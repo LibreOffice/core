@@ -4,9 +4,9 @@
  *
  *  $RCSfile: assertion.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:25:21 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:39:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,11 +212,11 @@
 
     #define LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )                                            \
                 {                                                                                               \
-                    ::rtl::OStringBuffer _sAssertBuffer( 256 );                                                 \
-                    _sAssertBuffer.append( SOWNMESSAGE              );                                          \
-                    _sAssertBuffer.append( "\n"                     );                                          \
-                    _sAssertBuffer.append( U2B(SEXCEPTIONMESSAGE)   );                                          \
-                    LOG_ERROR( SMETHOD, _sAssertBuffer.makeStringAndClear() )                                   \
+                    ::rtl::OStringBuffer _sAssertBuffer2( 256 );                                                \
+                    _sAssertBuffer2.append( SOWNMESSAGE             );                                          \
+                    _sAssertBuffer2.append( "\n"                    );                                          \
+                    _sAssertBuffer2.append( U2B(SEXCEPTIONMESSAGE)  );                                          \
+                    LOG_ERROR( SMETHOD, _sAssertBuffer2.makeStringAndClear() )                                  \
                 }
 
     /*_____________________________________________________________________________________________________________
