@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appedit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:33:39 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:35:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ void AppEdit::LoadIniFile()
 
 #if OSL_DEBUG_LEVEL > 1
     {
-        Font aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0, pFrame ));
+        Font aFont2( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0, pFrame ));
     }
 #endif
     aFont.SetTransparent( FALSE );
