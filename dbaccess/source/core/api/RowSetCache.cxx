@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:42:22 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:37:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -831,12 +831,14 @@ sal_Bool ORowSetCache::moveWindow()
                         else
                         {
 #if OSL_DEBUG_LEVEL > 0
-                            ORowSetMatrix::iterator aOldPos = aCacheIter->second.aIterator;
+                            ORowSetMatrix::iterator aOldPos;
+                            aOldPos = aCacheIter->second.aIterator;
 #endif
                             CHECK_MATRIX_POS( ((aOldPos - m_pMatrix->begin()) + nOffSet) );
                             aCacheIter->second.aIterator += nOffSet;
 #if OSL_DEBUG_LEVEL > 0
-                            ORowSetMatrix::iterator aCurrentPos = aCacheIter->second.aIterator;
+                            ORowSetMatrix::iterator aCurrentPos;
+                            aCurrentPos = aCacheIter->second.aIterator;
 #endif
                             OSL_ENSURE(aCacheIter->second.aIterator >= m_pMatrix->begin()
                                     && aCacheIter->second.aIterator < m_pMatrix->end(),"Iterator out of area!");
