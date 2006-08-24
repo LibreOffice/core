@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objface.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:17:37 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:47:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -477,7 +477,7 @@ const ResId& SfxInterface::GetObjectBarResId( USHORT nNo ) const
             nNo -= nBaseCount;
     }
 
-#ifdef DEBUG
+#ifdef DBG_UTIL
     USHORT nObjBarCount = pImpData->pObjectBars->Count();
     DBG_ASSERT( nNo<nObjBarCount,"Objectbar ist unbekannt!" );
 #endif
@@ -501,7 +501,7 @@ USHORT SfxInterface::GetObjectBarPos( USHORT nNo ) const
             nNo -= nBaseCount;
     }
 
-#ifdef DEBUG
+#ifdef DBG_UTIL
     USHORT nObjBarCount = pImpData->pObjectBars->Count();
     DBG_ASSERT( nNo<nObjBarCount,"Objectbar ist unbekannt!" );
 #endif
@@ -551,7 +551,7 @@ ULONG SfxInterface::GetChildWindowId (USHORT nNo) const
             nNo -= nBaseCount;
     }
 
-#ifdef DEBUG
+#ifdef DBG_UTIL
     USHORT nCWCount = pImpData->pChildWindows->Count();
     DBG_ASSERT( nNo<nCWCount,"ChildWindow ist unbekannt!" );
 #endif
@@ -574,7 +574,7 @@ ULONG SfxInterface::GetChildWindowFeature (USHORT nNo) const
             nNo -= nBaseCount;
     }
 
-#ifdef DEBUG
+#ifdef DBG_UTIL
     USHORT nCWCount = pImpData->pChildWindows->Count();
     DBG_ASSERT( nNo<nCWCount,"ChildWindow ist unbekannt!" );
 #endif
@@ -624,7 +624,7 @@ const String* SfxInterface::GetObjectBarName ( USHORT nNo ) const
             nNo -= nBaseCount;
     }
 
-#ifdef DEBUG
+#ifdef DBG_UTIL
     USHORT nObjBarCount = pImpData->pObjectBars->Count();
     DBG_ASSERT( nNo<nObjBarCount,"Objectbar ist unbekannt!" );
 #endif
@@ -645,7 +645,7 @@ ULONG SfxInterface::GetObjectBarFeature ( USHORT nNo ) const
             nNo -= nBaseCount;
     }
 
-#ifdef DEBUG
+#ifdef DBG_UTIL
     USHORT nObjBarCount = pImpData->pObjectBars->Count();
     DBG_ASSERT( nNo<nObjBarCount,"Objectbar ist unbekannt!" );
 #endif
@@ -666,7 +666,7 @@ BOOL SfxInterface::IsObjectBarVisible(USHORT nNo) const
             nNo -= nBaseCount;
     }
 
-#ifdef DEBUG
+#ifdef DBG_UTIL
     USHORT nObjBarCount = pImpData->pObjectBars->Count();
     DBG_ASSERT( nNo<nObjBarCount,"Objectbar ist unbekannt!" );
 #endif
