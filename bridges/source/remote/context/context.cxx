@@ -4,9 +4,9 @@
  *
  *  $RCSfile: context.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:48:06 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:43:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include <bridges/remote/context.h>
 #include <bridges/remote/remote.h>
 #include <bridges/remote/connection.h>
+#include <bridges/remote/counter.hxx>
 
 using namespace ::std;
 using namespace ::osl;
@@ -109,28 +110,6 @@ typedef hash_map
 ContextMap;
 
 #if OSL_DEBUG_LEVEL > 1
-struct MyCounter
-{
-    MyCounter( sal_Char *pName ) :
-        m_nCounter( 0 ),
-        m_pName ( pName )
-        {
-        }
-    ~MyCounter()
-        {
-            if( m_nCounter ) {
-                printf( "%s : %d left\n", m_pName , m_nCounter );
-            }
-        }
-    void acquire()
-        { m_nCounter ++; }
-    void release()
-        { m_nCounter --; }
-
-
-    sal_Int32 m_nCounter;
-    sal_Char *m_pName;
-};
 static MyCounter thisCounter( "DEBUG : Context" );
 #endif
 
