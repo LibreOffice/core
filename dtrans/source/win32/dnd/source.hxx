@@ -4,9 +4,9 @@
  *
  *  $RCSfile: source.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:18:18 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:48:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,10 +119,6 @@ public:
 public:
     DragSource(const Reference<XMultiServiceFactory>& sf);
     virtual ~DragSource();
-
-#if OSL_DEBUG_LEVEL > 1
-    virtual void SAL_CALL release();
-#endif
 
   // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
