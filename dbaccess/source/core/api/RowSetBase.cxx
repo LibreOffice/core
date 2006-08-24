@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:41:56 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:54:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -282,8 +282,10 @@ const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
     if ( bValidCurrentRow )
     {
 #if OSL_DEBUG_LEVEL > 0
-        ORowSetMatrix::iterator aCacheEnd = m_pCache->getEnd();
-        ORowSetMatrix::iterator aCurrentRow = m_aCurrentRow;
+        ORowSetMatrix::iterator aCacheEnd;
+        ORowSetMatrix::iterator aCurrentRow;
+        aCacheEnd = m_pCache->getEnd();
+        aCurrentRow = m_aCurrentRow;
         ORowSetCacheMap::iterator aCacheIter = m_aCurrentRow.getIter();
         sal_Int32 n = aCacheIter->first;
         n = n;
@@ -1231,8 +1233,10 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
     DBG_TRACE2("DBACCESS ORowSetBase::firePropertyChange() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     OSL_ENSURE(m_pColumns,"Columns can not be NULL here!");
 #if OSL_DEBUG_LEVEL > 1
-    sal_Bool bNull = m_aCurrentRow.isNull(); (void)bNull;
-    ORowSetMatrix::iterator atest = m_aCurrentRow;
+    sal_Bool bNull;
+    ORowSetMatrix::iterator atest;
+    bNull = m_aCurrentRow.isNull();
+    atest = m_aCurrentRow;
 #endif
     sal_Int32 i=0;
     try
