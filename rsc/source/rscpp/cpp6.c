@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp6.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:50:26 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:45:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -662,8 +662,7 @@ defendel(char* name, int delete)
 
 #if OSL_DEBUG_LEVEL > 1
 
-void dumpdef(why)
-char            *why;
+void dumpdef(char *why)
 {
         register DEFBUF         *dp;
         register DEFBUF         **syp;
@@ -690,9 +689,7 @@ char            *why;
         }
 }
 
-void dumpadef(why, dp)
-char            *why;                   /* Notation                     */
-register DEFBUF *dp;
+void dumpadef(char *why, register DEFBUF *dp)
 {
         register char           *cp;
         register int            c;
