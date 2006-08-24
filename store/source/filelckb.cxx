@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filelckb.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:40:46 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:41:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,9 +86,6 @@ using namespace store;
  * OFileLockBytes internals.
  *
  *======================================================================*/
-#if OSL_DEBUG_LEVEL > 1
-#define inline static
-#endif /* OSL_DEBUG_LEVEL > 1 */
 
 /*
  * __store_memcpy.
@@ -141,13 +138,6 @@ static storeError __store_errnoToErrCode (sal_uInt32 nErrno)
     }
     return store_E_Unknown;
 }
-
-#if OSL_DEBUG_LEVEL > 1
-#ifdef inline
-#undef inline
-#endif
-#define inline
-#endif /* OSL_DEBUG_LEVEL > 1 */
 
 /*========================================================================
  *
