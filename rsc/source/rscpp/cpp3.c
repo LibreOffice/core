@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp3.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-22 10:08:11 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:45:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -330,7 +330,7 @@ dooptions(int argc, char** argv)
                 case 'X':                       /* Debug                */
                     debug = (isdigit(*ap)) ? atoi(ap) : 1;
 #if (HOST == SYS_VMS || HOST == SYS_UNIX)
-                    signal(SIGINT, abort);      /* Trap "interrupt"     */
+                    signal(SIGINT, (void (*)(int)) abort); /* Trap "interrupt" */
 #endif
                     fprintf(stderr, "Debug set to %d\n", debug);
                     break;
