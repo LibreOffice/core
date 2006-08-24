@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:16:32 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,7 +254,8 @@ namespace configmgr
         {
             INode* pINode = *it2;
             OUString aName2 = pINode->getName();
-            volatile int dummy = 0;
+            volatile int dummy;
+            dummy = 0;
         }
 #endif
 
