@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:57:39 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 11:28:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2733,8 +2733,15 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
                 else
                 {
                     // check if table box value item is set
-                    BOOL bIsNum = pFmt->GetItemState( RES_BOXATR_VALUE, FALSE ) == SFX_ITEM_SET;
-                    if(!bIsNum)
+                    SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
+                    BOOL bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, FALSE ) == SFX_ITEM_SET;
+                    //const SfxPoolItem* pItem;
+                    //SwDoc* pDoc = pXCell->GetDoc();
+                    //BOOL bIsText = (SFX_ITEM_SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, sal_True, &pItem)
+                    //          ||  pDoc->GetNumberFormatter()->IsTextFormat(((SwTblBoxNumFormat*)pItem)->GetValue())
+                    //          ||  ((SwTblBoxNumFormat*)pItem)->GetValue() == NUMBERFORMAT_TEXT);
+
+                    if(!bIsNum/*bIsText*/)
                         pColArray[nCol] <<= lcl_getString(*pXCell);
                     else
                         pColArray[nCol] <<= lcl_getValue(*pXCell);
@@ -2757,8 +2764,8 @@ void SAL_CALL SwXTextTable::setDataArray(
     // see SwXTextTable::setData(...) also
 
     vos::OGuard aGuard(Application::GetSolarMutex());
-    sal_Int16 nRowCount = nRows;
-    sal_Int16 nColCount = nColumns;
+    sal_Int16 nRowCount = getRowCount();
+    sal_Int16 nColCount = getColumnCount();
 
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
@@ -4195,8 +4202,16 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
                 }
                 else
                 {
-                    sal_uInt32 nNdPos = pBox->IsValidNumTxtNd( sal_True );
-                    if(USHRT_MAX == nNdPos)
+                    // check if table box value item is set
+                    SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
+                    BOOL bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, FALSE ) == SFX_ITEM_SET;
+                    //const SfxPoolItem* pItem;
+                    //SwDoc* pDoc = pXCell->GetDoc();
+                    //BOOL bIsText = (SFX_ITEM_SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, sal_True, &pItem)
+                    //          ||  pDoc->GetNumberFormatter()->IsTextFormat(((SwTblBoxNumFormat*)pItem)->GetValue())
+                    //          ||  ((SwTblBoxNumFormat*)pItem)->GetValue() == NUMBERFORMAT_TEXT);
+
+                    if(!bIsNum/*bIsText*/)
                         pColArray[nCol] <<= lcl_getString(*pXCell);
                     else
                         pColArray[nCol] <<= lcl_getValue(*pXCell);
