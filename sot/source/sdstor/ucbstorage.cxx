@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:35:25 $
+ *  last change: $Author: ihi $ $Date: 2006-08-24 10:46:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -969,7 +969,7 @@ ULONG UCBStorageStream_Impl::ReadSourceWriteTemporary()
 #if OSL_DEBUG_LEVEL > 1
         catch( Exception & e )
         {
-            DBG_ASSERT( FALSE, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            OSL_ENSURE( FALSE, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #else
         catch( Exception & )
         {
@@ -1012,7 +1012,7 @@ ULONG UCBStorageStream_Impl::ReadSourceWriteTemporary( ULONG aLength )
 #if OSL_DEBUG_LEVEL > 1
         catch( Exception & e )
         {
-            DBG_ASSERT( FALSE, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            OSL_ENSURE( FALSE, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #else
         catch( Exception & )
         {
@@ -1089,7 +1089,7 @@ ULONG UCBStorageStream_Impl::GetData( void* pData, ULONG nSize )
 #if OSL_DEBUG_LEVEL > 1
         catch( Exception & e )
         {
-            DBG_ASSERT( FALSE, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            OSL_ENSURE( FALSE, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #else
         catch( Exception & )
         {
