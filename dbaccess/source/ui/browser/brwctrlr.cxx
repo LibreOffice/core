@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:49:12 $
+ *  last change: $Author: oj $ $Date: 2006-08-25 09:18:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -516,6 +516,7 @@ DBG_NAME(SbaXDataBrowserController)
 //------------------------------------------------------------------------------
 SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
     :OGenericUnoController(_rM)
+    ,m_pClipbordNotifier( NULL )
     ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
     ,m_sStateSaveRecord(ModuleRes(RID_STR_SAVE_CURRENT_RECORD))
     ,m_sStateUndoRecord(ModuleRes(RID_STR_UNDO_MODIFY_RECORD))
@@ -526,7 +527,6 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_bLoadCanceled( sal_False )
     ,m_bClosingKillOpen( sal_False )
     ,m_bErrorOccured( sal_False )
-    ,m_pClipbordNotifier( NULL )
 {
     DBG_CTOR(SbaXDataBrowserController,NULL);
 
