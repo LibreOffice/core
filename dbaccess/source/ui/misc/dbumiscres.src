@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:37:39 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:08:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,8 +305,10 @@ String STR_FILE_DOES_NOT_EXIST
 
 String STR_WARNINGS_DURING_CONNECT
 {
-    Text [ de ] = "Beim Verbindungsaufbau sind Warnungen aufgetreten. Drücken Sie \"Mehr\", um sie anzuzeigen.";
-    Text [ en-US ] = "Warnings were encountered while connecting to the data source. Press \"More\" to view them.";
+    Text [ de ] = "Beim Verbindungsaufbau sind Warnungen aufgetreten. Drücken Sie \"$buttontext$\", um sie anzuzeigen.";
+    Text [ en-US ] = "Warnings were encountered while connecting to the data source. Press \"$buttontext$\" to view them.";
+    Text [ x-comment ] = "$buttontext$ will, at runtime, be replaced with the localized equivalent of 'More', "
+                         "as it is to be found in dialogs on buttons which reveal more information.";
 };
 
 String STR_NAMED_OBJECT_ALREADY_EXISTS
