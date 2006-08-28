@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:35:09 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:07:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -751,8 +751,11 @@ sal_Bool ODatabaseExport::createRowSet()
         if ( ::dbtools::canInsert(xProp) )
         {
             m_pUpdateHelper.reset(new ORowUpdateHelper(xRowSet));
-        OSL_ENSURE(m_xResultSetMetaData.is(),"No ResultSetMetaData!");
-    }
+            OSL_ENSURE(m_xResultSetMetaData.is(),"No ResultSetMetaData!");
+            TPositions::iterator aIter = m_vColumns.begin();
+            for (;aIter != m_vColumns.end() ; ++aIter)
+                aIter->first = aIter->second;
+        }
         else
             m_pUpdateHelper.reset(new OParameterUpdateHelper(createPreparedStatment(m_xConnection->getMetaData(),m_xTable,m_vColumns)));
     }
