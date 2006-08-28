@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmundo.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:07:36 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:02:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,13 @@
 #ifndef _SVDUNDO_HXX
 #include "svdundo.hxx"
 #endif
+#ifndef _SVDOUNO_HXX
+#include "svdouno.hxx"
+#endif
+#ifndef SVX_FMSCRIPTINGENV_HXX
+#include "fmscriptingenv.hxx"
+#endif
+
 
 /** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
@@ -55,9 +62,6 @@
 #endif
 #ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENT_HPP_
 #include <com/sun/star/script/ScriptEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XSCRIPTLISTENER_HPP_
-#include <com/sun/star/script/XScriptListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
@@ -76,8 +80,8 @@
 #endif
 /** === end UNO includes === **/
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 
 
@@ -85,11 +89,6 @@
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
 #endif
-
-#ifndef _SVDOUNO_HXX //autogen wg. SdrUnoObj
-#include "svdouno.hxx"
-#endif
-
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
@@ -184,24 +183,20 @@ public:
 
 //========================================================================
 class SVX_DLLPRIVATE FmXUndoEnvironment
-    : public ::cppu::WeakImplHelper4<   ::com::sun::star::beans::XPropertyChangeListener
+    : public ::cppu::WeakImplHelper3<   ::com::sun::star::beans::XPropertyChangeListener
                                     ,   ::com::sun::star::container::XContainerListener
-                                    ,   ::com::sun::star::script::XScriptListener
                                     ,   ::com::sun::star::util::XModifyListener
                                     >
     , public SfxListener
                            //   public ::cppu::OWeakObject
 {
-    friend class FmXFormView;
     FmFormModel& rModel;
 
-    void*               m_pPropertySetCache;
-    oslInterlockedCount m_Locks;
-    ::osl::Mutex        m_aMutex;
-    sal_Bool            bReadOnly;
-
-
-    void firing_Impl( const  ::com::sun::star::script::ScriptEvent& evt, ::com::sun::star::uno::Any *pSyncRet=0 );
+    void*                                   m_pPropertySetCache;
+    ::svxform::PFormScriptingEnvironment    m_pScriptingEnv;
+    oslInterlockedCount                     m_Locks;
+    ::osl::Mutex                            m_aMutex;
+    sal_Bool                                bReadOnly;
 
 public:
     FmXUndoEnvironment(FmFormModel& _rModel);
@@ -239,15 +234,11 @@ protected:
     virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException);
 
-    // XScriptListener
-    virtual void SAL_CALL firing(const  ::com::sun::star::script::ScriptEvent& evt) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL approveFiring(const  ::com::sun::star::script::ScriptEvent& evt) throw(::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
-
     // XModifyListener
     virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     void ModeChanged();
-    void Clear();
+    void dispose();
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
