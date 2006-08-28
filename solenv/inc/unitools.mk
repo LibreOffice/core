@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:59:58 $
+#   last change: $Author: ihi $ $Date: 2006-08-28 15:43:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -189,3 +189,4 @@ RM+=$(RMFLAGS)
 ADJUSTVISIBILITY*:=$(WRAPCMD) adjustvisibility
 CONVERT*:=$(PERL) $(SOLARENV)$/bin$/leconvert.pl
 EXECTEST := $(PERL) -w $(SOLARENV)$/bin$/exectest.pl
+GCCINSTLIB:=$(PERL) -w $(SOLARENV)$/bin$/gccinstlib.pl
