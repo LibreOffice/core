@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-01 12:23:58 $
+#   last change: $Author: ihi $ $Date: 2006-08-28 11:32:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=svdem
 LIBTARGET=NO
 TARGETTYPE=GUI
@@ -43,39 +43,30 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
 
 # --- Files --------------------------------------------------------
 
 OBJFILES=	$(OBJ)$/svdem.obj
 
 APP1TARGET= 	$(TARGET)
-APP1STDLIBS=	$(SVTOOLLIB)	\
-                $(SVLIB)		\
+APP1STDLIBS=	$(SVTOOLLIB)		\
+                $(SVLIB)			\
+                $(UNOTOOLSLIB) 		\
                 $(COMPHELPERLIB) 	\
                 $(TOOLSLIB) 		\
-                $(SALLIB)		\
-                $(VOSLIB)		\
-                $(CPPUHELPERLIB) 	\
+                $(SALLIB)			\
+                $(VOSLIB)			\
+                $(CPPUHELPERLIB)	\
                 $(CPPULIB)
 
-.IF "$(OS)"=="MACOSX" || "$(GUI)"=="WIN"
-APP1STDLIBS +=	$(UNOTOOLSLIB)
-.ENDIF
-
-APP1DEPN=		$(L)$/itools.lib $(SVLIBDEPEND) 
 APP1OBJS=		$(OBJ)$/svdem.obj
-
 
 # --- Targets -------------------------------------------------------
 
-ALL : \
-    ALLTAR \
-    $(BIN)$/applicat.rdb 
-
 .INCLUDE :	target.mk
+
+ALLTAR : $(BIN)$/applicat.rdb 
 
 $(BIN)$/applicat.rdb : makefile.mk $(UNOUCRRDB)
     rm -f $@
