@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:48:02 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:07:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,21 +200,21 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                         &XDatabaseMetaData::getSchemas, m_xMetaData->getUserName() );
                 }
 
-                ::rtl::OUString sCatalog,sSchema,sTable;
+                ::rtl::OUString sTable;
                 ::dbtools::qualifiedNameComponents( m_xMetaData,
                                                     m_aName,
-                                                    sCatalog,
-                                                    sSchema,
+                                                    m_sCatalog,
+                                                    m_sSchema,
                                                     sTable,
                                                     ::dbtools::eInDataManipulation);
 
-                USHORT nPos = m_aCatalog.GetEntryPos( String( sCatalog ) );
+                USHORT nPos = m_aCatalog.GetEntryPos( String( m_sCatalog ) );
                 if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
                     m_aCatalog.SelectEntryPos( nPos );
 
-                if ( sSchema.getLength() )
+                if ( m_sSchema.getLength() )
                 {
-                    nPos = m_aSchema.GetEntryPos( String( sSchema ) );
+                    nPos = m_aSchema.GetEntryPos( String( m_sSchema ) );
                     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
                         m_aSchema.SelectEntryPos( nPos );
                 }
