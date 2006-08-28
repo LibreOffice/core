@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgsave.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:32:07 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:07:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,10 @@ namespace dbaui
         HelpButton          m_aPB_HELP;
         String              m_aQryLabel;
         String              m_sTblLabel;
+        rtl::OUString       m_sCatalog;
+        rtl::OUString       m_sSchema;
         String              m_aName;
+
         const IObjectNameCheck&
                             m_rObjectNameCheck;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
@@ -110,8 +113,8 @@ namespace dbaui
                     sal_Int32 _nFlags = SAD_DEFAULT | SAD_TITLE_STORE_AS);
 
         String getName() const      { return m_aName; }
-        String getCatalog() const   { return m_aCatalog.IsVisible() ? m_aCatalog.GetText() : String(); }
-        String getSchema() const    { return m_aSchema.IsVisible() ? m_aSchema.GetText() : String(); }
+        String getCatalog() const   { return m_aCatalog.IsVisible() ? m_aCatalog.GetText() : String(m_sCatalog); }
+        String getSchema() const    { return m_aSchema.IsVisible() ? m_aSchema.GetText() : String(m_sSchema); }
     private:
         DECL_LINK(ButtonClickHdl, Button *);
         DECL_LINK(EditModifyHdl,  Edit * );
