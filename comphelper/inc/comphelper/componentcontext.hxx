@@ -4,9 +4,9 @@
  *
  *  $RCSfile: componentcontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:14:48 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:10:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,11 @@ namespace comphelper
             return _out_rxComponent.is();
         }
 
+        /** creates a component using our component factory/context, passing creation arguments
+            @throws ::com::sun::star::uno::Exception
+            @return
+                <TRUE/> if and only if the component could be successfully created
+        */
         template < typename INTERFACE >
         bool createComponentWithArguments( const sal_Char* _pAsciiServiceName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments, ::com::sun::star::uno::Reference< INTERFACE >& _out_rxComponent ) const
         {
@@ -168,6 +173,23 @@ namespace comphelper
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createComponent( const sal_Char* _pAsciiServiceName ) const
         {
             return createComponent( ::rtl::OUString::createFromAscii( _pAsciiServiceName ) );
+        }
+
+        /** retrieves a singleton instance from the context
+
+            Singletons are collected below the <code>/singletons</code> key in a component context,
+            so accessing them means retrieving the value under <code>/singletons/&lt;instance_name&gt;</code>.
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getSingleton( const ::rtl::OUString& _rInstanceName );
+
+        /** retrieves a singleton instance from the context
+
+            Singletons are collected below the <code>/singletons</code> key in a component context,
+            so accessing them means retrieving the value under <code>/singletons/&lt;instance_name&gt;</code>.
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getSingleton( const sal_Char* _pAsciiInstanceName )
+        {
+            return getSingleton( ::rtl::OUString::createFromAscii( _pAsciiInstanceName ) );
         }
 
         /** returns the ->XMultiServiceFactory interface of ->m_xORB, for passing to
