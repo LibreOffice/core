@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-03 15:12:11 $
+#   last change: $Author: ihi $ $Date: 2006-08-28 11:29:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,23 @@ USE_DEFFILE=TRUE
 
 .INCLUDE :  settings.mk
 
+JAVA_INCLUDES:= -I$(JAVA_HOME)/include
+
+# values taken from set_soenv.in
+.IF "$(JDK)" != "gcj"
+.IF "$(OS)" == "LINUX"
+JAVA_INCLUDES+= -I$(JAVA_HOME)/include/linux
+.ELIF "$(OS)" == "FREEBSD"
+JAVA_INCLUDES+= -I$(JAVA_HOME)/include/freebsd
+JAVA_INCLUDES+= -I$(JAVA_HOME)/include/bsd
+JAVA_INCLUDES+= -I$(JAVA_HOME)/include/linux
+.ELIF "$(OS)" == "NETBSD"
+JAVA_INCLUDES+= -I$(JAVA_HOME)/include/netbsd
+.ELIF "$(OS)" == "IRIX"
+JAVA_INCLUDES+= -I$(JAVA_HOME)/include/solaris
+.ENDIF
+.ENDIF
+
 .IF "$(SOLAR_JAVA)"==""
 nojava:
     @echo "Not building javaunohelper because Java is disabled"
@@ -57,7 +74,7 @@ nojava:
 .IF "$(BUILD_UNOWINREG)" == "YES"
 
 $(BIN)$/unowinreg.dll : unowinreg.cxx
-    $(MINGWCXX) -Wall -D_JNI_IMPLEMENTATION_ -I$(JAVA_HOME)/include \
+    $(MINGWCXX) -Wall -D_JNI_IMPLEMENTATION_ $(JAVA_INCLUDES) \
         -shared -o $(BIN)$/unowinreg.dll unowinreg.cxx \
             -Wl,--kill-at -lkernel32 -ladvapi32
     $(MINGWSTRIP) $(BIN)$/unowinreg.dll
