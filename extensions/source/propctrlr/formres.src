@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:05:34 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:12:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,23 +173,25 @@ String RID_STR_ALIGN
 };
 String RID_STR_VERTICAL_ALIGN
 {
-    Text = "Vert. Alignment" ;
-    // no translation so far, this property is still experimental and not visible by default
+    Text [ de ] = "Ausrichtung (vert.)" ;
+    Text [ en-US ] = "Vert. Alignment" ;
 };
 Resource RID_RSC_ENUM_VERTICAL_ALIGN
 {
-    // no translation so far, this property is still experimental and not visible by default
     String 1
     {
-        Text = "Top";
+        Text [ de ] = "Oben";
+        Text [ en-US ] = "Top";
     };
     String 2
     {
-        Text = "Middle";
+        Text [ de ] = "Mitte";
+        Text [ en-US ] = "Middle";
     };
     String 3
     {
-        Text = "Bottom";
+        Text [ de ] = "Unten";
+        Text [ en-US ] = "Bottom";
     };
 };
 String RID_STR_IMAGEPOSITION
