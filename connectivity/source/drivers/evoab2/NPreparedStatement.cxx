@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NPreparedStatement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:33:45 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:52:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 
 using namespace connectivity::evoab;
 using namespace com::sun::star::uno;
@@ -71,9 +74,9 @@ IMPLEMENT_SERVICE_INFO(OEvoabPreparedStatement,"com.sun.star.sdbcx.evoab.Prepare
 
 OEvoabPreparedStatement::OEvoabPreparedStatement( OEvoabConnection* _pConnection, const ::rtl::OUString& sql)
     :OStatement_BASE2(_pConnection)
-    ,m_bPrepared(sal_False)
-    ,m_sSqlStatement(sql)
     ,m_nNumParams(0)
+    ,m_sSqlStatement(sql)
+    ,m_bPrepared(sal_False)
 {
 }
 // -----------------------------------------------------------------------------
@@ -156,10 +159,9 @@ sal_Int32 SAL_CALL OEvoabPreparedStatement::executeUpdate(  ) throw(SQLException
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setString( sal_Int32 /*parameterIndex*/, const ::rtl::OUString& /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setString", *this );
 }
 // -------------------------------------------------------------------------
 
@@ -182,174 +184,131 @@ Reference< XResultSet > SAL_CALL OEvoabPreparedStatement::executeQuery(  ) throw
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setBoolean( sal_Int32 /*parameterIndex*/, sal_Bool /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setBoolean", *this );
 
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OEvoabPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setByte( sal_Int32 /*parameterIndex*/, sal_Int8 /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setByte", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setDate( sal_Int32 parameterIndex, const Date& aData ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setDate( sal_Int32 /*parameterIndex*/, const Date& /*aData*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setDate", *this );
 }
 // -------------------------------------------------------------------------
 
-
-void SAL_CALL OEvoabPreparedStatement::setTime( sal_Int32 parameterIndex, const Time& aVal ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setTime( sal_Int32 /*parameterIndex*/, const Time& /*aVal*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setTime", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const DateTime& aVal ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setTimestamp( sal_Int32 /*parameterIndex*/, const DateTime& /*aVal*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setTimestamp", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setDouble( sal_Int32 parameterIndex, double x ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setDouble( sal_Int32 /*parameterIndex*/, double /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setDouble", *this );
 }
 
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setFloat( sal_Int32 /*parameterIndex*/, float /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setFloat", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setInt( sal_Int32 /*parameterIndex*/, sal_Int32 /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setInt", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 aVal ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setLong( sal_Int32 /*parameterIndex*/, sal_Int64 /*aVal*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setLong", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setNull( sal_Int32 /*parameterIndex*/, sal_Int32 /*sqlType*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setNull", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setClob( sal_Int32 parameterIndex, const Reference< XClob >& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setClob( sal_Int32 /*parameterIndex*/, const Reference< XClob >& /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setClob", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setBlob( sal_Int32 parameterIndex, const Reference< XBlob >& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setBlob( sal_Int32 /*parameterIndex*/, const Reference< XBlob >& /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setBlob", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setArray( sal_Int32 parameterIndex, const Reference< XArray >& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const Reference< XArray >& /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setArray", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setRef( sal_Int32 parameterIndex, const Reference< XRef >& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const Reference< XRef >& /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setRef", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 sqlType, sal_Int32 scale ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setObjectWithInfo( sal_Int32 /*parameterIndex*/, const Any& /*x*/, sal_Int32 /*sqlType*/, sal_Int32 /*scale*/ ) throw(SQLException, RuntimeException)
 {
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setObjectWithInfo", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setObjectNull( sal_Int32 /*parameterIndex*/, sal_Int32 /*sqlType*/, const ::rtl::OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setObjectNull", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setObject( sal_Int32 /*parameterIndex*/, const Any& /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setObject", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setShort( sal_Int32 /*parameterIndex*/, sal_Int16 /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setShort", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setBytes( sal_Int32 /*parameterIndex*/, const Sequence< sal_Int8 >& /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setBytes", *this );
 }
 // -------------------------------------------------------------------------
 
 
-void SAL_CALL OEvoabPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setCharacterStream( sal_Int32 /*parameterIndex*/, const Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setCharacterStream", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setBinaryStream( sal_Int32 /*parameterIndex*/, const Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException( "XParameters::setBinaryStream", *this );
 }
 // -------------------------------------------------------------------------
 
@@ -372,12 +331,6 @@ void OEvoabPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle
         default:
             OStatement_Base::setFastPropertyValue_NoBroadcast(nHandle,rValue);
     }
-}
-// -----------------------------------------------------------------------------
-void OEvoabPreparedStatement::checkParameterIndex(sal_Int32 _parameterIndex)
-{
-    if( !_parameterIndex || _parameterIndex > m_nNumParams)
-        throw SQLException();
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL OEvoabPreparedStatement::getResultSet(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)

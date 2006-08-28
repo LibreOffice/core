@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:33:20 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:52:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,9 +101,21 @@ namespace connectivity
             "address-label-other"
         };
 
+    const SplitEvoColumns* get_evo_addr()
+    {
+        static const SplitEvoColumns evo_addr[] = {
+            {"addr-line1",DEFAULT_ADDR_LINE1},{"addr-line2",DEFAULT_ADDR_LINE2},{"city",DEFAULT_CITY},{"state",DEFAULT_STATE},{"country",DEFAULT_COUNTRY},{"zip",DEFAULT_ZIP},
+            {"work-addr-line1",WORK_ADDR_LINE1},{"work-addr-line2",WORK_ADDR_LINE2},{"work-city",WORK_CITY},{"work-state",WORK_STATE},{"work-country",WORK_COUNTRY},{"work-zip",WORK_ZIP},
+            {"home-addr-line1",HOME_ADDR_LINE1},{"home-addr-line2",HOME_ADDR_LINE2},{"home-addr-City",HOME_CITY},{"home-state",HOME_STATE},{"home-country",HOME_COUNTRY},{"home-zip",HOME_ZIP},
+            {"other-addr-line1",OTHER_ADDR_LINE1},{"other-addr-line2",OTHER_ADDR_LINE2},{"other-addr-city",OTHER_CITY},{"other-addr-state",OTHER_STATE},{"other-addr-country",OTHER_COUNTRY},{"other-addr-zip",OTHER_ZIP}
+        };
+        return evo_addr;
+    }
+
     static void
     splitColumn (ColumnProperty **pToBeFields)
     {
+        const SplitEvoColumns* evo_addr( get_evo_addr() );
         for (int i = 0; i < OTHER_ZIP; i++)
         {
             pToBeFields[nFields] = g_new0(ColumnProperty,1);
@@ -138,7 +150,7 @@ namespace connectivity
                         {
                             bool bAdd = true;
                             const char *pName = g_param_spec_get_name( pProps[i] );
-                            for (int j = 0; j < G_N_ELEMENTS( pBlackList ); j++ )
+                            for (unsigned int j = 0; j < G_N_ELEMENTS( pBlackList ); j++ )
                             {
                                 if( !strcmp( pBlackList[j], pName ) )
                                 {
@@ -184,11 +196,11 @@ namespace connectivity
     }
 
     sal_Int32
-    getFieldType( sal_Int32 nCol )
+    getFieldType( guint nCol )
     {
         sal_Int32 nType = DataType::VARCHAR;
         initFields();
-        if (nCol >= 0 && nCol < nFields )
+        if ( nCol < nFields )
         {
             if( ((GParamSpec *)pFields[nCol]->pField)->value_type == G_TYPE_STRING )
                 nType = DataType::VARCHAR;
@@ -198,12 +210,12 @@ namespace connectivity
         return nType;
     }
 
-    sal_Int32 findEvoabField(const rtl::OUString& aColName)
+    guint findEvoabField(const rtl::OUString& aColName)
     {
-        sal_Int32 nRet = -1;
+        guint nRet = (guint)-1;
         sal_Bool bFound = sal_False;
         initFields();
-        for (int i=0;(i < nFields) && !bFound;i++)
+        for (guint i=0;(i < nFields) && !bFound;i++)
         {
             rtl::OUString aName = getFieldName(i);
             if (aName == aColName)
@@ -216,7 +228,7 @@ namespace connectivity
     }
 
     rtl::OUString
-    getFieldTypeName( sal_Int32 nCol )
+    getFieldTypeName( guint nCol )
     {
         switch( getFieldType( nCol ) )
         {
@@ -231,7 +243,7 @@ namespace connectivity
     }
 
     rtl::OUString
-    getFieldName( sal_Int32 nCol )
+    getFieldName( guint nCol )
     {
         const GParamSpec *pSpec = getField( nCol )->pField;
         rtl::OUString aName;
@@ -284,7 +296,7 @@ OEvoabDatabaseMetaData::~OEvoabDatabaseMetaData()
 
 // -------------------------------------------------------------------------
 ODatabaseMetaDataResultSet::ORows& SAL_CALL OEvoabDatabaseMetaData::getColumnRows(
-                                         const ::rtl::OUString& tableNamePattern,
+                                         const ::rtl::OUString& /*tableNamePattern*/,
                                          const ::rtl::OUString& columnNamePattern ) throw(SQLException)
 {
     static ODatabaseMetaDataResultSet::ORows aRows;
@@ -561,7 +573,7 @@ sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsOpenCursorsAcrossRollback(  ) 
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 level ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 /*level*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
@@ -697,7 +709,7 @@ sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsTableCorrelationNames(  ) thro
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_Int32 toType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsConvert( sal_Int32 /*fromType*/, sal_Int32 /*toType*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
@@ -978,57 +990,57 @@ sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxUserNameLength(  ) throw(SQLExc
     return nValue;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsResultSetType( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsResultSetType( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 concurrency ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsResultSetConcurrency( sal_Int32 /*setType*/, sal_Int32 /*concurrency*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabDatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::ownUpdatesAreVisible( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabDatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::ownDeletesAreVisible( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabDatabaseMetaData::ownInsertsAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::ownInsertsAreVisible( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabDatabaseMetaData::othersUpdatesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::othersUpdatesAreVisible( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabDatabaseMetaData::othersDeletesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::othersDeletesAreVisible( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabDatabaseMetaData::othersInsertsAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::othersInsertsAreVisible( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabDatabaseMetaData::updatesAreDetected( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::updatesAreDetected( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabDatabaseMetaData::deletesAreDetected( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::deletesAreDetected( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabDatabaseMetaData::insertsAreDetected( sal_Int32 setType ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabDatabaseMetaData::insertsAreDetected( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
@@ -1158,33 +1170,27 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getSchemas(  ) throw(SQ
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumnPrivileges(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
-    const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/,
+    const ::rtl::OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException)
 {
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setColumnPrivilegesMap();
-    return xResultSet;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eColumnPrivileges );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumns(
-    const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern,
+    const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& tableNamePattern,
     const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
     // this returns an empty resultset where the column-names are already set
     // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eColumns );
     Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setColumnsMap();
-    pResultSet->setRows( getColumnRows( tableNamePattern, columnNamePattern ));
+    pResultSet->setRows( getColumnRows( tableNamePattern, columnNamePattern ) );
     return xResultSet;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
-    const Any& catalog, const ::rtl::OUString& schemaPattern,
-    const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& types ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/,
+    const ::rtl::OUString& /*tableNamePattern*/, const Sequence< ::rtl::OUString >& types ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -1224,7 +1230,6 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
             pSourceList = NULL;
 
     GSList *g;
-    EBook *pTempBook = NULL;
     for( g = e_source_list_peek_groups( pSourceList ); g; g = g->next)
     {
         GSList *s;
@@ -1246,6 +1251,8 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
                         break;
                     else
                         continue;
+        case SDBCAddress::Unknown:
+            break;
         }
         for (s = e_source_group_peek_sources (E_SOURCE_GROUP (g->data)); s; s = s->next)
         {
@@ -1269,127 +1276,75 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getProcedureColumns(
-    const Any& catalog, const ::rtl::OUString& schemaPattern,
-    const ::rtl::OUString& procedureNamePattern, const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/,
+    const ::rtl::OUString& /*procedureNamePattern*/, const ::rtl::OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException)
 {
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setProcedureColumnsMap();
-    return xResultSet;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedureColumns );
 }
 
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getProcedures(
-    const Any& catalog, const ::rtl::OUString& schemaPattern,
-    const ::rtl::OUString& procedureNamePattern ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/,
+    const ::rtl::OUString& /*procedureNamePattern*/ ) throw(SQLException, RuntimeException)
 {
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setProceduresMap();
-    return xResultSet;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedures );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getVersionColumns(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
 {
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setVersionColumnsMap();
-    return xResultSet;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eVersionColumns );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getExportedKeys(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
 {
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setExportedKeysMap();
-    return xResultSet;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eExportedKeys );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getImportedKeys(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
 {
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setImportedKeysMap();
-    return xResultSet;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eImportedKeys );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getPrimaryKeys(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
 {
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setPrimaryKeysMap();
-    return xResultSet;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::ePrimaryKeys );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getIndexInfo(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
-    sal_Bool unique, sal_Bool approximate ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/,
+    sal_Bool /*unique*/, sal_Bool /*approximate*/ ) throw(SQLException, RuntimeException)
 {
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setIndexInfoMap();
-    return xResultSet;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eIndexInfo );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getBestRowIdentifier(
-    const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table, sal_Int32 scope,
-    sal_Bool nullable ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/, sal_Int32 /*scope*/,
+    sal_Bool /*nullable*/ ) throw(SQLException, RuntimeException)
 {
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setBestRowIdentifierMap();
-    return xResultSet;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eBestRowIdentifier );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTablePrivileges(
-    const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& /*tableNamePattern*/ ) throw(SQLException, RuntimeException)
 {
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setTablePrivilegesMap();
-    return xResultSet;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTablePrivileges );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getCrossReference(
-    const Any& primaryCatalog, const ::rtl::OUString& primarySchema,
-    const ::rtl::OUString& primaryTable, const Any& foreignCatalog,
-    const ::rtl::OUString& foreignSchema, const ::rtl::OUString& foreignTable ) throw(SQLException, RuntimeException)
+    const Any& /*primaryCatalog*/, const ::rtl::OUString& /*primarySchema*/,
+    const ::rtl::OUString& /*primaryTable*/, const Any& /*foreignCatalog*/,
+    const ::rtl::OUString& /*foreignSchema*/, const ::rtl::OUString& /*foreignTable*/ ) throw(SQLException, RuntimeException)
 {
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setCrossReferenceMap();
-    return xResultSet;
+    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eCrossReference );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getUDTs( const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& typeNamePattern, const Sequence< sal_Int32 >& types ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getUDTs( const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ ) throw(SQLException, RuntimeException)
 {
-    OSL_ENSURE(0,"Not implemented yet!");
-    throw SQLException();
+    ::dbtools::throwFeatureNotImplementedException( "XDatabaseMetaDaza::getUDTs", *this );
     return NULL;
 }
 // -----------------------------------------------------------------------------
