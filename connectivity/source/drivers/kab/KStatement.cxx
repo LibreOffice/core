@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KStatement.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:29:16 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:54:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -539,7 +539,6 @@ sal_Bool KabCommonStatement::convertFastPropertyValue(
 {
     sal_Bool bConverted = sal_False;
     // here we have to try to convert
-OSL_ENSURE(false, "KabCommonStatement::convertFastPropertyValue is not implemented!");
     return bConverted;
 }
 // -------------------------------------------------------------------------
@@ -561,7 +560,6 @@ void KabCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
         default:
             ;
     }
-OSL_ENSURE(false, "KabCommonStatement::setFastPropertyValue_NoBroadcast is not implemented!");
 }
 // -------------------------------------------------------------------------
 void KabCommonStatement::getFastPropertyValue(Any&,sal_Int32 nHandle) const
@@ -581,7 +579,6 @@ void KabCommonStatement::getFastPropertyValue(Any&,sal_Int32 nHandle) const
         default:
             ;
     }
-OSL_ENSURE(false, "KabCommonStatement::getFastPropertyValue is not implemented!");
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL KabCommonStatement::acquire() throw()
