@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:20:01 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:08:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
+#endif
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -270,13 +273,15 @@ void OHTMLReader::NextToken( int nToken )
     DBG_CHKTHIS(OHTMLReader,NULL);
     if(m_bError || !m_nRows) // falls Fehler oder keine Rows mehr zur "Uberpr"ufung dann gleich zur"uck
         return;
-    if(!m_bMetaOptions)
-        setTextEncoding();
 
     if(m_xConnection.is())    // gibt an welcher CTOR gerufen wurde und damit, ob eine Tabelle erstellt werden soll
     {
         switch(nToken)
         {
+            case HTML_META:
+                if(!m_bMetaOptions)
+                    setTextEncoding();
+                break;
             case HTML_TABLE_ON:
                 ++m_nTableCount;
                 {   // es kann auch TD oder TH sein, wenn es vorher kein TABLE gab
@@ -702,7 +707,18 @@ void OHTMLReader::setTextEncoding()
     {
         case HTML_META_CONTENT_TYPE:
             if( aContent.Len() )
-                SetSrcEncoding(GetEncodingByMIME( aContent ));
+            {
+                rtl_TextEncoding eEnc = GetEncodingByMIME( aContent );
+                // If the encoding is set by a META tag, it may only overwrite the
+                // current encoding if both, the current and the new encoding, are 1-BYTE
+                // encodings. Everything else cannot lead to reasonable results.
+                if ( rtl_isOctetTextEncoding( eEnc ) &&
+                        rtl_isOctetTextEncoding( GetSrcEncoding() ) )
+                {
+                    eEnc = GetExtendedCompatibilityTextEncoding( eEnc );
+                    SetSrcEncoding( eEnc );
+                }
+            }
             break;
     }
 }
