@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:57:40 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:04:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1692,7 +1692,7 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
     catch( const SQLException& )
     {
         SQLExceptionInfo aError( ::cppu::getCaughtException() );
-        OSL_ENSURE( aError.isValid(), "ORowSet::execute_NoApprove_NoNewConn: caught an SQLException which we cannot analyze!" );
+        OSL_ENSURE( aError.isValid(), "ORowSet::impl_prepareAndExecute_throw: caught an SQLException which we cannot analyze!" );
 
         // append information about what we were actually going to execute
         try
