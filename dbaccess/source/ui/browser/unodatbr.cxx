@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.177 $
+ *  $Revision: 1.178 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:49:53 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:06:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2917,11 +2917,10 @@ void SbaTableQueryBrowser::disposeConnection( SvLBoxEntry* _pDSEntry )
         DBTreeListModel::DBTreeListUserData* pTreeListData = static_cast< DBTreeListModel::DBTreeListUserData* >( _pDSEntry->GetUserData() );
         if ( pTreeListData )
         {
-            impl_releaseConnection( pTreeListData->xConnection );
+            DBG_ASSERT( !pTreeListData->xConnection.is() == !!pTreeListData->aController.empty(),
+                "SbaTableQueryBrowser::disposeConnection: inconsistency: there should either be a connection and a controller, or none of both!" );
 
-            // release the model-controller-connection
-            DBG_ASSERT( !pTreeListData->aController.empty(),
-                "SbaTableQueryBrowser::disposeConnection: there's a connection, but we didn't register ourself as controller at the model?!" );
+            impl_releaseConnection( pTreeListData->xConnection );
             pTreeListData->aController.clear();
         }
     }
