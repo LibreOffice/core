@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasourceconnector.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:37:21 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:08:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,9 @@
 #endif
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
+#endif
+#ifndef _SV_BUTTON_HXX
+#include <vcl/button.hxx>
 #endif
 #ifndef SVTOOLS_FILENOTATION_HXX
 #include <svtools/filenotation.hxx>
@@ -259,8 +262,12 @@ namespace dbaui
                 Any aWarnings( xConnectionWarnings->getWarnings() );
                 if ( aWarnings.hasValue() )
                 {
+                    String sMessage( ModuleRes( STR_WARNINGS_DURING_CONNECT ) );
+                    sMessage.SearchAndReplaceAscii( "$buttontext$", Button::GetStandardText( BUTTON_MORE ) );
+                    sMessage = OutputDevice::GetNonMnemonicString( sMessage );
+
                     SQLContext aContext;
-                    aContext.Message = String( ModuleRes( STR_WARNINGS_DURING_CONNECT ) );
+                    aContext.Message = sMessage;
                     aContext.NextException = aWarnings;
                     showError( SQLExceptionInfo( aContext ), m_pErrorMessageParent, m_xORB );
                 }
