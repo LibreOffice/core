@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:34:12 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:52:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,14 +71,13 @@ void OEvoabResultSetMetaData::setEvoabFields(const ::vos::ORef<connectivity::OSQ
         for (aIter = xColumns->begin(); aIter != xColumns->end(); ++aIter)
         {
                 ::rtl::OUString aFieldName;
-                sal_uInt32 nFieldNumber;
 
                 (*aIter)->getPropertyValue(aName) >>= aFieldName;
-                nFieldNumber = findEvoabField(aFieldName);
-        if (nFieldNumber == -1)
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii("Invalid column name: ") + aFieldName,
-            NULL);
+                guint nFieldNumber = findEvoabField(aFieldName);
+                if (nFieldNumber == (guint)-1)
+                    ::dbtools::throwGenericSQLException(
+                        ::rtl::OUString::createFromAscii("Invalid column name: ") + aFieldName,
+                        NULL);
                 m_aEvoabFields.push_back(nFieldNumber);
         }
 }
@@ -90,7 +89,7 @@ void OEvoabResultSetMetaData::checkColumnIndex(sal_Int32 nColumnNum)  throw(SQLE
         dbtools::throwInvalidIndexException( *this );
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OEvoabResultSetMetaData::getColumnDisplaySize( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OEvoabResultSetMetaData::getColumnDisplaySize( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return 50;
 }
@@ -106,32 +105,31 @@ sal_Int32 SAL_CALL OEvoabResultSetMetaData::getColumnCount(  ) throw(SQLExceptio
     return m_aEvoabFields.size();
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabResultSetMetaData::isCaseSensitive( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSetMetaData::isCaseSensitive( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getSchemaName( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getSchemaName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getColumnName( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
 {
-        sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
-        return evoab::getFieldName( nField );
+    sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
+    return evoab::getFieldName( nField );
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getColumnTypeName( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
 {
-        sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
+    sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
     return evoab::getFieldTypeName( nField );
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getColumnLabel( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
 {
-
-        sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
+    sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
     const ColumnProperty *pSpecs = getField(nField);
     GParamSpec *pSpec = pSpecs->pField;
     rtl::OUString aLabel;
@@ -142,68 +140,68 @@ sal_Bool SAL_CALL OEvoabResultSetMetaData::isCaseSensitive( sal_Int32 nColumnNum
     return aLabel;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getColumnServiceName( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getColumnServiceName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getTableName( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getTableName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return m_aTableName;//::rtl::OUString::createFromAscii("TABLE");
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getCatalogName( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getCatalogName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
 
-sal_Bool SAL_CALL OEvoabResultSetMetaData::isCurrency( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSetMetaData::isCurrency( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabResultSetMetaData::isAutoIncrement( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSetMetaData::isAutoIncrement( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabResultSetMetaData::isSigned( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSetMetaData::isSigned( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OEvoabResultSetMetaData::getPrecision( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OEvoabResultSetMetaData::getPrecision( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return 0;
 }
 // -----------------------------------------------------------------------------
-sal_Int32 SAL_CALL OEvoabResultSetMetaData::getScale( sal_Int32 nColumnNum ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL OEvoabResultSetMetaData::getScale( sal_Int32 /*nColumnNum*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return 0;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OEvoabResultSetMetaData::isNullable( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OEvoabResultSetMetaData::isNullable( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return 0;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabResultSetMetaData::isSearchable( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSetMetaData::isSearchable( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabResultSetMetaData::isReadOnly( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSetMetaData::isReadOnly( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabResultSetMetaData::isDefinitelyWritable( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSetMetaData::isDefinitelyWritable( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabResultSetMetaData::isWritable( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSetMetaData::isWritable( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
