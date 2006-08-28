@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:42:00 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:00:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_LINEENDFORMAT_HPP_
 #include <com/sun/star/awt/LineEndFormat.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SCRTIP_XEVENTATTACHERMANAGER_HPP_
+#include <com/sun/star/script/XEventAttacherManager.hpp>
 #endif
 
 #ifndef _FMTFIELD_HXX_
@@ -298,10 +301,35 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
     }
     m_pCell->acquire();
 
+    impl_toggleScriptManager_nothrow( true );
+
     // only if we use have a bound field, we use a a controller for displaying the
     // window in the grid
     if (m_xField.is())
         m_xController = pCellControl->CreateController();
+}
+
+//------------------------------------------------------------------------------
+void DbGridColumn::impl_toggleScriptManager_nothrow( bool _bAttach )
+{
+    try
+    {
+        Reference< container::XChild > xChild( m_xModel, UNO_QUERY_THROW );
+        Reference< script::XEventAttacherManager > xManager( xChild->getParent(), UNO_QUERY_THROW );
+        Reference< container::XIndexAccess > xContainer( xChild->getParent(), UNO_QUERY_THROW );
+
+        sal_Int32 nIndexInParent( getElementPos( xContainer, m_xModel ) );
+
+        Reference< XInterface > xCellInterface( *m_pCell, UNO_QUERY );
+        if ( _bAttach )
+            xManager->attach( nIndexInParent, xCellInterface, makeAny( xCellInterface ) );
+        else
+            xManager->detach( nIndexInParent, xCellInterface );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -344,8 +372,29 @@ DbGridColumn::~DbGridColumn()
 }
 
 //------------------------------------------------------------------------------
+void DbGridColumn::setModel(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  _xModel)
+{
+    if ( m_pCell )
+        impl_toggleScriptManager_nothrow( false );
+
+    m_xModel = _xModel;
+
+    if ( m_pCell )
+        impl_toggleScriptManager_nothrow( true );
+}
+
+//------------------------------------------------------------------------------
 void DbGridColumn::Clear()
 {
+    if ( m_pCell )
+    {
+        impl_toggleScriptManager_nothrow( false );
+
+        m_pCell->dispose();
+        m_pCell->release();
+        m_pCell = NULL;
+    }
+
     m_xController = NULL;
     m_xField = NULL;
 
@@ -354,13 +403,6 @@ void DbGridColumn::Clear()
     m_bReadOnly = sal_True;
     m_bAutoValue = sal_False;
     m_nFieldType = DataType::OTHER;
-
-    if (m_pCell)
-    {
-        m_pCell->dispose();
-        m_pCell->release();
-        m_pCell = NULL;
-    }
 }
 
 //------------------------------------------------------------------------------
@@ -3684,7 +3726,7 @@ FmXListBoxCell::FmXListBoxCell(DbGridColumn* pColumn, DbCellControl* pControl)
 {
     DBG_CTOR(FmXListBoxCell,NULL);
 
-    m_pBox->SetSelectHdl( LINK( this, FmXListBoxCell, OnSelect ) );
+    m_pBox->AddEventListener( LINK( this, FmXListBoxCell, OnSelect ) );
     m_pBox->SetDoubleClickHdl( LINK( this, FmXListBoxCell, OnDoubleClick ) );
 }
 
@@ -3975,9 +4017,11 @@ void SAL_CALL FmXListBoxCell::makeVisible(sal_Int16 nEntry) throw( RuntimeExcept
 }
 
 //------------------------------------------------------------------
-IMPL_LINK(FmXListBoxCell, OnSelect, void*, EMPTYARG )
+IMPL_LINK(FmXListBoxCell, OnSelect, VclWindowEvent*, _pEvent )
 {
-    if (m_pBox)
+    if  (   ( _pEvent->GetWindow() == m_pBox )
+        &&  ( _pEvent->GetId() == VCLEVENT_LISTBOX_SELECT )
+        )
     {
         OnDoubleClick( NULL );
 
@@ -3989,10 +4033,7 @@ IMPL_LINK(FmXListBoxCell, OnSelect, void*, EMPTYARG )
         aEvent.Selected = (m_pBox->GetSelectEntryCount() == 1 )
             ? m_pBox->GetSelectEntryPos() : 0xFFFF;
 
-        ::cppu::OInterfaceIteratorHelper aIt( m_aItemListeners );
-
-        while( aIt.hasMoreElements() )
-            ((::com::sun::star::awt::XItemListener *)aIt.next())->itemStateChanged( aEvent );
+        m_aItemListeners.notifyEach( &awt::XItemListener::itemStateChanged, aEvent );
     }
     return 1;
 }
