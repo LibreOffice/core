@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NConnection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:24:30 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:51:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,21 +93,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
-namespace connectivity {
-    namespace evoab {
-        // For the moment, we will connect the Evol address book to the Mozilla
-        // top-level address book which will display whatever is in the preferences
-        // file of Mozilla.
-        static sal_Char*    EVO_SCHEME_EVOLUTION          = "evolution://";
-        // This one is a base uri which will be completed with the connection data.
-        static sal_Char*    EVO_SCHEME_LDAP             = "ldap://";
-        // These two uris will be used to obtain directory factories to access all
-        // address books of the given type.
-        static sal_Char*    EVO_SCHEME_GWISE     = "groupwise://";
-    }
-}
-
-
 ::rtl::OUString implGetExceptionMsg( Exception& e, const ::rtl::OUString& aExceptionType_ )
 {
      ::rtl::OUString aExceptionType = aExceptionType_;
@@ -133,11 +118,11 @@ namespace connectivity {
 }
 
 // --------------------------------------------------------------------------------
-OEvoabConnection::OEvoabConnection(OEvoabDriver*    _pDriver) :
-    OSubComponent<OEvoabConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
+OEvoabConnection::OEvoabConnection(OEvoabDriver*    _pDriver)
+    :OSubComponent<OEvoabConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
+    ,m_pDriver(_pDriver)
     ,m_xCatalog(NULL)
     ,m_xMetaData(NULL)
-    ,m_pDriver(_pDriver)
     ,m_aPassword()
 {
 }
@@ -254,11 +239,9 @@ Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareStatement( con
     return xStmt;
 }
 
-Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareCall( const ::rtl::OUString& sql ) throw( SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareCall( const ::rtl::OUString& /*sql*/ ) throw( SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-        ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"),NULL);
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
     return NULL;
 }
 sal_Bool SAL_CALL OEvoabConnection::isClosed(  ) throw(SQLException, RuntimeException)
@@ -315,9 +298,9 @@ void OEvoabConnection::disposing()
 }
 
 // -------------------------------- stubbed methods ------------------------------------------------
-void SAL_CALL OEvoabConnection::setAutoCommit( sal_Bool autoCommit ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabConnection::setAutoCommit( sal_Bool /*autoCommit*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"),NULL);
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setAutoCommit", *this );
 }
 sal_Bool SAL_CALL OEvoabConnection::getAutoCommit(  ) throw(SQLException, RuntimeException)
 {
@@ -329,37 +312,39 @@ void SAL_CALL OEvoabConnection::commit(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OEvoabConnection::rollback(  ) throw(SQLException, RuntimeException)
 {
 }
-void SAL_CALL OEvoabConnection::setReadOnly( sal_Bool readOnly ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabConnection::setReadOnly( sal_Bool /*readOnly*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"),NULL);
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setReadOnly", *this );
 }
 sal_Bool SAL_CALL OEvoabConnection::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-void SAL_CALL OEvoabConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabConnection::setCatalog( const ::rtl::OUString& /*catalog*/ ) throw(SQLException, RuntimeException)
 {
-        ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"),NULL);
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setCatalog", *this );
 }
 
 ::rtl::OUString SAL_CALL OEvoabConnection::getCatalog(  ) throw(SQLException, RuntimeException)
 {
     return ::rtl::OUString();
 }
-void SAL_CALL OEvoabConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabConnection::setTransactionIsolation( sal_Int32 /*level*/ ) throw(SQLException, RuntimeException)
 {
-        ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"),NULL);
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setTransactionIsolation", *this );
 }
 
 sal_Int32 SAL_CALL OEvoabConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
 {
     return TransactionIsolation::NONE;
 }
+
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OEvoabConnection::getTypeMap(  ) throw(SQLException, RuntimeException)
 {
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::getTypeMap", *this );
     return NULL;
 }
-void SAL_CALL OEvoabConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
-        ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("Not Implemented"),NULL);
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
 }
