@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NServices.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:24:54 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:53:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ void REGISTER_PROVIDER(
     Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
     OSL_ENSURE(xNewKey.is(), "EVOAB::component_writeInfo : could not create a registry key !");
 
-    for (sal_uInt32 i=0; i<Services.getLength(); ++i)
+    for (sal_Int32 i=0; i<Services.getLength(); ++i)
         xNewKey->createKey(Services[i]);
 }
 
