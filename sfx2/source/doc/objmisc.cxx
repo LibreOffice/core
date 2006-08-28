@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 11:19:05 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:09:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1492,13 +1492,13 @@ namespace {
     using namespace ::com::sun::star::uno;
 
     //.....................................................................
-    static SbxArrayRef lcl_translateUno2Basic( void* _pAnySequence )
+    static SbxArrayRef lcl_translateUno2Basic( const void* _pAnySequence )
     {
         SbxArrayRef xReturn;
         if ( _pAnySequence )
         {
             // in real it's a sequence of Any (by convention)
-            Sequence< Any >* pArguments = static_cast< Sequence< Any >* >( _pAnySequence );
+            const Sequence< Any >* pArguments = static_cast< const Sequence< Any >* >( _pAnySequence );
 
             // do we have arguments ?
             if ( pArguments->getLength() )
@@ -1527,7 +1527,7 @@ namespace {
 }
 //-------------------------------------------------------------------------
 ErrCode SfxObjectShell::CallStarBasicScript( const String& _rMacroName, const String& _rLocation,
-    void* _pArguments, void* _pReturn )
+    const void* _pArguments, void* _pReturn )
 {
     OSL_TRACE("in CallSBS");
     ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
@@ -1562,8 +1562,7 @@ ErrCode SfxObjectShell::CallStarBasicScript( const String& _rMacroName, const St
 ErrCode SfxObjectShell::CallScript(
     const String & rScriptType,
     const String & rCode,
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& /*rSource*/,
-    void *pArgs,
+    const void *pArgs,
     void *pRet
 )
 {
