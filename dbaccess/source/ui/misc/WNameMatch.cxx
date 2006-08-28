@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WNameMatch.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:04:46 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:08:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ String OWizNameMatching::GetTitle() const { return String(ModuleRes(STR_WIZ_NAME
 IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton )
 {
     SvLBoxEntry* pEntry = m_CTRL_LEFT.FirstSelected();
-    if(pEntry)
+    if ( pEntry )
     {
         sal_Int32 nPos      = m_CTRL_LEFT.GetModel()->GetAbsPos(pEntry);
         if(pButton == &m_ibColumn_up && nPos)
@@ -265,7 +265,7 @@ IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton )
 IMPL_LINK( OWizNameMatching, RightButtonClickHdl, Button *, pButton )
 {
     SvLBoxEntry* pEntry = m_CTRL_RIGHT.FirstSelected();
-    if(pEntry)
+    if ( pEntry )
     {
         sal_Int32 nPos      = m_CTRL_RIGHT.GetModel()->GetAbsPos(pEntry);
         if(pButton == &m_ibColumn_up_right && nPos)
