@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KResultSet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 10:24:18 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:54:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -985,12 +985,14 @@ void KabResultSet::setFastPropertyValue_NoBroadcast(
 }
 // -------------------------------------------------------------------------
 void KabResultSet::getFastPropertyValue(
-            Any&,
+            Any& _rValue,
             sal_Int32 nHandle) const
 {
     switch (nHandle)
     {
         case PROPERTY_ID_ISBOOKMARKABLE:
+            _rValue <<= (sal_Bool)sal_False;
+            break;
         case PROPERTY_ID_CURSORNAME:
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
