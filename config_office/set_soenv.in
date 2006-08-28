@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.114 $
-# Date:        $Date: 2006-08-28 12:35:32 $
+# Version:     $Revision: 1.115 $
+# Date:        $Date: 2006-08-28 15:43:41 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1861,7 +1861,6 @@ ToFile( "DELIVER",       $perlpre."deliver.pl",     "e" );
 ToFile( "MKOUT",         $perlpre."mkout.pl",       "e" );
 ToFile( "ZIPDEP",        $perlpre."zipdep.pl",      "e" );
 
-ToFile( "GCCINSTLIB",            "gccinstlib.pl",   "e" );
 ToFile( "USE_SHELL",             '@USE_SHELL@',     "e" );
 if ($SYSTEM_PYTHON eq "NO")
 {
