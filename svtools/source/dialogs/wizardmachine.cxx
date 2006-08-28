@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizardmachine.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:00:47 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:55:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -474,11 +474,6 @@ namespace svt
                 )
             {
                 pChildLoop->SetStyle(pChildLoop->GetStyle() & ~WB_DEFBUTTON);
-
-                // give the button the focus, this is the best method to enforce it to be repainted
-                sal_uIntPtr nSaveFocusId = Window::SaveFocus();
-                pChildLoop->GrabFocus();
-                Window::EndSaveFocus(nSaveFocusId);
             }
 
             // the next one ...
@@ -495,13 +490,7 @@ namespace svt
 
         // set it's new style
         if (_pNewDefButton)
-        {
             _pNewDefButton->SetStyle(_pNewDefButton->GetStyle() | WB_DEFBUTTON);
-            // give the button the focus, this is the best method to enforce it to be repainted
-            sal_uIntPtr nSaveFocusId = Window::SaveFocus();
-            _pNewDefButton->GrabFocus();
-            Window::EndSaveFocus(nSaveFocusId);
-        }
     }
 
     //---------------------------------------------------------------------
