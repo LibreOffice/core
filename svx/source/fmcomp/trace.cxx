@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trace.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:42:36 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:00:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,8 +65,8 @@ Tracer::Tracer(const char* _pBlockDescription)
 
     ByteString sMessage(sThread);
     sMessage += sIndent;
-    sMessage += "=>\t";
     sMessage += m_sBlockDescription;
+    sMessage += " {";
     DBG_TRACE(sMessage.GetBuffer());
 }
 
@@ -85,7 +85,7 @@ Tracer::~Tracer()
 
     ByteString sMessage(sThread);
     sMessage += sIndent;
-    sMessage += "<=\t";
+    sMessage += "} // ";
     sMessage += m_sBlockDescription;
     DBG_TRACE(sMessage.GetBuffer());
 }
