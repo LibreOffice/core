@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TTableHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:00:11 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:51:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,12 @@ namespace connectivity
         /** this function is called upon disposing the component
         */
         virtual void SAL_CALL disposing();
+
+        /** The default returns "RENAME TABLE " or "RENAME VIEW " depending on the type.
+        *
+        * \return The start of the rename statement.
+        */
+        virtual ::rtl::OUString getRenameStart() const;
 
     public:
         virtual void refreshColumns();
