@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 15:40:55 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:34:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1799,9 +1799,10 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
 
     // Check, wether or not there is a group with this name
     // Return false, if there is no group with the given name
-    Content         aGroup, aTemplate, aTargetGroup;
-    OUString        aGroupURL, aTemplateURL;
+    Content         aGroup, aTemplate, aTargetGroup, aTemplateToRemove;
+    OUString        aGroupURL, aTemplateURL, aTemplateToRemoveTargetURL;
     INetURLObject   aGroupObj( maRootURL );
+    sal_Bool        bRemoveOldTemplateContent = sal_False;
 
     aGroupObj.insertName( rGroupName, false,
                       INetURLObject::LAST_SEGMENT, true,
@@ -1811,15 +1812,34 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
     if ( ! Content::create( aGroupURL, maCmdEnv, aGroup ) )
         return sal_False;
 
+    ::rtl::OUString aGroupTargetURL;
+    ::rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
+    Any      aValue;
+    if ( getProperty( aGroup, aPropName, aValue ) )
+        aValue >>= aGroupTargetURL;
+
+
     // Check, if there's a template with the given name in this group
-    // Return false, if there already is a template
+    // the target template should be overwritten if it is imported by user
+    // in case the template is installed by office installation of by an add-in
+    // it can not be replaced
     aGroupObj.insertName( rTemplateName, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
     aTemplateURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
 
-    if ( Content::create( aTemplateURL, maCmdEnv, aTemplate ) )
-        return sal_False;
+    if ( Content::create( aTemplateURL, maCmdEnv, aTemplateToRemove ) )
+    {
+        OUString    aTargetTemplPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ) );
+
+        bRemoveOldTemplateContent = sal_True;
+        if ( getProperty( aTemplateToRemove, aTargetTemplPropName, aValue ) )
+            aValue >>= aTemplateToRemoveTargetURL;
+
+        if ( !aGroupTargetURL.getLength() || !maTemplateDirs.getLength()
+          || aTemplateToRemoveTargetURL.getLength() && !::utl::UCBContentHelper::IsSubPath( maTemplateDirs[ maTemplateDirs.getLength() - 1 ], aTemplateToRemoveTargetURL ) )
+            return sal_False; // it is not allowed to remove the template
+    }
 
     try
     {
@@ -1901,24 +1921,18 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
             throw uno::RuntimeException();
 
         // construct destination url
-        ::rtl::OUString aTargetURL;
-        ::rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
-        Any      aValue;
-        if ( getProperty( aGroup, aPropName, aValue ) )
-            aValue >>= aTargetURL;
-
-        if ( !aTargetURL.getLength() )
+        if ( !aGroupTargetURL.getLength() )
         {
-            aTargetURL = CreateNewGroupFsys( rGroupName, aGroup );
+            aGroupTargetURL = CreateNewGroupFsys( rGroupName, aGroup );
 
-            if ( !aTargetURL.getLength() )
+            if ( !aGroupTargetURL.getLength() )
                 throw uno::RuntimeException();
         }
 
-        ::rtl::OUString aNewTemplateTargetURL = CreateNewUniqueFileWithPrefix( aTargetURL, rTemplateName, aExt );
+        ::rtl::OUString aNewTemplateTargetURL = CreateNewUniqueFileWithPrefix( aGroupTargetURL, rTemplateName, aExt );
         if ( !aNewTemplateTargetURL.getLength() )
         {
-            aNewTemplateTargetURL = CreateNewUniqueFileWithPrefix( aTargetURL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserTemplate" ) ), aExt );
+            aNewTemplateTargetURL = CreateNewUniqueFileWithPrefix( aGroupTargetURL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserTemplate" ) ), aExt );
 
             if ( !aNewTemplateTargetURL.getLength() )
                 throw uno::RuntimeException();
@@ -1932,6 +1946,13 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         aStoreArgs[1].Value <<= rTemplateName;
 
         rStorable->storeToURL( aNewTemplateTargetURL, aStoreArgs );
+
+        // the storing was successful, now the old template with the same name can be removed if it existed
+        if ( aTemplateToRemoveTargetURL.getLength() )
+            removeContent( aTemplateToRemoveTargetURL );
+
+        if ( bRemoveOldTemplateContent )
+            removeContent( aTemplateToRemove );
 
         // add the template to hierarchy
         return addEntry( aGroup, rTemplateName, aNewTemplateTargetURL, aMediaType );
