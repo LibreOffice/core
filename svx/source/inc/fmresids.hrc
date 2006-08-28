@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmresids.hrc,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:57:11 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:02:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,12 +207,12 @@
 #define RID_STR_AUTOFIELD                           (RID_FORMS_START +  86)
 #define RID_STR_SVT_SQL_INTERNATIONAL               (RID_FORMS_START +  87)
 #define RID_STR_SVT_SQL_SYNTAX_ERROR                (RID_FORMS_START +  88)
-#define RID_STR_SVT_SQL_SYNTAX_ERROR_BEFORE         (RID_FORMS_START +  89)
+    // FREE
 #define RID_STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE        (RID_FORMS_START +  90)
 #define RID_STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE        (RID_FORMS_START +  91)
 #define RID_STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE      (RID_FORMS_START +  92)
 #define RID_STR_SVT_SQL_SYNTAX_INT_NO_VALID         (RID_FORMS_START +  93)
-#define RID_STR_SVT_SQL_SYNTAX_NO_NUM               (RID_FORMS_START +  94)
+    // FREE
 #define RID_STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID  (RID_FORMS_START +  95)
 #define RID_STR_SVT_SQL_SYNTAX_REAL_NO_VALID        (RID_FORMS_START +  96)
 #define RID_STR_SVT_SQL_SYNTAX_TABLE                (RID_FORMS_START +  97)
