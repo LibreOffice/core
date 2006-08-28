@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:23:24 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:05:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -452,7 +452,7 @@ void OAppDetailPageHelper::getSelectionElementNames(::std::vector< ::rtl::OUStri
                 if ( pSchema )
                 {
                     SvLBoxEntry* pCatalog = rTree.GetParent(pSchema);
-                    if ( pCatalog || _xMetaData->supportsCatalogsInDataManipulation() ) // here we support catalog but no schema
+                    if ( pCatalog || (_xMetaData->supportsCatalogsInDataManipulation() && !_xMetaData->supportsSchemasInDataManipulation()) ) // here we support catalog but no schema
                     {
                         if ( pCatalog == NULL )
                         {
@@ -764,7 +764,8 @@ sal_Bool OAppDetailPageHelper::isFilled() const
 void OAppDetailPageHelper::elementReplaced(ElementType _eType
                                                     ,const ::rtl::OUString& _rOldName
                                                     ,const ::rtl::OUString& _rNewName
-                                                    ,const Reference< XConnection >& _rxConn )
+                                                    ,const Reference< XConnection >& _rxConn
+                                                    ,const Reference<XInterface>& _xObject)
 {
     DBTreeListBox* pTreeView = getCurrentView();
     if ( pTreeView )
@@ -776,7 +777,7 @@ void OAppDetailPageHelper::elementReplaced(ElementType _eType
             case E_TABLE:
                 OSL_ENSURE(_rxConn.is(),"Connection is NULL! ->GPF");
                 static_cast<OTableTreeListBox*>(pTreeView)->removedTable(_rxConn,_rOldName);
-                static_cast<OTableTreeListBox*>(pTreeView)->addedTable(_rxConn,_rNewName, Any());
+                static_cast<OTableTreeListBox*>(pTreeView)->addedTable(_rxConn,_rNewName, makeAny(_xObject));
                 return;
 
             case E_QUERY:
