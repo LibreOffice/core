@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IParseContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:14:50 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:51:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,17 +57,15 @@ namespace connectivity
         {
             ERROR_NONE      = 0,
             ERROR_GENERAL,                  // "Syntax error in SQL expression"
-            ERROR_GENERAL_HINT,             // "before \"#\" expression.", uses 1 parameter
-            ERROR_VALUE_NO_LIKE,            // "The value # can not be used with LIKE.", uses 1 parameter
+            ERROR_VALUE_NO_LIKE,            // "The value #1 can not be used with LIKE."
             ERROR_FIELD_NO_LIKE,            // "LIKE can not be used with this field."
             ERROR_INVALID_COMPARE,          // "The entered criterion can not be compared with this field."
             ERROR_INVALID_INT_COMPARE,      // "The field can not be compared with a number."
-            ERROR_INVALID_STRING_COMPARE,   // "The field can not be compared with a string."
             ERROR_INVALID_DATE_COMPARE,     // "The field can not be compared with a date."
             ERROR_INVALID_REAL_COMPARE,     // "The field can not be compared with a floating point number."
             ERROR_INVALID_TABLE,            // "The database does not contain a table named \"#\"."
             ERROR_INVALID_TABLE_OR_QUERY,   // "The database does contain neither a table nor a query named \"#\"."
-            ERROR_INVALID_COLUMN,           // "The column \"#\" is unknown in the table \"#\"."
+            ERROR_INVALID_COLUMN,           // "The column \"#1\" is unknown in the table \"#2\"."
             ERROR_INVALID_TABLE_EXIST,      // "The database already contains a table or view with name \"#\"."
             ERROR_INVALID_QUERY_EXIST,      // "The database already contains a query with name \"#\".";
             ERROR_CYCLIC_SUB_QUERIES        // "The statement contains a cyclic reference to one or more sub queries."
