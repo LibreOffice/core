@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-13 13:15:19 $
+#   last change: $Author: ihi $ $Date: 2006-08-28 11:21:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -285,7 +285,8 @@ sub create_epm_header
         $readmefilename = "README";
     }
 
-    if ( $installer::globals::languagepack )    # in language packs the files LICENSE and README are removed, because they are not language specific
+    if (( $installer::globals::languagepack )   # in language packs the files LICENSE and README are removed, because they are not language specific
+        || ( $variableshashref->{'NO_README_IN_ROOTDIR'} ))
     {
         if ( $installer::globals::iswindowsbuild )
         {
