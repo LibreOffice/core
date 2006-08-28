@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TTableHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:19:45 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:51:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,6 +262,17 @@ void OTableHelper::refreshIndexes()
     else
         m_pIndexes  = createIndexes(aVector);
 }
+// -----------------------------------------------------------------------------
+::rtl::OUString OTableHelper::getRenameStart() const
+{
+    ::rtl::OUString sSql(RTL_CONSTASCII_USTRINGPARAM("RENAME "));
+    if ( m_Type == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")) )
+        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" VIEW "));
+    else
+        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TABLE "));
+
+    return sSql;
+}
 // -------------------------------------------------------------------------
 // XRename
 void SAL_CALL OTableHelper::rename( const ::rtl::OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
@@ -277,12 +288,7 @@ void SAL_CALL OTableHelper::rename( const ::rtl::OUString& newName ) throw(SQLEx
 
     if(!isNew())
     {
-        ::rtl::OUString sSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RENAME "));
-        if ( m_Type == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")) )
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" VIEW "));
-        else
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TABLE "));
-
+        ::rtl::OUString sSql = getRenameStart();
         ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 
         ::rtl::OUString sCatalog,sSchema,sTable;
