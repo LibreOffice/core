@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 15:55:23 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:56:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -428,23 +428,11 @@ void VCLXImageConsumer::setProperty( const ::rtl::OUString& PropertyName, const 
 //--------------------------------------------------------------------
 //  class VCLXButton
 //  ----------------------------------------------------
-VCLXButton::VCLXButton() : maActionListeners( *this )
+VCLXButton::VCLXButton()
+    :maActionListeners( *this )
+    ,maItemListeners( *this )
 {
 }
-
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXButton::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XButton*, this ) );
-    return (aRet.hasValue() ? aRet : VCLXImageConsumer::queryInterface( rType ));
-}
-
-// ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXButton )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton>* ) NULL ),
-    VCLXImageConsumer::getTypes()
-IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXButton::CreateAccessibleContext()
 {
@@ -458,6 +446,7 @@ void VCLXButton::dispose() throw(::com::sun::star::uno::RuntimeException)
     ::com::sun::star::lang::EventObject aObj;
     aObj.Source = (::cppu::OWeakObject*)this;
     maActionListeners.disposeAndClear( aObj );
+    maItemListeners.disposeAndClear( aObj );
     VCLXImageConsumer::dispose();
 }
 
@@ -471,6 +460,18 @@ void VCLXButton::removeActionListener( const ::com::sun::star::uno::Reference< :
 {
     ::vos::OGuard aGuard( GetMutex() );
     maActionListeners.removeInterface( l );
+}
+
+void VCLXButton::addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener > & l  )throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    maItemListeners.addInterface( l );
+}
+
+void VCLXButton::removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener > & l ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    maItemListeners.removeInterface( l );
 }
 
 void VCLXButton::setLabel( const ::rtl::OUString& rLabel ) throw(::com::sun::star::uno::RuntimeException)
@@ -640,6 +641,21 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 aEvent.ActionCommand = maActionCommand;
                 maActionListeners.actionPerformed( aEvent );
+            }
+        }
+        break;
+
+        case VCLEVENT_PUSHBUTTON_TOGGLE:
+        {
+            PushButton& rButton = dynamic_cast< PushButton& >( *rVclWindowEvent.GetWindow() );
+
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
+            if ( maItemListeners.getLength() )
+            {
+                ::com::sun::star::awt::ItemEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Selected = ( rButton.GetState() == STATE_CHECK ) ? 1 : 0;
+                maItemListeners.itemStateChanged( aEvent );
             }
         }
         break;
