@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NStatement.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:22:58 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:53:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,15 +87,15 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 //------------------------------------------------------------------------------
 OStatement_Base::OStatement_Base(OEvoabConnection* _pConnection)
-    : OStatement_BASE(m_aMutex),
-      OPropertySetHelper(OStatement_BASE::rBHelper),
-      rBHelper(OStatement_BASE::rBHelper),
-      m_pConnection(_pConnection),
-      m_xResultSet(NULL),
-      m_pResultSet(NULL),
-      m_pParseTree(NULL),
-      m_aParser(_pConnection->getDriver()->getMSFactory()),
-      m_aSQLIterator(_pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL)
+    : OStatement_BASE(m_aMutex)
+    , OPropertySetHelper(OStatement_BASE::rBHelper)
+    , m_xResultSet(NULL)
+    , m_pResultSet(NULL)
+    , m_pConnection(_pConnection)
+    , m_aParser(_pConnection->getDriver()->getMSFactory())
+    , m_aSQLIterator( _pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL )
+    , m_pParseTree(NULL)
+    , rBHelper(OStatement_BASE::rBHelper)
 {
     m_pConnection->acquire();
 }
@@ -336,7 +336,6 @@ EBookQuery *OStatement_Base::whereAnalysis( const OSQLParseNode* parseTree ) thr
 
         OSQLParseNode *pColumn    = parseTree->getChild( 0 );                          // Match Item
         OSQLParseNode *pAtom      = parseTree->getChild( parseTree->count() - 2 );     // Match String
-        OSQLParseNode *pOptEscape = parseTree->getChild( parseTree->count() - 1 );     // Opt Escape Rule
         bool bNotLike             = parseTree->count() == 5;
 
         if( !( pAtom->getNodeType() == SQL_NODE_STRING ||
@@ -351,7 +350,6 @@ EBookQuery *OStatement_Base::whereAnalysis( const OSQLParseNode* parseTree ) thr
         }
 
         const sal_Unicode WILDCARD = '%';
-        const sal_Unicode ALT_WILDCARD = '*';
 
         rtl::OUString aColumnName;
         rtl::OUString aMatchString;
@@ -542,37 +540,14 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeExcep
     return aRet;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& /*sql*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    ::dbtools::throwFeatureNotImplementedException( "XStatement::executeUpdate", *this );
     // the return values gives information about how many rows are affected by executing the sql statement
     return 0;
 }
-// -------------------------------------------------------------------------
-
-// Reference< XResultSet > SAL_CALL OStatement_Base::getResultSet(  ) throw(SQLException, RuntimeException)
-// {
-//  ::osl::MutexGuard aGuard( m_aMutex );
-//  checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-// //   return our save resultset here
-//  return m_xResultSet;
-// }
-
-// -------------------------------------------------------------------------
-
-// sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, RuntimeException)
-// {
-//  ::osl::MutexGuard aGuard( m_aMutex );
-//  checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-//  // if your driver supports more than only one resultset
-//  // and has one more at this moment return true
-//  return sal_False;
-// }
-
-// -------------------------------------------------------------------------
 
 // -------------------------------------------------------------------------
 Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeException)
@@ -583,8 +558,6 @@ Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeExcepti
 
     return makeAny(SQLWarning());
 }
-
-// -------------------------------------------------------------------------
 
 // -------------------------------------------------------------------------
 void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeException)
@@ -622,18 +595,18 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
 }
 // -------------------------------------------------------------------------
 sal_Bool OStatement_Base::convertFastPropertyValue(
-                            Any & rConvertedValue,
-                            Any & rOldValue,
-                            sal_Int32 nHandle,
-                            const Any& rValue )
+                            Any & /*rConvertedValue*/,
+                            Any & /*rOldValue*/,
+                            sal_Int32 /*nHandle*/,
+                            const Any& /*rValue*/ )
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
-    sal_Bool bConverted = sal_False;
+    sal_Bool bModified = sal_False;
     // here we have to try to convert
-    return bConverted;
+    return bModified;
 }
 // -------------------------------------------------------------------------
-void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
+void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& /*rValue*/) throw (Exception)
 {
     // set the value to what ever is nescessary
     switch(nHandle)
@@ -653,7 +626,7 @@ void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const A
     }
 }
 // -------------------------------------------------------------------------
-void OStatement_Base::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
+void OStatement_Base::getFastPropertyValue(Any& /*rValue*/,sal_Int32 nHandle) const
 {
     switch(nHandle)
     {
