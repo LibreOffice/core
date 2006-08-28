@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:56:42 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:01:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -550,12 +550,6 @@ String RID_STR_SVT_SQL_SYNTAX_ERROR
     Text [ de ] = "Syntaxfehler im SQL-Ausdruck" ;
     Text [ en-US ] = "Syntax error in SQL statement" ;
 };
-String RID_STR_SVT_SQL_SYNTAX_ERROR_BEFORE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Syntaxfehler im SQL-Ausdruck : Fehlerhafte Syntax */
-    Text [ de ] = "bevor \"#\" Ausdruck." ;
-    Text [ en-US ] = "before \"#\" expression.";
-};
 
 String RID_STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE
 {
@@ -567,12 +561,6 @@ String RID_STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE
 {
     Text [ de ] = "WIE kann bei diesem Feld nicht benutzt werden.";
     Text [ en-US ] = "LIKE cannot be used with this field.";
-};
-
-String RID_STR_SVT_SQL_SYNTAX_NO_NUM
-{
-    Text [ de ] = "Das Feld kann nicht mit einer Zeichenkette verglichen werden.";
-    Text [ en-US ] = "The field cannot be compared with a string.";
 };
 
 String RID_STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID
@@ -613,8 +601,8 @@ String RID_STR_SVT_SQL_CYCLIC_SUB_QUERIES
 };
 String RID_STR_SVT_SQL_SYNTAX_COLUMN
 {
-    Text [ de ] = "Die Spalte \"#\" ist in der Tabelle \"#\" unbekannt.";
-    Text [ en-US ] = "The column \"#\" is unknown in the table \"#\".";
+    Text [ de ] = "Die Spalte \"#1\" ist in der Tabelle \"#2\" unbekannt.";
+    Text [ en-US ] = "The column \"#1\" is unknown in the table \"#2\".";
 };
 String RID_STR_SVT_SQL_SYNTAX_REAL_NO_VALID
 {
