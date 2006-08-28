@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppView.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:55:11 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:06:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -498,10 +498,11 @@ void OApplicationView::elementRemoved(ElementType eType,const ::rtl::OUString& _
 void OApplicationView::elementReplaced(ElementType _eType
                                                     ,const ::rtl::OUString& _rOldName
                                                     ,const ::rtl::OUString& _rNewName
-                                                    ,const Reference< XConnection >& _rxConn )
+                                                    ,const Reference< XConnection >& _rxConn
+                                                    ,const Reference<XInterface>& _xObject)
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
-    getDetailView()->elementReplaced(_eType, _rOldName,_rNewName,_rxConn );
+    getDetailView()->elementReplaced(_eType, _rOldName,_rNewName,_rxConn ,_xObject);
 }
 // -----------------------------------------------------------------------------
 void OApplicationView::clearPages(sal_Bool _bTaskAlso)
