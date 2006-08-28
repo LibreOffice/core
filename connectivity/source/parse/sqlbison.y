@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.54 2006-07-13 15:14:39 obo Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.55 2006-08-28 14:54:46 ihi Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: obo $ $Date: 2006-07-13 15:14:39 $ $Revision: 1.54 $
+//	$Author: ihi $ $Date: 2006-08-28 14:54:46 $ $Revision: 1.55 $
 //
 // Description:
 //
@@ -3124,17 +3124,15 @@ struct _ConstAsciiString_
 	_ConstAsciiString_ const name = { sizeof(string)-1, string }
 
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_GENERAL, "Syntax error in SQL expression");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_GENERAL_HINT,	"in front of \"#\" expression." );
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_VALUE_NO_LIKE, "The value # can not be used with LIKE.");
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_VALUE_NO_LIKE, "The value #1 can not be used with LIKE.");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_FIELD_NO_LIKE, "LIKE can not be used with this field.");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_COMPARE, "The entered criterion can not be compared with this field.");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_STRING_COMPARE, "The field can not be compared with a string.");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_DATE_COMPARE, "The field can not be compared with a date.");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_REAL_COMPARE,	"The field can not be compared with a floating point number.");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_INT_COMPARE,	"The field can not be compared with a number.");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_TABLE,	"The database does not contain a table named \"#\".");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_TABLE_OR_QUERY,   "The database does contain neither a table nor a query named \"#\".");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_COLUMN,	"The column \"#\" is unknown in the table \"#\".");
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_COLUMN,	"The column \"#1\" is unknown in the table \"#2\".");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_TABLE_EXIST,	"The database already contains a table or view with name \"#\".");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_QUERY_EXIST,	"The database already contains a query with name \"#\".");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_CYCLIC_SUB_QUERIES,   "The statement contains a cyclic reference to one or more sub queries.");
@@ -3178,12 +3176,10 @@ OParseContext::~OParseContext()
 	switch (_eCode)
 	{
 		case ERROR_GENERAL:					aMsg = ERROR_STR_GENERAL; break;
-		case ERROR_GENERAL_HINT:			aMsg = ERROR_STR_GENERAL_HINT; break;
 		case ERROR_VALUE_NO_LIKE:			aMsg = ERROR_STR_VALUE_NO_LIKE; break;
 		case ERROR_FIELD_NO_LIKE:			aMsg = ERROR_STR_FIELD_NO_LIKE; break;
 		case ERROR_INVALID_COMPARE:			aMsg = ERROR_STR_INVALID_COMPARE; break;
 		case ERROR_INVALID_INT_COMPARE:		aMsg = ERROR_STR_INVALID_INT_COMPARE; break;
-		case ERROR_INVALID_STRING_COMPARE:	aMsg = ERROR_STR_INVALID_STRING_COMPARE; break;
 		case ERROR_INVALID_DATE_COMPARE:	aMsg = ERROR_STR_INVALID_DATE_COMPARE; break;
 		case ERROR_INVALID_REAL_COMPARE:	aMsg = ERROR_STR_INVALID_REAL_COMPARE; break;
 		case ERROR_INVALID_TABLE:			aMsg = ERROR_STR_INVALID_TABLE; break;
