@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:08:05 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:02:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@ public:
     ~DbGridColumn();
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& getModel() const { return m_xModel; }
-    void  setModel(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  _xModel) { m_xModel = _xModel; }
+    void  setModel(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  _xModel);
 
 
     sal_uInt16  GetId() const {return m_nId;}
@@ -234,6 +234,12 @@ public:
     // column locking
     sal_Bool    isLocked() const { return m_bLocked; }
     void    setLock(sal_Bool _bLock);
+
+private:
+    /** attaches or detaches our cell object to the SctriptEventAttacherManager implemented
+        by our model's parent
+    */
+    void    impl_toggleScriptManager_nothrow( bool _bAttach );
 };
 
 //==================================================================
@@ -973,7 +979,7 @@ public:
     virtual void SAL_CALL SAL_CALL makeVisible(sal_Int16 nEntry) throw(::com::sun::star::uno::RuntimeException);
 
 protected:
-    DECL_LINK( OnSelect, void* );
+    DECL_LINK( OnSelect, VclWindowEvent* );
     DECL_LINK( OnDoubleClick, void* );
 };
 
