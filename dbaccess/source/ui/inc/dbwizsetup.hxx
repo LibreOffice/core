@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:36:52 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:07:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,6 @@ public:
     virtual void setTitle(const ::rtl::OUString& _sTitle);
     virtual sal_Bool saveDatasource();
     virtual String  getStateDisplayName( WizardState _nState );
-    virtual short Execute();
 
     /** returns <TRUE/> if the database should be opened, otherwise <FALSE/>.
     */
