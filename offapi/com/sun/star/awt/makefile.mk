@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-14 07:13:55 $
+#   last change: $Author: ihi $ $Date: 2006-08-28 14:58:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -279,6 +279,7 @@ IDLFILES=\
     XTextLayoutConstrains.idl\
     XTextListener.idl\
     XTimeField.idl\
+    XToggleButton.idl\
     XToolkit.idl\
     XTopWindow.idl\
     XTopWindowListener.idl\
