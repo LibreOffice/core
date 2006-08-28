@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:06:31 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:07:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,9 @@
 #ifndef _DBAUI_DBADMIN_HRC_
 #include "dbadmin.hrc"
 #endif
+#ifndef DBAUI_ASYNCRONOUSLINK_HXX
+#include "AsyncronousLink.hxx"
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
@@ -167,6 +170,9 @@
 #endif
 #ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
 #include <comphelper/sequenceashashmap.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 #ifndef _COM_SUN_STAR_UCB_IOERRORCODE_HPP_
@@ -1087,13 +1093,6 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 
 
     //-------------------------------------------------------------------------
-    short ODbTypeWizDialogSetup::Execute()
-    {
-        short nResult = ModalDialog::Execute();
-        return nResult;
-    }
-
-    //-------------------------------------------------------------------------
     sal_Bool ODbTypeWizDialogSetup::callSaveAsDialog()
     {
         sal_Bool bRet = sal_False;
@@ -1179,36 +1178,67 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     }
 
     // -----------------------------------------------------------------------------
+    namespace
+    {
+        // .............................................................................
+        class AsyncLoader
+        {
+        private:
+            Reference< XComponentLoader >   m_xFrameLoader;
+            ::rtl::OUString                 m_sURL;
+            OAsyncronousLink                m_aAsyncCaller;
+
+        public:
+            AsyncLoader( const Reference< XComponentLoader >& _rxLoader, const ::rtl::OUString& _rURL )
+                :m_xFrameLoader( _rxLoader )
+                ,m_sURL( _rURL )
+                ,m_aAsyncCaller( LINK( this, AsyncLoader, OnOpenDocument ) )
+            {
+            }
+
+            void doLoadAsync()
+            {
+                m_aAsyncCaller.Call( NULL );
+            }
+
+        private:
+            DECL_LINK( OnOpenDocument, void* );
+        };
+
+        // .............................................................................
+        IMPL_LINK( AsyncLoader, OnOpenDocument, void*, /*_pEmptyArg*/ )
+        {
+            m_xFrameLoader->loadComponentFromURL( m_sURL,
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ), FrameSearchFlag::ALL, Sequence<PropertyValue >() );
+            delete this;
+            return 0L;
+        }
+    }
+
+    // -----------------------------------------------------------------------------
     sal_Bool ODbTypeWizDialogSetup::onFinish(sal_Int32 _nResult)
     {
         if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPage::eOpenExisting )
         {
-            if ( !OWizardMachine::onFinish( _nResult ) )
+            // we're not going to re-use the XModel we have - since the document the user
+            // wants us to load could be a non-database document. Instead, we asynchronously
+            // open the selected document. Thus, the wizard's return value is RET_CANCEL,
+            // which means to not continue loading the database document
+            if ( !OWizardMachine::onFinish( RET_CANCEL ) )
                 return sal_False;
 
-            Reference< XModel > xModel( m_pImpl->getCurrentModel() );
-            DBG_ASSERT( xModel.is(), "ODbTypeWizDialogSetup::onFinish: no model?" );
-            if ( xModel.is() )
+            Reference< XComponentLoader > xFrameLoader;
+            try
             {
-                OGeneralPage::DocumentDescriptor aDocument( m_pGeneralPage->GetSelectedDocument() );
-
-                ::comphelper::SequenceAsHashMap aLoadArgs;
-                aLoadArgs.createItemIfMissing( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ) ),
-                    ::rtl::OUString( aDocument.sURL ) );
-                aLoadArgs.createItemIfMissing( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ),
-                    ::rtl::OUString( aDocument.sURL ) );
-                aLoadArgs.createItemIfMissing( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) ),
-                    ::rtl::OUString( aDocument.sFilter ) );
-                try
-                {
-                    xModel->attachResource( aDocument.sURL, aLoadArgs.getAsConstPropertyValueList() );
-                }
-                catch( const Exception& e )
-                {
-                    DBG_ERROR( "ODbTypeWizDialogSetup::onFinish: caught an exception while loading the document!" );
-                    (void)e;
-                }
+                xFrameLoader = Reference< XComponentLoader >( getORB()->createInstance( SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
             }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+
+            AsyncLoader* pAsyncLoader = new AsyncLoader( xFrameLoader, m_pGeneralPage->GetSelectedDocument().sURL );
+            pAsyncLoader->doLoadAsync();
 
             return sal_True;
         }
