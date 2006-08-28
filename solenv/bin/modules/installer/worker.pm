@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-15 10:37:57 $
+#   last change: $Author: ihi $ $Date: 2006-08-28 11:21:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1923,6 +1923,13 @@ sub put_scpactions_into_installset
         my $destfile = $destdir . $installer::globals::separator . $onescpaction->{'DestinationName'};
 
         installer::systemactions::copy_one_file($sourcefile, $destfile);
+
+        if ( $onescpaction->{'UnixRights'} )
+        {
+            my $localcall = "chmod $onescpaction->{'UnixRights'} $destfile \>\/dev\/null 2\>\&1";
+            system($localcall);
+        }
+
     }
 
     installer::logger::include_header_into_logfile("End: Copying scp action files into installation set");
