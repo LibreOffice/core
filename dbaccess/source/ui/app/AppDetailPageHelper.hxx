@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:54:20 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:05:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,7 +340,8 @@ namespace dbaui
         void elementReplaced(ElementType eType
                         ,const ::rtl::OUString& _rOldName
                         ,const ::rtl::OUString& _rNewName
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn = NULL);
+                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn = NULL
+                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xObject = NULL);
 
         /** removes an element from the detail page.
             @param  _eType
