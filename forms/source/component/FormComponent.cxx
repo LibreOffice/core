@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:49:22 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:57:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2319,9 +2319,7 @@ void OBoundControlModel::reset() throw (RuntimeException)
 
     aGuard.clear();
 
-    cppu::OInterfaceIteratorHelper aIterDone(m_aResetListeners);
-    while (aIterDone.hasMoreElements())
-        reinterpret_cast<XResetListener*>(aIterDone.next())->resetted(aResetEvent);
+    m_aResetListeners.notifyEach( &XResetListener::resetted, aResetEvent );
 }
 // -----------------------------------------------------------------------------
 void OBoundControlModel::setField( const Reference< XPropertySet>& _rxField,sal_Bool _bFire )
@@ -2609,7 +2607,7 @@ Any OBoundControlModel::translateControlValueToExternalValue( ) const
 Any OBoundControlModel::translateControlValueToValidatableValue( ) const
 {
     OSL_PRECOND( m_xValidator.is(), "OBoundControlModel::translateControlValueToValidatableValue: no validator, so why should I?" );
-    if ( m_xValidator == m_xExternalBinding )
+    if ( ( m_xValidator == m_xExternalBinding ) && m_xValidator.is() )
         return translateControlValueToExternalValue();
     return getControlValue();
 }
@@ -2737,9 +2735,18 @@ sal_Bool SAL_CALL OBoundControlModel::isValid(  ) throw (RuntimeException)
 }
 
 //--------------------------------------------------------------------
+::com::sun::star::uno::Any OBoundControlModel::getCurrentFormComponentValue() const
+{
+    if ( hasValidator() )
+        return translateControlValueToValidatableValue();
+    return getControlValue();
+}
+
+//--------------------------------------------------------------------
 Any SAL_CALL OBoundControlModel::getCurrentValue(  ) throw (RuntimeException)
 {
-    return translateControlValueToValidatableValue();
+    ::osl::MutexGuard aGuard( m_aMutex );
+    return getCurrentFormComponentValue();
 }
 
 //--------------------------------------------------------------------
