@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppView.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:55:23 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:06:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,11 +273,14 @@ namespace dbaui
                 The new name of the object to be replaced
             @param  _rxConn
                 If we insert a table, the connection must be set.
+            @param  _xObject
+                The object which was replaced
         */
         void elementReplaced(ElementType eType
                         ,const ::rtl::OUString& _rOldName
                         ,const ::rtl::OUString& _rNewName
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn = NULL);
+                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn = NULL
+                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xObject = NULL);
 
         /** removes an element from the detail page.
             @param  _eType
