@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:39:31 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:01:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@
 #ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSINK_HPP_
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #endif
+#ifndef _COM_SUN_STAR_REFLECTION_XINTERFACEMETHODTYPEDESCRIPTION_HPP_
+#include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
+#endif
 /** === end UNO includes === **/
 
 #ifndef _FM_FMMODEL_HXX
@@ -94,12 +97,8 @@
 #include <tools/shl.hxx>
 #endif
 
-#ifndef _SBXCLASS_HXX //autogen
-#include <basic/sbx.hxx>
-#endif
-
-#ifndef _SB_SBUNO_HXX
-#include <basic/sbuno.hxx>
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 #ifndef _SFX_OBJSH_HXX //autogen
@@ -120,10 +119,6 @@
 
 #ifndef _SFXEVENT_HXX //autogen
 #include <sfx2/event.hxx>
-#endif
-
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
 #endif
 
 #ifndef _SVDITER_HXX //autogen
@@ -162,6 +157,7 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::reflection;
 using namespace ::com::sun::star::form::binding;
 using namespace ::svxform;
 
@@ -199,10 +195,11 @@ String static_STR_UNDO_PROPERTY;
 DBG_NAME(FmXUndoEnvironment);
 //------------------------------------------------------------------------------
 FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
-                   :rModel(_rModel)
-                   ,m_pPropertySetCache(NULL)
+                   :rModel( _rModel )
+                   ,m_pPropertySetCache( NULL )
+                   ,m_pScriptingEnv( ::svxform::createDefaultFormScriptingEnvironment( _rModel ) )
                    ,m_Locks( 0 )
-                   ,bReadOnly(sal_False)
+                   ,bReadOnly( sal_False )
 {
     DBG_CTOR(FmXUndoEnvironment,NULL);
 }
@@ -216,9 +213,10 @@ FmXUndoEnvironment::~FmXUndoEnvironment()
 }
 
 //------------------------------------------------------------------------------
-void FmXUndoEnvironment::Clear()
+void FmXUndoEnvironment::dispose()
 {
     Lock();
+
     sal_uInt16 nCount = rModel.GetPageCount();
     sal_uInt16 i;
     for (i = 0; i < nCount; i++)
@@ -226,7 +224,7 @@ void FmXUndoEnvironment::Clear()
         FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetPage(i) );
         if ( pPage )
         {
-            Reference< XInterface > xForms = pPage->GetForms( false );
+            Reference< XInterface > xForms = pPage->GetForms( false ).get();
             if ( xForms.is() )
                 RemoveElement( xForms );
         }
@@ -238,16 +236,19 @@ void FmXUndoEnvironment::Clear()
         FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetMasterPage(i) );
         if ( pPage )
         {
-            Reference< XInterface > xForms = pPage->GetForms( false );
+            Reference< XInterface > xForms = pPage->GetForms( false ).get();
             if ( xForms.is() )
                 RemoveElement( xForms );
         }
     }
+
     UnLock();
 
-    EndListening(*rModel.GetObjectShell());
-    if (IsListening(rModel))
-        EndListening(rModel);
+    EndListening( *rModel.GetObjectShell() );
+    if ( IsListening( rModel ) )
+        EndListening( rModel );
+
+    m_pScriptingEnv->dispose();
 }
 
 //------------------------------------------------------------------------------
@@ -264,7 +265,7 @@ void FmXUndoEnvironment::ModeChanged()
             FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetPage(i) );
             if ( pPage )
             {
-                Reference< XInterface > xForms = pPage->GetForms( false );
+                Reference< XInterface > xForms = pPage->GetForms( false ).get();
                 if ( xForms.is() )
                     TogglePropertyListening( xForms );
             }
@@ -276,7 +277,7 @@ void FmXUndoEnvironment::ModeChanged()
             FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetMasterPage(i) );
             if ( pPage )
             {
-                Reference< XInterface > xForms = pPage->GetForms( false );
+                Reference< XInterface > xForms = pPage->GetForms( false ).get();
                 if ( xForms.is() )
                     TogglePropertyListening( xForms );
             }
@@ -317,7 +318,7 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         switch ( ((SfxSimpleHint&)rHint).GetId() )
         {
             case SFX_HINT_DYING:
-                Clear();
+                dispose();
                 break;
             case SFX_HINT_MODECHANGED:
                 ModeChanged();
@@ -773,9 +774,9 @@ void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _r
         Reference< XEventAttacherManager > xManager( _rxContainer, UNO_QUERY );
         if ( xManager.is() )
             if ( _bStartListening )
-                xManager->addScriptListener( this );
+                m_pScriptingEnv->registerEventAttacherManager( xManager );
             else
-                xManager->removeScriptListener( this );
+                m_pScriptingEnv->revokeEventAttacherManager( xManager );
 
         // also handle all children of this element
         sal_uInt32 nCount = _rxContainer->getCount();
@@ -870,92 +871,6 @@ void FmXUndoEnvironment::RemoveElement(const Reference< XInterface >& _rxElement
         switchListening( xContainer, false );
 }
 
-
-// XScriptListener
-void FmXUndoEnvironment::firing_Impl( const ScriptEvent& evt, Any *pSyncRet )
-{
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
-
-    SfxObjectShellRef xObjSh = rModel.GetObjectShell();
-    if( !xObjSh.Is() )
-        return;
-
-    {
-        Reference< XInterface >  xThis;
-        evt.Helper >>= xThis;
-
-        aSolarGuard.clear();
-        if (xThis.is())
-        {
-            ::rtl::OUString sScriptType = evt.ScriptType;
-            ::rtl::OUString sScriptCode = evt.ScriptCode;
-            Sequence< Any > aArguments = evt.Arguments;
-
-            ::rtl::OUString sMacroLocation;
-
-            // the object shell still want's the script in the old format where neither "document" nor "application" is prepended
-            if ( 0 == sScriptType.compareToAscii( "StarBasic" ) )
-            {   // it's a starbasic script
-                sal_Int32 nPrefixLen = sScriptCode.indexOf( ':' );
-                DBG_ASSERT( 0 <= nPrefixLen, "FmXUndoEnvironment::firing_Impl: Basic script name in old format encountered!" );
-
-                if ( 0 <= nPrefixLen )
-                {
-                    // and it has such a prefix
-                    sMacroLocation = sScriptCode.copy( 0, nPrefixLen );
-                    DBG_ASSERT( 0 == sMacroLocation.compareToAscii( "document" )
-                            ||  0 == sMacroLocation.compareToAscii( "application" ),
-                            "FmXUndoEnvironment::firing_Impl: invalid (unknown) prefix!" );
-
-                    // strip the prefix: the SfxObjectShell::CallScript knows nothing about such prefixes
-                    sScriptCode = sScriptCode.copy( nPrefixLen + 1 );
-
-                    // (On the medium run, we should migrate to the mechanism where scripts are executed via
-                    // XDispatch (or whatever they are planning to use). But at the moment this mechanism is not implemented at all ...)
-                }
-
-                if ( sMacroLocation.getLength() )
-                {   // we have a macro in the "new" runtime format (fully described)
-                    xObjSh->CallStarBasicScript( sScriptCode, sMacroLocation, static_cast< void* >( &aArguments ), pSyncRet );
-                }
-                else
-                {   // we have a script in the old format
-                    xObjSh->CallScript( sScriptType, sScriptCode, xThis, static_cast< void* >( &aArguments ), pSyncRet );
-                }
-
-            }
-            else
-            {
-                Any aIgnoreReturn;
-                ::com::sun::star::uno::Sequence< sal_Int16 > aOutArgsIndex;
-                ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aOutArgs;
-                xObjSh->CallXScript( sScriptCode,  aArguments, pSyncRet ? *pSyncRet : aIgnoreReturn,
-                                    aOutArgsIndex, aOutArgs);
-            }
-
-        }
-
-    }
-
-    // Objectshells are not thread safe, so guard the destruction
-    {
-        ::vos::OGuard aSolarGuarsReset( Application::GetSolarMutex() );
-        xObjSh = NULL;
-    }
-}
-
-void SAL_CALL FmXUndoEnvironment::firing(const ScriptEvent& evt) throw(::com::sun::star::uno::RuntimeException)
-{
-    firing_Impl( evt );
-}
-
-//------------------------------------------------------------------------------
-Any SAL_CALL FmXUndoEnvironment::approveFiring(const ScriptEvent& evt) throw(::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException)
-{
-    Any aRet;
-    firing_Impl( evt, &aRet );
-    return aRet;
-}
 
 //------------------------------------------------------------------------------
 FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyChangeEvent& evt)
