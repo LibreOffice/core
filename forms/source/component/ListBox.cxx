@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:44:00 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:57:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 #include <algorithm>
@@ -1336,9 +1339,10 @@ namespace frm
         OBoundControlModel::onConnectedExternalValue( );
     }
 
-    //....................................................................
+    //--------------------------------------------------------------------
     namespace
     {
+        //................................................................
         struct ExtractStringFromSequence_Safe : public ::std::unary_function< sal_Int16, ::rtl::OUString >
         {
         protected:
@@ -1355,6 +1359,39 @@ namespace frm
                 return ::rtl::OUString();
             }
         };
+
+        //................................................................
+        Any lcl_getSingleSelectedEntry( const Sequence< sal_Int16 >& _rSelectSequence, const Sequence< ::rtl::OUString >& _rStringList )
+        {
+            Any aReturn;
+
+            // by definition, multiple selected entries are transfered as NULL if the
+            // binding does not support string lists
+            if ( _rSelectSequence.getLength() <= 1 )
+            {
+                ::rtl::OUString sSelectedEntry;
+
+                if ( _rSelectSequence.getLength() == 1 )
+                    sSelectedEntry = ExtractStringFromSequence_Safe( _rStringList )( _rSelectSequence[0] );
+
+                aReturn <<= sSelectedEntry;
+            }
+
+            return aReturn;
+        }
+
+        //................................................................
+        Any lcl_getMultiSelectedEntries( const Sequence< sal_Int16 >& _rSelectSequence, const Sequence< ::rtl::OUString >& _rStringList )
+        {
+            Sequence< ::rtl::OUString > aSelectedEntriesTexts( _rSelectSequence.getLength() );
+            ::std::transform(
+                _rSelectSequence.getConstArray(),
+                _rSelectSequence.getConstArray() + _rSelectSequence.getLength(),
+                aSelectedEntriesTexts.getArray(),
+                ExtractStringFromSequence_Safe( _rStringList )
+            );
+            return makeAny( aSelectedEntriesTexts );
+        }
     }
 
     //--------------------------------------------------------------------
@@ -1397,33 +1434,44 @@ namespace frm
             break;
 
         case tsEntryList:
-            {
-                Sequence< ::rtl::OUString > aSelectedEntriesTexts( aSelectSequence.getLength() );
-                ::std::transform(
-                    aSelectSequence.getConstArray(),
-                    aSelectSequence.getConstArray() + aSelectSequence.getLength(),
-                    aSelectedEntriesTexts.getArray(),
-                    ExtractStringFromSequence_Safe( getStringItemList() )
-                );
-            }
+            aReturn = lcl_getMultiSelectedEntries( aSelectSequence, getStringItemList() );
             break;
 
         case tsEntry:
-            // by definition, multiple selected entries are transfered as NULL if the
-            // binding does not support string lists
-            if ( aSelectSequence.getLength() <= 1 )
-            {
-                ::rtl::OUString sSelectedEntry;
-
-                if ( aSelectSequence.getLength() == 1 )
-                    sSelectedEntry = ExtractStringFromSequence_Safe( getStringItemList() )( aSelectSequence[0] );
-
-                aReturn <<= sSelectedEntry;
-            }
+            aReturn = lcl_getSingleSelectedEntry( aSelectSequence, getStringItemList() );
             break;
         }
 
         return aReturn;
+    }
+
+    //--------------------------------------------------------------------
+    Any OListBoxModel::getCurrentFormComponentValue() const
+    {
+        if ( hasValidator() )
+            return OBoundControlModel::getCurrentFormComponentValue();
+
+        Any aCurretnValue;
+
+        try
+        {
+            Sequence< sal_Int16 > aSelectSequence;
+            OSL_VERIFY( const_cast< OListBoxModel* >( this )->getPropertyValue( PROPERTY_SELECT_SEQ ) >>= aSelectSequence );
+
+            sal_Bool bMultiSelection( sal_False );
+            OSL_VERIFY( const_cast< OListBoxModel* >( this )->getPropertyValue( PROPERTY_MULTISELECTION ) >>= bMultiSelection );
+
+            if ( bMultiSelection )
+                aCurretnValue = lcl_getMultiSelectedEntries( aSelectSequence, getStringItemList() );
+            else
+                aCurretnValue = lcl_getSingleSelectedEntry( aSelectSequence, getStringItemList() );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
+        return aCurretnValue;
     }
 
     //--------------------------------------------------------------------
@@ -1434,10 +1482,10 @@ namespace frm
         // only strings are accepted for simplicity
         return  _rxBinding.is()
             &&  (   _rxBinding->supportsType( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) )
-            ||  _rxBinding->supportsType( ::getCppuType( static_cast< Sequence< ::rtl::OUString >* >( NULL ) ) )
-            ||  _rxBinding->supportsType( ::getCppuType( static_cast< sal_Int32* >( NULL ) ) )
-            ||  _rxBinding->supportsType( ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) ) )
-            );
+                ||  _rxBinding->supportsType( ::getCppuType( static_cast< Sequence< ::rtl::OUString >* >( NULL ) ) )
+                ||  _rxBinding->supportsType( ::getCppuType( static_cast< sal_Int32* >( NULL ) ) )
+                ||  _rxBinding->supportsType( ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) ) )
+                );
     }
 
     //--------------------------------------------------------------------
