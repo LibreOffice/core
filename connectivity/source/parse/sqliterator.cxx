@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-22 12:51:42 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:54:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1999,9 +1999,13 @@ void OSQLParseTreeIterator::impl_appendError( IParseContext::ErrorCode _eError, 
     ::rtl::OUString sErrorMessage = m_rParser.getContext().getErrorMessage( _eError );
     if ( _pReplaceToken1 )
     {
-        sErrorMessage = sErrorMessage.replaceAt( sErrorMessage.indexOf('#'), 1, *_pReplaceToken1 );
+        bool bTwoTokens = ( _pReplaceToken2 != NULL );
+        const sal_Char* pPlaceHolder1 = bTwoTokens ? "#1" : "#";
+        const ::rtl::OUString sPlaceHolder1 = ::rtl::OUString::createFromAscii( pPlaceHolder1 );
+
+        sErrorMessage = sErrorMessage.replaceAt( sErrorMessage.indexOf( sPlaceHolder1 ), sPlaceHolder1.getLength(), *_pReplaceToken1 );
         if ( _pReplaceToken2 )
-            sErrorMessage = sErrorMessage.replaceAt( sErrorMessage.indexOf('#'), 1, *_pReplaceToken2 );
+            sErrorMessage = sErrorMessage.replaceAt( sErrorMessage.indexOf( ::rtl::OUString::createFromAscii( "#2" ) ), 2, *_pReplaceToken2 );
     }
 
     impl_appendError( SQLException(
