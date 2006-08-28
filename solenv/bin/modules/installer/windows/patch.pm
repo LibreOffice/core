@@ -4,9 +4,9 @@
 #
 #   $RCSfile: patch.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:20:09 $
+#   last change: $Author: ihi $ $Date: 2006-08-28 11:21:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,16 @@ sub update_patch_tables
         my $number = $i + 1;
         my $signature = "dir" . $number . "user";
         my $rootvalue = "1";
-        my $key = "Software\\" . $allvariables->{'MANUFACTURER'} . "\\" . $allvariables->{'PRODUCTNAME'} . "\\" . $allvariables->{'PRODUCTVERSION'} . "\\" . $code;
+        my $registryname = "";
+        my $registryversion = "";
+
+        if ( $allvariables->{'SEARCHPRODUCTNAME'} ) { $registryname = $allvariables->{'SEARCHPRODUCTNAME'}; }
+        else { $registryname = $allvariables->{'PRODUCTNAME'}; }
+
+        if ( $allvariables->{'SEARCHPRODUCTVERSION'} ) { $registryversion = $allvariables->{'SEARCHPRODUCTVERSION'}; }
+        else { $registryversion = $allvariables->{'PRODUCTVERSION'}; }
+
+        my $key = "Software\\" . $allvariables->{'MANUFACTURER'} . "\\" . $registryname . "\\" . $registryversion . "\\" . $code;
 
         my $name = "INSTALLLOCATION";
         my $type = 2;
