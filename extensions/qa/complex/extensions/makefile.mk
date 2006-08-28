@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-29 12:41:43 $
+#   last change: $Author: ihi $ $Date: 2006-08-28 15:11:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,12 @@ PACKAGE = complex$/$(PRJNAME)
 
 RES_TARGET = orl
 
+.IF "$(GUI)"=="WNT"
+command_seperator=&&
+.ELSE
+command_seperator=;
+.ENDIF
+
 # --- Settings -----------------------------------------------------
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
@@ -48,15 +54,27 @@ RES_TARGET = orl
 
 #----- resource files for the OfficeResourceLoader test ------------
 
-SRS1NAME=$(RES_TARGET)
+SRS1NAME=$(RES_TARGET)_A_
 SRC1FILES= \
-    $(RES_TARGET).src
+    $(RES_TARGET)_en-US.src
 
 RES1FILELIST=\
-    $(SRS)$/$(RES_TARGET).srs
+    $(SRS)$/$(RES_TARGET)_A_.srs
 
-RESLIB1NAME=$(RES_TARGET)
+RESLIB1NAME=$(RES_TARGET)_A_
 RESLIB1SRSFILES=$(RES1FILELIST)
+
+
+
+SRS2NAME=$(RES_TARGET)_B_
+SRC2FILES= \
+    $(RES_TARGET)_de.src
+
+RES2FILELIST=\
+    $(SRS)$/$(RES_TARGET)_B_.srs
+
+RESLIB2NAME=$(RES_TARGET)_B_
+RESLIB2SRSFILES=$(RES2FILELIST)
 
 
 #----- compile .java files -----------------------------------------
@@ -87,9 +105,14 @@ ALL: 	ALLDEP
 RUNNER_CLASSPATH = -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar$(PATH_SEPERATOR)$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/ConnectivityTools.jar
 RUNNER_ARGS = org.openoffice.Runner -TestBase java_complex
 
-run:
-    +$(COPY) $(PRJ)$/common$/bin$/$(RES_TARGET)*.res $(CLASSDIR)$/$(PACKAGE) && java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce extensions_all.sce
+run:copy_resources
+    +java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce extensions_all.sce
 
-run_%:
-    +$(COPY) $(PRJ)$/common$/bin$/$(RES_TARGET)*.res $(CLASSDIR)$/$(PACKAGE) && java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o complex.$(PRJNAME).$(@:s/run_//)
+run_%:copy_resources
+    +java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o complex.$(PRJNAME).$(@:s/run_//)
+
+
+copy_resources: $(RESLIB1TARGETN) $(RESLIB2TARGETN)
+    +@$(foreach,i,$(RESLIB1TARGETN) $(COPY) $i $(i:s/de/invalid/:s/_A_//) $(command_seperator)) echo.
+    +@$(foreach,i,$(RESLIB2TARGETN) $(COPY) $i $(i:s/en-US/invalid/:s/_B_//) $(command_seperator)) echo.
 
