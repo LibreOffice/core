@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NPreparedStatement.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:51:56 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:52:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,8 +104,6 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
 
             sal_Bool    m_bPrepared;
-
-            void checkParameterIndex(sal_Int32 _parameterIndex);
 
         protected:
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
