@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:52:25 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:57:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,6 +215,9 @@ protected:
                             getDefaultForReset() const;
 
     virtual sal_Bool        approveValueBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding );
+
+    virtual ::com::sun::star::uno::Any
+                            getCurrentFormComponentValue() const;
 
     // OEntryListHelper overriables
     virtual void    stringItemListChanged( );
