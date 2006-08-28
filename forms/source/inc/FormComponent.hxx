@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:57:23 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:57:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -910,6 +910,17 @@ protected:
     */
     virtual ::com::sun::star::uno::Any
                             translateControlValueToValidatableValue( ) const;
+
+    /** retrieves the current value of the form component
+
+        This is the implementation method for XValidatableFormComponent::getCurrentValue. The default implementation
+        calls translateControlValueToValidatableValue if a validator is present, otherwise getControlValue.
+
+        @precond
+            our mutex is locked when this method is called
+    */
+    virtual ::com::sun::star::uno::Any
+                            getCurrentFormComponentValue() const;
 
     /** We can't write (new) common properties in this base class, as the file format doesn't allow this
         (unfortunally). So derived classes may use the following to methods. They secure the written
