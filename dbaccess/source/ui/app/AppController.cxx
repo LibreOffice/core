@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 22:33:43 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:05:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -769,21 +769,24 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = getContainer()->getElementType() == E_TABLE && isConnected();
                 break;
             case SID_DB_APP_DSPROPS:
-                if ( (aReturn.bEnabled = m_xDataSource.is()) )
+                aReturn.bEnabled = m_xDataSource.is();
+                if ( aReturn.bEnabled )
                 {
                     DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
                     aReturn.bEnabled = DST_EMBEDDED != eType && DST_MOZILLA != eType && DST_EVOLUTION != eType && DST_KAB != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
                 }
                 break;
             case SID_DB_APP_DSCONNECTION_TYPE:
-                if ( (aReturn.bEnabled = !isDataSourceReadOnly() && m_xDataSource.is()) )
+                aReturn.bEnabled = !isDataSourceReadOnly();
+                if ( aReturn.bEnabled && m_xDataSource.is() )
                 {
                     DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
                     aReturn.bEnabled = DST_EMBEDDED != eType;
                 }
                 break;
             case SID_DB_APP_DSADVANCED_SETTINGS:
-                if ( (aReturn.bEnabled = m_xDataSource.is()) )
+                aReturn.bEnabled = m_xDataSource.is();
+                if ( aReturn.bEnabled )
                 {
                     DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
                     aReturn.bEnabled = DST_EMBEDDED != eType && DST_LDAP != eType && DST_CALC != eType && DST_MOZILLA != eType && DST_THUNDERBIRD != eType && DST_EVOLUTION != eType && DST_KAB != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
@@ -834,7 +837,8 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = sal_False;
                 break;
             case SID_DB_APP_STATUS_TYPE:
-                if ( (aReturn.bEnabled = m_xDataSource.is()) )
+                aReturn.bEnabled = m_xDataSource.is();
+                if ( aReturn.bEnabled )
                 {
                     DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
                     ::rtl::OUString sDSTypeName = m_aTypeCollection.getTypeDisplayName(eType);
@@ -842,7 +846,8 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 }
                 break;
             case SID_DB_APP_STATUS_DBNAME:
-                if ( (aReturn.bEnabled = m_xDataSource.is()) )
+                aReturn.bEnabled = m_xDataSource.is();
+                if ( aReturn.bEnabled )
                 {
                     ::rtl::OUString sTemp;
                     m_xDataSource->getPropertyValue(PROPERTY_URL) >>= sTemp;
@@ -878,11 +883,13 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 }
                 break;
             case SID_DB_APP_STATUS_USERNAME:
-                if ( (aReturn.bEnabled = m_xDataSource.is()) )
+                aReturn.bEnabled = m_xDataSource.is();
+                if ( aReturn.bEnabled )
                     m_xDataSource->getPropertyValue( PROPERTY_USER ) >>= aReturn.sTitle;
                 break;
             case SID_DB_APP_STATUS_HOSTNAME:
-                if ( (aReturn.bEnabled = m_xDataSource.is()) )
+                aReturn.bEnabled = m_xDataSource.is();
+                if ( aReturn.bEnabled )
                 {
                     ::rtl::OUString sTemp;
                     m_xDataSource->getPropertyValue(PROPERTY_URL) >>= sTemp;
@@ -1831,7 +1838,7 @@ void OApplicationController::renameEntry()
             ::std::auto_ptr< OSaveAsDlg > aDialog;
 
             Reference<XRename> xRename;
-            ElementType eType = getContainer()->getElementType();
+            const ElementType eType = getContainer()->getElementType();
             switch( eType )
             {
                 case E_FORM:
@@ -1905,7 +1912,7 @@ void OApplicationController::renameEntry()
                                 ::rtl::OUString sCatalog = aDialog->getCatalog();
                                 ::rtl::OUString sSchema  = aDialog->getSchema();
 
-                                sNewName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sName, sal_False, ::dbtools::eInTableDefinitions );
+                                sNewName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sName, sal_False, ::dbtools::eInDataManipulation );
                             }
                             else
                                 sNewName = aDialog->getName();
@@ -1923,7 +1930,14 @@ void OApplicationController::renameEntry()
                             xRename->rename(sNewName);
 
                             if ( !Reference< XNameAccess >( xRename, UNO_QUERY ).is() )
-                                getContainer()->elementReplaced( getContainer()->getElementType(), sOldName, sNewName, getConnection() );
+                            {
+                                if ( eType == E_TABLE )
+                                {
+                                    Reference<XPropertySet> xProp(xRename,UNO_QUERY);
+                                    sNewName = ::dbaui::composeTableName( m_xMetaData, xProp, ::dbtools::eInDataManipulation, false, false, false );
+                                }
+                                getContainer()->elementReplaced( eType , sOldName, sNewName, getConnection(),xRename );
+                            }
 
                             bTryAgain = sal_False;
                         }
