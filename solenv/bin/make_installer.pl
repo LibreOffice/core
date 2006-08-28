@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.67 $
+#   $Revision: 1.68 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-19 09:52:50 $
+#   last change: $Author: ihi $ $Date: 2006-08-28 11:20:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -668,7 +668,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles10c.log", $filesinproductlanguageresolvedarrayref); }
     }
 
-    if ( ! $installer::globals::islanguagepackinunixmulti )
+
+    if (( ! $installer::globals::islanguagepackinunixmulti ) && ( ! $allvariableshashref->{'NO_README_IN_ROOTDIR'} ))
     {
         $filesinproductlanguageresolvedarrayref = installer::scriptitems::add_License_Files_into_Installdir($filesinproductlanguageresolvedarrayref, $languagesarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles10b.log", $filesinproductlanguageresolvedarrayref); }
@@ -1735,7 +1736,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             # setting patch codes to detect installed products
 
-            if (( $installer::globals::patch ) || ( $installer::globals::languagepack )) { installer::windows::patch::update_patch_tables($languageidtdir, $allvariableshashref); }
+            if (( $installer::globals::patch ) || ( $installer::globals::languagepack ) || ( $allvariableshashref->{'PDFCONVERTER'} )) { installer::windows::patch::update_patch_tables($languageidtdir, $allvariableshashref); }
 
             # Adding Windows Installer CustomActions
 
