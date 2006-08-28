@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:22:54 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:05:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -666,9 +666,10 @@ TransferableHelper* OApplicationController::copyObject()
             case E_TABLE:
             case E_QUERY:
             {
+                SharedConnection xConnection( ensureConnection() );
                 Reference< XDatabaseMetaData> xMetaData;
-                if ( m_xDataSourceConnection.is() )
-                    xMetaData = m_xDataSourceConnection->getMetaData();
+                if ( xConnection.is() )
+                    xMetaData = xConnection->getMetaData();
 
                 ::rtl::OUString sName = getContainer()->getQualifiedName(NULL,xMetaData);
                 if ( sName.getLength() )
@@ -677,11 +678,11 @@ TransferableHelper* OApplicationController::copyObject()
 
                     if ( eType == E_TABLE )
                     {
-                        pData = new ODataClipboard(sDataSource, CommandType::TABLE, sName, m_xDataSourceConnection, getNumberFormatter(m_xDataSourceConnection,getORB()), getORB());
+                        pData = new ODataClipboard(sDataSource, CommandType::TABLE, sName, xConnection, getNumberFormatter(xConnection,getORB()), getORB());
                     }
                     else
                     {
-                        pData = new ODataClipboard(sDataSource, CommandType::QUERY, sName, getNumberFormatter(m_xDataSourceConnection,getORB()), getORB());
+                        pData = new ODataClipboard(sDataSource, CommandType::QUERY, sName, getNumberFormatter(xConnection,getORB()), getORB());
                     }
                 }
             }
