@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:05:22 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:56:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -836,6 +836,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlButtonModel::getPropertySetI
 //  ----------------------------------------------------
 UnoButtonControl::UnoButtonControl()
     : maActionListeners( *this )
+    , maItemListeners( *this )
 {
     maComponentInfos.nWidth = 50;
     maComponentInfos.nHeight = 14;
@@ -866,37 +867,27 @@ UnoButtonControl::UnoButtonControl()
     return aName;
 }
 
-// uno::XInterface
-uno::Any UnoButtonControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
-{
-    uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( awt::XButton*, this ),
-                                        SAL_STATIC_CAST( awt::XLayoutConstrains*, this ) );
-    return (aRet.hasValue() ? aRet : ImageConsumerControl::queryAggregation( rType ));
-}
-
-// lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoButtonControl )
-getCppuType( ( uno::Reference< awt::XButton>* ) NULL ),
-getCppuType( ( uno::Reference< awt::XLayoutConstrains>* ) NULL ),
-ImageConsumerControl::getTypes()
-IMPL_XTYPEPROVIDER_END
-
 void UnoButtonControl::dispose() throw(uno::RuntimeException)
 {
     lang::EventObject aEvt;
     aEvt.Source = (::cppu::OWeakObject*)this;
     maActionListeners.disposeAndClear( aEvt );
+    maItemListeners.disposeAndClear( aEvt );
     ImageConsumerControl::dispose();
 }
 
 void UnoButtonControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
     ImageConsumerControl::createPeer( rxToolkit, rParentPeer );
+
     uno::Reference < awt::XButton > xButton( getPeer(), uno::UNO_QUERY );
     xButton->setActionCommand( maActionCommand );
     if ( maActionListeners.getLength() )
         xButton->addActionListener( &maActionListeners );
+
+    uno::Reference< XToggleButton > xPushButton( getPeer(), uno::UNO_QUERY );
+    if ( xPushButton.is() )
+        xPushButton->addItemListener( this );
 }
 
 void UnoButtonControl::addActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
@@ -917,6 +908,34 @@ void UnoButtonControl::removeActionListener(const uno::Reference< awt::XActionLi
         xButton->removeActionListener( &maActionListeners );
     }
     maActionListeners.removeInterface( l );
+}
+
+void UnoButtonControl::addItemListener(const uno::Reference< awt::XItemListener > & l) throw(uno::RuntimeException)
+{
+    maItemListeners.addInterface( l );
+}
+
+void UnoButtonControl::removeItemListener(const uno::Reference< awt::XItemListener > & l) throw(uno::RuntimeException)
+{
+    maItemListeners.removeInterface( l );
+}
+
+void SAL_CALL UnoButtonControl::disposing( const lang::EventObject& Source ) throw (uno::RuntimeException)
+{
+    ImageConsumerControl::disposing( Source );
+}
+
+void SAL_CALL UnoButtonControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw (uno::RuntimeException)
+{
+    // forward to model
+    uno::Any aAny;
+    aAny <<= (sal_Int16)rEvent.Selected;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, sal_False );
+
+    // multiplex
+    ItemEvent aEvent( rEvent );
+    aEvent.Source = *this;
+    maItemListeners.itemStateChanged( aEvent );
 }
 
 void UnoButtonControl::setLabel( const ::rtl::OUString&  rLabel ) throw(uno::RuntimeException)
