@@ -4,9 +4,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-06 14:01:29 $
+#   last change: $Author: ihi $ $Date: 2006-08-28 11:21:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,7 @@ sub add_root_directories
         my $productversion = $allvariableshashref->{'PRODUCTVERSION'};
         my $productkey = $productname . " " . $productversion;
 
-        if ( $allvariableshashref->{'POSTVERSIONEXTENSION'} ) { $productkey = $productkey . " " . $allvariableshashref->{'POSTVERSIONEXTENSION'}; }
+        if (( $allvariableshashref->{'POSTVERSIONEXTENSION'} ) && ( ! $allvariableshashref->{'DONTUSEEXTENSIONINDEFAULTDIR'} )) { $productkey = $productkey . " " . $allvariableshashref->{'POSTVERSIONEXTENSION'}; }
         if ( $allvariableshashref->{'NOVERSIONINDIRNAME'} ) { $productkey = $productname; }
         if ( $allvariableshashref->{'NOSPACEINDIRECTORYNAME'} ) { $productkey =~ s/\ /\_/g; }
 
