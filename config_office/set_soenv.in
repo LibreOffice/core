@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.113 $
-# Date:        $Date: 2006-08-11 16:19:16 $
+# Version:     $Revision: 1.114 $
+# Date:        $Date: 2006-08-28 12:35:32 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1503,6 +1503,9 @@ ToFile( "NO_BSYMBOLIC",      $NO_BSYMBOLIC,      "e" );
 ToFile( "TF_FILTER",         "TRUE",             "e" );
 if ("@ENABLE_DEBUG@" eq "TRUE") {
 ToFile( "debug",             "true",             "e" );
+}
+if ("@ENABLE_WERROR@" eq "FALSE") {
+ToFile( "EXTERNAL_WARNINGS_NOT_ERRORS", "TRUE",  "e" );
 }
 ToFile( "PRODUCT",           "@PRODUCT@",        "e" );
 ToFile( "PROFULLSWITCH",     "@PROFULLSWITCH@",  "e" );
