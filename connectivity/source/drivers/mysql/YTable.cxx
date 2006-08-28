@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YTable.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:30:42 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:54:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,6 +388,10 @@ void OMySQLTable::executeStatement(const ::rtl::OUString& _rStatement )
     }
 }
 // -----------------------------------------------------------------------------
+::rtl::OUString OMySQLTable::getRenameStart() const
+{
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RENAME TABLE "));
+}
 
 
 
