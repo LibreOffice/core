@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YTable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:04:54 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:54:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,13 @@ namespace connectivity
                     The index names.
             */
             virtual sdbcx::OCollection* createIndexes(const TStringVector& _rNames);
+
+            /** Returns always "RENAME TABLE " even for views.
+            *
+            * \return The start of the rename statement.
+            * @see http://dev.mysql.com/doc/refman/5.1/de/rename-table.html
+            */
+            virtual ::rtl::OUString getRenameStart() const;
 
             /** used to implement the creation of the array helper which is shared amongst all instances of the class.
                 This method needs to be implemented in derived classes.
