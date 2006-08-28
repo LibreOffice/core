@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NDatabaseMetaData.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:33:33 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,19 +77,14 @@ namespace connectivity
             ColumnNumber value;
         }SplitEvoColumns;
 
-        static SplitEvoColumns evo_addr[] = {
-            {"addr-line1",DEFAULT_ADDR_LINE1},{"addr-line2",DEFAULT_ADDR_LINE2},{"city",DEFAULT_CITY},{"state",DEFAULT_STATE},{"country",DEFAULT_COUNTRY},{"zip",DEFAULT_ZIP},
-            {"work-addr-line1",WORK_ADDR_LINE1},{"work-addr-line2",WORK_ADDR_LINE2},{"work-city",WORK_CITY},{"work-state",WORK_STATE},{"work-country",WORK_COUNTRY},{"work-zip",WORK_ZIP},
-            {"home-addr-line1",HOME_ADDR_LINE1},{"home-addr-line2",HOME_ADDR_LINE2},{"home-addr-City",HOME_CITY},{"home-state",HOME_STATE},{"home-country",HOME_COUNTRY},{"home-zip",HOME_ZIP},
-            {"other-addr-line1",OTHER_ADDR_LINE1},{"other-addr-line2",OTHER_ADDR_LINE2},{"other-addr-city",OTHER_CITY},{"other-addr-state",OTHER_STATE},{"other-addr-country",OTHER_COUNTRY},{"other-addr-zip",OTHER_ZIP}
-        };
+        const SplitEvoColumns* get_evo_addr();
 
         const ColumnProperty *getField(guint n);
         guint                 getFieldCount() ;
-        sal_Int32             getFieldType(sal_Int32 nCol) ;
-        rtl::OUString         getFieldTypeName(sal_Int32 nCol) ;
-        rtl::OUString         getFieldName(sal_Int32 nCol) ;
-        sal_Int32             findEvoabField(const rtl::OUString& aColName);
+        sal_Int32             getFieldType(guint nCol) ;
+        rtl::OUString         getFieldTypeName(guint nCol) ;
+        rtl::OUString         getFieldName(guint nCol) ;
+        guint                 findEvoabField(const rtl::OUString& aColName);
 
         void free_column_resources();
 
