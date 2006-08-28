@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:56:58 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 14:56:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XBUTTON_HPP_
 #include <com/sun/star/awt/XButton.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XTOGGLEBUTTON_HPP_
+#include <com/sun/star/awt/XToggleButton.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XIMAGECONSUMER_HPP_
 #include <com/sun/star/awt/XImageConsumer.hpp>
@@ -351,12 +354,17 @@ public:
 //  ----------------------------------------------------
 //  class UnoButtonControl
 //  ----------------------------------------------------
-class UnoButtonControl :    public ImageConsumerControl,
-                            public ::com::sun::star::awt::XButton,
-                            public ::com::sun::star::awt::XLayoutConstrains
+typedef ::cppu::AggImplInheritanceHelper4   <   ImageConsumerControl
+                                            ,   ::com::sun::star::awt::XButton
+                                            ,   ::com::sun::star::awt::XToggleButton
+                                            ,   ::com::sun::star::awt::XLayoutConstrains
+                                            ,   ::com::sun::star::awt::XItemListener
+                                            >   UnoButtonControl_Base;
+class UnoButtonControl :    public UnoButtonControl_Base
 {
 private:
     ActionListenerMultiplexer   maActionListeners;
+    ItemListenerMultiplexer     maItemListeners;
     ::rtl::OUString             maActionCommand;
 
 public:
@@ -364,22 +372,25 @@ public:
                         UnoButtonControl();
     ::rtl::OUString     GetComponentServiceName();
 
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return ImageConsumerControl::queryInterface(rType); }
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XButton
     void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setLabel( const ::rtl::OUString& Label ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setActionCommand( const ::rtl::OUString& Command ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XToggleButton
+    // ::com::sun::star::awt::XItemEventBroadcaster
+    void SAL_CALL addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XItemListener
+    virtual void SAL_CALL itemStateChanged( const ::com::sun::star::awt::ItemEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XLayoutConstrains
     ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException);
