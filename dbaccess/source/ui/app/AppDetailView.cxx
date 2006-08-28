@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:54:33 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:06:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -812,10 +812,11 @@ void OApplicationDetailView::elementRemoved(ElementType _eType,const ::rtl::OUSt
 void OApplicationDetailView::elementReplaced(ElementType _eType
                                                     ,const ::rtl::OUString& _rOldName
                                                     ,const ::rtl::OUString& _rNewName
-                                                    ,const Reference< XConnection >& _rxConn )
+                                                    ,const Reference< XConnection >& _rxConn
+                                                    ,const Reference<XInterface>& _xObject)
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
-    m_pControlHelper->elementReplaced(_eType, _rOldName,_rNewName,_rxConn );
+    m_pControlHelper->elementReplaced(_eType, _rOldName,_rNewName,_rxConn,_xObject );
 }
 // -----------------------------------------------------------------------------
 PreviewMode OApplicationDetailView::getPreviewMode()
