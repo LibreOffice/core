@@ -4,9 +4,9 @@
  *
  *  $RCSfile: componentcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:15:21 $
+ *  last change: $Author: ihi $ $Date: 2006-08-28 15:10:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,14 @@ namespace comphelper
         if ( !xComponent.is() )
             throw ServiceNotRegisteredException( _rServiceName, NULL );
         return xComponent;
+    }
+
+    //------------------------------------------------------------------------
+    Reference< XInterface > ComponentContext::getSingleton( const ::rtl::OUString& _rInstanceName )
+    {
+        ::rtl::OUString sKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/" ) ) );
+        sKey += _rInstanceName;
+        return Reference< XInterface >( getContextValueByName( sKey ), UNO_QUERY );
     }
 
     //------------------------------------------------------------------------
