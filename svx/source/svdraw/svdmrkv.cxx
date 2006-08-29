@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:56:13 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:39:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 #include "svdpagv.hxx"
 #include "svdpage.hxx"
 #include "svddrgm1.hxx"
-#include "svdio.hxx"
 #include "svdibrow.hxx"
 #include "svdoole2.hxx"
 #include "xgrad.hxx"
