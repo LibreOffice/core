@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequenceashashmap.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:39:16 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:16:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,7 +266,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             if (pIt == end())
                 return aDefault;
 
-            TValueType aValue;
+            TValueType aValue = TValueType();
             if (!(pIt->second >>= aValue))
                 return aDefault;
 
