@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iframe.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:28:34 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:16:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,25 +237,25 @@ void SAL_CALL IFrameObject::setPropertyValue(const ::rtl::OUString& aPropertyNam
     }
     else if ( aPropertyName.equalsAscii("FrameIsAutoScroll") )
     {
-        sal_Bool bIsAutoScroll;
+        sal_Bool bIsAutoScroll = sal_Bool();
         if ( (aAny >>= bIsAutoScroll) && bIsAutoScroll )
             maFrmDescr.SetScrollingMode( ScrollingAuto );
     }
     else if ( aPropertyName.equalsAscii("FrameIsScrollingMode") )
     {
-        sal_Bool bIsScroll;
+        sal_Bool bIsScroll = sal_Bool();
         if ( aAny >>= bIsScroll )
             maFrmDescr.SetScrollingMode( bIsScroll ? ScrollingYes : ScrollingNo );
     }
     else if ( aPropertyName.equalsAscii("FrameIsBorder") )
     {
-        sal_Bool bIsBorder;
+        sal_Bool bIsBorder = sal_Bool();
         if ( aAny >>= bIsBorder )
             maFrmDescr.SetFrameBorder( bIsBorder );
     }
     else if ( aPropertyName.equalsAscii("FrameIsAutoBorder") )
     {
-        sal_Bool bIsAutoBorder;
+        sal_Bool bIsAutoBorder = sal_Bool();
         if ( (aAny >>= bIsAutoBorder) )
         {
             BOOL bBorder = maFrmDescr.IsFrameBorderOn();
