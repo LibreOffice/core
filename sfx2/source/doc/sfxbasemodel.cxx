@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:55:33 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:16:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1156,7 +1156,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUSTRING&               
         // but _only_ before load() or initNew() methods
         if ( m_pData->m_pObjectShell.Is() && !m_pData->m_pObjectShell->GetMedium() )
         {
-            sal_Bool bEmb;
+            sal_Bool bEmb = sal_Bool();
             if ( ( rArgs[0].Value >>= bEmb ) && bEmb )
                 m_pData->m_pObjectShell->SetCreateMode_Impl( SFX_CREATE_MODE_EMBEDDED );
         }
@@ -2047,7 +2047,7 @@ void SAL_CALL SfxBaseModel::print(const SEQUENCE< PROPERTYVALUE >& rOptions)
         // Collate-Property
         else if ( rProp.Name.compareToAscii( "Collate" ) == 0 )
         {
-            sal_Bool bTemp ;
+            sal_Bool bTemp = sal_Bool();
             if ( rProp.Value >>= bTemp )
                 aArgs.Put( SfxBoolItem( SID_PRINT_COLLATE, bTemp ) );
             else
@@ -2057,7 +2057,7 @@ void SAL_CALL SfxBaseModel::print(const SEQUENCE< PROPERTYVALUE >& rOptions)
         // Sort-Property
         else if ( rProp.Name.compareToAscii( "Sort" ) == 0 )
         {
-            sal_Bool bTemp ;
+            sal_Bool bTemp = sal_Bool();
             if( rProp.Value >>= bTemp )
                 aArgs.Put( SfxBoolItem( SID_PRINT_SORT, bTemp ) );
             else
