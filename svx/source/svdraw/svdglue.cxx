@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdglue.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:37:51 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:38:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 
 #include "svdglue.hxx"
 #include "svdobj.hxx"
-#include "svdio.hxx"
 #include "svdtrans.hxx"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
