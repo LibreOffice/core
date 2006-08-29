@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortresult.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 17:01:15 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:08:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1513,7 +1513,7 @@ void SortedResultSet::CheckProperties( long nOldCount, sal_Bool bWasFinal )
         // check for propertyChangeEvents
         if ( nOldCount != GetCount() )
         {
-            sal_Bool bIsFinal;
+            sal_Bool bIsFinal = sal_False;
             PropertyChangeEvent aEvt;
 
             aEvt.PropertyName = OUString::createFromAscii( "RowCount" );
