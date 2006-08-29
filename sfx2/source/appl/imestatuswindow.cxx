@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imestatuswindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:10:15 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:15:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ void ImeStatusWindow::init()
     if (Application::CanToggleImeStatusWindow())
         try
         {
-            sal_Bool bShow;
+            sal_Bool bShow = sal_Bool();
             if (getConfig()->getPropertyValue(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                       "ShowStatusWindow")))
@@ -94,7 +94,7 @@ bool ImeStatusWindow::isShowing()
 {
     try
     {
-        sal_Bool bShow;
+        sal_Bool bShow = sal_Bool();
         if (getConfig()->getPropertyValue(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowStatusWindow")))
             >>= bShow)
