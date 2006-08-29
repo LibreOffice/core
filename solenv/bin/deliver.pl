@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.103 $
+#   $Revision: 1.104 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-19 09:37:14 $
+#   last change: $Author: ihi $ $Date: 2006-08-29 14:15:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.103 $ ';
+$id_str = ' $Revision: 1.104 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -93,6 +93,7 @@ $common_dest        = 0;            # common tree on solver
 @action_data        = ();           # LoL with all action data
 @macros             = ();           # d.lst macros
 @hedabu_list        = ();           # files which have to be filtered through hedabu
+@dirlist            = ();           # List of 'mkdir' targets
 @zip_list           = ();           # files which have to be zipped
 @common_zip_list    = ();           # common files which have to be zipped
 @log_list           = ();           # LoL for logging all copy and link actions
@@ -158,6 +159,7 @@ walk_action_data();
 walk_hedabu_list();
 write_log() if $opt_log;
 zip_files() if $opt_zip;
+cleanup() if $opt_delete;
 delete_output() if $opt_deloutput;
 print_stats();
 
@@ -339,11 +341,12 @@ sub do_linklib
 sub do_mkdir
 {
     my $path = expand_macros(shift);
-    if ( $opt_check ) {
-        print "MKDIR: $path\n";
-    }
-    else {
-        mkpath($path, 0, 0777-$umask);
+    if ( ! $opt_delete ) {
+        if ( $opt_check ) {
+            print "MKDIR: $path\n";
+        } else {
+            mkpath($path, 0, 0777-$umask);
+        }
     }
 }
 
@@ -652,6 +655,11 @@ sub walk_action_data
     # dispatch depending on action type
     for (my $i=0; $i <= $#action_data; $i++) {
             &{"do_".$action_data[$i][0]}($action_data[$i][1]);
+            if ( $action_data[$i][0] eq 'mkdir' ) {
+                # fill array with (possibly) created directories in
+                # revers order for removal in 'cleanup'
+                unshift @dirlist, $action_data[$i][1];
+            }
     }
 }
 
@@ -975,15 +983,15 @@ sub push_default_actions
         } else {
             push(@action_data, ['mkdir', "%_DEST%/res%_EXT%/img/additional"]);
         }
+    }
 
-        # deliver build.lst to $dest/inc/$module
-        push(@action_data, ['mkdir', "%_DEST%/inc%_EXT%/$module"]); # might be necessary
-        push(@action_data, ['copy', "build.lst %_DEST%/inc%_EXT%/$module/build.lst"]);
-        if ( $common_build ) {
-            # and to $common_dest/inc/$module
-            push(@action_data, ['mkdir', "%COMMON_DEST%/inc%_EXT%/$module"]); # might be necessary
-            push(@action_data, ['copy', "build.lst %COMMON_DEST%/inc%_EXT%/$module/build.lst"]);
-        }
+    # deliver build.lst to $dest/inc/$module
+    push(@action_data, ['mkdir', "%_DEST%/inc%_EXT%/$module"]);
+    push(@action_data, ['copy', "build.lst %_DEST%/inc%_EXT%/$module/build.lst"]);
+    if ( $common_build ) {
+        # ... and to $common_dest/inc/$module
+        push(@action_data, ['mkdir', "%COMMON_DEST%/inc%_EXT%/$module"]);
+        push(@action_data, ['copy', "build.lst %COMMON_DEST%/inc%_EXT%/$module/build.lst"]);
     }
 
     # need to copy libstaticmxp.dylib for Mac OS X
@@ -1260,7 +1268,6 @@ sub get_tempfilename
 
 sub write_log
 {
-    return if $opt_delete;
     my (%log_file, %file_date);
     $log_file{\@log_list} = "%_DEST%/inc%_EXT%/$module/deliver.log";
     $log_file{\@common_log_list} = "%COMMON_DEST%/inc%_EXT%/$module/deliver.log";
@@ -1271,19 +1278,37 @@ sub write_log
     push @logs, ( \@common_log_list ) if ( $common_build );
     foreach my $log ( @logs ) {
         $log_file{$log} = expand_macros( $log_file{$log} );
-        print "LOG: writing $log_file{$log}\n";
-        next if ( $opt_check );
-        open( LOGFILE, "> $log_file{$log}" ) or warn "Error: could not open log file.";
-        foreach my $item ( @$log ) {
-            print LOGFILE "@$item\n";
+        if ( $opt_delete ) {
+            print "LOG: removing $log_file{$log}\n";
+            next if ( $opt_check );
+            unlink $log_file{$log} or warn"Warning: cannot remove log file\n";
+        } else {
+            print "LOG: writing $log_file{$log}\n";
+            next if ( $opt_check );
+            open( LOGFILE, "> $log_file{$log}" ) or warn "Error: could not open log file.";
+            foreach my $item ( @$log ) {
+                print LOGFILE "@$item\n";
+            }
+            close( LOGFILE );
+            utime($file_date{$log}, $file_date{$log}, $log_file{$log});
         }
-        close( LOGFILE );
-        utime($file_date{$log}, $file_date{$log}, $log_file{$log});
         push_on_ziplist( $log_file{$log} ) if $opt_zip;
     }
     return;
 }
 
+sub cleanup
+{
+    # remove empty directories
+    foreach my $path ( @dirlist ) {
+        $path = expand_macros($path);
+        if ( $opt_check ) {
+            print "RMDIR: $path\n";
+        } else {
+            rmdir $path;
+        }
+    }
+}
 sub delete_output
 {
     my $output_path = expand_macros("../%__SRC%");
