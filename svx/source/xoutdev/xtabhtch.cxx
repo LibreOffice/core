@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtabhtch.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:08:52 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:46:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,6 @@
 #include "dialogs.hrc"
 #include "dialmgr.hxx"
 #include "xtable.hxx"
-#include "xiocomp.hxx"
 #include "xpool.hxx"
 #include "xoutx.hxx"
 #include "dlgutil.hxx"
