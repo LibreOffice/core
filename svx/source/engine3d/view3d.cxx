@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:51:37 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:34:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,10 +125,6 @@
 
 #ifndef _E3D_CUBE3D_HXX
 #include "cube3d.hxx"
-#endif
-
-#ifndef _E3D_DLIGHT3D_HXX
-#include "dlight3d.hxx"
 #endif
 
 #ifndef _E3D_POLYSC3D_HXX
