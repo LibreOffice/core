@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuisrchdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:05:11 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:28:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@
 #define ITEMID_SEARCH       SID_ATTR_SEARCH
 #define ITEMID_SETITEM      0
 
-#include "srchitem.hxx"
+#include <sfx2/srchitem.hxx>
 #include "pageitem.hxx"
 #include "srchctrl.hxx"
 //CHINA001 #include "srchxtra.hxx"
