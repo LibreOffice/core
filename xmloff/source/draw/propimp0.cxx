@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propimp0.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:10:57 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 10:59:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ sal_Bool XMLOpacityPropertyHdl::exportXML(
     const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
-    sal_uInt16 nVal;
+    sal_uInt16 nVal = sal_uInt16();
 
     if( rValue >>= nVal )
     {
@@ -242,7 +242,7 @@ sal_Bool XMLTextAnimationStepPropertyHdl::exportXML(
     const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
-    sal_Int16 nVal;
+    sal_Int16 nVal = sal_Int16();
 
     if( rValue >>= nVal )
     {
