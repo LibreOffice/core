@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:20:34 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 13:34:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,7 @@ typedef struct {
         TCHAR           cDriveString[MAX_PATH];
     };
     TCHAR           szFullPath[MAX_PATH];
-    TCHAR           szLocation[MAX_PATH];
+    BOOL            bFullPathNormalized;
     int             nRefCount;
 }DirectoryItem_Impl;
 
@@ -662,6 +662,7 @@ namespace /* private */
             pItemImpl->nRefCount = 1;
             _tcscpy( pItemImpl->szFullPath, pDirImpl->szDirectoryPath );
             _tcscat( pItemImpl->szFullPath, pItemImpl->FindData.cFileName );
+            pItemImpl->bFullPathNormalized = FALSE;
             *pItem = (oslDirectoryItem)pItemImpl;
             return osl_File_E_None;
         }
@@ -922,7 +923,7 @@ namespace /* private */
         return lpEndPath;
     }
 
-#if 0
+#if 1
     //#####################################################
     // Same as GetLongPathName but also 95/NT4
     DWORD WINAPI GetCaseCorrectPathNameEx(
@@ -1008,7 +1009,7 @@ namespace /* private */
     }
 #endif
 
-#if 1
+#if 0
     inline size_t wcstoupper( LPWSTR lpStr )
     {
         size_t nLen = wcslen( lpStr );
@@ -1029,7 +1030,7 @@ namespace /* private */
         LPTSTR  lpszLongPath,   // path buffer
         DWORD   cchBuffer       // size of path buffer
     )
-#if 1
+#if 0
     {
         /* Special handling for "\\.\" as system root */
         if ( lpszShortPath && 0 == wcscmp( lpszShortPath, WSTR_SYSTEM_ROOT_PATH ) )
@@ -2971,6 +2972,12 @@ oslFileError SAL_CALL osl_getFileStatus(
     {
         rtl_uString *ustrFullPath = NULL;
 
+
+        if ( !pItemImpl->bFullPathNormalized )
+        {
+            GetCaseCorrectPathName( pItemImpl->szFullPath, pItemImpl->szFullPath, sizeof(pItemImpl->szFullPath) );
+            pItemImpl->bFullPathNormalized = TRUE;
+        }
         rtl_uString_newFromStr( &ustrFullPath, pItemImpl->szFullPath );
         osl_getFileURLFromSystemPath( ustrFullPath, &pStatus->ustrFileURL );
         rtl_uString_release( ustrFullPath );
@@ -3227,6 +3234,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
                 osl_acquireDirectoryItem( (oslDirectoryItem)pItemImpl );
 
                 _tcscpy( pItemImpl->cDriveString, strSysFilePath->buffer );
+                pItemImpl->cDriveString[0] = _toupper( pItemImpl->cDriveString[0] );
 
                 if ( pItemImpl->cDriveString[_tcslen(pItemImpl->cDriveString) - 1] != '\\' )
                     _tcscat( pItemImpl->cDriveString, TEXT( "\\" ) );
