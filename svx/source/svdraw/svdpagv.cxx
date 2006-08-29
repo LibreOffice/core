@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:57:03 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:43:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,6 @@
 #include "svdobj.hxx"
 #include "svdouno.hxx"
 #include "svdpage.hxx"
-#include "svdio.hxx"
 #include "svdview.hxx"
 #include "svditer.hxx"
 #include "svdogrp.hxx"
