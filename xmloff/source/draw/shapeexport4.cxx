@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport4.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:12:51 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 10:59:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,7 +272,7 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
                     break;
                     case EAS_MirroredX :
                     {
-                        sal_Bool bMirroredX;
+                        sal_Bool bMirroredX = sal_Bool();
                         if ( rPropVal.Value >>= bMirroredX )
                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_HANDLE_MIRROR_HORIZONTAL,
                                 bMirroredX ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
@@ -280,7 +280,7 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
                     break;
                     case EAS_MirroredY :
                     {
-                        sal_Bool bMirroredY;
+                        sal_Bool bMirroredY = sal_Bool();
                         if ( rPropVal.Value >>= bMirroredY )
                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_HANDLE_MIRROR_VERTICAL,
                                 bMirroredY ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
@@ -288,7 +288,7 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
                     break;
                     case EAS_Switched :
                     {
-                        sal_Bool bSwitched;
+                        sal_Bool bSwitched = sal_Bool();
                         if ( rPropVal.Value >>= bSwitched )
                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_HANDLE_SWITCHED,
                                 bSwitched ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
@@ -553,7 +553,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                     break;
                     case EAS_MirroredX :
                     {
-                        sal_Bool bMirroredX;
+                        sal_Bool bMirroredX = sal_Bool();
                         if ( rGeoProp.Value >>= bMirroredX )
                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIRROR_HORIZONTAL,
                                 bMirroredX ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
@@ -561,7 +561,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                     break;
                     case EAS_MirroredY :
                     {
-                        sal_Bool bMirroredY;
+                        sal_Bool bMirroredY = sal_Bool();
                         if ( rGeoProp.Value >>= bMirroredY )
                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIRROR_VERTICAL,
                                 bMirroredY ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
@@ -601,7 +601,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                 {
                                     case EAS_Extrusion :
                                     {
-                                        sal_Bool bExtrusionOn;
+                                        sal_Bool bExtrusionOn = sal_Bool();
                                         if ( rProp.Value >>= bExtrusionOn )
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION,
                                                 bExtrusionOn ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
@@ -656,7 +656,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_LightFace :
                                     {
-                                        sal_Bool bExtrusionLightFace;
+                                        sal_Bool bExtrusionLightFace = sal_Bool();
                                         if ( rProp.Value >>= bExtrusionLightFace )
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_LIGHT_FACE,
                                                 bExtrusionLightFace ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
@@ -664,7 +664,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_FirstLightHarsh :
                                     {
-                                        sal_Bool bExtrusionFirstLightHarsh;
+                                        sal_Bool bExtrusionFirstLightHarsh = sal_Bool();
                                         if ( rProp.Value >>= bExtrusionFirstLightHarsh )
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_FIRST_LIGHT_HARSH,
                                                 bExtrusionFirstLightHarsh ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
@@ -672,7 +672,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_SecondLightHarsh :
                                     {
-                                        sal_Bool bExtrusionSecondLightHarsh;
+                                        sal_Bool bExtrusionSecondLightHarsh = sal_Bool();
                                         if ( rProp.Value >>= bExtrusionSecondLightHarsh )
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SECOND_LIGHT_HARSH,
                                                 bExtrusionSecondLightHarsh ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
@@ -730,7 +730,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_Metal :
                                     {
-                                        sal_Bool bExtrusionMetal;
+                                        sal_Bool bExtrusionMetal = sal_Bool();
                                         if ( rProp.Value >>= bExtrusionMetal )
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_METAL,
                                                 bExtrusionMetal ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
@@ -853,7 +853,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_Color :
                                     {
-                                        sal_Bool bExtrusionColor;
+                                        sal_Bool bExtrusionColor = sal_Bool();
                                         if ( rProp.Value >>= bExtrusionColor )
                                         {
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_COLOR,
@@ -881,7 +881,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                 {
                                     case EAS_TextPath :
                                     {
-                                        sal_Bool bTextPathOn;
+                                        sal_Bool bTextPathOn = sal_Bool();
                                         if ( rProp.Value >>= bTextPathOn )
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TEXT_PATH,
                                                 bTextPathOn ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
@@ -907,7 +907,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_ScaleX :
                                     {
-                                        sal_Bool bScaleX;
+                                        sal_Bool bScaleX = sal_Bool();
                                         if ( rProp.Value >>= bScaleX )
                                         {
                                             aStr = bScaleX ? GetXMLToken( XML_SHAPE ) : GetXMLToken( XML_PATH );
@@ -917,7 +917,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_SameLetterHeights :
                                     {
-                                        sal_Bool bSameLetterHeights;
+                                        sal_Bool bSameLetterHeights = sal_Bool();
                                         if ( rProp.Value >>= bSameLetterHeights )
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TEXT_PATH_SAME_LETTER_HEIGHTS,
                                                 bSameLetterHeights ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
@@ -943,7 +943,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                 {
                                     case EAS_ExtrusionAllowed :
                                     {
-                                        sal_Bool bExtrusionAllowed;
+                                        sal_Bool bExtrusionAllowed = sal_Bool();
                                         if ( rProp.Value >>= bExtrusionAllowed )
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_ALLOWED,
                                                 bExtrusionAllowed ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
@@ -951,7 +951,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_ConcentricGradientFillAllowed :
                                     {
-                                        sal_Bool bConcentricGradientFillAllowed;
+                                        sal_Bool bConcentricGradientFillAllowed = sal_Bool();
                                         if ( rProp.Value >>= bConcentricGradientFillAllowed )
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CONCENTRIC_GRADIENT_FILL_ALLOWED,
                                                 bConcentricGradientFillAllowed ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
@@ -959,7 +959,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_TextPathAllowed  :
                                     {
-                                        sal_Bool bTextPathAllowed;
+                                        sal_Bool bTextPathAllowed = sal_Bool();
                                         if ( rProp.Value >>= bTextPathAllowed )
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TEXT_PATH_ALLOWED,
                                                 bTextPathAllowed ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
@@ -986,7 +986,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_GluePointType :
                                     {
-                                        sal_Int16 nGluePointType;
+                                        sal_Int16 nGluePointType = sal_Int16();
                                         if ( rProp.Value >>= nGluePointType )
                                         {
                                             switch ( nGluePointType )
