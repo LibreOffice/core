@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:44:50 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:19:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@
 
 #define ITEMID_SEARCH           SID_SEARCH_ITEM
 #include <svx/svxids.hrc>
-#include <svx/srchitem.hxx>
+#include <sfx2/srchitem.hxx>
 #include <svx/svxerr.hxx>
 
 #include <svx/xmlsecctrl.hxx>
