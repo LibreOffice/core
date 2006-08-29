@@ -4,9 +4,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:44:30 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:13:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -445,7 +445,7 @@ static BYTE* ImplGetConfigBuffer( const ImplConfigData* pData, ULONG& rLen )
 {
     BYTE*           pWriteBuf;
     BYTE*           pBuf;
-    BYTE            aLineEndBuf[2];
+    BYTE            aLineEndBuf[2] = {0, 0};
     ImplKeyData*    pKey;
     ImplGroupData*  pGroup;
     unsigned int    nBufLen;
