@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:42:19 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:06:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2367,7 +2367,7 @@ BOOL ToolBox::AlwaysLocked()
         if ( aNode.isValid() )
         {
             // feature enabled ?
-            BOOL bStatesEnabled;
+            BOOL bStatesEnabled = BOOL();
             ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "StatesEnabled" ) );
             if( aValue >>= bStatesEnabled )
             {
@@ -2378,7 +2378,7 @@ BOOL ToolBox::AlwaysLocked()
                         vcl::unohelper::GetMultiServiceFactory(),
                         OUString::createFromAscii( "/org.openoffice.Office.UI.GlobalSettings/Toolbars/States" ) );    // note: case sensisitive !
 
-                    BOOL bLocked;
+                    BOOL bLocked = BOOL();
                     ::com::sun::star::uno::Any aValue2 = aNode2.getNodeValue( OUString::createFromAscii( "Locked" ) );
                     if( aValue2 >>= bLocked )
                         nAlwaysLocked = (bLocked == TRUE) ? 1 : 0;
