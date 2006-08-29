@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:34:49 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 10:59:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -891,7 +891,7 @@ sal_Bool XMLMoveSizeProtectHdl::importXML( const OUString& rStrImpValue, Any& rV
 
 sal_Bool XMLMoveSizeProtectHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bValue;
+    sal_Bool bValue = sal_Bool();
     if( !(rValue >>= bValue ) )
         return sal_False;
 
@@ -942,7 +942,7 @@ sal_Bool XMLSdHeaderFooterVisibilityTypeHdl::exportXML(
 {
     sal_Bool bRet = sal_False;
       OUStringBuffer aOut;
-    sal_Bool bValue;
+    sal_Bool bValue = sal_Bool();
 
     if (rValue >>= bValue)
     {
@@ -1418,14 +1418,14 @@ void XMLShapeExportPropertyMapper::ContextFilter(
 
             case CTF_SD_MOVE_PROTECT:
                 {
-                    sal_Bool bProtected;
+                    sal_Bool bProtected = sal_Bool();
                     if( (property->maValue >>= bProtected) && !bProtected )
                         property->mnIndex = -1;
                 }
                 break;
             case CTF_SD_SIZE_PROTECT:
                 {
-                    sal_Bool bProtected;
+                    sal_Bool bProtected = sal_Bool();
                     if( (property->maValue >>= bProtected) && !bProtected )
                         property->mnIndex = -1;
                 }
@@ -1439,7 +1439,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     // do not export visual area for internal ole objects
     if( pOLEIsInternal )
     {
-        sal_Bool bInternal;
+        sal_Bool bInternal = sal_Bool();
         if( (pOLEIsInternal->maValue >>= bInternal) && bInternal )
         {
             if( pOLEVisAreaLeft ) pOLEVisAreaLeft->mnIndex = -1;
@@ -1655,7 +1655,7 @@ void XMLPageExportPropertyMapper::ContextFilter(
                 break;
             case CTF_PAGE_TRANSITION_SUBTYPE:
                 {
-                    sal_Int16 nTransitionSubtype;
+                    sal_Int16 nTransitionSubtype = sal_Int16();
                     if( ((mrExport.getExportFlags() & EXPORT_OASIS) == 0) ||
                         ((*property).maValue >>= nTransitionSubtype) && (nTransitionSubtype == 0) )
                             (*property).mnIndex = -1;
@@ -1664,7 +1664,7 @@ void XMLPageExportPropertyMapper::ContextFilter(
                 break;
             case CTF_PAGE_TRANSITION_DIRECTION:
                 {
-                    sal_Bool bDirection;
+                    sal_Bool bDirection = sal_Bool();
                     if( ((mrExport.getExportFlags() & EXPORT_OASIS) == 0) ||
                         ((*property).maValue >>= bDirection) && bDirection )
                             (*property).mnIndex = -1;
