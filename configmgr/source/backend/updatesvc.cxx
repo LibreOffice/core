@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatesvc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:35:47 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:14:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ sal_Bool UpdateService::setImplementationProperty(OUString const & aName, uno::A
 {
     if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Overwrite")))
     {
-        sal_Bool bOverwrite;
+        sal_Bool bOverwrite = sal_False;
         if (aValue >>= bOverwrite)
         {
             if (!bOverwrite)
@@ -174,7 +174,7 @@ sal_Bool UpdateService::setImplementationProperty(OUString const & aName, uno::A
 
     else if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Truncate")))
     {
-        sal_Bool bTruncate;
+        sal_Bool bTruncate = sal_False;
         if (aValue >>= bTruncate)
         {
             if (!bTruncate)
