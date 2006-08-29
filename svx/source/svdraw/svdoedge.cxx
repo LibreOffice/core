@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:41:43 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:40:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,8 +50,6 @@
 #include "svdtouch.hxx"
 #include "svdtrans.hxx"
 #include "svdetc.hxx"
-#include "svdio.hxx"
-#include "svdsuro.hxx"
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
 
