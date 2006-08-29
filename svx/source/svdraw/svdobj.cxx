@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-03 12:36:55 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:40:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@
 #include "svdxout.hxx"
 #include "svdetc.hxx"
 #include "svdtrans.hxx"
-#include "svdio.hxx"
 #include "svdhdl.hxx"
 #include "svddrag.hxx"
 #include "svdmodel.hxx"
