@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextOrientationHdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:03:06 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 10:58:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ sal_Bool XMLTextOrientationHdl::exportXML(
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
-    sal_Bool bVal;
+    sal_Bool bVal (sal_False );
     sal_Bool bRetval( sal_False );
 
     if( rValue >>= bVal )
