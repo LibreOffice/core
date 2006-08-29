@@ -4,9 +4,9 @@
  *
  *  $RCSfile: durationhdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:32:12 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:01:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ sal_Bool XMLDurationMS16PropHdl_Impl::exportXML(
         const Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    sal_Int16 nMS;
+    sal_Int16 nMS = sal_Int16();
 
     if(rValue >>= nMS)
     {
