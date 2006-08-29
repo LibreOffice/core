@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.241 $
+ *  $Revision: 1.242 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 09:53:33 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:06:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -507,7 +507,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     // #104427# auto detect HC mode ?
     if( !rSettings.GetStyleSettings().GetHighContrastMode() )
     {
-        sal_Bool bTmp, bAutoHCMode = sal_True;
+        sal_Bool bTmp = sal_False, bAutoHCMode = sal_True;
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
             vcl::unohelper::GetMultiServiceFactory(),
             OUString::createFromAscii( "org.openoffice.Office.Common/Accessibility" ) );    // note: case sensisitive !
@@ -531,7 +531,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
 
     // Detect if images in menus are allowed or not
     {
-        sal_Bool bTmp, bUseImagesInMenus = sal_True;
+        sal_Bool bTmp = sal_False, bUseImagesInMenus = sal_True;
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
             vcl::unohelper::GetMultiServiceFactory(),
             OUString::createFromAscii( "org.openoffice.Office.Common/View/Menu" ) );    // note: case sensisitive !
