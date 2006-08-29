@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 10:35:50 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:43:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@
 #include "svdpage.hxx"
 #include "svdmodel.hxx"
 #include "svdvmark.hxx"
-#include "svdio.hxx"
 #include "svdundo.hxx"
 #include "svdview.hxx"
 #include "svdglue.hxx"
