@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:40:36 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:39:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #include "xpool.hxx"
 #include "svditext.hxx"
 #include "svdtouch.hxx"
-#include "svdio.hxx"
 #include "svdmodel.hxx"
 #include "svdxout.hxx"
 #include "svdpage.hxx"
