@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:46:48 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:20:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,8 @@
 #undef ITEMID_SEARCH
 #endif
 #define ITEMID_SEARCH           SID_SEARCH_ITEM
-#ifndef _SRCHITEM_HXX
-#include <svx/srchitem.hxx>
+#ifndef _SFX_SRCHITEM_HXX
+#include <sfx2/srchitem.hxx>
 #endif
 #ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
