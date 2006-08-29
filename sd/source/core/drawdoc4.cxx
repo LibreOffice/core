@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:01:31 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:18:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,9 @@
 #define ITEMID_FRAMEDIR             EE_PARA_WRITINGDIR
 
 #include <svx/svxids.hrc>
-#include <svx/srchitem.hxx>
+#ifndef _SFX_SRCHITEM_HXX
+#include <sfx2/srchitem.hxx>
+#endif
 #include <svx/lrspitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/lspcitem.hxx>
