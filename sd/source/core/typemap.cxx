@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:15:04 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:18:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@
 #include <svx/srchdlg.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/clipfmtitem.hxx>
-#include <svx/srchitem.hxx>
+#include <sfx2/srchitem.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/svxenum.hxx>
 #include <svx/algitem.hxx>
