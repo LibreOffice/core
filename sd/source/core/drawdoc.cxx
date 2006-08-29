@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 11:21:11 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:17:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,9 @@
 #endif
 
 #include <svx/svxids.hrc>
-#include <svx/srchitem.hxx>
+#ifndef _SFX_SRCHITEM_HXX
+#include <sfx2/srchitem.hxx>
+#endif
 #include <svx/eeitem.hxx>
 #define ITEMID_SCRIPTSPACE      EE_PARA_ASIANCJKSPACING
 #include <svx/scriptspaceitem.hxx>
