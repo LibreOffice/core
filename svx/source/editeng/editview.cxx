@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:40:04 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:30:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _SOLAR__PRIVATE 1
 
 #ifndef SVX_LIGHT
-#include <srchitem.hxx>
+#include <sfx2/srchitem.hxx>
 #endif
 
 #include <impedit.hxx>
