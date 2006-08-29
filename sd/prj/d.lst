@@ -28,7 +28,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\simpress\statusbar
 ..\%__SRC%\lib\sdi.lib %_DEST%\lib%_EXT%\sdi.lib
 ..\%__SRC%\slb\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
-..\%__SRC%\bin\sdraw3.exe %_DEST%\bin%_EXT%\sdraw3.exe
 ..\%__SRC%\bin\sd?????.dll %_DEST%\bin%_EXT%\sd?????.dll
 ..\%__SRC%\bin\sd??????.dll %_DEST%\bin%_EXT%\sd??????.dll
 ..\%__SRC%\bin\sd*.res %_DEST%\bin%_EXT%\sd*.res
@@ -72,4 +71,3 @@ mkdir: %_DEST%\inc%_EXT%\sd
 ..\uiconfig\sdraw\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\statusbar\*.xml
 ..\uiconfig\simpress\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\simpress\statusbar\*.xml
 
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
