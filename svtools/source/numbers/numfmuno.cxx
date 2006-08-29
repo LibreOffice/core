@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmuno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:23:34 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:13:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1032,13 +1032,13 @@ void SAL_CALL SvNumberFormatSettingsObj::setPropertyValue( const rtl::OUString& 
         }
         else if (aString.EqualsAscii( PROPERTYNAME_STDDEC ))
         {
-            sal_Int16 nInt16;
+            sal_Int16 nInt16 = sal_Int16();
             if ( aValue >>= nInt16 )
                 pFormatter->ChangeStandardPrec( nInt16 );
         }
         else if (aString.EqualsAscii( PROPERTYNAME_TWODIGIT ))
         {
-            sal_Int16 nInt16;
+            sal_Int16 nInt16 = sal_Int16();
             if ( aValue >>= nInt16 )
                 pFormatter->SetYear2000( nInt16 );
         }
