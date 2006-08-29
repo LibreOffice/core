@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 16:53:46 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:19:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,12 +41,6 @@
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
 #endif
-#ifndef _SVX_SVXIFACT_HXX //autogen
-#include <svx/svxifact.hxx>
-#endif
-//CHINA001 #ifndef _SVX_DLGNAME_HXX //autogen
-//CHINA001 #include <svx/dlgname.hxx>
-//CHINA001 #endif
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
 #pragma hdrstop
