@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:45:29 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:32:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,6 @@
 
 #ifndef _E3D_GLOBL3D_HXX
 #include "globl3d.hxx"
-#endif
-
-#ifndef _SVDIO_HXX
-#include "svdio.hxx"
 #endif
 
 #ifndef _E3D_LATHE3D_HXX
