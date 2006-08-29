@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numehelp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:33:49 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:01:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -316,7 +316,7 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
             {
                 uno::Reference <beans::XPropertySet> xNumberPropertySet(xNumberFormats->getByKey(nNumberFormat));
                 xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STANDARDFORMAT))) >>= bIsStandard;
-                sal_Int16 nNumberType;
+                sal_Int16 nNumberType = sal_Int16();
                 if ( xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE))) >>= nNumberType )
                 {
                     return nNumberType;
@@ -399,7 +399,7 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
             if (xNumberPropertySet.is())
             {
                 xNumberPropertySet->getPropertyValue(sStandardFormat) >>= bIsStandard;
-                sal_Int16 nNumberType;
+                sal_Int16 nNumberType = sal_Int16();
                 if ( xNumberPropertySet->getPropertyValue(sType) >>= nNumberType )
                 {
                     return nNumberType;
