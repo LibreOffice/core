@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:43:56 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:42:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@
 #include "svdpage.hxx"  // und fuer AnimationHandler (Laufschrift)
 #include "svdxout.hxx"
 #include "svdtouch.hxx"
-#include "svdio.hxx"
 #include "svdetc.hxx"
 #include "svdoutl.hxx"
 #include "svdscrol.hxx"  // fuer Laufschrift
