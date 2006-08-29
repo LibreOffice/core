@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:04:36 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 10:57:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -980,7 +980,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             aVal = xPSet->getPropertyValue( aPropName );
-            sal_Int16 n;
+            sal_Int16 n = sal_Int16();
             if ( aVal >>= n )
             {
                 if ( n )
@@ -995,7 +995,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             aVal = xPSet->getPropertyValue( aPropName );
-            sal_Bool b;
+            sal_Bool b = sal_Bool();
             if ( ( aVal >>= b ) && b)
                 aDescr.WindowAttributes |= WindowAttribute::MOVEABLE;
         }
@@ -1005,7 +1005,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             aVal = xPSet->getPropertyValue( aPropName );
-            sal_Bool b;
+            sal_Bool b = sal_Bool();
             if ( ( aVal >>= b ) && b)
                 aDescr.WindowAttributes |= WindowAttribute::CLOSEABLE;
         }
@@ -1015,7 +1015,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             aVal = xPSet->getPropertyValue( aPropName );
-            sal_Bool b;
+            sal_Bool b = sal_Bool();
             if ( ( aVal >>= b ) && b)
                 aDescr.WindowAttributes |= VclWindowPeerAttribute::DROPDOWN;
         }
@@ -1025,7 +1025,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             aVal = xPSet->getPropertyValue( aPropName );
-            sal_Bool b;
+            sal_Bool b = sal_Bool();
             if ( ( aVal >>= b ) && b)
                 aDescr.WindowAttributes |= VclWindowPeerAttribute::SPIN;
         }
@@ -1035,7 +1035,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             aVal = xPSet->getPropertyValue( aPropName );
-            sal_Bool b;
+            sal_Bool b = sal_Bool();
             if ( ( aVal >>= b ) && b)
                 aDescr.WindowAttributes |= VclWindowPeerAttribute::HSCROLL;
         }
@@ -1045,7 +1045,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             aVal = xPSet->getPropertyValue( aPropName );
-            sal_Bool b;
+            sal_Bool b = sal_Bool();
             if ( ( aVal >>= b ) && b)
                 aDescr.WindowAttributes |= VclWindowPeerAttribute::VSCROLL;
         }
@@ -1055,7 +1055,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             aVal = xPSet->getPropertyValue( aPropName );
-            sal_Int16 n;
+            sal_Int16 n = sal_Int16();
             if ( aVal >>= n )
             {
                 if ( n == PROPERTY_ALIGN_LEFT )
