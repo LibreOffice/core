@@ -4,9 +4,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:31:28 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 13:32:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -968,6 +968,8 @@ static void read_settings_from_environment( hash_map< string, string >& rSetting
         rSettings[ "EMAIL" ] = strEnv;
         rSettings[ "CONTACT" ] = "true";
     }
+    else
+        rSettings[ "CONTACT" ] = "false";
 
 
     strEnv = get_environment_string( "ERRORREPORT_HTTPPROXYSERVER" );
