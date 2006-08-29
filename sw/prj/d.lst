@@ -32,14 +32,10 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sglobal\statusbar
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
-..\%__SRC%\bin\soffice.pdb %_DEST%\bin%_EXT%\soffice.pdb
-..\%__SRC%\bin\swslots.tlb %_DEST%\bin%_EXT%\swslots.tlb
-..\%__SRC%\bin\wswslots.tlb %_DEST%\bin%_EXT%\wswslots.tlb
 ..\%__SRC%\bin\sw?????.dll %_DEST%\bin%_EXT%\sw?????.dll
 ..\%__SRC%\bin\swd?????.dll %_DEST%\bin%_EXT%\swd?????.dll
 ..\%__SRC%\bin\swui?????.dll %_DEST%\bin%_EXT%\swui?????.dll
 ..\%__SRC%\bin\sw*.res %_DEST%\bin%_EXT%\sw*.res
-..\%__SRC%\slb\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
 
 ..\uiconfig\swriter\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\swriter\menubar\*.xml
