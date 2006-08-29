@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 11:21:23 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:18:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,6 @@
 #include "eetext.hxx"       // definiert ITEMID_... fuer frmitems und textitem
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
-#endif
-#ifndef _SVDSURO_HXX //autogen
-#include <svx/svdsuro.hxx>
 #endif
 #ifndef _SVDOUTL_HXX //autogen
 #include <svx/svdoutl.hxx>
