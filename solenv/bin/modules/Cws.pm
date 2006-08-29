@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-14 17:01:35 $
+#   last change: $Author: ihi $ $Date: 2006-08-29 14:16:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -503,6 +503,18 @@ sub get_current_milestone
     my $master    = shift;
 
     return $self->get_current_milestone_from_eis($master);
+}
+
+# Declare milestone 'removed'
+# This triggers EIS to send emails to all (SO-internal) CWS owners
+# with living CWSs based on that milestone.
+sub milestone_removed
+{
+    my $self      = shift;
+    my $master    = shift;
+    my $milestone = shift;
+
+    return $self->set_milestone_removed_in_eis($master, $milestone);
 }
 
 # Get all child workspaces which have been integrated on a
@@ -1170,6 +1182,23 @@ sub get_current_milestone_from_eis
         carp("ERROR: get_current_milestone(): EIS database transaction failed. Reason:\n$@\n");
     }
     return $result;
+}
+
+sub set_milestone_removed_in_eis
+{
+    my $self      = shift;
+    my $master    = shift;
+    my $milestone = shift;
+
+    $master    = Eis::to_string($master);
+    $milestone = Eis::to_string($milestone);
+
+    my $eis = Cws::eis();
+    eval { $eis->minorRemoved( $master, $milestone ) };
+    if ( $@ ) {
+        carp("ERROR: set_current_milestone(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return;
 }
 
 sub is_milestone_registered_with_eis
