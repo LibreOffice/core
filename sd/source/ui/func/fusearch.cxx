@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusearch.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:50:46 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:20:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 
 #define ITEMID_SEARCH           SID_SEARCH_ITEM
 #include <svx/svxids.hrc>
-#include <svx/srchitem.hxx>
+#include <sfx2/srchitem.hxx>
 #include <svx/srchdlg.hxx>
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
