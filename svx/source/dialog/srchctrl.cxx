@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:29:01 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:29:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 
 #include "srchctrl.hxx"
 #include "srchdlg.hxx"
-#include "srchitem.hxx"
+#include <sfx2/srchitem.hxx>
 
 // class SvxSearchFamilyControllerItem -----------------------------------
 
