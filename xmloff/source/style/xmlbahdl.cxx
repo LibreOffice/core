@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:36:40 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:02:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,7 +275,7 @@ sal_Bool XMLBoolPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, c
 {
     sal_Bool bRet = sal_False;
       OUStringBuffer aOut;
-    sal_Bool bValue;
+    sal_Bool bValue = sal_Bool();
 
     if (rValue >>= bValue)
     {
@@ -313,7 +313,7 @@ sal_Bool XMLNBoolPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, 
 {
     sal_Bool bRet = sal_False;
       OUStringBuffer aOut;
-    sal_Bool bValue;
+    sal_Bool bValue = sal_Bool();
 
     if (rValue >>= bValue)
     {
