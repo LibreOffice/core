@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:18:00 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 10:57:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -462,7 +462,7 @@ sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const ::r
         Reference<XPropertySet> xProp( xSheet, UNO_QUERY );
         if (xProp.is())
         {
-            sal_Bool bVisible;
+            sal_Bool bVisible = sal_Bool();
             Any aVisAny = xProp->getPropertyValue( ::rtl::OUString::createFromAscii("IsVisible") );
             if ( aVisAny >>= bVisible )
                 if (!bVisible)
@@ -529,7 +529,7 @@ sal_Bool lcl_IsUnnamed( const Reference<XDatabaseRanges>& xRanges, const ::rtl::
             try
             {
                 Any aUserAny = xRangeProp->getPropertyValue( ::rtl::OUString::createFromAscii("IsUserDefined") );
-                sal_Bool bUserDefined;
+                sal_Bool bUserDefined = sal_Bool();
                 if ( aUserAny >>= bUserDefined )
                     bUnnamed = !bUserDefined;
             }
