@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:34:22 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:38:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 
 #include "svdcrtv.hxx"
 #include "xattr.hxx"
-#include "svdio.hxx"
 #include "svdxout.hxx"
 #include "svdundo.hxx"
 #include "svdocapt.hxx" // Spezialbehandlung: Nach dem Create transparente Fuellung
