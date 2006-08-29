@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:12:02 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:04:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ void ElementDescriptor::readButtonModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":multiline") ) );
 
     // State
-    sal_Int16 nState;
+    sal_Int16 nState = 0;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ) ) >>= nState)
     {
         switch (nState)
@@ -186,7 +186,7 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tristate") ),
                       OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
     }
-    sal_Int16 nState;
+    sal_Int16 nState = 0;
     if (_xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ) ) >>= nState)
     {
         switch (nState)
@@ -390,7 +390,7 @@ void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles )
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":multiline") ) );
 
-    sal_Int16 nState;
+    sal_Int16 nState = 0;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ) ) >>= nState)
     {
         switch (nState)
@@ -525,7 +525,7 @@ void ElementDescriptor::readEditModel( StyleBag * all_styles )
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
     readLineEndFormatAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("LineEndFormat") ),
                            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":lineend-format") ) );
-    sal_Int16 nEcho;
+    sal_Int16 nEcho = 0;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("EchoChar") ) ) >>= nEcho)
     {
         sal_Unicode cEcho = (sal_Unicode)nEcho;
