@@ -4,9 +4,9 @@
  *
  *  $RCSfile: constructors.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 10:45:58 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:07:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,19 +84,19 @@ private:
 void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     throw (css::uno::Exception)
 {
-    ::sal_Bool arg0;
-    ::sal_Int8 arg1;
-    ::sal_Int16 arg2;
-    ::sal_uInt16 arg3;
-    ::sal_Int32 arg4;
-    ::sal_uInt32 arg5;
-    ::sal_Int64 arg6;
-    ::sal_uInt64 arg7;
+    ::sal_Bool arg0 = sal_Bool();
+    ::sal_Int8 arg1 = sal_Int8();
+    ::sal_Int16 arg2 = sal_Int16();
+    ::sal_uInt16 arg3 = sal_uInt16();
+    ::sal_Int32 arg4 = sal_Int32();
+    ::sal_uInt32 arg5 = sal_uInt32();
+    ::sal_Int64 arg6 = sal_Int64();
+    ::sal_uInt64 arg7 = sal_uInt64();
     float arg8;
     double arg9;
     ::rtl::OUString arg11;
     css::uno::Type arg12;
-    ::sal_Bool arg13;
+    ::sal_Bool arg13 = sal_Bool();
     css::uno::Sequence< ::sal_Bool > arg14;
     css::uno::Sequence< ::sal_Int8 > arg15;
     css::uno::Sequence< ::sal_Int16 > arg16;
@@ -110,23 +110,23 @@ void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     css::uno::Sequence< ::rtl::OUString > arg25;
     css::uno::Sequence< css::uno::Type > arg26;
     css::uno::Sequence< css::uno::Any > arg27;
-    ::sal_Bool arg27b;
+    ::sal_Bool arg27b = sal_Bool();
     css::uno::Sequence< css::uno::Sequence< ::sal_Bool > > arg28;
     css::uno::Sequence< css::uno::Sequence< css::uno::Any > > arg29;
-    ::sal_Bool arg29b;
+    ::sal_Bool arg29b = sal_Bool();
     css::uno::Sequence< ::test::testtools::bridgetest::TestEnum > arg30;
     css::uno::Sequence< ::test::testtools::bridgetest::TestStruct > arg31;
     css::uno::Sequence<
         ::test::testtools::bridgetest::TestPolyStruct< sal_Bool > > arg32;
     css::uno::Sequence<
         ::test::testtools::bridgetest::TestPolyStruct< css::uno::Any > > arg33;
-    ::sal_Bool arg33b;
+    ::sal_Bool arg33b = sal_Bool();
     css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > arg34;
     ::test::testtools::bridgetest::TestEnum arg35;
     ::test::testtools::bridgetest::TestStruct arg36;
     ::test::testtools::bridgetest::TestPolyStruct< ::sal_Bool > arg37;
     ::test::testtools::bridgetest::TestPolyStruct< css::uno::Any > arg38;
-    ::sal_Bool arg38b;
+    ::sal_Bool arg38b = sal_Bool();
     css::uno::Reference< css::uno::XInterface > arg39;
     if (!(arguments.getLength() == 40
           && (arguments[0] >>= arg0) && arg0
