@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:50:57 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 10:57:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1490,7 +1490,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
 
             case BASEPROPERTY_ENABLED:
             {
-                sal_Bool b;
+                sal_Bool b = sal_Bool();
                 if ( Value >>= b )
                     setEnable( b );
             }
@@ -1563,7 +1563,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_FONTRELIEF:
             {
-                sal_Int16 n;
+                sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                 {
                     Font aFont = pWindow->GetControlFont();
@@ -1574,7 +1574,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_FONTEMPHASISMARK:
             {
-                sal_Int16 n;
+                sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                 {
                     Font aFont = pWindow->GetControlFont();
