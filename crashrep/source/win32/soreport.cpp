@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soreport.cpp,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:31:42 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 13:32:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,6 +132,26 @@ bool    g_bLoadReport = false;
 // tmpfile from msvcrt creates the temporary file in the root of the current
 // volume and can fail.
 
+static FILE *_xfopen( const _TCHAR *file, const _TCHAR *mode )
+{
+#ifdef UNICODE
+    if ( (LONG)GetVersion() < 0 )
+    {
+        char    afile[MAX_PATH];
+        char    amode[16];
+
+        WideCharToMultiByte( CP_ACP, 0, file, -1, afile, MAX_PATH, NULL, NULL );
+        WideCharToMultiByte( CP_ACP, 0, mode, -1, amode, 16, NULL, NULL );
+
+
+        return fopen( afile, amode );
+    }
+    else
+#endif
+        return _tfopen( file, mode );
+}
+
+
 static FILE *_tmpfile(void)
 {
     FILE *fp = NULL;
@@ -203,7 +223,7 @@ static FILE *_open_reportfile( LPCTSTR lpExt, LPCTSTR lpMode )
         _tcscat( szAppDataPath, _T("\\crashdat") );
         _tcscat( szAppDataPath, lpExt );
 
-        fp = _tfopen( szAppDataPath, lpMode );
+        fp = _xfopen( szAppDataPath, lpMode );
     }
 
     return fp;
@@ -420,7 +440,7 @@ void CrashReportParams::ReadFromEnvironment()
 
     if ( dwResult && dwResult < elementsof(szBuffer) )
     {
-        FILE *fp = _tfopen( szBuffer, _T("rb") );
+        FILE *fp = _xfopen( szBuffer, _T("rb") );
 
         if ( fp )
         {
