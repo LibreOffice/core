@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-05 22:10:09 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:41:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,6 @@
 #include <goodies/grfmgr.hxx>
 #include "linkmgr.hxx"
 #include "svdxout.hxx"
-#include "svdio.hxx"
 #include "svdetc.hxx"
 #include "svdglob.hxx"
 #include "svdstr.hrc"
