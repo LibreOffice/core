@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-04 12:30:05 $
+#   last change: $Author: ihi $ $Date: 2006-08-29 14:47:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ CFLAGS+=-DENABLE_LOCKDOWN
 
 .IF "$(ENABLE_GNOMEVFS)"!=""
 COMPILER_WARN_ALL=TRUE
-PKGCONFIG_MODULES=gconf-2.0 gobject-2.0
+PKGCONFIG_MODULES=gconf-2.0 gobject-2.0 ORBit-2.0 glib-2.0
 .INCLUDE: pkg_config.mk
 
 .IF "$(OS)" == "SOLARIS"
