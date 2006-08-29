@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:56:50 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:43:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,6 @@
 
 #include "svdetc.hxx"
 #include "svdxout.hxx"
-#include "svdio.hxx"
 #include "svdobj.hxx"
 #include "svdogrp.hxx"
 #include "svdograf.hxx" // fuer SwapInAll()
