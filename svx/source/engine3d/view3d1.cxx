@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view3d1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:48:24 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:35:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,10 +93,6 @@
 
 #ifndef _SVX_COLRITEM_HXX
 #include "colritem.hxx"
-#endif
-
-#ifndef _E3D_DLIGHT3D_HXX
-#include "dlight3d.hxx"
 #endif
 
 #ifndef _E3D_LATHE3D_HXX
