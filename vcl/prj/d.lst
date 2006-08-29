@@ -1,10 +1,5 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\hid
-mkdir: %_DEST%\inc%_EXT%\sv
-mkdir: %_DEST%\inc%_EXT%\tools
-mkdir: %_DEST%\inc%_EXT%\uno
-mkdir: %_DEST%\inc%_EXT%\uno\awt
 mkdir: %_DEST%\inc%_EXT%\vcl
-mkdir: %_DEST%\inc%_EXT%\vcl\unx
 mkdir: %_DEST%\inc%_EXT%\vcl\plug
 mkdir: %_DEST%\inc%_EXT%\vcl\plug\vcl
 
@@ -14,19 +9,10 @@ mkdir: %_DEST%\inc%_EXT%\vcl\plug\vcl
 ..\%__SRC%\bin\vcl?????.sym %_DEST%\bin%_EXT%\vcl?????.sym
 ..\%__SRC%\lib\libvcl*.so %_DEST%\lib%_EXT%\libvcl*.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
-..\%__SRC%\lib\app16.lib %_DEST%\lib%_EXT%\app16.lib
-..\%__SRC%\lib\gdi16.lib %_DEST%\lib%_EXT%\gdi16.lib
-..\%__SRC%\lib\isv.lib %_DEST%\lib%_EXT%\isv.lib
 ..\%__SRC%\lib\ivcl.lib %_DEST%\lib%_EXT%\ivcl.lib
-..\%__SRC%\lib\vcl.lib %_DEST%\lib%_EXT%\vcl.lib
 ..\%__SRC%\misc\vcl?????.map %_DEST%\bin%_EXT%\vcl?????.map
-..\%__SRC%\obj\main.obj %_DEST%\lib%_EXT%\xsvmain.obj
 ..\%__SRC%\obj\salmain.obj %_DEST%\lib%_EXT%\salmain.obj
-..\%__SRC%\obj\svapp.obj %_DEST%\lib%_EXT%\xsvapp.obj
-..\%__SRC%\res\svsrc.res %_DEST%\res%_EXT%\svsrc.res
-..\%__SRC%\slb\sv.lib %_DEST%\lib%_EXT%\xsv.lib
 ..\%__SRC%\slo\salmain.o %_DEST%\lib%_EXT%\salmain.o
-..\%__SRC%\slo\svdll.obj %_DEST%\lib%_EXT%\xsvdll.obj
 
 hedabu: ..\inc\accel.hxx %_DEST%\inc%_EXT%\vcl\accel.hxx
 hedabu: ..\inc\alpha.hxx %_DEST%\inc%_EXT%\vcl\alpha.hxx
@@ -54,8 +40,6 @@ hedabu: ..\inc\dllapi.h %_DEST%\inc%_EXT%\vcl\dllapi.h
 hedabu: ..\inc\edit.hxx %_DEST%\inc%_EXT%\vcl\edit.hxx
 hedabu: ..\inc\event.hxx %_DEST%\inc%_EXT%\vcl\event.hxx
 hedabu: ..\inc\field.hxx %_DEST%\inc%_EXT%\vcl\field.hxx
-hedabu: ..\inc\fildlg.hxx %_DEST%\inc%_EXT%\vcl\fildlg.hxx
-hedabu: ..\inc\filedlg.hxx %_DEST%\inc%_EXT%\vcl\filedlg.hxx
 hedabu: ..\inc\fixbrd.hxx %_DEST%\inc%_EXT%\vcl\fixbrd.hxx
 hedabu: ..\inc\fixed.hxx %_DEST%\inc%_EXT%\vcl\fixed.hxx
 hedabu: ..\inc\fldunit.hxx %_DEST%\inc%_EXT%\vcl\fldunit.hxx
@@ -63,7 +47,6 @@ hedabu: ..\inc\floatwin.hxx %_DEST%\inc%_EXT%\vcl\floatwin.hxx
 hedabu: ..\inc\fntstyle.hxx %_DEST%\inc%_EXT%\vcl\fntstyle.hxx
 hedabu: ..\inc\font.hxx %_DEST%\inc%_EXT%\vcl\font.hxx
 hedabu: ..\inc\fontcvt.hxx %_DEST%\inc%_EXT%\vcl\fontcvt.hxx
-hedabu: ..\inc\fonttype.hxx %_DEST%\inc%_EXT%\vcl\fonttype.hxx
 hedabu: ..\inc\gdimtf.hxx %_DEST%\inc%_EXT%\vcl\gdimtf.hxx
 hedabu: ..\inc\gfxlink.hxx %_DEST%\inc%_EXT%\vcl\gfxlink.hxx
 hedabu: ..\inc\gradient.hxx %_DEST%\inc%_EXT%\vcl\gradient.hxx
@@ -71,10 +54,8 @@ hedabu: ..\inc\graph.h %_DEST%\inc%_EXT%\vcl\graph.h
 hedabu: ..\inc\graph.hxx %_DEST%\inc%_EXT%\vcl\graph.hxx
 hedabu: ..\inc\group.hxx %_DEST%\inc%_EXT%\vcl\group.hxx
 hedabu: ..\inc\hatch.hxx %_DEST%\inc%_EXT%\vcl\hatch.hxx
-hedabu: ..\inc\hdltab.hxx %_DEST%\inc%_EXT%\vcl\hdltab.hxx
 hedabu: ..\inc\help.hxx %_DEST%\inc%_EXT%\vcl\help.hxx
 hedabu: ..\inc\image.hxx %_DEST%\inc%_EXT%\vcl\image.hxx
-hedabu: ..\inc\imagebtn.hxx %_DEST%\inc%_EXT%\vcl\imagebtn.hxx
 hedabu: ..\inc\imgcons.hxx %_DEST%\inc%_EXT%\vcl\imgcons.hxx
 hedabu: ..\inc\imgctrl.hxx %_DEST%\inc%_EXT%\vcl\imgctrl.hxx
 hedabu: ..\inc\inputctx.hxx %_DEST%\inc%_EXT%\vcl\inputctx.hxx
@@ -101,7 +82,6 @@ hedabu: ..\inc\octree.hxx %_DEST%\inc%_EXT%\vcl\octree.hxx
 hedabu: ..\inc\opengl.hxx %_DEST%\inc%_EXT%\vcl\opengl.hxx
 hedabu: ..\inc\outdev.hxx %_DEST%\inc%_EXT%\vcl\outdev.hxx
 hedabu: ..\inc\outdev3d.hxx %_DEST%\inc%_EXT%\vcl\outdev3d.hxx
-hedabu: ..\inc\pal.hxx %_DEST%\inc%_EXT%\vcl\pal.hxx
 hedabu: ..\inc\pointr.hxx %_DEST%\inc%_EXT%\vcl\pointr.hxx
 hedabu: ..\inc\print.hxx %_DEST%\inc%_EXT%\vcl\print.hxx
 hedabu: ..\inc\prndlg.hxx %_DEST%\inc%_EXT%\vcl\prndlg.hxx
@@ -109,14 +89,12 @@ hedabu: ..\inc\prntypes.hxx %_DEST%\inc%_EXT%\vcl\prntypes.hxx
 hedabu: ..\inc\ptrstyle.hxx %_DEST%\inc%_EXT%\vcl\ptrstyle.hxx
 hedabu: ..\inc\regband.hxx %_DEST%\inc%_EXT%\vcl\regband.hxx
 hedabu: ..\inc\region.hxx %_DEST%\inc%_EXT%\vcl\region.hxx
-hedabu: ..\inc\rversion.h %_DEST%\inc%_EXT%\vcl\rversion.h
 hedabu: ..\inc\salbtype.hxx %_DEST%\inc%_EXT%\vcl\salbtype.hxx
 hedabu: ..\inc\salctype.hxx %_DEST%\inc%_EXT%\vcl\salctype.hxx
 hedabu: ..\inc\salgtype.hxx %_DEST%\inc%_EXT%\vcl\salgtype.hxx
 hedabu: ..\inc\salotype.hxx %_DEST%\inc%_EXT%\vcl\salotype.hxx
 hedabu: ..\inc\salstype.hxx %_DEST%\inc%_EXT%\vcl\salstype.hxx
 hedabu: ..\inc\salnativewidgets.hxx %_DEST%\inc%_EXT%\vcl\salnativewidgets.hxx
-hedabu: ..\unx\inc\salnativewidgets.h %_DEST%\inc%_EXT%\vcl\salnativewidgets.h
 hedabu: ..\inc\scrbar.hxx %_DEST%\inc%_EXT%\vcl\scrbar.hxx
 hedabu: ..\inc\seleng.hxx %_DEST%\inc%_EXT%\vcl\seleng.hxx
 hedabu: ..\inc\settings.hxx %_DEST%\inc%_EXT%\vcl\settings.hxx
@@ -132,20 +110,16 @@ hedabu: ..\inc\status.hxx %_DEST%\inc%_EXT%\vcl\status.hxx
 hedabu: ..\inc\stdtext.hxx %_DEST%\inc%_EXT%\vcl\stdtext.hxx
 hedabu: ..\inc\sv.h %_DEST%\inc%_EXT%\vcl\sv.h
 hedabu: ..\inc\svapp.hxx %_DEST%\inc%_EXT%\vcl\svapp.hxx
-hedabu: ..\inc\svsys.h %_DEST%\inc%_EXT%\vcl\svsys.h
 hedabu: ..\inc\symbol.hxx %_DEST%\inc%_EXT%\vcl\symbol.hxx
 hedabu: ..\inc\syschild.hxx %_DEST%\inc%_EXT%\vcl\syschild.hxx
 hedabu: ..\inc\sysdata.hxx %_DEST%\inc%_EXT%\vcl\sysdata.hxx
-hedabu: ..\inc\sysdlg.hxx %_DEST%\inc%_EXT%\vcl\sysdlg.hxx
 hedabu: ..\inc\syswin.hxx %_DEST%\inc%_EXT%\vcl\syswin.hxx
-hedabu: ..\inc\tab.hxx %_DEST%\inc%_EXT%\vcl\tab.hxx
 hedabu: ..\inc\tabctrl.hxx %_DEST%\inc%_EXT%\vcl\tabctrl.hxx
 hedabu: ..\inc\tabdlg.hxx %_DEST%\inc%_EXT%\vcl\tabdlg.hxx
 hedabu: ..\inc\tabpage.hxx %_DEST%\inc%_EXT%\vcl\tabpage.hxx
 hedabu: ..\inc\taskpanelist.hxx %_DEST%\inc%_EXT%\vcl\taskpanelist.hxx
 hedabu: ..\inc\timer.hxx %_DEST%\inc%_EXT%\vcl\timer.hxx
 hedabu: ..\inc\toolbox.hxx %_DEST%\inc%_EXT%\vcl\toolbox.hxx
-hedabu: ..\inc\uniqid.hxx %_DEST%\inc%_EXT%\vcl\uniqid.hxx
 hedabu: ..\inc\unowrap.hxx %_DEST%\inc%_EXT%\vcl\unowrap.hxx
 hedabu: ..\inc\canvastools.hxx %_DEST%\inc%_EXT%\vcl\canvastools.hxx
 hedabu: ..\inc\vclenum.hxx %_DEST%\inc%_EXT%\vcl\vclenum.hxx
@@ -153,11 +127,9 @@ hedabu: ..\inc\vclevent.hxx %_DEST%\inc%_EXT%\vcl\vclevent.hxx
 hedabu: ..\inc\virdev.hxx %_DEST%\inc%_EXT%\vcl\virdev.hxx
 hedabu: ..\inc\waitobj.hxx %_DEST%\inc%_EXT%\vcl\waitobj.hxx
 hedabu: ..\inc\wall.hxx %_DEST%\inc%_EXT%\vcl\wall.hxx
-hedabu: ..\inc\winbit.hxx %_DEST%\inc%_EXT%\vcl\winbit.hxx
 hedabu: ..\inc\window.hxx %_DEST%\inc%_EXT%\vcl\window.hxx
 hedabu: ..\inc\wintypes.hxx %_DEST%\inc%_EXT%\vcl\wintypes.hxx
 hedabu: ..\inc\wrkwin.hxx %_DEST%\inc%_EXT%\vcl\wrkwin.hxx
-hedabu: ..\inc\atom.hxx %_DEST%\inc%_EXT%\vcl\atom.hxx
 hedabu: ..\inc\threadex.hxx %_DEST%\inc%_EXT%\vcl\threadex.hxx
 hedabu: ..\inc\evntpost.hxx %_DEST%\inc%_EXT%\vcl\evntpost.hxx
 hedabu: ..\inc\unohelp.hxx %_DEST%\inc%_EXT%\vcl\unohelp.hxx
@@ -203,4 +175,3 @@ hedabu: ..\inc\salsys.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salsys.hxx
 hedabu: ..\inc\salvd.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salvd.hxx
 hedabu: ..\unx\inc\saldatabasic.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\saldatabasic.hxx
 
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
