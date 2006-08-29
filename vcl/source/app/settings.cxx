@@ -4,9 +4,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 14:58:41 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:06:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2010,7 +2010,7 @@ BOOL AllSettings::GetLayoutRTL() const
             OUString::createFromAscii( "org.openoffice.Office.Common/I18N/CTL" ) );    // note: case sensisitive !
         if ( aNode.isValid() )
         {
-            BOOL bTmp;
+            BOOL bTmp = BOOL();
             ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "UIMirroring" ) );
             if( aValue >>= bTmp )
             {
