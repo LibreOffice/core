@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:54:52 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:38:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 #include "svdtrans.hxx"
 #include "svdundo.hxx"
 #include "svdocapt.hxx"
-#include "svdio.hxx"
 #include "svdpagv.hxx"
 #include "svdopath.hxx" // wg. Sonderbehandlung in SetDragPolys()
 #include "svdoedge.hxx" // wg. Sonderbehandlung in IsInsGluePossible()
