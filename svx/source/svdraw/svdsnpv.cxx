@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdsnpv.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:47:11 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:44:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #include <math.h>
 
 #include "svdetc.hxx"
-#include "svdio.hxx"
 #include "svdobj.hxx"
 #include "svdpagv.hxx"
 #include "svdpage.hxx"
