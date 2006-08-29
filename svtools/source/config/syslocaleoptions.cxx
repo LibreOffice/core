@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syslocaleoptions.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:49:04 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:11:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                         break;
                         case  PROPERTYHANDLE_DECIMALSEPARATOR:
                         {
-                                    sal_Bool bValue;
+                                    sal_Bool bValue = sal_Bool();
                             if ( pValues[nProp] >>= bValue )
                                 m_bDecimalSeparator = bValue;
                             else
