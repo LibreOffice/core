@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cube3d.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:44:22 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:31:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,6 @@
 
 #ifndef _SVX_VECTOR3D_HXX
 #include <goodies/vector3d.hxx>
-#endif
-
-#ifndef _E3D_E3DIOCMPT_HXX
-#include "e3dcmpt.hxx"
 #endif
 
 #ifndef _BGFX_POINT_B3DPOINT_HXX
