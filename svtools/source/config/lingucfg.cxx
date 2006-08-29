@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lingucfg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:46:00 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -569,7 +569,7 @@ BOOL SvtLinguConfigItem::SetProperty( INT32 nPropertyHandle, const Any &rValue )
 
     if (pbVal)
     {
-        BOOL bNew;
+        BOOL bNew = BOOL();
         if (rValue >>= bNew)
         {
             if (bNew != *pbVal)
@@ -582,7 +582,7 @@ BOOL SvtLinguConfigItem::SetProperty( INT32 nPropertyHandle, const Any &rValue )
     }
     else if (pnVal)
     {
-        INT16 nNew;
+        INT16 nNew = INT16();
         if (rValue >>= nNew)
         {
             if (nNew != *pnVal)
