@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:47:24 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:34:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,10 +42,6 @@
 #include "svditer.hxx"
 #endif
 
-#ifndef _SVDIO_HXX
-#include "svdio.hxx"
-#endif
-
 #if defined( UNX ) || defined( ICC )
 #include <stdlib.h>
 #endif
@@ -72,14 +68,6 @@
 
 #ifndef _B3D_BASE3D_HXX
 #include <goodies/base3d.hxx>
-#endif
-
-#ifndef _E3D_PLIGHT3D_HXX
-#include "plight3d.hxx"
-#endif
-
-#ifndef _E3D_DLIGHT3D_HXX
-#include "dlight3d.hxx"
 #endif
 
 #ifndef _SVDTRANS_HXX
