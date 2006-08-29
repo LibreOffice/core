@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 17:11:15 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:13:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -464,21 +464,21 @@ void VCLXMultiLineEdit::setProperty( const ::rtl::OUString& PropertyName, const 
 
             case BASEPROPERTY_READONLY:
             {
-                sal_Bool b;
+                sal_Bool b = sal_Bool();
                 if ( Value >>= b )
                     pMultiLineEdit->SetReadOnly( b );
             }
             break;
             case BASEPROPERTY_MAXTEXTLEN:
             {
-                sal_Int16 n;
+                sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                     pMultiLineEdit->SetMaxTextLen( n );
             }
             break;
             case BASEPROPERTY_HIDEINACTIVESELECTION:
             {
-                sal_Bool b;
+                sal_Bool b = sal_Bool();
                 if ( Value >>= b )
                 {
                     pMultiLineEdit->EnableFocusSelectionHide( b );
@@ -954,7 +954,7 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
 
             case BASEPROPERTY_TREATASNUMBER:
             {
-                sal_Bool b;
+                sal_Bool b = sal_Bool();
                 if ( Value >>= b )
                     SetTreatAsNumber(b);
             }
@@ -1024,7 +1024,7 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
-                    sal_Bool b;
+                    sal_Bool b = sal_Bool();
                     if ( Value >>= b )
                      pField->SetThousandsSep( b );
             }
