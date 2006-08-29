@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:34:26 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 10:59:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -556,7 +556,7 @@ void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, const rtl::OUSt
 {
     if( rName == msPrinterIndependentLayout )
     {
-        sal_Int16 nTmp;
+        sal_Int16 nTmp = sal_Int16();
         if( rAny >>= nTmp )
         {
             if( nTmp == document::PrinterIndependentLayout::LOW_RESOLUTION )
