@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:26:02 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:00:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ inline void lcl_RemoveState( XMLPropertyState* pState )
 
 void lcl_RemoveStateIfZero16( XMLPropertyState* pState )
 {
-    sal_Int16   nValue;
+    sal_Int16   nValue = sal_Int16();
     if( (pState->maValue >>= nValue) && !nValue )
         lcl_RemoveState( pState );
 }
