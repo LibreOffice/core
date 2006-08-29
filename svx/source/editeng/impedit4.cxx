@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:42:38 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:31:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #endif
 #include <vcl/svapp.hxx>
 
-#include <srchitem.hxx>
+#include <sfx2/srchitem.hxx>
 #include <lspcitem.hxx>
 #include <adjitem.hxx>
 #include <tstpitem.hxx>
