@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:40:40 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:03:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,7 +252,7 @@ void XMLTextExportPropertySetMapper::ContextFontFilter(
     if( pFontStyleNameState && (pFontStyleNameState->maValue >>= sTmp ) )
         sStyleName = sTmp;
 
-    sal_Int16 nTmp;
+    sal_Int16 nTmp = sal_Int16();
     if( pFontFamilyState && (pFontFamilyState->maValue >>= nTmp ) )
         nFamily = nTmp;
     if( pFontPitchState && (pFontPitchState->maValue >>= nTmp ) )
@@ -834,7 +834,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
     if( pHeightMinAbsState )
     {
-        sal_Int16 nRel;
+        sal_Int16 nRel = sal_Int16();
         if( (SizeType::FIX == nSizeType) ||
             ( pHeightMinRelState &&
               ( !(pHeightMinRelState->maValue >>= nRel) || nRel > 0 ) ) )
@@ -863,7 +863,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     }
     if( pWidthMinAbsState )
     {
-        sal_Int16 nRel;
+        sal_Int16 nRel = sal_Int16();
         if( (SizeType::FIX == nSizeType) ||
             ( pWidthMinRelState &&
               ( !(pWidthMinRelState->maValue >>= nRel) || nRel > 0 ) ) )
