@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:41:10 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@
 #include "svdetc.hxx"
 #include "svdtrans.hxx"
 #include "svdtouch.hxx"
-#include "svdio.hxx"
 #include "svdhdl.hxx"
 #include "svddrag.hxx"
 #include "svdmodel.hxx"
