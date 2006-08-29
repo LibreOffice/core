@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:22:26 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:08:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -979,7 +979,7 @@ shell::setv( const rtl::OUString& aUnqPath,
             else if(values[i].Name == IsReadOnly ||
                     values[i].Name == IsHidden)
             {
-                sal_Bool value ;
+                sal_Bool value = sal_False;
                 if( values[i].Value >>= value )
                 {
                     osl::DirectoryItem aDirItem;
