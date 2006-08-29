@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exp_share.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:12:25 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:04:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,7 @@ inline void ElementDescriptor::read(
         _xPropState->getPropertyState( propName ))
     {
         css::uno::Any a( _xProps->getPropertyValue( propName ) );
-        T v;
+        T v = T();
         if (a >>= v)
             addAttribute( attrName, ::rtl::OUString::valueOf(v) );
         else
