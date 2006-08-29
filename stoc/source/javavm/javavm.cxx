@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:03:12 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:15:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1240,7 +1240,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
     {
         aPropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                           "stardiv.security.disableSecurity"));
-        sal_Bool b;
+        sal_Bool b = sal_Bool();
         if (rEvent.Element >>= b)
             if (b)
                 aPropertyValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
