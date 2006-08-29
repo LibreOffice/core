@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:12:03 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:12:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ BOOL SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal, BYTE) const
 // virtual
 BOOL SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal, BYTE )
 {
-    sal_Int16 nValue;
+    sal_Int16 nValue = sal_Int16();
     if (rVal >>= nValue)
     {
         m_nValue = nValue;

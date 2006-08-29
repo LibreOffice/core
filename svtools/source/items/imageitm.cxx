@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imageitm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:11:49 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:12:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ BOOL SfxImageItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq;
     if (( rVal >>= aSeq ) && ( aSeq.getLength() == 4 ))
     {
-        sal_Int16     nVal;
+        sal_Int16     nVal = sal_Int16();
         rtl::OUString aURL;
         if ( aSeq[0] >>= nVal )
             SetValue( nVal );
