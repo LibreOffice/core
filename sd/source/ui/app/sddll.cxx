@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddll.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:03:04 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:19:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,6 @@
 #endif
 #ifndef _FM_FMOBJFAC_HXX
 #include <svx/fmobjfac.hxx>
-#endif
-#ifndef _SVX_SIIMPORT_HXX
-#include <svx/siimport.hxx>
 #endif
 #ifndef _SVDFIELD_HXX
 #include <svx/svdfield.hxx>
