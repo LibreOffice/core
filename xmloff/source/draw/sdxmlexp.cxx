@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:35:03 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 10:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -979,7 +979,7 @@ BOOL SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUStr
     Reference <beans::XPropertySet> xPropSet(xPage, UNO_QUERY);
     if(xPropSet.is())
     {
-        sal_uInt16 nType;
+        sal_uInt16 nType = sal_uInt16();
         Any aAny;
 
         aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Layout")));
