@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 03:07:29 $
+#   last change: $Author: ihi $ $Date: 2006-08-29 15:09:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ TARGETTYPE=GUI
 # --- Files --------------------------------------------------------
 
 .IF "$(TEST)" != ""
-ENVCFLAGS=-DTEST
+CDEFS+=-DTEST
 OBJFILES=	\
         $(OBJ)$/invader.obj \
         $(OBJ)$/invader1.obj \
@@ -74,7 +74,7 @@ RESLIB1SRSFILES=$(SRS)$/invader.srs
 
 .IF "$(TEST)"!=""
 APP1TARGET= $(TARGET)
-APP1OBJS= $(OBJ)$/invader.obj
+APP1OBJS= $(OBJFILES)
 APP1STDLIBS=	$(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(COMPHELPERLIB)	\
@@ -84,9 +84,6 @@ APP1STDLIBS=	$(CPPULIB)			\
                 $(VOSLIB)			\
                 $(SOTLIB)			\
                 $(SVLIB)
-APP1LIBS=$(LIBPRE) $(LB)$/invader.lib
-APP1STACK= 64000
-APP1DEPN= $(LB)$/invader.lib
 
 .ELSE
 
@@ -103,15 +100,7 @@ SHL1STDLIBS+=\
             advapi32.lib
 .ENDIF
 
-.IF "$(GUI)"!="WNT"
-SHL1LIBS=   $(LIB1TARGET)
-.ENDIF
-
-.IF "$(GUI)"=="WNT"
 SHL1OBJS=$(SLOFILES)
-.ELSE
-SHL1LIBS=$(SLB)$/$(TARGET).lib
-.ENDIF
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
@@ -135,7 +124,7 @@ $(BIN)$/applicat.rdb : makefile.mk $(SOLARBINDIR)$/types.rdb
 
 .IF "$(GUI)"=="WNT"
 
-$(MISC)$/$(SHL1TARGET).def: makefile.mk $(MISC)$/$(SHL1TARGET).flt
+$(MISC)$/$(SHL1TARGET).def: makefile.mk
     @+echo -------------------------------------------
     @+echo DEF-File erstellen $@
         @+echo LIBRARY     $(DLLNAME)                    >$@
@@ -145,10 +134,4 @@ $(MISC)$/$(SHL1TARGET).def: makefile.mk $(MISC)$/$(SHL1TARGET).flt
         @+echo     StartInvader    @22                    >>$@
 
 .ENDIF
-
-$(MISC)$/$(SHL1TARGET).flt:
-    @+echo $(MISC)
-    @echo $(@)
-    @+echo $(@)
-    @echo Imp		>$(@)
 
