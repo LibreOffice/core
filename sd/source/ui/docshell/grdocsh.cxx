@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grdocsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:31:29 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:20:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,8 @@
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
-#ifndef _SVX_SRCHITEM_HXX
-#include <svx/srchitem.hxx>
+#ifndef _SFX_SRCHITEM_HXX
+#include <sfx2/srchitem.hxx>
 #endif
 
 #ifndef _GLOBNAME_HXX //autogen
