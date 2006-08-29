@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:07:15 $
+#   last change: $Author: ihi $ $Date: 2006-08-29 14:38:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,6 @@ SLOFILES=\
          $(SLO)$/svdoutl.obj         \
          $(SLO)$/svdovirt.obj        \
          $(SLO)$/svdoutlinercache.obj \
-         $(SLO)$/dialdll.obj         \
          $(SLO)$/gradtrns.obj         \
          $(SLO)$/svdattr.obj         \
          $(SLO)$/svdcrtmt.obj        \
@@ -90,7 +89,6 @@ SLOFILES=\
          $(SLO)$/svdhdl.obj          \
          $(SLO)$/svdhlpln.obj        \
          $(SLO)$/svdibrow.obj        \
-         $(SLO)$/svdio.obj           \
          $(SLO)$/svditer.obj         \
          $(SLO)$/svdlayer.obj        \
          $(SLO)$/svdmark.obj         \
@@ -105,7 +103,6 @@ SLOFILES=\
          $(SLO)$/svdpoev.obj         \
          $(SLO)$/svdscrol.obj        \
          $(SLO)$/svdsnpv.obj         \
-         $(SLO)$/svdsuro.obj         \
          $(SLO)$/svdtouch.obj        \
          $(SLO)$/svdtrans.obj        \
          $(SLO)$/svdtxhdl.obj        \
