@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:41:29 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:40:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,6 @@
 #include "svdpool.hxx"
 #include "svdattrx.hxx"
 #include "svdtrans.hxx"
-#include "svdio.hxx"
 #include "svdetc.hxx"
 #include "svddrag.hxx"
 #include "svdmodel.hxx"
