@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:10:04 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:22:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,6 @@
 
 #ifndef _FM_FMOBJFAC_HXX
 #include <svx/fmobjfac.hxx>
-#endif
-#ifndef _SVX_SIIMPORT_HXX
-#include <svx/siimport.hxx>
 #endif
 #ifndef _OBJFAC3D_HXX
 #include <svx/objfac3d.hxx>
