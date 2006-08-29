@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibilityoptions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:41:11 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:11:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ void SvtAccessibilityOptions_Impl::Load()
     DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
     if ( aValues.getLength() == aNames.getLength() )
     {
-        sal_Bool bTemp;
+        sal_Bool bTemp = sal_Bool();
 
         for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
         {
@@ -237,7 +237,7 @@ void SvtAccessibilityOptions_Impl::Load()
                 }
                 else
                 {
-                    sal_Int16 nTemp;
+                    sal_Int16 nTemp = sal_Int16();
                     if( pValues[nProp] >>= nTemp )
                     {
                         if(PropertyNameIndex(nProp)==HELPTIPSECONDS)//this is an integer and not a bool
