@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrud3d.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:45:01 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:32:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,6 @@
 
 #ifndef _E3D_EXTRUD3D_HXX
 #include "extrud3d.hxx"
-#endif
-
-#ifndef _E3D_E3DIOCMPT_HXX
-#include "e3dcmpt.hxx"
 #endif
 
 #ifndef _POLY3D_HXX
