@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sphere3d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:47:38 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:34:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,6 @@
 
 #include "svdstr.hrc"
 #include "svdglob.hxx"
-
-#ifndef _SVDIO_HXX
-#include "svdio.hxx"
-#endif
 
 #ifndef _SVDITER_HXX
 #include "svditer.hxx"
