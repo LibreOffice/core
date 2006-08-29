@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:39:21 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:03:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -671,7 +671,7 @@ void XMLSectionExport::ExportTableOfContentStart(
         // TOC specific index source attributes:
 
         // outline-level: 1..10
-        sal_Int16 nLevel;
+        sal_Int16 nLevel = sal_Int16();
         if( rPropertySet->getPropertyValue(sLevel) >>= nLevel )
         {
             OUStringBuffer sBuffer;
