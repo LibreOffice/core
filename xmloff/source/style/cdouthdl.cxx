@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cdouthdl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:31:11 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:00:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ sal_Bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno:
     {
         // multi property: style and width might be set already.
         // If the old value is NONE, the new is used unchanged.
-        sal_Int16 eStrikeout;
+        sal_Int16 eStrikeout = sal_Int16();
         if( (rValue >>= eStrikeout) && FontStrikeout::NONE!=eStrikeout )
         {
             switch( eNewStrikeout )
@@ -173,7 +173,7 @@ sal_Bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno:
 sal_Bool XMLCrossedOutTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
-    sal_Int16 nValue;
+    sal_Int16 nValue = sal_Int16();
     OUStringBuffer aOut;
 
     if( (rValue >>= nValue) && FontStrikeout::DOUBLE==nValue )
@@ -205,7 +205,7 @@ sal_Bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno
     {
         // multi property: style and width might be set already.
         // If the old value is NONE, the new is used unchanged.
-        sal_Int16 eStrikeout;
+        sal_Int16 eStrikeout = sal_Int16();
         if( (rValue >>= eStrikeout) && FontStrikeout::NONE!=eStrikeout )
         {
             // one NONE a SINGLE are possible new values. For both, the
@@ -223,7 +223,7 @@ sal_Bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno
 sal_Bool XMLCrossedOutStylePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
-    sal_Int16 nValue;
+    sal_Int16 nValue = sal_Int16();
     OUStringBuffer aOut;
 
     if( rValue >>= nValue )
@@ -256,7 +256,7 @@ sal_Bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno
     {
         // multi property: style and width might be set already.
         // If the old value is NONE, the new is used unchanged.
-        sal_Int16 eStrikeout;
+        sal_Int16 eStrikeout = sal_Int16();
         if( (rValue >>= eStrikeout) && FontStrikeout::NONE!=eStrikeout )
         {
             switch( eNewStrikeout )
@@ -295,7 +295,7 @@ sal_Bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno
 sal_Bool XMLCrossedOutWidthPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
-    sal_Int16 nValue;
+    sal_Int16 nValue = sal_Int16();
     OUStringBuffer aOut;
 
     if( (rValue >>= nValue) && (FontStrikeout::BOLD == nValue) )
@@ -337,7 +337,7 @@ sal_Bool XMLCrossedOutTextPropHdl::importXML( const OUString& rStrImpValue, uno:
 sal_Bool XMLCrossedOutTextPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
-    sal_Int16 nValue;
+    sal_Int16 nValue = sal_Int16();
 
     if( (rValue >>= nValue) &&
         (FontStrikeout::SLASH == nValue || FontStrikeout::X == nValue) )

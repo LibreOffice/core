@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csmaphdl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:31:58 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:01:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ sal_Bool XMLCaseMapPropHdl::importXML( const OUString& rStrImpValue, uno::Any& r
 sal_Bool XMLCaseMapPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
-    sal_uInt16 nValue;
+    sal_uInt16 nValue = sal_uInt16();
     OUStringBuffer aOut;
 
     if( rValue >>= nValue )
@@ -141,7 +141,7 @@ sal_Bool XMLCaseMapVariantHdl::importXML( const OUString& rStrImpValue, uno::Any
 
 sal_Bool XMLCaseMapVariantHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_uInt16 nValue;
+    sal_uInt16 nValue = sal_uInt16();
     OUStringBuffer aOut;
 
     if( rValue >>= nValue )

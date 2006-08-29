@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chrhghdl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:31:24 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:01:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ sal_Bool XMLCharHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
 {
     OUStringBuffer aOut( rStrExpValue );
 
-    sal_Int16 nValue;
+    sal_Int16 nValue = sal_Int16();
     if( rValue >>= nValue )
     {
         rUnitConverter.convertPercent( aOut, nValue );
