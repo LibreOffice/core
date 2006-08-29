@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:22:39 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:16:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,7 +196,7 @@ sal_Bool HasDocumentValidSignature( const css::uno::Reference< css::frame::XMode
         if ( xPropSet.is() )
         {
             Any a = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasValidSignatures" )));
-            sal_Bool bReturn;
+            sal_Bool bReturn = sal_Bool();
             if ( a >>= bReturn )
                 return bReturn;
         }
