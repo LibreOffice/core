@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cstitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:15:09 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:12:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,7 +238,7 @@ SfxItemPresentation SfxCrawlStatusItem::GetPresentation
 // virtual
 BOOL SfxCrawlStatusItem::PutValue( const com::sun::star::uno::Any& rVal,BYTE )
 {
-    sal_Int16 aValue;
+    sal_Int16 aValue = sal_Int16();
     if ( rVal >>= aValue )
     {
         SetStatus( static_cast< CrawlStatus >( aValue ) );

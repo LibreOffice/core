@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inettype.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:22:16 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:12:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -963,7 +963,7 @@ UniString INetContentTypes::GetContentType(INetContentType eTypeID)
 UniString INetContentTypes::GetPresentation(INetContentType eTypeID,
                                             const ::com::sun::star::lang::Locale& aLocale)
 {
-    USHORT nResID;
+    USHORT nResID = USHORT();
     if (eTypeID <= CONTENT_TYPE_LAST)
         nResID = aStaticResourceIDMap[eTypeID];
     else
