@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:15:10 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:49:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,10 +74,6 @@
 
 #ifndef _TOOLS_RESMGR_HXX
 #include <tools/resmgr.hxx>
-#endif
-
-#ifndef _SVDIO_HXX //autogen
-#include <svx/svdio.hxx>
 #endif
 
 #ifndef _SHL_HXX
