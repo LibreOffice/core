@@ -4,9 +4,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:45:58 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:33:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,10 +48,6 @@
 
 #ifndef _SVDPAGE_HXX
 #include "svdpage.hxx"
-#endif
-
-#ifndef _SVDIO_HXX
-#include "svdio.hxx"
 #endif
 
 #ifndef _SVDMODEL_HXX
@@ -152,10 +148,6 @@
 
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
-
-#ifndef _SVDIO_HXX
-#include "svdio.hxx"
 #endif
 
 #ifndef _TL_POLY_HXX
