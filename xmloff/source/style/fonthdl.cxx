@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fonthdl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:32:40 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:01:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,7 +250,7 @@ sal_Bool XMLFontFamilyPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     sal_Bool bRet = sal_False;
     OUStringBuffer aOut;
 
-    sal_Int16 nFamily;
+    sal_Int16 nFamily = sal_Int16();
     if( rValue >>= nFamily )
     {
         FontFamily eFamily = (FontFamily)nFamily;
@@ -287,7 +287,7 @@ sal_Bool XMLFontEncodingPropHdl::exportXML( OUString& rStrExpValue, const uno::A
 {
     sal_Bool bRet = sal_False;
     OUStringBuffer aOut;
-    sal_Int16 nSet;
+    sal_Int16 nSet = sal_Int16();
 
     if( rValue >>= nSet )
     {
@@ -326,7 +326,7 @@ sal_Bool XMLFontPitchPropHdl::importXML( const OUString& rStrImpValue, uno::Any&
 sal_Bool XMLFontPitchPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
-    sal_Int16 nPitch;
+    sal_Int16 nPitch = sal_Int16();
     OUStringBuffer aOut;
 
     FontPitch ePitch = PITCH_DONTKNOW;
