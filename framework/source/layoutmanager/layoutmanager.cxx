@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 11:07:54 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:09:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1465,7 +1465,7 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
                     aWriteLock2.unlock();
 
                     css::uno::Any aValue;
-                    sal_Bool      bValue;
+                    sal_Bool      bValue = sal_Bool();
                     if ( pGlobalSettings->GetStateInfo( GlobalSettings::UIELEMENT_TYPE_TOOLBAR,
                                                         GlobalSettings::STATEINFO_LOCKED,
                                                         aValue ))
@@ -7176,14 +7176,14 @@ void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32        
         }
         case LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS:
         {
-            sal_Bool bValue;
+            sal_Bool bValue = sal_Bool();
             if ( aValue >>= bValue )
                 m_bAutomaticToolbars = bValue;
             break;
         }
         case LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY:
         {
-            sal_Bool bValue;
+            sal_Bool bValue = sal_Bool();
             if (( aValue >>= bValue ) && bValue )
                 implts_refreshContextToolbarsVisibility();
             break;
