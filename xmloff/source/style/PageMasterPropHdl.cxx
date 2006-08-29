@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageMasterPropHdl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:26:46 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:00:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,7 @@ sal_Bool XMLPMPropHdl_NumFormat::importXML(
         Any& rValue,
         const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Int16 nSync;
+    sal_Int16 nSync = sal_Int16();
     sal_Int16 nNumType = NumberingType::NUMBER_NONE;
     rUnitConverter.convertNumFormat( nNumType, rStrImpValue, OUString(),
                                      sal_True );
@@ -195,7 +195,7 @@ sal_Bool XMLPMPropHdl_NumFormat::exportXML(
         const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool    bRet = sal_False;
-    sal_Int16   nNumType;
+    sal_Int16   nNumType = sal_Int16();
 
     if( rValue >>= nNumType )
     {
@@ -251,7 +251,7 @@ sal_Bool XMLPMPropHdl_NumLetterSync::exportXML(
         const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool    bRet = sal_False;
-    sal_Int16   nNumType;
+    sal_Int16   nNumType = sal_Int16();
 
     if( rValue >>= nNumType )
     {
