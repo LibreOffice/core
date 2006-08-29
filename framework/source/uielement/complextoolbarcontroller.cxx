@@ -4,9 +4,9 @@
  *
  *  $RCSfile: complextoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:38:26 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:09:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,7 +207,7 @@ throw ( RuntimeException )
         nItemBits &= ~TIB_CHECKABLE;
         TriState eTri = STATE_NOCHECK;
 
-        sal_Bool        bValue;
+        sal_Bool        bValue = sal_Bool();
         rtl::OUString   aStrValue;
         ItemStatus      aItemState;
         Visibility      aItemVisibility;
