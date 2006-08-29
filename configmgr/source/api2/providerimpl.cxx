@@ -4,9 +4,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:16:41 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:14:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -770,7 +770,7 @@ namespace configmgr
         case ARG_ASYNC:
         case ARG_ASYNC_DEPRECATED:
             {
-                sal_Bool bBoolVal;
+                sal_Bool bBoolVal = sal_False;
                 if (aValue >>= bBoolVal)
                     _rOptions.enableAsync(!!bBoolVal);
                 else
@@ -779,7 +779,7 @@ namespace configmgr
             break;
          case ARG_REFRESH:
             {
-                sal_Bool bBoolVal;
+                sal_Bool bBoolVal = sal_False;
                 if (aValue >>= bBoolVal)
                     _rOptions.forceRefresh(!!bBoolVal);
                 else
