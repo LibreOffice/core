@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generictoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 17:15:19 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:09:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,7 +245,7 @@ throw ( RuntimeException )
         nItemBits &= ~TIB_CHECKABLE;
         TriState eTri = STATE_NOCHECK;
 
-        sal_Bool        bValue;
+        sal_Bool        bValue = sal_Bool();
         rtl::OUString   aStrValue;
         ItemStatus      aItemState;
         Visibility      aItemVisibility;
