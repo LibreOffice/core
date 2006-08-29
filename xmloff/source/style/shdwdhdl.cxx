@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shdwdhdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:34:33 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:02:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ sal_Bool XMLShadowedPropHdl::importXML( const OUString& rStrImpValue, Any& rValu
 sal_Bool XMLShadowedPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
-    sal_Bool bValue;
+    sal_Bool bValue = sal_Bool();
 
     if (rValue >>= bValue)
     {
