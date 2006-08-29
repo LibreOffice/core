@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:42:43 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:41:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
 #include "svdpool.hxx"
 #include "svdattrx.hxx"
 #include "svdmodel.hxx"
-#include "svdio.hxx"
 #include "svdview.hxx"
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
