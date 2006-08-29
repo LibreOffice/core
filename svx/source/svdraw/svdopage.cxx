@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopage.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 13:00:19 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:42:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 #include "svdstr.hrc"   // Objektname
 #include "svdtrans.hxx"
 #include "svdetc.hxx"
-#include "svdio.hxx"
 #include "svdxout.hxx"
 #include "svdmodel.hxx"
 #include "svdpage.hxx"
