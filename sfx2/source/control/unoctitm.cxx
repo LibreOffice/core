@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 17:18:16 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:16:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -731,7 +731,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         sal_Int32   nMarkArg = -1;
 
         // Filter arguments which shouldn't be part of the sequence property value
-        sal_Bool    bTemp;
+        sal_Bool    bTemp = sal_Bool();
         sal_uInt16  nModifier(0);
         std::vector< ::com::sun::star::beans::PropertyValue > aAddArgs;
         for( sal_Int32 n=0; n<nCount; n++ )
