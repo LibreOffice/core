@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmobj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:55:26 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:35:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,10 +63,6 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #endif
 /** === end UNO includes === **/
-
-#ifndef _SVDIO_HXX //autogen
-#include <svdio.hxx>
-#endif
 
 #ifndef _SVX_FMMODEL_HXX
 #include "fmmodel.hxx"

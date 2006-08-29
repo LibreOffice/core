@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmpage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:55:53 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:35:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,10 +75,6 @@
 #ifndef _SVX_FMPGEIMP_HXX
 #include "fmpgeimp.hxx"
 #endif
-#endif
-
-#ifndef _SVDIO_HXX //autogen
-#include "svdio.hxx"
 #endif
 
 #ifndef SVX_LIGHT

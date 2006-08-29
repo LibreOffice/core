@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmmodel.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:55:06 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,6 @@ class SfxObjectShell;
 
 #ifndef _FM_FMMODEL_HXX
 #include "fmmodel.hxx"
-#endif
-
-#ifndef _SVDIO_HXX
-#include "svdio.hxx"
 #endif
 
 #ifndef _FM_PAGE_HXX
