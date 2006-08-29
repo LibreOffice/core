@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpopt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:44:09 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:11:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,7 +231,7 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< ::rtl::OUString>& rProperty
             DBG_ASSERT( pValues[nProp].hasValue(), "property value missing" );
             if ( pValues[nProp].hasValue() )
             {
-                sal_Bool bTmp;
+                sal_Bool bTmp = sal_Bool();
                 ::rtl::OUString aTmpStr;
                 sal_Int32 nTmpInt;
                 if ( pValues[nProp] >>= bTmp )
