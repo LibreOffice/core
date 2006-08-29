@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowstateconfiguration.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:35:29 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:09:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -738,7 +738,7 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const rt
                 case PROPERTY_SOFTCLOSE:
                 case PROPERTY_CONTEXTACTIVE:
                 {
-                    sal_Bool bValue;
+                    sal_Bool bValue = sal_Bool();
                     if ( a >>= bValue )
                     {
                         sal_Int32 nValue( 1 << i );
@@ -933,7 +933,7 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
                 case PROPERTY_SOFTCLOSE:
                 case PROPERTY_CONTEXTACTIVE:
                 {
-                    sal_Bool bValue;
+                    sal_Bool bValue = sal_Bool();
                     if ( a >>= bValue )
                     {
                         sal_Int32 nValue( 1 << i );
@@ -1137,7 +1137,7 @@ void ConfigurationAccess_WindowState::impl_fillStructFromSequence( WindowStateIn
                     case PROPERTY_SOFTCLOSE:
                     case PROPERTY_CONTEXTACTIVE:
                     {
-                        sal_Bool bValue;
+                        sal_Bool bValue = sal_Bool();
                         if ( rSeq[i].Value >>= bValue )
                         {
                             sal_Int32 nValue( 1 << j );
