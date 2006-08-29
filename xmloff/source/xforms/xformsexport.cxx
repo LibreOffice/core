@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xformsexport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:42:09 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:03:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -676,7 +676,7 @@ OUString lcl_string( const Any& rAny )
 
 OUString lcl_bool( const Any& rAny )
 {
-    bool bResult;
+    bool bResult = bool();
     if( rAny >>= bResult )
         return GetXMLToken( bResult ? XML_TRUE : XML_FALSE );
     DBG_ERROR( "expected boolean value" );
@@ -710,7 +710,7 @@ void lcl_formatDateTime( OUStringBuffer& aBuffer, const DateTime& aDateTime )
 OUString lcl_whitespace( const Any& rAny )
 {
     OUString sResult;
-    sal_uInt16 n;
+    sal_uInt16 n = sal_uInt16();
     if( rAny >>= n )
     {
         switch( n )
