@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 11:08:22 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:10:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -641,7 +641,7 @@ throw (::com::sun::star::uno::RuntimeException)
     if ( m_bDisposed )
         return;
 
-    sal_Int16 nImageType;
+    sal_Int16 nImageType = sal_Int16();
     sal_Int16 nCurrentImageType = getImageTypeFromBools( sal_False, m_bWasHiContrast );
     if (( Event.aInfo >>= nImageType ) &&
         ( nImageType == nCurrentImageType ))
@@ -657,7 +657,7 @@ throw (::com::sun::star::uno::RuntimeException)
     if ( m_bDisposed )
         return;
 
-    sal_Int16 nImageType;
+    sal_Int16 nImageType = sal_Int16();
     sal_Int16 nCurrentImageType = getImageTypeFromBools( sal_False, m_bWasHiContrast );
     if (( Event.aInfo >>= nImageType ) &&
         ( nImageType == nCurrentImageType ))
@@ -673,7 +673,7 @@ throw (::com::sun::star::uno::RuntimeException)
     if ( m_bDisposed )
         return;
 
-    sal_Int16 nImageType;
+    sal_Int16 nImageType = sal_Int16();
     sal_Int16 nCurrentImageType = getImageTypeFromBools( sal_False, m_bWasHiContrast );
     if (( Event.aInfo >>= nImageType ) &&
         ( nImageType == nCurrentImageType ))
