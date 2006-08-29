@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:51:19 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:03:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1032,7 +1032,7 @@ sal_Bool XMLTextEmphasizePropHdl_Impl::exportXML(
 {
     OUStringBuffer aOut( 15 );
     sal_Bool bRet = sal_True;
-    sal_Int16 nType;
+    sal_Int16 nType = sal_Int16();
     if( rValue >>= nType )
     {
         sal_Bool bBelow = sal_False;
@@ -1147,7 +1147,7 @@ sal_Bool XMLTextRelWidthHeightPropHdl_Impl::exportXML(
         const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
-    sal_Int16 nValue;
+    sal_Int16 nValue = sal_Int16();
     if( (rValue >>= nValue) && nValue > 0 )
     {
         OUStringBuffer aOut;
@@ -1264,7 +1264,7 @@ sal_Bool XMLTextRotationAnglePropHdl_Impl::exportXML(
         const Any& rValue,
         const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Int16 nAngle;
+    sal_Int16 nAngle = sal_Int16();
     sal_Bool bRet = ( rValue >>= nAngle );
     if( bRet )
     {
@@ -1315,7 +1315,7 @@ sal_Bool XMLNumber8OneBasedHdl::exportXML(
         const Any& rValue,
         const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Int8 nValue;
+    sal_Int8 nValue = sal_Int8();
     sal_Bool bRet = ( rValue >>= nValue );
     if( bRet )
     {
