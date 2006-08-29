@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-28 14:56:47 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 10:58:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -288,7 +288,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoEditControl, UnoControlBase, UnoEditControl
 
     // but maybe we are to display multi-line text?
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_MULTILINE ) );
-    sal_Bool b;
+    sal_Bool b = sal_Bool();
     if ( ( aVal >>= b ) && b )
         sName= ::rtl::OUString::createFromAscii( "MultiLineEdit" );
 
@@ -846,7 +846,7 @@ UnoButtonControl::UnoButtonControl()
 {
     ::rtl::OUString aName( ::rtl::OUString::createFromAscii( "pushbutton" ) );
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_PUSHBUTTONTYPE ) );
-    sal_Int16 n;
+    sal_Int16 n = sal_Int16();
     if ( ( aVal >>= n ) && n )
     {
         // Use PushButtonType later when available...
