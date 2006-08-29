@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localhierarchybrowsersvc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:25:21 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:14:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,7 +214,7 @@ namespace
             }
             else if (aArguments[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FetchComponentNames")))
             {
-                sal_Bool bComponents;
+                sal_Bool bComponents = sal_False;
 
                 bKnown = true;
                 if (aArguments[i].Value.hasValue())
