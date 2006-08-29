@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 09:39:18 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:39:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,6 @@
 #include "svditer.hxx"
 #include "svdobj.hxx"
 #include "svdtrans.hxx"
-#include "svdio.hxx"
 #include "svdetc.hxx"
 #include "svdattrx.hxx"  // NotPersistItems
 #include "svdoedge.hxx"  // #32383# Die Verbinder nach Move nochmal anbroadcasten
