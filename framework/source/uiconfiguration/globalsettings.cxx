@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globalsettings.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:30:44 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:09:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,7 +235,7 @@ sal_Bool GlobalSettings_Access::HasStatesInfo( GlobalSettings::UIElementType eEl
         try
         {
             css::uno::Any a;
-            sal_Bool      bValue;
+            sal_Bool      bValue = sal_Bool();
             a = m_xConfigAccess->getByName( m_aPropStatesEnabled );
             if ( a >>= bValue )
                 return bValue;
