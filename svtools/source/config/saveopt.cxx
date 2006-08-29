@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:48:03 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:11:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -467,7 +467,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
 
                     default:
                     {
-                        sal_Bool bTemp;
+                        sal_Bool bTemp = sal_Bool();
                         if ( pValues[nProp] >>= bTemp )
                         {
                             switch ( nProp )
