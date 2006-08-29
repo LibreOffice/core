@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:45:35 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:43:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,9 +92,6 @@
 #endif
 #ifndef _SVDMODEL_HXX
 #include "svdmodel.hxx"
-#endif
-#ifndef _SVDIO_HXX
-#include "svdio.hxx"
 #endif
 #ifndef _SVDGLOB_HXX
 #include "svdglob.hxx"  // Stringcache
