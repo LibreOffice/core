@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:12:14 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:05:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -949,7 +949,7 @@ void ElementDescriptor::readDefaults( bool supportPrintable )
     readShortAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("TabIndex") ),
                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tab-index") ) );
 
-    sal_Bool bEnabled;
+    sal_Bool bEnabled = sal_False;
     if (_xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Enabled") ) ) >>= bEnabled)
     {
         if (! bEnabled)
