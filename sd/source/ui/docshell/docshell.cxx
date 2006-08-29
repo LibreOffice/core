@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-22 14:00:08 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:19:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,14 +57,11 @@
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#ifndef _SVX_SRCHITEM_HXX
-#include <svx/srchitem.hxx>
+#ifndef _SFX_SRCHITEM_HXX
+#include <sfx2/srchitem.hxx>
 #endif
 #ifndef _SVX_SRCHDLG_HXX
 #include <svx/srchdlg.hxx>
-#endif
-#ifndef _SVX_SVXIFACT_HXX
-#include <svx/svxifact.hxx>
 #endif
 #ifndef _SVX_FLSTITEM_HXX
 #include <svx/flstitem.hxx>
