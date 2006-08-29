@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cenumitm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:14:28 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:12:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,7 +259,7 @@ BOOL CntBoolItem::QueryValue(com::sun::star::uno::Any& rVal, BYTE) const
 // virtual
 BOOL CntBoolItem::PutValue(const com::sun::star::uno::Any& rVal, BYTE)
 {
-    sal_Bool bTheValue;
+    sal_Bool bTheValue = sal_Bool();
     if (rVal >>= bTheValue)
     {
         m_bValue = bTheValue;
