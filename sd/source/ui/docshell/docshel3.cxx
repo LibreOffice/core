@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:25:18 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:19:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,8 +61,8 @@
 #ifndef _SVX_DIALMGR_HXX
 #include <svx/dialmgr.hxx>
 #endif
-#ifndef _SVX_SRCHITEM_HXX
-#include <svx/srchitem.hxx>
+#ifndef _SFX_SRCHITEM_HXX
+#include <sfx2/srchitem.hxx>
 #endif
 #ifndef _SVX_SRCHDLG_HXX
 #include <svx/srchdlg.hxx>
