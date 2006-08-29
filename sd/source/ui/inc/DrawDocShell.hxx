@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawDocShell.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 14:59:14 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:20:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,6 @@
 #endif
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _SVX_SVXIFACT_HXX //autogen
-#include <svx/svxifact.hxx>
 #endif
 
 #include <vcl/jobset.hxx>
