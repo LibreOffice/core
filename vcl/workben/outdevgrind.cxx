@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdevgrind.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 17:53:25 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:07:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -827,8 +827,8 @@ void grindFunc( OutputDevice&                       rTarget,
 
     fprintf( stdout,
              "Duration: %d ms (%d repetitions)\tOperation: %s\tSetup: %s\n",
-             osl_getGlobalTimer() - nStartTime,
-             nTurns,
+             (int)(osl_getGlobalTimer() - nStartTime),
+             (int)(nTurns),
              iter->first,
              pMsg );
 }
