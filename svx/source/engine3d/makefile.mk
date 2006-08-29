@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 15:45:41 $
+#   last change: $Author: ihi $ $Date: 2006-08-29 14:32:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@ SLOFILES= \
         $(SLO)$/obj3d.obj 		\
         $(SLO)$/pntobj3d.obj     \
         $(SLO)$/label3d.obj		\
-        $(SLO)$/light3d.obj 		\
         $(SLO)$/scene3d.obj		\
         $(SLO)$/polysc3d.obj		\
         $(SLO)$/cube3d.obj		\
@@ -67,12 +66,9 @@ SLOFILES= \
         $(SLO)$/poly3d.obj 		\
         $(SLO)$/volmrk3d.obj 	\
         $(SLO)$/objfac3d.obj 	\
-        $(SLO)$/dlight3d.obj 	\
-        $(SLO)$/plight3d.obj 	\
         $(SLO)$/dragmt3d.obj		\
         $(SLO)$/view3d.obj		\
         $(SLO)$/view3d1.obj       \
-        $(SLO)$/e3dcmpt.obj       \
         $(SLO)$/float3d.obj
 
 .IF "$(COM)"=="ICC"
