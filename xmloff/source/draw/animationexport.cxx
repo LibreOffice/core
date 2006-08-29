@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationexport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:09:08 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 10:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -870,7 +870,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
             {
                 if( IsXMLToken( pValue->Name, XML_NODE_TYPE ) )
                 {
-                    sal_Int16 nNodeType;
+                    sal_Int16 nNodeType = sal_Int16();
                     if( (pValue->Value >>= nNodeType) && (nNodeType != EffectNodeType::DEFAULT) )
                     {
                         SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nNodeType, getAnimationsEnumMap(Animations_EnumMap_EffectNodeType) );
@@ -894,7 +894,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
                 }
                 else if( IsXMLToken( pValue->Name, XML_PRESET_CLASS ) )
                 {
-                    sal_Int16 nEffectPresetClass;
+                    sal_Int16 nEffectPresetClass = sal_Int16();
                     if( pValue->Value >>= nEffectPresetClass )
                     {
                         SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nEffectPresetClass, getAnimationsEnumMap(Animations_EnumMap_EffectPresetClass) );
