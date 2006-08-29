@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachedcontentresultset.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:59:27 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:08:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1247,7 +1247,7 @@ void SAL_CALL CachedContentResultSet
         {//RowCount changed
 
             //check value
-            sal_Int32 nNew;
+            sal_Int32 nNew = 0;
             if( !( aEvt.NewValue >>= nNew ) )
             {
                 OSL_ENSURE( sal_False, "PropertyChangeEvent contains wrong data" );
@@ -1261,7 +1261,7 @@ void SAL_CALL CachedContentResultSet
         {//IsRowCountFinal changed
 
             //check value
-            sal_Bool bNew;
+            sal_Bool bNew = sal_False;
             if( !( aEvt.NewValue >>= bNew ) )
             {
                 OSL_ENSURE( sal_False, "PropertyChangeEvent contains wrong data" );
@@ -1818,7 +1818,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 {
     impl_EnsureNotDisposed();
 
-    sal_Int32 nRow;
+    sal_Int32 nRow = 0;
     Reference< XResultSet > xResultSetOrigin;
 
     {
