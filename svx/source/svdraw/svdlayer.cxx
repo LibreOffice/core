@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdlayer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:38:57 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:39:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 #endif
 
 #include "svdlayer.hxx"
-#include "svdio.hxx"
 #include "svdmodel.hxx" // fuer Broadcasting
 #include "svdglob.hxx"  // StringCache
 #include "svdstr.hrc"   // Namen aus der Resource
