@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:41:07 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:05:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
         if(xSourceColumns->hasByName(aPosIter->first))
         {
             Reference<XPropertySet> xProp(xSourceColumns->getByName(aPosIter->first),UNO_QUERY);
-            sal_Bool bAuto;
+            sal_Bool bAuto = sal_Bool();
             if( (xProp->getPropertyValue(PROPERTY_ISAUTOINCREMENT) >>= bAuto) && bAuto)
                 m_aAutoColumns.push_back(aPosIter->first);
         }
