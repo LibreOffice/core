@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galmisc.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:37:34 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 14:26:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 #include <svtools/imap.hxx>
 #include <svtools/hint.hxx>
 #include <svtools/transfer.hxx>
-#include "svdio.hxx"
 #include "svdobj.hxx"
 #include "galobj.hxx"
 
