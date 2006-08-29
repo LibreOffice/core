@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-28 14:56:30 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 10:57:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,7 +353,7 @@ void VCLXImageConsumer::setProperty( const ::rtl::OUString& PropertyName, const 
                    || ( eType == WINDOW_CHECKBOX )
                    )
                 {
-                    sal_Int16 nAlignment;
+                    sal_Int16 nAlignment = sal_Int16();
                     if ( Value >>= nAlignment )
                         pButton->SetImageAlign( static_cast< ImageAlign >( nAlignment ) );
                 }
@@ -558,7 +558,7 @@ void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             case BASEPROPERTY_DEFAULTBUTTON:
             {
                 WinBits nStyle = pButton->GetStyle() | WB_DEFBUTTON;
-                sal_Bool b;
+                sal_Bool b = sal_Bool();
                 if ( ( Value >>= b ) && !b )
                     nStyle &= ~WB_DEFBUTTON;
                 pButton->SetStyle( nStyle );
@@ -568,7 +568,7 @@ void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             {
                 if ( GetWindow()->GetType() == WINDOW_PUSHBUTTON )
                 {
-                    sal_Int16 n;
+                    sal_Int16 n = sal_Int16();
                     if ( Value >>= n )
                         ((PushButton*)pButton)->SetState( (TriState)n );
                 }
@@ -797,7 +797,7 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
         {
             case BASEPROPERTY_SCALEIMAGE:
             {
-                sal_Bool b;
+                sal_Bool b = sal_Bool();
                 if ( Value >>= b )
                      pImageControl->SetScaleImage( b );
             }
@@ -1018,14 +1018,14 @@ void VCLXCheckBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
 
             case BASEPROPERTY_TRISTATE:
             {
-                sal_Bool b;
+                sal_Bool b = sal_Bool();
                 if ( Value >>= b )
                      pCheckBox->EnableTriState( b );
             }
             break;
             case BASEPROPERTY_STATE:
             {
-                sal_Int16 n;
+                sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                     setState( n );
             }
@@ -1161,7 +1161,7 @@ void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::
 
             case BASEPROPERTY_STATE:
             {
-                sal_Int16 n;
+                sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                 {
                     BOOL b = n ? sal_True : sal_False;
@@ -1174,7 +1174,7 @@ void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::
             break;
             case BASEPROPERTY_AUTOTOGGLE:
             {
-                sal_Bool b;
+                sal_Bool b = sal_Bool();
                 if ( Value >>= b )
                     pButton->EnableRadioCheck( b );
             }
@@ -1864,21 +1864,21 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
         {
             case BASEPROPERTY_READONLY:
             {
-                sal_Bool b;
+                sal_Bool b = sal_Bool();
                 if ( Value >>= b )
                      pListBox->SetReadOnly( b);
             }
             break;
             case BASEPROPERTY_MULTISELECTION:
             {
-                sal_Bool b;
+                sal_Bool b = sal_Bool();
                 if ( Value >>= b )
                      pListBox->EnableMultiSelection( b );
             }
             break;
             case BASEPROPERTY_LINECOUNT:
             {
-                sal_Int16 n;
+                sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                      pListBox->SetDropDownLineCount( n );
             }
@@ -2975,21 +2975,21 @@ void VCLXEdit::setProperty( const ::rtl::OUString& PropertyName, const ::com::su
 
             case BASEPROPERTY_READONLY:
             {
-                sal_Bool b;
+                sal_Bool b = sal_Bool();
                 if ( Value >>= b )
                      pEdit->SetReadOnly( b );
             }
             break;
             case BASEPROPERTY_ECHOCHAR:
             {
-                sal_Int16 n;
+                sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                      pEdit->SetEchoChar( n );
             }
             break;
             case BASEPROPERTY_MAXTEXTLEN:
             {
-                sal_Int16 n;
+                sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                      pEdit->SetMaxTextLen( n );
             }
@@ -3306,14 +3306,14 @@ void VCLXComboBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
         {
             case BASEPROPERTY_LINECOUNT:
             {
-                sal_Int16 n;
+                sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                      pComboBox->SetDropDownLineCount( n );
             }
             break;
             case BASEPROPERTY_AUTOCOMPLETE:
             {
-                sal_Int16 n;
+                sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                      pComboBox->EnableAutocomplete( n != 0 );
             }
@@ -3341,7 +3341,7 @@ void VCLXComboBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
                 // #109385# SetBorderStyle is not virtual
                 if ( nPropType == BASEPROPERTY_BORDER )
                 {
-                    sal_uInt16 nBorder;
+                    sal_uInt16 nBorder = sal_uInt16();
                     if ( (Value >>= nBorder) && nBorder != 0 )
                         pComboBox->SetBorderStyle( nBorder );
                 }
@@ -3540,7 +3540,7 @@ void VCLXFormattedSpinField::setProperty( const ::rtl::OUString& PropertyName, c
         {
             case BASEPROPERTY_SPIN:
             {
-                sal_Bool b;
+                sal_Bool b = sal_Bool();
                 if ( Value >>= b )
                 {
                     WinBits nStyle = GetWindow()->GetStyle() | WB_SPIN;
@@ -3552,7 +3552,7 @@ void VCLXFormattedSpinField::setProperty( const ::rtl::OUString& PropertyName, c
             break;
             case BASEPROPERTY_STRICTFORMAT:
             {
-                sal_Bool b;
+                sal_Bool b = sal_Bool();
                 if ( Value >>= b )
                 {
                      pFormatter->SetStrictFormat( b );
@@ -3665,14 +3665,14 @@ void VCLXDateField::setProperty( const ::rtl::OUString& PropertyName, const ::co
             break;
             case BASEPROPERTY_EXTDATEFORMAT:
             {
-                sal_Int16 n;
+                sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                     ((DateField*)GetWindow())->SetExtDateFormat( (ExtDateFieldFormat) n );
             }
             break;
             case BASEPROPERTY_DATESHOWCENTURY:
             {
-                sal_Bool b;
+                sal_Bool b = sal_Bool();
                 if ( Value >>= b )
                      ((DateField*)GetWindow())->SetShowDateCentury( b );
             }
@@ -4112,7 +4112,7 @@ void VCLXTimeField::setProperty( const ::rtl::OUString& PropertyName, const ::co
             break;
             case BASEPROPERTY_EXTTIMEFORMAT:
             {
-                sal_Int16 n;
+                sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                     ((TimeField*)GetWindow())->SetExtFormat( (ExtTimeFieldFormat) n );
             }
@@ -4411,14 +4411,14 @@ void VCLXNumericField::setProperty( const ::rtl::OUString& PropertyName, const :
             break;
             case BASEPROPERTY_DECIMALACCURACY:
             {
-                sal_Int16 n;
+                sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                      setDecimalDigits( n );
             }
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
-                sal_Bool b;
+                sal_Bool b = sal_Bool();
                 if ( Value >>= b )
                      ((NumericField*)GetWindow())->SetUseThousandSep( b );
             }
@@ -4717,7 +4717,7 @@ void VCLXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
             break;
             case BASEPROPERTY_DECIMALACCURACY:
             {
-                sal_Int16 n;
+                sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                      setDecimalDigits( n );
             }
@@ -4731,7 +4731,7 @@ void VCLXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
-                sal_Bool b;
+                sal_Bool b = sal_Bool();
                 if ( Value >>= b )
                      ((LongCurrencyField*)GetWindow())->SetUseThousandSep( b );
             }
