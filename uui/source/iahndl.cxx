@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 17:15:18 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:15:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -481,7 +481,7 @@ getBoolRequestArgument(star::uno::Sequence< star::uno::Any > const &
         star::beans::PropertyValue aProperty;
         if ((rArguments[i] >>= aProperty) && aProperty.Name == rKey)
         {
-            sal_Bool bValue;
+            sal_Bool bValue = sal_Bool();
             if (aProperty.Value >>= bValue)
             {
                 if (pValue)
