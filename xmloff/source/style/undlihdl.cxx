@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undlihdl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:49:45 $
+ *  last change: $Author: ihi $ $Date: 2006-08-29 11:02:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ sal_Bool XMLUnderlineTypePropHdl::importXML( const OUString& rStrImpValue, uno::
     {
         // multi property: style and width might be set already.
         // If the old value is NONE, the new is used unchanged.
-        sal_Int16 eUnderline;
+        sal_Int16 eUnderline = sal_Int16();
         if( (rValue >>= eUnderline) && FontUnderline::NONE!=eUnderline )
         {
             switch( eNewUnderline )
@@ -207,7 +207,7 @@ sal_Bool XMLUnderlineTypePropHdl::importXML( const OUString& rStrImpValue, uno::
 sal_Bool XMLUnderlineTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
-    sal_Int16 nValue;
+    sal_Int16 nValue = sal_Int16();
     OUStringBuffer aOut;
 
     if( (rValue >>= nValue) &&
@@ -242,7 +242,7 @@ sal_Bool XMLUnderlineStylePropHdl::importXML( const OUString& rStrImpValue, uno:
     {
         // multi property: style and width might be set already.
         // If the old value is NONE, the new is used unchanged.
-        sal_Int16 eUnderline;
+        sal_Int16 eUnderline = sal_Int16();
         if( (rValue >>= eUnderline) && FontUnderline::NONE!=eUnderline )
         {
             switch( eNewUnderline )
@@ -297,7 +297,7 @@ sal_Bool XMLUnderlineStylePropHdl::importXML( const OUString& rStrImpValue, uno:
 sal_Bool XMLUnderlineStylePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
-    sal_Int16 nValue;
+    sal_Int16 nValue = sal_Int16();
     OUStringBuffer aOut;
 
     if( rValue >>= nValue )
@@ -330,7 +330,7 @@ sal_Bool XMLUnderlineWidthPropHdl::importXML( const OUString& rStrImpValue, uno:
     {
         // multi property: style and width might be set already.
         // If the old value is NONE, the new is used unchanged.
-        sal_Int16 eUnderline;
+        sal_Int16 eUnderline = sal_Int16();
         if( (rValue >>= eUnderline) && FontUnderline::NONE!=eUnderline )
         {
             switch( eNewUnderline )
@@ -389,7 +389,7 @@ sal_Bool XMLUnderlineWidthPropHdl::importXML( const OUString& rStrImpValue, uno:
 sal_Bool XMLUnderlineWidthPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
-    sal_Int16 nValue;
+    sal_Int16 nValue = sal_Int16();
     OUStringBuffer aOut;
 
     if( (rValue >>= nValue) && (FontUnderline::NONE != nValue) )
