@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-06 14:21:33 $
+#   last change: $Author: rt $ $Date: 2006-08-30 12:40:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,23 +33,32 @@
 #
 #*************************************************************************
 
-MAKEFILERC=yes
+PRJ=..
 
-.IF "$(USE_SHELL)" == "4nt"
-patchsuffix=btm
-.ELSE
-patchsuffix=sh
-.ENDIF
+PRJNAME=external
+TARGET=getopt
 
-ALL: patchinf \
-    ALLTAR
+# --- Settings -----------------------------------------------------
 
-patchinf:
-    @+glibcpatch.$(patchsuffix)
+.INCLUDE :	settings.mk
 
-clean:
-    @+rm -f patchinf
-    @+rm -f patcherror
+# --- Files --------------------------------------------------------
 
+TARFILE_NAME=glibc-2.1.3-stub
+TARFILE_ROOTDIR=glibc-2.1.3
+ADDITIONAL_FILES=posix$/makefile.mk posix$/config.h posix$/readdir_r.c
 
-.INCLUDE :  target.mk
+PATCH_FILE_NAME=glibc-2.1.3.patch
+
+#CONFIGURE_DIR=glibc-2.1.3/posix
+CONFIGURE_ACTION=
+
+BUILD_DIR=posix
+BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
+
+# --- Targets ------------------------------------------------------
+
+.INCLUDE : set_ext.mk
+.INCLUDE : target.mk
+.INCLUDE : tg_ext.mk
+
