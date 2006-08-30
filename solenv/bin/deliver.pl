@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.104 $
+#   $Revision: 1.105 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-29 14:15:58 $
+#   last change: $Author: rt $ $Date: 2006-08-30 15:19:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.104 $ ';
+$id_str = ' $Revision: 1.105 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1281,7 +1281,7 @@ sub write_log
         if ( $opt_delete ) {
             print "LOG: removing $log_file{$log}\n";
             next if ( $opt_check );
-            unlink $log_file{$log} or warn"Warning: cannot remove log file\n";
+            unlink $log_file{$log};
         } else {
             print "LOG: writing $log_file{$log}\n";
             next if ( $opt_check );
