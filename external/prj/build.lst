@@ -1,9 +1,9 @@
-es      external :       soltools NULL
-es	external					usr1 - all es_mkout NULL
-es	external\ado		nmake	-	w	es_ado NULL
-es	external\glibc		nmake	-	all	es_glibc NULL
-es	external\glibc\rtufiles	nmake	-	all	es_glibcrtu es_glibc NULL
-es	external\gpc		nmake	-	u	es_gpc NULL
-es      external\gpc            nmake   -       w       es_gpc NULL
-es      external\w4w		nmake	-	u	es_w4w NULL
-es	external\gcc3_specific	nmake	-	u	es_gcc3 NULL
+el      external :       soltools NULL
+el	external					usr1 - all el_mkout NULL
+el	external\ado		nmake	-	w	el_ado NULL
+el	external\glibc		nmake	-	all	el_glibc NULL
+el	external\glibc\rtufiles	nmake	-	all	el_glibcrtu el_glibc NULL
+el	external\gpc		nmake	-	u	el_gpc NULL
+el	external\gpc		nmake	-	w	el_gpc NULL
+el	external\w4w		nmake	-	u	el_w4w NULL
+el	external\gcc3_specific	nmake	-	u	el_gcc3 NULL
