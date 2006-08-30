@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NResultSet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-28 14:52:43 $
+ *  last change: $Author: rt $ $Date: 2006-08-30 15:08:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,10 +259,11 @@ void OEvoabResultSet::construct( EBookQuery *pQuery, rtl::OString aTable, bool b
 
     if (pBook)
     {
+        g_list_free(m_pContacts);
+        m_pContacts = NULL;
         if( bIsWithoutWhere && !isLocal( pBook ) )
         {
             OSL_TRACE( "large query on non-local book - ignored" );
-            m_pContacts = NULL;
             ::dbtools::throwGenericSQLException(
                 ::rtl::OUString::createFromAscii(
                 "Use SQL Query with \"where clause\" or \"criteria\", to get the results." ), NULL );
@@ -287,7 +288,8 @@ void OEvoabResultSet::disposing(void)
     OPropertySetHelper::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
-
+    g_list_free(m_pContacts);
+    m_pContacts = NULL;
     m_pStatement = NULL;
     m_xMetaData = NULL;
 }
