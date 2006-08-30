@@ -1,9 +1,6 @@
-el      external :       soltools NULL
+el      external :       SO:external_so soltools NULL
 el	external					usr1 - all el_mkout NULL
-el	external\ado		nmake	-	w	el_ado NULL
+#el	external\ado		nmake	-	w	el_ado NULL
 el	external\glibc		nmake	-	all	el_glibc NULL
-el	external\glibc\rtufiles	nmake	-	all	el_glibcrtu el_glibc NULL
-el	external\gpc		nmake	-	u	el_gpc NULL
-el	external\gpc		nmake	-	w	el_gpc NULL
-el	external\w4w		nmake	-	u	el_w4w NULL
+el	external\gpc		nmake	-	all	el_gpc NULL
 el	external\gcc3_specific	nmake	-	u	el_gcc3 NULL
