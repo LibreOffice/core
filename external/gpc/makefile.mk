@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 11:49:14 $
+#   last change: $Author: rt $ $Date: 2006-08-30 12:41:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,28 +34,28 @@
 #*************************************************************************
 PRJ=..
 
-PRJNAME=3rdparty
+PRJNAME=external
 TARGET=gpc
 LIBTARGET=NO
 EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
+.IF "$(BUILD_SPECIAL)"==""
 .IF "$(WITH_GPC)"!="NO"
 SLOFILES = $(SLO)$/gpc.obj	
-
 
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1ARCHIV=$(LB)$/lib$(TARGET).a
 LIB1OBJFILES=$(SLOFILES)
 .ENDIF
+.ENDIF			# "$(BUILD_SPECIAL)"==""
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
