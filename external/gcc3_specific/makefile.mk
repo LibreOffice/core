@@ -7,31 +7,30 @@ TARGET=gcc3_specific
 # ------------------------------------------------------------------
 
 
+.IF "$(BUILD_SPECIAL)"==""
 .IF "$(SYSTEM_STDLIBS)" != "YES" && "$(COMID)"=="gcc3"
 
 .IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 .IF "$(OS)"!="FREEBSD"
 
+.EXPORT : CC
 
-all .SEQUENTIAL : $(SOLARLIBDIR)$/libstdc++.so.$(SHORTSTDCPP3) $(SOLARLIBDIR)$/libgcc_s.so.1 $(SOLARLIBDIR)$/libgcc_s.so 
+all .SEQUENTIAL : $(LB)$/libstdc++.so.$(SHORTSTDCPP3) $(LB)$/libgcc_s.so.1
 
 
-$(SOLARLIBDIR)$/libstdc++.so.$(SHORTSTDCPP3) :
-       $(GCCINSTLIB) libstdc++.so.$(SHORTSTDCPP3) $(SOLARLIBDIR)
+$(LB)$/libstdc++.so.$(SHORTSTDCPP3) :
+       $(GCCINSTLIB) libstdc++.so.$(SHORTSTDCPP3) $(LB)
 
-$(SOLARLIBDIR)$/libgcc_s.so.1 :
-       $(GCCINSTLIB) libgcc_s.so.1 $(SOLARLIBDIR)
-
-$(SOLARLIBDIR)$/libgcc_s.so : $(SOLARLIBDIR)$/libgcc_s.so.1
-        -rm -f $@
-        +ln -s libgcc_s.so.1 $@
+$(LB)$/libgcc_s.so.1 :
+       $(GCCINSTLIB) libgcc_s.so.1 $(LB)
 
 .ENDIF
 .ENDIF 
 .ENDIF 
 
 .ENDIF
+.ENDIF			# "$(BUILD_SPECIAL)"==""
 
 
 .INCLUDE: target.mk
