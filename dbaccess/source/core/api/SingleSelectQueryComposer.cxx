@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-09-05 16:40:56 $
+ *  last change: $Author: ihi $ $Date: 2006-09-05 16:44:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -793,7 +793,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
 
         sal_Int32 nCount = xResultSetMeta->getColumnCount();
         sal_Int32 nSize  = aSelectColumns->size();
-        OSL_ENSURE( nCount == nSize, "OSingleSelectQueryComposer::getColumns: inconsistent column counts, this might result in wrong columns!" );
+        OSL_ENSURE( nCount == nSize , "OSingleSelectQueryComposer::getColumns: inconsistent column counts, this might result in wrong columns!" );
         for(sal_Int32 i=1;i<=nCount;++i)
         {
             ::rtl::OUString sName = xResultSetMeta->getColumnName(i);
