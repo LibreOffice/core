@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.164 $
+ *  $Revision: 1.165 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:35:30 $
+ *  last change: $Author: vg $ $Date: 2006-09-07 16:24:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2381,7 +2381,7 @@ End
 
 File gid_File_Xsl_Import_Wordml_Wordml2ooo
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Xslt_Import_Wordml;
     Name = "/xslt/import/wordml/wordml2ooo.xsl";
 End
@@ -2417,7 +2417,7 @@ End
 
 File gid_File_Xsl_Import_Wordml_Wordml2ooo_Page
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Xslt_Import_Wordml;
     Name = "/xslt/import/wordml/wordml2ooo_page.xsl";
 End
@@ -2431,14 +2431,14 @@ End
 
 File gid_File_Xsl_Import_Wordml_Wordml2ooo_Table
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Xslt_Import_Wordml;
     Name = "/xslt/import/wordml/wordml2ooo_table.xsl";
 End
 
 File gid_File_Xsl_Import_Wordml_Wordml2ooo_Text
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Xslt_Import_Wordml;
     Name = "/xslt/import/wordml/wordml2ooo_text.xsl";
 End
