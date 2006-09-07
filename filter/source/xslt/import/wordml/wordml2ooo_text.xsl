@@ -2,36 +2,36 @@
 <!--
 
     OpenOffice.org - a multi-platform office productivity suite
- 
+
     $RCSfile: wordml2ooo_text.xsl,v $
- 
-    $Revision: 1.9 $
- 
-    last change: $Author: rt $ $Date: 2005-09-08 22:13:34 $
- 
+
+    $Revision: 1.10 $
+
+    last change: $Author: vg $ $Date: 2006-09-07 16:24:31 $
+
     The Contents of this file are made available subject to
     the terms of GNU Lesser General Public License Version 2.1.
- 
- 
+
+
       GNU Lesser General Public License Version 2.1
       =============================================
       Copyright 2005 by Sun Microsystems, Inc.
       901 San Antonio Road, Palo Alto, CA 94303, USA
- 
+
       This library is free software; you can redistribute it and/or
       modify it under the terms of the GNU Lesser General Public
       License version 2.1, as published by the Free Software Foundation.
- 
+
       This library is distributed in the hope that it will be useful,
       but WITHOUT ANY WARRANTY; without even the implied warranty of
       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
       Lesser General Public License for more details.
- 
+
       You should have received a copy of the GNU Lesser General Public
       License along with this library; if not, write to the Free Software
       Foundation, Inc., 59 Temple Place, Suite 330, Boston,
       MA  02111-1307  USA
- 
+
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="w wx aml o dt  v">
     <xsl:template name="create-default-paragraph-styles">
@@ -174,18 +174,23 @@
         <xsl:variable name="last-section-property" select="preceding::w:pPr/w:sectPr[1]"/>
         <xsl:variable name="next-section-property" select="following::w:sectPr[1]"/>
         <style:style style:family="paragraph" style:name="P{$paragraph-number}">
-            <xsl:if test="w:pPr/w:pStyle">
+            <xsl:choose>
+              <xsl:when test="w:pPr/w:pStyle">
                 <xsl:attribute name="style:parent-style-name">
-                    <xsl:value-of select="concat('w',translate(w:pPr/w:pStyle/@w:val,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))"/>
+                  <xsl:value-of select="concat('w',translate(w:pPr/w:pStyle/@w:val,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))" />
                 </xsl:attribute>
-            </xsl:if>
+              </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="style:parent-style-name">wNormal</xsl:attribute>
+            </xsl:otherwise>
+            </xsl:choose>
             <xsl:choose>
                 <xsl:when test="not($next-section-property/w:type/@w:val = 'continuous') and  generate-id($last-section-property[last()]/following::w:p[1]) = generate-id(.) and not(ancestor::w:sectPr or ancestor::w:tbl)">
-                    <xsl:attribute name="style:master-page-name">Standard<xsl:value-of select="$section-property-number + 1"/>
+                    <xsl:attribute name="style:master-page-name">Standard-1<xsl:value-of select="$section-property-number + 1"/>
                     </xsl:attribute>
                 </xsl:when>
                 <xsl:when test="$paragraph-number = 1">
-                    <xsl:attribute name="style:master-page-name">Standard1</xsl:attribute>
+                    <xsl:attribute name="style:master-page-name">First_20_Page</xsl:attribute>
                 </xsl:when>
             </xsl:choose>
             <style:paragraph-properties>
@@ -205,11 +210,11 @@
                 </xsl:if>
                 <xsl:choose>
                     <xsl:when test="generate-id($last-section-property[last()]/following::w:p[1]) = generate-id(.) and not(ancestor::w:sectPr or ancestor::w:tbl)">
-                        <xsl:attribute name="style:master-page-name">Standard<xsl:value-of select="$section-property-number + 1"/>
+                        <xsl:attribute name="style:master-page-name">Standard-1<xsl:value-of select="$section-property-number + 1"/>
                         </xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$paragraph-number = 1">
-                        <xsl:attribute name="style:master-page-name">Standard1</xsl:attribute>
+                        <xsl:attribute name="style:master-page-name">First_20_Page</xsl:attribute>
                     </xsl:when>
                 </xsl:choose>
                 <style:paragraph-properties fo:break-before="page">
@@ -226,11 +231,11 @@
                 </xsl:if>
                 <xsl:choose>
                     <xsl:when test="generate-id($last-section-property[last()]/following::w:p[1]) = generate-id(.) and not(ancestor::w:sectPr or ancestor::w:tbl)">
-                        <xsl:attribute name="style:master-page-name">Standard<xsl:value-of select="$section-property-number + 1"/>
+                        <xsl:attribute name="style:master-page-name">Standard-1<xsl:value-of select="$section-property-number + 1"/>
                         </xsl:attribute>
                     </xsl:when>
                     <xsl:when test="$paragraph-number = 1">
-                        <xsl:attribute name="style:master-page-name">Standard1</xsl:attribute>
+                        <xsl:attribute name="style:master-page-name">First_20_Page</xsl:attribute>
                     </xsl:when>
                 </xsl:choose>
                 <style:paragraph-properties fo:break-before="column">
@@ -522,7 +527,7 @@
             </xsl:if>
             <xsl:element name="style:text-properties">
 
-                <xsl:apply-templates select="current()"/> 
+                <xsl:apply-templates select="current()"/>
 <!--		<xsl:call-template name="text-properties"/> -->
             </xsl:element>
         </xsl:element>
@@ -876,7 +881,7 @@
                     <xsl:with-param name="position" select="count($bookmark-and-paragraph)"/>
                 </xsl:call-template>
             </xsl:if>
-            <xsl:apply-templates select="w:r | w:fldSimple | w:hlink | aml:annotation"/>
+            <xsl:apply-templates mode="dispatch"/>
             <xsl:if test="not(following::w:p)">
                 <xsl:apply-templates select="following::aml:annotation[(@w:type = 'Word.Bookmark.Start' or @w:type = 'Word.Bookmark.End') and not(ancestor::w:p)]"/>
             </xsl:if>
@@ -934,14 +939,14 @@
                                 </xsl:attribute>
                             </xsl:when>
                         </xsl:choose>
-                        <xsl:apply-templates select="w:t | w:pict | w:br | w:instrText | w:fldChar | w:tab | w:footnote | w:endnote | aml:annotation | w:hlink | w:footnote | w:endnote"/>
+                        <xsl:apply-templates mode="dispatch"/>
                     </text:span>
                 </xsl:if>
             </xsl:when>
             <xsl:otherwise>
                 <!-- add this condition to prevent from printing the value of DATE, TIME, PRINTDATE, CREATEDATE, SAVEDATE, PAGE, NUMPAGES, etc. fields in-between w:fldchar begin and w:fldchar end  G.Yang.-->
                 <xsl:if test="not( preceding-sibling::w:r/w:instrText[substring(normalize-space(.),1,4) = 'DATE'  or substring(normalize-space(.),1,4) = 'TIME'  or  substring(normalize-space(.),1,9) = 'PRINTDATE'  or substring(normalize-space(.),1,10) = 'CREATEDATE'  or substring(normalize-space(.),1,8) = 'SAVEDATE' or substring(normalize-space(.),1,4) = 'PAGE' or substring(normalize-space(.),1,8) = 'NUMPAGES'  or substring(normalize-space(.),1,8) = 'NUMWORDS' or substring(normalize-space(.),1,8) = 'NUMCHARS' or substring(normalize-space(.),1,6) = 'REVNUM' or substring(normalize-space(.),1,7) = 'AUTONUM'  or  substring(normalize-space(.),1,10) = 'AUTONUMLGL' or substring(normalize-space(.),1,10) = 'AUTONUMOUT' or substring(normalize-space(.),1,3) = 'SEQ' or substring(normalize-space(.),1,6) = 'AUTHOR' or substring(normalize-space(.),1,5) = 'TITLE'  or substring(normalize-space(.),1,7) = 'SUBJECT'  or substring(normalize-space(.),1,8) = 'KEYWORDS' or substring(normalize-space(.),1,6) = 'FILLIN' or substring(normalize-space(.),1,11) = 'DOCPROPERTY' or substring(normalize-space(.),1,10) = 'MERGEFIELD' or substring(normalize-space(.),1,8) = 'MERGEREC' or substring(normalize-space(.),1,4) = 'NEXT' or substring( normalize-space(.),1,9) = 'HYPERLINK' or substring( normalize-space(.),1,3) = 'REF' ][1]  and (following-sibling::w:r/w:fldChar[@w:fldCharType='end'] or (  not(preceding-sibling::w:r/w:fldChar[@w:fldCharType='end'] ) and parent::w:p/following-sibling::w:p/w:r/w:fldChar[@w:fldCharType='end'])) )">
-                    <xsl:apply-templates select="w:t | w:pict | w:br | w:instrText | w:fldChar | w:tab | w:footnote | w:endnote | aml:annotation | w:hlink | w:footnote | w:endnote"/>
+                    <xsl:apply-templates mode="dispatch"/>
                 </xsl:if>
             </xsl:otherwise>
         </xsl:choose>
@@ -993,7 +998,7 @@
                     <xsl:value-of select="@w:target"/>
                 </xsl:attribute>
             </xsl:if>
-            <xsl:apply-templates select="w:r | w:fldSimple | w:hlink"/>
+            <xsl:apply-templates mode="dispatch"/>
         </xsl:element>
     </xsl:template>
     <xsl:template match="w:t">
@@ -1044,7 +1049,7 @@
         <text:note text:note-class="footnote" text:id="ftn{$footnote-position}">
             <text:note-citation/>
             <text:note-body>
-                <xsl:apply-templates select="w:p | w:tbl"/>
+                <xsl:apply-templates mode="dispatch"/>
             </text:note-body>
         </text:note>
     </xsl:template>
@@ -1054,7 +1059,7 @@
         </xsl:variable>
         <text:endnote text:id="edn{$endnote-position}">
             <text:endnote-body>
-                <xsl:apply-templates select="w:p | w:tbl"/>
+                <xsl:apply-templates mode="dispatch"/>
             </text:endnote-body>
         </text:endnote>
     </xsl:template>
