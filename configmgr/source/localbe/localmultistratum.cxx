@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localmultistratum.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:25:34 $
+ *  last change: $Author: ihi $ $Date: 2006-09-07 14:01:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,10 @@ uno::Sequence< rtl::OUString > SAL_CALL
             throw backend::BackendAccessException(errmsg,*this,uno::Any());
         }
 
-        return ResultType(&aResult.front(), static_cast<sal_Int32>(aResult.size()));
+        return aResult.empty()
+            ? ResultType()
+            : ResultType(
+                &aResult.front(), static_cast<sal_Int32>(aResult.size()));
     }
 }
 
