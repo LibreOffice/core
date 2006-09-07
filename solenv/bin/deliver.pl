@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.105 $
+#   $Revision: 1.106 $
 #
-#   last change: $Author: rt $ $Date: 2006-08-30 15:19:24 $
+#   last change: $Author: rt $ $Date: 2006-09-07 15:16:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.105 $ ';
+$id_str = ' $Revision: 1.106 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1188,13 +1188,20 @@ sub zip_files
         my $this_ref = $list_ref{$zip_file};
         if ( $opt_delete ) {
             if ( -e $work_file ) {
+                open(UNZIP, "unzip -t $work_file 2>&1 |") or die "error opening zip file";
+                if ( grep /empty/, (<UNZIP>)) {
+                    close(UNZIP);
+                    unlink $work_file;
+                    next;
+                }
+                close(UNZIP);
                 open(ZIP, "| $zipexe -q -o -d -@ $work_file") or die "error opening zip file";
                 foreach $file ( @$this_ref ) {
                     print "ZIP: removing $file from $platform_zip_file\n" if $is_debug;
                     print ZIP "$file\n";
                 }
+                close(ZIP);
             }
-            close(ZIP);
         } else {
             open(ZIP, "| $zipexe -q -o -u -@ $work_file") or die "error opening zip file";
             foreach $file ( @$this_ref ) {
