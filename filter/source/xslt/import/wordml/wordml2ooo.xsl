@@ -5,9 +5,9 @@
  
     $RCSfile: wordml2ooo.xsl,v $
  
-    $Revision: 1.10 $
+    $Revision: 1.11 $
  
-    last change: $Author: rt $ $Date: 2005-09-08 22:11:10 $
+    last change: $Author: vg $ $Date: 2006-09-07 16:23:43 $
  
     The Contents of this file are made available subject to
     the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,32 @@
     <xsl:include href="wordml2ooo_props.xsl"/>
     <xsl:key name="paragraph-style" match="w:style[@w:type = 'paragraph']" use="@w:styleId"/>
     <xsl:key name="heading-style" match="w:style[@w:type = 'paragraph' and w:pPr/w:outlineLvl]" use="@w:styleId"/>
+    <xsl:variable name="preserve-alien-markup">no</xsl:variable>
+    <xsl:variable name="native-namespace-prefixes">,w,o,v,wx,aml,w10,dt,</xsl:variable>
+    <xsl:variable name="to-dispatch-elements">,wx:sect,wx:sub-section,w:p,w:tbl,w:sectPr,w:r,w:fldSimple,w:hlink,w:t,w:pict,w:br,w:instrText,w:fldChar,w:tab,w:footnote,w:endnote,aml:annotation,w:hlink,w:footnote,w:endnote,w:tblGrid,w:tr,w:tc,wx:pBdrGroup,</xsl:variable>
     <xsl:template match="/">
         <xsl:apply-templates select="w:wordDocument"/>
+    </xsl:template>
+    <xsl:template match="*" mode="dispatch">
+        <xsl:choose>
+            <xsl:when test="not(contains($native-namespace-prefixes, concat(',', substring-before(name(), ':'), ',')))">
+                <!-- if alien namespace dispatch -->
+                <xsl:choose>
+                    <xsl:when test="$preserve-alien-markup = 'yes'">
+                        <xsl:copy>
+                           <xsl:copy-of select="@*"/>
+                           <xsl:apply-templates mode="dispatch"/>
+                        </xsl:copy>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:apply-templates mode="dispatch"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:when test="contains($to-dispatch-elements, concat(',',name(),','))">
+                <xsl:apply-templates select="current()"/>
+            </xsl:when>
+        </xsl:choose>
     </xsl:template>
     <xsl:template match="w:wordDocument">
         <office:document office:mimetype="application/x-vnd.oasis.openoffice.text" office:version="1.0">
@@ -230,15 +254,15 @@
                 <text:user-field-decls>
                     <xsl:call-template name="user_fields_declare_docproperty"/>
                 </text:user-field-decls>
-                <xsl:apply-templates select="wx:sect | w:p | w:tbl | w:sectPr"/>
+                <xsl:apply-templates mode="dispatch"/>
             </xsl:element>
         </xsl:element>
     </xsl:template>
     <xsl:template match="wx:sect">
-        <xsl:apply-templates select="wx:sub-section | w:p | w:tbl | w:sectPr"/>
+        <xsl:apply-templates mode="dispatch"/>
     </xsl:template>
     <xsl:template match="wx:sub-section">
-        <xsl:apply-templates select="wx:sub-section | w:p | w:tbl | w:sectPr"/>
+        <xsl:apply-templates mode="dispatch"/>
     </xsl:template>
     <xsl:template name="create-default-frame-style">
         <!--add for default frame style -->
