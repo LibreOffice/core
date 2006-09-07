@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-29 14:16:10 $
+#   last change: $Author: vg $ $Date: 2006-09-07 16:31:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -347,6 +347,17 @@ sub get_owner
     my $self = shift;
 
     return $self->get_owner_from_eis();
+}
+
+# store an Attachment to a given CWS
+sub save_attachment
+{
+    my $self = shift;
+    my $name = shift;
+    my $mediatype = shift;
+    my $data = shift;
+
+    return $self->save_attachment_in_eis($name, $mediatype, $data);
 }
 
 # Get child workspace approval status,
@@ -1059,6 +1070,37 @@ sub get_owner_from_eis
     eval { $result = $eis->getOwnerEmail($id) };
     if ( $@ ) {
         carp("ERROR: get_status(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return $result;
+}
+
+# store an attachment to a given CWS
+# return undef in case of error.
+sub save_attachment_in_eis
+{
+    my $self      = shift;
+    my $name      = shift;
+    my $mediatype = shift;
+    my $text      = shift;
+
+    # check if child workspace is valid
+    my $eisid = $self->eis_id();
+    if ( !$eisid )
+    {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eisname =      Eis::to_string($name);
+    my $eismediatype = Eis::to_string($mediatype);
+    my $eistextstring = Eis::to_string($text);
+
+    my $eis = Cws::eis();
+    my $result;
+
+    eval { $result = $eis->saveAttachment($eisid, $eisname, $eismediatype, $eistextstring ) };
+    if ( $@ ) {
+        carp("ERROR: save_attachment_in_eis(): EIS database transaction failed. Reason:\n$@\n");
     }
     return $result;
 }
