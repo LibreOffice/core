@@ -2,36 +2,36 @@
 <!--
 
     OpenOffice.org - a multi-platform office productivity suite
- 
+
     $RCSfile: wordml2ooo_page.xsl,v $
- 
-    $Revision: 1.9 $
- 
-    last change: $Author: rt $ $Date: 2005-09-08 22:12:29 $
- 
+
+    $Revision: 1.10 $
+
+    last change: $Author: vg $ $Date: 2006-09-07 16:24:03 $
+
     The Contents of this file are made available subject to
     the terms of GNU Lesser General Public License Version 2.1.
- 
- 
+
+
       GNU Lesser General Public License Version 2.1
       =============================================
       Copyright 2005 by Sun Microsystems, Inc.
       901 San Antonio Road, Palo Alto, CA 94303, USA
- 
+
       This library is free software; you can redistribute it and/or
       modify it under the terms of the GNU Lesser General Public
       License version 2.1, as published by the Free Software Foundation.
- 
+
       This library is distributed in the hope that it will be useful,
       but WITHOUT ANY WARRANTY; without even the implied warranty of
       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
       Lesser General Public License for more details.
- 
+
       You should have received a copy of the GNU Lesser General Public
       License along with this library; if not, write to the Free Software
       Foundation, Inc., 59 Temple Place, Suite 330, Boston,
       MA  02111-1307  USA
- 
+
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="w wx aml o dt  v">
     <xsl:template match="w:footnotePr" mode="config">
@@ -182,33 +182,52 @@
             <xsl:attribute name="style:name">pm<xsl:number from="/w:wordDocument/w:body" level="any" count="w:sectPr" format="1"/>
             </xsl:attribute>
             <style:page-layout-properties>
-			<xsl:call-template name="page-layout-properties"/>
+            <xsl:call-template name="page-layout-properties"/>
                 <xsl:apply-templates select="/w:wordDocument/w:bgPict"/>
             </style:page-layout-properties>
-	    <style:header-style>
-		<style:header-footer-properties style:dynamic-spacing="true" fo:margin-bottom="0">
-		   <xsl:attribute name="fo:min-height.value"><xsl:value-of select="concat('(.(twips2cm(?(>($0(-[', w:pgMar/@w:top, '](|[', w:pgMar/@w:header, '][720])))[0])($0)[0]))[cm])')"/></xsl:attribute>
-		</style:header-footer-properties>
-	    </style:header-style>
+        <style:header-style>
+        <style:header-footer-properties style:dynamic-spacing="true" fo:margin-bottom="0">
+           <xsl:attribute name="fo:min-height.value"><xsl:value-of select="concat('(.(twips2cm(?(>($0(-[', w:pgMar/@w:top, '](|[', w:pgMar/@w:header, '][720])))[0])($0)[0]))[cm])')"/></xsl:attribute>
+        </style:header-footer-properties>
+        </style:header-style>
         </style:page-layout>
     </xsl:template>
     <xsl:template match="w:sectPr" mode="master-page">
         <!-- style:page-layout style:style-->
-        <style:master-page>
-            <xsl:variable name="master-page-name">
-                <xsl:number count="w:sectPr" from="/w:wordDocument/w:body" level="any" format="1"/>
-            </xsl:variable>
-            <xsl:attribute name="style:name">Standard<xsl:value-of select="$master-page-name"/>
+
+        <xsl:variable name="master-page-number">
+            <xsl:number count="w:sectPr" from="/w:wordDocument/w:body" level="any" format="1"/>
+        </xsl:variable>
+        <xsl:if test="$master-page-number = '1'">
+            <style:master-page style:next-style-name="Standard-1" style:page-layout-name="pm1" style:display-name="First Page" style:name="First_20_Page">
+                <style:header>
+                    <xsl:apply-templates select="w:hdr[@w:type='first']/child::*" mode="dispatch"/>
+                </style:header>
+                <style:footer>
+                    <xsl:apply-templates select="w:ftr[@w:type='first']/child::*" mode="dispatch"/>
+                </style:footer>
+            </style:master-page>
+        </xsl:if>
+        <xsl:element name="style:master-page">
+            <xsl:attribute name="style:name">Standard-<xsl:value-of select="$master-page-number"/>
             </xsl:attribute>
             <xsl:attribute name="style:page-layout-name">
-                <xsl:value-of select="concat('pm', $master-page-name)"/>
+                <xsl:value-of select="concat('pm', $master-page-number)"/>
             </xsl:attribute>
-	    <style:header>
-		<xsl:apply-templates select="w:hdr/child::*"/>
-	    </style:header>
-	    <style:footer>
-		<xsl:apply-templates select="w:ftr/child::*"/>
-	    </style:footer>
+
+            <style:header>
+                <xsl:apply-templates select="w:hdr[@w:type='odd']/child::*" mode="dispatch"/>
+            </style:header>
+            <style:header-left>
+                <xsl:apply-templates select="w:hdr[@w:type='even']/child::*" mode="dispatch"/>
+            </style:header-left>
+            <style:footer>
+                <xsl:apply-templates select="w:ftr[@w:type='odd']/child::*" mode="dispatch"/>
+            </style:footer>
+            <style:footer-left>
+                <xsl:apply-templates select="w:ftr[@w:type='even']/child::*" mode="dispatch"/>
+            </style:footer-left>
+
             <!-- Headers and footers-->
             <!--
             <style:header-style>
@@ -226,13 +245,15 @@
                 </style:header-footer-properties>
             </style:footer-style>
             -->
+
+            <!-- any examples for w:titlePg usage? -->
             <xsl:if test="not(w:titlePg)">
                 <xsl:apply-templates select="w:hdr[@w:type='odd']"/>
                 <xsl:apply-templates select="w:hdr[@w:type='even']"/>
                 <xsl:apply-templates select="w:ftr[@w:type='odd']"/>
                 <xsl:apply-templates select="w:ftr[@w:type='even']"/>
             </xsl:if>
-        </style:master-page>
+        </xsl:element>
     </xsl:template>
     <xsl:template match="w:hdr">
         <!--
@@ -267,7 +288,7 @@
         -->
     </xsl:template>
     <xsl:template match="wx:pBdrGroup">
-        <xsl:apply-templates select="w:p | w:tbl"/>
+        <xsl:apply-templates mode="dispatch"/>
     </xsl:template>
     <!-- xsl:template name="convert-number-format">
         <xsl:param name="number-format"/>
