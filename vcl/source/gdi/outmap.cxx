@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outmap.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:29:14 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:35:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,8 @@
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
 #endif
+
+#define USE_64BIT_INTS
 
 // =======================================================================
 
@@ -205,6 +207,13 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
         else
             rThresRes.mnThresPixToLogY = (long)(((ULONG)LONG_MAX + (ULONG)(-nProductY/2)) / nDenomY);
     }
+
+#ifdef USE_64BIT_INTS
+    rThresRes.mnThresLogToPixX /= 2;
+    rThresRes.mnThresLogToPixY /= 2;
+    rThresRes.mnThresPixToLogX /= 2;
+    rThresRes.mnThresPixToLogY /= 2;
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -406,31 +415,41 @@ inline void ImplCalcMapResolution( const MapMode& rMapMode,
 static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
                               long nThres )
 {
-#if 1
-    if ( Abs( n ) < nThres )
+#ifdef USE_64BIT_INTS
+#if (SAL_TYPES_SIZEOFLONG < 8)
+    if( (+n < nThres) && (-n < nThres) )
     {
-        sal_Int64 n64 = n;
-        n64 *= nDPI * nMapNum;
-        if( nMapDenom == 1 )
-            n = (long)n64;
-        else
-        {
-            if( n >= 0 )
-                n64 += nMapDenom/2;
-            else
-                n64 -= (nMapDenom-1)/2;
-            n = (long)(n64 / nMapDenom);
-        }
-        return n;
+       n *= nMapNum * nDPI;
+       if( nMapDenom != 1 )
+       {
+          n = (2 * n) / nMapDenom;
+          if( n < 0 ) --n; else ++n;
+          n /= 2;
+       }
     }
-#else
+    else
+#endif
+    {
+       sal_Int64 n64 = n;
+       n64 *= nMapNum;
+       n64 *= nDPI;
+       if( nMapDenom == 1 )
+          n = (long)n64;
+       else
+       {
+          n = (long)(2 * n64 / nMapDenom);
+          if( n < 0 ) --n; else ++n;
+          n /= 2;
+       }
+    }
+    return n;
+#else // USE_64BIT_INTS
     if ( Abs( n ) < nThres )
     {
         n *= nDPI * nMapNum;
         n += n >= 0 ? nMapDenom/2 : -((nMapDenom-1)/2);
                 return (n / nMapDenom);
     }
-#endif
     else
     {
         BigInt aTemp( n );
@@ -451,6 +470,7 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
         aTemp /= BigInt( nMapDenom );
         return (long)aTemp;
     }
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -458,7 +478,21 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
 static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
                               long nThres )
 {
-#if 1
+#ifdef USE_64BIT_INTS
+#if (SAL_TYPES_SIZEOFLONG < 8)
+    if( (+n < nThres) && (-n < nThres) )
+        n = (2 * n * nMapDenom) / (nDPI * nMapNum);
+    else
+#endif
+    {
+        sal_Int64 n64 = n;
+        n64 *= nMapDenom;
+        long nDenom  = nDPI * nMapNum;
+        n = (long)(2 * n64 / nDenom);
+    }
+    if( n < 0 ) --n; else ++n;
+    return (n / 2);
+#else // USE_64BIT_INTS
     if ( Abs( n ) < nThres )
     {
         long nDenom  = nDPI * nMapNum;
@@ -466,31 +500,9 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
         if( (nNum ^ nDenom) >= 0 )
             nNum += nDenom/2;
         else
-            nNum -= (nDenom+1)/2;
+            nNum -= nDenom/2;
         return (nNum / nDenom);
     }
-#else
-    if ( Abs( n ) < nThres )
-    {
-        long nDenom  = nDPI * nMapNum;
-        long nNum    = n * nMapDenom;
-        if ( nNum >= 0 )
-        {
-            if ( nDenom >= 0 )
-                nNum  += nDenom/2;
-            else
-                nNum  -= (nDenom+1)/2;
-        }
-        else
-        {
-            if ( nDenom >= 0 )
-                nNum  -= (nDenom-1)/2;
-            else
-                nNum  += nDenom/2;
-        }
-        return (nNum / nDenom);
-    }
-#endif
     else
     {
         BigInt aDenom( nDPI );
@@ -532,6 +544,7 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
         aNum  /= aDenom;
         return (long)aNum;
     }
+#endif
 }
 
 // -----------------------------------------------------------------------
