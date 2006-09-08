@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.165 $
+ *  $Revision: 1.166 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-07 16:24:54 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:38:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1424,6 +1424,13 @@ File gid_File_Oo_Office_Math_Xcu
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/Math.xcu";
+End
+
+File gid_File_Oo_Office_TabBrowse_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/TabBrowse.xcs";
 End
 
 File gid_File_Oo_Office_Protocolhandler_Xcs
