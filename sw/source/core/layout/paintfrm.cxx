@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:28:53 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 07:51:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1753,7 +1753,10 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
         if( rSh.GetViewOptions()->IsGraphic() )
         {
             //#125488#: load graphic directly in PDF import
-            if((rSh).GetViewOptions()->IsPDFExport())
+            // --> OD 2006-08-25 #i68953# - also during print load graphic directly.
+            if ( (rSh).GetViewOptions()->IsPDFExport() ||
+                 rSh.GetOut()->GetOutDevType() == OUTDEV_PRINTER )
+            // <--
             {
                 ((SvxBrushItem*)pBrush)->PurgeMedium();
                 ((SvxBrushItem*)pBrush)->SetDoneLink( Link() );
