@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-28 14:58:28 $
+#   last change: $Author: vg $ $Date: 2006-09-08 08:37:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -271,8 +271,10 @@ IDLFILES=\
     XSystemDependentMenuPeer.idl\
     XSystemDependentWindowPeer.idl\
     SystemDependentXWindow.idl\
+    XSimpleTabController.idl\
     XTabController.idl\
     XTabControllerModel.idl\
+    XTabListener.idl\
     XTextArea.idl\
     XTextComponent.idl\
     XTextEditField.idl\
