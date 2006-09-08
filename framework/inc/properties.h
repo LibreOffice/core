@@ -4,9 +4,9 @@
  *
  *  $RCSfile: properties.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 10:16:54 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:30:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,6 +249,17 @@ namespace framework{
 #define OFFICEFACTORY_PROPNAME_ASCII_WINDOWATTRIBUTES   "ooSetupFactoryWindowAttributes"
 
 #define OFFICEFACTORY_PROPNAME_WINDOWATTRIBUTES         ::rtl::OUString::createFromAscii( OFFICEFACTORY_PROPNAME_ASCII_WINDOWATTRIBUTES )
+
+//_______________________________________________
+/** properties for tab window */
+#define TABWINDOW_PROPNAME_ASCII_PARENTWINDOW           "ParentWindow"
+#define TABWINDOW_PROPNAME_ASCII_TOPWINDOW              "TopWindow"
+#define TABWINDOW_PROPNAME_PARENTWINDOW                 ::rtl::OUString::createFromAscii( TABWINDOW_PROPNAME_ASCII_PARENTWINDOW )
+#define TABWINDOW_PROPNAME_TOPWINDOW                    ::rtl::OUString::createFromAscii( TABWINDOW_PROPNAME_ASCII_TOPWINDOW )
+
+#define TABWINDOW_PROPHANDLE_PARENTWINDOW               0
+#define TABWINDOW_PROPHANDLE_TOPWINDOW                  1
+#define TABWINDOW_PROPCOUNT                             2
 
 //_______________________________________________
 /** provides some helper methods to implement property sets. */
