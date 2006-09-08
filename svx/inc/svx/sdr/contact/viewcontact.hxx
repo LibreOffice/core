@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontact.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:08:29 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:29:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,9 @@ namespace sdr
             // Test if this ViewContact has ViewObjectContacts at all. This can
             // be used to test if this ViewContact is visualized ATM or not
             sal_Bool HasViewObjectContacts(bool bExcludePreviews = false) const;
+
+            // Test if this ViewContact is visualized by the Preview Renderere only
+            sal_Bool IsPreviewRendererOnly() const;
 
             // method to get the PaintRectangle. Tests internally for validity and calls
             // CalcPaintRectangle() on demand.
