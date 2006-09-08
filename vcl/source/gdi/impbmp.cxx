@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impbmp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:00:57 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:34:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,8 @@ ImpBitmap::ImpBitmap() :
             mnRefCount  ( 1UL ),
             mnChecksum  ( 0UL ),
             mpRMBitmap  ( NULL ),
-            mpSalBitmap ( ImplGetSVData()->mpDefInst->CreateSalBitmap() )
+            mpSalBitmap ( ImplGetSVData()->mpDefInst->CreateSalBitmap() ),
+            maSourceSize( 0, 0 )
 {
 }
 
@@ -76,6 +77,7 @@ void ImpBitmap::ImplSetSalBitmap( SalBitmap* pBitmap )
 
 BOOL ImpBitmap::ImplCreate( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal )
 {
+    maSourceSize = rSize;
     return mpSalBitmap->Create( rSize, nBitCount, rPal );
 }
 
@@ -83,6 +85,7 @@ BOOL ImpBitmap::ImplCreate( const Size& rSize, USHORT nBitCount, const BitmapPal
 
 BOOL ImpBitmap::ImplCreate( const ImpBitmap& rImpBitmap )
 {
+    maSourceSize = rImpBitmap.maSourceSize;
     mnChecksum = rImpBitmap.mnChecksum;
     return mpSalBitmap->Create( *rImpBitmap.mpSalBitmap );
 }
