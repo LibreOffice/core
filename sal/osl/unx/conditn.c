@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conditn.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 17:06:13 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 07:53:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,9 +245,9 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
         return osl_cond_result_error;
     }
 
-    if ( ! pCond->m_State )
+    if ( pTimeout )
     {
-        if ( pTimeout )
+        if ( ! pCond->m_State )
         {
             int                 ret;
             struct timeval      tp;
@@ -290,17 +290,14 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
 /*                    OSL_TRACE("EINTR\n");*/
                 }
             }
-            while ( ret != 0 );
+            while ( !pCond->m_State );
         }
-        else
+    }
+    else
+    {
+        while ( !pCond->m_State )
         {
-            /* spurious wake up prevention */
-            do
-            {
-                nRet = pthread_cond_wait(&pCond->m_Condition, &pCond->m_Lock);
-            }
-            while ( nRet != 0 );
-
+            nRet = pthread_cond_wait(&pCond->m_Condition, &pCond->m_Lock);
             if ( nRet != 0 )
             {
                 OSL_TRACE("osl_waitCondition : condition wait failed. Errno: %d; %s\n",
