@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:27:40 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:33:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2698,7 +2698,21 @@ css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const ::rtl::OUString& /*sPr
                 break;
 
         case FRAME_PROPHANDLE_ISHIDDEN :
-                aValue <<= m_bIsHidden;
+//                aValue <<= m_bIsHidden;
+                {
+                    sal_Bool bLoadedHidden = m_bIsHidden;
+                    css::uno::Reference< css::frame::XModel > xModel;
+                    if (m_xController.is())
+                        xModel = m_xController->getModel();
+                    if (xModel.is())
+                    {
+                        ::comphelper::MediaDescriptor lDesc(xModel->getArgs());
+                        bLoadedHidden = lDesc.getUnpackedValueOrDefault(
+                                                    ::comphelper::MediaDescriptor::PROP_HIDDEN(),
+                                                    (sal_Bool)sal_False);
+                    }
+                    aValue <<= bLoadedHidden;
+                }
                 break;
 
         case FRAME_PROPHANDLE_LAYOUTMANAGER :
