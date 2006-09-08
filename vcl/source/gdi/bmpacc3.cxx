@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpacc3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:54:48 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:33:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #endif
 #ifndef _SV_BMPACC_HXX
 #include <bmpacc.hxx>
+#endif
+#ifndef _SV_BMPFAST_HXX
+#include <bmpfast.hxx>
 #endif
 
 // ---------------------
@@ -123,6 +126,16 @@ Color BitmapWriteAccess::GetFillColor() const
 
 void BitmapWriteAccess::Erase( const Color& rColor )
 {
+    // convert the color format from RGB to palette index if needed
+    // TODO: provide and use Erase( BitmapColor& method)
+    BitmapColor aColor = rColor;
+    if( HasPalette() )
+        aColor = BitmapColor( (BYTE)GetBestPaletteIndex( rColor) );
+    // try fast bitmap method first
+    if( ImplFastEraseBitmap( *mpBuffer, aColor ) )
+        return;
+
+    // use the canonical method to clear the bitmap
     BitmapColor*    pOldFillColor = mpFillColor ? new BitmapColor( *mpFillColor ) : NULL;
     const Point     aPoint;
     const Rectangle aRect( aPoint, maBitmap.GetSizePixel() );
