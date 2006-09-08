@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontact.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:26:37 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:29:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,10 @@
 
 #ifndef _SDR_ANIMATION_ANIMATIONINFO_HXX
 #include <svx/sdr/animation/animationinfo.hxx>
+#endif
+
+#ifndef _SDR_CONTACT_OBJECTCONTACTOFPAGEVIEW_HXX
+#include <svx/sdr/contact/objectcontactofpageview.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -222,6 +226,18 @@ namespace sdr
             {
                 return (0L != maVOCList.Count());
             }
+        }
+
+        // Test if this ViewContact is visualized by the Preview Renderer only
+        sal_Bool ViewContact::IsPreviewRendererOnly() const
+        {
+            sal_uInt32 a;
+            for ( a = 0; a < maVOCList.Count(); a++ )
+            {
+                if ( !maVOCList.GetObject( a )->GetObjectContact().IsPreviewRenderer() )
+                    return sal_False;
+            }
+            return sal_True;
         }
 
         // method to get the PaintRectangle. Tests internally for validity and calls
