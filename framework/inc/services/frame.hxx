@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:59:28 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:31:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,12 +164,12 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_AWT_XWINDOWLISTENER_HPP_
-#include <com/sun/star/awt/XWindowListener.hpp>
+#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
+#include <com/sun/star/awt/XTopWindow.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_AWT_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#ifndef _COM_SUN_STAR_AWT_XWINDOWLISTENER_HPP_
+#include <com/sun/star/awt/XWindowListener.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
@@ -473,6 +473,7 @@ class Frame :   // interfaces
         void                                                    implts_saveWindowAttributes     (                                                                        );
         void                                                    implts_checkSuicide             (                                                                        );
         DECL_LINK( implts_windowClosing, void* );
+        css::uno::Reference< css::awt::XTopWindow >             impl_searchTopWindow            ( const css::uno::Reference< css::awt::XWindow >&       xWindow          );
 
         // non threadsafe
         void                                                    impl_checkMenuCloser            (                                                                        );
