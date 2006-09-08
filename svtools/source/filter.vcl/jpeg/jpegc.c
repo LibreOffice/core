@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jpegc.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:07:34 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:25:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,16 @@ my_output_message (j_common_ptr cinfo)
     (*cinfo->err->format_message) (cinfo, buffer);
 }
 
+/* TODO: when incompatible changes are possible again
+   the preview size hint should be redone */
+static int nPreviewWidth = 0;
+static int nPreviewHeight = 0;
+void SetJpegPreviewSizeHint( int nWidth, int nHeight )
+{
+    nPreviewWidth = nWidth;
+    nPreviewHeight = nHeight;
+}
+
 void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
 {
     struct jpeg_decompress_struct   cinfo;
@@ -104,12 +114,42 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
     if ( cinfo.jpeg_color_space != JCS_GRAYSCALE )
         cinfo.out_color_space = JCS_RGB;
 
-    jpeg_start_decompress( &cinfo);
+    /* change scale for preview import */
+    if( nPreviewWidth || nPreviewHeight )
+    {
+        if( nPreviewWidth == 0 ) {
+            nPreviewWidth = ( cinfo.image_width*nPreviewHeight )/cinfo.image_height;
+            if( nPreviewWidth <= 0 )
+                nPreviewWidth = 1;
+        } else if( nPreviewHeight == 0 ) {
+            nPreviewHeight = ( cinfo.image_height*nPreviewWidth )/cinfo.image_width;
+            if( nPreviewHeight <= 0 )
+                nPreviewHeight = 1;
+        }
+
+        for( cinfo.scale_denom = 1; cinfo.scale_denom < 8; cinfo.scale_denom *= 2 )
+        {
+            if( cinfo.image_width < nPreviewWidth * cinfo.scale_denom )
+                break;
+            if( cinfo.image_height < nPreviewHeight * cinfo.scale_denom )
+                break;
+        }
+
+        if( cinfo.scale_denom > 1 )
+        {
+            cinfo.dct_method            = JDCT_FASTEST;
+            cinfo.do_fancy_upsampling   = FALSE;
+            cinfo.do_block_smoothing    = FALSE;
+        }
+    }
+
+    jpeg_start_decompress( &cinfo );
 
     nWidth = cinfo.output_width;
     nHeight = cinfo.output_height;
     aCreateBitmapParam.nWidth = nWidth;
     aCreateBitmapParam.nHeight = nHeight;
+
     aCreateBitmapParam.density_unit = cinfo.density_unit;
     aCreateBitmapParam.X_density = cinfo.X_density;
     aCreateBitmapParam.Y_density = cinfo.Y_density;
@@ -178,6 +218,10 @@ long WriteJPEG( void* pJPEGWriter, void* pOStm,
 
     jpeg_set_defaults( &cinfo );
     jpeg_set_quality( &cinfo, (int) nQualityPercent, FALSE );
+
+    if ( ( nWidth > 128 ) || ( nHeight > 128 ) )
+        jpeg_simple_progression( &cinfo );
+
     jpeg_start_compress( &cinfo, TRUE );
 
     for( nY = 0; nY < nHeight; nY++ )
