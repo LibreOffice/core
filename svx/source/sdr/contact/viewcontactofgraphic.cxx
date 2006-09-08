@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofgraphic.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:27:10 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:30:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,9 @@ namespace sdr
                         else
                         {
                             // SwapIn direct
+                            rGrafObj.mbInsidePaint = sal_True;
                             rGrafObj.ForceSwapIn();
+                            rGrafObj.mbInsidePaint = sal_False;
                             bRetval = sal_True;
                         }
                     }
@@ -376,7 +378,7 @@ namespace sdr
 
             SdrGrafObj& rGrafObj = GetGrafObject();
 
-            if(rGrafObj.IsSwappedOut())
+            if( !rGrafObj.mbIsPreview && rGrafObj.IsSwappedOut())
             {
                 return sal_True;
             }
