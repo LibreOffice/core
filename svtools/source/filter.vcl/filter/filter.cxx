@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:05:29 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:24:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1353,10 +1353,17 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject& rPa
     return nRetValue;
 }
 
+USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvStream& rIStream,
+                                     USHORT nFormat, USHORT* pDeterminedFormat, sal_uInt32 nImportFlags )
+{
+    return ImportGraphic( rGraphic, rPath, rIStream, nFormat, pDeterminedFormat, nImportFlags, NULL );
+}
+
 //-------------------------------------------------------------------------
 
 USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvStream& rIStream,
-                                     USHORT nFormat, USHORT* pDeterminedFormat, sal_uInt32 nImportFlags )
+                                     USHORT nFormat, USHORT* pDeterminedFormat, sal_uInt32 nImportFlags,
+                                     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData )
 {
     ImpFilterCallbackData   aCallbackData;
     String                  aFilterName;
@@ -1368,7 +1375,43 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
     const BOOL              bLinkSet = rGraphic.IsLink();
     FilterConfigItem*       pFilterConfigItem = NULL;
 
+    Size                    aPreviewSizeHint( 0, 0 );
+    sal_Bool                bAllowPartialStreamRead = sal_False;
+    sal_Bool                bCreateNativeLink = sal_True;
+
     ResetLastError();
+
+    if ( pFilterData )
+    {
+        sal_Int32 i;
+        for ( i = 0; i < pFilterData->getLength(); i++ )
+        {
+            if ( (*pFilterData)[ i ].Name.equalsAscii( "PreviewSizeHint" ) )
+            {
+                awt::Size aSize;
+                if ( (*pFilterData)[ i ].Value >>= aSize )
+                {
+                    aPreviewSizeHint = Size( aSize.Width, aSize.Height );
+                    if ( aSize.Width || aSize.Height )
+                        nImportFlags |= GRFILTER_I_FLAGS_FOR_PREVIEW;
+                    else
+                        nImportFlags &=~GRFILTER_I_FLAGS_FOR_PREVIEW;
+                }
+            }
+            else if ( (*pFilterData)[ i ].Name.equalsAscii( "AllowPartialStreamRead" ) )
+            {
+                (*pFilterData)[ i ].Value >>= bAllowPartialStreamRead;
+                if ( bAllowPartialStreamRead )
+                    nImportFlags |= GRFILTER_I_FLAGS_ALLOW_PARTIAL_STREAMREAD;
+                else
+                    nImportFlags &=~GRFILTER_I_FLAGS_ALLOW_PARTIAL_STREAMREAD;
+            }
+            else if ( (*pFilterData)[ i ].Name.equalsAscii( "CreateNativeLink" ) )
+            {
+                (*pFilterData)[ i ].Value >>= bCreateNativeLink;
+            }
+        }
+    }
 
     if( !pContext || bDummyContext )
     {
@@ -1436,26 +1479,43 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
                 rGraphic.SetContext( NULL );
 
             vcl::PNGReader aPNGReader( rIStream );
-            const std::vector< vcl::PNGReader::ChunkData >& rChunkData = aPNGReader.GetChunks();
-            std::vector< vcl::PNGReader::ChunkData >::const_iterator aIter( rChunkData.begin() );
-            std::vector< vcl::PNGReader::ChunkData >::const_iterator aEnd ( rChunkData.end() );
-            while( aIter != aEnd )
+
+            // ignore animation for previews and set preview size
+            if( aPreviewSizeHint.Width() || aPreviewSizeHint.Height() )
             {
-                // Microsoft Office is storing Animated GIFs in following chunk
-                if ( aIter->nType == PMGCHUNG_msOG )
-                {
-                    sal_uInt32 nChunkSize = aIter->aData.size();
-                    if ( nChunkSize > 11 )
-                    {
-                        const std::vector< sal_uInt8 >& rData = aIter->aData;
-                        SvMemoryStream aIStrm( (void*)&rData[ 11 ], nChunkSize - 11, STREAM_READ );
-                        ImportGIF( aIStrm, rGraphic, NULL );
-                        eLinkType = GFX_LINK_TYPE_NATIVE_PNG;
-                        break;
-                    }
-                }
-                aIter++;
+                vcl::PNGReader::SetPreviewSizeHint( aPreviewSizeHint );
+
+                // position the stream at the end of the image if requested
+                if( !bAllowPartialStreamRead )
+                    aPNGReader.GetChunks();
             }
+            else
+            {
+                vcl::PNGReader::DisablePreviewMode();
+
+                // check if this PNG contains a GIF chunk!
+                const std::vector< vcl::PNGReader::ChunkData >&    rChunkData = aPNGReader.GetChunks();
+                std::vector< vcl::PNGReader::ChunkData >::const_iterator aIter( rChunkData.begin() );
+                std::vector< vcl::PNGReader::ChunkData >::const_iterator aEnd ( rChunkData.end() );
+                while( aIter != aEnd )
+                {
+                    // Microsoft Office is storing Animated GIFs in following chunk
+                    if ( aIter->nType == PMGCHUNG_msOG )
+                    {
+                        sal_uInt32 nChunkSize = aIter->aData.size();
+                        if ( nChunkSize > 11 )
+                        {
+                            const std::vector< sal_uInt8 >& rData = aIter->aData;
+                            SvMemoryStream aIStrm( (void*)&rData[ 11 ], nChunkSize - 11, STREAM_READ );
+                            ImportGIF( aIStrm, rGraphic, NULL );
+                            eLinkType = GFX_LINK_TYPE_NATIVE_PNG;
+                            break;
+                        }
+                    }
+                    aIter++;
+                }
+            }
+
             if ( eLinkType == GFX_LINK_TYPE_NONE )
             {
                 BitmapEx aBmpEx( aPNGReader.Read() );
@@ -1684,7 +1744,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
         if( nPercent )
             aErrorHdlLink.Call( this );
     }
-    else if( ( eLinkType != GFX_LINK_TYPE_NONE ) && !rGraphic.GetContext() && !bLinkSet )
+    else if( bCreateNativeLink && ( eLinkType != GFX_LINK_TYPE_NONE ) && !rGraphic.GetContext() && !bLinkSet )
     {
         const ULONG nStmEnd = rIStream.Tell();
         const ULONG nBufSize = nStmEnd - nStmBegin;
