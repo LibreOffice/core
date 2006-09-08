@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.106 $
+#   $Revision: 1.107 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-01 09:40:16 $
+#   last change: $Author: vg $ $Date: 2006-09-08 08:35:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -315,6 +315,7 @@ SHL4OBJS=       \
                 $(SLO)$/wakeupthread.obj               \
                 $(SLO)$/sessionlistener.obj         \
                 $(SLO)$/newmenucontroller.obj          \
+                $(SLO)$/taskcreatorsrv.obj              \
                 $(SLO)$/logoimagestatusbarcontroller.obj  \
                 $(SLO)$/logotextstatusbarcontroller.obj   \
                 $(SLO)$/globalsettings.obj                \
@@ -359,12 +360,15 @@ SHL5TARGET=		fwm$(UPD)$(DLLPOSTFIX)
 SHL5IMPLIB=		ifwm
 
 SHL5OBJS=       \
-                $(SLO)$/helponstartup.obj \
+                $(SLO)$/helponstartup.obj   \
+                $(SLO)$/tabwinfactory.obj   \
+                $(SLO)$/tabwindow.obj       \
                 $(SLO)$/systemexec.obj    \
                 $(SLO)$/register3rdcomponents.obj
 
 SHL5STDLIBS=	\
                 $(FWILIB)			\
+                $(TKLIB)			\
                 $(VCLLIB)			\
                 $(TOOLSLIB) 		\
                 $(COMPHELPERLIB)	\
