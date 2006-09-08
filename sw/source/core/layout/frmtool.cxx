@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:26:31 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 07:54:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1475,6 +1475,14 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                     pViewShell->InvalidateAccessibleParaFlowRelation(
                         dynamic_cast<SwTxtFrm*>(pFrm->FindNextCnt( true )),
                         dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
+                    // --> OD 2006-08-28 #i68958#
+                    // The information flags of the text frame are validated
+                    // in methods <FindNextCnt(..)> and <FindPrevCnt(..)>.
+                    // The information flags have to be invalidated, because
+                    // it is possible, that the one of its upper frames
+                    // isn't inserted into the layout.
+                    pFrm->InvalidateInfFlags();
+                    // <--
                 }
             }
             // <--
