@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngwrite.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:30:30 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:35:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #include "pngwrite.hxx"
 
 #include <cmath>
+#include <limits>
 #include <rtl/crc.h>
 #include <rtl/memory.h>
 #include <rtl/alloc.h>
@@ -94,6 +95,7 @@ private:
 
     sal_Int32           mnCompLevel;
     sal_Int32           mnInterlaced;
+    sal_uInt32          mnMaxChunkSize;
     BOOL                mbStatus;
 
     BitmapReadAccess*   mpAccess;
@@ -133,7 +135,6 @@ private:
 PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData ) :
         mnCompLevel     ( PNG_DEF_COMPRESSION ),
-        mnInterlaced    ( 0 ),
         mbStatus        ( TRUE ),
         mpAccess        ( NULL ),
         mpMaskAccess    ( NULL ),
@@ -142,7 +143,12 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
 {
     if ( !rBmpEx.IsEmpty() )
     {
-        Bitmap          aBmp( rBmpEx.GetBitmap() );
+        Bitmap aBmp( rBmpEx.GetBitmap() );
+
+        mnInterlaced = 0;   // ( aBmp.GetSizePixel().Width() > 128 ) || ( aBmp.GetSizePixel().Height() > 128 ) ? 1 : 0; #i67236#
+
+        // #i67234# defaulting max chunk size to 256kb when using interlace mode
+        mnMaxChunkSize = mnInterlaced == 0 ? std::numeric_limits< sal_uInt32 >::max() : 0x40000;
 
         if ( pFilterData )
         {
@@ -153,6 +159,12 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                     (*pFilterData)[ i ].Value >>= mnCompLevel;
                 else if ( (*pFilterData)[ i ].Name.equalsAscii( "Interlaced" ) )
                     (*pFilterData)[ i ].Value >>= mnInterlaced;
+                else if ( (*pFilterData)[ i ].Name.equalsAscii( "MaxChunkSize" ) )
+                {
+                    sal_Int32 nVal;
+                    if ( (*pFilterData)[ i ].Value >>= nVal )
+                        mnMaxChunkSize = (sal_uInt32)nVal;
+                }
             }
         }
         mnBitsPerPixel = (BYTE)aBmp.GetBitCount();
@@ -400,8 +412,6 @@ void PNGWriterImpl::ImplWritepHYs( const BitmapEx& rBmpEx )
 
 void PNGWriterImpl::ImplWriteIDAT ()
 {
-    ImplOpenChunk( PNGCHUNK_IDAT );
-
     mnDeflateInSize = mnBitsPerPixel;
 
     if( mpMaskAccess )
@@ -476,8 +486,17 @@ void PNGWriterImpl::ImplWriteIDAT ()
         delete[] mpPreviousScan;
     }
     delete[] mpDeflateInBuf;
-    ImplWriteChunk( (unsigned char*)aOStm.GetData(), aOStm.Tell() );
-    ImplCloseChunk();
+
+    sal_uInt32 nIDATSize = aOStm.Tell();
+    sal_uInt32 nBytes, nBytesToWrite = nIDATSize;
+    while( nBytesToWrite )
+    {
+        nBytes = nBytesToWrite <= mnMaxChunkSize ? nBytesToWrite : mnMaxChunkSize;
+        ImplOpenChunk( PNGCHUNK_IDAT );
+        ImplWriteChunk( (unsigned char*)aOStm.GetData() + ( nIDATSize - nBytesToWrite ), nBytes );
+        ImplCloseChunk();
+        nBytesToWrite -= nBytes;
+    }
 }
 
 // ---------------------------------------------------------------------------------------------------
