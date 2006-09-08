@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: TabBrowse.xcs,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:35:45 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
+<oor:component-schema oor:package="org.openoffice.Office"
+                      oor:name="TabBrowse"
+                      xmlns:oor="http://openoffice.org/2001/registry"
+                      xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xml:lang="en-US">
+    <info>
+		<author>AS</author>
+		<desc>Contain all needed properties for the tabbed document interface of OOo.</desc>
+	</info>
+
+	<templates>
+	</templates>
+
+	<component>
+
+        <group oor:name="TaskCreatorService">
+            <info>
+        		<desc>The TaskCreatorService is used to create new document windows.
+                      It must be replaced if the logic behind creation of such windows should be changed.</desc>
+        	</info>
+            <prop oor:name="ImplementationName" oor:type="xs:string">
+                <info>
+            		<desc>Because there can exists more then one implementations of such TaskCreatorService,
+                          the actual one must be specified with it's UNO implementation name.
+                          Otherwise it's not guaranteed, which implementation is realy used at runtime.</desc>
+            	</info>
+            </prop>
+        </group>
+
+	</component>
+
+</oor:component-schema>
