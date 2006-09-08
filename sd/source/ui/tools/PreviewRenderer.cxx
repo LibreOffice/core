@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreviewRenderer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:07:17 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:27:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -407,6 +407,7 @@ void PreviewRenderer::ProvideView (DrawDocShell* pDocShell)
     {
         mpView.reset (new DrawView (pDocShell, mpPreviewDevice.get(), NULL));
     }
+    mpView->SetPreviewRenderer( sal_True );
     mpView->SetBordVisible(FALSE);
     mpView->SetPageBorderVisible(FALSE);
     mpView->SetPageVisible(TRUE);
