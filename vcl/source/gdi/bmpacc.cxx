@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpacc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 17:44:33 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 07:46:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,20 +273,22 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
         nBits *= nWidth;
         if( nScanSize % 4 || !bMsb )
         {
-            const sal_Int32 nLeftOverBits = sizeof(sal_uInt8)*nScanSize - nBits;
-            const sal_Int32 nBytes = (nLeftOverBits + 7L) >> 3L;
-            sal_uInt8       nMask;
+            DBG_ASSERT( 8*nScanSize >= nBits,
+                        "BitmapWriteAccess::ZeroInitUnusedBits: span size smaller than width?!");
+            const sal_uInt32 nLeftOverBits = 8*sizeof(sal_uInt8)*nScanSize - nBits;
+            const sal_uInt32 nBytes = (nLeftOverBits + 7U) >> 3U;
+            sal_uInt8        nMask;
 
             if( bMsb )
-                nMask = static_cast<sal_uInt8>(0xff << (nLeftOverBits & 3L));
+                nMask = static_cast<sal_uInt8>(0xffU << (nLeftOverBits & 3UL));
             else
-                nMask = static_cast<sal_uInt8>(0xff >> (nLeftOverBits & 3L));
+                nMask = static_cast<sal_uInt8>(0xffU >> (nLeftOverBits & 3UL));
 
             BYTE* pLastBytes = (BYTE*)GetBuffer() + ( nScanSize - nBytes );
             for( sal_uInt32 i = 0; i < nHeight; i++, pLastBytes += nScanSize )
             {
                 *pLastBytes &= nMask;
-                for( sal_Int32 j = 1; j < nBytes; j++ )
+                for( sal_uInt32 j = 1; j < nBytes; j++ )
                     pLastBytes[j] = 0;
             }
         }
