@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontactofpageview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:26:11 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:29:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,7 @@ namespace sdr
             mrPageViewWindow(rPageViewWindow),
             mpRememberedStartPage(0L)
         {
+            mbIsPreviewRenderer = ((SdrPaintView&)rPageViewWindow.GetPageView().GetView()).IsPreviewRenderer();
         }
 
         // The destructor. When PrepareDelete() was not called before (see there)
