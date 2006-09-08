@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpfast.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:21:54 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:34:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #define _SOLAR__PRIVATE 1
 #include <bmpacc.hxx>
 
-//#define FAST_ARGB_BGRA
+#define FAST_ARGB_BGRA
 
 #include <stdlib.h>
 static bool bDisableFastBitops = (getenv( "SAL_DISABLE_BITMAPS_OPTS" ) != NULL);
@@ -946,6 +946,82 @@ bool ImplFastBitmapBlending( BitmapWriteAccess& rDstWA,
     return false;
 }
 
+bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
+{
+    if( bDisableFastBitops )
+        return false;
+
+    const ULONG nDstFormat = rDst.mnFormat & ~BMP_FORMAT_TOP_DOWN;
+
+    // erasing a bitmap is often just a byte-wise memory fill
+    bool bByteFill = true;
+    BYTE nFillByte;
+
+    switch( nDstFormat )
+    {
+        case BMP_FORMAT_1BIT_MSB_PAL:
+        case BMP_FORMAT_1BIT_LSB_PAL:
+            nFillByte = rColor.GetIndex();
+            nFillByte = static_cast<BYTE>( -(nFillByte & 1) ); // 0x00 or 0xFF
+            break;
+        case BMP_FORMAT_4BIT_MSN_PAL:
+        case BMP_FORMAT_4BIT_LSN_PAL:
+            nFillByte = rColor.GetIndex();
+            nFillByte &= 0x0F;
+            nFillByte |= (nFillByte << 4);
+            break;
+        case BMP_FORMAT_8BIT_PAL:
+        case BMP_FORMAT_8BIT_TC_MASK:
+            nFillByte = rColor.GetIndex();
+            break;
+
+        case BMP_FORMAT_24BIT_TC_MASK:
+        case BMP_FORMAT_24BIT_TC_BGR:
+        case BMP_FORMAT_24BIT_TC_RGB:
+            nFillByte = rColor.GetRed();
+            if( (nFillByte != rColor.GetGreen())
+            ||  (nFillByte != rColor.GetBlue()) )
+                bByteFill = false;
+            break;
+
+        default:
+            bByteFill = false;
+            nFillByte = 0x00;
+            break;
+    }
+
+    if( bByteFill )
+    {
+        long nByteCount = rDst.mnHeight * rDst.mnScanlineSize;
+        rtl_fillMemory( rDst.mpBits, nByteCount, nFillByte );
+        return true;
+    }
+
+    // TODO: handle other bitmap formats
+    switch( nDstFormat )
+    {
+        case BMP_FORMAT_32BIT_TC_MASK:
+        case BMP_FORMAT_16BIT_TC_MSB_MASK:
+        case BMP_FORMAT_16BIT_TC_LSB_MASK:
+
+        case BMP_FORMAT_24BIT_TC_BGR:
+        case BMP_FORMAT_24BIT_TC_RGB:
+
+        case BMP_FORMAT_32BIT_TC_ABGR:
+#ifdef FAST_ARGB_BGRA
+        case BMP_FORMAT_32BIT_TC_ARGB:
+        case BMP_FORMAT_32BIT_TC_BGRA:
+#endif
+        case BMP_FORMAT_32BIT_TC_RGBA:
+            break;
+
+        default:
+            break;
+    }
+
+    return false;
+}
+
 // =======================================================================
 
 #else // NO_OPTIMIZED_BITMAP_ACCESS
@@ -958,6 +1034,11 @@ bool ImplFastBitmapConversion( BitmapBuffer&, const BitmapBuffer& )
 bool ImplFastBitmapBlending( BitmapWriteAccess&,
     const BitmapReadAccess&, const BitmapReadAccess&,
     const Size&, const Point& )
+{
+    return false;
+}
+
+bool ImplFastEraseBitmap( BitmapBuffer&, const BitmapColor& )
 {
     return false;
 }
