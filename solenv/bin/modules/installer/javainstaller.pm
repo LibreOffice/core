@@ -4,9 +4,9 @@
 #
 #   $RCSfile: javainstaller.pm,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: vg $ $Date: 2006-03-17 14:25:45 $
+#   last change: $Author: vg $ $Date: 2006-09-08 08:05:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1046,6 +1046,86 @@ sub remove_w4w_from_xmlfile
     }
 }
 
+#######################################################################
+# Removing module from xml file, if not defined in scp
+#######################################################################
+
+sub remove_scpgid_from_xmlfile
+{
+    my ($xmlfile, $scpgid) = @_;
+
+    # Component begins with "<component selected='true' name='$scpgid' componentVersion="8">"
+    # and ends with "</component>"
+
+    my $successfully_removed = 0;
+
+    for ( my $i = 0; $i <= $#{$xmlfile}; $i++ )
+    {
+        if ( ${$xmlfile}[$i] =~ /name\s*\=\'\s*\Q$scpgid\E/ )
+        {
+            # Counting the lines till "</component>"
+
+            my $linecounter = 1;
+            my $startline = $i+1;
+            my $line = ${$xmlfile}[$startline];
+
+            while ((!( $line =~ /^\s*\<\/component\>\s*$/ )) && ( $startline <= $#{$xmlfile} ))
+            {
+                $linecounter++;
+                $startline++;
+                $line = ${$xmlfile}[$startline];
+            }
+
+            $linecounter = $linecounter + 2;     # last line and following empty line
+
+            splice(@{$xmlfile},$i, $linecounter);   # removing $linecounter lines, beginning in line $i
+            $successfully_removed = 1;
+            last;
+        }
+    }
+
+    my $infoline = "";
+    if ($successfully_removed)
+    {
+        $infoline = "Module $scpgid successfully removed from xml file.\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Module $scpgid not found in xml file (no problem).\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+}
+
+#######################################################################
+# Special mechanism for removing modules for xml file, if they are
+# not defined in scp (introduced for onlineupdate module).
+#######################################################################
+
+sub remove_module_if_not_defined
+{
+    my ($xmlfile, $modulesarrayref, $scpgid) = @_;
+
+    my $infoline = "Checking existence of $scpgid in scp definition\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    my $found = 0;
+
+    for ( my $i = 0; $i <= $#{$modulesarrayref}; $i++ )
+    {
+        my $onemodule = ${$modulesarrayref}[$i];
+        if ( $onemodule->{'gid'} eq $scpgid ) { $found = 1; }
+        if ( $found ) { last; }
+    }
+
+    if ( ! $found )
+    {
+        $infoline = "Module $scpgid not found -> Removing from xml file.\n";
+        push( @installer::globals::logfileinfo, $infoline);
+        remove_scpgid_from_xmlfile($xmlfile, $scpgid);
+    }
+}
+
 ###########################################################
 # Preparing the package subdirectory
 ###########################################################
@@ -1796,6 +1876,7 @@ sub create_java_installer
     if (( $installer::globals::islinuxrpmbuild ) && ( $#installer::globals::linkrpms > -1 )) { prepare_linkrpm_in_xmlfile($xmlfile,\@installer::globals::linkrpms); }
     if (( $installer::globals::issolarisx86build ) || ( ! $allvariableshashref->{'ADAPRODUCT'} )) { remove_ada_from_xmlfile($xmlfile); }
     if ( $installer::globals::issolarisx86build || $installer::globals::islinuxbuild ) { remove_w4w_from_xmlfile($xmlfile); }
+    remove_module_if_not_defined($xmlfile, $modulesarrayref, "gid_Module_Optional_Onlineupdate");
     replace_component_names($xmlfile, $templatefilename, $modulesarrayref, $javatemplateorigfile, $ulffile);
     if ( $installer::globals::islinuxrpmbuild ) { put_rpmpath_into_xmlfile($xmlfile, $listofpackages); }
     if ( $installer::globals::islinuxrpmbuild ) { put_filesize_into_xmlfile($xmlfile, $listofpackages); }
