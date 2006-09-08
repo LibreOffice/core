@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 11:28:47 $
+#   last change: $Author: vg $ $Date: 2006-09-08 08:33:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,8 @@ SLOFILES=			\
                     $(SLO)$/license.obj                      		\
                     $(SLO)$/modulemanager.obj                       \
                     $(SLO)$/autorecovery.obj                        \
-                    $(SLO)$/sessionlistener.obj
+                    $(SLO)$/sessionlistener.obj                     \
+                    $(SLO)$/taskcreatorsrv.obj
 
 # --- Targets ------------------------------------------------------
 
