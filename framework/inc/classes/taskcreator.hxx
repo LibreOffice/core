@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskcreator.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:09:29 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:30:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,11 +125,6 @@ class TaskCreator : private ThreadHelpBase
     //_______________________
     // helper
     private:
-
-        css::uno::Reference< css::frame::XFrame > implts_createSystemTask ( const css::uno::Reference< css::frame::XFramesSupplier >&   xDesktop ,
-                                                                            const ::rtl::OUString&                                      sName    ,
-                                                                                  sal_Bool                                              bVisible );
-        static ::rtl::OUString                    impl_filterNames        ( const ::rtl::OUString&                                      sName    );
 
 }; // class TaskCreator
 
