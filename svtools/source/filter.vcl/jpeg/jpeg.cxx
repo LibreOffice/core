@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jpeg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:07:20 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:24:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,7 +315,7 @@ extern "C" void jpeg_svstream_src (j_decompress_ptr cinfo, void * in)
 // - JPEGReader -
 // --------------
 
-JPEGReader::JPEGReader( SvStream& rStm, void*, sal_Bool bSetLS ) :
+JPEGReader::JPEGReader( SvStream& rStm, void* /*pCallData*/, sal_Bool bSetLS ) :
         rIStm           ( rStm ),
         pAcc            ( NULL ),
         pAcc1           ( NULL ),
@@ -537,13 +537,13 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
     BOOL        bRet = FALSE;
     BYTE        cDummy;
 
-    // sehen, ob wir _alles_ lesen koennen
+#if 1 // TODO: is it possible to get rid of this seek to the end?
+    // check if the stream's end is already available
     rIStm.Seek( STREAM_SEEK_TO_END );
     rIStm >> cDummy;
     nEndPos = rIStm.Tell();
 
-    // falls wir nicht alles lesen koennen, gucken wir,
-    // ob min. JPEGMINREAD Bytes gelesen werden koennen
+    // else check if at least JPEGMINREAD bytes can be read
     if( rIStm.GetError() == ERRCODE_IO_PENDING )
     {
         rIStm.ResetError();
@@ -554,10 +554,14 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
         }
     }
 
-    // an Anfang springen
+    // seek back to the original position
     rIStm.Seek( nLastPos );
+#endif
 
-    // (Teil-) Bild einlesen
+    Size aPreviewSize = GetPreviewSize();
+    SetJpegPreviewSizeHint( aPreviewSize.Width(), aPreviewSize.Height() );
+
+    // read the (partial) image
     ReadJPEG( this, &rIStm, &nLines );
 
     if( pAcc )
@@ -729,6 +733,11 @@ BOOL ImportJPEG( SvStream& rStm, Graphic& rGraphic, void* pCallerData, sal_Int32
 
     if( !pJPEGReader )
         pJPEGReader = new JPEGReader( rStm, pCallerData, ( nImportFlags & GRFILTER_I_FLAGS_SET_LOGSIZE_FOR_JPEG ) != 0 );
+
+    if( nImportFlags & GRFILTER_I_FLAGS_FOR_PREVIEW )
+        pJPEGReader->SetPreviewSize( Size(128,128) );
+    else
+        pJPEGReader->DisablePreviewMode();
 
     rGraphic.SetContext( NULL );
     eReadState = pJPEGReader->Read( rGraphic );
