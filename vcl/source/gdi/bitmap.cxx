@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 17:44:10 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:33:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,12 +300,26 @@ Size Bitmap::GetSizePixel() const
 {
     return( mpImpBmp ? mpImpBmp->ImplGetSize() : Size() );
 }
-
 // ------------------------------------------------------------------
 
 void Bitmap::SetSizePixel( const Size& rNewSize )
 {
     Scale( rNewSize );
+}
+
+// ------------------------------------------------------------------
+
+Size Bitmap::GetSourceSizePixel() const
+{
+    return( mpImpBmp ? mpImpBmp->ImplGetSourceSize() : Size() );
+}
+
+// ------------------------------------------------------------------
+
+void Bitmap::SetSourceSizePixel( const Size& rSize)
+{
+    if( mpImpBmp )
+        mpImpBmp->ImplSetSourceSize( rSize);
 }
 
 // ------------------------------------------------------------------
