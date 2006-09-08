@@ -1,12 +1,13 @@
+
 /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 10:24:09 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:34:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,8 +115,55 @@ struct ImpSwapFile
 // - Graphicreader -
 // -----------------
 
+class ReaderData
+{
+public:
+    Size    maPreviewSize;
+};
+
 GraphicReader::~GraphicReader()
 {
+    delete mpReaderData;
+}
+
+// ------------------------------------------------------------------------
+
+BOOL GraphicReader::IsPreviewModeEnabled() const
+{
+    if( !mpReaderData )
+        return FALSE;
+    if( mpReaderData->maPreviewSize.Width() )
+        return TRUE;
+    if( mpReaderData->maPreviewSize.Height() )
+        return TRUE;
+    return FALSE;
+}
+
+// ------------------------------------------------------------------------
+
+void GraphicReader::DisablePreviewMode()
+{
+    if( mpReaderData )
+        mpReaderData->maPreviewSize = Size( 0, 0 );
+}
+
+// ------------------------------------------------------------------------
+
+void GraphicReader::SetPreviewSize( const Size& rSize )
+{
+    if( !mpReaderData )
+        mpReaderData = new ReaderData;
+    mpReaderData->maPreviewSize = rSize;
+}
+
+// ------------------------------------------------------------------------
+
+Size GraphicReader::GetPreviewSize() const
+{
+    Size aSize( 0, 0 );
+    if( mpReaderData )
+        aSize = mpReaderData->maPreviewSize;
+    return aSize;
 }
 
 // --------------
