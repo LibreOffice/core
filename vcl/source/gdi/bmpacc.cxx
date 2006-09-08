@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpacc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-08 07:46:52 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:33:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,13 +369,14 @@ void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc 
         memcpy( mpScanBuf[ nY ], rReadAcc.GetScanline( nY ), rReadAcc.GetScanlineSize() );
     }
     else
+        // TODO: use fastbmp infrastructure
         for( long nX = 0L, nWidth = Min( mpBuffer->mnWidth, rReadAcc.Width() ); nX < nWidth; nX++ )
             SetPixel( nY, nX, rReadAcc.GetPixel( nY, nX ) );
 }
 
 // ------------------------------------------------------------------
 
-void BitmapWriteAccess::CopyScanline( long nY, const Scanline aSrcScanline,
+void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
                                       ULONG nSrcScanlineFormat, ULONG nSrcScanlineSize )
 {
     const ULONG nFormat = BMP_SCANLINE_FORMAT( nSrcScanlineFormat );
@@ -398,6 +399,7 @@ void BitmapWriteAccess::CopyScanline( long nY, const Scanline aSrcScanline,
                         nFormat != BMP_FORMAT_24BIT_TC_MASK && nFormat != BMP_FORMAT_32BIT_TC_MASK,
                         "No support for pixel formats with color masks yet!" );
 
+            // TODO: use fastbmp infrastructure
             FncGetPixel pFncGetPixel;
 
             switch( nFormat )
