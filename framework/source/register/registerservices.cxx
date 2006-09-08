@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-24 15:12:33 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:32:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,6 +261,10 @@
 #include <uielement/newmenucontroller.hxx>
 #endif
 
+#ifndef __FRAMEWORK_SERVICES_TASKCREATORSRV_HXX_
+#include <services/taskcreatorsrv.hxx>
+#endif
+
 #ifndef __FRAMEWORK_UIELEMENT_SIMPLETEXTSTATUSBARCONTROLLER_HXX_
 #include <uielement/simpletextstatusbarcontroller.hxx>
 #endif
@@ -315,6 +319,7 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::LogoImageStatusbarController            )
                         COMPONENTINFO( ::framework::LogoTextStatusbarController             )
                         COMPONENTINFO( ::framework::NewMenuController                       )
+                        COMPONENTINFO( ::framework::TaskCreatorService                      )
                         COMPONENTINFO( ::framework::SimpleTextStatusbarController           )
                     )
 
@@ -366,6 +371,7 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::LogoImageStatusbarController            )   else
                         IFFACTORY( ::framework::LogoTextStatusbarController             )   else
+                        IFFACTORY( ::framework::TaskCreatorService                      )   else
                         IFFACTORY( ::framework::NewMenuController                       )   else
                         IFFACTORY( ::framework::SimpleTextStatusbarController           )
             )
