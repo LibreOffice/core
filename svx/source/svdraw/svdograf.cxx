@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-29 14:41:16 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:30:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,6 +231,7 @@ SdrGrafObj::SdrGrafObj()
     // #i25616#
     mbLineIsOutsideGeometry = sal_True;
     mbInsidePaint = sal_False;
+    mbIsPreview = sal_False;
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = sal_False;
@@ -255,6 +256,7 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect)
     // #i25616#
     mbLineIsOutsideGeometry = sal_True;
     mbInsidePaint = sal_False;
+    mbIsPreview = sal_False;
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = sal_False;
@@ -279,6 +281,7 @@ SdrGrafObj::SdrGrafObj( const Graphic& rGrf )
     // #i25616#
     mbLineIsOutsideGeometry = sal_True;
     mbInsidePaint = sal_False;
+    mbIsPreview = sal_False;
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = sal_False;
@@ -299,6 +302,7 @@ void SdrGrafObj::SetGraphicObject( const GraphicObject& rGrfObj )
     *pGraphic = rGrfObj;
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
     pGraphic->SetUserData();
+    mbIsPreview = sal_False;
     nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     SetChanged();
     BroadcastObjectChange();
@@ -318,6 +322,7 @@ void SdrGrafObj::SetGraphic( const Graphic& rGrf )
 {
     pGraphic->SetGraphic( rGrf );
     pGraphic->SetUserData();
+    mbIsPreview = sal_False;
     nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     SetChanged();
     BroadcastObjectChange();
@@ -397,7 +402,7 @@ sal_Bool SdrGrafObj::IsEPS() const
 
 sal_Bool SdrGrafObj::IsSwappedOut() const
 {
-    return pGraphic->IsSwappedOut();
+    return mbIsPreview ? sal_True : pGraphic->IsSwappedOut();
 }
 
 const MapMode& SdrGrafObj::GetGrafPrefMapMode() const
@@ -420,6 +425,7 @@ sal_Bool SdrGrafObj::DrawGraphic(OutputDevice* pOut, const Point& rPt, const Siz
 
 void SdrGrafObj::SetGrafStreamURL( const String& rGraphicStreamURL )
 {
+    mbIsPreview = sal_False;
     if( !rGraphicStreamURL.Len() )
     {
         pGraphic->SetUserData();
@@ -428,6 +434,7 @@ void SdrGrafObj::SetGrafStreamURL( const String& rGraphicStreamURL )
     else if( pModel->IsSwapGraphics() )
     {
         pGraphic->SetUserData( rGraphicStreamURL );
+
         nGrafStreamPos = GRAFSTREAMPOS_INVALID;
 
         // set state of graphic object to 'swapped out'
@@ -485,6 +492,19 @@ XubString SdrGrafObj::GetName() const
 
 void SdrGrafObj::ForceSwapIn() const
 {
+    if( mbIsPreview )
+    {
+        // removing preview graphic
+        const String aUserData( pGraphic->GetUserData() );
+
+        Graphic aEmpty;
+        pGraphic->SetGraphic( aEmpty );
+        pGraphic->SetUserData( aUserData );
+        pGraphic->SetSwapState();
+
+        const_cast< SdrGrafObj* >( this )->mbIsPreview = sal_False;
+    }
+
     pGraphic->FireSwapInRequest();
 
     if( pGraphic->IsSwappedOut() ||
@@ -1690,7 +1710,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
 
     if( pO->IsInSwapOut() )
     {
-        if( pModel && pModel->IsSwapGraphics() && pGraphic->GetSizeBytes() > 20480 )
+        if( pModel && !mbIsPreview && pModel->IsSwapGraphics() && pGraphic->GetSizeBytes() > 20480 )
         {
             // test if this object is visualized from someone
             // ## test only if there are VOCs other than the preview renderer
@@ -1746,14 +1766,37 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
 
                     if( pGraphic->HasUserData() )
                     {
-                        if( !GetGrfFilter()->ImportGraphic( aGraphic, String(), *pStream ) )
+                        com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL;
+                        if( mbInsidePaint && GetViewContact().IsPreviewRendererOnly() )
+                        {
+//                          Rectangle aSnapRect(GetSnapRect());
+//                          const Rectangle aSnapRectPixel(pOutDev->LogicToPixel(aSnapRect));
+
+                            pFilterData = new com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >( 3 );
+
+                            com::sun::star::awt::Size aPreviewSizeHint( 64, 64 );
+                            sal_Bool bAllowPartialStreamRead = sal_True;
+                            sal_Bool bCreateNativeLink = sal_False;
+                            (*pFilterData)[ 0 ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "PreviewSizeHint" ) );
+                            (*pFilterData)[ 0 ].Value <<= aPreviewSizeHint;
+                            (*pFilterData)[ 1 ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "AllowPartialStreamRead" ) );
+                            (*pFilterData)[ 1 ].Value <<= bAllowPartialStreamRead;
+                            (*pFilterData)[ 2 ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "CreateNativeLink" ) );
+                            (*pFilterData)[ 2 ].Value <<= bCreateNativeLink;
+
+                            mbIsPreview = sal_True;
+                        }
+
+                        if( !GetGrfFilter()->ImportGraphic( aGraphic, String(), *pStream,
+                            GRFILTER_FORMAT_DONTKNOW, NULL, 0, pFilterData ) )
                         {
                             const String aUserData( pGraphic->GetUserData() );
 
                             pGraphic->SetGraphic( aGraphic );
                             pGraphic->SetUserData( aUserData );
-                            pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
+                            pRet = GRFMGR_AUTOSWAPSTREAM_NONE;
                         }
+                        delete pFilterData;
                     }
                     else
                     {
