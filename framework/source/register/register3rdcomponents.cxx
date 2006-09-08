@@ -4,9 +4,9 @@
  *
  *  $RCSfile: register3rdcomponents.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 14:13:49 $
+ *  last change: $Author: vg $ $Date: 2006-09-08 08:32:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,10 @@
 #include <jobs/helponstartup.hxx>
 #endif
 
+#ifndef __FRAMEWORK_TABWIN_TABWINFACTORY_HXX_
+#include <tabwin/tabwinfactory.hxx>
+#endif
+
 #ifndef __FRAMEWORK_DISPATCH_SYSTEMEXEC_HXX_
 #include <dispatch/systemexec.hxx>
 #endif
@@ -76,9 +80,11 @@
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::HelpOnStartup   )
+                        COMPONENTINFO( ::framework::TabWinFactory   )
                         COMPONENTINFO( ::framework::SystemExec      )
                     )
 
-COMPONENTGETFACTORY (   IFFACTORY( ::framework::HelpOnStartup       )
+COMPONENTGETFACTORY (   IFFACTORY( ::framework::HelpOnStartup       ) else
+                        IFFACTORY( ::framework::TabWinFactory       ) else
                         IFFACTORY( ::framework::SystemExec          )
                     )
