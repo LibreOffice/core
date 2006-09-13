@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheck.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 09:56:09 $
+ *  last change: $Author: obo $ $Date: 2006-09-13 11:26:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,6 +184,7 @@ protected:
     friend void SAL_CALL ::myThreadFunc(void *);
 
     inline rtl::OUString getProductName() const;
+    inline rtl::OUString getLocale() const;
 
     /* Used to avoid dialup login windows (on platforms we know how to double this) */
     inline bool hasInternetConnection() const
@@ -463,6 +464,19 @@ UpdateCheckJob::getProductName() const
 
 //------------------------------------------------------------------------------
 
+rtl::OUString
+UpdateCheckJob::getLocale() const
+{
+    rtl::OUString aProductName;
+
+    uno::Reference< container::XNameAccess > xNameAccess( getNameAccess(UNISTRING("org.openoffice.Setup/L10N")) );
+    xNameAccess->getByName(UNISTRING("ooLocale")) >>= aProductName;
+
+    return aProductName;
+}
+
+//------------------------------------------------------------------------------
+
 void
 UpdateCheckJob::runAsThread()
 {
@@ -659,8 +673,26 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
     uno::Sequence<beans::NamedValue> aConfig =
         getValue< uno::Sequence<beans::NamedValue> > (namedValues, "JobConfig");
 
-    m_aBubbleHeading = getValue< rtl::OUString > (aConfig, "BubbleHeading");
-    m_aBubbleText = getValue< rtl::OUString > (aConfig, "BubbleText");
+    // Localization in extendable sets not yet supported
+    rtl::OString aLocale = OUStringToOString(getLocale(), RTL_TEXTENCODING_ASCII_US);
+    try
+    {
+        rtl::OString aKey = "BubbleHeading_";
+        aKey += aLocale;
+        m_aBubbleHeading = getValue< rtl::OUString > (aConfig, aKey.getStr());
+        aKey = "BubbleText_";
+        aKey += aLocale;
+        m_aBubbleText = getValue< rtl::OUString > (aConfig, aKey.getStr());
+    }
+    catch( uno::RuntimeException& )
+    {
+        // fallback to en-US
+        m_aBubbleHeading = getValue< rtl::OUString > (aConfig, "BubbleHeading_en-US");
+        m_aBubbleText = getValue< rtl::OUString > (aConfig, "BubbleText_en-US");
+    }
+
+//    m_aBubbleHeading = getValue< rtl::OUString > (aConfig, "BubbleHeading");
+//    m_aBubbleText = getValue< rtl::OUString > (aConfig, "BubbleText");
 
     /* Determine the way we got invoked here -
      * see Developers Guide Chapter "4.7.2 Jobs" to understand the magic
