@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:34:11 $
+ *  last change: $Author: obo $ $Date: 2006-09-13 11:02:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,7 @@
  *
  ************************************************************************/
 
+#include <stdio.h>
 // #include <malloc.h>
 
 #include <com/sun/star/uno/genfunc.hxx>
@@ -63,7 +64,7 @@ void callVirtualMethod(
     void * pAdjustedThisPtr,
     sal_Int32 nVtableIndex,
     void * pRegisterReturn,
-    typelib_TypeDescription * pReturnTypeDescr,
+    typelib_TypeDescription * pReturnTypeDescr, bool bSimpleReturn,
     sal_Int32 * pStackLongs,
     sal_Int32 nStackLongs ) __attribute__((noinline));
 
@@ -71,7 +72,7 @@ void callVirtualMethod(
     void * pAdjustedThisPtr,
     sal_Int32 nVtableIndex,
     void * pRegisterReturn,
-    typelib_TypeDescription * pReturnTypeDescr,
+    typelib_TypeDescription * pReturnTypeDescr, bool bSimpleReturn,
     sal_Int32 * pStackLongs,
     sal_Int32 nStackLongs )
 {
@@ -151,16 +152,15 @@ void callVirtualMethod(
     case typelib_TypeClass_DOUBLE:
         asm ( "fstpl %0\n\t" : : "m"(*(char *)pRegisterReturn) );
         break;
-/*    default: {
+    default: {
         sal_Int32 const nRetSize = pReturnTypeDescr->nSize;
-        if (nRetSize <= 8 && nRetSize > 0) {
+        if (bSimpleReturn && nRetSize <= 8 && nRetSize > 0) {
             if (nRetSize > 4)
                 static_cast<long *>(pRegisterReturn)[1] = edx;
             static_cast<long *>(pRegisterReturn)[0] = eax;
         }
         break;
     }
-*/
     }
 }
 
@@ -183,10 +183,13 @@ static void cpp_call(
     OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
 
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
+    bool bSimpleReturn = true;
 
     if (pReturnTypeDescr)
     {
-        if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
+        bSimpleReturn = CPPU_CURRENT_NAMESPACE::isSimpleReturnType(
+            pReturnTypeDescr);
+        if (bSimpleReturn)
         {
             pCppReturn = pUnoReturn; // direct way for simple types
         }
@@ -196,11 +199,9 @@ static void cpp_call(
                               pReturnTypeDescr )
                           ? alloca( pReturnTypeDescr->nSize )
                           : pUnoReturn); // direct way
-//            if (pReturnTypeDescr->nSize > 8) {
-                // complex return via ptr
-                *(void **)pCppStack = pCppReturn;
-                pCppStack += sizeof(void *);
-//            }
+            // complex return via ptr
+            *(void **)pCppStack = pCppReturn;
+            pCppStack += sizeof(void *);
         }
     }
     // push this
@@ -238,6 +239,8 @@ static void cpp_call(
             case typelib_TypeClass_UNSIGNED_HYPER:
             case typelib_TypeClass_DOUBLE:
                 pCppStack += sizeof(sal_Int32); // extra long
+            default:
+                break;
             }
             // no longer needed
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
@@ -282,7 +285,7 @@ static void cpp_call(
         OSL_ENSURE( !( (pCppStack - pCppStackStart ) & 3), "UNALIGNED STACK !!! (Please DO panic)" );
         callVirtualMethod(
             pAdjustedThisPtr, aVtableSlot.index,
-            pCppReturn, pReturnTypeDescr,
+            pCppReturn, pReturnTypeDescr, bSimpleReturn,
             (sal_Int32 *)pCppStackStart, (pCppStack - pCppStackStart) / sizeof(sal_Int32) );
         // NO exception occured...
         *ppUnoExc = 0;
@@ -322,6 +325,9 @@ static void cpp_call(
     }
      catch (...)
      {
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "caught C++ exception\n" );
+#endif
           // fill uno exception
         fillUnoException( CPPU_CURRENT_NAMESPACE::__cxa_get_globals()->caughtExceptions, *ppUnoExc, pThis->getBridge()->getCpp2Uno() );
 
@@ -341,6 +347,28 @@ static void cpp_call(
 
 }
 
+namespace CPPU_CURRENT_NAMESPACE {
+bool isSimpleReturnType(typelib_TypeDescription * pTD)
+{
+    if (bridges::cpp_uno::shared::isSimpleType( pTD ))
+        return true;
+    if (pTD->eTypeClass == typelib_TypeClass_STRUCT && pTD->nSize <= 8) {
+        typelib_CompoundTypeDescription *const pCompTD =
+            (typelib_CompoundTypeDescription *) pTD;
+        for ( sal_Int32 pos = pCompTD->nMembers; pos--; ) {
+            typelib_TypeDescription * pMemberTD = 0;
+            TYPELIB_DANGER_GET( &pMemberTD, pCompTD->ppTypeRefs[pos] );
+            bool const b = isSimpleReturnType(pMemberTD);
+            TYPELIB_DANGER_RELEASE( pMemberTD );
+            if (! b)
+                return false;
+        }
+        return true;
+    }
+    return false;
+}
+}
+
 //==================================================================================================
 
 namespace bridges { namespace cpp_uno { namespace shared {
@@ -351,7 +379,6 @@ void unoInterfaceProxyDispatch(
     // is my surrogate
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
         = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy * >(pUnoI);
-    typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
 
     switch (pMemberDescr->eTypeClass)
     {
