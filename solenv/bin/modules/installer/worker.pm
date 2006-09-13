@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-28 11:21:28 $
+#   last change: $Author: obo $ $Date: 2006-09-13 11:48:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1325,6 +1325,82 @@ sub reorg_patchfile
 }
 
 ###########################################################
+# One special file has to be the last in patchfile.txt.
+# Controlling this file, guarantees, that all files were
+# patch correctly. Using version.ini makes it easy to
+# control this by looking into the about box
+# -> shifting one section to the end
+###########################################################
+
+sub shift_section_to_end
+{
+    my ($patchfilelist) = @_;
+
+    my @patchfile = ();
+    my @lastsection = ();
+    my $lastsection = "program";
+    my $record = 0;
+
+    for ( my $i = 0; $i <= $#{$patchfilelist}; $i++ )
+    {
+        my $line = ${$patchfilelist}[$i];
+
+        if (( $record ) && ( $line =~ /^\s*\[/ )) { $record = 0; }
+
+        if ( $line =~ /^\s*\[\Q$lastsection\E\\\]\s*$/ ) { $record = 1; }
+
+        if ( $record ) { push(@lastsection, $line); }
+        else { push(@patchfile, $line); }
+    }
+
+    if ( $#lastsection > -1 )
+    {
+        for ( my $i = 0; $i <= $#lastsection; $i++ )
+        {
+            push(@patchfile, $lastsection[$i]);
+        }
+    }
+
+    return \@patchfile;
+}
+
+###########################################################
+# One special file has to be the last in patchfile.txt.
+# Controlling this file, guarantees, that all files were
+# patch correctly. Using version.ini makes it easy to
+# control this by looking into the about box
+# -> shifting one file of the last section to the end
+###########################################################
+
+sub shift_file_to_end
+{
+    my ($patchfilelist) = @_;
+
+    my @patchfile = ();
+    my $lastfilename = "version.ini";
+    my $lastfileline = "";
+    my $foundfile = 0;
+
+    for ( my $i = 0; $i <= $#{$patchfilelist}; $i++ )
+    {
+        my $line = ${$patchfilelist}[$i];
+
+        if ( $line =~ /^\s*\"\Q$lastfilename\E\"\=/ )
+        {
+            $lastfileline = $line;
+            $foundfile = 1;
+            next;
+        }
+
+        push(@patchfile, $line);
+    }
+
+    if ( $foundfile ) { push(@patchfile, $lastfileline); }
+
+    return  \@patchfile;
+}
+
+###########################################################
 # Putting hash content into array and sorting it
 ###########################################################
 
@@ -1409,6 +1485,11 @@ sub prepare_windows_patchfiles
     # reorganizing the patchfile content, sorting for directory to decrease the file size
     my $sorteddirectorylist = sort_hash(\%patchfiledirectories);
     my $patchfilelist = reorg_patchfile(\@patchfiles, $sorteddirectorylist);
+
+    # shifting version.ini to the end of the list, to guarantee, that all files are patched
+    # if the correct version is shown in the about box
+    $patchfilelist = shift_section_to_end($patchfilelist);
+    $patchfilelist = shift_file_to_end($patchfilelist);
 
     # saving the file
     $patchfilename = $winpatchdir . $installer::globals::separator . $patchfilename;
