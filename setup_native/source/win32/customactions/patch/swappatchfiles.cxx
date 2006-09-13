@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swappatchfiles.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-22 14:11:55 $
+ *  last change: $Author: obo $ $Date: 2006-09-13 11:48:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@
 #endif
 #include <tchar.h>
 #include <string>
+#include <queue>
 #include <stdio.h>
 
 #ifdef _WIN32_WINNT
@@ -61,6 +62,21 @@
 #define WININIT_FILENAME    "wininit.ini"
 #define RENAME_SECTION      "rename"
 
+#ifdef DEBUG
+inline void OutputDebugStringFormat( LPCTSTR pFormat, ... )
+{
+    _TCHAR  buffer[1024];
+    va_list args;
+
+    va_start( args, pFormat );
+    _vsntprintf( buffer, elementsof(buffer), pFormat, args );
+    OutputDebugString( buffer );
+}
+#else
+static inline void OutputDebugStringFormat( LPCTSTR, ... )
+{
+}
+#endif
 
 static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
 {
@@ -291,6 +307,30 @@ static bool SwapFiles( const std::_tstring& sFileName1, const std::_tstring& sFi
         }
     }
 
+    OutputDebugStringFormat( TEXT("%s <-> %s: %s"), sFileName1.c_str(), sFileName2.c_str(), fSuccess ? TEXT("OK") : TEXT("FAILED") );
+
+    if (!fSuccess )
+    {
+        DWORD   dwError = GetLastError();
+        LPVOID lpMsgBuf;
+        if ( FormatMessage(
+            FORMAT_MESSAGE_ALLOCATE_BUFFER |
+            FORMAT_MESSAGE_FROM_SYSTEM |
+            FORMAT_MESSAGE_IGNORE_INSERTS,
+            NULL,
+            GetLastError(),
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            (LPTSTR) &lpMsgBuf,
+            0,
+            NULL ))
+        {
+            OutputDebugStringFormat( TEXT("Error Code %d: %s"), dwError, lpMsgBuf );
+            LocalFree( lpMsgBuf );
+        }
+        else
+            OutputDebugStringFormat( TEXT("Error Code %d: Unknown"), dwError );
+    }
+
     return fSuccess;
 }
 
@@ -356,10 +396,14 @@ static bool readLine( FILE *fp, std::_tstring& rLine )
 }
 
 
-static std::_tstring getProfileString( LPCTSTR pFileName, LPCTSTR pSectionName, LPCTSTR pKeyName, LPCTSTR pDefault = NULL )
+static std::_tstring getProfileString(
+    const std::_tstring& aFileName,
+    const std::_tstring& aSectionName,
+    const std::_tstring& aKeyName,
+    const std::_tstring& aDefault = _T("") )
 {
-    FILE    *fp = _tfopen( pFileName, _T("r") );
-    std::_tstring   retValue = pDefault ? pDefault : _T("");
+    FILE    *fp = _tfopen( aFileName.c_str(), _T("r") );
+    std::_tstring   retValue = aDefault.length() ? aDefault : _T("");
 
     if ( fp )
     {
@@ -392,8 +436,8 @@ static std::_tstring getProfileString( LPCTSTR pFileName, LPCTSTR pSectionName, 
                     value = trim( value );
 
                     if (
-                        0 == _tcsicmp( section.c_str(), pSectionName ) &&
-                        0 == _tcsicmp( keyname.c_str(), pKeyName )
+                        0 == _tcsicmp( section.c_str(), aSectionName.c_str() ) &&
+                        0 == _tcsicmp( keyname.c_str(), aKeyName.c_str() )
                          )
                     {
                         retValue = value;
@@ -409,64 +453,149 @@ static std::_tstring getProfileString( LPCTSTR pFileName, LPCTSTR pSectionName, 
     return retValue;
 }
 
+static std::queue< std::_tstring > getProfileSections( const std::_tstring& aFileName )
+{
+    FILE    *fp = _tfopen( aFileName.c_str(), _T("r") );
+    std::queue< std::_tstring > aResult;
+
+    OutputDebugStringFormat( TEXT("*** Retrieving Section Names ****") );
+
+    if ( fp )
+    {
+        std::_tstring line;
+        std::_tstring section;
+
+        while ( readLine( fp, line ) )
+        {
+            line = trim( line );
+
+            if ( line.length() && line[0] == '[' )
+            {
+                line.erase( 0, 1 );
+                std::_tstring::size_type end = line.find( ']', 0 );
+
+                if ( std::_tstring::npos != end )
+                    section = trim( line.substr( 0, end ) );
+
+                aResult.push( section );
+
+                OutputDebugStringFormat( TEXT("Section: %s"), section.c_str() );
+
+            }
+        }
+
+        fclose( fp );
+    }
+
+    OutputDebugStringFormat( TEXT("*** Done Section Names ***") );
+
+    return aResult;
+}
+
+static std::queue< std::_tstring > getProfileKeys( const std::_tstring& aFileName, const std::_tstring& aSectionName )
+{
+    FILE    *fp = _tfopen( aFileName.c_str(), _T("r") );
+    std::queue< std::_tstring > aResult;
+
+    OutputDebugStringFormat( TEXT("*** Retrieving Key Names for [%s] ***"), aSectionName.c_str() );
+
+    if ( fp )
+    {
+        std::_tstring line;
+        std::_tstring section;
+
+        while ( readLine( fp, line ) )
+        {
+            line = trim( line );
+
+            if ( line.length() && line[0] == '[' )
+            {
+                line.erase( 0, 1 );
+                std::_tstring::size_type end = line.find( ']', 0 );
+
+                if ( std::_tstring::npos != end )
+                    section = trim( line.substr( 0, end ) );
+            }
+            else
+            {
+
+                std::_tstring::size_type iEqualSign = line.find( '=', 0 );
+
+                if ( iEqualSign != std::_tstring::npos )
+                {
+                    std::_tstring   keyname = line.substr( 0, iEqualSign );
+                    keyname = trim( keyname );
+
+                    if ( 0 == _tcsicmp( section.c_str(), aSectionName.c_str() ) )
+                    {
+                        aResult.push( keyname );
+
+                        OutputDebugStringFormat( keyname.c_str() );
+
+                    }
+                }
+            }
+        }
+
+        fclose( fp );
+    }
+
+    OutputDebugStringFormat( TEXT("*** Done Key Names for [%s] ***"), aSectionName.c_str() );
+
+    return aResult;
+}
+
 extern "C" UINT __stdcall InstallPatchedFiles( MSIHANDLE handle )
 {
     std::_tstring   sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
     std::_tstring   sProgramDir = sInstDir + TEXT("program\\");
     std::_tstring   sPatchFile = sProgramDir + TEXT("patchlist.txt");
 
-    TCHAR   szSectionNames[32767];
-    TCHAR   szKeyNames[32767];
+    std::queue< std::_tstring > aSectionNames;
+    std::queue< std::_tstring > aKeyNames;
+
+    OutputDebugStringA( "Starting Custom Action" );
 
     // std::_tstring    mystr;
     // mystr = "Patchfile: " + sPatchFile;
     // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
 
-    if ( GetPrivateProfileString( NULL, NULL, TEXT(""), szSectionNames, elementsof(szSectionNames), sPatchFile.c_str() ) )
+    aSectionNames = getProfileSections( sPatchFile );
+    while ( !aSectionNames.empty() )
     {
-        TCHAR   *pSectionName = szSectionNames;
+        std::_tstring   sSectionName = aSectionNames.front();
+        if ( std::_tstring(TEXT("_root")) == sSectionName ) { sSectionName = TEXT(""); }
+        // mystr = "Section: " + sSectionName;
+        // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
 
-        while ( *pSectionName )
+        aKeyNames = getProfileKeys( sPatchFile, sSectionName );
+        while ( !aKeyNames.empty() )
         {
-            std::_tstring   sSectionName = pSectionName;
-            if ( std::_tstring(TEXT("_root")) == sSectionName ) { sSectionName = TEXT(""); }
-            // mystr = "Section: " + sSectionName;
-            // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
+            std::_tstring   sKeyName = aKeyNames.front();
+            std::_tstring   sValue = getProfileString( sPatchFile, sSectionName, sKeyName );
 
-            if ( GetPrivateProfileString( pSectionName, NULL, TEXT(""), szKeyNames, elementsof(szKeyNames), sPatchFile.c_str() ) )
+            if ( sValue.length() )
             {
-                TCHAR   *pKeyName = szKeyNames;
+                std::_tstring   sFileName1 = sKeyName;
+                std::_tstring   sExtension = sValue;
+                std::_tstring   sFileName2;
 
-                while ( *pKeyName )
-                {
-                    // TCHAR    szValue[4096];
-                    std::_tstring   sValue = getProfileString( sPatchFile.c_str(), pSectionName, pKeyName );
+                sFileName1 = strip( sFileName1, '\"' );
+                sExtension = strip( sExtension, '\"' );
 
-                    // if ( GetPrivateProfileString( pSectionName, pKeyName, TEXT(""), szValue, elementsof(szValue), sPatchFile.c_str() ) )
-                    if ( sValue.length() )
-                    {
-                        std::_tstring   sFileName1 = pKeyName;
-                        std::_tstring   sExtension = sValue;
-                        std::_tstring   sFileName2;
+                sFileName1 = sInstDir + sSectionName + sFileName1;
+                sFileName2 = sFileName1 + sExtension;
 
-                        sFileName1 = strip( sFileName1, '\"' );
-                        sExtension = strip( sExtension, '\"' );
+                // mystr = "Convert: " + sFileName1 + " to " + sFileName2;
+                // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
 
-                        sFileName1 = sInstDir + sSectionName + sFileName1;
-                        sFileName2 = sFileName1 + sExtension;
-
-                        // mystr = "Convert: " + sFileName1 + " to " + sFileName2;
-                        // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
-
-                        SwapFiles( sFileName1, sFileName2 );
-                    }
-
-                    pKeyName += _tcslen(pKeyName) + 1;
-                }
+                SwapFiles( sFileName1, sFileName2 );
             }
 
-            pSectionName += _tcslen(pSectionName) + 1;
+            aKeyNames.pop();
         }
+
+        aSectionNames.pop();
     }
 
     return ERROR_SUCCESS;
@@ -504,56 +633,49 @@ extern "C" UINT __stdcall UninstallPatchedFiles( MSIHANDLE handle )
     std::_tstring   sProgramDir = sInstDir + TEXT("program\\");
     std::_tstring   sPatchFile = sProgramDir + TEXT("patchlist.txt");
 
-    TCHAR   szSectionNames[32767];
-    TCHAR   szKeyNames[32767];
+    std::queue< std::_tstring > aSectionNames;
+    std::queue< std::_tstring > aKeyNames;
 
     // std::_tstring    mystr;
     // mystr = "Patchfile: " + sPatchFile;
     // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
 
-    if ( GetPrivateProfileString( NULL, NULL, TEXT(""), szSectionNames, elementsof(szSectionNames), sPatchFile.c_str() ) )
+    aSectionNames = getProfileSections( sPatchFile );
+    while ( !aSectionNames.empty() )
     {
-        TCHAR   *pSectionName = szSectionNames;
+        std::_tstring   sSectionName = aSectionNames.front();
+        if ( std::_tstring(TEXT("_root")) == sSectionName ) { sSectionName = TEXT(""); }
+        // mystr = "Section: " + sSectionName;
+        // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
 
-        while ( *pSectionName )
+        aKeyNames = getProfileKeys( sPatchFile, sSectionName );
+        while( !aKeyNames.empty() )
         {
-            std::_tstring   sSectionName = pSectionName;
-            if ( std::_tstring(TEXT("_root")) == sSectionName ) { sSectionName = TEXT(""); }
-            // mystr = "Section: " + sSectionName;
-            // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
+            std::_tstring   sKeyName = aKeyNames.front();
+            std::_tstring   sValue = getProfileString( sPatchFile, sSectionName, sKeyName );
 
-            if ( GetPrivateProfileString( pSectionName, NULL, TEXT(""), szKeyNames, elementsof(szKeyNames), sPatchFile.c_str() ) )
+            if ( sValue.length() )
             {
-                TCHAR   *pKeyName = szKeyNames;
+                std::_tstring   sFileName1 = sKeyName;
+                std::_tstring   sExtension = sValue;
+                std::_tstring   sFileName2;
 
-                while ( *pKeyName )
-                {
-                    TCHAR   szValue[4096];
+                sFileName1 = strip( sFileName1, '\"' );
+                sExtension = strip( sExtension, '\"' );
 
-                    if ( GetPrivateProfileString( pSectionName, pKeyName, TEXT(""), szValue, elementsof(szValue), sPatchFile.c_str() ) )
-                    {
-                        std::_tstring   sFileName1 = pKeyName;
-                        std::_tstring   sExtension = szValue;
-                        std::_tstring   sFileName2;
+                sFileName1 = sInstDir + sSectionName + sFileName1;
+                sFileName2 = sFileName1 + sExtension;
 
-                        sFileName1 = strip( sFileName1, '\"' );
-                        sExtension = strip( sExtension, '\"' );
+                // mystr = "Convert: " + sFileName1 + " to " + sFileName2;
+                // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
 
-                        sFileName1 = sInstDir + sSectionName + sFileName1;
-                        sFileName2 = sFileName1 + sExtension;
-
-                        // mystr = "Convert: " + sFileName1 + " to " + sFileName2;
-                        // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
-
-                        SwapFiles( sFileName2, sFileName1 );
-                    }
-
-                    pKeyName += _tcslen(pKeyName) + 1;
-                }
+                SwapFiles( sFileName2, sFileName1 );
             }
 
-            pSectionName += _tcslen(pSectionName) + 1;
+            aKeyNames.pop();
         }
+
+        aSectionNames.pop();
     }
 
     return ERROR_SUCCESS;
