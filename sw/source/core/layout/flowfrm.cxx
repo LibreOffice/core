@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:25:22 $
+ *  last change: $Author: obo $ $Date: 2006-09-13 11:31:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2256,7 +2256,9 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
                 pNewUpper = 0;
             }
             // --> OD 2006-05-08 #i53139#
-            else
+            // --> OD 2006-09-11 #i69409# - check <pNewUpper>
+            else if ( pNewUpper )
+            // <--
             {
                 // Now <pNewUpper> is a previous layout frame, which
                 // contains content. But the new upper layout frame
