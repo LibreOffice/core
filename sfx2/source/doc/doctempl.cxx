@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 16:05:33 $
+ *  last change: $Author: obo $ $Date: 2006-09-13 11:45:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -335,12 +335,19 @@ class SfxDocTemplate_Impl : public SvRefBase
 
     Reference< XAnyCompareFactory > m_rCompareFactory;
 
+    // the following member is intended to prevent clearing of the global data when it is in use
+    // TODO/LATER: it still does not make the implementation complete thread-safe
+    sal_Int32           mnLockCounter;
+
 private:
     void                Clear();
 
 public:
                         SfxDocTemplate_Impl();
                         ~SfxDocTemplate_Impl();
+
+    void                IncrementLock();
+    void                DecrementLock();
 
     sal_Bool            Construct( );
     void                CreateFromHierarchy( Content &rTemplRoot );
@@ -368,6 +375,24 @@ public:
     OUString            GetRootURL() const { return maRootURL; }
 
     Reference< XDocumentTemplates >     getDocTemplates() { return mxTemplates; }
+};
+
+// ------------------------------------------------------------------------
+
+class DocTemplLocker_Impl
+{
+    SfxDocTemplate_Impl& m_aDocTempl;
+public:
+    DocTemplLocker_Impl( SfxDocTemplate_Impl& aDocTempl )
+    : m_aDocTempl( aDocTempl )
+    {
+        m_aDocTempl.IncrementLock();
+    }
+
+    ~DocTemplLocker_Impl()
+    {
+        m_aDocTempl.DecrementLock();
+    }
 };
 
 // ------------------------------------------------------------------------
@@ -411,6 +436,8 @@ String SfxDocumentTemplates::GetFullRegionName
     // First: find the RegionData for the index
     String aName;
 
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( pImp->Construct() )
     {
         RegionData_Impl *pData1 = pImp->GetRegion( nIdx );
@@ -446,6 +473,8 @@ const String& SfxDocumentTemplates::GetRegionName
 {
     static String maTmpString;
 
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( pImp->Construct() )
     {
         RegionData_Impl *pData = pImp->GetRegion( nIdx );
@@ -480,6 +509,8 @@ USHORT SfxDocumentTemplates::GetRegionNo
 
 */
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( !pImp->Construct() )
         return USHRT_MAX;
 
@@ -508,6 +539,8 @@ USHORT SfxDocumentTemplates::GetRegionCount() const
 
 */
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( !pImp->Construct() )
         return 0;
 
@@ -520,6 +553,8 @@ USHORT SfxDocumentTemplates::GetRegionCount() const
 
 sal_Bool SfxDocumentTemplates::IsRegionLoaded( USHORT nIdx ) const
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( !pImp->Construct() )
         return sal_False;
 
@@ -552,6 +587,8 @@ USHORT SfxDocumentTemplates::GetCount
 */
 
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( !pImp->Construct() )
         return 0;
 
@@ -583,6 +620,8 @@ USHORT SfxDocumentTemplates::GetCount
 */
 
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( !pImp->Construct() )
         return 0;
 
@@ -615,6 +654,8 @@ const String& SfxDocumentTemplates::GetName
 */
 
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     static String maTmpString;
 
     if ( pImp->Construct() )
@@ -652,6 +693,8 @@ String SfxDocumentTemplates::GetFileName
 
 */
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( !pImp->Construct() )
         return String();
 
@@ -691,6 +734,8 @@ String SfxDocumentTemplates::GetPath
 
 */
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( !pImp->Construct() )
         return String();
 
@@ -726,6 +771,8 @@ String SfxDocumentTemplates::GetTemplatePath
 
 */
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( !pImp->Construct() )
         return String();
 
@@ -779,6 +826,8 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
 
 */
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( ! pImp->Construct() )
         return String();
 
@@ -839,6 +888,8 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
 ::rtl::OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const ::rtl::OUString& aGroupName,
                                                                          const ::rtl::OUString& aTitle )
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     INetURLObject aTemplateObj( pImp->GetRootURL() );
 
     aTemplateObj.insertName( aGroupName, false,
@@ -909,6 +960,8 @@ void SfxDocumentTemplates::NewTemplate
 */
 
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( ! pImp->Construct() )
         return;
 
@@ -969,6 +1022,8 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
        representation in the hierarchy )
        ...
     */
+
+    DocTemplLocker_Impl aLocker( *pImp );
 
     if ( !pImp->Construct() )
         return sal_False;
@@ -1083,6 +1138,8 @@ sal_Bool SfxDocumentTemplates::Move
     <SfxDocumentTemplates::CopyOrMove(USHORT,USHORT,USHORT,USHORT,sal_Bool)>
 */
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     return CopyOrMove( nTargetRegion, nTargetIdx,
                        nSourceRegion, nSourceIdx, sal_True );
 }
@@ -1117,6 +1174,8 @@ sal_Bool SfxDocumentTemplates::Copy
 */
 
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     return CopyOrMove( nTargetRegion, nTargetIdx,
                        nSourceRegion, nSourceIdx, sal_False );
 }
@@ -1153,6 +1212,8 @@ sal_Bool SfxDocumentTemplates::CopyTo
 */
 
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( ! pImp->Construct() )
         return sal_False;
 
@@ -1230,6 +1291,8 @@ sal_Bool SfxDocumentTemplates::CopyFrom
 */
 
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( ! pImp->Construct() )
         return sal_False;
 
@@ -1387,6 +1450,8 @@ sal_Bool SfxDocumentTemplates::Delete
 */
 
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     /* delete the template or folder in the hierarchy and in the
        template folder by sending a delete command to the content.
        Then remove the data from the lists
@@ -1451,6 +1516,8 @@ sal_Bool SfxDocumentTemplates::InsertDir
     <SfxDocumentTemplates::SaveDir(SfxTemplateDir&)>
 */
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( ! pImp->Construct() )
         return sal_False;
 
@@ -1502,6 +1569,8 @@ sal_Bool SfxDocumentTemplates::SetName
 */
 
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( ! pImp->Construct() )
         return sal_False;
 
@@ -1579,7 +1648,7 @@ sal_Bool SfxDocumentTemplates::Rescan()
     <SfxTemplateDir::Freshen(const SfxTemplateDir &rNew)>
 */
 {
-    if ( ! pImp->Construct() )
+    if ( !pImp->Construct() )
         return sal_False;
 
     pImp->Rescan();
@@ -1612,6 +1681,8 @@ SfxObjectShellRef SfxDocumentTemplates::CreateObjectShell
 */
 
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( !pImp->Construct() )
         return NULL;
 
@@ -1655,6 +1726,8 @@ sal_Bool SfxDocumentTemplates::DeleteObjectShell
 */
 
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( ! pImp->Construct() )
         return sal_True;
 
@@ -1700,6 +1773,8 @@ sal_Bool SfxDocumentTemplates::GetFull
 */
 
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     // We don't search for empty names!
     if ( ! rName.Len() )
         return sal_False;
@@ -1759,6 +1834,8 @@ sal_Bool SfxDocumentTemplates::GetLogicNames
 */
 
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     if ( ! pImp->Construct() )
         return sal_False;
 
@@ -1862,6 +1939,8 @@ void SfxDocumentTemplates::ReInitFromComponent()
 
 sal_Bool SfxDocumentTemplates::HasUserContents( sal_uInt16 nRegion, sal_uInt16 nIdx ) const
 {
+    DocTemplLocker_Impl aLocker( *pImp );
+
     sal_Bool bResult = sal_False;
 
     RegionData_Impl* pRegion = pImp->GetRegion( nRegion );
@@ -2301,8 +2380,9 @@ int RegionData_Impl::Compare( RegionData_Impl* pCompare ) const
 // -----------------------------------------------------------------------
 
 SfxDocTemplate_Impl::SfxDocTemplate_Impl()
+: mbConstructed( sal_False )
+, mnLockCounter( 0 )
 {
-    mbConstructed = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -2311,6 +2391,21 @@ SfxDocTemplate_Impl::~SfxDocTemplate_Impl()
     Clear();
 
     gpTemplateData = NULL;
+}
+
+// -----------------------------------------------------------------------
+void SfxDocTemplate_Impl::IncrementLock()
+{
+    ::osl::MutexGuard aGuard( maMutex );
+    mnLockCounter++;
+}
+
+// -----------------------------------------------------------------------
+void SfxDocTemplate_Impl::DecrementLock()
+{
+    ::osl::MutexGuard aGuard( maMutex );
+    if ( mnLockCounter )
+        mnLockCounter--;
 }
 
 // -----------------------------------------------------------------------
@@ -2697,6 +2792,10 @@ sal_Bool SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL,
 // -----------------------------------------------------------------------
 void SfxDocTemplate_Impl::Clear()
 {
+    ::osl::MutexGuard   aGuard( maMutex );
+    if ( mnLockCounter )
+        return;
+
     RegionData_Impl *pRegData = maRegions.First();
 
     while ( pRegData )
