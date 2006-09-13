@@ -4,9 +4,9 @@
  *
  *  $RCSfile: share.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-03 17:35:41 $
+ *  last change: $Author: obo $ $Date: 2006-09-13 11:02:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,8 @@
 
 namespace CPPU_CURRENT_NAMESPACE
 {
+
+bool isSimpleReturnType(typelib_TypeDescription * pTD);
 
 void dummy_can_throw_anything( char const * );
 
