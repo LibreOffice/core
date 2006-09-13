@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:59:42 $
+ *  last change: $Author: obo $ $Date: 2006-09-13 11:35:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -660,6 +660,10 @@ void ViewShell::ChgAllPageOrientation( USHORT eOri )
         if( rOld.GetLandscape() != bNewOri )
         {
             SwPageDesc aNew( rOld );
+            const sal_Bool bDoesUndo( GetDoc()->DoesUndo() );
+            GetDoc()->DoUndo( sal_False );
+            GetDoc()->CopyPageDesc(rOld, aNew);
+            GetDoc()->DoUndo( bDoesUndo );
             aNew.SetLandscape( bNewOri );
             SwFrmFmt& rFmt = aNew.GetMaster();
             SwFmtFrmSize aSz( rFmt.GetFrmSize() );
@@ -697,13 +701,15 @@ void ViewShell::ChgAllPageSize( Size &rSz )
 
     for( USHORT i = 0; i < nAll; ++i )
     {
-        // Fuer WIN95 als Pointer anlegen! (falsche Optimierung!!)
-        SwPageDesc* pNew =
-            new SwPageDesc( const_cast<const SwDoc *>(pDoc)->
-                            GetPageDesc( i ) );
-        SwFrmFmt& rPgFmt = pNew->GetMaster();
+        const SwPageDesc &rOld = const_cast<const SwDoc *>(pDoc)->GetPageDesc( i );
+        SwPageDesc aNew( rOld );
+        const sal_Bool bDoesUndo( GetDoc()->DoesUndo() );
+        GetDoc()->DoUndo( sal_False );
+        GetDoc()->CopyPageDesc( rOld, aNew );
+        GetDoc()->DoUndo( bDoesUndo );
+        SwFrmFmt& rPgFmt = aNew.GetMaster();
         Size aSz( rSz );
-        const BOOL bOri = pNew->GetLandscape();
+        const BOOL bOri = aNew.GetLandscape();
         if( bOri  ? aSz.Height() > aSz.Width()
                   : aSz.Height() < aSz.Width() )
         {
@@ -715,8 +721,7 @@ void ViewShell::ChgAllPageSize( Size &rSz )
         SwFmtFrmSize aFrmSz( rPgFmt.GetFrmSize() );
         aFrmSz.SetSize( aSz );
         rPgFmt.SetAttr( aFrmSz );
-        pDoc->ChgPageDesc( i, *pNew );
-        delete pNew;
+        pDoc->ChgPageDesc( i, aNew );
     }
 }
 
