@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.219 $
+ *  $Revision: 1.220 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:28:25 $
+ *  last change: $Author: obo $ $Date: 2006-09-13 10:54:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2686,8 +2686,8 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         // find the best matching logical font family and update font selector accordingly
         pFontFamily = pFontList->ImplFindByFont( aFontSelData, mbPrinter, pDevSpecific );
         DBG_ASSERT( (pFontFamily != NULL), "ImplFontCache::Get() No logical font found!" );
-    if( pFontFamily )
-        aFontSelData.maSearchName = pFontFamily->GetSearchName();
+        if( pFontFamily )
+            aFontSelData.maSearchName = pFontFamily->GetSearchName();
 
         // check if an indirectly matching logical font instance is already cached
         FontInstanceList::iterator it = maFontInstanceList.find( aFontSelData );
@@ -2766,23 +2766,29 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
         if( (rFSD.meWeight > WEIGHT_MEDIUM)
         &&  aSearchName.EqualsAscii( "hg", 0, 2) )
         {
-            const FontWeight eWeight = rFSD.meWeight;
-            rFSD.meWeight = WEIGHT_DONTKNOW;    // prevent synthetic emboldening
+            String aBoldName;
             if( aSearchName.EqualsAscii( "hggothicb", 0, 9) )
-                aSearchName = String(RTL_CONSTASCII_USTRINGPARAM("hggothice"));
+                aBoldName = String(RTL_CONSTASCII_USTRINGPARAM("hggothice"));
             else if( aSearchName.EqualsAscii( "hgpgothicb", 0, 10) )
-                aSearchName = String(RTL_CONSTASCII_USTRINGPARAM("hgpgothice"));
+                aBoldName = String(RTL_CONSTASCII_USTRINGPARAM("hgpgothice"));
             else if( aSearchName.EqualsAscii( "hgminchol", 0, 9) )
-                aSearchName = String(RTL_CONSTASCII_USTRINGPARAM("hgminchob"));
+                aBoldName = String(RTL_CONSTASCII_USTRINGPARAM("hgminchob"));
             else if( aSearchName.EqualsAscii( "hgpminchol", 0, 10) )
-                aSearchName = String(RTL_CONSTASCII_USTRINGPARAM("hgpminchob"));
+                aBoldName = String(RTL_CONSTASCII_USTRINGPARAM("hgpminchob"));
             else if( aSearchName.EqualsAscii( "hgminchob" ) )
-                aSearchName = String(RTL_CONSTASCII_USTRINGPARAM("hgminchoe"));
+                aBoldName = String(RTL_CONSTASCII_USTRINGPARAM("hgminchoe"));
             else if( aSearchName.EqualsAscii( "hgpminchob" ) )
-                aSearchName = String(RTL_CONSTASCII_USTRINGPARAM("hgpminchoe"));
-            else // restore font weight
-                rFSD.meWeight = eWeight;
+                aBoldName = String(RTL_CONSTASCII_USTRINGPARAM("hgpminchoe"));
+
+            if( aBoldName.Len() && ImplFindBySearchName( aBoldName ) )
+            {
+                // the other font is available => use it
+                aSearchName = aBoldName;
+                // prevent synthetic emboldening of bold version
+                rFSD.meWeight = WEIGHT_DONTKNOW;
+            }
         }
+
         ImplDevFontListData* pFoundData = ImplFindBySearchName( aSearchName );
         if( pFoundData )
             return pFoundData;
