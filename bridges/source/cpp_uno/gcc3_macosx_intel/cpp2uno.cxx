@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 12:04:16 $
+ *  last change: $Author: obo $ $Date: 2006-09-13 11:02:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,22 +76,15 @@ void cpp2uno_call(
 
     if (pReturnTypeDescr)
     {
-        if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
+        // xxx todo: test PolyStructy<STRUCT<long>> foo()
+        if (CPPU_CURRENT_NAMESPACE::isSimpleReturnType( pReturnTypeDescr ))
         {
             pUnoReturn = pReturnValue; // direct way for simple types
         }
         else // complex return via ptr (pCppReturn)
         {
-//            if (pReturnTypeDescr->nSize > 8) {
-                pCppReturn = *(void **)pCppStack;
-                pCppStack += sizeof(void *);
-/*           }
-            else {
-                // return value expected in eax[/edx] which are filled from mem
-                // referenced by pReturnValue:
-                pCppReturn = pReturnValue;
-            }
-*/
+            pCppReturn = *(void **)pCppStack;
+            pCppStack += sizeof(void *);
             pUnoReturn = (bridges::cpp_uno::shared::relatesToInterfaceType(
                               pReturnTypeDescr )
                           ? alloca( pReturnTypeDescr->nSize )
@@ -131,6 +124,8 @@ void cpp2uno_call(
             case typelib_TypeClass_UNSIGNED_HYPER:
             case typelib_TypeClass_DOUBLE:
                 pCppStack += sizeof(sal_Int32); // extra long
+            default:
+                break;
             }
             // no longer needed
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
@@ -403,35 +398,25 @@ unsigned char * codeSnippet(
         case typelib_TypeClass_DOUBLE:
             exec = privateSnippetExecutorDouble;
             break;
-        case typelib_TypeClass_STRING:
-        case typelib_TypeClass_TYPE:
-        case typelib_TypeClass_SEQUENCE:
-        case typelib_TypeClass_INTERFACE:
-/*            // return value returned via register eax
-            BOOST_STATIC_ASSERT(
-                sizeof (rtl::OUString) == 4 &&
-                sizeof (com::sun::star::uno::Type) == 4 &&
-                sizeof (com::sun::star::uno::Reference<
-                        com::sun::star::uno::XInterface>) == 4 &&
-                sizeof (com::sun::star::uno::Sequence<sal_Int32>) == 4 );
-            exec = privateSnippetExecutorGeneral; // fills eax
-            break;
-*/
         case typelib_TypeClass_STRUCT:
-        case typelib_TypeClass_EXCEPTION:
-/* {
+        case typelib_TypeClass_EXCEPTION: {
             typelib_TypeDescription * pReturnTypeDescr = 0;
             TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
+            bool const bSimpleReturnStruct =
+                CPPU_CURRENT_NAMESPACE::isSimpleReturnType(pReturnTypeDescr);
             sal_Int32 const nRetSize = pReturnTypeDescr->nSize;
             TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
-            if (nRetSize <= 8) {
+            if (bSimpleReturnStruct && nRetSize <= 8) {
                 exec = privateSnippetExecutorGeneral; // fills eax
                 if (nRetSize > 4)
                     exec = privateSnippetExecutorHyper; // fills eax/edx
                 break;
             }
         }
-*/
+        case typelib_TypeClass_STRING:
+        case typelib_TypeClass_TYPE:
+        case typelib_TypeClass_SEQUENCE:
+        case typelib_TypeClass_INTERFACE:
         case typelib_TypeClass_ANY:
             functionIndex |= 0x80000000;
             exec = privateSnippetExecutorClass;
@@ -483,7 +468,7 @@ void ** bridges::cpp_uno::shared::VtableFactory::initializeBlock(void * block) {
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     void ** slots, unsigned char * code,
     typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
-    sal_Int32 functionCount, sal_Int32 vtableOffset)
+    sal_Int32 /*functionCount*/, sal_Int32 vtableOffset)
 {
     for (sal_Int32 i = 0; i < type->nMembers; ++i) {
         typelib_TypeDescription * member = 0;
