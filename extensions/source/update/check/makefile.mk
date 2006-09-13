@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-04 09:55:59 $
+#   last change: $Author: obo $ $Date: 2006-09-13 11:25:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -112,5 +112,6 @@ $(SPOOLDIR)$/$(PACKAGEDIR)$/Addons$/Addons-onlineupdate.xcu : $(PROCESSOUT)$/mer
 
 $(SPOOLDIR)$/$(PACKAGEDIR)$/Jobs$/Jobs-onlineupdate.xcu : $(PROCESSOUT)$/merge$/$(PACKAGEDIR)$/Jobs.xcu
     @$(MKDIRHIER) $(@:d)
-    @+$(COPY) $< $@
+    @+$(PERL) transform.pl < $< > $@
+#	@+$(COPY) $< $@
 
