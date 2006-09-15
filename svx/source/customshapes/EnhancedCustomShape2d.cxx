@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-03 13:32:46 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:05:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,10 @@
 #ifndef _RTL_CRC_H_
 #include <rtl/crc.h>
 #endif
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
+#endif
+
 #ifndef SVX_XFILLIT0_HXX
 #include <xfillit0.hxx>
 #endif
@@ -1292,6 +1296,8 @@ double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex )
         try
         {
             fNumber = (*vNodesSharedPtr[ nIndex ])();
+            if ( !rtl::math::isFinite( fNumber ) )
+                fNumber = 0.0;
         }
         catch ( ... )
         {
