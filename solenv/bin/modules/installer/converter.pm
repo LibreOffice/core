@@ -4,9 +4,9 @@
 #
 #   $RCSfile: converter.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-09 09:09:25 $
+#   last change: $Author: obo $ $Date: 2006-09-15 14:35:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,33 @@ sub convert_stringlist_into_array
 
     if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $last =~ s/\//\\/g; }
     push(@newarray, "$last\n");
+
+    return \@newarray;
+}
+
+#############################################################################
+# Converting a string list with separator $listseparator
+# into an array
+#############################################################################
+
+sub convert_stringlist_into_array_without_newline
+{
+    my ( $includestringref, $listseparator ) = @_;
+
+    my @newarray = ();
+    my $first;
+    my $last = ${$includestringref};
+
+    while ( $last =~ /^\s*(.+?)\Q$listseparator\E(.+)\s*$/) # "$" for minimal matching
+    {
+        $first = $1;
+        $last = $2;
+        if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $first =~ s/\//\\/g; }
+        push(@newarray, "$first");
+    }
+
+    if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $last =~ s/\//\\/g; }
+    push(@newarray, "$last");
 
     return \@newarray;
 }
