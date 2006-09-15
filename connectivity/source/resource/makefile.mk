@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 02:09:36 $
+#   last change: $Author: obo $ $Date: 2006-09-15 13:54:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 PRJ=..$/..
 PRJINC=..
 PRJNAME=connectivity
-TARGET=$(SHARED_RES_TARGET)
+TARGET=cnr
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -44,6 +44,8 @@ ENABLE_EXCEPTIONS=TRUE
 .IF "$(DBGUTIL_OJ)"!=""
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
+
+CDEFS+=-DCONN_SHARED_RESOURCE_FILE=$(TARGET)
 
 .INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/version.mk
