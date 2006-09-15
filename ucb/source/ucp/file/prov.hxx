@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prov.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:29:41 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 14:34:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@
 #ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
@@ -90,6 +93,7 @@ namespace fileaccess {
     class FileProvider:
         public cppu::OWeakObject,
         public com::sun::star::lang::XServiceInfo,
+        public com::sun::star::lang::XInitialization,
         public com::sun::star::lang::XTypeProvider,
         public com::sun::star::ucb::XContentProvider,
         public com::sun::star::ucb::XContentIdentifierFactory,
@@ -146,6 +150,12 @@ namespace fileaccess {
         // XTypeProvider
 
         XTYPEPROVIDER_DECL()
+
+        // XInitialization
+        virtual void SAL_CALL
+        initialize(
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
+            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
 
         // XContentProvider
@@ -241,6 +251,7 @@ namespace fileaccess {
 
     private:
         // methods
+        void SAL_CALL init();
 
         // Members
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >  m_xMultiServiceFactory;
