@@ -1,9 +1,12 @@
 
 # executables are *.exe for WNT. This variable is necessary since Cygwin 1.5.x
+# Use spawn instead of fork when building dmake on cygwin. 
 if test "$GUI" = "WNT"; then
   EXEEXT=".exe"
+  DMAKE_CONF="--enable-spawn"
 else
   EXEEXT=""
+  DMAKE_CONF=""
 fi
 export EXEEXT
 
@@ -30,7 +33,7 @@ if test "$BUILD_DMAKE" != "NO"; then
     $GNUMAKE distclean || exit
   fi
 
-  ./configure || exit
+  ./configure $DMAKE_CONF || exit
 
   ## invoke the gnu make command set by configure.
   $GNUMAKE || exit
@@ -54,6 +57,18 @@ if test "$BUILD_DMAKE" != "NO"; then
   cp -f "$SRC_ROOT/dmake/dmake$EXEEXT" "$SOLARENV/$OUTPATH/bin" || exit
   echo ""
   echo "dmake copied to $SOLARENV/$OUTPATH/bin/dmake$EXEEXT"
+fi
+
+if test "$GUI" = "WNT" -a ! -x "$SOLARENV/$OUTPATH/bin/guw$EXEEXT"; then
+  echo ""
+  echo "Calling $GNUMAKE in guw"
+  cd "$SRC_ROOT/config_office/guw" || exit
+  $GNUMAKE || exit
+  echo ""
+  echo "guw has been successfully made"
+  cp -f "$SRC_ROOT/config_office/guw/guw$EXEEXT" "$SOLARENV/$OUTPATH/bin" || exit
+  echo ""
+  echo "guw copied to $SOLARENV/$OUTPATH/bin/guw$EXEEXT"
 fi
 
 #make sure build.pl is executable 
