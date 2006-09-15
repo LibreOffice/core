@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:54:22 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:57:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -312,7 +312,8 @@ void SwListShell::GetState(SfxItemSet &rSet)
             break;
             case FN_NUM_BULLET_OUTLINE_DOWN :
             {
-                sal_uInt8 nUpper, nLower;
+                sal_uInt8 nUpper = 0;
+                sal_uInt8 nLower = 0;
                 rSh.GetCurrentOutlineLevels( nUpper, nLower );
                 if(nLower == (MAXLEVEL - 1))
                     rSet.DisableItem(nWhich);
