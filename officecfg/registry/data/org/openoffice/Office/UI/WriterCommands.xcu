@@ -1416,8 +1416,8 @@
             </node>
             <node oor:name=".uno:DecrementLevel" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Eine Ebene runter</value>
-                    <value xml:lang="en-US">Down One Level</value>
+                    <value xml:lang="de">Eine Ebene niedriger verschieben</value>
+                    <value xml:lang="en-US">Demote One Level</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>7</value>
@@ -1431,8 +1431,8 @@
             </node>
             <node oor:name=".uno:IncrementLevel" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Eine Ebene hoch</value>
-                    <value xml:lang="en-US">Up One Level</value>
+                    <value xml:lang="de">Eine Ebene höher verschieben</value>
+                    <value xml:lang="en-US">Promote One Level</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>7</value>
@@ -1554,8 +1554,8 @@
             </node>
             <node oor:name=".uno:DecrementSubLevels" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Mit Unterpunkten runter</value>
-                    <value xml:lang="en-US">Move Down with Subpoints</value>
+                    <value xml:lang="de">Eine Ebene mit Unterpunkten niedriger verschieben</value>
+                    <value xml:lang="en-US">Demote One Level With Subpoints</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>7</value>
@@ -1569,8 +1569,8 @@
             </node>
             <node oor:name=".uno:IncrementSubLevels" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Mit Unterpunkten hoch</value>
-                    <value xml:lang="en-US">Move Up with Subpoints</value>
+                    <value xml:lang="de">Eine Ebene mit Unterpunkten höher verschieben</value>
+                    <value xml:lang="en-US">Promote One Level With Subpoints</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>7</value>
