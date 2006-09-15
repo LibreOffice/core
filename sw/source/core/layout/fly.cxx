@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:25:34 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:42:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -744,6 +744,9 @@ BOOL SwFlyFrm::FrmSizeChg( const SwFmtFrmSize &rFrmSize )
             const SwTwips nDiffWidth = Frm().Width() - rFrmSize.GetWidth();
             aFrm.Height( aFrm.Height() - nDiffHeight );
             aFrm.Width ( aFrm.Width()  - nDiffWidth  );
+            // --> OD 2006-08-16 #i68520#
+            InvalidateObjRectWithSpaces();
+            // <--
             aPrt.Height( aPrt.Height() - nDiffHeight );
             aPrt.Width ( aPrt.Width()  - nDiffWidth  );
             ChgLowersProp( aOldSz );
@@ -799,9 +802,19 @@ void SwFlyFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
     {
         _Invalidate();
         if ( nInvFlags & 0x01 )
+        {
             _InvalidatePos();
+            // --> OD 2006-08-16 #i68520#
+            InvalidateObjRectWithSpaces();
+            // <--
+        }
         if ( nInvFlags & 0x02 )
+        {
             _InvalidateSize();
+            // --> OD 2006-08-16 #i68520#
+            InvalidateObjRectWithSpaces();
+            // <--
+        }
         if ( nInvFlags & 0x04 )
             _InvalidatePrt();
         if ( nInvFlags & 0x08 )
@@ -1317,8 +1330,13 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
     if ( !bValidSize )
     {
         if ( Frm().Top() == WEIT_WECH && Frm().Left() == WEIT_WECH )
+        {
             //Sicherheitsschaltung wegnehmen (siehe SwFrm::CTor)
             Frm().Pos().X() = Frm().Pos().Y() = 0;
+            // --> OD 2006-08-16 #i68520#
+            InvalidateObjRectWithSpaces();
+            // <--
+        }
 
         //Breite der Spalten pruefen und ggf. einstellen.
         if ( Lower() && Lower()->IsColumnFrm() )
@@ -1416,6 +1434,12 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
             (Prt().*fnRect->fnSetHeight)( nRemaining );
             nRemaining -= (Frm().*fnRect->fnGetHeight)();
             (Frm().*fnRect->fnAddBottom)( nRemaining + nUL );
+            // --> OD 2006-08-16 #i68520#
+            if ( nRemaining + nUL != 0 )
+            {
+                InvalidateObjRectWithSpaces();
+            }
+            // <--
             bValidSize = TRUE;
         }
         else
@@ -1429,6 +1453,12 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
             (Prt().*fnRect->fnSetHeight)( nNewSize );
             nNewSize += nUL - (Frm().*fnRect->fnGetHeight)();
             (Frm().*fnRect->fnAddBottom)( nNewSize );
+            // --> OD 2006-08-16 #i68520#
+            if ( nNewSize != 0 )
+            {
+                InvalidateObjRectWithSpaces();
+            }
+            // <--
         }
 
         if ( !bFormatHeightOnly )
@@ -1456,6 +1486,12 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
             (Prt().*fnRect->fnSetWidth)( nNewSize );
             nNewSize += nLR - (Frm().*fnRect->fnGetWidth)();
             (Frm().*fnRect->fnAddRight)( nNewSize );
+            // --> OD 2006-08-16 #i68520#
+            if ( nNewSize != 0 )
+            {
+                InvalidateObjRectWithSpaces();
+            }
+            // <--
         }
     }
     ColUnlock();
@@ -1786,6 +1822,9 @@ void SwFlyFrm::MakeObjPos()
         SWRECTFN( GetAnchorFrm() );
         aFrm.Pos( aObjPositioning.GetRelPos() );
         aFrm.Pos() += (GetAnchorFrm()->Frm().*fnRect->fnGetPos)();
+        // --> OD 2006-09-11 #i69335#
+        InvalidateObjRectWithSpaces();
+        // <--
     }
 }
 
@@ -1928,6 +1967,12 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, BOOL bTst )
             {
                 SwRect aOld( GetObjRectWithSpaces() );
                 (Frm().*fnRect->fnSetHeight)( nHeight - nVal );
+                // --> OD 2006-08-16 #i68520#
+                if ( nHeight - nVal != 0 )
+                {
+                    InvalidateObjRectWithSpaces();
+                }
+                // <--
                 nHeight = (Prt().*fnRect->fnGetHeight)();
                 (Prt().*fnRect->fnSetHeight)( nHeight - nVal );
                 _InvalidatePos();
@@ -2701,6 +2746,9 @@ SwVirtFlyDrawObj* SwFlyFrm::GetVirtDrawObj()
 void SwFlyFrm::InvalidateObjPos()
 {
     InvalidatePos();
+    // --> OD 2006-08-10 #i68520#
+    InvalidateObjRectWithSpaces();
+    // <--
 }
 
 SwFrmFmt& SwFlyFrm::GetFrmFmt()
@@ -2720,14 +2768,25 @@ const SwRect SwFlyFrm::GetObjRect() const
 {
     return Frm();
 }
-void SwFlyFrm::SetObjTop( const SwTwips _nTop )
+
+// --> OD 2006-08-10 #i68520#
+const bool SwFlyFrm::_SetObjTop( const SwTwips _nTop )
 {
+    const bool bChanged( Frm().Pos().Y() != _nTop );
+
     Frm().Pos().Y() = _nTop;
+
+    return bChanged;
 }
-void SwFlyFrm::SetObjLeft( const SwTwips _nLeft )
+const bool SwFlyFrm::_SetObjLeft( const SwTwips _nLeft )
 {
+    const bool bChanged( Frm().Pos().X() != _nLeft );
+
     Frm().Pos().X() = _nLeft;
+
+    return bChanged;
 }
+// <--
 
 /** method to assure that anchored object is registered at the correct
     page frame
