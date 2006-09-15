@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doccorr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:56:01 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:52:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,14 +64,6 @@
 #endif
 #ifndef _UNOCRSR_HXX
 #include <unocrsr.hxx>
-#endif
-
-#ifndef _TEMPAUTO_HXX
-#include <tempauto.hxx>     // temporaere Autokorrektur
-#endif
-
-#ifndef _SWUNDOTEMPAUTOCORR_HXX
-#include <SwUndoTempAutoCorr.hxx>
 #endif
 
 #ifndef _SWUNDO_HXX
@@ -600,36 +592,4 @@ SwEditShell* SwDoc::GetEditShell( ViewShell** ppSh ) const
     return 0;
 }
 
-// #102505# ->
-void SwDoc::AppendTmpCorr(const String & aWrong, const String & aCorrect)
-{
-    if( !pTempAuto )
-        pTempAuto = new SwTempAuto();
 
-    if (DoesUndo())
-    {
-        SwUndoTempAutoCorr * pUndo =
-            new SwUndoTempAutoCorr(UNDO_TMPAUTOCORR, *pTempAuto, aWrong,
-                                   aCorrect);
-        ASSERT(pUndo != NULL,
-               "Creating SwUndoTempAutoCorr failed!");
-        AppendUndo(pUndo);
-    }
-    else
-    {
-        SwCorrection* pCorr =
-            new SwCorrection( aWrong );
-
-        pCorr->Correct() = aCorrect;
-
-        pTempAuto->Insert( pCorr );
-    }
-
-}
-
-void SwDoc::RemoveTmpCorr(const String & aWrong)
-{
-    if (pTempAuto)
-        pTempAuto->Delete(aWrong);
-}
-// <- #102505#
