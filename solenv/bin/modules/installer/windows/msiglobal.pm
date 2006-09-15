@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 18:51:25 $
+#   last change: $Author: obo $ $Date: 2006-09-15 14:36:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1057,6 +1057,14 @@ sub copy_child_projects_into_installset
     {
         $sourcefile = $installer::globals::adafile->{'sourcepath'};
         $destdir = $installdir . $installer::globals::separator . $installer::globals::adafile->{'Subdir'};
+        if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
+        installer::systemactions::copy_one_file($sourcefile, $destdir);
+    }
+
+    if ( $allvariables->{'UREPRODUCT'} )
+    {
+        $sourcefile = $installer::globals::urefile->{'sourcepath'};
+        $destdir = $installdir . $installer::globals::separator . $installer::globals::urefile->{'Subdir'};
         if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
         installer::systemactions::copy_one_file($sourcefile, $destdir);
     }
