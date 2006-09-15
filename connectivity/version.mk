@@ -4,9 +4,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-29 12:13:12 $
+#   last change: $Author: obo $ $Date: 2006-09-15 13:53:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,6 @@ ADO_MINOR=0
 # the micro 
 ADO_MICRO=0
 
-# this is a c++ compatible library 
-ADO_CPP=1
-
-ADO=$(ADO_TARGET_TARGET)_$(CMPEXT)
 
 # ----------------------------ODBC BASE settings-----------------------------------#
 # target
@@ -60,10 +56,6 @@ ODBC2_MINOR=0
 # the micro 
 ODBC2_MICRO=0
 
-# this is a c++ compatible library 
-ODBC2_CPP=1
-
-ODBC2=$(ODBC2_TARGET_TARGET)_$(CMPEXT)
 
 # ----------------------------ODBC settings-----------------------------------#
 # target
@@ -76,10 +68,6 @@ ODBC_MINOR=0
 # the micro 
 ODBC_MICRO=0
 
-# this is a c++ compatible library 
-ODBC_CPP=1
-
-ODBC=$(ODBC_TARGET_TARGET)_$(CMPEXT)
 
 # ----------------------------JDBC settings-----------------------------------#
 # target
@@ -92,10 +80,6 @@ JDBC_MINOR=0
 # the micro 
 JDBC_MICRO=0
 
-# this is a c++ compatible library 
-JDBC_CPP=1
-
-JDBC=$(JDBC_TARGET_TARGET)_$(CMPEXT)
 
 # ----------------------------ADABAS settings-----------------------------------#
 # target
@@ -108,10 +92,6 @@ ADABAS_MINOR=0
 # the micro 
 ADABAS_MICRO=0
 
-# this is a c++ compatible library 
-ADABAS_CPP=1
-
-ADABAS=$(ADABAS_TARGET_TARGET)_$(CMPEXT)
 
 # ----------------------------dbtools settings-----------------------------------#
 # target
@@ -124,15 +104,6 @@ DBTOOLS_MINOR=0
 # the micro 
 DBTOOLS_MICRO=0
 
-# this is a c++ compatible library 
-DBTOOLS_CPP=1
-
-DBTOOLS=$(DBTOOLS_TARGET_TARGET)_$(CMPEXT)
-
-# ----------------------------conn/res settings-----------------------------------#
-# target
-SHARED_RES_TARGET=cnr
-CDEFS+=-DCONN_SHARED_RESOURCE_FILE=$(SHARED_RES_TARGET)
 
 # -----------------------DRIVER MANAGER settings--------------------------------#
 # target
@@ -145,10 +116,6 @@ SDBC_MINOR=0
 # the micro 
 SDBC_MICRO=0
 
-# this is a c++ compatible library 
-SDBC_CPP=1
-
-SDBC=$(SDBC_TARGET_TARGET)_$(CMPEXT)
 
 # -----------------------Connection Pool settings--------------------------------#
 # target
@@ -161,10 +128,6 @@ DBPOOL_MINOR=0
 # the micro 
 DBPOOL_MICRO=0
 
-# this is a c++ compatible library 
-DBPOOL_CPP=1
-
-DBPOOL=$(DBPOOL_TARGET_TARGET)_$(CMPEXT)
 
 # ----------------------------DBASE settings-----------------------------------#
 # target
@@ -177,17 +140,10 @@ DBASE_MINOR=0
 # the micro 
 DBASE_MICRO=0
 
-# this is a c++ compatible library 
-DBASE_CPP=1
-
-DBASE=$(DBASE_TARGET_TARGET)_$(CMPEXT)
 
 
 
 # ----------------------------MOZAB settings-----------------------------------#
-# target
-MOZAB_TARGET=mozab
-
 # the major 
 MOZAB_MAJOR=2
 # the minor 
@@ -195,10 +151,6 @@ MOZAB_MINOR=0
 # the micro 
 MOZAB_MICRO=0
 
-# this is a c++ compatible library 
-MOZAB_CPP=1
-
-MOZAB=$(MOZAB_TARGET_TARGET)_$(CMPEXT)
 
 
 # ----------------------------MySQL settings-----------------------------------#
@@ -212,10 +164,6 @@ MYSQL_MINOR=0
 # the micro 
 MYSQL_MICRO=0
 
-# this is a c++ compatible library 
-MYSQL_CPP=1
-
-MYSQL=$(MYSQL_TARGET_TARGET)_$(CMPEXT)
 
 # ----------------------------Evoab settings-----------------------------------#
 # target
@@ -228,10 +176,6 @@ EVOAB_MINOR=0
 # the micro 
 EVOAB_MICRO=0
 
-# this is a c++ compatible library 
-EVOAB_CPP=1
-
-EVOAB=$(EVOAB_TARGET_TARGET)_$(CMPEXT)
 
 # ----------------------------Kab settings-------------------------------------#
 # target
@@ -244,10 +188,6 @@ KAB_MINOR=0
 # the micro 
 KAB_MICRO=0
 
-# this is a c++ compatible library 
-KAB_CPP=1
-
-KAB=$(KAB_TARGET_TARGET)_$(CMPEXT)
 
 # ----------------------------HSQLDB settings-----------------------------------#
 # target
@@ -260,7 +200,3 @@ HSQLDB_MINOR=0
 # the micro 
 HSQLDB_MICRO=0
 
-# this is a c++ compatible library 
-HSQLDB_CPP=1
-
-HSQLDB=$(HSQLDB_TARGET_TARGET)_$(CMPEXT)
