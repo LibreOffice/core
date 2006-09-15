@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-29 11:08:31 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 14:34:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,8 +232,9 @@ shell::MyProperty::~MyProperty()
 
 
 shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceFactory,
-              FileProvider* pProvider )
+              FileProvider* pProvider, sal_Bool bWithConfig )
     : TaskManager(),
+      m_bWithConfig( bWithConfig ),
       m_pProvider( pProvider ),
       m_xMultiServiceFactory( xMultiServiceFactory ),
       Title( rtl::OUString::createFromAscii( "Title" ) ),
@@ -454,13 +455,18 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
     m_sCommandInfo[7].Handle = -1;
     m_sCommandInfo[7].ArgType = getCppuType( static_cast< InsertCommandArgument* > ( 0 ) );
 
-    rtl::OUString Store = rtl::OUString::createFromAscii( "com.sun.star.ucb.Store" );
-    uno::Reference< XPropertySetRegistryFactory > xRegFac( m_xMultiServiceFactory->createInstance( Store ),
-                                                           uno::UNO_QUERY );
-    if ( xRegFac.is() )
+
+    if(m_bWithConfig)
     {
-        // Open/create a registry
-        m_xFileRegistry = xRegFac->createPropertySetRegistry( rtl::OUString() );
+        rtl::OUString Store = rtl::OUString::createFromAscii( "com.sun.star.ucb.Store" );
+        uno::Reference< XPropertySetRegistryFactory > xRegFac(
+            m_xMultiServiceFactory->createInstance( Store ),
+            uno::UNO_QUERY );
+        if ( xRegFac.is() )
+        {
+            // Open/create a registry
+            m_xFileRegistry = xRegFac->createPropertySetRegistry( rtl::OUString() );
+        }
     }
 }
 
@@ -616,7 +622,8 @@ shell::deassociate( const rtl::OUString& aUnqPath,
             it->second.xS = 0;
             it->second.xC = 0;
             it->second.xA = 0;
-            m_xFileRegistry->removePropertySet( aUnqPath );
+            if(m_xFileRegistry.is())
+                m_xFileRegistry->removePropertySet( aUnqPath );
         }
     }
     notifyPropertyRemoved( getPropertySetListeners( aUnqPath ), PropertyName );
@@ -2935,6 +2942,7 @@ shell::erasePersistentSet( const rtl::OUString& aUnqPath,
     if( ! m_xFileRegistry.is() )
     {
         VOS_ASSERT( m_xFileRegistry.is() );
+        return;
     }
 
     uno::Sequence< rtl::OUString > seqNames;
@@ -2997,6 +3005,7 @@ shell::copyPersistentSet( const rtl::OUString& srcUnqPath,
     if( ! m_xFileRegistry.is() )
     {
         VOS_ASSERT( m_xFileRegistry.is() );
+        return;
     }
 
     uno::Sequence< rtl::OUString > seqNames;
