@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-11 11:42:27 $
+#   last change: $Author: obo $ $Date: 2006-09-15 13:59:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,13 @@ PRJ=..$/..$/..$/..$/..$/..
 
 PRJNAME=officecfg
 TARGET=data_ooOUI
+PACKAGE=org.openoffice.Office.UI
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Targets ------------------------------------------------------
 
-PACKAGE=org.openoffice.Office.UI
 
 XCUFILES= \
     Controller.xcu \
@@ -73,7 +73,6 @@ XCUFILES= \
     WriterGlobalWindowState.xcu \
     WriterWebWindowState.xcu \
     WriterCommands.xcu\
-    Effects.xcu \
     GenericCategories.xcu \
     GlobalSettings.xcu
 
@@ -104,7 +103,6 @@ LOCALIZEDFILES= \
     WriterGlobalWindowState.xcu \
     WriterWebWindowState.xcu \
     WriterCommands.xcu\
-    Effects.xcu \
     GenericCategories.xcu
 
 .INCLUDE :  target.mk
