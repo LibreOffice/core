@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_merge.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:46:26 $
+#   last change: $Author: obo $ $Date: 2006-09-15 13:58:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ $(foreach,i,$(XMLPROPERTIES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sd
 
 # *.xrm merge
 .IF "$(READMEFILES)"!=""
-$(foreach,i,$(READMEFILES) $(COMMONMISC)$/$(TARGET)$/$(i:b).xrm) : $$(@:f) localize.sdf 
+$(uniq $(foreach,i,$(READMEFILES) $(COMMONMISC)$/$(TARGET)$/$(i:b).xrm)) : $$(@:f) localize.sdf
 .ENDIF          # "$(ULFFILES)"!=""
 
 # *.xcu merge
