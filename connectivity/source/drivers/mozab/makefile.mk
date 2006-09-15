@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-21 13:17:39 $
+#   last change: $Author: obo $ $Date: 2006-09-15 13:53:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,8 @@
 PRJ=..$/..$/..
 PRJINC=..$/..
 PRJNAME=connectivity
-TARGET=$(MOZAB_TARGET)
-TARGET2=$(MOZAB_TARGET)drv
+TARGET=mozab
+TARGET2=$(TARGET)drv
 
 .IF ( "$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO"
 all: 
@@ -67,10 +67,10 @@ MOZ_REG_LIB := $(MOZ_LIB)$/mozreg.lib
 .ENDIF
 .ENDIF
 
-.IF "$(OS)"=="WNT" 
+.IF "$(COM)"=="MSC" 
 LIB += $(MOZ_LIB)
 MOZ_LIB_XPCOM= $(MOZ_EMBED_LIB) $(MOZ_LIB)$/nspr4.lib $(MOZ_REG_LIB) $(MOZ_LIB)$/xpcom.lib
-.ELSE "$(OS)"=="WNT" 
+.ELSE "$(COM)"=="MSC" 
 MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lembed_base_s -lnspr4 -lmozreg_s -lxpcom
 .ENDIF
 #End of mozilla specific stuff.
@@ -78,10 +78,8 @@ MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lembed_base_s -lnspr4 -lmozreg_s -lxpcom
 # Disable '-z defs' due to broken libxpcom.
 LINKFLAGSDEFS=$(0)
 
-USE_LDUMP2=TRUE
 USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
-LDUMP=ldump2.exe
 
 # --- Settings ----------------------------------
 
@@ -162,6 +160,8 @@ SLO2FILES=\
         $(SLO)$/MConnection.obj					\
         $(MOZSLOFILES)
 
+DEPOBJFILES=$(SLO2FILES)
+
 # --- MOZAB BASE Library -----------------------------------
 
 SHL2VERSIONMAP= $(TARGET2).map
@@ -193,26 +193,15 @@ DEF2NAME=	$(SHL2TARGET)
 
 # --- filter file ------------------------------
 
-.IF "$(depend)"==""
-
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo CLEAR_THE_FILE	> $@
     @echo _TI				>>$@
     @echo _real				>>$@
-.ENDIF
-
-.IF "$(depend)"==""
 
 $(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo CLEAR_THE_FILE	> $@
     @echo _TI				>>$@
     @echo _real				>>$@
-.ENDIF
-
-killdpc: 
-    -+$(RM) $(DPCTARGET)
-    -+$(RM) $(DEPFILES)
-    @+echo Dependency files removed
 
