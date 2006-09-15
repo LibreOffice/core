@@ -5,9 +5,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 09:35:43 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:49:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2136,7 +2136,7 @@
             </node>
             <node oor:name=".uno:Reload" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Neu Laden</value>
+                    <value xml:lang="de">Neu ~laden</value>
                     <value xml:lang="en-US">Reload</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -5951,7 +5951,7 @@
             </node>
             <node oor:name=".uno:InsertHardHyphen" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Geschützer Trenner</value>
+                    <value xml:lang="de">Geschützter Trenner</value>
                     <value xml:lang="en-US">Non-br~eaking hyphen</value>
                 </prop>
             </node>
