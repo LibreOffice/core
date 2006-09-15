@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flyfrm.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:46:47 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:41:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,10 @@ protected:
     */
     virtual void RegisterAtCorrectPage();
 
+    // --> OD 2006-08-10 #i68520#
+    virtual const bool _SetObjTop( const SwTwips _nTop );
+    virtual const bool _SetObjLeft( const SwTwips _nLeft );
+    // <--
 public:
     // OD 2004-03-23 #i26791#
     TYPEINFO();
@@ -275,8 +279,6 @@ public:
     virtual const SwFrmFmt& GetFrmFmt() const;
 
     virtual const SwRect GetObjRect() const;
-    virtual void SetObjTop( const SwTwips _nTop );
-    virtual void SetObjLeft( const SwTwips _nLeft );
 
     /** method to determine, if a format on the Writer fly frame is possible
 
