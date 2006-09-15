@@ -7,9 +7,9 @@
 #
 #   $RCSfile: hicontrast-to-theme.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-05 18:15:56 $
+#   last change: $Author: obo $ $Date: 2006-09-15 14:08:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,8 @@ $dst = File::Spec->rel2abs( $dst );
     [ "dah[0-9].*.png",   "dah",       "da" ]
 );
 
+my (@from_stat, @to_stat);
+
 sub copy_normalized {
     $file = $_;
     for $hc ( @hc_table ) {
@@ -115,7 +117,12 @@ sub copy_normalized {
             ( my $copy = $file ) =~ s/$from/$to/;
             $copy = File::Spec->catfile( $dir, $copy );
 
-            copy( $file, $copy ) || die $!;
+            @from_stat = stat($file);
+            @to_stat = stat($copy);
+            if ( $from_stat[9] > $to_stat[9] ) {
+                copy( $file, $copy ) || die $!;
+                utime( $from_stat[9], $from_stat[9], $copy );
+            }
 
             last;
         }
