@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:09:22 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:53:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,9 +110,6 @@
 #endif
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
-#endif
-#ifndef _TEMPAUTO_HXX
-#include <tempauto.hxx>
 #endif
 #ifndef _SPLARGS_HXX
 #include <splargs.hxx>
@@ -1174,23 +1171,6 @@ bool SwEditShell::SpellSentence(::svx::SpellPortions& rPortions)
     EndAction();
     return bRet;
 }
-/*-- 21.10.2003 12:35:52---------------------------------------------------
-    add a correction pair to the temporary AutoCorrect list
-  -----------------------------------------------------------------------*/
-void lcl_AddToTempAutoCorrect(const String& rOld, const String& rNew, LanguageType eLang)
-{
-    SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
-    SvxAutocorrWord aAWord( rOld, aEmptyStr );
-    if( rOld.Len() > 0  &&
-        !pACorr->GetAutocorrWordList( eLang )->Seek_Entry( &aAWord ))
-    {
-        SwCorrection* pCorr = new SwCorrection( aAWord.GetShort() );
-        pCorr->Correct() = rNew;
-        if( !pTempAuto )
-            pTempAuto = new SwTempAuto;
-        pTempAuto->Insert( pCorr );
-    }
-}
 /*-- 02.02.2005 14:34:41---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1267,10 +1247,6 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions)
                     if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
                         SetAttr( SvxLanguageItem(aCurrentNewPortion->eLanguage), nLangWhichId );
                     pDoc->Insert(*pCrsr, aCurrentNewPortion->sText, true);
-                    lcl_AddToTempAutoCorrect(
-                            aCurrentOldPortion->sText,
-                            aCurrentNewPortion->sText,
-                            aCurrentNewPortion->eLanguage);
                 }
                 else if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
                 {
