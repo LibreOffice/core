@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:05:45 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:40:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,18 +211,22 @@ sal_Bool HasWrap( const SdrObject* pObj )
  *
  *****************************************************************************/
 
-SwRect GetBoundRect( const SdrObject* pObj )
+// --> OD 2006-08-15 #i68520# - change naming
+SwRect GetBoundRectOfAnchoredObj( const SdrObject* pObj )
+// <--
 {
     SwRect aRet( pObj->GetCurrentBoundRect() );
-    const SwFmt *pFmt = ((SwContact*)GetUserCall(pObj))->GetFmt();
-    const SvxULSpaceItem &rUL = pFmt->GetULSpace();
-    const SvxLRSpaceItem &rLR = pFmt->GetLRSpace();
+    // --> OD 2006-08-10 #i68520# - call cache of <SwAnchoredObject>
+    SwContact* pContact( GetUserCall( pObj ) );
+    if ( pContact )
     {
-        aRet.Top ( Max( aRet.Top() - long(rUL.GetUpper()), 0L ));
-        aRet.Left( Max( aRet.Left()- long(rLR.GetLeft()),  0L ));
-        aRet.SSize().Height() += rUL.GetLower();
-        aRet.SSize().Width()  += rLR.GetRight();
+        const SwAnchoredObject* pAnchoredObj( pContact->GetAnchoredObj( pObj ) );
+        if ( pAnchoredObj )
+        {
+            aRet = pAnchoredObj->GetObjRectWithSpaces();
+        }
     }
+    // <--
     return aRet;
 }
 
@@ -1493,6 +1497,9 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                 // adjusting position and change the last object rectangle.
                 if ( bNotify )
                 {
+                    // --> OD 2006-08-16 #i68520#
+                    pAnchoredDrawObj->InvalidateObjRectWithSpaces();
+                    // <--
                     // --> OD 2004-07-20 #i31573# - correction: Only invalidate
                     // background of given drawing object.
                     lcl_NotifyBackgroundOfObj( *this, rObj, &aOldObjRect );
