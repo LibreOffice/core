@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfly.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:43:57 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:43:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,10 +54,18 @@ class Color;
 class SwAnchoredObject;
 // <--
 
-// eine kleine Schweinerei, weil enums nicht forward-deklariert werden koennen.
-typedef MSHORT _FlyCntnt;
+// --> OD 2006-08-15 #i68520# - refactoring
+//typedef MSHORT _FlyCntnt;
+#ifndef _FMTSRNDENUM_HXX
+#include <fmtsrndenum.hxx>
+#endif
+// <--
 
-SV_DECL_PTRARR( SwFlyList, SdrObject*, 10, 10 )
+// --> OD 2006-08-15 #i68520#
+//SV_DECL_PTRARR( SwFlyList, SdrObject*, 10, 10 )
+#include <vector>
+typedef std::vector< SwAnchoredObject* > SwAnchoredObjList;
+// <--
 
 /*************************************************************************
  *                      class SwFlyIter
@@ -96,9 +104,13 @@ public:
     const SdrObject* GetObject( MSHORT nPos ){ return pSdrObj[ nPos ]; }
     MSHORT GetCount() const { return nObjCnt; }
     void ClrObject( MSHORT nPos );
-    static const SwRect CalcBoundRect( const SdrObject* pObj,
-        const SwRect &rLine, const SwTxtFrm* pFrm, const long nXPos,
-        const sal_Bool bRight );
+    // --> OD 2006-08-15 #i68520#
+    static const SwRect CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
+                                       const SwRect &rLine,
+                                       const SwTxtFrm* pFrm,
+                                       const long nXPos,
+                                       const sal_Bool bRight );
+    // <--
 #ifndef PRODUCT
     void ShowContour( OutputDevice* pOut, const SdrObject* pObj,
                       const Color& rClosedColor, const Color& rOpenColor );
@@ -112,12 +124,16 @@ public:
 class SwTxtFly
 {
     const SwPageFrm     *pPage;
-    const SdrObject     *pCurrFly;
+    // --> OD 2006-08-15 #i68520#
+    const SwAnchoredObject* mpCurrAnchoredObj;
+    // <--
 
     const SwTxtFrm      *pCurrFrm;
 
     const SwCntntFrm    *pMaster;
-    SwFlyList           *pFlyList;
+    // --> OD 2006-08-15 #i68520#
+    SwAnchoredObjList* mpAnchoredObjList;
+    // <--
 
     long nMinBottom;
     long nNextTop; // Hier wird die Oberkante des "naechsten" Rahmens gespeichert
@@ -132,15 +148,25 @@ class SwTxtFly
     sal_Bool mbIgnoreObjsInHeaderFooter: 1;
     // <--
     SwRect _GetFrm( const SwRect &rPortion, sal_Bool bTop ) const;
-    SwFlyList* InitFlyList();
-    // iteriert ueber die Fly-Liste
+    // --> OD 2006-08-15 #i68520#
+    SwAnchoredObjList* InitAnchoredObjList();
+    inline SwAnchoredObjList* GetAnchoredObjList() const
+    {
+        return mpAnchoredObjList
+               ? mpAnchoredObjList
+               : const_cast<SwTxtFly*>(this)->InitAnchoredObjList();
+    }
+    // iterates over the anchored object list <mpAnchoredObjList>
     sal_Bool ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid ) const;
-    _FlyCntnt CalcSmart( const SdrObject *pObj ) const;
-    // liefert die Order eines FlyFrms
-    _FlyCntnt GetOrder( const SdrObject *pObj ) const;
-    void CalcRightMargin( SwRect &rFly, MSHORT nPos, const SwRect &rLine ) const;
-    void CalcLeftMargin( SwRect &rFly, MSHORT nPos, const SwRect &rLine ) const;
-    MSHORT GetPos( const SdrObject *pObj ) const;
+    SwSurround _GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredObj ) const;
+    void CalcRightMargin( SwRect &rFly,
+                          SwAnchoredObjList::size_type nPos,
+                          const SwRect &rLine ) const;
+    void CalcLeftMargin( SwRect &rFly,
+                         SwAnchoredObjList::size_type nPos,
+                         const SwRect &rLine ) const;
+    SwAnchoredObjList::size_type GetPos( const SwAnchoredObject* pAnchoredObj ) const;
+    // <--
     // --> OD 2004-10-06 #i26945# - change first parameter:
     // Now it's the <SwAnchoredObject> instance of the floating screen object
     sal_Bool GetTop( const SwAnchoredObject* _pAnchoredObj,
@@ -158,24 +184,30 @@ public:
         // --> OD 2004-12-17 #118809#
         mbIgnoreObjsInHeaderFooter = sal_False;
         // <--
-        pFlyList = 0; pMaster = 0;
+        // --> OD 2006-08-15 #i68520#
+        mpCurrAnchoredObj = 0;
+        mpAnchoredObjList = 0;
+        // <--
+        pMaster = 0;
     }
     inline SwTxtFly( const SwTxtFrm *pFrm )
         { CtorInit( pFrm ); }
 
     SwTxtFly( const SwTxtFly& rTxtFly );
-    inline ~SwTxtFly() { delete pFlyList; }
+    // --> OD 2006-08-15 #i68520#
+    inline ~SwTxtFly() { delete mpAnchoredObjList; }
+    // <--
     void CtorInit( const SwTxtFrm *pFrm );
     void SetTopRule(){ bTopRule = sal_False; }
 
-    SwFlyList* GetFlyList() const
-        { return pFlyList ? pFlyList : ((SwTxtFly*)this)->InitFlyList(); }
     inline SwRect GetFrm( const SwRect &rPortion, sal_Bool bTop = sal_True ) const;
     inline sal_Bool IsOn() const { return bOn; }
     inline sal_Bool Relax( const SwRect &rRect );
     inline sal_Bool Relax();
     inline SwTwips GetMinBottom() const
-        { return pFlyList ? nMinBottom : CalcMinBottom(); }
+        // --> OD 2006-08-15 #i68520#
+        { return mpAnchoredObjList ? nMinBottom : CalcMinBottom(); }
+        // <--
     inline const SwCntntFrm* GetMaster() const
         { return pMaster ? pMaster : ((SwTxtFly*)this)->_GetMaster(); }
     inline long GetNextTop() const { return nNextTop; }
@@ -183,9 +215,12 @@ public:
     inline void SetNextTop( long nNew ) const
         { ((SwTxtFly*)this)->nNextTop = nNew;   }
 
-    // Liefert zu einem SdrObject das von ihm _beanspruchte_ Rect
-    // (unter Beruecksichtigung der Order) zurueck.
-    SwRect FlyToRect( const SdrObject *pObj, const SwRect &rRect ) const;
+    // --> OD 2006-08-15 #i68520#
+    // determines the demanded rectangle for an anchored object,
+    // considering its surround for text wrapping.
+    SwRect AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
+                              const SwRect& rRect ) const;
+    // <--
 
     // Die Drawmethoden stellen sicher, dass ueberlappende Frames
     // (ausser bei transparenten Frames) nicht uebergepinselt werden.
