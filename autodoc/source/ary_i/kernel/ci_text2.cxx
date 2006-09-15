@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ci_text2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:22:41 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:11:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,17 @@ DocuTex2::DisplayAt( DocumentationDisplay & o_rDisplay ) const
     {
         (*iter)->DisplayAt(o_rDisplay);
     }
+}
+
+void
+DocuTex2::AddToken( DYN DocuToken & let_drToken )
+{
+    if (aTokens.empty())
+    {
+        if (let_drToken.IsWhiteOnly())
+            return;
+    }
+    aTokens.push_back(&let_drToken);
 }
 
 bool
