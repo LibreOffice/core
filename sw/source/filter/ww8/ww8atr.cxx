@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:16:56 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:55:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2502,26 +2502,26 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
                     eFld = ww::eREVNUM;
                     break;
                 case DI_CREATE:
-                    if (DI_SUB_AUTHOR == (nSubType & ~DI_SUB_AUTHOR))
+                    if (DI_SUB_AUTHOR == (nSubType & DI_SUB_AUTHOR))
                         eFld = ww::eAUTHOR;
                     else if (rWW8Wrt.GetNumberFmt(*pFld, sStr))
                         eFld = ww::eCREATEDATE;
                     break;
 
                 case DI_CHANGE:
-                    if (DI_SUB_AUTHOR == (nSubType & ~DI_SUB_AUTHOR))
+                    if (DI_SUB_AUTHOR == (nSubType & DI_SUB_AUTHOR))
                         eFld = ww::eLASTSAVEDBY;
                     else if (rWW8Wrt.GetNumberFmt(*pFld, sStr))
                         eFld = ww::eSAVEDATE;
                     break;
 
                 case DI_PRINT:
-                    if (DI_SUB_AUTHOR != (nSubType & ~DI_SUB_AUTHOR) &&
+                    if (DI_SUB_AUTHOR != (nSubType & DI_SUB_AUTHOR) &&
                         rWW8Wrt.GetNumberFmt(*pFld, sStr))
                         eFld = ww::ePRINTDATE;
                     break;
                 case DI_EDIT:
-                    if( DI_SUB_AUTHOR != (nSubType & ~DI_SUB_AUTHOR ) &&
+                    if( DI_SUB_AUTHOR != (nSubType & DI_SUB_AUTHOR ) &&
                         rWW8Wrt.GetNumberFmt( *pFld, sStr ))
                         eFld = ww::eSAVEDATE;
                     break;
