@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmltbl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:01:12 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:53:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -593,9 +593,9 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                             SwTxtNode *pTxtNd = (pDoc->GetNodes()[nIdx])->GetTxtNode();
                             if( pTxtNd )
                             {
-                                ULONG nMinNoAlignCnts;
-                                ULONG nMaxNoAlignCnts;
-                                ULONG nAbsMinNoAlignCnts;
+                                ULONG nMinNoAlignCnts = 0;
+                                ULONG nMaxNoAlignCnts = 0;
+                                ULONG nAbsMinNoAlignCnts = 0;
 
                                 lcl_GetMinMaxSize( nMinNoAlignCnts,
                                                    nMaxNoAlignCnts,
