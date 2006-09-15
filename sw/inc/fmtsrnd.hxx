@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtsrnd.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:53:16 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:40:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,21 +48,16 @@
 #include <svtools/eitem.hxx>
 #endif
 
+// --> OD 2006-08-15 #i68520# - refactoring
+// separate enumeration <SwSurround> in own header file
+#ifndef _FMTSRNDENUM_HXX
+#include <fmtsrndenum.hxx>
+#endif
+// <--
 class IntlWrapper;
 
 //SwFmtSurround, wie soll sich der ---------------
 //  Dokumentinhalt unter dem Rahmen verhalten ---
-
-enum SwSurround {
-    SURROUND_BEGIN,
-    SURROUND_NONE = SURROUND_BEGIN,
-    SURROUND_THROUGHT,
-    SURROUND_PARALLEL,
-    SURROUND_IDEAL,
-    SURROUND_LEFT,
-    SURROUND_RIGHT,
-    SURROUND_END
-};
 
 class SW_DLLPUBLIC SwFmtSurround: public SfxEnumItem
 {
