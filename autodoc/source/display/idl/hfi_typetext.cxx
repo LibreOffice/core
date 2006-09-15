@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_typetext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:59:24 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:12:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,9 @@ HF_IdlTypeText::Produce_byData( const String & i_sFullName ) const
                                 *pScopeModule );
     if (NOT bFound)
     {
-        if (strchr(sTypeText,':') == 0)
+        if ( strchr(sTypeText,':') == 0
+             AND
+             *sTypeText.c_str() != 'X' )    // This is a HACK, make this correct!
         {
             Produce_LocalLinkInDocu(sTypeText);
             return;
