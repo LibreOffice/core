@@ -4,9 +4,9 @@
 #
 #   $RCSfile: component.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:14:39 $
+#   last change: $Author: obo $ $Date: 2006-09-15 14:36:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 package installer::windows::component;
 
+use installer::converter;
+use installer::existence;
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -244,6 +246,11 @@ sub get_component_condition
 
     $condition = "";    # Always ?
 
+    if (exists($installer::globals::componentcondition{$componentname}))
+    {
+        $condition = $installer::globals::componentcondition{$componentname};
+    }
+
     return $condition
 }
 
@@ -346,6 +353,88 @@ sub create_component_table
     installer::files::save_file($componenttablename ,\@componenttable);
     $infoline = "Created idt file: $componenttablename\n";
     push(@installer::globals::logfileinfo, $infoline);
+}
+
+####################################################################################
+# Returning a component for a scp module gid.
+# Pairs are saved in the files collector.
+####################################################################################
+
+sub get_component_name_from_modulegid
+{
+    my ($modulegid, $filesref) = @_;
+
+    my $componentname = "";
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        my $onefile = ${$filesref}[$i];
+
+        if ( $onefile->{'modules'} )
+        {
+            my $filemodules = $onefile->{'modules'};
+            my $filemodulesarrayref = installer::converter::convert_stringlist_into_array_without_newline(\$filemodules, ",");
+
+            if (installer::existence::exists_in_array($modulegid, $filemodulesarrayref))
+            {
+                $componentname = $onefile->{'componentname'};
+                last;
+            }
+        }
+    }
+
+    return $componentname;
+}
+
+####################################################################################
+# Updating the file Environm.idt dynamically
+# Content:
+# Environment Name Value Component_
+####################################################################################
+
+sub set_component_in_environment_table
+{
+    my ($basedir, $filesref) = @_;
+
+    my $infoline = "";
+
+    my $environmentfilename = $basedir . $installer::globals::separator . "Environm.idt";
+
+    if ( -f $environmentfilename )  # only do something, if file exists
+    {
+        my $environmentfile = installer::files::read_file($environmentfilename);
+
+        for ( my $i = 3; $i <= $#{$environmentfile}; $i++ ) # starting in line 4 of Environm.idt
+        {
+            if ( ${$environmentfile}[$i] =~ /^\s*(.*?)\t(.*?)\t(.*?)\t(.*?)\s*$/ )
+            {
+                my $modulegid = $4; # in Environment table a scp module gid can be used as component replacement
+
+                my $componentname = get_component_name_from_modulegid($modulegid, $filesref);
+
+                if ( $componentname )   # only do something if a component could be found
+                {
+                    $infoline = "Updated Environment table:\n";
+                    push(@installer::globals::logfileinfo, $infoline);
+                    $infoline = "Old line: ${$environmentfile}[$i]\n";
+                    push(@installer::globals::logfileinfo, $infoline);
+
+                    ${$environmentfile}[$i] =~ s/$modulegid/$componentname/;
+
+                    $infoline = "New line: ${$environmentfile}[$i]\n";
+                    push(@installer::globals::logfileinfo, $infoline);
+
+                }
+            }
+        }
+
+        # Saving the file
+
+        installer::files::save_file($environmentfilename ,$environmentfile);
+        $infoline = "Updated idt file: $environmentfilename\n";
+        push(@installer::globals::logfileinfo, $infoline);
+
+    }
 }
 
 1;
