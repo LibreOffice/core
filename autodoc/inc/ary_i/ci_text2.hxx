@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ci_text2.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:24:35 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:10:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ class DocuToken
     virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const = 0;
+    virtual bool        IsWhiteOnly() const = 0;
 };
 
 
@@ -74,10 +75,9 @@ class DocuTex2
     virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
-
     void                AddToken(
-                            DYN DocuToken &     let_drToken )
-                                                { aTokens.push_back(&let_drToken); }
+                            DYN DocuToken &     let_drToken );
+
     const TokenList &   Tokens() const          { return aTokens; }
     bool                IsEmpty() const;
     const String &      TextOfFirstToken() const;
