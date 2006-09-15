@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 05:33:41 $
+#   last change: $Author: obo $ $Date: 2006-09-15 13:53:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,38 +51,6 @@ ENVCFLAGS+=/FR$(SLO)$/
 
 
 # --- Files -------------------------------------
-
-SLOFILES=\
-        $(SLO)$/ADatabaseMetaDataImpl.obj				\
-        $(SLO)$/Aolevariant.obj							\
-        $(SLO)$/Awrapado.obj							\
-        $(SLO)$/ADatabaseMetaData.obj					\
-        $(SLO)$/AColumn.obj								\
-        $(SLO)$/AColumns.obj							\
-        $(SLO)$/AIndex.obj								\
-        $(SLO)$/AIndexes.obj							\
-        $(SLO)$/AKey.obj								\
-        $(SLO)$/AKeys.obj								\
-        $(SLO)$/AUser.obj								\
-        $(SLO)$/AUsers.obj								\
-        $(SLO)$/AGroup.obj								\
-        $(SLO)$/AGroups.obj								\
-        $(SLO)$/ACatalog.obj							\
-        $(SLO)$/AView.obj								\
-        $(SLO)$/AViews.obj								\
-        $(SLO)$/ATable.obj								\
-        $(SLO)$/ATables.obj								\
-        $(SLO)$/ACallableStatement.obj					\
-        $(SLO)$/ADatabaseMetaDataResultSetMetaData.obj	\
-        $(SLO)$/ADatabaseMetaDataResultSet.obj			\
-        $(SLO)$/AResultSet.obj							\
-        $(SLO)$/AConnection.obj							\
-        $(SLO)$/AStatement.obj							\
-        $(SLO)$/APreparedStatement.obj					\
-        $(SLO)$/AResultSetMetaData.obj					\
-        $(SLO)$/ADriver.obj								\
-        $(SLO)$/Aservices.obj							\
-        $(SLO)$/adoimp.obj
         
 EXCEPTIONSFILES= \
         $(SLO)$/ADatabaseMetaData.obj					\
@@ -112,6 +80,12 @@ EXCEPTIONSFILES= \
         $(SLO)$/ADriver.obj								\
         $(SLO)$/Aservices.obj
 
+SLOFILES=\
+        $(EXCEPTIONSFILES)								\
+        $(SLO)$/ADatabaseMetaDataImpl.obj				\
+        $(SLO)$/Aolevariant.obj							\
+        $(SLO)$/Awrapado.obj							\
+        $(SLO)$/adoimp.obj
 # --- Library -----------------------------------
 
 SHL1TARGET=	$(ADO_TARGET)$(ADO_MAJOR)
