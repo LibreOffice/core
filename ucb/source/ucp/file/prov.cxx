@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:22:11 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 14:34:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,8 +189,6 @@ FileProvider::FileProvider( const Reference< XMultiServiceFactory >& xMultiServi
     : m_xMultiServiceFactory( xMultiServiceFactory ),
       m_pMyShell( 0 )
 {
-    if( ! m_pMyShell )
-        m_pMyShell = new shell( m_xMultiServiceFactory, this );
 }
 
 
@@ -228,14 +226,42 @@ FileProvider::queryInterface(
     const Type& rType )
     throw( RuntimeException )
 {
-    Any aRet = cppu::queryInterface( rType,
-                                     SAL_STATIC_CAST( XContentProvider*, this ),
-                                     SAL_STATIC_CAST( XContentIdentifierFactory*, this ),
-                                     SAL_STATIC_CAST( XServiceInfo*,     this ),
-                                     SAL_STATIC_CAST( XTypeProvider*,    this ),
-                                     SAL_STATIC_CAST( XFileIdentifierConverter*,this ),
-                                     SAL_STATIC_CAST( XPropertySet*, this ) );
+    Any aRet = cppu::queryInterface(
+        rType,
+        SAL_STATIC_CAST( XContentProvider*, this ),
+        SAL_STATIC_CAST( XInitialization*, this ),
+        SAL_STATIC_CAST( XContentIdentifierFactory*, this ),
+        SAL_STATIC_CAST( XServiceInfo*,     this ),
+        SAL_STATIC_CAST( XTypeProvider*,    this ),
+        SAL_STATIC_CAST( XFileIdentifierConverter*,this ),
+        SAL_STATIC_CAST( XPropertySet*, this ) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// XInitialization
+
+void SAL_CALL FileProvider::init()
+{
+    if( ! m_pMyShell )
+        m_pMyShell = new shell( m_xMultiServiceFactory, this, sal_True );
+}
+
+
+void SAL_CALL
+FileProvider::initialize(
+    const Sequence< Any >& aArguments )
+    throw (Exception, RuntimeException)
+{
+    if( ! m_pMyShell ) {
+        rtl::OUString config;
+        if( aArguments.getLength() > 0 &&
+            (aArguments[0] >>= config) &&
+            config.compareToAscii("NoConfig") == 0 )
+            m_pMyShell = new shell( m_xMultiServiceFactory, this, sal_False );
+        else
+            m_pMyShell = new shell( m_xMultiServiceFactory, this, sal_True );
+    }
 }
 
 
@@ -244,9 +270,10 @@ FileProvider::queryInterface(
 // XTypeProvider methods.
 
 
-XTYPEPROVIDER_IMPL_6( FileProvider,
+XTYPEPROVIDER_IMPL_7( FileProvider,
                          XTypeProvider,
                          XServiceInfo,
+                      XInitialization,
                       XContentIdentifierFactory,
                       XPropertySet,
                         XFileIdentifierConverter,
@@ -339,6 +366,7 @@ FileProvider::queryContent(
     throw( IllegalIdentifierException,
            RuntimeException)
 {
+    init();
     rtl::OUString aUnc;
     sal_Bool err = m_pMyShell->getUnqFromUrl( xIdentifier->getContentIdentifier(),
                                               aUnc );
@@ -357,6 +385,7 @@ FileProvider::compareContentIds(
                 const Reference< XContentIdentifier >& Id2 )
   throw( RuntimeException )
 {
+    init();
     rtl::OUString aUrl1 = Id1->getContentIdentifier();
     rtl::OUString aUrl2 = Id2->getContentIdentifier();
 
@@ -414,6 +443,7 @@ FileProvider::createContentIdentifier(
                       const rtl::OUString& ContentId )
   throw( RuntimeException )
 {
+    init();
     FileContentIdentifier* p = new FileContentIdentifier( m_pMyShell,ContentId,false );
     return Reference< XContentIdentifier >( p );
 }
