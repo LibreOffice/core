@@ -4,9 +4,9 @@
  *
  *  $RCSfile: d_token.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:23:16 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:11:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,12 +49,29 @@ namespace csi
 namespace dsapi
 {
 
+bool
+DT_Dsapi::IsWhiteOnly() const
+{
+    return false;
+}
 
 
 void
 DT_TextToken::DisplayAt( DocumentationDisplay & o_rDisplay ) const
 {
     o_rDisplay.Display_TextToken( *this );
+}
+
+bool
+DT_TextToken::IsWhiteOnly() const
+{
+    for ( const char * it = sText.c_str();
+          static_cast<UINT8>(*it) > 32;
+          ++it )
+    {
+        return false;
+    }
+    return true;
 }
 
 void
@@ -85,6 +102,12 @@ void
 DT_EOL::DisplayAt( DocumentationDisplay & o_rDisplay ) const
 {
     o_rDisplay.Display_EOL();
+}
+
+bool
+DT_EOL::IsWhiteOnly() const
+{
+    return true;
 }
 
 void
