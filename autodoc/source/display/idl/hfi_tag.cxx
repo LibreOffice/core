@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_tag.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:59:01 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:12:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,9 +110,6 @@ HF_IdlTag::Produce_byData( Xml::Element &      o_rTitle,
           it != i_seeAlsoVector.end();
           ++it )
     {
-        if ( (*it)->Text().IsEmpty() )
-            continue;
-
         if (it != i_seeAlsoVector.begin())
         {
             o_rText << ", ";
