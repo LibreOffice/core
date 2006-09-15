@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:15:07 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:05:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,7 +350,7 @@ bool readOCXNAME( OUString& sCName, SvStorageStream* pStream )
     OUStringBuffer buf(40);
     do
     {
-        sal_uInt16 ch;
+        sal_uInt16 ch = 0;
         *pStream >> ch;
         sal_Unicode uni = static_cast< sal_Unicode >( ch );
         if ( uni == 0 )
@@ -645,7 +645,6 @@ class ContainerRecReader
         }
 
         records.clear();
-        bool bOk = true;
         for (sal_uInt32 nRecord = 0; nRecord < nNoRecords; ++nRecord)
         {
             // DR #134146# redo loading of FrameChild data
