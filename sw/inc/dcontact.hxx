@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:19:28 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:39:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,9 @@ sal_Bool HasWrap( const SdrObject* pObj );
 void ClrContourCache( const SdrObject *pObj );
 
 // liefert BoundRect inklusive Abstand
-SwRect GetBoundRect( const SdrObject* pObj );
+// --> OD 2006-08-15 #i68520# - change naming
+SwRect GetBoundRectOfAnchoredObj( const SdrObject* pObj );
+// <--
 
 //Liefert den UserCall ggf. vom Gruppenobjekt
 // OD 2004-03-31 #i26791# - change return type
