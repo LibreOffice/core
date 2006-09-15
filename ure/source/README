@@ -4,9 +4,9 @@
 #
 #   $RCSfile: README,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 10:11:26 $
+#   last change: $Author: obo $ $Date: 2006-09-15 14:37:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -175,6 +175,7 @@ Program Files\URE\bin\uuresolver.uno.dll  [private]
 Program Files\URE\bin\libxml2.dll  [private]
 Program Files\URE\bin\msvcr71.dll  [private]
 Program Files\URE\bin\msvcp71.dll  [private]
+Program Files\URE\bin\unicows.dll  [private]
 Program Files\URE\bin\uwinapi.dll  [private]
 Program Files\URE\java\java_uno.jar  [private]
 Program Files\URE\misc\javavendors.xml  [private]
@@ -228,6 +229,9 @@ Solaris x86, and Solaris SPARC, and in Program Files\URE on Windows. If you
 want, you can override this location when you install the URE, for example, with
 rpm --relocate on Linux.  The URE is designed so that multiple instances of the
 URE can coexist on a single system in different locations.
+
+On Windows, the path to the installed URE is stored in the registry under the
+path "HKEY_CLASSES_ROOT\Software\OpenOffice.org\URE" and key "Path".
 
 
 UNO Deployment Variables
