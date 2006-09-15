@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.69 $
+#   $Revision: 1.70 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-14 16:19:23 $
+#   last change: $Author: obo $ $Date: 2006-09-15 13:58:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -537,11 +537,6 @@ $(MISC)$/%.dprc :
     @+echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
 
-$(MISC)$/%.dpc : $(RCFILES) $(SLOFILES) $(OBJFILES) $(DEPOBJFILES)
-    @echo ------------------------------
-    @echo Making: $@
-    dmake subdmake=true $(MFLAGS) $(MAKEFILE) $(CALLMACROS) depend=t ALLDPC
-
 $(MISC)$/%.dpr :
     @echo ------------------------------ 
 .IF "$(nodep)"==""
@@ -654,7 +649,7 @@ $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR)_description.cxx : $(MISC)$/%$($(WINVERSION
     +xml2cmp -func $(MISC)$/$*$($(WINVERSIONNAMES)_MAJOR)_description.cxx $<
 
 #generate private rdb
-$(BIN)$/%.rdb:| $(COMPRDB) $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR).xml
+$(BIN)$/%.rdb: $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR).xml
     +$(RDBMAKER) -BUCR -O$(BIN)$/$*.rdb @$(mktmp $(foreach,i,$($(@:b)_XML2CMPTYPES) -T$i ) $(COMPRDB))
 
 #strip dos lineends
