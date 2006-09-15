@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globlmn_tmpl.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:37:23 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:58:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -466,7 +466,7 @@
     Identifier = SID_RELOAD ; \
     Command = ".uno:Reload" ; \
     HelpID = SID_RELOAD ; \
-    Text [ de ] = "Neu Laden" ; \
+    Text [ de ] = "Neu ~laden" ; \
     Text [ en-US ] = "Reload" ;\
     Text [ x-comment ] = " ";   \
 
