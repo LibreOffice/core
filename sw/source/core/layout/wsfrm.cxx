@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:30:17 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:42:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3719,6 +3719,12 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     nDiff = (Prt().*fnRect->fnGetHeight)() + nDiff + nBorder -
                             (Frm().*fnRect->fnGetHeight)();
                     (Frm().*fnRect->fnAddBottom)( nDiff );
+                    // --> OD 2006-08-16 #i68520#
+                    if ( dynamic_cast<SwFlyFrm*>(this) )
+                    {
+                        dynamic_cast<SwFlyFrm*>(this)->InvalidateObjRectWithSpaces();
+                    }
+                    // <--
                     (this->*fnRect->fnSetYMargins)( nTop, nBorder - nTop );
                     ChgLowersProp( aOldSz );
                     NotifyLowerObjs();
