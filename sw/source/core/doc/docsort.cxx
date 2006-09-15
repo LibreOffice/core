@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsort.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:59:44 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:53:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,12 +369,19 @@ double SwSortBoxElement::GetValue( USHORT nKey ) const
         pFndBox = pBox->GetBox(nRow, nCol);         // Spalten sortieren
 
     double aVal;
+    double nVal;
     if( pFndBox )
-        aVal = pFndBox->GetBox()->GetFrmFmt()->GetTblBoxValue().GetValue();
+    {
+        const SwFmt *pFmt = pFndBox->GetBox()->GetFrmFmt();
+        if (pFmt->GetTblBoxNumFmt().GetValue() & NUMBERFORMAT_TEXT)
+            nVal = SwSortElement::GetValue( nKey );
+        else
+            nVal = pFmt->GetTblBoxValue().GetValue();
+    }
     else
-        aVal = 0;
+        nVal = 0;
 
-    return aVal;
+    return nVal;
 }
 
 /*--------------------------------------------------------------------
