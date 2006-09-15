@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobject.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:24:35 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:41:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,12 @@ SwAnchoredObject::SwAnchoredObject() :
     mbClearedEnvironment( false ),
     // <--
     // --> OD 2004-08-25 #i3317#
-    mbTmpConsiderWrapInfluence( false )
+    mbTmpConsiderWrapInfluence( false ),
+    // <--
+    // --> OD 2006-08-10 #i68520#
+    maObjRectWithSpaces(),
+    mbObjRectWithSpacesValid( false ),
+    maLastObjRect()
     // <--
 {
 }
@@ -717,23 +722,58 @@ bool SwAnchoredObject::HasClearedEnvironment() const
 /** method to add spacing to object area
 
     OD 2004-06-30 #i28701#
+    OD 2006-08-10 #i68520# - return constant reference and use cache
 
     @author OD
 */
-const SwRect SwAnchoredObject::GetObjRectWithSpaces() const
+const SwRect& SwAnchoredObject::GetObjRectWithSpaces() const
 {
-    SwRect aRet( GetObjRect() );
-    const SwFrmFmt& rFmt = GetFrmFmt();
-    const SvxULSpaceItem& rUL = rFmt.GetULSpace();
-    const SvxLRSpaceItem& rLR = rFmt.GetLRSpace();
+    if ( mbObjRectWithSpacesValid &&
+         maLastObjRect != GetObjRect() )
     {
-        aRet.Top ( Max( aRet.Top() - long(rUL.GetUpper()), 0L ));
-        aRet.Left( Max( aRet.Left()- long(rLR.GetLeft()),  0L ));
-        aRet.SSize().Height() += rUL.GetLower();
-        aRet.SSize().Width()  += rLR.GetRight();
+        ASSERT( false,
+                "<SwAnchoredObject::GetObjRectWithSpaces> - cache for object rectangle inclusive spaces marked as valid, but it couldn't be. Missing invalidation of cache. Please inform OD." );
+        InvalidateObjRectWithSpaces();
     }
-    return aRet;
+    if ( !mbObjRectWithSpacesValid )
+    {
+        maObjRectWithSpaces = GetObjRect();
+        const SwFrmFmt& rFmt = GetFrmFmt();
+        const SvxULSpaceItem& rUL = rFmt.GetULSpace();
+        const SvxLRSpaceItem& rLR = rFmt.GetLRSpace();
+        {
+            maObjRectWithSpaces.Top ( Max( maObjRectWithSpaces.Top() - long(rUL.GetUpper()), 0L ));
+            maObjRectWithSpaces.Left( Max( maObjRectWithSpaces.Left()- long(rLR.GetLeft()),  0L ));
+            maObjRectWithSpaces.SSize().Height() += rUL.GetLower();
+            maObjRectWithSpaces.SSize().Width()  += rLR.GetRight();
+        }
+
+        mbObjRectWithSpacesValid = true;
+        maLastObjRect = GetObjRect();
+    }
+
+    return maObjRectWithSpaces;
 }
+
+// --> OD 2006-08-10 #i68520#
+void SwAnchoredObject::SetObjTop( const SwTwips _nTop)
+{
+    const bool bTopChanged( _SetObjTop( _nTop ) );
+    if ( bTopChanged )
+    {
+        mbObjRectWithSpacesValid = false;
+    }
+}
+
+void SwAnchoredObject::SetObjLeft( const SwTwips _nLeft)
+{
+    const bool bLeftChanged( _SetObjLeft( _nLeft ) );
+    if ( bLeftChanged )
+    {
+        mbObjRectWithSpacesValid = false;
+    }
+}
+// <--
 
 /** method to update anchored object in the <SwSortedObjs> lists
 
