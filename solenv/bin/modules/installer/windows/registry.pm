@@ -4,9 +4,9 @@
 #
 #   $RCSfile: registry.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:20:54 $
+#   last change: $Author: obo $ $Date: 2006-09-15 14:37:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,8 @@ sub get_registry_root
 
     if ( $scproot eq "PREDEFINED_HKEY_LOCAL_MACHINE" ) { $rootvalue = -1; }
 
+    if ( $scproot eq "PREDEFINED_HKEY_LOCAL_MACHINE_ONLY" ) { $rootvalue = 2; }
+
     return $rootvalue;
 }
 
@@ -239,6 +241,15 @@ sub create_registry_table
             if (!(installer::existence::exists_in_array($registry{'Component_'}, $allregistrycomponentsref)))
             {
                 push(@{$allregistrycomponentsref}, $registry{'Component_'});
+            }
+
+            # Collecting all component conditions
+            if ( $oneregistry->{'ComponentCondition'} )
+            {
+                if ( ! exists($installer::globals::componentcondition{$registry{'Component_'}}))
+                {
+                    $installer::globals::componentcondition{$registry{'Component_'}} = $oneregistry->{'ComponentCondition'};
+                }
             }
 
             my $oneline = $registry{'Registry'} . "\t" . $registry{'Root'} . "\t" . $registry{'Key'} . "\t"
