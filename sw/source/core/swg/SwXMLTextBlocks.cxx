@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:32:15 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:54:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,7 +273,8 @@ ULONG SwXMLTextBlocks::Rename( USHORT nIdx, const String& rNewShort, const Strin
         xRoot = 0;
     }
 
-    xBlkRoot->renameElement ( aOldName, aPackageName );
+    if(aOldName != aPackageName)
+        xBlkRoot->renameElement ( aOldName, aPackageName );
     uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
     if ( xTrans.is() )
         xTrans->commit();
