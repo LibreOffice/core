@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-13 11:25:30 $
+#   last change: $Author: obo $ $Date: 2006-09-15 14:03:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@ PRJ=..$/..$/..
 
 PRJNAME=extensions
 TARGET=updchk
+PACKAGE=org.openoffice.Office
 
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
@@ -84,7 +85,6 @@ SHL1VERSIONMAP=..$/exports.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
-PACKAGE=org.openoffice.Office
 PACKAGEDIR=$(subst,.,$/ $(PACKAGE))
 SPOOLDIR=$(MISC)$/registry$/spool
 
