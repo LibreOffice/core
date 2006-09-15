@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_merge.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 13:58:36 $
+#   last change: $Author: obo $ $Date: 2006-09-15 14:09:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ $(uniq $(foreach,i,$(READMEFILES) $(COMMONMISC)$/$(TARGET)$/$(i:b).xrm)) : $$(@:
 
 # *.xcu merge
 .IF "$(LOCALIZEDFILES)"!=""
-$(foreach,i,$(LOCALIZEDFILES) $(MISC)$/merge$/{$(subst,.,$/ $(PACKAGE))}$/$(i:b).xcu) : $$(@:f) localize.sdf 
+$(foreach,i,$(LOCALIZEDFILES) $(PROCESSOUT)$/merge$/{$(subst,.,$/ $(PACKAGE))}$/$(i:b).xcu) : $$(@:f) localize.sdf 
 .ENDIF          # "$(ULFFILES)"!=""
 
 
