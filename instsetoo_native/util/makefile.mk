@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-13 15:15:45 $
+#   last change: $Author: obo $ $Date: 2006-09-15 14:38:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,7 @@ MSIOFFICETEMPLATESOURCE=$(PRJ)$/inc_openoffice$/windows$/msi_templates
 MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
 MSIURETEMPLATESOURCE=$(PRJ)$/inc_ure$/windows$/msi_templates
 MSISDKOOTEMPLATESOURCE=$(PRJ)$/inc_sdkoo$/windows$/msi_templates
-MSIURETEMPLATESOURCE=$(PRJ)$/inc_ure$/windows$/msi_templates
+
 .IF "$(BUILD_SPECIAL)"!=""
 MSIOFFICETEMPLATEDIR=$(MSIOFFICETEMPLATESOURCE)
 MSILANGPACKTEMPLATEDIR=$(MSILANGPACKTEMPLATESOURCE)
@@ -155,7 +155,7 @@ MSIOFFICETEMPLATEDIR=$(MISC)$/openoffice$/msi_templates
 MSILANGPACKTEMPLATEDIR=$(MISC)$/ooolangpack$/msi_templates
 MSIURETEMPLATEDIR=$(MISC)$/ure$/msi_templates
 MSISDKOOTEMPLATEDIR=$(MISC)$/sdkoo$/msi_templates
-MSIURETEMPLATEDIR=$(MISC)$/ure$/msi_templates
+
 ADDDEPS=$(NOLOGOSPLASH) hack_msitemplates
 
 $(foreach,i,$(alllangiso) openoffice_$i) : $(ADDDEPS)
@@ -409,4 +409,5 @@ hack_msitemplates .PHONY:
     +$(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIURETEMPLATEDIR)$/Binary$/Image.bmp
     +$(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSISDKOOTEMPLATEDIR)$/Binary$/Image.bmp
     +$(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIURETEMPLATEDIR)$/Binary$/Image.bmp
+
 
