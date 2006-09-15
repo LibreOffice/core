@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-11 11:43:59 $
+#   last change: $Author: obo $ $Date: 2006-09-15 14:00:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,12 @@ PRJ=..$/..$/..$/..$/..$/..
 
 PRJNAME=officecfg
 TARGET=schema_ooOUI
+PACKAGE=org.openoffice.Office.UI
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Targets ------------------------------------------------------
-
-PACKAGE=org.openoffice.Office.UI
 
 XCSFILES= \
     Controller.xcs \
