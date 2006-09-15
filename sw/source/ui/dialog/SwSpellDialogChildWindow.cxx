@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwSpellDialogChildWindow.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:32:34 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:56:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,9 +91,6 @@
 #endif
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
-#endif
-#ifndef _TEMPAUTO_HXX
-#include <tempauto.hxx>
 #endif
 #ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
@@ -505,9 +502,6 @@ void SwSpellDialogChildWindow::AddAutoCorrection(
 {
     SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     pACorr->PutText( rOld, rNew, eLanguage );
-    //access to global static pointer!!
-    if( pTempAuto )
-        pTempAuto->Delete( rOld );
 }
 /*-- 21.10.2003 09:33:59---------------------------------------------------
 
