@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:48:17 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:56:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -362,22 +362,9 @@ void SwSpellPopup::Execute( USHORT nId )
                 aNewWord = aOrigWord;
             SvxPrepareAutoCorrect( aOrigWord, aNewWord );
 
-            /* #102505# Temporary auto correction is now handled by
-               the document itself. Thus we no longer have to build,
-               insert and remove the correction here but call the
-               appropriate methods of SwDoc. */
             if( bAutoCorr )
             {
                 pACorr->PutText( aOrigWord, aNewWord, eLanguage );
-                pSh->GetDoc()->RemoveTmpCorr(aOrigWord);
-            }
-            else
-            {
-                SvxAutocorrWord aAWord( aOrigWord, aEmptyStr );
-                if( !pACorr->GetAutocorrWordList(eLanguage)->Seek_Entry( &aAWord ))
-                {
-                    pSh->GetDoc()->AppendTmpCorr(aAWord.GetShort(), aNewWord);
-                }
             }
 
             /* #102505# EndAction/EndUndo moved down since insertion
