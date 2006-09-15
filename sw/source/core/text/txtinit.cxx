@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtinit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 13:40:50 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:55:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@
 #include "porftn.hxx"
 #include "porhyph.hxx"
 #include "pordrop.hxx"
-#include "tempauto.hxx" // Temporaere Autokorrekturliste
 #include "blink.hxx"    // Blink-Manager
 #include "init.hxx"   // Deklarationen fuer _TextInit() und _TextFinit()
 #include "txtfly.hxx"   // SwContourCache
@@ -107,7 +106,6 @@ void _TextFinit()
     delete SwTxtFrm::GetTxtCache();
     delete pSwFontCache;
     delete pFntCache;
-    delete pTempAuto;
     delete pBlink;
     delete pWaveCol;
     delete pContourCache;
