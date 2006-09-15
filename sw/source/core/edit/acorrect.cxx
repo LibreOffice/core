@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acorrect.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:06:49 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:53:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,9 +77,6 @@
 #endif
 #ifndef _SHELLIO_HXX
 #include <shellio.hxx>
-#endif
-#ifndef _TEMPAUTO_HXX
-#include <tempauto.hxx>
 #endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
@@ -420,26 +417,6 @@ BOOL SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
                 bRet = TRUE;
             }
             aTBlks.EndGetDoc();
-        }
-    }
-    else if( pTempAuto )
-    {
-        String sKurz( pTxtNd->GetTxt().Copy( rSttPos, nEndPos - rSttPos ));
-        // die temporaere Autokorrektur schlaegt zu
-        const SwCorrection* pCorr = pTempAuto->Replaceable( sKurz );
-        //JP 22.04.99: Bug 63883 - Sonderbehandlung fuer Punkte.
-        if( pCorr && ( !bLastCharIsPoint || !pCorr->Correct().Len() ||
-            '.' != pCorr->Correct().GetChar( pCorr->Correct().Len() - 1 )) )
-        {
-            const SwNodeIndex& rNd = rCrsr.GetPoint()->nNode;
-            SwPaM aPam( rNd, rSttPos, rNd, nEndPos );
-
-            DeleteSel( aPam );
-
-            pDoc->DontExpandFmt( *aPam.GetPoint() );
-            pDoc->Insert( aPam, pCorr->Correct(), true );
-            pDoc->AppendTmpCorr(sKurz, pCorr->Correct());
-            bRet = TRUE;
         }
     }
 
