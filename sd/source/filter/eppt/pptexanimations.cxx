@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptexanimations.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 09:03:56 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:03:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -450,63 +450,71 @@ void AnimationExporter::doexport( const Reference< XDrawPage >& xPage, SvStream&
 
 void AnimationExporter::processAfterEffectNodes( const Reference< XAnimationNode >& xRootNode )
 {
-    Reference< XEnumerationAccess > xEnumerationAccess( xRootNode, UNO_QUERY_THROW );
-    Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
-    while( xEnumeration->hasMoreElements() )
+    try
     {
-        Reference< XAnimationNode > xNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
-
-        Reference< XEnumerationAccess > xEnumerationAccess2( xNode, UNO_QUERY );
-        if ( xEnumerationAccess2.is() )
+        Reference< XEnumerationAccess > xEnumerationAccess( xRootNode, UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+        while( xEnumeration->hasMoreElements() )
         {
-            Reference< XEnumeration > xEnumeration2( xEnumerationAccess2->createEnumeration(), UNO_QUERY_THROW );
-            while( xEnumeration2->hasMoreElements() )
+            Reference< XAnimationNode > xNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
+
+            Reference< XEnumerationAccess > xEnumerationAccess2( xNode, UNO_QUERY );
+            if ( xEnumerationAccess2.is() )
             {
-                Reference< XAnimationNode > xChildNode( xEnumeration2->nextElement(), UNO_QUERY_THROW );
-
-                Reference< XEnumerationAccess > xEnumerationAccess3( xChildNode, UNO_QUERY_THROW );
-                Reference< XEnumeration > xEnumeration3( xEnumerationAccess3->createEnumeration(), UNO_QUERY_THROW );
-                while( xEnumeration3->hasMoreElements() )
+                Reference< XEnumeration > xEnumeration2( xEnumerationAccess2->createEnumeration(), UNO_QUERY_THROW );
+                while( xEnumeration2->hasMoreElements() )
                 {
-                    Reference< XAnimationNode > xChildNode2( xEnumeration3->nextElement(), UNO_QUERY_THROW );
+                    Reference< XAnimationNode > xChildNode( xEnumeration2->nextElement(), UNO_QUERY_THROW );
 
-                    Reference< XEnumerationAccess > xEnumerationAccess4( xChildNode2, UNO_QUERY_THROW );
-                    Reference< XEnumeration > xEnumeration4( xEnumerationAccess4->createEnumeration(), UNO_QUERY_THROW );
-                    while( xEnumeration4->hasMoreElements() )
+                    Reference< XEnumerationAccess > xEnumerationAccess3( xChildNode, UNO_QUERY_THROW );
+                    Reference< XEnumeration > xEnumeration3( xEnumerationAccess3->createEnumeration(), UNO_QUERY_THROW );
+                    while( xEnumeration3->hasMoreElements() )
                     {
-                        Reference< XAnimationNode > xChildNode3( xEnumeration4->nextElement(), UNO_QUERY_THROW );
+                        Reference< XAnimationNode > xChildNode2( xEnumeration3->nextElement(), UNO_QUERY_THROW );
 
-                        switch( xChildNode3->getType() )
+                        Reference< XEnumerationAccess > xEnumerationAccess4( xChildNode2, UNO_QUERY_THROW );
+                        Reference< XEnumeration > xEnumeration4( xEnumerationAccess4->createEnumeration(), UNO_QUERY_THROW );
+                        while( xEnumeration4->hasMoreElements() )
                         {
-                        // found an after effect
-                        case AnimationNodeType::SET:
-                        case AnimationNodeType::ANIMATECOLOR:
+                            Reference< XAnimationNode > xChildNode3( xEnumeration4->nextElement(), UNO_QUERY_THROW );
+
+                            switch( xChildNode3->getType() )
                             {
-                                Reference< XAnimationNode > xMaster;
-
-                                Sequence< NamedValue > aUserData( xChildNode3->getUserData() );
-                                sal_Int32 nLength = aUserData.getLength();
-                                const NamedValue* p = aUserData.getConstArray();
-
-                                while( nLength-- )
+                            // found an after effect
+                            case AnimationNodeType::SET:
+                            case AnimationNodeType::ANIMATECOLOR:
                                 {
-                                    if( p->Name.equalsAscii( "master-element" ) )
-                                    {
-                                        p->Value >>= xMaster;
-                                        break;
-                                    }
-                                    p++;
-                                }
+                                    Reference< XAnimationNode > xMaster;
 
-                                AfterEffectNodePtr pAfterEffectNode( new AfterEffectNode( xChildNode3, xMaster ) );
-                                maAfterEffectNodes.push_back( pAfterEffectNode );
+                                    Sequence< NamedValue > aUserData( xChildNode3->getUserData() );
+                                    sal_Int32 nLength = aUserData.getLength();
+                                    const NamedValue* p = aUserData.getConstArray();
+
+                                    while( nLength-- )
+                                    {
+                                        if( p->Name.equalsAscii( "master-element" ) )
+                                        {
+                                            p->Value >>= xMaster;
+                                            break;
+                                        }
+                                        p++;
+                                    }
+
+                                    AfterEffectNodePtr pAfterEffectNode( new AfterEffectNode( xChildNode3, xMaster ) );
+                                    maAfterEffectNodes.push_back( pAfterEffectNode );
+                                }
+                                break;
                             }
-                            break;
                         }
                     }
                 }
             }
         }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR( "(@CL)AnimationExporter::processAfterEffectNodes(), exception cought!" );
     }
 }
 
@@ -866,7 +874,7 @@ Reference< XAnimationNode > AnimationExporter::createAfterEffectNodeClone( const
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::ppt::AnimationExporter::createAfterEffectNodeClone(), could not create clone!" );
+        DBG_ERROR("(@CL)sd::ppt::AnimationExporter::createAfterEffectNodeClone(), could not create clone!" );
     }
     return xNode;
 }
