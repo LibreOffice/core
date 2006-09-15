@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobject.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:16:14 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:39:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,12 @@ class SwAnchoredObject
         bool mbTmpConsiderWrapInfluence;
         // <--
 
+        // --> OD 2006-06-21 #i68520#
+        mutable SwRect maObjRectWithSpaces;
+        mutable bool mbObjRectWithSpacesValid;
+        mutable SwRect maLastObjRect;
+        // <--
+
         /** method to indicate, that positioning of anchored object is in progress
 
             note: method is implemented empty
@@ -243,6 +249,10 @@ class SwAnchoredObject
         */
         void SetTmpConsiderWrapInfluenceOfOtherObjs( const bool bTmpConsiderWrapInfluence );
 
+        // --> OD 2006-08-10 #i68520#
+        virtual const bool _SetObjTop( const SwTwips _nTop) = 0;
+        virtual const bool _SetObjLeft( const SwTwips _nLeft) = 0;
+        // <--
     public:
         TYPEINFO();
 
@@ -422,8 +432,10 @@ class SwAnchoredObject
 
         // accessors to the object area and its position
         virtual const SwRect GetObjRect() const = 0;
-        virtual void SetObjTop( const SwTwips _nTop) = 0;
-        virtual void SetObjLeft( const SwTwips _nLeft) = 0;
+        // --> OD 2006-08-10 #i68520#
+        void SetObjTop( const SwTwips _nTop);
+        void SetObjLeft( const SwTwips _nLeft);
+        // <--
 
         /** method update layout direction the layout direction, the anchored
             object is assigned to
@@ -441,10 +453,18 @@ class SwAnchoredObject
         /** method to determine object area inclusive its spacing
 
             OD 2004-06-30 #i28701#
+            OD 2006-08-10 #i68520# - return constant reference
 
             @author OD
         */
-        const SwRect GetObjRectWithSpaces() const;
+        const SwRect& GetObjRectWithSpaces() const;
+
+        // --> OD 2006-08-10 #i68520#
+        inline void InvalidateObjRectWithSpaces() const
+        {
+            mbObjRectWithSpacesValid = false;
+        }
+        // <--
 
         /** method to determine, if wrapping style influence of the anchored
             object has to be considered on the object positioning
