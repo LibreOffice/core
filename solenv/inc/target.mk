@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.180 $
+#   $Revision: 1.181 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-14 16:19:35 $
+#   last change: $Author: obo $ $Date: 2006-09-15 13:58:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,11 +70,6 @@ INCLUDE_C=$(subst,$/stl$(SPACECHAR),dont_use_stl$(SPACECHAR) $(INCLUDE))
 .EXPORT : LIB
 # --- Compiler -----------------------------------------------------
 
-#needed for initial build of dpc files
-.IF "$(MAKEFILERC)"!=""
-PRJ=$(TEMP)
-DPCTARGET=
-.ENDIF
 .IF "$(RC_SUBDIRS)"!=""
 SUBDIRS:=$(RC_SUBDIRS)
 SUBDIRSDEPS=$(RC_SUBDIRSDEPS)
@@ -1380,7 +1375,7 @@ ALLTAR: \
         $(UNOIDLDEPTARGETS) \
         $(URDTARGET) \
         $(URDDOCTARGET) \
-        $(DEPFILES) $(DPCTARGET) \
+        $(DEPFILES) \
         $(DPRTARGET) \
         $(DPZTARGET) \
         $(ZIPALL) \
@@ -1564,6 +1559,42 @@ $(UNOUCRTARGET) : $(UNOUCRDEP) $(UNOUCRTYPEFLAGS)
 .ENDIF			# "$(XML2MK_FILES)"!=""
     +$(CPPUMAKER) @$(mktmp $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOTYPES:^"-T")  $(UNOUCRRDB)) && $(TOUCH) $@
 .ENDIF			# "$(UNOTYPES)" != ""
+
+.IF "$(COMP1RDBTARGETN)"!=""
+$(COMP1RDBTARGETN) : $(COMPRDB)
+.ENDIF			# "$(COMP1RDBTARGETN)"!=""
+
+.IF "$(COMP2RDBTARGETN)"!=""
+$(COMP2RDBTARGETN) : $(COMPRDB)
+.ENDIF			# "$(COMP2RDBTARGETN)"!=""
+
+.IF "$(COMP3RDBTARGETN)"!=""
+$(COMP3RDBTARGETN) : $(COMPRDB)
+.ENDIF			# "$(COMP3RDBTARGETN)"!=""
+
+.IF "$(COMP4RDBTARGETN)"!=""
+$(COMP4RDBTARGETN) : $(COMPRDB)
+.ENDIF			# "$(COMP4RDBTARGETN)"!=""
+
+.IF "$(COMP5RDBTARGETN)"!=""
+$(COMP5RDBTARGETN) : $(COMPRDB)
+.ENDIF			# "$(COMP5RDBTARGETN)"!=""
+
+.IF "$(COMP6RDBTARGETN)"!=""
+$(COMP6RDBTARGETN) : $(COMPRDB)
+.ENDIF			# "$(COMP6RDBTARGETN)"!=""
+
+.IF "$(COMP7RDBTARGETN)"!=""
+$(COMP7RDBTARGETN) : $(COMPRDB)
+.ENDIF			# "$(COMP7RDBTARGETN)"!=""
+
+.IF "$(COMP8RDBTARGETN)"!=""
+$(COMP8RDBTARGETN) : $(COMPRDB)
+.ENDIF			# "$(COMP8RDBTARGETN)"!=""
+
+.IF "$(COMP9RDBTARGETN)"!=""
+$(COMP9RDBTARGETN) : $(COMPRDB)
+.ENDIF			# "$(COMP9RDBTARGETN)"!=""
 
 .ENDIF			# "$(L10N_framework)"!=""
 .ELSE			# "$(lintit)"==""
@@ -1835,10 +1866,6 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 .IF "$(CXXFILES)$(CFILES)$(RCFILES)$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
 .IF "$(DEPFILES)" != ""
 .INCLUDE : $(DEPFILES)
-DPCTARGET=$(MISC)$/$(TARGET).dpc
-.IF "$(nodep)"==""
-.INCLUDE : $(MISC)$/$(TARGET).dpc
-.ENDIF			# "$(nodep)"==""
 .ENDIF			# "$(DEPFILES)" != ""
 .ENDIF			# "$(CXXFILES)$(CFILES)$(RCFILES)$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
 .ELSE		# MAKEFILERC
@@ -2207,19 +2234,6 @@ ZIPALLTARGET:
 #temporary workaround for non-existing delzip in extras
 delzip:
     +echo > $@
-
-.IF "$(depend)"==""
-.IF "$(SVXLIGHT)"!=""
-$(MISC)$/$(TARGET).dpc : \
-    $(foreach,i,$(SVXLIGHTSLOFILES) $(i:d)sxl_$(i:f)) \
-    $(foreach,i,$(SVXLIGHTOBJFILES) $(i:d)sxl_$(i:f))
-.ENDIF
-.IF "$(SECOND_BUILD)"!=""
-$(MISC)$/$(TARGET).dpc : \
-    $(foreach,i,$($(SECOND_BUILD)_SLOFILES) $(i:d)$(SECOND_BUILD)_$(i:f)) \
-    $(foreach,i,$($(SECOND_BUILD)_OBJFILES) $(i:d)$(SECOND_BUILD)_$(i:f))
-.ENDIF
-.ENDIF			# "$(depend)"==""
 
 .IF "$(make_srs_deps)"==""
 $(MISC)$/$(TARGET).dpr : $(SRCFILES) $(SRC1FILES) $(SRC2FILES) $(SRC3FILES)
