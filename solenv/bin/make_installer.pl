@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.68 $
+#   $Revision: 1.69 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-28 11:20:50 $
+#   last change: $Author: obo $ $Date: 2006-09-15 14:35:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1718,6 +1718,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             $infoline = "Added licensefile $licensefilesource into database $controltablename\n";
             push(@installer::globals::logfileinfo, $infoline);
+
+            # include a component into environment table if required
+
+            installer::windows::component::set_component_in_environment_table($languageidtdir, $filesinproductlanguageresolvedarrayref);
 
             # include the ProductCode and the UpgradeCode from codes-file into the Property.idt
 
