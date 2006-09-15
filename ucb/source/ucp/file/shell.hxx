@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shell.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:22:38 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 14:34:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,7 +233,7 @@ namespace fileaccess {
 
         // MethodenDefinitionen
         shell( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMultiServiceFactory,
-               FileProvider* pProvider );
+               FileProvider* pProvider,sal_Bool bWithConfig );
 
         virtual ~shell();
 
@@ -467,6 +467,7 @@ namespace fileaccess {
         sal_Bool SAL_CALL getUrlFromUnq( const rtl::OUString& Unq, rtl::OUString& Url );
 
 
+        sal_Bool m_bWithConfig;
         FileProvider*                                                                   m_pProvider;
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xMultiServiceFactory;
         com::sun::star::uno::Reference< com::sun::star::ucb::XPropertySetRegistry >     m_xFileRegistry;
