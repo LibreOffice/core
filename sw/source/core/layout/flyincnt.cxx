@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flyincnt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:25:58 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:42:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,9 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
     SetCurrRelPos( rRelAttr );
     SWRECTFN( GetAnchorFrm() )
     (Frm().*fnRect->fnSetPos)( rPoint + rRelPos );
+    // --> OD 2006-08-25 #i68520#
+    InvalidateObjRectWithSpaces();
+    // <--
     if( pNotify )
     {
         InvalidatePage();
