@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-08 08:35:59 $
+#   last change: $Author: obo $ $Date: 2006-09-15 14:00:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,12 @@ PRJ=..$/..$/..$/..$/..
 
 PRJNAME=officecfg
 TARGET=schema_ooOffice
+PACKAGE=org.openoffice.Office
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Targets ------------------------------------------------------
-
-PACKAGE=org.openoffice.Office
 
 XCSFILES= \
     Addons.xcs \
