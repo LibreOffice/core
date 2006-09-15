@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provprox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:16:23 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 14:33:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@
 #endif
 #ifndef _PROVPROX_HXX
 #include "provprox.hxx"
+#endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
 using namespace rtl;
@@ -356,6 +359,15 @@ UcbContentProviderProxy::getContentProvider()
             m_xProvider
                 = Reference< XContentProvider >(
                       m_xSMgr->createInstance( m_aService ), UNO_QUERY );
+            if(m_aArguments.compareToAscii("NoConfig") == 0)
+            {
+                Reference<XInitialization> xInit(m_xProvider,UNO_QUERY);
+                if(xInit.is()) {
+                    Sequence<Any> aArgs(1);
+                    aArgs[0] <<= m_aArguments;
+                    xInit->initialize(aArgs);
+                }
+            }
         }
         catch ( RuntimeException const & )
         {
