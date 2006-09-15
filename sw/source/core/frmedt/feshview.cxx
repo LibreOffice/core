@@ -4,9 +4,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:15:42 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:41:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -912,7 +912,9 @@ void lcl_NotifyNeighbours( const SdrMarkList *pLst )
             if( !pAnch )
                 continue;
             pPage = pAnch->FindPageFrm();
-            aRect = GetBoundRect( pO );
+            // --> OD 2006-08-15 #i68520# - naming changed
+            aRect = GetBoundRectOfAnchoredObj( pO );
+            // <--
         }
 
         sal_uInt32 nCount = pPage->GetSortedObjs() ? pPage->GetSortedObjs()->Count() : 0;
