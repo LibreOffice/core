@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-29 14:20:58 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:03:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,23 +222,42 @@ private:
 Outliner::Outliner( SdDrawDocument* pDoc, USHORT nMode )
     : SdrOutliner( &pDoc->GetItemPool(), nMode ),
       mpImpl(new Implementation()),
-      mpDrawDocument(pDoc),
-      mpViewShell(NULL),
+      meMode(SEARCH),
       mpView(NULL),
+      mpViewShell(NULL),
+      mpWindow(NULL),
+      mpDrawDocument(pDoc),
+      mnConversionLanguage(LANGUAGE_NONE),
       mbStringFound(FALSE),
+      mbMatchMayExist(false),
+      mnPageCount(0),
+      mnObjectCount(0),
       mbEndOfSearch(FALSE),
       mbFoundObject(FALSE),
       mbError(FALSE),
       mbDirectionIsForward(true),
       mbRestrictSearchToSelection(false),
+      maMarkListCopy(),
+      mbProcessCurrentViewOnly(false),
       mpObj(NULL),
       mpFirstObj(NULL),
       mpTextObj(NULL),
       mpParaObj(NULL),
+      meStartViewMode(PK_STANDARD),
+      meStartEditMode(EM_PAGE),
+      mnStartPageIndex((USHORT)-1),
+      mpStartEditedObject(NULL),
+      maStartSelection(),
       mpSearchItem(NULL),
+      maObjectIterator(),
+      maCurrentPosition(),
+      maSearchStartPosition(),
+      maLastValidPosition(),
+      mbSelectionHasChanged(false),
+      mbExpectingSelectionChangeEvent(false),
+      mbWholeDocumentProcessed(false),
       mbPrepareSpellingPending(true),
-      mbViewShellValid(true),
-      mbWholeDocumentProcessed(false)
+      mbViewShellValid(true)
 {
     SetStyleSheetPool((SfxStyleSheetPool*) mpDrawDocument->GetStyleSheetPool());
     SetEditTextObjectPool( &pDoc->GetItemPool() );
@@ -380,7 +399,6 @@ void Outliner::PrepareSpelling (void)
 
 void Outliner::StartSpelling (void)
 {
-    BOOL bMultiDoc = false;
     meMode = SPELL;
     mbDirectionIsForward = true;
     mpSearchItem = NULL;
@@ -611,7 +629,7 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
                 if(!mbStringFound)
                     RestoreStartPosition ();
                 else
-                    mnStartPageIndex = -1;
+                    mnStartPageIndex = (USHORT)-1;
             }
         }
         else
@@ -955,7 +973,7 @@ void Outliner::RememberStartPosition (void)
     }
     else
     {
-        mnStartPageIndex = -1;
+        mnStartPageIndex = (USHORT)-1;
     }
 }
 
@@ -996,7 +1014,6 @@ void Outliner::RestoreStartPosition (void)
                     ToolBarManager::TBG_FUNCTION,
                     RID_DRAW_TEXT_TOOLBOX);
 
-                SdrPageView* pPageView = mpView->GetPageViewPvNum(0);
                 mpView->BegTextEdit (mpStartEditedObject);
 
                 ::Outliner* pOutliner =
@@ -1145,6 +1162,8 @@ void Outliner::EndOfSearch (void)
 
 void Outliner::InitPage (USHORT nPageIndex)
 {
+    (void)nPageIndex;
+
     ::sd::outliner::IteratorPosition aPosition (*maObjectIterator);
     if (aPosition.meEditMode == EM_PAGE)
         mnPageCount = mpDrawDocument->GetSdPageCount(aPosition.mePageKind);
@@ -1288,8 +1307,6 @@ void Outliner::PrepareSpellCheck (void)
     {
         // When spell checking we have to test whether we have processed the
         // whole document and have reached the start page again.
-        DrawViewShell* pDrawViewShell =
-            static_cast<DrawViewShell*>(mpViewShell);
         if (meMode == SPELL)
             if (maSearchStartPosition == ::sd::outliner::Iterator())
                 // Remember the position of the first text object so that we
@@ -1310,7 +1327,6 @@ void Outliner::PrepareSpellCheck (void)
 
 void Outliner::PrepareSearchAndReplace (void)
 {
-    ULONG nMatchCount = 0;
     if (HasText( *mpSearchItem ))
     {
         mbStringFound = true;
@@ -1406,7 +1422,7 @@ void Outliner::EnterEditMode (BOOL bGrabFocus)
         pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1)));
         SetPaperSize( mpTextObj->GetLogicRect().GetSize() );
         SdrPageView* pPV = mpView->GetPageViewPvNum(0);
-        FASTBOOL bIsNewObj = TRUE;
+        BOOL bIsNewObj = TRUE;
 
         // Make FuText the current function.
         SfxUInt16Item aItem (SID_TEXTEDIT, 1);
