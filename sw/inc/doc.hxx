@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: vg $ $Date: 2006-08-17 07:29:38 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:52:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1838,22 +1838,6 @@ public:
     void ReadLayoutCache( SvStream& rStream );
     void WriteLayoutCache( SvStream& rStream );
     SwLayoutCache* GetLayoutCache() const { return pLayoutCache; }
-
-    // #102505# ->
-    /**
-       Append a new temporary auto correction.
-
-       @param aWrong the wrong word
-       @param aCorrect the correct word
-    */
-    void AppendTmpCorr(const String & aWrong, const String & aCorrect);
-
-    /** Remove a temporary auto correction.
-
-        @param aWrong the wrong word whose correction shall be removed
-    */
-    void RemoveTmpCorr(const String & aWrong);
-    // <- #102505#
 
     /** Checks if any of the text node contains hidden characters.
         Used for optimization. Changing the view option 'view hidden text'
