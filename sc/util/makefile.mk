@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:28:43 $
+#   last change: $Author: obo $ $Date: 2006-09-15 14:02:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,10 +43,7 @@ USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :  connectivity/version.mk
 .INCLUDE :  settings.mk
-
-IENV!:=$(IENV);..$/res
 
 .IF "$(OS)"=="IRIX"
 LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=30
@@ -136,23 +133,6 @@ SHL1RES=    $(RCTARGET)
 # --- Linken der Applikation ---------------------------------------
 
 LIB3TARGET=$(SLB)$/scalc3.lib
-#LIB3FILES=	\
-#	$(SLB)$/app.lib \
-#	$(SLB)$/docshell.lib \
-#	$(SLB)$/view.lib \
-#	$(SLB)$/undo.lib \
-#	$(SLB)$/attrdlg.lib \
-#	$(SLB)$/namedlg.lib \
-#	$(SLB)$/styleui.lib \
-#	$(SLB)$/miscdlgs.lib \
-#	$(SLB)$/formdlgs.lib \
-#	$(SLB)$/cctrl.lib \
-#	$(SLB)$/dbgui.lib \
-#	$(SLB)$/optdlg.lib \
-#	$(SLB)$/pagedlg.lib \
-#	$(SLB)$/drawfunc.lib \
-#	$(SLB)$/navipi.lib
-
 LIB3FILES=	\
     $(SLB)$/app.lib \
     $(SLB)$/docshell.lib \
@@ -187,15 +167,6 @@ LIB4FILES=	\
     $(SLB)$/accessibility.lib \
     $(SLB)$/ftools.lib \
     $(SLB)$/scflt.lib
-
-#LIB5TARGET=$(LB)$/sclib.lib
-#LIB5ARCHIV=$(LB)$/libsclib.a
-
-.IF "$(depend)" == ""
-ALL:	\
-    $(MISC)$/linkinc.ls \
-    ALLTAR
-.ENDIF
 
 SHL2TARGET= scd$(UPD)$(DLLPOSTFIX)
 SHL2IMPLIB= scdimp
@@ -295,6 +266,8 @@ LIB8OBJFILES = \
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+ALLTAR:	$(MISC)$/linkinc.ls
 
 
 
