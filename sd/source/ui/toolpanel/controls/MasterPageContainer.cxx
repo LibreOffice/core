@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPageContainer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:22:33 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:03:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -824,7 +824,7 @@ void MasterPageContainer::Implementation::UpdatePreviewSizePixel (void)
     MasterPageContainerType::const_iterator iDescriptor;
     MasterPageContainerType::const_iterator iContainerEnd(maContainer.end());
     for (iDescriptor=maContainer.begin(); iDescriptor!=iContainerEnd; ++iDescriptor)
-        if ((*iDescriptor)->mpMasterPage != NULL)
+        if (*iDescriptor!=NULL && (*iDescriptor)->mpMasterPage != NULL)
         {
             Size aPageSize ((*iDescriptor)->mpMasterPage->GetSize());
             nWidth = aPageSize.Width();
