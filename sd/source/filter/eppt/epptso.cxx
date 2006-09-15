@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 09:03:32 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 12:03:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1096,7 +1096,7 @@ sal_Bool PPTWriter::ImplGetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
 
         /* try to get the "real" background PropertySet. If the normal page is not supporting this property, it is
            taken the property from the master */
-        sal_Bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Background" ) ) );
+        sal_Bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Background" ) ), sal_True );
         if ( bHasBackground )
             bHasBackground = ( aAny >>= mXBackgroundPropSet );
         if ( !bHasBackground )
@@ -1579,12 +1579,10 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                     // now check if the text is part of a group, and if the previous object has the same color than the fontcolor
                     // ( and if fillcolor is not available the background color ), it is sometimes
                     // not possible to export the 'embossed' flag
-                    if ( ( GetCurrentGroupLevel() > 0 ) && ( mpGroupEntry[ GetCurrentGroupIndex() ]->mnCurrentPos >= 2 ) )
+                    if ( ( GetCurrentGroupLevel() > 0 ) && ( GetCurrentGroupIndex() >= 1 ) )
                     {
-                        sal_uInt32 nPreviousGroupIndex = mpGroupEntry[ GetCurrentGroupIndex() ]->mnCurrentPos - 2;
-
                         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > aGroupedShape;
-                        ::com::sun::star::uno::Any aAny( GetCurrentGroupAccess()->getByIndex( nPreviousGroupIndex ) );
+                        ::com::sun::star::uno::Any aAny( GetCurrentGroupAccess()->getByIndex( GetCurrentGroupIndex() - 1 ) );
                         aAny >>= aGroupedShape;
                         if ( aGroupedShape.is() )
                         {
@@ -1593,7 +1591,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                             if ( aPropSetOfNextShape.is() )
                             {
                                 if ( PropValue::GetPropertyValue( aAny, aPropSetOfNextShape,
-                                                    String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ) ) )
+                                                    String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ), sal_True ) )
                                 {
                                     if ( nCharColor == mpPptEscherEx->GetColor( *((sal_uInt32*)aAny.getValue()) ) )
                                     {
