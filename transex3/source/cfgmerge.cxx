@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:23:18 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 13:36:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -742,9 +742,7 @@ CfgMerge::CfgMerge(
 {
     if ( rMergeSource.Len()){
         pMergeDataFile = new MergeDataFile(
-//CONFLICT
-            //rMergeSource, sInputFileName  , bErrorLog, RTL_TEXTENCODING_MS_1252, true );
-            rMergeSource, sInputFileName , 0 , RTL_TEXTENCODING_MS_1252 );
+        rMergeSource, sInputFileName  , bErrorLog, RTL_TEXTENCODING_MS_1252, true );
         if( Export::sLanguages.EqualsIgnoreCaseAscii("ALL") ){
             Export::SetLanguages( pMergeDataFile->GetLanguages() );
             aLanguages = pMergeDataFile->GetLanguages();
