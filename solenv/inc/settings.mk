@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.199 $
+#   $Revision: 1.200 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-21 10:38:35 $
+#   last change: $Author: obo $ $Date: 2006-09-15 14:08:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -692,6 +692,10 @@ CLASSPATH!:=$(CLASSPATH:s/uno/no/)
 .IF "$(PRJNAME)"=="tkt"
 CLASSPATH!:=$(CLASSPATH:s/tkt/no/)
 .ENDIF
+
+# default output directory when processing
+# configuration files
+PROCESSOUT*=$(MISC)
 
 # Makros fuer die Librarynamen des Solar
 .INCLUDE .IGNORE : office.mk
