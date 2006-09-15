@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 15:07:33 $
+#   last change: $Author: obo $ $Date: 2006-09-15 14:00:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,12 @@ PRJ=..$/..$/..$/..$/..
 
 PRJNAME=officecfg
 TARGET=data_ooucb
+PACKAGE=org.openoffice.ucb
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Targets ------------------------------------------------------
-
-PACKAGE=org.openoffice.ucb
 
 XCUFILES= \
     Configuration.xcu
