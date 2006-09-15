@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-21 15:27:50 $
+#   last change: $Author: obo $ $Date: 2006-09-15 14:36:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -226,6 +226,7 @@ BEGIN
     $javafilename3 = "";
     $javafile = "";
     $adafile = "";
+    $urefile = "";
 
     $subdir = "";
     $postprocess_specialepm = 0;
@@ -247,6 +248,7 @@ BEGIN
     $linuxlinkrpms = "gid_Module_Root_Files_3,gid_Module_Root_Files_4,gid_Module_Root_Files_5";
     @languagenames = ();
     @requiredpackages = ();
+    %componentconditions = ();
 
     @removedirs = ();
     @emptypackages = ();
