@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_doc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-03 16:50:43 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:11:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,9 @@ HF_IdlDocu::Produce_byData( const client &  i_ce,
     }
 
     std::vector< csi::dsapi::DT_SeeAlsoAtTag* >
-        aSeeAlsos;
+        aSeeAlsosWithoutText;
+    std::vector< csi::dsapi::DT_SeeAlsoAtTag* >
+        aSeeAlsosWithText;
 
     for ( std::vector< ary::info::AtTag2* >::const_iterator
                 iter = i_pDocu->Tags().begin();
@@ -138,7 +140,14 @@ HF_IdlDocu::Produce_byData( const client &  i_ce,
                 pSeeAlso = dynamic_cast< csi::dsapi::DT_SeeAlsoAtTag * >(*iter);
             if (pSeeAlso != 0 )
             {
-                aSeeAlsos.push_back(pSeeAlso);
+                if ( pSeeAlso->Text().IsEmpty() )
+                {
+                    aSeeAlsosWithoutText.push_back(pSeeAlso);
+                }
+                else
+                {
+                    aSeeAlsosWithText.push_back(pSeeAlso);
+                }
                 continue;
             }
 
@@ -152,7 +161,7 @@ HF_IdlDocu::Produce_byData( const client &  i_ce,
         }
     }   // end for
 
-    if (aSeeAlsos.size() > 0)
+    if (aSeeAlsosWithoutText.size() > 0)
     {
         HF_IdlTag
             aSeeAlsoTag(Env(),  i_ce);
@@ -160,8 +169,22 @@ HF_IdlDocu::Produce_byData( const client &  i_ce,
             rTerm = rOut.Produce_Term();
         aSeeAlsoTag.Produce_byData( rTerm,
                                     rOut.Produce_Definition(),
-                                    aSeeAlsos );
+                                    aSeeAlsosWithoutText );
     }
+
+    for ( std::vector< csi::dsapi::DT_SeeAlsoAtTag* >::const_iterator
+                itSee2 = aSeeAlsosWithText.begin();
+          itSee2 != aSeeAlsosWithText.end();
+          ++itSee2 )
+    {
+        HF_IdlTag
+            aTag(Env(),  i_ce);
+        Xml::Element &
+            rTerm = rOut.Produce_Term();
+            aTag.Produce_byData( rTerm,
+                                 rOut.Produce_Definition(),
+                                 *(*itSee2) );
+    }   // end for
 }
 
 void
