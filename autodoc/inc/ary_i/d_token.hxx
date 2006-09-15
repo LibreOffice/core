@@ -4,9 +4,9 @@
  *
  *  $RCSfile: d_token.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:49:07 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:10:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ class DT_Dsapi : public ary::info::DocuToken
     virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const  = 0;
+    virtual bool        IsWhiteOnly() const;
 };
 
 
@@ -83,6 +84,8 @@ class DT_TextToken : public DT_Dsapi
     const String &      GetTextStr() const      { return sText; }
 
     String &            Access_Text()           { return sText; }
+
+    virtual bool        IsWhiteOnly() const;
 
   private:
     String              sText;
@@ -183,6 +186,8 @@ class DT_EOL : public DT_Dsapi
     virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
+    virtual bool        IsWhiteOnly() const;
+
   private:
     udmstri             sText;
 };
