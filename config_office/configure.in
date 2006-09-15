@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-08-28 12:35:18 $
+dnl * Date: $Date: 2006-09-15 11:19:11 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.176 $ )
+AC_REVISION( $Revision: 1.177 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1053,12 +1053,12 @@ Native windows programs cannot use cygwin symlinks. Remove the symbolic
 link, and copy the program to the name of the link.])
       fi
    dnl ===================================================================
-   dnl Another sanity check! More a band-aid. winenv.* adds guw.pl to
-   dnl CC and CXX but the configure checks here assume that guw.pl
+   dnl Another sanity check! More a band-aid. winenv.* adds guw.exe to
+   dnl CC and CXX but the configure checks here assume that guw.exe
    dnl (if needed at all) is not yet present.
    dnl ===================================================================
-   CC=`echo $CC | $SED -n "s/^guw.pl //p"`
-   CXX=`echo $CXX | $SED -n "s/^guw.pl //p"`
+   CC=`echo $CC | $SED -n "s/^guw.exe //p"`
+   CXX=`echo $CXX | $SED -n "s/^guw.exe //p"`
    dnl ===================================================================
    dnl If $CC is set to a MinGW compiler, e.g. "gcc -mno-cygwin" enable
    dnl $WITH_MINGWIN
@@ -1082,7 +1082,7 @@ link, and copy the program to the name of the link.])
    fi
 else 
    dnl ===================================================================
-   dnl All other operating systems use tcsh.
+   dnl All other operating systems use tcsh or bash.
    dnl ===================================================================
    if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash"; then
       AC_MSG_ERROR([only "tcsh" or "bash" are supported options])
@@ -1092,6 +1092,21 @@ USE_SHELL="$with_use_shell"
 AC_MSG_RESULT([$USE_SHELL])
 AC_SUBST(USE_SHELL)
 AC_SUBST(WITH_MINGWIN)
+
+dnl ===================================================================
+dnl Extra check for Windows. Non 4nt-builds need gcc to build dmake
+dnl and g++ to build guw.exe although MS cl (or MinGW) is used to
+dnl build OOo.
+dnl ===================================================================
+if test "$_os" = "WINNT" -a "$with_use_shell" != "4nt" ; then
+   AC_MSG_CHECKING([for cygwin gcc/g++])
+   if which gcc > /dev/null && which g++ > /dev/null ; then
+      AC_MSG_RESULT([found])
+   else
+      AC_MSG_ERROR([cygwin gcc and g++ are needed, please install them.])
+   fi
+fi
+
 
 dnl ===================================================================
 dnl Check whether the chosen shell can be used.
