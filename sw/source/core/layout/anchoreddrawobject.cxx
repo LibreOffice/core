@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:24:22 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:41:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -651,6 +651,9 @@ void SwAnchoredDrawObject::InvalidateObjPos()
          InvalidationOfPosAllowed() )
     {
         mbValidPos = false;
+        // --> OD 2006-08-10 #i68520#
+        InvalidateObjRectWithSpaces();
+        // <--
 
         // --> OD 2005-03-08 #i44339# - check, if anchor frame exists.
         if ( GetAnchorFrm() )
@@ -718,16 +721,23 @@ const SwRect SwAnchoredDrawObject::GetObjRect() const
     //return GetDrawObj()->GetCurrentBoundRect();
     return GetDrawObj()->GetSnapRect();
 }
-void SwAnchoredDrawObject::SetObjTop( const SwTwips _nTop )
+
+// --> OD 2006-08-10 #i68520#
+const bool SwAnchoredDrawObject::_SetObjTop( const SwTwips _nTop )
 {
     SwTwips nDiff = _nTop - GetObjRect().Top();
     DrawObj()->Move( Size( 0, nDiff ) );
+
+    return nDiff != 0;
 }
-void SwAnchoredDrawObject::SetObjLeft( const SwTwips _nLeft )
+const bool SwAnchoredDrawObject::_SetObjLeft( const SwTwips _nLeft )
 {
     SwTwips nDiff = _nLeft - GetObjRect().Left();
     DrawObj()->Move( Size( nDiff, 0 ) );
+
+    return nDiff != 0;
 }
+// <--
 
 /** adjust positioning and alignment attributes for new anchor frame
 
