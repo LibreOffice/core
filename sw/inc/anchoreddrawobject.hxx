@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoreddrawobject.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:16:00 $
+ *  last change: $Author: obo $ $Date: 2006-09-15 11:39:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,11 @@ class SwAnchoredDrawObject : public SwAnchoredObject
         */
         virtual void RegisterAtCorrectPage();
 
+        // --> OD 2006-08-10 #i68520#
+        virtual const bool _SetObjTop( const SwTwips _nTop);
+        virtual const bool _SetObjLeft( const SwTwips _nLeft);
+        // <--
+
     public:
         TYPEINFO();
 
@@ -165,8 +170,6 @@ class SwAnchoredDrawObject : public SwAnchoredObject
 
         // accessors to the object area and its position
         virtual const SwRect GetObjRect() const;
-        virtual void SetObjTop( const SwTwips _nTop);
-        virtual void SetObjLeft( const SwTwips _nLeft);
         // --> OD 2004-09-29 #i34748# - change return type to a pointer.
         // Return value can be NULL.
         const Rectangle* GetLastObjRect() const;
