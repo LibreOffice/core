@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testsmgr_cpnt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:24:59 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 17:42:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_stoc.hxx"
 #ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
 #endif
