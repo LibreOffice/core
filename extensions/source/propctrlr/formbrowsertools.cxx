@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formbrowsertools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:22:45 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 13:17:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_extensions.hxx"
 
 #ifndef _EXTENSIONS_FORMSCTRLR_FORMBROWSERTOOLS_HXX_
 #include "formbrowsertools.hxx"
