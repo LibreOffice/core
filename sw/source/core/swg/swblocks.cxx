@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:34:39 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 21:32:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,10 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 
-#pragma hdrstop
+
 
 #ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
