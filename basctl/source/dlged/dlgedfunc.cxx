@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedfunc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:59:52 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:31:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,15 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basctl.hxx"
+
 #ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
 #endif
 #ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
 #endif
-#pragma hdrstop
 
 #ifndef _BASCTL_DLGEDFUNC_HXX
 #include "dlgedfunc.hxx"
