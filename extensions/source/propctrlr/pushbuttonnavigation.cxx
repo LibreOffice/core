@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pushbuttonnavigation.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 08:00:33 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 13:22:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_extensions.hxx"
 
 #ifndef EXTENSIONS_PROPCTRLR_PUSHBUTTONNAVIGATION_HXX
 #include "pushbuttonnavigation.hxx"
