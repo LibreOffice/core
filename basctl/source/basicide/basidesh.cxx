@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 12:43:08 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:26:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basctl.hxx"
+
 // CLOOKS:
 //#define _MENUBTN_HXX
 #define _SPIN_HXX
@@ -51,7 +54,6 @@
 // Falls ohne PCH's:
 #include <ide_pch.hxx>
 
-#pragma hdrstop
 
 #define _SOLAR__PRIVATE 1
 
