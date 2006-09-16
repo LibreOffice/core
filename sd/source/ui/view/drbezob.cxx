@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drbezob.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:47:33 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 19:35:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
 
 #include "BezierObjectBar.hxx"
 
@@ -74,7 +77,6 @@
 #endif
 
 
-#pragma hdrstop
 
 #include "res_bmp.hrc"
 #include "glob.hrc"
