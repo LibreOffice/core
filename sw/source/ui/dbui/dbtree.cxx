@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtree.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:52:45 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 22:44:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,12 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
+
 // INCLUDE ---------------------------------------------------------------
 
 
-#pragma hdrstop
 
 #ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
