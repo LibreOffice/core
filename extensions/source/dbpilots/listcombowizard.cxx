@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listcombowizard.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:53:20 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 13:00:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_extensions.hxx"
 
 #ifndef _EXTENSIONS_DBP_LISTCOMBOWIZARD_HXX_
 #include "listcombowizard.hxx"
