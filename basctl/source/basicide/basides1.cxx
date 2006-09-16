@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 12:42:55 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:25:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,12 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basctl.hxx"
+
 
 #define GLOBALOVERFLOW2
 
-#pragma hdrstop
 
 
 #ifndef _SBXCLASS_HXX //autogen
@@ -45,7 +47,6 @@
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
 #include <ide_pch.hxx>
-#pragma hdrstop
 
 #define _SOLAR__PRIVATE 1
 
