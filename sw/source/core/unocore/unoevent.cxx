@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:54:05 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 21:56:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,9 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
+
 
 // HINTIDs must be on top; it is required for the macitem.hxx header
 #ifndef _HINTIDS_HXX
