@@ -4,9 +4,9 @@
  *
  *  $RCSfile: changes.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:16:13 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 15:20:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_configmgr.hxx"
 
 
 #include <stdio.h>
