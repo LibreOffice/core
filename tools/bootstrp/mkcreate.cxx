@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mkcreate.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:21:07 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:48:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_tools.hxx"
 
 // global includes
 #include <stdio.h>
@@ -688,9 +691,9 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
         "#\n"
         "#  $RCSfile: mkcreate.cxx,v $\n"
         "#\n"
-        "#  $Revision: 1.14 $\n"
+        "#  $Revision: 1.15 $\n"
         "#\n"
-        "#  last change: $Author: hr $ $Date: 2006-06-19 13:21:07 $\n"
+        "#  last change: $Author: obo $ $Date: 2006-09-17 00:48:57 $\n"
         "#\n"
         "#  The Contents of this file are made available subject to\n"
         "#  the terms of GNU Lesser General Public License Version 2.1.\n"
