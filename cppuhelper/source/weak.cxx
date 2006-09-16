@@ -4,9 +4,9 @@
  *
  *  $RCSfile: weak.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:35:43 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 12:43:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cppuhelper.hxx"
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
