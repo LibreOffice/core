@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:16:16 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 22:22:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
@@ -42,9 +45,6 @@
 #endif
 #include <unotools/ucbstreamhelper.hxx>
 
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
 
 #ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
