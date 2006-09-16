@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unmodpg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:39:15 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 19:44:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
+
 #ifndef _SVDLAYER
 #include <svx/svdlayer.hxx>
 #endif
@@ -43,7 +46,6 @@
 #include <sfx2/viewfrm.hxx>
 #endif
 
-#pragma hdrstop
 
 #include "strings.hrc"
 #include "glob.hrc"         // STR_BCKGRND, STR_BCKGRNDOBJ
