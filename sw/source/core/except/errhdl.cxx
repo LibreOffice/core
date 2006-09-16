@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errhdl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:11:30 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 21:09:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,11 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 #define _ERRHDL_CXX
 
-#pragma hdrstop
 
 #include "stdlib.h"
 #ifdef WIN
