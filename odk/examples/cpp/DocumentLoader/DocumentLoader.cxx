@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentLoader.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 17:02:04 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,6 +37,9 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_odk.hxx"
 
 /*****************************************************************************
  *****************************************************************************
