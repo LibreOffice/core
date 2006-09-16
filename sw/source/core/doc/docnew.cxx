@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:58:50 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 20:53:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#pragma hdrstop
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 #define ROLBCK_HISTORY_ONLY     // Der Kampf gegen die CLOOK's
 
 #ifndef _DOC_HXX
