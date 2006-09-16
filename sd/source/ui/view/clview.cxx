@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:07:27 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 19:35:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,13 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
+
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
 
-#pragma hdrstop
 
 #ifndef SD_CLIENT_VIEW_HXX
 #include "ClientView.hxx"
