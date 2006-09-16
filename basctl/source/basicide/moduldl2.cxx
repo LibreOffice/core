@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:16:10 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:28:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basctl.hxx"
+
 
 #define GLOBALOVERFLOW
 
@@ -40,7 +43,6 @@
 
 #include <svtools/filedlg.hxx>
 
-#pragma hdrstop
 
 #include <sot/storinfo.hxx>
 
