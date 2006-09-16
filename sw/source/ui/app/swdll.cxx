@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdll.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-29 14:24:20 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 22:35:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,10 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 
-#pragma hdrstop
+
 
 #ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
