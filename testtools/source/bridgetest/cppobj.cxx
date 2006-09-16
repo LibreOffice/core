@@ -1,13 +1,16 @@
 /**************************************************************************
 #*
-#*    last change   $Author: hr $ $Date: 2006-06-19 23:13:09 $
-#*    $Revision: 1.10 $
+#*    last change   $Author: obo $ $Date: 2006-09-16 13:37:27 $
+#*    $Revision: 1.11 $
 #*
 #*    $Logfile: $
 #*
 #*    Copyright (c) 1989 - 2000, Star Office GmbH
 #*
 #************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_testtools.hxx"
 #include <stdio.h>
 
 #include "cppu/unotype.hxx"
