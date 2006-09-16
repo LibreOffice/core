@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabtempl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:22:19 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 18:43:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,15 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
+
 #ifdef SD_DLLIMPLEMENTATION
 #undef SD_DLLIMPLEMENTATION
 #endif
 
 #include <svx/flstitem.hxx>
 
-#pragma hdrstop
 #include <svx/svxids.hrc> //add CHINA001
 
 #define ITEMID_COLOR_TABLE      SID_COLOR_TABLE //CHINA001
