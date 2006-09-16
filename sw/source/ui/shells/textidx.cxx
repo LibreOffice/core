@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textidx.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:55:00 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 23:17:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,9 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <uiparam.hxx>
 #ifndef _MSGBOX_HXX //autogen
