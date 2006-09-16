@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdiocmpt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:13:28 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 18:15:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,9 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
+
 
 #ifndef _DEBUG_HXX //autogen
 #include <tools/debug.hxx>
