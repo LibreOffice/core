@@ -4,9 +4,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 08:01:00 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 13:23:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_extensions.hxx"
 
 #ifndef _EXTENSIONS_PROPCTRLR_STANDARDCONTROL_HXX_
 #include "standardcontrol.hxx"
