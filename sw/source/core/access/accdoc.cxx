@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:41:50 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 20:34:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
 #endif
@@ -39,7 +42,6 @@
 #include <rootfrm.hxx>
 #endif
 
-#pragma hdrstop
 
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
