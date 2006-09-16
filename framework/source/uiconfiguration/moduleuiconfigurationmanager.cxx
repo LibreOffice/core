@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleuiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:31:43 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 14:16:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_framework.hxx"
 
 #ifndef __FRAMEWORK_UICONFIGURATION_MODULEUICONFIGMANAGER_HXX_
 #include <uiconfiguration/moduleuiconfigurationmanager.hxx>
