@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleBootstrap_cpp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:50:19 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:14:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,6 +37,9 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_odk.hxx"
 
 #include <iostream>
 #include <cppuhelper/bootstrap.hxx>
