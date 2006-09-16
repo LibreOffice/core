@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olethread.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:44:37 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 13:04:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_extensions.hxx"
 #if defined _MSC_VER && ( _MSC_VER >= 1200 )
 #define _WIN32_WINNT  0x0400
 #endif
