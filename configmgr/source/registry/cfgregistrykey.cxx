@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgregistrykey.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:13:18 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 15:19:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_configmgr.hxx"
 
 #ifndef _CONFIGMGR_REGISTRY_CFGREGISTRYKEY_HXX_
 #include "cfgregistrykey.hxx"
