@@ -2,9 +2,12 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/npnapi.cxx,v 1.9 2006-01-20 12:59:31 obo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/npnapi.cxx,v 1.10 2006-09-16 13:09:58 obo Exp $
 
 *************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_extensions.hxx"
 #include <plugin/unx/plugcon.hxx>
 
 #include <unistd.h>
