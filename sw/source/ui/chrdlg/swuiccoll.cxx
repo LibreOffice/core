@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuiccoll.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:42:44 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 22:38:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,12 +33,14 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
+
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
 
 
-#pragma hdrstop
 
 #include "cmdid.h"
 
