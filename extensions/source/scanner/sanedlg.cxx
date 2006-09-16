@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sanedlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:24:42 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 13:27:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_extensions.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>
