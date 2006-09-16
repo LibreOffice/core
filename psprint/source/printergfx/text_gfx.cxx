@@ -4,9 +4,9 @@
  *
  *  $RCSfile: text_gfx.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:27:19 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 12:37:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_psprint.hxx"
 
 #ifndef _PSPRINT_PRINTERGFX_HXX_
 #include <psprint/printergfx.hxx>
