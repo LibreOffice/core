@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:59:32 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:26:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,12 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basctl.hxx"
+
 
 #include <ide_pch.hxx>
 
-#pragma hdrstop
 
 #include <vector>
 #include <algorithm>
