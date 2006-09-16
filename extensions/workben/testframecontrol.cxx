@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testframecontrol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 13:04:32 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 13:35:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,9 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_extensions.hxx"
+
 //#include <vos/mutex.hxx>
 #include <vos/dynload.hxx>
 
