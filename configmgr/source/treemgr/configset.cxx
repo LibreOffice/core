@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:27:49 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 15:28:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_configmgr.hxx"
 #include <stdio.h> // needed for Solaris 8
 #include "configset.hxx"
 
