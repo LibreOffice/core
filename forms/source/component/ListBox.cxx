@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-28 14:57:15 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 23:52:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
 ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_forms.hxx"
 
 #ifndef _FORMS_LISTBOX_HXX_
 #include "ListBox.hxx"
