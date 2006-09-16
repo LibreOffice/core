@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SStatement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:25:55 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,6 +37,9 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_odk.hxx"
 
 #include <stdio.h>
 
