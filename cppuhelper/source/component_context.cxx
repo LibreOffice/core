@@ -4,9 +4,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:32:58 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 12:39:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cppuhelper.hxx"
 
 #ifdef DIAG
 #define CONTEXT_DIAG
