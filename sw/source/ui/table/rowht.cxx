@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rowht.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:01:51 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 23:20:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,12 +33,14 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
+
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
 
 
-#pragma hdrstop
 
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
