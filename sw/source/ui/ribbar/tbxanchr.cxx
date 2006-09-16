@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxanchr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:46:52 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 23:12:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,10 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 
-#pragma hdrstop
+
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
