@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextvclcontrol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:33:03 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:01:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_forms.hxx"
 
 #ifndef FORMS_SOURCE_RICHTEXT_RICHTEXTVCLCONTROL_HXX
 #include "richtextvclcontrol.hxx"
