@@ -4,9 +4,9 @@
  *
  *  $RCSfile: handlerhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:58:12 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 13:19:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_extensions.hxx"
 
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_HANDLERHELPER_HXX
 #include "handlerhelper.hxx"
