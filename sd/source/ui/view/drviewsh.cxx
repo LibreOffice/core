@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:13:01 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 19:39:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
+
 #include "DrawViewShell.hxx"
 
 #ifndef _AEITEM_HXX //autogen
@@ -48,7 +51,6 @@
 #include <svx/svxids.hrc>
 #endif
 
-#pragma hdrstop
 
 #ifndef _SVX_FMSHELL_HXX            // XXX nur temp (dg)
 #include <svx/fmshell.hxx>
