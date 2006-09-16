@@ -4,9 +4,9 @@
  *
  *  $RCSfile: externallock.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:21:40 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 12:21:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_toolkit.hxx"
 
 #ifndef _TOOLKIT_HELPER_EXTERNALLOCK_HXX_
 #include <toolkit/helper/externallock.hxx>
