@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:55:25 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 19:42:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#pragma hdrstop
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
 
 #include "View.hxx"
 
