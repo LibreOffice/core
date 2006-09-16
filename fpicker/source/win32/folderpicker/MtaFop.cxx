@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MtaFop.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 17:03:40 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 17:58:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_fpicker.hxx"
 
 #pragma warning( disable : 4290 ) // c++ exception specification ignored
 #pragma warning( disable : 4786 ) // identifier was truncated to 'number'
