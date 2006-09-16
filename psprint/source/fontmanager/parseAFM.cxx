@@ -46,11 +46,14 @@
  *
  *  $RCSfile: parseAFM.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:24:16 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 12:34:18 $
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_psprint.hxx"
 
 /* parseAFM.c
  *
