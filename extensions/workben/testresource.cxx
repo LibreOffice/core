@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testresource.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 13:04:44 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 13:36:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_extensions.hxx"
 
 #include <smart/com/sun/star/registry/XImplementationRegistration.hxx>
 #include <smart/com/sun/star/script/XInvocation.hxx>
