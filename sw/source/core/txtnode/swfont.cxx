@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:47:31 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 21:47:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,9 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
+
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
