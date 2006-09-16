@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labimg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:46:58 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 22:55:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,10 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 
-#pragma hdrstop
+
 
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
