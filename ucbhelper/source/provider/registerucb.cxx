@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerucb.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:40:08 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 17:23:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_ucbhelper.hxx"
 
 #ifndef _UCBHELPER_REGISTERUCB_HXX_
 #include <registerucb.hxx>
