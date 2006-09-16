@@ -4,9 +4,9 @@
  *
  *  $RCSfile: modulemanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:45:18 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 14:11:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_framework.hxx"
 
 #include "services/modulemanager.hxx"
 #include "services/frame.hxx"
