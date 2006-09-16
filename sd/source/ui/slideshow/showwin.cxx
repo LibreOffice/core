@@ -4,9 +4,9 @@
  *
  *  $RCSfile: showwin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 11:23:06 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 19:02:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
+
 #include "ShowWindow.hxx"
 
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
@@ -42,7 +45,6 @@
 #include <sfx2/viewfrm.hxx>
 #endif
 
-#pragma hdrstop
 
 #include "res_bmp.hrc"
 
