@@ -514,7 +514,12 @@ Sub SetDefaultOptions
 	bMakeJavaTest = true
 	bMakeDBTest = true
 	bMakeSaveOpenXMLTest = true
-	bMakeSaveOpen50Test = true
+	REM Disable StarOffice 5.0 tests in case binfilter has not been included
+	if Environ(&quot;WITH_BINFILTER&quot;) = &quot;NO&quot; then
+		bMakeSaveOpen50Test = false
+	else
+		bMakeSaveOpen50Test = true
+	End If
 	bMakeSaveOpen8Test = true
 	bMakeCutTest = true
 	bMakePasteTest = true
