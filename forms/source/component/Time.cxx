@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Time.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:19:03 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 23:53:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_forms.hxx"
 
 #ifndef _FORMS_TIME_HXX_
 #include "Time.hxx"
