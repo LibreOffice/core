@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:13:06 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 22:18:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
