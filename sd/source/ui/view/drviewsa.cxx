@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:49:56 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 19:38:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
 
 #include "DrawViewShell.hxx"
 
@@ -94,7 +97,6 @@
 #include <svx/clipfmtitem.hxx>
 #endif
 
-#pragma hdrstop
 
 #include <sfx2/viewfrm.hxx>
 
