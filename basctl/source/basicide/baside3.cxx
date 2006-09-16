@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 12:42:40 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:25:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basctl.hxx"
+
 //svdraw.hxx
 //#define _SVDRAW_HXX ***
 #define _SDR_NOITEMS
@@ -47,7 +50,6 @@
 
 #include <ide_pch.hxx>
 
-#pragma hdrstop
 
 #include <basidesh.hrc>
 #include <baside3.hxx>
