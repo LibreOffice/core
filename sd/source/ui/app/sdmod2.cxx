@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:30:08 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 18:31:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
 
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
@@ -92,7 +95,6 @@
 
 #include <sfx2/sfxdlg.hxx>
 
-#pragma hdrstop
 
 #ifndef _SDR_CONTACT_DISPLAYINFO_HXX
 #include <svx/sdr/contact/displayinfo.hxx>
