@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusnapln.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:04:21 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 18:56:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
+
 #include "fusnapln.hxx"
 
 #ifndef _AEITEM_HXX //autogen
@@ -45,7 +48,6 @@
 #include <sfx2/request.hxx>
 #endif
 
-#pragma hdrstop
 
 #include "strings.hrc"
 
