@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RadioButton.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:44:13 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 23:52:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_forms.hxx"
 
 #ifndef _FORMS_RADIOBUTTON_HXX_
 #include "RadioButton.hxx"
