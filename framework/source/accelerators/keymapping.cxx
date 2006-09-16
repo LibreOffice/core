@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keymapping.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:41:42 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 13:41:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_framework.hxx"
 
 #ifndef __FRAMEWORK_ACCELERATORS_KEYMAPPING_HXX_
 #include <accelerators/keymapping.hxx>
