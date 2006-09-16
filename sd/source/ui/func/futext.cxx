@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:42:27 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 18:57:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,9 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
+
 
 #include "futext.hxx"
 
