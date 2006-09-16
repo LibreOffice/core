@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SServices.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:21:21 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,6 +37,9 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_odk.hxx"
 
 #include "SDriver.hxx"
 #ifndef _CPPUHELPER_FACTORY_HXX_
