@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:00:17 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 22:04:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 #define _SVSTDARR_STRINGS
 
 #include <string.h>
