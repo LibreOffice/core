@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:37:22 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:24:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,15 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basctl.hxx"
+
 
 #include <svtools/svarray.hxx>
 #define _BASIC_TEXTPORTIONS
 #include <basic/sbdef.hxx>
 #include <ide_pch.hxx>
 
-#pragma hdrstop
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
