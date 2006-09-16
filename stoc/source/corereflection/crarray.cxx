@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crarray.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:00:07 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 17:27:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_stoc.hxx"
 
 #ifndef _TYPELIB_TYPEDESCRIPTION_H_
 #include <typelib/typedescription.h>
