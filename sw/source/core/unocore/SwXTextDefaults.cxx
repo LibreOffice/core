@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXTextDefaults.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:52:45 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 21:54:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
@@ -43,7 +46,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
-#pragma hdrstop
 #ifndef _SW_XTEXT_DEFAULTS_HXX
 #include <SwXTextDefaults.hxx>
 #endif
