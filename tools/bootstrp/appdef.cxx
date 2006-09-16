@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdef.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:18:32 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:47:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_tools.hxx"
 
 #include <stdlib.h>
 #include <stdio.h>
