@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-08 07:54:58 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 21:19:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#pragma hdrstop
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #define ITEMID_SIZE         SID_ATTR_PAGE_SIZE
 #include <hintids.hxx>
