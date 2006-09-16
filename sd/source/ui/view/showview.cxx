@@ -4,9 +4,9 @@
  *
  *  $RCSfile: showview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:18:07 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 19:43:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
+
 #include "showview.hxx"
 #ifndef _SVDMODEL_HXX //autogen
 #include <svx/svdmodel.hxx>
@@ -41,7 +44,6 @@
 #include <svx/fmview.hxx>
 #endif
 
-#pragma hdrstop
 
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
