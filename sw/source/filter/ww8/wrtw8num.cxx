@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 11:49:59 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 22:21:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,11 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
+
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
