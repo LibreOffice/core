@@ -4,9 +4,9 @@
  *
  *  $RCSfile: present.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 11:21:50 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 18:41:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,13 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
+
 #ifdef SD_DLLIMPLEMENTATION
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-#pragma hdrstop
 
 #ifndef _SFXITEMSET_HXX //autogen
 #include <svtools/itemset.hxx>
