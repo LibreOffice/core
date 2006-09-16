@@ -4,9 +4,9 @@
  *
  *  $RCSfile: break.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:11 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 22:37:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,12 +33,14 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
+
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
 
 
-#pragma hdrstop
 
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
