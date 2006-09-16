@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldtdlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:47:18 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 22:59:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,12 +33,14 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
+
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
 
 
-#pragma hdrstop
 
 #ifndef _CMDID_H
 #include <cmdid.h>
