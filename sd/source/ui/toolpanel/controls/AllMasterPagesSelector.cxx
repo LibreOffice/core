@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AllMasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:21:56 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 19:17:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
 
 #include "AllMasterPagesSelector.hxx"
 #include "PreviewValueSet.hxx"
