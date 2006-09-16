@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdresid.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:45:46 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 18:32:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,9 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
+
 
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
