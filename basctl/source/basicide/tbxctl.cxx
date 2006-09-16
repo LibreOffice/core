@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxctl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:11:16 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:30:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,12 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basctl.hxx"
+
 
 #include <ide_pch.hxx>
 
-#pragma hdrstop
 
 #define _BASIDE_POPUPWINDOWTBX
 #include <tbxctl.hxx>
