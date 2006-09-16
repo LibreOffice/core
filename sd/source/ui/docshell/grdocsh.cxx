@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grdocsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-29 14:20:01 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 18:45:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
+
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -54,7 +57,6 @@
 
 #include <sfx2/objface.hxx>
 
-#pragma hdrstop
 
 #include "app.hrc"
 #include "strings.hrc"
