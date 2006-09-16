@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:01:36 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:27:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,15 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basctl.hxx"
+
 
 #include <vector>
 #include <algorithm>
 
 #include <ide_pch.hxx>
 
-#pragma hdrstop
 
 #ifndef _SBXCLASS_HXX //autogen
 #include <basic/sbx.hxx>
