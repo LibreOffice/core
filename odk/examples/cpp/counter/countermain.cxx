@@ -2,9 +2,9 @@
  *
  *  $RCSfile: countermain.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:51:35 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,6 +37,9 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_odk.hxx"
 
 /***************************************************************************************************
  ***************************************************************************************************
