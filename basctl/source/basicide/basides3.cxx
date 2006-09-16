@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basides3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:58:21 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:26:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,15 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basctl.hxx"
+
 #define SI_NOCONTROL
 #define SI_NOSBXCONTROLS
 
 #include <basidesh.hrc>
 #include <ide_pch.hxx>
 
-#pragma hdrstop
 
 #define _SOLAR__PRIVATE 1
 
