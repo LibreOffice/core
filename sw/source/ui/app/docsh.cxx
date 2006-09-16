@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-08 08:02:58 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 22:33:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,9 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
+
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
