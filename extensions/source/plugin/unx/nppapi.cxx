@@ -2,9 +2,12 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/nppapi.cxx,v 1.5 2006-01-20 12:59:44 obo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/nppapi.cxx,v 1.6 2006-09-16 13:10:13 obo Exp $
 
 *************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_extensions.hxx"
 
 #if STLPORT_VERSION>=321
 #include <cstdarg>
