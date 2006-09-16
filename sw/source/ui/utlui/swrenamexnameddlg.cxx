@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swrenamexnameddlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 18:03:35 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 23:34:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,11 +32,13 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-#pragma hdrstop
 
 #include <swtypes.hxx>
 #include <globals.hrc>
