@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-29 14:19:29 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 18:44:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
+
 #include "DrawDocShell.hxx"
 
 #ifndef _SV_MSGBOX_HXX //autogen
@@ -43,7 +46,6 @@
 #endif
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
-#pragma hdrstop
 
 #include "helpids.h"
 #ifndef SD_VIEW_SHELL_HXX
