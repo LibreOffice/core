@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartins.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:23:59 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 23:19:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,10 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 
-#pragma hdrstop
+
 
 #define _CHARTINS_CXX
 
