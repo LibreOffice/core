@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:05:26 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:28:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,13 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basctl.hxx"
+
 #include <memory>
 
 #include <ide_pch.hxx>
 
-#pragma hdrstop
 
 #include <macrodlg.hxx>
 #include <macrodlg.hrc>
