@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:52:54 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 23:16:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#pragma hdrstop
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 
 #include "hintids.hxx"
 #include "uiitems.hxx"
