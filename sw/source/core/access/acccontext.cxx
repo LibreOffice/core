@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:41:21 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 20:34:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 #if (OSL_DEBUG_LEVEL > 1) && defined TEST_MIB
     #ifndef _STRING_HXX
     #include <tools/string.hxx>
@@ -55,7 +58,6 @@
 #include "swtypes.hxx"
 #endif
 
-#pragma hdrstop
 
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATESET_HPP_
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
