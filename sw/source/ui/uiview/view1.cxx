@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 12:19:17 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 23:24:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,10 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 
-#pragma hdrstop
+
 
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
