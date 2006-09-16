@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objdlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:09:41 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:29:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,11 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basctl.hxx"
+
 #include <ide_pch.hxx>
 
-#pragma hdrstop
 
 #ifndef _SBXCLASS_HXX //autogen
 #include <basic/sbx.hxx>
