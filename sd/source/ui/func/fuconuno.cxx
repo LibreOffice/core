@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:17:43 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 18:48:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
+
 #include "fuconuno.hxx"
 
 #ifndef _AEITEM_HXX //autogen
@@ -52,7 +55,6 @@
 #endif
 
 
-#pragma hdrstop
 
 #ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
