@@ -4,9 +4,9 @@
  *
  *  $RCSfile: actctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:10 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 22:36:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,10 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 
-#pragma hdrstop
+
 
 
 #ifndef _LIST_HXX //autogen
