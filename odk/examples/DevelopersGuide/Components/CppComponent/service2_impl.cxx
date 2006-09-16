@@ -2,9 +2,9 @@
  *
  *  $RCSfile: service2_impl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 16:32:26 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 00:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,6 +37,9 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_odk.hxx"
 
 #include <cppuhelper/implbase3.hxx> // "3" implementing three interfaces
 #include <cppuhelper/factory.hxx>
