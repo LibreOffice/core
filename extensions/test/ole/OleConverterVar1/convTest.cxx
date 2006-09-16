@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convTest.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:50:04 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 13:32:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_extensions.hxx"
+
 #include <windows.h>
 #include <comdef.h>
 #include <tchar.h>
@@ -53,7 +56,6 @@ extern CComModule _Module;
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <rtl/string.h>
-#pragma hdrstop
 
 
 CComModule _Module;
