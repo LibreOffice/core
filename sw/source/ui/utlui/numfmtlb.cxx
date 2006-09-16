@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmtlb.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:21:41 $
+ *  last change: $Author: obo $ $Date: 2006-09-16 23:34:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,9 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
+
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
