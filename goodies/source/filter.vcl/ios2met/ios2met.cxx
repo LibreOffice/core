@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ios2met.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:47:52 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 15:51:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_goodies.hxx"
 
 
 #include <math.h>
@@ -2792,7 +2795,6 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
 
 //================== ein bischen Muell fuer Windows ==========================
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #ifdef WIN
