@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storlckb.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:33:44 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 01:12:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,10 @@
  *
  ************************************************************************/
 
-#define _STORE_STORLCKB_CXX_ "$Revision: 1.7 $"
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_store.hxx"
+
+#define _STORE_STORLCKB_CXX_ "$Revision: 1.8 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
