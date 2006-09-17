@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:13:26 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 02:32:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_connectivity.hxx"
 
 #ifndef _CONNECTIVITY_FILE_ODATABASEMETADATA_HXX_
 #include "file/FDatabaseMetaData.hxx"
