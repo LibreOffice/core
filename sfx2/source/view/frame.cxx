@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-24 10:48:12 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:48:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
 
 #ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -88,7 +91,6 @@
 #include <vcl/msgbox.hxx>
 
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 // wg. pTopFrames
