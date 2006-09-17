@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dragmt3d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:51:14 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 04:55:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svx.hxx"
 
 // MIB 6.11.97: Die Reihenfolge der Includes mag verwundern, aber in dieser
 // Reihenfolge geht das durch den SCO GCC, in anderen nicht. Also bitte nicht
