@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfkey2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:35:57 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 15:27:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
