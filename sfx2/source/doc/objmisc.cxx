@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-28 15:09:55 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:43:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
 #ifndef _INETMSG_HXX //autogen
 #include <svtools/inetmsg.hxx>
 #endif
@@ -48,7 +51,6 @@
 #include <vos/mutex.hxx>
 
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
