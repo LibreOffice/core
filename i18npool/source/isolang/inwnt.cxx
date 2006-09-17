@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inwnt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:46:25 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 09:20:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_i18npool.hxx"
 
 #ifndef _SAL_CONFIG_H_
 #include <sal/config.h>
