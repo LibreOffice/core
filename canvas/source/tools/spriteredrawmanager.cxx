@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spriteredrawmanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 11:01:20 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 03:27:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
 #include <canvas/spriteredrawmanager.hxx>
