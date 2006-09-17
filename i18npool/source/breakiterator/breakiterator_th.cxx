@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_th.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:18:25 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 09:14:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_i18npool.hxx"
 #include <breakiterator_th.hxx>
 #include <wtt.h>
 
