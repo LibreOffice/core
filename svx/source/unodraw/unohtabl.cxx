@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unohtabl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:04:46 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 06:12:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svx.hxx"
 
 #ifndef _COM_SUN_STAR_DRAWING_HATCH_HPP_
 #include <com/sun/star/drawing/Hatch.hpp>
