@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dpolypolygon.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 09:57:41 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 08:04:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basegfx.hxx"
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
