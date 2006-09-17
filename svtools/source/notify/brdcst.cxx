@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brdcst.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:22:57 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 15:17:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,10 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
+
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #ifndef _DEBUG_HXX
