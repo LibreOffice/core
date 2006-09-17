@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filerec.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 11:47:06 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 14:50:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
 #include "filerec.hxx"
 #ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
