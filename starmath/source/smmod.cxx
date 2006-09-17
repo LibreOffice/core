@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smmod.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 16:51:32 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 07:55:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,9 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_starmath.hxx"
+
 
 
 #ifndef _GLOBNAME_HXX //autogen
