@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdde.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:07:10 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:14:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
 
 #ifndef _SV_WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
@@ -65,7 +68,6 @@
 #include <tools/urlobj.hxx>
 #include <svtools/pathoptions.hxx>
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #include "app.hxx"
