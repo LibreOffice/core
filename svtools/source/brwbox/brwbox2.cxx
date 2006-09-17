@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 11:01:41 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 14:18:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
+
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -54,7 +57,6 @@
 #endif
 
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #ifndef _SV_MULTISEL_HXX
