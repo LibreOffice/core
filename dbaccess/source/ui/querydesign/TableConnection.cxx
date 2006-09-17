@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableConnection.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:27:50 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 07:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_dbaccess.hxx"
 #ifndef DBAUI_TABLECONNECTION_HXX
 #include "TableConnection.hxx"
 #endif
