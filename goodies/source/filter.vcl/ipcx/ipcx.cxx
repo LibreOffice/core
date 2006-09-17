@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipcx.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:59:54 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 15:51:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_goodies.hxx"
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
@@ -431,7 +434,6 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
 
 //================== ein bischen Muell fuer Windows ==========================
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #ifdef WIN
