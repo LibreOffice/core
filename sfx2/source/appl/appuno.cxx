@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:08:52 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:16:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
 #if defined(_MSC_VER) && (_MSC_VER >= 1300)
 #pragma warning( disable : 4290 )
 #endif
@@ -190,7 +193,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #include "sfxtypes.hxx"
