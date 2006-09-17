@@ -405,6 +405,9 @@ TVRead::hasByHierarchicalName( const rtl::OUString& aName )
 
 
 /**************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_xmlhelp.hxx"
 /*                                                                        */
 /*                      TVChildTarget                                     */
 /*                                                                        */
