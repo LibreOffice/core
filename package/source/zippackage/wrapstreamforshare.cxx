@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrapstreamforshare.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 06:15:02 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 17:30:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_package.hxx"
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
