@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrap_hidclex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:05:24 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 11:32:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,5 +32,8 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_soltools.hxx"
 
 #include "hidc_yy.cxx"
