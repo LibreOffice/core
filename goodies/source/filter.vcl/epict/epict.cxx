@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epict.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:19:29 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 15:43:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_goodies.hxx"
 
 #if SUPD <= 364
 #include <svtfilt.hxx>
@@ -2318,7 +2321,6 @@ extern "C" BOOL SAL_CALL DoExportDialog( FltCallDialogParameter& rPara )
 
 //=============================== fuer Windows ==============================
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #ifdef WIN
