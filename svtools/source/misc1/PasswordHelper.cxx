@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PasswordHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:24:36 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 15:14:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,12 +33,11 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "ui_pch.hxx"
-#endif
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
+
 
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #ifndef _SVTOOLS_PASSWORDHELPER_HXX
