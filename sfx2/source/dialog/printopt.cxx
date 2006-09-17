@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printopt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:23:54 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:34:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,10 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #ifndef _SV_MSGBOX_HXX
