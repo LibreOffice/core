@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:29:27 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:50:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
 #ifndef _SV_VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
 #endif
@@ -54,7 +57,6 @@
 #include <vector>
 
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #include "printer.hxx"
