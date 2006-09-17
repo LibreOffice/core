@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 15:49:06 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 12:21:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_vcl.hxx"
 
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
