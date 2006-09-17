@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treelist.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:53:36 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 14:35:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,12 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
+
 #define _TREELIST_CXX
 
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #include <treelist.hxx>
