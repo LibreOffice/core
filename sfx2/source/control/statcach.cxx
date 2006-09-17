@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:54:58 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:29:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
 
 #ifdef SOLARIS
 // HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
@@ -71,7 +74,6 @@
 #include <comphelper/processfactory.hxx>
 
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #include "app.hxx"
