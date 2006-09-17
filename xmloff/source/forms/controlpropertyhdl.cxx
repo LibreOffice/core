@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlpropertyhdl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-29 11:00:08 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 10:33:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_xmloff.hxx"
 
 #ifndef _XMLOFF_FORMS_CONTROLPROPERTYHDL_HXX_
 #include "controlpropertyhdl.hxx"
