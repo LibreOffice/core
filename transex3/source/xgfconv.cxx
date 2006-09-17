@@ -4,6 +4,9 @@
 #include "utf8conv.hxx"
 
 /*****************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_transex3.hxx"
 #if defined( UNX ) || defined( MAC )
 int main( int argc, char *argv[] )
 #else
