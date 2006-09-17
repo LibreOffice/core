@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edittest.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-29 14:47:15 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 06:27:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svx.hxx"
 
 #define ITEMID_FONT             0
 #define ITEMID_POSTURE          0
