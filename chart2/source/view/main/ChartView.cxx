@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:46:34 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 13:35:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_chart2.hxx"
 #include "ChartViewImpl.hxx"
 #include "ViewDefines.hxx"
 #include "VDiagram.hxx"
