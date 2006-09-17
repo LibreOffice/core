@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dtex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:40:01 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 15:38:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_goodies.hxx"
 
 #ifndef _B3D_B3DTEX_HXX
 #include "b3dtex.hxx"
