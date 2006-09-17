@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmhtml.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:23:24 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
 #include <tools/list.hxx>
 #include <tools/table.hxx>
 
@@ -44,7 +47,6 @@
 #endif
 
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #include "docinf.hxx"
