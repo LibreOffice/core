@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cairo_canvashelper_texturefill.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:35:17 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 03:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
 
