@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmllib_export.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:13:21 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 11:39:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_xmlscript.hxx"
 
 #include <xmlscript/xmllib_imexp.hxx>
 #include <xmlscript/xml_helper.hxx>
