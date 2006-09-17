@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appsys.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:04:30 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 09:34:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_desktop.hxx"
+
 #include "appsys.hxx"
 
 #ifdef WNT
@@ -44,7 +47,6 @@
 #include <tools/postwin.h>
 #include <tools/urlobj.hxx>
 
-#pragma hdrstop
 
 #define U2S(STRING)     ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
 
