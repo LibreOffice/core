@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eos2met.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:41:33 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 15:42:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_goodies.hxx"
 
 #include <svtools/fltcall.hxx>
 
@@ -2655,7 +2658,6 @@ extern "C" BOOL SAL_CALL DoExportDialog( FltCallDialogParameter& rPara )
 
 //================== ein bischen Muell fuer Windows ==========================
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #ifdef WIN
