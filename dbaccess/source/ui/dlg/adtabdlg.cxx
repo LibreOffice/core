@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:25:35 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 07:07:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_dbaccess.hxx"
 #ifndef DBAUI_QYDLGTAB_HXX
 #include "adtabdlg.hxx"
 #endif
