@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dhompoint.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:43:41 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 07:59:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basegfx.hxx"
 
 #ifndef _BGFX_POINT_B2DHOMPOINT_HXX
 #include <basegfx/point/b2dhompoint.hxx>
