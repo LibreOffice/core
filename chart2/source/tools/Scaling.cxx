@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Scaling.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:34:50 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 13:29:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_chart2.hxx"
 #ifndef _CHART2_SCALING_HXX
 #include "Scaling.hxx"
 #endif
