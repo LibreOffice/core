@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:49:37 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 13:37:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_chart2.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "CommonConverters.hxx"
 #include "ViewDefines.hxx"
