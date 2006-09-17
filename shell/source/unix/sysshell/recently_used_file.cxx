@@ -4,9 +4,9 @@
  *
  *  $RCSfile: recently_used_file.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 09:39:25 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 01:42:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_shell.hxx"
 
 #ifndef INCLUDED_RECENTLY_USED_FILE
 #include "recently_used_file.hxx"
