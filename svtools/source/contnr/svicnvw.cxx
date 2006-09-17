@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svicnvw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:51:26 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 14:33:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,15 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
+
 #include <svlbox.hxx>
 #include <svicnvw.hxx>
 #include <svimpicn.hxx>
 #include <svlbitm.hxx>
 
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #define ICNVW_BLOCK_ENTRYINS    0x0001
