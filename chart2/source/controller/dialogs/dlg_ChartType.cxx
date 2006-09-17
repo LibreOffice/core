@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ChartType.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:25:58 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 12:56:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,13 +32,15 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_chart2.hxx"
 /*
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
 #include <sfx2/sfxsids.hrc>
 #include <svx/eeitem.hxx>
-#pragma hdrstop
 
 #include "schdll.hxx"
 #define ITEMID_CHARTSTYLE   CHATTR_DIAGRAM_STYLE
