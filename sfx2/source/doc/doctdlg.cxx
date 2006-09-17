@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:27:07 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:40:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -40,7 +43,6 @@
 #include <svtools/stritem.hxx>
 #endif
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #include "doctdlg.hxx"
