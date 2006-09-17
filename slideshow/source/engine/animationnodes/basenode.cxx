@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basenode.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:34:56 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 08:35:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_slideshow.hxx"
 
 // must be first
 #include "canvas/debug.hxx"
