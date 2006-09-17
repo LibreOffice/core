@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwhead.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:29:33 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 14:18:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,13 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
+
 #include "brwhead.hxx"
 #include "brwbox.hxx"
 
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 //===================================================================
