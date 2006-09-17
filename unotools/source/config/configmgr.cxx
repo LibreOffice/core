@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:05:04 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 01:23:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_unotools.hxx"
 
 #ifndef _UTL_CONFIGMGR_HXX_
 #include "unotools/configmgr.hxx"
