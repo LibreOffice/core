@@ -4,9 +4,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:09:05 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:16:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
 #ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
 #endif
@@ -58,7 +61,6 @@
 #endif
 
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #include "childwin.hxx"
