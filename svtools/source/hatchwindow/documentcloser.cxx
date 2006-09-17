@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentcloser.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:09:43 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 14:57:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
 
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEBROADCASTER_HPP_
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
