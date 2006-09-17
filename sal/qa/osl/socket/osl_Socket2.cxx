@@ -4,9 +4,9 @@
  *
  *  $RCSfile: osl_Socket2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:24:15 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 08:53:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sal.hxx"
 
 /**  test coder preface:
     1. the BSD socket function will meet "unresolved external symbol error" on Windows platform
