@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intro.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 17:12:59 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 09:36:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,9 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_desktop.hxx"
+
 
 #include "intro.hxx"
 
