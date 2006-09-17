@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styfitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:32:39 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:36:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,12 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
 // INCLUDE ---------------------------------------------------------------
 
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #include "styfitem.hxx"
