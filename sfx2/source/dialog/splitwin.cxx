@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:24:20 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:35:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
 #ifdef SOLARIS
 // HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
 #include <ctime>
@@ -47,7 +50,6 @@
 #include <svtools/viewoptions.hxx>
 #endif
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #include <vcl/timer.hxx>
