@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 10:53:58 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 10:00:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basic.hxx"
 //#include <stl_queue.h>
 
 #ifndef _VOS_MUTEX_HXX_ //autogen
