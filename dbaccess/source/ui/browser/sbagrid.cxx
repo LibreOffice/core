@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:58:21 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 06:58:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_dbaccess.hxx"
 
 #ifndef DBACCESS_SBA_GRID_HRC
 #include "sbagrid.hrc"
