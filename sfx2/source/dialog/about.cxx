@@ -4,9 +4,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:19:25 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:30:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
 // include ---------------------------------------------------------------
 
 #ifndef _SV_APP_HXX
@@ -45,7 +48,6 @@
 #include <svtools/pver.hxx>
 #endif
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #include <tools/stream.hxx>
