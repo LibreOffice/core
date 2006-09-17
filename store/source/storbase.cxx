@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storbase.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:32:49 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 01:11:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,10 @@
  *
  ************************************************************************/
 
-#define _STORE_STORBASE_CXX_ "$Revision: 1.10 $"
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_store.hxx"
+
+#define _STORE_STORBASE_CXX_ "$Revision: 1.11 $"
 
 #ifndef __ALGORITHM__
 #include <algorithm>
