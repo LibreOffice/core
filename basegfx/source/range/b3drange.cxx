@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3drange.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 14:00:22 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 08:05:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basegfx.hxx"
 
 #ifndef _BGFX_RANGE_B3DRANGE_HXX
 #include <basegfx/range/b3drange.hxx>
