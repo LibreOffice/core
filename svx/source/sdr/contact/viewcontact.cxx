@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontact.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-08 08:29:56 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 05:35:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svx.hxx"
 
 #ifndef _SDR_CONTACT_VIEWCONTACT_HXX
 #include <svx/sdr/contact/viewcontact.hxx>
