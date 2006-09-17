@@ -4,9 +4,9 @@
  *
  *  $RCSfile: waitsymbol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:37:45 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 08:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_slideshow.hxx"
 
 #include "waitsymbol.hxx"
 #include "comphelper/anytostring.hxx"
