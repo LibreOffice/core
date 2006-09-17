@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3ituple.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:53:32 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 08:07:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basegfx.hxx"
 
 #ifndef _BGFX_TUPLE_B3ITUPLE_HXX
 #include <basegfx/tuple/b3ituple.hxx>
