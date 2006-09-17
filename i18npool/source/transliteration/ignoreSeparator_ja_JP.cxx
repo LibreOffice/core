@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ignoreSeparator_ja_JP.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:30:11 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 09:28:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_i18npool.hxx"
 
 // prevent internal compiler error with MSVC6SP3
 #include <utility>
