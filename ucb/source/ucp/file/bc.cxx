@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:18:58 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 13:46:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_ucb.hxx"
 #ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
 #endif
