@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oslfile2streamwrap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:53:20 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 17:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_comphelper.hxx"
 
 #ifndef _COMPHELPER_STREAM_OSLFILEWRAPPER_HXX_
 #include <comphelper/oslfile2streamwrap.hxx>
