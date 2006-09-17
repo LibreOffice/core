@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexentrysupplier_asian.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:29:37 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 09:18:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_i18npool.hxx"
 
 #include <rtl/ustrbuf.hxx>
 #include <indexentrysupplier_asian.hxx>
