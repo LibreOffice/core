@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mgetempl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-24 10:47:27 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:33:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
 // include ---------------------------------------------------------------
 
 #ifndef _MSGBOX_HXX //autogen
@@ -51,7 +54,6 @@
 #include <svtools/style.hxx>
 #endif
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #include "styfitem.hxx"
