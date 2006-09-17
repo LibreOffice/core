@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:03:30 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 10:18:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,9 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_xmloff.hxx"
+
 
 #ifndef _COM_SUN_STAR_UTIL_XSTRINGSUBSTITUTION_HPP_
 #include <com/sun/star/util/XStringSubstitution.hpp>
