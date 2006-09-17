@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeresourcebundle.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:45:02 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 17:13:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_comphelper.hxx"
 
 #ifndef COMPHELPER_OFFICE_RESOURCE_BUNDLE_HXX
 #include <comphelper/officeresourcebundle.hxx>
