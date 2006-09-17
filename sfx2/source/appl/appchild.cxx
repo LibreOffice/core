@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appchild.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:14:56 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:14:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,10 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #ifndef _SFX_WHITER_HXX //autogen
