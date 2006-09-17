@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:07:38 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 06:37:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_dbaccess.hxx"
 
 #ifndef _DBA_CORE_VIEWCONTAINER_HXX_
 #include "viewcontainer.hxx"
