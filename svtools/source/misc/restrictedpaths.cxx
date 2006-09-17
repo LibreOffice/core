@@ -4,9 +4,9 @@
  *
  *  $RCSfile: restrictedpaths.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:20:52 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 15:12:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
 
 #ifndef SVTOOLS_RESTRICTEDPATHS_HXX
 #include "restrictedpaths.hxx"
