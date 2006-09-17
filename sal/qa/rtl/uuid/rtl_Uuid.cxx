@@ -34,6 +34,9 @@ inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = ""
 /************************************************************************
  * For diagnostics( from sal/test/testuuid.cxx )
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sal.hxx"
 void printUuid( sal_uInt8 *pNode )
 {
     for( sal_Int32 i1 = 0 ; i1 < 4 ; i1++ )
