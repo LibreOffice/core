@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ilstitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:16:13 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 15:04:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
 
 #ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
 #include <com/sun/star/script/XTypeConverter.hpp>
