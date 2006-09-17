@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_Bootstrap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:42:56 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 08:55:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sal.hxx"
 
 // Documentation about bootstraping can be found at:
 // http://udk.openoffice.org/common/man/concept/micro_deployment.html
