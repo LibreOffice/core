@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolygonclipper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 17:41:08 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 08:01:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_basegfx.hxx"
 
 #ifndef _BGFX_POLYPOLYGON_B2DPOLYGONCLIPPER_HXX
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
