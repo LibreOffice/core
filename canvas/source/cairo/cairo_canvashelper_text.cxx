@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvashelper_text.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:59:59 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 03:19:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
 #include <canvas/canvastools.hxx>
