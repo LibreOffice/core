@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styledlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:24:33 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:36:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
 // include ---------------------------------------------------------------
 
 #ifndef _SFX_WHITER_HXX //autogen
@@ -45,7 +48,6 @@
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #include "styledlg.hxx"
