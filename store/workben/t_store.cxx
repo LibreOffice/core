@@ -4,9 +4,9 @@
  *
  *  $RCSfile: t_store.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:50:21 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 01:13:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,10 @@
  *
  ************************************************************************/
 
-#define _T_STORE_CXX "$Revision: 1.5 $"
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_store.hxx"
+
+#define _T_STORE_CXX "$Revision: 1.6 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
