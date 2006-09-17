@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smdll.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:38:15 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 07:55:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,9 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_starmath.hxx"
+
 
 #ifndef _SOT_FACTORY_HXX //autogen
 #include <sot/factory.hxx>
