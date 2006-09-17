@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:35:59 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 10:58:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_xmloff.hxx"
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
