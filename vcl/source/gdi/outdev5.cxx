@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev5.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:28:50 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 12:07:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_vcl.hxx"
 
 #include <tools/ref.hxx>
 #ifndef _SV_SVSYS_HXX
