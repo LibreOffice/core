@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipict.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:11:17 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 15:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_goodies.hxx"
 
 #include <math.h>
 #include <string.h>
@@ -1927,7 +1930,6 @@ extern "C" BOOL GraphicImport( SvStream& rIStm, Graphic & rGraphic,
 
 //================== ein bischen Muell fuer Windows ==========================
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #ifdef WIN
