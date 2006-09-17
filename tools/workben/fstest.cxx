@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fstest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:51:57 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 01:09:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,10 @@
  *
  ************************************************************************/
 
-#define _FSTEST_CXX "$Revision: 1.2 $"
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_tools.hxx"
+
+#define _FSTEST_CXX "$Revision: 1.3 $"
 
 #ifndef _SOLAR_H
 #include <solar.h>
