@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 10:03:32 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 03:42:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_testshl2.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -259,7 +262,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(, argv)
 
     if ( opt.hasOpt("-verbose") )
     {
-        fprintf(stderr, "testshl2 $Revision: 1.20 $\n");
+        fprintf(stderr, "testshl2 $Revision: 1.21 $\n");
     }
 
     if ( opt.hasOpt("-endless"))                 // this exists only for self test issues
