@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objface.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-24 10:47:17 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:27:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,15 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
 #include <stdlib.h>
 
 #ifndef _TOOLS_RCID_H
 #include <tools/rcid.h>
 #endif
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #ifndef _STREAM_HXX //autogen
