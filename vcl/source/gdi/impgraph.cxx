@@ -5,9 +5,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-08 08:34:50 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 12:03:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_vcl.hxx"
 
 #ifndef _VCOMPAT_HXX
 #include <tools/vcompat.hxx>
