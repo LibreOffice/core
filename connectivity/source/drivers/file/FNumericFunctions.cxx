@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FNumericFunctions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:25:40 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 02:33:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_connectivity.hxx"
 
 #include <cmath>
 #include "file/FNumericFunctions.hxx"
