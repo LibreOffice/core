@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rsclex.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 17:14:06 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 15:59:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_rsc.hxx"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
