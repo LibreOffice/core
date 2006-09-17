@@ -4,9 +4,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:15:55 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:25:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
 
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -59,7 +62,6 @@
 #include <svtools/securityoptions.hxx>
 
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #ifndef _RTL_USTRING_
