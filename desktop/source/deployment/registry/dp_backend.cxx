@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_backend.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 17:06:05 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 09:42:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_desktop.hxx"
 
 #include "dp_backend.h"
 #include "dp_ucb.h"
