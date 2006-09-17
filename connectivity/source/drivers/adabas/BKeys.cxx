@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BKeys.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:22:26 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 02:08:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_connectivity.hxx"
 
 #ifndef _CONNECTIVITY_ADABAS_KEYS_HXX_
 #include "adabas/BKeys.hxx"
