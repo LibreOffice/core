@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmdescr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:27:59 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:41:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
 #include <sot/object.hxx>
 
 #ifndef _STREAM_HXX //autogen
@@ -45,7 +48,6 @@
 #include <svtools/itemset.hxx>
 #endif
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #include "frmdescr.hxx"
