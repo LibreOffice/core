@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:35:43 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:46:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
 #ifndef _COM_SUN_STAR_EMBED_VERBDESCRIPTOR_HPP_
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #endif
@@ -52,7 +55,6 @@
 #include <vcl/pointr.hxx>
 #endif
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #include <unotools/streamwrap.hxx>
