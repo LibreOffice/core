@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filectrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:01:07 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 14:37:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
+
 #define _SV_FIELCTRL_CXX
 
 #ifndef _URLOBJ_HXX //autogen wg. INetURLObject
@@ -50,7 +53,6 @@
 #endif
 
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 // =======================================================================
