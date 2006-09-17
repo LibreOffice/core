@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:27:17 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 02:36:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_connectivity.hxx"
 
 #ifndef _CONNECTIVITY_FILE_FCODE_HXX_
 #include "file/fcode.hxx"
