@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charset_s.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:45:52 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 03:13:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_connectivity.hxx"
 
 #ifndef CONNECTIVITY_DBTOOLS_CHARSET_S_HXX
 #include "charset_s.hxx"
