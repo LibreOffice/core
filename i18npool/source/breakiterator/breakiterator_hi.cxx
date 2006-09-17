@@ -5,6 +5,9 @@
 #* Bugs! - Contact Prabhat.Hegde@sun.com
 #************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_i18npool.hxx"
+
 #include <breakiterator_hi.hxx>
 
 #include <string.h> // for memset
