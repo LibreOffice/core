@@ -4,9 +4,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 16:06:44 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 16:49:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
 #endif
@@ -48,7 +51,6 @@
 #endif
 #include <tools/urlobj.hxx>
 #ifndef GCC
-#pragma hdrstop
 #endif
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
