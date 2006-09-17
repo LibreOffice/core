@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexcollection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:14:29 $
+ *  last change: $Author: obo $ $Date: 2006-09-17 07:17:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_dbaccess.hxx"
 
 #ifndef _DBAUI_INDEXCOLLECTION_HXX_
 #include "indexcollection.hxx"
