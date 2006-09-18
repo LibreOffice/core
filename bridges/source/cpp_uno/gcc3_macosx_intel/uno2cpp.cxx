@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-13 11:02:57 $
+ *  last change: $Author: obo $ $Date: 2006-09-18 08:26:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,11 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_bridges.hxx"
+
 #include <stdio.h>
+
 // #include <malloc.h>
 
 #include <com/sun/star/uno/genfunc.hxx>
