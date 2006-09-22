@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:49:33 $
+ *  last change: $Author: vg $ $Date: 2006-09-22 09:18:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,6 +296,9 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case TABLE_ROW_KEEP: return mbTableRowKeep;
         case IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION: return mbIgnoreTabsAndBlanksForLineCalculation;
         case DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE: return mbDoNotCaptureDrawObjsOnPage;
+        // --> OD 2006-08-25 #i68949#
+        case CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME: return mbClipAsCharacterAnchoredWriterFlyFrames;
+        // <--
          // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE: return mbBrowseMode;
@@ -349,13 +352,13 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
 
                 UpdateNumRule();
 
-        if (pOutlineRule)
-            {
-            pOutlineRule->Validate();
-            // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
-            pOutlineRule->SetCountPhantoms( !mbOldNumbering );
-            // <--
-        }
+                if (pOutlineRule)
+                {
+                    pOutlineRule->Validate();
+                    // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
+                    pOutlineRule->SetCountPhantoms( !mbOldNumbering );
+                    // <--
+                }
             }
             break;
         case OLD_LINE_SPACING:
@@ -396,6 +399,11 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             mbDoNotCaptureDrawObjsOnPage = value;
             break;
 
+        // --> OD 2006-08-25 #i68949#
+        case CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME:
+            mbClipAsCharacterAnchoredWriterFlyFrames = value;
+            break;
+        // <--
          // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE:
