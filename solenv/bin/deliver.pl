@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.106 $
+#   $Revision: 1.107 $
 #
-#   last change: $Author: rt $ $Date: 2006-09-07 15:16:45 $
+#   last change: $Author: vg $ $Date: 2006-09-22 08:55:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.106 $ ';
+$id_str = ' $Revision: 1.107 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -111,6 +111,7 @@ $opt_zip            = 0;            # create an additional zip file
 $opt_log            = 1;            # create an additional log file
 $opt_link           = 0;            # hard link files into the solver to save disk space
 $opt_deloutput      = 0;            # delete the output tree for the project once successfully delivered
+$delete_common      = 1;            # for "-delete": if defined delete files from common tree also
 
 if ($^O ne 'cygwin') {              # iz59477 - cygwin needes a dot "." at the end of filenames to disable
   $maybedot     = '';               # some .exe transformation magic.
@@ -192,7 +193,7 @@ sub do_copy
         glob_and_copy($from, $to, $touch);
     }
 
-    if ( $common_build && ( $line !~ /%COMMON_OUTDIR%/ ) ) {
+    if ($delete_common && $common_build && ( $line !~ /%COMMON_OUTDIR%/ ) ) {
         $line =~ s/%__SRC%/%COMMON_OUTDIR%/ig;
         if ( $line =~ /%COMMON_OUTDIR%/ ) {
             $line =~ s/%_DEST%/%COMMON_DEST%/ig;
@@ -415,28 +416,34 @@ sub do_touch
 sub parse_options
 {
     my $arg;
+    my $dontdeletecommon = 0;
     while ( $arg = shift @ARGV ) {
         $arg =~ /^-force$/  and $opt_force  = 1 and next;
         $arg =~ /^-minor$/  and $opt_minor  = 1 and next;
         $arg =~ /^-check$/  and $opt_check  = 1 and next;
         $arg =~ /^-zip$/    and $opt_zip    = 1 and next;
         $arg =~ /^-delete$/ and $opt_delete = 1 and next;
+        $arg =~ /^-dontdeletecommon$/ and $dontdeletecommon = 1 and next;
         $arg =~ /^-help$/   and $opt_help   = 1 and $arg = '';
         $arg =~ /^-link$/ and $ENV{GUI} ne 'WNT' and $opt_link = 1 and next;
         $arg =~ /^-deloutput$/ and $opt_deloutput = 1 and next;
         $arg =~ /^-debug$/  and $is_debug   = 1 and next;
         print_error("invalid option $arg") if ( $arg =~ /^-/ );
         if ( $arg =~ /^-/ || $opt_help || $#ARGV > -1 ) {
-            usage();
-            exit(1);
+            usage(1);
         }
         $dest = $arg;
     }
     # $dest and $opt_zip or $opt_delete are mutually exclusive
     if ( $dest and ($opt_zip || $opt_delete) ) {
-        usage();
-        exit(1);
+        usage(1);
     }
+    if ($dontdeletecommon) {
+        if (!$opt_delete) {
+            usage(1);
+        }
+        $delete_common = 0;
+    };
     # $opt_delete implies $opt_force
     $opt_force = 1 if $opt_delete;
 }
@@ -580,6 +587,10 @@ sub parse_dlst
         tr/\r\n//d;
         next if /^#/;
         next if /^\s*$/;
+        if (!$delete_common && /%COMMON_DEST%/) {
+            # Just ignore all lines with %COMMON_DEST%
+            next;
+        };
         if ( /^\s*(\w+?):\s+(.*)$/ ) {
             if ( !exists $action_hash{$1} ) {
                 print_error("unknown action: \'$1\'", $line_cnt);
@@ -1377,12 +1388,14 @@ sub cleanup_and_die
 
 sub usage
 {
+    my $exit_code = shift;
     print STDERR "Usage:\ndeliver [OPTION]... [DESTINATION-PATH]\n";
     print STDERR "Options:\n";
     print STDERR "  -check       just print what would happen, no actual copying of files\n";
     print STDERR "  -delete      delete files (undeliver), use with care\n";
     print STDERR "  -deloutput   remove the output tree after copying\n";
     print STDERR "  -force       copy even if not newer\n";
+    print STDERR "  -dontdeletecommon do not delete common files (for -delete option)\n";
     print STDERR "  -help        print this message\n";
     if ( !defined($ENV{GUI}) || $ENV{GUI} ne 'WNT' ) {
         print STDERR "  -link        hard link files into the solver to save disk space\n";
@@ -1390,6 +1403,7 @@ sub usage
     print STDERR "  -minor       deliver into minor (milestone)\n";
     print STDERR "  -zip         additionally create zip files of delivered content\n";
     print STDERR "The option -zip and a destination-path are mutually exclusive.\n";
+    exit($exit_code);
 }
 
 # vim: set ts=4 shiftwidth=4 expandtab syntax=perl:
