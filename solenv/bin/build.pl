@@ -7,9 +7,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.149 $
+#   $Revision: 1.150 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:36:00 $
+#   last change: $Author: vg $ $Date: 2006-09-22 08:55:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.149 $ ';
+    $id_str = ' $Revision: 1.150 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -488,6 +488,15 @@ sub dmake_dir {
             if (!$grab_output && -f $log_file) {
                 system("cat $log_file");
             };
+#            open(DMAKE_OUTPUT, "$dmake 2>&1 |");
+#            open(DMAKE_OUTPUT_FILE, ">$log_file");
+#            while (<DMAKE_OUTPUT>) {
+#                print $_ if (!$grab_output);
+#                print DMAKE_OUTPUT_FILE $_;
+#            };
+#            close DMAKE_OUTPUT;
+#            close DMAKE_OUTPUT_FILE;
+#            $error_code = $?;
         } else {
             $error_code = system ("$dmake");
         };
@@ -616,7 +625,7 @@ sub get_deps_hash {
     $module_to_build = shift;
     my $dependencies_hash = shift;
     if ($deliver || $custom_job) {
-        add_post_job($dependencies_hash, $module_to_build);
+        add_post_job($dependencies_hash, $module_to_build) if ($modules_types{$module_to_build} ne 'lnk');
         return;
     };
     if ( defined $modules_types{$module_to_build} && $modules_types{$module_to_build} ne 'mod') {
@@ -1942,6 +1951,9 @@ sub is_output_tree {
     if ($only_common) {
         return '1' if ($_ eq $only_common);
     } else {
+        if (scalar keys %platforms < scalar keys %platforms_to_copy) {
+            return '';
+        };
         return '1' if (/^common$/);
         return '1' if (/^common\.pro$/);
     };
@@ -2174,7 +2186,9 @@ sub get_incomp_projects {
 sub get_platforms {
     my $platforms_ref = shift;
     if ($only_platform) {
-        $$platforms_ref{$only_platform}++;
+        foreach (split(',', $only_platform)) {
+            $$platforms_ref{$_}++;
+        }
         $platforms_ref = \%platforms_to_copy;
     };
 
@@ -2193,7 +2207,7 @@ sub get_platforms {
         my $s_path = $solver . '/' .  $_;
         $$platforms_ref{$_}++ if (-e $s_path);
     };
-    delete $platforms_to_copy{$only_platform} if (defined $only_platform);
+#    delete $platforms_to_copy{$_} foreach (split(',', $only_platform));
     if (!scalar keys %platforms) {
         # An Auses wish - fallback to INPATH for new platforms
         if (defined $ENV{INPATH}) {
@@ -2209,8 +2223,16 @@ sub get_platforms {
 # by the modules to be build
 #
 sub clear_delivered {
-    print "Clearing up delivered\n";
+    my $message = 'Clearing up delivered';
     my %backup_vars;
+    my $deliver_delete_switches = '-delete';
+    if (scalar keys %platforms < scalar keys %platforms_to_copy) {
+        $message .= ' without common trees';
+        $deliver_delete_switches .= ' -dontdeletecommon';
+        $only_common = '';
+    };
+    print "$message\n";
+
     foreach my $platform (keys %platforms) {
         print "\nRemoving delivered for $platform\n";
         my %solar_vars = ();
@@ -2221,7 +2243,7 @@ sub clear_delivered {
             };
             $ENV{$_} = $solar_vars{$_};
         };
-        my $undeliver = "$deliver_commando -delete $nul";
+        my $undeliver = "$deliver_commando $deliver_delete_switches $nul";
         foreach my $module (sort @modules_built) {
             my $module_path = CorrectPath($StandDir.$module);
             print "Removing delivered from module $module\n";
