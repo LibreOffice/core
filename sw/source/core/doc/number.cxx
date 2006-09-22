@@ -4,9 +4,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:57:32 $
+ *  last change: $Author: vg $ $Date: 2006-09-22 09:19:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,13 +178,16 @@ void SwNumRule::SetName(const String & rName)
     sName = rName;
 }
 
-void SwNumRule::SetList(SwTxtNodeTable * _pList)
+// --> OD 2006-09-12 #i69145#
+// Creates list of associated text nodes by copying contents of provided list <_pList>
+void SwNumRule::SetList( const SwTxtNodeTable& rList )
 {
-    if (pList)
+    if ( pList )
         delete pList;
 
-    pList = _pList;
+    pList = new SwTxtNodeTable( rList );
 }
+// <--
 
 void SwNumRule::SetNumRuleMap(std::hash_map<String, SwNumRule *, StringHash> *
                               _pNumRuleMap)
@@ -636,6 +639,10 @@ SwNumRule::~SwNumRule()
         delete (*aIt).second;
     }
 
+    // --> OD 2006-09-12 #i69145#
+    delete pList;
+    pList = 0;
+    // <--
 }
 
 
