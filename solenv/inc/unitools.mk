@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-28 15:43:23 $
+#   last change: $Author: vg $ $Date: 2006-09-22 08:55:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,9 @@ PIPEERROR=|&
 
 # iz31658
 CHECKZIPRESULT:=^ iff errorlevel == 12 .and. errorlevel == 12 then ( echo Nothing to update for zip ^ set somedummyvar=%somedummyvar)
+
+# tell makedepend to write windows native format
+MKDEPFLAGS=-n
 
 .ENDIF # "$(USE_SHELL)"!="4nt"
 
