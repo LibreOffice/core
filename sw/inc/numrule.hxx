@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:28:41 $
+ *  last change: $Author: vg $ $Date: 2006-09-22 09:18:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,8 +160,11 @@ class SW_DLLPUBLIC SwNumRule
     tPamAndNums aNumberRanges;
     SwNumFmt* aFmts[ MAXLEVEL ];
 
-    /**
-       cache for associated text nodes
+    /** list for associated text nodes
+
+        OD 2006-09-12 #i69145#
+        It's not a cache.
+
     */
     SwTxtNodeTable * pList;
 
@@ -230,12 +233,15 @@ public:
     */
     const SwTxtNodeTable * GetList() const { return pList; }
 
-    /**
-       Set list of associated text nodes.
+    /** Creates list of associated text nodes.
 
-       @param _pList  the list of associated text nodes
+        OD 2006-09-12 #i69145#
+        Creates the list the associated text nodes by copying contents of
+        list provided by parameter <rList>
+
+        @param _rList  the list of associated text nodes
     */
-    void SetList(SwTxtNodeTable * _pList);
+    void SetList(const SwTxtNodeTable& rList);
 
     // #i36749#
     /**
