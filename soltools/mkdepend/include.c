@@ -34,6 +34,7 @@ void remove_dotdot( char * );
 int isdot( char * );
 int isdotdot( char * );
 int issymbolic(char * dir, char * component);
+int exists_path(struct IncludesCollection*, char*);
 
 
 extern struct   inclist inclist[ MAXFILES ],
@@ -43,10 +44,11 @@ extern char *notdotdot[ ];
 extern boolean show_where_not;
 extern boolean warn_multiple;
 
-struct inclist *inc_path(file, include, dot)
+struct inclist *inc_path(file, include, dot, incCollection)
     register char   *file,
             *include;
     boolean dot;
+    struct IncludesCollection* incCollection;
 {
     static char path[ BUFSIZ ];
     register char       **pp, *p;
@@ -70,7 +72,8 @@ struct inclist *inc_path(file, include, dot)
      * then check the exact path provided.
      */
     if (!found && (dot || *include == '/')) {
-        if (stat(include, &st) == 0 && !( st.st_mode & S_IFDIR)) {
+
+        if ((exists_path(incCollection, include)) && stat(include, &st) == 0 && !( st.st_mode & S_IFDIR)) {
             ip = newinclude(include, include);
             found = TRUE;
         }
@@ -94,7 +97,7 @@ struct inclist *inc_path(file, include, dot)
             strcpy(path + (p-file) + 1, include);
         }
         remove_dotdot(path);
-        if (stat(path, &st) == 0 && !( st.st_mode & S_IFDIR)) {
+        if ((exists_path(incCollection, path)) && stat(path, &st) == 0 && !( st.st_mode & S_IFDIR)) {
             ip = newinclude(path, include);
             found = TRUE;
         }
@@ -110,7 +113,7 @@ struct inclist *inc_path(file, include, dot)
         for (pp = includedirs; *pp; pp++) {
             sprintf(path, "%s/%s", *pp, include);
             remove_dotdot(path);
-            if (stat(path, &st) == 0 && !(st.st_mode & S_IFDIR)) {
+            if ((exists_path(incCollection, path)) && stat(path, &st) == 0 && !(st.st_mode & S_IFDIR)) {
                 ip = newinclude(path, include);
                 found = TRUE;
                 break;
@@ -122,6 +125,14 @@ struct inclist *inc_path(file, include, dot)
     if (!found)
         ip = NULL;
     return(ip);
+}
+
+int exists_path(incCollection, path)
+    struct IncludesCollection* incCollection;
+    char* path;
+{
+    convert_slashes(path);
+    return call_IncludesCollection_exists(incCollection, path);
 }
 
 /*
