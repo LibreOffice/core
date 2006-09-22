@@ -159,6 +159,8 @@ catch (sig)
 struct sigaction sig_act;
 #endif /* USGISH */
 
+boolean native_win_slashes = FALSE;
+
 int main(argc, argv)
     int argc;
     char    **argv;
@@ -172,6 +174,7 @@ int main(argc, argv)
     struct symtab *psymp = predefs;
     char *endmarker = NULL;
     char *defincdir = NULL;
+    struct IncludesCollection* incCollection;
 
     ProgramName = argv[0];
 
@@ -283,6 +286,10 @@ int main(argc, argv)
             } else
                 width = atoi(argv[0]+2);
             break;
+        case 'n':
+            // Use "-n" switch to generate dependencies with windows-native slash style
+            native_win_slashes = TRUE;
+            break;
         case 'o':
             if (endmarker) break;
             if (argv[0][2] == '\0') {
@@ -345,6 +352,10 @@ int main(argc, argv)
             warning("ignoring option %s\n", argv[0]);
         }
     }
+
+    convert_slashes(objprefix);
+    objprefix = append_slash(objprefix);
+
     if (!defincdir) {
 #ifdef PREINCDIR
         if (incp >= includedirs + MAXDIRS)
@@ -436,11 +447,13 @@ int main(argc, argv)
     /*
      * now peruse through the list of files.
      */
+    incCollection = create_IncludesCollection();
+
     for(fp=filelist; *fp; fp++) {
         filecontent = getfile(*fp);
         ip = newinclude(*fp, (char *)NULL);
 
-        find_includes(filecontent, ip, ip, 0, FALSE);
+        find_includes(filecontent, ip, ip, 0, FALSE, incCollection);
         freefile(filecontent);
         recursive_pr_include(ip, ip->i_file, base_name(*fp));
         inc_clean();
@@ -761,3 +774,41 @@ void warning1(msg,x1,x2,x3,x4,x5,x6,x7,x8,x9)
 #endif
 #endif /* DEBUG_MKDEPEND */
 }
+
+void convert_slashes(path)
+    char* path;
+{
+#if defined (WNT)
+    /*
+     * Convert backslashes to slashes
+     */
+    char *ptr;
+    if (native_win_slashes) {
+        for (ptr = (char*)path; *ptr; ++ptr)
+            if (*ptr == '/')
+                *ptr = '\\';
+    } else {
+        for (ptr = (char*)path; *ptr; ++ptr)
+            if (*ptr == '\\')
+                *ptr = '/';
+    };
+#endif
+}
+
+char* append_slash(path)
+    char* path;
+{
+    char *ptr, *new_string;
+    if ((path[strlen(path) - 1] == '/') || (path[strlen(path) - 1] == '\\')) {
+        new_string = path;
+    } else {
+        new_string = (char*)malloc(sizeof(char) * (strlen(path) + 2));
+        strcpy(new_string, path);
+        if (native_win_slashes)
+            strcat(new_string, "\\");
+        else
+            strcat(new_string, "/");
+    };
+    return new_string;
+};
+
