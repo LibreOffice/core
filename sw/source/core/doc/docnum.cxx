@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:54:01 $
+ *  last change: $Author: vg $ $Date: 2006-09-22 09:18:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -903,8 +903,9 @@ void SwNumRuleInfo::MakeList( SwDoc& rDoc, BOOL bOutline )
 
     // --> FME 2004-11-03 #i36571# The numrule and this info structure should
     // have different instances of the list:
-    SwTxtNodeTable* pNewList = new SwTxtNodeTable( aList );
-    pRule->SetList(pNewList);
+    // --> OD 2006-09-12 #i69145#
+    // method <SwNumRule::SetList(..)> copies content of list provided by the parameter
+    pRule->SetList( aList );
     // <--
 }
 
