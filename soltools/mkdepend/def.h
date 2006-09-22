@@ -103,6 +103,9 @@ extern int  _debugmask;
 #define debug(level,arg) /**/
 #endif /* DEBUG */
 
+// VG: a C++ class for information about directories
+#include "collectdircontent.hxx"
+
 typedef unsigned char boolean;
 
 struct symtab {
@@ -159,3 +162,6 @@ extern fatalerr(char *, ...);
 extern warning(char *, ...);
 extern warning1(char *, ...);
 #endif
+
+void convert_slashes(char *);
+char *append_slash(char *);
