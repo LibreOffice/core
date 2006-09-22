@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 05:09:01 $
+#   last change: $Author: vg $ $Date: 2006-09-22 08:57:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,11 +63,12 @@ OBJFILES=  \
         $(OBJ)$/main.obj \
         $(OBJ)$/parse.obj \
         $(OBJ)$/pr.obj \
+        $(OBJ)$/collectdircontent.obj \
         $(NULL)
 
 APP1TARGET=makedepend
 APP1OBJS=$(OBJFILES)
-#APP1STDLIBS=$(LIBSTLPORTST)
+APP1STDLIBS=$(LIBSTLPORT)
 
 .INCLUDE : target.mk
 
