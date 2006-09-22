@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.70 $
+#   $Revision: 1.71 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 13:58:08 $
+#   last change: $Author: vg $ $Date: 2006-09-22 08:55:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -305,7 +305,7 @@ $(MISC)$/s_%.dpcc : %.c
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @$(MAKEDEPEND) -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
@@ -316,7 +316,7 @@ $(MISC)$/o_%.dpcc : %.c
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @+$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+    @+$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @echo $@ : $(OBJ)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
@@ -327,7 +327,7 @@ $(MISC)$/s_%.dpcc : %.cxx
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @$(MAKEDEPEND) -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
@@ -338,7 +338,7 @@ $(MISC)$/o_%.dpcc : %.cxx
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+    @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
@@ -349,7 +349,7 @@ $(MISC)$/s_%.dpcc : %.cpp
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @$(MAKEDEPEND) -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
@@ -360,7 +360,7 @@ $(MISC)$/o_%.dpcc : %.cpp
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+    @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
@@ -372,9 +372,9 @@ $(MISC)$/s_%.dpcc : $(MISC)$/%.c
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"	
-    @$(MAKEDEPEND) -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
+    @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
-    @$(MAKEDEPEND) -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
+    @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
@@ -387,9 +387,9 @@ $(MISC)$/o_%.dpcc : $(MISC)$/%.c
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"	
-    @$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
+    @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
-    @$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
+    @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
@@ -402,9 +402,9 @@ $(MISC)$/s_%.dpcc : $(MISC)$/%.cxx
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"	
-    @$(MAKEDEPEND) -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
+    @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
-    @$(MAKEDEPEND) -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
+    @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
@@ -417,9 +417,9 @@ $(MISC)$/o_%.dpcc : $(MISC)$/%.cxx
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"	
-    @$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
+    @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
-    @$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
+    @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
@@ -433,7 +433,7 @@ $(MISC)$/s_%.dpcc : %.m
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @$(MAKEDEPEND) -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
@@ -444,7 +444,7 @@ $(MISC)$/o_%.dpcc : %.m
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+    @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
@@ -456,9 +456,9 @@ $(MISC)$/s_%.dpcc : $(MISC)$/%.m
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"	
-    @$(MAKEDEPEND) -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
+    @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
-    @$(MAKEDEPEND) -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
+    @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
@@ -471,9 +471,9 @@ $(MISC)$/o_%.dpcc : $(MISC)$/%.m
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"	
-    @$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
+    @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
-    @$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
+    @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
@@ -487,7 +487,7 @@ $(MISC)$/s_%.dpcc : %.s
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @$(MAKEDEPEND) -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
@@ -515,7 +515,7 @@ $(MISC)$/%.dpsc :
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
     @+-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))} >& $(NULLDEV)
-    @$(MAKEDEPEND) -f - -p$(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/ -o.par -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(*:b).scp > $@
+    @$(MAKEDEPEND) -f - -p$(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))} -o.par -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(*:b).scp > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).par  >> $@
     @+echo $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).par : $(*:b).scp >> $@
@@ -529,7 +529,7 @@ $(MISC)$/%.dprc :
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @$(MAKEDEPEND) -f - -p$(RES)$/ -o.res $(RCLANGFLAGS_{$(subst,$(@:d:d:d:u), $(@:d:d:u))}:u:s/ //) $(CDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) -I$(SOLARENV)$/inc $(*:b).rc >> $@
+    @$(MAKEDEPEND) -f - -p$(RES) -o.res $(RCLANGFLAGS_{$(subst,$(@:d:d:d:u), $(@:d:d:u))}:u:s/ //) $(CDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) -I$(SOLARENV)$/inc $(*:b).rc >> $@
 .IF "$(LAZY_DEPS)"==""	
 #	@+echo $@ : $(RES)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).res  >> $@
     @+echo $@ : $(RES)$/$(*:b).res  >> $@
