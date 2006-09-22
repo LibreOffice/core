@@ -34,11 +34,12 @@ void undefine( char *symbol, register struct inclist *file );
 extern char *directives[];
 extern struct inclist   maininclist;
 
-int find_includes(filep, file, file_red, recursion, failOK)
+int find_includes(filep, file, file_red, recursion, failOK, incCollection)
     struct filepointer  *filep;
     struct inclist      *file, *file_red;
     int         recursion;
     boolean         failOK;
+    struct IncludesCollection* incCollection;
 {
     register char   *line;
     register int    type;
@@ -49,7 +50,7 @@ int find_includes(filep, file, file_red, recursion, failOK)
         case IF:
         doif:
             type = find_includes(filep, file,
-                file_red, recursion+1, failOK);
+                file_red, recursion+1, failOK, incCollection);
             while ((type == ELIF) || (type == ELIFFALSE) ||
                    (type == ELIFGUESSFALSE))
                 type = gobble(filep, file, file_red);
@@ -66,7 +67,7 @@ int find_includes(filep, file, file_red, recursion, failOK)
             type = gobble(filep, file, file_red);
             if (type == ELSE)
                 find_includes(filep, file,
-                      file_red, recursion+1, recfailOK);
+                      file_red, recursion+1, recfailOK, incCollection);
             else
             if (type == ELIF)
                 goto doif;
@@ -83,7 +84,7 @@ int find_includes(filep, file, file_red, recursion, failOK)
                     filep->f_line, line,
                     file->i_file, file_red->i_file, ": doit"));
                 type = find_includes(filep, file,
-                    file_red, recursion+1, failOK);
+                    file_red, recursion+1, failOK, incCollection);
                 while (type == ELIF || type == ELIFFALSE || type == ELIFGUESSFALSE)
                     type = gobble(filep, file, file_red);
                 if (type == ELSE)
@@ -97,7 +98,7 @@ int find_includes(filep, file, file_red, recursion, failOK)
                 type = gobble(filep, file, file_red);
                 if (type == ELSE)
                     find_includes(filep, file,
-                        file_red, recursion+1, failOK);
+                        file_red, recursion + 1, failOK, incCollection);
                 else if (type == ELIF)
                         goto doif;
                 else if (type == ELIFFALSE || type == ELIFGUESSFALSE)
@@ -125,10 +126,10 @@ int find_includes(filep, file, file_red, recursion, failOK)
             undefine(line, file_red);
             break;
         case INCLUDE:
-            add_include(filep, file, file_red, line, FALSE, failOK);
+            add_include(filep, file, file_red, line, FALSE, failOK, incCollection);
             break;
         case INCLUDEDOT:
-            add_include(filep, file, file_red, line, TRUE, failOK);
+            add_include(filep, file, file_red, line, TRUE, failOK, incCollection);
             break;
         case ERROR:
                 warning("%s: %d: %s\n", file_red->i_file,

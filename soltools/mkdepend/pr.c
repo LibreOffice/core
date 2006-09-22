@@ -39,11 +39,12 @@ extern boolean  printed;
 extern boolean  verbose;
 extern boolean  show_where_not;
 
-void add_include(filep, file, file_red, include, dot, failOK)
+void add_include(filep, file, file_red, include, dot, failOK, incCollection)
     struct filepointer  *filep;
     struct inclist  *file, *file_red;
     char    *include;
     boolean dot;
+    struct IncludesCollection* incCollection;
 {
     register struct inclist *newfile;
     register struct filepointer *content;
@@ -51,7 +52,7 @@ void add_include(filep, file, file_red, include, dot, failOK)
     /*
      * First decide what the pathname of this include file really is.
      */
-    newfile = inc_path(file->i_file, include, dot);
+    newfile = inc_path(file->i_file, include, dot, incCollection);
     if (newfile == NULL) {
         if (failOK)
             return;
@@ -62,7 +63,7 @@ void add_include(filep, file, file_red, include, dot, failOK)
             warning("%s, line %d: ", file->i_file, filep->f_line);
         warning1("cannot find include file \"%s\"\n", include);
         show_where_not = TRUE;
-        newfile = inc_path(file->i_file, include, dot);
+        newfile = inc_path(file->i_file, include, dot, incCollection);
         show_where_not = FALSE;
     }
 
@@ -76,7 +77,7 @@ void add_include(filep, file, file_red, include, dot, failOK)
         if (!newfile->i_searched) {
             newfile->i_searched = TRUE;
             content = getfile(newfile->i_file);
-            find_includes(content, newfile, file_red, 0, failOK);
+            find_includes(content, newfile, file_red, 0, failOK, incCollection);
             freefile(content);
         }
     }
