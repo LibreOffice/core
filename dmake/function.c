@@ -1,6 +1,6 @@
 /* $RCSfile: function.c,v $
--- $Revision: 1.8 $
--- last change: $Author: hr $ $Date: 2006-04-20 12:00:12 $
+-- $Revision: 1.9 $
+-- last change: $Author: vg $ $Date: 2006-09-25 09:39:41 $
 --
 -- SYNOPSIS
 --      GNU style functions for dmake.
@@ -145,8 +145,10 @@ char *buf;
       case 'n':
      if( strncmp(fname,"null", 4) == 0 )
         res = _exec_iseq(mod1,NIL(char),args,TRUE);
-     else if (strncmp(fname,"nil",3) == 0 )
+     else if (strncmp(fname,"nil",3) == 0 ) {
+        FREE(Expand(args));
         res = DmStrDup("");
+     }
      else if (strncmp(fname,"not",3) == 0 )
         res = _exec_not(args);
          else
@@ -230,46 +232,25 @@ char *data;
 
 
 static char *
-_exec_call( var, list )
-char *var;
-char *list;
+_exec_call( var, list )/*
+=========================
+  Return the (recursively expanded) value of macro var. Expand list and
+  discard the result.
+*/
+char *var;  /* Name of the macro (until first whitespace). */
+char *list; /* Rest data (after the whitespace). */
 {
    char *res = NIL(char);
-   char *s;
-   TKSTR tk;
-   int   i=0;
 
-   list = Expand(list);
+   /* the argument part is expanded. */
+   FREE(Expand(list));
 
-   SET_TOKEN(&tk,list);
-   while( *(s=Get_token(&tk, "", FALSE)) != '\0' ) {
-      char  buf[40];
-
-      sprintf(buf, "%d", i++);
-      Def_macro(buf,s,M_MULTI|M_NOEXPORT|M_FORCE|M_PUSH);
-   }
-   CLEAR_TOKEN(&tk);
-
+   /* Prepend '$(' and append ')' so that Expand will return the value
+    * of the 'var' macro. */
    var = DmStrJoin(DmStrJoin("$(",var,-1,FALSE),")",-1,TRUE);
    res = Expand(var);
 
-   i=0;
-   SET_TOKEN(&tk,list);
-   while( *(s=Get_token(&tk, "", FALSE)) != '\0' ) {
-      HASHPTR hp;
-      char    buf[40];
-
-      sprintf(buf, "%d", i++);
-      hp = GET_MACRO(buf);
-      Pop_macro(hp);
-      FREE(hp->ht_name);
-      if(hp->ht_value) FREE(hp->ht_value);
-      FREE(hp);
-   }
-   CLEAR_TOKEN(&tk);
-
    FREE(var);
-   FREE(list);
    return(res);
 }
 
@@ -290,6 +271,7 @@ char *data;
 
    data = DmStrSpn(data," \t\n");
    SET_TOKEN(&tk,list);
+   /* push previous macro definition and redefine. */
    hp = Def_macro(var,"",M_MULTI|M_NOEXPORT|M_FORCE|M_PUSH);
 
    while( *(s=Get_token(&tk, "", FALSE)) != '\0' ) {
@@ -298,7 +280,7 @@ char *data;
    }
 
    CLEAR_TOKEN(&tk);
-   Pop_macro(hp);
+   Pop_macro(hp);   /* Get back old macro definition. */
    FREE(hp->ht_name);
    if(hp->ht_value) FREE(hp->ht_value);
    FREE(hp);
@@ -333,12 +315,23 @@ char *data;
        * safe to create a random filename and assume the file does not exist.  Howver,
        * we still allow Expand() to do its job for fixed filenames */
       /* char *newtmp;
-       * Get_temp( &newtmp, "", FALSE ); FREE(newtmp); */
+       * Get_temp( &newtmp, FALSE ); FREE(newtmp); */
       tmpname = Expand(file);
 
       if( *tmpname ) {
+#ifdef NO_DRIVE_LETTERS
+     /* umask without ugo rights doesn't make sense. */
+     mode_t       mask;
+
+     /* Create tempfile with 600 permissions. */
+     mask = umask(0066);
+#endif
+
      if( (tmpfile = fopen(tmpname, "w")) == NIL(FILE) )
         Open_temp_error( tmpname, name );
+#ifdef NO_DRIVE_LETTERS
+     umask(mask);
+#endif
 
      Def_macro("TMPFILE", tmpname, M_EXPANDED|M_MULTI);
      Link_temp( Current_target, tmpfile, tmpname );
@@ -564,7 +557,7 @@ char *mod1;
       fflush(stdout);
    }
 
-   if( (stdout_redir = Get_temp(&tmpnm, "", "w+")) == NIL(FILE) )
+   if( (stdout_redir = Get_temp(&tmpnm, "w+")) == NIL(FILE) )
       Open_temp_error( tmpnm, cname.ht_name );
 
    bsize  = (Buffer_size < BUFSIZ)?BUFSIZ:Buffer_size;
