@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filebuff.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:02:43 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:27:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ class Buffer
                                                 { return s; }
     char *              Data()                  { return s; }
     void                SetSize(
-                            long                i_size )
+                           unsigned long                i_size )
                                                 { if (s) delete [] s; s = new char [i_size]; }
   private:
     char * s;
@@ -60,4 +60,3 @@ bool                LoadXmlFile(
 
 
 #endif
-
