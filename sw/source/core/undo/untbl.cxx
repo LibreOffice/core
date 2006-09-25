@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:54:08 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:29:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -409,7 +409,7 @@ void SwUndoInsTbl::Redo( SwUndoIter& rUndoIter )
         if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ) )
         {
             IDocumentRedlineAccess::RedlineMode_t eOld = rDoc.GetRedlineMode();
-            rDoc.SetRedlineMode_intern( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE );
+            rDoc.SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE));
 
             rDoc.AppendRedline( new SwRedline( *pRedlData, aPam ), true);
             rDoc.SetRedlineMode_intern( eOld );
@@ -2364,7 +2364,7 @@ public:
     RedlineModeInternGuard(
         SwDoc& rDoc,                      /// change mode of this document
         IDocumentRedlineAccess::RedlineMode_t eNewRedlineMode,    /// new redline mode
-        IDocumentRedlineAccess::RedlineMode_t eRedlineModeMask  = IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_IGNORE /*change only bits set in this mask*/);
+        IDocumentRedlineAccess::RedlineMode_t eRedlineModeMask  = (IDocumentRedlineAccess::RedlineMode_t)(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_IGNORE /*change only bits set in this mask*/));
 
     ~RedlineModeInternGuard();
 };
@@ -2376,8 +2376,8 @@ RedlineModeInternGuard::RedlineModeInternGuard(
     : mrDoc( rDoc ),
       meOldRedlineMode( rDoc.GetRedlineMode() )
 {
-    mrDoc.SetRedlineMode_intern( ( meOldRedlineMode & ~eRedlineModeMask ) |
-                                 ( eNewRedlineMode & eRedlineModeMask ) );
+    mrDoc.SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)( ( meOldRedlineMode & ~eRedlineModeMask ) |
+                                     ( eNewRedlineMode & eRedlineModeMask ) ));
 }
 
 RedlineModeInternGuard::~RedlineModeInternGuard()
@@ -2801,8 +2801,8 @@ SwUndo* SwUndoTblCpyTbl::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
     // mark the cell content behind rIdx as deletion
     // merge text nodes at rIdx if possible
     IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( ( eOld | IDocumentRedlineAccess::REDLINE_DONTCOMBINE_REDLINES ) &
-                                ~IDocumentRedlineAccess::REDLINE_IGNORE );
+    pDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)( ( eOld | IDocumentRedlineAccess::REDLINE_DONTCOMBINE_REDLINES ) &
+                                     ~IDocumentRedlineAccess::REDLINE_IGNORE ));
     SwPosition aInsertEnd( rPos );
     SwTxtNode* pTxt;
     if( !rJoin )
