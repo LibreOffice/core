@@ -19,7 +19,7 @@
 .IP "\\$1" \\n[dmake-indent]u
 .it 1 PD
 ..
-.TH DMAKE 1  "2006-06-16" "Dmake Version 4.5"
+.TH DMAKE 1  "2006-09-21" "Dmake Version 4.6"
 .SH NAME
 \fBdmake\fR \- maintain program groups, or interdependent files
 .SH SYNOPSIS
@@ -261,6 +261,8 @@ Defining and expanding macros.
 How to define targets and their prerequisites.
 .IP \fBRECIPES\fP 1.9i
 How to tell \fBdmake\fP how to make a target.
+.IP "\fBBUILTIN COMMANDS\fP" 1.9i
+Internal dmake commands.
 .IP "\fBTEXT DIVERSIONS\fP" 1.9i
 How to use text diversions in recipes and macro expansions.
 .IP "\fBSPECIAL TARGETS\fP" 1.9i
@@ -283,12 +285,12 @@ The rules that \fBdmake\fP uses to bind
 a target to an existing file in the file system.
 .IP "\fBPERCENT(%) RULES\fP" 1.9i
 Specification of recipes to be used by the inference algorithm.
-.IP "\fBAUGMAKE META RULES\fP" 1.9i
-A subclass of the \fBPERCENT(%) RULES\fP.
 .IP "\fBMAKING INFERENCES\fP" 1.9i
 The rules that \fBdmake\fP uses when inferring how to make a target which
 has no explicit recipe.  This and the previous section are really a single
 section in the text.
+.IP "\fBAUGMAKE META RULES\fP" 1.9i
+A subclass of the \fBPERCENT(%) RULES\fP.
 .IP "\fBMAKING TARGETS\fP" 1.9i
 How \fBdmake\fP makes targets other than libraries.
 .IP "\fBMAKING LIBRARIES\fP" 1.9i
@@ -523,6 +525,7 @@ target-definition \(-> targets [attrs] op { \fBPREREQUISITE\fP } [\fB;\fR rcp-li
 \(-> \fB.ROOT\fR
 \(-> \fB.SOURCE\fR
 \(-> \fB.SOURCE.\fIsuffix\fR
+\(-> \fB.SUFFIXES (deprecated)\fR
 \(-> \fB.TARGETS\fR
 \(-> \fB.INIT\fR
 \(-> \fB.DONE\fR
@@ -559,17 +562,18 @@ start of the first line.
 A continued line cannot span more than one makefile.
 .PP
 \fBwhite space\fP is defined to be any combination of
-<space>, <tab>, and the sequence \e<nl>
-when \e<nl> is used to terminate a LINE.
-When processing \fBmacro\fP definition lines,
+<space>, <tab>, and the sequence \e<nl> when \e<nl> is used to terminate a
+LINE. \fBNote\fP the special treatment of \e<nl> in macro definion and recipe
+lines below.
+When processing \fBmacro definition\fP lines,
 any amount of white space is allowed on either side of the macro operator
 and white space is stripped from both before and after the macro
-value string.
-The sequence \e<nl> is treated as white space during recipe expansion
-and is deleted from the final recipe string.
+value string. A \e<nl> sequence in a macro definition is deleted from the
+macro value before assigning this value.
+During \fBrecipe expansion\fP the sequence \e<nl> is treated as white space 
+but is deleted from the final recipe string.
 You must escape the \e<nl> with another \e in order to get a \e at the end
-of a recipe line.
-The \e<nl> sequence is deleted from macro values when they are expanded.
+of a recipe or macro definition line.
 .PP
 When processing \fBtarget\fP definition lines,
 the recipe for a target must, in general, follow the first definition
@@ -1104,17 +1108,15 @@ list of prerequisites.
 says to clear the previous list of prerequisites before adding
 the new prerequisites.  Thus,
 .sp
-\t.SUFFIXES :
+\tfoo :
 .br
-\t.SUFFIXES : .a .b
+\tfoo : bar baz
 .sp
 can be replaced by
 .sp
-\t.SUFFIXES :\- .a .b
+\tfoo :\- bar baz
 .sp
-however the old form still works as expected.  NOTE:  .SUFFIXES is ignored by
-.B dmake
-it is used here simply as an example.
+however the old form still works as expected.
 .IP \fB:\fP
 When the rule operator is not modified by a second ':'
 only one set of rules may be specified for making a target.
@@ -1273,12 +1275,14 @@ An example recipe:
 .RS
 .nf
 target :
-\tfirst recipe line
-\tsecond recipe line, executed independent of first.
-\t@a recipe line that is not echoed
-\t\-and one that has errors ignored
-\t%and one that causes dmake to swap out
-\t\+and one that is executed using a shell.
+.RS
+first recipe line
+second recipe line, executed independent of first.
+@a recipe line that is not echoed
+-and one that has errors ignored
+%and one that causes dmake to swap out
++and one that is executed using a shell.
+.RE
 .fi
 .RE
 .PP
@@ -1312,6 +1316,31 @@ target :
 .fi
 .RE
 .sp
+.SH "BUILTIN COMMANDS"
+.B dmake
+supports some builtin commands. An optional leading '+' describes that
+the builtin can be used also when being executed in a shell otherwise it
+is only implemented when used directly. Remember that if a character of the
+recipe is found in the SHELLMETAS macro the execution of the recipe in a
+shell is forced.
+.IP "[\fB+\fP]\fBnoop\fP [\fBsomething\fP]"
+The  \fBnoop\fP internal command always returns success if used but it is
+not executed even though the rest of the commandline is evaluated.
+This command can be used to evaluate macro expansions at the runtime of the
+recipe without starting a real commmand.
+.IP "[\fB+\fP]<empty recipe>
+If an empty recipe line is encountered it is not executed. This sounds
+more trivial than it really is because the recipe could consist of
+macros that evaluated to empty or whitespace only strings.
+.IP "\fBecho\fP [\fB-n\fP] \fBdata\fP"
+This internal command prints data (with all leading whitespace removed, but
+otherwise literally) to stdout. If the '-n' switch is given no trailing
+newline is printed. Note that no quoting is removed nor that escape sequences
+are handled.
+.PP
+No special treatment of buildin commands for group recipes is implemented
+even though the <empty recipe> will most propably also not be evaluated by
+most shells that can be used to handle the recipe groups.
 .SH "TEXT DIVERSIONS"
 .B dmake
 supports the notion of text diversions.
@@ -1565,6 +1594,8 @@ targets for more information.
 The same as .SOURCE, except that the .SOURCE.suff list is searched first when
 trying to locate a file matching the a target whose name ends in the suffix
 \&.suff.
+.IP \fB.SUFFIXES\fP 1.4i
+This deprecated special target has no special meaning. Avoid its use.
 .IP \fB.TARGETS\fP 1.4i
 The internal targets that all user defined targets are prerequisites of,
 see section STARTUP for details.
@@ -1904,6 +1935,9 @@ will be:
 supports a full set of functional macros.  One of these, the $(mktmp ...)
 macro, is discussed in detail in the TEXT DIVERSION section and is not
 covered here.
+The names of function macros must appear literally after the opening $(
+or ${. They are \fBnot\fP recognized if they are the result of a recursive
+expansion.
 .PP
 Note that some of these macros take comma separated parameters
 but that these parameters must not contain literal whitespaces. Whitespaces
@@ -2095,7 +2129,21 @@ $(OBJECTS:s/.o/.c/)
 .IP "$(\fBuniq\fP \fBlist\fP)"
 Will take all white\-space separated tokens in \fIlist\fP and will
 return their sorted equivalent list containing no duplicates.
+.sp
 .RE
+For historic reasons \fBdmake\fP treats the following case slightly special:
+.RS
+.sp
+$(\fBname\fP \fBsomething\fP)
+.sp
+.RE
+If it encounters a macro with a whitespace after \fBname\fP and \fBname\fP
+is not literally one of the above mentioned function macro identifiers then
+\fBdmake\fP will return the recursively expanded value of \fB$(name)\fP.
+The remaining \fBsomething\fP part will be expanded but the result will be
+discarded. The use of this special feature is deprecated and should not be
+used.
+.sp
 .SH "CONDITIONAL MACROS"
 .B dmake
 supports conditional macros.  These allow the definition of target specific
@@ -2276,15 +2324,15 @@ result.
 When defining .SOURCE and .SOURCE.x targets the construct
 .RS
 .sp
-.SOURCE :
+\&.SOURCE :
 .br
-.SOURCE : fred gery
+\&.SOURCE : fred gery
 .sp
 .RE
 is equivalent to
 .RS
 .sp
-.SOURCE :\- fred gery
+\&.SOURCE :\- fred gery
 .RE
 .PP
 \fBdmake\fP correctly handles the UNIX Make variable VPATH.  By definition VPATH
@@ -2292,7 +2340,7 @@ contains a list of ':' separated directories to search when looking for a
 target.  \fBdmake\fP maps VPATH to the following special rule:
 .RS
 .sp
-.SOURCE :^ $(VPATH:s/:/ /)
+\&.SOURCE :^ $(VPATH:s/:/ /)
 .sp
 .RE
 Which takes the value of VPATH and sets .SOURCE to the same set of directories
@@ -2305,8 +2353,10 @@ If the makefile does not specify an explicit recipe for the target then
 .B dmake
 uses special rules to try to infer a recipe which it can use
 to make the target.  Previous versions of Make perform this task by using
-rules that are defined by targets of the form .<suffix>.<suffix> and by
-using the .SUFFIXES list of suffixes.  The exact workings of this mechanism
+rules that are defined by targets of the form .<suffix>.<suffix> (this is still
+supported, see "AUGMAKE META RULES") or by using the \fBnot supported\fP by
+dmake .SUFFIXES list of suffixes (see "SPECIAL TARGETS" for more details
+about .SUFFIXES).  The exact workings of this mechanism
 were sometimes difficult to understand and often limiting in their usefulness.
 Instead, \fBdmake\fP supports the concept of \fI%-meta\fP rules.  
 The syntax and semantics of these rules differ from standard rule lines as
@@ -2551,8 +2601,7 @@ instead the corresponding path in the inference graph is rejected.
 bases all of its inferences on the inference graph constructed from the
 %-rules defined in the makefile.
 It knows exactly which targets can be made from which prerequisites by
-making queries on the inference graph.  For this reason .SUFFIXES is not
-needed and is completely ignored.
+making queries on the inference graph.
 .PP
 For a %-meta rule to be inferred as the
 rule whose recipe will be used to make a target, the target's name must match
@@ -3221,9 +3270,6 @@ Works as expected if you issue the command
 but fails with a 'don't know how to make FRC'
 error message if you do not specify AUGMAKE special target handling via
 the \-A flag (or by setting AUGMAKE:=yes internally).
-.IP 8.
-The \fBMSDOS\fP version of \fBdmake\fP now supports a single buitin runtime
-command \fBnoop\fP, which returns success if requested and does nothing.
 .RE
 .SH "LIMITS"
 In some environments the length of an argument string is restricted.
