@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2006-07-25 07:54:55 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:05:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ ASSEMBLY_ATTRIBUTES = $(MISC)$/assembly_cppuhelper.cxx
 
 POLICY_ASSEMBLY_FILE=$(BIN)$/$(CLI_CPPUHELPER_POLICY_ASSEMBLY).dll
 
-ASSEMBLY_KEY_X=$(subst,\,\\ $(ASSEMBLY_KEY)) 
+ASSEMBLY_KEY_X=$(subst,\,\\ $(ASSEMBLY_KEY))
 
 
 LINKFLAGS += /delayload:cppuhelper3MSC.dll \
@@ -84,13 +84,18 @@ UNOTYPES = \
 
 # When compiling for CLR, disable "warning C4339: use of undefined type detected
 # in CLR meta-data - use of this type may lead to a runtime exception":
-CFLAGS += -clr -AI $(OUT)$/bin -wd4339
-#see  Microsoft Knowledge Base Article - 814472 
+.IF "$(CCNUMVER)" >= "001399999999"
+CFLAGSCXX += -clr:oldSyntax -AI $(OUT)$/bin -wd4339
+LINKFLAGS += -MANIFEST:NO -NOENTRY -NODEFAULTLIB:nochkclr.obj -INCLUDE:__DllMainCRTStartup@12
+.ELSE
+CFLAGSCXX += -clr -AI $(OUT)$/bin -wd4339
+#see  Microsoft Knowledge Base Article - 814472
 LINKFLAGS += -NOENTRY -NODEFAULTLIB:nochkclr.obj -INCLUDE:__DllMainCRTStartup@12
+.ENDIF
 
 SLOFILES = \
         $(SLO)$/native_bootstrap.obj \
-    $(SLO)$/assembly_cppuhelper.obj 
+    $(SLO)$/assembly_cppuhelper.obj                  # /clr
 
 SHL1OBJS = $(SLOFILES)
 
@@ -105,6 +110,11 @@ SHL1STDLIBS = \
     mscoree.lib \
     Advapi32.lib
 
+.IF "$(CCNUMVER)" >= "001399999999"
+SHL1STDLIBS += \
+    msvcmrt.lib
+.ENDIF
+
 SHL1VERSIONMAP = msvc.map
 
 SHL1DEF = $(MISC)$/$(SHL1TARGET).def
@@ -118,21 +128,25 @@ DEF1NAME = $(SHL1TARGET)
 
 .IF "$(BUILD_FOR_CLI)" != ""
 
+.IF "$(CCNUMVER)" >= "001399999999"
+CFLAGSCXX += -clr:oldSyntax
+.ENDIF
+
 $(ASSEMBLY_ATTRIBUTES) : assembly.cxx $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk
     @+echo $(ASSEMBLY_KEY_X)
     $(GNUCOPY) -p assembly.cxx $@
     +echo $(ECHOQUOTE) \
     [assembly:System::Reflection::AssemblyVersion( "$(CLI_CPPUHELPER_NEW_VERSION)" )]; $(ECHOQUOTE) \
-    >> $(OUT)$/misc$/assembly_cppuhelper.cxx	
+    >> $(OUT)$/misc$/assembly_cppuhelper.cxx
     +echo $(ECHOQUOTE) \
     [assembly:System::Reflection::AssemblyKeyFile($(ASSEMBLY_KEY_X))]; $(ECHOQUOTE) \
     >> $(OUT)$/misc$/assembly_cppuhelper.cxx
 
 #make sure we build cli_cppuhelper after the version changed
-$(SHL1OBJS) : $(BIN)$/cli_cppuhelper.config 
+$(SHL1OBJS) : $(BIN)$/cli_cppuhelper.config
 
-ALLTAR : $(POLICY_ASSEMBLY_FILE)	
-    
+ALLTAR : $(POLICY_ASSEMBLY_FILE)
+
 #do not forget to deliver cli_cppuhelper.config. It is NOT embedded in the policy file.
 $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_cppuhelper.config
     +$(WRAPCMD) AL.exe -out:$@ \
@@ -141,9 +155,8 @@ $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_cppuhelper.config
             -link:$(BIN)$/cli_cppuhelper.config
 
 #Create the config file that is used with the policy assembly
-$(BIN)$/cli_cppuhelper.config: cli_cppuhelper_config $(BIN)$/cliureversion.mk 
+$(BIN)$/cli_cppuhelper.config: cli_cppuhelper_config $(BIN)$/cliureversion.mk
     +$(PERL) $(PRJ)$/source$/scripts$/subst_template.pl \
     $< $@
 
 .ENDIF			# "$(BUILD_FOR_CLI)" != ""
-
