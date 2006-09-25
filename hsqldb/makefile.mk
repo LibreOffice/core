@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-14 16:18:13 $
+#   last change: $Author: vg $ $Date: 2006-09-25 09:43:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ TARFILE_ROOTDIR=hsqldb
 
 CONVERTFILES=build$/build.xml\
         doc/changelist_1_8_0.txt\
-        src/org/hsqldb/resources/sql-error-messages_it.properties
+        src/org/hsqldb/resources/sql-error-messages.properties
 PATCH_FILE_NAME=hsqldb_1_8_0
 
 # ADDITIONAL_FILES=   src$/org$/hsqldb$/Collation.java \
