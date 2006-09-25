@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:00:09 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:02:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@ ENABLE_EXCEPTIONS=true
 .INCLUDE :  settings.mk
 .INCLUDE :      $(PRJ)$/util$/makefile.pmk
 
-.IF "$(GUI)"=="WNT"
-CFLAGS+=-GX
-.ENDIF
 .IF "$(COM)"=="GCC"
 CFLAGSCXX+=-fexceptions
 .ENDIF
