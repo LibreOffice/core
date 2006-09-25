@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:20:43 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:30:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -867,8 +867,8 @@ namespace sw
                 (*aRegion.GetPoint() != *aRegion.GetMark())
             )
             {
-                mrDoc.SetRedlineMode(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_SHOW_INSERT |
-                    IDocumentRedlineAccess::REDLINE_SHOW_DELETE);
+                mrDoc.SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_SHOW_INSERT |
+                                         IDocumentRedlineAccess::REDLINE_SHOW_DELETE));
                 const SwFltRedline *pFltRedline = static_cast<const SwFltRedline*>
                     (pEntry->pAttr);
 
@@ -885,8 +885,8 @@ namespace sw
                         pFltRedline->aStamp, aEmptyStr, 0);
 
                 mrDoc.AppendRedline(new SwRedline(aData, aRegion), true);
-                mrDoc.SetRedlineMode(IDocumentRedlineAccess::REDLINE_NONE | IDocumentRedlineAccess::REDLINE_SHOW_INSERT |
-                    IDocumentRedlineAccess::REDLINE_SHOW_DELETE );
+                mrDoc.SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)(IDocumentRedlineAccess::REDLINE_NONE | IDocumentRedlineAccess::REDLINE_SHOW_INSERT |
+                     IDocumentRedlineAccess::REDLINE_SHOW_DELETE ));
             }
             delete pEntry;
         }
