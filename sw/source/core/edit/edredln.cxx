@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edredln.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:07:29 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:27:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ void SwEditShell::SetRedlineMode( USHORT eMode )
     {
         SET_CURR_SHELL( this );
         StartAllAction();
-        GetDoc()->SetRedlineMode( eMode );
+        GetDoc()->SetRedlineMode( (IDocumentRedlineAccess::RedlineMode_t)eMode );
         EndAllAction();
     }
 }
