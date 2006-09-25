@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp1.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:49:29 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:34:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *
  ************************************************************************/
 
-
-
 #include        <stdio.h>
 #include        <ctype.h>
 #include        "cppdef.h"
@@ -270,7 +268,7 @@ nRunde++;
         argc = getredirection(argc, argv);      /* vms >file and <file  */
 #endif
         initdefines();                          /* O.S. specific def's  */
-        if ( *argv[argc-1] == '@' )
+        if ( argv[argc-1][0] == '@' )
         {
             i = readoptions( argv[1], &pfargv );    /* Command file */
             useargv=pfargv;
