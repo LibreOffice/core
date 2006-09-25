@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:35:26 $
+#   last change: $Author: vg $ $Date: 2006-09-25 12:46:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@ ENABLE_EXCEPTIONS=TRUE
 INCPRE+=-I$(ATL_INCLUDE)
 
 
-.IF "$(NETTOOLKIT)"==""
 
 APP1TARGET=	$(TARGET)
 APP1OBJS=	$(OBJ)$/testcppuno.obj
@@ -77,7 +76,5 @@ APP1STDLIBS += $(LIBCIMT)
 
 APP1DEF=	$(MISC)$/$(APP1TARGET).def
 
-.ENDIF #"$(NETTOOLKIT)"==""
 # --- Targets ---
 .INCLUDE : target.mk
-
