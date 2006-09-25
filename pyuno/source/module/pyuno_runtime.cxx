@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_runtime.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-29 11:04:27 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:22:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -575,7 +575,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
             Reference< XSingleServiceFactory > ssf = getImpl()->cargo->xInvocation;
             tc->convertTo (a, ::getCppuType (&s)) >>= s;
             PyRef tuple( PyTuple_New (s.getLength()), SAL_NO_ACQUIRE);
-            int i;
+            int i=0;
             OUString errMsg;
             try
             {
