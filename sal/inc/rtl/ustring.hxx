@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:15:06 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:13:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@
 #if !defined EXCEPTIONS_OFF
 #include <new>
 #endif
-
 namespace rtl
 {
 /* ======================================================================= */
@@ -91,7 +90,7 @@ public:
 
 private:
     /** @internal */
-    class DO_NOT_ACQUIRE;
+    class DO_NOT_ACQUIRE{};
 
     /** @internal */
     OUString( rtl_uString * value, DO_NOT_ACQUIRE * )
@@ -205,7 +204,6 @@ public:
         }
 #endif
     }
-
     /**
       Release the string data.
     */
