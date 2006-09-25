@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:59:40 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:26:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -659,7 +659,7 @@ void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
         if( pDelPam )
         {
             IDocumentRedlineAccess::RedlineMode_t eOld = pDestDoc->GetRedlineMode();
-            pDestDoc->SetRedlineMode_intern( eOld | IDocumentRedlineAccess::REDLINE_IGNORE );
+            pDestDoc->SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)(eOld | IDocumentRedlineAccess::REDLINE_IGNORE));
 
             BOOL bDoesUndo = pDestDoc->DoesUndo();
             pDestDoc->DoUndo( FALSE );
@@ -739,7 +739,7 @@ bool SwDoc::Copy( SwPaM& rPam, SwPosition& rPos ) const
     else
     {
         ASSERT( this == pDoc, " falscher Copy-Zweig!" );
-        pDoc->SetRedlineMode_intern( eOld | IDocumentRedlineAccess::REDLINE_IGNORE );
+        pDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eOld | IDocumentRedlineAccess::REDLINE_IGNORE));
 
         BOOL bDoUndo = pDoc->DoesUndo();
         pDoc->DoUndo( FALSE );  // Auf jedenfall Undo abschalten
@@ -861,7 +861,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
     }
 
     IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( eOld | IDocumentRedlineAccess::REDLINE_IGNORE );
+    pDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eOld | IDocumentRedlineAccess::REDLINE_IGNORE));
 
 
     // bewege den Pam von der Insert-Position ein zurueck, dadurch wird
