@@ -1,4 +1,4 @@
-/* RCS  $Id: spawn.c,v 1.1.1.1 2000-09-22 15:33:27 hr Exp $
+/* RCS  $Id: spawn.c,v 1.2 2006-09-25 09:42:07 vg Exp $
 --
 -- SYNOPSIS
 --      Spawnvpe code to emulate spawnvpe call common to DOS compilers.
@@ -140,6 +140,7 @@ find_program:
       }
 
       argv = Pack_argv( FALSE, TRUE, *argv );
+      Packed_shell = TRUE; /* Previous call implies shell = TRUE. */
 
       /* Go and find the program again, I hate goto's but it seems silly to
        * use tail recursion here just for aesthetic purity. */
