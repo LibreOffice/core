@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macros.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:35:43 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:17:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,10 @@
 
 #ifndef _INC_MALLOC
 #   include <malloc.h>
+#endif
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+#pragma warning(disable:4740)
 #endif
 
 #ifndef _INC_TCHAR
@@ -94,7 +98,7 @@ LPSTR   lpStr##A = lpStr##W ? (LPSTR)_alloca( (cchBuffer) * sizeof(CHAR) ) : NUL
 
 
 #define STRBUF2WSTR( lpStr, cchSrcBuffer, cchDestBuffer ) \
-    MultiByteToWideChar( CP_ACP, 0, lpStr##A, cchSrcBuffer, lpStr##W, cchDestBuffer )
+    MultiByteToWideChar( CP_ACP, 0, lpStr##A, cchSrcBuffer, lpStr##W, (int) cchDestBuffer )
 
 #define STR2WSTR( lpStr, cchBuffer ) \
     STRBUF2WSTR( lpStr, -1, cchBuffer )
@@ -165,4 +169,3 @@ static rettype calltype func##_##Failure params \
     SetLastError( ERROR_CALL_NOT_IMPLEMENTED ); \
     return (rettype)0; \
 }
-
