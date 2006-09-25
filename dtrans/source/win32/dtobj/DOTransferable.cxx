@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:59:59 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:37:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
-using CStgTransferHelper::CStgTransferException;
+//2005 using CStgTransferHelper::CStgTransferException;
 
 //------------------------------------------------------------------------
 //
@@ -400,7 +400,7 @@ CDOTransferable::ByteSequence_t SAL_CALL CDOTransferable::getClipboardData( CFor
 
         ReleaseStgMedium( &stgmedium );
     }
-    catch( CStgTransferException& )
+    catch( CStgTransferHelper::CStgTransferException& )
     {
         ReleaseStgMedium( &stgmedium );
         throw IOException( );
