@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 20:53:12 $
+#   last change: $Author: vg $ $Date: 2006-09-25 12:46:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 INCPRE+=-I$(ATL_INCLUDE)
 
-.IF "$(NETTOOLKIT)"==""
 
 APP1TARGET=	$(TARGET)
 APP1OBJS=	$(OBJ)$/cppTest.obj
@@ -76,6 +75,4 @@ APP1STDLIBS += $(LIBCIMT)
 APP1DEF=	$(MISC)\$(APP1TARGET).def
 
 # --- Targets ---
-.ENDIF #"$(NETTOOLKIT)"==""
 .INCLUDE : target.mk
-
