@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: obo $ $Date: 2006-09-16 13:37:27 $
-#*    $Revision: 1.11 $
+#*    last change   $Author: vg $ $Date: 2006-09-25 12:47:43 $
+#*    $Revision: 1.12 $
 #*
 #*    $Logfile: $
 #*
@@ -15,6 +15,7 @@
 
 #include "cppu/unotype.hxx"
 #include <osl/diagnose.h>
+#include "osl/diagnose.hxx"
 #include <osl/thread.h>
 #include <osl/mutex.hxx>
 #ifndef _OSL_TIME_H_
@@ -108,7 +109,9 @@ static void assign( TestData & rData,
 }
 
 //==================================================================================================
-class Test_Impl : public WeakImplHelper3< XBridgeTest2, XServiceInfo , XRecursiveCall >
+class Test_Impl :
+    protected osl::DebugBase<Test_Impl>,
+    public WeakImplHelper3< XBridgeTest2, XServiceInfo , XRecursiveCall >
 {
     TestData _aData, _aStructData;
     sal_Int32 m_nLastCallId;
@@ -443,7 +446,8 @@ public:
 };
 
 //Dummy class for XComponent implementation
-class Dummy : public WeakComponentImplHelperBase
+class Dummy : protected osl::DebugBase<Dummy>,
+              public WeakComponentImplHelperBase
 {
 public:
      Dummy(): WeakComponentImplHelperBase(*Mutex::getGlobalMutex()){}
