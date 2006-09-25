@@ -8,7 +8,7 @@ IMPLEMENT_THUNK( psapi, WINDOWS, DWORD, WINAPI, GetModuleFileNameExW, (HANDLE hP
     AUTO_STR( lpFileName, 2 * nSize );
 
     if ( GetModuleFileNameExA( hProcess, hModule, lpFileNameA, 2 * nSize ) )
-        return STR2WSTR( lpFileName, nSize );
+        return (DWORD) STR2WSTR( lpFileName, nSize );
     else
         return 0;
 }
