@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:31:15 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:32:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2005,7 +2005,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             {
                 eMode = bSet ? eMode|IDocumentRedlineAccess::REDLINE_ON : eMode&~IDocumentRedlineAccess::REDLINE_ON;
             }
-            pDocShell->GetDoc()->SetRedlineMode( eMode );
+            pDocShell->GetDoc()->SetRedlineMode( (IDocumentRedlineAccess::RedlineMode_t)(eMode ));
         }
         break;
         case  WID_DOC_CHANGES_PASSWORD:
@@ -2019,7 +2019,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
                 {
                     sal_uInt16 eMode = pDoc->GetRedlineMode();
                     eMode = eMode|IDocumentRedlineAccess::REDLINE_ON;
-                    pDoc->SetRedlineMode( eMode );
+                    pDoc->SetRedlineMode( (IDocumentRedlineAccess::RedlineMode_t)(eMode ));
                 }
             }
         }
@@ -2050,7 +2050,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
                 break;
                 default: throw IllegalArgumentException();
             }
-            pDocShell->GetDoc()->SetRedlineMode(nSet);
+            pDocShell->GetDoc()->SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)(nSet));
         }
         break;
         case WID_DOC_TWO_DIGIT_YEAR:
