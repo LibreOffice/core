@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utility.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:01:52 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 12:49:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,9 @@
 
 #ifndef CONFIGMGR_UTILITY_HXX_
 #define CONFIGMGR_UTILITY_HXX_
+#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+#pragma warning(disable : 4350) // behavior change: 'member1' called instead of 'member2'
+#endif
 
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -102,5 +105,4 @@ namespace configmgr
 }
 
 #endif // CONFIGMGR_UTILITY_HXX_
-
 
