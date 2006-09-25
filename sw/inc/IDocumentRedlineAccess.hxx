@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IDocumentRedlineAccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:13:15 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,38 +87,41 @@
  class IDocumentRedlineAccess
  {
  public:
-    typedef int RedlineMode_t;
 
-    static const RedlineMode_t REDLINE_NONE = 0;// no RedlineMode
-    static const RedlineMode_t REDLINE_ON = 0x01;// RedlineMode on
-    static const RedlineMode_t REDLINE_IGNORE = 0x02;// ignore Redlines
-    static const RedlineMode_t REDLINE_SHOW_INSERT = 0x10;// show all inserts
-    static const RedlineMode_t REDLINE_SHOW_DELETE = 0x20;// show all delets
-    static const RedlineMode_t REDLINE_SHOW_MASK = REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE;
+   enum RedlineMode_t
+   {
+       REDLINE_NONE = 0, // no RedlineMode
+       REDLINE_ON = 0x01,// RedlineMode on
+       REDLINE_IGNORE = 0x02,// ignore Redlines
+       REDLINE_SHOW_INSERT = 0x10,// show all inserts
+       REDLINE_SHOW_DELETE = 0x20,// show all delets
+       REDLINE_SHOW_MASK = REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE,
 
-    // fuer die interne Verwaltung:
-    // die originalen Redlines inclusive des Contents entfernen
-    // (ClipBoard/Textbausteine)
-    static const RedlineMode_t REDLINE_DELETE_REDLINES = 0x100;
-    // beim Loeschen innerhalb ein RedlineObjectes, waehrend des Appends,
-    // das DeleteRedline ignorieren
-    static const RedlineMode_t REDLINE_IGNOREDELETE_REDLINES = 0x200;
-    // don't combine any readlines. This flags is may only used in the Undo.
-    static const RedlineMode_t REDLINE_DONTCOMBINE_REDLINES = 0x400;
+       // fuer die interne Verwaltung:
+       // die originalen Redlines inclusive des Contents entfernen
+       // (ClipBoard/Textbausteine)
+       REDLINE_DELETE_REDLINES = 0x100,
+       // beim Loeschen innerhalb ein RedlineObjectes, waehrend des Appends,
+       // das DeleteRedline ignorieren
+       REDLINE_IGNOREDELETE_REDLINES = 0x200,
+       // don't combine any readlines. This flags is may only used in the Undo.
+      REDLINE_DONTCOMBINE_REDLINES = 0x400
+   };
 
-    typedef int RedlineType_t;
+   enum RedlineType_t
+   {
+     // die RedlineTypen gehen von 0 bis 127
+     REDLINE_INSERT = 0x0,// Inhalt wurde eingefuegt
+     REDLINE_DELETE = 0x1,// Inhalt wurde geloescht
+     REDLINE_FORMAT = 0x2,// Attributierung wurde angewendet
+     REDLINE_TABLE = 0x3,// TabellenStruktur wurde veraendert
+     REDLINE_FMTCOLL = 0x4,// FormatVorlage wurde veraendert (Autoformat!)
 
-    // die RedlineTypen gehen von 0 bis 127
-    static const RedlineType_t REDLINE_INSERT = 0x0;// Inhalt wurde eingefuegt
-    static const RedlineType_t REDLINE_DELETE = 0x1;// Inhalt wurde geloescht
-    static const RedlineType_t REDLINE_FORMAT = 0x2;// Attributierung wurde angewendet
-    static const RedlineType_t REDLINE_TABLE = 0x3;// TabellenStruktur wurde veraendert
-    static const RedlineType_t REDLINE_FMTCOLL = 0x4;// FormatVorlage wurde veraendert (Autoformat!)
-
-    // ab 128 koennen Flags hineinverodert werden
-    static const RedlineType_t REDLINE_NO_FLAG_MASK = 0x7F;
-    static const RedlineType_t REDLINE_FLAG_MASK = 0xFF80;
-    static const RedlineType_t REDLINE_FORM_AUTOFMT = 0x80;// kann als Flag im RedlineType stehen
+     // ab 128 koennen Flags hineinverodert werden
+     REDLINE_NO_FLAG_MASK = 0x7F,
+     REDLINE_FLAG_MASK = 0xFF80,
+     REDLINE_FORM_AUTOFMT = 0x80// kann als Flag im RedlineType stehen
+   };
 
     // Static helper functions
 public:
