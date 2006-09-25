@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untblk.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:54:22 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:30:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,7 +358,7 @@ void SwUndoInserts::Redo( SwUndoIter& rUndoIter )
     if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
     {
         IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-        pDoc->SetRedlineMode_intern( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE );
+        pDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE ));
         pDoc->AppendRedline( new SwRedline( *pRedlData, *pPam ), true);
         pDoc->SetRedlineMode_intern( eOld );
     }
