@@ -4,9 +4,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 15:04:54 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:13:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ MULTITHREAD_OBJ=TRUE
 
 .INCLUDE :  settings.mk
 
-# Uncomment the following line if you want to compile with -Wall 
+# Uncomment the following line if you want to compile with -Wall
 # it disables lots of unnecessary warnings comming from the Win32
 # header files (disabling warnings via command line only works with
 # MSVC >= 7.x)
@@ -57,6 +57,9 @@ MULTITHREAD_OBJ=TRUE
 # CFLAGS+=/wd4668 /wd4711 /wd4201 /wd4710 /wd4619 /wd4514 /wd4820
 
 # --- Files --------------------------------------------------------
+.IF "$(CCNUMVER)" >= "001400000000"
+CDEFS+=-D_CRT_NON_CONFORMING_SWPRINTFS
+.ENDIF
 
 .IF "$(header)" == ""
 
@@ -109,6 +112,5 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
 
 
