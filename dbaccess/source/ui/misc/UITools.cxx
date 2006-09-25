@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:14:08 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:42:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -568,7 +568,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                     ||  (
                                 (aIter->second->nPrecision      >= _nPrecision)
                             &&  (aIter->second->nMaximumScale   >= _nScale)
-                            &&  (aIter->second->bAutoIncrement  == _bAutoIncrement)
+                            &&  ( (_bAutoIncrement && aIter->second->bAutoIncrement) || !_bAutoIncrement )
                         )
                     )
                 )
@@ -585,7 +585,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                 if  (   (aIter->second->aLocalTypeName.equalsIgnoreAsciiCase(_sTypeName))
                     &&  (nPrec  >= _nPrecision)
                     &&  (nScale >= _nScale)
-                    &&  (aIter->second->bAutoIncrement  == _bAutoIncrement)
+                    &&  ( (_bAutoIncrement && aIter->second->bAutoIncrement) || !_bAutoIncrement )
                     )
                 {
                     OSL_ENSURE(sal_False,
@@ -619,7 +619,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                 sal_Int32 nScale = aIter->second->nMaximumScale;
                 if  (   (nPrec  >= _nPrecision)
                     &&  (nScale >= _nScale)
-                    &&  (aIter->second->bAutoIncrement  == _bAutoIncrement)
+                    &&  ( (_bAutoIncrement && aIter->second->bAutoIncrement) || !_bAutoIncrement )
                     )
                     break;
             }
