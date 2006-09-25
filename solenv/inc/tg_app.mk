@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:57:28 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:09:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -163,6 +163,8 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(APP$(TNR)STDLIBS) \
         $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) \
         )
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
 .ELSE
         +-$(RM) $(MISC)\$(APP$(TNR)TARGET).lnk
         +-$(RM) $(MISC)\$(APP$(TNR)TARGET).lst
