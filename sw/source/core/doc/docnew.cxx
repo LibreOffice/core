@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:53:45 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:25:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,7 +310,7 @@ SwDoc::SwDoc() :
     nUndoCnt( 0 ),
     nUndoSttEnd( 0 ),
     nAutoFmtRedlnCommentNo( 0 ),
-    eRedlineMode(IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE),
+    eRedlineMode((IDocumentRedlineAccess::RedlineMode_t)(IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE)),
     eChrCmprType( CHARCOMPRESS_NONE ),
     mReferenceCount(0),
     nLockExpFld( 0 ),
