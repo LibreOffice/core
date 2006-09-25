@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-09-15 11:19:11 $
+dnl * Date: $Date: 2006-09-25 13:33:13 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.177 $ )
+AC_REVISION( $Revision: 1.178 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -122,8 +122,9 @@ AC_ARG_ENABLE(directx,
                           interface. The DirectX support requires more stuff installed on
                           Windows to compile.  (DirectX SDK, GDI+ libs)
 ],,enable_directx=yes)
-AC_ARG_ENABLE(atlmfc,
-[  --disable-atlmfc        Disable the use of ATL/MFC for windows build.
+AC_ARG_ENABLE(activex,
+[  --disable-activex       Disable the use of ActiveX for windows build.
+                          This switch is mandatory when using VC++ 2005 Express.
 ],,)
 
 AC_ARG_ENABLE(symbols,
@@ -163,10 +164,6 @@ AC_ARG_ENABLE(cl-standard,
                           standard compiler. ( This just disavles optimization
                           options and therefore removes a lot of warnings when
                           using the cheaper standard compiler. )
-],,)
-AC_ARG_ENABLE(vctk,
-[  --enable-vctk           Tell configure to check for the MS VC Toolkit 2003.
-                          ( This is experimental! )
 ],,)
 AC_ARG_ENABLE(gtk,
 [  --disable-gtk           Determines whether to use Gtk+ vclplug on platforms
@@ -449,14 +446,6 @@ AC_ARG_WITH(csc-path,
  
                           Usage: --with-csc-path=<absolute path to csc.exe>
 ],,)
-AC_ARG_WITH(nmake-path,
-[  --with-nmake-path       For MS Visual Toolkit compiler users, please supply
-                          the path pointing to the nmake.exe. The Platform SDK
-                          provides one in the Win64 directory, usually something
-                          like: "/cygdrive/c/Programme/Microsoft SDK/Bin/Win64"
- 
-                          Usage: --with-nmake-path=<absolute path to nmake.exe>
-],,)
 AC_ARG_WITH(nsis-path,
 [  --with-nsis-path        For Windows users, please supply the path to the
                           "Nullsoft Scriptable Install System" (NSIS). If NSIS is
@@ -490,15 +479,6 @@ AC_ARG_WITH(directx-home,
                           Microsoft DirectX SDK.
  
                           Usage: --with-directx-home=<absolute path to Microsoft DirectX SDK>
-],,)
-AC_ARG_WITH(extra-dotnet-files,
-[  --with-extra-dotnet-files  For MS Visual Toolkit compiler, please supply the
-                          path to additional library/include files that are
-                          otherwise missing. 
-                          (This is a cludge until MS Visual Toolkit is usable
-                          without extra files.)
- 
-                          Usage: --with-extra-dotnet-files=<absolute path to extra files>
 ],,)
 AC_ARG_WITH(local-solenv,
 [  --with-local-solenv     If you have solenv in a location other than ../solenv,
@@ -845,19 +825,6 @@ fi
 
 if test "$_os" = "WINNT"; then
    dnl ===================================================================
-   dnl Set the ENABLE_VCTK variable.
-   dnl ===================================================================
-   AC_MSG_CHECKING([whether to check for the MS VC Toolkit 2003])
-   if test "$enable_vctk" = "" -o "$enable_vctk" = "no"; then
-      ENABLE_VCTK=""
-      AC_MSG_RESULT([no])
-   else
-      ENABLE_VCTK="TRUE"
-      AC_MSG_RESULT([yes])
-   fi
-   AC_SUBST(ENABLE_VCTK)
-
-   dnl ===================================================================
    dnl Set the VC_STANDARD variable.
    dnl ===================================================================
    AC_MSG_CHECKING([whether to use the standard non-optimizing compiler])
@@ -996,9 +963,9 @@ if test "$_os" = "WINNT"; then
    fi
    AC_SUBST(ENABLE_DIRECTX)
 
-   AC_MSG_CHECKING([whether to use ATL/MFC])
-   if test "$enable_atlmfc" = "yes" -o "$enable_atlmfc" = "TRUE" -o "$enable_atlmfc" = ""; then
-   dnl This should be called DISABLE_ATLMFC, see iz32552
+   AC_MSG_CHECKING([whether to use ActiveX])
+   if test "$enable_activex" = "yes" -o "$enable_activex" = "TRUE" -o "$enable_activex" = ""; then
+   dnl This should be called DISABLE_ACTIVEX, see iz32552
       NETTOOLKIT=""
       AC_MSG_RESULT([yes])
    else
@@ -1363,7 +1330,7 @@ dnl ===================================================================
 if test "$_os" = "WINNT"; then
 	if test "$WITH_MINGWIN" != "yes"; then
 		AC_MSG_CHECKING([for friendly registry keys])
-		# VS.Net 2003, VS.Net 2002, VC6
+		# VS.Net 2003, VS.Net 2005
 		if test -z "$with_cl_home"; then
 			vctest=`./oowintool --msvc-productdir`;
 			if test -x "$vctest/bin/cl.exe"; then
@@ -1386,9 +1353,9 @@ if test "$_os" = "WINNT"; then
 		if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb71.dll"; then
 			MSPDB_PATH="$with_cl_home/../Common7/IDE"
 		fi
-		dnl VCTK case
-		if test -z "$MSPDB_PATH" -a -e "$with_cl_home/bin/mspdb71.dll"; then
-			MSPDB_PATH="$with_cl_home/bin"
+		dnl VSE case
+		if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb80.dll"; then
+			MSPDB_PATH="$with_cl_home/../Common7/IDE"
 		fi
 
 		if test -z "$MSPDB_PATH"; then
@@ -1425,10 +1392,14 @@ dnl      The following find microsoft, matches nn.nn.nnnn then pulls numbers out
 							}
 							}"`
 			AC_MSG_RESULT([found Compiler version $CCNUMVER.])
-			if test "$CCNUMVER" -ge "001300102240"; then
+			if test "$CCNUMVER" -ge "001400000000"; then
+				COMEX=11
+				AC_MSG_RESULT([found .NET 2005.])
+			elif test "$CCNUMVER" -ge "001300102240"; then
 				COMEX=10
+				AC_MSG_RESULT([found .NET 2003.])
 			else
-				AC_MSG_ERROR([Compiler too old. Use Microsoft C/C++ .NET 2003 compiler.])
+				AC_MSG_ERROR([Compiler too old. Use Microsoft C/C++ .NET 2003/2005 compiler.])
 			fi
 		else
 			AC_MSG_ERROR([Microsoft C/C++ Compiler not found. Use --with-cl-home or set path to cl.exe.])
@@ -1448,7 +1419,7 @@ AC_SUBST(MSPDB_PATH)
 dnl ===================================================================
 dnl  .NET needs special treatment
 dnl ===================================================================
-if test "$COMEX" = "8" -o "$COMEX" = "10"; then
+if test "$COMEX" = "10" -o "$COMEX" = "11"; then
 	dnl Check midl.exe
 	if test -n "$MIDL_PATH";then
 		MIDL_PATH=`dirname "$MIDL_PATH"`
@@ -1479,12 +1450,12 @@ if test "$COMEX" = "8" -o "$COMEX" = "10"; then
 	fi
 	if test -x "$with_csc_path/csc.exe"; then
 		CSC_PATH="$with_csc_path"
+	else
+	   csctest=`./oowintool --csc-compilerdir`;
+	   if test -x "$csctest/csc.exe"; then
+	      CSC_PATH="$csctest"
+	   fi
 	fi
-	csctest=`./oowintool --csc-compilerdir`;
-	if test -x "$csctest/csc.exe"; then
-		CSC_PATH="$csctest"
-	fi
-
 	if test ! -x "$CSC_PATH/csc.exe"; then
 		AC_MSG_ERROR([csc.exe not found. Make sure it's in the path or use --with-csc-path])
 	fi
@@ -1493,27 +1464,8 @@ if test "$COMEX" = "8" -o "$COMEX" = "10"; then
 	CSC_PATH=`cygpath -u "$CSC_PATH"`
 	AC_PATH_PROG(CSC_PATH, csc.exe)
 
-    dnl Check nmake.exe for MS VC Toolkit
-    if test -n "$ENABLE_VCTK"; then
-        AC_PATH_PROG(NMAKE_PATH, nmake.exe)
-        if test -n "$NMAKE_PATH"; then
-            NMAKE_PATH=`dirname "$NMAKE_PATH"`
-        fi
-        if test -x "$with_nmake_path/nmake.exe"; then
-            NMAKE_PATH="$with_nmake_path"
-        fi
-        if test ! -x "$NMAKE_PATH/nmake.exe"; then
-        AC_MSG_ERROR([nmake.exe not found. Make sure it's in the path or use --with-nmake-path])
-        fi
-        # Convert to posix path with 8.3 filename restrictions ( No spaces )
-        NMAKE_PATH=`cygpath -d "$NMAKE_PATH"`
-        NMAKE_PATH=`cygpath -u "$NMAKE_PATH"`
-    fi
-
     dnl Check mscoree.lib / .NET Frameworks dir
-    dnl This now has two meanings, for .NET2003 it has to point to the
-    dnl directory with lib/mscoree.lib and for VCTK to lib/msvcrt.lib.
-    if test -z "$ENABLE_VCTK"; then
+    dnl For VS2003/2005 $with_frame_home has to point to the directory with lib/mscoree.lib.
        AC_MSG_CHECKING(.NET Framework)
 	    if test -f "$with_frame_home/lib/mscoree.lib"; then
 		    FRAME_HOME="$with_frame_home"
@@ -1531,27 +1483,12 @@ if test "$COMEX" = "8" -o "$COMEX" = "10"; then
 		AC_MSG_ERROR([mscoree.lib (.NET Framework) not found. Make sure you use --with-frame-home])
 	    fi
 	    AC_MSG_RESULT(found)
-    else
-        if test ! -f "$COMPATH/../lib/mscoree.lib"; then
-        AC_MSG_ERROR([mscoree.lib not found. Unexpected, ask dev@tools.openoffice.org for help.])
-        fi
-        if test -f "$with_frame_home/lib/msvcrt.lib"; then
-            FRAME_HOME="$with_frame_home"
-        fi
-        if test -z "$FRAME_HOME" -a -e "$with_cl_home/../Microsoft Visual Studio .NET 2003/Vc7/lib/msvcrt.lib"; then
-            FRAME_HOME="$with_cl_home/../Microsoft Visual Studio .NET 2003/Vc7"
-        fi
-        if test ! -f "$FRAME_HOME/lib/msvcrt.lib"; then
-        AC_MSG_ERROR([msvcrt.lib (.NET Framework) not found. Make sure you use --with-frame-home])
-        fi
-    fi
 	# Convert to posix path with 8.3 filename restrictions ( No spaces )
 	FRAME_HOME=`cygpath -d "$FRAME_HOME"`
 	FRAME_HOME=`cygpath -u "$FRAME_HOME"`
 fi
 AC_SUBST(MIDL_PATH)
 AC_SUBST(CSC_PATH)
-AC_SUBST(NMAKE_PATH)
 AC_SUBST(FRAME_HOME)
 
 dnl ===================================================================
@@ -4076,23 +4013,6 @@ if test "$_os" = "WINNT" ; then
 fi
 AC_SUBST(NSIS_PATH)
 
-dnl ============================================
-dnl Check for extra include/library files
-dnl needed for MS Visual Toolkit compiler build.
-dnl ============================================
-if test "$_os" = "WINNT" -a -n "$with_extra_dotnet_files" ; then
-	AC_MSG_CHECKING([extra .net include/library files])
-	if test -d "$with_extra_dotnet_files"; then
-		AC_MSG_RESULT([directory found])
-        EXTRA_DOTNET_FILES="$with_extra_dotnet_files"
-    else
-		AC_MSG_ERROR([invalid directory, please check.])
-    fi
-else
-    EXTRA_DOTNET_FILES=""
-fi
-AC_SUBST(EXTRA_DOTNET_FILES)
-
 dnl ***************************************
 dnl testing bison and flex exist
 dnl ***************************************
@@ -4310,35 +4230,9 @@ You may have to search Microsoft's website. Last time it was seen at:
 fi
 
 dnl ===================================================================
-dnl Windows builds with .NET need msvcp70.dll/msvcr70.dll in external/msvcp70/
-dnl ===================================================================
-if test "$_os" = "WINNT" -a "$COMEX" = "8"; then
-   AC_MSG_CHECKING([for msvcp70.dll/msvcr70.dll])
-   if test -x ../external/msvcp70/msvcp70.dll -a -x ../external/msvcp70/msvcr70.dll; then
-      AC_MSG_RESULT([found])
-   else
-      MSVCPPATH=`/bin/find "$COMPATH/../.." -iname msvcp70.dll | head -n 1`
-      MSVCRPATH=`/bin/find "$COMPATH/../.." -iname msvcr70.dll | head -n 1`
-      if test -n "$MSVCPPATH" -a -n "$MSVCRPATH"; then
-         cp "$MSVCPPATH" ../external/msvcp70/ && chmod +x ../external/msvcp70/msvcp70.dll && MSVCPCOPY="OK"
-         cp "$MSVCRPATH" ../external/msvcp70/ && chmod +x ../external/msvcp70/msvcr70.dll && MSVCRCOPY="OK"
-      fi
-      if test -z "$MSVCPCOPY" -o -z "$MSVCRCOPY"; then
-         AC_MSG_ERROR([msvcp70.dll and/or msvcr70.dll are/is missing in the default location.
-These dlls are part of the .NET installation and should be found in a directory
-similar to:
-"c:\\Program Files\\Microsoft Visual Studio .NET\\Visual C++ .NET Professional - English\\"
-As the automatic detection fails please copy the files to external/msvcp70/.])
-      else
-         AC_MSG_RESULT([found and copied])
-      fi
-   fi
-fi
-
-dnl ===================================================================
 dnl Windows builds with .NET 2003 needs msvcp71.dll/msvcr71.dll in external/msvcp71
 dnl ===================================================================
-if test "$_os" = "WINNT" -a "$COMEX" = "10"; then
+if test "$_os" = "WINNT" -a "$COMEX" = "10" ; then
    AC_MSG_CHECKING([for msvcp71.dll/msvcr71.dll])
    if test -x ../external/msvcp71/msvcp71.dll -a -x ../external/msvcp71/msvcr71.dll; then
       AC_MSG_RESULT([found])
@@ -4362,6 +4256,32 @@ As the automatic detection fails please copy the files to external/msvcp71/.])
 fi
 
 dnl ===================================================================
+dnl Windows builds with Visual C++ 2005 needs msvc{p,r}80.dll in external/msvcp80
+dnl ===================================================================
+if test "$_os" = "WINNT" -a "$COMEX" = "11"; then
+   AC_MSG_CHECKING([for msvcp80.dll/msvcr80.dll])
+   if test -x ../external/msvcp80/msvcp80.dll -a -x ../external/msvcp80/msvcr80.dll; then
+      AC_MSG_RESULT([found])
+   else
+      MSVCPPATH=`/bin/find "$COMPATH/../.." -iname msvcp80.dll | head -n 1`
+      MSVCRPATH=`/bin/find "$COMPATH/../.." -iname msvcr80.dll | head -n 1`
+      if test -n "$MSVCPPATH" -a -n "$MSVCRPATH"; then
+         cp "$MSVCPPATH" ../external/msvcp80/ && chmod +x ../external/msvcp80/msvcp80.dll && MSVCPCOPY="OK"
+         cp "$MSVCRPATH" ../external/msvcp80/ && chmod +x ../external/msvcp80/msvcr80.dll && MSVCRCOPY="OK"
+      fi
+      if test -z "$MSVCPCOPY" -o -z "$MSVCRCOPY"; then
+         AC_MSG_ERROR([msvcp80.dll and/or msvcr80.dll are/is missing in the default location.
+These dlls are part of the VS installation and should be found in a directory
+similar to:
+"c:\\Program Files\\<no-idea>"
+As the automatic detection fails please copy the files to external/msvcp80/.])
+      else
+         AC_MSG_RESULT([found and copied])
+      fi
+   fi
+fi
+
+dnl ===================================================================
 dnl Windows builds - attempt to auto-copy required instmsiX.exe into external/
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
@@ -4369,9 +4289,9 @@ if test "$_os" = "WINNT"; then
 fi
 
 dnl ===================================================================
-dnl Windows builds with .NET 2003 need instmsia.exe and instmsiw.exe in external/msi
+dnl Windows builds with VS 2003/2005 need instmsia.exe and instmsiw.exe in external/msi
 dnl ===================================================================
-if test "$_os" = "WINNT" -a "$COMEX" = "10"; then
+if test "$_os" = "WINNT" -a \( "$COMEX" = "10" -o "$COMEX" = "11" \) ; then
    AC_MSG_CHECKING([for instmsia.exe/instmsiw.exe])
    if test -x ../external/msi/instmsia.exe -a -x ../external/msi/instmsiw.exe; then
       AC_MSG_RESULT([found])
@@ -4384,7 +4304,7 @@ if test "$_os" = "WINNT" -a "$COMEX" = "10"; then
       fi
       if test -z "$MSIACOPY" -o -z "$MSIWCOPY"; then
          AC_MSG_ERROR([instmsia.exe and/or instmsiw.exe are/is missing in the default location.
-These programs are part of the .NET installation and should be found in a
+These programs are part of the Visual Studio installation and should be found in a
 directory similar to:
 "c:\\Program Files\\Microsoft Visual Studio .NET 2003\\Common7\\Tools\\Deployment\\MsiRedist\\"
 As the automatic detection fails please copy the files to external/msi/.])
