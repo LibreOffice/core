@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommandLineToArgvW.cpp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:10:11 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:14:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+#pragma warning(disable:4740)
+#endif
 
 #include "macros.h"
 
