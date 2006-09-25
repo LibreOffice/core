@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:39:15 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:06:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <assert.h>
 #include <algorithm>
 
-#pragma warning(disable : 4786)
+#pragma warning(disable : 4786 4350)
 
 //-----------------------------------------------------
 /** Create instance and open the specified Registry key
