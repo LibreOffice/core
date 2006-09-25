@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winmgr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:11:44 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 12:45:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,7 +277,7 @@ Sequence< PluginDescription > XPluginManager_Impl::getPluginDescriptions(void) t
 {
     Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
     static Sequence<PluginDescription > s_aDescriptions( 0 );
-    static s_bInit = FALSE;
+    static bool s_bInit = FALSE;
 
     if (! s_bInit)
     {
