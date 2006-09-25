@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unix.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:52:12 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:11:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include <fcntl.h>
 #if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
 #include <io.h>
+#include <sys/stat.h>
 #else
 #include <unistd.h>
 #endif
@@ -203,8 +204,11 @@ void
 
     if (optind + 1 < argc)
     {
-        int fdo = creat(argv[optind + 1], 0666);
-
+#if defined(WNT) && (_MSC_VER >= 1400)
+    int fdo = creat(argv[optind + 1], _S_IREAD | _S_IWRITE );
+#else
+    int fdo = creat(argv[optind + 1], 0666 );
+#endif
         if (fdo < 0)
             error(FATAL, "Can't open output file %s", argv[optind + 1]);
 
@@ -250,4 +254,3 @@ void *
 }
 
 #endif
-
