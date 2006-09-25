@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:54:14 $
+#   last change: $Author: vg $ $Date: 2006-09-25 12:52:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ COMP1TYPELIST=$(TARGET)
 
 # ------------------------------------------------------------------
 
-CFLAGS+=-GX -GR -D_WIN32_WINNT=0x0500 -D_UNICODE -DUNICODE
+CDEFS+=-D_WIN32_WINNT=0x0500 -D_UNICODE -DUNICODE
 
 # --- Resources ----------------------------------------------------
 
