@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DllGetVersion.cpp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:32:24 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:15:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ extern "C" HRESULT CALLBACK DllGetVersion( DLLVERSIONINFO *pdvi )
                 pdvi->dwMajorVersion = HIWORD( lpBuffer->dwFileVersionMS );
                 pdvi->dwMinorVersion = LOWORD( lpBuffer->dwFileVersionMS );
                 pdvi->dwBuildNumber = HIWORD( lpBuffer->dwFileVersionLS );
-                pdvi->dwPlatformID = (lpBuffer->dwFileOS & VOS_NT) ? DLLVER_PLATFORM_NT : DLLVER_PLATFORM_WINDOWS;
+                pdvi->dwPlatformID = (DWORD) ((lpBuffer->dwFileOS & VOS_NT) ? DLLVER_PLATFORM_NT : DLLVER_PLATFORM_WINDOWS);
 
                 fSuccess = TRUE;
             }
@@ -75,4 +75,3 @@ extern "C" HRESULT CALLBACK DllGetVersion( DLLVERSIONINFO *pdvi )
 
     return fSuccess ? HRESULT_FROM_WIN32( GetLastError() ) : HRESULT_FROM_WIN32( NO_ERROR );
 }
-
