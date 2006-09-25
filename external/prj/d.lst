@@ -32,6 +32,9 @@ mkdir: %_DEST%\pck%_EXT%
 ..\msvcp71\msvcp71.dll %_DEST%\bin%_EXT%\msvcp71.dll
 ..\msvcp71\msvcr71.dll %_DEST%\bin%_EXT%\msvcr71.dll
 
+..\msvcp80\msvcp80.dll %_DEST%\bin%_EXT%\msvcp80.dll
+..\msvcp80\msvcr80.dll %_DEST%\bin%_EXT%\msvcr80.dll
+
 ..\unicows\unicows.dll %_DEST%\bin%_EXT%\unicows.dll
 
 ..\unowinreg\unowinreg.dll %_DEST%\bin%_EXT%\unowinreg.dll
