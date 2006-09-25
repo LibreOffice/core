@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treenodefactory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:59:56 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 12:49:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,9 @@
 #include <memory>
 #define INCLUDED_MEMORY
 #endif
-
-
+#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+#pragma warning(disable : 4350)
+#endif
 namespace configmgr
 {
 
