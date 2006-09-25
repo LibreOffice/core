@@ -4,9 +4,9 @@
  *
  *  $RCSfile: advisesink.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:41:04 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:01:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ protected:
 public:
     OleWrapperAdviseSink( OleComponent* pOleComp );
     OleWrapperAdviseSink(void);
+    ~OleWrapperAdviseSink();
 
     void disconnectOleComponent();
     STDMETHODIMP QueryInterface(REFIID, void**);
