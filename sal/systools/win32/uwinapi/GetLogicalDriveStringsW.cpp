@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GetLogicalDriveStringsW.cpp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:16:36 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:16:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@ IMPLEMENT_THUNK( kernel32, WINDOWS, DWORD, WINAPI, GetLogicalDriveStringsW, ( DW
 
 
     if ( dwResult && dwResult < cchBuffer )
-        STRBUF2WSTR( lpBuffer, dwResult + 1, cchBuffer );
+        STRBUF2WSTR( lpBuffer, (int) (dwResult + 1), (int) cchBuffer );
 
     return dwResult;
 }
