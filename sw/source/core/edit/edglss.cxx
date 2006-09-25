@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edglss.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:06:24 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:27:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,7 @@ USHORT SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const String& rName, cons
         {
             rBlks.GetDoc()->SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_DELETE_REDLINES );
             _CopySelToDoc( pGDoc );
-            rBlks.GetDoc()->SetRedlineMode_intern( 0 );
+            rBlks.GetDoc()->SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)0 );
             nRet = rBlks.PutDoc();
         }
         else
