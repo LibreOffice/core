@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2006-07-25 07:55:13 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:05:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,9 @@ ALLTAR : \
     $(BIN)$/cli_ure.dll \
     $(POLICY_ASSEMBLY_FILE)
 
+.IF "$(CCNUMVER)" >= "001399999999"
+CSCFLAGS+=-keyfile:"$(BIN)$/cliuno.snk"
+.ENDIF
 
 CSFILES = \
     uno$/util$/DisposeGuard.cs					\
@@ -71,12 +74,20 @@ CSFILES = \
     uno$/util$/WeakComponentBase.cs	\
     $(ASSEMBLY_ATTRIBUTES)
 
+.IF "$(CCNUMVER)" <= "001399999999"
 $(ASSEMBLY_ATTRIBUTES) : assembly.cs makefile.mk $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk 
     $(GNUCOPY) -p assembly.cs $@
     +echo $(ECHOQUOTE) \
     [assembly:System.Reflection.AssemblyVersion( "$(CLI_URE_NEW_VERSION)")] \
     [assembly:System.Reflection.AssemblyKeyFile(@"$(BIN)$/cliuno.snk")]$(ECHOQUOTE) \
     >> $@
+.ELSE
+$(ASSEMBLY_ATTRIBUTES) : assembly.cs makefile.mk $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk 
+    $(GNUCOPY) -p assembly.cs $@
+    +echo $(ECHOQUOTE) \
+    [assembly:System.Reflection.AssemblyVersion( "$(CLI_URE_NEW_VERSION)")]$(ECHOQUOTE) \
+    >> $@
+.ENDIF
 
 $(BIN)$/cli_ure.dll : $(CSFILES) $(BIN)$/cli_types.dll $(BIN)$/cliureversion.mk 
     +$(CSC) $(CSCFLAGS) \
