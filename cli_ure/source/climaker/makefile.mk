@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2006-07-25 07:54:36 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:04:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,20 +79,20 @@ UNOTYPES = \
     com.sun.star.reflection.XSingletonTypeDescription2		\
     com.sun.star.reflection.XStructTypeDescription
 
-CFLAGS +=-AI$(BIN)
+CFLAGSCXX +=-AI$(BIN)
 
 
 # When compiling for CLR, disable "warning C4339: use of undefined type detected
 # in CLR meta-data - use of this type may lead to a runtime exception":
 .IF "$(COMEX)"=="10"
-CFLAGS += -clr:noAssembly -wd4339
+CFLAGSCXX += -clr:noAssembly -wd4339
 .ELSE
-CFLAGS += -clr:noAssembly -wd4339
+CFLAGSCXX += -clr:oldSyntax -LN -wd4339 -wd4715
 .ENDIF
 
 OBJFILES = \
-    $(OBJ)$/climaker_emit.obj	\
-    $(OBJ)$/climaker_app.obj
+    $(OBJ)$/climaker_app.obj	\
+    $(OBJ)$/climaker_emit.obj
 
 APP1TARGET = $(TARGET)
 APP1OBJS = $(OBJFILES)
@@ -103,6 +103,11 @@ APP1STDLIBS = \
     $(CPPULIB)			\
     $(SALLIB)			\
     mscoree.lib
+
+.IF "$(CCNUMVER)" >= "001399999999"
+APP1STDLIBS += \
+    msvcmrt.lib
+.ENDIF
 
 .ENDIF
 
@@ -119,9 +124,11 @@ ALLTAR : $(BIN)$/climaker.exe.config
 
 $(BIN)$/climaker.exe.config : climaker.exe.config
     $(GNUCOPY) -f $? $@
-
+.IF "$(USE_SHELL)"!="4nt"
+    +chmod +x $@
 .ENDIF
 
+.ENDIF
 
 
 
