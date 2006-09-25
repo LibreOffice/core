@@ -18,6 +18,8 @@
 #include "registryexception.hxx"
 #endif
 
+#pragma warning(disable : 4350)
+
 //--------------------------------------
 /**
 */
