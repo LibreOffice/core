@@ -4,9 +4,9 @@
  *
  *  $RCSfile: climaker_emit.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:51:42 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:04:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1229,7 +1229,11 @@ Assembly * TypeEmitter::type_resolve(
              MethodAttributes::Virtual |
              MethodAttributes::NewSlot |
              MethodAttributes::HideBySig |
+#if defined(_MSC_VER) && (_MSC_VER < 1400)
              MethodAttributes::Instance);
+#else
+         Instance);
+#endif
 
         if (TypeClass_INTERFACE_METHOD == xMember->getTypeClass())
         {
