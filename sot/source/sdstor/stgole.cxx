@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgole.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:10:14 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:35:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,9 @@
 #include "storinfo.hxx"     // Read/WriteClipboardFormat()
 
 #include <tools/debug.hxx>
-
+#if defined(_MSC_VER) && (_MSC_VER>=1400)
+#pragma warning(disable: 4342)
+#endif
 ///////////////////////// class StgInternalStream ////////////////////////
 
 StgInternalStream::StgInternalStream
