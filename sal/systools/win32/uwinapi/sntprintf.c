@@ -6,6 +6,10 @@
 #include <tchar.h>
 #include <systools/win32/snprintf.h>
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+#pragma warning(disable:4273)       // inconsistent dll linkage
+#endif
+
 #if _MSC_VER < 1300
 
 /*  The non-debug versions of _vscprintf/_scprintf are just calls
@@ -109,4 +113,3 @@ _SNPRINTF_DLLIMPORT int __cdecl sntprintf( _TCHAR *buffer, size_t count, const _
 
     return retval;
 }
-
