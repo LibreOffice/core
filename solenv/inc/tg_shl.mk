@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.97 $
+#   $Revision: 1.98 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:59:27 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:09:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)TARGET).vmap
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)TARGET).vmap
-$(USE_SHL$(TNR)VERSIONMAP) .PHONY: 
+$(USE_SHL$(TNR)VERSIONMAP) .PHONY:
     @+echo -----------------------------
     @+echo you should only use versionmap OR exportfile
     @+echo -----------------------------
@@ -165,7 +165,7 @@ $(USE_SHL$(TNR)VERSIONMAP): \
 
 .ELSE			# "$(SHL$(TNR)FILTERFILE)"!=""
 USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)TARGET).vmap
-$(USE_SHL$(TNR)VERSIONMAP) : 
+$(USE_SHL$(TNR)VERSIONMAP) :
     @+echo -----------------------------
     @+echo SHL$(TNR)FILTERFILE not set!
     @+echo -----------------------------
@@ -241,7 +241,7 @@ $(SHL$(TNR)TARGETN) : $(LINKINCTARGETS)
 .IF "$(SHL$(TNR)USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
 SHL$(TNR)LINKLIST=$(MISC)$/$(SHL$(TNR)TARGET)_link.lst
-$(MISC)$/$(SHL$(TNR)TARGET)_link.lst : $(SHL$(TNR)LIBS) 
+$(MISC)$/$(SHL$(TNR)TARGET)_link.lst : $(SHL$(TNR)LIBS)
     @+-$(RM) $@ >& $(NULLDEV)
     +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
@@ -260,7 +260,7 @@ $(SHL$(TNR)TARGETN) : \
                     $(USE_SHL$(TNR)VERSIONMAP)\
                     $(SHL$(TNR)RES)\
                     $(SHL$(TNR)DEPN) \
-                    $(SHL$(TNR)LINKLIST) 
+                    $(SHL$(TNR)LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL$(TNR)TARGETN)
 .IF "$(GUI)" == "WNT"
@@ -275,7 +275,7 @@ $(SHL$(TNR)TARGETN) : \
 .ELSE			# "$(SHL$(TNR)ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(SHL$(TNR)ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ORG_NAME	$(SHL$(TNR)TARGET)$(DLLPOST) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
@@ -317,6 +317,8 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL$(TNR)LINKER) @$(mktmp	$(SHL$(TNR)LINKFLAGS)			\
@@ -332,6 +334,8 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL$(TNR)USE_EXPORTS)"!="name"
     $(SHL$(TNR)LINKER) @$(mktmp	$(SHL$(TNR)LINKFLAGS)			\
@@ -346,6 +350,8 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)STDSHL) $(STDSHL$(TNR))                           \
         $(SHL$(TNR)LINKRES) \
     )
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL$(TNR)TARGET).lnk
@@ -364,6 +370,8 @@ $(SHL$(TNR)TARGETN) : \
         ) >> $(MISC)$/$(SHL$(TNR)TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL$(TNR)TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL$(TNR)TARGET).lnk
         $(SHL$(TNR)LINKER) @$(MISC)$/$(SHL$(TNR)TARGET).lnk
+        @-+echo linking $@.manifest ...
+        +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -415,7 +423,7 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - THREAD WARNING! - this library was linked single threaded
     @+echo - and must not be used in any office installation!
     @+echo -
     @+echo ----------------------------------------------------------
@@ -482,4 +490,3 @@ $(SHL$(TNR)IMPLIBN):	\
 
 # unroll end
 #######################################################
-
