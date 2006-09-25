@@ -4,9 +4,9 @@
  *
  *  $RCSfile: invocation.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:30:03 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 12:51:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -705,11 +705,9 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
         sal_Int16* pOutIndizes              = OutIndizes.getArray();
         sal_uInt32 nOutIndex                = 0;
 
-        sal_Int32 nPos;
-
-        try
+        for ( sal_Int32 nPos = 0; nPos < nFParamsLen; ++nPos )
         {
-            for ( nPos = 0; nPos < nFParamsLen; ++nPos )
+            try
             {
                 const ParamInfo& rFParam = pFParams[nPos];
                 const Reference<XIdlClass>& rDestType = rFParam.aType;
@@ -744,28 +742,28 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
                     ++nOutIndex;
                 }
             }
-
-            // execute Method
-            Any aRet = xMethod->invoke( _aMaterial, aInvokeParams );
-
-            // OUT Params
-            OutIndizes.realloc( nOutIndex );
-            pOutIndizes        = OutIndizes.getArray();
-            OutParams.realloc( nOutIndex );
-            Any* pOutParams = OutParams.getArray();
-
-            while (nOutIndex--)
+            catch( CannotConvertException& rExc )
             {
-                pOutParams[nOutIndex] = pInvokeParams[ pOutIndizes[nOutIndex] ];
+                rExc.ArgumentIndex = nPos;  // optionalen Parameter Index hinzufuegen
+                throw rExc;
             }
+        }
 
-            return aRet;
-        }
-        catch( CannotConvertException& rExc )
+        // execute Method
+        Any aRet = xMethod->invoke( _aMaterial, aInvokeParams );
+
+        // OUT Params
+        OutIndizes.realloc( nOutIndex );
+        pOutIndizes        = OutIndizes.getArray();
+        OutParams.realloc( nOutIndex );
+        Any* pOutParams = OutParams.getArray();
+
+        while (nOutIndex--)
         {
-            rExc.ArgumentIndex = nPos;  // optionalen Parameter Index hinzufuegen
-            throw rExc;
+            pOutParams[nOutIndex] = pInvokeParams[ pOutIndizes[nOutIndex] ];
         }
+
+        return aRet;
     }
 
     RuntimeException aExc;
