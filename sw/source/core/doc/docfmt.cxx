@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:52:37 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:25:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2290,7 +2290,7 @@ void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& rSet )
 // !!!!!!!!! Undo fehlt noch !!!!!!!!!!!!!!!!!!
         AppendRedline( pRedl, true );
 
-        SetRedlineMode_intern( eOld | IDocumentRedlineAccess::REDLINE_IGNORE );
+        SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)(eOld | IDocumentRedlineAccess::REDLINE_IGNORE));
     }
 
     Insert( rPam, rSet, SETATTR_DONTEXPAND );
