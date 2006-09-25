@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:05:24 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:27:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,13 +53,6 @@ ENABLE_EXCEPTIONS=TRUE
 APP1TARGET=	$(TARGET)
 APP1STACK=	1000000
 
-.IF "$(GUI)"=="WNT"
-.IF "$(COMEX)"!="10"
-APP1STDLIBS= MSVCIRT.LIB
-.ENDIF
-.ENDIF
-
-
 UWINAPILIB=$(0)
 LIBSALCPPRT=$(0)
 
@@ -68,6 +61,5 @@ APP1DEPN=   $(LB)$/x2c_xcd.lib $(LB)$/x2c_support.lib
 
 
 .INCLUDE :  target.mk
-
 
 
