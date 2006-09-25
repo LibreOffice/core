@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddocaccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:56:51 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:32:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,12 @@
 #endif
 
 #include <oleidl.h>
+#if defined(_MSC_VER) && (_MSC_VER > 1310)
+#pragma warning(disable : 4265)
+#include <atldbcli.h>
+#else
 #include <atlcomcli.h>
-
+#endif
 #include <cppuhelper/weak.hxx>
 
 class EmbedDocument_Impl;
@@ -67,4 +71,3 @@ class EmbeddedDocumentInstanceAccess_Impl : public ::cppu::OWeakObject
 };
 
 #endif
-
