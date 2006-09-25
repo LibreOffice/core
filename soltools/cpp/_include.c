@@ -1,18 +1,20 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
 #if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
 #   include <io.h>
 #else
 #   include <unistd.h>
 #endif
 
-#ifdef __hpux
-#   define _HPUX_SOURCE
-#endif
 #ifdef _MSC_VER
 #   define _POSIX_
+#endif
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+
+
+#ifdef __hpux
+#   define _HPUX_SOURCE
 #endif
 #ifdef __IBMC__
 #   include <fcntl.h>
