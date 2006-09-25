@@ -1,6 +1,6 @@
 /* $RCSfile: rulparse.c,v $
--- $Revision: 1.8 $
--- last change: $Author: ihi $ $Date: 2006-06-29 11:24:37 $
+-- $Revision: 1.9 $
+-- last change: $Author: vg $ $Date: 2006-09-25 09:40:47 $
 --
 -- SYNOPSIS
 --      Perform semantic analysis on input
@@ -148,6 +148,10 @@ int *state;
         DB_PRINT( "par", ("tg_cell [%s]", tok) );
 
         if( (at = _is_attribute(tok)) != 0 ) {
+           /* Ignore .SILENT when -vr is active. */
+           if( (Verbose & V_FORCEECHO) && (at == A_SILENT) )
+          at = 0;
+
            /* Logically OR the attributes specified into one main
             * ATTRIBUTE mask. */
 
@@ -429,7 +433,7 @@ Bind_rules_to_targets( flag )/*
         Take the recipe lines we have defined and bind them with proper attributes
         to the targets that were previously defined in the parse.  The
         attributes that get passed here are merged with those that are were
-        previously defined.  (namely F_SINGLE) */
+        previously defined.  (namely attribute F_SINGLE) */
 int flag;
 {
    CELLPTR tg;             /* pointer to current target in list */
@@ -739,7 +743,6 @@ int     *state;
       break;
 
       case ST_SOURCE:
-      /* case ST_SUFFIXES: */
            if( prereq != NIL(CELL) )
         _do_targets( op & (R_OP_CL | R_OP_MI | R_OP_UP), attr, set_dir,
              target, prereq );
@@ -1551,8 +1554,7 @@ char *name;
 
          case 'S':
             if( !strncmp(name, "SETDIR=", 7) )    attr = A_SETDIR;
-            /* let .SILENT do nothing when -vr is active. */
-            else if( !(Verbose & V_FORCEECHO) && !strcmp(name, "SILENT") ) attr = A_SILENT;
+            else if( !strcmp(name, "SILENT") )    attr = A_SILENT;
             else if( !strcmp(name, "SYMBOL") )    attr = A_SYMBOL;
             else if( !strcmp(name, "SEQUENTIAL")) attr = A_SEQ;
             else if( !strcmp(name, "SWAP"))       attr = A_SWAP;
@@ -1619,7 +1621,11 @@ char *tg;
 
       case 'S':
          if( !strncmp( tg, "SOURCE", 6 ) )  DB_RETURN( ST_SOURCE   );
-         else if( !strncmp(tg, "SUFFIXES", 8 )) DB_RETURN( ST_SOURCE   );
+         else if( !strncmp(tg, "SUFFIXES", 8 )) {
+            if  (Verbose & V_WARNALL)
+               Warning( "The .SUFFIXES target has no special meaning and is deprecated." );
+            DB_RETURN( ST_SOURCE   );
+     }
      break;
 
       case 'T':
