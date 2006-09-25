@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rsclex.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:50:58 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:34:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ extern "C" int yyparse();   // forward Deklaration fuer erzeugte Funktion
 extern "C" void yyerror( const char * );
 extern "C" int  yylex( void );
 #else
-#if defined ( WTC ) || defined ( GCC )
+#if defined ( WTC ) || defined ( GCC ) || (_MSC_VER >= 1400)
 int yyparse();              // forward Deklaration fuer erzeugte Funktion
 #else
 yyparse();              // forward Deklaration fuer erzeugte Funktion
