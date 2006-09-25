@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryw9x.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:37:02 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:06:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@
 
 #include <assert.h>
 
-#pragma warning(disable : 4786)
+#pragma warning(disable : 4786 4350)
 
 //---------------------------------------
 //
