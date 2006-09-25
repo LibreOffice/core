@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:06:23 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:25:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1488,9 +1488,9 @@ void OutputDevice::ImplSetTriangleClipRegion( const PolyPolygon &rPolyPolygon )
                 //sprintf(string,"[%f,%f] [%f,%f] [%f,%f]\n",v0.x,v0.y,v1.x,v1.y,v2.x,v2.y);
                 //OSL_TRACE(string);
 
-                if(v0.y > v2.y) swap(v0, v2);
-                if(v1.y > v2.y) swap(v1, v2);
-                if(v0.y > v1.y) swap(v0, v1);
+                if(v0.y > v2.y) ::swap(v0, v2);
+                if(v1.y > v2.y) ::swap(v1, v2);
+                if(v0.y > v1.y) ::swap(v0, v1);
 
                 const float float2fixed(16.0f);
 
