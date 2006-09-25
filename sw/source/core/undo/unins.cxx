@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:52:04 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:28:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -407,7 +407,7 @@ void SwUndoInsert::Redo( SwUndoIter& rUndoIter )
         if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         {
             IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-            pDoc->SetRedlineMode_intern( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE );
+            pDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE));
             pDoc->AppendRedline( new SwRedline( *pRedlData, *pPam ), true);
             pDoc->SetRedlineMode_intern( eOld );
         }
@@ -450,7 +450,7 @@ void SwUndoInsert::Redo( SwUndoIter& rUndoIter )
             if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
             {
                 IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-                pDoc->SetRedlineMode_intern( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE );
+                pDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE));
                 pDoc->AppendRedline( new SwRedline( *pRedlData,
                                             *rUndoIter.pAktPam ), true);
                 pDoc->SetRedlineMode_intern( eOld );
