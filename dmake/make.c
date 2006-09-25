@@ -1,6 +1,6 @@
 /* $RCSfile: make.c,v $
--- $Revision: 1.6 $
--- last change: $Author: hr $ $Date: 2006-04-20 12:01:03 $
+-- $Revision: 1.7 $
+-- last change: $Author: vg $ $Date: 2006-09-25 09:40:24 $
 --
 -- SYNOPSIS
 --      Perform the update of all outdated targets.
@@ -636,9 +636,10 @@ CELLPTR setdirroot;
       }
       else if( cp->ce_recipe != NIL(STRING) ) {
      /* If a recipe is found use it. Note this misses F_MULTI targets. */
-     if( !(cp->ce_flag & F_SINGLE) )
+     if( !(cp->ce_flag & F_SINGLE) ) /* Execute the recipes once ... */
            rval = Exec_commands( cp );
-     else {
+     else {              /* or for every out of date dependency
+                      * if the ruleop ! was used. */
         TKSTR tk;
 
         _drop_mac( m_q );
@@ -980,12 +981,20 @@ PUBLIC int
 Exec_commands( cp )/*
 =====================
   Execute the commands one at a time that are pointed to by the rules pointer
-  of the target cp. If a group is indicated, then the ce_attr determines
-  .IGNORE and .SILENT treatment for the group.
+  of the target cp if normal (non-group) recipes are defined. If a group recipe
+  is found all commands are written into a temporary file first and this
+  (group-) shell script is executed all at once.
+  If a group is indicated, then the ce_attr determines .IGNORE and .SILENT
+  treatment for the group.
 
   The function returns 0, if the command is executed and has successfully
   returned, and it returns 1 if the command is executing but has not yet
   returned or -1 if an error occured (Return value from Do_cmnd()).
+
+  Macros that are found in recipe lines are expanded in this function, in
+  parallel builds this can mean they are expanded before the previous recipe
+  lines are finished. (Exception: $(shell ..) waits until all previous recipe
+  lines are done.)
 
   The F_MADE bit in the cell is guaranteed set when the command has
   successfully completed.  */
@@ -1049,7 +1058,7 @@ CELLPTR cp;
       t_attr l_attr;
       char   *p;
       int    new_attr = FALSE;
-      int    shell;
+      int    shell; /* True if the recipe shall run in shell. */
 
       /* Reset it for each recipe line otherwise tempfiles don't get removed.
        * Since processing of $(mktmp ...) depends on Current_target being
@@ -1126,13 +1135,16 @@ CELLPTR cp;
       }
 
       if( group )
+     /* Append_line() calls Print_cmnd(). */
          Append_line( cmnd, TRUE, tmpfile, cp->CE_NAME, trace, 0 );
       else {
-     if( *DmStrSpn(cmnd, " \t") != '\0' )
+     /* Don't print empty recipe lines. .ROOT and .TARGETS
+      * deliberately might have empty "" recipes and we don't want
+      * to output empty recipe lines for them. */
+     if ( *cmnd ) {
+        /* Print command and remove continuation sequence from cmnd. */
         Print_cmnd(cmnd, !(do_it && (l_attr & A_SILENT)), 0);
-     else
-        do_it = FALSE;
-
+     }
      rval=Do_cmnd(cmnd,FALSE,do_it,cp,(l_attr&A_IGNORE)!=0, shell,
               rp->st_next == NIL(STRING) );
       }
