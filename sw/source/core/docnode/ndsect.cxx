@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:00:38 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:26:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,7 +272,7 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
     SwSectionNode* pNewSectNode = 0;
 
     IDocumentRedlineAccess::RedlineMode_t eOld = GetRedlineMode();
-    SetRedlineMode_intern( (eOld & ~IDocumentRedlineAccess::REDLINE_SHOW_MASK) | IDocumentRedlineAccess::REDLINE_IGNORE );
+    SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)((eOld & ~IDocumentRedlineAccess::REDLINE_SHOW_MASK) | IDocumentRedlineAccess::REDLINE_IGNORE));
 
     if( rRange.HasMark() )
     {
