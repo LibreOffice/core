@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:51:53 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -557,7 +557,7 @@ void lcl_SaveRedlines( const SwPaM& aPam, _SaveRedlines& rArr )
 
     // redline mode REDLINE_IGNORE|REDLINE_ON; save old mode
     IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( ( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON );
+    pDoc->SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)(( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON ));
     SwRedlineTbl& rRedlTbl = (SwRedlineTbl&)pDoc->GetRedlineTbl();
 
     // iterate over relevant redlines and decide for each whether it should
@@ -614,7 +614,7 @@ void lcl_SaveRedlines( const SwPaM& aPam, _SaveRedlines& rArr )
 void lcl_RestoreRedlines( SwDoc* pDoc, const SwPosition& rPos, _SaveRedlines& rArr )
 {
     IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( ( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON );
+    pDoc->SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)(( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON ));
 
     for( sal_uInt16 n = 0; n < rArr.Count(); ++n )
     {
@@ -639,7 +639,7 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
         return ;
 
     IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( ( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON );
+    pDoc->SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)(( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON ));
     SwRedlineTbl& rRedlTbl = (SwRedlineTbl&)pDoc->GetRedlineTbl();
 
     do {
@@ -719,7 +719,7 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
 void lcl_RestoreRedlines( SwDoc* pDoc, sal_uInt32 nInsPos, _SaveRedlines& rArr )
 {
     IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( ( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON );
+    pDoc->SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)(( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON ));
 
     for( sal_uInt16 n = 0; n < rArr.Count(); ++n )
     {
@@ -1612,7 +1612,7 @@ bool SwDoc::DeleteAndJoin( SwPaM & rPam )
 
     //JP 06.01.98: MUSS noch optimiert werden!!!
     SetRedlineMode(
-        IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE );
+           (IDocumentRedlineAccess::RedlineMode_t)(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE ));
 
             nUndoSize = pUndos->Count();
             StartUndo(0, NULL);
@@ -2166,7 +2166,7 @@ bool SwDoc::Replace( SwPaM& rPam, const String& rStr, bool bRegExpRplc )
 
         //JP 06.01.98: MUSS noch optimiert werden!!!
         SetRedlineMode(
-            IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE );
+               (IDocumentRedlineAccess::RedlineMode_t)(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE ));
 
                 *aDelPam.GetPoint() = pBkmk->GetPos();
                 *aDelPam.GetMark() = *pBkmk->GetOtherPos();
@@ -2548,7 +2548,7 @@ void SwDoc::checkRedlining(IDocumentRedlineAccess::RedlineMode_t& _rReadlineMode
         {
             sal_Int32 nMode = (sal_Int32)_rReadlineMode;
             nMode |= IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE;
-            _rReadlineMode = nMode;
+            _rReadlineMode = (IDocumentRedlineAccess::RedlineMode_t)nMode;
         }
     }
 }
