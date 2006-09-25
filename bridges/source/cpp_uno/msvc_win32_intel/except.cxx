@@ -4,9 +4,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:55:05 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 12:51:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -533,6 +533,9 @@ int msci_filterCppException(
         // hack to get msvcrt internal _curexception field:
         pRecord = *reinterpret_cast< EXCEPTION_RECORD ** >(
             reinterpret_cast< char * >( __pxcptinfoptrs() ) +
+            // as long as we don't demand msvcr source as build prerequisite
+            // (->platform sdk), we have to code those offsets here.
+            //
             // crt\src\mtdll.h:
             // offsetof (_tiddata, _curexception) -
             // offsetof (_tiddata, _tpxcptinfoptrs):
@@ -540,8 +543,10 @@ int msci_filterCppException(
             0x18 // msvcrt,dll
 #elif _MSC_VER < 1310
             0x20 // msvcr70.dll
-#else
+#elif _MSC_VER < 1400
             0x24 // msvcr71.dll
+#else
+            0x28 // msvcr80.dll
 #endif
             );
     }
@@ -589,9 +594,12 @@ int msci_filterCppException(
                     uno_type_any_constructAndConvert(
                         pUnoExc, &exc,
                         ::getCppuType( &exc ).getTypeLibType(), pCpp2Uno );
+#if _MSC_VER < 1400 // msvcr80.dll cleans up, different from former msvcrs
+                    // if (! rethrow):
                     // though this unknown exception leaks now, no user-defined
                     // exception is ever thrown thru the binary C-UNO dispatcher
                     // call stack.
+#endif
                 }
                 else
                 {
@@ -599,12 +607,14 @@ int msci_filterCppException(
                     uno_any_constructAndConvert(
                         pUnoExc, (void *) pRecord->ExceptionInformation[1],
                         pExcTypeDescr, pCpp2Uno );
+#if _MSC_VER < 1400 // msvcr80.dll cleans up, different from former msvcrs
                     if (! rethrow)
                     {
                         uno_destructData(
                             (void *) pRecord->ExceptionInformation[1],
                             pExcTypeDescr, cpp_release );
                     }
+#endif
                     typelib_typedescription_release( pExcTypeDescr );
                 }
 
