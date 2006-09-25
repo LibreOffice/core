@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xformsimport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:32:21 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:45:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#include "xformsimport.hxx"
 #include "XFormsModelContext.hxx"
 #include <vector>
 #include <utility>
+#include "xformsimport.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
@@ -100,7 +100,7 @@ void bindXFormsValueBinding(
 
 void bindXFormsListBinding(
     Reference<XModel> xModel,
-    pair<Reference<XPropertySet>,OUString> aPair )
+    ::pair<Reference<XPropertySet>,OUString> aPair )
 {
     Reference<XListEntrySink> xListEntrySink(
         aPair.first,
