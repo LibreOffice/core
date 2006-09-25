@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redline.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:30:22 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:24:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,7 @@ public:
         {   return !operator==( rCmp ); }
 
     IDocumentRedlineAccess::RedlineType_t GetType() const
-        { return (eType & IDocumentRedlineAccess::REDLINE_NO_FLAG_MASK); }
+  { return ((IDocumentRedlineAccess::RedlineType_t)(eType & IDocumentRedlineAccess::REDLINE_NO_FLAG_MASK)); }
     IDocumentRedlineAccess::RedlineType_t GetRealType() const { return eType; }
     USHORT GetAuthor() const                { return nAuthor; }
     const String& GetComment() const        { return sComment; }
@@ -149,7 +149,7 @@ public:
 
     void SetComment( const String& rS )     { sComment = rS; }
     void SetAutoFmtFlag()
-        { eType = ( eType | IDocumentRedlineAccess::REDLINE_FORM_AUTOFMT ); }
+  { eType = (IDocumentRedlineAccess::RedlineType_t)(eType | IDocumentRedlineAccess::REDLINE_FORM_AUTOFMT); }
     int CanCombine( const SwRedlineData& rCmp ) const
         {
             return nAuthor == rCmp.nAuthor &&
@@ -240,7 +240,7 @@ public:
     const DateTime& GetTimeStamp( USHORT nPos = 0) const;
     IDocumentRedlineAccess::RedlineType_t GetRealType( USHORT nPos = 0 ) const;
     IDocumentRedlineAccess::RedlineType_t GetType( USHORT nPos = 0) const
-        { return ( GetRealType( nPos ) & IDocumentRedlineAccess::REDLINE_NO_FLAG_MASK); }
+  { return ( (IDocumentRedlineAccess::RedlineType_t)(GetRealType( nPos ) & IDocumentRedlineAccess::REDLINE_NO_FLAG_MASK)); }
     const String& GetComment( USHORT nPos = 0 ) const;
 
     void SetComment( const String& rS ) { pRedlineData->SetComment( rS ); }
