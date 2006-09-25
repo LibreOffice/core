@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodechangeinfo.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:51:50 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 12:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,6 +267,7 @@ namespace configmgr
     }
 }
 
+#if !defined(WNT) || (defined(WNT) && _MSC_VER < 1400)
 namespace std
 {
     template <>
@@ -274,5 +275,6 @@ namespace std
     void swap(configmgr::configuration::NodeChangesInformation& lhs, configmgr::configuration::NodeChangesInformation& rhs)
     { lhs.swap(rhs); }
 }
+#endif
 
 #endif // CONFIGMGR_CONFIGCHANGEINFO_HXX_
