@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:29:24 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:32:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -581,7 +581,7 @@ Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const OUStr
             {
                 pGDoc->SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_DELETE_REDLINES );
                 lcl_CopySelToDoc( pGDoc, pxCursor, pxRange );
-                pGDoc->SetRedlineMode_intern( 0 );
+                pGDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)( 0 ));
                 nRet = pGlosGroup->PutDoc();
             }
             else
