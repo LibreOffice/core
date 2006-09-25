@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-07 17:08:03 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:00:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -152,8 +152,14 @@ ICU_BUILD_LIBPOST=d
 ICU_BUILD_VERSION=Release
 ICU_BUILD_LIBPOST=
 .ENDIF
+
 CONFIGURE_ACTION+= $(COPY) ..$/..$/..$/..$/..$/makefiles.zip . $(BUILD_ACTION_SEP) unzip makefiles.zip
-BUILD_ACTION=cd allinone$/all && cmd /c nmake /f all.mak CFG="all - Win32 Release" && cd ..$/..
+
+.IF "$(CCNUMVER)"<="001400000000"
+BUILD_ACTION=cd allinone$/all && cmd /c nmake /f all.mak CFG="all - Win32 Release" EXCEPTIONSWITCH="-EHsc" && cd ..$/..
+.ELSE
+BUILD_ACTION=cd allinone$/all && cmd /c nmake /f all.mak CFG="all - Win32 Release" EXCEPTIONSWITCH="-EHa -Zc:wchar_t-" && cd ..$/..
+.ENDIF
 
 OUT2LIB= \
     $(BUILD_DIR)$/..$/lib$/icudata.lib \
