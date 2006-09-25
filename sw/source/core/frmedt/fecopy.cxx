@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:13:43 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:27:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -393,7 +393,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
     else
         bRet = _CopySelToDoc( pClpDoc, 0 );     // kopiere die Selectionen
 
-    pClpDoc->SetRedlineMode_intern( 0 );
+    pClpDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)0 );
     pClpDoc->UnlockExpFlds();
     if( !pClpDoc->IsExpFldsLocked() )
         pClpDoc->UpdateExpFlds(NULL, true);
@@ -635,7 +635,7 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
         pDoc->SetCopyIsMove( TRUE );
 
     IDocumentRedlineAccess::RedlineMode_t eOldRedlMode = pDestShell->GetDoc()->GetRedlineMode();
-    pDestShell->GetDoc()->SetRedlineMode_intern( eOldRedlMode | IDocumentRedlineAccess::REDLINE_DELETE_REDLINES );
+    pDestShell->GetDoc()->SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)(eOldRedlMode | IDocumentRedlineAccess::REDLINE_DELETE_REDLINES));
 
     // sind Tabellen-Formeln im Bereich, dann muss erst die Tabelle
     // angezeigt werden, damit die Tabellen-Formel den neuen Wert errechnen
