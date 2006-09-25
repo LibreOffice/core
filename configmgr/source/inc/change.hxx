@@ -4,9 +4,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:23:48 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 12:48:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,9 @@
 
 #ifndef CONFIGMGR_CHANGE_HXX
 #define CONFIGMGR_CHANGE_HXX
+#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+#pragma warning(disable : 4350) // behavior change: 'member1' called instead of 'member2'
+#endif
 
 #ifndef _CONFIGMGR_TREE_VALUENODE_HXX
 #include "valuenode.hxx"
