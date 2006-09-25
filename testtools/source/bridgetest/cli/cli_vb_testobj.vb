@@ -4,9 +4,9 @@
 '
 '   $RCSfile: cli_vb_testobj.vb,v $
 '
-'   $Revision: 1.3 $
+'   $Revision: 1.4 $
 '
-'   last change: $Author: rt $ $Date: 2005-09-09 12:25:01 $
+'   last change: $Author: vg $ $Date: 2006-09-25 12:47:57 $
 '
 '   The Contents of this file are made available subject to
 '   the terms of GNU Lesser General Public License Version 2.1.
@@ -246,7 +246,7 @@ Public Class VBBridgeTestObject
         End Set
     End Property
 
-    Public Overridable Property UShort As UInt16 _
+    Public Overridable Property [UShort] As UInt16 _
         Implements XBridgeTest2.UShort
         Get
             Return m_ushort
@@ -266,7 +266,7 @@ Public Class VBBridgeTestObject
         End Set
     End Property
 
-    Public Overridable Property ULong() As UInt32 _
+    Public Overridable Property [ULong]() As UInt32 _
         Implements XBridgeTest2.ULong
         Get
             Return m_ulong 
