@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp3.c,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-24 10:45:16 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:35:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#if defined(_MSC_VER) && (_MSC_VER > 1310)
+#define _USE_32BIT_TIME_T
+#endif
 
 #include        <stdio.h>
 #ifdef UNX
@@ -509,13 +512,9 @@ void initdefines()
             dp = defendel("__DATE__", FALSE);
             dp->repl = tp = getmem(27);
             dp->nargs = DEF_NOARGS;
-#ifdef MAC /* MA */
-                        time( (time_t*)&tvec);
-#else
-            time(&tvec);
-#endif
+            time( (time_t*)&tvec);
             *tp++ = '"';
-            strcpy(tp, ctime(&tvec));
+            strcpy(tp, ctime((const time_t*)&tvec));
             tp[24] = '"';                       /* Overwrite newline    */
 #endif
         }
@@ -608,4 +607,3 @@ char            **argv;
         return (j);                     /* Return new argc      */
 }
 #endif
-
