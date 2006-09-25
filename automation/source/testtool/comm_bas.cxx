@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comm_bas.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:38:29 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:01:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@
 
 #if defined(MAC) || defined(HPUX)
 #define MEMBER(name) &##name
-#elif (defined (GCC) && ( __GNUC__ >= 3 ))
+#elif (defined (GCC) && ( __GNUC__ >= 3 )) || (defined(WNT) && (_MSC_VER >= 1400))
 #define MEMBER(name) &name
 #else
 #define MEMBER(name) name
