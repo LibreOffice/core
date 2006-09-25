@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:22:13 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:31:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2216,8 +2216,8 @@ ULONG SwWW8Writer::StoreDoc()
     USHORT nRedlineMode = pDoc->GetRedlineMode();
     if (pDoc->GetRedlineTbl().Count())
     {
-        pDoc->SetRedlineMode(nRedlineMode | IDocumentRedlineAccess::REDLINE_SHOW_DELETE |
-            IDocumentRedlineAccess::REDLINE_SHOW_INSERT);
+        pDoc->SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)(nRedlineMode | IDocumentRedlineAccess::REDLINE_SHOW_DELETE |
+                                     IDocumentRedlineAccess::REDLINE_SHOW_INSERT));
     }
 
     maFontHelper.InitFontTable(bWrtWW8, *pDoc);
@@ -2356,7 +2356,7 @@ ULONG SwWW8Writer::StoreDoc()
     StoreDoc1();
 
     if (nRedlineMode != pDoc->GetRedlineMode())
-        pDoc->SetRedlineMode(nRedlineMode);
+      pDoc->SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)(nRedlineMode));
 
     if (pUsedNumTbl)           // all used NumRules
     {
