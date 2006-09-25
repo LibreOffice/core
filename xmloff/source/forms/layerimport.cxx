@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:37:11 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:21:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -535,7 +535,8 @@ namespace xmloff
             return;
 
         // add a new entry to our page map
-        ::std::pair< MapDrawPage2MapIterator, bool > aPagePosition =
+        ::std::pair< MapDrawPage2MapIterator, bool > aPagePosition;
+        aPagePosition =
             m_aControlIds.insert(MapDrawPage2Map::value_type(_rxDrawPage, MapString2PropertySet()));
         OSL_ENSURE(aPagePosition.second, "OFormLayerXMLImport_Impl::startPage: already imported this page!");
         m_aCurrentPageIds = aPagePosition.first;
