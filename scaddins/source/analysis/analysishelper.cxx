@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:11:26 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 12:47:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -994,7 +994,7 @@ double Erf( double x )
 
     double fErf = 1.0;
     if ( x < 1.0e-10 )
-        fErf = x*1.1283791670955125738961589031215452L;
+        fErf = (double) (x*1.1283791670955125738961589031215452L);
     else if ( x < 0.65 )
         Erf0065( x, fErf );
     else
