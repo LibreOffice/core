@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 15:15:15 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:14:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+#pragma warning(disable:4738) // storing 32-bit float result in memory, possible loss of performance
+#endif
 
 #ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
