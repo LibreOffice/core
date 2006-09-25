@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WindowsAccessBridgeAdapter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:33:10 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:03:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,7 @@ Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_createMapping(JNIEn
             if ( pJava_environment && pUno_environment )
             {
                 g_unoMapping = Mapping(pUno_environment, pJava_environment);
-                getCppuType((Reference< XAccessible > *) 0).getDescription((typelib_TypeDescription **) & g_pTypeDescription);
+                getCppuType((::com::sun::star::uno::Reference< XAccessible > *) 0).getDescription((typelib_TypeDescription **) & g_pTypeDescription);
             }
 
             if ( pJava_environment )
@@ -255,7 +255,7 @@ void handleWindowEvent(Window * pWindow, bool bShow)
 {
     if ( pWindow && pWindow->IsTopWindow() )
     {
-        Reference< XAccessible > xAccessible;
+        ::com::sun::star::uno::Reference< XAccessible > xAccessible;
 
         // Test for combo box - drop down floating windows first
         Window * pParentWindow = pWindow->GetParent();
@@ -265,10 +265,10 @@ void handleWindowEvent(Window * pWindow, bool bShow)
             try
             {
                 // The parent window of a combo box floating window should have the role COMBO_BOX
-                Reference< XAccessible > xParentAccessible(pParentWindow->GetAccessible());
+                ::com::sun::star::uno::Reference< XAccessible > xParentAccessible(pParentWindow->GetAccessible());
                 if ( xParentAccessible.is() )
                 {
-                    Reference< XAccessibleContext > xParentAC(xParentAccessible->getAccessibleContext());
+                    ::com::sun::star::uno::Reference< XAccessibleContext > xParentAC(xParentAccessible->getAccessibleContext());
                     if ( xParentAC.is() && (AccessibleRole::COMBO_BOX == xParentAC->getAccessibleRole()) )
                     {
                         // O.k. - this is a combo box floating window corresponding to the child of role LIST of the parent.
@@ -276,10 +276,10 @@ void handleWindowEvent(Window * pWindow, bool bShow)
                         sal_Int32 nCount = xParentAC->getAccessibleChildCount();
                         for ( sal_Int32 n = 0; (n < nCount) && !xAccessible.is(); n++)
                         {
-                            Reference< XAccessible > xChild = xParentAC->getAccessibleChild(n);
+                            ::com::sun::star::uno::Reference< XAccessible > xChild = xParentAC->getAccessibleChild(n);
                             if ( xChild.is() )
                             {
-                                Reference< XAccessibleContext > xChildAC = xChild->getAccessibleContext();
+                                ::com::sun::star::uno::Reference< XAccessibleContext > xChildAC = xChild->getAccessibleContext();
                                 if ( xChildAC.is() && (AccessibleRole::LIST == xChildAC->getAccessibleRole()) )
                                 {
                                     xAccessible = xChild;
