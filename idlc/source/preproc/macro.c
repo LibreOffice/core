@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macro.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:51:35 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:11:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,15 +32,15 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#ifdef _MSC_VER
+#   define _POSIX_
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #ifdef __hpux
 #   define _HPUX_SOURCE
-#endif
-#ifdef _MSC_VER
-#   define _POSIX_
 #endif
 #ifdef SCO
 #   define _IBCS2
