@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:51:08 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:28:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1082,7 +1082,7 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     rDoc.DeleteRedline( *pRedl, false, USHRT_MAX );
 
     IDocumentRedlineAccess::RedlineMode_t eOld = rDoc.GetRedlineMode();
-    rDoc.SetRedlineMode_intern( eOld | IDocumentRedlineAccess::REDLINE_DONTCOMBINE_REDLINES );
+    rDoc.SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eOld | IDocumentRedlineAccess::REDLINE_DONTCOMBINE_REDLINES));
     rDoc.AppendRedline( pRedl, true );
     rDoc.SetRedlineMode_intern( eOld );
 }
@@ -1152,7 +1152,7 @@ BOOL SwUndo::FillSaveDataForFmt( const SwPaM& rRange, SwRedlineSaveDatas& rSData
 void SwUndo::SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData )
 {
     IDocumentRedlineAccess::RedlineMode_t eOld = rDoc.GetRedlineMode();
-    rDoc.SetRedlineMode_intern( ( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON );
+    rDoc.SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)(( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON ));
     SwPaM aPam( rDoc.GetNodes().GetEndOfContent() );
 
     for( USHORT n = rSData.Count(); n; )
