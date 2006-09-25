@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2006-02-09 13:49:51 $
+#   last change: $Author: vg $ $Date: 2006-09-25 12:45:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ SHL1STDLIBS=\
     urlmon.lib \
     Shlwapi.lib
 
-.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
+.IF "$(COMEX)"=="11" || "$(COMEX)"=="10"
 .IF "$(USE_STLP_DEBUG)" != ""
     SHL1STDLIBS+= $(ATL_LIB)$/atlsd.lib
 .ELSE
