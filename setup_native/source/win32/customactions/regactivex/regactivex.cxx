@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regactivex.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:40:41 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:07:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -396,4 +396,3 @@ extern "C" UINT __stdcall DeinstallActiveXControl( MSIHANDLE hMSI )
 
     return ERROR_SUCCESS;
 }
-
