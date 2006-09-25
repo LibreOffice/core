@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:27:36 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:32:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -654,7 +654,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                 {
                     sal_uInt16 eMode = mpDoc->GetRedlineMode();
                     eMode = eMode|IDocumentRedlineAccess::REDLINE_ON;
-                    mpDoc->SetRedlineMode( eMode );
+                    mpDoc->SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)( eMode ));
                 }
             }
         }
