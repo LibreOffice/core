@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-22 09:18:43 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:26:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2144,7 +2144,7 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
             {
                 //JP 06.01.98: MUSS noch optimiert werden!!!
                 SetRedlineMode(
-                    IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE );
+                   (IDocumentRedlineAccess::RedlineMode_t)(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE));
                 AppendUndo( new SwUndoRedlineDelete( aPam, UNDO_DELETE ));
             }
 
