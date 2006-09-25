@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.209 $
+ *  $Revision: 1.210 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 12:39:52 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:17:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,7 @@ End
 // STD_LIB_FILE(gid_File_Lib_Charttools, charttools)
 // STD_UNO_LIB_FILE(gid_File_Lib_Chartview, chartview)
 
-#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+#if defined WNT && (defined M1400 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Cli_Cppuhelper
     TXT_FILE_BODY;
@@ -190,7 +190,7 @@ End
 
 #endif
 
-#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+#if defined WNT && (defined M1400 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Cli_Cppuhelper_Assembly
     TXT_FILE_BODY;
@@ -205,7 +205,7 @@ File gid_File_Lib_Cli_Cppuhelper_Assembly
 End
 
 #endif
-#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+#if defined WNT && (defined M1400 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Policy_Cli_Cppuhelper_Assembly
     TXT_FILE_BODY;
@@ -221,7 +221,7 @@ End
 
 #endif
 
-#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+#if defined WNT && (defined M1400 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Policy_Cli_Cppuhelper_Config
     TXT_FILE_BODY;
@@ -235,7 +235,7 @@ End
 
 
 
-#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+#if defined WNT && (defined M1400 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Cli_Types
     TXT_FILE_BODY;
@@ -246,7 +246,7 @@ End
 
 #endif
 
-#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+#if defined WNT && (defined M1400 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Cli_Types_Assembly
     TXT_FILE_BODY;
@@ -262,7 +262,7 @@ End
 
 #endif
 
-#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+#if defined WNT && (defined M1400 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Policy_Cli_Types_Assembly
     TXT_FILE_BODY;
@@ -278,7 +278,7 @@ End
 
 #endif
 
-#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+#if defined WNT && (defined M1400 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Policy_Cli_Types_Config
     TXT_FILE_BODY;
@@ -290,7 +290,7 @@ End
 
 #endif
 
-#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+#if defined WNT && (defined M1400 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Cli_Basetypes
     TXT_FILE_BODY;
@@ -301,7 +301,7 @@ End
 
 #endif
 
-#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+#if defined WNT && (defined M1400 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Cli_Basetypes_Assembly
     TXT_FILE_BODY;
@@ -317,7 +317,7 @@ End
 
 #endif
 
-#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+#if defined WNT && (defined M1400 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Policy_Cli_Basetypes_Assembly
     TXT_FILE_BODY;
@@ -333,7 +333,7 @@ End
 
 #endif
 
-#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+#if defined WNT && (defined M1400 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Policy_Cli_Basetypes_Config
     TXT_FILE_BODY;
@@ -345,7 +345,7 @@ End
 
 #endif
 
-#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+#if defined WNT && (defined M1400 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Cli_Uno
     TXT_FILE_BODY;
@@ -356,7 +356,7 @@ End
 
 #endif
 
-#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+#if defined WNT && (defined M1400 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Cli_Ure
     TXT_FILE_BODY;
@@ -367,7 +367,7 @@ End
 
 #endif
 
-#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+#if defined WNT && (defined M1400 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Cli_Ure_Assembly
     TXT_FILE_BODY;
@@ -382,7 +382,7 @@ File gid_File_Lib_Cli_Ure_Assembly
 End
 
 #endif
-#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+#if defined WNT && (defined M1400 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Policy_Cli_Ure_Assembly
     TXT_FILE_BODY;
@@ -398,7 +398,7 @@ End
 
 #endif
 
-#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+#if defined WNT && (defined M1400 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Policy_Cli_Ure_Config
     TXT_FILE_BODY;
@@ -1926,12 +1926,12 @@ File gid_File_Lib_Stlport
   #endif
   #endif
   #else
-  #ifdef M1300
-    Name = STRING(CONCAT3(stlport_,vc74_stldebug5,.dll));
-  #elif defined(M1310)
+  #ifdef M1310
     Name = STRING(CONCAT3(stlport_,vc71_stldebug45,.dll));
+  #elif defined(M1400)
+    Name = STRING(CONCAT3(stlport_,vc8_stldebug45,.dll));
   #else
-    Name = STRING(CONCAT3(stlport_,vc6_stldebug,.dll));
+    Name = STRING(CONCAT3(stlport_,vc7_stldebug,.dll));
   #endif
   #endif
   #else
@@ -1950,12 +1950,12 @@ File gid_File_Lib_Stlport
   #endif
   #endif
   #else
-  #ifdef M1300
-    Name = STRING(CONCAT3(stlport_,vc745,.dll));
-  #elif defined(M1310)
+  #ifdef M1310
     Name = STRING(CONCAT3(stlport_,vc7145,.dll));
+  #elif defined(M1400)
+    Name = STRING(CONCAT3(stlport_,vc845,.dll));
   #else
-    Name = STRING(CONCAT3(stlport_,vc6,.dll));
+    Name = STRING(CONCAT3(stlport_,vc745,.dll));
   #endif
   #endif
   #endif
