@@ -1,5 +1,5 @@
-*** misc/spirit-1.6.1/boost/spirit/core/composite/epsilon.hpp	2003-07-08 04:19:06.000000000 +0200
---- misc/build/spirit-1.6.1/boost/spirit/core/composite/epsilon.hpp	2005-04-01 15:13:03.768850181 +0200
+*** misc/spirit-1.6.1/boost/spirit/core/composite/epsilon.hpp	Tue Jul  8 04:19:06 2003
+--- misc/build/spirit-1.6.1/boost/spirit/core/composite/epsilon.hpp	Wed Aug 30 15:25:27 2006
 ***************
 *** 70,76 ****
   private:
@@ -17,10 +17,10 @@
   template <typename CondT>
   inline condition_parser<CondT, false>
   operator~(condition_parser<CondT, true> const& p)
-*** misc/spirit-1.6.1/boost/spirit/core/impl/match.ipp	2003-07-08 04:19:06.000000000 +0200
---- misc/build/spirit-1.6.1/boost/spirit/core/impl/match.ipp	2005-04-01 15:38:40.744360982 +0200
+*** misc/spirit-1.6.1/boost/spirit/core/impl/match.ipp	Tue Jul  8 04:19:06 2003
+--- misc/build/spirit-1.6.1/boost/spirit/core/impl/match.ipp	Wed Aug 30 15:25:27 2006
 ***************
-*** 154,167 ****
+*** 154,160 ****
               { return nil_t(); }
           };
   
@@ -28,14 +28,7 @@
           struct dummy { void nonnull() {}; };
           typedef void (dummy::*safe_bool)();
       #else
-          typedef bool safe_bool;
-      #endif
-  
-!     #if !defined(__BORLANDC__)
-      #define BOOST_SPIRIT_SAFE_BOOL(cond)  ((cond) ? &impl::dummy::nonnull : 0)
-      #else
-      #define BOOST_SPIRIT_SAFE_BOOL(cond)  (cond)
---- 154,167 ----
+--- 154,160 ----
               { return nil_t(); }
           };
   
@@ -43,6 +36,16 @@
           struct dummy { void nonnull() {}; };
           typedef void (dummy::*safe_bool)();
       #else
+***************
+*** 161,167 ****
+          typedef bool safe_bool;
+      #endif
+  
+!     #if !defined(__BORLANDC__)
+      #define BOOST_SPIRIT_SAFE_BOOL(cond)  ((cond) ? &impl::dummy::nonnull : 0)
+      #else
+      #define BOOST_SPIRIT_SAFE_BOOL(cond)  (cond)
+--- 161,167 ----
           typedef bool safe_bool;
       #endif
   
@@ -50,8 +53,8 @@
       #define BOOST_SPIRIT_SAFE_BOOL(cond)  ((cond) ? &impl::dummy::nonnull : 0)
       #else
       #define BOOST_SPIRIT_SAFE_BOOL(cond)  (cond)
-*** misc/spirit-1.6.1/boost/spirit/core/scanner/scanner.hpp	2003-07-08 04:19:06.000000000 +0200
---- misc/build/spirit-1.6.1/boost/spirit/core/scanner/scanner.hpp	2005-04-01 15:13:03.769850073 +0200
+*** misc/spirit-1.6.1/boost/spirit/core/scanner/scanner.hpp	Tue Jul  8 04:19:06 2003
+--- misc/build/spirit-1.6.1/boost/spirit/core/scanner/scanner.hpp	Wed Aug 30 15:25:27 2006
 ***************
 *** 18,23 ****
 --- 18,26 ----
@@ -84,68 +87,8 @@
       typedef typename boost::call_traits<IteratorT>::param_type
           iter_param_t;
   
-*** misc/spirit-1.6.1/miniboost/boost/config/compiler/gcc.hpp	2003-07-08 04:19:08.000000000 +0200
---- misc/build/spirit-1.6.1/miniboost/boost/config/compiler/gcc.hpp	2005-04-01 15:13:03.769850073 +0200
-***************
-*** 59,65 ****
-  #endif
-  //
-  // last known and checked version is 3.2:
-! #if (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 2))
-  #  if defined(BOOST_ASSERT_CONFIG)
-  #     error "Unknown compiler version - please run the configure tests and report the results"
-  #  else
---- 59,66 ----
-  #endif
-  //
-  // last known and checked version is 3.2:
-! // although 3.4+x & 4.x are unchecked, we will give it a try
-! #if (__GNUC__ > 4)
-  #  if defined(BOOST_ASSERT_CONFIG)
-  #     error "Unknown compiler version - please run the configure tests and report the results"
-  #  else
-*** misc/spirit-1.6.1/miniboost/boost/config/compiler/sunpro_cc.hpp	2003-07-08 04:19:08.000000000 +0200
---- misc/build/spirit-1.6.1/miniboost/boost/config/compiler/sunpro_cc.hpp	2005-04-01 15:13:03.769850073 +0200
-***************
-*** 45,52 ****
-  #      define BOOST_NO_INTEGRAL_INT64_T
-  #    endif
-  
-! #    if (__SUNPRO_CC <= 0x540) || !defined(BOOST_STRICT_CONFIG)
-  #      define BOOST_NO_TEMPLATE_TEMPLATES
-  #    endif
-  
-  #define BOOST_COMPILER "Sun compiler version " BOOST_STRINGIZE(__SUNPRO_CC)
---- 45,57 ----
-  #      define BOOST_NO_INTEGRAL_INT64_T
-  #    endif
-  
-! #    if (__SUNPRO_CC <= 0x550) || !defined(BOOST_STRICT_CONFIG)
-  #      define BOOST_NO_TEMPLATE_TEMPLATES
-+        // see http://lists.boost.org/MailArchives/boost/msg47184.php
-+        // and http://lists.boost.org/MailArchives/boost/msg47220.php
-+ #      define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-+ #      define BOOST_NO_SFINAE
-+ #      define BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS
-  #    endif
-  
-  #define BOOST_COMPILER "Sun compiler version " BOOST_STRINGIZE(__SUNPRO_CC)
-*** misc/spirit-1.6.1/miniboost/boost/config/user.hpp	2003-07-08 04:19:08.000000000 +0200
---- misc/build/spirit-1.6.1/miniboost/boost/config/user.hpp	2005-04-01 15:13:03.770849965 +0200
-***************
-*** 66,68 ****
---- 66,74 ----
-  // #define BOOST_DISABLE_WIN32
-  
-  
-+ // Switch off exception statements if file is compiled without
-+ // exception support:
-+ #if defined(EXCEPTIONS_OFF) && !defined(BOOST_NO_EXCEPTIONS)
-+ #define BOOST_NO_EXCEPTIONS
-+ #endif
-+ 
-*** misc/spirit-1.6.1/miniboost/boost/optional.hpp	2003-07-08 04:19:09.000000000 +0200
---- misc/build/spirit-1.6.1/miniboost/boost/optional.hpp	2005-04-01 15:23:03.764855626 +0200
+*** misc/spirit-1.6.1/miniboost/boost/optional.hpp	Tue Jul  8 04:19:09 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/optional.hpp	Wed Aug 30 15:25:27 2006
 ***************
 *** 17,22 ****
 --- 17,27 ----
@@ -182,15 +125,15 @@
   
 + #if defined _MSC_VER
 + #pragma warning(pop)
-+ #endif
-+ 
   #endif
++ 
++ #endif
   
-*** misc/spirit-1.6.1/miniboost/boost/scoped_array.hpp	2003-07-08 04:19:08.000000000 +0200
---- misc/build/spirit-1.6.1/miniboost/boost/scoped_array.hpp	2005-04-01 15:26:31.066393207 +0200
+*** misc/spirit-1.6.1/miniboost/boost/scoped_array.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/scoped_array.hpp	Wed Aug 30 15:25:27 2006
 ***************
-*** 83,94 ****
---- 83,98 ----
+*** 83,88 ****
+--- 83,91 ----
   
       // implicit conversion to "bool"
   
@@ -200,6 +143,9 @@
       typedef T * (this_type::*unspecified_bool_type)() const;
   
       operator unspecified_bool_type() const // never throws
+***************
+*** 89,94 ****
+--- 92,98 ----
       {
           return ptr == 0? 0: &this_type::get;
       }
@@ -207,11 +153,11 @@
   
       bool operator! () const // never throws
       {
-*** misc/spirit-1.6.1/miniboost/boost/scoped_ptr.hpp	2003-07-08 04:19:08.000000000 +0200
---- misc/build/spirit-1.6.1/miniboost/boost/scoped_ptr.hpp	2005-04-01 15:26:26.796855840 +0200
+*** misc/spirit-1.6.1/miniboost/boost/scoped_ptr.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/scoped_ptr.hpp	Wed Aug 30 15:25:27 2006
 ***************
-*** 102,113 ****
---- 102,117 ----
+*** 102,107 ****
+--- 102,110 ----
   
       // implicit conversion to "bool"
   
@@ -221,6 +167,9 @@
       typedef T * (this_type::*unspecified_bool_type)() const;
   
       operator unspecified_bool_type() const // never throws
+***************
+*** 108,113 ****
+--- 111,117 ----
       {
           return ptr == 0? 0: &this_type::get;
       }
@@ -228,11 +177,11 @@
   
       bool operator! () const // never throws
       {
-*** misc/spirit-1.6.1/miniboost/boost/shared_array.hpp	2003-07-08 04:19:08.000000000 +0200
---- misc/build/spirit-1.6.1/miniboost/boost/shared_array.hpp	2005-04-01 15:27:24.476605844 +0200
+*** misc/spirit-1.6.1/miniboost/boost/shared_array.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/shared_array.hpp	Wed Aug 30 15:25:27 2006
 ***************
-*** 94,105 ****
---- 94,109 ----
+*** 94,99 ****
+--- 94,102 ----
   
       // implicit conversion to "bool"
   
@@ -242,6 +191,9 @@
       typedef T * (this_type::*unspecified_bool_type)() const;
   
       operator unspecified_bool_type() const // never throws
+***************
+*** 100,105 ****
+--- 103,109 ----
       {
           return px == 0? 0: &this_type::get;
       }
@@ -249,8 +201,8 @@
   
       bool operator! () const // never throws
       {
-*** misc/spirit-1.6.1/miniboost/boost/shared_ptr.hpp	2003-07-08 04:19:08.000000000 +0200
---- misc/build/spirit-1.6.1/miniboost/boost/shared_ptr.hpp	2005-04-01 15:29:09.319245401 +0200
+*** misc/spirit-1.6.1/miniboost/boost/shared_ptr.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/shared_ptr.hpp	Wed Aug 30 15:25:27 2006
 ***************
 *** 35,41 ****
   
@@ -269,8 +221,8 @@
   
   namespace boost
 ***************
-*** 246,257 ****
---- 246,261 ----
+*** 246,251 ****
+--- 246,254 ----
   
       // implicit conversion to "bool"
   
@@ -280,6 +232,9 @@
       typedef T * (this_type::*unspecified_bool_type)() const;
   
       operator unspecified_bool_type() const // never throws
+***************
+*** 252,257 ****
+--- 255,261 ----
       {
           return px == 0? 0: &this_type::get;
       }
@@ -287,8 +242,8 @@
   
       // operator! is redundant, but some compilers need it
   
-*** misc/spirit-1.6.1/miniboost/boost/throw_exception.hpp	2003-07-08 04:19:08.000000000 +0200
---- misc/build/spirit-1.6.1/miniboost/boost/throw_exception.hpp	2005-04-01 15:13:03.770849965 +0200
+*** misc/spirit-1.6.1/miniboost/boost/throw_exception.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/throw_exception.hpp	Wed Aug 30 15:25:27 2006
 ***************
 *** 29,35 ****
   
@@ -307,3 +262,456 @@
   
   #else
   
+*** misc/spirit-1.6.1/miniboost/boost/config/user.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/config/user.hpp	Wed Aug 30 15:25:27 2006
+***************
+*** 66,68 ****
+--- 66,74 ----
+  // #define BOOST_DISABLE_WIN32
+  
+  
++ // Switch off exception statements if file is compiled without
++ // exception support:
++ #if defined(EXCEPTIONS_OFF) && !defined(BOOST_NO_EXCEPTIONS)
++ #define BOOST_NO_EXCEPTIONS
++ #endif
++ 
+*** misc/spirit-1.6.1/miniboost/boost/config/compiler/gcc.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/config/compiler/gcc.hpp	Wed Aug 30 15:25:27 2006
+***************
+*** 59,65 ****
+  #endif
+  //
+  // last known and checked version is 3.2:
+! #if (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 2))
+  #  if defined(BOOST_ASSERT_CONFIG)
+  #     error "Unknown compiler version - please run the configure tests and report the results"
+  #  else
+--- 59,66 ----
+  #endif
+  //
+  // last known and checked version is 3.2:
+! // although 3.4+x & 4.x are unchecked, we will give it a try
+! #if (__GNUC__ > 4)
+  #  if defined(BOOST_ASSERT_CONFIG)
+  #     error "Unknown compiler version - please run the configure tests and report the results"
+  #  else
+*** misc/spirit-1.6.1/miniboost/boost/config/compiler/sunpro_cc.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/config/compiler/sunpro_cc.hpp	Wed Aug 30 15:25:27 2006
+***************
+*** 45,52 ****
+  #      define BOOST_NO_INTEGRAL_INT64_T
+  #    endif
+  
+! #    if (__SUNPRO_CC <= 0x540) || !defined(BOOST_STRICT_CONFIG)
+  #      define BOOST_NO_TEMPLATE_TEMPLATES
+  #    endif
+  
+  #define BOOST_COMPILER "Sun compiler version " BOOST_STRINGIZE(__SUNPRO_CC)
+--- 45,57 ----
+  #      define BOOST_NO_INTEGRAL_INT64_T
+  #    endif
+  
+! #    if (__SUNPRO_CC <= 0x550) || !defined(BOOST_STRICT_CONFIG)
+  #      define BOOST_NO_TEMPLATE_TEMPLATES
++        // see http://lists.boost.org/MailArchives/boost/msg47184.php
++        // and http://lists.boost.org/MailArchives/boost/msg47220.php
++ #      define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
++ #      define BOOST_NO_SFINAE
++ #      define BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS
+  #    endif
+  
+  #define BOOST_COMPILER "Sun compiler version " BOOST_STRINGIZE(__SUNPRO_CC)
+*** misc/spirit-1.6.1/miniboost/boost/config/compiler/visualc.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/config/compiler/visualc.hpp	Wed Jun 28 16:54:42 2006
+***************
+*** 1,123 ****
+! //  (C) Copyright Boost.org 2001. Permission to copy, use, modify, sell and
+! //  distribute this software is granted provided this copyright notice appears
+! //  in all copies. This software is provided "as is" without express or implied
+! //  warranty, and with no claim as to its suitability for any purpose.
+! 
+! //  See http://www.boost.org for most recent version.
+! 
+! //  Microsoft Visual C++ compiler setup:
+! 
+! #define BOOST_MSVC _MSC_VER
+! 
+! // turn off the warnings before we #include anything
+! #pragma warning( disable : 4503 ) // warning: decorated name length exceeded
+! 
+! #if _MSC_VER <= 1200  // 1200 == VC++ 6.0
+! #pragma warning( disable : 4786 ) // ident trunc to '255' chars in debug info
+! #  define BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
+! #  define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
+! #  define BOOST_NO_VOID_RETURNS
+! #  define BOOST_NO_EXCEPTION_STD_NAMESPACE
+! #  define BOOST_NO_DEDUCED_TYPENAME
+!    // disable min/max macro defines on vc6:
+!    //
+! #endif
+! 
+! #if (_MSC_VER <= 1300)  // 1200 == VC++ 7.0
+! 
+! #if !defined(_MSC_EXTENSIONS) && !defined(BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS)      // VC7 bug with /Za
+! #  define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
+! #endif
+! 
+! #  define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+! #  define BOOST_NO_PRIVATE_IN_AGGREGATE
+! #  define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+! #  define BOOST_NO_INTEGRAL_INT64_T
+! 
+! //    VC++ 6/7 has member templates but they have numerous problems including
+! //    cases of silent failure, so for safety we define:
+! #  define BOOST_NO_MEMBER_TEMPLATES
+! //    For VC++ experts wishing to attempt workarounds, we define:
+! #  define BOOST_MSVC6_MEMBER_TEMPLATES
+! 
+! #  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+! #  define BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+! #  define BOOST_NO_CV_VOID_SPECIALIZATIONS
+! #  define BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+! #  define BOOST_NO_USING_TEMPLATE
+! #  define BOOST_NO_SWPRINTF
+! #  define BOOST_NO_TEMPLATE_TEMPLATES
+! #  if (_MSC_VER > 1200)
+! #     define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
+! #  endif
+! 
+! #endif
+! 
+! #if _MSC_VER < 1310 // 1310 == VC++ 7.1
+! #  define BOOST_NO_SWPRINTF
+! #endif
+! 
+! #if _MSC_VER <= 1310
+! #  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+! #endif
+! 
+! #ifndef _NATIVE_WCHAR_T_DEFINED
+! #  define BOOST_NO_INTRINSIC_WCHAR_T
+! #endif
+! 
+! //   
+! // check for exception handling support:   
+! #ifndef _CPPUNWIND   
+! #  define BOOST_NO_EXCEPTIONS   
+! #endif 
+! 
+! //
+! // __int64 support:
+! //
+! #if (_MSC_VER >= 1200) && defined(_MSC_EXTENSIONS)
+! #   define BOOST_HAS_MS_INT64
+! #endif
+! #if (_MSC_VER >= 1310) && defined(_MSC_EXTENSIONS)
+! #   define BOOST_HAS_LONG_LONG
+! #endif
+! //
+! // disable Win32 API's if compiler extentions are
+! // turned off:
+! //
+! #ifndef _MSC_EXTENSIONS
+! #  define BOOST_DISABLE_WIN32
+! #endif
+! 
+! # if _MSC_VER == 1200
+! #   define BOOST_COMPILER_VERSION 6.0
+! # elif _MSC_VER == 1300
+! #   define BOOST_COMPILER_VERSION 7.0
+! # elif _MSC_VER == 1310
+! #   define BOOST_COMPILER_VERSION 7.1
+! # else
+! #   define BOOST_COMPILER_VERSION _MSC_VER
+! # endif
+! 
+! #define BOOST_COMPILER "Microsoft Visual C++ version " BOOST_STRINGIZE(BOOST_COMPILER_VERSION)
+! 
+! //
+! // versions check:
+! // we don't support Visual C++ prior to version 6:
+! #if _MSC_VER < 1200
+! #error "Compiler not supported or configured - please reconfigure"
+! #endif
+! //
+! // last known and checked version is 1310:
+! #if (_MSC_VER > 1310)
+! #  if defined(BOOST_ASSERT_CONFIG)
+! #     error "Unknown compiler version - please run the configure tests and report the results"
+! #  else
+! #     pragma message("Unknown compiler version - please run the configure tests and report the results")
+! #  endif
+! #endif
+! 
+! 
+! 
+! 
+! 
+! 
+--- 1,124 ----
+! //  (C) Copyright Boost.org 2001. Permission to copy, use, modify, sell and
+! //  distribute this software is granted provided this copyright notice appears
+! //  in all copies. This software is provided "as is" without express or implied
+! //  warranty, and with no claim as to its suitability for any purpose.
+! 
+! //  See http://www.boost.org for most recent version.
+! 
+! //  Microsoft Visual C++ compiler setup:
+! 
+! #define BOOST_MSVC _MSC_VER
+! 
+! // turn off the warnings before we #include anything
+! #pragma warning( disable : 4503 ) // warning: decorated name length exceeded
+! 
+! #if _MSC_VER <= 1200  // 1200 == VC++ 6.0
+! #pragma warning( disable : 4786 ) // ident trunc to '255' chars in debug info
+! #  define BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
+! #  define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
+! #  define BOOST_NO_VOID_RETURNS
+! #  define BOOST_NO_EXCEPTION_STD_NAMESPACE
+! #  define BOOST_NO_DEDUCED_TYPENAME
+!    // disable min/max macro defines on vc6:
+!    //
+! #endif
+! 
+! #if (_MSC_VER <= 1300)  // 1200 == VC++ 7.0
+! 
+! #if !defined(_MSC_EXTENSIONS) && !defined(BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS)      // VC7 bug with /Za
+! #  define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
+! #endif
+! 
+! #  define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+! #  define BOOST_NO_PRIVATE_IN_AGGREGATE
+! #  define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+! #  define BOOST_NO_INTEGRAL_INT64_T
+! 
+! //    VC++ 6/7 has member templates but they have numerous problems including
+! //    cases of silent failure, so for safety we define:
+! #  define BOOST_NO_MEMBER_TEMPLATES
+! //    For VC++ experts wishing to attempt workarounds, we define:
+! #  define BOOST_MSVC6_MEMBER_TEMPLATES
+! 
+! #  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+! #  define BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+! #  define BOOST_NO_CV_VOID_SPECIALIZATIONS
+! #  define BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+! #  define BOOST_NO_USING_TEMPLATE
+! #  define BOOST_NO_SWPRINTF
+! #  define BOOST_NO_TEMPLATE_TEMPLATES
+! #  if (_MSC_VER > 1200)
+! #     define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
+! #  endif
+! 
+! #endif
+! 
+! #if _MSC_VER < 1310 // 1310 == VC++ 7.1
+! #  define BOOST_NO_SWPRINTF
+! #endif
+! 
+! #if _MSC_VER <= 1310
+! #  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+! #endif
+! 
+! #ifndef _NATIVE_WCHAR_T_DEFINED
+! #  define BOOST_NO_INTRINSIC_WCHAR_T
+! #endif
+! 
+! //
+! // check for exception handling support:
+! #ifndef _CPPUNWIND
+! #  define BOOST_NO_EXCEPTIONS
+! #endif
+! 
+! //
+! // __int64 support:
+! //
+! #if (_MSC_VER >= 1200) && defined(_MSC_EXTENSIONS)
+! #   define BOOST_HAS_MS_INT64
+! #endif
+! #if (_MSC_VER >= 1310) && defined(_MSC_EXTENSIONS)
+! #   define BOOST_HAS_LONG_LONG
+! #endif
+! //
+! // disable Win32 API's if compiler extentions are
+! // turned off:
+! //
+! #ifndef _MSC_EXTENSIONS
+! #  define BOOST_DISABLE_WIN32
+! #endif
+! 
+! # if _MSC_VER == 1200
+! #   define BOOST_COMPILER_VERSION 6.0
+! # elif _MSC_VER == 1300
+! #   define BOOST_COMPILER_VERSION 7.0
+! # elif _MSC_VER == 1310
+! #   define BOOST_COMPILER_VERSION 7.1
+! # elif _MSC_VER == 1400
+! #   define BOOST_COMPILER_VERSION 8.0
+! # else
+! #   define BOOST_COMPILER_VERSION _MSC_VER
+! # endif
+! 
+! #define BOOST_COMPILER "Microsoft Visual C++ version " BOOST_STRINGIZE(BOOST_COMPILER_VERSION)
+! 
+! //
+! // versions check:
+! // we don't support Visual C++ prior to version 6:
+! #if _MSC_VER < 1200
+! #error "Compiler not supported or configured - please reconfigure"
+! #endif
+! //
+! // last known and checked version is 1310:
+! #if (_MSC_VER > 1410)
+! #  if defined(BOOST_ASSERT_CONFIG)
+! #     error "Unknown compiler version - please run the configure tests and report the results"
+! #  else
+! #     pragma message("Unknown compiler version - please run the configure tests and report the results")
+! #  endif
+! #endif
+! 
+! 
+! 
+! 
+! 
+*** misc/spirit-1.6.1/miniboost/boost/config/platform/win32.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/config/platform/win32.hpp	Wed Jun 28 16:54:42 2006
+***************
+*** 1,67 ****
+! //  (C) Copyright Boost.org 2001. Permission to copy, use, modify, sell and
+! //  distribute this software is granted provided this copyright notice appears
+! //  in all copies. This software is provided "as is" without express or implied
+! //  warranty, and with no claim as to its suitability for any purpose.
+! 
+! //  See http://www.boost.org for most recent version.
+! 
+! //  Win32 specific config options:
+! 
+! #define BOOST_PLATFORM "Win32"
+! 
+! #if defined(__GNUC__) && !defined(BOOST_NO_SWPRINTF)
+! #  define BOOST_NO_SWPRINTF
+! #endif
+! 
+! #ifndef BOOST_DISABLE_WIN32
+! //
+! // Win32 will normally be using native Win32 threads,
+! // but there is a pthread library avaliable as an option:
+! //
+! #ifndef BOOST_HAS_PTHREADS
+! #  define BOOST_HAS_WINTHREADS
+! #endif
+! 
+! // WEK: Added
+! #define BOOST_HAS_FTIME
+! 
+! #endif
+! 
+! //
+! // disable min/max macros:
+! //
+! #ifdef min
+! #  undef min
+! #endif
+! #ifdef max
+! #  undef max
+! #endif
+! #ifndef NOMINMAX
+! #  define NOMINMAX
+! #endif
+! 
+! #ifdef BOOST_MSVC
+! namespace std{
+!   // Apparently, something in the Microsoft libraries requires the "long"
+!   // overload, because it calls the min/max functions with arguments of
+!   // slightly different type.  (If this proves to be incorrect, this
+!   // whole "BOOST_MSVC" section can be removed.)
+!   inline long min(long __a, long __b) {
+!     return __b < __a ? __b : __a;
+!   }
+!   inline long max(long __a, long __b) {
+!     return  __a < __b ? __b : __a;
+!   }
+!   // The "long double" overload is required, otherwise user code calling
+!   // min/max for floating-point numbers will use the "long" overload.
+!   // (SourceForge bug #495495)
+!   inline long double min(long double __a, long double __b) {
+!     return __b < __a ? __b : __a;
+!   }
+!   inline long double max(long double __a, long double __b) {
+!     return  __a < __b ? __b : __a;
+!   }
+! }
+! using std::min;
+! using std::max;
+! #     endif
+--- 1,69 ----
+! //  (C) Copyright Boost.org 2001. Permission to copy, use, modify, sell and
+! //  distribute this software is granted provided this copyright notice appears
+! //  in all copies. This software is provided "as is" without express or implied
+! //  warranty, and with no claim as to its suitability for any purpose.
+! 
+! //  See http://www.boost.org for most recent version.
+! 
+! //  Win32 specific config options:
+! 
+! #define BOOST_PLATFORM "Win32"
+! 
+! #if defined(__GNUC__) && !defined(BOOST_NO_SWPRINTF)
+! #  define BOOST_NO_SWPRINTF
+! #endif
+! 
+! #ifndef BOOST_DISABLE_WIN32
+! //
+! // Win32 will normally be using native Win32 threads,
+! // but there is a pthread library avaliable as an option:
+! //
+! #ifndef BOOST_HAS_PTHREADS
+! #  define BOOST_HAS_WINTHREADS
+! #endif
+! 
+! // WEK: Added
+! #define BOOST_HAS_FTIME
+! 
+! #endif
+! 
+! //
+! // disable min/max macros:
+! //
+! #ifdef min
+! #  undef min
+! #endif
+! #ifdef max
+! #  undef max
+! #endif
+! #ifndef NOMINMAX
+! #  define NOMINMAX
+! #endif
+! 
+! #if (_MSC_VER < 1400)
+! #ifdef BOOST_MSVC
+! namespace std{
+!   // Apparently, something in the Microsoft libraries requires the "long"
+!   // overload, because it calls the min/max functions with arguments of
+!   // slightly different type.  (If this proves to be incorrect, this
+!   // whole "BOOST_MSVC" section can be removed.)
+!   inline long min(long __a, long __b) {
+!     return __b < __a ? __b : __a;
+!   }
+!   inline long max(long __a, long __b) {
+!     return  __a < __b ? __b : __a;
+!   }
+!   // The "long double" overload is required, otherwise user code calling
+!   // min/max for floating-point numbers will use the "long" overload.
+!   // (SourceForge bug #495495)
+!   inline long double min(long double __a, long double __b) {
+!     return __b < __a ? __b : __a;
+!   }
+!   inline long double max(long double __a, long double __b) {
+!     return  __a < __b ? __b : __a;
+!   }
+! }
+! using std::min;
+! using std::max;
+! #     endif
+! #endif
