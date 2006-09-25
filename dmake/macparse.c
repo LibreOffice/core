@@ -1,4 +1,4 @@
-/* RCS  $Id: macparse.c,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: macparse.c,v 1.2 2006-09-25 09:40:09 vg Exp $
 --
 -- SYNOPSIS
 --      Parse a macro definition
@@ -95,6 +95,8 @@ int  flag;
      break;
 
       case M_OP_DF:
+     /* *= */
+     /* internal default macros or initialized empty macros set M_INIT. */
       if( (hv = GET_MACRO(tok1)) != NIL(HASH) && !(hv->ht_flag & M_INIT) )
         break;
      /* else FALLTHRU */
@@ -104,6 +106,8 @@ int  flag;
      break;
 
       case M_OP_DFCL:
+     /* *:= */
+     /* internal default macros or initialized empty macros set M_INIT. */
       if( (hv = GET_MACRO(tok1)) != NIL(HASH) && !(hv->ht_flag & M_INIT) )
         break;
      /* else FALLTHRU */
