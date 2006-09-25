@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sistr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:04:35 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:25:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,10 @@
 #include <string.h>  // strlen(), memcpy(), memset()
 #include <ctype.h>   // tolower()
 #include <limits.h>  // INT_MAX
+
+#if (_MSC_VER >=1400)
+#pragma warning(disable:4365)
+#endif
 
 const char NULCH = '\0';
 const int  NO_POS = -1;
