@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docundo.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:49:45 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:28:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -378,12 +378,12 @@ bool SwDoc::Undo( SwUndoIter& rUndoIter )
     SwUndo *pUndo = (*pUndos)[ --nUndoPos ];
 
     IDocumentRedlineAccess::RedlineMode_t eOld = GetRedlineMode();
-    IDocumentRedlineAccess::RedlineMode_t eTmpMode = pUndo->GetRedlineMode();
+    IDocumentRedlineAccess::RedlineMode_t eTmpMode = (IDocumentRedlineAccess::RedlineMode_t)pUndo->GetRedlineMode();
     if( (IDocumentRedlineAccess::REDLINE_SHOW_MASK & eTmpMode) != (IDocumentRedlineAccess::REDLINE_SHOW_MASK & eOld) &&
         UNDO_START != pUndo->GetId() && UNDO_END != pUndo->GetId() )
         SetRedlineMode( eTmpMode );
 
-    SetRedlineMode_intern( eTmpMode | IDocumentRedlineAccess::REDLINE_IGNORE );
+    SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eTmpMode | IDocumentRedlineAccess::REDLINE_IGNORE));
     // Undo ausfuehren
 
     // zum spaeteren ueberpruefen
@@ -815,11 +815,11 @@ bool SwDoc::Redo( SwUndoIter& rUndoIter )
     SwUndo *pUndo = (*pUndos)[ nUndoPos++ ];
 
     IDocumentRedlineAccess::RedlineMode_t eOld = GetRedlineMode();
-    IDocumentRedlineAccess::RedlineMode_t eTmpMode = pUndo->GetRedlineMode();
+    IDocumentRedlineAccess::RedlineMode_t eTmpMode = (IDocumentRedlineAccess::RedlineMode_t)pUndo->GetRedlineMode();
     if( (IDocumentRedlineAccess::REDLINE_SHOW_MASK & eTmpMode) != (IDocumentRedlineAccess::REDLINE_SHOW_MASK & eOld) &&
         UNDO_START != pUndo->GetId() && UNDO_END != pUndo->GetId() )
         SetRedlineMode( eTmpMode );
-    SetRedlineMode_intern( eTmpMode | IDocumentRedlineAccess::REDLINE_IGNORE );
+    SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)(eTmpMode | IDocumentRedlineAccess::REDLINE_IGNORE));
 
     //JP 11.05.98: FlyFormate ueber die EditShell selektieren, nicht aus dem
     //              Undo heraus
