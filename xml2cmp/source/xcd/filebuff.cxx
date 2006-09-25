@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filebuff.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:02:26 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:26:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,16 +57,15 @@ LoadXmlFile( Buffer &           o_rBuffer,
 
     // Prepare buffer:
     aXmlFile.seekg(0, std::ios::end);
-    unsigned long nBufferSize = aXmlFile.tellg();
+    unsigned long nBufferSize = (unsigned long) aXmlFile.tellg();
     o_rBuffer.SetSize(nBufferSize + 1);
     o_rBuffer.Data()[nBufferSize] = '\0';
     aXmlFile.seekg(0);
 
     // Read file:
-    aXmlFile.read(o_rBuffer.Data(), nBufferSize);
+    aXmlFile.read(o_rBuffer.Data(), (int) nBufferSize);
     bool ret = aXmlFile.good() != 0;
     aXmlFile.close();
     return ret;
 }
-
 
