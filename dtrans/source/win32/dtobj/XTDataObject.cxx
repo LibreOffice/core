@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:02:12 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:37:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace rtl;
-using CStgTransferHelper::CStgTransferException;
+//2005 using CStgTransferHelper::CStgTransferException;
 
 //------------------------------------------------------------------------
 // a helper class that will be thrown by the function validateFormatEtc
@@ -202,7 +202,7 @@ STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium
     {
         return ex.m_hr;
     }
-    catch( CStgTransferException& ex )
+    catch( CStgTransferHelper::CStgTransferException& ex )
     {
         return translateStgExceptionCode( ex.m_hr );
     }
@@ -389,7 +389,7 @@ HRESULT SAL_CALL CXTDataObject::renderSynthesizedFormatAndSetupStgMedium( FORMAT
     {
         OSL_ENSURE( sal_False, "Unexpected exception" );
     }
-    catch( CStgTransferException& ex )
+    catch( CStgTransferHelper::CStgTransferException& ex )
     {
         return translateStgExceptionCode( ex.m_hr );
     }
