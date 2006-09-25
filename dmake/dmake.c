@@ -1,6 +1,6 @@
 /* $RCSfile: dmake.c,v $
--- $Revision: 1.7 $
--- last change: $Author: ihi $ $Date: 2006-06-29 11:22:57 $
+-- $Revision: 1.8 $
+-- last change: $Author: vg $ $Date: 2006-09-25 09:39:05 $
 --
 -- SYNOPSIS
 --      The main program.
@@ -278,9 +278,11 @@ char **argv;
                  HASHPTR hp;
                  /* This cleans the .SILENT setting */
                  hp = Def_macro(".SILENT", "", M_EXPANDED);
-                 /* This overrides the bitmask for further occurences, it */
-                 /* is set already by Create_macro_vars() and has to be   */
-                 /* cleaned. See _set_bit_var() definition in imacs.c.    */
+                 /* This overrides the bitmask for further occurences of
+                  * .SILENT to "no bits allowed", see bit variables in the
+                  * set_macro_value() definition in dag.c.
+                  * The bitmask is already set by Create_macro_vars() in
+                  * imacs.c and is overridden for the V_FORCEECHO case. */
                  hp->MV_MASK  = A_DEFAULT;
                }
            break;
