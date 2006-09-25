@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-24 13:07:32 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:01:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@ TARGET=emboleobj
 LIBTARGET=NO
 USE_DEFFILE=YES
 INCPRE+=$(ATL_INCLUDE)
+.IF "$(MFC_INCLUDE)"!=""
+INCPRE+=$(MFC_INCLUDE)
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
