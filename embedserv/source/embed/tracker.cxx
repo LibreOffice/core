@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tracker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:42:11 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:31:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#if defined(_MSC_VER) && (_MSC_VER > 1310)
+#pragma warning(disable : 4917 4555)
+#endif
 
 #include "stdafx.h"
 #include <stddef.h>
