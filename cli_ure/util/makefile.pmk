@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-25 11:15:28 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:05:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 # no translation here anyway
 .IF "$(L10N_framework)"==""
-.IF "$(COM)$(COMEX)" == "MSC8" || "$(COM)$(COMEX)"== "MSC10"
+.IF "$(COM)$(COMEX)" == "MSC11" || "$(COM)$(COMEX)"== "MSC10"
 BUILD_FOR_CLI = "true"
 .ENDIF
 .ENDIF			# "L10N_framework"==""
