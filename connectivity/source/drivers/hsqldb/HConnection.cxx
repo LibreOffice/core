@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HConnection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:40:10 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:42:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,6 @@ void SAL_CALL OConnectionWeakWrapper::flush(  ) throw (RuntimeException)
     }
     catch(::com::sun::star::uno::Exception&)
     {
-        OSL_ENSURE( false, "OConnectionWeakWrapper::flush: caught an exception!" );
     }
 }
 
