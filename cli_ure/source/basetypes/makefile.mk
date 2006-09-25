@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2006-07-25 07:54:09 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:04:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,9 @@ ALLTAR : \
     $(BIN)$/cli_basetypes.dll \
     $(POLICY_ASSEMBLY_FILE)
     
+.IF "$(CCNUMVER)" >= "001399999999"
+CSCFLAGS+=-keyfile:"$(BIN)$/cliuno.snk"
+.ENDIF
 
 CSFILES = \
     uno$/Any.cs			\
@@ -75,12 +78,20 @@ CSFILES = \
     uno$/PolymorphicType.cs \
     $(ASSEMBLY_ATTRIBUTES)
 
+.IF "$(CCNUMVER)" <= "001399999999"
 $(ASSEMBLY_ATTRIBUTES) : assembly.cs makefile.mk $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk 
     $(GNUCOPY) -p assembly.cs $@
     +echo $(ECHOQUOTE) \
     [assembly:System.Reflection.AssemblyVersion( "$(CLI_BASETYPES_NEW_VERSION)")] \
     [assembly:System.Reflection.AssemblyKeyFile(@"$(BIN)$/cliuno.snk")]$(ECHOQUOTE) \
     >> $@
+.ELSE
+$(ASSEMBLY_ATTRIBUTES) : assembly.cs makefile.mk $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk 
+    $(GNUCOPY) -p assembly.cs $@
+    +echo $(ECHOQUOTE) \
+    [assembly:System.Reflection.AssemblyVersion( "$(CLI_BASETYPES_NEW_VERSION)")]$(ECHOQUOTE) \
+    >> $@
+.ENDIF
 
 $(BIN)$/cli_basetypes.dll : $(CSFILES) $(BIN)$/cliureversion.mk 
     +$(CSC) $(CSCFLAGS) \
