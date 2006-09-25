@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-04 12:39:31 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:34:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,11 +82,17 @@ OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl*$(DLLPOST)*
 # make use of stlport headerfiles
 EXT_USE_STLPORT=TRUE
 
+.IF "$(COMEX)"=="11"
+EXCFLAGS="/EHa /Zc:wchar_t- /D "_CRT_SECURE_NO_DEPRECATE""
+.ELSE
+EXCFLAGS="/EHsc /YX"
+.ENDIF
+
 BUILD_DIR=.$/lib
 .IF "$(debug)"==""
-BUILD_ACTION=nmake -f Makefile.vc6 cfg=release-dll
+BUILD_ACTION=nmake -f Makefile.vc6 cfg=release-dll EXCFLAGS=$(EXCFLAGS)
 .ELSE
-BUILD_ACTION=nmake -f Makefile.vc6 cfg=debug-dll
+BUILD_ACTION=nmake -f Makefile.vc6 cfg=debug-dll EXCFLAGS=$(EXCFLAGS)
 .ENDIF
 
 OUT2BIN=$(BUILD_DIR)$/libcurl.dll
