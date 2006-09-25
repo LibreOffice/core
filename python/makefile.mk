@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-19 09:37:08 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:22:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -121,12 +121,18 @@ BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) ; $(GNUMAKE) install ; c
 PYTHONPATH:=..$/Lib
 .EXPORT : PYTHONPATH
 
+.IF "$(CCNUMVER)" <= "001400000000"
+EXFLAGS="/GX /YX"
+.ELSE
+EXFLAGS="/EHa /Zc:wchar_t- /D "_CRT_SECURE_NO_DEPRECATE""
+.ENDIF
+
 BUILD_DIR=PCbuild
 # Build python executable and then runs a minimal script. Running the minimal script
 # ensures that certain *.pyc files are generated which would otherwise be created on
 # solver during registration in insetoo_native
 BUILD_ACTION= \
-    $(foreach,i,$(PYPROJECTS) nmake /e /f $(i).mak CFG="$(i) - Win32 Release" OS="Windows_NT" && ) \
+    $(foreach,i,$(PYPROJECTS) nmake /f $(i).mak CFG="$(i) - Win32 Release" EXFLAGS=$(EXFLAGS) && ) \
     python.exe -c "import os" && \
     echo build done
 .ENDIF
@@ -170,4 +176,3 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.bz2
     @+echo $(assign UNPACKCMD := bzip2 -cd $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ) > $(NULLDEV)
 .ENDIF			# "$(GUI)"=="UNX"
     @+$(COPY) $(mktmp $(UNPACKCMD)) $@
-
