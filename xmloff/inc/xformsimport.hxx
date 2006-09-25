@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xformsimport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:12:18 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:21:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,11 @@
 class SvXMLImport;
 class SvXMLImportContext;
 namespace rtl { class OUString; }
+
+#if defined(WNT) && _MSC_VER < 1400
 namespace std { template<typename A, typename B> struct pair; }
+#endif
+
 namespace com { namespace sun { namespace star {
     namespace uno { template<typename T> class Reference; }
     namespace beans { class XPropertySet; }
@@ -89,3 +93,5 @@ void bindXFormsSubmission(
 
 
 #endif
+
+
