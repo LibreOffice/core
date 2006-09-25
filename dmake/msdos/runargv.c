@@ -1,4 +1,4 @@
-/* RCS  $Id: runargv.c,v 1.2 2006-04-20 12:06:24 hr Exp $
+/* RCS  $Id: runargv.c,v 1.3 2006-09-25 09:41:53 vg Exp $
 --
 -- SYNOPSIS
 --      Run a sub process.
@@ -55,31 +55,37 @@ char    *cmd;
       Do_profile_output( "s", M_RECIPE, target );
 
    _add_child(target, ignore);
-   /* return immediately for noop command */
-   if (strncmp(cmd, "noop", 4) == 0 && (cmd[4] == ' ' || cmd[4] == '\0')) {
+
+   /* remove leading whitespace */
+   while( iswhite(*cmd) ) ++cmd;
+
+   /* Return immediately for empty line or noop command. */
+   if ( !*cmd ||                /* empty line */
+    ( strncmp(cmd, "noop", 4) == 0 &&   /* noop command */
+      (iswhite(cmd[4]) || cmd[4] == '\0')) ) {
+      status = 0;
+   }
+   else if( !shell &&  /* internal echo only if not in shell */
+        strncmp(cmd, "echo", 4) == 0 &&
+        (iswhite(cmd[4]) || cmd[4] == '\0') ) {
+      char *tstr = cmd+4;
+      int nl = 1;
+
+      while( iswhite(*tstr) ) ++tstr;
+      if ( strncmp(tstr,"-n",2 ) == 0) {
+     nl = 0;
+     tstr = tstr+2;
+     while( iswhite(*tstr) ) ++tstr;
+      }
+      printf("%s%s", tstr, nl ? "\n" : "");
+      fflush(stdout);
       status = 0;
    }
    else {
       argv = Pack_argv( group, shell, cmd );
+      Packed_shell = shell||group;
 
-      if ( strcmp(argv[0],"echo") == 0 ) {
-         int i;
-         int first = 1;
-         int nl = 1;
-
-         if (strcmp(argv[1],"-n") == 0) nl--;
-
-         for (i=2-nl;argv[i]; i++) {
-            if (!first) putchar(' ');
-        printf("%s", argv[i]);
-     }
-     if (nl) printf("\n");
-     fflush(stdout);
-     status = 0;
-      }
-      else {
-     status = spawnvpe(P_WAIT, *argv, argv, environ);
-      }
+      status = spawnvpe(P_WAIT, *argv, argv, environ);
    }
 
    if( status == -1 ) Error("%s: %s", argv[0], strerror(errno));
