@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:54:16 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:26:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,7 @@ void SwDoc::SetRedlineMode( IDocumentRedlineAccess::RedlineMode_t eMode )
 
             default:
                 pFnc = &SwRedline::Hide;
-                eMode |= IDocumentRedlineAccess::REDLINE_SHOW_INSERT;
+                eMode = (IDocumentRedlineAccess::RedlineMode_t)(eMode | IDocumentRedlineAccess::REDLINE_SHOW_INSERT);
                 break;
             }
 
@@ -798,7 +798,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 
 // auf NONE setzen, damit das Delete::Redo die RedlineDaten wieder richtig
 // zusammen fasst! Der ShowMode muss erhalten bleiben!
-                        eRedlineMode = (eOld & ~(REDLINE_ON | REDLINE_IGNORE));
+              eRedlineMode = (IDocumentRedlineAccess::RedlineMode_t)(eOld & ~(REDLINE_ON | REDLINE_IGNORE));
                         switch( eCmpPos )
                         {
                         case POS_EQUAL:
@@ -810,7 +810,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                         case POS_INSIDE:
                             if( bCallDelete )
                             {
-                                eRedlineMode = (eRedlineMode | REDLINE_IGNOREDELETE_REDLINES);
+                              eRedlineMode = (IDocumentRedlineAccess::RedlineMode_t)(eRedlineMode | REDLINE_IGNOREDELETE_REDLINES);
 
                                 // #98863# DeleteAndJoin does not yield the
                                 // desired result if there is no paragraph to
@@ -1290,7 +1290,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
             IDocumentRedlineAccess::RedlineMode_t eOld = eRedlineMode;
 // auf NONE setzen, damit das Delete::Redo die RedlineDaten wieder richtig
 // zusammen fasst! Der ShowMode muss erhalten bleiben!
-            eRedlineMode = (eOld & ~(REDLINE_ON | REDLINE_IGNORE));
+            eRedlineMode = (IDocumentRedlineAccess::RedlineMode_t)(eOld & ~(REDLINE_ON | REDLINE_IGNORE));
             DeleteAndJoin( *pNewRedl );
             eRedlineMode = eOld;
         }
@@ -1745,7 +1745,7 @@ BOOL lcl_AcceptRedline( SwRedlineTbl& rArr, USHORT& rPos,
                     delete pRedl;
 
                 IDocumentRedlineAccess::RedlineMode_t eOld = rDoc.GetRedlineMode();
-                rDoc.SetRedlineMode_intern( eOld & ~(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_IGNORE) );
+                rDoc.SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)(eOld & ~(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_IGNORE)));
 
                 if( pCSttNd && pCEndNd )
                     rDoc.DeleteAndJoin( aPam );
@@ -1855,7 +1855,7 @@ BOOL lcl_RejectRedline( SwRedlineTbl& rArr, USHORT& rPos,
                     delete pRedl;
 
                 IDocumentRedlineAccess::RedlineMode_t eOld = rDoc.GetRedlineMode();
-                rDoc.SetRedlineMode_intern( eOld & ~(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_IGNORE) );
+                rDoc.SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)(eOld & ~(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_IGNORE)));
 
                 if( pCSttNd && pCEndNd )
                     rDoc.DeleteAndJoin( aPam );
@@ -2102,7 +2102,7 @@ bool SwDoc::AcceptRedline( USHORT nPos, bool bCallDelete )
     // aufjedenfall auf sichtbar umschalten
     if( (REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE) !=
         (REDLINE_SHOW_MASK & eRedlineMode) )
-        SetRedlineMode( REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE | eRedlineMode );
+      SetRedlineMode( (IDocumentRedlineAccess::RedlineMode_t)(REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE | eRedlineMode));
 
     SwRedline* pTmp = (*pRedlineTbl)[ nPos ];
     if( pTmp->HasMark() && pTmp->IsVisible() )
@@ -2162,7 +2162,7 @@ bool SwDoc::AcceptRedline( const SwPaM& rPam, bool bCallDelete )
     // aufjedenfall auf sichtbar umschalten
     if( (REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE) !=
         (REDLINE_SHOW_MASK & eRedlineMode) )
-        SetRedlineMode( REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE | eRedlineMode );
+      SetRedlineMode( (IDocumentRedlineAccess::RedlineMode_t)(REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE | eRedlineMode));
 
     // die Selektion steht nur im ContentBereich. Wenn es aber Redlines
     // davor oder dahinter auf nicht ContentNodes stehen, dann erweiter die
@@ -2210,7 +2210,7 @@ bool SwDoc::RejectRedline( USHORT nPos, bool bCallDelete )
     // aufjedenfall auf sichtbar umschalten
     if( (REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE) !=
         (REDLINE_SHOW_MASK & eRedlineMode) )
-        SetRedlineMode( REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE | eRedlineMode );
+      SetRedlineMode( (IDocumentRedlineAccess::RedlineMode_t)(REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE | eRedlineMode));
 
     SwRedline* pTmp = (*pRedlineTbl)[ nPos ];
     if( pTmp->HasMark() && pTmp->IsVisible() )
@@ -2270,7 +2270,7 @@ bool SwDoc::RejectRedline( const SwPaM& rPam, bool bCallDelete )
     // aufjedenfall auf sichtbar umschalten
     if( (REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE) !=
         (REDLINE_SHOW_MASK & eRedlineMode) )
-        SetRedlineMode( REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE | eRedlineMode );
+      SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)(REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE | eRedlineMode));
 
     // die Selektion steht nur im ContentBereich. Wenn es aber Redlines
     // davor oder dahinter auf nicht ContentNodes stehen, dann erweiter die
@@ -2985,7 +2985,7 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
     SwDoc* pDoc = rPam.GetDoc();
 
     IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( eOld & ~(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_IGNORE) );
+    pDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eOld & ~(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_IGNORE)));
 
     // eigentlich muesste hier das Attribut zurueck gesetzt werden!!!
     for( USHORT n = 0, nEnd = aWhichIds.Count(); n < nEnd; ++n )
@@ -3159,7 +3159,7 @@ void SwRedline::Show( USHORT nLoop )
     {
         SwDoc* pDoc = GetDoc();
         IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-        pDoc->SetRedlineMode_intern( eOld | IDocumentRedlineAccess::REDLINE_IGNORE );
+        pDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eOld | IDocumentRedlineAccess::REDLINE_IGNORE));
         BOOL bUndo = pDoc->DoesUndo();
         pDoc->DoUndo( FALSE );
 
@@ -3191,7 +3191,7 @@ void SwRedline::Hide( USHORT nLoop )
 {
     SwDoc* pDoc = GetDoc();
     IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( eOld | IDocumentRedlineAccess::REDLINE_IGNORE );
+    pDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eOld | IDocumentRedlineAccess::REDLINE_IGNORE));
     BOOL bUndo = pDoc->DoesUndo();
     pDoc->DoUndo( FALSE );
 
@@ -3231,7 +3231,7 @@ void SwRedline::ShowOriginal( USHORT nLoop )
     IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
     SwRedlineData* pCur;
 
-    pDoc->SetRedlineMode_intern( eOld | IDocumentRedlineAccess::REDLINE_IGNORE );
+    pDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eOld | IDocumentRedlineAccess::REDLINE_IGNORE));
     BOOL bUndo = pDoc->DoesUndo();
     pDoc->DoUndo( FALSE );
 
