@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-10 15:58:29 $
+#   last change: $Author: vg $ $Date: 2006-09-25 12:45:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ INCPRE+= -I$(ATL_INCLUDE)
 
 # --- Settings -----------------------------------------------------
 
-.IF "$(GUI)"=="WNT" && "$(NETTOOLKIT)"==""
+.IF "$(GUI)"=="WNT"
 
 SLOFILES= \
             $(SLO)$/servreg.obj		\
@@ -97,4 +97,3 @@ DEF1EXPORTFILE=$(SHL1TARGET).dxp
 #----------------------------------------------------------------
 
 .INCLUDE :  target.mk
-
