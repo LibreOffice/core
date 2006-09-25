@@ -1,0 +1,33 @@
+====================================================================================
+File name
+---------
+  timestamp_and_vendor.patch
+
+Description
+-----------
+  removes the tstamp/_tmpstamp construct from the build.xml (not supported by
+  some ant versions)
+
+Issue
+-----
+  http://www.openoffice.org/issues/show_bug.cgi?id=51409
+  Build breaks in hsqldb
+
+
+====================================================================================
+File name
+---------
+  unique_constraint_violation_error.patch
+
+Description
+-----------
+  provides a better error message when violating a unique index or (primary)
+  constraint
+
+Issue
+-----
+  http://www.openoffice.org/issues/show_bug.cgi?id=65426
+  "Database frontend: Confusing errormessage when entering duplicate primary key"
+
+
+====================================================================================
