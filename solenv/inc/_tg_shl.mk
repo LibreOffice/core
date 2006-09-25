@@ -96,7 +96,7 @@ USE_SHL1VERSIONMAP=$(MISC)$/$(SHL1TARGET).vmap
 .IF "$(SHL1VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL1VERSIONMAP=$(MISC)$/$(SHL1TARGET).vmap
-$(USE_SHL1VERSIONMAP) .PHONY: 
+$(USE_SHL1VERSIONMAP) .PHONY:
     @+echo -----------------------------
     @+echo you should only use versionmap OR exportfile
     @+echo -----------------------------
@@ -128,7 +128,7 @@ $(USE_SHL1VERSIONMAP): \
 
 .ELSE			# "$(SHL1FILTERFILE)"!=""
 USE_SHL1VERSIONMAP=$(MISC)$/$(SHL1TARGET).vmap
-$(USE_SHL1VERSIONMAP) : 
+$(USE_SHL1VERSIONMAP) :
     @+echo -----------------------------
     @+echo SHL1FILTERFILE not set!
     @+echo -----------------------------
@@ -204,7 +204,7 @@ $(SHL1TARGETN) : $(LINKINCTARGETS)
 .IF "$(SHL1USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
 SHL1LINKLIST=$(MISC)$/$(SHL1TARGET)_link.lst
-$(MISC)$/$(SHL1TARGET)_link.lst : $(SHL1LIBS) 
+$(MISC)$/$(SHL1TARGET)_link.lst : $(SHL1LIBS)
     @+-$(RM) $@ >& $(NULLDEV)
     +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
@@ -223,7 +223,7 @@ $(SHL1TARGETN) : \
                     $(USE_SHL1VERSIONMAP)\
                     $(SHL1RES)\
                     $(SHL1DEPN) \
-                    $(SHL1LINKLIST) 
+                    $(SHL1LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL1TARGETN)
 .IF "$(GUI)" == "WNT"
@@ -238,7 +238,7 @@ $(SHL1TARGETN) : \
 .ELSE			# "$(SHL1ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(SHL1ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ORG_NAME	$(SHL1TARGET)$(DLLPOST) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
@@ -280,6 +280,8 @@ $(SHL1TARGETN) : \
         $(SHL1LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL1LINKER) @$(mktmp	$(SHL1LINKFLAGS)			\
@@ -295,6 +297,8 @@ $(SHL1TARGETN) : \
         $(SHL1LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL1USE_EXPORTS)"!="name"
     $(SHL1LINKER) @$(mktmp	$(SHL1LINKFLAGS)			\
@@ -309,6 +313,8 @@ $(SHL1TARGETN) : \
         $(SHL1STDSHL) $(STDSHL1)                           \
         $(SHL1LINKRES) \
     )
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(SHL1USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL1TARGET).lnk
@@ -327,6 +333,8 @@ $(SHL1TARGETN) : \
         ) >> $(MISC)$/$(SHL1TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL1TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL1TARGET).lnk
         $(SHL1LINKER) @$(MISC)$/$(SHL1TARGET).lnk
+        @-+echo linking $@.manifest ...
+        +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -378,7 +386,7 @@ $(SHL1TARGETN) : \
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - THREAD WARNING! - this library was linked single threaded
     @+echo - and must not be used in any office installation!
     @+echo -
     @+echo ----------------------------------------------------------
@@ -493,7 +501,7 @@ USE_SHL2VERSIONMAP=$(MISC)$/$(SHL2TARGET).vmap
 .IF "$(SHL2VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL2VERSIONMAP=$(MISC)$/$(SHL2TARGET).vmap
-$(USE_SHL2VERSIONMAP) .PHONY: 
+$(USE_SHL2VERSIONMAP) .PHONY:
     @+echo -----------------------------
     @+echo you should only use versionmap OR exportfile
     @+echo -----------------------------
@@ -525,7 +533,7 @@ $(USE_SHL2VERSIONMAP): \
 
 .ELSE			# "$(SHL2FILTERFILE)"!=""
 USE_SHL2VERSIONMAP=$(MISC)$/$(SHL2TARGET).vmap
-$(USE_SHL2VERSIONMAP) : 
+$(USE_SHL2VERSIONMAP) :
     @+echo -----------------------------
     @+echo SHL2FILTERFILE not set!
     @+echo -----------------------------
@@ -601,7 +609,7 @@ $(SHL2TARGETN) : $(LINKINCTARGETS)
 .IF "$(SHL2USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
 SHL2LINKLIST=$(MISC)$/$(SHL2TARGET)_link.lst
-$(MISC)$/$(SHL2TARGET)_link.lst : $(SHL2LIBS) 
+$(MISC)$/$(SHL2TARGET)_link.lst : $(SHL2LIBS)
     @+-$(RM) $@ >& $(NULLDEV)
     +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
@@ -620,7 +628,7 @@ $(SHL2TARGETN) : \
                     $(USE_SHL2VERSIONMAP)\
                     $(SHL2RES)\
                     $(SHL2DEPN) \
-                    $(SHL2LINKLIST) 
+                    $(SHL2LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL2TARGETN)
 .IF "$(GUI)" == "WNT"
@@ -635,7 +643,7 @@ $(SHL2TARGETN) : \
 .ELSE			# "$(SHL2ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(SHL2ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ORG_NAME	$(SHL2TARGET)$(DLLPOST) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
@@ -677,6 +685,8 @@ $(SHL2TARGETN) : \
         $(SHL2LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL2LINKER) @$(mktmp	$(SHL2LINKFLAGS)			\
@@ -692,6 +702,8 @@ $(SHL2TARGETN) : \
         $(SHL2LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL2USE_EXPORTS)"!="name"
     $(SHL2LINKER) @$(mktmp	$(SHL2LINKFLAGS)			\
@@ -706,6 +718,8 @@ $(SHL2TARGETN) : \
         $(SHL2STDSHL) $(STDSHL2)                           \
         $(SHL2LINKRES) \
     )
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(SHL2USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL2TARGET).lnk
@@ -724,6 +738,8 @@ $(SHL2TARGETN) : \
         ) >> $(MISC)$/$(SHL2TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL2TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL2TARGET).lnk
         $(SHL2LINKER) @$(MISC)$/$(SHL2TARGET).lnk
+        @-+echo linking $@.manifest ...
+        +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -775,7 +791,7 @@ $(SHL2TARGETN) : \
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - THREAD WARNING! - this library was linked single threaded
     @+echo - and must not be used in any office installation!
     @+echo -
     @+echo ----------------------------------------------------------
@@ -890,7 +906,7 @@ USE_SHL3VERSIONMAP=$(MISC)$/$(SHL3TARGET).vmap
 .IF "$(SHL3VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL3VERSIONMAP=$(MISC)$/$(SHL3TARGET).vmap
-$(USE_SHL3VERSIONMAP) .PHONY: 
+$(USE_SHL3VERSIONMAP) .PHONY:
     @+echo -----------------------------
     @+echo you should only use versionmap OR exportfile
     @+echo -----------------------------
@@ -922,7 +938,7 @@ $(USE_SHL3VERSIONMAP): \
 
 .ELSE			# "$(SHL3FILTERFILE)"!=""
 USE_SHL3VERSIONMAP=$(MISC)$/$(SHL3TARGET).vmap
-$(USE_SHL3VERSIONMAP) : 
+$(USE_SHL3VERSIONMAP) :
     @+echo -----------------------------
     @+echo SHL3FILTERFILE not set!
     @+echo -----------------------------
@@ -998,7 +1014,7 @@ $(SHL3TARGETN) : $(LINKINCTARGETS)
 .IF "$(SHL3USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
 SHL3LINKLIST=$(MISC)$/$(SHL3TARGET)_link.lst
-$(MISC)$/$(SHL3TARGET)_link.lst : $(SHL3LIBS) 
+$(MISC)$/$(SHL3TARGET)_link.lst : $(SHL3LIBS)
     @+-$(RM) $@ >& $(NULLDEV)
     +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
@@ -1017,7 +1033,7 @@ $(SHL3TARGETN) : \
                     $(USE_SHL3VERSIONMAP)\
                     $(SHL3RES)\
                     $(SHL3DEPN) \
-                    $(SHL3LINKLIST) 
+                    $(SHL3LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL3TARGETN)
 .IF "$(GUI)" == "WNT"
@@ -1032,7 +1048,7 @@ $(SHL3TARGETN) : \
 .ELSE			# "$(SHL3ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(SHL3ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ORG_NAME	$(SHL3TARGET)$(DLLPOST) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
@@ -1074,6 +1090,8 @@ $(SHL3TARGETN) : \
         $(SHL3LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL3LINKER) @$(mktmp	$(SHL3LINKFLAGS)			\
@@ -1089,6 +1107,8 @@ $(SHL3TARGETN) : \
         $(SHL3LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL3USE_EXPORTS)"!="name"
     $(SHL3LINKER) @$(mktmp	$(SHL3LINKFLAGS)			\
@@ -1103,6 +1123,8 @@ $(SHL3TARGETN) : \
         $(SHL3STDSHL) $(STDSHL3)                           \
         $(SHL3LINKRES) \
     )
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(SHL3USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL3TARGET).lnk
@@ -1121,6 +1143,8 @@ $(SHL3TARGETN) : \
         ) >> $(MISC)$/$(SHL3TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL3TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL3TARGET).lnk
         $(SHL3LINKER) @$(MISC)$/$(SHL3TARGET).lnk
+        @-+echo linking $@.manifest ...
+        +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -1172,7 +1196,7 @@ $(SHL3TARGETN) : \
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - THREAD WARNING! - this library was linked single threaded
     @+echo - and must not be used in any office installation!
     @+echo -
     @+echo ----------------------------------------------------------
@@ -1287,7 +1311,7 @@ USE_SHL4VERSIONMAP=$(MISC)$/$(SHL4TARGET).vmap
 .IF "$(SHL4VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL4VERSIONMAP=$(MISC)$/$(SHL4TARGET).vmap
-$(USE_SHL4VERSIONMAP) .PHONY: 
+$(USE_SHL4VERSIONMAP) .PHONY:
     @+echo -----------------------------
     @+echo you should only use versionmap OR exportfile
     @+echo -----------------------------
@@ -1319,7 +1343,7 @@ $(USE_SHL4VERSIONMAP): \
 
 .ELSE			# "$(SHL4FILTERFILE)"!=""
 USE_SHL4VERSIONMAP=$(MISC)$/$(SHL4TARGET).vmap
-$(USE_SHL4VERSIONMAP) : 
+$(USE_SHL4VERSIONMAP) :
     @+echo -----------------------------
     @+echo SHL4FILTERFILE not set!
     @+echo -----------------------------
@@ -1395,7 +1419,7 @@ $(SHL4TARGETN) : $(LINKINCTARGETS)
 .IF "$(SHL4USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
 SHL4LINKLIST=$(MISC)$/$(SHL4TARGET)_link.lst
-$(MISC)$/$(SHL4TARGET)_link.lst : $(SHL4LIBS) 
+$(MISC)$/$(SHL4TARGET)_link.lst : $(SHL4LIBS)
     @+-$(RM) $@ >& $(NULLDEV)
     +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
@@ -1414,7 +1438,7 @@ $(SHL4TARGETN) : \
                     $(USE_SHL4VERSIONMAP)\
                     $(SHL4RES)\
                     $(SHL4DEPN) \
-                    $(SHL4LINKLIST) 
+                    $(SHL4LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL4TARGETN)
 .IF "$(GUI)" == "WNT"
@@ -1429,7 +1453,7 @@ $(SHL4TARGETN) : \
 .ELSE			# "$(SHL4ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(SHL4ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ORG_NAME	$(SHL4TARGET)$(DLLPOST) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
@@ -1471,6 +1495,8 @@ $(SHL4TARGETN) : \
         $(SHL4LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL4LINKER) @$(mktmp	$(SHL4LINKFLAGS)			\
@@ -1486,6 +1512,8 @@ $(SHL4TARGETN) : \
         $(SHL4LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL4USE_EXPORTS)"!="name"
     $(SHL4LINKER) @$(mktmp	$(SHL4LINKFLAGS)			\
@@ -1500,6 +1528,8 @@ $(SHL4TARGETN) : \
         $(SHL4STDSHL) $(STDSHL4)                           \
         $(SHL4LINKRES) \
     )
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(SHL4USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL4TARGET).lnk
@@ -1518,6 +1548,8 @@ $(SHL4TARGETN) : \
         ) >> $(MISC)$/$(SHL4TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL4TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL4TARGET).lnk
         $(SHL4LINKER) @$(MISC)$/$(SHL4TARGET).lnk
+        @-+echo linking $@.manifest ...
+        +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -1569,7 +1601,7 @@ $(SHL4TARGETN) : \
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - THREAD WARNING! - this library was linked single threaded
     @+echo - and must not be used in any office installation!
     @+echo -
     @+echo ----------------------------------------------------------
@@ -1684,7 +1716,7 @@ USE_SHL5VERSIONMAP=$(MISC)$/$(SHL5TARGET).vmap
 .IF "$(SHL5VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL5VERSIONMAP=$(MISC)$/$(SHL5TARGET).vmap
-$(USE_SHL5VERSIONMAP) .PHONY: 
+$(USE_SHL5VERSIONMAP) .PHONY:
     @+echo -----------------------------
     @+echo you should only use versionmap OR exportfile
     @+echo -----------------------------
@@ -1716,7 +1748,7 @@ $(USE_SHL5VERSIONMAP): \
 
 .ELSE			# "$(SHL5FILTERFILE)"!=""
 USE_SHL5VERSIONMAP=$(MISC)$/$(SHL5TARGET).vmap
-$(USE_SHL5VERSIONMAP) : 
+$(USE_SHL5VERSIONMAP) :
     @+echo -----------------------------
     @+echo SHL5FILTERFILE not set!
     @+echo -----------------------------
@@ -1792,7 +1824,7 @@ $(SHL5TARGETN) : $(LINKINCTARGETS)
 .IF "$(SHL5USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
 SHL5LINKLIST=$(MISC)$/$(SHL5TARGET)_link.lst
-$(MISC)$/$(SHL5TARGET)_link.lst : $(SHL5LIBS) 
+$(MISC)$/$(SHL5TARGET)_link.lst : $(SHL5LIBS)
     @+-$(RM) $@ >& $(NULLDEV)
     +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
@@ -1811,7 +1843,7 @@ $(SHL5TARGETN) : \
                     $(USE_SHL5VERSIONMAP)\
                     $(SHL5RES)\
                     $(SHL5DEPN) \
-                    $(SHL5LINKLIST) 
+                    $(SHL5LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL5TARGETN)
 .IF "$(GUI)" == "WNT"
@@ -1826,7 +1858,7 @@ $(SHL5TARGETN) : \
 .ELSE			# "$(SHL5ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(SHL5ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ORG_NAME	$(SHL5TARGET)$(DLLPOST) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
@@ -1868,6 +1900,8 @@ $(SHL5TARGETN) : \
         $(SHL5LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL5LINKER) @$(mktmp	$(SHL5LINKFLAGS)			\
@@ -1883,6 +1917,8 @@ $(SHL5TARGETN) : \
         $(SHL5LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL5USE_EXPORTS)"!="name"
     $(SHL5LINKER) @$(mktmp	$(SHL5LINKFLAGS)			\
@@ -1897,6 +1933,8 @@ $(SHL5TARGETN) : \
         $(SHL5STDSHL) $(STDSHL5)                           \
         $(SHL5LINKRES) \
     )
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(SHL5USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL5TARGET).lnk
@@ -1915,6 +1953,8 @@ $(SHL5TARGETN) : \
         ) >> $(MISC)$/$(SHL5TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL5TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL5TARGET).lnk
         $(SHL5LINKER) @$(MISC)$/$(SHL5TARGET).lnk
+        @-+echo linking $@.manifest ...
+        +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -1966,7 +2006,7 @@ $(SHL5TARGETN) : \
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - THREAD WARNING! - this library was linked single threaded
     @+echo - and must not be used in any office installation!
     @+echo -
     @+echo ----------------------------------------------------------
@@ -2081,7 +2121,7 @@ USE_SHL6VERSIONMAP=$(MISC)$/$(SHL6TARGET).vmap
 .IF "$(SHL6VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL6VERSIONMAP=$(MISC)$/$(SHL6TARGET).vmap
-$(USE_SHL6VERSIONMAP) .PHONY: 
+$(USE_SHL6VERSIONMAP) .PHONY:
     @+echo -----------------------------
     @+echo you should only use versionmap OR exportfile
     @+echo -----------------------------
@@ -2113,7 +2153,7 @@ $(USE_SHL6VERSIONMAP): \
 
 .ELSE			# "$(SHL6FILTERFILE)"!=""
 USE_SHL6VERSIONMAP=$(MISC)$/$(SHL6TARGET).vmap
-$(USE_SHL6VERSIONMAP) : 
+$(USE_SHL6VERSIONMAP) :
     @+echo -----------------------------
     @+echo SHL6FILTERFILE not set!
     @+echo -----------------------------
@@ -2189,7 +2229,7 @@ $(SHL6TARGETN) : $(LINKINCTARGETS)
 .IF "$(SHL6USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
 SHL6LINKLIST=$(MISC)$/$(SHL6TARGET)_link.lst
-$(MISC)$/$(SHL6TARGET)_link.lst : $(SHL6LIBS) 
+$(MISC)$/$(SHL6TARGET)_link.lst : $(SHL6LIBS)
     @+-$(RM) $@ >& $(NULLDEV)
     +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
@@ -2208,7 +2248,7 @@ $(SHL6TARGETN) : \
                     $(USE_SHL6VERSIONMAP)\
                     $(SHL6RES)\
                     $(SHL6DEPN) \
-                    $(SHL6LINKLIST) 
+                    $(SHL6LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL6TARGETN)
 .IF "$(GUI)" == "WNT"
@@ -2223,7 +2263,7 @@ $(SHL6TARGETN) : \
 .ELSE			# "$(SHL6ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(SHL6ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ORG_NAME	$(SHL6TARGET)$(DLLPOST) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
@@ -2265,6 +2305,8 @@ $(SHL6TARGETN) : \
         $(SHL6LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL6LINKER) @$(mktmp	$(SHL6LINKFLAGS)			\
@@ -2280,6 +2322,8 @@ $(SHL6TARGETN) : \
         $(SHL6LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL6USE_EXPORTS)"!="name"
     $(SHL6LINKER) @$(mktmp	$(SHL6LINKFLAGS)			\
@@ -2294,6 +2338,8 @@ $(SHL6TARGETN) : \
         $(SHL6STDSHL) $(STDSHL6)                           \
         $(SHL6LINKRES) \
     )
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(SHL6USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL6TARGET).lnk
@@ -2312,6 +2358,8 @@ $(SHL6TARGETN) : \
         ) >> $(MISC)$/$(SHL6TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL6TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL6TARGET).lnk
         $(SHL6LINKER) @$(MISC)$/$(SHL6TARGET).lnk
+        @-+echo linking $@.manifest ...
+        +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -2363,7 +2411,7 @@ $(SHL6TARGETN) : \
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - THREAD WARNING! - this library was linked single threaded
     @+echo - and must not be used in any office installation!
     @+echo -
     @+echo ----------------------------------------------------------
@@ -2478,7 +2526,7 @@ USE_SHL7VERSIONMAP=$(MISC)$/$(SHL7TARGET).vmap
 .IF "$(SHL7VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL7VERSIONMAP=$(MISC)$/$(SHL7TARGET).vmap
-$(USE_SHL7VERSIONMAP) .PHONY: 
+$(USE_SHL7VERSIONMAP) .PHONY:
     @+echo -----------------------------
     @+echo you should only use versionmap OR exportfile
     @+echo -----------------------------
@@ -2510,7 +2558,7 @@ $(USE_SHL7VERSIONMAP): \
 
 .ELSE			# "$(SHL7FILTERFILE)"!=""
 USE_SHL7VERSIONMAP=$(MISC)$/$(SHL7TARGET).vmap
-$(USE_SHL7VERSIONMAP) : 
+$(USE_SHL7VERSIONMAP) :
     @+echo -----------------------------
     @+echo SHL7FILTERFILE not set!
     @+echo -----------------------------
@@ -2586,7 +2634,7 @@ $(SHL7TARGETN) : $(LINKINCTARGETS)
 .IF "$(SHL7USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
 SHL7LINKLIST=$(MISC)$/$(SHL7TARGET)_link.lst
-$(MISC)$/$(SHL7TARGET)_link.lst : $(SHL7LIBS) 
+$(MISC)$/$(SHL7TARGET)_link.lst : $(SHL7LIBS)
     @+-$(RM) $@ >& $(NULLDEV)
     +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
@@ -2605,7 +2653,7 @@ $(SHL7TARGETN) : \
                     $(USE_SHL7VERSIONMAP)\
                     $(SHL7RES)\
                     $(SHL7DEPN) \
-                    $(SHL7LINKLIST) 
+                    $(SHL7LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL7TARGETN)
 .IF "$(GUI)" == "WNT"
@@ -2620,7 +2668,7 @@ $(SHL7TARGETN) : \
 .ELSE			# "$(SHL7ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(SHL7ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ORG_NAME	$(SHL7TARGET)$(DLLPOST) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
@@ -2662,6 +2710,8 @@ $(SHL7TARGETN) : \
         $(SHL7LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL7LINKER) @$(mktmp	$(SHL7LINKFLAGS)			\
@@ -2677,6 +2727,8 @@ $(SHL7TARGETN) : \
         $(SHL7LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL7USE_EXPORTS)"!="name"
     $(SHL7LINKER) @$(mktmp	$(SHL7LINKFLAGS)			\
@@ -2691,6 +2743,8 @@ $(SHL7TARGETN) : \
         $(SHL7STDSHL) $(STDSHL7)                           \
         $(SHL7LINKRES) \
     )
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(SHL7USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL7TARGET).lnk
@@ -2709,6 +2763,8 @@ $(SHL7TARGETN) : \
         ) >> $(MISC)$/$(SHL7TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL7TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL7TARGET).lnk
         $(SHL7LINKER) @$(MISC)$/$(SHL7TARGET).lnk
+        @-+echo linking $@.manifest ...
+        +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -2760,7 +2816,7 @@ $(SHL7TARGETN) : \
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - THREAD WARNING! - this library was linked single threaded
     @+echo - and must not be used in any office installation!
     @+echo -
     @+echo ----------------------------------------------------------
@@ -2875,7 +2931,7 @@ USE_SHL8VERSIONMAP=$(MISC)$/$(SHL8TARGET).vmap
 .IF "$(SHL8VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL8VERSIONMAP=$(MISC)$/$(SHL8TARGET).vmap
-$(USE_SHL8VERSIONMAP) .PHONY: 
+$(USE_SHL8VERSIONMAP) .PHONY:
     @+echo -----------------------------
     @+echo you should only use versionmap OR exportfile
     @+echo -----------------------------
@@ -2907,7 +2963,7 @@ $(USE_SHL8VERSIONMAP): \
 
 .ELSE			# "$(SHL8FILTERFILE)"!=""
 USE_SHL8VERSIONMAP=$(MISC)$/$(SHL8TARGET).vmap
-$(USE_SHL8VERSIONMAP) : 
+$(USE_SHL8VERSIONMAP) :
     @+echo -----------------------------
     @+echo SHL8FILTERFILE not set!
     @+echo -----------------------------
@@ -2983,7 +3039,7 @@ $(SHL8TARGETN) : $(LINKINCTARGETS)
 .IF "$(SHL8USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
 SHL8LINKLIST=$(MISC)$/$(SHL8TARGET)_link.lst
-$(MISC)$/$(SHL8TARGET)_link.lst : $(SHL8LIBS) 
+$(MISC)$/$(SHL8TARGET)_link.lst : $(SHL8LIBS)
     @+-$(RM) $@ >& $(NULLDEV)
     +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
@@ -3002,7 +3058,7 @@ $(SHL8TARGETN) : \
                     $(USE_SHL8VERSIONMAP)\
                     $(SHL8RES)\
                     $(SHL8DEPN) \
-                    $(SHL8LINKLIST) 
+                    $(SHL8LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL8TARGETN)
 .IF "$(GUI)" == "WNT"
@@ -3017,7 +3073,7 @@ $(SHL8TARGETN) : \
 .ELSE			# "$(SHL8ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(SHL8ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ORG_NAME	$(SHL8TARGET)$(DLLPOST) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
@@ -3059,6 +3115,8 @@ $(SHL8TARGETN) : \
         $(SHL8LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL8LINKER) @$(mktmp	$(SHL8LINKFLAGS)			\
@@ -3074,6 +3132,8 @@ $(SHL8TARGETN) : \
         $(SHL8LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL8USE_EXPORTS)"!="name"
     $(SHL8LINKER) @$(mktmp	$(SHL8LINKFLAGS)			\
@@ -3088,6 +3148,8 @@ $(SHL8TARGETN) : \
         $(SHL8STDSHL) $(STDSHL8)                           \
         $(SHL8LINKRES) \
     )
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(SHL8USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL8TARGET).lnk
@@ -3106,6 +3168,8 @@ $(SHL8TARGETN) : \
         ) >> $(MISC)$/$(SHL8TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL8TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL8TARGET).lnk
         $(SHL8LINKER) @$(MISC)$/$(SHL8TARGET).lnk
+        @-+echo linking $@.manifest ...
+        +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -3157,7 +3221,7 @@ $(SHL8TARGETN) : \
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - THREAD WARNING! - this library was linked single threaded
     @+echo - and must not be used in any office installation!
     @+echo -
     @+echo ----------------------------------------------------------
@@ -3272,7 +3336,7 @@ USE_SHL9VERSIONMAP=$(MISC)$/$(SHL9TARGET).vmap
 .IF "$(SHL9VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL9VERSIONMAP=$(MISC)$/$(SHL9TARGET).vmap
-$(USE_SHL9VERSIONMAP) .PHONY: 
+$(USE_SHL9VERSIONMAP) .PHONY:
     @+echo -----------------------------
     @+echo you should only use versionmap OR exportfile
     @+echo -----------------------------
@@ -3304,7 +3368,7 @@ $(USE_SHL9VERSIONMAP): \
 
 .ELSE			# "$(SHL9FILTERFILE)"!=""
 USE_SHL9VERSIONMAP=$(MISC)$/$(SHL9TARGET).vmap
-$(USE_SHL9VERSIONMAP) : 
+$(USE_SHL9VERSIONMAP) :
     @+echo -----------------------------
     @+echo SHL9FILTERFILE not set!
     @+echo -----------------------------
@@ -3380,7 +3444,7 @@ $(SHL9TARGETN) : $(LINKINCTARGETS)
 .IF "$(SHL9USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
 SHL9LINKLIST=$(MISC)$/$(SHL9TARGET)_link.lst
-$(MISC)$/$(SHL9TARGET)_link.lst : $(SHL9LIBS) 
+$(MISC)$/$(SHL9TARGET)_link.lst : $(SHL9LIBS)
     @+-$(RM) $@ >& $(NULLDEV)
     +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
@@ -3399,7 +3463,7 @@ $(SHL9TARGETN) : \
                     $(USE_SHL9VERSIONMAP)\
                     $(SHL9RES)\
                     $(SHL9DEPN) \
-                    $(SHL9LINKLIST) 
+                    $(SHL9LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL9TARGETN)
 .IF "$(GUI)" == "WNT"
@@ -3414,7 +3478,7 @@ $(SHL9TARGETN) : \
 .ELSE			# "$(SHL9ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(SHL9ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ORG_NAME	$(SHL9TARGET)$(DLLPOST) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
@@ -3456,6 +3520,8 @@ $(SHL9TARGETN) : \
         $(SHL9LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL9LINKER) @$(mktmp	$(SHL9LINKFLAGS)			\
@@ -3471,6 +3537,8 @@ $(SHL9TARGETN) : \
         $(SHL9LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL9USE_EXPORTS)"!="name"
     $(SHL9LINKER) @$(mktmp	$(SHL9LINKFLAGS)			\
@@ -3485,6 +3553,8 @@ $(SHL9TARGETN) : \
         $(SHL9STDSHL) $(STDSHL9)                           \
         $(SHL9LINKRES) \
     )
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(SHL9USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL9TARGET).lnk
@@ -3503,6 +3573,8 @@ $(SHL9TARGETN) : \
         ) >> $(MISC)$/$(SHL9TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL9TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL9TARGET).lnk
         $(SHL9LINKER) @$(MISC)$/$(SHL9TARGET).lnk
+        @-+echo linking $@.manifest ...
+        +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -3554,7 +3626,7 @@ $(SHL9TARGETN) : \
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - THREAD WARNING! - this library was linked single threaded
     @+echo - and must not be used in any office installation!
     @+echo -
     @+echo ----------------------------------------------------------
@@ -3669,7 +3741,7 @@ USE_SHL10VERSIONMAP=$(MISC)$/$(SHL10TARGET).vmap
 .IF "$(SHL10VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL10VERSIONMAP=$(MISC)$/$(SHL10TARGET).vmap
-$(USE_SHL10VERSIONMAP) .PHONY: 
+$(USE_SHL10VERSIONMAP) .PHONY:
     @+echo -----------------------------
     @+echo you should only use versionmap OR exportfile
     @+echo -----------------------------
@@ -3701,7 +3773,7 @@ $(USE_SHL10VERSIONMAP): \
 
 .ELSE			# "$(SHL10FILTERFILE)"!=""
 USE_SHL10VERSIONMAP=$(MISC)$/$(SHL10TARGET).vmap
-$(USE_SHL10VERSIONMAP) : 
+$(USE_SHL10VERSIONMAP) :
     @+echo -----------------------------
     @+echo SHL10FILTERFILE not set!
     @+echo -----------------------------
@@ -3777,7 +3849,7 @@ $(SHL10TARGETN) : $(LINKINCTARGETS)
 .IF "$(SHL10USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
 SHL10LINKLIST=$(MISC)$/$(SHL10TARGET)_link.lst
-$(MISC)$/$(SHL10TARGET)_link.lst : $(SHL10LIBS) 
+$(MISC)$/$(SHL10TARGET)_link.lst : $(SHL10LIBS)
     @+-$(RM) $@ >& $(NULLDEV)
     +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
@@ -3796,7 +3868,7 @@ $(SHL10TARGETN) : \
                     $(USE_SHL10VERSIONMAP)\
                     $(SHL10RES)\
                     $(SHL10DEPN) \
-                    $(SHL10LINKLIST) 
+                    $(SHL10LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL10TARGETN)
 .IF "$(GUI)" == "WNT"
@@ -3811,7 +3883,7 @@ $(SHL10TARGETN) : \
 .ELSE			# "$(SHL10ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(SHL10ADD_VERINFO)"!=""
     @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
     @-+echo $(EMQ)#define ORG_NAME	$(SHL10TARGET)$(DLLPOST) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
@@ -3853,6 +3925,8 @@ $(SHL10TARGETN) : \
         $(SHL10LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL10LINKER) @$(mktmp	$(SHL10LINKFLAGS)			\
@@ -3868,6 +3942,8 @@ $(SHL10TARGETN) : \
         $(SHL10LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL10USE_EXPORTS)"!="name"
     $(SHL10LINKER) @$(mktmp	$(SHL10LINKFLAGS)			\
@@ -3882,6 +3958,8 @@ $(SHL10TARGETN) : \
         $(SHL10STDSHL) $(STDSHL10)                           \
         $(SHL10LINKRES) \
     )
+    @-+echo linking $@.manifest ...
+    +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(SHL10USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL10TARGET).lnk
@@ -3900,6 +3978,8 @@ $(SHL10TARGETN) : \
         ) >> $(MISC)$/$(SHL10TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL10TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL10TARGET).lnk
         $(SHL10LINKER) @$(MISC)$/$(SHL10TARGET).lnk
+        @-+echo linking $@.manifest ...
+        +$(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -3951,7 +4031,7 @@ $(SHL10TARGETN) : \
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - THREAD WARNING! - this library was linked single threaded
     @+echo - and must not be used in any office installation!
     @+echo -
     @+echo ----------------------------------------------------------
