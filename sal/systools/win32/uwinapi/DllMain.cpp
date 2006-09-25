@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DllMain.cpp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:32:35 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:16:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ static HMODULE WINAPI _LoadUnicowsLibrary(VOID)
 
         if ( lpLastBkSlash )
         {
-            size_t  nParentDirSize = _tcsinc( lpLastBkSlash ) - szModulePath;
+            size_t  nParentDirSize = (size_t) (_tcsinc( lpLastBkSlash ) - szModulePath);
             LPSTR   lpUnicowsModulePath = (LPTSTR)_alloca( nParentDirSize + sizeof(szUnicowsModuleName) );
 
             if ( lpUnicowsModulePath )
@@ -140,7 +140,6 @@ extern "C" BOOL WINAPI DllMain( HMODULE hModule, DWORD dwReason, LPVOID )
     }
 
 }
-
 
 
 
