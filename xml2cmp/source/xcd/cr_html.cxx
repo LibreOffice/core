@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cr_html.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:04:45 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:26:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,9 +141,9 @@ HtmlCreator::Write_SglTextElement( const SglTextElement &  i_rElement,
         if ( i_rElement.IsReversedName())
         {
             const char * pEnd = strchr(i_rElement.Data(), ' ');
-            nLen = pEnd - i_rElement.Data();
+            nLen = (unsigned)( pEnd - i_rElement.Data() );
         }
-        aFile.write( i_rElement.Data(), nLen );
+        aFile.write( i_rElement.Data(), (int) nLen );
         WriteStr( "\">" );
     }
 
