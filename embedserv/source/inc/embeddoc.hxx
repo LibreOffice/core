@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddoc.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:42:22 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:31:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,9 @@
 #define _EMBEDDOC_HXX_
 #if defined(_MSC_VER) && (_MSC_VER >= 1300)
 #undef _DEBUG
+#endif
+#if defined(_MSC_VER) && (_MSC_VER > 1310)
+#pragma warning(disable : 4917 4555)
 #endif
 
 #include "common.h"
@@ -187,4 +190,3 @@ protected:
 };
 
 #endif //_EMBEDDOC_HXX_
-
