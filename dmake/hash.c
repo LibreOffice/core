@@ -1,4 +1,4 @@
-/* RCS  $Id: hash.c,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: hash.c,v 1.2 2006-09-25 09:39:55 vg Exp $
 --
 -- SYNOPSIS
 --      Hashing function for hash tables.
@@ -38,8 +38,8 @@ Hash( id, phv )/*
       compare hash keys instead and compare strings only for those whose 32-bit
       hash keys match. (not many) */
 
-char   *id;
-uint32 *phv;
+char   *id;  /* value */
+uint32 *phv; /* key */
 {
    register char   *p    = id;
    register uint32 hash  = (uint32) 0;
@@ -47,6 +47,8 @@ uint32 *phv;
    while( *p ) hash = (hash << 7) + hash + (uint32) (*p++);
    *phv = hash = hash + (uint32) (p-id);
 
+   /* return an index (for Macs[]) where all keys with the same remainder
+    * after integer division with HASH_TABLE_SIZE are stored. */
    return( (uint16) (hash % HASH_TABLE_SIZE) );
 }
 
