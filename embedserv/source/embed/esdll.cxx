@@ -4,9 +4,9 @@
  *
  *  $RCSfile: esdll.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:40:26 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@
 #define _WIN32_DCOM
 #if defined(_MSC_VER) && (_MSC_VER >= 1300)
 #undef _DEBUG
+#endif
+#if defined(_MSC_VER) && (_MSC_VER > 1310)
+#pragma warning(disable : 4917 4555)
 #endif
 
 #include "stdafx.h"
