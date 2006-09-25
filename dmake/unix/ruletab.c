@@ -1,6 +1,6 @@
 /* $RCSfile: ruletab.c,v $
--- $Revision: 1.6 $
--- last change: $Author: ihi $ $Date: 2006-06-29 11:31:39 $
+-- $Revision: 1.7 $
+-- last change: $Author: vg $ $Date: 2006-09-25 09:47:45 $
 --
 -- SYNOPSIS
 --      Default initial configuration of dmake.
@@ -32,7 +32,7 @@
  * strictly so that dmake can parse the STARTUP makefile */
 
 static char *_rules[] = {
-    "MAXPROCESSLIMIT := 10",
+    "MAXPROCESSLIMIT := 64",
     "MAXLINELENGTH := 32766",
 #include "dmakeroot.h"
     ".IMPORT .IGNORE: DMAKEROOT",
