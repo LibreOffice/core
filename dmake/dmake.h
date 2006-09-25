@@ -1,4 +1,4 @@
-/* RCS  $Id: dmake.h,v 1.4 2006-06-29 11:23:09 ihi Exp $
+/* RCS  $Id: dmake.h,v 1.5 2006-09-25 09:39:18 vg Exp $
 --
 -- SYNOPSIS
 --      Global defines for dmake.
@@ -47,13 +47,18 @@
 #define M_MARK           0x0001         /* mark for circularity checks  */
 #define M_PRECIOUS       0x0002         /* keep macro, same as A_PRE... */
 #define M_MULTI          0x0004         /* multiple redefinitions ok!   */
-#define M_EXPANDED       0x0008         /* macro has been assigned      */
-#define M_USED           0x0010         /* macro has been expanded      */
+#define M_EXPANDED       0x0008         /* macro has been assigned after
+                                         * being completely expanded   */
+#define M_USED           0x0010         /* macro has been used in the
+                                         * makefile. (From another macro
+                                         * or target definition.)       */
 #define M_LITERAL        0x0020         /* don't strip w/s on macro def */
 #define M_NOEXPORT       0x0040         /* don't export macro for -x    */
 #define M_FORCE          0x0080         /* Force a macro redefinition   */
 #define M_PUSH           0x0100         /* Push previous macro defintn  */
-#define M_INIT           0x0200         /* Macro defined initially      */
+#define M_INIT           0x0200         /* Macro is defined initially or
+                                         * an empty macro implicitly
+                                         * defined when expanding it.   */
 #define M_VAR_BIT        0x1000         /* macro bit variable           */
 #define M_VAR_CHAR       0x2000         /* macro char variable          */
 #define M_VAR_STRING     0x4000         /* macro string variable        */
@@ -109,7 +114,7 @@
 #define F_MARK           0x0001         /* circularity check mark       */
 #define F_MULTI          0x0002         /* multiple rules for target    */
 #define F_SINGLE         0x0004         /* exec recipes for each out of
-                     * date prerequisite            */
+                     * date prerequisite (! ruleop) */
 #define F_TARGET         0x0008         /* marks a target               */
 #define F_RULES          0x0010         /* indicates target has rules   */
 #define F_GROUP          0x0020         /* indicates that rules are to  */
