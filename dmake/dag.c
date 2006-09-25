@@ -1,6 +1,6 @@
 /* $RCSfile: dag.c,v $
--- $Revision: 1.6 $
--- last change: $Author: ihi $ $Date: 2006-06-29 11:22:42 $
+-- $Revision: 1.7 $
+-- last change: $Author: vg $ $Date: 2006-09-25 09:38:52 $
 --
 -- SYNOPSIS
 --      Routines to construct the internal dag.
@@ -29,7 +29,11 @@
 #include "extern.h"
 
 static void
-set_macro_value(hp)
+set_macro_value(hp)/*
+=====================
+  Set the macro according to its type. In addition to the string value
+  in hp->ht_value a macro can stores a value casted with its type.
+*/
 HASHPTR hp;
 {
    switch( hp->ht_flag & M_VAR_MASK )   /* only one var type per var */
@@ -148,7 +152,13 @@ uint32  *phkey;
 
 
 PUBLIC HASHPTR
-Push_macro(hp)
+Push_macro(hp)/*
+================
+  This function pushes hp into the hash of all macros. If a previous
+  instance of the macro exists it is hidden by the new one. If one
+  existed before the new instance inherits some values from the preexisting
+  macro (see below for details).
+*/
 HASHPTR hp;
 {
    HASHPTR cur,prev;
@@ -157,20 +167,29 @@ HASHPTR hp;
 
    hv = Hash(hp->ht_name, &key);
 
+   /* Search for an existing instance of hp->ht_name, if found cur will point
+    * to it. */
    for(prev=NIL(HASH),cur=Macs[hv]; cur!=NIL(HASH); prev=cur,cur=cur->ht_next)
       if(    cur->ht_hash == key
       && !strcmp(cur->ht_name, hp->ht_name) )
          break;
 
    if (cur == NIL(HASH) || prev == NIL(HASH)) {
+      /* If no match or was found or the first element of Macs[hv] was
+       * the match insert hp at the beginning. */
       hp->ht_next  = Macs[hv];
       Macs[hv] = hp;
    }
    else {
+      /* otherwise insert hp in the chain. */
       hp->ht_next = prev->ht_next;
       prev->ht_next = hp;
    }
 
+   /* Inherit some parts of the former instance. Copying cur->var to hp->var
+    * copies the old value. Keeping the M_VAR_MASK (variable type) makes sure
+    * the type stays the same keeping M_PRECIOUS assures that the old values
+    * cannot be overridden if it is/was set. */
    if (cur) {
       memcpy((void *)&hp->var, (void *)&cur->var, sizeof(hp->var));
       hp->ht_flag |= ((M_VAR_MASK|M_PRECIOUS) & cur->ht_flag);
@@ -181,7 +200,12 @@ HASHPTR hp;
 
 
 PUBLIC HASHPTR
-Pop_macro(hp)
+Pop_macro(hp)/*
+================
+  This function pops (removes) hp from the hash of all macros. If a previous
+  instance of the macro existed it becomes accessible again.
+*/
+
 HASHPTR hp;
 {
    HASHPTR cur,prev;
@@ -190,23 +214,28 @@ HASHPTR hp;
 
    hv = Hash(hp->ht_name, &key);
 
+   /* Try to find hp. */
    for(prev=NIL(HASH),cur=Macs[hv]; cur != NIL(HASH);prev=cur,cur=cur->ht_next)
       if (cur == hp)
      break;
 
+   /* If cur == NIL macros was not found. */
    if (cur == NIL(HASH))
       return(NIL(HASH));
 
+   /* Remove hp from the linked list. */
    if (prev)
       prev->ht_next = cur->ht_next;
    else
       Macs[hv] = cur->ht_next;
 
+   /* Look for a previous (older) instance of hp->ht_name. */
    for(cur=cur->ht_next; cur != NIL(HASH); cur=cur->ht_next)
       if(    cur->ht_hash == key
       && !strcmp(cur->ht_name, hp->ht_name) )
          break;
 
+   /* If one was found we restore the typecast values. */
    if (cur)
       set_macro_value(cur);
 
@@ -281,6 +310,7 @@ int     flags;          /* initial ht_flags */
    if( (hp->ht_flag & M_USED) && !((flags | hp->ht_flag) & M_MULTI) )
       Warning( "Macro `%s' redefined after use", name );
 
+   /* If an empty string ("") is given set ht_value to NIL(char) */
    if( (value != NIL(char)) && (*value) ) {
       /* strip out any \<nl> combinations where \ is the current CONTINUATION
        * char */
@@ -319,6 +349,7 @@ int     flags;          /* initial ht_flags */
    /* Assign the hash table flag less the M_MULTI flag, it is used only
     * to silence the warning.  But carry it over if it was previously
     * defined in ht_flag, as this is a permanent M_MULTI variable. */
+   /* Also strip M_INIT flag if macro is assigned. */
 
    hp->ht_flag = (((flags & ~(M_MULTI|M_FORCE)) |
           (hp->ht_flag & (M_VAR_MASK | M_MULTI)))) & ~M_INIT;
