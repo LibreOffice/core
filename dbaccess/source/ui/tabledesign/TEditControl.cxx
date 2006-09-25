@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:29:15 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:43:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -517,6 +517,7 @@ void OTableEditorCtrl::InitController(CellControllerRef&, long nRow, sal_uInt16 
             if( pActFieldDescr )
                 aInitString = pActFieldDescr->GetDescription();
             pDescrCell->SetText( aInitString );
+            pDescrCell->SaveValue();
             break;
 
     }
@@ -675,7 +676,10 @@ sal_Bool OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
             //////////////////////////////////////////////////////////////
             // Wenn aktuelle Feldbeschreibung NULL, Default setzen
             if( !pActFieldDescr )
+            {
                 pDescrCell->SetText(String());
+                pDescrCell->ClearModifyFlag();
+            }
             else
                 pActFieldDescr->SetDescription( pDescrCell->GetText() );
             break;
