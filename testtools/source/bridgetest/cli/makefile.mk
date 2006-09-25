@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:25:17 $
+#   last change: $Author: vg $ $Date: 2006-09-25 12:48:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ LIBTARGET=NO
 .INCLUDE :  settings.mk
 DLLPRE =
 
-.IF "$(COM)$(COMEX)" == "MSC8" || "$(COM)$(COMEX)"=="MSC10"
+.IF "$(COM)$(COMEX)" == "MSC11" || "$(COM)$(COMEX)"=="MSC10"
 
 # ------------------------------------------------------------------
 .IF "$(GUI)"=="WNT"
@@ -59,37 +59,42 @@ WINTARGETS=  \
     $(DESTDIR)$/regcomp.exe \
     $(DESTDIR)$/uno.exe \
     $(DESTDIR)$/regcomp.exe.config \
-    $(DESTDIR)$/uno.exe.config 
+    $(DESTDIR)$/uno.exe.config
 
 .ELSE
 MY_DLLPOSTFIX=.so
 DESTDIR=$(OUT)$/lib
 BATCH_INPROCESS=bridgetest_inprocess
-GIVE_EXEC_RIGHTS=chmod +x 
+GIVE_EXEC_RIGHTS=chmod +x
 .ENDIF		$(DESTDIR)$/bridgetest_server$(BATCH_SUFFIX) \
         $(DESTDIR)$/bridgetest_client$(BATCH_SUFFIX) \
         $(JAVATARGETS)
 
 
-UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb 
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 UNOUCROUT=$(OUT)$/inc
 INCPRE+=$(OUT)$/inc
 
 #-----------------------
-
-CFLAGS += -clr -AI $(OUT)$/bin -AI $(SOLARBINDIR)
-
+.IF "$(CCNUMVER)" >= "001399999999"
+CFLAGSCXX += -clr:oldSyntax -AI $(OUT)$/bin -AI $(SOLARBINDIR)
+SHL1STDLIBS = \
+    mscoree.lib \
+    msvcmrt.lib
+.ELSE
+CFLAGSCXX += -clr -AI $(OUT)$/bin -AI $(SOLARBINDIR)
+SHL1STDLIBS = \
+    mscoree.lib
+.ENDIF
 SLOFILES= \
-    $(SLO)$/cli_cpp_bridgetest.obj		
+    $(SLO)$/cli_cpp_bridgetest.obj
 
 SHL1OBJS = $(SLOFILES)
 
 SHL1TARGET = $(TARGET)
 
-SHL1STDLIBS = \
-    mscoree.lib
 
 SHL1DEF = $(MISC)$/$(SHL1TARGET).def
 DEF1NAME = $(SHL1TARGET)
@@ -110,7 +115,11 @@ CLI_CPPUHELPER = $(SOLARBINDIR)$/cli_cppuhelper.dll
 CLI_TYPES_BRIDGETEST = $(BIN)$/cli_types_bridgetest.dll
 
 CSCFLAGS = -warnaserror+ -incremental-
+.IF "$(CCNUMVER)" <= "001399999999"
 VBC_FLAGS = -warnaserror+
+.ELSE
+VBC_FLAGS = -nowarn:42030 -warnaserror+
+.ENDIF
 .IF "$(debug)" != ""
 CSCFLAGS += -debug+ -checked+ -define:DEBUG -define:TRACE
 VBC_FLAGS += -debug+ -define:DEBUG=TRUE -define:TRACE=TRUE
