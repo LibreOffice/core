@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cr_metho.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:05:21 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:26:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ Create_AccessMethod( const char *           i_pOutputFileName,
     const char * pText = i_sText;
     const char * pTrans = 0;
     const char   sDescrLineChange[] = "\"\r\n    \"";
-    int    sDescrLen = strlen(sDescrLineChange);
+    int    sDescrLen = (int) strlen(sDescrLineChange);
 
     std::ofstream aFile(i_pOutputFileName, std::ios::out
 #ifdef WNT
@@ -83,10 +83,10 @@ Create_AccessMethod( const char *           i_pOutputFileName,
         return;
     }
 
-    aFile.write( C_sFileHeader1, strlen(C_sFileHeader1) );
-    aFile.write( i_pOutputFileName, strlen(i_pOutputFileName) );
-    aFile.write( C_sFileHeader2, strlen(C_sFileHeader2) );
-    aFile.write( C_sFuncBegin, strlen(C_sFuncBegin) );
+    aFile.write( C_sFileHeader1, (int) strlen(C_sFileHeader1) );
+    aFile.write( i_pOutputFileName, (int) strlen(i_pOutputFileName) );
+    aFile.write( C_sFileHeader2, (int) strlen(C_sFileHeader2) );
+    aFile.write( C_sFuncBegin, (int) strlen(C_sFuncBegin) );
 
     for ( pTrans = pText; *pTrans != '\0'; pTrans++ )
     {
@@ -105,11 +105,10 @@ Create_AccessMethod( const char *           i_pOutputFileName,
         }
     }   /* end for */
 
-    aFile.write( C_sFuncEnd, strlen(C_sFuncEnd) );
+    aFile.write( C_sFuncEnd, (int) strlen(C_sFuncEnd) );
 
 
     aFile.close();
 }
-
 
 
