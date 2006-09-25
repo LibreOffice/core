@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 04:54:45 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:19:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,8 @@ ENABLE_EXCEPTIONS	=	TRUE
 .INCLUDE : settings.mk
 
 # --- Allgemein -----------------------------------------------------------
+
+INCPRE+=$(MFC_INCLUDE)
 
 RCFILES=	$(RES)$/$(TARGET).rc
 
