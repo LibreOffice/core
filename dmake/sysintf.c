@@ -1,4 +1,4 @@
-/* RCS  $Id: sysintf.c,v 1.7 2006-04-20 12:02:41 hr Exp $
+/* RCS  $Id: sysintf.c,v 1.8 2006-09-25 09:41:02 vg Exp $
 --
 -- SYNOPSIS
 --      System independent interface
@@ -235,36 +235,39 @@ CELLPTR target;
 
 
 
-/*
-** Execute the string passed in as a command and return
-** the return code. The command line arguments are
-** assumed to be separated by spaces or tabs.  The first
-** such argument is assumed to be the command.
-**
-** If group is true then this is a group of commands to be fed to the
-** the shell as a single unit.  In this case cmd is of the form
-** "file" indicating the file that should be read by the shell
-** in order to execute the command group.
-*/
 PUBLIC int
-Do_cmnd(cmd, group, do_it, target, ignore, shell, last)
+Do_cmnd(cmd, group, do_it, target, ignore, shell, last)/*
+=========================================================
+  Execute the string passed in as a command and return
+  the return code. The command line arguments are
+  assumed to be separated by spaces or tabs.  The first
+  such argument is assumed to be the command.
+
+  If group is true then this is a group of commands to be fed to the
+  the shell as a single unit.  In this case cmd is of the form
+  "file" indicating the file that should be read by the shell
+  in order to execute the command group. */
 char   *cmd;
-int     group;
-int do_it;
+int     group;  /* if set cmd contains the filename of a (group-)shell script. */
+int     do_it;  /* Only execute cmd if not set to null. */
 CELLPTR target;
-int     ignore;
-int     shell;
-int last;
+int     ignore; /* Ignore errors ('-'). */
+int     shell;  /* Use shell when executing cmd. */
+int     last;   /* Last recipe line in target. */
 {
    int  i;
 
    if( !do_it ) {
       if( last && !Doing_bang ) {
+     /* Don't execute, just update the target when using '-t'
+      * switch. */
          Update_time_stamp( target );
       }
       return(0);
    }
 
+   /* Stop making the rest of the recipies for this target if an error occured
+    * but the Continue (-k) flag is set to build as much as possible. */
    if ( target->ce_attr & A_ERROR ) {
       if ( last ) {
      Update_time_stamp( target );
@@ -274,8 +277,12 @@ int last;
 
    if( Max_proc == 1 ) Wait_for_completion = TRUE;
 
+   /* set shell if shell metas are found */
+   if( shell || group || (*DmStrPbrk(cmd, Shell_metas)!='\0') )
+      shell = TRUE; /* If group is TRUE this doesn't hurt. */
+
    if( (i = runargv(target, ignore, group, last, shell, cmd)) == -1 )
-      /* Only fails for failed spawn. (Spawn is disabled ATM.) */
+      /* runargv() failed. */
       Quit(0);
 
    /* NOTE:  runargv must return either 0 or 1, 0 ==> command executed, and
@@ -287,9 +294,13 @@ int last;
 
 
 #define MINARGV 64
-/* Take a command and pack it into an argument vector to be executed. */
+
 PUBLIC char **
-Pack_argv( group, shell, cmd )
+Pack_argv( group, shell, cmd )/*
+================================
+  Take a command and pack it into an argument vector to be executed.
+  If group is true cmd holds the group script file.
+*/
 int    group;
 int    shell;
 char  *cmd;
@@ -305,9 +316,7 @@ char  *cmd;
    av[0] = NIL(char);
 
    if (*cmd) {
-      Packed_shell = shell||group||(*DmStrPbrk(cmd, Shell_metas)!='\0');
-
-      if( Packed_shell ){
+      if( shell||group ){
      char* sh = group ? GShell : Shell;
 
      if( sh != NIL(char) ) {
@@ -322,12 +331,15 @@ char  *cmd;
       }
       else {
      do {
+        /* Fill *cmd into av[]. Whitespace is converted into '\0' to
+         * terminate each av[] member. */
         while( iswhite(*cmd) ) ++cmd;
         if( *cmd ) av[i++] = cmd;
 
         while( *cmd != '\0' && !iswhite(*cmd) ) ++cmd;
         if( *cmd ) *cmd++ = '\0';
 
+        /* dynamically increase av size. */
         if( i == avs ) {
            avs += MINARGV;
            av = (char **) realloc( av, avs*sizeof(char *) );
@@ -526,26 +538,26 @@ Get_switch_char()
    return( getswitchar() );
 }
 
-/*
-** Create a temporary file and open with exclusive access
-** Path is updated with the filename and the file descriptor
-** is returned.  Note that the new name should be freed when
-** the file is removed.
-**/
-int Create_temp(tmpdir, path, suff)
+
+int Create_temp(tmpdir, path)/*
+===============================
+  Create a temporary file and open with exclusive access
+  Path is updated with the filename and the file descriptor
+  is returned.  Note that the new name should be freed when
+  the file is removed.
+*/
 char *tmpdir;
 char **path;
-char *suff;
 {
-   int fd;
+   int fd; /* file descriptor */
 
 #if defined(HAVE_MKSTEMP)
    mode_t       mask;
 
    *path = DmStrJoin( tmpdir, "/", -1, FALSE);
    *path = DmStrJoin( *path, "mkXXXXXX", -1, TRUE );
-   *path = DmStrJoin( *path, suff, -1, TRUE );
-   mask = umask(0044);
+
+   mask = umask(0066);
    fd = mkstemp( *path );
    umask(mask);
 
@@ -562,7 +574,7 @@ char *suff;
 #else
    sprintf(pidbuff,"mk");
 #endif
-   *path = DmStrJoin( tempnam(tmpdir, pidbuff), suff, -1, TRUE );
+   *path = tempnam(tmpdir, pidbuff);
    fd = open(*path, O_CREAT | O_EXCL | O_TRUNC | O_RDWR, 0600);
 #else
 
@@ -573,18 +585,18 @@ char *suff;
    return fd;
 }
 
-/*
-** Generate a temporary file name and open the file for writing.
-** If a name cannot be generated or the file cannot be opened
-** return -1, else return the fileno of the open file.
-** and update the source file pointer to point at the new file name.
-** Note that the new name should be freed when the file is removed.
-** The file stream is opened with the given mode
-*/
+
 PUBLIC FILE*
-Get_temp(path, suff, mode)
+Get_temp(path, mode)/*
+======================
+  Generate a temporary file name and open the file for writing.
+  If a name cannot be generated or the file cannot be opened
+  return -1, else return the fileno of the open file.
+  and update the source file pointer to point at the new file name.
+  Note that the new name should be freed when the file is removed.
+  The file stream is opened with the given mode.
+*/
 char **path;
-char *suff;
 char *mode;
 {
    int          fd;
@@ -598,15 +610,16 @@ char *mode;
 
    while( --tries )
    {
-      if( (fd = Create_temp(tmpdir, path, suff)) != -1)
+      if( (fd = Create_temp(tmpdir, path)) != -1)
          break;
 
-      free(*path);
+      free(*path); /* free var if creating temp failed. */
    }
 
    if( fd != -1)
    {
       Def_macro( "TMPFILE", *path, M_MULTI|M_EXPANDED );
+      /* associate stream with file descriptor */
       fp = fdopen(fd, mode);
    }
    else
@@ -616,40 +629,64 @@ char *mode;
 }
 
 
-/*
-** Open a new temporary file and set it up for writing.
-*/
 PUBLIC FILE *
-Start_temp( suffix, cp, fname )
+Start_temp( suffix, cp, fname )/*
+=================================
+  Open a new temporary file and set it up for writing. The file is linked
+  to cp and will be removed if once the target is finished.
+  If a suffix for the temporary files is requested two temporary files are
+  created. This is done because the routines that create a save temporary
+  file do not provide a definable suffix. The first (provided by Get_temp())
+  is save and unique and the second file is generated by adding the desired
+  suffix the the first temporary file. The extra file is also linked to cp
+  so that it gets removed later.
+  The function returns the FILE pointer to the temporary file (with suffix
+  if specified) and leaves the file name in *fname.
+*/
 char     *suffix;
 CELLPTR   cp;
 char    **fname;
 {
    FILE        *fp, *fp2;
-   char        *tmpname, *tmpname2;
+   char        *tmpname;
    char        *name;
+   char        *fname_suff;
 
    name = (cp != NIL(CELL))?cp->CE_NAME:"makefile text";
 
-   if( (fp = Get_temp(&tmpname, suffix, "w")) == NIL(FILE) )
+   if( (fp = Get_temp(&tmpname, "w")) == NIL(FILE) )
       Open_temp_error( tmpname, name );
 
+   /* Don't free tmpname, it's stored in a FILELIST member in Link_temp(). */
    Link_temp( cp, fp, tmpname );
    *fname = tmpname;
 
-/*
- * link tempfiles generated by tempnam() to make sure that
- * they will be removed
-*/
-   if ( *suffix != '\0' )
-   {
-      tmpname2 = MALLOC( strlen( tmpname ) - strlen( suffix ) +1, char );
-      *tmpname2 = '\0';
-      strncat( tmpname2, tmpname, strlen( tmpname ) - strlen( suffix ));
+   /* As Get_temp() doesn't provide a definable suffix (anymore) we create an
+    * additional temporary file with that suffix. */
+   if ( suffix && *suffix ) {
 
-      if( (fp2 = fopen(tmpname2, "w" )) == NIL(FILE) )
-         Open_temp_error( tmpname2, name );
-      Link_temp( cp, fp2, tmpname2 );
+#ifdef NO_DRIVE_LETTERS
+      /* umask without ugo rights doesn't make sense. */
+      mode_t mask;
+
+      mask = umask(0066);
+#endif
+
+      fname_suff = DmStrJoin( tmpname, suffix, -1, FALSE );
+
+      /* Overwrite macro, Get_temp didn't know of the suffix. */
+      Def_macro( "TMPFILE", fname_suff, M_MULTI|M_EXPANDED );
+
+      if( (fp2 = fopen(fname_suff, "w" )) == NIL(FILE) )
+         Open_temp_error( fname_suff, name );
+#ifdef NO_DRIVE_LETTERS
+      umask(mask);
+#endif
+
+      /* Don't free fname_suff. */
+      Link_temp( cp, fp2, fname_suff );
+      fp = fp2;
+      *fname = fname_suff;
    }
 
    return( fp );
@@ -743,15 +780,19 @@ CELLPTR cp;
 
 
 PUBLIC void
-Handle_result(status, ignore, abort_flg, target)
+Handle_result(status, ignore, abort_flg, target)/*
+==================================================
+  Handle return value of recipe.
+*/
 int status;
 int ignore;
 int abort_flg;
 CELLPTR target;
 {
-   status = ((status&0xff)==0 ? status>>8
-        : (status & 0xff)==SIGTERM ? -1
-        : (status & 0x7f)+128);
+   status = ((status&0xff)==0 ? status>>8   /* return from exit()      */
+         : (status & 0xff)==SIGTERM ? -1 /* terminated from SIGTERM */
+         : (status & 0x7f)+128);         /* terminated from signal
+                          *         ( =status-128 ) */
 
    if( status ) {
       if( !abort_flg ) {
@@ -765,17 +806,18 @@ CELLPTR target;
            strcat(buf, " (Ignored" );
 
            if ( Continue ) {
+          /* Continue after error if '-k' was used. */
           strcat(buf,",Continuing");
           target->ce_attr |= A_ERROR;
            }
            strcat(buf,")");
            if (Verbose)
-               fprintf(stderr, "%s\n", buf);
+          fprintf(stderr, "%s\n", buf);
         }
 
         if( target->ce_attr & A_ERRREMOVE
-         && Remove_file( target->ce_fname ) == 0
-         && !(Glob_attr & A_SILENT))
+        && Remove_file( target->ce_fname ) == 0
+        && !(Glob_attr & A_SILENT))
            fprintf(stderr,"%s:  '%s' removed.\n", Pname, target->ce_fname);
      }
      else {
