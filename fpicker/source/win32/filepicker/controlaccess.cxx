@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlaccess.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:54:43 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 12:52:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,7 +198,7 @@ namespace // private
         stc2,       //  LISTBOX_FILTER_LABEL
         stc3        //  LISTBOX_FILE_NAME_LABEL
     };
-    const SIZE_WINDOWS_FILEOPEN_CTRL_IDS =
+    const int SIZE_WINDOWS_FILEOPEN_CTRL_IDS =
         sizeof(WindowsFileOpenCtrlIds)/sizeof(WindowsFileOpenCtrlIds[0]);
 
 }; // end namespace
