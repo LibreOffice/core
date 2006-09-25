@@ -1,6 +1,6 @@
 /* $RCSfile: expand.c,v $
--- $Revision: 1.5 $
--- last change: $Author: hr $ $Date: 2006-04-20 11:59:48 $
+-- $Revision: 1.6 $
+-- last change: $Author: vg $ $Date: 2006-09-25 09:39:30 $
 --
 -- SYNOPSIS
 --      Macro expansion code.
@@ -183,11 +183,13 @@ int   anchor;           /* if TRUE anchor    */
 
    DB_ENTER( "Apply_edit" );
 
-   if( !*pat ) DB_RETURN( src );        /* do nothing if pat is NULL */
+   /* do nothing if pat is NULL or pat and subst are equal */
+   if( !*pat || !strcmp(pat,subst) ) DB_RETURN( src );
 
    DB_PRINT( "mod", ("Source str:  [%s]", src) );
    DB_PRINT( "mod", ("Replacing [%s], with [%s]", pat, subst) );
 
+   /* FIXME: This routine is used frequently and has room for optimizations */
    s   = src;
    l   = strlen( pat );
    if( (p = DmStrStr( s, pat )) != NIL(char) ) {
@@ -672,8 +674,11 @@ int  doexpand;          /* If TRUE enables macro expansion  */
             if( lev == 1 && !fflag && doexpand ) {
                done = TRUE;
                mflag = 1;
-            } else                              /* must be $: */
-          done = !lev;
+            }
+            else if( !lev )                     /* must be $: */
+               Fatal( "Syntax error in macro [$%s]. A colon [:] cannot be a macro name.\n", start );
+
+            /* continue if a colon is found but lev > 1 */
             break;
 
      case '\n':                             /* Not possible because of the
@@ -698,20 +703,23 @@ int  doexpand;          /* If TRUE enables macro expansion  */
      case '\0':             /* check for null */
         *ps = s;
         done = TRUE;
-        if( lev ) {
-           bflag = 0;
-           s     = start;
+        if( lev ) {             /* catch $( or ${ without closing bracket */
+           Fatal( "Syntax error in macro [$%s]. The closing bracket [%c] is missing.\n", start, edelim );
         } else
           Fatal( "DEBUG: This cannot occur! [%s].\n", start );
         break;
 
          case ')':              /* close macro brace */
          case '}':
-        if( *s == edelim && lev ) --lev;
+        if( !lev )      /* A closing bracket without an .. */
+           Fatal("Syntax error in macro [$%s]. Closing bracket [%c] cannot be a macro name.\n", start, *s );
+        else if( *s == edelim ) --lev;
         /*FALLTHRU*/
 
-         default:               /* Done when lev == 0 */
-        done = !lev;
+         default:       /* Done when lev == 0. This means either no */
+        done = !lev;    /* opening bracket (single letter macro) or */
+                /* a fully enclosed $(..) or ${..} macro    */
+                /* was found. */
       }
       s++;
    }
@@ -763,14 +771,21 @@ int  doexpand;          /* If TRUE enables macro expansion  */
      else
         result = DmStrDup( "" );
 
-     /*
-      * Mark macros as used only if we are not expanding them for
-      * the purpose of a .IF test, so we can warn about redef after use*/
-
-     if( !If_expand ) hp->ht_flag |= M_USED;
       }
-      else
+      else {
+     /* The use of an undefined macro implicitly defines it but
+      * leaves its value to NIL(char). */
+     hp = Def_macro( macro_name, NIL(char), M_EXPANDED );
+     /* Setting M_INIT assures that this macro is treated unset like
+      * default internal macros. (Necessary for *= and *:=) */
+     hp->ht_flag |= M_INIT;
+
      result = DmStrDup( "" );
+      }
+      /* Mark macros as used only if we are not expanding them for
+       * the purpose of a .IF test, so we can warn about redef after use*/
+      if( !If_expand ) hp->ht_flag |= M_USED;
+
    }
 
    if( mflag ) {
