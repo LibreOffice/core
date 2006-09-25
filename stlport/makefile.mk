@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 04:08:44 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:12:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -121,11 +121,11 @@ BUILD_DIR=src
 
 .IF "$(COM)"=="MSC"
 BUILD_ACTION=nmake
-.IF "$(CCNUMVER)"<="001300000000"
-BUILD_FLAGS=-f vc6.mak
-.ELSE			# "$(CCNUMVER)"<="001300000000"
-BUILD_FLAGS=-f vc7.mak
-.ENDIF			# "$(CCNUMVER)"<="001300000000"
+.IF "$(CCNUMVER)"<="001400000000"
+BUILD_FLAGS=-f vc7.mak EXFLAGS="/EHsc"
+.ELSE			# "$(CCNUMVER)"<="001400000000"
+BUILD_FLAGS=-f vc7.mak EXFLAGS="/EHa /Zc:wchar_t-" CCNUMVER=$(CCNUMVER)
+.ENDIF			# "$(CCNUMVER)"<="001400000000"
 .ENDIF
 
 .IF "$(COM)"=="GCC"
