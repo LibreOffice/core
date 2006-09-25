@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltshell.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:18:53 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:30:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -642,9 +642,9 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
         {
             if (pEntry->MakeRegion(pDoc, aRegion, TRUE))
             {
-                pDoc->SetRedlineMode(   IDocumentRedlineAccess::REDLINE_ON
-                                      | IDocumentRedlineAccess::REDLINE_SHOW_INSERT
-                                      | IDocumentRedlineAccess::REDLINE_SHOW_DELETE );
+              pDoc->SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)(   IDocumentRedlineAccess::REDLINE_ON
+                                              | IDocumentRedlineAccess::REDLINE_SHOW_INSERT
+                                              | IDocumentRedlineAccess::REDLINE_SHOW_DELETE ));
                 SwFltRedline& rFltRedline = *((SwFltRedline*)pEntry->pAttr);
 
                 if( USHRT_MAX != rFltRedline.nAutorNoPrev )
@@ -664,9 +664,9 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                                     0
                                     );
                 pDoc->AppendRedline( new SwRedline(aData, aRegion), true );
-                pDoc->SetRedlineMode(   IDocumentRedlineAccess::REDLINE_NONE
-                                      | IDocumentRedlineAccess::REDLINE_SHOW_INSERT
-                                      | IDocumentRedlineAccess::REDLINE_SHOW_DELETE );
+                pDoc->SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)(   IDocumentRedlineAccess::REDLINE_NONE
+                                                | IDocumentRedlineAccess::REDLINE_SHOW_INSERT
+                                                | IDocumentRedlineAccess::REDLINE_SHOW_DELETE ));
             }
         }
         break;
