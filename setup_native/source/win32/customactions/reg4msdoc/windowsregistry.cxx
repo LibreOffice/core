@@ -6,6 +6,8 @@
 #include "registrywnt.hxx"
 #include "registryw9x.hxx"
 
+#pragma warning(disable : 4350)
+
 //------------------------------
 //
 //------------------------------
