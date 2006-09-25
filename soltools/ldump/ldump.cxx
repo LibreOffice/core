@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ldump.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:34:37 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:23:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ LibDump::LibDump( char *cFileName )
     fprintf( stderr, "LIB-NT File Dumper v4.00 (C) 2000 Sun Microsystems, Inc.\n\n" );
     fprintf( stderr, "%s ", cFileName );
 
-    int nSlots =  0xfffff;
+    unsigned long nSlots =  0xfffff;
     pBaseTab = new ExportSet( nSlots );
     pIndexTab = new ExportSet( nSlots );
     pFilterLines = new char * [MAXFILT];
@@ -120,8 +120,8 @@ bool LibDump::Dump()
         unsigned char TmpBuffer[4];
         fread( TmpBuffer, 1, 4, pList);
         // anzahl bigendian mal laenge + ueberspringen der naechsten laengenangabe
-        unsigned long nOffSet = ( TmpBuffer[2] * 256 + TmpBuffer[3] ) * 4 + 4;
-        fseek( pList, nOffSet, 0);
+        unsigned long nOffSet = (unsigned long) ( TmpBuffer[2] * 256 + TmpBuffer[3] ) * 4 + 4;
+        fseek( pList, (long) nOffSet, 0);
     }
 
     char aTmpBuf[4096];
@@ -181,7 +181,7 @@ bool LibDump::Dump()
 
         if ((aBuf[0] =='?') || !strncmp(aBuf, "__CT",4))
         {
-            nLen = strlen(aBuf);
+            nLen = (int) strlen(aBuf);
             memset( aName, 0, sizeof( aName ) );
             int nName = 0;
             for( i = 0; i < nLen; i++ )
@@ -197,9 +197,9 @@ bool LibDump::Dump()
         }
         else if ( bAll == true )
         {
-            int nPreLen = strlen( cAPrefix );
+            int nPreLen = (int) strlen( cAPrefix );
 
-            nLen = strlen(aBuf);
+            nLen = (int) strlen(aBuf);
             memset( aName, 0, sizeof( aName ) );
             int nName = 0;
 
@@ -213,10 +213,10 @@ bool LibDump::Dump()
             }
             //fprintf( stderr, "Gefundenen Prefix : %s %d \n", aTmpBuf, nPreLen );
             // den ersten _ raus
-            nLen = strlen(aName);
+            nLen = (int) strlen(aName);
             if (aName[0] == '_')
                 strcpy( aBuf , &aName[1] );
-            strncpy ( aTmpBuf, aBuf, nPreLen );
+            strncpy ( aTmpBuf, aBuf, (size_t) nPreLen );
             aTmpBuf[nPreLen] = '\0';
             if ( !strcmp( aTmpBuf, cAPrefix ))
             {
@@ -229,7 +229,7 @@ bool LibDump::Dump()
                         char aOldBuf[MAX_MAN];
                         strcpy( aOldBuf, aBuf );
                         char pChar[MAX_MAN];
-                        strncpy( pChar, aBuf, nPos -1 );
+                        strncpy( pChar, aBuf, (size_t) (nPos -1) );
                         pChar[nPos-1] = '\0';
                         strcpy( aBuf, pChar );
                         strcat( aBuf, "=" );
@@ -321,11 +321,11 @@ bool LibDump::ReadFilter( char * cFilterName )
 
     while( fgets( aBuf, MAX_MAN, pfFilter ) != 0 )
     {
-        nLen = strlen(aBuf);
-        pStr = new char[nLen];
+        nLen = (int) strlen(aBuf);
+        pStr = new char[(unsigned int) nLen];
         if ( !pStr )
             DumpError( 98 );
-        memcpy( pStr, aBuf, nLen );
+        memcpy( pStr, aBuf, (unsigned int) nLen );
         if ( *(pStr+nLen-1) == '\n' )
             *(pStr+nLen-1) = '\0';
         pFilterLines[nFilterLines] = pStr;
@@ -463,11 +463,11 @@ bool LibDump::ReadDataBase()
     bool bRet = true;
     while( fgets( aBuf, MAX_MAN, pfBase ) != 0 )
     {
-        nLen = strlen(aBuf);
-        pStr = new char[nLen];
+        nLen = (int) strlen(aBuf);
+        pStr = new char[(unsigned int) nLen];
         if ( !pStr )
             DumpError( 98 );
-        memcpy( pStr, aBuf, nLen );
+        memcpy( pStr, aBuf, (size_t) nLen );
         if ( *(pStr+nLen-1) == '\n' )
             *(pStr+nLen-1) = '\0';
         pData = new LibExport;
@@ -477,7 +477,7 @@ bool LibDump::ReadDataBase()
 
         if (pBaseTab->Insert(pData->cExportName, pData ) == NULL)
             bRet = false;
-        ltoa( pData->nOrdinal, cBuffer, 10 );
+        ltoa( (long) pData->nOrdinal, cBuffer, 10 );
         if (pIndexTab->Insert( cBuffer, pData ) == NULL)
             bRet = false;
         nBaseLines++;
@@ -783,4 +783,3 @@ main( int argc, char **argv )
     delete pDump;
     return 0;
 }
-
