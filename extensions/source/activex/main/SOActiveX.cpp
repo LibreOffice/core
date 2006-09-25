@@ -326,7 +326,7 @@ STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog )
         return hr;
 
     mbReadyForActivation = FALSE;
-    hr = CBindStatusCallback<CSOActiveX>::Download( this, CallbackCreateXInputStream, mCurFileUrl, m_spClientSite, FALSE );
+    hr = CBindStatusCallback<CSOActiveX>::Download( this, &CSOActiveX::CallbackCreateXInputStream, mCurFileUrl, m_spClientSite, FALSE );
     if ( hr == MK_S_ASYNCHRONOUS )
         hr = S_OK;
 
