@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: obo $ $Date: 2006-09-16 13:36:58 $
-#*    $Revision: 1.17 $
+#*    last change   $Author: vg $ $Date: 2006-09-25 12:47:30 $
+#*    $Revision: 1.18 $
 #*
 #*    $Logfile: $
 #*
@@ -14,6 +14,7 @@
 
 #include <stdio.h>
 #include <osl/diagnose.h>
+#include "osl/diagnose.hxx"
 #include <osl/time.h>
 #include <sal/types.h>
 #include "typelib/typedescription.hxx"
@@ -92,7 +93,8 @@ bool checkEmpty(rtl::OUString const & string, char const * message) {
 }
 
 //==================================================================================================
-class TestBridgeImpl : public WeakImplHelper2< XMain, XServiceInfo >
+class TestBridgeImpl : protected osl::DebugBase<TestBridgeImpl>,
+                       public WeakImplHelper2< XMain, XServiceInfo >
 {
     Reference< XComponentContext > m_xContext;
 
@@ -100,6 +102,9 @@ public:
     TestBridgeImpl( const Reference< XComponentContext > & xContext )
         : m_xContext( xContext )
         {}
+    virtual ~TestBridgeImpl()
+    {
+    }
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
@@ -355,28 +360,22 @@ static sal_Bool performQueryForUnknownType( const Reference< XBridgeTest > & xLB
     return bRet;
 }
 
-class MyClass : public OWeakObject
+class MyClass : public osl::DebugBase<MyClass>, public OWeakObject
 {
 public:
-    static sal_Int32 s_instances;
-
     MyClass();
     virtual ~MyClass();
     virtual void SAL_CALL acquire() throw ();
     virtual void SAL_CALL release() throw ();
 };
 
-sal_Int32 MyClass::s_instances = 0;
-
 //______________________________________________________________________________
 MyClass::MyClass()
 {
-    ++s_instances;
 }
 //______________________________________________________________________________
 MyClass::~MyClass()
 {
-    --s_instances;
 }
 //______________________________________________________________________________
 void MyClass::acquire() throw ()
@@ -894,11 +893,12 @@ static sal_Bool raiseOnewayException( const Reference < XBridgeTest > & xLBT )
 {
     sal_Bool bReturn = sal_True;
     OUString sCompare = OUSTR(STRING_TEST_CONSTANT);
+    Reference<XInterface> const x(xLBT->getInterface());
     try
     {
         // Note : the exception may fly or not (e.g. remote scenario).
         //        When it flies, it must contain the correct elements.
-        xLBT->raiseRuntimeExceptionOneway(  sCompare, xLBT->getInterface() );
+        xLBT->raiseRuntimeExceptionOneway( sCompare, x );
     }
     catch( RuntimeException & e )
     {
@@ -907,7 +907,8 @@ static sal_Bool raiseOnewayException( const Reference < XBridgeTest > & xLBT )
             // java stack traces trash Message
             e.Message == sCompare &&
 #endif
-            xLBT->getInterface() == e.Context );
+            xLBT->getInterface() == e.Context &&
+            x == e.Context );
     }
     return bReturn;
 }
@@ -1159,11 +1160,7 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
         throw;
     }
 
-    if (MyClass::s_instances != 0)
-    {
-        OSL_ENSURE( 0, "leaking object instance!" );
-        printf( "\n\n ### leaking object instance!\n" );
-    }
+    bRet = MyClass::checkObjectCount() && bRet;
 
     if( bRet )
     {
