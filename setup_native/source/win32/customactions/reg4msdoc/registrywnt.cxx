@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registrywnt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:40:01 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:06:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@
 
 #include <assert.h>
 
-#pragma warning(disable : 4786)
+#pragma warning(disable : 4786 4350)
 
 //---------------------------------------
 //
