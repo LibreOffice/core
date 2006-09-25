@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:05:07 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:30:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -459,7 +459,7 @@ ULONG SwReader::Read( const Reader& rOptions )
         pDoc->UpdateLinks();
         // <--
 
-        eOld = (pDoc->GetRedlineMode() & ~IDocumentRedlineAccess::REDLINE_IGNORE);
+    eOld = (IDocumentRedlineAccess::RedlineMode_t)(pDoc->GetRedlineMode() & ~IDocumentRedlineAccess::REDLINE_IGNORE);
 
         pDoc->SetFieldsDirty(false, NULL, 0);
     }
