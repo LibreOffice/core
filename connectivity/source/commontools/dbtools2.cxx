@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:03:13 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:42:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,8 +173,7 @@ namespace dbtools
         sTypeName = sTypeName.replaceAt(nIndex,sTypeName.getLength() - nIndex,::rtl::OUString());
     }
 
-
-    if ( nPrecision > 0 && bUseLiteral )
+    if ( (nPrecision > 0 || nScale > 0) && bUseLiteral )
     {
         sal_Int32 nParenPos = sTypeName.indexOf('(');
         if ( nParenPos == -1 )
@@ -186,12 +185,16 @@ namespace dbtools
         {
             aSql += sTypeName.copy(0,++nParenPos);
         }
-        aSql += ::rtl::OUString::valueOf(nPrecision);
-        if ( nScale > 0 )
+
+        if ( nPrecision > 0 && nDataType != DataType::TIMESTAMP )
         {
-            aSql += ::rtl::OUString::createFromAscii(",");
-            aSql += ::rtl::OUString::valueOf(nScale);
+            aSql += ::rtl::OUString::valueOf(nPrecision);
+            if ( nScale > 0 )
+                aSql += ::rtl::OUString::createFromAscii(",");
         }
+        if ( nScale > 0 || nDataType == DataType::TIMESTAMP )
+            aSql += ::rtl::OUString::valueOf(nScale);
+
         if ( nParenPos == -1 )
             aSql += ::rtl::OUString::createFromAscii(")");
         else
