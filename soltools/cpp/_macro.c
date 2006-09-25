@@ -1,11 +1,11 @@
+#ifdef _MSC_VER
+#   define _POSIX_
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #ifdef __hpux
 #   define _HPUX_SOURCE
-#endif
-#ifdef _MSC_VER
-#   define _POSIX_
 #endif
 #ifdef __IBMC__
 #   define PATH_MAX _MAX_PATH
