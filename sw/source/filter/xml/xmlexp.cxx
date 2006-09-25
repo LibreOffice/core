@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:28:10 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:32:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -470,7 +470,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         // now save and switch redline mode
         nRedlineMode = pDoc->GetRedlineMode();
         pDoc->SetRedlineMode(
-            ( nRedlineMode & IDocumentRedlineAccess::REDLINE_SHOW_MASK ) | IDocumentRedlineAccess::REDLINE_INSERT );
+                 (IDocumentRedlineAccess::RedlineMode_t)(( nRedlineMode & IDocumentRedlineAccess::REDLINE_SHOW_MASK ) | IDocumentRedlineAccess::REDLINE_INSERT ));
     }
 
      sal_uInt32 nRet = SvXMLExport::exportDoc( eClass );
@@ -478,7 +478,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     // now we can restore the redline mode (if we changed it previously)
     if( bSaveRedline )
     {
-        pDoc->SetRedlineMode( nRedlineMode );
+      pDoc->SetRedlineMode( (IDocumentRedlineAccess::RedlineMode_t)(nRedlineMode ));
     }
 
 
