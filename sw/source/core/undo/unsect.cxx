@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unsect.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:53:26 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:29:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,7 @@ void SwUndoInsSection::Redo( SwUndoIter& rUndoIter )
     if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
     {
         IDocumentRedlineAccess::RedlineMode_t eOld = rDoc.GetRedlineMode();
-        rDoc.SetRedlineMode_intern( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE );
+        rDoc.SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE));
 
         SwPaM aPam( *pSectNd->EndOfSectionNode(), *pSectNd, 1 );
         rDoc.AppendRedline( new SwRedline( *pRedlData, aPam ), true);

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unredln.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:53:13 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:29:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ void SwUndoRedline::Redo( SwUndoIter& rIter )
 {
     SwDoc* pDoc = &rIter.GetDoc();
     IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( ( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON );
+    pDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON ));
 
     SetPaM( *rIter.pAktPam );
     if( pRedlSaveData && bHiddenRedlines )
@@ -413,7 +413,7 @@ void SwUndoCompDoc::Undo( SwUndoIter& rIter )
     {
         // die Redlines loeschen
         IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-        pDoc->SetRedlineMode_intern( ( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON );
+        pDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON));
 
         pDoc->DeleteRedline( *pPam, true, USHRT_MAX );
 
