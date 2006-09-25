@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheck.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:30:09 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:33:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,8 +110,23 @@ T getValue( const uno::Sequence< beans::NamedValue >& rNamedValues, const sal_Ch
     throw (uno::RuntimeException)
 {
     for( sal_Int32 n=0; n < rNamedValues.getLength(); n++ )
+    {
+    // Unfortunatly gcc-3.3 does not like Any.get<T>();
         if( rNamedValues[n].Name.equalsAscii( pszName ) )
-            return rNamedValues[n].Value.get<T>();
+        {
+            T value;
+            if( ! (rNamedValues[n].Value >>= value) )
+                throw uno::RuntimeException(
+                    ::rtl::OUString(
+                        cppu_Any_extraction_failure_msg(
+                            &rNamedValues[n].Value,
+                            ::cppu::getTypeFavourUnsigned(&value).getTypeLibType() ),
+                            SAL_NO_ACQUIRE ),
+                    uno::Reference<uno::XInterface>() );
+
+            return value;
+        }
+    }
 
     return T();
 }
