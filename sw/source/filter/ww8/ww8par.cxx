@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.170 $
+ *  $Revision: 1.171 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:23:45 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:31:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4078,7 +4078,7 @@ ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
     // delete the pam before the call for hide all redlines (Bug 73683)
     if (mbNewDoc)
-        rDoc.SetRedlineMode( eMode );
+      rDoc.SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)( eMode ));
 
     UpdatePageDescs(rDoc, nPageDescOffset);
 
