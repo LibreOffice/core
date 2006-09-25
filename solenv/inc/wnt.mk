@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.76 $
+#   $Revision: 1.77 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-07 12:43:41 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:10:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,10 @@ WRAPCMD_ENV*=$(WRAPCMD) -env
 
 .IF "$(OS)$(COM)$(CPU)$(COMEX)" == "WNTMSCI10"
 .INCLUDE : wntmsci10.mk
+.ENDIF
+
+.IF "$(OS)$(COM)$(CPU)$(COMEX)" == "WNTMSCI11"
+.INCLUDE : wntmsci11.mk
 .ENDIF
 
 .IF "$(COM)$(CVER)$(OS)$(CPU)" == "GCCC341WNTI"
