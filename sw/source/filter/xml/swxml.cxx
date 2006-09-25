@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:27:29 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:31:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -994,8 +994,8 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     // ... restore redline mode
     // (First set bogus mode to make sure the mode in SetRedlineMode()
     //  is different from it's previous mode.)
-    rDoc.SetRedlineMode_intern( ~nRedlineMode );
-    rDoc.SetRedlineMode( nRedlineMode );
+    rDoc.SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)( ~nRedlineMode ));
+    rDoc.SetRedlineMode( (IDocumentRedlineAccess::RedlineMode_t)( nRedlineMode ));
 
     // #103728# move Pam into valid content
     lcl_EnsureValidPam( rPaM );
