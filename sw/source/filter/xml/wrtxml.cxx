@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:27:42 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:31:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -312,7 +312,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     // ... and hide redlines for export
     nRedlineMode &= ~IDocumentRedlineAccess::REDLINE_SHOW_MASK;
     nRedlineMode |= IDocumentRedlineAccess::REDLINE_SHOW_INSERT;
-    pDoc->SetRedlineMode( nRedlineMode );
+    pDoc->SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)( nRedlineMode ));
 
     // Set base URI
     OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
@@ -507,7 +507,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     nRedlineMode |= IDocumentRedlineAccess::REDLINE_SHOW_INSERT;
     if ( *(sal_Bool*)aAny.getValue() )
         nRedlineMode |= IDocumentRedlineAccess::REDLINE_SHOW_DELETE;
-    pDoc->SetRedlineMode( nRedlineMode );
+    pDoc->SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)( nRedlineMode ));
 
     if (xStatusIndicator.is())
     {
