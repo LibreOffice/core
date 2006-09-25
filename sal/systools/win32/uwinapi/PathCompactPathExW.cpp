@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PathCompactPathExW.cpp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:33:45 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:16:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,6 @@ IMPLEMENT_THUNK( shlwapi, WINDOWS, BOOL, WINAPI, PathCompactPathExW,
     AUTO_WSTR2STR(lpPath);
     char* pOutA = (LPSTR)_alloca( cchMax * sizeof(CHAR) );
     BOOL bret = PathCompactPathExA(pOutA, lpPathA, cchMax, dwFlags);
-    MultiByteToWideChar(CP_ACP, 0, pOutA, -1, pszOut, cchMax);
+    MultiByteToWideChar(CP_ACP, 0, pOutA, -1, pszOut, (int) cchMax);
     return bret;
 }
