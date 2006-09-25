@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 20:50:26 $
+#   last change: $Author: vg $ $Date: 2006-09-25 12:46:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 INCPRE+=-I$(ATL_INCLUDE)
 
-.IF "$(NETTOOLKIT)"==""
 
 APP1TARGET=	$(TARGET)
 APP1OBJS=	$(OBJ)$/convTest.obj
@@ -67,7 +66,7 @@ APP1STDLIBS= \
     uuid.lib	\
     comdlg32.lib	\
     $(COMPATH)$/atlmfc$/lib$/atls.lib \
-    advapi32.lib    
+    advapi32.lib
 
 .IF "$(GUI)"=="WNT"
 APP1STDLIBS += $(LIBCIMT)
@@ -75,7 +74,5 @@ APP1STDLIBS += $(LIBCIMT)
 
 APP1DEF=	$(MISC)\$(APP1TARGET).def
 
-.ENDIF  #"$(NETTOOLKIT)"==""
 # --- Targets ---
 .INCLUDE : target.mk
-
