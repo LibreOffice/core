@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syshelp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:58:31 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:25:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@ void
 WriteStr( std::ostream &    o_rFile,
           const char *      i_sStr )
 {
-    o_rFile.write( i_sStr, strlen(i_sStr) );
+    o_rFile.write( i_sStr, (int) strlen(i_sStr) );
 }
 
 void
