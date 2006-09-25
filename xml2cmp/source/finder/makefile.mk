@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 11:53:19 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:25:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 OBJFILES= \
     $(OBJ)$/dependy.obj	\
-    $(OBJ)$/dep_main.obj    
+    $(OBJ)$/dep_main.obj
 
 
 # --- Targets ------------------------------------------------------
@@ -65,9 +65,6 @@ LIBSALCPPRT=$(0)
 
 .IF "$(GUI)"=="WNT"
 UWINAPILIB=$(0)
-.IF "$(COMEX)"!="10"
-APP1STDLIBS= MSVCIRT.LIB
-.ENDIF
 .ENDIF
 
 
@@ -76,6 +73,5 @@ APP1DEPN=	$(LB)$/$(TARGET).lib $(LB)$/x2c_xcdl.lib $(LB)$/x2c_support.lib
 
 
 .INCLUDE :  target.mk
-
 
 
