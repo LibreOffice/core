@@ -4,9 +4,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:22:20 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:14:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@
 #endif
 
 #define _MAX_CMD    4096    /* maximum length of commandline     */
-#define _MAX_ENV    4096    /* maximum length of environment var */
+/* #define _MAX_ENV 4096     maximum length of environment var (isn't used anywhere) */
 
 #ifdef GCC
     #   ifndef SA_FAMILY_DECL
@@ -115,5 +115,4 @@
     extern DWORD GetPlatformId(void);
     #define IS_NT (GetPlatformId() == VER_PLATFORM_WIN32_NT)
 #endif // #ifdef _DLL_
-
 
