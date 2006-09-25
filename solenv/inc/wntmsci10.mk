@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-11 17:40:29 $
+#   last change: $Author: vg $ $Date: 2006-09-25 13:10:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -188,9 +188,10 @@ CFLAGSOUTOBJ=-Fo
 # wrapped by STLport):
 # - "warning C4255: no function prototype given: converting
 #   '()' to '(void)'".
+# - "warning C4619: warning Cnnnn unknown
 CFLAGSWARNCXX=-Wall -wd4061 -wd4127 -wd4191 -wd4217 -wd4251 -wd4275 -wd4290 \
     -wd4294 -wd4355 -wd4511 -wd4512 -wd4514 -wd4611 -wd4625 -wd4626 -wd4640 \
-    -wd4675 -wd4710 -wd4711 -wd4786 -wd4800 -wd4820 -wd4503
+    -wd4675 -wd4710 -wd4711 -wd4786 -wd4800 -wd4820 -wd4503 -wd4619
 CFLAGSWARNCC=$(CFLAGSWARNCXX) -wd4255
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
