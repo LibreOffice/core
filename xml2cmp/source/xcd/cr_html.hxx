@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cr_html.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:04:59 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:26:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ class HtmlCreator
                             bool                i_bStrong );
     void                WriteStr(
                             const char *        i_sStr )
-                                                { aFile.write( i_sStr, strlen(i_sStr) ); }
+                                                { aFile.write( i_sStr, (int) strlen(i_sStr) ); }
     // DATA
     std::ofstream       aFile;
     const XmlElement &  rDocument;
@@ -105,3 +105,5 @@ class HtmlCreator
 
 
 #endif
+
+
