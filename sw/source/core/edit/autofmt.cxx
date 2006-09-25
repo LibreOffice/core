@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:04:19 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:27:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2288,10 +2288,10 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     if( aFlags.bWithRedlining )
     {
         pDoc->SetAutoFmtRedline( TRUE );
-        eRedlMode = IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_SHOW_INSERT;
+        eRedlMode = (IDocumentRedlineAccess::RedlineMode_t)(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_SHOW_INSERT);
     }
     else
-        eRedlMode = IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_IGNORE;
+      eRedlMode = (IDocumentRedlineAccess::RedlineMode_t)(IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_IGNORE);
     pDoc->SetRedlineMode( eRedlMode );
 
     // save undo state (might be turned off)
