@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 20:49:47 $
+#   last change: $Author: vg $ $Date: 2006-09-25 12:45:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@ ENABLE_EXCEPTIONS=TRUE
 INCPRE+=	$(OUT)$/inc -I$(ATL_INCLUDE)
 
 
-.IF "$(NETTOOLKIT)"==""
 
 APP1TARGET=	$(TARGET)
 APP1OBJS=  \
@@ -71,14 +70,12 @@ APP1STDLIBS= \
     oleaut32.lib	\
     uuid.lib		\
     gdi32.lib	\
-    advapi32.lib    
+    advapi32.lib
 
 APP1DEF=	$(MISC)\$(APP1TARGET).def
 
-.ENDIF  # "$(NETTOOLKIT)"==""
 # --- Targets ---
 
 .INCLUDE : target.mk
-
 
 
