@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:29:02 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 09:43:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,6 +252,12 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,sal_Bool _bF
                     if ( GetPrecision() )
                         nPrec = GetPrecision();
                     SetPrecision(::std::min<sal_Int32>(nPrec,_pType->nPrecision));
+                }
+                break;
+            case DataType::TIMESTAMP:
+                if ( bForce && _pType->nMaximumScale)
+                {
+                    SetScale(::std::min<sal_Int32>(GetScale() ? GetScale() : DEFAULT_NUMERIC_SCALE,_pType->nMaximumScale));
                 }
                 break;
             default:
