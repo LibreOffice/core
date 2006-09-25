@@ -4,9 +4,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:38:06 $
+ *  last change: $Author: vg $ $Date: 2006-09-25 13:06:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,9 @@
 #include <shlobj.h>
 #pragma warning(pop)
 
+
 #include <assert.h>
+#pragma warning(disable: 4350)
 
 typedef std::auto_ptr<Registrar> RegistrarPtr;
 
