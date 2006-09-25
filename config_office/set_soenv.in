@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.116 $
-# Date:        $Date: 2006-09-15 11:19:23 $
+# Version:     $Revision: 1.117 $
+# Date:        $Date: 2006-09-25 13:33:27 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -79,11 +79,11 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $SHELL,
      $SOLARROOT, $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $STAR_REGISTRY, $STAR_RESOURCEPATH, $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
-     $MSPDB_PATH, $MIDL_PATH, $CSC_PATH, $NMAKE_PATH, 
+     $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
      $LD_LIBRARY_PATH, $PATH, $SOLARDEF, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $MULTITHREAD_OBJ, $PERL, 
-     $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $EXTRA_DOTNET_FILES, $USE_NEW_SDK, $FRAME_HOME, 
-     $ATL_LIB, $ATL_INCLUDE, $NO_HIDS, $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
+     $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $USE_NEW_SDK, $FRAME_HOME, 
+     $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB,
 	 $PROEXT,
      $SYSTEM_PYTHON, $PYTHONPATH, $PYTHONHOME, $SYSTEM_MOZILLA );
@@ -552,13 +552,7 @@ elsif ( $platform =~ m/cygwin/ )
       $MSPDB_PATH     = PosixFormat('@MSPDB_PATH@');
       $MIDL_PATH      = PosixFormat('@MIDL_PATH@');
       $CSC_PATH       = PosixFormat('@CSC_PATH@');
-      $NMAKE_PATH     = PosixFormat('@NMAKE_PATH@');
       $PSDK_HOME      = PosixFormat('@PSDK_HOME@');
-      if('@EXTRA_DOTNET_FILES@') {
-          $EXTRA_DOTNET_FILES = PosixFormat('@EXTRA_DOTNET_FILES@');
-      } else {
-          $EXTRA_DOTNET_FILES = '';
-      }
       $FRAME_HOME     = PosixFormat('@FRAME_HOME@');
       $USE_NEW_SDK    = "TRUE";
       $CPUNAME        = "INTEL";
@@ -593,15 +587,25 @@ elsif ( $platform =~ m/cygwin/ )
       $INPATH         = $OUTPATH.$PROEXT;
       $GVERDIR        = $INPATH;
       $COMEX          = '@COMEX@';
-      if ( $EXTRA_DOTNET_FILES ) {
-          $ATL_LIB     = $EXTRA_DOTNET_FILES;
-          $ATL_INCLUDE = $EXTRA_DOTNET_FILES;
-      } else {
-          $ATL_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
-          $ATL_INCLUDE = $COMPATH.$ds."atlmfc".$ds."include";
-      }
       if ( "@COMEX@" eq "10" ) { # .NET 2003 needs M1310
           $CVER        = "M1310";
+          $ATL_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
+          $ATL_INCLUDE = $COMPATH.$ds."atlmfc".$ds."include";
+          $MFC_LIB     = "";
+          $MFC_INCLUDE = "";
+      } elsif ( "@COMEX@" eq "11" ) { # .NET 2005 needs M1400
+          $CVER        = "M1400";
+          if ( "@NETTOOLKIT@" ) {
+              $ATL_LIB     = $PSDK_HOME.$ds."lib"; # Doesn't exist for VSE
+              $ATL_INCLUDE = $PSDK_HOME.$ds."include".$ds."atl";
+              $MFC_LIB     = $PSDK_HOME.$ds."lib"; # Doesn't exist for VSE
+              $MFC_INCLUDE = $PSDK_HOME.$ds."include".$ds."mfc";
+          } else {
+              $ATL_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
+              $ATL_INCLUDE = $COMPATH.$ds."atlmfc".$ds."include";
+              $MFC_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
+              $MFC_INCLUDE = $PSDK_HOME.$ds."include".$ds."mfc";
+          }
       } else {                   # Unsupported
           die "Unsupported value for COMEX variable.\n";
       }
@@ -1048,9 +1052,7 @@ if ($platform =~ m/cygwin/)
    $JAVAHOME          = '$JAVA_HOME';
 
    $ILIB             = $cur_dir.$ps_STLPORT_LIB.
-                        $ps.$SOLARVER.$ds.$UPD.$LIB.
                         $ps.$SOLARVER.$ds.$UPD.$ds.$INPATH.$LIB.
-                        $ps.$SOLARENV.$ds.$OUTPATH.$LIB.
                         $ps.$JAVA_HOME.$LIB.
                         $ps.'$PSDK_HOME'.$LIB.
                         $ps.'$FRAME_HOME'.$LIB;
@@ -1059,9 +1061,6 @@ if ($platform =~ m/cygwin/)
    {  $ILIB       .= $ps.'$COMPATH'.$LIB;
       if ( '@ENABLE_DIRECTX@' ne "" ) {
           $ILIB   .= $ps.PosixFormat('@DIRECTXSDK_LIB@');
-      }
-      if ( "$EXTRA_DOTNET_FILES" ) {
-          $ILIB   .= $ps.$EXTRA_DOTNET_FILES;
       }
    }
 
@@ -1136,7 +1135,7 @@ elsif ($platform =~ m/cygwin/)
 	   if ( $PATH !~ /(?:[:]|\A)(?:$MSPDB_PATH)(?:[:]|\Z)/ ) {
 		   $PATH .= $ps.$MSPDB_PATH;
 	   }
-	   if ( ( $COMEX eq "8" ) || ( $COMEX eq "10" ) ) {
+	   if ( ( $COMEX eq "10" ) || ( $COMEX eq "11" ) ) {
 		   # .NET needs midl.exe
 		   if ( $PATH !~ /(?:[:]|\A)(?:$MIDL_PATH)(?:[:]|\Z)/ ) {
 			   $PATH .= $ps.$MIDL_PATH;
@@ -1144,10 +1143,6 @@ elsif ($platform =~ m/cygwin/)
 		   # .NET needs csc.exe
 		   if ( $PATH !~ /(?:[:]|\A)(?:$CSC_PATH)(?:[:]|\Z)/ ) {
 			   $PATH .= $ps.$CSC_PATH;
-		   }
-		   # VC toolkit needs nmake.exe
-		   if ( "@ENABLE_VCTK@" ne "" and $PATH !~ /(?:[:]|\A)(?:$NMAKE_PATH)(?:[:]|\Z)/ ) {
-			   $PATH .= $ps.$NMAKE_PATH;
 		   }
 		   # Native installer needs some files if the Windows Installer SDK
 		   if ( $PATH !~ /(?:[:]|\A)(?:$PSDK_HOME\/bin)(?:[:]|\Z)/i ) {
@@ -1364,9 +1359,6 @@ elsif ($platform =~ m/cygwin/)
    {  $SOLARINC       .= $I.'$COMPATH'.$ds."include";
       if ( '@ENABLE_DIRECTX@' ne "" ) {
           $SOLARINC   .= $I.PosixFormat('@DIRECTXSDK_HOME@').$INCLUDE;
-      }
-      if ( "$EXTRA_DOTNET_FILES" ) {
-          $SOLARINC   .= $I.$EXTRA_DOTNET_FILES;
       }
    }
 }
@@ -1645,8 +1637,9 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "PSDK_HOME",         $PSDK_HOME,         "e" );
    ToFile( "ATL_LIB",           $ATL_LIB,         "e" );
    ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
+   ToFile( "MFC_LIB",           $MFC_LIB,         "e" );
+   ToFile( "MFC_INCLUDE",       $MFC_INCLUDE,       "e" );
    ToFile( "NSIS_PATH",         "@NSIS_PATH@",      "e" );
-   ToFile( "ENABLE_VCTK",       "@ENABLE_VCTK@",    "e" );
    ToFile( "NETTOOLKIT",        "@NETTOOLKIT@",     "e" );
    ToFile( "USE_NEW_SDK",       $USE_NEW_SDK,       "e" );
 }
@@ -2141,11 +2134,9 @@ sub ToFile {
              if ( $_[ 0 ] !~ /^PATH$|^TMP$|^TEMP$|^TMPDIR$|^HOME$/i ) {
                  $envvar = $win_format_var;
              }
-             # Tcsh needs backslashes quoted
+             # Tcsh/bash needs backslashes quoted
              $envvar =~ s/\\/\\\\/g;
-             # Bash needs backslashes quoted twice
              $envvarbash = $envvar;
-             $envvarbash =~ s/\\\\/\\\\\\\\/g;
          }
          printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", $envvar);
          print OUT "$setenv $_[ 0 ] \"$envvar\"$newline";  # to tcsh file
@@ -2226,8 +2217,6 @@ sub ToFile {
          $win_format_var =~ s/\\/\\\\/g;
          print OUT "$setenv $_[ 0 ] \"$win_format_var\"$newline";
 
-         # bash needs one layer of escaping more
-         $win_format_var =~ s/\\\\/\\\\\\\\/g;
          print OUT_SH "$_[ 0 ]=\"$win_format_var\"$newline"; # to sh file
          $exportvars .= " $_[ 0 ]";                          # add to export list for sh file
 
