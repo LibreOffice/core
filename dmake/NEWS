@@ -2,6 +2,28 @@ News file for the dmake version that is hosted on the OpenOffice.org
 cvs. #i<number># denote issues tracked by the OpenOffice.org issue tracking
 system, see <http://qa.openoffice.org/issue_handling/project_issues.html>.
 
+Version 4.6
+===========
+
+Volker Quetschke (vq@openoffice.org)
+#i67589# Implement the internal dmake commands noop and echo. These commands
+were already existing for the native Windows version but only partially
+documented.
+
+Volker Quetschke (vq@openoffice.org)
+#i67166# Issue a warning when a previously unset macro (i.e. assumed to be
+empty) is used and later set to a different value.
+
+Volker Quetschke (vq@openoffice.org)
+#i66567# Issue a warning when .SUFFIXES is used. This special target had no
+special meaning (anymore?) and was always (at least since version 4.2)
+ignored.
+
+Volker Quetschke (vq@openoffice.org)
+#i67025# Fix a bug that was introduced in dmake 4.5 and led dmake to falsely
+issue an error if a %-target was defined with the .SILENT attribute and dmake
+was started with the -vr (included in -v) verbose flag.
+
 Version 4.5
 ===========
 
