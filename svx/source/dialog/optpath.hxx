@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpath.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 12:01:24 $
+ *  last change: $Author: vg $ $Date: 2006-09-26 14:10:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,8 +96,8 @@ private:
     DECL_LINK( HeaderSelect_Impl, HeaderBar * );
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar * );
 
-    void        GetPathList( USHORT _nPathHandle,
-                             String& _rInternalPath, String& _rUserPath, String& _rWritablePath );
+    void        GetPathList( USHORT _nPathHandle, String& _rInternalPath,
+                             String& _rUserPath, String& _rWritablePath, sal_Bool& _rReadOnly );
     void        SetPathList( USHORT _nPathHandle,
                              const String& _rUserPath, const String& _rWritablePath );
 #endif
