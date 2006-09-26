@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pathsettings.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:34:23 $
+ *  last change: $Author: vg $ $Date: 2006-09-26 14:08:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
                 , lUserPaths    ()
                 , sWritePath    ()
                 , bIsSinglePath (sal_False)
+                , bIsReadonly   (sal_False)
             {}
 
             PathInfo(const PathInfo& rCopy)
@@ -162,6 +163,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
                 lUserPaths     = rCopy.lUserPaths;
                 sWritePath     = rCopy.sWritePath;
                 bIsSinglePath  = rCopy.bIsSinglePath;
+                bIsReadonly    = rCopy.bIsReadonly;
             }
 
             /// an internal name describing this path
@@ -178,6 +180,9 @@ class PathSettings : public  css::lang::XTypeProvider             ,
 
             /// indicates real single pathes, which uses WritePath property only
             sal_Bool bIsSinglePath;
+
+            /// simple handling of finalized/mandatory states ... => we know one state READONLY only .-)
+            sal_Bool bIsReadonly;
     };
 
     typedef BaseHash< PathSettings::PathInfo > PathHash;
