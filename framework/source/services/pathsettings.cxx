@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pathsettings.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:11:18 $
+ *  last change: $Author: vg $ $Date: 2006-09-26 14:08:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,14 @@
 
 // ______________________________________________
 // interface includes
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
+#include <com/sun/star/beans/Property.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTY_HPP_
+#include <com/sun/star/beans/XProperty.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -319,6 +327,21 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& s
 
     // read state props
     xPath->getByName(CFGPROP_ISSINGLEPATH) >>= aPathVal.bIsSinglePath;
+
+    // analyze finalized/mandatory states
+    aPathVal.bIsReadonly = sal_False;
+    css::uno::Reference< css::beans::XProperty > xInfo(xPath, css::uno::UNO_QUERY);
+    if (xInfo.is())
+    {
+        css::beans::Property aInfo = xInfo->getAsProperty();
+        sal_Bool bFinalized = ((aInfo.Attributes & css::beans::PropertyAttribute::READONLY  ) == css::beans::PropertyAttribute::READONLY  );
+        //sal_Bool bMandatory = ((aInfo.Attributes & css::beans::PropertyAttribute::REMOVEABLE) != css::beans::PropertyAttribute::REMOVEABLE);
+
+        // Note: Till we support finalized / mandatory on our API more in detail we handle
+        // all states simple as READONLY ! But because all realy needed pathes are "mandatory" by default
+        // we have to handle "finalized" as the real "readonly" indicator .
+        aPathVal.bIsReadonly = bFinalized;
+    }
 
     return aPathVal;
 }
@@ -767,6 +790,8 @@ void PathSettings::impl_rebuildPropertyDescriptor()
         pProp->Handle     = i;
         pProp->Type       = ::getCppuType((::rtl::OUString*)0);
         pProp->Attributes = css::beans::PropertyAttribute::BOUND;
+        if (rPath.bIsReadonly)
+            pProp->Attributes |= css::beans::PropertyAttribute::READONLY;
         ++i;
 
         pProp             = &(m_lPropDesc[i]);
@@ -782,6 +807,8 @@ void PathSettings::impl_rebuildPropertyDescriptor()
         pProp->Handle     = i;
         pProp->Type       = ::getCppuType((css::uno::Sequence< ::rtl::OUString >*)0);
         pProp->Attributes = css::beans::PropertyAttribute::BOUND;
+        if (rPath.bIsReadonly)
+            pProp->Attributes |= css::beans::PropertyAttribute::READONLY;
         ++i;
 
         pProp             = &(m_lPropDesc[i]);
@@ -789,6 +816,8 @@ void PathSettings::impl_rebuildPropertyDescriptor()
         pProp->Handle     = i;
         pProp->Type       = ::getCppuType((::rtl::OUString*)0);
         pProp->Attributes = css::beans::PropertyAttribute::BOUND;
+        if (rPath.bIsReadonly)
+            pProp->Attributes |= css::beans::PropertyAttribute::READONLY;
         ++i;
     }
 
