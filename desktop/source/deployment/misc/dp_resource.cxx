@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_resource.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:42:02 $
+ *  last change: $Author: vg $ $Date: 2006-09-26 14:21:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include "dp_resource.h"
 #include "osl/module.hxx"
 #include "osl/mutex.hxx"
+#include "rtl/ustring.h"
 #include "cppuhelper/implbase1.hxx"
 #include "unotools/configmgr.hxx"
 
@@ -58,6 +59,10 @@ struct OfficeLocale :
         if (! (::utl::ConfigManager::GetDirectConfigProperty(
                    ::utl::ConfigManager::LOCALE ) >>= slang))
             throw RuntimeException( OUSTR("Cannot determine language!"), 0 );
+        //fallback, the locale is currently only set when the user starts the
+        //office for the first time.
+        if (slang.getLength() == 0)
+            slang =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US"));
         return toLocale(slang);
     }
 };
