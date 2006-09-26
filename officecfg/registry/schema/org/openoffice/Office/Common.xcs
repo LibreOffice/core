@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 11:48:48 $
+ *  last change: $Author: vg $ $Date: 2006-09-26 14:18:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3171,7 +3171,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					<info>
 						<desc>Contains a Boolean that specifies if the "Registration..." menu item is available.</desc>
 					</info>
-					<value>false</value>
+					<value>true</value>
 				</prop>
 			</group>
 		</group>
