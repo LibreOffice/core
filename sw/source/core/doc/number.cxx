@@ -4,9 +4,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-22 09:19:04 $
+ *  last change: $Author: vg $ $Date: 2006-09-26 14:19:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -785,6 +785,10 @@ String SwNumRule::MakeNumString( const SwNodeNum::tNumberVector & rNumVector,
             BYTE i = nLevel;
 
             if( !IsContinusNum() &&
+                // --> OD 2006-09-19 #i69672#
+                // - do not include upper levels, if level isn't numbered.
+                rMyNFmt.GetNumberingType() != SVX_NUM_NUMBER_NONE &&
+                // <--
                 rMyNFmt.GetIncludeUpperLevels() )  // nur der eigene Level ?
             {
                 BYTE n = rMyNFmt.GetIncludeUpperLevels();
