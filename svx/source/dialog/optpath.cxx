@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpath.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:32:21 $
+ *  last change: $Author: vg $ $Date: 2006-09-26 14:09:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+
 #ifndef  _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -139,6 +143,7 @@ using namespace svx;
 #define POSTFIX_INTERNAL    String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_internal" ) )
 #define POSTFIX_USER        String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_user" ) )
 #define POSTFIX_WRITABLE    String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_writable" ) )
+#define POSTFIX_READONLY    String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_readonly" ) )
 #define VAR_ONE             String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "%1" ) )
 
 // struct OptPath_Impl ---------------------------------------------------
@@ -370,7 +375,8 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
             {
                 String aStr( SVX_RES( RID_SVXSTR_PATH_NAME_START + i ) );
                 String sInternal, sUser, sWritable;
-                GetPathList( i, sInternal, sUser, sWritable );
+                sal_Bool bReadOnly = sal_False;
+                GetPathList( i, sInternal, sUser, sWritable, bReadOnly );
                 String sTmpPath = sUser;
                 if ( sTmpPath.Len() > 0 && sWritable.Len() > 0 )
                     sTmpPath += MULTIPATH_DELIMITER;
@@ -379,7 +385,7 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
                 aStr += '\t';
                 aStr += Convert_Impl( aValue );
                 SvLBoxEntry* pEntry = pPathBox->InsertEntry( aStr );
-                if ( aPathOpt.IsPathReadonly( (SvtPathOptions::Pathes)i ) )
+                if ( bReadOnly )
                 {
                     pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->m_aLockImage, BMP_COLOR_NORMAL );
                     pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->m_aLockImageHC, BMP_COLOR_HIGHCONTRAST );
@@ -471,7 +477,8 @@ IMPL_LINK( SvxPathTabPage, StandardHdl_Impl, PushButton *, EMPTYARG )
         if ( aOldPath.Len() )
         {
             String sInternal, sUser, sWritable, sTemp;
-            GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable );
+            sal_Bool bReadOnly = sal_False;
+            GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable, bReadOnly );
 
             USHORT i;
             USHORT nOldCount = aOldPath.GetTokenCount( MULTIPATH_DELIMITER );
@@ -523,7 +530,8 @@ IMPL_LINK( SvxPathTabPage, PathHdl_Impl, PushButton *, EMPTYARG )
     if ( pEntry )
     {
         PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pEntry->GetUserData();
-        GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable );
+        sal_Bool bReadOnly = sal_False;
+        GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable, bReadOnly );
         sUser = pPathImpl->sUserPath;
         sWritable = pPathImpl->sWritablePath;
     }
@@ -701,7 +709,8 @@ IMPL_LINK( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
 // -----------------------------------------------------------------------
 
 void SvxPathTabPage::GetPathList(
-    USHORT _nPathHandle, String& _rInternalPath, String& _rUserPath, String& _rWritablePath )
+    USHORT _nPathHandle, String& _rInternalPath,
+    String& _rUserPath, String& _rWritablePath, sal_Bool& _rReadOnly )
 {
     String sCfgName = getCfgName_Impl( _nPathHandle );
 
@@ -759,6 +768,12 @@ void SvxPathTabPage::GetPathList(
             ::rtl::OUString sWritablePath;
             if ( aAny >>= sWritablePath )
                 _rWritablePath = String( sWritablePath );
+
+            // and the readonly flag
+            sProp = sCfgName;
+            Reference< XPropertySetInfo > xInfo = pImpl->m_xPathSettings->getPropertySetInfo();
+            Property aProp = xInfo->getPropertyByName( sProp );
+            _rReadOnly = ( ( aProp.Attributes & PropertyAttribute::READONLY ) == PropertyAttribute::READONLY );
         }
     }
     catch( const Exception& )
