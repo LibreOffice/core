@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:26:06 $
+ *  last change: $Author: vg $ $Date: 2006-09-27 10:31:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,10 @@
 #define ITEMID_FIELD EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
 #undef ITEMID_FIELD
+
+#ifndef SVX_BORDERLINE_HXX
+#include <svx/borderline.hxx>
+#endif
 
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
@@ -548,101 +552,32 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
 }
 
 
-BOOL ScHTMLExport::HasBottomBorder( SCROW nRow, SCTAB nTab,
-        SCCOL nStartCol, SCCOL nEndCol )
+void ScHTMLExport::BorderToStyle( ByteString& rOut, const char* pBorderName,
+        const SvxBorderLine* pLine, bool& bInsertSemicolon )
 {
-    BOOL bHas = TRUE;
-    for ( SCCOL nCol=nStartCol; nCol<=nEndCol && bHas; nCol++ )
+    if ( pLine )
     {
-        SvxBoxItem* pBorder = (SvxBoxItem*)
-            pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER );
-        if ( !pBorder || !pBorder->GetBottom() )
-        {   // vielleicht obere Border an Zelle darunter?
-            if ( nRow < MAXROW )
-            {
-                pBorder = (SvxBoxItem*) pDoc->GetAttr( nCol, nRow+1, nTab, ATTR_BORDER );
-                if ( !pBorder || !pBorder->GetTop() )
-                    bHas = FALSE;
-            }
-            else
-                bHas = FALSE;
-        }
+        if ( bInsertSemicolon )
+            rOut += "; ";
+
+        // which border
+        ((rOut += "border-") += pBorderName) += ": ";
+
+        // thickness
+        int nWidth = pLine->GetOutWidth();
+        int nPxWidth = ( nWidth > 0 )? std::max( int( nWidth / TWIPS_PER_PIXEL ), 1 ): 0;
+        (rOut += ByteString::CreateFromInt32( nPxWidth )) += "px solid #";
+
+        // color
+        char hex[7];
+        snprintf( hex, 7, "%06x", pLine->GetColor().GetRGBColor() );
+        hex[6] = 0;
+
+        rOut += hex;
+
+        bInsertSemicolon = true;
     }
-    return bHas;
 }
-
-
-BOOL ScHTMLExport::HasLeftBorder( SCCOL nCol, SCTAB nTab,
-        SCROW nStartRow, SCROW nEndRow )
-{
-    BOOL bHas = TRUE;
-    for ( SCROW nRow=nStartRow; nRow<=nEndRow && bHas; nRow++ )
-    {
-        SvxBoxItem* pBorder = (SvxBoxItem*)
-            pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER );
-        if ( !pBorder || !pBorder->GetLeft() )
-        {   // vielleicht rechte Border an Zelle links daneben?
-            if ( nCol > 0 )
-            {
-                pBorder = (SvxBoxItem*) pDoc->GetAttr( nCol-1, nRow, nTab, ATTR_BORDER );
-                if ( !pBorder || !pBorder->GetRight() )
-                    bHas = FALSE;
-            }
-            else
-                bHas = FALSE;
-        }
-    }
-    return bHas;
-}
-
-
-BOOL ScHTMLExport::HasTopBorder( SCROW nRow, SCTAB nTab,
-        SCCOL nStartCol, SCCOL nEndCol )
-{
-    BOOL bHas = TRUE;
-    for ( SCCOL nCol=nStartCol; nCol<=nEndCol && bHas; nCol++ )
-    {
-        SvxBoxItem* pBorder = (SvxBoxItem*)
-            pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER );
-        if ( !pBorder || !pBorder->GetTop() )
-        {   // vielleicht untere Border an Zelle darueber?
-            if ( nRow > 0 )
-            {
-                pBorder = (SvxBoxItem*) pDoc->GetAttr( nCol, nRow-1, nTab, ATTR_BORDER );
-                if ( !pBorder || !pBorder->GetBottom() )
-                    bHas = FALSE;
-            }
-            else
-                bHas = FALSE;
-        }
-    }
-    return bHas;
-}
-
-
-BOOL ScHTMLExport::HasRightBorder( SCCOL nCol, SCTAB nTab,
-        SCROW nStartRow, SCROW nEndRow )
-{
-    BOOL bHas = TRUE;
-    for ( SCROW nRow=nStartRow; nRow<=nEndRow && bHas; nRow++ )
-    {
-        SvxBoxItem* pBorder = (SvxBoxItem*)
-            pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER );
-        if ( !pBorder || !pBorder->GetRight() )
-        {   // vielleicht linke Border an Zelle rechts daneben?
-            if ( nCol < MAXCOL )
-            {
-                pBorder = (SvxBoxItem*) pDoc->GetAttr( nCol+1, nRow, nTab, ATTR_BORDER );
-                if ( !pBorder || !pBorder->GetLeft() )
-                    bHas = FALSE;
-            }
-            else
-                bHas = FALSE;
-        }
-    }
-    return bHas;
-}
-
 
 void ScHTMLExport::WriteBody()
 {
@@ -801,91 +736,16 @@ void ScHTMLExport::WriteTables()
         // <TABLE ...>
         ByteString  aByteStrOut = sHTML_table;
 //      aStrOut  = sHTML_table;
-        aByteStrOut += ' ';
-        aByteStrOut += sHTML_frame;
-        aByteStrOut += '=';
-        USHORT nFrame = 0;
-        if ( HasBottomBorder( nEndRow, nTab, nStartCol, nEndCol ) )
-            nFrame |= 2;
-        if ( HasLeftBorder( nStartCol, nTab, nStartRow, nEndRow ) )
-            nFrame |= 4;
-        if ( HasTopBorder( nStartRow, nTab, nStartCol, nEndCol ) )
-            nFrame |= 8;
-        if ( HasRightBorder( nEndCol, nTab, nStartRow, nEndRow ) )
-            nFrame |= 16;
-        if ( nFrame )
-        {
-            // nicht alle Kombinationen sind in HTML moeglich
-            // nur void, above, below, lhs, rhs, hsides, vsides, box
-            const USHORT nAll = 2 | 4 | 8 | 16;
-            USHORT nBit;
-            for ( nBit=2; nBit<=16; nBit <<= 1 )
-            {
-                if ( (nFrame | nBit) == nAll )
-                {   // mindestens drei Seiten => vier
-                    aByteStrOut += sHTML_TF_box;
-                    nFrame = 0;
-                    break;
-                }
-            }
-            if ( nFrame )
-            {   // ein oder zwei Seiten
-                for ( nBit=2; nBit<=16; nBit <<= 1 )
-                {
-                    if ( (nFrame & nBit) == nFrame )
-                    {   // eine Seite
-                        switch ( nBit )
-                        {
-                            case 2:
-                                aByteStrOut += sHTML_TF_below;
-                            break;
-                            case 4:
-                                aByteStrOut += sHTML_TF_lhs;
-                            break;
-                            case 8:
-                                aByteStrOut += sHTML_TF_above;
-                            break;
-                            case 16:
-                                aByteStrOut += sHTML_TF_rhs;
-                            break;
-                        }
-                        nFrame = 0;
-                        break;
-                    }
-                }
-                if ( nFrame )
-                {   // zwei Seiten
-                    // horizontale bevorzugt
-                    if ( nFrame & 8 )
-                    {
-                        if ( nFrame & 2 )
-                            aByteStrOut += sHTML_TF_hsides;
-                        else
-                            aByteStrOut += sHTML_TF_above;
-                    }
-                    else if ( nFrame & 2 )
-                        aByteStrOut += sHTML_TF_below;
-                    else if ( nFrame & 4 )
-                    {
-                        if ( nFrame & 16 )
-                            aByteStrOut += sHTML_TF_vsides;
-                        else
-                            aByteStrOut += sHTML_TF_lhs;
-                    }
-                    else    // if ( nFrame & 16 )
-                        aByteStrOut += sHTML_TF_rhs;
-                }
-            }
-        }
-        else
-            aByteStrOut += sHTML_TF_void;
+
+        // FRAME=VOID, we do the styling of the cells in <TD>
+        (((aByteStrOut += ' ') += sHTML_frame) += '=') += sHTML_TF_void;
 
         bTabHasGraphics = bTabAlignedLeft = FALSE;
         if ( bAll && pDrawLayer )
             PrepareGraphics( pDrawLayer, nTab, nStartCol, nStartRow,
                 nEndCol, nEndRow );
 
-        // mehr <TABLE ...>
+        // more <TABLE ...>
         if ( bTabAlignedLeft )
             (((aByteStrOut += ' ') += sHTML_O_align) += '=') += sHTML_AL_left;
             // ALIGN=LEFT allow text and graphics to flow around
@@ -901,15 +761,17 @@ void ScHTMLExport::WriteTables()
                 ++nColCnt;
         }
         (((aByteStrOut += ' ') += sHTML_O_cols) += '=') += ByteString::CreateFromInt32( nColCnt );
-        // RULES=GROUPS
-        (((aByteStrOut += ' ') += sHTML_O_rules) += '=') += sHTML_TR_groups;
-        // Netscape und M$IE brauchen ein BORDER=n um ueberhaupt ein Rule zu zeichnen
-        ((aByteStrOut += ' ') += sHTML_O_border) += "=1";
+
+        // RULES=NONE, we do the styling of the cells in <TD>
+        (((aByteStrOut += ' ') += sHTML_O_rules) += '=') += sHTML_TR_none;
+
+        // BORDER=0, we do the styling of the cells in <TD>
+        ((aByteStrOut += ' ') += sHTML_O_border) += "=0";
         IncIndent(1); TAG_ON_LF( aByteStrOut.GetBuffer() );
 
-        // <COLGROUP> fuer RULES=GROUPS
+        // <COLGROUP>
         TAG_ON( sHTML_colgroup );
-        // <COL WIDTH=x> als Vorabinformation fuer lange Tabellen
+        // <COL WIDTH=x> as pre-info for long tables
         ByteString  aByteStr = sHTML_col;
         aByteStr += ' ';
         aByteStr += sHTML_O_width;
@@ -923,17 +785,10 @@ void ScHTMLExport::WriteTables()
             aByteStrOut += ByteString::CreateFromInt32(
                                 ToPixel( pDoc->GetColWidth( nCol, nTab ) ) );
             TAG_ON( aByteStrOut.GetBuffer() );
-
-            if ( nCol < nEndCol && HasRightBorder( nCol, nTab,
-                    nStartRow, nEndRow ) )
-            {   // neue ColGroup fuer RULES
-                TAG_OFF_LF( sHTML_colgroup );
-                TAG_ON( sHTML_colgroup );
-            }
         }
         TAG_OFF_LF( sHTML_colgroup );
 
-        // <TBODY> fuer RULES=GROUPS
+        // <TBODY>
         IncIndent(1); TAG_ON_LF( sHTML_tbody );
         // At least old (3.x, 4.x?) Netscape doesn't follow <TABLE COLS=n> and
         // <COL WIDTH=x> specified, but needs a width at every column.
@@ -964,19 +819,9 @@ void ScHTMLExport::WriteTables()
             }
             bTableDataWidth = FALSE;    // widths only in first row
 
-            if ( nRow < nEndRow && HasBottomBorder( nRow, nTab,
-                    nStartCol, nEndCol ) )
-            {   // neuer TBody fuer RULES
-                IncIndent(-1); TAG_OFF_LF( sHTML_tablerow );
-                TAG_OFF_LF( sHTML_tbody );
-                IncIndent(1); TAG_ON_LF( sHTML_tbody );
-            }
-            else
-            {
-                if ( nRow == nEndRow )
-                    IncIndent(-1);
-                TAG_OFF_LF( sHTML_tablerow );
-            }
+            if ( nRow == nEndRow )
+                IncIndent(-1);
+            TAG_OFF_LF( sHTML_tablerow );
         }
         IncIndent(-1); TAG_OFF_LF( sHTML_tbody );
 
@@ -984,7 +829,7 @@ void ScHTMLExport::WriteTables()
 
         if ( bTabHasGraphics )
         {
-            // der Rest, der nicht in Zellen ist
+            // the rest that is not in a cell
             for ( ScHTMLGraphEntry* pE = aGraphList.First(); pE; pE = aGraphList.Next() )
             {
                 if ( !pE->bWritten )
@@ -993,7 +838,7 @@ void ScHTMLExport::WriteTables()
             }
             aGraphList.Clear();
             if ( bTabAlignedLeft )
-            {   // mit <BR CLEAR=LEFT> das <TABLE ALIGN=LEFT> wieder ausschalten
+            {   // clear <TABLE ALIGN=LEFT> with <BR CLEAR=LEFT>
                 aByteStrOut = sHTML_linebreak;
                 (((aByteStrOut += ' ') += sHTML_O_clear) += '=') += sHTML_AL_left;
                 TAG_ON_LF( aByteStrOut.GetBuffer() );
@@ -1053,6 +898,21 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
 
     ByteString aStrTD = sHTML_tabledata;
+
+    // border of the cells
+    SvxBoxItem* pBorder = (SvxBoxItem*) pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER );
+    if ( pBorder && (pBorder->GetTop() || pBorder->GetBottom() || pBorder->GetLeft() || pBorder->GetRight()) )
+    {
+        ((aStrTD += ' ') += sHTML_style) += "=\"";
+
+        bool bInsertSemicolon = false;
+        BorderToStyle( aStrTD, "top", pBorder->GetTop(), bInsertSemicolon );
+        BorderToStyle( aStrTD, "bottom", pBorder->GetBottom(), bInsertSemicolon );
+        BorderToStyle( aStrTD, "left", pBorder->GetLeft(), bInsertSemicolon );
+        BorderToStyle( aStrTD, "right", pBorder->GetRight(), bInsertSemicolon );
+
+        aStrTD += '"';
+    }
 
     String      aStr;
     const sal_Char* pChar;
