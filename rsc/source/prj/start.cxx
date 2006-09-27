@@ -4,9 +4,9 @@
  *
  *  $RCSfile: start.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:00:48 $
+ *  last change: $Author: vg $ $Date: 2006-09-27 09:52:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,6 +228,7 @@ static BOOL CallRsc2( ByteString aRsc2Name,
             if( !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ),  "-fp=", 4 )
               || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-fo=", 4 )
               || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-pp=", 4 )
+              || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-rsc2=", 6 )
               || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-presponse", 9 )
               || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-rc", 3 )
               || !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-+" )
@@ -350,6 +351,10 @@ int cdecl main ( int argc, char ** argv)
             else if( !rsc_strnicmp( (*ppStr) + 1, "pp=", 3 ) )
             { // anderer Name fuer den Preprozessor
                 aPrePro = (*ppStr) + 4;
+            }
+            else if( !rsc_strnicmp( (*ppStr) + 1, "rsc2=", 5 ) )
+            { // Accept alternate name for the rsc2 compiler
+                aRsc2Name = (*ppStr) + 6;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fo=", 3 ) )
             { // anderer Name fuer .res-file
