@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scabstdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:14:23 $
+ *  last change: $Author: vg $ $Date: 2006-09-27 09:48:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,11 @@
 #include "precompiled_sc.hxx"
 
 #include "scabstdlg.hxx"
-#include "scuilib.hxx"
 
 #include <osl/module.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustrbuf.hxx>
+
+using ::rtl::OUStringBuffer;
 
 typedef ScAbstractDialogFactory* (__LOADONCALLAPI *ScFuncPtrCreateDialogFactory)();
 
@@ -48,7 +49,16 @@ ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
 {
     ScFuncPtrCreateDialogFactory fp = 0;
     static ::osl::Module aDialogLibrary;
-    if ( aDialogLibrary.is() || aDialogLibrary.load( String( RTL_CONSTASCII_USTRINGPARAM( DLL_NAME ) ) ) )
+
+    OUStringBuffer aStrBuf;
+#ifdef SAL_DLLPREFIX
+    aStrBuf.appendAscii( SAL_DLLPREFIX );
+#endif
+    aStrBuf.appendAscii( "scui" );
+    aStrBuf.append( static_cast<sal_Int32>(SUPD) );
+    aStrBuf.appendAscii( SAL_DLLEXTENSION );
+
+    if ( aDialogLibrary.is() || aDialogLibrary.load( aStrBuf.makeStringAndClear() ) )
         fp = ( ScAbstractDialogFactory* (__LOADONCALLAPI*)() )
             aDialogLibrary.getSymbol( ::rtl::OUString::createFromAscii("CreateDialogFactory") );
     if ( fp )
