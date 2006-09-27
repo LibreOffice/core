@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.117 $
-# Date:        $Date: 2006-09-25 13:33:27 $
+# Version:     $Revision: 1.118 $
+# Date:        $Date: 2006-09-27 09:43:23 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -38,10 +38,10 @@ use File::Basename;
 # IIa. Declaring variables for the system commands, etc.
 #--------------------------------------------------------
 #
-my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment, $comment4nt, $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps, $cur_dir, 
+my ( $outfile, $outfile_sh, $outfile_bat, $outfile_jam, $bootfile, $newline, $comment, $comment4nt, $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps, $cur_dir, 
      $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $MINGW, $platform,
      $cygwinver, $empty, $no_ant, $no_stl, $no_gcc_include, 
-     $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $unsetvarssh, $unsetvarsbat, $exportvars, $win_format_var, $perl_os);
+     $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $unsetvarssh, $unsetvarsbat, $unsetvarsjam, $exportvars, $win_format_var, $perl_os);
 #
 #-------------------------------------------------
 # IIb. Declaring environment values (constants).
@@ -52,7 +52,7 @@ my @DICTIONARIES = ("DADK", "DEDE", "ENGB", "ENUS", "HUHU", "ITIT", "RURU", "THT
 my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG, 
      $common_build, $NO_REC_RES, $SO3, $SOLAR_JAVA, 
      $SOLAR_PLUGIN, $TF_PACKAGES, $TF_SDBAPI, $TF_FILEURL, $UPDATER, $BUILD_DELIVER, $VCL, 
-     $TF_CFGDATA, $TF_SVDATA, $CC, $CXX,
+     $TF_CFGDATA, $TF_SVDATA, $CC, $CXX, $JAM_CC, $JAM_CXX, $JAM_INCLUDE, $JAM_LIB, $JAM_COMPATH, $JAM_PSDK_HOME,
      $BUILD_SOSL, $ENABLEUNICODE, $NEW_JAR_PACK, $NO_BSYMBOLIC, 
      $BUILD_SOSL_RELEASE, $RSC_ONCE );
 #
@@ -86,7 +86,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $SHELL,
      $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB,
 	 $PROEXT,
-     $SYSTEM_PYTHON, $PYTHONPATH, $PYTHONHOME, $SYSTEM_MOZILLA );
+     $SYSTEM_PYTHON, $PYTHONPATH, $PYTHONHOME, $SYSTEM_MOZILLA, $ENABLE_JAM);
 #
 #-------------------------------------------
 # IId. Declaring the aliases.
@@ -609,8 +609,22 @@ elsif ( $platform =~ m/cygwin/ )
       } else {                   # Unsupported
           die "Unsupported value for COMEX variable.\n";
       }
-
-  if ( "@USE_SHELL@" ne "4nt" )
+  # Jam requires us to give both CC and LIB without wrapping paths
+  if ( "@ENABLE_JAM@" eq "TRUE" ) {
+	print "Setting Windows NT cygwin with Jam specific values... ";
+	# Store the original CXX without the wrapcommand for Jam
+	  chomp( $JAM_CXX = qx{cygpath -w "$CXX"} );
+	  chomp( $JAM_CC = qx{cygpath -w "$CC"} );
+	  chomp( $JAM_COMPATH = qx{cygpath -w "$COMPATH"} );
+	  chomp( $JAM_PSDK_HOME = qx{cygpath -w "$PSDK_HOME"} );
+	  $JAM_INCLUDE    = "$JAM_COMPATH\\include;$JAM_PSDK_HOME\\include";
+	  $JAM_LIB        = "$JAM_COMPATH\\lib;$JAM_PSDK_HOME\\lib";
+	  $WRAPCMD        = "guw.pl";
+	  $CC             = $WRAPCMD." ".$CC;
+	  $CXX            = $WRAPCMD." ".$CXX;
+      $PATH_SEPERATOR = ':';
+  }
+  elsif ( "@USE_SHELL@" ne "4nt" )
   {   print "Setting Windows NT cygwin without 4NT specific values... ";
 	  $WRAPCMD        = "guw.exe";
 	  $CC             = $WRAPCMD." ".$CC;
@@ -821,6 +835,14 @@ if ("@USE_SHELL@" eq "4nt") {
     $outfile_bat =~ s/set$/bat/i;
 } else {
     undef $outfile_bat;
+}
+
+# Generate jam config file in case jam is enabled
+if ("@ENABLE_JAM@" eq "TRUE") {
+    $outfile_jam = $outfile;
+    $outfile_jam =~ s/set$/jam/i;
+} else {
+    undef $outfile_jam;
 }
 
 if ($STLPORT4 ne $no_stl) {
@@ -1416,6 +1438,12 @@ if(defined($outfile_bat))
    die "Cannot open $outfile_bat: $!\n";
 }
 
+if(defined($outfile_jam))
+{  # Create Jam configuration file
+   open( OUT_JAM, ">$outfile_jam" ) ||
+   die "Cannot open $outfile_jam: $!\n";
+}
+
 #
 #------------------------------------------
 # VII. Writing the data to the output file.
@@ -1425,6 +1453,7 @@ if(defined($outfile_bat))
 CreateFileHeader( *OUT, $UPD, $platform, "(t)csh", "#" );
 CreateFileHeader( *OUT_SH, $UPD, $platform, "sh/bash/ksh", "#" );
 CreateFileHeader( *OUT_BAT, $UPD, $platform, "4nt", "rem" ) if defined($outfile_bat);
+CreateFileHeader( *OUT_JAM, $UPD, $platform, "jam", "#" ) if defined($outfile_jam);
 
 ToFile( "SRC_ROOT",	     $SRC_ROOT,          "e" );
 ToFile( "SHELL",             $SHELL,             "e" );
@@ -1708,6 +1737,12 @@ ToFile( "HAVE_GCC_VISIBILITY_FEATURE",
 ToFile( "CXX",               $CXX,               "e" );
 ToFile( "MINGWCXX",          "@MINGWCXX@",       "e" );
 ToFile( "MINGWSTRIP",        "@MINGWSTRIP@",     "e" );
+ToFile( "JAM_CXX",           $JAM_CXX,           "e" );
+ToFile( "JAM_CC",            $JAM_CC,            "e" );
+ToFile( "JAM_INCLUDE",       $JAM_INCLUDE,       "e" );
+ToFile( "JAM_LIB",           $JAM_LIB,           "e" );
+ToFile( "JAM_COMPATH",       $JAM_COMPATH,       "e" );
+ToFile( "JAM_PSDK_HOME",     $JAM_PSDK_HOME,     "e" );
 ToFile( "USE_SYSTEM_STL",    "@USE_SYSTEM_STL@", "e" );
 ToFile( "ALLOC",             "@ALLOC@",          "e" );
 ToFile( "ENABLE_SYMBOLS",    "@ENABLE_SYMBOLS@",    "e" );
@@ -1812,6 +1847,7 @@ ToFile( "SYSTEM_AGG",	     "@SYSTEM_AGG@",       "e" );
 ToFile( "AGG_VERSION",	     "@AGG_VERSION@",      "e" );
 ToFile( "BUILD_DMAKE",       "@BUILD_DMAKE@",      "e" );
 ToFile( "BUILD_UNOWINREG",   "@BUILD_UNOWINREG@",  "e" );
+ToFile( "ENABLE_JAM",        "@ENABLE_JAM@",       "e" );
 ToFile( "USE_XINERAMA",      "@USE_XINERAMA@",     "e" );
 ToFile( "XINERAMA_LINK",     "@XINERAMA_LINK@",    "e" );
 ToFile( "SYSTEM_MYSPELL",    "@SYSTEM_MYSPELL@",   "e" );
@@ -1930,6 +1966,10 @@ if(defined($outfile_bat))
 {  print OUT_BAT $unsetvarsbat;
 }
 
+if(defined($outfile_jam))
+{  print OUT_JAM $unsetvarsjam;
+}
+
 #
 #---------------------------
 # VIII. Closing output file.
@@ -1941,6 +1981,10 @@ close( OUT_SH ) || print "Can't close $outfile_sh: $!";
 
 if( defined($outfile_bat))
 {  close( OUT_BAT ) || print "Can't close $outfile_bat: $!";
+}
+
+if( defined($outfile_jam))
+{  close( OUT_JAM ) || print "Can't close $outfile_jam: $!";
 }
 #
 #------------------------------
@@ -1970,6 +2014,14 @@ if(defined($outfile_bat))
     $tmp = $SRC_ROOT.$ds.$outfile_bat;
     if (rename( $outfile_bat, $tmp ) ne 1)
     {  `mv -f $outfile_bat $tmp`;
+    }
+}
+
+if(defined($outfile_jam))
+{
+    $tmp = $SRC_ROOT.$ds.$outfile_jam;
+    if (rename( $outfile_jam, $tmp ) ne 1)
+    {  `mv -f $outfile_jam $tmp`;
     }
 }
 
@@ -2146,12 +2198,18 @@ sub ToFile {
              print OUT_BAT "IF DEFINED $_[ 0 ] $unset $_[ 0 ]$newline";
              print OUT_BAT "$set $_[ 0 ]=$win_format_var$newline";
          }
+	 if(defined($outfile_jam)) {
+             print OUT_JAM "$_[ 0 ] = \"$envvarbash\" ;$newline"; # to jam file
+	 }
       } else {
          printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", "unset") ; # to stdout
          $unsetvars .= "$unsetenv $_[ 0 ] >& /dev/null$newline"; # for tcsh file
          $unsetvarssh .= " $_[ 0 ]";                             # for sh file
          if(defined($outfile_bat)) {
              $unsetvarsbat .= "$unset $_[ 0 ] >& NUL$newline";
+         }
+         if(defined($outfile_jam)) {
+             $unsetvarsjam .= "$_[ 0 ] = \"\" ;$newline";
          }
       }
    }
@@ -2167,6 +2225,11 @@ sub ToFile {
          $aliastmp =~ s!"!!g;
          print OUT_BAT "$_[ 0 ]=".'`'.$aliastmp.'`'.$newline;
       }
+# FIXME(kaib): Aliases not supported in this form by jam (should be normal env declarations)
+#      if(defined($outfile_jam))
+#      {
+#         print OUT_JAM "$_[ 0 ]=$_[ 1 ]$newline";      # to jam file
+#      }
    }
    elsif ( $_[ 2 ] eq "c" ) 
    {  # Write a comment to file.
@@ -2188,12 +2251,19 @@ sub ToFile {
           print OUT_BAT "$comment4nt $_[ 0 ]$newline";
           print OUT_BAT "$comment4nt$newline";
       }
+      if(defined($outfile_jam)) {
+          print OUT_JAM "$newline";
+          print OUT_JAM "$comment$newline";
+          print OUT_JAM "$comment $_[ 0 ]$newline";
+          print OUT_JAM "$comment$newline";
+      }
    }
    elsif ( $_[ 2 ] eq "n" )
    {  #Write a newline to a file
       print OUT "$newline";
       print OUT_SH "$newline";
       print OUT_BAT "$newline" if defined($outfile_bat);
+      print OUT_JAM "$newline" if defined($outfile_jam);
    }
    elsif ( $_[ 2 ] eq "x" )
    {
@@ -2224,6 +2294,9 @@ sub ToFile {
              $win_format_var = WinFormat( $_[ 1 ] );  #Filter for Windows
              print OUT_BAT "IF DEFINED $_[ 0 ] $unset $_[ 0 ]$newline";
              print OUT_BAT "$set $_[ 0 ]=$win_format_var$newline";
+         }
+         if (defined($outfile_jam)) {
+             print OUT_JAM "$_[ 0 ] = \"$win_format_var\" ;$newline"; # to jam file
          }
       }
       else
