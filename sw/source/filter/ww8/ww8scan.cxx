@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:25:28 $
+ *  last change: $Author: vg $ $Date: 2006-09-27 10:52:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6470,7 +6470,7 @@ WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize) : bUseTh
             cDBC = Get_Long( pData );
             cDBCFtnEdn = Get_Long( pData );
 
-            pData += 1 * sizeof( long );
+            pData += 1 * sizeof( INT32);
 
             nfcFtnRef = Get_Short( pData );
             nfcEdnRef = Get_Short( pData );
@@ -6762,7 +6762,7 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
         Set_UInt32( pData, cDBC );
         Set_UInt32( pData, cDBCFtnEdn );
 
-        pData += 1 * sizeof( long );
+        pData += 1 * sizeof( INT32);
 
         Set_UInt16( pData, nfcFtnRef );
         Set_UInt16( pData, nfcEdnRef );
