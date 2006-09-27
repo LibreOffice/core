@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlexp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:20:21 $
+ *  last change: $Author: vg $ $Date: 2006-09-27 10:32:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@ class OutputDevice;
 class ScDrawLayer;
 class SvStringsSortDtor;
 class ScEditCell;
+class SvxBorderLine;
 
 struct ScHTMLStyle
 {   // Defaults aus StyleSheet
@@ -167,14 +168,8 @@ class ScHTMLExport : public ScExportBase
                                         SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow );
 
-    BOOL                HasBottomBorder( SCROW nRow, SCTAB nTab,
-                                        SCCOL nStartCol, SCCOL nEndCol );
-    BOOL                HasLeftBorder( SCCOL nCol, SCTAB nTab,
-                                        SCROW nStartRow, SCROW nEndRow );
-    BOOL                HasTopBorder( SCROW nRow, SCTAB nTab,
-                                        SCCOL nStartCol, SCCOL nEndCol );
-    BOOL                HasRightBorder( SCCOL nCol, SCTAB nTab,
-                                        SCROW nStartRow, SCROW nEndRow );
+    void                BorderToStyle( ByteString& rOut, const char* pBorderName,
+                                       const SvxBorderLine* pLine, bool& bInsertSemicolon );
 
     USHORT              GetFontSizeNumber( USHORT nHeight );
     const char*         GetFontSizeCss( USHORT nHeight );
