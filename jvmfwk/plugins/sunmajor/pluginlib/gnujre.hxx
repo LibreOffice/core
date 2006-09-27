@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gnujre.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:31:12 $
+ *  last change: $Author: vg $ $Date: 2006-09-27 10:54:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,8 @@ namespace jfw_plugin
 
 class GnuInfo: public VendorBase
 {
+private:
+    rtl::OUString m_sJavaHome;
 public:
     static char const* const* getJavaExePaths(int * size);
 
