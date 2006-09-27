@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fract.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:55:42 $
+ *  last change: $Author: vg $ $Date: 2006-09-27 10:50:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -534,22 +534,22 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
         return;
 
     // Zaehler und Nenner auf den Stack fuer schnelleren Zugriff
-    UINT32 nMul;
-    UINT32 nDiv;
+    unsigned long nMul;
+    unsigned long nDiv;
     BOOL   bNeg;
     if ( nNumerator >= 0 )
     {
-        nMul = (UINT32)nNumerator;
+        nMul = (unsigned long)nNumerator;
         bNeg = FALSE;
     }
     else
     {
-        nMul = (UINT32)(-nNumerator);
+        nMul = (unsigned long)(-nNumerator);
         bNeg = TRUE;
     }
-    nDiv=(UINT32)nDenominator;
+    nDiv=(unsigned long)nDenominator;
 
-    UINT32 a=nMul; unsigned nMulZ=0; // Fuehrende Nullen zaehlen
+    unsigned long a=nMul; unsigned nMulZ=0; // Fuehrende Nullen zaehlen
     while (a<0x00800000) { nMulZ+=8; a<<=8; }
     while (a<0x80000000) { nMulZ++; a<<=1; }
     a=nDiv; unsigned nDivZ=0; // Fuehrende Nullen zaehlen
@@ -557,8 +557,8 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
     while (a<0x80000000) { nDivZ++; a<<=1; }
     // Anzahl der verwendeten Digits bestimmen
     // Auch hier gehe ich davon aus, dass es sich um 32Bit-Werte handelt
-    int nMulDigits=32-nMulZ;
-    int nDivDigits=32-nDivZ;
+    int nMulDigits=(sizeof(long) * 8)-nMulZ;
+    int nDivDigits=(sizeof(long) * 8)-nDivZ;
     // Nun bestimmen, wieviele Stellen hinten weg koennen
     // Hier koennte man das Ergebnis noch etwas optimieren...
     int nMulWeg=nMulDigits-nSignificantBits; if (nMulWeg<0) nMulWeg=0;
