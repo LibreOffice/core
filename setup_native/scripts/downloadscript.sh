@@ -46,7 +46,7 @@ fi
 
 # Unpacking
 
-mkdir $UNPACKDIR
+mkdir -m 700 $UNPACKDIR
 
 diskSpace=`df -k $UNPACKDIR | $tail_prog -1 | awk '{if ( $4 ~ /%/) { print $3 } else { print $4 } }'`
 if [ $diskSpace -lt $diskSpaceRequired ]; then
