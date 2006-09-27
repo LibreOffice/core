@@ -4,9 +4,9 @@
  *
  *  $RCSfile: erscerr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:58:23 $
+ *  last change: $Author: vg $ $Date: 2006-09-27 09:52:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,6 +241,7 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
             StdLstOut( "-presponse     Use response file for Preprocessor.\n" );
             StdLstOut( "-lg<language>  Use a different language.\n" );
             StdLstOut( "-pp=<filename> Use a different Preprocessor.\n" );
+            StdLstOut( "-rsc2=<filename> Specify the location for rsc2.\n" );
             StdLstOut( "No longer existent: -rc<filename>  Use a different system resource compiler.\n" );
             StdLstOut( "-fs=<filename> Name of the .res file.\n" );
             StdLstOut( "-lip=<path>    additional search path for system dependant files\n" );
