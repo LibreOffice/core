@@ -2,61 +2,105 @@
 # executables are *.exe for WNT. This variable is necessary since Cygwin 1.5.x
 # Use spawn instead of fork when building dmake on cygwin. 
 if test "$GUI" = "WNT"; then
-  EXEEXT=".exe"
-  DMAKE_CONF="--enable-spawn"
+    EXEEXT=".exe"
+    DMAKE_CONF="--enable-spawn"
 else
-  EXEEXT=""
-  DMAKE_CONF=""
+    EXEEXT=""
+    DMAKE_CONF=""
 fi
 export EXEEXT
 
+# ------------------------------------------------------------------------------
+# Build jam if enabled. Grabbed from dmake build pieces
+# BEWARE: this needs to be before the dmake build as we need the platform
+# specific CC value ..
+
+if test "$ENABLE_JAM" = "TRUE"; then
+    if test ! -e "$SOLARENV/$OUTPATH/bin/jam$EXEEXT"; then
+        cd "$SRC_ROOT/external/jam" || exit
+
+        # For normal unixy systems
+        if test -e "build_jam.sh" ; then
+            INCLUDE=$JAM_INCLUDE LIB=$JAM_LIB ./build_jam.sh || exit
+        fi
+
+        echo ""
+        echo "jam has been successfully built"
+
+        cd ../..
+
+        # copy the jam executable into solenv
+        mkdir -p "$SOLARENV/$OUTPATH/bin"	
+        cp "$SRC_ROOT/external/jam/src/jam$EXEEXT" "$SOLARENV/$OUTPATH/bin/jam$EXEEXT" 
+
+    fi
+
+    # Copy the dummy root Jamrules and Jamfile into $SRC_ROOT
+    # They just include the real ones in solenv/jaminc
+    cp "$SRC_ROOT/solenv/jaminc/Jamrules.1" "$SRC_ROOT/Jamrules" 
+    if ! test -e "$SRC_ROOT/Jamrules" ; then
+        echo "Error in copying $SRC_ROOT/solenv/jaminc/Jamrules.1 to $SRC_ROOT/Jamrules"
+        exit 1; 
+    fi
+
+    cp "$SRC_ROOT/solenv/jaminc/Jamfile.1" "$SRC_ROOT/Jamfile" 
+    if ! test -e "$SRC_ROOT/Jamfile" ; then
+        echo "Error in copying $SRC_ROOT/solenv/jaminc/Jamfile.1 to $SRC_ROOT/Jamfile"
+        exit 1; 
+    fi
+
+fi
+
+# ------------------------------------------------------------------------------
+# Build dmake
+
 if test "$BUILD_DMAKE" != "NO"; then
 
-  if test ! -x "$SOLARENV/$OUTPATH/bin/dmake$EXEEXT"; then
+    if test ! -x "$SOLARENV/$OUTPATH/bin/dmake$EXEEXT"; then
 
-  cd "$SRC_ROOT/dmake" || exit
+        cd "$SRC_ROOT/dmake" || exit
 
-  # Special case! The w32/tcsh build needs CC pointing to the MSVC++ compiler
-  # but we need a cygwin/gcc build dmake to understand the posix paths
-  if test "$GUI" = "WNT" -a "$USE_SHELL" != "4nt"; then
-    CC=""
-    CXX=""
-    export CC
-    export CXX
-  fi
+        # Special case! The w32/tcsh build needs CC pointing to the MSVC++ compiler
+        # but we need a cygwin/gcc build dmake to understand the posix paths
+        if test "$GUI" = "WNT" -a "$USE_SHELL" != "4nt"; then
+            CC=""
+            CXX=""
+            export CC
+            export CXX
+        fi
 
-  # For the W32/4nt case
-  rm -rf objects
+        # For the W32/4nt case
+        rm -rf objects
 
-  # For normal unixy systems
-  if test -f "Makefile" ; then
-    $GNUMAKE distclean || exit
-  fi
+        # For normal unixy systems
+        if test -f "Makefile" ; then
+            $GNUMAKE distclean || exit
+        fi
 
-  ./configure $DMAKE_CONF || exit
+        ./configure $DMAKE_CONF || exit
 
-  ## invoke the gnu make command set by configure.
-  $GNUMAKE || exit
+        ## invoke the gnu make command set by configure.
+        $GNUMAKE || exit
 
-  echo ""
-  echo "dmake has been successfully built"
+        echo ""
+        echo "dmake has been successfully built"
 
-  cd ..
+        cd ..
 
-  else
+    else
 
-  echo ""
-  echo "dmake present in $SOLARENV/$OUTPATH/bin/dmake$EXEEXT"
+        echo ""
+        echo "dmake present in $SOLARENV/$OUTPATH/bin/dmake$EXEEXT"
 
-  fi
+    fi
 
 fi
 
 mkdir -p "$SOLARENV/$OUTPATH/bin"
 if test "$BUILD_DMAKE" != "NO"; then
-  cp -f "$SRC_ROOT/dmake/dmake$EXEEXT" "$SOLARENV/$OUTPATH/bin" || exit
-  echo ""
-  echo "dmake copied to $SOLARENV/$OUTPATH/bin/dmake$EXEEXT"
+    cp -f "$SRC_ROOT/dmake/dmake$EXEEXT" "$SOLARENV/$OUTPATH/bin" || exit
+    echo ""
+    echo "dmake copied to $SOLARENV/$OUTPATH/bin/dmake$EXEEXT"
 fi
 
 if test "$GUI" = "WNT" -a ! -x "$SOLARENV/$OUTPATH/bin/guw$EXEEXT"; then
