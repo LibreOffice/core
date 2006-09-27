@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swhtml.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:07:18 $
+ *  last change: $Author: vg $ $Date: 2006-09-27 10:52:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -438,7 +438,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     sal_uInt32  aFontHeights[7];    // die Font-Hoehen 1-7
     sal_uInt32  nScriptStartLineNr; // Zeilennummer eines Script-Blocks
-    sal_uInt32                  nEventId;
+    ULONG       nEventId;
 
     sal_uInt16  nBaseFontStMin;     //
     sal_uInt16  nFontStMin;         //
