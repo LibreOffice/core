@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-15 12:52:23 $
+ *  last change: $Author: vg $ $Date: 2006-09-27 10:51:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -838,9 +838,9 @@ public:
     virtual void UnlockExpFlds();
     virtual bool IsExpFldsLocked() const;
     virtual SwDocUpdtFld& GetUpdtFlds() const;
-    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, sal_uInt32 nLen);
+    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, ULONG nLen);
     virtual void SetFixFields(bool bOnlyTimeDate, const DateTime* pNewDateTime);
-    virtual void FldsToCalc(SwCalc& rCalc, sal_uInt32 nLastNd, sal_uInt16 nLastCntnt);
+    virtual void FldsToCalc(SwCalc& rCalc, ULONG nLastNd, sal_uInt16 nLastCnt);
     virtual void FldsToCalc(SwCalc& rCalc, const _SetGetExpFld& rToThisFld);
     virtual void FldsToExpand(SwHash**& ppTbl, sal_uInt16& rTblSize, const _SetGetExpFld& rToThisFld);
     virtual bool IsNewFldLst() const;
