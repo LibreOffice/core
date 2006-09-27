@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:38:04 $
+ *  last change: $Author: vg $ $Date: 2006-09-27 10:53:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ class SalPrinterBmp : public psp::PrinterBmp
 
     FncGetPixel         mpFncGetPixel;
     Scanline            mpScanAccess;
-    sal_Int32           mnScanOffset;
+    sal_PtrDiff         mnScanOffset;
 
     sal_uInt32          ColorOf (BitmapColor& rColor) const;
     sal_uInt8           GrayOf  (BitmapColor& rColor) const;
