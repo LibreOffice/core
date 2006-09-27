@@ -4,9 +4,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:53:18 $
+ *  last change: $Author: vg $ $Date: 2006-09-27 10:52:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ extern "C"
 }
 
 
-static const int nXdndProtocolRevision = 5;
+static const long nXdndProtocolRevision = 5;
 
 // mapping between mime types (or what the office thinks of mime types)
 // and X convention types
@@ -1341,7 +1341,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
     std::vector< Atom > aNativeTypes;
     if( aAtoms.getLength() )
     {
-        int nAtoms = aAtoms.getLength() / 4;
+        sal_Int32 nAtoms = aAtoms.getLength() / sizeof(Atom);
         Atom* pAtoms = (Atom*)aAtoms.getArray();
         rTypes.realloc( nAtoms );
         aNativeTypes.resize( nAtoms );
@@ -1458,6 +1458,12 @@ PixmapHolder* SelectionManager::getPixmapHolder( Atom selection )
     if( ! it->second->m_pPixmap )
         it->second->m_pPixmap = new PixmapHolder( m_pDisplay );
     return it->second->m_pPixmap;
+}
+
+static sal_Size GetTrueFormatSize(int nFormat)
+{
+    // http://mail.gnome.org/archives/wm-spec-list/2003-March/msg00067.html
+    return nFormat == 32 ? sizeof(long) : nFormat/8;
 }
 
 bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
@@ -1595,13 +1601,15 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
             rInc.m_nTransferStartTime   = time( NULL );
 
             // use incr protocol, signal start to requestor
-            int nMinSize = m_nIncrementalThreshold;
+            long nMinSize = m_nIncrementalThreshold;
             XSelectInput( m_pDisplay, requestor, PropertyChangeMask );
             XChangeProperty( m_pDisplay, requestor, property,
                              m_nINCRAtom, 32,  PropModeReplace, (unsigned char*)&nMinSize, 1 );
             XFlush( m_pDisplay );
         }
         else
+        {
+            sal_Size nUnitSize = GetTrueFormatSize(nFormat);
             XChangeProperty( m_pDisplay,
                              requestor,
                              property,
@@ -1609,7 +1617,8 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
                              nFormat,
                              PropModeReplace,
                              (const unsigned char*)aData.getConstArray(),
-                             aData.getLength()/(nFormat/8) );
+                             aData.getLength()/nUnitSize );
+            }
     }
 #if OSL_DEBUG_LEVEL > 1
     else
@@ -1677,7 +1686,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
         }
         else if( rRequest.target == m_nTIMESTAMPAtom )
         {
-            sal_uInt32 nTimeStamp = (sal_uInt32)m_aSelections[rRequest.selection]->m_nOrigTimestamp;
+            long nTimeStamp = (long)m_aSelections[rRequest.selection]->m_nOrigTimestamp;
             XChangeProperty( m_pDisplay, rRequest.requestor, rRequest.property,
                              XA_INTEGER, 32, PropModeReplace, (const unsigned char*)&nTimeStamp, 1 );
             aNotify.xselection.property = rRequest.property;
@@ -1907,11 +1916,14 @@ bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
                      OUStringToOString( getString( nType ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
                      nFormat, nBytes );
 #endif
+
+            sal_Size nUnitSize = GetTrueFormatSize(nFormat);
+
             if( it->second->m_eState == Selection::WaitingForData ||
                 it->second->m_eState == Selection::WaitingForResponse )
             {
                 // copy data
-                it->second->m_aData = Sequence< sal_Int8 >( (sal_Int8*)pData, nItems*nFormat/8 );
+                it->second->m_aData = Sequence< sal_Int8 >( (sal_Int8*)pData, nItems*nUnitSize );
                 it->second->m_eState = Selection::Inactive;
                 it->second->m_aDataArrived.set();
             }
@@ -1920,9 +1932,9 @@ bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
                 if( nItems )
                 {
                     // append data
-                    Sequence< sal_Int8 > aData( it->second->m_aData.getLength() + nItems*nFormat/8 );
+                    Sequence< sal_Int8 > aData( it->second->m_aData.getLength() + nItems*nUnitSize );
                     memcpy( aData.getArray(), it->second->m_aData.getArray(), it->second->m_aData.getLength() );
-                    memcpy( aData.getArray() + it->second->m_aData.getLength(), pData, nItems*nFormat/8 );
+                    memcpy( aData.getArray() + it->second->m_aData.getLength(), pData, nItems*nUnitSize );
                     it->second->m_aData = aData;
                 }
                 else
@@ -2009,6 +2021,8 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
                          (const unsigned char*)rInc.m_aData.getConstArray()+rInc.m_nBufferPos );
 #endif
 
+                sal_Size nUnitSize = GetTrueFormatSize(rInc.m_nFormat);
+
                 XChangeProperty( m_pDisplay,
                                  rInc.m_aRequestor,
                                  rInc.m_aProperty,
@@ -2016,7 +2030,7 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
                                  rInc.m_nFormat,
                                  PropModeReplace,
                                  (const unsigned char*)rInc.m_aData.getConstArray()+rInc.m_nBufferPos,
-                                 nBytes/(rInc.m_nFormat/8) );
+                                 nBytes/nUnitSize );
                 rInc.m_nBufferPos += nBytes;
                 rInc.m_nTransferStartTime = nCurrentTime;
 
@@ -2103,7 +2117,8 @@ bool SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
                                     &pData );
             }
             it->second->m_eState        = Selection::Inactive;
-            it->second->m_aData         = Sequence< sal_Int8 >((sal_Int8*)pData, nFormat/8 * nItems );
+            sal_Size nUnitSize = GetTrueFormatSize(nFormat);
+            it->second->m_aData         = Sequence< sal_Int8 >((sal_Int8*)pData, nItems * nUnitSize);
             it->second->m_aDataArrived.set();
             if( pData )
                 XFree( pData );
