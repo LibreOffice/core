@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:52:09 $
+ *  last change: $Author: vg $ $Date: 2006-09-27 10:51:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1225,7 +1225,7 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld )
     pMgr->CloseAll(FALSE);
 }
 
-void SwDoc::FldsToCalc( SwCalc& rCalc, ULONG nLastNd, USHORT nLastCnt )
+void SwDoc::FldsToCalc( SwCalc& rCalc, ULONG nLastNd, sal_uInt16 nLastCnt )
 {
     // erzeuge die Sortierteliste aller SetFelder
     pUpdtFlds->MakeFldList( *this, mbNewFldLst, GETFLD_CALC );
