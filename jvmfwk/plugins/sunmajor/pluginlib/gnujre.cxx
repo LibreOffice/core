@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gnujre.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:45:28 $
+ *  last change: $Author: vg $ $Date: 2006-09-27 10:54:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,9 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
         RTL_CONSTASCII_USTRINGPARAM("java.vendor"));
     OUString sVersionProperty(
         RTL_CONSTASCII_USTRINGPARAM("java.version"));
-    OUString sHomeProperty(
+    OUString sJavaHomeProperty(
+        RTL_CONSTASCII_USTRINGPARAM("java.home"));
+    OUString sGNUHomeProperty(
         RTL_CONSTASCII_USTRINGPARAM("gnu.classpath.home.url"));
     OUString sAccessProperty(
         RTL_CONSTASCII_USTRINGPARAM("javax.accessibility.assistive_technologies"));
@@ -94,6 +96,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     bool bVersion = false;
     bool bVendor = false;
     bool bHome = false;
+    bool bJavaHome = false;
     bool bAccess = false;
 
     typedef vector<pair<OUString, OUString> >::const_iterator it_prop;
@@ -109,10 +112,26 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
             m_sVersion = i->second;
             bVersion = true;
         }
-        else if (!bHome && sHomeProperty.equals(i->first))
+        else if (!bHome && sGNUHomeProperty.equals(i->first))
         {
             m_sHome = i->second;
             bHome = true;
+        }
+        else if (!bJavaHome && sJavaHomeProperty.equals(i->first))
+        {
+           OUString fileURL;
+           if (osl_getFileURLFromSystemPath(i->second.pData,& fileURL.pData) ==
+               osl_File_E_None)
+           {
+               //make sure that the drive letter have all the same case
+               //otherwise file:///c:/jre and file:///C:/jre produce two
+               //different objects!!!
+               if (makeDriveLetterSame( & fileURL))
+               {
+                   m_sJavaHome = fileURL;
+                   bJavaHome = true;
+               }
+           }
         }
         else if (!bAccess && sAccessProperty.equals(i->first))
         {
@@ -128,6 +147,9 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     }
     if (!bVersion || !bVendor || !bHome)
         return false;
+
+    if (!m_sJavaHome.getLength())
+        m_sJavaHome = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///usr/lib"));
 
     // init m_sRuntimeLibrary
     OSL_ASSERT(m_sHome.getLength());
@@ -155,7 +177,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
 
     if (!bRt)
     {
-        m_sHome = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///usr/lib"));
+        m_sHome = m_sJavaHome;
         for(i_path ip = libpaths.begin(); ip != libpaths.end(); ip++)
         {
             //Construct an absolute path to the possible runtime
