@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texture.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:58:20 $
+ *  last change: $Author: aw $ $Date: 2006-09-27 16:33:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,18 +55,18 @@ namespace drawinglayer
         {
         }
 
-        bool geoTexSvx::operator==(const geoTexSvx& rGeoTexSvx) const
+        bool geoTexSvx::operator==(const geoTexSvx& /*rGeoTexSvx*/) const
         {
             // default implementation says yes (no data -> no difference)
             return true;
         }
 
-        void geoTexSvx::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
+        void geoTexSvx::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& /*rMatrices*/)
         {
             // default implementation does nothing
         }
 
-        void geoTexSvx::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
+        void geoTexSvx::modifyBColor(const basegfx::B2DPoint& /*rUV*/, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             // base implementation creates random color (for testing only, may also be pure virtual)
             rBColor.setRed((rand() & 0x7fff) / 32767.0);
@@ -236,7 +236,7 @@ namespace drawinglayer
             }
         }
 
-        void geoTexSvxGradientLinear::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
+        void geoTexSvxGradientLinear::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
 
@@ -363,7 +363,7 @@ namespace drawinglayer
             }
         }
 
-        void geoTexSvxGradientAxial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
+        void geoTexSvxGradientAxial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
             const double fAbsY(fabs(aCoor.getY()));
@@ -483,7 +483,7 @@ namespace drawinglayer
             impAppendColorsRadial(rColors);
         }
 
-        void geoTexSvxGradientRadial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
+        void geoTexSvxGradientRadial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
             const double fDist(aCoor.getX() * aCoor.getX() + aCoor.getY() * aCoor.getY());
@@ -613,7 +613,7 @@ namespace drawinglayer
             impAppendColorsRadial(rColors);
         }
 
-        void geoTexSvxGradientElliptical::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
+        void geoTexSvxGradientElliptical::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
             const double fDist(aCoor.getX() * aCoor.getX() + aCoor.getY() * aCoor.getY());
@@ -758,7 +758,7 @@ namespace drawinglayer
             impAppendColorsRadial(rColors);
         }
 
-        void geoTexSvxGradientSquare::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
+        void geoTexSvxGradientSquare::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
             const double fAbsX(fabs(aCoor.getX()));
@@ -896,7 +896,7 @@ namespace drawinglayer
             impAppendColorsRadial(rColors);
         }
 
-        void geoTexSvxGradientRect::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
+        void geoTexSvxGradientRect::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
             const double fAbsX(fabs(aCoor.getX()));

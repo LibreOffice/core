@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudelathetools3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:51:15 $
+ *  last change: $Author: aw $ $Date: 2006-09-27 16:33:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,8 +160,8 @@ namespace
             if(nPointCount)
             {
                 const sal_uInt32 nEdgeCount(aSubA.isClosed() ? nPointCount : nPointCount - 1L);
-                double fTexHorMultiplicatorA, fTexHorMultiplicatorB;
-                double fPolygonPosA, fPolygonPosB;
+                double fTexHorMultiplicatorA(0.0), fTexHorMultiplicatorB(0.0);
+                double fPolygonPosA(0.0), fPolygonPosB(0.0);
 
                 if(bCreateTextureCoordinates)
                 {
@@ -170,8 +170,6 @@ namespace
 
                     const double fPolygonLengthB(basegfx::tools::getLength(aSubB));
                     fTexHorMultiplicatorB = basegfx::fTools::equalZero(fPolygonLengthB) ? 1.0 : 1.0 / fPolygonLengthB;
-
-                    fPolygonPosA = fPolygonPosB = 0.0;
                 }
 
                 for(sal_uInt32 b(0L); b < nEdgeCount; b++)

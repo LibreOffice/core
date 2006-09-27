@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygontubeprimitive3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:51:15 $
+ *  last change: $Author: aw $ $Date: 2006-09-27 16:33:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,7 +191,7 @@ namespace drawinglayer
                 sal_uInt32 nSegments,
                 const attribute::materialAttribute3D& rMaterial,
                 double fAngle,
-                double fDegreeStepWidth,
+                double /*fDegreeStepWidth*/,
                 double fMiterMinimumAngle,
                 basegfx::tools::B2DLineJoin aLineJoin)
             {

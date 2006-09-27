@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrsphereprimitive3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:51:16 $
+ *  last change: $Author: aw $ $Date: 2006-09-27 16:33:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ namespace drawinglayer
 
                     if(bSphereX || bObjectSpecificX || bSphereY || bObjectSpecificY)
                     {
-                        double fRelativeAngle;
+                        double fRelativeAngle(0.0);
 
                         if(bObjectSpecificX)
                         {

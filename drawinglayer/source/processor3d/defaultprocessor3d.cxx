@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultprocessor3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:57:47 $
+ *  last change: $Author: aw $ $Date: 2006-09-27 16:33:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -428,6 +428,10 @@ namespace basegfx
     public:
         B3DPolyPolygonRasterConverter(bool bArea)
         :   mbAreaMode(bArea)
+        {
+        }
+
+        virtual ~B3DPolyPolygonRasterConverter()
         {
         }
 
@@ -879,7 +883,6 @@ namespace drawinglayer
                 }
                 else
                 {
-                    const sal_uInt32 nScanlineIndexLine(mrBuffer.getIndexFromXY(0L, (sal_uInt32)nLine));
                     double fZStart(rEntry.getZInterpolator().getVal());
                     double fZStop(fZStart + rEntry.getZInterpolator().getInc());
 
@@ -973,12 +976,12 @@ namespace drawinglayer
                 && mfOpacity == pCompare->mfOpacity);
         }
 
-        void geoTexSvxMono::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
+        void geoTexSvxMono::modifyBColor(const basegfx::B2DPoint& /*rUV*/, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             rBColor = maSingleColor;
         }
 
-        void geoTexSvxMono::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
+        void geoTexSvxMono::modifyOpacity(const basegfx::B2DPoint& /*rUV*/, double& rfOpacity) const
         {
             rfOpacity = mfOpacity;
         }
@@ -1743,7 +1746,7 @@ namespace drawinglayer
                         // directdraw of polygonHairlinePrimitive3D
                         const primitive3d::polygonHairlinePrimitive3D& rPrimitive = static_cast< const primitive3d::polygonHairlinePrimitive3D& >(rCandidate.getBasePrimitive());
 
-                        if(mbProcessTransparent == (0L != mpTransparenceGeoTexSvx))
+                        if((bool)mbProcessTransparent == (0L != mpTransparenceGeoTexSvx))
                         {
                             impRender_POH3(rPrimitive);
                         }
@@ -1756,7 +1759,7 @@ namespace drawinglayer
                         // directdraw of polyPolygonMaterialPrimitive3D
                         const primitive3d::polyPolygonMaterialPrimitive3D& rPrimitive = static_cast< const primitive3d::polyPolygonMaterialPrimitive3D& >(rCandidate.getBasePrimitive());
 
-                        if(mbProcessTransparent == (0L != mpTransparenceGeoTexSvx))
+                        if((bool)mbProcessTransparent == (0L != mpTransparenceGeoTexSvx))
                         {
                             impRender_POM3(rPrimitive);
                         }

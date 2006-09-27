@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationtiming.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:47:02 $
+ *  last change: $Author: aw $ $Date: 2006-09-27 16:32:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ namespace drawinglayer
             return mfDuration;
         }
 
-        double animationEntryFixed::getStateAtTime(double fTime) const
+        double animationEntryFixed::getStateAtTime(double /*fTime*/) const
         {
             return mfState;
         }
