@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IDocumentFieldsAccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:12:27 $
+ *  last change: $Author: vg $ $Date: 2006-09-27 10:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
         SwNode (see parameter pChk) is (?) part of the private
         data structure of SwDoc and should not be exposed
     */
-    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, sal_uInt32 nLen) = 0;
+    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, ULONG nLen) = 0;
 
     /**
     */
@@ -200,7 +200,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
     // eine erzeugte Liste aller Felder mit uebergegeben werden.
     // (ist die Adresse != 0, und der Pointer == 0 wird eine neue
     // Liste returnt.)
-    virtual void FldsToCalc(SwCalc& rCalc, sal_uInt32 nLastNd, sal_uInt16 nLastCntnt) = 0;
+    virtual void FldsToCalc(SwCalc& rCalc, ULONG nLastNd, sal_uInt16 nLastCnt) = 0;
 
     /**
     */
