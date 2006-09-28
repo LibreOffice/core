@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scabstdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-27 09:48:41 $
+ *  last change: $Author: vg $ $Date: 2006-09-28 16:58:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,12 +51,7 @@ ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
     static ::osl::Module aDialogLibrary;
 
     OUStringBuffer aStrBuf;
-#ifdef SAL_DLLPREFIX
-    aStrBuf.appendAscii( SAL_DLLPREFIX );
-#endif
-    aStrBuf.appendAscii( "scui" );
-    aStrBuf.append( static_cast<sal_Int32>(SUPD) );
-    aStrBuf.appendAscii( SAL_DLLEXTENSION );
+    aStrBuf.appendAscii( SVLIBRARY("scui") );
 
     if ( aDialogLibrary.is() || aDialogLibrary.load( aStrBuf.makeStringAndClear() ) )
         fp = ( ScAbstractDialogFactory* (__LOADONCALLAPI*)() )
