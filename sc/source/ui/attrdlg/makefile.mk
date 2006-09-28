@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 20:26:59 $
+#   last change: $Author: vg $ $Date: 2006-09-28 16:58:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,16 +75,3 @@ LIB1OBJFILES =  \
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
-$(INCCOM)$/scuilib.hxx: makefile.mk
-.IF "$(GUI)"=="UNX"
-    $(RM) $@
-    +echo \#define DLL_NAME \"libscui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
-.ELSE
-.IF "$(USE_SHELL)"!="4nt"
-    +echo \#define DLL_NAME \"scui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
-.ELSE          # "$(USE_SHELL)"!="4nt"
-    +echo #define DLL_NAME "scui$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
-.ENDIF          # "$(USE_SHELL)"!="4nt"
-.ENDIF
-
-$(SLO)$/scabstdlg.obj : $(INCCOM)$/scuilib.hxx
