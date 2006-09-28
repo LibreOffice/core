@@ -1,0 +1,2 @@
+eg  eggtray   :  vcl NULL
+eg	eggtray\source			    nmake	-	u	eg_src NULL
