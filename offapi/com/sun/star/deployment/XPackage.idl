@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPackage.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 16:59:09 $
+ *  last change: $Author: kz $ $Date: 2006-10-04 16:52:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,6 +183,18 @@ interface XPackage
                 name of the package
     */
     string getName();
+
+    /** returns the textual version representation of the package.
+
+        A textual version representation is a finite string following the
+        BNF<br/>
+        version ::= [element ("." element)*]<br/>
+        element ::= ("0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9")+
+
+        @return
+                the textual version representation
+    */
+    string getVersion();
 
     /** returns the location of the package.
 
