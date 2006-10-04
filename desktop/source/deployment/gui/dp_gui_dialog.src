@@ -1,12 +1,12 @@
-/*************************************************************************
+﻿/*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: dp_gui_dialog.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 17:03:25 $
+ *  last change: $Author: kz $ $Date: 2006-10-04 16:24:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 ModelessDialog RID_DLG_PACKAGE_MANAGER
 {
     HelpId = HID_PACKAGE_MANAGER;
-    Text [ en-US ] = "Package Manager";
-    Text [ de ] = "Package Manager";
+    Text [ en-US ] = "Extension Manager";
+    Text [ de ] = "Extension Manager";
 
     Size = MAP_APPFONT( 300, 200 );
     OutputSize = TRUE;
@@ -53,8 +53,9 @@ ModelessDialog RID_DLG_PACKAGE_MANAGER
     {
         Group = TRUE;
         Left = TRUE;
-        Text [ en-US ] = "Browse packages";
-        Text [ de ] = "Packages durchsuchen";
+        NoLabel = TRUE;
+        Text [ en-US ] = "Browse extensions";
+        Text [ de ] = "Extensions durchsuchen";
     };
 
     PushButton RID_BTN_ADD
@@ -160,20 +161,20 @@ Image RID_IMG_DEF_PACKAGE_HC
 
 String RID_STR_USER_INSTALLATION
 {
-    Text [ en-US ] = "My Packages";
-    Text [ de ] = "Meine Packages";
+    Text [ en-US ] = "My Extensions";
+    Text [ de ] = "Meine Extensions";
 };
 
 String RID_STR_SHARED_INSTALLATION
 {
-    Text [ en-US ] = "%PRODUCTNAME Packages";
-    Text [ de ] = "%PRODUCTNAME Packages";
+    Text [ en-US ] = "%PRODUCTNAME Extensions";
+    Text [ de ] = "%PRODUCTNAME Extensions";
 };
 
 String RID_STR_PACKAGE
 {
-    Text [ en-US ] = "Package";
-    Text [ de ] = "Package";
+    Text [ en-US ] = "Extension";
+    Text [ de ] = "Extension";
 };
 
 String RID_STR_PACKAGE_STATUS
@@ -184,8 +185,8 @@ String RID_STR_PACKAGE_STATUS
 
 String RID_STR_ADD_PACKAGES
 {
-    Text [ en-US ] = "Add Package(s)...";
-    Text [ de ] = "Package(s) hinzufügen...";
+    Text [ en-US ] = "Add Extension(s)";
+    Text [ de ] = "Extension(s) hinzufügen";
 };
 
 String RID_STR_ENABLED
@@ -234,44 +235,44 @@ String RID_CTX_ITEM_EXPORT
 
 String RID_STR_EXPORT_PACKAGE
 {
-    Text [ en-US ] = "Export Package...";
-    Text [ de ] = "Package exportieren...";
+    Text [ en-US ] = "Export Extension";
+    Text [ de ] = "Extension exportieren";
 };
 
 String RID_STR_EXPORT_PACKAGES
 {
-    Text [ en-US ] = "Export Packages to...";
-    Text [ de ] = "Packages exportieren nach...";
+    Text [ en-US ] = "Export Extensions to...";
+    Text [ de ] = "Extensions exportieren nach...";
 };
 
 String RID_STR_ADDING_PACKAGES
 {
-    Text [ en-US ] = "Adding Package(s)";
-    Text [ de ] = "Package(s) werden hinzugefügt";
+    Text [ en-US ] = "Adding Extension(s)";
+    Text [ de ] = "Extension(s) werden hinzugefügt";
 };
 
 String RID_STR_REMOVING_PACKAGES
 {
-    Text [ en-US ] = "Removing Package(s)";
-    Text [ de ] = "Package(s) werden entfernt";
+    Text [ en-US ] = "Removing Extension(s)";
+    Text [ de ] = "Extension(s) werden entfernt";
 };
 
 String RID_STR_ENABLING_PACKAGES
 {
-    Text [ en-US ] = "Enabling Package(s)";
-    Text [ de ] = "Package(s) werden aktiviert";
+    Text [ en-US ] = "Enabling Extension(s)";
+    Text [ de ] = "Extension(s) werden aktiviert";
 };
 
 String RID_STR_DISABLING_PACKAGES
 {
-    Text [ en-US ] = "Disabling Package(s)";
-    Text [ de ] = "Package(s) werden deaktiviert";
+    Text [ en-US ] = "Disabling Extension(s)";
+    Text [ de ] = "Extension(s) werden deaktiviert";
 };
 
 String RID_STR_EXPORTING_PACKAGES
 {
-    Text [ en-US ] = "Exporting Package(s)";
-    Text [ de ] = "Package(s) werden exportiert";
+    Text [ en-US ] = "Exporting Extension(s)";
+    Text [ de ] = "Extension(s) werden exportiert";
 };
 
 
@@ -460,8 +461,8 @@ WarningBox WARNINGBOX_NOSHAREDALLOWED
 {
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK;
-    Message [ de ] ="Die Erweiterung %NAME kann nicht unter \"%PRODUCTNAME Packages\" installiert werden, da jeder Anwender "
+    Message [ de ] ="Die Erweiterung %NAME kann nicht unter \"%PRODUCTNAME Extensions\" installiert werden, da jeder Anwender "
         "der Lizenz der Extension zustimmen muss. Die Erweiterung wird nicht installiert";
-    Message[ en-US ] ="The extension %NAME cannot be installed under \"%PRODUCTNAME Packages\", because "
+    Message[ en-US ] ="The extension %NAME cannot be installed under \"%PRODUCTNAME Extensions\", because "
         "every user has to agree to the license agreement of the extension. The extension will not be installed.";
 };
