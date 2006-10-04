@@ -5,6 +5,7 @@ OUT=$(PRJ)/$(OS)example.out
 endif
 
 UNOPKG_EXT=uno.pkg
+UNOOXT_EXT=oxt
 
 OUT_BIN=$(OUT)/bin
 OUT_INC=$(OUT)/inc
