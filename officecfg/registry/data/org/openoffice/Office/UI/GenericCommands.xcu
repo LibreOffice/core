@@ -5,9 +5,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-15 12:49:41 $
+ *  last change: $Author: kz $ $Date: 2006-10-04 16:18:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5660,8 +5660,8 @@
             </node>
             <node oor:name="service:com.sun.star.deployment.ui.PackageManagerDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Package Manager...</value>
-                    <value xml:lang="en-US">~Package Manager...</value>
+                    <value xml:lang="de">Ex~tension Manager...</value>
+                    <value xml:lang="en-US">~Extension Manager...</value>
                 </prop>
             </node>
                         <node oor:name=".uno:Signature" oor:op="replace">
