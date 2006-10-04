@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_description.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:43:52 $
+ *  last change: $Author: kz $ $Date: 2006-10-04 16:55:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,10 +153,7 @@ ExtensionDescription::~ExtensionDescription()
 FileDoesNotExistFilter::FileDoesNotExistFilter(
     const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv):
     m_bExist(true), m_xCommandEnv(xCmdEnv)
-{
-    m_xInteraction = m_xCommandEnv->getInteractionHandler();
-    OSL_ASSERT(m_xInteraction.is());
-}
+{}
 
 FileDoesNotExistFilter::~FileDoesNotExistFilter()
 {
@@ -176,7 +173,9 @@ cssu::Reference<css::task::XInteractionHandler >
 cssu::Reference<css::ucb::XProgressHandler >
     FileDoesNotExistFilter::getProgressHandler() throw (css::uno::RuntimeException)
 {
-    return m_xCommandEnv->getProgressHandler();
+    return m_xCommandEnv.is()
+        ? m_xCommandEnv->getProgressHandler()
+        : cssu::Reference<css::ucb::XProgressHandler>();
 }
 
 // XInteractionHandler
@@ -194,7 +193,13 @@ void  FileDoesNotExistFilter::handle(
         m_bExist = false;
         return;
     }
-    m_xInteraction->handle(xRequest);
+    css::uno::Reference<css::task::XInteractionHandler> xInteraction;
+    if (m_xCommandEnv.is()) {
+        xInteraction = m_xCommandEnv->getInteractionHandler();
+    }
+    if (xInteraction.is()) {
+        xInteraction->handle(xRequest);
+    }
 }
 
 
