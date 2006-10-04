@@ -23,6 +23,8 @@ public class LetterDocument extends TextDocument {
     boolean keepLogoFrame = true;
     boolean keepBendMarksFrame = true;
     boolean keepLetterSignsFrame = true;
+    boolean keepSenderAddressRepeatedFrame = true;
+    boolean keepAddressFrame = true;
 
 
     public LetterDocument(XMultiServiceFactory xMSF, XTerminateListener listener) {
@@ -143,6 +145,15 @@ public class LetterDocument extends TextDocument {
                 XTextFrame xTF = TextFrameHandler.getFrameByName("Letter Signs", xTextDocument);
                 if (xTF != null) xTF.dispose();
             }
+            if (!keepSenderAddressRepeatedFrame) {
+                XTextFrame xTF = TextFrameHandler.getFrameByName("Sender Address Repeated", xTextDocument);
+                if (xTF != null) xTF.dispose();
+            }
+            if (!keepAddressFrame) {
+                XTextFrame xTF = TextFrameHandler.getFrameByName("Sender Address", xTextDocument);
+                if (xTF != null) xTF.dispose();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
