@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_description.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 17:06:49 $
+ *  last change: $Author: kz $ $Date: 2006-10-04 16:55:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,6 @@ class FileDoesNotExistFilter
     //css::uno::Reference<css::task::XInteractionHandler> m_xHandler;
     bool m_bExist;
     css::uno::Reference< css::ucb::XCommandEnvironment > m_xCommandEnv;
-    css::uno::Reference<css::task::XInteractionHandler> m_xInteraction;
 
 public:
     virtual ~FileDoesNotExistFilter();
