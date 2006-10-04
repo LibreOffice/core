@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 17:05:48 $
+ *  last change: $Author: kz $ $Date: 2006-10-04 16:54:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,21 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
         bool throw_exc = true );
     ::rtl::OUString insertToActivationLayer(
         ::rtl::OUString const & title, ::rtl::OUString const & mediaType,
-        ::ucb::Content const & sourceContent );
+        ::ucb::Content const & sourceContent, ::rtl::OUString * dbData );
+    void insertToActivationLayerDB(
+        ::rtl::OUString const & title, ::rtl::OUString const & dbData );
+
+    void deletePackageFromCache(
+        css::uno::Reference<css::deployment::XPackage> const & xPackage,
+        ::rtl::OUString const & destFolder );
+
+    bool checkUpdate(
+        ::rtl::OUString const & title,
+        css::uno::Reference<css::deployment::XPackage> const & package,
+        bool * removeExisting,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & origCmdEnv,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const &
+            wrappedCmdEnv );
 
     void checkAborted(
         ::rtl::Reference< ::dp_misc::AbortChannel > const & abortChannel );
@@ -178,10 +192,6 @@ public:
         ::rtl::OUString const & name,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
-    void removePackageAndDeleteFromCache(
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv_,
-    ::rtl::OUString const & title, ::rtl::OUString const & destFolder);
 
     virtual void SAL_CALL removePackage(
         ::rtl::OUString const & name,
