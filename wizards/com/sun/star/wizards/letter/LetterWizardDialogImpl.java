@@ -183,20 +183,22 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             //disable the document, so that the user cannot change anything:
             myLetterDoc.xFrame.getComponentWindow().setEnable(false);
 
-            //show the Wizard dialog:
-            xWindow.setVisible(true);
+            executeDialog(myLetterDoc.xFrame);
+            removeTerminateListener();
+            closeDocument();
+            running = false;
 
         } catch (Exception exception) {
             removeTerminateListener();
             exception.printStackTrace(System.out);
+            running=false;
+            return;
         }
     }
 
 
     public void cancelWizard() {
-        xWindow.setVisible(false);
-        closeDocument();
-        removeTerminateListener();
+        xDialog.endExecute();
         running = false;
     }
 
@@ -225,8 +227,22 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             myLetterDoc.setWizardTemplateDocInfo(resources.resLetterWizardDialog_title, resources.resTemplateDescription);
             myLetterDoc.killEmptyUserFields();
             myLetterDoc.keepLogoFrame = (chkUseLogo.getState() != 0);
+            if ((chkBusinessPaper.getState() != 0) && (chkPaperCompanyLogo.getState() !=0)) {
+                myLetterDoc.keepLogoFrame = false;
+            }
             myLetterDoc.keepBendMarksFrame = (chkUseBendMarks.getState() != 0);
             myLetterDoc.keepLetterSignsFrame = (chkUseSigns.getState() != 0);
+            myLetterDoc.keepSenderAddressRepeatedFrame = (chkUseAddressReceiver.getState() != 0);
+
+            if (optBusinessLetter.getState()) {
+                if ((chkBusinessPaper.getState() != 0) && (chkCompanyReceiver.getState() !=0)) {
+                    myLetterDoc.keepSenderAddressRepeatedFrame = false;
+                }
+                if ((chkBusinessPaper.getState() != 0) && (chkPaperCompanyAddress.getState() !=0)) {
+                    myLetterDoc.keepAddressFrame = false;
+                }
+            }
+
             myLetterDoc.killEmptyFrames();
 
 
@@ -234,9 +250,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
 
             if (bSaveSuccess) {
                 saveConfiguration();
-                xWindow.setVisible(false);
-                closeDocument();
-                //myLetterDoc.xTextDocument.unlockControllers();
                 XInteractionHandler xIH = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, xMSF.createInstance("com.sun.star.comp.uui.UUIInteractionHandler"));
                 PropertyValue loadValues[] = new PropertyValue[4];
                 loadValues[0] = new PropertyValue();
@@ -250,7 +263,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
                 loadValues[3] = new PropertyValue();
                 loadValues[3].Name = "InteractionHandler";
                 loadValues[3].Value = xIH;
-
 
                 if (bEditTemplate) {
                     loadValues[0].Value = Boolean.FALSE;
@@ -269,7 +281,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             e.printStackTrace();
         }
         finally {
-            removeTerminateListener();
+            xDialog.endExecute();
             running = false;
         }
 
@@ -277,7 +289,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
 
     public void closeDocument() {
         try {
-            xComponent.dispose();
+            //xComponent.dispose();
             XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, myLetterDoc.xFrame);
             xCloseable.close(false);
         } catch (CloseVetoException e) {
@@ -390,6 +402,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
         xTextDocument = myLetterDoc.loadAsPreview(OfficialFiles[1][lstPrivOfficialStyle.getSelectedItemPos()] , false );
         myLetterDoc.xTextDocument.lockControllers();
         initializeElements();
+        setPossibleSenderData(true);
         setElements(false);
         myLetterDoc.xTextDocument.unlockControllers();
         activate();
@@ -772,10 +785,23 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
 
     private int getOfficeLinguistic() {
         int oL = 0;
+        boolean found = false;
         String OfficeLinguistic = Configuration.getOfficeLinguistic(xMSF);
         for (int i = 0; i < Norms.length; i++){
             if (Norms[i].equalsIgnoreCase(OfficeLinguistic)) {
                 oL = i;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            //fall back to English:
+            for (int i = 0; i < Norms.length; i++){
+                if (Norms[i].equalsIgnoreCase("en-US")) {
+                    oL = i;
+                    found = true;
+                    break;
+                }
             }
         }
         return oL;
