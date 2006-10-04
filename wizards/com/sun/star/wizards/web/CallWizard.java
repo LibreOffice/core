@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CallWizard.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:37:00 $
+ *  last change: $Author: kz $ $Date: 2006-10-04 20:09:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ import com.sun.star.wizards.common.Resource;
  * information into the given registry key (<CODE>__writeRegistryServiceInfo</CODE>).
  *
  * @author rpiterman
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class CallWizard {
 
@@ -274,7 +274,7 @@ public class CallWizard {
     public static void main(String[] s) {
 
         String ConnectStr =
-            "uno:socket,host=localhost,port=8111;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
+            "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
         //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
         try {
             XMultiServiceFactory xmsf = Desktop.connect(ConnectStr);
