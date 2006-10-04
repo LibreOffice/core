@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:40:10 $
+ *  last change: $Author: kz $ $Date: 2006-10-04 16:54:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,8 +61,8 @@
 #include "com/sun/star/sdbc/XRow.hpp"
 #include "com/sun/star/ucb/XContentAccess.hpp"
 #include "com/sun/star/ucb/NameClash.hpp"
-#include "com/sun/star/ucb/NameClashResolveRequest.hpp"
-#include "com/sun/star/ucb/XInteractionReplaceExistingData.hpp"
+#include "com/sun/star/deployment/VersionException.hpp"
+#include "com/sun/star/task/XInteractionApprove.hpp"
 #include "com/sun/star/ucb/UnsupportedCommandException.hpp"
 #include "boost/bind.hpp"
 #include <vector>
@@ -137,8 +137,13 @@ void PackageManagerImpl::initActivationLayer(
 
                 OUString mediaType( detectMediaType( title, sourceContent,
                                                      false /* no throw */) );
-                if (mediaType.getLength() > 0)
-                    insertToActivationLayer( title, mediaType, sourceContent );
+                if (mediaType.getLength() >0)
+                {
+                    OUString dbData;
+                    insertToActivationLayer(
+                        title, mediaType, sourceContent, &dbData );
+                    insertToActivationLayerDB( title, dbData );
+                }
             }
         }
     }
@@ -492,7 +497,7 @@ OUString PackageManagerImpl::detectMediaType(
 //______________________________________________________________________________
 OUString PackageManagerImpl::insertToActivationLayer(
     OUString const & title, OUString const & mediaType,
-    ::ucb::Content const & sourceContent_ )
+    ::ucb::Content const & sourceContent_, OUString * dbData )
 {
     ::ucb::Content sourceContent(sourceContent_);
     Reference<XCommandEnvironment> xCmdEnv(
@@ -547,10 +552,52 @@ OUString PackageManagerImpl::insertToActivationLayer(
     buf.append( tempEntry );
     buf.append( static_cast<sal_Unicode>(';') );
     buf.append( mediaType );
-    OUString inserted( buf.makeStringAndClear() );
+    *dbData = buf.makeStringAndClear();
+    return destFolder;
+}
+
+//______________________________________________________________________________
+void PackageManagerImpl::insertToActivationLayerDB(
+    OUString const & title, OUString const & dbData )
+{
+    OUString inserted( dbData );
     OSL_ASSERT( ! m_activePackagesDB->has( title ) );
     m_activePackagesDB->put( title, inserted, false /* ! overwrite */ );
-    return destFolder;
+}
+
+//______________________________________________________________________________
+bool PackageManagerImpl::checkUpdate(
+    OUString const & title, Reference<deployment::XPackage> const & package,
+    bool * removeExisting, Reference<XCommandEnvironment> const & origCmdEnv,
+    Reference<XCommandEnvironment> const & wrappedCmdEnv )
+{
+    *removeExisting = false;
+    if (m_activePackagesDB->has( title ))
+    {
+        // package already deployed, interact --force:
+        Any request(
+            deployment::VersionException(
+                getResourceString( RID_STR_PACKAGE_ALREADY_ADDED ) + title,
+                static_cast<OWeakObject *>(this), package,
+                getDeployedPackage_( title, origCmdEnv ) ) );
+        bool replace = false, abort = false;
+        if (! interactContinuation(
+                request, task::XInteractionApprove::static_type(),
+                wrappedCmdEnv, &replace, &abort )) {
+            OSL_ASSERT( !replace && !abort );
+            throw deployment::DeploymentException(
+                getResourceString(RID_STR_ERROR_WHILE_ADDING) + title,
+                static_cast<OWeakObject *>(this), request );
+        }
+        if (abort || !replace)
+            throw CommandFailedException(
+                getResourceString(RID_STR_ERROR_WHILE_ADDING) + title,
+                static_cast<OWeakObject *>(this), request );
+
+        // remove clashing package before registering new version:
+        *removeExisting = true;
+    }
+    return true;
 }
 
 // XPackageManager
@@ -590,42 +637,9 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
         if (mediaType.getLength() == 0)
             mediaType = detectMediaType( title, sourceContent );
 
+        Reference<deployment::XPackage> xPackage;
         {
             const ::osl::MutexGuard guard( getMutex() );
-
-            if (m_activePackagesDB->has( title ))
-            {
-                // package already deployed, interact --force:
-                Any nameClashResolveRequest = Any(
-                    NameClashResolveRequest(
-                        getResourceString(
-                            RID_STR_PACKAGE_ALREADY_ADDED ) + title,
-                        static_cast<OWeakObject *>(this),
-                        task::InteractionClassification_QUERY,
-                        getDeployPath(title), title, OUString() ) );
-                bool replace = false, abort = false;
-                if (! interactContinuation(
-                        nameClashResolveRequest,
-                        XInteractionReplaceExistingData::static_type(),
-                        xCmdEnv, &replace, &abort )) {
-                    OSL_ASSERT( !replace && !abort );
-                    throw deployment::DeploymentException(
-                        getResourceString(RID_STR_ERROR_WHILE_ADDING) + title,
-                        static_cast<OWeakObject *>(this),
-                        nameClashResolveRequest );
-                }
-                if (abort || !replace)
-                    throw CommandFailedException(
-                        getResourceString(RID_STR_ERROR_WHILE_ADDING) + title,
-                        static_cast<OWeakObject *>(this),
-                        nameClashResolveRequest );
-
-                // remove clashing package before copying new version:
-                removePackage_(
-                    title, xAbortChannel,
-                    xCmdEnv_ /* unwrapped cmd env */ );
-            }
-            OSL_ASSERT( ! m_activePackagesDB->has( title ) );
 
             // copy file:
             progressUpdate(
@@ -654,41 +668,52 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
                 catch (UnsupportedCommandException &) {
                 }
             }
+            OUString dbData;
             destFolder = insertToActivationLayer(
-                title, mediaType, sourceContent );
+                title, mediaType, sourceContent, &dbData );
+
+            // xxx todo: fire before bind(), registration?
+            // fireModified();
+
+            // bind activation package:
+            xPackage = m_xRegistry->bindPackage(
+                makeURL( destFolder, title_enc ), mediaType, xCmdEnv );
+
+            OSL_ASSERT( xPackage.is() );
+            if (xPackage.is())
+            {
+                bool install;
+                try
+                {
+                    bool removeExisting;
+                    install = checkUpdate(
+                        title, xPackage, &removeExisting, xCmdEnv_, xCmdEnv ) &&
+                        xPackage->checkPrerequisites(xAbortChannel, xCmdEnv);
+                    if ( install && removeExisting )
+                        removePackage_(
+                            title, xAbortChannel,
+                            xCmdEnv_ /* unwrapped cmd env */ );
+                }
+                catch (...)
+                {
+                    deletePackageFromCache( xPackage, destFolder );
+                    throw;
+                }
+
+                if (install)
+                {
+                    insertToActivationLayerDB( title, dbData );
+                    xPackage->registerPackage( xAbortChannel, xCmdEnv );
+                }
+                else
+                {
+                    deletePackageFromCache( xPackage, destFolder );
+                }
+            }
         } // guard
 
-        // xxx todo: fire before bind(), registration?
         fireModified();
 
-        // bind activation package:
-        Reference<deployment::XPackage> xPackage(
-            m_xRegistry->bindPackage( makeURL( destFolder, title_enc ),
-                                      mediaType, xCmdEnv ) );
-
-        OSL_ASSERT( xPackage.is() );
-        if (xPackage.is())
-        {
-            bool bPrerequisites = false;
-            try
-            {
-                bPrerequisites = xPackage->checkPrerequisites(xAbortChannel, xCmdEnv);
-            }
-            catch (Exception& )
-            {
-                removePackageAndDeleteFromCache(xAbortChannel, xCmdEnv_, title, destFolder);
-                throw;
-            }
-
-            if (bPrerequisites)
-            {
-                xPackage->registerPackage( xAbortChannel, xCmdEnv );
-            }
-            else
-            {
-                removePackageAndDeleteFromCache(xAbortChannel, xCmdEnv_, title, destFolder);
-            }
-        }
         return xPackage;
     }
     catch (RuntimeException &) {
@@ -714,13 +739,11 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
             static_cast<OWeakObject *>(this), exc );
     }
 }
-void PackageManagerImpl::removePackageAndDeleteFromCache(
-    Reference<task::XAbortChannel> const & xAbortChannel,
-    Reference<XCommandEnvironment> const & xCmdEnv_,
-    OUString const & title, OUString const & destFolder)
+void PackageManagerImpl::deletePackageFromCache(
+    Reference<deployment::XPackage> const & xPackage,
+    OUString const & destFolder)
 {
-    removePackage_(
-        title, xAbortChannel, xCmdEnv_ /* unwrapped cmd env */ );
+    try_dispose( xPackage );
 
     //we remove the package from the uno cache
     //no service from the package may be loaded at this time!!!
