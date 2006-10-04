@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-06 10:21:28 $
+#   last change: $Author: kz $ $Date: 2006-10-04 16:54:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@ PRJ = ..$/..$/..
 PRJNAME = desktop
 TARGET = deployment_misc
 ENABLE_EXCEPTIONS = TRUE
+LIBTARGET = NO
 
 .INCLUDE : settings.mk
 
@@ -49,7 +50,8 @@ SRS1NAME = $(TARGET)
 SRC1FILES = \
     dp_misc.src
 
-SLOFILES = \
+LIB1TARGET = $(SLB)$/$(TARGET).lib
+LIB1OBJFILES = \
         $(SLO)$/dp_misc.obj \
         $(SLO)$/dp_resource.obj \
         $(SLO)$/dp_interact.obj \
@@ -59,6 +61,10 @@ SLOFILES = \
         $(SLO)$/dp_persmap.obj \
         $(SLO)$/dp_services.obj       \
         $(SLO)$/db.obj
+
+SLOFILES = $(LIB1OBJFILES) $(SLO)$/dp_version.obj
+
+OBJFILES = $(OBJ)$/dp_version.obj
 
 .INCLUDE : ..$/target.pmk
 .INCLUDE : target.mk
