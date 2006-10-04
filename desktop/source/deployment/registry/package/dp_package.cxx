@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_package.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:44:06 $
+ *  last change: $Author: kz $ $Date: 2006-10-04 16:55:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,6 +200,7 @@ class BackendImpl : public ImplBaseT
                 css::ucb::CommandAbortedException,
                 css::uno::RuntimeException);
 
+        virtual OUString SAL_CALL getVersion() throw (RuntimeException);
     };
     friend class PackageImpl;
 
@@ -726,6 +727,41 @@ bool BackendImpl::PackageImpl::checkDependencies(
     }
     return checkDependencies(xCmdEnv, *spDescription)
         && checkLicense(xCmdEnv, *spDescription);
+}
+
+OUString BackendImpl::PackageImpl::getVersion() throw (RuntimeException)
+{
+    try {
+        ExtensionDescription desc(
+            getMyBackend()->getComponentContext(), m_url_expanded,
+            css::uno::Reference< css::ucb::XCommandEnvironment >());
+        css::uno::Reference< css::xml::xpath::XXPathAPI > xpath(
+            desc.getXPathAPI());
+        xpath->registerNS(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("desc")),
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "http://openoffice.org/extensions/description/2006")));
+        css::uno::Reference< css::xml::dom::XNode > vers(
+            xpath->selectSingleNode(
+                css::uno::Reference< css::xml::dom::XNode >(
+                    desc.getRootElement(), css::uno::UNO_QUERY_THROW),
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "/desc:description/desc:version/@value"))));
+        if (vers.is()) {
+            return vers->getNodeValue();
+        }
+    } catch (NoDescriptionException &) {
+    } catch (css::xml::dom::DOMException & e) {
+        throw RuntimeException(
+            (OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.xml.dom.DOMException: ")) +
+             e.Message),
+            static_cast< OWeakObject * >(this));
+    }
+    return OUString();
 }
 
 //______________________________________________________________________________
