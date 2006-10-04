@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:34:43 $
+ *  last change: $Author: kz $ $Date: 2006-10-04 16:24:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,31 +38,31 @@
 
 String RID_STR_COPYING_PACKAGE
 {
-    Text [ en-US ] = "Copying Package: ";
-    Text [ de ] = "Package wird kopiert: ";
+    Text [ en-US ] = "Copying: ";
+    Text [ de ] = "Kopiere: ";
 };
 
 String RID_STR_ERROR_WHILE_ADDING
 {
-    Text [ en-US ] = "Error while adding package: ";
-    Text [ de ] = "Fehler beim Hinzufügen des Package: ";
+    Text [ en-US ] = "Error while adding: ";
+    Text [ de ] = "Fehler beim Hinzufügen von: ";
 };
 
 String RID_STR_ERROR_WHILE_REMOVING
 {
-    Text [ en-US ] = "Error while removing package: ";
-    Text [ de ] = "Fehler beim Entfernen des Package: ";
+    Text [ en-US ] = "Error while removing: ";
+    Text [ de ] = "Fehler beim Entfernen von: ";
 };
 
 String RID_STR_PACKAGE_ALREADY_ADDED
 {
-    Text [ en-US ] = "Package has already been added: ";
-    Text [ de ] = "Package ist bereits vorhanden: ";
+    Text [ en-US ] = "Extension has already been added: ";
+    Text [ de ] = "Extension ist bereits vorhanden: ";
 };
 
 String RID_STR_NO_SUCH_PACKAGE
 {
-    Text [ en-US ] = "There is no such package deployed: ";
-    Text [ de ] = "Package ist nicht bekannt: ";
+    Text [ en-US ] = "There is no such extension deployed: ";
+    Text [ de ] = "Extension ist nicht bekannt: ";
 };
 
