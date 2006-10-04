@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-13 17:04:49 $
+#   last change: $Author: kz $ $Date: 2006-10-04 16:53:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,8 @@ SLOFILES = \
         $(SLO)$/dp_gui_dependencydialog.obj
 
 SHL1OBJS = \
-        $(SLO)$/dp_misc.obj
+        $(SLO)$/dp_misc.obj \
+        $(SLO)$/dp_version.obj
 
 SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX).uno
 SHL1VERSIONMAP = ..$/deployment.map
@@ -86,7 +87,8 @@ SRS1NAME = $(TARGET)
 SRC1FILES = \
         dp_gui_dialog.src \
         dp_gui_backend.src \
-        dp_gui_dependencydialog.src
+        dp_gui_dependencydialog.src \
+        dp_gui_versionboxes.src
 
 RESLIB1NAME = $(TARGET)
 RESLIB1SRSFILES = $(SRS)$/$(TARGET).srs
