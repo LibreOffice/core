@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-13 16:59:25 $
+#   last change: $Author: kz $ $Date: 2006-10-04 16:52:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,8 @@ IDLFILES = \
         XPackageManagerFactory.idl                              \
         thePackageManagerFactory.idl				\
     DependencyException.idl \
-    LicenseException.idl
+    LicenseException.idl \
+    VersionException.idl
 
 .INCLUDE : target.mk
 .INCLUDE : $(PRJ)$/util$/target.pmk
