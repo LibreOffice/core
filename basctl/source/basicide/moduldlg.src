@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:45:04 $
+ *  last change: $Author: kz $ $Date: 2006-10-04 16:23:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,8 +420,8 @@ ModalDialog RID_DLG_EXPORT
         Pos = MAP_APPFONT( 6, 6 );
         Size = MAP_APPFONT( 103, 10 );
         Group = TRUE;
-        Text [ de ] = "Als Package ~exportieren";
-        Text [ en-US ] = "~Export as package";
+        Text [ de ] = "Als ~Extension exportieren";
+        Text [ en-US ] = "Export as ~extension";
         TabStop = TRUE ;
     };
     RadioButton RB_EXPORTASBASIC
@@ -436,8 +436,8 @@ ModalDialog RID_DLG_EXPORT
 
 String RID_STR_EXPORTPACKAGE
 {
-    Text [ de ] = "Bibliothek als Package exportieren";
-    Text [ en-US ] = "Export library as package";
+    Text [ de ] = "Bibliothek als Extension exportieren";
+    Text [ en-US ] = "Export library as extension";
 };
 
 String RID_STR_EXPORTBASIC
@@ -448,8 +448,7 @@ String RID_STR_EXPORTBASIC
 
 String RID_STR_PACKAGE_BUNDLE
 {
-    Text [ en-US ] = "UNO Package Bundle";
-    Text [ de ] = "UNO Package Bundle";
+    Text [ en-US ] = "Extension";
+    Text [ de ] = "Extension";
 };
 
- 
