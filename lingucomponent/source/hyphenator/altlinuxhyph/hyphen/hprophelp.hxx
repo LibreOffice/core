@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hprophelp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:54:58 $
+ *  last change: $Author: kz $ $Date: 2006-10-04 16:10:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,9 +172,9 @@ public:
         propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt )
             throw(::com::sun::star::uno::RuntimeException);
 
-    INT16   GetMinLeading() const               { return nHyphMinLeading; }
-    INT16   GetMinTrailing() const              { return nHyphMinTrailing; }
-    INT16   GetMinWordLength() const            { return nHyphMinWordLength; }
+    INT16   GetMinLeading() const               { return nResHyphMinLeading; }
+    INT16   GetMinTrailing() const              { return nResHyphMinTrailing; }
+    INT16   GetMinWordLength() const            { return nResHyphMinWordLength; }
 };
 
 ///////////////////////////////////////////////////////////////////////////
