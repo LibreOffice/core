@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AgendaWizardDialogImpl.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 12:12:26 $
+ *  last change: $Author: kz $ $Date: 2006-10-04 20:09:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,6 +180,11 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             makeDA();
             if(myPathSelection.xSaveTextBox.getText().equalsIgnoreCase("")) {myPathSelection.initializePath();}
 
+            executeDialog(agendaTemplate.xFrame);
+            removeTerminateListener();
+            closeDocument();
+            running = false;
+
         }
         catch (Exception ex) {
             removeTerminateListener();
@@ -188,8 +193,6 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             return;
         }
 
-        // show dialog.
-        xWindow.setVisible(true);
 
     }
 
@@ -457,9 +460,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
      */
 
     public void cancelWizard() {
-        xWindow.setVisible(false);
-        closeDocument();
-        removeTerminateListener();
+        xDialog.endExecute();
         running = false;
     }
 
@@ -518,11 +519,11 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
                 ex.printStackTrace();
             }
 
-            xWindow.setVisible(false);
-            running = false;
+            //xWindow.setVisible(false);
+            //running = false;
             agendaTemplate.xTextDocument.unlockControllers();
-            closeDocument();
-            removeTerminateListener();
+            //closeDocument();
+            //removeTerminateListener();
 
             PropertyValue loadValues[] = new PropertyValue[2];
             loadValues[0] = new PropertyValue();
@@ -556,11 +557,13 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             agendaTemplate.xTextDocument.unlockControllers();
             return;
         }
+        xDialog.endExecute();
+        running = false;
     }
 
     private void closeDocument() {
         try {
-            xComponent.dispose();
+            //xComponent.dispose();
             XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, agendaTemplate.xFrame);
             xCloseable.close(false);
         } catch (CloseVetoException e) {
