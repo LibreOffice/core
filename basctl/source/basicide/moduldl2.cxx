@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:28:55 $
+ *  last change: $Author: kz $ $Date: 2006-10-04 16:23:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1343,7 +1343,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
     // filter
     ::rtl::OUString aTitle = String( IDEResId( RID_STR_PACKAGE_BUNDLE ) );
     ::rtl::OUString aFilter;
-    aFilter = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.uno.pkg" ) );       // library files
+    aFilter = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.oxt" ) );       // library files
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
     xFltMgr->appendFilter( aTitle, aFilter );
 
@@ -1367,7 +1367,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
         Sequence< ::rtl::OUString > aFiles = xFP->getFiles();
         INetURLObject aURL( aFiles[0] );
         if( !aURL.getExtension().getLength() )
-            aURL.setExtension( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "uno.pkg" ) ) );
+            aURL.setExtension( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "oxt" ) ) );
 
         ::rtl::OUString aPackageURL( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
