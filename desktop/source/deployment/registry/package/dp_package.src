@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_package.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:31:29 $
+ *  last change: $Author: kz $ $Date: 2006-10-04 16:25:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 String RID_STR_PACKAGE_BUNDLE
 {
-    Text [ en-US ] = "UNO Package Bundle";
-    Text [ de ] = "UNO Package Bundle";
+    Text [ en-US ] = "Extension";
+    Text [ de ] = "Extension";
 };
 
