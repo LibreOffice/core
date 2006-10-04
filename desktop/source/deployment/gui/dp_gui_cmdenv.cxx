@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:38:35 $
+ *  last change: $Author: kz $ $Date: 2006-10-04 16:53:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 #include "dp_gui_cmdenv.h"
 #include "dp_gui_shared.hxx"
 #include "dp_gui_dependencydialog.hxx"
+#include "dp_version.hxx"
 #include "comphelper/anytostring.hxx"
 #include "com/sun/star/lang/WrappedTargetException.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
@@ -48,6 +49,7 @@
 #include "com/sun/star/task/XInteractionApprove.hpp"
 #include "com/sun/star/deployment/DependencyException.hpp"
 #include "com/sun/star/deployment/LicenseException.hpp"
+#include "com/sun/star/deployment/VersionException.hpp"
 #include "com/sun/star/deployment/ui/LicenseDialog.hpp"
 #include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
 #include "tools/resid.hxx"
@@ -63,6 +65,18 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using ::rtl::OUString;
+
+namespace {
+
+rtl::OUString getVersion(
+    css::uno::Reference< css::deployment::XPackage > const & package)
+{
+    rtl::OUString s(package->getVersion());
+    return s.getLength() == 0
+        ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0")) : s;
+}
+
+}
 
 namespace dp_gui
 {
@@ -257,6 +271,7 @@ void ProgressCommandEnv::handle(
     lang::WrappedTargetException wtExc;
     deployment::DependencyException depExc;
     deployment::LicenseException licExc;
+    deployment::VersionException verExc;
     bool bLicenseException = false;
     // selections:
     bool approve = false;
@@ -368,6 +383,35 @@ void ProgressCommandEnv::handle(
 
         }
 
+    }
+    else if (request >>= verExc)
+    {
+        sal_uInt32 id;
+        switch (dp_misc::comparePackageVersions(
+                    verExc.New, verExc.Deployed))
+        {
+        case dp_misc::LESS:
+            id = RID_QUERYBOX_VERSION_LESS;
+            break;
+        case dp_misc::EQUAL:
+            id = RID_QUERYBOX_VERSION_EQUAL;
+            break;
+        default: // dp_misc::GREATER
+            id = RID_QUERYBOX_VERSION_GREATER;
+            break;
+        }
+        {
+            vos::OGuard guard(Application::GetSolarMutex());
+            InfoBox box(activeDialog(), ResId(id, DeploymentGuiResMgr::get()));
+            String s(box.GetMessText());
+            s.SearchAndReplaceAllAscii("$NAME", verExc.New->getName());
+            s.SearchAndReplaceAllAscii("$NEW", getVersion(verExc.New));
+            s.SearchAndReplaceAllAscii(
+                "$DEPLOYED", getVersion(verExc.Deployed));
+            box.SetMessText(s);
+            approve = box.Execute() == RET_OK;
+            abort = !approve;
+        }
     }
 
     if (approve == false && abort == false)
