@@ -1,0 +1,57 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: dp_gui_versionboxes.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2006-10-04 16:53:34 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2006 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "dp_gui.hrc"
+
+InfoBox RID_QUERYBOX_VERSION_LESS {
+    Buttons = WB_OK_CANCEL;
+    DefButton = WB_DEF_CANCEL;
+    Message[de] = "Sie wollen die Version $NEW der Extension $NAME installieren. Die neuere Version $DEPLOYED ist bereits installiert.\nDrücken Sie OK um die bereits installierte Version zu ersetzen.\nDrücken Sie Abbrechen um die Installation abzubrechen.";
+    Message[en-US] = "You are about to install version $NEW of the extension $NAME. The newer version $DEPLOYED is already installed.\nPress OK to replace the installed extension.\nPress Cancel to abort the installation.";
+};
+
+InfoBox RID_QUERYBOX_VERSION_EQUAL {
+    Buttons = WB_OK_CANCEL;
+    DefButton = WB_DEF_CANCEL;
+    Message[de] = "Sie wollen die Version $NEW der Extension $NAME installieren. Diese Version ist bereits installiert.\nDrücken Sie OK um die bereits installierte Version zu ersetzen.\nDrücken Sie Abbrechen um die Installation abzubrechen.";
+    Message[en-US] = "You are about to install version $NEW of the extension $NAME. That version is already installed.\nPress OK to replace the installed extension.\nPress Cancel to abort the installation.";
+};
+
+InfoBox RID_QUERYBOX_VERSION_GREATER {
+    Buttons = WB_OK_CANCEL;
+    DefButton = WB_DEF_OK;
+    Message[de] = "Sie wollen die Version $NEW der Extension $NAME installieren. Die ältere Version $DEPLOYED ist bereits installiert.\nDrücken Sie OK um die bereits installierte Version zu ersetzen.\nDrücken Sie Abbrechen um die Installation abzubrechen.";
+    Message[en-US] = "You are about to install version $NEW of the extension $NAME. The older version $DEPLOYED is already installed.\nPress OK to replace the installed extension.\nPress Cancel to abort the installation.";
+};
