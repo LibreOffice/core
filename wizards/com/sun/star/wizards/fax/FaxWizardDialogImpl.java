@@ -143,20 +143,22 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
             //disable the document, so that the user cannot change anything:
             myFaxDoc.xFrame.getComponentWindow().setEnable(false);
 
-            //show the Wizard dialog:
-            xWindow.setVisible(true);
+            executeDialog(myFaxDoc.xFrame);
+            removeTerminateListener();
+            closeDocument();
+            running = false;
 
         } catch (Exception exception) {
             removeTerminateListener();
             exception.printStackTrace(System.out);
+            running=false;
+            return;
         }
     }
 
 
     public void cancelWizard() {
-        xWindow.setVisible(false);
-        closeDocument();
-        removeTerminateListener();
+        xDialog.endExecute();
         running = false;
     }
 
@@ -193,9 +195,6 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
             bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer8_template", false, "Template could not be saved to" + sPath);
             if (bSaveSuccess) {
                 saveConfiguration();
-                xWindow.setVisible(false);
-                closeDocument();
-                //myFaxDoc.xTextDocument.unlockControllers();
                 XInteractionHandler xIH = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, xMSF.createInstance("com.sun.star.comp.uui.UUIInteractionHandler"));
                 PropertyValue loadValues[] = new PropertyValue[4];
                 loadValues[0] = new PropertyValue();
@@ -228,7 +227,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
             e.printStackTrace();
         }
         finally {
-            removeTerminateListener();
+            xDialog.endExecute();
             running = false;
         }
 
@@ -236,7 +235,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
 
     public void closeDocument() {
         try {
-            xComponent.dispose();
+            //xComponent.dispose();
             XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, myFaxDoc.xFrame);
             xCloseable.close(false);
         } catch (CloseVetoException e) {
