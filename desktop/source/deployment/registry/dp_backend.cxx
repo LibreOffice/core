@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_backend.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:42:56 $
+ *  last change: $Author: kz $ $Date: 2006-10-04 16:55:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -325,6 +325,12 @@ Sequence< Reference<deployment::XPackage> > Package::getBundle(
 OUString Package::getName() throw (RuntimeException)
 {
     return m_name;
+}
+
+//______________________________________________________________________________
+OUString Package::getVersion() throw (RuntimeException)
+{
+    return OUString();
 }
 
 //______________________________________________________________________________
