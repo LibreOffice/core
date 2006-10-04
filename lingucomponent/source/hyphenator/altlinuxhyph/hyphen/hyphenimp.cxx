@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphenimp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:07:26 $
+ *  last change: $Author: kz $ $Date: 2006-10-04 16:10:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -352,7 +352,7 @@ Reference< XHyphenatedWord > SAL_CALL
 Hyphenator::hyphenate( const ::rtl::OUString& aWord,
                const ::com::sun::star::lang::Locale& aLocale,
                sal_Int16 nMaxLeading,
-               const ::com::sun::star::beans::PropertyValues& /*aProperties*/ )
+               const ::com::sun::star::beans::PropertyValues& aProperties )
                throw (com::sun::star::uno::RuntimeException,
                com::sun::star::lang::IllegalArgumentException)
 {
@@ -367,7 +367,7 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
         int k = 0;
 
         PropertyHelper_Hyphen & rHelper = GetPropHelper();
-        //rHelper.SetTmpPropVals(aProperties);
+        rHelper.SetTmpPropVals(aProperties);
     sal_Int16 minTrail = rHelper.GetMinTrailing();
     sal_Int16 minLead = rHelper.GetMinLeading();
     sal_Int16 minLen = rHelper.GetMinWordLength();
@@ -485,14 +485,14 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
 
         INT32 Leading =  GetPosInWordToCheck( aWord, nMaxLeading );
 
-        for (INT32 i = 0; i < encWord.getLength(); i++)
+        for (INT32 i = 0; i < n; i++)
         {
                 int leftrep = 0;
-                BOOL hit = (wordlen >= minLen);
+                BOOL hit = (n >= minLen);
                 if (!rep || !rep[i] || (i >= n)) {
                     hit = hit && (hyphens[i]&1) && (i < Leading);
                     hit = hit && (i >= (minLead-1) );
-                    hit = hit && ((wordlen - i - 1) >= minTrail);
+                    hit = hit && ((n - i - 1) >= minTrail);
                 } else {
                     // calculate change character length before hyphenation point signed with '='
                     for (char * c = rep[i]; *c && (*c != '='); c++) {
@@ -502,7 +502,7 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
                     }
                     hit = hit && (hyphens[i]&1) && ((i + leftrep - pos[i]) < Leading);
                     hit = hit && ((i + leftrep - pos[i]) >= (minLead-1) );
-                    hit = hit && ((wordlen - i - 1 + sal::static_int_cast< sal_sSize >(strlen(rep[i])) - leftrep - 1) >= minTrail);
+                    hit = hit && ((n - i - 1 + sal::static_int_cast< sal_sSize >(strlen(rep[i])) - leftrep - 1) >= minTrail);
                 }
             if (hit) {
             nHyphenationPos = i;
@@ -602,7 +602,6 @@ Reference< XPossibleHyphens > SAL_CALL
 
   SvtPathOptions aPathOpt;
 
-//  int nHyphenationPos = -1;
   int wordlen;
   char *hyphens;
   char *lcword;
