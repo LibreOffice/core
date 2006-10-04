@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:16:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-04 05:51:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,8 +173,8 @@ void Directory::readDirectory ( const rtl::OUString& sFullpath )
 
     FindClose(hList);
 
-    std::sort( aFileVec.begin() , aFileVec.end() , File::lessFile );
-    std::sort( aDirVec.begin()  , aDirVec.end()  , Directory::lessDir  );
+    ::std::sort( aFileVec.begin() , aFileVec.end() , File::lessFile );
+    ::std::sort( aDirVec.begin()  , aDirVec.end()  , Directory::lessDir  );
 }
 
 #else
