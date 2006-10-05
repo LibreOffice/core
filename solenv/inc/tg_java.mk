@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_java.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:40:34 $
+#   last change: $Author: kz $ $Date: 2006-10-05 16:21:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@ $(CLASSDIR)$/com$/sun$/star$/upd$/$(VERSIONINFOFILE)_updversion.class .PHONY: $(
 $(MISC)$/java$/com$/sun$/star$/upd$/$(VERSIONINFOFILE)_updversion.java .PHONY:
     @echo ------------------------------
     @echo Making: $@
-    @+-$(MKDIRHIER) $(MISC)$/java$/com$/sun$/star$/upd
+    @-$(MKDIRHIER) $(MISC)$/java$/com$/sun$/star$/upd
 .IF "$(GUI)"=="UNX"
     @echo package com.sun.star.upd\; > $@
     @echo 'public class $(VERSIONINFOFILE)_updversion { public static String Version = "$(RSCREVISION)";}' >> $@
