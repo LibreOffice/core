@@ -4,9 +4,9 @@
 #
 #   $RCSfile: ant.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:48:17 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:36:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,26 +61,15 @@ CLASSPATH!:=$(CLASSPATH)$(PATH_SEPERATOR)$(ANT_CLASSPATH)$(PATH_SEPERATOR)$(JAVA
 
 # --- TARGETS -----------------------------------------------------
 
-#$(CLASSDIR)$/solar.properties .PHONY:
 $(CLASSDIR)$/solar.properties : $(SOLARENV)$/inc/minor.mk $(SOLARENV)$/inc/ant.properties
     @echo Making: $@
-.IF "$(GUI)"=="UNX"
-    @+echo solar.build="$(BUILD)" > $@
-    @+echo solar.rscversion="$(RSCVERSION)" >> $@
-    @+echo solar.rscrevision="$(RSCREVISION)" >> $@
-    @+echo solar.minor="$(LAST_MINOR)" >> $@
-    @+echo solar.sourceversion="$(SOURCEVERSION)" >> $@
-    @+echo solar.udkstamp="$(UDKSTAMP)" >> $@
-    @+echo solar.extstamp="$(EXTSTAMP)" >> $@
-.ELSE
-    @+echo solar.build=$(BUILD) > $@
-    @+echo solar.rscversion=$(RSCVERSION) >> $@
-    @+echo solar.rscrevision=$(RSCREVISION) >> $@
-    @+echo solar.minor=$(LAST_MINOR) >> $@
-    @+echo solar.sourceversion=$(SOURCEVERSION) >> $@
-    @+echo solar.udkstamp=$(UDKSTAMP) >> $@
-    @+echo solar.extstamp=$(EXTSTAMP) >> $@
-.ENDIF
+    @echo solar.build=$(BUILD) > $@
+    @echo solar.rscversion=$(RSCVERSION) >> $@
+    @echo solar.rscrevision=$(RSCREVISION) >> $@
+    @echo solar.minor=$(LAST_MINOR) >> $@
+    @echo solar.sourceversion=$(SOURCEVERSION) >> $@
+    @echo solar.udkstamp=$(UDKSTAMP) >> $@
+    @echo solar.extstamp=$(EXTSTAMP) >> $@
     @+cat $(DMAKEROOT)$/../ant.properties >> $@
 
 ANTBUILD .PHONY:
