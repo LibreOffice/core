@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:56:52 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 12:49:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #endif
 #ifndef _SV_IMAGE_HXX_
 #include <vcl/image.hxx>
+#endif
+#ifndef VCL_IMAGEREPOSITORY_HXX
+#include <vcl/imagerepository.hxx>
 #endif
 #include <tools/rcid.h>
 #include <tools/resid.hxx>
@@ -189,6 +192,26 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( const ::r
 
 // ------------------------------------------------------------------------------
 
+uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( const ::rtl::OUString& rResourceURL ) const
+{
+    uno::Reference< ::graphic::XGraphic >   xRet;
+    sal_Int32                               nIndex = 0;
+
+    if( ( 0 == rResourceURL.getToken( 0, '/', nIndex ).compareToAscii( "private:graphicrepository" ) ) )
+    {
+        String sPathName( rResourceURL.copy( nIndex ) );
+        BitmapEx aBitmap;
+        if ( ::vcl::ImageRepository::loadImage( sPathName, aBitmap, false ) )
+        {
+            Image aImage( aBitmap );
+            xRet = aImage.GetXGraphic();
+        }
+    }
+    return xRet;
+}
+
+// ------------------------------------------------------------------------------
+
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const ::rtl::OUString& rResourceURL ) const
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
@@ -305,6 +328,9 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
         if( !xGraphic.is() )
             xGraphic = implLoadResource( aURL );
 
+        if ( !xGraphic.is() )
+            xGraphic = implLoadRepositoryImage( aURL );
+
         if( xGraphic.is() )
         {
             xRet = uno::Reference< beans::XPropertySet >( xGraphic, uno::UNO_QUERY );
@@ -358,6 +384,9 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 
         if( !xRet.is() )
             xRet = implLoadResource( aPath );
+
+        if ( !xRet.is() )
+            xRet = implLoadRepositoryImage( aPath );
 
         if( !xRet.is() )
             pIStm = ::utl::UcbStreamHelper::CreateStream( aPath, STREAM_READ );
