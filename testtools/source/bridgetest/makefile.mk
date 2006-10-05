@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:36:42 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:32:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@ $(DLLDEST)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
 
 $(DLLDEST)$/bridgetest_inprocess_java$(BATCH_SUFFIX) : makefile.mk
     -rm -f $@
-    +echo uno -ro uno_services.rdb -ro uno_types.rdb \
+    echo uno -ro uno_services.rdb -ro uno_types.rdb \
         -s com.sun.star.test.bridge.BridgeTest \
         -env:URE_INTERNAL_JAVA_DIR=$(MY_URE_INTERNAL_JAVA_DIR) \
         -- com.sun.star.test.bridge.JavaTestObject > $@
