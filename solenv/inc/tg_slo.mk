@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_slo.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:49:14 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:41:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ $(SLOTARGET): $(SLOFILES) $(IDLSLOFILES)
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
-    +echo $(foreach,i,$(SLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
+    echo $(foreach,i,$(SLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
 .IF "$(OS)"=="MACOSX"
     @-+nm `cat $(SLOTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ELSE
@@ -61,29 +61,6 @@ $(SLOTARGET): $(SLOFILES) $(IDLSLOFILES)
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$(SLOTARGET)"!=""
 
-
-
-
-.IF "$(SVXLIGHT)"!=""
-.IF "$(SVXLIGHTSLOTARGET)"!=""
-$(SVXLIGHTSLOTARGET): $(REAL_SVXLIGHTSLOFILES)
-.IF "$(MDB)" != ""
-    @echo $(REAL_SVXLIGHTSLOTARGET)
-    @echo $(&:+"\n")
-.ENDIF
-    @echo ------------------------------
-    @echo Making: $@
-.IF "$(GUI)"=="WNT"
-.IF "$(LIBTARGET)"!="NO"
-    @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
-.ENDIF          # "$(LIBTARGET)"!="NO"
-    $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
-.ENDIF			# "$(GUI)"=="WNT"
-.IF "$(GUI)"=="UNX"
-    +echo $(foreach,i,$(REAL_SVXLIGHTSLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
-.ENDIF			# "$(GUI)"=="UNX"
-.ENDIF			# "$(SVXLIGHTSLOTARGET)"!=""
-.ENDIF			# "$(SVXLIGHT)"!=""
 
 .IF "$(SECOND_BUILD)"!=""
 .IF "$($(SECOND_BUILD)SLOTARGET)"!=""
@@ -101,7 +78,7 @@ $($(SECOND_BUILD)SLOTARGET): $(REAL_$(SECOND_BUILD)_SLOFILES)
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
-    +echo $(foreach,i,$(REAL_$(SECOND_BUILD)_SLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
+    echo $(foreach,i,$(REAL_$(SECOND_BUILD)_SLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$($(SECOND_BUILD)SLOTARGET)"!=""
 .ENDIF			# "$(SECOND_BUILD)"!=""
