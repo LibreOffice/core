@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 11:16:28 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:09:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,13 @@ Resource RID_UUI_ERRHDL
     {
         Text [ de ] = "Ziel existiert bereits.";
         Text [ en-US ] = "Target already exists.";
+    };
+
+    String (ERRCODE_UUI_IO_MODULESIZEEXCEEDED & ERRCODE_RES_MASK)
+    {
+        Text [ de ] = "Sie sind im Begriff, eine per Kennwort geschützte Basic Bibliothek zu speichern/zu exportieren. Deren Modul(e)\n$(ARG1)\nsind zu groß, um im Binärformat gespeichert zu werden. Wenn Sie möchten, dass Benutzer, die nicht über das Kennwort verfügen, Makros aus diesem/n Modul(en) ausführen können, müssen Sie sie in eine Reihe kleinerer Module aufteilen. Möchten Sie fortfahren, diese Bibliothek zu speichern/zu exportieren?" ;
+        Text [ en-US ] = "You are about to save/export a password protected basic library containing module(s) \n$(ARG1)\nwhich are too large to store in binary format. If you wish users that don't have access to the library password to be able to run macros in those module(s) you must split those modules into a number of smaller modules. Do you wish to continue to save/export this library?" ;
+       Text [ x-comment ] = " ";
     };
 
     String (ERRCODE_UUI_IO_BADCRC & ERRCODE_RES_MASK)
