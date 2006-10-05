@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.71 $
+#   $Revision: 1.72 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:40:06 $
+#   last change: $Author: kz $ $Date: 2006-10-05 16:35:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ ALLTAR : \
 clean:
     +cd $(P_BUILD_DIR) && $(BUILD_ACTION) $(BUILD_FLAGS) clean
     +$(RM) $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
-    
+
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.Z
     @+-$(RM) $@
 .IF "$(GUI)"=="UNX"
@@ -127,7 +127,7 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.gz
 .ENDIF			# "$(GUI)"=="UNX"
     @+$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @+$(RENAME) $@.$(INPATH) $@
-    
+
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.bz2
     @+-$(RM) $@
 .IF "$(GUI)"=="UNX"
@@ -137,7 +137,7 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.bz2
 .ENDIF			# "$(GUI)"=="UNX"
     @+$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @+$(RENAME) $@.$(INPATH) $@
-    
+
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tgz
     @+-$(RM) $@
 .IF "$(GUI)"=="UNX"
@@ -164,8 +164,8 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.zip
 $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack $(PATCH_FILE_DEP)
     +$(IFEXIST) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) $(THEN) $(RENAME) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)_removeme $(FI)
     +-rm -rf $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)_removeme
-    @+-$(MKDIR) $(PACKAGE_DIR:d)
-    @+-$(MKDIR) $(PACKAGE_DIR)
+    @-$(MKDIR) $(PACKAGE_DIR:d)
+    @-$(MKDIR) $(PACKAGE_DIR)
     +cd $(PACKAGE_DIR) && ( $(shell +$(TYPE) $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack)) && $(TOUCH) $(UNTAR_FLAG_FILE)
     @echo make writeable...
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
@@ -235,18 +235,18 @@ $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
 .IF "$(CONFIGURE_ACTION)" == "none" || "$(CONFIGURE_ACTION)"==""
     +$(TOUCH) $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE)
 .ELSE			# "$(CONFIGURE_ACTION)"=="none" || "$(CONFIGURE_ACTION)"==""
-    +-$(MKDIR) $(P_CONFIGURE_DIR)
+    -$(MKDIR) $(P_CONFIGURE_DIR)
     +cd $(P_CONFIGURE_DIR) && $(CONFIGURE_ACTION) $(CONFIGURE_FLAGS) && $(TOUCH) $(CONFIGURE_FLAG_FILE)
     +mv $(P_CONFIGURE_DIR)$/$(CONFIGURE_FLAG_FILE) $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE)
 .ENDIF			# "$(CONFIGURE_ACTION)"=="none" ||	"$(CONFIGURE_ACTION)"==""
 
-    
+
 $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE) : $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(eq,x$(BUILD_ACTION:s/none//)x,xx true false)"=="true"
     +$(TOUCH) $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 .ELSE			# "$(eq,x$(BUILD_ACTION:s/none//)x,xx true false)"=="true"
-    +-$(MKDIR) $(P_BUILD_DIR)
+    -$(MKDIR) $(P_BUILD_DIR)
     +cd $(P_BUILD_DIR) && $(BUILD_ACTION) $(BUILD_FLAGS) && $(TOUCH) $(ABS_PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 .ENDIF			# "$(eq,x$(BUILD_ACTION:s/none//)x,xx true false)"=="true"
 
@@ -255,8 +255,8 @@ $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 .IF "$(INSTALL_ACTION)"=="none" ||	"$(INSTALL_ACTION)"==""
     +$(TOUCH) $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 .ELSE			# "$(INSTALL_ACTION)"=="none" ||	"$(INSTALL_ACTION)"==""
-    +-$(MKDIR) $(P_INSTALL_DIR)
-    +-$(MKDIR) $(P_INSTALL_TARGET_DIR)
+    -$(MKDIR) $(P_INSTALL_DIR)
+    -$(MKDIR) $(P_INSTALL_TARGET_DIR)
     +cd $(P_INSTALL_DIR) && $(INSTALL_ACTION) $(INSTALL_FLAGS) && $(TOUCH) $(INSTALL_FLAG_FILE)
     +mv $(P_INSTALL_DIR)$/$(INSTALL_FLAG_FILE) $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 .ENDIF			# "$(INSTALL_ACTION)"=="none" ||	"$(INSTALL_ACTION)"==""
@@ -267,7 +267,7 @@ $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 .ENDIF			# "$(OUT2LIB)"!=""
 .IF "$(OUT2INC)"!=""
 .IF "$(OUT2INC_SUBDIR)"!=""
-    +-$(MKDIR) $(INCCOM)$/$(OUT2INC_SUBDIR)
+    -$(MKDIR) $(INCCOM)$/$(OUT2INC_SUBDIR)
     +$(COPY) $(foreach,i,$(OUT2INC) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(INCCOM)$/$(OUT2INC_SUBDIR)
 .ELSE          # "$(OUT2INC_SUBDIR)"!=""
     +$(COPY) $(foreach,i,$(OUT2INC) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(INCCOM)
@@ -275,7 +275,7 @@ $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 .ENDIF			# "$(OUT2INC)"!=""
 .IF "$(OUTDIR2INC)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    @$(MKDIR) $(foreach,i,$(OUTDIR2INC) $(INCCOM)$/$(i:b))
+    @-$(MKDIR) $(foreach,i,$(OUTDIR2INC) $(INCCOM)$/$(i:b))
     @echo copied $(foreach,i,$(OUTDIR2INC) $(shell +$(COPY) $(COPYRECURSE) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i$/* $(INCCOM)$/$(i:b) >& $(NULLDEV) && echo $i))
 .ELSE			# "$(USE_SHELL)"=="4nt"
     +$(COPY) $(COPYRECURSE) $(foreach,i,$(OUTDIR2INC) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(INCCOM)
