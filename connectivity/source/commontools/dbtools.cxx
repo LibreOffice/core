@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:02:59 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 12:44:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -964,13 +964,13 @@ static ::rtl::OUString impl_doComposeTableName( const Reference< XDatabaseMetaDa
 void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaData, const ::rtl::OUString& _rQualifiedName, ::rtl::OUString& _rCatalog, ::rtl::OUString& _rSchema, ::rtl::OUString& _rName,EComposeRule _eComposeRule)
 {
     OSL_ENSURE(_rxConnMetaData.is(), "QualifiedNameComponents : invalid meta data!");
-    OSL_ENSURE( _eComposeRule == eInDataManipulation, "qualifiedNameComponents: un-implemented case!" );
-    OSL_UNUSED( _eComposeRule );
+    OSL_ENSURE( ( _eComposeRule == eInDataManipulation ) || ( _eComposeRule == eComplete ), "qualifiedNameComponents: un-implemented case!" );
+    bool bComplete = ( _eComposeRule == eComplete );
     ::rtl::OUString sSeparator = _rxConnMetaData->getCatalogSeparator();
 
     ::rtl::OUString sName(_rQualifiedName);
     // do we have catalogs ?
-    if ( _rxConnMetaData->supportsCatalogsInDataManipulation() )
+    if ( bComplete || _rxConnMetaData->supportsCatalogsInDataManipulation() )
     {
         if (_rxConnMetaData->isCatalogAtStart())
         {
@@ -994,7 +994,7 @@ void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaDa
         }
     }
 
-    if ( _rxConnMetaData->supportsSchemasInDataManipulation() )
+    if ( bComplete || _rxConnMetaData->supportsSchemasInDataManipulation() )
     {
         sal_Int32 nIndex = sName.indexOf((sal_Unicode)'.');
         //  OSL_ENSURE(-1 != nIndex, "QualifiedNameComponents : no schema separator!");
