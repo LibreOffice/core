@@ -1,0 +1,81 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: DatabaseObject.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2006-10-05 12:55:25 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_application_DatabaseObject_idl__
+#define __com_sun_star_sdb_application_DatabaseObject_idl__
+
+#ifndef __com_sun_star_sdb_CommandType_idl__
+#include <com/sun/star/sdb/CommandType.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module sdb { module application {
+
+//=============================================================================
+
+/**
+ */
+constants DatabaseObject
+{
+    /** denotes a table in a database
+
+        <p>Note that <em>table</em> here is a more general term. In OpenOffice.org Base,
+        views are also represented as tables, since to the user, the behave pretty much
+        as tables do.</p>
+    */
+    const long TABLE = com::sun::star::sdb::CommandType::TABLE;
+
+    /** denotes a query in a database
+    */
+    const long QUERY = com::sun::star::sdb::CommandType::QUERY;
+
+    /** denotes a form in a database
+    */
+    const long FORM = 2;
+
+    /** denotes a report in a database
+    */
+    const long REPORT = 3;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif
+
