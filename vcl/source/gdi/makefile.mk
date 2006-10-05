@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-03 12:41:55 $
+#   last change: $Author: kz $ $Date: 2006-10-05 13:10:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,7 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/impgraph.obj	\
             $(SLO)$/impimage.obj	\
             $(SLO)$/impimagetree.obj \
+            $(SLO)$/imagerepository.obj   \
             $(SLO)$/impprn.obj		\
             $(SLO)$/impvect.obj 	\
             $(SLO)$/implncvt.obj	\
