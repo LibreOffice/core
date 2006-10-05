@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 09:56:55 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:17:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,29 +249,6 @@ void ImportExcel8::Scenario( void )
 }
 
 
-void ImportExcel8::Cellmerging( void )
-{
-    UINT16  nCount, nRow1, nRow2, nCol1, nCol2;
-    aIn >> nCount;
-
-    DBG_ASSERT( aIn.GetRecLeft() >= (sal_Size)(nCount * 8), "ImportExcel8::Cellmerging - wrong record size" );
-
-    while( nCount-- )
-    {
-        aIn >> nRow1 >> nRow2 >> nCol1 >> nCol2;
-        bTabTruncated |= (nRow1 > static_cast<sal_uInt16>(MAXROW)) || (nRow2 > static_cast<sal_uInt16>(MAXROW)) || (nCol1 > static_cast<sal_uInt16>(MAXCOL)) || (nCol2 > static_cast<sal_uInt16>(MAXCOL));
-        if( (nRow1 <= static_cast<sal_uInt16>(MAXROW)) && (nCol1 <= static_cast<sal_uInt16>(MAXCOL)) )
-        {
-            nRow2 = Min( nRow2, static_cast<sal_uInt16>( MAXROW ) );
-            nCol2 = Min( nCol2, static_cast<sal_uInt16>( MAXCOL ) );
-            GetXFRangeBuffer().SetMerge( static_cast<SCCOL>(nCol1), static_cast<SCROW>(nRow1), static_cast<SCCOL>(nCol2), static_cast<SCROW>(nRow2) );
-        }
-        else
-            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow1 > static_cast<sal_uInt16>(MAXROW) ? nRow1 : nRow2, MAXROW);
-    }
-}
-
-
 void ImportExcel8::Labelsst( void )
 {
     XclAddress aXclPos;
@@ -284,7 +261,6 @@ void ImportExcel8::Labelsst( void )
     if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
     {
         GetXFRangeBuffer().SetXF( aScPos, nXF );
-        pColRowBuff->Used( aScPos );
         if( ScBaseCell* pCell = GetSst().CreateCell( nSst, nXF ) )
             GetDoc().PutCell( aScPos.Col(), aScPos.Row(), aScPos.Tab(), pCell );
     }
@@ -336,6 +312,7 @@ void ImportExcel8::EndSheet( void )
 
 void ImportExcel8::PostDocLoad( void )
 {
+    // filtered ranges before outlines and hidden rows
     if( pExcRoot->pAutoFilterBuffer )
         pExcRoot->pAutoFilterBuffer->Apply();
 
@@ -343,7 +320,7 @@ void ImportExcel8::PostDocLoad( void )
 
     ImportExcel::PostDocLoad();
 
-    // process all drawing objects (including OLE, charts, controls)
+    // process all drawing objects (including OLE, charts, controls; after hiding rows/columns)
     GetObjectManager().ConvertObjects();
 
     // Scenarien bemachen! ACHTUNG: Hier wird Tabellen-Anzahl im Dokument erhoeht!!
