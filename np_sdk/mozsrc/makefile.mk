@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 05:43:35 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:13:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,7 @@ JDKINCS=
 .IF "$(GUI)" == "WNT"
 MOZFILES = $(SLO)$/npwin.obj
 .ELSE
-# macos is still not supported by the plugin
-.IF "$(OS)" != "MACOSX"
 MOZFILES = $(SLO)$/npunix.obj
-.ENDIF
 .ENDIF
 
 ALL: $(MOZFILES)
