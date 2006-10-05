@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 12:45:17 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:30:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -113,8 +113,8 @@ $(MISC)$/envsettings.h : makefile.mk
     +-$(RM) $@
 # it looks wrong; but rc likes it that way...
 .IF "$(USE_SHELL)"!="4nt"
-    +echo "#define MISC .\..\$(INPATH)\misc" > $@
+    echo "#define MISC .\..\$(INPATH)\misc" > $@
 .ELSE			# "$(USE_SHELL)"!="4nt"
-    +echo #define MISC .\..\$(INPATH)\misc > $@
+    echo #define MISC .\..\$(INPATH)\misc > $@
 .ENDIF			# "$(USE_SHELL)"!="4nt"
 
