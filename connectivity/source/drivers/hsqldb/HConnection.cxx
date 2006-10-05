@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HConnection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:42:19 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,44 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
+
+#ifndef CONNECTIVITY_HSQLDB_CONNECTION_HXX
 #include "hsqldb/HConnection.hxx"
+#endif
+#ifndef CONNECTIVITY_HSQLUI_HRC
+#include "hsqlui.hrc"
+#endif
+
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XDATADEFINITIONSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
+#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
+#include <com/sun/star/sdbc/XRow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICPROVIDER_HPP_
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_GRAPHIC_GRAPHICCOLORMODE_HPP_
+#include <com/sun/star/graphic/GraphicColorMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+/** === end UNO includes === **/
+
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
+#endif
 
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
@@ -43,117 +80,377 @@
 #ifndef COMPHELPER_INC_COMPHELPER_LISTENERNOTIFICATION_HXX
 #include <comphelper/listenernotification.hxx>
 #endif
+#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
+#include <comphelper/componentcontext.hxx>
+#endif
 
-using namespace connectivity::hsqldb;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::util;
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
+#endif
 
-namespace connectivity
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
+/** === begin UNO using === **/
+using ::com::sun::star::util::XFlushListener;
+using ::com::sun::star::lang::EventObject;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::sdbc::XStatement;
+using ::com::sun::star::sdbc::XConnection;
+using ::com::sun::star::sdbcx::XDataDefinitionSupplier;
+using ::com::sun::star::sdbcx::XTablesSupplier;
+using ::com::sun::star::container::XNameAccess;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::beans::NamedValue;
+using ::com::sun::star::lang::WrappedTargetException;
+using ::com::sun::star::lang::ServiceNotRegisteredException;
+using ::com::sun::star::sdbc::XDriver;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::graphic::XGraphic;
+using ::com::sun::star::graphic::XGraphicProvider;
+using ::com::sun::star::uno::XInterface;
+using ::com::sun::star::lang::IllegalArgumentException;
+using ::com::sun::star::ui::dialogs::XExecutableDialog;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::makeAny;
+using ::com::sun::star::sdbc::XResultSet;
+using ::com::sun::star::sdbc::XDatabaseMetaData;
+using ::com::sun::star::sdbc::XRow;
+using ::com::sun::star::sdb::application::XDatabaseDocumentUI;
+using ::com::sun::star::beans::PropertyValue;
+/** === end UNO using === **/
+namespace GraphicColorMode = ::com::sun::star::graphic::GraphicColorMode;
+
+namespace connectivity { namespace hsqldb
 {
-    namespace hsqldb
+    // =============================================================================
+    // = FlushListeners
+    // =============================================================================
+    typedef ::comphelper::OListenerContainerBase< XFlushListener, EventObject > FlushListeners_Base;
+    class FlushListeners : public FlushListeners_Base
     {
-        // =============================================================================
-        // = FlushListeners
-        // =============================================================================
-        typedef ::comphelper::OListenerContainerBase< XFlushListener, EventObject > FlushListeners_Base;
-        class FlushListeners : public FlushListeners_Base
-        {
-        public:
-            FlushListeners( ::osl::Mutex& _rMutex ) :FlushListeners_Base( _rMutex ) { }
+    public:
+        FlushListeners( ::osl::Mutex& _rMutex ) :FlushListeners_Base( _rMutex ) { }
 
-        protected:
-            virtual bool    implTypedNotify(
-                                const Reference< XFlushListener >& _rxListener,
-                                const EventObject& _rEvent
-                            )   SAL_THROW( ( Exception ) );
-        };
+    protected:
+        virtual bool    implTypedNotify(
+                            const Reference< XFlushListener >& _rxListener,
+                            const EventObject& _rEvent
+                        )   SAL_THROW( ( Exception ) );
+    };
 
-        // -----------------------------------------------------------------------------
-        bool FlushListeners::implTypedNotify( const Reference< XFlushListener >& _rxListener, const EventObject& _rEvent ) SAL_THROW( ( Exception ) )
+    // -----------------------------------------------------------------------------
+    bool FlushListeners::implTypedNotify( const Reference< XFlushListener >& _rxListener, const EventObject& _rEvent ) SAL_THROW( ( Exception ) )
+    {
+        _rxListener->flushed( _rEvent );
+        return true;    // continue notifying the other listeners, if any
+    }
+
+    // =============================================================================
+    // = OHsqlConnection
+    // =============================================================================
+    // -----------------------------------------------------------------------------
+    void SAL_CALL OHsqlConnection::disposing(void)
+    {
+        m_aFlushListeners.disposeAndClear( EventObject( *this ) );
+        OHsqlConnection_BASE::disposing();
+        OConnectionWrapper::disposing();
+    }
+    // -----------------------------------------------------------------------------
+    OHsqlConnection::OHsqlConnection( const Reference< XDriver > _rxDriver,
+        const Reference< XConnection >& _xConnection ,const Reference< XMultiServiceFactory>& _xORB )
+        :OHsqlConnection_BASE( m_aMutex )
+        ,m_aFlushListeners( m_aMutex )
+        ,m_xDriver( _rxDriver )
+        ,m_xORB( _xORB )
+    {
+        setDelegation(_xConnection,_xORB,m_refCount);
+    }
+    // -----------------------------------------------------------------------------
+    OHsqlConnection::~OHsqlConnection()
+    {
+        if ( !OHsqlConnection_BASE::rBHelper.bDisposed )
         {
-            _rxListener->flushed( _rEvent );
-            return true;    // continue notifying the other listeners, if any
+            osl_incrementInterlockedCount( &m_refCount );
+            dispose();
         }
     }
-}
+    // -----------------------------------------------------------------------------
+    IMPLEMENT_FORWARD_XINTERFACE2(OHsqlConnection,OHsqlConnection_BASE,OConnectionWrapper)
+    IMPLEMENT_SERVICE_INFO(OHsqlConnection, "com.sun.star.sdbc.drivers.hsqldb.OHsqlConnection", "com.sun.star.sdbc.Connection")
+    IMPLEMENT_FORWARD_XTYPEPROVIDER2(OHsqlConnection,OHsqlConnection_BASE,OConnectionWrapper)
 
-// =============================================================================
-// = OConnectionWeakWrapper
-// =============================================================================
-// -----------------------------------------------------------------------------
-void SAL_CALL OConnectionWeakWrapper::disposing(void)
-{
-    m_pFlushListeners->disposing( EventObject( *this ) );
-    OConnectionWeakWrapper_BASE::disposing();
-    OConnectionWrapper::disposing();
-}
-// -----------------------------------------------------------------------------
-OConnectionWeakWrapper::OConnectionWeakWrapper(
-    const Reference< XConnection >& _xConnection ,const Reference< XMultiServiceFactory>& _xORB )
-    :OConnectionWeakWrapper_BASE( m_aMutex )
-    ,m_pFlushListeners( new FlushListeners( m_aMutex ) )
-{
-    setDelegation(_xConnection,_xORB,m_refCount);
-}
-// -----------------------------------------------------------------------------
-OConnectionWeakWrapper::~OConnectionWeakWrapper()
-{
-    if ( !OConnectionWeakWrapper_BASE::rBHelper.bDisposed )
+    //--------------------------------------------------------------------
+    ::osl::Mutex& OHsqlConnection::getMutex() const
     {
-        osl_incrementInterlockedCount( &m_refCount );
-        dispose();
+        return m_aMutex;
     }
-}
-// -----------------------------------------------------------------------------
-IMPLEMENT_FORWARD_XINTERFACE2(OConnectionWeakWrapper,OConnectionWeakWrapper_BASE,OConnectionWrapper)
-IMPLEMENT_SERVICE_INFO(OConnectionWeakWrapper, "com.sun.star.sdbc.drivers.hsqldb.OConnectionWeakWrapper", "com.sun.star.sdbc.Connection")
-IMPLEMENT_FORWARD_XTYPEPROVIDER2(OConnectionWeakWrapper,OConnectionWeakWrapper_BASE,OConnectionWrapper)
-// XFlushable
-//--------------------------------------------------------------------
-void SAL_CALL OConnectionWeakWrapper::flush(  ) throw (RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(rBHelper.bDisposed);
 
-    try
+    //--------------------------------------------------------------------
+    void OHsqlConnection::checkDisposed() const
     {
-        if ( m_xConnection.is() )
+        ::connectivity::checkDisposed( rBHelper.bDisposed );
+    }
+
+    // XFlushable
+    //--------------------------------------------------------------------
+    void SAL_CALL OHsqlConnection::flush(  ) throw (RuntimeException)
+    {
+        MethodGuard aGuard( *this );
+
+        try
         {
-//          Reference< XStatement> xStmt( m_xConnection->createStatement(), UNO_QUERY_THROW );
-//            xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SET WRITE_DELAY 0" ) ) );
+            if ( m_xConnection.is() )
+            {
+//                Reference< XStatement> xStmt( m_xConnection->createStatement(), UNO_QUERY_THROW );
+//                xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SET WRITE_DELAY 0" ) ) );
 //
-//            sal_Bool bPreviousAutoCommit = m_xConnection->getAutoCommit();
-//            m_xConnection->setAutoCommit( sal_False );
-//            m_xConnection->commit();
-//            m_xConnection->setAutoCommit( bPreviousAutoCommit );
+//                sal_Bool bPreviousAutoCommit = m_xConnection->getAutoCommit();
+//                m_xConnection->setAutoCommit( sal_False );
+//                m_xConnection->commit();
+//                m_xConnection->setAutoCommit( bPreviousAutoCommit );
 //
-//            if ( xStmt.is() )
-//              xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SET WRITE_DELAY 60" ) ) );
-            Reference< XStatement > xStmt( m_xConnection->createStatement(), UNO_QUERY_THROW );
-            xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CHECKPOINT" ) ) );
+//                if ( xStmt.is() )
+//                    xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SET WRITE_DELAY 60" ) ) );
+                Reference< XStatement > xStmt( m_xConnection->createStatement(), UNO_QUERY_THROW );
+                xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CHECKPOINT" ) ) );
+            }
+
+            EventObject aFlushedEvent( *this );
+            m_aFlushListeners.notifyEach( &XFlushListener::flushed, aFlushedEvent );
         }
-        m_pFlushListeners->notify( EventObject( *this ) );
-    }
-    catch(::com::sun::star::uno::Exception&)
+        catch(::com::sun::star::uno::Exception&)
+        {
+            OSL_ENSURE( false, "OHsqlConnection::flush: caught an exception!" );
+        }
+   }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OHsqlConnection::addFlushListener( const Reference< XFlushListener >& l ) throw (RuntimeException)
     {
+        MethodGuard aGuard( *this );
+        m_aFlushListeners.addInterface( l );
     }
-}
 
-//--------------------------------------------------------------------
-void SAL_CALL OConnectionWeakWrapper::addFlushListener( const Reference< XFlushListener >& l ) throw (RuntimeException)
-{
-    m_pFlushListeners->addTypedListener( l );
-}
+    //--------------------------------------------------------------------
+    void SAL_CALL OHsqlConnection::removeFlushListener( const Reference< XFlushListener >& l ) throw (RuntimeException)
+    {
+        MethodGuard aGuard( *this );
+        m_aFlushListeners.removeInterface( l );
+    }
 
-//--------------------------------------------------------------------
-void SAL_CALL OConnectionWeakWrapper::removeFlushListener( const Reference< XFlushListener >& l ) throw (RuntimeException)
-{
-    m_pFlushListeners->removeTypedListener( l );
-}
+    // -------------------------------------------------------------------
+    Reference< XGraphic > SAL_CALL OHsqlConnection::getTableIcon( const ::rtl::OUString& _TableName, ::sal_Int32 _ColorMode ) throw (RuntimeException)
+    {
+        MethodGuard aGuard( *this );
 
-// -----------------------------------------------------------------------------
+        impl_checkExistingTable_throw( _TableName );
+        if ( !impl_isTextTable_nothrow( _TableName ) )
+            return NULL;
 
+        return impl_getTextTableIcon_nothrow( _ColorMode );
+    }
+
+    // -------------------------------------------------------------------
+    Reference< XInterface > SAL_CALL OHsqlConnection::getTableEditor( const Reference< XDatabaseDocumentUI >& _DocumentUI, const ::rtl::OUString& _TableName ) throw (IllegalArgumentException, WrappedTargetException, RuntimeException)
+    {
+        MethodGuard aGuard( *this );
+
+        impl_checkExistingTable_throw( _TableName );
+        if ( !impl_isTextTable_nothrow( _TableName ) )
+            return NULL;
+
+        if ( !_DocumentUI.is() )
+            throw IllegalArgumentException(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The provided DocumentUI is not allowed to be NULL." ) ),
+                *this,
+                0
+            );
+        // TODO: resource
+
+//        Reference< XExecutableDialog > xEditor = impl_createLinkedTableEditor_throw( _DocumentUI, _TableName );
+//        return xEditor.get();
+        return NULL;
+        // editor not yet implemented in this CWS
+    }
+
+    // -------------------------------------------------------------------
+    Reference< XNameAccess > OHsqlConnection::impl_getTableContainer_throw()
+    {
+        Reference< XNameAccess > xTables;
+        try
+        {
+            Reference< XConnection > xMe( *this, UNO_QUERY );
+            Reference< XDataDefinitionSupplier > xDefinitionsSupp( m_xDriver, UNO_QUERY_THROW );
+            Reference< XTablesSupplier > xTablesSupp( xDefinitionsSupp->getDataDefinitionByConnection( xMe ), UNO_QUERY_THROW );
+            xTables.set( xTablesSupp->getTables(), UNO_QUERY_THROW );
+        }
+        catch( const RuntimeException& ) { throw; }
+        catch( const Exception& )
+        {
+            throw WrappedTargetException( ::rtl::OUString::createFromAscii( "error while obtaining the connection's table container" ),
+                *this, ::cppu::getCaughtException() );
+            // TODO: resource
+        }
+
+        OSL_POSTCOND( xTables.is(), "OHsqlConnection::impl_getTableContainer_throw: post condition not met!" );
+        return xTables;
+    }
+
+    // -------------------------------------------------------------------
+    Reference< XExecutableDialog > OHsqlConnection::impl_createLinkedTableEditor_throw( const Reference< XDatabaseDocumentUI >& _rxDocumentUI, const ::rtl::OUString& _rTableName )
+    {
+        OSL_PRECOND( _rxDocumentUI.is(), "OHsqlConnection::impl_createLinkedTableEditor_throw: illegal document UI!" );
+        Reference< XExecutableDialog > xDialog;
+        try
+        {
+            ::comphelper::ComponentContext aContext( m_xORB );
+            Sequence< Any > aArguments(3);
+            aArguments[0] <<= NamedValue(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TableContainer" ) ),
+                makeAny( impl_getTableContainer_throw() )
+            );
+            aArguments[1] <<= NamedValue(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TableName" ) ),
+                makeAny( _rTableName )
+            );
+            aArguments[2] <<= NamedValue(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ),
+                makeAny( _rxDocumentUI->getApplicationMainWindow() )
+            );
+
+            aContext.createComponentWithArguments( "com.sun.star.sdb.hsql.LinkedTableEditor", aArguments, xDialog );
+            if ( !xDialog.is() )
+                throw ServiceNotRegisteredException( ::rtl::OUString::createFromAscii( "com.sun.star.sdb.hsql.LinkedTableEditor" ), *this );
+        }
+        catch( const RuntimeException& ) { throw; }
+        catch( const Exception& )
+        {
+            throw WrappedTargetException( ::rtl::OUString::createFromAscii( "error while creating the table editor dialog" ),
+                *this, ::cppu::getCaughtException() );
+            // TODO: resource
+        }
+        return xDialog;
+    }
+
+    // -------------------------------------------------------------------
+    void OHsqlConnection::impl_checkExistingTable_throw( const ::rtl::OUString& _rTableName )
+    {
+        bool bDoesExist = false;
+        try
+        {
+            Reference< XNameAccess > xTables( impl_getTableContainer_throw(), UNO_QUERY_THROW );
+            if ( xTables.is() )
+                bDoesExist = xTables->hasByName( _rTableName );
+        }
+        catch( const Exception& )
+        {
+            // that's a serious error in impl_getTableContainer_throw, or hasByName, however, we're only
+            // allowed to throw an IllegalArgumentException ourself
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
+        if ( !bDoesExist )
+            throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "There is no table named " ) ) + _rTableName,
+                *this, 0 );
+            // TODO: resource
+    }
+
+    // -------------------------------------------------------------------
+    bool OHsqlConnection::impl_isTextTable_nothrow( const ::rtl::OUString& _rTableName )
+    {
+        bool bIsTextTable = false;
+        try
+        {
+            Reference< XConnection > xMe( *this, UNO_QUERY_THROW );
+
+            // split the fully qualified name
+            Reference< XDatabaseMetaData > xMetaData( xMe->getMetaData(), UNO_QUERY_THROW );
+            ::rtl::OUString sCatalog, sSchema, sName;
+            ::dbtools::qualifiedNameComponents( xMetaData, _rTableName, sCatalog, sSchema, sName, ::dbtools::eComplete );
+
+            // get the table information
+            ::rtl::OUStringBuffer sSQL;
+            sSQL.appendAscii( "SELECT HSQLDB_TYPE FROM INFORMATION_SCHEMA.SYSTEM_TABLES" );
+            sSQL.appendAscii( " WHERE " );
+            if ( sCatalog.getLength() )
+            {
+                sSQL.appendAscii( "TABLE_CAT = '" );
+                sSQL.append     ( sCatalog );
+                sSQL.appendAscii( "' AND " );
+            }
+            if ( sSchema.getLength() )
+            {
+                sSQL.appendAscii( "' TABLE_SCHEM = '" );
+                sSQL.append     ( sSchema );
+                sSQL.appendAscii( "' AND " );
+            }
+            sSQL.appendAscii( "TABLE_NAME = '" );
+            sSQL.append     ( sName );
+            sSQL.appendAscii( "' AND TABLE_TYPE = '" );
+            sSQL.appendAscii( "TABLE'" );
+
+            Reference< XStatement > xStatement( xMe->createStatement(), UNO_QUERY_THROW );
+            Reference< XResultSet > xTableHsqlType( xStatement->executeQuery( sSQL.makeStringAndClear() ), UNO_QUERY_THROW );
+
+            if ( xTableHsqlType->next() )   // might not succeed in case of VIEWs
+            {
+                Reference< XRow > xValueAccess( xTableHsqlType, UNO_QUERY_THROW );
+                ::rtl::OUString sTableType = xValueAccess->getString( 1 );
+                bIsTextTable = sTableType.equalsAscii( "TEXT" );
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
+        return bIsTextTable;
+    }
+
+    // -------------------------------------------------------------------
+    Reference< XGraphic > OHsqlConnection::impl_getTextTableIcon_nothrow( ::sal_Int32 _ColorMode )
+    {
+        Reference< XGraphic > xGraphic;
+        try
+        {
+            // create a graphic provider
+            Reference< XGraphicProvider > xProvider;
+            if ( m_xORB.is() )
+                xProvider.set( m_xORB->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.GraphicProvider" ) ) ), UNO_QUERY_THROW );
+
+            // assemble the image URL
+            ::rtl::OUStringBuffer aImageURL;
+            aImageURL.appendAscii( "private:graphicrepository/" );  // load the graphic from the global graphic repository
+            aImageURL.appendAscii( "database/" );                   // the relative path within the images.zip
+            if ( _ColorMode == GraphicColorMode::NORMAL )
+                aImageURL.appendAscii( LINKED_TEXT_TABLE_IMAGE_RESOURCE );
+            else
+                aImageURL.appendAscii( LINKED_TEXT_TABLE_IMAGE_RESOURCE_HC );
+                                                                    // the name of the graphic to use
+            ::rtl::OUString sImageURL( aImageURL.makeStringAndClear() );
+
+            // ask the provider to obtain a graphic
+            Sequence< PropertyValue > aMediaProperties( 1 );
+            aMediaProperties[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+            aMediaProperties[0].Value <<= sImageURL;
+            xGraphic = xProvider->queryGraphic( aMediaProperties );
+            OSL_ENSURE( xGraphic.is(), "OHsqlConnection::impl_getTextTableIcon_nothrow: the provider did not give us a graphic object!" );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return xGraphic;
+    }
+
+} } // namespace connectivity::hsqldb
