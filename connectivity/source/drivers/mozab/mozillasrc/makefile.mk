@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-19 15:53:32 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:21:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,8 @@ PRJINC=..$/..$/..
 PRJNAME=connectivity
 TARGET=mozabsrc
 
-USE_LDUMP2=TRUE
 USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
-LDUMP=ldump2.exe
 
 # --- Settings ----------------------------------
 .IF "$(DBGUTIL_OJ)"!=""
@@ -152,10 +150,4 @@ SHL1TARGET_NAME=$(TARGET)$(MOZAB_MAJOR)
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
-
-
-killdpc:
-    -+$(RM) $(DPCTARGET)
-    -+$(RM) $(DEPFILES)
-    @+echo Dependency files removed
 
