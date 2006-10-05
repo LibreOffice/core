@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:07:32 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:04:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,9 +98,11 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#ifndef DBACCESS_IMAGEPROVIDER_HXX
+#include "imageprovider.hxx"
+#endif
 
 #include <algorithm>
-
 
 // slot ids
 using namespace dbaui;
@@ -221,7 +223,7 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
             sViews = Sequence< ::rtl::OUString>();
         }
 
-        m_rTableList.UpdateTableList( m_xConnection->getMetaData(), sTables, sViews );
+        m_rTableList.UpdateTableList( m_xConnection, sTables, sViews );
         SvLBoxEntry* pEntry = m_rTableList.First();
         while( pEntry && m_rTableList.GetModel()->HasChilds( pEntry ) )
         {
@@ -270,8 +272,10 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
     m_rQueryList.Clear();
     try
     {
-        Image aQueryImage( ModuleRes( QUERY_TREE_ICON ) );
-        Image aQueryImageHC( ModuleRes( QUERY_TREE_ICON_SCH ) );
+        ImageProvider aImageProvider( m_xConnection );
+        Image aQueryImage( aImageProvider.getDefaultImage( DatabaseObject::QUERY, false ) );
+        Image aQueryImageHC( aImageProvider.getDefaultImage( DatabaseObject::QUERY, true ) );
+
         m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImage, BMP_COLOR_NORMAL );
         m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImage, BMP_COLOR_NORMAL );
         m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImageHC, BMP_COLOR_HIGHCONTRAST );
