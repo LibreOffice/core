@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.59 $
+#   $Revision: 1.60 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 14:38:43 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:29:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -243,7 +243,7 @@ sdkoo_% :
 
 .ELSE			# "$(alllangiso)"!=""
 openoffice:
-    @+echo cannot pack nothing...
+    @echo cannot pack nothing...
 
 .ENDIF			# "$(alllangiso)"!=""
 
@@ -380,9 +380,9 @@ $(BIN)$/iso8859_1.py : $(SOLARLIBDIR)$/python$/encodings$/iso8859_1.py
     @+$(COPY) $< $@
 .ELSE
 $(BIN)$/cp1251.py : 
-    @+echo "Using system python - nothing more to do here"
+    @echo "Using system python - nothing more to do here"
 $(BIN)$/iso8859_1.py : 
-    @+echo "Using system python - nothing more to do here"
+    @echo "Using system python - nothing more to do here"
 .ENDIF
 
 $(BIN)$/intro.bmp : $(SOLARCOMMONPCKDIR)$/openoffice$/nologointro.bmp
