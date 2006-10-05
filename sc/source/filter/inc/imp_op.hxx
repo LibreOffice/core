@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 09:59:12 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:20:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,11 +78,8 @@ class ScFormulaCell;
 class SdrObject;
 class ScDocument;
 class ScToken;
-class ScToken2;
 class _ScRangeListTabs;
 
-class XF_Buffer;
-class ValueFormBuffer;
 class ExcelToSc;
 
 
@@ -125,25 +122,25 @@ struct ExcelChartData
                             ~ExcelChartData();
 };
 
-class XclImpOutlineDataBuffer
+class XclImpOutlineDataBuffer : protected XclImpRoot
 {
-private:
-    typedef ::std::auto_ptr< XclImpOutlineBuffer >  XclImpOutlineBufferPtr;
-    typedef ::std::auto_ptr< XclImpColRowSettings > XclImpColRowSettingsPtr;
-
-    XclImpOutlineBufferPtr      pColOutlineBuff;
-    XclImpOutlineBufferPtr      pRowOutlineBuff;
-    XclImpColRowSettingsPtr     pColRowBuff;
-    SCTAB nTab;
-
 public:
-    XclImpOutlineDataBuffer(RootData& rRootData, SCTAB nScTab);
-    ~XclImpOutlineDataBuffer();
+    explicit            XclImpOutlineDataBuffer( const XclImpRoot& rRoot, SCTAB nScTab );
+    virtual             ~XclImpOutlineDataBuffer();
 
-    inline XclImpColRowSettings* GetColRowBuff() const { return pColRowBuff.get(); }
-    inline XclImpOutlineBuffer* GetColOutline()  const { return pColOutlineBuff.get(); }
-    inline XclImpOutlineBuffer* GetRowOutline()  const { return pRowOutlineBuff.get(); }
-    void Apply(ScDocument* pD);
+    inline XclImpColRowSettings* GetColRowBuff() const { return mxColRowBuff.get(); }
+    inline XclImpOutlineBuffer* GetColOutline()  const { return mxColOutlineBuff.get(); }
+    inline XclImpOutlineBuffer* GetRowOutline()  const { return mxRowOutlineBuff.get(); }
+    void                Convert();
+
+private:
+    typedef ScfRef< XclImpOutlineBuffer >  XclImpOutlineBfrRef;
+    typedef ScfRef< XclImpColRowSettings > XclImpColRowSettRef;
+
+    XclImpOutlineBfrRef mxColOutlineBuff;
+    XclImpOutlineBfrRef mxRowOutlineBuff;
+    XclImpColRowSettRef mxColRowBuff;
+    SCTAB               mnScTab;
 };
 
 class ImportExcel : public ImportTyp, protected XclImpRoot
@@ -223,6 +220,7 @@ protected:
     void                    Mulrk( void );                  // 0xBD
     void                    Mulblank( void );               // 0xBE
     void                    Rstring( void );                // 0xD6
+    void                    Cellmerging( void );            // 0xE5
     void                    Olesize( void );                // 0xDE
     void                    ReadUsesElfs();                 // 0x0160
     void                    Formula3( void );               // 0x0206       -> excform.cxx
