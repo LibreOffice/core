@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:59:09 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:42:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -113,13 +113,13 @@ ALLTAR : \
 
 $(OUT)$/bin$/TestRemote$(SCRIPTEXT) : $(JAVACLASSFILES)
     -rm -f $@
-    +echo java -classpath ..$/class$/test$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)$(EXEC_CLASSPATH) \
+    echo java -classpath ..$/class$/test$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)$(EXEC_CLASSPATH) \
         test.java_uno.anytest.TestRemote > $@
     $(GIVE_EXEC_RIGHTS) $@
 
 $(OUT)$/bin$/TestJni$(SCRIPTEXT) : $(JAVACLASSFILES)
     -rm -f $@
-    +echo java -classpath .$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)$(EXEC_CLASSPATH) \
+    echo java -classpath .$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)$(EXEC_CLASSPATH) \
         test.java_uno.anytest.TestJni >> $@
     $(GIVE_EXEC_RIGHTS) $@
 
