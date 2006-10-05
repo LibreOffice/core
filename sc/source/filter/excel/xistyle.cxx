@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 11:34:25 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1147,7 +1147,8 @@ void XclImpXF::ApplyPattern(
     ScDocument& rDoc = GetDoc();
     if( IsCellXF() && mpStyleSheet )
         rDoc.ApplyStyleAreaTab( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, *mpStyleSheet );
-    rDoc.ApplyPatternAreaTab( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, rPattern );
+    if( HasUsedFlags() )
+        rDoc.ApplyPatternAreaTab( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, rPattern );
 
     // #108770# apply special number format
     if( nForceScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND )
@@ -1351,14 +1352,12 @@ void XclImpXFBuffer::ApplyPattern(
         SCCOL nScCol1, SCROW nScRow1, SCCOL nScCol2, SCROW nScRow2,
         SCTAB nScTab, const XclImpXFIndex& rXFIndex )
 {
-    sal_uInt16 nXFIndex = rXFIndex.GetXFIndex();
-    // #108770# set 'Standard' number format for all Boolean cells
-    ULONG nForceScNumFmt = rXFIndex.IsBoolCell() ? GetNumFmtBuffer().GetStdScNumFmt() : NUMBERFORMAT_ENTRY_NOT_FOUND;
-    // do nothing for default cell format without explicit number format
-    // #i34061# but always for BIFF2
-    if( (GetBiff() == EXC_BIFF2) || (nXFIndex != EXC_XF_DEFAULTCELL) || (nForceScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND) )
-        if( XclImpXF* pXF = GetXF( nXFIndex ) )
-            pXF->ApplyPattern( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, nForceScNumFmt );
+    if( XclImpXF* pXF = GetXF( rXFIndex.GetXFIndex() ) )
+    {
+        // #108770# set 'Standard' number format for all Boolean cells
+        ULONG nForceScNumFmt = rXFIndex.IsBoolCell() ? GetNumFmtBuffer().GetStdScNumFmt() : NUMBERFORMAT_ENTRY_NOT_FOUND;
+        pXF->ApplyPattern( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, nForceScNumFmt );
+    }
 }
 
 // Buffer for XF indexes in cells =============================================
