@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_lib.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:58:42 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:40:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,16 +47,16 @@ $(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
     @+-$(RM) $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
     @+-$(RM) $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
-    @+echo $(LINK) +inst_close -c `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
+    @echo $(LINK) +inst_close -c `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
     @cat $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
     @source $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
 .ENDIF
-    @+echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+    @echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
-    @+echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+    @echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
 .ENDIF
 .IF "$(OS)" == "MACOSX"
-     @+echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+     @echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
 .ENDIF
     @cat $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
     @source $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
@@ -75,7 +75,7 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
     @echo Making: $@
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
-    @+echo $(LIB$(TNR)OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
+    @echo $(LIB$(TNR)OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB$(TNR)FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
 .IF "$(OS)"=="MACOSX"
@@ -96,7 +96,7 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
     @+$(ECHONL)
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
-    +echo $(LIBMGR) r $@ $(LIB$(TNR)OBJFILES)
+    echo $(LIBMGR) r $@ $(LIB$(TNR)OBJFILES)
     $(LIBMGR) r $@ $(LIB$(TNR)OBJFILES) $(LIB$(TNR)FILES) bla.lib
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="UNX"
