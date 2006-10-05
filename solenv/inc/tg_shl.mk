@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.98 $
+#   $Revision: 1.99 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 13:09:50 $
+#   last change: $Author: kz $ $Date: 2006-10-05 12:38:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,7 @@ SHL$(TNR)IMPLIB=i$(TARGET)_t$(TNR)
 .ENDIF			# "$(SHL$(TNR)IMPLIB)" == ""
 USE_$(TNR)IMPLIB=-implib:$(LB)$/$(SHL$(TNR)IMPLIB).lib
 SHL$(TNR)IMPLIBN=$(LB)$/$(SHL$(TNR)IMPLIB).lib
+ALLTAR : $(SHL$(TNR)IMPLIBN)
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -133,10 +134,10 @@ USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)TARGET).vmap
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)TARGET).vmap
-$(USE_SHL$(TNR)VERSIONMAP) .PHONY:
-    @+echo -----------------------------
-    @+echo you should only use versionmap OR exportfile
-    @+echo -----------------------------
+$(USE_SHL$(TNR)VERSIONMAP) .PHONY: 
+    @echo -----------------------------
+    @echo you should only use versionmap OR exportfile
+    @echo -----------------------------
 #	force_dmake_to_error
 
 .ENDIF			# "$(SHL$(TNR)VERSIONMAP)"!=""
@@ -165,12 +166,12 @@ $(USE_SHL$(TNR)VERSIONMAP): \
 
 .ELSE			# "$(SHL$(TNR)FILTERFILE)"!=""
 USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)TARGET).vmap
-$(USE_SHL$(TNR)VERSIONMAP) :
-    @+echo -----------------------------
-    @+echo SHL$(TNR)FILTERFILE not set!
-    @+echo -----------------------------
+$(USE_SHL$(TNR)VERSIONMAP) : 
+    @echo -----------------------------
+    @echo SHL$(TNR)FILTERFILE not set!
+    @echo -----------------------------
     @$(TOUCH) $@
-    @+echo dummy file to keep the dependencies for later use.
+    @echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL$(TNR)FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL$(TNR)VERSIONMAP)"!=""
@@ -267,20 +268,20 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(SHL$(TNR)DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL$(TNR)ICON)" != ""
-    @-+echo 1 ICON $(SHL$(TNR)ICON) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-echo 1 ICON $(SHL$(TNR)ICON) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
 .IF "$(SHL$(TNR)ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#include $(EMQ)"$(SHL$(TNR)ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"$(SHL$(TNR)ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ELSE			# "$(SHL$(TNR)ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL$(TNR)ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ORG_NAME	$(SHL$(TNR)TARGET)$(DLLPOST) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ORG_NAME	$(SHL$(TNR)TARGET)$(DLLPOST) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-echo $(EMQ)#define INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(SHL$(TNR)DEFAULTRES)"!=""
@@ -295,10 +296,10 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(SHL$(TNR)USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL$(TNR)STDLIBS) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) $(SHL$(TNR)RES) >> $(MISC)$/$(@:b).cmd
+    @echo  $(SHL$(TNR)STDLIBS) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) $(SHL$(TNR)RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(SHL$(TNR)LINKER) @$(mktmp \
@@ -378,10 +379,10 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
+    @echo $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
     $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL$(TNR)STDLIBS)` \
     $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
@@ -400,7 +401,7 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(SHL$(TNR)SONAME) $(LINKFLAGSSHL) $(SHL$(TNR)VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
+    @echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(SHL$(TNR)SONAME) $(LINKFLAGSSHL) $(SHL$(TNR)VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
     $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL$(TNR)LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
@@ -421,12 +422,12 @@ $(SHL$(TNR)TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(TARGETTHREAD)"!="MT"
-    @+echo ----------------------------------------------------------
-    @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded
-    @+echo - and must not be used in any office installation!
-    @+echo -
-    @+echo ----------------------------------------------------------
+    @echo ----------------------------------------------------------
+    @echo -
+    @echo - THREAD WARNING! - this library was linked single threaded 
+    @echo - and must not be used in any office installation!
+    @echo -
+    @echo ----------------------------------------------------------
 .ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
