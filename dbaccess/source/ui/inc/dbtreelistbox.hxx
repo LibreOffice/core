@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtreelistbox.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:17:00 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:05:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,7 @@
 
 namespace dbaui
 {
-    #define TABLE_TYPE  1
-    #define VIEW_TYPE   2
-    #define FOLDER_TYPE 3
+    #define FOLDER_INDICATOR 1
 
     struct DBTreeEditedEntry
     {
