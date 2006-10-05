@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dapiuno.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:32:36 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:22:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2863,7 +2863,7 @@ uno::Any SAL_CALL ScDataPilotFieldGroupsObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    if (nIndex < aGroups.size())
+    if (nIndex >= 0 && nIndex < aGroups.size())
         return uno::makeAny(uno::Reference < container::XNameAccess > (new ScDataPilotFieldGroupObj(aGroups[nIndex])));
     else
         throw lang::IndexOutOfBoundsException();
@@ -3071,7 +3071,7 @@ uno::Any SAL_CALL ScDataPilotFieldGroupObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    if (nIndex < aGroup.aMembers.size())
+    if (nIndex >= 0 && nIndex < aGroup.aMembers.size())
         return uno::makeAny(uno::Reference < container::XNamed > (new ScDataPilotFieldGroupItemObj(aGroup.aMembers[nIndex])));
     else
         throw lang::IndexOutOfBoundsException();
