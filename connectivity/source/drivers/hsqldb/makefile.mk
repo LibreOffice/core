@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 06:07:25 $
+#   last change: $Author: kz $ $Date: 2006-10-05 12:45:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,23 @@ USE_DEFFILE=TRUE
 nojava:
     @echo "Not building jurt because Java is disabled"
 .ENDIF
+
+# --- Resources ---------------------------------
+
+SRS1NAME=$(TARGET)
+SRC1FILES =	\
+        hsqlui.src
+        
+RES1FILELIST=\
+    $(SRS)$/$(TARGET).srs
+
+RESLIB1NAME=$(TARGET)
+RESLIB1IMAGES=$(SOLARSRC)$/$(RSCDEFIMG)$/database
+RESLIB1SRSFILES=$(RES1FILELIST)
+
+# Note that the resource file built here is currently *not* included
+# in installation sets. See hsqlui.src for an explanation
+
 # --- Files -------------------------------------
 
 SLOFILES=\
