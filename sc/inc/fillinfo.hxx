@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillinfo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:39:47 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:16:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,28 +92,28 @@ struct CellInfo
 
     const SvxShadowItem*        pShadowAttr;            // Original-Item (intern)
 
-    ScShadowPart                eHShadowPart;           // Schatten effektiv zum Zeichnen
-    ScShadowPart                eVShadowPart;
     const SvxShadowItem*        pHShadowOrigin;
     const SvxShadowItem*        pVShadowOrigin;
 
-    USHORT                      nWidth;
-
-    BOOL                        bMarked;
+    ScShadowPart                eHShadowPart : 4;           // Schatten effektiv zum Zeichnen
+    ScShadowPart                eVShadowPart : 4;
     BYTE                        nClipMark;
-    BOOL                        bEmptyCellText;
-
-    BOOL                        bMerged;
-    BOOL                        bHOverlapped;
-    BOOL                        bVOverlapped;
-    BOOL                        bAutoFilter;
-    BOOL                        bPushButton;
+    USHORT                      nWidth;
     BYTE                        nRotateDir;
 
-    BOOL                        bPrinted;               // bei Bedarf (Pagebreak-Modus)
+    BOOL                        bMarked : 1;
+    BOOL                        bEmptyCellText : 1;
 
-    BOOL                        bHideGrid;              // output-intern
-    BOOL                        bEditEngine;            // output-intern
+    BOOL                        bMerged : 1;
+    BOOL                        bHOverlapped : 1;
+    BOOL                        bVOverlapped : 1;
+    BOOL                        bAutoFilter : 1;
+    BOOL                        bPushButton : 1;
+
+    BOOL                        bPrinted : 1;               // bei Bedarf (Pagebreak-Modus)
+
+    BOOL                        bHideGrid : 1;              // output-intern
+    BOOL                        bEditEngine : 1;            // output-intern
 };
 
 const SCCOL SC_ROTMAX_NONE = SCCOL_MAX;
