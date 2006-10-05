@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:34:33 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:56:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,12 @@
 #
 #*************************************************************************
 
+# any volunteer to remove warnings?
+EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+
 PRJ=..
 
-PRJNAME=SV
+PRJNAME=vcl
 TARGET=dndtest
 LIBTARGET=NO
 
@@ -45,13 +48,13 @@ LIBTARGET=NO
 
 # --- Files --------------------------------------------------------
 
-OBJFILES=		$(OBJ)$/dndtest.obj
+OBJFILES= \
+    $(OBJ)$/dndtest.obj
+
 
 APP1NOSAL=		TRUE
 APP1TARGET= 	$(TARGET)
-APP1OBJS=		$(OBJ)$/dnddem.obj \
-                $(OBJ)$/salmain.obj
-
+APP1OBJS=	$(OBJFILES)	$(SLO)$/salmain.obj
 APP1STDLIBS=	$(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(TOOLSLIB) 		\
@@ -60,10 +63,6 @@ APP1STDLIBS=	$(CPPULIB)			\
                 $(SOTLIB)			\
                 $(COMPHELPERLIB)	\
                 $(SVLIB)
-
-APP1DEPN=		$(L)$/itools.lib	\
-                $(L)$/sot.lib
-
 
 # --- Targets ------------------------------------------------------
 
