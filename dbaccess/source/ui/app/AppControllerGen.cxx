@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:54:17 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 12:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,7 @@ namespace dbaui
 using namespace ::dbtools;
 using namespace ::svx;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
@@ -184,7 +185,7 @@ void OApplicationController::convertToView(const ::rtl::OUString& _sName)
             Reference<XPropertySet> xView = ::dbaui::createView(sNewName,xConnection,xSourceObject);
             if ( !xView.is() )
                 throw SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
-            getContainer()->elementAdded(E_TABLE,sNewName,makeAny(xView),xConnection);
+            getContainer()->elementAdded(E_TABLE,sNewName,makeAny(xView));
         }
     }
     catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
@@ -325,6 +326,49 @@ void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent&
     aEvt.Source = m_xModel;
     modified(aEvt);
 }
+
+// -----------------------------------------------------------------------------
+Reference< XDataSource > SAL_CALL OApplicationController::getDataSource() throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
+    return xDataSource;
+}
+
+// -----------------------------------------------------------------------------
+Reference< XWindow > SAL_CALL OApplicationController::getApplicationMainWindow() throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    Reference< XFrame > xFrame( getFrame(), UNO_QUERY_THROW );
+    Reference< XWindow > xWindow( xFrame->getContainerWindow(), UNO_QUERY_THROW );
+    return xWindow;
+}
+
+// -----------------------------------------------------------------------------
+Reference< XConnection > SAL_CALL OApplicationController::getActiveConnection() throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    return m_xDataSourceConnection.getTyped();
+}
+
+// -----------------------------------------------------------------------------
+::sal_Bool SAL_CALL OApplicationController::isConnected(  ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    return m_xDataSourceConnection.is();
+}
+
+// -----------------------------------------------------------------------------
+::sal_Bool SAL_CALL OApplicationController::connect(  ) throw (RuntimeException)
+{
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard(m_aMutex);
+
+    ensureConnection();
+    return isConnected();
+}
+
+
 // -----------------------------------------------------------------------------
 void OApplicationController::previewChanged( sal_Int32 _nMode )
 {
