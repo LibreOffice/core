@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 14:36:59 $
+#   last change: $Author: kz $ $Date: 2006-10-05 09:19:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,15 @@ sub make_relative_ddf_path
 {
     my ( $sourcepath ) = @_;
 
-    $sourcepath =~ s/\Q$installer::globals::temppath\E//;
+    my $windowstemppath = $installer::globals::temppath;
+
+    if ( $^O =~ /cygwin/i )
+    {
+        $windowstemppath =~ s/\\/\\\\/g;
+        chomp( $windowstemppath = qx{cygpath -w "$windowstemppath"} );
+    }
+
+    $sourcepath =~ s/\Q$windowstemppath\E//;
     $sourcepath =~ s/^\\//;
 
     return $sourcepath;
