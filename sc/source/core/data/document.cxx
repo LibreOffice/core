@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 09:56:17 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:16:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3771,6 +3771,33 @@ BOOL ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
     }
     else
         DBG_ERROR("ExtendOverlapped: falscher Bereich");
+
+    return bFound;
+}
+
+
+BOOL ScDocument::ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
+                              SCCOL& rEndCol, SCROW& rEndRow,
+                              const ScMarkData& rMark, BOOL bRefresh, BOOL bAttrs )
+{
+    // use all selected sheets from rMark
+
+    BOOL bFound = FALSE;
+    SCCOL nOldEndCol = rEndCol;
+    SCROW nOldEndRow = rEndRow;
+
+    for (SCTAB nTab = 0; nTab <= MAXTAB; nTab++)
+        if ( pTab[nTab] && rMark.GetTableSelect(nTab) )
+        {
+            SCCOL nThisEndCol = nOldEndCol;
+            SCROW nThisEndRow = nOldEndRow;
+            if ( ExtendMerge( nStartCol, nStartRow, nThisEndCol, nThisEndRow, nTab, bRefresh, bAttrs ) )
+                bFound = TRUE;
+            if ( nThisEndCol > rEndCol )
+                rEndCol = nThisEndCol;
+            if ( nThisEndRow > rEndRow )
+                rEndRow = nThisEndRow;
+        }
 
     return bFound;
 }
