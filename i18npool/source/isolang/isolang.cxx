@@ -4,9 +4,9 @@
  *
  *  $RCSfile: isolang.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:21:05 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:15:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -387,6 +387,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_ENGLISH_NAMIBIA,        "en", "NA" },
     { LANGUAGE_USER_WALLOON,                "wa", "BE" },
     { LANGUAGE_USER_COPTIC,                "cop", "EG" },
+    { LANGUAGE_USER_GASCON,                "gsc", "FR" },
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
 
