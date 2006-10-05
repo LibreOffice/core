@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:44:11 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:47:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,63 +80,63 @@ UNODLLPOST=.uno$(DLLPOST)
 UPDDLLPOST=$(UPD)$(DLLPOSTFIX)$(DLLPOST)
 
 $(MISC)$/$(TARGET)-calc : makefile.mk
-    @+echo Making: $@
-    @-+echo $(DLLPRE)sc$(UPDDLLPOST)  >  $@
-    @-+echo $(DLLPRE)svx$(UPDDLLPOST) >> $@
+    @echo Making: $@
+    @-echo $(DLLPRE)sc$(UPDDLLPOST)  >  $@
+    @-echo $(DLLPRE)svx$(UPDDLLPOST) >> $@
 
 $(MISC)$/$(TARGET)-draw : makefile.mk
-    @+echo Making: $@
-    @-+echo $(DLLPRE)sd$(UPDDLLPOST)  >  $@
-    @-+echo $(DLLPRE)svx$(UPDDLLPOST) >> $@
+    @echo Making: $@
+    @-echo $(DLLPRE)sd$(UPDDLLPOST)  >  $@
+    @-echo $(DLLPRE)svx$(UPDDLLPOST) >> $@
 
 $(MISC)$/$(TARGET)-impress : makefile.mk
-    @+echo Making: $@
-    @-+echo $(DLLPRE)sd$(UPDDLLPOST)  >  $@
-    @-+echo $(DLLPRE)svx$(UPDDLLPOST) >> $@
+    @echo Making: $@
+    @-echo $(DLLPRE)sd$(UPDDLLPOST)  >  $@
+    @-echo $(DLLPRE)svx$(UPDDLLPOST) >> $@
 
 $(MISC)$/$(TARGET)-writer : makefile.mk
-    @+echo Making: $@
-    @-+echo $(DLLPRE)sw$(UPDDLLPOST)  >  $@
-    @-+echo $(DLLPRE)svx$(UPDDLLPOST) >> $@
+    @echo Making: $@
+    @-echo $(DLLPRE)sw$(UPDDLLPOST)  >  $@
+    @-echo $(DLLPRE)svx$(UPDDLLPOST) >> $@
 
 # sorted in reverse load order (ld.so.1)
 $(MISC)$/$(TARGET)-common : makefile.mk
-    @+echo Making: $@
-    @-+echo $(DLLPRE)icui18n$(ICUDLLPOST)  >  $@
-    @-+echo i18npool$(UNODLLPOST)       >> $@
+    @echo Making: $@
+    @-echo $(DLLPRE)icui18n$(ICUDLLPOST)  >  $@
+    @-echo i18npool$(UNODLLPOST)       >> $@
 #
-    @-+echo $(DLLPRE)xcr$(UPDDLLPOST)   >> $@
-    @-+echo $(DLLPRE)xo$(UPDDLLPOST)    >> $@
-    @-+echo $(DLLPRE)go$(UPDDLLPOST)    >> $@
-    @-+echo $(DLLPRE)sb$(UPDDLLPOST)    >> $@
-    @-+echo $(DLLPRE)sfx$(UPDDLLPOST)   >> $@
-    @-+echo $(DLLPRE)so$(UPDDLLPOST)    >> $@
+    @-echo $(DLLPRE)xcr$(UPDDLLPOST)   >> $@
+    @-echo $(DLLPRE)xo$(UPDDLLPOST)    >> $@
+    @-echo $(DLLPRE)go$(UPDDLLPOST)    >> $@
+    @-echo $(DLLPRE)sb$(UPDDLLPOST)    >> $@
+    @-echo $(DLLPRE)sfx$(UPDDLLPOST)   >> $@
+    @-echo $(DLLPRE)so$(UPDDLLPOST)    >> $@
 #
-    @-+echo $(DLLPRE)fwe$(UPDDLLPOST)   >> $@
-    @-+echo $(DLLPRE)fwk$(UPDDLLPOST)   >> $@
-    @-+echo $(DLLPRE)ucpfile1$(DLLPOST) >> $@
-    @-+echo $(DLLPRE)fwi$(UPDDLLPOST)   >> $@
-    @-+echo $(DLLPRE)fwl$(UPDDLLPOST)   >> $@
-    @-+echo configmgr2$(UNODLLPOST)     >> $@
+    @-echo $(DLLPRE)fwe$(UPDDLLPOST)   >> $@
+    @-echo $(DLLPRE)fwk$(UPDDLLPOST)   >> $@
+    @-echo $(DLLPRE)ucpfile1$(DLLPOST) >> $@
+    @-echo $(DLLPRE)fwi$(UPDDLLPOST)   >> $@
+    @-echo $(DLLPRE)fwl$(UPDDLLPOST)   >> $@
+    @-echo configmgr2$(UNODLLPOST)     >> $@
 #
-    @-+echo $(DLLPRE)icuuc$(ICUDLLPOST) >> $@
-    @-+echo $(DLLPRE)sot$(UPDDLLPOST)   >> $@
-    @-+echo $(DLLPRE)psp$(UPDDLLPOST)   >> $@
+    @-echo $(DLLPRE)icuuc$(ICUDLLPOST) >> $@
+    @-echo $(DLLPRE)sot$(UPDDLLPOST)   >> $@
+    @-echo $(DLLPRE)psp$(UPDDLLPOST)   >> $@
 .IF "$(COMNAME)" == "gcc2" || "$(COMNAME)" == "gcc3"
-    @-+echo $(DLLPRE)stlport_gcc$(DLLPOST)    >> $@
+    @-echo $(DLLPRE)stlport_gcc$(DLLPOST)    >> $@
 .ENDIF # gcc
 .IF "$(COMNAME)" == "sunpro5"
-    @-+echo $(DLLPRE)stlport_sunpro$(DLLPOST) >> $@
+    @-echo $(DLLPRE)stlport_sunpro$(DLLPOST) >> $@
 .ENDIF # sunpro5
-    @-+echo $(DLLPRE)uno_sal$(UDKDLLPOST)   >>  $@
-    @-+echo $(DLLPRE)uno_cppu$(UDKDLLPOST)  >> $@
-    @-+echo $(DLLPRE)uno_cppuhelper$(COMID)$(UDKDLLPOST)           >> $@
-    @-+echo $(DLLPRE)ucbhelper$(UCBHELPER_MAJOR)$(COMID)$(DLLPOST) >> $@
-    @-+echo $(DLLPRE)comphelp$(COMPHLP_MAJOR)$(COMID)$(DLLPOST)    >> $@
-    @-+echo $(DLLPRE)tl$(UPDDLLPOST)    >> $@
-    @-+echo $(DLLPRE)utl$(UPDDLLPOST)   >> $@
-    @-+echo $(DLLPRE)svl$(UPDDLLPOST)   >> $@
-    @-+echo $(DLLPRE)vcl$(UPDDLLPOST)   >> $@
-    @-+echo $(DLLPRE)tk$(UPDDLLPOST)    >> $@
-    @-+echo $(DLLPRE)svt$(UPDDLLPOST)   >> $@
-    @-+echo soffice.bin                 >> $@
+    @-echo $(DLLPRE)uno_sal$(UDKDLLPOST)   >>  $@
+    @-echo $(DLLPRE)uno_cppu$(UDKDLLPOST)  >> $@
+    @-echo $(DLLPRE)uno_cppuhelper$(COMID)$(UDKDLLPOST)           >> $@
+    @-echo $(DLLPRE)ucbhelper$(UCBHELPER_MAJOR)$(COMID)$(DLLPOST) >> $@
+    @-echo $(DLLPRE)comphelp$(COMPHLP_MAJOR)$(COMID)$(DLLPOST)    >> $@
+    @-echo $(DLLPRE)tl$(UPDDLLPOST)    >> $@
+    @-echo $(DLLPRE)utl$(UPDDLLPOST)   >> $@
+    @-echo $(DLLPRE)svl$(UPDDLLPOST)   >> $@
+    @-echo $(DLLPRE)vcl$(UPDDLLPOST)   >> $@
+    @-echo $(DLLPRE)tk$(UPDDLLPOST)    >> $@
+    @-echo $(DLLPRE)svt$(UPDDLLPOST)   >> $@
+    @-echo soffice.bin                 >> $@
