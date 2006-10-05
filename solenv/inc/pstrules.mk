@@ -4,9 +4,9 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:56:33 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:37:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,55 +32,6 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-
-
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++	svxlight rules			+++++++++++++++++++++++++++++++++++++
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.IF "$(SVXLIGHT)"=="TRUE"
-.IF "$(SVXLIGHTOBJFILES)"!=""
-
-SVXLIGHTDEFS=-DSVX_LIGHT
-
-$(OBJ)$/sxl_%.obj : %.cxx
-    @echo ------------------------------
-    @echo Making: $@
-.IF "$(GUI)"=="UNX"
-    @$(RM) $@ $(@:s/.obj/.o/)
-    $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(SVXLIGHTDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/sxl_$*.o $(CFLAGSINCXX)$(PWD)$/$*.cxx
-.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
-    $(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
-.ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
-     +$(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
-.ELSE
-     @+$(IFEXIST) $@ $(THEN) $(RM) $@ >& $(NULLDEV) $(FI)
-    $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(SVXLIGHTDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/sxl_$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx
-.ENDIF
-
-.ENDIF			# "$(SVXLIGHTOBJFILES)"!=""
-
-.IF "$(SVXLIGHTSLOFILES)"!=""
-
-SVXLIGHTDEFS=-DSVX_LIGHT
-
-$(SLO)$/sxl_%.obj : %.cxx
-    @echo ------------------------------
-    @echo Making: $@
-.IF "$(GUI)"=="UNX"
-    @$(RM) $@ $(@:s/.obj/.o/)
-    $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(SVXLIGHTDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/sxl_$*.o $(CFLAGSINCXX)$(PWD)$/$*.cxx
-.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
-    $(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
-.ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
-     +$(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
-.ELSE
-     @+$(IFEXIST) $@ $(THEN) $(RM) $@ >& $(NULLDEV) $(FI)
-    $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(SVXLIGHTDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/sxl_$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx
-.ENDIF
-
-.ENDIF			# "$(SVXLIGHTSLOFILES)"!=""
-.ENDIF			# "$(SVXLIGHT)"=="TRUE"
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++	second_build rules			+++++++++++++++++++++++++++++++++++++
@@ -122,7 +73,7 @@ $(OBJ)$/$(SECOND_BUILD)_%.obj : %.c
 .ENDIF
 .ELSE
     @+$(TYPE) $(mktmp $(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)\$(SECOND_BUILD)_$*.obj $*.c )
-    @+echo.
+    @echo.
 .IF "$(COM)"=="GCC"
     $(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)\$(SECOND_BUILD)_$*.obj $*.c
 .ELSE
