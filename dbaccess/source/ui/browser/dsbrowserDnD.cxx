@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:58:01 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:02:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,7 +240,7 @@ namespace dbaui
         if (!isObject(eEntryType))
             return DND_ACTION_NONE;
 
-        TransferableHelper* pTransfer = implCopyObject( pHitEntry, (etTable == eEntryType || etView == eEntryType) ? CommandType::TABLE : CommandType::QUERY);
+        TransferableHelper* pTransfer = implCopyObject( pHitEntry, ( etTableOrView == eEntryType ) ? CommandType::TABLE : CommandType::QUERY);
         Reference< XTransferable> xEnsureDelete = pTransfer;
 
         if (pTransfer)
@@ -265,7 +265,7 @@ namespace dbaui
     sal_Bool SbaTableQueryBrowser::isEntryCopyAllowed(SvLBoxEntry* _pEntry) const
     {
         EntryType eType = getEntryType(_pEntry);
-        return  (eType == etTable || eType == etQuery || eType == etView);
+        return  ( eType == etTableOrView || eType == etQuery );
     }
     // -----------------------------------------------------------------------------
     sal_Bool SbaTableQueryBrowser::isEntryPasteAllowed(SvLBoxEntry* /*_pEntry*/) const
