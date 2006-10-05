@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_scp.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:59:04 $
+#   last change: $Author: kz $ $Date: 2006-10-05 16:21:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 
 # try to get missing parfiles
 $(PAR)$/%.par : $(SOLARPARDIR)$/%.par
-    @+-$(MKDIRHIER) $(@:d:d) >& $(NULLDEV)
+    @-$(MKDIRHIER) $(@:d:d) >& $(NULLDEV)
     +$(COPY) $< $@
 
 LOCALSCP$(TNR)FILES=$(foreach,i,$(SCP$(TNR)FILES) $(foreach,j,$(SCP$(TNR)LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
@@ -49,7 +49,7 @@ LOCALSCP$(TNR)FILES=$(foreach,i,$(SCP$(TNR)FILES) $(foreach,j,$(SCP$(TNR)LINK_PR
 $(SCP$(TNR)TARGETN): $(LOCALSCP$(TNR)FILES)
     @echo ------------------------------
     @echo Making: $@
-    @+-$(MKDIRHIER) $(BIN)$/$(SCP$(TNR)LINK_PRODUCT_TYPE) >& $(NULLDEV)
+    @-$(MKDIRHIER) $(BIN)$/$(SCP$(TNR)LINK_PRODUCT_TYPE) >& $(NULLDEV)
     +$(SCPLINK) $(SCPLINKFLAGS) @@$(mktmp $(foreach,i,$(SCP$(TNR)FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
 .ENDIF
 
