@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.181 $
+#   $Revision: 1.182 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 13:58:21 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:38:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,9 @@ SUBDIRSDEPS=$(RC_SUBDIRSDEPS)
 
 .INCLUDE : pstrules.mk
 
+.IF "$(YACCTARGET)"!=""
 .INCLUDE : tg_yxx.mk
+.ENDIF			# "$(YACCTARGET)"!=""
 
 .IF "$(nodep)"==""
 .IF "$(TESTOBJECTS)"!=""
@@ -136,15 +138,15 @@ DEPFILES=$(uniq $(DEPFILESx))
 .IF "$(strip $(DEPFILES_TEST))"!=""
 .IF "$(DEPFILES)"=="$(strip $(DEPFILESx))"
 something_wrong_with_objects :
-    @+echo --------------------------------------------------
-    @+echo make sure that every object appears in either	
-    @+echo     OBJFILES,
-    @+echo     SLOFILES
-    @+echo  or DEPOBJFILES
-    @+echo --------------------------------------------------
-#	@+echo ooo$(strip $(DEPFILES_TEST))ooo
-#	@+echo $(DEPFILES)
-#	@+echo $(DEPFILESx)
+    @echo --------------------------------------------------
+    @echo make sure that every object appears in either	
+    @echo     OBJFILES,
+    @echo     SLOFILES
+    @echo  or DEPOBJFILES
+    @echo --------------------------------------------------
+#	@echo ooo$(strip $(DEPFILES_TEST))ooo
+#	@echo $(DEPFILES)
+#	@echo $(DEPFILESx)
     force_dmake_to_error
 .ENDIF			# "$(DEPFILES)"!="$(strip $(DEPFILESX))"
 .ENDIF			# "$(DEPFILES_TEST)"!=""
@@ -284,22 +286,6 @@ SLOTARGET=$(SLB)$/$(TARGET).lib
 .ENDIF
 .ENDIF			# "$(LIBTARGET)"==""
 
-.IF "$(SVXLIGHT)"!=""
-.IF "$(SVXLIGHTSLOFILES)"!=""
-.IF "$(LIBTARGET)"==""
-SVXLIGHTSLOTARGET=$(SLB)$/sxl_$(TARGET).lib
-.ENDIF			# "$(LIBTARGET)"==""
-REAL_SVXLIGHTSLOFILES=$(foreach,i,$(SVXLIGHTSLOFILES) $(i:d)sxl_$(i:f))
-.ENDIF
-
-.IF "$(SVXLIGHTOBJFILES)"!=""
-.IF "$(LIBTARGET)"==""
-SVXLIGHTOBJTARGET=$(LB)$/sxl_$(TARGET).lib
-.ENDIF			# "$(LIBTARGET)"==""
-REAL_SVXLIGHTOBJFILES=$(foreach,i,$(SVXLIGHTOBJFILES) $(i:d)sxl_$(i:f))
-.ENDIF
-.ENDIF			# "$(SVXLIGHT)"!=""
-
 .IF "$(SECOND_BUILD)"!=""
 .IF "$($(SECOND_BUILD)_SLOFILES)"!=""
 .IF "$(LIBTARGET)"==""
@@ -318,11 +304,11 @@ REAL_$(SECOND_BUILD)_OBJFILES=$(foreach,i,$($(SECOND_BUILD)_OBJFILES) $(i:d)$(SE
 
 .IF "$(NOLIBOBJTARGET)$(NOLIBSLOTARGET)"!=""
 dont_set_NOLIBOBJTARGET:
-    @+echo --------------------------------------------------
-    @+echo setting NOLIBOBJTARGET or NOLIBSLOTARGET in your makefile
-    @+echo will cause serious problems!
-    @+echo use DEPOBJFILES instead.
-    @+echo --------------------------------------------------
+    @echo --------------------------------------------------
+    @echo setting NOLIBOBJTARGET or NOLIBSLOTARGET in your makefile
+    @echo will cause serious problems!
+    @echo use DEPOBJFILES instead.
+    @echo --------------------------------------------------
     force_dmake_to_error
 .ENDIF			# "$(NOLIBTARGET)"!=""
 .IF "$(OBJFILES)"!=""
@@ -1405,8 +1391,6 @@ ALLTAR: \
         $(XMLPROPERTIESN) \
         $(ALL_JAVA_TARGETS) \
         $(OBJTARGET)	$(SLOTARGET)	$(SMRSLOTARGET)		\
-        $(SVXLIGHTSLOTARGET) \
-        $(SVXLIGHTOBJTARGET) \
         $($(SECOND_BUILD)SLOTARGET) \
         $($(SECOND_BUILD)OBJTARGET) \
         $(LIB1TARGET)	$(LIB2TARGET)	$(LIB3TARGET)		\
@@ -1427,15 +1411,6 @@ ALLTAR: \
         $(SHL7TARGETN) \
         $(SHL8TARGETN) \
         $(SHL9TARGETN) \
-        $(SHL1IMPLIBN) \
-        $(SHL2IMPLIBN) \
-        $(SHL3IMPLIBN) \
-        $(SHL4IMPLIBN) \
-        $(SHL5IMPLIBN) \
-        $(SHL6IMPLIBN) \
-        $(SHL7IMPLIBN) \
-        $(SHL8IMPLIBN) \
-        $(SHL9IMPLIBN) \
         $(SCP_PRODUCT_TYPE) \
         $(ALLPARFILES) \
         $(SCP1TARGETN) \
@@ -1634,11 +1609,14 @@ $(JAVATARGET) : $(GENJAVAFILES)
 .ENDIF			# "$(GENJAVAFILES)"!=""
 .ENDIF          # "$(SOLAR_JAVA)"!=""
 
-.INCLUDE : tg_dir.mk
+.IF "$(HXXCOPYFILES)" != ""
+$(HXXCOPYTARGET):	$(HXXCOPYFILES)
+    @-+$(COPY) $(COPYUPDATE) $(HXXCOPYFILES) $(INCCOM)
+.ENDIF
 
 .IF "$(UNIXTEXT)"!=""
 $(UNIXTEXT) : $(UNIXTEXT:f)
-    @+echo Making $@
+    @echo Making $@
     @+-$(RM) -f $@ >& $(NULLDEV)
     @+tr -d "\015" < $(@:f) > $@
 
@@ -1756,7 +1734,9 @@ $(MISC)$/$(TARGET)_%.done : $(COMMONMISC)$/$(TARGET)$/%.xrb
     @+$(RM)  $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
 .ENDIF			# "$(XMLPROPERTIES)"!=""
 
+.IF "$(HIDSID1PARTICLE)$(SDI1TARGET)$(HIDSID2PARTICLE)$(SDI2TARGET)$(HIDSID3PARTICLE)$(SDI3TARGET)$(HIDSID4PARTICLE)$(SDI4TARGET)$(HIDSID5PARTICLE)$(SDI5TARGET)$(HIDSID6PARTICLE)$(SDI6TARGET)$(HIDSID7PARTICLE)$(SDI7TARGET)$(HIDSID8PARTICLE)$(SDI8TARGET)$(HIDSID9PARTICLE)$(SDI9TARGET)"!=""
 .INCLUDE : _tg_sdi.mk
+.ENDIF			# "$(HIDSID1PARTICLE)$(SDI1TARGET)$(HIDSID2PARTICLE)$(SDI2TARGET)$(HIDSID3PARTICLE)$(SDI3TARGET)$(HIDSID4PARTICLE)$(SDI4TARGET)$(HIDSID5PARTICLE)$(SDI5TARGET)$(HIDSID6PARTICLE)$(SDI6TARGET)$(HIDSID7PARTICLE)$(SDI7TARGET)$(HIDSID8PARTICLE)$(SDI8TARGET)$(HIDSID9PARTICLE)$(SDI9TARGET)"!=""
 
 .IF "$(DEF1NAME)$(DEF2NAME)$(DEF3NAME)$(DEF4NAME)$(DEF5NAME)$(DEF6NAME)$(DEF7NAME)$(DEF8NAME)$(DEF9NAME)"!=""
 .INCLUDE : _tg_def.mk
@@ -1775,19 +1755,25 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 # - LIB -
 # -------
 
+.IF "$(OBJTARGET)$($(SECOND_BUILD)OBJTARGET)"!=""
 .INCLUDE : tg_obj.mk
+.ENDIF			# "$(OBJTARGET)$($(SECOND_BUILD)OBJTARGET)"!=""
 
 # -------
 # - SLB -
 # -------
 
+.IF "$(SLOTARGET)$($(SECOND_BUILD)SLOTARGET)"!=""
 .INCLUDE : tg_slo.mk
+.ENDIF			# "$(SLOTARGET)$($(SECOND_BUILD)SLOTARGET)"!=""
 
 # --------
 # - LIBS -
 # --------
 
+.IF "$(LIB1TARGET)$(LIB2TARGET)$(LIB3TARGET)$(LIB4TARGET)$(LIB5TARGET)$(LIB6TARGET)$(LIB7TARGET)$(LIB8TARGET)$(LIB9TARGET)" != ""
 .INCLUDE : _tg_lib.mk
+.ENDIF			# "$(LIB1TARGET)$(LIB2TARGET)$(LIB3TARGET)$(LIB4TARGET)$(LIB5TARGET)$(LIB6TARGET)$(LIB7TARGET)$(LIB8TARGET)$(LIB9TARGET)" != ""
 
 # -------
 # - SRS -
@@ -1801,13 +1787,17 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 # - RES -
 # -------
 
+.IF "$(RCTARGET)"!=""
 .INCLUDE : tg_res.mk
+.ENDIF			# "$(RCTARGET)"!=""
 
 # -------
 # - SHL -
 # -------
 
+.IF "$(SHL1TARGETN)$(SHL2TARGETN)$(SHL3TARGETN)$(SHL4TARGETN)$(SHL5TARGETN)$(SHL6TARGETN)$(SHL7TARGETN)$(SHL8TARGETN)$(SHL9TARGETN)"!=""
 .INCLUDE : _tg_shl.mk
+.ENDIF			# "$(SHL1TARGETN)$(SHL2TARGETN)$(SHL3TARGETN)$(SHL4TARGETN)$(SHL5TARGETN)$(SHL6TARGETN)$(SHL7TARGETN)$(SHL8TARGETN)$(SHL9TARGETN)"!=""
 
 .IF "$(USE_VERSIONH)"!=""
 .INIT .SEQUENTIAL : $(USE_VERSIONH) $(NULLPRQ)
@@ -1849,13 +1839,17 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 # - HXX -
 # -------
 
+.IF "$(HXX1TARGETN)$(HXX2TARGETN)$(HXX3TARGETN)$(HXX4TARGETN)$(HXX5TARGETN)$(HXX6TARGETN)$(HXX7TARGETN)$(HXX8TARGETN)$(HXX9TARGETN)$(HXX10TARGETN)"!=""
 .INCLUDE : _tg_hxx.mk
+.ENDIF			# "$(HXX1TARGETN)$(HXX2TARGETN)$(HXX3TARGETN)$(HXX4TARGETN)$(HXX5TARGETN)$(HXX6TARGETN)$(HXX7TARGETN)$(HXX8TARGETN)$(HXX9TARGETN)$(HXX10TARGETN)"!=""
 
 # -------
 # - processing config -
 # -------
 
+.IF "$(XCSFILES)$(XCUFILES)"!=""
 .INCLUDE : tg_config.mk
+.ENDIF			# "$(XCSFILES)$(XCUFILES)"!=""
 
 
 # ------------------
@@ -1897,7 +1891,7 @@ LAZY_DEPS_WARNING=warn_lazy_deps
 .ENDIF			# "$(LAZY_DEPS)"!=""
 
 last_target: $(LAZY_DEPS_WARNING)
-    @+echo -------------
+    @echo -------------
 
 $(MISC)$/$(TARGET)genjava.mk: 	$(IDLFILES)
 
@@ -1910,7 +1904,7 @@ $(URDTARGET) : $(DEPIDLFILES)
 .IF "$(MAXPROCESS)"<="1"
         +$(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
 .ENDIF			# "$(MAXPROCESS)"<="1"
-    @+echo > $@
+    @echo > $@
 
 .IF "$(URDDOC)"!=""
 
@@ -1921,7 +1915,7 @@ $(URDDOCTARGET) : $(DEPIDLFILES)
 .IF "$(MAXPROCESS)"<="1"
         +$(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
 .ENDIF			# "$(MAXPROCESS)"<="1"
-    @+echo > $@
+    @echo > $@
     
 .ENDIF			# "$(URDDOC)"!=""
 .ENDIF			# "$(IDLFILES)"!=""
@@ -1933,7 +1927,9 @@ $(TARGETDPJ) : $(JAVAFILES) $(JAVATARGET)
 .ENDIF			# "$(L10N_framework)"==""
 .ENDIF
 
+.IF "$(JARTARGETN)"!=""
 .INCLUDE : tg_jar.mk
+.ENDIF			# "$(JARTARGETN)"!=""
 
 # ----------------------------------
 # - NOOPT - files ohne optimierung -
@@ -1942,17 +1938,15 @@ $(TARGETDPJ) : $(JAVAFILES) $(JAVATARGET)
 .IF "$(NOOPTTARGET)" != ""
 .IF "$(NOOPT_FLAG)" == ""
 
-#$(SLOFILES) $(OBJFILES) $(IDLSLOFILES) $(IDLOBJFILES) $(S2USLOFILES) $(SMRSLOFILES) $(SVXLIGHTSLOFILES) $(SVXLIGHTOBJFILES) $($(SECOND_BUILD)_SLOFILES) $($(SECOND_BUILD)_OBJFILES) : $(NOOPTTARGET)
-
 $(NOOPTTARGET):
-    @+echo --- NOOPTFILES ---
+    @echo --- NOOPTFILES ---
     @dmake $(MFLAGS) $(MAKEFILE) nopt=true $(NOOPTFILES) NOOPT_FLAG=TRUE $(CALLMACROS)
-    @+echo --- NOOPTFILES OVER ---
+    @echo --- NOOPTFILES OVER ---
 
 $(NOOPTFILES):
-    @+echo --- NOOPT ---
+    @echo --- NOOPT ---
     @dmake $(MFLAGS) $(MAKEFILE) nopt=true NOOPT_FLAG=TRUE $(CALLMACROS) $@
-    @+echo --- NOOPT OVER ---
+    @echo --- NOOPT OVER ---
 .ENDIF
 .ENDIF
 
@@ -1964,17 +1958,15 @@ $(NOOPTFILES):
 .IF "$(EXCEPTIONSTARGET)" != ""
 .IF "$(EXCEPTIONS_FLAG)" == ""
 
-#$(SLOFILES) $(OBJFILES) $(IDLSLOFILES) $(IDLOBJFILES) $(S2USLOFILES) $(SMRSLOFILES) $(SVXLIGHTSLOFILES) $(SVXLIGHTOBJFILES) $($(SECOND_BUILD)_SLOFILES) $($(SECOND_BUILD)_OBJFILES) : $(EXCEPTIONSTARGET)
-
 $(EXCEPTIONSTARGET):
-    @+echo --- EXCEPTIONSFILES ---
+    @echo --- EXCEPTIONSFILES ---
     @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true $(EXCEPTIONSFILES) EXCEPTIONS_FLAG=TRUE $(CALLMACROS)
-    @+echo --- EXCEPTIONSFILES OVER ---
+    @echo --- EXCEPTIONSFILES OVER ---
 
 $(EXCEPTIONSFILES):
-    @+echo --- EXCEPTIONS ---
+    @echo --- EXCEPTIONS ---
     @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true EXCEPTIONS_FLAG=TRUE $(CALLMACROS) $@
-    @+echo --- EXCEPTIONS OVER ---
+    @echo --- EXCEPTIONS OVER ---
 
 
 .ENDIF
@@ -1987,17 +1979,15 @@ $(EXCEPTIONSFILES):
 .IF "$(EXCEPTIONSNOOPTTARGET)" != ""
 .IF "$(EXCEPTIONSNOOPT_FLAG)" == ""
 
-#$(SLOFILES) $(OBJFILES) $(IDLSLOFILES) $(IDLOBJFILES) $(S2USLOFILES) $(SMRSLOFILES) $(SVXLIGHTSLOFILES) $(SVXLIGHTOBJFILES) $($(SECOND_BUILD)_SLOFILES) $($(SECOND_BUILD)_OBJFILES) : $(EXCEPTIONSTARGET)
-
 $(EXCEPTIONSNOOPTTARGET):
-    @+echo --- EXCEPTIONSNOOPTFILES ---
+    @echo --- EXCEPTIONSNOOPTFILES ---
     @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true $(EXCEPTIONSNOOPTFILES) EXCEPTIONSNOOPT_FLAG=TRUE nopt=true $(CALLMACROS)
-    @+echo --- EXCEPTIONSNOOPTFILES OVER ---
+    @echo --- EXCEPTIONSNOOPTFILES OVER ---
 
 $(EXCEPTIONSNOOPTFILES):
-    @+echo --- EXCEPTIONSNOOPT ---
+    @echo --- EXCEPTIONSNOOPT ---
     @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true EXCEPTIONSNOOPT_FLAG=TRUE nopt=true $(CALLMACROS) $@
-    @+echo --- EXCEPTIONSNOOPT OVER ---
+    @echo --- EXCEPTIONSNOOPT OVER ---
 
 
 .ENDIF
@@ -2006,13 +1996,13 @@ $(EXCEPTIONSNOOPTFILES):
 
 .IF "$(LAZY_DEPS)"!=""
 warn_lazy_deps:
-    @+echo -
-    @+echo -----------------------------------------------
-    @+echo -
-    @+echo - You have used LAZY_DEPS. Your dependencies
-    @+echo - will not be updated anymore!
-    @+echo -
-    @+echo -----------------------------------------------
+    @echo -
+    @echo -----------------------------------------------
+    @echo -
+    @echo - You have used LAZY_DEPS. Your dependencies
+    @echo - will not be updated anymore!
+    @echo -
+    @echo -----------------------------------------------
 .ENDIF			# "$(LAZY_DEPS)"!=""
 
 # ----------------------------------
@@ -2115,16 +2105,6 @@ killobj:
     +-cd $(OBJ) && $(TYPE) $(mktmp  $(OBJFILES:f)) | xargs -n 20 rm 
     +-cd $(OBJ) && $(TYPE) $(mktmp  $(OBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
 .ENDIF
-.IF "$(SVXLIGHT)"!=""
-.IF "$(REAL_SVXLIGHTSLOFILES)" != ""
-    +-cd $(REAL_SVXLIGHTSLO) && $(TYPE) $(mktmp  $(REAL_SVXLIGHTSLOFILES:f)) | xargs -n 20 rm 
-    +-cd $(REAL_SVXLIGHTSLO) && $(TYPE) $(mktmp  $(REAL_SVXLIGHTSLOFILES:s/.obj/.o/:f)) | xargs -n 20 rm
-.ENDIF
-.IF "$(REAL_SVXLIGHTOBJFILES)" != ""
-    +-cd $(REAL_SVXLIGHTOBJ) && $(TYPE) $(mktmp  $(REAL_SVXLIGHTOBJFILES:f)) | xargs -n 20 rm 
-    +-cd $(REAL_SVXLIGHTOBJ) && $(TYPE) $(mktmp  $(REAL_SVXLIGHTOBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
-.ENDIF
-.ENDIF			# "$(SVXLIGHT)"!=""
 .IF "$(REAL_$(SECOND_BUILD)_SLOFILES)" != ""
     +-cd $(REAL_$(SECOND_BUILD)_SLO) && $(TYPE) $(mktmp  $(REAL_$(SECOND_BUILD)_SLOFILES:f)) | xargs -n 20 rm
     +-cd $(REAL_$(SECOND_BUILD)_SLO) && $(TYPE) $(mktmp  $(REAL_$(SECOND_BUILD)_SLOFILES:s/.obj/.o/:f)) | xargs -n 20 rm
@@ -2139,28 +2119,28 @@ killobj:
     +-cd $(OBJ) && $(TYPE) $(mktmp  $(DEPOBJFILES:f)) | xargs -n 20 rm
     +-cd $(OBJ) && $(TYPE) $(mktmp  $(DEPOBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
 .ENDIF
-    @+echo objects weg!
+    @echo objects weg!
 
 killsrs:
 # doesn't work - fix me!
 .IF "$(SRSFILES)" != ""
     +$(RM) $(SRSFILES)
 .ENDIF
-    @+echo srsfiles weg!
+    @echo srsfiles weg!
 
 killres:
 .IF "$(RESLIB1TARGETN)$(RESLIB2TARGETN)$(RESLIB3TARGETN)$(RESLIB4TARGETN)$(RESLIB5TARGETN)$(RESLIB6TARGETN)$(RESLIB7TARGETN)$(RESLIB8TARGETN)$(RESLIB9TARGETN)"!=""
     +$(RM) $(RESLIB1TARGETN) $(RESLIB2TARGETN) $(RESLIB3TARGETN) $(RESLIB4TARGETN) $(RESLIB5TARGETN) $(RESLIB6TARGETN) $(RESLIB7TARGETN) $(RESLIB8TARGETN) $(RESLIB9TARGETN)
-    @+echo resource files removed!
+    @echo resource files removed!
 .ELSE			# "$(RESLIB1TARGETN)$(RESLIB2TARGETN)$(RESLIB3TARGETN)$(RESLIB4TARGETN)$(RESLIB5TARGETN)$(RESLIB6TARGETN)$(RESLIB7TARGETN)$(RESLIB8TARGETN)$(RESLIB9TARGETN)"!=""
-    @+echo no resource files defined!
+    @echo no resource files defined!
 .ENDIF			# "$(RESLIB1TARGETN)$(RESLIB2TARGETN)$(RESLIB3TARGETN)$(RESLIB4TARGETN)$(RESLIB5TARGETN)$(RESLIB6TARGETN)$(RESLIB7TARGETN)$(RESLIB8TARGETN)$(RESLIB9TARGETN)"!=""
 
 killdef:
 .IF "$(DEFTARGETN)" != ""
     +$(RM) $(DEFTARGETN)
 .ENDIF
-    @+echo deffiles weg!
+    @echo deffiles weg!
 
 killlib:
 .IF "$(LIB1TARGETN)$(LIB2TARGETN)$(LIB3TARGETN)$(LIB4TARGETN)$(LIB5TARGETN)$(LIB6TARGETN)$(LIB7TARGETN)$(LIB8TARGETN)$(LIB9TARGETN)"!=""
@@ -2168,23 +2148,20 @@ killlib:
 .IF "$(LIB1ARCHIV)$(LIB2ARCHIV)$(LIB3ARCHIV)$(LIB4ARCHIV)$(LIB5ARCHIV)$(LIB6ARCHIV)$(LIB7ARCHIV)$(LIB8ARCHIV)$(LIB9ARCHIV)"!=""
     +$(RM) $(LIB1ARCHIV) $(LIB2ARCHIV) $(LIB3ARCHIV) $(LIB4ARCHIV) $(LIB5ARCHIV) $(LIB6ARCHIV) $(LIB7ARCHIV) $(LIB8ARCHIV) $(LIB9ARCHIV)
 .ENDIF			# "$(LIB1ARCHIV)$(LIB2ARCHIV)$(LIB3ARCHIV)$(LIB4ARCHIV)$(LIB5ARCHIV)$(LIB6ARCHIV)$(LIB7ARCHIV)$(LIB8ARCHIV)$(LIB9ARCHIV)"!=""
-    @+echo lib/archive files removed!
+    @echo lib/archive files removed!
 .ENDIF			# "$(LIB1TARGETN)$(LIB2TARGETN)$(LIB3TARGETN)$(LIB4TARGETN)$(LIB5TARGETN)$(LIB6TARGETN)$(LIB7TARGETN)$(LIB8TARGETN)$(LIB9TARGETN)"!=""
 .IF "$(SLOTARGET)$(OBJTARGET)"!=""
     +$(RM) $(SLOTARGET) $(OBJTARGET)
-    @+echo default lib files removed!
+    @echo default lib files removed!
 .ENDIF			# "$(SLOTARGET)$(OBJTARGET)"!=""
-.IF "$(SVXLIGHTSLOTARGET)$(SVXLIGHTOBJTARGET)"!=""
-    +$(RM) $(SVXLIGHTSLOTARGET) $(SVXLIGHTOBJTARGET)
-.ENDIF			# "$(SVXLIGHTSLOTARGET)$(SVXLIGHTOBJTARGET)"!=""
-    @+echo done!
+    @echo done!
 
 clean_misc :
 .IF "$(MISC)"!=""
     +rm -rf $(MISC)$/*
-    @+echo misc is gone!
+    @echo misc is gone!
 .ELSE			# "$(MISC)"!=""
-    @+echo can\'t be done! $$(MISC) not defined.
+    @echo can\'t be done! $$(MISC) not defined.
 .ENDIF			# "$(MISC)"!=""
 
 clean_all :
@@ -2194,9 +2171,9 @@ clean_all :
 .ELSE			# "$(USE_SHELL)"!="4nt"
     +$(IFEXIST) $(PRJ)$/prj/build.lst $(THEN) del /sxyz $(OUT) $(FI)
 .ENDIF			# "$(USE_SHELL)"!="4nt"
-    @+echo local output tree is gone!
+    @echo local output tree is gone!
 .ELSE			# "$(OUT)"!=""
-    @+echo can\'t be done! $$(OUT) not defined.
+    @echo can\'t be done! $$(OUT) not defined.
 .ENDIF			# "$(OUT)"!=""
 
 
@@ -2225,15 +2202,15 @@ ZIPALLTARGET: \
         $(ZIP9TARGETN)
 .ELSE
 ZIPALLTARGET:
-    @+$(ECHO) ---
-    @+echo nothing to zip for activated languages!
-    @+$(ECHO) ---
+    @echo ---
+    @echo nothing to zip for activated languages!
+    @echo ---
 .ENDIF
 
 
 #temporary workaround for non-existing delzip in extras
 delzip:
-    +echo > $@
+    echo > $@
 
 .IF "$(make_srs_deps)"==""
 $(MISC)$/$(TARGET).dpr : $(SRCFILES) $(SRC1FILES) $(SRC2FILES) $(SRC3FILES)
@@ -2245,11 +2222,11 @@ $(MISC)$/$(TARGET).dpz $(ZIPDEPPHONY) : $(ZIP1TARGETN) $(ZIP2TARGETN) $(ZIP3TARG
 
 VERSIONTMP:=$(mktmp iii)
 $(INCCOM)$/%_version.h : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
-    @+echo $(EMQ)#define _BUILD $(EMQ)"$(BUILD)$(EMQ)" > $(VERSIONTMP)
-    @+echo $(EMQ)#define _UPD $(EMQ)"$(UPD)$(EMQ)"                 >> $(VERSIONTMP)
-    @+echo $(EMQ)#define _LAST_MINOR $(EMQ)"$(LAST_MINOR)$(EMQ)"   >> $(VERSIONTMP)
-    @+echo $(EMQ)#define _RSCREVISION $(EMQ)"$(USQ)$(RSCREVISION)$(USQ)$(EMQ)" >> $(VERSIONTMP)
-    @+echo $(EMQ)#define _INPATH $(EMQ)"$(INPATH)$(EMQ)"           >> $(VERSIONTMP)
+    @echo $(EMQ)#define _BUILD $(EMQ)"$(BUILD)$(EMQ)" > $(VERSIONTMP)
+    @echo $(EMQ)#define _UPD $(EMQ)"$(UPD)$(EMQ)"                 >> $(VERSIONTMP)
+    @echo $(EMQ)#define _LAST_MINOR $(EMQ)"$(LAST_MINOR)$(EMQ)"   >> $(VERSIONTMP)
+    @echo $(EMQ)#define _RSCREVISION $(EMQ)"$(USQ)$(RSCREVISION)$(USQ)$(EMQ)" >> $(VERSIONTMP)
+    @echo $(EMQ)#define _INPATH $(EMQ)"$(INPATH)$(EMQ)"           >> $(VERSIONTMP)
     @+-$(RM) $(@)_$(VERSIONTMP:b) >& $(NULLDEV)
     @+$(TYPE) $(VERSIONTMP) > $(@)_$(VERSIONTMP:b)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -2257,13 +2234,13 @@ $(INCCOM)$/%_version.h : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkc
 
 .IF "$(MAKEFILERC)"==""
 warn_target_empty:
-    @+echo '*'
-    @+echo '* error $$(TARGET) is empty - this will cause problems'
-    @+echo '*'
+    @echo '*'
+    @echo '* error $$(TARGET) is empty - this will cause problems'
+    @echo '*'
     force_dmake_to_error
 .ELSE
 warn_target_empty:
-    @+echo generated makefile.rc detected
+    @echo generated makefile.rc detected
 .ENDIF
 
 .IF "$(UNOTYPES)" != ""
@@ -2282,7 +2259,9 @@ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid.lst .PHONY :
 
 
 .IF "$(SOLAR_JAVA)"!=""
+.IF "$(JAVACLASSFILES:s/DEFINED//)$(javauno)"!=""
 .INCLUDE : tg_java.mk
+.ENDIF			# "$(JAVACLASSFILES:s/DEFINED//)$(javauno)"!=""
 .ENDIF          # "$(SOLAR_JAVA)"!=""
 
 .INCLUDE : tg_merge.mk
@@ -2312,7 +2291,7 @@ $(SUBDIRS) : $(SUBDIRSDEPS)
 
 .IF "$(mk_tmp)$(BSCLIENT)"!=""
 $(SUBDIRS)  .PHONY :
-    @+echo ignoring SUBDIRS
+    @echo ignoring SUBDIRS
 
 .ELSE			# "$(mk_tmp)$(BSCLIENT)"!=""
 #.IF "$(PRJNAME)"!="sw"
