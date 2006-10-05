@@ -2,6 +2,7 @@
 
 LINK="no"
 UPDATE="ask"
+UNPACKDIR=""
 USAGE="Usage: $0 [-l,--link] [-U,--update] [-h,--help] <rpm-source-dir> <office-installation-dir>"
 
 help()
@@ -14,6 +15,7 @@ help()
   echo
   echo "Usage:" $0 [-lU] "<rpm-source-dir> <office-installation-dir>"
   echo "    <rpm-source-dir>: directory *only* containing the Linux rpm packages to be installed"
+  echo "                      or language pack shell script containing the rpm packages"
   echo "    <office-installation-dir>: directory to where the office will get installed into"
   echo
   echo "Optional Parameter:"
@@ -21,6 +23,40 @@ help()
   echo "    -U,--update:            update without asking"
   echo "    -h,--help:              output this help"
   echo
+}
+
+try_to_unpack_languagepack_file()
+{
+  FILENAME=$PACKAGE_PATH
+
+  # Checking, if $FILENAME is a language pack.
+  # String "language package" has to exist in the shell script file.
+  # If this is no language pack, the installation is not supported
+
+  SEARCHSTRING=`head --lines=10 $FILENAME | grep "language package"`
+
+  if [ ! -z "$SEARCHSTRING" ]
+  then
+    echo "First parameter $FILENAME is a language pack";
+  else
+    printf "\nERROR: First parameter $FILENAME is a file, but no language pack shell script.\n"
+    echo $USAGE
+    exit 2
+  fi
+
+  echo "Unpacking shell script $FILENAME"
+  TAILLINE=`head --lines=20 $FILENAME | sed --quiet 's/linenum=//p'`
+
+  UNPACKDIR=/var/tmp/install_$$
+  mkdir $UNPACKDIR
+  # UNPACKDIR=`mktemp -d`
+  tail -n +$TAILLINE $FILENAME | gunzip | (cd $UNPACKDIR; tar xvf -)
+
+  # Setting the new package path, in which the packages exist
+  PACKAGE_PATH=$UNPACKDIR
+
+  # Setting variable UPDATE, because an Office installation has to exist, if a language pack shall be installed
+  UPDATE="yes"
 }
 
 #
@@ -59,6 +95,16 @@ then
 fi
 
 PACKAGE_PATH=$1
+
+#
+# If the first parameter is a shell script (download installation set), the packages have to
+# be unpacked into temp directory
+#
+
+if [ -f "$PACKAGE_PATH" ]
+then
+  try_to_unpack_languagepack_file
+fi
 
 #
 # Check and get the list of packages to install
@@ -230,6 +276,14 @@ fi
 if [ -f $INSTALLDIR/program/bootstraprc ]; then
   mv $INSTALLDIR/program/bootstraprc $INSTALLDIR/program/bootstraprc.orig
   sed 's/UserInstallation=$SYSUSERCONFIG.*/UserInstallation=$ORIGIN\/..\/UserInstallation/g' $INSTALLDIR/program/bootstraprc.orig > $INSTALLDIR/program/bootstraprc
+fi
+
+# if an unpack directory exists, it can be removed now
+if [ ! -z "$UNPACKDIR" ]
+then
+  rm $UNPACKDIR/*.rpm
+  rmdir $UNPACKDIR
+  echo "Removed temporary directory $UNPACKDIR"
 fi
 
 echo
