@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.70 $
+#   $Revision: 1.71 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-22 13:18:13 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:40:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -111,9 +111,9 @@ clean:
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.Z
     @+-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @+echo $(assign UNPACKCMD := sh -c "uncompress -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.Z | tar $(TAR_EXCLUDE_SWITCH) -xvf - ") > $(NULLDEV)
+    @noop $(assign UNPACKCMD := sh -c "uncompress -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.Z | tar $(TAR_EXCLUDE_SWITCH) -xvf - ")
 .ELSE			# "$(GUI)"=="UNX"
-    @+echo $(assign UNPACKCMD := uncompress -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.Z | tar $(TAR_EXCLUDE_SWITCH) -xvf - ) > $(NULLDEV)
+    @noop $(assign UNPACKCMD := uncompress -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.Z | tar $(TAR_EXCLUDE_SWITCH) -xvf - )
 .ENDIF			# "$(GUI)"=="UNX"
     @+$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @+$(RENAME) $@.$(INPATH) $@
@@ -121,9 +121,9 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.Z
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.gz
     @+-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @+echo $(assign UNPACKCMD := sh -c "gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ") > $(NULLDEV)
+    @noop $(assign UNPACKCMD := sh -c "gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ")
 .ELSE			# "$(GUI)"=="UNX"
-    @+echo $(assign UNPACKCMD := gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ) > $(NULLDEV)
+    @noop $(assign UNPACKCMD := gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - )
 .ENDIF			# "$(GUI)"=="UNX"
     @+$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @+$(RENAME) $@.$(INPATH) $@
@@ -131,9 +131,9 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.gz
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.bz2
     @+-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @+echo $(assign UNPACKCMD := sh -c "bunzip2 -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ") > $(NULLDEV)
+    @noop $(assign UNPACKCMD := sh -c "bunzip2 -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ")
 .ELSE			# "$(GUI)"=="UNX"
-    @+echo $(assign UNPACKCMD := bunzip2 -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ) > $(NULLDEV)
+    @noop $(assign UNPACKCMD := bunzip2 -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - )
 .ENDIF			# "$(GUI)"=="UNX"
     @+$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @+$(RENAME) $@.$(INPATH) $@
@@ -141,22 +141,22 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.bz2
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tgz
     @+-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @+echo $(assign UNPACKCMD := sh -c "gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tgz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ") > $(NULLDEV)
+    @noop $(assign UNPACKCMD := sh -c "gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tgz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ")
 .ELSE			# "$(GUI)"=="UNX"
-    @+echo $(assign UNPACKCMD := gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tgz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ) > $(NULLDEV)
+    @noop $(assign UNPACKCMD := gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tgz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - )
 .ENDIF			# "$(GUI)"=="UNX"
     @+$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @+$(RENAME) $@.$(INPATH) $@
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar
     @+-$(RM) $@
-    +echo $(assign UNPACKCMD := tar $(TAR_EXCLUDE_SWITCH) -xvf $(BACK_PATH)download$/$(TARFILE_NAME).tar) > $(NULLDEV)
+    noop $(assign UNPACKCMD := tar $(TAR_EXCLUDE_SWITCH) -xvf $(BACK_PATH)download$/$(TARFILE_NAME).tar)
     @+$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @+$(RENAME) $@.$(INPATH) $@
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.zip
     @+-$(RM) $@
-    +echo $(assign UNPACKCMD := unzip $(BACK_PATH)download$/$(TARFILE_NAME).zip) > $(NULLDEV)
+    noop $(assign UNPACKCMD := unzip $(BACK_PATH)download$/$(TARFILE_NAME).zip)
     @+$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @+$(RENAME) $@.$(INPATH) $@
 
@@ -167,7 +167,7 @@ $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpa
     @+-$(MKDIR) $(PACKAGE_DIR:d)
     @+-$(MKDIR) $(PACKAGE_DIR)
     +cd $(PACKAGE_DIR) && ( $(shell +$(TYPE) $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack)) && $(TOUCH) $(UNTAR_FLAG_FILE)
-    @+echo make writeable...
+    @echo make writeable...
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     @+cd $(PACKAGE_DIR) && chmod -R +rw $(TARFILE_ROOTDIR) && $(TOUCH) $(UNTAR_FLAG_FILE)
     @+cd $(PACKAGE_DIR) && find $(TARFILE_ROOTDIR) -type d -exec chmod a+x {{}} \;
@@ -276,7 +276,7 @@ $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 .IF "$(OUTDIR2INC)"!=""
 .IF "$(USE_SHELL)"=="4nt"
     @$(MKDIR) $(foreach,i,$(OUTDIR2INC) $(INCCOM)$/$(i:b))
-    @+echo copied $(foreach,i,$(OUTDIR2INC) $(shell +$(COPY) $(COPYRECURSE) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i$/* $(INCCOM)$/$(i:b) >& $(NULLDEV) && echo $i))
+    @echo copied $(foreach,i,$(OUTDIR2INC) $(shell +$(COPY) $(COPYRECURSE) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i$/* $(INCCOM)$/$(i:b) >& $(NULLDEV) && echo $i))
 .ELSE			# "$(USE_SHELL)"=="4nt"
     +$(COPY) $(COPYRECURSE) $(foreach,i,$(OUTDIR2INC) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(INCCOM)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
@@ -320,12 +320,12 @@ create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES)
     +-cd $(PRJ)$/$(ROUT) && diff -rc misc$/$(TARFILE_ROOTDIR) misc$/build$/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)$/bin$/cleandiff.pl | tr -d "\015" > misc$/$(NEW_PATCH_FILE_NAME).tmp
     @+-mv $(NEW_PATCH_FILE_NAME) $(NEW_PATCH_FILE_NAME).bak >& $(NULLDEV)
     @+-mv $(MISC)$/$(NEW_PATCH_FILE_NAME).tmp $(PRJ)$/$(NEW_PATCH_FILE_NAME) >& $(NULLDEV)
-    @+echo still some problems with win32 generated patches...
+    @echo still some problems with win32 generated patches...
 
 create_clean : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
-    @+echo done
+    @echo done
     
 patch : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
-    @+echo done
+    @echo done
 
 .ENDIF			# "$(L10N_framework)"==""
