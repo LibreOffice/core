@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_dep.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-14 16:20:01 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:39:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@ ALLDEP .PHONY:
     @+-$(RM) $(MISC)$/$(TARGET).dpr >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(PWD:f).*.dprr >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(TARGET).dpj >& $(NULLDEV)
-    @+-$(RM) $(MISC)$/$(TARGET).dpc >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(TARGET).dpz >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(COMP1TYPELIST).mk >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(COMP2TYPELIST).mk >& $(NULLDEV)
@@ -96,14 +95,6 @@ ALLDPC: \
     @+$(IFEXIST) $(MISC)$/$(TARGET).dpj $(THEN) $(RM) $(MISC)$/$(TARGET).dpj >& $(NULLDEV) $(FI)
     @+$(IFEXIST) $(MISC)$/genjava.mk $(THEN) $(RM) $(MISC)$/genjava.mk >& $(NULLDEV) $(FI)
     +$(TOUCH) $(MISC)$/$(TARGET).dpc
-.IF "$(SVXLIGHT)"!=""
-#.IF "$(SVXLIGHTSLOFILES)"!=""
-#	@+$(TYPE) $(mktmp $(foreach,i,$(SVXLIGHTSLOFILES) $(i:d:^"\n")sxl_$(i:f) : $i )) >> $(MISC)$/$(TARGET).dpc
-#.ENDIF
-.IF "$(SVXLIGHTOBJFILES)"!=""
-    @+$(TYPE) $(mktmp $(foreach,i,$(SVXLIGHTOBJFILES) $(i:d:^"\n")sxl_$(i:f) : $(i:d:s/obj/slo/)$(i:b).obj )) >> $(MISC)$/$(TARGET).dpc
-.ENDIF
-.ENDIF			# "$(SVXLIGHT)"!=""
 .IF "$($(SECOND_BUILD)_SLOFILES)"!=""
     @+$(TYPE) $(mktmp $(foreach,i,$($(SECOND_BUILD)_SLOFILES) $(i:d:^"\n")$(SECOND_BUILD)_$(i:f) : $i )) >> $(MISC)$/$(TARGET).dpc
 .ENDIF
