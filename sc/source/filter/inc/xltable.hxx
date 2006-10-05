@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xltable.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:43:39 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:21:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,8 +117,13 @@ const sal_uInt16 EXC_ROW_XFMASK             = 0x0FFF;
 
 const sal_uInt16 EXC_ROW_DEFAULTHEIGHT      = 255;
 const sal_uInt16 EXC_ROW_FLAGDEFHEIGHT      = 0x8000;
+const sal_uInt16 EXC_ROW_HEIGHTMASK         = 0x7FFF;
 
 const sal_uInt16 EXC_ROW_ROWBLOCKSIZE       = 32;       /// Number of rows in a row block.
+
+// (0x0020) COLUMNDEFAULT -----------------------------------------------------
+
+const sal_uInt16 EXC_ID_COLUMNDEFAULT       = 0x0020;
 
 // (0x0021, 0x0221) ARRAY -----------------------------------------------------
 
@@ -128,6 +133,10 @@ const sal_uInt16 EXC_ID3_ARRAY              = 0x0221;
 const sal_uInt16 EXC_ARRAY_RECALC_ALWAYS    = 0x0001;
 const sal_uInt16 EXC_ARRAY_RECALC_ONLOAD    = 0x0002;
 const sal_uInt16 EXC_ARRAY_DEFAULTFLAGS     = EXC_ARRAY_RECALC_ONLOAD;
+
+// (0x0024) COLWIDTH ----------------------------------------------------------
+
+const sal_uInt16 EXC_ID_COLWIDTH            = 0x0024;
 
 // (0x0025, 0x0225) DEFAULTROWHEIGHT ------------------------------------------
 
