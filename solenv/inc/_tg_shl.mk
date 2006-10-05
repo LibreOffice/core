@@ -74,6 +74,7 @@ SHL1IMPLIB=i$(TARGET)_t1
 .ENDIF			# "$(SHL1IMPLIB)" == ""
 USE_1IMPLIB=-implib:$(LB)$/$(SHL1IMPLIB).lib
 SHL1IMPLIBN=$(LB)$/$(SHL1IMPLIB).lib
+ALLTAR : $(SHL1IMPLIBN)
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -96,10 +97,10 @@ USE_SHL1VERSIONMAP=$(MISC)$/$(SHL1TARGET).vmap
 .IF "$(SHL1VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL1VERSIONMAP=$(MISC)$/$(SHL1TARGET).vmap
-$(USE_SHL1VERSIONMAP) .PHONY:
-    @+echo -----------------------------
-    @+echo you should only use versionmap OR exportfile
-    @+echo -----------------------------
+$(USE_SHL1VERSIONMAP) .PHONY: 
+    @echo -----------------------------
+    @echo you should only use versionmap OR exportfile
+    @echo -----------------------------
 #	force_dmake_to_error
 
 .ENDIF			# "$(SHL1VERSIONMAP)"!=""
@@ -128,12 +129,12 @@ $(USE_SHL1VERSIONMAP): \
 
 .ELSE			# "$(SHL1FILTERFILE)"!=""
 USE_SHL1VERSIONMAP=$(MISC)$/$(SHL1TARGET).vmap
-$(USE_SHL1VERSIONMAP) :
-    @+echo -----------------------------
-    @+echo SHL1FILTERFILE not set!
-    @+echo -----------------------------
+$(USE_SHL1VERSIONMAP) : 
+    @echo -----------------------------
+    @echo SHL1FILTERFILE not set!
+    @echo -----------------------------
     @$(TOUCH) $@
-    @+echo dummy file to keep the dependencies for later use.
+    @echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL1FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL1VERSIONMAP)"!=""
@@ -230,20 +231,20 @@ $(SHL1TARGETN) : \
 .IF "$(SHL1DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL1DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL1ICON)" != ""
-    @-+echo 1 ICON $(SHL1ICON) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-echo 1 ICON $(SHL1ICON) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
 .IF "$(SHL1ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#include $(EMQ)"$(SHL1ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"$(SHL1ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ELSE			# "$(SHL1ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL1ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ORG_NAME	$(SHL1TARGET)$(DLLPOST) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL1TARGET:b) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ORG_NAME	$(SHL1TARGET)$(DLLPOST) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-echo $(EMQ)#define INTERNAL_NAME $(SHL1TARGET:b) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(SHL1DEFAULTRES)"!=""
@@ -258,10 +259,10 @@ $(SHL1TARGETN) : \
 .IF "$(SHL1USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL1LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL1STDLIBS) $(SHL1STDSHL) $(STDSHL1) $(SHL1RES) >> $(MISC)$/$(@:b).cmd
+    @echo  $(SHL1STDLIBS) $(SHL1STDSHL) $(STDSHL1) $(SHL1RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(SHL1LINKER) @$(mktmp \
@@ -341,10 +342,10 @@ $(SHL1TARGETN) : \
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
+    @echo $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
     $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL1STDLIBS)` \
     $(SHL1STDLIBS) $(SHL1ARCHIVES) $(SHL1STDSHL) $(STDSHL1) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
@@ -363,7 +364,7 @@ $(SHL1TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(SHL1SONAME) $(LINKFLAGSSHL) $(SHL1VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
+    @echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(SHL1SONAME) $(LINKFLAGSSHL) $(SHL1VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
     $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL1LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL1STDLIBS) $(SHL1ARCHIVES) $(SHL1STDSHL) $(STDSHL1) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
@@ -384,12 +385,12 @@ $(SHL1TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(TARGETTHREAD)"!="MT"
-    @+echo ----------------------------------------------------------
-    @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded
-    @+echo - and must not be used in any office installation!
-    @+echo -
-    @+echo ----------------------------------------------------------
+    @echo ----------------------------------------------------------
+    @echo -
+    @echo - THREAD WARNING! - this library was linked single threaded 
+    @echo - and must not be used in any office installation!
+    @echo -
+    @echo ----------------------------------------------------------
 .ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
@@ -479,6 +480,7 @@ SHL2IMPLIB=i$(TARGET)_t2
 .ENDIF			# "$(SHL2IMPLIB)" == ""
 USE_2IMPLIB=-implib:$(LB)$/$(SHL2IMPLIB).lib
 SHL2IMPLIBN=$(LB)$/$(SHL2IMPLIB).lib
+ALLTAR : $(SHL2IMPLIBN)
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -501,10 +503,10 @@ USE_SHL2VERSIONMAP=$(MISC)$/$(SHL2TARGET).vmap
 .IF "$(SHL2VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL2VERSIONMAP=$(MISC)$/$(SHL2TARGET).vmap
-$(USE_SHL2VERSIONMAP) .PHONY:
-    @+echo -----------------------------
-    @+echo you should only use versionmap OR exportfile
-    @+echo -----------------------------
+$(USE_SHL2VERSIONMAP) .PHONY: 
+    @echo -----------------------------
+    @echo you should only use versionmap OR exportfile
+    @echo -----------------------------
 #	force_dmake_to_error
 
 .ENDIF			# "$(SHL2VERSIONMAP)"!=""
@@ -533,12 +535,12 @@ $(USE_SHL2VERSIONMAP): \
 
 .ELSE			# "$(SHL2FILTERFILE)"!=""
 USE_SHL2VERSIONMAP=$(MISC)$/$(SHL2TARGET).vmap
-$(USE_SHL2VERSIONMAP) :
-    @+echo -----------------------------
-    @+echo SHL2FILTERFILE not set!
-    @+echo -----------------------------
+$(USE_SHL2VERSIONMAP) : 
+    @echo -----------------------------
+    @echo SHL2FILTERFILE not set!
+    @echo -----------------------------
     @$(TOUCH) $@
-    @+echo dummy file to keep the dependencies for later use.
+    @echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL2FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL2VERSIONMAP)"!=""
@@ -635,20 +637,20 @@ $(SHL2TARGETN) : \
 .IF "$(SHL2DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL2DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL2ICON)" != ""
-    @-+echo 1 ICON $(SHL2ICON) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-echo 1 ICON $(SHL2ICON) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
 .IF "$(SHL2ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#include $(EMQ)"$(SHL2ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"$(SHL2ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ELSE			# "$(SHL2ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL2ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ORG_NAME	$(SHL2TARGET)$(DLLPOST) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL2TARGET:b) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ORG_NAME	$(SHL2TARGET)$(DLLPOST) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-echo $(EMQ)#define INTERNAL_NAME $(SHL2TARGET:b) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(SHL2DEFAULTRES)"!=""
@@ -663,10 +665,10 @@ $(SHL2TARGETN) : \
 .IF "$(SHL2USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL2LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL2STDLIBS) $(SHL2STDSHL) $(STDSHL2) $(SHL2RES) >> $(MISC)$/$(@:b).cmd
+    @echo  $(SHL2STDLIBS) $(SHL2STDSHL) $(STDSHL2) $(SHL2RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(SHL2LINKER) @$(mktmp \
@@ -746,10 +748,10 @@ $(SHL2TARGETN) : \
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
+    @echo $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
     $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL2STDLIBS)` \
     $(SHL2STDLIBS) $(SHL2ARCHIVES) $(SHL2STDSHL) $(STDSHL2) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
@@ -768,7 +770,7 @@ $(SHL2TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(SHL2SONAME) $(LINKFLAGSSHL) $(SHL2VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
+    @echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(SHL2SONAME) $(LINKFLAGSSHL) $(SHL2VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
     $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL2LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL2STDLIBS) $(SHL2ARCHIVES) $(SHL2STDSHL) $(STDSHL2) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
@@ -789,12 +791,12 @@ $(SHL2TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(TARGETTHREAD)"!="MT"
-    @+echo ----------------------------------------------------------
-    @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded
-    @+echo - and must not be used in any office installation!
-    @+echo -
-    @+echo ----------------------------------------------------------
+    @echo ----------------------------------------------------------
+    @echo -
+    @echo - THREAD WARNING! - this library was linked single threaded 
+    @echo - and must not be used in any office installation!
+    @echo -
+    @echo ----------------------------------------------------------
 .ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
@@ -884,6 +886,7 @@ SHL3IMPLIB=i$(TARGET)_t3
 .ENDIF			# "$(SHL3IMPLIB)" == ""
 USE_3IMPLIB=-implib:$(LB)$/$(SHL3IMPLIB).lib
 SHL3IMPLIBN=$(LB)$/$(SHL3IMPLIB).lib
+ALLTAR : $(SHL3IMPLIBN)
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -906,10 +909,10 @@ USE_SHL3VERSIONMAP=$(MISC)$/$(SHL3TARGET).vmap
 .IF "$(SHL3VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL3VERSIONMAP=$(MISC)$/$(SHL3TARGET).vmap
-$(USE_SHL3VERSIONMAP) .PHONY:
-    @+echo -----------------------------
-    @+echo you should only use versionmap OR exportfile
-    @+echo -----------------------------
+$(USE_SHL3VERSIONMAP) .PHONY: 
+    @echo -----------------------------
+    @echo you should only use versionmap OR exportfile
+    @echo -----------------------------
 #	force_dmake_to_error
 
 .ENDIF			# "$(SHL3VERSIONMAP)"!=""
@@ -938,12 +941,12 @@ $(USE_SHL3VERSIONMAP): \
 
 .ELSE			# "$(SHL3FILTERFILE)"!=""
 USE_SHL3VERSIONMAP=$(MISC)$/$(SHL3TARGET).vmap
-$(USE_SHL3VERSIONMAP) :
-    @+echo -----------------------------
-    @+echo SHL3FILTERFILE not set!
-    @+echo -----------------------------
+$(USE_SHL3VERSIONMAP) : 
+    @echo -----------------------------
+    @echo SHL3FILTERFILE not set!
+    @echo -----------------------------
     @$(TOUCH) $@
-    @+echo dummy file to keep the dependencies for later use.
+    @echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL3FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL3VERSIONMAP)"!=""
@@ -1040,20 +1043,20 @@ $(SHL3TARGETN) : \
 .IF "$(SHL3DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL3DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL3ICON)" != ""
-    @-+echo 1 ICON $(SHL3ICON) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-echo 1 ICON $(SHL3ICON) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
 .IF "$(SHL3ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#include $(EMQ)"$(SHL3ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"$(SHL3ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ELSE			# "$(SHL3ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL3ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ORG_NAME	$(SHL3TARGET)$(DLLPOST) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL3TARGET:b) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ORG_NAME	$(SHL3TARGET)$(DLLPOST) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-echo $(EMQ)#define INTERNAL_NAME $(SHL3TARGET:b) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(SHL3DEFAULTRES)"!=""
@@ -1068,10 +1071,10 @@ $(SHL3TARGETN) : \
 .IF "$(SHL3USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL3LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL3STDLIBS) $(SHL3STDSHL) $(STDSHL3) $(SHL3RES) >> $(MISC)$/$(@:b).cmd
+    @echo  $(SHL3STDLIBS) $(SHL3STDSHL) $(STDSHL3) $(SHL3RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(SHL3LINKER) @$(mktmp \
@@ -1151,10 +1154,10 @@ $(SHL3TARGETN) : \
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
+    @echo $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
     $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL3STDLIBS)` \
     $(SHL3STDLIBS) $(SHL3ARCHIVES) $(SHL3STDSHL) $(STDSHL3) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
@@ -1173,7 +1176,7 @@ $(SHL3TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(SHL3SONAME) $(LINKFLAGSSHL) $(SHL3VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
+    @echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(SHL3SONAME) $(LINKFLAGSSHL) $(SHL3VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
     $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL3LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL3STDLIBS) $(SHL3ARCHIVES) $(SHL3STDSHL) $(STDSHL3) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
@@ -1194,12 +1197,12 @@ $(SHL3TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(TARGETTHREAD)"!="MT"
-    @+echo ----------------------------------------------------------
-    @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded
-    @+echo - and must not be used in any office installation!
-    @+echo -
-    @+echo ----------------------------------------------------------
+    @echo ----------------------------------------------------------
+    @echo -
+    @echo - THREAD WARNING! - this library was linked single threaded 
+    @echo - and must not be used in any office installation!
+    @echo -
+    @echo ----------------------------------------------------------
 .ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
@@ -1289,6 +1292,7 @@ SHL4IMPLIB=i$(TARGET)_t4
 .ENDIF			# "$(SHL4IMPLIB)" == ""
 USE_4IMPLIB=-implib:$(LB)$/$(SHL4IMPLIB).lib
 SHL4IMPLIBN=$(LB)$/$(SHL4IMPLIB).lib
+ALLTAR : $(SHL4IMPLIBN)
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -1311,10 +1315,10 @@ USE_SHL4VERSIONMAP=$(MISC)$/$(SHL4TARGET).vmap
 .IF "$(SHL4VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL4VERSIONMAP=$(MISC)$/$(SHL4TARGET).vmap
-$(USE_SHL4VERSIONMAP) .PHONY:
-    @+echo -----------------------------
-    @+echo you should only use versionmap OR exportfile
-    @+echo -----------------------------
+$(USE_SHL4VERSIONMAP) .PHONY: 
+    @echo -----------------------------
+    @echo you should only use versionmap OR exportfile
+    @echo -----------------------------
 #	force_dmake_to_error
 
 .ENDIF			# "$(SHL4VERSIONMAP)"!=""
@@ -1343,12 +1347,12 @@ $(USE_SHL4VERSIONMAP): \
 
 .ELSE			# "$(SHL4FILTERFILE)"!=""
 USE_SHL4VERSIONMAP=$(MISC)$/$(SHL4TARGET).vmap
-$(USE_SHL4VERSIONMAP) :
-    @+echo -----------------------------
-    @+echo SHL4FILTERFILE not set!
-    @+echo -----------------------------
+$(USE_SHL4VERSIONMAP) : 
+    @echo -----------------------------
+    @echo SHL4FILTERFILE not set!
+    @echo -----------------------------
     @$(TOUCH) $@
-    @+echo dummy file to keep the dependencies for later use.
+    @echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL4FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL4VERSIONMAP)"!=""
@@ -1445,20 +1449,20 @@ $(SHL4TARGETN) : \
 .IF "$(SHL4DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL4DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL4ICON)" != ""
-    @-+echo 1 ICON $(SHL4ICON) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-echo 1 ICON $(SHL4ICON) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
 .IF "$(SHL4ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#include $(EMQ)"$(SHL4ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"$(SHL4ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ELSE			# "$(SHL4ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL4ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ORG_NAME	$(SHL4TARGET)$(DLLPOST) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL4TARGET:b) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ORG_NAME	$(SHL4TARGET)$(DLLPOST) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-echo $(EMQ)#define INTERNAL_NAME $(SHL4TARGET:b) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(SHL4DEFAULTRES)"!=""
@@ -1473,10 +1477,10 @@ $(SHL4TARGETN) : \
 .IF "$(SHL4USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL4LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL4STDLIBS) $(SHL4STDSHL) $(STDSHL4) $(SHL4RES) >> $(MISC)$/$(@:b).cmd
+    @echo  $(SHL4STDLIBS) $(SHL4STDSHL) $(STDSHL4) $(SHL4RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(SHL4LINKER) @$(mktmp \
@@ -1556,10 +1560,10 @@ $(SHL4TARGETN) : \
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
+    @echo $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
     $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL4STDLIBS)` \
     $(SHL4STDLIBS) $(SHL4ARCHIVES) $(SHL4STDSHL) $(STDSHL4) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
@@ -1578,7 +1582,7 @@ $(SHL4TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(SHL4SONAME) $(LINKFLAGSSHL) $(SHL4VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
+    @echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(SHL4SONAME) $(LINKFLAGSSHL) $(SHL4VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
     $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL4LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL4STDLIBS) $(SHL4ARCHIVES) $(SHL4STDSHL) $(STDSHL4) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
@@ -1599,12 +1603,12 @@ $(SHL4TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(TARGETTHREAD)"!="MT"
-    @+echo ----------------------------------------------------------
-    @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded
-    @+echo - and must not be used in any office installation!
-    @+echo -
-    @+echo ----------------------------------------------------------
+    @echo ----------------------------------------------------------
+    @echo -
+    @echo - THREAD WARNING! - this library was linked single threaded 
+    @echo - and must not be used in any office installation!
+    @echo -
+    @echo ----------------------------------------------------------
 .ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
@@ -1694,6 +1698,7 @@ SHL5IMPLIB=i$(TARGET)_t5
 .ENDIF			# "$(SHL5IMPLIB)" == ""
 USE_5IMPLIB=-implib:$(LB)$/$(SHL5IMPLIB).lib
 SHL5IMPLIBN=$(LB)$/$(SHL5IMPLIB).lib
+ALLTAR : $(SHL5IMPLIBN)
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -1716,10 +1721,10 @@ USE_SHL5VERSIONMAP=$(MISC)$/$(SHL5TARGET).vmap
 .IF "$(SHL5VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL5VERSIONMAP=$(MISC)$/$(SHL5TARGET).vmap
-$(USE_SHL5VERSIONMAP) .PHONY:
-    @+echo -----------------------------
-    @+echo you should only use versionmap OR exportfile
-    @+echo -----------------------------
+$(USE_SHL5VERSIONMAP) .PHONY: 
+    @echo -----------------------------
+    @echo you should only use versionmap OR exportfile
+    @echo -----------------------------
 #	force_dmake_to_error
 
 .ENDIF			# "$(SHL5VERSIONMAP)"!=""
@@ -1748,12 +1753,12 @@ $(USE_SHL5VERSIONMAP): \
 
 .ELSE			# "$(SHL5FILTERFILE)"!=""
 USE_SHL5VERSIONMAP=$(MISC)$/$(SHL5TARGET).vmap
-$(USE_SHL5VERSIONMAP) :
-    @+echo -----------------------------
-    @+echo SHL5FILTERFILE not set!
-    @+echo -----------------------------
+$(USE_SHL5VERSIONMAP) : 
+    @echo -----------------------------
+    @echo SHL5FILTERFILE not set!
+    @echo -----------------------------
     @$(TOUCH) $@
-    @+echo dummy file to keep the dependencies for later use.
+    @echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL5FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL5VERSIONMAP)"!=""
@@ -1850,20 +1855,20 @@ $(SHL5TARGETN) : \
 .IF "$(SHL5DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL5DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL5ICON)" != ""
-    @-+echo 1 ICON $(SHL5ICON) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-echo 1 ICON $(SHL5ICON) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
 .IF "$(SHL5ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#include $(EMQ)"$(SHL5ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"$(SHL5ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ELSE			# "$(SHL5ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL5ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ORG_NAME	$(SHL5TARGET)$(DLLPOST) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL5TARGET:b) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ORG_NAME	$(SHL5TARGET)$(DLLPOST) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-echo $(EMQ)#define INTERNAL_NAME $(SHL5TARGET:b) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(SHL5DEFAULTRES)"!=""
@@ -1878,10 +1883,10 @@ $(SHL5TARGETN) : \
 .IF "$(SHL5USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL5LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL5STDLIBS) $(SHL5STDSHL) $(STDSHL5) $(SHL5RES) >> $(MISC)$/$(@:b).cmd
+    @echo  $(SHL5STDLIBS) $(SHL5STDSHL) $(STDSHL5) $(SHL5RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(SHL5LINKER) @$(mktmp \
@@ -1961,10 +1966,10 @@ $(SHL5TARGETN) : \
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
+    @echo $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
     $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL5STDLIBS)` \
     $(SHL5STDLIBS) $(SHL5ARCHIVES) $(SHL5STDSHL) $(STDSHL5) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
@@ -1983,7 +1988,7 @@ $(SHL5TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(SHL5SONAME) $(LINKFLAGSSHL) $(SHL5VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
+    @echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(SHL5SONAME) $(LINKFLAGSSHL) $(SHL5VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
     $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL5LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL5STDLIBS) $(SHL5ARCHIVES) $(SHL5STDSHL) $(STDSHL5) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
@@ -2004,12 +2009,12 @@ $(SHL5TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(TARGETTHREAD)"!="MT"
-    @+echo ----------------------------------------------------------
-    @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded
-    @+echo - and must not be used in any office installation!
-    @+echo -
-    @+echo ----------------------------------------------------------
+    @echo ----------------------------------------------------------
+    @echo -
+    @echo - THREAD WARNING! - this library was linked single threaded 
+    @echo - and must not be used in any office installation!
+    @echo -
+    @echo ----------------------------------------------------------
 .ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
@@ -2099,6 +2104,7 @@ SHL6IMPLIB=i$(TARGET)_t6
 .ENDIF			# "$(SHL6IMPLIB)" == ""
 USE_6IMPLIB=-implib:$(LB)$/$(SHL6IMPLIB).lib
 SHL6IMPLIBN=$(LB)$/$(SHL6IMPLIB).lib
+ALLTAR : $(SHL6IMPLIBN)
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -2121,10 +2127,10 @@ USE_SHL6VERSIONMAP=$(MISC)$/$(SHL6TARGET).vmap
 .IF "$(SHL6VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL6VERSIONMAP=$(MISC)$/$(SHL6TARGET).vmap
-$(USE_SHL6VERSIONMAP) .PHONY:
-    @+echo -----------------------------
-    @+echo you should only use versionmap OR exportfile
-    @+echo -----------------------------
+$(USE_SHL6VERSIONMAP) .PHONY: 
+    @echo -----------------------------
+    @echo you should only use versionmap OR exportfile
+    @echo -----------------------------
 #	force_dmake_to_error
 
 .ENDIF			# "$(SHL6VERSIONMAP)"!=""
@@ -2153,12 +2159,12 @@ $(USE_SHL6VERSIONMAP): \
 
 .ELSE			# "$(SHL6FILTERFILE)"!=""
 USE_SHL6VERSIONMAP=$(MISC)$/$(SHL6TARGET).vmap
-$(USE_SHL6VERSIONMAP) :
-    @+echo -----------------------------
-    @+echo SHL6FILTERFILE not set!
-    @+echo -----------------------------
+$(USE_SHL6VERSIONMAP) : 
+    @echo -----------------------------
+    @echo SHL6FILTERFILE not set!
+    @echo -----------------------------
     @$(TOUCH) $@
-    @+echo dummy file to keep the dependencies for later use.
+    @echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL6FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL6VERSIONMAP)"!=""
@@ -2255,20 +2261,20 @@ $(SHL6TARGETN) : \
 .IF "$(SHL6DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL6DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL6ICON)" != ""
-    @-+echo 1 ICON $(SHL6ICON) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-echo 1 ICON $(SHL6ICON) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
 .IF "$(SHL6ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#include $(EMQ)"$(SHL6ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"$(SHL6ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ELSE			# "$(SHL6ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL6ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ORG_NAME	$(SHL6TARGET)$(DLLPOST) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL6TARGET:b) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ORG_NAME	$(SHL6TARGET)$(DLLPOST) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-echo $(EMQ)#define INTERNAL_NAME $(SHL6TARGET:b) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(SHL6DEFAULTRES)"!=""
@@ -2283,10 +2289,10 @@ $(SHL6TARGETN) : \
 .IF "$(SHL6USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL6LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL6STDLIBS) $(SHL6STDSHL) $(STDSHL6) $(SHL6RES) >> $(MISC)$/$(@:b).cmd
+    @echo  $(SHL6STDLIBS) $(SHL6STDSHL) $(STDSHL6) $(SHL6RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(SHL6LINKER) @$(mktmp \
@@ -2366,10 +2372,10 @@ $(SHL6TARGETN) : \
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
+    @echo $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
     $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL6STDLIBS)` \
     $(SHL6STDLIBS) $(SHL6ARCHIVES) $(SHL6STDSHL) $(STDSHL6) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
@@ -2388,7 +2394,7 @@ $(SHL6TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(SHL6SONAME) $(LINKFLAGSSHL) $(SHL6VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
+    @echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(SHL6SONAME) $(LINKFLAGSSHL) $(SHL6VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
     $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL6LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL6STDLIBS) $(SHL6ARCHIVES) $(SHL6STDSHL) $(STDSHL6) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
@@ -2409,12 +2415,12 @@ $(SHL6TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(TARGETTHREAD)"!="MT"
-    @+echo ----------------------------------------------------------
-    @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded
-    @+echo - and must not be used in any office installation!
-    @+echo -
-    @+echo ----------------------------------------------------------
+    @echo ----------------------------------------------------------
+    @echo -
+    @echo - THREAD WARNING! - this library was linked single threaded 
+    @echo - and must not be used in any office installation!
+    @echo -
+    @echo ----------------------------------------------------------
 .ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
@@ -2504,6 +2510,7 @@ SHL7IMPLIB=i$(TARGET)_t7
 .ENDIF			# "$(SHL7IMPLIB)" == ""
 USE_7IMPLIB=-implib:$(LB)$/$(SHL7IMPLIB).lib
 SHL7IMPLIBN=$(LB)$/$(SHL7IMPLIB).lib
+ALLTAR : $(SHL7IMPLIBN)
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -2526,10 +2533,10 @@ USE_SHL7VERSIONMAP=$(MISC)$/$(SHL7TARGET).vmap
 .IF "$(SHL7VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL7VERSIONMAP=$(MISC)$/$(SHL7TARGET).vmap
-$(USE_SHL7VERSIONMAP) .PHONY:
-    @+echo -----------------------------
-    @+echo you should only use versionmap OR exportfile
-    @+echo -----------------------------
+$(USE_SHL7VERSIONMAP) .PHONY: 
+    @echo -----------------------------
+    @echo you should only use versionmap OR exportfile
+    @echo -----------------------------
 #	force_dmake_to_error
 
 .ENDIF			# "$(SHL7VERSIONMAP)"!=""
@@ -2558,12 +2565,12 @@ $(USE_SHL7VERSIONMAP): \
 
 .ELSE			# "$(SHL7FILTERFILE)"!=""
 USE_SHL7VERSIONMAP=$(MISC)$/$(SHL7TARGET).vmap
-$(USE_SHL7VERSIONMAP) :
-    @+echo -----------------------------
-    @+echo SHL7FILTERFILE not set!
-    @+echo -----------------------------
+$(USE_SHL7VERSIONMAP) : 
+    @echo -----------------------------
+    @echo SHL7FILTERFILE not set!
+    @echo -----------------------------
     @$(TOUCH) $@
-    @+echo dummy file to keep the dependencies for later use.
+    @echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL7FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL7VERSIONMAP)"!=""
@@ -2660,20 +2667,20 @@ $(SHL7TARGETN) : \
 .IF "$(SHL7DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL7DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL7ICON)" != ""
-    @-+echo 1 ICON $(SHL7ICON) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-echo 1 ICON $(SHL7ICON) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
 .IF "$(SHL7ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#include $(EMQ)"$(SHL7ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"$(SHL7ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ELSE			# "$(SHL7ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL7ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ORG_NAME	$(SHL7TARGET)$(DLLPOST) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL7TARGET:b) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ORG_NAME	$(SHL7TARGET)$(DLLPOST) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-echo $(EMQ)#define INTERNAL_NAME $(SHL7TARGET:b) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(SHL7DEFAULTRES)"!=""
@@ -2688,10 +2695,10 @@ $(SHL7TARGETN) : \
 .IF "$(SHL7USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL7LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL7STDLIBS) $(SHL7STDSHL) $(STDSHL7) $(SHL7RES) >> $(MISC)$/$(@:b).cmd
+    @echo  $(SHL7STDLIBS) $(SHL7STDSHL) $(STDSHL7) $(SHL7RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(SHL7LINKER) @$(mktmp \
@@ -2771,10 +2778,10 @@ $(SHL7TARGETN) : \
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
+    @echo $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
     $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL7STDLIBS)` \
     $(SHL7STDLIBS) $(SHL7ARCHIVES) $(SHL7STDSHL) $(STDSHL7) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
@@ -2793,7 +2800,7 @@ $(SHL7TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(SHL7SONAME) $(LINKFLAGSSHL) $(SHL7VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
+    @echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(SHL7SONAME) $(LINKFLAGSSHL) $(SHL7VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
     $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL7LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL7STDLIBS) $(SHL7ARCHIVES) $(SHL7STDSHL) $(STDSHL7) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
@@ -2814,12 +2821,12 @@ $(SHL7TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(TARGETTHREAD)"!="MT"
-    @+echo ----------------------------------------------------------
-    @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded
-    @+echo - and must not be used in any office installation!
-    @+echo -
-    @+echo ----------------------------------------------------------
+    @echo ----------------------------------------------------------
+    @echo -
+    @echo - THREAD WARNING! - this library was linked single threaded 
+    @echo - and must not be used in any office installation!
+    @echo -
+    @echo ----------------------------------------------------------
 .ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
@@ -2909,6 +2916,7 @@ SHL8IMPLIB=i$(TARGET)_t8
 .ENDIF			# "$(SHL8IMPLIB)" == ""
 USE_8IMPLIB=-implib:$(LB)$/$(SHL8IMPLIB).lib
 SHL8IMPLIBN=$(LB)$/$(SHL8IMPLIB).lib
+ALLTAR : $(SHL8IMPLIBN)
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -2931,10 +2939,10 @@ USE_SHL8VERSIONMAP=$(MISC)$/$(SHL8TARGET).vmap
 .IF "$(SHL8VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL8VERSIONMAP=$(MISC)$/$(SHL8TARGET).vmap
-$(USE_SHL8VERSIONMAP) .PHONY:
-    @+echo -----------------------------
-    @+echo you should only use versionmap OR exportfile
-    @+echo -----------------------------
+$(USE_SHL8VERSIONMAP) .PHONY: 
+    @echo -----------------------------
+    @echo you should only use versionmap OR exportfile
+    @echo -----------------------------
 #	force_dmake_to_error
 
 .ENDIF			# "$(SHL8VERSIONMAP)"!=""
@@ -2963,12 +2971,12 @@ $(USE_SHL8VERSIONMAP): \
 
 .ELSE			# "$(SHL8FILTERFILE)"!=""
 USE_SHL8VERSIONMAP=$(MISC)$/$(SHL8TARGET).vmap
-$(USE_SHL8VERSIONMAP) :
-    @+echo -----------------------------
-    @+echo SHL8FILTERFILE not set!
-    @+echo -----------------------------
+$(USE_SHL8VERSIONMAP) : 
+    @echo -----------------------------
+    @echo SHL8FILTERFILE not set!
+    @echo -----------------------------
     @$(TOUCH) $@
-    @+echo dummy file to keep the dependencies for later use.
+    @echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL8FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL8VERSIONMAP)"!=""
@@ -3065,20 +3073,20 @@ $(SHL8TARGETN) : \
 .IF "$(SHL8DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL8DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL8ICON)" != ""
-    @-+echo 1 ICON $(SHL8ICON) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-echo 1 ICON $(SHL8ICON) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
 .IF "$(SHL8ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#include $(EMQ)"$(SHL8ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"$(SHL8ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ELSE			# "$(SHL8ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL8ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ORG_NAME	$(SHL8TARGET)$(DLLPOST) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL8TARGET:b) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ORG_NAME	$(SHL8TARGET)$(DLLPOST) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-echo $(EMQ)#define INTERNAL_NAME $(SHL8TARGET:b) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(SHL8DEFAULTRES)"!=""
@@ -3093,10 +3101,10 @@ $(SHL8TARGETN) : \
 .IF "$(SHL8USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL8LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL8STDLIBS) $(SHL8STDSHL) $(STDSHL8) $(SHL8RES) >> $(MISC)$/$(@:b).cmd
+    @echo  $(SHL8STDLIBS) $(SHL8STDSHL) $(STDSHL8) $(SHL8RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(SHL8LINKER) @$(mktmp \
@@ -3176,10 +3184,10 @@ $(SHL8TARGETN) : \
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
+    @echo $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
     $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL8STDLIBS)` \
     $(SHL8STDLIBS) $(SHL8ARCHIVES) $(SHL8STDSHL) $(STDSHL8) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
@@ -3198,7 +3206,7 @@ $(SHL8TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(SHL8SONAME) $(LINKFLAGSSHL) $(SHL8VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
+    @echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(SHL8SONAME) $(LINKFLAGSSHL) $(SHL8VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
     $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL8LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL8STDLIBS) $(SHL8ARCHIVES) $(SHL8STDSHL) $(STDSHL8) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
@@ -3219,12 +3227,12 @@ $(SHL8TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(TARGETTHREAD)"!="MT"
-    @+echo ----------------------------------------------------------
-    @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded
-    @+echo - and must not be used in any office installation!
-    @+echo -
-    @+echo ----------------------------------------------------------
+    @echo ----------------------------------------------------------
+    @echo -
+    @echo - THREAD WARNING! - this library was linked single threaded 
+    @echo - and must not be used in any office installation!
+    @echo -
+    @echo ----------------------------------------------------------
 .ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
@@ -3314,6 +3322,7 @@ SHL9IMPLIB=i$(TARGET)_t9
 .ENDIF			# "$(SHL9IMPLIB)" == ""
 USE_9IMPLIB=-implib:$(LB)$/$(SHL9IMPLIB).lib
 SHL9IMPLIBN=$(LB)$/$(SHL9IMPLIB).lib
+ALLTAR : $(SHL9IMPLIBN)
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -3336,10 +3345,10 @@ USE_SHL9VERSIONMAP=$(MISC)$/$(SHL9TARGET).vmap
 .IF "$(SHL9VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL9VERSIONMAP=$(MISC)$/$(SHL9TARGET).vmap
-$(USE_SHL9VERSIONMAP) .PHONY:
-    @+echo -----------------------------
-    @+echo you should only use versionmap OR exportfile
-    @+echo -----------------------------
+$(USE_SHL9VERSIONMAP) .PHONY: 
+    @echo -----------------------------
+    @echo you should only use versionmap OR exportfile
+    @echo -----------------------------
 #	force_dmake_to_error
 
 .ENDIF			# "$(SHL9VERSIONMAP)"!=""
@@ -3368,12 +3377,12 @@ $(USE_SHL9VERSIONMAP): \
 
 .ELSE			# "$(SHL9FILTERFILE)"!=""
 USE_SHL9VERSIONMAP=$(MISC)$/$(SHL9TARGET).vmap
-$(USE_SHL9VERSIONMAP) :
-    @+echo -----------------------------
-    @+echo SHL9FILTERFILE not set!
-    @+echo -----------------------------
+$(USE_SHL9VERSIONMAP) : 
+    @echo -----------------------------
+    @echo SHL9FILTERFILE not set!
+    @echo -----------------------------
     @$(TOUCH) $@
-    @+echo dummy file to keep the dependencies for later use.
+    @echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL9FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL9VERSIONMAP)"!=""
@@ -3470,20 +3479,20 @@ $(SHL9TARGETN) : \
 .IF "$(SHL9DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL9DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL9ICON)" != ""
-    @-+echo 1 ICON $(SHL9ICON) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-echo 1 ICON $(SHL9ICON) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
 .IF "$(SHL9ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#include $(EMQ)"$(SHL9ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"$(SHL9ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ELSE			# "$(SHL9ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL9ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ORG_NAME	$(SHL9TARGET)$(DLLPOST) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL9TARGET:b) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ORG_NAME	$(SHL9TARGET)$(DLLPOST) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-echo $(EMQ)#define INTERNAL_NAME $(SHL9TARGET:b) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(SHL9DEFAULTRES)"!=""
@@ -3498,10 +3507,10 @@ $(SHL9TARGETN) : \
 .IF "$(SHL9USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL9LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL9STDLIBS) $(SHL9STDSHL) $(STDSHL9) $(SHL9RES) >> $(MISC)$/$(@:b).cmd
+    @echo  $(SHL9STDLIBS) $(SHL9STDSHL) $(STDSHL9) $(SHL9RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(SHL9LINKER) @$(mktmp \
@@ -3581,10 +3590,10 @@ $(SHL9TARGETN) : \
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
+    @echo $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
     $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL9STDLIBS)` \
     $(SHL9STDLIBS) $(SHL9ARCHIVES) $(SHL9STDSHL) $(STDSHL9) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
@@ -3603,7 +3612,7 @@ $(SHL9TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(SHL9SONAME) $(LINKFLAGSSHL) $(SHL9VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
+    @echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(SHL9SONAME) $(LINKFLAGSSHL) $(SHL9VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
     $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL9LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL9STDLIBS) $(SHL9ARCHIVES) $(SHL9STDSHL) $(STDSHL9) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
@@ -3624,12 +3633,12 @@ $(SHL9TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(TARGETTHREAD)"!="MT"
-    @+echo ----------------------------------------------------------
-    @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded
-    @+echo - and must not be used in any office installation!
-    @+echo -
-    @+echo ----------------------------------------------------------
+    @echo ----------------------------------------------------------
+    @echo -
+    @echo - THREAD WARNING! - this library was linked single threaded 
+    @echo - and must not be used in any office installation!
+    @echo -
+    @echo ----------------------------------------------------------
 .ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
@@ -3719,6 +3728,7 @@ SHL10IMPLIB=i$(TARGET)_t10
 .ENDIF			# "$(SHL10IMPLIB)" == ""
 USE_10IMPLIB=-implib:$(LB)$/$(SHL10IMPLIB).lib
 SHL10IMPLIBN=$(LB)$/$(SHL10IMPLIB).lib
+ALLTAR : $(SHL10IMPLIBN)
 .ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
@@ -3741,10 +3751,10 @@ USE_SHL10VERSIONMAP=$(MISC)$/$(SHL10TARGET).vmap
 .IF "$(SHL10VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL10VERSIONMAP=$(MISC)$/$(SHL10TARGET).vmap
-$(USE_SHL10VERSIONMAP) .PHONY:
-    @+echo -----------------------------
-    @+echo you should only use versionmap OR exportfile
-    @+echo -----------------------------
+$(USE_SHL10VERSIONMAP) .PHONY: 
+    @echo -----------------------------
+    @echo you should only use versionmap OR exportfile
+    @echo -----------------------------
 #	force_dmake_to_error
 
 .ENDIF			# "$(SHL10VERSIONMAP)"!=""
@@ -3773,12 +3783,12 @@ $(USE_SHL10VERSIONMAP): \
 
 .ELSE			# "$(SHL10FILTERFILE)"!=""
 USE_SHL10VERSIONMAP=$(MISC)$/$(SHL10TARGET).vmap
-$(USE_SHL10VERSIONMAP) :
-    @+echo -----------------------------
-    @+echo SHL10FILTERFILE not set!
-    @+echo -----------------------------
+$(USE_SHL10VERSIONMAP) : 
+    @echo -----------------------------
+    @echo SHL10FILTERFILE not set!
+    @echo -----------------------------
     @$(TOUCH) $@
-    @+echo dummy file to keep the dependencies for later use.
+    @echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL10FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL10VERSIONMAP)"!=""
@@ -3875,20 +3885,20 @@ $(SHL10TARGETN) : \
 .IF "$(SHL10DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL10DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL10ICON)" != ""
-    @-+echo 1 ICON $(SHL10ICON) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-echo 1 ICON $(SHL10ICON) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
 .IF "$(SHL10ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#include $(EMQ)"$(SHL10ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"$(SHL10ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ELSE			# "$(SHL10ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL10ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define ORG_NAME	$(SHL10TARGET)$(DLLPOST) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL10TARGET:b) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-echo $(EMQ)#define ORG_NAME	$(SHL10TARGET)$(DLLPOST) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-echo $(EMQ)#define INTERNAL_NAME $(SHL10TARGET:b) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(SHL10DEFAULTRES)"!=""
@@ -3903,10 +3913,10 @@ $(SHL10TARGETN) : \
 .IF "$(SHL10USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL10LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL10STDLIBS) $(SHL10STDSHL) $(STDSHL10) $(SHL10RES) >> $(MISC)$/$(@:b).cmd
+    @echo  $(SHL10STDLIBS) $(SHL10STDSHL) $(STDSHL10) $(SHL10RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
     $(SHL10LINKER) @$(mktmp \
@@ -3986,10 +3996,10 @@ $(SHL10TARGETN) : \
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
+    @echo $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
     $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL10STDLIBS)` \
     $(SHL10STDLIBS) $(SHL10ARCHIVES) $(SHL10STDSHL) $(STDSHL10) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
@@ -4008,7 +4018,7 @@ $(SHL10TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(SHL10SONAME) $(LINKFLAGSSHL) $(SHL10VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
+    @echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(SHL10SONAME) $(LINKFLAGSSHL) $(SHL10VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
     $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL10LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL10STDLIBS) $(SHL10ARCHIVES) $(SHL10STDSHL) $(STDSHL10) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
@@ -4029,12 +4039,12 @@ $(SHL10TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(TARGETTHREAD)"!="MT"
-    @+echo ----------------------------------------------------------
-    @+echo -
-    @+echo - THREAD WARNING! - this library was linked single threaded
-    @+echo - and must not be used in any office installation!
-    @+echo -
-    @+echo ----------------------------------------------------------
+    @echo ----------------------------------------------------------
+    @echo -
+    @echo - THREAD WARNING! - this library was linked single threaded 
+    @echo - and must not be used in any office installation!
+    @echo -
+    @echo ----------------------------------------------------------
 .ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
