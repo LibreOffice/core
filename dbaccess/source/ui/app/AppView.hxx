@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppView.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-28 15:06:44 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:01:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,13 +187,10 @@ namespace dbaui
             @param  _pEntry
                 The entry of a table, or query, form, report to get the qualified name.
                 If the entry is <NULL/>, the first selected is chosen.
-            @param  _xMetaData
-                The meta data are used to create the table name, otherwise this may also be <NULL/>
             @return
                 the qualified name
         */
-        ::rtl::OUString getQualifiedName(SvLBoxEntry* _pEntry
-                                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData) const;
+        ::rtl::OUString getQualifiedName( SvLBoxEntry* _pEntry ) const;
 
         /** returns if an entry is a leaf
             @param _pEntry
@@ -243,11 +240,8 @@ namespace dbaui
         /** returns the element names which are selected
             @param  _rNames
                 The list will be filled.
-            @param  _xMetaData
-                Will be used when the table list should be filled.
         */
-        void getSelectionElementNames(::std::vector< ::rtl::OUString>& _rNames
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData = NULL) const;
+        void getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames ) const;
 
         /** adds a new object to the detail page.
             @param  _eType
@@ -261,8 +255,7 @@ namespace dbaui
         */
         SvLBoxEntry* elementAdded(ElementType _eType
                         ,const ::rtl::OUString& _rName
-                        ,const ::com::sun::star::uno::Any& _rObject
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn = NULL);
+                        ,const ::com::sun::star::uno::Any& _rObject );
 
         /** replaces a objects name with a new one
             @param  _eType
@@ -278,9 +271,7 @@ namespace dbaui
         */
         void elementReplaced(ElementType eType
                         ,const ::rtl::OUString& _rOldName
-                        ,const ::rtl::OUString& _rNewName
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn = NULL
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xObject = NULL);
+                        ,const ::rtl::OUString& _rNewName );
 
         /** removes an element from the detail page.
             @param  _eType
@@ -291,8 +282,7 @@ namespace dbaui
                 If we remove a table, the connection must be set.
         */
         void elementRemoved(ElementType _eType
-                            ,const ::rtl::OUString& _rName
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn);
+                            ,const ::rtl::OUString& _rName );
 
         /** clears the selection in the icon choice control and calls the handler
         */
