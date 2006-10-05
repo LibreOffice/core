@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xetable.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:05:08 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:18:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1727,7 +1727,7 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes )
 
 sal_uInt16 XclExpRow::GetFirstUsedXclCol() const
 {
-    return maCellList.Empty() ? 0 : maCellList.GetRecord( 0 )->GetXclCol();
+    return maCellList.Empty() ? 0 : maCellList.GetFirstRecord()->GetXclCol();
 }
 
 sal_uInt16 XclExpRow::GetFirstFreeXclCol() const
@@ -1763,7 +1763,7 @@ void XclExpRow::Save( XclExpStream& rStrm )
 
 void XclExpRow::InsertCell( XclExpCellRef xCell, size_t nPos )
 {
-    DBG_ASSERT( xCell, "XclExpRow::InsertCell - missing cell" );
+    DBG_ASSERT( xCell.is(), "XclExpRow::InsertCell - missing cell" );
 
     /*  #109751# If we have a multi-line text in a merged cell, and the resulting
         row height has not been confirmed, we need to force the EXC_ROW_UNSYNCED
@@ -1809,7 +1809,7 @@ XclExpRowBuffer::XclExpRowBuffer( const XclExpRoot& rRoot ) :
 
 void XclExpRowBuffer::AppendCell( XclExpCellRef xCell )
 {
-    DBG_ASSERT( xCell, "XclExpRowBuffer::AppendCell - missing cell" );
+    DBG_ASSERT( xCell.is(), "XclExpRowBuffer::AppendCell - missing cell" );
     GetOrCreateRow( xCell->GetXclRow(), false ).AppendCell( xCell );
 }
 
@@ -1843,8 +1843,9 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     /*  #i30411# Files saved with SO7/OOo1.x with nonstandard default column
         formatting cause big Excel files, because all rows from row 1 to row
         32000 are exported. Now, if the used area goes exactly to row 32000,
-        ignore all rows >32000. */
-    if( nDefaultXclRow != 32000 )
+        ignore all rows >32000.
+        #i59220# Tolerance of +-128 rows for inserted/removed rows. */
+    if( (nDefaultXclRow < 31872) || (nDefaultXclRow > 32128) )
     {
         sal_uInt16 nLastXclRow = static_cast< sal_uInt16 >( GetMaxPos().Row() );
         if( nDefaultXclRow <= nLastXclRow )
@@ -2026,9 +2027,10 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     /*  #i30411# Files saved with SO7/OOo1.x with nonstandard default column
         formatting cause big Excel files, because all rows from row 1 to row
         32000 are exported. Now, if the used area goes exactly to row 32000,
-        use this row as default and ignore all rows >32000. */
-    if( (nLastUsedScRow == 31999) && (nFirstUnflaggedScRow < 32000) && (nFirstUngroupedScRow <= 32000) )
-        nMaxScRow = 31999;
+        use this row as default and ignore all rows >32000.
+        #i59220# Tolerance of +-128 rows for inserted/removed rows. */
+    if( (31871 <= nLastUsedScRow) && (nLastUsedScRow <= 32127) && (nFirstUnflaggedScRow < nLastUsedScRow) && (nFirstUngroupedScRow <= nLastUsedScRow) )
+        nMaxScRow = nLastUsedScRow;
     maColInfoBfr.Initialize( nMaxScRow );
 
     // range for cell iterator
