@@ -494,7 +494,7 @@ multilist=RECORD-NAMES-BIFF3
 begin
   include=RECORD-NAMES-BIFF2
   # worksheet records
-  exclude=0x0006,0x0008,0x0009,0x000B,0x0018,0x0021,0x0023,0x0025,0x0031,0x0036,0x0037,0x003E,0x0043
+  exclude=0x0006,0x0008,0x0009,0x000B,0x0018,0x0020,0x0021,0x0023,0x0024,0x0025,0x0031,0x0036,0x0037,0x003E,0x0043,0x0044,0x0045
   0x0050=,,,,,,BUILTINFMTCOUNT,
   0x0058=TOOLBAR,XCT,CRN,FILESHARING,WRITEACCESS,OBJ,UNCALCED,SAFERECALC
   0x0060=TEMPLATE,INTL,,OBJPROTECT,,,,
@@ -1064,6 +1064,15 @@ begin
   0x0080=maximum-axis-cross
 end
 
+# COLINFO --------------------------------------------------------------------
+
+combilist=COLINFO-FLAGS
+begin
+  0x0001=hidden
+  0x0700=uint8,dec,outline-level
+  0x1000=outline-collapsed
+end
+
 # DATEMODE -------------------------------------------------------------------
 
 shortlist=DATEMODE,0,1899-12-31,1904-01-01
@@ -1160,6 +1169,27 @@ shortlist=HIDEOBJ,0,show,placeholder,hide
 # REFMODE --------------------------------------------------------------------
 
 shortlist=REFMODE,0,R1C1,A1
+
+# ROW ------------------------------------------------------------------------
+
+combilist=ROW-HEIGHT
+begin
+  0x7FFF=uint16,dec,height,CONV-TWIP-TO-PT
+  0x8000=default-height
+end
+
+combilist=ROW-FLAGS
+begin
+  ignore=0x00000100
+  0x00000007=uint8,dec,outline-level
+  0x00000010=outline-collapsed
+  0x00000020=hidden
+  0x00000040=manual-height
+  0x00000080=has-default-xf
+  0x0FFF0000=uint16,dec,default-xf-idx
+  0x10000000=add-space-above
+  0x20000000=add-space-below
+end
 
 # WSBOOL ---------------------------------------------------------------------
 
@@ -1368,7 +1398,7 @@ begin
   0xC0=uint8,dec,font-idx,FONTNAMES
 end
 
-flagslist=CELL-XFSTYLE-BIFF2
+combilist=CELL-XFSTYLE-BIFF2
 begin
   include=XF-STYLEFLAGS-BIFF2
 end
