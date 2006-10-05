@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_yxx.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:49:59 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:42:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
 #*************************************************************************
 
 
-.IF "$(YACCTARGET)"!=""
 $(MISC)$/%.cxx : %.y
     @echo ------------------------------
     @echo Making: $@
@@ -62,5 +61,4 @@ $(INCCOM)$/yy%.cxx : %.y
     @+-$(COPY:s/-f//) $@.h $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
     @+-$(COPY:s/-f//) $(@:d)$/$(@:b).hxx $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
     +$(TYPE) $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
-.ENDIF
 
