@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 16:59:26 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:19:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,155 +36,52 @@
 #ifndef _COLROWST_HXX
 #define _COLROWST_HXX
 
-#ifndef _TOOLS_DEBUG_HXX //autogen
-#include <tools/debug.hxx>
+#ifndef EXC_XIROOT_HXX
+#include "xiroot.hxx"
 #endif
-
-#ifndef _ROOT_HXX
-#include "root.hxx"
-#endif
-
-#ifndef SC_FTOOLS_HXX
-#include "ftools.hxx"
-#endif
-
-// ----- forwards --------------------------------------------------------
 
 class XclImpStream;
 
-// ----------------------------------------------- class XclImpColRowSettings --
+// ============================================================================
 
-#define ROWFLAG_USED        0x01
-#define ROWFLAG_DEFAULT     0x02
-#define ROWFLAG_HIDDEN      0x04
-#define ROWFLAG_MAN         0x08
-
-
-class XclImpColRowSettings : public ExcRoot
+class XclImpColRowSettings : protected XclImpRoot
 {
-private:
-    // ACHTUNG: Col-/Row-Angaben in TWIPS
-    INT32*              pWidth;
-    BOOL*               pColHidden;
-    UINT16*             pHeight;
-    INT8*               pRowFlags;
-
-    INT32               nMaxRow;    // < 0 -> no row used!
-    UINT16              nDefWidth;
-    UINT16              nDefHeight;
-    BOOL                bDirty;     // noch nicht rausgehauen?
-    BOOL                bSetByStandard;     // StandardWidth hat Vorrang vor DefColWidth!
-
-    void                _SetRowSettings( const SCROW nRow, const UINT16 nExcelHeight, const UINT16 nGrbit );
-
 public:
-                        XclImpColRowSettings( RootData& rRootData );
-                        ~XclImpColRowSettings();
-    void                Reset( void );
+    explicit            XclImpColRowSettings( const XclImpRoot& rRoot );
+    virtual             ~XclImpColRowSettings();
 
-    void                SetDefaults( UINT16 nWidth, UINT16 nHeight );
-    inline void         SetDefWidth( const UINT16 nNew, const BOOL bStandardWidth = FALSE );
-    inline void         SetDefHeight( const UINT16 nNew );
+    void                SetDefWidth( sal_uInt16 nDefWidth, bool bStdWidthRec = false );
+    void                SetWidthRange( SCCOL nCol1, SCCOL nCol2, sal_uInt16 nWidth );
+    void                HideCol( SCCOL nCol );
+    void                HideColRange( SCCOL nCol1, SCCOL nCol2 );
 
-    inline void         Used( const ScAddress& rScPos );
+    void                SetDefHeight( sal_uInt16 nDefHeight, sal_uInt16 nFlags );
+    void                SetHeight( SCROW nRow, sal_uInt16 nHeight );
+    void                HideRow( SCROW nRow );
+    void                SetRowSettings( SCROW nRow, sal_uInt16 nHeight, sal_uInt16 nFlags );
 
-    inline void         HideCol( const SCCOL nCol );
-    void                HideColRange( SCCOL nColFirst, SCCOL nColLast );
-    void                SetWidthRange( SCCOL nF, SCCOL nL, UINT16 nNew );
-    void                SetDefaultXF( SCCOL nColFirst, SCCOL nColLast, UINT16 nXF );
-    inline void         SetWidth( const SCCOL nCol, const INT32 nNew );
-
-    inline void         SetHeight( const SCROW nRow, const UINT16 nNew );
-    inline void         HideRow( const SCROW nRow );
-    inline void         SetRowSettings( const SCROW nRow, const UINT16 nExcelHeight, const UINT16 nGrbit );
-                                    // Auswertung/Umrechung von nExcelHeight und Auswertung nGrbit
-
+    void                SetDefaultXF( SCCOL nScCol1, SCCOL nScCol2, sal_uInt16 nXFIndex );
     /** Inserts all column and row settings of the specified sheet, except the hidden flags. */
-    void                Apply( SCTAB nScTab );
+    void                Convert( SCTAB nScTab );
     /** Sets the HIDDEN flags at all hidden columns and rows in the specified sheet. */
-    void                SetHiddenFlags( SCTAB nScTab );
+    void                ConvertHiddenFlags( SCTAB nScTab );
+
+private:
+    ScfUInt16Vec        maWidths;           /// Column widths in twips.
+    ScfUInt8Vec         maColFlags;         /// Flags for all columns.
+    ScfUInt16Vec        maHeights;          /// Row heights in twips.
+    ScfUInt8Vec         maRowFlags;         /// Flags for all rows.
+
+    SCROW               mnLastScRow;
+
+    sal_uInt16          mnDefWidth;         /// Default width from DEFCOLWIDTH or STANDARDWIDTH record.
+    sal_uInt16          mnDefHeight;        /// Default height from DEFAULTROWHEIGHT record.
+    sal_uInt16          mnDefRowFlags;      /// Default row flags from DEFAULTROWHEIGHT record.
+
+    bool                mbHasStdWidthRec;   /// true = Width from STANDARDWIDTH (overrides DEFCOLWIDTH record).
+    bool                mbHasDefHeight;     /// true = mnDefHeight and mnDefRowFlags are valid.
+    bool                mbDirty;
 };
-
-
-
-
-inline void XclImpColRowSettings::SetDefWidth( const UINT16 n, const BOOL b )
-{
-    if( b )
-    {
-        nDefWidth = n;
-        bSetByStandard = TRUE;
-    }
-    else if( !bSetByStandard )
-        nDefWidth = n;
-}
-
-
-inline void XclImpColRowSettings::SetDefHeight( const UINT16 n )
-{
-    nDefHeight = n;
-}
-
-
-inline void XclImpColRowSettings::SetWidth( const SCCOL nCol, const INT32 nNew )
-{
-    if( ValidCol(nCol) )
-        pWidth[ nCol ] = nNew;
-}
-
-
-inline void XclImpColRowSettings::SetHeight( const SCROW nRow, const UINT16 n )
-{
-    if( ValidRow(nRow) )
-    {
-        pHeight[ nRow ] = n & 0x7FFF;
-
-        INT8    nFlags = pRowFlags[ nRow ];
-        nFlags |= ROWFLAG_USED;
-
-        if( n & 0x8000 )
-            nFlags|= ROWFLAG_DEFAULT;
-
-        if( nRow > nMaxRow )
-            nMaxRow = nRow;
-
-        pRowFlags[ nRow ] = nFlags;
-    }
-}
-
-
-inline void XclImpColRowSettings::HideCol( const SCCOL nCol )
-{
-    if( ValidCol(nCol) )
-        pColHidden[ nCol ] = TRUE;
-}
-
-
-inline void XclImpColRowSettings::HideRow( const SCROW nRow )
-{
-    if( ValidRow(nRow) )
-    {
-        pRowFlags[ nRow ] |= ( ROWFLAG_HIDDEN | ROWFLAG_USED );
-
-        if( nRow > nMaxRow )
-            nMaxRow = nRow;
-    }
-}
-
-
-inline void XclImpColRowSettings::Used( const ScAddress& rScPos )
-{
-    pRowFlags[ rScPos.Row() ] |= ROWFLAG_USED;
-    if( rScPos.Row() > nMaxRow )
-        nMaxRow = rScPos.Row();
-}
-
-
-inline void XclImpColRowSettings::SetRowSettings( const SCROW nRow, const UINT16 nExcelHeight, const UINT16 nGrbit )
-{
-    if( ValidRow(nRow) )
-        _SetRowSettings( nRow, nExcelHeight, nGrbit );
-}
 
 
 
