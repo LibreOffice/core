@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:36:31 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:23:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1811,7 +1811,7 @@ void ScTableSheetsObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 ScTableSheetObj* ScTableSheetsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
 {
-    if ( pDocShell && nIndex < pDocShell->GetDocument()->GetTableCount() )
+    if ( pDocShell && nIndex >= 0 && nIndex < pDocShell->GetDocument()->GetTableCount() )
         return new ScTableSheetObj( pDocShell, static_cast<SCTAB>(nIndex) );
 
     return NULL;
@@ -2914,7 +2914,7 @@ BOOL ScScenariosObj::GetScenarioIndex_Impl( const rtl::OUString& rName, SCTAB& r
 ScTableSheetObj* ScScenariosObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
     USHORT nCount = (USHORT)getCount();
-    if ( pDocShell && nIndex < nCount )
+    if ( pDocShell && nIndex >= 0 && nIndex < nCount )
         return new ScTableSheetObj( pDocShell, nTab+static_cast<SCTAB>(nIndex)+1 );
 
     return NULL;    // kein Dokument oder falscher Index
