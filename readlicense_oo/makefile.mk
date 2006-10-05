@@ -25,18 +25,18 @@ ALLTAR: convert $(fallbacklicenses) just_for_nice_optics
 .IF "$(fallbacklicenses)"!=""
 $(fallbacklicenses) : convert
     @+$(ECHON) .
-    @+$(COPY) $(@:d)$(@:b:s/_/./:b)_$(defaultlangiso)$(@:e) $@ $(noout)
+    @+$(COPY) $(@:d)$(@:b:s/_/./:b)_$(defaultlangiso)$(@:e) $@
 .ENDIF          # "$(fallbacklicenses)"!=""
 
 just_for_nice_optics: $(fallbacklicenses)
     @+$(ECHONL)
-    @+echo done.
+    @echo done.
 
 convert:
-    @+echo converting license files
+    @echo converting license files
     @+-$(PERL) conv.pl -o $(MISC)
 # no conversion for *.rtf
 .IF "$(GUI)"=="WNT"
-    @+$(COPY) source$/license$/wnt$/*.rtf $(SYSLICDEST) $(noout)
+    @+$(COPY) source$/license$/wnt$/*.rtf $(SYSLICDEST)
 .ENDIF          # "$(GUI)"=="WNT"
 
