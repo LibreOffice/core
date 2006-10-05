@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:42:34 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:22:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 #include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
 #include <connectivity/dbcharset.hxx>
+#include <svx/txenctab.hxx>
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -80,6 +81,7 @@
 #include "editutil.hxx"
 #include "cellform.hxx"
 #include "dbdocutl.hxx"
+#include "dociter.hxx"
 #include "globstr.hrc"
 
 using namespace com::sun::star;
@@ -714,6 +716,25 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
     }
 }
 
+
+inline void lcl_getLongVarCharEditString( String& rString,
+        const ScBaseCell* pCell, ScFieldEditEngine& rEditEngine )
+{
+    rEditEngine.SetText( *((const ScEditCell*)pCell)->GetData() );
+    rString = rEditEngine.GetText( LINEEND_CRLF );
+}
+
+inline void lcl_getLongVarCharString( String& rString, ScBaseCell* pCell,
+        ScDocument& rDocument, SCCOL nCol, SCROW nRow, SCTAB nTab,
+        SvNumberFormatter& rNumFmt )
+{
+    sal_uInt32 nFormat;
+    Color* pColor;
+    rDocument.GetNumberFormat( nCol, nRow, nTab, nFormat );
+    ScCellFormat::GetString( pCell, nFormat, rString, &pColor, rNumFmt );
+}
+
+
 ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BOOL& bHasMemo )
 {
     // remove the file so the dBase driver doesn't find an invalid file
@@ -764,6 +785,11 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
     aURL.removeSegment();
     aURL.removeFinalSlash();
     String aPath = aURL.GetMainURL(INetURLObject::NO_DECODE);
+
+    // also needed for exception catch
+    SCROW nDocRow = 0;
+    ScFieldEditEngine aEditEngine( aDocument.GetEditPool() );
+    String aString;
 
     try
     {
@@ -941,11 +967,9 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
         if (!xRowUpdate.is()) return SCERR_EXPORT_CONNECT;
 
         SCROW nFirstDataRow = ( bHasFieldNames ? nFirstRow + 1 : nFirstRow );
-        ScFieldEditEngine aEditEngine( aDocument.GetEditPool() );
-        String aString;
         double fVal;
 
-        for ( SCROW nDocRow = nFirstDataRow; nDocRow <= nLastRow; nDocRow++ )
+        for ( nDocRow = nFirstDataRow; nDocRow <= nLastRow; nDocRow++ )
         {
             xResultUpdate->moveToInsertRow();
 
@@ -963,15 +987,14 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
                             {
                                 if ( pCell->GetCellType() == CELLTYPE_EDIT )
                                 {   // #60761# Paragraphs erhalten
-                                    aEditEngine.SetText( *((ScEditCell*)pCell)->GetData() );
-                                    aString = aEditEngine.GetText( LINEEND_CRLF );
+                                    lcl_getLongVarCharEditString( aString,
+                                            pCell, aEditEngine);
                                 }
                                 else
                                 {
-                                    sal_uInt32 nFormat;
-                                    Color* pColor;
-                                    aDocument.GetNumberFormat( nDocCol, nDocRow, nTab, nFormat );
-                                    ScCellFormat::GetString( pCell, nFormat, aString, &pColor, *pNumFmt );
+                                    lcl_getLongVarCharString( aString, pCell,
+                                            aDocument, nDocCol, nDocRow, nTab,
+                                            *pNumFmt);
                                 }
                                 xRowUpdate->updateString( nCol+1, aString );
                             }
@@ -1049,9 +1072,67 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
         comphelper::disposeComponent( xRowSet );
         comphelper::disposeComponent( xConnection );
     }
-    catch ( sdbc::SQLException& )
+    catch ( sdbc::SQLException& aException )
     {
-        nErr = SCERR_EXPORT_CONNECT;
+        if (aException.ErrorCode == 22018)
+        {
+            // SQL error 22018: Character not in target encoding.
+            SCCOL nDocCol = nFirstCol;
+            DBG_ASSERT( rtl_isOctetTextEncoding( eCharSet), "ScDocShell::DBaseExport: not an octect textencoding");
+            if (rtl_isOctetTextEncoding( eCharSet))
+            {
+                const sal_Int32* pColTypes = aColTypes.getConstArray();
+                ScHorizontalCellIterator aIter( &aDocument, nTab, nFirstCol,
+                        nDocRow, nLastCol, nDocRow);
+                ScBaseCell* pCell = NULL;
+                bool bTest = true;
+                while (bTest && ((pCell = aIter.GetNext( nDocCol, nDocRow)) != NULL))
+                {
+                    SCCOL nCol = nDocCol - nFirstCol;
+                    switch (pColTypes[nCol])
+                    {
+                        case sdbc::DataType::LONGVARCHAR:
+                            {
+                                if ( pCell->GetCellType() != CELLTYPE_NOTE )
+                                {
+                                    if ( pCell->GetCellType() == CELLTYPE_EDIT )
+                                        lcl_getLongVarCharEditString( aString,
+                                                pCell, aEditEngine);
+                                    else
+                                        lcl_getLongVarCharString( aString,
+                                                pCell, aDocument, nDocCol,
+                                                nDocRow, nTab, *pNumFmt);
+                                }
+                            }
+                            break;
+
+                        case sdbc::DataType::VARCHAR:
+                            aDocument.GetString( nDocCol, nDocRow, nTab, aString);
+                            break;
+
+                        default:
+                            bTest = false;
+                    }
+                    if (bTest)
+                    {
+                        rtl::OUString aOUString( aString);
+                        rtl::OString aOString;
+                        if (!aOUString.convertToString( &aOString, eCharSet,
+                                    RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+                                    RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
+                            bTest = false;
+                    }
+                    else
+                        bTest = true;
+                }
+            }
+            String sPosition( ScAddress( nDocCol, nDocRow, nTab).GetColRowString());
+            String sEncoding( SvxTextEncodingTable().GetTextString( eCharSet));
+            nErr = *new TwoStringErrorInfo( SCERR_EXPORT_ENCODING, sPosition,
+                    sEncoding, ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR);
+        }
+        else
+            nErr = SCERR_EXPORT_CONNECT;
     }
     catch ( uno::Exception& )
     {
