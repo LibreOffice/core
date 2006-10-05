@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcoli.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:51:29 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:21:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,6 +201,12 @@ void ScXMLTableColContext::EndElement()
             }
         }
     }
+
+    // #i57915# ScXMLImport::SetStyleToRange can't handle empty style names.
+    // The default for a column if there is no attribute is the style "Default" (programmatic API name).
+    if ( !sCellStyleName.getLength() )
+        sCellStyleName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Default" ));
+
     GetScImport().GetTables().AddColCount(nColCount);
     GetScImport().GetTables().AddColStyle(nColCount, sCellStyleName);
 }
