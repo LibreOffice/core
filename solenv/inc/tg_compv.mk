@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_compv.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:57:38 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:38:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -133,15 +133,15 @@ COMNAME=MipsPro
 # appear in the first n modules.
 
 compiler_version_error:
-    @+echo ++++++++++++++++++++++++++++++++++++
-    @+echo  ERROR!
-    @+echo  Could not detect compiler version!
-    @+echo  Please extend tg_compv.mk in 
-    @+echo  "solenv/inc".
-    @+echo ++++++++++++++++++++++++++++++++++++
-    @+echo "$(CXX) $(CFLAGSVERSION)" returns
+    @echo ++++++++++++++++++++++++++++++++++++
+    @echo  ERROR!
+    @echo  Could not detect compiler version!
+    @echo  Please extend tg_compv.mk in 
+    @echo  "solenv/inc".
+    @echo ++++++++++++++++++++++++++++++++++++
+    @echo "$(CXX) $(CFLAGSVERSION)" returns
     @+$(CXX) $(CFLAGSVERSION)
-    @+echo ++++++++++++++++++++++++++++++++++++
+    @echo ++++++++++++++++++++++++++++++++++++
     @+exit 255
 
 .ENDIF          # "$(COMNAME)"==""
