@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtreemodel.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:57:19 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:01:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,30 +63,4 @@ namespace dbaui
     {
         DBG_DTOR(DBTreeListUserData,NULL);
     }
-
-    //------------------------------------------------------------------------
-    sal_uInt16 DBTreeListModel::getImageResId(SbaTableQueryBrowser::EntryType _eType,
-                                                sal_Bool _bHiContrast)
-    {
-        switch (_eType)
-        {
-            case SbaTableQueryBrowser::etTable:
-                return _bHiContrast ? TABLE_TREE_ICON_SCH : TABLE_TREE_ICON;
-            case SbaTableQueryBrowser::etView:
-                return _bHiContrast ? VIEW_TREE_ICON_SCH : VIEW_TREE_ICON;
-            case SbaTableQueryBrowser::etQuery:
-                return _bHiContrast ? QUERY_TREE_ICON_SCH : QUERY_TREE_ICON;
-            case SbaTableQueryBrowser::etDatasource:
-                return _bHiContrast ? IMG_DATABASE_SCH : IMG_DATABASE;
-            case SbaTableQueryBrowser::etQueryContainer:
-                return _bHiContrast ? QUERYFOLDER_TREE_ICON_SCH : QUERYFOLDER_TREE_ICON;
-            case SbaTableQueryBrowser::etTableContainer:
-                return _bHiContrast ? TABLEFOLDER_TREE_ICON_SCH : TABLEFOLDER_TREE_ICON;
-            case SbaTableQueryBrowser::etUnknown:
-                break;
-        }
-        OSL_ENSURE(sal_False, "DBTreeListModel::getImageResId: invalid entry type!");
-        return 0;
-    }
-
 }

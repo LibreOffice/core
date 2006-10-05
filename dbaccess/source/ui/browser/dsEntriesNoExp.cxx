@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsEntriesNoExp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:57:47 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:02:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,9 @@
 #ifndef _DBAUI_LISTVIEWITEMS_HXX_
 #include "listviewitems.hxx"
 #endif
+#ifndef DBACCESS_IMAGEPROVIDER_HXX
+#include "imageprovider.hxx"
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -76,7 +79,7 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvLBoxEntry*
     switch (getEntryType(_pEntry))
     {
         case etTableContainer:
-            return etTable;
+            return etTableOrView;
         case etQueryContainer:
             return etQuery;
         default:
@@ -118,7 +121,7 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( SvLBoxEntry*
         return etQueryContainer;
 
     if (pTables == pEntryParent)
-        return etTable;
+        return etTableOrView;
 
     if (pQueries == pEntryParent)
         return etQuery;
@@ -196,39 +199,78 @@ String SbaTableQueryBrowser::getURL() const
 {
     return String();
 }
+
+// -----------------------------------------------------------------------------
+sal_Int32 SbaTableQueryBrowser::getDatabaseObjectType( EntryType _eType )
+{
+    switch ( _eType )
+    {
+    case etQuery:
+    case etQueryContainer:
+        return DatabaseObject::QUERY;
+    case etTableOrView:
+    case etTableContainer:
+        return DatabaseObject::TABLE;
+    default:
+        break;
+    }
+    OSL_ENSURE( false, "SbaTableQueryBrowser::getDatabaseObjectType: folder types and 'Unknown' not allowed here!" );
+    return DatabaseObject::TABLE;
+}
+
 // -----------------------------------------------------------------------------
 void SbaTableQueryBrowser::notifyHiContrastChanged()
 {
     if ( m_pTreeView )
     {
-        sal_Bool bHiContrast = isHiContrast();
-
-        if ( m_bHiContrast != bHiContrast )
+        // change all bitmap entries
+        SvLBoxEntry* pEntryLoop = m_pTreeModel->First();
+        while ( pEntryLoop )
         {
-            m_bHiContrast = bHiContrast;
-            // change all bitmap entries
-            SvLBoxEntry* pEntryLoop = m_pTreeModel->First();
-            while ( pEntryLoop )
+            DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntryLoop->GetUserData());
+            if ( !pData )
             {
-                DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntryLoop->GetUserData());
-                if ( pData )
-                {
-                    ModuleRes aResId(DBTreeListModel::getImageResId(pData->eType,isHiContrast()));
-                    Image aImage(aResId);
-                    USHORT nCount = pEntryLoop->ItemCount();
-                    for (USHORT i=0;i<nCount;++i)
-                    {
-                        SvLBoxItem* pItem = pEntryLoop->GetItem(i);
-                        if ( pItem && pItem->IsA() == SV_ITEM_ID_LBOXCONTEXTBMP)
-                        {
-                            static_cast<SvLBoxContextBmp*>(pItem)->SetBitmap1( aImage );
-                            static_cast<SvLBoxContextBmp*>(pItem)->SetBitmap2( aImage );
-                            break;
-                        }
-                    }
-                }
                 pEntryLoop = m_pTreeModel->Next(pEntryLoop);
+                continue;
             }
+
+            // the connection to which this entry belongs, if any
+            ::std::auto_ptr< ImageProvider > pImageProvider( getImageProviderFor( pEntryLoop ) );
+
+            // the images for this entry
+            Image aImage, aImageHC;
+            bool bIsFolder = !isObject( pData->eType );
+            if ( bIsFolder )
+            {
+                sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
+                aImage = pImageProvider->getFolderImage( nObjectType, false );
+                aImageHC = pImageProvider->getFolderImage( nObjectType, true );
+            }
+            else
+            {
+                sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
+                aImage = pImageProvider->getImage( GetEntryText( pEntryLoop ), nObjectType, false );
+                aImageHC = pImageProvider->getImage( GetEntryText( pEntryLoop ), nObjectType, true );
+            }
+
+            // find the proper item, and set its icons
+            USHORT nCount = pEntryLoop->ItemCount();
+            for (USHORT i=0;i<nCount;++i)
+            {
+                SvLBoxItem* pItem = pEntryLoop->GetItem(i);
+                if ( !pItem || ( pItem->IsA() != SV_ITEM_ID_LBOXCONTEXTBMP ) )
+                    continue;
+
+                SvLBoxContextBmp* pContextBitmapItem = static_cast< SvLBoxContextBmp* >( pItem );
+
+                pContextBitmapItem->SetBitmap1( aImage, BMP_COLOR_NORMAL );
+                pContextBitmapItem->SetBitmap2( aImage, BMP_COLOR_NORMAL );
+                pContextBitmapItem->SetBitmap1( aImageHC, BMP_COLOR_HIGHCONTRAST );
+                pContextBitmapItem->SetBitmap2( aImageHC, BMP_COLOR_HIGHCONTRAST );
+                break;
+            }
+
+            pEntryLoop = m_pTreeModel->Next(pEntryLoop);
         }
     }
 }
