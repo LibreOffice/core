@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-29 15:09:06 $
+#   last change: $Author: kz $ $Date: 2006-10-05 11:03:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -125,13 +125,13 @@ $(BIN)$/applicat.rdb : makefile.mk $(SOLARBINDIR)$/types.rdb
 .IF "$(GUI)"=="WNT"
 
 $(MISC)$/$(SHL1TARGET).def: makefile.mk
-    @+echo -------------------------------------------
-    @+echo DEF-File erstellen $@
-        @+echo LIBRARY     $(DLLNAME)                    >$@
-        @+echo DESCRIPTION 'Star Cube DLL'               >>$@
-        @+echo DATA                READ WRITE NONSHARED  >>$@
-        @+echo EXPORTS                                   >>$@
-        @+echo     StartInvader    @22                    >>$@
+    @echo -------------------------------------------
+    @echo DEF-File erstellen $@
+    @echo LIBRARY     $(DLLNAME)                    >$@
+    @echo DESCRIPTION 'Star Cube DLL'               >>$@
+    @echo DATA                READ WRITE NONSHARED  >>$@
+    @echo EXPORTS                                   >>$@
+    @echo     StartInvader    @22                    >>$@
 
 .ENDIF
 
