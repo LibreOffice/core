@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:24:02 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:04:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -451,19 +451,6 @@ ModalDialog DLG_DATABASE_TYPE_CHANGE
     };
     Text [ de ] = "Datenbankeigenschaften" ;
     Text [ en-US ] = "Database properties" ;
-};
-
-//-------------------------------------------------------------------------
-
-Image IMG_DATABASE
-{
-    ImageBitmap = Bitmap { File = "db.bmp"; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
-};
-Image IMG_DATABASE_SCH
-{
-    ImageBitmap = Bitmap { File = "db_sch.bmp"; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 };
 
 //-------------------------------------------------------------------------
