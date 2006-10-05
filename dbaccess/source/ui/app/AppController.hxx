@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:22:23 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 12:59:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,14 +39,11 @@
 #ifndef DBAUI_GENERICCONTROLLER_HXX
 #include "genericcontroller.hxx"
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
-#include <com/sun/star/container/XContainerListener.hpp>
-#endif
 #ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -69,9 +66,17 @@
 #ifndef DBAUI_IAPPELEMENTNOTIFICATION_HXX
 #include "IAppElementNotification.hxx"
 #endif
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
+#include <com/sun/star/container/XContainerListener.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_APPLICATION_XDATABASEDOCUMENTUI_HPP_
+#include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
+#endif
+/** === end UNO includes === **/
 #ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
 #endif
@@ -116,8 +121,9 @@ namespace dbaui
     class OApplicationView;
     class OLinkedDocumentsAccess;
     typedef OGenericUnoController                   OApplicationController_CBASE;
-    typedef ::cppu::ImplHelper2 <   ::com::sun::star::container::XContainerListener,
-                                    ::com::sun::star::beans::XPropertyChangeListener
+    typedef ::cppu::ImplHelper3 <   ::com::sun::star::container::XContainerListener
+                                ,   ::com::sun::star::beans::XPropertyChangeListener
+                                ,   ::com::sun::star::sdb::application::XDatabaseDocumentUI
                                 >   OApplicationController_Base;
 
     class OApplicationController
@@ -458,6 +464,7 @@ namespace dbaui
         virtual void            impl_initialize();
 
         virtual ~OApplicationController();
+
     public:
         OApplicationController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
 
@@ -488,6 +495,13 @@ namespace dbaui
 
         // XPropertyChangeListener
         virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XDatabaseDocumentUI
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > SAL_CALL getDataSource() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getApplicationMainWindow() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getActiveConnection() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL isConnected(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL connect(  ) throw (::com::sun::star::uno::RuntimeException);
 
         /** retrieves the current connection, creates it if necessary
         */
@@ -536,7 +550,9 @@ namespace dbaui
 
         // IViewChangeListener
         virtual void previewChanged( sal_Int32 _nMode);
+
     protected:
+        using OApplicationController_CBASE::connect;
 
         /** disconnects from our XConnection, and cleans up this connection
         */
