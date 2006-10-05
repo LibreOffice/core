@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtreelistbox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:01:33 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:02:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,10 +207,6 @@ void DBTreeListBox::SelectEntry(SvLBoxEntry* _pEntry)
 void DBTreeListBox::InitEntry( SvLBoxEntry* _pEntry, const XubString& aStr, const Image& _rCollEntryBmp, const Image& _rExpEntryBmp)
 {
     SvTreeListBox::InitEntry( _pEntry, aStr, _rCollEntryBmp,_rExpEntryBmp);
-    // add items
-//  SvLBoxContextBmp* pContextBmp = new SvLBoxContextBmp(_pEntry, 0, _rCollEntryBmp, _rExpEntryBmp, 0);
-//  _pEntry->AddItem( pContextBmp );
-
     SvLBoxItem* pTextItem(_pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
     SvLBoxString* pString = new OBoldListboxString( _pEntry, 0, aStr );
     _pEntry->ReplaceItem( pString,_pEntry->GetPos(pTextItem));
