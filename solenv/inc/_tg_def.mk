@@ -180,10 +180,10 @@ $(DEF1TARGETN) .PHONY :
 $(DEF1TARGETN): \
         $(DEF1DEPN) \
         $(DEF1EXPORTFILE)
-    @+echo ------------------------------
-    @+echo Making Module-Definitionfile : $@
-    @+echo just a dummy for UNIX
-    @+echo > $@
+    @echo ------------------------------
+    @echo Making Module-Definitionfile : $@
+    @echo just a dummy for UNIX
+    @echo > $@
 .ENDIF
 .ENDIF			# "$(DEF1TARGETN)"!=""
 
@@ -371,10 +371,10 @@ $(DEF2TARGETN) .PHONY :
 $(DEF2TARGETN): \
         $(DEF2DEPN) \
         $(DEF2EXPORTFILE)
-    @+echo ------------------------------
-    @+echo Making Module-Definitionfile : $@
-    @+echo just a dummy for UNIX
-    @+echo > $@
+    @echo ------------------------------
+    @echo Making Module-Definitionfile : $@
+    @echo just a dummy for UNIX
+    @echo > $@
 .ENDIF
 .ENDIF			# "$(DEF2TARGETN)"!=""
 
@@ -562,10 +562,10 @@ $(DEF3TARGETN) .PHONY :
 $(DEF3TARGETN): \
         $(DEF3DEPN) \
         $(DEF3EXPORTFILE)
-    @+echo ------------------------------
-    @+echo Making Module-Definitionfile : $@
-    @+echo just a dummy for UNIX
-    @+echo > $@
+    @echo ------------------------------
+    @echo Making Module-Definitionfile : $@
+    @echo just a dummy for UNIX
+    @echo > $@
 .ENDIF
 .ENDIF			# "$(DEF3TARGETN)"!=""
 
@@ -753,10 +753,10 @@ $(DEF4TARGETN) .PHONY :
 $(DEF4TARGETN): \
         $(DEF4DEPN) \
         $(DEF4EXPORTFILE)
-    @+echo ------------------------------
-    @+echo Making Module-Definitionfile : $@
-    @+echo just a dummy for UNIX
-    @+echo > $@
+    @echo ------------------------------
+    @echo Making Module-Definitionfile : $@
+    @echo just a dummy for UNIX
+    @echo > $@
 .ENDIF
 .ENDIF			# "$(DEF4TARGETN)"!=""
 
@@ -944,10 +944,10 @@ $(DEF5TARGETN) .PHONY :
 $(DEF5TARGETN): \
         $(DEF5DEPN) \
         $(DEF5EXPORTFILE)
-    @+echo ------------------------------
-    @+echo Making Module-Definitionfile : $@
-    @+echo just a dummy for UNIX
-    @+echo > $@
+    @echo ------------------------------
+    @echo Making Module-Definitionfile : $@
+    @echo just a dummy for UNIX
+    @echo > $@
 .ENDIF
 .ENDIF			# "$(DEF5TARGETN)"!=""
 
@@ -1135,10 +1135,10 @@ $(DEF6TARGETN) .PHONY :
 $(DEF6TARGETN): \
         $(DEF6DEPN) \
         $(DEF6EXPORTFILE)
-    @+echo ------------------------------
-    @+echo Making Module-Definitionfile : $@
-    @+echo just a dummy for UNIX
-    @+echo > $@
+    @echo ------------------------------
+    @echo Making Module-Definitionfile : $@
+    @echo just a dummy for UNIX
+    @echo > $@
 .ENDIF
 .ENDIF			# "$(DEF6TARGETN)"!=""
 
@@ -1326,10 +1326,10 @@ $(DEF7TARGETN) .PHONY :
 $(DEF7TARGETN): \
         $(DEF7DEPN) \
         $(DEF7EXPORTFILE)
-    @+echo ------------------------------
-    @+echo Making Module-Definitionfile : $@
-    @+echo just a dummy for UNIX
-    @+echo > $@
+    @echo ------------------------------
+    @echo Making Module-Definitionfile : $@
+    @echo just a dummy for UNIX
+    @echo > $@
 .ENDIF
 .ENDIF			# "$(DEF7TARGETN)"!=""
 
@@ -1517,10 +1517,10 @@ $(DEF8TARGETN) .PHONY :
 $(DEF8TARGETN): \
         $(DEF8DEPN) \
         $(DEF8EXPORTFILE)
-    @+echo ------------------------------
-    @+echo Making Module-Definitionfile : $@
-    @+echo just a dummy for UNIX
-    @+echo > $@
+    @echo ------------------------------
+    @echo Making Module-Definitionfile : $@
+    @echo just a dummy for UNIX
+    @echo > $@
 .ENDIF
 .ENDIF			# "$(DEF8TARGETN)"!=""
 
@@ -1708,10 +1708,10 @@ $(DEF9TARGETN) .PHONY :
 $(DEF9TARGETN): \
         $(DEF9DEPN) \
         $(DEF9EXPORTFILE)
-    @+echo ------------------------------
-    @+echo Making Module-Definitionfile : $@
-    @+echo just a dummy for UNIX
-    @+echo > $@
+    @echo ------------------------------
+    @echo Making Module-Definitionfile : $@
+    @echo just a dummy for UNIX
+    @echo > $@
 .ENDIF
 .ENDIF			# "$(DEF9TARGETN)"!=""
 
@@ -1899,10 +1899,10 @@ $(DEF10TARGETN) .PHONY :
 $(DEF10TARGETN): \
         $(DEF10DEPN) \
         $(DEF10EXPORTFILE)
-    @+echo ------------------------------
-    @+echo Making Module-Definitionfile : $@
-    @+echo just a dummy for UNIX
-    @+echo > $@
+    @echo ------------------------------
+    @echo Making Module-Definitionfile : $@
+    @echo just a dummy for UNIX
+    @echo > $@
 .ENDIF
 .ENDIF			# "$(DEF10TARGETN)"!=""
 
