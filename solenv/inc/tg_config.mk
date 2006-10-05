@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_config.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:39:02 $
+#   last change: $Author: kz $ $Date: 2006-10-05 16:35:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -86,10 +86,10 @@ $(PROCESSOUT)$/registry$/schema$/$(PACKAGEDIR)$/%.xcs : %.xcs
     +$(RM) $(@:d)$*.tmp > $(NULLDEV)
     +$(RM) $(@:d)$*.val > $(NULLDEV)
     +$(RM) $(@:d)$*.san > $(NULLDEV)
-    
+
 $(PROCESSOUT)$/merge$/$(PACKAGEDIR)$/%.xcs : %.xcs
 # just a copy for now - insert "cfgex" commandline when required
-    +$(MKDIRHIER) $(@:d)
+    -$(MKDIRHIER) $(@:d)
     +$(COPY) $< $@
 
 # Create properties files for localized <info> contents (Currently not built)
@@ -159,7 +159,7 @@ $(XCU_LANG) : localize.sdf
 .ENDIF			# "$(XCU_LANG)"!=""
 
 $(PROCESSOUT)$/merge$/$(PACKAGEDIR)$/%.xcu : %.xcu
-    +$(MKDIRHIER) $(@:d)
+    -$(MKDIRHIER) $(@:d)
     $(WRAPCMD) $(CFGEX) -p $(PRJNAME) -i $(@:f) -o $@ -m localize.sdf -l all
 
 .IF "$(XCU_LANG)" != ""
@@ -194,7 +194,7 @@ $(PROCESSOUT)$/registry$/spool$/Langpack-%.xcu : Langpack.xcu.tmpl
     @echo -------------+ creating a Langpack module for locale $*
     -$(MKDIRHIER) $(@:d) 
     $(SED) -e "s/__LANGUAGE__/$*/" -f $(XSLDIR)$/delcomment.sed $< > $@
-    
+
 
 # --- modules ---
 .IF "$(XCU_MODULES)" != ""
