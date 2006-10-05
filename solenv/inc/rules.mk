@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.72 $
+#   $Revision: 1.73 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 13:09:14 $
+#   last change: $Author: kz $ $Date: 2006-10-05 12:36:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -297,79 +297,62 @@ $(SLO)$/%.obj : %.m
 .ENDIF		"$(OS)"=="MACOSX"
 
 # dependencies c / c++
-.IF "$(verbose)"==""
-noout=>& $(NULLDEV)
-.ENDIF
 
 $(MISC)$/s_%.dpcc : %.c
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
     @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
-    @+echo $@ : $(SLO)$/$(<:b).obj >> $@
+    @echo $@ : $(SLO)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
-    @+echo LAZY_DEPS=were_used_to_generate >> $@
+    @echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
 
 $(MISC)$/o_%.dpcc : %.c
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
     @+$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
     @echo $@ : $(OBJ)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
-    @+echo LAZY_DEPS=were_used_to_generate >> $@
+    @echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
 
 $(MISC)$/s_%.dpcc : %.cxx
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
     @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
-    @+echo $@ : $(SLO)$/$(<:b).obj >> $@
+    @echo $@ : $(SLO)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
-    @+echo LAZY_DEPS=were_used_to_generate >> $@
+    @echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
    
 $(MISC)$/o_%.dpcc : %.cxx
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
     @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
-    @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
+    @echo $@ : $(OBJ)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
-    @+echo LAZY_DEPS=were_used_to_generate >> $@
+    @echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
    
 $(MISC)$/s_%.dpcc : %.cpp
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
     @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
-    @+echo $@ : $(SLO)$/$(<:b).obj >> $@
+    @echo $@ : $(SLO)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
-    @+echo LAZY_DEPS=were_used_to_generate >> $@
+    @echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
    
 $(MISC)$/o_%.dpcc : %.cpp
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
     @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
-    @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
+    @echo $@ : $(OBJ)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
-    @+echo LAZY_DEPS=were_used_to_generate >> $@
+    @echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
    
 $(MISC)$/s_%.dpcc : $(MISC)$/%.c
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"	
     @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
@@ -377,14 +360,12 @@ $(MISC)$/s_%.dpcc : $(MISC)$/%.c
     @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
-    @+echo $@ : $(SLO)$/$(<:b).obj >> $@
+    @echo $@ : $(SLO)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
-    @+echo LAZY_DEPS=were_used_to_generate >> $@
+    @echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
    
 $(MISC)$/o_%.dpcc : $(MISC)$/%.c
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"	
     @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
@@ -392,14 +373,12 @@ $(MISC)$/o_%.dpcc : $(MISC)$/%.c
     @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
-    @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
+    @echo $@ : $(OBJ)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
-    @+echo LAZY_DEPS=were_used_to_generate >> $@
+    @echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
    
 $(MISC)$/s_%.dpcc : $(MISC)$/%.cxx
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"	
     @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
@@ -407,14 +386,12 @@ $(MISC)$/s_%.dpcc : $(MISC)$/%.cxx
     @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
-    @+echo $@ : $(SLO)$/$(<:b).obj >> $@
+    @echo $@ : $(SLO)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
-    @+echo LAZY_DEPS=were_used_to_generate >> $@
+    @echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
    
 $(MISC)$/o_%.dpcc : $(MISC)$/%.cxx
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"	
     @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
@@ -422,38 +399,32 @@ $(MISC)$/o_%.dpcc : $(MISC)$/%.cxx
     @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
-    @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
+    @echo $@ : $(OBJ)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
-    @+echo LAZY_DEPS=were_used_to_generate >> $@
+    @echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
    
 # dependencies objective-c
 
 $(MISC)$/s_%.dpcc : %.m
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
     @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
-    @+echo $@ : $(SLO)$/$(<:b).obj >> $@
+    @echo $@ : $(SLO)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
-    @+echo LAZY_DEPS=were_used_to_generate >> $@
+    @echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
    
 $(MISC)$/o_%.dpcc : %.m
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
     @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
-    @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
+    @echo $@ : $(OBJ)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
-    @+echo LAZY_DEPS=were_used_to_generate >> $@
+    @echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
    
 $(MISC)$/s_%.dpcc : $(MISC)$/%.m
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"	
     @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
@@ -461,14 +432,12 @@ $(MISC)$/s_%.dpcc : $(MISC)$/%.m
     @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
-    @+echo $@ : $(SLO)$/$(<:b).obj >> $@
+    @echo $@ : $(SLO)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
-    @+echo LAZY_DEPS=were_used_to_generate >> $@
+    @echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
    
 $(MISC)$/o_%.dpcc : $(MISC)$/%.m
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"	
     @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
@@ -476,65 +445,55 @@ $(MISC)$/o_%.dpcc : $(MISC)$/%.m
     @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
-    @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
+    @echo $@ : $(OBJ)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
-    @+echo LAZY_DEPS=were_used_to_generate >> $@
+    @echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
 
 # dependency dummy for *.s files
 
 $(MISC)$/s_%.dpcc : %.s
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
     @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
-    @+echo $@ : $(SLO)$/$(<:b).obj >> $@
+    @echo $@ : $(SLO)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
-    @+echo LAZY_DEPS=were_used_to_generate >> $@
+    @echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
 
 # generated source files.
 
 $(MISC)$/o_%.dpcc : 
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @+echo $@ : $(OBJ)$/$(@:b:^"__":s/__o_//).obj > $@
+    @echo $@ : $(OBJ)$/$(@:b:^"__":s/__o_//).obj > $@
    
 $(MISC)$/s_%.dpcc :
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @+echo $@ : $(SLO)$/$(@:b::^"__":s/__s_//).obj > $@
+    @echo $@ : $(SLO)$/$(@:b::^"__":s/__s_//).obj > $@
 
 # dependencies script files
 
 $(MISC)$/%.dpsc :
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
     @+-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))} >& $(NULLDEV)
     @$(MAKEDEPEND) -f - -p$(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))} -o.par -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(*:b).scp > $@
 .IF "$(LAZY_DEPS)"==""	
-    @+echo $@ : $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).par  >> $@
-    @+echo $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).par : $(*:b).scp >> $@
+    @echo $@ : $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).par  >> $@
+    @echo $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).par : $(*:b).scp >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
-    @+echo LAZY_DEPS=were_used_to_generate >> $@
+    @echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
 
 # dependencies rc files (native resources for windows)
 
 $(MISC)$/%.dprc : 
-    @echo ------------------------------ $(noout)
-    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
     @$(MAKEDEPEND) -f - -p$(RES) -o.res $(RCLANGFLAGS_{$(subst,$(@:d:d:d:u), $(@:d:d:u))}:u:s/ //) $(CDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) -I$(SOLARENV)$/inc $(*:b).rc >> $@
 .IF "$(LAZY_DEPS)"==""	
-#	@+echo $@ : $(RES)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).res  >> $@
-    @+echo $@ : $(RES)$/$(*:b).res  >> $@
+#	@echo $@ : $(RES)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).res  >> $@
+    @echo $@ : $(RES)$/$(*:b).res  >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
-    @+echo LAZY_DEPS=were_used_to_generate >> $@
+    @echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
 
 $(MISC)$/%.dpr :
@@ -558,26 +517,26 @@ $(MISC)$/%.dpz :
     +$(TYPE) $(mktmp $(ZIPDEPFILES:s/\/\\/)) | xargs -n 20 dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) make_zip_deps=true
 .ENDIF			# "$(USE_SHELL)"!="4nt"
     $(TYPE) $(ZIPDEPFILES) $(mktmp $(NULL)) | grep -v "CVS" >> $@
-    +echo zipdep_langs=$(alllangiso) >> $@
+    echo zipdep_langs=$(alllangiso) >> $@
     @+-$(RM) $(ZIPDEPFILES) >& $(NULLDEV)
 .ENDIF			# "$(nodep)"==""
 
 # Dependencies fuer java - Files
 
 $(MISC)$/%.dpj :
-    @+echo Making dpj...
+    @echo Making dpj...
 .IF "$(nodep)"!=""
 .IF "$(GUI)"=="UNX"
-    @+echo > $@
+    @echo > $@
 .ELSE
     @+$(ECHONL) > $@
 .ENDIF
 .ELSE 			# "$(ndep)"==""
 .IF "$(GUI)"=="UNX"
-    @+echo $(shell +$(STARDEP) @$(mktmp -o $@ -i $(CLASSDIR) $(foreach,i,$(JAVADEPINCLUDES:s/:/ /) -i $i) $(JAVACLASSFILES)))
+    @echo $(shell +$(STARDEP) @$(mktmp -o $@ -i $(CLASSDIR) $(foreach,i,$(JAVADEPINCLUDES:s/:/ /) -i $i) $(JAVACLASSFILES)))
 .ELSE
-    @+echo javadeps
-    @+echo +$(shell +$(STARDEP) @$(mktmp -o $@ -i $(CLASSDIR) $(foreach,i,$(JAVADEPINCLUDES:s/;/ /) -i $i) $(JAVACLASSFILES)))
+    @echo javadeps
+    @echo $(shell +$(STARDEP) @$(mktmp -o $@ -i $(CLASSDIR) $(foreach,i,$(JAVADEPINCLUDES:s/;/ /) -i $i) $(JAVACLASSFILES)))
 .ENDIF
 .ENDIF			# "$(nodep)"==""
 
@@ -643,7 +602,7 @@ $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR).xml : %.xml
 # dummy rule to make sure xml file is in place when used in settings.mk
 $(MISC)$/%.mk : $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR).xml
     +$(TOUCH) $@
-    +echo XML2MK_FILES += $(@:b) >> $@
+    echo XML2MK_FILES += $(@:b) >> $@
 
 #generate descriptions from xml
 $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR)_description.cxx : $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR).xml 
@@ -695,5 +654,5 @@ $(COMMONMISC)$/$(TARGET)$/%.mlf : $$(@:db).ulf
 # dirty hack
 # if local *.sdf file is missing
 %.sdf:
-    +echo > $@
+    echo > $@
 
