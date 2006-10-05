@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablespage.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:10:32 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:04:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,12 +123,6 @@ namespace dbaui
 
     private:
 
-
-        /** get the composed name of the entry given
-            @param _pEntry
-                the entry which's name is to be retrieved. Must be a leaf entry.
-        */
-        ::rtl::OUString getComposedEntryName(SvLBoxEntry* _pEntry);
 
         /** check the tables in <member>m_aTablesList</member> according to <arg>_rTables</arg>
         */
