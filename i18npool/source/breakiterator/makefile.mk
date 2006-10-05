@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 04:42:28 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:46:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -84,9 +82,9 @@ APP1STDLIBS = $(SALLIB)
 # Output of gencmn is redirected to OpenOffice_icu_tmp.c with the -t switch.
 $(MISC)$/OpenOffice_icu_dat.c :  $(MY_BRK_BRKFILES)
     +$(WRAPCMD) $(SOLARBINDIR)$/gencmn -e OpenOffice_icu -n OpenOffice_icu -t tmp -S -d $(MISC) O $(mktmp $(MY_BRK_BRKFILES:t"\n"))
-    +echo $(USQ)#ifdef _MSC_VER$(USQ) > $@
-    +echo $(USQ)#pragma warning( disable : 4229 4668 )$(USQ) >> $@
-    +echo $(USQ)#endif$(USQ) >> $@
+    echo $(USQ)#ifdef _MSC_VER$(USQ) > $@
+    echo $(USQ)#pragma warning( disable : 4229 4668 )$(USQ) >> $@
+    echo $(USQ)#endif$(USQ) >> $@
     +$(TYPE) $(@:s/_dat/_tmp/) >> $@
 $(MISC)$/OpenOffice_%.brk : data/%.txt
     +$(WRAPCMD) $(SOLARBINDIR)$/genbrk -r $< -o $(MISC)$/OpenOffice_$*.brk
