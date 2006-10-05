@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.182 $
+#   $Revision: 1.183 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:38:22 $
+#   last change: $Author: kz $ $Date: 2006-10-05 16:20:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1525,7 +1525,7 @@ $(EXCEPTIONSNOOPTFILES) : $(UNOUCRHEADER)
 $(UNOUCRHEADER) : $(UNOUCRTARGET)
 
 $(UNOUCROUT)$/%.flag :
-    @+-$(MKDIRHIER) $(@:d)
+    @-$(MKDIRHIER) $(@:d)
     @+$(TOUCH) $@
 
 $(UNOUCRTARGET) : $(UNOUCRDEP) $(UNOUCRTYPEFLAGS)
@@ -1659,8 +1659,8 @@ $(UNOIDLDBDOCTARGET) : $(UNOIDLDBDOCFILES) $(UNOIDLDBDOCREGS)
 
 .IF "$(SCP_PRODUCT_TYPE)"!=""
 $(SCP_PRODUCT_TYPE):
-    @+-$(MKDIRHIER) $(PAR)$/$@ >& $(NULLDEV)
-    @+-$(MKDIRHIER) $(BIN)$/$@ >& $(NULLDEV)
+    @-$(MKDIRHIER) $(PAR)$/$@ >& $(NULLDEV)
+    @-$(MKDIRHIER) $(BIN)$/$@ >& $(NULLDEV)
 
 .ENDIF			# "$(PARFILES)"!=""
 
@@ -1717,7 +1717,7 @@ $(TARGETDEPS) : $(LOCALIZE_ME_DEST)
 
 .IF "$(LOCALIZE_ME_DEST)"!=""
 $(LOCALIZE_ME_DEST) : $(LOCALIZE_ME) localize.sdf 
-    +-$(MKDIR) $(@:d)
+    -$(MKDIR) $(@:d)
     +-$(RM) $@
     $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:b:+"_tmpl")$(@:e) -o $(@:d)$/$(@:b:+"_tmpl")$(@:e).$(INPATH) -m localize.sdf -l all
     +$(RENAME) $(@:d)$/$(@:b:+"_tmpl")$(@:e).$(INPATH) $@
