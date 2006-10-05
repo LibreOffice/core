@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:32:37 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:44:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,10 +56,10 @@ $(BASEADDRESSES) .PHONY :
 .IF "$(product)"=="full"
     +$(PERL) rebase.pl -C $(BASEADDRESSES) -b $(STARTADDRESS) -d -e 10000 -l $(LOGFILE) -m $(MISC) -v -R $(SOLARBINDIR) -N $(EXCLUDELIST) $(IMAGENAMES)
 .ELSE	# "$(product)"=="full"
-    @+echo Doing nothing on non product builds ...
+    @echo Doing nothing on non product builds ...
 .ENDIF	# "$(product)"=="full"
 .ELSE	# "$(GUI)"=="WNT"
-    @+echo Nothing to do, 'rebase' is windows only.
+    @echo Nothing to do, 'rebase' is windows only.
 .ENDIF
 
 
