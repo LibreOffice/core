@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 04:30:12 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:45:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -153,14 +153,14 @@ TARGETDEPS+=$(ALWAYSDBGTARGET)
 # - ALWAYSDBG - files always compiled with debugging
 # --------------------------------------------------
 $(ALWAYSDBGTARGET):
-    @+echo --- ALWAYSDBGFILES ---
+    @echo --- ALWAYSDBGFILES ---
     @dmake $(MFLAGS) $(MAKEFILE) debug=true $(ALWAYSDBGFILES) ALWAYSDBG_FLAG=TRUE $(CALLMACROS)
-    @+echo --- ALWAYSDBGFILES OVER ---
+    @echo --- ALWAYSDBGFILES OVER ---
 
 $(ALWAYSDBGFILES):
-    @+echo --- ALWAYSDBG ---
+    @echo --- ALWAYSDBG ---
     @dmake $(MFLAGS) $(MAKEFILE) debug=true ALWAYSDBG_FLAG=TRUE $(CALLMACROS) $@
-    @+echo --- ALWAYSDBG OVER ---
+    @echo --- ALWAYSDBG OVER ---
 .ENDIF
 .ENDIF
 
