@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 15:38:28 $
+#   last change: $Author: kz $ $Date: 2006-10-05 13:08:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,8 @@ SRC1FILES =	\
 # ... object files ............................
 
 SLOFILES=	\
-        $(SLO)$/componentclientmonitor.obj		\
+        $(SLO)$/asyncmodaldialog.obj        \
+        $(SLO)$/imageprovider.obj           \
         $(SLO)$/singledoccontroller.obj		\
         $(SLO)$/datasourceconnector.obj		\
         $(SLO)$/linkeddocuments.obj			\
@@ -70,7 +71,7 @@ SLOFILES=	\
         $(SLO)$/RtfReader.obj				\
         $(SLO)$/propertysetitem.obj			\
         $(SLO)$/containermultiplexer.obj	\
-        $(SLO)$/querydesignaccess.obj		\
+        $(SLO)$/databaseobjectview.obj      \
         $(SLO)$/DExport.obj					\
         $(SLO)$/uiservices.obj				\
         $(SLO)$/RowSetDrop.obj				\
