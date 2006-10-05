@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:07:53 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:22:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1190,6 +1190,7 @@ void ScAccessibleEditLineTextData::ResetEditMode()
 
     DELETEZ(mpForwarder);
     DELETEZ(mpEditViewForwarder);
+    DELETEZ(mpViewForwarder);
     mbEditEngineCreated = sal_False;
 }
 
