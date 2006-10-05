@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:27:36 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:45:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -112,13 +112,6 @@ SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2EXPORTFILE=	exports.dxp
 DEF2NAME=	$(SHL2TARGET)
 
-# generate exports ------------------------------------------------
-#DEF1DEPN=      $(MISC)$/$(SHL1TARGET).flt
-#DEFLIB1NAME=   $(TARGET)
-#-----------------------------------------------------------------
-
-
-
 # ------------------------------------------------------------------
 
 APP1NOSAL=TRUE
@@ -133,20 +126,10 @@ APP1STDLIBS= \
     $(CPPULIB)
 
 
-
-
 LIBCIMT=MSVCPRTD.lib
 
-
-.IF "$(GUI)"=="WNT"
-#APP1STDLIBS += $(LIBCIMT)
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
-
-#$(MISC)$/$(SHL1TARGET).flt : makefile.mk
-#       +echo   _TI2       >$@
-#       +echo   _TI1      >>$@
 
