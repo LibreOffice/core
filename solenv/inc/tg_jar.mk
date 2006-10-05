@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_jar.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-18 10:02:49 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:40:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,12 +60,12 @@ $(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f) : $(subst,/,$/ $(DMAKE_WORK_DIR))$/$(
 $(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP)
     +-$(MKDIRHIER) $(@:d) >& $(NULLDEV)
     +-$(RM) $@ >& $(NULLDEV)
-    +echo Manifest-Version: 1.0 > $@
+    echo Manifest-Version: 1.0 > $@
 .IF "$(JARCLASSPATH)" != ""
-    +echo $(USQ)Class-Path: $(JARCLASSPATH)$(USQ) >> $@
+    echo $(USQ)Class-Path: $(JARCLASSPATH)$(USQ) >> $@
 .ENDIF
 # $(RSCREVISION) contains chars that must be quoted (for *NIX shells)
-    +echo $(USQ)Solar-Version: $(RSCREVISION)$(USQ) >> $@
+    echo $(USQ)Solar-Version: $(RSCREVISION)$(USQ) >> $@
 .IF "$(CUSTOMMANIFESTFILE)"!=""
     +$(TYPE) $(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f) >> $@
 .ENDIF			# "$(CUSTOMMANIFESTFILE)"!=""
