@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 09:58:20 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:18:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,20 +94,36 @@ const sal_Unicode SCF_DUMP_PLACEHOLDER  = '\x01';
 // ============================================================================
 // ============================================================================
 
+namespace {
+
+inline sal_Int32 lclReadCol( XclImpStream& rStrm, bool bCol16Bit )
+{
+    return bCol16Bit ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
+}
+
+inline sal_Int32 lclReadRow( XclImpStream& rStrm, bool bRow32Bit )
+{
+    return bRow32Bit ? rStrm.ReadInt32() : rStrm.ReaduInt16();
+}
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
 void Address::Read( XclImpStream& rStrm, bool bCol16Bit, bool bRow32Bit )
 {
-    mnRow = bRow32Bit ? rStrm.ReadInt32() : rStrm.ReaduInt16();
-    mnCol = bCol16Bit ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
+    mnRow = lclReadRow( rStrm, bRow32Bit );
+    mnCol = lclReadCol( rStrm, bCol16Bit );
 }
 
 // ----------------------------------------------------------------------------
 
 void Range::Read( XclImpStream& rStrm, bool bCol16Bit, bool bRow32Bit )
 {
-    maFirst.mnRow = bRow32Bit ? rStrm.ReadInt32() : rStrm.ReaduInt16();
-    maLast.mnRow = bRow32Bit ? rStrm.ReadInt32() : rStrm.ReaduInt16();
-    maFirst.mnCol = bCol16Bit ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
-    maLast.mnCol = bCol16Bit ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
+    maFirst.mnRow = lclReadRow( rStrm, bRow32Bit );
+    maLast.mnRow = lclReadRow( rStrm, bRow32Bit );
+    maFirst.mnCol = lclReadCol( rStrm, bCol16Bit );
+    maLast.mnCol = lclReadCol( rStrm, bCol16Bit );
 }
 
 // ----------------------------------------------------------------------------
@@ -414,6 +430,46 @@ void RootObjectBase::WriteErrorCodeItem( const sal_Char* pcName, sal_uInt8 nErrC
     WriteHexItem( pcName, nErrCode, mxErrCodes );
 }
 
+void RootObjectBase::WriteColIndexItem( const sal_Char* pcName, sal_Int32 nCol )
+{
+    ItemGuard aItem( Out(), pcName );
+    Out().WriteDec( nCol );
+    aItem.Cont();
+    StringHelper::AppendAddrCol( Out().GetLine(), nCol, true );
+}
+
+void RootObjectBase::WriteColRangeItem( const sal_Char* pcName, sal_Int32 nCol1, sal_Int32 nCol2 )
+{
+    ItemGuard aItem( Out(), pcName );
+    Out().WriteDec( nCol1 );
+    Out().WriteChar( SCF_DUMP_RANGESEP );
+    Out().WriteDec( nCol2 );
+    aItem.Cont();
+    StringHelper::AppendAddrCol( Out().GetLine(), nCol1, true );
+    Out().WriteChar( SCF_DUMP_RANGESEP );
+    StringHelper::AppendAddrCol( Out().GetLine(), nCol2, true );
+}
+
+void RootObjectBase::WriteRowIndexItem( const sal_Char* pcName, sal_Int32 nRow )
+{
+    ItemGuard aItem( Out(), pcName );
+    Out().WriteDec( nRow );
+    aItem.Cont();
+    StringHelper::AppendAddrRow( Out().GetLine(), nRow, true );
+}
+
+void RootObjectBase::WriteRowRangeItem( const sal_Char* pcName, sal_Int32 nRow1, sal_Int32 nRow2 )
+{
+    ItemGuard aItem( Out(), pcName );
+    Out().WriteDec( nRow1 );
+    Out().WriteChar( SCF_DUMP_RANGESEP );
+    Out().WriteDec( nRow2 );
+    aItem.Cont();
+    StringHelper::AppendAddrRow( Out().GetLine(), nRow1, true );
+    Out().WriteChar( SCF_DUMP_RANGESEP );
+    StringHelper::AppendAddrRow( Out().GetLine(), nRow2, true );
+}
+
 void RootObjectBase::WriteAddressItem( const sal_Char* pcName, const Address& rPos )
 {
     ItemGuard aItem( Out(), pcName );
@@ -500,6 +556,36 @@ void RootObjectBase::DumpFormulaResult( const sal_Char* pcName )
     }
     else
         WriteDecItem( "value", SVBT64ToDouble( pnResult ) );
+}
+
+sal_Int32 RootObjectBase::DumpColIndex( const sal_Char* pcName, bool bCol16Bit )
+{
+    sal_Int32 nCol = lclReadCol( *mxStrm, bCol16Bit );
+    WriteColIndexItem( pcName ? pcName : "col-idx", nCol );
+    return nCol;
+}
+
+sal_Int32 RootObjectBase::DumpColRange( const sal_Char* pcName, bool bCol16Bit )
+{
+    sal_Int32 nCol1 = lclReadCol( *mxStrm, bCol16Bit );
+    sal_Int32 nCol2 = lclReadCol( *mxStrm, bCol16Bit );
+    WriteColRangeItem( pcName ? pcName : "col-range", nCol1, nCol2 );
+    return nCol2 - nCol1 + 1;
+}
+
+sal_Int32 RootObjectBase::DumpRowIndex( const sal_Char* pcName, bool bRow32Bit )
+{
+    sal_Int32 nRow = lclReadRow( *mxStrm, bRow32Bit );
+    WriteRowIndexItem( pcName ? pcName : "row-idx", nRow );
+    return nRow;
+}
+
+sal_Int32 RootObjectBase::DumpRowRange( const sal_Char* pcName, bool bRow32Bit )
+{
+    sal_Int32 nRow1 = lclReadRow( *mxStrm, bRow32Bit );
+    sal_Int32 nRow2 = lclReadRow( *mxStrm, bRow32Bit );
+    WriteRowRangeItem( pcName ? pcName : "row-range", nRow1, nRow2 );
+    return nRow2 - nRow1 + 1;
 }
 
 Address RootObjectBase::DumpAddress( const sal_Char* pcName, bool bCol16Bit, bool bRow32Bit )
@@ -1961,6 +2047,26 @@ void WorkbookStreamObject::ImplDumpRecord()
             DumpCodePageRec();
         break;
 
+        case EXC_ID_COLINFO:
+            DumpColRange();
+            DumpDec< sal_uInt16 >( "col-width", "CONV-COLWIDTH" );
+            DumpXfIdx( "default-xf-idx" );
+            DumpHex< sal_uInt16 >( "flags", "COLINFO-FLAGS" );
+            DumpUnused( 2 );
+        break;
+
+        case EXC_ID_COLUMNDEFAULT:
+            Out().ResetItemIndex();
+            for( sal_Int32 nCol = 0, nCount = DumpColRange(); nCol < nCount; ++nCol )
+                DumpXfIdx( "#xf-idx", true );
+            DumpUnused( 2 );
+        break;
+
+        case EXC_ID_COLWIDTH:
+            DumpColRange( 0, false );
+            DumpDec< sal_uInt16 >( "col-width", "CONV-COLWIDTH" );
+        break;
+
         case EXC_ID3_DEFROWHEIGHT:
             DumpHex< sal_uInt16 >( "flags", "DEFROWHEIGHT-FLAGS" );
             DumpDec< sal_uInt16 >( "row-height", "CONV-TWIP-TO-PT" );
@@ -2023,6 +2129,30 @@ void WorkbookStreamObject::ImplDumpRecord()
         case EXC_ID_RK:
             DumpCellHeader();
             DumpRk( "value" );
+        break;
+
+        case EXC_ID2_ROW:
+        {
+            DumpRowIndex();
+            DumpColIndex( "first-used-col-idx" );
+            DumpColIndex( "first-free-col-idx" );
+            DumpHex< sal_uInt16 >( "row-height", "ROW-HEIGHT" );
+            DumpUnused( 2 );
+            bool bHasDefXf = DumpBool< sal_uInt8 >( "has-default-xf" );
+            DumpDec< sal_uInt16 >( "cell-offset" );
+            if( bHasDefXf ) DumpXfIdx( "default-format", true );
+            if( bHasDefXf ) DumpXfIdx( "default-xf-idx", false );
+        }
+        break;
+
+        case EXC_ID3_ROW:
+            DumpRowIndex();
+            DumpColIndex( "first-used-col-idx" );
+            DumpColIndex( "first-free-col-idx" );
+            DumpHex< sal_uInt16 >( "row-height", "ROW-HEIGHT" );
+            DumpUnused( (eBiff <= EXC_BIFF4) ? 2 : 4 );
+            if( eBiff <= EXC_BIFF4 ) DumpDec< sal_uInt16 >( "cell-offset" );
+            DumpHex< sal_uInt32 >( "flags", "ROW-FLAGS" );
         break;
 
         case EXC_ID_SST:
