@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:05:10 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:20:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -595,8 +595,12 @@ public:
 
     /** Sets all "attribute used" flags to the passed state. */
     void                SetAllUsedFlags( bool bUsed );
+    /** Returns true, if any "attribute used" flags are ste in this XF. */
+    bool                HasUsedFlags() const;
 
+    /** Returns true, if this is a hard cell format. */
     inline bool         IsCellXF() const    { return mbCellXF; }
+    /** Returns true, if this is a cell style. */
     inline bool         IsStyleXF() const   { return !IsCellXF(); }
 
 protected:
