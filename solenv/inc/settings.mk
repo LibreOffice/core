@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.201 $
+#   $Revision: 1.202 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-22 08:55:46 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:38:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@ MKFILENAME:=SETTINGS.MK
 # smaller/greater arithmetic's like ".IF 400<=200" are an OOo extention to
 # the initial dmake 4.1PL0 (unfortunately called 4.10) version and are
 # tested implicitly by the construction below.
-.IF $(MAKEVERSION:s/-cvs//:s/.//:s/410/41/)<=42
-.ERROR : ; @echo Forced error: dmake version 4.3 or newer is needed!
+.IF $(MAKEVERSION:s/-cvs//:s/.//:s/410/41/)<=45
+.ERROR : ; @echo Forced error: dmake version 4.6 or newer is needed!
 force_dmake_to_error
 .ENDIF
 
@@ -100,9 +100,9 @@ WRONG_SOURCEVERSION
 .IF "$(BSCLIENT)"=="TRUE"
 .IF "$(UPDATER)"!="YES"
 incorrect_settings:
-    @+echo "#"
-    @+echo "#" ERROR: setsolar option -bsclient used but UPDATER=YES not set!
-    @+echo "#"
+    @echo "#"
+    @echo "#" ERROR: setsolar option -bsclient used but UPDATER=YES not set!
+    @echo "#"
     force_dmake_to_error
 .ENDIF
 .ENDIF
@@ -617,14 +617,14 @@ LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
 # (See iz62795)
 $(OUT)$/inc$/%world.mk :
     @+$(MKOUT) $(ROUT)
-    @+echo $(EMQ)# > $@
+    @echo $(EMQ)# > $@
 
 .INCLUDE : $(OUT)$/inc$/myworld.mk
 
 .IF "$(common_build)"!=""
 $(LOCAL_COMMON_OUT)$/inc$/%world.mk :
     @+$(MKOUT) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(ROUT))
-    @+echo $(EMQ)# > $@
+    @echo $(EMQ)# > $@
 
 .INCLUDE : $(LOCAL_COMMON_OUT)$/inc$/myworld.mk
 .ENDIF			# "$(common_build)"!=""
@@ -717,7 +717,7 @@ WINVERSIONNAMES=$(UNIXVERSIONNAMES)
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="WNT"
-SHELLLIB=$(LIBPRE) gdi32.lib $(LIBPRE) shell32.lib $(LIBPRE) advapi32.lib $(LIBPRE) comdlg32.lib
+SHELLLIB=gdi32.lib shell32.lib advapi32.lib comdlg32.lib
 .ENDIF
 
 .IF "$(GUI)" != "MAC"
@@ -1204,14 +1204,14 @@ SOLAR_JAVA!:=
 .EXPORT : SOLAR_JAVA
 .IF "$(JDKPATH)"!=""
 environment_confusion:
-    @+echo ----------------------------------------------------------
-    @+echo -
-    @+echo - Error!
-    @+echo -
-    @+echo - $$JDKPATH and $$DISABLE_JAVA are set. this will lead
-    @+echo - to impropper results.
-    @+echo -
-    @+echo ----------------------------------------------------------
+    @echo ----------------------------------------------------------
+    @echo -
+    @echo - Error!
+    @echo -
+    @echo - $$JDKPATH and $$DISABLE_JAVA are set. this will lead
+    @echo - to impropper results.
+    @echo -
+    @echo ----------------------------------------------------------
     force_dmake_to_error
 .ENDIF          # "$(JDKPATH)"!=""
 .ENDIF          # "$(DISABLE_JAVA)"==""
@@ -1295,10 +1295,6 @@ CDEFS+=-DUPD=\"$(UPD)\" -DMINOR=\"$(LAST_MINOR)\" -DBUILD_ID=\"$(BUILD)\"
 CDEFS+= -DTF_NEWEX
 .ENDIF
 
-#.IF "$(UPDATER)"=="YES"
-#SVXLIGHT=TRUE
-#.ENDIF
-
 #defaults for UCR HEADER
 UNOUCRBASE*=UCR
 UNOUCROUT*=$(OUT)$/inc$/$(TARGET)
@@ -1354,6 +1350,10 @@ $(COMP8TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP8TYP
 .INCLUDE .IGNORE : $(MISC)$/$(COMP9TYPELIST).mk
 $(COMP9TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP9TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
+
+# some place to define these jars for SO environment
+XML_APIS_JAR*=$(SOLARBINDIR)$/xml-apis.jar
+XERCES_JAR*=$(SOLARBINDIR)$/xercesImpl.jar
 
 # workaround for strange dmake bug:
 # if the previous block was a rule or a target, "\#" isn't recognized
