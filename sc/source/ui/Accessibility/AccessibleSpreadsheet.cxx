@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:07:31 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:21:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,11 +110,12 @@ ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
     mpViewShell(pViewShell),
     mpMarkedRanges(NULL),
     mpSortedMarkedCells(NULL),
+    mpAccDoc(pAccDoc),
+    mpAccCell(NULL),
     meSplitPos(eSplitPos),
     mbHasSelection(sal_False),
-    mpAccDoc(pAccDoc),
-    mbIsFocusSend(sal_False),
-    mpAccCell(NULL)
+    mbDelIns(sal_False),
+    mbIsFocusSend(sal_False)
 {
     maVisCells = GetVisCells(GetVisArea(pViewShell, eSplitPos));
     if (pViewShell)
