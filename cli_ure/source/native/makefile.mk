@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 13:05:01 $
+#   last change: $Author: kz $ $Date: 2006-10-05 11:06:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ CFLAGSCXX += -clr:oldSyntax
 .ENDIF
 
 $(ASSEMBLY_ATTRIBUTES) : assembly.cxx $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk
-    @+echo $(ASSEMBLY_KEY_X)
+    @echo $(ASSEMBLY_KEY_X)
     $(GNUCOPY) -p assembly.cxx $@
     +echo $(ECHOQUOTE) \
     [assembly:System::Reflection::AssemblyVersion( "$(CLI_CPPUHELPER_NEW_VERSION)" )]; $(ECHOQUOTE) \
