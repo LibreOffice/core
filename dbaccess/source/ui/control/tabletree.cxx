@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:02:57 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:03:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 #ifndef _DBAUI_TABLETREE_HRC_
 #include "tabletree.hrc"
 #endif
+#ifndef DBACCESS_IMAGEPROVIDER_HXX
+#include "imageprovider.hxx"
+#endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
@@ -59,6 +62,9 @@
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
+#endif
+#ifndef _COM_SUN_STAR_SDB_APPLICATION_DATABASEOBJECT_HPP_
+#include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
@@ -87,6 +93,9 @@
 #ifndef _DBAUI_LISTVIEWITEMS_HXX_
 #include "listviewitems.hxx"
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 #include <algorithm>
 
 //.........................................................................
@@ -105,108 +114,140 @@ using namespace ::com::sun::star::container;
 using namespace ::dbtools;
 using namespace ::comphelper;
 
+namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
+
 //========================================================================
 //= OTableTreeListBox
 //========================================================================
 OTableTreeListBox::OTableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, WinBits nWinStyle,sal_Bool _bVirtualRoot )
     :OMarkableTreeListBox(pParent,_rxORB,nWinStyle)
+    ,m_pImageProvider( new ImageProvider )
     ,m_bVirtualRoot(_bVirtualRoot)
 {
-    notifyHiContrastChanged();
+    implSetDefaultImages();
 }
 //------------------------------------------------------------------------
 OTableTreeListBox::OTableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, const ResId& rResId ,sal_Bool _bVirtualRoot)
     :OMarkableTreeListBox(pParent,_rxORB,rResId)
+    ,m_pImageProvider( new ImageProvider )
     ,m_bVirtualRoot(_bVirtualRoot)
 {
-    notifyHiContrastChanged();
+    implSetDefaultImages();
 }
+
+// -----------------------------------------------------------------------------
+OTableTreeListBox::~OTableTreeListBox()
+{
+}
+
+// -----------------------------------------------------------------------------
+void OTableTreeListBox::implSetDefaultImages()
+{
+    ImageProvider aImageProvider;
+    SetDefaultExpandedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE, false ), BMP_COLOR_NORMAL );
+    SetDefaultExpandedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE, true ), BMP_COLOR_HIGHCONTRAST );
+    SetDefaultCollapsedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE, false ), BMP_COLOR_NORMAL );
+    SetDefaultCollapsedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE, true ), BMP_COLOR_HIGHCONTRAST );
+}
+
+// -----------------------------------------------------------------------------
+bool  OTableTreeListBox::isFolderEntry( const SvLBoxEntry* _pEntry ) const
+{
+   return reinterpret_cast< int >( _pEntry->GetUserData() ) == FOLDER_INDICATOR;
+}
+
 // -----------------------------------------------------------------------------
 void OTableTreeListBox::notifyHiContrastChanged()
 {
-    sal_Bool bHiContrast = GetBackground().GetColor().IsDark();
-    m_aTableImage = Image(ModuleRes(bHiContrast ? TABLE_TREE_ICON_SCH : TABLE_TREE_ICON));
-    m_aViewImage = Image(ModuleRes(bHiContrast ? VIEW_TREE_ICON_SCH : VIEW_TREE_ICON));
-
-    SetDefaultExpandedEntryBmp(Image(ModuleRes(bHiContrast ? TABLEFOLDER_TREE_ICON_SCH : TABLEFOLDER_TREE_ICON)));
-    SetDefaultCollapsedEntryBmp(Image(ModuleRes(bHiContrast ? TABLEFOLDER_TREE_ICON_SCH : TABLEFOLDER_TREE_ICON)));
+    implSetDefaultImages();
 
     SvLBoxEntry* pEntryLoop = First();
     while (pEntryLoop)
     {
-        sal_Int32 nType = reinterpret_cast<sal_IntPtr>(pEntryLoop->GetUserData());
-        if ( nType )
+        USHORT nCount = pEntryLoop->ItemCount();
+        for (USHORT i=0;i<nCount;++i)
         {
-            USHORT nCount = pEntryLoop->ItemCount();
-            for (USHORT i=0;i<nCount;++i)
+            SvLBoxItem* pItem = pEntryLoop->GetItem(i);
+            if ( pItem && pItem->IsA() == SV_ITEM_ID_LBOXCONTEXTBMP)
             {
-                SvLBoxItem* pItem = pEntryLoop->GetItem(i);
-                if ( pItem && pItem->IsA() == SV_ITEM_ID_LBOXCONTEXTBMP)
+                SvLBoxContextBmp* pContextBitmapItem = static_cast< SvLBoxContextBmp* >( pItem );
+
+                Image aImage, aImageHC;
+                if ( isFolderEntry( pEntryLoop ) )
                 {
-                    Image aImage;
-                    switch( nType )
-                    {
-                        case TABLE_TYPE:    aImage = m_aTableImage; break;
-                        case VIEW_TYPE:     aImage = m_aViewImage;  break;
-                        default:            aImage = Image(ModuleRes(bHiContrast ? TABLEFOLDER_TREE_ICON_SCH : TABLEFOLDER_TREE_ICON));
-                    }
-                    static_cast<SvLBoxContextBmp*>(pItem)->SetBitmap1(aImage);
-                    static_cast<SvLBoxContextBmp*>(pItem)->SetBitmap2(aImage);
-                    break;
+                    aImage = m_pImageProvider->getFolderImage( DatabaseObject::TABLE, false );
+                    aImageHC = m_pImageProvider->getFolderImage( DatabaseObject::TABLE, true );
                 }
+                else
+                {
+                    String sCompleteName( getQualifiedTableName( pEntryLoop ) );
+                    aImage = m_pImageProvider->getImage( sCompleteName, DatabaseObject::TABLE, false );
+                    aImageHC = m_pImageProvider->getImage( sCompleteName, DatabaseObject::TABLE, true );
+                }
+
+                pContextBitmapItem->SetBitmap1( aImage, BMP_COLOR_NORMAL );
+                pContextBitmapItem->SetBitmap2( aImage, BMP_COLOR_NORMAL );
+                pContextBitmapItem->SetBitmap1( aImageHC, BMP_COLOR_HIGHCONTRAST );
+                pContextBitmapItem->SetBitmap2( aImageHC, BMP_COLOR_HIGHCONTRAST );
+                // TODO: Now that we give both images to the entry item, it is not necessary anymore
+                // to do this anytime HC changes - the tree control will do this itself now.
+                // We would only need to properly initialize newly inserted entries.
+                break;
             }
         }
         pEntryLoop = Next(pEntryLoop);
     }
 }
-//------------------------------------------------------------------------
-void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _xConnection ) throw(SQLException)
-{
-    Reference< XDatabaseMetaData > xMetaData;
 
+//------------------------------------------------------------------------
+void OTableTreeListBox::implOnNewConnection( const Reference< XConnection >& _rxConnection )
+{
+    m_xConnection = _rxConnection;
+    m_pImageProvider.reset( new ImageProvider( m_xConnection  ) );
+}
+
+//------------------------------------------------------------------------
+void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConnection ) throw(SQLException)
+{
     Sequence< ::rtl::OUString > sTables, sViews;
-    DBG_ASSERT(m_xORB.is(), "OTableTreeListBox::UpdateTableList : please use setServiceFactory to give me a service factory !");
 
     String sCurrentActionError;
-    String sCurrentActionDetails;
     try
     {
-        if (m_xORB.is())
+        Reference< XTablesSupplier > xTableSupp( _rxConnection, UNO_QUERY_THROW );
+        sCurrentActionError = String(ModuleRes(STR_NOTABLEINFO));
+
+        Reference< XNameAccess > xTables,xViews;
+
+        Reference< XViewsSupplier > xViewSupp( _rxConnection, UNO_QUERY );
+        if ( xViewSupp.is() )
         {
-
-            sCurrentActionDetails = String();
-            xMetaData = _xConnection->getMetaData();
-
-            Reference< XTablesSupplier > xTableSupp(_xConnection,UNO_QUERY);
-            sCurrentActionError = String(ModuleRes(STR_NOTABLEINFO));
-
-            Reference< XNameAccess > xTables,xViews;
-
-            xTables = xTableSupp->getTables();
-            Reference< XViewsSupplier > xViewSupp(xTableSupp,UNO_QUERY);
-            if ( xViewSupp.is() )
-            {
-                xViews = xViewSupp->getViews();
-                if (xViews.is())
-                    sViews = xViews->getElementNames();
-            }
-
-            if (xTables.is())
-                sTables = xTables->getElementNames();
+            xViews = xViewSupp->getViews();
+            if (xViews.is())
+                sViews = xViews->getElementNames();
         }
+
+        xTables = xTableSupp->getTables();
+        if (xTables.is())
+            sTables = xTables->getElementNames();
     }
     catch(RuntimeException&)
     {
         DBG_ERROR("OTableTreeListBox::UpdateTableList : caught an RuntimeException!");
     }
+    catch ( const SQLException& )
+    {
+        throw;
+    }
     catch(Exception&)
     {
-        // a non-SQLException exception occured ... simply throw an SQLContext
-        SQLContext aExtendedInfo;
-        throw aExtendedInfo;
+        // a non-SQLException exception occured ... simply throw an SQLException
+        SQLException aInfo;
+        aInfo.Message = sCurrentActionError;
+        throw aInfo;
     }
 
-    UpdateTableList(xMetaData, sTables,sViews);
+    UpdateTableList( _rxConnection, sTables, sViews );
 }
 // -----------------------------------------------------------------------------
 namespace
@@ -232,7 +273,7 @@ namespace
 }
 // -----------------------------------------------------------------------------
 void OTableTreeListBox::UpdateTableList(
-                const Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConnMetaData,
+                const Reference< XConnection >& _rxConnection,
                 const Sequence< ::rtl::OUString>& _rTables,
                 const Sequence< ::rtl::OUString>& _rViews
             )
@@ -243,16 +284,21 @@ void OTableTreeListBox::UpdateTableList(
     const ::rtl::OUString* pEnd = _rTables.getConstArray() + _rTables.getLength();
     try
     {
-        ::std::transform(pIter,pEnd,aTables.begin(),OViewSetter(_rViews,_rxConnMetaData.is() ? _rxConnMetaData->supportsMixedCaseQuotedIdentifiers() : sal_False));
+        Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData(), UNO_QUERY_THROW );
+        ::std::transform( pIter, pEnd,
+            aTables.begin(), OViewSetter( _rViews, xMeta->supportsMixedCaseQuotedIdentifiers() ) );
     }
     catch(Exception&)
     {
+        DBG_UNHANDLED_EXCEPTION();
     }
-    UpdateTableList(_rxConnMetaData,aTables);
+    UpdateTableList( _rxConnection, aTables );
 }
 //------------------------------------------------------------------------
-void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _rxConnMetaData, const TNames& _rTables)
+void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConnection, const TNames& _rTables )
 {
+    implOnNewConnection( _rxConnection );
+
     // throw away all the old stuff
     Clear();
 
@@ -274,7 +320,7 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
                 sRootEntryText  = String(ModuleRes(STR_ALL_VIEWS));
             else
                 sRootEntryText  = String(ModuleRes(STR_ALL_TABLES_AND_VIEWS));
-            pAllObjects = InsertEntry(sRootEntryText,NULL,FALSE,LIST_APPEND,reinterpret_cast<void*>(FOLDER_TYPE));
+            pAllObjects = InsertEntry( sRootEntryText, NULL, FALSE, LIST_APPEND, reinterpret_cast< void* >( FOLDER_INDICATOR ) );
         }
 
         if ( _rTables.empty() )
@@ -285,22 +331,20 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
         TNames::const_iterator aIter = _rTables.begin();
         TNames::const_iterator aEnd = _rTables.end();
 
+        Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData(), UNO_QUERY_THROW );
         for ( ; aIter != aEnd; ++aIter )
         {
             // add the entry
             implAddEntry(
-                _rxConnMetaData,
+                xMeta,
                 aIter->first,
-                aIter->second ? m_aViewImage : m_aTableImage,
-                pAllObjects,
-                aIter->second ? VIEW_TYPE : TABLE_TYPE,
                 sal_False
             );
         }
     }
-    catch(RuntimeException&)
+    catch ( const Exception& )
     {
-        DBG_ERROR("OTableTreeListBox::UpdateTableList : caught a RuntimeException!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 //------------------------------------------------------------------------
@@ -398,68 +442,62 @@ void OTableTreeListBox::InitEntry(SvLBoxEntry* _pEntry, const XubString& _rStrin
 
 //------------------------------------------------------------------------
 SvLBoxEntry* OTableTreeListBox::implAddEntry(
-        const Reference< XDatabaseMetaData >& _rxConnMetaData,
+        const Reference< XDatabaseMetaData >& _rxMeta,
         const ::rtl::OUString& _rTableName,
-        const Image& _rImage,
-        SvLBoxEntry* _pParentEntry,
-        sal_Int32 _nType,
         sal_Bool _bCheckName
     )
 {
+    OSL_PRECOND( _rxMeta.is(), "OTableTreeListBox::implAddEntry: invalid meta data!" );
+    if ( !_rxMeta.is() )
+        return NULL;
+
     // split the complete name into it's components
     ::rtl::OUString sCatalog, sSchema, sName;
-    qualifiedNameComponents(_rxConnMetaData, _rTableName, sCatalog, sSchema, sName,::dbtools::eInDataManipulation);
+    qualifiedNameComponents( _rxMeta, _rTableName, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
+
+    SvLBoxEntry* pParentEntry = getAllObjectsEntry();
 
     SvLBoxEntry* pCat = NULL;
     SvLBoxEntry* pSchema = NULL;
     if (sCatalog.getLength())
     {
-        pCat = GetEntryPosByName(sCatalog, _pParentEntry);
+        pCat = GetEntryPosByName(sCatalog, pParentEntry);
         if (!pCat)
-            pCat = InsertEntry(sCatalog, _pParentEntry,FALSE,LIST_APPEND,reinterpret_cast<void*>(FOLDER_TYPE));
-        _pParentEntry = pCat;
+            pCat = InsertEntry( sCatalog, pParentEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( FOLDER_INDICATOR ) );
+        pParentEntry = pCat;
     }
 
     if (sSchema.getLength())
     {
-        pSchema = GetEntryPosByName(sSchema, _pParentEntry);
+        pSchema = GetEntryPosByName(sSchema, pParentEntry);
         if (!pSchema)
-            pSchema = InsertEntry(sSchema, _pParentEntry,FALSE,LIST_APPEND,reinterpret_cast<void*>(FOLDER_TYPE));
-        _pParentEntry = pSchema;
+            pSchema = InsertEntry( sSchema, pParentEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( FOLDER_INDICATOR ) );
+        pParentEntry = pSchema;
     }
 
     SvLBoxEntry* pRet = NULL;
-    if ( !_bCheckName || !GetEntryPosByName(sName, _pParentEntry))
-        pRet = InsertEntry(sName, _rImage, _rImage, _pParentEntry,FALSE,LIST_APPEND,reinterpret_cast<void*>(_nType));
+    if ( !_bCheckName || !GetEntryPosByName( sName, pParentEntry ) )
+    {
+        pRet = InsertEntry( sName, pParentEntry, FALSE, LIST_APPEND );
+
+        Image aImage( m_pImageProvider->getImage( _rTableName, DatabaseObject::TABLE, false ) );
+        Image aImageHC( m_pImageProvider->getImage( _rTableName, DatabaseObject::TABLE, true ) );
+        SetExpandedEntryBmp( pRet, aImage, BMP_COLOR_NORMAL );
+        SetCollapsedEntryBmp( pRet, aImage, BMP_COLOR_NORMAL );
+        SetExpandedEntryBmp( pRet, aImageHC, BMP_COLOR_HIGHCONTRAST );
+        SetCollapsedEntryBmp( pRet, aImageHC, BMP_COLOR_HIGHCONTRAST );
+    }
     return pRet;
 }
 
 //------------------------------------------------------------------------
-SvLBoxEntry* OTableTreeListBox::addedTable( const Reference< XConnection >& _rxConn, const ::rtl::OUString& _rName, const Any& _rObject )
+SvLBoxEntry* OTableTreeListBox::addedTable( const ::rtl::OUString& _rName )
 {
     try
     {
-        // get the connection meta data
         Reference< XDatabaseMetaData > xMeta;
-        if (_rxConn.is()) xMeta = _rxConn->getMetaData();
-        if (!xMeta.is())
-        {
-            DBG_ERROR( "OTableTreeListBox::addedTable: invalid connection!" );
-            return NULL;
-        }
-
-        sal_Int32 nType = TABLE_TYPE;
-        Reference<XPropertySet> xProp(_rObject,UNO_QUERY);
-        if ( xProp.is() )
-        {
-            ::rtl::OUString sValue;
-            xProp->getPropertyValue(PROPERTY_TYPE) >>= sValue;
-            if ( sValue.equalsAscii("VIEW") )
-                nType = VIEW_TYPE;
-        }
-        // add the entry
-        return implAddEntry( xMeta, _rName, nType == TABLE_TYPE ? m_aTableImage : m_aViewImage, getAllObjectsEntry(),nType );
-            // TODO: the image
+        if ( impl_getAndAssertMetaData( xMeta ) )
+            return implAddEntry( xMeta, _rName );
     }
     catch( const Exception& )
     {
@@ -469,18 +507,60 @@ SvLBoxEntry* OTableTreeListBox::addedTable( const Reference< XConnection >& _rxC
 }
 
 //------------------------------------------------------------------------
-SvLBoxEntry* OTableTreeListBox::getEntryByQualifiedName( const Reference< XConnection >& _rxConn, const ::rtl::OUString& _rName )
+bool OTableTreeListBox::impl_getAndAssertMetaData( Reference< XDatabaseMetaData >& _out_rMetaData ) const
+{
+    if ( m_xConnection.is() )
+        _out_rMetaData = m_xConnection->getMetaData();
+    OSL_PRECOND( _out_rMetaData.is(), "OTableTreeListBox::impl_getAndAssertMetaData: invalid current connection!" );
+    return _out_rMetaData.is();
+}
+
+//------------------------------------------------------------------------
+String OTableTreeListBox::getQualifiedTableName( SvLBoxEntry* _pEntry ) const
+{
+    OSL_PRECOND( !isFolderEntry( _pEntry ), "OTableTreeListBox::getQualifiedTableName: folder entries not allowed here!" );
+
+    Reference< XDatabaseMetaData > xMeta;
+    if ( !impl_getAndAssertMetaData( xMeta ) )
+        return String();
+
+    ::rtl::OUString sCatalog;
+    ::rtl::OUString sSchema;
+    ::rtl::OUString sTable;
+
+    SvLBoxEntry* pSchema = GetParent( _pEntry );
+    if ( pSchema )
+    {
+        SvLBoxEntry* pCatalog = GetParent( pSchema );
+        if  (   pCatalog
+            ||  (   xMeta->supportsCatalogsInDataManipulation()
+                &&  !xMeta->supportsSchemasInDataManipulation()
+                )   // here we support catalog but no schema
+            )
+        {
+            if ( pCatalog == NULL )
+            {
+                pCatalog = pSchema;
+                pSchema = NULL;
+            }
+            sCatalog = GetEntryText( pCatalog );
+        }
+        if ( pSchema )
+            sSchema = GetEntryText(pSchema);
+    }
+    sTable = GetEntryText( _pEntry );
+
+    return ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sTable, sal_False, ::dbtools::eInDataManipulation );
+}
+
+//------------------------------------------------------------------------
+SvLBoxEntry* OTableTreeListBox::getEntryByQualifiedName( const ::rtl::OUString& _rName )
 {
     try
     {
-        // get the connection meta data
         Reference< XDatabaseMetaData > xMeta;
-        if (_rxConn.is()) xMeta = _rxConn->getMetaData();
-        if (!xMeta.is())
-        {
-            DBG_ERROR( "OTableTreeListBox::removedTable: invalid connection!" );
+        if ( !impl_getAndAssertMetaData( xMeta ) )
             return NULL;
-        }
 
         // split the complete name into it's components
         ::rtl::OUString sCatalog, sSchema, sName;
@@ -512,13 +592,13 @@ SvLBoxEntry* OTableTreeListBox::getEntryByQualifiedName( const Reference< XConne
     return NULL;
 }
 //------------------------------------------------------------------------
-void OTableTreeListBox::removedTable( const Reference< XConnection >& _rxConn, const ::rtl::OUString& _rName )
+void OTableTreeListBox::removedTable( const ::rtl::OUString& _rName )
 {
     try
     {
-        SvLBoxEntry* pEntry = getEntryByQualifiedName(_rxConn,_rName);
+        SvLBoxEntry* pEntry = getEntryByQualifiedName( _rName );
         if ( pEntry )
-            GetModel()->Remove(pEntry);
+            GetModel()->Remove( pEntry );
     }
     catch( const Exception& )
     {
