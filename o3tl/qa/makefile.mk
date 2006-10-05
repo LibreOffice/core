@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: thb $ $Date: 2006-01-25 16:18:16 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:59:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,9 +74,9 @@ SLOFILES=$(SHL1OBJS)
 # --- Enable test execution in normal build ------------------------
 
 unittest : $(SHL1TARGETN)
-        @+echo ----------------------------------------------------------
-        @+echo - start unit test on library $(SHL1TARGETN)
-        @+echo ----------------------------------------------------------
+        @echo ----------------------------------------------------------
+        @echo - start unit test on library $(SHL1TARGETN)
+        @echo ----------------------------------------------------------
         testshl2 $(SHL1TARGETN)
 
 ALLTAR : unittest
