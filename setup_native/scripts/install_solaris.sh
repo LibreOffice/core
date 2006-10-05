@@ -14,11 +14,53 @@ help()
   echo
   echo "Usage:" $0 "<pkg-source-dir> <office-installation-dir> [-l]"
   echo "    <pkg-source-dir>:       directory *only* containing the Solaris pkg packages to be installed"
+  echo "                            or language pack shell script containing the Solaris pkg packages"
   echo "    <office-installation-dir>: directory to where the office and the pkg database will get installed into"
   echo
   echo "Optional Parameter:"
   echo "    -l :              create a link \"soffice\" in $HOME"
   echo "    -h :              output this help"
+}
+
+try_to_unpack_languagepack_file()
+{
+  FILENAME=$PACKAGE_PATH
+
+  # Checking, if $FILENAME is a language pack.
+  # String "language package" has to exist in the shell script file.
+  # If this is no language pack, the installation is not supported
+
+  SEARCHSTRING=`head -n 10 $FILENAME | grep "language package"`
+
+  if [ ! -z "$SEARCHSTRING" ]
+  then
+    echo "First parameter $FILENAME is a language pack";
+  else
+    printf "\nERROR: First parameter $FILENAME is a file, but no language pack shell script.\n"
+    echo $USAGE
+    exit 2
+  fi
+
+  echo "Unpacking shell script $FILENAME"
+  # TAILLINE=`head -n 20 $FILENAME | sed --quiet 's/linenum=//p'`
+  TAILLINE=`head -n 20 $FILENAME | sed -n 's/linenum=//p'`
+
+  if [ -x "/usr/bin/mktemp" ]  # available in Solaris 10
+  then
+    UNPACKDIR=`mktemp -d`
+  else
+    UNPACKDIR=/var/tmp/install_$$
+    mkdir $UNPACKDIR
+  fi
+
+  echo $UNPACKDIR
+  tail +$TAILLINE $FILENAME | gunzip | (cd $UNPACKDIR; tar xvf -)
+
+  # Setting the new package path, in which the packages exist
+  PACKAGE_PATH=$UNPACKDIR
+
+  # Setting variable UPDATE, because an Office installation has to exist, if a language pack shall be installed
+  UPDATE="yes"
 }
 
 #
@@ -68,6 +110,15 @@ else
     PACKAGE_PATH="$1/packages"
   else
     PACKAGE_PATH=$1
+  fi
+
+  #
+  # If the first parameter is a shell script (download installation set), the packages have to
+  # be unpacked into temp directory
+  #
+  if [ -f "$PACKAGE_PATH" ]
+  then
+    try_to_unpack_languagepack_file
   fi
 
   #
@@ -169,7 +220,16 @@ then
     cp -f /var/sadm/system/admin/INST_RELEASE ${INSTALL_ROOT}/var/sadm/system/admin/INST_RELEASE
   fi
 
-  LD_PRELOAD_32=$GETUID_SO /usr/sbin/patchadd -R ${INSTALL_ROOT} -M ${PATCH_PATH} ${PATCH_LIST} 2>&1 | grep -v '/var/sadm/patch'
+  # The case UPDATE="yes" is valid for patch installation and for language packs.
+  # For patches the variable PKG_LIST is empty, for language packs it is not empty.
+  # Patches have to be installed with patchadd, language packs with pkgadd
+
+  if [ -z "${PKG_LIST}" ]
+  then
+    LD_PRELOAD_32=$GETUID_SO /usr/sbin/patchadd -R ${INSTALL_ROOT} -M ${PATCH_PATH} ${PATCH_LIST} 2>&1 | grep -v '/var/sadm/patch'
+  else
+    LD_PRELOAD_32=$GETUID_SO /usr/sbin/pkgadd -d ${PACKAGE_PATH} -R ${INSTALL_ROOT} ${PKG_LIST} >/dev/null
+  fi
 
 else
 
@@ -240,6 +300,18 @@ if [ "${OFFICE_DIR}" != "" ]; then
   sed 's| LD_LIBRARY_PATH=\"\$sd_prog\"| LD_LIBRARY_PATH=/usr/sfw/lib:"$sd_prog":"$sd_prog/../../../usr/sfw/lib"|' \
     ${OFFICE_DIR}/program/soffice.orig > ${OFFICE_DIR}/program/soffice
   chmod a+x ${OFFICE_DIR}/program/soffice
+fi
+
+# if an unpack directory exists, it can be removed now
+if [ ! -z "$UNPACKDIR" ]
+then
+  # for i in ${PKG_LIST}; do
+  #   cd $UNPACKDIR; rm -rf $i
+  # done
+  # rmdir $UNPACKDIR
+
+  rm -rf $UNPACKDIR
+  echo "Removed temporary directory $UNPACKDIR"
 fi
 
 echo
