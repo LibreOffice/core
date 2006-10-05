@@ -56,6 +56,7 @@ hedabu: ..\inc\group.hxx %_DEST%\inc%_EXT%\vcl\group.hxx
 hedabu: ..\inc\hatch.hxx %_DEST%\inc%_EXT%\vcl\hatch.hxx
 hedabu: ..\inc\help.hxx %_DEST%\inc%_EXT%\vcl\help.hxx
 hedabu: ..\inc\image.hxx %_DEST%\inc%_EXT%\vcl\image.hxx
+hedabu: ..\inc\imagerepository.hxx %_DEST%\inc%_EXT%\vcl\imagerepository.hxx
 hedabu: ..\inc\imgcons.hxx %_DEST%\inc%_EXT%\vcl\imgcons.hxx
 hedabu: ..\inc\imgctrl.hxx %_DEST%\inc%_EXT%\vcl\imgctrl.hxx
 hedabu: ..\inc\inputctx.hxx %_DEST%\inc%_EXT%\vcl\inputctx.hxx
