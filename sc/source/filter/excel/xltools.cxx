@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:23:15 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:19:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,9 +116,7 @@ XclGuid::XclGuid(
 
 bool operator==( const XclGuid& rCmp1, const XclGuid& rCmp2 )
 {
-    return ::std::lexicographical_compare_3way(
-        rCmp1.mpnData, STATIC_TABLE_END( rCmp1.mpnData ),
-        rCmp2.mpnData, STATIC_TABLE_END( rCmp2.mpnData ) ) == 0;
+    return ::std::equal( rCmp1.mpnData, STATIC_TABLE_END( rCmp1.mpnData ), rCmp2.mpnData );
 }
 
 bool operator<( const XclGuid& rCmp1, const XclGuid& rCmp2 )
