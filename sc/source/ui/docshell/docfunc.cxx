@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:36:03 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:22:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1480,11 +1480,6 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, DelCellCmd eCmd, BOOL bRecor
         nUndoEndY = MAXROW;
     }
 
-    SCCOL nDelEndX = nUndoEndX;
-    if (eCmd==DEL_CELLSLEFT||eCmd==DEL_DELCOLS) nDelEndX = MAXCOL;
-    SCROW nDelEndY = nUndoEndY;
-    if (eCmd==DEL_CELLSUP||eCmd==DEL_DELROWS) nDelEndY = MAXROW;
-
                     // Test Zellschutz
 
     SCCOL nEditTestEndX = nUndoEndX;
@@ -1554,10 +1549,13 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, DelCellCmd eCmd, BOOL bRecor
     ScRefUndoData* pUndoData = NULL;
     if ( bRecord )
     {
+        // With the fix for #101329#, UpdateRef always puts cells into pRefUndoDoc at their old position,
+        // so it's no longer necessary to copy more than the deleted range into pUndoDoc.
+
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( pDoc, nStartTab, nEndTab,
                                 (eCmd==DEL_DELCOLS), (eCmd==DEL_DELROWS) );
-        pDoc->CopyToDocument( nUndoStartX, nUndoStartY, nStartTab, nDelEndX, nDelEndY, nEndTab,
+        pDoc->CopyToDocument( nUndoStartX, nUndoStartY, nStartTab, nUndoEndX, nUndoEndY, nEndTab,
                                 IDF_ALL, FALSE, pUndoDoc );
         pRefUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pRefUndoDoc->InitUndo( pDoc, 0, nTabCount-1, FALSE, FALSE );
@@ -1609,7 +1607,7 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, DelCellCmd eCmd, BOOL bRecor
     if ( bRecord )
     {
         for (SCTAB i=nStartTab; i<=nEndTab; i++)
-            pRefUndoDoc->DeleteAreaTab(nUndoStartX,nUndoStartY,nDelEndX,nDelEndY,i,
+            pRefUndoDoc->DeleteAreaTab(nUndoStartX,nUndoStartY,nUndoEndX,nUndoEndY,i,
                                         IDF_ALL);
 
             //  alle Tabellen anlegen, damit Formeln kopiert werden koennen:
