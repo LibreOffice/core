@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nameuno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:42:41 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:23:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -862,7 +862,7 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
         ScDocument* pDoc = pDocShell->GetDocument();
         ScRangePairList* pOldList = bColumn ? pDoc->GetColNameRanges() : pDoc->GetRowNameRanges();
 
-        if ( pOldList && nIndex < (sal_Int32)pOldList->Count() )
+        if ( pOldList && nIndex >= 0 && nIndex < (sal_Int32)pOldList->Count() )
         {
             ScRangePairListRef xNewList(pOldList->Clone());
 
