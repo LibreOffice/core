@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:53:49 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 12:59:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,8 +160,8 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
-#ifndef _DBAUI_QUERYDESIGNACCESS_HXX_
-#include "querydesignaccess.hxx"
+#ifndef DBACCESS_DATABASE_OBJECT_VIEW_HXX
+#include "databaseobjectview.hxx"
 #endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
@@ -1154,7 +1154,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
             case SID_APP_NEW_FOLDER:
                 {
                     ElementType eType = getContainer()->getElementType();
-                    ::rtl::OUString sName = getContainer()->getQualifiedName(NULL,NULL);
+                    ::rtl::OUString sName = getContainer()->getQualifiedName( NULL );
                     insertHierachyElement(eType,sName);
                 }
                 break;
@@ -1164,9 +1164,11 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
                     {
-                        OQueryDesignAccess aHelper(getORB(),sal_True,SID_DB_NEW_VIEW_SQL == _nId );
-                        Reference< XComponent > xComponent(aHelper.create(Reference<XDataSource>(m_xDataSource,UNO_QUERY),xConnection),UNO_QUERY);
-                        addDocumentListener(xComponent,NULL);
+                        QueryDesigner aDesigner( getORB(), this, sal_True, SID_DB_NEW_VIEW_SQL == _nId );
+
+                        Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
+                        Reference< XComponent > xComponent( aDesigner.createNew( xDataSource ), UNO_QUERY );
+                        addDocumentListener( xComponent, NULL );
                     }
                 }
                 break;
@@ -1210,9 +1212,10 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
                     {
-                        ORelationDesignAccess aHelper(getORB());
-                        Reference< XComponent > xComponent(aHelper.create(Reference<XDataSource>(m_xDataSource,UNO_QUERY), xConnection),UNO_QUERY);
-                        addDocumentListener(xComponent,NULL);
+                        RelationDesigner aDesigner( getORB(), this );
+                        Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
+                        Reference< XComponent > xComponent( aDesigner.createNew( xDataSource ), UNO_QUERY );
+                        addDocumentListener( xComponent, NULL );
                     }
                 }
                 break;
@@ -1436,7 +1439,7 @@ void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rE
                 default:
                     break;
             }
-            getContainer()->elementAdded(eType,sName,_rEvent.Element,getConnection());
+            getContainer()->elementAdded(eType,sName,_rEvent.Element);
         }
     }
 }
@@ -1471,7 +1474,7 @@ void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEv
             default:
                 break;
         }
-        getContainer()->elementRemoved(eType,sName,getConnection());
+        getContainer()->elementRemoved(eType,sName);
     }
 }
 // -----------------------------------------------------------------------------
@@ -1515,7 +1518,7 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
                 default:
                     break;
             }
-            //  getContainer()->elementReplaced(getContainer()->getElementType(),sName,sNewName,xConnection);
+            //  getContainer()->elementReplaced(getContainer()->getElementType(),sName,sNewName);
         }
         catch( Exception& )
         {
@@ -1615,7 +1618,7 @@ void OApplicationController::onEntryDoubleClick(SvTreeListBox* _pTree)
     {
         try
         {
-            openElement( getContainer()->getQualifiedName( _pTree->GetHdlEntry(), m_xMetaData ), getContainer()->getElementType() );
+            openElement( getContainer()->getQualifiedName( _pTree->GetHdlEntry() ), getContainer()->getElementType() );
         }
         catch(const Exception&)
         {
@@ -1647,27 +1650,27 @@ Reference< XComponent > OApplicationController::openElement(const ::rtl::OUStrin
         case E_QUERY:
         case E_TABLE:
             {
-                ::std::auto_ptr< ODesignAccess> pDispatcher;
                 SharedConnection xConnection( ensureConnection() );
                 if ( xConnection.is() )
                 {
+                    ::std::auto_ptr< DatabaseObjectView > pDesigner;
                     Sequence < PropertyValue > aArgs;
                     Any aDataSource;
                     if ( _eOpenMode == OLinkedDocumentsAccess::OPEN_DESIGN )
                     {
                         if ( _eType == E_TABLE )
                         {
-                            pDispatcher.reset(new OTableDesignAccess(getORB()));
+                            pDesigner.reset( new TableDesigner( getORB(), this ) );
                         }
                         else
                         {
-                            pDispatcher.reset(new OQueryDesignAccess(getORB(), sal_False, sal_False));
+                            pDesigner.reset( new QueryDesigner( getORB(), this, sal_False, sal_False ) );
                         }
                         aDataSource <<= m_xDataSource;
                     }
                     else
                     {
-                        pDispatcher.reset(new OTableAccess(getORB(),_eType == E_TABLE));
+                        pDesigner.reset( new ResultSetBrowser( getORB(), this, _eType == E_TABLE ) );
 
                         aArgs.realloc(1);
                         aArgs[0].Name = PROPERTY_SHOWMENU;
@@ -1676,8 +1679,8 @@ Reference< XComponent > OApplicationController::openElement(const ::rtl::OUStrin
                         aDataSource <<= getDatabaseName();
                     }
 
-                    Reference< XComponent > xComponent(pDispatcher->edit(aDataSource, _sName,xConnection,aArgs),UNO_QUERY);
-                    addDocumentListener(xComponent,NULL);
+                    Reference< XComponent > xComponent( pDesigner->openExisting( aDataSource, _sName, aArgs ), UNO_QUERY );
+                    addDocumentListener( xComponent, NULL );
                 }
             }
             break;
@@ -1716,7 +1719,7 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
                 {
                     try
                     {
-                        sName = getContainer()->getQualifiedName( NULL, m_xMetaData );
+                        sName = getContainer()->getQualifiedName( NULL );
                         OSL_ENSURE( sName.getLength(), "OApplicationController::newElementWithPilot: no name given!" );
                     }
                     catch(Exception)
@@ -1775,19 +1778,20 @@ void OApplicationController::newElement( ElementType _eType, sal_Bool _bSQLView 
         case E_QUERY:
         case E_TABLE:
             {
-                ::std::auto_ptr< ODesignAccess> pDispatcher;
+                ::std::auto_ptr< DatabaseObjectView > pDesigner;
                 SharedConnection xConnection( ensureConnection() );
                 if ( xConnection.is() )
                 {
                     if ( _eType == E_TABLE )
                     {
-                        pDispatcher.reset(new OTableDesignAccess(getORB()));
+                        pDesigner.reset( new TableDesigner( getORB(), this ) );
                     }
                     else
                     {
-                        pDispatcher.reset(new OQueryDesignAccess(getORB(), sal_False, _bSQLView));
+                        pDesigner.reset( new QueryDesigner( getORB(), this, sal_False, _bSQLView ) );
                     }
-                    Reference< XComponent > xComponent(pDispatcher->create(Reference<XDataSource>(m_xDataSource,UNO_QUERY), xConnection),UNO_QUERY);
+                    Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
+                    Reference< XComponent > xComponent( pDesigner->createNew( xDataSource ), UNO_QUERY );
                     addDocumentListener(xComponent,NULL);
                 }
             }
@@ -1939,7 +1943,7 @@ void OApplicationController::renameEntry()
                                     Reference<XPropertySet> xProp(xRename,UNO_QUERY);
                                     sNewName = ::dbaui::composeTableName( m_xMetaData, xProp, ::dbtools::eInDataManipulation, false, false, false );
                                 }
-                                getContainer()->elementReplaced( eType , sOldName, sNewName, getConnection(),xRename );
+                                getContainer()->elementReplaced( eType , sOldName, sNewName );
                             }
 
                             bTryAgain = sal_False;
@@ -1996,7 +2000,7 @@ void OApplicationController::onEntrySelect(SvLBoxEntry* _pEntry)
                     case E_FORM:
                     case E_REPORT:
                         {
-                            ::rtl::OUString sName = pView->getQualifiedName( _pEntry,NULL);
+                            ::rtl::OUString sName = pView->getQualifiedName( _pEntry );
                             if ( sName.getLength() )
                             {
                                 Reference< XHierarchicalNameAccess > xContainer(getElements(eType),UNO_QUERY);
@@ -2007,7 +2011,7 @@ void OApplicationController::onEntrySelect(SvLBoxEntry* _pEntry)
                         break;
                     case E_QUERY:
                         {
-                            ::rtl::OUString sName = pView->getQualifiedName( _pEntry,NULL);
+                            ::rtl::OUString sName = pView->getQualifiedName( _pEntry );
                             if ( pView->isPreviewEnabled() )
                             {
                                 SharedConnection xConnection( ensureConnection() );
@@ -2021,7 +2025,7 @@ void OApplicationController::onEntrySelect(SvLBoxEntry* _pEntry)
                             SharedConnection xConnection( ensureConnection() );
                             if ( xConnection.is() )
                             {
-                                ::rtl::OUString sName = pView->getQualifiedName( _pEntry,xConnection->getMetaData());
+                                ::rtl::OUString sName = pView->getQualifiedName( _pEntry );
                                 pView->showPreview(getDatabaseName(),xConnection,sName,eType == E_TABLE);
                                 return;
                             }
@@ -2175,7 +2179,7 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
                     ::rtl::OUString sName;
                     if ( pHitEntry )
                     {
-                        sName = pView->getQualifiedName( pHitEntry,NULL);
+                        sName = pView->getQualifiedName( pHitEntry );
                         if ( sName.getLength() )
                         {
                             Reference< XHierarchicalNameAccess > xContainer(getElements(pView->getElementType()),UNO_QUERY);
@@ -2244,7 +2248,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
         m_aAsyncDrop.aDroppedData = OComponentTransferable::extractComponentDescriptor(aDroppedData);
         SvLBoxEntry* pHitEntry = pView->getEntry(_rEvt.maPosPixel);
         if ( pHitEntry )
-            m_aAsyncDrop.aUrl = pView->getQualifiedName( pHitEntry,NULL);
+            m_aAsyncDrop.aUrl = pView->getQualifiedName( pHitEntry );
 
         sal_Int8 nAction = _rEvt.mnAction;
         Reference<XContent> xContent;
