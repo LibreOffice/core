@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:54:04 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 12:59:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,9 +149,6 @@
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _DBAUI_QUERYDESIGNACCESS_HXX_
-#include "querydesignaccess.hxx"
 #endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
@@ -595,14 +592,7 @@ void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUSt
 
     OSL_ENSURE(getContainer(),"View isn't valid! -> GPF");
 
-    Reference< XDatabaseMetaData> xMetaData;
-    if ( getContainer()->getElementType() == E_TABLE )
-    {
-        if ( m_xDataSourceConnection.is() )
-            xMetaData = m_xDataSourceConnection->getMetaData();
-    }
-
-    getContainer()->getSelectionElementNames(_rNames,xMetaData);
+    getContainer()->getSelectionElementNames( _rNames );
 }
 // -----------------------------------------------------------------------------
 ::std::auto_ptr<OLinkedDocumentsAccess> OApplicationController::getDocumentsAccess(ElementType _eType)
@@ -674,7 +664,7 @@ TransferableHelper* OApplicationController::copyObject()
                 if ( xConnection.is() )
                     xMetaData = xConnection->getMetaData();
 
-                ::rtl::OUString sName = getContainer()->getQualifiedName(NULL,xMetaData);
+                ::rtl::OUString sName = getContainer()->getQualifiedName( NULL );
                 if ( sName.getLength() )
                 {
                     ::rtl::OUString sDataSource = getDatabaseName();
