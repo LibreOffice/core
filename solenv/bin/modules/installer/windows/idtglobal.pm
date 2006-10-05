@@ -4,9 +4,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 14:36:46 $
+#   last change: $Author: kz $ $Date: 2006-10-05 09:18:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -703,11 +703,13 @@ sub translate_idtfile
 
 sub prepare_language_idt_directory
 {
-    my ($destinationdir, $newidtdir, $onelanguage, $filesref, $iconfilecollector, $binarytablefiles) = @_;
+    my ($destinationdir, $newidtdir, $onelanguage, $filesref, $iconfilecollector, $binarytablefiles, $allvariables) = @_;
 
     # Copying all idt-files from the source $installer::globals::idttemplatepath to the destination $destinationdir
     # Copying all files in the subdirectory "Binary"
     # Copying all files in the subdirectory "Icon"
+
+    my $infoline = "";
 
     installer::systemactions::copy_directory($installer::globals::idttemplatepath, $destinationdir);
 
@@ -715,6 +717,14 @@ sub prepare_language_idt_directory
     {
         installer::systemactions::create_directory($destinationdir . $installer::globals::separator . "Binary");
         installer::systemactions::copy_directory($installer::globals::idttemplatepath . $installer::globals::separator . "Binary", $destinationdir . $installer::globals::separator . "Binary");
+
+        if (( $installer::globals::patch ) && ( $allvariables->{'WINDOWSPATCHBITMAPDIRECTORY'} ))
+        {
+            $infoline = "\nOverwriting files in directory \"" . $destinationdir . $installer::globals::separator . "Binary" . "\" with files from directory \"" . $allvariables->{'WINDOWSPATCHBITMAPDIRECTORY'} . "\".\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            if ( ! -d $allvariables->{'WINDOWSPATCHBITMAPDIRECTORY'} ) { installer::exiter::exit_program("ERROR: Directory $allvariables->{'PATCHBITMAPDIRECTORY'} does not exist!", "prepare_language_idt_directory"); }
+            installer::systemactions::copy_directory($allvariables->{'WINDOWSPATCHBITMAPDIRECTORY'}, $destinationdir . $installer::globals::separator . "Binary");
+        }
     }
 
     installer::systemactions::create_directory($destinationdir . $installer::globals::separator . "Icon");
