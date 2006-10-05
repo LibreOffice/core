@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:35:01 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:21:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -399,24 +399,40 @@ void lcl_ReadChartTypeData(SvStream& rStream, Sc10ChartTypeData& rTypeData)
     //rStream.Read(&rTypeData, sizeof(rTypeData));
 }
 
-//!     funktioniert das auf allen Systemen ???
-
 double lcl_PascalToDouble(sal_Char* tp6)
 {
-    struct
-    {
-        UINT8           be  ;     /* biased exponent           */
-        unsigned int    v1  ;     /* lower 16 bits of mantissa */
-        unsigned int    v2  ;     /* next  16 bits of mantissa */
-        unsigned int    v3:7;     /* upper  7 bits of mantissa */
-        unsigned int    s :1;     /* sign bit                  */
-    } real;
+// #i68483# bah! this was broken forever...
+//   struct
+//   {
+//        sal_uInt8       be  ;     /* biased exponent           */
+//        sal_uInt16      v1  ;     /* lower 16 bits of mantissa */
+//        sal_uInt16      v2  ;     /* next  16 bits of mantissa */
+//        sal_uInt8       v3:7;     /* upper  7 bits of mantissa */
+//        sal_uInt8       s :1;     /* sign bit                  */
+//   } real;
+//
+//   memcpy (&real, tp6, 6);
+//   if (real.be == 0)
+//         return 0.0;
+//   return (((((128 +real.v3) * 65536.0) + real.v2) * 65536.0 + real.v1) *
+//         ldexp ((real.s? -1.0: 1.0), real.be - (129+39)));
 
-    memcpy (&real, tp6, 6);
-    if (real.be == 0)
-          return 0.0;
-    return (((((128 +real.v3) * 65536.0) + real.v2) * 65536.0 + real.v1) *
-          ldexp ((real.s? -1.0: 1.0), real.be - (129+39)));
+    sal_uInt8* pnUnsigned = reinterpret_cast< sal_uInt8* >( tp6 );
+    // biased exponent
+    sal_uInt8 be = pnUnsigned[ 0 ];
+    // lower 16 bits of mantissa
+    sal_uInt16 v1 = static_cast< sal_uInt16 >( pnUnsigned[ 2 ] * 256 + pnUnsigned[ 1 ] );
+    // next 16 bits of mantissa
+    sal_uInt16 v2 = static_cast< sal_uInt16 >( pnUnsigned[ 4 ] * 256 + pnUnsigned[ 3 ] );
+    // upper 7 bits of mantissa
+    sal_uInt8 v3 = static_cast< sal_uInt8 >( pnUnsigned[ 5 ] & 0x7F );
+    // sign bit
+    bool s = (pnUnsigned[ 5 ] & 0x80) != 0;
+
+    if (be == 0)
+        return 0.0;
+    return (((((128 + v3) * 65536.0) + v2) * 65536.0 + v1) *
+        ldexp ((s ? -1.0 : 1.0), be - (129+39)));
 }
 
 
@@ -779,6 +795,9 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
         ScStyleSheet* pSheet = (ScStyleSheet*) &pStylePool->Make( aName,
                                     SFX_STYLE_FAMILY_PAGE,
                                     SFXSTYLEBIT_USERDEF | SCSTYLEBIT_STANDARD );
+        // #i68483# set page style name at sheet...
+        pDoc->SetPageStyle( static_cast< SCTAB >( i ), aName );
+
         SfxItemSet* pSet = &pSheet->GetItemSet();
 
         for (USHORT nHeadFoot=0; nHeadFoot<2; nHeadFoot++)
