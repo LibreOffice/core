@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:10:04 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 12:58:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,11 +88,14 @@
 #ifndef _COM_SUN_STAR_SDB_TOOLS_XCONNECTIONTOOLS_HPP_
 #include <com/sun/star/sdb/tools/XConnectionTools.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_APPLICATION_XTABLEUIPROVIDER_HPP_
+#include <com/sun/star/sdb/application/XTableUIProvider.hpp>
+#endif
 /** === end UNO includes === **/
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 13
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 14
 #include <comphelper/implbase_var.hxx>
 #endif
 
@@ -111,7 +114,7 @@ namespace dbaccess
 
 //==========================================================================
 //==========================================================================
-typedef ::comphelper::ImplHelper13  <   ::com::sun::star::container::XChild
+typedef ::comphelper::ImplHelper14  <   ::com::sun::star::container::XChild
                                     ,   ::com::sun::star::sdbcx::XTablesSupplier
                                     ,   ::com::sun::star::sdbcx::XViewsSupplier
                                     ,   ::com::sun::star::sdbc::XConnection
@@ -124,6 +127,7 @@ typedef ::comphelper::ImplHelper13  <   ::com::sun::star::container::XChild
                                     ,   ::com::sun::star::sdbcx::XUsersSupplier
                                     ,   ::com::sun::star::sdbcx::XGroupsSupplier
                                     ,   ::com::sun::star::sdb::tools::XConnectionTools
+                                    ,   ::com::sun::star::sdb::application::XTableUIProvider
                                     >   OConnection_Base;
 
 class ODatabaseSource;
@@ -148,8 +152,10 @@ protected:
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableFilter;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableTypeFilter;
     ::comphelper::ComponentContext                      m_aContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xMasterConnection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XConnectionTools >  m_xConnectionTools;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >                     m_xMasterConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XConnectionTools >          m_xConnectionTools;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XTableUIProvider >    m_xTableUIProvider;
+
 
     OTableContainer*            m_pTables;
     OViewContainer*             m_pViews;
@@ -241,6 +247,10 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XTableName > SAL_CALL createTableName(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XObjectNames > SAL_CALL getObjectNames(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XDataSourceMetaData > SAL_CALL getDataSourceMetaData(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XTableUIProvider
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL getTableIcon( const ::rtl::OUString& TableName, ::sal_Int32 ColorMode ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getTableEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& DocumentUI, const ::rtl::OUString& TableName ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // IRefreshListener
     virtual void refresh(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rToBeRefreshed);
