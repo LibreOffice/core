@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.102 $
+#   $Revision: 1.103 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-11 17:39:52 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:37:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,11 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.102 $$"
-
-.IF "$(COM)"=="WTC"
-LIBPRE=libr
-.ENDIF
+LIBSMKREV!:="$$Revision: 1.103 $$"
 
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 
@@ -283,171 +279,171 @@ USED_RCLIENT_LIBS =	$(VCLLIB) $(SOTLIB) $(TOOLSLIB) $(UNOLIB) \
 
 .ELSE				# "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 AWTLIB*=jawt.lib
-AVMEDIALIB=$(LIBPRE) iavmedia.lib
+AVMEDIALIB=iavmedia.lib
 ICUINLIB=icuin.lib
 ICULELIB=icule.lib
 ICUUCLIB=icuuc.lib
-I18NUTILLIB=$(LIBPRE) ii18nutil.lib
-I18NISOLANGLIB=$(LIBPRE) ii18nisolang.lib
+I18NUTILLIB=ii18nutil.lib
+I18NISOLANGLIB=ii18nisolang.lib
 .IF "$(GPC)"!="NO"
 GPC3RDLIB=gpc.lib
 .ENDIF
-SALHELPERLIB=$(LIBPRE) isalhelper.lib
+SALHELPERLIB=isalhelper.lib
 XMLSCRIPTLIB=ixcr.lib
 COMPHELPERLIB=icomphelp.lib
 CONNECTIVITYLIB=connectivity.lib
 LDAPBERLIB=ldapber.lib
-CPPULIB=$(LIBPRE) icppu.lib
-CPPUHELPERLIB=$(LIBPRE) icppuhelper.lib
-UCBHELPERLIB=$(LIBPRE) iucbhelper.lib
-ODBCLIB=$(LIBPRE) iodbc.lib
-ODBCBASELIB=$(LIBPRE) iodbcbase.lib
-DBFILELIB=$(LIBPRE) ifile$(OFFICEUPD).lib
-TOOLSLIB=$(LIBPRE)itools.lib
-TOOLSLIBST=$(LIBPRE) atools.lib
-DVOSUTILLIBST=$(LIBPRE) dvosutil.lib
-DUNOUTILLIBST=$(LIBPRE) dunoutil.lib
-DVCLUTILLIBST=$(LIBPRE) dvclutil.lib
-BPICONVLIB=$(LIBPRE) bpiconv.lib
-SALLIB=$(LIBPRE) isal.lib
+CPPULIB=icppu.lib
+CPPUHELPERLIB=icppuhelper.lib
+UCBHELPERLIB=iucbhelper.lib
+ODBCLIB=iodbc.lib
+ODBCBASELIB=iodbcbase.lib
+DBFILELIB=ifile$(OFFICEUPD).lib
+TOOLSLIB=itools.lib
+TOOLSLIBST=atools.lib
+DVOSUTILLIBST=dvosutil.lib
+DUNOUTILLIBST=dunoutil.lib
+DVCLUTILLIBST=dvclutil.lib
+BPICONVLIB=bpiconv.lib
+SALLIB=isal.lib
 # make sure some ancient libs are empty
 OSLLIB=
 RTLLIB=
 TECLIB=
-VOSLIB=$(LIBPRE) ivos.lib
-UNOLIB=$(LIBPRE) iuno.lib
-UNOTOOLSLIB=$(LIBPRE) iutl.lib
-RMCXTLIB=$(LIBPRE) irmcxt.lib
-XMLOFFLIB=$(LIBPRE) ixo.lib
-XMLOFFLLIB=$(LIBPRE) xol.lib
-STORELIB=$(LIBPRE) istore.lib
-IOTXLIB=$(LIBPRE) iotx.lib
-OTXLIB=$(LIBPRE) otx_ind.lib
-OSXLIB=$(LIBPRE) osx.lib
-REGLIB=$(LIBPRE) ireg.lib
-UCRLIB=$(LIBPRE) ucr.lib
-UASLIB=$(LIBPRE) uas.lib
-EXTLIB=$(LIBPRE) iext.lib
-USRLIB=$(LIBPRE) usr.lib
-SOTLIB=$(LIBPRE) sot.lib
-ONELIB=$(LIBPRE) one.lib
-MOZBASELIBST=$(LIBPRE) nspr4_s.lib $(LIBPRE) xpcombase_s.lib
-MOZBASELIB=$(LIBPRE) nspr4.lib $(LIBPRE) xpcom.lib
-LDAPSDKLIB=$(LIBPRE) nsldap32v50.lib
+VOSLIB=ivos.lib
+UNOLIB=iuno.lib
+UNOTOOLSLIB=iutl.lib
+RMCXTLIB=irmcxt.lib
+XMLOFFLIB=ixo.lib
+XMLOFFLLIB=xol.lib
+STORELIB=istore.lib
+IOTXLIB=iotx.lib
+OTXLIB=otx_ind.lib
+OSXLIB=osx.lib
+REGLIB=ireg.lib
+UCRLIB=ucr.lib
+UASLIB=uas.lib
+EXTLIB=iext.lib
+USRLIB=usr.lib
+SOTLIB=sot.lib
+ONELIB=one.lib
+MOZBASELIBST=nspr4_s.lib xpcombase_s.lib
+MOZBASELIB=nspr4.lib xpcom.lib
+LDAPSDKLIB=nsldap32v50.lib
 ONELIB=
 UNOLIB=
-PAPILIB=$(LIBPRE) ipap.lib
-TRACERLIB=$(LIBPRE) itrc.lib
+PAPILIB=ipap.lib
+TRACERLIB=itrc.lib
 TRCLIB=$(TRACERLIB)
-SETUPLIB=$(LIBPRE) iset.lib
-SCHEDLIB=$(LIBPRE) ss.lib
-SSCLIB=$(LIBPRE) ssc.lib
-SSLLIB=$(LIBPRE) ssl.lib
-SSWLIB=$(LIBPRE) ssw.lib
-SFX2LIB=$(LIBPRE) sfx.lib
+SETUPLIB=iset.lib
+SCHEDLIB=ss.lib
+SSCLIB=ssc.lib
+SSLLIB=ssl.lib
+SSWLIB=ssw.lib
+SFX2LIB=sfx.lib
 SFXLIB=$(SFX2LIB)
-FWELIB=$(LIBPRE) ifwe.lib
-FWILIB=$(LIBPRE) ifwi.lib
-BTSTRPLIB=$(LIBPRE) btstrp.lib
-BTSTRPDTLIB=$(LIBPRE) bootstrpdt.lib
-TRANSEXLIB=$(LIBPRE) transex.lib
-ICOLIB= $(LIBPRE) icom.lib
-SVTOOLLIB=$(LIBPRE) svtool.lib
-XMLSECLIB=$(LIBPRE) libxmlsec.lib
-XMLSECLIB-MS=$(LIBPRE) libxmlsec-mscrypto.lib
-XMLSECLIB-NSS=$(LIBPRE) libxmlsec-nss.lib
-LIBXML2LIB=$(LIBPRE) libxml2.lib
-NSS3LIB=$(LIBPRE) nss3.lib
-NSPR4LIB=$(LIBPRE) nspr4.lib
-PLC4LIB=$(LIBPRE) plc4.lib
+FWELIB=ifwe.lib
+FWILIB=ifwi.lib
+BTSTRPLIB=btstrp.lib
+BTSTRPDTLIB=bootstrpdt.lib
+TRANSEXLIB=transex.lib
+ICOLIB= icom.lib
+SVTOOLLIB=svtool.lib
+XMLSECLIB=libxmlsec.lib
+XMLSECLIB-MS=libxmlsec-mscrypto.lib
+XMLSECLIB-NSS=libxmlsec-nss.lib
+LIBXML2LIB=libxml2.lib
+NSS3LIB=nss3.lib
+NSPR4LIB=nspr4.lib
+PLC4LIB=plc4.lib
 NSSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-NSS) $(NSS3LIB) $(NSPR4LIB) $(PLC4LIB)
-MSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-MS) $(LIBPRE) crypt32.lib $(LIBPRE) advapi32.lib
-BROOKERLIB=$(LIBPRE) ibrooker.lib
-SIMPLECMLIB=$(LIBPRE) isimplecm.lib
-COMMUNILIB=$(LIBPRE) icommuni.lib
-BTCOMMUNILIB=$(LIBPRE) ibtcommuni.lib
-AUTOMATIONLIB=$(LIBPRE) ists.lib
-SVLLIB=$(LIBPRE) isvl.lib
-PLUGCTORLIB=$(LIBPRE) plugctor.lib
-PLUGAPPLIB=$(LIBPRE) plugapp.lib
-SVMEMLIB=$(LIBPRE) svmem.lib
-SVUNZIPLIB=$(LIBPRE) svunzip.lib
-SVUNZIPDLL=$(LIBPRE) unzipdll.lib
-GOODIESLIB=$(LIBPRE) igo.lib
-MAILLIB=$(LIBPRE) mail.lib
-DOCMGRLIB=$(LIBPRE) docmgr.lib
-BASICLIB=$(LIBPRE) basic.lib
-BASICLIGHTLIB=$(LIBPRE) basicl.lib
-SO2LIB=$(LIBPRE) so2.lib
-TKTLIB=$(LIBPRE) tkt.lib
-SJLIB=$(LIBPRE) sj.lib
-SVXLIB=$(LIBPRE) isvx.lib
-BASCTLLIB=$(LIBPRE) basctl.lib
+MSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-MS) crypt32.lib advapi32.lib
+BROOKERLIB=ibrooker.lib
+SIMPLECMLIB=isimplecm.lib
+COMMUNILIB=icommuni.lib
+BTCOMMUNILIB=ibtcommuni.lib
+AUTOMATIONLIB=ists.lib
+SVLLIB=isvl.lib
+PLUGCTORLIB=plugctor.lib
+PLUGAPPLIB=plugapp.lib
+SVMEMLIB=svmem.lib
+SVUNZIPLIB=svunzip.lib
+SVUNZIPDLL=unzipdll.lib
+GOODIESLIB=igo.lib
+MAILLIB=mail.lib
+DOCMGRLIB=docmgr.lib
+BASICLIB=basic.lib
+BASICLIGHTLIB=basicl.lib
+SO2LIB=so2.lib
+TKTLIB=tkt.lib
+SJLIB=sj.lib
+SVXLIB=isvx.lib
+BASCTLLIB=basctl.lib
 BASICIDELIB=ybctl.lib
-SVXLLIB=$(LIBPRE) svxl.lib
-SDBLIB=$(LIBPRE) sdb.lib
-DBTOOLSLIB=$(LIBPRE) idbtools.lib
-HM2LIBSH=$(LIBPRE) hmwrpdll.lib
-HM2LIBST=$(LIBPRE) hmwrap.lib
+SVXLLIB=svxl.lib
+SDBLIB=sdb.lib
+DBTOOLSLIB=idbtools.lib
+HM2LIBSH=hmwrpdll.lib
+HM2LIBST=hmwrap.lib
 LINGULIB=$(HM2LIBST)
-LNGLIB=$(LIBPRE) ilng.lib
-EXPAT3RDLIB=$(LIBPRE) expat_xmltok.lib $(LIBPRE) expat_xmlparse.lib
-EXPATASCII3RDLIB=$(LIBPRE) expat_xmltok.lib $(LIBPRE) ascii_expat_xmlparse.lib
-ZLIB3RDLIB=$(LIBPRE) zlib.lib
-JPEG3RDLIB=$(LIBPRE) jpeglib.lib
-NEON3RDLIB=$(LIBPRE) neon.lib
-BERKELEYLIB=$(LIBPRE) libdb42.lib
+LNGLIB=ilng.lib
+EXPAT3RDLIB=expat_xmltok.lib expat_xmlparse.lib
+EXPATASCII3RDLIB=expat_xmltok.lib ascii_expat_xmlparse.lib
+ZLIB3RDLIB=zlib.lib
+JPEG3RDLIB=jpeglib.lib
+NEON3RDLIB=neon.lib
+BERKELEYLIB=libdb42.lib
 BERKELEYCPPLIB=
-CURLLIB=$(LIBPRE) libcurl.lib
-CHAOSLIB=$(LIBPRE) ichaos.lib
-UUILIB=$(LIBPRE) iuui.lib
+CURLLIB=libcurl.lib
+CHAOSLIB=ichaos.lib
+UUILIB=iuui.lib
 DGLIB=
-SIMLIB=$(LIBPRE) ysim.lib
-SCHLIB=$(LIBPRE) ysch.lib
-SMLIB=$(LIBPRE) ysm.lib
-SBALIB=$(LIBPRE) sbawrap.lib
-OFALIB=$(LIBPRE) aofa.lib
-SCLIB=$(LIBPRE) sclib.lib
-SDLIB=$(LIBPRE) sdlib.lib
-SDLLIB=$(LIBPRE) sdl.lib
-SWLIB=$(LIBPRE) swlib.lib
-PRXLIB=$(LIBPRE) ilprx2.lib
-ISWLIB=$(LIBPRE) _sw.lib
-ISCLIB=$(LIBPRE) sci.lib
-ISDLIB=$(LIBPRE) sdi.lib
-SVLIB=$(LIBPRE) ivcl.lib
+SIMLIB=ysim.lib
+SCHLIB=ysch.lib
+SMLIB=ysm.lib
+SBALIB=sbawrap.lib
+OFALIB=aofa.lib
+SCLIB=sclib.lib
+SDLIB=sdlib.lib
+SDLLIB=sdl.lib
+SWLIB=swlib.lib
+PRXLIB=ilprx2.lib
+ISWLIB=_sw.lib
+ISCLIB=sci.lib
+ISDLIB=sdi.lib
+SVLIB=ivcl.lib
 VCLLIB=$(SVLIB)
-BASEGFXLIB=$(LIBPRE) ibasegfx.lib
-BASEBMPLIB=$(LIBPRE) ibasebmp.lib
-CANVASTOOLSLIB=$(LIBPRE) icanvastools.lib
-CPPCANVASLIB=$(LIBPRE) icppcanvas.lib
-AGGLIB=$(LIBPRE) iagg.lib
-TKLIB=$(LIBPRE) itk.lib
-SVXLLIB=$(LIBPRE) svxl.lib
+BASEGFXLIB=ibasegfx.lib
+BASEBMPLIB=ibasebmp.lib
+CANVASTOOLSLIB=icanvastools.lib
+CPPCANVASLIB=icppcanvas.lib
+AGGLIB=iagg.lib
+TKLIB=itk.lib
+SVXLLIB=svxl.lib
 FREETYPELIB=freetype.lib
 FREETYPELIBST=freetype.lib
-PKGCHKLIB=$(LIBPRE) ipkgchk.lib
+PKGCHKLIB=ipkgchk.lib
 SYSSHELLLIB=sysshell.lib
 SSOOPTLIB=issoopt$(OFFICEUPD)$(DLLPOSTFIX).lib
-JVMACCESSLIB = $(LIBPRE) ijvmaccess.lib
+JVMACCESSLIB = ijvmaccess.lib
 CPPUNITLIB = cppunit.lib
-XML2LIB = $(LIBPRE) libxml2.lib
-JVMFWKLIB = $(LIBPRE) ijvmfwk.lib
+XML2LIB = libxml2.lib
+JVMFWKLIB = ijvmfwk.lib
 
 # #110743#
 # For BinFilters, some libs were added.
 #
 
-BFSVXLIB=$(LIBPRE) bf_svx.lib
-BFSFXLIB=$(LIBPRE) bf_sfx.lib
-BFSCHLIB=$(LIBPRE) bf_ysch.lib
-BFSMLIB=$(LIBPRE) bf_ysm.lib
-BFSCLIB=$(LIBPRE) bf_sclib.lib
-BFSDLIB=$(LIBPRE) bf_sdlib.lib
-BFSWLIB=$(LIBPRE) bf_swlib.lib
-BFOFALIB=$(LIBPRE) bf_ofa.lib
-BFXMLOFFLIB=$(LIBPRE) ibf_xo.lib
-LEGACYSMGRLIB=$(LIBPRE) ilegacy_binfilters.lib
+BFSVXLIB=bf_svx.lib
+BFSFXLIB=bf_sfx.lib
+BFSCHLIB=bf_ysch.lib
+BFSMLIB=bf_ysm.lib
+BFSCLIB=bf_sclib.lib
+BFSDLIB=bf_sdlib.lib
+BFSWLIB=bf_swlib.lib
+BFOFALIB=bf_ofa.lib
+BFXMLOFFLIB=ibf_xo.lib
+LEGACYSMGRLIB=ilegacy_binfilters.lib
 
 .ENDIF              # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 
