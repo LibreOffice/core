@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-14 17:11:07 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:43:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@ PRJ=..
 
 INCPRE=$(MISC)
 
-PRJNAME=transex
-TARGET=transex3
+PRJNAME=transex3
+TARGET=transex
 TARGETTYPE=CUI
 LIBTARGET=no
 # --- Settings -----------------------------------------------------
@@ -68,7 +68,7 @@ OBJFILES=   			\
     $(OBJ)$/directory.obj   \
     $(OBJ)$/hw2fw.obj
 
-LIB1TARGET= $(LB)$/transex.lib
+LIB1TARGET= $(LB)$/$(TARGET).lib
 LIB1ARCHIV= $(LB)$/libtransex.a
 #LIB1FILES=  $(LB)$/transex3.lib
 LIB1OBJFILES=        $(OBJ)$/export.obj      \
@@ -83,7 +83,7 @@ LIB1OBJFILES=        $(OBJ)$/export.obj      \
 APP1VERSIONMAP=exports.map
 
 # extractor and merger for *.src and *.hrc
-APP1TARGET=     $(TARGET)
+APP1TARGET=  transex3
 #APP1OBJS=   $(OBJ)$/src_yy.obj
 APP1OBJS=   $(OBJ)$/src_yy_wrapper.obj
 
@@ -96,13 +96,8 @@ APP1STDLIBS+= \
 # static libs at end for OS X
 .ENDIF
 
-APP1LIBS+=	$(LB)$/$(PRJNAME).lib
-#APP1DEPN=   $(OBJ)$/src_yy.obj $(LB)$/$(PRJNAME).lib
-APP1DEPN=   $(OBJ)$/src_yy_wrapper.obj $(LB)$/$(PRJNAME).lib
-
-#APP2TARGET= termilo
-#APP2STACK=  16000
-#APP2OBJS=   $(OBJ)$/termino.obj
+APP1LIBS+=	$(LB)$/$(TARGET).lib
+APP1DEPN=   $(OBJ)$/src_yy_wrapper.obj $(LB)$/$(TARGET).lib
 
 APP2TARGET= helpex
 APP2OBJS= $(OBJ)$/helpmerge.obj  $(OBJ)$/xmlparse.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj $(OBJ)$/merge.obj $(OBJ)$/helpex.obj $(OBJ)$/hw2fw.obj
