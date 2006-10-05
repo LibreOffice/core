@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_config.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2006-08-17 12:39:52 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:39:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,11 +57,8 @@ $(XCS_TRIM) :   $(DTDDIR)$/registry$/component-schema.dtd \
                 $(XSLDIR)$/schema_trim.xsl 
 .ENDIF
 
-XML_APIS_JAR*=$(SOLARBINDIR)$/xml-apis.jar
-XERCES_JAR*=$(SOLARBINDIR)$/xercesImpl.jar
-
 $(PROCESSOUT)$/registry$/schema$/$(PACKAGEDIR)$/%.xcs : %.xcs
-    @+echo -------------+ validating and stripping schema files
+    @echo -------------+ validating and stripping schema files
     -$(MKDIRHIER) $(@:d)
 .IF "$(XSLTPROC)"=="NO_XSLTPROC"
 .IF "$(NO_INSPECTION)"==""
@@ -101,7 +98,7 @@ $(XCS_RESOURCES) :   $(XSLDIR)$/resource.xsl
 .ENDIF
 
 $(PROCESSOUT)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.properties :| $(PROCESSOUT)$/merge$/$(PACKAGEDIR)$/%.xcs
-    @+echo -------------+ creating locale dependent resource bundles
+    @echo -------------+ creating locale dependent resource bundles
     -$(MKDIRHIER) $(@:d)
 .IF "$(XSLTPROC)"=="NO_XSLTPROC"
     $(JAVAI) $(JAVACPS) $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/resource.xsl $@ locale={$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(PROCESSOUT)$/registry$/res$/, $@))}
@@ -128,7 +125,7 @@ $(XCU_DEFAULT) : $(DTDDIR)$/registry$/component-update.dtd \
 .ENDIF
 
 $(PROCESSOUT)$/registry$/data$/$(PACKAGEDIR)$/%.xcu : %.xcu
-    @+echo -------------+ validating and creating a locale independent file
+    @echo -------------+ validating and creating a locale independent file
     -$(MKDIRHIER) $(@:d) 
 .IF "$(XSLTPROC)"=="NO_XSLTPROC"
 .IF "$(NO_INSPECTION)"==""
@@ -170,7 +167,7 @@ $(XCU_LANG) : $(XSLDIR)$/alllang.xsl
 .ENDIF
 
 $(PROCESSOUT)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.xcu :| $(PROCESSOUT)$/merge$/$(PACKAGEDIR)$/%.xcu
-    @+echo -------------+ creating locale dependent entries
+    @echo -------------+ creating locale dependent entries
     -$(MKDIRHIER) $(@:d)
 .IF "$(XSLTPROC)"=="NO_XSLTPROC"
     $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/alllang.xsl $(@:d)$*.tmp xcs=$(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs schemaRoot=$(XCSROOT)$/registry$/schema locale={$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(PROCESSOUT)$/registry$/res$/, $@))}	
@@ -194,7 +191,7 @@ $(LANGUAGEPACKS) : $(XSLDIR)$/delcomment.sed
 
 
 $(PROCESSOUT)$/registry$/spool$/Langpack-%.xcu : Langpack.xcu.tmpl
-    @+echo -------------+ creating a Langpack module for locale $*
+    @echo -------------+ creating a Langpack module for locale $*
     -$(MKDIRHIER) $(@:d) 
     $(SED) -e "s/__LANGUAGE__/$*/" -f $(XSLDIR)$/delcomment.sed $< > $@
     
@@ -206,7 +203,7 @@ $(XCU_MODULES) : $(XSLDIR)$/alllang.xsl
 
 
 $(PROCESSOUT)$/registry$/spool$/$(PACKAGEDIR)$/%.xcu :| $$(@:b:s/-/./:b).xcu
-    @+echo -------------+ creating a module file
+    @echo -------------+ creating a module file
     -$(MKDIRHIER) $(@:d) 
 .IF "$(XSLTPROC)"=="NO_XSLTPROC"
     $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/alllang.xsl $(@:d)$(@:f:s/.xcu/.tmp/) xcs=$(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$(<:b).xcs schemaRoot=$(XCSROOT)$/registry$/schema module={$(subst,$(<:b)-, $(*))}
