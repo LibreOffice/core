@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 09:58:58 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:19:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,6 @@ class ImportExcel8 : public ImportExcel
         void                    Scenman( void );                // 0xAE
         void                    Scenario( void );               // 0xAF
         void                    ReadBasic( void );              // 0xD3
-        void                    Cellmerging( void );            // 0xE5     geraten...
         void                    Labelsst( void );               // 0xFD
 
         void                    Hlink( void );                  // 0x01B8
