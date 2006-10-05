@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:34:14 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:06:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,8 +93,8 @@ class SvLBoxEntry;
 class Splitter;
 struct SvSortData;
 
-#define CONTAINER_QUERIES       sal_Int32(etQuery - etQuery)
-#define CONTAINER_TABLES        sal_Int32(etTable - etQuery)
+#define CONTAINER_QUERIES       sal_Int32( etQuery - etQuery )
+#define CONTAINER_TABLES        sal_Int32( etTableOrView - etQuery )
 
 namespace com { namespace sun{ namespace star { namespace container { class XNameContainer; } } } }
 // .........................................................................
@@ -105,6 +105,8 @@ namespace dbaui
     class DBTreeView;
     class DBTreeListModel;
     struct DBTreeEditedEntry;
+    class ImageProvider;
+
     // =====================================================================
     typedef ::cppu::ImplHelper2 <   ::com::sun::star::frame::XStatusListener
                                 ,   ::com::sun::star::view::XSelectionSupplier
@@ -157,7 +159,6 @@ namespace dbaui
         sal_Int16               m_nBorder;              // TRUE when border should be shown
 
         sal_Bool                m_bQueryEscapeProcessing : 1;   // the escape processing flag of the query currently loaded (if any)
-        sal_Bool                m_bHiContrast;          // in which mode we are
         sal_Bool                m_bShowMenu;            // if TRUE the menu should be visible otherwise not
         sal_Bool                m_bInSuspend;
         sal_Bool                m_bEnableBrowser;
@@ -177,10 +178,14 @@ namespace dbaui
             etQueryContainer,
             etTableContainer,
             etQuery,
-            etTable,
-            etView,
+            etTableOrView,
             etUnknown
         };
+        /** returns a DatabaseObject value corresponding to the given EntryType
+            @param _eType
+                the entry type. Must not be etUnknown.
+        */
+        static sal_Int32    getDatabaseObjectType( EntryType _eType );
 
         // need by registration
         static ::rtl::OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
@@ -333,7 +338,7 @@ namespace dbaui
         */
         void        closeConnection(SvLBoxEntry* _pEntry,sal_Bool _bDisposeConnection = sal_True);
 
-        sal_Bool    populateTree(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xNameAccess, SvLBoxEntry* _pParent, const EntryType& _rEntryType);
+        sal_Bool    populateTree(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xNameAccess, SvLBoxEntry* _pParent, EntryType _eEntryType);
         void        initializeTreeModel();
 
         /** search in the tree for query- or tablecontainer equal to this interface and return
@@ -343,6 +348,12 @@ namespace dbaui
         // return true when there is connection available
         sal_Bool ensureConnection(SvLBoxEntry* _pDSEntry, void * pDSData, SharedConnection& _rConnection );
         sal_Bool ensureConnection(SvLBoxEntry* _pAnyEntry, SharedConnection& _rConnection );
+
+        sal_Bool getExistentConnectionFor( SvLBoxEntry* _pDSEntry, SharedConnection& _rConnection );
+        /** returns an image provider which works with the connection belonging to the given entry
+        */
+        ::std::auto_ptr< ImageProvider >
+                getImageProviderFor( SvLBoxEntry* _pAnyEntry );
 
         void    implAdministrate( SvLBoxEntry* _pApplyTo );
         void    implDirectSQL( SvLBoxEntry* _pApplyTo );
@@ -361,7 +372,7 @@ namespace dbaui
 
         EntryType   getEntryType( SvLBoxEntry* _pEntry ) const;
         EntryType   getChildType( SvLBoxEntry* _pEntry ) const;
-        sal_Bool    isObject( EntryType _eType ) const { return (etTable == _eType) || (etView == _eType) || (etQuery == _eType);}
+        sal_Bool    isObject( EntryType _eType ) const { return ( etTableOrView== _eType ) || ( etQuery == _eType ); }
         sal_Bool    isContainer( EntryType _eType ) const { return (etTableContainer == _eType) || (etQueryContainer == _eType); }
         sal_Bool    isContainer( SvLBoxEntry* _pEntry ) const { return isContainer( getEntryType( _pEntry ) ); }
 
@@ -394,6 +405,14 @@ namespace dbaui
             const sal_Bool _bEscapeProcessing,
             const SharedConnection& _rxConnection,
             sal_Bool _bSelectDirect = sal_False
+        );
+
+        /// inserts an entry into the tree
+        void implAppendEntry(
+            SvLBoxEntry* _pParent,
+            const String& _rName,
+            void* _pUserData,
+            EntryType _eEntryType
         );
 
         /// loads the grid control with the data object specified (which may be a table, a query or a command)
