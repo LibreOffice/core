@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:03:43 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:20:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,6 +210,11 @@ protected:
     void                WriteBooleanItem( const sal_Char* pcName, sal_uInt8 nBool );
     void                WriteErrorCodeItem( const sal_Char* pcName, sal_uInt8 nErrCode );
 
+    void                WriteColIndexItem( const sal_Char* pcName, sal_Int32 nCol );
+    void                WriteColRangeItem( const sal_Char* pcName, sal_Int32 nCol1, sal_Int32 nCol2 );
+    void                WriteRowIndexItem( const sal_Char* pcName, sal_Int32 nRow );
+    void                WriteRowRangeItem( const sal_Char* pcName, sal_Int32 nRow1, sal_Int32 nRow2 );
+
     void                WriteAddressItem( const sal_Char* pcName, const Address& rPos );
     void                WriteRangeItem( const sal_Char* pcName, const Range& rRange );
     void                WriteRangeListItem( const sal_Char* pcName, const RangeList& rRanges );
@@ -230,6 +235,11 @@ protected:
     Color               DumpRgbColor( const sal_Char* pcName = 0 );
     rtl_TextEncoding    DumpCodePage( const sal_Char* pcName = 0 );
     void                DumpFormulaResult( const sal_Char* pcName = 0 );
+
+    sal_Int32           DumpColIndex( const sal_Char* pcName = 0, bool bCol16Bit = true );
+    sal_Int32           DumpColRange( const sal_Char* pcName = 0, bool bCol16Bit = true );
+    sal_Int32           DumpRowIndex( const sal_Char* pcName = 0, bool bRow32Bit = false );
+    sal_Int32           DumpRowRange( const sal_Char* pcName = 0, bool bRow32Bit = false );
 
     Address             DumpAddress( const sal_Char* pcName = 0, bool bCol16Bit = true, bool bRow32Bit = false );
     Range               DumpRange( const sal_Char* pcName = 0, bool bCol16Bit = true, bool bRow32Bit = false );
