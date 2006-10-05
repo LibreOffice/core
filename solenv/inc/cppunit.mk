@@ -4,9 +4,9 @@
 #
 #   $RCSfile: cppunit.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:33:26 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:36:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,9 +73,9 @@ TEST$(TNR)LIB=$(SHL$(TNR)TARGETN)
 .IF "$(SHL$(TNR)TARGET)"!=""
 test : test$(TNR)
 test$(TNR): ALLTAR
-        @+echo ----------------------------------------------------------
-        @+echo - start unit test \#$(TNR) on library $(TEST$(TNR)LIB)
-        @+echo ----------------------------------------------------------
+        @echo ----------------------------------------------------------
+        @echo - start unit test \#$(TNR) on library $(TEST$(TNR)LIB)
+        @echo ----------------------------------------------------------
         testshl2 $(TEST$(TNR)LIB) $(TEST$(TNR)OPT)
 .ENDIF
 
