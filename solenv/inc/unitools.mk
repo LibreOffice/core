@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-22 08:55:59 $
+#   last change: $Author: kz $ $Date: 2006-10-05 16:22:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,8 @@ GNUCOPY*=cp
 GNUMAKE*=make
 GREP*=grep
 LS*=ls
-MKDIR*=mkdir.pl
+MKDIR*=mkdir
+MKDIRHIER*=mkdir -p
 PERL*:=perl
 RENAME*=mv
 TOUCH*=touch
@@ -147,12 +148,12 @@ GREP*=$(BUILD_TOOLS)$/grep.exe
 LS*=$(BUILD_TOOLS)$/ls.exe
 #wraper for solenv\bin\mkdir.pl to fix mkdir /p problem
 MKDIR=+$(SOLARENV)$/bin$/mkdir.btm
+MKDIRHIER=$(MKDIR) 
 PERL*:=call perl5.btm
 RENAME*=ren
 TOUCH*=$(BUILD_TOOLS)$/touch.exe
 TYPE*=type
 .ENDIF  "$(USE_SHELL)"!="4nt"
-MKDIRHIER=$(MKDIR) 
 DUMPBIN*=$(WRAPCMD) dumpbin
 
 .ELIF "$(GUI)"=="UNX"	# "$(GUI)"=="WNT"
