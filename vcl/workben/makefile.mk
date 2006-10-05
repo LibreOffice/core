@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-11 17:53:15 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:57:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=..
 
-PRJNAME=SV
+PRJNAME=vcl
 TARGET=svdem
 LIBTARGET=NO
 TARGETTYPE=GUI
@@ -44,16 +44,18 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
 
 # --- Files --------------------------------------------------------
+OBJFILES= \
+    $(OBJ)$/svdem.obj \
+    $(OBJ)$/outdevgrind.obj
 
-OBJFILES=		$(OBJ)$/svdem.obj
+
 APP1NOSAL=		TRUE
 APP1TARGET= 	$(TARGET)
-APP1OBJS=		$(OBJFILES)
+APP1OBJS= \
+    $(OBJ)$/svdem.obj
 
 APP1STDLIBS=	$(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
@@ -64,10 +66,6 @@ APP1STDLIBS=	$(CPPULIB)			\
                 $(VOSLIB)			\
                 $(SOTLIB)			\
                 $(SVLIB)
-
-.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
-APP1DEF=		$(MISC)$/$(TARGET).def
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
@@ -90,17 +88,12 @@ APP2STDLIBS=$(TOOLSLIB) 		\
             $(SALLIB)			\
             $(VCLLIB)
 
-.IF "$(GUI)"!="UNX"
-APP2DEF=	$(MISC)$/$(TARGET).def
-.ENDIF
-
 # --- Targets ------------------------------------------------------
 
-ALL : \
-    ALLTAR \
-    $(BIN)$/applicat.rdb
-
 .INCLUDE :	target.mk
+
+ALLTAR : $(BIN)$/applicat.rdb
+
 
 $(BIN)$/applicat.rdb : makefile.mk $(UNOUCRRDB)
     rm -f $@
@@ -109,23 +102,4 @@ $(BIN)$/applicat.rdb : makefile.mk $(UNOUCRRDB)
          regcomp -register -r applicat.rdb \
              -c i18nsearch.uno$(DLLPOST) \
              -c i18npool.uno$(DLLPOST)
-
-# ------------------------------------------------------------------
-# Windows
-# ------------------------------------------------------------------
-
-.IF "$(GUI)" == "WIN"
-
-$(MISC)$/$(TARGET).def: makefile
-    echo  NAME			$(TARGET)							>$@
-    echo  DESCRIPTION	'StarView - Testprogramm'          >>$@
-    echo  EXETYPE		WINDOWS 						   >>$@
-    echo  STUB			'winSTUB.EXE'                      >>$@
-    echo  PROTMODE										   >>$@
-    echo  CODE			PRELOAD MOVEABLE DISCARDABLE	   >>$@
-    echo  DATA			PRELOAD MOVEABLE MULTIPLE		   >>$@
-    echo  HEAPSIZE		8192							   >>$@
-    echo  STACKSIZE 	32768							   >>$@
-
-.ENDIF
 
