@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:11:07 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:13:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -794,6 +794,10 @@ AnalysisAddIn::getMultinomial( constREFXPS& xOpt, const SEQSEQ( sal_Int32 )& aVL
 double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, const SEQSEQ( double )& aCoeffList ) THROWDEF_RTE_IAE
 {
     double                          fRet = 0.0;
+
+    // #i32269# 0^0 is undefined, Excel returns #NUM! error
+    if( fX == 0.0 && fN == 0 )
+        THROW_RTE;
 
     if( fX != 0.0 )
     {
