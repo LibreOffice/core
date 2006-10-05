@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppView.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:55:42 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:01:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,7 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
     m_pPanel->SetUniqueId(UID_APP_DATABASE_VIEW);
     m_pPanel->Show();
 
-    m_pDetailView = new OApplicationDetailView(this,_ePreviewMode);
+    m_pDetailView = new OApplicationDetailView(*this,_ePreviewMode);
     m_pDetailView->Show();
 
     ImplInitSettings();
@@ -414,10 +414,10 @@ void OApplicationView::paste()
         pTest->paste();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OApplicationView::getQualifiedName(SvLBoxEntry* _pEntry,const Reference< XDatabaseMetaData>& _xMetaData) const
+::rtl::OUString OApplicationView::getQualifiedName( SvLBoxEntry* _pEntry ) const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
-    return getDetailView()->getQualifiedName(_pEntry,_xMetaData);
+    return getDetailView()->getQualifiedName( _pEntry );
 }
 // -----------------------------------------------------------------------------
 sal_Bool OApplicationView::isLeaf(SvLBoxEntry* _pEntry) const
@@ -480,32 +480,30 @@ sal_Int32 OApplicationView::getElementCount()
     return getDetailView()->getElementCount();
 }
 // -----------------------------------------------------------------------------
-void OApplicationView::getSelectionElementNames(::std::vector< ::rtl::OUString>& _rNames,const Reference< XDatabaseMetaData>& _xMetaData) const
+void OApplicationView::getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames ) const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
-    getDetailView()->getSelectionElementNames(_rNames,_xMetaData);
+    getDetailView()->getSelectionElementNames( _rNames );
 }
 // -----------------------------------------------------------------------------
-SvLBoxEntry* OApplicationView::elementAdded(ElementType eType,const ::rtl::OUString& _rName, const Any& _rObject, const Reference< XConnection >& _rxConn )
+SvLBoxEntry* OApplicationView::elementAdded(ElementType eType,const ::rtl::OUString& _rName, const Any& _rObject )
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
-    return getDetailView()->elementAdded(eType,_rName,_rObject,_rxConn);
+    return getDetailView()->elementAdded(eType,_rName,_rObject);
 }
 // -----------------------------------------------------------------------------
-void OApplicationView::elementRemoved(ElementType eType,const ::rtl::OUString& _rName, const Reference< XConnection >& _rxConn )
+void OApplicationView::elementRemoved(ElementType eType,const ::rtl::OUString& _rName )
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
-    getDetailView()->elementRemoved(eType,_rName,_rxConn);
+    getDetailView()->elementRemoved(eType,_rName);
 }
 // -----------------------------------------------------------------------------
 void OApplicationView::elementReplaced(ElementType _eType
                                                     ,const ::rtl::OUString& _rOldName
-                                                    ,const ::rtl::OUString& _rNewName
-                                                    ,const Reference< XConnection >& _rxConn
-                                                    ,const Reference<XInterface>& _xObject)
+                                                    ,const ::rtl::OUString& _rNewName )
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
-    getDetailView()->elementReplaced(_eType, _rOldName,_rNewName,_rxConn ,_xObject);
+    getDetailView()->elementReplaced(_eType, _rOldName, _rNewName );
 }
 // -----------------------------------------------------------------------------
 void OApplicationView::clearPages(sal_Bool _bTaskAlso)
@@ -600,7 +598,7 @@ void OApplicationView::showPreview( const ::rtl::OUString& _sDataSourceName,
         }
         if ( m_xObject.is() )
             startComponentListening(m_xObject);
-        getDetailView()->showPreview(_sDataSourceName,_xConnection,_sName,_bTable);
+        getDetailView()->showPreview(_sDataSourceName,_sName,_bTable);
     }
 }
 // -----------------------------------------------------------------------------
