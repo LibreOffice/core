@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:54:45 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:00:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -478,7 +478,7 @@ void OTasksWindow::fillCreationNew( const TResourceStruct& _rList )
 
     try
     {
-        Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(getDetailView()->getBorderWin()->getView()->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))),UNO_QUERY);
+        Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(getDetailView()->getBorderWin().getView()->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))),UNO_QUERY);
         Reference<XUIConfigurationManager> xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument")));
         Reference<XImageManager> xImageMgr(xUIConfigMgr->getImageManager(),UNO_QUERY);
 
@@ -538,23 +538,23 @@ void OTasksWindow::Clear()
 // class OApplicationDetailView
 //==================================================================
 DBG_NAME(OApplicationDetailView)
-OApplicationDetailView::OApplicationDetailView(OAppBorderWindow* _pParent,PreviewMode _ePreviewMode) : OSplitterView(_pParent,sal_False )
+OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode) : OSplitterView(&_rParent,sal_False )
     ,m_aHorzSplitter(this)
     ,m_aTasks(this,STR_TASKS,WB_BORDER | WB_DIALOGCONTROL )
     ,m_aContainer(this,0,WB_BORDER | WB_DIALOGCONTROL )
-    ,m_pBorderWin(_pParent)
+    ,m_rBorderWin(_rParent)
 {
     DBG_CTOR(OApplicationDetailView,NULL);
     SetUniqueId(UID_APP_DETAIL_VIEW);
     ImplInitSettings( sal_True, sal_True, sal_True );
 
-    m_pControlHelper = new OAppDetailPageHelper(&m_aContainer,_pParent,_ePreviewMode);
+    m_pControlHelper = new OAppDetailPageHelper(&m_aContainer,m_rBorderWin,_ePreviewMode);
     m_pControlHelper->Show();
     m_aContainer.setChildWindow(m_pControlHelper);
 
     OTasksWindow* pTasks = new OTasksWindow(&m_aTasks,this);
     pTasks->Show();
-    pTasks->Disable(_pParent->getView()->getCommandController()->isDataSourceReadOnly());
+    pTasks->Disable(m_rBorderWin.getView()->getCommandController()->isDataSourceReadOnly());
     m_aTasks.setChildWindow(pTasks);
     m_aTasks.SetUniqueId(UID_APP_TASKS_VIEW);
     m_aTasks.Show();
@@ -639,7 +639,7 @@ void OApplicationDetailView::createTablesPage(const Reference< XConnection>& _xC
 
     ::com::sun::star::util::URL aUrl;
     aUrl.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewView"));
-    if ( getBorderWin()->getView()->getCommandController()->isCommandEnabled(aUrl) )
+    if ( getBorderWin().getView()->getCommandController()->isCommandEnabled(aUrl) )
         aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_VIEW),TResourcePair(aUrl.Complete,RID_STR_VIEWS_HELP_TEXT_DESIGN)));
     //  aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_VIEW_AUTO),TResourcePair(ID_NEW_VIEW_DESIGN_AUTO_PILOT,RID_STR_VIEWS_HELP_TEXT_WIZARD)));
 
@@ -695,10 +695,10 @@ void OApplicationDetailView::createPage(ElementType _eType,const Reference< XNam
     Resize();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OApplicationDetailView::getQualifiedName(SvLBoxEntry* _pEntry,const Reference< XDatabaseMetaData>& _xMetaData) const
+::rtl::OUString OApplicationDetailView::getQualifiedName( SvLBoxEntry* _pEntry ) const
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
-    return m_pControlHelper->getQualifiedName(_pEntry,_xMetaData);
+    return m_pControlHelper->getQualifiedName( _pEntry );
 }
 // -----------------------------------------------------------------------------
 sal_Bool OApplicationDetailView::isLeaf(SvLBoxEntry* _pEntry) const
@@ -763,10 +763,10 @@ sal_Int32 OApplicationDetailView::getElementCount()
     return m_pControlHelper->getElementCount();
 }
 // -----------------------------------------------------------------------------
-void OApplicationDetailView::getSelectionElementNames(::std::vector< ::rtl::OUString>& _rNames,const Reference< XDatabaseMetaData>& _xMetaData) const
+void OApplicationDetailView::getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames ) const
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
-    m_pControlHelper->getSelectionElementNames(_rNames,_xMetaData);
+    m_pControlHelper->getSelectionElementNames( _rNames );
 }
 // -----------------------------------------------------------------------------
 SvLBoxEntry* OApplicationDetailView::getEntry( const Point& _aPoint ) const
@@ -800,26 +800,24 @@ void OApplicationDetailView::onCreationClick( const ::rtl::OUString& _sCommand)
     static_cast<OAppBorderWindow*>(GetParent())->getView()->getElementNotification()->onCreationClick(_sCommand);
 }
 // -----------------------------------------------------------------------------
-SvLBoxEntry*  OApplicationDetailView::elementAdded(ElementType _eType,const ::rtl::OUString& _rName, const Any& _rObject, const Reference< XConnection >& _rxConn )
+SvLBoxEntry*  OApplicationDetailView::elementAdded(ElementType _eType,const ::rtl::OUString& _rName, const Any& _rObject )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
-    return m_pControlHelper->elementAdded(_eType,_rName, _rObject, _rxConn );
+    return m_pControlHelper->elementAdded(_eType,_rName, _rObject );
 }
 // -----------------------------------------------------------------------------
-void OApplicationDetailView::elementRemoved(ElementType _eType,const ::rtl::OUString& _rName, const Reference< XConnection >& _rxConn )
+void OApplicationDetailView::elementRemoved(ElementType _eType,const ::rtl::OUString& _rName )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
-    m_pControlHelper->elementRemoved(_eType,_rName, _rxConn );
+    m_pControlHelper->elementRemoved(_eType,_rName );
 }
 // -----------------------------------------------------------------------------
 void OApplicationDetailView::elementReplaced(ElementType _eType
                                                     ,const ::rtl::OUString& _rOldName
-                                                    ,const ::rtl::OUString& _rNewName
-                                                    ,const Reference< XConnection >& _rxConn
-                                                    ,const Reference<XInterface>& _xObject)
+                                                    ,const ::rtl::OUString& _rNewName )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
-    m_pControlHelper->elementReplaced(_eType, _rOldName,_rNewName,_rxConn,_xObject );
+    m_pControlHelper->elementReplaced( _eType, _rOldName, _rNewName );
 }
 // -----------------------------------------------------------------------------
 PreviewMode OApplicationDetailView::getPreviewMode()
@@ -853,12 +851,11 @@ void OApplicationDetailView::showPreview(const Reference< XContent >& _xContent)
 }
 // -----------------------------------------------------------------------------
 void OApplicationDetailView::showPreview(   const ::rtl::OUString& _sDataSourceName,
-                                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                                             const ::rtl::OUString& _sName,
                                             sal_Bool _bTable)
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
-    m_pControlHelper->showPreview(_sDataSourceName,_xConnection,_sName,_bTable);
+    m_pControlHelper->showPreview(_sDataSourceName,_sName,_bTable);
 }
 // -----------------------------------------------------------------------------
 sal_Bool OApplicationDetailView::isSortUp() const
