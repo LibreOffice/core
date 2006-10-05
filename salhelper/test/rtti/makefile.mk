@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:02:46 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:44:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ LIBTARGET=NO
 TARGETTYPE=CUI
 
 
-NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
 
 USE_DEFFILE=	TRUE
@@ -79,11 +78,6 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1EXPORTFILE=	exports.dxp
 
 DEF1NAME=	$(SHL1TARGET)
-# generate exports ------------------------------------------------
-#DEF1DEPN=      $(MISC)$/$(SHL1TARGET).flt
-#DEFLIB1NAME=   $(TARGET)
-#-----------------------------------------------------------------
-
 
 .IF "$(OS)$(CPU)"=="SOLARISS"
 SHL1VERSIONMAP=	sols.map
@@ -125,8 +119,4 @@ APP1STDLIBS += $(LIBCIMT)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
-
-$(MISC)$/$(SHL1TARGET).flt : makefile.mk
-       +echo   _TI2       >$@
-       +echo   _TI1      >>$@
 
