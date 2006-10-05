@@ -1,0 +1,122 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XDatabaseDocumentUI.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2006-10-05 12:55:36 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_application_XDatabaseDocumentUI_idl__
+#define __com_sun_star_sdb_application_XDatabaseDocumentUI_idl__
+
+#ifndef __com_sun_star_sdbc_XDataSource_idl__
+#include <com/sun/star/sdbc/XDataSource.idl>
+#endif
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
+#ifndef __com_sun_star_sdbc_XConnection_idl__
+#include <com/sun/star/sdbc/XConnection.idl>
+#endif
+#ifndef __com_sun_star_awt_XWindow_idl__
+#include <com/sun/star/awt/XWindow.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module sdb { module application {
+
+//=============================================================================
+
+/** provides access to the user interface of a database document
+
+    <p>This interface is available when a database document has been loaded into
+    a frame, at the controller of this frame.</p>
+
+    @see com::sun::star::frame::Controller
+    @see com::sun::star::sdb::DatabaseDocument
+ */
+interface XDatabaseDocumentUI
+{
+    /** provides access to the data source belong to the database document
+    */
+    [attribute, readonly] com::sun::star::sdbc::XDataSource DataSource;
+
+    /** provides access to the applicatio's main window
+
+        <p>Note that reading this atttribute is equivalent to querying the component
+        for the <type scope="com::sun::star::frame">XController</type> interface,
+        asking the controller for its frame, and asking this frame for its
+        container window.
+
+        @see ::com::sun::star::frame::XController
+        @see ::com::sun::star::frame::XFrame
+    */
+    [attribute, readonly] com::sun::star::awt::XWindow ApplicationMainWindow;
+
+    /** provides access to the current connection of the application
+
+        <p>Note that the connection returned here is really the working connection
+        of the application. Clients should not misuse it, in particular, closing
+        the connection can yield unexpected results and should definately be
+        avoided.</p>
+    */
+    [attribute, readonly] com::sun::star::sdbc::XConnection ActiveConnection;
+
+    /** determines whether the application is currently connected to the database
+    */
+    boolean isConnected();
+
+    /** lets the application connect to the database
+
+        <p>If the application is already connected, nothing happens. If it is not
+        connected, the application will try to establish a connection by using
+        <member scope="com::sun::star::sdbc">XDataSource::getConnection</member>
+        with the current settings, as specified in the
+        <member scope="com::sun::star::sdb">DataSource::Settings</member> member.</p>
+
+        <p>If the connection cannot be established, the respective error message is shown
+        in the application window.</p>
+
+        @return
+            whether or not the connection attempt was successful, i.e. whether or not
+            a subsequent call to <member>isConnected</member> would return <TRUE/>.
+    */
+    boolean connect();
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif
+
