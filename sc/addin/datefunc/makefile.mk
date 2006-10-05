@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 16:20:52 $
+#   last change: $Author: kz $ $Date: 2006-10-05 11:02:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -103,9 +103,9 @@ $(MISC)$/$(TARGET).lst : \
     ..$/inc$/$(TARGET).hrc \
     ..$/inc$/addin.h
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    +echo $< > $@
+    echo $< > $@
 .ELSE
-    +echo $(<:+"\n":s/ //) > $@
+    echo $(<:+"\n":s/ //) > $@
 .ENDIF
 
 # --- Def-File ---
