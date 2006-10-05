@@ -4,9 +4,9 @@
  *
  *  $RCSfile: marktree.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:02:01 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:03:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,76 +208,6 @@ void OMarkableTreeListBox::CheckButtons()
         implDetermineState(pEntry);
         pEntry = GetModel()->NextSibling(pEntry);
     }
-
-#if 0
-    // Plausibilit"atspr"ufung
-    SvButtonState eState;
-    SvLBoxEntry* pEntry = GetModel()->First();
-    while(pEntry)
-    {
-        if(!GetModel()->HasChilds(pEntry))
-        {
-            sal_uInt16 nCheck=0;
-            sal_uInt16 nCount=0;
-            SvLBoxEntry* pChildEntry = pEntry;
-            while(pChildEntry)
-            {
-                if(GetCheckButtonState(pChildEntry) == SV_BUTTON_CHECKED)
-                    nCheck++;
-                nCount++;
-                pChildEntry = GetModel()->NextSibling(pChildEntry);
-            }
-
-            if(nCheck && nCount != nCheck)
-                eState = SV_BUTTON_TRISTATE;
-            else if(nCheck)
-                eState = SV_BUTTON_CHECKED;
-            else
-                eState = SV_BUTTON_UNCHECKED;
-
-            SvLBoxEntry* pSchema = GetModel()->GetParent(pEntry);
-            if(pSchema)
-            {
-                pEntry = GetModel()->NextSibling(pSchema);
-                SetCheckButtonState(pSchema, eState);
-            }
-            else
-                pEntry = NULL; // wenn kein Schema dann sind bereits alle pEntry's durchlaufen worden
-        }
-        else
-            pEntry = GetModel()->Next(pEntry);
-    }
-
-    SvLBoxEntry* pCatalog = GetModel()->First();
-    SvLBoxEntry* pSchema = NULL;
-    if(GetModel()->HasChilds(pCatalog) && GetModel()->HasChilds(pSchema = GetModel()->Next(pCatalog)))
-    {
-        sal_uInt16 nCheck   =0;
-        sal_uInt16 nTri     =0;
-        sal_uInt16 nCount   =0;
-        while(pSchema)
-        {
-            if((eState = GetCheckButtonState(pSchema)) == SV_BUTTON_TRISTATE)
-                break;
-
-            if(eState == SV_BUTTON_CHECKED)
-                nCheck++;
-            nCount++;
-            pSchema = GetModel()->NextSibling(pSchema);
-        }
-
-        if(eState != SV_BUTTON_TRISTATE)
-        {
-            if(nCheck && nCount == nCheck)
-                eState = SV_BUTTON_CHECKED;
-            else if(nCheck)
-                eState = SV_BUTTON_TRISTATE;
-            else
-                eState = SV_BUTTON_UNCHECKED;
-        }
-        SetCheckButtonState( pCatalog,eState);
-    }
-#endif
 }
 //------------------------------------------------------------------------
 void OMarkableTreeListBox::CheckButtonHdl()
