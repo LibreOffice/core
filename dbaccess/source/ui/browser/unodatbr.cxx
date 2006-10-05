@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.179 $
+ *  $Revision: 1.180 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:59:27 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:02:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #endif
 #ifndef _SBA_GRID_HXX
 #include "sbagrid.hxx"
+#endif
+#ifndef DBACCESS_IMAGEPROVIDER_HXX
+#include "imageprovider.hxx"
 #endif
 #ifndef _SVTREEBOX_HXX
 #include <svtools/svtreebx.hxx>
@@ -416,7 +419,6 @@ SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory
     ,m_nAsyncDrop(0)
     ,m_nBorder(1)
     ,m_bQueryEscapeProcessing( sal_False )
-    ,m_bHiContrast(sal_False)
     ,m_bShowMenu(sal_False)
     ,m_bInSuspend(sal_False)
     ,m_bEnableBrowser(sal_True)
@@ -549,8 +551,6 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
 
         m_pTreeView->getListBox()->setControlActionListener(this);
         m_pTreeView->SetHelpId(HID_CTL_TREEVIEW);
-
-        m_bHiContrast = isHiContrast();
 
         // a default pos for the splitter, so that the listbox is about 80 (logical) pixels wide
         m_pSplitter->SetSplitPosPixel( getBrowserView()->LogicToPixel( Size( 80, 0 ), MAP_APPFONT ).Width() );
@@ -1991,13 +1991,14 @@ void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDb
     if (!_rTableName.Len())
         _rTableName = String(ModuleRes(RID_STR_TABLES_CONTAINER));
 
+    ImageProvider aImageProvider;
     if (!_rQueryImage)
-        _rQueryImage = Image(ModuleRes( DBTreeListModel::getImageResId(etQueryContainer,isHiContrast()) ));
+        _rQueryImage = aImageProvider.getFolderImage( DatabaseObject::QUERY, isHiContrast() );
     if (!_rTableImage)
-        _rTableImage = Image(ModuleRes( DBTreeListModel::getImageResId(etTableContainer,isHiContrast()) ));
+        _rTableImage = aImageProvider.getFolderImage( DatabaseObject::TABLE, isHiContrast() );
 
     if (!_rDbImage)
-        _rDbImage = Image(ModuleRes( DBTreeListModel::getImageResId(etDatasource,isHiContrast()) ));
+        _rDbImage = aImageProvider.getDatabaseImage( isHiContrast() );
 
     // add the entry for the data source
     // special handling for data sources denoted by URLs - we do not want to display this ugly URL, do we?
@@ -2050,14 +2051,11 @@ void SbaTableQueryBrowser::initializeTreeModel()
 // -------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAccess,
                                             SvLBoxEntry* _pParent,
-                                            const EntryType& _rEntryType)
+                                            EntryType _eEntryType)
 {
     DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(_pParent->GetUserData());
     if(pData) // don't ask if the nameaccess is already set see OnExpandEntry views and tables
         pData->xContainer = _xNameAccess;
-
-    ModuleRes aResId(DBTreeListModel::getImageResId(_rEntryType,isHiContrast()));
-    Image aImage(aResId);
 
     try
     {
@@ -2069,8 +2067,8 @@ sal_Bool SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xName
             if(!m_pTreeView->getListBox()->GetEntryPosByName(*pIter,_pParent))
             {
                 DBTreeListModel::DBTreeListUserData* pEntryData = new DBTreeListModel::DBTreeListUserData;
-                pEntryData->eType = _rEntryType;
-                m_pTreeView->getListBox()->InsertEntry(*pIter, aImage, aImage, _pParent, sal_False,LIST_APPEND,pEntryData);
+                pEntryData->eType = _eEntryType;
+                implAppendEntry( _pParent, *pIter, pEntryData, _eEntryType );
             }
         }
     }
@@ -2081,6 +2079,23 @@ sal_Bool SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xName
     }
     return sal_True;
 }
+
+//------------------------------------------------------------------------------
+void SbaTableQueryBrowser::implAppendEntry( SvLBoxEntry* _pParent, const String& _rName, void* _pUserData, EntryType _eEntryType )
+{
+    ::std::auto_ptr< ImageProvider > pImageProvider( getImageProviderFor( _pParent ) );
+
+    Image aImage( pImageProvider->getImage( _rName, getDatabaseObjectType( _eEntryType ), false ) );
+    Image aImageHC( pImageProvider->getImage( _rName, getDatabaseObjectType( _eEntryType ), true ) );
+
+    SvLBoxEntry* pNewEntry = m_pTreeView->getListBox()->InsertEntry( _rName, _pParent, sal_False, LIST_APPEND, _pUserData );
+
+    m_pTreeView->getListBox()->SetExpandedEntryBmp( pNewEntry, aImage, BMP_COLOR_NORMAL );
+    m_pTreeView->getListBox()->SetCollapsedEntryBmp( pNewEntry, aImage, BMP_COLOR_NORMAL );
+    m_pTreeView->getListBox()->SetExpandedEntryBmp( pNewEntry, aImageHC, BMP_COLOR_HIGHCONTRAST );
+    m_pTreeView->getListBox()->SetCollapsedEntryBmp( pNewEntry, aImageHC, BMP_COLOR_HIGHCONTRAST );
+}
+
 //------------------------------------------------------------------------------
 IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
 {
@@ -2122,12 +2137,12 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
                 // the nameaccess will be overwriten in populateTree
                 Reference<XViewsSupplier> xViewSup(xConnection,UNO_QUERY);
                 if(xViewSup.is())
-                    populateTree(xViewSup->getViews(),_pParent,etView);
+                    populateTree( xViewSup->getViews(), _pParent, etTableOrView );
 
                 Reference<XTablesSupplier> xTabSup(xConnection,UNO_QUERY);
                 if(xTabSup.is())
                 {
-                    populateTree(xTabSup->getTables(),_pParent,etTable);
+                    populateTree( xTabSup->getTables(), _pParent, etTableOrView );
                     Reference<XContainer> xCont(xTabSup->getTables(),UNO_QUERY);
                     if(xCont.is())
                         // add as listener to know when elements are inserted or removed
@@ -2396,9 +2411,8 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
     DBTreeListModel::DBTreeListUserData* pEntryData = static_cast<DBTreeListModel::DBTreeListUserData*>(_pEntry->GetUserData());
     switch (pEntryData->eType)
     {
-        case etTable:
+        case etTableOrView:
         case etQuery:
-        case etView:
             break;
         default:
             // nothing to do
@@ -2624,32 +2638,12 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
         DBTreeListModel::DBTreeListUserData* pContainerData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntry->GetUserData());
         OSL_ENSURE(pContainerData, "elementInserted: There must be user data for this type!");
 
+        DBTreeListModel::DBTreeListUserData* pNewData = new DBTreeListModel::DBTreeListUserData;
         sal_Bool bIsTable = etTableContainer == pContainerData->eType;
-        if (bIsTable)
+        if ( bIsTable )
         {
-            // only insert userdata when we have a table because the query is only a commanddefinition object and not a query
-            DBTreeListModel::DBTreeListUserData* pNewData = new DBTreeListModel::DBTreeListUserData;
-
             _rEvent.Element >>= pNewData->xObjectProperties;// remember the new element
-            // now we have to check which type we have here
-            ::rtl::OUString sType;
-            if ( pNewData->xObjectProperties->getPropertySetInfo()->hasPropertyByName( PROPERTY_TYPE ) )
-                pNewData->xObjectProperties->getPropertyValue(PROPERTY_TYPE) >>= sType;
-            if(sType.getLength() && sType == ::rtl::OUString::createFromAscii("VIEW"))
-                pNewData->eType = etView;
-            else
-                pNewData->eType = etTable;
-
-            sal_uInt16 nImageResId = DBTreeListModel::getImageResId(pNewData->eType,isHiContrast());
-
-            Image aImage = Image(ModuleRes(nImageResId));
-            m_pTreeView->getListBox()->InsertEntry(::comphelper::getString(_rEvent.Accessor),
-                                                                            aImage,
-                                                                            aImage,
-                                                                            pEntry,
-                                                                            sal_False,
-                                                                            LIST_APPEND,
-                                                                            pNewData);
+            pNewData->eType = etTableOrView;
         }
         else
         {
@@ -2659,23 +2653,9 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
                 // now that it has all items
                 populateTree(xNames, pEntry, etQuery );
             }
-            else
-            {
-                DBTreeListModel::DBTreeListUserData* pNewData = new DBTreeListModel::DBTreeListUserData;
-                //  _rEvent.Element >>= pNewData->xObjectProperties;// remember the new element
-                pNewData->eType = etQuery;
-
-                sal_uInt16 nImageResId = DBTreeListModel::getImageResId(pNewData->eType,isHiContrast());
-                Image aImage = Image(ModuleRes(nImageResId));
-                m_pTreeView->getListBox()->InsertEntry(::comphelper::getString(_rEvent.Accessor),
-                                                                                aImage,
-                                                                                aImage,
-                                                                                pEntry,
-                                                                                sal_False,
-                                                                                LIST_APPEND,
-                                                                                pNewData);
-            }
+            pNewData->eType = etQuery;
         }
+        implAppendEntry( pEntry, ::comphelper::getString( _rEvent.Accessor ), pNewData, pNewData->eType );
     }
     else if (xNames.get() == m_xDatabaseContext.get())
     {   // a new datasource has been added to the context
@@ -2830,7 +2810,7 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
             DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pTemp->GetUserData());
             if (pData)
             {
-                if (etTable == pData->eType || etView == pData->eType)
+                if ( etTableOrView == pData->eType )
                 { // only insert userdata when we have a table because the query is only a commanddefinition object and not a query
                      _rEvent.Element >>= pData->xObjectProperties;  // remember the new element
                 }
@@ -2852,7 +2832,7 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
                     DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pChild->GetUserData());
                     if (pData)
                     {
-                        if (etTable == pData->eType || etView == pData->eType)
+                        if ( etTableOrView == pData->eType )
                         { // only insert userdata when we have a table because the query is only a commanddefinition object and not a query
                             _rEvent.Element >>= pData->xObjectProperties;   // remember the new element
                         }
@@ -3256,6 +3236,29 @@ sal_Bool SbaTableQueryBrowser::ensureConnection(SvLBoxEntry* _pAnyEntry, SharedC
 }
 
 // -----------------------------------------------------------------------------
+::std::auto_ptr< ImageProvider > SbaTableQueryBrowser::getImageProviderFor( SvLBoxEntry* _pAnyEntry )
+{
+    ::std::auto_ptr< ImageProvider > pImageProvider( new ImageProvider );
+    SharedConnection xConnection;
+    if ( getExistentConnectionFor( _pAnyEntry, xConnection ) )
+        pImageProvider.reset( new ImageProvider( xConnection ) );
+    return pImageProvider;
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool SbaTableQueryBrowser::getExistentConnectionFor( SvLBoxEntry* _pAnyEntry, SharedConnection& _rConnection )
+{
+    SvLBoxEntry* pDSEntry = m_pTreeView->getListBox()->GetRootLevelParent( _pAnyEntry );
+    DBTreeListModel::DBTreeListUserData* pDSData =
+                pDSEntry
+            ?   static_cast< DBTreeListModel::DBTreeListUserData* >( pDSEntry->GetUserData() )
+            :   NULL;
+    if ( pDSData )
+        _rConnection = pDSData->xConnection;
+    return _rConnection.is();
+}
+
+// -----------------------------------------------------------------------------
 bool SbaTableQueryBrowser::impl_isDataSourceEntry( SvLBoxEntry* _pEntry ) const
 {
     return m_pTreeModel->GetRootLevelParent( _pEntry ) == _pEntry;
@@ -3529,19 +3532,11 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
 
         switch (eType)
         {
-            // 1. for tables
+            // 1. for tables/views
             case etTableContainer:
-            case etTable:
+            case etTableOrView:
             {
-                aContextMenu.EnableItem(SID_COPY,           etTable == eType);
-            }
-            break;
-            // 2. for views
-            case etView:
-            {
-                // 2.3 actions on existing tables
-                aContextMenu.EnableItem(SID_COPY,           sal_True);
-
+                aContextMenu.EnableItem( SID_COPY, etTableOrView == eType );
             }
             break;
 
