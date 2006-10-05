@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:39:00 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 12:58:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,11 +122,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdb::application;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::reflection;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::graphic;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
@@ -376,7 +378,10 @@ OConnection::OConnection(ODatabaseSource& _rDB
     }
     catch(const Exception&)
     {
+        DBG_UNHANDLED_EXCEPTION();
     }
+
+    m_xTableUIProvider = m_xTableUIProvider.query( m_xMasterConnection );
 
     try
     {
@@ -849,6 +854,41 @@ void OConnection::impl_checkTableQueryNames_nothrow()
         DBG_UNHANDLED_EXCEPTION();
     }
 }
+
+// -----------------------------------------------------------------------------
+Reference< XGraphic > SAL_CALL OConnection::getTableIcon( const ::rtl::OUString& _TableName, ::sal_Int32 _ColorMode ) throw (RuntimeException)
+{
+    Reference< XGraphic > xReturn;
+
+    // ask our aggregate
+    if ( m_xTableUIProvider.is() )
+        xReturn = m_xTableUIProvider->getTableIcon( _TableName, _ColorMode );
+
+    // ask ourself
+    // well, we don't have own functionality here ...
+    // In the future, we might decide to delegate the complete handling to this interface.
+    // In this case, we would need to load the icon here.
+
+    return xReturn;
+}
+
+// -----------------------------------------------------------------------------
+Reference< XInterface > SAL_CALL OConnection::getTableEditor( const Reference< XDatabaseDocumentUI >& _DocumentUI, const ::rtl::OUString& _TableName ) throw (IllegalArgumentException, WrappedTargetException, RuntimeException)
+{
+    Reference< XInterface > xReturn;
+
+    // ask our aggregate
+    if ( m_xTableUIProvider.is() )
+        xReturn = m_xTableUIProvider->getTableEditor( _DocumentUI, _TableName );
+
+    // ask ourself
+    // well, we don't have own functionality here ...
+    // In the future, we might decide to delegate the complete handling to this interface.
+    // In this case, we would need to instantiate an css.sdb.TableDesign here.
+
+    return xReturn;
+}
+
 
 //........................................................................
 }   // namespace dbaccess
