@@ -4,9 +4,9 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:37:43 $
+#   last change: $Author: kz $ $Date: 2006-10-05 16:20:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ LANGFILEEXT=jlf
 $(PAR)$/%.par :
     @echo ------------------------------
     @echo Making: $@
-    @+-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))} >& $(NULLDEV)
+    @-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))} >& $(NULLDEV)
 .IF "$(GUI)"=="WNT"
     $(CPPLCC) -+ -P $(INCLUDE) $(CDEFS) $(SCPDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) $(*:b).scp > $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
 .ENDIF
