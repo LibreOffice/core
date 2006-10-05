@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 05:56:55 $
+#   last change: $Author: kz $ $Date: 2006-10-05 11:04:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ DEF1DES 	=StarObjectsTools
 .INCLUDE :  target.mk
 
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @+echo ------------------------------
-    @+echo Making: $@
+    @echo ------------------------------
+    @echo Making: $@
     +$(TYPE) sot.flt > $@
 
