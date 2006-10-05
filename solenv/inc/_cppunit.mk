@@ -15,9 +15,9 @@ TEST1LIB=$(SHL1TARGETN)
 .IF "$(SHL1TARGET)"!=""
 test : test1
 test1: ALLTAR
-        @+echo ----------------------------------------------------------
-        @+echo - start unit test \#1 on library $(TEST1LIB)
-        @+echo ----------------------------------------------------------
+        @echo ----------------------------------------------------------
+        @echo - start unit test \#1 on library $(TEST1LIB)
+        @echo ----------------------------------------------------------
         testshl2 $(TEST1LIB) $(TEST1OPT)
 .ENDIF
 
@@ -38,9 +38,9 @@ TEST2LIB=$(SHL2TARGETN)
 .IF "$(SHL2TARGET)"!=""
 test : test2
 test2: ALLTAR
-        @+echo ----------------------------------------------------------
-        @+echo - start unit test \#2 on library $(TEST2LIB)
-        @+echo ----------------------------------------------------------
+        @echo ----------------------------------------------------------
+        @echo - start unit test \#2 on library $(TEST2LIB)
+        @echo ----------------------------------------------------------
         testshl2 $(TEST2LIB) $(TEST2OPT)
 .ENDIF
 
@@ -61,9 +61,9 @@ TEST3LIB=$(SHL3TARGETN)
 .IF "$(SHL3TARGET)"!=""
 test : test3
 test3: ALLTAR
-        @+echo ----------------------------------------------------------
-        @+echo - start unit test \#3 on library $(TEST3LIB)
-        @+echo ----------------------------------------------------------
+        @echo ----------------------------------------------------------
+        @echo - start unit test \#3 on library $(TEST3LIB)
+        @echo ----------------------------------------------------------
         testshl2 $(TEST3LIB) $(TEST3OPT)
 .ENDIF
 
@@ -84,9 +84,9 @@ TEST4LIB=$(SHL4TARGETN)
 .IF "$(SHL4TARGET)"!=""
 test : test4
 test4: ALLTAR
-        @+echo ----------------------------------------------------------
-        @+echo - start unit test \#4 on library $(TEST4LIB)
-        @+echo ----------------------------------------------------------
+        @echo ----------------------------------------------------------
+        @echo - start unit test \#4 on library $(TEST4LIB)
+        @echo ----------------------------------------------------------
         testshl2 $(TEST4LIB) $(TEST4OPT)
 .ENDIF
 
@@ -107,9 +107,9 @@ TEST5LIB=$(SHL5TARGETN)
 .IF "$(SHL5TARGET)"!=""
 test : test5
 test5: ALLTAR
-        @+echo ----------------------------------------------------------
-        @+echo - start unit test \#5 on library $(TEST5LIB)
-        @+echo ----------------------------------------------------------
+        @echo ----------------------------------------------------------
+        @echo - start unit test \#5 on library $(TEST5LIB)
+        @echo ----------------------------------------------------------
         testshl2 $(TEST5LIB) $(TEST5OPT)
 .ENDIF
 
@@ -130,9 +130,9 @@ TEST6LIB=$(SHL6TARGETN)
 .IF "$(SHL6TARGET)"!=""
 test : test6
 test6: ALLTAR
-        @+echo ----------------------------------------------------------
-        @+echo - start unit test \#6 on library $(TEST6LIB)
-        @+echo ----------------------------------------------------------
+        @echo ----------------------------------------------------------
+        @echo - start unit test \#6 on library $(TEST6LIB)
+        @echo ----------------------------------------------------------
         testshl2 $(TEST6LIB) $(TEST6OPT)
 .ENDIF
 
@@ -153,9 +153,9 @@ TEST7LIB=$(SHL7TARGETN)
 .IF "$(SHL7TARGET)"!=""
 test : test7
 test7: ALLTAR
-        @+echo ----------------------------------------------------------
-        @+echo - start unit test \#7 on library $(TEST7LIB)
-        @+echo ----------------------------------------------------------
+        @echo ----------------------------------------------------------
+        @echo - start unit test \#7 on library $(TEST7LIB)
+        @echo ----------------------------------------------------------
         testshl2 $(TEST7LIB) $(TEST7OPT)
 .ENDIF
 
@@ -176,9 +176,9 @@ TEST8LIB=$(SHL8TARGETN)
 .IF "$(SHL8TARGET)"!=""
 test : test8
 test8: ALLTAR
-        @+echo ----------------------------------------------------------
-        @+echo - start unit test \#8 on library $(TEST8LIB)
-        @+echo ----------------------------------------------------------
+        @echo ----------------------------------------------------------
+        @echo - start unit test \#8 on library $(TEST8LIB)
+        @echo ----------------------------------------------------------
         testshl2 $(TEST8LIB) $(TEST8OPT)
 .ENDIF
 
@@ -199,9 +199,9 @@ TEST9LIB=$(SHL9TARGETN)
 .IF "$(SHL9TARGET)"!=""
 test : test9
 test9: ALLTAR
-        @+echo ----------------------------------------------------------
-        @+echo - start unit test \#9 on library $(TEST9LIB)
-        @+echo ----------------------------------------------------------
+        @echo ----------------------------------------------------------
+        @echo - start unit test \#9 on library $(TEST9LIB)
+        @echo ----------------------------------------------------------
         testshl2 $(TEST9LIB) $(TEST9OPT)
 .ENDIF
 
@@ -222,9 +222,9 @@ TEST10LIB=$(SHL10TARGETN)
 .IF "$(SHL10TARGET)"!=""
 test : test10
 test10: ALLTAR
-        @+echo ----------------------------------------------------------
-        @+echo - start unit test \#10 on library $(TEST10LIB)
-        @+echo ----------------------------------------------------------
+        @echo ----------------------------------------------------------
+        @echo - start unit test \#10 on library $(TEST10LIB)
+        @echo ----------------------------------------------------------
         testshl2 $(TEST10LIB) $(TEST10OPT)
 .ENDIF
 
