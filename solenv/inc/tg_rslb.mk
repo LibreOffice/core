@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_rslb.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:58:53 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:41:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 HIDRES$(TNR)PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(RESLIB$(TNR)NAME)_res.hid
 
 #HACK cut off the dirty srs files which are included from solver
-#RESLIB$(TNR)HIDFILESx=$(shell @+echo $(RESLIB$(TNR)SRSFILES:t"\n") | $(GREP) -v "$(SOLARRESDIR:s/\/\\/)" )
 RESLIB$(TNR)HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB$(TNR)SRSFILES)))
 $(HIDRES$(TNR)PARTICLE): $(RESLIB$(TNR)HIDFILES)
     @echo ------------------------------
@@ -60,7 +59,7 @@ $(RSC_MULTI$(TNR)) : \
         $(RESLIB$(TNR)SRSFILES) \
         $(RESLIB$(TNR)TARGETN) \
         $(RESLIB$(TNR)BMPS)
-    @+echo using rsc multi-res feature
+    @echo using rsc multi-res feature
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
