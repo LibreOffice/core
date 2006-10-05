@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:42:48 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:07:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1816,7 +1816,7 @@ void fillTreeListNames( const Reference< XNameAccess >& _xContainer, DBTreeListB
             Reference<XNameAccess> xSubElements(_xContainer->getByName(*pIter),UNO_QUERY);
             if ( xSubElements.is() )
             {
-                pEntry = _rList.InsertEntry(*pIter,_pParent,FALSE,LIST_APPEND,reinterpret_cast<void*>(FOLDER_TYPE));
+                pEntry = _rList.InsertEntry( *pIter, _pParent, FALSE, LIST_APPEND, reinterpret_cast< void* >( FOLDER_INDICATOR ) );
                 if ( _pContainerFoundListener )
                 {
                     Reference<XContainer> xCont(xSubElements,UNO_QUERY);
