@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabletree.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:19:23 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:06:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,10 +56,14 @@
 #include <com/sun/star/sdbc/XDriver.hpp>
 #endif
 
+#include <memory>
+
 //.........................................................................
 namespace dbaui
 {
 //.........................................................................
+
+class ImageProvider;
 
 //========================================================================
 //= OTableTreeListBox
@@ -67,9 +71,10 @@ namespace dbaui
 class OTableTreeListBox : public OMarkableTreeListBox
 {
 protected:
-    Image           m_aTableImage;
-    Image           m_aViewImage;
-
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+                    m_xConnection;      // the connection we're working for, set in implOnNewConnection, called by UpdateTableList
+    ::std::auto_ptr< ImageProvider >
+                    m_pImageProvider;   // provider for our images
     sal_Bool        m_bVirtualRoot; // should the first entry be visible
 
 public:
@@ -85,55 +90,64 @@ public:
         const ResId& rResId,
         sal_Bool _bVirtualRoot );
 
+    ~OTableTreeListBox();
+
     typedef ::std::pair< ::rtl::OUString,sal_Bool>  TTableViewName;
     typedef ::std::vector< TTableViewName >         TNames;
+
     /** call when HiContrast change.
     */
-    virtual void notifyHiContrastChanged();
+    void notifyHiContrastChanged();
+
+    /** determines whether the given entry denotes a tables folder
+    */
+    bool    isFolderEntry( const SvLBoxEntry* _pEntry ) const;
+
+    /** determines whether the given entry denotes a table or view
+    */
+    bool    isTableOrViewEntry( const SvLBoxEntry* _pEntry ) const
+    {
+        return !isFolderEntry( _pEntry );
+    }
 
     /** fill the table list with the tables belonging to the connection described by the parameters
-        @param _xConnection
+        @param _rxConnection
             the connection, which must support the service com.sun.star.sdb.Connection
         @throws
             <type scope="com::sun::star::sdbc">SQLException</type> if no connection could be created
     */
-    void
-            UpdateTableList(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection
+    void    UpdateTableList(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
             )   throw(::com::sun::star::sdbc::SQLException);
 
     /** fill the table list with the tables and views determined by the two given containers.
         The views sequence is used to determine which table is of type view.
-        @param      _rxConnMetaData meta data describing the connection where you got the object names from. Must not be NULL.
+        @param      _rxConnection   the connection where you got the object names from. Must not be NULL.
                                     Used to split the full qualified names into it's parts.
         @param      _rTables        table/view sequence
         @param      _rViews         view sequence
     */
     void    UpdateTableList(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConnMetaData,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                 const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _rTables,
                 const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _rViews
             );
 
     /** to be used if a foreign instance added a table
     */
-    SvLBoxEntry* addedTable(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
-                const ::rtl::OUString& _rName,
-                const ::com::sun::star::uno::Any& _rObject
-            );
+    SvLBoxEntry* addedTable( const ::rtl::OUString& _rName );
 
     /** to be used if a foreign instance removed a table
     */
-    void    removedTable(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
-                const ::rtl::OUString& _rName
-            );
+    void    removedTable( const ::rtl::OUString& _rName );
 
-    SvLBoxEntry*    getEntryByQualifiedName(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
-                const ::rtl::OUString& _rName
-            );
+    /** returns the fully qualified name of a table entry
+        @param _pEntry
+            the entry whose name is to be obtained. Must not denote a folder entry.
+    */
+    String getQualifiedTableName( SvLBoxEntry* _pEntry ) const;
+
+    SvLBoxEntry*    getEntryByQualifiedName( const ::rtl::OUString& _rName );
 
     SvLBoxEntry*    getAllObjectsEntry() const;
 
@@ -156,24 +170,32 @@ protected:
 
     void implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateDescendants = sal_True, sal_Bool _bUpdateAncestors = sal_True);
 
+    /** adds the given entry to our list
+        @precond
+            our image provider must already have been reset to the connection to which the meta data
+            belong.
+    */
     SvLBoxEntry* implAddEntry(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConnMetaData,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMeta,
             const ::rtl::OUString& _rTableName,
-            const Image& _rImage,
-            SvLBoxEntry* _pParentEntry,
-            sal_Int32 _nType,
             sal_Bool _bCheckName = sal_True
         );
+
+    void    implSetDefaultImages();
+
+    void    implOnNewConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection );
+
+    bool    impl_getAndAssertMetaData( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _out_rMetaData ) const;
 
     sal_Bool haveVirtualRoot() const { return m_bVirtualRoot; }
 
     /** fill the table list with the tables and views determined by the two given containers
-        @param      _rxConnMetaData meta data describing the connection where you got the object names from. Must not be NULL.
+        @param      _rxConnection   the connection where you got the object names from. Must not be NULL.
                                     Used to split the full qualified names into it's parts.
         @param      _rTables        table/view sequence, the second argument is <TRUE/> if it is a table, otherwise it is a view.
     */
     void    UpdateTableList(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConnMetaData,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                 const TNames& _rTables
             );
 
