@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 14:36:36 $
+#   last change: $Author: kz $ $Date: 2006-10-05 11:00:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,7 @@ TARGET=str
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
@@ -77,13 +75,13 @@ TARGETDEPS+=$(ALWAYSDBGTARGET)
 # - ALWAYSDBG - files always compiled with debugging
 # --------------------------------------------------
 $(ALWAYSDBGTARGET):
-       @+echo --- ALWAYSDBGFILES ---
+       @echo --- ALWAYSDBGFILES ---
        @dmake $(MFLAGS) $(MAKEFILE) debug=true $(ALWAYSDBGFILES) ALWAYSDBG_FLAG=TRUE $(CALLMACROS)
-       @+echo --- ALWAYSDBGFILES OVER ---
+       @echo --- ALWAYSDBGFILES OVER ---
 
 $(ALWAYSDBGFILES):
-       @+echo --- ALWAYSDBG ---
+       @echo --- ALWAYSDBG ---
        @dmake $(MFLAGS) $(MAKEFILE) debug=true ALWAYSDBG_FLAG=TRUE $(CALLMACROS) $@
-       @+echo --- ALWAYSDBG OVER ---
+       @echo --- ALWAYSDBG OVER ---
 .ENDIF
 .ENDIF
