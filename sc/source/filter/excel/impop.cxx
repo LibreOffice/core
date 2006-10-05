@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 09:57:13 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:17:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,7 +273,6 @@ void ImportExcel::ReadBlank()
     {
         sal_uInt16 nXFIdx = ReadXFIndex( maStrm.GetRecId() == EXC_ID2_BLANK );
 
-        pColRowBuff->Used( aScPos );
         GetXFRangeBuffer().SetBlankXF( aScPos, nXFIdx );
     }
 }
@@ -290,7 +289,6 @@ void ImportExcel::ReadInteger()
         sal_uInt16 nValue;
         maStrm >> nValue;
 
-        pColRowBuff->Used( aScPos );
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
         GetDoc().PutCell( aScPos, new ScValueCell( nValue ) );
     }
@@ -308,7 +306,6 @@ void ImportExcel::ReadNumber()
         double fValue;
         maStrm >> fValue;
 
-        pColRowBuff->Used( aScPos );
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
         GetDoc().PutCell( aScPos, new ScValueCell( fValue ) );
     }
@@ -339,7 +336,6 @@ void ImportExcel::ReadLabel()
         aString.Read( maStrm, nFlags );
         SetCharSet( eOldTextEnc );
 
-        pColRowBuff->Used( aScPos );
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
         if( ScBaseCell* pCell = XclImpStringHelper::CreateCell( GetRoot(), aString, nXFIdx ) )
             GetDoc().PutCell( aScPos, pCell );
@@ -358,7 +354,6 @@ void ImportExcel::ReadBoolErr()
         sal_uInt8 nValue, nType;
         maStrm >> nValue >> nType;
 
-        pColRowBuff->Used( aScPos );
         if( nType == EXC_BOOLERR_BOOL )
             GetXFRangeBuffer().SetBoolXF( aScPos, nXFIdx );
         else
@@ -384,7 +379,6 @@ void ImportExcel::ReadRk()
         sal_Int32 nRk;
         maStrm >> nRk;
 
-        pColRowBuff->Used( aScPos );
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
         GetDoc().PutCell( aScPos, new ScValueCell( XclTools::GetDoubleFromRK( nRk ) ) );
     }
@@ -440,14 +434,12 @@ void ImportExcel::Bof2( void )
     maStrm.Ignore( 2 );
     maStrm >> nSubType;
 
-    if( nSubType == 0x0010 )        // Worksheet?
-        pExcRoot->eDateiTyp = Biff2;
-    else if( nSubType == 0x0020 )   // Chart?
+    if( nSubType == 0x0020 )        // Chart
         pExcRoot->eDateiTyp = Biff2C;
-    else if( nSubType == 0x0040 )   // Macro?
+    else if( nSubType == 0x0040 )   // Macro
         pExcRoot->eDateiTyp = Biff2M;
-    else
-        pExcRoot->eDateiTyp = BiffX;
+    else                            // #i51490# Excel interprets invalid indexes as worksheet
+        pExcRoot->eDateiTyp = Biff2;
 }
 
 
@@ -619,10 +611,10 @@ void ImportExcel::Colwidth( void )
 
 void ImportExcel::Defrowheight2( void )
 {
-    UINT16  nDef;
-    aIn >> nDef;
-    nDef &=0x7FFF;
-    pColRowBuff->SetDefHeight( nDef );
+    sal_uInt16 nDefHeight;
+    maStrm >> nDefHeight;
+    nDefHeight &= 0x7FFF;
+    pColRowBuff->SetDefHeight( nDefHeight, EXC_DEFROW_UNSYNCED );
 }
 
 
@@ -869,7 +861,6 @@ void ImportExcel::Mulrk( void )
         if( GetAddressConverter().ConvertAddress( aScPos, aCurrXclPos, GetCurrScTab(), true ) )
         {
             GetXFRangeBuffer().SetXF( aScPos, nXF );
-            pColRowBuff->Used( aScPos );
             GetDoc().PutCell( aScPos, new ScValueCell( XclTools::GetDoubleFromRK( nRkNum ) ) );
         }
     }
@@ -889,10 +880,7 @@ void ImportExcel::Mulblank( void )
 
         ScAddress aScPos( ScAddress::UNINITIALIZED );
         if( GetAddressConverter().ConvertAddress( aScPos, aCurrXclPos, GetCurrScTab(), true ) )
-        {
-            pColRowBuff->Used( aScPos );
             GetXFRangeBuffer().SetBlankXF( aScPos, nXF );
-        }
     }
 }
 
@@ -921,9 +909,31 @@ void ImportExcel::Rstring( void )
             aString.ReadFormats( maStrm );
 
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
-        pColRowBuff->Used( aScPos );
         if( ScBaseCell* pCell = XclImpStringHelper::CreateCell( *this, aString, nXFIdx ) )
             GetDoc().PutCell( aScPos, pCell );
+    }
+}
+
+
+void ImportExcel::Cellmerging()
+{
+    sal_uInt16 nCount, nRow1, nRow2, nCol1, nCol2;
+    aIn >> nCount;
+
+    DBG_ASSERT( aIn.GetRecLeft() >= (sal_Size)(nCount * 8), "ImportExcel8::Cellmerging - wrong record size" );
+
+    while( nCount-- )
+    {
+        aIn >> nRow1 >> nRow2 >> nCol1 >> nCol2;
+        bTabTruncated |= (nRow1 > static_cast<sal_uInt16>(MAXROW)) || (nRow2 > static_cast<sal_uInt16>(MAXROW)) || (nCol1 > static_cast<sal_uInt16>(MAXCOL)) || (nCol2 > static_cast<sal_uInt16>(MAXCOL));
+        if( (nRow1 <= static_cast<sal_uInt16>(MAXROW)) && (nCol1 <= static_cast<sal_uInt16>(MAXCOL)) )
+        {
+            nRow2 = Min( nRow2, static_cast<sal_uInt16>( MAXROW ) );
+            nCol2 = Min( nCol2, static_cast<sal_uInt16>( MAXCOL ) );
+            GetXFRangeBuffer().SetMerge( static_cast<SCCOL>(nCol1), static_cast<SCROW>(nRow1), static_cast<SCCOL>(nCol2), static_cast<SCROW>(nRow2) );
+        }
+        else
+            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow1 > static_cast<sal_uInt16>(MAXROW) ? nRow1 : nRow2, MAXROW);
     }
 }
 
@@ -977,16 +987,14 @@ void ImportExcel::Bof3( void )
     maStrm >> nSubType;
 
     DBG_ASSERT( nSubType != 0x0100, "*ImportExcel::Bof3(): Biff3 als Workbook?!" );
-    if( nSubType == 0x0010 )        // Sheet?
-        pExcRoot->eDateiTyp = Biff3;
-    else if( nSubType == 0x0100 )   // Book?
+    if( nSubType == 0x0100 )        // Book
         pExcRoot->eDateiTyp = Biff3W;
-    else if( nSubType == 0x0020 )   // Chart?
+    else if( nSubType == 0x0020 )   // Chart
         pExcRoot->eDateiTyp = Biff3C;
-    else if( nSubType == 0x0040 )   // Macro?
+    else if( nSubType == 0x0040 )   // Macro
         pExcRoot->eDateiTyp = Biff3M;
-    else
-        pExcRoot->eDateiTyp = BiffX;
+    else                            // #i51490# Excel interprets invalid indexes as worksheet
+        pExcRoot->eDateiTyp = Biff3;
 }
 
 
@@ -1027,14 +1035,9 @@ void ImportExcel::Externname34( void )
 
 void ImportExcel::Defrowheight345( void )
 {
-    UINT16  nDef, nOpt;
-
-    aIn >> nOpt >> nDef;
-
-    if( nOpt & 0x0002 )
-        pColRowBuff->SetDefHeight( 0 );
-    else
-        pColRowBuff->SetDefHeight( nDef );
+    sal_uInt16 nFlags, nDefHeight;
+    maStrm >> nFlags >> nDefHeight;
+    pColRowBuff->SetDefHeight( nDefHeight, nFlags );
 }
 
 
@@ -1123,16 +1126,14 @@ void ImportExcel::Bof4( void )
     maStrm.Ignore( 2 );
     maStrm >> nSubType;
 
-    if( nSubType == 0x0010 )        // Sheet?
-        pExcRoot->eDateiTyp = Biff4;
-    else if( nSubType == 0x0100 )   // Book?
+    if( nSubType == 0x0100 )        // Book
         pExcRoot->eDateiTyp = Biff4W;
-    else if( nSubType == 0x0020 )   // Chart?
+    else if( nSubType == 0x0020 )   // Chart
         pExcRoot->eDateiTyp = Biff4C;
-    else if( nSubType == 0x0040 )   // Macro?
+    else if( nSubType == 0x0040 )   // Macro
         pExcRoot->eDateiTyp = Biff4M;
-    else
-        pExcRoot->eDateiTyp = BiffX;
+    else                            // #i51490# Excel interprets invalid indexes as worksheet
+        pExcRoot->eDateiTyp = Biff4;
 }
 
 
@@ -1165,7 +1166,7 @@ void ImportExcel::Bof5( void )
 
 void ImportExcel::EndSheet( void )
 {
-    pColRowBuff->Apply( GetCurrScTab() );
+    pColRowBuff->Convert( GetCurrScTab() );
 
     pExcRoot->pExtSheetBuff->Reset();
 
@@ -1184,7 +1185,7 @@ void ImportExcel::NeueTabelle( void )
 
     InitializeTable( nTab );
 
-    pOutlineListBuffer->Append(new XclImpOutlineDataBuffer(*pExcRoot, nTab ));          //#94039# prevent empty rootdata
+    pOutlineListBuffer->Append( new XclImpOutlineDataBuffer( GetRoot(), nTab ) );
 
     pColRowBuff = pOutlineListBuffer->Last()->GetColRowBuff();
     pColOutlineBuff = pOutlineListBuffer->Last()->GetColOutline();
@@ -1200,16 +1201,13 @@ const ScTokenArray* ImportExcel::ErrorToFormula( BYTE bErrOrVal, BYTE nError, do
 
 void ImportExcel::AdjustRowHeight()
 {
-    // #93255# speed up chart import: import all sheets without charts, then
-    // update row heights (here), last load all charts -> do not any longer
-    // update inside of ScDocShell::ConvertFrom() (causes update of existing
-    // charts during each and every change of row height)
-    ScModelObj* pDocObj = GetDocModelObj();
-    if( pDocObj )
-    {
+    /*  #93255# Speed up chart import: import all sheets without charts, then
+        update row heights (here), last load all charts -> do not any longer
+        update inside of ScDocShell::ConvertFrom() (causes update of existing
+        charts during each and every change of row height). */
+    if( ScModelObj* pDocObj = GetDocModelObj() )
         for( SCTAB nTab = 0; nTab < GetDoc().GetTableCount(); ++nTab )
             pDocObj->AdjustRowHeight( 0, MAXROW, nTab );
-    }
 }
 
 
@@ -1221,9 +1219,9 @@ void ImportExcel::PostDocLoad( void )
     if( SfxStyleSheetBase* pStyleSheet = GetStyleSheetPool().Find( ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SFX_STYLE_FAMILY_PAGE ) )
         pStyleSheet->GetItemSet().Put( SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, 0 ) );
 
-    // Apply any Outlines for each sheet
-    for(XclImpOutlineDataBuffer* pBuffer = pOutlineListBuffer->First(); pBuffer; pBuffer = pOutlineListBuffer->Next() )
-        pBuffer->Apply(pD);
+    // outlines for all sheets, sets hidden rows and columns (after filtered ranges)
+    for( XclImpOutlineDataBuffer* pBuffer = pOutlineListBuffer->First(); pBuffer; pBuffer = pOutlineListBuffer->Next() )
+        pBuffer->Convert();
 
     // document view settings (before visible OLE area)
     GetDocViewSettings().Finalize();
@@ -1342,27 +1340,26 @@ void ImportExcel::PostDocLoad( void )
     }
 }
 
-XclImpOutlineDataBuffer::XclImpOutlineDataBuffer(RootData& rRootData, SCTAB nTabNo) :
-    nTab (nTabNo),
-    pColOutlineBuff( new XclImpOutlineBuffer (MAXCOLCOUNT) ),
-    pRowOutlineBuff( new XclImpOutlineBuffer (MAXROWCOUNT) ),
-    pColRowBuff( new XclImpColRowSettings( rRootData ) )
+XclImpOutlineDataBuffer::XclImpOutlineDataBuffer( const XclImpRoot& rRoot, SCTAB nScTab ) :
+    XclImpRoot( rRoot ),
+    mxColOutlineBuff( new XclImpOutlineBuffer( MAXCOLCOUNT ) ),
+    mxRowOutlineBuff( new XclImpOutlineBuffer( MAXROWCOUNT ) ),
+    mxColRowBuff( new XclImpColRowSettings( rRoot ) ),
+    mnScTab( nScTab )
 {
-    pColRowBuff->SetDefWidth( STD_COL_WIDTH );
-    pColRowBuff->SetDefHeight( ( UINT16 ) STD_ROW_HEIGHT );
 }
 
 XclImpOutlineDataBuffer::~XclImpOutlineDataBuffer()
 {
 }
 
-void XclImpOutlineDataBuffer::Apply(ScDocument* pD)
+void XclImpOutlineDataBuffer::Convert()
 {
-    pColOutlineBuff->SetOutlineArray( pD->GetOutlineTable( nTab, TRUE )->GetColArray() );
-    pColOutlineBuff->MakeScOutline();
+    mxColOutlineBuff->SetOutlineArray( GetDoc().GetOutlineTable( mnScTab, TRUE )->GetColArray() );
+    mxColOutlineBuff->MakeScOutline();
 
-    pRowOutlineBuff->SetOutlineArray( pD->GetOutlineTable( nTab, TRUE )->GetRowArray() );
-    pRowOutlineBuff->MakeScOutline();
+    mxRowOutlineBuff->SetOutlineArray( GetDoc().GetOutlineTable( mnScTab, TRUE )->GetRowArray() );
+    mxRowOutlineBuff->MakeScOutline();
 
-    pColRowBuff->SetHiddenFlags(nTab);
+    mxColRowBuff->ConvertHiddenFlags( mnScTab );
 }
