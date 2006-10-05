@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 15:00:37 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:15:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -744,6 +744,9 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     /** Returns true, if there is any data to create a selection list for rPos. */
     BOOL            HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
+    BOOL            ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
+                                SCCOL& rEndCol, SCROW& rEndRow, const ScMarkData& rMark,
+                                BOOL bRefresh = FALSE, BOOL bAttrs = FALSE );
     BOOL            ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow, SCTAB nTab,
                                 BOOL bRefresh = FALSE, BOOL bAttrs = FALSE );
