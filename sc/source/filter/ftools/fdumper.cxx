@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:25:30 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:19:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1812,15 +1812,14 @@ void ObjectBase::WriteInfoItem( const sal_Char* pcName, const StringWrapper& rDa
 void ObjectBase::WriteStringItem( const sal_Char* pcName, const String& rData )
 {
     ItemGuard aItem( *mxOut, pcName );
+    mxOut->WriteAscii( "(len=" );
+    mxOut->WriteDec( static_cast< sal_Int32 >( rData.Len() ) );
+    mxOut->WriteAscii( ")," );
     String aValue = rData.Copy( 0, SCF_DUMP_MAXSTRLEN );
     StringHelper::Enclose( aValue, '\'' );
     mxOut->WriteString( aValue );
     if( rData.Len() > SCF_DUMP_MAXSTRLEN )
-    {
-        mxOut->WriteAscii( " (cut,len=" );
-        mxOut->WriteDec( static_cast< sal_Int32 >( rData.Len() ) );
-        mxOut->WriteChar( ')' );
-    }
+        mxOut->WriteAscii( ",cut" );
 }
 
 void ObjectBase::WriteArrayItem( const sal_Char* pcName, const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep )
