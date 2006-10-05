@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:59:16 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:20:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,9 @@
 #endif
 #ifndef SC_XIROOT_HXX
 #include "xiroot.hxx"
+#endif
+#ifndef SC_XISTRING_HXX
+#include "xistring.hxx"
 #endif
 
 namespace com { namespace sun { namespace star {
