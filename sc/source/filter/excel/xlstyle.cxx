@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:22:24 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:18:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1663,6 +1663,11 @@ XclXFBase::~XclXFBase()
 void XclXFBase::SetAllUsedFlags( bool bUsed )
 {
     mbProtUsed = mbFontUsed = mbFmtUsed = mbAlignUsed = mbBorderUsed = mbAreaUsed = bUsed;
+}
+
+bool XclXFBase::HasUsedFlags() const
+{
+    return mbProtUsed || mbFontUsed || mbFmtUsed || mbAlignUsed || mbBorderUsed || mbAreaUsed;
 }
 
 bool XclXFBase::Equals( const XclXFBase& rCmp ) const
