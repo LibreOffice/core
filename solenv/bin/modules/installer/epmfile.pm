@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-08 08:05:09 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:15:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2012,6 +2012,25 @@ sub create_new_directory_structure
 
     }
 
+    # Setting unix rights to "775" for $newdir ("RPMS" or "packages")
+
+    my $localcall = "chmod 775 $newdir \>\/dev\/null 2\>\&1";
+    my $callreturnvalue = system($localcall);
+
+    my $callinfoline = "Systemcall: $localcall\n";
+    push( @installer::globals::logfileinfo, $callinfoline);
+
+    if ($callreturnvalue)
+    {
+        $callinfoline = "ERROR: Could not execute \"$localcall\"!\n";
+        push( @installer::globals::logfileinfo, $callinfoline);
+    }
+    else
+    {
+        $callinfoline = "Success: Executed \"$localcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $callinfoline);
+    }
+
     return $newdir;
 }
 
@@ -2317,7 +2336,7 @@ sub finalize_linux_patch
 
     my $productname = $allvariables->{'PRODUCTNAME'};
     $productname = lc($productname);
-    $productname =~ s/ /_/g;    # xyz office -> xyz_office
+    $productname =~ s/ /_/g;    # abc office -> abc_office
 #   $productname =~ s/\.//g;    # openoffice.org -> openofficeorg
 
     $infoline = "Adding productname $productname into Linux patch script\n";
