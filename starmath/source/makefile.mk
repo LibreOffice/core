@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-14 08:22:31 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:33:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -127,13 +127,9 @@ LOCALIZE_ME =  menu_tmpl.src
 $(INCCOM)$/dllname.hxx: makefile.mk
 .IF "$(GUI)"=="UNX"
     $(RM) $@
-    +echo \#define DLL_NAME \"$(DLLPRE)sm$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+    echo \#define DLL_NAME \"$(DLLPRE)sm$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE
-.IF "$(USE_SHELL)"!="4nt"
-    +echo \#define DLL_NAME \"$(DLLPRE)sm$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
-.ELSE          # "$(USE_SHELL)"!="4nt"
-    +echo #define DLL_NAME "sm$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
-.ENDIF          # "$(USE_SHELL)"!="4nt"
+    echo $(EMQ)#define DLL_NAME $(EMQ)"$(DLLPRE)sm$(UPD)$(DLLPOSTFIX)$(DLLPOST)$(EMQ)" >$@
 .ENDIF
 
 $(SRS)$/smres.srs: $(SOLARINCDIR)$/svx$/globlmn.hrc
