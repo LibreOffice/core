@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.73 $
+#   $Revision: 1.74 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 12:36:17 $
+#   last change: $Author: kz $ $Date: 2006-10-05 16:20:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -475,7 +475,7 @@ $(MISC)$/s_%.dpcc :
 
 $(MISC)$/%.dpsc :
     @+-$(RM) $@ >& $(NULLDEV)
-    @+-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))} >& $(NULLDEV)
+    @-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))} >& $(NULLDEV)
     @$(MAKEDEPEND) -f - -p$(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))} -o.par -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(*:b).scp > $@
 .IF "$(LAZY_DEPS)"==""	
     @echo $@ : $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).par  >> $@
@@ -618,21 +618,21 @@ $(MISC)$/%.sh : %.sh
     @+tr -d "\015" < $< > $@
 
 $(COMMONMISC)$/$(TARGET)$/%.ulf : %.ulf
-    +-$(MKDIR) $(@:d)
+    -$(MKDIR) $(@:d)
     +-$(RM) $@
     $(WRAPCMD) $(ULFEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
     +$(RENAME) $@.$(INPATH) $@
     +-$(RM) $@.$(INPATH)
 
 $(COMMONMISC)$/$(TARGET)$/%.xrb : %.xrb
-    +-$(MKDIR) $(@:d)
+    -$(MKDIR) $(@:d)
     +-$(RM) $@
     $(WRAPCMD) $(XMLEX) -t xrb -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
     +$(RENAME) $@.$(INPATH) $@
     +-$(RM) $@.$(INPATH)
 
 $(COMMONMISC)$/$(TARGET)$/%.xrm : %.xrm
-    +-$(MKDIR) $(@:d)
+    -$(MKDIR) $(@:d)
     +-$(RM) $@
     $(WRAPCMD) $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
     +$(RENAME) $@.$(INPATH) $@
