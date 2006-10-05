@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:12:12 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:04:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,9 +110,6 @@
 #endif
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
-#ifndef _DBAUI_QUERYDESIGNACCESS_HXX_
-#include "querydesignaccess.hxx"
 #endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
@@ -751,54 +748,6 @@ DBG_NAME(OTableSubscriptionPage)
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString OTableSubscriptionPage::getComposedEntryName(SvLBoxEntry* _pEntry)
-    {
-        SvLBoxEntry* pSchema = NULL;
-        SvLBoxEntry* pCatalog = NULL;
-        SvLBoxEntry* pAllObjectsEntry = m_aTablesList.getAllObjectsEntry();
-        ::rtl::OUString sCatalog;
-        ::rtl::OUString sComposedName;
-        if (m_aTablesList.GetModel()->HasParent(_pEntry))
-        {
-            pSchema = m_aTablesList.GetModel()->GetParent(_pEntry);
-            if (pAllObjectsEntry == pSchema)
-                // do not want to have the root entry
-                pSchema = NULL;
-
-            if (pSchema)
-            {   // it's a real schema entry, not the "all objects" root
-                if (m_aTablesList.GetModel()->HasParent(pSchema))
-                {
-                    pCatalog = m_aTablesList.GetModel()->GetParent(pSchema);
-                    if (pAllObjectsEntry == pCatalog)
-                        // do not want to have the root entry
-                        pCatalog = NULL;
-
-                    if (pCatalog)
-                    {   // it's a real catalog entry, not the "all objects" root
-                        if (m_bCatalogAtStart)
-                        {
-                            sComposedName += m_aTablesList.GetEntryText( pCatalog );
-                            sComposedName += m_sCatalogSeparator;
-                        }
-                        else
-                        {
-                            sCatalog += m_sCatalogSeparator;
-                            sCatalog += m_aTablesList.GetEntryText( pCatalog );
-                        }
-                    }
-                }
-                sComposedName += m_aTablesList.GetEntryText( pSchema );
-                sComposedName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
-            }
-        }
-        sComposedName += m_aTablesList.GetEntryText( _pEntry );
-        if (!m_bCatalogAtStart)
-            sComposedName += sCatalog;
-
-        return sComposedName;
-    }
-    //------------------------------------------------------------------------
     IMPL_LINK( OTableSubscriptionPage, OnTreeEntryCompare, const SvSortData*, _pSortData )
     {
         SvLBoxEntry* pLHS = static_cast<SvLBoxEntry*>(_pSortData->pLeft);
@@ -977,7 +926,7 @@ DBG_NAME(OTableSubscriptionPage)
         _rEvent.Accessor >>= sName;
         DBG_ASSERT( 0 != sName.getLength(), "OTableSubscriptionPage::_elementInserted: invalid accessor!" );
 
-        m_aTablesList.addedTable( m_xCurrentConnection, sName, _rEvent.Element );
+        m_aTablesList.addedTable( sName );
 
         // update the checks from the table filter set on the data source
         try
@@ -1007,7 +956,7 @@ DBG_NAME(OTableSubscriptionPage)
         _rEvent.Accessor >>= sName;
         DBG_ASSERT( 0 != sName.getLength(), "OTableSubscriptionPage::_elementRemoved: invalid accessor!" );
 
-        m_aTablesList.removedTable( m_xCurrentConnection, sName );
+        m_aTablesList.removedTable( sName );
 
         m_aTablesList.CheckButtons();
     }
