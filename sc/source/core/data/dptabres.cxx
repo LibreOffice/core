@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dptabres.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:59:46 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:16:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,15 +262,19 @@ const ScDPItemData* ScDPInitState::GetNameForIndex( long nIndexValue ) const
 
 // -----------------------------------------------------------------------
 
-void lcl_DumpStrings( const String& rType, const String& rName, const String& rValue,
+void lcl_DumpRow( const String& rType, const String& rName, const ScDPAggData* pAggData,
                     ScDocument* pDoc, ScAddress& rPos )
 {
     SCCOL nCol = rPos.Col();
     SCROW nRow = rPos.Row();
     SCTAB nTab = rPos.Tab();
-    pDoc->SetString( nCol,   nRow, nTab, rType );
-    pDoc->SetString( nCol+1, nRow, nTab, rName );
-    pDoc->SetString( nCol+2, nRow, nTab, rValue );
+    pDoc->SetString( nCol++, nRow, nTab, rType );
+    pDoc->SetString( nCol++, nRow, nTab, rName );
+    while ( pAggData )
+    {
+        pDoc->SetValue( nCol++, nRow, nTab, pAggData->GetResult() );
+        pAggData = pAggData->GetExistingChild();
+    }
     rPos.SetRow( nRow + 1 );
 }
 
@@ -1137,7 +1141,8 @@ void ScDPResultMember::ProcessData( const ScDPItemData* pChildMembers, ScDPResul
 
         for (long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
         {
-            if ( pChildDimension )
+            // #i68338# if nUserSubCount is 1 (automatic only), don't set nRowSubTotalFunc
+            if ( pChildDimension && nUserSubCount > 1 )
             {
                 aSubState.nRowSubTotalFunc = nUserPos;
                 aSubState.eRowForce = lcl_GetForceFunc( pParentLevel, nUserPos );
@@ -1358,7 +1363,7 @@ void ScDPResultMember::FillDataResults( const ScDPResultMember* pRefMember,
 
             for (long nUserPos=nUserSubStart; nUserPos<nUserSubCount; nUserPos++)
             {
-                if ( bHasChild )
+                if ( bHasChild && nUserSubCount > 1 )
                 {
                     aSubState.nRowSubTotalFunc = nUserPos;
                     aSubState.eRowForce = lcl_GetForceFunc( pParentLevel, nUserPos );
@@ -1416,7 +1421,7 @@ void ScDPResultMember::UpdateDataResults( const ScDPResultMember* pRefMember, lo
 
             for (long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
             {
-                if ( bHasChild )
+                if ( bHasChild && nUserSubCount > 1 )
                 {
                     aSubState.nRowSubTotalFunc = nUserPos;
                     aSubState.eRowForce = lcl_GetForceFunc( pParentLevel, nUserPos );
@@ -1513,7 +1518,7 @@ void ScDPResultMember::UpdateRunningTotals( const ScDPResultMember* pRefMember, 
 
             for (long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
             {
-                if ( bHasChild )
+                if ( bHasChild && nUserSubCount > 1 )
                 {
                     aSubState.nRowSubTotalFunc = nUserPos;
                     aSubState.eRowForce = lcl_GetForceFunc( pParentLevel, nUserPos );
@@ -1541,7 +1546,7 @@ void ScDPResultMember::UpdateRunningTotals( const ScDPResultMember* pRefMember, 
 
 void ScDPResultMember::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
-    lcl_DumpStrings( String::CreateFromAscii("ScDPResultMember"), GetName(), String(), pDoc, rPos );
+    lcl_DumpRow( String::CreateFromAscii("ScDPResultMember"), GetName(), NULL, pDoc, rPos );
     SCROW nStartRow = rPos.Row();
 
     if (pDataRoot)
@@ -1612,9 +1617,21 @@ void ScDPDataMember::InitFrom( ScDPResultDimension* pDim )
     pChildDimension->InitFrom(pDim);
 }
 
+const long SC_SUBTOTALPOS_AUTO = -1;    // default
+const long SC_SUBTOTALPOS_SKIP = -2;    // don't use
+
 long lcl_GetSubTotalPos( const ScDPSubTotalState& rSubState )
 {
-    long nRet = -1;
+    if ( rSubState.nColSubTotalFunc >= 0 && rSubState.nRowSubTotalFunc >= 0 &&
+         rSubState.nColSubTotalFunc != rSubState.nRowSubTotalFunc )
+    {
+        // #i68338# don't return the same index for different combinations (leading to repeated updates),
+        // return a "don't use" value instead
+
+        return SC_SUBTOTALPOS_SKIP;
+    }
+
+    long nRet = SC_SUBTOTALPOS_AUTO;
     if ( rSubState.nColSubTotalFunc >= 0 ) nRet = rSubState.nColSubTotalFunc;
     if ( rSubState.nRowSubTotalFunc >= 0 ) nRet = rSubState.nRowSubTotalFunc;
     return nRet;
@@ -1627,6 +1644,8 @@ void ScDPDataMember::UpdateValues( const ScDPValueData* pValues, const ScDPSubTo
     ScDPAggData* pAgg = &aAggregate;
 
     long nSubPos = lcl_GetSubTotalPos(rSubState);
+    if (nSubPos == SC_SUBTOTALPOS_SKIP)
+        return;
     if (nSubPos > 0)
     {
         long nSkip = nSubPos * pResultData->GetMeasureCount();
@@ -1668,7 +1687,7 @@ void ScDPDataMember::ProcessData( const ScDPItemData* pChildMembers, const ScDPV
 
     for (long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
     {
-        if ( pChildDimension )
+        if ( pChildDimension && nUserSubCount > 1 )
         {
             ScDPLevel* pForceLevel = pResultMember ? pResultMember->GetParentLevel() : NULL;
             aLocalSubState.nColSubTotalFunc = nUserPos;
@@ -1722,6 +1741,8 @@ ScDPAggData* ScDPDataMember::GetAggData( long nMeasure, const ScDPSubTotalState&
     ScDPAggData* pAgg = &aAggregate;
     long nSkip = nMeasure;
     long nSubPos = lcl_GetSubTotalPos(rSubState);
+    if (nSubPos == SC_SUBTOTALPOS_SKIP)
+        return NULL;
     if (nSubPos > 0)
         nSkip += nSubPos * pResultData->GetMeasureCount();
 
@@ -1738,6 +1759,8 @@ const ScDPAggData* ScDPDataMember::GetConstAggData( long nMeasure, const ScDPSub
     const ScDPAggData* pAgg = &aAggregate;
     long nSkip = nMeasure;
     long nSubPos = lcl_GetSubTotalPos(rSubState);
+    if (nSubPos == SC_SUBTOTALPOS_SKIP)
+        return NULL;
     if (nSubPos > 0)
         nSkip += nSubPos * pResultData->GetMeasureCount();
 
@@ -1825,7 +1848,7 @@ void ScDPDataMember::FillDataRow( const ScDPResultMember* pRefMember,
 
             for (long nUserPos=nUserSubStart; nUserPos<nUserSubCount; nUserPos++)
             {
-                if ( pChildDimension )
+                if ( pChildDimension && nUserSubCount > 1 )
                 {
                     ScDPLevel* pForceLevel = pResultMember ? pResultMember->GetParentLevel() : NULL;
                     aLocalSubState.nColSubTotalFunc = nUserPos;
@@ -1901,7 +1924,7 @@ void ScDPDataMember::UpdateDataRow( const ScDPResultMember* pRefMember,
 
     for (long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
     {
-        if ( pChildDimension )
+        if ( pChildDimension && nUserSubCount > 1 )
         {
             ScDPLevel* pForceLevel = pResultMember ? pResultMember->GetParentLevel() : NULL;
             aLocalSubState.nColSubTotalFunc = nUserPos;
@@ -2013,7 +2036,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
 
             for (long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
             {
-                if ( pChildDimension )
+                if ( pChildDimension && nUserSubCount > 1 )
                 {
                     ScDPLevel* pForceLevel = pResultMember ? pResultMember->GetParentLevel() : NULL;
                     aLocalSubState.nColSubTotalFunc = nUserPos;
@@ -2363,12 +2386,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
 
 void ScDPDataMember::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
-    String aValue;
-    const ScDPAggData* pAggData = GetConstAggData( 0, ScDPSubTotalState() );
-    if ( pAggData )
-        aValue = String::CreateFromDouble( pAggData->GetResult() );
-
-    lcl_DumpStrings( String::CreateFromAscii("ScDPDataMember"), GetName(), aValue, pDoc, rPos );
+    lcl_DumpRow( String::CreateFromAscii("ScDPDataMember"), GetName(), &aAggregate, pDoc, rPos );
     SCROW nStartRow = rPos.Row();
 
     const ScDPDataDimension* pDataChild = GetChildDimension();
@@ -3118,7 +3136,7 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember( const ScDPRelativePo
 void ScDPResultDimension::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
     String aDimName = bIsDataLayout ? String::CreateFromAscii("(data layout)") : GetName();
-    lcl_DumpStrings( String::CreateFromAscii("ScDPResultDimension"), aDimName, String(), pDoc, rPos );
+    lcl_DumpRow( String::CreateFromAscii("ScDPResultDimension"), aDimName, NULL, pDoc, rPos );
 
     SCROW nStartRow = rPos.Row();
 
@@ -3445,7 +3463,7 @@ void ScDPDataDimension::UpdateRunningTotals( const ScDPResultDimension* pRefDim,
 void ScDPDataDimension::DumpState( const ScDPResultDimension* pRefDim, ScDocument* pDoc, ScAddress& rPos ) const
 {
     String aDimName = String::CreateFromAscii( bIsDataLayout ? "(data layout)" : "(unknown)" );
-    lcl_DumpStrings( String::CreateFromAscii("ScDPDataDimension"), aDimName, String(), pDoc, rPos );
+    lcl_DumpRow( String::CreateFromAscii("ScDPDataDimension"), aDimName, NULL, pDoc, rPos );
 
     SCROW nStartRow = rPos.Row();
 
