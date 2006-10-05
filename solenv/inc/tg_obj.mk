@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_obj.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:47:06 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:41:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
-    +echo $(foreach,i,$(OBJFILES:f) $(ROBJ)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
+    echo $(foreach,i,$(OBJFILES:f) $(ROBJ)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
 .IF "$(OS)"=="MACOSX"
     @-+nm `cat $(OBJTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ELSE
@@ -61,28 +61,6 @@ $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$(OBJTARGET)"!=""
 
-
-.IF "$(SVXLIGHT)"!=""
-.IF "$(SVXLIGHTOBJTARGET)"!=""
-$(SVXLIGHTOBJTARGET): $(REAL_SVXLIGHTOBJFILES)
-    @echo ------------------------------
-    @echo Making: $@
-.IF "$(GUI)"=="WNT"
-.IF "$(COM)"=="GCC"
-#     $(LIBMGR) $(LIBFLAGS) $@ $(OBJFILES)
-    +$(ECHONL) $(foreach,i,$(REAL_SVXLIGHTOBJFILES:f) $(ROBJ)$/$(i)) >> $@
-.ELSE
-.IF "$(LIBTARGET)"!="NO"
-    @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
-.ENDIF          # "$(LIBTARGET)"!="NO"
-    $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
-.ENDIF
-.ENDIF			# "$(GUI)"=="WNT"
-.IF "$(GUI)"=="UNX"
-    +echo $(foreach,i,$(REAL_SVXLIGHTOBJFILES:f) $(ROBJ)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
-.ENDIF			# "$(GUI)"=="UNX"
-.ENDIF			# "$(SVXLIGHTOBJTARGET)"!=""
-.ENDIF			# "$(SVXLIGHT)"!=""
 
 .IF "$(SECOND_BUILD)"!=""
 .IF "$($(SECOND_BUILD)OBJTARGET)"!=""
@@ -101,7 +79,7 @@ $($(SECOND_BUILD)OBJTARGET): $(REAL_$(SECOND_BUILD)_OBJFILES)
 .ENDIF
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
-    +echo $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)$/$(i:s/.obj/.o/)) | xargs -n1 >> $@
+    echo $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)$/$(i:s/.obj/.o/)) | xargs -n1 >> $@
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$($(SECOND_BUILD)OBJTARGET)"!=""
 .ENDIF			# "$(SECOND_BUILD)"!=""
