@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 09:56:37 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:17:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,10 +159,7 @@ void ImportExcel::Formula( const XclAddress& rXclPos,
         if( pErgebnis )
         {
             pZelle = new ScFormulaCell( pD, aScPos, pErgebnis );
-
             pD->PutCell( aScPos.Col(), aScPos.Row(), aScPos.Tab(), pZelle, (BOOL)TRUE );
-
-            pColRowBuff->Used( aScPos );
         }
         else
         {
