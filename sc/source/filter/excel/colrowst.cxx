@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:47:20 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:17:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,185 +61,249 @@
 // for filter manager
 #include "excimp8.hxx"
 
+// ============================================================================
 
-XclImpColRowSettings::XclImpColRowSettings( RootData& rRootData ) :
-    ExcRoot( &rRootData )
+const sal_uInt8 EXC_COLROW_USED         = 0x01;
+const sal_uInt8 EXC_COLROW_DEFAULT      = 0x02;
+const sal_uInt8 EXC_COLROW_HIDDEN       = 0x04;
+const sal_uInt8 EXC_COLROW_MAN          = 0x08;
+
+// ============================================================================
+
+XclImpColRowSettings::XclImpColRowSettings( const XclImpRoot& rRoot ) :
+    XclImpRoot( rRoot ),
+    maWidths( MAXCOLCOUNT, 0 ),
+    maColFlags( MAXCOLCOUNT, 0 ),
+    maHeights( MAXROWCOUNT, 0 ),
+    maRowFlags( MAXROWCOUNT, 0 ),
+    mnLastScRow( -1 ),
+    mnDefWidth( STD_COL_WIDTH ),
+    mnDefHeight( STD_ROW_HEIGHT ),
+    mnDefRowFlags( EXC_DEFROW_DEFAULTFLAGS ),
+    mbHasStdWidthRec( false ),
+    mbHasDefHeight( false ),
+    mbDirty( true )
 {
-    nDefWidth = nDefHeight = 0;
-
-    pWidth = new INT32 [ MAXCOL + 1 ];
-    pColHidden = new BOOL [ MAXCOL + 1 ];
-
-    pHeight = new UINT16 [ MAXROW + 1 ];
-    pRowFlags = new INT8[ MAXROW + 1 ];
-
-    Reset();
 }
-
 
 XclImpColRowSettings::~XclImpColRowSettings()
 {
-    delete[] pRowFlags;
-    delete[] pHeight;
-    delete[] pColHidden;
-    delete[] pWidth;
 }
 
-
-void XclImpColRowSettings::Reset( void )
+void XclImpColRowSettings::SetDefWidth( sal_uInt16 nDefWidth, bool bStdWidthRec )
 {
-    SCCOL   nC;
-    for( nC = 0 ; nC <= MAXCOL ; nC++ )
+    if( bStdWidthRec )
     {
-        pColHidden[ nC ] = FALSE;
-        pWidth[ nC ] = -1;
+        // STANDARDWIDTH record overrides DEFCOLWIDTH record
+        mnDefWidth = nDefWidth;
+        mbHasStdWidthRec = true;
     }
-
-    memset( pRowFlags, 0x00, sizeof( INT8 ) * ( MAXROW + 1 ) );
-
-    bDirty = TRUE;
-    nMaxRow = -1;
-
-    bSetByStandard = FALSE;
+    else if( !mbHasStdWidthRec )
+    {
+        // use DEFCOLWIDTH record only, if no STANDARDWIDTH record exists
+        mnDefWidth = nDefWidth;
+    }
 }
 
-
-void XclImpColRowSettings::Apply( SCTAB nScTab )
+void XclImpColRowSettings::SetWidthRange( SCCOL nScCol1, SCCOL nScCol2, sal_uInt16 nWidth )
 {
-    if( !bDirty )
+    DBG_ASSERT( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::SetColWidthRange - invalid column range" );
+    nScCol2 = ::std::min( nScCol2, MAXCOL );
+    nScCol1 = ::std::min( nScCol1, nScCol2 );
+    ::std::fill( maWidths.begin() + nScCol1, maWidths.begin() + nScCol2 + 1, nWidth );
+    for( ScfUInt8Vec::iterator aIt = maColFlags.begin() + nScCol1, aEnd = maColFlags.begin() + nScCol2 + 1; aIt != aEnd; ++aIt )
+        ::set_flag( *aIt, EXC_COLROW_USED );
+}
+
+void XclImpColRowSettings::HideCol( SCCOL nScCol )
+{
+    if( ValidCol( nScCol ) )
+        ::set_flag( maColFlags[ nScCol ], EXC_COLROW_HIDDEN );
+}
+
+void XclImpColRowSettings::HideColRange( SCCOL nScCol1, SCCOL nScCol2 )
+{
+    DBG_ASSERT( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::HideColRange - invalid column range" );
+    nScCol2 = ::std::min( nScCol2, MAXCOL );
+    nScCol1 = ::std::min( nScCol1, nScCol2 );
+    for( ScfUInt8Vec::iterator aIt = maColFlags.begin() + nScCol1, aEnd = maColFlags.begin() + nScCol2 + 1; aIt != aEnd; ++aIt )
+        ::set_flag( *aIt, EXC_COLROW_HIDDEN );
+}
+
+void XclImpColRowSettings::SetDefHeight( sal_uInt16 nDefHeight, sal_uInt16 nFlags )
+{
+    mnDefHeight = nDefHeight;
+    mnDefRowFlags = nFlags;
+    if( mnDefHeight == 0 )
+    {
+        mnDefHeight = STD_ROW_HEIGHT;
+        ::set_flag( mnDefRowFlags, EXC_DEFROW_HIDDEN );
+    }
+    mbHasDefHeight = true;
+}
+
+void XclImpColRowSettings::SetHeight( SCROW nScRow, sal_uInt16 nHeight )
+{
+    if( ValidRow( nScRow ) )
+    {
+        sal_uInt16 nRawHeight = nHeight & EXC_ROW_HEIGHTMASK;
+        bool bDefHeight = ::get_flag( nHeight, EXC_ROW_FLAGDEFHEIGHT ) || (nRawHeight == 0);
+        maHeights[ nScRow ] = nRawHeight;
+        sal_uInt8& rnFlags = maRowFlags[ nScRow ];
+        ::set_flag( rnFlags, EXC_COLROW_USED );
+        if( nRawHeight == 0 )
+            ::set_flag( rnFlags, EXC_COLROW_HIDDEN );
+        ::set_flag( rnFlags, EXC_COLROW_DEFAULT, bDefHeight );
+        if( nScRow > mnLastScRow )
+            mnLastScRow = nScRow;
+    }
+}
+
+void XclImpColRowSettings::HideRow( SCROW nScRow )
+{
+    if( ValidRow( nScRow ) )
+    {
+        ::set_flag( maRowFlags[ nScRow ], static_cast< sal_uInt8 >( EXC_COLROW_USED | EXC_COLROW_HIDDEN ) );
+        if( nScRow > mnLastScRow )
+            mnLastScRow = nScRow;
+    }
+}
+
+void XclImpColRowSettings::SetRowSettings( SCROW nScRow, sal_uInt16 nHeight, sal_uInt16 nFlags )
+{
+    if( ValidRow( nScRow ) )
+    {
+        SetHeight( nScRow, nHeight );
+        sal_uInt8& rnFlags = maRowFlags[ nScRow ];
+        if( ::get_flag( nFlags, EXC_ROW_UNSYNCED ) )
+            ::set_flag( rnFlags, EXC_COLROW_MAN );
+        if( ::get_flag( nFlags, EXC_ROW_HIDDEN ) )
+            ::set_flag( rnFlags, EXC_COLROW_HIDDEN );
+    }
+}
+
+void XclImpColRowSettings::SetDefaultXF( SCCOL nScCol1, SCCOL nScCol2, sal_uInt16 nXFIndex )
+{
+    /*  #109555# assign the default column formatting here to ensure that
+        explicit cell formatting is not overwritten. */
+    DBG_ASSERT( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::SetDefaultXF - invalid column index" );
+    nScCol2 = ::std::min( nScCol2, MAXCOL );
+    nScCol1 = ::std::min( nScCol1, nScCol2 );
+    XclImpXFRangeBuffer& rXFRangeBuffer = GetXFRangeBuffer();
+    for( SCCOL nScCol = nScCol1; nScCol <= nScCol2; ++nScCol )
+        rXFRangeBuffer.SetColumnDefXF( nScCol, nXFIndex );
+}
+
+void XclImpColRowSettings::Convert( SCTAB nScTab )
+{
+    if( !mbDirty )
         return;
 
-    SCCOLROW                nC;
-    SCROW                   nStart = 0;
-    UINT16                  nWidth;
-    UINT16                  nLastWidth = ( pWidth[ 0 ] >= 0 )? ( UINT16 ) pWidth[ 0 ] : nDefWidth;
-    ScDocument&             rD = pExcRoot->pIR->GetDoc();
+    ScDocument& rDoc = GetDoc();
+    rDoc.IncSizeRecalcLevel( nScTab );
 
-    rD.IncSizeRecalcLevel( nScTab );
+    // column widths ----------------------------------------------------------
 
-    // Column-Bemachung
-    for( nC = 0 ; nC <= MAXCOL ; nC++ )
+    for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
     {
-        if( pWidth[ nC ] >= 0 )
-            // eingestellte Width
-            nWidth = ( UINT16 ) pWidth[ nC ];
-        else
-            // Default-Width
-            nWidth = nDefWidth;
-
+        sal_uInt16 nWidth = ::get_flag( maColFlags[ nScCol ], EXC_COLROW_USED ) ? maWidths[ nScCol ] : mnDefWidth;
+        /*  Hidden columns: remember hidden state, but do not set hidden state
+            in document here. Needed for #i11776#, no HIDDEN flags in the
+            document, until filters and outlines are inserted. */
         if( nWidth == 0 )
         {
-            pColHidden[ nC ] = TRUE;
-            // Column hidden: remember original column width and set width 0.
-            // Needed for #i11776#, no HIDDEN flags in the document, until
-            // filters and outlines are inserted.
-            pWidth[ nC ] = rD.GetColWidth( static_cast<SCCOL>( nC ), nScTab );
+            ::set_flag( maColFlags[ nScCol ], EXC_COLROW_HIDDEN );
+            nWidth = mnDefWidth;
         }
-        rD.SetColWidth( static_cast<SCCOL>( nC ), nScTab, nWidth );
+        rDoc.SetColWidth( nScCol, nScTab, nWidth );
     }
 
-    // Row-Bemachung
+    // row heights ------------------------------------------------------------
 
-    INT8                    nFlags;
-    nStart = 0;
-    UINT16                  nHeight;
+    // #i54252# set default row height
+    rDoc.SetRowHeightRange( 0, MAXROW, nScTab, mnDefHeight );
+    if( ::get_flag( mnDefRowFlags, EXC_DEFROW_UNSYNCED ) )
+        // first access to row flags, do not ask for old flags
+        rDoc.SetRowFlags( 0, MAXROW, nScTab, CR_MANUALSIZE );
+    bool bDefHideRow = ::get_flag( mnDefRowFlags, EXC_DEFROW_HIDDEN );
 
-    UINT16                  nLastHeight;
-    nFlags = pRowFlags[ 0 ];
-    if( nFlags & ROWFLAG_USED )
+    SCROW nFirstScRow = -1;
+    sal_uInt16 nLastHeight = 0;
+    for( SCROW nScRow = 0; nScRow <= mnLastScRow ; ++nScRow )
     {
-        if( nFlags & ROWFLAG_DEFAULT )
-            nLastHeight = nDefHeight;
-        else
+        // get height and hidden state from cached data
+        sal_uInt8 nFlags = maRowFlags[ nScRow ];
+        sal_uInt16 nHeight = 0;
+        bool bHideRow = false;
+        if( ::get_flag( nFlags, EXC_COLROW_USED ) )
         {
-            nLastHeight = pHeight[ 0 ];
-            if( !nLastHeight )
-                nLastHeight = nDefHeight;
-        }
-    }
-    else
-        nLastHeight = nDefHeight;
-
-    for( nC = 0 ; nC <= nMaxRow ; nC++ )
-    {
-        nFlags = pRowFlags[ nC ];
-
-        if( nFlags & ROWFLAG_USED )
-        {
-            if( nFlags & ROWFLAG_DEFAULT )
-                nHeight = nDefHeight;
+            if( ::get_flag( nFlags, EXC_COLROW_DEFAULT ) )
+            {
+                nHeight = mnDefHeight;
+                bHideRow = bDefHideRow;
+            }
             else
             {
-                nHeight = pHeight[ nC ];
-                if( !nHeight )
-                    nHeight = nDefHeight;
+                nHeight = maHeights[ nScRow ];
+                if( nHeight == 0 )
+                {
+                    nHeight = mnDefHeight;
+                    bHideRow = true;
+                }
             }
 
-            if( nFlags & ( ROWFLAG_HIDDEN | ROWFLAG_MAN ) )
-            {
-                BYTE        nSCFlags = rD.GetRowFlags( nC , nScTab );
-
-                if( nFlags & ROWFLAG_MAN )
-                    nSCFlags |= CR_MANUALSIZE;
-
-                rD.SetRowFlags( nC, nScTab, nSCFlags );
-            }
+            if( ::get_flag( nFlags, EXC_COLROW_MAN ) )
+                rDoc.SetRowFlags( nScRow, nScTab, rDoc.GetRowFlags( nScRow, nScTab ) | CR_MANUALSIZE );
         }
         else
-            nHeight = nDefHeight;
-
-        if( !nHeight )
         {
-            pRowFlags[ nC ] |= ROWFLAG_HIDDEN;
-            // Row hidden: remember original row height and set height 0.
-            // Needed for #i11776#, no HIDDEN flags in the document, until
-            // filters and outlines are inserted.
-            pHeight[ nC ] = rD.GetRowHeight( nC, nScTab );
+            nHeight = mnDefHeight;
+            bHideRow = bDefHideRow;
         }
 
-        if( nLastHeight != nHeight )
+        /*  Hidden rows: remember hidden state, but do not set hidden state in
+            document here. Needed for #i11776#, no HIDDEN flags in the document,
+            until filters and outlines are inserted. */
+        if( bHideRow )
+            ::set_flag( maRowFlags[ nScRow ], EXC_COLROW_HIDDEN );
+
+        // set height range
+        if( (nLastHeight != nHeight) || (nScRow == 0) )
         {
-            DBG_ASSERT( nC > 0, "XclImpColRowSettings::Apply(): Algorithmus-Fehler!" );
+            DBG_ASSERT( (nScRow == 0) || (nFirstScRow >= 0), "XclImpColRowSettings::Convert - algorithm error" );
+            if( nScRow > 0 )
+                rDoc.SetRowHeightRange( nFirstScRow, nScRow - 1, nScTab, nLastHeight );
 
-            if( nLastHeight )
-                rD.SetRowHeightRange( nStart, nC - 1, nScTab, nLastHeight );
-
-            nStart = nC;
+            nFirstScRow = nScRow;
             nLastHeight = nHeight;
         }
     }
 
-    if( nLastHeight && nMaxRow >= 0 )
-        rD.SetRowHeightRange( nStart, static_cast<SCROW>( nMaxRow ), nScTab, nLastHeight );
+    // set row height of last portion
+    if( mnLastScRow >= 0 )
+        rDoc.SetRowHeightRange( nFirstScRow, mnLastScRow, nScTab, nLastHeight );
 
-    bDirty = FALSE; // jetzt stimmt Tabelle im ScDocument
+    // ------------------------------------------------------------------------
 
-    rD.DecSizeRecalcLevel( nScTab );
+    mbDirty = false;
+    rDoc.DecSizeRecalcLevel( nScTab );
 }
 
-
-void XclImpColRowSettings::SetHiddenFlags( SCTAB nScTab )
+void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
 {
-    ScDocument& rDoc = pExcRoot->pIR->GetDoc();
+    ScDocument& rDoc = GetDoc();
 
+    // hide the columns
     for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
-    {
-        if( pColHidden[ nScCol ] )
-        {
-            // set original width, needed to unhide the column
-            if( pWidth[ nScCol ] > 0 )
-                rDoc.SetColWidth( nScCol, nScTab, static_cast< sal_uInt16 >( pWidth[ nScCol ] ) );
-            // really hide the column
+        if( ::get_flag( maColFlags[ nScCol ], EXC_COLROW_HIDDEN ) )
             rDoc.ShowCol( nScCol, nScTab, FALSE );
-        }
-    }
 
     // #i38093# rows hidden by filter need extra flag
     SCROW nFirstFilterScRow = SCROW_MAX;
     SCROW nLastFilterScRow = SCROW_MAX;
-    if( pExcRoot->pIR->GetBiff() == EXC_BIFF8 )
+    if( GetBiff() == EXC_BIFF8 )
     {
-        const XclImpAutoFilterData* pFilter = pExcRoot->pIR->GetFilterManager().GetByTab( nScTab );
+        const XclImpAutoFilterData* pFilter = GetFilterManager().GetByTab( nScTab );
         if( pFilter && pFilter->IsActive() )
         {
             nFirstFilterScRow = pFilter->StartRow();
@@ -247,14 +311,12 @@ void XclImpColRowSettings::SetHiddenFlags( SCTAB nScTab )
         }
     }
 
-    for( SCROW nScRow = 0; nScRow <= nMaxRow; ++nScRow )
+    // hide the rows
+    for( SCROW nScRow = 0; nScRow <= mnLastScRow; ++nScRow )
     {
-        if( pRowFlags[ nScRow ] & ROWFLAG_HIDDEN )
+        if( ::get_flag( maRowFlags[ nScRow ], EXC_COLROW_HIDDEN ) )
         {
-            // set original height, needed to unhide the row
-            if( pHeight[ nScRow ] > 0 )
-                rDoc.SetRowHeight( nScRow, nScTab, pHeight[ nScRow ] );
-            // really hide the row
+            // hide the row
             rDoc.ShowRow( nScRow, nScTab, FALSE );
             // #i38093# rows hidden by filter need extra flag
             if( (nFirstFilterScRow <= nScRow) && (nScRow <= nLastFilterScRow) )
@@ -263,88 +325,7 @@ void XclImpColRowSettings::SetHiddenFlags( SCTAB nScTab )
     }
 
     // #i47438# if default row format is hidden, hide remaining rows
-    if( (nDefHeight == 0) && (nMaxRow < MAXROW) )
-        rDoc.ShowRows( nMaxRow + 1, MAXROW, nScTab, FALSE );
-}
-
-
-void XclImpColRowSettings::HideColRange( SCCOL nColFirst, SCCOL nColLast )
-{
-    DBG_ASSERT( nColFirst <= nColLast, "+XclImpColRowSettings::HideColRange(): First > Last?!" );
-    DBG_ASSERT( ValidCol(nColLast), "+XclImpColRowSettings::HideColRange(): ungueltige Column" );
-
-    if( !ValidCol(nColLast) )
-        nColLast = MAXCOL;
-
-    BOOL*   pHidden;
-    BOOL*   pFinish;
-    pHidden = &pColHidden[ nColFirst ];
-    pFinish = &pColHidden[ nColLast ];
-    while( pHidden <= pFinish )
-        *( pHidden++ ) = TRUE;
-}
-
-
-void XclImpColRowSettings::SetWidthRange( SCCOL nColFirst, SCCOL nColLast, UINT16 nNew )
-{
-    DBG_ASSERT( nColFirst <= nColLast, "+XclImpColRowSettings::SetColWidthRange(): First > Last?!" );
-    DBG_ASSERT( ValidCol(nColLast), "+XclImpColRowSettings::SetColWidthRange(): ungueltige Column" );
-
-    if( !ValidCol(nColLast) )
-        nColLast = MAXCOL;
-
-    INT32*  pWidthCount;
-    INT32*  pFinish;
-    pWidthCount = &pWidth[ nColFirst ];
-    pFinish = &pWidth[ nColLast ];
-
-    while( pWidthCount <= pFinish )
-        *( pWidthCount++ ) = nNew;
-}
-
-
-void XclImpColRowSettings::SetDefaultXF( SCCOL nColFirst, SCCOL nColLast, UINT16 nXF )
-{
-    DBG_ASSERT( nColFirst <= nColLast, "+XclImpColRowSettings::SetDefaultXF(): First > Last?!" );
-    DBG_ASSERT( ValidCol(nColLast), "+XclImpColRowSettings::SetDefaultXF(): ungueltige Column" );
-
-    if( !ValidCol(nColLast) )
-        nColLast = MAXCOL;
-
-    const XclImpRoot& rRoot = *pExcRoot->pIR;
-
-    // #109555# assign the default column formatting here to ensure
-    // that explicit cell formatting is not overwritten.
-    for( SCCOL nScCol = nColFirst; nScCol <= nColLast; ++nScCol )
-        rRoot.GetXFRangeBuffer().SetColumnDefXF( nScCol, nXF );
-}
-
-
-void XclImpColRowSettings::SetDefaults( UINT16 nWidth, UINT16 nHeight )
-{
-    nDefWidth = nWidth;
-    nDefHeight = nHeight;
-}
-
-
-void XclImpColRowSettings::_SetRowSettings( const SCROW nRow, const UINT16 nExcelHeight, const UINT16 nGrbit )
-{
-    pHeight[ nRow ] = nExcelHeight & 0x7FFF;
-
-    INT8    nFlags = ROWFLAG_USED;
-
-    if( nExcelHeight & 0x8000 )
-        nFlags |= ROWFLAG_DEFAULT;
-
-    if( nGrbit & EXC_ROW_UNSYNCED )
-        nFlags |= ROWFLAG_MAN;
-
-    if( nGrbit &  EXC_ROW_HIDDEN )
-        nFlags |= ROWFLAG_HIDDEN;
-
-    pRowFlags[ nRow ] = nFlags;
-
-    if( nRow > nMaxRow )
-        nMaxRow = nRow;
+    if( ::get_flag( mnDefRowFlags, EXC_DEFROW_HIDDEN ) && (mnLastScRow < MAXROW) )
+        rDoc.ShowRows( mnLastScRow + 1, MAXROW, nScTab, FALSE );
 }
 
