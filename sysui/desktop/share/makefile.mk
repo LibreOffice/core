@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:20:11 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:51:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN) ../productversion.mk brand.pl translate.pl
     @$(PERL) translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db).$(INPATH) --ext "desktop" --key "Name" $(COMMONMISC)$/$(TARGET)$/launcher_name.ulf
     @$(PERL) translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db).$(INPATH) --ext "desktop" --key "Comment" $(COMMONMISC)$/$(TARGET)$/launcher_comment.ulf
 .IF "$(WITH_LIBSN)"=="YES"
-    @+echo x$(foreach,i,$(LAUNCHERLIST) $(shell +echo "StartupNotify=true" >> $(@:db).$(INPATH)/$i.desktop))x $(noout)
+    @noop x$(foreach,i,$(LAUNCHERLIST) $(shell +echo "StartupNotify=true" >> $(@:db).$(INPATH)/$i.desktop))x
 .ENDIF
     @mv -f $(@:db).$(INPATH)/* $(@:d)
     @touch $@
