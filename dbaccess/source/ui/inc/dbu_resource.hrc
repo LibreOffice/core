@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:31:40 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:05:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,23 +247,23 @@
 #define BMP_EXCEPTION_INFO              RID_IMAGE_START +  5
 #define QUERYFOLDER_TREE_ICON           RID_IMAGE_START +  6
 #define QUERY_TREE_ICON                 RID_IMAGE_START +  7
-#define IMG_DATABASE                    RID_IMAGE_START +  8
+#define DATABASE_TREE_ICON              RID_IMAGE_START +  8
 // free
 // free
 // free
 #define IMG_PKEYICON                    RID_IMAGE_START + 12
-#define IMG_REPORTFOLDER_TREE_SCH       RID_IMAGE_START + 13
-#define IMG_FORMFOLDER_TREE_SCH         RID_IMAGE_START + 14
+#define REPORTFOLDER_TREE_ICON_SCH      RID_IMAGE_START + 13
+#define FORMFOLDER_TREE_ICON_SCH        RID_IMAGE_START + 14
 #define IMG_DATABASE_CONNECTED          RID_IMAGE_START + 15
 #define QUERYFOLDER_TREE_ICON_SCH       RID_IMAGE_START + 16
 #define TABLEFOLDER_TREE_ICON_SCH       RID_IMAGE_START + 17
 // free
-#define IMG_DATABASE_SCH                RID_IMAGE_START + 19
+#define DATABASE_TREE_ICON_SCH          RID_IMAGE_START + 19
 #define IMG_DATABASE_CONNECTED_SCH      RID_IMAGE_START + 20
 #define TABLE_TREE_ICON_SCH             RID_IMAGE_START + 21
 #define VIEW_TREE_ICON_SCH              RID_IMAGE_START + 22
 #define QUERY_TREE_ICON_SCH             RID_IMAGE_START + 23
-#define IMG_REPORTFOLDER_TREE_S         RID_IMAGE_START + 24
+#define REPORTFOLDER_TREE_ICON          RID_IMAGE_START + 24
 // free
 // free
 // free
@@ -294,7 +294,7 @@
 #define REPORT_TREE_ICON                RID_IMAGE_START + 52
 #define FORM_TREE_ICON_SCH              RID_IMAGE_START + 53
 #define REPORT_TREE_ICON_SCH            RID_IMAGE_START + 54
-#define IMG_FORMFOLDER_TREE_S           RID_IMAGE_START + 55
+#define FORMFOLDER_TREE_ICON            RID_IMAGE_START + 55
 
 
 //========================================================================
