@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-14 16:20:41 $
+#   last change: $Author: kz $ $Date: 2006-10-05 11:03:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -117,19 +117,19 @@ DEBUGSWITCH = true
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)" != "4nt"
 $(JAVADIR)$/$(PACKAGE)$/%.java: makefile.mk
     @-+$(MKDIRHIER) $(JAVADIR)$/$(PACKAGE) >& $(NULLDEV) 
-    @-+echo package org.openoffice.java.accessibility\; > $@
-    @-+echo public class Build { >> $@
-    @-+echo public static final boolean DEBUG = $(DEBUGSWITCH)\; >> $@
-    @-+echo public static final boolean PRODUCT = $(PRODUCTSWITCH)\; >> $@
-    @-+echo } >> $@
+    @-echo package org.openoffice.java.accessibility\; > $@
+    @-echo public class Build { >> $@
+    @-echo public static final boolean DEBUG = $(DEBUGSWITCH)\; >> $@
+    @-echo public static final boolean PRODUCT = $(PRODUCTSWITCH)\; >> $@
+    @-echo } >> $@
 .ELSE
 $(JAVADIR)$/$(PACKAGE)$/%.java: makefile.mk
     @-+$(MKDIRHIER) $(JAVADIR)$/$(PACKAGE) >& $(NULLDEV) 
-    @-+echo package org.openoffice.java.accessibility; > $@
-    @-+echo public class Build { >> $@
-    @-+echo public static final boolean DEBUG = $(DEBUGSWITCH); >> $@
-    @-+echo public static final boolean PRODUCT = $(PRODUCTSWITCH); >> $@
-    @-+echo } >> $@
+    @-echo package org.openoffice.java.accessibility; > $@
+    @-echo public class Build { >> $@
+    @-echo public static final boolean DEBUG = $(DEBUGSWITCH); >> $@
+    @-echo public static final boolean PRODUCT = $(PRODUCTSWITCH); >> $@
+    @-echo } >> $@
 .ENDIF
 
 
