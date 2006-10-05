@@ -4,9 +4,9 @@
 #
 #   $RCSfile: extractfiles.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:58:54 $
+#   last change: $Author: kz $ $Date: 2006-10-05 11:06:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ make_temp_dir:
 .ENDIF
 
 $(OUT)$/bin$/mozruntime.zip: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
-    +echo $@>& $(NULLDEV)
+    noop
 
 $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
 # copy files in BIN_RUNTIMELIST
@@ -261,7 +261,7 @@ $(MISC)$/build$/so_moz_include_files: $(INCCOM)$/nsBuildID.h
     +$(TOUCH) $@
 
 $(MISC)$/build$/so_moz_lib_files:		$(foreach,file,$(LIBLIST) $(LIB_DIR)$/$(file))
-    +echo $(foreach,file,$(LIBLIST) $(MOZ_DIST_DIR)$/lib$/$(file))
+    echo $(foreach,file,$(LIBLIST) $(MOZ_DIST_DIR)$/lib$/$(file))
     +$(foreach,file,$(LIBLIST) $(COPY) $(MOZ_DIST_DIR)$/lib$/$(file) \
     $(LIB_DIR)$/$(file) &&) \
     echo >& $(NULLDEV)
@@ -290,8 +290,8 @@ RES_FILELIST: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 .ENDIF
 
     
-$(LIB_DIR)$/%: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
-    +echo  >& $(NULLDEV)
+$(LIB_DIR)$/%: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
+    noop
 
 $(MISC)$/CREATETARBALL:	extract_mozab_files
     @+-$(MKDIR)	$(OUT)$/zipped	>& $(NULLDEV)
