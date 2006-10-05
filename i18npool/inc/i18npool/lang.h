@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lang.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 09:34:35 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:15:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,6 +213,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_FRENCH_CAMEROON            0x2C0C
 #define LANGUAGE_FRENCH_CANADIAN            0x0C0C
 #define LANGUAGE_FRENCH_COTE_D_IVOIRE       0x300C
+
 #define LANGUAGE_FRENCH_HAITI               0x3C0C
 #define LANGUAGE_FRENCH_LUXEMBOURG          0x140C
 #define LANGUAGE_FRENCH_MALI                0x340C
@@ -444,7 +445,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_OBSOLETE_USER_LOWER_SORBIAN 0x0624
 #define LANGUAGE_USER_LOWER_SORBIAN         LANGUAGE_LOWER_SORBIAN_GERMANY
 #define LANGUAGE_OBSOLETE_USER_OCCITAN      0x0625
-#define LANGUAGE_USER_OCCITAN               LANGUAGE_OCCITAN_FRANCE
+#define LANGUAGE_USER_OCCITAN               LANGUAGE_OCCITAN_FRANCE /* reserved to languedocian */
 #define LANGUAGE_USER_KOREAN_NORTH          0x8012  /* North Korean as opposed to South Korean, makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_KOREAN)) */
 #define LANGUAGE_USER_KURDISH_TURKEY        0x0626  /* sublang 0x01, Latin script */
 #define LANGUAGE_USER_KURDISH_SYRIA         0x0A26  /* sublang 0x02, Latin script */
@@ -471,5 +472,8 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_ENGLISH_NAMIBIA       0x8009  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_ENGLISH_US)) */
 #define LANGUAGE_USER_WALLOON               0x0633
 #define LANGUAGE_USER_COPTIC                0x0634
+#define LANGUAGE_USER_GASCON                0x0636  /* gascon France gsc-FR */
+
+
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
