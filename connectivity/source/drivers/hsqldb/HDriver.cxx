@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:40:25 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 12:45:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -316,7 +316,7 @@ namespace connectivity
                             xDesktop->addTerminateListener(s_xTerminateListener);
                         }
                     }
-                    Reference< XComponent> xIfc = new OConnectionWeakWrapper(xOrig,m_xFactory);
+                    Reference< XComponent> xIfc = new OHsqlConnection( this, xOrig, m_xFactory );
                     xConnection.set(xIfc,UNO_QUERY);
                     m_aConnections.push_back(TWeakPair(WeakReferenceHelper(xOrig),TWeakConnectionPair(sKey,TWeakRefPair(WeakReferenceHelper(xConnection),WeakReferenceHelper()))));
 
