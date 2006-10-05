@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-28 15:06:13 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 13:00:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,14 +160,14 @@ namespace dbaui
         Splitter                            m_aHorzSplitter;
         OTitleWindow                        m_aTasks;
         OTitleWindow                        m_aContainer;
-        OAppBorderWindow*                   m_pBorderWin;       // my parent
+        OAppBorderWindow&                   m_rBorderWin;       // my parent
         OAppDetailPageHelper*               m_pControlHelper;
 
         void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt);
     public:
-        OApplicationDetailView(OAppBorderWindow* _pParent,PreviewMode _ePreviewMode);
+        OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode);
         virtual ~OApplicationDetailView();
         // window overloads
         //  virtual void Resize();
@@ -187,7 +187,7 @@ namespace dbaui
         */
         void createPage(ElementType _eType,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer);
 
-        inline OAppBorderWindow* getBorderWin() const { return m_pBorderWin;}
+        inline OAppBorderWindow& getBorderWin() const { return m_rBorderWin;}
         sal_Bool isCutAllowed() ;
         sal_Bool isCopyAllowed()    ;
         sal_Bool isPasteAllowed();
@@ -200,13 +200,10 @@ namespace dbaui
             @param  _pEntry
                 The entry of a table, or query, form, report to get the qualified name.
                 If the entry is <NULL/>, the first selected is chosen.
-            @param  _xMetaData
-                The meta data are used to create the table name, otherwise this may also be <NULL/>
             @return
                 the qualified name
         */
-        ::rtl::OUString getQualifiedName(SvLBoxEntry* _pEntry
-                                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData) const;
+        ::rtl::OUString getQualifiedName( SvLBoxEntry* _pEntry ) const;
 
         /** returns if an entry is a leaf
             @param _pEntry
@@ -256,11 +253,8 @@ namespace dbaui
         /** returns the element names which are selected
             @param  _rNames
                 The list will be filled.
-            @param  _xMetaData
-                Will be used when the table list should be filled.
         */
-        void getSelectionElementNames(::std::vector< ::rtl::OUString>& _rNames
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData = NULL) const;
+        void getSelectionElementNames(::std::vector< ::rtl::OUString>& _rNames ) const;
 
         /** adds a new object to the detail page.
             @param  _eType
@@ -274,8 +268,7 @@ namespace dbaui
         */
         SvLBoxEntry* elementAdded(ElementType eType
                         ,const ::rtl::OUString& _rName
-                        ,const ::com::sun::star::uno::Any& _rObject
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn = NULL);
+                        ,const ::com::sun::star::uno::Any& _rObject );
 
         /** replaces a objects name with a new one
             @param  _eType
@@ -291,9 +284,7 @@ namespace dbaui
         */
         void elementReplaced(ElementType eType
                         ,const ::rtl::OUString& _rOldName
-                        ,const ::rtl::OUString& _rNewName
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn = NULL
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xObject = NULL);
+                        ,const ::rtl::OUString& _rNewName );
 
         /** removes an element from the detail page.
             @param  _eType
@@ -304,8 +295,7 @@ namespace dbaui
                 If we remove a table, the connection must be set.
         */
         void elementRemoved(ElementType _eType
-                            ,const ::rtl::OUString& _rName
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn);
+                            ,const ::rtl::OUString& _rName );
 
         /// returns the preview mode
         PreviewMode getPreviewMode();
@@ -331,8 +321,6 @@ namespace dbaui
         /** shows the Preview of a table or query
             @param  _sDataSourceName
                 the name of the data source
-            @param  _xConnection
-                the connection which will be shared
             @param  _sName
                 the name of table or query
             @param  _bTable
@@ -340,7 +328,6 @@ namespace dbaui
             @return void
         */
         void showPreview(   const ::rtl::OUString& _sDataSourceName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                             const ::rtl::OUString& _sName,
                             sal_Bool _bTable);
 
