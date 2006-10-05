@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 13:12:16 $
+#   last change: $Author: kz $ $Date: 2006-10-05 10:43:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -213,8 +213,8 @@ all :
 $(MISC)$/$(TARFILE_ROOTDIR) : avoid_win32_patches
 avoid_win32_patches :
     @+$(ECHONL)
-    @+echo ERROR! this module can't use automated patch creation
-    @+echo on windows.
+    @echo ERROR! this module can't use automated patch creation
+    @echo on windows.
     @+$(ECHONL)
     force_dmake_to_error
 
