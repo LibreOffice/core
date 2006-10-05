@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:22:55 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:23:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -575,6 +575,16 @@ BOOL ScViewFunc::PasteOnDrawObject( const uno::Reference<datatransfer::XTransfer
     return bRet;
 }
 
+BOOL lcl_SelHasAttrib( ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                        const ScMarkData& rTabSelection, USHORT nMask )
+{
+    SCTAB nTabCount = pDoc->GetTableCount();
+    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+        if ( rTabSelection.GetTableSelect(nTab) && pDoc->HasAttrib( nCol1, nRow1, nTab, nCol2, nRow2, nTab, nMask ) )
+            return TRUE;
+    return FALSE;
+}
+
 //
 //      Einfuegen auf Tabelle:
 //
@@ -789,8 +799,14 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     pClipDoc->GetClipStart( nClipStartX, nClipStartY );
     SCCOL nUndoEndCol = nClipStartX + nClipSizeX;
     SCROW nUndoEndRow = nClipStartY + nClipSizeY;   // end of source area in clipboard document
-    BOOL bClipOver = pClipDoc->
-        ExtendMerge( nClipStartX,nClipStartY, nUndoEndCol,nUndoEndRow, nStartTab, FALSE );
+    BOOL bClipOver = FALSE;
+    // #i68690# ExtendMerge for the clip doc must be called with the clipboard's sheet numbers.
+    // The same end column/row can be used for all calls because the clip doc doesn't contain
+    // content outside the clip area.
+    for (SCTAB nClipTab=0; nClipTab<=MAXTAB; nClipTab++)
+        if ( pClipDoc->HasTable(nClipTab) )
+            if ( pClipDoc->ExtendMerge( nClipStartX,nClipStartY, nUndoEndCol,nUndoEndRow, nClipTab, FALSE ) )
+                bClipOver = TRUE;
     nUndoEndCol -= nClipStartX + nClipSizeX;
     nUndoEndRow -= nClipStartY + nClipSizeY;        // now contains only the difference added by ExtendMerge
     nUndoEndCol += nEndCol;
@@ -809,7 +825,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         return FALSE;
     }
 
-    pDoc->ExtendMerge( nStartCol,nStartRow, nUndoEndCol,nUndoEndRow, nStartTab, FALSE );
+    pDoc->ExtendMergeSel( nStartCol,nStartRow, nUndoEndCol,nUndoEndRow, rMark, FALSE );
 
         //  Test auf Zellschutz
 
@@ -828,9 +844,8 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     //                          pClipDoc, nClipStartX, nClipStartY );
 
     if (bClipOver)
-        if (pDoc->HasAttrib( nStartCol,nStartRow,nStartTab, nUndoEndCol,nUndoEndRow,nStartTab,
-                                HASATTR_OVERLAPPED ))
-        {       // "Zusammenfassen nicht verschachteln !"
+        if (lcl_SelHasAttrib( pDoc, nStartCol,nStartRow, nUndoEndCol,nUndoEndRow, rMark, HASATTR_OVERLAPPED ))
+        {       // "Cell merge not possible if cells already merged"
             ErrorMessage(STR_MSSG_PASTEFROMCLIP_1);
             delete pTransClip;
             return FALSE;
@@ -927,7 +942,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )
         pDocSh->GetDocFunc().UnmergeCells( aUserRange, FALSE, TRUE );
 
-    pDoc->ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, nStartTab, TRUE );   // Refresh
+    pDoc->ExtendMergeSel( nStartCol, nStartRow, nEndCol, nEndRow, rMark, TRUE );    // Refresh
                                                                                     // und Bereich neu
 
     if ( pMixDoc )              // Rechenfunktionen mit Original-Daten auszufuehren ?
