@@ -4,9 +4,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 09:57:35 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:17:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -694,6 +694,7 @@ FltError ImportExcel::Read( void )
                     case 0xBD:  Mulrk(); break;         // MULRK        [    5]
                     case 0xBE:  Mulblank(); break;      // MULBLANK     [    5]
                     case 0xD6:  Rstring(); break;       // RSTRING      [    5]
+                    case 0x00E5: Cellmerging();          break;  // #i62300#
                     case 0x0236: TableOp(); break;      // TABLE        [    5]
                     case 0x0809:                        // BOF          [    5]
                         Bof5();
