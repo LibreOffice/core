@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:26:59 $
+ *  last change: $Author: kz $ $Date: 2006-10-05 16:23:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,7 +345,9 @@ void ScDrawView::SetMarkedOriginalSize()
     if (nDone)
     {
         pUndoGroup->SetComment(ScGlobal::GetRscString( STR_UNDO_ORIGINALSIZE ));
-        pViewData->GetDocShell()->GetUndoManager()->AddUndoAction(pUndoGroup);
+        ScDocShell* pDocSh = pViewData->GetDocShell();
+        pDocSh->GetUndoManager()->AddUndoAction(pUndoGroup);
+        pDocSh->SetDrawModified();
     }
     else
         delete pUndoGroup;
