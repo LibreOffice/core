@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-05 21:53:01 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:37:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2802,9 +2802,8 @@ String STR_PAGE_BACKGROUND_TITLE
 };
 String STR_PAGE_BACKGROUND_TXT
 {
-    /* ### ACHTUNG: Neuer Text in Resource! "Hintergrundeinstellungen f�r alle Seiten ?"*/
-    Text [ de ] = "Hintergrundeinstellungen für alle Seiten ?" ;
-    Text [ en-US ] = "Background settings for all pages ?" ;
+    Text [ de ] = "Hintergrundeinstellungen für alle Seiten?" ;
+    Text [ en-US ] = "Background settings for all pages?" ;
 };
 String STR_GRAFCROP
 {
