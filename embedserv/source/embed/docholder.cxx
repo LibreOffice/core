@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:29:33 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:37:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BRIDGE_MODELDEPENDENT_HPP_
 #include <com/sun/star/bridge/ModelDependent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_EMBEDMAPUNITS_HPP_
+#include <com/sun/star/embed/EmbedMapUnits.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
 #include <com/sun/star/embed/XVisualObject.hpp>
@@ -1207,6 +1210,18 @@ HRESULT DocumentHolder::SetExtent( const SIZEL *pSize )
             try
             {
                 awt::Size aNewSize( pSize->cx, pSize->cy );
+
+                sal_Int32 aMapMode = xVisObj->getMapUnit( DVASPECT_CONTENT );
+
+                // TODO/LATER: in future UNO API should be used for the conversion, currently there is no
+                if ( aMapMode == embed::EmbedMapUnits::TWIP )
+                {
+                    // convertion from ONE_100TH_MM
+                    aNewSize.Width = aNewSize.Width * 144 / 254;
+                    aNewSize.Height = aNewSize.Height * 144 / 254;
+                }
+
+
                 xVisObj->setVisualAreaSize( DVASPECT_CONTENT, aNewSize );
 
                 return S_OK;
@@ -1229,6 +1244,17 @@ HRESULT DocumentHolder::GetExtent( SIZEL *pSize )
             try
             {
                 awt::Size aDocSize = xVisObj->getVisualAreaSize( DVASPECT_CONTENT );
+
+                sal_Int32 aMapMode = xVisObj->getMapUnit( DVASPECT_CONTENT );
+
+                // TODO/LATER: in future UNO API should be used for the conversion, currently there is no
+                if ( aMapMode == embed::EmbedMapUnits::TWIP )
+                {
+                    // convertion to ONE_100TH_MM
+                    aDocSize.Width = aDocSize.Width * 254 / 144;
+                    aDocSize.Height = aDocSize.Height * 254 / 144;
+                }
+
                 pSize->cx = aDocSize.Width;
                 pSize->cy = aDocSize.Height;
 
