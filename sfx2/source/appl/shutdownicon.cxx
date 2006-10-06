@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:21:16 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:39:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,19 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _OSL_SECURITY_HXX_
+#include <osl/security.hxx>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+#ifndef _UTL_BOOTSTRAP_HXX
+#include <unotools/bootstrap.hxx>
+#endif
 
+#ifdef UNX // need symlink
+#include <unistd.h>
+#endif
 #include "sfxresid.hxx"
 
 using namespace ::com::sun::star::uno;
@@ -129,9 +141,7 @@ public:
 
 void SAL_CALL SfxNotificationListener_Impl::dispatchFinished( const DispatchResultEvent& ) throw( RuntimeException )
 {
-#ifdef WNT
     ShutdownIcon::LeaveModalMode();
-#endif
 }
 
 void SAL_CALL SfxNotificationListener_Impl::disposing( const EventObject& ) throw( RuntimeException )
@@ -141,64 +151,85 @@ void SAL_CALL SfxNotificationListener_Impl::disposing( const EventObject& ) thro
 SFX_IMPL_XSERVICEINFO( ShutdownIcon, "com.sun.star.office.Quickstart", "com.sun.star.comp.desktop.QuickstartWrapper" )  \
 SFX_IMPL_ONEINSTANCEFACTORY( ShutdownIcon );
 
+bool ShutdownIcon::bModalMode = false;
 ShutdownIcon* ShutdownIcon::pShutdownIcon = 0;
+
+// To remove conditionals
+extern "C" {
+    static void disabled_initSystray()
+    {
+        // disable shutdown
+        ShutdownIcon::getInstance()->SetVeto( true );
+        ShutdownIcon::getInstance()->addTerminateListener();
+    }
+    static void disabled_deInitSystray() { }
+}
+#define DOSTRING( x )                       #x
+#define STRING( x )                         DOSTRING( x )
+
+void ShutdownIcon::initSystray()
+{
+#ifdef ENABLE_QUICKSTART_APPLET
+    if (!m_pInitSystray)
+    {
+#  ifdef WIN32
+        m_pInitSystray = win32_init_sys_tray;
+        m_pDeInitSystray = win32_shutdown_sys_tray;
+#  else // UNX
+        m_pPlugin = new osl::Module();
+        if ( m_pPlugin->load( OUString (RTL_CONSTASCII_USTRINGPARAM( STRING( PLUGIN_NAME ) ) ) ) )
+        {
+            m_pInitSystray = (void (*)()) m_pPlugin->getSymbol(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "plugin_init_sys_tray" ) ) );
+            m_pDeInitSystray = (void (*)()) m_pPlugin->getSymbol(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "plugin_shutdown_sys_tray" ) ) );
+            OSL_ASSERT (m_pInitSystray && m_pDeInitSystray);
+        }
+        else
+        {
+            delete m_pPlugin;
+            m_pPlugin = 0;
+        }
+#  endif // UNX
+    }
+#endif // ENABLE_QUICKSTART_APPLET
+    if (!m_pInitSystray ||
+        !m_pDeInitSystray)
+    {
+        m_pInitSystray = disabled_initSystray;
+        m_pDeInitSystray = disabled_deInitSystray;
+    }
+    m_pInitSystray();
+}
+
+void ShutdownIcon::deInitSystray()
+{
+    if (m_pDeInitSystray)
+    m_pDeInitSystray();
+
+    m_pInitSystray = 0;
+    m_pDeInitSystray = 0;
+    if (m_pPlugin)
+        delete m_pPlugin;
+    m_pPlugin = 0;
+}
+
 
 ShutdownIcon::ShutdownIcon( Reference< XMultiServiceFactory > aSMgr ) :
     ShutdownIconServiceBase( m_aMutex ),
     m_bVeto ( false ),
     m_pResMgr( 0 ),
-    m_xServiceManager( aSMgr )
+    m_xServiceManager( aSMgr ),
+    m_pInitSystray( 0 ),
+    m_pDeInitSystray( 0 ),
+    m_pPlugin( 0 )
 {
 }
 
 ShutdownIcon::~ShutdownIcon()
 {
-#ifdef WNT
     deInitSystray();
-#endif
 }
-
-// ---------------------------------------------------------------------------
-
-void ShutdownIcon::SetAutostart( bool bActivate )
-{
-#ifdef WNT
-    OUString aShortcutName( RTL_CONSTASCII_USTRINGPARAM( "StarOffice 6.0" ) );
-    ResMgr* pMgr = SfxResId::GetResMgr();
-    if( pMgr )
-    {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        UniString aRes( SfxResId( STR_QUICKSTART_LNKNAME ) );
-        aShortcutName = OUString( aRes );
-    }
-
-    aShortcutName += OUString( RTL_CONSTASCII_USTRINGPARAM( ".lnk" ) );
-
-    SetAutostartW32( aShortcutName, bActivate );
-#else
-    (void)bActivate; // unused variable
-#endif
-}
-
-bool ShutdownIcon::GetAutostart( )
-{
-#ifdef WNT
-    OUString aShortcutName( RTL_CONSTASCII_USTRINGPARAM( "StarOffice 6.0" ) );
-    ResMgr* pMgr = SfxResId::GetResMgr();
-    if( pMgr )
-    {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        UniString aRes( SfxResId( STR_QUICKSTART_LNKNAME ) );
-        aShortcutName = OUString( aRes );
-    }
-    aShortcutName += OUString( RTL_CONSTASCII_USTRINGPARAM( ".lnk" ) );
-
-    return GetAutostartW32( aShortcutName );
-#else
-    return false;
-#endif
-}
-
 
 // ---------------------------------------------------------------------------
 
@@ -236,9 +267,7 @@ void ShutdownIcon::FileOpen()
     if ( getInstance() && getInstance()->m_xDesktop.is() )
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-#ifdef WNT
         EnterModalMode();
-#endif
         // use ctor for filling up filters automatically! #89169#
         FileDialogHelper dlg( WB_OPEN | SFXWB_MULTISELECTION, String() );
         if ( ERRCODE_NONE == dlg.Execute() )
@@ -362,9 +391,7 @@ void ShutdownIcon::FileOpen()
             {
             }
         }
-#ifdef WNT
         LeaveModalMode();
-#endif
     }
 }
 
@@ -400,9 +427,7 @@ void ShutdownIcon::FromTemplate()
             Reference< ::com::sun::star::frame::XNotifyingDispatch > xNotifyer( xDisp, UNO_QUERY );
             if ( xNotifyer.is() )
             {
-#ifdef WNT
                 EnterModalMode();
-#endif
                 xNotifyer->dispatchWithNotification( aTargetURL, aArgs, new SfxNotificationListener_Impl() );
             }
             else
@@ -558,10 +583,9 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
                 if ( !m_xDesktop.is() )
                     return;
 
+                /* Create a sub-classed instance - foo */
                 ShutdownIcon::pShutdownIcon = this;
-#ifdef WNT
                 initSystray();
-#endif
             }
             catch(const ::com::sun::star::lang::IllegalArgumentException&)
             {
@@ -578,4 +602,142 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
                 SetAutostart( sal_False );
     }
 
+}
+
+// -------------------------------
+
+void ShutdownIcon::EnterModalMode()
+{
+    bModalMode = TRUE;
+}
+
+// -------------------------------
+
+void ShutdownIcon::LeaveModalMode()
+{
+    bModalMode = FALSE;
+}
+
+#ifdef WNT
+// defined in shutdowniconw32.cxx
+#else
+bool ShutdownIcon::IsQuickstarterInstalled()
+{
+#ifndef ENABLE_QUICKSTART_APPLET
+    return false;
+#endif // !ENABLE_QUICKSTART_APPLET
+#ifdef UNX
+    return true;
+#endif // UNX
+}
+#endif // !WNT
+
+// ---------------------------------------------------------------------------
+
+#if defined (ENABLE_QUICKSTART_APPLET) && defined (UNX)
+static OUString getDotAutostart( bool bCreate = false )
+{
+    OUString aShortcut;
+    const char *pConfigHome;
+    if( (pConfigHome = getenv("XDG_CONFIG_HOME") ) )
+        aShortcut = OStringToOUString( OString( pConfigHome ), RTL_TEXTENCODING_UTF8 );
+    else
+    {
+        OUString aHomeURL;
+        osl::Security().getHomeDir( aHomeURL );
+        ::osl::File::getSystemPathFromFileURL( aHomeURL, aShortcut );
+        aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "/.config" ) );
+    }
+    aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "/autostart" ) );
+    if (bCreate)
+    {
+        OUString aShortcutUrl;
+        osl::File::getFileURLFromSystemPath( aShortcut, aShortcutUrl );
+        osl::Directory::createPath( aShortcutUrl );
+    }
+    return aShortcut;
+}
+#endif
+
+rtl::OUString ShutdownIcon::getShortcutName()
+{
+#ifndef ENABLE_QUICKSTART_APPLET
+    return OUString();
+#else
+
+    OUString aShortcutName( RTL_CONSTASCII_USTRINGPARAM( "StarOffice 6.0" ) );
+    ResMgr* pMgr = SfxResId::GetResMgr();
+    if( pMgr )
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        UniString aRes( SfxResId( STR_QUICKSTART_LNKNAME ) );
+        aShortcutName = OUString( aRes );
+    }
+#ifdef WNT
+    aShortcutName += OUString( RTL_CONSTASCII_USTRINGPARAM( ".lnk" ) );
+
+    OUString aShortcut(GetAutostartFolderNameW32());
+    aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\" ) );
+    aShortcut += aShortcutName;
+#else // UNX
+    OUString aShortcut = getDotAutostart();
+    aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "/qstart.desktop" ) );
+#endif // UNX
+    return aShortcut;
+#endif // ENABLE_QUICKSTART_APPLET
+}
+
+bool ShutdownIcon::GetAutostart( )
+{
+    bool bRet = false;
+#ifdef ENABLE_QUICKSTART_APPLET
+    OUString aShortcut( getShortcutName() );
+    OUString aShortcutUrl;
+    osl::File::getFileURLFromSystemPath( aShortcut, aShortcutUrl );
+    osl::File f( aShortcutUrl );
+    osl::File::RC error = f.open( OpenFlag_Read );
+    if( error == osl::File::E_None )
+    {
+        f.close();
+        bRet = true;
+    }
+#endif // ENABLE_QUICKSTART_APPLET
+    return bRet;
+}
+
+void ShutdownIcon::SetAutostart( bool bActivate )
+{
+#ifdef ENABLE_QUICKSTART_APPLET
+    OUString aShortcut( getShortcutName() );
+
+    if( bActivate && IsQuickstarterInstalled() )
+    {
+#ifdef WNT
+        EnableAutostartW32( aShortcut );
+#else // UNX
+        getDotAutostart( true );
+
+        OUString aPath;
+        ::utl::Bootstrap::locateBaseInstallation(aPath);
+
+        OUString aDesktopFile;
+        ::osl::File::getSystemPathFromFileURL( aPath, aDesktopFile );
+        aDesktopFile += OUString( RTL_CONSTASCII_USTRINGPARAM( "/share/xdg/qstart.desktop" ) );
+
+        OString aDesktopFileUnx = OUStringToOString( aDesktopFile,
+                                                     osl_getThreadTextEncoding() );
+        OString aShortcutUnx = OUStringToOString( aShortcut,
+                                                  osl_getThreadTextEncoding() );
+        symlink( aDesktopFileUnx, aShortcutUnx );
+#endif // UNX
+    }
+    else
+    {
+        OUString aShortcutUrl;
+        ::osl::File::getFileURLFromSystemPath( aShortcut, aShortcutUrl );
+        ::osl::File::remove( aShortcutUrl );
+    }
+#else
+    (void)bActivate; // unused variable
+#endif // ENABLE_QUICKSTART_APPLET
 }
