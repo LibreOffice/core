@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salsys.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:35:42 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:04:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,20 @@ X11SalSystem::~X11SalSystem()
 unsigned int X11SalSystem::GetDisplayScreenCount()
 {
     SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
-    return pSalDisp->IsXinerama() ? pSalDisp->GetXineramaScreens().size() : 1U;
+    return pSalDisp->IsXinerama() ? pSalDisp->GetXineramaScreens().size() : pSalDisp->GetScreenCount();
+}
+
+bool X11SalSystem::IsMultiDisplay()
+{
+    SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
+    unsigned int nScreenCount = pSalDisp->GetScreenCount();
+    return pSalDisp->IsXinerama() ? false : (nScreenCount > 1);
+}
+
+unsigned int X11SalSystem::GetDefaultDisplayNumber()
+{
+    SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
+    return pSalDisp->GetDefaultScreenNumber();
 }
 
 Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
@@ -77,8 +90,18 @@ Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
             aRet = rScreens[nScreen];
     }
     else
-        aRet = Rectangle( Point(), pSalDisp->GetScreenSize() );
+    {
+        const SalDisplay::ScreenData& rScreen = pSalDisp->getDataForScreen( nScreen );
+        aRet = Rectangle( Point( 0, 0 ), rScreen.m_aSize );
+    }
+
     return aRet;
+}
+
+Rectangle X11SalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
+{
+    // FIXME: workareas
+    return GetDisplayScreenPosSizePixel( nScreen );
 }
 
 int X11SalSystem::ShowNativeDialog( const String& rTitle, const String& rMessage, const std::list< String >& rButtons, int nDefButton )
