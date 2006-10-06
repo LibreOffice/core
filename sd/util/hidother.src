@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:21:52 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:53:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,3 +200,7 @@ hidspecial HID_SD_CUSTOMANIMATIONPANE_ROTATIONPROPERTYBOX       { HelpId = HID_S
 hidspecial HID_SD_CUSTOMANIMATIONPANE_TRANSPARENCYPROPERTYBOX   { HelpId = HID_SD_CUSTOMANIMATIONPANE_TRANSPARENCYPROPERTYBOX; };
 hidspecial HID_SD_CUSTOMANIMATIONPANE_SCALEPROPERTYBOX          { HelpId = HID_SD_CUSTOMANIMATIONPANE_SCALEPROPERTYBOX; };
 hidspecial HID_SD_CUSTOMANIMATIONPANE_FONTSTYLEPROPERTYBOX      { HelpId = HID_SD_CUSTOMANIMATIONPANE_FONTSTYLEPROPERTYBOX; };
+
+hidspecial SID_SAVEGRAPHIC { HelpId = SID_SAVEGRAPHIC; };
+
+hidspecial HID_SD_SLIDESHOW_DISPLAY                             { HelpId = HID_SD_SLIDESHOW_DISPLAY; };
