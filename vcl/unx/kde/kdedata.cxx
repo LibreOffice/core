@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdedata.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:30:45 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:03:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,8 +103,8 @@ void VCLKDEApplication::commitData(QSessionManager&)
  * class SalKDEDisplay                                                     *
  ***************************************************************************/
 
-SalKDEDisplay::SalKDEDisplay( Display* pDisp, Visual* pVisual, Colormap aColMap )
-    : SalX11Display( pDisp, pVisual, aColMap, false )
+SalKDEDisplay::SalKDEDisplay( Display* pDisp )
+    : SalX11Display( pDisp, false )
 {
 }
 
@@ -197,9 +197,7 @@ void KDEXLib::Init()
 
     Display* pDisp = QPaintDevice::x11AppDisplay();
 
-    SalDisplay *pSalDisplay = new SalKDEDisplay( pDisp,
-            static_cast< Visual * >( QPaintDevice::x11AppVisual() ),
-            QPaintDevice::x11AppColormap() );
+    SalDisplay *pSalDisplay = new SalKDEDisplay( pDisp );
 
     XSetIOErrorHandler    ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
     XSetErrorHandler      ( (XErrorHandler)X11SalData::XErrorHdl );
