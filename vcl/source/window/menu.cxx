@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:19:43 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:35:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5661,7 +5661,8 @@ Rectangle MenuBarWindow::GetMenuBarButtonRectPixel( USHORT nId )
 
 void MenuBarWindow::RemoveMenuBarButton( USHORT nId )
 {
-    aCloser.RemoveItem( nId );
+    USHORT nPos = aCloser.GetItemPos( nId );
+    aCloser.RemoveItem( nPos );
     m_aAddButtons.erase( nId );
     aCloser.calcMinSize();
     ImplLayoutChanged();
