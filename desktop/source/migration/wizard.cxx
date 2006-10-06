@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:45:56 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:39:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,13 +59,15 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/container/XNameReplace.hpp>
 
 using namespace svt;
 using namespace rtl;
@@ -75,6 +77,9 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
+using namespace com::sun::star::container;
+
+#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
 namespace desktop
 {
@@ -83,7 +88,8 @@ const FirstStartWizard::WizardState FirstStartWizard::STATE_WELCOME = 0;
 const FirstStartWizard::WizardState FirstStartWizard::STATE_LICENSE = 1;
 const FirstStartWizard::WizardState FirstStartWizard::STATE_MIGRATION = 2;
 const FirstStartWizard::WizardState FirstStartWizard::STATE_USER = 3;
-const FirstStartWizard::WizardState FirstStartWizard::STATE_REGISTRATION = 4;
+const FirstStartWizard::WizardState FirstStartWizard::STATE_UPDATE_CHECK = 4;
+const FirstStartWizard::WizardState FirstStartWizard::STATE_REGISTRATION = 5;
 
 WizardResId::WizardResId( USHORT nId ) :
     ResId( nId, FirstStartWizard::GetResManager() )
@@ -111,6 +117,7 @@ FirstStartWizard::FirstStartWizard(Window* pParent)
     ,m_bDone(sal_False)
     ,m_bAccepted(sal_False)
     ,m_bOverride(sal_False)
+    ,m_bAutomaticUpdChk(sal_True)
 {
     // ---
     // FreeResource();
@@ -145,25 +152,56 @@ FirstStartWizard::FirstStartWizard(Window* pParent)
     // migration is needed
     if(Migration::checkMigration())
     {
-        declarePath(m_aDefaultPath,
-            STATE_WELCOME,
-            STATE_LICENSE,
-            STATE_MIGRATION,
-            STATE_USER,
-            STATE_REGISTRATION,
-            WZS_INVALID_STATE
-            );
-            enableState(STATE_MIGRATION, sal_False);
+        if ( showOnlineUpdatePage() )
+        {
+            declarePath(m_aDefaultPath,
+                STATE_WELCOME,
+                STATE_LICENSE,
+                STATE_MIGRATION,
+                STATE_USER,
+                STATE_UPDATE_CHECK,
+                STATE_REGISTRATION,
+                WZS_INVALID_STATE
+                );
+            enableState(STATE_UPDATE_CHECK, sal_False);
+        }
+        else
+        {
+            declarePath(m_aDefaultPath,
+                STATE_WELCOME,
+                STATE_LICENSE,
+                STATE_MIGRATION,
+                STATE_USER,
+                STATE_REGISTRATION,
+                WZS_INVALID_STATE
+                );
+        }
+        enableState(STATE_MIGRATION, sal_False);
     }
     else
     {
-        declarePath(m_aDefaultPath,
-            STATE_WELCOME,
-            STATE_LICENSE,
-            STATE_USER,
-            STATE_REGISTRATION,
-            WZS_INVALID_STATE
-            );
+        if ( showOnlineUpdatePage() )
+        {
+            declarePath(m_aDefaultPath,
+                STATE_WELCOME,
+                STATE_LICENSE,
+                STATE_USER,
+                STATE_UPDATE_CHECK,
+                STATE_REGISTRATION,
+                WZS_INVALID_STATE
+                );
+            enableState(STATE_UPDATE_CHECK, sal_False);
+        }
+        else
+        {
+            declarePath(m_aDefaultPath,
+                STATE_WELCOME,
+                STATE_LICENSE,
+                STATE_USER,
+                STATE_REGISTRATION,
+                WZS_INVALID_STATE
+                );
+        }
     }
     enableState(STATE_USER, sal_False);
     enableState(STATE_REGISTRATION, sal_False);
@@ -234,7 +272,7 @@ void FirstStartWizard::enterState(WizardState _nState)
 
 }
 
-IMPL_LINK( FirstStartWizard, DeclineHdl, PushButton *, arg )
+IMPL_LINK( FirstStartWizard, DeclineHdl, PushButton *, EMPTYARG )
 {
     QueryBox aBox(this, WizardResId(QB_ASK_DECLINE));
     sal_Int32 ret = aBox.Execute();
@@ -265,6 +303,9 @@ TabPage* FirstStartWizard::createPage(WizardState _nState)
     case STATE_USER:
         pTabPage = new UserPage(this, WizardResId(TP_USER));
         break;
+    case STATE_UPDATE_CHECK:
+        pTabPage = new UpdateCheckPage(this, WizardResId(TP_UPDATE_CHECK));
+        break;
     case STATE_REGISTRATION:
         pTabPage = new RegistrationPage(this, WizardResId(TP_REGISTRATION));
         break;
@@ -291,6 +332,9 @@ String FirstStartWizard::getStateDisplayName(WizardState _nState)
     case STATE_USER:
         sName = String(WizardResId(STR_STATE_USER));
         break;
+    case STATE_UPDATE_CHECK:
+        sName = String(WizardResId(STR_STATE_UPDATE_CHECK));
+        break;
     case STATE_REGISTRATION:
         sName = String(WizardResId(STR_STATE_REGISTRATION));
         break;
@@ -306,17 +350,22 @@ sal_Bool FirstStartWizard::prepareLeaveCurrentState( CommitPageReason _eReason )
         // of the roadmap wizard which the page implementation does not know.
         if (Migration::checkMigration())
             enableState(FirstStartWizard::STATE_MIGRATION, sal_True);
+
         enableState(FirstStartWizard::STATE_USER, sal_True);
+
+        if ( showOnlineUpdatePage() )
+            enableState(FirstStartWizard::STATE_UPDATE_CHECK, sal_True);
+
         enableState(FirstStartWizard::STATE_REGISTRATION, sal_True);
+
         m_bAccepted = sal_True;
         storeAcceptDate();
     }
     return svt::RoadmapWizard::prepareLeaveCurrentState(_eReason);
 }
 
-sal_Bool FirstStartWizard::leaveState(WizardState _nState )
+sal_Bool FirstStartWizard::leaveState(WizardState)
 {
-
     return sal_True;
 }
 
@@ -613,6 +662,31 @@ sal_Bool FirstStartWizard::isLicenseAccepted()
     }
 }
 
+sal_Bool FirstStartWizard::showOnlineUpdatePage()
+{
+    try {
+        Reference < XNameReplace > xUpdateAccess;
+        Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+
+        xUpdateAccess = Reference < XNameReplace >(
+            xFactory->createInstance( UNISTRING( "com.sun.star.setup.UpdateCheckConfig" ) ), UNO_QUERY_THROW );
+
+        if ( xUpdateAccess.is() )
+        {
+            sal_Bool bAutoUpdChk;
+            Any result = xUpdateAccess->getByName( UNISTRING( "AutoCheckEnabled" ) );
+            result >>= bAutoUpdChk;
+            if ( bAutoUpdChk == sal_False )
+                return sal_True;
+            else
+                return sal_False;
+        }
+    } catch (RuntimeException)
+    {
+    }
+    return sal_False;
+}
+
 OUString FirstStartWizard::getLicensePath()
 {
     // license file name
@@ -640,7 +714,7 @@ OUString FirstStartWizard::getLicensePath()
     OString aMgrName = OString("dkt") + OString::valueOf((sal_Int32)SUPD, 10);
     AllSettings aSettings(Application::GetSettings());
     aLocale = aSettings.GetUILocale();
-    ResMgr* pResMgr = ResMgr::SearchCreateResMgr(aMgrName, aLocale);
+    ResMgr::SearchCreateResMgr(aMgrName, aLocale);
 
     aLangString = aLocale.Language;
     if ( aLocale.Country.getLength() != 0 )
