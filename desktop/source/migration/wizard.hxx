@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:39:24 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:40:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@ public:
     static const WizardState STATE_LICENSE;
     static const WizardState STATE_MIGRATION;
     static const WizardState STATE_USER;
+    static const WizardState STATE_UPDATE_CHECK;
     static const WizardState STATE_REGISTRATION;
 
     static ResMgr* pResMgr;
@@ -81,6 +82,7 @@ private:
     String m_sCancel;
     sal_Bool m_bDone;
     sal_Bool m_bAccepted;
+    sal_Bool m_bAutomaticUpdChk;
     Link m_lnkCancel;
 
     void storeAcceptDate();
@@ -90,6 +92,7 @@ private:
     DECL_LINK(DeclineHdl, PushButton*);
 
     void cleanOldOfficeRegKeys();
+    sal_Bool showOnlineUpdatePage();
 
 public:
     static sal_Bool isFirstStart();
