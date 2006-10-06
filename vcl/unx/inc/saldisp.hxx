@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:57:07 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:00:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ class   SalXLib;
 #endif
 #include <vector>
 #include <list>
+#include <hash_map>
 #ifndef _GEN_HXX
 #include <tools/gen.hxx>
 #endif
@@ -159,6 +160,7 @@ class SalVisual : public XVisualInfo
     int             nGreenBits_;
     int             nBlueBits_;
 public:
+                            SalVisual();
                             ~SalVisual();
                             SalVisual( const XVisualInfo* pXVI );
 
@@ -177,34 +179,37 @@ public:
 // -=-= SalColormap =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalColormap
 {
-    SalDisplay     *pDisplay_;
-    Colormap        hColormap_;
-    SalColor       *pPalette_;          // Pseudocolor
-    SalVisual      *pVisual_;
-    USHORT         *pLookupTable_;      // Pseudocolor: 12bit reduction
-    Pixel           nWhitePixel_;
-    Pixel           nBlackPixel_;
-    Pixel           nUsed_;             // Pseudocolor
+    const SalDisplay*       m_pDisplay;
+    Colormap                m_hColormap;
+    std::vector<SalColor>   m_aPalette;         // Pseudocolor
+    SalVisual               m_aVisual;
+    std::vector<USHORT>     m_aLookupTable;     // Pseudocolor: 12bit reduction
+    Pixel                   m_nWhitePixel;
+    Pixel                   m_nBlackPixel;
+    Pixel                   m_nUsed;            // Pseudocolor
+    int                     m_nScreen;
 
     void            GetPalette();
     void            GetLookupTable();
 public:
-    SalColormap( SalDisplay          *pSalDisplay,
-                 Colormap             hColormap );
+    SalColormap( const SalDisplay*  pSalDisplay,
+                 Colormap           hColormap,
+                 int                nScreen );
     SalColormap( const BitmapPalette &rpPalette );
-    SalColormap( USHORT               nDepth );
+    SalColormap( USHORT             nDepth );
     SalColormap();
     ~SalColormap();
 
-    inline  Colormap        GetXColormap() const { return hColormap_; }
-    inline  SalDisplay     *GetDisplay() const { return pDisplay_; }
-    inline  Display        *GetXDisplay() const;
-    inline  SalVisual      *GetVisual() const;
-    inline  Visual         *GetXVisual() const;
-    inline  Pixel           GetWhitePixel() const { return nWhitePixel_; }
-    inline  Pixel           GetBlackPixel() const { return nBlackPixel_; }
-    inline  Pixel           GetUsed() const { return nUsed_; }
-    inline  int             GetClass() const;
+    inline  Colormap            GetXColormap() const { return m_hColormap; }
+    inline  const SalDisplay*   GetDisplay() const { return m_pDisplay; }
+    inline  Display*            GetXDisplay() const;
+    inline  const SalVisual&    GetVisual() const { return m_aVisual; }
+    inline  Visual*             GetXVisual() const { return m_aVisual.GetVisual(); }
+    inline  Pixel               GetWhitePixel() const { return m_nWhitePixel; }
+    inline  Pixel               GetBlackPixel() const { return m_nBlackPixel; }
+    inline  Pixel               GetUsed() const { return m_nUsed; }
+    inline  int                 GetClass() const { return m_aVisual.GetClass(); }
+    inline  int                 GetScreenNumber() const { return m_nScreen; }
 
     BOOL            GetXPixels( XColor  &rColor,
                                 int      r,
@@ -292,6 +297,49 @@ extern "C" {
 
 class VCL_DLLPUBLIC SalDisplay
 {
+public:
+    struct RenderEntry
+    {
+        Pixmap      m_aPixmap;
+        Picture     m_aPicture;
+
+        RenderEntry() : m_aPixmap( 0 ), m_aPicture( 0 ) {}
+    };
+
+    typedef std::hash_map<int,RenderEntry> RenderEntryMap;
+
+    struct ScreenData
+    {
+        bool                m_bInit;
+
+        XLIB_Window         m_aRoot;
+        XLIB_Window         m_aRefWindow;
+        Size                m_aSize;
+        SalVisual           m_aVisual;
+        SalColormap         m_aColormap;
+        GC                  m_aMonoGC;
+        GC                  m_aCopyGC;
+        GC                  m_aAndInvertedGC;
+        GC                  m_aAndGC;
+        GC                  m_aOrGC;
+        GC                  m_aStippleGC;
+        Pixmap              m_hInvert50;
+        mutable RenderEntryMap m_aRenderData;
+
+        ScreenData() :
+        m_bInit( false ),
+        m_aRoot( None ),
+        m_aRefWindow( None ),
+        m_aMonoGC( None ),
+        m_aCopyGC( None ),
+        m_aAndInvertedGC( None ),
+        m_aAndGC( None ),
+        m_aOrGC( None ),
+        m_aStippleGC( None ),
+        m_hInvert50( None ),
+        m_aRenderData( 1 )
+        {}
+    };
 // -=-= UserEvent =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct SalUserEvent
     {
@@ -316,11 +364,9 @@ protected:
     const ExtendedXlfd          *mpFallbackFactory;
 
     Display        *pDisp_;             // X Display
-    Screen         *pScreen_;           // XDefaultScreenOfDisplay
-    int             nScreen_;           // XDefaultScreen
-    SalVisual      *pRootVisual_;       // default visual of screen
-    XLIB_Window     hRootWindow_;
-    Size            aSize_;             // Screen Size [pixel]
+    int             m_nDefaultScreen;           // XDefaultScreen
+    std::vector< ScreenData >    m_aScreens;
+    ScreenData      m_aInvalidScreenData;
     Pair            aResolution_;       // [dpi]
     bool            mbExactResolution;
     ULONG           nMaxRequestSize_;   // [byte]
@@ -339,19 +385,7 @@ protected:
     XLIB_Cursor     aPointerCache_[POINTER_COUNT];
     SalFrame*       m_pCapture;
 
-    // GDI
-    SalVisual      *pVisual_;           // Visual
-    XLIB_Window     hRefWindow_;
-    GC              pMonoGC_;
-    GC              pCopyGC_;
-    GC              pAndInvertedGC_;
-    GC              pAndGC_;
-    GC              pOrGC_;
-    GC              pStippleGC_;
-    Pixmap          hInvert50_;
-    SalColormap    *m_pColormap;
-
-    SalFontCache   *pFontCache_;
+    mutable SalFontCache* m_pFontCache;
 
     // Keyboard
     BOOL            bNumLockFromXS_;    // Num Lock handled by X Server
@@ -386,8 +420,7 @@ public:
                                         int          nScreen,
                                         XVisualInfo &rVI );
 
-                            SalDisplay( Display* pDisp,
-                                        Colormap aColMap = None );
+                            SalDisplay( Display* pDisp );
 
     virtual ~SalDisplay();
 
@@ -397,7 +430,7 @@ public:
     void                    setHaveSystemChildFrame() const
     { pXLib_->setHaveSystemChildFrame(); }
 
-    void            Init( Colormap hXColmap, Visual *pVisual, bool bHandleStartupNotification = true );
+    void            Init( bool bHandleStartupNotification = true );
 
     void            SendInternalEvent( SalFrame* pFrame, void* pData, USHORT nEvent = SALEVENT_USEREVENT );
     void            CancelInternalEvent( SalFrame* pFrame, void* pData, USHORT nEvent );
@@ -407,10 +440,10 @@ public:
     void            PrintEvent( const ByteString &rComment,
                                 XEvent       *pEvent ) const;
 
-    XlfdStorage*    GetXlfdList();
+    XlfdStorage*    GetXlfdList() const;
     ExtendedFontStruct*
     GetFont( const ExtendedXlfd *pFont,
-             const Size& rPixelSize, sal_Bool bVertical );
+             const Size& rPixelSize, sal_Bool bVertical ) const;
     const ExtendedXlfd*
     GetFallbackFactory()
     { return mpFallbackFactory; }
@@ -435,25 +468,34 @@ public:
 
     void            Remove( XEvent   *pEvent );
 
-    XLIB_Window     GetRootWindow() const { return hRootWindow_; }
-    XLIB_Window     GetDrawable() const { return hRefWindow_; }
+    void            initScreen( int nScreen ) const;
+    const ScreenData&     getDataForScreen( int nScreen ) const
+    {
+        if( nScreen < 0 || nScreen >= static_cast<int>(m_aScreens.size()) )
+            return m_aInvalidScreenData;
+        if( ! m_aScreens[nScreen].m_bInit )
+            initScreen( nScreen );
+        return m_aScreens[nScreen];
+    }
+
+    XLIB_Window     GetDrawable( int nScreen ) const { return getDataForScreen( nScreen ).m_aRefWindow; }
     Display        *GetDisplay() const { return pDisp_; }
-    int             GetScreenNumber() const { return nScreen_; }
+    int             GetDefaultScreenNumber() const { return m_nDefaultScreen; }
+    const Size&     GetScreenSize( int nScreen ) const { return getDataForScreen( nScreen ).m_aSize; }
     srv_vendor_t    GetServerVendor() const { return meServerVendor; }
     void            SetServerVendor() { meServerVendor = sal_GetServerVendor(pDisp_); }
     BOOL            IsDisplay() const { return !!pXLib_; }
-    GC              GetMonoGC() const { return pMonoGC_; }
-    GC              GetCopyGC() const { return pCopyGC_; }
-    GC              GetAndInvertedGC() const { return pAndInvertedGC_; }
-    GC              GetAndGC() const { return pAndGC_; }
-    GC              GetOrGC() const { return pOrGC_; }
-    GC              GetStippleGC() const { return pStippleGC_; }
-    GC              GetGC( USHORT nDepth ) const;
-    Pixmap          GetInvert50() const { return hInvert50_; }
-    SalColormap    &GetColormap() const { return *m_pColormap; }
-    SalVisual      *GetVisual() const { return pVisual_; }
-    SalVisual      *GetRootVisual() const { return pRootVisual_; }
-    const Size     &GetScreenSize() const { return aSize_; }
+    GC              GetMonoGC( int nScreen ) const { return getDataForScreen(nScreen).m_aMonoGC; }
+    GC              GetCopyGC( int nScreen ) const { return getDataForScreen(nScreen).m_aCopyGC; }
+    GC              GetAndInvertedGC( int nScreen ) const { return getDataForScreen(nScreen).m_aAndInvertedGC; }
+    GC              GetAndGC( int nScreen ) const { return getDataForScreen(nScreen).m_aAndGC; }
+    GC              GetOrGC( int nScreen ) const { return getDataForScreen(nScreen).m_aOrGC; }
+    GC              GetStippleGC( int nScreen ) const { return getDataForScreen(nScreen).m_aStippleGC; }
+    GC              GetGC( USHORT nDepth, int nScreen ) const;
+    Pixmap          GetInvert50( int nScreen ) const { return getDataForScreen(nScreen).m_hInvert50; }
+    const SalColormap&    GetColormap( int nScreen ) const { return getDataForScreen(nScreen).m_aColormap; }
+    const SalVisual&      GetVisual( int nScreen ) const { return getDataForScreen(nScreen).m_aVisual; }
+    RenderEntryMap&       GetRenderEntries( int nScreen ) const { return getDataForScreen(nScreen).m_aRenderData; }
     const Pair     &GetResolution() const { return aResolution_; }
     bool            GetExactResolution() const { return mbExactResolution; }
     ULONG           GetProperties() const { return nProperties_; }
@@ -464,10 +506,10 @@ public:
     { return m_pCapture == pFrameData; }
     SalFrame*   GetCaptureFrame() const
     { return m_pCapture; }
-    SalXLib*         GetXLib() { return pXLib_; }
+    SalXLib*         GetXLib() const { return pXLib_; }
 
-    SalI18N_InputMethod*            GetInputMethod()  { return mpInputMethod;  }
-    SalI18N_KeyboardExtension*  GetKbdExtension() { return mpKbdExtension; }
+    SalI18N_InputMethod*            GetInputMethod()  const { return mpInputMethod;  }
+    SalI18N_KeyboardExtension*  GetKbdExtension() const { return mpKbdExtension; }
     void            SetInputMethod( SalI18N_InputMethod *pInputMethod )
     { mpInputMethod = pInputMethod; }
     void            SetKbdExtension(SalI18N_KeyboardExtension *pKbdExtension)
@@ -476,6 +518,11 @@ public:
     ::vcl_sal::WMAdaptor* getWMAdaptor() const { return m_pWMAdaptor; }
     bool            IsXinerama() const { return m_bXinerama; }
     const std::vector< Rectangle >& GetXineramaScreens() const { return m_aXineramaScreens; }
+    XLIB_Window     GetRootWindow( int nScreen ) const
+    { return getDataForScreen( nScreen ).m_aRoot; }
+    const std::vector< ScreenData >& GetScreenData()
+    { return m_aScreens; }
+    int GetScreenCount() const { return static_cast<int>(m_aScreens.size()); }
 
     const std::list< SalFrame* >& getFrames() const
     { return m_aFrames; }
@@ -487,32 +534,20 @@ public:
 
 // -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-inline GC SalDisplay::GetGC( USHORT nDepth ) const
+inline GC SalDisplay::GetGC( USHORT nDepth, int nScreen ) const
 { return 1 == nDepth
-         ? pMonoGC_
-         : pVisual_->GetDepth() == nDepth
-           ? pCopyGC_
-           : NULL; }
+         ? GetMonoGC( nScreen )
+         : getDataForScreen(nScreen).m_aVisual.GetDepth() == nDepth
+           ? GetCopyGC( nScreen )
+           : None; }
 
 inline  Display *SalColormap::GetXDisplay() const
-{ return pDisplay_->GetDisplay(); }
-
-inline SalVisual *SalColormap::GetVisual() const
-{ return pVisual_ ? pVisual_ : pDisplay_->GetVisual(); }
-
-inline Visual *SalColormap::GetXVisual() const
-{ return GetVisual()->GetVisual(); }
-
-inline int SalColormap::GetClass() const
-{ return pVisual_ ? pVisual_->GetClass() : PseudoColor; }
+{ return m_pDisplay->GetDisplay(); }
 
 class VCL_DLLPUBLIC SalX11Display : public SalDisplay
 {
 public:
-             SalX11Display( Display* pDisp,
-                         Visual* pVisual = NULL,
-                         Colormap aColMap = None,
-                         bool bHandleStartupNotification = true );
+             SalX11Display( Display* pDisp, bool bHandleStartupNotification = true );
     virtual ~SalX11Display();
 
     virtual long        Dispatch( XEvent *pEvent );
@@ -533,4 +568,3 @@ namespace vcl_sal {
 
 
 #endif // _SV_SALDISP_HXX
-
