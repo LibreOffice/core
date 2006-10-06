@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: rt $ $Date: 2006-05-03 07:35:51 $
+#   last change: $Author: kz $ $Date: 2006-10-06 10:38:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@ PRJ=..$/..
 PRJNAME=sfx2
 TARGET=appl
 ENABLE_EXCEPTIONS=TRUE
+LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
@@ -47,10 +48,18 @@ ENABLE_EXCEPTIONS=TRUE
 # w.g. compilerbugs
 .IF "$(GUI)"=="WNT"
 CFLAGS+=-Od
+CFLAGS+=-DENABLE_QUICKSTART_APPLET
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
         CDEFS+=-DDLL_NAME=libsfx$(UPD)$(DLLPOSTFIX)$(DLLPOST)
+.IF "$(ENABLE_GTK)" != ""
+        PKGCONFIG_MODULES=gtk+-2.0
+        .INCLUDE: pkg_config.mk
+        CFLAGS+=$(PKGCONFIG_CFLAGS)
+        CFLAGS+=-DENABLE_QUICKSTART_APPLET
+        CDEFS+=-DPLUGIN_NAME=libqstart_gtk$(UPD)$(DLLPOSTFIX)$(DLLPOST)
+.ENDIF # "$(ENABLE_QUICKSTART_APPLET)"=="TRUE"
 .ELSE
         CDEFS+=-DDLL_NAME=sfx$(UPD)$(DLLPOSTFIX)$(DLLPOST)
 .ENDIF
@@ -65,7 +74,7 @@ SRS2NAME=sfx
 SRC2FILES =  \
         sfx.src
 
-SLOFILES =  \
+SFX_OBJECTS = \
     $(SLO)$/app.obj \
     $(SLO)$/appbas.obj \
     $(SLO)$/appcfg.obj \
@@ -103,6 +112,20 @@ SLOFILES =  \
         $(SLO)$/xpackcreator.obj \
     $(SLO)$/fwkhelper.obj \
     $(SLO)$/updatedlg.obj
+
+.IF "$(GUI)"=="UNX"
+QUICKSTART_OBJECTS = \
+    $(SLO)$/shutdowniconunx.obj
+.ENDIF
+
+SLOFILES = $(SFX_OBJECTS) $(QUICKSTART_OBJECTS)
+LIB1TARGET= $(SLB)$/$(TARGET).lib
+LIB1OBJFILES= $(SFX_OBJECTS)
+
+.IF "$(GUI)"=="UNX"
+LIB2TARGET= $(SLB)$/quickstart.lib
+LIB2OBJFILES= $(QUICKSTART_OBJECTS)
+.ENDIF
 
 EXCEPTIONSFILES=\
     $(SLO)$/imagemgr.obj		\
