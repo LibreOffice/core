@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optmemory.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:32:07 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:37:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,10 +236,12 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rS
     aQuickLaunchFL          ( this, ResId( FL_QUICKLAUNCH ) ),
     aQuickLaunchCB          ( this, ResId( CB_QUICKLAUNCH ) )//,
 {
+#if defined(UNX)
+    aQuickLaunchCB.SetText( ResId( STR_QUICKLAUNCH_UNX ) );
+#endif
     FreeResource();
 
-    //quick launch only available in Win
-#ifndef WNT
+#if !defined(WNT) && !defined(ENABLE_GTK)
     aQuickLaunchFL.Hide();
     aQuickLaunchCB.Hide();
 #endif
