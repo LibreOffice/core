@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpids.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:55:34 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:51:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,3 +269,5 @@
 #define HID_SD_CUSTOMANIMATIONPANE_TRANSPARENCYPROPERTYBOX  (HID_SD_START + 187)
 #define HID_SD_CUSTOMANIMATIONPANE_SCALEPROPERTYBOX         (HID_SD_START + 188)
 #define HID_SD_CUSTOMANIMATIONPANE_FONTSTYLEPROPERTYBOX     (HID_SD_START + 189)
+
+#define HID_SD_SLIDESHOW_DISPLAY                            (HID_SD_START + 190)
