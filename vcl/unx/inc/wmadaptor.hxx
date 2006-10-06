@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:37:10 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:02:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,8 @@ public:
         NET_WM_STATE_STAYS_ON_TOP,
         NET_WM_STATE_STICKY,
         NET_WM_STATE_FULLSCREEN,
+        NET_WM_STRUT,
+        NET_WM_STRUT_PARTIAL,
         NET_WM_WINDOW_TYPE,
         NET_WM_WINDOW_TYPE_DESKTOP,
         NET_WM_WINDOW_TYPE_DIALOG,
@@ -151,7 +153,8 @@ public:
         windowType_ModelessDialogue,
         windowType_Utility,
         windowType_Splash,
-        windowType_Toolbar
+        windowType_Toolbar,
+        windowType_Dock
     };
 
 protected:
@@ -235,7 +238,15 @@ public:
      *  start/stop fullscreen mode on a frame
      */
     virtual void showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const;
-
+    /*
+     * set window struts
+     */
+    virtual void setFrameStruts( X11SalFrame*pFrame,
+                                 int left, int right, int top, int bottom,
+                                 int left_start_y, int left_end_y,
+                                 int right_start_y, int right_end_y,
+                                 int top_start_x, int top_end_x,
+                                 int bottom_start_x, int bottom_end_x ) const;
     /*
      *  tells whether fullscreen mode is supported by WM
      */
