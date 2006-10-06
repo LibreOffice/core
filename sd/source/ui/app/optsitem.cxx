@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:30:28 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:51:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -576,7 +576,9 @@ SdOptionsMisc::SdOptionsMisc( USHORT nConfigId, BOOL bUseConfig ) :
 
     bPreviewNewEffects( TRUE ),
     bPreviewChangedEffects( FALSE ),
-    bPreviewTransitions( TRUE )
+    bPreviewTransitions( TRUE ),
+
+    mnDisplay( 0 )
 {
     EnableModify( TRUE );
 }
@@ -611,6 +613,7 @@ void SdOptionsMisc::SetDefaults()
     SetPreviewNewEffects(true);
     SetPreviewChangedEffects(false);
     SetPreviewTransitions(true);
+    SetDisplay(0);
 }
 
 // -----------------------------------------------------------------------------
@@ -641,7 +644,8 @@ BOOL SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
 
             IsPreviewNewEffects() == rOpt.IsPreviewNewEffects() &&
             IsPreviewChangedEffects() == rOpt.IsPreviewChangedEffects() &&
-            IsPreviewTransitions() == rOpt.IsPreviewTransitions()
+            IsPreviewTransitions() == rOpt.IsPreviewTransitions() &&
+            GetDisplay() == rOpt.GetDisplay()
 
         );
 }
@@ -679,12 +683,14 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
 
         "PreviewNewEffects",
         "PreviewChangedEffects",
-        "PreviewTransitions"
+        "PreviewTransitions",
+
+        "Display"
     };
 
     // #90356# rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 15 : 12 );
     // #97016# rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 16 : 12 );
-    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 22 : 15 );
+    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 23 : 15 );
     ppNames = aPropNames;
 }
 
@@ -731,6 +737,8 @@ BOOL SdOptionsMisc::ReadData( const Any* pValues )
         if( pValues[21].hasValue() )
             SetPreviewTransitions(*(sal_Bool*) pValues[ 21 ].getValue());
 
+        if( pValues[22].hasValue() )
+            SetDisplay(*(sal_Int32*) pValues[ 22 ].getValue());
     }
 
     return TRUE;
@@ -770,6 +778,8 @@ BOOL SdOptionsMisc::WriteData( Any* pValues ) const
         pValues[ 19 ] <<= IsPreviewNewEffects();
         pValues[ 20 ] <<= IsPreviewChangedEffects();
         pValues[ 21 ] <<= IsPreviewTransitions();
+
+        pValues[ 22 ] <<= GetDisplay();
     }
 
     return TRUE;
@@ -807,6 +817,8 @@ SdOptionsMiscItem::SdOptionsMiscItem( USHORT nWhich, SdOptions* pOpts,
     SetPreviewNewEffects(pOpts->IsPreviewNewEffects());
     SetPreviewChangedEffects(pOpts->IsPreviewChangedEffects());
     SetPreviewTransitions(pOpts->IsPreviewTransitions());
+
+    SetDisplay(pOpts->GetDisplay());
 
     if( pView )
     {
@@ -888,6 +900,8 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
     pOpts->SetPreviewNewEffects( IsPreviewNewEffects() );
     pOpts->SetPreviewChangedEffects( IsPreviewChangedEffects() );
     pOpts->SetPreviewTransitions( IsPreviewTransitions() );
+
+    pOpts->SetDisplay( GetDisplay() );
 }
 
 /*************************************************************************
