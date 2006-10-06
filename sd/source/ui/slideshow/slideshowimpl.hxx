@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 09:54:14 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:38:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,6 +320,8 @@ private:
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProperties );
 
     SfxViewFrame* getViewFrame() const;
+    SfxDispatcher* getDispatcher() const;
+    SfxBindings* getBindings() const;
 
     sal_Int32 getSlideNumberForBookmark( const rtl::OUString& rStrBookmark );
 
