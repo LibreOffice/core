@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:19:54 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:47:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1692,7 +1692,8 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* _pParent )
     pSPage              ( NULL ),
     pBPage              ( NULL ),
 
-    bIsInitDone         ( false )
+    bWasCursorLeftOrRight( false ),
+    bIsInitDone          ( false )
 
 {
     FreeResource();
