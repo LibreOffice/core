@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:30:01 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:38:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,6 +221,7 @@ EmbedDocument_Impl::EmbedDocument_Impl( const uno::Reference< lang::XMultiServic
 , m_bIsDirty( sal_False )
 , m_nAdviseNum( 0 )
 , m_xOwnAccess( new EmbeddedDocumentInstanceAccess_Impl( this ) )
+, m_bIsInVerbHandling( sal_False )
 //, m_bLoadedFromFile( sal_False )
 {
     m_pDocHolder = new DocumentHolder( xFactory, m_xOwnAccess );
