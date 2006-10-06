@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:21:30 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:39:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@
 #include <stdio.h>
 #include <io.h>
 #include <osl/thread.h>
-#include <osl/file.hxx>
 #include <setup_native/qswin32.h>
 
 #ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
@@ -144,7 +143,6 @@ using namespace ::osl;
 
 static HWND  aListenerWindow = NULL;
 static HWND  aExecuterWindow = NULL;
-static BOOL  bModalMode = FALSE;
 static HMENU popupMenu = NULL;
 
 static void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis);
@@ -440,10 +438,10 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     // update status before showing menu, could have been changed from option page
                     CheckMenuItem( popupMenu, IDM_INSTALL, MF_BYCOMMAND| (ShutdownIcon::GetAutostart() ? MF_CHECKED : MF_UNCHECKED) );
 
-                    EnableMenuItem( popupMenu, IDM_EXIT, MF_BYCOMMAND | (bModalMode ? MF_GRAYED : MF_ENABLED) );
+                    EnableMenuItem( popupMenu, IDM_EXIT, MF_BYCOMMAND | (ShutdownIcon::bModalMode ? MF_GRAYED : MF_ENABLED) );
 #if defined(USE_APP_SHORTCUTS)
-                    EnableMenuItem( popupMenu, IDM_OPEN, MF_BYCOMMAND | (bModalMode ? MF_GRAYED : MF_ENABLED) );
-                    EnableMenuItem( popupMenu, IDM_TEMPLATE, MF_BYCOMMAND | (bModalMode ? MF_GRAYED : MF_ENABLED) );
+                    EnableMenuItem( popupMenu, IDM_OPEN, MF_BYCOMMAND | (ShutdownIcon::bModalMode ? MF_GRAYED : MF_ENABLED) );
+                    EnableMenuItem( popupMenu, IDM_TEMPLATE, MF_BYCOMMAND | (ShutdownIcon::bModalMode ? MF_GRAYED : MF_ENABLED) );
 #endif
                     int m = TrackPopupMenuEx( popupMenu, TPM_RETURNCMD|TPM_LEFTALIGN|TPM_RIGHTBUTTON,
                                               pt.x, pt.y, hWnd, NULL );
@@ -538,7 +536,7 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             {
 #if defined(USE_APP_SHORTCUTS)
                 case IDM_OPEN:
-                    if ( !bModalMode && checkOEM() )
+                    if ( !ShutdownIcon::bModalMode && checkOEM() )
                         ShutdownIcon::FileOpen();
                 break;
                 case IDM_WRITER:
@@ -562,7 +560,7 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( BASE_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
                 break;
                 case IDM_TEMPLATE:
-                    if ( !bModalMode && checkOEM())
+                    if ( !ShutdownIcon::bModalMode && checkOEM())
                         ShutdownIcon::FromTemplate();
                 break;
 #endif
@@ -572,7 +570,7 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 case IDM_EXIT:
                     // remove listener and
                     //  terminate office if running in background
-                    if ( !bModalMode )
+                    if ( !ShutdownIcon::bModalMode )
                         ShutdownIcon::terminateDesktop();
                     break;
             }
@@ -616,9 +614,9 @@ DWORD WINAPI SystrayThread( LPVOID lpParam )
 
 // -------------------------------
 
-void ShutdownIcon::initSystray()
+void win32_init_sys_tray()
 {
-    if ( IsQuickstarterInstalled() )
+    if ( ShutdownIcon::IsQuickstarterInstalled() )
     {
         WNDCLASSEXA listenerClass;
         listenerClass.cbSize        = sizeof(WNDCLASSEX);
@@ -667,15 +665,15 @@ void ShutdownIcon::initSystray()
             );
 
         DWORD   dwThreadId;
-        HANDLE  hThread = CreateThread( NULL, 0, SystrayThread, this, 0, &dwThreadId );
+        HANDLE  hThread = CreateThread( NULL, 0, SystrayThread, NULL, 0, &dwThreadId );
     }
 }
 
 // -------------------------------
 
-void ShutdownIcon::deInitSystray()
+void win32_shutdown_sys_tray()
 {
-    if ( IsQuickstarterInstalled() )
+    if ( ShutdownIcon::IsQuickstarterInstalled() )
     {
         if( IsWindow( aListenerWindow ) )
         {
@@ -690,19 +688,6 @@ void ShutdownIcon::deInitSystray()
 }
 
 
-// -------------------------------
-
-void ShutdownIcon::EnterModalMode()
-{
-    bModalMode = TRUE;
-}
-
-// -------------------------------
-
-void ShutdownIcon::LeaveModalMode()
-{
-    bModalMode = FALSE;
-}
 
 // -------------------------------
 
@@ -850,7 +835,7 @@ static OUString _SHGetSpecialFolder( int nFolderID )
     return aFolder;
 }
 
-static OUString SHGetAutostartFolderName()
+OUString ShutdownIcon::GetAutostartFolderNameW32()
 {
     return _SHGetSpecialFolder(CSIDL_STARTUP);
 }
@@ -957,68 +942,35 @@ bool ShutdownIcon::IsQuickstarterInstalled()
     return FileExistsW( quickstartExe.getStr() );
 }
 
-void ShutdownIcon::SetAutostartW32( const OUString& aShortcutName, bool bActivate )
+void ShutdownIcon::EnableAutostartW32( const rtl::OUString &aShortcut )
 {
-    OUString aShortcut(SHGetAutostartFolderName());
-    aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\" ) );
-    aShortcut += aShortcutName;
-
-    if( bActivate && IsQuickstarterInstalled() )
-    {
-        wchar_t aPath[_MAX_PATH];
-        if( isNT() )
-        {
-            GetModuleFileNameW( NULL, aPath, _MAX_PATH-1);
-        }
-        else
-        {
-            char szPathA[_MAX_PATH];
-            int len = GetModuleFileNameA( NULL, szPathA, _MAX_PATH-1);
-
-            // calc the string wcstr len
-            int nNeededWStrBuffSize = MultiByteToWideChar( CP_ACP, 0, szPathA, -1, NULL, 0 );
-
-            // copy the string if necessary
-            if ( nNeededWStrBuffSize > 0 )
-                MultiByteToWideChar( CP_ACP, 0, szPathA, -1, aPath, nNeededWStrBuffSize );
-        }
-
-        OUString aOfficepath( aPath );
-        int i = aOfficepath.lastIndexOf((sal_Char) '\\');
-        if( i != -1 )
-            aOfficepath = aOfficepath.copy(0, i);
-
-        OUString quickstartExe(aOfficepath);
-        quickstartExe += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\quickstart.exe" ) );
-
-        CreateShortcut( quickstartExe, aOfficepath, aShortcut, OUString(), OUString() );
-    }
+    wchar_t aPath[_MAX_PATH];
+    if( isNT() )
+        GetModuleFileNameW( NULL, aPath, _MAX_PATH-1);
     else
     {
-        OUString aShortcutUrl;
-        ::osl::File::getFileURLFromSystemPath( aShortcut, aShortcutUrl );
-        ::osl::File::remove( aShortcutUrl );
+        char szPathA[_MAX_PATH];
+        int len = GetModuleFileNameA( NULL, szPathA, _MAX_PATH-1);
+
+        // calc the string wcstr len
+        int nNeededWStrBuffSize = MultiByteToWideChar( CP_ACP, 0, szPathA, -1, NULL, 0 );
+
+        // copy the string if necessary
+        if ( nNeededWStrBuffSize > 0 )
+            MultiByteToWideChar( CP_ACP, 0, szPathA, -1, aPath, nNeededWStrBuffSize );
     }
+
+    OUString aOfficepath( aPath );
+    int i = aOfficepath.lastIndexOf((sal_Char) '\\');
+    if( i != -1 )
+        aOfficepath = aOfficepath.copy(0, i);
+
+    OUString quickstartExe(aOfficepath);
+    quickstartExe += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\quickstart.exe" ) );
+
+    CreateShortcut( quickstartExe, aOfficepath, aShortcut, OUString(), OUString() );
 }
 
-bool ShutdownIcon::GetAutostartW32( const OUString& aShortcutName )
-{
-    OUString aShortcut(SHGetAutostartFolderName());
-    aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\" ) );
-    aShortcut += aShortcutName;
-
-    OUString aShortcutUrl;
-    File::getFileURLFromSystemPath( aShortcut, aShortcutUrl );
-    File f( aShortcutUrl );
-    File::RC error = f.open( OpenFlag_Read );
-    if( error == File::E_None )
-    {
-        f.close();
-        return true;
-    }
-    else
-        return false;
-}
 #endif // WNT
 
 
