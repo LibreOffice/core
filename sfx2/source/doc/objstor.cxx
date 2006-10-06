@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.182 $
+ *  $Revision: 1.183 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:43:37 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -478,6 +478,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
 void SfxObjectShell::PrepareSecondTryLoad_Impl()
 {
     // only for internal use
+    pImp->m_xDocStorage = uno::Reference< embed::XStorage >();
     pImp->m_bIsInit = sal_False;
     ResetError();
 }
