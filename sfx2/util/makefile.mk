@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:35:37 $
+#   last change: $Author: kz $ $Date: 2006-10-06 10:40:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,27 @@ SFXSRSLIST=\
 RESLIB1NAME=$(TARGET)
 RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES=$(SFXSRSLIST)
+
+# gtk quick-starter
+.IF "$(GUI)"=="UNX"
+.IF "$(ENABLE_GTK)" != ""
+PKGCONFIG_MODULES=gtk+-2.0
+.INCLUDE: pkg_config.mk
+CFLAGS+=$(PKGCONFIG_CFLAGS)
+
+SHL3TARGET=qstart_gtk$(UPD)$(DLLPOSTFIX)
+SHL3LIBS=$(SLB)$/quickstart.lib
+SHL3DEPN=$(SHL1IMPLIBN) $(SHL1TARGETN)
+# libs for gtk plugin
+SHL3STDLIBS=$(SHL1STDLIBS) $(SFX2LIB) $(EGGTRAYLIB)
+SHL3STDLIBS+=$(PKGCONFIG_LIBS:s/ -lpangoxft-1.0//)
+# hack for faked SO environment
+.IF "$(PKGCONFIG_ROOT)"!=""
+SHL3SONAME+=-z nodefs
+SHL3NOCHECK=TRUE
+.ENDIF          # "$(PKGCONFIG_ROOT)"!=""
+.ENDIF # "$(ENABLE_GTK)" != ""
+.ENDIF # "$(GUI)"=="UNX"
 
 # --- Targets ------------------------------------------------------
 
