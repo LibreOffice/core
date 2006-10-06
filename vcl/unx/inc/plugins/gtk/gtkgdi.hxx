@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkgdi.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:47:44 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:03:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@ public:
     inline GtkWidget*  GetGtkWidget() const { return m_pWindow; }
     inline GdkWindow*  GetGdkWindow() const { return m_pWindow->window; }
     inline GtkSalFrame* GetGtkFrame() const { return static_cast<GtkSalFrame*>(m_pFrame); }
+    void SetWindow( GtkWidget* window ) { m_pWindow = window; }
 
 
     // will be set when UI theme was changed
