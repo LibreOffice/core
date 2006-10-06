@@ -7,6 +7,7 @@ vc	vcl\source\window						nmake	-	all	vc_win NULL
 vc	vcl\source\control						nmake	-	all	vc_ctrl NULL
 vc	vcl\source\src							nmake	-	all	vc_src NULL
 vc	vcl\source\helper						nmake	-	all	vc_hlp NULL
+vc  vcl\source\components					nmake	-	all	vc_components NULL
 vc	vcl\win\source\app						nmake	-	w	vc__appw NULL
 vc	vcl\win\source\gdi						nmake	-	w	vc__gdiw NULL
 vc	vcl\win\source\window					nmake	-	w	vc__winw NULL
@@ -28,5 +29,5 @@ vc	vcl\mac\source\app						nmake	-	m	vc__appm NULL
 vc	vcl\mac\source\gdi						nmake	-	m	vc__gdim NULL
 vc	vcl\mac\source\window					nmake	-	m	vc__winm NULL
 vc	vcl\mac\source\src						nmake	-	m	vc__srcm NULL
-vc	vcl\util								nmake	-	all	vc_util vc__plug.u vc__appa.u vc__appm.m vc__appu.u vc__appw.w vc__gdim.m vc__gdiu.u vc__gdiw.w vc__srcm.m vc__srcw.w vc__wina.u vc__winm.m vc__winu.u vc__winw.w vc__du.u vc__gtka.u vc__gtky.u vc__gtkw.u vc__gtkg.u vc__kde.u vc_app vc_ctrl vc_gdi vc_hlp vc_src vc_win vc_glyphs NULL
+vc	vcl\util								nmake	-	all	vc_util vc__plug.u vc__appa.u vc__appm.m vc__appu.u vc__appw.w vc__gdim.m vc__gdiu.u vc__gdiw.w vc__srcm.m vc__srcw.w vc__wina.u vc__winm.m vc__winu.u vc__winw.w vc__du.u vc__gtka.u vc__gtky.u vc__gtkw.u vc__gtkg.u vc__kde.u vc_app vc_ctrl vc_gdi vc_hlp vc_src vc_win vc_glyphs vc_components NULL
 vc	vcl\workben								nmake	-	all	vc_wrkb vc_util NULL
