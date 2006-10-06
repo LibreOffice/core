@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:02:54 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:37:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -820,7 +820,7 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
         hideChildWindows();
 
         ::Window* pParent;
-        pParent = &getViewFrame()->GetWindow();
+        pParent = getViewFrame() ? &getViewFrame()->GetWindow() : 0;
 
         mpShowWindow = new ShowWindow( pParent );
         mpShowWindow->SetMouseAutoHide( !maPresSettings.mbMouseVisible );
@@ -831,12 +831,16 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
             mpViewShell->GetViewShellBase().ShowUIControls (false);
             mpPaneHider.reset(new PaneHider(*mpViewShell));
 
-            mpViewShell->GetViewFrame()->SetChildWindow( SID_NAVIGATOR, maPresSettings.mbStartWithNavigator );
+            if( getViewFrame() )
+                getViewFrame()->SetChildWindow( SID_NAVIGATOR, maPresSettings.mbStartWithNavigator );
         }
 
         // these Slots are forbiden in other views for this document
-        mpDocSh->SetSlotFilter( TRUE, sizeof( pAllowed ) / sizeof( USHORT ), pAllowed );
-        mpDocSh->ApplySlotFilter();
+        if( mpDocSh )
+        {
+            mpDocSh->SetSlotFilter( TRUE, sizeof( pAllowed ) / sizeof( USHORT ), pAllowed );
+            mpDocSh->ApplySlotFilter();
+        }
 
         Help::DisableContextHelp();
         Help::DisableExtHelp();
@@ -854,7 +858,7 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
 
         // call resize handler
         maPresSize = pParent->GetSizePixel();
-        if( !maPresSettings.mbFullScreen )
+        if( !maPresSettings.mbFullScreen && mpViewShell )
         {
             const Rectangle& aClientRect = mpViewShell->GetViewShellBase().getClientRectangle();
             maPresSize = aClientRect.GetSize();
@@ -887,9 +891,12 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
             mpView->SetAnimationPause( TRUE );
         }
 
-        SfxBindings& rBindings = getViewFrame()->GetBindings();
-        rBindings.Invalidate( SID_PRESENTATION );
-        rBindings.Invalidate( SID_REHEARSE_TIMINGS );
+        SfxBindings* pBindings = getBindings();
+        if( pBindings )
+        {
+            pBindings->Invalidate( SID_PRESENTATION );
+            pBindings->Invalidate( SID_REHEARSE_TIMINGS );
+        }
 
         mpShowWindow->GrabFocus();
 
@@ -1162,10 +1169,10 @@ void SlideshowImpl::stopShow()
         }
 
         // restart the custom show dialog if he started us
-        if( mpViewShell->IsStartShowWithDialog() )
+        if( mpViewShell->IsStartShowWithDialog() && getDispatcher() )
         {
             mpViewShell->SetStartShowWithDialog( FALSE );
-            getViewFrame()->GetDispatcher()->Execute( SID_CUSTOMSHOW_DLG, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+            getDispatcher()->Execute( SID_CUSTOMSHOW_DLG, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
         }
 
         mpViewShell->GetViewShellBase().UpdateBorder(true);
@@ -1383,11 +1390,15 @@ void SlideshowImpl::gotoPreviousSlide()
     if( mxShow.is() && mpSlideController.get() ) try
     {
         const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
-        if( (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
+        if( eMode == SHOWWINDOWMODE_END )
         {
             const sal_Int32 nLastSlideIndex = mpSlideController->getSlideIndexCount() - 1;
             if( nLastSlideIndex >= 0 )
                 mpShowWindow->RestartShow( nLastSlideIndex );
+        }
+        else if( (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
+        {
+            mpShowWindow->RestartShow();
         }
         else
         {
@@ -1440,87 +1451,96 @@ void SlideshowImpl::displayCurrentSlide()
         registerShapeEvents(mpSlideController->getCurrentSlideNumber());
         update();
 
-        SfxBindings& rBindings = getViewFrame()->GetBindings();
-        rBindings.Invalidate( SID_NAVIGATOR_STATE );
-        rBindings.Invalidate( SID_NAVIGATOR_PAGENAME );
-
+        SfxBindings* pBindings = getBindings();
+        if( pBindings )
+        {
+            pBindings->Invalidate( SID_NAVIGATOR_STATE );
+            pBindings->Invalidate( SID_NAVIGATOR_PAGENAME );
+        }
     }
 }
 
 void SlideshowImpl::gotoNextSlide()
 {
-
-    // if this is a show, ignore user inputs and
-    // start 20ms timer to reenable inputs to fiter
-    // buffered inputs during slide transition
-    if( meAnimationMode == ANIMATIONMODE_SHOW )
+    const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
+    if( (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
     {
-        mbInputFreeze = true;
-        maInputFreezeTimer.Start();
+        mpShowWindow->RestartShow();
     }
-
-    if( mpSlideController.get() )
+    else
     {
-        if( mpSlideController->nextSlide() )
+        // if this is a show, ignore user inputs and
+        // start 20ms timer to reenable inputs to fiter
+        // buffered inputs during slide transition
+        if( meAnimationMode == ANIMATIONMODE_SHOW )
         {
-            displayCurrentSlide();
+            mbInputFreeze = true;
+            maInputFreezeTimer.Start();
         }
-        else
+
+        if( mpSlideController.get() )
         {
-            stopSound();
-
-            if( meAnimationMode == ANIMATIONMODE_PREVIEW )
+            if( mpSlideController->nextSlide() )
             {
-                endPresentation();
-            }
-            else if( maPresSettings.mbEndless )
-            {
-                if( maPresSettings.mnPauseTimeout )
-                {
-                    boost::scoped_ptr< Graphic > pGraphic;
-
-                    if( maPresSettings.mbShowPauseLogo )
-                    {
-                        // load about image from module path
-                        String aBmpFileName( RTL_CONSTASCII_USTRINGPARAM("about.bmp") );
-                        INetURLObject aObj( SvtPathOptions().GetModulePath(), INET_PROT_FILE );
-                        aObj.insertName( aBmpFileName );
-                        SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
-                        if ( !aStrm.GetError() )
-                        {
-                            Bitmap aBmp;
-                            aStrm >> aBmp;
-                            pGraphic.reset( new Graphic(aBmp) );
-                            pGraphic->SetPrefMapMode(MAP_PIXEL);
-                        }
-                        else
-                        {
-                            //if no image is located in the module path
-                            //use default logo from iso resource:
-
-                            String aMgrName( RTL_CONSTASCII_USTRINGPARAM( "iso" ) );
-                            aMgrName += String::CreateFromInt32(SUPD);
-                            boost::scoped_ptr< ResMgr > pResMgr( ResMgr::CreateResMgr( U2S( aMgrName )) );
-                            DBG_ASSERT(pResMgr,"No ResMgr found");
-                            if(pResMgr.get())
-                            {
-                                pGraphic.reset( new Graphic( Bitmap( ResId( RID_DEFAULT_ABOUT_BMP_LOGO, pResMgr.get() ) ) ) );
-                                pGraphic->SetPrefMapMode(MAP_PIXEL);
-                            }
-                        }
-                    }
-                    if( mpShowWindow )
-                        mpShowWindow->SetPauseMode( 0, maPresSettings.mnPauseTimeout, pGraphic.get() );
-                }
-                else
-                {
-                    displaySlideIndex( 0 );
-                }
+                displayCurrentSlide();
             }
             else
             {
-                if( mpShowWindow )
-                    mpShowWindow->SetEndMode();
+                stopSound();
+
+                if( meAnimationMode == ANIMATIONMODE_PREVIEW )
+                {
+                    endPresentation();
+                }
+                else if( maPresSettings.mbEndless )
+                {
+                    if( maPresSettings.mnPauseTimeout )
+                    {
+                        boost::scoped_ptr< Graphic > pGraphic;
+
+                        if( maPresSettings.mbShowPauseLogo )
+                        {
+                            // load about image from module path
+                            String aBmpFileName( RTL_CONSTASCII_USTRINGPARAM("about.bmp") );
+                            INetURLObject aObj( SvtPathOptions().GetModulePath(), INET_PROT_FILE );
+                            aObj.insertName( aBmpFileName );
+                            SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
+                            if ( !aStrm.GetError() )
+                            {
+                                Bitmap aBmp;
+                                aStrm >> aBmp;
+                                pGraphic.reset( new Graphic(aBmp) );
+                                pGraphic->SetPrefMapMode(MAP_PIXEL);
+                            }
+                            else
+                            {
+                                //if no image is located in the module path
+                                //use default logo from iso resource:
+
+                                String aMgrName( RTL_CONSTASCII_USTRINGPARAM( "iso" ) );
+                                aMgrName += String::CreateFromInt32(SUPD);
+                                boost::scoped_ptr< ResMgr > pResMgr( ResMgr::CreateResMgr( U2S( aMgrName )) );
+                                DBG_ASSERT(pResMgr,"No ResMgr found");
+                                if(pResMgr.get())
+                                {
+                                    pGraphic.reset( new Graphic( Bitmap( ResId( RID_DEFAULT_ABOUT_BMP_LOGO, pResMgr.get() ) ) ) );
+                                    pGraphic->SetPrefMapMode(MAP_PIXEL);
+                                }
+                            }
+                        }
+                        if( mpShowWindow )
+                            mpShowWindow->SetPauseMode( 0, maPresSettings.mnPauseTimeout, pGraphic.get() );
+                    }
+                    else
+                    {
+                        displaySlideIndex( 0 );
+                    }
+                }
+                else
+                {
+                    if( mpShowWindow )
+                        mpShowWindow->SetEndMode();
+                }
             }
         }
     }
@@ -2149,21 +2169,26 @@ IMPL_LINK( SlideshowImpl, ContextMenuHdl, void*, EMPTYARG )
 
     PopupMenu* pMenu = new PopupMenu( SdResId( RID_SLIDESHOW_CONTEXTMENU ) );
 
+    const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
     pMenu->EnableItem( CM_NEXT_SLIDE, ( mpSlideController->getNextSlideIndex() != -1 ) );
-    pMenu->EnableItem( CM_PREV_SLIDE, ( mpSlideController->getPreviousSlideIndex() != -1 ) );
+    pMenu->EnableItem( CM_PREV_SLIDE, ( mpSlideController->getPreviousSlideIndex() != -1 ) || (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) );
 
     PopupMenu* pPageMenu = pMenu->GetPopupMenu( CM_GOTO );
 
-    if( mpViewShell && mpViewShell->GetViewShellBase().GetViewFrame() )
+    SfxViewFrame* pViewFrame = getViewFrame();
+    if( pViewFrame && pViewFrame->GetFrame() )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( mpViewShell->GetViewShellBase().GetViewFrame()->GetFrame()->GetFrameInterface() );
-        pMenu->SetItemImage( CM_NEXT_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10617") ), FALSE, FALSE ) );
-        pMenu->SetItemImage( CM_PREV_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10618") ), FALSE, FALSE ) );
-
-        if( pPageMenu )
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( pViewFrame->GetFrame()->GetFrameInterface() );
+        if( xFrame.is() )
         {
-            pPageMenu->SetItemImage( CM_FIRST_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10616") ), FALSE, FALSE ) );
-            pPageMenu->SetItemImage( CM_LAST_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10619") ), FALSE, FALSE ) );
+            pMenu->SetItemImage( CM_NEXT_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10617") ), FALSE, FALSE ) );
+            pMenu->SetItemImage( CM_PREV_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10618") ), FALSE, FALSE ) );
+
+            if( pPageMenu )
+            {
+                pPageMenu->SetItemImage( CM_FIRST_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10616") ), FALSE, FALSE ) );
+                pPageMenu->SetItemImage( CM_LAST_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10619") ), FALSE, FALSE ) );
+            }
         }
     }
 
@@ -2177,7 +2202,9 @@ IMPL_LINK( SlideshowImpl, ContextMenuHdl, void*, EMPTYARG )
         }
         else
         {
-            const sal_Int32 nCurrentSlideNumber = mpSlideController->getCurrentSlideNumber();
+            sal_Int32 nCurrentSlideNumber = mpSlideController->getCurrentSlideNumber();
+            if( (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
+                nCurrentSlideNumber = -1;
 
             pPageMenu->EnableItem( CM_FIRST_SLIDE, ( mpSlideController->getSlideNumber(0) != nCurrentSlideNumber ) );
             pPageMenu->EnableItem( CM_LAST_SLIDE, ( mpSlideController->getSlideNumber( mpSlideController->getSlideIndexCount() - 1) != nCurrentSlideNumber ) );
@@ -2227,15 +2254,19 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
         {
         case CM_PREV_SLIDE:
             gotoPreviousSlide();
+            mbWasPaused = false;
             break;
         case CM_NEXT_SLIDE:
             gotoNextSlide();
+            mbWasPaused = false;
             break;
         case CM_FIRST_SLIDE:
             gotoFirstSlide();
+            mbWasPaused = false;
             break;
         case CM_LAST_SLIDE:
             gotoLastSlide();
+            mbWasPaused = false;
             break;
         case CM_SCREEN_BLACK:
         case CM_SCREEN_WHITE:
@@ -2267,14 +2298,23 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
             if( mpSlideController.get() && (ANIMATIONMODE_SHOW == meAnimationMode) )
             {
                 if( mpSlideController->getCurrentSlideNumber() != -1 )
+                {
                     mnRestoreSlide = mpSlideController->getCurrentSlideNumber();
+                }
             }
             endPresentation();
             break;
         default:
             sal_Int32 nPageNumber = nMenuId - CM_SLIDES;
-            if( nPageNumber != mpSlideController->getCurrentSlideNumber() )
+            const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
+            if( (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
+            {
+                mpShowWindow->RestartShow( nPageNumber );
+            }
+            else if( nPageNumber != mpSlideController->getCurrentSlideNumber() )
+            {
                 displaySlideNumber( nPageNumber );
+            }
             mbWasPaused = false;
             break;
         }
@@ -2429,17 +2469,20 @@ void SlideshowImpl::hideChildWindows()
     {
         SfxViewFrame* pViewFrame = getViewFrame();
 
-        if( pViewFrame->GetChildWindow( SID_NAVIGATOR ) != NULL )
-            mnChildMask |= NAVIGATOR_CHILD_MASK;
-
-        for( ULONG i = 0, nCount = sizeof( aShowChilds ) / sizeof( FncGetChildWindowId ); i < nCount; i++ )
+        if( pViewFrame )
         {
-            const USHORT nId = ( *aShowChilds[ i ] )();
+            if( pViewFrame->GetChildWindow( SID_NAVIGATOR ) != NULL )
+                mnChildMask |= NAVIGATOR_CHILD_MASK;
 
-            if( pViewFrame->GetChildWindow( nId ) )
+            for( ULONG i = 0, nCount = sizeof( aShowChilds ) / sizeof( FncGetChildWindowId ); i < nCount; i++ )
             {
-                pViewFrame->SetChildWindow( nId, FALSE );
-                mnChildMask |= 1 << i;
+                const USHORT nId = ( *aShowChilds[ i ] )();
+
+                if( pViewFrame->GetChildWindow( nId ) )
+                {
+                    pViewFrame->SetChildWindow( nId, FALSE );
+                    mnChildMask |= 1 << i;
+                }
             }
         }
     }
@@ -2450,19 +2493,32 @@ void SlideshowImpl::showChildWindows()
     if( ANIMATIONMODE_SHOW == meAnimationMode )
     {
         SfxViewFrame* pViewFrame = getViewFrame();
-        pViewFrame->SetChildWindow( SID_NAVIGATOR, ( mnChildMask & NAVIGATOR_CHILD_MASK ) != 0 );
-
-        for( ULONG i = 0, nCount = sizeof( aShowChilds ) / sizeof( FncGetChildWindowId ); i < nCount; i++ )
+        if( pViewFrame )
         {
-            if( mnChildMask & ( 1 << i ) )
-                pViewFrame->SetChildWindow( ( *aShowChilds[ i ] )(), TRUE );
+            pViewFrame->SetChildWindow( SID_NAVIGATOR, ( mnChildMask & NAVIGATOR_CHILD_MASK ) != 0 );
+
+            for( ULONG i = 0, nCount = sizeof( aShowChilds ) / sizeof( FncGetChildWindowId ); i < nCount; i++ )
+            {
+                if( mnChildMask & ( 1 << i ) )
+                    pViewFrame->SetChildWindow( ( *aShowChilds[ i ] )(), TRUE );
+            }
         }
     }
 }
 
 SfxViewFrame* SlideshowImpl::getViewFrame() const
 {
-    return mpViewShell ? mpViewShell->GetViewFrame() : SfxViewFrame::Current();
+    return mpViewShell ? mpViewShell->GetViewFrame() : 0;
+}
+
+SfxDispatcher* SlideshowImpl::getDispatcher() const
+{
+    return (mpViewShell && mpViewShell->GetViewFrame()) ? mpViewShell->GetViewFrame()->GetDispatcher() : 0;
+}
+
+SfxBindings* SlideshowImpl::getBindings() const
+{
+    return (mpViewShell && mpViewShell->GetViewFrame()) ? &mpViewShell->GetViewFrame()->GetBindings() : 0;
 }
 
 void SlideshowImpl::resize( const Size& rSize )
@@ -2519,31 +2575,20 @@ void SlideshowImpl::activate()
 
         if( mpShowWindow )
         {
-            SfxDispatcher* pDispatcher = getViewFrame()->GetDispatcher();
+            SfxViewFrame* pViewFrame = getViewFrame();
+            SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : 0;
 
-/* ???
-            if( mpViewShell )
-            {
-                mpViewShell->Invalidate(SID_OBJECT_ALIGN);
-                mpViewShell->Invalidate(SID_ZOOM_TOOLBOX);
-                mpViewShell->Invalidate(SID_OBJECT_CHOOSE_MODE);
-                mpViewShell->Invalidate(SID_POSITION);
-                mpViewShell->Invalidate(SID_DRAWTBX_TEXT);
-                mpViewShell->Invalidate(SID_DRAWTBX_RECTANGLES);
-                mpViewShell->Invalidate(SID_DRAWTBX_ELLIPSES);
-                mpViewShell->Invalidate(SID_DRAWTBX_LINES);
-                mpViewShell->Invalidate(SID_DRAWTBX_ARROWS);
-                mpViewShell->Invalidate(SID_DRAWTBX_3D_OBJECTS);
-                mpViewShell->Invalidate(SID_DRAWTBX_CONNECTORS);
-                mpViewShell->Invalidate(SID_DRAWTBX_INSERT);
-            }
-*/
             hideChildWindows();
 
-            // filter all forbiden slots
-            pDispatcher->SetSlotFilter( TRUE, sizeof(pAllowed) / sizeof(USHORT), pAllowed );
+            if( pDispatcher )
+            {
+                // filter all forbiden slots
+                pDispatcher->SetSlotFilter( TRUE, sizeof(pAllowed) / sizeof(USHORT), pAllowed );
+            }
 
-            getViewFrame()->GetBindings().InvalidateAll(TRUE);
+            if( getBindings() )
+                getBindings()->InvalidateAll(TRUE);
+
             mpShowWindow->GrabFocus();
         }
     }
