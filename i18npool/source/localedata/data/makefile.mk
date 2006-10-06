@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-01 10:02:50 $
+#   last change: $Author: kz $ $Date: 2006-10-06 09:11:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_bs_BA.cxx  \
     $(MISC)$/localedata_ca_ES.cxx  \
     $(MISC)$/localedata_cs_CZ.cxx  \
+    $(MISC)$/localedata_cv_RU.cxx  \
     $(MISC)$/localedata_cy_GB.cxx  \
     $(MISC)$/localedata_da_DK.cxx  \
     $(MISC)$/localedata_de_AT.cxx  \
@@ -132,6 +133,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_fr_FR.cxx  \
     $(MISC)$/localedata_fr_LU.cxx  \
     $(MISC)$/localedata_fr_MC.cxx  \
+    $(MISC)$/localedata_fur_IT.cxx  \
     $(MISC)$/localedata_ga_IE.cxx  \
     $(MISC)$/localedata_gl_ES.cxx  \
     $(MISC)$/localedata_gu_IN.cxx  \
@@ -199,6 +201,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_uk_UA.cxx  \
     $(MISC)$/localedata_ve_ZA.cxx  \
     $(MISC)$/localedata_vi_VN.cxx  \
+    $(MISC)$/localedata_wa_BE.cxx  \
     $(MISC)$/localedata_xh_ZA.cxx  \
     $(MISC)$/localedata_zh_CN.cxx  \
     $(MISC)$/localedata_zh_HK.cxx  \
@@ -285,6 +288,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_bs_BA.obj	\
     $(SLO)$/localedata_ca_ES.obj	\
     $(SLO)$/localedata_cs_CZ.obj	\
+    $(SLO)$/localedata_cv_RU.obj	\
     $(SLO)$/localedata_cy_GB.obj	\
     $(SLO)$/localedata_da_DK.obj	\
     $(SLO)$/localedata_de_AT.obj	\
@@ -303,6 +307,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_fr_FR.obj	\
     $(SLO)$/localedata_fr_LU.obj	\
     $(SLO)$/localedata_fr_MC.obj	\
+    $(SLO)$/localedata_fur_IT.obj	\
     $(SLO)$/localedata_ga_IE.obj	\
     $(SLO)$/localedata_gl_ES.obj	\
     $(SLO)$/localedata_hr_HR.obj	\
@@ -333,7 +338,8 @@ SHL3OBJS=	\
     $(SLO)$/localedata_sv_FI.obj	\
     $(SLO)$/localedata_sv_SE.obj	\
     $(SLO)$/localedata_tr_TR.obj	\
-    $(SLO)$/localedata_uk_UA.obj
+    $(SLO)$/localedata_uk_UA.obj	\
+    $(SLO)$/localedata_wa_BE.obj
 
 LIB3TARGET=	$(SLB)$/$(SHL3TARGET).lib
 LIB3OBJFILES=$(SHL3OBJS)
