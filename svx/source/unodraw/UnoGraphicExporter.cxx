@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:09:53 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:39:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -892,6 +892,16 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 if( pObj && pObj->ISA( SdrGrafObj ) && !( (SdrGrafObj*) pObj )->HasText() )
                 {
                     aGraphic = ( (SdrGrafObj*) pObj )->GetTransformedGraphic();
+                    if ( aGraphic.GetType() == GRAPHIC_BITMAP )
+                    {
+                        Size aSizePixel( aGraphic.GetSizePixel() );
+                        if ( nWidth && nHeight && ( nWidth != aSizePixel.Width() ) || ( nHeight != aSizePixel.Height() ) )
+                        {
+                            BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
+                            aBmpEx.Scale( Size( nWidth, nHeight ) );
+                            aGraphic = aBmpEx;
+                        }
+                    }
                     bSingleGraphic = sal_True;
                 }
             }
