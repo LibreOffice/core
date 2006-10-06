@@ -4,9 +4,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:30:03 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:47:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -435,16 +435,86 @@ void AboutDialog::Paint( const Rectangle& rRect )
         return;
     }
 
-    long nPos = 0;
-    long nW = GetOutputSizePixel().Width() / 2 - 5;
-    Size aSize = Size( GetTextWidth( aDevVersionStr ), GetTextHeight() );
-    Point aPnt( nW - ( aSize.Width() / 2 ), nPos );
-    long nPos1 = aPnt.Y(), nPos2 = nPos1 + aSize.Height(), nTop = rRect.Top();
+    Point aPnt;
+    Size aSize;
+    long nPos = 0, nPos1, nPos2, nTop = 0;
+    long nFullWidth = GetOutputSizePixel().Width();
+    long nW = nFullWidth / 2 - 5;
+    long nTxtWidth = GetTextWidth( aDevVersionStr );
 
-    if ( nPos1 <= nTop && nTop < nPos2 )
-        DrawText( aPnt, aDevVersionStr );
+    // perhaps the devversion text is too wide, so we have to split it in some lines
+    // the buildids end with ')'
+    String sVersion = aDevVersionStr;
+    xub_StrLen nEndPos = sVersion.Search( ')' );
+    xub_StrLen nLastPos = STRING_NOTFOUND;
+    while ( true )
+    {
+        bool bDraw = false, bDraw2 = false;
+        String sTemp = sVersion.Copy( 0, nEndPos + 1 );
+        nTxtWidth = GetTextWidth( sTemp );
+        if ( nTxtWidth < nFullWidth )
+        {
+            nLastPos = nEndPos;
+            nEndPos = sVersion.Search( ')', nEndPos + 1 );
+        }
+        else if ( nLastPos != STRING_NOTFOUND )
+        {
+            sTemp = sVersion.Copy( 0, nLastPos + 1 );
+            sVersion = sVersion.Copy( nLastPos + 2 );
+            bDraw = true;
+        }
 
-    nPos += aSize.Height() + 3;
+        if ( !bDraw && nEndPos == STRING_NOTFOUND )
+        {
+            sTemp = sVersion;
+            nTxtWidth = GetTextWidth( sTemp );
+            if ( nTxtWidth > nFullWidth )
+            {
+                if ( nLastPos != STRING_NOTFOUND )
+                {
+                    sTemp = sVersion.Copy( 0, nLastPos + 1 );
+                    sVersion = sVersion.Copy( nLastPos + 2 );
+                    bDraw2 = true;
+                }
+                else
+                {
+                    DBG_ERRORFILE( "error while scanning buildids" );
+                }
+            }
+
+            bDraw = true;
+        }
+
+        if ( bDraw )
+        {
+            aSize = Size( GetTextWidth( sTemp ), GetTextHeight() );
+            aPnt = Point( nW - ( aSize.Width() / 2 ), nPos );
+            nPos1 = aPnt.Y();
+            nPos2 = nPos1 + aSize.Height();
+            nTop = rRect.Top();
+
+            if ( nTop < nPos2 )
+                DrawText( aPnt, sTemp );
+            nPos += aSize.Height() + 3;
+
+            if ( bDraw2 )
+            {
+                aSize = Size( GetTextWidth( sVersion ), GetTextHeight() );
+                aPnt = Point( nW - ( aSize.Width() / 2 ), nPos );
+                nPos1 = aPnt.Y();
+                nPos2 = nPos1 + aSize.Height();
+                nTop = rRect.Top();
+
+                if ( nTop < nPos2 )
+                    DrawText( aPnt, sVersion );
+                nPos += aSize.Height() + 3;
+            }
+        }
+
+        if ( nEndPos == STRING_NOTFOUND )
+            break;
+    }
+
     USHORT nDevCnt = static_cast< USHORT >( aDeveloperAry.Count() );
     USHORT nCount = nDevCnt;
 
