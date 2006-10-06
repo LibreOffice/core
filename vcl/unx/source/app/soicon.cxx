@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:36:25 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:05:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,8 +70,7 @@
 #endif
 #include <svids.hrc>
 
-
-BOOL SelectAppIconPixmap( SalDisplay *pDisplay, USHORT nIcon, USHORT iconSize,
+BOOL SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,USHORT nIcon, USHORT iconSize,
                           Pixmap& icon_pixmap, Pixmap& icon_mask)
 {
     if( ! ImplGetResMgr() )
@@ -101,18 +100,25 @@ BOOL SelectAppIconPixmap( SalDisplay *pDisplay, USHORT nIcon, USHORT iconSize,
     X11SalBitmap *pBitmap = static_cast < X11SalBitmap * >
         (aIcon.ImplGetBitmapImpBitmap()->ImplGetSalBitmap());
 
-    icon_pixmap = XCreatePixmap( pDisplay->GetDisplay(), pDisplay->GetRootWindow(),
-        iconSize, iconSize, pDisplay->GetRootVisual()->GetDepth());
+    icon_pixmap = XCreatePixmap( pDisplay->GetDisplay(),
+                                 pDisplay->GetRootWindow( nScreen ),
+                                 iconSize, iconSize,
+                                 DefaultDepth( pDisplay->GetDisplay(), nScreen )
+                                 );
 
-    pBitmap->ImplDraw(icon_pixmap, pDisplay->GetRootVisual()->GetDepth(),
-        aRect, DefaultGC(pDisplay->GetDisplay(), pDisplay->GetScreenNumber()));
+    pBitmap->ImplDraw( icon_pixmap,
+                       nScreen,
+                       DefaultDepth( pDisplay->GetDisplay(), nScreen ),
+                       aRect,
+                       DefaultGC(pDisplay->GetDisplay(), nScreen ) );
 
     icon_mask = None;
 
     if( TRANSPARENT_BITMAP == aIcon.GetTransparentType() )
     {
         icon_mask = XCreatePixmap( pDisplay->GetDisplay(),
-            pDisplay->GetRootWindow(), iconSize, iconSize, 1);
+                                   pDisplay->GetRootWindow( pDisplay->GetDefaultScreenNumber() ),
+                                   iconSize, iconSize, 1);
 
         XGCValues aValues;
         aValues.foreground = 0xffffffff;
@@ -127,7 +133,7 @@ BOOL SelectAppIconPixmap( SalDisplay *pDisplay, USHORT nIcon, USHORT iconSize,
         X11SalBitmap *pMask = static_cast < X11SalBitmap * >
             (aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
 
-        pMask->ImplDraw(icon_mask, 1, aRect, aMonoGC);
+        pMask->ImplDraw(icon_mask, nScreen, 1, aRect, aMonoGC);
         XFreeGC( pDisplay->GetDisplay(), aMonoGC );
     }
 
