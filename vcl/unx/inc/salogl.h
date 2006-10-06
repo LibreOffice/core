@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salogl.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:47:32 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:01:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,12 +66,12 @@ class SalGraphics;
 class X11SalOpenGL : public SalOpenGL
 {
 private:
-    static oslModule        mpGLLib;
-    static GLXContext       maGLXContext;
-    static ULONG            mnOGLState;
-    static Display*     mpDisplay;
-    static XVisualInfo* mpVisualInfo;
-    static BOOL         mbHaveGLVisual;
+    static oslModule            mpGLLib;
+    static GLXContext           maGLXContext;
+    static ULONG                mnOGLState;
+    static Display*             mpDisplay;
+    static const XVisualInfo*   mpVisualInfo;
+    static BOOL                 mbHaveGLVisual;
 
     static BOOL         ImplInit();
 
