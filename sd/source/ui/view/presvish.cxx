@@ -4,9 +4,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:41:57 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:53:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,24 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 #include "PresentationViewShell.hxx"
+
+#ifndef _SD_OPTSITEM_HXX
+#include "optsitem.hxx"
+#endif
+#ifndef _SDDLL_HXX
+#include "sddll.hxx"
+#endif
 
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
@@ -85,6 +102,10 @@
 using namespace sd;
 #include "sdslots.hxx"
 
+using ::rtl::OUString;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
 
 namespace sd {
 
@@ -159,7 +180,10 @@ PresentationViewShell::~PresentationViewShell (void)
         WorkWindow* pWorkWindow = (WorkWindow*) GetViewFrame()->GetTopFrame()->GetWindow().GetParent();
 
         if( pWorkWindow )
+        {
             pWorkWindow->StartPresentationMode( FALSE, mpSlideShow ? mpSlideShow->isAlwaysOnTop() : 0 );
+        }
+
     }
 
     if( mpSlideShow )
@@ -214,12 +238,12 @@ void PresentationViewShell::FinishInitialization (
 }
 
 
-SvxRuler* PresentationViewShell::CreateHRuler(::sd::Window* pWin, BOOL bIsFirst)
+SvxRuler* PresentationViewShell::CreateHRuler(::sd::Window*, BOOL)
 {
     return NULL;
 }
 
-SvxRuler* PresentationViewShell::CreateVRuler(::sd::Window* pWin)
+SvxRuler* PresentationViewShell::CreateVRuler(::sd::Window*)
 {
     return NULL;
 }
@@ -264,7 +288,7 @@ void PresentationViewShell::Activate( BOOL bIsMDIActivate )
 
 
 
-void PresentationViewShell::Paint( const Rectangle& rRect, ::sd::Window* pWin )
+void PresentationViewShell::Paint( const Rectangle& rRect, ::sd::Window* )
 {
     // allow paints only if show is already started
     if( mbShowStarted && mpSlideShow )
@@ -288,12 +312,36 @@ void PresentationViewShell::CreateFullScreenShow (
         ? pAlwaysOnTop->GetValue()
         : pDoc->getPresentationSettings().mbAlwaysOnTop;
 
+    SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
+
+    sal_Int32 nDisplay = pOptions->GetDisplay();
+
+    if( nDisplay <= 0 )
+    {
+        try
+        {
+            Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+            Reference< XPropertySet > xMonProps( xFactory->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DisplayAccess" ) ) ), UNO_QUERY_THROW );
+            const OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "DefaultDisplay" ) );
+            xMonProps->getPropertyValue( sPropName ) >>= nDisplay;
+        }
+        catch( Exception& )
+        {
+        }
+    }
+    else
+    {
+        nDisplay--;
+    }
+
     WorkWindow* pWorkWindow = new WorkWindow (
         NULL,
         WB_HIDE | WB_CLIPCHILDREN);
     pWorkWindow->StartPresentationMode (
         TRUE,
-        bAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0);
+        bAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0,
+        nDisplay );
+
     pWorkWindow->SetBackground(Wallpaper(COL_BLACK));
     if (pWorkWindow->IsVisible())
     {
