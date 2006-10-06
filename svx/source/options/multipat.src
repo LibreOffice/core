@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:40:53 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:46:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
     };
     Control LB_RADIOBUTTON
     {
+        HelpId = HID_OPTIONS_MULTIPATH_LIST ;
         Hide = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 6 ) ;
