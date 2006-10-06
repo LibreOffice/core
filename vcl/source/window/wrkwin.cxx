@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrkwin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:24:39 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,7 +214,7 @@ WorkWindow::~WorkWindow()
 
 // -----------------------------------------------------------------------
 
-void WorkWindow::ShowFullScreenMode( BOOL bFullScreenMode )
+void WorkWindow::ShowFullScreenMode( BOOL bFullScreenMode, sal_Int32 nDisplay )
 {
     if ( !mbFullScreenMode == !bFullScreenMode )
         return;
@@ -223,13 +223,13 @@ void WorkWindow::ShowFullScreenMode( BOOL bFullScreenMode )
     if ( !mbSysChild )
     {
         mpWindowImpl->mpFrameWindow->mpWindowImpl->mbWaitSystemResize = TRUE;
-        ImplGetFrame()->ShowFullScreen( bFullScreenMode );
+        ImplGetFrame()->ShowFullScreen( bFullScreenMode, nDisplay );
     }
 }
 
 // -----------------------------------------------------------------------
 
-void WorkWindow::StartPresentationMode( BOOL bPresentation, USHORT nFlags )
+void WorkWindow::StartPresentationMode( BOOL bPresentation, USHORT nFlags, sal_Int32 nDisplay )
 {
     if ( !bPresentation == !mbPresentationMode )
         return;
@@ -242,7 +242,7 @@ void WorkWindow::StartPresentationMode( BOOL bPresentation, USHORT nFlags )
         mnPresentationFlags     = nFlags;
 
         if ( !(mnPresentationFlags & PRESENTATION_NOFULLSCREEN) )
-            ShowFullScreenMode( TRUE );
+            ShowFullScreenMode( TRUE, nDisplay );
         if ( !mbSysChild )
         {
             if ( mnPresentationFlags & PRESENTATION_HIDEALLAPPS )
@@ -264,7 +264,7 @@ void WorkWindow::StartPresentationMode( BOOL bPresentation, USHORT nFlags )
             if ( mnPresentationFlags & PRESENTATION_HIDEALLAPPS )
                 mpWindowImpl->mpFrame->SetAlwaysOnTop( FALSE );
         }
-        ShowFullScreenMode( mbPresentationFull );
+        ShowFullScreenMode( mbPresentationFull, nDisplay );
 
         mbPresentationMode      = FALSE;
         mbPresentationVisible   = FALSE;
