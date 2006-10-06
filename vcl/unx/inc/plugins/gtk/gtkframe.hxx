@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 11:01:35 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:02:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@
 #include <list>
 #include <vector>
 
-class X11SalGraphics;
+class GtkSalGraphics;
 class GtkSalDisplay;
 
 class GtkSalFrame : public SalFrame
@@ -65,7 +65,7 @@ class GtkSalFrame : public SalFrame
 
     struct GraphicsHolder
     {
-        X11SalGraphics*     pGraphics;
+        GtkSalGraphics*     pGraphics;
         bool                bInUse;
         GraphicsHolder()
                 : pGraphics( NULL ),
@@ -172,6 +172,7 @@ class GtkSalFrame : public SalFrame
     };
     friend struct IMHandler;
 
+    int                             m_nScreen;
     GtkWindow*                      m_pWindow;
     GdkWindow*                      m_pForeignParent;
     GdkNativeWindow                 m_aForeignParentWindow;
@@ -182,6 +183,7 @@ class GtkSalFrame : public SalFrame
     SalExtStyle                     m_nExtStyle;
     GtkFixed*                       m_pFixedContainer;
     GtkSalFrame*                    m_pParent;
+    std::list< GtkSalFrame* >       m_aChildren;
     GdkWindowState                  m_nState;
     SystemEnvData                   m_aSystemData;
     GraphicsHolder                  m_aGraphics[ nMaxGraphics ];
@@ -195,6 +197,7 @@ class GtkSalFrame : public SalFrame
     bool                            m_bDefaultPos;
     bool                            m_bDefaultSize;
     bool                            m_bSendModChangeOnRelease;
+    String                          m_aTitle;
 
     IMHandler*                      m_pIMHandler;
 
@@ -254,6 +257,7 @@ class GtkSalFrame : public SalFrame
     Size calcDefaultSize();
 
     void setMinMaxSize();
+    void createNewWindow( XLIB_Window aParent, int nScreen );
 public:
     GtkSalFrame( SalFrame* pParent, ULONG nStyle );
     GtkSalFrame( SystemParentData* pSysData );
@@ -275,6 +279,9 @@ public:
     GdkVisibilityState getVisibilityState() const
     { return m_nVisibility; }
     Pixmap getBackgroundPixmap() const { return m_hBackgroundPixmap; }
+    int getScreenNumber() const { return m_nScreen; }
+
+    void moveToScreen( int nScreen );
 
     virtual ~GtkSalFrame();
 
@@ -307,7 +314,7 @@ public:
     virtual SalFrame*           GetParent() const;
     virtual void                SetWindowState( const SalFrameState* pState );
     virtual BOOL                GetWindowState( SalFrameState* pState );
-    virtual void                ShowFullScreen( BOOL bFullScreen );
+    virtual void                ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay );
     // Enable/Disable ScreenSaver, SystemAgents, ...
     virtual void                StartPresentation( BOOL bStart );
     // Show Window over all other Windows
