@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:47:23 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:52:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -308,6 +308,8 @@ private:
     sal_Bool    bPreviewChangedEffects;
     sal_Bool    bPreviewTransitions;
 
+    sal_Int32   mnDisplay;
+
     /** This value controls the device to use for formatting documents.
         The currently supported values are 0 for the current printer or 1
         for the printer independent virtual device the can be retrieved from
@@ -360,6 +362,9 @@ public:
     sal_Bool    IsPreviewNewEffects() const { Init(); return bPreviewNewEffects; }
     sal_Bool    IsPreviewChangedEffects() const { Init(); return bPreviewChangedEffects; }
     sal_Bool    IsPreviewTransitions() const { Init(); return bPreviewTransitions; }
+
+    sal_Int32   GetDisplay() const { Init(); return mnDisplay; }
+    void        SetDisplay( sal_Int32 nDisplay = 0 ) { if( mnDisplay != nDisplay ) { OptionsChanged(); mnDisplay = nDisplay; } }
 
     void    SetStartWithTemplate( BOOL bOn = TRUE ) { if( bStartWithTemplate != bOn ) { OptionsChanged(); bStartWithTemplate = bOn; } }
     void    SetMarkedHitMovesAlways( BOOL bOn = TRUE ) { if( bMarkedHitMovesAlways != bOn ) { OptionsChanged(); bMarkedHitMovesAlways = bOn; } }
