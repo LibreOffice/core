@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:45:04 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:44:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,7 @@ class SwTransferable : public TransferableHelper
 
     // helper methods for the copy
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > FindOLEObj() const;
+    Graphic* FindOLEReplacementGraphic() const;
     void DeleteSelection();
 
     // helper methods for the paste
