@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optmemory.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:47:30 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:37:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,7 @@
 #define NF_OLECACHE                     25
 #define FL_QUICKLAUNCH                  26
 #define CB_QUICKLAUNCH                  27
+#define STR_QUICKLAUNCH_UNX                 28
 
 #endif // #ifndef _OFA_OPTMEMORY_HRC
 
