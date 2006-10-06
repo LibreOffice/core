@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-10-05 11:00:28 $
+dnl * Date: $Date: 2006-10-06 10:35:45 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.180 $ )
+AC_REVISION( $Revision: 1.181 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -4406,6 +4406,7 @@ if test  "$test_gtk" = "yes"; then
         PKG_CHECK_MODULES(GDKPIXBUF, gdk-pixbuf-xlib-2.0 >= 2.2)
         GTK_CFLAGS="$GTK_CFLAGS $GDKPIXBUF_CFLAGS"
         GTK_LIBS="$GTK_LIBS $GDKPIXBUF_LIBS"
+	BUILD_TYPE="$BUILD_TYPE GTK"
     fi
 
 fi
