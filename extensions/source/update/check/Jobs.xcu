@@ -7,14 +7,6 @@
                 <value>com.sun.star.setup.UpdateCheck</value>
             </prop>
             <node oor:name="Arguments">
-                <prop oor:name="BubbleHeading" oor:type="xs:string" oor:op="replace">
-                    <value xml:lang="de">%PRODUCTNAME Update verfügbar</value>
-                    <value xml:lang="en-US">%PRODUCTNAME update available</value>
-                </prop>
-                <prop oor:name="BubbleText" oor:type="xs:string" oor:op="replace">
-                    <value xml:lang="de">Klicken Sie hier, um zur Webseite zu gelangen, auf der Sie das neue Update herunterladen können.</value>
-                    <value xml:lang="en-US">Click here to go to the web site, where you can download the new update.</value>
-                </prop>
                 <prop oor:name="SearchForUpdateText" oor:type="xs:string" oor:op="replace">
                     <value xml:lang="de">Das Programm sucht nach einem neuen Versions Update basierend auf Informationen über Ihre installierte %PRODUCTNAME Version und aktuell verfügbare Updates.</value>
                     <value xml:lang="en-US">The program checks for a new version update based on information about your installed %PRODUCTNAME version and currently available updates.</value>
@@ -28,7 +20,7 @@
                     <value xml:lang="en-US">No new update is available.\n %PRODUCTNAME is up to date.</value>
                 </prop>
                 <prop oor:name="AutoCheckEnabled" oor:type="xs:boolean" oor:op="replace">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
                 <prop oor:name="LastCheck" oor:type="xs:long" oor:op="replace">
                     <value>0</value>
