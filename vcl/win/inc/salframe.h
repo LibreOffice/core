@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:08:01 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:08:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,7 @@ public:
     BOOL                    mbAtCursorIME;          // TRUE: Wir behandeln nur einige IME-Messages
     BOOL                    mbCandidateMode;        // TRUE: Wir befinden uns im Candidate-Modus
     static BOOL             mbInReparent;           // TRUE: ignore focus lost and gain due to reparenting
+    sal_Int32               mnDisplay;              // Display used for Fullscreen, 0 is primary monitor
 
 public:
     WinSalFrame();
@@ -124,7 +125,7 @@ public:
     virtual SalFrame*           GetParent() const;
     virtual void                SetWindowState( const SalFrameState* pState );
     virtual BOOL                GetWindowState( SalFrameState* pState );
-    virtual void                ShowFullScreen( BOOL bFullScreen );
+    virtual void                ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay );
     virtual void                StartPresentation( BOOL bStart );
     virtual void                SetAlwaysOnTop( BOOL bOnTop );
     virtual void                ToTop( USHORT nFlags );
