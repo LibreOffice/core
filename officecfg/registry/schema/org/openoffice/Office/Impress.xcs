@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Impress.xcs,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:37:53 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:49:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -439,6 +439,17 @@
 					<label>Automatic preview for slide transition panel</label>
 				</info>
 				<value>true</value>
+			</prop>
+			<prop oor:name="Display" oor:type="xs:int">
+				<!-- OldPath: -->
+				<!-- OldLocation: -->
+				<!-- UIHints: slide show settings display listbox -->
+				<info>
+					<author>CL</author>
+					<desc>Number of the display used for full screen slide show mode.</desc>
+					<label>Display for full screen slide show mode</label>
+				</info>
+				<value>0</value>
 			</prop>
 			<group oor:name="TextObject">
 				<info>
