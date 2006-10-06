@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:53:38 $
+#   last change: $Author: kz $ $Date: 2006-10-06 09:51:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,8 @@ EXCEPTIONSFILES= \
         $(SLO)$/dlgass.obj		    \
         $(SLO)$/TemplateScanner.obj \
         $(SLO)$/sdtreelb.obj        \
-        $(SLO)$/tpoption.obj
+        $(SLO)$/tpoption.obj \
+        $(SLO)$/present.obj
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 
