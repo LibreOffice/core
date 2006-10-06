@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:46:19 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:56:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,7 +250,7 @@ BOOL SalFrame::GetWindowState( SalFrameState* pState )
 
 // -----------------------------------------------------------------------
 
-void SalFrame::ShowFullScreen( BOOL bFullScreen )
+void SalFrame::ShowFullScreen( BOOL /* bFullScreen */, sal_Int32 /* nDisplay */ )
 {
 }
 
