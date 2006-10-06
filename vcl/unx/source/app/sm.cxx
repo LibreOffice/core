@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:36:12 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:04:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -460,10 +460,10 @@ void SessionManagerClient::open()
         ICEConnectionObserver::unlock();
 
         SalDisplay* pDisp = GetX11SalData()->GetDisplay();
-        if( pDisp->GetDrawable() && aClientID.Len() )
+        if( pDisp->GetDrawable( pDisp->GetDefaultScreenNumber() ) && aClientID.Len() )
         {
             XChangeProperty( pDisp->GetDisplay(),
-                             pDisp->GetDrawable(),
+                             pDisp->GetDrawable( pDisp->GetDefaultScreenNumber() ),
                              XInternAtom( pDisp->GetDisplay(), "SM_CLIENT_ID", False ),
                              XA_STRING,
                              8,
