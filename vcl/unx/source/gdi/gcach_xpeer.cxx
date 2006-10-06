@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:37:36 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:05:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,15 +44,31 @@ using namespace rtl;
 #include <gcach_xpeer.hxx>
 #include <stdio.h>
 #include <stdlib.h>
+#include <saldisp.hxx>
+#include <saldata.hxx>
 
-// ---------------------------------------------------------------------------
+// ===========================================================================
 
-static int nRenderVersion = 0x00;
+// all glyph specific data needed by the XGlyphPeer is quite trivial
+// with one exception: if multiple screens are involved and non-antialiased
+// glyph rendering is active, then we need screen specific pixmaps
+struct MultiScreenGlyph
+{
+    const RawBitmap*    mpRawBitmap;
+    Glyph               maXRGlyphId;
+    Pixmap              maPixmaps[1];   // [mnMaxScreens]
+};
+
+// ===========================================================================
 
 X11GlyphPeer::X11GlyphPeer()
 :   mpDisplay(NULL)
-,   mbForcedAA(false)
-,   mbUsingXRender(false)
+,   mnMaxScreens(0)
+,   mnDefaultScreen(0)
+,   mnExtByteCount(0)
+,   mnForcedAA(0)
+,   mnUsingXRender(0)
+,   mnRenderVersion(0x00)
 ,   mpGlyphFormat(NULL)
 {
     maRawBitmap.mnAllocated = 0;
@@ -61,12 +77,46 @@ X11GlyphPeer::X11GlyphPeer()
 
 // ---------------------------------------------------------------------------
 
-void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
+X11GlyphPeer::~X11GlyphPeer()
 {
-    if( mpDisplay == _pDisplay )
+    SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
+    Display* const pX11Disp = pSalDisp->GetDisplay();
+    for( int i = 0; i < mnMaxScreens; i++ )
+    {
+        SalDisplay::RenderEntryMap& rMap = pSalDisp->GetRenderEntries( i );
+        for( SalDisplay::RenderEntryMap::iterator it = rMap.begin(); it != rMap.end(); ++it )
+        {
+            if( it->second.m_aPixmap )
+                XFreePixmap( pX11Disp, it->second.m_aPixmap );
+            if( it->second.m_aPicture )
+            {
+                #ifdef XRENDER_LINK
+                XRenderFreePicture ( pX11Disp, it->second.m_aPicture );
+                #else
+                (*pXRenderFreePicture)( pX11Disp, it->second.m_aPicture );
+                #endif
+            }
+        }
+        rMap.clear();
+    }
+}
+
+// ---------------------------------------------------------------------------
+
+void X11GlyphPeer::SetDisplay( const SalDisplay& rSalDisplay )
+{
+    if( mpDisplay != NULL )
         return;
 
-    mpDisplay = _pDisplay;
+    mpDisplay    = rSalDisplay.GetDisplay();
+    mnMaxScreens = rSalDisplay.GetScreenCount();
+    if( mnMaxScreens > MAX_GCACH_SCREENS )
+        mnMaxScreens = MAX_GCACH_SCREENS;
+    // if specific glyph data has to be kept for many screens
+    // then prepare the allocation of MultiScreenGlyph objects
+    if( mnMaxScreens > 1 )
+        mnExtByteCount = sizeof(MultiScreenGlyph) + sizeof(Pixmap) * (mnMaxScreens - 1);
+    mnDefaultScreen = rSalDisplay.GetDefaultScreenNumber();
 
     int nEnvAntiAlias = 0;
     const char* pEnvAntiAlias = getenv( "SAL_ANTIALIAS_DISABLE" );
@@ -79,25 +129,29 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
 
     // we can do anti aliasing on the client side
     // when the display's visuals are suitable
-    mbForcedAA = true;
-    XVisualInfo aXVisualInfo;
-    aXVisualInfo.visualid = _pVisual->visualid;
-    int nVisuals = 0;
-    XVisualInfo* pXVisualInfo = XGetVisualInfo( mpDisplay, VisualIDMask, &aXVisualInfo, &nVisuals );
-    int nMaxDepth = 0;
-    for( int i = nVisuals; --i >= 0; )
-    {
-        if( nMaxDepth < pXVisualInfo[i].depth )
-            nMaxDepth = pXVisualInfo[i].depth;
-        if( ((pXVisualInfo[i].c_class==PseudoColor) || (pXVisualInfo[i].depth<24))
-        && ((pXVisualInfo[i].c_class>GrayScale) || (pXVisualInfo[i].depth!=8) ) )
-            mbForcedAA = false;
-    }
-    if( pXVisualInfo != NULL )
-        XFree( pXVisualInfo );
-
+    mnForcedAA = ~0U;
+    // unless the feature is explicitly disabled by an environment variable
     if( (nEnvAntiAlias & 1) != 0 )
-        mbForcedAA = false;
+        mnForcedAA = 0;
+    int nMaxDepth = 0;
+    for( int nScreen = 0; nScreen < mnMaxScreens; ++nScreen)
+    {
+        Visual* pVisual = rSalDisplay.GetVisual( nScreen ).GetVisual();
+        XVisualInfo aXVisualInfo;
+        aXVisualInfo.visualid = pVisual->visualid;
+        int nVisuals = 0;
+        XVisualInfo* pXVisualInfo = XGetVisualInfo( mpDisplay, VisualIDMask, &aXVisualInfo, &nVisuals );
+        for( int i = nVisuals; --i >= 0; )
+        {
+            if( nMaxDepth < pXVisualInfo[i].depth )
+                nMaxDepth = pXVisualInfo[i].depth;
+            if( ((pXVisualInfo[i].c_class==PseudoColor) || (pXVisualInfo[i].depth<24))
+            && ((pXVisualInfo[i].c_class>GrayScale) || (pXVisualInfo[i].depth!=8) ) )
+                mnForcedAA &= ~(1U << nScreen);
+        }
+        if( pXVisualInfo != NULL )
+            XFree( pXVisualInfo );
+    }
 
     // but we prefer the hardware accelerated solution
     int nDummy;
@@ -202,7 +256,7 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
 #else
     (*pXRenderQueryVersion)( mpDisplay, &nMajor, &nMinor );
 #endif
-    nRenderVersion = 16*nMajor + nMinor;
+    mnRenderVersion = 16*nMajor + nMinor;
     // TODO: enable/disable things depending on version
 
     // the 8bit alpha mask format must be there
@@ -217,69 +271,224 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
 
     if( mpGlyphFormat != NULL )
     {
-        // and the visual must be supported too
+        for( int nScreen = 0; nScreen < mnMaxScreens; ++nScreen)
+        {
+            Visual* pVisual = rSalDisplay.GetVisual( nScreen ).GetVisual();
+
+            // and the visual must be supported too on the screen
 #ifdef XRENDER_LINK
-      XRenderPictFormat* pVisualFormat = XRenderFindVisualFormat ( mpDisplay, _pVisual);
+            XRenderPictFormat* pVisualFormat = XRenderFindVisualFormat( mpDisplay, pVisual );
 #else
-        XRenderPictFormat* pVisualFormat = (*pXRenderFindVisualFormat)( mpDisplay, _pVisual );
+            XRenderPictFormat* pVisualFormat = (*pXRenderFindVisualFormat)( mpDisplay, pVisual );
 #endif
-        if( pVisualFormat != NULL )
-            mbUsingXRender = true;
+            if( pVisualFormat != NULL )
+                mnUsingXRender = ~0U;
+        }
     }
 
     // #97763# disable XRENDER on <15bit displays for XFree<=4.2.0
-    if( (nMaxDepth < 15) && (nRenderVersion <= 0x02) )
-        mbUsingXRender = false;
+    if( (nMaxDepth < 15) && (mnRenderVersion <= 0x02) )
+        mnUsingXRender = 0;
 
     // #93033# disable XRENDER for old RENDER versions if XINERAMA is present
-    if( (nRenderVersion < 0x02)
+    if( (mnRenderVersion < 0x02)
     &&  XQueryExtension( mpDisplay, "XINERAMA", &nDummy, &nDummy, &nDummy ) )
-        mbUsingXRender = false;
+        mnUsingXRender = 0;
 
+    // disable XRENDER if requested by an environment variable
     if( (nEnvAntiAlias & 2) != 0 )
-        mbUsingXRender = false;
+        mnUsingXRender = 0;
+}
+
+// ===========================================================================
+
+enum { INFO_EMPTY=0, INFO_PIXMAP, INFO_XRENDER, INFO_RAWBMP, INFO_MULTISCREEN };
+static const Glyph NO_GLYPHID = 0;
+static RawBitmap* const NO_RAWBMP = NULL;
+static const Pixmap NO_PIXMAP = 0;
+
+// ---------------------------------------------------------------------------
+
+MultiScreenGlyph* X11GlyphPeer::PrepareForMultiscreen( ExtGlyphData& rEGD ) const
+{
+    // prepare to store screen specific pixmaps
+    MultiScreenGlyph* pMSGlyph = (MultiScreenGlyph*)new char[ mnExtByteCount ];
+    pMSGlyph->mpRawBitmap = NO_RAWBMP;
+    pMSGlyph->maXRGlyphId = NO_GLYPHID;
+    for( int i = 0; i < mnMaxScreens; ++i )
+        pMSGlyph->maPixmaps[i] = NO_PIXMAP;
+    if( rEGD.meInfo == INFO_XRENDER )
+        pMSGlyph->maXRGlyphId = reinterpret_cast<Glyph>(rEGD.mpData);
+    else if( rEGD.meInfo == INFO_RAWBMP )
+        pMSGlyph->mpRawBitmap = reinterpret_cast<RawBitmap*>(rEGD.mpData);
+    else if( rEGD.meInfo == INFO_PIXMAP )
+        pMSGlyph->maPixmaps[ mnDefaultScreen ] = reinterpret_cast<Pixmap>(rEGD.mpData);
+    rEGD.mpData = (void*)pMSGlyph;
+    rEGD.meInfo = INFO_MULTISCREEN;
+    return pMSGlyph;
+ }
+
+// ---------------------------------------------------------------------------
+
+Glyph X11GlyphPeer::GetRenderGlyph( const GlyphData& rGD ) const
+{
+    Glyph aGlyphId = NO_GLYPHID;
+    const ExtGlyphData& rEGD = rGD.ExtDataRef();
+    if( rEGD.meInfo == INFO_XRENDER )
+        aGlyphId = reinterpret_cast<Glyph>(rEGD.mpData);
+    else if( rEGD.meInfo == INFO_MULTISCREEN )
+        aGlyphId = reinterpret_cast<MultiScreenGlyph*>(rEGD.mpData)->maXRGlyphId;
+    return aGlyphId;
+}
+
+// ---------------------------------------------------------------------------
+
+void X11GlyphPeer::SetRenderGlyph( GlyphData& rGD, Glyph aGlyphId ) const
+{
+    ExtGlyphData& rEGD = rGD.ExtDataRef();
+    switch( rEGD.meInfo )
+    {
+        case INFO_EMPTY:
+            rEGD.meInfo = INFO_XRENDER;
+            // fall through
+        case INFO_XRENDER:
+            rEGD.mpData = reinterpret_cast<void*>(aGlyphId);
+            break;
+        case INFO_PIXMAP:
+        case INFO_RAWBMP:
+            PrepareForMultiscreen( rEGD );
+            // fall through
+        case INFO_MULTISCREEN:
+            reinterpret_cast<MultiScreenGlyph*>(rEGD.mpData)->maXRGlyphId = aGlyphId;
+            break;
+        default:
+            break;  // cannot happen...
+    }
+}
+
+// ---------------------------------------------------------------------------
+
+const RawBitmap* X11GlyphPeer::GetRawBitmap( const GlyphData& rGD ) const
+{
+    const RawBitmap* pRawBitmap = NO_RAWBMP;
+    const ExtGlyphData& rEGD = rGD.ExtDataRef();
+    if( rEGD.meInfo == INFO_RAWBMP )
+        pRawBitmap = reinterpret_cast<RawBitmap*>(rEGD.mpData);
+    else if( rEGD.meInfo == INFO_MULTISCREEN )
+        pRawBitmap = reinterpret_cast<MultiScreenGlyph*>(rEGD.mpData)->mpRawBitmap;
+    return pRawBitmap;
+}
+
+// ---------------------------------------------------------------------------
+
+void X11GlyphPeer::SetRawBitmap( GlyphData& rGD, const RawBitmap* pRawBitmap ) const
+{
+    ExtGlyphData& rEGD = rGD.ExtDataRef();
+    switch( rEGD.meInfo )
+    {
+        case INFO_EMPTY:
+            rEGD.meInfo = INFO_RAWBMP;
+            // fall through
+        case INFO_RAWBMP:
+            rEGD.mpData = (void*)pRawBitmap;
+            break;
+        case INFO_PIXMAP:
+        case INFO_XRENDER:
+            PrepareForMultiscreen( rEGD );
+            // fall through
+        case INFO_MULTISCREEN:
+            reinterpret_cast<MultiScreenGlyph*>(rEGD.mpData)->mpRawBitmap = pRawBitmap;
+            break;
+        default:
+            // cannot happen...
+            break;
+    }
+}
+
+// ---------------------------------------------------------------------------
+
+Pixmap X11GlyphPeer::GetPixmap( const GlyphData& rGD, int nScreen ) const
+{
+    Pixmap aPixmap = NO_PIXMAP;
+    const ExtGlyphData& rEGD = rGD.ExtDataRef();
+    if( (rEGD.meInfo == INFO_PIXMAP) && (nScreen == mnDefaultScreen) )
+        aPixmap = (Pixmap)rEGD.mpData;
+    else if( rEGD.meInfo == INFO_MULTISCREEN )
+        aPixmap = (Pixmap)(reinterpret_cast<MultiScreenGlyph*>(rEGD.mpData)->maPixmaps[nScreen]);
+    return aPixmap;
+}
+
+// ---------------------------------------------------------------------------
+
+void X11GlyphPeer::SetPixmap( GlyphData& rGD, Pixmap aPixmap, int nScreen ) const
+{
+    if( aPixmap == NO_PIXMAP )
+        aPixmap = None;
+
+    ExtGlyphData& rEGD = rGD.ExtDataRef();
+    if( (rEGD.meInfo == INFO_EMPTY) && (nScreen == mnDefaultScreen) )
+    {
+        rEGD.meInfo = INFO_PIXMAP;
+        rEGD.mpData = (void*)aPixmap;
+    }
+    else
+    {
+        MultiScreenGlyph* pMSGlyph;
+        if( rEGD.meInfo == INFO_MULTISCREEN )
+            pMSGlyph = reinterpret_cast<MultiScreenGlyph*>(rEGD.mpData);
+        else
+            pMSGlyph = PrepareForMultiscreen( rEGD );
+
+        pMSGlyph->maPixmaps[ nScreen ] = aPixmap;
+    }
 }
 
 // ---------------------------------------------------------------------------
 
 void X11GlyphPeer::RemovingFont( ServerFont& rServerFont )
 {
+    void* pFontExt = rServerFont.GetExtPointer();
     switch( rServerFont.GetExtInfo() )
     {
-        case PIXMAP_KIND:
-        case AAFORCED_KIND:
+        case INFO_PIXMAP:
+        case INFO_RAWBMP:
+            // nothing to do
+            break;
+        case INFO_MULTISCREEN:
+            // cannot happen...
             break;
 
-        case XRENDER_KIND:
+        case INFO_XRENDER:
 #ifdef XRENDER_LINK
-        XRenderFreeGlyphSet( mpDisplay,(GlyphSet)rServerFont.GetExtPointer() );
+            XRenderFreeGlyphSet( mpDisplay, (GlyphSet)pFontExt );
 #else
-            (*pXRenderFreeGlyphSet)( mpDisplay,(GlyphSet)rServerFont.GetExtPointer() );
+            (*pXRenderFreeGlyphSet)( mpDisplay, (GlyphSet)pFontExt );
 #endif
             break;
     }
 
-    rServerFont.SetExtended( EMPTY_KIND, NULL );
+    rServerFont.SetExtended( INFO_EMPTY, NULL );
 }
 
 // ---------------------------------------------------------------------------
 
 // notification to clean up GlyphPeer resources for this glyph
-void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData, int /*nGlyphIndex*/ )
+void X11GlyphPeer::RemovingGlyph( ServerFont& /*rServerFont*/, GlyphData& rGlyphData, int /*nGlyphIndex*/ )
 {
     // nothing to do if the GlyphPeer hasn't allocated resources for the glyph
-    if( rGlyphData.GetExtInfo() == EMPTY_KIND )
+    if( rGlyphData.ExtDataRef().meInfo == INFO_EMPTY )
         return;
 
     const GlyphMetric& rGM = rGlyphData.GetMetric();
-    const int nWidth = rGM.GetSize().Width();
+    const int nWidth  = rGM.GetSize().Width();
     const int nHeight = rGM.GetSize().Height();
 
-    switch( rServerFont.GetExtInfo() )
+    void* pGlyphExt = rGlyphData.ExtDataRef().mpData;
+    switch( rGlyphData.ExtDataRef().meInfo )
     {
-        case PIXMAP_KIND:
+        case INFO_PIXMAP:
             {
-                Pixmap aPixmap = (Pixmap)rServerFont.GetExtPointer();
+                Pixmap aPixmap = (Pixmap)pGlyphExt;
                 if( aPixmap != None )
                 {
                     XFreePixmap( mpDisplay, aPixmap );
@@ -288,9 +497,25 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
             }
             break;
 
-        case AAFORCED_KIND:
+        case INFO_MULTISCREEN:
             {
-                RawBitmap* pRawBitmap = (RawBitmap*)rGlyphData.GetExtPointer();
+                MultiScreenGlyph* pMSGlyph = reinterpret_cast<MultiScreenGlyph*>(pGlyphExt);
+                for( int i = 0; i < mnMaxScreens; ++i)
+                {
+                    if( pMSGlyph->maPixmaps[i] == NO_PIXMAP )
+                        continue;
+                    XFreePixmap( mpDisplay, pMSGlyph->maPixmaps[i] );
+                    mnBytesUsed -= nHeight * ((nWidth + 7) >> 3);
+                }
+                delete pMSGlyph->mpRawBitmap;
+                // (*pXRenderFreeGlyphs)( mpDisplay, aGlyphSet, &nGlyphId, 1 );
+                delete[] pMSGlyph; // it was allocated with new char[]
+            }
+            break;
+
+        case INFO_RAWBMP:
+            {
+                RawBitmap* pRawBitmap = (RawBitmap*)pGlyphExt;
                 if( pRawBitmap != NULL )
                 {
                     mnBytesUsed -= pRawBitmap->mnScanlineSize * pRawBitmap->mnHeight;
@@ -300,16 +525,16 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
             }
             break;
 
-        case XRENDER_KIND:
+        case INFO_XRENDER:
             {
 /*
                 // TODO: reenable when it works without problems
-                Glyph nGlyphId = (Glyph)rGlyphData.GetExtPointer();
+                Glyph nGlyphId = (Glyph)rGlyphData.ExtDataRef().mpData;
                 // XRenderFreeGlyphs not implemented yet for version<=0.2
                 // #108209# disabled because of crash potential,
                 // the glyph leak is not too bad because they will
                 // be cleaned up when the glyphset is released
-                if( nRenderVersion >= 0x05 )
+                if( mnRenderVersion >= 0x05 )
                     (*pXRenderFreeGlyphs)( mpDisplay, aGlyphSet, &nGlyphId, 1 );
 */
                 mnBytesUsed -= nHeight * ((nWidth + 3) & ~3);
@@ -320,35 +545,35 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
     if( mnBytesUsed < 0 )   // TODO: eliminate nBytesUsed calc mismatch
         mnBytesUsed = 0;
 
-    rGlyphData.SetExtended( EMPTY_KIND, NULL );
+    rGlyphData.ExtDataRef() = ExtGlyphData();
 }
 
 // ---------------------------------------------------------------------------
 
-bool X11GlyphPeer::ForcedAntialiasing( const ServerFont& rServerFont ) const
+bool X11GlyphPeer::ForcedAntialiasing( const ServerFont& rServerFont, int nScreen ) const
 {
     bool bForceOk = rServerFont.GetAntialiasAdvice();
     // maximum size for antialiasing is 250 pixels
     bForceOk &= (rServerFont.GetFontSelData().mnHeight < 250);
-    return (bForceOk && mbForcedAA);
+    return (bForceOk && ((mnForcedAA >> nScreen) & 1));
 }
 
 // ---------------------------------------------------------------------------
 
-GlyphSet X11GlyphPeer::GetGlyphSet( ServerFont& rServerFont )
+GlyphSet X11GlyphPeer::GetGlyphSet( ServerFont& rServerFont, int nScreen )
 {
-    if( !mbUsingXRender )
+    if( (nScreen >= 0) && ((mnUsingXRender >> nScreen) & 1) == 0 )
         return 0;
 
     GlyphSet aGlyphSet;
 
     switch( rServerFont.GetExtInfo() )
     {
-        case XRENDER_KIND:
+        case INFO_XRENDER:
             aGlyphSet = (GlyphSet)rServerFont.GetExtPointer();
             break;
 
-        case EMPTY_KIND:
+        case INFO_EMPTY:
             {
                 // antialiasing for reasonable font heights only
                 // => prevents crashes caused by X11 requests >= 256k
@@ -358,11 +583,11 @@ GlyphSet X11GlyphPeer::GetGlyphSet( ServerFont& rServerFont )
                 if( nHeight<250 && rServerFont.GetAntialiasAdvice() )
                 {
 #ifdef XRENDER_LINK
-            aGlyphSet = XRenderCreateGlyphSet ( mpDisplay, mpGlyphFormat );
+                    aGlyphSet = XRenderCreateGlyphSet ( mpDisplay, mpGlyphFormat );
 #else
                     aGlyphSet = (*pXRenderCreateGlyphSet)( mpDisplay, mpGlyphFormat );
 #endif
-                    rServerFont.SetExtended( XRENDER_KIND, (void*)aGlyphSet );
+                    rServerFont.SetExtended( INFO_XRENDER, (void*)aGlyphSet );
                 }
                 else
                     aGlyphSet = 0;
@@ -379,14 +604,11 @@ GlyphSet X11GlyphPeer::GetGlyphSet( ServerFont& rServerFont )
 
 // ---------------------------------------------------------------------------
 
-Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex )
+Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex, int nReqScreen )
 {
-    Pixmap aPixmap = None;
     GlyphData& rGlyphData = rServerFont.GetGlyphData( nGlyphIndex );
-
-    if( rGlyphData.GetExtInfo() == PIXMAP_KIND )
-        aPixmap = (Pixmap)rGlyphData.GetExtPointer();
-    else
+    Pixmap aPixmap = GetPixmap( rGlyphData, nReqScreen );
+    if( aPixmap == NO_PIXMAP )
     {
         if( rServerFont.GetGlyphBitmap1( nGlyphIndex, maRawBitmap ) )
         {
@@ -441,20 +663,43 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex )
                 for( int i = nBytes; --i >= 0; ++pTemp )
                     *pTemp = lsb2msb[ *pTemp ];
 
-                 aPixmap = XCreatePixmapFromBitmapData( mpDisplay,
-                     DefaultRootWindow( mpDisplay ), (char*)maRawBitmap.mpBits,
-                     nPixmapWidth, maRawBitmap.mnHeight, 1, 0, 1 );
-                 mnBytesUsed += nBytes;
+                // often a glyph pixmap is only needed on the default screen
+                // => optimize for this common case
+                int nMinScreen = 0;
+                int nEndScreen = mnMaxScreens;
+                if( nReqScreen == mnDefaultScreen ) {
+                    nMinScreen = mnDefaultScreen;
+                    nEndScreen = mnDefaultScreen + 1;
+                }
+                // prepare glyph pixmaps for the different screens
+                for( int i = nMinScreen; i < nEndScreen; ++i )
+                {
+                    // don't bother if the pixmap is already there
+                    if( GetPixmap( rGlyphData, i ) != NO_PIXMAP )
+                        continue;
+                    // create the glyph pixmap
+                    Pixmap aScreenPixmap = XCreatePixmapFromBitmapData( mpDisplay,
+                        RootWindow( mpDisplay, i ), (char*)maRawBitmap.mpBits,
+                        nPixmapWidth, maRawBitmap.mnHeight, 1, 0, 1 );
+                    // and cache it as glyph specific data
+                    SetPixmap( rGlyphData, aScreenPixmap, i );
+                    mnBytesUsed += nBytes;
+                    if( i == nReqScreen )
+                        aPixmap = aScreenPixmap;
+                }
             }
         }
         else
         {
             // fall back to .notdef glyph
             if( nGlyphIndex != 0 )  // recurse only once
-                aPixmap = GetPixmap( rServerFont, 0 );
-        }
+                aPixmap = GetPixmap( rServerFont, 0, nReqScreen );
 
-        rGlyphData.SetExtended( PIXMAP_KIND, (void*)aPixmap );
+            if( aPixmap == NO_PIXMAP )
+                aPixmap = None;
+
+            SetPixmap( rGlyphData, aPixmap, nReqScreen );
+        }
     }
 
     return aPixmap;
@@ -465,19 +710,17 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex )
 const RawBitmap* X11GlyphPeer::GetRawBitmap( ServerFont& rServerFont,
     int nGlyphIndex )
 {
-    const RawBitmap* pRawBitmap = NULL;
     GlyphData& rGlyphData = rServerFont.GetGlyphData( nGlyphIndex );
 
-    if( rGlyphData.GetExtInfo() == AAFORCED_KIND )
-        pRawBitmap = (RawBitmap*)rGlyphData.GetExtPointer();
-    else
+    const RawBitmap* pRawBitmap = GetRawBitmap( rGlyphData );
+    if( pRawBitmap == NO_RAWBMP )
     {
         RawBitmap* pNewBitmap = new RawBitmap;
         if( rServerFont.GetGlyphBitmap8( nGlyphIndex, *pNewBitmap ) )
         {
             pRawBitmap = pNewBitmap;
-            mnBytesUsed += pRawBitmap->mnScanlineSize * pRawBitmap->mnHeight;
-            mnBytesUsed += sizeof(RawBitmap);
+            mnBytesUsed += pNewBitmap->mnScanlineSize * pNewBitmap->mnHeight;
+            mnBytesUsed += sizeof(pNewBitmap);
         }
         else
         {
@@ -487,7 +730,7 @@ const RawBitmap* X11GlyphPeer::GetRawBitmap( ServerFont& rServerFont,
                 pRawBitmap = GetRawBitmap( rServerFont, 0 );
         }
 
-        rGlyphData.SetExtended( AAFORCED_KIND, (void*)pRawBitmap );
+        SetRawBitmap( rGlyphData, pRawBitmap );
     }
 
     return pRawBitmap;
@@ -497,12 +740,10 @@ const RawBitmap* X11GlyphPeer::GetRawBitmap( ServerFont& rServerFont,
 
 Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
 {
-    Glyph aGlyphId = 0;
     GlyphData& rGlyphData = rServerFont.GetGlyphData( nGlyphIndex );
 
-    if( rGlyphData.GetExtInfo() == XRENDER_KIND )
-        aGlyphId = (Glyph)rGlyphData.GetExtPointer();
-    else
+    Glyph aGlyphId = GetRenderGlyph( rGlyphData );
+    if( aGlyphId == NO_GLYPHID )
     {
         // prepare GlyphInfo and Bitmap
         if( rServerFont.GetGlyphBitmap8( nGlyphIndex, maRawBitmap ) )
@@ -521,12 +762,12 @@ Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
             aGlyphInfo.yOff     = +rGM.GetDelta().Y();
 
             // upload glyph bitmap to server
-            GlyphSet aGlyphSet = GetGlyphSet( rServerFont );
+            GlyphSet aGlyphSet = GetGlyphSet( rServerFont, -1 );
 
             aGlyphId = nGlyphIndex & 0x00FFFFFF;
             const ULONG nBytes = maRawBitmap.mnScanlineSize * maRawBitmap.mnHeight;
 #ifdef XRENDER_LINK
-        XRenderAddGlyphs ( mpDisplay, aGlyphSet, &aGlyphId, &aGlyphInfo, 1,
+            XRenderAddGlyphs ( mpDisplay, aGlyphSet, &aGlyphId, &aGlyphInfo, 1,
                 (char*)maRawBitmap.mpBits, nBytes );
 #else
             (*pXRenderAddGlyphs)( mpDisplay, aGlyphSet, &aGlyphId, &aGlyphInfo, 1,
@@ -541,7 +782,7 @@ Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
                 aGlyphId = GetGlyphId( rServerFont, 0 );
         }
 
-        rGlyphData.SetExtended( XRENDER_KIND, (void*)aGlyphId );
+        SetRenderGlyph( rGlyphData, aGlyphId );
     }
 
     return aGlyphId;
