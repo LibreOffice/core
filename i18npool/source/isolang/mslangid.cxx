@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mslangid.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:21:19 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:09:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,6 +229,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
 
         // CTL
         // all LANGUAGE_ARABIC_... are caught below
+        case LANGUAGE_AMHARIC_ETHIOPIA:
         case LANGUAGE_ASSAMESE:
         case LANGUAGE_BENGALI:
         case LANGUAGE_BENGALI_BANGLADESH:
