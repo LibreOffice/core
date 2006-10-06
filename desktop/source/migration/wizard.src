@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 16:21:37 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:40:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,12 @@ String STR_STATE_USER
 {
     Text [ de ]    = "Benutzername";
     Text [ en-US ] = "User name";
+};
+
+String STR_STATE_UPDATE_CHECK
+{
+    Text [ de ]    = "Online Update";
+    Text [ en-US ] = "Online Update";
 };
 
 String STR_STATE_REGISTRATION
@@ -291,6 +297,44 @@ TabPage TP_MIGRATION
         Check = TRUE;
         Text [ en-US ] = "Transfer personal data";
         Text [ de ]    = "Persönliche Daten übernehmen";
+    };
+};
+
+TabPage TP_UPDATE_CHECK
+{
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT(TP_WIDTH, TP_HEIGHT);
+    HelpID          = HID_FIRSTSTART_UPDATE_CHECK;
+
+    FixedText FT_UPDATE_CHECK_HEADER
+    {
+        NoLabel = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP);
+        Size = MAP_APPFONT( BODYWIDTH, ROWHEIGHT );
+        Text [ en-US ] = "Online Update";
+        Text [ de ]    = "Online Update";
+
+    };
+
+    FixedText FT_UPDATE_CHECK_BODY
+    {
+        NoLabel = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*2);
+        Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*8);
+        WordBreak = TRUE;
+        Text [ en-US ] = "%PRODUCTNAME searches automatically at regular intervals for new versions.\nIn doing so online update does not transfer personal data.\nAs soon as a new version is available, you will be notified.\n\nYou can configure this feature at Tools / Options... / Online Update.";
+        Text [ de ]    = "%PRODUCTNAME sucht automatisch in regelmäßigen Abständen nach neuen Versionen.\nHierbei werden keine persönlichen Daten übertragen.\nSobald eine neue Version verfügbar ist, werden Sie benachrichtigt.\n\nSie können dieses Feature unter Extras / Optionen... / Online Update konfigurieren.";
+
+    };
+
+    CheckBox CB_UPDATE_CHECK
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*10);
+        Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*2);
+        Check = TRUE;
+        Text [ en-US ] = "~Check for updates automatically";
+        Text [ de ]    = "~Automatisch nach Updates suchen";
     };
 };
 
