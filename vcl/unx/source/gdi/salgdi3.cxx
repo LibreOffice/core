@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:39:13 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:06:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,13 +99,11 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 
-#ifndef _USE_PRINT_EXTENSION_
 #include <psprint/printergfx.hxx>
 #include <psprint/fontmanager.hxx>
 #include <psprint/jobdata.hxx>
 #include <psprint/printerinfomanager.hxx>
 #include <svapp.hxx>
-#endif
 
 #ifndef XLFD_ATTRIBUTE_HXX
 #include "xlfd_attr.hxx"
@@ -124,7 +122,19 @@
 
 // -----------------------------------------------------------------------
 
-static X11GlyphPeer aX11GlyphPeer;
+static X11GlyphPeer* pX11GlyphPeer = NULL;
+static X11GlyphPeer& getGlyphPeer()
+{
+    if( ! pX11GlyphPeer )
+        pX11GlyphPeer = new X11GlyphPeer();
+    return *pX11GlyphPeer;
+}
+
+void X11SalGraphics::releaseGlyphPeer()
+{
+    delete pX11GlyphPeer;
+    pX11GlyphPeer = NULL;
+}
 
 using namespace rtl;
 
@@ -304,7 +314,7 @@ FontLookup::InSet (const FontLookup::fl_hashset& rSet, const Xlfd& rXlfd)
 // ----------------------------------------------------------------------------
 
 XlfdStorage*
-SalDisplay::GetXlfdList()
+SalDisplay::GetXlfdList() const
 {
     if ( mpFontList != NULL )
     {
@@ -312,9 +322,9 @@ SalDisplay::GetXlfdList()
     }
     else
     {
-        mpFactory  = new AttributeProvider;
-        mpFontList = new XlfdStorage;
-        mpFallbackFactory = new VirtualXlfd;
+        const_cast<SalDisplay*>(this)->mpFactory  = new AttributeProvider;
+        const_cast<SalDisplay*>(this)->mpFontList = new XlfdStorage;
+        const_cast<SalDisplay*>(this)->mpFallbackFactory = new VirtualXlfd;
 
         int i, nFontCount;
         const int nMaxCount  = 64 * 1024 - 1;
@@ -431,26 +441,26 @@ SalDisplay::GetXlfdList()
 
 ExtendedFontStruct*
 SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont,
-    const Size& rPixelSize, sal_Bool bVertical )
+    const Size& rPixelSize, sal_Bool bVertical ) const
 {
     // TODO: either get rid of X11 fonts or get rid of the non-hashmapped cache
-    if( !pFontCache_ )
+    if( !m_pFontCache )
     {
-        pFontCache_ = new SalFontCache( 64, 64, 16 ); // ???
+        m_pFontCache = new SalFontCache( 64, 64, 16 ); // ???
     }
     else
     {
         ExtendedFontStruct *pItem;
-        for ( pItem  = pFontCache_->First();
+        for ( pItem  = m_pFontCache->First();
               pItem != NULL;
-              pItem  = pFontCache_->Next() )
+              pItem  = m_pFontCache->Next() )
         {
             if ( pItem->Match(pRequestedFont, rPixelSize, bVertical) )
             {
-                if( pFontCache_->GetCurPos() )
+                if( m_pFontCache->GetCurPos() )
                 {
-                    pFontCache_->Remove( pItem );
-                    pFontCache_->Insert( pItem, 0UL );
+                    m_pFontCache->Remove( pItem );
+                    m_pFontCache->Insert( pItem, 0UL );
                 }
                 return pItem;
             }
@@ -458,18 +468,18 @@ SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont,
     }
 
     // before we expand the cache, we look for very old and unused items
-    if( pFontCache_->Count() >= 64 )
+    if( m_pFontCache->Count() >= 64 )
     {
         ExtendedFontStruct *pItem;
-        for ( pItem = pFontCache_->Last();
+        for ( pItem = m_pFontCache->Last();
               pItem != NULL;
-              pItem = pFontCache_->Prev() )
+              pItem = m_pFontCache->Prev() )
         {
             if( 1 == pItem->GetRefCount() )
             {
-                pFontCache_->Remove( pItem );
+                m_pFontCache->Remove( pItem );
                 pItem->ReleaseRef();
-                if( pFontCache_->Count() < 64 )
+                if( m_pFontCache->Count() < 64 )
                     break;
             }
         }
@@ -478,7 +488,7 @@ SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont,
     ExtendedFontStruct *pItem = new ExtendedFontStruct( GetDisplay(),
                                         rPixelSize, bVertical,
                                         const_cast<ExtendedXlfd*>(pRequestedFont) );
-    pFontCache_->Insert( pItem, 0UL );
+    m_pFontCache->Insert( pItem, 0UL );
     pItem->AddRef();
 
     return pItem;
@@ -489,15 +499,15 @@ SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont,
 void
 SalDisplay::DestroyFontCache()
 {
-    if( pFontCache_ )
+    if( m_pFontCache )
     {
-        ExtendedFontStruct *pItem = pFontCache_->First();
+        ExtendedFontStruct *pItem = m_pFontCache->First();
         while( pItem )
         {
             delete pItem;
-            pItem = pFontCache_->Next();
+            pItem = m_pFontCache->Next();
         }
-        delete pFontCache_;
+        delete m_pFontCache;
     }
     if( mpFontList )
     {
@@ -509,7 +519,7 @@ SalDisplay::DestroyFontCache()
         delete mpFactory;
     }
 
-    pFontCache_ = (SalFontCache*)NULL;
+    m_pFontCache = (SalFontCache*)NULL;
     mpFontList = (XlfdStorage*)NULL;
     mpFactory  = (AttributeProvider*)NULL;
 }
@@ -746,57 +756,35 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 
     if( !pVisualFormat )
     {
-        Visual* pVisual = GetDisplay()->GetVisual()->GetVisual();
+        Visual* pVisual = GetColormap().GetVisual().GetVisual();
 #ifdef XRENDER_LINK
         pVisualFormat = XRenderFindVisualFormat ( pDisplay, pVisual );
 #else
-        pVisualFormat = (*aX11GlyphPeer.pXRenderFindVisualFormat)( pDisplay, pVisual );
+        pVisualFormat = (*getGlyphPeer().pXRenderFindVisualFormat)( pDisplay, pVisual );
 #endif
     }
 
     // create xrender Picture for font foreground
-    bool bDeleteSrc = false;
-    Pixmap aSrcPixmap;
-    Pixmap aSrcPicture;
-
-    static Pixmap aPixmap;
-    static Picture aSrc = 0;
-    static unsigned nDepth;
-    if( !aSrc )
+    int nDepth = pVisualFormat ? pVisualFormat->depth : GetDisplay()->GetVisual(m_nScreen).GetDepth();
+    SalDisplay::RenderEntry& rEntry = GetDisplay()->GetRenderEntries( m_nScreen )[ nDepth ];
+    if( !rEntry.m_aPicture )
     {
         int iDummy;
         unsigned uDummy;
         XLIB_Window wDummy;
+        unsigned int depth;
         XGetGeometry( pDisplay, hDrawable_, &wDummy, &iDummy, &iDummy,
-            &uDummy, &uDummy, &uDummy, &nDepth );
-        aPixmap = XCreatePixmap( pDisplay, hDrawable_, 1, 1, nDepth );
+                      &uDummy, &uDummy, &uDummy, &depth );
+        DBG_ASSERT( static_cast<int>(depth) == nDepth, "depth messed up for XRender" );
+        rEntry.m_aPixmap = XCreatePixmap( pDisplay, hDrawable_, 1, 1, nDepth );
 
         XRenderPictureAttributes aAttr;
         aAttr.repeat = true;
 #ifdef XRENDER_LINK
-        aSrc = XRenderCreatePicture ( pDisplay, aPixmap, pVisualFormat, CPRepeat, &aAttr );
+        rEntry.m_aPicture = XRenderCreatePicture ( pDisplay, rEntry.m_aPixmap, pVisualFormat, CPRepeat, &aAttr );
 #else
-        aSrc = (*aX11GlyphPeer.pXRenderCreatePicture)( pDisplay, aPixmap, pVisualFormat, CPRepeat, &aAttr );
+        rEntry.m_aPicture = (*getGlyphPeer().pXRenderCreatePicture)( pDisplay, rEntry.m_aPixmap, pVisualFormat, CPRepeat, &aAttr );
 #endif
-        aSrcPicture = aSrc;
-        aSrcPixmap = aPixmap;
-    } else if( pVisualFormat &&
-               (sal::static_int_cast< unsigned int >(pVisualFormat->depth)
-                != nDepth) )
-    {
-        aSrcPixmap = XCreatePixmap( pDisplay, hDrawable_, 1, 1, pVisualFormat->depth );
-
-        XRenderPictureAttributes aAttr;
-        aAttr.repeat = true;
-#ifdef XRENDER_LINK
-        aSrcPicture = XRenderCreatePicture ( pDisplay, aSrcPixmap, pVisualFormat, CPRepeat, &aAttr );
-#else
-        aSrcPicture = (*aX11GlyphPeer.pXRenderCreatePicture)( pDisplay, aSrcPixmap, pVisualFormat, CPRepeat, &aAttr );
-#endif
-        bDeleteSrc = true;
-    } else {
-        aSrcPicture = aSrc;
-        aSrcPixmap = aPixmap;
     }
 
     // set font foreground
@@ -804,14 +792,14 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
     XGCValues aGCVal;
     XGetGCValues( pDisplay, nGC, GCForeground, &aGCVal );
     aGCVal.clip_mask = None;
-    GC tmpGC = XCreateGC( pDisplay, aSrcPixmap, GCForeground | GCClipMask, &aGCVal );
-    XDrawPoint( pDisplay, aSrcPixmap, tmpGC, 0, 0 );
+    GC tmpGC = XCreateGC( pDisplay, rEntry.m_aPixmap, GCForeground | GCClipMask, &aGCVal );
+    XDrawPoint( pDisplay, rEntry.m_aPixmap, tmpGC, 0, 0 );
 
       XRenderColor aRenderColor = { 0, 0, 0, 0xffff };
 #ifdef XRENDER_LINK
-     XRenderFillRectangle( pDisplay, PictOpAdd, aSrcPicture, &aRenderColor, 0, 0, 1, 1 );
+     XRenderFillRectangle( pDisplay, PictOpAdd, rEntry.m_aPicture, &aRenderColor, 0, 0, 1, 1 );
 #else
-     (*aX11GlyphPeer.pXRenderFillRectangle)( pDisplay, PictOpAdd, aSrcPicture, &aRenderColor, 0, 0, 1, 1 );
+     (*getGlyphPeer().pXRenderFillRectangle)( pDisplay, PictOpAdd, rEntry.m_aPicture, &aRenderColor, 0, 0, 1, 1 );
 #endif
 
     XFreeGC( pDisplay, tmpGC );
@@ -821,7 +809,7 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 #ifdef XRENDER_LINK
     Picture aDst = XRenderCreatePicture ( pDisplay, hDrawable_, pVisualFormat, 0, &aAttr );
 #else
-    Picture aDst = (*aX11GlyphPeer.pXRenderCreatePicture)( pDisplay, hDrawable_, pVisualFormat, 0, &aAttr );
+    Picture aDst = (*getGlyphPeer().pXRenderCreatePicture)( pDisplay, hDrawable_, pVisualFormat, 0, &aAttr );
 #endif
 
     // set clipping
@@ -829,11 +817,11 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 #ifdef XRENDER_LINK
         XRenderSetPictureClipRegion( pDisplay, aDst, pClipRegion_ );
 #else
-        (*aX11GlyphPeer.pXRenderSetPictureClipRegion)( pDisplay, aDst, pClipRegion_ );
+        (*getGlyphPeer().pXRenderSetPictureClipRegion)( pDisplay, aDst, pClipRegion_ );
 #endif
 
     ServerFont& rFont = rLayout.GetServerFont();
-    GlyphSet aGlyphSet = aX11GlyphPeer.GetGlyphSet( rFont );
+    GlyphSet aGlyphSet = getGlyphPeer().GetGlyphSet( rFont, m_nScreen );
 
     Point aPos;
     static const int MAXGLYPHS = 160;
@@ -852,13 +840,13 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 
         unsigned int aRenderAry[ MAXGLYPHS ];
         for( int i = 0; i < nGlyphs; ++i )
-             aRenderAry[ i ] = aX11GlyphPeer.GetGlyphId( rFont, aGlyphAry[i] );
+             aRenderAry[ i ] = getGlyphPeer().GetGlyphId( rFont, aGlyphAry[i] );
 #ifdef XRENDER_LINK
         XRenderCompositeString32 ( pDisplay, PictOpOver,
-            aSrcPicture, aDst, 0, aGlyphSet, 0, 0, aPos.X(), aPos.Y(), aRenderAry, nGlyphs );
+            rEntry.m_aPicture, aDst, 0, aGlyphSet, 0, 0, aPos.X(), aPos.Y(), aRenderAry, nGlyphs );
 #else
-        (*aX11GlyphPeer.pXRenderCompositeString32)( pDisplay, PictOpOver,
-            aSrcPicture, aDst, 0, aGlyphSet, 0, 0, aPos.X(), aPos.Y(), aRenderAry, nGlyphs );
+        (*getGlyphPeer().pXRenderCompositeString32)( pDisplay, PictOpOver,
+            rEntry.m_aPicture, aDst, 0, aGlyphSet, 0, 0, aPos.X(), aPos.Y(), aRenderAry, nGlyphs );
 #endif
     }
 
@@ -866,18 +854,8 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 #ifdef XRENDER_LINK
     XRenderFreePicture ( pDisplay, aDst );
 #else
-    (*aX11GlyphPeer.pXRenderFreePicture)( pDisplay, aDst );
+    (*getGlyphPeer().pXRenderFreePicture)( pDisplay, aDst );
 #endif
-
-    if( bDeleteSrc ) {
-        XFreePixmap( pDisplay, aSrcPixmap );
-
-#ifdef XRENDER_LINK
-        XRenderFreePicture ( pDisplay, aSrcPicture );
-#else
-        (*aX11GlyphPeer.pXRenderFreePicture)( pDisplay, aSrcPicture );
-#endif
-    }
 }
 
 //--------------------------------------------------------------------------
@@ -896,7 +874,7 @@ bool X11SalGraphics::DrawServerAAForcedString( const ServerFontLayout& rLayout )
     sal_Int32 nGlyph;
     for( bool bFirst=true; rLayout.GetNextGlyphs( 1, &nGlyph, aPos, nStart ); )
     {
-        const RawBitmap* const pRawBitmap = aX11GlyphPeer.GetRawBitmap( rFont, nGlyph );
+        const RawBitmap* const pRawBitmap = getGlyphPeer().GetRawBitmap( rFont, nGlyph );
         if( !pRawBitmap )
             continue;
 
@@ -957,8 +935,9 @@ bool X11SalGraphics::DrawServerAAForcedString( const ServerFontLayout& rLayout )
         // clip with screen
         int nScreenX = m_pFrame->maGeometry.nX+aXRect.x;
         int nScreenY = m_pFrame->maGeometry.nY+aXRect.y;
-        int nScreenW = GetDisplay()->GetScreenSize().Width();
-        int nScreenH = GetDisplay()->GetScreenSize().Height();
+        const Size& rScreenSize = GetDisplay()->getDataForScreen( m_nScreen ).m_aSize;
+        int nScreenW = rScreenSize.Width();
+        int nScreenH = rScreenSize.Height();
         if( nScreenX < 0 )
             aXRect.x -= nScreenX, aXRect.width += nScreenX;
         if( nScreenX+aXRect.width > nScreenW )
@@ -992,8 +971,9 @@ bool X11SalGraphics::DrawServerAAForcedString( const ServerFontLayout& rLayout )
             // geometry changed in the meantime; lets get the current geometry
             // and clip against the current window size as well as the screen
             // with the current frame position
-            int nScreenW = GetDisplay()->GetScreenSize().Width();
-            int nScreenH = GetDisplay()->GetScreenSize().Height();
+            const Size& rScreenSize = GetDisplay()->getDataForScreen(m_nScreen).m_aSize;
+            int nScreenW = rScreenSize.Width();
+            int nScreenH = rScreenSize.Height();
             XLIB_Window aRoot = None;
             int x = 0, y = 0;
             unsigned int w = 0, h = 0, bw = 0, d;
@@ -1045,7 +1025,7 @@ bool X11SalGraphics::DrawServerAAForcedString( const ServerFontLayout& rLayout )
     const int bpp = pImg->bits_per_pixel >> 3;
     for( nStart = 0; rLayout.GetNextGlyphs( 1, &nGlyph, aPos, nStart ); )
     {
-        const RawBitmap* const pRawBitmap = aX11GlyphPeer.GetRawBitmap( rFont, nGlyph );
+        const RawBitmap* const pRawBitmap = getGlyphPeer().GetRawBitmap( rFont, nGlyph );
         if( !pRawBitmap )
             continue;
 
@@ -1131,7 +1111,7 @@ void X11SalGraphics::DrawServerSimpleFontString( const ServerFontLayout& rSalLay
         if( aPos.X() >= 30000 || aPos.Y() >= 30000 )
             continue;
 
-        Pixmap aStipple = aX11GlyphPeer.GetPixmap( rFont, nGlyph );
+        Pixmap aStipple = getGlyphPeer().GetPixmap( rFont, nGlyph, m_nScreen );
         const GlyphMetric& rGM = rFont.GetGlyphMetric( nGlyph );
 
         if( aStipple != None )
@@ -1160,10 +1140,10 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
     // draw complex text
     ServerFont& rFont = rLayout.GetServerFont();
 
-    if( aX11GlyphPeer.GetGlyphSet( rFont ) )
+    if( getGlyphPeer().GetGlyphSet( rFont, m_nScreen ) )
         DrawServerAAFontString( rLayout );
 #ifndef MACOSX        /* ignore X11 fonts on MACOSX */
-    else if( !aX11GlyphPeer.ForcedAntialiasing( rFont ) )
+    else if( !getGlyphPeer().ForcedAntialiasing( rFont, m_nScreen ) )
         DrawServerSimpleFontString( rLayout );
 #endif // MACOSX
     else
@@ -1304,7 +1284,7 @@ bool X11SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     if( nFaceNum < 0 )
         nFaceNum = 0;
 
-    GlyphCache::EnsureInstance( aX11GlyphPeer, false );
+    GlyphCache::EnsureInstance( getGlyphPeer(), false );
     GlyphCache& rGC = GlyphCache::GetInstance();
     const rtl::OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
     rGC.AddFontFile( rFileName, nFaceNum, aInfo.m_nID, aDFA );
@@ -1318,6 +1298,7 @@ bool X11SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
 
 void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
 {
+    // allow disabling of native X11 fonts
     static const char* pEnableX11FontStr = getenv( "SAL_ENABLE_NATIVE_XFONTS" );
     if( !pEnableX11FontStr || (pEnableX11FontStr[0] != '0') )
     {
@@ -1327,13 +1308,12 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
     }
 
     // prepare the GlyphCache using psprint's font infos
-    aX11GlyphPeer.SetDisplay( GetXDisplay(),
-        GetDisplay()->GetVisual()->GetVisual() );
+    getGlyphPeer().SetDisplay( *GetDisplay() );
 
 #ifdef MACOSX
-    GlyphCache::EnsureInstance( aX11GlyphPeer, true );
+    GlyphCache::EnsureInstance( getGlyphPeer(), true );
 #else
-    GlyphCache::EnsureInstance( aX11GlyphPeer, false );
+    GlyphCache::EnsureInstance( getGlyphPeer(), false );
 #endif
     GlyphCache& rGC = GlyphCache::GetInstance();
 
