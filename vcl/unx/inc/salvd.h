@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:27:28 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:02:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@ class X11SalVirtualDevice : public SalVirtualDevice
 
 
     Pixmap          hDrawable_;
+    int             m_nScreen;
 
     int             nDX_;
     int             nDY_;
@@ -70,6 +71,7 @@ public:
     BOOL            Init( SalDisplay *pDisplay,
                           long nDX, long nDY,
                           USHORT nBitCount,
+                          int nScreen,
                           Pixmap hDrawable = None,
                           void* pRenderFormat = NULL );
     inline  void            InitGraphics( X11SalVirtualDevice *pVD );
@@ -81,6 +83,7 @@ public:
     inline  USHORT          GetDepth() const { return nDepth_; }
     int                     GetWidth() const { return nDX_; }
     int                     GetHeight() const { return nDY_; }
+    int                     GetScreenNumber() const { return m_nScreen; }
 
     virtual SalGraphics*    GetGraphics();
     virtual void            ReleaseGraphics( SalGraphics* pGraphics );
