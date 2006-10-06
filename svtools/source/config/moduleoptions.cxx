@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:27:25 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:35:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,8 +193,9 @@ struct FactoryInfo
             bChangedTemplateFile        = sal_False         ;
             bChangedWindowAttributes    = sal_False         ;
             bChangedEmptyDocumentURL    = sal_False         ;
+            bChangedDefaultFilter       = sal_False         ;
             bChangedIcon                = sal_False         ;
-            bDefaultFilterReadonly      = sal_False;
+            bDefaultFilterReadonly      = sal_False         ;
         }
 
         //---------------------------------------------------------------------------------------------------------
