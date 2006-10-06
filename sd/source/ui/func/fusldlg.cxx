@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusldlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:55:19 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:52:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,6 +155,9 @@ void FuSlideShowDlg::DoExecute( SfxRequest& rReq )
     aDlgSet.Put( SfxUInt32Item( ATTR_PRESENT_PAUSE_TIMEOUT, rPresentationSettings.mnPauseTimeout ) );
     aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_SHOW_PAUSELOGO, rPresentationSettings.mbShowPauseLogo ) );
 
+    SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
+    aDlgSet.Put( SfxInt32Item( ATTR_PRESENT_DISPLAY, pOptions->GetDisplay() ) );
+
     //CHINA001 SdStartPresentationDlg aDlg (pWindow, aDlgSet, aPageNameList, pCustomShowList );
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
     DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
@@ -266,6 +269,8 @@ void FuSlideShowDlg::DoExecute( SfxRequest& rReq )
             bValuesChanged = true;
             rPresentationSettings.mbShowPauseLogo = bValue;
         }
+
+        pOptions->SetDisplay( ITEMVALUE( aDlgSet, ATTR_PRESENT_DISPLAY, SfxInt32Item ) );
 
         // wenn sich etwas geaendert hat, setzen wir das Modified-Flag,
         if ( bValuesChanged )
