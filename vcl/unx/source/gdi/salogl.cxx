@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:39:27 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:06:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,12 +79,12 @@ using namespace rtl;
 // -----------------
 
 // Members
-GLXContext      X11SalOpenGL::maGLXContext = 0;
-Display*        X11SalOpenGL::mpDisplay    = 0;
-XVisualInfo*    X11SalOpenGL::mpVisualInfo = 0;
-BOOL            X11SalOpenGL::mbHaveGLVisual = FALSE;
+GLXContext          X11SalOpenGL::maGLXContext = 0;
+Display*            X11SalOpenGL::mpDisplay    = 0;
+const XVisualInfo*  X11SalOpenGL::mpVisualInfo = 0;
+BOOL                X11SalOpenGL::mbHaveGLVisual = FALSE;
 
-oslModule      X11SalOpenGL::mpGLLib    = 0;
+oslModule           X11SalOpenGL::mpGLLib    = 0;
 #ifdef SOLARIS
 oslModule      aMotifLib;
 #endif
@@ -102,12 +102,12 @@ void       (*X11SalOpenGL::pFlush)() = 0;
 // -------------
 // - X11SalOpenGL -
 // -------------
-
+// FIXME: Multiscreen
 X11SalOpenGL::X11SalOpenGL( SalGraphics* pSGraphics )
 {
     X11SalGraphics* pGraphics = static_cast<X11SalGraphics*>(pSGraphics);
     mpDisplay    = pGraphics->GetXDisplay();
-    mpVisualInfo = pGraphics->GetDisplay()->GetVisual();
+    mpVisualInfo = &pGraphics->GetDisplay()->GetVisual(pGraphics->GetScreenNumber());
     maDrawable   = pGraphics->GetDrawable();
 }
 
@@ -173,9 +173,9 @@ bool X11SalOpenGL::IsValid()
         {
             int nDoubleBuffer = 0;
             int nHaveGL = 0;
-            pGetConfig( mpDisplay, mpVisualInfo,
+            pGetConfig( mpDisplay, const_cast<XVisualInfo*>(mpVisualInfo),
                         GLX_USE_GL, &nHaveGL );
-            pGetConfig( mpDisplay, mpVisualInfo,
+            pGetConfig( mpDisplay, const_cast<XVisualInfo*>(mpVisualInfo),
                         GLX_DOUBLEBUFFER, &nDoubleBuffer );
             if( nHaveGL && ! nDoubleBuffer )
             {
@@ -185,7 +185,7 @@ bool X11SalOpenGL::IsValid()
                 pSalDisplay->GetXLib()->SetIgnoreXErrors( TRUE );
                 mbHaveGLVisual = TRUE;
 
-                maGLXContext = pCreateContext( mpDisplay, mpVisualInfo, 0, True );
+                maGLXContext = pCreateContext( mpDisplay, const_cast<XVisualInfo*>(mpVisualInfo), 0, True );
                 if( pSalDisplay->GetXLib()->WasXError() )
                     mbHaveGLVisual = FALSE;
                 else
