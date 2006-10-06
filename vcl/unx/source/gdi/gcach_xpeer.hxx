@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_xpeer.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-09 12:21:19 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:05:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,34 +42,51 @@
 #include <X11/extensions/Xrender.h>
 #include <postx.h>
 
+class SalDisplay;
+struct MultiScreenGlyph;
+
 class X11GlyphPeer
 : public GlyphCachePeer
 {
 public:
                         X11GlyphPeer();
+    virtual            ~X11GlyphPeer();
 
-    void                SetDisplay( Display*, Visual* );
+    void                SetDisplay( const SalDisplay& );
 
-    Pixmap              GetPixmap( ServerFont&, int nGlyphIndex );
+    Pixmap              GetPixmap( ServerFont&, int nGlyphIndex, int nScreen );
     const RawBitmap*    GetRawBitmap( ServerFont&, int nGlyphIndex );
-    bool                ForcedAntialiasing( const ServerFont& ) const;
+    bool                ForcedAntialiasing( const ServerFont&, int nScreen ) const;
 
-    GlyphSet            GetGlyphSet( ServerFont& );
+    GlyphSet            GetGlyphSet( ServerFont&, int nScreen );
     Glyph               GetGlyphId( ServerFont&, int nGlyphIndex );
 
 protected:
     virtual void        RemovingFont( ServerFont& );
     virtual void        RemovingGlyph( ServerFont&, GlyphData&, int nGlyphIndex );
 
+    MultiScreenGlyph*   PrepareForMultiscreen( ExtGlyphData& ) const;
+    void                SetRenderGlyph( GlyphData&, Glyph ) const;
+    void                SetRawBitmap( GlyphData&, const RawBitmap* ) const;
+    void                SetPixmap( GlyphData&, Pixmap, int nScreen ) const;
+    Glyph               GetRenderGlyph( const GlyphData& ) const;
+    const RawBitmap*    GetRawBitmap( const GlyphData& ) const;
+    Pixmap              GetPixmap( const GlyphData&, int nScreen ) const;
+
 private:
-    enum { EMPTY_KIND=0, PIXMAP_KIND, XRENDER_KIND, AAFORCED_KIND };
-
     Display*            mpDisplay;
-    RawBitmap           maRawBitmap;
-    bool                mbForcedAA;
 
-    bool                mbUsingXRender;
+    // thirty-two screens should be enough for everyone...
+    static const int MAX_GCACH_SCREENS = 32;
+    int                 mnMaxScreens;
+    int                 mnDefaultScreen;
+    int                 mnExtByteCount;
+    sal_uInt32          mnForcedAA;
+    sal_uInt32          mnUsingXRender;
+
+    int                 mnRenderVersion;
     XRenderPictFormat*  mpGlyphFormat;
+    RawBitmap           maRawBitmap;
 
 #ifndef XRENDER_LINK
 public:
