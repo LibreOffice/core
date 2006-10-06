@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:34:59 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:04:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,8 +114,8 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #ifndef _SV_SALINST_HXX
 #include <salinst.hxx>
 #endif
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#ifndef _SV_SALGDI_H
+#include <salgdi.h>
 #endif
 #ifndef _SV_SALFRAME_H
 #include <salframe.h>
@@ -464,8 +464,8 @@ static sal_Bool sal_IsTrustedSolaris (Display *p_display)
 // -=-= SalDisplay -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 BOOL SalDisplay::BestVisual( Display     *pDisplay,
-                                   int          nScreen,
-                                   XVisualInfo &rVI )
+                             int          nScreen,
+                             XVisualInfo &rVI )
 {
     VisualID nDefVID = XVisualIDFromVisual( DefaultVisual( pDisplay, nScreen ) );
     VisualID    nVID = 0;
@@ -477,9 +477,10 @@ BOOL SalDisplay::BestVisual( Display     *pDisplay,
         return rVI.visualid == nDefVID;
 
     XVisualInfo aVI;
+    aVI.screen = nScreen;
     // get all visuals
     int nVisuals;
-    XVisualInfo* pVInfos = XGetVisualInfo( pDisplay, VisualNoMask,
+    XVisualInfo* pVInfos = XGetVisualInfo( pDisplay, VisualScreenMask,
                                            &aVI, &nVisuals );
     // pVInfos should contain at least one visual, otherwise
     // we're in trouble
@@ -584,11 +585,10 @@ extern "C" {
 }
 #endif /* HAVE_LIBSN */
 
-SalDisplay::SalDisplay( Display *display, Colormap aColMap ) :
+SalDisplay::SalDisplay( Display *display ) :
         mpInputMethod( NULL ),
         mpFallbackFactory ( NULL ),
         pDisp_( display ),
-        hRefWindow_( None ),
         m_pWMAdaptor( NULL ),
         m_pSnDisplay( NULL ),
         m_pSnLauncheeContext( NULL )
@@ -601,17 +601,9 @@ SalDisplay::SalDisplay( Display *display, Colormap aColMap ) :
     DBG_ASSERT( ! pSalData->GetDisplay(), "Second SalDisplay created !!!\n" );
     pSalData->SetSalDisplay( this );
 
-#ifdef _USE_PRINT_EXTENSION_
-    pXLib_    = XSalIsDisplay( pDisp_ ) ? pSalData->GetLib() : NULL;
-#else
     pXLib_    = pSalData->GetLib();
-#endif
-    nScreen_  = DefaultScreen( pDisp_ );
+    m_nDefaultScreen = DefaultScreen( pDisp_ );
 
-    if (!aColMap)
-        aColMap = DefaultColormap( display, nScreen_ );
-    if( !IsDisplay() && !aColMap)
-        aColMap = 1;   // trick for XPrinter
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -636,6 +628,7 @@ void SalDisplay::doDestruct()
 
     delete m_pWMAdaptor;
     X11SalBitmap::ImplDestroyCache();
+    X11SalGraphics::releaseGlyphPeer();
     DestroyFontCache();
 
 #ifdef HAVE_LIBSN
@@ -657,25 +650,27 @@ void SalDisplay::doDestruct()
         // this object after this point
         osl_destroyMutex( hEventGuard_ );
 
-        XDestroyWindow( pDisp_, hRefWindow_ );
-        if( pMonoGC_ != pCopyGC_ )
-            XFreeGC( pDisp_, pMonoGC_ );
-        XFreeGC( pDisp_, pCopyGC_ );
-        XFreeGC( pDisp_, pAndInvertedGC_ );
-        XFreeGC( pDisp_, pAndGC_ );
-        XFreeGC( pDisp_, pOrGC_ );
-        XFreeGC( pDisp_, pStippleGC_ );
-        XFreePixmap( pDisp_, hInvert50_ );
+        for( unsigned int i = 0; i < m_aScreens.size(); i++ )
+        {
+            ScreenData& rData = m_aScreens[i];
+            if( rData.m_bInit )
+            {
+                if( rData.m_aMonoGC != rData.m_aCopyGC )
+                    XFreeGC( pDisp_, rData.m_aMonoGC );
+                XFreeGC( pDisp_, rData.m_aCopyGC );
+                XFreeGC( pDisp_, rData.m_aAndInvertedGC );
+                XFreeGC( pDisp_, rData.m_aAndGC );
+                XFreeGC( pDisp_, rData.m_aOrGC );
+                XFreeGC( pDisp_, rData.m_aStippleGC );
+                XFreePixmap( pDisp_, rData.m_hInvert50 );
+                XDestroyWindow( pDisp_, rData.m_aRefWindow );
+                Colormap aColMap = rData.m_aColormap.GetXColormap();
+                if( aColMap != None && aColMap != DefaultColormap( pDisp_, i ) )
+                    XFreeColormap( pDisp_, aColMap );
+            }
+        }
 
         hEventGuard_            = (oslMutex)ILLEGAL_POINTER;
-        hRefWindow_             = (XLIB_Window)ILLEGAL_POINTER;
-        pMonoGC_                = (GC)ILLEGAL_POINTER;
-        pCopyGC_                = (GC)ILLEGAL_POINTER;
-        pAndInvertedGC_         = (GC)ILLEGAL_POINTER;
-        pAndGC_                 = (GC)ILLEGAL_POINTER;
-        pOrGC_                  = (GC)ILLEGAL_POINTER;
-        pStippleGC_             = (GC)ILLEGAL_POINTER;
-        hInvert50_              = None;
 
         for( size_t i = 0; i < POINTER_COUNT; i++ )
         {
@@ -684,18 +679,7 @@ void SalDisplay::doDestruct()
         }
 
         pXLib_->Remove( ConnectionNumber( pDisp_ ) );
-
-        // free colormap before modifying pVisual_
-        delete m_pColormap;
-
-        delete pVisual_;
-
-        if( pRootVisual_ != pVisual_ )
-            delete pRootVisual_;
     }
-
-    pVisual_        = (SalVisual*)ILLEGAL_POINTER;
-    pRootVisual_    = (SalVisual*)ILLEGAL_POINTER;
 
     if( pSalData->GetDisplay() == this )
         pSalData->SetSalDisplay( NULL );
@@ -746,10 +730,10 @@ fd
   return TRUE;
 }
 
-SalX11Display::SalX11Display( Display *display, Visual *pVisual, Colormap aColMap, bool bHandleStartupNotification )
-        : SalDisplay( display, aColMap )
+SalX11Display::SalX11Display( Display *display, bool bHandleStartupNotification )
+        : SalDisplay( display )
 {
-    Init( aColMap, pVisual, bHandleStartupNotification );
+    Init( bHandleStartupNotification );
 
     pXLib_->Insert( ConnectionNumber( pDisp_ ),
                     this,
@@ -771,33 +755,156 @@ SalX11Display::~SalX11Display()
     }
 }
 
+void SalDisplay::initScreen( int nScreen ) const
+{
+    if( nScreen < 0 || nScreen >= static_cast<int>(m_aScreens.size()) )
+        nScreen = m_nDefaultScreen;
+    ScreenData& rSD = const_cast<ScreenData&>(m_aScreens[nScreen]);
+    if( rSD.m_bInit )
+        return;
+    rSD.m_bInit = true;
+
+    XVisualInfo aVI;
+    Colormap    aColMap;
+
+    if( SalDisplay::BestVisual( pDisp_, nScreen, aVI ) ) // DefaultVisual
+        aColMap = DefaultColormap( pDisp_, nScreen );
+    else
+        aColMap = XCreateColormap( pDisp_,
+                                   RootWindow( pDisp_, nScreen ),
+                                   aVI.visual,
+                                   AllocNone );
+
+    Screen* pScreen = ScreenOfDisplay( pDisp_, nScreen );
+
+    rSD.m_aSize = Size( WidthOfScreen( pScreen ), HeightOfScreen( pScreen ) );
+    rSD.m_aRoot = RootWindow( pDisp_, nScreen );
+    rSD.m_aVisual = SalVisual( &aVI );
+    rSD.m_aColormap = SalColormap( this, aColMap, nScreen );
+
+    // - - - - - - - - - - Reference Window/Default Drawable - -
+    XSetWindowAttributes aXWAttributes;
+    aXWAttributes.border_pixel      = 0;
+    aXWAttributes.background_pixel  = 0;
+    aXWAttributes.colormap          = aColMap;
+    rSD.m_aRefWindow     = XCreateWindow( pDisp_,
+                                          rSD.m_aRoot,
+                                          0,0, 16,16, 0,
+                                          rSD.m_aVisual.GetDepth(),
+                                          InputOutput,
+                                          rSD.m_aVisual.GetVisual(),
+                                          CWBorderPixel|CWBackPixel|CWColormap,
+                                          &aXWAttributes );
+
+    // set client leader (session id gets set when session is started)
+    if( rSD.m_aRefWindow )
+    {
+        // client leader must have WM_CLIENT_LEADER pointing to itself
+        XChangeProperty( pDisp_,
+                         rSD.m_aRefWindow,
+                         XInternAtom( pDisp_, "WM_CLIENT_LEADER", False ),
+                         XA_WINDOW,
+                         32,
+                         PropModeReplace,
+                         (unsigned char*)&rSD.m_aRefWindow,
+                         1
+                         );
+
+        ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
+        const char* argv[2];
+        argv[0] = "/bin/sh";
+        argv[1] = aExec.GetBuffer();
+        XSetCommand( pDisp_, rSD.m_aRefWindow, const_cast<char**>(argv), 2 );
+        XSelectInput( pDisp_, rSD.m_aRefWindow, PropertyChangeMask );
+
+        // - - - - - - - - - - GCs - - - - - - - - - - - - - - - - -
+        XGCValues values;
+        values.graphics_exposures   = False;
+        values.fill_style           = FillOpaqueStippled;
+        values.background           = (1<<rSD.m_aVisual.GetDepth())-1;
+        values.foreground           = 0;
+
+        rSD.m_aCopyGC       = XCreateGC( pDisp_,
+                                         rSD.m_aRefWindow,
+                                         GCGraphicsExposures
+                                         | GCForeground
+                                         | GCBackground,
+                                         &values );
+        rSD.m_aAndInvertedGC= XCreateGC( pDisp_,
+                                         rSD.m_aRefWindow,
+                                         GCGraphicsExposures
+                                         | GCForeground
+                                         | GCBackground,
+                                         &values );
+        rSD.m_aAndGC        = XCreateGC( pDisp_,
+                                         rSD.m_aRefWindow,
+                                         GCGraphicsExposures
+                                         | GCForeground
+                                         | GCBackground,
+                                         &values );
+        rSD.m_aOrGC         = XCreateGC( pDisp_,
+                                         rSD.m_aRefWindow,
+                                         GCGraphicsExposures
+                                         | GCForeground
+                                         | GCBackground,
+                                         &values    );
+        rSD.m_aStippleGC    = XCreateGC( pDisp_,
+                                         rSD.m_aRefWindow,
+                                         GCGraphicsExposures
+                                         | GCFillStyle
+                                         | GCForeground
+                                         | GCBackground,
+                                         &values );
+
+        XSetFunction( pDisp_, rSD.m_aAndInvertedGC,  GXandInverted );
+        XSetFunction( pDisp_, rSD.m_aAndGC,          GXand );
+        // #44556# PowerPC Solaris 2.5 (XSun 3500) Bug: GXor = GXnop
+        //XSetFunction( pDisp_, pOrGC_,         GXor );
+        XSetFunction( pDisp_, rSD.m_aOrGC,           GXxor );
+
+        if( 1 == rSD.m_aVisual.GetDepth() )
+        {
+            XSetFunction( pDisp_, rSD.m_aCopyGC, GXcopyInverted );
+            rSD.m_aMonoGC = rSD.m_aCopyGC;
+        }
+        else
+        {
+            Pixmap hPixmap = XCreatePixmap( pDisp_, rSD.m_aRefWindow, 1, 1, 1 );
+            rSD.m_aMonoGC = XCreateGC( pDisp_,
+                                       hPixmap,
+                                       GCGraphicsExposures,
+                                       &values );
+            XFreePixmap( pDisp_, hPixmap );
+        }
+        rSD.m_hInvert50 = XCreateBitmapFromData( pDisp_,
+                                                 rSD.m_aRefWindow,
+                                                 invert50_bits,
+                                                 invert50_width,
+                                                 invert50_height );
+    }
+}
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalDisplay::Init( Colormap hXColmap, Visual *pVisual, bool
+void SalDisplay::Init( bool
 #ifdef HAVE_LIBSN
 bHandleStartupNotification
 #endif
 )
 {
-    XVisualInfo aXVI;
-
-    if (!pVisual)
-        pVisual = DefaultVisual( pDisp_, nScreen_ );
-    sal_GetVisualInfo( pDisp_, XVisualIDFromVisual( pVisual ), aXVI );
-
     for( size_t i = 0; i < POINTER_COUNT; i++ )
         aPointerCache_[i] = None;
 
     eWindowManager_     = otherwm;
     nProperties_        = PROPERTY_DEFAULT;
     hEventGuard_        = NULL;
-    pFontCache_         = NULL;
+    m_pFontCache        = NULL;
     mpFontList          = (XlfdStorage*)NULL;
     mpFactory           = (AttributeProvider*)NULL;
     m_pCapture          = NULL;
-    pVisual_            = new SalVisual( &aXVI );
     m_bXinerama         = false;
-    aSize_              = Size( DisplayWidth ( pDisp_, nScreen_ ),
-                                DisplayHeight( pDisp_, nScreen_ ) );
+
+    int nDisplayScreens = ScreenCount( pDisp_ );
+    m_aScreens = std::vector<ScreenData>(nDisplayScreens);
 
     const char *value;
     /*  #i15507#
@@ -814,8 +921,8 @@ bHandleStartupNotification
     else
     {
         aResolution_     =
-            Pair( DPI( aSize_.Width(),  DisplayWidthMM ( pDisp_, nScreen_ ) ),
-                  DPI( aSize_.Height(), DisplayHeightMM( pDisp_, nScreen_ ) ) );
+            Pair( DPI( WidthOfScreen( DefaultScreenOfDisplay( pDisp_ ) ), DisplayWidthMM ( pDisp_, m_nDefaultScreen ) ),
+                  DPI( HeightOfScreen( DefaultScreenOfDisplay( pDisp_ ) ), DisplayHeightMM( pDisp_, m_nDefaultScreen ) ) );
         mbExactResolution   = false;
     }
 
@@ -826,332 +933,167 @@ bHandleStartupNotification
     SetServerVendor();
     X11SalBitmap::ImplCreateCache();
 
-    if( IsDisplay() )
+    hEventGuard_    = osl_createMutex();
+    bLocal_         = FALSE; /* dont care, initialize later by
+                                calling SalDisplay::IsLocal() */
+    mbLocalIsValid  = FALSE; /* bLocal_ is not yet initialized */
+
+    // - - - - - - - - - - Synchronize - - - - - - - - - - - - -
+    if( getenv( "SAL_SYNCHRONIZE" ) )
+        XSynchronize( pDisp_, True );
+
+    // - - - - - - - - - - Keyboardmapping - - - - - - - - - - -
+    ModifierMapping();
+
+    // - - - - - - - - - - Window Manager  - - - - - - - - - - -
+    m_pWMAdaptor = ::vcl_sal::WMAdaptor::createWMAdaptor( this );
+    const char *pWM = getenv( "SAL_WM" );
+    if( pWM )
     {
-        hEventGuard_    = osl_createMutex();
-
-        pScreen_        = ScreenOfDisplay( pDisp_, nScreen_ );
-        hRootWindow_    = RootWindowOfScreen( pScreen_ );
-
-        bLocal_         = FALSE; /* dont care, initialize later by
-                                    calling SalDisplay::IsLocal() */
-        mbLocalIsValid  = FALSE; /* bLocal_ is not yet initialized */
-
-        // - - - - - - - - - - Visuals - - - - - - - - - - - - - - -
-        Visual *pRootVisual = DefaultVisual( pDisp_, nScreen_ );
-        if( pRootVisual->visualid != pVisual_->GetVisualId() )
-        {
-            XVisualInfo aXVInfo;
-            sal_GetVisualInfo( pDisp_, pRootVisual->visualid, aXVInfo );
-            pRootVisual_ = new SalVisual( &aXVInfo );
-        }
-        else
-            pRootVisual_ = pVisual_;
-
-        // - - - - - - - - - - Reference Window/Default Drawable - -
-        XSetWindowAttributes aXWAttributes;
-        aXWAttributes.border_pixel      = 0;
-        aXWAttributes.background_pixel  = 0;
-        aXWAttributes.colormap          = hXColmap;
-        hRefWindow_     = XCreateWindow( pDisp_,
-                                         hRootWindow_,
-                                         0,0, 16,16, 0,
-                                         pVisual_->GetDepth(),
-                                         InputOutput,
-                                         pVisual_->GetVisual(),
-                                         CWBorderPixel|CWBackPixel|CWColormap,
-                                         &aXWAttributes );
-
-        // set client leader (session id gets set when session is started)
-        if( hRefWindow_ )
-        {
-            // client leader must have WM_CLIENT_LEADER pointing to itself
-            XChangeProperty( pDisp_,
-                             hRefWindow_,
-                             XInternAtom( pDisp_, "WM_CLIENT_LEADER", False ),
-                             XA_WINDOW,
-                             32,
-                             PropModeReplace,
-                             (unsigned char*)&hRefWindow_,
-                             1
-
-                             );
-
-            ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
-            const char* argv[2];
-            argv[0] = "/bin/sh";
-            argv[1] = aExec.GetBuffer();
-            XSetCommand( pDisp_, hRefWindow_, const_cast<char**>(argv), 2 );
-
-            XSelectInput( pDisp_, hRefWindow_, PropertyChangeMask );
-
-        }
-
-        // - - - - - - - - - - Synchronize - - - - - - - - - - - - -
-        if( getenv( "SAL_SYNCHRONIZE" ) )
-            XSynchronize( pDisp_, True );
+        long int nWM = 0;
+        sscanf( pWM, "%li", &nWM );
+        eWindowManager_ = SalWM(nWM);
     }
+    else if( XInternAtom( pDisp_, "_SGI_TELL_WM", True ) )
+        eWindowManager_ = FourDwm;
+    else if( XInternAtom( pDisp_, "KWM_RUNNING", True ) )
+        eWindowManager_ = mwm; // naja, eigentlich kwm ...
+    else if( XInternAtom( pDisp_, "_OL_WIN_ATTR", True ) )
+        eWindowManager_ = olwm;
+    else if( m_pWMAdaptor->getWindowManagerName().EqualsAscii( "Dtwm" ) )
+        eWindowManager_ = dtwm;
+
+    // - - - - - - - - - - Properties  - - - - - - - - - - - - -
+    const char *pProperties = getenv( "SAL_PROPERTIES" );
+    if( pProperties )
+        sscanf( pProperties, "%li", &nProperties_ );
     else
     {
-        pScreen_            = NULL;
-        hRootWindow_        = None;
-        pRootVisual_        = pVisual_;
-#ifdef DBG_UTIL
-        hRefWindow_         = (XLIB_Window)ILLEGAL_POINTER;
-#endif
-#if defined(_USE_PRINT_EXTENSION_)
-
-      pScreen_            = ScreenOfDisplay( pDisp_, nScreen_ );
-      hRootWindow_        = RootWindowOfScreen( pScreen_ );
-      pRootVisual_        = pVisual_;
-
-      XSetWindowAttributes aXWAttributes;
-      aXWAttributes.border_pixel              = 0;
-      aXWAttributes.background_pixel          = 0;
-      aXWAttributes.colormap                  = hXColmap;
-      hRefWindow_                             = XCreateWindow( pDisp_,
-                                                               hRootWindow_,
-                                                               0, 0, 16, 16, 0,
-                                                               pVisual_->GetDepth(),
-                                                               InputOutput,
-                                                               pVisual_->GetVisual(),
-                                                               CWBorderPixel|CWBackPixel|CWColormap,
-                                                               &aXWAttributes );
-
-#endif
-
-        hInvert50_          = None;
-        bLocal_             = TRUE; /* always true for xprinter */
-        mbLocalIsValid      = TRUE; /* yes bLocal_ is initialized */
-        nProperties_       &= ~PROPERTY_SUPPORT_XSetClipMask; //XPrinter doesnt
-    }
-
-    // - - - - - - - - - - Images  - - - - - - - - - - - - - - -
-    m_pColormap             = new SalColormap( this, hXColmap );
-
-    // - - - - - - - - - - GCs - - - - - - - - - - - - - - - - -
-    XGCValues values;
-    values.graphics_exposures   = False;
-    values.fill_style           = FillOpaqueStippled;
-    values.background           = (1<<pVisual_->GetDepth())-1;
-    values.foreground           = 0;
-
-    pCopyGC_            = XCreateGC( pDisp_,
-                                     hRefWindow_,
-                                     GCGraphicsExposures
-                                     | GCForeground
-                                     | GCBackground,
-                                     &values );
-    pAndInvertedGC_     = XCreateGC( pDisp_,
-                                     hRefWindow_,
-                                     GCGraphicsExposures
-                                     | GCForeground
-                                     | GCBackground,
-                                     &values );
-    pAndGC_             = XCreateGC( pDisp_,
-                                     hRefWindow_,
-                                     GCGraphicsExposures
-                                     | GCForeground
-                                     | GCBackground,
-                                     &values );
-    pOrGC_              = XCreateGC( pDisp_,
-                                     hRefWindow_,
-                                     GCGraphicsExposures
-                                     | GCForeground
-                                     | GCBackground,
-                                     &values    );
-    pStippleGC_         = XCreateGC( pDisp_,
-                                     hRefWindow_,
-                                     GCGraphicsExposures
-                                     | GCFillStyle
-                                     | GCForeground
-                                     | GCBackground,
-                                     &values );
-
-    XSetFunction( pDisp_, pAndInvertedGC_,  GXandInverted );
-    XSetFunction( pDisp_, pAndGC_,          GXand );
-    // #44556# PowerPC Solaris 2.5 (XSun 3500) Bug: GXor = GXnop
-    //XSetFunction( pDisp_, pOrGC_,         GXor );
-    XSetFunction( pDisp_, pOrGC_,           GXxor );
-
-    if( 1 == pVisual_->GetDepth() ) // irgendwer dreht immer
-    {
-        XSetFunction( pDisp_, pCopyGC_, GXcopyInverted );
-        pMonoGC_    = pCopyGC_;
-    }
-    else
-    {
-        Pixmap hPixmap = XCreatePixmap( pDisp_, hRefWindow_, 1, 1, 1 );
-        pMonoGC_    = XCreateGC( pDisp_,
-                                 hPixmap,
-                                 GCGraphicsExposures,
-                                 &values );
-        XFreePixmap( pDisp_, hPixmap );
-    }
-
-    if( IsDisplay() )
-    {
-        hInvert50_ = XCreateBitmapFromData( pDisp_,
-                                            hRefWindow_,
-                                            invert50_bits,
-                                            invert50_width,
-                                            invert50_height );
-
-        // - - - - - - - - - - Keyboardmapping - - - - - - - - - - -
-
-        ModifierMapping();
-
-        m_pWMAdaptor = ::vcl_sal::WMAdaptor::createWMAdaptor( this );
-        // - - - - - - - - - - Window Manager  - - - - - - - - - - -
-        const char *pWM = getenv( "SAL_WM" );
-        if( pWM )
-        {
-            long int nWM = 0;
-            sscanf( pWM, "%li", &nWM );
-            eWindowManager_ = SalWM(nWM);
-        }
-        else if( XInternAtom( pDisp_, "_SGI_TELL_WM", True ) )
-            eWindowManager_ = FourDwm;
-        else if( XInternAtom( pDisp_, "KWM_RUNNING", True ) )
-            eWindowManager_ = mwm; // naja, eigentlich kwm ...
-        else if( XInternAtom( pDisp_, "_OL_WIN_ATTR", True ) )
-            eWindowManager_ = olwm;
-        else if( m_pWMAdaptor->getWindowManagerName().EqualsAscii( "Dtwm" ) )
-            eWindowManager_ = dtwm;
-
-        // - - - - - - - - - - Properties  - - - - - - - - - - - - -
-        const char *pProperties = getenv( "SAL_PROPERTIES" );
-        if( pProperties )
-            sscanf( pProperties, "%li", &nProperties_ );
-        else
-        {
 #if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD || defined IRIX || defined MACOSX
-            nProperties_ |= PROPERTY_FEATURE_Maximize;
+        nProperties_ |= PROPERTY_FEATURE_Maximize;
 #endif
-            // Server Bugs & Properties
-            if( GetServerVendor() == vendor_excursion )
-            {
-                nProperties_ |= PROPERTY_BUG_Stipple;
-                nProperties_ |= PROPERTY_BUG_DrawLine;
-                nProperties_ &= ~PROPERTY_SUPPORT_XSetClipMask;
-            }
-            else
-            if( GetServerVendor() == vendor_attachmate )
-            {
-                nProperties_ |= PROPERTY_BUG_CopyPlane_RevertBWPixel;
-            }
-            else
-            if( GetServerVendor() == vendor_ibm )
-            {
-                nProperties_ |= PROPERTY_BUG_XA_FAMILY_NAME_nil;
+        // Server Bugs & Properties
+        if( GetServerVendor() == vendor_excursion )
+        {
+            nProperties_ |= PROPERTY_BUG_Stipple;
+            nProperties_ |= PROPERTY_BUG_DrawLine;
+            nProperties_ &= ~PROPERTY_SUPPORT_XSetClipMask;
+        }
+        else
+        if( GetServerVendor() == vendor_attachmate )
+        {
+            nProperties_ |= PROPERTY_BUG_CopyPlane_RevertBWPixel;
+        }
+        else
+        if( GetServerVendor() == vendor_ibm )
+        {
+            nProperties_ |= PROPERTY_BUG_XA_FAMILY_NAME_nil;
 
-                if( otherwm == eWindowManager_ ) eWindowManager_ = mwm;
-            }
-            else
-            if( GetServerVendor() == vendor_xfree )
-            {
-                nProperties_ |= PROPERTY_BUG_XCopyArea_GXxor;
+            if( otherwm == eWindowManager_ ) eWindowManager_ = mwm;
+        }
+        else
+        if( GetServerVendor() == vendor_xfree )
+        {
+            nProperties_ |= PROPERTY_BUG_XCopyArea_GXxor;
 #if defined LINUX || defined FREEBSD || defined MACOSX
-                // otherwm and olwm are a kind of default, which are not detected
-                // carefully. if we are running linux (i.e. not netbsd) on an xfree
-                // display, fvwm is most probable the wm to choose, confusing with mwm
-                // doesn't harm. #57791# start maximized if possible
-                if(    (otherwm == eWindowManager_)
-                    || (olwm    == eWindowManager_ ))
-                {
-                    eWindowManager_ = fvwm; // ???
-                    nProperties_ |= PROPERTY_FEATURE_Maximize;
-                }
+            // otherwm and olwm are a kind of default, which are not detected
+            // carefully. if we are running linux (i.e. not netbsd) on an xfree
+            // display, fvwm is most probable the wm to choose, confusing with mwm
+            // doesn't harm. #57791# start maximized if possible
+            if(    (otherwm == eWindowManager_)
+                || (olwm    == eWindowManager_ ))
+            {
+                eWindowManager_ = fvwm; // ???
+                nProperties_ |= PROPERTY_FEATURE_Maximize;
+            }
 #else
-                if( otherwm == eWindowManager_ ) eWindowManager_ = winmgr;
+            if( otherwm == eWindowManager_ ) eWindowManager_ = winmgr;
 #endif
 #if defined SOLARIS && defined SPARC
-                nProperties_ |= PROPERTY_BUG_Bitmap_Bit_Order;
-                // solaris xlib seems to have problems with putting images
-                // in correct bit order to xfree 8 bit displays
+            nProperties_ |= PROPERTY_BUG_Bitmap_Bit_Order;
+            // solaris xlib seems to have problems with putting images
+            // in correct bit order to xfree 8 bit displays
 #endif
-            }
-            else
-            if( GetServerVendor() == vendor_sun )
-            {
-                // nicht alle! (bekannt: nur Sparc II CG3, CG6?)
-                nProperties_ &= ~PROPERTY_SUPPORT_XSetClipMask;
+        }
+        else
+        if( GetServerVendor() == vendor_sun )
+        {
+            // nicht alle! (bekannt: nur Sparc II CG3, CG6?)
+            nProperties_ &= ~PROPERTY_SUPPORT_XSetClipMask;
 
-                // trusted solaris doesn't allow to change properties on the
-                // wm decoration window
-                if (sal_IsTrustedSolaris (pDisp_))
-                    nProperties_ |= PROPERTY_FEATURE_TrustedSolaris;
+            // trusted solaris doesn't allow to change properties on the
+            // wm decoration window
+            if (sal_IsTrustedSolaris (pDisp_))
+                nProperties_ |= PROPERTY_FEATURE_TrustedSolaris;
 
-                // Fehler im Sun-Solaris X86 Server !
-                if (ImageByteOrder(GetDisplay()) == LSBFirst)
-                {
-                    nProperties_ |= PROPERTY_BUG_Tile;
-                    static const char* pSal3ButtonEmulate = getenv( "SAL_ENABLE_BUTTON3_MAPPING" );
-                    if( pSal3ButtonEmulate && *pSal3ButtonEmulate )
-                        nProperties_ |= PROPERTY_SUPPORT_3ButtonMouse;
-                }
-                else // MSBFirst Sun-Solaris Sparc Server
-                {
-                    // XCopyPlane reverts black and white for 1bit bitmaps
-                    // only sun, only 8bit pseudocolor target
-                    if (   (pVisual_->GetDepth() == 8)
-                        && (pVisual_->GetClass() == PseudoColor))
-                        nProperties_ |= PROPERTY_BUG_CopyPlane_RevertBWPixel;
-                    // Fehler in Solaris 2.5.1
-                    if (VendorRelease ( GetDisplay() ) < 3600)
-                        nProperties_ |= PROPERTY_BUG_FillPolygon_Tile;
-                }
-
-                if( otherwm == eWindowManager_ )
-                    eWindowManager_ = olwm;
-            }
-            else
-            if( GetServerVendor() == vendor_sco )
+            // Fehler im Sun-Solaris X86 Server !
+            if (ImageByteOrder(GetDisplay()) == LSBFirst)
             {
-                if( otherwm == eWindowManager_ ) eWindowManager_ = pmwm;
+                nProperties_ |= PROPERTY_BUG_Tile;
+                nProperties_ |= PROPERTY_SUPPORT_3ButtonMouse;
             }
-            else
-            if( GetServerVendor() == vendor_sgi )
+            else // MSBFirst Sun-Solaris Sparc Server
             {
-                if( pVisual_->GetDepth() > 8 && pVisual_->GetDepth() <= 16 )
-                    nProperties_ |= PROPERTY_BUG_XCopyArea_GXxor;
-                nProperties_ |= PROPERTY_SUPPORT_XSetClipMask;
-
-                if( otherwm == eWindowManager_ ) eWindowManager_ = FourDwm;
-            }
-            else
-            if( GetServerVendor() == vendor_hp )
-            {
-                if( otherwm == eWindowManager_ ) eWindowManager_ = dtwm;
-            }
-            else
-            if( GetServerVendor() == vendor_hummingbird )
-            {
-                if (pVisual_->GetDepth() == 24)
-                    nProperties_ |= PROPERTY_BUG_CopyArea_OnlySmallSlices;
+                // XCopyPlane reverts black and white for 1bit bitmaps
+                // only sun, only 8bit pseudocolor target
+                if (   (GetVisual(m_nDefaultScreen).GetDepth() == 8)
+                    && (GetVisual(m_nDefaultScreen).GetClass() == PseudoColor))
+                    nProperties_ |= PROPERTY_BUG_CopyPlane_RevertBWPixel;
+                // Fehler in Solaris 2.5.1
+                if (VendorRelease ( GetDisplay() ) < 3600)
+                    nProperties_ |= PROPERTY_BUG_FillPolygon_Tile;
             }
 
             if( otherwm == eWindowManager_ )
-            {
-                if( !XInternAtom( pDisp_, "_MOTIF_WM_INFO", True ) )
-                    eWindowManager_ = olwm;
-                // ???
-            }
+                eWindowManager_ = olwm;
+        }
+        else
+        if( GetServerVendor() == vendor_sco )
+        {
+            if( otherwm == eWindowManager_ ) eWindowManager_ = pmwm;
+        }
+        else
+        if( GetServerVendor() == vendor_sgi )
+        {
+            if( GetVisual( m_nDefaultScreen ).GetDepth() > 8 && GetVisual( m_nDefaultScreen ).GetDepth() <= 16 )
+                nProperties_ |= PROPERTY_BUG_XCopyArea_GXxor;
+            nProperties_ |= PROPERTY_SUPPORT_XSetClipMask;
 
-            if( winmgr == eWindowManager_ )
-            {
-                nProperties_ &= ~PROPERTY_SUPPORT_WM_SetPos;
-                nProperties_ &= ~PROPERTY_SUPPORT_WM_Screen;
-                nProperties_ |= PROPERTY_FEATURE_Maximize;
-            }
-            else if( dtwm == eWindowManager_ )
-            {
-                nProperties_ &= ~PROPERTY_SUPPORT_WM_ClientPos;
-            }
-            else if( pmwm == eWindowManager_ )
-            {
-                nProperties_ &= ~PROPERTY_SUPPORT_WM_ClientPos;
-            }
+            if( otherwm == eWindowManager_ )
+                eWindowManager_ = FourDwm;
+        }
+        else
+        if( GetServerVendor() == vendor_hp )
+        {
+            if( otherwm == eWindowManager_ ) eWindowManager_ = dtwm;
+        }
+        else
+        if( GetServerVendor() == vendor_hummingbird )
+        {
+            if (GetVisual(m_nDefaultScreen).GetDepth() == 24)
+                nProperties_ |= PROPERTY_BUG_CopyArea_OnlySmallSlices;
+        }
+
+        if( otherwm == eWindowManager_ )
+        {
+            if( !XInternAtom( pDisp_, "_MOTIF_WM_INFO", True ) )
+                eWindowManager_ = olwm;
+            // ???
+        }
+
+        if( winmgr == eWindowManager_ )
+        {
+            nProperties_ &= ~PROPERTY_SUPPORT_WM_SetPos;
+            nProperties_ &= ~PROPERTY_SUPPORT_WM_Screen;
+            nProperties_ |= PROPERTY_FEATURE_Maximize;
+        }
+        else if( dtwm == eWindowManager_ )
+        {
+            nProperties_ &= ~PROPERTY_SUPPORT_WM_ClientPos;
+        }
+        else if( pmwm == eWindowManager_ )
+        {
+            nProperties_ &= ~PROPERTY_SUPPORT_WM_ClientPos;
         }
     }
 
@@ -2267,7 +2209,7 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
     if( None == aCur )
     {
         XColor      aBlack, aWhite, aDummy;
-        Colormap    hColormap = m_pColormap->GetXColormap();
+        Colormap    hColormap = GetColormap(m_nDefaultScreen).GetXColormap();
 
         XAllocNamedColor( pDisp_, hColormap, "black", &aBlack, &aDummy );
         XAllocNamedColor( pDisp_, hColormap, "white", &aWhite, &aDummy );
@@ -2491,13 +2433,18 @@ long SalX11Display::Dispatch( XEvent *pEvent )
                 ;
             break;
         case PropertyNotify:
-            if( pEvent->xproperty.window == hRefWindow_ &&
-                pEvent->xproperty.atom == getWMAdaptor()->getAtom( WMAdaptor::VCL_SYSTEM_SETTINGS ) )
+            if( pEvent->xproperty.atom == getWMAdaptor()->getAtom( WMAdaptor::VCL_SYSTEM_SETTINGS ) )
             {
-                std::list< SalFrame* >::const_iterator it;
-                for( it = m_aFrames.begin(); it != m_aFrames.end(); ++it )
-                    (*it)->CallCallback( SALEVENT_SETTINGSCHANGED, NULL );
-                return 0;
+                for( unsigned int i = 0; i < m_aScreens.size(); i++ )
+                {
+                    if( pEvent->xproperty.window == m_aScreens[i].m_aRefWindow )
+                    {
+                        std::list< SalFrame* >::const_iterator it;
+                        for( it = m_aFrames.begin(); it != m_aFrames.end(); ++it )
+                            (*it)->CallCallback( SALEVENT_SETTINGSCHANGED, NULL );
+                        return 0;
+                    }
+                }
             }
             break;
         case MappingNotify:
@@ -2725,8 +2672,8 @@ void SalDisplay::PrintInfo() const
         fprintf( stderr, "\tProtocol          \t%d.%d\n",
                  ProtocolVersion(pDisp_), ProtocolRevision(pDisp_) );
         fprintf( stderr, "\tScreen (count,def)\t%d (%d,%d)\n",
-                 nScreen_, ScreenCount(pDisp_), DefaultScreen(pDisp_) );
-        fprintf( stderr, "\tshift ctrl alt    \t%s (0x%lX) %s (0x%lX) %s (0x%lX)\n",
+                 m_nDefaultScreen, ScreenCount(pDisp_), DefaultScreen(pDisp_) );
+        fprintf( stderr, "\tshift ctrl alt    \t%s (0x%X) %s (0x%X) %s (0x%X)\n",
                  KeyStr( nShiftKeySym_ ), nShiftKeySym_,
                  KeyStr( nCtrlKeySym_ ),  nCtrlKeySym_,
                  KeyStr( nMod1KeySym_ ),  nMod1KeySym_ );
@@ -2741,23 +2688,17 @@ void SalDisplay::PrintInfo() const
     fprintf( stderr, "Screen\n" );
     fprintf( stderr, "\tResolution/Size   \t%ld*%ld %ld*%ld %.1lf\"\n",
              aResolution_.A(), aResolution_.B(),
-             aSize_.Width(), aSize_.Height(),
-             Hypothenuse( DisplayWidthMM ( pDisp_, nScreen_ ),
-                          DisplayHeightMM( pDisp_, nScreen_ ) ) / 25.4 );
+             m_aScreens[m_nDefaultScreen].m_aSize.Width(), m_aScreens[m_nDefaultScreen].m_aSize.Height(),
+             Hypothenuse( DisplayWidthMM ( pDisp_, m_nDefaultScreen ),
+                          DisplayHeightMM( pDisp_, m_nDefaultScreen ) ) / 25.4 );
     fprintf( stderr, "\tBlack&White       \t%lu %lu\n",
-             m_pColormap->GetBlackPixel(), m_pColormap->GetWhitePixel() );
+             GetColormap(m_nDefaultScreen).GetBlackPixel(), GetColormap(m_nDefaultScreen).GetWhitePixel() );
     fprintf( stderr, "\tRGB               \t0x%lx 0x%lx 0x%lx\n",
-             pVisual_->red_mask, pVisual_->green_mask, pVisual_->blue_mask );
+             GetVisual(m_nDefaultScreen).red_mask, GetVisual(m_nDefaultScreen).green_mask, GetVisual(m_nDefaultScreen).blue_mask );
     fprintf( stderr, "\tVisual            \t%d-bit %s ID=0x%x\n",
-             pVisual_->GetDepth(),
-             VisualClassName[ pVisual_->GetClass() ],
-             sal::static_int_cast< unsigned int >(pVisual_->GetVisualId()) );
-    if( pVisual_ != pRootVisual_ )
-        fprintf( stderr, "\tRoot visual       \t%d-bit %s ID=0x%x\n",
-                 pRootVisual_->GetDepth(),
-                 VisualClassName[ pRootVisual_->GetClass() ],
-                 sal::static_int_cast< unsigned int >(
-                     pRootVisual_->GetVisualId()) );
+             GetVisual(m_nDefaultScreen).GetDepth(),
+             VisualClassName[ GetVisual(m_nDefaultScreen).GetClass() ],
+             GetVisual(m_nDefaultScreen).GetVisualId() );
 }
 
 void SalDisplay::GetScreenFontResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) const
@@ -2768,9 +2709,9 @@ void SalDisplay::GetScreenFontResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) c
         return;
 
     int   nThreshold;
-    if (aSize_.Height() <= 600)
+    if (m_aScreens[m_nDefaultScreen].m_aSize.Height() <= 600)
         nThreshold =  96;
-    else if (aSize_.Height() <= 768)
+    else if (m_aScreens[m_nDefaultScreen].m_aSize.Height() <= 768)
         nThreshold = 108;
     else
         nThreshold = 120;
@@ -2787,26 +2728,32 @@ void SalDisplay::GetScreenFontResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) c
 
 void SalDisplay::InitXinerama()
 {
+    if( m_aScreens.size() > 1 )
+    {
+        m_bXinerama = false;
+        return; // multiple screens mean no xinerama
+    }
 #ifdef USE_XINERAMA
 #if defined(USE_XINERAMA_XSUN)
     int nFramebuffers = 1;
-    if( XineramaGetState( pDisp_, nScreen_ ) )
+    if( XineramaGetState( pDisp_, m_nDefaultScreen ) )
     {
         XRectangle pFramebuffers[MAXFRAMEBUFFERS];
         unsigned char hints[MAXFRAMEBUFFERS];
         int result = XineramaGetInfo( pDisp_,
-                                      nScreen_,
+                                      m_nDefaultScreen,
                                       pFramebuffers,
                                       hints,
                                       &nFramebuffers );
         if( result > 0 && nFramebuffers > 1 )
         {
             m_bXinerama = true;
+            m_aXineramaScreens = std::vector<Rectangle>( nFramebuffers );
             for( int i = 0; i < nFramebuffers; i++ )
-                m_aXineramaScreens.push_back( Rectangle( Point( pFramebuffers[i].x,
-                                                                pFramebuffers[i].y ),
-                                                         Size( pFramebuffers[i].width,
-                                                               pFramebuffers[i].height ) ) );
+                m_aXineramaScreens[i] = Rectangle( Point( pFramebuffers[i].x,
+                                                   pFramebuffers[i].y ),
+                                            Size( pFramebuffers[i].width,
+                                                  pFramebuffers[i].height ) );
         }
     }
 #elif defined(USE_XINERAMA_XORG)
@@ -2819,6 +2766,7 @@ if( XineramaIsActive( pDisp_ ) )
     {
         if( nFramebuffers > 1 )
         {
+            m_aXineramaScreens = std::vector<Rectangle>();
             for( int i = 0; i < nFramebuffers; i++ )
             {
                 // see if any frame buffers are at the same coordinates
@@ -2835,7 +2783,7 @@ if( XineramaIsActive( pDisp_ ) )
                             m_aXineramaScreens[n].GetHeight() < pScreens[i].height )
                         {
                             m_aXineramaScreens[n].SetSize( Size( pScreens[i].width,
-                            pScreens[i].height ) );
+                                                                 pScreens[i].height ) );
                         }
                         break;
                     }
@@ -2891,6 +2839,11 @@ void SalDisplay::deregisterFrame( SalFrame* pFrame )
 
 // -=-= SalVisual -=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+SalVisual::SalVisual()
+{
+    rtl_zeroMemory( this, sizeof( SalVisual ) );
+}
+
 SalVisual::SalVisual( const XVisualInfo* pXVI )
 {
     *(XVisualInfo*)this = *pXVI;
@@ -3102,37 +3055,25 @@ Pixel SalVisual::GetTCPixel( SalColor nSalColor ) const
 
 // -=-= SalColormap -=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-SalColormap::SalColormap( SalDisplay *pDisplay, Colormap hColormap )
-    : pDisplay_( pDisplay ),
-      hColormap_( hColormap ),
-      pPalette_( NULL ),
-      pLookupTable_( NULL )
+SalColormap::SalColormap( const SalDisplay *pDisplay, Colormap hColormap, int nScreen )
+    : m_pDisplay( pDisplay ),
+      m_hColormap( hColormap ),
+      m_nScreen( nScreen )
 {
-    pVisual_ = pDisplay_->GetVisual();
+    m_aVisual = m_pDisplay->GetVisual( m_nScreen );
 
-    if( pVisual_ == pDisplay_->GetRootVisual() )
+    XColor aColor;
+
+    GetXPixel( aColor, 0x00, 0x00, 0x00 );
+    m_nBlackPixel = aColor.pixel;
+
+    GetXPixel( aColor, 0xFF, 0xFF, 0xFF );
+    m_nWhitePixel = aColor.pixel;
+
+    m_nUsed = 1 << m_aVisual.GetDepth();
+
+    if( m_aVisual.GetClass() == PseudoColor )
     {
-        nBlackPixel_    = BlackPixel( pDisplay_->GetDisplay(),
-                                      pDisplay_->GetScreenNumber() );
-        nWhitePixel_    = WhitePixel( pDisplay_->GetDisplay(),
-                                      pDisplay_->GetScreenNumber() );
-    }
-    else
-    {
-        XColor aColor;
-
-        GetXPixel( aColor, 0x00, 0x00, 0x00 );
-        nBlackPixel_ = aColor.pixel;
-
-        GetXPixel( aColor, 0xFF, 0xFF, 0xFF );
-        nWhitePixel_ = aColor.pixel;
-    }
-
-    nUsed_ = 1 << pVisual_->GetDepth();
-
-    if( pVisual_->GetClass() == PseudoColor )
-    {
-        XColor aColor;
         int r, g, b;
 
         // black, white, gray, ~gray = 4
@@ -3185,66 +3126,64 @@ SalColormap::SalColormap( SalDisplay *pDisplay, Colormap hColormap )
 
 // PseudoColor
 SalColormap::SalColormap( const BitmapPalette &rPalette )
-    : pDisplay_( GetX11SalData()->GetDisplay() ),
-      hColormap_( None ),
-      pVisual_( NULL ),
-      pLookupTable_( NULL ),
-      nWhitePixel_( 0xFFFFFFFF ),
-      nBlackPixel_( 0xFFFFFFFF ),
-      nUsed_( rPalette.GetEntryCount() )
+    : m_pDisplay( GetX11SalData()->GetDisplay() ),
+      m_hColormap( None ),
+      m_nWhitePixel( 0xFFFFFFFF ),
+      m_nBlackPixel( 0xFFFFFFFF ),
+      m_nUsed( rPalette.GetEntryCount() ),
+      m_nScreen( GetX11SalData()->GetDisplay()->GetDefaultScreenNumber() )
 {
-    pPalette_ = new SalColor[nUsed_];
+    m_aPalette = std::vector<SalColor>(m_nUsed);
 
-    for( unsigned int i = 0; i < nUsed_; i++ )
+    for( unsigned int i = 0; i < m_nUsed; i++ )
     {
         const BitmapColor &rColor = rPalette[i];
-        pPalette_[i] = MAKE_SALCOLOR( rColor.GetRed(),
-                                      rColor.GetGreen(),
-                                      rColor.GetBlue() );
-        if( nBlackPixel_ == 0xFFFFFFFF && SALCOLOR_BLACK == pPalette_[i] )
-            nBlackPixel_ = i;
-        else if( nWhitePixel_ == 0xFFFFFFFF && SALCOLOR_WHITE == pPalette_[i] )
-            nWhitePixel_ = i;
+        m_aPalette[i] = MAKE_SALCOLOR( rColor.GetRed(),
+                                       rColor.GetGreen(),
+                                       rColor.GetBlue() );
+        if( m_nBlackPixel == 0xFFFFFFFF && SALCOLOR_BLACK == m_aPalette[i] )
+            m_nBlackPixel = i;
+        else if( m_nWhitePixel == 0xFFFFFFFF && SALCOLOR_WHITE == m_aPalette[i] )
+            m_nWhitePixel = i;
     }
 }
 
 // MonoChrome
 SalColormap::SalColormap()
-    : pDisplay_( GetX11SalData()->GetDisplay() ),
-      hColormap_( None ),
-      pVisual_( NULL ),
-      pLookupTable_( NULL ),
-      nWhitePixel_( 1 ),
-      nBlackPixel_( 0 ),
-      nUsed_( 2 )
+    : m_pDisplay( GetX11SalData()->GetDisplay() ),
+      m_hColormap( None ),
+      m_nWhitePixel( 1 ),
+      m_nBlackPixel( 0 ),
+      m_nUsed( 2 ),
+      m_nScreen( 0 )
 {
-    pPalette_ = new SalColor[nUsed_];
+    if( m_pDisplay )
+        m_nScreen = m_pDisplay->GetDefaultScreenNumber();
+    m_aPalette = std::vector<SalColor>(m_nUsed);
 
-    pPalette_[nBlackPixel_] = SALCOLOR_BLACK;
-    pPalette_[nWhitePixel_] = SALCOLOR_WHITE;
+    m_aPalette[m_nBlackPixel] = SALCOLOR_BLACK;
+    m_aPalette[m_nWhitePixel] = SALCOLOR_WHITE;
 }
 
 // TrueColor
 SalColormap::SalColormap( USHORT nDepth )
-    : pDisplay_( GetX11SalData()->GetDisplay() ),
-      hColormap_( None ),
-      pPalette_( NULL ),
-      pLookupTable_( NULL ),
-      nWhitePixel_( (1 << nDepth) - 1 ),
-      nBlackPixel_( 0x00000000 ),
-      nUsed_( 1 << nDepth )
-
+    : m_pDisplay( GetX11SalData()->GetDisplay() ),
+      m_hColormap( None ),
+      m_nWhitePixel( (1 << nDepth) - 1 ),
+      m_nBlackPixel( 0x00000000 ),
+      m_nUsed( 1 << nDepth ),
+      m_nScreen( GetX11SalData()->GetDisplay()->GetDefaultScreenNumber() )
 {
-    SalVisual *pVisual  = pDisplay_->GetVisual();
+    const SalVisual *pVisual  = &m_pDisplay->GetVisual( m_nScreen );
 
     if( pVisual->GetClass() == TrueColor && pVisual->GetDepth() == nDepth )
-        pVisual_ = pVisual;
+        m_aVisual = *pVisual;
     else
     {
         XVisualInfo aVI;
 
-        if( !XMatchVisualInfo( pDisplay_->GetDisplay(),
-                               pDisplay_->GetScreenNumber(),
+        if( !XMatchVisualInfo( m_pDisplay->GetDisplay(),
+                               m_pDisplay->GetDefaultScreenNumber(),
                                nDepth,
                                TrueColor,
                                &aVI ) )
@@ -3303,98 +3242,84 @@ SalColormap::SalColormap( USHORT nDepth )
             aVI.visual->map_entries     = aVI.colormap_size;
         }
 
-        pVisual_ = new SalVisual( &aVI );
+        m_aVisual = SalVisual( &aVI );
     }
 }
 
 SalColormap::~SalColormap()
 {
-    if( hColormap_
-        && pDisplay_->IsDisplay()
-        && hColormap_ != DefaultColormap( GetXDisplay(), pDisplay_->GetScreenNumber() ) )
-        XFreeColormap( GetXDisplay(), hColormap_ );
-    delete [] pPalette_;
-    delete [] pLookupTable_;
-    if( pVisual_ != pDisplay_->GetVisual() )
-        delete pVisual_;
-
 #ifdef DBG_UTIL
-    hColormap_      = (Colormap)ILLEGAL_POINTER;
-    pDisplay_       = (SalDisplay*)ILLEGAL_POINTER;
-    pPalette_       = (SalColor*)ILLEGAL_POINTER;
-    pLookupTable_   = (USHORT*)ILLEGAL_POINTER;
-    pVisual_        = (SalVisual*)ILLEGAL_POINTER;
+    m_hColormap      = (Colormap)ILLEGAL_POINTER;
+    m_pDisplay       = (SalDisplay*)ILLEGAL_POINTER;
 #endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalColormap::SetPalette( const BitmapPalette &rPalette )
 {
-    if( this != &GetX11SalData()->GetDisplay()->GetColormap() )
+    if( this != &GetX11SalData()->GetDisplay()->GetColormap(m_nScreen) )
     {
-        nBlackPixel_ = 0xFFFFFFFF;
-        nWhitePixel_ = 0xFFFFFFFF;
+        m_nBlackPixel = 0xFFFFFFFF;
+        m_nWhitePixel = 0xFFFFFFFF;
     }
 
-    if( rPalette.GetEntryCount() > nUsed_ )
+    if( rPalette.GetEntryCount() > m_nUsed )
     {
-        nBlackPixel_ = 0xFFFFFFFF;
-        nWhitePixel_ = 0xFFFFFFFF;
-        delete [] pPalette_;
-        pPalette_ = new SalColor[rPalette.GetEntryCount()];
-        nUsed_ = rPalette.GetEntryCount();
+        m_nBlackPixel = 0xFFFFFFFF;
+        m_nWhitePixel = 0xFFFFFFFF;
+        m_nUsed = rPalette.GetEntryCount();
+        m_aPalette = std::vector<SalColor>(m_nUsed);
     }
 
     for( int i = 0; i < rPalette.GetEntryCount(); i++ )
     {
         const BitmapColor &rColor = rPalette[i];
-        pPalette_[i] = MAKE_SALCOLOR( rColor.GetRed(),
-                                      rColor.GetGreen(),
-                                      rColor.GetBlue() );
-        if( nBlackPixel_ == 0xFFFFFFFF && SALCOLOR_BLACK == pPalette_[i] )
-            nBlackPixel_ = i;
-        else if( nWhitePixel_ == 0xFFFFFFFF && SALCOLOR_WHITE == pPalette_[i] )
-            nWhitePixel_ = i;
+        m_aPalette[i] = MAKE_SALCOLOR( rColor.GetRed(),
+                                       rColor.GetGreen(),
+                                       rColor.GetBlue() );
+        if( m_nBlackPixel == 0xFFFFFFFF && SALCOLOR_BLACK == m_aPalette[i] )
+            m_nBlackPixel = i;
+        else if( m_nWhitePixel == 0xFFFFFFFF && SALCOLOR_WHITE == m_aPalette[i] )
+            m_nWhitePixel = i;
     }
 }
 
 void SalColormap::GetPalette()
 {
     Pixel i;
+    m_aPalette = std::vector<SalColor>(m_nUsed);
 
-    pPalette_ = new SalColor[nUsed_];
+    XColor *aColor = new XColor[m_nUsed];
 
-    XColor *aColor = new XColor[nUsed_];
-
-    for( i = 0; i < nUsed_; i++ )
+    for( i = 0; i < m_nUsed; i++ )
     {
         aColor[i].red = aColor[i].green = aColor[i].blue = 0;
         aColor[i].pixel = i;
     }
 
-    XQueryColors( pDisplay_->GetDisplay(), hColormap_, aColor, nUsed_ );
+    XQueryColors( m_pDisplay->GetDisplay(), m_hColormap, aColor, m_nUsed );
 
-    for( i = 0; i < nUsed_; i++ )
+    for( i = 0; i < m_nUsed; i++ )
     {
-        pPalette_[i] = MAKE_SALCOLOR( aColor[i].red   >> 8,
-                                      aColor[i].green >> 8,
-                                      aColor[i].blue  >> 8 );
+        m_aPalette[i] = MAKE_SALCOLOR( aColor[i].red   >> 8,
+                                       aColor[i].green >> 8,
+                                       aColor[i].blue  >> 8 );
     }
 
     delete [] aColor;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static USHORT sal_Lookup( SalColor *pPalette,
+static USHORT sal_Lookup( const std::vector<SalColor>& rPalette,
                                 int r, int g, int b,
                                 Pixel nUsed )
 {
     USHORT nPixel = 0;
-    int    nBest  = ColorDiff( pPalette[0], r, g, b );
+    int    nBest  = ColorDiff( rPalette[0], r, g, b );
 
     for( USHORT i = 1; i < nUsed; i++ )
     {
-        int n = ColorDiff( pPalette[i], r, g, b );
+        int n = ColorDiff( rPalette[i], r, g, b );
 
         if( n < nBest )
         {
@@ -3410,48 +3335,41 @@ static USHORT sal_Lookup( SalColor *pPalette,
 
 void SalColormap::GetLookupTable()
 {
-    USHORT *p = pLookupTable_ = new USHORT[16*16*16];
+    m_aLookupTable = std::vector<USHORT>(16*16*16);
 
+    int i = 0;
     for( int r = 0; r < 256; r += 17 )
         for( int g = 0; g < 256; g += 17 )
             for( int b = 0; b < 256; b += 17 )
-                *p++ = sal_Lookup( pPalette_, r, g, b, nUsed_ );
+                m_aLookupTable[i++] = sal_Lookup( m_aPalette, r, g, b, m_nUsed );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalColor SalColormap::GetColor( Pixel nPixel ) const
 {
-    if( nBlackPixel_ == nPixel ) return SALCOLOR_BLACK;
-    if( nWhitePixel_ == nPixel ) return SALCOLOR_WHITE;
+    if( m_nBlackPixel == nPixel ) return SALCOLOR_BLACK;
+    if( m_nWhitePixel == nPixel ) return SALCOLOR_WHITE;
 
-    if( pVisual_ )
+    if( m_aVisual.GetVisual() )
     {
-        if( pVisual_->GetClass() == TrueColor )
-            return pVisual_->GetTCColor( nPixel );
+        if( m_aVisual.GetClass() == TrueColor )
+            return m_aVisual.GetTCColor( nPixel );
 
-        if( !pPalette_
-#ifdef _USE_PRINT_EXTENSION_
-            && ( hColormap_ || XSalIsPrinter( GetXDisplay() ) )
-#else
-            && hColormap_
-#endif
+        if( m_aPalette.empty()
+            && m_hColormap
 #ifdef PSEUDOCOLOR12
-            && pVisual_->GetDepth() <= 12
+            && m_aVisual.GetDepth() <= 12
 #else
-            && pVisual_->GetDepth() <= 8
+            && m_aVisual.GetDepth() <= 8
 #endif
-            && pVisual_->GetClass() == PseudoColor )
+            && m_aVisual.GetClass() == PseudoColor )
             ((SalColormap*)this)->GetPalette();
     }
 
-    if( pPalette_ && nPixel < nUsed_ )
-        return pPalette_[nPixel];
+    if( !m_aPalette.empty() && nPixel < m_nUsed )
+        return m_aPalette[nPixel];
 
-#ifdef _USE_PRINT_EXTENSION_
-    if( !hColormap_ && !XSalIsPrinter( GetXDisplay() ) )
-#else
-    if( !hColormap_ )
-#endif
+    if( m_hColormap )
     {
         DBG_ASSERT( 1, "SalColormap::GetColor() !hColormap_\n" );
         return nPixel;
@@ -3462,7 +3380,7 @@ SalColor SalColormap::GetColor( Pixel nPixel ) const
 
     aColor.pixel = nPixel;
 
-    XQueryColor( pDisplay_->GetDisplay(), hColormap_, &aColor );
+    XQueryColor( m_pDisplay->GetDisplay(), m_hColormap, &aColor );
 
     return MAKE_SALCOLOR( aColor.red>>8, aColor.green>>8, aColor.blue>>8 );
 }
@@ -3475,7 +3393,7 @@ inline BOOL SalColormap::GetXPixel( XColor &rColor,
     rColor.red      = r * 257;
     rColor.green    = g * 257;
     rColor.blue     = b * 257;
-    return XAllocColor( GetXDisplay(), hColormap_, &rColor );
+    return XAllocColor( GetXDisplay(), m_hColormap, &rColor );
 }
 
 BOOL SalColormap::GetXPixels( XColor &rColor,
@@ -3493,39 +3411,30 @@ BOOL SalColormap::GetXPixels( XColor &rColor,
 Pixel SalColormap::GetPixel( SalColor nSalColor ) const
 {
     if( 0xFFFFFFFF == nSalColor )     return 0;
-    if( SALCOLOR_BLACK == nSalColor ) return nBlackPixel_;
-    if( SALCOLOR_WHITE == nSalColor ) return nWhitePixel_;
+    if( SALCOLOR_BLACK == nSalColor ) return m_nBlackPixel;
+    if( SALCOLOR_WHITE == nSalColor ) return m_nWhitePixel;
 
-    if( pVisual_ && pVisual_->GetClass() == TrueColor )
-        return pVisual_->GetTCPixel( nSalColor );
+    if( m_aVisual.GetClass() == TrueColor )
+        return m_aVisual.GetTCPixel( nSalColor );
 
-    if( !pLookupTable_ )
+    if( m_aLookupTable.empty() )
     {
-        if( !pPalette_
-#ifdef _USE_PRINT_EXTENSION_
-            && ( hColormap_ || XSalIsPrinter( GetXDisplay() ) )
-#else
-            && hColormap_
-#endif
-            && pVisual_
+        if( m_aPalette.empty()
+            && m_hColormap
 #ifdef PSEUDOCOLOR12
-            && pVisual_->GetDepth() <= 12
+            && m_aVisual.GetDepth() <= 12
 #else
-            && pVisual_->GetDepth() <= 8
+            && m_aVisual.GetDepth() <= 8
 #endif
-            && pVisual_->GetClass() == PseudoColor ) // what else ???
+            && m_aVisual.GetClass() == PseudoColor ) // what else ???
             ((SalColormap*)this)->GetPalette();
 
-        if( pPalette_ )
-            for( Pixel i = 0; i < nUsed_; i++ )
-                if( pPalette_[i] == nSalColor )
+        if( !m_aPalette.empty() )
+            for( Pixel i = 0; i < m_nUsed; i++ )
+                if( m_aPalette[i] == nSalColor )
                     return i;
 
-#ifdef _USE_PRINT_EXTENSION_
-        if( hColormap_ || XSalIsPrinter( GetXDisplay() ) )
-#else
-        if( hColormap_ )
-#endif
+        if( m_hColormap )
         {
             // DirectColor, StaticColor, StaticGray, GrayScale (PseudoColor)
             XColor aColor;
@@ -3535,11 +3444,11 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
                            SALCOLOR_GREEN( nSalColor ),
                            SALCOLOR_BLUE ( nSalColor ) ) )
             {
-                if( pPalette_ && !pPalette_[aColor.pixel] )
+                if( !m_aPalette.empty() && !m_aPalette[aColor.pixel] )
                 {
-                    pPalette_[aColor.pixel] = nSalColor;
+                    const_cast<SalColormap*>(this)->m_aPalette[aColor.pixel] = nSalColor;
 
-                    if( !(aColor.pixel & 1) && !pPalette_[aColor.pixel+1] )
+                    if( !(aColor.pixel & 1) && !m_aPalette[aColor.pixel+1] )
                     {
                         XColor aInversColor;
 
@@ -3550,8 +3459,8 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
                                    SALCOLOR_GREEN( nInversColor ),
                                    SALCOLOR_BLUE ( nInversColor ) );
 
-                        if( !pPalette_[aInversColor.pixel] )
-                            pPalette_[aInversColor.pixel] = nInversColor;
+                        if( !m_aPalette[aInversColor.pixel] )
+                            const_cast<SalColormap*>(this)->m_aPalette[aInversColor.pixel] = nInversColor;
 #ifdef DBG_UTIL
                         else
                             fprintf( stderr, "SalColormap::GetPixel() 0x06lx=%d 0x06lx=%d\n",
@@ -3570,10 +3479,12 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
 #endif
         }
 
-        if( !pPalette_ )
+        if( m_aPalette.empty() )
         {
-            fprintf( stderr, "SalColormap::GetPixel() !pPalette_ %lx\n",
+#ifdef DBG_UTIL
+            fprintf( stderr, "SalColormap::GetPixel() Palette empty %lx\n",
                      nSalColor);
+#endif
             return nSalColor;
         }
 
@@ -3584,8 +3495,8 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
     USHORT r = SALCOLOR_RED  ( nSalColor );
     USHORT g = SALCOLOR_GREEN( nSalColor );
     USHORT b = SALCOLOR_BLUE ( nSalColor );
-    return pLookupTable_[ (((r+8)/17) << 8)
-                        + (((g+8)/17) << 4)
-                        +  ((b+8)/17) ];
+    return m_aLookupTable[ (((r+8)/17) << 8)
+                         + (((g+8)/17) << 4)
+                         +  ((b+8)/17) ];
 }
 
