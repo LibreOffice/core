@@ -4,9 +4,9 @@
  *
  *  $RCSfile: session.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:48:42 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:58:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
 #endif
@@ -53,22 +54,6 @@
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _OSL_MUTEX_HXX
-#include <osl/mutex.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX
-#include <rtl/ustrbuf.hxx>
-#endif
-
-#ifndef _UNO_DISPATCHER_H_
-#include <uno/dispatcher.h> // declaration of generic uno interface
-#endif
-#ifndef _UNO_MAPPING_HXX_
-#include <uno/mapping.hxx> // mapping stuff
-#endif
-#ifndef _CPPUHELPER_FACTORY_HXX_
-#include <cppuhelper/factory.hxx>
-#endif
 
 #ifndef _COM_SUN_STAR_FRAME_XSESSIONMANAGERCLIENT_HPP_
 #include <com/sun/star/frame/XSessionManagerClient.hpp>
@@ -78,9 +63,6 @@
 #endif
 
 #include <list>
-
-#define SESSION_SERVICE_IMPL_NAME "com.sun.star.frame.VCLSessionManagerClient"
-#define SESSION_SERVICE_SERVICE_NAME "com.sun.star.frame.SessionManagerClient"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -364,14 +346,20 @@ sal_Bool SAL_CALL VCLSession::cancelShutdown() throw( RuntimeException )
 
 // service implementation
 
-static Sequence< rtl::OUString > SAL_CALL vcl_session_getSupportedServiceNames()
+OUString SAL_CALL vcl_session_getImplementationName()
+{
+    static OUString aImplementationName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.VCLSessionManagerClient" ) );
+    return aImplementationName;
+}
+
+Sequence< rtl::OUString > SAL_CALL vcl_session_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(SESSION_SERVICE_SERVICE_NAME);
+    aRet[0] = OUString::createFromAscii("com.sun.star.frame.SessionManagerClient");
     return aRet;
 }
 
-static Reference< XInterface > SAL_CALL vcl_session_createInstance( const Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/ )
+Reference< XInterface > SAL_CALL vcl_session_createInstance( const Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/ )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( ! pSVData->xSMClient.is() )
@@ -379,71 +367,3 @@ static Reference< XInterface > SAL_CALL vcl_session_createInstance( const Refere
 
     return Reference< XInterface >(pSVData->xSMClient, UNO_QUERY );
 }
-
-
-
-extern "C" {
-
-    VCL_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
-        const sal_Char** ppEnvTypeName,
-        uno_Environment** /*ppEnv*/ )
-    {
-        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
-
-    VCL_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pXUnoKey )
-    {
-        if( pXUnoKey )
-        {
-            try
-            {
-                Reference< ::com::sun::star::registry::XRegistryKey > xKey( reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( pXUnoKey ) );
-
-                OUStringBuffer aImplName = OUString::createFromAscii( "/" );
-                aImplName.appendAscii( SESSION_SERVICE_IMPL_NAME );
-                aImplName.appendAscii( "/UNO/SERVICES/" );
-                aImplName.appendAscii( SESSION_SERVICE_SERVICE_NAME );
-                xKey->createKey( aImplName.makeStringAndClear() );
-
-                return sal_True;
-            }
-            catch( ::com::sun::star::registry::InvalidRegistryException& )
-            {
-            }
-        }
-        return sal_False;
-    }
-
-    VCL_DLLPUBLIC void* SAL_CALL component_getFactory(
-        const sal_Char* pImplementationName,
-        void* pXUnoSMgr,
-        void* /*pXUnoKey*/
-        )
-    {
-        void* pRet = 0;
-
-        rtl::OString aImplementation( pImplementationName );
-        rtl::OString aImplName( SESSION_SERVICE_IMPL_NAME );
-
-        if( pXUnoSMgr )
-        {
-            Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr(
-                reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pXUnoSMgr )
-                );
-            Reference< ::com::sun::star::lang::XSingleServiceFactory > xFactory;
-            if( aImplName.equals( aImplementation ) )
-            {
-                xFactory = ::cppu::createSingleFactory(
-                    xMgr, OUString::createFromAscii( SESSION_SERVICE_IMPL_NAME ), vcl_session_createInstance,
-                    vcl_session_getSupportedServiceNames() );
-            }
-            if( xFactory.is() )
-            {
-                xFactory->acquire();
-                pRet = xFactory.get();
-            }
-        }
-        return pRet;
-    }
-
-} /* extern "C" */
