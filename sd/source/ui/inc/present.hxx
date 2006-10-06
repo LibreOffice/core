@@ -4,9 +4,9 @@
  *
  *  $RCSfile: present.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 11:22:22 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:52:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,16 +90,27 @@ private:
     CheckBox            aCbxChangePage;
     CheckBox            aCbxAlwaysOnTop;
 
+    FixedLine           maGrpMonitor;
+    FixedText           maFtMonitor;
+    ListBox             maLBMonitor;
+
     OKButton            aBtnOK;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;
 
     List*               pCustomShowList;
     const SfxItemSet&   rOutAttrs;
+    sal_Int32           mnMonitors;
+
+    String              msPrimaryMonitor;
+    String              msMonitor;
+    String              msAllMonitors;
 
                         DECL_LINK( ChangeRangeHdl, void * );
                         DECL_LINK( ClickWindowPresentationHdl, void * );
                         DECL_LINK( ChangePauseHdl, void * );
+
+    void                InitMonitorSettings();
 
 public:
                         SdStartPresentationDlg( Window* pWindow,
