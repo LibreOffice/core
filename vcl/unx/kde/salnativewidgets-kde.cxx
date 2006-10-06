@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:30:59 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:03:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,7 +258,7 @@ class WidgetPainter
     */
         BOOL drawStyledWidget( QWidget *pWidget,
                 ControlState nState, const ImplControlValue& aValue,
-                Display *dpy, XLIB_Window drawable, GC gc,
+                Display *dpy, XLIB_Window drawable, int nScreen, int nDepth, GC gc,
                 ControlPart nPart = PART_ENTIRE_CONTROL );
 
     /** 'Get' method for push button.
@@ -438,7 +438,7 @@ WidgetPainter::~WidgetPainter( void )
 
 BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
     ControlState nState, const ImplControlValue& aValue,
-        Display *dpy, XLIB_Window drawable, GC gc,
+        Display *dpy, XLIB_Window drawable, int nScreen, int nDepth, GC gc,
         ControlPart nPart )
 {
     if ( !pWidget )
@@ -487,11 +487,12 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
     // Bitblt from the screen, because the radio buttons are usually not
     // rectangular, and there could be a bitmap under them
     GC aTmpGC = XCreateGC( dpy, qPixmap.handle(), 0, NULL );
-    XCopyArea( dpy,
-        drawable, qPixmap.handle(),
-        aTmpGC,
-        qWidgetPos.x(), qWidgetPos.y(), qRect.width(), qRect.height(),
-        0, 0 );
+    X11SalGraphics::CopyScreenArea( dpy,
+                              drawable, nScreen, nDepth,
+                              qPixmap.handle(), qPixmap.x11Screen(), qPixmap.x11Depth(),
+                              aTmpGC,
+                              qWidgetPos.x(), qWidgetPos.y(), qRect.width(), qRect.height(),
+                              0, 0 );
     XFreeGC( dpy, aTmpGC );
 
     kapp->style().drawControl( QStyle::CE_RadioButton,
@@ -774,11 +775,12 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
     return FALSE;
 
     // Bitblt it to the screen
-    XCopyArea( dpy,
-           qPixmap.handle(), drawable,
-           gc,
-           0, 0, qRect.width(), qRect.height(),
-           qWidgetPos.x(), qWidgetPos.y() );
+    X11SalGraphics::CopyScreenArea( dpy,
+                              qPixmap.handle(), qPixmap.x11Screen(), qPixmap.x11Depth(),
+                              drawable, nScreen, nDepth,
+                              gc,
+                              0, 0, qRect.width(), qRect.height(),
+                              qWidgetPos.x(), qWidgetPos.y() );
 
     // Restore widget's position
     pWidget->move( qWidgetPos );
@@ -1322,105 +1324,105 @@ BOOL KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->pushButton( rControlRegion, (nState & CTRL_STATE_DEFAULT) ),
         nState, aValue,
-        dpy, drawable, gc );
+        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
     }
     else if ( (nType == CTRL_RADIOBUTTON) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->radioButton( rControlRegion ),
         nState, aValue,
-        dpy, drawable, gc );
+        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
     }
     else if ( (nType == CTRL_CHECKBOX) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->checkBox( rControlRegion ),
         nState, aValue,
-        dpy, drawable, gc );
+        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
     }
     else if ( (nType == CTRL_COMBOBOX) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->comboBox( rControlRegion, TRUE ),
         nState, aValue,
-        dpy, drawable, gc );
+        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
     }
     else if ( (nType == CTRL_EDITBOX) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->lineEdit( rControlRegion ),
         nState, aValue,
-        dpy, drawable, gc );
+        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
     }
     else if ( (nType == CTRL_LISTBOX) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->comboBox( rControlRegion, FALSE ),
         nState, aValue,
-        dpy, drawable, gc );
+        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
     }
     else if ( (nType == CTRL_LISTBOX) && (nPart == PART_WINDOW) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->listView( rControlRegion ),
         nState, aValue,
-        dpy, drawable, gc );
+        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
     }
     else if ( (nType == CTRL_SPINBOX) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->spinWidget( rControlRegion ),
         nState, aValue,
-        dpy, drawable, gc );
+        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
     }
     else if ( (nType==CTRL_TAB_ITEM) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->tabBar( rControlRegion ),
         nState, aValue,
-        dpy, drawable, gc );
+        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
     }
     else if ( (nType==CTRL_TAB_PANE) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->tabWidget( rControlRegion ),
         nState, aValue,
-        dpy, drawable, gc );
+        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
     }
     else if ( (nType == CTRL_SCROLLBAR) && (nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->scrollBar( rControlRegion, nPart == PART_DRAW_BACKGROUND_HORZ, aValue ),
         nState, aValue,
-        dpy, drawable, gc );
+        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
     }
     else if ( (nType == CTRL_TOOLBAR) && (nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT || nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->toolBar( rControlRegion, nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_THUMB_VERT ),
                 nState, aValue,
-                dpy, drawable, gc, nPart );
+                dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc, nPart );
     }
     else if ( (nType == CTRL_TOOLBAR) && (nPart == PART_BUTTON) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->toolButton( rControlRegion ),
                 nState, aValue,
-                dpy, drawable, gc, nPart );
+                dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc, nPart );
     }
     else if ( (nType == CTRL_MENUBAR) && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->menuBar( rControlRegion ),
                 nState, aValue,
-                dpy, drawable, gc, nPart );
+                dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc, nPart );
     }
     else if ( (nType == CTRL_MENU_POPUP) && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->popupMenu( rControlRegion ),
                 nState, aValue,
-                dpy, drawable, gc );
+                dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
     }
 
     return bReturn;
@@ -1971,7 +1973,7 @@ SalGraphics* KDESalFrame::GetGraphics()
                 if( ! m_aGraphics[i].pGraphics )
                 {
                     m_aGraphics[i].pGraphics = new KDESalGraphics();
-                    m_aGraphics[i].pGraphics->Init( this, GetWindow() );
+                    m_aGraphics[i].pGraphics->Init( this, GetWindow(), GetScreenNumber() );
                 }
                 return m_aGraphics[i].pGraphics;
             }
@@ -1990,6 +1992,15 @@ void KDESalFrame::ReleaseGraphics( SalGraphics *pGraphics )
             m_aGraphics[i].bInUse = false;
             break;
         }
+    }
+}
+
+void KDESalFrame::updateGraphics()
+{
+    for( int i = 0; i < nMaxGraphics; i++ )
+    {
+        if( m_aGraphics[i].bInUse )
+            m_aGraphics[i].pGraphics->SetDrawable( GetWindow(), GetScreenNumber() );
     }
 }
 
