@@ -315,7 +315,14 @@
     </Calendar>
   </LC_CALENDAR>
   <LC_CURRENCY>
-    <Currency default="true" usedInCompatibleFormatCodes="true">
+    <Currency default="true" usedInCompatibleFormatCodes="false">
+      <CurrencyID>EUR</CurrencyID>
+      <CurrencySymbol>€</CurrencySymbol>
+      <BankSymbol>EUR</BankSymbol>
+      <CurrencyName>evro</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="true">
       <CurrencyID>SIT</CurrencyID>
       <CurrencySymbol>SIT</CurrencySymbol>
       <BankSymbol>SIT</BankSymbol>
