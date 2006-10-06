@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.243 $
+ *  $Revision: 1.244 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:23:44 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:58:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -9340,6 +9340,10 @@ BOOL Window::IsNativeWidgetEnabled() const
     return ImplGetWinData()->mbEnableNativeWidget;
 }
 
+#ifdef WNT // see #140456#
+#include <salframe.h>
+#endif
+
 Reference< ::com::sun::star::rendering::XCanvas > Window::GetCanvas() const
 {
     // try to retrieve hard reference from weak member
@@ -9405,10 +9409,18 @@ Reference< ::com::sun::star::rendering::XCanvas > Window::GetCanvas() const
                 OUString( RTL_CONSTASCII_USTRINGPARAM(
                               "com.sun.star."
                               "rendering.CanvasFactory") ) ), UNO_QUERY );
-        if (xCanvasFactory.is()) {
+        if (xCanvasFactory.is())
+        {
+            OUString sService;
+#ifdef WNT // see #140456#
+            const sal_uInt32 nDisplay = static_cast< WinSalFrame* >( mpWindowImpl->mpFrame )->mnDisplay;
+            if( (nDisplay >= Application::GetScreenCount()) )
+                sService = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.rendering.VCLCanvas" ) );
+#endif
             xCanvas.set( xCanvasFactory->createInstanceWithArguments(
-                             OUString() /* no preference */, aArg ),
-                         UNO_QUERY );
+                             sService /* no preference */, aArg ),
+
+                             UNO_QUERY );
 
             mpWindowImpl->mxCanvas = xCanvas;
 
