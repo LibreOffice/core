@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:22:00 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:09:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,9 @@ static const struct {
         { "mk_MK",  lcl_DATA_EURO, "mk" },
         { "br_FR",  lcl_DATA_EURO, "br" },
         { "la_VA",  lcl_DATA_EURO, "la" },
+        { "cv_RU",  lcl_DATA_EURO, "cv" },
+        { "wa_BE",  lcl_DATA_EURO, "wa" },
+        { "fur_IT", lcl_DATA_EURO, "fur" },
 
         { "ja_JP",  lcl_DATA_OTHERS, "ja" },
         { "ko_KR",  lcl_DATA_OTHERS, "ko" },
@@ -225,9 +228,6 @@ static const struct {
         { "ky_KG",  lcl_DATA_OTHERS, "ky" },
         { "kk_KZ",  lcl_DATA_OTHERS, "kk" },
         { "fa_IR",  lcl_DATA_OTHERS, "fa" },
-
-//      { "br_AE",  lcl_DATA, "br" },
-
 };
 
 static const sal_Unicode under = sal_Unicode('_');
