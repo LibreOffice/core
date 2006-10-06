@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:24:03 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:41:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -391,8 +391,9 @@ void ScDrawTransferObj::AddSupportedFormats()
 sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
     sal_Bool bOK = sal_False;
+    sal_uInt32 nFormat = SotExchange::GetFormat( rFlavor );
 
-    if ( bOleObj )
+    if ( bOleObj && nFormat != SOT_FORMAT_GDIMETAFILE )
     {
         if ( !aOleData.GetTransferable().is() )
         {
@@ -420,7 +421,6 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
         }
     }
 
-    sal_uInt32 nFormat = SotExchange::GetFormat( rFlavor );
     if( HasFormat( nFormat ) )
     {
         if ( nFormat == SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR || nFormat == SOT_FORMATSTR_ID_OBJECTDESCRIPTOR )
