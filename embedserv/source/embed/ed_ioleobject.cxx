@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ed_ioleobject.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:40:04 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:38:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,6 @@ STDMETHODIMP EmbedDocument_Impl::GetClipboardData( DWORD /*dwReserved*/, IDataOb
  *
  */
 
-
 STDMETHODIMP EmbedDocument_Impl::DoVerb(
     LONG iVerb,
     LPMSG,
@@ -136,6 +135,12 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb(
     HWND,
     LPCRECT )
 {
+    // no locking is used since the OLE must use the same thread always
+    if ( m_bIsInVerbHandling )
+        return OLEOBJ_S_CANNOT_DOVERB_NOW;
+
+    BooleanGuard_Impl aGuard( m_bIsInVerbHandling );
+
     switch(iVerb) {
         case OLEIVERB_DISCARDUNDOSTATE:
             // free any undostate?
