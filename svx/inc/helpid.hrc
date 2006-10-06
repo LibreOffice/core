@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 09:47:56 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -769,6 +769,8 @@
 #define HID_SVX_NEW_TOOLBAR_ITEM                    (HID_SVX_EXT0_START + 184)
 #define HID_SVX_CONFIG_MENU_LISTBOX                 (HID_SVX_EXT0_START + 185)
 #define HID_SVX_OPTIONS_ONLINEUPDATE                (HID_SVX_EXT0_START + 186)
+#define HID_OPTIONS_CHART_DEFCOLORS                 (HID_SVX_EXT0_START + 187)
+#define HID_OPTIONS_MULTIPATH_LIST                  (HID_SVX_EXT0_START + 188)
 
 // please adjust ACT_SVX_HID_END2 below if you add entries here!
 
@@ -783,7 +785,7 @@
 #endif
 
 // overrun check 2
-#define ACT_SVX_HID_END2        HID_SVX_OPTIONS_ONLINEUPDATE
+#define ACT_SVX_HID_END2        HID_OPTIONS_MULTIPATH_LIST
 
 #if ACT_SVX_HID2_END > HID_SVX_EXT0_END
 #error resource overrun in #line, #file
