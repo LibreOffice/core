@@ -11,6 +11,9 @@
         <status value="beta"/>
         <supported-service>com.sun.star.setup.UpdateCheckUI</supported-service>
         <service-dependency>...</service-dependency>
+        <type>com.sun.star.document.XEventBroadcaster</type>
+        <type>com.sun.star.document.XEventListener</type>
+        <type>com.sun.star.lang.XEventListener</type>
         <type>com.sun.star.lang.XMultiComponentFactory</type>
         <type>com.sun.star.lang.XServiceInfo</type>
         <type>com.sun.star.lang.XSingleComponentFactory</type>
