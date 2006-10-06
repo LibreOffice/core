@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.167 $
+ *  $Revision: 1.168 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 09:12:59 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:40:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -414,6 +414,15 @@ File gid_File_Share_Xdg_Printeradmin
     Styles = (PACKED,SCPZIP_REPLACE);
     Name = "printeradmin.desktop";
 End
+
+#ifdef ENABLE_GTK
+File gid_File_Share_Xdg_QStart
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Xdg;
+    Styles = (PACKED,SCPZIP_REPLACE);
+    Name = "qstart.desktop";
+End
+#endif
 
 #endif
 
