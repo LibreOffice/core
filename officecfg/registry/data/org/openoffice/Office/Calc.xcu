@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Calc.xcu,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:47:06 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:03:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,6 +166,17 @@
             </prop>
             <prop oor:name="Factor">
                 <value>340.750</value>
+            </prop>
+        </node>
+        <node oor:name="CR13" oor:op="replace">
+            <prop oor:name="FromUnit">
+                <value>EUR</value>
+            </prop>
+            <prop oor:name="ToUnit">
+                <value>SIT</value>
+            </prop>
+            <prop oor:name="Factor">
+                <value>239.64</value>
             </prop>
         </node>
     </node>
