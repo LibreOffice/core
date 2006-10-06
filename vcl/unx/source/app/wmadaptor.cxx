@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:36:54 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:05:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,12 @@ public:
     virtual int handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEvent ) const;
     virtual void showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const;
     virtual void frameIsMapping( X11SalFrame* pFrame ) const;
+    virtual void setFrameStruts( X11SalFrame* pFrame,
+                                 int left, int right, int top, int bottom,
+                                 int left_start_y, int left_end_y,
+                                 int right_start_y, int right_end_y,
+                                 int top_start_x, int top_end_x,
+                                 int bottom_start_x, int bottom_end_x ) const;
 };
 
 class GnomeWMAdaptor : public WMAdaptor
@@ -149,6 +155,8 @@ static const WMAdaptorProtocol aProtocolTab[] =
     { "_NET_WM_STATE_SKIP_TASKBAR", WMAdaptor::NET_WM_STATE_SKIP_TASKBAR },
     { "_NET_WM_STATE_STAYS_ON_TOP", WMAdaptor::NET_WM_STATE_STAYS_ON_TOP },
     { "_NET_WM_STATE_STICKY", WMAdaptor::NET_WM_STATE_STICKY },
+    { "_NET_WM_STRUT", WMAdaptor::NET_WM_STRUT },
+    { "_NET_WM_STRUT_PARTIAL", WMAdaptor::NET_WM_STRUT_PARTIAL },
     { "_NET_WM_WINDOW_TYPE", WMAdaptor::NET_WM_WINDOW_TYPE },
     { "_NET_WM_WINDOW_TYPE_DESKTOP", WMAdaptor::NET_WM_WINDOW_TYPE_DESKTOP },
     { "_NET_WM_WINDOW_TYPE_DIALOG", WMAdaptor::NET_WM_WINDOW_TYPE_DIALOG },
@@ -258,7 +266,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
     // default desktops
     m_nDesktops = 1;
     m_aWMWorkAreas = ::std::vector< Rectangle >
-        ( 1, Rectangle( Point( 0, 0 ), m_pSalDisplay->GetScreenSize() ) );
+        ( 1, Rectangle( Point(), m_pSalDisplay->GetScreenSize( m_pSalDisplay->GetDefaultScreenNumber() ) ) );
     m_bEqualWorkAreas = true;
 
     memset( m_aWMAtoms, 0, sizeof( m_aWMAtoms ) );
@@ -271,7 +279,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
     if( m_aWMAtoms[ DTWM_IS_RUNNING ] )
     {
         if (   (XGetWindowProperty( m_pDisplay,
-                                    m_pSalDisplay->GetRootWindow(),
+                                    m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                     m_aWMAtoms[ DTWM_IS_RUNNING ],
                                     0, 1,
                                     False,
@@ -283,7 +291,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
                                     &pProperty) == 0
                 && nItems)
                || (XGetWindowProperty( m_pDisplay,
-                                       m_pSalDisplay->GetRootWindow(),
+                                       m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                        m_aWMAtoms[ DTWM_IS_RUNNING ],
                                        0, 1,
                                        False,
@@ -315,7 +323,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
         Atom aWMakerRunning = XInternAtom( m_pDisplay, "_WINDOWMAKER_WM_PROTOCOLS", True );
         if( aWMakerRunning != None &&
             XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow(),
+                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                 aWMakerRunning,
                                 0, 32,
                                 False,
@@ -351,7 +359,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
         Atom aRwmRunning = XInternAtom( m_pDisplay, "RWM_RUNNING", True );
         if( aRwmRunning != None &&
             XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow(),
+                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                 aRwmRunning,
                                 0, 32,
                                 False,
@@ -368,7 +376,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
         }
         else if( (aRwmRunning = XInternAtom( m_pDisplay, "_WRQ_WM_RUNNING", True )) != None &&
             XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow(),
+                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                 aRwmRunning,
                                 0, 32,
                                 False,
@@ -389,7 +397,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
         Atom aTTAPlatform = XInternAtom( m_pDisplay, "TTA_CLIENT_PLATFORM", True );
         if( aTTAPlatform != None &&
             XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow(),
+                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                 aTTAPlatform,
                                 0, 32,
                                 False,
@@ -454,7 +462,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
     bNetWM = getNetWmName();
     if( bNetWM
         && XGetWindowProperty( m_pDisplay,
-                               m_pSalDisplay->GetRootWindow(),
+                               m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                m_aWMAtoms[ NET_SUPPORTED ],
                                0, 0,
                                False,
@@ -475,7 +483,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
         }
         // collect supported protocols
         if( XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow(),
+                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                 m_aWMAtoms[ NET_SUPPORTED ],
                                 0, nBytesLeft/4,
                                 False,
@@ -532,7 +540,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
         // get number of desktops
         if( m_aWMAtoms[ NET_NUMBER_OF_DESKTOPS ]
             && XGetWindowProperty( m_pDisplay,
-                                   m_pSalDisplay->GetRootWindow(),
+                                   m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                    m_aWMAtoms[ NET_NUMBER_OF_DESKTOPS ],
                                    0, 1,
                                    False,
@@ -551,7 +559,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
             // get work areas
             if( m_aWMAtoms[ NET_WORKAREA ]
                 && XGetWindowProperty( m_pDisplay,
-                                       m_pSalDisplay->GetRootWindow(),
+                                       m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                        m_aWMAtoms[ NET_WORKAREA ],
                                        0, 4*m_nDesktops,
                                        False,
@@ -644,7 +652,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
     {
         XLIB_Window         aWMChild    = None;
         if( XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow(),
+                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                 m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ],
                                 0, 1,
                                 False,
@@ -707,7 +715,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
     }
     if( m_bValid
         && XGetWindowProperty( m_pDisplay,
-                               m_pSalDisplay->GetRootWindow(),
+                               m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                m_aWMAtoms[ WIN_PROTOCOLS ],
                                0, 0,
                                False,
@@ -728,7 +736,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
         }
         // collect supported protocols
         if( XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow(),
+                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                 m_aWMAtoms[ WIN_PROTOCOLS ],
                                 0, nBytesLeft/4,
                                 False,
@@ -791,7 +799,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
         // get number of desktops
         if( m_aWMAtoms[ WIN_WORKSPACE_COUNT ]
             && XGetWindowProperty( m_pDisplay,
-                                   m_pSalDisplay->GetRootWindow(),
+                                   m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                    m_aWMAtoms[ WIN_WORKSPACE_COUNT ],
                                    0, 1,
                                    False,
@@ -844,7 +852,7 @@ bool WMAdaptor::getNetWmName()
     {
         XLIB_Window         aWMChild = None;
         if( XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow(),
+                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                 m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ],
                                 0, 1,
                                 False,
@@ -1445,7 +1453,7 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
                               pFrame->GetShellWindow(),
                               pReferenceFrame->bMapped_ ?
                               pReferenceFrame->GetShellWindow() :
-                              m_pSalDisplay->GetRootWindow()
+                              m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() )
                               );
         if( ! pReferenceFrame->bMapped_ )
             pFrame->mbTransientForRoot = true;
@@ -1502,6 +1510,12 @@ void NetWMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType 
                     m_aWMAtoms[ NET_WM_WINDOW_TYPE_TOOLBAR ] :
                     m_aWMAtoms[ NET_WM_WINDOW_TYPE_NORMAL];
                 break;
+            case windowType_Dock:
+                aWindowTypes[nWindowTypes++] =
+                    m_aWMAtoms[ NET_WM_WINDOW_TYPE_DOCK ] ?
+                    m_aWMAtoms[ NET_WM_WINDOW_TYPE_DOCK ] :
+                    m_aWMAtoms[ NET_WM_WINDOW_TYPE_NORMAL];
+                break;
             default:
                 aWindowTypes[nWindowTypes++] = m_aWMAtoms[ NET_WM_WINDOW_TYPE_NORMAL ];
                 break;
@@ -1521,7 +1535,7 @@ void NetWMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType 
     {
         XSetTransientForHint( m_pDisplay,
                               pFrame->GetShellWindow(),
-                              m_pSalDisplay->GetRootWindow() );
+                              m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ) );
         pFrame->mbTransientForRoot = true;
     }
 }
@@ -1553,7 +1567,7 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
 
     if( bHorizontal || bVertical )
     {
-        Size aScreenSize( m_pSalDisplay->GetScreenSize() );
+        Size aScreenSize( m_pSalDisplay->GetScreenSize( pFrame->GetScreenNumber() ) );
         Point aTL( rGeom.nLeftDecoration, rGeom.nTopDecoration );
         if( m_pSalDisplay->IsXinerama() )
         {
@@ -1678,7 +1692,7 @@ void NetWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bV
             aEvent.xclient.data.l[3]    = 0;
             aEvent.xclient.data.l[4]    = 0;
             XSendEvent( m_pDisplay,
-                        m_pSalDisplay->GetRootWindow(),
+                        m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
                         False,
                         SubstructureNotifyMask | SubstructureRedirectMask,
                         &aEvent
@@ -1689,7 +1703,7 @@ void NetWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bV
                 aEvent.xclient.data.l[1]= m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_VERT ];
                 aEvent.xclient.data.l[2]= 0;
                 XSendEvent( m_pDisplay,
-                            m_pSalDisplay->GetRootWindow(),
+                            m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
                             False,
                             SubstructureNotifyMask | SubstructureRedirectMask,
                             &aEvent
@@ -1745,7 +1759,7 @@ void GnomeWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool 
             aEvent.xclient.data.l[3]    = 0;
             aEvent.xclient.data.l[4]    = 0;
             XSendEvent( m_pDisplay,
-                        m_pSalDisplay->GetRootWindow(),
+                        m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
                         False,
                         SubstructureNotifyMask,
                         &aEvent
@@ -1819,7 +1833,7 @@ void NetWMAdaptor::enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const
             aEvent.xclient.data.l[3]    = 0;
             aEvent.xclient.data.l[4]    = 0;
             XSendEvent( m_pDisplay,
-                        m_pSalDisplay->GetRootWindow(),
+                        m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
                         False,
                         SubstructureNotifyMask | SubstructureRedirectMask,
                         &aEvent
@@ -1853,7 +1867,7 @@ void GnomeWMAdaptor::enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) cons
             aEvent.xclient.data.l[3]    = 0;
             aEvent.xclient.data.l[4]    = 0;
             XSendEvent( m_pDisplay,
-                        m_pSalDisplay->GetRootWindow(),
+                        m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
                         False,
                         SubstructureNotifyMask | SubstructureRedirectMask,
                         &aEvent
@@ -1885,7 +1899,7 @@ void WMAdaptor::changeReferenceFrame( X11SalFrame* pFrame, X11SalFrame* pReferen
         && ! pFrame->IsFloatGrabWindow()
         )
     {
-        XLIB_Window aTransient = pFrame->pDisplay_->GetRootWindow();
+        XLIB_Window aTransient = pFrame->pDisplay_->GetRootWindow( pFrame->GetScreenNumber() );
         pFrame->mbTransientForRoot = true;
         if( pReferenceFrame )
         {
@@ -2073,7 +2087,7 @@ void NetWMAdaptor::shade( X11SalFrame* pFrame, bool bToShaded ) const
             aEvent.xclient.data.l[3]    = 0;
             aEvent.xclient.data.l[4]    = 0;
             XSendEvent( m_pDisplay,
-                        m_pSalDisplay->GetRootWindow(),
+                        m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
                         False,
                         SubstructureNotifyMask | SubstructureRedirectMask,
                         &aEvent
@@ -2110,7 +2124,7 @@ void GnomeWMAdaptor::shade( X11SalFrame* pFrame, bool bToShaded ) const
             aEvent.xclient.data.l[3]    = 0;
             aEvent.xclient.data.l[4]    = 0;
             XSendEvent( m_pDisplay,
-                        m_pSalDisplay->GetRootWindow(),
+                        m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
                         False,
                         SubstructureNotifyMask | SubstructureRedirectMask,
                         &aEvent
@@ -2153,7 +2167,7 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
             aEvent.xclient.data.l[3]    = 0;
             aEvent.xclient.data.l[4]    = 0;
             XSendEvent( m_pDisplay,
-                        m_pSalDisplay->GetRootWindow(),
+                        m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
                         False,
                         SubstructureNotifyMask | SubstructureRedirectMask,
                         &aEvent
@@ -2173,7 +2187,7 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
                 int root_x = 0, root_y = 0, lx, ly;
                 unsigned int mask;
                 XQueryPointer( m_pDisplay,
-                m_pSalDisplay->GetRootWindow(),
+                m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
                 &aRoot, &aChild,
                 &root_x, &root_y, &lx, &ly, &mask );
                 const std::vector< Rectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
@@ -2192,7 +2206,7 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
             }
             else
             {
-                Size aSize = m_pSalDisplay->GetScreenSize();
+                Size aSize = m_pSalDisplay->GetScreenSize( pFrame->GetScreenNumber() );
                 pFrame->maGeometry.nX       = 0;
                 pFrame->maGeometry.nY       = 0;
                 pFrame->maGeometry.nWidth   = aSize.Width();
@@ -2207,6 +2221,7 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
 /*
  *  WMAdaptor::getCurrentWorkArea
  */
+// FIXME: multiscreen case
 int WMAdaptor::getCurrentWorkArea() const
 {
     int nCurrent = -1;
@@ -2218,7 +2233,7 @@ int WMAdaptor::getCurrentWorkArea() const
         unsigned long       nBytesLeft  = 0;
         unsigned char*  pProperty   = NULL;
         if( XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow(),
+                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                                 m_aWMAtoms[ NET_CURRENT_DESKTOP ],
                                 0, 1,
                                 False,
@@ -2285,6 +2300,7 @@ int WMAdaptor::getWindowWorkArea( XLIB_Window aWindow ) const
 /*
  *  WMAdaptor::getCurrentWorkArea
  */
+// fixme: multi screen case
 void WMAdaptor::switchToWorkArea( int nWorkArea ) const
 {
     if( m_aWMAtoms[ NET_CURRENT_DESKTOP ] )
@@ -2292,7 +2308,7 @@ void WMAdaptor::switchToWorkArea( int nWorkArea ) const
         XEvent aEvent;
         aEvent.type                 = ClientMessage;
         aEvent.xclient.display      = m_pDisplay;
-        aEvent.xclient.window       = m_pSalDisplay->GetRootWindow();
+        aEvent.xclient.window       = m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() );
         aEvent.xclient.message_type = m_aWMAtoms[ NET_CURRENT_DESKTOP ];
         aEvent.xclient.format       = 32;
         aEvent.xclient.data.l[0]    = nWorkArea;
@@ -2301,7 +2317,7 @@ void WMAdaptor::switchToWorkArea( int nWorkArea ) const
         aEvent.xclient.data.l[3]    = 0;
         aEvent.xclient.data.l[4]    = 0;
         XSendEvent( m_pDisplay,
-                    m_pSalDisplay->GetRootWindow(),
+                    m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
                     False,
                     SubstructureNotifyMask | SubstructureRedirectMask,
                     &aEvent
@@ -2322,5 +2338,65 @@ void WMAdaptor::frameIsMapping( X11SalFrame* ) const
 void NetWMAdaptor::frameIsMapping( X11SalFrame* pFrame ) const
 {
     setNetWMState( pFrame );
+}
+
+/*
+ * WMAdaptor::setFrameStruts
+ */
+void WMAdaptor::setFrameStruts( X11SalFrame*,
+                                int, int, int, int,
+                                int, int, int, int,
+                                int, int, int, int ) const
+{
+}
+
+/*
+ * NetWMAdaptor::setFrameStruts
+ */
+void NetWMAdaptor::setFrameStruts( X11SalFrame* pFrame,
+                                   int left, int right, int top, int bottom,
+                                   int left_start_y, int left_end_y,
+                                   int right_start_y, int right_end_y,
+                                   int top_start_x, int top_end_x,
+                                   int bottom_start_x, int bottom_end_x ) const
+{
+    long nData[12];
+    nData[0] = left;
+    nData[1] = right;
+    nData[2] = top;
+    nData[3] = bottom;
+    nData[4] = left_start_y;
+    nData[5] = left_end_y;
+    nData[6] = right_start_y;
+    nData[7] = right_end_y;
+    nData[8] = top_start_x;
+    nData[9] = top_end_x;
+    nData[10]= bottom_start_x;
+    nData[11]= bottom_end_x;
+    Atom aProperty = None;
+    int nSetData = 0;
+
+    if( m_aWMAtoms[NET_WM_STRUT_PARTIAL] )
+    {
+        aProperty = m_aWMAtoms[NET_WM_STRUT_PARTIAL];
+        nSetData = 12;
+    }
+    else if( m_aWMAtoms[NET_WM_STRUT] )
+    {
+        aProperty = m_aWMAtoms[NET_WM_STRUT];
+        nSetData = 4;
+    }
+    if( nSetData )
+    {
+            XChangeProperty( m_pDisplay,
+                             pFrame->GetShellWindow(),
+                             aProperty,
+                             XA_CARDINAL,
+                             32,
+                             PropModeReplace,
+                             (unsigned char*)&nData,
+                             nSetData
+                             );
+    }
 }
 
