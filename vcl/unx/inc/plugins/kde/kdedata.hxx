@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdedata.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 17:47:49 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:03:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ public:
 class SalKDEDisplay : public SalX11Display
 {
 public:
-    SalKDEDisplay( Display* pDisp, Visual* pVisual = NULL, Colormap aColMap = None );
+    SalKDEDisplay( Display* pDisp );
     virtual ~SalKDEDisplay();
 };
 
@@ -80,6 +80,7 @@ public:
 
     virtual SalGraphics* GetGraphics();
     virtual void ReleaseGraphics( SalGraphics *pGraphics );
+    virtual void updateGraphics();
     virtual void UpdateSettings( AllSettings& rSettings );
     virtual void Show( BOOL bVisible, BOOL bNoActivate );
 };
