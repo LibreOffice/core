@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zipfileaccess.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:30:34 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:49:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,24 +93,6 @@ OZipFileAccess::~OZipFileAccess()
         }
     }
 }
-
-// ----------------------------------------------------------------
-EntryHash& OZipFileAccess::GetEntryHash_Impl()
-{
-    OSL_ENSURE( m_pZipFile, "ZipFile must be set already!\n" );
-    if ( !m_aEntries.size() && m_pZipFile )
-    {
-        ::std::auto_ptr< ZipEnumeration > pZipEnum( m_pZipFile->entries() );
-        while( pZipEnum->hasMoreElements() )
-        {
-            const ZipEntry* pZipEntry = pZipEnum->nextElement();
-            m_aEntries[pZipEntry->sName] = *pZipEntry;
-        }
-    }
-
-    return m_aEntries;
-}
-
 
 // ----------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > OZipFileAccess::GetPatternsFromString_Impl( const ::rtl::OUString& aString )
@@ -284,9 +266,8 @@ uno::Any SAL_CALL OZipFileAccess::getByName( const ::rtl::OUString& aName )
     if ( !m_pZipFile )
         throw io::NotConnectedException();
 
-    GetEntryHash_Impl();
-    EntryHash::iterator aIter = m_aEntries.find( aName );
-    if ( aIter == m_aEntries.end() )
+    EntryHash::iterator aIter = m_pZipFile->GetEntryHash().find( aName );
+    if ( aIter == m_pZipFile->GetEntryHash().end() )
         throw container::NoSuchElementException();
 
     uno::Reference< io::XInputStream > xEntryStream( m_pZipFile->getDataStream( (*aIter).second,
@@ -311,15 +292,24 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OZipFileAccess::getElementNames()
     if ( !m_pZipFile )
         throw io::NotConnectedException();
 
-    uno::Sequence< ::rtl::OUString > aNames;
+    uno::Sequence< ::rtl::OUString > aNames( m_pZipFile->GetEntryHash().size() );
     sal_Int32 nLen = 0;
 
-    GetEntryHash_Impl();
-
-    for ( EntryHash::iterator aIter = m_aEntries.begin(); aIter != m_aEntries.end(); aIter++ )
+    for ( EntryHash::iterator aIter = m_pZipFile->GetEntryHash().begin(); aIter != m_pZipFile->GetEntryHash().end(); aIter++ )
     {
-        aNames.realloc( ++nLen );
+        if ( aNames.getLength() < ++nLen )
+        {
+            OSL_ENSURE( sal_False, "The size must be the same!\n" );
+            aNames.realloc( nLen );
+        }
+
         aNames[nLen-1] = (*aIter).second.sName;
+    }
+
+    if ( aNames.getLength() != nLen )
+    {
+        OSL_ENSURE( sal_False, "The size must be the same!\n" );
+        aNames.realloc( nLen );
     }
 
     return aNames;
@@ -337,10 +327,9 @@ sal_Bool SAL_CALL OZipFileAccess::hasByName( const ::rtl::OUString& aName )
     if ( !m_pZipFile )
         throw io::NotConnectedException();
 
-    GetEntryHash_Impl();
-    EntryHash::iterator aIter = m_aEntries.find( aName );
+    EntryHash::iterator aIter = m_pZipFile->GetEntryHash().find( aName );
 
-    return ( aIter != m_aEntries.end() );
+    return ( aIter != m_pZipFile->GetEntryHash().end() );
 }
 
 // ----------------------------------------------------------------
@@ -370,8 +359,7 @@ sal_Bool SAL_CALL OZipFileAccess::hasElements()
     if ( !m_pZipFile )
         throw io::NotConnectedException();
 
-    GetEntryHash_Impl();
-    return ( m_aEntries.size() != 0 );
+    return ( m_pZipFile->GetEntryHash().size() != 0 );
 }
 
 // XZipFileAccess
@@ -392,9 +380,7 @@ uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( 
     // Code to compare strings by patterns
     uno::Sequence< ::rtl::OUString > aPattern = GetPatternsFromString_Impl( aPatternString );
 
-    GetEntryHash_Impl();
-
-    for ( EntryHash::iterator aIter = m_aEntries.begin(); aIter != m_aEntries.end(); aIter++ )
+    for ( EntryHash::iterator aIter = m_pZipFile->GetEntryHash().begin(); aIter != m_pZipFile->GetEntryHash().end(); aIter++ )
     {
         if ( StringGoodForPattern_Impl( (*aIter).second.sName, aPattern ) )
         {
