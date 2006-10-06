@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.103 $
+#   $Revision: 1.104 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:37:16 $
+#   last change: $Author: kz $ $Date: 2006-10-06 10:35:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.103 $$"
+LIBSMKREV!:="$$Revision: 1.104 $$"
 
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 
@@ -198,6 +198,7 @@ BERKELEYCPPLIB=-ldb_cxx-4.2
 CURLLIB=-lcurl
 SFX2LIB=-lsfx$(OFFICEUPD)$(DLLPOSTFIX)
 SFXLIB=-lsfx$(OFFICEUPD)$(DLLPOSTFIX)
+EGGTRAYLIB=-leggtray$(OFFICEUPD)$(DLLPOSTFIX)
 SFXDEBUGLIB=
 FWELIB=-lfwe$(OFFICEUPD)$(DLLPOSTFIX)
 FWILIB=-lfwi$(OFFICEUPD)$(DLLPOSTFIX)
