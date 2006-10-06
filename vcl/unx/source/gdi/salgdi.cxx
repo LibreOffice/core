@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:38:45 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:06:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,33 +160,54 @@ X11SalGraphics::X11SalGraphics()
 X11SalGraphics::~X11SalGraphics()
 {
     ReleaseFonts();
-
-    Display *pDisplay = GetXDisplay();
-
-    DBG_ASSERT( !pPaintRegion_, "pPaintRegion_" )
-        if( pClipRegion_ ) XDestroyRegion( pClipRegion_ );
-
-    if( hBrush_ )       XFreePixmap( pDisplay, hBrush_ );
-    if( pPenGC_ )       XFreeGC( pDisplay, pPenGC_ );
-    if( pFontGC_ )      XFreeGC( pDisplay, pFontGC_ );
-    if( pBrushGC_ )     XFreeGC( pDisplay, pBrushGC_ );
-    if( pMonoGC_ )      XFreeGC( pDisplay, pMonoGC_ );
-    if( pCopyGC_ )      XFreeGC( pDisplay, pCopyGC_ );
-    if( pMaskGC_ )      XFreeGC( pDisplay, pMaskGC_ );
-    if( pInvertGC_ )    XFreeGC( pDisplay, pInvertGC_ );
-    if( pInvert50GC_ )  XFreeGC( pDisplay, pInvert50GC_ );
-    if( pStippleGC_ )   XFreeGC( pDisplay, pStippleGC_ );
-    if( pTrackingGC_ )  XFreeGC( pDisplay, pTrackingGC_ );
-    if( m_pDeleteColormap )
-        delete m_pDeleteColormap;
+    freeResources();
 }
 
 // -=-= SalGraphics / X11SalGraphics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget )
+void X11SalGraphics::freeResources()
 {
-    m_pColormap     = &GetX11SalData()->GetDisplay()->GetColormap();
+    Display *pDisplay = GetXDisplay();
+
+    DBG_ASSERT( !pPaintRegion_, "pPaintRegion_" )
+    if( pClipRegion_ ) XDestroyRegion( pClipRegion_ ), pClipRegion_ = None;
+
+    if( hBrush_ )       XFreePixmap( pDisplay, hBrush_ ), hBrush_ = None;
+    if( pPenGC_ )       XFreeGC( pDisplay, pPenGC_ ), pPenGC_ = None;
+    if( pFontGC_ )      XFreeGC( pDisplay, pFontGC_ ), pFontGC_ = None;
+    if( pBrushGC_ )     XFreeGC( pDisplay, pBrushGC_ ), pBrushGC_ = None;
+    if( pMonoGC_ )      XFreeGC( pDisplay, pMonoGC_ ), pMonoGC_ = None;
+    if( pCopyGC_ )      XFreeGC( pDisplay, pCopyGC_ ), pCopyGC_ = None;
+    if( pMaskGC_ )      XFreeGC( pDisplay, pMaskGC_ ), pMaskGC_ = None;
+    if( pInvertGC_ )    XFreeGC( pDisplay, pInvertGC_ ), pInvertGC_ = None;
+    if( pInvert50GC_ )  XFreeGC( pDisplay, pInvert50GC_ ), pInvert50GC_ = None;
+    if( pStippleGC_ )   XFreeGC( pDisplay, pStippleGC_ ), pStippleGC_ = None;
+    if( pTrackingGC_ )  XFreeGC( pDisplay, pTrackingGC_ ), pTrackingGC_ = None;
+    if( m_pDeleteColormap )
+        delete m_pDeleteColormap, m_pColormap = m_pDeleteColormap = NULL;
+
+    bPenGC_ = bFontGC_ = bBrushGC_ = bMonoGC_ = bCopyGC_ = bInvertGC_ = bInvert50GC_ = bStippleGC_ = bTrackingGC_ = false;
+}
+
+void X11SalGraphics::SetDrawable( Drawable aDrawable, int nScreen )
+{
+    if( nScreen != m_nScreen )
+    {
+        freeResources();
+        m_pColormap = &GetX11SalData()->GetDisplay()->GetColormap( nScreen );
+        m_nScreen = nScreen;
+    }
+    hDrawable_ = aDrawable;
+    nPenPixel_      = GetPixel( nPenColor_ );
+    nTextPixel_     = GetPixel( nTextColor_ );
+    nBrushPixel_    = GetPixel( nBrushColor_ );
+}
+
+void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget, int nScreen )
+{
+    m_pColormap     = &GetX11SalData()->GetDisplay()->GetColormap(nScreen);
     hDrawable_      = aTarget;
+    m_nScreen       = nScreen;
 
     bWindow_        = TRUE;
     m_pFrame        = pFrame;
@@ -397,7 +418,7 @@ BOOL X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
     };
 
     // test for correct depth (8bit)
-    if( GetColormap().GetVisual()->GetDepth() != 8 )
+    if( GetColormap().GetVisual().GetDepth() != 8 )
         return FALSE;
 
     char    pBits[64];
@@ -445,7 +466,7 @@ BOOL X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
     // put the ximage to the pixmap
     XPutImage( GetXDisplay(),
                hBrush_,
-               GetDisplay()->GetCopyGC(),
+               GetDisplay()->GetCopyGC( m_nScreen ),
                pImage,
                0, 0,                        // Source
                0, 0,                        // Destination
@@ -461,7 +482,7 @@ BOOL X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // const
 {
-    SalDisplay *pDisplay = GetDisplay();
+    const SalDisplay *pDisplay = GetDisplay();
 
     rDPIX = pDisplay->GetResolution().A();
     rDPIY = pDisplay->GetResolution().B();
@@ -501,7 +522,7 @@ void X11SalGraphics::GetScreenFontResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 USHORT X11SalGraphics::GetBitCount() // const
 {
-    return GetVisual()->GetDepth();
+    return GetVisual().GetDepth();
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -620,7 +641,7 @@ void X11SalGraphics::SetFillColor( SalColor nSalColor )
         bDitherBrush_   = FALSE;
         nBrushColor_    = nSalColor;
         nBrushPixel_    = GetPixel( nSalColor );
-        if( TrueColor != GetColormap().GetVisual()->GetClass()
+        if( TrueColor != GetColormap().GetVisual().GetClass()
             && GetColormap().GetColor( nBrushPixel_ ) != nBrushColor_
             && nSalColor != MAKE_SALCOLOR( 0x00, 0x00, 0x00 ) // black
             && nSalColor != MAKE_SALCOLOR( 0x00, 0x00, 0x80 ) // blue
@@ -652,10 +673,10 @@ void X11SalGraphics::SetROPLineColor( SalROPColor nROPColor )
             nPenPixel_ = (Pixel)0;
             break;
         case SAL_ROP_1 : // 1
-            nPenPixel_ = (Pixel)(1 << GetVisual()->GetDepth()) - 1;
+            nPenPixel_ = (Pixel)(1 << GetVisual().GetDepth()) - 1;
             break;
         case SAL_ROP_INVERT : // 2
-            nPenPixel_ = (Pixel)(1 << GetVisual()->GetDepth()) - 1;
+            nPenPixel_ = (Pixel)(1 << GetVisual().GetDepth()) - 1;
             break;
     }
     nPenColor_  = GetColormap().GetColor( nPenPixel_ );
@@ -671,10 +692,10 @@ void X11SalGraphics::SetROPFillColor( SalROPColor nROPColor )
             nBrushPixel_ = (Pixel)0;
             break;
         case SAL_ROP_1 : // 1
-            nBrushPixel_ = (Pixel)(1 << GetVisual()->GetDepth()) - 1;
+            nBrushPixel_ = (Pixel)(1 << GetVisual().GetDepth()) - 1;
             break;
         case SAL_ROP_INVERT : // 2
-            nBrushPixel_ = (Pixel)(1 << GetVisual()->GetDepth()) - 1;
+            nBrushPixel_ = (Pixel)(1 << GetVisual().GetDepth()) - 1;
             break;
     }
     bDitherBrush_   = FALSE;
