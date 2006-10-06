@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lang.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:15:32 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:44:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -473,7 +473,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_WALLOON               0x0633
 #define LANGUAGE_USER_COPTIC                0x0634
 #define LANGUAGE_USER_GASCON                0x0636  /* gascon France gsc-FR */
-
-
+#define LANGUAGE_USER_CHUVASH               0x0635
+#define LANGUAGE_USER_GERMAN_BELGIUM        0x8007  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_GERMAN)) */
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
