@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:27:06 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:00:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ private:
                                                USHORT nBitCount,
                                                const BitmapPalette& rPal );
     static BitmapBuffer*        ImplCreateDIB( Drawable aDrawable,
+                                               int nScreen,
                                                long nDrawableDepth,
                                                long nX, long nY,
                                                long nWidth, long nHeight );
@@ -85,7 +86,9 @@ public:
     void                        ImplRemovedFromCache();
 
     bool                        SnapShot (Display* pDisplay, XLIB_Window hWindow);
-    bool                        ImplCreateFromXImage (Display* pDisplay, XLIB_Window hWindow,
+    bool                        ImplCreateFromXImage( Display* pDisplay,
+                                                      XLIB_Window hWindow,
+                                                      int nScreen,
                                                       XImage* pImage);
 private:
 
@@ -95,25 +98,17 @@ private:
 
 public:
 
-    SAL_DLLPRIVATE bool    ImplCreateFromDrawable(
-#ifdef _USE_PRINT_EXTENSION_
-                                            SalDisplay* pDisplay,
-#endif
-                                            Drawable aDrawable,
-                                            long nDrawableDepth,
-                                            long nX, long nY,
-                                            long nWidth, long nHeight );
+    SAL_DLLPRIVATE bool    ImplCreateFromDrawable( Drawable aDrawable,
+                                                  int nScreen,
+                                                  long nDrawableDepth,
+                                                  long nX, long nY,
+                                                  long nWidth, long nHeight );
 
-    SAL_DLLPRIVATE XImage* ImplCreateXImage(
-                                            SalDisplay* pSalDisp, long nDepth,
+    SAL_DLLPRIVATE XImage* ImplCreateXImage( SalDisplay* pSalDisp,
+                                            int nScreen, long nDepth,
                                               const SalTwoRect& rTwoRect ) const;
-#ifdef _USE_PRINT_EXTENSION_
-    void    ImplDraw( SalDisplay *pDisplay, Drawable aDrawable, long nDrawableDepth,
-                          const SalTwoRect& rTwoRect, const GC& rGC ) const;
-#else
-    void    ImplDraw( Drawable aDrawable, long nDrawableDepth,
-                          const SalTwoRect& rTwoRect, const GC& rGC ) const;
-#endif
+    void    ImplDraw( Drawable aDrawable, int nScreen, long nDrawableDepth,
+                     const SalTwoRect& rTwoRect, const GC& rGC ) const;
 
 public:
 
@@ -151,34 +146,29 @@ private:
     Pixmap          maPixmap;
     SalTwoRect      maTwoRect;
     long            mnDepth;
+    int             mnScreen;
 
                     ImplSalDDB() {}
 
-    static void ImplDraw(
-#ifdef _USE_PRINT_EXTENSION_
-                                SalDisplay* pDisplay,
-#endif
-    Drawable aSrcDrawable, long nSrcDrawableDepth,
-                              Drawable aDstDrawable, long nDstDrawableDepth,
-                              long nSrcX, long nSrcY,
-                              long nDestWidth, long nDestHeight,
-                              long nDestX, long nDestY, const GC& rGC );
+    static void ImplDraw( Drawable aSrcDrawable, long nSrcDrawableDepth,
+                          Drawable aDstDrawable, long nDstDrawableDepth,
+                          long nSrcX, long nSrcY,
+                          long nDestWidth, long nDestHeight,
+                          long nDestX, long nDestY, const GC& rGC );
 
 public:
 
-                    ImplSalDDB(
-#ifdef _USE_PRINT_EXTENSION_
-                                SalDisplay* pDisplay,
-#endif
-                                XImage* pImage, Drawable aDrawable,
+                    ImplSalDDB( XImage* pImage,
+                                Drawable aDrawable, int nScreen,
                                 const SalTwoRect& rTwoRect );
-                    ImplSalDDB(
-#ifdef _USE_PRINT_EXTENSION_
-                                SalDisplay* pDisplay,
-#endif
-                                Drawable aDrawable, long nDrawableDepth,
+                    ImplSalDDB( Drawable aDrawable,
+                                int nScreen,
+                                long nDrawableDepth,
                                 long nX, long nY, long nWidth, long nHeight );
-                    ImplSalDDB (Display* pDisplay, XLIB_Window hWindow, XImage* pImage);
+                    ImplSalDDB( Display* pDisplay,
+                                XLIB_Window hWindow,
+                                int nScreen,
+                                XImage* pImage);
                     ~ImplSalDDB();
 
     Pixmap          ImplGetPixmap() const { return maPixmap; }
@@ -186,14 +176,11 @@ public:
     long            ImplGetHeight() const { return maTwoRect.mnDestHeight; }
     long            ImplGetDepth() const { return mnDepth; }
     ULONG           ImplGetMemSize() const { return( ( maTwoRect.mnDestWidth * maTwoRect.mnDestHeight * mnDepth ) >> 3 ); }
+    int             ImplGetScreen() const { return mnScreen; }
 
-    bool            ImplMatches( long nDepth, const SalTwoRect& rTwoRect ) const;
-    void            ImplDraw(
-#ifdef _USE_PRINT_EXTENSION_
-                                SalDisplay* pDisplay,
-#endif
-                                Drawable aDrawable, long nDrawableDepth,
-                                const SalTwoRect& rTwoRect, const GC& rGC ) const;
+    bool            ImplMatches( int nScreen, long nDepth, const SalTwoRect& rTwoRect ) const;
+    void            ImplDraw( Drawable aDrawable, long nDrawableDepth,
+                              const SalTwoRect& rTwoRect, const GC& rGC ) const;
 };
 
 // ----------------------
