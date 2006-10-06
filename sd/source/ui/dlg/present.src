@@ -4,9 +4,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 11:22:01 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,10 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#include "helpids.h"
 #include <svx/svxids.hrc>
 #include "present.hrc"
+
 #define DISTANCE    23
 #define DISTANCE2   ((DISTANCE) + 81)
 
@@ -42,7 +44,7 @@ ModalDialog DLG_START_PRESENTATION
     HelpID = SID_PRESENTATION ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 256, 177 ) ;
+    Size = MAP_APPFONT ( 256, 205 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Bildschirmpr‰sentation : Bildschirmprısentation */
     Text [ de ] = "Bildschirmpr√§sentation" ;
     Text [ en-US ] = "Slide Show" ;
@@ -97,8 +99,8 @@ ModalDialog DLG_START_PRESENTATION
     ListBox LB_DIAS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72, 24 ) ;
-        Size = MAP_APPFONT ( 121, 80 ) ;
+        Pos = MAP_APPFONT ( 82, 24 ) ;
+        Size = MAP_APPFONT ( 111, 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
          //DDExtraWidth = TRUE;
@@ -116,7 +118,7 @@ ModalDialog DLG_START_PRESENTATION
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 32, 53 ) ;
-        Size = MAP_APPFONT ( 155, 80 ) ;
+        Size = MAP_APPFONT ( 161, 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
@@ -274,31 +276,57 @@ ModalDialog DLG_START_PRESENTATION
         Text [ en-US ] = "Presentation always ~on top" ;
         Text [ x-comment ] = " ";
     };
+
+    FixedLine GRP_MONITOR
+    {
+        Pos = MAP_APPFONT ( 6, 174 ) ;
+        Size = MAP_APPFONT ( 244, 8 );
+        Hide = TRUE;
+        Text [ de ] = "Mehrere Bildschirme" ;
+        Text [ en-US ] = "Multiple monitors" ;
+        Text [ x-comment ] = " ";
+    };
+
+    FixedText FT_MONITOR
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 12 , 185 + 2  ) ;
+        Size = MAP_APPFONT( 70, 8 );
+        Hide = TRUE;
+        Text [ de ] = "~Pr√§sentationsbildschirm" ;
+        Text [ en-US ] = "P~resentation monitor" ;
+        Text [ x-comment ] = " ";
+    };
+
+    ListBox LB_MONITOR
+    {
+        Pos = MAP_APPFONT ( 82 , 185 ) ;
+        Size = MAP_APPFONT ( 111, 100 );
+        HelpId = HID_SD_SLIDESHOW_DISPLAY;
+        Hide = TRUE;
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+        ClipChildren = TRUE;
+    };
+
+    String STR_PRIMARY_MONITOR
+    {
+        Text [ de ] = "Bildschirm %N (prim√§r)";
+        Text [ en-US ] = "Monitor %N (primary)";
+    };
+
+    String STR_MONITOR
+    {
+        Text [ de ] = "Bildschirm %N";
+        Text [ en-US ] = "Monitor %N";
+    };
+
+    String STR_ALL_MONITORS
+    {
+        Text [ de ] = "Alle Bildschirme";
+        Text [ en-US ] = "All monitors";
+    };
+
     Text [ x-comment ] = " ";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
