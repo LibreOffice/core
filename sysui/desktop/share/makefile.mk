@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:51:19 $
+#   last change: $Author: kz $ $Date: 2006-10-06 10:34:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ ULFFILES= \
     launcher_comment.ulf \
     launcher_name.ulf
 
-LAUNCHERLIST = writer calc draw impress math base printeradmin
+LAUNCHERLIST = writer calc draw impress math base printeradmin qstart
 LAUNCHERDEPN = ../menus/{$(LAUNCHERLIST)}.desktop
 
 LAUNCHERFLAGFILE = $(COMMONMISC)/$(TARGET)/xdg.flag
