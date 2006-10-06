@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zipfileaccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:00:27 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:49:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,8 +77,6 @@ class OZipFileAccess : public ::cppu::WeakImplHelper5<
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xContentStream;
     ZipFile* m_pZipFile;
 
-    EntryHash m_aEntries;
-
     ::cppu::OInterfaceContainerHelper* m_pListenersContainer;
 
     sal_Bool m_bDisposed;
@@ -87,8 +85,6 @@ public:
     OZipFileAccess( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
 
     virtual ~OZipFileAccess();
-
-    EntryHash& GetEntryHash_Impl();
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > GetPatternsFromString_Impl( const ::rtl::OUString& aString );
 
