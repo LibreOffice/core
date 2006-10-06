@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinfo.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:43:10 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:08:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,19 +62,25 @@
 class WinSalSystem : public SalSystem
 {
     std::vector< Rectangle > m_aMonitors;
+    std::vector< Rectangle > m_aWorkAreas;
+    unsigned int             m_nPrimary;
 public:
-    WinSalSystem() {}
+    WinSalSystem() : m_nPrimary( 0 ) {}
     virtual ~WinSalSystem();
 
     virtual unsigned int GetDisplayScreenCount();
+    virtual bool IsMultiDisplay();
+    virtual unsigned int GetDefaultDisplayNumber();
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
+    virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen );
     virtual int ShowNativeMessageBox( const String& rTitle,
                                       const String& rMessage,
                                       int nButtonCombination,
                                       int nDefaultButton);
-
     bool initMonitors();
     void addMonitor( const Rectangle& rRect) { m_aMonitors.push_back( rRect ); }
+    void addWorkArea( const Rectangle& rRect) { m_aWorkAreas.push_back( rRect ); }
+    void setLastToPrimary() { m_nPrimary = m_aMonitors.size()-1; }
 };
 
 SalSystem* WinSalInstance::CreateSalSystem()
@@ -88,16 +94,25 @@ WinSalSystem::~WinSalSystem()
 
 // -----------------------------------------------------------------------
 
-static BOOL CALLBACK ImplEnumMonitorProc( HMONITOR,
+static BOOL CALLBACK ImplEnumMonitorProc( HMONITOR hMonitor,
                                           HDC,
-                                          LPRECT lprcMonitor,
+                                          LPRECT,
                                           LPARAM dwData )
 {
+    MONITORINFO aInfo;
+    aInfo.cbSize = sizeof( aInfo );
+    GetMonitorInfo( hMonitor, &aInfo );
     WinSalSystem* pSys = reinterpret_cast<WinSalSystem*>(dwData);
-    pSys->addMonitor( Rectangle( Point( lprcMonitor->left,
-                                        lprcMonitor->top ),
-                                 Size( lprcMonitor->right - lprcMonitor->left,
-                                       lprcMonitor->bottom - lprcMonitor->top ) ) );
+    pSys->addMonitor( Rectangle( Point( aInfo.rcMonitor.left,
+                                        aInfo.rcMonitor.top ),
+                                 Size( aInfo.rcMonitor.right - aInfo.rcMonitor.left,
+                                       aInfo.rcMonitor.bottom - aInfo.rcMonitor.top ) ) );
+    pSys->addWorkArea( Rectangle( Point( aInfo.rcWork.left,
+                                         aInfo.rcWork.top ),
+                                  Size( aInfo.rcWork.right - aInfo.rcWork.left,
+                                        aInfo.rcWork.bottom - aInfo.rcWork.top ) ) );
+    if( (aInfo.dwFlags & MONITORINFOF_PRIMARY) != 0 )
+        pSys->setLastToPrimary();
     return TRUE;
 }
 
@@ -132,6 +147,12 @@ bool WinSalSystem::initMonitors()
             int w = GetSystemMetrics( SM_CXSCREEN );
             int h = GetSystemMetrics( SM_CYSCREEN );
             m_aMonitors.push_back( Rectangle( Point(), Size( w, h ) ) );
+            RECT aWorkRect;
+            if( SystemParametersInfo( SPI_GETWORKAREA, 0, &aWorkRect, 0 ) )
+                m_aWorkAreas.push_back( Rectangle( aWorkRect.left, aWorkRect.top,
+                                                   aWorkRect.right, aWorkRect.bottom ) );
+            else
+                m_aWorkAreas.push_back( m_aMonitors.front() );
         }
         else
         {
@@ -144,6 +165,12 @@ bool WinSalSystem::initMonitors()
         int w = GetSystemMetrics( SM_CXSCREEN );
         int h = GetSystemMetrics( SM_CYSCREEN );
         m_aMonitors.push_back( Rectangle( Point(), Size( w, h ) ) );
+        RECT aWorkRect;
+        if( SystemParametersInfo( SPI_GETWORKAREA, 0, &aWorkRect, 0 ) )
+            m_aWorkAreas.push_back( Rectangle( aWorkRect.left, aWorkRect.top,
+                                               aWorkRect.right, aWorkRect.bottom ) );
+        else
+            m_aWorkAreas.push_back( m_aMonitors.front() );
     }
 
     return m_aMonitors.size() > 0;
@@ -155,10 +182,26 @@ unsigned int WinSalSystem::GetDisplayScreenCount()
     return m_aMonitors.size();
 }
 
+bool WinSalSystem::IsMultiDisplay()
+{
+    return false;
+}
+
+unsigned int WinSalSystem::GetDefaultDisplayNumber()
+{
+    return m_nPrimary;
+}
+
 Rectangle WinSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
     initMonitors();
     return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen] : Rectangle();
+}
+
+Rectangle WinSalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
+{
+    initMonitors();
+    return (nScreen < m_aWorkAreas.size()) ? m_aWorkAreas[nScreen] : Rectangle();
 }
 
 // -----------------------------------------------------------------------
