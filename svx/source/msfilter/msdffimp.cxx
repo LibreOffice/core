@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:27:13 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:39:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -615,7 +615,7 @@ Impl_OlePres * CreateCache_Impl( SotStorage * pStor )
 SvStream& operator>>( SvStream& rIn, DffRecordHeader& rRec )
 {
     rRec.nFilePos = rIn.Tell();
-    UINT16 nTmp;
+    UINT16 nTmp(0);
     rIn >> nTmp;
     rRec.nImpVerInst = nTmp;
     rRec.nRecVer = nTmp & 0x000F;
