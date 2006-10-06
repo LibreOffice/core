@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prex.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:46:42 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:00:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@ extern "C" {
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/StringDefs.h>
+#include <X11/extensions/Xrender.h>
 typedef unsigned long Pixel;
 
 #undef  DestroyAll
@@ -73,16 +74,6 @@ typedef unsigned long Pixel;
 #define KeyCode         XLIB_KeyCode //undef in intrinsics
 
 #define __Ol_OlXlibExt_h__
-
-#if defined(_USE_PRINT_EXTENSION_)
-      #include <X11/X.h>
-      #include <X11/Xlib.h>
-      #include <X11/Xutil.h>
-
-      Bool XSalIsDisplay( Display *p_display );
-      Bool XSalIsPrinter( Display *p_display );
-      Display* GetXpDisplay();
-#endif
 
 #endif
 
