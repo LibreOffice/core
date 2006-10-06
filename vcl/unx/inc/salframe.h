@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:47:06 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:01:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,7 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
     std::list< X11SalFrame* > maChildren;         // List of child frames
 
     SalDisplay     *pDisplay_;
+    int             m_nScreen;
     XLIB_Window     mhWindow;
     XLIB_Window     mhShellWindow;
     XLIB_Window     mhForeignParent;
@@ -149,6 +150,8 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
     // icon id
     int             mnIconID;
 
+    String          m_aTitle;
+
     SystemChildData maSystemChildData;
 
     SalI18N_InputContext *mpInputContext;
@@ -181,16 +184,20 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
     DECL_LINK( HandleAlwaysOnTopRaise, void* );
 
     void            passOnSaveYourSelf();
+
+    void            createNewWindow( XLIB_Window aParent, int nScreen = -1 );
 public:
     X11SalFrame( SalFrame* pParent, ULONG nSalFrameStyle, SystemParentData* pSystemParent = NULL );
     virtual ~X11SalFrame();
 
     long            Dispatch( XEvent *pEvent );
-    void            Init( ULONG nSalFrameStyle, SystemParentData* pParentData = NULL );
+    void            Init( ULONG nSalFrameStyle, int nScreen = -1,
+                          SystemParentData* pParentData = NULL, bool bUseGeometry = false );
 
     SalDisplay*             GetDisplay() const { return pDisplay_; }
     Display*                GetXDisplay() const;
     XLIB_Window             GetDrawable() const;
+    int                     GetScreenNumber() const { return m_nScreen; }
     XLIB_Window             GetWindow() const { return mhWindow; }
     XLIB_Window             GetShellWindow() const { return mhShellWindow; }
     XLIB_Window             GetForeignParent() const { return mhForeignParent; }
@@ -217,6 +224,8 @@ public:
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
 
+    virtual void                updateGraphics();
+
     virtual BOOL                PostEvent( void* pData );
 
     virtual void                SetTitle( const XubString& rTitle );
@@ -235,7 +244,7 @@ public:
     virtual SalFrame*           GetParent() const;
     virtual void                SetWindowState( const SalFrameState* pState );
     virtual BOOL                GetWindowState( SalFrameState* pState );
-    virtual void                ShowFullScreen( BOOL bFullScreen );
+    virtual void                ShowFullScreen( BOOL bFullScreen, sal_Int32 nMonitor );
     virtual void                StartPresentation( BOOL bStart );
     virtual void                SetAlwaysOnTop( BOOL bOnTop );
     virtual void                ToTop( USHORT nFlags );
