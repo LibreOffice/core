@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:47:08 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:08:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,23 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
+#include <com/sun/star/container/XIndexAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
+#include <com/sun/star/awt/Rectangle.hpp>
+#endif
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #include <string.h>
 #include <limits.h>
@@ -131,6 +148,12 @@
 #include <com/sun/star/uno/Exception.hdl>
 
 #include <time.h>
+
+using ::rtl::OUString;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::beans;
 
 // The following defines are newly added in Longhorn
 #ifndef WM_MOUSEHWHEEL
@@ -878,8 +901,10 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
     int nFrameX;
     int nFrameY;
     int nCaptionY;
-    int nScreenDX;
-    int nScreenDY;
+    int nScreenX = 0;
+    int nScreenY = 0;
+    int nScreenDX = 0;
+    int nScreenDY = 0;
 
     if ( pFrame->mbSizeBorder )
     {
@@ -906,11 +931,42 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
     else
         nCaptionY = 0;
 
-    nScreenDX   = GetSystemMetrics( SM_CXSCREEN );
-    nScreenDY   = GetSystemMetrics( SM_CYSCREEN );
+    try
+    {
+        Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+        Reference< XIndexAccess > xMultiMon( xFactory->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DisplayAccess" ) ) ), UNO_QUERY_THROW );
+        if( (pFrame->mnDisplay >= 0) && (pFrame->mnDisplay < xMultiMon->getCount()) )
+        {
+            Reference< XPropertySet > xMonitor( xMultiMon->getByIndex( pFrame->mnDisplay ), UNO_QUERY_THROW );
+            com::sun::star::awt::Rectangle aRect;
+            if( xMonitor->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "ScreenArea" ) ) ) >>= aRect )
+            {
+                nScreenX = aRect.X;
+                nScreenY = aRect.Y;
+                nScreenDX = aRect.Width;
+                nScreenDY = aRect.Height;
+            }
+        }
+        else
+        {
+            nScreenX = GetSystemMetrics( SM_XVIRTUALSCREEN );
+            nScreenY = GetSystemMetrics( SM_YVIRTUALSCREEN );
+            nScreenDX = GetSystemMetrics( SM_CXVIRTUALSCREEN );
+            nScreenDY = GetSystemMetrics( SM_CYVIRTUALSCREEN );
+        }
+    }
+    catch( Exception& )
+    {
+    }
 
-    rX  = -nFrameX;
-    rY  = -(nFrameY+nCaptionY);
+    if( !nScreenDX || !nScreenDY )
+    {
+        nScreenDX   = GetSystemMetrics( SM_CXSCREEN );
+        nScreenDY   = GetSystemMetrics( SM_CYSCREEN );
+    }
+
+    rX  = nScreenX -nFrameX;
+    rY  = nScreenY -(nFrameY+nCaptionY);
     rDX = nScreenDX+(nFrameX*2);
     rDY = nScreenDY+(nFrameY*2)+nCaptionY;
 }
@@ -976,6 +1032,7 @@ WinSalFrame::WinSalFrame()
     mbNoIcon            = FALSE;
     mSelectedhMenu      = 0;
     mLastActivatedhMenu = 0;
+    mnDisplay           = 0;
 
     memset( &maState, 0, sizeof( SalFrameState ) );
     maSysData.nSize     = sizeof( SystemEnvData );
@@ -1953,12 +2010,14 @@ BOOL WinSalFrame::GetWindowState( SalFrameState* pState )
 
 // -----------------------------------------------------------------------
 
-void WinSalFrame::ShowFullScreen( BOOL bFullScreen )
+void WinSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay )
 {
-    if ( mbFullScreen == bFullScreen )
+    if ( (mbFullScreen == bFullScreen) && (!bFullScreen || (mnDisplay == nDisplay)) )
         return;
 
     mbFullScreen = bFullScreen;
+    mnDisplay = nDisplay;
+
     if ( bFullScreen )
     {
         // Damit Taskleiste von Windows ausgeblendet wird
