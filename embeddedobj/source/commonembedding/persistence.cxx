@@ -4,9 +4,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:41:06 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:37:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,9 +276,13 @@ void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::X
     m_aEntryName = aNewName;
 
 #ifdef USE_STORAGEBASED_DOCUMENT
-    uno::Reference< document::XStorageBasedDocument > xDoc( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
-    if ( xDoc.is() )
-        xDoc->switchToStorage( m_xObjectStorage );
+    // the linked document should not be switched
+    if ( !m_bIsLink )
+    {
+        uno::Reference< document::XStorageBasedDocument > xDoc( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+        if ( xDoc.is() )
+            xDoc->switchToStorage( m_xObjectStorage );
+    }
 #endif
 
     try {
