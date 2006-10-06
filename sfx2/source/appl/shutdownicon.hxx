@@ -35,11 +35,17 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
+#ifndef _OSL_MODULE_HXX_
+#include <osl/module.hxx>
+#endif
 #ifndef _SFX_SFXUNO_HXX
 #include <sfxuno.hxx>
 #endif
 #ifndef _CPPUHELPER_COMPBASE3_HXX_
 #include <cppuhelper/compbase3.hxx>
+#endif
+#ifndef INCLUDED_SFX2_DLLAPI_H
+#include <sfx2/dllapi.h>
 #endif
 
 class ResMgr;
@@ -49,7 +55,17 @@ typedef ::cppu::WeakComponentImplHelper3<
     ::com::sun::star::frame::XTerminateListener,
     ::com::sun::star::lang::XServiceInfo > ShutdownIconServiceBase;
 
-class ShutdownIcon :    public ShutdownIconServiceBase
+#if defined(USE_APP_SHORTCUTS)
+#define WRITER_URL      "private:factory/swriter"
+#define CALC_URL        "private:factory/scalc"
+#define IMPRESS_URL     "private:factory/simpress"
+#define IMPRESS_WIZARD_URL     "private:factory/simpress?slot=10425"
+#define DRAW_URL        "private:factory/sdraw"
+#define MATH_URL        "private:factory/smath"
+#define BASE_URL        "private:factory/sdatabase?Interactive"
+#endif
+
+class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
 {
         ::osl::Mutex    m_aMutex;
         bool            m_bVeto;
@@ -58,16 +74,18 @@ class ShutdownIcon :    public ShutdownIconServiceBase
 
         static ShutdownIcon *pShutdownIcon; // one instance
 
-#ifdef WNT
+        void (*m_pInitSystray)   ();
+        void (*m_pDeInitSystray) ();
+        ::osl::Module  *m_pPlugin;
+
         void initSystray();
         void deInitSystray();
-        static void SetAutostartW32( const ::rtl::OUString& aShortcutName, bool bActivate );
-        static bool GetAutostartW32( const ::rtl::OUString& aShortcutName );
+
         static void EnterModalMode();
         static void LeaveModalMode();
+        static rtl::OUString getShortcutName();
 
         friend class SfxNotificationListener_Impl;
-#endif
 
     public:
         ShutdownIcon( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > aSMgr );
@@ -88,6 +106,7 @@ class ShutdownIcon :    public ShutdownIconServiceBase
 
         static void SetAutostart( bool bActivate );
         static bool GetAutostart();
+        static bool bModalMode;
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >
                     GetWrapperFactory( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSMgr );
@@ -99,9 +118,7 @@ class ShutdownIcon :    public ShutdownIconServiceBase
         void SetVeto( bool bVeto )  { m_bVeto = bVeto;}
         bool GetVeto()              { return m_bVeto; }
 
-#ifdef WNT
         static bool IsQuickstarterInstalled();
-#endif
 
         // Component Helper - force override
         virtual void SAL_CALL disposing();
@@ -121,6 +138,22 @@ class ShutdownIcon :    public ShutdownIconServiceBase
             throw( ::com::sun::star::uno::Exception );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop > m_xDesktop;
+
+#ifdef WNT
+        static void EnableAutostartW32( const rtl::OUString &aShortcutName );
+        static rtl::OUString GetAutostartFolderNameW32();
+#endif
 };
+
+extern "C" {
+#  ifdef WNT
+    // builtin win32 systray
+    void win32_init_sys_tray();
+    void win32_shutdown_sys_tray();
+#  endif
+    // external plugin systray impl.
+    void plugin_init_sys_tray();
+    void plugin_shutdown_sys_tray();
+}
 
 #endif
