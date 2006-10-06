@@ -90,7 +90,7 @@
       <FormatCode>AA-MM-JJ</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>J MMMM, AAAA</FormatCode>
+      <FormatCode>J MMMM AAAA</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey8" default="true" type="medium" usage="DATE" formatindex="20">
       <FormatCode>AA-MM-JJ</FormatCode>
@@ -99,31 +99,31 @@
       <FormatCode>AAAA-MM-JJ</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
-      <FormatCode>J MMM, AA</FormatCode>
+      <FormatCode>J MMM AA</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="23">
-      <FormatCode>J MMM, AAAA</FormatCode>
+      <FormatCode>J MMM AAAA</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
       <FormatCode>J. MMM AAAA</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
-      <FormatCode>J MMMM, AAAA</FormatCode>
+      <FormatCode>J MMMM AAAA</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="26">
       <FormatCode>J. MMMM AAAA</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
-      <FormatCode>NN J MMM, AA</FormatCode>
+      <FormatCode>NN J MMM AA</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="28">
       <FormatCode>NN JJ-MMM AA</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
-      <FormatCode>NN J MMMM, AAAA</FormatCode>
+      <FormatCode>NN J MMMM AAAA</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
-      <FormatCode>NNNNJ MMMM, AAAA</FormatCode>
+      <FormatCode>NNNNJ MMMM AAAA</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
       <FormatCode>MM-JJ</FormatCode>
