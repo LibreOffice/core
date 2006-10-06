@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 10:06:04 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:47:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1346,8 +1346,8 @@ QueryBox RID_XMLSEC_QUERY_LOSINGSIGNATURE
 //    HelpId = HID_XMLSEC_QUERY_LOSINGSIGNATURE;
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Speichern in diesem Format entfernt alle existierenden Signaturen.\nMöchten Sie mit dem Speichern fortfahren?\n" ;
-    Message [ en-US ] = "Saving will remove all existing signatures.\nDo you want to continue saving the document?\n" ;
+    Message [ de ] = "Das Speichern entfernt alle existierenden Signaturen.\nMöchten Sie mit dem Speichern fortfahren?" ;
+    Message [ en-US ] = "Saving will remove all existing signatures.\nDo you want to continue saving the document?" ;
 };
 
 QueryBox RID_XMLSEC_QUERY_SAVEBEFORESIGN
