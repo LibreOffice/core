@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calendar_gregorian.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:40:26 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:08:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,6 @@ private:
     void SAL_CALL setValue() throw(com::sun::star::uno::RuntimeException);
     void SAL_CALL init(Era *_eraArray) throw(com::sun::star::uno::RuntimeException);
     Calendar aCalendar;
-    sal_Int16 aStartOfWeek;
 };
 
 //  ----------------------------------------------------
