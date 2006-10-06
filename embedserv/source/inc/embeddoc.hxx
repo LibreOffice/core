@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddoc.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:31:46 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:38:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,6 +187,25 @@ protected:
     DWORD                               m_nAdviseNum;
 
     ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl > m_xOwnAccess;
+
+    sal_Bool                            m_bIsInVerbHandling;
+};
+
+class BooleanGuard_Impl
+{
+    sal_Bool& m_bValue;
+
+public:
+    BooleanGuard_Impl( sal_Bool& bValue )
+    : m_bValue( bValue )
+    {
+        m_bValue = sal_True;
+    }
+
+    ~BooleanGuard_Impl()
+    {
+        m_bValue = sal_False;
+    }
 };
 
 #endif //_EMBEDDOC_HXX_
