@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheck.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:33:36 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:37:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,9 @@
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
@@ -102,6 +105,13 @@ extern "C" void SAL_CALL myThreadFunc(void*);
 
 #define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
+#define PROPERTY_TITLE          UNISTRING("BubbleHeading")
+#define PROPERTY_TEXT           UNISTRING("BubbleText")
+#define PROPERTY_IMAGE          UNISTRING("BubbleImageURL")
+#define PROPERTY_SHOW_BUBBLE    UNISTRING("BubbleVisible")
+#define PROPERTY_CLICK_HDL      UNISTRING("MenuClickHDL")
+#define PROPERTY_DEFAULT_TITLE  UNISTRING("DefaultHeading")
+#define PROPERTY_DEFAULT_TEXT   UNISTRING("DefaultText")
 
 //------------------------------------------------------------------------------
 
@@ -191,9 +201,6 @@ class UpdateCheckJob : public ::cppu::WeakImplHelper3< task::XJob, lang::XServic
     rtl::OUString getBuildId();
 
     uno::Reference< uno::XInterface > m_xUIService;
-
-    rtl::OUString m_aBubbleHeading;
-    rtl::OUString m_aBubbleText;
 
     sal_Bool (* m_pHasInternetConnection) ();
 
@@ -365,7 +372,8 @@ UpdateCheckJob::getUpdateAccess(
 uno::Reference< uno::XInterface >
 UpdateCheckJob::getUIService(sal_Bool bShowBubble) const
 {
-    uno::Reference<uno::XComponentContext> xContext(m_xContext);
+    uno::Reference< uno::XComponentContext > xContext(m_xContext);
+    uno::Reference< uno::XInterface > xUpdateCheckUI;
 
     if( !xContext.is() )
         throw uno::RuntimeException(
@@ -380,18 +388,19 @@ UpdateCheckJob::getUIService(sal_Bool bShowBubble) const
     rtl::OUString aPlaceholder( RTL_CONSTASCII_USTRINGPARAM("%PRODUCTNAME") );
     rtl::OUString aProductName = getProductName();
 
-    uno::Sequence< uno::Any > aArgumentList(4);
-    // FIXME this should be another object ..
-    aArgumentList[0] = uno::makeAny( uno::Reference< task::XJob >(const_cast <UpdateCheckJob *> (this) ) );
-    aArgumentList[1] = uno::makeAny(
-        m_aBubbleHeading.replaceAt( m_aBubbleHeading.indexOf( aPlaceholder ),
-            aPlaceholder.getLength(), aProductName) );
-    aArgumentList[2] = uno::makeAny( m_aBubbleText );
-    aArgumentList[3] = uno::makeAny( bShowBubble );
+    xUpdateCheckUI = xServiceManager->createInstanceWithContext(
+        UNISTRING( "com.sun.star.setup.UpdateCheckUI" ), xContext );
 
-    return xServiceManager->createInstanceWithArgumentsAndContext(
-        UNISTRING( "com.sun.star.setup.UpdateCheckUI" ),
-        aArgumentList, xContext );
+    uno::Reference< beans::XPropertySet > xSetProperties(xUpdateCheckUI, uno::UNO_QUERY_THROW);
+    xSetProperties->setPropertyValue( PROPERTY_TITLE,
+                                      xSetProperties->getPropertyValue( PROPERTY_DEFAULT_TITLE ) );
+    xSetProperties->setPropertyValue( PROPERTY_TEXT,
+                                      xSetProperties->getPropertyValue( PROPERTY_DEFAULT_TEXT ) );
+    xSetProperties->setPropertyValue( PROPERTY_CLICK_HDL,
+                                      uno::makeAny( uno::Reference< task::XJob >(const_cast <UpdateCheckJob *> (this) ) ) );
+    xSetProperties->setPropertyValue( PROPERTY_SHOW_BUBBLE, uno::makeAny( bShowBubble ) );
+
+    return xUpdateCheckUI;
 }
 
 //------------------------------------------------------------------------------
@@ -690,27 +699,6 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
 {
     uno::Sequence<beans::NamedValue> aConfig =
         getValue< uno::Sequence<beans::NamedValue> > (namedValues, "JobConfig");
-
-    // Localization in extendable sets not yet supported
-    rtl::OString aLocale = OUStringToOString(getLocale(), RTL_TEXTENCODING_ASCII_US);
-    try
-    {
-        rtl::OString aKey = "BubbleHeading_";
-        aKey += aLocale;
-        m_aBubbleHeading = getValue< rtl::OUString > (aConfig, aKey.getStr());
-        aKey = "BubbleText_";
-        aKey += aLocale;
-        m_aBubbleText = getValue< rtl::OUString > (aConfig, aKey.getStr());
-    }
-    catch( uno::RuntimeException& )
-    {
-        // fallback to en-US
-        m_aBubbleHeading = getValue< rtl::OUString > (aConfig, "BubbleHeading_en-US");
-        m_aBubbleText = getValue< rtl::OUString > (aConfig, "BubbleText_en-US");
-    }
-
-//    m_aBubbleHeading = getValue< rtl::OUString > (aConfig, "BubbleHeading");
-//    m_aBubbleText = getValue< rtl::OUString > (aConfig, "BubbleText");
 
     /* Determine the way we got invoked here -
      * see Developers Guide Chapter "4.7.2 Jobs" to understand the magic
