@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pages.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:45:43 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:39:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version .1.
@@ -56,6 +56,7 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/container/XNameReplace.hpp>
 
 #ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
 #include <comphelper/configurationhelper.hxx>
@@ -88,6 +89,9 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::container;
+
+#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
 namespace desktop {
 
@@ -307,7 +311,7 @@ BOOL LicenseView::IsEndReached() const
     return bEndReached;
 }
 
-void LicenseView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void LicenseView::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
     if ( rHint.IsA( TYPE(TextHint) ) )
     {
@@ -404,7 +408,7 @@ UserPage::UserPage( svt::OWizardMachine* parent, const ResId& resid)
     }
 }
 
-sal_Bool UserPage::commitPage(COMMIT_REASON _eReason)
+sal_Bool UserPage::commitPage(COMMIT_REASON)
 {
     SvtUserOptions aUserOpt;
     aUserOpt.SetFirstName(m_edFirst.GetText());
@@ -422,6 +426,52 @@ void UserPage::ActivatePage()
     GrabFocus();
 }
 
+// -------------------------------------------------------------------
+UpdateCheckPage::UpdateCheckPage( svt::OWizardMachine* parent, const ResId& resid)
+    : OWizardPage(parent, resid)
+    , m_ftHead(this, WizardResId(FT_UPDATE_CHECK_HEADER))
+    , m_ftBody(this, WizardResId(FT_UPDATE_CHECK_BODY))
+    , m_cbUpdateCheck(this, WizardResId(CB_UPDATE_CHECK))
+{
+    FreeResource();
+    _setBold(m_ftHead);
+}
+
+sal_Bool UpdateCheckPage::commitPage(COMMIT_REASON _eReason)
+{
+    if ( _eReason == eTravelForward )
+    {
+        try {
+            Reference < XNameReplace > xUpdateAccess;
+            Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+
+            xUpdateAccess = Reference < XNameReplace >(
+                xFactory->createInstance( UNISTRING( "com.sun.star.setup.UpdateCheckConfig" ) ), UNO_QUERY_THROW );
+
+            if ( !xUpdateAccess.is() )
+                return sal_False;
+
+            sal_Bool bAutoUpdChk = m_cbUpdateCheck.IsChecked();
+            xUpdateAccess->replaceByName( UNISTRING("AutoCheckEnabled"), makeAny( bAutoUpdChk ) );
+
+            Reference< XChangesBatch > xChangesBatch( xUpdateAccess, UNO_QUERY);
+            if( xChangesBatch.is() && xChangesBatch->hasPendingChanges() )
+                xChangesBatch->commitChanges();
+        } catch (RuntimeException)
+        {
+        }
+    }
+
+    return sal_True;
+}
+
+void UpdateCheckPage::ActivatePage()
+{
+    OWizardPage::ActivatePage();
+    GrabFocus();
+}
+
+// -------------------------------------------------------------------
 RegistrationPage::RegistrationPage( svt::OWizardMachine* parent, const ResId& resid)
     : OWizardPage(parent, resid)
     , m_ftHeader(this, WizardResId(FT_REGISTRATION_HEADER))
@@ -595,6 +645,7 @@ static sal_Int32 checkOEMPreloadFlag()
     */
 }
 
+#if 0
 static void disableOEMPreloadFlag()
 {
     OUString aSofficeIniFileURL = locateIniFile();
@@ -606,6 +657,7 @@ static void disableOEMPreloadFlag()
         aConfig.Flush();
     }
 }
+#endif
 
 WelcomePage::OEMType WelcomePage::checkOEM()
 {
