@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:34:44 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:04:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -474,22 +474,10 @@ void SalXLib::Init()
         exit(0);
     }
 
-    XVisualInfo aVI;
-    Colormap    aColMap;
-    int         nScreen = DefaultScreen( pDisp );
-
-    if( SalDisplay::BestVisual( pDisp, nScreen, aVI ) ) // DefaultVisual
-        aColMap = DefaultColormap( pDisp, nScreen );
-    else
-        aColMap = XCreateColormap( pDisp,
-                                   RootWindow( pDisp, nScreen ),
-                                   aVI.visual,
-                                   AllocNone );
-
     XSetIOErrorHandler    ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
     XSetErrorHandler      ( (XErrorHandler)X11SalData::XErrorHdl );
 
-    SalDisplay *pSalDisplay = new SalX11Display( pDisp, aVI.visual, aColMap );
+    SalDisplay *pSalDisplay = new SalX11Display( pDisp );
 
     pInputMethod->CreateMethod( pDisp );
     pInputMethod->AddConnectionWatch( pDisp, (void*)this );
