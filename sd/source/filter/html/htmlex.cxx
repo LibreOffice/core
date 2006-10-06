@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:22:23 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:37:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -488,6 +488,7 @@ HtmlExport::HtmlExport(
         m_nButtonThema(-1),
         m_bNotes(false),
         m_eEC(NULL),
+        m_bSlideSound(true),
         pDocSh( pDocShell ),
         m_eMode( PUBLISH_HTML ),
         m_eFormat( FORMAT_JPG ),
