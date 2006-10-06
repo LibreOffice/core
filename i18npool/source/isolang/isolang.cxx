@@ -4,9 +4,9 @@
  *
  *  $RCSfile: isolang.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:15:44 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:43:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,6 +388,8 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_WALLOON,                "wa", "BE" },
     { LANGUAGE_USER_COPTIC,                "cop", "EG" },
     { LANGUAGE_USER_GASCON,                "gsc", "FR" },
+    { LANGUAGE_USER_GERMAN_BELGIUM,         "de", "BE" },
+    { LANGUAGE_USER_CHUVASH,                "cv", "RU" },
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
 
