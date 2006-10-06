@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphhelp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:41:30 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:47:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,8 +206,8 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
                             else
                             {
                                 Size aWinSize = OutputDevice::LogicToLogic( Size( aMetaSize.Width(), aMetaSize.Height() ),
-                                                                            aWinMode,
-                                                                            pGDIMeta->GetPrefMapMode() );
+                                                                            pGDIMeta->GetPrefMapMode(),
+                                                                            aWinMode );
                                 pMF->xExt = aWinSize.Width();
                                 pMF->yExt = aWinSize.Height();
                             }
