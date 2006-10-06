@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CurrentMasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:17:37 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:38:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,21 +166,35 @@ void CurrentMasterPagesSelector::UpdateSelection (void)
     SdPage* pPage;
     ::std::set<String> aNames;
     USHORT nIndex;
-    for (nIndex=0; nIndex<nPageCount; nIndex++)
+    bool bLoop (true);
+    for (nIndex=0; nIndex<nPageCount && bLoop; nIndex++)
     {
         pPage = mrDocument.GetSdPage (nIndex, PK_STANDARD);
         if (pPage != NULL && pPage->IsSelected())
         {
-            SdrPage& rMasterPage (pPage->TRG_GetMasterPage());
-            SdPage* pMasterPage = static_cast<SdPage*>(&rMasterPage);
-            if (pMasterPage != NULL)
-                aNames.insert (pMasterPage->GetName());
+            if ( ! pPage->TRG_HasMasterPage())
+            {
+                // One of the pages has no master page.  This is an
+                // indicator for that this method is called in the middle of
+                // a document change and that the model is not in a valid
+                // state.  Therefore we stop update the selection and wait
+                // for another call to UpdateSelection when the model is
+                // valid again.
+                bLoop = false;
+            }
+            else
+            {
+                SdrPage& rMasterPage (pPage->TRG_GetMasterPage());
+                SdPage* pMasterPage = static_cast<SdPage*>(&rMasterPage);
+                if (pMasterPage != NULL)
+                    aNames.insert (pMasterPage->GetName());
+            }
         }
     }
 
     // Find the items for the master pages in the set.
     USHORT nItemCount (mpPageSet->GetItemCount());
-    for (nIndex=1; nIndex<=nItemCount; nIndex++)
+    for (nIndex=1; nIndex<=nItemCount && bLoop; nIndex++)
     {
         String sName (mpPageSet->GetItemText (nIndex));
         if (aNames.find(sName) != aNames.end())
