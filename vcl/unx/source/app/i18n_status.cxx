@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:32:47 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:03:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,7 +222,7 @@ Point XIMStatusWindow::updatePosition()
         XLIB_Window aChild;
         XTranslateCoordinates( (Display*)pParentEnvData->pDisplay,
                                (XLIB_Window)pParentEnvData->aShellWindow,
-                               GetX11SalData()->GetDisplay()->GetRootWindow(),
+                               GetX11SalData()->GetDisplay()->GetRootWindow( GetX11SalData()->GetDisplay()->GetDefaultScreenNumber() ),
                                0, 0,
                                &x, &y,
                                &aChild );
