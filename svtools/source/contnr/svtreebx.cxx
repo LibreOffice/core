@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:35:17 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:35:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,9 +108,11 @@ SvTreeListBox::SvTreeListBox( Window* pParent , const ResId& rResId )
 void SvTreeListBox::InitTreeView( WinBits nWinStyle )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    pCheckButtonData = 0;
+    pCheckButtonData = NULL;
+    pEdEntry = NULL;
+    pEdItem = NULL;
     nEntryHeight = 0;
-    pEdCtrl = 0;
+    pEdCtrl = NULL;
     nFirstSelTab = 0;
     nLastSelTab = 0;
     nFocusWidth = -1;
@@ -864,7 +866,7 @@ void SvTreeListBox::ModelHasCleared()
     DBG_CHKTHIS(SvTreeListBox,0);
     pImp->pCursor = 0; //sonst Absturz beim Inplace-Editieren im GetFocus
     delete pEdCtrl;
-    pEdCtrl = 0;
+    pEdCtrl = NULL;
     pImp->Clear();
     nFocusWidth = -1;
 
@@ -1240,9 +1242,9 @@ void SvTreeListBox::SetSpaceBetweenEntries( short nOffsLogic )
     DBG_CHKTHIS(SvTreeListBox,0);
     if( nOffsLogic != nEntryHeightOffs )
     {
-        nEntryHeight -= nEntryHeightOffs;
+        nEntryHeight = nEntryHeight - nEntryHeightOffs;
         nEntryHeightOffs = (short)nOffsLogic;
-        nEntryHeight += nOffsLogic;
+        nEntryHeight = nEntryHeight + nOffsLogic;
         AdjustEntryHeight( GetFont() );
         RecalcViewData();
         pImp->SetEntryHeight( nEntryHeight );
@@ -1895,7 +1897,7 @@ Rectangle SvTreeListBox::GetFocusRect( SvLBoxEntry* pEntry, long nLine )
             aSize.Width() = pLastTab ? pLastTab->GetPos() : 0x0fffffff;
             nFocusWidth = (short)aSize.Width();
             if( pTab )
-                nFocusWidth -= (short)nTabPos; //pTab->GetPos();
+                nFocusWidth = nFocusWidth - (short)nTabPos; //pTab->GetPos();
         }
         else
         {
@@ -1934,7 +1936,7 @@ long SvTreeListBox::GetTabPos( SvLBoxEntry* pEntry, SvLBoxTab* pTab)
     if( pTab->IsDynamic() )
     {
         USHORT nDepth = pModel->GetDepth( pEntry );
-        nDepth *= (USHORT)nIndent;
+        nDepth = nDepth * (USHORT)nIndent;
         nPos += (long)nDepth;
     }
     return nPos;
