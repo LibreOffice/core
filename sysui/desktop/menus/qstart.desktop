@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Terminal=false
+Type=Application
+Categories=Application;Office
+Exec=openoffice -quickstart -nologo -nodefault
+NoDisplay=true
+Name=%PRODUCTNAME Quickstarter
+Comment=Hook for quickstarter startup
