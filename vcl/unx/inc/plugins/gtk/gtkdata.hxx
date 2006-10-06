@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 17:47:23 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:02:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ class GtkSalDisplay : public SalDisplay
     GdkCursor* getFromXPM( const char *pBitmap, const char *pMask,
                            int nWidth, int nHeight, int nXHot, int nYHot );
 public:
-             GtkSalDisplay( GdkDisplay* pDisplay, Visual* pVis, Colormap aCol );
+             GtkSalDisplay( GdkDisplay* pDisplay );
     virtual ~GtkSalDisplay();
 
     GdkDisplay* GetGdkDisplay() const { return m_pGdkDisplay; }
