@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:41:43 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:48:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -804,9 +804,9 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     DBG_ASSERT( aDocServiceShortName.getLength(), "No short name for document service!" );
 
-
     sal_Int32 nMust = getMustFlags( nStoreMode );
     sal_Int32 nDont = getDontFlags( nStoreMode );
+    sfx2::FileDialogHelper::Context eCtxt = sfx2::FileDialogHelper::UNKNOWN_CONTEXT;
 
     if ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
     {
@@ -814,9 +814,11 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceShortName, nMust, nDont );
 
         if( aDocServiceShortName.equalsAscii( "sdraw" ) )
-            pFileDlg->SetContext( sfx2::FileDialogHelper::SD_EXPORT );
+            eCtxt = sfx2::FileDialogHelper::SD_EXPORT;
         if( aDocServiceShortName.equalsAscii( "simpress" ) )
-            pFileDlg->SetContext( sfx2::FileDialogHelper::SI_EXPORT );
+            eCtxt = sfx2::FileDialogHelper::SI_EXPORT;
+        if ( eCtxt != sfx2::FileDialogHelper::UNKNOWN_CONTEXT )
+            pFileDlg->SetContext( eCtxt );
 
         pFileDlg->CreateMatcher( aDocServiceShortName );
 
@@ -882,12 +884,10 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         // bSetStandardName == true means that user agreed to store document in the default (default default ;-)) format
         if ( bSetStandardName || ( nOldFiltFlags & nMust ) != nMust || nOldFiltFlags & nDont )
         {
-            ::rtl::OUString aTypeName;
-            ::comphelper::SequenceAsHashMap aPropsHM( GetDocServiceAnyFilter( 294, 80 ) );  // import,export,default,!alien,!templatepath
-            ::rtl::OUString aFilterUIName = aPropsHM.getUnpackedValueOrDefault(
+            ::rtl::OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
                                             ::rtl::OUString::createFromAscii( "UIName" ),
                                             ::rtl::OUString() );
-            aTypeName = aPropsHM.getUnpackedValueOrDefault(
+            ::rtl::OUString aTypeName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
                                             ::rtl::OUString::createFromAscii( "Type" ),
                                             ::rtl::OUString() );
 
@@ -932,7 +932,10 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     }
     else
     {
-        pFileDlg->SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
+        // pb: set graphic path if context == SD_EXPORT or SI_EXPORT else work path
+        String sDirectory = eCtxt != sfx2::FileDialogHelper::UNKNOWN_CONTEXT
+            ? SvtPathOptions().GetGraphicPath() : SvtPathOptions().GetWorkPath();
+        pFileDlg->SetDisplayDirectory( sDirectory );
     }
 
     uno::Reference < view::XSelectionSupplier > xSel( GetModel()->getCurrentController(), uno::UNO_QUERY );
