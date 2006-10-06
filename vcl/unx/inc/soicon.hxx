@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soicon.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:48:39 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:02:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@ class SalDisplay;
 class SalBitmap;
 class Bitmap;
 
-BOOL SelectAppIconPixmap( SalDisplay *pDisplay, USHORT nIcon, USHORT iconSize,
+BOOL SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,
+                          USHORT nIcon, USHORT iconSize,
                           Pixmap& icon_pixmap, Pixmap& icon_mask );
 #endif
