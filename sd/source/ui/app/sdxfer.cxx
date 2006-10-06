@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:32:35 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:39:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,7 +268,12 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
                 uno::Reference < embed::XEmbeddedObject > xObj = static_cast< SdrOle2Obj* >( pObj )->GetObjRef();
                 uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
                 if( xObj.is() && xPersist.is() && xPersist->hasEntry() )
+                {
                     pOLEDataHelper = new TransferableDataHelper( new SvEmbedTransferHelper( xObj ) );
+                    Graphic* pObjGr = static_cast< SdrOle2Obj* >( pObj )->GetGraphic();
+                    if ( pObjGr )
+                        pGraphic = new Graphic( *pObjGr );
+                }
             }
             catch( uno::Exception& )
             {}
@@ -535,7 +540,11 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
             pSdDrawDocumentIntern->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_PURGE );
         }
 
-        bOK = SetAny( pOLEDataHelper->GetAny( rFlavor ), rFlavor );
+        // TODO/LATER: support all the graphical formats, the embedded object scenario should not have separated handling
+        if( nFormat == FORMAT_GDIMETAFILE && pGraphic )
+            bOK = SetGDIMetaFile( pGraphic->GetGDIMetaFile(), rFlavor );
+        else
+            bOK = SetAny( pOLEDataHelper->GetAny( rFlavor ), rFlavor );
 
         if( pSdDrawDocumentIntern )
             pSdDrawDocumentIntern->SetSwapGraphicsMode( nOldSwapMode );
