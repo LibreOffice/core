@@ -4,9 +4,9 @@
  *
  *  $RCSfile: present.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:41:32 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:51:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,18 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
+#include <com/sun/star/container/XIndexAccess.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #ifndef _SFXITEMSET_HXX //autogen
 #include <svtools/itemset.hxx>
@@ -50,6 +62,12 @@
 #include "present.hrc"
 #include "sdresid.hxx"
 #include "cusshow.hxx"
+
+using ::rtl::OUString;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::beans;
 
 /*************************************************************************
 |* Ctor
@@ -79,11 +97,19 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
                 aCbxChangePage          ( this, SdResId( CBX_CHANGE_PAGE ) ),
                 aCbxAlwaysOnTop         ( this, SdResId( CBX_ALWAYS_ON_TOP ) ),
                 aGrpOptions             ( this, SdResId( GRP_OPTIONS ) ),
+                maGrpMonitor            ( this, SdResId( GRP_MONITOR ) ),
+                maFtMonitor             ( this, SdResId( FT_MONITOR ) ),
+                maLBMonitor             ( this, SdResId( LB_MONITOR ) ),
+
                 aBtnOK                  ( this, SdResId( BTN_OK ) ),
                 aBtnCancel              ( this, SdResId( BTN_CANCEL ) ),
                 aBtnHelp                ( this, SdResId( BTN_HELP ) ),
                 pCustomShowList         ( pCSList ),
-                rOutAttrs               ( rInAttrs )
+                rOutAttrs               ( rInAttrs ),
+                mnMonitors              ( 0 ),
+                msPrimaryMonitor( SdResId(STR_PRIMARY_MONITOR ) ),
+                msMonitor( SdResId( STR_MONITOR ) ),
+                msAllMonitors( SdResId( STR_ALL_MONITORS ) )
 {
     FreeResource();
 
@@ -163,24 +189,71 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     else
         aRbtStandard.Check( TRUE );
 
-/* #109180# change in behaviour, even when always start with current page is enabled, range settings are
-            still used
-    BOOL bStartWithActualPage = ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_START_ACTUAL_PAGE ) ).GetValue();
-    if( bStartWithActualPage )
-    {
-        aRbtAll.Enable( FALSE );
-        aRbtAtDia.Check();
-        aRbtAtDia.Enable( FALSE );
-        aLbDias.Enable( FALSE );
-        aLbCustomshow.Enable( FALSE );
-        aGrpRange.Enable( FALSE );
-    }
-    else
-*/
+    InitMonitorSettings();
+
     ChangeRangeHdl( this );
 
     ClickWindowPresentationHdl( NULL );
     ChangePauseHdl( NULL );
+}
+
+void SdStartPresentationDlg::InitMonitorSettings()
+{
+    try
+    {
+        Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+        Reference< XIndexAccess > xMultiMon( xFactory->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DisplayAccess" ) ) ), UNO_QUERY_THROW );
+        maGrpMonitor.Show( true );
+        maFtMonitor.Show( true );
+        maLBMonitor.Show( true );
+
+        mnMonitors = xMultiMon->getCount();
+
+        if( mnMonitors <= 1 )
+        {
+            maFtMonitor.Enable( false );
+            maLBMonitor.Enable( false );
+        }
+        else
+        {
+            sal_Bool bMultiscreen = false;
+            sal_Int32 nPrimaryIndex = 0;
+            Reference< XPropertySet > xMonProps( xMultiMon, UNO_QUERY );
+            if( xMonProps.is() ) try
+            {
+                const OUString sPropName1( RTL_CONSTASCII_USTRINGPARAM( "MultiDisplay" ) );
+                xMonProps->getPropertyValue( sPropName1 ) >>= bMultiscreen;
+                const OUString sPropName2( RTL_CONSTASCII_USTRINGPARAM( "DefaultDisplay" ) );
+                xMonProps->getPropertyValue( sPropName2 ) >>= nPrimaryIndex;
+            }
+            catch( Exception& )
+            {
+            }
+
+            const String sPlaceHolder( RTL_CONSTASCII_USTRINGPARAM( "%N" ) );
+            for( sal_Int32 nDisplay = 0; nDisplay < mnMonitors; nDisplay++ )
+            {
+                String aName( nDisplay == nPrimaryIndex ? msPrimaryMonitor : msMonitor );
+                const String aNumber( String::CreateFromInt32( nDisplay + 1 ) );
+                aName.SearchAndReplace( sPlaceHolder, aNumber );
+                maLBMonitor.InsertEntry( aName );
+            }
+
+            if( !bMultiscreen )
+                maLBMonitor.InsertEntry( msAllMonitors );
+
+            sal_Int32 nSelected = ( ( const SfxInt32Item& ) rOutAttrs.Get( ATTR_PRESENT_DISPLAY ) ).GetValue();
+            if( nSelected <= 0 )
+                nSelected = nPrimaryIndex;
+            else
+                nSelected--;
+
+            maLBMonitor.SelectEntryPos( nSelected );
+        }
+    }
+    catch( Exception& )
+    {
+    }
 }
 
 /*************************************************************************
@@ -203,7 +276,11 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rOutAttrs )
     rOutAttrs.Put( SfxUInt32Item ( ATTR_PRESENT_PAUSE_TIMEOUT, aTmfPause.GetTime().GetMSFromTime() / 1000 ) );
     rOutAttrs.Put( SfxBoolItem ( ATTR_PRESENT_SHOW_PAUSELOGO, aCbxAutoLogo.IsChecked() ) );
 
-    USHORT nPos = aLbCustomshow.GetSelectEntryPos();
+    USHORT nPos = maLBMonitor.GetSelectEntryPos();
+    if( nPos != LISTBOX_ENTRY_NOTFOUND )
+        rOutAttrs.Put( SfxInt32Item ( ATTR_PRESENT_DISPLAY, nPos + 1 ) );
+
+    nPos = aLbCustomshow.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
         pCustomShowList->Seek( nPos );
 }
@@ -224,13 +301,18 @@ IMPL_LINK( SdStartPresentationDlg, ChangeRangeHdl, void *, EMPTYARG )
 \************************************************************************/
 IMPL_LINK( SdStartPresentationDlg, ClickWindowPresentationHdl, void *, EMPTYARG )
 {
-    const BOOL bAuto = aRbtAuto.IsChecked();
+    const bool bAuto = aRbtAuto.IsChecked();
+    const bool bWindow = aRbtWindow.IsChecked();
 
     // aFtPause.Enable( bAuto );
     aTmfPause.Enable( bAuto );
     aCbxAutoLogo.Enable( bAuto && ( aTmfPause.GetTime().GetMSFromTime() > 0UL ) );
 
-    if( aRbtWindow.IsChecked() )
+    const bool bDisplay = !bWindow && ( mnMonitors > 1 );
+    maFtMonitor.Enable( bDisplay );
+    maLBMonitor.Enable( bDisplay );
+
+    if( bWindow )
     {
         aCbxAlwaysOnTop.Enable( FALSE );
         aCbxAlwaysOnTop.Check( FALSE );
