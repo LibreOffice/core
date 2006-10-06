@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:47:19 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:01:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,6 @@
 
 // -=-= exports -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 class   SalFontCacheItem;
-class   SalGraphicsContext;
-class   SalGraphicsData;
 
 // -=-= includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #ifndef _SALSTD_HXX
@@ -88,9 +86,10 @@ protected:
     SalFrame*               m_pFrame; // the SalFrame which created this Graphics or NULL
     X11SalVirtualDevice*    m_pVDev;  // the SalVirtualDevice which created this Graphics or NULL
 
-    SalColormap    *m_pColormap;
+    const SalColormap*      m_pColormap;
     SalColormap    *m_pDeleteColormap;
     Drawable        hDrawable_;     // use
+    int             m_nScreen;
     void*           pRenderFormat_;
 
     XLIB_Region     pPaintRegion_;
@@ -195,25 +194,30 @@ protected:
     void                    DrawServerSimpleFontString( const ServerFontLayout& );
     void                    DrawServerAAFontString( const ServerFontLayout& );
     bool                    DrawServerAAForcedString( const ServerFontLayout& );
+
+    void freeResources();
 public:
                             X11SalGraphics();
     virtual             ~X11SalGraphics();
 
-            void            Init( SalFrame *pFrame, Drawable aDrawable );
+            void            Init( SalFrame *pFrame, Drawable aDrawable, int nScreen );
             void            Init( X11SalVirtualDevice *pVirtualDevice, SalColormap* pColormap = NULL, bool bDeleteColormap = false );
             void            Init( class ImplSalPrinterData *pPrinter );
             void            DeInit();
 
-    inline  SalDisplay     *GetDisplay() const;
-    inline  Display        *GetXDisplay() const;
-    inline  SalVisual       *GetVisual() const;
+    inline  const SalDisplay*   GetDisplay() const;
+    inline  Display*            GetXDisplay() const;
+    inline  const SalVisual&    GetVisual() const;
     inline  Drawable        GetDrawable() const { return hDrawable_; }
-    inline  void            SetDrawable( Drawable d ) { hDrawable_ = d; }
+    void                    SetDrawable( Drawable d, int nScreen );
     inline  void*           GetXRenderFormat() { return pRenderFormat_; }
     inline  void            SetXRenderFormat( void* pRenderFormat ) { pRenderFormat_ = pRenderFormat; }
-    inline  SalColormap    &GetColormap() const { return *m_pColormap; }
+    inline  const SalColormap&    GetColormap() const { return *m_pColormap; }
     using SalGraphics::GetPixel;
     inline  Pixel           GetPixel( SalColor nSalColor ) const;
+
+    int                     GetScreenNumber() const
+    { return m_nScreen; }
 
     // overload all pure virtual methods
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
@@ -318,14 +322,25 @@ public:
      *  them because the next one using XCopyArea can depend on them
      */
     static void YieldGraphicsExpose( Display* pDisplay, SalFrame* pFrame, Drawable aDrawable );
+
+    // do XCopyArea or XGet/PutImage depending on screen numbers
+    // signature is like XCopyArea with screen numbers added
+    static void CopyScreenArea( Display* pDisplay,
+                          Drawable aSrc, int nScreenSrc, int nSrcDepth,
+                          Drawable aDest, int nScreenDest, int nDestDepth,
+                          GC aDestGC,
+                          int src_x, int src_y,
+                          unsigned int w, unsigned int h,
+                          int dest_x, int dest_y );
+    static void releaseGlyphPeer();
 };
 
 
-inline SalDisplay *X11SalGraphics::GetDisplay() const
+inline const SalDisplay *X11SalGraphics::GetDisplay() const
 { return GetColormap().GetDisplay(); }
 
-inline SalVisual *X11SalGraphics::GetVisual() const
-{ return GetColormap().GetDisplay()->GetVisual(); }
+inline const SalVisual& X11SalGraphics::GetVisual() const
+{ return GetColormap().GetVisual(); }
 
 inline Display *X11SalGraphics::GetXDisplay() const
 { return GetColormap().GetXDisplay(); }
