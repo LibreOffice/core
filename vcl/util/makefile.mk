@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.81 $
+#   $Revision: 1.82 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-01 09:30:37 $
+#   last change: $Author: kz $ $Date: 2006-10-06 10:07:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,8 @@ LIB1FILES=  $(SLB)$/app.lib     \
             $(SLB)$/gdi.lib     \
             $(SLB)$/win.lib     \
             $(SLB)$/ctrl.lib    \
-            $(SLB)$/helper.lib
+            $(SLB)$/helper.lib	\
+            $(SLB)$/components.lib
 
 
 .IF "$(GUI)" == "UNX"
