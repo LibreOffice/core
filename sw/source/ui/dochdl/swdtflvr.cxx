@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:52:05 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:44:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -543,6 +543,26 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > SwTran
 
 // -----------------------------------------------------------------------
 
+Graphic* SwTransferable::FindOLEReplacementGraphic() const
+{
+    if( pClpDocFac )
+    {
+        SwClientIter aIter( *(SwModify*)pClpDocFac->GetDoc()->
+                            GetDfltGrfFmtColl() );
+        for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
+                pNd; pNd = (SwCntntNode*)aIter.Next() )
+            if( ND_OLENODE == pNd->GetNodeType() )
+            {
+                return ((SwOLENode*)pNd)->GetGraphic();
+            }
+    }
+
+    return NULL;
+}
+
+
+// -----------------------------------------------------------------------
+
 void SwTransferable::RemoveDDELinkFormat( const Window& rWin )
 {
     RemoveFormat( SOT_FORMATSTR_ID_LINK );
@@ -647,6 +667,15 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
             ::com::sun::star::uno::Any aAny( aD.GetAny( rFlavor ));
             if( aAny.hasValue() )
                 bOK = SetAny( aAny, rFlavor );
+        }
+
+        // the following solution will be used in the case when the object can not generate the image
+        // TODO/LATER: in future the transferhelper must probably be created based on object and the replacement stream
+        if ( nFormat == SOT_FORMAT_GDIMETAFILE )
+        {
+            Graphic* pOLEGraph = FindOLEReplacementGraphic();
+            if ( pOLEGraph )
+                bOK = SetGDIMetaFile( pOLEGraph->GetGDIMetaFile(), rFlavor );
         }
     }
     else
@@ -1916,12 +1945,19 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
         uno::Reference< embed::XStorage > xTmpStor;
         com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xObj;
         ::rtl::OUString aName;
+           comphelper::EmbeddedObjectContainer aCnt;
 
-        if ( !xStrm.is() )
+        if ( xStrm.is() )
         {
-            // try other formats
-            if( rData.HasFormat( nFmt = SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE ) && rData.GetTransferableObjectDescriptor( nFmt, aObjDesc ) )
+            if ( !rData.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) )
             {
+                DBG_ASSERT( !xStrm.is(), "An object without descriptor in clipboard!");
+            }
+        }
+        else
+        {
+            if( rData.HasFormat( nFmt = SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE ) && rData.GetTransferableObjectDescriptor( nFmt, aObjDesc ) )
+             {
                 if ( !rData.GetInputStream( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStrm ) )
                     rData.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStrm );
 
@@ -1951,8 +1987,6 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
             }
         }
 
-           // temporary storage until the object is inserted
-           comphelper::EmbeddedObjectContainer aCnt;
         if ( xStrm.is() && !xObj.is() )
             xObj = aCnt.InsertEmbeddedObject( xStrm, aName );
 
