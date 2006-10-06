@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:39:55 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:07:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,23 +71,32 @@ SalVirtualDevice* X11SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     if( !nBitCount && pGraphics )
         nBitCount = pGraphics->GetBitCount();
 
-    SalDisplay* pSalDisplay = GetX11SalData()->GetDisplay();
     if( pData && pData->hDrawable != None )
     {
         XLIB_Window aRoot;
         int x, y;
         unsigned int w = 0, h = 0, bw, d;
-        XGetGeometry( pSalDisplay->GetDisplay(), pData->hDrawable,
+        Display* pDisp = GetX11SalData()->GetDisplay()->GetDisplay();
+        XGetGeometry( pDisp, pData->hDrawable,
                       &aRoot, &x, &y, &w, &h, &bw, &d );
+        int nScreen = 0;
+        while( nScreen < ScreenCount( pDisp ) )
+        {
+            if( RootWindow( pDisp, nScreen ) == aRoot )
+                break;
+            nScreen++;
+        }
         nDX = (long)w;
         nDY = (long)h;
-        if( !pVDev->Init( pSalDisplay, nDX, nDY, nBitCount, pData->hDrawable, pData->pRenderFormat ) )
+        if( !pVDev->Init( GetX11SalData()->GetDisplay(), nDX, nDY, nBitCount, nScreen, pData->hDrawable, pData->pRenderFormat ) )
         {
             delete pVDev;
             return NULL;
         }
     }
-    else if( !pVDev->Init( pSalDisplay, nDX, nDY, nBitCount ) )
+    else if( !pVDev->Init( GetX11SalData()->GetDisplay(), nDX, nDY, nBitCount,
+                           pGraphics ? static_cast<X11SalGraphics*>(pGraphics)->GetScreenNumber() :
+                                       GetX11SalData()->GetDisplay()->GetDefaultScreenNumber() ) )
     {
         delete pVDev;
         return NULL;
@@ -107,22 +116,23 @@ void X11SalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
 void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap, bool bDeleteColormap )
 {
     SalDisplay *pDisplay  = pDevice->GetDisplay();
+    m_nScreen = pDevice->GetScreenNumber();
 
-    int nVisualDepth = pDisplay->GetColormap().GetVisual()->GetDepth();
+    int nVisualDepth = pDisplay->GetColormap( m_nScreen ).GetVisual().GetDepth();
     int nDeviceDepth = pDevice->GetDepth();
 
     if( pColormap )
     {
         m_pColormap = pColormap;
         if( bDeleteColormap )
-            m_pDeleteColormap = m_pColormap;
+            m_pDeleteColormap = pColormap;
     }
     else
     if( nDeviceDepth == nVisualDepth )
-        m_pColormap = &pDisplay->GetColormap();
+        m_pColormap = &pDisplay->GetColormap( m_nScreen );
     else
     if( nDeviceDepth == 1 )
-        m_pDeleteColormap = m_pColormap = new SalColormap();
+        m_pColormap = m_pDeleteColormap = new SalColormap();
 
     hDrawable_   = pDevice->GetDrawable();
     m_pVDev      = pDevice;
@@ -141,6 +151,7 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
 BOOL X11SalVirtualDevice::Init( SalDisplay *pDisplay,
                                 long nDX, long nDY,
                                 USHORT nBitCount,
+                                int nScreen,
                                 Pixmap hDrawable,
                                 void* pRenderFormatVoid )
 {
@@ -149,14 +160,20 @@ BOOL X11SalVirtualDevice::Init( SalDisplay *pDisplay,
 
     pDisplay_               = pDisplay;
     pGraphics_              = new X11SalGraphics();
+    m_nScreen               = nScreen;
     if( pRenderFormatVoid ) {
         XRenderPictFormat *pRenderFormat = ( XRenderPictFormat* )pRenderFormatVoid;
         pGraphics_->SetXRenderFormat( pRenderFormat );
         if( pRenderFormat->colormap )
-            pColormap = new SalColormap( pDisplay, pRenderFormat->colormap );
+            pColormap = new SalColormap( pDisplay, pRenderFormat->colormap, m_nScreen );
         else
             pColormap = new SalColormap( nBitCount );
          bDeleteColormap = true;
+    }
+    else if( nBitCount != pDisplay->GetVisual( m_nScreen ).GetDepth() )
+    {
+        pColormap = new SalColormap( nBitCount );
+        bDeleteColormap = true;
     }
     pGraphics_->SetLayout( 0 ); // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
     nDX_                    = nDX;
@@ -165,7 +182,7 @@ BOOL X11SalVirtualDevice::Init( SalDisplay *pDisplay,
 
     if( hDrawable == None )
         hDrawable_          = XCreatePixmap( GetXDisplay(),
-                                             pDisplay_->GetDrawable(),
+                                             pDisplay_->GetDrawable( m_nScreen ),
                                              nDX_, nDY_,
                                              GetDepth() );
     else
@@ -226,7 +243,7 @@ BOOL X11SalVirtualDevice::SetSize( long nDX, long nDY )
     if( !nDY ) nDY = 1;
 
     Pixmap h = XCreatePixmap( GetXDisplay(),
-                              pDisplay_->GetDrawable(),
+                              pDisplay_->GetDrawable( m_nScreen ),
                               nDX, nDY, nDepth_ );
 
     if( !h )
@@ -234,7 +251,7 @@ BOOL X11SalVirtualDevice::SetSize( long nDX, long nDY )
         if( !GetDrawable() )
         {
             hDrawable_ = XCreatePixmap( GetXDisplay(),
-                                        pDisplay_->GetDrawable(),
+                                        pDisplay_->GetDrawable( m_nScreen ),
                                         1, 1, nDepth_ );
             nDX_ = 1;
             nDY_ = 1;
