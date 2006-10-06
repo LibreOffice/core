@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:15:11 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:09:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,14 +144,24 @@ Calendar_gregorian::loadCalendar( const OUString& uniqueID, const com::sun::star
 {
         aLocale = rLocale;
         Sequence< Calendar> xC = LocaleData().getAllCalendars(rLocale);
-        for (sal_Int32 i = 0; i < xC.getLength(); i++) {
-            if (uniqueID == xC[i].Name) {
+        for (sal_Int32 i = 0; i < xC.getLength(); i++)
+        {
+            if (uniqueID == xC[i].Name)
+            {
                 aCalendar = xC[i];
+                // setup minimalDaysInFirstWeek
+                setMinimumNumberOfDaysForFirstWeek(
+                        aCalendar.MinimumNumberOfDaysForFirstWeek);
                 // setup first day of week
-                for (aStartOfWeek = sal::static_int_cast<sal_Int16>(aCalendar.Days.getLength()-1);
-                                aStartOfWeek>=0; aStartOfWeek-- )
-                    if (aCalendar.StartOfWeek == aCalendar.Days[aStartOfWeek].ID)
+                for (sal_Int16 day = sal::static_int_cast<sal_Int16>(
+                            aCalendar.Days.getLength()-1); day>=0; day--)
+                {
+                    if (aCalendar.StartOfWeek == aCalendar.Days[day].ID)
+                    {
+                        setFirstDayOfWeek( day);
                         return;
+                    }
+                }
             }
         }
         // Calendar is not for the locale
@@ -566,20 +576,26 @@ static sal_Int32 SAL_CALL DisplayCode2FieldIndex(sal_Int32 nCalendarDisplayCode)
 sal_Int16 SAL_CALL
 Calendar_gregorian::getFirstDayOfWeek() throw(RuntimeException)
 {
-        return aStartOfWeek;
+    // UCAL_SUNDAY == 1, Weekdays::SUNDAY == 0 => offset -1
+    // Check for underflow just in case we're called "out of sync".
+    return ::std::max( sal::static_int_cast<sal_Int16>(0),
+            sal::static_int_cast<sal_Int16>( static_cast<sal_Int16>(
+                    body->getFirstDayOfWeek()) - 1));
 }
 
 void SAL_CALL
 Calendar_gregorian::setFirstDayOfWeek( sal_Int16 day )
 throw(RuntimeException)
 {
-        aStartOfWeek = day;
+    // Weekdays::SUNDAY == 0, UCAL_SUNDAY == 1 => offset +1
+    body->setFirstDayOfWeek( static_cast<UCalendarDaysOfWeek>( day + 1));
 }
 
 void SAL_CALL
 Calendar_gregorian::setMinimumNumberOfDaysForFirstWeek( sal_Int16 days ) throw(RuntimeException)
 {
         aCalendar.MinimumNumberOfDaysForFirstWeek = days;
+        body->setMinimalDaysInFirstWeek( static_cast<uint8_t>( days));
 }
 
 sal_Int16 SAL_CALL
