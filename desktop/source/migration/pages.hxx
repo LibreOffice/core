@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pages.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 12:36:35 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:39:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,6 +151,20 @@ private:
 public:
     UserPage( svt::OWizardMachine* parent, const ResId& resid);
     virtual sal_Bool commitPage(COMMIT_REASON _eReason);
+protected:
+    virtual void ActivatePage();
+};
+
+class UpdateCheckPage : public svt::OWizardPage
+{
+private:
+    FixedText m_ftHead;
+    FixedText m_ftBody;
+    CheckBox m_cbUpdateCheck;
+public:
+    UpdateCheckPage( svt::OWizardMachine* parent, const ResId& resid);
+    virtual sal_Bool commitPage(COMMIT_REASON _eReason);
+
 protected:
     virtual void ActivatePage();
 };
