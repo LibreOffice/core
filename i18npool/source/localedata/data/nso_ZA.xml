@@ -15,7 +15,13 @@
   <LC_FORMAT ref="en_ZA" replaceTo="[$R-46C]"/>
   <LC_COLLATION ref="en_US"/>
   <LC_SEARCH ref="en_US"/>
-  <LC_INDEX ref="en_US"/>
+  <LC_INDEX>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-S Š T-Z</IndexKey>
+    <UnicodeScript>0</UnicodeScript>
+    <UnicodeScript>2</UnicodeScript>
+    <FollowPageWord>p.</FollowPageWord>
+    <FollowPageWord>pp.</FollowPageWord>
+  </LC_INDEX>
   <LC_CALENDAR>
     <Calendar unoid="gregorian" default="true">
       <DaysOfWeek>
