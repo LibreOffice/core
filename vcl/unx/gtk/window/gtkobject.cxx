@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkobject.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:30:31 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 10:00:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,9 +67,9 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent )
         m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(m_pSocket->window);
         m_aSystemData.pSalFrame     = NULL;
         m_aSystemData.pWidget       = m_pSocket;
-        m_aSystemData.pVisual       = pDisp->GetVisual()->GetVisual();
-        m_aSystemData.nDepth        = pDisp->GetVisual()->GetDepth();
-        m_aSystemData.aColormap     = pDisp->GetColormap().GetXColormap();
+        m_aSystemData.pVisual       = pDisp->GetVisual(pParent->getScreenNumber()).GetVisual();
+        m_aSystemData.nDepth        = pDisp->GetVisual(pParent->getScreenNumber()).GetDepth();
+        m_aSystemData.aColormap     = pDisp->GetColormap(pParent->getScreenNumber()).GetXColormap();
         m_aSystemData.pAppContext   = NULL;
         m_aSystemData.aShellWindow  = GDK_WINDOW_XWINDOW(GTK_WIDGET(pParent->getWindow())->window);
         m_aSystemData.pShellWidget  = GTK_WIDGET(pParent->getWindow());
