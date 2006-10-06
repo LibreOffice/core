@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:29:10 $
+ *  last change: $Author: kz $ $Date: 2006-10-06 09:59:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,14 +93,14 @@ using namespace vcl_sal;
  * class GtkDisplay                                                        *
  ***************************************************************************/
 
-GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay, Visual* pVis, Colormap aCol )
-            : SalDisplay( gdk_x11_display_get_xdisplay( pDisplay ), aCol ),
+GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay )
+            : SalDisplay( gdk_x11_display_get_xdisplay( pDisplay ) ),
               m_pGdkDisplay( pDisplay ),
               m_bStartupCompleted( false )
 {
     for(int i = 0; i < POINTER_COUNT; i++)
         m_aCursors[ i ] = NULL;
-    Init ( aCol, pVis, false );
+    Init ( false );
 }
 
 GtkSalDisplay::~GtkSalDisplay()
@@ -547,22 +547,11 @@ void GtkXLib::Init()
     putenv( pPutEnvIsBroken );
 
     Display *pDisp = gdk_x11_display_get_xdisplay( pGdkDisp );
-    XVisualInfo aVI;
-    Colormap    aColMap;
-    int         nScreen = DefaultScreen( pDisp );
-
-    if( SalDisplay::BestVisual( pDisp, nScreen, aVI ) ) // DefaultVisual
-        aColMap = DefaultColormap( pDisp, nScreen );
-    else
-        aColMap = XCreateColormap( pDisp,
-                                   RootWindow( pDisp, nScreen ),
-                                   aVI.visual,
-                                   AllocNone );
 
     XSetIOErrorHandler    ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
     XSetErrorHandler      ( (XErrorHandler)X11SalData::XErrorHdl );
 
-    m_pGtkSalDisplay = new GtkSalDisplay( pGdkDisp, aVI.visual, aColMap );
+    m_pGtkSalDisplay = new GtkSalDisplay( pGdkDisp );
 
     gdk_window_add_filter( NULL, call_filterGdkEvent, m_pGtkSalDisplay );
 
