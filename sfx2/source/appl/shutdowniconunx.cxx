@@ -136,11 +136,13 @@ static GdkPixbuf * ResIdToPixbuf( USHORT nResId )
         NULL );
 }
 
+extern "C" {
 static void oustring_delete (gpointer  data,
                              GClosure * /* closure */)
 {
     OUString *pURL = (OUString *) data;
     delete pURL;
+}
 }
 
 static void add_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
