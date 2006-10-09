@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:39:05 $
+ *  last change: $Author: kz $ $Date: 2006-10-09 15:56:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,9 +179,9 @@ void ShutdownIcon::initSystray()
         m_pPlugin = new osl::Module();
         if ( m_pPlugin->load( OUString (RTL_CONSTASCII_USTRINGPARAM( STRING( PLUGIN_NAME ) ) ) ) )
         {
-            m_pInitSystray = (void (*)()) m_pPlugin->getSymbol(
+            m_pInitSystray = m_pPlugin->getFunctionSymbol(
                     OUString( RTL_CONSTASCII_USTRINGPARAM( "plugin_init_sys_tray" ) ) );
-            m_pDeInitSystray = (void (*)()) m_pPlugin->getSymbol(
+            m_pDeInitSystray = m_pPlugin->getFunctionSymbol(
                     OUString( RTL_CONSTASCII_USTRINGPARAM( "plugin_shutdown_sys_tray" ) ) );
             OSL_ASSERT (m_pInitSystray && m_pDeInitSystray);
         }
