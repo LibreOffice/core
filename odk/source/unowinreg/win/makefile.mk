@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-28 11:29:52 $
+#   last change: $Author: hjs $ $Date: 2006-10-09 16:00:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ nojava:
 
 $(BIN)$/unowinreg.dll : unowinreg.cxx
     $(MINGWCXX) -Wall -D_JNI_IMPLEMENTATION_ $(JAVA_INCLUDES) \
-        -shared -o $(BIN)$/unowinreg.dll unowinreg.cxx \
+        -I$(PRJ)/inc/pch -shared -o $(BIN)$/unowinreg.dll unowinreg.cxx \
             -Wl,--kill-at -lkernel32 -ladvapi32
     $(MINGWSTRIP) $(BIN)$/unowinreg.dll
 
