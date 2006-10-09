@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 03:08:38 $
+#   last change: $Author: hjs $ $Date: 2006-10-09 12:15:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -131,4 +131,8 @@ LOCALIZE_ME=AutoControls_tmpl.hrc
 
 $(SLO)$/ConnectionHelper.obj : $(LOCALIZE_ME_DEST)
 
+$(SLO)$/ConnectionPageSetup.obj : $(LOCALIZE_ME_DEST)
 
+$(SLO)$/DBSetupConnectionPages.obj : $(LOCALIZE_ME_DEST)
+
+$(SLO)$/TextConnectionHelper.obj : $(LOCALIZE_ME_DEST)
