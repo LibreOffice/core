@@ -1,0 +1,3 @@
+lx	libxslt	: soltools LIBXML2:libxml2 NULL
+lx	libxslt			    usr1	-	all	lx_mkout NULL
+lx	libxslt			    nmake	-	all	lx_libxslt NULL
