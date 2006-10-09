@@ -45,7 +45,7 @@
 #include <cppuhelper/compbase3.hxx>
 #endif
 #ifndef INCLUDED_SFX2_DLLAPI_H
-#include <sfx2/dllapi.h>
+#include "dllapi.h"
 #endif
 
 class ResMgr;
@@ -74,8 +74,8 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
 
         static ShutdownIcon *pShutdownIcon; // one instance
 
-        void (*m_pInitSystray)   ();
-        void (*m_pDeInitSystray) ();
+        oslGenericFunction m_pInitSystray;
+        oslGenericFunction m_pDeInitSystray;
         ::osl::Module  *m_pPlugin;
 
         void initSystray();
