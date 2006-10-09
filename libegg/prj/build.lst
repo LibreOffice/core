@@ -1,2 +1,2 @@
-eg  eggtray   :  vcl NULL
-eg	eggtray\source			    nmake	-	u	eg_src NULL
+eg  libegg   :  vcl NULL
+eg	libegg\source			    nmake	-	u	eg_src NULL
