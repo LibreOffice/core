@@ -4,9 +4,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 09:18:47 $
+#   last change: $Author: kz $ $Date: 2006-10-10 11:19:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 package installer::windows::idtglobal;
 
+use Cwd;
 use installer::converter;
 use installer::existence;
 use installer::exiter;
@@ -720,10 +721,15 @@ sub prepare_language_idt_directory
 
         if (( $installer::globals::patch ) && ( $allvariables->{'WINDOWSPATCHBITMAPDIRECTORY'} ))
         {
-            $infoline = "\nOverwriting files in directory \"" . $destinationdir . $installer::globals::separator . "Binary" . "\" with files from directory \"" . $allvariables->{'WINDOWSPATCHBITMAPDIRECTORY'} . "\".\n";
+            my $newsourcedir = $installer::globals::unpackpath . $installer::globals::separator . $allvariables->{'WINDOWSPATCHBITMAPDIRECTORY'}; # path setting in list file dependent from unpackpath !?
+            $infoline = "\nOverwriting files in directory \"" . $destinationdir . $installer::globals::separator . "Binary" . "\" with files from directory \"" . $newsourcedir . "\".\n";
             push( @installer::globals::logfileinfo, $infoline);
-            if ( ! -d $allvariables->{'WINDOWSPATCHBITMAPDIRECTORY'} ) { installer::exiter::exit_program("ERROR: Directory $allvariables->{'PATCHBITMAPDIRECTORY'} does not exist!", "prepare_language_idt_directory"); }
-            installer::systemactions::copy_directory($allvariables->{'WINDOWSPATCHBITMAPDIRECTORY'}, $destinationdir . $installer::globals::separator . "Binary");
+            if ( ! -d $newsourcedir )
+            {
+                my $currentdir = cwd();
+                installer::exiter::exit_program("ERROR: Directory $newsourcedir does not exist! Current directory is: $currentdir", "prepare_language_idt_directory");
+            }
+            installer::systemactions::copy_directory($newsourcedir, $destinationdir . $installer::globals::separator . "Binary");
         }
     }
 
