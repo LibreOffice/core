@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsoli4.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-15 10:39:41 $
+#   last change: $Author: kz $ $Date: 2006-10-10 11:22:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ LINKC=$(CC)
 
 # link against set of baseline libraries
 .IF "$(SYSBASE)"!=""
-C_RESTRICTIONFLAGS:=-xc99=none
+C_RESTRICTIONFLAGS*=-xc99=none
 LD_OPTIONS+:=-L$(SYSBASE)$/usr/lib
 CDEFS+=-DSYSBASE="$(SYSBASE)"
 CFLAGSCC+=$(C_RESTRICTIONFLAGS)
