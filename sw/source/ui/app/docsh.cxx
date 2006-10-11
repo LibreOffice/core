@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:33:46 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:52:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1436,7 +1436,7 @@ void SwDocShell::StartLoadFinishedTimer()
         aFinishedTimer.SetTimeoutHdl( STATIC_LINK( this, SwDocShell, IsLoadFinished ));
         aFinishedTimer.SetTimeout( 1000 );
         aFinishedTimer.Start();
-        GetDoc()->StopIdleTimer();
+        getIDocumentTimerAccess()->BlockIdling();
     }
     // --> OD 2005-02-11 #i38810# - disable method <SetModified(..)>, if document
     // has stay in modified state, due to the update of its links during load.
@@ -1502,7 +1502,7 @@ IMPL_STATIC_LINK( SwDocShell, IsLoadFinished, void*, EMPTYARG )
         if(bIsModifiedEnabled)
             pThis->EnableSetModified( sal_True );
 
-        pThis->GetDoc()->StartIdleTimer();
+        pThis->getIDocumentTimerAccess()->UnblockIdling();
     }
     return 0;
 }
