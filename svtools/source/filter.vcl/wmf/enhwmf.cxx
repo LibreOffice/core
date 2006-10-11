@@ -4,9 +4,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:55:15 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 09:24:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -373,33 +373,37 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 UINT16* pnPoints;
                 Point*  pPtAry;
 
-                INT32   i, nPoly, nGesPoints;
+                UINT32  i, nPoly, nGesPoints;
                 pWMF->SeekRel( 0x10 );
 
                 // Anzahl der Polygone:
                 *pWMF >> nPoly >> nGesPoints;
 
-                // Anzahl der Punkte eines jeden Polygons holen, Gesammtzahl der Punkte ermitteln:
-                pnPoints = new UINT16[ nPoly ];
-
-                for ( i = 0; i < nPoly; i++ )
+                if (nGesPoints < SAL_MAX_UINT32 / sizeof(Point))
                 {
-                    *pWMF >> nPoints;
-                    pnPoints[ i ] = (UINT16)nPoints;
-                }
-                // Polygonpunkte holen:
-                pPtAry  = (Point*) new char[ nGesPoints * sizeof(Point) ];
 
-                for ( i = 0; i < nGesPoints; i++ )
-                {
-                    *pWMF >> nX32 >> nY32;
-                    pPtAry[ i ] = Point( nX32, nY32 );
+                    // Anzahl der Punkte eines jeden Polygons holen, Gesammtzahl der Punkte ermitteln:
+                    pnPoints = new UINT16[ nPoly ];
+
+                    for ( i = 0; i < nPoly; i++ )
+                    {
+                        *pWMF >> nPoints;
+                        pnPoints[ i ] = (UINT16)nPoints;
+                    }
+                    // Polygonpunkte holen:
+                    pPtAry  = (Point*) new char[ nGesPoints * sizeof(Point) ];
+
+                    for ( i = 0; i < nGesPoints; i++ )
+                    {
+                        *pWMF >> nX32 >> nY32;
+                        pPtAry[ i ] = Point( nX32, nY32 );
+                    }
+                    // PolyPolygon Actions erzeugen
+                    PolyPolygon aPolyPoly( (UINT16)nPoly, pnPoints, pPtAry );
+                    pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
+                    delete[] (char*) pPtAry;
+                    delete[] pnPoints;
                 }
-                // PolyPolygon Actions erzeugen
-                PolyPolygon aPolyPoly( (UINT16)nPoly, pnPoints, pPtAry );
-                pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
-                delete[] (char*) pPtAry;
-                delete[] pnPoints;
             }
             break;
 
@@ -1101,31 +1105,34 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 UINT16* pnPoints;
                 Point*  pPtAry;
 
-                INT32   i, nPoly, nGesPoints;
+                UINT32  i, nPoly, nGesPoints;
                 pWMF->SeekRel( 0x10 );
                 // Anzahl der Polygone:
                 *pWMF >> nPoly >> nGesPoints;
-                // Anzahl der Punkte eines jeden Polygons holen, Gesammtzahl der Punkte ermitteln:
-                pnPoints = new UINT16[ nPoly ];
-                for ( i = 0; i < nPoly; i++ )
+                if (nGesPoints < SAL_MAX_UINT32 / sizeof(Point))
                 {
-                    *pWMF >> nPoints;
-                    pnPoints[ i ] = (UINT16)nPoints;
-                }
-                // Polygonpunkte holen:
-                pPtAry  = (Point*) new char[ nGesPoints * sizeof(Point) ];
-                for ( i = 0; i < nGesPoints; i++ )
-                {
-                    *pWMF >> nX16 >> nY16;
-                    pPtAry[ i ] = Point( nX16, nY16 );
-                }
+                    // Anzahl der Punkte eines jeden Polygons holen, Gesammtzahl der Punkte ermitteln:
+                    pnPoints = new UINT16[ nPoly ];
+                    for ( i = 0; i < nPoly; i++ )
+                    {
+                        *pWMF >> nPoints;
+                        pnPoints[ i ] = (UINT16)nPoints;
+                    }
+                    // Polygonpunkte holen:
+                    pPtAry  = (Point*) new char[ nGesPoints * sizeof(Point) ];
+                    for ( i = 0; i < nGesPoints; i++ )
+                    {
+                        *pWMF >> nX16 >> nY16;
+                        pPtAry[ i ] = Point( nX16, nY16 );
+                    }
 
-                // PolyPolygon Actions erzeugen
-                PolyPolygon aPolyPoly( (UINT16)nPoly, pnPoints, pPtAry );
-                pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
-                delete[] (char*) pPtAry;
-                delete[] pnPoints;
-            };
+                    // PolyPolygon Actions erzeugen
+                    PolyPolygon aPolyPoly( (UINT16)nPoly, pnPoints, pPtAry );
+                    pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
+                    delete[] (char*) pPtAry;
+                    delete[] pnPoints;
+                }
+            }
             break;
 
             case EMR_FILLRGN :
