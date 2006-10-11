@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:55:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 09:24:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -866,17 +866,21 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
                                         aMemoryStream >> aPt.X()
                                                       >> aPt.Y()
                                                       >> nStringLen;
-                                        sal_Unicode* pBuf = aString.AllocBuffer( (sal_uInt16)nStringLen );
-                                        for ( i = 0; i < nStringLen; i++ )
-                                            aMemoryStream >> pBuf[ i ];
-                                        aMemoryStream >> nDXCount;
-                                        if ( nDXCount )
-                                            pDXAry = new sal_Int32[ nDXCount ];
-                                        for  ( i = 0; i < nDXCount; i++ )
-                                            aMemoryStream >> pDXAry[ i ];
-                                        aMemoryStream >> nSkipActions;
-                                        pOut->DrawText( aPt, aString, pDXAry );
-                                        delete[] pDXAry;
+
+                                        if (nStringLen < STRING_MAXLEN)
+                                        {
+                                            sal_Unicode* pBuf = aString.AllocBuffer( (xub_StrLen)nStringLen );
+                                            for ( i = 0; i < nStringLen; i++ )
+                                                aMemoryStream >> pBuf[ i ];
+                                            aMemoryStream >> nDXCount;
+                                            if ( nDXCount )
+                                                pDXAry = new sal_Int32[ nDXCount ];
+                                            for  ( i = 0; i < nDXCount; i++ )
+                                                aMemoryStream >> pDXAry[ i ];
+                                            aMemoryStream >> nSkipActions;
+                                            pOut->DrawText( aPt, aString, pDXAry );
+                                            delete[] pDXAry;
+                                        }
                                     }
                                 }
                                 break;
