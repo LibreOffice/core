@@ -4,9 +4,9 @@
 #
 #   $RCSfile: ziplist.pm,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-13 15:01:55 $
+#   last change: $Author: obo $ $Date: 2006-10-11 09:05:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@ use installer::globals;
 use installer::logger;
 use installer::parameter;
 use installer::remover;
+use installer::systemactions;
 
 #################################################
 # Getting data from path file and zip list file
@@ -575,7 +576,10 @@ sub replace_languages_in_pathes
 {
     my ( $patharrayref, $languagesref ) = @_;
 
+    installer::logger::include_header_into_logfile("Replacing languages in include pathes:");
+
     my @patharray = ();
+    my $infoline = "";
 
     for ( my $i = 0; $i <= $#{$patharrayref}; $i++ )
     {
@@ -584,13 +588,39 @@ sub replace_languages_in_pathes
         if ( $line =~ /\$\(LANG\)/ )
         {
             my $originalline = $line;
+            my $newline = "";
 
             for ( my $j = 0; $j <= $#{$languagesref}; $j++ )
             {
                 my $language = ${$languagesref}[$j];
                 $line =~ s/\$\(LANG\)/$language/g;
                 push(@patharray ,$line);
+                $newdir = $line;
                 $line = $originalline;
+
+                installer::remover::remove_leading_and_ending_whitespaces(\$newline);
+
+                # Is it necessary to refresh the global array, containing all files of all include pathes?
+                if ( -d $newdir )
+                {
+                    # Checking if $newdir is empty
+                    if ( ! installer::systemactions::is_empty_dir($newdir) )
+                    {
+                        $installer::globals::refresh_includepathes = 1;
+                        $infoline = "Directory $newdir exists and is not empty. Refreshing global file array is required.\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+                    }
+                    else
+                    {
+                        $infoline = "Directory $newdir is empty. No refresh of global file array required.\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+                    }
+                }
+                else
+                {
+                    $infoline = "Directory $newdir does not exist. No refresh of global file array required.\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                }
             }
         }
         else        # not language dependent include path
@@ -606,47 +636,21 @@ sub replace_languages_in_pathes
 # Collecting all files from all include paths
 #####################################################
 
-sub collect_all_files_from_include_path
+sub list_all_files_from_include_path
 {
     my ( $patharrayref) = @_;
-
-    my @filesarray = ();
 
     installer::logger::include_header_into_logfile("Include pathes:");
 
     for ( my $i = 0; $i <= $#{$patharrayref}; $i++ )
     {
-        my $count = 0;
-
         my $path = ${$patharrayref}[$i];
-
         installer::remover::remove_leading_and_ending_whitespaces(\$path);
-
-        opendir(DIR, $path);
-
-        my $direntry;
-
-        foreach $direntry (readdir(DIR))
-        {
-            my $completefile = $path . $installer::globals::separator . $direntry;
-
-            if ( -f $completefile )
-            {
-                $completefile .= "\n";
-                push(@filesarray, $completefile);
-                $count++;
-            }
-        }
-
-        closedir(DIR);
-
-        my $infoline = "$path\t$count files\n";
+        my $infoline = "$path\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
 
-    # one empty line after directory section
-    $infoline = "\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    push( @installer::globals::logfileinfo, "\n");
 
     return \@filesarray;
 }
