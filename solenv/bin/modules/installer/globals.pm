@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.57 $
+#   $Revision: 1.58 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 14:36:07 $
+#   last change: $Author: obo $ $Date: 2006-10-11 09:04:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -201,6 +201,7 @@ BEGIN
     $tab = 0;
     $patch = 0;
     $patchincludepath = "";
+    $refresh_includepathes = 0;
     $patchfilelistname = "patchfilelist.txt";
     @patchfilecollector = ();
     $nopatchfilecollector = "";
