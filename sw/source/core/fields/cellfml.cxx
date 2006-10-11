@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellfml.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:10:00 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 09:28:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -376,18 +376,14 @@ void SwTableFormula::_MakeFormel( const SwTable& rTbl, String& rNewStr,
     // ein Bereich in dieser Klammer ?
     if( pLastBox )
     {
-    //TODOUNICODE: does it work?
-//      pEndBox = (SwTableBox*)(long)(*pLastBox);
-        pEndBox = (SwTableBox*)pLastBox->ToInt32();
+        pEndBox = (SwTableBox*)pLastBox->ToInt64();
 
         // ist das ueberhaupt ein gueltiger Pointer ??
         if( !rTbl.GetTabSortBoxes().Seek_Entry( pEndBox ))
             pEndBox = 0;
         rFirstBox.Erase( 0, pLastBox->Len()+1 );
     }
-    //TODOUNICODE: does it work?
-//  pSttBox = (SwTableBox*)(long)rFirstBox;
-    pSttBox = (SwTableBox*)rFirstBox.ToInt32();
+    pSttBox = (SwTableBox*)rFirstBox.ToInt64();
     // ist das ueberhaupt ein gueltiger Pointer ??
     if( !rTbl.GetTabSortBoxes().Seek_Entry( pSttBox ))
         pSttBox = 0;
@@ -465,7 +461,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTbl, String& rNewStr,
     if( pLastBox )
     {
         if( 0 != ( pRelBox = lcl_RelToBox( rTbl, pBox, *pLastBox )) )
-            rNewStr += String::CreateFromInt32( (long)pRelBox );
+            rNewStr += String::CreateFromInt64( (sal_PtrDiff)pRelBox );
         else
             rNewStr += '0';
         rNewStr += ':';
@@ -473,7 +469,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTbl, String& rNewStr,
     }
 
     if( 0 != ( pRelBox = lcl_RelToBox( rTbl, pBox, rFirstBox )) )
-        rNewStr += String::CreateFromInt32( (long)pRelBox );
+        rNewStr += String::CreateFromInt64( (sal_PtrDiff)pRelBox );
     else
         rNewStr += '0';
 
@@ -527,8 +523,7 @@ void SwTableFormula::PtrToBoxNms( const SwTable& rTbl, String& rNewStr,
     rFirstBox.Erase(0,1);
     if( pLastBox )
     {
-//      pBox = (SwTableBox*)(long)(*pLastBox);
-        pBox = (SwTableBox*)pLastBox->ToInt32();
+        pBox = (SwTableBox*)pLastBox->ToInt64();
 
         // ist das ueberhaupt ein gueltiger Pointer ??
         if( rTbl.GetTabSortBoxes().Seek_Entry( pBox ))
@@ -539,8 +534,7 @@ void SwTableFormula::PtrToBoxNms( const SwTable& rTbl, String& rNewStr,
         rFirstBox.Erase( 0, pLastBox->Len()+1 );
     }
 
-//  pBox = (SwTableBox*)(long)rFirstBox;
-    pBox = (SwTableBox*)rFirstBox.ToInt32();
+    pBox = (SwTableBox*)rFirstBox.ToInt64();
     // ist das ueberhaupt ein gueltiger Pointer ??
     if( rTbl.GetTabSortBoxes().Seek_Entry( pBox ))
         rNewStr += pBox->GetName();
@@ -562,13 +556,13 @@ void SwTableFormula::BoxNmsToPtr( const SwTable& rTbl, String& rNewStr,
     if( pLastBox )
     {
         pBox = rTbl.GetTblBox( *pLastBox );
-        rNewStr += String::CreateFromInt32( (long)pBox );
+        rNewStr += String::CreateFromInt64( (sal_PtrDiff)pBox );
         rNewStr += ':';
         rFirstBox.Erase( 0, pLastBox->Len()+1 );
     }
 
     pBox = rTbl.GetTblBox( rFirstBox );
-    rNewStr += String::CreateFromInt32( (long)pBox );
+    rNewStr += String::CreateFromInt64( (sal_PtrDiff)pBox );
 
     // Kennung fuer Box erhalten
     rNewStr += rFirstBox.GetChar( rFirstBox.Len() - 1 );
@@ -897,8 +891,7 @@ String lcl_BoxNmToRel( const SwTable& rTbl, const SwTableNode& rTblNd,
     if( !bExtrnlNm )
     {
         // in die Externe Darstellung umwandeln.
-//      SwTableBox* pBox = (SwTableBox*)(long)sTmp;
-        SwTableBox* pBox = (SwTableBox*)sTmp.ToInt32();
+        SwTableBox* pBox = (SwTableBox*)sTmp.ToInt64();
         if( !rTbl.GetTabSortBoxes().Seek_Entry( pBox ))
             return '?';
         sTmp = pBox->GetName();
@@ -954,8 +947,7 @@ void SwTableFormula::_GetFmlBoxes( const SwTable& rTbl, String& rNewStr,
     // ein Bereich in dieser Klammer ?
     if( pLastBox )
     {
-//      pEndBox = (SwTableBox*)(long)(*pLastBox);
-        pEndBox = (SwTableBox*)pLastBox->ToInt32();
+        pEndBox = (SwTableBox*)pLastBox->ToInt64();
 
         // ist das ueberhaupt ein gueltiger Pointer ??
         if( !rTbl.GetTabSortBoxes().Seek_Entry( pEndBox ))
@@ -963,8 +955,7 @@ void SwTableFormula::_GetFmlBoxes( const SwTable& rTbl, String& rNewStr,
         rFirstBox.Erase( 0, pLastBox->Len()+1 );
     }
 
-//  pSttBox = (SwTableBox*)(long)rFirstBox;
-    pSttBox = (SwTableBox*)rFirstBox.ToInt32();
+    pSttBox = (SwTableBox*)rFirstBox.ToInt64();
     // ist das ueberhaupt ein gueltiger Pointer ??
     if( !rTbl.GetTabSortBoxes().Seek_Entry( pSttBox ))
         pSttBox = 0;
@@ -1054,12 +1045,8 @@ void SwTableFormula::_HasValidBoxes( const SwTable& rTbl, String& rNewStr,
         {
         case INTRNL_NAME:
             if( pLastBox )
-            {
-//              pEndBox = (SwTableBox*)(long)(*pLastBox);
-                pEndBox = (SwTableBox*)pLastBox->ToInt32();
-            }
-//          pSttBox = (SwTableBox*)(long)rFirstBox;
-            pSttBox = (SwTableBox*)rFirstBox.ToInt32();
+                pEndBox = (SwTableBox*)pLastBox->ToInt64();
+            pSttBox = (SwTableBox*)rFirstBox.ToInt64();
             break;
 
         case REL_NAME:
@@ -1169,12 +1156,8 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, String& rNewStr,
     {
     case INTRNL_NAME:
         if( pLastBox )
-        {
-//          pEndBox = (SwTableBox*)(long)(*pLastBox);
-            pEndBox = (SwTableBox*)pLastBox->ToInt32();
-        }
-//      pSttBox = (SwTableBox*)(long)rFirstBox;
-        pSttBox = (SwTableBox*)rFirstBox.ToInt32();
+            pEndBox = (SwTableBox*)pLastBox->ToInt64();
+        pSttBox = (SwTableBox*)rFirstBox.ToInt64();
         break;
 
     case REL_NAME:
@@ -1260,8 +1243,8 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, String& rNewStr,
     }
 
     if( pLastBox )
-        ( rNewStr += String::CreateFromInt32((long)pEndBox )) += ':';
-    ( rNewStr += String::CreateFromInt32((long)pSttBox ))
+        ( rNewStr += String::CreateFromInt64((sal_PtrDiff)pEndBox)) += ':';
+    ( rNewStr += String::CreateFromInt64((sal_PtrDiff)pSttBox))
               += rFirstBox.GetChar( rFirstBox.Len() - 1 );
 }
 
