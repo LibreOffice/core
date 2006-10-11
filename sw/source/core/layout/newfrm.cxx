@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:20:52 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:49:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,11 @@
 #include <pagedesc.hxx>
 #endif
 #include "viewimp.hxx"
+#include "IDocumentTimerAccess.hxx"
+#include "IDocumentLayoutAccess.hxx"
+#include "IDocumentFieldsAccess.hxx"
+#include "IDocumentSettingAccess.hxx"
+#include "IDocumentDrawModelAccess.hxx"
 
 SwLayVout     *SwRootFrm::pVout = 0;
 BOOL           SwRootFrm::bInPaint = FALSE;
@@ -487,10 +492,12 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
 
     InitCurrShells( this );
 
-    SwDoc *pDoc = pFmt->GetDoc();
-    const BOOL bOldIdle = pDoc->IsIdleTimerActive();
-    pDoc->StopIdleTimer();
-    pDoc->SetRootFrm( this );       //Fuer das Erzeugen der Flys durch MakeFrms()
+    IDocumentTimerAccess *pTimerAccess = pFmt->getIDocumentTimerAccess();
+    IDocumentLayoutAccess *pLayoutAccess = pFmt->getIDocumentLayoutAccess();
+    IDocumentFieldsAccess *pFieldsAccess = pFmt->getIDocumentFieldsAccess();
+    const IDocumentSettingAccess *pSettingAccess = pFmt->getIDocumentSettingAccess();
+    pTimerAccess->StopIdling();
+    pLayoutAccess->SetRootFrm( this );      //Fuer das Erzeugen der Flys durch MakeFrms()
     bCallbackActionEnabled = FALSE; //vor Verlassen auf TRUE setzen!
 
     SdrModel *pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
@@ -506,6 +513,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     //Zuerst einiges initialiseren und den ersten Node besorgen (der wird
     //fuer den PageDesc benoetigt).
 
+    SwDoc* pDoc = pFmt->GetDoc();
     SwNodeIndex aIndex( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
     SwCntntNode *pNode = pDoc->GetNodes().GoNextSection( &aIndex, TRUE, FALSE );
     // --> FME 2005-05-25 #123067# pNode = 0 can really happen:
@@ -550,19 +558,18 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     ::_InsertCnt( pLay, pDoc, aTmp.GetIndex(), TRUE );
     //Noch nicht ersetzte Master aus der Liste entfernen.
     RemoveMasterObjs( pDrawPage );
-    if( pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
-        pDoc->UpdateRefFlds( NULL );
+    if( pSettingAccess->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
+        pFieldsAccess->UpdateRefFlds( NULL );
     //b6433357: Update page fields after loading
     // --->
     if ( !pCurrShell || !pCurrShell->Imp()->IsUpdateExpFlds() )
     {
         SwDocPosUpdate aMsgHnt( pPage->Frm().Top() );
-        pDoc->UpdatePageFlds( &aMsgHnt );
+        pFieldsAccess->UpdatePageFlds( &aMsgHnt );
     }
     // <---
 
-    if ( bOldIdle )
-        pDoc->StartIdleTimer();
+    pTimerAccess->StartIdling();
     bCallbackActionEnabled = TRUE;
 }
 
