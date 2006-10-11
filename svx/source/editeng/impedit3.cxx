@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:18:56 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 09:29:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1314,10 +1314,11 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                 if ( nPara || IsFixedCellHeight() || pLine->GetStartPortion() ) // Nicht die aller erste Zeile
                 {
                     // #100508# There are documents with PropLineSpace 0, why?
+                    // (cmc: re above question :-) such documents can be seen by importing a .ppt
                     if ( rLSItem.GetPropLineSpace() && ( rLSItem.GetPropLineSpace() != 100 ) )
                     {
                         sal_uInt16 nTxtHeight = pLine->GetHeight();
-                        sal_uInt32 nH = nTxtHeight;
+                        sal_Int32 nH = nTxtHeight;
                         nH *= rLSItem.GetPropLineSpace();
                         nH /= 100;
                         // Der Ascent muss um die Differenz angepasst werden:
@@ -1656,10 +1657,11 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
             if ( nPara || IsFixedCellHeight() || pTmpLine->GetStartPortion() ) // Nicht die aller erste Zeile
             {
                 // #100508# There are documents with PropLineSpace 0, why?
+                // (cmc: re above question :-) such documents can be seen by importing a .ppt
                 if ( rLSItem.GetPropLineSpace() && ( rLSItem.GetPropLineSpace() != 100 ) )
                 {
                     sal_uInt16 nTxtHeight = pTmpLine->GetHeight();
-                    sal_uInt32 nH = nTxtHeight;
+                    sal_Int32 nH = nTxtHeight;
                     nH *= rLSItem.GetPropLineSpace();
                     nH /= 100;
                     // Der Ascent muss um die Differenz angepasst werden:
