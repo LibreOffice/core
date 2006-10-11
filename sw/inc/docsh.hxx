@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:20:09 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:47:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@ class SwgReaderOption;
 class SwOLEObj;
 class IDocumentDeviceAccess;
 class IDocumentSettingAccess;
+class IDocumentTimerAccess;
 
 class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 {
@@ -185,6 +186,7 @@ public:
     inline SwDoc*                   GetDoc() { return pDoc; }
     IDocumentDeviceAccess*          getIDocumentDeviceAccess();
     const IDocumentSettingAccess*   getIDocumentSettingAccess() const;
+    IDocumentTimerAccess*           getIDocumentTimerAccess();
 
     void                    UpdateFontList();
     void                    UpdateChildWindows();
