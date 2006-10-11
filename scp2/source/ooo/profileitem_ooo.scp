@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profileitem_ooo.scp,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-09 10:45:06 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 09:29:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -841,5 +841,8 @@ ProfileItem gid_Profileitem_Jvmfwk_Uno_Java_Jfw_Classpath_Urls
 #endif
 #ifdef SYSTEM_XALAN
     ValueList29 = XALAN_JAR;
+#ifdef SYSTEM_SERIALIZER
+    ValueList30 = SERIALIZER_JAR;
+#endif
 #endif
 End
