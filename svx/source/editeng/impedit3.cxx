@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:52:31 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:18:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2837,46 +2837,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
             return;
 
         if ( pPDFExtOutDevData )
-        {
-            String aActualParaText;
             pPDFExtOutDevData->BeginStructureElement( vcl::PDFWriter::Paragraph );
-
-            sal_uInt16 i, nLines = pPortion->GetLines().Count();
-            for ( i = 0; i < nLines; i++ )
-            {
-                if ( pPortion->IsVisible() )
-                {
-                    pLine = pPortion->GetLines().GetObject( i );
-                    sal_uInt16 nIndex = pLine->GetStart();
-                    for ( sal_uInt16 y = pLine->GetStartPortion(); y <= pLine->GetEndPortion(); y++ )
-                    {
-                        TextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( y );
-                        switch ( pTextPortion->GetKind() )
-                        {
-                            case PORTIONKIND_TEXT:
-                            {
-                                String aText( *pPortion->GetNode(), nIndex, pTextPortion->GetLen() );
-                                aActualParaText.Append( aText );
-                            }
-                            break;
-                            case PORTIONKIND_FIELD:
-                            {
-                                EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature( nIndex );
-                                if ( pAttr && pAttr->GetItem()->ISA( SvxFieldItem ) )
-                                    aActualParaText.Append( ((EditCharAttribField*)pAttr)->GetFieldValue() );
-                            }
-                            break;
-                            case PORTIONKIND_LINEBREAK :
-                            {
-                                aActualParaText.Append( String( (sal_Unicode)0xd ) );
-                            }
-                            break;
-                         }
-                    }
-                }
-            }
-            pPDFExtOutDevData->SetActualText( aActualParaText );
-        }
 
         long nParaHeight = pPortion->GetHeight();
         sal_uInt16 nIndex = 0;
@@ -3643,7 +3604,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
         }
 
         // Wenn Doc-Breite < OutputArea,Width, nicht umgebrochene Felder,
-        // stehen die Felder sonst ber, wenn > Zeile.
+        // stehen die Felder sonst ï¿½ber, wenn > Zeile.
         // ( Oben nicht, da dort bereits Doc-Breite von Formatierung mit drin )
         if ( !IsVertical() && ( pView->GetOutputArea().GetWidth() > GetPaperSize().Width() ) )
         {
