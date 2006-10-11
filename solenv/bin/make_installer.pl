@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.70 $
+#   $Revision: 1.71 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 09:18:23 $
+#   last change: $Author: obo $ $Date: 2006-10-11 09:03:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -259,6 +259,13 @@ if ( $installer::globals::globallogging ) { installer::files::save_file($logging
 
 installer::ziplist::remove_ending_separator($includepatharrayref);
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allpatharray3c.log" ,$includepatharrayref); }
+
+##############################################
+# Collecting all files from all include
+# pathes in global hashes.
+##############################################
+
+installer::worker::collect_all_files_from_includepathes($includepatharrayref);
 
 ##############################################
 # Analyzing languages in zip.lst if required
@@ -601,11 +608,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     $includepatharrayref_lang = installer::ziplist::replace_languages_in_pathes($includepatharrayref, $languagesarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allpatharray4.log" ,$includepatharrayref_lang); }
 
-    # Now all include paths are evaluated.
-    # All files in this include paths can be collected.
+    if ( $installer::globals::refresh_includepathes ) { installer::worker::collect_all_files_from_includepathes($includepatharrayref_lang); }
 
-    my $allfilesinincludepatharrayref = installer::ziplist::collect_all_files_from_include_path($includepatharrayref_lang); # needed for include path logging
-    if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allfiles.log" ,$allfilesinincludepatharrayref); }
+    installer::ziplist::list_all_files_from_include_path($includepatharrayref_lang);
 
     #####################################
     # Language dependent directory part
