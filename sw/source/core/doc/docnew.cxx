@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:25:56 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:48:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,11 +313,13 @@ SwDoc::SwDoc() :
     eRedlineMode((IDocumentRedlineAccess::RedlineMode_t)(IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE)),
     eChrCmprType( CHARCOMPRESS_NONE ),
     mReferenceCount(0),
+    mIdleBlockCount(0),
     nLockExpFld( 0 ),
     nLinkUpdMode( GLOBALSETTING ),
      nFldUpdMode( AUTOUPD_GLOBALSETTING ),
     mbReadlineChecked(false),
-    mbWinEncryption(false),
+    mbWinEncryption(sal_False),
+    mbStartIdleTimer(sal_False),
     // --> OD 2005-02-11 #i38810#
     mbLinksUpdated( sal_False )
 {
@@ -443,7 +445,6 @@ SwDoc::SwDoc() :
     // den eigenen IdleTimer setzen
     aIdleTimer.SetTimeout( 600 );
     aIdleTimer.SetTimeoutHdl( LINK(this, SwDoc, DoIdleJobs) );
-    aIdleTimer.Start();
 
     // den CharTimer setzen
     aChartTimer.SetTimeout( 2000 );
@@ -496,7 +497,7 @@ SwDoc::~SwDoc()
     SwFmtCharFmt aCharFmt(NULL);
     SetDefault(aCharFmt);
 
-    aIdleTimer.Stop();  // den Idltimer abschalten
+    StopIdling();   // stop idle timer
 
     delete pUnoCallBack, pUnoCallBack = 0;
     delete pURLStateChgd;
