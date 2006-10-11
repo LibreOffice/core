@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-10-06 10:35:45 $
+dnl * Date: $Date: 2006-10-11 09:26:04 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.181 $ )
+AC_REVISION( $Revision: 1.182 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -309,6 +309,10 @@ AC_ARG_WITH(system-xalan,
 AC_ARG_WITH(xalan-jar,
 [  --with-xalan-jar=JARFILE   Specify path to jarfile manually ],
 [ XALAN_JAR="$withval"
+])
+AC_ARG_WITH(serializer-jar,
+[  --with-serializer-jar=JARFILE   Specify path to jarfile manually ],
+[ SERIALIZER_JAR="$withval"
 ])
 AC_ARG_WITH(system-sablot,
 [  --with-system-sablot    Use sablot already on system
@@ -3075,6 +3079,11 @@ if test -n "$with_system_xalan" -o -n "$with_system_libs" && \
         else
           AC_CHECK_FILE($XALAN_JAR, [],
                [AC_MSG_ERROR(xalan.jar replacement not found.)], [])
+        fi
+        if test -n "$SERIALIZER_JAR"; then
+          AC_CHECK_FILE($SERIALIZER_JAR, [],
+               [AC_MSG_ERROR(serializer.jar not found.)], [])
+          AC_SUBST(SERIALIZER_JAR)
         fi
 else
     AC_MSG_RESULT([internal])
