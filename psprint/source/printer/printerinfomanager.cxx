@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:35:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:17:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -605,6 +605,7 @@ void PrinterInfoManager::changePrinterInfo( const OUString& rPrinter, const Prin
         // recalculate font substitutions
         fillFontSubstitutions( it->second.m_aInfo );
         it->second.m_bModified  = true;
+        writePrinterConfig();
     }
 }
 
@@ -809,6 +810,10 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
                  m_aPrinters[rPrinterName].m_aInfo.m_nColorDevice,
                  m_aPrinters[rPrinterName].m_aInfo.m_nColorDepth );
 #endif
+        // comment: logically one should writePrinterConfig() here
+        // but immediately after addPrinter() a changePrinterInfo()
+        // will follow (see padmin code), which writes it again,
+        // so we can currently save some performance here
     }
     return bSuccess;
 }
