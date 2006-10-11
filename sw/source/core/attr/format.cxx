@@ -4,9 +4,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:40:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:47:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -707,4 +707,6 @@ const IDocumentDrawModelAccess* SwFmt::getIDocumentDrawModelAccess() const { ret
 IDocumentDrawModelAccess* SwFmt::getIDocumentDrawModelAccess() { return GetDoc(); }
 const IDocumentLayoutAccess* SwFmt::getIDocumentLayoutAccess() const { return GetDoc(); }
 IDocumentLayoutAccess* SwFmt::getIDocumentLayoutAccess() { return GetDoc(); }
+IDocumentTimerAccess* SwFmt::getIDocumentTimerAccess() { return GetDoc(); }
+IDocumentFieldsAccess* SwFmt::getIDocumentFieldsAccess() { return GetDoc(); }
 
