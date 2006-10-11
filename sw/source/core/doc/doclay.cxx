@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:53:31 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:48:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1884,6 +1884,38 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
 
 /*************************************************************************
 |*
+|*  IDocumentTimerAccess-methods
+|*
+|*************************************************************************/
+
+void SwDoc::StartIdling()
+{
+    mbStartIdleTimer = sal_True;
+    if( !mIdleBlockCount )
+        aIdleTimer.Start();
+}
+
+void SwDoc::StopIdling()
+{
+    mbStartIdleTimer = sal_False;
+    aIdleTimer.Stop();
+}
+
+void SwDoc::BlockIdling()
+{
+    aIdleTimer.Stop();
+    ++mIdleBlockCount;
+}
+
+void SwDoc::UnblockIdling()
+{
+    --mIdleBlockCount;
+    if( !mIdleBlockCount && mbStartIdleTimer && !aIdleTimer.IsActive() )
+        aIdleTimer.Start();
+}
+
+/*************************************************************************
+|*
 |*  SwDoc::DoIdleJobs()
 |*
 |*  Ersterstellung      OK 30.03.94
@@ -1899,14 +1931,18 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
         pModLogFile = new ::rtl::Logfile( "First DoIdleJobs" );
 #endif
 
-    if( !SfxProgress::GetActiveProgress( pDocShell ) &&
-        GetRootFrm() && GetRootFrm()->GetCurrShell() )
+    if( GetRootFrm() && GetRootFrm()->GetCurrShell() &&
+        !SfxProgress::GetActiveProgress( pDocShell ) )
     {
         ViewShell *pSh, *pStartSh;
         pSh = pStartSh = GetRootFrm()->GetCurrShell();
         do {
             if( pSh->ActionPend() )
+            {
+                if( pTimer )
+                    pTimer->Start();
                 return 0;
+            }
             pSh = (ViewShell*)pSh->GetNext();
         } while( pSh != pStartSh );
 
@@ -1945,6 +1981,8 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
     if( pModLogFile && 1 != (long)pModLogFile )
         delete pModLogFile, ((long&)pModLogFile) = 1;
 #endif
+    if( pTimer )
+        pTimer->Start();
     return 0;
 }
 
