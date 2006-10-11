@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.210 $
+ *  $Revision: 1.211 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:07:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:22:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2439,7 +2439,7 @@ inline Color getColorFromLong( long nColor )
 void X11SalFrame::UpdateSettings( AllSettings& rSettings )
 {
 
-    DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator();
+    DtIntegrator* pIntegrator = GetDisplay()->getDtIntegrator();
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "DtIntegrator: %d\n", pIntegrator ? pIntegrator->GetDtType() : -1 );
 #endif
