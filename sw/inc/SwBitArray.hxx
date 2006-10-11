@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwBitArray.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:29:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:46:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,9 @@
 #define _SW_BIT_ARRAY_HXX
 
 #include <swtypes.hxx>
+#if OSL_DEBUG_LEVEL > 1
 #include <iostream>
+#endif
 
 /**
     a bit array
@@ -170,6 +172,7 @@ public:
      */
     friend SwBitArray operator ~ (const SwBitArray & rA);
 
+#if OSL_DEBUG_LEVEL > 1
     /**
        output operator
 
@@ -180,6 +183,7 @@ public:
     */
     friend std::ostream & operator <<
         (std::ostream & o, const SwBitArray & rBitArray);
+#endif
 };
 
 
