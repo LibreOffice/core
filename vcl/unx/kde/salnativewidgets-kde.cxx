@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:03:45 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:21:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1843,18 +1843,28 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     // General settings
     QColorGroup qColorGroup = kapp->palette().active();
 
-    // Foreground
     Color aFore = toColor( qColorGroup.foreground() );
+    Color aBack = toColor( qColorGroup.background() );
+    Color aText = toColor( qColorGroup.text() );
+    Color aBase = toColor( qColorGroup.base() );
+
+    // Foreground
     aStyleSettings.SetRadioCheckTextColor( aFore );
     aStyleSettings.SetLabelTextColor( aFore );
     aStyleSettings.SetInfoTextColor( aFore );
     aStyleSettings.SetDialogTextColor( aFore );
     aStyleSettings.SetGroupTextColor( aFore );
 
-    // Input boxes, list boxes
-    aStyleSettings.SetFieldColor( toColor( qColorGroup.base() ) );
-    aStyleSettings.SetFieldTextColor( toColor( qColorGroup.text() ) );
-    aStyleSettings.SetFieldRolloverTextColor( toColor( qColorGroup.text() ) );
+    // Text
+    aStyleSettings.SetFieldTextColor( aText );
+    aStyleSettings.SetFieldRolloverTextColor( aText );
+    aStyleSettings.SetWindowTextColor( aText );
+    aStyleSettings.SetHelpTextColor( aText );
+
+    // Base
+    aStyleSettings.SetFieldColor( aBase );
+    aStyleSettings.SetHelpColor( aBase );
+    aStyleSettings.SetWindowColor( aBase );
 
     // Buttons
     aStyleSettings.SetButtonTextColor( toColor( qColorGroup.buttonText() ) );
@@ -1863,8 +1873,10 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     // Disable color
     aStyleSettings.SetDisableColor( toColor( qColorGroup.mid() ) );
 
+    // Workspace
+    aStyleSettings.SetWorkspaceColor( toColor( qColorGroup.mid() ) );
+
     // Background
-    Color aBack = toColor( qColorGroup.background() );
     aStyleSettings.Set3DColors( aBack );
     aStyleSettings.SetFaceColor( aBack );
     aStyleSettings.SetDialogColor( aBack );
@@ -1914,28 +1926,42 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     {
         // Color
         QColorGroup qMenuCG = pMenuBar->colorGroup();
-        aStyleSettings.SetMenuTextColor( toColor( qMenuCG.buttonText() ) );
-        aStyleSettings.SetMenuColor( toColor( qMenuCG.button() ) );
-        aStyleSettings.SetMenuBarColor( toColor( qMenuCG.button() ) );
+
+        // Menu text and background color, theme specific
+        Color aMenuFore = toColor( qMenuCG.foreground() );
+        Color aMenuBack = toColor( qMenuCG.background() );
+        if ( kapp->style().inherits( "LightStyleV2" ) ||
+             kapp->style().inherits( "LightStyleV3" ) ||
+             ( kapp->style().inherits( "QMotifStyle" ) && !kapp->style().inherits( "QSGIStyle" ) ) ||
+             kapp->style().inherits( "QWindowsStyle" ) )
+        {
+            aMenuFore = toColor( qMenuCG.buttonText() );
+            aMenuBack = toColor( qMenuCG.button() );
+        }
+
+        aStyleSettings.SetMenuTextColor( aMenuFore );
+        aStyleSettings.SetMenuColor( aMenuBack );
+        aStyleSettings.SetMenuBarColor( aMenuBack );
+
         aStyleSettings.SetMenuHighlightColor( toColor ( qMenuCG.highlight() ) );
 
         // Menu items higlight text color, theme specific
         if ( kapp->style().inherits( "HighContrastStyle" ) ||
-                kapp->style().inherits( "KeramikStyle" ) ||
-                kapp->style().inherits( "QWindowsStyle" ) ||
-                kapp->style().inherits( "ThinKeramikStyle" ) ||
-                kapp->style().inherits( "PlastikStyle" ) )
+             kapp->style().inherits( "KeramikStyle" ) ||
+             kapp->style().inherits( "QWindowsStyle" ) ||
+             kapp->style().inherits( "ThinKeramikStyle" ) ||
+             kapp->style().inherits( "PlastikStyle" ) )
         {
             aStyleSettings.SetMenuHighlightTextColor( toColor ( qMenuCG.highlightedText() ) );
         }
         else
-            aStyleSettings.SetMenuHighlightTextColor( toColor ( qMenuCG.buttonText() ) );
+            aStyleSettings.SetMenuHighlightTextColor( aMenuFore );
 
         // set special menubar higlight text color
         if ( kapp->style().inherits( "HighContrastStyle" ) )
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = toColor( qMenuCG.highlightedText() );
         else
-            ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = toColor( qMenuCG.buttonText() );
+            ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = aMenuFore;
 
         // Font
         aFont = toFont( pMenuBar->font(), rSettings.GetUILocale() );
