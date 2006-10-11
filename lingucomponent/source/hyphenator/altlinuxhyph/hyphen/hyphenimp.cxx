@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphenimp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-04 16:10:35 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 09:25:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,6 @@
 #include "dictmgr.hxx"
 
 #include <stdio.h>
-#include <iostream>
 using namespace utl;
 using namespace osl;
 using namespace rtl;
