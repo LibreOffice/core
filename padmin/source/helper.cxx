@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:15:46 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:23:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,6 +253,7 @@ QueryString::QueryString( Window* pParent, String& rQuery, String& rRet, const :
         m_aComboBox( this, PaResId( RID_STRQRY_BOX_NEWNAME ) ),
         m_rReturnValue( rRet )
 {
+    FreeResource();
     m_aOKButton.SetClickHdl( LINK( this, QueryString, ClickBtnHdl ) );
     m_aFixedText.SetText( rQuery );
     if( rChoices.begin() != rChoices.end() )
@@ -271,7 +272,6 @@ QueryString::QueryString( Window* pParent, String& rQuery, String& rRet, const :
         m_bUseEdit = true;
     }
     SetText( Application::GetDisplayName() );
-    FreeResource();
 }
 
 QueryString::~QueryString()
