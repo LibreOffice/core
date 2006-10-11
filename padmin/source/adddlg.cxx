@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:15:06 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:23:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -811,6 +811,8 @@ AddPrinterDialog::~AddPrinterDialog()
         delete m_pFaxSelectDriverPage;
     if( m_pFaxCommandPage )
         delete m_pFaxCommandPage;
+    if( m_pFaxNamePage )
+        delete m_pFaxNamePage;
     if( m_pPdfDriverPage )
         delete m_pPdfDriverPage;
     if( m_pPdfSelectDriverPage )
