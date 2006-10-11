@@ -4,9 +4,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:24:36 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:47:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,8 @@
 class IDocumentSettingAccess;
 class IDocumentDrawModelAccess;
 class IDocumentLayoutAccess;
+class IDocumentTimerAccess;
+class IDocumentFieldsAccess;
 class SwDoc;
 
 class SwFmt : public SwModify
@@ -159,6 +161,14 @@ public:
      */
     const IDocumentLayoutAccess* getIDocumentLayoutAccess() const;
           IDocumentLayoutAccess* getIDocumentLayoutAccess();
+
+     /** Provides access to the document idle timer interface
+     */
+    IDocumentTimerAccess* getIDocumentTimerAccess();
+
+     /** Provides access to the document idle timer interface
+     */
+    IDocumentFieldsAccess* getIDocumentFieldsAccess();
 
     // erfragen und setzen der Poolvorlagen-Id's
     USHORT GetPoolFmtId() const { return nPoolFmtId; }
