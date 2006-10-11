@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 09:51:32 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 09:27:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ void SdOptionsGeneric::Init() const
 {
     if( !mbInit )
     {
-        SdOptionsGeneric* pThis = (SdOptionsGeneric*) this;
+        SdOptionsGeneric* pThis = const_cast<SdOptionsGeneric*>(this);
 
         if( !mpCfgItem )
             pThis->mpCfgItem = new SdOptionsItem( *this, maSubTree );
@@ -167,7 +167,7 @@ void SdOptionsGeneric::Commit( SdOptionsItem& rCfgItem ) const
 
     if( aNames.getLength() && ( aValues.getLength() == aNames.getLength() ) )
     {
-        if( ( (SdOptionsGeneric*) this )->WriteData( aValues.getArray() ) )
+        if( (const_cast<SdOptionsGeneric*>(this))->WriteData( aValues.getArray() ) )
             rCfgItem.PutProperties( aNames, aValues );
         else
         {
