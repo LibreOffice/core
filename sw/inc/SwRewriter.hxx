@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwRewriter.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:29:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:46:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #define _SW_REWRITER_HXX
 
 #include <vector>
-#include <iostream>
 #include <tools/string.hxx>
 
 typedef std::pair<String, String> SwRewriteRule;
