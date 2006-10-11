@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:24:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:52:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -598,7 +598,7 @@ void SwWW8ImplReader::Read_CRevisionMark(IDocumentRedlineAccess::RedlineType_t e
     }
 
     if (nLen < 0)
-        mpRedlineStack->close(*pPaM->GetPoint(), eType);
+        mpRedlineStack->close(*pPaM->GetPoint(), eType, pTableDesc );
     else
     {
         // start of new revision mark, if not there default to first entry
