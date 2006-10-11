@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:04:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:21:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -590,6 +590,7 @@ SalDisplay::SalDisplay( Display *display ) :
         mpFallbackFactory ( NULL ),
         pDisp_( display ),
         m_pWMAdaptor( NULL ),
+        m_pDtIntegrator( NULL ),
         m_pSnDisplay( NULL ),
         m_pSnLauncheeContext( NULL )
 {
@@ -627,6 +628,9 @@ void SalDisplay::doDestruct()
     X11SalData *pSalData = GetX11SalData();
 
     delete m_pWMAdaptor;
+    m_pWMAdaptor = NULL;
+    delete m_pDtIntegrator;
+    m_pDtIntegrator = NULL;
     X11SalBitmap::ImplDestroyCache();
     X11SalGraphics::releaseGlyphPeer();
     DestroyFontCache();
@@ -1100,8 +1104,7 @@ bHandleStartupNotification
     InitXinerama();
 
     // initialize system settings update
-    DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator();
-    pIntegrator->Acquire();
+    m_pDtIntegrator = DtIntegrator::CreateDtIntegrator();
 
 #ifdef HAVE_LIBSN
     if ( bHandleStartupNotification )
