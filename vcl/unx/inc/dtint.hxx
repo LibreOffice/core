@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dtint.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:46:06 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:20:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,6 @@
 #ifndef _SV_DTINT_HXX
 #define _SV_DTINT_HXX
 
-#ifndef _LIST_HXX
-#include <tools/list.hxx>
-#endif
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
 #endif
@@ -61,10 +58,6 @@ struct XEvent;
 #define XLIB_Window UINT32
 #endif
 
-class DtIntegrator;
-
-DECLARE_LIST( DtIntegratorList, DtIntegrator* )
-
 enum DtType {
     DtGeneric,
     DtCDE,
@@ -77,13 +70,11 @@ protected:
     DtType              meType;
     Display*            mpDisplay;
     SalDisplay*         mpSalDisplay;
-    int                 mnRefCount;
     int                 mnSystemLookCommandProcess;
 
 
     DtIntegrator();
 
-    static DtIntegratorList aIntegratorList;
     static String           aHomeDir;
 
 public:
@@ -97,19 +88,6 @@ public:
     DtType          GetDtType() { return meType; }
     SalDisplay*     GetSalDisplay() { return mpSalDisplay; }
     Display*        GetDisplay() { return mpDisplay; }
-
-    void Acquire() { mnRefCount++; }
-    inline void Release();
 };
-
-inline void DtIntegrator::Release()
-{
-    mnRefCount--;
-    if( ! mnRefCount )
-    {
-        aIntegratorList.Remove( this );
-        delete this;
-    }
-}
 
 #endif
