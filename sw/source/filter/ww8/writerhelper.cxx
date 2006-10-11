@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:30:52 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:51:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -841,14 +841,17 @@ namespace sw
             }
         };
 
-        void RedlineStack::close(const SwPosition& rPos, IDocumentRedlineAccess::RedlineType_t eType)
+        bool RedlineStack::close(const SwPosition& rPos, IDocumentRedlineAccess::RedlineType_t eType)
         {
             //Search from end for same type
             myriter aResult = std::find_if(maStack.rbegin(), maStack.rend(),
                 SameOpenRedlineType(eType));
-            ASSERT(aResult != maStack.rend(), "close without open!");
             if (aResult != maStack.rend())
+            {
                 (*aResult)->SetEndPos(rPos);
+                return true;
+            }
+            return false;
         }
 
 
