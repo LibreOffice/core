@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:24:01 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:51:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,9 @@
 #endif
 #ifndef _SVX_PGRDITEM_HXX
 #include <svx/pgrditem.hxx>
+#endif
+#ifndef SW_MS_MSFILTER_HXX
+#include <msfilter.hxx>
 #endif
 
 #ifndef _PAM_HXX
@@ -364,7 +367,28 @@ public:
     // find name of numrule valid for current WW-COL
     const String& GetNumRuleName() const;
     void SetNumRuleName( const String& rName );
+
+    sw::util::RedlineStack* getOldRedlineStack(){ return mpOldRedlineStack; }
 };
+
+void sw::util::RedlineStack::close( const SwPosition& rPos,
+    IDocumentRedlineAccess::RedlineType_t eType, WW8TabDesc* pTabDesc )
+{
+    // If the redline type is not found in the redline stack, we have to check if there has been
+    // a tabledesc and to check its saved redline stack, too. (#136939, #i68139)
+    if( !close( rPos, eType ) )
+    {
+        if( pTabDesc && pTabDesc->getOldRedlineStack() )
+        {
+#ifndef PRODUCT
+            ASSERT( pTabDesc->getOldRedlineStack()->close(rPos, eType), "close without open!");
+#else
+            pTabDesc->getOldRedlineStack()->close( rPos, eType );
+#endif
+        }
+    }
+}
+
 
 void wwSectionManager::SetCurrentSectionHasFootnote()
 {
