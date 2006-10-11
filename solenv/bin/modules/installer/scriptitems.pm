@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-04 11:55:00 $
+#   last change: $Author: obo $ $Date: 2006-10-11 09:04:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -640,19 +640,18 @@ sub get_Destination_Directory_For_Item_From_Directorylist       # this is used f
 }
 
 ##########################################################################
-# Input is one file name, output the complete absolute path of this file
+# Searching a file in a list of pathes
 ##########################################################################
 
-sub get_sourcepath_from_filename_and_includepath
+sub get_sourcepath_from_filename_and_includepath_classic
 {
     my ($searchfilenameref, $includepatharrayref, $write_logfile) = @_;
 
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::get_sourcepath_from_filename_and_includepath : $$searchfilenameref : $#{$includepatharrayref} : $write_logfile"); }
+    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic : $$searchfilenameref : $#{$includepatharrayref} : $write_logfile"); }
 
     my ($onefile, $includepath, $infoline);
 
     my $foundsourcefile = 0;
-    my $foundnewname = 0;
 
     for ( my $j = 0; $j <= $#{$includepatharrayref}; $j++ )
     {
@@ -668,24 +667,77 @@ sub get_sourcepath_from_filename_and_includepath
         }
     }
 
+    if (!($foundsourcefile))
+    {
+        $onefile = "";  # the sourcepath has to be empty
+        if ( $write_logfile)
+        {
+            if ( $ENV{'DEFAULT_TO_ENGLISH_FOR_PACKING'} )
+            {
+                $infoline = "WARNING: Source for $$searchfilenameref not found!\n";  # Important message in log file
+            }
+            else
+            {
+                $infoline = "ERROR: Source for $$searchfilenameref not found!\n";    # Important message in log file
+            }
+
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+    }
+    else
+    {
+        if ( $write_logfile)
+        {
+            $infoline = "SUCCESS: Source for $$searchfilenameref: $onefile\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+    }
+
+    return \$onefile;
+}
+
+##########################################################################
+# Input is one file name, output the complete absolute path of this file
+##########################################################################
+
+sub get_sourcepath_from_filename_and_includepath
+{
+    my ($searchfilenameref, $unused, $write_logfile) = @_;
+
+    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::get_sourcepath_from_filename_and_includepath : $$searchfilenameref : $#{$includepatharrayref} : $write_logfile"); }
+
+    my ($onefile, $includepath, $infoline);
+
+    my $foundsourcefile = 0;
+    my $foundnewname = 0;
+
+    for ( my $j = 0; $j <= $#installer::globals::allincludepathes; $j++ )
+    {
+        my $allfiles = $installer::globals::allincludepathes[$j];
+
+        if ( exists( $allfiles->{$$searchfilenameref} ))
+        {
+            $onefile = $allfiles->{'includepath'} . $installer::globals::separator . $$searchfilenameref;
+            $foundsourcefile = 1;
+            last;
+        }
+    }
+
     if (!($foundsourcefile))    # testing with lowercase filename
     {
         # Attention: README01.html is copied for Windows to readme01.html, not case sensitive
 
-        for ( my $j = 0; $j <= $#{$includepatharrayref}; $j++ )
+        for ( my $j = 0; $j <= $#installer::globals::allincludepathes; $j++ )
         {
-            $includepath = ${$includepatharrayref}[$j];
-            installer::remover::remove_leading_and_ending_whitespaces(\$includepath);
+            my $allfiles = $installer::globals::allincludepathes[$j];
 
             my $newfilename = $$searchfilenameref;
-
             $newfilename =~ s/readme/README/;       # special handling for readme files
             $newfilename =~ s/license/LICENSE/;     # special handling for license files
 
-            $onefile = $includepath . $installer::globals::separator . $newfilename;
-
-            if ( -f $onefile )
+            if ( exists( $allfiles->{$newfilename} ))
             {
+                $onefile = $allfiles->{'includepath'} . $installer::globals::separator . $newfilename;
                 $foundsourcefile = 1;
                 $foundnewname = 1;
                 last;
