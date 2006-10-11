@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:37:22 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:22:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,19 +77,14 @@
 using namespace rtl;
 using namespace vcl_sal;
 
-BOOL bSymbolLoadFailed = FALSE;
-
-DtIntegratorList DtIntegrator::aIntegratorList;
 String DtIntegrator::aHomeDir;
 
 DtIntegrator::DtIntegrator() :
         meType( DtGeneric ),
-        mnRefCount( 0 ),
         mnSystemLookCommandProcess( -1 )
 {
     mpSalDisplay = GetX11SalData()->GetDisplay();
     mpDisplay = mpSalDisplay->GetDisplay();
-    aIntegratorList.Insert( this, LIST_APPEND );
     OUString aDir;
     oslSecurity aCur = osl_getCurrentSecurity();
     if( aCur )
@@ -108,15 +103,6 @@ DtIntegrator::~DtIntegrator()
 
 DtIntegrator* DtIntegrator::CreateDtIntegrator()
 {
-    SalDisplay* pSalDisplay = GetX11SalData()->GetDisplay();
-    Display* pDisplay = pSalDisplay->GetDisplay();
-
-    for( unsigned int i = 0; i < aIntegratorList.Count(); i++ )
-    {
-        DtIntegrator* pIntegrator = aIntegratorList.GetObject( i );
-        if( pIntegrator->mpDisplay == pDisplay )
-            return pIntegrator;
-    }
 #ifdef MACOSX
     return new MACOSXIntegrator();
 #endif
@@ -144,6 +130,8 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator()
 
     // check dt type
     // CDE
+    SalDisplay* pSalDisplay = GetX11SalData()->GetDisplay();
+    Display* pDisplay = pSalDisplay->GetDisplay();
     Atom nDtAtom = XInternAtom( pDisplay, "_DT_WM_READY", True );
     if( nDtAtom && ( pLibrary = dlopen( "/usr/dt/lib/libDtSvc.so", DLOPEN_MODE ) ) )
     {
