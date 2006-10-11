@@ -4,9 +4,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hr $ $Date: 2006-05-08 15:29:05 $
+#   last change: $Author: obo $ $Date: 2006-10-11 09:04:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -353,6 +353,38 @@ sub copy_directory
             }
         }
     }
+}
+
+##########################################
+# Copying all files from one directory
+# to another directory
+##########################################
+
+sub is_empty_dir
+{
+    my ($dir) = @_;
+
+    my $directory_is_empty = 1;
+    my @sourcefiles = ();
+
+    opendir(DIR, $dir);
+    @sourcefiles = readdir(DIR);
+    closedir(DIR);
+
+    my $onefile;
+    my @realcontent = ();
+
+    foreach $onefile (@sourcefiles)
+    {
+        if ((!($onefile eq ".")) && (!($onefile eq "..")))
+        {
+            push(@realcontent, $onefile);
+        }
+    }
+
+    if ( $#realcontent > -1 ) { $directory_is_empty = 0; }
+
+    return $directory_is_empty;
 }
 
 #####################################################################
@@ -1129,6 +1161,43 @@ sub create_pid_directory
     else { installer::exiter::exit_program("ERROR: Directory $directory already exists!", "create_pid_directory"); }
 
     return $directory;
+}
+
+##############################################################
+# Reading all files from a directory and its subdirectories
+##############################################################
+
+sub read_complete_directory
+{
+    my ($directory, $pathstring, $filecollector) = @_;
+
+    my @content = ();
+    opendir(DIR, $directory);
+    @content = readdir(DIR);
+    closedir(DIR);
+
+    my $onefile;
+
+    foreach $onefile (@content)
+    {
+        if ((!($onefile eq ".")) && (!($onefile eq "..")))
+        {
+            my $completefilename = $directory . $installer::globals::separator . $onefile;
+            my $sep = "";
+            if ( $pathstring ne "" ) { $sep = $installer::globals::separator; }
+
+            if ( ! -d $completefilename )   # only files, no directories
+            {
+                my $content = $pathstring . $sep . $onefile;
+                push(@{$filecollector}, $content);
+            }
+            else  # recursive for directories
+            {
+                my $newpathstring = $pathstring . $sep . $onefile;
+                read_complete_directory($completefilename, $newpathstring, $filecollector);
+            }
+        }
+    }
 }
 
 1;
