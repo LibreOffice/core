@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tagtest.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:19:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 09:55:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ TokenInfo::TokenInfo( TokenId pnId, USHORT nP, String paStr, ParserMessageList &
         SplitTag( rErrorList );
 }
 
-enum tagcheck { TC_START, TC_HAS_TAG_NAME, TC_HAS_PROP_NAME_EQ, TC_HAS_PROP_NAME_EQ_SP, TC_HAS_PROP_NAME_SP, TC_INSIDE_STRING, TC_PROP_FINISHED, TC_CLOSED, TC_CLOSED_SPACE, TC_CLOSETAG, TC_CLOSETAG_SP, TC_CLOSETAG_HAS_TAG_NAME, TC_FINISHED, TC_ERROR };
+enum tagcheck { TC_START, TC_HAS_TAG_NAME, TC_HAS_PROP_NAME_EQ, TC_HAS_PROP_NAME_EQ_SP, TC_HAS_PROP_NAME_SP, TC_INSIDE_STRING, TC_PROP_FINISHED, TC_CLOSED, TC_CLOSED_SPACE, TC_CLOSETAG, TC_CLOSETAG_HAS_TAG_NAME, TC_FINISHED, TC_ERROR };
 
 /*
                                                       \<  link  href  =  \"text\"  name  =  \"C\"  \>
@@ -94,10 +94,8 @@ CLOSED              ' ' ->  CLOSED_SPACE
 CLOSED              '>' ->  FINISHED
 CLOSED_SPACE        '>' ->  FINISHED
 
-CLOSETAG            ' ' ->  CLOSETAG_SP
+CLOSETAG            ' ' ->  CLOSETAG_HAS_TAG_NAME
 CLOSETAG            '>' ->  FINISHED
-CLOSETAG_SP         '>' ->  FINISHED
-CLOSETAG_SP         ' ' ->  CLOSETAG_HAS_TAG_NAME
 CLOSETAG_HAS_TAG_NAME  '>' ->  FINISHED
 
 */
@@ -303,42 +301,17 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                 }
                 break;
 
-// CLOSETAG            ' ' ->  CLOSETAG_SP
+// CLOSETAG            ' ' ->  CLOSETAG_HAS_TAG_NAME
 // CLOSETAG            '>' ->  FINISHED
             case TC_CLOSETAG:
                 bCloseTag = TRUE;
                 switch ( cDelim )
                 {
-                    case ' ':
-                        if ( aPortion.Len() == 0 )
-                        {
-                            aState = TC_CLOSETAG_SP;
-                        }
-                        else
-                        {
-                            aState = TC_CLOSETAG_HAS_TAG_NAME;
-                            aTagName = aPortion;
-                            bCheckName = TRUE;
-                        }
-                        break;
-                    case '>': aState = TC_FINISHED;
-                               aTagName = aPortion;
-                               bCheckName = TRUE;
-                               break;
-                    default:   aState = TC_ERROR;
-                }
-                break;
-
-// CLOSETAG_SP         '>' ->  FINISHED
-// CLOSETAG_SP         ' ' ->  CLOSETAG_HAS_TAG_NAME
-            case TC_CLOSETAG_SP:
-                switch ( cDelim )
-                {
-                    case '>': aState = TC_FINISHED;
-                               aTagName = aPortion;
-                               bCheckName = TRUE;
-                               break;
                     case ' ': aState = TC_CLOSETAG_HAS_TAG_NAME;
+                               aTagName = aPortion;
+                               bCheckName = TRUE;
+                               break;
+                    case '>': aState = TC_FINISHED;
                                aTagName = aPortion;
                                bCheckName = TRUE;
                                break;
