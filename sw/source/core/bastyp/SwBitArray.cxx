@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwBitArray.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:40:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:47:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ SwBitArray operator ~ (const SwBitArray & rA)
     return aResult;
 }
 
-#if 1
+#if OSL_DEBUG_LEVEL > 1
 ostream & operator << (ostream & o, const SwBitArray & rBitArray)
 {
     char buffer[256];
