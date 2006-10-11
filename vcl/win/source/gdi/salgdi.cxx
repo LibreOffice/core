@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:44:52 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -402,6 +402,7 @@ void ImplFreeSalGDI()
 
     // delete icon cache
     SalIcon* pIcon = pSalData->mpFirstIcon;
+    pSalData->mpFirstIcon = NULL;
     while( pIcon )
     {
         SalIcon* pTmp = pIcon->pNext;
