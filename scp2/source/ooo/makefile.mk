@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-20 13:35:04 $
+#   last change: $Author: obo $ $Date: 2006-10-11 09:29:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -166,6 +166,9 @@ SCPDEFS+=-DSYSTEM_XERCES -DXERCES_JAR=\""file://$(XERCES_JAR)"\"
 
 .IF "$(SYSTEM_XALAN)" == "YES"
 SCPDEFS+=-DSYSTEM_XALAN -DXALAN_JAR=\""file://$(XALAN_JAR)"\"
+.IF "$(SERIALIZER_JAR)" != ""
+SCPDEFS+=-DSYSTEM_SERIALIZER -DSERIALIZER_JAR=\""file://$(SERIALIZER_JAR)"\"
+.ENDIF
 .ENDIF
 
 .IF "$(JDK)" == "gcj"
