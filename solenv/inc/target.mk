@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.183 $
+#   $Revision: 1.184 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 16:20:48 $
+#   last change: $Author: obo $ $Date: 2006-10-11 09:54:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1298,6 +1298,8 @@ ALLTAR:	\
         $(DPRTARGET) \
         $(DPZTARGET) \
         $(ZIPALL) \
+        $(HIDSID1PARTICLE)	$(HIDSID2PARTICLE)		\
+        $(HIDSID3PARTICLE)	$(HIDSID4PARTICLE)	$(HIDSID5PARTICLE)		\
         $(SDITARGET)	$(SDI1TARGET)	$(SDI2TARGET)		\
         $(SDI3TARGET)	$(SDI4TARGET)	$(SDI5TARGET)		\
         $(XMLPROPERTIESN) \
@@ -1381,6 +1383,8 @@ ALLTAR: \
         $(COMP9RDBTARGETN) \
         $(IDL1TARGET)	$(IDL2TARGET)	$(IDL3TARGET)		\
         $(IDL4TARGET)	$(IDL5TARGET)		\
+        $(HIDSID1PARTICLE)	$(HIDSID2PARTICLE)		\
+        $(HIDSID3PARTICLE)	$(HIDSID4PARTICLE)	$(HIDSID5PARTICLE)		\
         $(SDI1TARGET)	$(SDI2TARGET)	$(SDI3TARGET)		\
         $(SDI4TARGET)	$(SDI5TARGET)		\
         $(HXXALLTARGET) \
