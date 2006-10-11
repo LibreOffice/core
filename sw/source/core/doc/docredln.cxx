@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:26:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:48:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,6 +343,9 @@ Verhalten von Delete-Redline:
 
 bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 {
+#ifndef PRODUCT
+    SwRedline aCopy( *pNewRedl );
+#endif
     _CHECK_REDLINE( this )
 
     if( IsRedlineOn() && !IsShowOriginal( eRedlineMode ) &&
@@ -451,7 +454,8 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                              ( POS_OVERLAP_BEHIND == eCmpPos ) ) &&
                             pRedl->CanCombine( *pNewRedl ) &&
                             ( n+1 >= pRedlineTbl->Count() ||
-                             *(*pRedlineTbl)[ n+1 ]->Start() != *pREnd ))
+                             ( *(*pRedlineTbl)[ n+1 ]->Start() >= *pEnd &&
+                             *(*pRedlineTbl)[ n+1 ]->Start() != *pREnd ) ) )
                         {
                             pRedl->SetEnd( *pEnd, pREnd );
                             if( !pRedl->HasValidRange() )
@@ -483,9 +487,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                             // #107164# own insert-over-insert
                             // redlines: just scrap the inside ones
                             pRedlineTbl->Remove( n );
-                            pRedlineTbl->Insert( pRedl );
-
-                            bDelete = true;
+                            bDec = true;
                         }
                         // <- #107164#
                         else if( POS_OVERLAP_BEHIND == eCmpPos )
@@ -622,6 +624,10 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                         // documents - delete old (delete) redline
                         pRedlineTbl->DeleteAndDestroy( n );
                         bDec = true;
+                    }
+                    else if ( POS_OVERLAP_BEHIND == eCmpPos )
+                    {   // Another workaround for broken redlines (#107164#)
+                        pNewRedl->SetStart( *pREnd );
                     }
                     break;
                 case REDLINE_FORMAT:
