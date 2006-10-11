@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:19:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:49:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1362,8 +1362,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                              ULONG nIndex, BOOL bPages, ULONG nEndIndex,
                              SwFrm *pPrv )
 {
-    const BOOL bOldIdle = pDoc->IsIdleTimerActive();
-    pDoc->StopIdleTimer();
+    pDoc->BlockIdling();
     SwRootFrm* pLayout = pDoc->GetRootFrm();
     const BOOL bOldCallbackActionEnabled = pLayout ? pLayout->IsCallbackActionEnabled() : sal_False;
     if(pLayout)
@@ -1769,8 +1768,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         }
     }
 
-    if ( bOldIdle )
-        pDoc->StartIdleTimer();
+    pDoc->UnblockIdling();
     if(pLayout)
         pLayout->SetCallbackActionEnabled( bOldCallbackActionEnabled );
 }
