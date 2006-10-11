@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:38:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 09:54:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -961,6 +961,12 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
             || aLongname.Copy( 0, 8 ).EqualsIgnoreCaseAscii( "service:" )
             || aLongname.Copy( 0, 6 ).EqualsIgnoreCaseAscii( "macro:" )
             || aLongname.Copy( 0, 8 ).EqualsIgnoreCaseAscii( ".HelpId:" ) );
+        // generic method to mark longnames as symbolic
+        if ( aLongname.Copy( 0, 4 ).EqualsIgnoreCaseAscii( "sym:" ) )
+        {
+            bUnoName = TRUE;
+            aLongname.Erase( 0, 4 );
+        }
         BOOL bMozillaName = ( !bIsFlat && aLongname.Copy( 0, 4 ).EqualsIgnoreCaseAscii( ".moz" ) );
 
         if ( aShortname.GetChar(0) == '+' )          // Kompletten Eintrag kopieren
@@ -2863,7 +2869,7 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.27 $
+    // search $Revision: 1.28 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
