@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-13 11:48:33 $
+#   last change: $Author: obo $ $Date: 2006-10-11 09:04:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2113,6 +2113,64 @@ sub add_variables_from_inc_to_hashref
             }
         }
     }
+}
+
+##############################################
+# Collecting all files from include pathes
+##############################################
+
+sub collect_all_files_from_includepathes
+{
+    my ($patharrayref) = @_;
+
+    installer::logger::globallog("Reading all directories: Start");
+    print "... reading include pathes ...\n";
+    # empty the global
+
+    @installer::globals::allincludepathes =();
+    my $infoline;
+
+    for ( my $i = 0; $i <= $#{$patharrayref}; $i++ )
+    {
+        $includepath = ${$patharrayref}[$i];
+        installer::remover::remove_leading_and_ending_whitespaces(\$includepath);
+
+        if ( ! -d $includepath )
+        {
+            $infoline = "$includepath does not exist. (Can be removed from include path list?)\n";
+            push( @installer::globals::globallogfileinfo, $infoline);
+            next;
+        }
+
+        my @sourcefiles = ();
+        my $pathstring = "";
+        installer::systemactions::read_complete_directory($includepath, $pathstring, \@sourcefiles);
+
+        if ( ! ( $#sourcefiles > -1 ))
+        {
+            $infoline = "$includepath is empty. (Can be removed from include path list?)\n";
+            push( @installer::globals::globallogfileinfo, $infoline);
+        }
+        else
+        {
+            my $number = $#sourcefiles + 1;
+            $infoline = "Directory $includepath contains $number files (including subdirs)\n";
+            push( @installer::globals::globallogfileinfo, $infoline);
+
+            my %allfileshash = ();
+            $allfileshash{'includepath'} = $includepath;
+
+            for ( my $j = 0; $j <= $#sourcefiles; $j++ )
+            {
+                $allfileshash{$sourcefiles[$j]} = 1;
+            }
+
+            push(@installer::globals::allincludepathes, \%allfileshash);
+        }
+    }
+
+    installer::logger::globallog("Reading all directories: End");
+    push( @installer::globals::globallogfileinfo, "\n");
 }
 
 1;
