@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:19:56 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:49:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,11 @@
 #include "pagefrm.hxx"
 #include "cntfrm.hxx"
 #include "doc.hxx"
+#include "IDocumentDrawModelAccess.hxx"
+#include "IDocumentSettingAccess.hxx"
+#include "IDocumentLayoutAccess.hxx"
+#include "IDocumentStatistics.hxx"
+#include "IDocumentTimerAccess.hxx"
 #include "viewimp.hxx"
 #include "crsrsh.hxx"
 #include "dflyobj.hxx"
@@ -153,7 +158,7 @@ static void BreakPoint()
             {   if ( IsAgain() ) \
                 {   BreakPoint(); \
                     if( bNoLoop ) \
-                        pDoc->GetLayouter()->EndLoopControl(); \
+                        pLayoutAccess->GetLayouter()->EndLoopControl(); \
                     return; \
                 } \
             }
@@ -167,7 +172,7 @@ static void BreakPoint()
             {   if ( IsAgain() ) \
                 { \
                     if( bNoLoop ) \
-                        pDoc->GetLayouter()->EndLoopControl(); \
+                        pLayoutAccess->GetLayouter()->EndLoopControl(); \
                     return; \
                 } \
             }
@@ -800,8 +805,8 @@ void SwLayAction::InternalAction()
     while ( pPage && !pPage->IsInvalid() && !pPage->IsInvalidFly() )
         pPage = (SwPageFrm*)pPage->GetNext();
 
-    SwDoc* pDoc = pRoot->GetFmt()->GetDoc();
-    BOOL bNoLoop = pPage ? SwLayouter::StartLoopControl( pDoc, pPage ) : NULL;
+    IDocumentLayoutAccess *pLayoutAccess = pRoot->GetFmt()->getIDocumentLayoutAccess();
+    BOOL bNoLoop = pPage ? SwLayouter::StartLoopControl( pRoot->GetFmt()->GetDoc(), pPage ) : NULL;
     USHORT nPercentPageNum = 0;
     while ( (pPage && !IsInterrupt()) || nCheckPageNum != USHRT_MAX )
     {
@@ -853,7 +858,7 @@ void SwLayAction::InternalAction()
                 if ( IsAgain() )
                 {
                     if( bNoLoop )
-                        pDoc->GetLayouter()->EndLoopControl();
+                        pLayoutAccess->GetLayouter()->EndLoopControl();
                     return;
                 }
                 pPage = (SwPageFrm*)pRoot->Lower();
@@ -928,7 +933,7 @@ void SwLayAction::InternalAction()
                             }
                         }
                         if( bNoLoop )
-                            pDoc->GetLayouter()->LoopControl( pPage, LOOP_PAGE );
+                            pLayoutAccess->GetLayouter()->LoopControl( pPage, LOOP_PAGE );
                     }
                 }
             } // end of scope for instance of class <NotifyLayoutOfPageInProgress>
@@ -982,7 +987,7 @@ void SwLayAction::InternalAction()
                     pPage = (SwPageFrm*)pPage->GetNext();
                 }
                 if( bNoLoop )
-                    pDoc->GetLayouter()->LoopControl( pPage, LOOP_PAGE );
+                    pLayoutAccess->GetLayouter()->LoopControl( pPage, LOOP_PAGE );
             }
             CheckIdleEnd();
         }
@@ -1000,7 +1005,7 @@ void SwLayAction::InternalAction()
             if ( IsAgain() )
             {
                 if( bNoLoop )
-                    pDoc->GetLayouter()->EndLoopControl();
+                    pLayoutAccess->GetLayouter()->EndLoopControl();
                 return;
             }
             pPage = (SwPageFrm*)pRoot->Lower();
@@ -1118,7 +1123,7 @@ void SwLayAction::InternalAction()
     }
     pOptTab = 0;
     if( bNoLoop )
-        pDoc->GetLayouter()->EndLoopControl();
+        pLayoutAccess->GetLayouter()->EndLoopControl();
 }
 /*************************************************************************
 |*
@@ -2000,9 +2005,8 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
     if ( IsAgain() || !pTab->Lower() )
         return FALSE;
 
-    SwDoc* pDoc = pRoot->GetFmt()->GetDoc();
-    const BOOL bOldIdle = pDoc->IsIdleTimerActive();
-    pDoc->StopIdleTimer();
+    IDocumentTimerAccess *pTimerAccess = pRoot->GetFmt()->getIDocumentTimerAccess();
+    pTimerAccess->BlockIdling();
 
     BOOL bChanged = FALSE;
     FASTBOOL bPainted = FALSE;
@@ -2160,8 +2164,7 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
 
     CheckWaitCrsr();
 
-    if ( bOldIdle )
-        pDoc->StartIdleTimer();
+    pTimerAccess->UnblockIdling();
 
     //Heftige Abkuerzung!
     if ( pTab->IsLowersFormatted() &&
@@ -2636,7 +2639,7 @@ BOOL SwLayIdle::DoIdleJob( IdleJobType eJob, BOOL bVisAreaOnly )
                 return FALSE;
             break;
         case WORD_COUNT :
-            if ( !pImp->GetShell()->GetDoc()->GetDocStat().bModified )
+            if ( !pImp->GetShell()->getIDocumentStatistics()->GetDocStat().bModified )
                 return FALSE;
             break;
         default: ASSERT( false, "Unknown idle job type" )
@@ -2899,7 +2902,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         const SwViewOption& rVOpt = *pImp->GetShell()->GetViewOptions();
         const BOOL bSpell = rVOpt.IsOnlineSpell();
         const BOOL bACmplWrd = rVOpt.IsAutoCompleteWords();
-        const BOOL bWordCount = pImp->GetShell()->GetDoc()->GetDocStat().bModified;
+        const BOOL bWordCount = pImp->GetShell()->getIDocumentStatistics()->GetDocStat().bModified;
 
         SwPageFrm *pPg = (SwPageFrm*)pRoot->Lower();
         do
