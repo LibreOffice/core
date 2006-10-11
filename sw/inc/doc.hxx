@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-27 10:51:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:46:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,9 @@
 #endif
 #ifndef IDOCUMENTLAYOUTACCESS_HXX_INCLUDED
 #include <IDocumentLayoutAccess.hxx>
+#endif
+#ifndef IDOCUMENTTIMERACCESS_HXX_INCLUDED
+#include <IDocumentTimerAccess.hxx>
 #endif
 
 #define _SVSTDARR_STRINGSDTOR
@@ -308,7 +311,8 @@ class SwDoc :
     public IDocumentStatistics,
     public IDocumentState,
     public IDocumentDrawModelAccess,
-    public IDocumentLayoutAccess
+    public IDocumentLayoutAccess,
+    public IDocumentTimerAccess
 {
     friend void _InitCore();  // new pACmpltWords
     friend void _FinitCore(); // delete pACmpltWords
@@ -325,7 +329,7 @@ class SwDoc :
     /* @@@MAINTAINABILITY-HORROR@@@
        Timer should not be members of the model
     */
-    AutoTimer   aIdleTimer;             // der eigene IdleTimer
+    Timer       aIdleTimer;             // der eigene IdleTimer
     Timer       aChartTimer;            // der Timer fuers Update aller Charts
     Timer       aOLEModifiedTimer;      // Timer for update modified OLE-Objecs
     SwDBData    aDBData;                // database descriptor
@@ -437,6 +441,7 @@ class SwDoc :
     SwCharCompressType eChrCmprType;    // for ASIAN: compress punctuation/kana
 
     sal_Int32   mReferenceCount;
+    sal_Int32   mIdleBlockCount;
     sal_Int8    nLockExpFld;        // Wenn != 0 hat UpdateExpFlds() keine Wirkung
 
     /* Draw Model Layer IDs
@@ -583,6 +588,8 @@ class SwDoc :
     //
 
     sal_Bool    bWinEncryption                      ;    // imported document password encrypted?
+
+    sal_Bool    mbStartIdleTimer                 ;    // idle timer mode start/stop
 
     static SwAutoCompleteWord *pACmpltWords;    // Liste aller Worte fuers AutoComplete
     static sal_uInt16 nUndoActions;     // anzahl von Undo ::com::sun::star::chaos::Action
@@ -818,7 +825,7 @@ public:
     virtual void SetLinksUpdated(const bool bNewLinksUpdated);
     virtual bool LinksUpdated() const;
 
-    /** IDocumentFielsAccess
+    /** IDocumentFieldsAccess
     */
     virtual const SwFldTypes *GetFldTypes() const;
     virtual SwFieldType *InsertFldType(const SwFieldType &);
@@ -961,17 +968,18 @@ public:
     virtual void DelLayoutFmt( SwFrmFmt *pFmt );
     virtual SwFrmFmt* CopyLayoutFmt( const SwFrmFmt& rSrc, const SwFmtAnchor& rNewAnchor, bool bSetTxtFlyAtt, bool bMakeFrms );
 
+    /** IDocumentTimerAccess
+    */
+    virtual void StartIdling();
+    virtual void StopIdling();
+    virtual void BlockIdling();
+    virtual void UnblockIdling();
+
     /** INextInterface here
     */
 
     DECL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem *);
     DECL_LINK(CalcFieldValueHdl, EditFieldInfo*);
-
-    /** Timer ???
-    */
-    void StartIdleTimer()               { aIdleTimer.Start(); }
-    void StopIdleTimer()                { aIdleTimer.Stop();  }
-    sal_Bool IsIdleTimerActive() const  { return aIdleTimer.IsActive(); }
 
     /** OLE ???
     */
