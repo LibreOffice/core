@@ -4,9 +4,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:48:56 $
+ *  last change: $Author: obo $ $Date: 2006-10-11 08:19:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -499,7 +499,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maFaceColor( rData.maFaceColor ),
     maFieldColor( rData.maFieldColor ),
     maFieldTextColor( rData.maFieldTextColor ),
-    maFieldRolloverTextColor( rData.maButtonRolloverTextColor ),
+    maFieldRolloverTextColor( rData.maFieldRolloverTextColor ),
     maFontColor( rData.maFontColor ),
     maGroupTextColor( rData.maGroupTextColor ),
     maHelpColor( rData.maHelpColor ),
@@ -1635,7 +1635,7 @@ ImplAllSettingsData::~ImplAllSettingsData()
         delete mpUICollatorWrapper;
     if ( mpI18nHelper )
         delete mpI18nHelper;
-    if ( mpI18nHelper )
+    if ( mpUII18nHelper )
         delete mpUII18nHelper;
 }
 
