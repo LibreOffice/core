@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uiservices.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:19:06 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:42:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
-                uno_Environment **/*ppEnv*/
+                uno_Environment **
             )
 {
     createRegistryInfo_DBU();
