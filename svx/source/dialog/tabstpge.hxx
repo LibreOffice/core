@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabstpge.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:13:20 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:29:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,8 @@ class TabWin_Impl;
 
 class SvxTabulatorTabPage : public SfxTabPage
 {
+    using TabPage::DeactivatePage;
+
 public:
     ~SvxTabulatorTabPage();
 
