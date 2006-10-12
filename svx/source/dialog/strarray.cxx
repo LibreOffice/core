@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strarray.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:40:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:27:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ const String& SvxStringArray::GetStringByPos( USHORT nPos ) const
 
 const String& SvxStringArray::GetStringByType( long nType ) const
 {
-    USHORT nPos = FindIndex( nType );
+    sal_uInt32 nPos = FindIndex( nType );
 
     if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count() )
         return ResStringArray::GetString( nPos );
@@ -96,9 +96,9 @@ const String& SvxStringArray::GetStringByType( long nType ) const
 long SvxStringArray::GetValueByStr( const String& rStr ) const
 {
     long nType = 0;
-    USHORT nCount = Count();
+    sal_uInt32 nCount = Count();
 
-    for ( USHORT i = 0; i < nCount; ++i )
+    for ( sal_uInt32 i = 0; i < nCount; ++i )
         if ( rStr == ResStringArray::GetString( i ) )
         {
             nType = GetValue( i );
