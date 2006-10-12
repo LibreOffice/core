@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:34:03 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:43:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1923,7 +1923,6 @@ namespace xmloff
                 // that's the worst case. If the string contains the separator character _quoted_, we reserved to much ...
 
 
-            SvXMLUnitConverter& rConverter = GetImport().GetMM100UnitConverter();
             sal_Int32 nElementStart = 0;
             sal_Int32 nNextSep = 0;
             sal_Int32 nElementLength;
@@ -1931,7 +1930,8 @@ namespace xmloff
             do
             {
                 // extract the current element
-                nNextSep = rConverter.indexOfComma(_rValue, nElementStart);
+                nNextSep = SvXMLUnitConverter::indexOfComma(
+                    _rValue, nElementStart);
                 if (-1 == nNextSep)
                     nNextSep = nLength;
                 sElement = _rValue.copy(nElementStart, nNextSep - nElementStart);
