@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlsupp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:26:47 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:27:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,63 +114,63 @@ void HTMLParser::RemoveSGMLComment( String &rString, BOOL bFull )
 {
     sal_Unicode c = 0;
     while( rString.Len() &&
-           ( ' '==(c=rString.GetChar(0UL)) || '\t'==c || '\r'==c || '\n'==c ) )
-        rString.Erase( 0UL, 1UL );
+           ( ' '==(c=rString.GetChar(0)) || '\t'==c || '\r'==c || '\n'==c ) )
+        rString.Erase( 0, 1 );
 
     while( rString.Len() &&
-           ( ' '==(c=rString.GetChar( rString.Len()-1UL))
+           ( ' '==(c=rString.GetChar( rString.Len()-1))
            || '\t'==c || '\r'==c || '\n'==c ) )
-        rString.Erase( rString.Len()-1UL );
+        rString.Erase( rString.Len()-1 );
 
 
     // SGML-Kommentare entfernen
-    if( rString.Len() >= 4UL &&
-        rString.CompareToAscii( "<!--", 4UL ) == COMPARE_EQUAL )
+    if( rString.Len() >= 4 &&
+        rString.CompareToAscii( "<!--", 4 ) == COMPARE_EQUAL )
     {
-        sal_uInt32 nPos = 3UL;
+        xub_StrLen nPos = 3;
         if( bFull )
         {
             // die gesamte Zeile !
-            nPos = 4UL;
+            nPos = 4;
             while( nPos < rString.Len() &&
                 ( ( c = rString.GetChar( nPos )) != '\r' && c != '\n' ) )
                 ++nPos;
-            if( c == '\r' && nPos+1UL < rString.Len() &&
-                '\n' == rString.GetChar( nPos+1UL ))
+            if( c == '\r' && nPos+1 < rString.Len() &&
+                '\n' == rString.GetChar( nPos+1 ))
                 ++nPos;
             else if( c != '\n' )
-                nPos = 3UL;
+                nPos = 3;
         }
-        rString.Erase( 0UL, ++nPos );
+        rString.Erase( 0, ++nPos );
     }
 
-    if( rString.Len() >=3UL &&
-        rString.Copy(rString.Len()-3UL).CompareToAscii("-->")
+    if( rString.Len() >=3 &&
+        rString.Copy(rString.Len()-3).CompareToAscii("-->")
             == COMPARE_EQUAL )
     {
-        rString.Erase( rString.Len()-3UL );
+        rString.Erase( rString.Len()-3 );
         if( bFull )
         {
             // auch noch ein "//" oder "'" und ggf CR/LF davor
             rString.EraseTrailingChars();
-            sal_uInt32 nDel = 0UL, nLen = rString.Len();
-            if( nLen >= 2UL &&
-                rString.Copy(nLen-2UL).CompareToAscii("//") == COMPARE_EQUAL )
+            xub_StrLen nDel = 0, nLen = rString.Len();
+            if( nLen >= 2 &&
+                rString.Copy(nLen-2).CompareToAscii("//") == COMPARE_EQUAL )
             {
-                nDel = 2UL;
+                nDel = 2;
             }
-            else if( nLen && '\'' == rString.GetChar(nLen-1UL) )
+            else if( nLen && '\'' == rString.GetChar(nLen-1) )
             {
-                nDel = 1UL;
+                nDel = 1;
             }
-            if( nDel && nLen >= nDel+1UL )
+            if( nDel && nLen >= nDel+1 )
             {
-                c = rString.GetChar( nLen-(nDel+1UL) );
+                c = rString.GetChar( nLen-(nDel+1) );
                 if( '\r'==c || '\n'==c )
                 {
                     nDel++;
-                    if( '\n'==c && nLen >= nDel+1UL &&
-                        '\r'==rString.GetChar( nLen-(nDel+1UL) ) )
+                    if( '\n'==c && nLen >= nDel+1 &&
+                        '\r'==rString.GetChar( nLen-(nDel+1) ) )
                         nDel++;
                 }
             }
