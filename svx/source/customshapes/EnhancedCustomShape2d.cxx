@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:06:11 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:01:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -558,7 +558,7 @@ sal_Bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
             }
             else if ( rPropVal.Name.equals( sMirroredX ) )
             {
-                sal_Bool bMirroredX;
+                sal_Bool bMirroredX = sal_Bool();
                 if ( rPropVal.Value >>= bMirroredX )
                 {
                     if ( bMirroredX )
@@ -567,7 +567,7 @@ sal_Bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
             }
             else if ( rPropVal.Name.equals( sMirroredY ) )
             {
-                sal_Bool bMirroredY;
+                sal_Bool bMirroredY = sal_Bool();
                 if ( rPropVal.Value >>= bMirroredY )
                 {
                     if ( bMirroredY )
@@ -576,7 +576,7 @@ sal_Bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
             }
             else if ( rPropVal.Name.equals( sSwitched ) )
             {
-                sal_Bool bSwitched;
+                sal_Bool bSwitched = sal_Bool();
                 if ( rPropVal.Value >>= bSwitched )
                 {
                     if ( bSwitched )
