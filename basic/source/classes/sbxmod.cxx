@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:00:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:26:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -551,7 +551,7 @@ void SbModule::SetSource32( const ::rtl::OUString& r )
             eLastTok = eCurTok;
         }
         // Definition der Methode
-        SbMethod* pMeth;
+        SbMethod* pMeth = NULL;
         if( eEndTok != NIL )
         {
             USHORT nLine1 = aTok.GetLine();
@@ -713,15 +713,15 @@ USHORT SbModule::Run( SbMethod* pMeth )
           getrlimit ( RLIMIT_STACK, &rl );
           // printf( "RLIMIT_STACK = %ld\n", rl.rlim_cur );
 #endif
-#ifdef LINUX
+#if defined LINUX
           // Empiric value, 900 = needed bytes/Basic call level
           // for Linux including 10% safety margin
           nMaxCallLevel = rl.rlim_cur / 900;
-#elif SOLARIS
+#elif defined SOLARIS
           // Empiric value, 1650 = needed bytes/Basic call level
           // for Solaris including 10% safety margin
           nMaxCallLevel = rl.rlim_cur / 1650;
-#elif WIN32
+#elif defined WIN32
           nMaxCallLevel = 5800;
 #else
           nMaxCallLevel = MAXRECURSION;
@@ -861,7 +861,7 @@ void SbModule::RunInit()
 // Mit private/dim deklarierte Variablen loeschen
 void SbModule::ClearPrivateVars()
 {
-    for( int i = 0 ; i < pProps->Count() ; i++ )
+    for( USHORT i = 0 ; i < pProps->Count() ; i++ )
     {
         SbProperty* p = PTR_CAST(SbProperty,pProps->Get( i ) );
         if( p )
@@ -872,7 +872,7 @@ void SbModule::ClearPrivateVars()
                 SbxArray* pArray = PTR_CAST(SbxArray,p->GetObject());
                 if( pArray )
                 {
-                    for( int j = 0 ; j < pArray->Count() ; j++ )
+                    for( USHORT j = 0 ; j < pArray->Count() ; j++ )
                     {
                         SbxVariable* pj = PTR_CAST(SbxVariable,pArray->Get( j ));
                         pj->SbxValue::Clear();
@@ -1385,7 +1385,8 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
 
             if( bCanBeKeyword )
             {
-                String aKWString( rpStartPos, nCount );
+                String aKWString(
+                    rpStartPos, sal::static_int_cast< xub_StrLen >(nCount) );
                 ByteString aByteStr( aKWString, RTL_TEXTENCODING_ASCII_US );
                 aByteStr.ToLowerAscii();
                 if ( bsearch( aByteStr.GetBuffer(), ppListKeyWords, nKeyWordCount, sizeof( char* ),
