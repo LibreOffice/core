@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exprgen.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:01:47 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:26:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,7 @@ void SbiExprNode::GenElement( SbiOpcode eOp )
         if( pProc->GetAlias().Len() )
             nId = ( nId & 0x8000 ) | pGen->GetParser()->aGblStrings.Add( pProc->GetAlias() );
     }
-    pGen->Gen( eOp, nId, GetType() );
+    pGen->Gen( eOp, nId, sal::static_int_cast< UINT16 >( GetType() ) );
 }
 
 // Erzeugen einer Argv-Tabelle
@@ -255,7 +255,8 @@ void SbiExprList::Gen()
                 if( pProc && nCount < nParAnz )
                 {
                     SbiSymDef* pDef = pPool->Get( nCount );
-                    USHORT nTyp = pDef->GetType();
+                    USHORT nTyp = sal::static_int_cast< USHORT >(
+                        pDef->GetType() );
                     // Zusätzliches Flag für BYVAL einbauen
                     if( pDef->IsByVal() )
                         nTyp |= 0x8000;
