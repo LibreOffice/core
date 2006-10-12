@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuitabarea.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:05:23 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:10:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,9 @@ public:
 
 class SVX_DLLPUBLIC SvxTransparenceTabPage : public SvxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
 
@@ -213,6 +216,9 @@ public:
 
 class SVX_DLLPUBLIC SvxAreaTabPage : public SvxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 private:
     FixedLine           aFlProp;
     ListBox             aTypeLB;
@@ -345,6 +351,9 @@ public:
 
 class SvxShadowTabPage : public SvxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 private:
     FixedLine           aFlProp;
     TriStateBox         aTsbShowShadow;
@@ -413,6 +422,9 @@ public:
 
 class SvxGradientTabPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 private:
     FixedLine           aFlProp;
     FixedText           aFtType;
@@ -504,6 +516,9 @@ public:
 
 class SvxHatchTabPage : public SvxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 private:
     FixedText           aFtDistance;
     MetricField         aMtrDistance;
@@ -594,6 +609,9 @@ public:
 
 class SvxBitmapTabPage : public SvxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 private:
     SvxPixelCtl         aCtlPixel;
     FixedText           aFtPixelEdit;
@@ -693,6 +711,9 @@ public:
 
 class SvxColorTabPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 private:
     FixedLine           aFlProp;
     FixedText           aFtName;
