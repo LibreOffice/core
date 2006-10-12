@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:00:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:53:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -434,7 +434,8 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext(
                     "Performance warning: sdbcx::Index created multiple times" );
 #endif
         ((SvXMLStylesContext_Impl *)this)->pIndices =
-            new SvXMLStyleIndices_Impl( aStyles.Count(), 5 );
+            new SvXMLStyleIndices_Impl(
+                sal::static_int_cast< USHORT >(aStyles.Count()), 5 );
         for( sal_uInt32 i=0; i < aStyles.Count(); i++ )
         {
             SvXMLStyleIndex_Impl* pStyleIndex = new SvXMLStyleIndex_Impl( aStyles.GetObject(i));
