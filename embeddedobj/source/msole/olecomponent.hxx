@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olecomponent.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 19:05:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:22:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,11 +205,8 @@ public:
     void StoreOwnTmpIfNecessary();
 
     sal_Bool SaveObject_Impl();
-    sal_Bool OnShowWindow_Impl( sal_Bool bShow );
+    sal_Bool OnShowWindow_Impl( bool bShow );
     void OnViewChange_Impl( sal_uInt32 dwAspect );
-
-    sal_Bool GetGraphicalCache_Impl( const ::com::sun::star::datatransfer::DataFlavor& aFlavor,
-                                     ::com::sun::star::uno::Any& aResult );
 
     // XCloseable
     virtual void SAL_CALL close( sal_Bool DeliverOwnership ) throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException);
