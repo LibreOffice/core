@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:21:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:26:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -714,7 +714,7 @@ SvNumberformat::SvNumberformat(String& rString,
                             F_Type != NUMBERFORMAT_SCIENTIFIC) )
                         {
                             fNumber = 0.0;
-                            nPos -= nAnzChars;
+                            nPos = nPos - nAnzChars;
                             rString.Erase(nPos, nAnzChars);
                             rString.Insert('0',nPos);
                             nPos++;
@@ -791,7 +791,7 @@ SvNumberformat::SvNumberformat(String& rString,
                         {
                             sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "NatNum" ) );
                             //! eSymbolType is negative
-                            BYTE nNum = 0 - (eSymbolType - BRACKET_SYMBOLTYPE_NATNUM0);
+                            BYTE nNum = sal::static_int_cast< BYTE >(0 - (eSymbolType - BRACKET_SYMBOLTYPE_NATNUM0));
                             sStr += String::CreateFromInt32( nNum );
                             NumFor[nIndex].SetNatNumNum( nNum, FALSE );
                         }
@@ -816,7 +816,7 @@ SvNumberformat::SvNumberformat(String& rString,
                         {
                             sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DBNum" ) );
                             //! eSymbolType is negative
-                            BYTE nNum = 1 - (eSymbolType - BRACKET_SYMBOLTYPE_DBNUM1);
+                            BYTE nNum = sal::static_int_cast< BYTE >(1 - (eSymbolType - BRACKET_SYMBOLTYPE_DBNUM1));
                             sStr += static_cast< sal_Unicode >('0' + nNum);
                             NumFor[nIndex].SetNatNumNum( nNum, TRUE );
                         }
@@ -1288,7 +1288,8 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                             sSymbol += rString.Copy( --nPos, aDBNum.Len()+1 );
                             nPos += aDBNum.Len()+1;
                             //! SymbolType is negative
-                            eSymbolType = BRACKET_SYMBOLTYPE_DBNUM1 - (cDBNum - '1');
+                            eSymbolType = sal::static_int_cast< short >(
+                                BRACKET_SYMBOLTYPE_DBNUM1 - (cDBNum - '1'));
                             eState = SsGetPrefix;
                         }
                         else if (cUpper == pKeywords[NF_KEY_H].GetChar(0)   ||  // H
@@ -1556,7 +1557,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
         USHORT nNewStandard = nNewStandardDefined;
         // neu parsen etc.
         String aStr( sFormatstring );
-        xub_StrLen nCheckPos;
+        xub_StrLen nCheckPos = 0;
         SvNumberformat* pFormat = new SvNumberformat( aStr, &rScan, &rISc,
             nCheckPos, eLnge, bStandard );
         DBG_ASSERT( !nCheckPos, "SvNumberformat::Load: NewCurrencyRescan nCheckPos" );
@@ -2136,7 +2137,7 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                 }
                 ULONG nBasis = ((ULONG)floor(           // 9, 99, 999 ,...
                                     pow(10.0,rInfo.nCntExp))) - 1;
-                ULONG x0, y0, x1, y1, x2, y2;
+                ULONG x0, y0, x1, y1;
 
                 if (rInfo.nCntExp <= _MAX_FRACTION_PREC)
                 {
@@ -2180,6 +2181,8 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                         x0 /= nGgt;
                         y0 /= nGgt;                     // Einschachteln:
                         double fTest;
+                        ULONG x2 = 0;
+                        ULONG y2 = 0;
                         BOOL bStop = FALSE;
                         while (!bStop)
                         {
@@ -2223,8 +2226,8 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                     fup  = (double)x1/(double)y1;
                     while (fNumber > fup)
                     {
-                        x2 = ((y0+nBasis)/y1)*x1 - x0;      // naechste Farey-Zahl
-                        y2 = ((y0+nBasis)/y1)*y1 - y0;
+                        ULONG x2 = ((y0+nBasis)/y1)*x1 - x0; // naechste Farey-Zahl
+                        ULONG y2 = ((y0+nBasis)/y1)*y1 - y0;
 //                      GetNextFareyNumber(nBasis, x0, x1, y0, y1, x2, y2);
                         x0 = x1;
                         y0 = y1;
@@ -3541,7 +3544,8 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
             case NF_SYMBOLTYPE_PERCENT:
                 sStr.Insert(rInfo.sStrArray[j],k);
                 if ( k == 0 )
-                    nLeadingStringChars += rInfo.sStrArray[j].Len();
+                    nLeadingStringChars =
+                        nLeadingStringChars + rInfo.sStrArray[j].Len();
             break;
             case NF_SYMBOLTYPE_STAR:
                 if( bStarFlag )
@@ -4368,7 +4372,8 @@ void SvNumberformat::EraseComment( String& rStr )
                 if ( !bEscaped && !bInString )
                 {
                     bFound = TRUE;
-                    nPos = p - rStr.GetBuffer();
+                    nPos = sal::static_int_cast< xub_StrLen >(
+                        p - rStr.GetBuffer());
                 }
             break;
         }
@@ -4434,7 +4439,7 @@ xub_StrLen SvNumberformat::GetQuoteEnd( const String& rStr, xub_StrLen nPos,
     while ( p < p1 )
     {
         if ( *p == cQuote && p > p0 && *(p-1) != cEscIn )
-            return p - p0;
+            return sal::static_int_cast< xub_StrLen >(p - p0);
         p++;
     }
     return nLen;        // String Ende
