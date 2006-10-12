@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:05:55 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:30:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,9 +65,6 @@
 #endif
 #include "sbunoobj.hxx"
 
-// Makro MEMBER()
-#include <macfix.hxx>
-
 bool SbiRuntime::isVBAEnabled()
 {
     bool result = false;
@@ -93,124 +90,124 @@ struct SbiArgvStack {                   // Argv stack:
 };
 
 SbiRuntime::pStep0 SbiRuntime::aStep0[] = { // Alle Opcodes ohne Operanden
-    MEMBER(SbiRuntime::StepNOP),
-    MEMBER(SbiRuntime::StepEXP),
-    MEMBER(SbiRuntime::StepMUL),
-    MEMBER(SbiRuntime::StepDIV),
-    MEMBER(SbiRuntime::StepMOD),
-    MEMBER(SbiRuntime::StepPLUS),
-    MEMBER(SbiRuntime::StepMINUS),
-    MEMBER(SbiRuntime::StepNEG),
-    MEMBER(SbiRuntime::StepEQ),
-    MEMBER(SbiRuntime::StepNE),
-    MEMBER(SbiRuntime::StepLT),
-    MEMBER(SbiRuntime::StepGT),
-    MEMBER(SbiRuntime::StepLE),
-    MEMBER(SbiRuntime::StepGE),
-    MEMBER(SbiRuntime::StepIDIV),
-    MEMBER(SbiRuntime::StepAND),
-    MEMBER(SbiRuntime::StepOR),
-    MEMBER(SbiRuntime::StepXOR),
-    MEMBER(SbiRuntime::StepEQV),
-    MEMBER(SbiRuntime::StepIMP),
-    MEMBER(SbiRuntime::StepNOT),
-    MEMBER(SbiRuntime::StepCAT),
+    &SbiRuntime::StepNOP,
+    &SbiRuntime::StepEXP,
+    &SbiRuntime::StepMUL,
+    &SbiRuntime::StepDIV,
+    &SbiRuntime::StepMOD,
+    &SbiRuntime::StepPLUS,
+    &SbiRuntime::StepMINUS,
+    &SbiRuntime::StepNEG,
+    &SbiRuntime::StepEQ,
+    &SbiRuntime::StepNE,
+    &SbiRuntime::StepLT,
+    &SbiRuntime::StepGT,
+    &SbiRuntime::StepLE,
+    &SbiRuntime::StepGE,
+    &SbiRuntime::StepIDIV,
+    &SbiRuntime::StepAND,
+    &SbiRuntime::StepOR,
+    &SbiRuntime::StepXOR,
+    &SbiRuntime::StepEQV,
+    &SbiRuntime::StepIMP,
+    &SbiRuntime::StepNOT,
+    &SbiRuntime::StepCAT,
 
-    MEMBER(SbiRuntime::StepLIKE),
-    MEMBER(SbiRuntime::StepIS),
+    &SbiRuntime::StepLIKE,
+    &SbiRuntime::StepIS,
     // Laden/speichern
-    MEMBER(SbiRuntime::StepARGC),       // neuen Argv einrichten
-    MEMBER(SbiRuntime::StepARGV),       // TOS ==> aktueller Argv
-    MEMBER(SbiRuntime::StepINPUT),      // Input ==> TOS
-    MEMBER(SbiRuntime::StepLINPUT),     // Line Input ==> TOS
-    MEMBER(SbiRuntime::StepGET),        // TOS anfassen
-    MEMBER(SbiRuntime::StepSET),        // Speichern Objekt TOS ==> TOS-1
-    MEMBER(SbiRuntime::StepPUT),        // TOS ==> TOS-1
-    MEMBER(SbiRuntime::StepPUTC),       // TOS ==> TOS-1, dann ReadOnly
-    MEMBER(SbiRuntime::StepDIM),        // DIM
-    MEMBER(SbiRuntime::StepREDIM),      // REDIM
-    MEMBER(SbiRuntime::StepREDIMP),     // REDIM PRESERVE
-    MEMBER(SbiRuntime::StepERASE),      // TOS loeschen
+    &SbiRuntime::StepARGC,      // neuen Argv einrichten
+    &SbiRuntime::StepARGV,      // TOS ==> aktueller Argv
+    &SbiRuntime::StepINPUT,     // Input ==> TOS
+    &SbiRuntime::StepLINPUT,        // Line Input ==> TOS
+    &SbiRuntime::StepGET,        // TOS anfassen
+    &SbiRuntime::StepSET,        // Speichern Objekt TOS ==> TOS-1
+    &SbiRuntime::StepPUT,       // TOS ==> TOS-1
+    &SbiRuntime::StepPUTC,      // TOS ==> TOS-1, dann ReadOnly
+    &SbiRuntime::StepDIM,       // DIM
+    &SbiRuntime::StepREDIM,         // REDIM
+    &SbiRuntime::StepREDIMP,        // REDIM PRESERVE
+    &SbiRuntime::StepERASE,         // TOS loeschen
     // Verzweigen
-    MEMBER(SbiRuntime::StepSTOP),       // Programmende
-    MEMBER(SbiRuntime::StepINITFOR),    // FOR-Variable initialisieren
-    MEMBER(SbiRuntime::StepNEXT),       // FOR-Variable inkrementieren
-    MEMBER(SbiRuntime::StepCASE),       // Anfang CASE
-    MEMBER(SbiRuntime::StepENDCASE),    // Ende CASE
-    MEMBER(SbiRuntime::StepSTDERROR),   // Standard-Fehlerbehandlung
-    MEMBER(SbiRuntime::StepNOERROR),    // keine Fehlerbehandlung
-    MEMBER(SbiRuntime::StepLEAVE),      // UP verlassen
+    &SbiRuntime::StepSTOP,          // Programmende
+    &SbiRuntime::StepINITFOR,   // FOR-Variable initialisieren
+    &SbiRuntime::StepNEXT,      // FOR-Variable inkrementieren
+    &SbiRuntime::StepCASE,      // Anfang CASE
+    &SbiRuntime::StepENDCASE,   // Ende CASE
+    &SbiRuntime::StepSTDERROR,      // Standard-Fehlerbehandlung
+    &SbiRuntime::StepNOERROR,   // keine Fehlerbehandlung
+    &SbiRuntime::StepLEAVE,     // UP verlassen
     // E/A
-    MEMBER(SbiRuntime::StepCHANNEL),    // TOS = Kanalnummer
-    MEMBER(SbiRuntime::StepPRINT),      // print TOS
-    MEMBER(SbiRuntime::StepPRINTF),     // print TOS in field
-    MEMBER(SbiRuntime::StepWRITE),      // write TOS
-    MEMBER(SbiRuntime::StepRENAME),     // Rename Tos+1 to Tos
-    MEMBER(SbiRuntime::StepPROMPT),     // Input Prompt aus TOS definieren
-    MEMBER(SbiRuntime::StepRESTART),    // Set restart point
-    MEMBER(SbiRuntime::StepCHANNEL0),   // E/A-Kanal 0 einstellen
-    MEMBER(SbiRuntime::StepEMPTY),      // Leeren Ausdruck auf Stack
-    MEMBER(SbiRuntime::StepERROR),      // TOS = Fehlercode
-    MEMBER(SbiRuntime::StepLSET),       // Speichern Objekt TOS ==> TOS-1
-    MEMBER(SbiRuntime::StepRSET),       // Speichern Objekt TOS ==> TOS-1
-    MEMBER(SbiRuntime::StepREDIMP_ERASE),// Copy array object for REDIMP
-    MEMBER(SbiRuntime::StepINITFOREACH),// Init for each loop
+    &SbiRuntime::StepCHANNEL,   // TOS = Kanalnummer
+    &SbiRuntime::StepPRINT,     // print TOS
+    &SbiRuntime::StepPRINTF,        // print TOS in field
+    &SbiRuntime::StepWRITE,     // write TOS
+    &SbiRuntime::StepRENAME,        // Rename Tos+1 to Tos
+    &SbiRuntime::StepPROMPT,        // Input Prompt aus TOS definieren
+    &SbiRuntime::StepRESTART,   // Set restart point
+    &SbiRuntime::StepCHANNEL0,  // E/A-Kanal 0 einstellen
+    &SbiRuntime::StepEMPTY,     // Leeren Ausdruck auf Stack
+    &SbiRuntime::StepERROR,     // TOS = Fehlercode
+    &SbiRuntime::StepLSET,      // Speichern Objekt TOS ==> TOS-1
+    &SbiRuntime::StepRSET,      // Speichern Objekt TOS ==> TOS-1
+    &SbiRuntime::StepREDIMP_ERASE,// Copy array object for REDIMP
+    &SbiRuntime::StepINITFOREACH,// Init for each loop
 };
 
 SbiRuntime::pStep1 SbiRuntime::aStep1[] = { // Alle Opcodes mit einem Operanden
-    MEMBER(SbiRuntime::StepLOADNC),     // Laden einer numerischen Konstanten (+ID)
-    MEMBER(SbiRuntime::StepLOADSC),     // Laden einer Stringkonstanten (+ID)
-    MEMBER(SbiRuntime::StepLOADI),      // Immediate Load (+Wert)
-    MEMBER(SbiRuntime::StepARGN),       // Speichern eines named Args in Argv (+StringID)
-    MEMBER(SbiRuntime::StepPAD),        // String auf feste Laenge bringen (+Laenge)
+    &SbiRuntime::StepLOADNC,        // Laden einer numerischen Konstanten (+ID)
+    &SbiRuntime::StepLOADSC,        // Laden einer Stringkonstanten (+ID)
+    &SbiRuntime::StepLOADI,     // Immediate Load (+Wert)
+    &SbiRuntime::StepARGN,      // Speichern eines named Args in Argv (+StringID)
+    &SbiRuntime::StepPAD,       // String auf feste Laenge bringen (+Laenge)
     // Verzweigungen
-    MEMBER(SbiRuntime::StepJUMP),       // Sprung (+Target)
-    MEMBER(SbiRuntime::StepJUMPT),      // TOS auswerten), bedingter Sprung (+Target)
-    MEMBER(SbiRuntime::StepJUMPF),      // TOS auswerten), bedingter Sprung (+Target)
-    MEMBER(SbiRuntime::StepONJUMP),     // TOS auswerten), Sprung in JUMP-Tabelle (+MaxVal)
-    MEMBER(SbiRuntime::StepGOSUB),      // UP-Aufruf (+Target)
-    MEMBER(SbiRuntime::StepRETURN),     // UP-Return (+0 oder Target)
-    MEMBER(SbiRuntime::StepTESTFOR),    // FOR-Variable testen), inkrementieren (+Endlabel)
-    MEMBER(SbiRuntime::StepCASETO),     // Tos+1 <= Case <= Tos), 2xremove (+Target)
-    MEMBER(SbiRuntime::StepERRHDL),     // Fehler-Handler (+Offset)
-    MEMBER(SbiRuntime::StepRESUME),     // Resume nach Fehlern (+0 or 1 or Label)
+    &SbiRuntime::StepJUMP,      // Sprung (+Target)
+    &SbiRuntime::StepJUMPT,     // TOS auswerten), bedingter Sprung (+Target)
+    &SbiRuntime::StepJUMPF,     // TOS auswerten), bedingter Sprung (+Target)
+    &SbiRuntime::StepONJUMP,        // TOS auswerten), Sprung in JUMP-Tabelle (+MaxVal)
+    &SbiRuntime::StepGOSUB,     // UP-Aufruf (+Target)
+    &SbiRuntime::StepRETURN,        // UP-Return (+0 oder Target)
+    &SbiRuntime::StepTESTFOR,   // FOR-Variable testen), inkrementieren (+Endlabel)
+    &SbiRuntime::StepCASETO,        // Tos+1 <= Case <= Tos), 2xremove (+Target)
+    &SbiRuntime::StepERRHDL,        // Fehler-Handler (+Offset)
+    &SbiRuntime::StepRESUME,        // Resume nach Fehlern (+0 or 1 or Label)
     // E/A
-    MEMBER(SbiRuntime::StepCLOSE),      // (+Kanal/0)
-    MEMBER(SbiRuntime::StepPRCHAR),     // (+char)
+    &SbiRuntime::StepCLOSE,     // (+Kanal/0)
+    &SbiRuntime::StepPRCHAR,        // (+char)
     // Verwaltung
-    MEMBER(SbiRuntime::StepSETCLASS),   // Set + Klassennamen testen (+StringId)
-    MEMBER(SbiRuntime::StepTESTCLASS),  // Check TOS class (+StringId)
-    MEMBER(SbiRuntime::StepLIB),        // Lib fuer Declare-Call (+StringId)
-    MEMBER(SbiRuntime::StepBASED),      // TOS wird um BASE erhoeht, BASE davor gepusht
-    MEMBER(SbiRuntime::StepARGTYP),     // Letzten Parameter in Argv konvertieren (+Typ)
+    &SbiRuntime::StepSETCLASS,  // Set + Klassennamen testen (+StringId)
+    &SbiRuntime::StepTESTCLASS, // Check TOS class (+StringId)
+    &SbiRuntime::StepLIB,       // Lib fuer Declare-Call (+StringId)
+    &SbiRuntime::StepBASED,     // TOS wird um BASE erhoeht, BASE davor gepusht
+    &SbiRuntime::StepARGTYP,        // Letzten Parameter in Argv konvertieren (+Typ)
 };
 
 SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// Alle Opcodes mit zwei Operanden
-    MEMBER(SbiRuntime::StepRTL),        // Laden aus RTL (+StringID+Typ)
-    MEMBER(SbiRuntime::StepFIND),       // Laden (+StringID+Typ)
-    MEMBER(SbiRuntime::StepELEM),       // Laden Element (+StringID+Typ)
-    MEMBER(SbiRuntime::StepPARAM),      // Parameter (+Offset+Typ)
+    &SbiRuntime::StepRTL,       // Laden aus RTL (+StringID+Typ)
+    &SbiRuntime::StepFIND,      // Laden (+StringID+Typ)
+    &SbiRuntime::StepELEM,          // Laden Element (+StringID+Typ)
+    &SbiRuntime::StepPARAM,     // Parameter (+Offset+Typ)
     // Verzweigen
-    MEMBER(SbiRuntime::StepCALL),       // Declare-Call (+StringID+Typ)
-    MEMBER(SbiRuntime::StepCALLC),      // CDecl-Declare-Call (+StringID+Typ)
-    MEMBER(SbiRuntime::StepCASEIS),     // Case-Test (+Test-Opcode+False-Target)
+    &SbiRuntime::StepCALL,      // Declare-Call (+StringID+Typ)
+    &SbiRuntime::StepCALLC,     // CDecl-Declare-Call (+StringID+Typ)
+    &SbiRuntime::StepCASEIS,        // Case-Test (+Test-Opcode+False-Target)
     // Verwaltung
-    MEMBER(SbiRuntime::StepSTMNT),      // Beginn eines Statements (+Line+Col)
+    &SbiRuntime::StepSTMNT,         // Beginn eines Statements (+Line+Col)
     // E/A
-    MEMBER(SbiRuntime::StepOPEN),       // (+SvStreamFlags+Flags)
+    &SbiRuntime::StepOPEN,          // (+SvStreamFlags+Flags)
     // Objekte
-    MEMBER(SbiRuntime::StepLOCAL),      // Lokale Variable definieren (+StringId+Typ)
-    MEMBER(SbiRuntime::StepPUBLIC),     // Modulglobale Variable (+StringID+Typ)
-    MEMBER(SbiRuntime::StepGLOBAL),     // Globale Variable definieren (+StringID+Typ)
-    MEMBER(SbiRuntime::StepCREATE),     // Objekt kreieren (+StringId+StringId)
-    MEMBER(SbiRuntime::StepSTATIC),     // Statische Variable (+StringId+StringId)
-    MEMBER(SbiRuntime::StepTCREATE),    // User Defined Objekte (+StringId+StringId)
-    MEMBER(SbiRuntime::StepDCREATE),    // Objekt-Array kreieren (+StringID+StringID)
-    MEMBER(SbiRuntime::StepGLOBAL_P),   // Globale Variable definieren, die beim Neustart
+    &SbiRuntime::StepLOCAL,     // Lokale Variable definieren (+StringId+Typ)
+    &SbiRuntime::StepPUBLIC,        // Modulglobale Variable (+StringID+Typ)
+    &SbiRuntime::StepGLOBAL,        // Globale Variable definieren (+StringID+Typ)
+    &SbiRuntime::StepCREATE,        // Objekt kreieren (+StringId+StringId)
+    &SbiRuntime::StepSTATIC,     // Statische Variable (+StringId+StringId)
+    &SbiRuntime::StepTCREATE,    // User Defined Objekte (+StringId+StringId)
+    &SbiRuntime::StepDCREATE,    // Objekt-Array kreieren (+StringID+StringID)
+    &SbiRuntime::StepGLOBAL_P,   // Globale Variable definieren, die beim Neustart
                                         // von Basic nicht ueberschrieben wird (+StringID+Typ)
-    MEMBER(SbiRuntime::StepFIND_G),     // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
-    MEMBER(SbiRuntime::StepDCREATE_REDIMP), // Objekt-Array redimensionieren (+StringID+StringID)
-    MEMBER(SbiRuntime::StepFIND_CM),    // Search inside a class module (CM) to enable global search in time
+    &SbiRuntime::StepFIND_G,        // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
+    &SbiRuntime::StepDCREATE_REDIMP, // Objekt-Array redimensionieren (+StringID+StringID)
+    &SbiRuntime::StepFIND_CM,    // Search inside a class module (CM) to enable global search in time
 };
 
 
@@ -523,14 +520,14 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, USHORT nStart )
     bError    = TRUE;
     bInError  = FALSE;
     bBlocked  = FALSE;
-    nLine     =
-    nCol1     =
-    nCol2     =
-    nExprLvl  =
-    nArgc     =
-    nError    =
-    nGosubLvl =
-    nForLvl   =
+    nLine     = 0;
+    nCol1     = 0;
+    nCol2     = 0;
+    nExprLvl  = 0;
+    nArgc     = 0;
+    nError    = 0;
+    nGosubLvl = 0;
+    nForLvl   = 0;
     nOps      = 0;
     refExprStk = new SbxArray;
 #if defined GCC
@@ -770,8 +767,9 @@ BOOL SbiRuntime::Step()
                             // Nach RT mit Error-Handler aufhoeren
                             if( pRt == pRtErrHdl )
                                 break;
+                            pRt = pRt->pNext;
                         }
-                        while( (pRt = pRt->pNext) );
+                        while( pRt );
                     }
                     // Kein Error-Hdl gefunden -> altes Vorgehen
                     else
