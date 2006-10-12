@@ -4,9 +4,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:47:18 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:58:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1119,7 +1119,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
     else
     {
         // VirtualMenu fuer SubMenu finden und ggf. an VirtualMenu binden
-        BOOL bRet = Bind_Impl( pMenu );
+        bool bRet = Bind_Impl( pMenu );
 #ifdef DBG_UTIL
         if ( !bRet)
             DBG_WARNING( "W1: Virtual menu konnte nicht erzeugt werden!" );
