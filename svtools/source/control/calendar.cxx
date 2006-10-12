@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calendar.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:36:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:11:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1512,13 +1512,13 @@ void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
         USHORT nNewMonth = nCurItemId % 1000;
         USHORT nNewYear = nYear+((nCurItemId-1000)/1000);
         if ( nTempMonthOff < nNewMonth )
-            nNewMonth -= nTempMonthOff;
+            nNewMonth = nNewMonth - nTempMonthOff;
         else
         {
             nNewYear--;
             nNewMonth = 12-(nTempMonthOff-nNewMonth);
         }
-        nNewYear -= nTempYearOff;
+        nNewYear = nNewYear - nTempYearOff;
         SetFirstDate( Date( 1, nNewMonth, nNewYear ) );
     }
 }
