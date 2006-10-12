@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:09:49 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:41:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2541,7 +2541,7 @@ void SAL_CALL Frame::setActionLocks( sal_Int16 nLock ) throw( css::uno::RuntimeE
     //            and tried to set these 5 ones here after his operations ...
     //            we can't ignore setted requests during these two calls!
     //            So we must add(!) these 5 locks here.
-    m_nExternalLockCount += nLock;
+    m_nExternalLockCount = m_nExternalLockCount + nLock;
 }
 
 //*****************************************************************************************************************
