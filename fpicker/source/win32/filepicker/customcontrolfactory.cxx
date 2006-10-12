@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customcontrolfactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:55:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:51:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,9 +68,9 @@ CCustomControl* CCustomControlFactory::CreateCustomControl(HWND aControlHandle, 
 
     TCHAR aClsName[256];
     ZeroMemory(aClsName,sizeof(aClsName));
-    int nRet = GetClassName(aControlHandle,aClsName,sizeof(aClsName));
-
-    OSL_ENSURE(nRet,"Invalid window handle");
+    if (GetClassName(aControlHandle,aClsName,sizeof(aClsName)) == 0) {
+        OSL_ENSURE(false,"Invalid window handle");
+    }
 
     if (0 == _tcsicmp(aClsName,TEXT("button")))
     {
