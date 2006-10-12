@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:34:31 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:04:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -509,7 +509,7 @@ void Desktop::CreateTemporaryDirectory()
     {
         ::osl::File::getTempDirURL( aTempBaseURL );
 
-        sal_Int32 nLength = aTempBaseURL.getLength();
+        nLength = aTempBaseURL.getLength();
         if ( aTempBaseURL.matchAsciiL( "/", 1, nLength-1 ) )
             aTempBaseURL = aTempBaseURL.copy( 0, nLength - 1 );
 
