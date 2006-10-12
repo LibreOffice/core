@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:44:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:22:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -362,7 +362,7 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
     {
         // the object is still not running
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not loaded!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
     // if ( m_bWaitSaveCompleted )
