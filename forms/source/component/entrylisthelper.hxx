@@ -4,9 +4,9 @@
  *
  *  $RCSfile: entrylisthelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:54:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:12:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ namespace frm
     protected:
         OEntryListHelper( ::osl::Mutex& _rMutex );
         OEntryListHelper( const OEntryListHelper& _rSource, ::osl::Mutex& _rMutex );
-        ~OEntryListHelper( );
+        virtual ~OEntryListHelper( );
 
         /// returns the current string item list
         inline const ::com::sun::star::uno::Sequence< ::rtl::OUString >&
