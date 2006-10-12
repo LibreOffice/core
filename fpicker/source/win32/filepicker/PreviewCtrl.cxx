@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreviewCtrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:54:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:49:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,13 @@
 #include <osl/diagnose.h>
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <ocidl.h>
 #include <olectl.h>
 
