@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmkmenu.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:44:42 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:39:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,7 @@ BmkMenu::~BmkMenu()
 {
     delete _pImp;
 
-    for ( int i = 0; i < GetItemCount(); i++ )
+    for ( USHORT i = 0; i < GetItemCount(); i++ )
     {
         if ( GetItemType( i ) != MENUITEM_SEPARATOR )
         {
