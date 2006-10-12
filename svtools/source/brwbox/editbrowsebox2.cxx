@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editbrowsebox2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:19:35 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:07:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,7 +210,8 @@ Rectangle EditBrowseBox::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nCol
     Rectangle aRect;
     if ( SeekRow(_nRow) )
     {
-        CellController* pController = GetController( _nRow,GetColumnId( _nColumnPos ) );
+        CellController* pController = GetController(
+            _nRow, GetColumnId( sal::static_int_cast< USHORT >(_nColumnPos) ) );
         if ( pController )
             aRect = pController->GetWindow().GetCharacterBounds(_nIndex);
     }
@@ -222,7 +223,8 @@ sal_Int32 EditBrowseBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumn
     sal_Int32 nRet = -1;
     if ( SeekRow(_nRow) )
     {
-        CellController* pController = GetController( _nRow, GetColumnId( _nColumnPos ) );
+        CellController* pController = GetController(
+            _nRow, GetColumnId( sal::static_int_cast< USHORT >(_nColumnPos) ) );
         if ( pController )
             nRet = pController->GetWindow().GetIndexForPoint(_rPoint);
     }
