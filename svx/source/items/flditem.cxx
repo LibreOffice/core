@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:19:42 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:53:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@ SvxFieldData* SvxFieldData::Clone() const
 int SvxFieldData::operator==( const SvxFieldData& rFld ) const
 {
     DBG_ASSERT( Type() == rFld.Type(), "==: Verschiedene Typen" );
+    (void)rFld;
     return TRUE;    // Basicklasse immer gleich.
 }
 
