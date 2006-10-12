@@ -4,9 +4,9 @@
  *
  *  $RCSfile: submission.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:06:19 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:15:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,8 @@ public:
         : m_aURLObj(aURL)
         , m_aFragment(aFragment)
     {}
+
+    virtual ~CSubmission() {}
 
     //    virtual CSS::uno::Sequence< rtl::OUString > getSupportedEncodings() = 0;
     virtual void setEncoding(const rtl::OUString& aEncoding)
