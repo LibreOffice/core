@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:03:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:18:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,9 +110,9 @@ public:
     virtual BOOL Connect( sfx2::SvBaseLink* );
 };
 
-SvxLinkManager::SvxLinkManager( SfxObjectShell* pPersist )
+SvxLinkManager::SvxLinkManager( SfxObjectShell* _pPersist )
 {
-    SvLinkManager::SetPersist( pPersist );
+    SvLinkManager::SetPersist( _pPersist );
 }
 
 sfx2::SvLinkSourceRef SvxLinkManager::CreateObj( sfx2::SvBaseLink * pLink )
@@ -223,13 +223,13 @@ void SvxLinkManager::CancelTransfers()
             pFileObj->CancelTransfers();
 }
 
-void SvxLinkManager::SetTransferPriority( sfx2::SvBaseLink& rLink, USHORT nPrio )
+void SvxLinkManager::SetTransferPriority( sfx2::SvBaseLink& /*rLink*/, USHORT /*nPrio*/ )
 {
-    SvFileObject* pFileObj =
+//  SvFileObject* pFileObj =
 //      (SvFileObject*)SvFileObject::ClassFactory()->
 //                                  CastAndAddRef( rLink.GetObj() );
-            OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & rLink.GetObjType()) ?
-                (SvFileObject*)rLink.GetObj() : 0;
+//          OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & rLink.GetObjType()) ?
+//              (SvFileObject*)rLink.GetObj() : 0;
 }
 
 
