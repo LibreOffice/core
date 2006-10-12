@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MarkerStyle.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:44:01 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:45:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,9 +232,6 @@ sal_Bool XMLMarkerStyleExport::exportXML(
             OUString aStrValue;
             OUStringBuffer aOut;
 
-            SvXMLUnitConverter& rUnitConverter =
-                rExport.GetMM100UnitConverter();
-
             /////////////////
             // Name
             sal_Bool bEncoded = sal_False;
@@ -296,7 +293,7 @@ sal_Bool XMLMarkerStyleExport::exportXML(
             sal_Int32 nDifY(nMaxY - nMinY);
 
             SdXMLImExViewBox aViewBox( 0, 0, nDifX, nDifY );
-            rExport.AddAttribute( XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString( rUnitConverter ) );
+            rExport.AddAttribute( XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString() );
 
             /////////////////
             // Pathdata
@@ -312,7 +309,7 @@ sal_Bool XMLMarkerStyleExport::exportXML(
                 aSvgDElement.AddPolygon(pSequence, pFlags,
                     awt::Point( 0, 0 ),
                     awt::Size( aViewBox.GetWidth(), aViewBox.GetHeight() ),
-                    rUnitConverter, bClosed);
+                    bClosed);
             }
 
             // write point array
