@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuiexp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:14:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:08:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ namespace cui
             pFactory = new AbstractDialogFactory_Impl;
         return pFactory;
     }
-};
+}
 
 extern "C"
 {
