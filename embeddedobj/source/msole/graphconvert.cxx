@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphconvert.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:43:49 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:22:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ void MainThreadNotificationRequest::mainThreadWorkerStart( MainThreadNotificatio
         Application::PostUserEvent( STATIC_LINK( NULL, MainThreadNotificationRequest, worker ), pMTRequest );
 }
 
-IMPL_STATIC_LINK( MainThreadNotificationRequest, worker, MainThreadNotificationRequest*, pMTRequest )
+IMPL_STATIC_LINK_NOINSTANCE( MainThreadNotificationRequest, worker, MainThreadNotificationRequest*, pMTRequest )
 {
     if ( pMTRequest )
     {
