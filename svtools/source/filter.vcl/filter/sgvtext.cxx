@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sgvtext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:53:34 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:18:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -577,7 +577,7 @@ USHORT GetLineFeed(UCHAR* TBuf, USHORT Index, ObjTextType Atr0, ObjTextType AktA
             if (AktAtr.ChrVPos>0) LF100-=AktAtr.ChrVPos*100;
             if (LF100>MaxLF100) MaxLF100=LF100;
             Grad=AktAtr.Grad;
-            if (AktAtr.ChrVPos>0) Grad-=AktAtr.ChrVPos;
+            if (AktAtr.ChrVPos>0) Grad=Grad-AktAtr.ChrVPos;
             if (Grad>MaxGrad) MaxGrad=Grad;
             First=FALSE;
         }
@@ -966,10 +966,10 @@ void FormatLine(UCHAR* TBuf, USHORT& Index, ObjTextType& Atr0, ObjTextType& AktA
         case THJustLeft: break;                                // Links
         case THJustCenter: {
             BoxRest=BoxRest /2;                                // Mitte
-            for (i=1;i<=nChars;i++) Line[i]+=BoxRest;
+            for (i=1;i<=nChars;i++) Line[i]=Line[i]+BoxRest;
         } break;
         case THJustRight: {                                    // Rechts
-            for (i=1;i<=nChars;i++) Line[i]+=BoxRest;
+            for (i=1;i<=nChars;i++) Line[i]=Line[i]+BoxRest;
         } break;
         case THJustDrvOut:
         case THJustBlock: {                                    // Block und Austreibend
@@ -989,7 +989,7 @@ void FormatLine(UCHAR* TBuf, USHORT& Index, ObjTextType& Atr0, ObjTextType& AktA
 
             if (j==0) {                        // nur 1 Wort ?  -> Strecken !
                 for (i=li+1;i<=re;i++) {       // von links nach rechts
-                  Line[i]+=MulDiv(i-li,BoxRest,re-li+1-1);
+                  Line[i]=Line[i]+MulDiv(i-li,BoxRest,re-li+1-1);
                 }
             } else {
                 k=0; h=0;
@@ -998,10 +998,10 @@ void FormatLine(UCHAR* TBuf, USHORT& Index, ObjTextType& Atr0, ObjTextType& AktA
                         k++;
                         h=MulDiv(k,BoxRest,j);
                     }
-                    Line[i]+=h;
+                    Line[i]=Line[i]+h;
                 }
             }
-            for (i=re+1;i<=nChars;i++) Line[i]+=BoxRest; // und den Rest anpassen
+            for (i=re+1;i<=nChars;i++) Line[i]=Line[i]+BoxRest; // und den Rest anpassen
             Line[nChars+1]=AdjWdt;
         } break;
         case THJustLocked: {                                    //Gesperrt
@@ -1011,9 +1011,9 @@ void FormatLine(UCHAR* TBuf, USHORT& Index, ObjTextType& Atr0, ObjTextType& AktA
             while (li<=re && (cLine[li]==' ' || cLine[li]==TextEnd || cLine[li]==AbsatzEnd)) li++;
             BoxRest=AdjWdt-Line[re+1];
             for (i=li+1;i<=re;i++) {         // Strecken von links nach rechts
-                Line[i]+=MulDiv(i-li,BoxRest,re-li+1-1);
+                Line[i]=Line[i]+MulDiv(i-li,BoxRest,re-li+1-1);
             }
-            for (i=re+1;i<=nChars;i++) Line[i]+=BoxRest; // und den Rest anpassen
+            for (i=re+1;i<=nChars;i++) Line[i]=Line[i]+BoxRest; // und den Rest anpassen
             Line[nChars+1]=AdjWdt;
         } break;
     }
@@ -1113,8 +1113,8 @@ void TextType::Draw(OutputDevice& rOut)
         xSize=32000 /2;      // Umbruch
         xSAdj=Pos2.x-Pos1.x; // zum Ausrichten bei Zentriert/Blocksatz
         //if (xSize<=0) { xSize=32000 /2; LineFit=TRUE; }
-        FitXMul=abs(Pos2.x-Pos1.x); FitXDiv=FitSize.x; if (FitXDiv==0) FitXDiv=1;
-        FitYMul=abs(Pos2.y-Pos1.y); FitYDiv=FitSize.y; if (FitYDiv==0) FitYDiv=1;
+        FitXMul=sal::static_int_cast< USHORT >(abs(Pos2.x-Pos1.x)); FitXDiv=FitSize.x; if (FitXDiv==0) FitXDiv=1;
+        FitYMul=sal::static_int_cast< USHORT >(abs(Pos2.y-Pos1.y)); FitYDiv=FitSize.y; if (FitYDiv==0) FitYDiv=1;
     } else {
         xSize=Pos2.x-Pos1.x;
         xSAdj=xSize;
@@ -1147,7 +1147,7 @@ void TextType::Draw(OutputDevice& rOut)
             }
             yPos0=yPos;
             TopToBase=GetTopToBaseLine(MaxGrad);
-            yPos+=TopToBase;
+            yPos=yPos+TopToBase;
             Ende=(yPos0+short(MulDiv(MaxGrad,CharTopToBtm,100))>ySize) && !TextFit;
             if (!Ende) {
                 T2=T1; Index2=Index1;
@@ -1273,7 +1273,7 @@ void SgfFontOne::ReadOne( ByteString& ID, ByteString& Dsc )
             else if ( s.CompareTo( "MAC", 3 ) == COMPARE_EQUAL ) SVChSet=RTL_TEXTENCODING_APPLE_ROMAN;
             else if ( s.CompareTo( "SYMBOL", 6 ) == COMPARE_EQUAL ) SVChSet=RTL_TEXTENCODING_SYMBOL;
             else if ( s.CompareTo( "SYSTEM", 6 ) == COMPARE_EQUAL ) SVChSet = gsl_getSystemTextEncoding();
-            else if ( s.IsNumericAscii() ) SVWidth=s.ToInt32();
+            else if ( s.IsNumericAscii() ) SVWidth=sal::static_int_cast< USHORT >(s.ToInt32());
         }
     }
 }
