@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.244 $
+ *  $Revision: 1.245 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 09:58:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:58:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6541,7 +6541,7 @@ void Window::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
 
 // -----------------------------------------------------------------------
 
-void Window::Enable( BOOL bEnable, BOOL bChild )
+void Window::Enable( bool bEnable, bool bChild )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
