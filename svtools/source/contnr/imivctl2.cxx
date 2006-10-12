@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imivctl2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:33:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:09:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,9 +106,9 @@ void IcnCursor_Impl::ImplCreate()
 
         // Rundungsfehler abfangen
         if( nY >= nRows )
-            nY = nRows - 1;
+            nY = sal::static_int_cast< short >(nRows - 1);
         if( nX >= nCols )
-            nX = nCols - 1;
+            nX = sal::static_int_cast< short >(nCols - 1);
 
         USHORT nIns = GetSortListPos( &pColumns[nX], rRect.Top(), TRUE );
         pColumns[ nX ].Insert( pEntry, nIns );
@@ -318,7 +318,8 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pCt
     DBG_ASSERT(nX< nCols,"GoLeftRight:Bad row");
     // Nachbar auf gleicher Zeile ?
     if( bRight )
-        pResult = SearchRow( nY, nX ,nCols-1, nX, TRUE, TRUE );
+        pResult = SearchRow(
+            nY, nX, sal::static_int_cast< USHORT >(nCols-1), nX, TRUE, TRUE );
     else
         pResult = SearchRow( nY, nX ,0, nX, FALSE, TRUE );
     if( pResult )
@@ -436,7 +437,8 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlE
 
     // Nachbar in gleicher Spalte ?
     if( bDown )
-        pResult = SearchCol( nX, nY ,nRows-1, nY, TRUE, TRUE );
+        pResult = SearchCol(
+            nX, nY, sal::static_int_cast< USHORT >(nRows-1), nY, TRUE, TRUE );
     else
         pResult = SearchCol( nX, nY ,0, nY, FALSE, TRUE );
     if( pResult )
