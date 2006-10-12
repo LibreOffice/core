@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comm_bas.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:01:15 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:05:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,19 +57,6 @@
 #ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
 #endif
-
-//#include "collelem.hxx"
-// Makro MEMBER()
-// #include <basic/macfix.hxx>
-
-#if defined(MAC) || defined(HPUX)
-#define MEMBER(name) &##name
-#elif (defined (GCC) && ( __GNUC__ >= 3 )) || (defined(WNT) && (_MSC_VER >= 1400))
-#define MEMBER(name) &name
-#else
-#define MEMBER(name) name
-#endif
-
 
 // Der CommunicationManager hat folgende Elemente:
 // 1) Properties:
@@ -125,26 +112,26 @@
 
 CommunicationWrapper::Methods CommunicationWrapper::aManagerMethods[] = {
 // Neue Kommunikation aufbauen
-{ "StartCommunication",             SbxEMPTY,  2 | _FUNCTION, MEMBER(CommunicationWrapper::MStartCommunication) },
+{ "StartCommunication", SbxEMPTY, &CommunicationWrapper::MStartCommunication, 2 | _FUNCTION },
     // Zwei Named Parameter
-    { "Host",SbxSTRING, 0,NULL },
-    { "Port",SbxLONG, 0,NULL },
+    { "Host", SbxSTRING, NULL, 0 },
+    { "Port", SbxLONG, NULL, 0 },
 // Alle Kommunikation wird abgebrochen
-{ "StopAllCommunication",           SbxEMPTY,  0 | _FUNCTION, MEMBER(CommunicationWrapper::MStopAllCommunication) },
+{ "StopAllCommunication", SbxEMPTY, &CommunicationWrapper::MStopAllCommunication, 0 | _FUNCTION },
 // Läuft noch irgendwas
-{ "IsCommunicationRunning",         SbxBOOL,   0 | _FUNCTION, MEMBER(CommunicationWrapper::MIsCommunicationRunning) },
+{ "IsCommunicationRunning", SbxBOOL, &CommunicationWrapper::MIsCommunicationRunning, 0 | _FUNCTION },
 // Hostname als FQDN erfragen
-{ "GetMyName",                      SbxSTRING, 0 | _FUNCTION, MEMBER(CommunicationWrapper::MGetMyName) },
+{ "GetMyName", SbxSTRING, &CommunicationWrapper::MGetMyName, 0 | _FUNCTION },
 // Abfragen ob der Link überhaupt noch gültig ist
-{ "IsLinkValid",                    SbxBOOL,   1 | _FUNCTION, MEMBER(CommunicationWrapper::MIsLinkValid) },
+{ "IsLinkValid", SbxBOOL, &CommunicationWrapper::MIsLinkValid, 1 | _FUNCTION },
     // Ein Named Parameter
-    { "Link",SbxOBJECT, 0,NULL },
+    { "Link", SbxOBJECT, NULL, 0 },
 // Dieser Handler wird dauernd gerufen
-{ "SetCommunicationEventHandler",   SbxEMPTY,  1 | _FUNCTION, MEMBER(CommunicationWrapper::MSetCommunicationEventHandler) },
+{ "SetCommunicationEventHandler", SbxEMPTY, &CommunicationWrapper::MSetCommunicationEventHandler, 1 | _FUNCTION },
     // Ein Named Parameter
-    { "FuncName",SbxSTRING, 0,NULL },
+    { "FuncName", SbxSTRING, NULL, 0 },
 
-{ NULL,     SbxNULL,            -1, NULL }};  // Tabellenende
+{ NULL, SbxNULL, NULL, -1 }};  // Tabellenende
 
 
 
@@ -153,19 +140,19 @@ CommunicationWrapper::Methods CommunicationWrapper::aManagerMethods[] = {
 
 CommunicationWrapper::Methods CommunicationWrapper::aLinkMethods[] = {
 // Die Kommunikation wird abgebrochen
-{ "StopCommunication",              SbxEMPTY,  0 | _FUNCTION, MEMBER(CommunicationWrapper::LStopCommunication) },
+{ "StopCommunication", SbxEMPTY, &CommunicationWrapper::LStopCommunication, 0 | _FUNCTION },
 // Der eigene Name
-{ "GetMyName",                      SbxSTRING, 0 | _FUNCTION, MEMBER(CommunicationWrapper::LGetMyName) },
+{ "GetMyName", SbxSTRING, &CommunicationWrapper::LGetMyName, 0 | _FUNCTION },
 // Der Name des Anderen
-{ "GetHostName",                    SbxSTRING, 0 | _FUNCTION, MEMBER(CommunicationWrapper::LGetHostName) },
+{ "GetHostName", SbxSTRING, &CommunicationWrapper::LGetHostName, 0 | _FUNCTION },
 // String an den Partner schicken
-{ "Send",                           SbxEMPTY,  1 | _FUNCTION, MEMBER(CommunicationWrapper::LSend) },
+{ "Send", SbxEMPTY, &CommunicationWrapper::LSend, 1 | _FUNCTION },
     // Ein Named Parameter
-    { "SendString",SbxSTRING, 0,NULL },
+    { "SendString", SbxSTRING, NULL, 0 },
 // Ergebnis des letzten Empfangs
-{ "GetString",                      SbxSTRING, 0 | _FUNCTION, MEMBER(CommunicationWrapper::LGetString) },
+{ "GetString", SbxSTRING, &CommunicationWrapper::LGetString, 0 | _FUNCTION },
 
-{ NULL,     SbxNULL,            -1 ,NULL }};  // Tabellenende
+{ NULL, SbxNULL, NULL, -1 }};  // Tabellenende
 
 
 
@@ -448,7 +435,9 @@ void CommunicationWrapper::LGetString( SbxVariable* pVar, SbxArray* /*pPar*/, BO
         pReceiveStream->Seek( STREAM_SEEK_TO_BEGIN );
         char *pBuffer = new char[nLength];
         pReceiveStream->Read( pBuffer, nLength );
-        String aReceive( pBuffer, nLength );
+        String aReceive(
+            pBuffer, sal::static_int_cast< xub_StrLen >( nLength ),
+            RTL_TEXTENCODING_UTF8 );
         delete [] pBuffer;
         pVar->PutString( aReceive );
         delete pReceiveStream;
