@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:35:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:10:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -900,7 +900,7 @@ sal_Int32 SvHeaderTabListBox::GetSelectedColumnCount() const
     return 0;
 }
 // -----------------------------------------------------------------------
-BOOL SvHeaderTabListBox::IsRowSelected( long _nRow ) const
+bool SvHeaderTabListBox::IsRowSelected( long _nRow ) const
 {
     SvLBoxEntry* pEntry = GetEntry( _nRow );
     return ( pEntry && IsSelected( pEntry ) );
