@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:47:46 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:08:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,8 @@
 
 class SvxSuperContourDlg : public SvxContourDlg
 {
+    using SvxContourDlg::GetPolyPolygon;
+
     Graphic             aGraphic;
     Graphic             aUndoGraphic;
     Graphic             aRedoGraphic;
@@ -121,7 +123,7 @@ public:
     BOOL                IsUndoPossible() const;
     BOOL                IsRedoPossible() const;
 
-    void                Update( const Graphic& rGraphic, BOOL bGraphicLinked,
+    void                UpdateGraphic( const Graphic& rGraphic, BOOL bGraphicLinked,
                                 const PolyPolygon* pPolyPoly = NULL,
                                 void* pEditingObj = NULL );
 
