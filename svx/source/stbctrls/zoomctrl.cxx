@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zoomctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:46:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:06:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,11 +124,11 @@ void ZoomPopup_Impl::Select()
 
 // class SvxZoomStatusBarControl ------------------------------------------
 
-SvxZoomStatusBarControl::SvxZoomStatusBarControl( USHORT nSlotId,
-                                                  USHORT nId,
+SvxZoomStatusBarControl::SvxZoomStatusBarControl( USHORT _nSlotId,
+                                                  USHORT _nId,
                                                   StatusBar& rStb ) :
 
-    SfxStatusBarControl( nSlotId, nId, rStb ),
+    SfxStatusBarControl( _nSlotId, _nId, rStb ),
     nZoom( 100 ),
     nValueSet( SVX_ZOOM_ENABLE_ALL )
 {
@@ -136,7 +136,7 @@ SvxZoomStatusBarControl::SvxZoomStatusBarControl( USHORT nSlotId,
 
 // -----------------------------------------------------------------------
 
-void SvxZoomStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState,
+void SvxZoomStatusBarControl::StateChanged( USHORT, SfxItemState eState,
                                             const SfxPoolItem* pState )
 {
     if( SFX_ITEM_AVAILABLE != eState )
@@ -155,9 +155,9 @@ void SvxZoomStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState,
         if ( pState->ISA(SvxZoomItem) )
         {
             nValueSet = ((const SvxZoomItem*)pState)->GetValueSet();
+/*!!!
             SvxZoomType eType = ((const SvxZoomItem*)pState)->GetType();
 
-/*!!!
             switch ( eType )
             {
                 case SVX_ZOOM_OPTIMAL:
@@ -182,7 +182,7 @@ void SvxZoomStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState,
 
 // -----------------------------------------------------------------------
 
-void SvxZoomStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
+void SvxZoomStatusBarControl::Paint( const UserDrawEvent& )
 {
     String aStr( String::CreateFromInt32( nZoom ));
     aStr += '%';
@@ -204,14 +204,12 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
             nZoom = aPop.GetZoom();
             SvxZoomItem aZoom( SVX_ZOOM_PERCENT, nZoom, GetId() );
 
-            USHORT nId = aPop.GetCurId();
-
-            if ( ZOOM_OPTIMAL == nId )
-                aZoom.SetType( SVX_ZOOM_OPTIMAL );
-            else if ( ZOOM_PAGE_WIDTH == nId )
-                aZoom.SetType( SVX_ZOOM_PAGEWIDTH );
-            else if ( ZOOM_WHOLE_PAGE == nId )
-                aZoom.SetType( SVX_ZOOM_WHOLEPAGE );
+            switch( aPop.GetCurId() )
+            {
+            case ZOOM_OPTIMAL:      aZoom.SetType( SVX_ZOOM_OPTIMAL ); break;
+            case ZOOM_PAGE_WIDTH:   aZoom.SetType( SVX_ZOOM_PAGEWIDTH ); break;
+            case ZOOM_WHOLE_PAGE:   aZoom.SetType( SVX_ZOOM_WHOLEPAGE ); break;
+            }
 
             ::com::sun::star::uno::Any a;
             INetURLObject aObj( m_aCommandURL );
