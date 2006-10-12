@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:14:34 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:40:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ sal_Bool OWizColumnSelect::LeavePage()
     if  (   m_pParent->GetPressedButton() == OCopyTableWizard::WIZARD_NEXT
         ||  m_pParent->GetPressedButton() == OCopyTableWizard::WIZARD_FINISH
         )
-        return m_pParent->getDestColumns()->size();
+        return m_pParent->getDestColumns()->size() != 0;
     else
         return sal_True;
 }
@@ -391,10 +391,10 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
             const ODatabaseExport::TColumnVector* pSrcVector = m_pParent->getSrcVector();
             ODatabaseExport::TColumnVector::const_iterator aPos = ::std::find(pSrcVector->begin(),pSrcVector->end(),aSrcIter);
             OSL_ENSURE( aPos != pSrcVector->end(),"Invalid position for the iterator here!");
-            USHORT nPos = (aPos - pSrcVector->begin()) - adjustColumnPosition(_pLeft, _sColumnName, (aPos - pSrcVector->begin()), _aCase);
+            ODatabaseExport::TColumnVector::size_type nPos = (aPos - pSrcVector->begin()) - adjustColumnPosition(_pLeft, _sColumnName, (aPos - pSrcVector->begin()), _aCase);
             m_pParent->removeColumnNameFromNameMap(_sColumnName);
 
-            _pRight->SetEntryData( _pRight->InsertEntry( (*aIter).first, nPos),aSrcIter->second );
+            _pRight->SetEntryData( _pRight->InsertEntry( (*aIter).first, sal::static_int_cast< USHORT >(nPos)),aSrcIter->second );
             _rRightColumns.push_back((*aIter).first);
             m_pParent->removeColumnNameFromNameMap(_sColumnName);
         }
@@ -407,7 +407,7 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
 // algorithm employed in moveColumn().
 USHORT OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
                                                const ::rtl::OUString&   _sColumnName,
-                                               USHORT nCurrentPos,
+                                               ODatabaseExport::TColumnVector::size_type nCurrentPos,
                                                const ::comphelper::TStringMixEqualFunctor& _aCase)
 {
     USHORT nAdjustedPos = 0;
@@ -439,7 +439,7 @@ USHORT OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
                 // we need also the old position of this column to insert it back on that position again
                 const ODatabaseExport::TColumnVector* pSrcVector = m_pParent->getSrcVector();
                 ODatabaseExport::TColumnVector::const_iterator aPos = ::std::find(pSrcVector->begin(),pSrcVector->end(),aSrcIter);
-                USHORT nPos = aPos - pSrcVector->begin();
+                ODatabaseExport::TColumnVector::size_type nPos = aPos - pSrcVector->begin();
                 if( nPos < nCurrentPos)
                 {
                     nAdjustedPos++;
