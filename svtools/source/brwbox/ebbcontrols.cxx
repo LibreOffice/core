@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ebbcontrols.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:19:07 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:06:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,12 +94,12 @@ namespace svt
                     {
                         // select next resp. previous entry
                         int nPos = GetEntryPos(GetText());
-                        nPos += rKey.GetCode() == KEY_DOWN ? 1 : -1;
+                        nPos = nPos + (rKey.GetCode() == KEY_DOWN ? 1 : -1);
                         if (nPos < 0)
                             nPos = 0;
                         if (nPos >= GetEntryCount())
                             nPos = GetEntryCount() - 1;
-                        SetText(GetEntry(nPos));
+                        SetText(GetEntry(sal::static_int_cast< USHORT >(nPos)));
                         return 1;
                     }
                 }
@@ -201,12 +201,12 @@ namespace svt
                     {
                         // select next resp. previous entry
                         int nPos = GetSelectEntryPos();
-                        nPos += rKey.GetCode() == KEY_DOWN ? 1 : -1;
+                        nPos = nPos + (rKey.GetCode() == KEY_DOWN ? 1 : -1);
                         if (nPos < 0)
                             nPos = 0;
                         if (nPos >= GetEntryCount())
                             nPos = GetEntryCount() - 1;
-                        SelectEntryPos(nPos);
+                        SelectEntryPos(sal::static_int_cast< USHORT >(nPos));
                         Select();   // for calling Modify
                         return 1;
                     }
