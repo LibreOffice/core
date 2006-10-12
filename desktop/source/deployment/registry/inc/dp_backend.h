@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_backend.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-04 16:55:19 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:10:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ typedef ::cppu::WeakComponentImplHelper1<
 //==============================================================================
 class Package : protected ::dp_misc::MutexHolder, public t_PackageBase
 {
-    void processPackage_(
+    void processPackage_impl(
         bool registerPackage,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
