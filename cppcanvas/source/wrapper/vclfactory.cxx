@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclfactory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:53:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:01:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,7 +338,7 @@ namespace cppcanvas
 
         for( i=0; i<nBitmaps; ++i )
         {
-            const AnimationBitmap& rAnimBmp( rAnim.Get(i) );
+            const AnimationBitmap& rAnimBmp( rAnim.Get((USHORT)i) );
 
             // Handle dispose according to GIF spec: a
             // DISPOSE_PREVIOUS does _not_ mean to revert to the
