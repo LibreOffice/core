@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:46:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:15:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -427,7 +427,8 @@ void ImpSvMEdit::SetMaxTextLen( xub_StrLen nLen )
 
 xub_StrLen ImpSvMEdit::GetMaxTextLen() const
 {
-    return mpTextWindow->GetTextEngine()->GetMaxTextLen();
+    return sal::static_int_cast< xub_StrLen >(
+        mpTextWindow->GetTextEngine()->GetMaxTextLen());
 }
 
 void ImpSvMEdit::InsertText( const String& rStr )
@@ -570,7 +571,7 @@ void ImpSvMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 ULONG nWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
                 if ( nWidth != mnTextWidth )
                 {
-                    mnTextWidth = nWidth;
+                    mnTextWidth = sal::static_int_cast< xub_StrLen >(nWidth);
                     mpHScrollBar->SetRange( Range( 0, (long)mnTextWidth-1 ) );
                     ImpSetHScrollBarThumbPos();
                 }
