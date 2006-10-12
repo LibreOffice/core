@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ccidecom.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:53:04 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:39:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -599,8 +599,9 @@ CCIDecompressor::CCIDecompressor( ULONG nOpts, UINT32 nImageWidth ) :
         pByteSwap = new BYTE[ 256 ];
         for ( int i = 0; i < 256; i++ )
         {
-            pByteSwap[ i ] = ( i << 7 ) | ( ( i & 2 ) << 5 ) | ( ( i & 4 ) << 3 ) | ( ( i & 8 ) << 1 ) |
-                ( ( i & 16 ) >> 1 ) | ( ( i & 32 ) >> 3 ) | ( ( i & 64 ) >> 5 ) | ( ( i & 128 ) >> 7 );
+            pByteSwap[ i ] = sal::static_int_cast< BYTE >(
+                ( i << 7 ) | ( ( i & 2 ) << 5 ) | ( ( i & 4 ) << 3 ) | ( ( i & 8 ) << 1 ) |
+                ( ( i & 16 ) >> 1 ) | ( ( i & 32 ) >> 3 ) | ( ( i & 64 ) >> 5 ) | ( ( i & 128 ) >> 7 ));
         }
     }
 
@@ -870,7 +871,7 @@ USHORT CCIDecompressor::ReadCodeAndDecode(const CCILookUpTableEntry * pLookUp,
                    &(0xffff>>(16-nMaxCodeBits)));
     nCodeBits=pLookUp[nCode].nCodeBits;
     if (nCodeBits==0) bStatus=FALSE;
-    nInputBitsBufSize-=nCodeBits;
+    nInputBitsBufSize = nInputBitsBufSize - nCodeBits;
     return pLookUp[nCode].nValue;
 }
 
@@ -986,11 +987,11 @@ void CCIDecompressor::Read1DScanlineData(BYTE * pTarget, USHORT nTargetBits)
         if (nDataBits<64) bTerminatingCode=TRUE; else bTerminatingCode=FALSE;
 
         // Die gelesenen Bits aus dem Eingabe-Buffer entfernen:
-        nInputBitsBufSize-=nCodeBits;
+        nInputBitsBufSize = nInputBitsBufSize - nCodeBits;
 
         // Die Anzahl Daten-Bits in die Scanline schreiben:
         if (nDataBits>0) {
-            nTargetBits-=nDataBits;
+            nTargetBits = nTargetBits - nDataBits;
             if (nBlackOrWhite==0x00) *pTarget &= 0xff << nTgtFreeByteBits;
             else                     *pTarget |= 0xff >> (8-nTgtFreeByteBits);
             if (nDataBits<=nTgtFreeByteBits) {
@@ -998,10 +999,10 @@ void CCIDecompressor::Read1DScanlineData(BYTE * pTarget, USHORT nTargetBits)
                     pTarget++;
                     nTgtFreeByteBits=8;
                 }
-                else nTgtFreeByteBits-=nDataBits;
+                else nTgtFreeByteBits = nTgtFreeByteBits - nDataBits;
             }
             else {
-                nDataBits-=nTgtFreeByteBits;
+                nDataBits = nDataBits - nTgtFreeByteBits;
                 pTarget++;
                 nTgtFreeByteBits=8;
                 while (nDataBits>=8) {
@@ -1010,7 +1011,7 @@ void CCIDecompressor::Read1DScanlineData(BYTE * pTarget, USHORT nTargetBits)
                 }
                 if (nDataBits>0) {
                     *pTarget=nBlackOrWhite;
-                    nTgtFreeByteBits-=nDataBits;
+                    nTgtFreeByteBits = nTgtFreeByteBits - nDataBits;
                 }
             }
         }
@@ -1042,18 +1043,18 @@ void CCIDecompressor::Read2DScanlineData(BYTE * pTarget, USHORT nTargetBits)
                 if ( nUncomp <= CCIUNCOMP_4White_1Black ) {
                     nRun=nUncomp-CCIUNCOMP_0White_1Black;
                     FillBits(pTarget,nTargetBits,nBitPos,nRun,0x00);
-                    nBitPos+=nRun;
+                    nBitPos = nBitPos + nRun;
                     FillBits(pTarget,nTargetBits,nBitPos,1,0xff);
                     nBitPos++;
                 }
                 else if ( nUncomp == CCIUNCOMP_5White ) {
                     FillBits(pTarget,nTargetBits,nBitPos,5,0x00);
-                    nBitPos+=5;
+                    nBitPos = nBitPos + 5;
                 }
                 else {
                     nRun=nUncomp-CCIUNCOMP_0White_End;
                     FillBits(pTarget,nTargetBits,nBitPos,nRun,0x00);
-                    nBitPos+=nRun;
+                    nBitPos = nBitPos + nRun;
                     nBlackOrWhite=ReadBlackOrWhite();
                     break;
                 }
@@ -1064,11 +1065,11 @@ void CCIDecompressor::Read2DScanlineData(BYTE * pTarget, USHORT nTargetBits)
             if (nBitPos==0 && nBlackOrWhite==0x00 && CountBits(pLastLine,nTargetBits,0,0xff)!=0) nRun=0;
             else {
                 nRun=CountBits(pLastLine,nTargetBits,nBitPos,~nBlackOrWhite);
-                nRun+=CountBits(pLastLine,nTargetBits,nBitPos+nRun,nBlackOrWhite);
+                nRun = nRun + CountBits(pLastLine,nTargetBits,nBitPos+nRun,nBlackOrWhite);
             }
-            nRun+=CountBits(pLastLine,nTargetBits,nBitPos+nRun,~nBlackOrWhite);
+            nRun = nRun + CountBits(pLastLine,nTargetBits,nBitPos+nRun,~nBlackOrWhite);
             FillBits(pTarget,nTargetBits,nBitPos,nRun,nBlackOrWhite);
-            nBitPos+=nRun;
+            nBitPos = nBitPos + nRun;
         }
 
         else if (n2DMode==CCI2DMODE_HORZ) {
@@ -1076,41 +1077,41 @@ void CCIDecompressor::Read2DScanlineData(BYTE * pTarget, USHORT nTargetBits)
                 nRun=0;
                 do {
                     nt=ReadCodeAndDecode(pWhiteLookUp,13);
-                    nRun+=nt;
+                    nRun = nRun + nt;
                 } while (nt>=64);
                 nRun2=0;
                 do {
                     nt=ReadCodeAndDecode(pBlackLookUp,13);
-                    nRun2+=nt;
+                    nRun2 = nRun2 + nt;
                 } while (nt>=64);
             }
             else {
                 nRun=0;
                 do {
                     nt=ReadCodeAndDecode(pBlackLookUp,13);
-                    nRun+=nt;
+                    nRun = nRun + nt;
                 } while (nt>=64);
                 nRun2=0;
                 do {
                     nt=ReadCodeAndDecode(pWhiteLookUp,13);
-                    nRun2+=nt;
+                    nRun2 = nRun2 + nt;
                 } while (nt>=64);
             }
             FillBits(pTarget,nTargetBits,nBitPos,nRun,nBlackOrWhite);
-            nBitPos+=nRun;
+            nBitPos = nBitPos + nRun;
             FillBits(pTarget,nTargetBits,nBitPos,nRun2,~nBlackOrWhite);
-            nBitPos+=nRun2;
+            nBitPos = nBitPos + nRun2;
         }
 
         else { // Es ist einer der Modi CCI2DMODE_VERT_...
             if (nBitPos==0 && nBlackOrWhite==0x00 && CountBits(pLastLine,nTargetBits,0,0xff)!=0) nRun=0;
             else {
                 nRun=CountBits(pLastLine,nTargetBits,nBitPos,~nBlackOrWhite);
-                nRun+=CountBits(pLastLine,nTargetBits,nBitPos+nRun,nBlackOrWhite);
+                nRun = nRun + CountBits(pLastLine,nTargetBits,nBitPos+nRun,nBlackOrWhite);
             }
             nRun+=n2DMode-CCI2DMODE_VERT_0;
             FillBits(pTarget,nTargetBits,nBitPos,nRun,nBlackOrWhite);
-            nBitPos+=nRun;
+            nBitPos = nBitPos + nRun;
             nBlackOrWhite=~nBlackOrWhite;
         }
     }
