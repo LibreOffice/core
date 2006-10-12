@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WColumnSelect.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:15:15 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:38:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ namespace dbaui
 
         USHORT adjustColumnPosition(ListBox* _pLeft,
                                     const ::rtl::OUString&  _sColumnName,
-                                    USHORT nCurrentPos,
+                                    ODatabaseExport::TColumnVector::size_type nCurrentPos,
                                     const ::comphelper::TStringMixEqualFunctor& _aCase);
 
     public:
