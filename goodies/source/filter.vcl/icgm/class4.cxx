@@ -4,9 +4,9 @@
  *
  *  $RCSfile: class4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:47:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:35:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,8 @@ void CGM::ImplDoClass4()
 
             case 0x02 : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Disjoint PolyLine" )
             {
-                sal_uInt32 nPoints = mnElementSize / ImplGetPointSize();
+                USHORT nPoints = sal::static_int_cast< USHORT >(
+                    mnElementSize / ImplGetPointSize());
                 if ( ! ( nPoints & 1 ) )
                 {
                     nPoints >>= 1;
@@ -277,9 +278,10 @@ void CGM::ImplDoClass4()
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
 
-                sal_uInt32 nPoints = mnElementSize / ImplGetPointSize();
+                USHORT nPoints = sal::static_int_cast< USHORT >(
+                    mnElementSize / ImplGetPointSize());
                 Polygon aPolygon( nPoints );
-                for ( sal_uInt32 i = 0; i < nPoints; i++)
+                for ( USHORT i = 0; i < nPoints; i++)
                 {
                     FloatPoint  aFloatPoint;
                     ImplGetPoint( aFloatPoint, sal_True );
@@ -294,7 +296,7 @@ void CGM::ImplDoClass4()
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
 
-                sal_uInt32      nPoints = 0;
+                USHORT      nPoints = 0;
                 Point*      pPoints = new Point[ 0x4000 ];
 
                 PolyPolygon aPolyPolygon;
@@ -308,7 +310,7 @@ void CGM::ImplDoClass4()
                     if ( ( nEdgeFlag & 2 ) || ( mnParaSize == mnElementSize ) )
                     {
                         Polygon aPolygon( nPoints );
-                        for ( sal_uInt32 i = 0; i < nPoints; i++ )
+                        for ( USHORT i = 0; i < nPoints; i++ )
                         {
                             aPolygon.SetPoint( pPoints[ i ], i );
                         }
@@ -730,15 +732,13 @@ void CGM::ImplDoClass4()
             break;
             case 0x1a : ComOut( CGM_LEVEL3, "Polybezier" )
             {
-                sal_uInt32 i, nOrder, nNumberOfPoints;
+                sal_uInt32 nOrder = ImplGetI( pElement->nIntegerPrecision );
 
-                nOrder = ImplGetI( pElement->nIntegerPrecision );
-
-                nNumberOfPoints = ( mnElementSize - pElement->nIntegerPrecision ) / ImplGetPointSize();
+                USHORT nNumberOfPoints = sal::static_int_cast< USHORT >(( mnElementSize - pElement->nIntegerPrecision ) / ImplGetPointSize());
 
                 Polygon aPolygon( nNumberOfPoints );
 
-                for ( i = 0; i < nNumberOfPoints; i++)
+                for ( USHORT i = 0; i < nNumberOfPoints; i++)
                 {
                     FloatPoint  aFloatPoint;
                     ImplGetPoint( aFloatPoint, sal_True );
@@ -746,7 +746,7 @@ void CGM::ImplDoClass4()
                 }
                 if ( nOrder & 4 )
                 {
-                    for ( i = 0; i < nNumberOfPoints; i++ )
+                    for ( USHORT i = 0; i < nNumberOfPoints; i++ )
                     {
                         if ( ( i % 3 ) == 0 )
                             aPolygon.SetFlags( i, POLY_NORMAL );
@@ -756,7 +756,7 @@ void CGM::ImplDoClass4()
                 }
                 else
                 {
-                    for ( i = 0; i < nNumberOfPoints; i++ )
+                    for ( USHORT i = 0; i < nNumberOfPoints; i++ )
                     {
                         switch ( i & 3 )
                         {
