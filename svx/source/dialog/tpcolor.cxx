@@ -5,9 +5,9 @@
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:44:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:30:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #define _SVX_TPCOLOR_CXX
 #define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
@@ -596,7 +597,7 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 //
 IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 {
-    int nPos = aLbColor.GetSelectEntryPos();
+    USHORT nPos = aLbColor.GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -718,7 +719,7 @@ IMPL_LINK( SvxColorTabPage, ClickWorkOnHdl_Impl, void *, EMPTYARG )
 //
 IMPL_LINK( SvxColorTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 {
-    int nPos = aLbColor.GetSelectEntryPos();
+    USHORT nPos = aLbColor.GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -789,7 +790,9 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
     if ( nReturn != RET_CANCEL )
     {
-        ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+        ::sfx2::FileDialogHelper aDlg(
+            com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+            0 );
         String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.soc" ) );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
@@ -893,7 +896,8 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 //
 IMPL_LINK( SvxColorTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
 {
-       ::sfx2::FileDialogHelper aDlg( ::sfx2::FILESAVE_SIMPLE, 0 );
+       ::sfx2::FileDialogHelper aDlg(
+        com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.soc" ) );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
@@ -1211,9 +1215,9 @@ void SvxColorTabPage::RgbToCmyk_Impl( Color& rColor, USHORT& rK )
 
     rK = Min( Min( nColor1, nColor2 ), nColor3 );
 
-    rColor.SetRed( nColor1 - rK );
-    rColor.SetGreen( nColor2 - rK );
-    rColor.SetBlue( nColor3 - rK );
+    rColor.SetRed( sal::static_int_cast< UINT8 >( nColor1 - rK ) );
+    rColor.SetGreen( sal::static_int_cast< UINT8 >( nColor2 - rK ) );
+    rColor.SetBlue( sal::static_int_cast< UINT8 >( nColor3 - rK ) );
 }
 
 //------------------------------------------------------------------------
@@ -1247,7 +1251,7 @@ void SvxColorTabPage::CmykToRgb_Impl( Color& rColor, const USHORT nK )
 
 USHORT SvxColorTabPage::ColorToPercent_Impl( USHORT nColor )
 {
-    USHORT nWert;
+    USHORT nWert = 0;
 
     switch (eCM)
     {
@@ -1267,7 +1271,7 @@ USHORT SvxColorTabPage::ColorToPercent_Impl( USHORT nColor )
 
 USHORT SvxColorTabPage::PercentToColor_Impl( USHORT nPercent )
 {
-    USHORT nWert;
+    USHORT nWert = 0;
 
     switch (eCM)
     {
