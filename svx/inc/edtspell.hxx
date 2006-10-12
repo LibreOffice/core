@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtspell.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:33:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:40:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ struct WrongRange
     WrongRange( USHORT nS, USHORT nE ) { nStart = nS; nEnd = nE; }
 };
 
-SV_DECL_VARARR( WrongRanges, WrongRange, 4, 4 );
+SV_DECL_VARARR( WrongRanges, WrongRange, 4, 4 )
 #define NOT_INVALID 0xFFFF
 
 class WrongList : private WrongRanges
