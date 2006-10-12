@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtreelistbox.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:02:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:36:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -422,19 +422,23 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
         switch(eFunc)
         {
             case KEYFUNC_CUT:
-                if ( (bHandled = (m_aCutHandler.IsSet() && m_pSelectedEntry)) )
+                bHandled = (m_aCutHandler.IsSet() && m_pSelectedEntry);
+                if ( bHandled )
                     m_aCutHandler.Call(m_pSelectedEntry);
                 break;
             case KEYFUNC_COPY:
-                if ( (bHandled = (m_aCopyHandler.IsSet() && m_pSelectedEntry)) )
+                bHandled = (m_aCopyHandler.IsSet() && m_pSelectedEntry);
+                if ( bHandled )
                     m_aCopyHandler.Call(m_pSelectedEntry);
                 break;
             case KEYFUNC_PASTE:
-                if ( (bHandled = (m_aPasteHandler.IsSet() && m_pSelectedEntry)) )
+                bHandled = (m_aPasteHandler.IsSet() && m_pSelectedEntry);
+                if ( bHandled )
                     m_aPasteHandler.Call(m_pSelectedEntry);
                 break;
             case KEYFUNC_DELETE:
-                if ( (bHandled = (m_aDeleteHandler.IsSet() && m_pSelectedEntry)) )
+                bHandled = (m_aDeleteHandler.IsSet() && m_pSelectedEntry);
+                if ( bHandled )
                     m_aDeleteHandler.Call(m_pSelectedEntry);
                 break;
             default:
