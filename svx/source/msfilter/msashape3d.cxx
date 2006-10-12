@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msashape3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:26:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:58:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ SvxMSDffCustomShape3D::Transformation2D::Transformation2D( const DffPropSet& rPr
     bParallel = ( rPropSet.GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 4 ) != 0;
     if ( bParallel )
     {
-        fSkewAngle = Fix16ToAngle( rPropSet.GetPropertyValue( DFF_Prop_c3DSkewAngle, -135 * 65536 ) ) * F_PI180;
+        fSkewAngle = Fix16ToAngle( rPropSet.GetPropertyValue( DFF_Prop_c3DSkewAngle, sal::static_int_cast< UINT32 >( -135 * 65536 ) ) ) * F_PI180;
         nSkewAmount = rPropSet.GetPropertyValue( DFF_Prop_c3DSkewAmount, 50 );
     }
     else
@@ -399,7 +399,7 @@ SdrObject* SvxMSDffCustomShape3D::Create3DObject( const SdrObject* pObj, const D
             sal_Int32 nSkewAmount = rPropSet.GetPropertyValue( DFF_Prop_c3DSkewAmount, 50 );
             if ( nSkewAmount )
             {
-                sal_Int32 nSkewAngle = ((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DSkewAngle,  -135 * 65536 ) ) >> 16;
+                sal_Int32 nSkewAngle = ((sal_Int32)rPropSet.GetPropertyValue( DFF_Prop_c3DSkewAngle, sal::static_int_cast< UINT32 >( -135 * 65536 ) ) ) >> 16;
 
                 double fAlpha( (double)nSkewAngle * F_PI180 );
                 double fInvTanBeta( (double)nSkewAmount / 100.0 );
