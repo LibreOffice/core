@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxvar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:13:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:35:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,7 +211,7 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
     xub_Unicode cType = ' ';
     XubString aTmp( maName );
     // Kurzer Typ? Dann holen, evtl. ist dieser 0.
-    short et = GetType();
+    SbxDataType et = GetType();
     if( t == SbxNAME_SHORT_TYPES )
     {
         if( et <= SbxSTRING )
@@ -223,7 +223,7 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
     for( USHORT i = 0; i < pInfo->aParams.Count(); i++ )
     {
         const SbxParamInfo* q = pInfo->aParams.GetObject( i );
-        short nt = q->eType & 0x0FFF;
+        int nt = q->eType & 0x0FFF;
         if( i )
             aTmp += ',';
         if( q->nFlags & SBX_OPTIONAL )
@@ -253,7 +253,8 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
             {
                 aTmp += SbxRes( STRING_AS );
                 if( nt < 32 )
-                    aTmp += SbxRes( STRING_TYPES + nt );
+                    aTmp += SbxRes(
+                        sal::static_int_cast< USHORT >( STRING_TYPES + nt ) );
                 else
                     aTmp += SbxRes( STRING_ANY );
             }
@@ -265,7 +266,8 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
     {
         aTmp += SbxRes( STRING_AS );
         if( et < 32 )
-            aTmp += SbxRes( STRING_TYPES + et );
+            aTmp += SbxRes(
+                sal::static_int_cast< USHORT >( STRING_TYPES + et ) );
         else
             aTmp += SbxRes( STRING_ANY );
     }
@@ -289,7 +291,7 @@ USHORT SbxVariable::MakeHashCode( const XubString& rName )
         // Falls wir ein Schweinezeichen haben, abbrechen!!
         if( c >= 0x80 )
             return 0;
-        n = ( n << 3 ) + toupper( c );
+        n = sal::static_int_cast< USHORT >( ( n << 3 ) + toupper( c ) );
     }
     return n;
 }
