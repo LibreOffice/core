@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:13:00 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:53:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -973,8 +973,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             {
 
                 TextContentAnchorType eNew;
-                if( XMLAnchorTypePropHdl::convert( rValue,
-                            GetImport().GetMM100UnitConverter(), eNew ) &&
+                if( XMLAnchorTypePropHdl::convert( rValue, eNew ) &&
                     ( TextContentAnchorType_AT_PARAGRAPH == eNew ||
                       TextContentAnchorType_AT_CHARACTER == eNew ||
                       TextContentAnchorType_AS_CHARACTER == eNew ||
@@ -1435,7 +1434,7 @@ XMLTextFrameContext::XMLTextFrameContext(
         {
             TextContentAnchorType eNew;
             if( XMLAnchorTypePropHdl::convert( xAttrList->getValueByIndex(i),
-                        GetImport().GetMM100UnitConverter(), eNew ) &&
+                        eNew ) &&
                 ( TextContentAnchorType_AT_PARAGRAPH == eNew ||
                   TextContentAnchorType_AT_CHARACTER == eNew ||
                   TextContentAnchorType_AS_CHARACTER == eNew ||
