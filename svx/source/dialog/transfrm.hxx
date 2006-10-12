@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfrm.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:36:19 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:32:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,9 @@ public:
 
 class SvxPositionSizeTabPage : public SvxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 private:
     // position
     FixedLine           maFlPosition;
@@ -195,6 +198,9 @@ public:
 \************************************************************************/
 class SvxAngleTabPage : public SvxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 private:
     FixedLine           aFlPosition;
     FixedText           aFtPosX;
@@ -248,6 +254,9 @@ public:
 \************************************************************************/
 class SvxSlantTabPage : public SvxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 private:
     FixedLine           aFlRadius;
     FixedText           aFtRadius;
