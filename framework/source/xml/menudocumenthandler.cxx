@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menudocumenthandler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:30:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:44:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -408,7 +408,7 @@ throw( SAXException, RuntimeException )
         if ( xSubItemContainer.is() )
         {
             // read attributes for menu
-            for ( int i=0; i< xAttrList->getLength(); i++ )
+            for ( sal_Int16 i=0; i< xAttrList->getLength(); i++ )
             {
                 OUString aName = xAttrList->getNameByIndex( i );
                 OUString aValue = xAttrList->getValueByIndex( i );
@@ -632,7 +632,7 @@ throw( SAXException, RuntimeException )
             xSubItemContainer = Reference< XIndexContainer >( m_xContainerFactory->createInstanceWithContext( xComponentContext ), UNO_QUERY );
 
         // read attributes for menu
-        for ( int i=0; i< xAttrList->getLength(); i++ )
+        for ( sal_Int16 i=0; i< xAttrList->getLength(); i++ )
         {
             OUString aName = xAttrList->getNameByIndex( i );
             OUString aValue = xAttrList->getValueByIndex( i );
@@ -678,7 +678,7 @@ throw( SAXException, RuntimeException )
         OUString aLabel;
 
         // read attributes for menu item
-        for ( int i=0; i< xAttrList->getLength(); i++ )
+        for ( sal_Int16 i=0; i< xAttrList->getLength(); i++ )
         {
             OUString aName = xAttrList->getNameByIndex( i );
             OUString aValue = xAttrList->getValueByIndex( i );

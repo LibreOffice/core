@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusbardocumenthandler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:31:26 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:44:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,7 +310,7 @@ throw(  SAXException, RuntimeException )
                 sal_Bool    bCommandURL( sal_False );
 
                 m_bStatusBarItemStartFound = sal_True;
-                for ( int n = 0; n < xAttribs->getLength(); n++ )
+                for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
                 {
                     pStatusBarEntry = m_aStatusBarMap.find( xAttribs->getNameByIndex( n ) );
                     if ( pStatusBarEntry != m_aStatusBarMap.end() )
