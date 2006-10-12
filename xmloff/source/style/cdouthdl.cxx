@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cdouthdl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:52:42 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:48:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,13 +121,12 @@ XMLCrossedOutTypePropHdl::~XMLCrossedOutTypePropHdl()
     // nothing to do
 }
 
-sal_Bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
     sal_uInt16 eNewStrikeout;
-
-    if( ( bRet = rUnitConverter.convertEnum( eNewStrikeout, rStrImpValue,
-                                             pXML_CrossedoutType_Enum ) ) )
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum(
+        eNewStrikeout, rStrImpValue, pXML_CrossedoutType_Enum );
+    if( bRet )
     {
         // multi property: style and width might be set already.
         // If the old value is NONE, the new is used unchanged.
@@ -173,7 +172,7 @@ sal_Bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno:
     return bRet;
 }
 
-sal_Bool XMLCrossedOutTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCrossedOutTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
     sal_Int16 nValue = sal_Int16();
@@ -181,7 +180,9 @@ sal_Bool XMLCrossedOutTypePropHdl::exportXML( OUString& rStrExpValue, const uno:
 
     if( (rValue >>= nValue) && FontStrikeout::DOUBLE==nValue )
     {
-        if( ( bRet = rUnitConverter.convertEnum( aOut, (sal_uInt16)nValue, pXML_CrossedoutType_Enum ) ) )
+        bRet = SvXMLUnitConverter::convertEnum(
+            aOut, (sal_uInt16)nValue, pXML_CrossedoutType_Enum );
+        if( bRet )
             rStrExpValue = aOut.makeStringAndClear();
     }
 
@@ -198,13 +199,12 @@ XMLCrossedOutStylePropHdl::~XMLCrossedOutStylePropHdl()
     // nothing to do
 }
 
-sal_Bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
     sal_uInt16 eNewStrikeout;
-
-    if( ( bRet = rUnitConverter.convertEnum( eNewStrikeout, rStrImpValue,
-                                             pXML_CrossedoutStyle_Enum ) ) )
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum(
+        eNewStrikeout, rStrImpValue, pXML_CrossedoutStyle_Enum );
+    if( bRet )
     {
         // multi property: style and width might be set already.
         // If the old value is NONE, the new is used unchanged.
@@ -223,7 +223,7 @@ sal_Bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno
     return bRet;
 }
 
-sal_Bool XMLCrossedOutStylePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCrossedOutStylePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
     sal_Int16 nValue = sal_Int16();
@@ -231,8 +231,9 @@ sal_Bool XMLCrossedOutStylePropHdl::exportXML( OUString& rStrExpValue, const uno
 
     if( rValue >>= nValue )
     {
-        if( ( bRet = rUnitConverter.convertEnum( aOut, (sal_uInt16)nValue,
-                                                 pXML_CrossedoutStyle_Enum ) ) )
+        bRet = SvXMLUnitConverter::convertEnum(
+            aOut, (sal_uInt16)nValue, pXML_CrossedoutStyle_Enum );
+        if( bRet )
             rStrExpValue = aOut.makeStringAndClear();
     }
 
@@ -249,13 +250,12 @@ XMLCrossedOutWidthPropHdl::~XMLCrossedOutWidthPropHdl()
     // nothing to do
 }
 
-sal_Bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
     sal_uInt16 eNewStrikeout;
-
-    if( ( bRet = rUnitConverter.convertEnum( eNewStrikeout, rStrImpValue,
-                                             pXML_CrossedoutWidth_Enum ) ) )
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum(
+        eNewStrikeout, rStrImpValue, pXML_CrossedoutWidth_Enum );
+    if( bRet )
     {
         // multi property: style and width might be set already.
         // If the old value is NONE, the new is used unchanged.
@@ -295,7 +295,7 @@ sal_Bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno
     return bRet;
 }
 
-sal_Bool XMLCrossedOutWidthPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCrossedOutWidthPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
     sal_Int16 nValue = sal_Int16();
@@ -303,8 +303,9 @@ sal_Bool XMLCrossedOutWidthPropHdl::exportXML( OUString& rStrExpValue, const uno
 
     if( (rValue >>= nValue) && (FontStrikeout::BOLD == nValue) )
     {
-        if( ( bRet = rUnitConverter.convertEnum( aOut, (sal_uInt16)nValue,
-                                                 pXML_CrossedoutWidth_Enum ) ) )
+        bRet = SvXMLUnitConverter::convertEnum(
+            aOut, (sal_uInt16)nValue, pXML_CrossedoutWidth_Enum );
+        if( bRet )
             rStrExpValue = aOut.makeStringAndClear();
     }
 

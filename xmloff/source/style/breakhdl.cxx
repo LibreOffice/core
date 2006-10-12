@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakhdl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:52:28 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:47:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,24 +88,32 @@ XMLFmtBreakBeforePropHdl::~XMLFmtBreakBeforePropHdl()
     // Nothing to do
 }
 
-sal_Bool XMLFmtBreakBeforePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLFmtBreakBeforePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
-    style::BreakType eBreak = style::BreakType_NONE;
     sal_uInt16 nEnum;
-
-    if( ( bRet = rUnitConverter.convertEnum( nEnum, rStrImpValue, pXML_BreakTypes ) ) )
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum( nEnum, rStrImpValue, pXML_BreakTypes );
+    if( bRet )
     {
-        if( nEnum != 0 )
-            eBreak = ( nEnum == 1 ) ? style::BreakType_COLUMN_BEFORE : style::BreakType_PAGE_BEFORE;
-
+        style::BreakType eBreak;
+        switch ( nEnum )
+        {
+        case 0:
+            eBreak = style::BreakType_NONE;
+            break;
+        case 1:
+            eBreak = style::BreakType_COLUMN_BEFORE;
+            break;
+        default:
+            eBreak = style::BreakType_PAGE_BEFORE;
+            break;
+        }
         rValue <<= eBreak;
     }
 
     return bRet;
 }
 
-sal_Bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     style::BreakType eBreak;
 
@@ -135,7 +143,7 @@ sal_Bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno:
     }
 
     OUStringBuffer aOut;
-    /* sal_Bool bOk = */ rUnitConverter.convertEnum( aOut, nEnum, pXML_BreakTypes );
+    /* sal_Bool bOk = */ SvXMLUnitConverter::convertEnum( aOut, nEnum, pXML_BreakTypes );
     rStrExpValue = aOut.makeStringAndClear();
 
     return sal_True;
@@ -151,24 +159,32 @@ XMLFmtBreakAfterPropHdl::~XMLFmtBreakAfterPropHdl()
     // Nothing to do
 }
 
-sal_Bool XMLFmtBreakAfterPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLFmtBreakAfterPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
-    style::BreakType eBreak = style::BreakType_NONE;
     sal_uInt16 nEnum;
-
-    if( ( bRet = rUnitConverter.convertEnum( nEnum, rStrImpValue, pXML_BreakTypes ) ) )
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum( nEnum, rStrImpValue, pXML_BreakTypes );
+    if( bRet )
     {
-        if( nEnum != 0 )
-            eBreak = ( nEnum == 1 ) ? style::BreakType_COLUMN_AFTER : style::BreakType_PAGE_AFTER;
-
+        style::BreakType eBreak;
+        switch ( nEnum )
+        {
+        case 0:
+            eBreak = style::BreakType_NONE;
+            break;
+        case 1:
+            eBreak = style::BreakType_COLUMN_AFTER;
+            break;
+        default:
+            eBreak = style::BreakType_PAGE_AFTER;
+            break;
+        }
         rValue <<= eBreak;
     }
 
     return bRet;
 }
 
-sal_Bool XMLFmtBreakAfterPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLFmtBreakAfterPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     style::BreakType eBreak;
 
@@ -198,7 +214,7 @@ sal_Bool XMLFmtBreakAfterPropHdl::exportXML( OUString& rStrExpValue, const uno::
     }
 
     OUStringBuffer aOut;
-    /* sal_Bool bOk = */ rUnitConverter.convertEnum( aOut, nEnum, pXML_BreakTypes );
+    /* sal_Bool bOk = */ SvXMLUnitConverter::convertEnum( aOut, nEnum, pXML_BreakTypes );
     rStrExpValue = aOut.makeStringAndClear();
 
     return sal_True;

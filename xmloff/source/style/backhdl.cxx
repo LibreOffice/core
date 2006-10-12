@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backhdl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:52:01 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:47:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ XMLBackGraphicPositionPropHdl::~XMLBackGraphicPositionPropHdl()
     // Nothing to do
 }
 
-sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter )
+sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& )
 {
     sal_Bool bRet = sal_True;
     style::GraphicLocation ePos = style::GraphicLocation_NONE, eTmp;
@@ -110,7 +110,7 @@ sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue,
         else if( -1 != aToken.indexOf( sal_Unicode('%') ) )
         {
             sal_Int32 nPrc = 50;
-            if( rUnitConverter.convertPercent( nPrc, aToken ) )
+            if( SvXMLUnitConverter::convertPercent( nPrc, aToken ) )
             {
                 if( !bHori )
                 {
@@ -143,7 +143,7 @@ sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue,
             else
                 ePos = style::GraphicLocation_MIDDLE_MIDDLE;
         }
-        else if( rUnitConverter.convertEnum( nTmp, aToken, pXML_BrushHorizontalPos ) )
+        else if( SvXMLUnitConverter::convertEnum( nTmp, aToken, pXML_BrushHorizontalPos ) )
         {
             if( bVert )
                 MergeXMLHoriPos( ePos, (style::GraphicLocation)nTmp );
@@ -154,7 +154,7 @@ sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue,
 
             bHori = sal_True;
         }
-        else if( rUnitConverter.convertEnum( nTmp, aToken, pXML_BrushVerticalPos ) )
+        else if( SvXMLUnitConverter::convertEnum( nTmp, aToken, pXML_BrushVerticalPos ) )
         {
             if( bHori )
                 MergeXMLVertPos( ePos, (style::GraphicLocation)nTmp );

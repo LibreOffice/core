@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chrhghdl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:52:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:48:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,13 +122,13 @@ XMLCharHeightPropHdl::~XMLCharHeightPropHdl()
     // nothing to do
 }
 
-sal_Bool XMLCharHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCharHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nPrc = 100;
 
     if( rStrImpValue.indexOf( sal_Unicode('%') ) != -1 )
     {
-        if( rUnitConverter.convertPercent( nPrc, rStrImpValue ) )
+        if( SvXMLUnitConverter::convertPercent( nPrc, rStrImpValue ) )
         {
             rValue <<= (sal_Int16)nPrc;
             return sal_True;
@@ -138,14 +138,14 @@ sal_Bool XMLCharHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any
     return sal_False;
 }
 
-sal_Bool XMLCharHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCharHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut( rStrExpValue );
 
     sal_Int16 nValue = sal_Int16();
     if( rValue >>= nValue )
     {
-        rUnitConverter.convertPercent( aOut, nValue );
+        SvXMLUnitConverter::convertPercent( aOut, nValue );
     }
 
     rStrExpValue = aOut.makeStringAndClear();
