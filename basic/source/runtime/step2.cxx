@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:07:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:31:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -435,104 +435,108 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             pPar->Put( NULL, 0 );
     }
     // Index-Access bei UnoObjekten beruecksichtigen
-    else if( pElem->GetType() == SbxOBJECT && !pElem->ISA(SbxMethod) && (pPar = pElem->GetParameters()) )
+    else if( pElem->GetType() == SbxOBJECT && !pElem->ISA(SbxMethod) )
     {
-        // Ist es ein Uno-Objekt?
-        SbxBaseRef pObj = (SbxBase*)pElem->GetObject();
-        if( pObj )
+        pPar = pElem->GetParameters();
+        if ( pPar )
         {
-            if( pObj->ISA(SbUnoObject) )
+            // Ist es ein Uno-Objekt?
+            SbxBaseRef pObj = (SbxBase*)pElem->GetObject();
+            if( pObj )
             {
-                SbUnoObject* pUnoObj = (SbUnoObject*)(SbxBase*)pObj;
-                Any aAny = pUnoObj->getUnoAny();
-
-                if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
+                if( pObj->ISA(SbUnoObject) )
                 {
-                    Reference< XInterface > x = *(Reference< XInterface >*)aAny.getValue();
-                    Reference< XIndexAccess > xIndexAccess( x, UNO_QUERY );
-                    if ( !SbiRuntime::isVBAEnabled() )
+                    SbUnoObject* pUnoObj = (SbUnoObject*)(SbxBase*)pObj;
+                    Any aAny = pUnoObj->getUnoAny();
+
+                    if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
                     {
-                        // Haben wir Index-Access?
-                        if( xIndexAccess.is() )
+                        Reference< XInterface > x = *(Reference< XInterface >*)aAny.getValue();
+                        Reference< XIndexAccess > xIndexAccess( x, UNO_QUERY );
+                        if ( !SbiRuntime::isVBAEnabled() )
                         {
-                            UINT32 nParamCount = (UINT32)pPar->Count() - 1;
-                            if( nParamCount != 1 )
+                            // Haben wir Index-Access?
+                            if( xIndexAccess.is() )
                             {
-                                StarBASIC::Error( SbERR_BAD_ARGUMENT );
-                                return pElem;
-                            }
+                                UINT32 nParamCount = (UINT32)pPar->Count() - 1;
+                                if( nParamCount != 1 )
+                                {
+                                    StarBASIC::Error( SbERR_BAD_ARGUMENT );
+                                    return pElem;
+                                }
 
-                            // Index holen
-                            INT32 nIndex = pPar->Get( 1 )->GetLong();
-                            Reference< XInterface > xRet;
-                            try
-                            {
-                                Any aAny2 = xIndexAccess->getByIndex( nIndex );
-                                TypeClass eType = aAny2.getValueType().getTypeClass();
-                                if( eType == TypeClass_INTERFACE )
-                                    xRet = *(Reference< XInterface >*)aAny2.getValue();
-                            }
-                            catch (IndexOutOfBoundsException& e1)
-                            {
-                                // Bei Exception erstmal immer von Konvertierungs-Problem ausgehen
-                                StarBASIC::Error( SbERR_OUT_OF_RANGE );
-                            }
+                                // Index holen
+                                INT32 nIndex = pPar->Get( 1 )->GetLong();
+                                Reference< XInterface > xRet;
+                                try
+                                {
+                                    Any aAny2 = xIndexAccess->getByIndex( nIndex );
+                                    TypeClass eType = aAny2.getValueType().getTypeClass();
+                                    if( eType == TypeClass_INTERFACE )
+                                        xRet = *(Reference< XInterface >*)aAny2.getValue();
+                                }
+                                catch (IndexOutOfBoundsException&)
+                                {
+                                    // Bei Exception erstmal immer von Konvertierungs-Problem ausgehen
+                                    StarBASIC::Error( SbERR_OUT_OF_RANGE );
+                                }
 
-                            // #57847 Immer neue Variable anlegen, sonst Fehler
-                            // durch PutObject(NULL) bei ReadOnly-Properties.
-                            pElem = new SbxVariable( SbxVARIANT );
-                            if( xRet.is() )
-                            {
-                                aAny <<= xRet;
+                                // #57847 Immer neue Variable anlegen, sonst Fehler
+                                // durch PutObject(NULL) bei ReadOnly-Properties.
+                                pElem = new SbxVariable( SbxVARIANT );
+                                if( xRet.is() )
+                                {
+                                    aAny <<= xRet;
 
-                                // #67173 Kein Namen angeben, damit echter Klassen-Namen eintragen wird
-                                String aName;
-                                SbxObjectRef xWrapper = (SbxObject*)new SbUnoObject( aName, aAny );
-                                pElem->PutObject( xWrapper );
-                            }
-                            else
-                            {
-                                pElem->PutObject( NULL );
+                                    // #67173 Kein Namen angeben, damit echter Klassen-Namen eintragen wird
+                                    String aName;
+                                    SbxObjectRef xWrapper = (SbxObject*)new SbUnoObject( aName, aAny );
+                                    pElem->PutObject( xWrapper );
+                                }
+                                else
+                                {
+                                    pElem->PutObject( NULL );
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        rtl::OUString sDefaultMethod;
-
-                        Reference< XDefaultMethod > xDfltMethod( x, UNO_QUERY );
-
-                        if ( xDfltMethod.is() )
-                            sDefaultMethod = xDfltMethod->getName();
-                        else if( xIndexAccess.is() )
-                            sDefaultMethod = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getByIndex" ) );
-
-                        if ( sDefaultMethod.getLength() )
+                        else
                         {
-                            SbxVariable* meth = pUnoObj->Find( sDefaultMethod, SbxCLASS_METHOD );
-                            SbxVariableRef refTemp = meth;
-                            if ( refTemp )
-                            {
-                                meth->SetParameters( pPar );
-                                SbxVariable* pNew = new SbxMethod( *(SbxMethod*)pMeth );
-                                pElem = pNew;
-                            }
+                            rtl::OUString sDefaultMethod;
 
+                            Reference< XDefaultMethod > xDfltMethod( x, UNO_QUERY );
+
+                            if ( xDfltMethod.is() )
+                                sDefaultMethod = xDfltMethod->getName();
+                            else if( xIndexAccess.is() )
+                                sDefaultMethod = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getByIndex" ) );
+
+                            if ( sDefaultMethod.getLength() )
+                            {
+                                SbxVariable* meth = pUnoObj->Find( sDefaultMethod, SbxCLASS_METHOD );
+                                SbxVariableRef refTemp = meth;
+                                if ( refTemp )
+                                {
+                                    meth->SetParameters( pPar );
+                                    SbxVariable* pNew = new SbxMethod( *(SbxMethod*)pMeth );
+                                    pElem = pNew;
+                                }
+
+                            }
                         }
+
+
                     }
 
-
+                    // #42940, 0.Parameter zu NULL setzen, damit sich Var nicht selbst haelt
+                    pPar->Put( NULL, 0 );
                 }
-
-                // #42940, 0.Parameter zu NULL setzen, damit sich Var nicht selbst haelt
-                pPar->Put( NULL, 0 );
-            }
-            else if( pObj->ISA(BasicCollection) )
-            {
-                BasicCollection* pCol = (BasicCollection*)(SbxBase*)pObj;
-                pElem = new SbxVariable( SbxVARIANT );
-                pPar->Put( pElem, 0 );
-                pCol->CollItem( pPar );
+                else if( pObj->ISA(BasicCollection) )
+                {
+                    BasicCollection* pCol = (BasicCollection*)(SbxBase*)pObj;
+                    pElem = new SbxVariable( SbxVARIANT );
+                    pPar->Put( pElem, 0 );
+                    pCol->CollItem( pPar );
+                }
             }
         }
     }
@@ -626,22 +630,26 @@ void SbiRuntime::StepPARAM( USHORT nOp1, USHORT nOp2 )
     {
         // Wenn ein Parameter fehlt, kann er OPTIONAL sein
         BOOL bOpt = FALSE;
-        SbxInfo* pInfo;
-        if( pMeth && ( pInfo = pMeth->GetInfo() ) )
+        if( pMeth )
         {
-            const SbxParamInfo* pParam = pInfo->GetParam( i );
-            if( pParam && ( (pParam->nFlags & SBX_OPTIONAL) != 0 ) )
+            SbxInfo* pInfo = pMeth->GetInfo();
+            if ( pInfo )
             {
-                // Default value?
-                USHORT nDefaultId = (pParam->nUserData & 0xffff );
-                if( nDefaultId > 0 )
+                const SbxParamInfo* pParam = pInfo->GetParam( i );
+                if( pParam && ( (pParam->nFlags & SBX_OPTIONAL) != 0 ) )
                 {
-                    String aDefaultStr = pImg->GetString( nDefaultId );
-                    p = new SbxVariable();
-                    p->PutString( aDefaultStr );
-                    refParams->Put( p, i );
+                    // Default value?
+                    USHORT nDefaultId = sal::static_int_cast< USHORT >(
+                        pParam->nUserData & 0xffff );
+                    if( nDefaultId > 0 )
+                    {
+                        String aDefaultStr = pImg->GetString( nDefaultId );
+                        p = new SbxVariable();
+                        p->PutString( aDefaultStr );
+                        refParams->Put( p, i );
+                    }
+                    bOpt = TRUE;
                 }
-                bOpt = TRUE;
             }
         }
         if( bOpt == FALSE )
@@ -766,7 +774,7 @@ void SbiRuntime::StepSTMNT( USHORT nOp1, USHORT nOp2 )
         // (Bei Sprüngen aus Schleifen tritt hier eine Differenz auf)
         USHORT nExspectedForLevel = nOp2 / 0x100;
         if( pGosubStk )
-            nExspectedForLevel += pGosubStk->nStartForLvl;
+            nExspectedForLevel = nExspectedForLevel + pGosubStk->nStartForLvl;
 
         // Wenn der tatsaechliche For-Level zu klein ist, wurde aus
         // einer Schleife heraus gesprungen -> korrigieren
