@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:22:05 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:43:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,8 +338,8 @@ MenuBarManager::MenuBarManager(
 
     Reference< XStatusListener > xStatusListener;
     Reference< XDispatch > xDispatch;
-    int nItemCount = pAddonMenu->GetItemCount();
-    for ( int i = 0; i < nItemCount; i++ )
+    USHORT nItemCount = pAddonMenu->GetItemCount();
+    for ( USHORT i = 0; i < nItemCount; i++ )
     {
         USHORT nItemId = pAddonMenu->GetItemId( i );
 
@@ -425,8 +425,8 @@ MenuBarManager::MenuBarManager(
 
     Reference< XDispatch > xDispatch;
     Reference< XStatusListener > xStatusListener;
-    int nItemCount = pAddonPopupMenu->GetItemCount();
-    for ( int i = 0; i < nItemCount; i++ )
+    USHORT nItemCount = pAddonPopupMenu->GetItemCount();
+    for ( USHORT i = 0; i < nItemCount; i++ )
     {
         USHORT nItemId = pAddonPopupMenu->GetItemId( i );
 
@@ -1601,8 +1601,8 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
 
     String      aEmpty;
     sal_Bool    bAccessibilityEnabled( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() );
-    int nItemCount = pMenu->GetItemCount();
-    for ( int i = 0; i < nItemCount; i++ )
+    USHORT nItemCount = pMenu->GetItemCount();
+    for ( USHORT i = 0; i < nItemCount; i++ )
     {
         USHORT nItemId = pMenu->GetItemId( i );
 
