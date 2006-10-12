@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtextedt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:49:23 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:16:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,7 @@ BOOL ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
         aStartPaM = aSel.GetStart();
     }
 
-    BOOL bFound = FALSE;
+    bool bFound = false;
     ULONG nStartNode, nEndNode;
 
     if ( bSearchInSelection )
@@ -234,7 +234,7 @@ BOOL ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
                 else
                 {
                     rSel.GetEnd().GetIndex() = nStartPos;
-                    bFound = FALSE;
+                    bFound = false;
                 }
             }
 
