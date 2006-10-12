@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgrid.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:12:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:46:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ class SVX_DLLPUBLIC SvxGridItem : public SvxOptionsGrid, public SfxPoolItem
     friend class SvxGridTabPage;
 
 public:
-    SvxGridItem( USHORT nWhich) : SfxPoolItem(nWhich){};
+    SvxGridItem( USHORT _nWhich) : SfxPoolItem(_nWhich){};
     SvxGridItem( const SvxGridItem& pTestItem );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
@@ -127,6 +127,9 @@ public:
 
 class SVX_DLLPUBLIC SvxGridTabPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 public:
     SvxGridTabPage( Window* pParent, const SfxItemSet& rSet );
 
@@ -182,7 +185,7 @@ protected:
 
 private:
     BOOL                bAttrModified;
-    BOOL                bEqualGrid; // Neu
+//  BOOL                bEqualGrid; // Neu
 
 #ifdef _SVX_OPTGRID_CXX
     DECL_LINK( ClickRotateHdl_Impl, void * );
