@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:44:03 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:22:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,7 +265,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
         {
             nBufSize = GetBitmapBits( aMedium.hBitmap, 0, NULL );
             pBuf = new unsigned char[nBufSize];
-            if ( nBufSize && nBufSize == GetBitmapBits( aMedium.hBitmap, nBufSize, pBuf ) )
+            if ( nBufSize && nBufSize == sal::static_int_cast< ULONG >( GetBitmapBits( aMedium.hBitmap, nBufSize, pBuf ) ) )
             {
                 if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", 54 ) )
                 {
@@ -505,7 +505,6 @@ void OleComponent::CreateNewIStorage_Impl()
 uno::Sequence< datatransfer::DataFlavor > OleComponentNative_Impl::GetFlavorsForAspects( sal_uInt32 nSupportedAspects )
 {
     uno::Sequence< datatransfer::DataFlavor > aResult;
-    const sal_uInt32 nAspects[4] = { DVASPECT_CONTENT, DVASPECT_THUMBNAIL, DVASPECT_ICON, DVASPECT_DOCPRINT };
     for ( sal_uInt32 nAsp = 1; nAsp <= 8; nAsp *= 2 )
         if ( ( nSupportedAspects & nAsp ) == nAsp )
         {
@@ -745,7 +744,7 @@ void OleComponent::CreateNewEmbeddedObject( const uno::Sequence< sal_Int8 >& aSe
 }
 
 //----------------------------------------------
-void OleComponent::CreateObjectFromData( const uno::Reference< datatransfer::XTransferable >& xTransfer )
+void OleComponent::CreateObjectFromData( const uno::Reference< datatransfer::XTransferable >& )
 // Static objects are not supported, they should be inserted as graphics
 {
     // TODO: May be this call is useless since there are no static objects
@@ -1015,8 +1014,8 @@ void OleComponent::ExecuteVerb( sal_Int32 nVerbID )
 }
 
 //----------------------------------------------
-void OleComponent::SetHostName( const ::rtl::OUString& aContName,
-                                const ::rtl::OUString& aEmbDocName )
+void OleComponent::SetHostName( const ::rtl::OUString&,
+                                const ::rtl::OUString& )
 {
     if ( !m_pNativeImpl->m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
@@ -1293,7 +1292,7 @@ sal_Bool OleComponent::SaveObject_Impl()
 }
 
 //----------------------------------------------
-sal_Bool OleComponent::OnShowWindow_Impl( sal_Bool bShow )
+sal_Bool OleComponent::OnShowWindow_Impl( bool bShow )
 {
     sal_Bool bResult = sal_False;
     OleEmbeddedObject* pLockObject = NULL;
@@ -1318,7 +1317,7 @@ sal_Bool OleComponent::OnShowWindow_Impl( sal_Bool bShow )
 }
 
 //----------------------------------------------
-void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
+void OleComponent::OnViewChange_Impl( sal_uInt32 )
 {
     // TODO: check if it is enough or may be saving notifications are required for Visio2000
     OleEmbeddedObject* pLockObject = NULL;
@@ -1340,41 +1339,6 @@ void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
 
         pLockObject->release();
     }
-}
-
-//----------------------------------------------
-sal_Bool OleComponent::GetGraphicalCache_Impl( const datatransfer::DataFlavor& aFlavor, uno::Any& aResult )
-{
-    sal_Bool bOk = sal_False;
-    if ( m_pNativeImpl->m_pIStorage )
-    {
-        // try to retrieve cached representation
-        // TODO: in future it must be converted to requested format
-        for ( sal_uInt8 nInd = 0; nInd < 10; nInd++ )
-        {
-            CComPtr< IStream > pGrStream;
-            ::rtl::OUString aStreamName = ::rtl::OUString::createFromAscii( "\002OlePres00" );
-            aStreamName += ::rtl::OUString::valueOf( nInd );
-            HRESULT hr = m_pNativeImpl->m_pIStorage->OpenStream( aStreamName.getStr(),
-                                                    NULL,
-                                                    STGM_READ,
-                                                    NULL,
-                                                    &pGrStream );
-            if ( FAILED( hr ) || !pGrStream )
-                break;
-
-            // TODO: check that the format is acceptable
-            //       if so - break
-
-
-            // create XInputStream ( for now SvStream ) with graphical representation
-            // try to generate a Metafile or Bitmap from it
-            // convert the result representation to requested format
-            // if ( succeeded ) ( bOk = sal_True ), break;
-        }
-    }
-
-    return bOk;
 }
 
 // XCloseable
@@ -1510,12 +1474,15 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
                 aFormat.dwAspect = nRequestedAspect;
 
                 hr = pDataObject->GetData( &aFormat, &aMedium );
-                if ( SUCCEEDED( hr )
-                  && ( bSupportedFlavor = m_pNativeImpl->ConvertDataForFlavor( aMedium, aFlavor, aResult ) ) )
+                if ( SUCCEEDED( hr ) )
                 {
-                    // TODO/LATER: bring the optimization back when other aspects are supported
-                    // m_pNativeImpl->AddSupportedFormat( aFormat );
-                    break;
+                    bSupportedFlavor = m_pNativeImpl->ConvertDataForFlavor( aMedium, aFlavor, aResult );
+                    if ( bSupportedFlavor )
+                    {
+                        // TODO/LATER: bring the optimization back when other aspects are supported
+                        // m_pNativeImpl->AddSupportedFormat( aFormat );
+                        break;
+                    }
                 }
             }
         }
