@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxdbl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:09:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:33:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ double ImpGetDouble( const SbxValues* p )
         case SbxCURRENCY:
             nRes = ImpCurrencyToDouble( p->nLong64 ); break;
         case SbxSALINT64:
-            nRes = p->nInt64; break;
+            nRes = static_cast< double >(p->nInt64); break;
         case SbxSALUINT64:
             nRes = ImpSalUInt64ToDouble( p->uInt64 ); break;
         case SbxDECIMAL:
@@ -132,7 +132,7 @@ double ImpGetDouble( const SbxValues* p )
         case SbxBYREF | SbxCURRENCY:
             nRes = ImpCurrencyToDouble( *p->pLong64 ); break;
         case SbxBYREF | SbxSALINT64:
-            nRes = *p->pnInt64; break;
+            nRes = static_cast< double >(*p->pnInt64); break;
         case SbxBYREF | SbxSALUINT64:
             nRes = ImpSalUInt64ToDouble( *p->puInt64 ); break;
 

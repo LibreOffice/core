@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxsng.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:11:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:33:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,19 +98,23 @@ start:
 
             if( dVal > SbxMAXSNG )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMAXSNG;
+                SbxBase::SetError( SbxERR_OVERFLOW );
+                nRes = static_cast< float >(SbxMAXSNG);
             }
             else if( dVal < SbxMINSNG )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMINSNG;
+                SbxBase::SetError( SbxERR_OVERFLOW );
+                nRes = static_cast< float >(SbxMINSNG);
             }
             else if( dVal > 0 && dVal < SbxMAXSNG2 )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMAXSNG2;
+                SbxBase::SetError( SbxERR_OVERFLOW );
+                nRes = static_cast< float >(SbxMAXSNG2);
             }
             else if( dVal < 0 && dVal > SbxMINSNG2 )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMINSNG2;
+                SbxBase::SetError( SbxERR_OVERFLOW );
+                nRes = static_cast< float >(SbxMINSNG2);
             }
             else
                 nRes = (float) dVal;
@@ -129,11 +133,13 @@ start:
                     nRes = 0;
                 else if( d > SbxMAXSNG )
                 {
-                    SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMAXSNG;
+                    SbxBase::SetError( SbxERR_OVERFLOW );
+                    nRes = static_cast< float >(SbxMAXSNG);
                 }
                 else if( d < SbxMINSNG )
                 {
-                    SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMINSNG;
+                    SbxBase::SetError( SbxERR_OVERFLOW );
+                    nRes = static_cast< float >(SbxMINSNG);
                 }
                 else
                     nRes = (float) d;
@@ -299,25 +305,39 @@ start:
             }
             *p->pUShort = (UINT16) n; break;
         case SbxBYREF | SbxLONG:
+        {
+            INT32 i;
             if( n > SbxMAXLNG )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXLNG;
+                SbxBase::SetError( SbxERR_OVERFLOW ); i = SbxMAXLNG;
             }
             else if( n < SbxMINLNG )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMINLNG;
+                SbxBase::SetError( SbxERR_OVERFLOW ); i = SbxMINLNG;
             }
-            *p->pLong = (INT32) n; break;
+            else
+            {
+                i = sal::static_int_cast< INT32 >(n);
+            }
+            *p->pLong = i; break;
+        }
         case SbxBYREF | SbxULONG:
+        {
+            UINT32 i;
             if( n > SbxMAXULNG )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXULNG;
+                SbxBase::SetError( SbxERR_OVERFLOW ); i = SbxMAXULNG;
             }
             else if( n < 0 )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = 0;
+                SbxBase::SetError( SbxERR_OVERFLOW ); i = 0;
             }
-            *p->pULong = (UINT32) n; break;
+            else
+            {
+                i = sal::static_int_cast< UINT32 >(n);
+            }
+            *p->pULong = i; break;
+        }
         case SbxBYREF | SbxSINGLE:
             *p->pSingle = n; break;
         case SbxBYREF | SbxDATE:
@@ -328,15 +348,20 @@ start:
         case SbxBYREF | SbxSALUINT64:
             *p->puInt64 = ImpDoubleToSalUInt64( (double) n ); break;
         case SbxBYREF | SbxCURRENCY:
+            double d;
             if( n > SbxMAXCURR )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXCURR;
+                SbxBase::SetError( SbxERR_OVERFLOW ); d = SbxMAXCURR;
             }
             else if( n < SbxMINCURR )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMINCURR;
+                SbxBase::SetError( SbxERR_OVERFLOW ); d = SbxMINCURR;
             }
-            *p->pLong64 = ImpDoubleToCurrency( (double)n ); break;
+            else
+            {
+                d = n;
+            }
+            *p->pLong64 = ImpDoubleToCurrency( n ); break;
 
         default:
             SbxBase::SetError( SbxERR_CONVERSION );
