@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:31:26 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:21:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,6 +223,8 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1741,7 +1743,7 @@ inline ::rtl::OString getDllURL( void )
 {
 //    ::rtl::OUString libPath(rtl::OUString::createFromAscii("libcui680li.so"));
     ::rtl::OUString dirPath/*dllPath, */;
-    osl::Module::getUrlFromAddress((void*)&getDllURL, dirPath);
+    osl::Module::getUrlFromAddress(reinterpret_cast< oslGenericFunction >(getDllURL), dirPath);
     dirPath = dirPath.copy(0, dirPath.lastIndexOf('/'));
 //    osl::FileBase::getAbsoluteFileURL(dirPath, libPath, dllPath);
     ::rtl::OUString sysDirPath;
@@ -2062,7 +2064,9 @@ IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
 {
     if ( &aMailerURLPB == pButton && !pImpl->aMailConfig.bROProgram )
     {
-        FileDialogHelper aHelper( FILEOPEN_SIMPLE, WB_OPEN );
+        FileDialogHelper aHelper(
+            com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+            WB_OPEN );
         String sPath = aMailerURLED.GetText();
         if ( !sPath.Len() )
             sPath.AppendAscii("/usr/bin");
