@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:47:35 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1678,7 +1678,7 @@ void SfxHelpWindow_Impl::loadHelpContent(const ::rtl::OUString& sHelpURL, sal_Bo
 
 SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* _pParent ) :
 
-    Window( _pParent, SfxResId( WIN_HELP_INDEX ) ),
+    Window( _pParent, SfxResId( WIN_HELPINDEX ) ),
 
     aActiveLB           ( this, ResId( LB_ACTIVE ) ),
     aActiveLine         ( this, ResId( FL_ACTIVE ) ),
