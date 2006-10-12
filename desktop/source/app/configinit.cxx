@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configinit.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:35:36 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:05:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,8 +139,7 @@ ConfigurationProvider createDefaultConfigurationProvider( )
 }
 // ----------------------------------------------------------------------------
 /// @attention this method must be called from a catch statement!
-static void handleGeneralException(ConfigurationProvider& xProvider,
-                                   uno::Exception& aException,
+static void handleGeneralException(uno::Exception& aException,
                                    const rtl::OUString& aMessage)
 {
     aException.Message = aMessage ;
@@ -158,31 +157,31 @@ uno::Reference< lang::XMultiServiceFactory > CreateApplicationConfigurationProvi
     }
     catch (configuration::InvalidBootstrapFileException & exception)
     {
-        handleGeneralException(xProvider, exception,
+        handleGeneralException(exception,
                 getMsgString( STR_CONFIG_ERR_SETTINGS_INCOMPLETE,
                             "The startup settings for your configuration settings are incomplete. "));
     }
      catch (backend::CannotConnectException & exception)
     {
-        handleGeneralException(xProvider, exception,
+        handleGeneralException(exception,
                 getMsgString( STR_CONFIG_ERR_CANNOT_CONNECT,
                             "A connection to your configuration settings could not be established. "));
     }
     catch (backend::BackendSetupException & exception)
     {
-        handleGeneralException(xProvider, exception,
+        handleGeneralException(exception,
                 getMsgString( STR_CONFIG_ERR_CANNOT_CONNECT,
                             "A connection to your configuration settings could not be established. "));
     }
     catch (configuration::CannotLoadConfigurationException & exception)
     {
-        handleGeneralException(xProvider,  exception,
+        handleGeneralException(exception,
                 getMsgString( STR_CONFIG_ERR_CANNOT_CONNECT,
                             "A connection to your configuration settings could not be established. "));
     }
     catch (uno::Exception & exception)
     {
-        handleGeneralException(xProvider, exception,
+        handleGeneralException(exception,
                 getMsgString( STR_CONFIG_ERR_ACCESS_GENERAL,
                             "A general error occurred while accessing your configuration settings."));
     }
@@ -241,8 +240,7 @@ namespace
 class ConfigurationErrorHandler::Context : public SimpleCurrentContext
 {
 public:
-    explicit
-    Context(InteractionHandler const & xHandler)
+    Context()
     : SimpleCurrentContext( uno::getCurrentContext() )
     {
     }
@@ -285,7 +283,7 @@ void ConfigurationErrorHandler::activate()
 {
     if (!m_pContext)
     {
-        m_pContext = new Context(m_xHandler);
+        m_pContext = new Context;
         m_pContext->acquire();
     }
     m_pContext->install();
