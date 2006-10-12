@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdglev.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:50:29 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:09:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,9 +154,9 @@ static void ImpGetPercent(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const vo
     USHORT& nRet=*(USHORT*)pnRet;
     BOOL& bFirst=*(BOOL*)pbFirst;
     if (nRet!=FUZZY) {
-        BOOL bOn=rGP.IsPercent();
+        bool bOn=rGP.IsPercent();
         if (bFirst) { nRet=bOn; bFirst=FALSE; }
-        else if (nRet!=bOn) nRet=FUZZY;
+        else if ((nRet!=0)!=bOn) nRet=FUZZY;
     }
 }
 
@@ -352,7 +352,7 @@ static void ImpMove(Point& rPt, const void* p1, const void* /*p2*/, const void* 
     rPt.Y()+=((const Size*)p1)->Height();
 }
 
-void SdrGlueEditView::MoveMarkedGluePoints(const Size& rSiz, BOOL bCopy)
+void SdrGlueEditView::MoveMarkedGluePoints(const Size& rSiz, bool bCopy)
 {
     ForceUndirtyMrkPnt();
     XubString aStr(ImpGetResStr(STR_EditMove));
@@ -371,7 +371,7 @@ static void ImpResize(Point& rPt, const void* p1, const void* p2, const void* p3
     ResizePoint(rPt,*(const Point*)p1,*(const Fraction*)p2,*(const Fraction*)p3);
 }
 
-void SdrGlueEditView::ResizeMarkedGluePoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, BOOL bCopy)
+void SdrGlueEditView::ResizeMarkedGluePoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy)
 {
     ForceUndirtyMrkPnt();
     XubString aStr(ImpGetResStr(STR_EditResize));
@@ -390,7 +390,7 @@ static void ImpRotate(Point& rPt, const void* p1, const void* /*p2*/, const void
     RotatePoint(rPt,*(const Point*)p1,*(const double*)p3,*(const double*)p4);
 }
 
-void SdrGlueEditView::RotateMarkedGluePoints(const Point& rRef, long nWink, BOOL bCopy)
+void SdrGlueEditView::RotateMarkedGluePoints(const Point& rRef, long nWink, bool bCopy)
 {
     ForceUndirtyMrkPnt();
     XubString aStr(ImpGetResStr(STR_EditRotate));
