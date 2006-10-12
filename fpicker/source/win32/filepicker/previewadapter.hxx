@@ -4,9 +4,9 @@
  *
  *  $RCSfile: previewadapter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:47:32 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:54:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,13 @@
 #include <com/sun/star/uno/Any.hxx>
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <memory>
 
 // forward declaration
@@ -102,11 +108,11 @@ public:
     // notification from parent
     //--------------------------------------
 
-    void SAL_CALL notifyParentShow(sal_Bool bShow);
+    void SAL_CALL notifyParentShow(bool bShow);
 
     void SAL_CALL notifyParentSizeChanged();
 
-    void SAL_CALL notifyParentWindowPosChanged(sal_Bool bIsVisible);
+    void SAL_CALL notifyParentWindowPosChanged();
 
 private:
     // hide implementation details using the
