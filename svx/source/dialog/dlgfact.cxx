@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:17:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:11:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -374,7 +374,7 @@ sal_Bool AbstractSpellDialog_Impl::Close()
   -----------------------------------------------------------------------*/
 void  AbstractSpellDialog_Impl::Invalidate()
 {
-    pDlg->Invalidate();
+    pDlg->InvalidateDialog();
 }
 /*-- 04.05.2004 08:26:13---------------------------------------------------
 
@@ -1049,7 +1049,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( const ResId& 
                                                 const SfxItemSet* pAttrSet,
                                                 SfxViewFrame* ,
                                                 bool /*bEditFmt*/,
-                                                const String */*pUserButtonText*/ )
+                                                const String * )
 {
     SfxTabDialog* pDlg=NULL;
     switch ( rResId.GetId() )
@@ -1074,7 +1074,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( const ResId& 
                                                 const SfxItemSet* pAttrSet,
                                                 const css::uno::Reference< css::frame::XFrame >& xViewFrame,
                                                 bool /*bEditFmt*/,
-                                                const String */*pUserButtonText*/ )
+                                                const String * )
 {
     SfxTabDialog* pDlg=NULL;
     switch ( rResId.GetId() )
@@ -2020,108 +2020,72 @@ CreateTabPage AbstractDialogFactory_Impl::GetTabPageCreatorFunc( USHORT nId )
     {
         case RID_OFA_TP_INTERNATIONAL:
             return ::offapp::InternationalOptionsPage::CreateSc;
-            break;
         case RID_OFA_TP_INTERNATIONAL_SD:
         case RID_OFA_TP_INTERNATIONAL_IMPR:
             return offapp::InternationalOptionsPage::CreateSd;
-            break;
         case RID_SVXPAGE_TEXTANIMATION :
             return SvxTextAnimationPage::Create;
-            break;
-//CHINA001      case RID_SVXPAGE_CAPTION :
-//CHINA001          return SvxCaptionTabPage::Create;
-//CHINA001          break;
         case RID_SVXTABPAGE_GALLERY_GENERAL :
             return TPGalleryThemeGeneral::Create;
-            break;
         case RID_SVXPAGE_TRANSPARENCE :
             return SvxTransparenceTabPage::Create;
-            break;
         case RID_SVXPAGE_AREA :
             return SvxAreaTabPage::Create;
-            break;
         case RID_SVXPAGE_SHADOW :
             return SvxShadowTabPage::Create;
-            break;
         case RID_SVXPAGE_LINE :
             return SvxLineTabPage::Create;
-            break;
         case RID_SVXPAGE_CONNECTION :
             return SvxConnectionPage::Create;
-            break;
         case RID_SVXPAGE_MEASURE :
             return SvxMeasurePage::Create;
-            break;
         case RID_SFXPAGE_GENERAL :
             return SvxGeneralTabPage::Create;
-            break;
         case RID_SVXPAGE_PICK_SINGLE_NUM :
             return SvxSingleNumPickTabPage::Create;
-            break;
         case RID_SVXPAGE_PICK_BMP :
             return SvxBitmapPickTabPage::Create;
-            break;
         case RID_SVXPAGE_PICK_BULLET :
             return SvxBulletPickTabPage::Create;
-            break;
         case RID_SVXPAGE_NUM_OPTIONS :
             return SvxNumOptionsTabPage::Create;
-            break;
         case RID_SVXPAGE_PICK_NUM :
             return SvxNumPickTabPage::Create;
-            break;
         case RID_SVXPAGE_NUM_POSITION :
             return SvxNumPositionTabPage::Create;
-            break;
         case RID_SVXPAGE_PARA_ASIAN :
             return SvxAsianTabPage::Create;
-            break;
         case RID_SVXPAGE_EXT_PARAGRAPH :
             return SvxExtParagraphTabPage::Create;
-            break;
         case RID_SVXPAGE_ALIGN_PARAGRAPH :
             return SvxParaAlignTabPage::Create;
-            break;
         case RID_SVXPAGE_STD_PARAGRAPH :
             return SvxStdParagraphTabPage::Create;
-            break;
         case RID_SVXPAGE_TABULATOR :
             return SvxTabulatorTabPage::Create;
-            break;
         case RID_SVXPAGE_TEXTATTR :
             return SvxTextAttrPage::Create;
-            break;
         case RID_SVXPAGE_ALIGNMENT :
             return svx::AlignmentTabPage::Create;
-            break;
         case RID_SW_TP_BACKGROUND :
         case RID_SVXPAGE_BACKGROUND :
             return SvxBackgroundTabPage::Create;
-            break;
         case RID_SVXPAGE_BORDER :
             return SvxBorderTabPage::Create;
-            break;
         case RID_SVXPAGE_CHAR_NAME :
             return SvxCharNamePage::Create;
-            break;
         case RID_SVXPAGE_CHAR_EFFECTS :
             return SvxCharEffectsPage::Create;
-            break;
         case RID_SVXPAGE_CHAR_POSITION :
             return SvxCharPositionPage::Create;
-            break;
         case RID_SVXPAGE_CHAR_TWOLINES :
             return SvxCharTwoLinesPage::Create;
-            break;
         case RID_SVXPAGE_NUMBERFORMAT :
             return SvxNumberFormatTabPage::Create;
-            break;
         case RID_SVXPAGE_PAGE :
             return SvxPageDescPage::Create;
-            break;
         case RID_SVXPAGE_GRFCROP :
             return SvxGrfCropPage::Create;
-            break;
 
         default:
             break;
@@ -2135,7 +2099,6 @@ CreateSvxDistributePage AbstractDialogFactory_Impl::GetSvxDistributePageCreatorF
     {
         case RID_SVXPAGE_DISTRIBUTE:
             return SvxDistributePage::Create;
-            break;
         default:
             break;
     }
@@ -2148,7 +2111,6 @@ DialogGetRanges AbstractDialogFactory_Impl::GetDialogGetRangesFunc( USHORT nId )
     {
         case RID_SVXDLG_POSTIT:
             return SvxPostItDialog::GetRanges;  //add for SvxPostItDialog
-            break;
         default:
             break;
     }
@@ -2161,77 +2123,51 @@ GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( USHORT nId )
     {
         case RID_SVXPAGE_TEXTANIMATION :
             return SvxTextAnimationPage::GetRanges;
-            break;
-//CHINA001      case RID_SVXPAGE_CAPTION :
-//CHINA001          return SvxCaptionTabPage::GetRanges;
-//CHINA001          break;
         case RID_SVXPAGE_DISTRIBUTE:
             return SvxDistributePage::GetRanges;
-            break;
         case RID_SVXPAGE_TRANSPARENCE :
             return SvxTransparenceTabPage::GetRanges;
-            break;
         case RID_SVXPAGE_AREA :
             return SvxAreaTabPage::GetRanges;
-            break;
         case RID_SVXPAGE_SHADOW :
             return SvxShadowTabPage::GetRanges;
-            break;
         case RID_SVXPAGE_LINE :
             return SvxLineTabPage::GetRanges;
-            break;
         case RID_SVXPAGE_CONNECTION :
             return SvxConnectionPage::GetRanges;
-            break;
         case RID_SVXPAGE_MEASURE :
             return SvxMeasurePage::GetRanges;
-            break;
         case RID_SVXPAGE_PARA_ASIAN :
             return SvxAsianTabPage::GetRanges;
-            break;
         case RID_SVXPAGE_EXT_PARAGRAPH :
             return SvxExtParagraphTabPage::GetRanges;
-            break;
         case RID_SVXPAGE_ALIGN_PARAGRAPH :
             return SvxParaAlignTabPage::GetRanges;
-            break;
         case RID_SVXPAGE_STD_PARAGRAPH :
             return SvxStdParagraphTabPage::GetRanges;
-            break;
         case RID_SVXPAGE_TABULATOR :
             return SvxTabulatorTabPage::GetRanges;
-            break;
         case RID_SVXPAGE_TEXTATTR :
             return SvxTextAttrPage::GetRanges;
-            break;
         case RID_SVXPAGE_ALIGNMENT :
             return svx::AlignmentTabPage::GetRanges;
-            break;
         case RID_SW_TP_BACKGROUND :
         case RID_SVXPAGE_BACKGROUND :
             return SvxBackgroundTabPage::GetRanges;
-            break;
         case RID_SVXPAGE_BORDER :
             return SvxBorderTabPage::GetRanges;
-            break;
         case RID_SVXPAGE_CHAR_NAME :
             return SvxCharNamePage::GetRanges;
-            break;
         case RID_SVXPAGE_CHAR_EFFECTS :
             return SvxCharEffectsPage::GetRanges;
-            break;
         case RID_SVXPAGE_CHAR_POSITION :
             return SvxCharPositionPage::GetRanges;
-            break;
         case RID_SVXPAGE_CHAR_TWOLINES :
             return SvxCharTwoLinesPage::GetRanges;
-            break;
         case RID_SVXPAGE_NUMBERFORMAT :
             return SvxNumberFormatTabPage::GetRanges;
-            break;
         case RID_SVXPAGE_PAGE :
             return SvxPageDescPage::GetRanges;
-            break;
 
         default:
             break;
