@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLBackgroundImageContext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:47:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:46:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,8 +215,6 @@ void XMLBackgroundImageContext::ProcessAttrs(
 
     ePos = GraphicLocation_NONE;
 
-    SvXMLUnitConverter& rUnitConverter = GetImport().GetMM100UnitConverter();
-
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -255,7 +253,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                     else if( -1 != aToken.indexOf( sal_Unicode('%') ) )
                     {
                         sal_Int32 nPrc = 50;
-                        if( rUnitConverter.convertPercent( nPrc, aToken ) )
+                        if( SvXMLUnitConverter::convertPercent( nPrc, aToken ) )
                         {
                             if( !bHori )
                             {
@@ -292,7 +290,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                         else
                             eNewPos = GraphicLocation_MIDDLE_MIDDLE;
                     }
-                    else if( rUnitConverter.convertEnum( nTmp, aToken,
+                    else if( SvXMLUnitConverter::convertEnum( nTmp, aToken,
                                                          psXML_BrushHoriPos ) )
                     {
                         if( bVert )
@@ -304,7 +302,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                             bOK = sal_False;
                         bHori = sal_True;
                     }
-                    else if( rUnitConverter.convertEnum( nTmp, aToken,
+                    else if( SvXMLUnitConverter::convertEnum( nTmp, aToken,
                                                          psXML_BrushVertPos ) )
                     {
                         if( bHori )
@@ -330,7 +328,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
         case XML_TOK_BGIMG_REPEAT:
             {
                 sal_uInt16 nPos = GraphicLocation_NONE;
-                if( rUnitConverter.convertEnum( nPos, rValue,
+                if( SvXMLUnitConverter::convertEnum( nPos, rValue,
                                                 psXML_BrushRepeat ) )
                 {
                     if( GraphicLocation_MIDDLE_MIDDLE != nPos ||

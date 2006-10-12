@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TransGradientStyle.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:47:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:46:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,6 @@ sal_Bool XMLTransGradientStyleImport::importXML(
 
     SvXMLTokenMap aTokenMap( aTrGradientAttrTokenMap );
     SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
-    SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -190,7 +189,7 @@ sal_Bool XMLTransGradientStyleImport::importXML(
         case XML_TOK_GRADIENT_STYLE:
             {
                 sal_uInt16 eValue;
-                if( rUnitConverter.convertEnum( eValue, rStrValue, pXML_GradientStyle_Enum ) )
+                if( SvXMLUnitConverter::convertEnum( eValue, rStrValue, pXML_GradientStyle_Enum ) )
                 {
                     aGradient.Style = (awt::GradientStyle) eValue;
                     bHasStyle = sal_True;
@@ -198,45 +197,47 @@ sal_Bool XMLTransGradientStyleImport::importXML(
             }
             break;
         case XML_TOK_GRADIENT_CX:
-            rUnitConverter.convertPercent( nTmpValue, rStrValue );
-            aGradient.XOffset = nTmpValue;
+            SvXMLUnitConverter::convertPercent( nTmpValue, rStrValue );
+            aGradient.XOffset = sal::static_int_cast< sal_Int16 >(nTmpValue);
             break;
         case XML_TOK_GRADIENT_CY:
-            rUnitConverter.convertPercent( nTmpValue, rStrValue );
-            aGradient.YOffset = nTmpValue;
+            SvXMLUnitConverter::convertPercent( nTmpValue, rStrValue );
+            aGradient.YOffset = sal::static_int_cast< sal_Int16 >(nTmpValue);
             break;
         case XML_TOK_GRADIENT_START:
             {
                 sal_Int32 aStartTransparency;
-                rUnitConverter.convertPercent( aStartTransparency, rStrValue );
+                SvXMLUnitConverter::convertPercent( aStartTransparency, rStrValue );
 
-                aStartTransparency = ( (100 - aStartTransparency) * 255 ) / 100;
+                UINT8 n = sal::static_int_cast< UINT8 >(
+                    ( (100 - aStartTransparency) * 255 ) / 100 );
 
-                Color aColor(aStartTransparency, aStartTransparency, aStartTransparency );
+                Color aColor( n, n, n );
                 aGradient.StartColor = (sal_Int32)( aColor.GetColor() );
             }
             break;
         case XML_TOK_GRADIENT_END:
             {
                 sal_Int32 aEndTransparency;
-                rUnitConverter.convertPercent( aEndTransparency, rStrValue );
+                SvXMLUnitConverter::convertPercent( aEndTransparency, rStrValue );
 
-                aEndTransparency = ( (100 - aEndTransparency) * 255 ) / 100;
+                UINT8 n = sal::static_int_cast< UINT8 >(
+                    ( (100 - aEndTransparency) * 255 ) / 100 );
 
-                Color aColor( aEndTransparency, aEndTransparency, aEndTransparency );
+                Color aColor( n, n, n );
                 aGradient.EndColor = (sal_Int32)( aColor.GetColor() );
             }
             break;
         case XML_TOK_GRADIENT_ANGLE:
             {
                 sal_Int32 nValue;
-                rUnitConverter.convertNumber( nValue, rStrValue, 0, 360 );
+                SvXMLUnitConverter::convertNumber( nValue, rStrValue, 0, 360 );
                 aGradient.Angle = sal_Int16( nValue );
             }
             break;
         case XML_TOK_GRADIENT_BORDER:
-            rUnitConverter.convertPercent( nTmpValue, rStrValue );
-            aGradient.Border = nTmpValue;
+            SvXMLUnitConverter::convertPercent( nTmpValue, rStrValue );
+            aGradient.Border = sal::static_int_cast< sal_Int16 >(nTmpValue);
             break;
 
         default:
@@ -290,11 +291,8 @@ sal_Bool XMLTransGradientStyleExport::exportXML(
             OUString aStrValue;
             OUStringBuffer aOut;
 
-            SvXMLUnitConverter& rUnitConverter =
-                rExport.GetMM100UnitConverter();
-
             // Style
-            if( !rUnitConverter.convertEnum( aOut, aGradient.Style, pXML_GradientStyle_Enum ) )
+            if( !SvXMLUnitConverter::convertEnum( aOut, aGradient.Style, pXML_GradientStyle_Enum ) )
             {
                 bRet = sal_False;
             }
@@ -316,11 +314,11 @@ sal_Bool XMLTransGradientStyleExport::exportXML(
                 if( aGradient.Style != awt::GradientStyle_LINEAR &&
                     aGradient.Style != awt::GradientStyle_AXIAL   )
                 {
-                    rUnitConverter.convertPercent( aOut, aGradient.XOffset );
+                    SvXMLUnitConverter::convertPercent( aOut, aGradient.XOffset );
                     aStrValue = aOut.makeStringAndClear();
                     rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CX, aStrValue );
 
-                    rUnitConverter.convertPercent( aOut, aGradient.YOffset );
+                    SvXMLUnitConverter::convertPercent( aOut, aGradient.YOffset );
                     aStrValue = aOut.makeStringAndClear();
                     rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CY, aStrValue );
                 }
@@ -331,27 +329,27 @@ sal_Bool XMLTransGradientStyleExport::exportXML(
                 // Transparency start
                 aColor.SetColor( aGradient.StartColor );
                 sal_Int32 aStartValue = 100 - (sal_Int32)(((aColor.GetRed() + 1) * 100) / 255);
-                rUnitConverter.convertPercent( aOut, aStartValue );
+                SvXMLUnitConverter::convertPercent( aOut, aStartValue );
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_START, aStrValue );
 
                 // Transparency end
                 aColor.SetColor( aGradient.EndColor );
                 sal_Int32 aEndValue = 100 - (sal_Int32)(((aColor.GetRed() + 1) * 100) / 255);
-                rUnitConverter.convertPercent( aOut, aEndValue );
+                SvXMLUnitConverter::convertPercent( aOut, aEndValue );
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_END, aStrValue );
 
                 // Angle
                 if( aGradient.Style != awt::GradientStyle_RADIAL )
                 {
-                    rUnitConverter.convertNumber( aOut, sal_Int32( aGradient.Angle ) );
+                    SvXMLUnitConverter::convertNumber( aOut, sal_Int32( aGradient.Angle ) );
                     aStrValue = aOut.makeStringAndClear();
                     rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, aStrValue );
                 }
 
                 // Border
-                rUnitConverter.convertPercent( aOut, aGradient.Border );
+                SvXMLUnitConverter::convertPercent( aOut, aGradient.Border );
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_BORDER, aStrValue );
 
