@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winpluginlib.cpp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:22:35 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:33:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,13 @@
 #undef SVX_DLLIMPLEMENTATION
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <Winreg.h>
 #include <Shlwapi.h>
 #include <stdio.h>
@@ -65,7 +71,7 @@ int lc_isInstalled(const  char* realFilePath)
     ret = RegOpenKeyEx(hKeySoftware,  "MozillaPlugins",  0,  KEY_READ, &hMozillaPlugins);
     if(ret != ERROR_SUCCESS){
         RegCloseKey(hKeySoftware);
-        if( ret = ERROR_FILE_NOT_FOUND)
+        if( ret == ERROR_FILE_NOT_FOUND)
             return 1;
         else
             return -1;
@@ -74,7 +80,7 @@ int lc_isInstalled(const  char* realFilePath)
     if(ret != ERROR_SUCCESS){
         RegCloseKey(hKeySoftware);
         RegCloseKey(hMozillaPlugins);
-        if( ret = ERROR_FILE_NOT_FOUND)
+        if( ret == ERROR_FILE_NOT_FOUND)
             return 1;
         else
             return -1;
@@ -110,7 +116,7 @@ int lc_isInstalled(const  char* realFilePath)
     return ret;
 }
 
-int lc_uninstallPlugin(const  char* realFilePath)
+int lc_uninstallPlugin(const  char*)
 {
     HKEY hKeySoftware;
     HKEY hMozillaPlugins;
@@ -127,7 +133,7 @@ int lc_uninstallPlugin(const  char* realFilePath)
     ret = RegOpenKeyEx(hKeySoftware,  "MozillaPlugins",  0,  KEY_READ|KEY_WRITE, &hMozillaPlugins);
     if(ret != ERROR_SUCCESS){
         RegCloseKey(hKeySoftware);
-        if( ret = ERROR_FILE_NOT_FOUND)
+        if( ret == ERROR_FILE_NOT_FOUND)
             return 0;
         else
             return -1;
@@ -137,7 +143,7 @@ int lc_uninstallPlugin(const  char* realFilePath)
     if(ret != ERROR_SUCCESS){
         RegCloseKey(hKeySoftware);
         RegCloseKey(hMozillaPlugins);
-        if( ret = ERROR_FILE_NOT_FOUND)
+        if( ret == ERROR_FILE_NOT_FOUND)
             return 0;
         else
             return -1;
