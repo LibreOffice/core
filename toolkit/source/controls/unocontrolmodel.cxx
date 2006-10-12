@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:20:19 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:32:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -745,7 +745,8 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
                 OutStream->writeShort( aFD.Pitch );
                 OutStream->writeDouble( aFD.CharacterWidth );
                 OutStream->writeDouble( aFD.Weight );
-                OutStream->writeShort( aFD.Slant );
+                OutStream->writeShort(
+                    sal::static_int_cast< sal_Int16 >(aFD.Slant) );
                 OutStream->writeShort( aFD.Underline );
                 OutStream->writeShort( aFD.Strikeout );
                 OutStream->writeDouble( aFD.Orientation );
@@ -835,12 +836,17 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
             {
                 OutStream->writeLong( aFD.Width );
                 OutStream->writeLong( aFD.Height );
-                OutStream->writeShort( VCLUnoHelper::ConvertFontWidth( aFD.CharacterWidth ) );
+                OutStream->writeShort(
+                    sal::static_int_cast< sal_Int16 >(
+                        VCLUnoHelper::ConvertFontWidth( aFD.CharacterWidth )) );
             }
             else if ( n == BASEPROPERTY_FONT_ATTRIBS )
             {
-                OutStream->writeShort( VCLUnoHelper::ConvertFontWeight( aFD.Weight ) );
-                OutStream->writeShort( aFD.Slant );
+                OutStream->writeShort(
+                    sal::static_int_cast< sal_Int16 >(
+                        VCLUnoHelper::ConvertFontWeight( aFD.Weight )) );
+                OutStream->writeShort(
+                    sal::static_int_cast< sal_Int16 >(aFD.Slant) );
                 OutStream->writeShort( aFD.Underline );
                 OutStream->writeShort( aFD.Strikeout );
                 OutStream->writeShort( (short)(aFD.Orientation * 10) );
@@ -1199,12 +1205,14 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                     {
                         // try as double
                         double nAsDouble = 0;
-                        if ( (bConverted = ( rValue >>= nAsDouble )) )
+                        bConverted = ( rValue >>= nAsDouble );
+                        if ( bConverted )
                             rConvertedValue <<= nAsDouble;
                         else
                         {   // try as integer - 96136 - 2002-10-08 - fs@openoffice.org
                             sal_Int32 nAsInteger = 0;
-                            if ( (bConverted = ( rValue >>= nAsInteger )) )
+                            bConverted = ( rValue >>= nAsInteger );
+                            if ( bConverted )
                                 rConvertedValue <<= (double)nAsInteger;
                         }
                     }
@@ -1212,28 +1220,32 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                     case TypeClass_SHORT:
                     {
                         sal_Int16 n;
-                        if ( (bConverted = ( rValue >>= n )) )
+                        bConverted = ( rValue >>= n );
+                        if ( bConverted )
                             rConvertedValue <<= n;
                     }
                     break;
                     case TypeClass_UNSIGNED_SHORT:
                     {
                         sal_uInt16 n;
-                        if ( (bConverted = ( rValue >>= n )) )
+                        bConverted = ( rValue >>= n );
+                        if ( bConverted )
                             rConvertedValue <<= n;
                     }
                     break;
                     case TypeClass_LONG:
                     {
                         sal_Int32 n;
-                        if ( (bConverted = ( rValue >>= n )) )
+                        bConverted = ( rValue >>= n );
+                        if ( bConverted )
                             rConvertedValue <<= n;
                     }
                     break;
                     case TypeClass_UNSIGNED_LONG:
                     {
                         sal_uInt32 n;
-                        if ( (bConverted = ( rValue >>= n )) )
+                        bConverted = ( rValue >>= n );
+                        if ( bConverted )
                             rConvertedValue <<= n;
                     }
                     break;
@@ -1253,7 +1265,8 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                     case TypeClass_ENUM:
                     {
                         sal_Int32 nValue = 0;
-                        if ( (bConverted = ( rValue >>= nValue )) )
+                        bConverted = ( rValue >>= nValue );
+                        if ( bConverted )
                             rConvertedValue = ::cppu::int2enum( nValue, *pDestType );
                     }
                     break;
