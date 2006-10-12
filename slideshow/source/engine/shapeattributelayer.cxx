@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeattributelayer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:27:32 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:55:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -594,11 +594,11 @@ namespace presentation
             // mnAdditiveMode is ignored, cannot combine strings in
             // any sensible way
             if( mbFillStyleValid )
-                return meFillStyle;
+                return (sal_Int16)meFillStyle;
             else if( haveChild() )
-                return mpChild->getFillStyle();
+                return (sal_Int16)mpChild->getFillStyle();
             else
-                return drawing::FillStyle_SOLID;
+                return (sal_Int16)drawing::FillStyle_SOLID;
         }
 
         void ShapeAttributeLayer::setFillStyle( const sal_Int16& rStyle )
@@ -619,11 +619,11 @@ namespace presentation
             // mnAdditiveMode is ignored, cannot combine strings in
             // any sensible way
             if( mbLineStyleValid )
-                return meLineStyle;
+                return (sal_Int16)meLineStyle;
             else if( haveChild() )
-                return mpChild->getLineStyle();
+                return (sal_Int16)mpChild->getLineStyle();
             else
-                return drawing::LineStyle_SOLID;
+                return (sal_Int16)drawing::LineStyle_SOLID;
         }
 
         void ShapeAttributeLayer::setLineStyle( const sal_Int16& rStyle )
@@ -785,11 +785,11 @@ namespace presentation
             // mnAdditiveMode is ignored, cannot combine strings in
             // any sensible way
             if( mbCharPostureValid )
-                return meCharPosture;
+                return (sal_Int16)meCharPosture;
             else if( haveChild() )
-                return mpChild->getCharPosture();
+                return (sal_Int16)mpChild->getCharPosture();
             else
-                return awt::FontSlant_NONE;
+                return (sal_Int16)awt::FontSlant_NONE;
         }
 
         void ShapeAttributeLayer::setCharPosture( const sal_Int16& rStyle )
