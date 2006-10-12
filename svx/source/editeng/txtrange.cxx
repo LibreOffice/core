@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtrange.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:53:55 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:40:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,9 +76,17 @@
 TextRanger::TextRanger( const XPolyPolygon& rXPoly, const XPolyPolygon* pXLine,
     USHORT nCacheSz, USHORT nLft, USHORT nRght, BOOL bSimpl, BOOL bInnr,
     BOOL bVert ) :
-    pBound( NULL ), nCacheSize( nCacheSz ), nCacheIdx( 0 ), nPointCount( 0 ),
-    nLeft( nLft ), nRight( nRght ), nUpper( 0 ), nLower( 0 ),
-    bSimple( bSimpl ), bInner( bInnr ), bVertical( bVert )
+    pBound( NULL ),
+    nCacheSize( nCacheSz ),
+    nCacheIdx( 0 ),
+    nRight( nRght ),
+    nLeft( nLft ),
+    nUpper( 0 ),
+    nLower( 0 ),
+    nPointCount( 0 ),
+    bSimple( bSimpl ),
+    bInner( bInnr ),
+    bVertical( bVert )
 {
 #ifndef PRODUCT
     bFlag3 = bFlag4 = bFlag5 = bFlag6 = bFlag7 = FALSE;
@@ -92,7 +100,8 @@ TextRanger::TextRanger( const XPolyPolygon& rXPoly, const XPolyPolygon* pXLine,
     for( USHORT i = 0; i < nCount; ++i )
     {
         ::basegfx::B2DPolygon aCandidate(::basegfx::tools::adaptiveSubdivideByAngle(rXPoly[ i ].getB2DPolygon()));
-        nPointCount += (sal_Int32)aCandidate.count();
+        nPointCount = sal::static_int_cast< USHORT >(
+            nPointCount + aCandidate.count());
         pPoly->Insert( Polygon(aCandidate), i );
     }
     if( pXLine )
@@ -102,7 +111,8 @@ TextRanger::TextRanger( const XPolyPolygon& rXPoly, const XPolyPolygon* pXLine,
         for( USHORT i = 0; i < nCount; ++i )
         {
             ::basegfx::B2DPolygon aCandidate(::basegfx::tools::adaptiveSubdivideByAngle((*pXLine)[ i ].getB2DPolygon()));
-            nPointCount += (sal_Int32)aCandidate.count();
+            nPointCount = sal::static_int_cast< USHORT >(
+                nPointCount + aCandidate.count());
             pLine->Insert( Polygon(aCandidate), i );
         }
     }
@@ -528,20 +538,20 @@ void SvxBoundArgs::Add()
         {
             if( bDelete )
             {
-                USHORT nNext = 2;
+                USHORT next = 2;
                 while( nBoolIdx < nCount && !aBoolArr[ nBoolIdx++ ] &&
                        (!bInner || nBoolIdx < nCount ) )
-                    nNext += 2;
-                pLongArr->Remove( nLongIdx, nNext );
-                nNext /= 2;
-                nBoolIdx -= nNext;
-                nCount -= nNext;
-                aBoolArr.Remove( nBoolIdx, nNext );
+                    next += 2;
+                pLongArr->Remove( nLongIdx, next );
+                next /= 2;
+                nBoolIdx = nBoolIdx - next;
+                nCount = nCount - next;
+                aBoolArr.Remove( nBoolIdx, next );
                 if( nBoolIdx )
                     aBoolArr[ nBoolIdx - 1 ] = FALSE;
 #if OSL_DEBUG_LEVEL > 1
                 else
-                    ++nNext;
+                    ++next;
 #endif
             }
             bDelete = nBoolIdx < nCount && aBoolArr[ nBoolIdx ];
