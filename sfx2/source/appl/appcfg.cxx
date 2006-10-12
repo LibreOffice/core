@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:13:51 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:46:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,7 +326,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVEGRAPHICS))
                         {
                             SfxDocumentInfo *pDocInf = SfxObjectShell::Current() ? &SfxObjectShell::Current()->GetDocInfo() : 0;
-                            BOOL bComprGraph = pDocInf ? pDocInf->IsSaveGraphicsCompressed() : aSaveOptions.GetSaveGraphicsMode() == SvtSaveOptions::SaveGraphicsCompressed;
+                            bool bComprGraph = pDocInf ? pDocInf->IsSaveGraphicsCompressed() : aSaveOptions.GetSaveGraphicsMode() == SvtSaveOptions::SaveGraphicsCompressed;
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_OPT_SAVEGRAPHICSCOMPRESSED ),bComprGraph )))
                                 bRet = FALSE;
                         }
@@ -340,7 +340,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVEGRAPHICS))
                         {
                             SfxDocumentInfo *pDocInf = SfxObjectShell::Current() ? &SfxObjectShell::Current()->GetDocInfo() : 0;
-                            BOOL bOrigGraph = pDocInf ? pDocInf->IsSaveOriginalGraphics() : aSaveOptions.GetSaveGraphicsMode() == SvtSaveOptions::SaveGraphicsOriginal;
+                            bool bOrigGraph = pDocInf ? pDocInf->IsSaveOriginalGraphics() : aSaveOptions.GetSaveGraphicsMode() == SvtSaveOptions::SaveGraphicsOriginal;
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_OPT_SAVEORIGINALGRAPHICS ), bOrigGraph )))
                                 bRet = FALSE;
                         }
@@ -451,7 +451,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                         bRet = TRUE;
                         if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_BASICMODE))
                         {
-                            if ( !rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_BASIC_ENABLED ), aSecurityOptions.GetBasicMode())))
+                            if ( !rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_BASIC_ENABLED ), sal::static_int_cast< UINT16 >(aSecurityOptions.GetBasicMode()))))
                                 bRet = FALSE;
                         }
                     }
@@ -563,7 +563,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     SfxAllEnumItem aNames(rPool.GetWhich(SID_ATTR_PATHGROUP));
                     SfxAllEnumItem aValues(rPool.GetWhich(SID_ATTR_PATHNAME));
                     SvtPathOptions aPathCfg;
-                    for ( int nProp = SvtPathOptions::PATH_ADDIN;
+                    for ( USHORT nProp = SvtPathOptions::PATH_ADDIN;
                           nProp <= SvtPathOptions::PATH_WORK; nProp++ )
                     {
                         const String aName( SfxResId( CONFIG_PATH_START + nProp ) );
@@ -650,7 +650,9 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         BOOL bBigSize = ( (const SfxBoolItem*)pItem )->GetValue();
-        aMiscOptions.SetSymbolsSize( bBigSize ? SFX_SYMBOLS_SIZE_LARGE : SFX_SYMBOLS_SIZE_SMALL );
+        aMiscOptions.SetSymbolsSize(
+            sal::static_int_cast< sal_Int16 >(
+                bBigSize ? SFX_SYMBOLS_SIZE_LARGE : SFX_SYMBOLS_SIZE_SMALL ) );
         SfxViewFrame* pCurrViewFrame = SfxViewFrame::GetFirst();
         while ( pCurrViewFrame )
         {
