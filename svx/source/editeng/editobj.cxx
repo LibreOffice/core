@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:49:19 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:36:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,8 @@
 #include <tools/tenccvt.hxx>
 #endif
 
-DBG_NAME( EE_EditTextObject );
-DBG_NAME( XEditAttribute );
+DBG_NAME( EE_EditTextObject )
+DBG_NAME( XEditAttribute )
 
 //--------------------------------------------------------------
 
@@ -180,12 +180,12 @@ XEditAttribute::~XEditAttribute()
     pItem = 0;  // Gehoert dem Pool.
 }
 
-XEditAttribute* XEditAttributeList::FindAttrib( USHORT nWhich, USHORT nChar ) const
+XEditAttribute* XEditAttributeList::FindAttrib( USHORT _nWhich, USHORT nChar ) const
 {
     for ( USHORT n = Count(); n; )
     {
         XEditAttribute* pAttr = GetObject( --n );
-        if( ( pAttr->GetItem()->Which() == nWhich ) && ( pAttr->GetStart() <= nChar ) && ( pAttr->GetEnd() > nChar ) )
+        if( ( pAttr->GetItem()->Which() == _nWhich ) && ( pAttr->GetStart() <= nChar ) && ( pAttr->GetEnd() > nChar ) )
             return pAttr;
     }
     return NULL;
@@ -305,24 +305,24 @@ USHORT EditTextObject::GetParagraphCount() const
     return 0;
 }
 
-XubString EditTextObject::GetText( USHORT nParagraph ) const
+XubString EditTextObject::GetText( USHORT /* nParagraph */ ) const
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
     return XubString();
 }
 
-void EditTextObject::Insert( const EditTextObject& rObj, USHORT nPara )
+void EditTextObject::Insert( const EditTextObject& /* rObj */, USHORT /* nPara */)
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
 
-EditTextObject* EditTextObject::CreateTextObject( USHORT nPara, USHORT nParas ) const
+EditTextObject* EditTextObject::CreateTextObject( USHORT /*nPara*/, USHORT /*nParas*/ ) const
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
     return 0;
 }
 
-void EditTextObject::RemoveParagraph( USHORT nPara )
+void EditTextObject::RemoveParagraph( USHORT /*nPara*/ )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
@@ -344,18 +344,18 @@ BOOL EditTextObject::HasOnlineSpellErrors() const
     return FALSE;
 }
 
-BOOL EditTextObject::HasCharAttribs( USHORT nWhich ) const
+BOOL EditTextObject::HasCharAttribs( USHORT ) const
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
     return FALSE;
 }
 
-void EditTextObject::GetCharAttribs( USHORT nPara, EECharAttribArray& rLst ) const
+void EditTextObject::GetCharAttribs( USHORT /*nPara*/, EECharAttribArray& /*rLst*/ ) const
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
 
-void EditTextObject::MergeParaAttribs( const SfxItemSet& rAttribs, USHORT nStart, USHORT nEnd )
+void EditTextObject::MergeParaAttribs( const SfxItemSet& /*rAttribs*/, USHORT /*nStart*/, USHORT /*nEnd*/ )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
@@ -372,47 +372,47 @@ const SvxFieldItem* EditTextObject::GetField() const
     return 0;
 }
 
-BOOL EditTextObject::HasField( TypeId aType ) const
+BOOL EditTextObject::HasField( TypeId /*aType*/ ) const
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
     return FALSE;
 }
 
-SfxItemSet EditTextObject::GetParaAttribs( USHORT nPara ) const
+SfxItemSet EditTextObject::GetParaAttribs( USHORT /*nPara*/ ) const
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
     return SfxItemSet( *(SfxItemPool*)NULL );
 }
 
-void EditTextObject::SetParaAttribs( USHORT nPara, const SfxItemSet& rAttribs )
+void EditTextObject::SetParaAttribs( USHORT /*nPara*/, const SfxItemSet& /*rAttribs*/ )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
 
-BOOL EditTextObject::RemoveCharAttribs( USHORT nWhich )
-{
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
-    return FALSE;
-}
-
-BOOL EditTextObject::RemoveParaAttribs( USHORT nWhich )
+BOOL EditTextObject::RemoveCharAttribs( USHORT /*nWhich*/ )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
     return FALSE;
 }
 
-BOOL EditTextObject::HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const
+BOOL EditTextObject::RemoveParaAttribs( USHORT /*nWhich*/ )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
     return FALSE;
 }
 
-void EditTextObject::GetStyleSheet( USHORT nPara, XubString& rName, SfxStyleFamily& eFamily ) const
+BOOL EditTextObject::HasStyleSheet( const XubString& /*rName*/, SfxStyleFamily /*eFamily*/ ) const
+{
+    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    return FALSE;
+}
+
+void EditTextObject::GetStyleSheet( USHORT /*nPara*/, XubString& /*rName*/, SfxStyleFamily& /*eFamily*/ ) const
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
 
-void EditTextObject::SetStyleSheet( USHORT nPara, const XubString& rName, const SfxStyleFamily& eFamily )
+void EditTextObject::SetStyleSheet( USHORT /*nPara*/, const XubString& /*rName*/, const SfxStyleFamily& /*eFamily*/ )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
@@ -424,8 +424,8 @@ BOOL __EXPORT EditTextObject::ChangeStyleSheets( const XubString&, SfxStyleFamil
     return FALSE;
 }
 
-void __EXPORT EditTextObject::ChangeStyleSheetName( SfxStyleFamily eFamily,
-                const XubString& rOldName, const XubString& rNewName )
+void __EXPORT EditTextObject::ChangeStyleSheetName( SfxStyleFamily /*eFamily*/,
+                const XubString& /*rOldName*/, const XubString& /*rNewName*/ )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
@@ -436,7 +436,7 @@ USHORT EditTextObject::GetUserType() const
     return 0;
 }
 
-void EditTextObject::SetUserType( USHORT n )
+void EditTextObject::SetUserType( USHORT )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
@@ -447,7 +447,7 @@ ULONG EditTextObject::GetObjectSettings() const
     return 0;
 }
 
-void EditTextObject::SetObjectSettings( ULONG n )
+void EditTextObject::SetObjectSettings( ULONG )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
@@ -479,8 +479,7 @@ BOOL EditTextObject::Store( SvStream& rOStream ) const
     // Vorspann:
     sal_Size nStartPos = rOStream.Tell();
 
-    USHORT nWhich = Which();
-    rOStream << nWhich;
+    rOStream << (USHORT)Which();
 
     sal_uInt32 nStructSz = 0;
     rOStream << nStructSz;
@@ -540,22 +539,22 @@ void EditTextObject::Skip( SvStream& rIStream )
 {
     sal_Size nStartPos = rIStream.Tell();
 
-    USHORT nWhich;
-    rIStream >> nWhich;
+    USHORT _nWhich;
+    rIStream >> _nWhich;
 
     sal_uInt32 nStructSz;
     rIStream >> nStructSz;
 
-    sal_Size nFullSz = sizeof( nWhich ) + sizeof( nStructSz ) + nStructSz;
+    sal_Size nFullSz = sizeof( _nWhich ) + sizeof( nStructSz ) + nStructSz;
     rIStream.Seek( nStartPos + nFullSz );
 }
 
-void __EXPORT EditTextObject::StoreData( SvStream& rOStream ) const
+void __EXPORT EditTextObject::StoreData( SvStream& ) const
 {
     DBG_ERROR( "StoreData: Basisklasse!" );
 }
 
-void __EXPORT EditTextObject::CreateData( SvStream& rIStream )
+void __EXPORT EditTextObject::CreateData( SvStream& )
 {
     DBG_ERROR( "CreateData: Basisklasse!" );
 }
@@ -566,17 +565,17 @@ USHORT EditTextObject::GetVersion() const
     return 0;
 }
 
-void EditTextObject::SetLRSpaceItemFlags( BOOL bOutlineMode )
+void EditTextObject::SetLRSpaceItemFlags( BOOL )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
 
-void EditTextObject::AdjustImportedLRSpaceItems( BOOL bTurnOfBullets )
+void EditTextObject::AdjustImportedLRSpaceItems( BOOL )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
 
-void EditTextObject::PrepareStore( SfxStyleSheetPool* pStyleSheetPool )
+void EditTextObject::PrepareStore( SfxStyleSheetPool* )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
@@ -586,7 +585,7 @@ void EditTextObject::FinishStore()
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
 
-void EditTextObject::FinishLoad( SfxStyleSheetPool* pStyleSheetPool )
+void EditTextObject::FinishLoad( SfxStyleSheetPool* )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
@@ -848,20 +847,20 @@ BOOL BinTextObject::HasOnlineSpellErrors() const
 
 }
 
-BOOL BinTextObject::HasCharAttribs( USHORT nWhich ) const
+BOOL BinTextObject::HasCharAttribs( USHORT _nWhich ) const
 {
     for ( USHORT nPara = GetContents().Count(); nPara; )
     {
         ContentInfo* pC = GetContents().GetObject( --nPara );
 
         USHORT nAttribs = pC->GetAttribs().Count();
-        if ( nAttribs && !nWhich )
+        if ( nAttribs && !_nWhich )
             return TRUE;
 
         for ( USHORT nAttr = nAttribs; nAttr; )
         {
             XEditAttribute* pX = pC->GetAttribs().GetObject( --nAttr );
-            if ( pX->GetItem()->Which() == nWhich )
+            if ( pX->GetItem()->Which() == _nWhich )
                 return TRUE;
         }
     }
@@ -971,7 +970,7 @@ void BinTextObject::SetParaAttribs( USHORT nPara, const SfxItemSet& rAttribs )
     ClearPortionInfo();
 }
 
-BOOL BinTextObject::RemoveCharAttribs( USHORT nWhich )
+BOOL BinTextObject::RemoveCharAttribs( USHORT _nWhich )
 {
     BOOL bChanged = FALSE;
 
@@ -982,7 +981,7 @@ BOOL BinTextObject::RemoveCharAttribs( USHORT nWhich )
         for ( USHORT nAttr = pC->GetAttribs().Count(); nAttr; )
         {
             XEditAttribute* pAttr = pC->GetAttribs().GetObject( --nAttr );
-            if ( !nWhich || ( pAttr->GetItem()->Which() == nWhich ) )
+            if ( !_nWhich || ( pAttr->GetItem()->Which() == _nWhich ) )
             {
                 pC->GetAttribs().Remove( nAttr );
                 DestroyAttrib( pAttr );
@@ -997,7 +996,7 @@ BOOL BinTextObject::RemoveCharAttribs( USHORT nWhich )
     return bChanged;
 }
 
-BOOL BinTextObject::RemoveParaAttribs( USHORT nWhich )
+BOOL BinTextObject::RemoveParaAttribs( USHORT _nWhich )
 {
     BOOL bChanged = FALSE;
 
@@ -1005,7 +1004,7 @@ BOOL BinTextObject::RemoveParaAttribs( USHORT nWhich )
     {
         ContentInfo* pC = GetContents().GetObject( --nPara );
 
-        if ( !nWhich )
+        if ( !_nWhich )
         {
             if( pC->GetParaAttribs().Count() )
                 bChanged = TRUE;
@@ -1013,9 +1012,9 @@ BOOL BinTextObject::RemoveParaAttribs( USHORT nWhich )
         }
         else
         {
-            if ( pC->GetParaAttribs().GetItemState( nWhich ) == SFX_ITEM_ON )
+            if ( pC->GetParaAttribs().GetItemState( _nWhich ) == SFX_ITEM_ON )
             {
-                pC->GetParaAttribs().ClearItem( nWhich );
+                pC->GetParaAttribs().ClearItem( _nWhich );
                 bChanged = TRUE;
             }
         }
@@ -1345,12 +1344,12 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
         USHORT nAttr;
         for ( nAttr = 0; nAttr < nAttribs; nAttr++ )
         {
-            USHORT nWhich, nStart, nEnd;
+            USHORT _nWhich, nStart, nEnd;
             const SfxPoolItem* pItem;
 
-            rIStream >> nWhich;
-            nWhich = pPool->GetNewWhich( nWhich );
-            pItem = pPool->LoadSurrogate( rIStream, nWhich, 0 );
+            rIStream >> _nWhich;
+            _nWhich = pPool->GetNewWhich( _nWhich );
+            pItem = pPool->LoadSurrogate( rIStream, _nWhich, 0 );
             rIStream >> nStart;
             rIStream >> nEnd;
             if ( pItem )
@@ -1364,7 +1363,7 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
                     XEditAttribute* pAttr = new XEditAttribute( *pItem, nStart, nEnd );
                     pC->GetAttribs().Insert( pAttr, pC->GetAttribs().Count() );
 
-                    if ( ( nWhich >= EE_FEATURE_START ) && ( nWhich <= EE_FEATURE_END ) )
+                    if ( ( _nWhich >= EE_FEATURE_START ) && ( _nWhich <= EE_FEATURE_END ) )
                     {
                         // Convert CH_FEATURE to CH_FEATURE_OLD
                         DBG_ASSERT( (BYTE) aByteString.GetChar( nStart ) == CH_FEATURE_OLD, "CreateData: CH_FEATURE expected!" );
@@ -1898,12 +1897,12 @@ void __EXPORT BinTextObject::CreateData300( SvStream& rIStream )
         // Which = 2; Surregat = 2; Start = 2; End = 2;
         for ( ULONG nAttr = 0; nAttr < nAttribs; nAttr++ )
         {
-            USHORT nWhich, nStart, nEnd;
+            USHORT _nWhich, nStart, nEnd;
             const SfxPoolItem* pItem;
 
-            rIStream >> nWhich;
-            nWhich = pPool->GetNewWhich( nWhich );
-            pItem = pPool->LoadSurrogate( rIStream, nWhich, 0 );
+            rIStream >> _nWhich;
+            _nWhich = pPool->GetNewWhich( _nWhich );
+            pItem = pPool->LoadSurrogate( rIStream, _nWhich, 0 );
             rIStream >> nStart;
             rIStream >> nEnd;
             if ( pItem )
