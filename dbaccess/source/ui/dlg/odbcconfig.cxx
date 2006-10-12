@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odbcconfig.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:10:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:37:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,14 @@
 // so don't touch this
 #if defined(WIN) || defined(WNT)
 #define SQL_API __stdcall
+// At least under some circumstances, the below #include <odbc/sqlext.h> re-
+// defines SQL_API to an empty string, leading to a compiler warning on MSC; to
+// not break the current behavior, this is worked around by locally disabling
+// that warning:
+#if defined _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4005)
+#endif
 #endif // defined(WIN) || defined(WNT)
 
 #ifdef SYSTEM_ODBC_HEADERS
@@ -89,6 +97,9 @@
 #endif
 
 #if defined(WIN) || defined(WNT)
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #undef SQL_API
 #define SQL_API __stdcall
 #endif // defined(WIN) || defined(WNT)
