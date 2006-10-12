@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxprinter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:14:31 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:31:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,7 +269,8 @@ void VCLXPrinterPropertySet::selectForm( const ::rtl::OUString& rFormDescription
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
 
     sal_Int32 nIndex = 0;
-    sal_uInt16 nPaperBin = rFormDescription.getToken( 3, ';', nIndex ).toInt32();
+    sal_uInt16 nPaperBin = sal::static_int_cast< sal_uInt16 >(
+        rFormDescription.getToken( 3, ';', nIndex ).toInt32());
     GetPrinter()->SetPaperBin( nPaperBin );
 }
 
