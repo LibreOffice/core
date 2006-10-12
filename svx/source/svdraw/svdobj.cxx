@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:53:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:12:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1181,9 +1181,9 @@ void SdrObject::ImpDrawLineGeometry(   XOutputDevice&   rXOut,
     }
 
     // #100127# Bracket output with a comment, if recording a Mtf
-    GDIMetaFile* pMtf=NULL;
     bool bMtfCommentWritten( false );
-    if( (pMtf=rXOut.GetOutDev()->GetConnectMetaFile()) )
+    GDIMetaFile* pMtf=rXOut.GetOutDev()->GetConnectMetaFile();
+    if( pMtf )
     {
         XPolyPolygon aPolyPoly;
         TakeXorPoly(aPolyPoly, TRUE);
@@ -2848,11 +2848,11 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     }
 
     if (rAttr.GetItemState(SDRATTR_OBJMOVEPROTECT,TRUE,&pPoolItem)==SFX_ITEM_SET) {
-        FASTBOOL b=((const SdrObjMoveProtectItem*)pPoolItem)->GetValue();
+        bool b=((const SdrObjMoveProtectItem*)pPoolItem)->GetValue();
         SetMoveProtect(b);
     }
     if (rAttr.GetItemState(SDRATTR_OBJSIZEPROTECT,TRUE,&pPoolItem)==SFX_ITEM_SET) {
-        FASTBOOL b=((const SdrObjSizeProtectItem*)pPoolItem)->GetValue();
+        bool b=((const SdrObjSizeProtectItem*)pPoolItem)->GetValue();
         SetResizeProtect(b);
     }
 
@@ -2861,7 +2861,7 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         SetResizeProtect( true );
 
     if (rAttr.GetItemState(SDRATTR_OBJPRINTABLE,TRUE,&pPoolItem)==SFX_ITEM_SET) {
-        FASTBOOL b=((const SdrObjPrintableItem*)pPoolItem)->GetValue();
+        bool b=((const SdrObjPrintableItem*)pPoolItem)->GetValue();
         SetPrintable(b);
     }
 
@@ -3734,7 +3734,7 @@ void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, S
 
 sal_Bool SdrObject::IsTransparent( BOOL /*bCheckForAlphaChannel*/) const
 {
-    FASTBOOL bRet = FALSE;
+    bool bRet = false;
 
     if( IsGroupObject() )
     {
