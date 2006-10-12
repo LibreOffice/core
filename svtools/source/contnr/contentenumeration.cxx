@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contentenumeration.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:32:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:09:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,7 +270,7 @@ namespace svt
             {
                 DBG_ERRORFILE( "createCursor: CommandAbortedException" );
             }
-            catch( Exception& e )
+            catch( Exception& )
             {
             }
 

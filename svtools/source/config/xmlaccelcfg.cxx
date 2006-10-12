@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlaccelcfg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:31:34 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:08:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ struct AttributeListImpl_impl
 
 sal_Int16 SAL_CALL AttributeListImpl::getLength(void) throw (RuntimeException)
 {
-    return m_pImpl->vecAttribute.size();
+    return sal::static_int_cast< sal_Int16 >(m_pImpl->vecAttribute.size());
 }
 
 
@@ -308,7 +308,7 @@ throw( SAXException, RuntimeException )
             SvtAcceleratorConfigItem aItem;
 
             // read attributes for accelerator
-            for ( int i=0; i< xAttrList->getLength(); i++ )
+            for ( sal_Int16 i=0; i< xAttrList->getLength(); i++ )
             {
                 OUString aName = xAttrList->getNameByIndex( i );
                 OUString aValue = xAttrList->getValueByIndex( i );
