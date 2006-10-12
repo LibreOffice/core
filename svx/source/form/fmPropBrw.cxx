@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:04:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:44:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -636,7 +636,7 @@ void FmPropBrw::impl_ensurePropertyBrowser_nothrow( FmFormShell* _pFormShell )
         sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
         OSL_ENSURE( false, sMessage );
     #else
-        e; // make compiler happy
+        (void)e; // make compiler happy
     #endif
     }
     m_xLastKnownDocument = xDocument;
