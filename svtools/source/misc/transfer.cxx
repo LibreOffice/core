@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:13:36 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:23:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,14 @@
 #include "precompiled_svtools.hxx"
 #ifdef WNT
 #include <tools/prewin.h>
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#pragma warning(disable: 4917)
+#endif
 #include <shlobj.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <tools/postwin.h>
 #endif
 
