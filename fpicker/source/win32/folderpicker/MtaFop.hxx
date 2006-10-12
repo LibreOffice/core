@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MtaFop.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:14:33 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:55:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,15 @@
 #endif
 
 #include <utility>
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#pragma warning(disable: 4917)
+#endif
 #include <objidl.h>
 #include <shlobj.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 #ifndef _WINIMPLHELPER_HXX_
 #include "..\misc\WinImplHelper.hxx"
@@ -136,10 +143,11 @@ protected:
     void SAL_CALL setStatusText( const rtl::OUString& aStatusText );
 
     virtual void SAL_CALL onInitialized( );
-    virtual void SAL_CALL onSelChanged( const rtl::OUString& aNewPath );
-    virtual sal_uInt32 SAL_CALL onValidateFailed( sal_Unicode* lpInvalidPath );
+    virtual void SAL_CALL onSelChanged( const rtl::OUString& aNewPath ) = 0;
 
 private:
+    sal_uInt32 onValidateFailed();
+
     // helper functions
     LPITEMIDLIST  SAL_CALL getItemIdListFromPath( const rtl::OUString& aDirectory );
     rtl::OUString SAL_CALL getPathFromItemIdList( LPCITEMIDLIST lpItemIdList );
