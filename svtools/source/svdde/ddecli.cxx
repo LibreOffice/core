@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddecli.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:23:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:26:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,21 +83,9 @@ struct DdeImp
 
 // --- DdeInternat::CliCallback() ----------------------------------
 
-#ifdef WNT
 HDDEDATA CALLBACK DdeInternal::CliCallback(
-            WORD nCode, WORD nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
-            HDDEDATA hData, DWORD nInfo1, DWORD nInfo2 )
-#else
-#if defined ( MTW ) || ( defined ( GCC ) && defined ( OS2 )) || defined( ICC )
-HDDEDATA CALLBACK __EXPORT DdeInternal::CliCallback(
-            WORD nCode, WORD nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
-            HDDEDATA hData, DWORD nInfo1, DWORD nInfo2 )
-#else
-HDDEDATA CALLBACK _export DdeInternal::CliCallback(
-            WORD nCode, WORD nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
-            HDDEDATA hData, DWORD nInfo1, DWORD nInfo2 )
-#endif
-#endif
+            WORD nCode, WORD nCbType, HCONV hConv, HSZ, HSZ hText2,
+            HDDEDATA hData, DWORD nInfo1, DWORD )
 {
     HDDEDATA nRet = DDE_FNOTPROCESSED;
     DdeConnections&     rAll = (DdeConnections&)DdeConnection::GetConnections();
@@ -414,7 +402,7 @@ DdeLink::DdeLink( DdeConnection& d, const String& aItemName, long n ) :
 
 DdeLink::~DdeLink()
 {
-    nType = (short)XTYP_ADVSTOP;
+    nType = (USHORT)XTYP_ADVSTOP;
     nTime = 0;
 }
 
