@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csmaphdl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:53:21 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:49:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,18 +88,18 @@ XMLCaseMapPropHdl::~XMLCaseMapPropHdl()
     // nothing to do
 }
 
-sal_Bool XMLCaseMapPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCaseMapPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
     sal_uInt16 nVal;
-
-    if( ( bRet = rUnitConverter.convertEnum( nVal, rStrImpValue, pXML_Casemap_Enum ) ) )
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum(
+        nVal, rStrImpValue, pXML_Casemap_Enum );
+    if( ( bRet ) )
         rValue <<= nVal;
 
     return bRet;
 }
 
-sal_Bool XMLCaseMapPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCaseMapPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
     sal_uInt16 nValue = sal_uInt16();
@@ -107,7 +107,9 @@ sal_Bool XMLCaseMapPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
 
     if( rValue >>= nValue )
     {
-        if( ( bRet = rUnitConverter.convertEnum( aOut, nValue, pXML_Casemap_Enum ) ) )
+        bRet = SvXMLUnitConverter::convertEnum(
+            aOut, nValue, pXML_Casemap_Enum );
+        if( bRet )
             rStrExpValue = aOut.makeStringAndClear();
     }
 
@@ -161,5 +163,5 @@ sal_Bool XMLCaseMapVariantHdl::exportXML( OUString& rStrExpValue, const uno::Any
     }
 
     rStrExpValue = aOut.makeStringAndClear();
-    return rStrExpValue.getLength();
+    return rStrExpValue.getLength() != 0;
 }
