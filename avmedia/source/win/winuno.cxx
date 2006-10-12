@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:47:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:27:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno:
 // - component_getImplementationEnvironment -
 // ------------------------------------------
 
-extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -60,7 +60,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char 
 // - component_writeInfo -
 // -----------------------
 
-extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
+extern "C" sal_Bool SAL_CALL component_writeInfo( void*, void* pRegistryKey )
 {
     sal_Bool bRet = sal_False;
 
@@ -87,7 +87,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* p
 // - component_getFactory -
 // ------------------------
 
-extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* pRegistryKey )
+extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* )
 {
     uno::Reference< lang::XSingleServiceFactory > xFactory;
     void*                                   pRet = 0;
