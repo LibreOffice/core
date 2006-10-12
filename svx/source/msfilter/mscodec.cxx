@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mscodec.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:26:57 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:58:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,11 @@ namespace {
 
 /** Rotates rnValue left by nBits bits. */
 template< typename Type >
-inline void lclRotateLeft( Type& rnValue, sal_uInt8 nBits )
+inline void lclRotateLeft( Type& rnValue, int nBits )
 {
-    OSL_ASSERT( nBits < sizeof( Type ) * 8 );
+    OSL_ASSERT(
+        nBits >= 0 &&
+        sal::static_int_cast< unsigned int >(nBits) < sizeof( Type ) * 8 );
     rnValue = static_cast< Type >( (rnValue << nBits) | (rnValue >> (sizeof( Type ) * 8 - nBits)) );
 }
 
@@ -257,11 +259,13 @@ void MSCodec_Std97::InitKey (
     (void)memset (pKeyData, 0, sizeof(pKeyData));
     for (i = 0, n = 16; (i < n) && pPassData[i]; i++)
     {
-        pKeyData[2*i    ] = ((pPassData[i] >> 0) & 0xff);
-        pKeyData[2*i + 1] = ((pPassData[i] >> 8) & 0xff);
+        pKeyData[2*i    ] = sal::static_int_cast< sal_uInt8 >(
+            (pPassData[i] >> 0) & 0xff);
+        pKeyData[2*i + 1] = sal::static_int_cast< sal_uInt8 >(
+            (pPassData[i] >> 8) & 0xff);
     }
     pKeyData[2*i] = 0x80;
-    pKeyData[ 56] = i << 4;
+    pKeyData[ 56] = sal::static_int_cast< sal_uInt8 >(i << 4);
 
     // Fill raw digest of KeyData into KeyData.
     (void)rtl_digest_updateMD5 (
