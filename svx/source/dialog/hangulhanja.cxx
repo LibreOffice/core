@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanja.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:22:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:13:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -728,7 +728,7 @@ namespace svx
 
                         // determine if it's Hangul
                         CharClass aCharClassificaton( m_xORB, m_aSourceLocale );
-                        sal_Int16 nScript = aCharClassificaton.getScript( m_sCurrentPortion, nNextAsianScript );
+                        sal_Int16 nScript = aCharClassificaton.getScript( m_sCurrentPortion, sal::static_int_cast< USHORT >(nNextAsianScript) );
                         if  (   ( UnicodeScript_kHangulJamo == nScript )
                             ||  ( UnicodeScript_kHangulCompatibilityJamo == nScript )
                             ||  ( UnicodeScript_kHangulSyllable == nScript )
@@ -904,7 +904,7 @@ namespace svx
                     aOffsets
                 );
             }
-            catch( const Exception& e )
+            catch( const Exception& )
             {
                 DBG_ERROR( "HangulHanjaConversion_Impl::implChange: caught unexpected exception!" );
                 aOffsets.realloc(0);
