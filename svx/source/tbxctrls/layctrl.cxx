@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layctrl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:05:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:21:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,9 +238,9 @@ void TableWindow::UpdateSize_Impl( long nNewCol, long nNewLine)
         if ( nNewLine > nHeight )
             nNewLine = nHeight;
 
-        Size    aWinSize = GetOutputSizePixel();
-        Invalidate( Rectangle( 0, aWinSize.Height()-nTextHeight+2-nOff,
-                               aWinSize.Width(), aWinSize.Height() ) );
+        Size    _aWinSize = GetOutputSizePixel();
+        Invalidate( Rectangle( 0, _aWinSize.Height()-nTextHeight+2-nOff,
+                               _aWinSize.Width(), _aWinSize.Height() ) );
         SetOutputSizePixel( Size( nMX*nWidth-1, nMY*nHeight-1+nTextHeight ) );
     }
     long    nMinCol = 0;
@@ -450,7 +450,7 @@ void TableWindow::PopupModeEnd()
     {
         Window* pParent = rTbx.GetParent();
         USHORT nId = GetId();
-        pParent->UserEvent(SVX_EVENT_COLUM_WINDOW_EXECUTE, (void*)nId);
+        pParent->UserEvent(SVX_EVENT_COLUM_WINDOW_EXECUTE, reinterpret_cast<void*>(nId));
 
         Reference< XDispatchProvider > xDispatchProvider( mxFrame, UNO_QUERY );
         if ( xDispatchProvider.is() )
@@ -774,7 +774,7 @@ void ColumnsWindow::PopupModeEnd()
     {
         USHORT nId = GetId();
         Window* pParent = rTbx.GetParent();
-        pParent->UserEvent(SVX_EVENT_COLUM_WINDOW_EXECUTE, (void*)nId);
+        pParent->UserEvent(SVX_EVENT_COLUM_WINDOW_EXECUTE, reinterpret_cast<void*>(nId));
 
         Sequence< PropertyValue > aArgs( 2 );
         aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Columns" ));
@@ -840,8 +840,7 @@ SfxPopupWindow* SvxTableToolBoxControl::CreatePopupWindowCascading()
 
 // -----------------------------------------------------------------------
 
-void SvxTableToolBoxControl::StateChanged(
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxTableToolBoxControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* pState )
 {
     if ( pState && pState->ISA(SfxUInt16Item) )
     {
