@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:10:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:05:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -517,7 +517,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
 
     // Zustand des Vorschau-Buttons durch UserData persistent
     String aUserData = GetUserData();
-    aBtnPreview.Check( aUserData.Len() ? ( sal_Unicode('1') == aUserData.GetChar( 0 ) ) : FALSE );
+    aBtnPreview.Check( aUserData.Len() && sal_Unicode('1') == aUserData.GetChar( 0 ) );
 
     // nach Reset kein ShowSelector() mehr aufrufen d"urfen
     bAllowShowSelector = FALSE;
@@ -701,7 +701,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
 
     // Zustand des Vorschau-Buttons durch UserData persistent
     String aUserData = GetUserData();
-    aBtnPreview.Check( aUserData.Len() ? ( sal_Unicode('1') == aUserData.GetChar( 0 ) ) : FALSE );
+    aBtnPreview.Check( aUserData.Len() && sal_Unicode('1') == aUserData.GetChar( 0 ) );
 
     // Input-BrushItem besorgen und auswerten
     const SvxBrushItem* pBgdAttr = NULL;
@@ -1071,7 +1071,7 @@ BOOL SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, U
 
                 CntWallpaperItem aItem( nWhich );
                 WallpaperStyle eWallStyle = SvxBrushItem::GraphicPos2WallpaperStyle(eNewPos);
-                aItem.SetStyle( eWallStyle );
+                aItem.SetStyle( sal::static_int_cast< USHORT >( eWallStyle ) );
                 aItem.SetColor( aBgdColor );
                 aItem.SetBitmapURL( aBgdGraphicPath );
                 rCoreSet.Put( aItem );
@@ -1092,7 +1092,7 @@ BOOL SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, U
         {
             WallpaperStyle eWallStyle =
                 SvxBrushItem::GraphicPos2WallpaperStyle( GetGraphicPosition_Impl() );
-            aItem.SetStyle( eWallStyle );
+            aItem.SetStyle( sal::static_int_cast< USHORT >( eWallStyle ) );
             aItem.SetColor( aBgdColor );
             aItem.SetBitmapURL( aBgdGraphicPath );
             rCoreSet.Put( aItem );
