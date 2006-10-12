@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 21:22:44 $
+#   last change: $Author: obo $ $Date: 2006-10-12 15:25:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,7 @@ SLOFILES=\
     $(SLO)$/iniadrtk.obj \
     $(SLO)$/lngmisc.obj \
     $(SLO)$/loginerr.obj \
-    $(SLO)$/PasswordHelper.obj \
-    $(SLO)$/strcrypt.obj
+    $(SLO)$/PasswordHelper.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES=\
