@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:35:32 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:10:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -587,7 +587,7 @@ void SvtIconWindow_Impl::InvalidateIconControl()
 
 ULONG SvtIconWindow_Impl::GetCursorPos() const
 {
-    ULONG nPos = ~0;
+    ULONG nPos = ~ULONG(0);
 
     SvxIconChoiceCtrlEntry* pCursorEntry = aIconCtrl.GetCursor( );
     if ( pCursorEntry )
@@ -600,7 +600,7 @@ ULONG SvtIconWindow_Impl::GetSelectEntryPos() const
 {
     ULONG nPos;
     if ( !aIconCtrl.GetSelectedEntry( nPos ) )
-        nPos = ~0;
+        nPos = ~ULONG(0);
     return nPos;
 }
 
@@ -642,7 +642,7 @@ sal_Bool SvtIconWindow_Impl::IsRootURL( const String& rURL ) const
 
 ULONG SvtIconWindow_Impl::GetRootPos( const String& rURL ) const
 {
-    ULONG nPos = ~0;
+    ULONG nPos = ~ULONG(0);
     if ( aNewDocumentRootURL.Match( rURL ) == STRING_MATCH )
         nPos = 0;
     else if ( aTemplateRootURL.Match( rURL ) == STRING_MATCH )
@@ -833,7 +833,7 @@ void SvtFileViewWindow_Impl::OpenFolder( const String& rURL )
     {
         xub_StrLen nSampFoldLen = aSamplesFolderURL.Len();
         aFileView.EnableNameReplacing(
-                    nSampFoldLen? rURL.CompareTo( aSamplesFolderURL, nSampFoldLen ) == COMPARE_EQUAL : sal_False );
+                    nSampFoldLen && rURL.CompareTo( aSamplesFolderURL, nSampFoldLen ) == COMPARE_EQUAL );
         aFileView.Initialize( rURL, String(), NULL );
     }
     aNewFolderLink.Call( this );
