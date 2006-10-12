@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:11:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:07:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,9 +164,9 @@ using namespace ::com::sun::star::uno;
 
 
 // -----------------------------------------------------------------------
-sal_Unicode& getSelectedChar()
+sal_uInt32& getSelectedChar()
 {
-    static sal_Unicode cSelectedChar = ' '; // keeps selected character over app livetime
+    static sal_uInt32 cSelectedChar = ' '; // keeps selected character over app livetime
     return cSelectedChar;
 }
 
@@ -402,7 +402,7 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
         default:
             {
                 sal_Unicode cChar = rKEvt.GetCharCode();
-                sal_Unicode cNext = maFontCharMap.GetNextChar( cChar - 1 );
+                sal_uInt32 cNext = maFontCharMap.GetNextChar( cChar - 1 );
                 tmpSelected = maFontCharMap.GetIndexFromChar( cNext );
                 if( tmpSelected < 0 || (cChar != cNext) )
                 {
@@ -576,7 +576,7 @@ sal_Unicode SvxShowCharSet::GetSelectCharacter() const
 {
     if( nSelectedIndex >= 0 )
         getSelectedChar() = maFontCharMap.GetCharFromIndex( nSelectedIndex );
-    return getSelectedChar();
+    return sal::static_int_cast< sal_Unicode >(getSelectedChar());
 }
 
 // -----------------------------------------------------------------------
@@ -633,7 +633,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
     if( nNewIndex < 0 )
     {
         // need to scroll see closest unicode
-        sal_Unicode cPrev = maFontCharMap.GetPrevChar( getSelectedChar() );
+        sal_uInt32 cPrev = maFontCharMap.GetPrevChar( getSelectedChar() );
         int nMapIndex = maFontCharMap.GetIndexFromChar( cPrev );
         int nNewPos = nMapIndex / COLUMN_COUNT;
         aVscrollSB.SetThumbPos( nNewPos );
@@ -716,7 +716,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
 void SvxShowCharSet::SelectCharacter( sal_Unicode cNew, BOOL bFocus )
 {
     // get next available char of current font
-    sal_Unicode cNext = maFontCharMap.GetNextChar( cNew - 1 );
+    sal_uInt32 cNext = maFontCharMap.GetNextChar( cNew - 1 );
 
     int nMapIndex = maFontCharMap.GetIndexFromChar( cNext );
     SelectIndex( nMapIndex, bFocus );
@@ -741,7 +741,7 @@ IMPL_LINK( SvxShowCharSet, VscrollHdl, ScrollBar *, EMPTYARG )
         if( m_pAccessible )
         {
             ::com::sun::star::uno::Any aOldAny, aNewAny;
-            sal_Int32 nLast = LastInView();
+            int nLast = LastInView();
             for ( ; nLast != nSelectedIndex; ++nLast)
             {
                 aOldAny <<= ImplGetItem(nLast)->GetAccessible();
@@ -778,13 +778,13 @@ void SvxShowCharSet::ReleaseAccessible()
     return m_xAccessible;
 }
 // -----------------------------------------------------------------------------
-::svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( USHORT _nPos )
+::svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( int _nPos )
 {
     ItemsMap::iterator aFind = m_aItems.find(_nPos);
     if ( aFind == m_aItems.end() )
     {
         OSL_ENSURE(m_pAccessible,"Who wants to create a child of my table without a parent?");
-        aFind = m_aItems.insert(ItemsMap::value_type(_nPos,new ::svx::SvxShowCharSetItem(*this,m_pAccessible->getTable(),_nPos))).first;
+        aFind = m_aItems.insert(ItemsMap::value_type(_nPos,new ::svx::SvxShowCharSetItem(*this,m_pAccessible->getTable(),sal::static_int_cast< USHORT >(_nPos)))).first;
         rtl::OUStringBuffer buf;
         buf.appendUtf32( maFontCharMap.GetCharFromIndex( _nPos ) );
         aFind->second->maText = buf.makeStringAndClear();
@@ -982,9 +982,8 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_ )
 
     String aDefStr( aFont.GetName() );
     String aLastName;
-    xub_StrLen i;
-    xub_StrLen nCount = mpDialog->GetDevFontCount();
-    for ( i = 0; i < nCount; i++ )
+    int nCount = mpDialog->GetDevFontCount();
+    for ( int i = 0; i < nCount; i++ )
     {
         String aFontName( mpDialog->GetDevFont( i ).GetName() );
         if ( aFontName != aLastName )
@@ -1000,7 +999,7 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_ )
     FASTBOOL bFound = (aFontLB.GetEntryPos( aDefStr ) == LISTBOX_ENTRY_NOTFOUND );
     if( !bFound )
     {
-        for ( i = 0; i < aDefStr.GetTokenCount(); ++i )
+        for ( xub_StrLen i = 0; i < aDefStr.GetTokenCount(); ++i )
         {
             String aToken = aDefStr.GetToken(i);
             if ( aFontLB.GetEntryPos( aToken ) != LISTBOX_ENTRY_NOTFOUND )
@@ -1215,7 +1214,7 @@ IMPL_LINK( SvxCharMapData, CharHighlightHdl, Control *, EMPTYARG )
         sal_Unicode c_Shifted = c;
         for( int i = 0; i < 4; ++i )
         {
-            char h = c_Shifted & 0x0F;
+            char h = sal::static_int_cast< char >(c_Shifted & 0x0F);
             buf[5-i] = (h > 9) ? (h - 10 + 'A') : (h + '0');
             c_Shifted >>= 4;
         }
