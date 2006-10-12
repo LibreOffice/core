@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FileOpenDlg.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:38:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:48:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,13 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 #ifndef _GETFILENAMEWRAPPER_HXX_
 #include "getfilenamewrapper.hxx"
@@ -272,8 +278,7 @@ protected:
     virtual void SAL_CALL onFolderChanged();
     virtual void SAL_CALL onTypeChanged(sal_uInt32 nFilterIndex);
 
-    // call base class method first when overloading
-    virtual void SAL_CALL onInitDialog(HWND hwndDlg, HWND hwndChild);
+    virtual void SAL_CALL onInitDialog(HWND hwndDlg) = 0;
 
     virtual sal_uInt32 SAL_CALL onCtrlCommand(HWND hwndDlg, sal_uInt16 ctrlId, sal_uInt16 notifyCode);
 
