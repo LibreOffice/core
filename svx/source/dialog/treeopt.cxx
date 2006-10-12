@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:46:04 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,10 @@
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
+#endif
+
+#ifndef _OSL_MODULE_HXX_
+#include <osl/module.hxx>
 #endif
 
 #include <com/sun/star/util/XCloseable.hpp>
@@ -329,7 +333,7 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
         case SID_SB_CONNECTIONPOOLING:              fnCreate = &::offapp::ConnectionPoolOptionsPage::Create; break;
         case SID_SB_DBREGISTEROPTIONS:              fnCreate = &::svx::DbRegistrationOptionsPage::Create; break;
         case RID_SVXPAGE_ACCESSIBILITYCONFIG:       fnCreate = &SvxAccessibilityOptionsTabPage::Create; break;
-        case RID_SVXPAGE_SSO:                       fnCreate = ( CreateTabPage ) GetSSOCreator(); break;
+        case RID_SVXPAGE_SSO:                       fnCreate = GetSSOCreator(); break;
         case RID_SVXPAGE_OPTIONS_CTL:               fnCreate = &SvxCTLOptionsPage::Create ; break;
         //added by jmeng begin
         case RID_SVXPAGE_INET_MOZPLUGIN:            fnCreate = &MozPluginTabPage::Create; break;
@@ -1116,6 +1120,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
     }
     else
     {
+/*
         static const sal_uInt16 _aGlobalHelpIds[] =
         {
             HID_OFADLG_TREE_GENERAL         ,
@@ -1135,7 +1140,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
         DBG_ASSERT( aHelpTextsArr.Count() ==
                     sizeof( _aGlobalHelpIds ) / sizeof(_aGlobalHelpIds[0]),
                     "fehlende HelpIds!!" );
-
+*/
 /* !!! pb: #98643# do not expand automatically, only with <+> or <crsr><right>
         if(!aTreeLB.IsInCollapse())
             pBox->Expand(pEntry);
@@ -1282,17 +1287,17 @@ BOOL EnableSSO( void )
     return bSSOEnabled;
 }
 
-void* GetSSOCreator( void )
+CreateTabPage GetSSOCreator( void )
 {
-    static void* theSymbol = 0;
+    static CreateTabPage theSymbol = 0;
     if ( theSymbol == 0 )
     {
-        OUString theModuleName = OUString::createFromAscii( SVLIBRARY( "ssoopt" ) );
-        oslModule theModule = osl_loadModule( theModuleName.pData, SAL_LOADMODULE_DEFAULT );
-        if ( theModule != 0 )
+        osl::Module aModule;
+        OUString theModuleName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "ssoopt" ) ) );
+        if( aModule.load( theModuleName, SAL_LOADMODULE_DEFAULT ) )
         {
-            OUString theSymbolName = OUString::createFromAscii( "CreateSSOTabPage" );
-            theSymbol = osl_getSymbol( theModule, theSymbolName.pData );
+            OUString theSymbolName( OUString::createFromAscii( "CreateSSOTabPage" ) );
+            theSymbol = reinterpret_cast<CreateTabPage>(aModule.getFunctionSymbol( theSymbolName ));
         }
     }
 
