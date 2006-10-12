@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:54:18 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:39:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,7 +348,10 @@ BOOL GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
         if( maGraphic.GetPrefMapMode() == MAP_PIXEL )
             aSize100 = Application::GetDefaultDevice()->PixelToLogic( maGraphic.GetPrefSize(), aMap100 );
         else
-            aSize100 = pOut->LogicToLogic( maGraphic.GetPrefSize(), maGraphic.GetPrefMapMode(), aMap100 );
+        {
+            MapMode m(maGraphic.GetPrefMapMode());
+            aSize100 = pOut->LogicToLogic( maGraphic.GetPrefSize(), &m, &aMap100 );
+        }
         // <--
 
         nTotalWidth = aSize100.Width() - pAttr->GetLeftCrop() - pAttr->GetRightCrop();
@@ -680,9 +683,8 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     Rectangle           aCropRect;
 
     // #i29534# Notify PDF writer about linked graphic (if any)
-    vcl::ExtOutDevData* pExtOutDevData;
-    if( (pExtOutDevData=pOut->GetExtOutDevData()) &&
-        pExtOutDevData->ISA(vcl::PDFExtOutDevData) )
+    vcl::ExtOutDevData* pExtOutDevData = pOut->GetExtOutDevData();
+    if( pExtOutDevData && pExtOutDevData->ISA(vcl::PDFExtOutDevData) )
     {
         // #i29534# Only delegate image handling to PDF, if no special
         // treatment is necessary
@@ -1004,7 +1006,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
         // #105641# Also crop animations
         if( aTransGraphic.IsAnimated() )
         {
-            int nFrame;
+            USHORT nFrame;
             Animation aAnim( aTransGraphic.GetAnimation() );
 
             for( nFrame=0; nFrame<aAnim.Count(); ++nFrame )
