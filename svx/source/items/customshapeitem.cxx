@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customshapeitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:19:00 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,7 +340,7 @@ SvStream& __EXPORT SdrCustomShapeGeometryItem::Store( SvStream& rOut, sal_uInt16
     return rOut;
 }
 
-SfxPoolItem* __EXPORT SdrCustomShapeGeometryItem::Clone( SfxItemPool */*pPool*/ ) const
+SfxPoolItem* __EXPORT SdrCustomShapeGeometryItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     SdrCustomShapeGeometryItem* pItem = new SdrCustomShapeGeometryItem( GetGeometry() );
 //  SdrCustomShapeGeometryItem* pItem = new SdrCustomShapeGeometryItem( *this );
