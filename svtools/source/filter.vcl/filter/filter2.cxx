@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:52:09 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:17:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -439,7 +439,7 @@ BOOL GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  BOOL bExtendedInfo )
 {
     UINT32  nTemp32;
     BOOL    bRet = FALSE;
-    BYTE    cByte;
+    BYTE    cByte = 0;
     BOOL    bM_COM;
 
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
@@ -589,8 +589,14 @@ BOOL GraphicDescriptor::ImpDetectPCD( SvStream& rStm, BOOL )
             bRet = TRUE;
         }
     }
-    else if ( (bRet = ( aPathExt.CompareToAscii( "pcd", 3 ) == COMPARE_EQUAL )))
-        nFormat = GFF_PCD;
+    else
+    {
+        bRet = aPathExt.CompareToAscii( "pcd", 3 ) == COMPARE_EQUAL;
+        if ( bRet )
+        {
+            nFormat = GFF_PCD;
+        }
+    }
 
     return bRet;
 }
@@ -839,8 +845,13 @@ BOOL GraphicDescriptor::ImpDetectTIF( SvStream& rStm, BOOL bExtendedInfo )
                         // Tag's lesen, bis wir auf Tag256 ( Width ) treffen
                         // nicht mehr Bytes als DATA_SIZE lesen
                         rStm >> nTemp16;
-                        while ( ( nTemp16 != 256 ) && ( bOk = ( bWideSearch || ( nCount < nMax ) ) ) )
+                        while ( nTemp16 != 256 )
                         {
+                            bOk = bWideSearch || ( nCount < nMax );
+                            if ( !bOk )
+                            {
+                                break;
+                            }
                             rStm.SeekRel( 10 );
                             rStm >> nTemp16;
                             nCount += 12;
@@ -925,9 +936,8 @@ BOOL GraphicDescriptor::ImpDetectTIF( SvStream& rStm, BOOL bExtendedInfo )
 
 BOOL GraphicDescriptor::ImpDetectXBM( SvStream&, BOOL )
 {
-    BOOL bRet;
-
-    if ( (bRet = ( aPathExt.CompareToAscii( "xbm", 3 ) == COMPARE_EQUAL )) )
+    BOOL bRet = aPathExt.CompareToAscii( "xbm", 3 ) == COMPARE_EQUAL;
+    if (bRet)
         nFormat = GFF_XBM;
 
     return bRet;
@@ -942,9 +952,8 @@ BOOL GraphicDescriptor::ImpDetectXBM( SvStream&, BOOL )
 
 BOOL GraphicDescriptor::ImpDetectXPM( SvStream&, BOOL )
 {
-    BOOL bRet;
-
-    if ( (bRet = ( aPathExt.CompareToAscii( "xpm", 3 ) == COMPARE_EQUAL )) )
+    BOOL bRet = aPathExt.CompareToAscii( "xpm", 3 ) == COMPARE_EQUAL;
+    if (bRet)
         nFormat = GFF_XPM;
 
     return bRet;
@@ -1063,9 +1072,8 @@ BOOL GraphicDescriptor::ImpDetectRAS( SvStream& rStm, BOOL )
 
 BOOL GraphicDescriptor::ImpDetectTGA( SvStream&, BOOL )
 {
-    BOOL bRet;
-
-    if ( (bRet = ( aPathExt.CompareToAscii( "tga", 3 ) == COMPARE_EQUAL )) )
+    BOOL bRet = aPathExt.CompareToAscii( "tga", 3 ) == COMPARE_EQUAL;
+    if (bRet)
         nFormat = GFF_TGA;
 
     return bRet;
@@ -1168,9 +1176,8 @@ BOOL GraphicDescriptor::ImpDetectEPS( SvStream& rStm, BOOL )
 
 BOOL GraphicDescriptor::ImpDetectDXF( SvStream&, BOOL )
 {
-    BOOL bRet;
-
-    if ( (bRet = ( aPathExt.CompareToAscii( "dxf", 3 ) == COMPARE_EQUAL )) )
+    BOOL bRet = aPathExt.CompareToAscii( "dxf", 3 ) == COMPARE_EQUAL;
+    if (bRet)
         nFormat = GFF_DXF;
 
     return bRet;
@@ -1184,9 +1191,8 @@ BOOL GraphicDescriptor::ImpDetectDXF( SvStream&, BOOL )
 
 BOOL GraphicDescriptor::ImpDetectMET( SvStream&, BOOL )
 {
-    BOOL bRet;
-
-    if ( (bRet = ( aPathExt.CompareToAscii( "met", 3 ) == COMPARE_EQUAL )) )
+    BOOL bRet = aPathExt.CompareToAscii( "met", 3 ) == COMPARE_EQUAL;
+    if (bRet)
         nFormat = GFF_MET;
 
     return bRet;
@@ -1201,9 +1207,8 @@ BOOL GraphicDescriptor::ImpDetectMET( SvStream&, BOOL )
 
 BOOL GraphicDescriptor::ImpDetectPCT( SvStream& rStm, BOOL )
 {
-    BOOL bRet;
-
-    if ( (bRet = ( aPathExt.CompareToAscii( "pct", 3 ) == COMPARE_EQUAL )))
+    BOOL bRet = aPathExt.CompareToAscii( "pct", 3 ) == COMPARE_EQUAL;
+    if (bRet)
         nFormat = GFF_PCT;
     else
     {
@@ -1265,9 +1270,8 @@ BOOL GraphicDescriptor::ImpDetectSGF( SvStream& rStm, BOOL )
 
 BOOL GraphicDescriptor::ImpDetectSGV( SvStream&, BOOL )
 {
-    BOOL bRet;
-
-    if (( bRet = ( aPathExt.CompareToAscii( "sgv", 3 ) == COMPARE_EQUAL )))
+    BOOL bRet = aPathExt.CompareToAscii( "sgv", 3 ) == COMPARE_EQUAL;
+    if (bRet)
         nFormat = GFF_SGV;
 
     return bRet;
@@ -1362,9 +1366,8 @@ BOOL GraphicDescriptor::ImpDetectSVM( SvStream& rStm, BOOL bExtendedInfo )
 
 BOOL GraphicDescriptor::ImpDetectWMF( SvStream&, BOOL )
 {
-    BOOL bRet;
-
-    if ((bRet = ( aPathExt.CompareToAscii( "wmf",3 ) == COMPARE_EQUAL )))
+    BOOL bRet = aPathExt.CompareToAscii( "wmf",3 ) == COMPARE_EQUAL;
+    if (bRet)
         nFormat = GFF_WMF;
 
     return bRet;
@@ -1378,9 +1381,8 @@ BOOL GraphicDescriptor::ImpDetectWMF( SvStream&, BOOL )
 
 BOOL GraphicDescriptor::ImpDetectEMF( SvStream&, BOOL )
 {
-    BOOL bRet;
-
-    if ((bRet = ( aPathExt.CompareToAscii( "emf", 3 ) == COMPARE_EQUAL )))
+    BOOL bRet = aPathExt.CompareToAscii( "emf", 3 ) == COMPARE_EQUAL;
+    if (bRet)
         nFormat = GFF_EMF;
 
     return bRet;
