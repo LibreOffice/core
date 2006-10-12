@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:32:52 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:53:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ void _HeaderTabListBox::Show( BOOL bVisible, USHORT nFlags )
     maHeaderBar.Show( bVisible, nFlags );
 }
 
-void _HeaderTabListBox::Enable( BOOL bEnable, BOOL bChild )
+void _HeaderTabListBox::Enable( bool bEnable, bool bChild )
 {
     maListBox.Enable( bEnable, bChild );
     maHeaderBar.Enable( bEnable, bChild );
