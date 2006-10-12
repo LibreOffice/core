@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editattr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:25:45 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:34:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,29 +153,29 @@ inline USHORT EditCharAttrib::GetLen() const
 inline void EditCharAttrib::MoveForward( USHORT nDiff )
 {
     DBG_ASSERT( ((long)nEnd + nDiff) <= 0xFFFF, "EditCharAttrib: MoveForward?!" );
-    nStart += nDiff;
-    nEnd += nDiff;
+    nStart = nStart + nDiff;
+    nEnd = nEnd + nDiff;
 }
 
 inline void EditCharAttrib::MoveBackward( USHORT nDiff )
 {
     DBG_ASSERT( ((long)nStart - nDiff) >= 0, "EditCharAttrib: MoveBackward?!" );
-    nStart -= nDiff;
-    nEnd -= nDiff;
+    nStart = nStart - nDiff;
+    nEnd = nEnd - nDiff;
 }
 
 inline void EditCharAttrib::Expand( USHORT nDiff )
 {
     DBG_ASSERT( ( ((long)nEnd + nDiff) <= (long)0xFFFF ), "EditCharAttrib: Expand?!" );
     DBG_ASSERT( !bFeature, "Bitte keine Features expandieren!" );
-    nEnd += nDiff;
+    nEnd = nEnd + nDiff;
 }
 
 inline void EditCharAttrib::Collaps( USHORT nDiff )
 {
     DBG_ASSERT( (long)nEnd - nDiff >= (long)nStart, "EditCharAttrib: Collaps?!" );
     DBG_ASSERT( !bFeature, "Bitte keine Features schrumpfen!" );
-    nEnd -= nDiff;
+    nEnd = nEnd - nDiff;
 }
 
 // -------------------------------------------------------------------------
