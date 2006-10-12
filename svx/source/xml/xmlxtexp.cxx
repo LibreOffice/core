@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlxtexp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:21:09 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:30:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,7 +350,7 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
                 xStorage->dispose();
         }
     }
-    catch( uno::Exception& e )
+    catch( uno::Exception& )
     {
         bRet = sal_False;
     }
@@ -385,7 +385,7 @@ sal_Bool SvxXMLXTableExportComponent::exportTable() throw()
             if( !mxTable.is() )
                 break;
 
-            char* pEleName;
+            char const* pEleName;
             Type aExportType = mxTable->getElementType();
             SvxXMLTableEntryExporter* pExporter = NULL;
 
