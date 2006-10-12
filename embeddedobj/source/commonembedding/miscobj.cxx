@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscobj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:40:51 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:20:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -513,7 +513,7 @@ uno::Reference< util::XCloseable > SAL_CALL OCommonEmbeddedObject::getComponent(
     {
         // the object is still not loaded
         throw uno::RuntimeException( ::rtl::OUString::createFromAscii( "Can't store object without persistence!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
     // if ( m_bWaitSaveCompleted )
