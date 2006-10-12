@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paraprev.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:33:57 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:24:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,7 @@ void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
             long nLW;
             switch( i )
             {
+                default:
                 case 3: nLW = aLineSiz.Width() * 8 / 10;    break;
                 case 4: nLW = aLineSiz.Width() * 9 / 10;    break;
                 case 5: nLW = aLineSiz.Width() / 2;         break;
