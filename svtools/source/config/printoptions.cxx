@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printoptions.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:28:33 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:08:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -613,12 +613,16 @@ void SvtBasePrintOptions::GetPrinterOptions( PrinterOptions& rOptions ) const
 void SvtBasePrintOptions::SetPrinterOptions( const PrinterOptions& rOptions )
 {
     SetReduceTransparency( rOptions.IsReduceTransparency() );
-    SetReducedTransparencyMode( rOptions.GetReducedTransparencyMode() );
+    SetReducedTransparencyMode(
+        sal::static_int_cast< sal_Int16 >(
+            rOptions.GetReducedTransparencyMode()) );
     SetReduceGradients( rOptions.IsReduceGradients() );
-    SetReducedGradientMode( rOptions.GetReducedGradientMode() );
+    SetReducedGradientMode(
+        sal::static_int_cast< sal_Int16 >(rOptions.GetReducedGradientMode()) );
     SetReducedGradientStepCount( rOptions.GetReducedGradientStepCount() );
     SetReduceBitmaps( rOptions.IsReduceBitmaps() );
-    SetReducedBitmapMode( rOptions.GetReducedBitmapMode() );
+    SetReducedBitmapMode(
+        sal::static_int_cast< sal_Int16 >(rOptions.GetReducedBitmapMode()) );
     SetReducedBitmapIncludesTransparency( rOptions.IsReducedBitmapIncludesTransparency() );
     SetConvertToGreyscales( rOptions.IsConvertToGreyscales() );
 
