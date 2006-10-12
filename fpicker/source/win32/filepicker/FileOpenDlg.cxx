@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FileOpenDlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:53:22 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:47:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -447,7 +447,7 @@ rtl::OUString SAL_CALL CFileOpenDialog::getCurrentFileName() const
 //
 //------------------------------------------------------------------------
 
-sal_uInt32 SAL_CALL CFileOpenDialog::onShareViolation(const rtl::OUString& aPathName)
+sal_uInt32 SAL_CALL CFileOpenDialog::onShareViolation(const rtl::OUString&)
 {
     return 0;
 }
@@ -465,7 +465,7 @@ sal_uInt32 SAL_CALL CFileOpenDialog::onFileOk()
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFileOpenDialog::onSelChanged(HWND hwndListBox)
+void SAL_CALL CFileOpenDialog::onSelChanged(HWND)
 {
 }
 
@@ -498,7 +498,7 @@ void SAL_CALL CFileOpenDialog::onFolderChanged()
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFileOpenDialog::onTypeChanged(sal_uInt32 nFilterIndex)
+void SAL_CALL CFileOpenDialog::onTypeChanged(sal_uInt32)
 {
 }
 
@@ -506,16 +506,7 @@ void SAL_CALL CFileOpenDialog::onTypeChanged(sal_uInt32 nFilterIndex)
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFileOpenDialog::onInitDialog(HWND hwndDlg, HWND hwndChild)
-{
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-sal_uInt32 SAL_CALL CFileOpenDialog::onCtrlCommand(
-    HWND hwndChild, sal_uInt16 ctrlId, sal_uInt16 notifyCode)
+sal_uInt32 SAL_CALL CFileOpenDialog::onCtrlCommand(HWND, sal_uInt16, sal_uInt16)
 {
     return 0;
 }
@@ -524,7 +515,7 @@ sal_uInt32 SAL_CALL CFileOpenDialog::onCtrlCommand(
 //
 //------------------------------------------------------------------------
 
-sal_uInt32 SAL_CALL CFileOpenDialog::onWMNotify( HWND hwndChild, LPOFNOTIFY lpOfNotify )
+sal_uInt32 SAL_CALL CFileOpenDialog::onWMNotify( HWND, LPOFNOTIFY lpOfNotify )
 {
     switch(lpOfNotify->hdr.code)
     {
@@ -572,7 +563,7 @@ void SAL_CALL CFileOpenDialog::handleInitDialog(HWND hwndDlg, HWND hwndChild)
 
     // calling virtual function which the
     // client can overload
-    onInitDialog(hwndDlg, hwndChild);
+    onInitDialog(hwndDlg);
 }
 
 //------------------------------------------------------------------------
