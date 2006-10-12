@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:54:40 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:12:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -565,9 +565,9 @@ sal_Bool SdrEdgeObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
     //if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
     //  return TRUE;
 
-    BOOL bHideContour(IsHideContour());
-    BOOL bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
-    BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
+    bool bHideContour(IsHideContour());
+    bool bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
+    bool bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
 
     // prepare ItemSet of this object
     const SfxItemSet& rSet = GetObjectItemSet();
@@ -657,7 +657,7 @@ sal_Bool SdrEdgeObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
 
 SdrObject* SdrEdgeObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
-    if (pVisiLayer!=NULL && !pVisiLayer->IsSet(nLayerId)) return NULL;
+    if (pVisiLayer!=NULL && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId))) return NULL;
     INT32 nMyTol=nTol;
 
     INT32 nWdt=ImpGetLineWdt()/2; // Halbe Strichstaerke
@@ -1961,13 +1961,13 @@ SdrHdl* SdrEdgeObj::GetHdl(USHORT nHdlNum) const
                     if (nNum==0) ((ImpEdgeHdl*)pHdl)->SetLineCode(OBJ1LINE2);
                     if (nNum==1) ((ImpEdgeHdl*)pHdl)->SetLineCode(OBJ1LINE3);
                 } else {
-                    nNum-=nO1;
+                    nNum=nNum-nO1;
                     if (nNum<nO2) {
                         nPt=nPntAnz-3-nNum;
                         if (nNum==0) ((ImpEdgeHdl*)pHdl)->SetLineCode(OBJ2LINE2);
                         if (nNum==1) ((ImpEdgeHdl*)pHdl)->SetLineCode(OBJ2LINE3);
                     } else {
-                        nNum-=nO2;
+                        nNum=nNum-nO2;
                         if (nNum<nM) {
                             nPt=aEdgeInfo.nMiddleLine;
                             ((ImpEdgeHdl*)pHdl)->SetLineCode(MIDDLELINE);
@@ -2293,7 +2293,7 @@ FASTBOOL SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, 
                         nConNum=rGP.GetId();
                         bOk=TRUE;
                     } else if (bVertex && !bUserFnd) {
-                        nConNum-=nConAnz;
+                        nConNum=nConNum-nConAnz;
                         if (rPV.GetView().IsAutoVertexConnectors()) {
                             SdrGluePoint aPt(pObj->GetVertexGluePoint(nConNum));
                             aConPos=aPt.GetAbsolutePos(*pObj);
