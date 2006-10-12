@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basmethnode.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:25:42 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:34:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,7 +253,7 @@ namespace basprov
         if ( aFunctionName == BASPROV_PROPERTY_EDITABLE )
         {
             ::rtl::OUString sDocURL, sLibName, sModName;
-            USHORT nLine1, nLine2;
+            USHORT nLine1 = 0, nLine2;
 
             if ( !m_bIsAppScript )
             {
