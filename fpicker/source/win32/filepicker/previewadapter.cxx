@@ -4,9 +4,9 @@
  *
  *  $RCSfile: previewadapter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:57:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:54:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ public:
 
     virtual void SAL_CALL notifyParentSizeChanged();
 
-    virtual void SAL_CALL notifyParentWindowPosChanged(sal_Bool bIsVisible);
+    virtual void SAL_CALL notifyParentWindowPosChanged();
 
 protected:
     virtual void SAL_CALL calcRightMargin();
@@ -259,7 +259,7 @@ void SAL_CALL CPreviewAdapterImpl::calcRightMargin()
 //
 //-----------------------------------------
 
-void SAL_CALL CPreviewAdapterImpl::notifyParentShow(sal_Bool bShow)
+void SAL_CALL CPreviewAdapterImpl::notifyParentShow(sal_Bool)
 {
 }
 
@@ -276,7 +276,7 @@ void SAL_CALL CPreviewAdapterImpl::notifyParentSizeChanged()
 //
 //-----------------------------------------
 
-void SAL_CALL CPreviewAdapterImpl::notifyParentWindowPosChanged(sal_Bool bIsVisible)
+void SAL_CALL CPreviewAdapterImpl::notifyParentWindowPosChanged()
 {
 }
 
@@ -432,7 +432,7 @@ class CWin98PreviewAdapterImpl : public CPreviewAdapterImpl
 public:
     CWin98PreviewAdapterImpl(HINSTANCE instance);
 
-    virtual void SAL_CALL notifyParentWindowPosChanged(sal_Bool bIsVisible);
+    virtual void SAL_CALL notifyParentWindowPosChanged();
 
 protected:
     virtual void SAL_CALL rearrangeLayout();
@@ -465,7 +465,7 @@ CWin98PreviewAdapterImpl::CWin98PreviewAdapterImpl(HINSTANCE instance) :
 //
 //--------------------------------------------
 
-void SAL_CALL CWin98PreviewAdapterImpl::notifyParentWindowPosChanged(sal_Bool bIsVisible)
+void SAL_CALL CWin98PreviewAdapterImpl::notifyParentWindowPosChanged()
 {
     try
     {
@@ -706,7 +706,7 @@ void SAL_CALL CPreviewAdapter::setParent(HWND parent)
 //
 //-------------------------------
 
-void SAL_CALL CPreviewAdapter::notifyParentShow(sal_Bool bShow)
+void SAL_CALL CPreviewAdapter::notifyParentShow(bool bShow)
 {
     m_pImpl->notifyParentShow(bShow);
 }
@@ -724,7 +724,7 @@ void SAL_CALL CPreviewAdapter::notifyParentSizeChanged()
 //
 //-------------------------------
 
-void SAL_CALL CPreviewAdapter::notifyParentWindowPosChanged(sal_Bool bIsVisible)
+void SAL_CALL CPreviewAdapter::notifyParentWindowPosChanged()
 {
-    m_pImpl->notifyParentWindowPosChanged(bIsVisible);
+    m_pImpl->notifyParentWindowPosChanged();
 }
