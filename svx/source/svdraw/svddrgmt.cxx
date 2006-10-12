@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgmt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:48:20 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:07:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,10 +154,10 @@ FASTBOOL SdrDragMethod::IsMoveOnly() const
     return FALSE;
 }
 
-void SdrDragMethod::DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const
+void SdrDragMethod::DrawXor(XOutputDevice& rXOut, FASTBOOL) const
 {
-    FASTBOOL bGlue=IsDraggingGluePoints();
-    FASTBOOL bPoints=IsDraggingPoints() || bGlue;
+    bool bGlue=IsDraggingGluePoints();
+    bool bPoints=IsDraggingPoints() || bGlue;
     OutputDevice* pOut=rXOut.GetOutDev();
     long x=0,y=0;
     if (bPoints) {
@@ -270,7 +270,7 @@ void SdrDragMethod::DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const
             }
         }
     }
-    rView.ImpDrawEdgeXor(rXOut,bFull);
+    rView.ImpDrawEdgeXor(rXOut);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -411,8 +411,8 @@ void SdrDragMovHdl::Show()
 {
     SdrHdl* pDragHdl=GetDragHdl();
     SdrHdlKind eDragHdl=pDragHdl->GetKind();
-    FASTBOOL bMirX=eDragHdl==HDL_MIRX;
-    FASTBOOL bShown=DragStat().IsShown();
+    bool bMirX=eDragHdl==HDL_MIRX;
+    bool bShown=DragStat().IsShown();
     if (rView.IsSolidMarkHdl()) {
         if (!bShown) {
             const SdrHdlList& rHL=GetHdlList();
@@ -440,8 +440,8 @@ void SdrDragMovHdl::Hide()
 {
     SdrHdl* pDragHdl=GetDragHdl();
     SdrHdlKind eDragHdl=pDragHdl->GetKind();
-    FASTBOOL bMirX=eDragHdl==HDL_MIRX;
-    FASTBOOL bShown=DragStat().IsShown();
+    bool bMirX=eDragHdl==HDL_MIRX;
+    bool bShown=DragStat().IsShown();
     SdrDragMethod::Hide();
     if (rView.IsSolidMarkHdl()) {
         if (bShown) {
@@ -526,7 +526,7 @@ FASTBOOL SdrDragObjOwn::End(FASTBOOL /*bCopy*/)
     Hide();
     SdrUndoAction* pUndo=NULL;
     SdrUndoAction* pUndo2=NULL;
-    FASTBOOL bRet=FALSE;
+    bool bRet=FALSE;
     SdrObject* pObj=GetDragObj();
     if (pObj!=NULL) {
         if (!rView.IsInsObjPoint()) {
@@ -713,13 +713,13 @@ void SdrDragMove::Mov(const Point& rNoSnapPnt_)
         ImpCheckSnap(aRU);
     }
     Point aPnt(aNoSnapPnt.X()+nBestXSnap,aNoSnapPnt.Y()+nBestYSnap);
-    FASTBOOL bOrtho=rView.IsOrtho();
+    bool bOrtho=rView.IsOrtho();
     if (bOrtho) OrthoDistance8(DragStat().GetStart(),aPnt,rView.IsBigOrtho());
     if (DragStat().CheckMinMoved(aNoSnapPnt)) {
         Point aPt1(aPnt);
         Rectangle aLR(rView.GetWorkArea());
-        FASTBOOL bWorkArea=!aLR.IsEmpty();
-        FASTBOOL bDragLimit=IsDragLimit();
+        bool bWorkArea=!aLR.IsEmpty();
+        bool bDragLimit=IsDragLimit();
         if (bDragLimit || bWorkArea) {
             Rectangle aSR2(GetMarkedRect());
             Point aD(aPt1-DragStat().GetStart());
@@ -916,8 +916,8 @@ void SdrDragResize::Mov(const Point& rNoSnapPnt)
     Point aRef(DragStat().GetRef1());
     Fraction aMaxFact(0x7FFFFFFF,1);
     Rectangle aLR(rView.GetWorkArea());
-    FASTBOOL bWorkArea=!aLR.IsEmpty();
-    FASTBOOL bDragLimit=IsDragLimit();
+    bool bWorkArea=!aLR.IsEmpty();
+    bool bDragLimit=IsDragLimit();
     if (bDragLimit || bWorkArea) {
         Rectangle aSR(GetMarkedRect());
         if (bDragLimit) {
@@ -952,9 +952,9 @@ void SdrDragResize::Mov(const Point& rNoSnapPnt)
     long nYMul=aPnt.Y()-aRef.Y();
     if (nXDiv<0) { nXDiv=-nXDiv; nXMul=-nXMul; }
     if (nYDiv<0) { nYDiv=-nYDiv; nYMul=-nYMul; }
-    FASTBOOL bXNeg=nXMul<0; if (bXNeg) nXMul=-nXMul;
-    FASTBOOL bYNeg=nYMul<0; if (bYNeg) nYMul=-nYMul;
-    FASTBOOL bOrtho=rView.IsOrtho() || !rView.IsResizeAllowed(FALSE);
+    bool bXNeg=nXMul<0; if (bXNeg) nXMul=-nXMul;
+    bool bYNeg=nYMul<0; if (bYNeg) nYMul=-nYMul;
+    bool bOrtho=rView.IsOrtho() || !rView.IsResizeAllowed(FALSE);
     if (!DragStat().IsHorFixed() && !DragStat().IsVerFixed()) {
         if (Abs(nXDiv)<=1 || Abs(nYDiv)<=1) bOrtho=FALSE;
         if (bOrtho) {
@@ -1223,7 +1223,7 @@ void SdrDragShear::Mov(const Point& rPnt)
                 }
             }
         }
-        FASTBOOL bNeg=nNeuWink<0;
+        bool bNeg=nNeuWink<0;
         if (bNeg) nNeuWink=-nNeuWink;
         if (nSA!=0) { // Winkelfang
             nNeuWink+=nSA/2;
@@ -1324,8 +1324,8 @@ FASTBOOL SdrDragMirror::Beg()
         Ref1()=pH1->GetPos();
         Ref2()=pH2->GetPos();
         aDif=pH2->GetPos()-pH1->GetPos();
-        FASTBOOL b90=(aDif.X()==0) || aDif.Y()==0;
-        FASTBOOL b45=b90 || (Abs(aDif.X())==Abs(aDif.Y()));
+        bool b90=(aDif.X()==0) || aDif.Y()==0;
+        bool b45=b90 || (Abs(aDif.X())==Abs(aDif.Y()));
         nWink=NormAngle360(GetAngle(aDif));
         if (!rView.IsMirrorAllowed(FALSE,FALSE) && !b45) return FALSE; // freier Achsenwinkel nicht erlaubt
         if (!rView.IsMirrorAllowed(TRUE,FALSE) && !b90) return FALSE;  // 45deg auch nicht erlaubt
@@ -1351,8 +1351,8 @@ void SdrDragMirror::MovPoint(Point& rPnt, const Point& rPvOfs)
 void SdrDragMirror::Mov(const Point& rPnt)
 {
     if (DragStat().CheckMinMoved(rPnt)) {
-        FASTBOOL bNeuSide=ImpCheckSide(rPnt);
-        FASTBOOL bNeuMirr=bSide0!=bNeuSide;
+        bool bNeuSide=ImpCheckSide(rPnt);
+        bool bNeuMirr=bSide0!=bNeuSide;
         if (bMirrored!=bNeuMirr) {
             Hide();
             bMirrored=bNeuMirr;
@@ -1398,7 +1398,7 @@ void SdrDragGradient::TakeComment(XubString& rStr) const
 
 FASTBOOL SdrDragGradient::Beg()
 {
-    FASTBOOL bRetval(FALSE);
+    bool bRetval(FALSE);
 
     pIAOHandle = (SdrHdlGradient*)GetHdlList().GetHdl(IsGradient() ? HDL_GRAD : HDL_TRNS);
     if(pIAOHandle)
@@ -1709,8 +1709,8 @@ void SdrDragCrook::MovAllPoints()
                             ResizePoint(aCtr1,aC,aFact,aFact1);
                         }
                     }
-                    FASTBOOL bRotOk=FALSE;
-                    double nSin,nCos;
+                    bool bRotOk=FALSE;
+                    double nSin=0,nCos=0;
                     if (aRad.X()!=0 && aRad.Y()!=0) {
                         bRotOk=bRotate;
                         switch (eMode) {
@@ -1760,9 +1760,9 @@ void SdrDragCrook::MovPointCrook(Point& rPnt, const Point& rPvOfs, Point* pC1, P
 {
     //FASTBOOL bSlant=eMode==SDRCROOK_SLANT;
     //FASTBOOL bStretch=eMode==SDRCROOK_STRETCH;
-    FASTBOOL bVert=bVertical;
-    FASTBOOL bC1=pC1!=NULL;
-    FASTBOOL bC2=pC2!=NULL;
+    bool bVert=bVertical;
+    bool bC1=pC1!=NULL;
+    bool bC2=pC2!=NULL;
     Point aC(aCenter);
     aC-=rPvOfs;
     if (bResize) {
@@ -1791,12 +1791,12 @@ void SdrDragCrook::Mov(const Point& rPnt)
 {
     if (DragStat().CheckMinMoved(rPnt)) {
         Point aPnt(rPnt);
-        FASTBOOL bNeuMoveOnly=rView.IsMoveOnlyDragging();
+        bool bNeuMoveOnly=rView.IsMoveOnlyDragging();
         bAtCenter=FALSE;
         SdrCrookMode eNeuMode=rView.GetCrookMode();
-        FASTBOOL bNeuContortion=!bNeuMoveOnly && ((bContortionAllowed && !rView.IsCrookNoContortion()) || !bNoContortionAllowed);
+        bool bNeuContortion=!bNeuMoveOnly && ((bContortionAllowed && !rView.IsCrookNoContortion()) || !bNoContortionAllowed);
         bResize=!rView.IsOrtho() && bResizeAllowed && !bNeuMoveOnly;
-        FASTBOOL bNeuRotate=bRotateAllowed && !bNeuContortion && !bNeuMoveOnly && eNeuMode==SDRCROOK_ROTATE;
+        bool bNeuRotate=bRotateAllowed && !bNeuContortion && !bNeuMoveOnly && eNeuMode==SDRCROOK_ROTATE;
         long nSA=0;
         if (nSA==0) aPnt=GetSnapPos(aPnt);
         Point aNeuCenter(aMarkCenter.X(),aStart.Y());
@@ -1922,7 +1922,7 @@ FASTBOOL SdrDragCrook::End(FASTBOOL bCopy)
 {
     Hide();
     if (bResize && aFact==Fraction(1,1)) bResize=FALSE;
-    FASTBOOL bDoCrook=aCenter!=aMarkCenter && aRad.X()!=0 && aRad.Y()!=0;
+    bool bDoCrook=aCenter!=aMarkCenter && aRad.X()!=0 && aRad.Y()!=0;
     if (bDoCrook || bResize) {
         if (bResize) {
             XubString aStr;
@@ -2080,7 +2080,7 @@ void SdrDragDistort::Mov(const Point& rPnt)
     if (DragStat().CheckMinMoved(rPnt)) {
         Point aPnt(GetSnapPos(rPnt));
         if (rView.IsOrtho()) OrthoDistance8(DragStat().GetStart(),aPnt,rView.IsBigOrtho());
-        FASTBOOL bNeuContortion=(bContortionAllowed && !rView.IsCrookNoContortion()) || !bNoContortionAllowed;
+        bool bNeuContortion=(bContortionAllowed && !rView.IsCrookNoContortion()) || !bNoContortionAllowed;
         if (bNeuContortion!=bContortion || aDistortedRect[nPolyPt]!=aPnt) {
             Hide();
             aDistortedRect[nPolyPt]=aPnt;
@@ -2095,7 +2095,7 @@ void SdrDragDistort::Mov(const Point& rPnt)
 FASTBOOL SdrDragDistort::End(FASTBOOL bCopy)
 {
     Hide();
-    FASTBOOL bDoDistort=DragStat().GetDX()!=0 || DragStat().GetDY()!=0;
+    bool bDoDistort=DragStat().GetDX()!=0 || DragStat().GetDY()!=0;
     if (bDoDistort) {
         rView.DistortMarkedObj(aMarkRect,aDistortedRect,!bContortion,bCopy);
         return TRUE;
