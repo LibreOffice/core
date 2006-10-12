@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helppopupwindow.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:57:03 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:53:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,12 +102,9 @@ sal_Int32 CHelpPopupWindow::s_RegisterWndClassCount = 0;
 
 CHelpPopupWindow::CHelpPopupWindow(
     HINSTANCE hInstance,
-    HWND hwndParent,
-    sal_Int32 minWidth,
-    sal_Int32 hMargins,
-    sal_Int32 vMargins ) :
-    m_hMargins( hMargins ),
-    m_vMargins( vMargins ),
+    HWND hwndParent ) :
+    m_hMargins( 0 ),
+    m_vMargins( 0 ),
     m_avCharWidth( 0 ),
     m_avCharHeight( 0 ),
     m_hwnd( NULL ),
@@ -225,7 +222,7 @@ void SAL_CALL CHelpPopupWindow::calcWindowRect( LPRECT lprect )
     if ( m_HelpText.getLength( ) <= MAX_CHARS_PER_LINE )
         nFormat |= DT_SINGLELINE;
 
-    int nRet = DrawText(
+    DrawText(
       hdc,
       m_HelpText.getStr( ),
       m_HelpText.getLength( ),
@@ -450,7 +447,7 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
 //
 //---------------------------------------------------
 
-void SAL_CALL CHelpPopupWindow::onNcDestroy( HWND hwnd )
+void SAL_CALL CHelpPopupWindow::onNcDestroy()
 {
     m_hwnd = NULL;
 }
@@ -539,7 +536,7 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
 
                 OSL_ASSERT( pImpl );
 
-                pImpl->onNcDestroy( hWnd );
+                pImpl->onNcDestroy();
             }
          break;
 
@@ -621,10 +618,11 @@ void SAL_CALL CHelpPopupWindow::UnregisterWindowClass( )
 
     if ( 0 == s_RegisterWndClassCount )
     {
-        bool bRet = UnregisterClass(
-            (LPCTSTR)MAKELONG( s_ClassAtom, 0 ), m_hInstance );
-
-        OSL_ENSURE( bRet, "unregister window class failed" );
+        if ( !UnregisterClass(
+                 (LPCTSTR)MAKELONG( s_ClassAtom, 0 ), m_hInstance ) )
+        {
+            OSL_ENSURE( false, "unregister window class failed" );
+        }
 
         s_ClassAtom = 0;
     }
