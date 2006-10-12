@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eehtml.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:50:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:37:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,8 @@
 
 #define STYLE_PRE               101
 
-EditHTMLParser::EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs, int bReadNewDoc )
-    : SfxHTMLParser( rIn, bReadNewDoc )
+EditHTMLParser::EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs )
+    : SfxHTMLParser( rIn, true )
     , aBaseURL( rBaseURL )
 {
     pImpEditEngine = 0;
@@ -85,7 +85,7 @@ SvParserState EditHTMLParser::CallParser( ImpEditEngine* pImpEE, const EditPaM& 
 {
     DBG_ASSERT( pImpEE, "CallParser: ImpEditEngine ?!" );
     pImpEditEngine = pImpEE;
-    SvParserState eState = SVPAR_NOTSTARTED;
+    SvParserState _eState = SVPAR_NOTSTARTED;
     if ( pImpEditEngine )
     {
         // Umbrechmimik vom RTF-Import einbauen?
@@ -98,7 +98,7 @@ SvParserState EditHTMLParser::CallParser( ImpEditEngine* pImpEE, const EditPaM& 
         }
 
         ImpSetStyleSheet( 0 );
-        eState = HTMLParser::CallParser();
+        _eState = HTMLParser::CallParser();
 
         if ( pImpEditEngine->aImportHdl.IsSet() )
         {
@@ -109,25 +109,26 @@ SvParserState EditHTMLParser::CallParser( ImpEditEngine* pImpEE, const EditPaM& 
         if ( bFieldsInserted )
             pImpEditEngine->UpdateFields();
     }
-    return eState;
+    return _eState;
 }
 
 void EditHTMLParser::NextToken( int nToken )
 {
     #ifdef DBG_UTIL
         HTML_TOKEN_IDS xID = (HTML_TOKEN_IDS)nToken;
+        (void)xID;
     #endif
 
     switch( nToken )
     {
     case HTML_META:
     {
-        const HTMLOptions *pOptions = GetOptions();
-        USHORT nArrLen = pOptions->Count();
+        const HTMLOptions *_pOptions = GetOptions();
+        USHORT nArrLen = _pOptions->Count();
         BOOL bEquiv = FALSE;
         for ( USHORT i = 0; i < nArrLen; i++ )
         {
-            const HTMLOption *pOption = (*pOptions)[i];
+            const HTMLOption *pOption = (*_pOptions)[i];
             switch( pOption->GetToken() )
             {
                 case HTML_O_HTTPEQUIV:
@@ -540,9 +541,7 @@ void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSe
     }
 
     ContentNode* pSN = aStartPaM.GetNode();
-    ContentNode* pEN = aEndPaM.GetNode();
     USHORT nStartNode = pImpEditEngine->GetEditDoc().GetPos( pSN );
-    USHORT nEndNode = pImpEditEngine->GetEditDoc().GetPos( pEN );
 
     // Wenn ein Attribut von 0 bis aktuelle Absatzlaenge geht,
     // soll es ein Absatz-Attribut sein!
@@ -551,7 +550,12 @@ void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSe
     // Alle vollstaendigen Absaetze sind Absatzattribute...
 
     // HTML eigentlich nicht:
+#ifdef DBG_UTIL
+    ContentNode* pEN = aEndPaM.GetNode();
+    USHORT nEndNode = pImpEditEngine->GetEditDoc().GetPos( pEN );
     DBG_ASSERT( nStartNode == nEndNode, "ImpSetAttribs: Mehrere Absaetze?" );
+#endif
+
 /*
     for ( USHORT z = nStartNode+1; z < nEndNode; z++ )
     {
@@ -709,12 +713,12 @@ void EditHTMLParser::StartPara( BOOL bReal )
 {
     if ( bReal )
     {
-        const HTMLOptions *pOptions = GetOptions();
-        USHORT nArrLen = pOptions->Count();
+        const HTMLOptions *_pOptions = GetOptions();
+        USHORT nArrLen = _pOptions->Count();
         SvxAdjust eAdjust = SVX_ADJUST_LEFT;
         for ( USHORT i = 0; i < nArrLen; i++ )
         {
-            const HTMLOption *pOption = (*pOptions)[i];
+            const HTMLOption *pOption = (*_pOptions)[i];
             switch( pOption->GetToken() )
             {
                 case HTML_O_ALIGN:
@@ -738,7 +742,7 @@ void EditHTMLParser::StartPara( BOOL bReal )
     bInPara = TRUE;
 }
 
-void EditHTMLParser::EndPara( BOOL bReal )
+void EditHTMLParser::EndPara( BOOL )
 {
     if ( bInPara )
     {
@@ -773,14 +777,14 @@ void EditHTMLParser::AnchorStart()
     // Anker im Anker ignoriern
     if ( !pCurAnchor )
     {
-        const HTMLOptions* pOptions = GetOptions();
-        USHORT nArrLen = pOptions->Count();
+        const HTMLOptions* _pOptions = GetOptions();
+        USHORT nArrLen = _pOptions->Count();
 
         String aRef;
 
         for ( USHORT i = 0; i < nArrLen; i++ )
         {
-            const HTMLOption* pOption = (*pOptions)[i];
+            const HTMLOption* pOption = (*_pOptions)[i];
             switch( pOption->GetToken() )
             {
                 case HTML_O_HREF:
@@ -832,12 +836,13 @@ void EditHTMLParser::HeadingStart( int nToken )
     if ( bWasInPara && HasTextInCurrentPara() )
         ImpInsertParaBreak();
 
-    USHORT nId = 1 + ( ( nToken - HTML_HEAD1_ON ) / 2 );
+    USHORT nId = sal::static_int_cast< USHORT >(
+        1 + ( ( nToken - HTML_HEAD1_ON ) / 2 ) );
     DBG_ASSERT( (nId >= 1) && (nId <= 9), "HeadingStart: ID kann nicht stimmen!" );
     ImpSetStyleSheet( nId );
 }
 
-void EditHTMLParser::HeadingEnd( int nToken )
+void EditHTMLParser::HeadingEnd( int )
 {
     EndPara( FALSE );
     ImpSetStyleSheet( 0 );
