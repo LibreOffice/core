@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fonthdl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:54:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:49:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,18 +237,17 @@ XMLFontFamilyPropHdl::~XMLFontFamilyPropHdl()
     // Nothing to do
 }
 
-sal_Bool XMLFontFamilyPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLFontFamilyPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
     sal_uInt16 eNewFamily;
-
-    if( ( bRet = rUnitConverter.convertEnum( eNewFamily, rStrImpValue, aFontFamilyGenericMapping ) ) )
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum( eNewFamily, rStrImpValue, aFontFamilyGenericMapping );
+    if( bRet )
         rValue <<= (sal_Int16)eNewFamily;
 
     return bRet;
 }
 
-sal_Bool XMLFontFamilyPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLFontFamilyPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
     OUStringBuffer aOut;
@@ -258,7 +257,7 @@ sal_Bool XMLFontFamilyPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     {
         FontFamily eFamily = (FontFamily)nFamily;
         if( eFamily != FAMILY_DONTKNOW )
-            bRet = rUnitConverter.convertEnum( aOut, eFamily, aFontFamilyGenericMapping );
+            bRet = SvXMLUnitConverter::convertEnum( aOut, eFamily, aFontFamilyGenericMapping );
     }
 
     rStrExpValue = aOut.makeStringAndClear();
@@ -315,18 +314,17 @@ XMLFontPitchPropHdl::~XMLFontPitchPropHdl()
     // Nothing to do
 }
 
-sal_Bool XMLFontPitchPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLFontPitchPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
     USHORT eNewPitch;
-
-    if( ( bRet = rUnitConverter.convertEnum( eNewPitch, rStrImpValue, aFontPitchMapping ) ) )
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum( eNewPitch, rStrImpValue, aFontPitchMapping );
+    if( bRet )
         rValue <<= (sal_Int16)eNewPitch;
 
     return bRet;
 }
 
-sal_Bool XMLFontPitchPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLFontPitchPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
     sal_Int16 nPitch = sal_Int16();
@@ -338,7 +336,7 @@ sal_Bool XMLFontPitchPropHdl::exportXML( OUString& rStrExpValue, const uno::Any&
 
     if( PITCH_DONTKNOW != ePitch )
     {
-        bRet = rUnitConverter.convertEnum( aOut, ePitch, aFontPitchMapping, XML_FIXED );
+        bRet = SvXMLUnitConverter::convertEnum( aOut, ePitch, aFontPitchMapping, XML_FIXED );
         rStrExpValue = aOut.makeStringAndClear();
     }
 
