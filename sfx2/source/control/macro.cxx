@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macro.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:26:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:51:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -407,7 +407,7 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
                         if ( bPrevReplaced )
                         {
                             aRecordable.Insert( aReplacement, n - 2 );
-                            n += aReplacement.Len();
+                            n = n + aReplacement.Len();
                             aRecordable.SetChar((unsigned short) (n-2), 0x0029);// ')' = 29h
                             aRecordable.Replace( n-1, 2, DEFINE_CONST_UNICODE("+\"") );
                             // ++n;
@@ -417,7 +417,7 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
                             aReplacement += DEFINE_CONST_UNICODE(")+\"");
                             aRecordable.SetChar(n, 0x0022 );// '"' = 22h
                             aRecordable.Insert( aReplacement, n + 1 );
-                            n += aReplacement.Len();
+                            n = n + aReplacement.Len();
                         }
                         bPrevReplaced = TRUE;
                     }
@@ -438,8 +438,11 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
                 }
 */
             }
-            else if ( pType != ::getVoidCppuType() )
-                DBG_ERROR("Unknown Type in recorder!");
+            else
+            {
+                OSL_ENSURE(
+                    pType == ::getVoidCppuType(), "Unknown Type in recorder!" );
+            }
 
             // den Parameter anh"angen
             aStatement += aArg;
