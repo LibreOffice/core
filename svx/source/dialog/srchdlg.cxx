@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:39:28 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:27:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1229,7 +1229,7 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
 
     if ( !pImpl->pRanges && pSSet )
     {
-        USHORT nCnt = 0;
+        sal_sSize nCnt = 0;
         const USHORT* pPtr = pSSet->GetRanges();
         const USHORT* pTmp = pPtr;
 
@@ -2066,7 +2066,7 @@ IMPL_LINK( SvxSearchDialog, FormatHdl_Impl, Button *, EMPTYARG )
     if ( !pSh || !pImpl->pRanges )
         return 0;
 
-    USHORT nCnt = 0;
+    sal_sSize nCnt = 0;
     const USHORT* pPtr = pImpl->pRanges;
     const USHORT* pTmp = pPtr;
 
