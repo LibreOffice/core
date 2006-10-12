@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuigaldlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:14:35 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:09:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
         Content                             aCnt( rStartURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
         Sequence< OUString >                aProps( 1 );
 
-        aProps.getArray()[ 0 ] == OUString::createFromAscii( "Url" );
+        aProps.getArray()[ 0 ] = OUString::createFromAscii( "Url" );
         Reference< ::com::sun::star::sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, INCLUDE_FOLDERS_AND_DOCUMENTS ) );
 
         if( xResultSet.is() )
@@ -250,9 +250,16 @@ SearchProgress::SearchProgress( Window* pParent, const INetURLObject& rStartURL 
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( SearchProgress, ClickCancelBtn, void*, EMPTYARG )
+void SearchProgress::Terminate()
 {
     maSearchThread.terminate();
+}
+
+// ------------------------------------------------------------------------
+
+IMPL_LINK( SearchProgress, ClickCancelBtn, void*, EMPTYARG )
+{
+    Terminate();
     return 0L;
 }
 
@@ -357,9 +364,17 @@ TakeProgress::TakeProgress( Window* pWindow ) :
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TakeProgress, ClickCancelBtn, void*, EMPTYARG )
+
+void TakeProgress::Terminate()
 {
     maTakeThread.terminate();
+}
+
+// ------------------------------------------------------------------------
+
+IMPL_LINK( TakeProgress, ClickCancelBtn, void*, EMPTYARG )
+{
+    Terminate();
     return 0L;
 }
 
