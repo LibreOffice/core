@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:50:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:09:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1957,7 +1957,7 @@ sal_Bool SdrPowerPointOLEDecompress( SvStream& rOutput, SvStream& rInput, sal_uI
     aZCodec.BeginCompression();
     SvMemoryStream aSource( pBuf, nInputSize, STREAM_READ );
     aZCodec.Decompress( aSource, rOutput );
-    sal_Bool bSuccess = aZCodec.EndCompression() != NULL;
+    sal_Bool bSuccess = aZCodec.EndCompression() != 0;
     delete[] pBuf;
     rInput.Seek( nOldPos );
     return bSuccess;
@@ -2557,7 +2557,9 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                             {
                                 nLen = pPtr - pF;
                                 if ( nLen )
-                                    aSelection.nEndPos += (sal_uInt16)nLen;
+                                    aSelection.nEndPos =
+                                        sal::static_int_cast< USHORT >(
+                                            aSelection.nEndPos + nLen );
                                 pF = pPtr + 1;
                                 rOutliner.QuickInsertLineBreak( ESelection( nParaIndex, aSelection.nEndPos, nParaIndex, aSelection.nEndPos + 1 ) );
                                 aSelection.nEndPos++;
@@ -2565,7 +2567,8 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                         }
                         nLen = pPtr - pF;
                         if ( nLen )
-                            aSelection.nEndPos += (sal_uInt16)nLen;
+                            aSelection.nEndPos = sal::static_int_cast< USHORT >(
+                                aSelection.nEndPos + nLen );
                     }
                     pPortion->ApplyTo( aPortionAttribs, (SdrPowerPointImport&)*this, nDestinationInstance, pTextObj );
                     rOutliner.QuickSetAttribs( aPortionAttribs, aSelection );
@@ -2745,7 +2748,7 @@ Size SdrPowerPointImport::GetPageSize() const
     if ( nMapMul > 2 * nMapDiv )
     {
         MapUnit eMap = pSdrModel->GetScaleUnit();
-        sal_Bool bInch = IsInch( eMap );
+        bool bInch = IsInch( eMap );
         long nInchMul = 1, nInchDiv = 1;
         if ( bInch )
         {   // Size temporaer (zum runden) in nach metric konvertieren
@@ -3442,7 +3445,7 @@ SvStream& operator>>( SvStream& rIn, PPTExtParaLevel& rLevel )
 BOOL PPTExtParaProv::GetGraphic( UINT32 nInstance, Graphic& rGraph ) const
 {
     BOOL bRetValue = FALSE;
-    PPTBuGraEntry* pPtr;
+    PPTBuGraEntry* pPtr = NULL;
     if ( nInstance < aBuGraList.Count() )
     {
         pPtr = (PPTBuGraEntry*)aBuGraList.GetObject( nInstance );
@@ -4304,7 +4307,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
     }
 
     rSlideHd.SeekToContent( rIn );
-    DffRecordHeader aTxMasterStyleHd;
+    DffRecordHeader aTxMasterStyleHd = { 0, 0, 0, 0, 0, 0 }; //TODO: aTxMasterStyleHd initialized here to suppress warning for now, see corresponding TODO below
     while ( rIn.Tell() < rSlideHd.GetRecEndFilePos() )
     {
         rIn >> aTxMasterStyleHd;
@@ -4313,7 +4316,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
         else
             aTxMasterStyleHd.SeekToEndOfRecord( rIn );
     }
-    while ( ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom ) && ( rIn.Tell() < rSlideHd.GetRecEndFilePos() ) )
+    while ( ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom ) && ( rIn.Tell() < rSlideHd.GetRecEndFilePos() ) ) //TODO: aTxMasterStyleHd may be used without having been properly initialized
     {
         sal_uInt32 nInstance = aTxMasterStyleHd.nRecInstance;
         if ( ( nInstance < PPT_STYLESHEETENTRYS ) &&
@@ -5066,12 +5069,15 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
     }
     else
     {
-        sal_Char cLo, *pBuf = new sal_Char[ nMaxLen + 1 ];
+        sal_Char *pBuf = new sal_Char[ nMaxLen + 1 ];
         pBuf[ nMaxLen ] = 0;
         rIn.Read( pBuf, nMaxLen );
         sal_Char* pPtr = pBuf;
-        while ( ( cLo = *pPtr ) )
+        for (;;)
         {
+            sal_Char cLo = *pPtr;
+            if ( cLo == 0 )
+                break;
             if ( cLo == 0xd )
             {
                 if ( nInstance == TSS_TYPE_PAGETITLE )
@@ -5081,14 +5087,14 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
             }
             pPtr++;
         }
-        xub_StrLen nLen = pPtr - pBuf;
+        xub_StrLen nLen = sal::static_int_cast< xub_StrLen >( pPtr - pBuf );
         if ( nLen )
             aString = String( pBuf, nLen, RTL_TEXTENCODING_MS_1252 );
         delete[] pBuf;
     }
     if ( aString.Len() )
     {
-        sal_uInt32  nMask;
+        sal_uInt32  nMask = 0; //TODO: nMask initialized here to suppress warning for now, see corresponding TODO below
         sal_uInt32  nCharCount, nCharAnzRead = 0;
         sal_Int32   nCharsToRead;
         sal_uInt16  i, j, nDummy16;
@@ -5236,12 +5242,12 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
 
         while ( nCharAnzRead < nStringLen )
         {
-            sal_uInt32 nBuFlags, nNumberingType, nLatestParaUpdate = 0xffffffff;
-            sal_uInt16 nBuInstance, nBuStart;
+            sal_uInt32 nBuFlags = 0, nNumberingType = 0, nLatestParaUpdate = 0xffffffff; //TODO: nBuFlags, nNumberingType initialized here to suppress warning for now, see corresponding TODO below
+            sal_uInt16 nBuInstance = 0, nBuStart = 0; //TODO: nBuFlags, nBuStart initialized here to suppress warning for now, see corresponding TODO below
 
-            sal_uInt32  nDontKnow1;
-            sal_uInt32  nDontKnow2;
-            sal_uInt16  nDontKnow2bit06;
+            sal_uInt32  nDontKnow1 = 0; //TODO: nDontKnow1 initialized here to suppress warning for now, see corresponding TODO below
+            sal_uInt32  nDontKnow2 = 0; //TODO: nDontKnow2 initialized here to suppress warning for now, see corresponding TODO below
+            sal_uInt16  nDontKnow2bit06 = 0; //TODO: nDontKnow2bit06 initialized here to suppress warning for now, see corresponding TODO below
 
             PPTCharPropSet aCharPropSet( nCurrentPara );
             if ( bTextPropAtom )
@@ -5346,7 +5352,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                stored in the portion and not paragraph section ?
                that makes no sense and cost me days of my life.)
             */
-            if ( nExtParaPos && ( ( nMask & 0x3c00 ) != nExtBuInd ) )
+            if ( nExtParaPos && ( ( nMask & 0x3c00 ) != nExtBuInd ) ) //TODO: nMask may be used without having been properly initialized
             {
                 nExtBuInd = nMask & 0x3c00;
                 if ( nExtParaPos < rExtParaHd.GetRecEndFilePos() )
@@ -5377,16 +5383,16 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                 if ( nExtParaPos && ( nLatestParaUpdate != nCurrentPara ) && ( nCurrentPara < aParaPropList.Count() ) )
                 {
                     PPTParaPropSet* pPropSet = (PPTParaPropSet*)aParaPropList.GetObject( nCurrentPara );
-                    pPropSet->pParaSet->nBuFlags = nBuFlags;
+                    pPropSet->pParaSet->nBuFlags = nBuFlags; //TODO: nBuFlags may be used without having been properly initialized
                     if ( nBuFlags & 0x800000 )
-                        pPropSet->pParaSet->nBuInstance = nBuInstance;
+                        pPropSet->pParaSet->nBuInstance = nBuInstance; //TODO: nBuInstance may be used without having been properly initialized
                     if ( nBuFlags & 0x01000000 )
-                        pPropSet->pParaSet->nNumberingType = nNumberingType;
+                        pPropSet->pParaSet->nNumberingType = nNumberingType; //TODO: nNumberingType may be used without having been properly initialized
                     if ( nBuFlags & 0x02000000 )
-                        pPropSet->pParaSet->nBuStart = nBuStart;
-                    pPropSet->pParaSet->nDontKnow1 = nDontKnow1;
-                    pPropSet->pParaSet->nDontKnow2 = nDontKnow2;
-                    pPropSet->pParaSet->nDontKnow2bit06 = nDontKnow2bit06;
+                        pPropSet->pParaSet->nBuStart = nBuStart; //TODO: nBuStart may be used without having been properly initialized
+                    pPropSet->pParaSet->nDontKnow1 = nDontKnow1; //TODO: nDontKnow1 may be used without having been properly initialized
+                    pPropSet->pParaSet->nDontKnow2 = nDontKnow2; //TODO: nDontKnow2 may be used without having been properly initialized
+                    pPropSet->pParaSet->nDontKnow2bit06 = nDontKnow2bit06; //TODO: nDontKnow2bit06 may be used without having been properly initialized
                     nLatestParaUpdate = nCurrentPara;
                 }
 
@@ -6297,7 +6303,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
     PPTPortionObj* pPortion = First();
     BOOL bIsHardAttribute = GetAttrib( PPT_ParaAttr_LineFeed, nVal, nDestinationInstance );
     nVal2 = (INT16)nVal;
-    sal_uInt32 nFont;
+    sal_uInt32 nFont = sal_uInt32();
     if ( pPortion && pPortion->GetAttrib( PPT_CharAttr_Font, nFont, nDestinationInstance ) )
         bIsHardAttribute = TRUE;
 
