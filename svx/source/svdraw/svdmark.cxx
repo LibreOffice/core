@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmark.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:52:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:10:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,8 @@ SdrMark::SdrMark(SdrObject* pNewObj, SdrPageView* pNewPageView)
 }
 
 SdrMark::SdrMark(const SdrMark& rMark)
-:   mpSelectedSdrObject(0L),
+:   ObjectUser(),
+    mpSelectedSdrObject(0L),
     mpPageView(0L),
     mpPoints(0L),
     mpLines(0L),
@@ -198,6 +199,7 @@ SdrMark::~SdrMark()
 
 void SdrMark::ObjectInDestruction(const SdrObject& rObject)
 {
+    (void) rObject; // avoid warnings
     OSL_ENSURE(mpSelectedSdrObject && mpSelectedSdrObject == &rObject, "SdrMark::ObjectInDestruction: called form object different from hosted one (!)");
     OSL_ENSURE(mpSelectedSdrObject, "SdrMark::ObjectInDestruction: still seleceted SdrObject is deleted, deselect first (!)");
     mpSelectedSdrObject = 0L;
