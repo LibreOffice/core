@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdorect.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:56:49 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:14:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,12 +161,12 @@ XPolygon SdrRectObj::ImpCalcXPoly(const Rectangle& rRect1, long nRad1, FASTBOOL 
     bContour=TRUE; // am 14.1.97 wg. Umstellung TakeContour ueber Mtf und Paint. Joe.
     XPolygon aXPoly(rRect1,nRad1,nRad1);
     if (bContour) {
-        unsigned nPointAnz=aXPoly.GetPointCount();
+        USHORT nPointAnz=aXPoly.GetPointCount();
         XPolygon aNeuPoly(nPointAnz+1);
-        unsigned nShift=nPointAnz-2;
+        USHORT nShift=nPointAnz-2;
         if (nRad1!=0) nShift=nPointAnz-5;
-        unsigned j=nShift;
-        for (unsigned i=1; i<nPointAnz; i++) {
+        USHORT j=nShift;
+        for (USHORT i=1; i<nPointAnz; i++) {
             aNeuPoly[i]=aXPoly[j];
             aNeuPoly.SetFlags(i,aXPoly.GetFlags(j));
             j++;
@@ -278,7 +278,7 @@ void SdrRectObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 void SdrRectObj::ImpDoPaintRectObjShadow(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec,
     sal_Bool bPaintFill, sal_Bool bPaintLine) const
 {
-    const sal_Bool bHideContour(IsHideContour());
+    const bool bHideContour(IsHideContour());
     const SfxItemSet& rSet = GetObjectItemSet();
     SfxItemSet aShadowSet(rSet);
 
@@ -358,7 +358,7 @@ void SdrRectObj::ImpDoPaintRectObjShadow(XOutputDevice& rXOut, const SdrPaintInf
 void SdrRectObj::ImpDoPaintRectObj(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec,
     sal_Bool bPaintFill, sal_Bool bPaintLine) const
 {
-    const sal_Bool bHideContour(IsHideContour());
+    const bool bHideContour(IsHideContour());
 
     if(!bHideContour)
     {
@@ -450,7 +450,7 @@ sal_Bool SdrRectObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
 
 SdrObject* SdrRectObj::ImpCheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer, FASTBOOL bForceFilled, FASTBOOL bForceTol) const
 {
-    if (pVisiLayer!=NULL && !pVisiLayer->IsSet(nLayerId)) return NULL;
+    if (pVisiLayer!=NULL && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId))) return NULL;
     INT32 nMyTol=nTol;
     FASTBOOL bFilled=bForceFilled || HasFill();
     FASTBOOL bPickThrough=pModel!=NULL && pModel->IsPickThroughTransparentTextFrames();
