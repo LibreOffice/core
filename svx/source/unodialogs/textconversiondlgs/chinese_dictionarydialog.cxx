@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chinese_dictionarydialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:08:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:23:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,9 +188,9 @@ void DictionaryList::save()
                 m_xDictionary->addEntry( pE->m_aTerm, pE->m_aMapping );
                 xPropertyType->setPropertyType( pE->m_aTerm, pE->m_aMapping, pE->m_nConversionPropertyType );
             }
-            catch( uno::Exception& e )
+            catch( uno::Exception& )
             {
-                e;
+
             }
         }
     }
@@ -537,7 +537,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
     m_aCT_DictionaryToTraditional.SetHelpId( HID_SVX_CHINESE_DICTIONARY_LB_TO_TRADITIONAL );
 
     SvtLinguConfig  aLngCfg;
-    sal_Bool bValue;
+    sal_Bool bValue = sal_Bool();
     Any aAny( aLngCfg.GetProperty( rtl::OUString::createFromAscii( UPN_IS_REVERSE_MAPPING ) ) );
     if( aAny >>= bValue )
         m_aCB_Reverse.Check( bValue );
@@ -705,7 +705,7 @@ void ChineseDictionaryDialog::updateAfterDirectionChange()
     updateButtons();
 }
 
-IMPL_LINK( ChineseDictionaryDialog, EditFieldsHdl, Control*, pCtrl )
+IMPL_LINK( ChineseDictionaryDialog, EditFieldsHdl, Control*, EMPTYARG )
 {
     updateButtons();
     return 0;
@@ -784,7 +784,7 @@ void ChineseDictionaryDialog::updateButtons()
 
     m_aPB_Delete.Enable( !bAdd && getActiveDictionary().GetSelectedRowCount()>0 );
 
-    DictionaryEntry* pFirstSelectedEntry = getActiveDictionary().getFirstSelectedEntry();
+//    DictionaryEntry* pFirstSelectedEntry = getActiveDictionary().getFirstSelectedEntry();
 
     bool bModify = false;
     {
