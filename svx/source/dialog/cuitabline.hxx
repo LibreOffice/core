@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuitabline.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:05:35 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:10:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,8 @@ class LineLocalExtMenuButton : public MenuButton
 
 class SvxLineTabPage : public SvxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
 private:
     FixedText           aFtLineStyle;
     LineLB              aLbLineStyle;
@@ -144,7 +146,7 @@ private:
 
     //#58425# Symbole auf einer Linie (z.B. StarChart) ->
     SdrObjList*         pSymbolList; //a list of symbols to be shown in menu. Symbol at position SID_ATTR_SYMBOLTYPE is to be shown in preview. The list position is to be used cyclic.
-    BOOL                bNewSize;
+    bool                bNewSize;
     Graphic             aAutoSymbolGraphic; //a graphic to be displayed in the preview in case that an automatic symbol is choosen
     long                nNumMenuGalleryItems;
     long                nSymbolType;
@@ -263,6 +265,8 @@ public:
 
 class SvxLineDefTabPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
 private:
     FixedLine           aFlDefinition;
     FixedText           aFTLinestyle;
@@ -360,6 +364,9 @@ public:
 
 class SvxLineEndDefTabPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 private:
     FixedLine           aFlTip;
     FixedText           aFTTitle;
