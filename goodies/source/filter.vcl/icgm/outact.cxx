@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outact.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:48:56 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:36:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,8 @@ using namespace ::com::sun::star;
 CGMOutAct::CGMOutAct( CGM& rCGM )
 {
     mpCGM = &rCGM;
-    mnCurrentPage = mnGroupActCount = mnGroupLevel = 0;
+    mnCurrentPage = 0;
+    mnGroupActCount = mnGroupLevel = 0;
     mpGroupLevel = new sal_uInt32[ CGM_OUTACT_MAX_GROUP_LEVEL ];
     mpPoints = (Point*)new sal_Int8[ 0x2000 * sizeof( Point ) ];
     mpFlags = new BYTE[ 0x2000 ];
@@ -117,12 +118,12 @@ void CGMOutAct::EndFigure()
 
 void CGMOutAct::RegPolyLine( Polygon& rPolygon, sal_Bool bReverse )
 {
-    sal_uInt32 nPoints = rPolygon.GetSize();
+    USHORT nPoints = rPolygon.GetSize();
     if ( nPoints )
     {
         if ( bReverse )
         {
-            for ( sal_uInt32 i = 0; i <  nPoints; i++ )
+            for ( USHORT i = 0; i <  nPoints; i++ )
             {
                 mpPoints[ mnIndex + i ] = rPolygon.GetPoint( nPoints - i - 1 );
                 mpFlags[ mnIndex + i ] = (sal_Int8)rPolygon.GetFlags( nPoints - i - 1 );
@@ -130,13 +131,13 @@ void CGMOutAct::RegPolyLine( Polygon& rPolygon, sal_Bool bReverse )
         }
         else
         {
-            for ( sal_uInt32 i = 0; i <  nPoints; i++ )
+            for ( USHORT i = 0; i <  nPoints; i++ )
             {
                 mpPoints[ mnIndex + i ] = rPolygon.GetPoint( i );
                 mpFlags[ mnIndex + i ] = (sal_Int8)rPolygon.GetFlags( i );
             }
         }
-        mnIndex += nPoints;
+        mnIndex = mnIndex + nPoints;
     }
 }
 
@@ -164,7 +165,7 @@ void CGMOutAct::SetGradientAngle( long nAngle )
 {
     if ( !mpGradient )
         mpGradient = new awt::Gradient;
-    mpGradient->Angle = nAngle;
+    mpGradient->Angle = sal::static_int_cast< sal_Int16 >(nAngle);
 }
 
 // ---------------------------------------------------------------

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outact.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:46:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:36:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ class CGMOutAct
         sal_uInt32                  mnGroupLevel;
         sal_uInt32*                 mpGroupLevel;
 
-        sal_uInt32                  mnIndex;                // figure
+        USHORT                  mnIndex;                // figure
         BYTE*                   mpFlags;
         Point*                  mpPoints;
         PolyPolygon             maPolyPolygon;
