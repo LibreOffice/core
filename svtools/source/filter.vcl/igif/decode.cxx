@@ -4,9 +4,9 @@
  *
  *  $RCSfile: decode.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:53:48 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:18:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,9 +171,10 @@ BOOL GIFLZWDecompressor::ProcessOneCode()
     if ( !bEndOfBlock )
     {
         // Einen Code aus dem Eingabe-Buffer holen:
-        nCode = ( (USHORT) nInputBitsBuf ) & ( ~( 0xffff << nCodeSize ) );
+        nCode = sal::static_int_cast< USHORT >(
+            ( (USHORT) nInputBitsBuf ) & ( ~( 0xffff << nCodeSize ) ));
         nInputBitsBuf >>= nCodeSize;
-        nInputBitsBufSize -= nCodeSize;
+        nInputBitsBufSize = nInputBitsBufSize - nCodeSize;
 
         if ( nCode < nClearCode )
         {
