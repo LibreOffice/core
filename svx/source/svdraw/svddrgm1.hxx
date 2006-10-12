@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgm1.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:34:51 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:07:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,8 +223,8 @@ class SdrDragMirror : public SdrDragMethod
 {
     Point                       aDif;
     long                        nWink;
-    FASTBOOL                    bMirrored;
-    FASTBOOL                    bSide0;
+    bool                        bMirrored;
+    bool                        bSide0;
 
 private:
     FASTBOOL ImpCheckSide(const Point& rPnt) const;
@@ -281,20 +281,20 @@ class SdrDragCrook : public SdrDragMethod
     Point                       aStart;
     Fraction                    aFact;
     Point                       aRad;
-    FASTBOOL                    bContortionAllowed;
-    FASTBOOL                    bNoContortionAllowed;
-    FASTBOOL                    bContortion;
-    FASTBOOL                    bResizeAllowed;
-    FASTBOOL                    bResize;
-    FASTBOOL                    bRotateAllowed;
-    FASTBOOL                    bRotate;
-    FASTBOOL                    bVertical;
-    FASTBOOL                    bValid;
-    FASTBOOL                    bLft;
-    FASTBOOL                    bRgt;
-    FASTBOOL                    bUpr;
-    FASTBOOL                    bLwr;
-    FASTBOOL                    bAtCenter;
+    bool                        bContortionAllowed;
+    bool                        bNoContortionAllowed;
+    bool                        bContortion;
+    bool                        bResizeAllowed;
+    bool                        bResize;
+    bool                        bRotateAllowed;
+    bool                        bRotate;
+    bool                        bVertical;
+    bool                        bValid;
+    bool                        bLft;
+    bool                        bRgt;
+    bool                        bUpr;
+    bool                        bLwr;
+    bool                        bAtCenter;
     long                        nWink;
     long                        nMarkSize;
     SdrCrookMode                eMode;
@@ -327,9 +327,9 @@ class SdrDragDistort : public SdrDragMethod
     Rectangle                   aMarkRect;
     XPolygon                    aDistortedRect;
     USHORT                      nPolyPt;
-    FASTBOOL                    bContortionAllowed;
-    FASTBOOL                    bNoContortionAllowed;
-    FASTBOOL                    bContortion;
+    bool                        bContortionAllowed;
+    bool                        bNoContortionAllowed;
+    bool                        bContortion;
 
 public:
     TYPEINFO();
