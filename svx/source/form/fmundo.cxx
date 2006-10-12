@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:11:03 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:47:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,7 @@ DECLARE_STL_STDKEY_MAP(Reference< XPropertySet >, PropertySetInfo, PropertySetIn
 
 String static_STR_UNDO_PROPERTY;
 //------------------------------------------------------------------------------
-DBG_NAME(FmXUndoEnvironment);
+DBG_NAME(FmXUndoEnvironment)
 //------------------------------------------------------------------------------
 FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
                    :rModel( _rModel )
@@ -365,7 +365,7 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
         return;
 
     // ist das Control noch einer Form zugeordnet
-    Reference< XInterface >  xModel = pObj->GetUnoControlModel();
+    Reference< XInterface >  xModel(pObj->GetUnoControlModel(), UNO_QUERY);
     Reference< XFormComponent >  xContent(xModel, UNO_QUERY);
     if (xContent.is() && pObj->GetPage())
     {
@@ -431,7 +431,7 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
         return;
 
     // ist das Control noch einer Form zugeordnet
-    Reference< XInterface >  xModel = pObj->GetUnoControlModel();
+    Reference< XInterface >  xModel(pObj->GetUnoControlModel(), UNO_QUERY);
     Reference< XFormComponent >  xContent(xModel, UNO_QUERY);
     if (xContent.is())
     {
@@ -722,7 +722,7 @@ void SAL_CALL FmXUndoEnvironment::modified( const EventObject& /*aEvent*/ ) thro
 void FmXUndoEnvironment::AddForms(const Reference< XNameContainer > & rForms)
 {
     Lock();
-    Reference< XInterface >  xInt = rForms;
+    Reference< XInterface >  xInt(rForms, UNO_QUERY);
     AddElement(xInt);
     UnLock();
 }
@@ -731,7 +731,7 @@ void FmXUndoEnvironment::AddForms(const Reference< XNameContainer > & rForms)
 void FmXUndoEnvironment::RemoveForms(const Reference< XNameContainer > & rForms)
 {
     Lock();
-    Reference< XInterface >  xInt = rForms;
+    Reference< XInterface >  xInt(rForms, UNO_QUERY);
     RemoveElement(xInt);
     UnLock();
 }
