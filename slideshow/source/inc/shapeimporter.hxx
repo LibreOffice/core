@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeimporter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:54:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:02:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,8 +94,6 @@ public:
 
 private:
     bool isSkip( ::com::sun::star::uno::Reference<
-                 ::com::sun::star::drawing::XShape> const& xCurrShape,
-                 ::com::sun::star::uno::Reference<
                  ::com::sun::star::beans::XPropertySet> const& xPropSet,
                  ::rtl::OUString const& shapeType ) const;
 

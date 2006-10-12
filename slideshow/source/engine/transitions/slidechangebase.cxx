@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidechangebase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:41:26 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:01:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,18 +386,18 @@ bool SlideChangeBase::operator()( double nValue )
 }
 
 void SlideChangeBase::performIn(
-    const cppcanvas::CustomSpriteSharedPtr&   rSprite,
-    UnoViewSharedPtr const &                  pView,
-    const cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
-    double                                    t )
+    const cppcanvas::CustomSpriteSharedPtr&   /*rSprite*/,
+    UnoViewSharedPtr const &                  /*pView*/,
+    const cppcanvas::CanvasSharedPtr&         /*rDestinationCanvas*/,
+    double                                    /*t*/ )
 {
 }
 
 void SlideChangeBase::performOut(
-    const cppcanvas::CustomSpriteSharedPtr&  rSprite,
-    UnoViewSharedPtr const &                 pView,
-    const cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
-    double                                   t )
+    const cppcanvas::CustomSpriteSharedPtr&  /*rSprite*/,
+    UnoViewSharedPtr const &                 /*pView*/,
+    const cppcanvas::CanvasSharedPtr&        /*rDestinationCanvas*/,
+    double                                   /*t*/ )
 {
 }
 
