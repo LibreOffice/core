@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rectitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:00:52 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:20:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,7 @@ BOOL SfxRectangleItem::PutValue( const com::sun::star::uno::Any& rVal,
     BOOL bRet = FALSE;
     nMemberId &= ~CONVERT_TWIPS;
     com::sun::star::awt::Rectangle aValue;
-    sal_Int32 nVal;
+    sal_Int32 nVal = 0;
     if ( !nMemberId )
         bRet = (rVal >>= aValue);
     else

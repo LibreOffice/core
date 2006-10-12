@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ptitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:00:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:20:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,7 @@ BOOL SfxPointItem::PutValue( const uno::Any& rVal,
     nMemberId &= ~CONVERT_TWIPS;
     BOOL bRet = FALSE;
     awt::Point aValue;
-    sal_Int32 nVal;
+    sal_Int32 nVal = 0;
     if ( !nMemberId )
     {
         bRet = ( rVal >>= aValue );
