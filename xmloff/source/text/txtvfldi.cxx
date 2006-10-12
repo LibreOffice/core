@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:20:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:55:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -992,7 +992,8 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
 
     // rename field
     // currently: no family in use! Use 0.
-    OUString sName = rImportHelper.GetRenameMap().Get(eVarType, sVarName);
+    OUString sName = rImportHelper.GetRenameMap().Get(
+        sal::static_int_cast< USHORT >(eVarType), sVarName);
 
     // get text fields supplier and field masters
     Reference<XTextFieldsSupplier> xTextFieldsSupp(rImport.GetModel(),
@@ -1043,7 +1044,8 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
             aBuf.append(nCollisionCount);
             sNew = aBuf.makeStringAndClear();
 
-            rImportHelper.GetRenameMap().Add(eVarType, sName, sNew);
+            rImportHelper.GetRenameMap().Add(
+                sal::static_int_cast< USHORT >(eVarType), sName, sNew);
 
             // call FindFieldMaster recursively to create new master
             return FindFieldMaster(xMaster, rImport, rImportHelper,
@@ -1067,7 +1069,8 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
             aBuf.append(nCollisionCount);
             sNew = aBuf.makeStringAndClear();
 
-            rImportHelper.GetRenameMap().Add(eVarType, sName, sNew);
+            rImportHelper.GetRenameMap().Add(
+                sal::static_int_cast< USHORT >(eVarType), sName, sNew);
 
             // call FindFieldMaster recursively to create new master
             return FindFieldMaster(xMaster, rImport, rImportHelper,
