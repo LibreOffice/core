@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hlmarkwn.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:23:45 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:14:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,7 +261,7 @@ void SvxHlinkDlgMarkWnd::RefreshTree ( String aStrURL )
 
     ClearTree();
 
-    int nPos = aStrURL.Search ( sal_Unicode('#') );
+    xub_StrLen nPos = aStrURL.Search ( sal_Unicode('#') );
 
     if( nPos != 0 )
         aUStrURL = ::rtl::OUString( aStrURL );
