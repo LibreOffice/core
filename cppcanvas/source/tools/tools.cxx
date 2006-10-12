@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:51:00 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:00:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,8 @@ namespace cppcanvas
 {
     namespace tools
     {
-        uno::Sequence< double > intSRGBAToDoubleSequence( const uno::Reference< rendering::XGraphicDevice >&    rDevice,
-                                                          Color::IntSRGBA                                       aColor  )
+        uno::Sequence< double > intSRGBAToDoubleSequence( const uno::Reference< rendering::XGraphicDevice >&,
+                                                          Color::IntSRGBA                                   aColor  )
         {
             uno::Sequence< double > aRes( 4 );
 
@@ -58,8 +58,8 @@ namespace cppcanvas
             return aRes;
         }
 
-        Color::IntSRGBA doubleSequenceToIntSRGBA( const uno::Reference< rendering::XGraphicDevice >&    rDevice,
-                                                  const uno::Sequence< double >&                        rColor  )
+        Color::IntSRGBA doubleSequenceToIntSRGBA( const uno::Reference< rendering::XGraphicDevice >&,
+                                                  const uno::Sequence< double >&                    rColor  )
         {
             return makeColor( static_cast<sal_uInt8>( 255*rColor[0] + .5 ),
                               static_cast<sal_uInt8>( 255*rColor[1] + .5 ),
