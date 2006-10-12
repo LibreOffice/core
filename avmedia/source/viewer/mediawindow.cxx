@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediawindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:58:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:26:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@
 #ifndef _COM_SUN_STAR_MEDIA_XMANAGER_HPP_
 #include <com/sun/star/media/XManager.hpp>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #define AVMEDIA_FRAMEGRABBER_DEFAULTFRAME_MEDIATIME 3.0
 
@@ -402,7 +403,7 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 
 bool MediaWindow::executeMediaURLDialog( Window* /* pParent */, ::rtl::OUString& rURL, bool bInsertDialog )
 {
-    ::sfx2::FileDialogHelper        aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+    ::sfx2::FileDialogHelper        aDlg( com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
     static const ::rtl::OUString    aWildcard( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
     FilterNameVector                aFilters;
     const ::rtl::OUString           aSeparator( RTL_CONSTASCII_USTRINGPARAM( ";" ) );
