@@ -4,9 +4,9 @@
  *
  *  $RCSfile: algitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:17:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ TYPEINIT1_AUTOFACTORY( SvxMarginItem, SfxPoolItem );
 
 SvxHorJustifyItem::SvxHorJustifyItem( const SvxCellHorJustify eJustify,
                                       const USHORT nId ) :
-    SfxEnumItem( nId, eJustify )
+    SfxEnumItem( nId, (USHORT)eJustify )
 {
 }
 
@@ -123,7 +123,7 @@ SfxItemPresentation SvxHorJustifyItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&              rText, const IntlWrapper */*pIntl*/)    const
+    XubString&              rText, const IntlWrapper *)    const
 {
     switch ( ePres )
     {
@@ -212,13 +212,13 @@ sal_Bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                     case table::CellHoriJustify_REPEAT:   eSvx = SVX_HOR_JUSTIFY_REPEAT;   break;
                     default: ; //prevent warning
                 }
-                SetValue( eSvx );
+                SetValue( (USHORT)eSvx );
             }
             break;
         case MID_HORJUST_ADJUST:
             {
                 //  property contains ParagraphAdjust values as sal_Int16
-                sal_Int16 nVal;
+                sal_Int16 nVal = sal_Int16();
                 if(!(rVal >>= nVal))
                     return sal_False;
 
@@ -232,7 +232,7 @@ sal_Bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                     case style::ParagraphAdjust_BLOCK:   eSvx = SVX_HOR_JUSTIFY_BLOCK;  break;
                     case style::ParagraphAdjust_CENTER:  eSvx = SVX_HOR_JUSTIFY_CENTER; break;
                 }
-                SetValue( eSvx );
+                SetValue( (USHORT)eSvx );
             }
     }
     return sal_True;
@@ -272,7 +272,7 @@ USHORT SvxHorJustifyItem::GetValueCount() const
 
 SvxVerJustifyItem::SvxVerJustifyItem( const SvxCellVerJustify eJustify,
                                       const USHORT nId ) :
-    SfxEnumItem( nId, eJustify )
+    SfxEnumItem( nId, (USHORT)eJustify )
 {
 }
 
@@ -284,7 +284,7 @@ SfxItemPresentation SvxVerJustifyItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&              rText,
-    const IntlWrapper */*pIntl*/)    const
+    const IntlWrapper * )    const
 {
     switch ( ePres )
     {
@@ -337,7 +337,7 @@ sal_Bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
         case table::CellVertJustify_BOTTOM:   eSvx = SVX_VER_JUSTIFY_BOTTOM;    break;
         default: ; //prevent warning
     }
-    SetValue( eSvx );
+    SetValue( (USHORT)eSvx );
 
     return sal_True;
 }
@@ -377,7 +377,7 @@ USHORT SvxVerJustifyItem::GetValueCount() const
 
 SvxOrientationItem::SvxOrientationItem( const SvxCellOrientation eOrientation,
                                         const USHORT nId):
-    SfxEnumItem( nId, eOrientation )
+    SfxEnumItem( nId, (USHORT)eOrientation )
 {
 }
 
@@ -394,7 +394,7 @@ SfxItemPresentation SvxOrientationItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&              rText, const IntlWrapper */*pIntl*/ ) const
+    XubString&              rText, const IntlWrapper * ) const
 {
     switch ( ePres )
     {
@@ -445,7 +445,7 @@ sal_Bool SvxOrientationItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ 
         case table::CellOrientation_STACKED:    eSvx = SVX_ORIENTATION_STACKED;   break;
         default: ; //prevent warning
     }
-    SetValue( eSvx );
+    SetValue( (USHORT)eSvx );
     return sal_True;
 }
 
