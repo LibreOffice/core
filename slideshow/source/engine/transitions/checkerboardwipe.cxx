@@ -4,9 +4,9 @@
  *
  *  $RCSfile: checkerboardwipe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:37:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:01:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,15 +54,15 @@ namespace internal {
     ::basegfx::B2DPolyPolygon res;
     for ( sal_Int32 i = m_unitsPerEdge; i--; )
     {
-        ::basegfx::B2DHomMatrix t( aTransform );
+        ::basegfx::B2DHomMatrix transform( aTransform );
         if ((i % 2) == 1) // odd line
-            t.translate( -d, 0.0 );
+            transform.translate( -d, 0.0 );
         for ( sal_Int32 j = (m_unitsPerEdge / 2) + 1; j--; )
         {
             ::basegfx::B2DPolyPolygon poly( m_unitRect );
-            poly.transform( t );
+            poly.transform( transform );
             res.append( poly );
-            t.translate( d * 2.0, 0.0 );
+            transform.translate( d * 2.0, 0.0 );
         }
         aTransform.translate( 0.0, d ); // next line
     }

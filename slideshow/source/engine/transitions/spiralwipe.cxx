@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spiralwipe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:42:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:02:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ SpiralWipe::SpiralWipe( sal_Int32 nElements, bool flipOnYAxis )
             const sal_Int32 alen = (len > edge1 ? edge1 : len);
             len -= alen;
             poly = createUnitRect();
-            ::basegfx::B2DHomMatrix aTransform;
+            aTransform.identity();
             aTransform.scale(
                 ::basegfx::pruneScaleValue( static_cast<double>(alen) / m_sqrtElements ),
                 ::basegfx::pruneScaleValue( 1.0 / m_sqrtElements ) );
