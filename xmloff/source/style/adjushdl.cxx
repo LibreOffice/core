@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adjushdl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:51:49 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:47:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,18 +101,17 @@ XMLParaAdjustPropHdl::~XMLParaAdjustPropHdl()
     // nothing to do
 }
 
-sal_Bool XMLParaAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLParaAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
     sal_uInt16 eAdjust;
-
-    if( ( bRet = rUnitConverter.convertEnum( eAdjust, rStrImpValue, pXML_Para_Adjust_Enum ) ) )
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum( eAdjust, rStrImpValue, pXML_Para_Adjust_Enum );
+    if( bRet )
         rValue <<= (sal_Int16)eAdjust;
 
     return bRet;
 }
 
-sal_Bool XMLParaAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLParaAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     if(!rValue.hasValue())
         return sal_False;     //added by BerryJia for fixing Bug102407 2002-11-5
@@ -121,7 +120,7 @@ sal_Bool XMLParaAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
 
     rValue >>= nVal;
 
-    sal_Bool bRet = rUnitConverter.convertEnum( aOut, nVal, pXML_Para_Adjust_Enum, XML_START );
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum( aOut, nVal, pXML_Para_Adjust_Enum, XML_START );
 
     rStrExpValue = aOut.makeStringAndClear();
 
@@ -138,18 +137,17 @@ XMLLastLineAdjustPropHdl::~XMLLastLineAdjustPropHdl()
     // nothing to do
 }
 
-sal_Bool XMLLastLineAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLLastLineAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
     sal_uInt16 eAdjust;
-
-    if( ( bRet = rUnitConverter.convertEnum( eAdjust, rStrImpValue, pXML_Para_Align_Last_Enum ) ) )
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum( eAdjust, rStrImpValue, pXML_Para_Align_Last_Enum );
+    if( bRet )
         rValue <<= (sal_Int16)eAdjust;
 
     return bRet;
 }
 
-sal_Bool XMLLastLineAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLLastLineAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut;
     sal_Int16 nVal = 0;
@@ -158,7 +156,7 @@ sal_Bool XMLLastLineAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno:
     rValue >>= nVal;
 
     if( nVal != style::ParagraphAdjust_LEFT )
-        bRet = rUnitConverter.convertEnum( aOut, nVal, pXML_Para_Align_Last_Enum, XML_START );
+        bRet = SvXMLUnitConverter::convertEnum( aOut, nVal, pXML_Para_Align_Last_Enum, XML_START );
 
     rStrExpValue = aOut.makeStringAndClear();
 
