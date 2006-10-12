@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.183 $
+ *  $Revision: 1.184 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:48:32 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:55:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1309,7 +1309,9 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 // commit the wrapper stream ( the stream will connect the URL only on commit, after that it will hold it )
                 // if the last step is failed the stream should stay to be transacted and should be commited on any flush
                 // so we can forget the stream in any way and the next storage commit will flush it
-            if ( ( bNeedsDisconnectionOnFail = DisconnectStorage_Impl( *pMedium, rMedium ) )
+            bNeedsDisconnectionOnFail = DisconnectStorage_Impl(
+                *pMedium, rMedium );
+            if ( bNeedsDisconnectionOnFail
               || ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
             {
                 pMedium->CloseAndRelease();
@@ -1346,8 +1348,9 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             // the source format is an own one but the target is
             // an alien format, just connect the source to temporary
             // storage
-
-            if ( ( bNeedsDisconnectionOnFail = DisconnectStorage_Impl( *pMedium, rMedium ) )
+            bNeedsDisconnectionOnFail = DisconnectStorage_Impl(
+                *pMedium, rMedium );
+            if ( bNeedsDisconnectionOnFail
               || ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
             {
                 pMedium->CloseAndRelease();
