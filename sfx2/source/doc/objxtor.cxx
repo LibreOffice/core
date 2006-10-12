@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:44:06 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:56:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -945,8 +945,7 @@ XModel* SfxObjectShell::GetModel()
 
 void SfxObjectShell::SetModel( SfxBaseModel* pModel )
 {
-    if ( pImp->xModel.is() )
-        DBG_WARNING( "Model already set!" );
+    OSL_ENSURE( !pImp->xModel.is(), "Model already set!" );
 
     pImp->xModel = pModel;
 }
@@ -960,8 +959,7 @@ void SfxObjectShell::SetModel( SfxBaseModel* pModel )
 
 void SfxObjectShell::SetBaseModel( SfxBaseModel* pModel )
 {
-    if ( pImp->xModel.is() && pModel )
-        DBG_WARNING( "Model already set!" );
+    OSL_ENSURE( !pImp->xModel.is() || pModel == NULL, "Model already set!" );
 
     pImp->xModel = pModel;
 }
