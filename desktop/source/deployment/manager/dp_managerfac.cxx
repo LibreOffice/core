@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_managerfac.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:40:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:09:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,7 @@ bool singleton_entries(
         return true;
     }
     catch (registry::InvalidRegistryException & exc) {
+        (void) exc; // avoid warnings
         OSL_ENSURE( 0, ::rtl::OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return false;
