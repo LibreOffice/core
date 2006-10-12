@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chardlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:40:40 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:06:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,10 @@ protected:
     inline SvxFont&     GetPreviewFont();
     inline SvxFont&     GetPreviewCJKFont();
     inline SvxFont&     GetPreviewCTLFont();
+
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 };
 
 // class SvxCharNamePage -------------------------------------------------
@@ -177,6 +181,9 @@ protected:
 public:
                         ~SvxCharNamePage();
 
+    virtual void DeactivatePage();
+    virtual void ActivatePage();
+
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static USHORT*      GetRanges();
 
@@ -197,6 +204,8 @@ public:
 
 class SvxCharEffectsPage : public SvxCharBasePage
 {
+    using TabPage::DeactivatePage;
+
 private:
     FixedText           m_aUnderlineFT;
     ListBox             m_aUnderlineLB;
@@ -329,6 +338,9 @@ public:
     //                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
     virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
+
+    virtual void DeactivatePage();
+    virtual void ActivatePage();
 };
 
 // class SvxCharTwoLinesPage ---------------------------------------------
@@ -356,6 +368,7 @@ private:
     DECL_LINK(          CharacterMapHdl_Impl, ListBox* );
 
 protected:
+    virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
 public:
@@ -367,6 +380,9 @@ public:
     //                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
     virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
+
+    virtual void DeactivatePage();
+    virtual void ActivatePage();
 };
 
 #endif // #ifndef _SVX_CHARDLG_HXX
