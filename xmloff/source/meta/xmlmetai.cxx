@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:39:38 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:44:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,10 +212,10 @@ static __FAR_DATA SvXMLTokenMapEntry aMetaReloadTokenMap[] =
 
 //-------------------------------------------------------------------------
 
-sal_Bool lcl_GetNumber( const rtl::OUString& rString, sal_Int32& rValue,
-                        sal_Int32 nMax )
+template< typename T1, typename T2 >
+sal_Bool lcl_GetNumber( const rtl::OUString& rString, T1& rValue, T2 nMax )
 {
-    sal_Int32 nTemp = 0;
+    T1 nTemp = 0;
 
     rtl::OUString aTrimmed = rString.trim();
     sal_Int32 nLen = aTrimmed.getLength();
@@ -224,8 +224,7 @@ sal_Bool lcl_GetNumber( const rtl::OUString& rString, sal_Int32& rValue,
     while( nPos < nLen && sal_Unicode('0') <= (c = aTrimmed[nPos]) &&
            sal_Unicode('9') >= c )
     {
-        nTemp *= 10;
-        nTemp += (c - sal_Unicode('0'));
+        nTemp = 10 * nTemp + (c - sal_Unicode('0'));
         if ( nTemp > nMax )
             return sal_False;
 
@@ -256,12 +255,12 @@ sal_Bool SfxXMLMetaElementContext::ParseISODateTimeString(
     else
         aDateStr = rString;         // no separator: only date part
 
-    sal_Int32 nYear  = 0;
-    sal_Int32 nMonth = 1;
-    sal_Int32 nDay   = 1;
-    sal_Int32 nHour  = 0;
-    sal_Int32 nMin   = 0;
-    sal_Int32 nSec   = 0;
+    sal_uInt16 nYear  = 0;
+    sal_uInt16 nMonth = 1;
+    sal_uInt16 nDay   = 1;
+    sal_uInt16 nHour  = 0;
+    sal_uInt16 nMin   = 0;
+    sal_uInt16 nSec   = 0;
 
     const sal_Unicode* pStr = aDateStr.getStr();
     sal_Int32 nDateTokens = 1;
@@ -671,7 +670,7 @@ void SfxXMLMetaElementContext::EndElement()
                             xSet->setPropertyValue( aPropName, uno::makeAny( sBuildId ) );
                     }
                 }
-                catch( Exception& e )
+                catch( Exception& )
                 {
                 }
             }
