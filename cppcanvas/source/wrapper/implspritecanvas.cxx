@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implspritecanvas.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:53:18 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:01:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,9 @@ namespace cppcanvas
         }
 
         ImplSpriteCanvas::ImplSpriteCanvas(const ImplSpriteCanvas& rOrig) :
+            Canvas(),
+            BitmapCanvas(),
+            SpriteCanvas(),
             ImplCanvas( rOrig ),
             ImplBitmapCanvas( rOrig ),
             mxSpriteCanvas( rOrig.getUNOSpriteCanvas() ),
@@ -156,7 +159,7 @@ namespace cppcanvas
         {
             return SpriteSharedPtr( new internal::ImplSprite( mxSpriteCanvas,
                                                               mxSpriteCanvas->createSpriteFromBitmaps( rAnimationBitmaps,
-                                                                                                       rendering::InterpolationMode::NEAREST_NEIGHBOR ),
+                                                                                                       nInterpolationMode ),
                                                               mpTransformArbiter ) );
         }
 
