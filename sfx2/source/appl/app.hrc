@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:14:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:46:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@
 #define STR_KEY_USERDICTIONARY_DIR      (CONFIG_PATH_START+21)
 #define STR_KEY_WORK_PATH               (CONFIG_PATH_START+22)
 
-#define WIN_HELP_INDEX                          (RID_SFX_APP_START+99)
+#define WIN_HELPINDEX                           (RID_SFX_APP_START+99)
 #define TP_HELP_CONTENT                         (RID_SFX_APP_START+100)
 #define TP_HELP_INDEX                           (RID_SFX_APP_START+101)
 #define TP_HELP_SEARCH                          (RID_SFX_APP_START+102)
