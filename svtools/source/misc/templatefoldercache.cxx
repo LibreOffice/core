@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templatefoldercache.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:13:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:23:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -695,7 +695,7 @@ namespace svt
                 DBG_ERRORFILE( "TemplateFolderCacheImpl::implReadFolder: caught a CommandAbortedException!" );
                 return sal_False;
             }
-            catch( ::com::sun::star::uno::Exception& e )
+            catch( ::com::sun::star::uno::Exception& )
             {
             }
 
