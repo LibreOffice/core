@@ -4,9 +4,9 @@
  *
  *  $RCSfile: actimpr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:45:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:34:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -797,7 +797,7 @@ void CGMImpressOutAct::DrawPolyLine( Polygon& rPoly )
 
 void CGMImpressOutAct::DrawPolybezier( Polygon& rPolygon )
 {
-    sal_uInt32 nPoints = rPolygon.GetSize();
+    USHORT nPoints = rPolygon.GetSize();
     if ( ( nPoints > 1 ) && ImplCreateShape( rtl::OUString::createFromAscii("com.sun.star.drawing.OpenBezierShape") ) )
     {
         drawing::PolyPolygonBezierCoords aRetval;
@@ -816,7 +816,7 @@ void CGMImpressOutAct::DrawPolybezier( Polygon& rPolygon )
         awt::Point* pInnerSequence = pOuterSequence->getArray();
         drawing::PolygonFlags* pInnerFlags = pOuterFlags->getArray();
 
-        for( sal_uInt32 i = 0; i < nPoints; i++ )
+        for( USHORT i = 0; i < nPoints; i++ )
         {
             *pInnerSequence++ = awt::Point( rPolygon[ i ].X(), rPolygon[ i ].Y() );
             *pInnerFlags++ = (drawing::PolygonFlags)rPolygon.GetFlags( i );
