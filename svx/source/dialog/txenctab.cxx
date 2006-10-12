@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txenctab.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:46:40 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:33:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ SvxTextEncodingTable::~SvxTextEncodingTable()
 
 const String& SvxTextEncodingTable::GetTextString( const rtl_TextEncoding nEnc ) const
 {
-    USHORT nPos = FindIndex( (long)nEnc );
+    sal_uInt32 nPos = FindIndex( (long)nEnc );
 
     if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count() )
         return ResStringArray::GetString( nPos );
@@ -75,9 +75,9 @@ const String& SvxTextEncodingTable::GetTextString( const rtl_TextEncoding nEnc )
 
 rtl_TextEncoding SvxTextEncodingTable::GetTextEncoding( const String& rStr ) const
 {
-    USHORT nCount = Count();
+    sal_uInt32 nCount = Count();
 
-    for ( USHORT i = 0; i < nCount; ++i )
+    for ( sal_uInt32 i = 0; i < nCount; ++i )
     {
         if ( rStr == ResStringArray::GetString( i ) )
             return rtl_TextEncoding( GetValue( i ) );
