@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:07:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:02:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,14 +158,14 @@ static const sal_uInt16 mso_sptArcSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptArcCalc[] =
 {
-    { 0x4009, 10800, DFF_Prop_adjustValue, 0 },
-    { 0x2000, 0x400, 10800, 0 },
-    { 0x400a, 10800, DFF_Prop_adjustValue, 0 },
-    { 0x2000, 0x402, 10800, 0 },
-    { 0x4009, 10800, DFF_Prop_adjust2Value, 0 },
-    { 0x2000, 0x404, 10800, 0 },
-    { 0x400a, 10800, DFF_Prop_adjust2Value, 0 },
-    { 0x2000, 0x406, 10800, 0 }
+    { 0x4009, { 10800, DFF_Prop_adjustValue, 0 } },
+    { 0x2000, { 0x400, 10800, 0 } },
+    { 0x400a, { 10800, DFF_Prop_adjustValue, 0 } },
+    { 0x2000, { 0x402, 10800, 0 } },
+    { 0x4009, { 10800, DFF_Prop_adjust2Value, 0 } },
+    { 0x2000, { 0x404, 10800, 0 } },
+    { 0x400a, { 10800, DFF_Prop_adjust2Value, 0 } },
+    { 0x2000, { 0x406, 10800, 0 } }
 };
 static const sal_Int32 mso_sptArcDefault[] =
 {
@@ -240,17 +240,17 @@ static const sal_uInt16 mso_sptRoundRectangleSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptRoundRectangleCalc[] =
 {
-    { 0x000e, 0, 45, 0 },
-    { 0x6009, DFF_Prop_adjustValue, 0x400, 0 },
-    { 0x2001, 0x401, 3163, 7636 },
-    { 0x6000, DFF_Prop_geoLeft, 0x402, 0 },
-    { 0x6000, DFF_Prop_geoTop, 0x402, 0 },
-    { 0xa000, DFF_Prop_geoRight, 0, 0x402 },
-    { 0xa000, DFF_Prop_geoBottom, 0, 0x402 },
-    { 0x6000, DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 },
-    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
-    { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
-    { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue }
+    { 0x000e, { 0, 45, 0 } },
+    { 0x6009, { DFF_Prop_adjustValue, 0x400, 0 } },
+    { 0x2001, { 0x401, 3163, 7636 } },
+    { 0x6000, { DFF_Prop_geoLeft, 0x402, 0 } },
+    { 0x6000, { DFF_Prop_geoTop, 0x402, 0 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, 0x402 } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, 0x402 } },
+    { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
+    { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
+    { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } }
 };
 static const SvxMSDffTextRectangles mso_sptRoundRectangleTextRect[] =
 {
@@ -330,20 +330,20 @@ static const sal_uInt16 mso_sptParallelogramSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptParallelogramCalc[] =
 {
-    { 0x4000, 0, DFF_Prop_adjustValue, 0 },
-    { 0x8000, 0, 21600, DFF_Prop_adjustValue },
-    { 0x2001, DFF_Prop_adjustValue, 10, 24 },
-    { 0x2000, 0x0402, 1750, 0 },
-    { 0x8000, 21600, 0, 0x0403 },
-    { 0x2001, 0x400, 1, 2 },
-    { 0x4000, 10800, 0x405, 0 },
-    { 0x2000, 0x400, 0, 10800 },
-    { 0x6006, 0x407, 0x40d, 0 },
-    { 0x8000, 10800, 0, 0x405 },
-    { 0x6006, 0x407, 0x40c, 21600 },
-    { 0x8000, 21600, 0, 0x405 },
-    { 0x8001, 21600, 10800, 0x400 },
-    { 0x8000, 21600, 0, 0x40c }
+    { 0x4000, { 0, DFF_Prop_adjustValue, 0 } },
+    { 0x8000, { 0, 21600, DFF_Prop_adjustValue } },
+    { 0x2001, { DFF_Prop_adjustValue, 10, 24 } },
+    { 0x2000, { 0x0402, 1750, 0 } },
+    { 0x8000, { 21600, 0, 0x0403 } },
+    { 0x2001, { 0x400, 1, 2 } },
+    { 0x4000, { 10800, 0x405, 0 } },
+    { 0x2000, { 0x400, 0, 10800 } },
+    { 0x6006, { 0x407, 0x40d, 0 } },
+    { 0x8000, { 10800, 0, 0x405 } },
+    { 0x6006, { 0x407, 0x40c, 21600 } },
+    { 0x8000, { 21600, 0, 0x405 } },
+    { 0x8001, { 21600, 10800, 0x400 } },
+    { 0x8000, { 21600, 0, 0x40c } }
 };
 static const SvxMSDffTextRectangles mso_sptParallelogramTextRect[] =
 {
@@ -402,13 +402,13 @@ static const sal_uInt16 mso_sptTrapezoidSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptTrapezoidCalc[] =
 {
-    { 0x8000, 21600, 0, DFF_Prop_adjustValue },
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x2001, DFF_Prop_adjustValue, 10, 18 },
-    { 0x2000, 0x0402, 1750, 0 },
-    { 0x8000, 21600, 0, 0x403 },
-    { 0x2001, DFF_Prop_adjustValue, 1, 2 },
-    { 0x8000, 21600, 0, 0x405 }
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2001, { DFF_Prop_adjustValue, 10, 18 } },
+    { 0x2000, { 0x0402, 1750, 0 } },
+    { 0x8000, { 21600, 0, 0x403 } },
+    { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
+    { 0x8000, { 21600, 0, 0x405 } }
 };
 static const SvxMSDffTextRectangles mso_sptTrapezoidTextRect[] =
 {
@@ -447,15 +447,15 @@ static const sal_uInt16 mso_sptOctagonSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptOctagonCalc[] =
 {
-    { 0x6000, DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 },
-    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
-    { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
-    { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
-    { 0x2001, DFF_Prop_adjustValue, 1, 2 },
-    { 0x6000, DFF_Prop_geoLeft, 0x404, 0 },
-    { 0x6000, DFF_Prop_geoTop, 0x404, 0 },
-    { 0xa000, DFF_Prop_geoRight, 0, 0x404 },
-    { 0xa000, DFF_Prop_geoBottom, 0, 0x404 }
+    { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
+    { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
+    { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
+    { 0x6000, { DFF_Prop_geoLeft, 0x404, 0 } },
+    { 0x6000, { DFF_Prop_geoTop, 0x404, 0 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, 0x404 } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, 0x404 } }
 };
 static const sal_Int32 mso_sptOctagonDefault[] =
 {
@@ -493,14 +493,14 @@ static const sal_uInt16 mso_sptIsocelesTriangleSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptIsocelesTriangleCalc[] =
 {
-    { 0x4000, 0, DFF_Prop_adjustValue, 0 },
-    { 0x2001, DFF_Prop_adjustValue, 1, 2 },
-    { 0x2000, 0x401, 10800, 0 },
-    { 0x2001, DFF_Prop_adjustValue, 2, 3 },
-    { 0x2000, 0x403, 7200, 0 },
-    { 0x8000, 21600, 0, 0x400 },
-    { 0x2001, 0x405, 1, 2 },
-    { 0x8000, 21600, 0, 0x406 }
+    { 0x4000, { 0, DFF_Prop_adjustValue, 0 } },
+    { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
+    { 0x2000, { 0x401, 10800, 0 } },
+    { 0x2001, { DFF_Prop_adjustValue, 2, 3 } },
+    { 0x2000, { 0x403, 7200, 0 } },
+    { 0x8000, { 21600, 0, 0x400 } },
+    { 0x2001, { 0x405, 1, 2 } },
+    { 0x8000, { 21600, 0, 0x406 } }
 };
 static const SvxMSDffTextRectangles mso_sptIsocelesTriangleTextRect[] =
 {
@@ -540,11 +540,11 @@ static const sal_uInt16 mso_sptHexagonSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptHexagonCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x8000, 21600, 0, DFF_Prop_adjustValue },
-    { 0x2001, DFF_Prop_adjustValue, 100, 234 },
-    { 0x2000, 0x402, 1700, 0 },
-    { 0x8000, 21600, 0, 0x403 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },
+    { 0x2001, { DFF_Prop_adjustValue, 100, 234 } },
+    { 0x2000, { 0x402, 1700, 0 } },
+    { 0x8000, { 21600, 0, 0x403 } }
 };
 static const SvxMSDffTextRectangles mso_sptHexagonTextRect[] =
 {
@@ -603,10 +603,10 @@ static const SvxMSDffVertPair mso_sptPlusVert[] =               // adjustment1 :
 };
 static const SvxMSDffCalculationData mso_sptPlusCalc[] =
 {
-    { 0x2001, DFF_Prop_adjustValue, 10799, 10800 },
-    { 0x2000, 0x400, 0, 0 },
-    { 0xa000, DFF_Prop_geoRight, 0, 0x400 },
-    { 0xa000, DFF_Prop_geoBottom, 0, 0x400 }
+    { 0x2001, { DFF_Prop_adjustValue, 10799, 10800 } },
+    { 0x2000, { 0x400, 0, 0 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, 0x400 } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, 0x400 } }
 };
 static const SvxMSDffTextRectangles mso_sptPlusTextRect[] =
 {
@@ -652,14 +652,14 @@ static const sal_uInt16 mso_sptCanSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptCanCalc[] =
 {
-    { 0x2001, DFF_Prop_adjustValue, 2, 4 },     // 1/4
-    { 0x2001, 0x0400, 6, 11 },
-    { 0xa000, 0x0400, 0, 0x0401 },
-    { 0x8000, 21600, 0, 0x0400 },
-    { 0x6000, 0x0403, 0x0401, 0 },
-    { 0x6000, 0x0400, 0x0401, 0 },
-    { 0x2001, DFF_Prop_adjustValue, 2, 2 },
-    { 0x0000, 44, 0, 0 }
+    { 0x2001, { DFF_Prop_adjustValue, 2, 4 } },     // 1/4
+    { 0x2001, { 0x0400, 6, 11 } },
+    { 0xa000, { 0x0400, 0, 0x0401 } },
+    { 0x8000, { 21600, 0, 0x0400 } },
+    { 0x6000, { 0x0403, 0x0401, 0 } },
+    { 0x6000, { 0x0400, 0x0401, 0 } },
+    { 0x2001, { DFF_Prop_adjustValue, 2, 2 } },
+    { 0x0000, { 44, 0, 0 } }
 };
 static const SvxMSDffTextRectangles mso_sptCanTextRect[] =
 {
@@ -702,14 +702,14 @@ static const sal_uInt16 mso_sptArrowSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptArrowCalc[] =
 {
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x8000, 21600, 0, DFF_Prop_adjust2Value },
-    { 0x8000, 21600, 0, 0x401 },
-    { 0x6001, 0x403, 0x400, 10800 },
-    { 0x6000, 0x401, 0x404, 0 },
-    { 0x6001, 0x401, 0x400, 10800 },
-    { 0xa000, 0x401, 0, 0x406 }
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x8000, { 21600, 0, DFF_Prop_adjust2Value } },
+    { 0x8000, { 21600, 0, 0x401 } },
+    { 0x6001, { 0x403, 0x400, 10800 } },
+    { 0x6000, { 0x401, 0x404, 0 } },
+    { 0x6001, { 0x401, 0x400, 10800 } },
+    { 0xa000, { 0x401, 0, 0x406 } }
 };
 static const SvxMSDffTextRectangles mso_sptArrowTextRect[] =
 {
@@ -846,16 +846,16 @@ static const sal_uInt16 mso_sptLeftRightArrowSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptDoubleArrowCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
-    { 0x8000, 21600, 0, DFF_Prop_adjustValue },
-    { 0x8000, 21600, 0, DFF_Prop_adjust2Value },
-    { 0x8000, 10800, 0, DFF_Prop_adjust2Value },
-    { 0x6001, DFF_Prop_adjustValue, 0x404, 10800 },
-    { 0x8000, 21600, 0, 0x405 },
-    { 0x8000, 10800, 0, DFF_Prop_adjustValue },
-    { 0x6001, DFF_Prop_adjust2Value, 0x407, 10800 },
-    { 0x8000, 21600, 0, 0x408 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },
+    { 0x8000, { 21600, 0, DFF_Prop_adjust2Value } },
+    { 0x8000, { 10800, 0, DFF_Prop_adjust2Value } },
+    { 0x6001, { DFF_Prop_adjustValue, 0x404, 10800 } },
+    { 0x8000, { 21600, 0, 0x405 } },
+    { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
+    { 0x6001, { DFF_Prop_adjust2Value, 0x407, 10800 } },
+    { 0x8000, { 21600, 0, 0x408 } }
 };
 static const sal_Int32 mso_sptLeftRightArrowDefault[] =
 {
@@ -934,12 +934,12 @@ static const sal_uInt16 mso_sptQuadArrowSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptQuadArrowCalc[] =
 {
-    { 0x2000, DFF_Prop_adjust3Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
-    { 0x8000, 21600, 0, DFF_Prop_adjustValue },
-    { 0x8000, 21600, 0, DFF_Prop_adjust2Value },
-    { 0x8000, 21600, 0, DFF_Prop_adjust3Value }
+    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },
+    { 0x8000, { 21600, 0, DFF_Prop_adjust2Value } },
+    { 0x8000, { 21600, 0, DFF_Prop_adjust3Value } }
 };
 static const sal_Int32 mso_sptQuadArrowDefault[] =
 {
@@ -983,12 +983,12 @@ static const sal_uInt16 mso_sptLeftRightUpArrowSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptLeftRightUpArrowCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },             // 0
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },            // 1
-    { 0x6001, 0x0403, DFF_Prop_adjust3Value, 21600 },   // 2
-    { 0x8000, 21600, 0, DFF_Prop_adjustValue },         // 3
-    { 0x8000, 21600, 0, DFF_Prop_adjust2Value },        // 4
-    { 0x8000, 21600, 0, 0x0402 }                        // 5
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },             // 0
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },            // 1
+    { 0x6001, { 0x0403, DFF_Prop_adjust3Value, 21600 } },   // 2
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },         // 3
+    { 0x8000, { 21600, 0, DFF_Prop_adjust2Value } },        // 4
+    { 0x8000, { 21600, 0, 0x0402 } }                        // 5
 };
 static const sal_Int32 mso_sptLeftRightUpArrowDefault[] =
 {
@@ -1030,11 +1030,11 @@ static const sal_uInt16 mso_sptBentArrowSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptBentArrowCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
-    { 0x8000,   12158, 0, DFF_Prop_adjust2Value },
-    { 0x8000, 6079, 0, DFF_Prop_adjust2Value },
-    { 0x2001,   0x0403, 2, 1 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x8000, { 12158, 0, DFF_Prop_adjust2Value } },
+    { 0x8000, { 6079, 0, DFF_Prop_adjust2Value } },
+    { 0x2001, { 0x0403, 2, 1 } }
 };
 static const sal_Int32 mso_sptBentArrowDefault[] =
 {
@@ -1105,16 +1105,16 @@ static const sal_uInt16 mso_sptLeftUpArrowSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptLeftUpArrowCalc[] =
 {
-    { 0x2000,   DFF_Prop_adjustValue, 0, 0 },       // 0
-    { 0x2000,   DFF_Prop_adjust2Value, 0, 0 },      // 1
-    { 0x2000, DFF_Prop_adjust3Value, 0, 0 },        // 2
-    { 0x8000,   21600, 0, DFF_Prop_adjustValue },   // 3
-    { 0x2001,   0x0403, 1, 2 },                     // 4
-    { 0x6000, DFF_Prop_adjustValue, 0x0404, 0 },    // 5
-    { 0x8000,   21600, 0, DFF_Prop_adjust2Value },  // 6
-    { 0x6000, DFF_Prop_adjustValue, 0x0406, 0 },    // 7
-    { 0x8000,   21600, 0, 0x406 },                  // 8
-    { 0xa000,   0x408, 0, 0x406 }                   // 9
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 0
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },        // 1
+    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },        // 2
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }, // 3
+    { 0x2001, { 0x0403, 1, 2 } },                       // 4
+    { 0x6000, { DFF_Prop_adjustValue, 0x0404, 0 } },    // 5
+    { 0x8000, { 21600, 0, DFF_Prop_adjust2Value } },    // 6
+    { 0x6000, { DFF_Prop_adjustValue, 0x0406, 0 } },    // 7
+    { 0x8000, { 21600, 0, 0x406 } },                    // 8
+    { 0xa000, { 0x408, 0, 0x406 } }                 // 9
 };
 static const sal_Int32 mso_sptLeftUpArrowDefault[] =
 {
@@ -1157,17 +1157,17 @@ static const sal_uInt16 mso_sptBentUpArrowSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptBentUpArrowCalc[] =
 {
-    { 0x2000,   DFF_Prop_adjustValue, 0, 0 },       // 0
-    { 0x2000,   DFF_Prop_adjust2Value, 0, 0 },      // 1
-    { 0x2000, DFF_Prop_adjust3Value, 0, 0 },        // 2
-    { 0x8000,   21600, 0, DFF_Prop_adjustValue },   // 3
-    { 0x2001,   0x0403, 1, 2 },                     // 4
-    { 0x6000, DFF_Prop_adjustValue, 0x0404, 0 },    // 5
-    { 0x8000,   21600, 0, DFF_Prop_adjust2Value },  // 6
-    { 0x6000, DFF_Prop_adjustValue, 0x0406, 0 },    // 7
-    { 0x6000, 0x0407, 0x0406, 0 },                  // 8
-    { 0x8000,   21600, 0, 0x406 },                  // 9
-    { 0xa000,   0x409, 0, 0x406 }                   // a
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 0
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },        // 1
+    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },        // 2
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }, // 3
+    { 0x2001, { 0x0403, 1, 2 } },                       // 4
+    { 0x6000, { DFF_Prop_adjustValue, 0x0404, 0 } },    // 5
+    { 0x8000, { 21600, 0, DFF_Prop_adjust2Value } },    // 6
+    { 0x6000, { DFF_Prop_adjustValue, 0x0406, 0 } },    // 7
+    { 0x6000, { 0x0407, 0x0406, 0 } },                  // 8
+    { 0x8000, { 21600, 0, 0x406 } },                    // 9
+    { 0xa000, { 0x409, 0, 0x406 } }                 // a
 };
 static const sal_Int32 mso_sptBentUpArrowDefault[] =
 {
@@ -1214,23 +1214,23 @@ static const sal_uInt16 mso_sptCurvedArrowSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptCurvedArrowCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },                     // 0
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },                    // 1
-    { 0x2000, DFF_Prop_adjust3Value, 0, 0 },                    // 2
-    { 0x8000, 21600, 0, DFF_Prop_adjust2Value },                // 3
-    { 0xa000, DFF_Prop_adjust2Value, 0, DFF_Prop_adjustValue }, // 4
-    { 0xa000, 0x0404, 0, 0x0403 },                              // 5
-    { 0x2001, 0x0405, 1, 2 },                                   // 6
-    { 0xa000, DFF_Prop_adjust2Value, 0, 0x0406 },               // 7
-    { 0x2001, DFF_Prop_adjust2Value, 1, 2 },                    // 8
-    { 0xa000, 0x0408, 0, 0x0406 },                              // 9
-    { 0x2001, 0x0409, 10000, 22326 },                           // 10
-    { 0x6000, 0x0409, 0x0405, 0 },                              // 11
-    { 0xa000, DFF_Prop_adjust2Value, 0, 0x040b },               // 12
-    { 0x2001, 0x040c, 10000, 23148 },                           // 13
-    { 0x6000, 0x040d, 0x040b, 0 },                              // 14
-    { 0x2001, DFF_Prop_adjust3Value, 10000, 25467 },            // 15
-    { 0x6000, DFF_Prop_adjustValue, 0x0403, 0 }                 // 16
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },                     // 0
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },                    // 1
+    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },                    // 2
+    { 0x8000, { 21600, 0, DFF_Prop_adjust2Value } },                // 3
+    { 0xa000, { DFF_Prop_adjust2Value, 0, DFF_Prop_adjustValue } }, // 4
+    { 0xa000, { 0x0404, 0, 0x0403 } },                              // 5
+    { 0x2001, { 0x0405, 1, 2 } },                                   // 6
+    { 0xa000, { DFF_Prop_adjust2Value, 0, 0x0406 } },               // 7
+    { 0x2001, { DFF_Prop_adjust2Value, 1, 2 } },                    // 8
+    { 0xa000, { 0x0408, 0, 0x0406 } },                              // 9
+    { 0x2001, { 0x0409, 10000, 22326 } },                           // 10
+    { 0x6000, { 0x0409, 0x0405, 0 } },                              // 11
+    { 0xa000, { DFF_Prop_adjust2Value, 0, 0x040b } },               // 12
+    { 0x2001, { 0x040c, 10000, 23148 } },                           // 13
+    { 0x6000, { 0x040d, 0x040b, 0 } },                              // 14
+    { 0x2001, { DFF_Prop_adjust3Value, 10000, 25467 } },            // 15
+    { 0x6000, { DFF_Prop_adjustValue, 0x0403, 0 } }                 // 16
 };
 static const sal_Int32 mso_sptCurvedArrowDefault[] =
 {
@@ -1268,12 +1268,12 @@ static const sal_uInt16 mso_sptStripedRightArrowSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptStripedRightArrowCalc[] =
 {
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x8000, 21600, 0, DFF_Prop_adjust2Value },
-    { 0x8000, 21600, 0, 0x401 },
-    { 0x6001, 0x403, 0x400, 10800 },
-    { 0x6000, 0x401, 0x404, 0 }
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x8000, { 21600, 0, DFF_Prop_adjust2Value } },
+    { 0x8000, { 21600, 0, 0x401 } },
+    { 0x6001, { 0x403, 0x400, 10800 } },
+    { 0x6000, { 0x401, 0x404, 0 } }
 };
 static const SvxMSDffTextRectangles mso_sptStripedRightArrowTextRect[] =
 {
@@ -1304,12 +1304,12 @@ static const SvxMSDffVertPair mso_sptNotchedRightArrowVert[] =  // adjustment1 :
 };
 static const SvxMSDffCalculationData mso_sptNotchedRightArrowCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
-    { 0x8000, 21600, 0, DFF_Prop_adjust2Value },
-    { 0x8000, 21600, 0, DFF_Prop_adjustValue },
-    { 0x8000, 10800, 0, DFF_Prop_adjust2Value },
-    { 0x6001, 0x403, 0x404, 10800 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x8000, { 21600, 0, DFF_Prop_adjust2Value } },
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },
+    { 0x8000, { 10800, 0, DFF_Prop_adjust2Value } },
+    { 0x6001, { 0x403, 0x404, 10800 } }
 };
 static const SvxMSDffTextRectangles mso_sptNotchedRightArrowTextRect[] =    // todo
 {
@@ -1344,7 +1344,7 @@ static const sal_uInt16 mso_sptHomePlateSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptHomePlateCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }
 };
 static const sal_Int32 mso_sptHomePlateDefault[] =
 {
@@ -1383,8 +1383,8 @@ static const sal_uInt16 mso_sptChevronSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptChevronCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x8000, 21600, 0, 0x0400 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x8000, { 21600, 0, 0x0400 } }
 };
 static const sal_Int32 mso_sptChevronDefault[] =
 {
@@ -1424,12 +1424,12 @@ static const sal_uInt16 mso_sptRightArrowCalloutSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptRightArrowCalloutCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust3Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust4Value, 0, 0 },
-    { 0x8000, 21600, 0, 0x0401 },
-    { 0x8000, 21600, 0, 0x0403 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust4Value, 0, 0 } },
+    { 0x8000, { 21600, 0, 0x0401 } },
+    { 0x8000, { 21600, 0, 0x0403 } }
 };
 static const sal_Int32 mso_sptRightArrowCalloutDefault[] =
 {
@@ -1473,12 +1473,12 @@ static const sal_uInt16 mso_sptLeftArrowCalloutSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptLeftArrowCalloutCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust3Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust4Value, 0, 0 },
-    { 0x8000, 21600, 0, 0x0401 },
-    { 0x8000, 21600, 0, 0x0403 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust4Value, 0, 0 } },
+    { 0x8000, { 21600, 0, 0x0401 } },
+    { 0x8000, { 21600, 0, 0x0403 } }
 };
 static const sal_Int32 mso_sptLeftArrowCalloutDefault[] =
 {
@@ -1522,12 +1522,12 @@ static const sal_uInt16 mso_sptUpArrowCalloutSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptUpArrowCalloutCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust3Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust4Value, 0, 0 },
-    { 0x8000, 21600, 0, 0x0401 },
-    { 0x8000, 21600, 0, 0x0403 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust4Value, 0, 0 } },
+    { 0x8000, { 21600, 0, 0x0401 } },
+    { 0x8000, { 21600, 0, 0x0403 } }
 };
 static const sal_Int32 mso_sptUpArrowCalloutDefault[] =
 {
@@ -1571,12 +1571,12 @@ static const sal_uInt16 mso_sptDownArrowCalloutSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptDownArrowCalloutCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust3Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust4Value, 0, 0 },
-    { 0x8000, 21600, 0, 0x0401 },
-    { 0x8000, 21600, 0, 0x0403 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust4Value, 0, 0 } },
+    { 0x8000, { 21600, 0, 0x0401 } },
+    { 0x8000, { 21600, 0, 0x0403 } }
 };
 static const sal_Int32 mso_sptDownArrowCalloutDefault[] =
 {
@@ -1622,14 +1622,14 @@ static const sal_uInt16 mso_sptLeftRightArrowCalloutSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptLeftRightArrowCalloutCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust3Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust4Value, 0, 0 },
-    { 0x8000, 21600, 0, 0x0400 },
-    { 0x8000, 21600, 0, 0x0401 },
-    { 0x8000, 21600, 0, 0x0402 },
-    { 0x8000, 21600, 0, 0x0403 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust4Value, 0, 0 } },
+    { 0x8000, { 21600, 0, 0x0400 } },
+    { 0x8000, { 21600, 0, 0x0401 } },
+    { 0x8000, { 21600, 0, 0x0402 } },
+    { 0x8000, { 21600, 0, 0x0403 } }
 };
 static const sal_Int32 mso_sptLeftRightArrowCalloutDefault[] =
 {
@@ -1675,14 +1675,14 @@ static const sal_uInt16 mso_sptUpDownArrowCalloutSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptUpDownArrowCalloutCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust3Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust4Value, 0, 0 },
-    { 0x8000, 21600, 0, 0x0400 },
-    { 0x8000, 21600, 0, 0x0401 },
-    { 0x8000, 21600, 0, 0x0402 },
-    { 0x8000, 21600, 0, 0x0403 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust4Value, 0, 0 } },
+    { 0x8000, { 21600, 0, 0x0400 } },
+    { 0x8000, { 21600, 0, 0x0401 } },
+    { 0x8000, { 21600, 0, 0x0402 } },
+    { 0x8000, { 21600, 0, 0x0403 } }
 };
 static const sal_Int32 mso_sptUpDownArrowCalloutDefault[] =
 {
@@ -1731,14 +1731,14 @@ static const sal_uInt16 mso_sptQuadArrowCalloutSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptQuadArrowCalloutCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust3Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust4Value, 0, 0 },
-    { 0x8000, 21600, 0, 0x0400 },
-    { 0x8000, 21600, 0, 0x0401 },
-    { 0x8000, 21600, 0, 0x0402 },
-    { 0x8000, 21600, 0, 0x0403 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust4Value, 0, 0 } },
+    { 0x8000, { 21600, 0, 0x0400 } },
+    { 0x8000, { 21600, 0, 0x0401 } },
+    { 0x8000, { 21600, 0, 0x0402 } },
+    { 0x8000, { 21600, 0, 0x0403 } }
 };
 static const sal_Int32 mso_sptQuadArrowCalloutDefault[] =
 {
@@ -1789,54 +1789,54 @@ static const sal_uInt16 mso_sptCircularArrowSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptCircularArrowCalc[] =
 {
-    { 0x2000, 0x0147, 0x0000, 0x0000 },
-    { 0x2000, 0x0148, 0x0000, 0x0000 },
-    { 0x2000, 0x0149, 0x0000, 0x0000 },
-    { 0x4000, 0x2A30, 0x0149, 0x0000 },
-    { 0x4009, 0x2A30, 0x0147, 0x0000 },
-    { 0x400A, 0x2A30, 0x0147, 0x0000 },
-    { 0x4009, 0x2A30, 0x0148, 0x0000 },
-    { 0x400A, 0x2A30, 0x0148, 0x0000 },
-    { 0x2000, 0x0404, 0x2A30, 0x0000 },
-    { 0x2000, 0x0405, 0x2A30, 0x0000 },
-    { 0x2000, 0x0406, 0x2A30, 0x0000 },
-    { 0x2000, 0x0407, 0x2A30, 0x0000 },
-    { 0x6009, 0x0403, 0x0147, 0x0000 },
-    { 0x600A, 0x0403, 0x0147, 0x0000 },
-    { 0x6009, 0x0403, 0x0148, 0x0000 },
-    { 0x600A, 0x0403, 0x0148, 0x0000 },
-    { 0x2000, 0x040C, 0x2A30, 0x0000 },
-    { 0x2000, 0x040D, 0x2A30, 0x0000 },
-    { 0x2000, 0x040E, 0x2A30, 0x0000 },
-    { 0x2000, 0x040F, 0x2A30, 0x0000 },
-    { 0x8000, 0x5460, 0x0000, 0x0403 },
-    { 0x4009, 0x34BC, 0x0148, 0x0000 },
-    { 0x400A, 0x34BC, 0x0148, 0x0000 },
-    { 0x2000, 0x0415, 0x2A30, 0x0000 },
-    { 0x2000, 0x0416, 0x2A30, 0x0000 },
-    { 0x2000, 0x0149, 0x0000, 0x0A8C },
-    { 0x6009, 0x0419, 0x0148, 0x0000 },
-    { 0x600A, 0x0419, 0x0148, 0x0000 },
-    { 0x2000, 0x041A, 0x2A30, 0x0000 },
-    { 0x2000, 0x041B, 0x2A30, 0x0000 },
-    { 0xA000, 0x041D, 0x0000, 0x0418 },
-    { 0xA000, 0x041D, 0x0000, 0x0418 },
-    { 0x6001, 0x041E, 0x041F, 0x0001 },
-    { 0xA000, 0x041C, 0x0000, 0x0417 },
-    { 0xA000, 0x041C, 0x0000, 0x0417 },
-    { 0x6001, 0x0421, 0x0422, 0x0001 },
-    { 0x6000, 0x0420, 0x0423, 0x0000 },
-    { 0x200D, 0x0424, 0x0000, 0x0000 },
-    { 0x200E, 0x0148, 0x002D, 0x0000 },
-    { 0x6009, 0x0425, 0x0426, 0x0000 },
-    { 0x200E, 0x0148, 0x002D, 0x0000 },
-    { 0x600A, 0x0425, 0x0428, 0x0000 },
-    { 0x000E, 0x0000, 0x002D, 0x0000 },
-    { 0x6009, 0x0427, 0x042A, 0x0000 },
-    { 0x000E, 0x0000, 0x002D, 0x0000 },
-    { 0x6009, 0x0429, 0x042C, 0x0000 },
-    { 0x6000, 0x041C, 0x042B, 0x0000 },
-    { 0x6000, 0x041D, 0x042D, 0x0000 }
+    { 0x2000, { 0x0147, 0x0000, 0x0000 } },
+    { 0x2000, { 0x0148, 0x0000, 0x0000 } },
+    { 0x2000, { 0x0149, 0x0000, 0x0000 } },
+    { 0x4000, { 0x2A30, 0x0149, 0x0000 } },
+    { 0x4009, { 0x2A30, 0x0147, 0x0000 } },
+    { 0x400A, { 0x2A30, 0x0147, 0x0000 } },
+    { 0x4009, { 0x2A30, 0x0148, 0x0000 } },
+    { 0x400A, { 0x2A30, 0x0148, 0x0000 } },
+    { 0x2000, { 0x0404, 0x2A30, 0x0000 } },
+    { 0x2000, { 0x0405, 0x2A30, 0x0000 } },
+    { 0x2000, { 0x0406, 0x2A30, 0x0000 } },
+    { 0x2000, { 0x0407, 0x2A30, 0x0000 } },
+    { 0x6009, { 0x0403, 0x0147, 0x0000 } },
+    { 0x600A, { 0x0403, 0x0147, 0x0000 } },
+    { 0x6009, { 0x0403, 0x0148, 0x0000 } },
+    { 0x600A, { 0x0403, 0x0148, 0x0000 } },
+    { 0x2000, { 0x040C, 0x2A30, 0x0000 } },
+    { 0x2000, { 0x040D, 0x2A30, 0x0000 } },
+    { 0x2000, { 0x040E, 0x2A30, 0x0000 } },
+    { 0x2000, { 0x040F, 0x2A30, 0x0000 } },
+    { 0x8000, { 0x5460, 0x0000, 0x0403 } },
+    { 0x4009, { 0x34BC, 0x0148, 0x0000 } },
+    { 0x400A, { 0x34BC, 0x0148, 0x0000 } },
+    { 0x2000, { 0x0415, 0x2A30, 0x0000 } },
+    { 0x2000, { 0x0416, 0x2A30, 0x0000 } },
+    { 0x2000, { 0x0149, 0x0000, 0x0A8C } },
+    { 0x6009, { 0x0419, 0x0148, 0x0000 } },
+    { 0x600A, { 0x0419, 0x0148, 0x0000 } },
+    { 0x2000, { 0x041A, 0x2A30, 0x0000 } },
+    { 0x2000, { 0x041B, 0x2A30, 0x0000 } },
+    { 0xA000, { 0x041D, 0x0000, 0x0418 } },
+    { 0xA000, { 0x041D, 0x0000, 0x0418 } },
+    { 0x6001, { 0x041E, 0x041F, 0x0001 } },
+    { 0xA000, { 0x041C, 0x0000, 0x0417 } },
+    { 0xA000, { 0x041C, 0x0000, 0x0417 } },
+    { 0x6001, { 0x0421, 0x0422, 0x0001 } },
+    { 0x6000, { 0x0420, 0x0423, 0x0000 } },
+    { 0x200D, { 0x0424, 0x0000, 0x0000 } },
+    { 0x200E, { 0x0148, 0x002D, 0x0000 } },
+    { 0x6009, { 0x0425, 0x0426, 0x0000 } },
+    { 0x200E, { 0x0148, 0x002D, 0x0000 } },
+    { 0x600A, { 0x0425, 0x0428, 0x0000 } },
+    { 0x000E, { 0x0000, 0x002D, 0x0000 } },
+    { 0x6009, { 0x0427, 0x042A, 0x0000 } },
+    { 0x000E, { 0x0000, 0x002D, 0x0000 } },
+    { 0x6009, { 0x0429, 0x042C, 0x0000 } },
+    { 0x6000, { 0x041C, 0x042B, 0x0000 } },
+    { 0x6000, { 0x041D, 0x042D, 0x0000 } }
 };
 static const sal_Int32 mso_sptCircularArrowDefault[] =
 {
@@ -1880,19 +1880,19 @@ static const sal_uInt16 mso_sptCubeSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptCubeCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x6000, DFF_Prop_geoTop, 0x400, 0 },
-    { 0x6000, DFF_Prop_geoLeft, 0x400, 0 },
-    { 0xa000, DFF_Prop_geoBottom, 0, 0x400 },
-    { 0xa000, DFF_Prop_geoRight, 0, 0x400 },
-    { 0xa000, DFF_Prop_geoRight, 0, 0x402 },    // 5
-    { 0x2001, 0x405, 1, 2 },                    // 6
-    { 0x6000, 0x402, 0x406, 0 },                // 7
-    { 0xa000, DFF_Prop_geoBottom, 0, 0x401 },   // 8
-    { 0x2001, 0x408, 1, 2 },                    // 9
-    { 0x6000, 0x401, 0x409, 0 },                // 10
-    { 0x2000, DFF_Prop_geoRight, 0, 0 },        // 11
-    { 0x2000, DFF_Prop_geoBottom, 0, 0 }        // 12
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x6000, { DFF_Prop_geoTop, 0x400, 0 } },
+    { 0x6000, { DFF_Prop_geoLeft, 0x400, 0 } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, 0x400 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, 0x400 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, 0x402 } },    // 5
+    { 0x2001, { 0x405, 1, 2 } },                    // 6
+    { 0x6000, { 0x402, 0x406, 0 } },                // 7
+    { 0xa000, { DFF_Prop_geoBottom, 0, 0x401 } },   // 8
+    { 0x2001, { 0x408, 1, 2 } },                    // 9
+    { 0x6000, { 0x401, 0x409, 0 } },                // 10
+    { 0x2000, { DFF_Prop_geoRight, 0, 0 } },        // 11
+    { 0x2000, { DFF_Prop_geoBottom, 0, 0 } }        // 12
 };
 static const SvxMSDffTextRectangles mso_sptCubeTextRect[] =
 {
@@ -1938,9 +1938,9 @@ static const sal_uInt16 mso_sptBevelSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptBevelCalc[] =
 {
-    { 0x2001, DFF_Prop_adjustValue, 21599, 21600 },
-    { 0xa000, DFF_Prop_geoRight, 0, 0x400 },
-    { 0xa000, DFF_Prop_geoBottom, 0, 0x400 }
+    { 0x2001, { DFF_Prop_adjustValue, 21599, 21600 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, 0x400 } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, 0x400 } }
 };
 
 static const SvxMSDffTextRectangles mso_sptBevelTextRect[] =
@@ -1978,18 +1978,18 @@ static const sal_uInt16 mso_sptFoldedCornerSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptFoldedCornerCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x8000, 21600, 0, 0x400 },
-    { 0x2001, 0x0401, 8000, 10800 },
-    { 0x8000, 21600, 0, 0x0402 },
-    { 0x2001, 0x0401, 1, 2 },
-    { 0x2001, 0x0401, 1, 4 },
-    { 0x2001, 0x0401, 1, 7 },
-    { 0x2001, 0x0401, 1, 16 },
-    { 0x6000, 0x0403, 0x405, 0 },
-    { 0x6000, 0x0400, 0x406, 0 },
-    { 0x8000, 21600, 0, 0x404 },
-    { 0x6000, 0x400, 0x407, 0 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x8000, { 21600, 0, 0x400 } },
+    { 0x2001, { 0x0401, 8000, 10800 } },
+    { 0x8000, { 21600, 0, 0x0402 } },
+    { 0x2001, { 0x0401, 1, 2 } },
+    { 0x2001, { 0x0401, 1, 4 } },
+    { 0x2001, { 0x0401, 1, 7 } },
+    { 0x2001, { 0x0401, 1, 16 } },
+    { 0x6000, { 0x0403, 0x405, 0 } },
+    { 0x6000, { 0x0400, 0x406, 0 } },
+    { 0x8000, { 21600, 0, 0x404 } },
+    { 0x6000, { 0x400, 0x407, 0 } }
 };
 static const sal_Int32 mso_sptFoldedCornerDefault[] =
 {
@@ -2035,9 +2035,9 @@ static const sal_uInt16 mso_sptActionButtonBlankSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptActionButtonBlankCalc[] =
 {
-    { 0x2001, DFF_Prop_adjustValue, 21599, 21600 },
-    { 0xa000, DFF_Prop_geoRight, 0, 0x400 },
-    { 0xa000, DFF_Prop_geoBottom, 0, 0x400 }
+    { 0x2001, { DFF_Prop_adjustValue, 21599, 21600 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, 0x400 } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, 0x400 } }
 };
 static const SvxMSDffTextRectangles mso_sptActionButtonBlankTextRect[] =
 {
@@ -2096,44 +2096,44 @@ static const sal_uInt16 mso_sptActionButtonHomeSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptActionButtonHomeCalc[] =    // adj value 0 - 5400
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x6000, DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 },
-    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
-    { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
-    { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
-    { 0x8000, 10800, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x0405, 1, 10800 },                           // scaling   6
-    { 0x2001, DFF_Prop_geoRight, 1, 2 },    // lr center 7
-    { 0x2001, DFF_Prop_geoBottom, 1, 2 },   // ul center 8
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
+    { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
+    { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
+    { 0x2001, { 0x0405, 1, 10800 } },                           // scaling   6
+    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    // lr center 7
+    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   // ul center 8
 
-    { 0x4001, -8000, 0x0406, 1 },   // 9
-    { 0x6000, 0x0409, 0x0408, 0 },  // a
-    { 0x4001, 2960, 0x0406, 1 },    // b
-    { 0x6000, 0x040b, 0x0407, 0 },  // c
-    { 0x4001, -5000, 0x0406, 1 },   // d
-    { 0x6000, 0x040d, 0x0408, 0 },  // e
-    { 0x4001, -7000, 0x0406, 1 },   // f
-    { 0x6000, 0x040f, 0x0408, 0 },  // 10
-    { 0x4001, 5000, 0x0406, 1 },    // 11
-    { 0x6000, 0x0411, 0x0407, 0 },  // 12
-    { 0x4001, -2960, 0x0406, 1 },   // 13
-    { 0x6000, 0x0413, 0x0408, 0 },  // 14
-    { 0x4001, 8000, 0x0406, 1 },    // 15
-    { 0x6000, 0x0415,0x0407, 0 },   // 16
-    { 0x4001, 6100, 0x0406, 1 },    // 17
-    { 0x6000, 0x0417,0x0407, 0 },   // 18
-    { 0x4001, 8260, 0x0406, 1 },    // 19
-    { 0x6000, 0x0419, 0x0408, 0 },  // 1a
-    { 0x4001, -6100, 0x0406, 1 },   // 1b
-    { 0x6000, 0x041b, 0x0407, 0 },  // 1c
-    { 0x4001, -8000, 0x0406, 1 },   // 1d
-    { 0x6000, 0x041d, 0x0407, 0 },  // 1e
-    { 0x4001, -1060, 0x0406, 1 },   // 1f
-    { 0x6000, 0x041f, 0x0407, 0 },  // 20
-    { 0x4001, 1060, 0x0406, 1 },    // 21
-    { 0x6000, 0x0421, 0x0407, 0 },  // 22
-    { 0x4001, 4020, 0x0406, 1 },    // 23
-    { 0x6000, 0x0423, 0x0408, 0 }   // 24
+    { 0x4001, { -8000, 0x0406, 1 } },   // 9
+    { 0x6000, { 0x0409, 0x0408, 0 } },  // a
+    { 0x4001, { 2960, 0x0406, 1 } },    // b
+    { 0x6000, { 0x040b, 0x0407, 0 } },  // c
+    { 0x4001, { -5000, 0x0406, 1 } },   // d
+    { 0x6000, { 0x040d, 0x0408, 0 } },  // e
+    { 0x4001, { -7000, 0x0406, 1 } },   // f
+    { 0x6000, { 0x040f, 0x0408, 0 } },  // 10
+    { 0x4001, { 5000, 0x0406, 1 } },    // 11
+    { 0x6000, { 0x0411, 0x0407, 0 } },  // 12
+    { 0x4001, { -2960, 0x0406, 1 } },   // 13
+    { 0x6000, { 0x0413, 0x0408, 0 } },  // 14
+    { 0x4001, { 8000, 0x0406, 1 } },    // 15
+    { 0x6000, { 0x0415,0x0407, 0 } },   // 16
+    { 0x4001, { 6100, 0x0406, 1 } },    // 17
+    { 0x6000, { 0x0417,0x0407, 0 } },   // 18
+    { 0x4001, { 8260, 0x0406, 1 } },    // 19
+    { 0x6000, { 0x0419, 0x0408, 0 } },  // 1a
+    { 0x4001, { -6100, 0x0406, 1 } },   // 1b
+    { 0x6000, { 0x041b, 0x0407, 0 } },  // 1c
+    { 0x4001, { -8000, 0x0406, 1 } },   // 1d
+    { 0x6000, { 0x041d, 0x0407, 0 } },  // 1e
+    { 0x4001, { -1060, 0x0406, 1 } },   // 1f
+    { 0x6000, { 0x041f, 0x0407, 0 } },  // 20
+    { 0x4001, { 1060, 0x0406, 1 } },    // 21
+    { 0x6000, { 0x0421, 0x0407, 0 } },  // 22
+    { 0x4001, { 4020, 0x0406, 1 } },    // 23
+    { 0x6000, { 0x0423, 0x0408, 0 } }   // 24
 
 };
 static const mso_CustomShape msoActionButtonHome =
@@ -2181,70 +2181,70 @@ static const sal_uInt16 mso_sptActionButtonHelpSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptActionButtonHelpCalc[] =    // adj value 0 - 5400
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x6000, DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 },
-    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
-    { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
-    { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
-    { 0x8000, 10800, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x0405, 1, 10800 },           // scaling   6
-    { 0x2001, DFF_Prop_geoRight, 1, 2 },    // lr center 7
-    { 0x2001, DFF_Prop_geoBottom, 1, 2 },   // ul center 8
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
+    { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
+    { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
+    { 0x2001, { 0x0405, 1, 10800 } },           // scaling   6
+    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    // lr center 7
+    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   // ul center 8
 
-    { 0x4001, -1690, 0x0406, 1 },   // 9
-    { 0x6000, 0x0409, 0x0407, 0 },  // a
-    { 0x4001, 4600, 0x0406, 1 },    // b
-    { 0x6000, 0x040b, 0x0408, 0 },  // c
-    { 0x4001, 1690, 0x0406, 1 },    // d
-    { 0x6000, 0x040d, 0x0407, 0 },  // e
-    { 0x4001, 7980, 0x0406, 1 },    // f
-    { 0x6000, 0x040f, 0x0408, 0 },  // 10
-    { 0x4001, 1270, 0x0406, 1 },    // 11
-    { 0x6000, 0x0411, 0x0407, 0 },  // 12
-    { 0x4001, 4000, 0x0406, 1 },    // 13
-    { 0x6000, 0x0413, 0x0408, 0 },  // 14
-    { 0x4001, 1750, 0x0406, 1 },    // 15
-    { 0x6000, 0x0415, 0x0408, 0 },  // 16
-    { 0x4001, 800, 0x0406, 1 },     // 17
-    { 0x6000, 0x0417, 0x0408, 0 },  // 18
-    { 0x4001, 1650, 0x0406, 1 },    // 19
-    { 0x6000, 0x0419, 0x0407, 0 },  // 1a
-    { 0x4001, 2340, 0x0406, 1 },    // 1b
-    { 0x6000, 0x041b, 0x0407, 0 },  // 1c
-    { 0x4001, 3640, 0x0406, 1 },    // 1d
-    { 0x6000, 0x041d, 0x0407, 0 },  // 1e
-    { 0x4001, 4670, 0x0406, 1 },    // 1f
-    { 0x6000, 0x041f, 0x0407, 0 },  // 20
-    { 0x4001, -1570, 0x0406, 1 },   // 21
-    { 0x6000, 0x0421, 0x0408, 0 },  // 22
-    { 0x4001, -3390, 0x0406, 1 },   // 23
-    { 0x6000, 0x0423, 0x0408, 0 },  // 24
-    { 0x4001, -6050, 0x0406, 1 },   // 25
-    { 0x6000, 0x0425, 0x0408, 0 },  // 26
-    { 0x4001, 2540, 0x0406, 1 },    // 27
-    { 0x6000, 0x0427, 0x0407, 0 },  // 28
-    { 0x4001, -8050, 0x0406, 1 },   // 29
-    { 0x6000, 0x0429, 0x0408, 0 },  // 2a
-    { 0x4001, -2540, 0x0406, 1 },   // 2b
-    { 0x6000, 0x042b, 0x0407, 0 },  // 2c
-    { 0x4001, -4460, 0x0406, 1 },   // 2d
-    { 0x6000, 0x042d, 0x0407, 0 },  // 2e
-    { 0x4001, -2330, 0x0406, 1 },   // 2f
-    { 0x6000, 0x042f, 0x0407, 0 },  // 30
-    { 0x4001, -4700, 0x0406, 1 },   // 31
-    { 0x6000, 0x0431, 0x0408, 0 },  // 32
-    { 0x4001, -1270, 0x0406, 1 },   // 33
-    { 0x6000, 0x0433, 0x0407, 0 },  // 34
-    { 0x4001, -5720, 0x0406, 1 },   // 35
-    { 0x6000, 0x0435, 0x0408, 0 },  // 36
-    { 0x4001, -2540, 0x0406, 1 },   // 37
-    { 0x6000, 0x0437, 0x0408, 0 },  // 38
-    { 0x4001, 1800, 0x0406, 1 },    // 39
-    { 0x6000, 0x0439, 0x0407, 0 },  // 3a
-    { 0x4001, -1700, 0x0406, 1 },   // 3b
-    { 0x6000, 0x043b, 0x0408, 0 },  // 3c
-    { 0x4001, 6290, 0x0406, 1 },    // 3d
-    { 0x6000, 0x043d, 0x0408, 0 }   // 3e
+    { 0x4001, { -1690, 0x0406, 1 } },   // 9
+    { 0x6000, { 0x0409, 0x0407, 0 } },  // a
+    { 0x4001, { 4600, 0x0406, 1 } },    // b
+    { 0x6000, { 0x040b, 0x0408, 0 } },  // c
+    { 0x4001, { 1690, 0x0406, 1 } },    // d
+    { 0x6000, { 0x040d, 0x0407, 0 } },  // e
+    { 0x4001, { 7980, 0x0406, 1 } },    // f
+    { 0x6000, { 0x040f, 0x0408, 0 } },  // 10
+    { 0x4001, { 1270, 0x0406, 1 } },    // 11
+    { 0x6000, { 0x0411, 0x0407, 0 } },  // 12
+    { 0x4001, { 4000, 0x0406, 1 } },    // 13
+    { 0x6000, { 0x0413, 0x0408, 0 } },  // 14
+    { 0x4001, { 1750, 0x0406, 1 } },    // 15
+    { 0x6000, { 0x0415, 0x0408, 0 } },  // 16
+    { 0x4001, { 800, 0x0406, 1 } },     // 17
+    { 0x6000, { 0x0417, 0x0408, 0 } },  // 18
+    { 0x4001, { 1650, 0x0406, 1 } },    // 19
+    { 0x6000, { 0x0419, 0x0407, 0 } },  // 1a
+    { 0x4001, { 2340, 0x0406, 1 } },    // 1b
+    { 0x6000, { 0x041b, 0x0407, 0 } },  // 1c
+    { 0x4001, { 3640, 0x0406, 1 } },    // 1d
+    { 0x6000, { 0x041d, 0x0407, 0 } },  // 1e
+    { 0x4001, { 4670, 0x0406, 1 } },    // 1f
+    { 0x6000, { 0x041f, 0x0407, 0 } },  // 20
+    { 0x4001, { -1570, 0x0406, 1 } },   // 21
+    { 0x6000, { 0x0421, 0x0408, 0 } },  // 22
+    { 0x4001, { -3390, 0x0406, 1 } },   // 23
+    { 0x6000, { 0x0423, 0x0408, 0 } },  // 24
+    { 0x4001, { -6050, 0x0406, 1 } },   // 25
+    { 0x6000, { 0x0425, 0x0408, 0 } },  // 26
+    { 0x4001, { 2540, 0x0406, 1 } },    // 27
+    { 0x6000, { 0x0427, 0x0407, 0 } },  // 28
+    { 0x4001, { -8050, 0x0406, 1 } },   // 29
+    { 0x6000, { 0x0429, 0x0408, 0 } },  // 2a
+    { 0x4001, { -2540, 0x0406, 1 } },   // 2b
+    { 0x6000, { 0x042b, 0x0407, 0 } },  // 2c
+    { 0x4001, { -4460, 0x0406, 1 } },   // 2d
+    { 0x6000, { 0x042d, 0x0407, 0 } },  // 2e
+    { 0x4001, { -2330, 0x0406, 1 } },   // 2f
+    { 0x6000, { 0x042f, 0x0407, 0 } },  // 30
+    { 0x4001, { -4700, 0x0406, 1 } },   // 31
+    { 0x6000, { 0x0431, 0x0408, 0 } },  // 32
+    { 0x4001, { -1270, 0x0406, 1 } },   // 33
+    { 0x6000, { 0x0433, 0x0407, 0 } },  // 34
+    { 0x4001, { -5720, 0x0406, 1 } },   // 35
+    { 0x6000, { 0x0435, 0x0408, 0 } },  // 36
+    { 0x4001, { -2540, 0x0406, 1 } },   // 37
+    { 0x6000, { 0x0437, 0x0408, 0 } },  // 38
+    { 0x4001, { 1800, 0x0406, 1 } },    // 39
+    { 0x6000, { 0x0439, 0x0407, 0 } },  // 3a
+    { 0x4001, { -1700, 0x0406, 1 } },   // 3b
+    { 0x6000, { 0x043b, 0x0408, 0 } },  // 3c
+    { 0x4001, { 6290, 0x0406, 1 } },    // 3d
+    { 0x6000, { 0x043d, 0x0408, 0 } }   // 3e
 };
 static const mso_CustomShape msoActionButtonHelp =
 {
@@ -2285,53 +2285,53 @@ static const sal_uInt16 mso_sptActionButtonInformationSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptActionButtonInformationCalc[] = // adj value 0 - 5400
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x6000, DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 },
-    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
-    { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
-    { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
-    { 0x8000, 10800, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x0405, 1, 10800 },           // scaling   6
-    { 0x2001, DFF_Prop_geoRight, 1, 2 },    // lr center 7
-    { 0x2001, DFF_Prop_geoBottom, 1, 2 },   // ul center 8
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
+    { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
+    { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
+    { 0x2001, { 0x0405, 1, 10800 } },           // scaling   6
+    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    // lr center 7
+    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   // ul center 8
 
-    { 0x4001, -8050, 0x0406, 1 },   // 9
-    { 0x6000, 0x0409, 0x0407, 0 },  // a
-    { 0x4001, -8050, 0x0406, 1 },   // b
-    { 0x6000, 0x040b, 0x0408, 0 },  // c
-    { 0x4001, 8050, 0x0406, 1 },    // d
-    { 0x6000, 0x040d, 0x0407, 0 },  // e
-    { 0x4001, 8050, 0x0406, 1 },    // f
-    { 0x6000, 0x040f, 0x0408, 0 },  // 10
+    { 0x4001, { -8050, 0x0406, 1 } },   // 9
+    { 0x6000, { 0x0409, 0x0407, 0 } },  // a
+    { 0x4001, { -8050, 0x0406, 1 } },   // b
+    { 0x6000, { 0x040b, 0x0408, 0 } },  // c
+    { 0x4001, { 8050, 0x0406, 1 } },    // d
+    { 0x6000, { 0x040d, 0x0407, 0 } },  // e
+    { 0x4001, { 8050, 0x0406, 1 } },    // f
+    { 0x6000, { 0x040f, 0x0408, 0 } },  // 10
 
-    { 0x4001, -2060, 0x0406, 1 },   // 11
-    { 0x6000, 0x0411, 0x0407, 0 },  // 12
-    { 0x4001, -7620, 0x0406, 1 },   // 13
-    { 0x6000, 0x0413, 0x0408, 0 },  // 14
-    { 0x4001, 2060, 0x0406, 1 },    // 15
-    { 0x6000, 0x0415, 0x0407, 0 },  // 16
-    { 0x4001, -3500, 0x0406, 1 },   // 17
-    { 0x6000, 0x0417, 0x0408, 0 },  // 18
+    { 0x4001, { -2060, 0x0406, 1 } },   // 11
+    { 0x6000, { 0x0411, 0x0407, 0 } },  // 12
+    { 0x4001, { -7620, 0x0406, 1 } },   // 13
+    { 0x6000, { 0x0413, 0x0408, 0 } },  // 14
+    { 0x4001, { 2060, 0x0406, 1 } },    // 15
+    { 0x6000, { 0x0415, 0x0407, 0 } },  // 16
+    { 0x4001, { -3500, 0x0406, 1 } },   // 17
+    { 0x6000, { 0x0417, 0x0408, 0 } },  // 18
 
-    { 0x4001, -2960, 0x0406, 1 },   // 19
-    { 0x6000, 0x0419, 0x0407, 0 },  // 1a
-    { 0x4001, -2960, 0x0406, 1 },   // 1b
-    { 0x6000, 0x041b, 0x0408, 0 },  // 1c
-    { 0x4001, 1480, 0x0406, 1 },    // 1d
-    { 0x6000, 0x041d, 0x0407, 0 },  // 1e
-    { 0x4001, 5080, 0x0406, 1 },    // 1f
-    { 0x6000, 0x041f, 0x0408, 0 },  // 20
-    { 0x4001, 2960, 0x0406, 1 },    // 21
-    { 0x6000, 0x0421, 0x0407, 0 },  // 22
-    { 0x4001, 6140, 0x0406, 1 },    // 23
-    { 0x6000, 0x0423, 0x0408, 0 },  // 24
-    { 0x4001, -1480, 0x0406, 1 },   // 25
-    { 0x6000, 0x0425, 0x0407, 0 },  // 26
-    { 0x4001, -1920, 0x0406, 1 },   // 27
-    { 0x6000, 0x0427, 0x0408, 0 },  // 28
+    { 0x4001, { -2960, 0x0406, 1 } },   // 19
+    { 0x6000, { 0x0419, 0x0407, 0 } },  // 1a
+    { 0x4001, { -2960, 0x0406, 1 } },   // 1b
+    { 0x6000, { 0x041b, 0x0408, 0 } },  // 1c
+    { 0x4001, { 1480, 0x0406, 1 } },    // 1d
+    { 0x6000, { 0x041d, 0x0407, 0 } },  // 1e
+    { 0x4001, { 5080, 0x0406, 1 } },    // 1f
+    { 0x6000, { 0x041f, 0x0408, 0 } },  // 20
+    { 0x4001, { 2960, 0x0406, 1 } },    // 21
+    { 0x6000, { 0x0421, 0x0407, 0 } },  // 22
+    { 0x4001, { 6140, 0x0406, 1 } },    // 23
+    { 0x6000, { 0x0423, 0x0408, 0 } },  // 24
+    { 0x4001, { -1480, 0x0406, 1 } },   // 25
+    { 0x6000, { 0x0425, 0x0407, 0 } },  // 26
+    { 0x4001, { -1920, 0x0406, 1 } },   // 27
+    { 0x6000, { 0x0427, 0x0408, 0 } },  // 28
 
-    { 0x4001, -5560, 0x0406, 1 },   // 29
-    { 0x6000, 0x0429, 0x0408, 0 },  // 2a
+    { 0x4001, { -5560, 0x0406, 1 } },   // 29
+    { 0x6000, { 0x0429, 0x0408, 0 } },  // 2a
 
 };
 static const mso_CustomShape msoActionButtonInformation =
@@ -2368,24 +2368,24 @@ static const sal_uInt16 mso_sptActionButtonForwardBackSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptActionButtonForwardBackCalc[] = // adj value 0 - 5400
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x6000, DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 },
-    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
-    { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
-    { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
-    { 0x8000, 10800, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x0405, 1, 10800 },           // scaling   6
-    { 0x2001, DFF_Prop_geoRight, 1, 2 },    // lr center 7
-    { 0x2001, DFF_Prop_geoBottom, 1, 2 },   // ul center 8
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
+    { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
+    { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
+    { 0x2001, { 0x0405, 1, 10800 } },           // scaling   6
+    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    // lr center 7
+    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   // ul center 8
 
-    { 0x4001, -8050, 0x0406, 1 },   // 9
-    { 0x6000, 0x0409, 0x0407, 0 },  // a
-    { 0x4001, -8050, 0x0406, 1 },   // b
-    { 0x6000, 0x040b, 0x0408, 0 },  // c
-    { 0x4001, 8050, 0x0406, 1 },    // d
-    { 0x6000, 0x040d, 0x0407, 0 },  // e
-    { 0x4001, 8050, 0x0406, 1 },    // f
-    { 0x6000, 0x040f, 0x0408, 0 }   // 10
+    { 0x4001, { -8050, 0x0406, 1 } },   // 9
+    { 0x6000, { 0x0409, 0x0407, 0 } },  // a
+    { 0x4001, { -8050, 0x0406, 1 } },   // b
+    { 0x6000, { 0x040b, 0x0408, 0 } },  // c
+    { 0x4001, { 8050, 0x0406, 1 } },    // d
+    { 0x6000, { 0x040d, 0x0407, 0 } },  // e
+    { 0x4001, { 8050, 0x0406, 1 } },    // f
+    { 0x6000, { 0x040f, 0x0408, 0 } }   // 10
 };
 static const mso_CustomShape msoActionButtonBackPrevious =
 {
@@ -2447,35 +2447,35 @@ static const sal_uInt16 mso_sptActionButtonBeginningEndSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptActionButtonBeginningEndCalc[] =    // adj value 0 - 5400
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x6000, DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 },
-    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
-    { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
-    { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
-    { 0x8000, 10800, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x0405, 1, 10800 },           // scaling   6
-    { 0x2001, DFF_Prop_geoRight, 1, 2 },    // lr center 7
-    { 0x2001, DFF_Prop_geoBottom, 1, 2 },   // ul center 8
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
+    { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
+    { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
+    { 0x2001, { 0x0405, 1, 10800 } },           // scaling   6
+    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    // lr center 7
+    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   // ul center 8
 
-    { 0x4001, -4020, 0x0406, 1 },   // 9
-    { 0x6000, 0x0409, 0x0407, 0 },  // a
-    { 0x4001, -8050, 0x0406, 1 },   // b
-    { 0x6000, 0x040b, 0x0408, 0 },  // c
-    { 0x4001, 8050, 0x0406, 1 },    // d
-    { 0x6000, 0x040d, 0x0407, 0 },  // e
-    { 0x4001, 8050, 0x0406, 1 },    // f
-    { 0x6000, 0x040f, 0x0408, 0 },  // 10
+    { 0x4001, { -4020, 0x0406, 1 } },   // 9
+    { 0x6000, { 0x0409, 0x0407, 0 } },  // a
+    { 0x4001, { -8050, 0x0406, 1 } },   // b
+    { 0x6000, { 0x040b, 0x0408, 0 } },  // c
+    { 0x4001, { 8050, 0x0406, 1 } },    // d
+    { 0x6000, { 0x040d, 0x0407, 0 } },  // e
+    { 0x4001, { 8050, 0x0406, 1 } },    // f
+    { 0x6000, { 0x040f, 0x0408, 0 } },  // 10
 
-    { 0x4001, -8050, 0x0406, 1 },   // 11
-    { 0x6000, 0x0411, 0x0407, 0 },  // 12
-    { 0x4001, -6140, 0x0406, 1 },   // 13
-    { 0x6000, 0x0413, 0x0407, 0 },  // 14
+    { 0x4001, { -8050, 0x0406, 1 } },   // 11
+    { 0x6000, { 0x0411, 0x0407, 0 } },  // 12
+    { 0x4001, { -6140, 0x0406, 1 } },   // 13
+    { 0x6000, { 0x0413, 0x0407, 0 } },  // 14
 
 
-    { 0x4001, 4020, 0x0406, 1 },    // 15
-    { 0x6000, 0x0415, 0x0407, 0 },  // 16
-    { 0x4001, 6140, 0x0406, 1 },    // 17
-    { 0x6000, 0x0417, 0x0407, 0 }   // 18
+    { 0x4001, { 4020, 0x0406, 1 } },    // 15
+    { 0x6000, { 0x0415, 0x0407, 0 } },  // 16
+    { 0x4001, { 6140, 0x0406, 1 } },    // 17
+    { 0x6000, { 0x0417, 0x0407, 0 } }   // 18
 };
 static const mso_CustomShape msoActionButtonBeginning =
 {
@@ -2544,52 +2544,52 @@ static const sal_uInt16 mso_sptActionButtonReturnSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptActionButtonReturnCalc[] =  // adj value 0 - 5400
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x6000, DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 },
-    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
-    { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
-    { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
-    { 0x8000, 10800, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x0405, 1, 10800 },           // scaling   6
-    { 0x2001, DFF_Prop_geoRight, 1, 2 },    // lr center 7
-    { 0x2001, DFF_Prop_geoBottom, 1, 2 },   // ul center 8
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
+    { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
+    { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
+    { 0x2001, { 0x0405, 1, 10800 } },           // scaling   6
+    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    // lr center 7
+    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   // ul center 8
 
-    { 0x4001, -8050, 0x0406, 1 },   // 9
-    { 0x6000, 0x0409, 0x0407, 0 },  // a
-    { 0x4001, -3800, 0x0406, 1 },   // b
-    { 0x6000, 0x040b, 0x0408, 0 },  // c
-    { 0x4001, -4020, 0x0406, 1 },   // d
-    { 0x6000, 0x040d, 0x0407, 0 },  // e
-    { 0x4001, 2330, 0x0406, 1 },    // f
-    { 0x6000, 0x040f, 0x0408, 0 },  // 10
-    { 0x4001, 3390, 0x0406, 1 },    // 11
-    { 0x6000, 0x0411, 0x0408, 0 },  // 12
-    { 0x4001, -3100, 0x0406, 1 },   // 13
-    { 0x6000, 0x0413, 0x0407, 0 },  // 14
-    { 0x4001, 4230, 0x0406, 1 },    // 15
-    { 0x6000, 0x0415, 0x0408, 0 },  // 16
-    { 0x4001, -1910, 0x0406, 1 },   // 17
-    { 0x6000, 0x0417, 0x0407, 0 },  // 18
-    { 0x4001, 1190, 0x0406, 1 },    // 19
-    { 0x6000, 0x0419, 0x0407, 0 },  // 1a
-    { 0x4001, 2110, 0x0406, 1 },    // 1b
-    { 0x6000, 0x041b, 0x0407, 0 },  // 1c
-    { 0x4001, 4030, 0x0406, 1 },    // 1d
-    { 0x6000, 0x041d, 0x0407, 0 },  // 1e
-    { 0x4001, -7830, 0x0406, 1 },   // 1f
-    { 0x6000, 0x041f, 0x0408, 0 },  // 20
-    { 0x4001, 8250, 0x0406, 1 },    // 21
-    { 0x6000, 0x0421, 0x0407, 0 },  // 22
-    { 0x4001, 6140, 0x0406, 1 },    // 23
-    { 0x6000, 0x0423, 0x0407, 0 },  // 24
-    { 0x4001, 5510, 0x0406, 1 },    // 25
-    { 0x6000, 0x0425, 0x0408, 0 },  // 26
-    { 0x4001, 3180, 0x0406, 1 },    // 27
-    { 0x6000, 0x0427, 0x0407, 0 },  // 28
-    { 0x4001, 8450, 0x0406, 1 },    // 29
-    { 0x6000, 0x0429, 0x0408, 0 },  // 2a
-    { 0x4001, -5090, 0x0406, 1 },   // 2b
-    { 0x6000, 0x042b, 0x0407, 0 }   // 2c
+    { 0x4001, { -8050, 0x0406, 1 } },   // 9
+    { 0x6000, { 0x0409, 0x0407, 0 } },  // a
+    { 0x4001, { -3800, 0x0406, 1 } },   // b
+    { 0x6000, { 0x040b, 0x0408, 0 } },  // c
+    { 0x4001, { -4020, 0x0406, 1 } },   // d
+    { 0x6000, { 0x040d, 0x0407, 0 } },  // e
+    { 0x4001, { 2330, 0x0406, 1 } },    // f
+    { 0x6000, { 0x040f, 0x0408, 0 } },  // 10
+    { 0x4001, { 3390, 0x0406, 1 } },    // 11
+    { 0x6000, { 0x0411, 0x0408, 0 } },  // 12
+    { 0x4001, { -3100, 0x0406, 1 } },   // 13
+    { 0x6000, { 0x0413, 0x0407, 0 } },  // 14
+    { 0x4001, { 4230, 0x0406, 1 } },    // 15
+    { 0x6000, { 0x0415, 0x0408, 0 } },  // 16
+    { 0x4001, { -1910, 0x0406, 1 } },   // 17
+    { 0x6000, { 0x0417, 0x0407, 0 } },  // 18
+    { 0x4001, { 1190, 0x0406, 1 } },    // 19
+    { 0x6000, { 0x0419, 0x0407, 0 } },  // 1a
+    { 0x4001, { 2110, 0x0406, 1 } },    // 1b
+    { 0x6000, { 0x041b, 0x0407, 0 } },  // 1c
+    { 0x4001, { 4030, 0x0406, 1 } },    // 1d
+    { 0x6000, { 0x041d, 0x0407, 0 } },  // 1e
+    { 0x4001, { -7830, 0x0406, 1 } },   // 1f
+    { 0x6000, { 0x041f, 0x0408, 0 } },  // 20
+    { 0x4001, { 8250, 0x0406, 1 } },    // 21
+    { 0x6000, { 0x0421, 0x0407, 0 } },  // 22
+    { 0x4001, { 6140, 0x0406, 1 } },    // 23
+    { 0x6000, { 0x0423, 0x0407, 0 } },  // 24
+    { 0x4001, { 5510, 0x0406, 1 } },    // 25
+    { 0x6000, { 0x0425, 0x0408, 0 } },  // 26
+    { 0x4001, { 3180, 0x0406, 1 } },    // 27
+    { 0x6000, { 0x0427, 0x0407, 0 } },  // 28
+    { 0x4001, { 8450, 0x0406, 1 } },    // 29
+    { 0x6000, { 0x0429, 0x0408, 0 } },  // 2a
+    { 0x4001, { -5090, 0x0406, 1 } },   // 2b
+    { 0x6000, { 0x042b, 0x0407, 0 } }   // 2c
 };
 static const mso_CustomShape msoActionButtonReturn =
 {
@@ -2628,28 +2628,28 @@ static const sal_uInt16 mso_sptActionButtonDocumentSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptActionButtonDocumentCalc[] =    // adj value 0 - 5400
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x6000, DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 },
-    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
-    { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
-    { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
-    { 0x8000, 10800, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x0405, 1, 10800 },           // scaling   6
-    { 0x2001, DFF_Prop_geoRight, 1, 2 },    // lr center 7
-    { 0x2001, DFF_Prop_geoBottom, 1, 2 },   // ul center 8
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
+    { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
+    { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
+    { 0x2001, { 0x0405, 1, 10800 } },           // scaling   6
+    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    // lr center 7
+    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   // ul center 8
 
-    { 0x4001, -6350, 0x0406, 1 },   // 9
-    { 0x6000, 0x0409, 0x0407, 0 },  // a
-    { 0x4001, -7830, 0x0406, 1 },   // b
-    { 0x6000, 0x040b, 0x0408, 0 },  // c
-    { 0x4001, 1690, 0x0406, 1 },    // d
-    { 0x6000, 0x040d, 0x0407, 0 },  // e
-    { 0x4001, 6350, 0x0406, 1 },    // f
-    { 0x6000, 0x040f, 0x0407, 0 },  // 10
-    { 0x4001, -3810, 0x0406, 1 },   // 11
-    { 0x6000, 0x0411, 0x0408, 0 },  // 12
-    { 0x4001, 7830, 0x0406, 1 },    // 13
-    { 0x6000, 0x0413, 0x0408, 0 }   // 14
+    { 0x4001, { -6350, 0x0406, 1 } },   // 9
+    { 0x6000, { 0x0409, 0x0407, 0 } },  // a
+    { 0x4001, { -7830, 0x0406, 1 } },   // b
+    { 0x6000, { 0x040b, 0x0408, 0 } },  // c
+    { 0x4001, { 1690, 0x0406, 1 } },    // d
+    { 0x6000, { 0x040d, 0x0407, 0 } },  // e
+    { 0x4001, { 6350, 0x0406, 1 } },    // f
+    { 0x6000, { 0x040f, 0x0407, 0 } },  // 10
+    { 0x4001, { -3810, 0x0406, 1 } },   // 11
+    { 0x6000, { 0x0411, 0x0408, 0 } },  // 12
+    { 0x4001, { 7830, 0x0406, 1 } },    // 13
+    { 0x6000, { 0x0413, 0x0408, 0 } }   // 14
 };
 static const mso_CustomShape msoActionButtonDocument =
 {
@@ -2694,38 +2694,38 @@ static const sal_uInt16 mso_sptActionButtonSoundSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptActionButtonSoundCalc[] =   // adj value 0 - 5400
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x6000, DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 },
-    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
-    { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
-    { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
-    { 0x8000, 10800, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x0405, 1, 10800 },           // scaling   6
-    { 0x2001, DFF_Prop_geoRight, 1, 2 },    // lr center 7
-    { 0x2001, DFF_Prop_geoBottom, 1, 2 },   // ul center 8
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
+    { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
+    { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
+    { 0x2001, { 0x0405, 1, 10800 } },           // scaling   6
+    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    // lr center 7
+    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   // ul center 8
 
-    { 0x4001, -8050, 0x0406, 1 },   // 9
-    { 0x6000, 0x0409, 0x0407, 0 },  // a
-    { 0x4001, -2750, 0x0406, 1 },   // b
-    { 0x6000, 0x040b, 0x0408, 0 },  // c
-    { 0x4001, -2960, 0x0406, 1 },   // d
-    { 0x6000, 0x040d, 0x0407, 0 },  // e
-    { 0x4001, 2120, 0x0406, 1 },    // f
-    { 0x6000, 0x040f, 0x0407, 0 },  // 10
-    { 0x4001, -8050, 0x0406, 1 },   // 11
-    { 0x6000, 0x0411, 0x0408, 0 },  // 12
-    { 0x4001, 8050, 0x0406, 1 },    // 13
-    { 0x6000, 0x0413, 0x0408, 0 },  // 14
-    { 0x4001, 2750, 0x0406, 1 },    // 15
-    { 0x6000, 0x0415, 0x0408, 0 },  // 16
-    { 0x4001, 4020, 0x0406, 1 },    // 17
-    { 0x6000, 0x0417, 0x0407, 0 },  // 18
-    { 0x4001, 8050, 0x0406, 1 },    // 19
-    { 0x6000, 0x0419, 0x0407, 0 },  // 1a
-    { 0x4001, -5930, 0x0406, 1 },   // 1b
-    { 0x6000, 0x041b, 0x0408, 0 },  // 1c
-    { 0x4001, 5930, 0x0406, 1 },    // 1d
-    { 0x6000, 0x041d, 0x0408, 0 }   // 1e
+    { 0x4001, { -8050, 0x0406, 1 } },   // 9
+    { 0x6000, { 0x0409, 0x0407, 0 } },  // a
+    { 0x4001, { -2750, 0x0406, 1 } },   // b
+    { 0x6000, { 0x040b, 0x0408, 0 } },  // c
+    { 0x4001, { -2960, 0x0406, 1 } },   // d
+    { 0x6000, { 0x040d, 0x0407, 0 } },  // e
+    { 0x4001, { 2120, 0x0406, 1 } },    // f
+    { 0x6000, { 0x040f, 0x0407, 0 } },  // 10
+    { 0x4001, { -8050, 0x0406, 1 } },   // 11
+    { 0x6000, { 0x0411, 0x0408, 0 } },  // 12
+    { 0x4001, { 8050, 0x0406, 1 } },    // 13
+    { 0x6000, { 0x0413, 0x0408, 0 } },  // 14
+    { 0x4001, { 2750, 0x0406, 1 } },    // 15
+    { 0x6000, { 0x0415, 0x0408, 0 } },  // 16
+    { 0x4001, { 4020, 0x0406, 1 } },    // 17
+    { 0x6000, { 0x0417, 0x0407, 0 } },  // 18
+    { 0x4001, { 8050, 0x0406, 1 } },    // 19
+    { 0x6000, { 0x0419, 0x0407, 0 } },  // 1a
+    { 0x4001, { -5930, 0x0406, 1 } },   // 1b
+    { 0x6000, { 0x041b, 0x0408, 0 } },  // 1c
+    { 0x4001, { 5930, 0x0406, 1 } },    // 1d
+    { 0x6000, { 0x041d, 0x0408, 0 } }   // 1e
 };
 static const mso_CustomShape msoActionButtonSound =
 {
@@ -2765,52 +2765,52 @@ static const sal_uInt16 mso_sptActionButtonMovieSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptActionButtonMovieCalc[] =   // adj value 0 - 5400
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x6000, DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 },
-    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
-    { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
-    { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
-    { 0x8000, 10800, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x0405, 1, 10800 },           // scaling   6
-    { 0x2001, DFF_Prop_geoRight, 1, 2 },    // lr center 7
-    { 0x2001, DFF_Prop_geoBottom, 1, 2 },   // ul center 8
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
+    { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
+    { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
+    { 0x2001, { 0x0405, 1, 10800 } },           // scaling   6
+    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    // lr center 7
+    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   // ul center 8
 
-    { 0x4001, -8050, 0x0406, 1 },   // 9
-    { 0x6000, 0x0409, 0x0407, 0 },  // a
-    { 0x4001, -4020, 0x0406, 1 },   // b
-    { 0x6000, 0x040b, 0x0408, 0 },  // c
-    { 0x4001, -7000, 0x0406, 1 },   // d
-    { 0x6000, 0x040d, 0x0407, 0 },  // e
-    { 0x4001, -6560, 0x0406, 1 },   // f
-    { 0x6000, 0x040f, 0x0407, 0 },  // 10
-    { 0x4001, -3600, 0x0406, 1 },   // 11
-    { 0x6000, 0x0411, 0x0408, 0 },  // 12
-    { 0x4001, 4020, 0x0406, 1 },    // 13
-    { 0x6000, 0x0413, 0x0407, 0 },  // 14
-    { 0x4001, 4660, 0x0406, 1 },    // 15
-    { 0x6000, 0x0415, 0x0407, 0 },  // 16
-    { 0x4001, -2960, 0x0406, 1 },   // 17
-    { 0x6000, 0x0417, 0x0408, 0 },  // 18
-    { 0x4001, -2330, 0x0406, 1 },   // 19
-    { 0x6000, 0x0419, 0x0408, 0 },  // 1a
-    { 0x4001, 6780, 0x0406, 1 },    // 1b
-    { 0x6000, 0x041b, 0x0407, 0 },  // 1c
-    { 0x4001, 7200, 0x0406, 1 },    // 1d
-    { 0x6000, 0x041d, 0x0407, 0 },  // 1e
-    { 0x4001, 8050, 0x0406, 1 },    // 1f
-    { 0x6000, 0x041f, 0x0407, 0 },  // 20
-    { 0x4001, 2960, 0x0406, 1 },    // 21
-    { 0x6000, 0x0421, 0x0408, 0 },  // 22
-    { 0x4001, 2330, 0x0406, 1 },    // 23
-    { 0x6000, 0x0423, 0x0408, 0 },  // 24
-    { 0x4001, 3800, 0x0406, 1 },    // 25
-    { 0x6000, 0x0425, 0x0408, 0 },  // 26
-    { 0x4001, -1060, 0x0406, 1 },   // 27
-    { 0x6000, 0x0427, 0x0408, 0 },  // 28
-    { 0x4001, -6350, 0x0406, 1 },   // 29
-    { 0x6000, 0x0429, 0x0407, 0 },  // 2a
-    { 0x4001, -640, 0x0406, 1 },    // 2b
-    { 0x6000, 0x042b, 0x0408, 0 }   // 2c
+    { 0x4001, { -8050, 0x0406, 1 } },   // 9
+    { 0x6000, { 0x0409, 0x0407, 0 } },  // a
+    { 0x4001, { -4020, 0x0406, 1 } },   // b
+    { 0x6000, { 0x040b, 0x0408, 0 } },  // c
+    { 0x4001, { -7000, 0x0406, 1 } },   // d
+    { 0x6000, { 0x040d, 0x0407, 0 } },  // e
+    { 0x4001, { -6560, 0x0406, 1 } },   // f
+    { 0x6000, { 0x040f, 0x0407, 0 } },  // 10
+    { 0x4001, { -3600, 0x0406, 1 } },   // 11
+    { 0x6000, { 0x0411, 0x0408, 0 } },  // 12
+    { 0x4001, { 4020, 0x0406, 1 } },    // 13
+    { 0x6000, { 0x0413, 0x0407, 0 } },  // 14
+    { 0x4001, { 4660, 0x0406, 1 } },    // 15
+    { 0x6000, { 0x0415, 0x0407, 0 } },  // 16
+    { 0x4001, { -2960, 0x0406, 1 } },   // 17
+    { 0x6000, { 0x0417, 0x0408, 0 } },  // 18
+    { 0x4001, { -2330, 0x0406, 1 } },   // 19
+    { 0x6000, { 0x0419, 0x0408, 0 } },  // 1a
+    { 0x4001, { 6780, 0x0406, 1 } },    // 1b
+    { 0x6000, { 0x041b, 0x0407, 0 } },  // 1c
+    { 0x4001, { 7200, 0x0406, 1 } },    // 1d
+    { 0x6000, { 0x041d, 0x0407, 0 } },  // 1e
+    { 0x4001, { 8050, 0x0406, 1 } },    // 1f
+    { 0x6000, { 0x041f, 0x0407, 0 } },  // 20
+    { 0x4001, { 2960, 0x0406, 1 } },    // 21
+    { 0x6000, { 0x0421, 0x0408, 0 } },  // 22
+    { 0x4001, { 2330, 0x0406, 1 } },    // 23
+    { 0x6000, { 0x0423, 0x0408, 0 } },  // 24
+    { 0x4001, { 3800, 0x0406, 1 } },    // 25
+    { 0x6000, { 0x0425, 0x0408, 0 } },  // 26
+    { 0x4001, { -1060, 0x0406, 1 } },   // 27
+    { 0x6000, { 0x0427, 0x0408, 0 } },  // 28
+    { 0x4001, { -6350, 0x0406, 1 } },   // 29
+    { 0x6000, { 0x0429, 0x0407, 0 } },  // 2a
+    { 0x4001, { -640, 0x0406, 1 } },    // 2b
+    { 0x6000, { 0x042b, 0x0408, 0 } }   // 2c
 };
 static const mso_CustomShape msoActionButtonMovie =
 {
@@ -2841,9 +2841,9 @@ static const sal_uInt16 mso_sptSmileyFaceSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptSmileyFaceCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 15510 },
-    { 0x8000, 17520, 0, 0x400 },
-    { 0x4000, 15510, 0x400, 0 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 15510 } },
+    { 0x8000, { 17520, 0, 0x400 } },
+    { 0x4000, { 15510, 0x400, 0 } }
 };
 
 static const SvxMSDffTextRectangles mso_sptSmileyFaceTextRect[] =
@@ -2883,8 +2883,8 @@ static const sal_uInt16 mso_sptDonutSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptDonutCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x8000, 10800, 0, DFF_Prop_adjustValue }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x8000, { 10800, 0, DFF_Prop_adjustValue } }
 };
 static const SvxMSDffHandle mso_sptDonutHandle[] =
 {
@@ -2917,23 +2917,23 @@ static const sal_uInt16 mso_sptNoSmokingSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptNoSmokingCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },         // 0
-    { 0x8000, 21600, 0, DFF_Prop_adjustValue },     // 1
-    { 0x8000, 10800, 0, DFF_Prop_adjustValue },     // 2
-    { 0x2001, DFF_Prop_adjustValue, 1, 2 },         // 3
-    { 0xa080, 0x403, 0, 0x402 },                    // 4
-    { 0x8000, 10800, 0, 0x403 },                    // 5 x1
-    { 0x4000, 10800, 0x403, 0 },                    // 6 x2
-    { 0x8000, 10800, 0, 0x404 },                    // 7 y1
-    { 0x4000, 10800, 0x404, 0 },                    // 8 y2
-    { 0x6081, 0x405, 0x407, 45 },                   // 9
-    { 0x6082, 0x405, 0x407, 45 },                   // a
-    { 0x6081, 0x405, 0x408, 45 },                   // b
-    { 0x6082, 0x405, 0x408, 45 },                   // c
-    { 0x6081, 0x406, 0x408, 45 },                   // d
-    { 0x6082, 0x406, 0x408, 45 },                   // e
-    { 0x6081, 0x406, 0x407, 45 },                   // f
-    { 0x6082, 0x406, 0x407, 45 }                    // 10
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },         // 0
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },     // 1
+    { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },     // 2
+    { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },         // 3
+    { 0xa080, { 0x403, 0, 0x402 } },                    // 4
+    { 0x8000, { 10800, 0, 0x403 } },                    // 5 x1
+    { 0x4000, { 10800, 0x403, 0 } },                    // 6 x2
+    { 0x8000, { 10800, 0, 0x404 } },                    // 7 y1
+    { 0x4000, { 10800, 0x404, 0 } },                    // 8 y2
+    { 0x6081, { 0x405, 0x407, 45 } },                   // 9
+    { 0x6082, { 0x405, 0x407, 45 } },                   // a
+    { 0x6081, { 0x405, 0x408, 45 } },                   // b
+    { 0x6082, { 0x405, 0x408, 45 } },                   // c
+    { 0x6081, { 0x406, 0x408, 45 } },                   // d
+    { 0x6082, { 0x406, 0x408, 45 } },                   // e
+    { 0x6081, { 0x406, 0x407, 45 } },                   // f
+    { 0x6082, { 0x406, 0x407, 45 } }                    // 10
 };
 static const SvxMSDffHandle mso_sptNoSmokingHandle[] =
 {
@@ -2968,15 +2968,15 @@ static const sal_Int32 mso_sptBlockArcDefault[] =
 };
 static const SvxMSDffCalculationData mso_sptBlockArcCalc[] =
 {
-    { 0x400a, 10800, DFF_Prop_adjustValue, 0 },
-    { 0x4009, 10800, DFF_Prop_adjustValue, 0 },
-    { 0x2000, 0x400, 10800, 0 },
-    { 0x2000, 0x401, 10800, 0 },
-    { 0x8000, 21600, 0, 0x402 },
-    { 0x8000, 10800, 0, DFF_Prop_adjust2Value },
-    { 0x4000, 10800, DFF_Prop_adjust2Value, 0 },
-    { 0x600a, 0x405, DFF_Prop_adjustValue, 0 },
-    { 0x6009, 0x405, DFF_Prop_adjustValue, 0 }
+    { 0x400a, { 10800, DFF_Prop_adjustValue, 0 } },
+    { 0x4009, { 10800, DFF_Prop_adjustValue, 0 } },
+    { 0x2000, { 0x400, 10800, 0 } },
+    { 0x2000, { 0x401, 10800, 0 } },
+    { 0x8000, { 21600, 0, 0x402 } },
+    { 0x8000, { 10800, 0, DFF_Prop_adjust2Value } },
+    { 0x4000, { 10800, DFF_Prop_adjust2Value, 0 } },
+    { 0x600a, { 0x405, DFF_Prop_adjustValue, 0 } },
+    { 0x6009, { 0x405, DFF_Prop_adjustValue, 0 } }
 };
 static const SvxMSDffHandle mso_sptBlockArcHandle[] =
 {
@@ -3118,63 +3118,61 @@ static const sal_uInt16 mso_sptSunSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptSunCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x8000, 21600, 0, DFF_Prop_adjustValue },
-    { 0x2000, DFF_Prop_adjustValue, 0, 2700 },
-    { 0x2001, 0x402, 5080, 7425 },
-    { 0x2000, 0x403, 2540, 0 },
-    { 0x8000, 10125, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x405, 2120, 7425 },
-    { 0x2000, 0x406, 210, 0 },
-    { 0x4000, 10800, 0x407, 0 },    // y1 (0x8)
-    { 0x8000, 10800, 0, 0x407 },    // y2 (0x9)
-    { 0x0081, 0, 10800, 45 },       // 0xa
-    { 0x0082, 0, 10800, 45 },       // 0xb
-    { 0x6081, 0x404, 0x408, 45 },   // 0xc
-    { 0x6082, 0x404, 0x408, 45 },   // 0xd
-    { 0x6081, 0x404, 0x409, 45 },   // 0xe
-    { 0x6082, 0x404, 0x409, 45 },   // 0xf
-    { 0x0081, 0, 10800, 90 },       // 0x10
-    { 0x0082, 0, 10800, 90 },       // 0x11
-    { 0x6081, 0x404, 0x408, 90 },   // 0x12
-    { 0x6082, 0x404, 0x408, 90 },   // 0x13
-    { 0x6081, 0x404, 0x409, 90 },   // 0x14
-    { 0x6082, 0x404, 0x409, 90 },   // 0x15
-    { 0x0081, 0, 10800, 135 },      // 0x16
-    { 0x0082, 0, 10800, 135 },      // 0x17
-    { 0x6081, 0x404, 0x408, 135 },  // 0x18
-    { 0x6082, 0x404, 0x408, 135 },  // 0x19
-    { 0x6081, 0x404, 0x409, 135 },  // 0x1a
-    { 0x6082, 0x404, 0x409, 135 },  // 0x1b
-    { 0x0081, 0, 10800, 180 },      // 0x1c
-    { 0x0082, 0, 10800, 180 },      // 0x1d
-    { 0x6081, 0x404, 0x408, 180 },  // 0x1e
-    { 0x6082, 0x404, 0x408, 180 },  // 0x1f
-    { 0x6081, 0x404, 0x409, 180 },  // 0x20
-    { 0x6082, 0x404, 0x409, 180 },  // 0x21
-    { 0x0081, 0, 10800, 225 },      // 0x22
-    { 0x0082, 0, 10800, 225 },      // 0x23
-    { 0x6081, 0x404, 0x408, 225 },  // 0x24
-    { 0x6082, 0x404, 0x408, 225 },  // 0x25
-    { 0x6081, 0x404, 0x409, 225 },  // 0x26
-    { 0x6082, 0x404, 0x409, 225 },  // 0x27
-    { 0x0081, 0, 10800, 270 },      // 0x28
-    { 0x0082, 0, 10800, 270 },      // 0x29
-    { 0x6081, 0x404, 0x408, 270 },  // 0x2a
-    { 0x6082, 0x404, 0x408, 270 },  // 0x2b
-    { 0x6081, 0x404, 0x409, 270 },  // 0x2c
-    { 0x6082, 0x404, 0x409, 270 },  // 0x2d
-    { 0x0081, 0, 10800, 315 },      // 0x2e
-    { 0x0082, 0, 10800, 315 },      // 0x2f
-    { 0x6081, 0x404, 0x408, 315 },  // 0x30
-    { 0x6082, 0x404, 0x408, 315 },  // 0x31
-    { 0x6081, 0x404, 0x409, 315 },  // 0x32
-    { 0x6082, 0x404, 0x409, 315 },  // 0x33
-    { 0x2081, DFF_Prop_adjustValue, 10800, 45 },    // 0x34 ( textbox )
-    { 0x2081, DFF_Prop_adjustValue, 10800, 225 },   // 0x35
-    { 0x8000, 10800, 0, DFF_Prop_adjustValue }
-
-
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },
+    { 0x2000, { DFF_Prop_adjustValue, 0, 2700 } },
+    { 0x2001, { 0x402, 5080, 7425 } },
+    { 0x2000, { 0x403, 2540, 0 } },
+    { 0x8000, { 10125, 0, DFF_Prop_adjustValue } },
+    { 0x2001, { 0x405, 2120, 7425 } },
+    { 0x2000, { 0x406, 210, 0 } },
+    { 0x4000, { 10800, 0x407, 0 } },    // y1 (0x8)
+    { 0x8000, { 10800, 0, 0x407 } },    // y2 (0x9)
+    { 0x0081, { 0, 10800, 45 } },       // 0xa
+    { 0x0082, { 0, 10800, 45 } },       // 0xb
+    { 0x6081, { 0x404, 0x408, 45 } },   // 0xc
+    { 0x6082, { 0x404, 0x408, 45 } },   // 0xd
+    { 0x6081, { 0x404, 0x409, 45 } },   // 0xe
+    { 0x6082, { 0x404, 0x409, 45 } },   // 0xf
+    { 0x0081, { 0, 10800, 90 } },       // 0x10
+    { 0x0082, { 0, 10800, 90 } },       // 0x11
+    { 0x6081, { 0x404, 0x408, 90 } },   // 0x12
+    { 0x6082, { 0x404, 0x408, 90 } },   // 0x13
+    { 0x6081, { 0x404, 0x409, 90 } },   // 0x14
+    { 0x6082, { 0x404, 0x409, 90 } },   // 0x15
+    { 0x0081, { 0, 10800, 135 } },      // 0x16
+    { 0x0082, { 0, 10800, 135 } },      // 0x17
+    { 0x6081, { 0x404, 0x408, 135 } },  // 0x18
+    { 0x6082, { 0x404, 0x408, 135 } },  // 0x19
+    { 0x6081, { 0x404, 0x409, 135 } },  // 0x1a
+    { 0x6082, { 0x404, 0x409, 135 } },  // 0x1b
+    { 0x0081, { 0, 10800, 180 } },      // 0x1c
+    { 0x0082, { 0, 10800, 180 } },      // 0x1d
+    { 0x6081, { 0x404, 0x408, 180 } },  // 0x1e
+    { 0x6082, { 0x404, 0x408, 180 } },  // 0x1f
+    { 0x6081, { 0x404, 0x409, 180 } },  // 0x20
+    { 0x6082, { 0x404, 0x409, 180 } },  // 0x21
+    { 0x0081, { 0, 10800, 225 } },      // 0x22
+    { 0x0082, { 0, 10800, 225 } },      // 0x23
+    { 0x6081, { 0x404, 0x408, 225 } },  // 0x24
+    { 0x6082, { 0x404, 0x408, 225 } },  // 0x25
+    { 0x6081, { 0x404, 0x409, 225 } },  // 0x26
+    { 0x6082, { 0x404, 0x409, 225 } },  // 0x27
+    { 0x0081, { 0, 10800, 270 } },      // 0x28
+    { 0x0082, { 0, 10800, 270 } },      // 0x29
+    { 0x6081, { 0x404, 0x408, 270 } },  // 0x2a
+    { 0x6082, { 0x404, 0x408, 270 } },  // 0x2b
+    { 0x6081, { 0x404, 0x409, 270 } },  // 0x2c
+    { 0x6082, { 0x404, 0x409, 270 } },  // 0x2d
+    { 0x0081, { 0, 10800, 315 } },      // 0x2e
+    { 0x0082, { 0, 10800, 315 } },      // 0x2f
+    { 0x6081, { 0x404, 0x408, 315 } },  // 0x30
+    { 0x6082, { 0x404, 0x408, 315 } },  // 0x31
+    { 0x6081, { 0x404, 0x409, 315 } },  // 0x32
+    { 0x6082, { 0x404, 0x409, 315 } },  // 0x33
+    { 0x2081, { DFF_Prop_adjustValue, 10800, 45 } },    // 0x34 ( textbox )
+    { 0x2081, { DFF_Prop_adjustValue, 10800, 225 } },   // 0x35
+    { 0x8000, { 10800, 0, DFF_Prop_adjustValue } }
 };
 static const SvxMSDffTextRectangles mso_sptSunTextRect[] =
 {
@@ -3212,17 +3210,17 @@ static const sal_uInt16 mso_sptMoonSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptMoonCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x8000, 21600, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x401, 1, 2 },
-    { 0x6000, 0x402, DFF_Prop_adjustValue, 0 },
-    { 0x2001, DFF_Prop_adjustValue, 1794, 10000 },
-    { 0x8000, 21600, 0, 0x0404 },
-    { 0x2001, DFF_Prop_adjustValue, 400, 18900 },
-    { 0x8081, 0, 10800, 0x406 },
-    { 0x8082, 0, 10800, 0x406 },
-    { 0x6000, 0x407, 0x407, 0 },
-    { 0x8000, 21600, 0, 0x408 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },
+    { 0x2001, { 0x401, 1, 2 } },
+    { 0x6000, { 0x402, DFF_Prop_adjustValue, 0 } },
+    { 0x2001, { DFF_Prop_adjustValue, 1794, 10000 } },
+    { 0x8000, { 21600, 0, 0x0404 } },
+    { 0x2001, { DFF_Prop_adjustValue, 400, 18900 } },
+    { 0x8081, { 0, 10800, 0x406 } },
+    { 0x8082, { 0, 10800, 0x406 } },
+    { 0x6000, { 0x407, 0x407, 0 } },
+    { 0x8000, { 21600, 0, 0x408 } }
 };
 static const SvxMSDffTextRectangles mso_sptMoonTextRect[] =
 {
@@ -3264,22 +3262,22 @@ static const sal_uInt16 mso_sptBracketPairSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptBracketPairCalc[] =
 {
-    { 0x6000, DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 },
-    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
-    { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
-    { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
-    { 0x2082, DFF_Prop_adjustValue, 0, 45 },
-    { 0x2000, 0x404, 0, 10800 },
-    { 0x8000, 0, 0, DFF_Prop_adjustValue },
-    { 0xa000, 0x406, 0, 0x405 },
-    { 0xa000, DFF_Prop_geoLeft, 0, 0x407 },
-    { 0xa000, DFF_Prop_geoTop, 0, 0x407 },
-    { 0x6000, DFF_Prop_geoRight, 0x407, 0 },
-    { 0x6000, DFF_Prop_geoBottom, 0x407, 0 },
-    { 0xa000, DFF_Prop_geoLeft, 0, 0x405 },
-    { 0xa000, DFF_Prop_geoTop, 0, 0x405 },
-    { 0x6000, DFF_Prop_geoRight, 0x405, 0 },
-    { 0x6000, DFF_Prop_geoBottom, 0x405, 0 }
+    { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
+    { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
+    { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
+    { 0x2082, { DFF_Prop_adjustValue, 0, 45 } },
+    { 0x2000, { 0x404, 0, 10800 } },
+    { 0x8000, { 0, 0, DFF_Prop_adjustValue } },
+    { 0xa000, { 0x406, 0, 0x405 } },
+    { 0xa000, { DFF_Prop_geoLeft, 0, 0x407 } },
+    { 0xa000, { DFF_Prop_geoTop, 0, 0x407 } },
+    { 0x6000, { DFF_Prop_geoRight, 0x407, 0 } },
+    { 0x6000, { DFF_Prop_geoBottom, 0x407, 0 } },
+    { 0xa000, { DFF_Prop_geoLeft, 0, 0x405 } },
+    { 0xa000, { DFF_Prop_geoTop, 0, 0x405 } },
+    { 0x6000, { DFF_Prop_geoRight, 0x405, 0 } },
+    { 0x6000, { DFF_Prop_geoBottom, 0x405, 0 } }
 };
 static const SvxMSDffTextRectangles mso_sptBracketPairTextRect[] =
 {
@@ -3343,22 +3341,21 @@ static const sal_uInt16 mso_sptBracePairSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptBracePairCalc[] =
 {
-    { 0x6000, DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 },
-    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
-    { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
-    { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x400, 2, 1 },                                    //  4
-    { 0x2001, DFF_Prop_adjustValue, 2, 1 },                     //  5
-    { 0x8000, 10800, 0, DFF_Prop_adjustValue },                 //  6
-    { 0x8000, 21600, 0, 0x406 },                                //  7
-    { 0xa000, DFF_Prop_geoRight, 0, 0x405 },                    //  8
-    { 0x2001, DFF_Prop_adjustValue, 1, 3 },                     //  9
-    { 0x6000, 0x409, DFF_Prop_adjustValue, 0 },                 // xa
-    { 0x6000, DFF_Prop_geoLeft, 0x40a, 0 },                     // xb
-    { 0x6000, DFF_Prop_geoTop, 0x409, 0 },                      // xc
-    { 0xa000, DFF_Prop_geoRight, 0, 0x40a },                    // xd
-    { 0xa000, DFF_Prop_geoBottom, 0, 0x409 }                    // xe
-
+    { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
+    { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
+    { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
+    { 0x2001, { 0x400, 2, 1 } },                                    //  4
+    { 0x2001, { DFF_Prop_adjustValue, 2, 1 } },                     //  5
+    { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },                 //  6
+    { 0x8000, { 21600, 0, 0x406 } },                                //  7
+    { 0xa000, { DFF_Prop_geoRight, 0, 0x405 } },                    //  8
+    { 0x2001, { DFF_Prop_adjustValue, 1, 3 } },                     //  9
+    { 0x6000, { 0x409, DFF_Prop_adjustValue, 0 } },                 // xa
+    { 0x6000, { DFF_Prop_geoLeft, 0x40a, 0 } },                     // xb
+    { 0x6000, { DFF_Prop_geoTop, 0x409, 0 } },                      // xc
+    { 0xa000, { DFF_Prop_geoRight, 0, 0x40a } },                    // xd
+    { 0xa000, { DFF_Prop_geoBottom, 0, 0x409 } }                    // xe
 };
 static const SvxMSDffTextRectangles mso_sptBracePairTextRect[] =
 {
@@ -3384,11 +3381,11 @@ static const mso_CustomShape msoBracePair =
 
 static const SvxMSDffCalculationData mso_sptBracketCalc[] =
 {
-    { 0x2001, DFF_Prop_adjustValue, 1, 2 },
-    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
-    { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
-    { 0x6000, DFF_Prop_geoTop, 0x400, 0 },
-    { 0xa000, DFF_Prop_geoBottom, 0, 0x400 }
+    { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
+    { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
+    { 0x6000, { DFF_Prop_geoTop, 0x400, 0 } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, 0x400 } }
 };
 static const sal_uInt16 mso_sptBracketSegm[] =
 {
@@ -3457,17 +3454,17 @@ static const mso_CustomShape msoRightBracket =
 
 static const SvxMSDffCalculationData mso_sptBraceCalc[] =
 {
-    { 0x2001, DFF_Prop_adjustValue, 1, 2 },
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0xa000, 0x404, 0, DFF_Prop_adjustValue },
-    { 0xa000, 0x404, 0, 0x400 },
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
-    { 0x6000, 0x404, 0x400, 0 },
-    { 0x6000, 0x404, DFF_Prop_adjustValue, 0 },
-    { 0x8000, 21600, 0, DFF_Prop_adjustValue },
-    { 0x8000, 21600, 0, 0x400 },
-    { 0x2001, DFF_Prop_adjustValue, 10000, 31953 },
-    { 0x8000, 21600, 0, 0x409 }
+    { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0xa000, { 0x404, 0, DFF_Prop_adjustValue } },
+    { 0xa000, { 0x404, 0, 0x400 } },
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x6000, { 0x404, 0x400, 0 } },
+    { 0x6000, { 0x404, DFF_Prop_adjustValue, 0 } },
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },
+    { 0x8000, { 21600, 0, 0x400 } },
+    { 0x2001, { DFF_Prop_adjustValue, 10000, 31953 } },
+    { 0x8000, { 21600, 0, 0x409 } }
 };
 static const sal_uInt16 mso_sptBraceSegm[] =
 {
@@ -3614,11 +3611,11 @@ static const SvxMSDffVertPair mso_sptSeal4Vert[] =      // adjustment1 : 0 - 108
 };
 static const SvxMSDffCalculationData mso_sptSeal4Calc[] =
 {
-    { 0x0000, 7600, 0, 0 },
-    { 0x6001, 0x400, DFF_Prop_adjustValue, 10800 },
-    { 0xa000, 0x400, 0, 0x401 },
-    { 0x4000, 10800, 0x402, 0 },
-    { 0x8000, 10800, 0, 0x402 }
+    { 0x0000, { 7600, 0, 0 } },
+    { 0x6001, { 0x400, DFF_Prop_adjustValue, 10800 } },
+    { 0xa000, { 0x400, 0, 0x401 } },
+    { 0x4000, { 10800, 0x402, 0 } },
+    { 0x8000, { 10800, 0, 0x402 } }
 };
 static const SvxMSDffTextRectangles mso_sptSeal4TextRect[] =
 {
@@ -3667,107 +3664,107 @@ static const mso_CustomShape msoStar =
 
 static const SvxMSDffCalculationData mso_sptSeal24Calc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },     // 0x00
-    { 0x2081, 0x400, 10800, 315 },              // 0x01 ( textframe )
-    { 0x2082, 0x400, 10800, 315 },              // 0x02
-    { 0x2081, 0x400, 10800, 135 },              // 0x03
-    { 0x2082, 0x400, 10800, 135 },              // 0x04
-    { 0x0081, 0,     10800, 0 },
-    { 0x0082, 0,     10800, 0 },
-    { 0x2081, 0x400, 10800, 7 },
-    { 0x2082, 0x400, 10800, 7 },
-    { 0x0081, 0,     10800, 15 },
-    { 0x0082, 0,     10800, 15 },
-    { 0x2081, 0x400, 10800, 22 },
-    { 0x2082, 0x400, 10800, 22 },
-    { 0x0081, 0,     10800, 30 },
-    { 0x0082, 0,     10800, 30 },
-    { 0x2081, 0x400, 10800, 37 },
-    { 0x2082, 0x400, 10800, 37 },
-    { 0x0081, 0,     10800, 45 },
-    { 0x0082, 0,     10800, 45 },
-    { 0x2081, 0x400, 10800, 52 },
-    { 0x2082, 0x400, 10800, 52 },
-    { 0x0081, 0,     10800, 60 },
-    { 0x0082, 0,     10800, 60 },
-    { 0x2081, 0x400, 10800, 67 },
-    { 0x2082, 0x400, 10800, 67 },
-    { 0x0081, 0,     10800, 75 },
-    { 0x0082, 0,     10800, 75 },
-    { 0x2081, 0x400, 10800, 82 },
-    { 0x2082, 0x400, 10800, 82 },
-    { 0x0081, 0,     10800, 90 },
-    { 0x0082, 0,     10800, 90 },
-    { 0x2081, 0x400, 10800, 97 },
-    { 0x2082, 0x400, 10800, 97 },
-    { 0x0081, 0,     10800, 105 },
-    { 0x0082, 0,     10800, 105 },
-    { 0x2081, 0x400, 10800, 112 },
-    { 0x2082, 0x400, 10800, 112 },
-    { 0x0081, 0,     10800, 120 },
-    { 0x0082, 0,     10800, 120 },
-    { 0x2081, 0x400, 10800, 127 },
-    { 0x2082, 0x400, 10800, 127 },
-    { 0x0081, 0,     10800, 135 },
-    { 0x0082, 0,     10800, 135 },
-    { 0x2081, 0x400, 10800, 142 },
-    { 0x2082, 0x400, 10800, 142 },
-    { 0x0081, 0,     10800, 150 },
-    { 0x0082, 0,     10800, 150 },
-    { 0x2081, 0x400, 10800, 157 },
-    { 0x2082, 0x400, 10800, 157 },
-    { 0x0081, 0,     10800, 165 },
-    { 0x0082, 0,     10800, 165 },
-    { 0x2081, 0x400, 10800, 172 },
-    { 0x2082, 0x400, 10800, 172 },
-    { 0x0081, 0,     10800, 180 },
-    { 0x0082, 0,     10800, 180 },
-    { 0x2081, 0x400, 10800, 187 },
-    { 0x2082, 0x400, 10800, 187 },
-    { 0x0081, 0,     10800, 195 },
-    { 0x0082, 0,     10800, 195 },
-    { 0x2081, 0x400, 10800, 202 },
-    { 0x2082, 0x400, 10800, 202 },
-    { 0x0081, 0,     10800, 210 },
-    { 0x0082, 0,     10800, 210 },
-    { 0x2081, 0x400, 10800, 217 },
-    { 0x2082, 0x400, 10800, 217 },
-    { 0x0081, 0,     10800, 225 },
-    { 0x0082, 0,     10800, 225 },
-    { 0x2081, 0x400, 10800, 232 },
-    { 0x2082, 0x400, 10800, 232 },
-    { 0x0081, 0,     10800, 240 },
-    { 0x0082, 0,     10800, 240 },
-    { 0x2081, 0x400, 10800, 247 },
-    { 0x2082, 0x400, 10800, 247 },
-    { 0x0081, 0,     10800, 255 },
-    { 0x0082, 0,     10800, 255 },
-    { 0x2081, 0x400, 10800, 262 },
-    { 0x2082, 0x400, 10800, 262 },
-    { 0x0081, 0,     10800, 270 },
-    { 0x0082, 0,     10800, 270 },
-    { 0x2081, 0x400, 10800, 277 },
-    { 0x2082, 0x400, 10800, 277 },
-    { 0x0081, 0,     10800, 285 },
-    { 0x0082, 0,     10800, 285 },
-    { 0x2081, 0x400, 10800, 292 },
-    { 0x2082, 0x400, 10800, 292 },
-    { 0x0081, 0,     10800, 300 },
-    { 0x0082, 0,     10800, 300 },
-    { 0x2081, 0x400, 10800, 307 },
-    { 0x2082, 0x400, 10800, 307 },
-    { 0x0081, 0,     10800, 315 },
-    { 0x0082, 0,     10800, 315 },
-    { 0x2081, 0x400, 10800, 322 },
-    { 0x2082, 0x400, 10800, 322 },
-    { 0x0081, 0,     10800, 330 },
-    { 0x0082, 0,     10800, 330 },
-    { 0x2081, 0x400, 10800, 337 },
-    { 0x2082, 0x400, 10800, 337 },
-    { 0x0081, 0,     10800, 345 },
-    { 0x0082, 0,     10800, 345 },
-    { 0x2081, 0x400, 10800, 352 },
-    { 0x2082, 0x400, 10800, 352 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 0x00
+    { 0x2081, { 0x400, 10800, 315 } },              // 0x01 ( textframe )
+    { 0x2082, { 0x400, 10800, 315 } },              // 0x02
+    { 0x2081, { 0x400, 10800, 135 } },              // 0x03
+    { 0x2082, { 0x400, 10800, 135 } },              // 0x04
+    { 0x0081, { 0,   10800, 0 } },
+    { 0x0082, { 0,   10800, 0 } },
+    { 0x2081, { 0x400, 10800, 7 } },
+    { 0x2082, { 0x400, 10800, 7 } },
+    { 0x0081, { 0,   10800, 15 } },
+    { 0x0082, { 0,   10800, 15 } },
+    { 0x2081, { 0x400, 10800, 22 } },
+    { 0x2082, { 0x400, 10800, 22 } },
+    { 0x0081, { 0,   10800, 30 } },
+    { 0x0082, { 0,   10800, 30 } },
+    { 0x2081, { 0x400, 10800, 37 } },
+    { 0x2082, { 0x400, 10800, 37 } },
+    { 0x0081, { 0,   10800, 45 } },
+    { 0x0082, { 0,   10800, 45 } },
+    { 0x2081, { 0x400, 10800, 52 } },
+    { 0x2082, { 0x400, 10800, 52 } },
+    { 0x0081, { 0,   10800, 60 } },
+    { 0x0082, { 0,   10800, 60 } },
+    { 0x2081, { 0x400, 10800, 67 } },
+    { 0x2082, { 0x400, 10800, 67 } },
+    { 0x0081, { 0,   10800, 75 } },
+    { 0x0082, { 0,   10800, 75 } },
+    { 0x2081, { 0x400, 10800, 82 } },
+    { 0x2082, { 0x400, 10800, 82 } },
+    { 0x0081, { 0,   10800, 90 } },
+    { 0x0082, { 0,   10800, 90 } },
+    { 0x2081, { 0x400, 10800, 97 } },
+    { 0x2082, { 0x400, 10800, 97 } },
+    { 0x0081, { 0,   10800, 105 } },
+    { 0x0082, { 0,   10800, 105 } },
+    { 0x2081, { 0x400, 10800, 112 } },
+    { 0x2082, { 0x400, 10800, 112 } },
+    { 0x0081, { 0,   10800, 120 } },
+    { 0x0082, { 0,   10800, 120 } },
+    { 0x2081, { 0x400, 10800, 127 } },
+    { 0x2082, { 0x400, 10800, 127 } },
+    { 0x0081, { 0,   10800, 135 } },
+    { 0x0082, { 0,   10800, 135 } },
+    { 0x2081, { 0x400, 10800, 142 } },
+    { 0x2082, { 0x400, 10800, 142 } },
+    { 0x0081, { 0,   10800, 150 } },
+    { 0x0082, { 0,   10800, 150 } },
+    { 0x2081, { 0x400, 10800, 157 } },
+    { 0x2082, { 0x400, 10800, 157 } },
+    { 0x0081, { 0,   10800, 165 } },
+    { 0x0082, { 0,   10800, 165 } },
+    { 0x2081, { 0x400, 10800, 172 } },
+    { 0x2082, { 0x400, 10800, 172 } },
+    { 0x0081, { 0,   10800, 180 } },
+    { 0x0082, { 0,   10800, 180 } },
+    { 0x2081, { 0x400, 10800, 187 } },
+    { 0x2082, { 0x400, 10800, 187 } },
+    { 0x0081, { 0,   10800, 195 } },
+    { 0x0082, { 0,   10800, 195 } },
+    { 0x2081, { 0x400, 10800, 202 } },
+    { 0x2082, { 0x400, 10800, 202 } },
+    { 0x0081, { 0,   10800, 210 } },
+    { 0x0082, { 0,   10800, 210 } },
+    { 0x2081, { 0x400, 10800, 217 } },
+    { 0x2082, { 0x400, 10800, 217 } },
+    { 0x0081, { 0,   10800, 225 } },
+    { 0x0082, { 0,   10800, 225 } },
+    { 0x2081, { 0x400, 10800, 232 } },
+    { 0x2082, { 0x400, 10800, 232 } },
+    { 0x0081, { 0,   10800, 240 } },
+    { 0x0082, { 0,   10800, 240 } },
+    { 0x2081, { 0x400, 10800, 247 } },
+    { 0x2082, { 0x400, 10800, 247 } },
+    { 0x0081, { 0,   10800, 255 } },
+    { 0x0082, { 0,   10800, 255 } },
+    { 0x2081, { 0x400, 10800, 262 } },
+    { 0x2082, { 0x400, 10800, 262 } },
+    { 0x0081, { 0,   10800, 270 } },
+    { 0x0082, { 0,   10800, 270 } },
+    { 0x2081, { 0x400, 10800, 277 } },
+    { 0x2082, { 0x400, 10800, 277 } },
+    { 0x0081, { 0,   10800, 285 } },
+    { 0x0082, { 0,   10800, 285 } },
+    { 0x2081, { 0x400, 10800, 292 } },
+    { 0x2082, { 0x400, 10800, 292 } },
+    { 0x0081, { 0,   10800, 300 } },
+    { 0x0082, { 0,   10800, 300 } },
+    { 0x2081, { 0x400, 10800, 307 } },
+    { 0x2082, { 0x400, 10800, 307 } },
+    { 0x0081, { 0,   10800, 315 } },
+    { 0x0082, { 0,   10800, 315 } },
+    { 0x2081, { 0x400, 10800, 322 } },
+    { 0x2082, { 0x400, 10800, 322 } },
+    { 0x0081, { 0,   10800, 330 } },
+    { 0x0082, { 0,   10800, 330 } },
+    { 0x2081, { 0x400, 10800, 337 } },
+    { 0x2082, { 0x400, 10800, 337 } },
+    { 0x0081, { 0,   10800, 345 } },
+    { 0x0082, { 0,   10800, 345 } },
+    { 0x2081, { 0x400, 10800, 352 } },
+    { 0x2082, { 0x400, 10800, 352 } }
 };
 static const SvxMSDffVertPair mso_sptSeal8Vert[] =  // adj value 0 -> 10800
 {
@@ -3807,75 +3804,75 @@ static const SvxMSDffVertPair mso_sptSeal16Vert[] = // adj value 0 -> 10800
 };
 static const SvxMSDffCalculationData mso_sptSeal16Calc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },     // 0x00
-    { 0x2081, 0x400, 10800, 315 },              // 0x01 ( textframe )
-    { 0x2082, 0x400, 10800, 315 },              // 0x02
-    { 0x2081, 0x400, 10800, 135 },              // 0x03
-    { 0x2082, 0x400, 10800, 135 },              // 0x04
-    { 0x0081, 0,     10800, 0 },
-    { 0x0082, 0,     10800, 0 },
-    { 0x2081, 0x400, 10800, 11 },
-    { 0x2082, 0x400, 10800, 11 },
-    { 0x0081, 0,     10800, 22 },
-    { 0x0082, 0,     10800, 22 },
-    { 0x2081, 0x400, 10800, 33 },
-    { 0x2082, 0x400, 10800, 33 },
-    { 0x0081, 0,     10800, 45 },
-    { 0x0082, 0,     10800, 45 },
-    { 0x2081, 0x400, 10800, 56 },
-    { 0x2082, 0x400, 10800, 56 },
-    { 0x0081, 0,     10800, 67 },
-    { 0x0082, 0,     10800, 67 },
-    { 0x2081, 0x400, 10800, 78 },
-    { 0x2082, 0x400, 10800, 78 },
-    { 0x0081, 0,     10800, 90 },
-    { 0x0082, 0,     10800, 90 },
-    { 0x2081, 0x400, 10800, 101 },
-    { 0x2082, 0x400, 10800, 101 },
-    { 0x0081, 0,     10800, 112 },
-    { 0x0082, 0,     10800, 112 },
-    { 0x2081, 0x400, 10800, 123 },
-    { 0x2082, 0x400, 10800, 123 },
-    { 0x0081, 0,     10800, 135 },
-    { 0x0082, 0,     10800, 135 },
-    { 0x2081, 0x400, 10800, 146 },
-    { 0x2082, 0x400, 10800, 146 },
-    { 0x0081, 0,     10800, 157 },
-    { 0x0082, 0,     10800, 157 },
-    { 0x2081, 0x400, 10800, 168 },
-    { 0x2082, 0x400, 10800, 168 },
-    { 0x0081, 0,     10800, 180 },
-    { 0x0082, 0,     10800, 180 },
-    { 0x2081, 0x400, 10800, 191 },
-    { 0x2082, 0x400, 10800, 191 },
-    { 0x0081, 0,     10800, 202 },
-    { 0x0082, 0,     10800, 202 },
-    { 0x2081, 0x400, 10800, 213 },
-    { 0x2082, 0x400, 10800, 213 },
-    { 0x0081, 0,     10800, 225 },
-    { 0x0082, 0,     10800, 225 },
-    { 0x2081, 0x400, 10800, 236 },
-    { 0x2082, 0x400, 10800, 236 },
-    { 0x0081, 0,     10800, 247 },
-    { 0x0082, 0,     10800, 247 },
-    { 0x2081, 0x400, 10800, 258 },
-    { 0x2082, 0x400, 10800, 258 },
-    { 0x0081, 0,     10800, 270 },
-    { 0x0082, 0,     10800, 270 },
-    { 0x2081, 0x400, 10800, 281 },
-    { 0x2082, 0x400, 10800, 281 },
-    { 0x0081, 0,     10800, 292 },
-    { 0x0082, 0,     10800, 292 },
-    { 0x2081, 0x400, 10800, 303 },
-    { 0x2082, 0x400, 10800, 303 },
-    { 0x0081, 0,     10800, 315 },
-    { 0x0082, 0,     10800, 315 },
-    { 0x2081, 0x400, 10800, 326 },
-    { 0x2082, 0x400, 10800, 326 },
-    { 0x0081, 0,     10800, 337 },
-    { 0x0082, 0,     10800, 337 },
-    { 0x2081, 0x400, 10800, 348 },
-    { 0x2082, 0x400, 10800, 348 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 0x00
+    { 0x2081, { 0x400, 10800, 315 } },              // 0x01 ( textframe )
+    { 0x2082, { 0x400, 10800, 315 } },              // 0x02
+    { 0x2081, { 0x400, 10800, 135 } },              // 0x03
+    { 0x2082, { 0x400, 10800, 135 } },              // 0x04
+    { 0x0081, { 0,   10800, 0 } },
+    { 0x0082, { 0,   10800, 0 } },
+    { 0x2081, { 0x400, 10800, 11 } },
+    { 0x2082, { 0x400, 10800, 11 } },
+    { 0x0081, { 0,   10800, 22 } },
+    { 0x0082, { 0,   10800, 22 } },
+    { 0x2081, { 0x400, 10800, 33 } },
+    { 0x2082, { 0x400, 10800, 33 } },
+    { 0x0081, { 0,   10800, 45 } },
+    { 0x0082, { 0,   10800, 45 } },
+    { 0x2081, { 0x400, 10800, 56 } },
+    { 0x2082, { 0x400, 10800, 56 } },
+    { 0x0081, { 0,   10800, 67 } },
+    { 0x0082, { 0,   10800, 67 } },
+    { 0x2081, { 0x400, 10800, 78 } },
+    { 0x2082, { 0x400, 10800, 78 } },
+    { 0x0081, { 0,   10800, 90 } },
+    { 0x0082, { 0,   10800, 90 } },
+    { 0x2081, { 0x400, 10800, 101 } },
+    { 0x2082, { 0x400, 10800, 101 } },
+    { 0x0081, { 0,   10800, 112 } },
+    { 0x0082, { 0,   10800, 112 } },
+    { 0x2081, { 0x400, 10800, 123 } },
+    { 0x2082, { 0x400, 10800, 123 } },
+    { 0x0081, { 0,   10800, 135 } },
+    { 0x0082, { 0,   10800, 135 } },
+    { 0x2081, { 0x400, 10800, 146 } },
+    { 0x2082, { 0x400, 10800, 146 } },
+    { 0x0081, { 0,   10800, 157 } },
+    { 0x0082, { 0,   10800, 157 } },
+    { 0x2081, { 0x400, 10800, 168 } },
+    { 0x2082, { 0x400, 10800, 168 } },
+    { 0x0081, { 0,   10800, 180 } },
+    { 0x0082, { 0,   10800, 180 } },
+    { 0x2081, { 0x400, 10800, 191 } },
+    { 0x2082, { 0x400, 10800, 191 } },
+    { 0x0081, { 0,   10800, 202 } },
+    { 0x0082, { 0,   10800, 202 } },
+    { 0x2081, { 0x400, 10800, 213 } },
+    { 0x2082, { 0x400, 10800, 213 } },
+    { 0x0081, { 0,   10800, 225 } },
+    { 0x0082, { 0,   10800, 225 } },
+    { 0x2081, { 0x400, 10800, 236 } },
+    { 0x2082, { 0x400, 10800, 236 } },
+    { 0x0081, { 0,   10800, 247 } },
+    { 0x0082, { 0,   10800, 247 } },
+    { 0x2081, { 0x400, 10800, 258 } },
+    { 0x2082, { 0x400, 10800, 258 } },
+    { 0x0081, { 0,   10800, 270 } },
+    { 0x0082, { 0,   10800, 270 } },
+    { 0x2081, { 0x400, 10800, 281 } },
+    { 0x2082, { 0x400, 10800, 281 } },
+    { 0x0081, { 0,   10800, 292 } },
+    { 0x0082, { 0,   10800, 292 } },
+    { 0x2081, { 0x400, 10800, 303 } },
+    { 0x2082, { 0x400, 10800, 303 } },
+    { 0x0081, { 0,   10800, 315 } },
+    { 0x0082, { 0,   10800, 315 } },
+    { 0x2081, { 0x400, 10800, 326 } },
+    { 0x2082, { 0x400, 10800, 326 } },
+    { 0x0081, { 0,   10800, 337 } },
+    { 0x0082, { 0,   10800, 337 } },
+    { 0x2081, { 0x400, 10800, 348 } },
+    { 0x2082, { 0x400, 10800, 348 } }
 };
 static const mso_CustomShape msoSeal16 =
 {
@@ -3919,139 +3916,139 @@ static const mso_CustomShape msoSeal24 =
 };
 static const SvxMSDffCalculationData mso_sptSeal32Calc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },     // 0x00
-    { 0x2081, 0x400, 10800, 315 },              // 0x01 ( textframe )
-    { 0x2082, 0x400, 10800, 315 },              // 0x02
-    { 0x2081, 0x400, 10800, 135 },              // 0x03
-    { 0x2082, 0x400, 10800, 135 },              // 0x04
-    { 0x0081, 0,     10800, 0 },
-    { 0x0082, 0,     10800, 0 },
-    { 0x2081, 0x400, 10800, 5 },
-    { 0x2082, 0x400, 10800, 5 },
-    { 0x0081, 0,     10800, 11 },
-    { 0x0082, 0,     10800, 11 },
-    { 0x2081, 0x400, 10800, 16 },
-    { 0x2082, 0x400, 10800, 16 },
-    { 0x0081, 0,     10800, 22 },
-    { 0x0082, 0,     10800, 22 },
-    { 0x2081, 0x400, 10800, 28 },
-    { 0x2082, 0x400, 10800, 28 },
-    { 0x0081, 0,     10800, 33 },
-    { 0x0082, 0,     10800, 33 },
-    { 0x2081, 0x400, 10800, 39 },
-    { 0x2082, 0x400, 10800, 39 },
-    { 0x0081, 0,     10800, 45 },
-    { 0x0082, 0,     10800, 45 },
-    { 0x2081, 0x400, 10800, 50 },
-    { 0x2082, 0x400, 10800, 50 },
-    { 0x0081, 0,     10800, 56 },
-    { 0x0082, 0,     10800, 56 },
-    { 0x2081, 0x400, 10800, 61 },
-    { 0x2082, 0x400, 10800, 61 },
-    { 0x0081, 0,     10800, 67 },
-    { 0x0082, 0,     10800, 67 },
-    { 0x2081, 0x400, 10800, 73 },
-    { 0x2082, 0x400, 10800, 73 },
-    { 0x0081, 0,     10800, 78 },
-    { 0x0082, 0,     10800, 78 },
-    { 0x2081, 0x400, 10800, 84 },
-    { 0x2082, 0x400, 10800, 84 },
-    { 0x0081, 0,     10800, 90 },
-    { 0x0082, 0,     10800, 90 },
-    { 0x2081, 0x400, 10800, 95 },
-    { 0x2082, 0x400, 10800, 95 },
-    { 0x0081, 0,     10800, 101 },
-    { 0x0082, 0,     10800, 101 },
-    { 0x2081, 0x400, 10800, 106 },
-    { 0x2082, 0x400, 10800, 106 },
-    { 0x0081, 0,     10800, 112 },
-    { 0x0082, 0,     10800, 112 },
-    { 0x2081, 0x400, 10800, 118 },
-    { 0x2082, 0x400, 10800, 118 },
-    { 0x0081, 0,     10800, 123 },
-    { 0x0082, 0,     10800, 123 },
-    { 0x2081, 0x400, 10800, 129 },
-    { 0x2082, 0x400, 10800, 129 },
-    { 0x0081, 0,     10800, 135 },
-    { 0x0082, 0,     10800, 135 },
-    { 0x2081, 0x400, 10800, 140 },
-    { 0x2082, 0x400, 10800, 140 },
-    { 0x0081, 0,     10800, 146 },
-    { 0x0082, 0,     10800, 146 },
-    { 0x2081, 0x400, 10800, 151 },
-    { 0x2082, 0x400, 10800, 151 },
-    { 0x0081, 0,     10800, 157 },
-    { 0x0082, 0,     10800, 157 },
-    { 0x2081, 0x400, 10800, 163 },
-    { 0x2082, 0x400, 10800, 163 },
-    { 0x0081, 0,     10800, 168 },
-    { 0x0082, 0,     10800, 168 },
-    { 0x2081, 0x400, 10800, 174 },
-    { 0x2082, 0x400, 10800, 174 },
-    { 0x0081, 0,     10800, 180 },
-    { 0x0082, 0,     10800, 180 },
-    { 0x2081, 0x400, 10800, 185 },
-    { 0x2082, 0x400, 10800, 185 },
-    { 0x0081, 0,     10800, 191 },
-    { 0x0082, 0,     10800, 191 },
-    { 0x2081, 0x400, 10800, 196 },
-    { 0x2082, 0x400, 10800, 196 },
-    { 0x0081, 0,     10800, 202 },
-    { 0x0082, 0,     10800, 202 },
-    { 0x2081, 0x400, 10800, 208 },
-    { 0x2082, 0x400, 10800, 208 },
-    { 0x0081, 0,     10800, 213 },
-    { 0x0082, 0,     10800, 213 },
-    { 0x2081, 0x400, 10800, 219 },
-    { 0x2082, 0x400, 10800, 219 },
-    { 0x0081, 0,     10800, 225 },
-    { 0x0082, 0,     10800, 225 },
-    { 0x2081, 0x400, 10800, 230 },
-    { 0x2082, 0x400, 10800, 230 },
-    { 0x0081, 0,     10800, 236 },
-    { 0x0082, 0,     10800, 236 },
-    { 0x2081, 0x400, 10800, 241 },
-    { 0x2082, 0x400, 10800, 241 },
-    { 0x0081, 0,     10800, 247 },
-    { 0x0082, 0,     10800, 247 },
-    { 0x2081, 0x400, 10800, 253 },
-    { 0x2082, 0x400, 10800, 253 },
-    { 0x0081, 0,     10800, 258 },
-    { 0x0082, 0,     10800, 258 },
-    { 0x2081, 0x400, 10800, 264 },
-    { 0x2082, 0x400, 10800, 264 },
-    { 0x0081, 0,     10800, 270 },
-    { 0x0082, 0,     10800, 270 },
-    { 0x2081, 0x400, 10800, 275 },
-    { 0x2082, 0x400, 10800, 275 },
-    { 0x0081, 0,     10800, 281 },
-    { 0x0082, 0,     10800, 281 },
-    { 0x2081, 0x400, 10800, 286 },
-    { 0x2082, 0x400, 10800, 286 },
-    { 0x0081, 0,     10800, 292 },
-    { 0x0082, 0,     10800, 292 },
-    { 0x2081, 0x400, 10800, 298 },
-    { 0x2082, 0x400, 10800, 298 },
-    { 0x0081, 0,     10800, 303 },
-    { 0x0082, 0,     10800, 303 },
-    { 0x2081, 0x400, 10800, 309 },
-    { 0x2082, 0x400, 10800, 309 },
-    { 0x0081, 0,     10800, 315 },
-    { 0x0082, 0,     10800, 315 },
-    { 0x2081, 0x400, 10800, 320 },
-    { 0x2082, 0x400, 10800, 320 },
-    { 0x0081, 0,     10800, 326 },
-    { 0x0082, 0,     10800, 326 },
-    { 0x2081, 0x400, 10800, 331 },
-    { 0x2082, 0x400, 10800, 331 },
-    { 0x0081, 0,     10800, 337 },
-    { 0x0082, 0,     10800, 337 },
-    { 0x2081, 0x400, 10800, 343 },
-    { 0x2082, 0x400, 10800, 343 },
-    { 0x0081, 0,     10800, 348 },
-    { 0x0082, 0,     10800, 348 },
-    { 0x2081, 0x400, 10800, 354 },
-    { 0x2082, 0x400, 10800, 354 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 0x00
+    { 0x2081, { 0x400, 10800, 315 } },              // 0x01 ( textframe )
+    { 0x2082, { 0x400, 10800, 315 } },              // 0x02
+    { 0x2081, { 0x400, 10800, 135 } },              // 0x03
+    { 0x2082, { 0x400, 10800, 135 } },              // 0x04
+    { 0x0081, { 0,   10800, 0 } },
+    { 0x0082, { 0,   10800, 0 } },
+    { 0x2081, { 0x400, 10800, 5 } },
+    { 0x2082, { 0x400, 10800, 5 } },
+    { 0x0081, { 0,   10800, 11 } },
+    { 0x0082, { 0,   10800, 11 } },
+    { 0x2081, { 0x400, 10800, 16 } },
+    { 0x2082, { 0x400, 10800, 16 } },
+    { 0x0081, { 0,   10800, 22 } },
+    { 0x0082, { 0,   10800, 22 } },
+    { 0x2081, { 0x400, 10800, 28 } },
+    { 0x2082, { 0x400, 10800, 28 } },
+    { 0x0081, { 0,   10800, 33 } },
+    { 0x0082, { 0,   10800, 33 } },
+    { 0x2081, { 0x400, 10800, 39 } },
+    { 0x2082, { 0x400, 10800, 39 } },
+    { 0x0081, { 0,   10800, 45 } },
+    { 0x0082, { 0,   10800, 45 } },
+    { 0x2081, { 0x400, 10800, 50 } },
+    { 0x2082, { 0x400, 10800, 50 } },
+    { 0x0081, { 0,   10800, 56 } },
+    { 0x0082, { 0,   10800, 56 } },
+    { 0x2081, { 0x400, 10800, 61 } },
+    { 0x2082, { 0x400, 10800, 61 } },
+    { 0x0081, { 0,   10800, 67 } },
+    { 0x0082, { 0,   10800, 67 } },
+    { 0x2081, { 0x400, 10800, 73 } },
+    { 0x2082, { 0x400, 10800, 73 } },
+    { 0x0081, { 0,   10800, 78 } },
+    { 0x0082, { 0,   10800, 78 } },
+    { 0x2081, { 0x400, 10800, 84 } },
+    { 0x2082, { 0x400, 10800, 84 } },
+    { 0x0081, { 0,   10800, 90 } },
+    { 0x0082, { 0,   10800, 90 } },
+    { 0x2081, { 0x400, 10800, 95 } },
+    { 0x2082, { 0x400, 10800, 95 } },
+    { 0x0081, { 0,   10800, 101 } },
+    { 0x0082, { 0,   10800, 101 } },
+    { 0x2081, { 0x400, 10800, 106 } },
+    { 0x2082, { 0x400, 10800, 106 } },
+    { 0x0081, { 0,   10800, 112 } },
+    { 0x0082, { 0,   10800, 112 } },
+    { 0x2081, { 0x400, 10800, 118 } },
+    { 0x2082, { 0x400, 10800, 118 } },
+    { 0x0081, { 0,   10800, 123 } },
+    { 0x0082, { 0,   10800, 123 } },
+    { 0x2081, { 0x400, 10800, 129 } },
+    { 0x2082, { 0x400, 10800, 129 } },
+    { 0x0081, { 0,   10800, 135 } },
+    { 0x0082, { 0,   10800, 135 } },
+    { 0x2081, { 0x400, 10800, 140 } },
+    { 0x2082, { 0x400, 10800, 140 } },
+    { 0x0081, { 0,   10800, 146 } },
+    { 0x0082, { 0,   10800, 146 } },
+    { 0x2081, { 0x400, 10800, 151 } },
+    { 0x2082, { 0x400, 10800, 151 } },
+    { 0x0081, { 0,   10800, 157 } },
+    { 0x0082, { 0,   10800, 157 } },
+    { 0x2081, { 0x400, 10800, 163 } },
+    { 0x2082, { 0x400, 10800, 163 } },
+    { 0x0081, { 0,   10800, 168 } },
+    { 0x0082, { 0,   10800, 168 } },
+    { 0x2081, { 0x400, 10800, 174 } },
+    { 0x2082, { 0x400, 10800, 174 } },
+    { 0x0081, { 0,   10800, 180 } },
+    { 0x0082, { 0,   10800, 180 } },
+    { 0x2081, { 0x400, 10800, 185 } },
+    { 0x2082, { 0x400, 10800, 185 } },
+    { 0x0081, { 0,   10800, 191 } },
+    { 0x0082, { 0,   10800, 191 } },
+    { 0x2081, { 0x400, 10800, 196 } },
+    { 0x2082, { 0x400, 10800, 196 } },
+    { 0x0081, { 0,   10800, 202 } },
+    { 0x0082, { 0,   10800, 202 } },
+    { 0x2081, { 0x400, 10800, 208 } },
+    { 0x2082, { 0x400, 10800, 208 } },
+    { 0x0081, { 0,   10800, 213 } },
+    { 0x0082, { 0,   10800, 213 } },
+    { 0x2081, { 0x400, 10800, 219 } },
+    { 0x2082, { 0x400, 10800, 219 } },
+    { 0x0081, { 0,   10800, 225 } },
+    { 0x0082, { 0,   10800, 225 } },
+    { 0x2081, { 0x400, 10800, 230 } },
+    { 0x2082, { 0x400, 10800, 230 } },
+    { 0x0081, { 0,   10800, 236 } },
+    { 0x0082, { 0,   10800, 236 } },
+    { 0x2081, { 0x400, 10800, 241 } },
+    { 0x2082, { 0x400, 10800, 241 } },
+    { 0x0081, { 0,   10800, 247 } },
+    { 0x0082, { 0,   10800, 247 } },
+    { 0x2081, { 0x400, 10800, 253 } },
+    { 0x2082, { 0x400, 10800, 253 } },
+    { 0x0081, { 0,   10800, 258 } },
+    { 0x0082, { 0,   10800, 258 } },
+    { 0x2081, { 0x400, 10800, 264 } },
+    { 0x2082, { 0x400, 10800, 264 } },
+    { 0x0081, { 0,   10800, 270 } },
+    { 0x0082, { 0,   10800, 270 } },
+    { 0x2081, { 0x400, 10800, 275 } },
+    { 0x2082, { 0x400, 10800, 275 } },
+    { 0x0081, { 0,   10800, 281 } },
+    { 0x0082, { 0,   10800, 281 } },
+    { 0x2081, { 0x400, 10800, 286 } },
+    { 0x2082, { 0x400, 10800, 286 } },
+    { 0x0081, { 0,   10800, 292 } },
+    { 0x0082, { 0,   10800, 292 } },
+    { 0x2081, { 0x400, 10800, 298 } },
+    { 0x2082, { 0x400, 10800, 298 } },
+    { 0x0081, { 0,   10800, 303 } },
+    { 0x0082, { 0,   10800, 303 } },
+    { 0x2081, { 0x400, 10800, 309 } },
+    { 0x2082, { 0x400, 10800, 309 } },
+    { 0x0081, { 0,   10800, 315 } },
+    { 0x0082, { 0,   10800, 315 } },
+    { 0x2081, { 0x400, 10800, 320 } },
+    { 0x2082, { 0x400, 10800, 320 } },
+    { 0x0081, { 0,   10800, 326 } },
+    { 0x0082, { 0,   10800, 326 } },
+    { 0x2081, { 0x400, 10800, 331 } },
+    { 0x2082, { 0x400, 10800, 331 } },
+    { 0x0081, { 0,   10800, 337 } },
+    { 0x0082, { 0,   10800, 337 } },
+    { 0x2081, { 0x400, 10800, 343 } },
+    { 0x2082, { 0x400, 10800, 343 } },
+    { 0x0081, { 0,   10800, 348 } },
+    { 0x0082, { 0,   10800, 348 } },
+    { 0x2081, { 0x400, 10800, 354 } },
+    { 0x2082, { 0x400, 10800, 354 } }
 };
 static const SvxMSDffVertPair mso_sptSeal32Vert[] =
 {
@@ -4124,36 +4121,36 @@ static const sal_uInt16 mso_sptRibbon2Segm[] =
 };
 static const SvxMSDffCalculationData mso_sptRibbon2Calc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },             // 00
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },            // 01
-    { 0x8000, 21600, 0, 0x401 },                        // 02
-    { 0x2001, 0x402, 1, 2 },                            // 03
-    { 0x2001, 0x403, 1, 2 },                            // 04
-    { 0x2001, 0x404, 1, 2 },                            // 05
-    { 0x2001, 0x401, 1, 2 },                            // 06
-    { 0x8000, 21600, 0, 0x406 },                        // 07
-    { 0x0000, 420, 0, 0 },                              // 08
-    { 0x2001, 0x408, 2, 1 },                            // 09
-    { 0x6000, 0x400, 0x408, 0 },                        // 10
-    { 0x6000, 0x400, 0x409, 0 },                        // 11
-    { 0x2000, 0x400, 2700, 0 },                         // 12
-    { 0x8000, 21600, 0, 0x404 },                        // 13
-    { 0x8000, 21600, 0, 0x405 },                        // 14
-    { 0xa000, 0x40c, 0, 0x408 },                        // 15
-    { 0xa000, 0x40c, 0, 0x409 },                        // 16
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },             // 00
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },            // 01
+    { 0x8000, { 21600, 0, 0x401 } },                        // 02
+    { 0x2001, { 0x402, 1, 2 } },                            // 03
+    { 0x2001, { 0x403, 1, 2 } },                            // 04
+    { 0x2001, { 0x404, 1, 2 } },                            // 05
+    { 0x2001, { 0x401, 1, 2 } },                            // 06
+    { 0x8000, { 21600, 0, 0x406 } },                        // 07
+    { 0x0000, { 420, 0, 0 } },                              // 08
+    { 0x2001, { 0x408, 2, 1 } },                            // 09
+    { 0x6000, { 0x400, 0x408, 0 } },                        // 10
+    { 0x6000, { 0x400, 0x409, 0 } },                        // 11
+    { 0x2000, { 0x400, 2700, 0 } },                         // 12
+    { 0x8000, { 21600, 0, 0x404 } },                        // 13
+    { 0x8000, { 21600, 0, 0x405 } },                        // 14
+    { 0xa000, { 0x40c, 0, 0x408 } },                        // 15
+    { 0xa000, { 0x40c, 0, 0x409 } },                        // 16
 
-    { 0x8000, 21600, 0, 0x40b },                        // 17
-    { 0x8000, 21600, 0, 0x40a },                        // 18
-    { 0x8000, 21600, 0, 0x400 },                        // 19
-    { 0x8000, 21600, 0, 0x410 },                        // 20
-    { 0x8000, 21600, 0, 0x40f },                        // 21
-    { 0x8000, 21600, 0, 0x40c },                        // 22
+    { 0x8000, { 21600, 0, 0x40b } },                        // 17
+    { 0x8000, { 21600, 0, 0x40a } },                        // 18
+    { 0x8000, { 21600, 0, 0x400 } },                        // 19
+    { 0x8000, { 21600, 0, 0x410 } },                        // 20
+    { 0x8000, { 21600, 0, 0x40f } },                        // 21
+    { 0x8000, { 21600, 0, 0x40c } },                        // 22
 
-    { 0xa000, 0x40d, 0, 0x405 },                        // 23
-    { 0x6000, 0x401, 0x403, 0 },                        // 24
-    { 0x6000, 0x401, 0x404, 0 },                        // 25
-    { 0x6000, 0x419, 0x405, 0 },                        // 26
-    { 0xa000, 0x419, 0, 0x405 }                         // 27
+    { 0xa000, { 0x40d, 0, 0x405 } },                        // 23
+    { 0x6000, { 0x401, 0x403, 0 } },                        // 24
+    { 0x6000, { 0x401, 0x404, 0 } },                        // 25
+    { 0x6000, { 0x419, 0x405, 0 } },                        // 26
+    { 0xa000, { 0x419, 0, 0x405 } }                         // 27
 };
 static const sal_Int32 mso_sptRibbon2Default[] =
 {
@@ -4212,20 +4209,20 @@ static const sal_uInt16 mso_sptVerticalScrollSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptScrollCalc[] =
 {
-    0x2000, DFF_Prop_adjustValue, 0, 0,
-    0x2001, 0x400, 1, 2,
-    0xa000, DFF_Prop_geoRight, 0, 0x401,
-    0xa000, DFF_Prop_geoRight, 0, 0x400,
-    0x6000, 0x400, 0x401, 0,
-    0xa000, DFF_Prop_geoRight, 0, 0x404,
-    0x2001, 0x400, 2, 1,
-    0x2001, 0x401, 1, 2,
-    0x6000, 0x400, 0x407, 0,
-    0x6000, 0x401, 0x407, 0,
-    0xa000, DFF_Prop_geoBottom, 0, 0x409,
-    0xa000, DFF_Prop_geoBottom, 0, 0x401,
-    0xa000, DFF_Prop_geoBottom, 0, 0x400,
-    0xa000, DFF_Prop_geoBottom, 0, 0x404
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2001, { 0x400, 1, 2 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, 0x401 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, 0x400 } },
+    { 0x6000, { 0x400, 0x401, 0 } },
+    { 0xa000, { DFF_Prop_geoRight, 0, 0x404 } },
+    { 0x2001, { 0x400, 2, 1 } },
+    { 0x2001, { 0x401, 1, 2 } },
+    { 0x6000, { 0x400, 0x407, 0 } },
+    { 0x6000, { 0x401, 0x407, 0 } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, 0x409 } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, 0x401 } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, 0x400 } },
+    { 0xa000, { DFF_Prop_geoBottom, 0, 0x404 } }
 };
 static const SvxMSDffTextRectangles mso_sptScrollTextRect[] =
 {
@@ -4323,14 +4320,14 @@ static const sal_uInt16 mso_sptFlowChartAlternateProcessSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptFlowChartAlternateProcessCalc[] =
 {
-    { 0x2000, DFF_Prop_geoLeft, 2540, 0 },
-    { 0x2000, DFF_Prop_geoRight, 0, 2540 },
-    { 0x2000, DFF_Prop_geoTop, 2540, 0 },
-    { 0x2000, DFF_Prop_geoBottom, 0, 2540 },
-    { 0x2000, DFF_Prop_geoLeft, 800, 0 },
-    { 0x2000, DFF_Prop_geoRight, 0, 800 },
-    { 0x2000, DFF_Prop_geoTop, 800, 0 },
-    { 0x2000, DFF_Prop_geoBottom,0, 800 }
+    { 0x2000, { DFF_Prop_geoLeft, 2540, 0 } },
+    { 0x2000, { DFF_Prop_geoRight, 0, 2540 } },
+    { 0x2000, { DFF_Prop_geoTop, 2540, 0 } },
+    { 0x2000, { DFF_Prop_geoBottom, 0, 2540 } },
+    { 0x2000, { DFF_Prop_geoLeft, 800, 0 } },
+    { 0x2000, { DFF_Prop_geoRight, 0, 800 } },
+    { 0x2000, { DFF_Prop_geoTop, 800, 0 } },
+    { 0x2000, { DFF_Prop_geoBottom,0, 800 } }
 };
 static const SvxMSDffTextRectangles mso_sptFlowChartAlternateProcessTextRect[] =
 {
@@ -5090,48 +5087,48 @@ static const SvxMSDffVertPair mso_sptWedgeRectCalloutVert[] =
 };
 static const SvxMSDffCalculationData mso_sptWedgeRectCalloutCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 10800 },     //0x400
-    { 0x2000, DFF_Prop_adjust2Value, 0,10800 },
-    { 0x6006, 0x412, DFF_Prop_adjustValue, 0 },     //0x402
-    { 0x6006, 0x412, DFF_Prop_adjust2Value, 6280 },
-    { 0x6006, 0x417, DFF_Prop_adjustValue, 0 },     //0x404
-    { 0x6006, 0x417, DFF_Prop_adjust2Value, 15320 },
-    { 0x6006, 0x41a, DFF_Prop_adjustValue, 6280 },  //0x406
-    { 0x6006, 0x41a, DFF_Prop_adjust2Value, 21600 },
-    { 0x6006, 0x41d, DFF_Prop_adjustValue, 15320 }, //0x408
-    { 0x6006, 0x41d, DFF_Prop_adjust2Value, 21600 },
-    { 0x6006, 0x420, DFF_Prop_adjustValue, 21600 }, //0x40a
-    { 0x6006, 0x420, DFF_Prop_adjust2Value, 15320 },
-    { 0x6006, 0x422, DFF_Prop_adjustValue, 21600 }, //0x40c
-    { 0x6006, 0x422, DFF_Prop_adjust2Value, 6280 },
-    { 0x6006, 0x424, DFF_Prop_adjustValue, 15320 }, //0x40e
-    { 0x6006, 0x424, DFF_Prop_adjust2Value, 0 },
-    { 0x6006, 0x426, DFF_Prop_adjustValue, 6280 },  //0x410
-    { 0x6006, 0x426, DFF_Prop_adjust2Value, 0 },
-    { 0xa006, DFF_Prop_adjustValue, -1, 0x413 },    //0x412
-    { 0xa006, 0x401, -1, 0x416 },
-    { 0x2003, 0x400, 0, 0 },                        //0x414
-    { 0x2003, 0x401, 0, 0 },
-    { 0xa000, 0x414, 0, 0x415 },                    //0x416
-    { 0xa006, DFF_Prop_adjustValue, -1, 0x418 },
-    { 0x6006, 0x401, 0x416, -1 },                   //0x418
-    { 0x2000, DFF_Prop_adjust2Value, 0, 21600 },
-    { 0x6006, 0x419, 0x41b, -1 },                   //0x41a
-    { 0xa006, 0x400, -1, 0x41c },
-    { 0xa000, 0x415, 0, 0x414 },                    //0x41c
-    { 0x6006, 0x419, 0x41e, -1 },
-    { 0x6006, 0x400, 0x41c, -1 },                   //0x41e
-    { 0x2000, DFF_Prop_adjustValue, 0, 21600 },
-    { 0x6006, 0x41f, 0x421, -1 },                   //0x420
-    { 0x6006, 0x401, 0x416, -1 },
-    { 0x6006, 0x41f, 0x423, -1 },                   //0x422
-    { 0xa006, 0x401, -1, 0x416 },
-    { 0xa006, DFF_Prop_adjust2Value, -1, 0x425 },   //0x424
-    { 0x6006, 0x400, 0x41c, -1 },
-    { 0xa006, DFF_Prop_adjust2Value, -1, 0x427 },   //0x426
-    { 0xa006, 0x400, -1, 0x41c },
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },         //0x428
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 10800 } },     //0x400
+    { 0x2000, { DFF_Prop_adjust2Value, 0,10800 } },
+    { 0x6006, { 0x412, DFF_Prop_adjustValue, 0 } },     //0x402
+    { 0x6006, { 0x412, DFF_Prop_adjust2Value, 6280 } },
+    { 0x6006, { 0x417, DFF_Prop_adjustValue, 0 } },     //0x404
+    { 0x6006, { 0x417, DFF_Prop_adjust2Value, 15320 } },
+    { 0x6006, { 0x41a, DFF_Prop_adjustValue, 6280 } },  //0x406
+    { 0x6006, { 0x41a, DFF_Prop_adjust2Value, 21600 } },
+    { 0x6006, { 0x41d, DFF_Prop_adjustValue, 15320 } }, //0x408
+    { 0x6006, { 0x41d, DFF_Prop_adjust2Value, 21600 } },
+    { 0x6006, { 0x420, DFF_Prop_adjustValue, 21600 } }, //0x40a
+    { 0x6006, { 0x420, DFF_Prop_adjust2Value, 15320 } },
+    { 0x6006, { 0x422, DFF_Prop_adjustValue, 21600 } }, //0x40c
+    { 0x6006, { 0x422, DFF_Prop_adjust2Value, 6280 } },
+    { 0x6006, { 0x424, DFF_Prop_adjustValue, 15320 } }, //0x40e
+    { 0x6006, { 0x424, DFF_Prop_adjust2Value, 0 } },
+    { 0x6006, { 0x426, DFF_Prop_adjustValue, 6280 } },  //0x410
+    { 0x6006, { 0x426, DFF_Prop_adjust2Value, 0 } },
+    { 0xa006, { DFF_Prop_adjustValue, -1, 0x413 } },    //0x412
+    { 0xa006, { 0x401, -1, 0x416 } },
+    { 0x2003, { 0x400, 0, 0 } },                        //0x414
+    { 0x2003, { 0x401, 0, 0 } },
+    { 0xa000, { 0x414, 0, 0x415 } },                    //0x416
+    { 0xa006, { DFF_Prop_adjustValue, -1, 0x418 } },
+    { 0x6006, { 0x401, 0x416, -1 } },                   //0x418
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 21600 } },
+    { 0x6006, { 0x419, 0x41b, -1 } },                   //0x41a
+    { 0xa006, { 0x400, -1, 0x41c } },
+    { 0xa000, { 0x415, 0, 0x414 } },                    //0x41c
+    { 0x6006, { 0x419, 0x41e, -1 } },
+    { 0x6006, { 0x400, 0x41c, -1 } },                   //0x41e
+    { 0x2000, { DFF_Prop_adjustValue, 0, 21600 } },
+    { 0x6006, { 0x41f, 0x421, -1 } },                   //0x420
+    { 0x6006, { 0x401, 0x416, -1 } },
+    { 0x6006, { 0x41f, 0x423, -1 } },                   //0x422
+    { 0xa006, { 0x401, -1, 0x416 } },
+    { 0xa006, { DFF_Prop_adjust2Value, -1, 0x425 } },   //0x424
+    { 0x6006, { 0x400, 0x41c, -1 } },
+    { 0xa006, { DFF_Prop_adjust2Value, -1, 0x427 } },   //0x426
+    { 0xa006, { 0x400, -1, 0x41c } },
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },         //0x428
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } }
 };
 static const sal_Int32 mso_sptWedgeRectCalloutDefault[] =
 {
@@ -5249,30 +5246,30 @@ static const sal_uInt16 mso_sptWedgeEllipseCalloutSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptWedgeEllipseCalloutCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 10800 },     // 00 rad x
-    { 0x2000, DFF_Prop_adjust2Value, 0, 10800 },    // 01 rad y
-    { 0x6001, 0x400, 0x400, 1 },                    // 02 rad x^2
-    { 0x6001, 0x401, 0x401, 1 },                    // 03 rad y^2
-    { 0x6000, 0x402, 0x403, 0 },                    // 04
-    { 0x200d, 0x404, 0, 0 },                        // 05
-    { 0x2000, 0x405, 0, 10800 },                    // 06 > 0 ? spur needs to be drawn : 10800
-    { 0x6008, 0x400, 0x401, 0 },                    // 07 atan2 -> angle
-    { 0x2000, 0x407, 0, 10 },                       // 08
-    { 0x2000, 0x407, 10, 0 },                       // 09
-    { 0x400a, 10800, 0x407, 0 },                    // 0a
-    { 0x4009, 10800, 0x407, 0 },                    // 0b
-    { 0x2000, 0x40a, 10800, 0 },                    // 0c
-    { 0x2000, 0x40b, 10800, 0 },                    // 0d
-    { 0xe006, 0x406, DFF_Prop_adjustValue, 0x40c }, // 0e
-    { 0xe006, 0x406, DFF_Prop_adjust2Value, 0x40d },// 0f
-    { 0x400a, 10800, 0x408, 0 },                    // 10
-    { 0x4009, 10800, 0x408, 0 },                    // 11
-    { 0x2000, 0x410, 10800, 0 },                    // 12
-    { 0x2000, 0x411, 10800, 0 },                    // 13
-    { 0x400a, 10800, 0x409, 0 },                    // 14
-    { 0x4009, 10800, 0x409, 0 },                    // 15
-    { 0x2000, 0x414, 10800, 0 },                    // 16
-    { 0x2000, 0x415, 10800, 0 },                    // 17
+    { 0x2000, { DFF_Prop_adjustValue, 0, 10800 } },     // 00 rad x
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 10800 } },    // 01 rad y
+    { 0x6001, { 0x400, 0x400, 1 } },                    // 02 rad x^2
+    { 0x6001, { 0x401, 0x401, 1 } },                    // 03 rad y^2
+    { 0x6000, { 0x402, 0x403, 0 } },                    // 04
+    { 0x200d, { 0x404, 0, 0 } },                        // 05
+    { 0x2000, { 0x405, 0, 10800 } },                    // 06 > 0 ? spur needs to be drawn : 10800
+    { 0x6008, { 0x400, 0x401, 0 } },                    // 07 atan2 -> angle
+    { 0x2000, { 0x407, 0, 10 } },                       // 08
+    { 0x2000, { 0x407, 10, 0 } },                       // 09
+    { 0x400a, { 10800, 0x407, 0 } },                    // 0a
+    { 0x4009, { 10800, 0x407, 0 } },                    // 0b
+    { 0x2000, { 0x40a, 10800, 0 } },                    // 0c
+    { 0x2000, { 0x40b, 10800, 0 } },                    // 0d
+    { 0xe006, { 0x406, DFF_Prop_adjustValue, 0x40c } }, // 0e
+    { 0xe006, { 0x406, DFF_Prop_adjust2Value, 0x40d } },// 0f
+    { 0x400a, { 10800, 0x408, 0 } },                    // 10
+    { 0x4009, { 10800, 0x408, 0 } },                    // 11
+    { 0x2000, { 0x410, 10800, 0 } },                    // 12
+    { 0x2000, { 0x411, 10800, 0 } },                    // 13
+    { 0x400a, { 10800, 0x409, 0 } },                    // 14
+    { 0x4009, { 10800, 0x409, 0 } },                    // 15
+    { 0x2000, { 0x414, 10800, 0 } },                    // 16
+    { 0x2000, { 0x415, 10800, 0 } }                     // 17
 };
 static const sal_Int32 mso_sptWedgeEllipseCalloutDefault[] =
 {
@@ -5361,27 +5358,27 @@ static const sal_uInt16 mso_sptCloudCalloutSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptCloudCalloutCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 10800 },
-    { 0x2000, DFF_Prop_adjust2Value, 0, 10800 },
-    { 0x6008, 0x400, 0x401, 0 },
-    { 0x400a, 10800, 0x402, 0 },                    // 3
-    { 0x4009, 10800, 0x402, 0 },                    // 4
-    { 0x2000, 0x403, 10800, 0 },                    // 5
-    { 0x2000, 0x404, 10800, 0 },                    // 6
-    { 0xa000, DFF_Prop_adjustValue, 0, 0x405 },     // 7
-    { 0xa000, DFF_Prop_adjust2Value,0, 0x406 },     // 8
-    { 0x2001, 0x407, 1, 3 },                        // 9
-    { 0x2001, 0x408, 1, 3 },                        // 0xa
-    { 0x2001, 0x407, 2, 3 },                        // 0xb
-    { 0x2001, 0x408, 2, 3 },                        // 0xc
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },         // 0xd
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },        // 0xe
-    { 0x2001, 0x403, 1, 10800 / 900 },              // 0xf  taking half x distance of the radius from the first bobble
-    { 0x2001, 0x404, 1, 10800 / 900 },              // 0x10
-    { 0xe000, 0x409, 0x405, 0x40f },                // 0x11
-    { 0xe000, 0x40a, 0x406, 0x410 },                // 0x12
-    { 0x6000, 0x40b, 0x405, 0 },                    // 0x13
-    { 0x6000, 0x40c, 0x406, 0 }                     // 0x14
+    { 0x2000, { DFF_Prop_adjustValue, 0, 10800 } },
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 10800 } },
+    { 0x6008, { 0x400, 0x401, 0 } },
+    { 0x400a, { 10800, 0x402, 0 } },                    // 3
+    { 0x4009, { 10800, 0x402, 0 } },                    // 4
+    { 0x2000, { 0x403, 10800, 0 } },                    // 5
+    { 0x2000, { 0x404, 10800, 0 } },                    // 6
+    { 0xa000, { DFF_Prop_adjustValue, 0, 0x405 } },     // 7
+    { 0xa000, { DFF_Prop_adjust2Value,0, 0x406 } },     // 8
+    { 0x2001, { 0x407, 1, 3 } },                        // 9
+    { 0x2001, { 0x408, 1, 3 } },                        // 0xa
+    { 0x2001, { 0x407, 2, 3 } },                        // 0xb
+    { 0x2001, { 0x408, 2, 3 } },                        // 0xc
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },         // 0xd
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },        // 0xe
+    { 0x2001, { 0x403, 1, 10800 / 900 } },              // 0xf  taking half x distance of the radius from the first bobble
+    { 0x2001, { 0x404, 1, 10800 / 900 } },              // 0x10
+    { 0xe000, { 0x409, 0x405, 0x40f } },                // 0x11
+    { 0xe000, { 0x40a, 0x406, 0x410 } },                // 0x12
+    { 0x6000, { 0x40b, 0x405, 0 } },                    // 0x13
+    { 0x6000, { 0x40c, 0x406, 0 } }                     // 0x14
 };
 static const sal_Int32 mso_sptCloudCalloutDefault[] =
 {
@@ -5411,40 +5408,40 @@ static const SvxMSDffVertPair mso_sptWaveVert[] =   // adjustment1 : 0 - 4460
 };
 static const SvxMSDffCalculationData mso_sptWaveCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 }, //400 (vert.adj)
-    { 0x8000, 21600, 0, 0x400 },            //401
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },//402 (horz.adj)
-    { 0x2000, 0x402, 0, 10800 },            //403 -2160 -> 2160 (horz.adj)
-    { 0x2001, 0x403, 2, 1 },                //404 -4320 -> 4320 (horz.adj)
-    { 0x2003, 0x404, 0, 0 },                //405 abs( 0x404 )  (horz.adj)
-    { 0x8000, 4320, 0, 0x405 },             //406
-    { 0xa006, 0x403, 0, 0x405 },            //407
-    { 0x4001, 15800, 0x400, 4460 },         //408 0 -> 15800    (vert.adj)
-    { 0xa000, 0x400, 0, 0x408 },            //409
-    { 0x6000, 0x400, 0x408, 0 },            //40a
-    { 0x8000, 21600, 0, 0x404 },            //40b
-    { 0x6006, 0x403, 0x40b, 21600 },        //40c
-    { 0xa000, 0x40c, 0, 0x407 },            //40d width between p0 and p1
-    { 0x2001, 0x405, 1, 2 },                //40e
-    { 0xa000, 0x407, 7200, 0x40e },         //40f
-    { 0x6000, 0x40c, 0x40e, 7200 },         //410
-    { 0x2001, 0x40d, 1, 2 },                //411 1/2 width
-    { 0x6000, 0x407, 0x411, 0 },            //412 top center glue xpos
-    { 0x8000, 21600, 0, 0x412 },            //413 bottom center glue xpos
-    { 0x2001, 0x405, 1, 2 },                //414 left glue x pos
-    { 0x8000, 21600, 0, 0x414 },            //415 right glue x pos
-    { 0x2001, 0x400, 2, 1 },                //416 y1 (textbox)
-    { 0x8000, 21600, 0, 0x416 },            //417 y2 (textbox)
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, //400 (vert.adj)
+    { 0x8000, { 21600, 0, 0x400 } },            //401
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },//402 (horz.adj)
+    { 0x2000, { 0x402, 0, 10800 } },            //403 -2160 -> 2160 (horz.adj)
+    { 0x2001, { 0x403, 2, 1 } },                //404 -4320 -> 4320 (horz.adj)
+    { 0x2003, { 0x404, 0, 0 } },                //405 abs( 0x404 )  (horz.adj)
+    { 0x8000, { 4320, 0, 0x405 } },             //406
+    { 0xa006, { 0x403, 0, 0x405 } },            //407
+    { 0x4001, { 15800, 0x400, 4460 } },         //408 0 -> 15800    (vert.adj)
+    { 0xa000, { 0x400, 0, 0x408 } },            //409
+    { 0x6000, { 0x400, 0x408, 0 } },            //40a
+    { 0x8000, { 21600, 0, 0x404 } },            //40b
+    { 0x6006, { 0x403, 0x40b, 21600 } },        //40c
+    { 0xa000, { 0x40c, 0, 0x407 } },            //40d width between p0 and p1
+    { 0x2001, { 0x405, 1, 2 } },                //40e
+    { 0xa000, { 0x407, 7200, 0x40e } },         //40f
+    { 0x6000, { 0x40c, 0x40e, 7200 } },         //410
+    { 0x2001, { 0x40d, 1, 2 } },                //411 1/2 width
+    { 0x6000, { 0x407, 0x411, 0 } },            //412 top center glue xpos
+    { 0x8000, { 21600, 0, 0x412 } },            //413 bottom center glue xpos
+    { 0x2001, { 0x405, 1, 2 } },                //414 left glue x pos
+    { 0x8000, { 21600, 0, 0x414 } },            //415 right glue x pos
+    { 0x2001, { 0x400, 2, 1 } },                //416 y1 (textbox)
+    { 0x8000, { 21600, 0, 0x416 } },            //417 y2 (textbox)
 
-    { 0x8000, 21600, 0, 0x407 },            //418 p2
+    { 0x8000, { 21600, 0, 0x407 } },            //418 p2
 
-    { 0x8000, 21600, 0, 0x40f },            //419 c
-    { 0x6000, 0x401, 0x408, 0 },            //41a
+    { 0x8000, { 21600, 0, 0x40f } },            //419 c
+    { 0x6000, { 0x401, 0x408, 0 } },            //41a
 
-    { 0x8000, 21600, 0, 0x410 },            //41b c
-    { 0xa000, 0x401, 0, 0x408 },            //41c
+    { 0x8000, { 21600, 0, 0x410 } },            //41b c
+    { 0xa000, { 0x401, 0, 0x408 } },            //41c
 
-    { 0x8000, 21600, 0, 0x40c }             //41d p3
+    { 0x8000, { 21600, 0, 0x40c } }             //41d p3
 };
 static const SvxMSDffVertPair mso_sptWaveGluePoints[] =
 {
@@ -5489,44 +5486,44 @@ static const SvxMSDffVertPair mso_sptDoubleWaveVert[] = // adjustment1 : 0 - 223
 };
 static const SvxMSDffCalculationData mso_sptDoubleWaveCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 }, //400 (vert.adj)
-    { 0x8000, 21600, 0, 0x400 },            //401
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },//402 (horz.adj)
-    { 0x2000, 0x402, 0, 10800 },            //403 -2160 -> 2160 (horz.adj)
-    { 0x2001, 0x403, 2, 1 },                //404 -4320 -> 4320 (horz.adj)
-    { 0x2003, 0x404, 0, 0 },                //405 abs( 0x404 )  (horz.adj)
-    { 0x8000, 4320, 0, 0x405 },             //406 -> not used
-    { 0xa006, 0x403, 0, 0x405 },            //407
-    { 0x4001, 7900, 0x400, 2230 },          //408 0 -> 7900 (vert.adj)
-    { 0xa000, 0x400, 0, 0x408 },            //409
-    { 0x6000, 0x400, 0x408, 0 },            //40a
-    { 0x8000, 21600, 0, 0x404 },            //40b
-    { 0x6006, 0x403, 0x40b, 21600 },        //40c
-    { 0xa000, 0x40c, 0, 0x407 },            //40d width between p0 and p1
-    { 0x2001, 0x405, 1, 2 },                //40e
-    { 0xa000, 0x407, 3600, 0x40e },         //40f
-    { 0x6000, 0x40c, 0x40e, 3600 },         //410
-    { 0x2001, 0x40d, 1, 2 },                //411 1/2 width
-    { 0x6000, 0x407, 0x411, 0 },            //412 top center glue xpos
-    { 0x8000, 21600, 0, 0x412 },            //413 bottom center glue xpos
-    { 0x2001, 0x405, 1, 2 },                //414 left glue x pos
-    { 0x8000, 21600, 0, 0x414 },            //415 right glue x pos
-    { 0x2001, 0x400, 2, 1 },                //416 y1 (textbox)
-    { 0x8000, 21600, 0, 0x416 },            //417 y2 (textbox)
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, //400 (vert.adj)
+    { 0x8000, { 21600, 0, 0x400 } },            //401
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },//402 (horz.adj)
+    { 0x2000, { 0x402, 0, 10800 } },            //403 -2160 -> 2160 (horz.adj)
+    { 0x2001, { 0x403, 2, 1 } },                //404 -4320 -> 4320 (horz.adj)
+    { 0x2003, { 0x404, 0, 0 } },                //405 abs( 0x404 )  (horz.adj)
+    { 0x8000, { 4320, 0, 0x405 } },             //406 -> not used
+    { 0xa006, { 0x403, 0, 0x405 } },            //407
+    { 0x4001, { 7900, 0x400, 2230 } },          //408 0 -> 7900 (vert.adj)
+    { 0xa000, { 0x400, 0, 0x408 } },            //409
+    { 0x6000, { 0x400, 0x408, 0 } },            //40a
+    { 0x8000, { 21600, 0, 0x404 } },            //40b
+    { 0x6006, { 0x403, 0x40b, 21600 } },        //40c
+    { 0xa000, { 0x40c, 0, 0x407 } },            //40d width between p0 and p1
+    { 0x2001, { 0x405, 1, 2 } },                //40e
+    { 0xa000, { 0x407, 3600, 0x40e } },         //40f
+    { 0x6000, { 0x40c, 0x40e, 3600 } },         //410
+    { 0x2001, { 0x40d, 1, 2 } },                //411 1/2 width
+    { 0x6000, { 0x407, 0x411, 0 } },            //412 top center glue xpos
+    { 0x8000, { 21600, 0, 0x412 } },            //413 bottom center glue xpos
+    { 0x2001, { 0x405, 1, 2 } },                //414 left glue x pos
+    { 0x8000, { 21600, 0, 0x414 } },            //415 right glue x pos
+    { 0x2001, { 0x400, 2, 1 } },                //416 y1 (textbox)
+    { 0x8000, { 21600, 0, 0x416 } },            //417 y2 (textbox)
 
-    { 0x8000, 21600, 0, 0x407 },            //418 p2
+    { 0x8000, { 21600, 0, 0x407 } },            //418 p2
 
-    { 0x8000, 21600, 0, 0x40f },            //419 c
-    { 0x6000, 0x401, 0x408, 0 },            //41a
+    { 0x8000, { 21600, 0, 0x40f } },            //419 c
+    { 0x6000, { 0x401, 0x408, 0 } },            //41a
 
-    { 0x8000, 21600, 0, 0x410 },            //41b c
-    { 0xa000, 0x401, 0, 0x408 },            //41c
+    { 0x8000, { 21600, 0, 0x410 } },            //41b c
+    { 0xa000, { 0x401, 0, 0x408 } },            //41c
 
-    { 0x8000, 21600, 0, 0x40c },            //41d p3
-    { 0xa000, 0x412, 0, 0x40e },            //41e
-    { 0x6000, 0x412, 0x40e, 0 },            //41f
-    { 0xa000, 0x413, 0, 0x40e },            //420
-    { 0x6000, 0x413, 0x40e, 0 }             //421
+    { 0x8000, { 21600, 0, 0x40c } },            //41d p3
+    { 0xa000, { 0x412, 0, 0x40e } },            //41e
+    { 0x6000, { 0x412, 0x40e, 0 } },            //41f
+    { 0xa000, { 0x413, 0, 0x40e } },            //420
+    { 0x6000, { 0x413, 0x40e, 0 } }             //421
 };
 static const SvxMSDffVertPair mso_sptDoubleWaveGluePoints[] =
 {
@@ -5666,14 +5663,14 @@ static const SvxMSDffVertPair mso_sptTextPlainTextVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextPlainTextCalc[] =   // adjustment1 : 6629 - 14971
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 10800 },
-    { 0x2001, 0x400, 2, 1 },
-    { 0x2003, 0x401, 0, 0 },
-    { 0xa006, 0x401, 0, 0x402 },        // x1(3)
-    { 0x8000, 21600, 0, 0x402 },
-    { 0x6006, 0x401, 0x404, 21600 },    // x2(5)
-    { 0x6006, 0x401, 0x402, 0 },        // x2
-    { 0xa006, 0x401, 21600, 0x404 }     // x3(7)
+    { 0x2000, { DFF_Prop_adjustValue, 0, 10800 } },
+    { 0x2001, { 0x400, 2, 1 } },
+    { 0x2003, { 0x401, 0, 0 } },
+    { 0xa006, { 0x401, 0, 0x402 } },        // x1(3)
+    { 0x8000, { 21600, 0, 0x402 } },
+    { 0x6006, { 0x401, 0x404, 21600 } },    // x2(5)
+    { 0x6006, { 0x401, 0x402, 0 } },        // x2
+    { 0xa006, { 0x401, 21600, 0x404 } }     // x3(7)
 };
 static const sal_uInt16 mso_sptTextPlainTextSegm[] =
 {
@@ -5705,8 +5702,8 @@ static const SvxMSDffVertPair mso_sptTextStopVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextStopCalc[] =    // adjustment1 : 3080 - 10800
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x8000, 21600, 0, DFF_Prop_adjustValue }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }
 };
 static const sal_uInt16 mso_sptTextStopSegm[] =
 {
@@ -5741,7 +5738,7 @@ static const SvxMSDffVertPair mso_sptTextTriangleVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextTriangleCalc[] =    // adjustment1 : 6629 - 14971
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }
 };
 static const sal_uInt16 mso_sptTextTriangleSegm[] =
 {
@@ -5793,8 +5790,8 @@ static const SvxMSDffVertPair mso_sptTextChevronVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextChevronCalc[] = // adjustment1 : 6629 - 14971
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x8000, 21600, 0, DFF_Prop_adjustValue }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }
 };
 static const sal_uInt16 mso_sptTextChevronSegm[] =
 {
@@ -5825,8 +5822,8 @@ static const SvxMSDffVertPair mso_sptTextChevronInvertedVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextChevronInvertedCalc[] = // adjustment1 : 6629 - 14971
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x8000, 21600, 0, DFF_Prop_adjustValue }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }
 };
 static const sal_uInt16 mso_sptTextChevronInvertedSegm[] =
 {
@@ -5858,8 +5855,8 @@ static const SvxMSDffVertPair mso_sptTextRingOutsideVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextRingOutsideCalc[] = // adjustment1 : 6629 - 14971
 {
-    { 0x2001, DFF_Prop_adjustValue, 1, 2 },
-    { 0x8000, 21600, 0, 0x400 }
+    { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
+    { 0x8000, { 21600, 0, 0x400 } }
 };
 static const sal_uInt16 mso_sptTextRingOutsideSegm[] =
 {
@@ -5890,8 +5887,8 @@ static const SvxMSDffVertPair mso_sptTextFadeRightVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextFadeCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x8000, 21600, 0, DFF_Prop_adjustValue }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }
 };
 static const sal_uInt16 mso_sptTextFadeSegm[] =
 {
@@ -6032,9 +6029,9 @@ static const SvxMSDffVertPair mso_sptTextCascadeUpVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextCascadeCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x8000, 21600, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x401, 1, 4 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },
+    { 0x2001, { 0x401, 1, 4 } }
 };
 static const SvxMSDffHandle mso_sptTextCascadeUpHandle[] =
 {
@@ -6082,11 +6079,11 @@ static const SvxMSDffVertPair mso_sptTextArchUpCurveVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextArchCurveCalc[] =
 {
-    { 0x400a, 10800, DFF_Prop_adjustValue, 0 },
-    { 0x4009, 10800, DFF_Prop_adjustValue, 0 },
-    { 0x2000, 0x400, 10800, 0 },
-    { 0x2000, 0x401, 10800, 0 },
-    { 0x8000, 21600, 0, 0x402 }
+    { 0x400a, { 10800, DFF_Prop_adjustValue, 0 } },
+    { 0x4009, { 10800, DFF_Prop_adjustValue, 0 } },
+    { 0x2000, { 0x400, 10800, 0 } },
+    { 0x2000, { 0x401, 10800, 0 } },
+    { 0x8000, { 21600, 0, 0x402 } }
 };
 static const sal_uInt16 mso_sptTextArchUpCurveSegm[] =
 {
@@ -6150,11 +6147,11 @@ static const SvxMSDffVertPair mso_sptTextCircleCurveVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextCircleCurveCalc[] =
 {
-    { 0x400a, 10800, DFF_Prop_adjustValue, 0 },
-    { 0x4009, 10800, DFF_Prop_adjustValue, 0 },
-    { 0x2000, 0x400, 10800, 0 },
-    { 0x2000, 0x401, 10800, 0 },
-    { 0x8000, 21600, 0, 0x403 }
+    { 0x400a, { 10800, DFF_Prop_adjustValue, 0 } },
+    { 0x4009, { 10800, DFF_Prop_adjustValue, 0 } },
+    { 0x2000, { 0x400, 10800, 0 } },
+    { 0x2000, { 0x401, 10800, 0 } },
+    { 0x8000, { 21600, 0, 0x403 } }
 };
 static const sal_uInt16 mso_sptTextCircleCurveSegm[] =
 {
@@ -6190,12 +6187,12 @@ static const SvxMSDffVertPair mso_sptTextButtonCurveVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextButtonCurveCalc[] =
 {
-    { 0x400a, 10800, DFF_Prop_adjustValue, 0 },
-    { 0x4009, 10800, DFF_Prop_adjustValue, 0 },
-    { 0x2000, 0x400, 10800, 0 },
-    { 0x2000, 0x401, 10800, 0 },
-    { 0x8000, 21600, 0, 0x402 },
-    { 0x8000, 21600, 0, 0x403 }
+    { 0x400a, { 10800, DFF_Prop_adjustValue, 0 } },
+    { 0x4009, { 10800, DFF_Prop_adjustValue, 0 } },
+    { 0x2000, { 0x400, 10800, 0 } },
+    { 0x2000, { 0x401, 10800, 0 } },
+    { 0x8000, { 21600, 0, 0x402 } },
+    { 0x8000, { 21600, 0, 0x403 } }
 };
 static const sal_uInt16 mso_sptTextButtonCurveSegm[] =
 {
@@ -6232,18 +6229,18 @@ static const SvxMSDffVertPair mso_sptTextArchUpPourVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextArchPourCalc[] =
 {
-    { 0x400a, 10800, DFF_Prop_adjustValue, 0 },
-    { 0x4009, 10800, DFF_Prop_adjustValue, 0 },
-    { 0x2000, 0x400, 10800, 0 },
-    { 0x2000, 0x401, 10800, 0 },
-    { 0x8000, 21600, 0, 0x402 },
-    { 0x8000, 10800, 0, DFF_Prop_adjust2Value },
-    { 0x600a, 0x405, DFF_Prop_adjustValue, 0 }, // 6
-    { 0x6009, 0x405, DFF_Prop_adjustValue, 0 },
-    { 0x2000, 0x406, 10800, 0 },                // 8
-    { 0x2000, 0x407, 10800, 0 },
-    { 0x8000, 21600, 0, 0x408 },                // 10
-    { 0x8000, 21600, 0, 0x405 }
+    { 0x400a, { 10800, DFF_Prop_adjustValue, 0 } },
+    { 0x4009, { 10800, DFF_Prop_adjustValue, 0 } },
+    { 0x2000, { 0x400, 10800, 0 } },
+    { 0x2000, { 0x401, 10800, 0 } },
+    { 0x8000, { 21600, 0, 0x402 } },
+    { 0x8000, { 10800, 0, DFF_Prop_adjust2Value } },
+    { 0x600a, { 0x405, DFF_Prop_adjustValue, 0 } }, // 6
+    { 0x6009, { 0x405, DFF_Prop_adjustValue, 0 } },
+    { 0x2000, { 0x406, 10800, 0 } },                // 8
+    { 0x2000, { 0x407, 10800, 0 } },
+    { 0x8000, { 21600, 0, 0x408 } },                // 10
+    { 0x8000, { 21600, 0, 0x405 } }
 };
 static const sal_uInt16 mso_sptTextArchUpPourSegm[] =
 {
@@ -6304,19 +6301,19 @@ static const SvxMSDffVertPair mso_sptTextCirclePourVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextCirclePourCalc[] =
 {
-    { 0x400a, 10800, DFF_Prop_adjustValue, 0 },
-    { 0x4009, 10800, DFF_Prop_adjustValue, 0 },
-    { 0x2000, 0x400, 10800, 0 },
-    { 0x2000, 0x401, 10800, 0 },
-    { 0x8000, 21600, 0, 0x403 },
-    { 0x8000, 10800, 0, DFF_Prop_adjust2Value },
-    { 0x600a, 0x405, DFF_Prop_adjustValue, 0 }, // 6
-    { 0x6009, 0x405, DFF_Prop_adjustValue, 0 },
-    { 0x2000, 0x406, 10800, 0 },                // 8
-    { 0x2000, 0x407, 10800, 0 },
-    { 0x8000, 21600, 0, 0x409 },                // 10
-    { 0x8000, 21600, 0, 0x405 },
-    { 0x000, 21600, 0, 0 }
+    { 0x400a, { 10800, DFF_Prop_adjustValue, 0 } },
+    { 0x4009, { 10800, DFF_Prop_adjustValue, 0 } },
+    { 0x2000, { 0x400, 10800, 0 } },
+    { 0x2000, { 0x401, 10800, 0 } },
+    { 0x8000, { 21600, 0, 0x403 } },
+    { 0x8000, { 10800, 0, DFF_Prop_adjust2Value } },
+    { 0x600a, { 0x405, DFF_Prop_adjustValue, 0 } }, // 6
+    { 0x6009, { 0x405, DFF_Prop_adjustValue, 0 } },
+    { 0x2000, { 0x406, 10800, 0 } },                // 8
+    { 0x2000, { 0x407, 10800, 0 } },
+    { 0x8000, { 21600, 0, 0x409 } },                // 10
+    { 0x8000, { 21600, 0, 0x405 } },
+    { 0x000, { 21600, 0, 0 } }
 };
 static const sal_uInt16 mso_sptTextCirclePourSegm[] =
 {
@@ -6355,31 +6352,31 @@ static const SvxMSDffVertPair mso_sptTextButtonPourVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextButtonPourCalc[] =
 {
-    { 0x400a, 10800, DFF_Prop_adjustValue, 0 },                 // 0x00
-    { 0x4009, 10800, DFF_Prop_adjustValue, 0 },                 // 0x01
-    { 0x2000, 0x400, 10800, 0 },                                // 0x02
-    { 0x2000, 0x401, 10800, 0 },                                // 0x03
-    { 0x8000, 21600, 0, 0x402 },                                // 0x04
-    { 0x8000, 21600, 0, 0x403 },                                // 0x05
+    { 0x400a, { 10800, DFF_Prop_adjustValue, 0 } },                 // 0x00
+    { 0x4009, { 10800, DFF_Prop_adjustValue, 0 } },                 // 0x01
+    { 0x2000, { 0x400, 10800, 0 } },                                // 0x02
+    { 0x2000, { 0x401, 10800, 0 } },                                // 0x03
+    { 0x8000, { 21600, 0, 0x402 } },                                // 0x04
+    { 0x8000, { 21600, 0, 0x403 } },                                // 0x05
 
-    { 0x8000, 10800, 0, DFF_Prop_adjust2Value },                // 0x06
-    { 0x8000, 21600, 0, 0x406 },                                // 0x07
+    { 0x8000, { 10800, 0, DFF_Prop_adjust2Value } },                // 0x06
+    { 0x8000, { 21600, 0, 0x406 } },                                // 0x07
 
-    { 0x600a, DFF_Prop_adjust2Value, DFF_Prop_adjustValue, 0 }, // 0x08
-    { 0x6009, DFF_Prop_adjust2Value, DFF_Prop_adjustValue, 0 }, // 0x09
-    { 0x2000, 0x408, 10800, 0 },    // 0x0a
-    { 0x2000, 0x409, 10800, 0 },    // 0x0b
-    { 0x8000, 21600, 0, 0x40a },    // 0x0c
-    { 0x8000, 21600, 0, 0x40b },    // 0x0d
-    { 0x2001, 0x406, 1, 2 },        // 0x0e
-    { 0x4000, 10800, 0x40e, 0 },    // 0x0f
-    { 0x8000, 10800, 0, 0x40e },    // 0x10
-    { 0x6001, 0x40e, 0x40e, 1 },    // 0x11
-    { 0x6001, DFF_Prop_adjust2Value, DFF_Prop_adjust2Value, 1 },    // 0x12
-    { 0xA000, 0x412, 0, 0x411 },    // 0x13
-    { 0x200d, 0x413, 0, 0 },        // 0x14
-    { 0x4000, 10800, 0x414, 0 },    // 0x15
-    { 0x8000, 10800, 0, 0x414 }     // 0x16
+    { 0x600a, { DFF_Prop_adjust2Value, DFF_Prop_adjustValue, 0 } }, // 0x08
+    { 0x6009, { DFF_Prop_adjust2Value, DFF_Prop_adjustValue, 0 } }, // 0x09
+    { 0x2000, { 0x408, 10800, 0 } },    // 0x0a
+    { 0x2000, { 0x409, 10800, 0 } },    // 0x0b
+    { 0x8000, { 21600, 0, 0x40a } },    // 0x0c
+    { 0x8000, { 21600, 0, 0x40b } },    // 0x0d
+    { 0x2001, { 0x406, 1, 2 } },        // 0x0e
+    { 0x4000, { 10800, 0x40e, 0 } },    // 0x0f
+    { 0x8000, { 10800, 0, 0x40e } },    // 0x10
+    { 0x6001, { 0x40e, 0x40e, 1 } },    // 0x11
+    { 0x6001, { DFF_Prop_adjust2Value, DFF_Prop_adjust2Value, 1 } },    // 0x12
+    { 0xA000, { 0x412, 0, 0x411 } },    // 0x13
+    { 0x200d, { 0x413, 0, 0 } },        // 0x14
+    { 0x4000, { 10800, 0x414, 0 } },    // 0x15
+    { 0x8000, { 10800, 0, 0x414 } }     // 0x16
 };
 static const sal_uInt16 mso_sptTextButtonPourSegm[] =
 {
@@ -6419,11 +6416,11 @@ static const SvxMSDffVertPair mso_sptTextCurveUpVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextCurveUpCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 }, // 400
-    { 0x4001, 14250, 0x400, 12170 },        // 401
-    { 0x4001, 12800, 0x400, 12170 },        // 402
-    { 0x4001, 6380, 0x400, 12170 },         // 403
-    { 0x8000, 21600, 0, 0x403 }             // 404
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
+    { 0x4001, { 14250, 0x400, 12170 } },        // 401
+    { 0x4001, { 12800, 0x400, 12170 } },        // 402
+    { 0x4001, { 6380, 0x400, 12170 } },         // 403
+    { 0x8000, { 21600, 0, 0x403 } }             // 404
 };
 static const sal_uInt16 mso_sptTextCurveUpSegm[] =
 {
@@ -6485,11 +6482,11 @@ static const SvxMSDffVertPair mso_sptTextCanUpVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextCanUpCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },     // 400
-    { 0x8000, 21600, 0, DFF_Prop_adjustValue }, // 401
-    { 0x2000, DFF_Prop_adjustValue, 0, 14400 }, // 402
-    { 0x4001, 5470, 0x402, 7200 },              // 403
-    { 0x4000, 16130, 0x403, 0 }                 // 404
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 400
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }, // 401
+    { 0x2000, { DFF_Prop_adjustValue, 0, 14400 } }, // 402
+    { 0x4001, { 5470, 0x402, 7200 } },              // 403
+    { 0x4000, { 16130, 0x403, 0 } }                 // 404
 };
 static const sal_uInt16 mso_sptTextCanUpSegm[] =
 {
@@ -6525,9 +6522,9 @@ static const SvxMSDffVertPair mso_sptTextCanDownVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextCanDownCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },     // 400
-    { 0x8000, 21600, 0, DFF_Prop_adjustValue }, // 401
-    { 0x4001, 5470, 0x400, 7200 }               // 402
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 400
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }, // 401
+    { 0x4001, { 5470, 0x400, 7200 } }               // 402
 };
 static const SvxMSDffHandle mso_sptTextCanDownHandle[] =
 {
@@ -6558,10 +6555,10 @@ static const SvxMSDffVertPair mso_sptTextInflateVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextInflateCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 }, // 400
-    { 0x4001, 1530, 0x400, 4650 },          // 401
-    { 0x8000, 21600, 0, 0x400 },            // 402
-    { 0x8000, 21600, 0, 0x401 }             // 403
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
+    { 0x4001, { 1530, 0x400, 4650 } },          // 401
+    { 0x8000, { 21600, 0, 0x400 } },            // 402
+    { 0x8000, { 21600, 0, 0x401 } }             // 403
 };
 static const SvxMSDffHandle mso_sptTextInflateHandle[] =
 {
@@ -6592,10 +6589,10 @@ static const SvxMSDffVertPair mso_sptTextDeflateVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextDeflateCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 }, // 400
-    { 0x2001, 0x400, 5320, 7100 },          // 401
-    { 0x8000, 21600, 0, 0x400 },            // 402
-    { 0x8000, 21600, 0, 0x401 }             // 403
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
+    { 0x2001, { 0x400, 5320, 7100 } },          // 401
+    { 0x8000, { 21600, 0, 0x400 } },            // 402
+    { 0x8000, { 21600, 0, 0x401 } }             // 403
 };
 static const SvxMSDffHandle mso_sptTextDeflateHandle[] =
 {
@@ -6622,10 +6619,10 @@ static const SvxMSDffVertPair mso_sptTextInflateBottomVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextInflateBottomCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 }, // 400
-    { 0x2000, 0x400, 0, 11150 },            // 401 0->10450
-    { 0x2001, 0x401, 3900, 10450 },         // 402
-    { 0x2000, 0x402, 17700, 0 }             // 403
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
+    { 0x2000, { 0x400, 0, 11150 } },            // 401 0->10450
+    { 0x2001, { 0x401, 3900, 10450 } },         // 402
+    { 0x2000, { 0x402, 17700, 0 } }             // 403
 };
 static const sal_uInt16 mso_sptTextInflateBottomSegm[] =
 {
@@ -6661,10 +6658,10 @@ static const SvxMSDffVertPair mso_sptTextDeflateBottomVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextDeflateBottomCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 }, // 400
-    { 0x2000, 0x400, 0, 1350 },             // 401 0->20250
-    { 0x2001, 0x401, 12070, 20250 },        // 402
-    { 0x2000, 0x402, 9530, 0 }              // 403
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
+    { 0x2000, { 0x400, 0, 1350 } },             // 401 0->20250
+    { 0x2001, { 0x401, 12070, 20250 } },        // 402
+    { 0x2000, { 0x402, 9530, 0 } }              // 403
 };
 static const sal_uInt16 mso_sptTextDeflateBottomSegm[] =
 {
@@ -6700,8 +6697,8 @@ static const SvxMSDffVertPair mso_sptTextInflateTopVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextInflateTopCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 }, // 400
-    { 0x2001, 0x400, 3900, 10450 }          // 401
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
+    { 0x2001, { 0x400, 3900, 10450 } }          // 401
 };
 static const sal_uInt16 mso_sptTextInflateTopSegm[] =
 {
@@ -6737,8 +6734,8 @@ static const SvxMSDffVertPair mso_sptTextDeflateTopVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextDeflateTopCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 }, // 400
-    { 0x2001, 0x400, 12070, 20250 },        // 402
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
+    { 0x2001, { 0x400, 12070, 20250 } }         // 402
 };
 static const sal_uInt16 mso_sptTextDeflateTopSegm[] =
 {
@@ -6776,14 +6773,13 @@ static const SvxMSDffVertPair mso_sptTextDeflateInflateVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextDeflateInflateCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 }, // 400
-    { 0x8000, 10800, 0, 0x400 },            // 401
-    { 0x2001, 0x401, 5770, 9500 },          // 402
-    { 0x8000, 10100, 0, 0x402 },            // 403
-    { 0x8000, 11500, 0, 0x402 },            // 404
-    { 0x2000, 0x400, 0, 700 },              // 405
-    { 0x2000, 0x400, 700, 0 }               // 406
-
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
+    { 0x8000, { 10800, 0, 0x400 } },            // 401
+    { 0x2001, { 0x401, 5770, 9500 } },          // 402
+    { 0x8000, { 10100, 0, 0x402 } },            // 403
+    { 0x8000, { 11500, 0, 0x402 } },            // 404
+    { 0x2000, { 0x400, 0, 700 } },              // 405
+    { 0x2000, { 0x400, 700, 0 } }               // 406
 };
 static const sal_uInt16 mso_sptTextDeflateInflateSegm[] =
 {
@@ -6825,17 +6821,17 @@ static const SvxMSDffVertPair mso_sptTextDeflateInflateDeflateVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextDeflateInflateDeflateCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 850 },       // 400
-    { 0x2001, 0x400, 6120, 8700 },
-    { 0x2000, 0x401, 0, 4280 },
-    { 0x4000, 6600, 0x402, 0 },
-    { 0x2000, DFF_Prop_adjustValue, 0, 450 },       // 404
-    { 0x2000, 0x403, 900, 0 },                      // 405
-    { 0x2000, 0x404, 900, 0 },                      // 406
-    { 0x8000, 21600, 0, 0x403 },                    // 407
-    { 0x8000, 21600, 0, 0x404 },                    // 408
-    { 0x8000, 21600, 0, 0x405 },                    // 409
-    { 0x8000, 21600, 0, 0x406 }                     // 410
+    { 0x2000, { DFF_Prop_adjustValue, 0, 850 } },       // 400
+    { 0x2001, { 0x400, 6120, 8700 } },
+    { 0x2000, { 0x401, 0, 4280 } },
+    { 0x4000, { 6600, 0x402, 0 } },
+    { 0x2000, { DFF_Prop_adjustValue, 0, 450 } },       // 404
+    { 0x2000, { 0x403, 900, 0 } },                      // 405
+    { 0x2000, { 0x404, 900, 0 } },                      // 406
+    { 0x8000, { 21600, 0, 0x403 } },                    // 407
+    { 0x8000, { 21600, 0, 0x404 } },                    // 408
+    { 0x8000, { 21600, 0, 0x405 } },                    // 409
+    { 0x8000, { 21600, 0, 0x406 } }                     // 410
 };
 static const sal_uInt16 mso_sptTextDeflateInflateDeflateSegm[] =
 {
@@ -7094,14 +7090,14 @@ static const sal_uInt16 mso_sptCallout3Segm1d[] =
 
 static const SvxMSDffCalculationData mso_sptCalloutCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust3Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust4Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust5Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust6Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust7Value, 0, 0 },
-    { 0x2000, DFF_Prop_adjust8Value, 0, 0 }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust4Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust5Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust6Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust7Value, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust8Value, 0, 0 } }
 };
 
 static const mso_CustomShape msoCallout90 =
