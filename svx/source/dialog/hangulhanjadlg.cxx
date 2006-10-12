@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanjadlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:22:23 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:14:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,6 +275,8 @@ namespace svx
     class RubyRadioButton   :public RadioButton
                             ,protected PseudoRubyText
     {
+        using svx::PseudoRubyText::Paint;
+
     public:
         RubyRadioButton(
             Window* _pParent,
@@ -1231,7 +1233,7 @@ namespace svx
 
         SvtLinguConfig  aLngCfg;
         Any             aTmp;
-        bool            bVal;
+        bool            bVal = bool();
         aTmp = aLngCfg.GetProperty( UPH_IS_IGNORE_POST_POSITIONAL_WORD );
         if( aTmp >>= bVal )
             m_aIgnorepostCB.Check( bVal );
