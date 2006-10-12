@@ -4,9 +4,9 @@
  *
  *  $RCSfile: platform.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:02:05 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:09:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,11 +42,18 @@
 #endif
 #define _ATL_APARTMENT_THREADED
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#pragma warning(disable: 4548 4917)
+#endif
 #include "windows.h"
 #if defined(_MSC_VER) && (_MSC_VER > 1310)
 #include <atldbcli.h>
 #else
 #include "atlcomcli.h"
+#endif
+#if defined _MSC_VER
+#pragma warning(pop)
 #endif
 
 #endif
