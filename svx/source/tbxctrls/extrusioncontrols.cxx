@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrusioncontrols.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:04:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:19:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,12 +110,12 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
     SfxPopupWindow( nId,
                     rFrame,
                     SVX_RES( RID_SVXFLOAT_EXTRUSION_DIRECTION )),
-    mbPopupMode     ( TRUE ),
+    mxFrame( rFrame ),
     maImgPerspective( SVX_RES( IMG_PERSPECTIVE ) ),
     maImgPerspectiveH( SVX_RES( IMG_PERSPECTIVE_H ) ),
     maImgParallel( SVX_RES( IMG_PARALLEL ) ),
     maImgParallelH( SVX_RES( IMG_PARALLEL_H ) ),
-    mxFrame( rFrame )
+    mbPopupMode     ( TRUE )
 {
     implInit();
 }
@@ -128,12 +128,12 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
                     rFrame,
                     pParentWindow,
                     SVX_RES( RID_SVXFLOAT_EXTRUSION_DIRECTION )),
-    mbPopupMode     ( TRUE ),
+    mxFrame( rFrame ),
     maImgPerspective( SVX_RES( IMG_PERSPECTIVE ) ),
     maImgPerspectiveH( SVX_RES( IMG_PERSPECTIVE_H ) ),
     maImgParallel( SVX_RES( IMG_PARALLEL ) ),
     maImgParallelH( SVX_RES( IMG_PARALLEL_H ) ),
-    mxFrame( rFrame )
+    mbPopupMode     ( TRUE )
 {
     implInit();
 }
@@ -142,7 +142,7 @@ void ExtrusionDirectionWindow::implInit()
 {
     SetHelpId( HID_POPUP_EXTRUSION_DIRECTION );
 
-    int i;
+    USHORT i;
     for( i = DIRECTION_NW; i <= DIRECTION_SE; i++ )
     {
         maImgDirection[i] = Image( SVX_RES( IMG_DIRECTION + i ) );
@@ -202,7 +202,7 @@ void ExtrusionDirectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
     {
         bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
 
-        int i;
+        USHORT i;
         for( i = DIRECTION_NW; i <= DIRECTION_SE; i++ )
         {
             mpDirectionSet->SetItemImage( i+1, bHighContrast ? maImgDirectionH[ i ] : maImgDirection[ i ] );
@@ -435,7 +435,7 @@ SfxPopupWindow* ExtrusionDirectionControl::CreatePopupWindow()
 
 // -----------------------------------------------------------------------
 
-void ExtrusionDirectionControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void ExtrusionDirectionControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* )
 {
     USHORT nId = GetId();
     ToolBox& rTbx = GetToolBox();
@@ -467,7 +467,7 @@ ExtrusionDepthDialog::~ExtrusionDepthDialog()
 
 double ExtrusionDepthDialog::getDepth() const
 {
-    bool bMetric = IsMetric( meDefaultUnit );
+//  bool bMetric = IsMetric( meDefaultUnit );
     return (double)( maMtrDepth.GetValue( FUNIT_100TH_MM ) ) / 100.0;
 }
 
@@ -481,7 +481,6 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
     SfxPopupWindow( nId,
                     rFrame,
                     SVX_RES( RID_SVXFLOAT_EXTRUSION_DEPTH )),
-    mbPopupMode     ( true ),
     maImgDepth0( SVX_RES( IMG_DEPTH_0 ) ),
     maImgDepth1( SVX_RES( IMG_DEPTH_1 ) ),
     maImgDepth2( SVX_RES( IMG_DEPTH_2 ) ),
@@ -494,9 +493,10 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
     maImgDepth3h( SVX_RES( IMG_DEPTH_3_H ) ),
     maImgDepth4h( SVX_RES( IMG_DEPTH_4_H ) ),
     maImgDepthInfinityh( SVX_RES( IMG_DEPTH_INFINITY_H ) ),
+    mxFrame( rFrame ),
+    mbPopupMode     ( true ),
     mfDepth( -1.0 ),
-    mbEnabled( false ),
-    mxFrame( rFrame )
+    mbEnabled( false )
 {
     implInit();
 }
@@ -508,7 +508,6 @@ ExtrusionDepthWindow::ExtrusionDepthWindow( USHORT nId,
                     rFrame,
                     pParentWindow,
                     SVX_RES( RID_SVXFLOAT_EXTRUSION_DEPTH )),
-    mbPopupMode     ( true ),
     maImgDepth0( SVX_RES( IMG_DEPTH_0 ) ),
     maImgDepth1( SVX_RES( IMG_DEPTH_1 ) ),
     maImgDepth2( SVX_RES( IMG_DEPTH_2 ) ),
@@ -521,9 +520,10 @@ ExtrusionDepthWindow::ExtrusionDepthWindow( USHORT nId,
     maImgDepth3h( SVX_RES( IMG_DEPTH_3_H ) ),
     maImgDepth4h( SVX_RES( IMG_DEPTH_4_H ) ),
     maImgDepthInfinityh( SVX_RES( IMG_DEPTH_INFINITY_H ) ),
+    mxFrame( rFrame ),
+    mbPopupMode     ( true ),
     mfDepth( -1.0 ),
-    mbEnabled( false ),
-    mxFrame( rFrame )
+    mbEnabled( false )
 {
     implInit();
 }
@@ -675,7 +675,7 @@ void ExtrusionDepthWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ExtrusionDepthWindow, SelectHdl, void *, pControl )
+IMPL_LINK( ExtrusionDepthWindow, SelectHdl, void *, EMPTYARG )
 {
 //  SfxDispatcher* pDisp = GetBindings().GetDispatcher();
 
@@ -688,7 +688,8 @@ IMPL_LINK( ExtrusionDepthWindow, SelectHdl, void *, pControl )
                 EndPopupMode();
 
             SvxDoubleItem aDepthItem( mfDepth, SID_EXTRUSION_DEPTH );
-            SfxUInt16Item aMetricItem( SID_ATTR_METRIC, meUnit );
+            SfxUInt16Item aMetricItem(
+                SID_ATTR_METRIC, sal::static_int_cast< UINT16 >( meUnit ) );
             rtl::OUString aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDepthDialog" ));
 
             Any a;
@@ -811,7 +812,7 @@ SfxPopupWindow* ExtrusionDepthControl::CreatePopupWindow()
 
 // -----------------------------------------------------------------------
 
-void ExtrusionDepthControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void ExtrusionDepthControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* )
 {
     USHORT nId = GetId();
     ToolBox& rTbx = GetToolBox();
@@ -836,12 +837,12 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(
     maImgBrighth( SVX_RES( IMG_LIGHTING_BRIGHT_H ) ),
     maImgNormalh( SVX_RES( IMG_LIGHTING_NORMAL_H ) ),
     maImgDimh( SVX_RES( IMG_LIGHTING_DIM_H ) ),
+    mxFrame( rFrame ),
     mbPopupMode( true ),
     mnLevel( 0 ),
     mbLevelEnabled( false ),
     mnDirection( FROM_FRONT ),
-    mbDirectionEnabled( false ),
-    mxFrame( rFrame )
+    mbDirectionEnabled( false )
 {
     implInit();
 }
@@ -862,12 +863,12 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(
     maImgBrighth( SVX_RES( IMG_LIGHTING_BRIGHT_H ) ),
     maImgNormalh( SVX_RES( IMG_LIGHTING_NORMAL_H ) ),
     maImgDimh( SVX_RES( IMG_LIGHTING_DIM_H ) ),
+    mxFrame( rFrame ),
     mbPopupMode( true ),
     mnLevel( 0 ),
     mbLevelEnabled( false ),
     mnDirection( FROM_FRONT ),
-    mbDirectionEnabled( false ),
-    mxFrame( rFrame )
+    mbDirectionEnabled( false )
 {
     implInit();
 }
@@ -878,7 +879,7 @@ void ExtrusionLightingWindow::implInit()
 {
     SetHelpId( HID_POPUP_EXTRUSION_LIGHTING );
 
-    int i;
+    USHORT i;
     for( i = FROM_TOP_LEFT; i <= FROM_BOTTOM_RIGHT; i++ )
     {
         if( i != FROM_FRONT )
@@ -1193,7 +1194,7 @@ SfxPopupWindow* ExtrusionLightingControl::CreatePopupWindow()
 
 // -----------------------------------------------------------------------
 
-void ExtrusionLightingControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void ExtrusionLightingControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* )
 {
     USHORT nId = GetId();
     ToolBox& rTbx = GetToolBox();
@@ -1221,8 +1222,8 @@ ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
     maImgSurface2h( SVX_RES( IMG_MATTE_H ) ),
     maImgSurface3h( SVX_RES( IMG_PLASTIC_H ) ),
     maImgSurface4h( SVX_RES( IMG_METAL_H ) ),
-    mbPopupMode( true ),
-    mxFrame( rFrame )
+    mxFrame( rFrame ),
+    mbPopupMode( true )
 {
     implInit();
 }
@@ -1244,8 +1245,8 @@ ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
     maImgSurface2h( SVX_RES( IMG_MATTE_H ) ),
     maImgSurface3h( SVX_RES( IMG_PLASTIC_H ) ),
     maImgSurface4h( SVX_RES( IMG_METAL_H ) ),
-    mbPopupMode( true ),
-    mxFrame( rFrame )
+    mxFrame( rFrame ),
+    mbPopupMode( true )
 {
     implInit();
 }
@@ -1352,7 +1353,7 @@ void ExtrusionSurfaceWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ExtrusionSurfaceWindow, SelectHdl, void *, pControl )
+IMPL_LINK( ExtrusionSurfaceWindow, SelectHdl, void *, EMPTYARG )
 {
     if ( IsInPopupMode() )
         EndPopupMode();
@@ -1454,7 +1455,7 @@ SfxPopupWindow* ExtrusionSurfaceControl::CreatePopupWindow()
 
 // -----------------------------------------------------------------------
 
-void ExtrusionSurfaceControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void ExtrusionSurfaceControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* )
 {
     USHORT nId = GetId();
     ToolBox& rTbx = GetToolBox();
