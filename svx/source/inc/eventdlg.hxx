@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:13:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:50:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@ public:
 
     virtual BOOL    FillItemSet( SfxItemSet& );
     virtual void    Reset( const SfxItemSet& );
+    using _SvxMacroTabPage::Reset;
 };
 
 
