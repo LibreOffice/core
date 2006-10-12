@@ -4,9 +4,9 @@
  *
  *  $RCSfile: assertion.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-24 10:39:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:39:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@
         Set LOGTYPE to LOGTYPE_FILEEXIT to do this.
         BCONDITION is inserted in "(...)" because user can call this macro with an complex expression!
     _____________________________________________________________________________________________________________*/
-    #if LOGTYPE==LOGTYPE_FILEXIT
+    #if LOGTYPE==LOGTYPE_FILEEXIT
 
         #define LOG_ASSERT( BCONDITION, STEXT )                                                                 \
                     if ( ( BCONDITION ) == sal_False )                                                          \
