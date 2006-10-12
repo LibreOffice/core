@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:21:28 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:55:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -293,7 +293,7 @@ SvxNumberFormat::SvxNumberFormat(SvStream &rStream)
     SetShowSymbol((BOOL)nUSHORT);
 
     if( nVersion < NUMITEM_VERSION_03 )
-        cBullet = ByteString::ConvertToUnicode( cBullet,
+        cBullet = ByteString::ConvertToUnicode( (sal_Char)cBullet,
                             (pBulletFont&&pBulletFont->GetCharSet()) ?  pBulletFont->GetCharSet()
                                         : RTL_TEXTENCODING_SYMBOL );
     if(pBulletFont)
@@ -1027,7 +1027,7 @@ int  SvxNumBulletItem::operator==( const SfxPoolItem& rCopy) const
 /* -----------------27.10.98 10:41-------------------
  *
  * --------------------------------------------------*/
-SfxPoolItem*  SvxNumBulletItem::Clone( SfxItemPool */*pPool*/ ) const
+SfxPoolItem*  SvxNumBulletItem::Clone( SfxItemPool * ) const
 {
     return new SvxNumBulletItem(*this);
 }
