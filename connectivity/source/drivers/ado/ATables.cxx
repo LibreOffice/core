@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ATables.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:15:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:30:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ Reference< XPropertySet > OTables::createDescriptor()
 }
 // -------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType OTables::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OTables::appendObject( const ::rtl::OUString&, const Reference< XPropertySet >& descriptor )
 {
     OAdoTable* pTable = NULL;
     if ( !getImplementation( pTable, descriptor ) || pTable == NULL )
