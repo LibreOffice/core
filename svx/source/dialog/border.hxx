@@ -4,9 +4,9 @@
  *
  *  $RCSfile: border.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:37:45 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:05:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,8 @@ TabPage zur Einstellung der Umrandung (Staerke, Farbe, Schatten, ...)
 
 class SvxBorderTabPage : public SfxTabPage
 {
+    using TabPage::DeactivatePage;
+
 public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
@@ -92,7 +94,6 @@ public:
     virtual void        Reset( const SfxItemSet& );
 
     void                HideShadowControls();
-    void                SetSWMode(BYTE nSet);
     virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
@@ -149,7 +150,7 @@ private:
     ImageList           aBorderImgLst;
 
     long                nMinValue;  // minimum distance
-    BYTE                nSWMode;    // table, textframe, paragraph
+    int                 nSWMode;    // table, textframe, paragraph
 
     bool                mbHorEnabled;       /// true = Inner horizontal border enabled.
     bool                mbVerEnabled;       /// true = Inner vertical border enabled.
