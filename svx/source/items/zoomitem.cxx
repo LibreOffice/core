@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zoomitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:24:45 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:56:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ SvxZoomItem::~SvxZoomItem()
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxZoomItem::Clone( SfxItemPool */*pPool*/ ) const
+SfxPoolItem* SvxZoomItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SvxZoomItem( *this );
 }
@@ -155,7 +155,9 @@ sal_Bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId
         case MID_VALUE: rVal <<= (sal_Int32) GetValue(); break;
         case MID_VALUESET: rVal <<= (sal_Int16) nValueSet; break;
         case MID_TYPE: rVal <<= (sal_Int16) eType; break;
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default:
+            DBG_ERROR("svx::SvxZoomItem::QueryValue(), Wrong MemberId!");
+            return sal_False;
     }
 
     return sal_True;
@@ -198,7 +200,7 @@ sal_Bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemb
 
                 if ( bAllConverted && nConvertedCount == ZOOM_PARAMS )
                 {
-                    SetValue( nValueTmp );
+                    SetValue( (UINT16)nValueTmp );
                     nValueSet = nValueSetTmp;
                     eType = SvxZoomType( nTypeTmp );
                     return sal_True;
@@ -207,25 +209,23 @@ sal_Bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemb
 
             return sal_False;
         }
-        break;
 
         case MID_VALUE:
         {
             sal_Int32 nVal;
             if ( rVal >>= nVal )
             {
-                SetValue( nVal );
+                SetValue( (UINT16)nVal );
                 return sal_True;
             }
             else
                 return sal_False;
         }
-        break;
 
         case MID_VALUESET:
         case MID_TYPE:
         {
-            sal_Int16 nVal;
+            sal_Int16 nVal = sal_Int16();
             if ( rVal >>= nVal )
             {
                 if ( nMemberId == MID_VALUESET )
@@ -237,9 +237,10 @@ sal_Bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemb
             else
                 return sal_False;
         }
-        break;
 
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default:
+            DBG_ERROR("svx::SvxZoomItem::PutValue(), Wrong MemberId!");
+            return sal_False;
     }
 
     return sal_True;
