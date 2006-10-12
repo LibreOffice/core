@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:17:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:05:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ using namespace svt;
 
 //-------------------------------------------------------------------
 
-#if DBG_MI
+#ifdef DBG_MI
 void DoLog_Impl( const BrowseBox *pThis, const char *pWhat, const char *pWho )
 {
     SvFileStream aLog( "d:\\cursor.log", STREAM_WRITE|STREAM_NOCREATE );
@@ -643,7 +643,7 @@ void BrowseBox::SetColumnMode( USHORT nColumnId, BrowserColumnMode nFlags )
     BrowserColumn *pCol = pCols->GetObject(nColumnPos);
     if ( pCol->Flags() != nFlags )
     {
-        pCol->Flags() = nFlags;
+        pCol->Flags() = sal::static_int_cast< HeaderBarItemBits >(nFlags);
 
         // redraw visible colums
         if ( GetUpdateMode() && ( pCol->IsFrozen() || nColumnPos > nFirstCol ) )
@@ -1160,7 +1160,7 @@ long BrowseBox::ScrollColumns( long nCols )
                 pDataWin->GetSizePixel() ) );
         }
 
-        nFirstCol += (USHORT)nCols;
+        nFirstCol = nFirstCol + (USHORT)nCols;
         aHScroll.SetThumbPos( nFirstCol - FrozenColCount() );
     }
 
@@ -1673,7 +1673,7 @@ BOOL BrowseBox::GoToRow( long nRow, BOOL bRowColMove, BOOL bKeepSelection )
 
     // compute the last visible row
     Size aSz( pDataWin->GetSizePixel() );
-    USHORT nVisibleRows = USHORT( aSz.Height() ) / GetDataRowHeight() - 1;
+    USHORT nVisibleRows = USHORT( aSz.Height() / GetDataRowHeight() - 1 );
     long nLastRow = nTopRow + nVisibleRows;
 
     // suspend Updates
@@ -2123,13 +2123,13 @@ USHORT BrowseBox::GetSelectColumnCount() const
 }
 
 //-------------------------------------------------------------------
-USHORT BrowseBox::FirstSelectedColumn( ) const
+long BrowseBox::FirstSelectedColumn( ) const
 {
     return pColSel ? pColSel->FirstSelected() : BROWSER_ENDOFSELECTION;
 }
 
 //-------------------------------------------------------------------
-USHORT BrowseBox::NextSelectedColumn( ) const
+long BrowseBox::NextSelectedColumn( ) const
 {
     return pColSel ? pColSel->NextSelected() : BROWSER_ENDOFSELECTION;
 }
@@ -2172,7 +2172,7 @@ long BrowseBox::LastSelectedRow()
 
 //-------------------------------------------------------------------
 
-BOOL BrowseBox::IsRowSelected( long nRow ) const
+bool BrowseBox::IsRowSelected( long nRow ) const
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
@@ -2181,7 +2181,7 @@ BOOL BrowseBox::IsRowSelected( long nRow ) const
 
 //-------------------------------------------------------------------
 
-BOOL BrowseBox::IsColumnSelected( USHORT nColumnId ) const
+bool BrowseBox::IsColumnSelected( USHORT nColumnId ) const
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
