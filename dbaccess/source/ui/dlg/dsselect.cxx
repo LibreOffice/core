@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsselect.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:09:45 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:37:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,7 +254,7 @@ IMPL_LINK( ODatasourceSelectDialog, CreateDBClickHdl, PushButton*, /*pButton*/ )
 }
 // -----------------------------------------------------------------------
 #ifdef HAVE_ODBC_ADMINISTRATION
-IMPL_LINK( ODatasourceSelectDialog, ManageClickHdl, PushButton*, pButton )
+IMPL_LINK( ODatasourceSelectDialog, ManageClickHdl, PushButton*, EMPTYARG )
 {
     OOdbcManagement aOdbcConfig;
     if (!aOdbcConfig.isLoaded())
