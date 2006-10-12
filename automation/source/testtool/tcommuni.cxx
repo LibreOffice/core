@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tcommuni.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:39:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:19:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ String GetHostConfig()
 {
     String aHostToTalk;
 
-    for ( int i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
+    for ( USHORT i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
     {
         if ( Application::GetCommandLineParam( i ).Copy(0,6).CompareIgnoreCaseToAscii("-host=") == COMPARE_EQUAL
 #ifndef UNX
@@ -171,7 +171,7 @@ ULONG GetTTPortConfig()
 {
     String aPortToTalk;
 
-    for ( int i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
+    for ( USHORT i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
     {
         if ( Application::GetCommandLineParam( i ).Copy(0,6).CompareIgnoreCaseToAscii("-port=") == COMPARE_EQUAL
 #ifndef UNX
@@ -197,7 +197,7 @@ ULONG GetUnoPortConfig()
 {
     String aPortToTalk;
 
-    for ( int i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
+    for ( USHORT i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
     {
         if ( Application::GetCommandLineParam( i ).Copy(0,9).CompareIgnoreCaseToAscii("-unoport=") == COMPARE_EQUAL
 #ifndef UNX
