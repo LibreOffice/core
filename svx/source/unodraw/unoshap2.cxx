@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:14:40 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:27:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -782,13 +782,12 @@ SvxShapeControlPropertyValueMapping[] =
     {style::ParagraphAdjust_RIGHT,          (sal_Int16)awt::TextAlign::RIGHT},
     {style::ParagraphAdjust_BLOCK,          (sal_Int16)awt::TextAlign::RIGHT},
     {style::ParagraphAdjust_STRETCH,        (sal_Int16)awt::TextAlign::LEFT},
-    {style::ParagraphAdjust_MAKE_FIXED_SIZE,(sal_Int16)awt::TextAlign::LEFT},
     {-1,-1}
 };
 
 void SvxShapeControl::valueAlignToParaAdjust(Any& rValue)
 {
-    sal_Int16 nValue;
+    sal_Int16 nValue = sal_Int16();
     rValue >>= nValue;
     sal_uInt16 i = 0;
     while (-1 != SvxShapeControlPropertyValueMapping[i].nFormValue)
@@ -914,7 +913,7 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyValue( const OUString& aPropertyNa
                 if ( aFormsName.equalsAscii( "FontSlant" ) )
                 {
                     awt::FontSlant eSlant = awt::FontSlant_NONE;
-                    sal_Int16 nSlant;
+                    sal_Int16 nSlant = sal_Int16();
                     if ( aValue >>= nSlant )
                     {
                         eSlant = (awt::FontSlant)nSlant;
