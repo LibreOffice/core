@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xpathlib.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:08:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:16:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xforms;
 using namespace com::sun::star::lang;
 
-xmlXPathFunction xforms_lookupFunc(void */*ctxt*/, const xmlChar *xname, const xmlChar */*ns_uri*/)
+xmlXPathFunction xforms_lookupFunc(void *, const xmlChar *xname, const xmlChar *)
 {
 
     const char *name = (char *)xname;
@@ -128,7 +128,7 @@ void xforms_ifFunction(xmlXPathParserContextPtr ctxt, int nargs)
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
     xmlChar *s1 = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
-    sal_Bool aBool = xmlXPathPopBoolean(ctxt);
+    bool aBool = xmlXPathPopBoolean(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
 
     if (aBool)
@@ -538,7 +538,7 @@ void xforms_instanceFuction(xmlXPathParserContextPtr ctxt, int nargs)
                 xmlNodePtr pNode = reinterpret_cast< xmlNodePtr >( aTunnel->getSomething(Sequence< sal_Int8 >()) );
                 xmlXPathObjectPtr pObject = xmlXPathNewNodeSet(pNode);
                 xmlXPathReturnNodeSet(ctxt, pObject->nodesetval);
-            } catch (RuntimeException& e)
+            } catch (RuntimeException&)
             {
                 xmlXPathReturnEmptyNodeSet(ctxt);
             }
@@ -566,7 +566,7 @@ void xforms_currentFunction(xmlXPathParserContextPtr ctxt, int nargs)
             xmlXPathObjectPtr pObject = xmlXPathNewNodeSet(pNode);
             xmlXPathReturnNodeSet(ctxt, pObject->nodesetval);
         }
-        catch (RuntimeException& e)
+        catch (RuntimeException&)
         {
             xmlXPathReturnEmptyNodeSet(ctxt);
         }
