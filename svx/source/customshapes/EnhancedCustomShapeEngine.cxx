@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeEngine.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:06:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:02:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,7 @@ SEQ( rtl::OUString ) SAL_CALL EnhancedCustomShapeEngine::getSupportedServiceName
 
 SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustomShape* pCustoObj, SdrObject* pRenderedShape )
 {
-    sal_Bool bHasText = pCustoObj->HasText();
+    bool bHasText = pCustoObj->HasText();
     if ( pRenderedShape || bHasText )
     {
         // applying shadow
