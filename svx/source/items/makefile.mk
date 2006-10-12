@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 23:37:00 $
+#   last change: $Author: obo $ $Date: 2006-10-12 12:54:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,9 @@ EXCEPTIONSFILES= \
         $(SLO)$/paraitem.obj \
         $(SLO)$/frmitems.obj \
         $(SLO)$/numitem.obj\
-        $(SLO)$/xmlcnitm.obj
+        $(SLO)$/xmlcnitm.obj\
+        $(SLO)$/flditem.obj \
+        $(SLO)$/customshapeitem.obj
 
 .INCLUDE :	target.mk
 
