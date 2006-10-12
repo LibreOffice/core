@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddewrap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:25:52 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:27:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,18 @@
 #include "precompiled_svtools.hxx"
 #define _SVTOOLS_SVDDE_DDEWRAP_CXX_
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include "ddewrap.hxx"
 
 //------------------------------------------------------------------------
 
-HSZ WINAPI DdeCreateStringHandleW_9x( DWORD idInst, LPCWSTR pszString, int iCodePage )
+HSZ WINAPI DdeCreateStringHandleW_9x( DWORD idInst, LPCWSTR pszString, int )
 {
     HSZ     hszResult;
     LPSTR   pszANSIString;
@@ -65,7 +71,7 @@ HSZ WINAPI DdeCreateStringHandleW_9x( DWORD idInst, LPCWSTR pszString, int iCode
 
 //------------------------------------------------------------------------
 
-DWORD WINAPI DdeQueryStringW_9x( DWORD idInst, HSZ hsz, LPWSTR pszString, DWORD cchMax, int iCodePage )
+DWORD WINAPI DdeQueryStringW_9x( DWORD idInst, HSZ hsz, LPWSTR pszString, DWORD cchMax, int )
 {
     DWORD   dwResult;
     LPSTR   pszANSIString;
