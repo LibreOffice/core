@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:18:20 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:28:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,9 +227,10 @@ check_me::~check_me()
         std::list< std::pair< sal_uInt32, SvxUnoTextRangeBase* > >::iterator aIter;
         for( aIter = maRanges.begin(); aIter != maRanges.end(); aIter++ )
         {
-            sal_Int32 nAllocNum = (*aIter).first;
-            SvxUnoTextRangeBase* pRange = (*aIter).second;
-            int nop = 0;
+            sal_Int32 nAllocNum;
+            SvxUnoTextRangeBase* pRange;
+            nAllocNum = (*aIter).first;
+            pRange = (*aIter).second;
         }
     }
 }
@@ -559,14 +560,13 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const S
 
             return sal_False;
         }
-        break;
 
     case WID_NUMLEVEL:
         {
             SvxTextForwarder* pForwarder = pEditSource? pEditSource->GetTextForwarder() : NULL;
             if(pForwarder && pSelection)
             {
-                sal_Int16 nLevel;
+                sal_Int16 nLevel = sal_Int16();
                 if( aValue >>= nLevel )
                 {
                     // #101004# Call interface method instead of unsafe cast
@@ -580,7 +580,7 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const S
         break;
     case EE_PARA_BULLETSTATE:
         {
-            sal_Bool bBullet;
+            sal_Bool bBullet = sal_Bool();
             if( aValue >>= bBullet )
             {
                 SfxUInt16Item aItem( EE_PARA_BULLETSTATE, bBullet );
@@ -633,7 +633,6 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::_getPropertyValue(const OUString& Propert
     }
 
     throw beans::UnknownPropertyException();
-    return aAny;
 }
 
 void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertyMap* pMap, uno::Any& rAny, const SfxItemSet& rSet ) throw( beans::UnknownPropertyException )
@@ -1373,7 +1372,7 @@ sal_Bool SvxUnoTextRangeBase::GoLeft(sal_Int16 nCount, sal_Bool Expand) throw()
 
     if ( bOk )
     {
-        nNewPos -= nCount;
+        nNewPos = nNewPos - nCount;
         maSelection.nStartPara = nNewPar;
         maSelection.nStartPos  = nNewPos;
     }
@@ -1570,8 +1569,6 @@ uno::Any SAL_CALL SvxUnoTextRange::queryAggregation( const uno::Type & rType )
     else QUERYINT( lang::XUnoTunnel );
     else
         return OWeakAggObject::queryAggregation( rType );
-
-    return OWeakAggObject::queryAggregation( rType );
 }
 
 uno::Any SAL_CALL SvxUnoTextRange::queryInterface( const uno::Type & rType )
