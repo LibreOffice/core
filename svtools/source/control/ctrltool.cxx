@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrltool.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:37:31 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:11:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,7 +273,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, BOOL bAll,
         nType = FONTLIST_FONTNAMETYPE_PRINTER;
 
     // Alle Fonts vom Device abfragen
-    USHORT  n = pDevice->GetDevFontCount();
+    int n = pDevice->GetDevFontCount();
     USHORT  i;
     for( i = 0; i < n; i++ )
     {
@@ -360,7 +360,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, BOOL bAll,
 // =======================================================================
 
 FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, BOOL bAll ) :
-    List( 4096, pDevice->GetDevFontCount(), 32 )
+    List( 4096, sal::static_int_cast< USHORT >(pDevice->GetDevFontCount()), 32 )
 {
     // Variablen initialisieren
     mpDev = pDevice;
@@ -835,7 +835,7 @@ const long* FontList::GetSizeAry( const FontInfo& rInfo ) const
     if ( pData )
         pDevice = pData->mpFirst->GetDevice();
 
-    USHORT nDevSizeCount = pDevice->GetDevFontSizeCount( rInfo );
+    int nDevSizeCount = pDevice->GetDevFontSizeCount( rInfo );
     if ( !nDevSizeCount ||
          (pDevice->GetDevFontSize( rInfo, 0 ).Height() == 0) )
         return aStdSizeAry;
