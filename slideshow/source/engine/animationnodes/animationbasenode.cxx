@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationbasenode.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:33:15 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:58:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,10 +112,6 @@ AnimationBaseNode::AnimationBaseNode(
     {
         // no parent-provided shape, try to extract
         // from XAnimationNode - cases 4 and 5
-
-        // try to extract Shape from parent node's target attribute
-        uno::Reference< drawing::XShape > xShape( mxAnimateNode->getTarget(),
-                                                  uno::UNO_QUERY );
 
         if( xShape.is() )
         {
