@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:05:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:20:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,14 +125,14 @@ TYPEINIT1_AUTOFACTORY( TbxImageItem, SfxUInt16Item );
 
 //---------------------------------------------------------
 
-TbxImageItem::TbxImageItem( USHORT nWhich, UINT16 nImage ) :
-    SfxUInt16Item( nWhich, nImage )
+TbxImageItem::TbxImageItem( USHORT _nWhich, UINT16 nImage ) :
+    SfxUInt16Item( _nWhich, nImage )
 {
 }
 
 //---------------------------------------------------------
 
-SfxPoolItem* TbxImageItem::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* TbxImageItem::Clone( SfxItemPool* ) const
 {
     return new TbxImageItem( *this );
 }
@@ -150,6 +150,8 @@ int TbxImageItem::operator==( const SfxPoolItem& rItem ) const
 
 class ImplGrafMetricField : public MetricField
 {
+    using Window::Update;
+
 private:
     Timer               maTimer;
     OUString            maCommand;
@@ -226,7 +228,7 @@ void ImplGrafMetricField::Modify()
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( ImplGrafMetricField, ImplModifyHdl, Timer*, pTimer )
+IMPL_LINK( ImplGrafMetricField, ImplModifyHdl, Timer*, EMPTYARG )
 {
     const long nVal = GetValue();
 
@@ -327,6 +329,7 @@ static USHORT ImplGetRID( const OUString& aCommand, bool bHighContrast )
 
 class ImplGrafControl : public Control
 {
+    using Window::Update;
 private:
     FixedImage              maImage;
     ImplGrafMetricField     maField;
@@ -407,6 +410,7 @@ void ImplGrafControl::GetFocus()
 
 class ImplGrafModeControl : public ListBox
 {
+    using Window::Update;
 private:
     USHORT              mnCurPos;
     Reference< XFrame > mxFrame;
@@ -659,7 +663,7 @@ SvxGrafFilterToolBoxControl::~SvxGrafFilterToolBoxControl()
 
 // -----------------------------------------------------------------------------
 
-void SvxGrafFilterToolBoxControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxGrafFilterToolBoxControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* )
 {
     GetToolBox().EnableItem( GetId(), ( eState != SFX_ITEM_DISABLED ) );
 }
@@ -705,7 +709,7 @@ SvxGrafToolBoxControl::~SvxGrafToolBoxControl()
 
 // -----------------------------------------------------------------------------
 
-void SvxGrafToolBoxControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxGrafToolBoxControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     ImplGrafControl* pCtrl = (ImplGrafControl*) GetToolBox().GetItemWindow( GetId() );
@@ -846,7 +850,7 @@ SvxGrafModeToolBoxControl::~SvxGrafModeToolBoxControl()
 
 // -----------------------------------------------------------------------------
 
-void SvxGrafModeToolBoxControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxGrafModeToolBoxControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     ImplGrafModeControl* pCtrl = (ImplGrafModeControl*) GetToolBox().GetItemWindow( GetId() );
@@ -888,7 +892,6 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
     const SfxItemSet*   pArgs = rReq.GetArgs();
     const SfxPoolItem*  pItem;
     USHORT              nSlot = rReq.GetSlot();
-    BOOL                bGeometryChanged = FALSE;
 
     if( !pArgs || SFX_ITEM_SET != pArgs->GetItemState( nSlot, FALSE, &pItem ))
         pItem = 0;
@@ -1158,7 +1161,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
                 if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFMODE ) )
                 {
                     rSet.Put( SfxUInt16Item( nSlotId,
-                        ITEMVALUE( aAttrSet, SDRATTR_GRAFMODE, SdrGrafModeItem ) ) );
+                        sal::static_int_cast< UINT16 >( ITEMVALUE( aAttrSet, SDRATTR_GRAFMODE, SdrGrafModeItem ) ) ) );
                 }
             }
             break;
