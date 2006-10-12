@@ -4,9 +4,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:17:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:51:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 // ------------------------------------------------------------------------
 //Sonderzeichen einfuegen fuer Edits
 
-extern "C" SVX_DLLPUBLIC String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
+SVX_DLLPUBLIC String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
 {
     String sRet;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
