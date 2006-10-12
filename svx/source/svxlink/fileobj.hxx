@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileobj.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:44:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:18:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,10 @@
 #include <sfx2/docfile.hxx>
 #endif
 
+#ifndef _SVXLINKMGR_HXX
+#include "linkmgr.hxx"
+#endif
+
 class Graphic;
 struct Impl_DownLoadData;
 
@@ -74,7 +78,7 @@ class SvFileObject : public sfx2::SvLinkSource
 
     BOOL GetGraphic_Impl( Graphic&, SvStream* pStream = 0 );
     BOOL LoadFile_Impl();
-    void SendStateChg_Impl( USHORT nState );
+    void SendStateChg_Impl( LinkState nState );
 
     DECL_STATIC_LINK( SvFileObject, DelMedium_Impl, SfxMediumRef* );
     DECL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void* );
