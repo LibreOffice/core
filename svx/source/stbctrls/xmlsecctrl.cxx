@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsecctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:45:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:05:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ XmlSecStatusBarControl::XmlSecStatusBarControl( USHORT _nSlotId,  USHORT _nId, S
 
     ,mpImpl( new XmlSecStatusBarControl_Impl )
 {
-    mpImpl->mnState = SIGNATURESTATE_UNKNOWN;
+    mpImpl->mnState = (UINT16)SIGNATURESTATE_UNKNOWN;
 
     sal_Bool bIsDark = GetStatusBar().GetBackground().GetColor().IsDark();
     mpImpl->maImage = Image( SVX_RES( bIsDark ? RID_SVXBMP_SIGNET_H : RID_SVXBMP_SIGNET ) );
@@ -137,7 +137,7 @@ void XmlSecStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState, con
 
     if( SFX_ITEM_AVAILABLE != eState )
     {
-        mpImpl->mnState = SIGNATURESTATE_UNKNOWN;
+        mpImpl->mnState = (UINT16)SIGNATURESTATE_UNKNOWN;
     }
     else if( pState->ISA( SfxUInt16Item ) )
     {
@@ -147,7 +147,7 @@ void XmlSecStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState, con
     else
     {
         DBG_ERRORFILE( "+XmlSecStatusBarControl::StateChanged(): invalid item type" );
-        mpImpl->mnState = SIGNATURESTATE_UNKNOWN;
+        mpImpl->mnState = (UINT16)SIGNATURESTATE_UNKNOWN;
     }
 
     if( GetStatusBar().AreItemsVisible() )              // necessary ?
@@ -223,7 +223,7 @@ void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
     pDev->SetFillColor( aOldFillColor );
 }
 
-long XmlSecStatusBarControl::GetDefItemWidth( StatusBar& _rStatusBar )
+long XmlSecStatusBarControl::GetDefItemWidth( StatusBar& )
 {
     return 16;
 }
