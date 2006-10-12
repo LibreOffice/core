@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationaudionode.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:29:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:58:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ protected:
 
 private:
     virtual void activate_st();
-    virtual void deactivate_st( NodeState eDestState, bool );
+    virtual void deactivate_st( NodeState eDestState );
     virtual bool hasPendingAnimation() const;
 
     /// overriden, because we need to deal with STOPAUDIO commands
