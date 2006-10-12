@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textedit.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:58:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:24:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,8 @@ void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
         else if( rTextHint.GetId() == TEXT_HINT_FORMATPARA )
         {
-            DoDelayedSyntaxHighlight( rTextHint.GetValue() );
+            DoDelayedSyntaxHighlight(
+                sal::static_int_cast< xub_StrLen >( rTextHint.GetValue() ) );
             if ( pTextView->GetTextEngine()->IsModified() )
                 ModifyHdl.Call( NULL );
         }
@@ -312,7 +313,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
 
         SbTextType eCol = r.eType;
         Color aColor;
-        xub_StrLen nLine = nLineOff+r.nLine-1; // -1, weil Basic bei 1 beginnt
+        ULONG nLine = nLineOff+r.nLine-1; // -1, weil Basic bei 1 beginnt
         switch ( eCol )
         {
             case SB_KEYWORD:
@@ -778,7 +779,8 @@ void TextEdit::SetSelection( const TextSelection& rSelection ){ aEdit.pTextView-
 
 USHORT TextEdit::GetLineNr() const
 {
-    return aEdit.pTextView->GetSelection().GetEnd().GetPara()+1;
+    return sal::static_int_cast< USHORT >(
+        aEdit.pTextView->GetSelection().GetEnd().GetPara()+1);
 }
 
 void TextEdit::ReplaceSelected( const String& rStr ){ aEdit.pTextView->InsertText(rStr); }
@@ -800,7 +802,7 @@ BOOL TextEdit::Find( const String& s )
     DBG_CHKTHIS(TextEdit,0);
 
     TextSelection aSelection = aEdit.pTextView->GetSelection();
-    USHORT nPara = aSelection.GetStart().GetPara();
+    ULONG nPara = aSelection.GetStart().GetPara();
     xub_StrLen nIndex = aSelection.GetStart().GetIndex();
 
     if ( aSelection.HasRange() )
