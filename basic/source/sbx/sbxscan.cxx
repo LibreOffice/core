@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxscan.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:11:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:33:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ SbxError ImpScan( const XubString& rWSrc, double& nVal, SbxDataType& rType,
     char cIntntlComma, cIntntl1000;
     char cNonIntntlComma = '.';
 
-    sal_Unicode cDecimalSep, cThousandSep;
+    sal_Unicode cDecimalSep, cThousandSep = 0;
     if( bAllowIntntl || bOnlyIntntl )
     {
         ImpGetIntntlSep( cDecimalSep, cThousandSep );
@@ -189,7 +189,7 @@ SbxError ImpScan( const XubString& rWSrc, double& nVal, SbxDataType& rType,
         }
 
         nVal = atof( buf );
-        ndig -= comma;
+        ndig = ndig - comma;
         // zu viele Zahlen fuer SINGLE?
         if( ndig > 15 || ncdig > 6 )
             eScanType = SbxDOUBLE;
@@ -216,7 +216,7 @@ SbxError ImpScan( const XubString& rWSrc, double& nVal, SbxDataType& rType,
         int i;
         while( isalnum( *p ) )
         {
-            char ch = toupper( *p );
+            char ch = sal::static_int_cast< char >( toupper( *p ) );
             p++;
             if( strchr( cmp, ch ) ) *q++ = ch;
             else bRes = FALSE;
@@ -307,7 +307,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
         while( nNum >= 10.0 ) nNum /= 10.0, nExp++;
     }
     if( !bFix && !nExpWidth )
-        nDig += nExp;
+        nDig = nDig + nExp;
     else if( bFix && !nPrec )
         nDig = nExp + 1;
 
@@ -346,7 +346,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
             if( i < 16 )
             {
                 digit = (int) nNum;
-                *pBuf++ = digit + '0';
+                *pBuf++ = sal::static_int_cast< char >(digit + '0');
                 nNum =( nNum - digit ) * 10.0;
             } else
                 *pBuf++ = '0';
@@ -372,12 +372,12 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
         while( nExpWidth > 3 ) *pBuf++ = '0', nExpWidth--;
         if( nExp >= 100 || nExpWidth == 3 )
         {
-            *pBuf++ = nExp/100 + '0';
+            *pBuf++ = sal::static_int_cast< char >(nExp/100 + '0');
             nExp %= 100;
         }
         if( nExp/10 || nExpWidth >= 2 )
-            *pBuf++ = nExp/10 + '0';
-        *pBuf++ = nExp%10 + '0';
+            *pBuf++ = sal::static_int_cast< char >(nExp/10 + '0');
+        *pBuf++ = sal::static_int_cast< char >(nExp%10 + '0');
     }
     *pBuf = 0;
 }
@@ -656,7 +656,7 @@ public:
 void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
 {
     short nComma = 0;
-    double d;
+    double d = 0;
     SbxDataType eType = GetType();
     switch( eType )
     {
