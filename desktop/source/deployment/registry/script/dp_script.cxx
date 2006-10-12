@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_script.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:44:34 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:11:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,8 +319,8 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 //______________________________________________________________________________
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::PackageImpl::isRegistered_(
-    ::osl::ResettableMutexGuard & guard,
-    ::rtl::Reference<AbortChannel> const & abortChannel,
+    ::osl::ResettableMutexGuard &,
+    ::rtl::Reference<AbortChannel> const &,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     BackendImpl * that = getMyBackend();
@@ -344,13 +344,13 @@ BackendImpl::PackageImpl::isRegistered_(
 
 //______________________________________________________________________________
 void BackendImpl::PackageImpl::processPackage_(
-    ::osl::ResettableMutexGuard & guard,
-    bool registerPackage,
-    ::rtl::Reference<AbortChannel> const & abortChannel,
+    ::osl::ResettableMutexGuard &,
+    bool doRegisterPackage,
+    ::rtl::Reference<AbortChannel> const &,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     BackendImpl * that = getMyBackend();
-    if (registerPackage)
+    if (doRegisterPackage)
     {
         if (m_scriptURL.getLength() > 0) {
             if (that->m_xScriptLibs.is())
