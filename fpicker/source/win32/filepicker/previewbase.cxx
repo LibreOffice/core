@@ -4,9 +4,9 @@
  *
  *  $RCSfile: previewbase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:57:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:54:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ sal_Bool SAL_CALL PreviewBase::getShowState() throw (RuntimeException)
 //
 //-------------------------------
 
-sal_Int16 SAL_CALL PreviewBase::getImaginaryShowState() const
+sal_Bool SAL_CALL PreviewBase::getImaginaryShowState() const
 {
     return m_bShowState;
 }
