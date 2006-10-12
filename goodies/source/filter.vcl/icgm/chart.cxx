@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chart.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:46:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:35:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 CGMChart::CGMChart( CGM& rCGM ) :
     mpCGM       ( &rCGM )
 {
-    for ( int i = 0; i < 7; i++ )
+    for ( sal_Int8 i = 0; i < 7; i++ )
     {
         mDataNode[ i ].nBoxX1 = mDataNode[ i ].nBoxY1 = 0 ;
         mDataNode[ i ].nBoxX2 = mDataNode[ i ].nBoxY2 = 0 ;
