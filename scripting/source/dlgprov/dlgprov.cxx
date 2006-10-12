@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgprov.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:26:57 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:34:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -479,7 +479,7 @@ namespace dlgprov
                 aHandlerAny <<= rxHandler;
                 xIntrospectionAccess = xIntrospection->inspect( aHandlerAny );
             }
-            catch( RuntimeException& e )
+            catch( RuntimeException& )
             {
                 xIntrospectionAccess.clear();
             }
