@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paralleltimecontainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:36:22 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:00:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@ void ParallelTimeContainer::activate_st()
         static_cast<std::size_t>(std::count_if(
                                      maChildren.begin(), maChildren.end(),
                                      boost::mem_fn(&AnimationNode::resolve) ));
+    (void) nResolvedNodes; // avoid warning
     OSL_ENSURE( nResolvedNodes == maChildren.size(),
                 "### resolving all children failed!" );
 
