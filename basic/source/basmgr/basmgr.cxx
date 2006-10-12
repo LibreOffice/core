@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:58:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:24:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2579,8 +2579,7 @@ sal_Bool ModuleContainer_Impl::hasElements()
     throw(RuntimeException)
 {
     SbxArray* pMods = mpLib ? mpLib->GetModules() : NULL;
-    sal_Bool bRet = pMods ? (pMods->Count() > 0) : sal_False;
-    return bRet;
+    return pMods && pMods->Count() > 0;
 }
 
 // Methods XNameAccess
