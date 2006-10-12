@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msoleexp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:27:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:59:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,7 @@ sal_Bool UseOldMSExport()
                     uno::Any aResult = xNameAccess->getByName(
                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseOldExport" ) ) );
 
-                    sal_Bool bResult;
+                    sal_Bool bResult = sal_Bool();
                     if ( aResult >>= bResult )
                         return bResult;
                 }
