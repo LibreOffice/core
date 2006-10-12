@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchcfg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:29:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:01:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ using namespace com::sun::star::beans;
 
 //-----------------------------------------------------------------------------
 typedef SvxSearchEngineData* SvxSearchEngineDataPtr;
-SV_DECL_PTRARR_DEL(SvxSearchEngineArr, SvxSearchEngineDataPtr, 2, 2);
+SV_DECL_PTRARR_DEL(SvxSearchEngineArr, SvxSearchEngineDataPtr, 2, 2)
 SV_IMPL_PTRARR(SvxSearchEngineArr, SvxSearchEngineDataPtr);
 //-----------------------------------------------------------------------------
 struct SvxSearchConfig_Impl
@@ -192,7 +192,7 @@ void SvxSearchConfig::Load()
 /* -----------------------------17.01.01 09:57--------------------------------
 
  ---------------------------------------------------------------------------*/
-void    SvxSearchConfig::Notify( const Sequence<OUString>& rPropertyNames)
+void    SvxSearchConfig::Notify( const Sequence<OUString>& )
 {
     Load();
 }
@@ -208,7 +208,6 @@ void SvxSearchConfig::Commit()
     {
         Sequence<PropertyValue> aSetValues(12 * pImpl->aEngineArr.Count());
         PropertyValue* pSetValues = aSetValues.getArray();
-        sal_Int32 nSetValue = 0;
 
         const Sequence<OUString>& rPropNames = lcl_GetSearchPropertyNames_Impl();
         const OUString* pPropNames = rPropNames.getConstArray();
