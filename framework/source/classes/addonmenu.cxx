@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonmenu.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:43:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:39:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ AddonMenu::AddonMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame:
 
 AddonMenu::~AddonMenu()
 {
-    for ( int i = 0; i < GetItemCount(); i++ )
+    for ( USHORT i = 0; i < GetItemCount(); i++ )
     {
         if ( GetItemType( i ) != MENUITEM_SEPARATOR )
         {
@@ -148,7 +148,7 @@ AddonPopupMenu::AddonPopupMenu( com::sun::star::uno::Reference< com::sun::star::
 
 AddonPopupMenu::~AddonPopupMenu()
 {
-    for ( int i = 0; i < GetItemCount(); i++ )
+    for ( USHORT i = 0; i < GetItemCount(); i++ )
     {
         if ( GetItemType( i ) != MENUITEM_SEPARATOR )
         {
