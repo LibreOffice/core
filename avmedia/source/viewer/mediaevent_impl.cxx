@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediaevent_impl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:58:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:26:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,9 @@ void SAL_CALL MediaEventListenersImpl::mousePressed( const ::com::sun::star::awt
 
     if( mpNotifyWindow )
     {
-        MouseEvent aVCLMouseEvt( Point( e.X, e.Y ), e.ClickCount, 0,
+        MouseEvent aVCLMouseEvt( Point( e.X, e.Y ),
+                                 sal::static_int_cast< USHORT >(e.ClickCount),
+                                 0,
                                 ( ( e.Buttons & 1 ) ? MOUSE_LEFT : 0 ) |
                                 ( ( e.Buttons & 2 ) ? MOUSE_RIGHT : 0 ) |
                                 ( ( e.Buttons & 4 ) ? MOUSE_MIDDLE : 0 ),
@@ -143,7 +145,9 @@ void SAL_CALL MediaEventListenersImpl::mouseReleased( const ::com::sun::star::aw
 
     if( mpNotifyWindow )
     {
-        MouseEvent aVCLMouseEvt( Point( e.X, e.Y ), e.ClickCount, 0,
+        MouseEvent aVCLMouseEvt( Point( e.X, e.Y ),
+                                 sal::static_int_cast< USHORT >(e.ClickCount),
+                                 0,
                                 ( ( e.Buttons & 1 ) ? MOUSE_LEFT : 0 ) |
                                 ( ( e.Buttons & 2 ) ? MOUSE_RIGHT : 0 ) |
                                 ( ( e.Buttons & 4 ) ? MOUSE_MIDDLE : 0 ),
