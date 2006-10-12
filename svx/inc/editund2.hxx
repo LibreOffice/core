@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editund2.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:44:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:40:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@ class ImpEditEngine;
 
 class SVX_DLLPUBLIC EditUndoManager : public SfxUndoManager
 {
+    using SfxUndoManager::Undo;
+    using SfxUndoManager::Redo;
+
 private:
     ImpEditEngine*  pImpEE;
 public:
@@ -75,7 +78,6 @@ public:
 
     virtual void    Undo()      = 0;
     virtual void    Redo()      = 0;
-    virtual void    Repeat()    = 0;
 
     virtual BOOL    CanRepeat(SfxRepeatTarget&) const;
     virtual String  GetComment() const;
