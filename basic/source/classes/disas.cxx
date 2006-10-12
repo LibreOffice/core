@@ -4,9 +4,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:59:11 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:24:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,6 @@
 #include "sb.hxx"
 #include "iosys.hxx"
 #include "disas.hxx"
-// Makro MEMBER()
-#include "macfix.hxx"
 
 
 static const char* pOp1[] = {
@@ -164,59 +162,59 @@ static const char** pOps[3] = { pOp1, pOp2, pOp3 };
 typedef void( SbiDisas::*Func )( String& );     // Verarbeitungsroutine
 
 static const Func pOperand2[] = {
-    MEMBER(SbiDisas::StrOp),    // Laden einer numerischen Konstanten (+ID)
-    MEMBER(SbiDisas::StrOp),    // Laden einer Stringkonstanten (+ID)
-    MEMBER(SbiDisas::ImmOp),    // Immediate Load (+Wert)
-    MEMBER(SbiDisas::StrOp),    // Speichern eines benannten Arguments(+ID)
-    MEMBER(SbiDisas::ImmOp),    // String auf feste Laenge bringen (+Laenge)
+    &SbiDisas::StrOp,   // Laden einer numerischen Konstanten (+ID)
+    &SbiDisas::StrOp,   // Laden einer Stringkonstanten (+ID)
+    &SbiDisas::ImmOp,   // Immediate Load (+Wert)
+    &SbiDisas::StrOp,   // Speichern eines benannten Arguments(+ID)
+    &SbiDisas::ImmOp,   // String auf feste Laenge bringen (+Laenge)
     // Verzweigungen
-    MEMBER(SbiDisas::LblOp),    // Sprung (+Target)
-    MEMBER(SbiDisas::LblOp),    // TOS auswerten), bedingter Sprung (+Target)
-    MEMBER(SbiDisas::LblOp),    // TOS auswerten), bedingter Sprung (+Target)
-    MEMBER(SbiDisas::OnOp),     // TOS auswerten), Sprung in JUMP-Tabelle (+MaxVal)
-    MEMBER(SbiDisas::LblOp),    // UP-Aufruf (+Target)
-    MEMBER(SbiDisas::ReturnOp), // UP-Return (+0 oder Target)
-    MEMBER(SbiDisas::LblOp),    // FOR-Variable testen), inkrementieren (+Endlabel)
-    MEMBER(SbiDisas::LblOp),    // Tos+1 <= Case <= Tos), 2xremove (+Target)
-    MEMBER(SbiDisas::LblOp),    // Fehler-Handler (+Offset)
-    MEMBER(SbiDisas::ResumeOp), // Resume nach Fehlern (+0 or 1 or Label)
+    &SbiDisas::LblOp,   // Sprung (+Target)
+    &SbiDisas::LblOp,   // TOS auswerten), bedingter Sprung (+Target)
+    &SbiDisas::LblOp,   // TOS auswerten), bedingter Sprung (+Target)
+    &SbiDisas::OnOp,        // TOS auswerten), Sprung in JUMP-Tabelle (+MaxVal)
+    &SbiDisas::LblOp,   // UP-Aufruf (+Target)
+    &SbiDisas::ReturnOp,    // UP-Return (+0 oder Target)
+    &SbiDisas::LblOp,   // FOR-Variable testen), inkrementieren (+Endlabel)
+    &SbiDisas::LblOp,   // Tos+1 <= Case <= Tos), 2xremove (+Target)
+    &SbiDisas::LblOp,   // Fehler-Handler (+Offset)
+    &SbiDisas::ResumeOp,    // Resume nach Fehlern (+0 or 1 or Label)
     // E/A
-    MEMBER(SbiDisas::CloseOp),  // (+Kanal/0)
-    MEMBER(SbiDisas::CharOp),   // (+char)
+    &SbiDisas::CloseOp, // (+Kanal/0)
+    &SbiDisas::CharOp,  // (+char)
     // Objekte
-    MEMBER(SbiDisas::StrOp),    // Klassennamen testen (+StringId)
-    MEMBER(SbiDisas::StrOp),    // TESTCLASS, Check TOS class (+StringId)
-    MEMBER(SbiDisas::StrOp),    // Libnamen fuer Declare-Procs setzen (+StringId)
-    MEMBER(SbiDisas::ImmOp),    // TOS wird um BASE erhoeht, BASE davor gepusht
-    MEMBER(SbiDisas::TypeOp),   // Letzten Parameter in Argv konvertieren (+Typ)
+    &SbiDisas::StrOp,   // Klassennamen testen (+StringId)
+    &SbiDisas::StrOp,   // TESTCLASS, Check TOS class (+StringId)
+    &SbiDisas::StrOp,   // Libnamen fuer Declare-Procs setzen (+StringId)
+    &SbiDisas::ImmOp,   // TOS wird um BASE erhoeht, BASE davor gepusht
+    &SbiDisas::TypeOp,      // Letzten Parameter in Argv konvertieren (+Typ)
 };
 
 static const Func pOperand3[] = {
     // Alle Opcodes mit zwei Operanden
-    MEMBER(SbiDisas::VarOp),    // Laden aus RTL (+StringID+Typ)
-    MEMBER(SbiDisas::VarOp),    // Laden (+StringID+Typ)
-    MEMBER(SbiDisas::VarOp),    // Laden Element (+StringID+Typ)
-    MEMBER(SbiDisas::OffOp),    // Parameter (+Offset+Typ)
+    &SbiDisas::VarOp,   // Laden aus RTL (+StringID+Typ)
+    &SbiDisas::VarOp,   // Laden (+StringID+Typ)
+    &SbiDisas::VarOp,   // Laden Element (+StringID+Typ)
+    &SbiDisas::OffOp,   // Parameter (+Offset+Typ)
     // Verzweigen
-    MEMBER(SbiDisas::VarOp),    // DECLARE-Methode rufen (+StringID+Typ)
-    MEMBER(SbiDisas::VarOp),    // CDecl-DECLARE-Methode rufen (+StringID+Typ)
-    MEMBER(SbiDisas::CaseOp),   // Case-Test (+Test-Opcode+False-Target)
-    MEMBER(SbiDisas::StmntOp),  // Statement (+Zeilen+Spalte)
+    &SbiDisas::VarOp,   // DECLARE-Methode rufen (+StringID+Typ)
+    &SbiDisas::VarOp,   // CDecl-DECLARE-Methode rufen (+StringID+Typ)
+    &SbiDisas::CaseOp,  // Case-Test (+Test-Opcode+False-Target)
+    &SbiDisas::StmntOp, // Statement (+Zeilen+Spalte)
     // E/A
-    MEMBER(SbiDisas::StrmOp),   // (+SvStreamFlags+Flags)
+    &SbiDisas::StrmOp,  // (+SvStreamFlags+Flags)
     // Objekte
-    MEMBER(SbiDisas::VarDefOp), // Lokale Variable definieren (+StringID+Typ)
-    MEMBER(SbiDisas::VarDefOp), // Modulglobale Variable definieren (+StringID+Typ)
-    MEMBER(SbiDisas::VarDefOp), // Globale Variable definieren (+StringID+Typ)
-    MEMBER(SbiDisas::Str2Op),   // Objekt kreieren (+StringId+StringId)
-    MEMBER(SbiDisas::VarDefOp), // Statische Variable definieren (+StringID+Typ)
-    MEMBER(SbiDisas::Str2Op),   // User defined Objekt kreieren (+StringId+StringId)
-    MEMBER(SbiDisas::Str2Op),   // User defined Objekt-Array kreieren (+StringId+StringId)
-    MEMBER(SbiDisas::VarDefOp), // Globale Variable definieren, die beim Neustart von Basic
+    &SbiDisas::VarDefOp, // Lokale Variable definieren (+StringID+Typ)
+    &SbiDisas::VarDefOp, // Modulglobale Variable definieren (+StringID+Typ)
+    &SbiDisas::VarDefOp, // Globale Variable definieren (+StringID+Typ)
+    &SbiDisas::Str2Op,  // Objekt kreieren (+StringId+StringId)
+    &SbiDisas::VarDefOp, // Statische Variable definieren (+StringID+Typ)
+    &SbiDisas::Str2Op,  // User defined Objekt kreieren (+StringId+StringId)
+    &SbiDisas::Str2Op,  // User defined Objekt-Array kreieren (+StringId+StringId)
+    &SbiDisas::VarDefOp, // Globale Variable definieren, die beim Neustart von Basic
                                 // nicht ueberschrieben wird, P=PERSIST (+StringID+Typ)
-    MEMBER(SbiDisas::VarOp),    // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
-    MEMBER(SbiDisas::Str2Op),   // User defined Objekt-Array redimensionieren (+StringId+StringId)
-    MEMBER(SbiDisas::VarOp),    // FIND_CM
+    &SbiDisas::VarOp,    // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
+    &SbiDisas::Str2Op,  // User defined Objekt-Array redimensionieren (+StringId+StringId)
+    &SbiDisas::VarOp,   // FIND_CM
 };
 
 
@@ -249,11 +247,9 @@ SbiDisas::SbiDisas( SbModule* p, const SbiImage* q ) : rImg( *q ), pMod( p )
     nLine = nOff = nPC = nOp1 = nOp2 = nParts = 0;
     eOp = _NOP;
     // Label-Bits setzen
-    USHORT nPos;
     nOff = 0;
     while( Fetch() )
     {
-        BOOL bLbl = FALSE;
         switch( eOp )
         {
             case _RESUME: if( nOp1 <= 1 ) break;
@@ -265,11 +261,11 @@ SbiDisas::SbiDisas( SbModule* p, const SbiImage* q ) : rImg( *q ), pMod( p )
             case _TESTFOR:
             case _CASEIS:
             case _CASETO:
-            case _ERRHDL: nPos = nOp1; bLbl = TRUE; break;
+            case _ERRHDL:
+                cLabels[ nOp1 >> 3 ] |= ( 1 << ( nOp1 & 7 ) );
+                break;
             default: break;
         }
-        if( bLbl )
-            cLabels[ nPos >> 3 ] |= ( 1 << ( nPos & 7 ) );
     }
     nOff = 0;
     // Die Publics noch dazu
@@ -278,7 +274,7 @@ SbiDisas::SbiDisas( SbModule* p, const SbiImage* q ) : rImg( *q ), pMod( p )
         SbMethod* pMeth = PTR_CAST(SbMethod,pMod->GetMethods()->Get( i ));
         if( pMeth )
         {
-            nPos = pMeth->GetId();
+            USHORT nPos = pMeth->GetId();
             cLabels[ nPos >> 3 ] |= ( 1 << ( nPos & 7 ) );
         }
     }
@@ -437,7 +433,7 @@ BOOL SbiDisas::DisasLine( String& rText )
     }
     snprintf( cBuf, sizeof(cBuf), pMask[ nParts ], nPC, (USHORT) eOp, nOp1, nOp2 );
     rText.AppendAscii( cBuf );
-    short n = eOp;
+    int n = eOp;
     if( eOp >= SbOP2_START )
         n -= SbOP2_START;
     else if( eOp >= SbOP1_START )
