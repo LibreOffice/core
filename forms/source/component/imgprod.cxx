@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imgprod.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:54:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:13:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,7 +398,7 @@ void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeExcept
 
 sal_Bool ImageProducer::ImplImportGraphic( Graphic& rGraphic )
 {
-    int     nFilter = GRFILTER_FORMAT_DONTKNOW;
+    USHORT  nFilter = GRFILTER_FORMAT_DONTKNOW;
     short   nRet;
     sal_Bool    bRet = sal_False;
 
@@ -587,7 +587,8 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
                     for( long nX = nStartX; nX <= nEndX; nX++ )
                     {
                         if( pMskAcc->GetPixel( nY, nX ) == aWhite )
-                            *pTmp++ = mnTransIndex;
+                            *pTmp++ = sal::static_int_cast< sal_Int8 >(
+                                mnTransIndex );
                         else
                             *pTmp++ = pBmpAcc->GetPixel( nY, nX ).GetIndex();
                     }
