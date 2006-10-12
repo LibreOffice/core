@@ -4,9 +4,9 @@
  *
  *  $RCSfile: weighhdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:58:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:51:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ XMLFontWeightPropHdl::~XMLFontWeightPropHdl()
     // Nothing to do
 }
 
-sal_Bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
     sal_uInt16 nWeight = 0;
@@ -130,8 +130,9 @@ sal_Bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rVa
     else
     {
         sal_Int32 nTemp;
-        if( ( bRet = rUnitConverter.convertNumber( nTemp, rStrImpValue, 100, 900 ) ) )
-            nWeight = nTemp;
+        bRet = SvXMLUnitConverter::convertNumber( nTemp, rStrImpValue, 100, 900 );
+        if( bRet )
+            nWeight = sal::static_int_cast< sal_uInt16 >(nTemp);
     }
 
     if( bRet )
@@ -159,7 +160,7 @@ sal_Bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rVa
     return bRet;
 }
 
-sal_Bool XMLFontWeightPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLFontWeightPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
     FontWeight eWeight;
@@ -199,7 +200,7 @@ sal_Bool XMLFontWeightPropHdl::exportXML( OUString& rStrExpValue, const Any& rVa
         else if( 700 == nWeight )
             aOut.append( GetXMLToken(XML_WEIGHT_BOLD) );
         else
-            rUnitConverter.convertNumber( aOut, (sal_Int32)nWeight );
+            SvXMLUnitConverter::convertNumber( aOut, (sal_Int32)nWeight );
 
         rStrExpValue = aOut.makeStringAndClear();
     }
