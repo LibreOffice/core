@@ -4,9 +4,9 @@
  *
  *  $RCSfile: langbox.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:26:34 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:17:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,8 +175,8 @@ void SvxLanguageBox::Init()
     if ( m_bWithCheckmark )
     {
         SvxLanguageTable aLangTable;
-        const USHORT nCount = aLangTable.GetEntryCount();
-        for ( USHORT i = 0; i < nCount; i++ )
+        sal_uInt32 nCount = aLangTable.GetEntryCount();
+        for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
             LanguageType nLangType = aLangTable.GetTypeAtIndex( i );
 
@@ -283,56 +283,53 @@ void SvxLanguageBox::SetLanguageList( INT16 nLangList,
         SvxLanguageTable aLangTable;
         ::com::sun::star::uno::Sequence< sal_uInt16 > xKnown;
         const sal_uInt16* pKnown;
-        USHORT nCount;
+        sal_uInt32 nCount;
         if ( nLangList & LANG_LIST_ONLY_KNOWN )
         {
             xKnown = LocaleDataWrapper::getInstalledLanguageTypes();
             pKnown = xKnown.getConstArray();
-            nCount = (USHORT) xKnown.getLength();
+            nCount = xKnown.getLength();
         }
         else
         {
             nCount = aLangTable.GetEntryCount();
             pKnown = NULL;
         }
-        for ( USHORT i = 0; i < nCount; i++ )
+        for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
             LanguageType nLangType;
             if ( nLangList & LANG_LIST_ONLY_KNOWN )
                 nLangType = pKnown[i];
             else
                 nLangType = aLangTable.GetTypeAtIndex( i );
-            BOOL bInsert = FALSE;
             if ( nLangType != LANGUAGE_DONTKNOW &&
-                 nLangType != LANGUAGE_SYSTEM   &&
-                 nLangType != LANGUAGE_NONE     &&
-                !(LANGUAGE_USER1 <= nLangType  &&  nLangType <= LANGUAGE_USER9) )
-            {
-                if (!bInsert && (nLangList & LANG_LIST_ALL))
-                    bInsert |= TRUE;
-                if (!bInsert && (nLangList & LANG_LIST_WESTERN))
-                    bInsert |= SCRIPTTYPE_LATIN == SvtLanguageOptions::GetScriptTypeOfLanguage( nLangType );
-                if (!bInsert && (nLangList & LANG_LIST_CTL))
-                    bInsert |= SCRIPTTYPE_COMPLEX == SvtLanguageOptions::GetScriptTypeOfLanguage( nLangType );
-                if (!bInsert && (nLangList & LANG_LIST_CJK))
-                    bInsert |= SCRIPTTYPE_ASIAN == SvtLanguageOptions::GetScriptTypeOfLanguage( nLangType );
-                if (!bInsert && (nLangList & LANG_LIST_FBD_CHARS))
-                    bInsert |= MsLangId::hasForbiddenCharacters( nLangType );
-                if (!bInsert && (nLangList & LANG_LIST_SPELL_AVAIL))
-                    bInsert |= lcl_SeqHasLang( aSpellAvailLang, nLangType );
-                if (!bInsert && (nLangList & LANG_LIST_HYPH_AVAIL))
-                    bInsert |= lcl_SeqHasLang( aHyphAvailLang, nLangType );
-                if (!bInsert && (nLangList & LANG_LIST_THES_AVAIL))
-                    bInsert |= lcl_SeqHasLang( aThesAvailLang, nLangType );
-                if (!bInsert && (nLangList & LANG_LIST_SPELL_USED))
-                    bInsert |= lcl_SeqHasLang( aSpellUsedLang, nLangType );
-                if (!bInsert && (nLangList & LANG_LIST_HYPH_USED))
-                    bInsert |= lcl_SeqHasLang( aHyphUsedLang, nLangType );
-                if (!bInsert && (nLangList & LANG_LIST_THES_USED))
-                    bInsert |= lcl_SeqHasLang( aThesUsedLang, nLangType );
-            }
-
-            if (bInsert)
+                 nLangType != LANGUAGE_SYSTEM &&
+                 nLangType != LANGUAGE_NONE &&
+                 (nLangType < LANGUAGE_USER1 || nLangType > LANGUAGE_USER9) &&
+                 ((nLangList & LANG_LIST_ALL) != 0 ||
+                  ((nLangList & LANG_LIST_WESTERN) != 0 &&
+                   (SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType) ==
+                    SCRIPTTYPE_LATIN)) ||
+                  ((nLangList & LANG_LIST_CTL) != 0 &&
+                   (SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType) ==
+                    SCRIPTTYPE_COMPLEX)) ||
+                  ((nLangList & LANG_LIST_CJK) != 0 &&
+                   (SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType) ==
+                    SCRIPTTYPE_ASIAN)) ||
+                  ((nLangList & LANG_LIST_FBD_CHARS) != 0 &&
+                   MsLangId::hasForbiddenCharacters(nLangType)) ||
+                  ((nLangList & LANG_LIST_SPELL_AVAIL) != 0 &&
+                   lcl_SeqHasLang(aSpellAvailLang, nLangType)) ||
+                  ((nLangList & LANG_LIST_HYPH_AVAIL) != 0 &&
+                   lcl_SeqHasLang(aHyphAvailLang, nLangType)) ||
+                  ((nLangList & LANG_LIST_THES_AVAIL) != 0 &&
+                   lcl_SeqHasLang(aThesAvailLang, nLangType)) ||
+                  ((nLangList & LANG_LIST_SPELL_USED) != 0 &&
+                   lcl_SeqHasLang(aSpellUsedLang, nLangType)) ||
+                  ((nLangList & LANG_LIST_HYPH_USED) != 0 &&
+                   lcl_SeqHasLang(aHyphUsedLang, nLangType)) ||
+                  ((nLangList & LANG_LIST_THES_USED) != 0 &&
+                   lcl_SeqHasLang(aThesUsedLang, nLangType))) )
                 InsertLanguage( nLangType );
         }
 
