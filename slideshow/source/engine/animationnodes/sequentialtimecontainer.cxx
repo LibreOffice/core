@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequentialtimecontainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:36:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:00:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ void SequentialTimeContainer::skipEffect(
 }
 
 void SequentialTimeContainer::rewindEffect(
-    AnimationNodeSharedPtr const& pChildNode )
+    AnimationNodeSharedPtr const& /*pChildNode*/ )
 {
     // xxx todo: ...
 }
