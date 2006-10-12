@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxvals.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:12:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:34:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,15 @@ SbxValues::SbxValues( const BigInt &rBig ) : eType(SbxCURRENCY)
 {
     rBig.INT64( &nLong64 );
 }
+
+//TODO:  BigInt is TOOLS_DLLPUBLIC, and its four member functions only declared
+// and defined within basic (#define _TLBIGINT_INT64) are a bad hack that causes
+// "warning C4273: 'function' : inconsistent dll linkage" on MSC; this whole
+// mess should be cleaned up properly (e.g., by completely removing Sbx[U]INT64
+// and using sal_[u]Int64 instead):
+#if defined _MSC_VER
+#pragma warning(disable: 4273)
+#endif
 
 BOOL BigInt::INT64( SbxINT64 *p ) const
 {
