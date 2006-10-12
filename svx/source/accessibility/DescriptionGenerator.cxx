@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DescriptionGenerator.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:04:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:01:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,7 +331,7 @@ void DescriptionGenerator::AddColor (const OUString& sPropertyName,
     try
     {
 
-        long nValue;
+        long nValue(0);
         if (mxSet.is())
         {
             uno::Any aValue = mxSet->getPropertyValue (sPropertyName);
@@ -404,7 +404,8 @@ void DescriptionGenerator::AddString (const OUString& sPropertyName,
             {
                 ::vos::OGuard aGuard (::Application::GetSolarMutex());
                 String sLocalizedValue;
-                SvxUnogetInternalNameForItem (nWhichId, sValue, sLocalizedValue);
+                SvxUnogetInternalNameForItem (sal::static_int_cast<sal_Int16>(nWhichId),
+                                              sValue, sLocalizedValue);
                 msDescription.append (sLocalizedValue);
             }
             else
