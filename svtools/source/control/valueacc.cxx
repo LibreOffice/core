@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valueacc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:42:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:13:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
     ThrowIfDisposed();
     const vos::OGuard                               aSolarGuard( Application::GetSolarMutex() );
     uno::Reference< accessibility::XAccessible >    xRet;
-    ValueSetItem* pItem = getItem (i);
+    ValueSetItem* pItem = getItem (sal::static_int_cast< USHORT >(i));
 
     if( pItem )
         xRet = pItem->GetAccessible();
@@ -553,7 +553,7 @@ void SAL_CALL ValueSetAcc::selectAccessibleChild( sal_Int32 nChildIndex )
 {
     ThrowIfDisposed();
     const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
-    ValueSetItem* pItem = getItem (nChildIndex);
+    ValueSetItem* pItem = getItem (sal::static_int_cast< USHORT >(nChildIndex));
 
     if(pItem != NULL)
     {
@@ -571,7 +571,7 @@ sal_Bool SAL_CALL ValueSetAcc::isAccessibleChildSelected( sal_Int32 nChildIndex 
 {
     ThrowIfDisposed();
     const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
-    ValueSetItem* pItem = getItem (nChildIndex);
+    ValueSetItem* pItem = getItem (sal::static_int_cast< USHORT >(nChildIndex));
     sal_Bool            bRet = sal_False;
 
     if (pItem != NULL)
