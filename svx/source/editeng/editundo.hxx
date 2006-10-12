@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editundo.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:29:34 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:36:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,6 @@ public:
 
     virtual void    Undo();
     virtual void    Redo();
-    virtual void    Repeat();
 };
 
 // -----------------------------------------------------------------------
@@ -98,7 +97,6 @@ public:
 
     virtual void    Undo();
     virtual void    Redo();
-    virtual void    Repeat();
 };
 
 // -----------------------------------------------------------------------
@@ -117,7 +115,6 @@ public:
 
     virtual void    Undo();
     virtual void    Redo();
-    virtual void    Repeat();
 };
 
 // -----------------------------------------------------------------------
@@ -138,7 +135,6 @@ public:
 
     virtual void    Undo();
     virtual void    Redo();
-    virtual void    Repeat();
 
     virtual BOOL    Merge( SfxUndoAction *pNextAction );
 };
@@ -161,7 +157,6 @@ public:
 
     virtual void    Undo();
     virtual void    Redo();
-    virtual void    Repeat();
 };
 
 // -----------------------------------------------------------------------
@@ -181,7 +176,6 @@ public:
 
     virtual void    Undo();
     virtual void    Redo();
-    virtual void    Repeat();
 };
 
 // -----------------------------------------------------------------------
@@ -200,7 +194,6 @@ public:
 
     virtual void    Undo();
     virtual void    Redo();
-    virtual void    Repeat();
 };
 
 // -----------------------------------------------------------------------
@@ -227,7 +220,6 @@ public:
 
     virtual void    Undo();
     virtual void    Redo();
-    virtual void    Repeat();
 };
 
 // -----------------------------------------------------------------------
@@ -247,7 +239,6 @@ public:
 
     virtual void    Undo();
     virtual void    Redo();
-    virtual void    Repeat();
 };
 
 // -----------------------------------------------------------------------
@@ -283,7 +274,6 @@ public:
 
     virtual void        Undo();
     virtual void        Redo();
-    virtual void        Repeat();
 };
 
 // -----------------------------------------------------------------------
@@ -310,7 +300,6 @@ public:
 
     virtual void        Undo();
     virtual void        Redo();
-    virtual void        Repeat();
 };
 
 // -----------------------------------------------------------------------
@@ -328,7 +317,6 @@ public:
 
     virtual void    Undo();
     virtual void    Redo();
-    virtual void    Repeat();
 };
 
 
