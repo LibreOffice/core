@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrlist.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:20:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:38:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ struct SvXMLAttributeList_Impl
 
 sal_Int16 SAL_CALL SvXMLAttributeList::getLength(void) throw( ::com::sun::star::uno::RuntimeException )
 {
-    return m_pImpl->vecAttribute.size();
+    return sal::static_int_cast< sal_Int16 >(m_pImpl->vecAttribute.size());
 }
 
 
