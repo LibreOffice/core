@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rehearsetimingsactivity.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:27:18 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:55:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -351,9 +351,6 @@ void RehearseTimingsActivity::paint(
     buf.append( n );
     const rtl::OUString time = buf.makeStringAndClear();
 
-    cppcanvas::BaseGfxFactory & factory =
-        cppcanvas::BaseGfxFactory::getInstance();
-
     // create the MetaFile:
     GDIMetaFile metaFile;
     VirtualDevice blackHole;
@@ -386,7 +383,8 @@ void RehearseTimingsActivity::paint(
         cppcanvas::VCLFactory::getInstance().createRenderer(
             canvas, metaFile, cppcanvas::Renderer::Parameters() ) );
     const bool succ = renderer->draw();
-    OSL_ASSERT( succ ); succ;
+    OSL_ASSERT( succ );
+    (void)succ;
 }
 
 
@@ -463,13 +461,13 @@ bool RehearseTimingsActivity::MouseHandler::handleMouseReleased(
 }
 
 bool RehearseTimingsActivity::MouseHandler::handleMouseEntered(
-    awt::MouseEvent const & evt )
+    awt::MouseEvent const & /*evt*/ )
 {
     return false;
 }
 
 bool RehearseTimingsActivity::MouseHandler::handleMouseExited(
-    awt::MouseEvent const & evt )
+    awt::MouseEvent const & /*evt*/ )
 {
     return false;
 }
@@ -483,7 +481,7 @@ bool RehearseTimingsActivity::MouseHandler::handleMouseDragged(
 }
 
 bool RehearseTimingsActivity::MouseHandler::handleMouseMoved(
-    awt::MouseEvent const & evt )
+    awt::MouseEvent const & /*evt*/ )
 {
     return false;
 }
