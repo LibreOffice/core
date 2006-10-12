@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chrlohdl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:53:07 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:48:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ XMLCharLanguageHdl::~XMLCharLanguageHdl()
     // nothing to do
 }
 
-sal_Bool XMLCharLanguageHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const
+bool XMLCharLanguageHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const
 {
     sal_Bool bRet = sal_False;
     lang::Locale aLocale1, aLocale2;
@@ -132,7 +132,7 @@ XMLCharCountryHdl::~XMLCharCountryHdl()
     // nothing to do
 }
 
-sal_Bool XMLCharCountryHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const
+bool XMLCharCountryHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const
 {
     sal_Bool bRet = sal_False;
     lang::Locale aLocale1, aLocale2;
