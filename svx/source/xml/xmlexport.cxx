@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:20:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:29:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -325,6 +325,8 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
         ByteString aError( "SAX parse exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
+#else
+        (void) r; // avoid warnings
 #endif
     }
     catch( xml::sax::SAXException& r )
@@ -333,6 +335,8 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
         ByteString aError( "SAX exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
+#else
+        (void) r; // avoid warnings
 #endif
     }
     catch( io::IOException& r )
@@ -341,6 +345,8 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
         ByteString aError( "IO exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
+#else
+        (void) r; // avoid warnings
 #endif
     }
     catch( uno::Exception& r )
@@ -349,6 +355,8 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
         ByteString aError( "uno exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
+#else
+        (void) r; // avoid warnings
 #endif
     }
 
