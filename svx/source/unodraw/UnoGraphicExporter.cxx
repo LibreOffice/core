@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:39:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:24:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -510,7 +510,10 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, ULONG nWidthPixe
     }
 
     pVDev->SetMapMode( aMM );
-    BOOL bAbort = !pVDev->SetOutputSize(aPageSize);
+#ifdef DBG_UTIL
+    BOOL bAbort = !
+#endif
+        pVDev->SetOutputSize(aPageSize);
     DBG_ASSERT(!bAbort, "virt. Device nicht korrekt erzeugt");
 
     SdrView* pView = new SdrView(mpDoc, pVDev);
