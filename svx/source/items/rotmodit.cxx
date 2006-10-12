@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rotmodit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:22:52 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:55:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ TYPEINIT1_AUTOFACTORY(SvxRotateModeItem,        SfxEnumItem);
 //-----------------------------------------------------------------------
 
 SvxRotateModeItem::SvxRotateModeItem( SvxRotateMode eMode, USHORT _nWhich )
-    : SfxEnumItem( _nWhich, eMode )
+    : SfxEnumItem( _nWhich, (USHORT)eMode )
 {
 }
 
@@ -208,7 +208,7 @@ sal_Bool SvxRotateModeItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
         case table::CellVertJustify_BOTTOM:   eSvx = SVX_ROTATE_MODE_BOTTOM;    break;
         default: ;//prevent warning
     }
-    SetValue( eSvx );
+    SetValue( (USHORT)eSvx );
     return sal_True;
 }
 

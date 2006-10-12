@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemtype.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:20:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:54:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,8 +183,12 @@ XubString GetColorString( const Color& rCol )
     XColorTable* pCol = NULL;
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
-    if ( pSh && ( pItem = pSh->GetItem( SID_COLOR_TABLE ) ) )
-            pCol = ( (SvxColorTableItem*)pItem )->GetColorTable();
+    if ( pSh )
+    {
+        pItem = pSh->GetItem( SID_COLOR_TABLE );
+        if( pItem )
+            pCol = static_cast<const SvxColorTableItem*>(pItem )->GetColorTable();
+    }
 
     XubString sStr;
 
