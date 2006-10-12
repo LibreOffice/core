@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:51:04 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:03:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,7 @@ class Desktop : public Application
         /// does initializations which are necessary for the first run of the office
         void                    DoFirstRunInitializations();
 
-        static sal_Bool         SaveTasks(sal_Int32 options);
+        static sal_Bool         SaveTasks();
         static sal_Bool         _bTasksSaved;
 
         static void             retrieveCrashReporterState();
