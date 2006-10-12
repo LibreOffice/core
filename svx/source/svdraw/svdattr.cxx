@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:47:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:06:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1379,7 +1379,7 @@ SvStream& __EXPORT SdrFractionItem::Store(SvStream& rOut, USHORT /*nItemVers*/) 
     return rOut;
 }
 
-SfxPoolItem* __EXPORT SdrFractionItem::Clone(SfxItemPool */*pPool*/) const
+SfxPoolItem* __EXPORT SdrFractionItem::Clone(SfxItemPool * /*pPool*/) const
 {
     return new SdrFractionItem(Which(),GetValue());
 }
@@ -1433,7 +1433,7 @@ SfxPoolItem* __EXPORT SdrScaleItem::Create(SvStream& rIn, USHORT /*nVer*/) const
     return new SdrScaleItem(Which(),rIn);
 }
 
-SfxPoolItem* __EXPORT SdrScaleItem::Clone(SfxItemPool */*pPool*/) const
+SfxPoolItem* __EXPORT SdrScaleItem::Clone(SfxItemPool * /*pPool*/) const
 {
     return new SdrScaleItem(Which(),GetValue());
 }
@@ -1772,7 +1772,7 @@ XubString __EXPORT SdrCaptionTypeItem::GetValueTextByPos(USHORT nPos) const
 SfxItemPresentation __EXPORT SdrCaptionTypeItem::GetPresentation(SfxItemPresentation ePres,
                       SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/, XubString& rText, const IntlWrapper *) const
 {
-    rText=GetValueTextByPos(GetValue());
+    rText=GetValueTextByPos(sal::static_int_cast< USHORT >(GetValue()));
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
         String aStr;
 
@@ -1799,7 +1799,7 @@ XubString __EXPORT SdrCaptionEscDirItem::GetValueTextByPos(USHORT nPos) const
 SfxItemPresentation __EXPORT SdrCaptionEscDirItem::GetPresentation(SfxItemPresentation ePres,
                       SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/, XubString& rText, const IntlWrapper *) const
 {
-    rText=GetValueTextByPos(GetValue());
+    rText=GetValueTextByPos(sal::static_int_cast< USHORT >(GetValue()));
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
         String aStr;
 
@@ -1874,7 +1874,7 @@ XubString __EXPORT SdrTextFitToSizeTypeItem::GetValueTextByPos(USHORT nPos) cons
 SfxItemPresentation __EXPORT SdrTextFitToSizeTypeItem::GetPresentation(SfxItemPresentation ePres,
                       SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/, XubString& rText, const IntlWrapper *) const
 {
-    rText=GetValueTextByPos(GetValue());
+    rText=GetValueTextByPos(sal::static_int_cast< USHORT >(GetValue()));
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
         String aStr;
 
@@ -1889,7 +1889,7 @@ int  __EXPORT SdrTextFitToSizeTypeItem::HasBoolValue() const { return TRUE; }
 
 BOOL __EXPORT SdrTextFitToSizeTypeItem::GetBoolValue() const { return GetValue()!=SDRTEXTFIT_NONE; }
 
-void __EXPORT SdrTextFitToSizeTypeItem::SetBoolValue(BOOL bVal) { SetValue(bVal ? SDRTEXTFIT_PROPORTIONAL : SDRTEXTFIT_NONE); }
+void __EXPORT SdrTextFitToSizeTypeItem::SetBoolValue(BOOL bVal) { SetValue(sal::static_int_cast< USHORT >(bVal ? SDRTEXTFIT_PROPORTIONAL : SDRTEXTFIT_NONE)); }
 
 sal_Bool SdrTextFitToSizeTypeItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
@@ -1911,7 +1911,7 @@ sal_Bool SdrTextFitToSizeTypeItem::PutValue( const uno::Any& rVal, BYTE /*nMembe
         eFS = (drawing::TextFitToSizeType) nEnum;
     }
 
-    SetValue( (SdrFitToSizeType)eFS );
+    SetValue( sal::static_int_cast< USHORT >( (SdrFitToSizeType)eFS ) );
 
     return sal_True;
 }
@@ -1932,7 +1932,7 @@ XubString __EXPORT SdrTextVertAdjustItem::GetValueTextByPos(USHORT nPos) const
 SfxItemPresentation __EXPORT SdrTextVertAdjustItem::GetPresentation(SfxItemPresentation ePres,
                       SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/, XubString& rText, const IntlWrapper *) const
 {
-    rText=GetValueTextByPos(GetValue());
+    rText=GetValueTextByPos(sal::static_int_cast< USHORT >(GetValue()));
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
         String aStr;
 
@@ -1961,7 +1961,7 @@ sal_Bool SdrTextVertAdjustItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId
         eAdj = (drawing::TextVerticalAdjust)nEnum;
     }
 
-    SetValue( (SdrTextVertAdjust)eAdj );
+    SetValue( sal::static_int_cast< USHORT >( (SdrTextVertAdjust)eAdj ) );
 
     return sal_True;
 }
@@ -1982,7 +1982,7 @@ XubString __EXPORT SdrTextHorzAdjustItem::GetValueTextByPos(USHORT nPos) const
 SfxItemPresentation __EXPORT SdrTextHorzAdjustItem::GetPresentation(SfxItemPresentation ePres,
                       SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/, XubString& rText, const IntlWrapper *) const
 {
-    rText=GetValueTextByPos(GetValue());
+    rText=GetValueTextByPos(sal::static_int_cast< USHORT >(GetValue()));
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
         String aStr;
 
@@ -2011,7 +2011,7 @@ sal_Bool SdrTextHorzAdjustItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId
         eAdj = (drawing::TextHorizontalAdjust)nEnum;
     }
 
-    SetValue( (SdrTextHorzAdjust)eAdj );
+    SetValue( sal::static_int_cast< USHORT >( (SdrTextHorzAdjust)eAdj ) );
 
     return sal_True;
 }
@@ -2032,7 +2032,7 @@ XubString __EXPORT SdrTextAniKindItem::GetValueTextByPos(USHORT nPos) const
 SfxItemPresentation __EXPORT SdrTextAniKindItem::GetPresentation(SfxItemPresentation ePres,
                       SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/, XubString& rText, const IntlWrapper *) const
 {
-    rText=GetValueTextByPos(GetValue());
+    rText=GetValueTextByPos(sal::static_int_cast< USHORT >(GetValue()));
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
         String aStr;
 
@@ -2060,7 +2060,7 @@ sal_Bool SdrTextAniKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
         eKind = (drawing::TextAnimationKind)nEnum;
     }
 
-    SetValue( (SdrTextAniKind)eKind );
+    SetValue( sal::static_int_cast< USHORT >( (SdrTextAniKind)eKind ) );
 
     return sal_True;
 }
@@ -2081,7 +2081,7 @@ XubString __EXPORT SdrTextAniDirectionItem::GetValueTextByPos(USHORT nPos) const
 SfxItemPresentation __EXPORT SdrTextAniDirectionItem::GetPresentation(SfxItemPresentation ePres,
                       SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/, XubString& rText, const IntlWrapper *) const
 {
-    rText=GetValueTextByPos(GetValue());
+    rText=GetValueTextByPos(sal::static_int_cast< USHORT >(GetValue()));
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
         String aStr;
 
@@ -2110,7 +2110,7 @@ sal_Bool SdrTextAniDirectionItem::PutValue( const uno::Any& rVal, BYTE /*nMember
         eDir = (drawing::TextAnimationDirection)nEnum;
     }
 
-    SetValue( (SdrTextAniDirection)eDir );
+    SetValue( sal::static_int_cast< USHORT >( (SdrTextAniDirection)eDir ) );
 
     return sal_True;
 }
@@ -2244,7 +2244,7 @@ SvStream& __EXPORT SdrTextFixedCellHeightItem::Store( SvStream& rOut, sal_uInt16
     }
     return rOut;
 }
-SfxPoolItem* __EXPORT SdrTextFixedCellHeightItem::Clone( SfxItemPool */*pPool*/) const
+SfxPoolItem* __EXPORT SdrTextFixedCellHeightItem::Clone( SfxItemPool * /*pPool*/) const
 {
     return new SdrTextFixedCellHeightItem( GetValue() );
 }
@@ -2260,7 +2260,7 @@ sal_Bool SdrTextFixedCellHeightItem::QueryValue( uno::Any& rVal, BYTE /*nMemberI
 }
 sal_Bool SdrTextFixedCellHeightItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
-    sal_Bool bValue;
+    sal_Bool bValue = sal_Bool();
     if( !( rVal >>= bValue ) )
         return sal_False;
     SetValue( bValue );
@@ -2364,7 +2364,7 @@ SvStream& __EXPORT SdrCustomShapeAdjustmentItem::Store( SvStream& rOut, sal_uInt
     return rOut;
 }
 
-SfxPoolItem* __EXPORT SdrCustomShapeAdjustmentItem::Clone( SfxItemPool */*pPool*/) const
+SfxPoolItem* __EXPORT SdrCustomShapeAdjustmentItem::Clone( SfxItemPool * /*pPool*/) const
 {
     sal_uInt32 i;
     SdrCustomShapeAdjustmentItem* pItem = new SdrCustomShapeAdjustmentItem;
@@ -2489,7 +2489,7 @@ XubString __EXPORT SdrEdgeKindItem::GetValueTextByPos(USHORT nPos) const
 SfxItemPresentation __EXPORT SdrEdgeKindItem::GetPresentation(SfxItemPresentation ePres,
                       SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/, XubString& rText, const IntlWrapper *) const
 {
-    rText=GetValueTextByPos(GetValue());
+    rText=GetValueTextByPos(sal::static_int_cast< USHORT >(GetValue()));
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
         String aStr;
 
@@ -2542,7 +2542,7 @@ sal_Bool SdrEdgeKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
         default:
             DBG_ERROR( "SdrEdgeKindItem::PuValue : unknown enum" );
     }
-    SetValue( eEK );
+    SetValue( sal::static_int_cast< USHORT >( eEK ) );
 
     return sal_True;
 }
@@ -2699,7 +2699,7 @@ XubString __EXPORT SdrMeasureKindItem::GetValueTextByPos(USHORT nPos) const
 SfxItemPresentation __EXPORT SdrMeasureKindItem::GetPresentation(SfxItemPresentation ePres,
                       SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/, XubString& rText, const IntlWrapper *) const
 {
-    rText=GetValueTextByPos(GetValue());
+    rText=GetValueTextByPos(sal::static_int_cast< USHORT >(GetValue()));
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
         String aStr;
 
@@ -2728,7 +2728,7 @@ sal_Bool SdrMeasureKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
         eKind = (drawing::MeasureKind)nEnum;
     }
 
-    SetValue( (SdrMeasureKind)eKind );
+    SetValue( sal::static_int_cast< USHORT >( (SdrMeasureKind)eKind ) );
     return sal_True;
 }
 
@@ -2748,7 +2748,7 @@ XubString __EXPORT SdrMeasureTextHPosItem::GetValueTextByPos(USHORT nPos) const
 SfxItemPresentation __EXPORT SdrMeasureTextHPosItem::GetPresentation(SfxItemPresentation ePres,
                       SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/, XubString& rText, const IntlWrapper *) const
 {
-    rText=GetValueTextByPos(GetValue());
+    rText=GetValueTextByPos(sal::static_int_cast< USHORT >(GetValue()));
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
         String aStr;
 
@@ -2777,7 +2777,7 @@ sal_Bool SdrMeasureTextHPosItem::PutValue( const uno::Any& rVal, BYTE /*nMemberI
         ePos = (drawing::MeasureTextHorzPos)nEnum;
     }
 
-    SetValue( (SdrMeasureTextHPos)ePos );
+    SetValue( sal::static_int_cast< USHORT >( (SdrMeasureTextHPos)ePos ) );
     return sal_True;
 }
 
@@ -2797,7 +2797,7 @@ XubString __EXPORT SdrMeasureTextVPosItem::GetValueTextByPos(USHORT nPos) const
 SfxItemPresentation __EXPORT SdrMeasureTextVPosItem::GetPresentation(SfxItemPresentation ePres,
                       SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/, XubString& rText, const IntlWrapper *) const
 {
-    rText=GetValueTextByPos(GetValue());
+    rText=GetValueTextByPos(sal::static_int_cast< USHORT >(GetValue()));
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
         String aStr;
 
@@ -2826,7 +2826,7 @@ sal_Bool SdrMeasureTextVPosItem::PutValue( const uno::Any& rVal, BYTE /*nMemberI
         ePos = (drawing::MeasureTextVertPos)nEnum;
     }
 
-    SetValue( (SdrMeasureTextHPos)ePos );
+    SetValue( sal::static_int_cast< USHORT >( (SdrMeasureTextHPos)ePos ) );
     return sal_True;
 }
 
@@ -2858,7 +2858,7 @@ XubString __EXPORT SdrMeasureUnitItem::GetValueTextByPos(USHORT nPos) const
 SfxItemPresentation __EXPORT SdrMeasureUnitItem::GetPresentation(SfxItemPresentation ePres,
                       SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/, XubString& rText, const IntlWrapper *) const
 {
-    rText=GetValueTextByPos(GetValue());
+    rText=GetValueTextByPos(sal::static_int_cast< USHORT >(GetValue()));
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
         String aStr;
 
@@ -2881,7 +2881,7 @@ sal_Bool SdrMeasureUnitItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
     if(!(rVal >>= nMeasure))
         return sal_False;
 
-    SetValue( (FieldUnit)nMeasure );
+    SetValue( sal::static_int_cast< USHORT >( (FieldUnit)nMeasure ) );
     return sal_True;
 }
 
@@ -2925,7 +2925,7 @@ XubString __EXPORT SdrCircKindItem::GetValueTextByPos(USHORT nPos) const
 SfxItemPresentation __EXPORT SdrCircKindItem::GetPresentation(SfxItemPresentation ePres,
                       SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/, XubString& rText, const IntlWrapper *) const
 {
-    rText=GetValueTextByPos(GetValue());
+    rText=GetValueTextByPos(sal::static_int_cast< USHORT >(GetValue()));
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
         String aStr;
 
@@ -2954,7 +2954,7 @@ sal_Bool SdrCircKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
         eKind = (drawing::CircleKind)nEnum;
     }
 
-    SetValue( (SdrCircKind)eKind );
+    SetValue( sal::static_int_cast< USHORT >( (SdrCircKind)eKind ) );
     return sal_True;
 }
 
@@ -3245,7 +3245,7 @@ SfxItemPresentation __EXPORT SdrGrafModeItem::GetPresentation( SfxItemPresentati
                                                                SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
                                                                XubString& rText, const IntlWrapper *) const
 {
-    rText = GetValueTextByPos( GetValue() );
+    rText = GetValueTextByPos( sal::static_int_cast< USHORT >( GetValue() ) );
 
     if( ePres == SFX_ITEM_PRESENTATION_COMPLETE )
     {
