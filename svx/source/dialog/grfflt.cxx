@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfflt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:21:40 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:13:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@
 ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject )
 {
     const Graphic&  rGraphic = rFilterObject.GetGraphic();
-    ULONG           nRet;
+    ULONG           nRet = SVX_GRAPHICFILTER_UNSUPPORTED_GRAPHICTYPE;
 
     if( rGraphic.GetType() == GRAPHIC_BITMAP )
     {
@@ -325,8 +325,6 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
             nRet = SVX_GRAPHICFILTER_ERRCODE_NONE;
         }
     }
-    else
-        nRet = SVX_GRAPHICFILTER_UNSUPPORTED_GRAPHICTYPE;
 
     return nRet;
 }
