@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltertabpagexslt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:49:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:45:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 #ifndef _COM_SUN_STAR_FRAME_XCONFIGMANAGER_HPP_
 #include <com/sun/star/frame/XConfigManager.hpp>
 #endif
+
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
@@ -225,7 +227,8 @@ IMPL_LINK ( XMLFilterTabPageXSLT, ClickBrowseHdl_Impl, PushButton *, pButton )
     }
 
     // Open Fileopen-Dialog
-       ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+       ::sfx2::FileDialogHelper aDlg(
+        com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 
     aDlg.SetDisplayDirectory( GetURL( *pURLBox ) );
 
