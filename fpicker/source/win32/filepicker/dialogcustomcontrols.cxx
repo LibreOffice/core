@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcustomcontrols.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:55:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:51:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ void SAL_CALL CDialogCustomControlBase::AlignToBuddy(HWND aBuddyHandle)
 //
 //-----------------------------------
 
-CDummyCustomControl::CDummyCustomControl(HWND aControlHandle, HWND aParentHandle)
+CDummyCustomControl::CDummyCustomControl(HWND, HWND)
 {
 }
 
@@ -124,7 +124,7 @@ void SAL_CALL CDummyCustomControl::Align()
 //
 //-----------------------------------
 
-void SAL_CALL CDummyCustomControl::SetFont(HFONT hFont)
+void SAL_CALL CDummyCustomControl::SetFont(HFONT)
 {
     // do nothing
 }
