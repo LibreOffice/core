@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:12:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:48:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1147,10 +1147,10 @@ namespace svxform
 
                 // und die Properties des alten in das neue kopieren
                 Reference< XPropertySet >  xCurrent(pControls[i], UNO_QUERY);
-#if (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
                 // nur mal eben sehen, ob das Ding tatsaechlich ein hidden control ist
                 sal_Int16 nClassId = ::comphelper::getINT16(xCurrent->getPropertyValue(FM_PROP_CLASSID));
-                DBG_ASSERT(nClassId == FormComponentType::HIDDENCONTROL, "NavigatorTree::implExecuteDataTransfer: invalid control in drop list !");
+                OSL_ENSURE(nClassId == FormComponentType::HIDDENCONTROL, "NavigatorTree::implExecuteDataTransfer: invalid control in drop list !");
                     // wenn das SVX_FM_HIDDEN_CONTROLS-Format vorhanden ist, dann sollten wirklich nur hidden controls in der Sequenz
                     // stecken
 #endif // (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
@@ -1866,10 +1866,10 @@ namespace svxform
         // then go on to the strucure. This means I have to delete the forms *after* the normal controls, so
         // that during UNDO, they're restored in the proper order.
         pFormShell->GetImpl()->EnableTrackProperties(sal_False);
-        int i;
-        for (i = m_arrCurrentSelection.Count()-1; i>=0; --i)
+        USHORT i;
+        for (i = m_arrCurrentSelection.Count(); i>0; --i)
         {
-            FmEntryData* pCurrent = (FmEntryData*)(m_arrCurrentSelection.GetObject(i)->GetUserData());
+            FmEntryData* pCurrent = (FmEntryData*)(m_arrCurrentSelection.GetObject(i - 1)->GetUserData());
 
             // eine Form ?
             sal_Bool bIsForm = pCurrent->ISA(FmFormData);
@@ -1895,7 +1895,7 @@ namespace svxform
                     // hidden layer (#i28502#), or something like this.
                     // In the first case, it will be deleted below, in the second case, we currently don't
                     // delete it, as there's no real (working!) API for this, neither in UNO nor in non-UNO.
-                    m_arrCurrentSelection.Remove( (sal_uInt16)i, 1 );
+                    m_arrCurrentSelection.Remove( i - 1, 1 );
                 }
                 // In case there is no shape for the current entry, we keep the entry in m_arrCurrentSelection,
                 // since then we can definately remove it.
