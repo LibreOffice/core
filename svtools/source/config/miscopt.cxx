@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscopt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:27:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:07:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,7 +345,9 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             case PROPERTYHANDLE_PLUGINSENABLED :
             {
                 if( !(seqValues[nProperty] >>= m_bPluginsEnabled) )
+                {
                     DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
+                }
                 m_bIsPluginsEnabledRO = seqRO[nProperty];
                 break;
             }
@@ -353,7 +355,9 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             case PROPERTYHANDLE_SYMBOLSET :
             {
                 if( !(seqValues[nProperty] >>= m_nSymbolsSize) )
+                {
                     DBG_ERROR("Wrong type of \"Misc\\SymbolSet\"!" );
+                }
                 m_bIsSymbolsSizeRO = seqRO[nProperty];
                 break;
             }
@@ -361,7 +365,9 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             case PROPERTYHANDLE_TOOLBOXSTYLE :
             {
                 if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
+                {
                     DBG_ERROR("Wrong type of \"Misc\\ToolboxStyle\"!" );
+                }
                 m_bIsToolboxStyleRO = seqRO[nProperty];
                 break;
             }
@@ -369,7 +375,9 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             case PROPERTYHANDLE_USESYSTEMFILEDIALOG :
             {
                 if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
+                {
                     DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
+                }
                 m_bIsUseSystemFileDialogRO = seqRO[nProperty];
                 break;
             }
@@ -442,22 +450,30 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
         {
             case PROPERTYHANDLE_PLUGINSENABLED      :   {
                                                             if( !(seqValues[nProperty] >>= m_bPluginsEnabled) )
+                                                            {
                                                                 DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
+                                                            }
                                                         }
                                                     break;
             case PROPERTYHANDLE_SYMBOLSET           :   {
                                                             if( !(seqValues[nProperty] >>= m_nSymbolsSize) )
+                                                            {
                                                                 DBG_ERROR("Wrong type of \"Misc\\SymbolSet\"!" );
+                                                            }
                                                         }
                                                     break;
             case PROPERTYHANDLE_TOOLBOXSTYLE        :   {
                                                             if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
+                                                            {
                                                                 DBG_ERROR("Wrong type of \"Misc\\ToolboxStyle\"!" );
+                                                            }
                                                         }
                                                     break;
             case PROPERTYHANDLE_USESYSTEMFILEDIALOG      :   {
                                                             if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
+                                                            {
                                                                 DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
+                                                            }
                                                         }
                                                     break;
             case PROPERTYHANDLE_SYMBOLSTYLE         :   {
