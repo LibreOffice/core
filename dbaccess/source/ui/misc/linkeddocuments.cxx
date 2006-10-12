@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:17:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:42:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,10 +166,10 @@ namespace dbaui
             aResult[1] = static_cast<sal_Int8>(( n1 << 8 ) >> 24);
             aResult[2] = static_cast<sal_Int8>(( n1 << 16 ) >> 24);
             aResult[3] = static_cast<sal_Int8>(( n1 << 24 ) >> 24);
-            aResult[4] = n2 >> 8;
-            aResult[5] = ( n2 << 8 ) >> 8;
-            aResult[6] = n3 >> 8;
-            aResult[7] = ( n3 << 8 ) >> 8;
+            aResult[4] = static_cast<sal_Int8>(n2 >> 8);
+            aResult[5] = static_cast<sal_Int8>(( n2 << 8 ) >> 8);
+            aResult[6] = static_cast<sal_Int8>(n3 >> 8);
+            aResult[7] = static_cast<sal_Int8>(( n3 << 8 ) >> 8);
             aResult[8] = b8;
             aResult[9] = b9;
             aResult[10] = b10;
