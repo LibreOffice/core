@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlpropertyhdl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:33:22 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:42:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OControlTextEmphasisHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const
+    sal_Bool OControlTextEmphasisHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
         ::rtl::OUStringBuffer aReturn;
         sal_Bool bSuccess = sal_False;
@@ -186,7 +186,8 @@ namespace xmloff
             sal_Bool bBelow = 0 != (nFontEmphasis & FontEmphasisMark::BELOW);
 
             // convert
-            if ((bSuccess = _rUnitConverter.convertEnum(aReturn, nType, OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis), XML_NONE)))
+            bSuccess = SvXMLUnitConverter::convertEnum(aReturn, nType, OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis), XML_NONE);
+            if (bSuccess)
             {
                 aReturn.append( (sal_Unicode)' ' );
                 aReturn.append( GetXMLToken(bBelow ? XML_BELOW : XML_ABOVE) );
@@ -199,7 +200,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OControlTextEmphasisHandler::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const
+    sal_Bool OControlTextEmphasisHandler::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         sal_Bool bSuccess = sal_True;
         sal_uInt16 nEmphasis = FontEmphasisMark::NONE;
@@ -226,7 +227,7 @@ namespace xmloff
             }
             if (!bHasType)
             {
-                if (_rUnitConverter.convertEnum(nEmphasis, sToken, OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis)))
+                if (SvXMLUnitConverter::convertEnum(nEmphasis, sToken, OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis)))
                 {
                     bHasType = sal_True;
                 }
@@ -271,7 +272,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OControlBorderHandlerBase::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const
+    sal_Bool OControlBorderHandlerBase::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         ::rtl::OUString sToken;
         SvXMLTokenEnumerator aTokens(_rStrImpValue);
@@ -289,10 +290,10 @@ namespace xmloff
         {
             // is it a valid enum value?
             if ( !bFoundStyle )
-                bFoundStyle = _rUnitConverter.convertEnum(nStyle, sToken, OEnumMapper::getEnumMap(OEnumMapper::epBorderWidth));
+                bFoundStyle = SvXMLUnitConverter::convertEnum(nStyle, sToken, OEnumMapper::getEnumMap(OEnumMapper::epBorderWidth));
             // is it a color value?
             if ( !bFoundColor )
-                bFoundColor = _rUnitConverter.convertColor( aColor, sToken );
+                bFoundColor = SvXMLUnitConverter::convertColor( aColor, sToken );
         }
 
         if ( !bFoundStyle && !bFoundColor )
@@ -313,14 +314,14 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OControlBorderStyleHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const
+    sal_Bool OControlBorderStyleHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
         sal_Bool bSuccess = sal_False;
         sal_Int16 nBorder = 0;
 
         ::rtl::OUStringBuffer aOut;
         bSuccess =  (_rValue >>= nBorder)
-                &&  _rUnitConverter.convertEnum(aOut, nBorder, OEnumMapper::getEnumMap(OEnumMapper::epBorderWidth));
+                &&  SvXMLUnitConverter::convertEnum(aOut, nBorder, OEnumMapper::getEnumMap(OEnumMapper::epBorderWidth));
 
         if ( _rStrExpValue.getLength() )
             _rStrExpValue += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
@@ -343,7 +344,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OControlBorderColorHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const
+    sal_Bool OControlBorderColorHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
         sal_Bool bSuccess = sal_False;
         sal_Int32 nBorderColor = 0;
@@ -351,7 +352,7 @@ namespace xmloff
         ::rtl::OUStringBuffer aOut;
         if ( _rValue >>= nBorderColor )
         {
-            _rUnitConverter.convertColor( aOut, Color( nBorderColor ) );
+            SvXMLUnitConverter::convertColor( aOut, Color( nBorderColor ) );
             bSuccess = sal_True;
         }
 
@@ -376,24 +377,23 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OFontWidthHandler::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const
+    sal_Bool OFontWidthHandler::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
-        sal_Bool bSuccess = sal_False;
-
         sal_Int32 nWidth = 0;
-        if ((bSuccess = _rUnitConverter.convertMeasure(nWidth, _rStrImpValue, MAP_POINT)))
+        sal_Bool bSuccess = SvXMLUnitConverter::convertMeasure(nWidth, _rStrImpValue, MAP_POINT);
+        if (bSuccess)
             _rValue <<= (sal_Int16)nWidth;
 
         return bSuccess;
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OFontWidthHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const
+    sal_Bool OFontWidthHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
         sal_Int16 nWidth = 0;
         ::rtl::OUStringBuffer aResult;
         if (_rValue >>= nWidth)
-            _rUnitConverter.convertMeasure(aResult, nWidth, MAP_POINT, MAP_POINT);
+            SvXMLUnitConverter::convertMeasure(aResult, nWidth, MAP_POINT, MAP_POINT);
         _rStrExpValue = aResult.makeStringAndClear();
 
         return _rStrExpValue.getLength() != 0;
@@ -408,12 +408,12 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool ORotationAngleHandler::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const
+    sal_Bool ORotationAngleHandler::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
-        sal_Bool bSucces = sal_False;
-
         double fValue;
-        if ((bSucces = _rUnitConverter.convertDouble(fValue, _rStrImpValue)))
+        sal_Bool bSucces =
+            SvXMLUnitConverter::convertDouble(fValue, _rStrImpValue);
+        if (bSucces)
         {
             fValue *= 10;
             _rValue <<= (float)fValue;
@@ -423,15 +423,15 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool ORotationAngleHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const
+    sal_Bool ORotationAngleHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
         float fAngle;
-        sal_Bool bSuccess = sal_False;
+        sal_Bool bSuccess = (_rValue >>= fAngle);
 
-        if ((bSuccess = (_rValue >>= fAngle)))
+        if (bSuccess)
         {
             rtl::OUStringBuffer sValue;
-            _rUnitConverter.convertDouble(sValue, ((double)fAngle) / 10);
+            SvXMLUnitConverter::convertDouble(sValue, ((double)fAngle) / 10);
             _rStrExpValue = sValue.makeStringAndClear();
         }
 
