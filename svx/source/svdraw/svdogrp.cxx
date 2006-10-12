@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:55:09 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:13:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -459,7 +459,9 @@ SdrObject* SdrObjGroup::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte
     if (pSub->GetObjCount()!=0) {
         return pSub->CheckHit(rPnt,nTol,pVisiLayer);
     } else { // ansonsten ist es eine leere Gruppe
-        if (pVisiLayer==NULL || pVisiLayer->IsSet(nLayerId)) {
+        if (pVisiLayer==NULL ||
+            pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId)))
+        {
             Rectangle aAussen(aOutRect);
             aAussen.Top()   -=nTol;
             aAussen.Left()  -=nTol;
