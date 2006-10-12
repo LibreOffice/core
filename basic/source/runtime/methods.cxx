@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:05:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:29:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,12 +75,6 @@
 #include <tools/wldcrd.hxx>
 #ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
-#endif
-
-#if defined (WNT)
-#ifndef _SVWIN_H
-#include <tools/svwin.h>
-#endif
 #endif
 
 #include "runtime.hxx"
@@ -1565,7 +1559,7 @@ RTLFUNC(StrComp)
         nTextCompare = !nTextCompare;
 
     StringCompare aResult;
-    int nRetValue = 0;
+    sal_Int32 nRetValue = 0;
     if( nTextCompare )
     {
         ::utl::TransliterationWrapper* pTransliterationWrapper = GetSbData()->pTransliterationWrapper;
@@ -1592,7 +1586,7 @@ RTLFUNC(StrComp)
             nRetValue = 1;
     }
 
-    rPar.Get(0)->PutInteger( nRetValue );
+    rPar.Get(0)->PutInteger( sal::static_int_cast< INT16 >( nRetValue ) );
 }
 
 RTLFUNC(String)
@@ -3317,12 +3311,16 @@ RTLFUNC(Shell)
         std::list<String> aTokenList;
         String aToken;
         USHORT i = 0;
-        char c;
+        sal_Unicode c;
         while( i < nLen )
         {
             // Spaces weg
-            while( ( c = aCmdLine.GetBuffer()[ i ] ) == ' ' || c == '\t' )
-                i++;
+            for ( ;; ++i )
+            {
+                c = aCmdLine.GetBuffer()[ i ];
+                if ( c != ' ' && c != '\t' )
+                    break;
+            }
 
             if( c == '\"' || c == '\'' )
             {
@@ -3399,7 +3397,8 @@ RTLFUNC(Shell)
 
         iter++;
 
-        USHORT nParamCount = aTokenList.size() - 1;
+        USHORT nParamCount = sal::static_int_cast< USHORT >(
+            aTokenList.size() - 1 );
         ::rtl::OUString* pArgumentList = NULL;
         //const char** pParamList = NULL;
         if( nParamCount )
