@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabarea.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:42:23 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:28:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ SvxAreaTabDialog::SvxAreaTabDialog
     Window* pParent,
     const SfxItemSet* pAttr,
     SdrModel* pModel,
-    const SdrView* pSdrView
+    const SdrView* /* pSdrView */
 ) :
 
     SfxTabDialog( pParent, SVX_RES( RID_SVXDLG_AREA ), pAttr ),
