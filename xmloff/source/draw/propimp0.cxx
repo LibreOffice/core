@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propimp0.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:28:07 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:40:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,14 +136,14 @@ XMLOpacityPropertyHdl::~XMLOpacityPropertyHdl()
 sal_Bool XMLOpacityPropertyHdl::importXML(
     const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
+    const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
     sal_Int32 nValue = 0;
 
     if( rStrImpValue.indexOf( sal_Unicode('%') ) != -1 )
     {
-        if( rUnitConverter.convertPercent( nValue, rStrImpValue ) )
+        if( SvXMLUnitConverter::convertPercent( nValue, rStrImpValue ) )
             bRet = sal_True;
     }
     else
@@ -184,7 +184,7 @@ sal_Bool XMLOpacityPropertyHdl::importXML(
 sal_Bool XMLOpacityPropertyHdl::exportXML(
     OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
+    const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
     sal_uInt16 nVal = sal_uInt16();
@@ -194,7 +194,7 @@ sal_Bool XMLOpacityPropertyHdl::exportXML(
         OUStringBuffer aOut;
 
         nVal = 100 - nVal;
-        rUnitConverter.convertPercent( aOut, nVal );
+        SvXMLUnitConverter::convertPercent( aOut, nVal );
         rStrExpValue = aOut.makeStringAndClear();
         bRet = sal_True;
     }

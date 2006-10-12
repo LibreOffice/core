@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLImageMapExport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:25:09 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:40:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -432,13 +432,12 @@ void XMLImageMapExport::ExportPolygon(
     // svg:viewbox
     SdXMLImExViewBox aViewBox(0, 0, nWidth, nHeight);
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX,
-                aViewBox.GetExportString(mrExport.GetMM100UnitConverter()));
+                aViewBox.GetExportString());
 
     // export point sequence
     awt::Point aPoint(0, 0);
     awt::Size aSize(nWidth, nHeight);
-    SdXMLImExPointsElement aPoints( &aPoly, aViewBox, aPoint, aSize,
-                                    mrExport.GetMM100UnitConverter() );
+    SdXMLImExPointsElement aPoints( &aPoly, aViewBox, aPoint, aSize );
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_POINTS,
                           aPoints.GetExportString());
 }
