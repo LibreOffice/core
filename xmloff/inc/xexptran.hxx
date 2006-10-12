@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xexptran.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:57:48 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:37:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,7 @@ public:
     sal_Int32 GetY() const { return mnY; }
     sal_Int32 GetWidth() const { return mnW; }
     sal_Int32 GetHeight() const { return mnH; }
-    const rtl::OUString& GetExportString(const SvXMLUnitConverter& rConv);
+    const rtl::OUString& GetExportString();
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -175,7 +175,6 @@ public:
         const SdXMLImExViewBox& rViewBox,
         const com::sun::star::awt::Point& rObjectPos,
         const com::sun::star::awt::Size& rObjectSize,
-        const SvXMLUnitConverter& rConv,
         // #96328#
         const sal_Bool bClosed = sal_True);
     SdXMLImExPointsElement(const rtl::OUString& rNew,
@@ -216,7 +215,6 @@ public:
         com::sun::star::drawing::FlagSequence* pFlags,
         const com::sun::star::awt::Point& rObjectPos,
         const com::sun::star::awt::Size& rObjectSize,
-        const SvXMLUnitConverter& rConv,
         sal_Bool bClosed = FALSE, sal_Bool bRelative = TRUE);
 
     const rtl::OUString& GetExportString() const { return msString; }
