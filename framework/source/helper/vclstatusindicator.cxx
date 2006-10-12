@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclstatusindicator.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:01:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:40:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,7 +219,9 @@ void SAL_CALL VCLStatusIndicator::setValue(sal_Int32 nValue)
     // <- SAFE ----------------------------------
 
     // normalize value to fit the range of 0-100 %
-    sal_Int32 nPercent = ::std::min(((nValue*100) / ::std::max(nRange,(sal_Int32)1)), (sal_Int32)100);
+    USHORT nPercent = sal::static_int_cast< USHORT >(
+        ::std::min(
+            ((nValue*100) / ::std::max(nRange,(sal_Int32)1)), (sal_Int32)100));
 
     // SOLAR SAFE -> ----------------------------
     ::vos::OClearableGuard aSolarLock(Application::GetSolarMutex());
