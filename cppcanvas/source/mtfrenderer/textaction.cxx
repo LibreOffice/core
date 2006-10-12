@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textaction.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:50:20 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:00:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -506,7 +506,7 @@ namespace cppcanvas
              */
             bool renderEffectText( const TextRenderer&                          rRenderer,
                                    const rendering::RenderState&                rRenderState,
-                                   const rendering::ViewState&                  rViewState,
+                                   const rendering::ViewState&                  /*rViewState*/,
                                    const uno::Reference< rendering::XCanvas >&  xCanvas,
                                    const ::Color&                               rShadowColor,
                                    const ::Size&                                rShadowOffset,
@@ -633,7 +633,6 @@ namespace cppcanvas
                             const ::rtl::OUString&      rString,
                             sal_Int32                   nStartPos,
                             sal_Int32                   nLen,
-                            VirtualDevice&              rVDev,
                             const CanvasSharedPtr&      rCanvas,
                             const OutDevState&          rState );
 
@@ -641,7 +640,6 @@ namespace cppcanvas
                             const ::rtl::OUString&          rString,
                             sal_Int32                       nStartPos,
                             sal_Int32                       nLen,
-                            VirtualDevice&                  rVDev,
                             const CanvasSharedPtr&          rCanvas,
                             const OutDevState&              rState,
                             const ::basegfx::B2DHomMatrix&  rTextTransform );
@@ -675,7 +673,6 @@ namespace cppcanvas
                                     const ::rtl::OUString&      rString,
                                     sal_Int32                   nStartPos,
                                     sal_Int32                   nLen,
-                                    VirtualDevice&              rVDev,
                                     const CanvasSharedPtr&      rCanvas,
                                     const OutDevState&          rState  ) :
                 mxFont( rState.xFont ),
@@ -696,7 +693,6 @@ namespace cppcanvas
                                     const ::rtl::OUString&          rString,
                                     sal_Int32                       nStartPos,
                                     sal_Int32                       nLen,
-                                    VirtualDevice&                  rVDev,
                                     const CanvasSharedPtr&          rCanvas,
                                     const OutDevState&              rState,
                                     const ::basegfx::B2DHomMatrix&  rTextTransform ) :
@@ -729,7 +725,7 @@ namespace cppcanvas
             }
 
             bool TextAction::render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                     const Subset&                  rSubset ) const
+                                     const Subset&                  /*rSubset*/ ) const
             {
                 OSL_ENSURE( false,
                             "TextAction::render(): Subset not supported by this object" );
@@ -761,7 +757,7 @@ namespace cppcanvas
             }
 
             ::basegfx::B2DRange TextAction::getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
-                                                       const Subset&                    rSubset ) const
+                                                       const Subset&                    /*rSubset*/ ) const
             {
                 OSL_ENSURE( false,
                             "TextAction::getBounds(): Subset not supported by this object" );
@@ -967,7 +963,7 @@ namespace cppcanvas
             }
 
             bool EffectTextAction::render( const ::basegfx::B2DHomMatrix&   rTransformation,
-                                           const Subset&                    rSubset ) const
+                                           const Subset&                    /*rSubset*/ ) const
             {
                 OSL_ENSURE( false,
                             "EffectTextAction::render(): Subset not supported by this object" );
@@ -1004,7 +1000,7 @@ namespace cppcanvas
             }
 
             ::basegfx::B2DRange EffectTextAction::getBounds( const ::basegfx::B2DHomMatrix& rTransformation,
-                                                             const Subset&                  rSubset ) const
+                                                             const Subset&                  /*rSubset*/ ) const
             {
                 OSL_ENSURE( false,
                             "EffectTextAction::getBounds(): Subset not supported by this object" );
@@ -1036,7 +1032,6 @@ namespace cppcanvas
                                  sal_Int32                      nStartPos,
                                  sal_Int32                      nLen,
                                  const uno::Sequence< double >& rOffsets,
-                                 VirtualDevice&                 rVDev,
                                  const CanvasSharedPtr&         rCanvas,
                                  const OutDevState&             rState );
 
@@ -1045,7 +1040,6 @@ namespace cppcanvas
                                  sal_Int32                      nStartPos,
                                  sal_Int32                      nLen,
                                  const uno::Sequence< double >& rOffsets,
-                                 VirtualDevice&                 rVDev,
                                  const CanvasSharedPtr&         rCanvas,
                                  const OutDevState&             rState,
                                  const ::basegfx::B2DHomMatrix& rTextTransform );
@@ -1078,7 +1072,6 @@ namespace cppcanvas
                                               sal_Int32                         nStartPos,
                                               sal_Int32                         nLen,
                                               const uno::Sequence< double >&    rOffsets,
-                                              VirtualDevice&                    rVDev,
                                               const CanvasSharedPtr&            rCanvas,
                                               const OutDevState&                rState ) :
                 mxTextLayout(),
@@ -1101,7 +1094,6 @@ namespace cppcanvas
                                               sal_Int32                         nStartPos,
                                               sal_Int32                         nLen,
                                               const uno::Sequence< double >&    rOffsets,
-                                              VirtualDevice&                    rVDev,
                                               const CanvasSharedPtr&            rCanvas,
                                               const OutDevState&                rState,
                                               const ::basegfx::B2DHomMatrix&    rTextTransform ) :
@@ -1928,7 +1920,7 @@ namespace cppcanvas
             }
 
             ::basegfx::B2DRange OutlineAction::getBounds( const ::basegfx::B2DHomMatrix&    rTransformation,
-                                                                  const Subset&                     rSubset ) const
+                                                          const Subset&                     /*rSubset*/ ) const
             {
                 OSL_ENSURE( false,
                             "OutlineAction::getBounds(): Subset not yet supported by this object" );
@@ -2195,7 +2187,6 @@ namespace cppcanvas
                                                     rText,
                                                     nStartPos,
                                                     nLen,
-                                                    rVDev,
                                                     rCanvas,
                                                     rState,
                                                     rParms.maTextTransformation.getValue() ) );
@@ -2207,7 +2198,6 @@ namespace cppcanvas
                                                     rText,
                                                     nStartPos,
                                                     nLen,
-                                                    rVDev,
                                                     rCanvas,
                                                     rState ) );
                     }
@@ -2260,7 +2250,6 @@ namespace cppcanvas
                                                     nStartPos,
                                                     nLen,
                                                     aCharWidths,
-                                                    rVDev,
                                                     rCanvas,
                                                     rState,
                                                     rParms.maTextTransformation.getValue() ) );
@@ -2271,7 +2260,6 @@ namespace cppcanvas
                                                     nStartPos,
                                                     nLen,
                                                     aCharWidths,
-                                                    rVDev,
                                                     rCanvas,
                                                     rState ) );
                 }
@@ -2309,6 +2297,12 @@ namespace cppcanvas
                                                     rState ) );
                 }
             }
+#if defined __GNUC__
+#if __GNUC__ == 4 && __GNUC_MINOR__ == 1 && __GNUC_PATCHLEVEL__ == 1
+            // Unreachable; to avoid bogus warning:
+            return ActionSharedPtr();
+#endif
+#endif
         }
     }
 }
