@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrusionbar.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:08:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -729,7 +729,7 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
             double      fSkew = 50.0;
 
             pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sProjectionMode );
-            sal_Int16 nProjectionMode;
+            sal_Int16 nProjectionMode = sal_Int16();
             if( pAny && ( *pAny >>= nProjectionMode ) )
                 bParallel = nProjectionMode == ProjectionMode_PARALLEL;
 
@@ -1247,7 +1247,7 @@ void getExtrusionColorState( SdrView* pSdrView, SfxItemSet& rSet )
 
             Color aColor;
 
-            bool bUseColor;
+            bool bUseColor = false;
             pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusionColor );
             if( pAny )
                 *pAny >>= bUseColor;
