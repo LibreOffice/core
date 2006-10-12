@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementimport_impl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 09:22:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:43:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 //=========================================================================
 //-------------------------------------------------------------------------
 template <class BASE>
-SvXMLImportContext* OContainerImport< BASE >::CreateChildContext(
+inline SvXMLImportContext* OContainerImport< BASE >::CreateChildContext(
     sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList)
 {
@@ -66,7 +66,7 @@ SvXMLImportContext* OContainerImport< BASE >::CreateChildContext(
 
 //-------------------------------------------------------------------------
 template <class BASE>
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
     OContainerImport< BASE >::createElement()
 {
     // let the base class create the object
@@ -87,7 +87,7 @@ template <class BASE>
 
 //-------------------------------------------------------------------------
 template <class BASE>
-void OContainerImport< BASE >::EndElement()
+inline void OContainerImport< BASE >::EndElement()
 {
     BASE::EndElement();
 
