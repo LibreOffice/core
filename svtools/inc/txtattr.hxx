@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtattr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:12:04 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:04:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,27 +216,27 @@ inline USHORT TextCharAttrib::GetLen() const
 inline void TextCharAttrib::MoveForward( USHORT nDiff )
 {
     DBG_ASSERT( ((long)mnEnd + nDiff) <= 0xFFFF, "TextCharAttrib: MoveForward?!" );
-    mnStart += nDiff;
-    mnEnd += nDiff;
+    mnStart = mnStart + nDiff;
+    mnEnd = mnEnd + nDiff;
 }
 
 inline void TextCharAttrib::MoveBackward( USHORT nDiff )
 {
     DBG_ASSERT( ((long)mnStart - nDiff) >= 0, "TextCharAttrib: MoveBackward?!" );
-    mnStart -= nDiff;
-    mnEnd -= nDiff;
+    mnStart = mnStart - nDiff;
+    mnEnd = mnEnd - nDiff;
 }
 
 inline void TextCharAttrib::Expand( USHORT nDiff )
 {
     DBG_ASSERT( ( ((long)mnEnd + nDiff) <= (long)0xFFFF ), "TextCharAttrib: Expand?!" );
-    mnEnd += nDiff;
+    mnEnd = mnEnd + nDiff;
 }
 
 inline void TextCharAttrib::Collaps( USHORT nDiff )
 {
     DBG_ASSERT( (long)mnEnd - nDiff >= (long)mnStart, "TextCharAttrib: Collaps?!" );
-    mnEnd -= nDiff;
+    mnEnd = mnEnd - nDiff;
 }
 
 inline BOOL TextCharAttrib::IsIn( USHORT nIndex )
