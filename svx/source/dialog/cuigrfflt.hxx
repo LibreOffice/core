@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuigrfflt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:51:42 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:09:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,8 +169,8 @@ public:
                     ~GraphicFilterMosaic();
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
-    USHORT          GetTileWidth() const { return maMtrWidth.GetValue(); }
-    USHORT          GetTileHeight() const { return maMtrHeight.GetValue(); }
+    long            GetTileWidth() const { return maMtrWidth.GetValue(); }
+    long            GetTileHeight() const { return maMtrHeight.GetValue(); }
     BOOL            IsEnhanceEdges() const { return maCbxEdges.IsChecked(); }
 };
 
@@ -215,7 +215,8 @@ public:
                     ~GraphicFilterSepia();
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
-    USHORT          GetSepiaPercent() const { return maMtrSepia.GetValue(); }
+    USHORT          GetSepiaPercent() const
+    { return sal::static_int_cast< USHORT >(maMtrSepia.GetValue()); }
 };
 
 // -----------------------
