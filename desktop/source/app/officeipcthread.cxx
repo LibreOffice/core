@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:37:42 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:07:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ public:
     DECL_STATIC_LINK( ProcessEventsClass_Impl, ProcessDocumentsEvent, void* pEvent );
 };
 
-IMPL_STATIC_LINK( ProcessEventsClass_Impl, CallEvent, void*, pEvent )
+IMPL_STATIC_LINK_NOINSTANCE( ProcessEventsClass_Impl, CallEvent, void*, pEvent )
 {
     // Application events are processed by the Desktop::HandleAppEvent implementation.
     Desktop::HandleAppEvent( *((ApplicationEvent*)pEvent) );
@@ -160,7 +160,7 @@ IMPL_STATIC_LINK( ProcessEventsClass_Impl, CallEvent, void*, pEvent )
     return 0;
 }
 
-IMPL_STATIC_LINK( ProcessEventsClass_Impl, ProcessDocumentsEvent, void*, pEvent )
+IMPL_STATIC_LINK_NOINSTANCE( ProcessEventsClass_Impl, ProcessDocumentsEvent, void*, pEvent )
 {
     // Documents requests are processed by the OfficeIPCThread implementation
     ProcessDocumentsRequest* pDocsRequest = (ProcessDocumentsRequest*)pEvent;
@@ -208,7 +208,7 @@ throw ( RuntimeException )
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.OfficeIPCThreadController" ));
 }
 
-sal_Bool SAL_CALL OfficeIPCThreadController::supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL OfficeIPCThreadController::supportsService( const OUString& )
 throw ( RuntimeException )
 {
     return sal_False;
@@ -222,13 +222,13 @@ throw ( RuntimeException )
 }
 
 // XEventListener
-void SAL_CALL OfficeIPCThreadController::disposing( const EventObject& Source )
+void SAL_CALL OfficeIPCThreadController::disposing( const EventObject& )
 throw( RuntimeException )
 {
 }
 
 // XTerminateListener
-void SAL_CALL OfficeIPCThreadController::queryTermination( const EventObject& aEvent )
+void SAL_CALL OfficeIPCThreadController::queryTermination( const EventObject& )
 throw( TerminationVetoException, RuntimeException )
 {
     // Desktop ask about pending request through our office ipc pipe. We have to
@@ -241,7 +241,7 @@ throw( TerminationVetoException, RuntimeException )
         OfficeIPCThread::BlockAllRequests();
 }
 
-void SAL_CALL OfficeIPCThreadController::notifyTermination( const EventObject& aEvent )
+void SAL_CALL OfficeIPCThreadController::notifyTermination( const EventObject& )
 throw( RuntimeException )
 {
 }
