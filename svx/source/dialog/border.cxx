@@ -4,9 +4,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:10:42 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:05:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,8 +382,12 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
 
     DBG_ASSERT( pDocSh, "DocShell not found!" );
 
-    if ( pDocSh && ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
-        pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+    if ( pDocSh )
+    {
+        pItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        if ( pItem != NULL )
+            pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+    }
 
     DBG_ASSERT( pColorTable, "ColorTable not found!" );
 
@@ -1236,14 +1240,6 @@ IMPL_LINK( SvxBorderTabPage, SyncHdl_Impl, CheckBox*, pBox)
     return 0;
 }
 
-
-void    SvxBorderTabPage::SetSWMode(BYTE nSet)
-{
-//#define SW_BORDER_MODE_PARA   0x01
-//#define SW_BORDER_MODE_TABLE  0x02
-//#define SW_BORDER_MODE_FRAME  0x04
-    nSWMode = nSet;
-}
 /* -----------------------------03.06.2002 10:15------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1261,7 +1257,7 @@ void SvxBorderTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
     if (pSWModeItem)
     {
-        SetSWMode(pSWModeItem->GetValue());
+        nSWMode = pSWModeItem->GetValue();
         // --> OD 2005-03-01 #i43593#
         // show checkbox <aMergeWithNextCB> for format.paragraph
         if ( nSWMode == SW_BORDER_MODE_PARA )
