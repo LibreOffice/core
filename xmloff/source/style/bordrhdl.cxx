@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bordrhdl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:52:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:47:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,9 +304,9 @@ sal_Bool XMLBorderWidthHdl::importXML( const OUString& rStrImpValue, uno::Any& r
     if(!(rValue >>= aBorderLine))
         aBorderLine.Color = 0;
 
-    aBorderLine.InnerLineWidth = nInWidth;
-    aBorderLine.OuterLineWidth = nOutWidth;
-    aBorderLine.LineDistance   = nDistance;
+    aBorderLine.InnerLineWidth = sal::static_int_cast< sal_Int16 >(nInWidth);
+    aBorderLine.OuterLineWidth = sal::static_int_cast< sal_Int16 >(nOutWidth);
+    aBorderLine.LineDistance   = sal::static_int_cast< sal_Int16 >(nDistance);
 
     rValue <<= aBorderLine;
     return sal_True;
