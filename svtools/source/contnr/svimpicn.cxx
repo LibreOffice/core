@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svimpicn.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:34:09 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:10:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,7 +358,7 @@ long GetTextLines( OutputDevice* pDev, MultiTextLineInfo& rLineInfo,
                             nLineWidth = pDev->GetTextWidth( rStr, nStartPos, nLen );
                             rLineInfo.AddLine( new TextLineInfo( nLineWidth, nStartPos, nLen ) );
                             nStartPos       = nPos;
-                            nLastLineLen   -= nLen;
+                            nLastLineLen = nLastLineLen - nLen;
                             nLineWidth = pDev->GetTextWidth( rStr, nStartPos, nLastLineLen );
                         }
                         while ( nLineWidth > nWidth );
@@ -3139,9 +3139,9 @@ void ImpIcnCursor::ImplCreate()
 
         // Rundungsfehler abfangen
         if( nY >= nRows )
-            nY = nRows - 1;
+            nY = sal::static_int_cast< short >(nRows - 1);
         if( nX >= nCols )
-            nX = nCols - 1;
+            nX = sal::static_int_cast< short >(nCols - 1);
 
         USHORT nIns = GetSortListPos( &pColumns[nX], rRect.Top(), TRUE );
         pColumns[ nX ].Insert( pEntry, nIns );
@@ -3219,12 +3219,12 @@ BOOL ImpIcnCursor::GetGrid( const Point& rDocPos, USHORT& rGridX, USHORT& rGridY
     BOOL bInGrid = TRUE;
     if( rGridX >= nGridCols )
     {
-        rGridX = nGridCols - 1;
+        rGridX = sal::static_int_cast< USHORT >(nGridCols - 1);
         bInGrid = FALSE;
     }
     if( rGridY >= nGridRows )
     {
-        rGridY = nGridRows - 1;
+        rGridY = sal::static_int_cast< USHORT >(nGridRows - 1);
         if( !bInGrid )
             return FALSE; // beide Koordinaten nicht im Grid
     }
@@ -3454,7 +3454,8 @@ SvLBoxEntry* ImpIcnCursor::GoLeftRight( SvLBoxEntry* pIcnEntry, BOOL bRight )
     DBG_ASSERT(nX< nCols,"GoLeftRight:Bad row");
     // Nachbar auf gleicher Zeile ?
     if( bRight )
-        pResult = SearchRow( nY, nX ,nCols-1, nX, TRUE, TRUE );
+        pResult = SearchRow(
+            nY, nX, sal::static_int_cast< USHORT >(nCols-1), nX, TRUE, TRUE );
     else
         pResult = SearchRow( nY, nX ,0, nX, FALSE, TRUE );
     if( pResult )
@@ -3503,7 +3504,8 @@ SvLBoxEntry* ImpIcnCursor::GoUpDown( SvLBoxEntry* pIcnEntry, BOOL bDown)
 
     // Nachbar in gleicher Spalte ?
     if( bDown )
-        pResult = SearchCol( nX, nY ,nRows-1, nY, TRUE, TRUE );
+        pResult = SearchCol(
+            nX, nY, sal::static_int_cast< USHORT >(nRows-1), nY, TRUE, TRUE );
     else
         pResult = SearchCol( nX, nY ,0, nY, FALSE, TRUE );
     if( pResult )
