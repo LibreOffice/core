@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterConfigCache.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 12:43:57 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:17:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,8 @@ class SVT_DLLPUBLIC FilterConfigCache
 
     public :
 
-        sal_uInt16  GetImportFormatCount() const { return aImport.size(); };
+        sal_uInt16  GetImportFormatCount() const
+        { return sal::static_int_cast< sal_uInt16 >(aImport.size()); };
         sal_uInt16  GetImportFormatNumber( const String& rFormatName );
         sal_uInt16  GetImportFormatNumberForMediaType( const String& rMediaType );
         sal_uInt16  GetImportFormatNumberForShortName( const String& rShortName );
@@ -138,7 +139,8 @@ class SVT_DLLPUBLIC FilterConfigCache
         sal_Bool    IsImportPixelFormat( sal_uInt16 nFormat );
         sal_Bool    IsImportDialog( sal_uInt16 nFormat );
 
-        sal_uInt16  GetExportFormatCount() const { return aExport.size(); };
+        sal_uInt16  GetExportFormatCount() const
+        { return sal::static_int_cast< sal_uInt16 >(aExport.size()); };
         sal_uInt16  GetExportFormatNumber( const String& rFormatName );
         sal_uInt16  GetExportFormatNumberForMediaType( const String& rMediaType );
         sal_uInt16  GetExportFormatNumberForShortName( const String& rShortName );
