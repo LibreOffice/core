@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xbmread.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:54:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:18:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,7 +222,7 @@ BOOL XBMReader::ParseData( SvStream* pInStm, const ByteString& aLastLine, XBMFor
     {
         if( bFirstLine )
         {
-            long nPos;
+            xub_StrLen nPos;
 
             // einfuehrende geschweifte Klammer loeschen
             if( (nPos = ( aLine = aLastLine ).Search( '{' ) ) != STRING_NOTFOUND )
@@ -240,12 +240,12 @@ BOOL XBMReader::ParseData( SvStream* pInStm, const ByteString& aLastLine, XBMFor
             for( USHORT i = 0; ( i < nCount ) && ( nRow < nHeight ); i++ )
             {
                 const ByteString    aToken( aLine.GetToken( i, ',' ) );
-                const ULONG         nLen = aToken.Len();
+                const xub_StrLen nLen = aToken.Len();
                 BOOL                bProcessed = FALSE;
 
                 nBit = nDigits = nValue = 0;
 
-                for( ULONG n = 0UL; n < nLen; n++ )
+                for( xub_StrLen n = 0UL; n < nLen; n++ )
                 {
                     const unsigned char cChar = aToken.GetChar( n );
                     const short         nTable = pHexTable[ cChar ];
