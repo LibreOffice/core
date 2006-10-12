@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:12:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:38:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,8 +102,8 @@
 
 #include <vos/ref.hxx>
 
-DBG_NAMEEX( EditView );
-DBG_NAMEEX( EditEngine );
+DBG_NAMEEX( EditView )
+DBG_NAMEEX( EditEngine )
 
 #define PIMPEE      pImpEditView->pEditEngine->pImpEditEngine
 
@@ -124,7 +124,7 @@ DBG_NAMEEX( EditEngine );
 #define LINE_SEP    0x0A
 
 typedef EENotify* EENotifyPtr;
-SV_DECL_PTRARR_DEL( NotifyList, EENotifyPtr, 1, 1 );    // IMPL is in outliner.cxx, move to EE later and share declaration, or use BlockNotifications from EE directly
+SV_DECL_PTRARR_DEL( NotifyList, EENotifyPtr, 1, 1 )    // IMPL is in outliner.cxx, move to EE later and share declaration, or use BlockNotifications from EE directly
 
 
 class EditView;
@@ -263,6 +263,9 @@ class ImpEditView : public vcl::unohelper::DragAndDropClient
     friend class EditView;
     friend class EditEngine;
     friend class ImpEditEngine;
+    using vcl::unohelper::DragAndDropClient::dragEnter;
+    using vcl::unohelper::DragAndDropClient::dragExit;
+    using vcl::unohelper::DragAndDropClient::dragOver;
 
 private:
     EditView*           pEditView;
@@ -419,12 +422,12 @@ public:
     sal_uInt16      GetInvalidateMore() const { return (sal_uInt16)nInvMore; }
 };
 
-// ----------------------------------------------------------------------
+//  ----------------------------------------------------------------------
 //  ImpEditEngine
 //  ----------------------------------------------------------------------
 
 typedef EditView* EditViewPtr;
-SV_DECL_PTRARR( EditViews, EditViewPtr, 0, 1 );
+SV_DECL_PTRARR( EditViews, EditViewPtr, 0, 1 )
 
 class ImpEditEngine : public SfxListener
 {
