@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_package.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-04 16:55:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:10:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,8 +167,7 @@ class BackendImpl : public ImplBaseT
             OUString const & url,
             OUString const & name,
             Reference<deployment::XPackageTypeInfo> const & xPackageType,
-            bool legacyBundle,
-            Reference<XCommandEnvironment> const & xCmdEnv )
+            bool legacyBundle )
             : Package( myBackend, url, name, name /* display-name */,
                        xPackageType ),
               m_url_expanded( expandUnoRcUrl( url ) ),
@@ -232,6 +231,8 @@ public:
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
+
+    using ImplBaseT::disposing;
 };
 
 //______________________________________________________________________________
@@ -338,14 +339,14 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 return new PackageImpl(
                     this, url, ucbContent.getPropertyValue(
                         StrTitle::get() ).get<OUString>(),
-                    m_xBundleTypeInfo, false, xCmdEnv );
+                    m_xBundleTypeInfo, false );
             }
             else if (subType.EqualsIgnoreCaseAscii(
                          "vnd.sun.star.legacy-package-bundle")) {
                 return new PackageImpl(
                     this, url, ucbContent.getPropertyValue(
                         StrTitle::get() ).get<OUString>(),
-                    m_xLegacyBundleTypeInfo, true, xCmdEnv );
+                    m_xLegacyBundleTypeInfo, true );
             }
         }
     }
@@ -373,7 +374,7 @@ void BackendImpl::PackageImpl::disposing()
 //______________________________________________________________________________
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::PackageImpl::isRegistered_(
-    ::osl::ResettableMutexGuard & guard,
+    ::osl::ResettableMutexGuard &,
     ::rtl::Reference<AbortChannel> const & abortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
@@ -426,7 +427,6 @@ OUString BackendImpl::PackageImpl::findLocalizedLicense(
         css::uno::Reference<css::xml::dom::XNodeList> listLicText =
             xXPath->selectNodeList(xRootNode,
             OUSTR("/desc:description/desc:registration/desc:simple-license/desc:license-text"));
-        sal_Int32 numNodes = listLicText->getLength();
         css::uno::Reference<css::xml::dom::XNode> nodeMatch;
 
 
@@ -451,30 +451,30 @@ OUString BackendImpl::PackageImpl::findLocalizedLicense(
             }
         }
 
-        OUString exp(
+        OUString exp1(
             OUSTR("/desc:description/desc:registration/desc:simple-license"
             "/desc:license-text[normalize-space(@lang)=\"") + buff.makeStringAndClear() +
             OUSTR("\"]"));
-        nodeMatch = xXPath->selectSingleNode(xRootNode, exp);
+        nodeMatch = xXPath->selectSingleNode(xRootNode, exp1);
         //check if we match lang + country
          if (!nodeMatch.is() )
          {
             if (officeLocale.Country.getLength())
             {
                 //first try exact match for lang-country
-                OUString exp(
+                OUString exp2(
                     OUSTR("/desc:description/desc:registration/desc:simple-license"
                           "/desc:license-text[normalize-space(@lang)=\"") + sLangCountry + OUSTR("\"]"));
-                nodeMatch = xXPath->selectSingleNode(xRootNode, exp);
+                nodeMatch = xXPath->selectSingleNode(xRootNode, exp2);
 
                 //try to match in strings that also have a variant, for example en-US matches in
                 //en-US-montana
                 if (!nodeMatch.is())
                 {
-                    OUString exp(
+                    OUString exp3(
                         OUSTR("/desc:description/desc:registration/desc:simple-license"
                               "/desc:license-text[starts-with(normalize-space(@lang),\"") + sLangCountry + OUSTR("-\")]"));
-                    nodeMatch = xXPath->selectSingleNode(xRootNode, exp);
+                    nodeMatch = xXPath->selectSingleNode(xRootNode, exp3);
                 }
             }
          }
@@ -483,19 +483,19 @@ OUString BackendImpl::PackageImpl::findLocalizedLicense(
          if (!nodeMatch.is() )
          {
             //first try exact match for lang
-            OUString exp(
+            OUString exp2(
                 OUSTR("/desc:description/desc:registration/desc:simple-license"
                       "/desc:license-text[normalize-space(@lang)=\"") + officeLocale.Language + OUSTR("\"]"));
-            nodeMatch = xXPath->selectSingleNode(xRootNode, exp);
+            nodeMatch = xXPath->selectSingleNode(xRootNode, exp2);
 
             //try to match in strings that also have a country and/orvariant, for example en  matches in
             //en-US-montana, en-US, en-montana
             if (!nodeMatch.is())
             {
-                OUString exp(
+                OUString exp3(
                     OUSTR("/desc:description/desc:registration/desc:simple-license"
                           "/desc:license-text[starts-with(normalize-space(@lang),\"") + officeLocale.Language + OUSTR("-\")]"));
-                nodeMatch = xXPath->selectSingleNode(xRootNode, exp);
+                nodeMatch = xXPath->selectSingleNode(xRootNode, exp3);
             }
          }
 
@@ -517,10 +517,10 @@ OUString BackendImpl::PackageImpl::findLocalizedLicense(
                 throw cssu::Exception(
                 OUSTR("The simple-license element has no valid default-license-id attribute."), 0);
 
-            OUString exp(
+            OUString exp2(
                 OUSTR("/desc:description/desc:registration/desc:simple-license"
                       "/desc:license-text[normalize-space(@license-id) = \"") + sDefaultId + OUSTR("\"]"));
-            nodeMatch = xXPath->selectSingleNode(xRootNode, exp);
+            nodeMatch = xXPath->selectSingleNode(xRootNode, exp2);
          }
 
         if (!nodeMatch.is())
@@ -705,7 +705,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
 }
 
 ::sal_Bool BackendImpl::PackageImpl::checkPrerequisites(
-        const css::uno::Reference< css::task::XAbortChannel >& xAbortChannel,
+        const css::uno::Reference< css::task::XAbortChannel >&,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv )
         throw (css::deployment::DeploymentException,
             css::ucb::CommandFailedException,
@@ -766,15 +766,15 @@ OUString BackendImpl::PackageImpl::getVersion() throw (RuntimeException)
 
 //______________________________________________________________________________
 void BackendImpl::PackageImpl::processPackage_(
-    ::osl::ResettableMutexGuard & guard,
-    bool registerPackage,
+    ::osl::ResettableMutexGuard &,
+    bool doRegisterPackage,
     ::rtl::Reference<AbortChannel> const & abortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     const Sequence< Reference<deployment::XPackage> > bundle(
         getBundle( abortChannel.get(), xCmdEnv ) );
 
-    if (registerPackage)
+    if (doRegisterPackage)
     {
         const sal_Int32 len = bundle.getLength();
         for ( sal_Int32 pos = 0; pos < len; ++pos )
@@ -1341,8 +1341,7 @@ void BackendImpl::PackageImpl::scanBundle(
                 "vnd.sun.star.package-bundle-description"))
         {
             // check locale:
-            INetContentTypeParameter const * param =
-                params.find( ByteString("locale") );
+            param = params.find( ByteString("locale") );
             if (param == 0) {
                 if (descrFile.getLength() == 0)
                     descrFile = url;
@@ -1423,9 +1422,9 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
         checkAborted( abortChannel );
 
         const Reference<sdbc::XRow> xRow( xResultSet, UNO_QUERY_THROW );
-        const OUString title( xRow->getString( 1 /* Title */ ) );
         const OUString title_enc( ::rtl::Uri::encode(
-                                      title, rtl_UriCharClassPchar,
+                                      xRow->getString( 1 /* Title */ ),
+                                      rtl_UriCharClassPchar,
                                       rtl_UriEncodeIgnoreEscapes,
                                       RTL_TEXTENCODING_UTF8 ) );
         const OUString path( makeURL( url, title_enc ) );
