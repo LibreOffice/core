@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:03:32 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:18:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,13 +96,13 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
                             int bReadNewDoc )
     : SvRTFParser( rIn, 5 ),
     rStrm(rIn),
-    pAttrPool( &rPool ),
-    pInsPos( 0 ),
     aColorTbl( 16, 4 ),
     aFontTbl( 16, 4 ),
-    nVersionNo( 0 ),
+    pInsPos( 0 ),
+    pAttrPool( &rPool ),
     pSfxInfo( 0 ),
-    pRTFDefaults( 0 )
+    pRTFDefaults( 0 ),
+    nVersionNo( 0 )
 {
     bNewDoc = bReadNewDoc;
 
@@ -224,7 +224,7 @@ void SvxRTFParser::NextToken( int nToken )
             {
                 if( aFontTbl.Count() )
                     // koennen wir sofort setzen
-                    SetDefault( nToken, (short)nTokenValue );
+                    SetDefault( nToken, nTokenValue );
                 else
                     // wird nach einlesen der Fonttabelle gesetzt
                     nDfltFont = int(nTokenValue);
@@ -234,7 +234,7 @@ void SvxRTFParser::NextToken( int nToken )
     case RTF_DEFTAB:
     case RTF_DEFLANG:
             if( bNewDoc )
-                SetDefault( nToken, (short)nTokenValue );
+                SetDefault( nToken, nTokenValue );
             break;
 
 
@@ -371,18 +371,18 @@ void SvxRTFParser::ReadStyleTable()
 {
     int nToken, bSaveChkStyleAttr = bChkStyleAttr;
     short nStyleNo = 0;
-    int nOpenBrakets = 1;       // die erste wurde schon vorher erkannt !!
+    int _nOpenBrakets = 1;      // die erste wurde schon vorher erkannt !!
     SvxRTFStyleType* pStyle = new SvxRTFStyleType( *pAttrPool, aWhichMap.GetData() );
     pStyle->aAttrSet.Put( GetRTFDefaults() );
 
     bIsInReadStyleTab = TRUE;
     bChkStyleAttr = FALSE;      // Attribute nicht gegen die Styles checken
 
-    while( nOpenBrakets && IsParserWorking() )
+    while( _nOpenBrakets && IsParserWorking() )
     {
         switch( nToken = GetNextToken() )
         {
-        case '}':       if( --nOpenBrakets && IsParserWorking() )
+        case '}':       if( --_nOpenBrakets && IsParserWorking() )
                             // Style konnte vollstaendig gelesen werden,
                             // also ist das noch ein stabiler Status
                             SaveState( RTF_STYLESHEET );
@@ -403,7 +403,7 @@ void SvxRTFParser::ReadStyleTable()
                         eState = SVPAR_ERROR;
                     break;
                 }
-                ++nOpenBrakets;
+                ++_nOpenBrakets;
             }
             break;
 
@@ -459,7 +459,7 @@ void SvxRTFParser::ReadStyleTable()
                     {
                         nToken = SkipToken( -1 );
 #if 0
-                        --nOpenBrakets;     // korrigieren!!
+                        --_nOpenBrakets;        // korrigieren!!
 #endif
                     }
                 }
@@ -480,7 +480,7 @@ void SvxRTFParser::ReadStyleTable()
 void SvxRTFParser::ReadColorTable()
 {
     int nToken;
-    BYTE nRed = -1, nGreen = -1, nBlue = -1;
+    BYTE nRed = 0xff, nGreen = 0xff, nBlue = 0xff;
 
     while( '}' != ( nToken = GetNextToken() ) && IsParserWorking() )
     {
@@ -523,13 +523,13 @@ void SvxRTFParser::ReadColorTable()
 void SvxRTFParser::ReadFontTable()
 {
     int nToken;
-    int nOpenBrakets = 1;       // die erste wurde schon vorher erkannt !!
+    int _nOpenBrakets = 1;      // die erste wurde schon vorher erkannt !!
     Font* pFont = new Font();
-    short nFontNo(0), nInsFontNo;
+    short nFontNo(0), nInsFontNo (0);
     String sAltNm, sFntNm;
     BOOL bIsAltFntNm = FALSE, bCheckNewFont;
 
-    while( nOpenBrakets && IsParserWorking() )
+    while( _nOpenBrakets && IsParserWorking() )
     {
         bCheckNewFont = FALSE;
         switch( ( nToken = GetNextToken() ))
@@ -538,7 +538,7 @@ void SvxRTFParser::ReadFontTable()
                 bIsAltFntNm = FALSE;
                 // Style konnte vollstaendig gelesen werden,
                 // also ist das noch ein stabiler Status
-                if( --nOpenBrakets <= 1 && IsParserWorking() )
+                if( --_nOpenBrakets <= 1 && IsParserWorking() )
                     SaveState( RTF_FONTTBL );
                 bCheckNewFont = TRUE;
                 nInsFontNo = nFontNo;
@@ -561,7 +561,7 @@ void SvxRTFParser::ReadFontTable()
                         eState = SVPAR_ERROR;
                     break;
                 }
-                ++nOpenBrakets;
+                ++_nOpenBrakets;
                 break;
             case RTF_FROMAN:
                 pFont->SetFamily( FAMILY_ROMAN );
@@ -629,7 +629,7 @@ void SvxRTFParser::ReadFontTable()
                 break;
         }
 
-        if( bCheckNewFont && 1 >= nOpenBrakets && sFntNm.Len() )  // one font is ready
+        if( bCheckNewFont && 1 >= _nOpenBrakets && sFntNm.Len() )  // one font is ready
         {
             // alle Daten vom Font vorhanden, also ab in die Tabelle
             if (sAltNm.Len())
@@ -664,13 +664,13 @@ void SvxRTFParser::ReadOLEData()
 String& SvxRTFParser::GetTextToEndGroup( String& rStr )
 {
     rStr.Erase( 0 );
-    int nOpenBrakets = 1, nToken;       // die erste wurde schon vorher erkannt !!
+    int _nOpenBrakets = 1, nToken;      // die erste wurde schon vorher erkannt !!
 
-    while( nOpenBrakets && IsParserWorking() )
+    while( _nOpenBrakets && IsParserWorking() )
     {
         switch( nToken = GetNextToken() )
         {
-        case '}':       --nOpenBrakets; break;
+        case '}':       --_nOpenBrakets;    break;
         case '{':
             {
                 if( RTF_IGNOREFLAG != GetNextToken() )
@@ -686,7 +686,7 @@ String& SvxRTFParser::GetTextToEndGroup( String& rStr )
                         eState = SVPAR_ERROR;
                     break;
                 }
-                ++nOpenBrakets;
+                ++_nOpenBrakets;
             }
             break;
 
@@ -725,18 +725,18 @@ DateTime& SvxRTFParser::GetDateTimeStamp( DateTime& rDT )
 void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
 {
 #ifndef SVX_LIGHT
-    int nOpenBrakets = 1, nToken;       // die erste wurde schon vorher erkannt !!
+    int _nOpenBrakets = 1, nToken;      // die erste wurde schon vorher erkannt !!
     pSfxInfo = new SfxDocumentInfo;
     String sStr, sComment;
-    long nVersNo;
+    long nVersNo = 0;
     SfxStamp aCreate, aModified;
     DateTime aDT;
 
-    while( nOpenBrakets && IsParserWorking() )
+    while( _nOpenBrakets && IsParserWorking() )
     {
         switch( nToken = GetNextToken() )
         {
-        case '}':       --nOpenBrakets; break;
+        case '}':       --_nOpenBrakets;    break;
         case '{':
             {
                 if( RTF_IGNOREFLAG != GetNextToken() )
@@ -752,7 +752,7 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
                         eState = SVPAR_ERROR;
                     break;
                 }
-                ++nOpenBrakets;
+                ++_nOpenBrakets;
             }
             break;
 
@@ -1374,7 +1374,7 @@ void SvxRTFItemStackType::MoveFullNode(const SvxNodeIdx &rOldNode,
     }
 }
 
-bool SvxRTFParser::UncompressableStackEntry(const SvxRTFItemStackType &rSet) const
+bool SvxRTFParser::UncompressableStackEntry(const SvxRTFItemStackType &) const
 {
     return false;
 }
