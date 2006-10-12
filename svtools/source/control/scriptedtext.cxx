@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptedtext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:40:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:12:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,7 +258,7 @@ void SvtScriptedTextHelper_Impl::CalculateBreaks( const uno::Reference< i18n::XB
                                 nScript = i18n::ScriptType::LATIN;
                                 while( (nScript != i18n::ScriptType::WEAK) && (nCharIx == nNextCharIx) )
                                 {
-                                    nNextCharIx = mrOutDevice.HasGlyphs( GetFont( nScript ), maText, nCharIx, nNextPos - nCharIx );
+                                    nNextCharIx = mrOutDevice.HasGlyphs( GetFont( nScript ), maText, sal::static_int_cast< USHORT >(nCharIx), sal::static_int_cast< USHORT >(nNextPos - nCharIx) );
                                     if( nCharIx == nNextCharIx )
                                         ++nScript;
                                 }
