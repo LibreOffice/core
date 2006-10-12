@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:30:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:21:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1804,7 +1804,7 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
     // #103299# - if CTL font setting is not readonly
     if(!pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_CTLFONT))
     {
-        sal_Bool bIsCTLFixed = nType & SCRIPTTYPE_COMPLEX;
+        bool bIsCTLFixed = (nType & SCRIPTTYPE_COMPLEX) != 0;
         lcl_checkLanguageCheckBox(aCTLSupportCB, bIsCTLFixed, m_bOldCtl);
         SupportHdl( &aCTLSupportCB );
     }
@@ -1812,7 +1812,7 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
     // #103299# - if CJK support is not readonly
     if(!pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_ALLCJK))
     {
-        sal_Bool bIsCJKFixed = nType & SCRIPTTYPE_ASIAN;
+        bool bIsCJKFixed = (nType & SCRIPTTYPE_ASIAN) != 0;
         lcl_checkLanguageCheckBox(aAsianSupportCB, bIsCJKFixed, m_bOldAsian);
         SupportHdl( &aAsianSupportCB );
     }
