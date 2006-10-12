@@ -25,6 +25,8 @@
 
 class SvxColorWindow_Impl : public SfxPopupWindow
 {
+    using FloatingWindow::StateChanged;
+
 private:
     const USHORT                                                        theSlotId;
     ValueSet                                                            aColorSet;
