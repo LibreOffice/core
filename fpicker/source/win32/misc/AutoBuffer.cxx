@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AutoBuffer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:59:06 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:55:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,13 @@
 #include <osl/diagnose.h>
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 //------------------------------------------------------------------------
 // namespace directives
@@ -83,8 +89,6 @@ CAutoUnicodeBuffer::~CAutoUnicodeBuffer( )
 
 sal_Bool SAL_CALL CAutoUnicodeBuffer::resize( size_t new_size )
 {
-    OSL_ASSERT( new_size >= 0 );
-
     if ( new_size != m_buffSize )
     {
         if ( new_size > m_buffSize )
