@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formnavigation.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:56:28 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:14:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ namespace frm
 
     protected:
         OFormNavigationHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB );
-        ~OFormNavigationHelper();
+        virtual ~OFormNavigationHelper();
 
         // XComponent
         void SAL_CALL dispose(  ) throw( ::com::sun::star::uno::RuntimeException );
