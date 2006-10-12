@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:11:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:06:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -713,6 +713,20 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
 
 // -----------------------------------------------------------------------
 
+void SvxCharNamePage::DeactivatePage()
+{
+    SvxCharBasePage::DeactivatePage();
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCharNamePage::ActivatePage()
+{
+    SvxCharBasePage::ActivatePage();
+}
+
+// -----------------------------------------------------------------------
+
 SvxCharNamePage::~SvxCharNamePage()
 {
     delete m_pImpl;
@@ -766,8 +780,12 @@ void SvxCharNamePage::Initialize()
     FASTBOOL bKillTable = FALSE;
     const SfxPoolItem* pItem = NULL;
 
-    if ( pDocSh && ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
-        pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+    if ( pDocSh )
+    {
+        pItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        if ( pItem != NULL )
+            pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+    }
 
     if ( !pColorTable )
     {
@@ -826,12 +844,16 @@ const FontList* SvxCharNamePage::GetFontList() const
         const SfxPoolItem* pItem;
 
         /* #110771# SvxFontListItem::GetFontList can return NULL */
-        if ( pDocSh && ( pItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST ) ) )
+        if ( pDocSh )
         {
-            DBG_ASSERT(NULL != ( (SvxFontListItem*)pItem )->GetFontList(),
-                       "Where is the font list?")
-            m_pImpl->m_pFontList =  static_cast<const SvxFontListItem*>(pItem )->GetFontList()->Clone();
-            m_pImpl->m_bMustDelete = TRUE;
+            pItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
+            if ( pItem != NULL )
+            {
+                DBG_ASSERT(NULL != ( (SvxFontListItem*)pItem )->GetFontList(),
+                           "Where is the font list?")
+                    m_pImpl->m_pFontList =  static_cast<const SvxFontListItem*>(pItem )->GetFontList()->Clone();
+                m_pImpl->m_bMustDelete = TRUE;
+            }
         }
         if(!m_pImpl->m_pFontList)
         {
@@ -1731,7 +1753,7 @@ namespace
         // ausgehend von der akt. Hoehe:
         //      - negativ bis minimal 2 pt
         //      - positiv bis maximal 999 pt
-        _pFontSizeLB->EnablePtRelativeMode( -(nCurHeight - 20), (9999 - nCurHeight), 10 );
+        _pFontSizeLB->EnablePtRelativeMode( sal::static_int_cast< short >(-(nCurHeight - 20)), (9999 - nCurHeight), 10 );
     }
 }
 // -----------------------------------------------------------------------------
@@ -1869,8 +1891,12 @@ void SvxCharEffectsPage::Initialize()
     XColorTable* pColorTable = NULL;
     FASTBOOL bKillTable = FALSE;
 
-    if ( pDocSh && ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
-        pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+    if ( pDocSh )
+    {
+        pItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        if ( pItem != NULL )
+            pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+    }
 
     if ( !pColorTable )
     {
@@ -2007,7 +2033,8 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
 void SvxCharEffectsPage::SetCaseMap_Impl( SvxCaseMap eCaseMap )
 {
     if ( SVX_CASEMAP_END > eCaseMap )
-        m_aEffects2LB.SelectEntryPos( eCaseMap );
+        m_aEffects2LB.SelectEntryPos(
+            sal::static_int_cast< USHORT >( eCaseMap ) );
     else
     {
         m_aEffects2LB.SetNoSelection();
@@ -2149,7 +2176,7 @@ IMPL_LINK( SvxCharEffectsPage, SelectHdl_Impl, ListBox*, pBox )
 
 IMPL_LINK( SvxCharEffectsPage, UpdatePreview_Impl, ListBox*, EMPTYARG )
 {
-    BOOL bEnable = ( ( m_aUnderlineLB.GetSelectEntryPos() > 0 ) |
+    bool bEnable = ( ( m_aUnderlineLB.GetSelectEntryPos() > 0 ) |
                     ( m_aStrikeoutLB.GetSelectEntryPos() > 0 ) );
     m_aIndividualWordsBtn.Enable( bEnable );
 
@@ -2368,7 +2395,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
             ? CHRDLG_POSITION_OVER
             : ( eMark == EMPHASISMARK_POS_BELOW ) ? CHRDLG_POSITION_UNDER : 0;
 
-        for ( int i = 0; i < m_aPositionLB.GetEntryCount(); i++ )
+        for ( USHORT i = 0; i < m_aPositionLB.GetEntryCount(); i++ )
         {
             if ( nEntryData == (ULONG)m_aPositionLB.GetEntryData(i) )
             {
@@ -2989,6 +3016,20 @@ SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rIn
 
 // -----------------------------------------------------------------------
 
+void SvxCharPositionPage::DeactivatePage()
+{
+    SvxCharBasePage::DeactivatePage();
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCharPositionPage::ActivatePage()
+{
+    SvxCharBasePage::ActivatePage();
+}
+
+// -----------------------------------------------------------------------
+
 void SvxCharPositionPage::Initialize()
 {
     // to handle the changes of the other pages
@@ -3106,8 +3147,8 @@ IMPL_LINK( SvxCharPositionPage, RotationHdl_Impl, RadioButton*, pBtn )
     BOOL bEnable = FALSE;
     if (&m_a90degRB == pBtn  ||  &m_a270degRB == pBtn)
         bEnable = TRUE;
-    else if (&m_a0degRB != pBtn)
-        DBG_ERROR( "unexpected button" );
+    else
+        OSL_ENSURE( &m_a0degRB == pBtn, "unexpected button" );
     m_aFitToLineCB.Enable( bEnable );
     return 0;
 }
@@ -3224,7 +3265,9 @@ IMPL_LINK( SvxCharPositionPage, PairKerningHdl_Impl, CheckBox*, EMPTYARG )
 
 IMPL_LINK( SvxCharPositionPage, LoseFocusHdl_Impl, MetricField*, pField )
 {
+#ifdef DBG_UTIL
     sal_Bool bHigh = m_aHighPosBtn.IsChecked();
+#endif
     sal_Bool bLow = m_aLowPosBtn.IsChecked();
     DBG_ASSERT( bHigh || bLow, "normal position is not valid" );
 
@@ -3733,6 +3776,19 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rIn
 
 // -----------------------------------------------------------------------
 
+void SvxCharTwoLinesPage::DeactivatePage()
+{
+    SvxCharBasePage::DeactivatePage();
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCharTwoLinesPage::ActivatePage()
+{
+    SvxCharBasePage::ActivatePage();
+}
+// -----------------------------------------------------------------------
+
 void SvxCharTwoLinesPage::Initialize()
 {
     Size aSize = m_aStartBracketLB.GetSizePixel();
@@ -3833,6 +3889,13 @@ IMPL_LINK( SvxCharTwoLinesPage, CharacterMapHdl_Impl, ListBox*, pBox )
         SelectCharacter( pBox );
     UpdatePreview_Impl();
     return 0;
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCharTwoLinesPage::ActivatePage( const SfxItemSet& rSet )
+{
+    SvxCharBasePage::ActivatePage( rSet );
 }
 
 // -----------------------------------------------------------------------
