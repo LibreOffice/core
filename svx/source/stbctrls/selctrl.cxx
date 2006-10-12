@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:45:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:05:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,17 +65,17 @@ SFX_IMPL_STATUSBAR_CONTROL(SvxSelectionModeControl, SfxUInt16Item);
 
 // class SvxSelectionModeControl -----------------------------------------
 
-SvxSelectionModeControl::SvxSelectionModeControl( USHORT nSlotId,
-                                                  USHORT nId,
+SvxSelectionModeControl::SvxSelectionModeControl( USHORT _nSlotId,
+                                                  USHORT _nId,
                                                   StatusBar& rStb ) :
-    SfxStatusBarControl( nSlotId, nId, rStb ),
+    SfxStatusBarControl( _nSlotId, _nId, rStb ),
     nState( 0 )
 {
 }
 
 // -----------------------------------------------------------------------
 
-void SvxSelectionModeControl::StateChanged( USHORT nSID, SfxItemState eState,
+void SvxSelectionModeControl::StateChanged( USHORT, SfxItemState eState,
                                             const SfxPoolItem* pState )
 {
     if ( SFX_ITEM_AVAILABLE != eState )
@@ -113,7 +113,7 @@ void SvxSelectionModeControl::Click()
 
 // -----------------------------------------------------------------------
 
-void SvxSelectionModeControl::Paint( const UserDrawEvent& rUsrEvt )
+void SvxSelectionModeControl::Paint( const UserDrawEvent& )
 {
     DrawItemText_Impl();
 }
@@ -123,24 +123,24 @@ void SvxSelectionModeControl::Paint( const UserDrawEvent& rUsrEvt )
 void SvxSelectionModeControl::DrawItemText_Impl()
 {
     String sTxt;
-    USHORT nId = 0;
+    USHORT _nId = 0;
 
     switch ( nState )
     {
         case 0:
-            nId = RID_SVXSTR_SELMODE_STD;
+            _nId = RID_SVXSTR_SELMODE_STD;
             break;
         case 1:
-            nId = RID_SVXSTR_SELMODE_ER;
+            _nId = RID_SVXSTR_SELMODE_ER;
             break;
         case 2:
-            nId = RID_SVXSTR_SELMODE_ERG;
+            _nId = RID_SVXSTR_SELMODE_ERG;
             break;
         default: DBG_ERROR( "invalid selection mode!" );
     }
 
-    if ( nId )
-        sTxt = SVX_RESSTR( nId );
+    if ( _nId )
+        sTxt = SVX_RESSTR( _nId );
     GetStatusBar().SetItemText( GetId(), sTxt );
 }
 

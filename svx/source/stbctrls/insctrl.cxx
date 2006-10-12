@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:44:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:04:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,14 +67,14 @@ SFX_IMPL_STATUSBAR_CONTROL(SvxInsertStatusBarControl, SfxBoolItem);
 
 // class SvxInsertStatusBarControl ---------------------------------------
 
-SvxInsertStatusBarControl::SvxInsertStatusBarControl( USHORT nSlotId,
-                                                      USHORT nId,
+SvxInsertStatusBarControl::SvxInsertStatusBarControl( USHORT _nSlotId,
+                                                      USHORT _nId,
                                                       StatusBar& rStb ) :
 
-    SfxStatusBarControl( nSlotId, nId, rStb ),
+    SfxStatusBarControl( _nSlotId, _nId, rStb ),
     bInsert( TRUE )
 {
-    rStb.SetHelpId( nId, nSlotId );
+    rStb.SetHelpId( _nId, _nSlotId );
 }
 
 // -----------------------------------------------------------------------
@@ -85,7 +85,7 @@ SvxInsertStatusBarControl::~SvxInsertStatusBarControl()
 
 // -----------------------------------------------------------------------
 
-void SvxInsertStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState,
+void SvxInsertStatusBarControl::StateChanged( USHORT , SfxItemState eState,
                                               const SfxPoolItem* pState )
 {
     if ( SFX_ITEM_AVAILABLE != eState )
@@ -119,7 +119,7 @@ void SvxInsertStatusBarControl::Click()
 
 // -----------------------------------------------------------------------
 
-void SvxInsertStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
+void SvxInsertStatusBarControl::Paint( const UserDrawEvent& )
 {
     DrawItemText_Impl();
 }
@@ -128,11 +128,11 @@ void SvxInsertStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
 
 void SvxInsertStatusBarControl::DrawItemText_Impl()
 {
-    USHORT nId = RID_SVXSTR_OVERWRITE_TEXT;
+    USHORT _nId = RID_SVXSTR_OVERWRITE_TEXT;
 
     if ( bInsert )
-        nId = RID_SVXSTR_INSERT_TEXT;
-    GetStatusBar().SetItemText( GetId(), SVX_RESSTR( nId ) );
+        _nId = RID_SVXSTR_INSERT_TEXT;
+    GetStatusBar().SetItemText( GetId(), SVX_RESSTR( _nId ) );
 }
 
 ULONG SvxInsertStatusBarControl::GetDefItemWidth(const StatusBar& rStb)

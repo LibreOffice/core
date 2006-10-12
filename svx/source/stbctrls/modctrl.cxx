@@ -4,9 +4,9 @@
  *
  *  $RCSfile: modctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:45:13 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:04:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,18 +59,18 @@ SFX_IMPL_STATUSBAR_CONTROL(SvxModifyControl, SfxBoolItem);
 
 // class SvxModifyControl ------------------------------------------------
 
-SvxModifyControl::SvxModifyControl( USHORT nSlotId,
-                                    USHORT nId,
+SvxModifyControl::SvxModifyControl( USHORT _nSlotId,
+                                    USHORT _nId,
                                     StatusBar& rStb ) :
 
-    SfxStatusBarControl( nSlotId, nId, rStb ),
+    SfxStatusBarControl( _nSlotId, _nId, rStb ),
     bState( TRUE )
 {
 }
 
 // -----------------------------------------------------------------------
 
-void SvxModifyControl::StateChanged( USHORT nSID, SfxItemState eState,
+void SvxModifyControl::StateChanged( USHORT, SfxItemState eState,
                                      const SfxPoolItem* pState )
 {
     if ( SFX_ITEM_AVAILABLE != eState )
@@ -86,7 +86,7 @@ void SvxModifyControl::StateChanged( USHORT nSID, SfxItemState eState,
 
 // -----------------------------------------------------------------------
 
-void SvxModifyControl::Paint( const UserDrawEvent& rUsrEvt )
+void SvxModifyControl::Paint( const UserDrawEvent& )
 {
     DrawItemText_Impl();
 }
