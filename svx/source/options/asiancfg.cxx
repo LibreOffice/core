@@ -4,9 +4,9 @@
  *
  *  $RCSfile: asiancfg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:28:40 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:59:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ struct SvxForbiddenStruct_Impl
 };
 //-----------------------------------------------------------------------------
 typedef SvxForbiddenStruct_Impl* SvxForbiddenStruct_ImplPtr;
-SV_DECL_PTRARR_DEL(SvxForbiddenStructArr, SvxForbiddenStruct_ImplPtr, 2, 2);
+SV_DECL_PTRARR_DEL(SvxForbiddenStructArr, SvxForbiddenStruct_ImplPtr, 2, 2)
 SV_IMPL_PTRARR(SvxForbiddenStructArr, SvxForbiddenStruct_ImplPtr);
 //-----------------------------------------------------------------------------
 struct SvxAsianConfig_Impl
@@ -168,7 +168,7 @@ void SvxAsianConfig::Load()
 /* -----------------------------17.01.01 09:57--------------------------------
 
  ---------------------------------------------------------------------------*/
-void    SvxAsianConfig::Notify( const Sequence<OUString>& rPropertyNames)
+void    SvxAsianConfig::Notify( const Sequence<OUString>& )
 {
     Load();
 }

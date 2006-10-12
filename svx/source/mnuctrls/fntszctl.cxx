@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntszctl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:25:28 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:57:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@ IMPL_LINK( SvxFontSizeMenuControl, MenuSelect, FontSizeMenu*, pMen )
 
 void SvxFontSizeMenuControl::StateChanged(
 
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    USHORT, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     rParent.EnableItem( GetId(), SFX_ITEM_DISABLED != eState );
@@ -207,18 +207,18 @@ void SvxFontSizeMenuControl::StateChanged(
 
 SvxFontSizeMenuControl::SvxFontSizeMenuControl
 (
-    USHORT          nId,
+    USHORT          _nId,
     Menu&           rMenu,
     SfxBindings&    rBindings
 ) :
-    SfxMenuControl( nId, rBindings ),
+    SfxMenuControl( _nId, rBindings ),
 
     pMenu   ( new FontSizeMenu ),
     rParent ( rMenu ),
     aFontNameForwarder( SID_ATTR_CHAR_FONT, *this )
 
 {
-    rMenu.SetPopupMenu( nId, pMenu );
+    rMenu.SetPopupMenu( _nId, pMenu );
     pMenu->SetSelectHdl( LINK( this, SvxFontSizeMenuControl, MenuSelect ) );
 }
 
