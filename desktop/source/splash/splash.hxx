@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splash.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 09:15:03 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:18:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,9 +104,9 @@ private:
     void loadConfig();
     void initBitmap();
     void updateStatus();
-    bool findScreenBitmap( Bitmap& aBitmap );
-    bool findAppBitmap( Bitmap& aBitmap );
-    bool findBitmap( const rtl::OUString aBmpFileName, Bitmap& aBitmap );
+    bool findScreenBitmap();
+    bool findAppBitmap();
+    bool findBitmap( const rtl::OUString aBmpFileName );
     void determineProgressRatioValues( rtl::Bootstrap& rIniFile, double& rXRelPos, double& rYRelPos, double& rRelWidth, double& rRelHeight );
 
     static  SplashScreen *_pINSTANCE;
