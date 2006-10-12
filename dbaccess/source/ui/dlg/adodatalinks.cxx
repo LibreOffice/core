@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adodatalinks.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:07:19 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:36:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,14 @@
 
 
 #if defined(WIN) || defined(WNT)
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#pragma warning(disable: 4917)
+#endif
 #include "msdasc.h"        // OLE DB Service Component header
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include "stdio.h"
 
 #include <initguid.h>  // Include only once in your application
