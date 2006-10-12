@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lockfile.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:37:00 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:06:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,9 +79,9 @@ namespace desktop {
         { return ByteString( "IPCServer" ); }
 
     Lockfile::Lockfile( bool bIPCserver )
-    :m_bRemove(sal_False)
+    :m_bIPCserver(bIPCserver)
+    ,m_bRemove(sal_False)
     ,m_bIsLocked(sal_False)
-    ,m_bIPCserver(bIPCserver)
     {
         // build the file-url to use for the lock
         OUString aUserPath;
