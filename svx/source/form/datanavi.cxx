@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datanavi.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:03:49 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:44:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,7 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #ifndef _COM_SUN_STAR_XFORMS_XFORMSSUPPLIER_HPP_
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 #endif
@@ -3714,7 +3715,8 @@ namespace svxform
     //------------------------------------------------------------------------
     IMPL_LINK( AddInstanceDialog, FilePickerHdl, PushButton *, EMPTYARG )
     {
-        ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+        ::sfx2::FileDialogHelper aDlg(
+            css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
         INetURLObject aFile( SvtPathOptions().GetWorkPath() );
 
         aDlg.AddFilter( m_sAllFilterName, DEFINE_CONST_UNICODE(FILEDIALOG_FILTER_ALL) );
