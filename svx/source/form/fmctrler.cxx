@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:05:26 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:44:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1312,10 +1312,10 @@ void FmXFormController::focusGained(const FocusEvent& e) throw( RuntimeException
             )
         {
             // check the old control if the content is ok
-#if (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
             Reference< XBoundControl >  xLockingTest(m_xCurrentControl, UNO_QUERY);
             sal_Bool bControlIsLocked = xLockingTest.is() && xLockingTest->getLock();
-            DBG_ASSERT(!bControlIsLocked, "FmXFormController::Gained: I'm modified and the current control is locked ? How this ?");
+            OSL_ENSURE(!bControlIsLocked, "FmXFormController::Gained: I'm modified and the current control is locked ? How this ?");
             // normalerweise sollte ein gelocktes Control nicht modified sein, also muss wohl mein bModified aus einem anderen Kontext
             // gesetzt worden sein, was ich nicht verstehen wuerde ...
 #endif
@@ -3738,7 +3738,7 @@ void SAL_CALL FmXFormController::removeStatusListener( const Reference< XStatusL
 Reference< XDispatchProviderInterceptor >  FmXFormController::createInterceptor(const Reference< XDispatchProviderInterception > & _xInterception)
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-#if DBG_UTIL
+#ifdef DBG_UTIL
     // check if we already have a interceptor for the given object
     for (   ConstInterceptorsIterator aIter = m_aControlDispatchInterceptors.begin();
             aIter != m_aControlDispatchInterceptors.end();
