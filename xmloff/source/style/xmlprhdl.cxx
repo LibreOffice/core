@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlprhdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:00:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:52:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ XMLPropertyHandler::~XMLPropertyHandler()
      // does nothing
 }
 
-sal_Bool XMLPropertyHandler::equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const
+bool XMLPropertyHandler::equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const
 {
     return (r1 == r2);
 }
