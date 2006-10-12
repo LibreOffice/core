@@ -4,9 +4,9 @@
  *
  *  $RCSfile: symtbl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:03:42 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:27:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -352,10 +352,10 @@ void SbiSymDef::SetType( SbxDataType t )
         {
             char ch = (char)aName.GetBuffer()[0];
             if( ch == '_' ) ch = 'Z';
-            ch = toupper( ch );
-            unsigned char c = (unsigned char)ch;
+            int ch2 = toupper( ch );
+            unsigned char c = (unsigned char)ch2;
             if( c > 0 && c < 128 )
-                t = pIn->pParser->eDefTypes[ ch - 'A' ];
+                t = pIn->pParser->eDefTypes[ ch2 - 'A' ];
         }
     }
     eType = t;
