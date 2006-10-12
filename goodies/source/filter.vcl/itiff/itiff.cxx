@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itiff.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:53:18 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:39:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -734,7 +734,10 @@ BOOL TIFFReader::ConvertScanline( ULONG nY )
                 BYTE  nLBlue = 0;
                 for ( nx = 0; nx < nImageWidth; nx++, pt += nSamplesPerPixel )
                 {
-                    pAcc->SetPixel( nY, nx, Color( ( nLRed+=pt[ 0 ] ), ( nLGreen += pt[ 1 ] ), ( nLBlue += pt[ 2 ] ) ) );
+                    nLRed = nLRed + pt[ 0 ];
+                    nLGreen = nLGreen + pt[ 1 ];
+                    nLBlue = nLBlue + pt[ 2 ];
+                    pAcc->SetPixel( nY, nx, Color( nLRed, nLGreen, nLBlue ) );
                 }
             }
             else
@@ -802,9 +805,10 @@ BOOL TIFFReader::ConvertScanline( ULONG nY )
                     for( ns = 0; ns < 4; ns++ )
                     {
                         if( nPlanes < 3 )
-                            nSamp[ ns ] = ( nSampLast[ ns ] += (BYTE) GetBits( pMap[ 0 ], ( nx * nSamplesPerPixel + ns ) * nBitsPerSample, nBitsPerSample ) );
+                            nSampLast[ ns ] = nSampLast[ ns ] + (BYTE) GetBits( pMap[ 0 ], ( nx * nSamplesPerPixel + ns ) * nBitsPerSample, nBitsPerSample );
                         else
-                            nSamp[ ns ] = ( nSampLast[ ns ] += (BYTE) GetBits( pMap[ ns ], nx * nBitsPerSample, nBitsPerSample ) );
+                            nSampLast[ ns ] = nSampLast[ ns ] + (BYTE) GetBits( pMap[ ns ], nx * nBitsPerSample, nBitsPerSample );
+                        nSamp[ ns ] = nSampLast[ ns ];
                     }
                 }
                 else
@@ -848,7 +852,7 @@ BOOL TIFFReader::ConvertScanline( ULONG nY )
                         for ( nx = 0; nx < nImageWidth; nx++ )
                         {
                             pAcc->SetPixel( nY, nx, nLast );
-                            nLast += *pt++;
+                            nLast = nLast + *pt++;
                         }
                     }
                     else
@@ -868,7 +872,7 @@ BOOL TIFFReader::ConvertScanline( ULONG nY )
                         for ( nx = 0; nx < nImageWidth; nx++ )
                         {
                             pAcc->SetPixel( nY, nx, nLast );
-                            nLast += *pt++;
+                            nLast = nLast + *pt++;
                         }
                     }
                     else
@@ -1208,7 +1212,8 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic,
                     nDstBitsPerPixel = 8;
 
                 aBitmap = Bitmap( Size( nImageWidth, nImageLength ), nDstBitsPerPixel );
-                if ( ( pAcc = aBitmap.AcquireWriteAccess() ) )
+                pAcc = aBitmap.AcquireWriteAccess();
+                if ( pAcc )
                 {
                     if ( nPlanarConfiguration == 1 )
                         nPlanes = 1;
