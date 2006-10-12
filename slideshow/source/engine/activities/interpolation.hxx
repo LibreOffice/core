@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpolation.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:37:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:58:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,7 @@ namespace presentation
         }
 
         /// Specialization for non-interpolatable constants/enums
-        template<> sal_Int16 lerp< sal_Int16 >( const Interpolator< sal_Int16 >&    rInterpolator,
+        template<> sal_Int16 lerp< sal_Int16 >( const Interpolator< sal_Int16 >&    /*rInterpolator*/,
                                                 const sal_Int16&                    rFrom,
                                                 const sal_Int16&                    rTo,
                                                 sal_uInt32                          nFrame,
@@ -163,7 +163,7 @@ namespace presentation
         }
 
         /// Specialization for non-interpolatable strings
-        template<> ::rtl::OUString lerp< ::rtl::OUString >( const Interpolator< ::rtl::OUString >&  rInterpolator,
+        template<> ::rtl::OUString lerp< ::rtl::OUString >( const Interpolator< ::rtl::OUString >&  /*rInterpolator*/,
                                                             const ::rtl::OUString&                  rFrom,
                                                             const ::rtl::OUString&                  rTo,
                                                             sal_uInt32                              nFrame,
@@ -177,7 +177,7 @@ namespace presentation
         }
 
         /// Specialization for non-interpolatable bools
-        template<> bool lerp< bool >( const Interpolator< bool >&   rInterpolator,
+        template<> bool lerp< bool >( const Interpolator< bool >&   /*rInterpolator*/,
                                       const bool&                   bFrom,
                                       const bool&                   bTo,
                                       sal_uInt32                    nFrame,
