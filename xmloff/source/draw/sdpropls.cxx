@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:28:21 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:41:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -841,11 +841,11 @@ public:
             const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
-sal_Bool XMLCaptionEscapeRelative::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCaptionEscapeRelative::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue;
 
-    if( !rUnitConverter.convertPercent( nValue, rStrImpValue ) )
+    if( !SvXMLUnitConverter::convertPercent( nValue, rStrImpValue ) )
         return sal_False;
 
     nValue *= 100;
@@ -853,7 +853,7 @@ sal_Bool XMLCaptionEscapeRelative::importXML( const OUString& rStrImpValue, Any&
     return sal_True;
 }
 
-sal_Bool XMLCaptionEscapeRelative::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCaptionEscapeRelative::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue;
     if( !(rValue >>= nValue ) )
@@ -861,7 +861,7 @@ sal_Bool XMLCaptionEscapeRelative::exportXML( OUString& rStrExpValue, const Any&
 
     nValue /= 100;
       OUStringBuffer aOut;
-     rUnitConverter.convertPercent( aOut, nValue );
+     SvXMLUnitConverter::convertPercent( aOut, nValue );
     rStrExpValue = aOut.makeStringAndClear();
     return sal_True;
 }
@@ -941,7 +941,7 @@ sal_Bool XMLSdHeaderFooterVisibilityTypeHdl::importXML(
 sal_Bool XMLSdHeaderFooterVisibilityTypeHdl::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
       OUStringBuffer aOut;
@@ -949,7 +949,7 @@ sal_Bool XMLSdHeaderFooterVisibilityTypeHdl::exportXML(
 
     if (rValue >>= bValue)
     {
-        rUnitConverter.convertBool( aOut, bValue );
+        SvXMLUnitConverter::convertBool( aOut, bValue );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = sal_True;
