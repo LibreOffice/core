@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:14:48 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:41:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,9 +275,11 @@ void OCopyTableWizard::construct()
 OCopyTableWizard::~OCopyTableWizard()
 {
     DBG_DTOR(OCopyTableWizard,NULL);
-    TabPage *pPage=0;
-    while((pPage = GetPage(0)))
+    for ( ;; )
     {
+        TabPage *pPage = GetPage(0);
+        if ( pPage == NULL )
+            break;
         RemovePage( pPage );
         delete pPage;
     }
@@ -442,7 +444,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
                 if ( bOnFirstPage && !bCheckOk )
                 {
                     showColumnTypeNotSupported(m_vSourceVec[nBreakPos-1]->first);
-                    OWizTypeSelect* pPage = reinterpret_cast<OWizTypeSelect*>(GetPage(3));
+                    OWizTypeSelect* pPage = static_cast<OWizTypeSelect*>(GetPage(3));
                     if ( pPage )
                     {
                         pPage->setDisplayRow(nBreakPos);
@@ -478,7 +480,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
                             {
                                 case RET_YES:
                                 {
-                                    OCopyTable* pPage = reinterpret_cast<OCopyTable*>(GetPage(0));
+                                    OCopyTable* pPage = static_cast<OCopyTable*>(GetPage(0));
                                     m_bCreatePrimaryColumn = sal_True;
                                     m_aKeyName = pPage->GetKeyName();
                                     sal_Int32 nBreakPos2 = 0;
