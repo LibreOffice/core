@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TokenWriter.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:14:49 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:38:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,7 +204,7 @@ namespace dbaui
         static const char __FAR_DATA sIndentSource[];
         char                    sIndent[nIndentMax+1];
         sal_Int16               m_nIndent;
-    #if DBG_UTIL
+    #ifdef DBG_UTIL
         BOOL                    m_bCheckFont;
     #endif
 
