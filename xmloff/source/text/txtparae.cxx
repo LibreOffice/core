@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:18:46 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:55:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2442,7 +2442,7 @@ void XMLTextParagraphExport::exportContour(
     // svg:viewbox
     SdXMLImExViewBox aViewBox(0, 0, aSize.Width, aSize.Height);
     GetExport().AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX,
-                aViewBox.GetExportString(GetExport().GetMM100UnitConverter()));
+                aViewBox.GetExportString());
 
     sal_Int32 nOuterCnt( aSourcePolyPolygon.getLength() );
 
@@ -2453,8 +2453,7 @@ void XMLTextParagraphExport::exportContour(
         /*const*/ PointSequence* pSequence =
                             (PointSequence*)aSourcePolyPolygon.getConstArray();
 
-        SdXMLImExPointsElement aPoints( pSequence, aViewBox, aPoint,
-                                aSize, GetExport().GetMM100UnitConverter() );
+        SdXMLImExPointsElement aPoints( pSequence, aViewBox, aPoint, aSize );
 
         // write point array
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_POINTS,
@@ -2477,8 +2476,7 @@ void XMLTextParagraphExport::exportContour(
                 if(pSequence)
                 {
                     aSvgDElement.AddPolygon(pSequence, 0L, aPoint,
-                        aSize, GetExport().GetMM100UnitConverter(),
-                        sal_True );
+                        aSize, sal_True );
                 }
             }
 
