@@ -4,9 +4,9 @@
  *
  *  $RCSfile: measure.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:27:42 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,7 +215,9 @@ void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     const SfxPoolItem* pItem = GetItem( rAttrs, SDRATTR_MEASURELINEDIST );
 
     // SdrMeasureLineDistItem
-    if( pItem || (pItem = &pPool->GetDefaultItem( SDRATTR_MEASURELINEDIST )) )
+    if( pItem == NULL )
+        pItem = &pPool->GetDefaultItem( SDRATTR_MEASURELINEDIST );
+    if( pItem )
     {
         long nValue = ( ( const SdrMeasureLineDistItem* )pItem )->GetValue();
         SetMetricValue( aMtrFldLineDist, nValue, eUnit );
@@ -228,7 +230,9 @@ void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
 
     // SdrMeasureHelplineOverhangItem
     pItem = GetItem( rAttrs, SDRATTR_MEASUREHELPLINEOVERHANG );
-    if( pItem || (pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINEOVERHANG )))
+    if( pItem == NULL )
+        pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINEOVERHANG );
+    if( pItem )
     {
         long nValue = ( ( const SdrMeasureHelplineOverhangItem* )pItem )->GetValue();
         SetMetricValue( aMtrFldHelplineOverhang, nValue, eUnit );
@@ -241,7 +245,9 @@ void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
 
     // SdrMeasureHelplineDistItem
     pItem = GetItem( rAttrs, SDRATTR_MEASUREHELPLINEDIST );
-    if( pItem || (pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINEDIST )))
+    if( pItem == NULL )
+        pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINEDIST );
+    if( pItem )
     {
         long nValue = ( ( const SdrMeasureHelplineDistItem* )pItem )->GetValue();
         SetMetricValue( aMtrFldHelplineDist, nValue, eUnit );
@@ -254,7 +260,9 @@ void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
 
     // SdrMeasureHelpline1LenItem
     pItem = GetItem( rAttrs, SDRATTR_MEASUREHELPLINE1LEN );
-    if( pItem || (pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINE1LEN )))
+    if( pItem == NULL )
+        pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINE1LEN );
+    if( pItem )
     {
         long nValue = ( ( const SdrMeasureHelpline1LenItem* )pItem )->GetValue();
         SetMetricValue( aMtrFldHelpline1Len, nValue, eUnit );
@@ -267,7 +275,9 @@ void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
 
     // SdrMeasureHelpline2LenItem
     pItem = GetItem( rAttrs, SDRATTR_MEASUREHELPLINE2LEN );
-    if( pItem || (pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINE2LEN )))
+    if( pItem == NULL )
+        pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINE2LEN );
+    if( pItem )
     {
         long nValue = ( ( const SdrMeasureHelpline2LenItem* )pItem )->GetValue();
         SetMetricValue( aMtrFldHelpline2Len, nValue, eUnit );
@@ -293,7 +303,9 @@ void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
 
     // SdrMeasureDecimalPlacesItem
     pItem = GetItem( rAttrs, SDRATTR_MEASUREDECIMALPLACES );
-    if( pItem || (pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREDECIMALPLACES )))
+    if( pItem == NULL )
+        pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREDECIMALPLACES );
+    if( pItem )
     {
         INT16 nValue = ( ( const SdrMeasureDecimalPlacesItem* )pItem )->GetValue();
         aMtrFldDecimalPlaces.SetValue( nValue );
@@ -499,7 +511,9 @@ BOOL SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
     if( aMtrFldDecimalPlaces.GetText() != aMtrFldDecimalPlaces.GetSavedValue() )
     {
         nValue = aMtrFldDecimalPlaces.GetValue();
-        rAttrs.Put( SdrMeasureDecimalPlacesItem( nValue ) );
+        rAttrs.Put(
+            SdrMeasureDecimalPlacesItem(
+                sal::static_int_cast< INT16 >( nValue ) ) );
         bModified = TRUE;
     }
 
@@ -541,6 +555,7 @@ BOOL SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
         RECT_POINT eRP = aCtlPosition.GetActualRP();
         switch( eRP )
         {
+            default:
             case RP_LT: eVPos = SDRMEASURE_ABOVE;
                         eHPos = SDRMEASURE_TEXTLEFTOUTSIDE; break;
             case RP_LM: eVPos = SDRMEASURETEXT_VERTICALCENTERED;
@@ -754,7 +769,8 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
 
     if( p == &aMtrFldDecimalPlaces )
     {
-        INT16 nValue = aMtrFldDecimalPlaces.GetValue();
+        INT16 nValue = sal::static_int_cast< INT16 >(
+            aMtrFldDecimalPlaces.GetValue() );
         aAttrSet.Put( SdrMeasureDecimalPlacesItem( nValue ) );
     }
 
@@ -794,6 +810,7 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
 
         switch( eRP )
         {
+            default:
             case RP_LT: eVPos = SDRMEASURE_ABOVE;
                         eHPos = SDRMEASURE_TEXTLEFTOUTSIDE; break;
             case RP_LM: eVPos = SDRMEASURETEXT_VERTICALCENTERED;
