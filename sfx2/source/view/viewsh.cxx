@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:51:52 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:59:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -851,9 +851,7 @@ SfxViewShell::SfxViewShell
 
 :   SfxShell(this)
     ,pImp( new SfxViewShell_Impl )
-#if !SFX_VIEWSH_INCLUDES_CLIENTSH_HXX
     ,pIPClientList( 0 )
-#endif
     ,pFrame(pViewFrame)
     ,pSubShell(0)
     ,pWindow(0)
@@ -871,7 +869,7 @@ SfxViewShell::SfxViewShell
 //        SFX_CREATE_MODE_EMBEDDED==pFrame->GetObjectShell()->GetCreateMode() &&
 //        SFX_VIEW_OBJECTSIZE_EMBEDDED == (nFlags & SFX_VIEW_OBJECTSIZE_EMBEDDED);
     pImp->bCanPrint = SFX_VIEW_CAN_PRINT == (nFlags & SFX_VIEW_CAN_PRINT);
-    pImp->bFrameSetImpl = nFlags & SFX_VIEW_IMPLEMENTED_AS_FRAMESET;
+    pImp->bFrameSetImpl = (nFlags & SFX_VIEW_IMPLEMENTED_AS_FRAMESET) != 0;
     pImp->bHasPrintOptions =
         SFX_VIEW_HAS_PRINTOPTIONS == (nFlags & SFX_VIEW_HAS_PRINTOPTIONS);
     pImp->bPlugInsActive = TRUE;
@@ -1626,10 +1624,11 @@ void Change( Menu* pMenu, SfxViewShell* pView )
         {
             if ( aCmd.CompareToAscii(".uno:", 5) == 0 )
             {
-                SfxShell *pShell=0;
-                USHORT nIdx;
-                for (nIdx=0; (pShell=pDisp->GetShell(nIdx)); nIdx++)
+                for (USHORT nIdx=0;;)
                 {
+                    SfxShell *pShell=pDisp->GetShell(nIdx++);
+                    if (pShell == NULL)
+                        break;
                     const SfxInterface *pIFace = pShell->GetInterface();
                     const SfxSlot* pSlot = pIFace->GetSlot( aCmd );
                     if ( pSlot )
