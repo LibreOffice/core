@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lspachdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:55:31 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:50:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ sal_Bool XMLLineHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
         aLSp.Mode = style::LineSpacingMode::PROP;
         if(!rUnitConverter.convertPercent( nTemp, rStrImpValue ))
             return sal_False;
-        aLSp.Height = nTemp;
+        aLSp.Height = sal::static_int_cast< sal_Int16 >(nTemp);
     }
     else if( IsXMLToken( rStrImpValue, XML_CASEMAP_NORMAL) )
     {
@@ -110,7 +110,7 @@ sal_Bool XMLLineHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
         aLSp.Mode = style::LineSpacingMode::FIX;
         if(!rUnitConverter.convertMeasure( nTemp, rStrImpValue, 0x0000, 0xffff ))
             return sal_False;
-        aLSp.Height = nTemp;
+        aLSp.Height = sal::static_int_cast< sal_Int16 >(nTemp);
     }
 
     rValue <<= aLSp;
@@ -159,7 +159,7 @@ sal_Bool XMLLineHeightAtLeastHdl::importXML( const OUString& rStrImpValue, uno::
     aLSp.Mode = style::LineSpacingMode::MINIMUM;
     if(!rUnitConverter.convertMeasure( nTemp, rStrImpValue, 0x0000, 0xffff ))
         return sal_False;
-    aLSp.Height = nTemp;
+    aLSp.Height = sal::static_int_cast< sal_Int16 >(nTemp);
 
     rValue <<= aLSp;
     return sal_True;
@@ -200,7 +200,7 @@ sal_Bool XMLLineSpacingHdl::importXML( const OUString& rStrImpValue, uno::Any& r
     aLSp.Mode = style::LineSpacingMode::LEADING;
     if(!rUnitConverter.convertMeasure( nTemp, rStrImpValue, 0x0000, 0xffff ))
         return sal_False;
-    aLSp.Height = nTemp;
+    aLSp.Height = sal::static_int_cast< sal_Int16 >(nTemp);
 
     rValue <<= aLSp;
     return sal_True;
