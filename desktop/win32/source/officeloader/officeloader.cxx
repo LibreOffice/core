@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeloader.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:53:22 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:19:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,14 @@
 #define _UNICODE
 
 #define WIN32_LEAN_AND_MEAN
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
 #include <shellapi.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 #include <tchar.h>
 
