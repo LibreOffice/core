@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritehelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:31:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:33:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,8 @@ namespace vclcanvas
                                bool&                        io_bSurfacesDirty,
                                bool                         bBufferedUpdate ) const
     {
+        (void)bBufferedUpdate; // not used on every platform
+
         if( !mpSpriteCanvas.get() ||
             !mpBackBuffer ||
             !mpBackBufferMask )
@@ -412,7 +414,7 @@ namespace vclcanvas
 
                     for( int i=0; i<aMarkerPoly.Count(); ++i )
                     {
-                        rTargetSurface.DrawPolyLine( aMarkerPoly.GetObject(i) );
+                        rTargetSurface.DrawPolyLine( aMarkerPoly.GetObject((USHORT)i) );
                     }
                 }
             }
