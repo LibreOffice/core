@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chinese_translationdialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:09:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:24:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
     m_aCB_Use_Variants.SetHelpId( HID_SVX_CHINESE_TRANSLATION_CB_USE_VARIANTS );
 
     SvtLinguConfig  aLngCfg;
-    sal_Bool bValue;
+    sal_Bool bValue = sal_Bool();
     Any aAny( aLngCfg.GetProperty( rtl::OUString::createFromAscii( UPN_IS_DIRECTION_TO_SIMPLIFIED ) ) );
     aAny >>= bValue;
     if( bValue )
