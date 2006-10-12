@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:44:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:30:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ SvxLineTabPage::SvxLineTabPage
     maLBEdgeStyle       ( this, ResId( LB_EDGE_STYLE ) ),
 
     pSymbolList(NULL),
-    bNewSize(FALSE),
+    bNewSize(false),
     nNumMenuGalleryItems(0),
     nSymbolType(SVX_SYMBOLTYPE_UNKNOWN), //unbekannt bzw. unchanged
     pSymbolAttr(NULL),
@@ -405,8 +405,8 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
     if( nDlgType == 0 && pDashList )  //CHINA001 if( *pDlgType == 0 && pDashList ) // Linien-Dialog
     {
         ResMgr* pMgr = DIALOG_MGR();
-        int nPos;
-        int nCount;
+        USHORT nPos;
+        USHORT nCount;
 
         // Dashliste
         if( ( *pnDashListState & CT_MODIFIED ) ||
@@ -713,7 +713,7 @@ BOOL SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
     TriState eState = aTsbCenterStart.GetState();
     if( eState != aTsbCenterStart.GetSavedValue() )
     {
-        XLineStartCenterItem aItem( eState );
+        XLineStartCenterItem aItem( sal::static_int_cast< BOOL >( eState ) );
         pOld = GetOldItem( rAttrs, XATTR_LINESTARTCENTER );
         if ( !pOld || !( *(const XLineStartCenterItem*)pOld == aItem ) )
         {
@@ -724,7 +724,7 @@ BOOL SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
     eState = aTsbCenterEnd.GetState();
     if( eState != aTsbCenterEnd.GetSavedValue() )
     {
-        XLineEndCenterItem aItem( eState );
+        XLineEndCenterItem aItem( sal::static_int_cast< BOOL >( eState ) );
         pOld = GetOldItem( rAttrs, XATTR_LINEENDCENTER );
         if ( !pOld || !( *(const XLineEndCenterItem*)pOld == aItem ) )
         {
@@ -827,9 +827,9 @@ BOOL SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
 
         SfxInt32Item aTItem(rAttrs.GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE),nSymbolType);
         const SfxPoolItem* pTOld = GetOldItem( rAttrs, rAttrs.GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE) );
-        BOOL bNewType  = pTOld ? *(const SfxInt32Item*)pTOld != aTItem : TRUE;
+        bool bNewType = pTOld == NULL || *(const SfxInt32Item*)pTOld != aTItem;
         if(bNewType && nSymbolType==SVX_SYMBOLTYPE_UNKNOWN)
-            bNewType=FALSE;//kleine Korrektur, Typ wurde garnicht gesetzt -> kein Type-Item erzeugen!
+            bNewType=false;//kleine Korrektur, Typ wurde garnicht gesetzt -> kein Type-Item erzeugen!
         if(bNewType)
         {
             rAttrs.Put(aTItem);
@@ -840,7 +840,8 @@ BOOL SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         {
             SvxBrushItem aBItem(aSymbolGraphic,GPOS_MM,rAttrs.GetPool()->GetWhich(SID_ATTR_BRUSH));
             const SfxPoolItem* pBOld = GetOldItem( rAttrs, rAttrs.GetPool()->GetWhich(SID_ATTR_BRUSH) );
-            BOOL bNewBrush = pBOld ? *(const SvxBrushItem*)pBOld != aBItem : TRUE;
+            bool bNewBrush =
+                pBOld == NULL || *(const SvxBrushItem*)pBOld != aBItem;
             if(bNewBrush)
             {
                 rAttrs.Put(aBItem);
@@ -1704,10 +1705,11 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
 
         PopupMenu* pPopup = new PopupMenu;
         String aEmptyStr;
-        SdrObject *pObj=NULL;
-        long i=0;
-        while(pObj=pSymbolList->GetObj(i))
+        for(long i=0;; ++i)
         {
+            SdrObject *pObj=pSymbolList->GetObj(i);
+            if(pObj==NULL)
+                break;
             pObj=pObj->Clone();
             //const String* pGrfName = (const String*)aGrfNames.GetObject(i);
             String *pStr=new String();//String(i));
@@ -1750,7 +1752,6 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
             }
             Image aImage(aBitmap);
             pPopup->InsertItem(pInfo->nItemId,*pStr,aImage);
-            i++;
         }
         aSymbolMB.GetPopupMenu()->SetPopupMenu( MN_SYMBOLS, pPopup );
         if(!aGrfNames.Count())
@@ -1844,7 +1845,7 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
             SVX_TRACE(213, aStr );
 #endif
             bDontSetSize=TRUE;
-            bNewSize=FALSE; //frühere Änderungen gelten nicht in diesem Fall!
+            bNewSize=false; //frühere Änderungen gelten nicht in diesem Fall!
             nSymbolType=SVX_SYMBOLTYPE_AUTO;
             bEnable=FALSE;
         }
@@ -1920,7 +1921,7 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
 }
 IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, MetricField *, pField)
 {
-    bNewSize=TRUE;
+    bNewSize=true;
     BOOL bWidth = (BOOL)(pField == &aSymbolWidthMF);
     bLastWidthModified = bWidth;
     BOOL bRatio = aSymbolRatioCB.IsChecked();
@@ -1929,14 +1930,12 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, MetricField *, pField)
     nWidthVal = OutputDevice::LogicToLogic(nWidthVal,MAP_100TH_MM,(MapUnit)ePoolUnit );
     nHeightVal = OutputDevice::LogicToLogic(nHeightVal,MAP_100TH_MM,(MapUnit)ePoolUnit);
     aSymbolSize=Size(nWidthVal,nHeightVal);
-    double  fSizeRatio;
+    double  fSizeRatio = (double)1;
 
     if(bRatio)
     {
         if (aSymbolLastSize.Height() && aSymbolLastSize.Width())
             fSizeRatio = (double)aSymbolLastSize.Width() / aSymbolLastSize.Height();
-        else
-            fSizeRatio = (double)1;
     }
 
     //Size aSymbolSize(aSymbolLastSize);
