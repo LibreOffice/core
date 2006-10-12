@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:02:56 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:00:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -688,7 +688,8 @@ namespace accessibility
 
             // #112814# Use correct index offset
             if( (nIndex=mpImpl->GetParagraph(i).getIndexAtPoint( rPoint )) != -1 )
-                return mpImpl->Internal2Index( EPosition(i, nIndex) );
+                return mpImpl->Internal2Index( EPosition(sal::static_int_cast<USHORT>(i),
+                                                         sal::static_int_cast<USHORT>(nIndex)) );
         }
 
         return -1;
