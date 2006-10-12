@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:15:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:46:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,10 +89,6 @@
 #include "app.hrc"
 #include "docfile.hxx"
 #include "workwin.hxx"
-
-#ifdef WNT
-#include <tools/svwin.h>
-#endif
 
 #ifdef UNX
 #define stricmp(a,b) strcmp(a,b)
