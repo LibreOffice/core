@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:53:00 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:39:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,13 +76,13 @@ void ImpEditEngine::SetStyleSheet( EditSelection aSel, SfxStyleSheet* pStyle )
     USHORT nStartPara = aEditDoc.GetPos( aSel.Min().GetNode() );
     USHORT nEndPara = aEditDoc.GetPos( aSel.Max().GetNode() );
 
-    BOOL bUpdate = GetUpdateMode();
+    BOOL _bUpdate = GetUpdateMode();
     SetUpdateMode( FALSE );
 
     for ( USHORT n = nStartPara; n <= nEndPara; n++ )
         SetStyleSheet( n, pStyle );
 
-    SetUpdateMode( bUpdate, 0 );
+    SetUpdateMode( _bUpdate, 0 );
 }
 
 void ImpEditEngine::SetStyleSheet( USHORT nPara, SfxStyleSheet* pStyle )
@@ -275,7 +275,7 @@ void ImpEditEngine::UndoActionStart( USHORT nId )
     }
 }
 
-void ImpEditEngine::UndoActionEnd( USHORT nId )
+void ImpEditEngine::UndoActionEnd( USHORT )
 {
     if ( IsUndoEnabled() && !IsInUndo() )
     {
@@ -674,7 +674,7 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, BOOL bRemoveParaAttri
     USHORT nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
     USHORT nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
 
-    const SfxItemSet* pEmptyItemSet = bRemoveParaAttribs ? &GetEmptyItemSet() : 0;
+    const SfxItemSet* _pEmptyItemSet = bRemoveParaAttribs ? &GetEmptyItemSet() : 0;
 
     if ( IsUndoEnabled() && !IsInUndo() && aStatus.DoUndoAttribs() )
     {
@@ -706,7 +706,7 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, BOOL bRemoveParaAttri
         BOOL bChanged = aEditDoc.RemoveAttribs( pNode, nStartPos, nEndPos, nWhich );
         if ( bRemoveParaAttribs )
         {
-            SetParaAttribs( nNode, *pEmptyItemSet );    // Invalidiert
+            SetParaAttribs( nNode, *_pEmptyItemSet );   // Invalidiert
         }
         else
         {
