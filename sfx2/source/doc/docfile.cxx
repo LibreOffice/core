@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.185 $
+ *  $Revision: 1.186 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:39:21 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:54:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -799,7 +799,9 @@ sal_Bool SfxMedium::IsStorage()
     {
         String aURL;
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL ) )
+        {
             DBG_ERROR("Physical name not convertable!");
+        }
         pImp->bIsStorage = SotStorage::IsStorageFile( aURL ) && !SotStorage::IsOLEStorage( aURL);
         if ( !pImp->bIsStorage )
             bTriedStorage = TRUE;
@@ -1085,7 +1087,9 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
     {
         // open storage from the temporary file
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aStorageName ) )
+        {
             DBG_ERROR("Physical name not convertable!");
+        }
 
         CloseOutStream();
         // create the set of the streams based on the temporary file
@@ -2214,7 +2218,9 @@ void SfxMedium::GetMedium_Impl()
             if ( aName.Len() )
             {
                 if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aFileName ) )
+                {
                     DBG_ERROR("Physical name not convertable!");
+                }
             }
             else
                 aFileName = GetName();
@@ -2929,10 +2935,14 @@ SfxMedium::~SfxMedium()
     {
         String aTemp;
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aTemp ))
+        {
             DBG_ERROR("Physical name not convertable!");
+        }
 
         if ( !::utl::UCBContentHelper::Kill( aTemp ) )
+        {
             DBG_ERROR("Couldn't remove temporary file!");
+        }
     }
 
     pFilter = 0;
