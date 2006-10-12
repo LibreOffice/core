@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpshadow.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:45:35 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:31:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,8 +236,8 @@ void SvxShadowTabPage::Construct()
 
 void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    int nPos;
-    int nCount;
+    USHORT nPos;
+    USHORT nCount;
     //add CHINA001 Begin
     SFX_ITEMSET_ARG (&rSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,sal_False);
     if (pPageTypeItem)
@@ -296,7 +296,7 @@ BOOL SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
         TriState eState = aTsbShowShadow.GetState();
         if( eState != aTsbShowShadow.GetSavedValue() )
         {
-            SdrShadowItem aItem( eState );
+            SdrShadowItem aItem( sal::static_int_cast< BOOL >( eState ) );
             pOld = GetOldItem( rAttrs, SDRATTR_SHADOW );
             if ( !pOld || !( *(const SdrShadowItem*)pOld == aItem ) )
             {
