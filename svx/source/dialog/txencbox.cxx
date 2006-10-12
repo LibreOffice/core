@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txencbox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:46:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:32:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,8 +95,8 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
 {
     rtl_TextEncodingInfo aInfo;
     aInfo.StructSize = sizeof(rtl_TextEncodingInfo);
-    USHORT nCount = m_pEncTable->Count();
-    for ( USHORT j=0; j<nCount; j++ )
+    sal_uInt32 nCount = m_pEncTable->Count();
+    for ( sal_uInt32 j=0; j<nCount; j++ )
     {
         BOOL bInsert = TRUE;
         rtl_TextEncoding nEnc = rtl_TextEncoding( m_pEncTable->GetValue( j ) );
