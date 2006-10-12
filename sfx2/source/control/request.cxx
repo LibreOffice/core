@@ -4,9 +4,9 @@
  *
  *  $RCSfile: request.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:28:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:51:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 // class SfxRequest
 //
 // (C) 1996 - 2000 StarDivision GmbH, Hamburg, Germany
-// $Author: obo $ $Date: 2006-09-17 16:28:12 $ $Revision: 1.18 $
+// $Author: obo $ $Date: 2006-10-12 15:51:40 $ $Revision: 1.19 $
 // $Logfile:   T:/sfx2/source/control/request.cxv  $ $Workfile:   REQUEST.CXX  $
 //------------------------------------------------------------------*/
 
@@ -525,7 +525,7 @@ const SfxPoolItem* SfxRequest::GetItem
 (
     const SfxItemSet* pArgs,
     USHORT          nSlotId,    // Slot-Id oder Which-Id des Parameters
-    FASTBOOL        bDeep,      // FALSE: nicht in Parent-ItemSets suchen
+    bool            bDeep,      // false: nicht in Parent-ItemSets suchen
     TypeId          aType       // != 0:  RTTI Pruefung mit Assertion
 )
 
