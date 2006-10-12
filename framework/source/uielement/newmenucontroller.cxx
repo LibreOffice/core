@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newmenucontroller.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:22:34 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:43:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,11 +155,11 @@ DEFINE_INIT_SERVICE                     (   NewMenuController, {} )
 
 void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImages, sal_Bool bHiContrast )
 {
-    int                 nItemCount = pPopupMenu->GetItemCount();
+    USHORT nItemCount = pPopupMenu->GetItemCount();
     Image               aImage;
     Reference< XFrame > xFrame( m_xFrame );
 
-    for ( int i = 0; i < nItemCount; i++ )
+    for ( USHORT i = 0; i < nItemCount; i++ )
     {
         USHORT nItemId = pPopupMenu->GetItemId( i );
         if ( nItemId != 0 )
@@ -431,7 +431,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
 
         // retrieve additional parameters from bookmark menu and
         // store it in a hash_map.
-        for ( int i = 0; i < pSubMenu->GetItemCount(); i++ )
+        for ( USHORT i = 0; i < pSubMenu->GetItemCount(); i++ )
         {
             USHORT nItemId = pSubMenu->GetItemId( i );
             if (( nItemId != 0 ) &&
