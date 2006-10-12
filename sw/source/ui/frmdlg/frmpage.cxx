@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:02:28 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:08:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,6 +168,7 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
