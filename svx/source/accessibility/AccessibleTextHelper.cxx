@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:03:45 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:01:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -655,7 +655,9 @@ namespace accessibility
                 {
                     // #103998# Not that important, changed from assertion to trace
                     if( mbThisHasFocus )
+                    {
                         DBG_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): Parent has focus!");
+                    }
 
                     USHORT nMaxValidParaIndex( static_cast< USHORT >( GetTextForwarder().GetParagraphCount() ) - 1 );
 
