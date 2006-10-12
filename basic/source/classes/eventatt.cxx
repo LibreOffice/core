@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:59:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:24:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -449,7 +449,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
             {
                 SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
                 unoToSbxValue( (SbxVariable*)xVar, pArgs[i] );
-                xArray->Put( xVar, i+1 );
+                xArray->Put( xVar, sal::static_int_cast< USHORT >(i+1) );
             }
         }
 
