@@ -4,9 +4,9 @@
  *
  *  $RCSfile: setup_main.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:53:48 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:31:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <new>
 
 #include "setup_main.hxx"
@@ -79,8 +85,7 @@ SetupApp::~SetupApp()
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
 
-extern "C" int __stdcall WinMain( HINSTANCE hInst, HINSTANCE hPrevInst,
-                                  LPSTR lpszCmdLine, int nCmdShow )
+extern "C" int __stdcall WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, int )
 {
     // Get OS version
     OSVERSIONINFO sInfoOS;
