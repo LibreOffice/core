@@ -4,9 +4,9 @@
  *
  *  $RCSfile: align.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:09:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:04:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ namespace svx {
 
 // horizontal alignment -------------------------------------------------------
 
-typedef sfx::ValueItemWrapper< SvxHorJustifyItem, SvxCellHorJustify > HorJustItemWrapper;
+typedef sfx::ValueItemWrapper< SvxHorJustifyItem, SvxCellHorJustify, USHORT > HorJustItemWrapper;
 typedef sfx::ListBoxConnection< HorJustItemWrapper > HorJustConnection;
 
 static const HorJustConnection::MapEntryType s_pHorJustMap[] =
@@ -108,7 +108,7 @@ static const HorJustConnection::MapEntryType s_pHorJustMap[] =
 
 // vertical alignment ---------------------------------------------------------
 
-typedef sfx::ValueItemWrapper< SvxVerJustifyItem, SvxCellVerJustify > VerJustItemWrapper;
+typedef sfx::ValueItemWrapper< SvxVerJustifyItem, SvxCellVerJustify, USHORT > VerJustItemWrapper;
 typedef sfx::ListBoxConnection< VerJustItemWrapper > VerJustConnection;
 
 static const VerJustConnection::MapEntryType s_pVerJustMap[] =
@@ -122,7 +122,7 @@ static const VerJustConnection::MapEntryType s_pVerJustMap[] =
 
 // cell rotate mode -----------------------------------------------------------
 
-typedef sfx::ValueItemWrapper< SvxRotateModeItem, SvxRotateMode > RotateModeItemWrapper;
+typedef sfx::ValueItemWrapper< SvxRotateModeItem, SvxRotateMode, USHORT > RotateModeItemWrapper;
 typedef sfx::ValueSetConnection< RotateModeItemWrapper > RotateModeConnection;
 
 static const RotateModeConnection::MapEntryType s_pRotateModeMap[] =
