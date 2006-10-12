@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escphdl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:53:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:49:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ XMLEscapementPropHdl::~XMLEscapementPropHdl()
     // nothing to do
 }
 
-sal_Bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int16 nVal;
 
@@ -101,7 +101,7 @@ sal_Bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any
     else
     {
         sal_Int32 nNewEsc;
-        if( !rUnitConverter.convertPercent( nNewEsc, aToken ) )
+        if( !SvXMLUnitConverter::convertPercent( nNewEsc, aToken ) )
             return sal_False;
 
         nVal = (sal_Int16) nNewEsc;
@@ -111,7 +111,7 @@ sal_Bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any
     return sal_True;
 }
 
-sal_Bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue;
     OUStringBuffer aOut;
@@ -128,7 +128,7 @@ sal_Bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
         }
         else
         {
-            rUnitConverter.convertPercent( aOut, nValue );
+            SvXMLUnitConverter::convertPercent( aOut, nValue );
         }
     }
 
@@ -146,7 +146,7 @@ XMLEscapementHeightPropHdl::~XMLEscapementHeightPropHdl()
     // nothing to do
 }
 
-sal_Bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     if( IsXMLToken( rStrImpValue, XML_CASEMAP_SMALL_CAPS ) )
         return sal_False;
@@ -161,7 +161,7 @@ sal_Bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, un
     if( aTokens.getNextToken( aToken ) )
     {
         sal_Int32 nNewProp;
-        if( !rUnitConverter.convertPercent( nNewProp, aToken ) )
+        if( !SvXMLUnitConverter::convertPercent( nNewProp, aToken ) )
             return sal_False;
         nProp = (sal_Int8)nNewProp;
     }
@@ -174,7 +174,7 @@ sal_Bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, un
     return sal_True;
 }
 
-sal_Bool XMLEscapementHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLEscapementHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut( rStrExpValue );
 
@@ -184,9 +184,9 @@ sal_Bool XMLEscapementHeightPropHdl::exportXML( OUString& rStrExpValue, const un
         if( rStrExpValue.getLength() )
             aOut.append( sal_Unicode(' '));
 
-        rUnitConverter.convertPercent( aOut, nValue );
+        SvXMLUnitConverter::convertPercent( aOut, nValue );
     }
 
     rStrExpValue = aOut.makeStringAndClear();
-    return rStrExpValue.getLength();
+    return rStrExpValue.getLength() != 0;
 }
