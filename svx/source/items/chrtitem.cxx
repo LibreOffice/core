@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chrtitem.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:18:34 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:52:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ TYPEINIT1_AUTOFACTORY(SvxDoubleItem, SfxPoolItem);
 *************************************************************************/
 
 SvxChartStyleItem::SvxChartStyleItem(SvxChartStyle eStyle, USHORT nId) :
-    SfxEnumItem(nId, eStyle)
+    SfxEnumItem(nId, (USHORT)eStyle)
 {
 }
 
@@ -131,7 +131,7 @@ SfxPoolItem* SvxChartStyleItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 
 SvxChartDataDescrItem::SvxChartDataDescrItem(SvxChartDataDescr eDataDescr,
                                              USHORT nId) :
-    SfxEnumItem(nId, eDataDescr)
+    SfxEnumItem(nId, (USHORT)eDataDescr)
 {
 }
 
@@ -164,7 +164,7 @@ SfxPoolItem* SvxChartDataDescrItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 
 SvxChartLegendPosItem::SvxChartLegendPosItem(SvxChartLegendPos eLegendPos,
                                              USHORT nId) :
-    SfxEnumItem(nId, eLegendPos)
+    SfxEnumItem(nId, (USHORT)eLegendPos)
 {
 }
 
@@ -197,7 +197,7 @@ SfxPoolItem* SvxChartLegendPosItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 
 SvxChartTextOrderItem::SvxChartTextOrderItem(SvxChartTextOrder eOrder,
                                              USHORT nId) :
-    SfxEnumItem(nId, eOrder)
+    SfxEnumItem(nId, (USHORT)eOrder)
 {
 }
 
@@ -278,7 +278,7 @@ sal_Bool SvxChartTextOrderItem::PutValue( const ::com::sun::star::uno::Any& rVal
             return sal_False;
     }
 
-    SetValue( eOrder );
+    SetValue( (USHORT)eOrder );
 
     return sal_True;
 }
@@ -291,7 +291,7 @@ sal_Bool SvxChartTextOrderItem::PutValue( const ::com::sun::star::uno::Any& rVal
 
 SvxChartTextOrientItem::SvxChartTextOrientItem(SvxChartTextOrient eOrient,
                                                USHORT nId) :
-    SfxEnumItem(nId, eOrient)
+    SfxEnumItem(nId, (USHORT)eOrient)
 {
 }
 
@@ -448,7 +448,7 @@ sal_Bool SvxDoubleItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 
 SvxChartKindErrorItem::SvxChartKindErrorItem(SvxChartKindError eOrient,
                                                USHORT nId) :
-    SfxEnumItem(nId, eOrient)
+    SfxEnumItem(nId, (USHORT)eOrient)
 {
 }
 
@@ -490,7 +490,7 @@ USHORT SvxChartKindErrorItem::GetVersion (USHORT nFileFormatVersion) const
 
 SvxChartIndicateItem::SvxChartIndicateItem(SvxChartIndicate eOrient,
                                                USHORT nId) :
-    SfxEnumItem(nId, eOrient)
+    SfxEnumItem(nId, (USHORT)eOrient)
 {
 }
 
@@ -532,7 +532,7 @@ USHORT SvxChartIndicateItem::GetVersion (USHORT nFileFormatVersion) const
 
 SvxChartRegressItem::SvxChartRegressItem(SvxChartRegress eOrient,
                                                USHORT nId) :
-    SfxEnumItem(nId, eOrient)
+    SfxEnumItem(nId, (USHORT)eOrient)
 {
 }
 
