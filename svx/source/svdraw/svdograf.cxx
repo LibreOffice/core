@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:54:55 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:13:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -984,7 +984,7 @@ void SdrGrafObj::ImpDoPaintGrafObjShadow( XOutputDevice& rOut, const SdrPaintInf
                             aTempBitmapMask.Invert();
                             BYTE bEraseValue(0xff);
                             AlphaMask aTempAlphaMask(aPixelSize, &bEraseValue);
-                            BYTE aReplaceTransparency((nShadowTransparence * 0x00ff) / 100);
+                            BYTE aReplaceTransparency(sal::static_int_cast< BYTE >((nShadowTransparence * 0x00ff) / 100));
                             aTempAlphaMask.Replace(aTempBitmapMask, aReplaceTransparency);
 
                             BitmapPalette aTempBitmapPalette(2);
