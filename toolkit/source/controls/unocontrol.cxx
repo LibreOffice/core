@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:19:18 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:32:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1189,7 +1189,8 @@ void UnoControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
         xWindow->setVisible( !bOn );
 
     // and notify our mode listeners
-    NOTIFY_LISTENERS( maModeChangeListeners, XModeChangeListener, modeChanged, aModeChangeEvent );
+    maModeChangeListeners.notifyEach(
+        &XModeChangeListener::modeChanged, aModeChangeEvent );
 }
 
 sal_Bool UnoControl::isDesignMode(  ) throw(RuntimeException)
