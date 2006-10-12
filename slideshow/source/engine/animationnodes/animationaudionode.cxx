@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationaudionode.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:33:01 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:58:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ void AnimationAudioNode::activate_st()
 // TODO(F2): generate deactivation event, when sound
 // is over
 
-void AnimationAudioNode::deactivate_st( NodeState eDestState, bool )
+void AnimationAudioNode::deactivate_st( NodeState /*eDestState*/ )
 {
     AnimationEventHandlerSharedPtr aHandler(
         boost::dynamic_pointer_cast<AnimationEventHandler>( getSelf() ) );
@@ -164,7 +164,7 @@ void AnimationAudioNode::resetPlayer() const
 }
 
 bool AnimationAudioNode::handleAnimationEvent(
-    const AnimationNodeSharedPtr& rNode )
+    const AnimationNodeSharedPtr& /*rNode*/ )
 {
     // TODO(F2): for now we support only STOPAUDIO events.
     deactivate();
