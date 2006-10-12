@@ -4,9 +4,9 @@
  *
  *  $RCSfile: descriptor.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:56:06 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:40:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -477,7 +477,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
 
             case( UNOGRAPHIC_BITSPERPIXEL ):
             {
-                sal_Int8 nBitsPerPixel = 0;
+                USHORT nBitsPerPixel = 0;
 
                 if( mpGraphic )
                 {
@@ -487,7 +487,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                 else
                     nBitsPerPixel = mnBitsPerPixel;
 
-                *pValues <<= nBitsPerPixel;
+                *pValues <<= sal::static_int_cast< sal_Int8 >(nBitsPerPixel);
             }
             break;
 
