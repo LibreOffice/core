@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:30:18 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:52:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,8 @@
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
 #endif
+
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 //-----------------------------------------------
 // include other projects
@@ -771,7 +773,9 @@ void SfxAcceleratorConfigPage::ResetConfig()
 String FileDialog_Impl( Window* /*pParent*/, WinBits nBits, const String& rTitle )
 {
     BOOL bSave = ( ( nBits & WB_SAVEAS ) == WB_SAVEAS );
-    short nDialogType = bSave? short(::sfx2::FILESAVE_SIMPLE) : short(::sfx2::FILEOPEN_SIMPLE);
+    short nDialogType = bSave
+        ? css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE
+        : css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
 
     sfx2::FileDialogHelper aFileDlg( nDialogType, 0 );
     aFileDlg.SetTitle( rTitle );
