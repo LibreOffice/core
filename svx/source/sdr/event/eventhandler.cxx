@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventhandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:39:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:04:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,10 +123,11 @@ namespace sdr
         // Trigger and consume the events
         void EventHandler::ExecuteEvents()
         {
-            BaseEvent* pEvent;
-
-            while(pEvent = GetEvent())
+            for(;;)
             {
+                BaseEvent* pEvent = GetEvent();
+                if(pEvent == NULL)
+                    break;
                 pEvent->ExecuteEvent();
                 delete pEvent;
             }
