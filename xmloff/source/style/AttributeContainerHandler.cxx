@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AttributeContainerHandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:42:13 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:44:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ XMLAttributeContainerHandler::~XMLAttributeContainerHandler()
     // nothing to do
 }
 
-sal_Bool XMLAttributeContainerHandler::equals(
+bool XMLAttributeContainerHandler::equals(
         const Any& r1,
         const Any& r2 ) const
 {
