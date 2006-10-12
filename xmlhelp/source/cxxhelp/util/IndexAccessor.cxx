@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IndexAccessor.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:20:56 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:28:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,8 +134,8 @@ RandomAccessStreamImpl::RandomAccessStreamImpl( const rtl::OUString& aPath,const
         else if( bla[i] == sal_Unicode( 'c' ) )
             flags |= Create;
     }
-
-    if( !( isOpen_ = ( file_.open( flags ) == osl::FileBase::E_None )) )
+    isOpen_ = ( file_.open( flags ) == osl::FileBase::E_None );
+    if( !isOpen_ )
     {
         file_.close();
         OSL_ENSURE( false,"RandomAccessStreamImpl::RandomAccessStreamImpl -> could not open file" );
