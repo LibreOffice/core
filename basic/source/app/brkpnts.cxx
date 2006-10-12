@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brkpnts.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:56:11 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:22:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,7 +210,7 @@ Breakpoint* BreakpointWindow::FindBreakpoint( ULONG nLine )
 
 void BreakpointWindow::AdjustBreakpoints( ULONG nLine, BOOL bInserted )
 {
-    if ( nLine == TEXT_PARA_ALL+1 )
+    if ( nLine == 0 ) //TODO: nLine == TEXT_PARA_ALL+1
         return;
     Breakpoint* pBrk = First();
     while ( pBrk )
@@ -388,7 +388,7 @@ void BreakpointWindow::MouseButtonDown( const MouseEvent& rMEvt )
         long nLineHeight = GetTextHeight();
         long nYPos = aMousePos.Y() + nCurYOffset;
         long nLine = nYPos / nLineHeight + 1;
-        ToggleBreakpoint( nLine );
+        ToggleBreakpoint( sal::static_int_cast< USHORT >(nLine) );
         // vielleicht mal etwas genauer...
         Invalidate();
     }
