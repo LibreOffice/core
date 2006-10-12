@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mcvmath.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:45:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:14:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ USHORT ImpSqrt( ULONG nRadi )
 {
     register ULONG  inf = 1;
     register ULONG  sup = nRadi;
-    register USHORT sqr;
+    register ULONG sqr;
 
     if ( !nRadi )
         return 0;
@@ -126,7 +126,7 @@ USHORT ImpSqrt( ULONG nRadi )
     sqr = (nRadi/sqr + sqr) >> 1;       // 2 Newton-Iterationen reichen fuer
     sqr = (nRadi/sqr + sqr) >> 1;       // +- 1 Digit
 
-    return sqr;
+    return sal::static_int_cast< USHORT >(sqr);
 }
 
 /**************************************************************************
@@ -306,8 +306,8 @@ void ImpPolarToCart( const Fix& rR, const USHORT Phi, short& rX, short& rY )
 {
     FixCpx fc = ImpExPI( Phi );  // calculate sin() & cos()
     fc.GetReal().MultBig( rR );
-    rX = long( fc.GetReal() );
+    rX = sal::static_int_cast< short >(long( fc.GetReal() ));
     fc.GetImag().MultBig( rR );
-    rY = long( fc.GetImag() );
+    rY = sal::static_int_cast< short >(long( fc.GetImag() ));
 }
 
