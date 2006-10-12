@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connpooloptions.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:46:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:08:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,8 @@ namespace offapp
     class DriverListControl;
     class ConnectionPoolOptionsPage : public SfxTabPage
     {
+        using TabPage::ActivatePage;
+
     protected:
         FixedLine               m_aFrame;
         CheckBox                m_aEnablePooling;
