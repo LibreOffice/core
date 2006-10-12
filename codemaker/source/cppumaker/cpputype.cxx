@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:36:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:33:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ void CppuType::dumpGetCppuTypePostamble(FileStream & out) {
             << indent()
             << "void operator =(UnoType); // not defined\n};\n\n}\n\n";
     } else {
-        out << "};\n\n";
+        out << "}\n\n";
         if (codemaker::cppumaker::dumpNamespaceClose(out, m_typeName, false)) {
             out << "\n\n";
         }
