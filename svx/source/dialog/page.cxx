@@ -4,9 +4,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:33:15 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:23:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,10 +319,10 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     aBottomMarginEdit   ( this, ResId( ED_BOTTOM_MARGIN ) ),
 
     aLayoutFL           ( this, ResId( FL_LAYOUT ) ),
-    aLayoutBox          ( this, ResId( LB_LAYOUT ) ),
     aPageText           ( this, ResId( FT_PAGELAYOUT ) ),
-    aNumberFormatBox    ( this, ResId( LB_NUMBER_FORMAT ) ),
+    aLayoutBox          ( this, ResId( LB_LAYOUT ) ),
     aNumberFormatText   ( this, ResId( FT_NUMBER_FORMAT ) ),
+    aNumberFormatBox    ( this, ResId( LB_NUMBER_FORMAT ) ),
     aBottomSeparatorFl  ( this, ResId( FL_BOTTOM_SEP ) ),
     aTblAlignFT         ( this, ResId( FT_TBL_ALIGN ) ),
     aHorzBox            ( this, ResId( CB_HORZ ) ),
@@ -540,7 +540,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     {
         const SvxPageItem& rItem = (const SvxPageItem&)*pItem;
         eNumType = rItem.GetNumType();
-        nUse = (SvxPageUsage)rItem.GetPageUsage();
+        nUse = rItem.GetPageUsage();
         bLandscape = rItem.IsLandscape();
     }
 
@@ -550,7 +550,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     LayoutHdl_Impl( 0 );
 
     // Numerierungsart der Seitenvorlage einstellen
-    aNumberFormatBox.SelectEntryPos( eNumType );
+    aNumberFormatBox.SelectEntryPos( sal::static_int_cast< USHORT >(eNumType) );
 
     // Aktueller Papierschacht
     aPaperTrayBox.Clear();
@@ -619,9 +619,9 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     if ( ePaperStart != SVX_PAPER_A3 )
         nAryId = RID_SVXSTRARY_PAPERSIZE_DRAW;
     ResStringArray aPaperAry( SVX_RES( nAryId ) );
-    USHORT nCnt = aPaperAry.Count();
+    sal_uInt32 nCnt = aPaperAry.Count();
 
-    for ( USHORT i = 0; i < nCnt; ++i )
+    for ( sal_uInt32 i = 0; i < nCnt; ++i )
     {
         String aStr = aPaperAry.GetString(i);
         SvxPaper eSize = (SvxPaper)aPaperAry.GetValue(i);
