@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_parceldesc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:44:49 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:12:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,27 +67,27 @@ throw ( xml::sax::SAXException, RuntimeException )
 }
 
 void SAL_CALL
-ParcelDescDocHandler::characters( const OUString & aChars )
+ParcelDescDocHandler::characters( const OUString & )
     throw ( xml::sax::SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL
-ParcelDescDocHandler::ignorableWhitespace( const OUString & aWhitespaces )
+ParcelDescDocHandler::ignorableWhitespace( const OUString & )
     throw ( xml::sax::SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL
 ParcelDescDocHandler::processingInstruction(
-    const OUString & aTarget, const OUString & aData )
+    const OUString &, const OUString & )
         throw ( xml::sax::SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL
 ParcelDescDocHandler::setDocumentLocator(
-    const Reference< xml::sax::XLocator >& xLocator )
+    const Reference< xml::sax::XLocator >& )
         throw ( xml::sax::SAXException, RuntimeException )
 {
 }
