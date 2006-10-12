@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlehelp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:22:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:39:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ void SvXMLExportHelper::AddLength( sal_Int32 nValue, MapUnit eValueUnit,
     }
 
 
-    sal_Int32 nLongVal;
+    sal_Int32 nLongVal = 0;
     BOOL bOutLongVal = TRUE;
     if( nValue > SAL_MAX_INT32 / nMul )
     {
