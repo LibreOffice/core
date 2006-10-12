@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templdgi.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:34:32 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:57:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,7 +273,7 @@ public:
     virtual PopupMenu*  CreateContextMenu( void );
 
     // Rechnet von den SFX_STYLE_FAMILY Ids auf 1-5 um
-    static USHORT       SfxFamilyIdToNId( USHORT nFamily );
+    static USHORT       SfxFamilyIdToNId( SfxStyleFamily nFamily );
 
     void                SetAutomaticFilter();
 };
