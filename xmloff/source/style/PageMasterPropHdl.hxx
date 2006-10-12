@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageMasterPropHdl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:26:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:46:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ class XMLPMPropHdl_PageStyleLayout : public XMLPropertyHandler
 {
 public:
     virtual                 ~XMLPMPropHdl_PageStyleLayout();
-    virtual sal_Bool        equals(
+    virtual bool            equals(
                                 const ::com::sun::star::uno::Any& rAny1,
                                 const ::com::sun::star::uno::Any& rAny2
                                 ) const;
