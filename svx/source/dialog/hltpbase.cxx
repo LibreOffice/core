@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:24:00 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:14:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,6 +349,16 @@ SvxHyperlinkTabPageBase::~SvxHyperlinkTabPageBase ()
     }
 
     delete mpMarkWnd;
+}
+
+void SvxHyperlinkTabPageBase::ActivatePage()
+{
+    TabPage::ActivatePage();
+}
+
+void SvxHyperlinkTabPageBase::DeactivatePage()
+{
+    TabPage::DeactivatePage();
 }
 
 void SvxHyperlinkTabPageBase::InitStdControls ()
