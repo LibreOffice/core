@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:50:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:11:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -981,8 +981,8 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
     if ( nAnyMask & FONTDESCRIPTOR )
     {
         // Attrib
-        _rxOutStream->writeShort( VCLUnoHelper::ConvertFontWeight( aFont.Weight ) );
-        _rxOutStream->writeShort( aFont.Slant );
+        _rxOutStream->writeShort( sal::static_int_cast< sal_Int16 >( VCLUnoHelper::ConvertFontWeight( aFont.Weight ) ) );
+        _rxOutStream->writeShort( sal::static_int_cast< sal_Int16 >( aFont.Slant ) );
         _rxOutStream->writeShort( aFont.Underline );
         _rxOutStream->writeShort( aFont.Strikeout );
         _rxOutStream->writeShort( sal_Int16(aFont.Orientation * 10) );
@@ -992,7 +992,7 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
         // Size
         _rxOutStream->writeLong( aFont.Width );
         _rxOutStream->writeLong( aFont.Height );
-        _rxOutStream->writeShort( VCLUnoHelper::ConvertFontWidth( aFont.CharacterWidth ) );
+        _rxOutStream->writeShort( sal::static_int_cast< sal_Int16 >( VCLUnoHelper::ConvertFontWidth( aFont.CharacterWidth ) ) );
 
         // Type
         _rxOutStream->writeUTF( aFont.Name );
