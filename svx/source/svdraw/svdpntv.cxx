@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:00:05 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:15:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -613,7 +613,7 @@ void SdrPaintView::ImpRemoveUserMarker(SdrViewUserMarker* pMarker)
 
 void SdrPaintView::ImpCheckMarkerAnimator()
 {
-    BOOL bNeed=FALSE;
+    bool bNeed=false;
     USHORT nAnz=ImpGetUserMarkerCount();
     for (USHORT nNum=0; nNum<nAnz && !bNeed; nNum++) {
         SdrViewUserMarker* pUM=ImpGetUserMarker(nNum);
@@ -1628,7 +1628,7 @@ void SdrPaintView::SetAnimationEnabled( BOOL bEnable )
     SetAnimationMode( bEnable ? SDR_ANIMATION_ANIMATE : SDR_ANIMATION_DISABLE );
 }
 
-void SdrPaintView::SetAnimationPause( BOOL bSet )
+void SdrPaintView::SetAnimationPause( bool bSet )
 {
     if(bAnimationPause != bSet)
     {
@@ -1897,7 +1897,7 @@ sal_Bool SdrPaintView::IsBufferedOutputAllowed() const
 }
 
 // #114898#
-void SdrPaintView::SetBufferedOutputAllowed(sal_Bool bNew)
+void SdrPaintView::SetBufferedOutputAllowed(bool bNew)
 {
     if(bNew != mbBufferedOutputAllowed)
     {
@@ -1912,7 +1912,7 @@ sal_Bool SdrPaintView::IsPagePaintingAllowed() const
 }
 
 //BFS09
-void SdrPaintView::SetPagePaintingAllowed(sal_Bool bNew)
+void SdrPaintView::SetPagePaintingAllowed(bool bNew)
 {
     if(bNew != mbPagePaintingAllowed)
     {
