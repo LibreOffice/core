@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxln.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:58:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:14:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -324,7 +324,7 @@ FASTBOOL SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterNa
 
         if( !pIStm->GetError() )
         {
-            SetText( *pIStm, aFileURL.GetMainURL( INetURLObject::NO_DECODE ), bRTF ? EE_FORMAT_RTF : EE_FORMAT_TEXT );
+            SetText( *pIStm, aFileURL.GetMainURL( INetURLObject::NO_DECODE ), sal::static_int_cast< USHORT >( bRTF ? EE_FORMAT_RTF : EE_FORMAT_TEXT ) );
             bRet = TRUE;
         }
 
