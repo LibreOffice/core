@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:49:05 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:35:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,8 +136,8 @@ using namespace ::com::sun::star::linguistic2;
 
 
 
-DBG_NAME( EditEngine );
-DBG_NAMEEX( EditView );
+DBG_NAME( EditEngine )
+DBG_NAMEEX( EditView )
 
 #if (OSL_DEBUG_LEVEL > 1) || defined ( DBG_UTIL )
 static sal_Bool bDebugPaint = sal_False;
@@ -473,7 +473,9 @@ void EditEngine::SetActiveView( EditView* pView )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     if ( pView )
+    {
         DBG_CHKOBJ( pView, EditView, 0 );
+    }
     pImpEditEngine->SetActiveView( pView );
 }
 
@@ -1138,11 +1140,11 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                                 if ( !aComplete.Len() )
                                 {
                                     xItem = pImpEditEngine->xLocaleDataWrapper->getDefaultCalendarMonths();
-                                    sal_Int32 nCount = xItem.getLength();
-                                    const i18n::CalendarItem* pArr = xItem.getArray();
-                                    for( sal_Int32 n = 0; n <= nCount; ++n )
+                                    sal_Int32 nMonthCount = xItem.getLength();
+                                    const i18n::CalendarItem* pMonthArr = xItem.getArray();
+                                    for( sal_Int32 n = 0; n <= nMonthCount; ++n )
                                     {
-                                        const ::rtl::OUString& rMon = pArr[n].FullName;
+                                        const ::rtl::OUString& rMon = pMonthArr[n].FullName;
                                         if( pTransliteration->isMatch( aWord, rMon) )
                                         {
                                             aComplete = rMon;
@@ -1655,7 +1657,7 @@ void EditEngine::GetPortions( sal_uInt16 nPara, SvUShorts& rList )
         sal_uInt16 nTextPortions = pParaPortion->GetTextPortions().Count();
         for ( sal_uInt16 n = 0; n < nTextPortions; n++ )
         {
-            nEnd += pParaPortion->GetTextPortions()[n]->GetLen();
+            nEnd = nEnd + pParaPortion->GetTextPortions()[n]->GetLen();
             rList.Insert( nEnd, rList.Count() );
         }
     }
@@ -2188,7 +2190,7 @@ sal_Bool EditEngine::ShouldCreateBigTextObject() const
     for ( sal_uInt16 nPara = 0; nPara < nParas; nPara++  )
     {
         ParaPortion* pParaPortion = pImpEditEngine->GetParaPortions()[nPara];
-        nTextPortions += pParaPortion->GetTextPortions().Count();
+        nTextPortions = nTextPortions + pParaPortion->GetTextPortions().Count();
     }
     return ( nTextPortions >= pImpEditEngine->GetBigTextObjectStart() ) ? sal_True : sal_False;
 }
@@ -2585,7 +2587,7 @@ void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const SvxFont& rFont )
 Font EditEngine::CreateFontFromItemSet( const SfxItemSet& rItemSet, USHORT nScriptType )
 {
     SvxFont aFont;
-    CreateFont( aFont, rItemSet, nScriptType );
+    CreateFont( aFont, rItemSet, true, nScriptType );
     return aFont;
 }
 
@@ -2710,7 +2712,8 @@ void EditEngine::ImportBulletItem( SvxNumBulletItem& rNumBullet, sal_uInt16 nLev
                 case BS_123:            eNumType = SVX_NUM_ARABIC;              break;
                 default:                eNumType = SVX_NUM_NUMBER_NONE;         break;
             }
-            pNumberFormat->SetNumberingType( eNumType );
+            pNumberFormat->SetNumberingType(
+                sal::static_int_cast< sal_Int16 >( eNumType ) );
 
             // Justification
             SvxAdjust eAdjust;
