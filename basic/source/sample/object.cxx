@@ -4,9 +4,9 @@
  *
  *  $RCSfile: object.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:07:29 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:31:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,6 @@
 
 #include "object.hxx"
 #include "collelem.hxx"
-// Makro MEMBER()
-#include "macfix.hxx"
 
 // Das Sample-Objekt hat folgende Elemente:
 // 1) Properties:
@@ -110,23 +108,23 @@
 
 SampleObject::Methods SampleObject::aMethods[] = {
 // Eine Sample-Methode (der Returnwert ist SbxNULL)
-{ "Display",    SbxEMPTY,       1 | _FUNCTION, MEMBER(SampleObject::Display) },
+{ "Display", SbxEMPTY, &SampleObject::Display, 1 | _FUNCTION },
     // Ein Named Parameter
-    { "message",SbxSTRING, 0,NULL },
+    { "message", SbxSTRING, NULL, 0 },
 // Eine Sample-Funktion
-{ "Square",     SbxDOUBLE,      1 | _FUNCTION, MEMBER(SampleObject::Square)  },
+{ "Square", SbxDOUBLE, &SampleObject::Square, 1 | _FUNCTION },
     // Ein Named Parameter
-    { "value",  SbxDOUBLE, 0,NULL },
+    { "value", SbxDOUBLE, NULL, 0 },
 //  Basic-Callback
-{ "Event",      SbxEMPTY,       1 | _FUNCTION, MEMBER(SampleObject::Event)   },
+{ "Event", SbxEMPTY, &SampleObject::Event, 1 | _FUNCTION },
     // Ein Named Parameter
-    { "event",  SbxSTRING, 0,NULL },
+    { "event", SbxSTRING, NULL, 0 },
 //  Element erzeugen
-{ "Create",     SbxEMPTY,       1 | _FUNCTION, MEMBER(SampleObject::Create)  },
+{ "Create", SbxEMPTY, &SampleObject::Create, 1 | _FUNCTION },
     // Ein Named Parameter
-    { "name",  SbxSTRING, 0,NULL },
+    { "name", SbxSTRING, NULL, 0 },
 
-{ NULL,     SbxNULL,            -1, NULL }};  // Tabellenende
+{ NULL, SbxNULL, NULL, -1 }};  // Tabellenende
 
 SampleObject::SampleObject( const String& rClass ) : SbxObject( rClass )
 {

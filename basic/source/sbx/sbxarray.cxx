@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxarray.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:07:42 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:31:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -798,7 +798,7 @@ UINT32 SbxDimArray::Offset32( SbxArray* pPar )
         SetError( SbxERR_BOUNDS ); return 0;
     }
     UINT32 nPos = 0;
-    UINT32 nOff = 1;    // Nicht Element 0!
+    USHORT nOff = 1;    // Nicht Element 0!
     for( SbxDim* p = pFirst; p && !IsError(); p = p->pNext )
     {
         INT32 nIdx = pPar->Get( nOff++ )->GetLong();
