@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:35:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:04:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -560,7 +560,7 @@ void CommandLineArgs::SetBoolParam( BoolParam eParam, sal_Bool bNewValue )
     m_aBoolParams[eParam] = bNewValue;
 }
 
-const rtl::OUString& CommandLineArgs::GetStringParam( BoolParam eParam ) const
+const rtl::OUString& CommandLineArgs::GetStringParam( StringParam eParam ) const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
 
@@ -568,7 +568,7 @@ const rtl::OUString& CommandLineArgs::GetStringParam( BoolParam eParam ) const
     return m_aStrParams[eParam];
 }
 
-void CommandLineArgs::SetStringParam( BoolParam eParam, const rtl::OUString& aNewValue )
+void CommandLineArgs::SetStringParam( StringParam eParam, const rtl::OUString& aNewValue )
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
 
