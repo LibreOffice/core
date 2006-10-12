@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdoc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:47:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:15:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,8 +468,8 @@ TextNode* TextNode::Split( USHORT nPos, BOOL bKeepEndingAttribs )
             // alle dahinter verschieben in den neuen Node (this)
             maCharAttribs.RemoveAttrib( nAttr );
             pNew->maCharAttribs.InsertAttrib( pAttrib );
-            pAttrib->GetStart() -= nPos;
-            pAttrib->GetEnd() -= nPos;
+            pAttrib->GetStart() = pAttrib->GetStart() - nPos;
+            pAttrib->GetEnd() = pAttrib->GetEnd() - nPos;
             nAttr--;
         }
     }
@@ -504,7 +504,8 @@ void TextNode::Append( const TextNode& rNode )
                     if ( ( pTmpAttrib->Which() == pAttrib->Which() ) &&
                          ( pTmpAttrib->GetAttr() == pAttrib->GetAttr() ) )
                     {
-                        pTmpAttrib->GetEnd() += pAttrib->GetLen();
+                        pTmpAttrib->GetEnd() =
+                            pTmpAttrib->GetEnd() + pAttrib->GetLen();
                         bMelted = TRUE;
                         break;  // es kann nur eins von der Sorte an der Stelle geben
                     }
@@ -515,8 +516,8 @@ void TextNode::Append( const TextNode& rNode )
         if ( !bMelted )
         {
             TextCharAttrib* pNewAttrib = new TextCharAttrib( *pAttrib );
-            pNewAttrib->GetStart() += nOldLen;
-            pNewAttrib->GetEnd() += nOldLen;
+            pNewAttrib->GetStart() = pNewAttrib->GetStart() + nOldLen;
+            pNewAttrib->GetEnd() = pNewAttrib->GetEnd() + nOldLen;
             maCharAttribs.InsertAttrib( pNewAttrib );
         }
     }
