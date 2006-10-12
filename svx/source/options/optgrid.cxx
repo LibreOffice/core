@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgrid.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:29:15 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:00:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,8 +106,9 @@ SvxOptionsGrid::~SvxOptionsGrid()
     Beschreibung: Item fuer Rastereinstellungen
  --------------------------------------------------------------------*/
 
-SvxGridItem::SvxGridItem( const SvxGridItem& rItem ):
-            SfxPoolItem(rItem)
+SvxGridItem::SvxGridItem( const SvxGridItem& rItem )
+:   SvxOptionsGrid()
+,   SfxPoolItem(rItem)
 {
     bUseGridsnap = rItem.bUseGridsnap ;
     bSynchronize = rItem.bSynchronize ;
@@ -174,8 +175,9 @@ SfxItemPresentation  SvxGridItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = String::CreateFromAscii("SvxGridItem");
             return ePres;
+        default:
+            return SFX_ITEM_PRESENTATION_NONE;
     }
-    return SFX_ITEM_PRESENTATION_NONE;
 }
 
 
@@ -187,16 +189,16 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
 
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_GRID ), rCoreSet ),
 
-    aFlResolution   ( this, ResId( FL_RESOLUTION ) ),
+    aCbxUseGridsnap ( this, ResId( CBX_USE_GRIDSNAP ) ),
+    aCbxGridVisible ( this, ResId( CBX_GRID_VISIBLE ) ),
 
+    aFlResolution   ( this, ResId( FL_RESOLUTION ) ),
     aFtDrawX        ( this, ResId( FT_DRAW_X ) ),
     aMtrFldDrawX    ( this, ResId( MTR_FLD_DRAW_X ) ),
-
     aFtDrawY        ( this, ResId( FT_DRAW_Y ) ),
     aMtrFldDrawY    ( this, ResId( MTR_FLD_DRAW_Y ) ),
 
     aFlDivision     ( this, ResId( FL_DIVISION ) ),
-
     aFtDivisionX(     this, ResId( FT_DIVISION_X) ),
     aNumFldDivisionX( this, ResId( NUM_FLD_DIVISION_X ) ),
     aDivisionPointX(  this, ResId( FT_HORZ_POINTS) ),
@@ -205,25 +207,27 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
     aNumFldDivisionY( this, ResId( NUM_FLD_DIVISION_Y ) ),
     aDivisionPointY(  this, ResId( FT_VERT_POINTS) ),
 
-    aGrpDrawGrid    ( this, ResId( GRP_DRAWGRID ) ),
-    aCbxUseGridsnap ( this, ResId( CBX_USE_GRIDSNAP ) ),
     aCbxSynchronize ( this, ResId( CBX_SYNCHRONIZE ) ),
-    aCbxGridVisible ( this, ResId( CBX_GRID_VISIBLE ) ),
+    aGrpDrawGrid    ( this, ResId( GRP_DRAWGRID ) ),
+
+    aGrpSnap            ( this, ResId( GRP_SNAP ) ),
     aCbxSnapHelplines   ( this, ResId( CBX_SNAP_HELPLINES ) ),
     aCbxSnapBorder      ( this, ResId( CBX_SNAP_BORDER ) ),
     aCbxSnapFrame       ( this, ResId( CBX_SNAP_FRAME ) ),
     aCbxSnapPoints      ( this, ResId( CBX_SNAP_POINTS ) ),
     aFtSnapArea         ( this, ResId( FT_SNAP_AREA ) ),
     aMtrFldSnapArea     ( this, ResId( MTR_FLD_SNAP_AREA ) ),
-    aGrpSnap            ( this, ResId( GRP_SNAP ) ),
+
     aSeparatorFL        ( this, ResId( FL_SEPARATOR ) ),
+
+    aGrpOrtho           ( this, ResId( GRP_ORTHO ) ),
     aCbxOrtho           ( this, ResId( CBX_ORTHO ) ),
     aCbxBigOrtho        ( this, ResId( CBX_BIGORTHO ) ),
     aCbxRotate          ( this, ResId( CBX_ROTATE ) ),
     aMtrFldAngle        ( this, ResId( MTR_FLD_ANGLE ) ),
     aFtBezAngle         ( this, ResId( FT_BEZ_ANGLE ) ),
     aMtrFldBezAngle     ( this, ResId( MTR_FLD_BEZ_ANGLE ) ),
-    aGrpOrtho           ( this, ResId( GRP_ORTHO ) ),
+
     bAttrModified( FALSE )
 {
     // diese Page braucht ExchangeSupport
@@ -373,10 +377,10 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 }
 
 // -----------------------------------------------------------------------
-int SvxGridTabPage::DeactivatePage( SfxItemSet* pSet )
+int SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( _pSet )
+        FillItemSet( *_pSet );
     return( LEAVE_PAGE );
 }
 //------------------------------------------------------------------------
@@ -394,7 +398,7 @@ IMPL_LINK( SvxGridTabPage, ChangeDrawHdl_Impl, MetricField *, pField )
 }
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxGridTabPage, ClickRotateHdl_Impl, void *, p )
+IMPL_LINK( SvxGridTabPage, ClickRotateHdl_Impl, void *, EMPTYARG )
 {
     if( aCbxRotate.IsChecked() )
         aMtrFldAngle.Enable();
@@ -420,7 +424,7 @@ IMPL_LINK( SvxGridTabPage, ChangeDivisionHdl_Impl, NumericField *, pField )
 }
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxGridTabPage, ChangeGridsnapHdl_Impl, void *, p )
+IMPL_LINK( SvxGridTabPage, ChangeGridsnapHdl_Impl, void *, EMPTYARG )
 {
     bAttrModified = TRUE;
     return 0;
