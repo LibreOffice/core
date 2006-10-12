@@ -4,9 +4,9 @@
  *
  *  $RCSfile: proparrhlp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:43:42 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 16:00:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,7 @@ template <class TYPE>
 }
 
 //------------------------------------------------------------------
-template <class TYPE>
+template <class TYPE> inline
 ::cppu::IPropertyArrayHelper* OAggregationArrayUsageHelper<TYPE>::createArrayHelper() const
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;
