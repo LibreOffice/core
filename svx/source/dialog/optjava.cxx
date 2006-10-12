@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjava.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:31:40 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:22:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,7 @@
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_EXECUTABLEDIALOGRESULTS_HPP_
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #endif
@@ -455,6 +456,7 @@ IMPL_LINK( SvxJavaOptionsPage, ParameterHdl_Impl, PushButton *, EMPTYARG )
             javaFrameworkError eErr = jfw_isVMRunning( &bRunning );
             DBG_ASSERT( JFW_E_NONE == eErr,
                         "SvxJavaOptionsPage::ParameterHdl_Impl(): error in jfw_isVMRunning" );
+            (void)eErr;
             if ( bRunning )
             {
                 WarningBox aWarnBox( this, SVX_RES( RID_SVX_MSGBOX_JAVA_RESTART2 ) );
@@ -498,6 +500,7 @@ IMPL_LINK( SvxJavaOptionsPage, ClassPathHdl_Impl, PushButton *, EMPTYARG )
             javaFrameworkError eErr = jfw_isVMRunning( &bRunning );
             DBG_ASSERT( JFW_E_NONE == eErr,
                         "SvxJavaOptionsPage::ParameterHdl_Impl(): error in jfw_isVMRunning" );
+            (void)eErr;
             if ( bRunning )
             {
                 WarningBox aWarnBox( this, SVX_RES( RID_SVX_MSGBOX_JAVA_RESTART2 ) );
@@ -938,7 +941,7 @@ SvxJavaClassPathDlg::~SvxJavaClassPathDlg()
 
 IMPL_LINK( SvxJavaClassPathDlg, AddArchiveHdl_Impl, PushButton *, EMPTYARG )
 {
-    sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+    sfx2::FileDialogHelper aDlg( TemplateDescription::FILEOPEN_SIMPLE, 0 );
     aDlg.SetTitle( SVX_RES( RID_SVXSTR_ARCHIVE_TITLE ) );
     aDlg.AddFilter( SVX_RES( RID_SVXSTR_ARCHIVE_HEADLINE ), String::CreateFromAscii("*.jar;*.zip") );
     String sFolder;
