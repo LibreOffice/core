@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:15:22 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:27:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,7 +248,7 @@ sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetSt
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoGluePointAccess_createInstance( SdrObject* pObject );
 
-DECLARE_LIST( SvxShapeList, SvxShape * );
+DECLARE_LIST( SvxShapeList, SvxShape * )
 
 /***********************************************************************
 * class SvxShape                                                       *
@@ -508,7 +508,11 @@ void SvxShape::Init() throw()
 }
 
 //----------------------------------------------------------------------
-void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw()
+void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage*
+#ifdef DBG_UTIL
+                        pNewPage
+#endif
+                        ) throw()
 {
     DBG_ASSERT( mpImpl, "svx::SvxShape::Create(), no mpImpl!" );
 
@@ -1570,7 +1574,6 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
 
                 return sal_True;
             }
-            break;
         case XATTR_FILLFLOATTRANSPARENCE:
             {
                 // #85953# Set a disabled XFillFloatTransparenceItem
@@ -1578,7 +1581,6 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
 
                 return sal_True;
             }
-            break;
         }
 
         return sal_False;
@@ -1691,8 +1693,10 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                 SdrObjList* pObjList = mpObj->GetObjList();
                 if( pObjList )
                 {
+#ifdef DBG_UTIL
                     SdrObject* pCheck =
-                    pObjList->SetObjectOrdNum( mpObj->GetOrdNum(), (ULONG)nNewOrdNum );
+#endif
+                                pObjList->SetObjectOrdNum( mpObj->GetOrdNum(), (ULONG)nNewOrdNum );
                     DBG_ASSERT( pCheck == mpObj.get(), "GetOrdNum() failed!" );
                     return;
                 }
@@ -1718,7 +1722,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
         }
         case OWN_ATTR_MIRRORED:
         {
-            sal_Bool bMirror;
+            sal_Bool bMirror = sal_Bool();
             if(rVal >>= bMirror )
             {
                 if( mpObj.is() && mpObj->ISA(SdrGrafObj) )
@@ -1869,7 +1873,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 
         case SDRATTR_LAYERID:
         {
-            sal_Int16 nLayerId;
+            sal_Int16 nLayerId = sal_Int16();
             if( rVal >>= nLayerId )
             {
                 SdrLayer* pLayer = mpModel->GetLayerAdmin().GetLayerPerID((unsigned char)nLayerId);
@@ -1935,7 +1939,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 
         case SDRATTR_OBJMOVEPROTECT:
         {
-            sal_Bool bMoveProtect;
+            sal_Bool bMoveProtect = sal_Bool();
             if( rVal >>= bMoveProtect )
             {
                 mpObj->SetMoveProtect(bMoveProtect);
@@ -1955,7 +1959,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
         }
         case SDRATTR_OBJPRINTABLE:
         {
-            sal_Bool bPrintable;
+            sal_Bool bPrintable = sal_Bool();
             if( rVal >>= bPrintable )
             {
                 mpObj->SetPrintable(bPrintable);
@@ -1965,7 +1969,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
         }
         case SDRATTR_OBJSIZEPROTECT:
         {
-            sal_Bool bResizeProtect;
+            sal_Bool bResizeProtect = sal_Bool();
             if( rVal >>= bResizeProtect )
             {
                 mpObj->SetResizeProtect(bResizeProtect);
