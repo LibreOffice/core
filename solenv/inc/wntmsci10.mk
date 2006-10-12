@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 13:10:13 $
+#   last change: $Author: obo $ $Date: 2006-10-12 14:20:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -163,35 +163,45 @@ CFLAGSOUTOBJ=-Fo
 # spurious warnings and are hard or impossible to workaround:
 # - "warning C4061: enumerate in switch of enum is not explicitly handled by a
 #   case label",
+# - "warning C4063: case 'identifier' is not a valid value for switch of enum
+#   'enumeration'",
 # - "warning C4127: conditional expression is constant",
 # - "warning C4191: unsafe conversion from function type to function type",
 # - "warning C4217: member template functions cannot be used for copy-assignment
 #   or copy-construction",
+# - "warning C4250: 'class1' : inherits 'class2::member' via dominance",
+# - "warning C4292: compiler limit : terminating debug information emission",
+# - "warning C4344: behavior change: use of explicit template arguments results
+#   in call to 'function",
+# - "warning C4347: behavior change: 'overload A' is called instead of
+#   'overload B'",
 # - "warning C4355: 'this' used in base member initializer list",
+# - "warning C4503: 'identifier': decorated name length exceeded, name was
+#   truncated" (http://msdn2.microsoft.com/en-us/library/074af4b6.aspx),
 # - "warning C4511: copy constructor could not be generated",
 # - "warning C4512: assignment operator could not be generated",
 # - "warning C4514: unreferenced inline function has been removed",
 # - "warning C4611: interaction between '_setjmp' and C++ object destruction is
 #   non-portable",
+# - "warning C4619: warning Cnnnn unknown",
 # - "warning C4625: copy constructor could not be generated because a base class
 #   copy constructor is inaccessible",
 # - "warning C4626: assignment operator could not be generated because a base
 #   class assignment operator is inaccessible",
 # - "warning C4675: resolved overload was found by argument-dependent lookup",
+# - "warning C4686: possible change in behavior, change in UDT return calling
+#   convention",
 # - "warning C4710: function not inlined",
 # - "warning C4711: function selected for automatic inline expansion",
 # - "warning C4820: padding added after member".
-# - "warning C4503: 'identifier' : decorated name length exceeded, name was truncated"
-#   (http://msdn2.microsoft.com/en-us/library/074af4b6.aspx)
 # For C, certain warnings from system headers (stdlib.h etc.) have to be
 # disabled globally (for C++, this is not necessary, as the system headers are
 # wrapped by STLport):
-# - "warning C4255: no function prototype given: converting
-#   '()' to '(void)'".
-# - "warning C4619: warning Cnnnn unknown
-CFLAGSWARNCXX=-Wall -wd4061 -wd4127 -wd4191 -wd4217 -wd4251 -wd4275 -wd4290 \
-    -wd4294 -wd4355 -wd4511 -wd4512 -wd4514 -wd4611 -wd4625 -wd4626 -wd4640 \
-    -wd4675 -wd4710 -wd4711 -wd4786 -wd4800 -wd4820 -wd4503 -wd4619
+# - "warning C4255: no function prototype given: converting '()' to '(void)'".
+CFLAGSWARNCXX=-Wall -wd4061 -wd4063 -wd4127 -wd4191 -wd4217 -wd4250 -wd4251 \
+    -wd4275 -wd4290 -wd4292 -wd4294 -wd4344 -wd4347 -wd4355 -wd4503 -wd4511 \
+    -wd4512 -wd4514 -wd4611 -wd4619 -wd4625 -wd4626 -wd4640 -wd4675 -wd4686 \
+    -wd4710 -wd4711 -wd4786 -wd4800 -wd4820
 CFLAGSWARNCC=$(CFLAGSWARNCXX) -wd4255
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
@@ -201,52 +211,20 @@ CFLAGSWERRCC=-WX
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
 MODULES_WITH_WARNINGS := \
-    automation \
-    avmedia \
     b_server \
     basctl \
-    basebmp \
-    basic \
-    canvas \
     chart2 \
-    connectivity \
-    cppcanvas \
-    customres \
-    databaseext \
-    dbaccess \
-    desktop \
     devtools \
-    dxcanvas \
-    embeddedobj \
     extensions \
     filter \
-    forms \
-    fpicker \
-    framework \
-    glcanvas \
-    goodies \
     lingu \
     lingucomponent \
-    linguistic \
-    migrationanalysis \
     r_tools \
     sc \
-    scripting \
     sd \
-    sfx2 \
-    sj2 \
-    slideshow \
-    so3 \
     starmath \
-    svtools \
-    svx \
     sw \
-    tab \
-    toolkit \
-    uui \
     writerperfect \
-    xmlhelp \
-    xmloff \
     xmlsecurity
 
 CDEFS+=-DSTLPORT_VERSION=400 -DWINVER=0x400 -D_WIN32_IE=0x400
