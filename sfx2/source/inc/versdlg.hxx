@@ -4,9 +4,9 @@
  *
  *  $RCSfile: versdlg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 11:11:47 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:57:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@
 #include "basedlgs.hxx"
 
 class SfxObjectShell;
+class SfxViewFrame;
 struct SfxVersionInfo;
 
 class SfxVersionsTabListBox_Impl  : public SvTabListBox
