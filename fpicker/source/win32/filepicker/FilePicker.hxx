@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilePicker.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:38:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:48:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,8 +278,10 @@ private:
     CFilePicker( const CFilePicker& );
     CFilePicker& operator=( const CFilePicker& );
 
+    using WeakComponentImplHelperBase::disposing;
+
 private:
-    ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory> m_xServiceMgr;   // to instanciate own services
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;   // to instanciate own services
     CAsyncEventNotifier                                                            m_aAsyncEventNotifier;
     std::auto_ptr<CWinFileOpenImpl>                                                m_pImpl;
 };
