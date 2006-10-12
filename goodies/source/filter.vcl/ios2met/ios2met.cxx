@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ios2met.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:51:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:37:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -749,9 +749,9 @@ sal_uInt32 OS2METReader::GetPalette0RGB(sal_uInt32 nIndex)
 Color OS2METReader::GetPaletteColor(sal_uInt32 nIndex)
 {
     nIndex=GetPalette0RGB(nIndex);
-    return Color((((USHORT)(nIndex>>8))&0xff00)>>8,
-                 (((USHORT) nIndex)&0xff00)>>8,
-                 (((USHORT)(nIndex<<8))&0xff00)>>8);
+    return Color(sal::static_int_cast< UINT8 >((nIndex>>16)&0xff),
+                 sal::static_int_cast< UINT8 >((nIndex>>8)&0xff),
+                 sal::static_int_cast< UINT8 >(nIndex&0xff));
 }
 
 
