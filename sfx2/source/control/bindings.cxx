@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:25:51 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:50:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -445,7 +445,7 @@ SfxPopupAction SfxBindings::GetPopupAction_Impl() const
 
 //--------------------------------------------------------------------
 
-void SfxBindings::HidePopups( FASTBOOL bHide )
+void SfxBindings::HidePopups( bool bHide )
 
 /*  [Beschreibung]
 
@@ -1345,9 +1345,9 @@ sal_uInt16 SfxBindings::GetSlotPos( sal_uInt16 nId, sal_uInt16 nStartSearchAt )
         DBG_PROFSTOP(SfxBindingsMsgPos);
         return (*pImp->pCaches)[nStartSearchAt]->GetId() >= nId ? 0 : 1;
     }
-    size_t nLow = nStartSearchAt;
-    size_t nMid = 0;
-    size_t nHigh = 0;
+    sal_uInt16 nLow = nStartSearchAt;
+    sal_uInt16 nMid = 0;
+    sal_uInt16 nHigh = 0;
     sal_Bool bFound = sal_False;
     nHigh = pImp->pCaches->Count() - 1;
     while ( !bFound && nLow <= nHigh )
@@ -1668,10 +1668,13 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
             if ( eState == SFX_ITEM_DISABLED )
                 return;
 
+            if ( SFX_ITEM_AVAILABLE == eState && SfxItemPool::IsWhich(nWhich) )
+                pOldItem = &aSet.Get(nWhich);
+
             if ( SFX_ITEM_SET == eState ||
                  ( SFX_ITEM_AVAILABLE == eState &&
                    SfxItemPool::IsWhich(nWhich) &&
-                   ( pOldItem = &aSet.Get(nWhich) ) ) )
+                   pOldItem ) )
             {
                 if ( pOldItem->ISA(SfxBoolItem) )
                 {
@@ -1932,7 +1935,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     // aus den Ranges ein Set erzeugen
     sal_uInt16 *pRanges = new sal_uInt16[rFound.Count() * 2 + 1];
     int j = 0;
-    int i = 0;
+    USHORT i = 0;
     while ( i < rFound.Count() )
     {
         pRanges[j++] = rFound[i]->nWhichId;
