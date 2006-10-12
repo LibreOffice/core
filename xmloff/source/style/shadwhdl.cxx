@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shadwhdl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:56:51 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:50:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,8 @@ sal_Bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
                 if( nX < 0 ) nX *= -1;
                 if( nY < 0 ) nY *= -1;
 
-                aShadow.ShadowWidth = (nX + nY) >> 1;
+                aShadow.ShadowWidth = sal::static_int_cast< sal_Int16 >(
+                    (nX + nY) >> 1);
             }
         }
     }
