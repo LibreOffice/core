@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: thb $ $Date: 2006-07-27 11:35:31 $
+#   last change: $Author: obo $ $Date: 2006-10-12 13:47:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,22 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :	settings.mk
 
+
+# TODO(F3) unify BASEBMP_NO_NESTED_TEMPLATE_PARAMETER and
+# VIGRA_WITHOUT_NESTED_TEMPLATES_PARAMS
+#
+# - VIGRA_WITHOUT_NESTED_TEMPLATES_PARAMS avoids template parameters
+#   to templates - the template keyword is broken for SunCC
+# - VIGRA_HAS_LONG_LONG enables long long overloads (but appears to not work
+#   reliably in some environments, and is thus not enabled)
+# - VIGRA_HAS_LONG_DOUBLE enables long double overloads 
+
+.IF "$(OS)"!="WNT"
+CDEFS+= -DVIGRA_HAS_LONG_DOUBLE
+.ENDIF
+
 .IF "$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
-CDEFS+= -DBASEBMP_NO_NESTED_TEMPLATE_PARAMETER
+CDEFS+= -DBASEBMP_NO_NESTED_TEMPLATE_PARAMETER -DVIGRA_WITHOUT_NESTED_TEMPLATE_PARAMS
 .ENDIF
 
 # --- Common ----------------------------------------------------------
