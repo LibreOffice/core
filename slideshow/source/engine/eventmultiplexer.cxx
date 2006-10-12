@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventmultiplexer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:25:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:53:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -985,13 +985,13 @@ void SAL_CALL EventMultiplexer::mouseReleased(
 }
 
 void SAL_CALL EventMultiplexer::mouseEntered(
-    const awt::MouseEvent& e ) throw (uno::RuntimeException)
+    const awt::MouseEvent& /*e*/ ) throw (uno::RuntimeException)
 {
     // not used here
 }
 
 void SAL_CALL EventMultiplexer::mouseExited(
-    const awt::MouseEvent& e ) throw (uno::RuntimeException)
+    const awt::MouseEvent& /*e*/ ) throw (uno::RuntimeException)
 {
     // not used here
 }
