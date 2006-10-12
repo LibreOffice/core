@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:31:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:03:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@
 #define OL_SCROLL_HOROFFSET         20  /* in % von VisibleSize.Width */
 #define OL_SCROLL_VEROFFSET         20  /* in % von VisibleSize.Height */
 
-DBG_NAME(OutlinerView);
+DBG_NAME(OutlinerView)
 
 
 OutlinerView::OutlinerView( Outliner* pOut, Window* pWin )
@@ -608,7 +608,10 @@ ParaRange OutlinerView::ImpGetSelectedParagraphs( BOOL bIncludeHiddenChilds )
     {
         Paragraph* pLast = pOwner->pParaList->GetParagraph( aParas.nEndPara );
         if ( pOwner->pParaList->HasHiddenChilds( pLast ) )
-            aParas.nEndPara += (USHORT) pOwner->pParaList->GetChildCount( pLast );
+            aParas.nEndPara =
+                sal::static_int_cast< USHORT >(
+                    aParas.nEndPara +
+                    pOwner->pParaList->GetChildCount( pLast ) );
     }
     return aParas;
 }
@@ -671,19 +674,20 @@ void OutlinerView::Indent( short nDiff )
                 // unsichtbar und steht jetzt auf der gleichen Ebene wie der
                 // sichtbare Absatz. In diesem Fall wird der naechste sichtbare
                 // Absatz gesucht und aufgeplustert.
-                Paragraph* pPara = pOwner->pParaList->GetParagraph( aSel.nStartPara );
-                DBG_ASSERT(pPara->IsVisible(),"Selected Paragraph invisible ?!")
-
+#ifdef DBG_UTIL
+                Paragraph* _pPara = pOwner->pParaList->GetParagraph( aSel.nStartPara );
+                DBG_ASSERT(_pPara->IsVisible(),"Selected Paragraph invisible ?!")
+#endif
                 Paragraph* pPrev= pOwner->pParaList->GetParagraph( aSel.nStartPara-1 );
 
                 if( !pPrev->IsVisible() && ( pPrev->GetDepth() == nNewDepth ) )
                 {
                     // Vorgaenger ist eingeklappt und steht auf gleicher Ebene
                     // => naechsten sichtbaren Absatz suchen und expandieren
-                    USHORT nDummy;
-                    pPrev = pOwner->pParaList->GetParent( pPrev, nDummy );
+                    USHORT _nDummy;
+                    pPrev = pOwner->pParaList->GetParent( pPrev, _nDummy );
                     while( !pPrev->IsVisible() )
-                        pPrev = pOwner->pParaList->GetParent( pPrev, nDummy );
+                        pPrev = pOwner->pParaList->GetParent( pPrev, _nDummy );
 
                     pOwner->Expand( pPrev );
                     pOwner->InvalidateBullet( pPrev, pOwner->pParaList->GetAbsPos( pPrev ) );
@@ -1119,9 +1123,11 @@ void OutlinerView::ImpPasted( ULONG nStart, ULONG nPrevParaCount, USHORT nSize)
     pOwner->bPasting = FALSE;
     ULONG nCurParaCount = (ULONG)pOwner->pEditEngine->GetParagraphCount();
     if( nCurParaCount < nPrevParaCount )
-        nSize -= (USHORT)( nPrevParaCount - nCurParaCount );
+        nSize = sal::static_int_cast< USHORT >(
+            nSize - ( nPrevParaCount - nCurParaCount ) );
     else
-        nSize += (USHORT)( nCurParaCount - nPrevParaCount );
+        nSize = sal::static_int_cast< USHORT >(
+            nSize + ( nCurParaCount - nPrevParaCount ) );
     pOwner->ImpTextPasted( nStart, nSize );
 }
 
@@ -1172,7 +1178,8 @@ USHORT OutlinerView::ImpCalcSelectedPages( BOOL bIncludeFirstSelected )
     if( nPages )
     {
         pOwner->nDepthChangedHdlPrevDepth = nPages;
-        pOwner->pHdlParagraph = (Paragraph*)nFirstPage;
+        pOwner->pHdlParagraph = 0;
+        pOwner->mnFirstSelPage = nFirstPage;
     }
 
     return nPages;
@@ -1537,7 +1544,7 @@ ULONG OutlinerView::Read( SvStream& rInput,  const String& rBaseURL, EETextForma
 
     long nParaDiff = pEditView->GetEditEngine()->GetParagraphCount() - nOldParaCount;
     USHORT nChangesStart = aOldSel.nStartPara;
-    USHORT nChangesEnd = nChangesStart + nParaDiff + (aOldSel.nEndPara-aOldSel.nStartPara);
+    USHORT nChangesEnd = sal::static_int_cast< USHORT >(nChangesStart + nParaDiff + (aOldSel.nEndPara-aOldSel.nStartPara));
 
     for ( USHORT n = nChangesStart; n <= nChangesEnd; n++ )
     {
