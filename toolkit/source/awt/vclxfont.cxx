@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxfont.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:13:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:30:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,8 @@ sal_Int16 VCLXFont::getCharWidth( sal_Unicode c ) throw(::com::sun::star::uno::R
         Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
 
-        nRet = pOutDev->GetTextWidth( String(c) );
+        nRet = sal::static_int_cast< sal_Int16 >(
+            pOutDev->GetTextWidth( String(c) ));
 
         pOutDev->SetFont( aOldFont );
     }
@@ -157,8 +158,9 @@ sal_Int16 VCLXFont::getCharWidth( sal_Unicode c ) throw(::com::sun::star::uno::R
         aSeq = ::com::sun::star::uno::Sequence<sal_Int16>( nCount );
         for ( USHORT n = 0; n < nCount; n++ )
         {
-            aSeq.getArray()[n] = pOutDev->GetTextWidth(
-                String(static_cast< sal_Unicode >(nFirst+n)) );
+            aSeq.getArray()[n] = sal::static_int_cast< sal_Int16 >(
+                pOutDev->GetTextWidth(
+                    String(static_cast< sal_Unicode >(nFirst+n)) ));
         }
 
         pOutDev->SetFont( aOldFont );
@@ -227,7 +229,7 @@ void VCLXFont::getKernPairs( ::com::sun::star::uno::Sequence< sal_Unicode >& rnC
             {
                 pChars1[n] = pData[n].nChar1;
                 pChars2[n] = pData[n].nChar2;
-                pKerns[n] = pData[n].nKern;
+                pKerns[n] = sal::static_int_cast< sal_Int16 >(pData[n].nKern);
             }
 
 

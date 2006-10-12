@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxdevice.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:13:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:30:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,12 +202,12 @@ IMPL_XTYPEPROVIDER_END
     ::com::sun::star::uno::Sequence< ::com::sun::star::awt::FontDescriptor> aFonts;
     if( mpOutputDevice )
     {
-        sal_uInt16 nFonts = mpOutputDevice->GetDevFontCount();
+        int nFonts = mpOutputDevice->GetDevFontCount();
         if ( nFonts )
         {
             aFonts = ::com::sun::star::uno::Sequence< ::com::sun::star::awt::FontDescriptor>( nFonts );
             ::com::sun::star::awt::FontDescriptor* pFonts = aFonts.getArray();
-            for ( sal_uInt16 n = 0; n < nFonts; n++ )
+            for ( int n = 0; n < nFonts; n++ )
                 pFonts[n] = VCLUnoHelper::CreateFontDescriptor( mpOutputDevice->GetDevFont( n ) );
         }
     }
