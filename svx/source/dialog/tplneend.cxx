@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tplneend.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:45:22 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:31:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #define _SVX_TPLNEEND_CXX
 
@@ -380,7 +381,7 @@ long SvxLineEndDefTabPage::ChangePreviewHdl_Impl( void* )
 
 IMPL_LINK( SvxLineEndDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 {
-    int nPos = aLbLineEnds.GetSelectEntryPos();
+    USHORT nPos = aLbLineEnds.GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -576,9 +577,9 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxLineEndDefTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 {
-    int nPos = aLbLineEnds.GetSelectEntryPos();
+    USHORT nPos = aLbLineEnds.GetSelectEntryPos();
 
-    if( nPos >= 0 )
+    if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         QueryBox aQueryBox( DLGWIN, WinBits( WB_YES_NO | WB_DEF_NO ),
 //!         SVX_RES( RID_SVXSTR_DEL_LINEEND ),
@@ -627,7 +628,9 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
     if ( nReturn != RET_CANCEL )
     {
-        ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+        ::sfx2::FileDialogHelper aDlg(
+            com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+            0 );
         String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.soe" ) );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
@@ -706,7 +709,8 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxLineEndDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
 {
-       ::sfx2::FileDialogHelper aDlg( ::sfx2::FILESAVE_SIMPLE, 0 );
+       ::sfx2::FileDialogHelper aDlg(
+        com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.soe" ) );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
