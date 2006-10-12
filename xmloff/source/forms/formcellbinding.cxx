@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcellbinding.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:34:57 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:43:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,6 @@ namespace xmloff
         using ::com::sun::star::uno::Reference;
         using ::com::sun::star::uno::XInterface;
         using ::com::sun::star::container::XChild;
-        using ::com::sun::star::drawing::XDrawPage;
         using ::com::sun::star::frame::XModel;
         using ::com::sun::star::uno::UNO_QUERY;
 
@@ -139,12 +138,6 @@ namespace xmloff
         }
 
         //....................................................................
-        Reference< XDrawPage > getDrawPage( const Reference< XInterface >& _rxModelNode )
-        {
-            return getTypedModelNode< XDrawPage >( _rxModelNode );
-        }
-
-        //....................................................................
         struct StringCompare : public ::std::unary_function< ::rtl::OUString, bool >
         {
         private:
@@ -158,21 +151,6 @@ namespace xmloff
                 return ( _rCompare == m_sReference ) ? true : false;
             }
         };
-        //....................................................................
-        bool isAsciiLetter( sal_Unicode _c )
-        {
-            return  ( _c >= 'A' && _c <= 'Z' )
-                ||  ( _c >= 'a' && _c <= 'z' );
-        }
-
-        //....................................................................
-        sal_Unicode toUpperAscii( sal_Unicode _c )
-        {
-            sal_Unicode nUpper( _c );
-            if ( _c >= 'a' && _c <= 'z' )
-                nUpper += 'A' - 'a';
-            return nUpper;
-        }
     }
 
     //========================================================================
