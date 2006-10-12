@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultsetforroot.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:18:09 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:28:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,8 +93,7 @@ ResultSetForRoot::ResultSetForRoot( const uno::Reference< lang::XMultiServiceFac
         if( content.is() )
         {
             uno::Reference< XCommandProcessor > cmd( content,uno::UNO_QUERY );
-            if( ! ( cmd->execute( aCommand,0,uno::Reference< XCommandEnvironment >( 0 ) ) >>= m_aItems[i] ) )
-                ;
+            cmd->execute( aCommand,0,uno::Reference< XCommandEnvironment >( 0 ) ) >>= m_aItems[i]; //TODO: check return value of operator >>=
         }
         m_nRow = 0xffffffff;
     }
