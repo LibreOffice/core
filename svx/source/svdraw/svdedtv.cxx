@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:48:46 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:08:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -684,7 +684,7 @@ void SdrEditView::ForceMarkedObjToAnotherPage()
         Rectangle aPgRect(pM->GetPageView()->GetPageRect());
         if (!aObjRect.IsOver(aPgRect)) {
             BOOL bFnd=FALSE;
-            SdrPageView* pPV;
+            SdrPageView* pPV = NULL;
             for (USHORT nv=GetPageViewCount(); nv>0 && !bFnd;) {
                 nv--;
                 pPV=GetPageViewPvNum(nv);
