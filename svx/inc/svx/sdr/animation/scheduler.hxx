@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scheduler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:56:28 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:00:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,10 +126,9 @@ namespace sdr
             // list of events
             EventList                                       maList;
 
-            // flag-array
             // Flag which remembers if this timer is paused. Default
             // is false.
-            unsigned                                        mbIsPaused : 1;
+            bool                                            mbIsPaused;
 
         public:
             // constructor/destructor
