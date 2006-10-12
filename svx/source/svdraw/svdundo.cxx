@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:01:47 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:16:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ XubString SdrUndoAction::GetRepeatComment(SfxRepeatTarget& rView) const
     return String();
 }
 
-FASTBOOL SdrUndoAction::CanSdrRepeat(SdrView& /*rView*/) const
+bool SdrUndoAction::CanSdrRepeat(SdrView& /*rView*/) const
 {
     return FALSE;
 }
@@ -181,7 +181,7 @@ XubString SdrUndoGroup::GetComment() const
     return aRet;
 }
 
-FASTBOOL SdrUndoGroup::CanSdrRepeat(SdrView& rView) const
+bool SdrUndoGroup::CanSdrRepeat(SdrView& rView) const
 {
     switch (eFunction) {
         case SDRREPFUNC_OBJ_NONE            :  return FALSE;
@@ -586,7 +586,7 @@ void SdrUndoAttrObj::SdrRepeat(SdrView& rView)
     }
 }
 
-FASTBOOL SdrUndoAttrObj::CanSdrRepeat(SdrView& rView) const
+bool SdrUndoAttrObj::CanSdrRepeat(SdrView& rView) const
 {
     return (pRepeatSet!=0L && rView.AreObjectsMarked());
 }
@@ -637,7 +637,7 @@ void SdrUndoMoveObj::SdrRepeat(SdrView& rView)
     rView.MoveMarkedObj(aDistance);
 }
 
-FASTBOOL SdrUndoMoveObj::CanSdrRepeat(SdrView& rView) const
+bool SdrUndoMoveObj::CanSdrRepeat(SdrView& rView) const
 {
     return rView.AreObjectsMarked();
 }
@@ -738,7 +738,7 @@ XubString SdrUndoGeoObj::GetComment() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, FASTBOOL bOrdNumDirect)
+SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect)
 :   SdrUndoObj(rNewObj),
     bOwner(FALSE),
     pView(NULL),
@@ -764,7 +764,7 @@ SdrUndoObjList::~SdrUndoObjList()
     }
 }
 
-void SdrUndoObjList::SetOwner(BOOL bNew)
+void SdrUndoObjList::SetOwner(bool bNew)
 {
     bOwner = bNew;
 }
@@ -922,7 +922,7 @@ void SdrUndoDelObj::SdrRepeat(SdrView& rView)
     rView.DeleteMarked();
 }
 
-FASTBOOL SdrUndoDelObj::CanSdrRepeat(SdrView& rView) const
+bool SdrUndoDelObj::CanSdrRepeat(SdrView& rView) const
 {
     return rView.AreObjectsMarked();
 }
@@ -964,7 +964,7 @@ XubString SdrUndoNewObj::GetComment() const
     return aStr;
 }
 
-SdrUndoReplaceObj::SdrUndoReplaceObj(SdrObject& rOldObj1, SdrObject& rNewObj1, FASTBOOL bOrdNumDirect)
+SdrUndoReplaceObj::SdrUndoReplaceObj(SdrObject& rOldObj1, SdrObject& rNewObj1, bool bOrdNumDirect)
 :   SdrUndoObj(rOldObj1),
     bOldOwner(FALSE),
     bNewOwner(FALSE),
@@ -1032,12 +1032,12 @@ void SdrUndoReplaceObj::Redo()
     ImpShowPageOfThisObject();
 }
 
-void SdrUndoReplaceObj::SetNewOwner(BOOL bNew)
+void SdrUndoReplaceObj::SetNewOwner(bool bNew)
 {
     bNewOwner = bNew;
 }
 
-void SdrUndoReplaceObj::SetOldOwner(BOOL bNew)
+void SdrUndoReplaceObj::SetOldOwner(bool bNew)
 {
     bOldOwner = bNew;
 }
@@ -1211,7 +1211,7 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
     }
 }
 
-FASTBOOL SdrUndoObjSetText::CanSdrRepeat(SdrView& rView) const
+bool SdrUndoObjSetText::CanSdrRepeat(SdrView& rView) const
 {
     FASTBOOL bOk=FALSE;
     if (bNewTextAvailable && rView.AreObjectsMarked()) {
@@ -1485,7 +1485,7 @@ void SdrUndoDelPage::SdrRepeat(SdrView& /*rView*/)
 {
 }
 
-FASTBOOL SdrUndoDelPage::CanSdrRepeat(SdrView& /*rView*/) const
+bool SdrUndoDelPage::CanSdrRepeat(SdrView& /*rView*/) const
 {
     return FALSE;
 }
@@ -1534,7 +1534,7 @@ void SdrUndoCopyPage::SdrRepeat(SdrView& /*rView*/)
 
 }
 
-FASTBOOL SdrUndoCopyPage::CanSdrRepeat(SdrView& /*rView*/) const
+bool SdrUndoCopyPage::CanSdrRepeat(SdrView& /*rView*/) const
 {
     return FALSE;
 }
