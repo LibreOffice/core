@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:45:28 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:56:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2216,8 +2216,8 @@ void SAL_CALL SfxBaseModel::storeSelf( const    SEQUENCE< PROPERTYVALUE >&  aSeq
             {
                 // actually in this very rare case only UI parameters have sence
                 // TODO/LATER: should be done later, after integration of sb19
-                if ( (bRet = m_pData->m_pObjectShell->DoSave()) )
-                    bRet = m_pData->m_pObjectShell->DoSaveCompleted();
+                bRet = m_pData->m_pObjectShell->DoSave()
+                    && m_pData->m_pObjectShell->DoSaveCompleted();
             }
             else
             {
@@ -3481,7 +3481,7 @@ void SfxBaseModel::impl_store(  const   OUSTRING&                   sURL        
 
 //********************************************************************************************************
 
-void SfxBaseModel::postEvent_Impl( sal_uInt16 nEventID )
+void SfxBaseModel::postEvent_Impl( ULONG nEventID )
 {
     // object already disposed?
     if ( impl_isDisposed() )
