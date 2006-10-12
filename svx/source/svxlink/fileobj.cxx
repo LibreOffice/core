@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileobj.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:03:45 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,8 @@ struct Impl_DownLoadData
 
 
 SvFileObject::SvFileObject()
-    : nType( FILETYPE_TEXT ), pDownLoadData( 0 )
+:   pDownLoadData( 0 )
+,   nType( FILETYPE_TEXT )
 {
     bLoadAgain = TRUE;
     bSynchron = bLoadError = bWaitForData = bDataReady = bNativFormat =
@@ -425,7 +426,7 @@ BOOL SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
             STATIC_LINK( pProgress, SvxFileObjProgress_Impl, UpdatePercentHdl ));
     }
 
-    const int nFilter = sFilter.Len() && pGF->GetImportFormatCount()
+    const USHORT nFilter = sFilter.Len() && pGF->GetImportFormatCount()
                             ? pGF->GetImportFormatNumber( sFilter )
                             : GRFILTER_FORMAT_DONTKNOW;
 
@@ -546,14 +547,14 @@ String SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink )
             Window* pOld = Application::GetDefDialogParent();
             Application::SetDefDialogParent( pParent );
 
-            SfxMediumRef xMed = SFX_APP()->InsertDocumentDialog( 0, String() );
-            if( xMed.Is() )
+            SfxMediumRef _xMed = SFX_APP()->InsertDocumentDialog( 0, String() );
+            if( _xMed.Is() )
             {
-                sFile = xMed->GetName();
+                sFile = _xMed->GetName();
                 sFile += ::sfx2::cTokenSeperator;
-// Bereich!         sFile += xMed->GetFilter()->GetName();
+// Bereich!         sFile += _xMed->GetFilter()->GetName();
                 sFile += ::sfx2::cTokenSeperator;
-                sFile += xMed->GetFilter()->GetFilterName();
+                sFile += _xMed->GetFilter()->GetFilterName();
             }
             else
                 sFile.Erase();
@@ -573,14 +574,14 @@ String SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink )
             if ( pShell )
                 pFactory = &pShell->GetFactory();
 
-            SfxMediumRef xMed = SFX_APP()->InsertDocumentDialog( 0, pFactory ? pFactory->GetFactoryName() : String() );
-            if( xMed.Is() )
+            SfxMediumRef _xMed = SFX_APP()->InsertDocumentDialog( 0, pFactory ? pFactory->GetFactoryName() : String() );
+            if( _xMed.Is() )
             {
-                sFile = xMed->GetName();
+                sFile = _xMed->GetName();
                 sFile += ::sfx2::cTokenSeperator;
-// Bereich!         sFile += xMed->GetFilter()->GetName();
+// Bereich!         sFile += _xMed->GetFilter()->GetName();
                 sFile += ::sfx2::cTokenSeperator;
-                sFile += xMed->GetFilter()->GetFilterName();
+                sFile += _xMed->GetFilter()->GetFilterName();
             }
             else
                 sFile.Erase();
@@ -645,6 +646,7 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void*, EMPTYARG )
 
 IMPL_STATIC_LINK( SvFileObject, DelMedium_Impl, SfxMediumRef*, pDelMed )
 {
+    (void)pThis;
     delete pDelMed;
     return 0;
 }
@@ -758,12 +760,12 @@ void SvFileObject::CancelTransfers()
 }
 
 
-void SvFileObject::SetTransferPriority( USHORT nPrio )
+void SvFileObject::SetTransferPriority( USHORT )
 {
 }
 
 
-void SvFileObject::SendStateChg_Impl( USHORT nState )
+void SvFileObject::SendStateChg_Impl( LinkState nState )
 {
     if( !bStateChangeCalled && HasDataLinks() )
     {
