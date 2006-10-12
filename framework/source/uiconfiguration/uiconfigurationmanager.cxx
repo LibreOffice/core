@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:16:46 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:42:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -616,7 +616,8 @@ void UIConfigurationManager::impl_Initialize()
         long nModes = m_bReadOnly ? ElementModes::READ : ElementModes::READWRITE;
 
         // Try to access our module sub folder
-        for ( int i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
+        for ( sal_Int16 i = 1; i < ::com::sun::star::ui::UIElementType::COUNT;
+              i++ )
         {
             Reference< XStorage > xElementTypeStorage;
             try
