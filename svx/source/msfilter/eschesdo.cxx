@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:26:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:57:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,7 +338,9 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             }
             else
             {
-                ADD_SHAPE( eShapeType, nMirrorFlags | 0xa00 );
+                ADD_SHAPE(
+                    sal::static_int_cast< UINT16 >(eShapeType),
+                    nMirrorFlags | 0xa00 );
                 aPropOpt.CreateCustomShapeProperties( eShapeType, rObj.GetShapeRef() );
                 aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
                 if ( rObj.ImplGetText() )
@@ -381,7 +383,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         else if ( rObj.GetType().EqualsAscii( "drawing.Ellipse" ))
         {
             CircleKind  eCircleKind = CircleKind_FULL;
-            PolyStyle   ePolyKind;
+            PolyStyle   ePolyKind = PolyStyle();
             if ( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("CircleKind") ) )
             {
                 eCircleKind = *( (CircleKind*)rObj.GetUsrAny().getValue() );
@@ -904,7 +906,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
                                    << (INT32)rRect.Right()
                                 << (INT32)rRect.Bottom();
 
-#if EES_WRITE_EPP
+#if defined EES_WRITE_EPP
         // ClientAnchor
         mpEscherEx->AddClientAnchor( maRect );
         // ClientTextbox
