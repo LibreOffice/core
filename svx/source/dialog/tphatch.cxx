@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tphatch.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:44:38 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:30:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #define _SVX_TPHATCH_CXX
 
@@ -207,8 +208,8 @@ void SvxHatchTabPage::Construct()
 
 void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    int nPos;
-    int nCount;
+    USHORT nPos;
+    USHORT nCount;
 
     if( *pDlgType == 0 ) // Flaechen-Dialog
     {
@@ -478,7 +479,8 @@ IMPL_LINK( SvxHatchTabPage, ChangeHatchHdl_Impl, void *, EMPTYARG )
     }
     if( pHatch )
     {
-        aLbLineType.SelectEntryPos( pHatch->GetHatchStyle() );
+        aLbLineType.SelectEntryPos(
+            sal::static_int_cast< USHORT >( pHatch->GetHatchStyle() ) );
         // Wenn der Eintrag nicht in der Listbox ist, wird die Farbe
         // temporaer hinzugenommen
         aLbLineColor.SetNoSelection();
@@ -641,7 +643,7 @@ IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxHatchTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 {
-    int nPos = aLbHatchings.GetSelectEntryPos();
+    USHORT nPos = aLbHatchings.GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -714,7 +716,7 @@ IMPL_LINK( SvxHatchTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxHatchTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 {
-    int nPos = aLbHatchings.GetSelectEntryPos();
+    USHORT nPos = aLbHatchings.GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -764,7 +766,9 @@ IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
     if ( nReturn != RET_CANCEL )
     {
-        ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+        ::sfx2::FileDialogHelper aDlg(
+            com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+            0 );
         String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.soh" ) );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
@@ -843,7 +847,8 @@ IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxHatchTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
 {
-       ::sfx2::FileDialogHelper aDlg( ::sfx2::FILESAVE_SIMPLE, 0 );
+       ::sfx2::FileDialogHelper aDlg(
+        com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.soh" ) );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
