@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textanim.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:43:03 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:29:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,7 +207,7 @@ void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     if( pItem )
     {
         eAniKind = ( ( const SdrTextAniKindItem* )pItem )->GetValue();
-        aLbEffect.SelectEntryPos( eAniKind );
+        aLbEffect.SelectEntryPos( sal::static_int_cast< USHORT >(eAniKind) );
     }
     else
         aLbEffect.SetNoSelection();
@@ -743,7 +743,7 @@ IMPL_LINK( SvxTextAnimationPage, ClickDirectionHdl_Impl, ImageButton *, pBtn )
 |*
 \************************************************************************/
 
-void SvxTextAnimationPage::SelectDirection( USHORT nValue )
+void SvxTextAnimationPage::SelectDirection( SdrTextAniDirection nValue )
 {
     aBtnUp.Check( nValue == SDRTEXTANI_UP );
     aBtnLeft.Check( nValue == SDRTEXTANI_LEFT );
