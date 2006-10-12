@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:31:15 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:52:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,7 @@
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #include "dinfdlg.hxx"
 #include "sfxresid.hxx"
@@ -525,7 +526,7 @@ BOOL SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
     }
 
     // Erzeugung der Ausgabedaten
-    const SfxPoolItem *pItem;
+    const SfxPoolItem *pItem = NULL;
     SfxDocumentInfoItem *pInfo;
     SfxTabDialog* pDlg = GetTabDialog();
     const SfxItemSet* pExSet = NULL;
@@ -612,7 +613,7 @@ namespace
         xub_StrLen  nContStart = _rRawString.Search( _rPartId );
         if( nContStart != STRING_NOTFOUND )
         {
-            nContStart += _rPartId.Len();
+            nContStart = nContStart + _rPartId.Len();
             ++nContStart;                   // now it's start of content, directly after Id
 
             xub_StrLen  nContEnd = _rRawString.Search( sal_Unicode( ',' ), nContStart );
@@ -1018,16 +1019,20 @@ SfxInternetPage::SfxInternetPage( Window* pParent, const SfxItemSet& rItemSet ) 
 //  SfxDocumentInfo&    rInfo = pInfoItem->GetDocInfo();
     TargetList          aList;
     SfxViewFrame*       pFrame = SfxViewFrame::Current();
-    if( pFrame && ( pFrame = pFrame->GetTopViewFrame() ) )
+    if( pFrame )
     {
-        pFrame->GetTargetList( aList );
-
-        String*         pObj;
-        for( USHORT nPos = ( USHORT ) aList.Count() ; nPos ; )
+        pFrame = pFrame->GetTopViewFrame();
+        if( pFrame )
         {
-            pObj = aList.GetObject( --nPos );
-            aCBFrame.InsertEntry( *pObj );
-            delete pObj;
+            pFrame->GetTargetList( aList );
+
+            String*         pObj;
+            for( USHORT nPos = ( USHORT ) aList.Count() ; nPos ; )
+            {
+                pObj = aList.GetObject( --nPos );
+                aCBFrame.InsertEntry( *pObj );
+                delete pObj;
+            }
         }
     }
 
@@ -1156,7 +1161,9 @@ IMPL_LINK( SfxInternetPage, ClickHdlForward, Control*, pCtrl )
 IMPL_LINK( SfxInternetPage, ClickHdlBrowseURL, PushButton*, pButton )
 {
     (void)pButton; //unused
-    sfx2::FileDialogHelper aHelper( ::sfx2::FILEOPEN_SIMPLE, WB_OPEN );
+    sfx2::FileDialogHelper aHelper(
+        com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+        WB_OPEN );
     aHelper.SetDisplayDirectory( aEDForwardURL.GetText() );
 
     if( ERRCODE_NONE == aHelper.Execute() )
