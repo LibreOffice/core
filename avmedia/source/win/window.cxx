@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:46:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:26:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,11 +34,18 @@
  ************************************************************************/
 
 #include <tools/prewin.h>
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#pragma warning(disable: 4917)
+#endif
 #include <windows.h>
 #include <objbase.h>
 #include <strmif.h>
 #include <control.h>
 #include <dshow.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <tools/postwin.h>
 #include <com/sun/star/awt/SystemPointer.hdl>
 
@@ -452,7 +459,7 @@ void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Window::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags )
+void SAL_CALL Window::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 )
     throw (uno::RuntimeException)
 {
     if( mnFrameWnd )
@@ -472,7 +479,6 @@ awt::Rectangle SAL_CALL Window::getPosSize()
     if( mnFrameWnd )
     {
         ::RECT  aWndRect;
-        long    nX = 0, nY = 0, nWidth = 0, nHeight = 0;
 
         if( ::GetClientRect( (HWND) mnFrameWnd, &aWndRect ) )
         {
