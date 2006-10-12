@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scanner.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:03:29 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:27:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,14 +60,14 @@ SbiScanner::SbiScanner( const ::rtl::OUString& rBuf, StarBASIC* p ) : aBuf( rBuf
     pLine    = NULL;
     nVal     = 0;
     eScanType = SbxVARIANT;
-    nErrors  =
-    nBufPos  =
-    nCurCol1 =
-    nSavedCol1 =
-    nColLock =
-    nLine    =
-    nCol1    =
-    nCol2    =
+    nErrors  = 0;
+    nBufPos  = 0;
+    nCurCol1 = 0;
+    nSavedCol1 = 0;
+    nColLock = 0;
+    nLine    = 0;
+    nCol1    = 0;
+    nCol2    = 0;
     nCol     = 0;
     bError   =
     bAbort   =
@@ -318,7 +318,7 @@ BOOL SbiScanner::NextSym()
         nVal = rtl_math_uStringToDouble( buf, buf+(p-buf), '.', ',', NULL, NULL );
         // ALT: nVal = atof( buf );
 
-        ndig -= comma;
+        ndig = ndig - comma;
         if( !comma && !exp )
         {
             if( nVal >= SbxMININT && nVal <= SbxMAXINT )
@@ -374,7 +374,8 @@ BOOL SbiScanner::NextSym()
         BOOL bBufOverflow = FALSE;
         while( BasicSimpleCharClass::isAlphaNumeric( *pLine & 0xFF, bCompatible ) )
         {
-            sal_Unicode ch = toupper( *pLine & 0xFF );
+            sal_Unicode ch = sal::static_int_cast< sal_Unicode >(
+                toupper( *pLine & 0xFF ) );
             pLine++; nCol++;
             // AB 4.1.1996: Buffer voll, leer weiter scannen
             if( (p-buf) == (BUF_SIZE-1) )
@@ -456,7 +457,7 @@ BOOL SbiScanner::NextSym()
             case ':': if( *pLine == '=' ) n = 2; break;
         }
         aSym = aLine.copy( nCol, n );
-        pLine += n-1; nCol += n;
+        pLine += n-1; nCol = nCol + n;
     }
 
     nCol2 = nCol-1;
@@ -471,7 +472,7 @@ PrevLineCommentLbl:
         USHORT nLen = String( pLine ).Len();
         if( bCompatible && pLine[ nLen - 1 ] == '_' && pLine[ nLen - 2 ] == ' ' )
             bPrevLineExtentsComment = TRUE;
-        nCol2 += nLen;
+        nCol2 = nCol2 + nLen;
         pLine = NULL;
     }
     return TRUE;
