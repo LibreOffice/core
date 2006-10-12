@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:21:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:25:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -502,7 +502,7 @@ inline BOOL ImpSvNumberInputScan::SkipString( const String& rWhat,
 {
     if ( StringContains( rWhat, rString, nPos ) )
     {
-        nPos += rWhat.Len();
+        nPos = nPos + rWhat.Len();
         return TRUE;
     }
     return FALSE;
@@ -529,7 +529,7 @@ inline BOOL ImpSvNumberInputScan::GetThousandSep(
         && (   sStrArray[nStringPos+1].Len() == 3           // with 3 digits
             || nPosThousandString == nStringPos+1 ) )       // or concatenated
     {
-        nPos += rSep.Len();
+        nPos = nPos + rSep.Len();
         return TRUE;
     }
     return FALSE;
@@ -589,21 +589,21 @@ short ImpSvNumberInputScan::GetMonth( const String& rString, xub_StrLen& nPos )
         {
             if ( StringContains( pUpperMonthText[i], rString, nPos ) )
             {                                           // full names first
-                nPos += pUpperMonthText[i].Len();
+                nPos = nPos + pUpperMonthText[i].Len();
                 res = i+1;
                 break;  // for
             }
             else if ( StringContains( pUpperAbbrevMonthText[i], rString, nPos ) )
             {                                           // abbreviated
-                nPos += pUpperAbbrevMonthText[i].Len();
-                res = -(i+1);                           // negative
+                nPos = nPos + pUpperAbbrevMonthText[i].Len();
+                res = sal::static_int_cast< short >(-(i+1)); // negative
                 break;  // for
             }
             else if ( i == 8 && pUpperAbbrevMonthText[i] == aSeptCorrect &&
                     StringContains( aSepShortened, rString, nPos ) )
             {                                           // #102136# SEPT/SEP
-                nPos += aSepShortened.Len();
-                res = -(i+1);                           // negative
+                nPos = nPos + aSepShortened.Len();
+                res = sal::static_int_cast< short >(-(i+1)); // negative
                 break;  // for
             }
         }
@@ -619,9 +619,9 @@ short ImpSvNumberInputScan::GetMonth( const String& rString, xub_StrLen& nPos )
 // Converts a string containing a DayOfWeek name (Mon, Monday) at nPos into the
 // DayOfWeek number + 1 (negative if abbreviated), returns 0 if nothing found
 
-short ImpSvNumberInputScan::GetDayOfWeek( const String& rString, xub_StrLen& nPos )
+int ImpSvNumberInputScan::GetDayOfWeek( const String& rString, xub_StrLen& nPos )
 {
-    short res = 0;      // no day found
+    int res = 0;      // no day found
 
     if (rString.Len() > nPos)                           // only if needed
     {
@@ -632,13 +632,13 @@ short ImpSvNumberInputScan::GetDayOfWeek( const String& rString, xub_StrLen& nPo
         {
             if ( StringContains( pUpperDayText[i], rString, nPos ) )
             {                                           // full names first
-                nPos += pUpperDayText[i].Len();
+                nPos = nPos + pUpperDayText[i].Len();
                 res = i + 1;
                 break;  // for
             }
             if ( StringContains( pUpperAbbrevDayText[i], rString, nPos ) )
             {                                           // abbreviated
-                nPos += pUpperAbbrevDayText[i].Len();
+                nPos = nPos + pUpperAbbrevDayText[i].Len();
                 res = -(i + 1);                         // negative
                 break;  // for
             }
@@ -670,7 +670,7 @@ BOOL ImpSvNumberInputScan::GetCurrency( const String& rString, xub_StrLen& nPos,
         }
         if ( StringContains( aUpperCurrSymbol, rString, nPos ) )
         {
-            nPos += aUpperCurrSymbol.Len();
+            nPos = nPos + aUpperCurrSymbol.Len();
             return TRUE;
         }
         if ( pFormat )
@@ -683,7 +683,7 @@ BOOL ImpSvNumberInputScan::GetCurrency( const String& rString, xub_StrLen& nPos,
                     pFormatter->GetCharClass()->toUpper( aSymbol );
                     if ( StringContains( aSymbol, rString, nPos ) )
                     {
-                        nPos += aSymbol.Len();
+                        nPos = nPos + aSymbol.Len();
                         return TRUE;
                     }
                 }
@@ -719,13 +719,13 @@ BOOL ImpSvNumberInputScan::GetTimeAmPm( const String& rString, xub_StrLen& nPos 
         if ( StringContains( pChr->upper( pLoc->getTimeAM() ), rString, nPos ) )
         {
             nAmPm = 1;
-            nPos += pLoc->getTimeAM().Len();
+            nPos = nPos + pLoc->getTimeAM().Len();
             return TRUE;
         }
         else if ( StringContains( pChr->upper( pLoc->getTimePM() ), rString, nPos ) )
         {
             nAmPm = -1;
-            nPos += pLoc->getTimePM().Len();
+            nPos = nPos + pLoc->getTimePM().Len();
             return TRUE;
         }
     }
@@ -748,7 +748,7 @@ inline BOOL ImpSvNumberInputScan::GetDecSep( const String& rString, xub_StrLen& 
         const String& rSep = pFormatter->GetNumDecimalSep();
         if ( rString.Equals( rSep, nPos, rSep.Len() ) )
         {
-            nPos += rSep.Len();
+            nPos = nPos + rSep.Len();
             return TRUE;
         }
     }
@@ -766,7 +766,7 @@ inline BOOL ImpSvNumberInputScan::GetTime100SecSep( const String& rString, xub_S
         const String& rSep = pFormatter->GetLocaleData()->getTime100SecSep();
         if ( rString.Equals( rSep, nPos, rSep.Len() ) )
         {
-            nPos += rSep.Len();
+            nPos = nPos + rSep.Len();
             return TRUE;
         }
     }
@@ -783,7 +783,7 @@ inline BOOL ImpSvNumberInputScan::GetTime100SecSep( const String& rString, xub_S
 // '('   => -1, nNegCheck = 1
 // sonst =>  0
 
-short ImpSvNumberInputScan::GetSign( const String& rString, xub_StrLen& nPos )
+int ImpSvNumberInputScan::GetSign( const String& rString, xub_StrLen& nPos )
 {
     if (rString.Len() > nPos)
         switch (rString.GetChar(nPos))
@@ -1463,13 +1463,14 @@ BOOL ImpSvNumberInputScan::ScanStartString( const String& rString,
         const SvNumberformat* pFormat )
 {
     xub_StrLen nPos = 0;
-    short nDayOfWeek;
+    int nDayOfWeek;
 
     // First of all, eat leading blanks
     SkipBlanks(rString, nPos);
 
     // Yes, nMatchedAllStrings should know about the sign position
-    if ( (nSign = GetSign(rString, nPos)) )           // sign?
+    nSign = GetSign(rString, nPos);
+    if ( nSign )           // sign?
         SkipBlanks(rString, nPos);
 
     // #102371# match against format string only if start string is not a sign character
@@ -1493,39 +1494,51 @@ BOOL ImpSvNumberInputScan::ScanStartString( const String& rString,
         eScannedType = NUMBERFORMAT_CURRENCY;       // !!! it IS currency !!!
         SkipBlanks(rString, nPos);
         if (nSign == 0)                             // no sign yet
-            if ( (nSign = GetSign(rString, nPos)) )   // DM -1
-                SkipBlanks(rString, nPos);
-    }
-    else if ( (nMonth = GetMonth(rString, nPos)) )    // month (Jan 1)?
-    {
-        eScannedType = NUMBERFORMAT_DATE;           // !!! it IS a date !!!
-        nMonthPos = 1;                              // month at the beginning
-        if ( nMonth < 0 )
-            SkipChar( '.', rString, nPos );         // abbreviated
-        SkipBlanks(rString, nPos);
-    }
-    else if ( (nDayOfWeek = GetDayOfWeek( rString, nPos )) )
-    {   // day of week is just parsed away
-        eScannedType = NUMBERFORMAT_DATE;           // !!! it IS a date !!!
-        if ( nPos < rString.Len() )
         {
-            if ( nDayOfWeek < 0 )
-            {   // abbreviated
-                if ( rString.GetChar( nPos ) == '.' )
-                    ++nPos;
-            }
-            else
-            {   // full long name
+            nSign = GetSign(rString, nPos);
+            if ( nSign )   // DM -1
                 SkipBlanks(rString, nPos);
-                SkipString( pFormatter->GetLocaleData()->getLongDateDayOfWeekSep(), rString, nPos );
-            }
+        }
+    }
+    else
+    {
+        nMonth = GetMonth(rString, nPos);
+        if ( nMonth )    // month (Jan 1)?
+        {
+            eScannedType = NUMBERFORMAT_DATE;       // !!! it IS a date !!!
+            nMonthPos = 1;                          // month at the beginning
+            if ( nMonth < 0 )
+                SkipChar( '.', rString, nPos );     // abbreviated
             SkipBlanks(rString, nPos);
-            if ( (nMonth = GetMonth(rString, nPos)) ) // month (Jan 1)?
-            {
-                nMonthPos = 1;                      // month a the beginning
-                if ( nMonth < 0 )
-                    SkipChar( '.', rString, nPos ); // abbreviated
-                SkipBlanks(rString, nPos);
+        }
+        else
+        {
+            nDayOfWeek = GetDayOfWeek( rString, nPos );
+            if ( nDayOfWeek )
+            {   // day of week is just parsed away
+                eScannedType = NUMBERFORMAT_DATE;       // !!! it IS a date !!!
+                if ( nPos < rString.Len() )
+                {
+                    if ( nDayOfWeek < 0 )
+                    {   // abbreviated
+                        if ( rString.GetChar( nPos ) == '.' )
+                            ++nPos;
+                    }
+                    else
+                    {   // full long name
+                        SkipBlanks(rString, nPos);
+                        SkipString( pFormatter->GetLocaleData()->getLongDateDayOfWeekSep(), rString, nPos );
+                    }
+                    SkipBlanks(rString, nPos);
+                    nMonth = GetMonth(rString, nPos);
+                    if ( nMonth ) // month (Jan 1)?
+                    {
+                        nMonthPos = 1;                  // month a the beginning
+                        if ( nMonth < 0 )
+                            SkipChar( '.', rString, nPos ); // abbreviated
+                        SkipBlanks(rString, nPos);
+                    }
+                }
             }
         }
     }
@@ -1977,11 +1990,11 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
         const String& rSep = pFormatter->GetLocaleData()->getLongDateDayOfWeekSep();
         if ( StringContains( rSep, rString, nPos ) )
         {
-            nPos += rSep.Len();
+            nPos = nPos + rSep.Len();
             SkipBlanks(rString, nPos);
         }
-        short nDayOfWeek;
-        if ( (nDayOfWeek = GetDayOfWeek( rString, nPos )) )
+        int nDayOfWeek = GetDayOfWeek( rString, nPos );
+        if ( nDayOfWeek )
         {
             if ( nPos < rString.Len() )
             {
@@ -2132,7 +2145,8 @@ BOOL ImpSvNumberInputScan::IsNumberFormatMain(
             String& rStrArray = sStrArray[0];
             rStrArray.EraseTrailingChars( ' ' );
             rStrArray.EraseLeadingChars( ' ' );
-            if ( (nLogical = GetLogical( rStrArray )) )
+            nLogical = GetLogical( rStrArray );
+            if ( nLogical )
             {
                 eScannedType = NUMBERFORMAT_LOGICAL; // !!! it's a BOOLEAN
                 nMatchedAllStrings &= ~nMatchedVirgin;
