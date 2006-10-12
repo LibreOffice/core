@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connect.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:12:34 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:07:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,8 +332,8 @@ void __EXPORT SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGEKIND );
     if( pItem )
     {
-        USHORT nValue = ( ( const SdrEdgeKindItem* )pItem )->GetValue();
-        aLbType.SelectEntryPos( nValue );
+        SdrEdgeKind nValue = ( ( const SdrEdgeKindItem* )pItem )->GetValue();
+        aLbType.SelectEntryPos( sal::static_int_cast< USHORT >(nValue) );
     }
     else
         aLbType.SetNoSelection();
