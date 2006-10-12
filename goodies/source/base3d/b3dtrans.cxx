@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dtrans.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:39:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:32:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,11 +125,7 @@ void B3dTransformationSet::PostSetObjectTrans()
 |*
 \************************************************************************/
 
-#if ! defined ICC && ! defined __GNUC__
-void B3dTransformationSet::SetOrientation( Vector3D& aVRP, Vector3D& aVPN, Vector3D& aVUP)
-#else
-void B3dTransformationSet::SetOrientation( Vector3D aVRP, Vector3D aVPN, Vector3D aVUP)
-#endif
+void B3dTransformationSet::SetOrientation( Vector3D const & aVRP, Vector3D const & aVPN, Vector3D const & aVUP)
 {
     aOrientation.Identity();
     aOrientation.Orientation(Point4D(aVRP), aVPN, aVUP);
