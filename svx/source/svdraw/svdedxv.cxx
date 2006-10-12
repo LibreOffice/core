@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:49:29 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:09:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,7 +232,7 @@ void SdrObjEditView::ModelHasChanged()
             BOOL bAreaChg=FALSE;
             BOOL bAnchorChg=FALSE;
             BOOL bColorChg=FALSE;
-            BOOL bContourFrame=pTextObj->IsContourTextFrame();
+            bool bContourFrame=pTextObj->IsContourTextFrame();
             EVAnchorMode eNewAnchor(ANCHOR_VCENTER_HCENTER);
             Rectangle aOldArea(aMinTextEditArea);
             aOldArea.Union(aTextEditArea);
@@ -429,7 +429,7 @@ Color SdrObjEditView::ImpGetTextEditBackgroundColor() const
 
     if(!rStyleSettings.GetHighContrastMode())
     {
-        BOOL bFound=FALSE;
+        bool bFound=false;
         SdrTextObj* pText=PTR_CAST(SdrTextObj,pTextEditObj);
         if (pText!=NULL && pText->IsClosedObj())
         {
@@ -521,7 +521,7 @@ IMPL_LINK(SdrObjEditView,ImpOutlinerStatusEventHdl,EditStatus*,pEditStat)
 
 IMPL_LINK(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI)
 {
-    BOOL bOk=FALSE;
+    bool bOk=false;
     String& rStr=pFI->GetRepresentation();
     rStr.Erase();
     SdrTextObj* pTextObj=PTR_CAST(SdrTextObj,pTextEditObj);
@@ -1710,7 +1710,7 @@ BOOL SdrObjEditView::EndMacroObj()
         aHitRec.pPageView=pMacroPV;
         aHitRec.bDown=TRUE;
         aHitRec.pOut=pMacroWin;
-        BOOL bRet=pMacroObj->DoMacro(aHitRec);
+        bool bRet=pMacroObj->DoMacro(aHitRec);
         pMacroObj=NULL;
         pMacroPV=NULL;
         pMacroWin=NULL;
