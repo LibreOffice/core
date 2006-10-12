@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gengal.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:17:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:49:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,10 +125,10 @@ static void createTheme( rtl::OUString aThemeName,
     fprintf( stderr, "Work on gallery '%s'\n",
                      (const sal_Char *) rtl::OUStringToOString( aGalleryURL, RTL_TEXTENCODING_UTF8 ) );
 
-    fprintf( stderr, "Existing themes: %d\n",
-             pGallery->GetThemeCount() );
+    fprintf( stderr, "Existing themes: %lu\n",
+             sal::static_int_cast< unsigned long >(
+                 pGallery->GetThemeCount() ) );
 
-    GalleryTheme *pGalTheme;
     if( !pGallery->HasTheme( aThemeName) ) {
             if( !pGallery->CreateTheme( aThemeName, nNumFrom ) ) {
                     fprintf( stderr, "Failed to create theme\n" );
@@ -136,12 +136,14 @@ static void createTheme( rtl::OUString aThemeName,
             }
     }
 
-    fprintf( stderr, "Existing themes: %d\n",
-             pGallery->GetThemeCount() );
+    fprintf( stderr, "Existing themes: %lu\n",
+             sal::static_int_cast< unsigned long >(
+                 pGallery->GetThemeCount() ) );
 
     SfxListener aListener;
 
-    if ( !( pGalTheme = pGallery->AcquireTheme( aThemeName, aListener ) ) ) {
+    GalleryTheme *pGalTheme = pGallery->AcquireTheme( aThemeName, aListener );
+    if ( pGalTheme == NULL  ) {
             fprintf( stderr, "Failed to acquire theme\n" );
             exit( 1 );
     }
@@ -166,9 +168,10 @@ static void createTheme( rtl::OUString aThemeName,
             fprintf( stderr, "Failed to import '%s'\n",
                      (const sal_Char *) rtl::OUStringToOString( *aIter, RTL_TEXTENCODING_UTF8 ) );
         else
-            fprintf( stderr, "Imported file '%s' (%d)\n",
+            fprintf( stderr, "Imported file '%s' (%lu)\n",
                      (const sal_Char *) rtl::OUStringToOString( *aIter, RTL_TEXTENCODING_UTF8 ),
-                     pGalTheme->GetObjectCount() );
+                     sal::static_int_cast< unsigned long >(
+                         pGalTheme->GetObjectCount() ) );
 
 #else // only loads BMPs
         SvStream *pStream = ::utl::UcbStreamHelper::CreateStream( *aIter, STREAM_READ );
