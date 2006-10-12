@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:54:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:41:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,7 +226,8 @@ Sequence< OUString > lcl_GetLastFoundSvcs(
         rNodeName += aCfgLocaleStr;
         Sequence< Any > aValues( rCfg.GetProperties( aNames ) );
 #if OSL_DEBUG_LEVEL > 1
-        const Any *pValue = aValues.getConstArray();
+        const Any *pValue;
+        pValue = aValues.getConstArray();
 #endif
         if (aValues.getLength())
         {
@@ -365,10 +366,10 @@ void SvxLinguConfigUpdate::UpdateAll()
             {
                 Sequence< OUString > aAvailSvcs(
                         xLngSvcMgr->getAvailableServices( aService, pAvailLocale[i] ));
-                Sequence< OUString > aLastFoundSvcs(
+                Sequence< OUString > _aLastFoundSvcs(
                         lcl_GetLastFoundSvcs( aCfg, aLastFoundList , pAvailLocale[i] ));
                 Sequence< OUString > aNewSvcs =
-                        lcl_GetNewEntries( aLastFoundSvcs, aAvailSvcs );
+                        lcl_GetNewEntries( _aLastFoundSvcs, aAvailSvcs );
 
                 OUString aCfgLocaleStr( MsLangId::convertLanguageToIsoString(
                                             SvxLocaleToLanguage( pAvailLocale[i] ) ) );
@@ -388,8 +389,6 @@ void SvxLinguConfigUpdate::UpdateAll()
             //
             // set last found services to currently available ones
             //
-            Sequence< PropertyValue > aValues( nAvailLocales );
-            PropertyValue *pValue = aValues.getArray();
             for (i = 0;  i < nAvailLocales;  ++i)
             {
                 Sequence< OUString > aSvcImplNames(
@@ -451,8 +450,10 @@ void SvxLinguConfigUpdate::UpdateAll()
                 {
                     RTL_LOGFILE_CONTEXT( aLog, "svx: SvxLinguConfigUpdate::UpdateAll - ReplaceSetProperties" );
                     // add new or replace existing entries.
+#ifdef DBG_UTIL
                     BOOL bRes = aCfg.ReplaceSetProperties( aSubNodeName, aNewValues );
                     DBG_ASSERT( bRes, "failed to set new configuration values" );
+#endif
                 }
             }
         }
@@ -1333,11 +1334,11 @@ Reference< XDictionary1 > LinguMgr::GetChangeAll()
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
 
-    Reference< XDictionaryList >  xDicList( GetDictionaryList() , UNO_QUERY );
-    if (xDicList.is())
+    Reference< XDictionaryList > _xDicList( GetDictionaryList() , UNO_QUERY );
+    if (_xDicList.is())
     {
         xChangeAll = Reference< XDictionary1 > (
-                        xDicList->createDictionary(
+                        _xDicList->createDictionary(
                             A2OU("ChangeAllList"),
                             SvxCreateLocale( LANGUAGE_NONE ),
                             DictionaryType_NEGATIVE, String() ), UNO_QUERY );
@@ -1422,7 +1423,7 @@ Reference< XPropertySet >   SvxGetLinguPropertySet()
 
 //TL:TODO: remove argument or provide SvxGetIgnoreAllList with the same one
 Reference< XDictionary1 >  SvxGetOrCreatePosDic(
-        Reference< XDictionaryList >  xDicList )
+        Reference< XDictionaryList >  /* xDicList */ )
 {
     return LinguMgr::GetStandardDic();
 }
@@ -1527,7 +1528,7 @@ String SvxGetDictionaryURL(const String &rDicName, sal_Bool bIsUserDic)
 sal_uInt8 SvxAddEntryToDic(
         Reference< XDictionary >  &rxDic,
         const OUString &rWord, sal_Bool bIsNeg,
-        const OUString &rRplcTxt, sal_Int16 nRplcLang,
+        const OUString &rRplcTxt, sal_Int16 /* nRplcLang */,
         sal_Bool bStripDot )
 {
     if (!rxDic.is())
