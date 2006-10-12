@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implrenderer.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:49:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:59:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ namespace
                                                           const cppcanvas::CanvasSharedPtr& rCanvas )
     {
         // set rIsColorSet and check for true at the same time
-        if( (rIsColorSet=pAct->IsSetting()) )
+        if( (rIsColorSet=pAct->IsSetting()) != false )
         {
             ::Color aColor( pAct->GetColor() );
 
@@ -457,7 +457,7 @@ namespace cppcanvas
                               "ImplRenderer::skipContent(): NULL string given" );
 
             MetaAction* pCurrAct;
-            while( (pCurrAct=rMtf.NextAction()) )
+            while( (pCurrAct=rMtf.NextAction()) != NULL )
             {
                 // increment action index, we've skipped an action.
                 ++io_rCurrActionIndex;
@@ -489,7 +489,7 @@ namespace cppcanvas
             ULONG nPos( 1 );
 
             MetaAction* pCurrAct;
-            while( (pCurrAct=rMtf.NextAction()) )
+            while( (pCurrAct=rMtf.NextAction()) != NULL )
             {
                 if( pCurrAct->GetType() == nType )
                 {
@@ -568,15 +568,15 @@ namespace cppcanvas
                     // scale color coefficients with gradient intensities
                     const USHORT nStartIntensity( rGradient.GetStartIntensity() );
                     ::Color aVCLStartColor( rGradient.GetStartColor() );
-                    aVCLStartColor.SetRed( aVCLStartColor.GetRed() * nStartIntensity / 100 );
-                    aVCLStartColor.SetGreen( aVCLStartColor.GetGreen() * nStartIntensity / 100 );
-                    aVCLStartColor.SetBlue( aVCLStartColor.GetBlue() * nStartIntensity / 100 );
+                    aVCLStartColor.SetRed( (UINT8)(aVCLStartColor.GetRed() * nStartIntensity / 100) );
+                    aVCLStartColor.SetGreen( (UINT8)(aVCLStartColor.GetGreen() * nStartIntensity / 100) );
+                    aVCLStartColor.SetBlue( (UINT8)(aVCLStartColor.GetBlue() * nStartIntensity / 100) );
 
                     const USHORT nEndIntensity( rGradient.GetEndIntensity() );
                     ::Color aVCLEndColor( rGradient.GetEndColor() );
-                    aVCLEndColor.SetRed( aVCLEndColor.GetRed() * nEndIntensity / 100 );
-                    aVCLEndColor.SetGreen( aVCLEndColor.GetGreen() * nEndIntensity / 100 );
-                    aVCLEndColor.SetBlue( aVCLEndColor.GetBlue() * nEndIntensity / 100 );
+                    aVCLEndColor.SetRed( (UINT8)(aVCLEndColor.GetRed() * nEndIntensity / 100) );
+                    aVCLEndColor.SetGreen( (UINT8)(aVCLEndColor.GetGreen() * nEndIntensity / 100) );
+                    aVCLEndColor.SetBlue( (UINT8)(aVCLEndColor.GetBlue() * nEndIntensity / 100) );
 
                     const uno::Sequence< double > aStartColor(
                         ::vcl::unotools::colorToDoubleSequence( rCanvas->getUNOCanvas()->getDevice(),
@@ -640,6 +640,9 @@ namespace cppcanvas
                                 case GRADIENT_AXIAL:
                                     aTexture.Gradient = xFactory->createAxialHorizontalGradient( aStartColor,
                                                                                                  aEndColor );
+                                    break;
+
+                                default: // other cases can't happen
                                     break;
                             }
 
@@ -788,6 +791,9 @@ namespace cppcanvas
                                                                    aBounds.Top(),
                                                                    aBounds.Right(),
                                                                    aBounds.Bottom() ) );
+                                    break;
+
+                                default: // other cases can't happen
                                     break;
                             }
 
@@ -982,7 +988,7 @@ namespace cppcanvas
             const OutDevState& rState( getState( rStates ) );
 
             // TODO(F2): implement all text effects
-            if( rState.textAlignment );             // TODO(F2): NYI
+            // if( rState.textAlignment );             // TODO(F2): NYI
 
             ::Color aShadowColor( COL_AUTO );
             ::Color aReliefColor( COL_AUTO );
@@ -1494,7 +1500,7 @@ namespace cppcanvas
                         // TODO(Q2): define and use appropriate enumeration types
                         rState.textReliefStyle          = (sal_Int8)rFont.GetRelief();
                         rState.textUnderlineStyle       = rParms.maFontUnderline.isValid() ?
-                            (rParms.maFontUnderline.getValue() ? UNDERLINE_SINGLE : UNDERLINE_NONE) :
+                            (rParms.maFontUnderline.getValue() ? (sal_Int8)UNDERLINE_SINGLE : (sal_Int8)UNDERLINE_NONE) :
                             (sal_Int8)rFont.GetUnderline();
                         rState.textStrikeoutStyle       = (sal_Int8)rFont.GetStrikeout();
                         rState.textEmphasisMarkStyle    = (sal_Int8)rFont.GetEmphasisMark();
@@ -1646,7 +1652,7 @@ namespace cppcanvas
                             MetaGradientExAction* pGradAction = NULL;
                             bool bDone( false );
                             while( !bDone &&
-                                   (pCurrAct=rMtf.NextAction()) )
+                                   (pCurrAct=rMtf.NextAction()) != NULL )
                             {
                                 switch( pCurrAct->GetType() )
                                 {
@@ -2885,6 +2891,10 @@ namespace cppcanvas
             CanvasGraphicHelper( rCanvas ),
             maActions()
         {
+            // TODO(F3): property modification parameters are
+            // currently ignored for Bitmaps
+            (void)rParams;
+
             RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::ImplRenderer::ImplRenderer(bitmap)" );
 
             OSL_ENSURE( rCanvas.get() != NULL && rCanvas->getUNOCanvas().is(),
