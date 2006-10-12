@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:03:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:17:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,17 +187,7 @@ inline const SvxULSpaceItem& GetULSpace(const SfxItemSet& rSet,USHORT nId,BOOL b
 #define PARDID      ((RTFPardAttrMapIds*)aPardMap.GetData())
 #define PLAINID     ((RTFPlainAttrMapIds*)aPlainMap.GetData())
 
-
-enum RTF_CharTypeDef
-{
-    NOTDEF_CHARTYPE,
-    LOW_CHARTYPE,
-    HIGH_CHARTYPE,
-    DOUBLEBYTE_CHARTYPE
-};
-
-
-void SvxRTFParser::SetScriptAttr( USHORT eType, SfxItemSet& rSet,
+void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
                                     SfxPoolItem& rItem )
 {
     const USHORT *pNormal = 0, *pCJK = 0, *pCTL = 0;
@@ -1210,7 +1200,7 @@ ATTR_SETEMPHASIS:
 
                                     if( RTF_SHDW_FCOL != GetNextToken() )
                                         break;
-                                    USHORT nFillCol = USHORT( nTokenValue );
+//                                  USHORT nFillCol = USHORT( nTokenValue );
 
                                     Color aColor = GetColor( nCol );
 
@@ -1526,14 +1516,12 @@ case RTF_BRDRBAR:           break;
             aBrd.SetInWidth( 0 );
             aBrd.SetDistance( 0 );
             goto SETBORDERLINE;
-            break;
 
         case RTF_BRDRDB:
             aBrd.SetOutWidth( DEF_DOUBLE_LINE0_OUT );
             aBrd.SetInWidth( DEF_DOUBLE_LINE0_IN );
             aBrd.SetDistance( DEF_DOUBLE_LINE0_DIST );
             goto SETBORDERLINE;
-            break;
 
         case RTF_BRDRSH:
             // schattierte Box
@@ -1942,7 +1930,7 @@ void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
     }
 }
 
-void SvxRTFParser::SetDefault( int nToken, short nValue )
+void SvxRTFParser::SetDefault( int nToken, int nValue )
 {
     if( !bNewDoc )
         return;
@@ -1962,7 +1950,7 @@ void SvxRTFParser::SetDefault( int nToken, short nValue )
                                 rSVFont.GetFamily(), rSVFont.GetName(),
                                 rSVFont.GetStyleName(), rSVFont.GetPitch(),
                                 rSVFont.GetCharSet(), SID_ATTR_CHAR_FONT );
-            SetScriptAttr( 0, aTmp, aTmpItem );
+            SetScriptAttr( NOTDEF_CHARTYPE, aTmp, aTmpItem );
         }
         break;
 
@@ -1973,7 +1961,7 @@ void SvxRTFParser::SetDefault( int nToken, short nValue )
         {
             SvxLanguageItem aTmpItem( (const LanguageType)nValue,
                                         SID_ATTR_CHAR_LANGUAGE );
-            SetScriptAttr( 0, aTmp, aTmpItem );
+            SetScriptAttr( NOTDEF_CHARTYPE, aTmp, aTmpItem );
         }
         break;
 
@@ -1990,7 +1978,7 @@ void SvxRTFParser::SetDefault( int nToken, short nValue )
             {
                 nTokenValue = nValue;
                 CalcValue();
-                nValue = (short)nTokenValue;
+                nValue = nTokenValue;
             }
 #if 1
             /*
@@ -2061,7 +2049,7 @@ void SvxRTFParser::CalcValue()
 }
 
     // fuer Tokens, die im ReadAttr nicht ausgewertet werden
-void SvxRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
+void SvxRTFParser::UnknownAttrToken( int, SfxItemSet* )
 {
 }
 
