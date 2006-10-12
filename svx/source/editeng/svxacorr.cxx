@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:53:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:40:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,9 +204,9 @@ _SV_IMPL_SORTAR_ALG( SvxAutocorrWordList, SvxAutocorrWordPtr )
 TYPEINIT0(SvxAutoCorrect)
 
 typedef SvxAutoCorrectLanguageLists* SvxAutoCorrectLanguageListsPtr;
-DECLARE_TABLE( SvxAutoCorrLanguageTable_Impl,  SvxAutoCorrectLanguageListsPtr);
+DECLARE_TABLE( SvxAutoCorrLanguageTable_Impl,  SvxAutoCorrectLanguageListsPtr)
 
-DECLARE_TABLE( SvxAutoCorrLastFileAskTable_Impl, long );
+DECLARE_TABLE( SvxAutoCorrLastFileAskTable_Impl, long )
 
 
 inline int IsWordDelim( const sal_Unicode c )
@@ -232,8 +232,10 @@ BOOL lcl_IsSymbolChar( CharClass& rCC, const String& rTxt,
     for( ; nStt < nEnd; ++nStt )
     {
 #if OSL_DEBUG_LEVEL > 1
-        sal_Int32 nCharType = rCC.getCharacterType( rTxt, nStt );
-        sal_Int32 nChType = rCC.getType( rTxt, nStt );
+        sal_Int32 nCharType;
+        sal_Int32 nChType;
+        nCharType = rCC.getCharacterType( rTxt, nStt );
+        nChType = rCC.getType( rTxt, nStt );
 #endif
         if( ::com::sun::star::i18n::UnicodeType::PRIVATE_USE ==
                 rCC.getType( rTxt, nStt ))
@@ -427,10 +429,10 @@ SvxAutoCorrect::SvxAutoCorrect( const String& rShareAutocorrFile,
                                 const String& rUserAutocorrFile )
     : sShareAutoCorrFile( rShareAutocorrFile ),
     sUserAutoCorrFile( rUserAutocorrFile ),
-    cStartSQuote( 0 ), cEndSQuote( 0 ), cStartDQuote( 0 ), cEndDQuote( 0 ),
     pLangTable( new SvxAutoCorrLanguageTable_Impl ),
     pLastFileTable( new SvxAutoCorrLastFileAskTable_Impl ),
-    pCharClass( 0 )
+    pCharClass( 0 ),
+    cStartDQuote( 0 ), cEndDQuote( 0 ), cStartSQuote( 0 ), cEndSQuote( 0 )
 {
     nFlags = SvxAutoCorrect::GetDefaultFlags();
 
@@ -442,19 +444,20 @@ SvxAutoCorrect::SvxAutoCorrect( const String& rShareAutocorrFile,
 }
 
 SvxAutoCorrect::SvxAutoCorrect( const SvxAutoCorrect& rCpy )
-    : nFlags( rCpy.nFlags & ~(ChgWordLstLoad|CplSttLstLoad|WrdSttLstLoad)),
-    aSwFlags( rCpy.aSwFlags ),
-/* Die Sprachentabelle wird neu aufgebaut, da sie im Dtor von rCpy abgeraeumt wird!
- */
-    sShareAutoCorrFile( rCpy.sShareAutoCorrFile ),
+:   sShareAutoCorrFile( rCpy.sShareAutoCorrFile ),
     sUserAutoCorrFile( rCpy.sUserAutoCorrFile ),
-    cStartSQuote( rCpy.cStartSQuote ), cEndSQuote( rCpy.cEndSQuote ),
-    cStartDQuote( rCpy.cStartDQuote ), cEndDQuote( rCpy.cEndDQuote ),
-    c1Div2( rCpy.c1Div2 ), c1Div4( rCpy.c1Div4 ), c3Div4( rCpy.c3Div4 ),
-    cEmDash( rCpy.cEmDash ), cEnDash( rCpy.cEnDash ),
+
+    aSwFlags( rCpy.aSwFlags ),
+
     pLangTable( new SvxAutoCorrLanguageTable_Impl ),
     pLastFileTable( new SvxAutoCorrLastFileAskTable_Impl ),
-    pCharClass( 0 )
+    pCharClass( 0 ),
+
+    nFlags( rCpy.nFlags & ~(ChgWordLstLoad|CplSttLstLoad|WrdSttLstLoad)),
+    cStartDQuote( rCpy.cStartDQuote ), cEndDQuote( rCpy.cEndDQuote ),
+    cStartSQuote( rCpy.cStartSQuote ), cEndSQuote( rCpy.cEndSQuote ),
+    c1Div2( rCpy.c1Div2 ), c1Div4( rCpy.c1Div4 ), c3Div4( rCpy.c3Div4 ),
+    cEmDash( rCpy.cEmDash ), cEnDash( rCpy.cEnDash )
 {
 }
 
@@ -728,7 +731,7 @@ BOOL SvxAutoCorrect::FnChgToEnEmDash(
             ( rCC.isLetterNumeric( sTmp, nFndPos + 2 ) ||
             lcl_IsInAsciiArr( sImplSttSkipChars, rTxt.GetChar( nFndPos + 2 ) )))
         {
-            nSttPos += nFndPos;
+            nSttPos = nSttPos + nFndPos;
             rDoc.Delete( nSttPos, nSttPos + 2 );
             rDoc.Insert( nSttPos, cEmDash );
             bRet = TRUE;
@@ -752,7 +755,7 @@ BOOL SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const String& rTxt,
 
 
 BOOL SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const String& rTxt,
-                                        xub_StrLen nSttPos, xub_StrLen nEndPos,
+                                        xub_StrLen, xub_StrLen nEndPos,
                                         LanguageType eLang )
 {
     // Bedingung:
@@ -834,18 +837,22 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     const sal_Unicode *pStart = aText.GetBuffer(),
                       *pStr = pStart + nEndPos,
                       *pWordStt = 0,
-                      *pDelim;
+                      *pDelim = 0;
 
     BOOL bAtStart = FALSE, bPrevPara = FALSE;
     do {
         --pStr;
-        if( rCC.isLetter( aText, pStr - pStart ) )
+        if( rCC.isLetter(
+                aText, sal::static_int_cast< xub_StrLen >( pStr - pStart ) ) )
         {
             if( !pWordStt )
                 pDelim = pStr+1;
             pWordStt = pStr;
         }
-        else if( pWordStt && !rCC.isDigit( aText, pStr - pStart ))
+        else if( pWordStt &&
+                 !rCC.isDigit(
+                     aText,
+                     sal::static_int_cast< xub_StrLen >( pStr - pStart ) ) )
         {
             if( lcl_IsInAsciiArr( sImplWordChars, *pStr ) &&
                 pWordStt - 1 == pStr &&
@@ -853,7 +860,9 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
                 // l'intallazione at beginning of paragraph. Replaced < by <=
                 (long)(pStart + 1) <= (long)pStr &&
                 // <--
-                rCC.isLetter( aText, pStr-1 - pStart ) )
+                rCC.isLetter(
+                    aText,
+                    sal::static_int_cast< xub_StrLen >( pStr-1 - pStart ) ) )
                 pWordStt = --pStr;
             else
                 break;
@@ -862,8 +871,12 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
 
 
     if( !pWordStt ||
-        rCC.isDigit( aText, pStr - pStart ) ||
-        IsUpperLetter( rCC.getCharacterType( aText, pWordStt - pStart )) ||
+        rCC.isDigit(
+            aText, sal::static_int_cast< xub_StrLen >( pStr - pStart ) ) ||
+        IsUpperLetter(
+            rCC.getCharacterType(
+                aText,
+                sal::static_int_cast< xub_StrLen >( pWordStt - pStart ) ) ) ||
         0x1 == *pWordStt || 0x2 == *pWordStt )
         return FALSE;       // kein zu ersetzendes Zeichen, oder schon ok
 
@@ -979,18 +992,24 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     if( 2 > ( pStr - pStart ) )
         return FALSE;
 
-    if( !rCC.isLetterNumeric( aText, pStr-- - pStart ) )
+    if( !rCC.isLetterNumeric(
+            aText, sal::static_int_cast< xub_StrLen >( pStr-- - pStart ) ) )
     {
         BOOL bValid = FALSE, bAlphaFnd = FALSE;
         const sal_Unicode* pTmpStr = pStr;
         while( !bValid )
         {
-            if( rCC.isDigit( aText, pTmpStr - pStart ) )
+            if( rCC.isDigit(
+                    aText,
+                    sal::static_int_cast< xub_StrLen >( pTmpStr - pStart ) ) )
             {
                 bValid = TRUE;
                 pStr = pTmpStr - 1;
             }
-            else if( rCC.isLetter( aText, pTmpStr - pStart ) )
+            else if( rCC.isLetter(
+                         aText,
+                         sal::static_int_cast< xub_StrLen >(
+                             pTmpStr - pStart ) ) )
             {
                 if( bAlphaFnd )
                 {
@@ -1018,7 +1037,9 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     // suche den Anfang vom Wort
     while( !IsWordDelim( *pStr ))
     {
-        if( bNumericOnly && rCC.isLetter( aText, pStr - pStart ))
+        if( bNumericOnly &&
+            rCC.isLetter(
+                aText, sal::static_int_cast< xub_StrLen >( pStr - pStart ) ) )
             bNumericOnly = FALSE;
 
         if( pStart == pStr )
@@ -1038,7 +1059,8 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     // ueberpruefe anhand der Exceptionliste
     if( pExceptStt )
     {
-        sWord = String( pStr, pExceptStt - pStr + 1 );
+        sWord = String(
+            pStr, sal::static_int_cast< xub_StrLen >( pExceptStt - pStr + 1 ) );
         if( FindInCplSttExceptList(eLang, sWord) )
             return FALSE;
 
@@ -1067,7 +1089,7 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
 
     // Ok, dann ersetze mal
     sal_Unicode cSave = *pWordStt;
-    nSttPos = pWordStt - rTxt.GetBuffer();
+    nSttPos = sal::static_int_cast< xub_StrLen >( pWordStt - rTxt.GetBuffer() );
     String sChar( cSave );
     rCC.toUpper( sChar );
     BOOL bRet = sChar.GetChar(0) != cSave && rDoc.Replace( nSttPos, sChar );
@@ -1615,13 +1637,13 @@ BOOL SvxAutoCorrect::DeleteText( const String& rShort, LanguageType eLang )
 
     //  - return den Ersetzungstext (nur fuer SWG-Format, alle anderen
     //      koennen aus der Wortliste herausgeholt werden!)
-BOOL SvxAutoCorrect::GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String& rFileName, const String& , String& )
+BOOL SvxAutoCorrect::GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String&, const String& , String& )
 {
     return FALSE;
 }
 
     //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
-BOOL SvxAutoCorrect::PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String& rFileName, const String&, SfxObjectShell&,
+BOOL SvxAutoCorrect::PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String&, const String&, SfxObjectShell&,
                                 String& )
 {
     return FALSE;
@@ -1679,7 +1701,7 @@ void DecryptBlockName_Imp( String& rName )
  * --------------------------------------------------*/
 const SvxAutocorrWord* lcl_SearchWordsInList(
                 SvxAutoCorrectLanguageListsPtr pList, const String& rTxt,
-                xub_StrLen& rStt, xub_StrLen nEndPos, SvxAutoCorrDoc& rDoc )
+                xub_StrLen& rStt, xub_StrLen nEndPos, SvxAutoCorrDoc& )
 {
     const SvxAutocorrWordList* pAutoCorrWordList = pList->GetAutocorrWordList();
     TransliterationWrapper& rCmp = GetIgnoreTranslWrapper();
@@ -1784,8 +1806,8 @@ BOOL SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
     {
         //die Sprache ist vorhanden - also her damit
         SvxAutoCorrectLanguageListsPtr pList = pLangTable->Seek(ULONG(eLang));
-        String sTemp(sWord);
-        if(pList->GetWrdSttExceptList()->Seek_Entry(&sTemp))
+        String _sTemp(sWord);
+        if(pList->GetWrdSttExceptList()->Seek_Entry(&_sTemp))
             return TRUE;
 
     }
@@ -1930,14 +1952,14 @@ SvxAutoCorrectLanguageLists::SvxAutoCorrectLanguageLists(
                 const String& rShareAutoCorrectFile,
                 const String& rUserAutoCorrectFile,
                 LanguageType eLang)
-    : rAutoCorrect(rParent),
-    eLanguage(eLang),
-    sShareAutoCorrFile( rShareAutoCorrectFile ),
+:   sShareAutoCorrFile( rShareAutoCorrectFile ),
     sUserAutoCorrFile( rUserAutoCorrectFile ),
-    nFlags(0),
+    eLanguage(eLang),
     pCplStt_ExcptLst( 0 ),
     pWrdStt_ExcptLst( 0 ),
-    pAutocorr_List( 0 )
+    pAutocorr_List( 0 ),
+    rAutoCorrect(rParent),
+    nFlags(0)
 {
 }
 
