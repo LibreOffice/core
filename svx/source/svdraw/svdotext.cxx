@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:57:03 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:14:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -649,9 +649,9 @@ void SdrTextObj::SetModel(SdrModel* pNewModel)
 {
     const SfxItemSet& rSet = GetObjectItemSet();
     SdrModel* pOldModel=pModel;
-    BOOL bLinked=IsLinkedText();
-    BOOL bChg=pNewModel!=pModel;
-    BOOL bHgtSet = rSet.GetItemState(EE_CHAR_FONTHEIGHT, TRUE) == SFX_ITEM_SET;
+    bool bLinked=IsLinkedText();
+    bool bChg=pNewModel!=pModel;
+    bool bHgtSet = rSet.GetItemState(EE_CHAR_FONTHEIGHT, TRUE) == SFX_ITEM_SET;
     if (bLinked && bChg) {
         ImpLinkAbmeldung();
     }
@@ -715,7 +715,7 @@ FASTBOOL SdrTextObj::NbcSetEckenradius(long nRad)
     return TRUE;
 }
 
-FASTBOOL SdrTextObj::NbcSetAutoGrowHeight(FASTBOOL bAuto)
+FASTBOOL SdrTextObj::NbcSetAutoGrowHeight(bool bAuto)
 {
     if(bTextFrame)
     {
@@ -754,7 +754,7 @@ FASTBOOL SdrTextObj::NbcSetMaxTextFrameHeight(long nHgt)
     return FALSE;
 }
 
-FASTBOOL SdrTextObj::NbcSetAutoGrowWidth(FASTBOOL bAuto)
+FASTBOOL SdrTextObj::NbcSetAutoGrowWidth(bool bAuto)
 {
     if(bTextFrame)
     {
@@ -1269,10 +1269,10 @@ sal_Bool SdrTextObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
 
             {
                 SvtAccessibilityOptions aOptions;
-                FASTBOOL bForceAutoColor = aOptions.GetIsAutomaticFontColor();
+                bool bForceAutoColor = aOptions.GetIsAutomaticFontColor();
                 //#106611# don't use automatic colors in WYSIWYG Print Previews
                 if(bPrintPreView&& !aOptions.GetIsForPagePreviews())
-                    bForceAutoColor = FALSE;
+                    bForceAutoColor = false;
                 rOutliner.ForceAutoColor( bForceAutoColor );
             }
 
@@ -1574,7 +1574,7 @@ void SdrTextObj::ImpAddTextToBoundRect()
 SdrObject* SdrTextObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
     if (!bTextFrame && pOutlinerParaObject==NULL) return NULL;
-    if (pVisiLayer!=NULL && !pVisiLayer->IsSet(nLayerId)) return NULL;
+    if (pVisiLayer!=NULL && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId))) return NULL;
     INT32 nMyTol=nTol;
     FASTBOOL bFontwork=IsFontwork();
     SdrFitToSizeType eFit=GetFitToSize();
@@ -2619,7 +2619,7 @@ GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
     Rectangle aAnchorRect;
     Rectangle aPaintRect;
     Fraction aFitXKorreg(1,1);
-    sal_Bool bContourFrame(IsContourTextFrame());
+    bool bContourFrame(IsContourTextFrame());
 
     // get outliner set up. To avoid getting a somehow rotated MetaFile,
     // temporarily disable object rotation.
