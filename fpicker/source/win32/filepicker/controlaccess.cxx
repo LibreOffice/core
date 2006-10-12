@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlaccess.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 12:52:15 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:50:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,8 @@ namespace // private
         CTRL_SETVALUE_FUNCTION_T* aCtrlSetValueFunctionTable, size_t aTableSize, sal_Int16 aCtrlAction )
     {
         if ( !aCtrlSetValueFunctionTable ||
-            aCtrlAction < 0 || aCtrlAction >= aTableSize )
+             aCtrlAction < 0
+             || sal::static_int_cast< sal_uInt16 >(aCtrlAction) >= aTableSize )
             return NULL;
 
         return aCtrlSetValueFunctionTable[aCtrlAction];
@@ -161,7 +162,8 @@ namespace // private
         CTRL_GETVALUE_FUNCTION_T* aCtrlGetValueFunctionTable, size_t aTableSize, sal_Int16 aCtrlAction )
     {
         if ( !aCtrlGetValueFunctionTable ||
-            aCtrlAction < 0 || aCtrlAction >= aTableSize )
+             aCtrlAction < 0 ||
+             sal::static_int_cast< sal_uInt16 >(aCtrlAction) >= aTableSize )
             return NULL;
 
         return aCtrlGetValueFunctionTable[aCtrlAction];
