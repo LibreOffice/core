@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:11:32 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:47:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -777,9 +777,9 @@ BOOL FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
 // -----------------------------------------------------------------------------
 sal_Bool FmFormView::checkUnMarkAll(const Reference< XInterface >& _xSource)
 {
-    sal_Bool bRet = sal_False;
     Reference< ::com::sun::star::awt::XControl> xControl(pImpl->m_xWindow,UNO_QUERY);
-    if ( bRet = ( !xControl.is() || !_xSource.is() || _xSource != xControl->getModel() ) )
+    sal_Bool bRet = !xControl.is() || !_xSource.is() || _xSource != xControl->getModel();
+    if ( bRet )
         UnmarkAll();
 
     return bRet;
