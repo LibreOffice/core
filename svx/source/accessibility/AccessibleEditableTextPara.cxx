@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:00:01 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:00:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2071,8 +2071,10 @@ namespace accessibility
             // _getPropertyState and _getPropertyValue (see below) to provide
             // the proper paragraph number when retrieving paragraph attributes
             PropertyState eState = aPropSet._getPropertyState( pProperties->Name, mnParagraphIndex );
-            DBG_ASSERT( eState != PropertyState_AMBIGUOUS_VALUE,
-                    "ambiguous property value encountered" );
+            if ( eState == PropertyState_AMBIGUOUS_VALUE )
+            {
+                OSL_ENSURE( false, "ambiguous property value encountered" );
+            }
 
             //if (eState == PropertyState_DIRECT_VALUE)
             // per definition all paragraph properties and all character
