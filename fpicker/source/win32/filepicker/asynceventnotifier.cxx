@@ -4,9 +4,9 @@
  *
  *  $RCSfile: asynceventnotifier.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:54:29 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:49:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,9 +160,9 @@ void SAL_CALL CAsyncEventNotifier::shutdown()
 
     // we are waiting infinite, so error will
     // be better detected in form of deadlocks
-    sal_uInt32 dwResult = WaitForSingleObject(m_hThread, INFINITE);
-
-    OSL_ENSURE(WAIT_FAILED != dwResult, "Waiting for thread termination failed!");
+    if (WaitForSingleObject(m_hThread, INFINITE) == WAIT_FAILED) {
+        OSL_ENSURE(false, "Waiting for thread termination failed!");
+    }
 
     // lock mutex again to reset m_hThread
     // and prevent a race with start()
