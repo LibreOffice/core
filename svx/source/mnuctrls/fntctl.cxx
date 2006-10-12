@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntctl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:25:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:57:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,14 +78,14 @@ SFX_IMPL_MENU_CONTROL(SvxFontMenuControl, SvxFontItem);
 
 SvxFontMenuControl::SvxFontMenuControl
 (
-    USHORT          nId,
+    USHORT          _nId,
     Menu&           rMenu,
     SfxBindings&    rBindings
 ) :
     pMenu   ( new FontNameMenu ),
     rParent ( rMenu )
 {
-    rMenu.SetPopupMenu( nId, pMenu );
+    rMenu.SetPopupMenu( _nId, pMenu );
     pMenu->SetSelectHdl( LINK( this, SvxFontMenuControl, MenuSelect ) );
     StartListening( rBindings );
     FillMenu();
@@ -127,7 +127,7 @@ void SvxFontMenuControl::FillMenu()
 
 void SvxFontMenuControl::StateChanged(
 
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    USHORT, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     rParent.EnableItem( GetId(), SFX_ITEM_DISABLED != eState );
@@ -154,7 +154,7 @@ void SvxFontMenuControl::StateChanged(
     der DocumentShell gef"ullt.
 */
 
-void SvxFontMenuControl::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
+void SvxFontMenuControl::SFX_NOTIFY( SfxBroadcaster&, const TypeId& rBCType,
                                  const SfxHint& rHint, const TypeId& rHintType )
 {
     if ( rHint.Type() != TYPE(SfxSimpleHint) &&
