@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleuiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:16:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:42:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -734,7 +734,8 @@ void ModuleUIConfigurationManager::impl_Initialize()
     if ( m_xUserConfigStorage.is() )
     {
         // Try to access our module sub folder
-        for ( int i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
+        for ( sal_Int16 i = 1; i < ::com::sun::star::ui::UIElementType::COUNT;
+              i++ )
         {
             Reference< XStorage > xElementTypeStorage;
             try
@@ -770,7 +771,8 @@ void ModuleUIConfigurationManager::impl_Initialize()
         Reference< XNameAccess > xNameAccess( m_xDefaultConfigStorage, UNO_QUERY_THROW );
 
         // Try to access our module sub folder
-        for ( int i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
+        for ( sal_Int16 i = 1; i < ::com::sun::star::ui::UIElementType::COUNT;
+              i++ )
         {
             Reference< XStorage > xElementTypeStorage;
             try
