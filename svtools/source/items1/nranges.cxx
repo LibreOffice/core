@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nranges.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:06:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:22:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,14 +80,18 @@ NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
 */
 
 {
-    NUMTYPE nSize = 0, nIns = 0, nCnt = 0;
+    NUMTYPE nSize = 0, nIns = 0;
+    USHORT nCnt = 0;
     SvNums aNumArr( 11, 8 );
     aNumArr.Insert( nWh1, nCnt++ );
     aNumArr.Insert( nWh2, nCnt++ );
     DBG_ASSERT( nWh1 <= nWh2, "Ungueltiger Bereich" );
     nSize += nWh2 - nWh1 + 1;
     aNumArr.Insert( nNull, nCnt++ );
-    while ( 0 != ( nIns = va_arg( pArgs, NUMTYPE_ARG ) ) )
+    while ( 0 !=
+            ( nIns =
+              sal::static_int_cast< NUMTYPE >(
+                  va_arg( pArgs, NUMTYPE_ARG ) ) ) )
     {
         aNumArr.Insert( nIns, nCnt++ );
         if ( 0 == (nCnt & 1) )       // 4,6,8, usw.
@@ -207,7 +211,10 @@ SfxNumRanges::SfxNumRanges( NUMTYPE_ARG nWh0, NUMTYPE_ARG nWh1, NUMTYPE_ARG nNul
 {
     va_list pArgs;
     va_start( pArgs, nNull );
-    InitializeRanges_Impl(_pRanges, pArgs, nWh0, nWh1, nNull);
+    InitializeRanges_Impl(
+        _pRanges, pArgs, sal::static_int_cast< NUMTYPE >(nWh0),
+        sal::static_int_cast< NUMTYPE >(nWh1),
+        sal::static_int_cast< NUMTYPE >(nNull));
     DBG_CHECK_RANGES(NUMTYPE, _pRanges);
 }
 
