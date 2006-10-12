@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:14:20 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:40:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,8 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsView, 
         // first we have to determine if we support views
         Reference< XDatabaseMetaData >  xMetaData(m_pParent->m_xConnection->getMetaData());
         Reference< XViewsSupplier > xViewSups(m_pParent->m_xConnection,UNO_QUERY);
-        if(!(m_bIsViewAllowed = xViewSups.is()))
+        m_bIsViewAllowed = xViewSups.is();
+        if(!m_bIsViewAllowed)
         {
             try
             {
