@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:08:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:37:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
-
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 
 #include <memory>
@@ -1100,7 +1100,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     {
         sal_Bool bRet = sal_False;
         WinBits nBits(WB_STDMODAL|WB_SAVEAS);
-        ::sfx2::FileDialogHelper aFileDlg( ::sfx2::FILESAVE_AUTOEXTENSION, static_cast<sal_uInt32>(nBits), this);
+        ::sfx2::FileDialogHelper aFileDlg( com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION, static_cast<sal_uInt32>(nBits), this);
         const SfxFilter* pFilter = getStandardDatabaseFilter();
         if ( pFilter )
         {
