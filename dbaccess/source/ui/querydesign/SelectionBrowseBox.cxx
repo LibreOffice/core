@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:24:03 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:43:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,8 +134,8 @@ namespace
 {
     sal_Bool isFieldNameAsterix(const ::rtl::OUString& _sFieldName )
     {
-        sal_Bool bAsterix;
-        if ( !(bAsterix = !(_sFieldName.getLength() && _sFieldName.toChar() != '*')) )
+        sal_Bool bAsterix = !(_sFieldName.getLength() && _sFieldName.toChar() != '*');
+        if ( !bAsterix )
         {
             String sName = _sFieldName;
             xub_StrLen nTokenCount = sName.GetTokenCount('.');
@@ -594,7 +594,8 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
             }
         }   break;
         case BROW_ORDER_ROW:
-            m_pOrderCell->SelectEntryPos(pEntry->GetOrderDir());
+            m_pOrderCell->SelectEntryPos(
+                sal::static_int_cast< USHORT >(pEntry->GetOrderDir()));
             enableControl(pEntry,m_pOrderCell);
             break;
         case BROW_COLUMNALIAS_ROW:
@@ -970,7 +971,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
         {
             case BROW_VIS_ROW:
                 {
-                    sal_Bool bOldValue = m_pVisibleCell->GetBox().GetSavedValue();
+                    sal_Bool bOldValue = m_pVisibleCell->GetBox().GetSavedValue() != STATE_NOCHECK;
                     strOldCellContents = bOldValue ? g_strOne : g_strZero;
                     sNewValue          = !bOldValue ? g_strOne : g_strZero;
                 }
@@ -1508,7 +1509,7 @@ OTableFieldDescRef OSelectionBrowseBox::AppendNewCol( sal_uInt16 nCnt)
     {
         OTableFieldDescRef pEmptyEntry = new OTableFieldDesc();
         getFields().push_back(pEmptyEntry);
-        USHORT nColumnId = getFields().size();
+        USHORT nColumnId = sal::static_int_cast< USHORT >(getFields().size());
         pEmptyEntry->SetColumnId( nColumnId );
 
         InsertDataColumn( nColumnId , String(), DEFAULT_SIZE, HIB_STDSTYLE, HEADERBAR_APPEND);
@@ -1532,7 +1533,7 @@ void OSelectionBrowseBox::DeleteFields(const String& rAliasName)
 
         OTableFields::reverse_iterator aIter = getFields().rbegin();
         OTableFieldDescRef pEntry = NULL;
-        for(USHORT nPos=getFields().size();aIter != getFields().rend();++aIter,--nPos)
+        for(USHORT nPos=sal::static_int_cast< USHORT >(getFields().size());aIter != getFields().rend();++aIter,--nPos)
         {
             pEntry = *aIter;
             if ( pEntry->GetAlias().equals( rAliasName ) )
@@ -1622,7 +1623,8 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, USHORT& _nColu
         if (FindFirstFreeCol(_nColumnPostion) == NULL)  // keine freie Column mehr
         {
             AppendNewCol(1);
-            _nColumnPostion = getFields().size();
+            _nColumnPostion = sal::static_int_cast< USHORT >(
+                getFields().size());
         }
         else
             ++_nColumnPostion; // innerhalb der vorgegebenen Liste
@@ -2011,7 +2013,9 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
             {
                 if  ( 1 == GetSelectColumnCount() )
                 {
-                    sal_uInt16 nSelId = GetColumnId( FirstSelectedColumn() );
+                    sal_uInt16 nSelId = GetColumnId(
+                        sal::static_int_cast< USHORT >(
+                            FirstSelectedColumn() ) );
                     ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, sal_False ) );
 
                     aMenuPos = aColRect.TopCenter();
@@ -2226,7 +2230,7 @@ String OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
         }   break;
         case BROW_ORDER_ROW:
             if (pEntry->GetOrderDir() != ORDER_NONE)
-                aText = String(ModuleRes(STR_QUERY_SORTTEXT) ).GetToken(pEntry->GetOrderDir());
+                aText = String(ModuleRes(STR_QUERY_SORTTEXT) ).GetToken(sal::static_int_cast< USHORT >(pEntry->GetOrderDir()));
             break;
         case BROW_VIS_ROW:
             break;
@@ -2641,7 +2645,8 @@ OTableFieldDescRef OSelectionBrowseBox::getEntry(OTableFields::size_type _nPos)
     if ( !pEntry.isValid() )
     {
         pEntry = new OTableFieldDesc();
-        pEntry->SetColumnId(GetColumnId(_nPos+1));
+        pEntry->SetColumnId(
+            GetColumnId(sal::static_int_cast< USHORT >(_nPos+1)));
         aFields[_nPos] = pEntry;
     }
     return pEntry;
