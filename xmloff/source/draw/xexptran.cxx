@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xexptran.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:30:26 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,38 +160,20 @@ void Imp_SkipDoubleAndSpacesAndCommas(const OUString& rStr, sal_Int32& rPos,
     Imp_SkipSpacesAndCommas(rStr, rPos, nLen);
 }
 
-sal_Int32 Imp_GetNumberChar(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen,
-    const SvXMLUnitConverter& rConv, sal_Int32 nRetval)
-{
-    OUStringBuffer sNumberString;
-    BOOL bSignAllowed(TRUE);
-
-    while(rPos < nLen && Imp_IsOnNumberChar(rStr, rPos, bSignAllowed))
-    {
-        bSignAllowed = FALSE;
-        sNumberString.append(rStr[rPos++]);
-    }
-
-    if(sNumberString.getLength())
-        rConv.convertNumber(nRetval, sNumberString.makeStringAndClear());
-
-    return nRetval;
-}
-
-void Imp_PutNumberChar(OUString& rStr, const SvXMLUnitConverter& rConv, sal_Int32 nValue)
+void Imp_PutNumberChar(OUString& rStr, sal_Int32 nValue)
 {
     OUStringBuffer sStringBuffer;
-    rConv.convertNumber(sStringBuffer, nValue);
+    SvXMLUnitConverter::convertNumber(sStringBuffer, nValue);
     rStr += OUString(sStringBuffer.makeStringAndClear());
 }
 
-void Imp_PutNumberCharWithSpace(OUString& rStr, const SvXMLUnitConverter& rConv, sal_Int32 nValue)
+void Imp_PutNumberCharWithSpace(OUString& rStr, sal_Int32 nValue)
 {
     const sal_Int32 aLen(rStr.getLength());
     if(aLen)
         if(Imp_IsOnNumberChar(rStr, aLen - 1, FALSE) && nValue >= 0)
             rStr += String(sal_Unicode(' '));
-    Imp_PutNumberChar(rStr, rConv, nValue);
+    Imp_PutNumberChar(rStr, nValue);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1238,21 +1220,21 @@ SdXMLImExViewBox::SdXMLImExViewBox(const OUString& rNew, const SvXMLUnitConverte
     }
 }
 
-const OUString& SdXMLImExViewBox::GetExportString(const SvXMLUnitConverter& rConv)
+const OUString& SdXMLImExViewBox::GetExportString()
 {
     OUString aNewString;
     OUString aEmptySpace(sal_Unicode(' '));
 
-    Imp_PutNumberChar(aNewString, rConv, mnX);
+    Imp_PutNumberChar(aNewString, mnX);
     aNewString += aEmptySpace;
 
-    Imp_PutNumberChar(aNewString, rConv, mnY);
+    Imp_PutNumberChar(aNewString, mnY);
     aNewString += aEmptySpace;
 
-    Imp_PutNumberChar(aNewString, rConv, mnW);
+    Imp_PutNumberChar(aNewString, mnW);
     aNewString += aEmptySpace;
 
-    Imp_PutNumberChar(aNewString, rConv, mnH);
+    Imp_PutNumberChar(aNewString, mnH);
 
     // set new string
     msString = aNewString;
@@ -1267,7 +1249,6 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(drawing::PointSequence* pPoints,
     const SdXMLImExViewBox& rViewBox,
     const awt::Point& rObjectPos,
     const awt::Size& rObjectSize,
-    const SvXMLUnitConverter& rConv,
     // #96328#
     const sal_Bool bClosed)
 :   maPoly( 0L )
@@ -1312,11 +1293,11 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(drawing::PointSequence* pPoints,
             }
 
             // X and comma
-            Imp_PutNumberChar(aNewString, rConv, nX);
+            Imp_PutNumberChar(aNewString, nX);
             aNewString += String(sal_Unicode(','));
 
             // Y and space (not for last)
-            Imp_PutNumberChar(aNewString, rConv, nY);
+            Imp_PutNumberChar(aNewString, nY);
             if(a + 1 != nCnt)
                 aNewString += String(sal_Unicode(' '));
 
@@ -1494,7 +1475,6 @@ void SdXMLImExSvgDElement::AddPolygon(
     drawing::FlagSequence* pFlags,
     const awt::Point& rObjectPos,
     const awt::Size& rObjectSize,
-    const SvXMLUnitConverter& rConv,
     sal_Bool bClosed, sal_Bool bRelative)
 {
     DBG_ASSERT(pPoints, "Empty PointSequence handed over to SdXMLImExSvgDElement(!)");
@@ -1684,8 +1664,8 @@ void SdXMLImExSvgDElement::AddPolygon(
                                                     if(aLastCommand != sal_Unicode('t'))
                                                         aNewString += OUString(sal_Unicode('t'));
 
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nX - mnLastX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nY - mnLastY);
 
                                                     aLastCommand = sal_Unicode('t');
                                                 }
@@ -1694,8 +1674,8 @@ void SdXMLImExSvgDElement::AddPolygon(
                                                     if(aLastCommand != sal_Unicode('T'))
                                                         aNewString += OUString(sal_Unicode('T'));
 
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nY);
 
                                                     aLastCommand = sal_Unicode('T');
                                                 }
@@ -1714,10 +1694,10 @@ void SdXMLImExSvgDElement::AddPolygon(
                                                     if(aLastCommand != sal_Unicode('q'))
                                                         aNewString += OUString(sal_Unicode('q'));
 
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX1 - mnLastX);
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY1 - mnLastY);
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nX1 - mnLastX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nY1 - mnLastY);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nX - mnLastX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nY - mnLastY);
 
                                                     aLastCommand = sal_Unicode('q');
                                                 }
@@ -1726,10 +1706,10 @@ void SdXMLImExSvgDElement::AddPolygon(
                                                     if(aLastCommand != sal_Unicode('Q'))
                                                         aNewString += OUString(sal_Unicode('Q'));
 
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX1);
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY1);
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nX1);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nY1);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nY);
 
                                                     aLastCommand = sal_Unicode('Q');
                                                 }
@@ -1776,8 +1756,8 @@ void SdXMLImExSvgDElement::AddPolygon(
                                                     if(aLastCommand != sal_Unicode('t'))
                                                         aNewString += String(sal_Unicode('t'));
 
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nX - mnLastX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nY - mnLastY);
 
                                                     aLastCommand = sal_Unicode('t');
                                                 }
@@ -1786,8 +1766,8 @@ void SdXMLImExSvgDElement::AddPolygon(
                                                     if(aLastCommand != sal_Unicode('T'))
                                                         aNewString += String(sal_Unicode('T'));
 
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nY);
 
                                                     aLastCommand = sal_Unicode('T');
                                                 }
@@ -1806,10 +1786,10 @@ void SdXMLImExSvgDElement::AddPolygon(
                                                     if(aLastCommand != sal_Unicode('q'))
                                                         aNewString += String(sal_Unicode('q'));
 
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX1 - mnLastX);
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY1 - mnLastY);
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nX1 - mnLastX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nY1 - mnLastY);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nX - mnLastX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nY - mnLastY);
 
                                                     aLastCommand = sal_Unicode('q');
                                                 }
@@ -1818,10 +1798,10 @@ void SdXMLImExSvgDElement::AddPolygon(
                                                     if(aLastCommand != sal_Unicode('Q'))
                                                         aNewString += String(sal_Unicode('Q'));
 
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX1);
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY1);
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
-                                                    Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nX1);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nY1);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nX);
+                                                    Imp_PutNumberCharWithSpace(aNewString, nY);
 
                                                     aLastCommand = sal_Unicode('Q');
                                                 }
@@ -1865,10 +1845,10 @@ void SdXMLImExSvgDElement::AddPolygon(
                                                 if(aLastCommand != sal_Unicode('s'))
                                                     aNewString += String(sal_Unicode('s'));
 
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX2 - mnLastX);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY2 - mnLastY);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
+                                                Imp_PutNumberCharWithSpace(aNewString, nX2 - mnLastX);
+                                                Imp_PutNumberCharWithSpace(aNewString, nY2 - mnLastY);
+                                                Imp_PutNumberCharWithSpace(aNewString, nX - mnLastX);
+                                                Imp_PutNumberCharWithSpace(aNewString, nY - mnLastY);
 
                                                 aLastCommand = sal_Unicode('s');
                                             }
@@ -1877,10 +1857,10 @@ void SdXMLImExSvgDElement::AddPolygon(
                                                 if(aLastCommand != sal_Unicode('S'))
                                                     aNewString += String(sal_Unicode('S'));
 
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX2);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY2);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
+                                                Imp_PutNumberCharWithSpace(aNewString, nX2);
+                                                Imp_PutNumberCharWithSpace(aNewString, nY2);
+                                                Imp_PutNumberCharWithSpace(aNewString, nX);
+                                                Imp_PutNumberCharWithSpace(aNewString, nY);
 
                                                 aLastCommand = sal_Unicode('S');
                                             }
@@ -1899,12 +1879,12 @@ void SdXMLImExSvgDElement::AddPolygon(
                                                 if(aLastCommand != sal_Unicode('c'))
                                                     aNewString += String(sal_Unicode('c'));
 
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX1 - mnLastX);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY1 - mnLastY);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX2 - mnLastX);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY2 - mnLastY);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
+                                                Imp_PutNumberCharWithSpace(aNewString, nX1 - mnLastX);
+                                                Imp_PutNumberCharWithSpace(aNewString, nY1 - mnLastY);
+                                                Imp_PutNumberCharWithSpace(aNewString, nX2 - mnLastX);
+                                                Imp_PutNumberCharWithSpace(aNewString, nY2 - mnLastY);
+                                                Imp_PutNumberCharWithSpace(aNewString, nX - mnLastX);
+                                                Imp_PutNumberCharWithSpace(aNewString, nY - mnLastY);
 
                                                 aLastCommand = sal_Unicode('c');
                                             }
@@ -1913,12 +1893,12 @@ void SdXMLImExSvgDElement::AddPolygon(
                                                 if(aLastCommand != sal_Unicode('C'))
                                                     aNewString += String(sal_Unicode('C'));
 
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX1);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY1);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX2);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY2);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
-                                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
+                                                Imp_PutNumberCharWithSpace(aNewString, nX1);
+                                                Imp_PutNumberCharWithSpace(aNewString, nY1);
+                                                Imp_PutNumberCharWithSpace(aNewString, nX2);
+                                                Imp_PutNumberCharWithSpace(aNewString, nY2);
+                                                Imp_PutNumberCharWithSpace(aNewString, nX);
+                                                Imp_PutNumberCharWithSpace(aNewString, nY);
 
                                                 aLastCommand = sal_Unicode('C');
                                             }
@@ -1955,7 +1935,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                                 if(aLastCommand != sal_Unicode('v'))
                                     aNewString += String(sal_Unicode('v'));
 
-                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
+                                Imp_PutNumberCharWithSpace(aNewString, nY - mnLastY);
 
                                 aLastCommand = sal_Unicode('v');
                             }
@@ -1964,7 +1944,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                                 if(aLastCommand != sal_Unicode('V'))
                                     aNewString += String(sal_Unicode('V'));
 
-                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
+                                Imp_PutNumberCharWithSpace(aNewString, nY);
 
                                 aLastCommand = sal_Unicode('V');
                             }
@@ -1976,7 +1956,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                                 if(aLastCommand != sal_Unicode('h'))
                                     aNewString += String(sal_Unicode('h'));
 
-                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
+                                Imp_PutNumberCharWithSpace(aNewString, nX - mnLastX);
 
                                 aLastCommand = sal_Unicode('h');
                             }
@@ -1985,7 +1965,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                                 if(aLastCommand != sal_Unicode('H'))
                                     aNewString += String(sal_Unicode('H'));
 
-                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
+                                Imp_PutNumberCharWithSpace(aNewString, nX);
 
                                 aLastCommand = sal_Unicode('H');
                             }
@@ -1997,8 +1977,8 @@ void SdXMLImExSvgDElement::AddPolygon(
                                 if(aLastCommand != sal_Unicode('l'))
                                     aNewString += String(sal_Unicode('l'));
 
-                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
-                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
+                                Imp_PutNumberCharWithSpace(aNewString, nX - mnLastX);
+                                Imp_PutNumberCharWithSpace(aNewString, nY - mnLastY);
 
                                 aLastCommand = sal_Unicode('l');
                             }
@@ -2007,8 +1987,8 @@ void SdXMLImExSvgDElement::AddPolygon(
                                 if(aLastCommand != sal_Unicode('L'))
                                     aNewString += String(sal_Unicode('L'));
 
-                                Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
-                                Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
+                                Imp_PutNumberCharWithSpace(aNewString, nX);
+                                Imp_PutNumberCharWithSpace(aNewString, nY);
 
                                 aLastCommand = sal_Unicode('L');
                             }
@@ -2021,8 +2001,8 @@ void SdXMLImExSvgDElement::AddPolygon(
                         {
                             aNewString += String(sal_Unicode('m'));
 
-                            Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
-                            Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
+                            Imp_PutNumberCharWithSpace(aNewString, nX - mnLastX);
+                            Imp_PutNumberCharWithSpace(aNewString, nY - mnLastY);
 
                             aLastCommand = sal_Unicode('l');
                         }
@@ -2030,8 +2010,8 @@ void SdXMLImExSvgDElement::AddPolygon(
                         {
                             aNewString += String(sal_Unicode('M'));
 
-                            Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
-                            Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
+                            Imp_PutNumberCharWithSpace(aNewString, nX);
+                            Imp_PutNumberCharWithSpace(aNewString, nY);
 
                             aLastCommand = sal_Unicode('L');
                         }
