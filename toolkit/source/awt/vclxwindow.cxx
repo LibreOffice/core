@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:15:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:31:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -429,7 +429,8 @@ void ImplInitKeyEvent( ::com::sun::star::awt::KeyEvent& rEvent, const KeyEvent& 
 
     rEvent.KeyCode = rEvt.GetKeyCode().GetCode();
     rEvent.KeyChar = rEvt.GetCharCode();
-    rEvent.KeyFunc = rEvt.GetKeyCode().GetFunction();
+    rEvent.KeyFunc = sal::static_int_cast< sal_Int16 >(
+        rEvt.GetKeyCode().GetFunction());
 }
 
 void ImplInitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent, const MouseEvent& rEvt )
