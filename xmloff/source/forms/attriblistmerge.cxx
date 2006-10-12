@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attriblistmerge.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:32:55 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:42:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ namespace xmloff
         for ( ; (aLookupSublist != m_aLists.end()) && (nLeftOver >= (*aLookupSublist)->getLength());
                 ++aLookupSublist
             )
-            nLeftOver -= (*aLookupSublist)->getLength();
+            nLeftOver = nLeftOver - (*aLookupSublist)->getLength();
 
         if (aLookupSublist == m_aLists.end())
         {
@@ -107,7 +107,7 @@ namespace xmloff
                 aAccumulate != m_aLists.end();
                 ++aAccumulate
             )
-            nCount += (*aAccumulate)->getLength();
+            nCount = nCount + (*aAccumulate)->getLength();
         return nCount;
     }
 
