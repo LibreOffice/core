@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basenode.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:35:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -629,6 +629,7 @@ void BaseNode::end()
 
 void BaseNode::notifyDeactivating( const AnimationNodeSharedPtr& rNotifier )
 {
+    (void) rNotifier; // avoid warning
     OSL_ASSERT( rNotifier->getState() == FROZEN ||
                 rNotifier->getState() == ENDED );
     // TODO(F1): for end sync functionality, this might indeed be used some day
