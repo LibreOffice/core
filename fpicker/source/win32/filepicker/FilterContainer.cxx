@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterContainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:53:48 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:48:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,14 @@
 #endif
 
 #include <utility>
+
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 //-------------------------------------------------------------------
 // namespace directives
@@ -290,12 +297,12 @@ rtl::OUString SAL_CALL makeWinFilterBuffer( CFilterContainer& aFilterContainer )
 {
     // calculate the required buffer size
     sal_uInt32 reqBuffSize = _getTotalFilterLength( aFilterContainer );
-    sal_Unicode* pBuff;
 
-    // return if there are no filters or the buffer could not
-    // be allocated
-    if ( !reqBuffSize || !( pBuff = new sal_Unicode[reqBuffSize] ) )
+    // return if there are no filters
+    if ( !reqBuffSize )
         return OUString( );
+
+    sal_Unicode* pBuff = new sal_Unicode[reqBuffSize];
 
     // initialize the buffer with 0
     ZeroMemory( pBuff, sizeof( sal_Unicode ) * reqBuffSize );
