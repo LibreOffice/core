@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:16:03 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:48:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -538,7 +538,7 @@ Rectangle GalleryListView::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nC
     if ( SeekRow(_nRow) )
     {
         SvxFont aFont( GetFont() );
-        AccessibleStringWrap aStringWrap( *this, aFont, GetCellText(_nRow, static_cast<USHORT>( GetColumnId( _nColumnPos ) ) ) );
+        AccessibleStringWrap aStringWrap( *this, aFont, GetCellText(_nRow, sal::static_int_cast<USHORT>( GetColumnId( sal::static_int_cast<USHORT>(_nColumnPos) ) ) ) );
 
         // get the bounds inside the string
         aStringWrap.GetCharacterBounds(nIndex, aRect);
@@ -557,7 +557,7 @@ sal_Int32 GalleryListView::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColu
     if ( SeekRow(_nRow) )
     {
         SvxFont aFont( GetFont() );
-        AccessibleStringWrap aStringWrap( *this, aFont, GetCellText(_nRow, static_cast<USHORT>(GetColumnId(_nColumnPos))) );
+        AccessibleStringWrap aStringWrap( *this, aFont, GetCellText(_nRow, sal::static_int_cast<USHORT>(GetColumnId(sal::static_int_cast<USHORT>(_nColumnPos)))) );
         nRet = aStringWrap.GetIndexAtPoint(_rPoint);
     }
     return nRet;
