@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exprnode.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:02:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:34:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 
-#define _NTSDK      // wg. HUGE_VAL MH
-#define HUGE_VAL    HUGE
 #include <math.h>
 
 #include <rtl/math.hxx>
