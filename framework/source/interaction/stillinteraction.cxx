@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stillinteraction.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:02:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:40:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,7 @@ void SAL_CALL StillInteraction::handle( const css::uno::Reference< css::task::XI
     {
         // warnings can be ignored   => approve
         // errors must break loading => abort
-        sal_Bool bWarning = (aErrorCodeRequest.ErrCode & ERRCODE_WARNING_MASK == ERRCODE_WARNING_MASK);
+        sal_Bool bWarning = (aErrorCodeRequest.ErrCode & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK;
         if (xApprove.is() && bWarning)
             xApprove->select();
         else

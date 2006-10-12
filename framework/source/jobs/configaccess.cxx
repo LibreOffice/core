@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configaccess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:03:04 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:41:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,6 +218,7 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
             }
             catch(css::uno::Exception& ex)
             {
+                (void) ex; // avoid warning
                 LOG_WARNING("open config ...", U2B(ex.Message))
             }
 
