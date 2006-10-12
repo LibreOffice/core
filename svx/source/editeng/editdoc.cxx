@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:48:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:34:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -532,7 +532,7 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
             }
             break;
         }
-        nIndex += pPortion->GetLen();
+        nIndex = nIndex + pPortion->GetLen();
     }
 
     SetHeight( (USHORT)aSz.Height() );
@@ -1000,8 +1000,8 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
             aCharAttribList.InsertAttrib( pAttrib );
             DBG_ASSERT( pAttrib->GetStart() >= nCut, "Start < nCut!" );
             DBG_ASSERT( pAttrib->GetEnd() >= nCut, "End < nCut!" );
-            pAttrib->GetStart() -= nCut;
-            pAttrib->GetEnd() -= nCut;
+            pAttrib->GetStart() = pAttrib->GetStart() - nCut;
+            pAttrib->GetEnd() = pAttrib->GetEnd() - nCut;
             nAttr--;
         }
         nAttr++;
@@ -1037,7 +1037,8 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
                     if ( ( pTmpAttrib->Which() == pAttrib->Which() ) &&
                          ( *(pTmpAttrib->GetItem()) == *(pAttrib->GetItem() ) ) )
                     {
-                        pTmpAttrib->GetEnd() += pAttrib->GetLen();
+                        pTmpAttrib->GetEnd() =
+                            pTmpAttrib->GetEnd() + pAttrib->GetLen();
                         pNextNode->GetCharAttribs().GetAttribs().Remove( nAttr );
                         // Vom Pool abmelden ?!
                         delete pAttrib;
@@ -1051,8 +1052,8 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
 
         if ( !bMelted )
         {
-            pAttrib->GetStart() += nNewStart;
-            pAttrib->GetEnd() += nNewStart;
+            pAttrib->GetStart() = pAttrib->GetStart() + nNewStart;
+            pAttrib->GetEnd() = pAttrib->GetEnd() + nNewStart;
             aCharAttribList.InsertAttrib( pAttrib );
             ++nAttr;
         }
@@ -1075,7 +1076,7 @@ void ContentNode::CreateDefFont()
 
     // ... dann die harte Absatzformatierung rueberbuegeln...
     CreateFont( GetCharAttribs().GetDefFont(),
-        GetContentAttribs().GetItems(), ( pS ? FALSE : TRUE ) );
+        GetContentAttribs().GetItems(), pS == NULL );
 }
 
 void ContentNode::SetStyleSheet( SfxStyleSheet* pS, const SvxFont& rFontFromStyle )
@@ -1086,7 +1087,7 @@ void ContentNode::SetStyleSheet( SfxStyleSheet* pS, const SvxFont& rFontFromStyl
     GetCharAttribs().GetDefFont() = rFontFromStyle;
     // ... dann die harte Absatzformatierung rueberbuegeln...
     CreateFont( GetCharAttribs().GetDefFont(),
-        GetContentAttribs().GetItems(), ( pS ? FALSE : TRUE ) );
+        GetContentAttribs().GetItems(), pS == NULL );
 }
 
 void ContentNode::SetStyleSheet( SfxStyleSheet* pS, BOOL bRecalcFont )
@@ -1256,7 +1257,7 @@ void EditDoc::RemoveItemsFromPool( ContentNode* pNode )
     }
 }
 
-void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent, short nScriptType )
+void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, short nScriptType )
 {
     Font aPrevFont( rFont );
     rFont.SetAlign( ALIGN_BASELINE );
@@ -1305,7 +1306,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent, s
         if ( nEsc == DFLT_ESC_AUTO_SUPER )
             nEsc = 100 - nProp;
         else if ( nEsc == DFLT_ESC_AUTO_SUB )
-            nEsc = -( 100 - nProp );
+            nEsc = sal::static_int_cast< short >( -( 100 - nProp ) );
         rFont.SetEscapement( nEsc );
     }
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_PAIRKERNING ) == SFX_ITEM_ON ) )
@@ -1534,7 +1535,7 @@ EditPaM EditDoc::InsertText( EditPaM aPaM, const XubString& rStr )
 
     aPaM.GetNode()->Insert( rStr, aPaM.GetIndex() );
     aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), rStr.Len(), GetItemPool() );
-    aPaM.GetIndex() += rStr.Len();
+    aPaM.GetIndex() = aPaM.GetIndex() + rStr.Len();
 
     SetModified( TRUE );
 
@@ -2013,7 +2014,13 @@ void CharAttribList::ResortAttribs()
 {
     if ( Count() )
     {
+#if defined __SUNPRO_CC
+#pragma disable_warn
+#endif
         qsort( (void*)aAttribs.GetData(), aAttribs.Count(), sizeof( EditCharAttrib* ), CompareStart );
+#if defined __SUNPRO_CC
+#pragma enable_warn
+#endif
     }
 }
 
