@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tplnedef.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:45:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:31:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #define _SVX_TPLNEDEF_CXX
 
@@ -695,7 +696,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 {
-    int nPos = aLbLineStyles.GetSelectEntryPos();
+    USHORT nPos = aLbLineStyles.GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -770,9 +771,9 @@ IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxLineDefTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 {
-    int nPos = aLbLineStyles.GetSelectEntryPos();
+    USHORT nPos = aLbLineStyles.GetSelectEntryPos();
 
-    if ( nPos >= 0 )
+    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         QueryBox aQueryBox( DLGWIN, WinBits( WB_YES_NO | WB_DEF_NO ),
 //!         SVX_RES( RID_SVXSTR_DEL_LINESTYLE ),
@@ -822,7 +823,9 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
     if ( nReturn != RET_CANCEL )
     {
-        ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+        ::sfx2::FileDialogHelper aDlg(
+            com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+            0 );
         String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sod" ) );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
@@ -905,7 +908,8 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxLineDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
 {
-       ::sfx2::FileDialogHelper aDlg( ::sfx2::FILESAVE_SIMPLE, 0 );
+       ::sfx2::FileDialogHelper aDlg(
+        com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sod" ) );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
