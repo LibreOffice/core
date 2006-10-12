@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MtaFop.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:58:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:01:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_fpicker.hxx"
-
-#pragma warning( disable : 4290 ) // c++ exception specification ignored
-#pragma warning( disable : 4786 ) // identifier was truncated to 'number'
-                                   // characters in the debug information
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -247,7 +243,8 @@ CMtaFolderPicker::~CMtaFolderPicker( )
             // terminate the thread if it
             // doesn't shutdown itself
             if ( WAIT_OBJECT_0 != dwResult )
-                TerminateThread( m_hStaThread, -1 );
+                TerminateThread(
+                    m_hStaThread, sal::static_int_cast< DWORD >(-1) );
 
             CloseHandle( m_hStaThread );
         }
@@ -506,7 +503,7 @@ OUString SAL_CALL CMtaFolderPicker::getPathFromItemIdList( LPCITEMIDLIST lpItemI
 
     if ( lpItemIdList )
     {
-        sal_Bool bRet = SHGetPathFromIDListW( lpItemIdList, m_pathBuff );
+        bool bRet = SHGetPathFromIDListW( lpItemIdList, m_pathBuff );
         if ( bRet )
             path = m_pathBuff.get( );
     }
@@ -587,16 +584,7 @@ void SAL_CALL CMtaFolderPicker::onInitialized( )
 //
 //--------------------------------------------------------------------
 
-void SAL_CALL CMtaFolderPicker::onSelChanged( const OUString& aNewPath )
-{
-    // to be overwritten by subclasses
-}
-
-//--------------------------------------------------------------------
-//
-//--------------------------------------------------------------------
-
-sal_uInt32 SAL_CALL CMtaFolderPicker::onValidateFailed( sal_Unicode* lpInvalidPath )
+sal_uInt32 CMtaFolderPicker::onValidateFailed()
 {
     // to be overwritten by subclasses
     return 1;
@@ -629,7 +617,7 @@ int CALLBACK CMtaFolderPicker::FolderPickerCallback( HWND hwnd, UINT uMsg, LPARA
         break;
 
         case BFFM_VALIDATEFAILEDW:
-            nRC = pImpl->onValidateFailed( reinterpret_cast< sal_Unicode* >( lParam ) );
+            nRC = pImpl->onValidateFailed();
             break;
 
         default:
@@ -719,7 +707,7 @@ LRESULT CALLBACK CMtaFolderPicker::StaWndProc( HWND hWnd, UINT uMsg, WPARAM wPar
 
 sal_Bool SAL_CALL CMtaFolderPicker::createStaRequestWindow( )
 {
-    sal_Bool bIsWnd = sal_False;
+    bool bIsWnd = false;
 
     if ( RegisterStaRequestWindowClass( ) )
     {
@@ -760,7 +748,7 @@ unsigned int CMtaFolderPicker::run( )
     if ( FAILED( hr ) )
     {
         OSL_ENSURE( sal_False, "CoInitialize failed" );
-        return -1;
+        return sal::static_int_cast< unsigned int >(-1);
     }
 
     unsigned int nRet;
@@ -779,7 +767,7 @@ unsigned int CMtaFolderPicker::run( )
     else
     {
         OSL_ENSURE( sal_False, "failed to create sta thread" );
-        nRet = -1;
+        nRet = sal::static_int_cast< unsigned int >(-1);
     }
 
     // shutdown sta environment
