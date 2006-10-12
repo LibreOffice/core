@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objface.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:27:45 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:51:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,17 +84,14 @@ SfxCompareSlots_Impl( const void* pSmaller, const void* pBigger )
 struct SfxObjectUI_Impl
 {
     USHORT  nPos;
-    USHORT  nInterfaceId;
     ResId   aResId;
     BOOL    bVisible;
     BOOL    bContext;
     String* pName;
     ULONG   nFeature;
 
-    SfxObjectUI_Impl(USHORT n, const ResId& rResId, BOOL bVis, ULONG nFeat,
-                USHORT nClassId=0xFFFF) :
+    SfxObjectUI_Impl(USHORT n, const ResId& rResId, BOOL bVis, ULONG nFeat) :
         nPos(n),
-        nInterfaceId(nClassId),
         aResId(rResId.GetId(), rResId.GetResMgr()),
         bVisible(bVis),
         bContext(FALSE),
@@ -143,7 +140,7 @@ struct SfxInterface_Impl
     }
 };
 
-static SfxObjectUI_Impl* CreateObjectBarUI_Impl( USHORT nPos, const ResId& rResId, ULONG nFeature, const String *pStr, USHORT nInterface );
+static SfxObjectUI_Impl* CreateObjectBarUI_Impl( USHORT nPos, const ResId& rResId, ULONG nFeature, const String *pStr );
 
 //====================================================================
 
@@ -152,7 +149,7 @@ static SfxObjectUI_Impl* CreateObjectBarUI_Impl( USHORT nPos, const ResId& rResI
 
 SfxInterface::SfxInterface( const char *pClassName,
                             const ResId& rNameResId,
-                            USHORT nId,
+                            SfxInterfaceId nId,
                             const SfxInterface* pParent,
                             SfxSlot &rSlotMap, USHORT nSlotCount ):
     pName(pClassName),
@@ -437,17 +434,17 @@ void SfxInterface::RegisterObjectBar( USHORT nPos, const ResId& rResId,
 
 void SfxInterface::RegisterObjectBar( USHORT nPos, const ResId& rResId, ULONG nFeature, const String *pStr )
 {
-    SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl( nPos, rResId, nFeature, pStr, nClassId );
+    SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl( nPos, rResId, nFeature, pStr );
     if ( pUI )
         pImpData->pObjectBars->Append(pUI);
 }
 
-SfxObjectUI_Impl* CreateObjectBarUI_Impl( USHORT nPos, const ResId& rResId, ULONG nFeature, const String *pStr, USHORT nClassId )
+SfxObjectUI_Impl* CreateObjectBarUI_Impl( USHORT nPos, const ResId& rResId, ULONG nFeature, const String *pStr )
 {
     if ((nPos & SFX_VISIBILITY_MASK) == 0)
         nPos |= SFX_VISIBILITY_STANDARD;
 
-    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(nPos, rResId, TRUE, nFeature, nClassId);
+    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(nPos, rResId, TRUE, nFeature);
 
     if (pStr == 0)
     {
@@ -476,7 +473,7 @@ const ResId& SfxInterface::GetObjectBarResId( USHORT nNo ) const
             // Die der Superklasse kommen zuerst
             return pGenoType->GetObjectBarResId( nNo );
         else
-            nNo -= nBaseCount;
+            nNo = nNo - nBaseCount;
     }
 
 #ifdef DBG_UTIL
@@ -500,7 +497,7 @@ USHORT SfxInterface::GetObjectBarPos( USHORT nNo ) const
             // Die der Superklasse kommen zuerst
             return pGenoType->GetObjectBarPos( nNo );
         else
-            nNo -= nBaseCount;
+            nNo = nNo - nBaseCount;
     }
 
 #ifdef DBG_UTIL
@@ -529,7 +526,7 @@ void SfxInterface::RegisterChildWindow(USHORT nId, BOOL bContext, const String* 
 
 void SfxInterface::RegisterChildWindow(USHORT nId, BOOL bContext, ULONG nFeature, const String*)
 {
-    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, nId, TRUE, nFeature, 0);
+    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, nId, TRUE, nFeature);
     pUI->bContext = bContext;
     pImpData->pChildWindows->Append(pUI);
 }
@@ -550,7 +547,7 @@ ULONG SfxInterface::GetChildWindowId (USHORT nNo) const
             // Die der Superklasse kommen zuerst
             return pGenoType->GetChildWindowId( nNo );
         else
-            nNo -= nBaseCount;
+            nNo = nNo - nBaseCount;
     }
 
 #ifdef DBG_UTIL
@@ -573,7 +570,7 @@ ULONG SfxInterface::GetChildWindowFeature (USHORT nNo) const
             // Die der Superklasse kommen zuerst
             return pGenoType->GetChildWindowFeature( nNo );
         else
-            nNo -= nBaseCount;
+            nNo = nNo - nBaseCount;
     }
 
 #ifdef DBG_UTIL
@@ -623,7 +620,7 @@ const String* SfxInterface::GetObjectBarName ( USHORT nNo ) const
             // Die der Superklasse kommen zuerst
             return pGenoType->GetObjectBarName( nNo );
         else
-            nNo -= nBaseCount;
+            nNo = nNo - nBaseCount;
     }
 
 #ifdef DBG_UTIL
@@ -644,7 +641,7 @@ ULONG SfxInterface::GetObjectBarFeature ( USHORT nNo ) const
             // Die der Superklasse kommen zuerst
             return pGenoType->GetObjectBarFeature( nNo );
         else
-            nNo -= nBaseCount;
+            nNo = nNo - nBaseCount;
     }
 
 #ifdef DBG_UTIL
@@ -665,7 +662,7 @@ BOOL SfxInterface::IsObjectBarVisible(USHORT nNo) const
             // Die der Superklasse kommen zuerst
             return pGenoType->IsObjectBarVisible( nNo );
         else
-            nNo -= nBaseCount;
+            nNo = nNo - nBaseCount;
     }
 
 #ifdef DBG_UTIL
