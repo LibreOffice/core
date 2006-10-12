@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 11:13:18 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:04:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,8 +121,8 @@ class CommandLineArgs
         sal_Bool                GetBoolParam( BoolParam eParam ) const;
         void                    SetBoolParam( BoolParam eParam, sal_Bool bNewValue );
 
-        const rtl::OUString&    GetStringParam( BoolParam eParam ) const;
-        void                    SetStringParam( BoolParam eParam, const rtl::OUString& bNewValue );
+        const rtl::OUString&    GetStringParam( StringParam eParam ) const;
+        void                    SetStringParam( StringParam eParam, const rtl::OUString& bNewValue );
 
         // Access to bool parameters
         sal_Bool                IsMinimized() const;
