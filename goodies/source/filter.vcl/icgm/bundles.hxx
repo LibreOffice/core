@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bundles.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:48:40 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:35:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ public:
 
                         Bundle() {};
     virtual Bundle*     Clone() { return new Bundle( *this ); };
-    virtual Bundle&     operator=( Bundle& rBundle );
+            Bundle&     operator=( Bundle& rBundle );
 
     virtual             ~Bundle() {} ;
 };
@@ -75,7 +75,7 @@ public:
 
                         LineBundle() {};
     virtual Bundle*     Clone() { return new LineBundle( *this ); };
-    virtual LineBundle& operator=( LineBundle& rLineBundle );
+            LineBundle& operator=( LineBundle& rLineBundle );
     virtual             ~LineBundle() {};
 };
 
@@ -90,7 +90,7 @@ public:
 
                         MarkerBundle() {};
     virtual Bundle*     Clone() { return new MarkerBundle( *this ); } ;
-    virtual MarkerBundle&   operator=( MarkerBundle& rMarkerBundle );
+            MarkerBundle&   operator=( MarkerBundle& rMarkerBundle );
     virtual             ~MarkerBundle() {};
 };
 
@@ -105,7 +105,7 @@ public:
 
                         EdgeBundle() {};
     virtual Bundle*     Clone() { return new EdgeBundle( *this ); } ;
-    virtual EdgeBundle& operator=( EdgeBundle& rEdgeBundle );
+            EdgeBundle& operator=( EdgeBundle& rEdgeBundle );
     virtual             ~EdgeBundle() {};
 };
 
@@ -122,7 +122,7 @@ public:
 
                         TextBundle() {};
     virtual Bundle*     Clone() { return new TextBundle( *this ); } ;
-    virtual TextBundle& operator=( TextBundle& rTextBundle );
+            TextBundle& operator=( TextBundle& rTextBundle );
     virtual             ~TextBundle() {};
 };
 
@@ -138,7 +138,7 @@ public:
 
                         FillBundle() {};
     virtual Bundle*     Clone() { return new FillBundle( *this ); } ;
-    virtual FillBundle& operator=( FillBundle& rFillBundle );
+            FillBundle& operator=( FillBundle& rFillBundle );
     virtual             ~FillBundle() {};
 };
 

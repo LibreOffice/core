@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:45:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:35:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,8 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 
 void CGMBitmap::ImplSetCurrentPalette( CGMBitmapDescriptor& rDesc )
 {
-    sal_uInt16  nColors =  1 << rDesc.mnDstBitsPerPixel;
+    sal_uInt16 nColors = sal::static_int_cast< sal_uInt16 >(
+        1 << rDesc.mnDstBitsPerPixel);
     rDesc.mpAcc->SetPaletteEntryCount( nColors );
     for ( sal_uInt16 i = 0; i < nColors; i++ )
     {
