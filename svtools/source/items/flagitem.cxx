@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flagitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:58:49 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:19:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ SfxItemPresentation SfxFlagItem::GetPresentation
 {
     DBG_CHKTHIS(SfxFlagItem, 0);
     rText.Erase();
-    for ( int nFlag = 0; nFlag < GetFlagCount(); ++nFlag )
+    for ( BYTE nFlag = 0; nFlag < GetFlagCount(); ++nFlag )
         rText += XubString::CreateFromInt32( GetFlag(nFlag) );
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
