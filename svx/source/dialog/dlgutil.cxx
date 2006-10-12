@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgutil.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:18:22 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:11:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -873,12 +873,12 @@ long Nothing( long nIn )
 FUNC_CONVERT ConvertTable[6][6] =
 {
 //  CM,         MM          INCH         POINT        PICAS=32     TWIPS
-    Nothing,    CMToMM,     CMToInch,    CMToPoint,   CMToPica,    CMToTwips,
-    MMToCM,     Nothing,    MMToInch,    MMToPoint,   MMToPica,    MMToTwips,
-    InchToCM,   InchToMM,   Nothing,     InchToPoint, InchToPica,  InchToTwips,
-    PointToCM,  PointToMM,  PointToInch, Nothing,     PointToPica, PointToTwips,
-    PicaToCM,   PicaToMM,   PicaToInch,  PicaToPoint, Nothing,     PicaToTwips,
-    TwipsToCM,  TwipsToMM,  TwipsToInch, TwipsToPoint,TwipsToPica, Nothing
+    { Nothing,  CMToMM,     CMToInch,    CMToPoint,   CMToPica,    CMToTwips },
+    { MMToCM,       Nothing,    MMToInch,    MMToPoint,   MMToPica,    MMToTwips },
+    { InchToCM, InchToMM,   Nothing,     InchToPoint, InchToPica,  InchToTwips },
+    { PointToCM,    PointToMM,  PointToInch, Nothing,     PointToPica, PointToTwips },
+    { PicaToCM, PicaToMM,   PicaToInch,  PicaToPoint, Nothing,     PicaToTwips },
+    { TwipsToCM,    TwipsToMM,  TwipsToInch, TwipsToPoint,TwipsToPica, Nothing }
 };
 
 // -----------------------------------------------------------------------
