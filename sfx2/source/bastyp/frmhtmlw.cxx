@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmhtmlw.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:23:23 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:49:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #ifndef _INETDEF_HXX
 #include <svtools/inetdef.hxx>
 #endif
+#include "svtools/htmlkywd.hxx"
 
 //!(dv) #include <chaos2/cntapi.hxx>
 #ifndef GCC
@@ -65,8 +66,6 @@
 // -----------------------------------------------------------------------
 
 using namespace com::sun::star;
-
-extern sal_Char const sHTML_META_classification[];
 
 static sal_Char __READONLY_DATA sHTML_SC_yes[] =    "YES";
 static sal_Char __READONLY_DATA sHTML_SC_no[] =     "NO";
