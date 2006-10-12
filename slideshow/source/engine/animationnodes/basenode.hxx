@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basenode.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 15:05:48 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:59:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,6 +184,7 @@ private:
 
     bool isTransition( NodeState eFromState, NodeState eToState,
                        bool debugAssert = true ) const {
+        (void) debugAssert; // avoid warning
         bool const bRet =((mpStateTransitionTable[eFromState] & eToState) != 0);
         OSL_ENSURE( !debugAssert || bRet, "### state unreachable!" );
         return bRet;
