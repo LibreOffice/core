@@ -315,3 +315,333 @@
   #ifdef BOOST_MEM_FN_ENABLE_STDCALL
   
   #define BOOST_MEM_FN_NAME(X) X##_stdcall
+*** misc/build/boost-1.30.2/boost/function/function_base.hpp	Fri Jul 18 06:04:54 2003
+--- misc/modified/boost-1.30.2/boost/function/function_base.hpp	Thu Aug 10 11:17:30 2006
+***************
+*** 16,21 ****
+--- 16,26 ----
+  #ifndef BOOST_FUNCTION_BASE_HEADER
+  #define BOOST_FUNCTION_BASE_HEADER
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include <stdexcept>
+  #include <string>
+  #include <memory>
+***************
+*** 413,416 ****
+--- 418,425 ----
+  } // end namespace detail
+  } // end namespace boost
+  
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
++ 
+  #endif // BOOST_FUNCTION_BASE_HEADER
+*** misc/build/boost-1.30.2/boost/iterator_adaptors.hpp	Fri Dec 27 17:51:52 2002
+--- misc/modified/boost-1.30.2/boost/iterator_adaptors.hpp	Thu Aug 10 11:33:04 2006
+***************
+*** 119,124 ****
+--- 119,129 ----
+  #ifndef BOOST_ITERATOR_ADAPTOR_DWA053000_HPP_
+  # define BOOST_ITERATOR_ADAPTOR_DWA053000_HPP_
+  
++ # if defined _MSC_VER
++ # pragma warning(push)
++ # pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ # endif
++ 
+  # include <boost/iterator.hpp>
+  # include <boost/utility.hpp>
+  # include <boost/compressed_pair.hpp>
+***************
+*** 873,879 ****
+           return policies().dereference(*this);
+      }
+  
+! #if BOOST_WORKAROUND(BOOST_MSVC, > 0)
+  # pragma warning(push)
+  # pragma warning( disable : 4284 )
+  #endif
+--- 878,884 ----
+           return policies().dereference(*this);
+      }
+  
+! #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+  # pragma warning(push)
+  # pragma warning( disable : 4284 )
+  #endif
+***************
+*** 882,888 ****
+      operator->() const
+          { return detail::operator_arrow(*this, iterator_category()); }
+  
+! #if BOOST_WORKAROUND(BOOST_MSVC, > 0)
+  # pragma warning(pop)
+  #endif
+  
+--- 887,893 ----
+      operator->() const
+          { return detail::operator_arrow(*this, iterator_category()); }
+  
+! #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+  # pragma warning(pop)
+  #endif
+  
+***************
+*** 1430,1435 ****
+--- 1435,1443 ----
+  } // namespace boost
+  # undef BOOST_ARG_DEPENDENT_TYPENAME
+  
++ # if defined _MSC_VER
++ # pragma warning(pop)
++ # endif
+  
+  #endif
+  
+*** misc/build/boost-1.30.2/boost/mpl/aux_/ice_cast.hpp	Tue Feb  4 21:21:05 2003
+--- misc/modified/boost-1.30.2/boost/mpl/aux_/ice_cast.hpp	Thu Aug 10 11:17:20 2006
+***************
+*** 17,22 ****
+--- 17,27 ----
+  #ifndef BOOST_MPL_AUX_ICE_CAST_HPP_INCLUDED
+  #define BOOST_MPL_AUX_ICE_CAST_HPP_INCLUDED
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include "boost/mpl/aux_/config/workaround.hpp"
+  
+  #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561)) \
+***************
+*** 28,31 ****
+--- 33,40 ----
+  #   define BOOST_MPL_AUX_ICE_CAST(T, expr) static_cast<T>(expr)
+  #endif
+  
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
++ 
+  #endif // BOOST_MPL_AUX_ICE_CAST_HPP_INCLUDED
+*** misc/build/boost-1.30.2/boost/mpl/aux_/integral_wrapper.hpp	Thu Mar 13 13:13:32 2003
+--- misc/modified/boost-1.30.2/boost/mpl/aux_/integral_wrapper.hpp	Thu Aug 10 11:17:06 2006
+***************
+*** 17,22 ****
+--- 17,27 ----
+  
+  // no include guards, the header is intended for multiple inclusion!
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include "boost/mpl/aux_/ice_cast.hpp"
+  #include "boost/mpl/aux_/config/nttp.hpp"
+  #include "boost/mpl/aux_/config/static_constant.hpp"
+***************
+*** 84,86 ****
+--- 89,95 ----
+  #undef AUX_WRAPPER_PARAMS
+  #undef AUX_WRAPPER_INST
+  #undef AUX_WRAPPER_VALUE_TYPE
++ 
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
+*** misc/build/boost-1.30.2/boost/mpl/aux_/lambda_support.hpp	Sat Mar  8 08:10:07 2003
+--- misc/modified/boost-1.30.2/boost/mpl/aux_/lambda_support.hpp	Thu Aug 10 11:16:54 2006
+***************
+*** 17,22 ****
+--- 17,27 ----
+  #ifndef BOOST_MPL_AUX_LAMBDA_SUPPORT_HPP_INCLUDED
+  #define BOOST_MPL_AUX_LAMBDA_SUPPORT_HPP_INCLUDED
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include "boost/mpl/aux_/config/lambda.hpp"
+  
+  #if !defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT)
+***************
+*** 133,136 ****
+--- 138,145 ----
+  
+  #endif // BOOST_MPL_NO_FULL_LAMBDA_SUPPORT
+  
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
++ 
+  #endif // BOOST_MPL_AUX_LAMBDA_SUPPORT_HPP_INCLUDED
+*** misc/build/boost-1.30.2/boost/mpl/aux_/logical_op.hpp	Wed Feb 26 00:10:54 2003
+--- misc/modified/boost-1.30.2/boost/mpl/aux_/logical_op.hpp	Thu Aug 10 11:16:40 2006
+***************
+*** 17,22 ****
+--- 17,27 ----
+  
+  // no include guards, the header is intended for multiple inclusion!
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #if !defined(BOOST_MPL_PREPROCESSING_MODE)
+  #   include "boost/mpl/bool.hpp"
+  #   include "boost/mpl/aux_/nested_type_wknd.hpp"
+***************
+*** 167,169 ****
+--- 172,178 ----
+  #undef AUX_LOGICAL_OP_NAME
+  #undef AUX_LOGICAL_OP_VALUE1
+  #undef AUX_LOGICAL_OP_VALUE2
++ 
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
+*** misc/build/boost-1.30.2/boost/mpl/if.hpp	Thu Mar 13 13:13:29 2003
+--- misc/modified/boost-1.30.2/boost/mpl/if.hpp	Thu Aug 10 11:16:06 2006
+***************
+*** 17,22 ****
+--- 17,27 ----
+  //
+  // See http://www.boost.org/libs/mpl for documentation.
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include "boost/mpl/aux_/value_wknd.hpp"
+  #include "boost/mpl/aux_/ice_cast.hpp"
+  #include "boost/mpl/aux_/void_spec.hpp"
+***************
+*** 174,177 ****
+--- 179,186 ----
+  } // namespace mpl
+  } // namespace boost
+  
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
++ 
+  #endif // BOOST_MPL_IF_HPP_INCLUDED
+*** misc/build/boost-1.30.2/boost/mpl/integral_c.hpp	Thu Mar 13 13:13:29 2003
+--- misc/modified/boost-1.30.2/boost/mpl/integral_c.hpp	Thu Aug 10 11:15:52 2006
+***************
+*** 18,23 ****
+--- 18,28 ----
+  //
+  // See http://www.boost.org/libs/mpl for documentation.
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include "boost/mpl/integral_c_fwd.hpp"
+  #include "boost/mpl/aux_/ice_cast.hpp"
+  #include "boost/mpl/aux_/config/ctps.hpp"
+***************
+*** 50,53 ****
+--- 55,62 ----
+  }}
+  #endif
+  
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
++ 
+  #endif // BOOST_MPL_INTEGRAL_C_HPP_INCLUDED
+*** misc/build/boost-1.30.2/boost/mpl/integral_c_fwd.hpp	Thu Mar 13 13:13:30 2003
+--- misc/modified/boost-1.30.2/boost/mpl/integral_c_fwd.hpp	Thu Aug 10 11:15:36 2006
+***************
+*** 18,23 ****
+--- 18,28 ----
+  //
+  // See http://www.boost.org/libs/mpl for documentation.
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include "boost/mpl/aux_/config/workaround.hpp"
+  
+  namespace boost { namespace mpl {
+***************
+*** 29,32 ****
+--- 34,41 ----
+  #endif
+  }}
+  
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
++ 
+  #endif // BOOST_MPL_INTEGRAL_C_FWD_HPP_INCLUDED
+*** misc/build/boost-1.30.2/boost/mpl/is_sequence.hpp	Wed Feb 26 00:10:43 2003
+--- misc/modified/boost-1.30.2/boost/mpl/is_sequence.hpp	Thu Aug 10 11:15:14 2006
+***************
+*** 17,22 ****
+--- 17,27 ----
+  #ifndef BOOST_MPL_IS_SEQUENCE_HPP_INCLUDED
+  #define BOOST_MPL_IS_SEQUENCE_HPP_INCLUDED
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include "boost/mpl/not.hpp"
+  #include "boost/mpl/or.hpp"
+  #include "boost/mpl/begin_end.hpp"
+***************
+*** 98,101 ****
+--- 103,110 ----
+  
+  }} // namespace boost::mpl
+  
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
++ 
+  #endif // BOOST_MPL_IS_SEQUENCE_HPP_INCLUDED
+*** misc/build/boost-1.30.2/boost/mpl/sequence_tag.hpp	Mon Feb 24 01:50:53 2003
+--- misc/modified/boost-1.30.2/boost/mpl/sequence_tag.hpp	Thu Aug 10 11:14:58 2006
+***************
+*** 17,22 ****
+--- 17,27 ----
+  #ifndef BOOST_MPL_SEQUENCE_TAG_HPP_INCLUDED
+  #define BOOST_MPL_SEQUENCE_TAG_HPP_INCLUDED
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include "boost/mpl/sequence_tag_fwd.hpp"
+  #include "boost/mpl/aux_/has_tag.hpp"
+  #include "boost/mpl/aux_/has_begin.hpp"
+***************
+*** 130,133 ****
+--- 135,142 ----
+  
+  }} // namespace boost::mpl
+  
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
++ 
+  #endif // BOOST_MPL_SEQUENCE_TAG_HPP_INCLUDED
