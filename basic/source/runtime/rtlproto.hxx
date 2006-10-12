@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtlproto.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:40:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:30:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,10 +34,9 @@
  ************************************************************************/
 
 #include "sbstar.hxx"
-#include "macfix.hxx"
 
 #define RTLFUNC( name ) void SbRtl_##name( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
-#define RTLNAME( name ) MEMBER(SbRtl_##name)
+#define RTLNAME( name ) &SbRtl_##name
 
 typedef void( *RtlCall ) ( StarBASIC* p, SbxArray& rArgs, BOOL bWrite );
 
