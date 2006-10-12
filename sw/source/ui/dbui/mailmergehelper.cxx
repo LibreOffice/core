@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergehelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:45:01 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:08:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
@@ -113,7 +114,7 @@ String  CallSaveAsDialog(String& rFilter)
 {
     ErrCode nRet;
     String sFactory(String::CreateFromAscii(SwDocShell::Factory().GetShortName()));
-    ::sfx2::FileDialogHelper aDialog( sfx2::FILESAVE_AUTOEXTENSION,
+    ::sfx2::FileDialogHelper aDialog( com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                 0,
                 sFactory );
     String& rLastSaveDir = (String&)SFX_APP()->GetLastSaveDirectory();
