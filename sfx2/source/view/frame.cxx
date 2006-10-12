@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:48:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:58:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1487,7 +1487,7 @@ sal_Bool SfxFrame::LoadSfxComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & /*aFrame*/,
     const ::rtl::OUString& /*aURL*/,
     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& /*aArgs*/,
-    const SfxObjectFactory */*pFact*/ )
+    const SfxObjectFactory* /*pFact*/ )
 {
     // get Implementation of xComponents ...
     DBG_ERROR( "Should not be called anymore!" );
