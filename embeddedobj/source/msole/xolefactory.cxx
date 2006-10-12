@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xolefactory.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:46:03 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:24:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,12 +103,12 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
-                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( !sEntName.getLength() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "Empty element name is provided!\n" ),
-                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
     uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
@@ -158,12 +158,12 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
-                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( !sEntName.getLength() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "Empty element name is provided!\n" ),
-                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
     uno::Reference< uno::XInterface > xResult(
@@ -200,12 +200,12 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
-                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             3 );
 
     if ( !sEntName.getLength() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "Empty element name is provided!\n" ),
-                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             4 );
 
     uno::Reference< uno::XInterface > xResult(
@@ -242,13 +242,13 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >(
-                                                reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                                static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( !sEntName.getLength() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "Empty element name is provided!\n" ),
                                             uno::Reference< uno::XInterface >(
-                                                reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                                static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
     uno::Reference< uno::XInterface > xResult(
@@ -288,12 +288,12 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     // the initialization is completelly controlled by user
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
-                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( !sEntName.getLength() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "Empty element name is provided!\n" ),
-                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
     uno::Reference< uno::XInterface > xResult(
