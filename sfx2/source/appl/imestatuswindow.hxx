@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imestatuswindow.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:41:07 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:47:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,11 +101,8 @@ public:
      */
     bool canToggle() const;
 
-    // At least the Solaris "CC: Forte Developer 7 C++ 5.4 2002/03/09" compiler
-    // does not accept the following using-declarations for virtual functions,
-    // so use (deprecated) access declarations instead:
-    /*using*/ ImeStatusWindow_Impl::acquire;
-    /*using*/ ImeStatusWindow_Impl::release;
+    using ImeStatusWindow_Impl::acquire;
+    using ImeStatusWindow_Impl::release;
     using ImeStatusWindow_Impl::operator new;
     using ImeStatusWindow_Impl::operator delete;
 
