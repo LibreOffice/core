@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sendreportw32.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:38:18 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:26:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,15 +39,14 @@
 #define UNICODE
 #define _UNICODE
 
-#include "docrecovery.hxx"
 #include <tools/svwin.h>
 
 #define WIN32_LEAN_AND_MEAN
 #include <tchar.h>
 #include <stdio.h>
-
 #include <systools/win32/uwinapi.h>
 
+#include "docrecovery.hxx"
 
 //***************************************************************************
 
@@ -129,7 +128,7 @@ namespace svx{
                 TEXT("AllowContact"),
                 &fAllowContact,
                 sizeof(fAllowContact) );
-            maContactCB.Check( fAllowContact );
+            maContactCB.Check( (BOOL)fAllowContact );
 
             DWORD   uInternetConnection = 0;
             RegReadValue(
@@ -213,7 +212,6 @@ namespace svx{
             SetEnvironmentVariable( TEXT("ERRORREPORT_SUBJECT"), GetDocType().GetBuffer() );
             SetEnvironmentVariable( TEXT("ERRORREPORT_BODYFILE"), szFileName );
 
-            BOOL    fSuccess = FALSE;
             _TCHAR  szBuffer[1024];
             TCHAR   szPath[MAX_PATH];
             LPTSTR  lpFilePart;
