@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmdpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:06:23 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:45:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::form::XFormsSupplier2;
 
-DBG_NAME(SvxFmDrawPage);
+DBG_NAME(SvxFmDrawPage)
 SvxFmDrawPage::SvxFmDrawPage( SdrPage* pInPage ) :
     SvxDrawPage( pInPage )
 {
