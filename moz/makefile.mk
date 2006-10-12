@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2006-06-02 12:51:17 $
+#   last change: $Author: obo $ $Date: 2006-10-12 15:26:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,7 @@ $(MISC)$/build$/wintools.unpack : $(PRJ)$/download$/$(WINTOOLS_ZIPFILE_NAME)
     +-$(RENAME) $(MOZTOOLSUNPACK) $(MOZTOOLSUNPACK)_removeme
     +-$(RENAME) $(MOZTOOLSINST) $(MOZTOOLSINST)_removeme
     +-rm -rf $(MOZTOOLSUNPACK)_removeme $(MOZTOOLSINST)_removeme
-    @+-$(MKDIR) $(MOZTOOLSUNPACK)
+    @+-$(MKDIRHIER) $(MOZTOOLSUNPACK)
     unzip $(PRJ)$/download$/$(WINTOOLS_ZIPFILE_NAME) -d $(MOZTOOLSUNPACK)
     +$(TOUCH) $(MISC)$/build$/wintools.unpack
 
