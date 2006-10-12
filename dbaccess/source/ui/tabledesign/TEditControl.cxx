@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:43:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:43:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1306,8 +1306,9 @@ sal_uInt32 OTableEditorCtrl::GetTotalCellWidth(long nRow, sal_uInt16 nColId)
 OFieldDescription* OTableEditorCtrl::GetFieldDescr( long nRow )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    sal_uInt16 nListCount(m_pRowList->size());
-    if( (nRow<0) || (nRow>=nListCount) )
+    std::vector< ::boost::shared_ptr<OTableRow> >::size_type nListCount(
+        m_pRowList->size());
+    if( (nRow<0) || (sal::static_int_cast< unsigned long >(nRow)>=nListCount) )
     {
         OSL_ENSURE(0,"(nRow<0) || (nRow>=nListCount)");
         return NULL;
@@ -1578,7 +1579,9 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
             {
                 if  ( 1 == GetSelectColumnCount() )
                 {
-                    sal_uInt16 nSelId = GetColumnId( FirstSelectedColumn() );
+                    sal_uInt16 nSelId = GetColumnId(
+                        sal::static_int_cast< USHORT >(
+                            FirstSelectedColumn() ) );
                     ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, sal_False ) );
 
                     aMenuPos = aColRect.TopCenter();
