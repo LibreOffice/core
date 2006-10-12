@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colorcfg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:21:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:07:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -461,7 +461,8 @@ void ColorConfig_Impl::UnlockBroadcast()
 {
     if ( m_bBroadcastWhenUnlocked )
     {
-        if ( (m_bBroadcastWhenUnlocked = ColorConfig::m_pImpl != NULL) )
+        m_bBroadcastWhenUnlocked = ColorConfig::m_pImpl != NULL;
+        if ( m_bBroadcastWhenUnlocked )
         {
             ColorConfig::m_pImpl->ImplUpdateApplicationSettings();
             if ( ColorConfig::m_pImpl->IsEnableBroadcast() )
