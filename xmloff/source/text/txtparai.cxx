@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:19:00 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:55:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1673,7 +1673,8 @@ XMLParaContext::XMLParaContext(
             break;
         case XML_TOK_TEXT_P_START_VALUE:
             {
-                nStartValue = rValue.toInt32();
+                nStartValue = sal::static_int_cast< sal_Int16 >(
+                    rValue.toInt32());
             }
             break;
         }
