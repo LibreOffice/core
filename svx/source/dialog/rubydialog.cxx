@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:36:42 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:25:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -521,10 +521,10 @@ void SvxRubyDialog::Update()
         const PropertyValue* pProps = rProps.getConstArray();
         for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
         {
-            sal_Int16 nTmp;
             if(nAdjust > -2 &&
                 pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cRubyAdjust)))
             {
+                sal_Int16 nTmp = sal_Int16();
                 pProps[nProp].Value >>= nTmp;
                 if(!nRuby)
                     nAdjust = nTmp;
