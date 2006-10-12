@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:01:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:42:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1352,7 +1352,7 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
         if (!::comphelper::hasProperty(FM_PROP_CLASSID, xCurrentColumn))
             continue;
 
-        sal_Int16 nClassId;
+        sal_Int16 nClassId = sal_Int16();
         xCurrentColumn->getPropertyValue(FM_PROP_CLASSID) >>= nClassId;
         if (nClassId>LAST_KNOWN_TYPE)
             continue;
