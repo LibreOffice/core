@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFontWork.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:06:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:02:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,14 +186,14 @@ sal_Bool InitializeFontWorkData( const SdrObject* pCustomShape, const sal_uInt16
         if ( pParaObj )
         {
             const EditTextObject& rTextObj = pParaObj->GetTextObject();
-            sal_Int16 nParagraphsLeft = rTextObj.GetParagraphCount();
+            sal_Int32 nParagraphsLeft = rTextObj.GetParagraphCount();
 
             rFWData.nMaxParagraphsPerTextArea = ( ( nParagraphsLeft - 1 ) / nTextAreaCount ) + 1;
             sal_Int16 j = 0;
             while( nParagraphsLeft && nTextAreaCount )
             {
                 FWTextArea aTextArea;
-                sal_Int16 i, nParagraphs = ( ( nParagraphsLeft - 1 ) / nTextAreaCount ) + 1;
+                sal_Int32 i, nParagraphs = ( ( nParagraphsLeft - 1 ) / nTextAreaCount ) + 1;
                 for ( i = 0; i < nParagraphs; i++, j++ )
                 {
                     FWParagraphData aParagraphData;
@@ -672,7 +672,7 @@ void CalcDistances( const Polygon& rPoly, std::vector< double >& rDistances )
 void InsertMissingOutlinePoints( const Polygon& /*rOutlinePoly*/, const std::vector< double >& rDistances, const Rectangle& rTextAreaBoundRect, Polygon& rPoly )
 {
     sal_uInt16 i = 0;
-    double fLastDistance;
+    double fLastDistance = 0.0;
     for ( i = 0; i < rPoly.GetSize(); i++ )
     {
         Point& rPoint = rPoly[ i ];
@@ -719,7 +719,7 @@ void GetPoint( const Polygon& rPoly, const std::vector< double >& rDistances, co
     if ( rPoly.GetSize() )
     {
         std::vector< double >::const_iterator aIter = std::lower_bound( rDistances.begin(), rDistances.end(), fX );
-        sal_uInt16 nIdx = std::distance( rDistances.begin(), aIter );
+        sal_uInt16 nIdx = sal::static_int_cast<sal_uInt16>( std::distance( rDistances.begin(), aIter ) );
         if ( aIter == rDistances.end() )
             nIdx--;
         const Point& rPt = rPoly[ nIdx ];
@@ -727,7 +727,7 @@ void GetPoint( const Polygon& rPoly, const std::vector< double >& rDistances, co
         fy1 = rPt.Y();
         if ( nIdx && ( aIter != rDistances.end() ) && ( *aIter != fX ) )
         {
-            nIdx = std::distance( rDistances.begin(), aIter );
+            nIdx = sal::static_int_cast<sal_uInt16>( std::distance( rDistances.begin(), aIter ) );
             double fDist0 = *( aIter - 1 );
             double fd = ( 1.0 / ( *aIter - fDist0 ) ) * ( fX - fDist0 );
             const Point& rPt2 = rPoly[ nIdx - 1 ];
