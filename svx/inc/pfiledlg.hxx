@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pfiledlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:17:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:47:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ public:
     ErrCode                  Execute();
     String                   GetPath() const;
 
-    static BOOL IsAvailable (USHORT nKind);
+    static bool IsAvailable (USHORT nKind);
 
     // setting HelpId and/or context of FileDialogHelper
     void                    SetDialogHelpId( const sal_Int32 nHelpId );
