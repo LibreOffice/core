@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:30:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:01:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,12 +59,12 @@
 #include <eeitem.hxx>
 #include <editstat.hxx>
 
-DBG_NAMEEX(Outliner);
+DBG_NAMEEX(Outliner)
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 
-// =====================================================================
+// =====================================================================
 // ======================   Einfache Durchreicher =======================
 // ======================================================================
 
