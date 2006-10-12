@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:59:35 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:15:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1099,7 +1099,7 @@ sdr::contact::ViewContact& SdrPage::GetViewContact() const
 
 TYPEINIT1(SdrPage,SdrObjList);
 
-SdrPage::SdrPage(SdrModel& rNewModel, FASTBOOL bMasterPage)
+SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
 :   SdrObjList(&rNewModel, this),
     mpViewContact(0L),
     nWdt(10L),
