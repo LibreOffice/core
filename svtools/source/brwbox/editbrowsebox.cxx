@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:19:21 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:06:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -671,7 +671,9 @@ namespace svt
             if ( GetSelectColumnCount( ) )
             {
                 while ( GetSelectColumnCount( ) )
-                    SelectColumnPos( FirstSelectedColumn(), sal_False );
+                    SelectColumnPos(
+                        sal::static_int_cast< USHORT >(FirstSelectedColumn()),
+                        sal_False );
                 Select();
             }
         }
@@ -1221,10 +1223,11 @@ namespace svt
 
         DBG_ASSERT(nId, "EditBrowseBox::AppendColumn: invalid id!");
 
-        if (!nWidth)
-            nWidth = GetDefaultColumnWidth(rName);
+        long w = nWidth;
+        if (!w)
+            w = GetDefaultColumnWidth(rName);
 
-        InsertDataColumn(nId, rName, nWidth, (HIB_CENTER | HIB_VCENTER | HIB_CLICKABLE), nPos);
+        InsertDataColumn(nId, rName, w, (HIB_CENTER | HIB_VCENTER | HIB_CLICKABLE), nPos);
         return nId;
     }
 
