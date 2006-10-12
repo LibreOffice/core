@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sessionlistener.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:12:01 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:42:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,9 +157,6 @@ SessionListener::SessionListener(const css::uno::Reference< css::lang::XMultiSer
         : ThreadHelpBase      (&Application::GetSolarMutex())
         , OWeakObject         (                             )
         , m_xSMGR             (xSMGR                        )
-        , _pcInteract( NULL )
-        , _pcCancelShutdown( NULL )
-        , m_cRestoreDone(osl_createCondition())
         , m_bRestored( false )
 {
 }
@@ -204,11 +201,6 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
     {
         m_rSessionManager->addSessionManagerListener(this);
     }
-    // configuration provider
-    m_cfgProv = Reference< XMultiServiceFactory > (
-            m_xSMGR->createInstance(OUString::createFromAscii(
-            "com.sun.star.configuration.ConfigurationProvider")),
-            UNO_QUERY_THROW);
 }
 
 void SAL_CALL SessionListener::statusChanged(const FeatureStateEvent& event)
@@ -237,7 +229,6 @@ sal_Bool SAL_CALL SessionListener::doRestore()
 {
     ResetableGuard aGuard(m_aLock);
     m_bRestored = sal_False;
-    osl_resetCondition(m_cRestoreDone);
     try {
         Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
 
@@ -300,56 +291,10 @@ void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool /*bCancelabl
 
 void SAL_CALL SessionListener::approveInteraction( sal_Bool /*bInteractionGranted*/ )
     throw (RuntimeException)
-{
-    if (_pcInteract != NULL)
-        osl_setCondition(*_pcInteract);
-}
+{}
 
 void SessionListener::shutdownCanceled()
     throw (RuntimeException)
-{
-    if (_pcCancelShutdown != NULL)
-        osl_setCondition(*_pcCancelShutdown);
-}
-
-
-
-void SessionListener::_doInteraction(
-        const OUString& /*title*/, const OUString& /*url*/, sal_Bool /*bCanceable*/, sal_Bool* /*save*/, sal_Bool* /*cancel*/)
-{
-}
-
-sal_Bool SessionListener::_cancelShutdown()
-{
-    oslCondition c = osl_createCondition();
-    _pcCancelShutdown = &c;
-    TimeValue t;
-    t.Seconds = 5;
-    t.Nanosec = 0;
-    m_rSessionManager->cancelShutdown();
-    sal_Bool b = osl_waitCondition(c, &t);
-    _pcCancelShutdown = NULL;
-    osl_destroyCondition(c);
-    return b;
-}
-
-sal_Bool SessionListener::_requestInteraction()
-{
-    oslCondition c = osl_createCondition();
-    _pcInteract = &c;
-    TimeValue t;
-    t.Seconds = 5;
-    t.Nanosec = 0;
-    m_rSessionManager->queryInteraction(Reference<XSessionManagerListener>(this));
-    sal_Bool b = osl_waitCondition(c, &t);
-    _pcInteract = NULL;
-    osl_destroyCondition(c);
-    return b;
-}
-
-void SessionListener::_finishInteraction()
-{
-    m_rSessionManager->interactionDone(Reference< XSessionManagerListener >(this));
-}
+{}
 
 }
