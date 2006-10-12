@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customcontrol.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:55:11 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:51:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ CCustomControl::~CCustomControl()
 //
 //-----------------------------------
 
-void SAL_CALL CCustomControl::AddControl(CCustomControl* aCustomControl)
+void SAL_CALL CCustomControl::AddControl(CCustomControl*)
 {
     // will be implemented by custom control containers
 }
@@ -61,7 +61,7 @@ void SAL_CALL CCustomControl::AddControl(CCustomControl* aCustomControl)
 //
 //-----------------------------------
 
-void SAL_CALL CCustomControl::RemoveControl(CCustomControl* aCustomControl)
+void SAL_CALL CCustomControl::RemoveControl(CCustomControl*)
 {
     // will be implemented by custom control containers
 }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlcommand.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:54:57 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:50:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ CControlCommand::~CControlCommand( )
 //
 //---------------------------------------------
 
-CControlCommandResult* SAL_CALL CControlCommand::handleRequest( CControlCommandRequest* aRequest )
+CControlCommandResult* SAL_CALL CControlCommand::handleRequest( CControlCommandRequest* )
 {
     return new CControlCommandResult( );
 }
@@ -157,13 +157,17 @@ CControlCommandResult* SAL_CALL CValueControlCommand::handleRequest( CControlCom
     {
         result = new CValueCommandResult( sal_True, m_aValue );
     }
-    else if ( (nextCommand = getNextCommand( )) )
-    {
-        result = nextCommand->handleRequest( aRequest );
-    }
     else
     {
-        result = new CControlCommandResult( );
+        nextCommand = getNextCommand( );
+        if ( nextCommand )
+        {
+            result = nextCommand->handleRequest( aRequest );
+        }
+        else
+        {
+            result = new CControlCommandResult( );
+        }
     }
 
     return result;
@@ -230,13 +234,17 @@ CControlCommandResult* SAL_CALL CLabelControlCommand::handleRequest( CControlCom
     {
         result = new CLabelCommandResult( sal_True, m_aLabel );
     }
-    else if ( (nextCommand = getNextCommand( )) )
-    {
-        result = nextCommand->handleRequest( aRequest );
-    }
     else
     {
-        result = new CControlCommandResult( );
+        nextCommand = getNextCommand( );
+        if ( nextCommand )
+        {
+            result = nextCommand->handleRequest( aRequest );
+        }
+        else
+        {
+            result = new CControlCommandResult( );
+        }
     }
 
     return result;
