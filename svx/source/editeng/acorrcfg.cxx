@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acorrcfg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:47:55 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:34:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,11 +70,11 @@ static SvxAutoCorrCfg* pAutoCorrCfg = 0;
 SvxAutoCorrCfg::SvxAutoCorrCfg() :
     aBaseConfig(*this),
     aSwConfig(*this),
-    bAutoFmtByInput(TRUE),
-    bAutoTextPreview(FALSE),
     bFileRel(TRUE),
     bNetRel(TRUE),
-    bAutoTextTip(TRUE)
+    bAutoTextTip(TRUE),
+    bAutoTextPreview(FALSE),
+    bAutoFmtByInput(TRUE)
 {
     SvtPathOptions aPathOpt;
     String sSharePath, sUserPath, sAutoPath( aPathOpt.GetAutoCorrectPath() );
@@ -219,11 +219,13 @@ void SvxBaseAutoCorrCfg::Load(sal_Bool bInit)
                     break;//"ReplaceSingleQuote",
                     case 12:
                         pValues[nProp] >>= nTemp;
-                        rParent.pAutoCorrect->SetStartSingleQuote( nTemp );
+                        rParent.pAutoCorrect->SetStartSingleQuote(
+                            sal::static_int_cast< sal_Unicode >( nTemp ) );
                     break;//"SingleQuoteAtStart",
                     case 13:
                         pValues[nProp] >>= nTemp;
-                        rParent.pAutoCorrect->SetEndSingleQuote( nTemp );
+                        rParent.pAutoCorrect->SetEndSingleQuote(
+                            sal::static_int_cast< sal_Unicode >( nTemp ) );
                     break;//"SingleQuoteAtEnd",
                     case 14:
                         if(*(sal_Bool*)pValues[nProp].getValue())
@@ -231,11 +233,13 @@ void SvxBaseAutoCorrCfg::Load(sal_Bool bInit)
                     break;//"ReplaceDoubleQuote",
                     case 15:
                         pValues[nProp] >>= nTemp;
-                        rParent.pAutoCorrect->SetStartDoubleQuote( nTemp );
+                        rParent.pAutoCorrect->SetStartDoubleQuote(
+                            sal::static_int_cast< sal_Unicode >( nTemp ) );
                     break;//"DoubleQuoteAtStart",
                     case 16:
                         pValues[nProp] >>= nTemp;
-                        rParent.pAutoCorrect->SetEndDoubleQuote( nTemp );
+                        rParent.pAutoCorrect->SetEndDoubleQuote(
+                            sal::static_int_cast< sal_Unicode >( nTemp ) );
                     break;//"DoubleQuoteAtEnd"
                 }
             }
@@ -265,9 +269,8 @@ SvxBaseAutoCorrCfg::~SvxBaseAutoCorrCfg()
   -----------------------------------------------------------------------*/
 void SvxBaseAutoCorrCfg::Commit()
 {
-    Sequence<OUString> aNames = GetPropertyNames();
+    Sequence<OUString> aNames( GetPropertyNames() );
 
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
@@ -349,7 +352,7 @@ void SvxBaseAutoCorrCfg::Commit()
 /*-- 12.10.00 11:44:21---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SvxBaseAutoCorrCfg::Notify( const Sequence<OUString>& aPropertyNames)
+void SvxBaseAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */)
 {
     Load(sal_False);
 }
@@ -454,7 +457,8 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     case  15:
                     {
                         sal_Int32 nVal; pValues[nProp] >>= nVal;
-                        rSwFlags.cBullet = nVal;
+                        rSwFlags.cBullet =
+                            sal::static_int_cast< sal_Unicode >(nVal);
                     }
                     break; // "Format/Option/ChangeToBullets/SpecialCharacter/Char",
                     case  16:
@@ -486,7 +490,8 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     case  22:
                     {
                         sal_Int32 nVal; pValues[nProp] >>= nVal;
-                        rSwFlags.nRightMargin = nVal;
+                        rSwFlags.nRightMargin =
+                            sal::static_int_cast< BYTE >(nVal);
                     }
                     break; // "Format/Option/CombineValue",
                     case  23: rSwFlags.bAFmtDelSpacesAtSttEnd =  *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/DelSpacesAtStartEnd",
@@ -503,13 +508,15 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     case  34:
                     {
                         sal_Int32 nVal; pValues[nProp] >>= nVal;
-                        rSwFlags.nAutoCmpltWordLen = nVal;
+                        rSwFlags.nAutoCmpltWordLen =
+                            sal::static_int_cast< USHORT >(nVal);
                     }
                     break; // "Completion/MinWordLen",
                     case  35:
                     {
                         sal_Int32 nVal; pValues[nProp] >>= nVal;
-                        rSwFlags.nAutoCmpltListLen = nVal;
+                        rSwFlags.nAutoCmpltListLen =
+                            sal::static_int_cast< USHORT >(nVal);
                     }
                     break; // "Completion/MaxListLen",
                     case  36: rSwFlags.bAutoCmpltCollectWords = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/CollectWords",
@@ -519,14 +526,16 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     case  40:
                     {
                         sal_Int32 nVal; pValues[nProp] >>= nVal;
-                        rSwFlags.nAutoCmpltExpandKey = nVal;
+                        rSwFlags.nAutoCmpltExpandKey =
+                            sal::static_int_cast< USHORT >(nVal);
                     }
                     break; // "Completion/AcceptKey"
                     case 41 :rSwFlags.bAutoCmpltKeepList = *(sal_Bool*)pValues[nProp].getValue(); break;//"Completion/KeepList"
                     case 42 :
                     {
                         sal_Int32 nVal; pValues[nProp] >>= nVal;
-                        rSwFlags.cByInputBullet = nVal;
+                        rSwFlags.cByInputBullet =
+                            sal::static_int_cast< sal_Unicode >(nVal);
                     }
                     break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/Char",
                     case 43 :
@@ -579,7 +588,6 @@ void SvxSwAutoCorrCfg::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
 
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
@@ -675,7 +683,7 @@ void SvxSwAutoCorrCfg::Commit()
 /*-- 12.10.00 11:51:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SvxSwAutoCorrCfg::Notify( const Sequence<OUString>& aPropertyNames)
+void SvxSwAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */ )
 {
     Load(sal_False);
 }
