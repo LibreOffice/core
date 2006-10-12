@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sjapplet.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:38:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:35:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,8 @@ void SjApplet2::Init(Window * pParentWin, const INetURLObject & rDocBase, const 
 #if OSL_DEBUG_LEVEL > 1
         OString message = OUStringToOString(runtimeException.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE("sjapplet.cxx: SjApplet2::Init - exception occurred: %s\n", message.getStr());
+#else
+        (void) runtimeException; // avoid warning
 #endif
 
         delete _pImpl;
