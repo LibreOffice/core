@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:24:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:56:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,7 +286,7 @@ SvxFontListItem::SvxFontListItem( const FontList* pFontLst,
         sal_Int32 nCount = pFontList->GetFontNameCount();
         aFontNameSeq.realloc( nCount );
 
-        for ( int i = 0; i < nCount; i++ )
+        for ( USHORT i = 0; i < nCount; i++ )
             aFontNameSeq[i] = pFontList->GetFontName(i).GetName();
     }
 }
@@ -330,7 +330,7 @@ SfxItemPresentation SvxFontListItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
     rText.Erase();
@@ -432,7 +432,7 @@ sal_Bool SvxFontItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
         break;
         case MID_FONT_FAMILY :
         {
-            sal_Int16 nFamily;
+            sal_Int16 nFamily = sal_Int16();
             if(!(rVal >>= nFamily))
                 return sal_False;
             eFamily = (FontFamily)nFamily;
@@ -440,7 +440,7 @@ sal_Bool SvxFontItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
         break;
         case MID_FONT_CHAR_SET  :
         {
-            sal_Int16 nSet;
+            sal_Int16 nSet = sal_Int16();
             if(!(rVal >>= nSet))
                 return sal_False;
             eTextEncoding = (rtl_TextEncoding)nSet;
@@ -448,7 +448,7 @@ sal_Bool SvxFontItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
         break;
         case MID_FONT_PITCH     :
         {
-            sal_Int16 nPitch;
+            sal_Int16 nPitch = sal_Int16();
             if(!(rVal >>= nPitch))
                 return sal_False;
             ePitch =  (FontPitch)nPitch;
@@ -570,7 +570,7 @@ SfxItemPresentation SvxFontItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
     switch ( ePres )
@@ -590,7 +590,7 @@ SfxItemPresentation SvxFontItem::GetPresentation
 // class SvxPostureItem --------------------------------------------------
 
 SvxPostureItem::SvxPostureItem( const FontItalic ePosture, const USHORT nId ) :
-    SfxEnumItem( nId, ePosture )
+    SfxEnumItem( nId, (USHORT)ePosture )
 {
 }
 
@@ -632,7 +632,7 @@ SfxItemPresentation SvxPostureItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
     switch ( ePres )
@@ -737,13 +737,13 @@ sal_Bool SvxPostureItem::GetBoolValue() const
 
 void SvxPostureItem::SetBoolValue( sal_Bool bVal )
 {
-    SetValue( bVal ? ITALIC_NORMAL : ITALIC_NONE );
+    SetValue( (USHORT)(bVal ? ITALIC_NORMAL : ITALIC_NONE) );
 }
 
 // class SvxWeightItem ---------------------------------------------------
 
 SvxWeightItem::SvxWeightItem( const FontWeight eWght, const USHORT nId ) :
-    SfxEnumItem( nId, eWght )
+    SfxEnumItem( nId, (USHORT)eWght )
 {
 }
 
@@ -767,7 +767,7 @@ sal_Bool SvxWeightItem::GetBoolValue() const
 
 void SvxWeightItem::SetBoolValue( sal_Bool bVal )
 {
-    SetValue( bVal ? WEIGHT_BOLD : WEIGHT_NORMAL );
+    SetValue( (USHORT)(bVal ? WEIGHT_BOLD : WEIGHT_NORMAL) );
 }
 
 // -----------------------------------------------------------------------
@@ -808,7 +808,7 @@ SfxItemPresentation SvxWeightItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
     switch ( ePres )
@@ -875,7 +875,7 @@ sal_Bool SvxWeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                     return sal_False;
                 fValue = (float)nValue;
             }
-            SetValue( VCLUnoHelper::ConvertFontWeight((float)fValue) );
+            SetValue( (USHORT)VCLUnoHelper::ConvertFontWeight((float)fValue) );
         }
         break;
     }
@@ -1146,7 +1146,7 @@ sal_Bool SvxFontHeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_FONTHEIGHT_PROP:
         {
-            sal_Int16 nNew;
+            sal_Int16 nNew = sal_Int16();
             if(!(rVal >>= nNew))
                 return sal_True;
 
@@ -1375,7 +1375,7 @@ sal_Bool SvxFontWidthItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Int16 nVal;
+    sal_Int16 nVal = sal_Int16();
     if(!(rVal >>= nVal))
         return sal_False;
 
@@ -1429,7 +1429,7 @@ SfxItemPresentation SvxFontWidthItem::GetPresentation
 // class SvxUnderlineItem ------------------------------------------------
 
 SvxUnderlineItem::SvxUnderlineItem( const FontUnderline eSt, const USHORT nId )
-    : SfxEnumItem( nId, eSt ), mColor( COL_TRANSPARENT )
+    : SfxEnumItem( nId, (USHORT)eSt ), mColor( COL_TRANSPARENT )
 {
 }
 
@@ -1451,7 +1451,7 @@ sal_Bool SvxUnderlineItem::GetBoolValue() const
 
 void SvxUnderlineItem::SetBoolValue( sal_Bool bVal )
 {
-    SetValue( bVal ? UNDERLINE_SINGLE : UNDERLINE_NONE );
+    SetValue( (USHORT)(bVal ? UNDERLINE_SINGLE : UNDERLINE_NONE) );
 }
 
 // -----------------------------------------------------------------------
@@ -1494,7 +1494,7 @@ SfxItemPresentation SvxUnderlineItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
 #ifndef SVX_LIGHT
@@ -1602,7 +1602,7 @@ int SvxUnderlineItem::operator==( const SfxPoolItem& rItem ) const
 // class SvxCrossedOutItem -----------------------------------------------
 
 SvxCrossedOutItem::SvxCrossedOutItem( const FontStrikeout eSt, const USHORT nId )
-    : SfxEnumItem( nId, eSt )
+    : SfxEnumItem( nId, (USHORT)eSt )
 {
 }
 
@@ -1624,7 +1624,7 @@ sal_Bool SvxCrossedOutItem::GetBoolValue() const
 
 void SvxCrossedOutItem::SetBoolValue( sal_Bool bVal )
 {
-    SetValue( bVal ? STRIKEOUT_SINGLE : STRIKEOUT_NONE );
+    SetValue( (USHORT)(bVal ? STRIKEOUT_SINGLE : STRIKEOUT_NONE) );
 }
 
 // -----------------------------------------------------------------------
@@ -1665,7 +1665,7 @@ SfxItemPresentation SvxCrossedOutItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
     switch ( ePres )
@@ -1769,7 +1769,7 @@ SfxItemPresentation SvxShadowedItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
     switch ( ePres )
@@ -1830,7 +1830,7 @@ SfxItemPresentation SvxAutoKernItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
     switch ( ePres )
@@ -1892,7 +1892,7 @@ SfxItemPresentation SvxWordLineModeItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
     switch ( ePres )
@@ -1953,7 +1953,7 @@ SfxItemPresentation SvxContourItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
     switch ( ePres )
@@ -2014,7 +2014,7 @@ SfxItemPresentation SvxPropSizeItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
     rText.Erase();
@@ -2133,7 +2133,7 @@ SfxItemPresentation SvxColorItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
 #ifndef SVX_LIGHT
@@ -2215,7 +2215,7 @@ SfxItemPresentation SvxCharSetColorItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
     rText.Erase();
@@ -2323,7 +2323,7 @@ sal_Bool SvxKerningItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 // -----------------------------------------------------------------------
 sal_Bool SvxKerningItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
 {
-    sal_Int16 nVal;
+    sal_Int16 nVal = sal_Int16();
     if(!(rVal >>= nVal))
         return sal_False;
     if(nMemberId & CONVERT_TWIPS)
@@ -2335,7 +2335,7 @@ sal_Bool SvxKerningItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
 // class SvxCaseMapItem --------------------------------------------------
 
 SvxCaseMapItem::SvxCaseMapItem( const SvxCaseMap eMap, const USHORT nId ) :
-    SfxEnumItem( nId, eMap )
+    SfxEnumItem( nId, (USHORT)eMap )
 {
 }
 
@@ -2377,7 +2377,7 @@ SfxItemPresentation SvxCaseMapItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
     switch ( ePres )
@@ -2424,7 +2424,7 @@ sal_Bool SvxCaseMapItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 --------------------------------------------------*/
 sal_Bool SvxCaseMapItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
-    sal_uInt16 nVal;
+    sal_uInt16 nVal = sal_uInt16();
     if(!(rVal >>= nVal))
         return sal_False;
 
@@ -2531,7 +2531,7 @@ SfxItemPresentation SvxEscapementItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
     switch ( ePres )
@@ -2616,7 +2616,7 @@ sal_Bool SvxEscapementItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     {
         case MID_ESC:
         {
-            sal_Int16 nVal;
+            sal_Int16 nVal = sal_Int16();
             if( (rVal >>= nVal) && (Abs(nVal) <= 101))
                 nEsc = nVal;
             else
@@ -2625,7 +2625,7 @@ sal_Bool SvxEscapementItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_ESC_HEIGHT:
         {
-            sal_Int8 nVal;
+            sal_Int8 nVal = sal_Int8();
             if( (rVal >>= nVal) && (nVal <= 100))
                 nProp = nVal;
             else
@@ -2703,7 +2703,7 @@ SfxItemPresentation SvxLanguageItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
 #ifndef SVX_LIGHT
@@ -2815,7 +2815,7 @@ SfxItemPresentation SvxNoLinebreakItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
     rText.Erase();
@@ -2860,7 +2860,7 @@ SfxItemPresentation SvxNoHyphenItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
     rText.Erase();
@@ -2962,7 +2962,7 @@ SfxItemPresentation SvxBlinkItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
     switch ( ePres )
@@ -3026,7 +3026,7 @@ SfxItemPresentation SvxEmphasisMarkItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText,
-    const IntlWrapper */*pIntl*/
+    const IntlWrapper * /*pIntl*/
 )   const
 {
     switch ( ePres )
@@ -3049,7 +3049,6 @@ SfxItemPresentation SvxEmphasisMarkItem::GetPresentation
                     rText += SVX_RESSTR( nId );
                 return ePres;
             }
-            break;
         default: ; //prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
@@ -3251,7 +3250,6 @@ SfxItemPresentation SvxTwoLinesItem::GetPresentation( SfxItemPresentation ePres,
             }
             return ePres;
         }
-        break;
         default: ; //prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
@@ -3344,7 +3342,6 @@ SfxItemPresentation SvxCharRotateItem::GetPresentation(
             }
             return ePres;
         }
-        break;
         default: ; //prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
@@ -3377,16 +3374,17 @@ sal_Bool SvxCharRotateItem::PutValue( const com::sun::star::uno::Any& rVal,
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bRet = sal_True;
-    sal_Int16 nVal;
     switch( nMemberId )
     {
     case MID_ROTATE:
-        rVal >>= nVal;
-        if(!nVal || 900 == nVal || 2700 == nVal)
-            SetValue( (USHORT)nVal );
-        else
-            bRet = sal_False;
-        break;
+        {
+            sal_Int16 nVal = 0;
+            if((rVal >>= nVal) && (0 == nVal || 900 == nVal || 2700 == nVal))
+                SetValue( (USHORT)nVal );
+            else
+                bRet = sal_False;
+            break;
+        }
 
     case MID_FITTOLINE:
         SetFitToLine( Any2Bool( rVal ) );
@@ -3487,7 +3485,6 @@ SfxItemPresentation SvxCharScaleWidthItem::GetPresentation(
             }
             return ePres;
         }
-        break;
         default: ; //prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
@@ -3497,7 +3494,7 @@ sal_Bool SvxCharScaleWidthItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
-    sal_Int16 nValue;
+    sal_Int16 nValue = sal_Int16();
     if (rVal >>= nValue)
     {
         SetValue( (UINT16) nValue );
@@ -3522,7 +3519,7 @@ sal_Bool SvxCharScaleWidthItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ )
 
 SvxCharReliefItem::SvxCharReliefItem( FontRelief eValue,
                                          const sal_uInt16 nId )
-    : SfxEnumItem( nId, eValue )
+    : SfxEnumItem( nId, (USHORT)eValue )
 {
 }
 
@@ -3567,7 +3564,7 @@ SfxItemPresentation SvxCharReliefItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
     SfxItemPresentation eRet = ePres;
@@ -3601,7 +3598,7 @@ sal_Bool SvxCharReliefItem::PutValue( const com::sun::star::uno::Any& rVal,
             sal_Int16 nVal = -1;
             rVal >>= nVal;
             if(nVal >= 0 && nVal <= RELIEF_ENGRAVED)
-                SetValue( (FontRelief)nVal );
+                SetValue( (USHORT)nVal );
             else
                 bRet = sal_False;
         }
@@ -3711,7 +3708,6 @@ const SfxPoolItem* SvxScriptSetItem::GetItemOfScript( USHORT nSlotId, const SfxI
             0 == (pAsn = GetItemOfScriptSet( rSet, nAsian )) ||
             *pRet != *pAsn )
             pRet = 0;
-        break;
         break;
 
     case SCRIPTTYPE_LATIN|SCRIPTTYPE_COMPLEX:
