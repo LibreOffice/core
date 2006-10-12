@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paralist.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:31:56 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:03:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <outliner.hxx>     // nur wegen Paragraph, muss geaendert werden!
 #include <numdef.hxx>
 
-DBG_NAME(Paragraph);
+DBG_NAME(Paragraph)
 
 Paragraph::Paragraph( USHORT nDDepth )
     : aBulSize( -1, -1)
@@ -55,7 +55,8 @@ Paragraph::Paragraph( USHORT nDDepth )
 }
 
 Paragraph::Paragraph( const Paragraph& rPara )
-    : aBulSize( rPara.aBulSize ), aBulText( rPara.aBulText )
+:   aBulText( rPara.aBulText )
+,   aBulSize( rPara.aBulSize )
 {
     DBG_CTOR( Paragraph, 0 );
 
@@ -82,13 +83,13 @@ void ParagraphList::Clear( BOOL bDestroyParagraphs )
     List::Clear();
 }
 
-void ParagraphList::MoveParagraphs( ULONG nStart, ULONG nDest, ULONG nCount )
+void ParagraphList::MoveParagraphs( ULONG nStart, ULONG nDest, ULONG _nCount )
 {
-    if ( ( nDest < nStart ) || ( nDest >= ( nStart + nCount ) ) )
+    if ( ( nDest < nStart ) || ( nDest >= ( nStart + _nCount ) ) )
     {
         ULONG n;
         ParagraphList aParas;
-        for ( n = 0; n < nCount; n++ )
+        for ( n = 0; n < _nCount; n++ )
         {
             Paragraph* pPara = GetParagraph( nStart );
             aParas.Insert( pPara, LIST_APPEND );
@@ -96,9 +97,9 @@ void ParagraphList::MoveParagraphs( ULONG nStart, ULONG nDest, ULONG nCount )
         }
 
         if ( nDest > nStart )
-            nDest -= nCount;
+            nDest -= _nCount;
 
-        for ( n = 0; n < nCount; n++ )
+        for ( n = 0; n < _nCount; n++ )
         {
             Paragraph* pPara = aParas.GetParagraph( n );
             Insert( pPara, nDest++ );
@@ -228,8 +229,8 @@ ULONG ParagraphList::GetVisPos( Paragraph* pPara )
     ULONG nPos = GetAbsPos( pPara );
     for ( ULONG n = 0; n < nPos; n++ )
     {
-        Paragraph* pPara = GetParagraph( n );
-        if ( pPara->IsVisible() )
+        Paragraph* _pPara = GetParagraph( n );
+        if ( _pPara->IsVisible() )
             nVisPos++;
     }
     return nVisPos;
