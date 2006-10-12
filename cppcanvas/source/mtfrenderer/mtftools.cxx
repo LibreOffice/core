@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mtftools.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:49:38 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:59:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,10 @@ namespace cppcanvas
                     return ::Size( 0,
                                    aMetric.GetIntLeading() + aMetric.GetAscent() );
 
+                default:
+                    ENSURE_AND_THROW( false,
+                                      "tools::getBaselineOffset(): Unexpected TextAlign value" );
+                    // FALLTHROUGH intended (to calm compiler warning - case won't happen)
                 case ALIGN_BASELINE:
                     return ::Size( 0, 0 );
 
@@ -97,9 +101,6 @@ namespace cppcanvas
                     return ::Size( 0,
                                    -aMetric.GetDescent() );
 
-                default:
-                    ENSURE_AND_THROW( false,
-                                      "tools::getBaselineOffset(): Unexpected TextAlign value" );
             }
         }
 
