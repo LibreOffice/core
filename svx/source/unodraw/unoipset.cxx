@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:12:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:25:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,7 +251,7 @@ struct SvxIDPropertyCombine
     uno::Any    aAny;
 };
 
-DECLARE_LIST( SvxIDPropertyCombineList, SvxIDPropertyCombine * );
+DECLARE_LIST( SvxIDPropertyCombineList, SvxIDPropertyCombine * )
 
 SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMap* pMap, sal_Bool bConvertTwips )
 :   _pMap(SvxInfoSetCache::getSortedPropertyMap(pMap)), mbConvertTwips(bConvertTwips)
