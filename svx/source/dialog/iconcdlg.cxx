@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iconcdlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:24:57 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:15:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -530,7 +530,7 @@ void IconChoiceDialog::RemoveTabPage( USHORT nId )
     }
 
     // was it the current page ?
-    if ( nId = mnCurrentPageId )
+    if ( nId == mnCurrentPageId )
     {
         mnCurrentPageId = maPageList.First()->nId;
     }
@@ -1129,8 +1129,15 @@ const USHORT* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
 
     // sortieren
     if ( aUS.Count() > 1 )
-        qsort( (void*)aUS.GetData(),
-               aUS.Count(), sizeof(USHORT), IconcDlgCmpUS_Impl );
+    {
+#if defined __SUNPRO_CC
+#pragma disable_warn
+#endif
+        qsort( (void*)aUS.GetData(), aUS.Count(), sizeof(USHORT), IconcDlgCmpUS_Impl );
+#if defined __SUNPRO_CC
+#pragma enable_warn
+#endif
+    }
 
     pRanges = new USHORT[aUS.Count() + 1];
     memcpy(pRanges, aUS.GetData(), sizeof(USHORT) * aUS.Count());
@@ -1309,7 +1316,7 @@ BOOL IconChoiceDialog::OK_Impl()
 {
     IconChoicePage* pPage = GetPageData ( mnCurrentPageId )->pPage;
 
-    BOOL bEnd = !pPage;
+    bool bEnd = !pPage;
     if ( pPage )
     {
         int nRet = IconChoicePage::LEAVE_PAGE;
