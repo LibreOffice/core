@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontwork.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:20:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:12:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -562,7 +562,8 @@ void SvxFontWorkDialog::SetStdForm_Impl(const XFormTextStdFormItem* pItem)
         aFormSet.SetNoSelection();
 
         if ( pItem->GetValue() != XFTFORM_NONE )
-            aFormSet.SelectItem(pItem->GetValue());
+            aFormSet.SelectItem(
+                sal::static_int_cast< USHORT >(pItem->GetValue()));
     }
     else
         aFormSet.Disable();
@@ -970,7 +971,7 @@ IMPL_LINK( SvxFontWorkDialog, FormSelectHdl_Impl, void *, EMPTYARG )
     if ( aFormSet.IsNoSelection() )
         aItem.SetValue(XFTFORM_NONE);
     else
-        aItem.SetValue(((XFormTextStdForm)(aFormSet.GetSelectItemId())));
+        aItem.SetValue(aFormSet.GetSelectItemId());
     GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_STDFORM, SFX_CALLMODE_RECORD, &aItem, 0L );
     aFormSet.SetNoSelection();
     return 0;
@@ -1071,6 +1072,7 @@ void SvxFontWorkDialog::CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
 
             switch ( eForm )
             {
+                default: ; //prevent warning
                 case XFTFORM_TOPCIRC:
                     nBeg = 0;
                     nEnd = 18000;
@@ -1103,7 +1105,6 @@ void SvxFontWorkDialog::CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
                     nBeg = 31500;
                     nEnd =  4500;
                     break;
-                default: ; //prevent warning
             }
             pNewObj = new SdrCircObj(OBJ_CARC, aRect, nBeg, nEnd);
             break;
@@ -1252,7 +1253,7 @@ void SvxFontWorkDialog::ApplyImageList()
 {
     bool bHighContrast =
         (GetSettings().GetStyleSettings().GetHighContrastMode() != 0) &&
-        (bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0);
+        (GetDisplayBackground().GetColor().IsDark() != 0);
 
     ResMgr* _pMgr = DIALOG_MGR();
 
