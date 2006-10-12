@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:37:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:19:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@
 #define LB_BUL_COLOR    191
 #define FT_BUL_REL_SIZE 192
 #define MF_BUL_REL_SIZE 193
-#define CB_USE_BULLET   194
+// 194 removed
 #define ST_POPUP_EMPTY_ENTRY 195
 
 #define MN_GRAPHIC_DLG     1
