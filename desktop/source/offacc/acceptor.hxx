@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceptor.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 17:13:21 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:15:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,8 +113,6 @@ private:
     OUString m_aProtocol;
 
     sal_Bool m_bInit;
-    oslThread m_aThread;
-
 
 public:
     Acceptor( const Reference< XMultiServiceFactory >& aFactory );
@@ -129,7 +127,6 @@ public:
     static  Sequence<OUString>          impl_getSupportedServiceNames();
     virtual Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (RuntimeException);
-    static  sal_Bool                    impl_supportsService( const OUString& aName );
     virtual sal_Bool           SAL_CALL supportsService( const OUString& aName )
         throw (RuntimeException);
 
