@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:08:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:45:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
 using namespace ::svxform;
 
-DBG_NAME(FmFormPageImpl);
+DBG_NAME(FmFormPageImpl)
 //------------------------------------------------------------------------------
 FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage)
                :pPage(_pPage)
