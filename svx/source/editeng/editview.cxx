@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:50:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:37:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::linguistic2;
 
 
-DBG_NAME( EditView );
+DBG_NAME( EditView )
 
 // From SW => Create common method
 LanguageType lcl_CheckLanguage( const OUString &rWord, Reference< XSpellChecker1 >  xSpell )
@@ -687,7 +687,9 @@ void EditView::MoveParagraphs( long nDiff )
     if ( nDiff > 0 )
         nDest++;
     DBG_ASSERT( ( nDest >= 0 ) && ( nDest <= pImpEditView->pEditEngine->GetParagraphCount() ), "MoveParagraphs - wrong Parameters!" );
-    MoveParagraphs( Range( aSel.nStartPara, aSel.nEndPara ), nDest );
+    MoveParagraphs(
+        Range( aSel.nStartPara, aSel.nEndPara ),
+        sal::static_int_cast< USHORT >( nDest ) );
 }
 
 void EditView::SetBackgroundColor( const Color& rColor )
@@ -753,7 +755,7 @@ void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::d
     PIMPEE->FormatAndUpdate( this );
 }
 
-sal_Bool EditView::Drop( const DropEvent& rEvt )
+sal_Bool EditView::Drop( const DropEvent& )
 {
     return FALSE;
 }
@@ -764,7 +766,7 @@ ESelection EditView::GetDropPos()
     return ESelection();
 }
 
-sal_Bool EditView::QueryDrop( DropEvent& rEvt )
+sal_Bool EditView::QueryDrop( DropEvent& )
 {
     return FALSE;
 }
