@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iosys.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:31:38 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:28:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,11 +78,11 @@ public:
     SbError Read( char& );
     SbError Write( const ByteString&, USHORT = 0 );
 
-    BOOL IsText() const     { return !(nMode & SBSTRM_BINARY);  }
-    BOOL IsRandom() const   { return  (nMode & SBSTRM_RANDOM);  }
-    BOOL IsBinary() const   { return  (nMode & SBSTRM_BINARY);  }
-    BOOL IsSeq() const      { return !(nMode & SBSTRM_RANDOM);  }
-    BOOL IsAppend() const   { return  (nMode & SBSTRM_APPEND);  }
+    bool IsText() const     { return (nMode & SBSTRM_BINARY) == 0; }
+    bool IsRandom() const   { return (nMode & SBSTRM_RANDOM) != 0; }
+    bool IsBinary() const   { return (nMode & SBSTRM_BINARY) != 0; }
+    bool IsSeq() const      { return (nMode & SBSTRM_RANDOM) == 0; }
+    bool IsAppend() const   { return (nMode & SBSTRM_APPEND) != 0; }
     short GetBlockLen() const          { return nLen;           }
     short GetMode() const              { return nMode;          }
     ULONG GetLine() const              { return nLine;          }
