@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconv.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:53:42 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:40:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -424,13 +424,17 @@ void TextConvWrapper::ReplaceUnit(
         default:
             DBG_ERROR( "unexpected case" );
     }
-    nUnitOffset += (USHORT) (nUnitStart + aNewTxt.getLength() );
+    nUnitOffset = sal::static_int_cast< USHORT >(
+        nUnitOffset + nUnitStart + aNewTxt.getLength());
 
     // remember current original language for kater use
     ImpEditEngine *pImpEditEng = pEditView->GetImpEditEngine();
-    ESelection aOldSel      = pEditView->GetSelection();
+    ESelection _aOldSel     = pEditView->GetSelection();
     //EditSelection aOldEditSel = pEditView->GetImpEditView()->GetEditSelection();
-    LanguageType nOldLang   = pImpEditEng->GetLanguage( pImpEditEng->CreateSel( aOldSel ).Min() );
+
+#ifdef DBG_UTIL
+    LanguageType nOldLang   = pImpEditEng->GetLanguage( pImpEditEng->CreateSel( _aOldSel ).Min() );
+#endif
 
     pImpEditEng->UndoActionStart( EDITUNDO_INSERT );
 
@@ -439,7 +443,7 @@ void TextConvWrapper::ReplaceUnit(
     // Thus we do this only for Chinese translation...
     sal_Bool bIsChineseConversion = IsChinese( GetSourceLanguage() );
     if (bIsChineseConversion)
-        ChangeText( aNewTxt, rOrigText, &rOffsets, &aOldSel );
+        ChangeText( aNewTxt, rOrigText, &rOffsets, &_aOldSel );
     else
         ChangeText( aNewTxt, rOrigText, NULL, NULL );
 
@@ -451,8 +455,9 @@ void TextConvWrapper::ReplaceUnit(
 
         ESelection aOldSel = pEditView->GetSelection();
         ESelection aNewSel( aOldSel );
-        aNewSel.nStartPos -= (xub_StrLen) aNewTxt.getLength();
-        DBG_ASSERT( aOldSel.nEndPos >= 0, "error while building selection" );
+        aNewSel.nStartPos = sal::static_int_cast< xub_StrLen >(
+            aNewSel.nStartPos - aNewTxt.getLength());
+//      DBG_ASSERT( aOldSel.nEndPos >= 0, "error while building selection" );
 
         if (pNewUnitLanguage)
         {
@@ -473,12 +478,14 @@ void TextConvWrapper::ReplaceUnit(
     {
         // Note: replacement is always done in the current paragraph
         // which is the one ConvContinue points to
-        pConvInfo->aConvContinue.nIndex += (USHORT) nDelta;
+        pConvInfo->aConvContinue.nIndex = sal::static_int_cast< USHORT >(
+            pConvInfo->aConvContinue.nIndex + nDelta);
 
         // if that is the same as the one where the conversions ends
         // the end needs to be updated also
         if (pConvInfo->aConvTo.nPara == pConvInfo->aConvContinue.nPara)
-            pConvInfo->aConvTo.nIndex += (USHORT) nDelta;
+            pConvInfo->aConvTo.nIndex = sal::static_int_cast< USHORT >(
+                pConvInfo->aConvTo.nIndex + nDelta);
     }
 }
 
