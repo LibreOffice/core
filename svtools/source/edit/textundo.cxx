@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textundo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:48:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:16:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,7 +255,7 @@ TextUndoInsertChars::TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM
 void __EXPORT TextUndoInsertChars::Undo()
 {
     TextSelection aSel( maTextPaM, maTextPaM );
-    aSel.GetEnd().GetIndex() += maText.Len();
+    aSel.GetEnd().GetIndex() = aSel.GetEnd().GetIndex() + maText.Len();
     TextPaM aPaM = GetTextEngine()->ImpDeleteText( aSel );
     SetSelection( aPaM );
 }
@@ -265,7 +265,7 @@ void __EXPORT TextUndoInsertChars::Redo()
     TextSelection aSel( maTextPaM, maTextPaM );
     GetTextEngine()->ImpInsertText( aSel, maText );
     TextPaM aNewPaM( maTextPaM );
-    aNewPaM.GetIndex() += maText.Len();
+    aNewPaM.GetIndex() = aNewPaM.GetIndex() + maText.Len();
     SetSelection( TextSelection( aSel.GetStart(), aNewPaM ) );
 }
 
@@ -298,14 +298,14 @@ void __EXPORT TextUndoRemoveChars::Undo()
 {
     TextSelection aSel( maTextPaM, maTextPaM );
     GetTextEngine()->ImpInsertText( aSel, maText );
-    aSel.GetEnd().GetIndex() += maText.Len();
+    aSel.GetEnd().GetIndex() = aSel.GetEnd().GetIndex() + maText.Len();
     SetSelection( aSel );
 }
 
 void __EXPORT TextUndoRemoveChars::Redo()
 {
     TextSelection aSel( maTextPaM, maTextPaM );
-    aSel.GetEnd().GetIndex() += maText.Len();
+    aSel.GetEnd().GetIndex() = aSel.GetEnd().GetIndex() + maText.Len();
     TextPaM aPaM = GetTextEngine()->ImpDeleteText( aSel );
     SetSelection( aPaM );
 }
