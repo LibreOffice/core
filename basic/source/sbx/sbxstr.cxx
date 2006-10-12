@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxstr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:11:56 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:34:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,8 @@ void ImpPutString( SbxValues* p, const XubString* n )
         case SbxBYREF | SbxINTEGER:
             *p->pInteger = ImpGetInteger( p ); break;
         case SbxBYREF | SbxBOOL:
-            *p->pUShort = ImpGetBool( p ); break;
+            *p->pUShort = sal::static_int_cast< UINT16 >( ImpGetBool( p ) );
+            break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
             *p->pUShort = ImpGetUShort( p ); break;
