@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuifmsearch.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:14:22 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:08:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,7 +251,7 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, c
     DBG_ASSERT(fmscInitial.xCursor.is(), "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplier !");
     DBG_ASSERT(fmscInitial.strUsedFields.GetTokenCount(';') == (xub_StrLen)fmscInitial.arrFields.size(),
         "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplied !");
-#if (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
     for (sal_Int32 i=0; i<(sal_Int32)fmscInitial.arrFields.size(); ++i)
         DBG_ASSERT(fmscInitial.arrFields.at(i).is(), "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplier !");
 #endif // (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
@@ -550,6 +550,7 @@ IMPL_LINK(FmSearchDialog, OnSearchTextModified, ComboBox*, EMPTYARG)
 //------------------------------------------------------------------------
 IMPL_LINK(FmSearchDialog, OnPositionSelected, ListBox*, pBox)
 {
+    (void) pBox; // avoid warning
     DBG_ASSERT(pBox->GetSelectEntryCount() == 1, "FmSearchDialog::OnMethodSelected : unerwartet : nicht genau ein Eintrag selektiert !");
 
     m_pSearchEngine->SetPosition(m_lbPosition.GetSelectEntryPos());
@@ -559,6 +560,7 @@ IMPL_LINK(FmSearchDialog, OnPositionSelected, ListBox*, pBox)
 //------------------------------------------------------------------------
 IMPL_LINK(FmSearchDialog, OnFieldSelected, ListBox*, pBox)
 {
+    (void) pBox; // avoid warning
     DBG_ASSERT(pBox->GetSelectEntryCount() == 1, "FmSearchDialog::OnFieldSelected : unerwartet : nicht genau ein Eintrag selektiert !");
 
     m_pSearchEngine->RebuildUsedFields(m_rbAllFields.IsChecked() ? -1 : (sal_Int16)m_lbField.GetSelectEntryPos());
@@ -656,8 +658,10 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
     FmSearchContext fmscContext;
     fmscContext.nContext = nContext;
 
+#ifdef DBG_UTIL
     sal_uInt32 nResult = m_lnkContextSupplier.Call(&fmscContext);
     DBG_ASSERT(nResult > 0, "FmSearchDialog::InitContext : ContextSupplier didn't give me any controls !");
+#endif
 
     // packen wir zuerst die Feld-Namen in die entsprechende Listbox
     m_lbField.Clear();
