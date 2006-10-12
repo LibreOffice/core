@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:27:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:59:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,7 +233,7 @@ bool storePictureInFileSystem( OUString& location, sal_uInt8* data, sal_uInt32 d
             result = false;
         }
     }
-    catch( uno::Exception& e )
+    catch( uno::Exception& )
     {
         result = false;
     }
@@ -290,7 +290,7 @@ bool storePictureInDoc( SfxObjectShell* pDocSh, OUString& name, sal_uInt8* data,
                     xTransact->commit();
                 }
             }
-            catch( uno::Exception& e )
+            catch( uno::Exception& )
             {
                 return false;
             }
@@ -626,6 +626,8 @@ typedef std::vector< ContainerRecord > ContainerRecordList;
 class ContainerRecReader
 {
     public:
+
+    virtual ~ContainerRecReader() {}
 
     virtual bool Read( OCX_ContainerControl* pContainerControl, SvStorageStream *pS)
     {
@@ -1781,7 +1783,7 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
     WriteAlign(rContents,4);
     nValueLen = 1|SVX_MSOCX_COMPRESSED;
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultState"));
-    INT16 nDefault;
+    sal_Int16 nDefault = sal_Int16();
     aTmp >>= nDefault;
     *rContents << nValueLen;
     pBlockFlags[2] |= 0x40;
@@ -1795,7 +1797,7 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("VisualEffect"));
     if (aTmp.hasValue())
     {
-        sal_Int16 nApiSpecEffect;
+        sal_Int16 nApiSpecEffect = sal_Int16();
         aTmp >>= nApiSpecEffect;
         nSpecialEffect = ExportSpecEffect( nApiSpecEffect );
     }
@@ -2035,7 +2037,7 @@ sal_Bool OCX_TextBox::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[0] |= 0x08;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
-    sal_Int16 nBorder;
+    sal_Int16 nBorder = sal_Int16();
     aTmp >>= nBorder;
     nSpecialEffect = ExportBorder(nBorder,nBorderStyle);
     *rContents << nBorderStyle;
@@ -2057,7 +2059,7 @@ sal_Bool OCX_TextBox::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[0] |= 0x20;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("EchoChar"));
-    sal_uInt16 nTmp;
+    sal_uInt16 nTmp = sal_uInt16();
     aTmp >>= nTmp;
     nPasswordChar = static_cast<sal_uInt8>(nTmp);
     *rContents << nPasswordChar;
@@ -2209,7 +2211,7 @@ sal_Bool OCX_FieldControl::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[0] |= 0x04;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
-    sal_Int16 nBorder;
+    sal_Int16 nBorder = sal_Int16();
     aTmp >>= nBorder;
     nSpecialEffect = ExportBorder(nBorder,nBorderStyle);
     *rContents << nBorderStyle;
@@ -2464,7 +2466,7 @@ sal_Bool OCX_ToggleButton::WriteContents(SvStorageStreamRef &rContents,
     WriteAlign(rContents,4);
     nValueLen = 1|SVX_MSOCX_COMPRESSED;
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("State"));
-    INT16 nDefault;
+    sal_Int16 nDefault = sal_Int16();
     aTmp >>= nDefault;
     *rContents << nValueLen;
     pBlockFlags[2] |= 0x40;
@@ -2665,7 +2667,7 @@ sal_Bool OCX_ComboBox::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[0] |= 0x04;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
-    sal_Int16 nBorder;
+    sal_Int16 nBorder = sal_Int16();
     aTmp >>= nBorder;
     nSpecialEffect = ExportBorder(nBorder,nBorderStyle);
     *rContents << nBorderStyle;
@@ -2880,7 +2882,7 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[0] |= 0x04;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
-    sal_Int16 nBorder;
+    sal_Int16 nBorder = sal_Int16();
     aTmp >>= nBorder;
     nSpecialEffect = ExportBorder(nBorder,nBorderStyle);
     WriteAlign(rContents,2);
@@ -3701,9 +3703,9 @@ void OCX_MultiPage::ProcessControl(OCX_Control* pControl, SvStorageStream* /* pS
     SotStorageStreamRef oStream = mContainedControlsStream;
 
     OCX_Page *pPage = NULL;
-    if ( rec.nTypeIdent == PAGE &&
-           ( pPage = static_cast< OCX_Page* >( pControl ) ) )
-
+    if ( rec.nTypeIdent == PAGE )
+        pPage = static_cast< OCX_Page* >( pControl );
+    if ( pPage != NULL )
     {
         pPage->mnStep = ++mnCurrentPageStep;
 
@@ -3883,7 +3885,9 @@ sal_Bool OCX_Frame::Read(SvStorageStream *pS)
     pS->Read(pBlockFlags,4);
 
     if (pBlockFlags[0] & 0x01)
+    {
             DBG_ASSERT(!this, "ARSE");
+    }
     if (pBlockFlags[0] & 0x02)
             *pS >> mnBackColor;
     if (pBlockFlags[0] & 0x04)
@@ -4072,7 +4076,9 @@ sal_Bool OCX_UserForm::Read(SvStorageStream *pS)
     pS->Read(pBlockFlags,4);
 
     if (pBlockFlags[0] & 0x01)
+    {
             DBG_ASSERT(!this, "ARSE");
+    }
     if (pBlockFlags[0] & 0x02)
         *pS >> mnBackColor;
     if (pBlockFlags[0] & 0x04)
@@ -4292,7 +4298,7 @@ sal_Bool OCX_Label::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[0] |= 0x80;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
-    sal_Int16 nBorder;
+    sal_Int16 nBorder = sal_Int16();
     aTmp >>= nBorder;
     sal_uInt8 nNewBorder;
     nSpecialEffect = ExportBorder(nBorder,nNewBorder);
@@ -4568,9 +4574,9 @@ sal_Bool SvxMSConvertOCXControls::ReadOCXStream( SvStorageRef& rSrc1,
      insert that control
      */
 
-    OCX_Control *pObj=NULL;
     SvGlobalName aTest = rSrc1->GetClassName();
-    if (pObj = OCX_Factory(aTest.GetHexName()))
+    OCX_Control *pObj = OCX_Factory(aTest.GetHexName());
+    if (pObj)
     {
         pObj->pDocSh = pDocSh;
         /* #117832# set imported control name */
@@ -4584,7 +4590,8 @@ sal_Bool SvxMSConvertOCXControls::ReadOCXStream( SvStorageRef& rSrc1,
             GetServiceFactory();
         if(!rServiceFactory.is())
             return(sal_False);
-        if(bRet = pObj->FullRead(pSt))
+        bRet = pObj->FullRead(pSt);
+        if(bRet)
             if (pObj->Import(rServiceFactory,xFComp,aSz))
                 bRet = InsertControl( xFComp, aSz,pShapeRef,bFloatingCtrl);
         delete pObj;
@@ -4607,12 +4614,12 @@ sal_Bool SvxMSConvertOCXControls::ReadOCXExcelKludgeStream(
      * stream, and then concatenate all the controls together,
      * This means that you should have the cnts stream wound to the
      * correct location before passing the control stream in here*/
-    OCX_Control *pObj=NULL;
     SvStream *pSt = rSrc1;
     pSt->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     SvGlobalName aTest;
     *pSt >> aTest;
-    if (pObj = OCX_Factory(aTest.GetHexName()))
+    OCX_Control *pObj = OCX_Factory(aTest.GetHexName());
+    if (pObj)
     {
 
         com::sun::star::awt::Size aSz;
@@ -4621,7 +4628,8 @@ sal_Bool SvxMSConvertOCXControls::ReadOCXExcelKludgeStream(
             GetServiceFactory();
         if(!rServiceFactory.is())
             return(sal_False);
-        if(bRet = pObj->FullRead(rSrc1))
+        bRet = pObj->FullRead(rSrc1);
+        if(bRet)
             if (pObj->Import(rServiceFactory,xFComp,aSz))
                 bRet = InsertControl( xFComp, aSz,pShapeRef,bFloatingCtrl);
         delete pObj;
@@ -4646,9 +4654,9 @@ sal_Bool SvxMSConvertOCXControls::WriteOCXStream( SvStorageRef& rSrc1,
     sal_Int16 nClassId = *(sal_Int16*) aTmp.getValue();
 #endif
 
-    OCX_Control *pObj=NULL;
     String sId;
-    if (pObj = OCX_Factory(rControlModel,sId,rName))
+    OCX_Control *pObj = OCX_Factory(rControlModel,sId,rName);
+    if (pObj != NULL)
     {
         uno::Reference<beans::XPropertySet> xPropSet(rControlModel,
             uno::UNO_QUERY);
@@ -4693,9 +4701,9 @@ sal_Bool SvxMSConvertOCXControls::WriteOCXExcelKludgeStream(
     if( !rControlModel.is() )
         return sal_False;
 
-    OCX_Control *pObj=NULL;
     String sId;
-    if (pObj = OCX_Factory(rControlModel,sId,rName))
+    OCX_Control *pObj = OCX_Factory(rControlModel,sId,rName);
+    if (pObj != NULL)
     {
         uno::Reference<beans::XPropertySet> xPropSet(rControlModel,
             uno::UNO_QUERY);
@@ -4840,7 +4848,7 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
     WriteAlign(rContents,4);
     nValueLen = 1|SVX_MSOCX_COMPRESSED;
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultState"));
-    INT16 nDefault;
+    sal_Int16 nDefault = sal_Int16();
     aTmp >>= nDefault;
     *rContents << nValueLen;
     pBlockFlags[2] |= 0x40;
@@ -4853,7 +4861,7 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("VisualEffect"));
     if (aTmp.hasValue())
     {
-        sal_Int16 nApiSpecEffect;
+        sal_Int16 nApiSpecEffect = sal_Int16();
         aTmp >>= nApiSpecEffect;
         nSpecialEffect = ExportSpecEffect( nApiSpecEffect );
     }
@@ -5326,7 +5334,7 @@ sal_Bool OCX_Image::WriteContents(SvStorageStreamRef &rContents,
 
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
-    sal_Int16 nBorder;
+    sal_Int16 nBorder = sal_Int16();
     aTmp >>= nBorder;
     nSpecialEffect = ExportBorder(nBorder,nBorderStyle);
     *rContents << nBorderStyle;
@@ -5643,7 +5651,7 @@ sal_Bool OCX_SpinButton::WriteContents(
     GetInt32Property( mnDelay,     rPropSet, WW8_ASCII2STR( "RepeatDelay" ),     0x00008000 );
 
     namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
-    sal_Int16 nApiOrient;
+    sal_Int16 nApiOrient = sal_Int16();
     if( rPropSet->getPropertyValue( WW8_ASCII2STR( "Orientation" ) ) >>= nApiOrient )
         UpdateInt32Property( mnOrient, (nApiOrient == AwtScrollOrient::VERTICAL) ? 0 : 1, 0x00002000 );
 
@@ -5876,7 +5884,7 @@ sal_Bool OCX_ScrollBar::WriteContents(
     GetInt32Property( mnDelay,     rPropSet, WW8_ASCII2STR( "RepeatDelay" ),     0x00008000 );
 
     namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
-    sal_Int16 nApiOrient;
+    sal_Int16 nApiOrient = sal_Int16();
     if( rPropSet->getPropertyValue( WW8_ASCII2STR( "Orientation" ) ) >>= nApiOrient )
         UpdateInt32Property( mnOrient, (nApiOrient == AwtScrollOrient::VERTICAL) ? 0 : 1, 0x00002000 );
 
