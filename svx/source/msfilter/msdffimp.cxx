@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:39:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:58:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -618,7 +618,7 @@ SvStream& operator>>( SvStream& rIn, DffRecordHeader& rRec )
     UINT16 nTmp(0);
     rIn >> nTmp;
     rRec.nImpVerInst = nTmp;
-    rRec.nRecVer = nTmp & 0x000F;
+    rRec.nRecVer = sal::static_int_cast< BYTE >(nTmp & 0x000F);
     rRec.nRecInstance = nTmp >> 4;
     rIn >> rRec.nRecType;
     rIn >> rRec.nRecLen;
@@ -2421,7 +2421,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         {
             const rtl::OUString sExtrusionSkew( RTL_CONSTASCII_USTRINGPARAM ( "Skew" ) );
             double fSkewAmount = (sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAmount, 50 );
-            double fSkewAngle = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAngle, -135 * 65536 )) / 65536.0;
+            double fSkewAngle = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAngle, sal::static_int_cast< UINT32 >(-135 * 65536) )) / 65536.0;
 
             EnhancedCustomShapeParameterPair aSkewPair;
             aSkewPair.First.Value <<= fSkewAmount;
@@ -3752,7 +3752,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
             UINT16 nFunctionBits = (UINT16)( ( nColorCode & 0x00000f00 ) >> 8 );
             UINT16 nAdditionalFlags = (UINT16)( ( nColorCode & 0x0000f000) >> 8 );
             UINT16 nColorIndex = sal_uInt16(nColorCode & 0x00ff);
-            UINT32 nPropColor;
+            UINT32 nPropColor = 0;
 
             sal_uInt16  nCProp = 0;
 
@@ -3854,17 +3854,17 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
             {
                 case 0x01 :     // darken color by parameter
                 {
-                    aColor.SetRed( ( nParameter * aColor.GetRed() ) >> 8 );
-                    aColor.SetGreen( ( nParameter * aColor.GetGreen() ) >> 8 );
-                    aColor.SetBlue( ( nParameter * aColor.GetBlue() ) >> 8 );
+                    aColor.SetRed( sal::static_int_cast< UINT8 >( ( nParameter * aColor.GetRed() ) >> 8 ) );
+                    aColor.SetGreen( sal::static_int_cast< UINT8 >( ( nParameter * aColor.GetGreen() ) >> 8 ) );
+                    aColor.SetBlue( sal::static_int_cast< UINT8 >( ( nParameter * aColor.GetBlue() ) >> 8 ) );
                 }
                 break;
                 case 0x02 :     // lighten color by parameter
                 {
                     UINT16 nInvParameter = ( 0x00ff - nParameter ) * 0xff;
-                    aColor.SetRed( ( nInvParameter + ( nParameter * aColor.GetRed() ) ) >> 8 );
-                    aColor.SetGreen( ( nInvParameter + ( nParameter * aColor.GetGreen() ) ) >> 8 );
-                    aColor.SetBlue( ( nInvParameter + ( nParameter * aColor.GetBlue() ) ) >> 8 );
+                    aColor.SetRed( sal::static_int_cast< UINT8 >( ( nInvParameter + ( nParameter * aColor.GetRed() ) ) >> 8 ) );
+                    aColor.SetGreen( sal::static_int_cast< UINT8 >( ( nInvParameter + ( nParameter * aColor.GetGreen() ) ) >> 8 ) );
+                    aColor.SetBlue( sal::static_int_cast< UINT8 >( ( nInvParameter + ( nParameter * aColor.GetBlue() ) ) >> 8 ) );
                 }
                 break;
                 case 0x03 :     // add grey level RGB(p,p,p)
@@ -4139,13 +4139,15 @@ FASTBOOL SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
                                 UINT16 nDefaultTabPos = nDefaultTab;
 
                                 while(nDefaultTabPos <= nObjWidth && nDefaultTabPos <= nMostrightTab)
-                                    nDefaultTabPos += nDefaultTab;
+                                    nDefaultTabPos =
+                                        nDefaultTabPos + nDefaultTab;
 
                                 while(nDefaultTabPos <= nObjWidth)
                                 {
                                     SvxTabStop aTabStop(nDefaultTabPos);
                                     aTabItem.Insert(aTabStop);
-                                    nDefaultTabPos += nDefaultTab;
+                                    nDefaultTabPos =
+                                        nDefaultTabPos + nDefaultTab;
                                 }
 
                                 // Falls TABs angelegt wurden, setze diese
@@ -4400,7 +4402,8 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
         //   UND, ODER folgendes:
         if( !( eFlags & mso_blipflagDoNotSave ) ) // Grafik embedded
         {
-            if ( !( bGrfRead = GetBLIP( nBlipId, aGraf, &aVisArea ) ) )
+            bGrfRead = GetBLIP( nBlipId, aGraf, &aVisArea );
+            if ( !bGrfRead )
             {
                 /*
                 Still no luck, lets look at the end of this record for a FBSE pool,
@@ -7111,7 +7114,7 @@ BOOL SvxMSDffManager::ReadCommonRecordHeader( SvStream& rSt,
 {
     sal_uInt16 nTmp;
     rSt >> nTmp >> rFbt >> rLength;
-    rVer = nTmp & 15;
+    rVer = sal::static_int_cast< BYTE >(nTmp & 15);
     rInst = nTmp >> 4;
     return rSt.GetError() == 0;
 }
