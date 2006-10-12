@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:44:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:33:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -578,7 +578,8 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     {
         xController.set(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.OApplicationController"))),UNO_QUERY);
 
-        if ( (bSuccess = xController.is()) )
+        bSuccess = xController.is();
+        if ( bSuccess )
         {
             xController->attachModel(xModel);
             xModel->setCurrentController(xController);
