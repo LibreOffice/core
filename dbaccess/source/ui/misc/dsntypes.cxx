@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:17:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:42:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -374,7 +374,7 @@ sal_Bool ODsnTypeCollection::isFileSystemBased(DATASOURCE_TYPE _eType) const
         case DST_USERDEFINE10:
         {
             StringVector::size_type nPos = static_cast<sal_Int16>(_eType-DST_USERDEFINE1);
-            return nPos < m_aUserExtensions.size() ? m_aUserExtensions[nPos].Len() != 0 : sal_False;
+            return nPos < m_aUserExtensions.size() && m_aUserExtensions[nPos].Len() != 0;
         }
         default:
             return sal_False;
