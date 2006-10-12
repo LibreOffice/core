@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dxf2mtf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:49:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:36:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -656,7 +656,7 @@ void DXF2GDIMetaFile::Draw3DFaceEntity(const DXF3DFaceEntity & rE, const DXFTran
         rTransform.Transform(rE.aP1,aPoly[1]);
         rTransform.Transform(rE.aP2,aPoly[2]);
         if (nN>3) rTransform.Transform(rE.aP3,aPoly[3]);
-        if (rE.nIEFlags&0x0f==0) pVirDev->DrawPolygon(aPoly);
+        if ((rE.nIEFlags&0x0f)==0) pVirDev->DrawPolygon(aPoly);
         else {
             for (i=0; i<nN; i++) {
                 if ( (rE.nIEFlags & (1<<i)) == 0 ) {
