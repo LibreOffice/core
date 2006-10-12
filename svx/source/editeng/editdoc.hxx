@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:38:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:35:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,12 +64,12 @@ class ImpEditEngine;
 class SvxTabStop;
 class SvtCTLOptions;
 
-DBG_NAMEEX( EE_TextPortion );
+DBG_NAMEEX( EE_TextPortion )
 
 #define CHARPOSGROW     16
 #define DEFTAB          720
 
-void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent = TRUE, short nScriptType = 0 );
+void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent = true, short nScriptType = 0 );
 USHORT GetScriptItemId( USHORT nItemId, short nScriptType );
 BOOL IsScriptItemValid( USHORT nItemId, short nScriptType );
 
@@ -116,7 +116,7 @@ struct ScriptTypePosInfo
     }
 };
 
-SV_DECL_VARARR( ScriptTypePosInfos, ScriptTypePosInfo, 0, 4 );
+SV_DECL_VARARR( ScriptTypePosInfos, ScriptTypePosInfo, 0, 4 )
 
 struct WritingDirectionInfo
 {
@@ -132,10 +132,10 @@ struct WritingDirectionInfo
     }
 };
 
-SV_DECL_VARARR( WritingDirectionInfos, WritingDirectionInfo, 0, 4 );
+SV_DECL_VARARR( WritingDirectionInfos, WritingDirectionInfo, 0, 4 )
 
 typedef EditCharAttrib* EditCharAttribPtr;
-SV_DECL_PTRARR( CharAttribArray, EditCharAttribPtr, 0, 4 );
+SV_DECL_PTRARR( CharAttribArray, EditCharAttribPtr, 0, 4 )
 
 class ContentAttribsInfo
 {
@@ -153,12 +153,12 @@ public:
 };
 
 typedef ContentAttribsInfo* ContentAttribsInfoPtr;
-SV_DECL_PTRARR( ContentInfoArray, ContentAttribsInfoPtr, 1, 1 );
+SV_DECL_PTRARR( ContentInfoArray, ContentAttribsInfoPtr, 1, 1 )
 
 //  ----------------------------------------------------------------------
 //  class SvxFontTable
 //  ----------------------------------------------------------------------
-DECLARE_TABLE( DummyFontTable, SvxFontItem* );
+DECLARE_TABLE( DummyFontTable, SvxFontItem* )
 class SvxFontTable : public DummyFontTable
 {
 public:
@@ -172,7 +172,7 @@ public:
 //  class SvxColorList
 //  ----------------------------------------------------------------------
 typedef ContentNode* ContentNodePtr;
-DECLARE_LIST( DummyColorList, SvxColorItem* );
+DECLARE_LIST( DummyColorList, SvxColorItem* )
 class SvxColorList : public DummyColorList
 {
 public:
@@ -186,7 +186,7 @@ public:
 //  class ItemList
 //  ----------------------------------------------------------------------
 typedef const SfxPoolItem* ConstPoolItemPtr;
-DECLARE_LIST( DummyItemList, ConstPoolItemPtr );
+DECLARE_LIST( DummyItemList, ConstPoolItemPtr )
 class ItemList : public DummyItemList
 {
 public:
@@ -302,7 +302,7 @@ public:
 };
 
 typedef ContentNode* ContentNodePtr;
-SV_DECL_PTRARR( ContentList, ContentNodePtr, 0, 4 );
+SV_DECL_PTRARR( ContentList, ContentNodePtr, 0, 4 )
 
 // -------------------------------------------------------------------------
 // class EditPaM
@@ -431,7 +431,7 @@ public:
 // class TextPortionList
 // -------------------------------------------------------------------------
 typedef TextPortion* TextPortionPtr;
-SV_DECL_PTRARR( TextPortionArray, TextPortionPtr, 0, 8 );
+SV_DECL_PTRARR( TextPortionArray, TextPortionPtr, 0, 8 )
 
 class TextPortionList : public TextPortionArray
 {
@@ -447,7 +447,7 @@ public:
 
 class ParaPortion;
 
-SV_DECL_VARARR( CharPosArray, sal_Int32, 0, CHARPOSGROW );
+SV_DECL_VARARR( CharPosArray, sal_Int32, 0, CHARPOSGROW )
 
 // ------------------------------------------------------------------------
 // class EditLine
@@ -542,7 +542,7 @@ public:
 // class LineList
 // -------------------------------------------------------------------------
 typedef EditLine* EditLinePtr;
-SV_DECL_PTRARR( LineArray, EditLinePtr, 0, 4 );
+SV_DECL_PTRARR( LineArray, EditLinePtr, 0, 4 )
 
 class EditLineList : public LineArray
 {
@@ -622,7 +622,7 @@ public:
 };
 
 typedef ParaPortion* ParaPortionPtr;
-SV_DECL_PTRARR( DummyParaPortionList, ParaPortionPtr, 0, 4 );
+SV_DECL_PTRARR( DummyParaPortionList, ParaPortionPtr, 0, 4 )
 
 // -------------------------------------------------------------------------
 // class ParaPortionList
@@ -696,7 +696,7 @@ public:
 };
 
 typedef DeletedNodeInfo* DeletedNodeInfoPtr;
-SV_DECL_PTRARR( DeletedNodesList, DeletedNodeInfoPtr, 0, 4 );
+SV_DECL_PTRARR( DeletedNodesList, DeletedNodeInfoPtr, 0, 4 )
 
 // -------------------------------------------------------------------------
 // class EditDoc
