@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:20:45 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:33:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2207,7 +2207,9 @@ void UnoListBoxControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw(u
         }
         catch( const Exception& e )
         {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL == 0
+            (void) e; // suppress warning
+#else
             ::rtl::OString sMessage( "UnoListBoxControl::itemStateChanged: caught an exception:\n" );
             sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
             OSL_ENSURE( sal_False, sMessage.getStr() );
