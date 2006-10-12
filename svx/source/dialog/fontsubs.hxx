@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsubs.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:06:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:12:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,9 @@
 class SvxFontSubstCheckListBox : public SvxSimpleTable
 {
     friend class SvxFontSubstTabPage;
+    using SvxSimpleTable::SetTabs;
+    using SvTreeListBox::GetCheckButtonState;
+    using SvTreeListBox::SetCheckButtonState;
 
     protected:
         virtual void    SetTabs();
