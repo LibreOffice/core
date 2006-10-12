@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:49:56 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:18:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,10 +73,10 @@ namespace desktop
 SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
     : IntroWindow()
     , _vdev(*((IntroWindow*)this))
-    , _cProgressFrameColor(NOT_LOADED)
-    , _cProgressBarColor(NOT_LOADED)
-    , _iProgress(0)
+    , _cProgressFrameColor(sal::static_int_cast< ColorData >(NOT_LOADED))
+    , _cProgressBarColor(sal::static_int_cast< ColorData >(NOT_LOADED))
     , _iMax(100)
+    , _iProgress(0)
     , _eBitmapMode(BM_DEFAULT)
     , _bPaintBitmap(sal_True)
     , _bPaintProgress(sal_False)
@@ -85,14 +85,14 @@ SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
     , _tlx(NOT_LOADED)
     , _tly(NOT_LOADED)
     , _barwidth(NOT_LOADED)
-    , _xoffset(12)
-    , _yoffset(18)
     , _barheight(NOT_LOADED)
     , _barspace(2)
     , _fXPos(-1.0)
     , _fYPos(-1.0)
     , _fWidth(-1.0)
     , _fHeight(-1.0)
+    , _xoffset(12)
+    , _yoffset(18)
 {
     _rFactory = rSMgr;
 
@@ -107,7 +107,7 @@ SplashScreen::~SplashScreen()
 
 }
 
-void SAL_CALL SplashScreen::start(const OUString& aText, sal_Int32 nRange)
+void SAL_CALL SplashScreen::start(const OUString&, sal_Int32 nRange)
     throw (RuntimeException)
 {
     _iMax = nRange;
@@ -147,7 +147,7 @@ void SAL_CALL SplashScreen::reset()
     }
 }
 
-void SAL_CALL SplashScreen::setText(const OUString& aText)
+void SAL_CALL SplashScreen::setText(const OUString&)
     throw (RuntimeException)
 {
     if (_bVisible && !_bProgressEnd) {
@@ -232,10 +232,12 @@ SplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::sta
             }
         }
 
-        if ( NOT_LOADED == _cProgressFrameColor.GetColor() )
+        if ( sal::static_int_cast< ColorData >(NOT_LOADED) ==
+             _cProgressFrameColor.GetColor() )
             _cProgressFrameColor = Color( COL_LIGHTGRAY );
 
-        if ( NOT_LOADED == _cProgressBarColor.GetColor() )
+        if ( sal::static_int_cast< ColorData >(NOT_LOADED) ==
+             _cProgressBarColor.GetColor() )
         {
             // progress bar: new color only for big bitmap format
             if ( _width > 500 )
@@ -397,14 +399,14 @@ void SplashScreen::initBitmap()
 
         if ( _bFullScreenSplash )
         {
-            haveBitmap = findScreenBitmap( _aIntroBmp );
+            haveBitmap = findScreenBitmap();
             if ( haveBitmap )
                 _eBitmapMode = BM_FULLSCREEN;
             else
-                haveBitmap = findAppBitmap( _aIntroBmp );
+                haveBitmap = findAppBitmap();
         }
         if ( !haveBitmap )
-            haveBitmap = findBitmap( aBmpFileName, _aIntroBmp );
+            haveBitmap = findBitmap( aBmpFileName );
 
         if ( !haveBitmap )
         {
@@ -433,11 +435,9 @@ void SplashScreen::initBitmap()
     }
 }
 
-bool SplashScreen::findBitmap( const rtl::OUString aBmpFileName, Bitmap& aBitmap )
+bool SplashScreen::findBitmap( const rtl::OUString aBmpFileName )
 {
     bool haveBitmap = false;
-
-    xub_StrLen nIndex = 0;
 
     // First, try to use custom bitmap data.
     rtl::OUString value;
@@ -482,7 +482,7 @@ bool SplashScreen::findBitmap( const rtl::OUString aBmpFileName, Bitmap& aBitmap
     return haveBitmap;
 }
 
-bool SplashScreen::findScreenBitmap( Bitmap& rBitmap )
+bool SplashScreen::findScreenBitmap()
 {
     sal_Int32 nWidth( 0 );
     sal_Int32 nHeight( 0 );
@@ -511,7 +511,7 @@ bool SplashScreen::findScreenBitmap( Bitmap& rBitmap )
     aStrBuf.appendAscii( ".bmp" );
     OUString aBmpFileName = aStrBuf.makeStringAndClear();
 
-    bool haveBitmap = findBitmap( aBmpFileName, rBitmap );
+    bool haveBitmap = findBitmap( aBmpFileName );
     if ( !haveBitmap )
     {
         aStrBuf.appendAscii( "intro_" );
@@ -521,12 +521,12 @@ bool SplashScreen::findScreenBitmap( Bitmap& rBitmap )
         aStrBuf.appendAscii( ".bmp" );
         aBmpFileName = aStrBuf.makeStringAndClear();
 
-        haveBitmap = findBitmap( aBmpFileName, rBitmap );
+        haveBitmap = findBitmap( aBmpFileName );
     }
     return haveBitmap;
 }
 
-bool SplashScreen::findAppBitmap( Bitmap& rBitmap )
+bool SplashScreen::findAppBitmap()
 {
     bool haveBitmap = false;
 
@@ -537,7 +537,7 @@ bool SplashScreen::findAppBitmap( Bitmap& rBitmap )
         aStrBuf.append( _sAppName );
         aStrBuf.appendAscii( ".bmp" );
         OUString aBmpFileName = aStrBuf.makeStringAndClear();
-        haveBitmap = findBitmap( aBmpFileName, rBitmap );
+        haveBitmap = findBitmap( aBmpFileName );
     }
     return haveBitmap;
 }
@@ -614,7 +614,7 @@ void SplashScreen::determineProgressRatioValues(
     }
 }
 
-void SplashScreen::Paint( const Rectangle& r)
+void SplashScreen::Paint( const Rectangle&)
 {
     if(!_bVisible) return;
 
