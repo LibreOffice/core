@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_URIHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:13:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:05:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,7 @@ Content::Content(
 }
 
 css::uno::Any Content::execute(
-    css::ucb::Command const & command, sal_Int32 commandId,
+    css::ucb::Command const & command, sal_Int32,
     css::uno::Reference< css::ucb::XCommandEnvironment > const &)
     throw (
         css::uno::Exception, css::ucb::CommandAbortedException,
