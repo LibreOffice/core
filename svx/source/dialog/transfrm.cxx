@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:45:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:31:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,7 +342,7 @@ void SvxAngleTabPage::Construct()
     lcl_ScaleRect( aRect, aUIScale );
 
     // Umrechnung auf UI-Unit
-    int nDigits = aMtrPosX.GetDecimalDigits();
+    USHORT nDigits = aMtrPosX.GetDecimalDigits();
     aRect = lcl_ConvertRect( aRect, nDigits, (MapUnit) ePoolUnit, eDlgUnit );
 
     if( !pView->IsRotateAllowed() )
@@ -905,7 +905,7 @@ void SvxPositionSizeTabPage::Construct()
     lcl_ScalePoint( aPt, aUIScale );
 
     // Metrik konvertieren
-    int nDigits = maMtrPosX.GetDecimalDigits();
+    USHORT nDigits = maMtrPosX.GetDecimalDigits();
 
     aPt = lcl_ConvertPoint( aPt, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
     maWorkArea = lcl_ConvertRect( maWorkArea, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
@@ -1006,7 +1006,7 @@ BOOL SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
                         (UINT32) lWidth ) );
         rOutAttrs.Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_HEIGHT ),
                         (UINT32) lHeight ) );
-        rOutAttrs.Put( SfxAllEnumItem( GetWhich( SID_ATTR_TRANSFORM_SIZE_POINT ), meRP ) );
+        rOutAttrs.Put( SfxAllEnumItem( GetWhich( SID_ATTR_TRANSFORM_SIZE_POINT ), sal::static_int_cast< USHORT >( meRP ) ) );
         bModified |= TRUE;
     }
 
