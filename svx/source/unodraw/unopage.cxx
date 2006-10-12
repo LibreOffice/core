@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:13:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:26:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ using namespace ::com::sun::star::drawing;
     if( rType == ::getCppuType((const Reference< xint >*)0) ) \
         aAny <<= Reference< xint >(this)
 
-DECLARE_LIST( SvxDrawPageList, SvxDrawPage * );
+DECLARE_LIST( SvxDrawPageList, SvxDrawPage * )
 
 extern SfxItemPropertyMap* ImplGetSvxOle2PropertyMap();
 extern SfxItemPropertyMap* ImplGetSvxPageShapePropertyMap();
@@ -453,7 +453,7 @@ sal_Bool SAL_CALL SvxDrawPage::hasElements()
     if( (mpModel == 0) || (mpPage == 0) )
         throw lang::DisposedException();
 
-    return mpPage?(mpPage->GetObjCount()>0):sal_False;
+    return mpPage && mpPage->GetObjCount()>0;
 }
 
 namespace
