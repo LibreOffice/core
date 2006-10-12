@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:55:04 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:50:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,9 +94,13 @@ SvXMLAutoStylePoolP_Impl::SvXMLAutoStylePoolP_Impl( SvXMLExport& rExp)
 
 SvXMLAutoStylePoolP_Impl::~SvXMLAutoStylePoolP_Impl()
 {
-    XMLFamilyData_Impl* pData = NULL;
-    while( ( pData = maFamilyList.Remove( ULONG(0) ) ) )
+    for (;;) {
+        XMLFamilyData_Impl* pData = maFamilyList.Remove( ULONG(0) );
+        if (pData == NULL) {
+            break;
+        }
         delete pData;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
