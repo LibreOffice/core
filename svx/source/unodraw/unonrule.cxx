@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:13:40 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:26:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,7 +369,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
 
         if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_NUMBERINGTYPE)))
         {
-            sal_Int16 nSet;
+            sal_Int16 nSet = sal_Int16();
             aVal >>= nSet;
 
             switch(nSet)
@@ -384,7 +384,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
             case SVX_NUM_NUMBER_NONE:
             case SVX_NUM_CHARS_UPPER_LETTER_N:
             case SVX_NUM_CHARS_LOWER_LETTER_N:
-                aFmt.SetNumberingType((SvxExtNumType)nSet);
+                aFmt.SetNumberingType(nSet);
                 continue;
             }
         }
@@ -408,7 +408,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
         }
         else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_BULLETID)))
         {
-            sal_Int16 nSet;
+            sal_Int16 nSet = sal_Int16();
             if( aVal >>= nSet )
             {
                 if(nSet < 0x100)
@@ -436,7 +436,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
         }
         else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_ADJUST)))
         {
-            sal_Int16 nAdjust;
+            sal_Int16 nAdjust = sal_Int16();
             if( aVal >>= nAdjust )
             {
                 aFmt.SetNumAdjust(ConvertUnoAdjust( (unsigned short)nAdjust ));
@@ -487,7 +487,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
         }
         else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_START_WITH)))
         {
-            sal_Int16 nStart;
+            sal_Int16 nStart = sal_Int16();
             if( aVal >>= nStart )
             {
                 aFmt.SetStart( nStart );
@@ -532,7 +532,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
         }
         else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_BULLET_RELSIZE)))
         {
-            sal_Int16 nSize;
+            sal_Int16 nSize = sal_Int16();
             if( aVal >>= nSize )
             {
                 aFmt.SetBulletRelSize( (short)nSize );
