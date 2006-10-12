@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:56:31 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:37:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,7 +232,7 @@ public:
     static enum ::xmloff::token::XMLTokenEnum MapDocInfoFieldName(enum FieldIdEnum nToken);
     static enum ::xmloff::token::XMLTokenEnum MapReferenceSource(sal_Int16 nType);
     static enum ::xmloff::token::XMLTokenEnum MapReferenceType(sal_Int16 nType);
-    static enum ::xmloff::token::XMLTokenEnum MapCountFieldName(sal_Int16 nToken);
+    static enum ::xmloff::token::XMLTokenEnum MapCountFieldName(FieldIdEnum nToken);
     static enum ::xmloff::token::XMLTokenEnum MapBibliographyFieldName(::rtl::OUString sName);
     static enum ::xmloff::token::XMLTokenEnum MapMeasureKind(sal_Int16 nKind);
     enum ::xmloff::token::XMLTokenEnum MapPageNumberName(const ::com::sun::star::uno::Reference<
@@ -444,7 +444,7 @@ protected:
                             ::com::sun::star::beans::XPropertySet> & xPropSet);
 
     /// determine, whether field has string or numeric content
-    sal_Bool IsStringField(sal_uInt16 nFieldType,   /// field ID
+    sal_Bool IsStringField(FieldIdEnum nFieldType,  /// field ID
                            const ::com::sun::star::uno::Reference <
                            ::com::sun::star::beans::XPropertySet > & xPropSet);
 
