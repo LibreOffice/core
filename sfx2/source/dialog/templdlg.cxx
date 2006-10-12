@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:37:11 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:53:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -963,7 +963,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     for( ; nCount--; )
     {
         const SfxStyleFamilyItem *pItem = pStyleFamilies->GetObject( nCount );
-        USHORT nId = SfxFamilyIdToNId( (USHORT) pItem->GetFamily() );
+        USHORT nId = SfxFamilyIdToNId( pItem->GetFamily() );
         InsertFamilyItem( nId, pItem );
     }
 
@@ -1036,7 +1036,7 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
 
 //-------------------------------------------------------------------------
 
-USHORT SfxCommonTemplateDialog_Impl::SfxFamilyIdToNId( USHORT nFamily )
+USHORT SfxCommonTemplateDialog_Impl::SfxFamilyIdToNId( SfxStyleFamily nFamily )
 {
     switch ( nFamily )
     {
@@ -1076,7 +1076,7 @@ const SfxStyleFamilyItem *SfxCommonTemplateDialog_Impl::GetFamilyItem_Impl() con
     {
         const SfxStyleFamilyItem *pItem = pStyleFamilies->GetObject(i);
 //        if(!pItem)continue;
-        USHORT nId = SfxFamilyIdToNId((USHORT)pItem->GetFamily());
+        USHORT nId = SfxFamilyIdToNId(pItem->GetFamily());
         if(nId == nActFamily)
             return pItem;
     }
@@ -2351,7 +2351,7 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
     for( ; nLoop--; )
     {
         const SfxStyleFamilyItem *pItem = pStyleFamilies->GetObject( nLoop );
-        USHORT nId = SfxFamilyIdToNId( (USHORT) pItem->GetFamily() );
+        USHORT nId = SfxFamilyIdToNId( pItem->GetFamily() );
         m_aActionTbL.SetItemImage( nId, pItem->GetImage() );
     }
 }
