@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:33:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:09:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,7 @@ short SvImpLBox::UpdateContextBmpWidthVector( SvLBoxEntry* pEntry, short nWidth 
 
     USHORT nDepth = pView->pModel->GetDepth( pEntry );
     // initialize vector if necessary
-    USHORT nSize = aContextBmpWidthVector.size();
+    std::vector< short >::size_type nSize = aContextBmpWidthVector.size();
     while ( nDepth > nSize )
     {
         aContextBmpWidthVector.resize( nSize + 1 );
@@ -1456,7 +1456,7 @@ void SvImpLBox::FillView()
 void SvImpLBox::ShowVerSBar()
 {
     BOOL bVerBar = ( pView->nWindowStyle & WB_VSCROLL ) != 0;
-    ULONG nVis;
+    ULONG nVis = 0;
     if( !bVerBar )
         nVis = pView->GetVisibleCount();
     if( bVerBar || (nVisibleCount && nVis > (ULONG)(nVisibleCount-1)) )
