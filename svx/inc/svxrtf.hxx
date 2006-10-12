@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxrtf.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:43:31 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:54:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,12 +271,24 @@ class SVX_DLLPUBLIC SvxRTFParser : public SvRTFParser
     // setzt alle Attribute, die unterschiedlich zum aktuellen sind
     void SetAttrSet( SfxItemSet& rAttrSet, SvxPosition& rSttPos );
     void SetAttrSet( SvxRTFItemStackType &rSet );
-    void SetDefault( int nToken, short nValue );
+    void SetDefault( int nToken, int nValue );
 
     // pard / plain abarbeiten
     void RTFPardPlain( int bPard, SfxItemSet** ppSet );
 
     void BuildWhichTbl();
+
+    enum RTF_CharTypeDef
+    {
+        NOTDEF_CHARTYPE,
+        LOW_CHARTYPE,
+        HIGH_CHARTYPE,
+        DOUBLEBYTE_CHARTYPE
+    };
+
+        // set latin/asian/complex character attributes
+    void SetScriptAttr(
+        RTF_CharTypeDef eType, SfxItemSet& rSet, SfxPoolItem& rItem );
 
 protected:
     virtual void EnterEnvironment();
@@ -368,9 +380,6 @@ protected:
         // ungueltige Daten gefunden (Zeichen ausser 0-9|a-f|A-F, so
         // wird USHRT_MAX returnt, ansonsten die Anzahl der umgewandelten Ze.
     xub_StrLen HexToBin( String& rToken );
-
-        // set latin/asian/complex character attributes
-    void SetScriptAttr( USHORT eType, SfxItemSet& rSet, SfxPoolItem& rItem );
 
 public:
 
