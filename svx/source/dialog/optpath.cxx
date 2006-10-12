@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpath.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-26 14:09:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:23:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -502,7 +502,7 @@ IMPL_LINK( SvxPathTabPage, StandardHdl_Impl, PushButton *, EMPTYARG )
 
             String sUserPath, sWritablePath;
             nOldCount = sTemp.GetTokenCount( MULTIPATH_DELIMITER );
-            for ( USHORT i = 0; nOldCount > 0 && i < nOldCount - 1; ++i )
+            for ( i = 0; nOldCount > 0 && i < nOldCount - 1; ++i )
             {
                 if ( sUserPath.Len() > 0 )
                     sUserPath += MULTIPATH_DELIMITER;
