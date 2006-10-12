@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:14:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:26:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1180,7 +1180,7 @@ bool SvxUnoGetResourceRanges( const short nWhich, int& nApiResIds, int& nIntResI
 bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount, String& rString ) throw()
 {
     // first, calculate the search string length without an optional number behind the name
-    int nLength = rString.Len();
+    xub_StrLen nLength = rString.Len();
     while( nLength > 0 )
     {
         const sal_Unicode nChar = rString.GetChar( nLength - 1 );
