@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmtsh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:20:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:54:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -604,7 +604,7 @@ short SvxNumberFormatShell::FillEntryList_Impl( SvStrings& rList )
      */
     short nSelPos=0;
     aCurEntryList.Remove(nSelPos,aCurEntryList.Count());
-    sal_uInt16          nPrivCat;
+    sal_uInt16          nPrivCat = CAT_CURRENCY;
     nSelPos=SELPOS_NONE;
 
     if(nCurCategory==NUMBERFORMAT_ALL)
@@ -682,7 +682,6 @@ void SvxNumberFormatShell::FillEListWithStd_Impl( SvStrings& rList,sal_uInt16 nP
                                      eOffsetEnd=NF_TEXT;
                                      break;
             default                 :return;
-                                     break;
         }
 
         nSelPos=FillEListWithFormats_Impl(rList,nSelPos,eOffsetStart,eOffsetEnd);
@@ -1491,13 +1490,20 @@ String SvxNumberFormatShell::GetFormat4Entry(short nEntry)
 short SvxNumberFormatShell::GetListPos4Entry(sal_uInt32 nIdx)
 {
     short nSelP=SELPOS_NONE;
-    for(int i=0;i<aCurEntryList.Count();i++)
+    if( aCurEntryList.Count() <= 0x7fff )
     {
-        if(aCurEntryList[i]==nIdx)
+        for(short i=0;i<aCurEntryList.Count();i++)
         {
-            nSelP=i;
-            break;
+            if(aCurEntryList[i]==nIdx)
+            {
+                nSelP=i;
+                break;
+            }
         }
+    }
+    else
+    {
+        DBG_ERROR("svx::SvxNumberFormatShell::GetListPos4Entry(), list got to large!" );
     }
     return nSelP;
 }
@@ -1753,7 +1759,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const String& rFmtStrin
     String aSymbol, aExtension;
     sal_uInt32 nFound = pFormatter->TestNewString( rFmtString, eCurLanguage );
     if ( nFound != NUMBERFORMAT_ENTRY_NOT_FOUND &&
-            (pFormat = pFormatter->GetEntry( nFound )) &&
+            ((pFormat = pFormatter->GetEntry( nFound )) != 0) &&
             pFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
     {   // eventually match with format locale
         const NfCurrencyEntry* pTmpCurrencyEntry =
