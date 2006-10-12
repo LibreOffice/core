@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clipboardctl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:25:00 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:56:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,9 +86,9 @@ SvxClipBoardControl::SvxClipBoardControl(
         USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pPopup      (0),
-    nItemId     (nId),
     pClipboardFmtItem( 0 ),
+     pPopup     (0),
+    nItemId     (nId),
     bDisabled( FALSE )
 {
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ClipboardFormatItems" )));
