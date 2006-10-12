@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoNamespaceMap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:10:22 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:25:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,7 +196,7 @@ sal_Bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
     // we need the next namespace item
     mpCurrentAttr = NULL;
 
-    const SfxPoolItem* pItem;
+    const SfxPoolItem* pItem = 0;
     // look for the next available item in the current pool
     while( (mnItem < mnItemCount) && ( NULL == (pItem = mpPool->GetItem( *mpWhichId, mnItem ) ) ) )
         mnItem++;
