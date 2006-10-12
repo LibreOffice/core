@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlg2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:44:19 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:13:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -674,7 +674,7 @@ void ImpPathDialog::PreExecute()
         for ( i = 0; i < pDriveList->GetEntryCount(); ++i )
         {
             UniString aEntry = pDriveList->GetEntry(i);
-            int    nLen   = aEntry.Len();
+            xub_StrLen nLen   = aEntry.Len();
             nLen = nLen > 2 ? 2 : nLen;
             if ( aEntry.CompareIgnoreCaseToAscii( aPathStr, nLen ) == COMPARE_EQUAL )
             {
