@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:48:33 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:07:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -424,7 +424,7 @@ BOOL SdrDragView::TakeDragLimit(SdrDragMode /*eMode*/, Rectangle& /*rRect*/) con
 BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl, short nMinMov, SdrDragMethod* pForcedMeth)
 {
     BrkAction();
-    BOOL bRet=FALSE;
+    bool bRet=false;
     {
         SetDragWithCopy(FALSE);
         //ForceEdgesOfMarkedNodes();
@@ -822,7 +822,7 @@ void SdrDragView::MovDragObj(const Point& rPnt)
 
 BOOL SdrDragView::EndDragObj(BOOL bCopy)
 {
-    BOOL bRet=FALSE;
+    bool bRet=false;
     if (pDragBla!=NULL && aDragStat.IsMinMoved() && aDragStat.GetNow()!=aDragStat.GetPrev()) {
         ULONG nHdlAnzMerk=0;
         if (bEliminatePolyPoints) { // IBM Special
@@ -949,7 +949,7 @@ void SdrDragView::DrawDragObj(OutputDevice* pOut, BOOL bFull) const
 
 BOOL SdrDragView::IsMoveOnlyDragObj(BOOL bAskRTTI) const
 {
-    BOOL bRet=FALSE;
+    bool bRet=false;
     if (pDragBla!=NULL && !IsDraggingPoints() && !IsDraggingGluePoints()) {
         if (bAskRTTI) {
             bRet=IS_TYPE(SdrDragMove,pDragBla);
@@ -960,7 +960,7 @@ BOOL SdrDragView::IsMoveOnlyDragObj(BOOL bAskRTTI) const
     return bRet;
 }
 
-void SdrDragView::ImpDrawEdgeXor(XOutputDevice& rXOut, BOOL /*bFull*/) const
+void SdrDragView::ImpDrawEdgeXor(XOutputDevice& rXOut) const
 {
     ULONG nEdgeAnz = GetEdgesOfMarkedNodes().GetMarkCount();
     BOOL bNo=(!IsRubberEdgeDragging() && !IsDetailedEdgeDragging()) || nEdgeAnz==0 ||
