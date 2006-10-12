@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dibpreview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:56:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:52:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,7 @@ sal_Int32 SAL_CALL CDIBPreview::getTargetColorDepth() throw (RuntimeException)
 sal_Int32 SAL_CALL CDIBPreview::getAvailableWidth() throw (RuntimeException)
 {
     RECT rect;
-    sal_Bool bRet = GetClientRect(m_Hwnd,&rect);
+    bool bRet = GetClientRect(m_Hwnd,&rect);
 
     sal_Int32 cx = 0;
 
@@ -192,7 +192,7 @@ sal_Int32 SAL_CALL CDIBPreview::getAvailableWidth() throw (RuntimeException)
 sal_Int32 SAL_CALL CDIBPreview::getAvailableHeight() throw (RuntimeException)
 {
     RECT rect;
-    sal_Bool bRet = GetClientRect(m_Hwnd,&rect);
+    bool bRet = GetClientRect(m_Hwnd,&rect);
 
     sal_Int32 cy = 0;
 
@@ -273,7 +273,7 @@ void SAL_CALL CDIBPreview::onPaint(HWND hWnd, HDC hDC)
         pbmfh = reinterpret_cast<BITMAPFILEHEADER*>(m_Image.getArray());
 
         if ( !IsBadReadPtr( pbmfh, sizeof(BITMAPFILEHEADER)) &&
-             (pbmfh->bfType == *(WORD*)"BM"))
+             (pbmfh->bfType == ('B' | ('M' << 8))) )
         {
             pbmi  = reinterpret_cast<BITMAPINFO*>((pbmfh + 1));
             pBits = reinterpret_cast<BYTE*>(((DWORD)pbmfh) + pbmfh->bfOffBits);
@@ -281,7 +281,7 @@ void SAL_CALL CDIBPreview::onPaint(HWND hWnd, HDC hDC)
             cxDib =      pbmi->bmiHeader.biWidth;
             cyDib = abs (pbmi->bmiHeader.biHeight);
 
-            int oldMode = SetStretchBltMode(hDC, COLORONCOLOR);
+            SetStretchBltMode(hDC, COLORONCOLOR);
 
             int nWidth  = getAvailableWidth();
             int nHeight = getAvailableHeight();
@@ -378,10 +378,11 @@ LRESULT CALLBACK CDIBPreview::WndProc(
     case WM_NCDESTROY:
         {
             // RemoveProp returns the saved value on success
-            CDIBPreview* pImpl = reinterpret_cast<CDIBPreview*>(
-                RemoveProp(hWnd, CURRENT_INSTANCE));
-
-            OSL_ASSERT(pImpl);
+            if (reinterpret_cast<CDIBPreview*>(
+                    RemoveProp(hWnd, CURRENT_INSTANCE)) == NULL)
+            {
+                OSL_ASSERT(false);
+            }
         }
         break;
 
