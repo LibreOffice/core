@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lnkbase2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:19:11 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:48:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -491,12 +491,12 @@ BOOL SvBaseLink::Edit( Window* pParent )
                 if( STRING_NOTFOUND != nFndPos )
                 {
                     sError.Erase( nFndPos, 1 ).Insert( sApp, nFndPos );
-                    nFndPos += sApp.Len();
+                    nFndPos = nFndPos + sApp.Len();
                 }
                 if( STRING_NOTFOUND != ( nFndPos = sError.Search( '%', nFndPos )))
                 {
                     sError.Erase( nFndPos, 1 ).Insert( sTopic, nFndPos );
-                    nFndPos += sTopic.Len();
+                    nFndPos = nFndPos + sTopic.Len();
                 }
                 if( STRING_NOTFOUND != ( nFndPos = sError.Search( '%', nFndPos )))
                     sError.Erase( nFndPos, 1 ).Insert( sItem, nFndPos );
