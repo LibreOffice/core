@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eehtml.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:30:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:37:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ struct AnchorInfo
 
 class EditHTMLParser : public SfxHTMLParser
 {
+    using HTMLParser::CallParser;
 private:
     EditSelection           aCurSel;
     String                  aBaseURL;
@@ -98,7 +99,7 @@ protected:
     virtual void            NextToken( int nToken );
 
 public:
-                            EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs, int bReadNewDoc = TRUE );
+                            EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs );
                             ~EditHTMLParser();
 
     virtual SvParserState   CallParser( ImpEditEngine* pImpEE, const EditPaM& rPaM );
@@ -106,7 +107,7 @@ public:
     const EditSelection&    GetCurSelection() const { return aCurSel; }
 };
 
-SV_DECL_REF( EditHTMLParser );
+SV_DECL_REF( EditHTMLParser )
 SV_IMPL_REF( EditHTMLParser );
 
 #endif
