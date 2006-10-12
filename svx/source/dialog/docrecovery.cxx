@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:18:49 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:12:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,6 @@ short TabDialog4Recovery::Execute()
             case DLG_RET_CANCEL :
             case DLG_RET_OK_AUTOLUNCH :
                 return nRet;
-                break;
         }
     }
 }
@@ -1175,7 +1174,6 @@ short RecoveryDialog::execute()
                     m_eRecoveryState = RecoveryDialog::E_RECOVERY_CANCELED;
                 return execute();
              }
-             break;
 
         case RecoveryDialog::E_RECOVERY_IN_PROGRESS :
              {
@@ -1198,7 +1196,6 @@ short RecoveryDialog::execute()
                 m_eRecoveryState = RecoveryDialog::E_RECOVERY_CORE_DONE;
                 return execute();
              }
-             break;
 
         case RecoveryDialog::E_RECOVERY_CORE_DONE :
              {
@@ -1227,7 +1224,6 @@ short RecoveryDialog::execute()
                     m_eRecoveryState = RecoveryDialog::E_RECOVERY_CANCELED;
                 return execute();
              }
-             break;
 
         case RecoveryDialog::E_RECOVERY_DONE :
              {
@@ -1255,7 +1251,6 @@ short RecoveryDialog::execute()
                               m_eRecoveryState = RecoveryDialog::E_RECOVERY_HANDLED;
                               return DLG_RET_OK;
                           }
-                          break;
 
                      // user decided to save the broken temp files
                      // do and forget it
@@ -1267,7 +1262,6 @@ short RecoveryDialog::execute()
                               m_eRecoveryState = RecoveryDialog::E_RECOVERY_HANDLED;
                               return DLG_RET_OK;
                           }
-                          break;
 
                      // user decided to ignore broken temp files.
                      // Ask it again ... may be this decision was wrong.
@@ -1282,13 +1276,11 @@ short RecoveryDialog::execute()
                               m_eRecoveryState = RecoveryDialog::E_RECOVERY_HANDLED;
                               return DLG_RET_OK;
                           }
-                          break;
                  }
 
                  m_eRecoveryState = RecoveryDialog::E_RECOVERY_HANDLED;
                  return DLG_RET_OK;
              }
-             break;
 
         case RecoveryDialog::E_RECOVERY_CANCELED :
              {
@@ -1301,7 +1293,6 @@ short RecoveryDialog::execute()
                      m_eRecoveryState = RecoveryDialog::E_RECOVERY_CANCELED_BEFORE;
                  return execute();
              }
-             break;
 
         case RecoveryDialog::E_RECOVERY_CANCELED_BEFORE :
         case RecoveryDialog::E_RECOVERY_CANCELED_AFTERWARDS :
@@ -1358,7 +1349,6 @@ short RecoveryDialog::execute()
                  // THERE IS NO WAY BACK. see impl_askUserForWizardCancel()!
                  return DLG_RET_CANCEL;
              }
-             break;
 
         case RecoveryDialog::E_RECOVERY_HANDLED :
              {
@@ -1374,7 +1364,6 @@ short RecoveryDialog::execute()
                  else
                      return DLG_RET_CANCEL;
              }
-             break;
     }
 
     // should never be reached .-)
@@ -1699,7 +1688,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             USHORT nLineCount = 0;
 
             for ( i = 0; i < nParaCount; ++i )
-                nLineCount += pTextEngine->GetLineCount(i);
+                nLineCount = nLineCount + pTextEngine->GetLineCount(i);
 
             USHORT nVisCols = 0, nVisLines = 0;
             GetMaxVisColumnsAndLines( nVisCols, nVisLines );
