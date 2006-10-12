@@ -4,9 +4,9 @@
  *
  *  $RCSfile: style.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:01:45 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:20:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -825,7 +825,7 @@ BOOL SfxStyleSheetBasePool::Load( SvStream& rStream )
     SfxMiniRecordReader aPoolRec( &rStream, SFX_STYLES_REC );
 
     // Header-Record lesen
-    short nCharSet;
+    short nCharSet = 0;
     if ( !rStream.GetError() )
     {
         SfxSingleRecordReader aHeaderRec( &rStream, SFX_STYLES_REC_HEADER );
@@ -843,8 +843,9 @@ BOOL SfxStyleSheetBasePool::Load( SvStream& rStream )
         if ( !aStylesRec.IsValid() )
             return FALSE;
 
-        rtl_TextEncoding eEnc = GetSOLoadTextEncoding( (rtl_TextEncoding)nCharSet,
-                                                       rStream.GetVersion() );
+        rtl_TextEncoding eEnc = GetSOLoadTextEncoding(
+            (rtl_TextEncoding)nCharSet,
+            sal::static_int_cast< USHORT >(rStream.GetVersion()) );
         rtl_TextEncoding eOldEnc = rStream.GetStreamCharSet();
         rStream.SetStreamCharSet( eEnc );
 
@@ -895,13 +896,13 @@ BOOL SfxStyleSheetBasePool::Load( SvStream& rStream )
         }
 
         //  #72939# only loop through the styles that were really inserted
-        nStyles = aStyles.Count();
+        ULONG n = aStyles.Count();
 
         //! delete pTmpPool;
         // Jetzt Parent und Follow setzen. Alle Sheets sind geladen.
         // Mit Setxxx() noch einmal den String eintragen, da diese
         // virtuellen Methoden evtl. ueberlagert sind.
-        for ( USHORT i = 0; i < nStyles; i++ )
+        for ( ULONG i = 0; i < n; i++ )
         {
             SfxStyleSheetBase* p = aStyles.GetObject( i );
             XubString aText = p->aParent;
@@ -931,8 +932,9 @@ BOOL SfxStyleSheetBasePool::Load1_Impl( SvStream& rStream )
     else
         rStream >> nCharSet;
 
-    rtl_TextEncoding eEnc = GetSOLoadTextEncoding( (rtl_TextEncoding)nCharSet,
-                                                   rStream.GetVersion() );
+    rtl_TextEncoding eEnc = GetSOLoadTextEncoding(
+        (rtl_TextEncoding)nCharSet,
+        sal::static_int_cast< USHORT >(rStream.GetVersion()) );
     rtl_TextEncoding eOldEnc = rStream.GetStreamCharSet();
     rStream.SetStreamCharSet( eEnc );
 
@@ -1028,8 +1030,9 @@ BOOL SfxStyleSheetBasePool::Store( SvStream& rStream, BOOL bUsed )
 
     // einen Header-Record vorweg
     rtl_TextEncoding eEnc
-        = ::GetSOStoreTextEncoding( rStream.GetStreamCharSet(),
-                                     rStream.GetVersion() );
+        = ::GetSOStoreTextEncoding(
+            rStream.GetStreamCharSet(),
+            sal::static_int_cast< USHORT >(rStream.GetVersion()) );
     rtl_TextEncoding eOldEnc = rStream.GetStreamCharSet();
     rStream.SetStreamCharSet( eEnc );
 
@@ -1062,8 +1065,11 @@ BOOL SfxStyleSheetBasePool::Store( SvStream& rStream, BOOL bUsed )
 
                     pName->Insert( (sal_Unicode)nFamily, 0 );
                     pConvName->Insert( "  ", 0 );
-                    pConvName->SetChar( 0, (0xff & (nFamily >> 8)) );
-                    pConvName->SetChar( 1, (0xff & nFamily) );
+                    pConvName->SetChar(
+                        0,
+                        sal::static_int_cast< char >(0xff & (nFamily >> 8)) );
+                    pConvName->SetChar(
+                        1, sal::static_int_cast< char >(0xff & nFamily) );
 
                     USHORT nInsPos, nAdd = aSortConvNames.Count();
                     while( !aSortConvNames.Insert( pConvName, nInsPos ) )
@@ -1102,7 +1108,7 @@ BOOL SfxStyleSheetBasePool::Store( SvStream& rStream, BOOL bUsed )
                 // Globale Teile speichern
                 String aHelpFile;
                 sal_uInt32 nHelpId = p->GetHelpId( aHelpFile );
-                USHORT nFamily = p->GetFamily();
+                USHORT nFamily = sal::static_int_cast< USHORT >(p->GetFamily());
                 String sFamily( (sal_Unicode)nFamily );
 
                 (sNm = sFamily) += p->GetName();
