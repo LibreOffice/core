@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:42:56 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:13:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1542,11 +1542,12 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                         {
                             nItemPos = ((((nLastItem+1)/mnCols)-1)*mnCols)+(mnCurCol%mnCols);
                             if ( nItemPos+mnCols <= nLastItem )
-                                nItemPos += mnCols;
+                                nItemPos = nItemPos + mnCols;
                         }
                     }
                     else if ( nCalcPos >= ( nLineCount * mnCols ) )
-                        nItemPos = nCalcPos - ( nLineCount * mnCols );
+                        nItemPos = sal::static_int_cast< USHORT >(
+                            nCalcPos - ( nLineCount * mnCols ));
                     else
                     {
                         if( (KEY_UP == rKEvt.GetKeyCode().GetCode() ) && (GetStyle() & WB_MENUSTYLEVALUESET) )
@@ -1571,7 +1572,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                                 {
                                     nItemPos = ((((nLastItem+1)/mnCols)-1)*mnCols)+(nCalcPos%mnCols);
                                     if ( nItemPos+mnCols <= nLastItem )
-                                        nItemPos += mnCols;
+                                        nItemPos = nItemPos + mnCols;
                                 }
                             }
                         }
@@ -1597,7 +1598,8 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                     if ( nCalcPos == VALUESET_ITEM_NONEITEM )
                         nItemPos = mnCurCol;
                     else if ( nCalcPos + ( nLineCount * mnCols ) <= nLastItem )
-                        nItemPos = nCalcPos + ( nLineCount * mnCols );
+                        nItemPos = sal::static_int_cast< USHORT >(
+                            nCalcPos + ( nLineCount * mnCols ));
                     else
                     {
                         if( (KEY_DOWN == rKEvt.GetKeyCode().GetCode() ) && (GetStyle() & WB_MENUSTYLEVALUESET) )
