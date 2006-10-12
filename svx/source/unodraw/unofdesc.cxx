@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofdesc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:12:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:25:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,17 +116,17 @@ void SvxUnoFontDescriptor::ConvertFromFont( const Font& rFont, awt::FontDescript
 {
     rDesc.Name = rFont.GetName();
     rDesc.StyleName = rFont.GetStyleName();
-    rDesc.Width = rFont.GetSize().Width();
-    rDesc.Height = rFont.GetSize().Height();
-    rDesc.Family = rFont.GetFamily();
+    rDesc.Width = sal::static_int_cast< sal_Int16 >(rFont.GetSize().Width());
+    rDesc.Height = sal::static_int_cast< sal_Int16 >(rFont.GetSize().Height());
+    rDesc.Family = sal::static_int_cast< sal_Int16 >(rFont.GetFamily());
     rDesc.CharSet = rFont.GetCharSet();
-    rDesc.Pitch = rFont.GetPitch();
-    rDesc.Orientation = rFont.GetOrientation() / 10;
+    rDesc.Pitch = sal::static_int_cast< sal_Int16 >(rFont.GetPitch());
+    rDesc.Orientation = static_cast< float >(rFont.GetOrientation() / 10);
     rDesc.Kerning = rFont.IsKerning();
     rDesc.Weight = VCLUnoHelper::ConvertFontWeight( rFont.GetWeight() );
     rDesc.Slant = (awt::FontSlant)rFont.GetItalic();
-    rDesc.Underline = rFont.GetUnderline();
-    rDesc.Strikeout = rFont.GetStrikeout();
+    rDesc.Underline = sal::static_int_cast< sal_Int16 >(rFont.GetUnderline());
+    rDesc.Strikeout = sal::static_int_cast< sal_Int16 >(rFont.GetStrikeout());
     rDesc.WordLineMode = rFont.IsWordLineMode();
 }
 
@@ -192,9 +192,11 @@ void SvxUnoFontDescriptor::FillFromItemSet( const SfxItemSet& rSet, awt::FontDes
         SvxFontItem* pFontItem = (SvxFontItem*)&rSet.Get( EE_CHAR_FONTINFO, TRUE );
         rDesc.Name      = pFontItem->GetFamilyName();
         rDesc.StyleName = pFontItem->GetStyleName();
-        rDesc.Family    = pFontItem->GetFamily();
+        rDesc.Family    = sal::static_int_cast< sal_Int16 >(
+            pFontItem->GetFamily());
         rDesc.CharSet   = pFontItem->GetCharSet();
-        rDesc.Pitch     = pFontItem->GetPitch();
+        rDesc.Pitch     = sal::static_int_cast< sal_Int16 >(
+            pFontItem->GetPitch());
     }
     {
         pItem = &rSet.Get( EE_CHAR_FONTHEIGHT, TRUE );
