@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclunohelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:23:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:33:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -361,14 +361,14 @@ FontWeight VCLUnoHelper::ConvertFontWeight( float f )
     aFD.StyleName = rFont.GetStyleName();
     aFD.Height = (sal_Int16)rFont.GetSize().Height();
     aFD.Width = (sal_Int16)rFont.GetSize().Width();
-    aFD.Family = rFont.GetFamily();
+    aFD.Family = sal::static_int_cast< sal_Int16 >(rFont.GetFamily());
     aFD.CharSet = rFont.GetCharSet();
-    aFD.Pitch = rFont.GetPitch();
+    aFD.Pitch = sal::static_int_cast< sal_Int16 >(rFont.GetPitch());
     aFD.CharacterWidth = VCLUnoHelper::ConvertFontWidth( rFont.GetWidthType() );
     aFD.Weight= VCLUnoHelper::ConvertFontWeight( rFont.GetWeight() );
     aFD.Slant = (::com::sun::star::awt::FontSlant)rFont.GetItalic();
-    aFD.Underline = rFont.GetUnderline();
-    aFD.Strikeout = rFont.GetStrikeout();
+    aFD.Underline = sal::static_int_cast< sal_Int16 >(rFont.GetUnderline());
+    aFD.Strikeout = sal::static_int_cast< sal_Int16 >(rFont.GetStrikeout());
     aFD.Orientation = rFont.GetOrientation();
     aFD.Kerning = rFont.IsKerning();
     aFD.WordLineMode = rFont.IsWordLineMode();
