@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saxnamespacefilter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:30:57 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:44:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,9 +105,9 @@ void SAL_CALL SaxNamespaceFilter::startElement(
     AttributeListImpl* pNewList = new AttributeListImpl();
 
     // examine all namespaces for this level
-    ::std::vector< int > aAttributeIndexes;
+    ::std::vector< sal_Int16 > aAttributeIndexes;
     {
-        for ( int i=0; i< xAttribs->getLength(); i++ )
+        for ( sal_Int16 i=0; i< xAttribs->getLength(); i++ )
         {
             OUString aName = xAttribs->getNameByIndex( i );
             if ( aName.compareTo( aXMLAttributeNamespace, aXMLAttributeNamespace.getLength() ) == 0 )
@@ -123,10 +123,12 @@ void SAL_CALL SaxNamespaceFilter::startElement(
     try
     {
         // apply namespaces to all remaing attributes
-        for ( sal_uInt32 i=0; i< aAttributeIndexes.size(); i++ )
+        for ( ::std::vector< sal_Int16 >::const_iterator i(
+                  aAttributeIndexes.begin());
+              i != aAttributeIndexes.end(); ++i )
         {
-            OUString aAttributeName          = xAttribs->getNameByIndex( aAttributeIndexes[i] );
-            OUString aValue                  = xAttribs->getValueByIndex( aAttributeIndexes[i] );
+            OUString aAttributeName          = xAttribs->getNameByIndex( *i );
+            OUString aValue                  = xAttribs->getValueByIndex( *i );
             OUString aNamespaceAttributeName = aXMLNamespaces.applyNSToAttributeName( aAttributeName );
             pNewList->addAttribute( aNamespaceAttributeName, aXMLAttributeType, aValue );
         }
