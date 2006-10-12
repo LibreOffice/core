@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iconcdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:15:32 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:16:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,9 @@ struct IconChoicePageData
 
 class IconChoicePage : public TabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 private :
     const SfxItemSet*   pSet;
     String              aUserString;
@@ -208,7 +211,7 @@ private :
     SfxItemSet*             pExampleSet;
     USHORT*                 pRanges;
 
-    USHORT                  nResId;
+    sal_uInt32              nResId;
 
     BOOL                    bHideResetBtn;
     BOOL                    bModal;
