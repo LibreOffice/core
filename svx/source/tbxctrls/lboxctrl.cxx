@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:06:09 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:21:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,8 @@ class SvxPopupWindowListBox;
 
 class SvxPopupWindowListBox : public SfxPopupWindow
 {
+    using FloatingWindow::StateChanged;
+
     FixedInfo       aInfo;
     ListBox *       pListBox;
     ToolBox &       rToolBox;
@@ -237,7 +239,7 @@ SfxPopupWindowType SvxListBoxControl::GetPopupWindowType() const
 
 
 void SvxListBoxControl::StateChanged(
-        USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+        USHORT, SfxItemState, const SfxPoolItem* pState )
 {
     GetToolBox().EnableItem( GetId(),
                             SFX_ITEM_DISABLED != GetItemState(pState) );
@@ -266,7 +268,7 @@ void SvxListBoxControl::Impl_SetInfo( USHORT nCount )
 {
     DBG_ASSERT( pPopupWin, "NULL pointer, PopupWindow missing" );
 
-    ListBox &rListBox = pPopupWin->GetListBox();
+//    ListBox &rListBox = pPopupWin->GetListBox();
 
     USHORT nId;
     if (nCount == 1)
