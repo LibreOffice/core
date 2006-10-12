@@ -4,9 +4,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:56:13 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:30:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,7 +174,7 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
 
         // OPropertySetAggregationHelper overridables
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() = 0;
+        using OPropertySetAggregationHelper::getInfoHelper;
 
         // XCloneable
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw(::com::sun::star::uno::RuntimeException);
