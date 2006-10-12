@@ -4,9 +4,9 @@
  *
  *  $RCSfile: searchopt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:29:28 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:08:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,8 @@ void SvtSearchOptions_Impl::SetFlag( USHORT nOffset, BOOL bVal )
 
 void SvtSearchOptions_Impl::SetModified( BOOL bVal )
 {
-    if ((bModified = bVal))
+    bModified = bVal;
+    if (bModified)
     {
         ConfigItem::SetModified();
     }
