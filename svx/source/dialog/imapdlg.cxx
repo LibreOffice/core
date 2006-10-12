@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:25:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:16:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
@@ -659,7 +660,8 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 
 void SvxIMapDlg::DoOpen()
 {
-       ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+       ::sfx2::FileDialogHelper aDlg(
+        com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 
     ImageMap        aLoadIMap;
     const String    aFilter( DEFINE_CONST_UNICODE( IMAP_ALL_FILTER ) );
@@ -703,14 +705,15 @@ void SvxIMapDlg::DoOpen()
 
 BOOL SvxIMapDlg::DoSave()
 {
-       ::sfx2::FileDialogHelper aDlg( ::sfx2::FILESAVE_SIMPLE, 0 );
+       ::sfx2::FileDialogHelper aDlg(
+        com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
 
     const String    aBinFilter( DEFINE_CONST_UNICODE( IMAP_BINARY_FILTER ) );
     const String    aCERNFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ) );
     const String    aNCSAFilter( DEFINE_CONST_UNICODE( IMAP_NCSA_FILTER ) );
     SdrModel*       pModel = pIMapWnd->GetSdrModel();
     const sal_Bool bChanged = pModel->IsChanged();
-    BOOL            bRet;
+    BOOL            bRet = false;
 
     aDlg.AddFilter( aCERNFilter, DEFINE_CONST_UNICODE( IMAP_CERN_TYPE ) );
     aDlg.AddFilter( aNCSAFilter, DEFINE_CONST_UNICODE( IMAP_NCSA_TYPE ) );
@@ -740,13 +743,16 @@ BOOL SvxIMapDlg::DoSave()
             nFormat = IMAP_FORMAT_NCSA;
             aExt = DEFINE_CONST_UNICODE( IMAP_NCSA_EXT );
         }
+        else
+        {
+            return FALSE;
+        }
 
         INetURLObject aURL( aDlg.GetPath() );
 
         if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
         {
             DBG_ERROR( "invalid URL" );
-            bRet = FALSE;
         }
         else
         {
@@ -765,12 +771,8 @@ BOOL SvxIMapDlg::DoSave()
                 pModel->SetChanged( bChanged );
                 bRet = TRUE;
             }
-            else
-                bRet = FALSE;
         }
     }
-    else
-        bRet = FALSE;
 
     return bRet;
 }
