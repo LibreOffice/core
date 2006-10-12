@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adrparse.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:14:42 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:24:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -652,15 +652,19 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                                                    m_pAddrSpec->m_pEnd, true);
                         else
                         {
-                            xub_StrLen nLen
-                                = m_pAddrSpec->m_pEnd - m_pAddrSpec->m_pBegin;
+                            xub_StrLen nLen =
+                                sal::static_int_cast< xub_StrLen >(
+                                    m_pAddrSpec->m_pEnd
+                                    - m_pAddrSpec->m_pBegin);
                             if (nLen == rInput.Len())
                                 aTheAddrSpec = rInput;
                             else
                                 aTheAddrSpec
-                                    = rInput.Copy(m_pAddrSpec->m_pBegin
-                                                      - rInput.GetBuffer(),
-                                                  nLen);
+                                    = rInput.Copy(
+                                        sal::static_int_cast< xub_StrLen >(
+                                            m_pAddrSpec->m_pBegin
+                                            - rInput.GetBuffer()),
+                                        nLen);
                         }
                         UniString aTheRealName;
                         if (!m_pRealNameBegin
@@ -677,24 +681,31 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                                                      m_pFirstCommentEnd);
                             else
                                 aTheRealName
-                                    = rInput.Copy(m_pFirstCommentBegin
-                                                      - rInput.GetBuffer(),
-                                                  m_pFirstCommentEnd
-                                                      - m_pFirstCommentBegin);
+                                    = rInput.Copy(
+                                        sal::static_int_cast< xub_StrLen >(
+                                            m_pFirstCommentBegin
+                                            - rInput.GetBuffer()),
+                                        sal::static_int_cast< xub_StrLen >(
+                                            m_pFirstCommentEnd
+                                            - m_pFirstCommentBegin));
                         else if (m_bRealNameReparse)
                             aTheRealName = reparse(m_pRealNameBegin,
                                                    m_pRealNameEnd, false);
                         else
                         {
-                            xub_StrLen nLen = m_pRealNameContentEnd
-                                                  - m_pRealNameContentBegin;
+                            xub_StrLen nLen =
+                                sal::static_int_cast< xub_StrLen >(
+                                    m_pRealNameContentEnd
+                                    - m_pRealNameContentBegin);
                             if (nLen == rInput.Len())
                                 aTheRealName = rInput;
                             else
                                 aTheRealName
-                                    = rInput.Copy(m_pRealNameContentBegin
-                                                      - rInput.GetBuffer(),
-                                                  nLen);
+                                    = rInput.Copy(
+                                        sal::static_int_cast< xub_StrLen >(
+                                            m_pRealNameContentBegin
+                                            - rInput.GetBuffer()),
+                                        nLen);
                         }
                         if (pParser->m_bHasFirst)
                             pParser->m_aRest.Insert(new SvAddressEntry_Impl(
