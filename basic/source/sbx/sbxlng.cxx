@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxlng.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:10:36 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:33:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ start:
             else if( p->eType == SbxULONG64 )
                 dVal = ImpUINT64ToDouble( p->nULong64 );
             else if( p->eType == SbxSALINT64 )
-                dVal = p->nInt64;
+                dVal = static_cast< double >(p->nInt64);
             else if( p->eType == SbxSALUINT64 )
                 dVal = ImpSalUInt64ToDouble( p->uInt64 );
             else if( p->eType == SbxDECIMAL )
@@ -330,15 +330,20 @@ start:
         case SbxBYREF | SbxDOUBLE:
             *p->pDouble = (double) n; break;
         case SbxBYREF | SbxCURRENCY:
+            double d;
             if( n > SbxMAXCURR )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = sal::static_int_cast<INT32>( SbxMAXCURR );
+                SbxBase::SetError( SbxERR_OVERFLOW ); d = SbxMAXCURR;
             }
             else if( n < SbxMINCURR )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = sal::static_int_cast<INT32>( SbxMINCURR );
+                SbxBase::SetError( SbxERR_OVERFLOW ); d = SbxMINCURR;
             }
-            *p->pLong64 = ImpDoubleToCurrency( (double)n ); break;
+            else
+            {
+                d = n;
+            }
+            *p->pLong64 = ImpDoubleToCurrency( d ); break;
 
         default:
             SbxBase::SetError( SbxERR_CONVERSION );

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxulng.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:12:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:34:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ start:
             else if( p->eType == SbxULONG64 )
                 dVal = ImpUINT64ToDouble( p->nULong64 );
             else if( p->eType == SbxSALINT64 )
-                dVal = p->nInt64;
+                dVal = static_cast< double >(p->nInt64);
             else if( p->eType == SbxSALUINT64 )
                 dVal = ImpSalUInt64ToDouble( p->uInt64 );
             else if( p->eType == SbxDECIMAL )
@@ -314,11 +314,16 @@ start:
         case SbxBYREF | SbxSALUINT64:
             *p->puInt64 = n; break;
         case SbxBYREF | SbxCURRENCY:
+            double d;
             if( n > SbxMAXCURR )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); n = sal::static_int_cast<UINT32>( SbxMAXCURR );
+                SbxBase::SetError( SbxERR_OVERFLOW ); d = SbxMAXCURR;
             }
-            *p->pLong64 = ImpDoubleToCurrency( (double)n ); break;
+            else
+            {
+                d = n;
+            }
+            *p->pLong64 = ImpDoubleToCurrency( n ); break;
 
         default:
             SbxBase::SetError( SbxERR_CONVERSION );
