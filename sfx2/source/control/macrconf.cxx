@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:26:36 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:50:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,7 +222,7 @@ SfxMacroInfo::SfxMacroInfo( const String& rURL ) :
                 aMethodName = aTmp.GetToken( 2, '.' );
 
                 // Remove arguments to be compatible
-                aMethodName.SearchAndReplaceAscii( "()", String(), std::max( aMethodName.Len()-2, 0 ));
+                aMethodName.SearchAndReplaceAscii( "()", String(), sal::static_int_cast< xub_StrLen >(std::max( aMethodName.Len()-2, 0 )));
             }
         }
 
