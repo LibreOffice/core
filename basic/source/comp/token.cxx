@@ -4,9 +4,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:03:55 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:28:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -525,13 +525,13 @@ SbiToken SbiTokenizer::Next()
             if( res == COMPARE_LESS )
             {
                 if ((ub - lb) == 2) ub = lb;
-                else ub -= delta;
+                else ub = ub - delta;
             }
             // Kleiner? Dann obere Haelfte
             else
             {
                 if ((ub -lb) == 2) lb = ub;
-                else lb += delta;
+                else lb = lb + delta;
             }
         } while( delta );
         // Symbol? Wenn nicht >= Token
