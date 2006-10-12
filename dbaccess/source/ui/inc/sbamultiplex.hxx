@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbamultiplex.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:18:48 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:39:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,7 @@ namespace dbaui
         aMulti.Source = &m_rParent;                                                         \
         ::cppu::OInterfaceIteratorHelper aIt(*this);                                        \
         while (aIt.hasMoreElements())                                                       \
-            reinterpret_cast< listenerclass*>(aIt.next())->methodname(aMulti);              \
+            static_cast< listenerclass*>(aIt.next())->methodname(aMulti);               \
     }                                                                                       \
 
     #define IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(classname, listenerclass, methodname, eventtype) \
@@ -211,7 +211,7 @@ namespace dbaui
         ::cppu::OInterfaceIteratorHelper aIt(*this);                                        \
         sal_Bool bResult = sal_True;                                                        \
         while (bResult && aIt.hasMoreElements())                                            \
-            bResult = reinterpret_cast< listenerclass*>(aIt.next())->methodname(aMulti);        \
+            bResult = static_cast< listenerclass*>(aIt.next())->methodname(aMulti);     \
         return bResult;                                                                     \
     }                                                                                       \
 
@@ -374,7 +374,7 @@ namespace dbaui
         aMulti.Source = &m_rParent;                                                         \
         ::cppu::OInterfaceIteratorHelper aIt(rListeners);                                   \
         while (aIt.hasMoreElements())                                                       \
-            reinterpret_cast< listenerclass*>(aIt.next())->methodname(aMulti);              \
+            static_cast< listenerclass*>(aIt.next())->methodname(aMulti);               \
     }                                                                                       \
 
     //------------------------------------------------------------------
