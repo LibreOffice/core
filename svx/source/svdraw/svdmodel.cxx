@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:52:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:10:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,7 +194,7 @@ struct SdrModelImpl
 DBG_NAME(SdrModel)
 TYPEINIT1(SdrModel,SfxBroadcaster);
 void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
-    FASTBOOL bUseExtColorTable, FASTBOOL bLoadRefCounts)
+    bool bUseExtColorTable, bool bLoadRefCounts)
 {
     mpImpl = new SdrModelImpl;
     mpImpl->mpUndoManager=0;
