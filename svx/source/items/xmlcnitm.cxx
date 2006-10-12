@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcnitm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:24:31 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:56:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ SfxItemPresentation SvXMLAttrContainerItem::GetPresentation(
                     SfxMapUnit /*eCoreMetric*/,
                     SfxMapUnit /*ePresentationMetric*/,
                     XubString &/*rText*/,
-                    const IntlWrapper */*pIntlWrapper*/ ) const
+                    const IntlWrapper * /*pIntlWrapper*/ ) const
 {
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -161,8 +161,8 @@ BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
                     return FALSE;
 
                 pData = (AttributeData*)aAny.getValue();
-                USHORT pos = aName.indexOf( sal_Unicode(':') );
-                if( pos != USHRT_MAX )
+                sal_Int32 pos = aName.indexOf( sal_Unicode(':') );
+                if( pos != -1 )
                 {
                     const OUString aPrefix( aName.copy( 0, pos ));
                     const OUString aLName( aName.copy( pos+1 ));
