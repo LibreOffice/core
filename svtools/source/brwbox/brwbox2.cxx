@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:18:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:06:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,7 @@ void BrowseBox::Command( const CommandEvent& rEvt )
 
 //===================================================================
 
-BOOL BrowseBox::IsInCommandEvent() const
+bool BrowseBox::IsInCommandEvent() const
 {
     return getDataWindow()->bInCommand;
 }
@@ -984,8 +984,9 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
 
         // prepare row
         ULONG nRow = nTopRow+nRelRow;
-        if ( !SeekRow( nRow) )
+        if ( !SeekRow( nRow) ) {
             DBG_ERROR("BrowseBox::ImplPaintData: SeekRow gescheitert");
+        }
         _rOut.SetClipRegion();
         aPos.X() = aOverallAreaPos.X();
 
@@ -1512,7 +1513,7 @@ IMPL_LINK( BrowseBox, StartDragHdl, HeaderBar*, pBar )
 //-------------------------------------------------------------------
 // MI: es wurde immer nur die 1. Spalte resized
 #ifdef _MSC_VER
-#pragma optimize("elg",off)
+#pragma optimize("",off)
 #endif
 
 void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
@@ -2013,7 +2014,8 @@ void BrowseBox::Dispatch( USHORT nId )
                 BOOL bLocalSelect = ( !IsRowSelected( nRow ) ||
                                  GetSelectRowCount() == 1 || IsRowSelected( nRow + 1 ) );
                 SelectRow( nCurRow, bLocalSelect, TRUE );
-                if ( (bDone = GoToRow( nRow - 1 , FALSE )) )
+                bDone = GoToRow( nRow - 1 , FALSE );
+                if ( bDone )
                     SelectRow( GetCurRow(), TRUE, TRUE );
             }
             break;
