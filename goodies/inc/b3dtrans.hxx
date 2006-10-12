@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dtrans.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:13:55 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:31:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,15 +157,9 @@ public:
     const Matrix4D& GetInvObjectTrans() { return aInvObjectTrans; }
 
     // Orientation
-#if ! defined ICC && ! defined __GNUC__
-    void SetOrientation(Vector3D& aVRP = Vector3D(0.0,0.0,1.0),
-        Vector3D& aVPN = Vector3D(0.0,0.0,1.0),
-        Vector3D& aVUP = Vector3D(0.0,1.0,0.0));
-#else
-    void SetOrientation(Vector3D aVRP = Vector3D(0.0,0.0,1.0),
-        Vector3D aVPN = Vector3D(0.0,0.0,1.0),
-        Vector3D aVUP = Vector3D(0.0,1.0,0.0));
-#endif
+    void SetOrientation(Vector3D const & aVRP = Vector3D(0.0,0.0,1.0),
+        Vector3D const & aVPN = Vector3D(0.0,0.0,1.0),
+        Vector3D const & aVUP = Vector3D(0.0,1.0,0.0));
     void SetOrientation(Matrix4D& mOrient);
     const Matrix4D& GetOrientation() { return aOrientation; }
     const Matrix4D& GetInvOrientation() { return aInvOrientation; }
