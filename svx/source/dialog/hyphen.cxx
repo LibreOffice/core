@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphen.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:24:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:15:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,11 +307,11 @@ String SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
         const sal_Int16 *pHyphenationPos = aHyphenationPositions.getConstArray();
 
         // find position nIdx after which all hyphen positions are unusable
-        sal_Int32 nIdx = -1,
+        xub_StrLen nIdx = STRING_NOTFOUND,
               nPos;
         if (nLen)
         {
-            sal_Int32 nStart = 0;
+            xub_StrLen nStart = 0;
             for (sal_Int32 i = 0;  i < nLen;  ++i)
             {
                 if (pHyphenationPos[i] > _nMaxHyphenationPos)
@@ -331,10 +331,10 @@ String SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
                 }
             }
         }
-        DBG_ASSERT(nIdx != -1, "no usable hyphenation position")
+        DBG_ASSERT(nIdx != STRING_NOTFOUND, "no usable hyphenation position")
 
         // remove not usable hyphens from string
-        nPos = nIdx == -1 ? 0 : nIdx + 1;
+        nPos = nIdx == STRING_NOTFOUND ? 0 : nIdx + 1;
         String aTmp( sal_Unicode( SW_SOFT_HYPHEN ) ),
                aEmpty;
         while (nPos != STRING_NOTFOUND)
