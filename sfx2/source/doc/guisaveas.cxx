@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:48:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:55:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #ifndef  _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -778,14 +779,17 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     // get the filename by dialog ...
     // create the file dialog
-    sal_Int16  aDialogMode = bAllowOptions ?
-                                ::sfx2::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS :
-                                ::sfx2::FILESAVE_AUTOEXTENSION_PASSWORD;
+    sal_Int16  aDialogMode = bAllowOptions
+        ? (com::sun::star::ui::dialogs::TemplateDescription::
+           FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS)
+        : (com::sun::star::ui::dialogs::TemplateDescription::
+           FILESAVE_AUTOEXTENSION_PASSWORD);
     sal_Int64 aDialogFlags = 0;
 
     if( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
     {
-        aDialogMode  = ::sfx2::FILESAVE_AUTOEXTENSION_SELECTION;
+        aDialogMode = com::sun::star::ui::dialogs::TemplateDescription::
+            FILESAVE_AUTOEXTENSION_SELECTION;
         aDialogFlags = SFXWB_EXPORT;
     }
 
