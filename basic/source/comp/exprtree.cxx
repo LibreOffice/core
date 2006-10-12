@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exprtree.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:02:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:27:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -700,7 +700,7 @@ SbiConstExpression::SbiConstExpression( SbiParser* p ) : SbiExpression( p )
             SbiSymDef* pVarDef = pExpr->GetVar();
 
             // Ist es eine BOOL-Konstante?
-            BOOL bBoolVal;
+            BOOL bBoolVal = FALSE;
             if( pVarDef->GetName().EqualsIgnoreCaseAscii( "true" ) )
             //if( pVarDef->GetName().ICompare( "true" ) == COMPARE_EQUAL )
             {
