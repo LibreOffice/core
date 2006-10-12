@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmenu.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:07:45 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:22:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -539,7 +539,7 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
         {
             if(nEntry == nHighlightEntry)
             {
-                bool bRestoreLineColor = false;
+//              bool bRestoreLineColor = false;
                 Color oldLineColor;
 /*
                 if( bHighlight && ((p->mpControl == NULL) || (p->mbHasText)) )
@@ -613,7 +613,7 @@ void ToolbarMenu::MouseButtonDown( const MouseEvent& rMEvt )
     implSelectEntry( mnHighlightedEntry );
 }
 
-void ToolbarMenu::MouseButtonUp( const MouseEvent& rMEvt )
+void ToolbarMenu::MouseButtonUp( const MouseEvent& )
 {
 }
 
@@ -876,7 +876,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
 
     const Size aOutSz( GetOutputSizePixel() );
-    const long nMaxY = aOutSz.Height();
+//    const long nMaxY = aOutSz.Height();
 
     Point aTopLeft, aTmpPos;
 
@@ -992,7 +992,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
     }
 }
 
-void ToolbarMenu::Paint( const Rectangle& rRect )
+void ToolbarMenu::Paint( const Rectangle& )
 {
     implPaint();
 
