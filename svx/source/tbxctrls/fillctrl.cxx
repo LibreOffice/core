@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillctrl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:04:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:20:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,11 +97,11 @@ SvxFillToolBoxControl::SvxFillToolBoxControl( USHORT nSlotId, USHORT nId, ToolBo
     pHatchItem      ( NULL ),
     pBitmapItem     ( NULL ),
     pFillControl    ( NULL ),
-    pFillAttrLB     ( NULL ),
     pFillTypeLB     ( NULL ),
+    pFillAttrLB     ( NULL ),
     bUpdate         ( FALSE ),
-    eLastXFS        ( XFILL_NONE ),
-    bIgnoreStatusUpdate( FALSE )
+    bIgnoreStatusUpdate( FALSE ),
+    eLastXFS        ( XFILL_NONE )
 {
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillColor" )));
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillGradient" )));
@@ -156,11 +156,12 @@ void SvxFillToolBoxControl::StateChanged(
                 pStyleItem = (XFillStyleItem*) pState->Clone();
                 pFillTypeLB->Enable();
 
-                eLastXFS = (XFillStyle) pFillTypeLB->GetSelectEntryPos();
+                eLastXFS = pFillTypeLB->GetSelectEntryPos();
                 bUpdate = TRUE;
 
                 XFillStyle eXFS = (XFillStyle)pStyleItem->GetValue();
-                pFillTypeLB->SelectEntryPos( eXFS );
+                pFillTypeLB->SelectEntryPos(
+                    sal::static_int_cast< USHORT >( eXFS ) );
                 pFillAttrLB->Enable();
             }
             else if( pStyleItem )
@@ -222,7 +223,7 @@ void SvxFillToolBoxControl::StateChanged(
             }
             else
             {
-                XFillStyle eXFS;
+                XFillStyle eXFS = XFILL_NONE;
                 if( pStyleItem )
                     eXFS = (XFillStyle)pStyleItem->GetValue();
                 if( !pStyleItem ||
@@ -286,7 +287,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         LISTBOX_ENTRY_NOTFOUND ||
                         pFillAttrLB->GetSelectEntryColor() != aColor )
                     {
-                        long nCount = pFillAttrLB->GetEntryCount();
+                        USHORT nCount = pFillAttrLB->GetEntryCount();
                         String aTmpStr;
                         if( nCount > 0 )
                         {
@@ -324,7 +325,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                     // Pruefen, ob Eintrag nicht in der Liste ist
                     if( pFillAttrLB->GetSelectEntry() != aString )
                     {
-                        long nCount = pFillAttrLB->GetEntryCount();
+                        USHORT nCount = pFillAttrLB->GetEntryCount();
                         String aTmpStr;
                         if( nCount > 0 )
                         {
@@ -374,7 +375,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                     // Pruefen, ob Eintrag nicht in der Liste ist
                     if( pFillAttrLB->GetSelectEntry() != aString )
                     {
-                        long nCount = pFillAttrLB->GetEntryCount();
+                        USHORT nCount = pFillAttrLB->GetEntryCount();
                         String aTmpStr;
                         if( nCount > 0 )
                         {
@@ -431,7 +432,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                     // Pruefen, ob Eintrag nicht in der Liste ist
                     if( pFillAttrLB->GetSelectEntry() != aString )
                     {
-                        long nCount = pFillAttrLB->GetEntryCount();
+                        USHORT nCount = pFillAttrLB->GetEntryCount();
                         String aTmpStr;
                         if( nCount > 0 )
                         {
@@ -576,7 +577,7 @@ FillControl::~FillControl()
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( FillControl, DelayHdl, Timer *, pTimer )
+IMPL_LINK_INLINE_START( FillControl, DelayHdl, Timer *, EMPTYARG )
 {
     SelectFillTypeHdl( NULL );
     ( (SvxFillToolBoxControl*)GetData() )->updateStatus( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillStyle" )));
