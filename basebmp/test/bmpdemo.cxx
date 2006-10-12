@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpdemo.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-27 11:35:32 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:48:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,6 @@
 
 #include <vigra/metaprogramming.hxx>
 #include <vigra/static_assert.hxx>
-#include <vigra/resizeimage.hxx>
 #include <vigra/basicimageview.hxx>
 
 #include <boost/static_assert.hpp>
@@ -988,7 +987,7 @@ class TestWindow : public Dialog
             Show();
         }
         virtual ~TestWindow() {}
-        virtual void MouseButtonUp( const MouseEvent& rMEvt )
+        virtual void MouseButtonUp( const MouseEvent& /*rMEvt*/ )
         {
             //TODO: do something cool
             EndDialog();
@@ -1018,7 +1017,7 @@ static basegfx::B2IPoint project( const basegfx::B2IPoint& rPoint )
     double z2 = z1;
 
     //return basegfx::B2IPoint( (sal_Int32)3*x2, (sal_Int32)3*z2 );
-    return basegfx::B2IPoint( (sal_Int32)6*x2, (sal_Int32)6*z2 );
+    return basegfx::B2IPoint( (sal_Int32)(6*x2), (sal_Int32)(6*z2) );
 }
 
 static basebmp::Color approachColor( const basebmp::Color& rFrom, const basebmp::Color& rTo )
@@ -1074,7 +1073,7 @@ static basebmp::Color approachColor( const basebmp::Color& rFrom, const basebmp:
 
 
 
-void TestWindow::Paint( const Rectangle& rRect )
+void TestWindow::Paint( const Rectangle& /*rRect*/ )
 {
     basegfx::B2ISize aTestSize(1000,1000);
     basebmp::BitmapDeviceSharedPtr pDevice( basebmp::createBitmapDevice( aTestSize,
