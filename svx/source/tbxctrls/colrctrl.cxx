@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colrctrl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:04:13 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:19:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ sal_Bool SvxColorValueSetData::GetData( const ::com::sun::star::datatransfer::Da
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SvxColorValueSetData::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+sal_Bool SvxColorValueSetData::WriteObject( SotStorageStreamRef& rxOStm, void*, sal_uInt32 , const ::com::sun::star::datatransfer::DataFlavor&  )
 {
     *rxOStm << maData;
     return( rxOStm->GetError() == ERRCODE_NONE );
@@ -124,8 +124,8 @@ sal_Bool SvxColorValueSetData::WriteObject( SotStorageStreamRef& rxOStm, void* p
 |*
 \************************************************************************/
 
-SvxColorValueSet::SvxColorValueSet( Window* pParent, WinBits nWinStyle ) :
-    ValueSet( pParent, nWinStyle ),
+SvxColorValueSet::SvxColorValueSet( Window* _pParent, WinBits nWinStyle ) :
+    ValueSet( _pParent, nWinStyle ),
     DragSourceHelper( this ),
     bLeft (TRUE)
 {
@@ -137,8 +137,8 @@ SvxColorValueSet::SvxColorValueSet( Window* pParent, WinBits nWinStyle ) :
 |*
 \************************************************************************/
 
-SvxColorValueSet::SvxColorValueSet( Window* pParent, const ResId& rResId ) :
-    ValueSet( pParent, rResId ),
+SvxColorValueSet::SvxColorValueSet( Window* _pParent, const ResId& rResId ) :
+    ValueSet( _pParent, rResId ),
     DragSourceHelper( this ),
     bLeft (TRUE)
 {
@@ -217,7 +217,7 @@ void SvxColorValueSet::Command(const CommandEvent& rCEvt)
 |*
 \************************************************************************/
 
-void SvxColorValueSet::StartDrag( sal_Int8 nAction, const Point& rPtPixel )
+void SvxColorValueSet::StartDrag( sal_Int8 , const Point&  )
 {
     Application::PostUserEvent(STATIC_LINK(this, SvxColorValueSet, ExecDragHdl));
 }
@@ -267,14 +267,14 @@ IMPL_STATIC_LINK(SvxColorValueSet, ExecDragHdl, void*, EMPTYARG)
 |*
 \************************************************************************/
 
-SvxColorChildWindow::SvxColorChildWindow( Window* pParent,
+SvxColorChildWindow::SvxColorChildWindow( Window* _pParent,
                                           USHORT nId,
                                           SfxBindings* pBindings,
                                           SfxChildWinInfo* pInfo ) :
-    SfxChildWindow( pParent, nId )
+    SfxChildWindow( _pParent, nId )
 {
     SvxColorDockingWindow* pWin = new SvxColorDockingWindow( pBindings, this,
-                                        pParent, SVX_RES( RID_SVXCTRL_COLOR ) );
+                                        _pParent, SVX_RES( RID_SVXCTRL_COLOR ) );
     pWindow = pWin;
 
     eChildAlignment = SFX_ALIGN_BOTTOM;
@@ -292,16 +292,16 @@ SvxColorChildWindow::SvxColorChildWindow( Window* pParent,
 
 SvxColorDockingWindow::SvxColorDockingWindow
 (
-    SfxBindings* pBindings,
+    SfxBindings* _pBindings,
     SfxChildWindow* pCW,
-    Window* pParent,
+    Window* _pParent,
     const ResId& rResId
 ) :
 
-    SfxDockingWindow( pBindings, pCW, pParent, rResId ),
+    SfxDockingWindow( _pBindings, pCW, _pParent, rResId ),
 
-    aColorSet       ( this, ResId( 1 ) ),
     pColorTable     ( NULL ),
+    aColorSet       ( this, ResId( 1 ) ),
     nLeftSlot       ( SID_ATTR_FILL_COLOR ),
     nRightSlot      ( SID_ATTR_LINE_COLOR ),
     nCols           ( 20 ),
@@ -332,7 +332,7 @@ SvxColorDockingWindow::SvxColorDockingWindow
 
     SetSize();
     aColorSet.Show();
-    StartListening( *pBindings, TRUE );
+    StartListening( *_pBindings, TRUE );
 }
 
 
@@ -353,7 +353,7 @@ SvxColorDockingWindow::~SvxColorDockingWindow()
 |*
 \************************************************************************/
 
-void SvxColorDockingWindow::SFX_NOTIFY( SfxBroadcaster& rBC,
+void SvxColorDockingWindow::SFX_NOTIFY( SfxBroadcaster& ,
                                          const TypeId& rBCType,
                                          const SfxHint& rHint,
                                          const TypeId& rHintType )
@@ -608,11 +608,12 @@ void SvxColorDockingWindow::Resizing( Size& rNewSize )
         nCols = 2;
 
     // Max. Reihen anhand der gegebenen Spalten berechnen
-    USHORT nMaxLines = nCount / nCols;
+    long nMaxLines = nCount / nCols;
     if( nCount %  nCols )
         nMaxLines++;
 
-    nLines = Min( nLines, nMaxLines );
+    nLines = sal::static_int_cast< USHORT >(
+        std::min< long >( nLines, nMaxLines ) );
 
     // Groesse des Windows setzen
     rNewSize.Width()  = nCols * aItemSize.Width() + nScrollWidth + 4;
