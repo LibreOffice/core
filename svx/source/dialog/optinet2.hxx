@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:45:29 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:22:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,9 @@ public:
 class SvxSearchConfig;
 class SvxSearchTabPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 private:
     FixedLine       aSearchGB;
     ListBox         aSearchLB;
@@ -250,6 +253,8 @@ class SvtSecurityOptions;
 
 class SvxSecurityTabPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
 public:
     enum RedliningMode  { RL_NONE, RL_WRITER, RL_CALC };
 private:
