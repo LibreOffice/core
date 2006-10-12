@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:51:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:17:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2026,7 +2026,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                                 {
                                     if ( aAdditionalChunkSequence[ j ].Name.getLength() == 4 )
                                     {
-                                        sal_uInt32 nChunkType;
+                                        sal_uInt32 nChunkType = 0;
                                         for ( k = 0; k < 4; k++ )
                                         {
                                             nChunkType <<= 8;
