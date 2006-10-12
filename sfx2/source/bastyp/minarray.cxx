@@ -4,9 +4,9 @@
  *
  *  $RCSfile: minarray.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:24:04 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:50:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ void SfxPtrArr::Append( void* aElem )
             memmove( pNewData, pData, sizeof(void*)*nUsed );
             delete [] pData;
         }
-        nUnused = nNewSize-nUsed;
+        nUnused = sal::static_int_cast< BYTE >(nNewSize-nUsed);
         pData = pNewData;
     }
 
@@ -159,7 +159,7 @@ USHORT SfxPtrArr::Remove( USHORT nPos, USHORT nLen )
     {
         // auf die naechste Grow-Grenze aufgerundet verkleinern
         USHORT nNewUsed = nUsed-nLen;
-        USHORT nNewSize = (nNewUsed+nGrow-1)/nGrow; nNewSize *= nGrow;
+        USHORT nNewSize = ((nNewUsed+nGrow-1)/nGrow) * nGrow;
         DBG_ASSERT( nNewUsed <= nNewSize && nNewUsed+nGrow > nNewSize,
                     "shrink size computation failed" );
         void** pNewData = new void*[nNewSize];
@@ -174,15 +174,15 @@ USHORT SfxPtrArr::Remove( USHORT nPos, USHORT nLen )
         delete [] pData;
         pData = pNewData;
         nUsed = nNewUsed;
-        nUnused = nNewSize - nNewUsed;
+        nUnused = sal::static_int_cast< BYTE >(nNewSize - nNewUsed);
         return nLen;
     }
 
     // in allen anderen Faellen nur zusammenschieben
     if ( nUsed-nPos-nLen > 0 )
         memmove( pData+nPos, pData+nPos+nLen, (nUsed-nPos-nLen)*sizeof(void*) );
-    nUsed -= nLen;
-    nUnused += nLen;
+    nUsed = nUsed - nLen;
+    nUnused = sal::static_int_cast< BYTE >(nUnused + nLen);
     return nLen;
 }
 
@@ -263,7 +263,7 @@ void SfxPtrArr::Insert( USHORT nPos, void* rElem )
             memmove( pNewData, pData, sizeof(void*)*nUsed );
             delete [] pData;
         }
-        nUnused = nNewSize-nUsed;
+        nUnused = sal::static_int_cast< BYTE >(nNewSize-nUsed);
         pData = pNewData;
     }
 
@@ -357,7 +357,7 @@ void ByteArr::Append( char aElem )
             memmove( pNewData, pData, sizeof(char)*nUsed );
             delete [] pData;
         }
-        nUnused = nNewSize-nUsed;
+        nUnused = sal::static_int_cast< BYTE >(nNewSize-nUsed);
         pData = pNewData;
     }
 
@@ -394,7 +394,7 @@ USHORT ByteArr::Remove( USHORT nPos, USHORT nLen )
     {
         // auf die naechste Grow-Grenze aufgerundet verkleinern
         USHORT nNewUsed = nUsed-nLen;
-        USHORT nNewSize = (nNewUsed+nGrow-1)/nGrow; nNewSize *= nGrow;
+        USHORT nNewSize = ((nNewUsed+nGrow-1)/nGrow) * nGrow;
         DBG_ASSERT( nNewUsed <= nNewSize && nNewUsed+nGrow > nNewSize,
                     "shrink size computation failed" );
         char* pNewData = new char[nNewSize];
@@ -409,15 +409,15 @@ USHORT ByteArr::Remove( USHORT nPos, USHORT nLen )
         delete [] pData;
         pData = pNewData;
         nUsed = nNewUsed;
-        nUnused = nNewSize - nNewUsed;
+        nUnused = sal::static_int_cast< BYTE >(nNewSize - nNewUsed);
         return nLen;
     }
 
     // in allen anderen Faellen nur zusammenschieben
     if ( nUsed-nPos-nLen > 0 )
         memmove( pData+nPos, pData+nPos+nLen, (nUsed-nPos-nLen)*sizeof(char) );
-    nUsed -= nLen;
-    nUnused += nLen;
+    nUsed = nUsed - nLen;
+    nUnused = sal::static_int_cast< BYTE >(nUnused + nLen);
     return nLen;
 }
 
@@ -477,7 +477,7 @@ void ByteArr::Insert( USHORT nPos, char rElem )
             memmove( pNewData, pData, sizeof(char)*nUsed );
             delete [] pData;
         }
-        nUnused = nNewSize-nUsed;
+        nUnused = sal::static_int_cast< BYTE >(nNewSize-nUsed);
         pData = pNewData;
     }
 
@@ -589,7 +589,7 @@ void WordArr::Append( short aElem )
             memmove( pNewData, pData, sizeof(short)*nUsed );
             delete [] pData;
         }
-        nUnused = nNewSize-nUsed;
+        nUnused = sal::static_int_cast< BYTE >(nNewSize-nUsed);
         pData = pNewData;
     }
 
@@ -626,7 +626,7 @@ USHORT WordArr::Remove( USHORT nPos, USHORT nLen )
     {
         // auf die naechste Grow-Grenze aufgerundet verkleinern
         USHORT nNewUsed = nUsed-nLen;
-        USHORT nNewSize = (nNewUsed+nGrow-1)/nGrow; nNewSize *= nGrow;
+        USHORT nNewSize = ((nNewUsed+nGrow-1)/nGrow) * nGrow;
         DBG_ASSERT( nNewUsed <= nNewSize && nNewUsed+nGrow > nNewSize,
                     "shrink size computation failed" );
         short* pNewData = new short[nNewSize];
@@ -641,15 +641,15 @@ USHORT WordArr::Remove( USHORT nPos, USHORT nLen )
             delete [] pData;
         pData = pNewData;
         nUsed = nNewUsed;
-        nUnused = nNewSize - nNewUsed;
+        nUnused = sal::static_int_cast< BYTE >(nNewSize - nNewUsed);
         return nLen;
     }
 
     // in allen anderen Faellen nur zusammenschieben
     if ( nUsed-nPos-nLen > 0 )
         memmove( pData+nPos, pData+nPos+nLen, (nUsed-nPos-nLen)*sizeof(short) );
-    nUsed -= nLen;
-    nUnused += nLen;
+    nUsed = nUsed - nLen;
+    nUnused = sal::static_int_cast< BYTE >(nUnused + nLen);
     return nLen;
 }
 
@@ -709,7 +709,7 @@ void WordArr::Insert( USHORT nPos, short rElem )
             memmove( pNewData, pData, sizeof(short)*nUsed );
             delete [] pData;
         }
-        nUnused = nNewSize-nUsed;
+        nUnused = sal::static_int_cast< BYTE >(nNewSize-nUsed);
         pData = pNewData;
     }
 

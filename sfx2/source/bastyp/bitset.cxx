@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitset.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:22:26 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:49:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,8 +64,9 @@ BitSet BitSet::operator<<( USHORT nOffset ) const
 
     // compute the new number of bits
     for ( USHORT nBlock = 0; nBlock < nBlockDiff; ++nBlock )
-        aSet.nCount -= CountBits( *(aSet.pBitmap+nBlock) );
-    aSet.nCount -= CountBits( *(aSet.pBitmap+nBlockDiff) >> (32-nBitValDiff) );
+        aSet.nCount = aSet.nCount - CountBits( *(aSet.pBitmap+nBlock) );
+    aSet.nCount = aSet.nCount -
+        CountBits( *(aSet.pBitmap+nBlockDiff) >> (32-nBitValDiff) );
 
     // shift complete long-words
     USHORT nTarget, nSource;
@@ -298,7 +299,7 @@ BitSet& BitSet::operator|=( const BitSet& rSet )
     {
         // compute numberof additional bits
         ULONG nDiff = ~*(pBitmap+nBlock) & *(rSet.pBitmap+nBlock);
-        nCount += CountBits(nDiff);
+        nCount = nCount + CountBits(nDiff);
 
         *(pBitmap+nBlock) |= *(rSet.pBitmap+nBlock);
     }
