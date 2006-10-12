@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dllmgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:04:35 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:29:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,7 +311,8 @@ SbiDllHandle SbiDllMgr::CreateDllHandle( const ByteString& rDllName )
     if( !(ULONG)hLib  )
     {
 #ifdef DBG_UTIL
-        ULONG nLastErr = GetLastError();
+        ULONG nLastErr;
+        nLastErr = GetLastError();
 #endif
         hLib = 0;
     }
@@ -336,7 +337,7 @@ SbiDllProc SbiDllMgr::GetProcAddr(SbiDllHandle hLib, const ByteString& rProcName
     char buf2 [128] = "";
 
     SbiDllProc pProc = 0;
-    short nOrd = 0;
+    int nOrd = 0;
 
     // Ordinal?
     if( rProcName.GetBuffer()[0] == '@' )
@@ -382,7 +383,7 @@ SbError SbiDllMgr::CallProc( SbiDllProc pProc, SbxArray* pArgs,
 //  ByteString aStr("Calling DLL at ");
 //  aStr += (ULONG)pProc;
 //  InfoBox( 0, aStr ).Execute();
-    INT16 nInt16; int nInt; INT32 nInt32; float nSingle; double nDouble;
+    INT16 nInt16; int nInt; INT32 nInt32; double nDouble;
     char* pStr;
 
     USHORT nSize;
@@ -422,9 +423,11 @@ SbError SbiDllMgr::CallProc( SbiDllProc pProc, SbxArray* pArgs,
 
 #ifndef WNT
         case SbxSINGLE:
-            nSingle = CallSNG(pProc, pStack, (short)nSize );
+        {
+            float nSingle = CallSNG(pProc, pStack, (short)nSize );
             rResult.PutSingle( nSingle );
             break;
+        }
 #endif
 
         case SbxDOUBLE:
@@ -508,7 +511,7 @@ SbError SbiDllMgr::CallProcC( SbiDllProc pProc, SbxArray* pArgs,
     (void)rResult;
 
     DBG_ERROR("C calling convention not supported");
-    return (USHORT)SbERR_BAD_ARGUMENT;
+    return SbERR_BAD_ARGUMENT;
 }
 
 void* SbiDllMgr::CreateStack( SbxArray* pArgs, USHORT& rSize )
