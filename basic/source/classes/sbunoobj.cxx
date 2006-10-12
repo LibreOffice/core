@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:00:34 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:25:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1083,7 +1083,7 @@ static Any implRekMultiDimArrayToSequence( SbxDimArray* pArray,
             StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
                 implGetExceptionMsg( e1, aIllegalArgumentExceptionName ) );
         }
-        catch (IndexOutOfBoundsException& e2)
+        catch (IndexOutOfBoundsException&)
         {
             StarBASIC::Error( SbERR_OUT_OF_RANGE );
         }
@@ -1252,7 +1252,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
                             StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
                                 implGetExceptionMsg( e1, aIllegalArgumentExceptionName ) );
                         }
-                        catch (IndexOutOfBoundsException& e2)
+                        catch (IndexOutOfBoundsException&)
                         {
                             StarBASIC::Error( SbERR_OUT_OF_RANGE );
                         }
@@ -3239,7 +3239,7 @@ void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet 
                     // Elemente wandeln
                     SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
                     unoToSbxValue( (SbxVariable*)xVar, pArgs[i] );
-                    xSbxArray->Put( xVar, i +1 );
+                    xSbxArray->Put( xVar, sal::static_int_cast< USHORT >(i+1) );
                 }
 
                 pLib->Call( aMethodName, xSbxArray );
