@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdglue.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:50:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:09:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,7 +268,7 @@ void SdrGluePoint::Draw(OutputDevice& rOut, const SdrObject* pObj) const
     Color aBackPenColor(COL_WHITE);
     Color aForePenColor(COL_LIGHTBLUE);
 
-    FASTBOOL bMapMerk=rOut.IsMapModeEnabled();
+    bool bMapMerk=rOut.IsMapModeEnabled();
     Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
     aPt=rOut.LogicToPixel(aPt);
     rOut.EnableMapMode(FALSE);
@@ -303,7 +303,7 @@ void SdrGluePoint::Draw(OutputDevice& rOut, const SdrObject* pObj) const
 
 void SdrGluePoint::Invalidate(Window& rWin, const SdrObject* pObj) const
 {
-    FASTBOOL bMapMerk=rWin.IsMapModeEnabled();
+    bool bMapMerk=rWin.IsMapModeEnabled();
     Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
     aPt=rWin.LogicToPixel(aPt);
     rWin.EnableMapMode(FALSE);
@@ -419,7 +419,7 @@ void SdrGluePointList::DrawAll(OutputDevice& rOut, const SdrObject* pObj) const
     {
         Color aBackPenColor(COL_WHITE);
 
-        FASTBOOL bMapMerk=rOut.IsMapModeEnabled();
+        bool bMapMerk=rOut.IsMapModeEnabled();
         rOut.SetLineColor( aBackPenColor );
         USHORT nNum;
 
