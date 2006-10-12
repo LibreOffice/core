@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidetransitionfactory.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:41:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:01:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@ private:
 void ClippedSlideChange::performIn(
     const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
     UnoViewSharedPtr const &                    pView,
-    const ::cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
+    const ::cppcanvas::CanvasSharedPtr&         /*rDestinationCanvas*/,
     double                                      t )
 {
     // #i46602# Better work in device coordinate space here,
@@ -170,10 +170,10 @@ void ClippedSlideChange::performIn(
 }
 
 void ClippedSlideChange::performOut(
-    const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
-    UnoViewSharedPtr const &                   pView,
-    const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
-    double                                     t )
+    const ::cppcanvas::CustomSpriteSharedPtr&  /*rSprite*/,
+    UnoViewSharedPtr const &                   /*pView*/,
+    const ::cppcanvas::CanvasSharedPtr&        /*rDestinationCanvas*/,
+    double                                     /*t*/ )
 {
     // not needed here
 }
@@ -216,8 +216,8 @@ private:
 
 void FadingSlideChange::performIn(
     const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
-    UnoViewSharedPtr const &                    pView,
-    const ::cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
+    UnoViewSharedPtr const &                    /*pView*/,
+    const ::cppcanvas::CanvasSharedPtr&         /*rDestinationCanvas*/,
     double                                      t )
 {
     ENSURE_AND_THROW(
@@ -407,9 +407,9 @@ void MovingSlideChange::performOut(
 SlideChangeAnimationSharedPtr createPushWipeTransition(
     boost::optional<SlideSharedPtr> const &         leavingSlide_,
     const SlideSharedPtr&                           pEnteringSlide,
-    sal_Int16                                       nTransitionType,
+    sal_Int16                                       /*nTransitionType*/,
     sal_Int16                                       nTransitionSubType,
-    bool                                            bTransitionDirection,
+    bool                                            /*bTransitionDirection*/,
     const SoundPlayerSharedPtr&                     pSoundPlayer )
 {
     boost::optional<SlideSharedPtr> leavingSlide; // no bitmap
@@ -504,7 +504,7 @@ SlideChangeAnimationSharedPtr createPushWipeTransition(
 SlideChangeAnimationSharedPtr createSlideWipeTransition(
     boost::optional<SlideSharedPtr> const &         leavingSlide,
     const SlideSharedPtr&                           pEnteringSlide,
-    sal_Int16                                       nTransitionType,
+    sal_Int16                                       /*nTransitionType*/,
     sal_Int16                                       nTransitionSubType,
     bool                                            bTransitionDirection,
     const SoundPlayerSharedPtr&                     pSoundPlayer )
@@ -647,7 +647,6 @@ SlideChangeAnimationSharedPtr TransitionFactory::createSlideTransition(
                                                 bTransitionDirection,
                                                 pSoundPlayer ) ) );
             }
-            break;
 
             case TransitionInfo::TRANSITION_SPECIAL:
             {
