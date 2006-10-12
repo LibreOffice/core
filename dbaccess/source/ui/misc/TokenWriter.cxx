@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:13:34 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:39:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -706,7 +706,7 @@ OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataD
                                      const String& rExchange)
         : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange)
     ,m_nIndent(0)
-#if DBG_UTIL
+#ifdef DBG_UTIL
     ,m_bCheckFont(FALSE)
 #endif
 {
@@ -1048,7 +1048,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
 //-----------------------------------------------------------------------
 void OHTMLImportExport::FontOn()
 {
-#if DBG_UTIL
+#ifdef DBG_UTIL
         m_bCheckFont = TRUE;
 #endif
 
@@ -1080,7 +1080,7 @@ inline void OHTMLImportExport::FontOff()
 {
     DBG_ASSERT(m_bCheckFont,"Kein FontOn() gerufen");
     TAG_OFF( sHTML_font );
-#if DBG_UTIL
+#ifdef DBG_UTIL
     m_bCheckFont = FALSE;
 #endif
 }
@@ -1088,7 +1088,7 @@ inline void OHTMLImportExport::FontOff()
 void OHTMLImportExport::IncIndent( sal_Int16 nVal )
 {
     sIndent[m_nIndent] = '\t';
-    m_nIndent += nVal;
+    m_nIndent = m_nIndent + nVal;
     if ( m_nIndent < 0 )
         m_nIndent = 0;
     else if ( m_nIndent > nIndentMax )
