@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.196 $
+ *  $Revision: 1.197 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:34:18 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:03:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -407,11 +407,11 @@ ResMgr* Desktop::GetDesktopResManager()
 
 OUString Desktop::GetMsgString( USHORT nId, const OUString& aFaultBackMsg )
 {
-    ResMgr* pResMgr = GetDesktopResManager();
-    if ( !pResMgr )
+    ResMgr* resMgr = GetDesktopResManager();
+    if ( !resMgr )
         return aFaultBackMsg;
     else
-        return OUString( String( ResId( nId, pResMgr )));
+        return OUString( String( ResId( nId, resMgr )));
 }
 
 OUString MakeStartupErrorMessage(OUString const & aErrorMessage)
@@ -592,10 +592,10 @@ void ReplaceStringHookProc( UniString& rStr )
 }
 
 Desktop::Desktop()
-: m_pIntro( 0 )
+: m_bServicesRegistered( false )
+, m_pIntro( 0 )
 , m_aBootstrapError( BE_OK )
 , m_pLockfile( NULL )
-, m_bServicesRegistered( false )
 {
     RTL_LOGFILE_TRACE( "desktop (cd100003) ::Desktop::Desktop" );
 }
@@ -929,6 +929,21 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
             bFileInfo = sal_False;
         }
         break;
+
+        case ::utl::Bootstrap::INVALID_VERSION_FILE_ENTRY:
+        {
+            // This needs to be improved, see #i67575#:
+            aMsg = OUString(
+                RTL_CONSTASCII_USTRINGPARAM( "Invalid version file entry" ) );
+            bFileInfo = sal_False;
+        }
+        break;
+
+        case ::utl::Bootstrap::NO_FAILURE:
+        {
+            OSL_ASSERT(false);
+        }
+        break;
     }
 
     if ( bFileInfo )
@@ -1000,6 +1015,12 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
 
                     utl::Bootstrap::locateUserInstallation( aUserInstallationURL );
                     aErrorMsg = CreateErrorMsgString( nFailureCode, aUserInstallationURL );
+                }
+                break;
+
+                case ::utl::Bootstrap::NO_FAILURE:
+                {
+                    OSL_ASSERT(false);
                 }
                 break;
             }
@@ -1255,7 +1276,7 @@ sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
 
 sal_Bool Desktop::_bTasksSaved = sal_False;
 
-sal_Bool Desktop::SaveTasks(sal_Int32 options)
+sal_Bool Desktop::SaveTasks()
 {
     return impl_callRecoveryUI(
         sal_True , // sal_True => force emergency save
@@ -1279,7 +1300,6 @@ USHORT Desktop::Exception(USHORT nError)
     }
 
     bInException = TRUE;
-    BOOL bRecovery = FALSE;
     CommandLineArgs* pArgs = GetCommandLineArgs();
 
     // save all modified documents ... if it's allowed doing so.
@@ -1292,7 +1312,7 @@ USHORT Desktop::Exception(USHORT nError)
                                                     ( Application::IsInExecute()               )    // crashes during startup and shutdown should be ignored (they indicates a corrupt installation ...)
                                                   );
     if ( bAllowRecoveryAndSessionManagement )
-        bRestart = SaveTasks(DESKTOP_SAVETASKS_MOD);
+        bRestart = SaveTasks();
 
     // because there is no method to flush the condiguration data, we must dispose the ConfigManager
     Reference < XFlushable > xCFGFlush( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), UNO_QUERY );
@@ -1778,7 +1798,7 @@ void Desktop::Main()
     {
         // The JavaContext contains an interaction handler which is used when
         // the creation of a Java Virtual Machine fails
-        com::sun::star::uno::ContextLayer layer(
+        com::sun::star::uno::ContextLayer layer2(
             new svt::JavaContext( com::sun::star::uno::getCurrentContext() ) );
 
         Execute();
@@ -1925,7 +1945,7 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
     }
 }
 
-void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* pFrame )
+void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* )
 {
     if ( !SvtTabAppearanceCfg::IsInitialized () )
         return;
@@ -1981,7 +2001,7 @@ void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* pFrame )
 }
 
 // ========================================================================
-IMPL_LINK( Desktop, AsyncInitFirstRun, void*, NOTINTERESTEDIN )
+IMPL_LINK( Desktop, AsyncInitFirstRun, void*, EMPTYARG )
 {
     DoFirstRunInitializations();
     return 0L;
@@ -1989,7 +2009,7 @@ IMPL_LINK( Desktop, AsyncInitFirstRun, void*, NOTINTERESTEDIN )
 
 // ========================================================================
 
-IMPL_STATIC_LINK( Desktop, AsyncTerminate, void*, NOTINTERESTEDIN )
+IMPL_STATIC_LINK_NOINSTANCE( Desktop, AsyncTerminate, void*, EMPTYARG )
 {
     Reference<XMultiServiceFactory> rFactory = ::comphelper::getProcessServiceFactory();
     Reference< XDesktop > xDesktop( rFactory->createInstance(
@@ -1999,7 +2019,7 @@ IMPL_STATIC_LINK( Desktop, AsyncTerminate, void*, NOTINTERESTEDIN )
     return 0L;
 }
 
-IMPL_LINK( Desktop, OpenClients_Impl, void*, pvoid )
+IMPL_LINK( Desktop, OpenClients_Impl, void*, EMPTYARG )
 {
     RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE - DesktopOpenClients_Impl()" );
 
@@ -2020,7 +2040,7 @@ IMPL_LINK( Desktop, OpenClients_Impl, void*, pvoid )
 }
 
 // enable acceptos
-IMPL_LINK( Desktop, EnableAcceptors_Impl, void*, pvoid )
+IMPL_LINK( Desktop, EnableAcceptors_Impl, void*, EMPTYARG )
 {
     enableAcceptors();
     return 0;
@@ -2860,8 +2880,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
     else if ( rAppEvent.GetEvent() == "SaveDocuments" )
     {
         Desktop::_bTasksSaved = sal_False;
-        Desktop::_bTasksSaved = SaveTasks(DESKTOP_SAVETASKS_ALL);
-        // SaveTasks(DESKTOP_SAVETASKS_MOD);
+        Desktop::_bTasksSaved = SaveTasks();
     }
     else if ( rAppEvent.GetEvent() == "OPENHELPURL" )
     {
