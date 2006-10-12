@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svarray.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:08:48 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,16 +268,16 @@ void SvUShortsSort::Insert( const SvUShortsSort * pI, USHORT nS, USHORT nE )
 BOOL SvUShortsSort::Insert( const USHORT aE )
 {
     USHORT nP;
-    BOOL bExist;
-    if( ! ( bExist = Seek_Entry( aE, &nP ) ) )
+    BOOL bExist = Seek_Entry( aE, &nP );
+    if( !bExist )
         SvUShorts::Insert( aE, nP );
     return !bExist;
 }
 
 BOOL SvUShortsSort::Insert( const USHORT aE, USHORT& rP )
 {
-    BOOL bExist;
-    if( ! ( bExist = Seek_Entry( aE, &rP ) ) )
+    BOOL bExist = Seek_Entry( aE, &rP );
+    if( !bExist )
         SvUShorts::Insert( aE, rP );
     return !bExist;
 }
