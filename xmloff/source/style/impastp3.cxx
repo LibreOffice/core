@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impastp3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:54:51 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:49:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ sal_Bool SvXMLAutoStylePoolParentP_Impl::Add( XMLFamilyData_Impl* pFamilyData, c
 OUString SvXMLAutoStylePoolParentP_Impl::Find( const XMLFamilyData_Impl* pFamilyData, const vector< XMLPropertyState >& rProperties ) const
 {
     OUString sName;
-    sal_uInt16 nItems = rProperties.size();
+    vector< XMLPropertyState>::size_type nItems = rProperties.size();
     sal_uInt32 nCount = maPropertiesList.Count();
     for( sal_uInt32 i=0; i < nCount; i++ )
     {
