@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:50:04 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:11:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,8 +180,8 @@ protected:
 public:
     static Reference< XNumberFormatsSupplier > get( const Reference< XMultiServiceFactory >& _rxORB );
 
-    SvNumberFormatsSupplierObj::operator new;
-    SvNumberFormatsSupplierObj::operator delete;
+    using SvNumberFormatsSupplierObj::operator new;
+    using SvNumberFormatsSupplierObj::operator delete;
 
 protected:
     StandardFormatsSupplier(const Reference<XMultiServiceFactory>& _rxFactory,LanguageType _eSysLanguage);
@@ -1117,7 +1117,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
 }
 
 //------------------------------------------------------------------------------
-sal_Int16 OFormattedModel::getPersistenceFlags() const
+sal_uInt16 OFormattedModel::getPersistenceFlags() const
 {
     return (OEditBaseModel::getPersistenceFlags() & ~PF_HANDLE_COMMON_PROPS);
     // a) we do our own call to writeCommonEditProperties
