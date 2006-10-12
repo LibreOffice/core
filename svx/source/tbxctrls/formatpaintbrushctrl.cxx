@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formatpaintbrushctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:05:11 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:20:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ IMPL_LINK(FormatPaintBrushToolBoxControl, WaitDoubleClickHdl, void*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
-void FormatPaintBrushToolBoxControl::Select( BOOL bMod1 )
+void FormatPaintBrushToolBoxControl::Select( BOOL )
 {
 }
 
@@ -124,7 +124,7 @@ void FormatPaintBrushToolBoxControl::Select( BOOL bMod1 )
 void FormatPaintBrushToolBoxControl::StateChanged( USHORT nSID, SfxItemState eState,
                 const SfxPoolItem* pState )
 {
-    if( eState & SFX_ITEM_SET == 0 )
+    if( ( eState & SFX_ITEM_SET ) == 0 )
         m_bPersistentCopy = false;
     SfxToolBoxControl::StateChanged( nSID, eState, pState );
 }
