@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editobj2.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 09:11:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:36:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ inline BOOL XEditAttribute::IsFeature()
 }
 
 typedef XEditAttribute* XEditAttributePtr;
-SV_DECL_PTRARR( XEditAttributeListImpl, XEditAttributePtr, 0, 4 );
+SV_DECL_PTRARR( XEditAttributeListImpl, XEditAttributePtr, 0, 4 )
 
 class XEditAttributeList : public XEditAttributeListImpl
 {
@@ -113,7 +113,7 @@ struct XParaPortion
 };
 
 typedef XParaPortion* XParaPortionPtr;
-SV_DECL_PTRARR( XBaseParaPortionList, XParaPortionPtr, 0, 4 );
+SV_DECL_PTRARR( XBaseParaPortionList, XParaPortionPtr, 0, 4 )
 
 class XParaPortionList : public  XBaseParaPortionList
 {
@@ -191,12 +191,14 @@ public:
 };
 
 typedef ContentInfo* ContentInfoPtr;
-SV_DECL_PTRARR( ContentInfoList, ContentInfoPtr, 1, 4 );
+SV_DECL_PTRARR( ContentInfoList, ContentInfoPtr, 1, 4 )
 
 // MT 05/00: Sollte mal direkt EditTextObjekt werden => keine virtuellen Methoden mehr.
 
 class BinTextObject : public EditTextObject
 {
+    using EditTextObject::operator==;
+
 private:
     ContentInfoList         aContents;
     SfxItemPool*            pPool;
