@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charhiddenitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:18:20 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:52:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ SfxItemPresentation SvxCharHiddenItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
     switch ( ePres )
