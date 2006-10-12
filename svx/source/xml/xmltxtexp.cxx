@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltxtexp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:20:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:29:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,7 +317,8 @@ uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( co
 {
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.NumberingRules" ) ) )
     {
-        return SvxCreateNumRule( (SdrModel*)NULL );
+        return uno::Reference< uno::XInterface >(
+            SvxCreateNumRule( (SdrModel*)NULL ), uno::UNO_QUERY );
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextField.DateTime") ) )
     {
@@ -548,7 +549,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
         }
         while( 0 );
     }
-    catch( uno::Exception& e )
+    catch( uno::Exception& )
     {
         DBG_ERROR("exception during xml export");
     }
