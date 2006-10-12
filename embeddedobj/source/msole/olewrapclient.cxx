@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olewrapclient.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:45:22 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:23:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ STDMETHODIMP OleWrapperClientSite::SaveObject()
     return hResult;
 }
 
-STDMETHODIMP OleWrapperClientSite::GetMoniker( DWORD dwAssign, DWORD dwWhich, LPMONIKER *ppmk )
+STDMETHODIMP OleWrapperClientSite::GetMoniker( DWORD, DWORD, LPMONIKER *ppmk )
 {
     *ppmk = NULL;
     return E_NOTIMPL;
