@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_lib_container.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:32:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:11:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,11 +78,11 @@ public:
         css::uno::Reference<css::uno::XComponentContext> const & xContext,
         bool immediateFlush = true )
         : m_xContext( xContext ),
+          m_immediateFlush( immediateFlush ),
           m_container_url( container_url ),
           m_mutex( mutex ),
           m_inited( false ),
-          m_modified( false ),
-          m_immediateFlush( immediateFlush )
+          m_modified( false )
         {}
 
     static ::rtl::OUString get_libname(
