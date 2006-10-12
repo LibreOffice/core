@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galtheme.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-25 14:22:28 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:44:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ struct GalleryObject
     BOOL            bDummy;
 };
 
-DECLARE_LIST( GalleryObjectList, GalleryObject* );
+DECLARE_LIST( GalleryObjectList, GalleryObject* )
 
 // -----------------
 // - GalDragParams -
