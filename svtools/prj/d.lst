@@ -44,7 +44,6 @@ hedabu: ..\inc\cancel.hxx %_DEST%\inc%_EXT%\svtools\cancel.hxx
 hedabu: ..\inc\cntnrsrt.hxx %_DEST%\inc%_EXT%\svtools\cntnrsrt.hxx
 hedabu: ..\inc\colrdlg.hxx %_DEST%\inc%_EXT%\svtools\colrdlg.hxx
 hedabu: ..\inc\colctrl.hxx %_DEST%\inc%_EXT%\svtools\colctrl.hxx
-hedabu: ..\inc\compat.hxx %_DEST%\inc%_EXT%\svtools\compat.hxx
 hedabu: ..\inc\ctrlbox.hxx %_DEST%\inc%_EXT%\svtools\ctrlbox.hxx
 hedabu: ..\inc\ctrltool.hxx %_DEST%\inc%_EXT%\svtools\ctrltool.hxx
 hedabu: ..\inc\collatorres.hxx %_DEST%\inc%_EXT%\svtools\collatorres.hxx
@@ -175,7 +174,6 @@ hedabu: ..\source\uno\unoiface.hxx %_DEST%\inc%_EXT%\svtools\unoiface.hxx
 hedabu: ..\inc\imageresourceaccess.hxx %_DEST%\inc%_EXT%\svtools\imageresourceaccess.hxx
 hedabu: ..\inc\itemprop.hxx %_DEST%\inc%_EXT%\svtools\itemprop.hxx
 hedabu: ..\inc\itempro3.hxx %_DEST%\inc%_EXT%\svtools\itempro3.hxx
-hedabu: ..\inc\strcrypt.hxx %_DEST%\inc%_EXT%\svtools\strcrypt.hxx
 hedabu: ..\inc\addresstemplate.hxx %_DEST%\inc%_EXT%\svtools\addresstemplate.hxx
 hedabu: ..\inc\genericunodialog.hxx %_DEST%\inc%_EXT%\svtools\genericunodialog.hxx
 hedabu: ..\inc\editbrowsebox.hxx %_DEST%\inc%_EXT%\svtools\editbrowsebox.hxx
