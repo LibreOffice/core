@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xattr2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:23:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:31:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,7 @@ TYPEINIT1_AUTOFACTORY(XLineJointItem, SfxEnumItem);
 // -----------------------------------------------------------------------------
 
 XLineJointItem::XLineJointItem( XLineJoint eLineJoint ) :
-    SfxEnumItem(XATTR_LINEJOINT, eLineJoint)
+    SfxEnumItem(XATTR_LINEJOINT, sal::static_int_cast< USHORT >(eLineJoint))
 {
 }
 
@@ -314,7 +314,7 @@ BOOL XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nM
         break;
     }
 
-    SetValue( eJoint );
+    SetValue( sal::static_int_cast< USHORT >( eJoint ) );
 
     return sal_True;
 }
@@ -697,7 +697,7 @@ TYPEINIT1_AUTOFACTORY( XFillBmpPosItem, SfxEnumItem );
 *************************************************************************/
 
 XFillBmpPosItem::XFillBmpPosItem( RECT_POINT eRP ) :
-            SfxEnumItem( XATTR_FILLBMP_POS, eRP )
+    SfxEnumItem( XATTR_FILLBMP_POS, sal::static_int_cast< USHORT >( eRP ) )
 {
 }
 
