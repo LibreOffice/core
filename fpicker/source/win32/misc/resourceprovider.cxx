@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resourceprovider.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:59:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:56:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,7 +222,7 @@ CResourceProvider::~CResourceProvider( )
 //
 //------------------------------------------------------------
 
-OUString CResourceProvider::getResString( sal_Int32 aId )
+OUString CResourceProvider::getResString( sal_Int16 aId )
 {
    return m_pImpl->getResString( aId );
 }

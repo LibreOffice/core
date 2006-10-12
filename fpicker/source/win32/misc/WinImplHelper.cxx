@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WinImplHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:59:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:56:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,9 @@ bool SAL_CALL IsWindowsVersion(unsigned int PlatformId, unsigned int MajorVersio
                 (MajorVersion == osvi.dwMajorVersion);
 
     if (MinorVersion > -1)
-        bRet = bRet && (MinorVersion == osvi.dwMinorVersion);
+        bRet = bRet &&
+            (sal::static_int_cast< unsigned int >(MinorVersion) ==
+             osvi.dwMinorVersion);
 
     return bRet;
 }
@@ -163,7 +165,7 @@ void SAL_CALL ListboxAddString( HWND hwnd, const OUString& aString )
 {
     LRESULT rc = SendMessageW(
         hwnd, CB_ADDSTRING, 0, reinterpret_cast< LPARAM >(aString.getStr( )) );
-
+    (void) rc; // avoid warning
     OSL_ASSERT( (CB_ERR != rc) && (CB_ERRSPACE != rc) );
 }
 
@@ -286,7 +288,7 @@ void SAL_CALL ListboxDeleteItem( HWND hwnd, const Any& aPosition, const Referenc
 //
 //------------------------------------------------------------
 
-void SAL_CALL ListboxDeleteItems( HWND hwnd, const Any& /*unused*/, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
+void SAL_CALL ListboxDeleteItems( HWND hwnd, const Any&, const Reference< XInterface >&, sal_Int16 )
     throw( IllegalArgumentException )
 {
     OSL_ASSERT( IsWindow( hwnd ) );
