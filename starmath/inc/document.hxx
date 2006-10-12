@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 07:58:09 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:49:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@
 #include <vcl/jobset.hxx>
 
 class SmNode;
+class SfxMenuBarManager;
 class SfxPrinter;
 class Printer;
 
