@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:01:32 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:43:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -459,7 +459,7 @@ sal_Int16 DbGridColumn::SetAlignmentFromModel(sal_Int16 nStandardAlign)
     Any aAlign( m_xModel->getPropertyValue(FM_PROP_ALIGN));
     if (aAlign.hasValue())
     {
-        sal_Int16 nTest;
+        sal_Int16 nTest = sal_Int16();
         if (aAlign >>= nTest)
             nStandardAlign = nTest;
     }
