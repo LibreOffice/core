@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pszctrl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:45:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:05:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,10 +210,10 @@ struct SvxPosSizeStatusBarControl_Impl
     Images fu"r die Position und Gro"sse laden.
 */
 
-SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( USHORT nSlotId,
-                                                        USHORT nId,
+SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( USHORT _nSlotId,
+                                                        USHORT _nId,
                                                         StatusBar& rStb ) :
-    SfxStatusBarControl( nSlotId, nId, rStb ),
+    SfxStatusBarControl( _nSlotId, _nId, rStb ),
     pImp( new SvxPosSizeStatusBarControl_Impl )
 {
     pImp->bPos = FALSE;
