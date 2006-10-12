@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errorbroadcaster.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:48:52 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:12:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ namespace frm
 
     protected:
         OErrorBroadcaster( ::cppu::OBroadcastHelper& _rBHelper );
-        ~OErrorBroadcaster( );
+        virtual ~OErrorBroadcaster( );
 
         void SAL_CALL disposing();
 
