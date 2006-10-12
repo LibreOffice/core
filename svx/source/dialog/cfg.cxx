@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:11:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:06:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,7 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #endif
@@ -5540,7 +5541,8 @@ IMPL_LINK( SvxIconSelectorDialog, ImportHdl, PushButton *, pButton )
     (void)pButton;
 
     sfx2::FileDialogHelper aImportDialog(
-        ::sfx2::FILEOPEN_LINK_PREVIEW, SFXWB_GRAPHIC | SFXWB_MULTISELECTION );
+        css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
+        SFXWB_GRAPHIC | SFXWB_MULTISELECTION );
 
     // disable the link checkbox in the dialog
     uno::Reference< css::ui::dialogs::XFilePickerControlAccess >
