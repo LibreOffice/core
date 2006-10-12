@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyprdlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:14:42 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:15:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,8 @@ class SvxHyperlinkDlg : public ToolBox, public SfxControllerItem
 {
     friend class HyperCombo;
     friend class HyperFixedText;
+    using ToolBox::StateChanged;
+
 private:
     SfxStatusForwarder  aForwarder;
     SfxStatusForwarder  aHyperlinkDlgForward;
