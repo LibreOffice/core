@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:49:49 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:11:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2562,6 +2562,8 @@ void OBoundControlModel::transferControlValueToExternal( )
             sMessage += "message:\n";
             sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
             OSL_ENSURE( sal_False, sMessage.getStr() );
+#else
+            (void) e; // avoid warnings
 #endif
         }
         m_bTransferingValue = sal_False;
