@@ -4,9 +4,9 @@
  *
  *  $RCSfile: refvaluecomponent.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:55:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:13:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,8 @@ namespace frm
                     Any aExternalValue = getExternalValueBinding()->getValue( ::getCppuType( static_cast< sal_Bool* >( NULL ) ) );
                     sal_Bool bState = sal_False;
                     if ( aExternalValue >>= bState )
-                        nState = bState ? STATE_CHECK : STATE_NOCHECK;
+                        nState = sal::static_int_cast< sal_Int16 >(
+                            bState ? STATE_CHECK : STATE_NOCHECK );
                 }
                 break;
 
