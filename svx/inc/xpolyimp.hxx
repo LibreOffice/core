@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xpolyimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:50:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:00:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,8 @@ public:
     ImpXPolygon( const ImpXPolygon& rImpXPoly );
     ~ImpXPolygon();
 
-    FASTBOOL operator==(const ImpXPolygon& rImpXPoly) const;
-    FASTBOOL operator!=(const ImpXPolygon& rImpXPoly) const { return !operator==(rImpXPoly); }
+    bool operator==(const ImpXPolygon& rImpXPoly) const;
+    bool operator!=(const ImpXPolygon& rImpXPoly) const { return !operator==(rImpXPoly); }
 
     void CheckPointDelete()
     {
@@ -109,8 +109,8 @@ public:
                 ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly );
                 ~ImpXPolyPolygon();
 
-    FASTBOOL operator==(const ImpXPolyPolygon& rImpXPolyPoly) const;
-    FASTBOOL operator!=(const ImpXPolyPolygon& rImpXPolyPoly) const { return !operator==(rImpXPolyPoly); }
+    bool operator==(const ImpXPolyPolygon& rImpXPolyPoly) const;
+    bool operator!=(const ImpXPolyPolygon& rImpXPolyPoly) const { return !operator==(rImpXPolyPoly); }
 };
 
 
