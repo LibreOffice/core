@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofsdrobj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:36:42 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:03:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,9 +127,9 @@ namespace sdr
             return pRetval;
         }
 
-#ifdef DBG_UTIL
-static sal_Bool bTestTheBitmapBufferedObjects(sal_False);
-#endif // DBG_UTIL
+//#ifdef DBG_UTIL
+//static sal_Bool bTestTheBitmapBufferedObjects(sal_False);
+//#endif // DBG_UTIL
 
         // Create a Object-Specific ViewObjectContact, set ViewContact and
         // ObjectContact. Always needs to return something.
