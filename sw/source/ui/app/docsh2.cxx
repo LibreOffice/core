@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:34:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:07:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,6 +260,7 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_COMMONFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #include <svx/acorrcfg.hxx>
 
