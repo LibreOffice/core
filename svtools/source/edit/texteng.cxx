@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:48:13 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:15:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -912,7 +912,7 @@ TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, const XubString
             if ( nL > STRING_MAXLEN )
             {
                 USHORT nDiff = (USHORT) (nL-STRING_MAXLEN);
-                nEnd -= nDiff;
+                nEnd = nEnd - nDiff;
             }
 
             XubString aLine( aText, nStart, nEnd-nStart );
@@ -1040,7 +1040,7 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, BOOL bSpecial, BOOL bP
             break;
         }
 
-        nCurIndex +=  pTmpLine->GetLen();
+        nCurIndex = nCurIndex + pTmpLine->GetLen();
         nY += mnCharHeight;
     }
     if ( !pLine )
@@ -1050,7 +1050,7 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, BOOL bSpecial, BOOL bP
 
         pLine = pPortion->GetLines().GetObject( pPortion->GetLines().Count()-1 );
         nY -= mnCharHeight;
-        nCurIndex -=  pLine->GetLen();
+        nCurIndex = nCurIndex - pLine->GetLen();
     }
 
     Rectangle aEditCursor;
@@ -1271,7 +1271,7 @@ USHORT TextEngine::GetCharPos( ULONG nPortion, USHORT nLine, long nXPos, BOOL )
             }
             return nCurIndex;
         }
-        nCurIndex += pTextPortion->GetLen();
+        nCurIndex = nCurIndex + pTextPortion->GetLen();
     }
     return nCurIndex;
 }
@@ -1877,7 +1877,7 @@ USHORT TextEngine::SplitTextPortion( ULONG nPara, USHORT nPos )
     for ( nSplitPortion = 0; nSplitPortion < nPortions; nSplitPortion++ )
     {
         TETextPortion* pTP = pTEParaPortion->GetTextPortions().GetObject(nSplitPortion);
-        nTmpPos += pTP->GetLen();
+        nTmpPos = nTmpPos + pTP->GetLen();
         if ( nTmpPos >= nPos )
         {
             if ( nTmpPos == nPos )  // dann braucht nichts geteilt werden
@@ -1890,7 +1890,7 @@ USHORT TextEngine::SplitTextPortion( ULONG nPara, USHORT nPos )
     DBG_ASSERT( pTextPortion, "Position ausserhalb des Bereichs!" );
 
     USHORT nOverlapp = nTmpPos - nPos;
-    pTextPortion->GetLen() -= nOverlapp;
+    pTextPortion->GetLen() = pTextPortion->GetLen() - nOverlapp;
     TETextPortion* pNewPortion = new TETextPortion( nOverlapp );
     pTEParaPortion->GetTextPortions().Insert( pNewPortion, nSplitPortion+1 );
     pTextPortion->GetWidth() = (long)CalcTextWidth( nPara, nPos-pTextPortion->GetLen(), pTextPortion->GetLen() );
@@ -1954,10 +1954,10 @@ void TextEngine::CreateTextPortions( ULONG nPara, USHORT nStartPos )
     for ( nP = 0; nP < pTEParaPortion->GetTextPortions().Count(); nP++ )
     {
         TETextPortion* pTmpPortion = pTEParaPortion->GetTextPortions().GetObject(nP);
-        nPortionStart += pTmpPortion->GetLen();
+        nPortionStart = nPortionStart + pTmpPortion->GetLen();
         if ( nPortionStart >= nStartPos )
         {
-            nPortionStart -= pTmpPortion->GetLen();
+            nPortionStart = nPortionStart - pTmpPortion->GetLen();
             nInvPortion = nP;
             break;
         }
@@ -1969,7 +1969,7 @@ void TextEngine::CreateTextPortions( ULONG nPara, USHORT nStartPos )
         // Aber nur wenn es mitten in der Portion war, sonst ist es evtl.
         // die einzige in der Zeile davor !
         nInvPortion--;
-        nPortionStart -= pTEParaPortion->GetTextPortions().GetObject(nInvPortion)->GetLen();
+        nPortionStart = nPortionStart - pTEParaPortion->GetTextPortions().GetObject(nInvPortion)->GetLen();
     }
     pTEParaPortion->GetTextPortions().DeleteFromPortion( nInvPortion );
 
@@ -2025,7 +2025,9 @@ void TextEngine::RecalcTextPortion( ULONG nPara, USHORT nStartPos, short nNewCha
                     !pTEParaPortion->GetTextPortions()[nNewPortionPos]->GetLen() )
             {
                 // Dann die leere Portion verwenden.
-                pTEParaPortion->GetTextPortions()[nNewPortionPos]->GetLen() += nNewChars;
+                USHORT & r =
+                    pTEParaPortion->GetTextPortions()[nNewPortionPos]->GetLen();
+                r = r + nNewChars;
             }
             else
             {
@@ -2040,7 +2042,7 @@ void TextEngine::RecalcTextPortion( ULONG nPara, USHORT nStartPos, short nNewCha
                 FindPortion( nStartPos, nPortionStart );
             TETextPortion* const pTP = pTEParaPortion->GetTextPortions()[ nTP ];
             DBG_ASSERT( pTP, "RecalcTextPortion: Portion nicht gefunden"  );
-            pTP->GetLen() += nNewChars;
+            pTP->GetLen() = pTP->GetLen() + nNewChars;
             pTP->GetWidth() = (-1);
         }
     }
@@ -2066,7 +2068,7 @@ void TextEngine::RecalcTextPortion( ULONG nPara, USHORT nStartPos, short nNewCha
                 DBG_ASSERT( nPos+pTP->GetLen() >= nEnd, "End falsch!" );
                 break;
             }
-            nPos += pTP->GetLen();
+            nPos = nPos + pTP->GetLen();
         }
         DBG_ASSERT( pTP, "RecalcTextPortion: Portion nicht gefunden" );
         if ( ( nPos == nStartPos ) && ( (nPos+pTP->GetLen()) == nEnd ) )
@@ -2078,7 +2080,7 @@ void TextEngine::RecalcTextPortion( ULONG nPara, USHORT nStartPos, short nNewCha
         else
         {
             DBG_ASSERT( pTP->GetLen() > (-nNewChars), "Portion zu klein zum schrumpfen!" );
-            pTP->GetLen() += nNewChars;
+            pTP->GetLen() = pTP->GetLen() + nNewChars;
         }
         DBG_ASSERT( pTEParaPortion->GetTextPortions().Count(), "RecalcTextPortions: Keine mehr da!" );
     }
@@ -2206,7 +2208,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                                     pOutDev->SetFont( aFont);
                                                     aPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, pLine, nTmpIndex, nTmpIndex+nL );
                                                     pOutDev->DrawText( aPos, pPortion->GetNode()->GetText(), nTmpIndex, nL );
-                                                    nTmpIndex += nL;
+                                                    nTmpIndex = nTmpIndex + nL;
 
                                                 }
                                                 // 2) Bereich mit Selektion
@@ -2222,7 +2224,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                                     pOutDev->DrawText( aPos, pPortion->GetNode()->GetText(), nTmpIndex, nL );
                                                     pOutDev->SetTextColor( aOldTextColor );
                                                     pOutDev->SetTextFillColor();
-                                                    nTmpIndex += nL;
+                                                    nTmpIndex = nTmpIndex + nL;
                                                 }
 
                                                 // 3) Bereich nach Selektion
@@ -2283,7 +2285,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                             }
                         }
 
-                        nIndex += pTextPortion->GetLen();
+                        nIndex = nIndex + pTextPortion->GetLen();
                     }
                 }
 
@@ -2364,7 +2366,7 @@ BOOL TextEngine::CreateLines( ULONG nPara )
             {
                 // Es darf kein Start/Ende im geloeschten Bereich liegen.
                 TETextPortion* const pTP = pTEParaPortion->GetTextPortions().GetObject( nTP );
-                nPos += pTP->GetLen();
+                nPos = nPos + pTP->GetLen();
                 if ( ( nPos > nStart ) && ( nPos < nEnd ) )
                 {
                     bQuickFormat = FALSE;
@@ -2469,7 +2471,7 @@ BOOL TextEngine::CreateLines( ULONG nPara )
                 pPortion->GetKind() = PORTIONKIND_TEXT;
             }
 
-            nTmpPos += pPortion->GetLen();
+            nTmpPos = nTmpPos + pPortion->GetLen();
             nPortionEnd = nTmpPos;
             nTmpPortion++;
         }
@@ -2479,7 +2481,7 @@ BOOL TextEngine::CreateLines( ULONG nPara )
         if ( nTmpWidth > nXWidth )
         {
             nPortionEnd = nTmpPos;
-            nTmpPos -= pPortion->GetLen();
+            nTmpPos = nTmpPos - pPortion->GetLen();
             nPortionStart = nTmpPos;
             nTmpPortion--;
             bEOL = FALSE;
@@ -2998,7 +3000,7 @@ void TextEngine::ImpCharsRemoved( ULONG nPara, USHORT nPos, USHORT nChars )
                     if ( rPaM.GetPara() == nPara )
                     {
                         if ( rPaM.GetIndex() > nEnd )
-                            rPaM.GetIndex() -= nChars;
+                            rPaM.GetIndex() = rPaM.GetIndex() - nChars;
                         else if ( rPaM.GetIndex() > nPos )
                             rPaM.GetIndex() = nPos;
                     }
@@ -3024,7 +3026,7 @@ void TextEngine::ImpCharsInserted( ULONG nPara, USHORT nPos, USHORT nChars )
                     if ( rPaM.GetPara() == nPara )
                     {
                         if ( rPaM.GetIndex() >= nPos )
-                            rPaM.GetIndex() += nChars;
+                            rPaM.GetIndex() = rPaM.GetIndex() + nChars;
                     }
                 }
             }
@@ -3114,7 +3116,9 @@ void TextEngine::ImpInitWritingDirections( ULONG nPara )
 
     if ( pParaPortion->GetNode()->GetText().Len() )
     {
-        const BYTE nDefaultDir = IsRightToLeft() ? UBIDI_RTL : UBIDI_LTR;
+        //TODO The following line needs to be fixed, see #i67789#:
+        const BYTE nDefaultDir = sal::static_int_cast< BYTE >(
+            IsRightToLeft() ? UBIDI_RTL : UBIDI_LTR);
         String aText( pParaPortion->GetNode()->GetText() );
 
         //
