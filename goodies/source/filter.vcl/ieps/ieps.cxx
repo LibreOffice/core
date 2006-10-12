@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ieps.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:50:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:36:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -456,7 +456,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 
 #ifdef WNT
 extern "C" BOOL _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                            PFilterCallback pCallback, void * pCallerData,
+                            PFilterCallback /*pCallback*/, void * /*pCallerData*/,
                                 FilterConfigItem*, BOOL)
 #else
 extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
@@ -601,7 +601,7 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
                                             }
                                         }
                                         if ( nBitDepth == 1 )
-                                            pAcc->SetPixel( y, x, ( nDat >> nBitsLeft ) & 1 );
+                                            pAcc->SetPixel( y, x, sal::static_int_cast< BYTE >(( nDat >> nBitsLeft ) & 1) );
                                         else
                                         {
                                             pAcc->SetPixel( y, x, ( nDat ) ? 1 : 0 );   // nBitDepth == 8
