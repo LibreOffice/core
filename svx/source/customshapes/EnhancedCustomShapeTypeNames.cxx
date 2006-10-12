@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeTypeNames.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:07:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:03:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ static ::osl::Mutex& getHashMapMutex()
 
 struct NameTypeTable
 {
-    char*       pS;
+    const char* pS;
     MSO_SPT     pE;
 };
 static const NameTypeTable pNameTypeTableArray[] =
