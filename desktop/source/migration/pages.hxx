@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pages.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:39:26 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:13:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,9 @@ public:
     const Link& GetScrolledHdl() const { return maScrolledHdl; }
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+protected:
+    using MultiLineEdit::Notify;
 };
 
 class LicensePage : public svt::OWizardPage
