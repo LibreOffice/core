@@ -4,9 +4,9 @@
  *
  *  $RCSfile: barwipepolypolygon.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:37:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:00:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,10 @@ namespace internal {
     aTransform.scale( ::basegfx::pruneScaleValue( t / m_nBars ), 1.0 );
     for ( sal_Int32 i = m_nBars; i--; )
     {
-        ::basegfx::B2DHomMatrix t( aTransform );
-        t.translate( static_cast<double>(i) / m_nBars, 0.0 );
+        ::basegfx::B2DHomMatrix transform( aTransform );
+        transform.translate( static_cast<double>(i) / m_nBars, 0.0 );
         ::basegfx::B2DPolygon poly( m_unitRect );
-        poly.transform( t );
+        poly.transform( transform );
         res.append( poly );
     }
     return res;
