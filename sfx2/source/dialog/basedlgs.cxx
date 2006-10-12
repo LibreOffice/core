@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:30:45 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:52:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,8 +66,6 @@
 #include "sfxhelp.hxx"
 #include "workwin.hxx"
 
-static String aEmptyString;
-
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
@@ -120,20 +118,19 @@ SfxModalDefParentHelper::~SfxModalDefParentHelper()
 
 // -----------------------------------------------------------------------
 
-void SetDialogData_Impl( SfxViewFrame* /*pFrame*/, SfxModalDialog *pDlg,
-                         sal_uInt16 nId, const String &rExtraData = aEmptyString )
+void SfxModalDialog::SetDialogData_Impl()
 {
     // save settings (position and user data)
-    SvtViewOptions aDlgOpt( E_DIALOG, String::CreateFromInt32( nId ) );
+    SvtViewOptions aDlgOpt( E_DIALOG, String::CreateFromInt32( nUniqId ) );
     aDlgOpt.SetWindowState(
-        OUString::createFromAscii( pDlg->GetWindowState( WINDOWSTATE_MASK_POS ).GetBuffer() ) );
-    if ( rExtraData.Len() )
-        aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( rExtraData ) ) );
+        OUString::createFromAscii( GetWindowState( WINDOWSTATE_MASK_POS ).GetBuffer() ) );
+    if ( aExtraData.Len() )
+        aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aExtraData ) ) );
 }
 
 // -----------------------------------------------------------------------
 
-String GetDialogData_Impl( SfxViewFrame* /*pFrame*/, SfxModalDialog *pDlg, sal_uInt16 nId )
+void SfxModalDialog::GetDialogData_Impl()
 
 /*      [Beschreibung]
 
@@ -142,19 +139,26 @@ String GetDialogData_Impl( SfxViewFrame* /*pFrame*/, SfxModalDialog *pDlg, sal_u
 */
 
 {
-    String sRet;
-    SvtViewOptions aDlgOpt( E_DIALOG, String::CreateFromInt32( nId ) );
+    SvtViewOptions aDlgOpt( E_DIALOG, String::CreateFromInt32( nUniqId ) );
     if ( aDlgOpt.Exists() )
     {
         // load settings
-        pDlg->SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
+        SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
         Any aUserItem = aDlgOpt.GetUserItem( USERITEM_NAME );
         OUString aTemp;
         if ( aUserItem >>= aTemp )
-            sRet = String( aTemp );
+            aExtraData = String( aTemp );
     }
+}
 
-    return sRet;
+// -----------------------------------------------------------------------
+
+void SfxModalDialog::init()
+{
+    GetDialogData_Impl();
+    aTimer.SetTimeout( 100 );
+    aTimer.SetTimeoutHdl( LINK( this, SfxModalDialog, TimerHdl_Impl ) );
+    aTimer.Start();
 }
 
 // -----------------------------------------------------------------------
@@ -171,18 +175,13 @@ SfxModalDialog::SfxModalDialog(Window* pParent, const ResId &rResId)
 :       ModalDialog(pParent, rResId),
     nUniqId(rResId.GetId())
 {
-    DBG_WARNING( "bitte den Ctor mit ViewFrame verwenden" );
-
-    aExtraData = GetDialogData_Impl(0, this, nUniqId);
-    aTimer.SetTimeout( 100 );
-    aTimer.SetTimeoutHdl( LINK( this, SfxModalDialog, TimerHdl_Impl ) );
-    aTimer.Start();
+    init();
 }
 
 // -----------------------------------------------------------------------
 
 SfxModalDialog::SfxModalDialog(Window* pParent,
-                               sal_uInt16 nUniqueId,
+                               sal_uInt32 nUniqueId,
                                WinBits nWinStyle) :
 /*      [Beschreibung]
 
@@ -194,62 +193,7 @@ SfxModalDialog::SfxModalDialog(Window* pParent,
     ModalDialog(pParent, nWinStyle),
     nUniqId(nUniqueId)
 {
-    DBG_WARNING( "bitte den Ctor mit ViewFrame verwenden" );
-    aExtraData = GetDialogData_Impl(0, this, nUniqId);
-    aTimer.SetTimeout( 100 );
-    aTimer.SetTimeoutHdl( LINK( this, SfxModalDialog, TimerHdl_Impl ) );
-    aTimer.Start();
-}
-
-// -----------------------------------------------------------------------
-
-SfxModalDialog::SfxModalDialog
-(
-    SfxViewFrame*   pViewFrame,
-    Window*                 pParent,
-    const ResId&    rResId
-)
-
-/*      [Beschreibung]
-
-    Konstruktor der allgemeinen Basisklasse f"ur modale Dialoge;
-    ResId wird als ID im ini-file verwendet.
-    Die dort gespeicherte Position wird gesetzt.
-*/
-
-:       ModalDialog(pParent, rResId),
-    nUniqId(rResId.GetId())
-{
-    aExtraData = GetDialogData_Impl(pViewFrame, this, nUniqId);
-    aTimer.SetTimeout( 100 );
-    aTimer.SetTimeoutHdl( LINK( this, SfxModalDialog, TimerHdl_Impl ) );
-    aTimer.Start();
-}
-
-// -----------------------------------------------------------------------
-
-SfxModalDialog::SfxModalDialog
-(
-    SfxViewFrame*   pViewFrame,
-    Window*                 pParent,
-    sal_uInt16                  nUniqueId,
-    WinBits                 nWinStyle
-)
-
-/*      [Beschreibung]
-
-    Konstruktor der allgemeinen Basisklasse f"ur modale Dialoge;
-    ID f"ur das ini-file wird explizit "ubergeben.
-    Die dort gespeicherte Position wird gesetzt.
-*/
-
-:       ModalDialog(pParent, nWinStyle),
-    nUniqId(nUniqueId)
-{
-    aExtraData = GetDialogData_Impl(pViewFrame, this, nUniqId);
-    aTimer.SetTimeout( 100 );
-    aTimer.SetTimeoutHdl( LINK( this, SfxModalDialog, TimerHdl_Impl ) );
-    aTimer.Start();
+    init();
 }
 
 // -----------------------------------------------------------------------
@@ -267,7 +211,7 @@ SfxModalDialog::~SfxModalDialog()
     if ( pHelpPI )
         pHelpPI->ResetTopic();
 */
-    SetDialogData_Impl(0, this, nUniqId, aExtraData);
+    SetDialogData_Impl();
     aTimer.Stop();
 }
 
@@ -822,34 +766,6 @@ SfxSingleTabDialog::SfxSingleTabDialog
 
 SfxSingleTabDialog::SfxSingleTabDialog
 (
-    SfxViewFrame*      /*pViewFrame*/,
-    Window*            pParent,
-    const SfxItemSet&  rSet,
-    sal_uInt16         nUniqueId
-) :
-
-/*  [Beschreibung]
-
-    Konstruktor der allgemeinen Basisklasse f"ur SingleTab-Dialoge;
-    ID f"ur das ini-file wird "ubergeben.
-*/
-
-    SfxModalDialog( pParent, nUniqueId, WinBits( WB_STDMODAL | WB_3DLOOK ) ),
-
-    pOKBtn          ( 0 ),
-    pCancelBtn      ( 0 ),
-    pHelpBtn        ( 0 ),
-    pPage           ( 0 ),
-    pOptions        ( &rSet ),
-    pOutSet         ( 0 )
-
-{
-}
-
-// -----------------------------------------------------------------------
-
-SfxSingleTabDialog::SfxSingleTabDialog
-(
     Window* pParent,
     sal_uInt16 nUniqueId,
     const SfxItemSet* pInSet
@@ -873,34 +789,6 @@ SfxSingleTabDialog::SfxSingleTabDialog
 
 {
     DBG_WARNING( "bitte den Ctor mit ViewFrame verwenden" );
-}
-
-// -----------------------------------------------------------------------
-
-SfxSingleTabDialog::SfxSingleTabDialog
-(
-    SfxViewFrame* /*pViewFrame*/,
-    Window* pParent,
-    sal_uInt16 nUniqueId,
-    const SfxItemSet* pInSet
-)
-
-/*  [Beschreibung]
-
-    Konstruktor der allgemeinen Basisklasse f"ur SingleTab-Dialoge;
-    ID f"ur das ini-file wird "ubergeben.
-*/
-
-:   SfxModalDialog( pParent, nUniqueId, WinBits( WB_STDMODAL | WB_3DLOOK ) ),
-
-    pOKBtn          ( 0 ),
-    pCancelBtn      ( 0 ),
-    pHelpBtn        ( 0 ),
-    pPage           ( 0 ),
-    pOptions        ( pInSet ),
-    pOutSet         ( 0 )
-
-{
 }
 
 // -----------------------------------------------------------------------
