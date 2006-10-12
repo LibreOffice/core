@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:59:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:15:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1576,7 +1576,7 @@ void SdrPageView::DrawGrid(OutputDevice& rOut, const Rectangle& rRect, Color aCo
         Color aColorMerk( rOut.GetLineColor() );
         rOut.SetLineColor( aColor );
 
-        FASTBOOL bMap0=rOut.IsMapModeEnabled();
+        bool bMap0=rOut.IsMapModeEnabled();
 #ifdef WIN // SetPixel-Profiling fuer Windows
        COLORREF aWinColRef=PALETTERGB(aColor.GetRed()>>8,aColor.GetGreen()>>8,aColor.GetBlue()>>8);
        HDC aWinhDC=Sysdepen::GethDC(rOut);
@@ -1606,9 +1606,9 @@ void SdrPageView::DrawGrid(OutputDevice& rOut, const Rectangle& rRect, Color aCo
         const SdrPageGridFrameList* pFrames=GetPage()->GetGridFrameList(this,NULL);
         //USHORT nBufSiz=1024; // 4k Buffer = max. 512 Punkte
         // #90353# long* pBuf = NULL;
-        unsigned nGridPaintAnz=1;
+        USHORT nGridPaintAnz=1;
         if (pFrames!=NULL) nGridPaintAnz=pFrames->GetCount();
-        for (unsigned nGridPaintNum=0; nGridPaintNum<nGridPaintAnz; nGridPaintNum++) {
+        for (USHORT nGridPaintNum=0; nGridPaintNum<nGridPaintAnz; nGridPaintNum++) {
             if (pFrames!=NULL) {
                 const SdrPageGridFrame& rGF=(*pFrames)[nGridPaintNum];
                 nWrX=rGF.GetPaperRect().Left();
