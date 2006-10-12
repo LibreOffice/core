@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:39:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:12:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -799,7 +799,7 @@ void SvtMatchContext_Impl::run()
 
                         String aURL( aMatch );
                         if( eProt == INET_PROT_NOT_VALID )
-                            aMatch.Erase( 0, INetURLObject::GetScheme( aCurObj.GetProtocol() ).getLength() );
+                            aMatch.Erase( 0, sal::static_int_cast< xub_StrLen >(INetURLObject::GetScheme( aCurObj.GetProtocol() ).getLength()) );
 
                         if( aText.Len() < aMatch.Len() )
                             Insert( aMatch, aURL );
@@ -1308,7 +1308,16 @@ void SvtURLBox::SetBaseURL( const String& rURL )
 /** Parse leading ~ for Unix systems,
     does nothing for Windows
  */
-sal_Bool SvtURLBox_Impl::TildeParsing( String& aText, String& aBaseURL )
+sal_Bool SvtURLBox_Impl::TildeParsing(
+    String&
+#ifdef UNX
+    aText
+#endif
+    , String&
+#ifdef UNX
+    aBaseURL
+#endif
+)
 {
 #ifdef UNX
     if( aText.Search( '~' ) == 0 )
