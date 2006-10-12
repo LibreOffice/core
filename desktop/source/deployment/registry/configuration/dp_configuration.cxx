@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_configuration.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:43:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:10:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -479,9 +479,9 @@ void BackendImpl::xcu_merge_in(
 //______________________________________________________________________________
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::PackageImpl::isRegistered_(
-    ::osl::ResettableMutexGuard & guard,
-    ::rtl::Reference<AbortChannel> const & abortChannel,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    ::osl::ResettableMutexGuard &,
+    ::rtl::Reference<AbortChannel> const &,
+    Reference<XCommandEnvironment> const & )
 {
     BackendImpl * that = getMyBackend();
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
@@ -492,13 +492,13 @@ BackendImpl::PackageImpl::isRegistered_(
 
 //______________________________________________________________________________
 void BackendImpl::PackageImpl::processPackage_(
-    ::osl::ResettableMutexGuard & guard,
-    bool registerPackage,
+    ::osl::ResettableMutexGuard &,
+    bool doRegisterPackage,
     ::rtl::Reference<AbortChannel> const & abortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     BackendImpl * that = getMyBackend();
-    if (registerPackage)
+    if (doRegisterPackage)
     {
         if (m_isSchema)
         {
