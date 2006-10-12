@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numithdl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:27:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:40:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ XMLNumRulePropHdl::~XMLNumRulePropHdl()
     // Nothing to do
 }
 
-sal_Bool XMLNumRulePropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
+bool XMLNumRulePropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
 {
     return mxNumRuleCompare.is() && mxNumRuleCompare->compare( r1, r2 ) == 0;
 }
