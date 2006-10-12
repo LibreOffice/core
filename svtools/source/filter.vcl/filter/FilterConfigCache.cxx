@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:50:23 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:17:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -392,7 +392,7 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumber( const String& rFormatName )
             break;
         aIter++;
     }
-    return aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin();
+    return sal::static_int_cast< sal_uInt16 >(aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin());
 }
 
 sal_uInt16 FilterConfigCache::GetImportFormatNumberForMediaType( const String& rMediaType )
@@ -404,7 +404,7 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumberForMediaType( const String& r
             break;
         aIter++;
     }
-    return aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin();
+    return sal::static_int_cast< sal_uInt16 >(aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin());
 }
 
 sal_uInt16 FilterConfigCache::GetImportFormatNumberForShortName( const String& rShortName )
@@ -416,7 +416,7 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumberForShortName( const String& r
             break;
         aIter++;
     }
-    return aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin();
+    return sal::static_int_cast< sal_uInt16 >(aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin());
 }
 
 sal_uInt16 FilterConfigCache::GetImportFormatNumberForTypeName( const String& rType )
@@ -428,7 +428,7 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumberForTypeName( const String& rT
             break;
         aIter++;
     }
-    return aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin();
+    return sal::static_int_cast< sal_uInt16 >(aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin());
 }
 
 String FilterConfigCache::GetImportFormatName( sal_uInt16 nFormat )
@@ -532,7 +532,7 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumber( const String& rFormatName )
             break;
         aIter++;
     }
-    return aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin();
+    return sal::static_int_cast< sal_uInt16 >(aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin());
 }
 
 sal_uInt16 FilterConfigCache::GetExportFormatNumberForMediaType( const String& rMediaType )
@@ -544,7 +544,7 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumberForMediaType( const String& r
             break;
         aIter++;
     }
-    return aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin();
+    return sal::static_int_cast< sal_uInt16 >(aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin());
 }
 
 sal_uInt16 FilterConfigCache::GetExportFormatNumberForShortName( const String& rShortName )
@@ -556,7 +556,7 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumberForShortName( const String& r
             break;
         aIter++;
     }
-    return aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin();
+    return sal::static_int_cast< sal_uInt16 >(aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin());
 }
 
 sal_uInt16 FilterConfigCache::GetExportFormatNumberForTypeName( const String& rType )
@@ -568,7 +568,7 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumberForTypeName( const String& rT
             break;
         aIter++;
     }
-    return aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin();
+    return sal::static_int_cast< sal_uInt16 >(aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin());
 }
 
 String FilterConfigCache::GetExportFormatName( sal_uInt16 nFormat )
