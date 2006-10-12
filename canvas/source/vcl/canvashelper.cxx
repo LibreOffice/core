@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvashelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:30:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:32:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -446,14 +446,14 @@ namespace vclcanvas
             if( !nTransparency )
                 mpOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
             else
-                mpOutDev->getOutDev().DrawTransparent( aPolyPoly, nTransPercent );
+                mpOutDev->getOutDev().DrawTransparent( aPolyPoly, (USHORT)nTransPercent );
 
             if( mp2ndOutDev )
             {
                 if( !nTransparency )
                     mp2ndOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
                 else
-                    mp2ndOutDev->getOutDev().DrawTransparent( aPolyPoly, nTransPercent );
+                    mp2ndOutDev->getOutDev().DrawTransparent( aPolyPoly, (USHORT)nTransPercent );
             }
         }
 
@@ -882,7 +882,7 @@ namespace vclcanvas
                     pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
                     pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
                     pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
-                    pRes[ nCurrPos++ ] = (sal_Int8)255L;
+                    pRes[ nCurrPos++ ] = (sal_uInt8)255L;
                 }
             }
 
