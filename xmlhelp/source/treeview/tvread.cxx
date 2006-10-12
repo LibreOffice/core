@@ -118,10 +118,13 @@ namespace treeview {
         {
             if( ! targetURL.getLength() )
             {
-                const TVDom* p = this;
                 sal_Int32 len;
-                while( ! ( len = p->application.getLength() ) )
-                    p = p->parent;
+                for ( const TVDom* p = this;; p = p->parent )
+                {
+                    len = p->application.getLength();
+                    if ( len != 0 )
+                        break;
+                }
 
                 rtl::OUStringBuffer strBuff( 22 + len + id.getLength() );
                 strBuff.appendAscii(
@@ -911,7 +914,7 @@ void TVChildTarget::subst( const Reference< XMultiServiceFactory >& m_xSMgr,
                     m_xSMgr->createInstance( rtl::OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" ) ),
                     UNO_QUERY );
         }
-        catch( const com::sun::star::uno::Exception& e )
+        catch( const com::sun::star::uno::Exception& )
         {
             OSL_ENSURE( xCfgMgr.is()," cant instantiate the special config manager " );
         }
