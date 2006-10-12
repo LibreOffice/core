@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxdocumenthandler.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:31:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:45:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,7 +265,7 @@ throw(  SAXException, RuntimeException )
                         {
                             // Check if we have a UI name set in our XML file
                             OUString aUIName;
-                            for ( int n = 0; n < xAttribs->getLength(); n++ )
+                            for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
                       {
                         pToolBoxEntry = m_aToolBoxMap.find( xAttribs->getNameByIndex( n ) );
                         if ( pToolBoxEntry != m_aToolBoxMap.end() )
@@ -334,7 +334,7 @@ throw(  SAXException, RuntimeException )
                 sal_uInt16      nUserDef( 0 );
                 sal_Bool        bVisible( sal_True );
 
-                for ( int n = 0; n < xAttribs->getLength(); n++ )
+                for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
                 {
                     pToolBoxEntry = m_aToolBoxMap.find( xAttribs->getNameByIndex( n ) );
                     if ( pToolBoxEntry != m_aToolBoxMap.end() )
