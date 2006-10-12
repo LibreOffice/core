@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:59:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:25:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,7 +394,7 @@ void SbiImage::AddString( const String& r )
                 memcpy( p, pStrings, nStringSize * sizeof( sal_Unicode ) );
                 delete[] pStrings;
                 pStrings = p;
-                nStringSize = nNewLen;
+                nStringSize = sal::static_int_cast< UINT16 >(nNewLen);
             }
             else
                 bError = TRUE;
@@ -404,7 +404,7 @@ void SbiImage::AddString( const String& r )
             pStringOff[ nStringIdx++ ] = nStringOff;
             //ByteString aByteStr( r, eCharSet );
             memcpy( pStrings + nStringOff, r.GetBuffer(), len * sizeof( sal_Unicode ) );
-            nStringOff += len;
+            nStringOff = nStringOff + len;
             // war das der letzte String? Dann die Groesse
             // des Puffers aktualisieren
             if( nStringIdx >= nStrings )
