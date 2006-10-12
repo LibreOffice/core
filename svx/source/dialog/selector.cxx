@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:37:38 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:26:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -384,7 +384,7 @@ void SvxConfigGroupListBox_Impl::ClearAll()
     Clear();
 }
 
-void SvxConfigGroupListBox_Impl::Init( SvStringsDtor */*pArr*/ )
+void SvxConfigGroupListBox_Impl::Init( SvStringsDtor * )
 {
     SetUpdateMode(FALSE);
     ClearAll();
@@ -519,7 +519,7 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor */*pArr*/ )
                 OUString::createFromAscii( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
             rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
         }
-        catch( Exception& e )
+        catch( Exception& )
         {
             // OSL_TRACE("Exception getting root node: %s", PRTSTR(e.Message));
             // TODO exception handling
@@ -652,7 +652,7 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor */*pArr*/ )
                         }
                     }
                 }
-                catch (RuntimeException &e) {
+                catch (RuntimeException &) {
                     // do nothing, the entry will not be displayed in the UI
                 }
             }
@@ -926,7 +926,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                                     String::CreateFromAscii( "Description" ) );
                                 value >>= description;
                             }
-                            catch (Exception &e) {
+                            catch (Exception &) {
                                 // do nothing, the description will be empty
                             }
 
@@ -955,7 +955,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                     }
                 }
             }
-            catch (RuntimeException &e) {
+            catch (RuntimeException &) {
                 // do nothing, the entry will not be displayed in the UI
             }
             break;
@@ -964,7 +964,6 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
         default:
         {
             return;
-            break;
         }
     }
 
@@ -1134,7 +1133,7 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                         }
                     }
                 }
-                catch (RuntimeException &e) {
+                catch (RuntimeException &) {
                     // do nothing, the entry will not be displayed in the UI
                 }
             }
@@ -1204,7 +1203,7 @@ SvxScriptSelectorDialog::GetDocTitle(
             }
         }
     }
-    catch ( Exception& e )
+    catch ( Exception& )
     {
         // OSL_TRACE("GetDocTitle() exception: %s", PRTSTR(e.Message));
     }
