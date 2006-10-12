@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inettype.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:16:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:24:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1176,7 +1176,7 @@ bool INetContentTypes::parse(ByteString const & rMediaType,
     }
     if (p == pToken)
         return false;
-    rType = ByteString(pToken, p - pToken);
+    rType = ByteString(pToken, sal::static_int_cast< xub_StrLen >(p - pToken));
     if (bDowncase)
         rType.ToLowerAscii();
 
@@ -1194,7 +1194,8 @@ bool INetContentTypes::parse(ByteString const & rMediaType,
     }
     if (p == pToken)
         return false;
-    rSubType = ByteString(pToken, p - pToken);
+    rSubType = ByteString(
+        pToken, sal::static_int_cast< xub_StrLen >(p - pToken));
     if (bDowncase)
         rSubType.ToLowerAscii();
 
@@ -1220,7 +1221,7 @@ bool INetContentTypes::parse(UniString const & rMediaType,
     }
     if (p == pToken)
         return false;
-    rType = UniString(pToken, p - pToken);
+    rType = UniString(pToken, sal::static_int_cast< xub_StrLen >(p - pToken));
     if (bDowncase)
         rType.ToLowerAscii();
 
@@ -1238,7 +1239,8 @@ bool INetContentTypes::parse(UniString const & rMediaType,
     }
     if (p == pToken)
         return false;
-    rSubType = UniString(pToken, p - pToken);
+    rSubType = UniString(
+        pToken, sal::static_int_cast< xub_StrLen >(p - pToken));
     if (bDowncase)
         rSubType.ToLowerAscii();
 
