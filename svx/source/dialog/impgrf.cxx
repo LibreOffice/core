@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:25:38 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:16:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ int LoadGraphic( const String &rPath, const String &rFilterName,
     if ( !pFilter )
         pFilter = ::GetGrfFilter();
 
-    const int nFilter = rFilterName.Len() && pFilter->GetImportFormatCount()
+    const USHORT nFilter = rFilterName.Len() && pFilter->GetImportFormatCount()
                     ? pFilter->GetImportFormatNumber( rFilterName )
                     : GRFILTER_FORMAT_DONTKNOW;
 
