@@ -4,9 +4,9 @@
  *
  *  $RCSfile: migration.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:45:29 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:12:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,8 +142,8 @@ sal_Bool MigrationImpl::checkMigration()
 }
 
 MigrationImpl::MigrationImpl(const Reference< XMultiServiceFactory >& xFactory)
-    : m_xFactory(xFactory)
-    , m_vrVersions(new strings_v)
+    : m_vrVersions(new strings_v)
+    , m_xFactory(xFactory)
     , m_vrMigrations(readMigrationSteps())
     , m_aInfo(findInstallation())
     , m_vrFileList(compileFileList())
@@ -217,7 +217,7 @@ sal_Bool MigrationImpl::checkMigrationCompleted()
             getConfigAccess("org.openoffice.Setup/Office"), UNO_QUERY_THROW);
         aPropertySet->getPropertyValue(
             OUString::createFromAscii("MigrationCompleted")) >>= bMigrationCompleted;
-    } catch (Exception& e) {
+    } catch (Exception&) {
         // just return false...
     }
     return bMigrationCompleted;
@@ -323,7 +323,7 @@ install_info MigrationImpl::findInstallation()
 
     strings_v vInst;
     ByteString sInst;
-    for (int i=0; i<aVersion.GetKeyCount(); i++) {
+    for (USHORT i=0; i<aVersion.GetKeyCount(); i++) {
         sInst =aVersion.GetKeyName(i);
         vInst.push_back(OUString(static_cast< OString >(sInst), sInst.Len(), RTL_TEXTENCODING_UTF8));
     }
@@ -489,7 +489,7 @@ void MigrationImpl::copyConfig()
                 OUString component = seqComponents[i];
                 importerArgs[2].Value = makeAny(seqComponents[i]);
                 try {
-                    Any aResult = xImporter->execute(importerArgs);
+                    aResult = xImporter->execute(importerArgs);
                     Exception myException;
                     if (aResult >>= myException) throw myException;
                 } catch(Exception& aException) {
