@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfpage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:21:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:13:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,8 +371,10 @@ BOOL SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
 
 void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
 {
+#ifdef DBG_UTIL
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
+#endif
 
     bSetOrigSize = FALSE;
 
