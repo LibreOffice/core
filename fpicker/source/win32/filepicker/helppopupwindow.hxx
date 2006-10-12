@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helppopupwindow.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:46:46 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:54:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,13 @@
 #endif
 
 #define WIN32_LEAN_AND_MEAN
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 //---------------------------------------------
 // declaration
@@ -85,10 +91,7 @@ public:
     */
     CHelpPopupWindow(
         HINSTANCE hInstance,
-        HWND hwndParent = NULL,
-        sal_Int32 minWidth = 0,
-        sal_Int32 hMargins = 0,
-        sal_Int32 vMargins = 0 );
+        HWND hwndParent );
 
     /*
         dtor
@@ -113,7 +116,7 @@ public:
 
 private:
     void SAL_CALL onPaint( HWND, HDC );
-    void SAL_CALL onNcDestroy( HWND );
+    void SAL_CALL onNcDestroy();
     void SAL_CALL onCreate( HWND );
 
     POINT SAL_CALL calcUpperLeftCorner( );
