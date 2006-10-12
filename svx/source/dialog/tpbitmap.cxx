@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpbitmap.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:43:57 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:30:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,7 @@
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #ifndef _SV_BMPACC_HXX
 #include <vcl/bmpacc.hxx>
@@ -207,8 +208,8 @@ void SvxBitmapTabPage::Construct()
 
 void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
 {
-    int nPos;
-    int nCount;
+    USHORT nPos;
+    USHORT nCount;
 
     if( *pDlgType == 0 ) // Flaechen-Dialog
     {
@@ -703,7 +704,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
     if( !nError )
     {
-        XBitmapEntry* pEntry;
+        XBitmapEntry* pEntry = 0;
         if( aCtlPixel.IsEnabled() )
         {
             XOBitmap aXOBitmap = aBitmapCtl.GetXBitmap();
@@ -722,28 +723,32 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
                 XOBitmap aXOBitmap( ( ( const XFillBitmapItem* ) pPoolItem )->GetBitmapValue() );
                 pEntry = new XBitmapEntry( aXOBitmap, aName );
             }
-            else { DBG_ERROR( "pEntry is undfined -> GPF" ) }
         }
 
-        pBitmapList->Insert( pEntry );
+        DBG_ASSERT( pEntry, "SvxBitmapTabPage::ClickAddHdl_Impl(), pEntry == 0 ?" );
 
-        aLbBitmaps.Append( pEntry );
-        aLbBitmaps.SelectEntryPos( aLbBitmaps.GetEntryCount() - 1 );
+        if( pEntry )
+        {
+            pBitmapList->Insert( pEntry );
+
+            aLbBitmaps.Append( pEntry );
+            aLbBitmaps.SelectEntryPos( aLbBitmaps.GetEntryCount() - 1 );
 
 #ifdef WNT
-        // hack: #31355# W.P.
-        Rectangle aRect( aLbBitmaps.GetPosPixel(), aLbBitmaps.GetSizePixel() );
-        if( TRUE ) {                // ??? overlapped with pDlg
-                                    // and srolling
-            Invalidate( aRect );
-            //aLbBitmaps.Invalidate();
-        }
+            // hack: #31355# W.P.
+            Rectangle aRect( aLbBitmaps.GetPosPixel(), aLbBitmaps.GetSizePixel() );
+            if( TRUE ) {                // ??? overlapped with pDlg
+                                        // and srolling
+                Invalidate( aRect );
+                //aLbBitmaps.Invalidate();
+            }
 #endif
 
-        // Flag fuer modifiziert setzen
-        *pnBitmapListState |= CT_MODIFIED;
+            // Flag fuer modifiziert setzen
+            *pnBitmapListState |= CT_MODIFIED;
 
-        ChangeBitmapHdl_Impl( this );
+            ChangeBitmapHdl_Impl( this );
+        }
     }
 
     // Status der Buttons ermitteln
@@ -776,7 +781,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
     if( !aDlg.Execute() )
     {
         Graphic         aGraphic;
-        USHORT          nError = 1;
+        int             nError = 1;
 
         EnterWait();
         nError = aDlg.GetGraphic( aGraphic );
@@ -873,7 +878,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 {
-    int nPos = aLbBitmaps.GetSelectEntryPos();
+    USHORT nPos = aLbBitmaps.GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -944,7 +949,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxBitmapTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 {
-    int nPos = aLbBitmaps.GetSelectEntryPos();
+    USHORT nPos = aLbBitmaps.GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -995,7 +1000,9 @@ IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
     if ( nReturn != RET_CANCEL )
     {
-        ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+        ::sfx2::FileDialogHelper aDlg(
+            com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+            0 );
         String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sob" ) );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
@@ -1079,7 +1086,8 @@ IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxBitmapTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
 {
-       ::sfx2::FileDialogHelper aDlg( ::sfx2::FILESAVE_SIMPLE, 0 );
+       ::sfx2::FileDialogHelper aDlg(
+        com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sob" ) );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
