@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdata.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:47:46 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:15:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ USHORT TETextPortionList::FindPortion( USHORT nCharPos, USHORT& nPortionStart, B
     for ( USHORT nPortion = 0; nPortion < Count(); nPortion++ )
     {
         TETextPortion* pPortion = GetObject( nPortion );
-        nTmpPos += pPortion->GetLen();
+        nTmpPos = nTmpPos + pPortion->GetLen();
         if ( nTmpPos >= nCharPos )
         {
             // take this one if we don't prefer the starting portion, or if it's the last one
@@ -165,13 +165,13 @@ void TEParaPortion::MarkInvalid( USHORT nStart, short nDiff )
         if ( ( nDiff > 0 ) && ( mnInvalidDiff > 0 ) &&
              ( ( mnInvalidPosStart+mnInvalidDiff ) == nStart ) )
         {
-            mnInvalidDiff += nDiff;
+            mnInvalidDiff = mnInvalidDiff + nDiff;
         }
         // Einfaches hintereinander loeschen
         else if ( ( nDiff < 0 ) && ( mnInvalidDiff < 0 ) && ( mnInvalidPosStart == nStart ) )
         {
-            mnInvalidPosStart += nDiff;
-            mnInvalidDiff += nDiff;
+            mnInvalidPosStart = mnInvalidPosStart + nDiff;
+            mnInvalidDiff = mnInvalidDiff + nDiff;
         }
         else
         {
@@ -242,19 +242,19 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( USHORT nLastFormattedL
         // formatierten beginnen:
         // Wenn in der geaenderten Zeile eine Portion gesplittet wurde,
         // kann nLastEnd > nNextStart sein!
-        short nPDiff = -( nPortionDiff-1 );
-        short nTDiff = -( nTextDiff-1 );
+        short nPDiff = sal::static_int_cast< short >(-( nPortionDiff-1 ));
+        short nTDiff = sal::static_int_cast< short >(-( nTextDiff-1 ));
         if ( nPDiff || nTDiff )
         {
             for ( USHORT nL = nLastFormattedLine+1; nL < nLines; nL++ )
             {
                 TextLine* pLine = maLines[ nL ];
 
-                pLine->GetStartPortion() += nPDiff;
-                pLine->GetEndPortion() += nPDiff;
+                pLine->GetStartPortion() = pLine->GetStartPortion() + nPDiff;
+                pLine->GetEndPortion() = pLine->GetEndPortion() + nPDiff;
 
-                pLine->GetStart() += nTDiff;
-                pLine->GetEnd() += nTDiff;
+                pLine->GetStart() = pLine->GetStart() + nTDiff;
+                pLine->GetEnd() = pLine->GetEnd() + nTDiff;
 
                 pLine->SetValid();
             }

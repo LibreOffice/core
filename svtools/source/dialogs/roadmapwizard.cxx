@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmapwizard.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:46:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:14:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,7 +257,8 @@ namespace svt
         while ( nState != WZS_INVALID_STATE )
         {
             aNewPath.push_back( nState );
-            nState = va_arg( aStateList, int );
+            nState = sal::static_int_cast< WizardState >(
+                va_arg( aStateList, int ));
         }
         va_end( aStateList );
 
