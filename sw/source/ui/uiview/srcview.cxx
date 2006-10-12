@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:23:03 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:08:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -472,8 +472,9 @@ void SwSrcView::Execute(SfxRequest& rReq)
             SvtPathOptions aPathOpt;
             Window* pParent = &GetViewFrame()->GetWindow();
             // filesave dialog with autoextension
-            FileDialogHelper aDlgHelper( ::sfx2::FILESAVE_AUTOEXTENSION,
-                                         TemplateDescription::FILESAVE_SIMPLE );
+            FileDialogHelper aDlgHelper(
+                TemplateDescription::FILESAVE_AUTOEXTENSION,
+                TemplateDescription::FILESAVE_SIMPLE );
             Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 //          pFileDlg->SetHelpId(HID_FILEDLG_SRCVIEW);
             Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
