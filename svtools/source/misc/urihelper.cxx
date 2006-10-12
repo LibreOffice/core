@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urihelper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:14:03 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:24:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -590,7 +590,7 @@ sal_uInt32 scanDomain(UniString const & rStr, xub_StrLen * pPos,
     sal_Unicode const * pBuffer = rStr.GetBuffer();
     sal_Unicode const * p = pBuffer + *pPos;
     sal_uInt32 nLabels = INetURLObject::scanDomain(p, pBuffer + nEnd, false);
-    *pPos = p - pBuffer;
+    *pPos = sal::static_int_cast< xub_StrLen >(p - pBuffer);
     return nLabels;
 }
 
