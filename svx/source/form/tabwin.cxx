@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:13:51 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:48:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@ using namespace ::svx;
 //==================================================================
 // class FmFieldWinListBox
 //==================================================================
-DBG_NAME(FmFieldWinListBox);
+DBG_NAME(FmFieldWinListBox)
 //------------------------------------------------------------------------------
 FmFieldWinListBox::FmFieldWinListBox( FmFieldWin* pParent )
     :SvTreeListBox( pParent, WB_HASBUTTONS|WB_BORDER )
