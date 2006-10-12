@@ -4,9 +4,9 @@
  *
  *  $RCSfile: headertablistbox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:02:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ public:
                                     // should be called after all manipulations on elements are done
                                     // calcs real sizes depending on sizes of this
     void                        Show( BOOL bVisible = TRUE, USHORT nFlags = 0 );    // same meaning as Windows::Show()
-    void                        Enable( BOOL bEnable = TRUE, BOOL bChild = TRUE );  // same meaning as Windows::Enable()
+    void                        Enable( bool bEnable = true, bool bChild = true );  // same meaning as Windows::Enable()
 };
 
 inline SvHeaderTabListBox& _HeaderTabListBox::GetListBox( void )
