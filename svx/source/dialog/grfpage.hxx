@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfpage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:10:57 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:13:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,10 @@
 
 class SvxGrfCropPage : public SfxTabPage
 {
+    using Window::CalcZoom;
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     class SvxCropExample : public Window
     {
         Size        aFrameSize;
