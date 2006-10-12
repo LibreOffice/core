@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:48:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:39:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,8 +240,8 @@ MenuManager::MenuManager(
     sal_Int32 nAddonsURLPrefixLength = ADDONSPOPUPMENU_URL_PREFIX.getLength();
     ::std::vector< USHORT > aQueryLabelItemIdVector;
 
-    int nItemCount = pMenu->GetItemCount();
-    for ( int i = 0; i < nItemCount; i++ )
+    USHORT nItemCount = pMenu->GetItemCount();
+    for ( USHORT i = 0; i < nItemCount; i++ )
     {
         USHORT nItemId = pMenu->GetItemId( i );
 
@@ -501,8 +501,8 @@ MenuManager::MenuManager(
 
     SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
 
-    int nItemCount = pBmkMenu->GetItemCount();
-    for ( int i = 0; i < nItemCount; i++ )
+    USHORT nItemCount = pBmkMenu->GetItemCount();
+    for ( USHORT i = 0; i < nItemCount; i++ )
     {
         USHORT nItemId = pBmkMenu->GetItemId( i );
 
@@ -579,8 +579,8 @@ MenuManager::MenuManager(
 
     SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
 
-    int nItemCount = pAddonMenu->GetItemCount();
-    for ( int i = 0; i < nItemCount; i++ )
+    USHORT nItemCount = pAddonMenu->GetItemCount();
+    for ( USHORT i = 0; i < nItemCount; i++ )
     {
         USHORT nItemId = pAddonMenu->GetItemId( i );
 
@@ -657,8 +657,8 @@ MenuManager::MenuManager(
 
     SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
 
-    int nItemCount = pAddonPopupMenu->GetItemCount();
-    for ( int i = 0; i < nItemCount; i++ )
+    USHORT nItemCount = pAddonPopupMenu->GetItemCount();
+    for ( USHORT i = 0; i < nItemCount; i++ )
     {
         USHORT nItemId = pAddonPopupMenu->GetItemId( i );
 
