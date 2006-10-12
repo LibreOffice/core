@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pastedlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:34:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:24:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@ IMPL_LINK_INLINE_END( SvPasteObjectDialog, DoubleClickHdl, ListBox *, pListBox )
 void SvPasteObjectDialog::SetDefault()
 {
     bLink   = FALSE;
-    nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT;
+    nAspect = (USHORT)::com::sun::star::embed::Aspects::MSOLE_CONTENT;
 }
 
 SvPasteObjectDialog::~SvPasteObjectDialog()
@@ -299,7 +299,7 @@ ULONG SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
         bLink = PasteLink().IsChecked();
 
         if( AsIconBox().IsChecked() )
-            nAspect = com::sun::star::embed::Aspects::MSOLE_ICON;
+            nAspect = (USHORT)com::sun::star::embed::Aspects::MSOLE_ICON;
 
         nSelFormat  = (ULONG)ObjectLB().GetEntryData( ObjectLB().GetSelectEntryPos() );
     }
