@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cntnrsrt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:12:38 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:03:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@
     ClassName( const ClassName& );                                          \
     ClassName& operator =( const ClassName& );                              \
 public:                                                                     \
-    Container::Count;                                                       \
+    using Container::Count;                                                 \
                                                                             \
     ClassName( USHORT  InitSize, USHORT  ReSize ) :                         \
         Container( CONTAINER_MAXBLOCKSIZE, InitSize, ReSize )   {}          \
@@ -124,8 +124,8 @@ class ClassName : private Container                                         \
 BOOL ClassName::Insert( Type *pObj )                                        \
 {                                                                           \
     ULONG nPos;                                                             \
-    BOOL bExist;                                                            \
-    if( ! ( bExist = Seek_Entry( pObj, &nPos ) ) )                          \
+    BOOL bExist = Seek_Entry( pObj, &nPos );                                \
+    if( !bExist )                                                           \
         Container::Insert( pObj, nPos );                                    \
     return !bExist;                                                         \
 }                                                                           \
