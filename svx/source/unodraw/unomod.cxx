@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:13:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:25:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,7 +250,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
     if( ServiceSpecifier.compareTo( aDrawingPrefix, aDrawingPrefix.getLength() ) == 0 )
     {
         UINT32 nType = aSdrShapeIdentifierMap.getId( ServiceSpecifier );
-        if( nType != (UINT32)UHASHMAP_NOTFOUND )
+        if( nType != UHASHMAP_NOTFOUND )
         {
             UINT16 nT = (UINT16)(nType & ~E3D_INVENTOR_FLAG);
             UINT32 nI = (nType & E3D_INVENTOR_FLAG)?E3dInventor:SdrInventor;
@@ -326,7 +326,6 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWi
     throw( uno::Exception, uno::RuntimeException )
 {
     throw lang::NoSupportException();
-    return uno::Reference< uno::XInterface >();
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawMSFactory::getAvailableServiceNames()
