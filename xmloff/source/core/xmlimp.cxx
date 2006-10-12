@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:23:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:39:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1839,7 +1839,7 @@ bool SvXMLImport::getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
     }
     return bRet;
