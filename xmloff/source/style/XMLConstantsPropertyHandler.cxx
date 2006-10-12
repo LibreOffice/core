@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLConstantsPropertyHandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:49:04 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:46:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,10 +75,11 @@ XMLConstantsPropertyHandler::~XMLConstantsPropertyHandler()
 sal_Bool XMLConstantsPropertyHandler::importXML(
     const OUString& rStrImpValue,
     Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
+    const SvXMLUnitConverter& ) const
 {
     sal_uInt16 nEnum;
-    sal_Bool bRet = rUnitConverter.convertEnum( nEnum, rStrImpValue, pMap );
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum(
+        nEnum, rStrImpValue, pMap );
 
     if( bRet )
         rValue <<= (sal_Int16)nEnum;
@@ -89,7 +90,7 @@ sal_Bool XMLConstantsPropertyHandler::importXML(
 sal_Bool XMLConstantsPropertyHandler::exportXML(
     OUString& rStrExpValue,
     const Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
+    const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut;
 
@@ -113,7 +114,8 @@ sal_Bool XMLConstantsPropertyHandler::exportXML(
         {
             sal_uInt16 nConst = static_cast<sal_uInt16>( nEnum );
 
-            bRet = rUnitConverter.convertEnum( aOut, nConst, pMap, eDefault );
+            bRet = SvXMLUnitConverter::convertEnum(
+                aOut, nConst, pMap, eDefault );
 
             rStrExpValue = aOut.makeStringAndClear();
         }
