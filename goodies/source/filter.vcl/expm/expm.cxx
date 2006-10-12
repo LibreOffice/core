@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:45:05 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:34:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,8 @@ BOOL XPMWriter::WriteXPM( const Graphic& rGraphic, SvStream& rXPM,
         if ( aBmp.GetBitCount() > 8 )               // wenn noetig Bild auf 8 bit konvertieren
             aBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
     }
-    if ( ( mpAcc = aBmp.AcquireReadAccess() ) )
+    mpAcc = aBmp.AcquireReadAccess();
+    if ( mpAcc )
     {
         mnColors = mpAcc->GetPaletteEntryCount();
         mpOStmOldModus = mpOStm->GetNumberFormatInt();
