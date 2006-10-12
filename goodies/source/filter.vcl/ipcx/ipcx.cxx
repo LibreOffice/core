@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipcx.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:51:57 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:37:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,7 +232,7 @@ void PCXReader::ImplReadBody()
     BYTE    *pPlane[ 4 ], * pDest, * pSource1, * pSource2, * pSource3, *pSource4;
     ULONG   i, nx, ny, np, nCount, nUsedLineSize, nLineSize, nPercent;
     ULONG   nLastPercent = 0;
-    BYTE    nDat, nCol = 0;
+    BYTE    nDat = 0, nCol = 0;
 
     nUsedLineSize = (ULONG)( ( ( nWidth * (ULONG)nDestBitsPerPixel ) + 7 ) >> 3 );
     nLineSize = ( nUsedLineSize + 3 ) & 0xfffc;
@@ -314,7 +314,10 @@ void PCXReader::ImplReadBody()
                     if ( nShift == 0 )
                         pAcc->SetPixel( ny, i, ( *pSource1++ & 1 ) );
                     else
-                        pAcc->SetPixel( ny, i, ( *pSource1 >> nShift ) & 1 );
+                        pAcc->SetPixel(
+                            ny, i,
+                            sal::static_int_cast< BYTE >(
+                                ( *pSource1 >> nShift ) & 1) );
                 }
                 break;
             // 4 colors
@@ -358,8 +361,9 @@ void PCXReader::ImplReadBody()
                     }
                     else
                     {
-                        nCol = ( ( *pSource1 >> nShift ) & 1)  + ( ( ( *pSource2 >> nShift ) << 1 ) & 2 ) +
-                            ( ( ( *pSource3 >> nShift ) << 2 ) & 4 );
+                        nCol = sal::static_int_cast< BYTE >(
+                            ( ( *pSource1 >> nShift ) & 1)  + ( ( ( *pSource2 >> nShift ) << 1 ) & 2 ) +
+                            ( ( ( *pSource3 >> nShift ) << 2 ) & 4 ));
                         pAcc->SetPixel( ny, i, nCol );
                     }
                 }
@@ -377,8 +381,9 @@ void PCXReader::ImplReadBody()
                     }
                     else
                     {
-                        nCol = ( ( *pSource1 >> nShift ) & 1)  + ( ( ( *pSource2 >> nShift ) << 1 ) & 2 ) +
-                            ( ( ( *pSource3 >> nShift ) << 2 ) & 4 ) + ( ( ( *pSource4 >> nShift ) << 3 ) & 8 );
+                        nCol = sal::static_int_cast< BYTE >(
+                            ( ( *pSource1 >> nShift ) & 1)  + ( ( ( *pSource2 >> nShift ) << 1 ) & 2 ) +
+                            ( ( ( *pSource3 >> nShift ) << 2 ) & 4 ) + ( ( ( *pSource4 >> nShift ) << 3 ) & 8 ));
                         pAcc->SetPixel( ny, i, nCol );
                     }
                 }
