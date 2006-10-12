@@ -4,9 +4,9 @@
  *
  *  $RCSfile: buffer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:01:05 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:26:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ BOOL SbiBuffer::Check( USHORT n )
         if( nInc == 0 )
             return FALSE;
         USHORT nn = 0;
-        while( nn < n ) nn += nInc;
+        while( nn < n ) nn = nn + nInc;
         char* p;
         if( ((long) nSize + nn ) > 0xFF00L ) p = NULL;
         else p = new char [nSize + nn];
@@ -100,7 +100,7 @@ BOOL SbiBuffer::Check( USHORT n )
             delete[] pBuf;
             pBuf = p;
             pCur = pBuf + nOff;
-            nSize += nn;
+            nSize = nSize + nn;
         }
     }
     return TRUE;
@@ -114,12 +114,12 @@ void SbiBuffer::Align( short n )
         USHORT nn =( ( nOff + n ) / n ) * n;
         if( nn <= 0xFF00 )
         {
-            nn -= nOff;
+            nn = nn - nOff;
             if( Check( nn ) )
             {
                 memset( pCur, 0, nn );
                 pCur += nn;
-                nOff += nn;
+                nOff = nOff + nn;
             }
         }
     }
@@ -207,7 +207,7 @@ BOOL SbiBuffer::operator +=( const String& n )
         ByteString aByteStr( n, gsl_getSystemTextEncoding() );
         memcpy( pCur, aByteStr.GetBuffer(), l );
         pCur += l;
-        nOff += l;
+        nOff = nOff + l;
         return TRUE;
     }
     else return FALSE;
@@ -219,7 +219,7 @@ BOOL SbiBuffer::Add( const void* p, USHORT len )
     {
         memcpy( pCur, p, len );
         pCur += len;
-        nOff += len;
+        nOff = nOff + len;
         return TRUE;
     } else return FALSE;
 }
