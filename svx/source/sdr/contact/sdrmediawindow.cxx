@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrmediawindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:34:48 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:03:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,26 +41,6 @@
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif
-
-//////////////////////////////////////////////////////////////////////////////
-// Added wrappers to replace the '#define protected public' hack embracing
-// the svtools/transfer include. Need to ask KA if it makes more sense to
-// change the used protected methods to public in the used svtoosl classes.
-
-class WrappedDropTargetHelper : DropTargetHelper
-{
-public:
-    sal_Int8 WrappedAcceptDrop( const AcceptDropEvent& rEvt ) { return AcceptDrop(rEvt); }
-    sal_Int8 WrappedExecuteDrop( const ExecuteDropEvent& rEvt ) { return ExecuteDrop(rEvt); }
-};
-
-class WrappedDragSourceHelper : DragSourceHelper
-{
-public:
-    void WrappedStartDrag( sal_Int8 nAction, const Point& rPosPixel ) { StartDrag(nAction, rPosPixel); }
-};
-
-//////////////////////////////////////////////////////////////////////////////
 
 #include <svx/sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
 #include <vcl/window.hxx>
@@ -177,7 +157,7 @@ sal_Int8 SdrMediaWindow::AcceptDrop( const AcceptDropEvent& rEvt )
 
         if( pDropTargetHelper )
         {
-            nRet = ((WrappedDropTargetHelper*)pDropTargetHelper)->WrappedAcceptDrop( rEvt );
+            nRet = pDropTargetHelper->AcceptDrop( rEvt );
         }
     }
 
@@ -197,7 +177,7 @@ sal_Int8 SdrMediaWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
         if( pDropTargetHelper )
         {
-            nRet = ((WrappedDropTargetHelper*)pDropTargetHelper)->WrappedExecuteDrop( rEvt );
+            nRet = pDropTargetHelper->ExecuteDrop( rEvt );
         }
     }
 
@@ -216,7 +196,7 @@ void SdrMediaWindow::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 
         if( pDragSourceHelper )
         {
-            ((WrappedDragSourceHelper*)pDragSourceHelper)->WrappedStartDrag( nAction, rPosPixel );
+            pDragSourceHelper->StartDrag( nAction, rPosPixel );
         }
     }
 }
