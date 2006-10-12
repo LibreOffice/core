@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:22:51 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:14:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,7 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& 
 
 SvxHyperlinkNewDocTp::~SvxHyperlinkNewDocTp ()
 {
-    for ( int n=0; n<maLbDocTypes.GetEntryCount(); n++ )
+    for ( USHORT n=0; n<maLbDocTypes.GetEntryCount(); n++ )
     {
         DocumentTypeData* pTypeData = (DocumentTypeData*)
                                       maLbDocTypes.GetEntryData ( n );
