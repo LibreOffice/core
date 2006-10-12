@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 23:09:04 $
+#   last change: $Author: obo $ $Date: 2006-10-12 12:49:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,8 @@ EXCEPTIONSFILES =	\
                     $(SLO)$/gallery1.obj	\
                     $(SLO)$/galtheme.obj	\
                     $(SLO)$/galmisc.obj		\
-                    $(SLO)$/galbrws1.obj	
+                    $(SLO)$/galbrws1.obj	\
+                    $(SLO)$/galexpl.obj
 
 RESLIB1NAME = $(TARGET)
 RESLIB1IMAGES = $(PRJ)$/res
