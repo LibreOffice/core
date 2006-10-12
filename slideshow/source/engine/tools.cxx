@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:29:32 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:56:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,8 +228,8 @@ namespace presentation
         /// extract enum/constant group value from Any
         bool extractValue( sal_Int16&                       o_rValue,
                            const uno::Any&                  rSourceAny,
-                           const ShapeSharedPtr&            rShape,
-                           const LayerManagerSharedPtr&     rLayerManager )
+                           const ShapeSharedPtr&            /*rShape*/,
+                           const LayerManagerSharedPtr&     /*rLayerManager*/ )
         {
             // try to extract numeric value (int, or smaller POD, like byte)
             if( (rSourceAny >>= o_rValue) )
@@ -242,7 +242,7 @@ namespace presentation
             drawing::FillStyle eFillStyle;
             if( (rSourceAny >>= eFillStyle) )
             {
-                o_rValue = eFillStyle;
+                o_rValue = (sal_Int16)eFillStyle;
 
                 // succeeded
                 return true;
@@ -251,7 +251,7 @@ namespace presentation
             drawing::LineStyle eLineStyle;
             if( (rSourceAny >>= eLineStyle) )
             {
-                o_rValue = eLineStyle;
+                o_rValue = (sal_Int16)eLineStyle;
 
                 // succeeded
                 return true;
@@ -260,7 +260,7 @@ namespace presentation
             awt::FontSlant eFontSlant;
             if( (rSourceAny >>= eFontSlant) )
             {
-                o_rValue = eFontSlant;
+                o_rValue = (sal_Int16)eFontSlant;
 
                 // succeeded
                 return true;
@@ -273,8 +273,8 @@ namespace presentation
         /// extract color value from Any
         bool extractValue( RGBColor&                    o_rValue,
                            const uno::Any&              rSourceAny,
-                           const ShapeSharedPtr&        rShape,
-                           const LayerManagerSharedPtr& rLayerManager )
+                           const ShapeSharedPtr&        /*rShape*/,
+                           const LayerManagerSharedPtr& /*rLayerManager*/ )
         {
             // try to extract numeric value (double, or smaller POD, like float or int)
             {
@@ -355,8 +355,8 @@ namespace presentation
         /// extract color value from Any
         bool extractValue( HSLColor&                    o_rValue,
                            const uno::Any&              rSourceAny,
-                           const ShapeSharedPtr&        rShape,
-                           const LayerManagerSharedPtr& rLayerManager )
+                           const ShapeSharedPtr&        /*rShape*/,
+                           const LayerManagerSharedPtr& /*rLayerManager*/ )
         {
             // try double sequence
             {
@@ -394,8 +394,8 @@ namespace presentation
         /// extract plain string from Any
         bool extractValue( ::rtl::OUString&                 o_rValue,
                            const uno::Any&                  rSourceAny,
-                           const ShapeSharedPtr&            rShape,
-                           const LayerManagerSharedPtr&     rLayerManager )
+                           const ShapeSharedPtr&            /*rShape*/,
+                           const LayerManagerSharedPtr&     /*rLayerManager*/ )
         {
             // try to extract string
             if( !(rSourceAny >>= o_rValue) )
@@ -407,10 +407,10 @@ namespace presentation
         /// extract bool value from Any
         bool extractValue( bool&                            o_rValue,
                            const uno::Any&                  rSourceAny,
-                           const ShapeSharedPtr&            rShape,
-                           const LayerManagerSharedPtr&     rLayerManager )
+                           const ShapeSharedPtr&            /*rShape*/,
+                           const LayerManagerSharedPtr&     /*rLayerManager*/ )
         {
-            sal_Bool nTmp;
+            sal_Bool nTmp = sal_Bool();
             // try to extract bool value
             if( (rSourceAny >>= nTmp) )
             {
