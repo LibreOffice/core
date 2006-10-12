@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:26:21 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:50:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,17 +135,17 @@ DECL_PTRSTACK(SfxShellStack_Impl, SfxShell*, 8, 4 );
 struct SfxToDo_Impl
 {
     SfxShell*           pCluster;
-    sal_Bool                bPush;
-    sal_Bool            bDelete;
-    sal_Bool            bUntil;
+    bool                bPush;
+    bool                bDelete;
+    bool                bUntil;
 
     SfxToDo_Impl()
         : pCluster(0)
-        , bPush(sal_False)
-        , bDelete(sal_False)
-        , bUntil(sal_False)
+        , bPush(false)
+        , bDelete(false)
+        , bUntil(false)
                 {}
-    SfxToDo_Impl( sal_Bool bOpPush, sal_Bool bOpDelete, sal_Bool bOpUntil, SfxShell& rCluster )
+    SfxToDo_Impl( bool bOpPush, bool bOpDelete, bool bOpUntil, SfxShell& rCluster )
         : pCluster(&rCluster)
         , bPush(bOpPush)
         , bDelete(bOpDelete)
@@ -153,7 +153,7 @@ struct SfxToDo_Impl
                 {}
     ~SfxToDo_Impl(){}
 
-    sal_Bool operator==( const SfxToDo_Impl& rWith ) const
+    bool operator==( const SfxToDo_Impl& rWith ) const
     { return pCluster==rWith.pCluster && bPush==rWith.bPush; }
 };
 
@@ -302,13 +302,7 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
             }
         }
 
-        // ggf. die Bindings locken (MI: warum?)
         SfxBindings *pBindings = GetBindings();
-#if modal_mode_sinnlos
-        sal_Bool bLockBindings = rSlot.GetSlotId() != SID_OPENDOC && rSlot.GetSlotId() != SID_OPENURL;
-        if ( bLockBindings && pBindings )
-            pBindings->DENTERREGISTRATIONS();
-#endif
 
         // Alles holen, was gebraucht wird, da der Slot den Execute evtl. nicht
         // "uberlebt, falls es ein 'Pseudoslot' f"ur Macros oder Verben ist
@@ -354,12 +348,6 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
         // TabPage-ID und Executing-SID zurueck setzen
         if ( pTabPageItem )
             pAppData->nAutoTabPageId = 0;
-
-#if modal_mode_sinnlos
-        // ggf. Lock wieder freigeben
-        if ( bLockBindings )
-            pBindings->DLEAVEREGISTRATIONS();
-#endif
 
         if( pExecuteItem )
         {
@@ -551,9 +539,9 @@ void SfxDispatcher::Pop
 //  DBG_ASSERT( SFX_APP()->IsInAsynchronCall_Impl(),
 //                "Dispatcher Push/Pop in synchron-call-stack" );
 
-    FASTBOOL bDelete = (nMode & SFX_SHELL_POP_DELETE) == SFX_SHELL_POP_DELETE;
-    FASTBOOL bUntil = (nMode & SFX_SHELL_POP_UNTIL) == SFX_SHELL_POP_UNTIL;
-    FASTBOOL bPush = (nMode & SFX_SHELL_PUSH) == SFX_SHELL_PUSH;
+    bool bDelete = (nMode & SFX_SHELL_POP_DELETE) == SFX_SHELL_POP_DELETE;
+    bool bUntil = (nMode & SFX_SHELL_POP_UNTIL) == SFX_SHELL_POP_UNTIL;
+    bool bPush = (nMode & SFX_SHELL_PUSH) == SFX_SHELL_PUSH;
 
     SfxApplication *pSfxApp = SFX_APP();
 
@@ -1221,7 +1209,7 @@ const SfxSlot* SfxDispatcher::GetSlot( const String& rCommand )
         SfxDispatcher *pParent = pImp->pParent;
         while ( pParent )
         {
-            nTotCount += pParent->pImp->aStack.Count();
+            nTotCount = nTotCount + pParent->pImp->aStack.Count();
             pParent = pParent->pImp->pParent;
         }
     }
@@ -1828,7 +1816,7 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, 
     if ( pImp->bQuiet || pImp->bNoUI || pImp->pFrame && pImp->pFrame->GetObjectShell()->IsPreview() )
         return nHelpId;
 
-    sal_uInt16 nStatBarId=0;
+    sal_uInt32 nStatBarId=0;
     SfxShell *pStatusBarShell = NULL;
 
     SfxSlotPool* pSlotPool = &SfxSlotPool::GetSlotPool( GetFrame() );
@@ -1932,7 +1920,7 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, 
 
         if ( bIsMDIApp || bIsIPOwner )
         {
-            sal_uInt16 nId = pIFace->GetStatusBarResId().GetId();
+            sal_uInt32 nId = pIFace->GetStatusBarResId().GetId();
             if ( nId )
             {
                 nStatBarId = nId;
@@ -2259,7 +2247,7 @@ sal_Bool SfxDispatcher::_TryIntercept_Impl
                 break;
         }
         else
-            nLevels += pParent->pImp->aStack.Count();
+            nLevels = nLevels + pParent->pImp->aStack.Count();
 
         pParent = pParent->pImp->pParent;
     }
@@ -2335,7 +2323,7 @@ sal_Bool SfxDispatcher::_FindServer
         SfxDispatcher *pParent = pImp->pParent;
         while ( pParent )
         {
-            nTotCount += pParent->pImp->aStack.Count();
+            nTotCount = nTotCount + pParent->pImp->aStack.Count();
             pParent = pParent->pImp->pParent;
         }
     }
@@ -2360,9 +2348,11 @@ sal_Bool SfxDispatcher::_FindServer
     // Verb-Slot?
     else if (nSlot >= SID_VERB_START && nSlot <= SID_VERB_END)
     {
-        SfxShell *pSh;
-        for ( sal_uInt16 nShell = 0; (pSh = GetShell(nShell)); ++nShell )
+        for ( sal_uInt16 nShell = 0;; ++nShell )
         {
+            SfxShell *pSh = GetShell(nShell);
+            if ( pSh == NULL )
+                return false;
             if ( pSh->ISA(SfxViewShell) )
             {
                 const SfxSlot* pSlot = pSh->GetVerbSlot_Impl(nSlot);
@@ -2370,12 +2360,10 @@ sal_Bool SfxDispatcher::_FindServer
                 {
                     rServer.SetShellLevel(nShell);
                     rServer.SetSlot( pSlot );
-                    return sal_True;
+                    return true;
                 }
             }
         }
-
-        return sal_False;
     }
 
     // SID gegen gesetzten Filter pr"ufen
@@ -2493,7 +2481,7 @@ sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
     if ( pImp->pParent && !pImp->pParent->pImp->pFrame )
     {
         // the last frame also uses the AppDispatcher
-        nTotCount += pImp->aStack.Count();
+        nTotCount = nTotCount + pImp->aStack.Count();
     }
 
     if ( SfxMacroConfig::IsMacroSlot( nSlot ) )
@@ -2502,14 +2490,14 @@ sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
     else if (nSlot >= SID_VERB_START && nSlot <= SID_VERB_END)
     {
         // Verb-Slot?
-        SfxShell *pSh;
-        for ( sal_uInt16 nShell = 0; (pSh = GetShell(nShell)); ++nShell )
+        for ( sal_uInt16 nShell = 0;; ++nShell )
         {
+            SfxShell *pSh = GetShell(nShell);
+            if ( pSh == NULL )
+                return false;
             if ( pSh->ISA(SfxViewShell) )
-                return sal_True;
+                return true;
         }
-
-        return sal_False;
     }
 
     // SID gegen gesetzten Filter pr"ufen
@@ -2818,7 +2806,7 @@ void SfxDispatcher::Lock( sal_Bool bLock )
     }
 }
 
-sal_uInt16 SfxDispatcher::GetObjectBarId( sal_uInt16 nPos ) const
+sal_uInt32 SfxDispatcher::GetObjectBarId( sal_uInt16 nPos ) const
 {
     return pImp->aObjBars[nPos].aResId.GetId();
 }
@@ -3060,7 +3048,7 @@ sal_Bool SfxDispatcher::IsAllowed
     // BinSearch in der DisableListe
     SvUShorts& rList = *pImp->pDisableList;
     sal_uInt16 nCount = rList.Count();
-    sal_uInt16 nLow = 0, nMid, nHigh;
+    sal_uInt16 nLow = 0, nMid = 0, nHigh;
     sal_Bool bFound = sal_False;
     nHigh = nCount - 1;
 
