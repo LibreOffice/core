@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oemjob.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:49:01 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:17:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,7 @@ throw ( RuntimeException )
 }
 
 // XJob
-Any SAL_CALL OEMPreloadJob::execute(const Sequence<NamedValue>& args)
+Any SAL_CALL OEMPreloadJob::execute(const Sequence<NamedValue>&)
 throw ( RuntimeException )
 {
     sal_Bool bCont = sal_False;
