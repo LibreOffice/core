@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:09:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:46:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -679,7 +679,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const ::rtl::O
     ::utl::TextSearch aLocalEngine(aParam);
 
     // --------------------------------------------------------------
-    sal_Bool bFound(sal_False);
+    bool bFound = false;
     sal_Bool bMovedAround(sal_False);
     do
     {
@@ -716,17 +716,17 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const ::rtl::O
                 case MATCHING_WHOLETEXT :
                     if (nEnd != sCurrentCheck.getLength())
                     {
-                        bFound = sal_False;
+                        bFound = false;
                         break;
                     }
                     // laeuft in den naechsten Case rein !
                 case MATCHING_BEGINNING :
                     if (nStart != 0)
-                        bFound = sal_False;
+                        bFound = false;
                     break;
                 case MATCHING_END :
                     if (nEnd != sCurrentCheck.getLength())
-                        bFound = sal_False;
+                        bFound = false;
                     break;
             }
         }
