@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formadapter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:58:28 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:35:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1524,7 +1524,7 @@ IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, ResetListener, m_aReset
 
 // ::com::sun::star::container::XNameContainer
 // -------------------------------------------------------------------------
-void SbaXFormAdapter::implInsert(const Any& aElement, sal_uInt16 nIndex, const ::rtl::OUString* pNewElName) throw( ::com::sun::star::lang::IllegalArgumentException )
+void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const ::rtl::OUString* pNewElName) throw( ::com::sun::star::lang::IllegalArgumentException )
 {
     // extract the form component
     if (aElement.getValueType().getTypeClass() != TypeClass_INTERFACE)
@@ -1559,7 +1559,8 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_uInt16 nIndex, const :
     }
 
     // check the index
-    if (nIndex > m_aChildren.size())
+    OSL_ASSERT(nIndex >= 0);
+    if (sal::static_int_cast< sal_uInt32 >(nIndex) > m_aChildren.size())
         nIndex = m_aChildren.size();
 
     DBG_ASSERT(m_aChildren.size() == m_aChildNames.size(), "SAL_CALL SbaXFormAdapter::implInsert : inconsistent container state !");
@@ -1575,7 +1576,7 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_uInt16 nIndex, const :
     // notify the container listeners
     ::com::sun::star::container::ContainerEvent aEvt;
     aEvt.Source = *this;
-    aEvt.Accessor <<= (sal_Int32)nIndex;
+    aEvt.Accessor <<= nIndex;
     aEvt.Element <<= xElement;
     ::cppu::OInterfaceIteratorHelper aIt(m_aContainerListeners);
     while (aIt.hasMoreElements())
