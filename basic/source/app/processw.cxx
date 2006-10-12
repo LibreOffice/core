@@ -4,9 +4,9 @@
  *
  *  $RCSfile: processw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:57:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:23:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,10 +57,6 @@
 
 #include "processw.hxx"
 
-//#include "collelem.hxx"
-// Makro MEMBER()
-#include "macfix.hxx"
-
 // Der Process hat folgende Elemente:
 // 1) Properties:
 //    Keine
@@ -104,20 +100,20 @@
 
 ProcessWrapper::Methods ProcessWrapper::aProcessMethods[] = {
 // Imagedatei des Executables
-{ "SetImage",                       SbxEMPTY,  1 | _FUNCTION, MEMBER(ProcessWrapper::PSetImage) },
+{ "SetImage", SbxEMPTY, &ProcessWrapper::PSetImage, 1 | _FUNCTION },
     // Zwei Named Parameter
-    { "Filename",SbxSTRING, 0 , NULL },
-    { "Params",SbxSTRING, _OPT , NULL },
+    { "Filename", SbxSTRING, NULL, 0 },
+    { "Params", SbxSTRING, NULL, _OPT },
 // Programm wird gestartet
-{ "Start",                          SbxBOOL,   0 | _FUNCTION, MEMBER(ProcessWrapper::PStart) },
+{ "Start", SbxBOOL, &ProcessWrapper::PStart, 0 | _FUNCTION },
 // ExitCode des Programms(nachdem es beendet ist)
-{ "GetExitCode",                    SbxULONG,  0 | _FUNCTION, MEMBER(ProcessWrapper::PGetExitCode) },
+{ "GetExitCode", SbxULONG, &ProcessWrapper::PGetExitCode, 0 | _FUNCTION },
 // Programm läuft noch
-{ "IsRunning",                      SbxBOOL,   0 | _FUNCTION, MEMBER(ProcessWrapper::PIsRunning) },
+{ "IsRunning", SbxBOOL, &ProcessWrapper::PIsRunning, 0 | _FUNCTION },
 // Programm mit GPF o.ä. abgebrochen
-{ "WasGPF",                         SbxBOOL,   0 | _FUNCTION, MEMBER(ProcessWrapper::PWasGPF) },
+{ "WasGPF", SbxBOOL, &ProcessWrapper::PWasGPF, 0 | _FUNCTION },
 
-{ NULL,     SbxNULL,            -1, NULL }};  // Tabellenende
+{ NULL, SbxNULL, NULL, -1 }};  // Tabellenende
 
 
 
