@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmsrcimp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:06:52 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:51:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,7 +332,7 @@ public:
     sal_uInt16  GetPosition() const             { return m_nPosition; }
         // Position wird bei m_bWildCard==sal_True nicht beachtet
 
-    sal_Bool    GetSearchMode() const { return m_eMode; }
+    FMSEARCH_MODE GetSearchMode() const { return m_eMode; }
 
 public:
     /** zwei Constructoren, beide analog zu denen des FmSearchDialog, Erklaerung siehe also dort ....
