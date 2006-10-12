@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lzwdecom.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:53:31 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:39:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ ULONG LZWDecompressor::Decompress(BYTE * pTarget, ULONG nMaxCount)
         if (pIStream->GetError()) break;
 
         if (((ULONG)nOutBufDataLen)>=nMaxCount) {
-            nOutBufDataLen-=(USHORT)nMaxCount;
+            nOutBufDataLen = nOutBufDataLen - (USHORT)nMaxCount;
             nCount+=nMaxCount;
             while (nMaxCount>0) {
                 *(pTarget++)=*(pOutBufData++);
@@ -140,7 +140,7 @@ USHORT LZWDecompressor::GetNextCode()
         if (nInputBitsBufSize<=nBits)
         {
             nCode=(nCode<<nInputBitsBufSize) | nInputBitsBuf;
-            nBits-=nInputBitsBufSize;
+            nBits = nBits - nInputBitsBufSize;
             *pIStream >> nInputBitsBuf;
             if ( bInvert )
                 nInputBitsBuf = ( ( nInputBitsBuf & 1 ) << 7 ) | ( ( nInputBitsBuf & 2 ) << 5 ) | ( ( nInputBitsBuf & 4 ) << 3 ) | ( ( nInputBitsBuf & 8 ) << 1 ) | ( ( nInputBitsBuf & 16 ) >> 1 ) | ( ( nInputBitsBuf & 32 ) >> 3 ) | ( ( nInputBitsBuf & 64 ) >> 5 ) | ( (nInputBitsBuf & 128 ) >> 7 );
@@ -149,7 +149,7 @@ USHORT LZWDecompressor::GetNextCode()
         else
         {
             nCode=(nCode<<nBits) | (nInputBitsBuf>>(nInputBitsBufSize-nBits));
-            nInputBitsBufSize-=nBits;
+            nInputBitsBufSize = nInputBitsBufSize - nBits;
             nInputBitsBuf&=0x00ff>>(8-nInputBitsBufSize);
             nBits=0;
         }
