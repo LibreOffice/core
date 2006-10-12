@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:21:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:26:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -462,7 +462,7 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
             nLastKey = nKey;
         SvNumberformat* pOldEntry = (SvNumberformat*) aOldTable.Remove( nKey );
         String aString( pOldEntry->GetFormatstring() );
-        xub_StrLen nCheckPos;
+        xub_StrLen nCheckPos = STRING_NOTFOUND;
 
         // Same as PutEntry() but assures key position even if format code is
         // a duplicate. Also won't mix up any LastInsertKey.
@@ -1613,7 +1613,7 @@ BOOL SvNumberFormatter::GetPreviewString(const String& sFormatString,
     if (sFormatString.Len() == 0)                       // keinen Leerstring
         return FALSE;
 
-    xub_StrLen nCheckPos;
+    xub_StrLen nCheckPos = STRING_NOTFOUND;
     sal_uInt32 nKey;
     if (eLnge == LANGUAGE_DONTKNOW)
         eLnge = IniLnge;
@@ -1670,7 +1670,7 @@ BOOL SvNumberFormatter::GetPreviewStringGuess( const String& sFormatString,
     }
 
     SvNumberformat *pEntry = NULL;
-    xub_StrLen nCheckPos;
+    xub_StrLen nCheckPos = STRING_NOTFOUND;
     String sTmpString;
 
     if ( bEnglish )
@@ -1706,7 +1706,7 @@ BOOL SvNumberFormatter::GetPreviewStringGuess( const String& sFormatString,
             }
             else
             {   // verify english
-                xub_StrLen nCheckPos2;
+                xub_StrLen nCheckPos2 = STRING_NOTFOUND;
                 // try other --> english
                 eFormatLang = eLnge;
                 pFormatScanner->SetConvertMode( eLnge, LANGUAGE_ENGLISH_US );
@@ -1745,7 +1745,7 @@ sal_uInt32 SvNumberFormatter::TestNewString(const String& sFormatString,
     if (sFormatString.Len() == 0)                       // keinen Leerstring
         return NUMBERFORMAT_ENTRY_NOT_FOUND;
 
-    xub_StrLen nCheckPos;
+    xub_StrLen nCheckPos = STRING_NOTFOUND;
     if (eLnge == LANGUAGE_DONTKNOW)
         eLnge = IniLnge;
     ChangeIntl(eLnge);                                  // ggfs. austauschen
@@ -2629,7 +2629,8 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
         {   // Insert only if not already inserted, but internal index must be
             // above so ImpInsertFormat can distinguish it.
             sal_Int16 nOrgIndex = pFormatArr[j].Index;
-            pFormatArr[j].Index += nCodes + NF_INDEX_TABLE_ENTRIES;
+            pFormatArr[j].Index = sal::static_int_cast< sal_Int16 >(
+                pFormatArr[j].Index + nCodes + NF_INDEX_TABLE_ENTRIES);
             //! no default on currency
             sal_Bool bDefault = aFormatSeq[j].Default;
             aFormatSeq[j].Default = sal_False;
