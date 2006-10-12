@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eertfpar.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:51:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:38:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ SvParserState __EXPORT EditRTFParser::CallParser()
         pImpEditEngine->aImportHdl.Call( &aImportInfo );
     }
 
-    SvParserState eState = SvxRTFParser::CallParser();
+    SvParserState _eState = SvxRTFParser::CallParser();
 
     if ( pImpEditEngine->aImportHdl.IsSet() )
     {
@@ -155,7 +155,7 @@ SvParserState __EXPORT EditRTFParser::CallParser()
         ( bOnlyOnePara ? aStart1PaM.GetNode() : aEnd2PaM.GetNode() ),
             aEnd1PaM.GetNode(), bSpecialBackward );
 
-    return eState;
+    return _eState;
 }
 
 void EditRTFParser::AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& rEnd )
@@ -163,8 +163,8 @@ void EditRTFParser::AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& r
     // Problem: DefFont und DefFontHeight
     Size aSz( 12, 0 );
     MapMode aPntMode( MAP_POINT );
-    MapMode aEditMapMode( pImpEditEngine->GetRefDevice()->GetMapMode().GetMapUnit() );
-    aSz = pImpEditEngine->GetRefDevice()->LogicToLogic( aSz, &aPntMode, &aEditMapMode );
+    MapMode _aEditMapMode( pImpEditEngine->GetRefDevice()->GetMapMode().GetMapUnit() );
+    aSz = pImpEditEngine->GetRefDevice()->LogicToLogic( aSz, &aPntMode, &_aEditMapMode );
     SvxFontHeightItem aFontHeightItem( aSz.Width(), 100, EE_CHAR_FONTHEIGHT );
     Font aDefFont( GetDefFont() );
     SvxFontItem aFontItem( aDefFont.GetFamily(), aDefFont.GetName(),
@@ -235,7 +235,7 @@ void __EXPORT EditRTFParser::NextToken( int nToken )
     }
 }
 
-void __EXPORT EditRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
+void __EXPORT EditRTFParser::UnknownAttrToken( int nToken, SfxItemSet* )
 {
     // fuer Tokens, die im ReadAttr nicht ausgewertet werden
     // Eigentlich nur fuer Calc (RTFTokenHdl), damit RTF_INTBL
@@ -320,7 +320,7 @@ void __EXPORT EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     const MapUnit eSrcUnit  = aRTFMapMode.GetMapUnit();
     if (eDestUnit != eSrcUnit)
     {
-        int aFntHeightIems[3] = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL };
+        USHORT aFntHeightIems[3] = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL };
         for (int i = 0; i < 2; ++i)
         {
             if (SFX_ITEM_SET == rSet.GetAttrSet().GetItemState( aFntHeightIems[i], FALSE, &pItem ))
@@ -466,9 +466,9 @@ SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
         if ( !pS )
         {
             // Wenn nirgendwo gefunden, aus RTF erzeugen...
-            SvxRTFStyleType* pRTFStyle = FindStyleSheet( aParent );
-            if ( pRTFStyle )
-                pS = CreateStyleSheet( pRTFStyle );
+            SvxRTFStyleType* _pRTFStyle = FindStyleSheet( aParent );
+            if ( _pRTFStyle )
+                pS = CreateStyleSheet( _pRTFStyle );
         }
         // 2b) ItemSet mit Parent verknuepfen...
         if ( pS )
@@ -503,21 +503,20 @@ void __EXPORT EditRTFParser::CalcValue()
 void EditRTFParser::ReadField()
 {
     // Aus SwRTFParser::ReadField()
-    int nRet = 0;
-    int nOpenBrakets = 1;       // die erste wurde schon vorher erkannt
+    int _nOpenBrakets = 1;      // die erste wurde schon vorher erkannt
     BOOL bFldInst = FALSE;
     BOOL bFldRslt = FALSE;
     String aFldInst;
     String aFldRslt;
 
-    while( nOpenBrakets && IsParserWorking() )
+    while( _nOpenBrakets && IsParserWorking() )
     {
         switch( GetNextToken() )
         {
             case '}':
             {
-                nOpenBrakets--;
-                if ( nOpenBrakets == 1 )
+                _nOpenBrakets--;
+                if ( _nOpenBrakets == 1 )
                 {
                     bFldInst = FALSE;
                     bFldRslt = FALSE;
@@ -525,7 +524,7 @@ void EditRTFParser::ReadField()
             }
             break;
 
-            case '{':           nOpenBrakets++;
+            case '{':           _nOpenBrakets++;
                                 break;
 
             case RTF_FIELD:     SkipGroup();
@@ -573,21 +572,21 @@ void EditRTFParser::ReadField()
 
 void EditRTFParser::SkipGroup()
 {
-    int nOpenBrakets = 1;       // die erste wurde schon vorher erkannt
+    int _nOpenBrakets = 1;      // die erste wurde schon vorher erkannt
 
-    while( nOpenBrakets && IsParserWorking() )
+    while( _nOpenBrakets && IsParserWorking() )
     {
         switch( GetNextToken() )
         {
             case '}':
             {
-                nOpenBrakets--;
+                _nOpenBrakets--;
             }
             break;
 
             case '{':
             {
-                nOpenBrakets++;
+                _nOpenBrakets++;
             }
             break;
         }
