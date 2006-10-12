@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:48:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:16:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -970,7 +970,7 @@ void TextView::Command( const CommandEvent& rCEvt )
             if ( !pData->IsOnlyCursorChanged() )
             {
                 TextSelection aSelect( mpImpl->mpTextEngine->mpIMEInfos->aPos );
-                aSelect.GetEnd().GetIndex() += mpImpl->mpTextEngine->mpIMEInfos->nLen;
+                aSelect.GetEnd().GetIndex() = aSelect.GetEnd().GetIndex() + mpImpl->mpTextEngine->mpIMEInfos->nLen;
                 aSelect = mpImpl->mpTextEngine->ImpDeleteText( aSelect );
                 aSelect = mpImpl->mpTextEngine->ImpInsertText( aSelect, pData->GetText() );
 
@@ -985,7 +985,7 @@ void TextView::Command( const CommandEvent& rCEvt )
                         // restore old characters
                         USHORT nRestore = nOldIMETextLen - nNewIMETextLen;
                         TextPaM aPaM( mpImpl->mpTextEngine->mpIMEInfos->aPos );
-                        aPaM.GetIndex() += nNewIMETextLen;
+                        aPaM.GetIndex() = aPaM.GetIndex() + nNewIMETextLen;
                         mpImpl->mpTextEngine->ImpInsertText( aPaM, mpImpl->mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Copy( nNewIMETextLen, nRestore ) );
                     }
                     else if ( ( nOldIMETextLen < nNewIMETextLen ) &&
@@ -997,9 +997,10 @@ void TextView::Command( const CommandEvent& rCEvt )
                             nOverwrite = mpImpl->mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() - nOldIMETextLen;
                         DBG_ASSERT( nOverwrite && (nOverwrite < 0xFF00), "IME Overwrite?!" );
                         TextPaM aPaM( mpImpl->mpTextEngine->mpIMEInfos->aPos );
-                        aPaM.GetIndex() += nNewIMETextLen;
+                        aPaM.GetIndex() = aPaM.GetIndex() + nNewIMETextLen;
                         TextSelection aSel( aPaM );
-                        aSel.GetEnd().GetIndex() += nOverwrite;
+                        aSel.GetEnd().GetIndex() =
+                            aSel.GetEnd().GetIndex() + nOverwrite;
                         mpImpl->mpTextEngine->ImpDeleteText( aSel );
                     }
                 }
@@ -2084,9 +2085,11 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
                     USHORT nNewChars =
                         mpImpl->mpTextEngine->GetTextLen( aPrevSel.GetStart().GetPara() ) - nPrevStartParaLen;
 
-                    aPrevSel.GetStart().GetIndex() += nNewChars;
+                    aPrevSel.GetStart().GetIndex() =
+                        aPrevSel.GetStart().GetIndex() + nNewChars;
                     if ( aPrevSel.GetStart().GetPara() == aPrevSel.GetEnd().GetPara() )
-                        aPrevSel.GetEnd().GetIndex() += nNewChars;
+                        aPrevSel.GetEnd().GetIndex() =
+                            aPrevSel.GetEnd().GetIndex() + nNewChars;
                 }
             }
             else
@@ -2096,9 +2099,11 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
                 aPaM.GetPara() -= ( aPrevSel.GetEnd().GetPara() - aPrevSel.GetStart().GetPara() );
                 if ( aPrevSel.GetEnd().GetPara() == mpImpl->mpDDInfo->maDropPos.GetPara() )
                 {
-                    aPaM.GetIndex() -= aPrevSel.GetEnd().GetIndex();
+                    aPaM.GetIndex() =
+                        aPaM.GetIndex() - aPrevSel.GetEnd().GetIndex();
                     if ( aPrevSel.GetStart().GetPara() == mpImpl->mpDDInfo->maDropPos.GetPara() )
-                        aPaM.GetIndex() += aPrevSel.GetStart().GetIndex();
+                        aPaM.GetIndex() =
+                            aPaM.GetIndex() + aPrevSel.GetStart().GetIndex();
                 }
                 ImpSetSelection( aPaM );
 
