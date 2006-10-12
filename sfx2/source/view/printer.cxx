@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:50:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:59:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ SfxFontSizeInfo::SfxFontSizeInfo( const SfxFont &rFont,
         aFont.SetCharSet(rFont.GetCharSet());
 
         // verfuegbare Groessen in die Liste eintragen, Groesse in 10tel Punkt
-        USHORT nSizeCount = rDev.GetDevFontSizeCount(aFont);
+        int nSizeCount = rDev.GetDevFontSizeCount(aFont);
         pSizes = NEW_OBJECTS(Size, nSizeCount);
         const MapMode aOldMapMode = rDev.GetMapMode();
         MapMode aMap(aOldMapMode);
@@ -168,7 +168,7 @@ SfxFontSizeInfo::SfxFontSizeInfo( const SfxFont &rFont,
         // Es gibt Fonts mit Bitmaps und skalierbaren Groessen
         // In diesem Fall wird der Fonts als skalierbar behandelt.
         BOOL bFoundScalable = FALSE;
-        for ( USHORT i = 0; i < nSizeCount; ++i )
+        for ( int i = 0; i < nSizeCount; ++i )
         {
             const Size aSize( rDev.GetDevFontSize(aFont, i) );
             if ( aSize.Height() != 0 )
@@ -446,11 +446,11 @@ void SfxPrinter::UpdateFonts_Impl()
     if( !IsValid() )
         pOut = pVirDev = new VirtualDevice;
 
-    const USHORT nCount = pOut->GetDevFontCount();
+    int nCount = pOut->GetDevFontCount();
     FONTS() =  new SfxFontArr_Impl((BYTE)nCount);
 
     std::vector< Font > aNonRegularFonts;
-    for(USHORT i = 0;i < nCount;++i)
+    for(int i = 0;i < nCount;++i)
     {
         Font aFont(pOut->GetDevFont(i));
         if ( (aFont.GetItalic() != ITALIC_NONE) ||
