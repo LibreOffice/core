@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charmapacc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:05:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:01:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::
     ensureAlive();
 
     uno::Reference< accessibility::XAccessible >    xRet;
-    const USHORT nItemId = mpParent->PixelToMapIndex( Point( aPoint.X, aPoint.Y ) );
+    const USHORT nItemId = sal::static_int_cast<USHORT>(mpParent->PixelToMapIndex( Point( aPoint.X, aPoint.Y ) ));
 
     if( USHORT(-1) != nItemId )
     {
@@ -360,7 +360,8 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxShowCharSetAcc, OAccessibleSelectionHelper,
 // -----------------------------------------------------------------------
 sal_Bool SvxShowCharSetAcc::implIsSelected( sal_Int32 nAccessibleChildIndex ) throw (RuntimeException)
 {
-    return m_pParent && m_pParent->getCharSetControl()->IsSelected(nAccessibleChildIndex);
+    return m_pParent && m_pParent->getCharSetControl()->IsSelected(
+        sal::static_int_cast<USHORT>(nAccessibleChildIndex));
 }
 // -----------------------------------------------------------------------------
         // select the specified child => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
@@ -510,7 +511,8 @@ uno::Reference< accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::getAcce
     ensureAlive();
 
     uno::Reference< accessibility::XAccessible >    xRet;
-    const USHORT nItemId = m_pParent->getCharSetControl()->PixelToMapIndex( Point( aPoint.X, aPoint.Y ) );
+    const USHORT nItemId = sal::static_int_cast<USHORT>(
+        m_pParent->getCharSetControl()->PixelToMapIndex( Point( aPoint.X, aPoint.Y ) ));
 
     if( USHORT(-1) != nItemId )
     {
@@ -615,7 +617,8 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetAcc::getAccessibleCellAt( sal_In
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    ::svx::SvxShowCharSetItem* pItem = m_pParent->getCharSetControl()->ImplGetItem( getAccessibleIndex(nRow,nColumn) );
+    ::svx::SvxShowCharSetItem* pItem = m_pParent->getCharSetControl()->ImplGetItem(
+        sal::static_int_cast<USHORT>(getAccessibleIndex(nRow,nColumn) ));
     if ( !pItem  )
         throw IndexOutOfBoundsException();
     return pItem->GetAccessible();
@@ -647,14 +650,14 @@ sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleRow( sal_Int32 nChildIndex ) 
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    return m_pParent->getCharSetControl()->GetRowPos(nChildIndex);
+    return m_pParent->getCharSetControl()->GetRowPos(sal::static_int_cast<USHORT>(nChildIndex));
 }
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleColumn( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    return m_pParent->getCharSetControl()->GetColumnPos(nChildIndex);
+    return m_pParent->getCharSetControl()->GetColumnPos(sal::static_int_cast<USHORT>(nChildIndex));
 }
 // -----------------------------------------------------------------------------
 
@@ -740,7 +743,7 @@ sal_Int16 SAL_CALL SvxShowCharSetItemAcc::getAccessibleRole()
     sal_Unicode c_Shifted = c;
     for( int i = 0; i < 4; ++i )
     {
-        char h = c_Shifted & 0x0F;
+        char h = (char)(c_Shifted & 0x0F);
         buf[5-i] = (h > 9) ? (h - 10 + 'A') : (h + '0');
         c_Shifted >>= 4;
     }
