@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epgm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:42:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:33:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,8 @@ void PGMWriter::ImplWriteBody()
                     *mpOStm << (BYTE)10;
                 }
                 nDat = (BYTE)mpAcc->GetPixel( y, x );
-                if ( ( nNumb = nDat / 100 ) )
+                nNumb = nDat / 100;
+                if ( nNumb )
                 {
                     *mpOStm << (BYTE)( nNumb + '0' );
                     nDat -= ( nNumb * 100 );
@@ -209,17 +210,21 @@ void PGMWriter::ImplWriteBody()
                     *mpOStm << (BYTE)( nDat + '0' );
                     nCount -= 4;
                 }
-                else if ( ( nNumb = nDat / 10 ) )
-                {
-                    *mpOStm << (BYTE)( nNumb + '0' );
-                    nDat -= ( nNumb * 10 );
-                    *mpOStm << (BYTE)( nDat + '0' );
-                    nCount -= 3;
-                }
                 else
                 {
-                    *mpOStm << (BYTE)( nDat + '0' );
-                    nCount -= 2;
+                    nNumb = nDat / 10;
+                    if ( nNumb )
+                    {
+                        *mpOStm << (BYTE)( nNumb + '0' );
+                        nDat -= ( nNumb * 10 );
+                        *mpOStm << (BYTE)( nDat + '0' );
+                        nCount -= 3;
+                    }
+                    else
+                    {
+                        *mpOStm << (BYTE)( nDat + '0' );
+                        nCount -= 2;
+                    }
                 }
                 *mpOStm << (BYTE)' ';
             }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eppm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:43:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:34:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,8 @@ void PPMWriter::ImplWriteBody()
                 nDat[2] = mpAcc->GetPixel( y, x ).GetBlue();
                 for ( i = 0; i < 3; i++ )
                 {
-                    if ( ( nNumb = nDat[ i ] / 100 ) )
+                    nNumb = nDat[ i ] / 100;
+                    if ( nNumb )
                     {
                         *mpOStm << (BYTE)( nNumb + '0' );
                         nDat[ i ] -= ( nNumb * 100 );
@@ -216,17 +217,21 @@ void PPMWriter::ImplWriteBody()
                         *mpOStm << (BYTE)( nDat[ i ] + '0' );
                         nCount -= 4;
                     }
-                    else if ( ( nNumb = nDat[ i ] / 10 ) )
-                    {
-                        *mpOStm << (BYTE)( nNumb + '0' );
-                        nDat[ i ] -= ( nNumb * 10 );
-                        *mpOStm << (BYTE)( nDat[ i ] + '0' );
-                        nCount -= 3;
-                    }
                     else
                     {
-                        *mpOStm << (BYTE)( nDat[ i ] + '0' );
-                        nCount -= 2;
+                        nNumb = nDat[ i ] / 10;
+                        if ( nNumb )
+                        {
+                            *mpOStm << (BYTE)( nNumb + '0' );
+                            nDat[ i ] -= ( nNumb * 10 );
+                            *mpOStm << (BYTE)( nDat[ i ] + '0' );
+                            nCount -= 3;
+                        }
+                        else
+                        {
+                            *mpOStm << (BYTE)( nDat[ i ] + '0' );
+                            nCount -= 2;
+                        }
                     }
                     *mpOStm << (BYTE)' ';
                 }
