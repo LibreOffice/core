@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 08:29:19 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:32:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,8 @@ class SfxItemSet;
 class XColorTable;
 class OfaOptionsTreeListBox : public SvTreeListBox
 {
+    using  SvListView::Collapse;
+
 private:
     BOOL            bInCollapse;
 
@@ -75,7 +77,7 @@ public:
 };
 
 BOOL            EnableSSO();
-void*           GetSSOCreator( void );
+CreateTabPage   GetSSOCreator( void );
 
 /* -----------------11.02.99 07:51-------------------
  *
