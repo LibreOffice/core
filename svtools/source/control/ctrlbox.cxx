@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:37:05 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:11:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -873,7 +873,8 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
                 {
                     sal_Unicode cOldChar = cNewChar;
                     for( int j = nSkip; --j >= 0; )
-                        cNewChar = aFontCharMap.GetPrevChar( cNewChar );
+                        cNewChar = sal::static_int_cast< sal_Unicode >(
+                            aFontCharMap.GetPrevChar( cNewChar ));
                     if( cOldChar == cNewChar )
                         break;
                     aText[ i ] = cNewChar;
@@ -1362,7 +1363,7 @@ void FontSizeBox::SetRelative( BOOL bNewRelative )
                 while ( i <= nPtRelMax && n++ < 100 )
                 {
                     InsertValue( i );
-                    i += nPtRelStep;
+                    i = i + nPtRelStep;
                 }
             }
             else
@@ -1378,7 +1379,7 @@ void FontSizeBox::SetRelative( BOOL bNewRelative )
                 while ( i <= nRelMax )
                 {
                     InsertValue( i );
-                    i += nRelStep;
+                    i = i + nRelStep;
                 }
             }
         }
