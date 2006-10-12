@@ -4,9 +4,9 @@
  *
  *  $RCSfile: networkdomain.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:57:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:40:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,13 @@ namespace framework
 //_________________________________________________________________________________________________________________
 
 #define UNICODE
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 //_________________________________________________________________________________________________________________
 //  Win NT, Win 2000, Win XP
@@ -78,7 +84,7 @@ static DWORD WINAPI GetUserDomainW_WINDOWS( LPWSTR lpBuffer, DWORD nSize )
     {
         DWORD   dwLogon = 0;
         DWORD   dwLogonSize = sizeof(dwLogon);
-        LONG    lResult = RegQueryValueEx( hkeyLogon, TEXT("LMLogon"), 0, NULL, (LPBYTE)&dwLogon, &dwLogonSize );
+        RegQueryValueEx( hkeyLogon, TEXT("LMLogon"), 0, NULL, (LPBYTE)&dwLogon, &dwLogonSize );
         RegCloseKey( hkeyLogon );
 
         if ( dwLogon )
