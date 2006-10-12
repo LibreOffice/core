@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:48:01 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:09:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,7 +319,7 @@ void OFormSubmitResetThread::processEvent(
         sal_Bool _bSubmit)
 {
     if (_bSubmit)
-        ((ODatabaseForm *)pCompImpl)->submit_impl(_rControl, *reinterpret_cast<const ::com::sun::star::awt::MouseEvent*>(_pEvt), true);
+        ((ODatabaseForm *)pCompImpl)->submit_impl(_rControl, *static_cast<const ::com::sun::star::awt::MouseEvent*>(_pEvt), true);
     else
         ((ODatabaseForm *)pCompImpl)->reset_impl(true);
 }
