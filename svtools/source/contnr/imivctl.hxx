@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imivctl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:52:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:09:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,11 +136,8 @@ class EntryList_Impl : public List
 {
 private:
 
-// Der Solaris-Compiler kann das noch nicht.
-#ifdef WNT
-    List::Replace;
-    List::Clear;
-#endif
+    using List::Replace;
+
     SvxIconChoiceCtrl_Impl*         _pOwner;
 
     void                    Removed_Impl( SvxIconChoiceCtrlEntry* pEntry );
