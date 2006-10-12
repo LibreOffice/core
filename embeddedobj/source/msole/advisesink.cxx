@@ -4,9 +4,9 @@
  *
  *  $RCSfile: advisesink.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:43:23 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,12 +91,12 @@ void OleWrapperAdviseSink::disconnectOleComponent()
     m_pOleComp = NULL;
 }
 
-STDMETHODIMP_(void) OleWrapperAdviseSink::OnDataChange(LPFORMATETC pFEIn, LPSTGMEDIUM pSTM)
+STDMETHODIMP_(void) OleWrapperAdviseSink::OnDataChange(LPFORMATETC, LPSTGMEDIUM)
 {
     // Unused for now ( no registration for IDataObject events )
 }
 
-STDMETHODIMP_(void) OleWrapperAdviseSink::OnViewChange(DWORD dwAspect, LONG lindex)
+STDMETHODIMP_(void) OleWrapperAdviseSink::OnViewChange(DWORD dwAspect, LONG)
 {
     OleComponent* pLockComponent = NULL;
 
@@ -116,7 +116,7 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnViewChange(DWORD dwAspect, LONG lind
     }
 }
 
-STDMETHODIMP_(void) OleWrapperAdviseSink::OnRename(LPMONIKER pmk)
+STDMETHODIMP_(void) OleWrapperAdviseSink::OnRename(LPMONIKER)
 {
     // handled by default inprocess handler
 }
