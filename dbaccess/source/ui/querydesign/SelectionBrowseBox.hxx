@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:27:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:43:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ namespace dbaui
     class OSelectionBrowseBox : public ::svt::EditBrowseBox
     {
         friend class OQueryDesignView;
-        ::std::vector<FASTBOOL>             m_bVisibleRow;  // an Pos steht die RowId
+        ::std::vector<bool>                 m_bVisibleRow;  // an Pos steht die RowId
         Timer                               m_timerInvalidate;
 
         long                                m_nSeekRow;
