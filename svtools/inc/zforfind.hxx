@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforfind.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:19:55 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:04:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ private:
     static const BYTE nMatchedVirgin;           // 0x08
     static const BYTE nMatchedUsedAsReturn;     // 0x10
 
-    short  nSign;                               // Sign of number
+    int    nSign;                               // Sign of number
     short  nMonth;                              // Month (1..x) if date
                                                 // negative => short format
     short  nMonthPos;                           // 1 = front, 2 = middle
@@ -209,7 +209,7 @@ private:
     short GetMonth(                             // Get month and advance string position
             const String& rString,
             xub_StrLen& nPos );
-    short GetDayOfWeek(                         // Get day of week and advance string position
+    int GetDayOfWeek(                           // Get day of week and advance string position
             const String& rString,
             xub_StrLen& nPos );
     BOOL GetCurrency(                           // Get currency symbol and advance string position
@@ -225,7 +225,7 @@ private:
     inline BOOL GetTime100SecSep(               // Get hundredth seconds separator and advance string position
             const String& rString,
             xub_StrLen& nPos );
-    short GetSign(                              // Get sign  and advance string position
+    int GetSign(                                // Get sign  and advance string position
             const String& rString,              // Including special case '('
             xub_StrLen& nPos );
     short GetESign(                             // Get sign of exponent and advance string position
