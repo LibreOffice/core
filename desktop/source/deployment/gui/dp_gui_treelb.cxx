@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:39:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:07:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,7 @@ Image NodeImpl::getIcon() const
     {
         const Reference<deployment::XPackageTypeInfo> xPackageType(
             m_xPackage->getPackageType() );
-        sal_uInt16 id;
+        sal_uInt16 id = 0;
         if (xPackageType.is() &&
             (xPackageType->getIcon(
                 // works here, because getCppuType(unsigned short) is defined
@@ -438,7 +438,7 @@ SvLBoxEntry * DialogImpl::TreeListBoxImpl::addNode(
     if (sortIn)
     {
         // sort in after top-level nodes after user, shared:
-        pos = parentNode == 0 ? 2 : pos = 0;
+        pos = parentNode == 0 ? 2 : 0;
         ULONG count = GetLevelChildCount(parentNode);
         for ( ; pos < count; ++pos )
         {
@@ -456,18 +456,16 @@ SvLBoxEntry * DialogImpl::TreeListBoxImpl::addNode(
     if (parentNode == 0)
     {
         // top-level node:
-        node->m_lbEntry = InsertEntry( displayName,
-                                       imgIcon, imgIcon,
-                                       0, pos, 0xffff, node );
+        node->m_lbEntry = InsertEntryToColumn(
+            displayName, imgIcon, imgIcon, NULL, pos, 0xffff, node );
         node->m_xPackageManager->addModifyListener( xListener );
     }
     else
     {
         String name( displayName );
         name.AppendAscii( RTL_CONSTASCII_STRINGPARAM("\t") );
-        node->m_lbEntry = InsertEntry( name,
-                                       imgIcon, imgIcon,
-                                       parentNode, pos, 0xffff, node );
+        node->m_lbEntry = InsertEntryToColumn(
+            name, imgIcon, imgIcon, parentNode, pos, 0xffff, node );
         // update status:
         node->modified( xCmdEnv );
         node->m_xPackage->addModifyListener( xListener );
@@ -624,7 +622,7 @@ void DialogImpl::TreeListBoxImpl::MouseMove( MouseEvent const & evt )
 }
 
 //______________________________________________________________________________
-IMPL_LINK( DialogImpl::TreeListBoxImpl, TimerHandler, Timer *, timer )
+IMPL_LINK( DialogImpl::TreeListBoxImpl, TimerHandler, Timer *, EMPTYARG )
 {
     m_timer.Stop();
     Point pos = GetPointerPosPixel();
@@ -791,7 +789,7 @@ void DialogImpl::TreeListBoxImpl::DataChanged( DataChangedEvent const & evt )
 //##############################################################################
 
 //______________________________________________________________________________
-IMPL_STATIC_LINK( DialogImpl, destroyDialog, void *, p )
+IMPL_STATIC_LINK_NOINSTANCE( DialogImpl, destroyDialog, void *, EMPTYARG )
 {
     if (s_dialog.is())
     {
