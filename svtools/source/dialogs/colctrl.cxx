@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:43:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:13:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,8 +275,8 @@ void SvColorControl::SetLuminance( short nLum )
 
         CreateBitmap();
 
-        USHORT nX = maPosition.X() + 2;
-        USHORT nY = maPosition.Y() + 2;
+        long nX = maPosition.X() + 2;
+        long nY = maPosition.Y() + 2;
 
         if( mpBitmap && ( ( mpReadAccess = mpBitmap->AcquireReadAccess() ) != NULL ) )
         {
@@ -440,7 +440,7 @@ void ColorMixingControl::FillColumn( USHORT nColumn )
     Color aColor( GetItemColor( nCol1 ) );
     Color aDiffColor( CalcDifferenceColor( nCol1, nCol2, mnRows - 1 ) );
 
-    for( USHORT i = nCol1 + mnColumns; i < nCol2; i += mnColumns )
+    for( USHORT i = nCol1 + mnColumns; i < nCol2; i = i + mnColumns )
     {
         aColor.SetRed( aColor.GetRed() + aDiffColor.GetRed() );
         aColor.SetGreen( aColor.GetGreen() + aDiffColor.GetGreen() );
@@ -689,7 +689,7 @@ ColorCMYK::ColorCMYK( const Color& rColor )
 // -----------------------------------------------------------------------
 Color ColorCMYK::GetRGB() const
 {
-    INT16 nTmp = Max( 0, 255 - ( mnCyan + mnKey ) );
+    int nTmp = Max( 0, 255 - ( mnCyan + mnKey ) );
     UINT8 cR = (UINT8) nTmp;
           nTmp = Max( 0, 255 - ( mnMagenta + mnKey ) );
     UINT8 cG = (UINT8) nTmp;
