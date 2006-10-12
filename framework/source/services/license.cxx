@@ -4,9 +4,9 @@
  *
  *  $RCSfile: license.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:10:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:42:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -418,7 +418,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             aRet <<= sal_False;
         }
     }
-    catch (RuntimeException& e)
+    catch (RuntimeException&)
     {
         // license could not be verified
         aRet <<= sal_False;
