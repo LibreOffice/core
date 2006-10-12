@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdoc2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:48:51 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:35:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@
 
 #include <vcl/svapp.hxx>    // Fuer AppWindow...
 
-DBG_NAME( EE_ParaPortion );
+DBG_NAME( EE_ParaPortion )
 
 SV_IMPL_VARARR( CharPosArray, sal_Int32 );
 
@@ -127,7 +127,7 @@ USHORT TextPortionList::FindPortion( USHORT nCharPos, USHORT& nPortionStart, BOO
     for ( USHORT nPortion = 0; nPortion < Count(); nPortion++ )
     {
         TextPortion* pPortion = GetObject( nPortion );
-        nTmpPos += pPortion->GetLen();
+        nTmpPos = nTmpPos + pPortion->GetLen();
         if ( nTmpPos >= nCharPos )
         {
             // take this one if we don't prefer the starting portion, or if it's the last one
@@ -148,7 +148,7 @@ USHORT TextPortionList::GetStartPos( USHORT nPortion )
     for ( USHORT n = 0; n < nPortion; n++ )
     {
         TextPortion* pPortion = GetObject( n );
-        nPos += pPortion->GetLen();
+        nPos = nPos + pPortion->GetLen();
     }
     return nPos;
 }
@@ -227,13 +227,13 @@ void ParaPortion::MarkInvalid( USHORT nStart, short nDiff )
         if ( ( nDiff > 0 ) && ( nInvalidDiff > 0 ) &&
              ( ( nInvalidPosStart+nInvalidDiff ) == nStart ) )
         {
-            nInvalidDiff += nDiff;
+            nInvalidDiff = nInvalidDiff + nDiff;
         }
         // Einfaches hintereinander loeschen
         else if ( ( nDiff < 0 ) && ( nInvalidDiff < 0 ) && ( nInvalidPosStart == nStart ) )
         {
-            nInvalidPosStart += nDiff;
-            nInvalidDiff += nDiff;
+            nInvalidPosStart = nInvalidPosStart + nDiff;
+            nInvalidDiff = nInvalidDiff + nDiff;
         }
         else
         {
@@ -250,7 +250,7 @@ void ParaPortion::MarkInvalid( USHORT nStart, short nDiff )
 //  aExtraCharInfos.Remove( 0, aExtraCharInfos.Count() );
 }
 
-void ParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT nEnd )
+void ParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT /* nEnd */ )
 {
     if ( bInvalid == FALSE )
     {
@@ -307,19 +307,23 @@ void ParaPortion::CorrectValuesBehindLastFormattedLine( USHORT nLastFormattedLin
         // formatierten beginnen:
         // Wenn in der geaenderten Zeile eine Portion gesplittet wurde,
         // kann nLastEnd > nNextStart sein!
-        short nPDiff = -( nPortionDiff-1 );
-        short nTDiff = -( nTextDiff-1 );
+        int nPDiff = -( nPortionDiff-1 );
+        int nTDiff = -( nTextDiff-1 );
         if ( nPDiff || nTDiff )
         {
             for ( USHORT nL = nLastFormattedLine+1; nL < nLines; nL++ )
             {
                 EditLine* pLine = aLineList[ nL ];
 
-                pLine->GetStartPortion() += nPDiff;
-                pLine->GetEndPortion() += nPDiff;
+                pLine->GetStartPortion() = sal::static_int_cast< USHORT >(
+                    pLine->GetStartPortion() + nPDiff);
+                pLine->GetEndPortion() = sal::static_int_cast< USHORT >(
+                    pLine->GetEndPortion() + nPDiff);
 
-                pLine->GetStart() += nTDiff;
-                pLine->GetEnd() += nTDiff;
+                pLine->GetStart() = sal::static_int_cast< USHORT >(
+                    pLine->GetStart() + nTDiff);
+                pLine->GetEnd() = sal::static_int_cast< USHORT >(
+                    pLine->GetEnd() + nTDiff);
 
                 pLine->SetValid();
             }
@@ -373,7 +377,11 @@ USHORT ParaPortionList::FindParagraph( long nYOffset )
     return 0xFFFF;  // solte mal ueber EE_PARA_NOT_FOUND erreicht werden!
 }
 
-void ParaPortionList::DbgCheck( EditDoc& rDoc )
+void ParaPortionList::DbgCheck( EditDoc&
+#ifdef DBG_UTIL
+                               rDoc
+#endif
+                                )
 {
 #ifdef DBG_UTIL
     DBG_ASSERT( Count() == rDoc.Count(), "ParaPortionList::DbgCheck() - Count() ungleich!" );
@@ -403,7 +411,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         {
             DBG_ASSERT( rPoolItem.IsA( TYPE( SvxLRSpaceItem ) ), "ConvertItem: Ungueltiges Item!" );
             SvxLRSpaceItem& rItem = (SvxLRSpaceItem&)rPoolItem;
-            rItem.SetTxtFirstLineOfst( OutputDevice::LogicToLogic( rItem.GetTxtFirstLineOfst(), eSourceUnit, eDestUnit ) );
+            rItem.SetTxtFirstLineOfst( sal::static_int_cast< short >( OutputDevice::LogicToLogic( rItem.GetTxtFirstLineOfst(), eSourceUnit, eDestUnit ) ) );
             rItem.SetTxtLeft( OutputDevice::LogicToLogic( rItem.GetTxtLeft(), eSourceUnit, eDestUnit ) );
 //          rItem.SetLeft( OutputDevice::LogicToLogic( rItem.GetLeft(), eSourceUnit, eDestUnit ) ); // #96298# SetLeft manipulates nTxtLeft!
             rItem.SetRight( OutputDevice::LogicToLogic( rItem.GetRight(), eSourceUnit, eDestUnit ) );
@@ -413,8 +421,8 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         {
             DBG_ASSERT( rPoolItem.IsA( TYPE( SvxULSpaceItem ) ), "ConvertItem: Ungueltiges Item!" );
             SvxULSpaceItem& rItem = (SvxULSpaceItem&)rPoolItem;
-            rItem.SetUpper( OutputDevice::LogicToLogic( rItem.GetUpper(), eSourceUnit, eDestUnit ) );
-            rItem.SetLower( OutputDevice::LogicToLogic( rItem.GetLower(), eSourceUnit, eDestUnit ) );
+            rItem.SetUpper( sal::static_int_cast< USHORT >( OutputDevice::LogicToLogic( rItem.GetUpper(), eSourceUnit, eDestUnit ) ) );
+            rItem.SetLower( sal::static_int_cast< USHORT >( OutputDevice::LogicToLogic( rItem.GetLower(), eSourceUnit, eDestUnit ) ) );
         }
         break;
         case EE_PARA_SBL:
@@ -423,7 +431,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
             SvxLineSpacingItem& rItem = (SvxLineSpacingItem&)rPoolItem;
             // #96298# SetLineHeight changes also eLineSpace!
             if ( rItem.GetLineSpaceRule() == SVX_LINE_SPACE_MIN )
-                rItem.SetLineHeight( OutputDevice::LogicToLogic( rItem.GetLineHeight(), eSourceUnit, eDestUnit ) );
+                rItem.SetLineHeight( sal::static_int_cast< USHORT >( OutputDevice::LogicToLogic( rItem.GetLineHeight(), eSourceUnit, eDestUnit ) ) );
         }
         break;
         case EE_PARA_TABS:
