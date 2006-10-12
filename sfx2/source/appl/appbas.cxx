@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:13:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:46:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,7 +244,9 @@ String lcl_GetVersionString(ResMgr* /*pAppData_ImplResMgr*/)
     String aVersion( utl::Bootstrap::getBuildIdData( aDefault ));
 
     if ( aVersion.Len() == 0 )
+    {
         DBG_ERROR( "No BUILDID in bootstrap file found" );
+    }
 
     aVersion.Erase( 0, aVersion.Search( ':' ) + 1 );
     aVersion.Erase( aVersion.Search( ')' ) );
@@ -916,7 +918,7 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                 break;
 
             case SID_ATTR_UNDO_COUNT:
-                rSet.Put( SfxUInt16Item( SID_ATTR_UNDO_COUNT, SvtUndoOptions().GetUndoCount() ) );
+                rSet.Put( SfxUInt16Item( SID_ATTR_UNDO_COUNT, sal::static_int_cast< UINT16 >( SvtUndoOptions().GetUndoCount() ) ) );
                 break;
 
             case SID_UPDATE_VERSION:
