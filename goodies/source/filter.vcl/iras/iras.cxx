@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iras.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:52:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:38:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,7 +262,10 @@ BOOL RASReader::ImplReadBody()
                 {
                     if (!(x & 7))
                         nDat = ImplGetByte();
-                    mpAcc->SetPixel ( y, x, nDat >> ( ( x & 7 ) ^ 7 ) );
+                    mpAcc->SetPixel (
+                        y, x,
+                        sal::static_int_cast< BYTE >(
+                            nDat >> ( ( x & 7 ) ^ 7 )) );
                 }
                 if (!( ( x - 1 ) & 0x8 ) ) ImplGetByte();       // WORD ALIGNMENT ???
             }
