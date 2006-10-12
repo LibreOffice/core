@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontworkgallery.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:44:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:42:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,7 @@
 #define IMG_FONTWORK_ALIGN_WORD_16_H        14
 #define IMG_FONTWORK_ALIGN_WORD_26          15
 #define IMG_FONTWORK_ALIGN_WORD_26_H        16
-#define IMG_FONTWORK_ALIGN_STRETCH_26_H     17
-#define IMG_FONTWORK_ALIGN_STRETCH_16       18
-#define IMG_FONTWORK_ALIGN_STRETCH_16_H     19
-#define IMG_FONTWORK_ALIGN_STRETCH_26       20
-#define IMG_FONTWORK_ALIGN_STRETCH_26_H     21
+#define IMG_FONTWORK_ALIGN_STRETCH_16       17
+#define IMG_FONTWORK_ALIGN_STRETCH_16_H     18
+#define IMG_FONTWORK_ALIGN_STRETCH_26       19
+#define IMG_FONTWORK_ALIGN_STRETCH_26_H     20
