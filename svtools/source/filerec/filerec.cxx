@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filerec.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:50:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:16:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ USHORT SfxMiniRecordReader::ScanRecordType
     *pStream >> nHeader;
 
     // k"onnte es sich um einen extended-Record handeln?
-    USHORT nPreTag = SFX_REC_PRE(nHeader);
+    USHORT nPreTag = sal::static_int_cast< USHORT >(SFX_REC_PRE(nHeader));
     if ( SFX_REC_PRETAG_EXT == nPreTag )
     {
         // die n"achsten 4 Bytes als extended-Header lesen
@@ -244,7 +244,7 @@ USHORT SfxMiniRecordReader::ScanRecordType
         pStream->SeekRel(-8);
 
         // liegt eine g"ultige Record-Kennung vor?
-        USHORT nType = SFX_REC_TYP(nHeader);
+        USHORT nType = sal::static_int_cast< USHORT >(SFX_REC_TYP(nHeader));
         if ( nType >= SFX_REC_TYPE_FIRST && nType <= SFX_REC_TYPE_LAST )
             // entsprechenden extended-Record-Typ zur"uckliefern
             return nType;
@@ -286,7 +286,7 @@ FASTBOOL SfxMiniRecordReader::SetHeader_Impl( UINT32 nHeader )
 
     // Record-Ende und Pre-Tag aus dem Header ermitteln
     _nEofRec = _pStream->Tell() + SFX_REC_OFS(nHeader);
-    _nPreTag = SFX_REC_PRE(nHeader);
+    _nPreTag = sal::static_int_cast< BYTE >(SFX_REC_PRE(nHeader));
 
     // wenn End-Of-Record-Kennung, dann Fehler
     if ( _nPreTag == SFX_REC_PRETAG_EOR )
@@ -519,11 +519,11 @@ inline FASTBOOL SfxSingleRecordReader::ReadHeader_Impl( USHORT nTypes )
     {
         // eigenen Header einlesen
         *_pStream >> nHeader;
-        _nRecordVer = SFX_REC_VER(nHeader);
-        _nRecordTag = SFX_REC_TAG(nHeader);
+        _nRecordVer = sal::static_int_cast< BYTE >(SFX_REC_VER(nHeader));
+        _nRecordTag = sal::static_int_cast< UINT16 >(SFX_REC_TAG(nHeader));
 
         // falscher Record-Typ?
-        _nRecordType = SFX_REC_TYP(nHeader);
+        _nRecordType = sal::static_int_cast< BYTE >(SFX_REC_TYP(nHeader));
         bRet = 0 != ( nTypes & _nRecordType);
     }
     return bRet;
@@ -607,13 +607,14 @@ FASTBOOL SfxSingleRecordReader::FindHeader_Impl
         {
             // Extended Header lesen
             *_pStream >> nHeader;
-            _nRecordTag = SFX_REC_TAG(nHeader);
+            _nRecordTag = sal::static_int_cast< UINT16 >(SFX_REC_TAG(nHeader));
 
             // richtigen Record gefunden?
             if ( _nRecordTag == nTag )
             {
                 // gefundener Record-Typ passend?
-                _nRecordType = SFX_REC_TYP(nHeader);
+                _nRecordType = sal::static_int_cast< BYTE >(
+                    SFX_REC_TYP(nHeader));
                 if ( nTypes & _nRecordType )
                     // ==> gefunden
                     return TRUE;
@@ -1009,7 +1010,8 @@ FASTBOOL SfxMultiRecordReader::GetContent()
         if ( _nRecordType == SFX_REC_TYPE_MIXTAGS ||
              _nRecordType == SFX_REC_TYPE_MIXTAGS_RELOC )
         {
-            _nContentVer = SFX_REC_CONTENT_VER(_pContentOfs[_nContentNo]);
+            _nContentVer = sal::static_int_cast< BYTE >(
+                SFX_REC_CONTENT_VER(_pContentOfs[_nContentNo]));
             *_pStream >> _nContentTag;
         }
 
