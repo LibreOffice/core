@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvashelper_texturefill.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:30:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,17 +229,17 @@ namespace vclcanvas
                     const int iPrime( i<=nStepCountHalved ? i : nStepCount-i-1);
 
                     rOutDev.SetFillColor(
-                        Color( ((nStepCountHalved - iPrime)*rColor1.GetRed() + iPrime*rColor2.GetRed())/nStepCountHalved,
-                               ((nStepCountHalved - iPrime)*rColor1.GetGreen() + iPrime*rColor2.GetGreen())/nStepCountHalved,
-                               ((nStepCountHalved - iPrime)*rColor1.GetBlue() + iPrime*rColor2.GetBlue())/nStepCountHalved ) );
+                        Color( (UINT8)(((nStepCountHalved - iPrime)*rColor1.GetRed() + iPrime*rColor2.GetRed())/nStepCountHalved),
+                               (UINT8)(((nStepCountHalved - iPrime)*rColor1.GetGreen() + iPrime*rColor2.GetGreen())/nStepCountHalved),
+                               (UINT8)(((nStepCountHalved - iPrime)*rColor1.GetBlue() + iPrime*rColor2.GetBlue())/nStepCountHalved) ) );
                 }
                 else
                 {
                     // linear gradient has a plain lerp between start and end color
                     rOutDev.SetFillColor(
-                        Color( ((nStepCount - i)*rColor1.GetRed() + i*rColor2.GetRed())/nStepCount,
-                               ((nStepCount - i)*rColor1.GetGreen() + i*rColor2.GetGreen())/nStepCount,
-                               ((nStepCount - i)*rColor1.GetBlue() + i*rColor2.GetBlue())/nStepCount ) );
+                        Color( (UINT8)(((nStepCount - i)*rColor1.GetRed() + i*rColor2.GetRed())/nStepCount),
+                               (UINT8)(((nStepCount - i)*rColor1.GetGreen() + i*rColor2.GetGreen())/nStepCount),
+                               (UINT8)(((nStepCount - i)*rColor1.GetBlue() + i*rColor2.GetBlue())/nStepCount) ) );
                 }
 
                 // copy right egde of polygon to left edge (and also
@@ -442,9 +442,9 @@ namespace vclcanvas
                 {
                     // lerp color
                     rOutDev.SetFillColor(
-                        Color( ((nStepCount - i)*rColor1.GetRed() + i*rColor2.GetRed())/nStepCount,
-                               ((nStepCount - i)*rColor1.GetGreen() + i*rColor2.GetGreen())/nStepCount,
-                               ((nStepCount - i)*rColor1.GetBlue() + i*rColor2.GetBlue())/nStepCount ) );
+                        Color( (UINT8)(((nStepCount - i)*rColor1.GetRed() + i*rColor2.GetRed())/nStepCount),
+                               (UINT8)(((nStepCount - i)*rColor1.GetGreen() + i*rColor2.GetGreen())/nStepCount),
+                               (UINT8)(((nStepCount - i)*rColor1.GetBlue() + i*rColor2.GetBlue())/nStepCount) ) );
 
                     // scale and render polygon, by interpolating between
                     // outer and inner polygon.
@@ -457,13 +457,13 @@ namespace vclcanvas
                         const ::basegfx::B2DPoint& rOuterPoint( aOuterPoly.getB2DPoint(p) );
                         const ::basegfx::B2DPoint& rInnerPoint( aInnerPoly.getB2DPoint(p) );
 
-                        aTempPoly[p] = ::Point(
-                            ::basegfx::fround( (1.0-nT)*rInnerPoint.getX() + nT*rOuterPoint.getX() ),
-                            ::basegfx::fround( (1.0-nT)*rInnerPoint.getY() + nT*rOuterPoint.getY() ) );
+                        aTempPoly[(USHORT)p] = ::Point(
+                            basegfx::fround( (1.0-nT)*rInnerPoint.getX() + nT*rOuterPoint.getX() ),
+                            basegfx::fround( (1.0-nT)*rInnerPoint.getY() + nT*rOuterPoint.getY() ) );
                     }
 
                     // close polygon explicitely
-                    aTempPoly[p] = aTempPoly[0];
+                    aTempPoly[(USHORT)p] = aTempPoly[0];
 
                     // TODO(P1): compare with vcl/source/gdi/outdev4.cxx,
                     // OutputDevice::ImplDrawComplexGradient(), there's a note
@@ -497,9 +497,9 @@ namespace vclcanvas
                 {
                     // lerp color
                     rOutDev.SetFillColor(
-                        Color( ((nStepCount - i)*rColor1.GetRed() + i*rColor2.GetRed())/nStepCount,
-                               ((nStepCount - i)*rColor1.GetGreen() + i*rColor2.GetGreen())/nStepCount,
-                               ((nStepCount - i)*rColor1.GetBlue() + i*rColor2.GetBlue())/nStepCount ) );
+                        Color( (UINT8)(((nStepCount - i)*rColor1.GetRed() + i*rColor2.GetRed())/nStepCount),
+                               (UINT8)(((nStepCount - i)*rColor1.GetGreen() + i*rColor2.GetGreen())/nStepCount),
+                               (UINT8)(((nStepCount - i)*rColor1.GetBlue() + i*rColor2.GetBlue())/nStepCount) ) );
 
 #if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
                     if( i && !(i % 10) )
@@ -518,13 +518,13 @@ namespace vclcanvas
                         const ::basegfx::B2DPoint& rOuterPoint( aOuterPoly.getB2DPoint(p) );
                         const ::basegfx::B2DPoint& rInnerPoint( aInnerPoly.getB2DPoint(p) );
 
-                        aTempPoly[p] = ::Point(
-                            ::basegfx::fround( (1.0-nT)*rInnerPoint.getX() + nT*rOuterPoint.getX() ),
-                            ::basegfx::fround( (1.0-nT)*rInnerPoint.getY() + nT*rOuterPoint.getY() ) );
+                        aTempPoly[(USHORT)p] = ::Point(
+                            basegfx::fround( (1.0-nT)*rInnerPoint.getX() + nT*rOuterPoint.getX() ),
+                            basegfx::fround( (1.0-nT)*rInnerPoint.getY() + nT*rOuterPoint.getY() ) );
                     }
 
                     // close polygon explicitely
-                    aTempPoly[p] = aTempPoly[0];
+                    aTempPoly[(USHORT)p] = aTempPoly[0];
 
                     // swap inner and outer polygon
                     aTempPolyPoly.Replace( aTempPolyPoly.GetObject( 1 ), 0 );
