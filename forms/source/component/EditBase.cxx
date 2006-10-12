@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EditBase.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:48:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:10:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) t
 
     // Version
     sal_uInt16 nVersionId = 0x0005;
-    DBG_ASSERT((getPersistenceFlags() & ~(sal_Int16)PF_SPECIAL_FLAGS) == 0,
+    DBG_ASSERT((getPersistenceFlags() & ~PF_SPECIAL_FLAGS) == 0,
         "OEditBaseModel::write : invalid special version flags !");
         // please don't use other flags, older versions can't interpret them !
 
@@ -168,9 +168,9 @@ void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) t
 }
 
 //------------------------------------------------------------------------------
-sal_Int16 OEditBaseModel::getPersistenceFlags() const
+sal_uInt16 OEditBaseModel::getPersistenceFlags() const
 {
-    return (sal_Int16)PF_HANDLE_COMMON_PROPS;
+    return PF_HANDLE_COMMON_PROPS;
 }
 
 //------------------------------------------------------------------------------

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Edit.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:47:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:10:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ protected:
     virtual sal_Bool        approveDbColumnType( sal_Int32 _nColumnType );
 
 protected:
-    virtual sal_Int16 getPersistenceFlags() const;
+    virtual sal_uInt16 getPersistenceFlags() const;
 
     DECLARE_XCLONEABLE();
 
