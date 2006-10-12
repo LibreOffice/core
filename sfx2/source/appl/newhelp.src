@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:21:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:48:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "newhelp.hrc"
 #include "helpid.hrc"
 
-Window WIN_HELP_INDEX
+Window WIN_HELPINDEX
 {
     Hide = TRUE ;
     Size = MAP_APPFONT ( 120 , 200 ) ;
