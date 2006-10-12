@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:22:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:55:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -316,7 +316,7 @@ SfxItemPresentation SvxLineSpacingItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef PRODUCT
@@ -509,7 +509,7 @@ SfxItemPresentation SvxAdjustItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -545,7 +545,7 @@ XubString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos ) const
 
 sal_uInt16 SvxAdjustItem::GetEnumValue() const
 {
-    return GetAdjust();
+    return (sal_uInt16)GetAdjust();
 }
 
 // -----------------------------------------------------------------------
@@ -638,7 +638,7 @@ SfxItemPresentation SvxWidowsItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -700,7 +700,7 @@ SfxItemPresentation SvxOrphansItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -813,7 +813,7 @@ SfxItemPresentation SvxHyphenZoneItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -1269,8 +1269,8 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
         && ::IsDefaultItem( this );
 
     const short nTabs = Count();
-    sal_uInt16  nCount = 0, nDefDist;
-    long nNew;
+    sal_uInt16  nCount = 0, nDefDist = 0;
+    long nNew = 0;
 
     if( bStoreDefTabs )
     {
@@ -1284,7 +1284,7 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
         if( nNew <= nPos + 50 )
             nNew += nDefDist;
 
-        nCount = nNew < lA3Width ? ( lA3Width - nNew ) / nDefDist + 1 : 0;
+        nCount = (sal_uInt16)(nNew < lA3Width ? ( lA3Width - nNew ) / nDefDist + 1 : 0);
     }
 
     rStrm << (sal_Int8) ( nTabs + nCount );
@@ -1369,7 +1369,7 @@ SfxItemPresentation SvxFmtSplitItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -1437,7 +1437,7 @@ SfxItemPresentation SvxPageModelItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     rText.Erase();
@@ -1472,7 +1472,7 @@ SvxScriptSpaceItem::SvxScriptSpaceItem( sal_Bool bOn, const sal_uInt16 nId )
 {
 }
 
-SfxPoolItem* SvxScriptSpaceItem::Clone( SfxItemPool */*pPool*/ ) const
+SfxPoolItem* SvxScriptSpaceItem::Clone( SfxItemPool * ) const
 {
     return new SvxScriptSpaceItem( GetValue(), Which() );
 }
@@ -1512,7 +1512,6 @@ SfxItemPresentation SvxScriptSpaceItem::GetPresentation(
                                     : RID_SVXITEMS_SCRPTSPC_ON );
             return ePres;
         }
-        break;
     default: ;//prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
@@ -1526,7 +1525,7 @@ SvxHangingPunctuationItem::SvxHangingPunctuationItem(
 {
 }
 
-SfxPoolItem* SvxHangingPunctuationItem::Clone( SfxItemPool */*pPool*/ ) const
+SfxPoolItem* SvxHangingPunctuationItem::Clone( SfxItemPool * ) const
 {
     return new SvxHangingPunctuationItem( GetValue(), Which() );
 }
@@ -1566,8 +1565,8 @@ SfxItemPresentation SvxHangingPunctuationItem::GetPresentation(
                                         : RID_SVXITEMS_HNGPNCT_ON );
                 return ePres;
             }
-            break;
         default: ;//prevent warning
+            break;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -1581,7 +1580,7 @@ SvxForbiddenRuleItem::SvxForbiddenRuleItem(
 /* -----------------------------29.11.00 11:23--------------------------------
 
  ---------------------------------------------------------------------------*/
-SfxPoolItem* SvxForbiddenRuleItem::Clone( SfxItemPool */*pPool*/ ) const
+SfxPoolItem* SvxForbiddenRuleItem::Clone( SfxItemPool * ) const
 {
     return new SvxForbiddenRuleItem( GetValue(), Which() );
 }
@@ -1627,8 +1626,8 @@ SfxItemPresentation SvxForbiddenRuleItem::GetPresentation(
                                         : RID_SVXITEMS_FORBIDDEN_RULE_ON );
                 return ePres;
             }
-        break;
         default: ;//prevent warning
+            break;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -1691,8 +1690,8 @@ SfxItemPresentation SvxParaVertAlignItem::GetPresentation(
                 rText = SVX_RESSTR( nTmp );
                 return ePres;
             }
-        break;
         default: ;//prevent warning
+            break;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -1707,7 +1706,7 @@ sal_Bool SvxParaVertAlignItem::QueryValue( com::sun::star::uno::Any& rVal,
 sal_Bool SvxParaVertAlignItem::PutValue( const com::sun::star::uno::Any& rVal,
                                          BYTE /*nMemberId*/ )
 {
-    sal_Int16 nVal;
+    sal_Int16 nVal = sal_Int16();
     if((rVal >>= nVal) && nVal >=0 && nVal <= BOTTOM )
     {
         SetValue( (USHORT)nVal );
@@ -1770,8 +1769,8 @@ SfxItemPresentation SvxParaGridItem::GetPresentation(
 
                 return ePres;
             }
-        break;
         default: ;//prevent warning
+            break;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
