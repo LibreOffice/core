@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:25:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:57:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1141,7 +1141,7 @@ void EscherPropertyContainer::ImplCreateGraphicAttributes( const ::com::sun::sta
         aAny >>= nLuminance;
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustContrast" ) ) ) )
     {
-        sal_Int16 nC;
+        sal_Int16 nC = sal_Int16();
         aAny >>= nC;
         nContrast = nC;
     }
@@ -1409,7 +1409,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
             xub_StrLen nIndex = aGraphicUrl.Search( aVndUrl, 0 );
             if ( nIndex != STRING_NOTFOUND )
             {
-                nIndex += aVndUrl.Len();
+                nIndex = nIndex + aVndUrl.Len();
                 if ( aGraphicUrl.Len() > nIndex  )
                     aUniqueId = ByteString( aGraphicUrl, nIndex, aGraphicUrl.Len() - nIndex, RTL_TEXTENCODING_UTF8 );
             }
@@ -1611,7 +1611,6 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
         if ( bNoError )
         {
             sal_uInt16 a, b, nInnerSequenceCount;
-            ::com::sun::star::awt::Point* pArray;
 
             // dies wird ein Polygon set
             for( a = 0; a < nOuterSequenceCount; a++ )
@@ -1621,7 +1620,9 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
                 if ( bNoError )
                 {
                     // Zeiger auf Arrays holen
-                    if ( pArray = pInnerSequence->getArray() )
+                    ::com::sun::star::awt::Point* pArray =
+                          pInnerSequence->getArray();
+                    if ( pArray != NULL )
                     {
                         nInnerSequenceCount = (sal_uInt16)pInnerSequence->getLength();
                         aPolygon = Polygon( nInnerSequenceCount );
@@ -1645,10 +1646,10 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
         if ( bNoError )
         {
             sal_uInt16 a, nInnerSequenceCount;
-            ::com::sun::star::awt::Point* pArray;
 
             // Zeiger auf Arrays holen
-            if ( pArray = pInnerSequence->getArray() )
+            ::com::sun::star::awt::Point* pArray = pInnerSequence->getArray();
+            if ( pArray != NULL )
             {
                 nInnerSequenceCount = (sal_uInt16)pInnerSequence->getLength();
                 aPolygon = Polygon( nInnerSequenceCount );
@@ -1719,7 +1720,7 @@ sal_Bool EscherPropertyContainer::CreatePolygonProperties(
             for ( nBezPoints = nPoints = i = 0; i < nPolyCount; i++ )
             {
                 k = aPolyPolygon[ i ].GetSize();
-                nPoints += k;
+                nPoints = nPoints + k;
                 for ( j = 0; j < k; j++ )
                 {
                     if ( aPolyPolygon[ i ].GetFlags( j ) != POLY_CONTROL )
@@ -2249,7 +2250,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
 
                             if ( rrProp.Name.equals( sExtrusion ) )
                             {
-                                sal_Bool bExtrusionOn;
+                                sal_Bool bExtrusionOn = sal_Bool();
                                 if ( rrProp.Value >>= bExtrusionOn )
                                 {
                                     nLightFaceFlags |= 0x80000;
@@ -2300,7 +2301,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sExtrusionLightFace ) )
                             {
-                                sal_Bool bExtrusionLightFace;
+                                sal_Bool bExtrusionLightFace = sal_Bool();
                                 if ( rrProp.Value >>= bExtrusionLightFace )
                                 {
                                     nLightFaceFlags |= 0x10000;
@@ -2312,7 +2313,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sExtrusionFirstLightHarsh ) )
                             {
-                                sal_Bool bExtrusionFirstLightHarsh;
+                                sal_Bool bExtrusionFirstLightHarsh = sal_Bool();
                                 if ( rrProp.Value >>= bExtrusionFirstLightHarsh )
                                 {
                                     nFillHarshFlags |= 0x20000;
@@ -2324,7 +2325,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sExtrusionSecondLightHarsh ) )
                             {
-                                sal_Bool bExtrusionSecondLightHarsh;
+                                sal_Bool bExtrusionSecondLightHarsh = sal_Bool();
                                 if ( rrProp.Value >>= bExtrusionSecondLightHarsh )
                                 {
                                     nFillHarshFlags |= 0x10000;
@@ -2368,7 +2369,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sExtrusionMetal ) )
                             {
-                                sal_Bool bExtrusionMetal;
+                                sal_Bool bExtrusionMetal = sal_Bool();
                                 if ( rrProp.Value >>= bExtrusionMetal )
                                 {
                                     nLightFaceFlags |= 0x40000;
@@ -2486,7 +2487,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sExtrusionColor ) )
                             {
-                                sal_Bool bExtrusionColor;
+                                sal_Bool bExtrusionColor = sal_Bool();
                                 if ( rrProp.Value >>= bExtrusionColor )
                                 {
                                     nLightFaceFlags |= 0x20000;
@@ -2574,7 +2575,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
 
                             if ( rrProp.Name.equals( sPathExtrusionAllowed ) )
                             {
-                                sal_Bool bExtrusionAllowed;
+                                sal_Bool bExtrusionAllowed = sal_Bool();
                                 if ( rrProp.Value >>= bExtrusionAllowed )
                                 {
                                     nPathFlags |= 0x100000;
@@ -2586,7 +2587,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sPathConcentricGradientFillAllowed ) )
                             {
-                                sal_Bool bConcentricGradientFillAllowed;
+                                sal_Bool bConcentricGradientFillAllowed = sal_Bool();
                                 if ( rrProp.Value >>= bConcentricGradientFillAllowed )
                                 {
                                     nPathFlags |= 0x20000;
@@ -2598,7 +2599,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sPathTextPathAllowed ) )
                             {
-                                sal_Bool bTextPathAllowed;
+                                sal_Bool bTextPathAllowed = sal_Bool();
                                 if ( rrProp.Value >>= bTextPathAllowed )
                                 {
                                     nPathFlags |= 0x40000;
@@ -2682,7 +2683,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sPathGluePointType ) )
                             {
-                                sal_Int16 nGluePointType;
+                                sal_Int16 nGluePointType = sal_Int16();
                                 if ( rrProp.Value >>= nGluePointType )
                                     AddOpt( DFF_Prop_connectorType, (sal_uInt16)nGluePointType );
                             }
@@ -2884,7 +2885,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
 
                             if ( rrProp.Name.equals( sTextPath ) )
                             {
-                                sal_Bool bTextPathOn;
+                                sal_Bool bTextPathOn = sal_Bool();
                                 if ( rrProp.Value >>= bTextPathOn )
                                 {
                                     nTextPathFlags |= 0x40000000;
@@ -2916,7 +2917,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sTextPathScaleX ) )
                             {
-                                sal_Bool bTextPathScaleX;
+                                sal_Bool bTextPathScaleX = sal_Bool();
                                 if ( rrProp.Value >>= bTextPathScaleX )
                                 {
                                     nTextPathFlags |= 0x00400000;
@@ -2928,7 +2929,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rrProp.Name.equals( sSameLetterHeights ) )
                             {
-                                sal_Bool bSameLetterHeights;
+                                sal_Bool bSameLetterHeights = sal_Bool();
                                 if ( rrProp.Value >>= bSameLetterHeights )
                                 {
                                     nTextPathFlags |= 0x00800000;
@@ -2973,7 +2974,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "CharKerning" ) ), sal_True ) )
                             {
-                                sal_Int16 nCharKerning;
+                                sal_Int16 nCharKerning = sal_Int16();
                                 if ( aAny >>= nCharKerning )
                             {
                                     nTextPathFlags |= 0x10000000;
@@ -3072,7 +3073,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         }
                                         else if ( rPropVal.Name.equals( sMirroredX ) )
                                         {
-                                            sal_Bool bMirroredX;
+                                            sal_Bool bMirroredX = sal_Bool();
                                             if ( rPropVal.Value >>= bMirroredX )
                                             {
                                                 if ( bMirroredX )
@@ -3081,7 +3082,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         }
                                         else if ( rPropVal.Name.equals( sMirroredY ) )
                                         {
-                                            sal_Bool bMirroredY;
+                                            sal_Bool bMirroredY = sal_Bool();
                                             if ( rPropVal.Value >>= bMirroredY )
                                             {
                                                 if ( bMirroredY )
@@ -3090,7 +3091,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         }
                                         else if ( rPropVal.Name.equals( sSwitched ) )
                                         {
-                                            sal_Bool bSwitched;
+                                            sal_Bool bSwitched = sal_Bool();
                                             if ( rPropVal.Value >>= bSwitched )
                                             {
                                                 if ( bSwitched )
@@ -3301,13 +3302,13 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
                     }
                     else if ( rProp.Name.equalsAscii( "MirroredX" ) )
                     {
-                        sal_Bool bMirroredX;
+                        sal_Bool bMirroredX = sal_Bool();
                         if ( ( rProp.Value >>= bMirroredX ) && bMirroredX )
                             nMirrorFlags  |= SHAPEFLAG_FLIPH;
                     }
                     else if ( rProp.Name.equalsAscii( "MirroredY" ) )
                     {
-                        sal_Bool bMirroredY;
+                        sal_Bool bMirroredY = sal_Bool();
                         if ( ( rProp.Value >>= bMirroredY ) && bMirroredY )
                             nMirrorFlags  |= SHAPEFLAG_FLIPV;
                     }
@@ -3679,7 +3680,7 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
             {
                 EscherBlibEntry* pBlibEntry = mpBlibEntrys[ i ];
 
-                sal_uInt8 nBlibType = pBlibEntry->meBlibType;
+                ESCHER_BlibType nBlibType = pBlibEntry->meBlibType;
                 nBlipSize = pBlibEntry->mnSize + pBlibEntry->mnSizeExtra;
                 pBlibEntry->WriteBlibEntry( rSt, sal_False, nBlipSize );
 
@@ -4164,10 +4165,9 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
 
                 uno::Any* pGluePointType = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sGluePointType );
 
-                sal_Int16 nGluePointType;
-                if ( pGluePointType )
-                    *pGluePointType >>= nGluePointType;
-                else
+                sal_Int16 nGluePointType = sal_Int16();
+                if ( !( pGluePointType &&
+                        ( *pGluePointType >>= nGluePointType ) ) )
                     nGluePointType = GetCustomShapeConnectionTypeDefault( eSpType );
 
                 if ( nGluePointType == com::sun::star::drawing::EnhancedCustomShapeGluePointType::CUSTOM )
