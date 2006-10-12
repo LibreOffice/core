@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:01:21 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:06:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -390,8 +390,7 @@ public:
     sal_Int32   GetStyle() { return nStyle; }
     void        SetStyle( sal_Int32 style ) { nStyle = style; }
 
-    virtual
-        com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
+    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
         GetProperties(
             const ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XNameAccess >& rCommandToLabelMap );
