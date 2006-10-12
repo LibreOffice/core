@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RTableConnection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:27:38 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:43:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,10 +103,9 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
 {
     DBG_CHKTHIS(ORelationTableConnection,NULL);
     OTableConnection::Draw( rRect );
-    ORelationTableConnectionData* pData;
-
-    if ((pData = (ORelationTableConnectionData*) GetData()) &&
-                (pData->GetCardinality() == CARDINAL_UNDEFINED) )
+    ORelationTableConnectionData* pData =
+        static_cast< ORelationTableConnectionData* >(GetData());
+    if ( pData && (pData->GetCardinality() == CARDINAL_UNDEFINED) )
         return;
 
     //////////////////////////////////////////////////////////////////////
