@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgattr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:09:05 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:37:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,8 +110,10 @@ SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumb
     if (bRow)
         SetText(aTitle);
     if( nFlags & TP_ATTR_CHAR )
+    {
 //        AddTabPage( RID_SVXPAGE_CHAR_STD,String(ResId(TP_ATTR_CHAR)),SvxCharStdPage::Create,            0 );
         DBG_ERROR( "found flag TP_ATTR_CHAR" );
+    }
     if( nFlags & TP_ATTR_NUMBER )
         AddTabPage( RID_SVXPAGE_NUMBERFORMAT,String(ResId(TP_ATTR_NUMBER)) ); //CHINA001 AddTabPage( RID_SVXPAGE_NUMBERFORMAT,String(ResId(TP_ATTR_NUMBER)),SvxNumberFormatTabPage::Create, 0 );
     if( nFlags & TP_ATTR_ALIGN )
