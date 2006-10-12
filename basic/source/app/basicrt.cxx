@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicrt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:55:55 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:21:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,9 +122,9 @@ BasicRuntime BasicRuntimeAccess::GetRuntime()
     return BasicRuntime( pINST->pRun );
 }
 
-BOOL BasicRuntimeAccess::HasRuntime()
+bool BasicRuntimeAccess::HasRuntime()
 {
-    return pINST ? ( pINST->pRun != NULL ) : FALSE;
+    return pINST && pINST->pRun != NULL;
 }
 
 USHORT BasicRuntimeAccess::GetStackEntryCount()
