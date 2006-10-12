@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbaobjectex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:00:46 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:42:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,8 +162,8 @@ namespace svx
     //--------------------------------------------------------------------
     ODataAccessDescriptor OComponentTransferable::extractComponentDescriptor(const TransferableDataHelper& _rData)
     {
-        sal_Bool bForm;
-        if ( (bForm = _rData.HasFormat(getDescriptorFormatId(sal_True))) || _rData.HasFormat(getDescriptorFormatId(sal_False)) )
+        sal_Bool bForm = _rData.HasFormat(getDescriptorFormatId(sal_True));
+        if ( bForm || _rData.HasFormat(getDescriptorFormatId(sal_False)) )
         {
             // the object has a real descriptor object (not just the old compatible format)
 
