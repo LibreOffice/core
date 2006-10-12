@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:54:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:12:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -356,7 +356,7 @@ void SdrCaptionObj::RecalcBoundRect()
 
 SdrObject* SdrCaptionObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
-    if (pVisiLayer!=NULL && !pVisiLayer->IsSet(nLayerId)) return NULL;
+    if (pVisiLayer!=NULL && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId))) return NULL;
     sal_Bool bHit(SdrRectObj::CheckHit(rPnt,nTol,pVisiLayer) != NULL);
     if (!bHit) {
         INT32 nMyTol=nTol;
@@ -426,7 +426,7 @@ SdrHdl* SdrCaptionObj::GetHdl(USHORT nHdlNum) const
         return SdrRectObj::GetHdl(nHdlNum);
     } else {
         USHORT nPntNum=nHdlNum;
-        nPntNum-=nRectHdlAnz;
+        nPntNum=nPntNum-nRectHdlAnz;
         if (nPntNum<aTailPoly.GetSize()) {
             SdrHdl* pHdl=new SdrHdl(aTailPoly.GetPoint(nPntNum),HDL_POLY);
             pHdl->SetPolyNum(1);
