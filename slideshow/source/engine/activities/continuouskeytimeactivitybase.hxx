@@ -4,9 +4,9 @@
  *
  *  $RCSfile: continuouskeytimeactivitybase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:36:20 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:57:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,8 @@ namespace presentation
         {
         public:
             ContinuousKeyTimeActivityBase( const ActivityParameters& rParms );
+
+            using SimpleContinuousActivityBase::perform;
 
             /** Hook for derived classes
 
