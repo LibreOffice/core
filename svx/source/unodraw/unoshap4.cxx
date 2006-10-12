@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:15:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:27:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -484,7 +484,6 @@ Any SAL_CALL SvxAppletShape::getPropertyValue( const OUString& PropertyName ) th
                 case OWN_ATTR_APPLET_COMMANDS:
                 case OWN_ATTR_APPLET_ISSCRIPT:
                     return xSet->getPropertyValue( PropertyName );
-                    break;
                 default:
                     throw IllegalArgumentException();
             }
@@ -593,7 +592,6 @@ Any SAL_CALL SvxPluginShape::getPropertyValue( const OUString& PropertyName ) th
                 case OWN_ATTR_PLUGIN_URL:
                 case OWN_ATTR_PLUGIN_COMMANDS:
                     return xSet->getPropertyValue( PropertyName );
-                    break;
                 default:
                     throw IllegalArgumentException();
             }
@@ -712,7 +710,6 @@ Any SAL_CALL SvxFrameShape::getPropertyValue( const OUString& PropertyName ) thr
                 case OWN_ATTR_FRAME_MARGIN_WIDTH:
                 case OWN_ATTR_FRAME_MARGIN_HEIGHT:
                     return xSet->getPropertyValue( PropertyName );
-                    break;
                 default:
                     throw IllegalArgumentException();
             }
@@ -767,7 +764,7 @@ void SAL_CALL SvxMediaShape::setPropertyValue( const OUString& rPropertyName, co
 
                 case( OWN_ATTR_MEDIA_LOOP ):
                 {
-                    sal_Bool bLoop;
+                    sal_Bool bLoop = sal_Bool();
 
                     if( rValue >>= bLoop )
                         aItem.setLoop( bLoop );
@@ -776,7 +773,7 @@ void SAL_CALL SvxMediaShape::setPropertyValue( const OUString& rPropertyName, co
 
                 case( OWN_ATTR_MEDIA_MUTE ):
                 {
-                    sal_Bool bMute;
+                    sal_Bool bMute = sal_Bool();
 
                     if( rValue >>= bMute )
                         aItem.setMute( bMute );
@@ -785,7 +782,7 @@ void SAL_CALL SvxMediaShape::setPropertyValue( const OUString& rPropertyName, co
 
                 case( OWN_ATTR_MEDIA_VOLUMEDB ):
                 {
-                    sal_Int16 nVolumeDB;
+                    sal_Int16 nVolumeDB = sal_Int16();
 
                     if( rValue >>= nVolumeDB )
                         aItem.setVolumeDB( nVolumeDB );
