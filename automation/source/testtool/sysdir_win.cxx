@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sysdir_win.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:39:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:19:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,14 @@
 
 #include <tools/prewin.h>
 #ifndef _SHOBJ_H
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#pragma warning(disable: 4917)
+#endif
 #include <shlobj.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #endif
 #include <tools/postwin.h>
 // as we define it ourselves further down the line we remove it here
