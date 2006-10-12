@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:15:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:47:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1014,7 +1014,10 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         {
             aPath = SvtPathOptions().GetTemplatePath();
             sal_Int32 nTokenCount = aPath.GetTokenCount( ';' );
-            aPath = aPath.GetToken( ( nTokenCount ? ( nTokenCount - 1 ) : 0 ), ';' );
+            aPath = aPath.GetToken(
+                sal::static_int_cast< xub_StrLen >(
+                    nTokenCount ? ( nTokenCount - 1 ) : 0 ),
+                ';' );
         }
 
         ULONG nErr = sfx2::FileOpenDialog_Impl(
@@ -1583,33 +1586,4 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         pLinkItem->GetValue().Call(pRet);
         delete pLinkItem;
     }
-}
-
-//--------------------------------------------------------------------
-
-SfxViewFrame *SfxApplication::CreateView_Impl
-(
-    SfxRequest&         rReq,
-    SfxObjectShell*     pDoc,
-    FASTBOOL            bNewView,   // neue View erzwingen
-    FASTBOOL            bHidden
-)
-{
-    SfxViewFrame* pFrame = CreateView_Impl( rReq.GetArgs(), pDoc, bNewView, bHidden );
-    rReq.SetReturnValue( SfxViewFrameItem( pFrame ) );
-    return pFrame;
-}
-
-SfxViewFrame *SfxApplication::CreateView_Impl
-(
-    const SfxItemSet*   pSet,
-    SfxObjectShell*     pDoc,
-    FASTBOOL            /*bNewView*/,   // neue View erzwingen
-    FASTBOOL            bHidden
-)
-{
-    DBG_MEMTEST();
-
-    SfxFrame* pFrame = SfxTopFrame::Create( pDoc, 0, bHidden, pSet );
-    return pFrame->GetCurrentViewFrame();
 }
