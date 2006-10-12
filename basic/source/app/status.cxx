@@ -4,9 +4,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:58:04 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:23:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ StatusLine::StatusLine( BasicFrame* p )
 
     // initialize TaskStatusBar
     TaskStatusBar*  pTempStatusBar = GetStatusBar();
-    USHORT nCharWidth = GetTextWidth( '0' );    // Angenommen, alle Zahlen sind gleich breit
+    long nCharWidth = GetTextWidth( '0' );  // Angenommen, alle Zahlen sind gleich breit
     pTempStatusBar->InsertItem( ST_MESSAGE, GetTextWidth( 'X' ) * 20, SIB_LEFT | SIB_IN | SIB_AUTOSIZE );
     pTempStatusBar->InsertItem( ST_LINE, 5*nCharWidth );
     pTempStatusBar->InsertStatusField();
