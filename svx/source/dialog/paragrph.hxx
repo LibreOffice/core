@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paragrph.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:51:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:24:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,8 @@ class SvxParagraphControllerItem;
 
 class SvxStdParagraphTabPage: public SfxTabPage
 {
+    using TabPage::DeactivatePage;
+
 private:
     SvxStdParagraphTabPage( Window* pParent, const SfxItemSet& rSet );
 
@@ -168,6 +170,8 @@ public:
 
 class SvxParaAlignTabPage : public SfxTabPage
 {
+    using TabPage::DeactivatePage;
+
     // Ausrichtung
     FixedLine               aAlignFrm;
     RadioButton             aLeft;
@@ -235,6 +239,8 @@ public:
 
 class SvxExtParagraphTabPage: public SfxTabPage
 {
+    using TabPage::DeactivatePage;
+
 public:
     virtual             ~SvxExtParagraphTabPage();
 
