@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:54:15 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:49:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,8 +333,9 @@ rtl::OUString SAL_CALL CWinFileOpenImpl::getCurrentFilter() throw(uno::RuntimeEx
     if (nIndex > 0)
     {
         // filter index of the base class starts with 1
-        sal_Bool bRet = m_filterContainer->getFilter(nIndex - 1, currentFilter);
-        OSL_ASSERT(bRet);
+        if (!m_filterContainer->getFilter(nIndex - 1, currentFilter)) {
+            OSL_ASSERT(false);
+        }
     }
 
     return currentFilter;
@@ -356,6 +357,7 @@ inline void SAL_CALL CWinFileOpenImpl::appendFilterGroupSeparator()
 void SAL_CALL CWinFileOpenImpl::appendFilterGroup(const rtl::OUString& sGroupTitle, const uno::Sequence<beans::StringPair>& aFilters)
     throw (IllegalArgumentException, uno::RuntimeException)
 {
+    (void) sGroupTitle; // avoid warning
     OSL_ENSURE(0 == sGroupTitle.getLength(), "appendFilterGroup: Parameter 'GroupTitle' currently ignored");
 
     sal_Int32 nFilters = aFilters.getLength();
@@ -522,7 +524,7 @@ void SAL_CALL CWinFileOpenImpl::cancel()
 
 sal_Int16 SAL_CALL CWinFileOpenImpl::getFocused()
 {
-    sal_Int32 nID = GetDlgCtrlID(GetFocus());
+    int nID = GetDlgCtrlID(GetFocus());
 
     // we don't forward id's of standard file open
     // dialog elements (ctlFirst is defined in dlgs.h
@@ -530,7 +532,7 @@ sal_Int16 SAL_CALL CWinFileOpenImpl::getFocused()
     if (nID >= ctlFirst)
         nID = 0;
 
-    return nID;
+    return sal::static_int_cast< sal_Int16 >(nID);
 }
 
 //-----------------------------------------------------------------------------------------
@@ -575,7 +577,7 @@ LRESULT CALLBACK CWinFileOpenImpl::SubClassFunc(
             reinterpret_cast<WNDPROC>(pImpl->m_pfnOldDlgProc),
             hWnd,wMessage,wParam,lParam);
 
-        pImpl->onWMSize(hWnd,wParam,LOWORD(lParam),HIWORD(lParam));
+        pImpl->onWMSize();
         break;
 
     case WM_WINDOWPOSCHANGED:
@@ -583,7 +585,7 @@ LRESULT CALLBACK CWinFileOpenImpl::SubClassFunc(
             reinterpret_cast<WNDPROC>(pImpl->m_pfnOldDlgProc),
             hWnd,wMessage,wParam,lParam);
 
-        pImpl->onWMWindowPosChanged(hWnd);
+        pImpl->onWMWindowPosChanged();
         break;
 
     case WM_SHOWWINDOW:
@@ -591,7 +593,7 @@ LRESULT CALLBACK CWinFileOpenImpl::SubClassFunc(
             reinterpret_cast<WNDPROC>(pImpl->m_pfnOldDlgProc),
             hWnd,wMessage,wParam,lParam);
 
-        pImpl->onWMShow(hWnd,(BOOL)wParam,(int)lParam);
+        pImpl->onWMShow((BOOL)wParam);
         break;
 
     case WM_NCDESTROY:
@@ -627,7 +629,7 @@ void SAL_CALL CWinFileOpenImpl::InitControlLabel(HWND hWnd)
     // set the labels for all extendet controls
     //-----------------------------------------
 
-    sal_Int16 aCtrlId = GetDlgCtrlID(hWnd);
+    sal_Int16 aCtrlId = sal::static_int_cast< sal_Int16 >(GetDlgCtrlID(hWnd));
     rtl::OUString aLabel = aResProvider.getResString(aCtrlId);
     if (aLabel.getLength())
         setLabel(aCtrlId, aLabel);
@@ -717,7 +719,7 @@ sal_uInt32 SAL_CALL CWinFileOpenImpl::onFileOk()
 //
 //-----------------------------------------------------------------
 
-void SAL_CALL CWinFileOpenImpl::onSelChanged(HWND hwndListBox)
+void SAL_CALL CWinFileOpenImpl::onSelChanged(HWND)
 {
     // the windows file open dialog sends an initial
     // SelChanged message after the InitDone message
@@ -864,7 +866,7 @@ void SAL_CALL CWinFileOpenImpl::onFolderChanged()
 //
 //-----------------------------------------------------------------
 
-void SAL_CALL CWinFileOpenImpl::onTypeChanged(sal_uInt32 nFilterIndex)
+void SAL_CALL CWinFileOpenImpl::onTypeChanged(sal_uInt32)
 {
     SetDefaultExtension();
 
@@ -878,7 +880,7 @@ void SAL_CALL CWinFileOpenImpl::onTypeChanged(sal_uInt32 nFilterIndex)
 //-----------------------------------------------------------------------------------------
 
 sal_uInt32 SAL_CALL CWinFileOpenImpl::onCtrlCommand(
-    HWND hwndDlg, sal_uInt16 ctrlId, sal_uInt16 notifyCode)
+    HWND, sal_uInt16 ctrlId, sal_uInt16)
 {
     SetDefaultExtension();
 
@@ -896,43 +898,39 @@ sal_uInt32 SAL_CALL CWinFileOpenImpl::onCtrlCommand(
 //
 //-----------------------------------------------------------------------------------------
 
-LRESULT SAL_CALL CWinFileOpenImpl::onWMSize(HWND hwnd, WPARAM type, WORD width, WORD height)
+void CWinFileOpenImpl::onWMSize()
 {
     m_Preview->notifyParentSizeChanged();
     m_CustomControls->Align();
     m_FilePicker->dialogSizeChanged();
-    return 0;
 }
 
 //-----------------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------------
 
-LRESULT SAL_CALL CWinFileOpenImpl::onWMShow(HWND hwnd, BOOL bShow, int fState)
+void CWinFileOpenImpl::onWMShow(BOOL bShow)
 {
     m_Preview->notifyParentShow(bShow);
-    return 0;
 }
 
 //-----------------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------------
 
-LRESULT SAL_CALL CWinFileOpenImpl::onWMWindowPosChanged(HWND hwnd)
+void CWinFileOpenImpl::onWMWindowPosChanged()
 {
-    LONG wl = GetWindowLong(hwnd,GWL_STYLE);
-    m_Preview->notifyParentWindowPosChanged((wl & WS_VISIBLE) > 0);
-    return 0;
+    m_Preview->notifyParentWindowPosChanged();
 }
 
 //-----------------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------------
 
-LRESULT SAL_CALL CWinFileOpenImpl::onCustomControlHelpRequest(LPHELPINFO lphi)
+void CWinFileOpenImpl::onCustomControlHelpRequest(LPHELPINFO lphi)
 {
     FilePickerEvent evt;
-    evt.ElementId = lphi->iCtrlId;
+    evt.ElementId = sal::static_int_cast< sal_Int16 >(lphi->iCtrlId);
 
     rtl::OUString aPopupHelpText = m_FilePicker->helpRequested(evt);
 
@@ -943,15 +941,13 @@ LRESULT SAL_CALL CWinFileOpenImpl::onCustomControlHelpRequest(LPHELPINFO lphi)
         DWORD dwMsgPos = GetMessagePos();
         m_HelpPopupWindow.show(LOWORD(dwMsgPos),HIWORD(dwMsgPos));
     }
-
-    return 0;
 }
 
 //-----------------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------------
 
-void SAL_CALL CWinFileOpenImpl::onInitDialog(HWND hwndDlg, HWND hwndChild)
+void SAL_CALL CWinFileOpenImpl::onInitDialog(HWND hwndDlg)
 {
     // subclass the dialog window
     m_pfnOldDlgProc =
@@ -1009,7 +1005,7 @@ void SAL_CALL CWinFileOpenImpl::SetDefaultExtension()
             if (nIndex > 0)
             {
                 // filter index of the base class starts with 1
-                sal_Bool bRet = m_filterContainer->getFilter(nIndex - 1, currentFilter);
+                m_filterContainer->getFilter(nIndex - 1, currentFilter);
 
                 if (currentFilter.getLength())
                 {
