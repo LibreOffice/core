@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctredlin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:13:40 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:08:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -473,13 +473,10 @@ BOOL SvxRedlinTable::IsValidCalcEntry(const String& rString,RedlinData *pUserDat
 BOOL SvxRedlinTable::IsValidEntry(const String* pAuthorStr,
                                   const DateTime *pDateTime,const String* pCommentStr)
 {
-    BOOL nTheFlag=TRUE;
+    bool nTheFlag=true;
     if(bAuthor)
     {
-        if(aAuthor.CompareTo(*pAuthorStr)==COMPARE_EQUAL)
-            nTheFlag=TRUE;
-        else
-            nTheFlag=FALSE;
+        nTheFlag = aAuthor.CompareTo(*pAuthorStr)==COMPARE_EQUAL;
     }
     if(bDate && nTheFlag)
     {
@@ -528,7 +525,7 @@ BOOL SvxRedlinTable::IsValidEntry(const String* pAuthorStr,const DateTime *pDate
 
 BOOL SvxRedlinTable::IsValidComment(const String* pCommentStr)
 {
-    BOOL nTheFlag=TRUE;
+    bool nTheFlag=true;
 
     if(bComment)
     {
@@ -692,7 +689,7 @@ void SvxTPView::Resize()
     aSize.Height()-=aPos.Y()+nDistance;
     aSize.Width()-=2*aPos.X();
 
-    USHORT newY=aPos.Y()+aSize.Height()+MIN_DISTANCE;
+    long newY=aPos.Y()+aSize.Height()+MIN_DISTANCE;
     aPos=PbAccept.GetPosPixel();
     aPos.Y()=newY;
     PbAccept.SetPosPixel(aPos);
@@ -1342,7 +1339,7 @@ void SvxTPFilter::DeactivatePage()
     TabPage::DeactivatePage();
 }
 
-void SvxTPFilter::Enable( BOOL bEnable, BOOL bChild)
+void SvxTPFilter::Enable( bool bEnable, bool bChild)
 {
     TabPage::Enable(bEnable,bChild);
     if(aCbDate.IsEnabled())
@@ -1353,9 +1350,9 @@ void SvxTPFilter::Enable( BOOL bEnable, BOOL bChild)
         RowEnableHdl(&aCbComment);
     }
 }
-void SvxTPFilter::Disable( BOOL bChild)
+void SvxTPFilter::Disable( bool bChild)
 {
-    Enable( FALSE, bChild );
+    Enable( false, bChild );
 }
 
 IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
