@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dndhelp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:47:31 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:57:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 
 using namespace ::com::sun::star;
 
+vcl::unohelper::DragAndDropClient::~DragAndDropClient() {}
 
 void vcl::unohelper::DragAndDropClient::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& /*dge*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
