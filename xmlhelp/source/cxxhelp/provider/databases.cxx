@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:16:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:27:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1122,8 +1122,8 @@ void Databases::setInstallPath( const rtl::OUString& aInstDir )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    if( osl::FileBase::E_None != osl::FileBase::getFileURLFromSystemPath( aInstDir,m_aInstallDirectory ) )
-        ;
+    osl::FileBase::getFileURLFromSystemPath( aInstDir,m_aInstallDirectory );
+        //TODO: check returned error code
 
     if( m_aInstallDirectory.lastIndexOf( sal_Unicode( '/' ) ) != m_aInstallDirectory.getLength() - 1 )
         m_aInstallDirectory += rtl::OUString::createFromAscii( "/" );
