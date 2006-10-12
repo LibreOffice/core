@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemset.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:05:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:22:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ SfxItemSet::SfxItemSet
                                        welche in dieses SfxItemSet gelangen,
                                        aufgenommen werden sollen */
     BOOL
-#if DBG_UTIL
+#ifdef DBG_UTIL
 #ifdef SFX_ITEMSET_NO_DEFAULT_CTOR
 
                     bTotalRanges    /* komplette Pool-Ranges uebernehmen,
@@ -156,7 +156,7 @@ SfxItemSet::SfxItemSet
     DBG( _pChildCountCtor; *_pChildCount(this) = 0 );
 //  DBG_ASSERT( bTotalRanges || abs( &bTotalRanges - this ) < 1000,
 //              "please use suitable ranges" );
-#if DBG_UTIL
+#ifdef DBG_UTIL
 #ifdef SFX_ITEMSET_NO_DEFAULT_CTOR
     if ( !bTotalRanges )
         *(int*)0 = 0; // GPF
@@ -236,11 +236,16 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool,
         nWh1 ^= nWh2 ^= nWh1 ^= nWh2;   // swappen
 #endif
     if(!nNull)
-        InitRanges_Impl(nWh1, nWh2);
+        InitRanges_Impl(
+            sal::static_int_cast< USHORT >(nWh1),
+            sal::static_int_cast< USHORT >(nWh2));
     else {
         va_list pArgs;
         va_start( pArgs, nNull );
-        InitRanges_Impl(pArgs, nWh1, nWh2, nNull);
+        InitRanges_Impl(
+            pArgs, sal::static_int_cast< USHORT >(nWh1),
+            sal::static_int_cast< USHORT >(nWh2),
+            sal::static_int_cast< USHORT >(nNull));
     }
 }
 
@@ -262,9 +267,9 @@ void SfxItemSet::InitRanges_Impl(const USHORT *pWhichPairTable)
     _aItems = new const SfxPoolItem* [ nCnt ];
     memset( (void*) _aItems, 0, sizeof( SfxPoolItem* ) * nCnt );
 
-    nCnt = pPtr - pWhichPairTable +1;
-    _pWhichRanges = new USHORT[ nCnt ];
-    memcpy( _pWhichRanges, pWhichPairTable, sizeof( USHORT ) * nCnt );
+    std::ptrdiff_t cnt = pPtr - pWhichPairTable +1;
+    _pWhichRanges = new USHORT[ cnt ];
+    memcpy( _pWhichRanges, pWhichPairTable, sizeof( USHORT ) * cnt );
 }
 
 
@@ -330,9 +335,9 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet ):
 
     // dann noch die Which Ranges kopieren
     DBG_TRACE1("SfxItemSet: Ranges-CopyCount==%ul", ++nRangesCopyCount);
-    nCnt = pPtr - rASet._pWhichRanges+1;
-    _pWhichRanges = new USHORT[ nCnt ];
-    memcpy( _pWhichRanges, rASet._pWhichRanges, sizeof( USHORT ) * nCnt );
+    std::ptrdiff_t cnt = pPtr - rASet._pWhichRanges+1;
+    _pWhichRanges = new USHORT[ cnt ];
+    memcpy( _pWhichRanges, rASet._pWhichRanges, sizeof( USHORT ) * cnt);
 }
 
 // -----------------------------------------------------------------------
@@ -1500,7 +1505,7 @@ USHORT SfxItemSet::GetWhichByPos( USHORT nPos ) const
         n = ( *(pPtr+1) - *pPtr ) + 1;
         if( nPos < n )
             return *(pPtr)+nPos;
-        nPos -= n;
+        nPos = nPos - n;
         pPtr += 2;
     }
     DBG_ASSERT( FALSE, "Hier sind wir falsch" );
@@ -1838,7 +1843,8 @@ SfxAllItemSet::SfxAllItemSet(const SfxAllItemSet &rCopy)
 
 // -----------------------------------------------------------------------
 
-static USHORT *AddRanges_Impl(USHORT *pUS, USHORT nOldSize, USHORT nIncr)
+static USHORT *AddRanges_Impl(
+    USHORT *pUS, std::ptrdiff_t nOldSize, USHORT nIncr)
 
 /*  Diese interne Funktion erzeugt ein neues Which-Range-Array, welches von
     dem 'nOldSize'-USHORTs langen 'pUS' kopiert wird und hinten an Platz
@@ -1977,7 +1983,7 @@ const SfxPoolItem* SfxAllItemSet::Put( const SfxPoolItem& rItem, USHORT nWhich )
     if ( !*pPtr )
     {
         // kein Platz mehr in _pWhichRanges => erweitern
-        USHORT nSize = pPtr - _pWhichRanges;
+        std::ptrdiff_t nSize = pPtr - _pWhichRanges;
         if( !nFree )
         {
             _pWhichRanges = AddRanges_Impl(_pWhichRanges, nSize, nInitCount);

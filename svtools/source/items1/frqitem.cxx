@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frqitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:04:32 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:21:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -456,8 +456,11 @@ DateTime SfxFrequencyItem::CalcNextTick( const DateTime& rBase, BOOL bFirst )
             {
                 long nMonth = aNextDate.GetMonth() - 1;
                 nMonth += nDInterval2;
-                aNextDate.SetYear( aNextDate.GetYear() + nMonth / 12 );
-                aNextDate.SetMonth( ( nMonth % 12 ) + 1 );
+                aNextDate.SetYear(
+                    sal::static_int_cast< USHORT >(
+                        aNextDate.GetYear() + nMonth / 12 ) );
+                aNextDate.SetMonth(
+                    sal::static_int_cast< USHORT >( ( nMonth % 12 ) + 1 ) );
             }
 
             if( aNextDate < aDateToday )
@@ -507,8 +510,11 @@ DateTime SfxFrequencyItem::CalcNextTick( const DateTime& rBase, BOOL bFirst )
             {
                 long nMonth = aNextDate.GetMonth() - 1;
                 nMonth += nDInterval3;
-                aNextDate.SetYear( aNextDate.GetYear() + nMonth / 12 );
-                aNextDate.SetMonth( ( nMonth % 12 ) + 1 );
+                aNextDate.SetYear(
+                    sal::static_int_cast< USHORT >(
+                        aNextDate.GetYear() + nMonth / 12 ) );
+                aNextDate.SetMonth(
+                    sal::static_int_cast< USHORT >( ( nMonth % 12 ) + 1 ) );
             }
 
             USHORT nDay;

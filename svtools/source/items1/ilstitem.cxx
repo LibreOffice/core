@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ilstitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:04:46 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:21:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,5 +112,5 @@ BOOL SfxIntegerListItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) cons
 void SfxIntegerListItem::GetList( SvULongs& rList ) const
 {
     for ( sal_Int32 n=0; n<m_aList.getLength(); n++ )
-        rList.Insert( m_aList[n], n );
+        rList.Insert( m_aList[n], sal::static_int_cast< USHORT >(n) );
 }

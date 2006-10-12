@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemprop.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:05:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:21:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,7 +313,8 @@ Sequence< Property > SAL_CALL
         aPropSeq.getArray()[n].Handle = pMap->nWID;
         if(pMap->pType)
             aPropSeq.getArray()[n].Type = *pMap->pType;
-        aPropSeq.getArray()[n].Attributes = pMap->nFlags;
+        aPropSeq.getArray()[n].Attributes =
+            sal::static_int_cast< sal_Int16 >(pMap->nFlags);
         n++;
     }
 
@@ -335,7 +336,7 @@ Property SAL_CALL
             aProp.Handle = pMap->nWID;
             if(pMap->pType)
                 aProp.Type = *pMap->pType;
-            aProp.Attributes = pMap->nFlags;
+            aProp.Attributes = sal::static_int_cast< sal_Int16 >(pMap->nFlags);
             break;
         }
     }
@@ -411,7 +412,8 @@ SfxExtItemPropertySetInfo::SfxExtItemPropertySetInfo(
             pNewArr[i].Handle = pMap[nCount1].nWID;
             if(pMap[nCount1].pType)
                 pNewArr[i].Type = *pMap[nCount1].pType;
-            pNewArr[i].Attributes = pMap[nCount1].nFlags;
+            pNewArr[i].Attributes = sal::static_int_cast< sal_Int16 >(
+                pMap[nCount1].nFlags);
             nCount1++;
         }
         else if(!bZero)
