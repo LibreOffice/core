@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_component.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:43:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:10:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,8 +209,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
                      Reference<XCommandEnvironment> const & xCmdEnv );
     bool removeFromUnoRc( bool jarFile, OUString const & url,
                           Reference<XCommandEnvironment> const & xCmdEnv );
-    bool hasInUnoRc( bool jarFile, OUString const & url,
-                     Reference<XCommandEnvironment> const & xCmdEnv );
+    bool hasInUnoRc( bool jarFile, OUString const & url );
 
 public:
     BackendImpl( Sequence<Any> const & args,
@@ -219,6 +218,8 @@ public:
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
+
+    using PackageRegistryBackend::disposing;
 };
 
 //______________________________________________________________________________
@@ -800,8 +801,7 @@ bool BackendImpl::removeFromUnoRc(
 
 //______________________________________________________________________________
 bool BackendImpl::hasInUnoRc(
-    bool jarFile, OUString const & url_,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    bool jarFile, OUString const & url_ )
 {
     const OUString rcterm( makeRcTerm(url_) );
     const ::osl::MutexGuard guard( getMutex() );
@@ -813,8 +813,10 @@ bool BackendImpl::hasInUnoRc(
 void BackendImpl::releaseObject( OUString const & id )
 {
     const ::osl::MutexGuard guard( getMutex() );
-    const ::std::size_t erased = m_backendObjects.erase( id );
-    OSL_ASSERT( erased == 1 );
+    if ( m_backendObjects.erase( id ) != 1 )
+    {
+        OSL_ASSERT( false );
+    }
 }
 
 //______________________________________________________________________________
@@ -843,7 +845,7 @@ void dummy() {}
 struct ProgramDir : public rtl::StaticWithInit<const OUString, ProgramDir> {
     const OUString operator () () {
         OUString exeURL;
-        ::osl::Module::getUrlFromAddress( (void *) dummy, exeURL );
+        ::osl::Module::getUrlFromAddress( (oslGenericFunction) dummy, exeURL );
         return exeURL.copy( 0, exeURL.lastIndexOf('/') );
     }
 };
@@ -891,8 +893,10 @@ Reference<XComponentContext> raise_uno_process(
     }
     catch (...) {
         // try to terminate process:
-        oslProcessError rc = osl_terminateProcess( hProcess );
-        OSL_ASSERT( rc == osl_Process_E_None );
+        if ( osl_terminateProcess( hProcess ) != osl_Process_E_None )
+        {
+            OSL_ASSERT( false );
+        }
         throw;
     }
 }
@@ -957,11 +961,10 @@ BackendImpl::ComponentPackageImpl::getComponentInfo(
 //______________________________________________________________________________
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::ComponentPackageImpl::isRegistered_(
-    ::osl::ResettableMutexGuard & guard,
+    ::osl::ResettableMutexGuard &,
     ::rtl::Reference<AbortChannel> const & abortChannel,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    Reference<XCommandEnvironment> const & )
 {
-    BackendImpl * that = getMyBackend();
     if (m_registered == REG_UNINIT)
     {
         m_registered = REG_NOT_REGISTERED;
@@ -1004,8 +1007,8 @@ BackendImpl::ComponentPackageImpl::isRegistered_(
 
 //______________________________________________________________________________
 void BackendImpl::ComponentPackageImpl::processPackage_(
-    ::osl::ResettableMutexGuard & guard,
-    bool registerPackage,
+    ::osl::ResettableMutexGuard &,
+    bool doRegisterPackage,
     ::rtl::Reference<AbortChannel> const & abortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
@@ -1014,7 +1017,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
         RTL_CONSTASCII_STRINGPARAM("com.sun.star.loader.Java2") );
     const OUString url( getURL() );
 
-    if (registerPackage)
+    if (doRegisterPackage)
     {
         if (java) // xxx todo: add to CLASSPATH until we have an
                   // own extendable classloader, the sandbox
@@ -1100,6 +1103,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
                     try {
                         xRootContext->insertByName( name, Any() );
                     } catch (container::ElementExistException & exc) {
+                        (void) exc; // avoid warnings
                         OSL_ENSURE(
                             0, OUStringToOString(
                                 exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -1169,6 +1173,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
                         xRootContext->removeByName( name );
                     }
                     catch (container::NoSuchElementException & exc) {
+                        (void) exc; // avoid warnings
                         OSL_ENSURE(
                             0, OUStringToOString(
                                 exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -1206,29 +1211,29 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
 //______________________________________________________________________________
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::TypelibraryPackageImpl::isRegistered_(
-    ::osl::ResettableMutexGuard & guard,
-    ::rtl::Reference<AbortChannel> const & abortChannel,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    ::osl::ResettableMutexGuard &,
+    ::rtl::Reference<AbortChannel> const &,
+    Reference<XCommandEnvironment> const & )
 {
     BackendImpl * that = getMyBackend();
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
         true /* IsPresent */,
         beans::Ambiguous<sal_Bool>(
-            that->hasInUnoRc( m_jarFile, getURL(), xCmdEnv ),
+            that->hasInUnoRc( m_jarFile, getURL() ),
             false /* IsAmbiguous */ ) );
 }
 
 //______________________________________________________________________________
 void BackendImpl::TypelibraryPackageImpl::processPackage_(
-    ::osl::ResettableMutexGuard & guard,
-    bool registerPackage,
-    ::rtl::Reference<AbortChannel> const & abortChannel,
+    ::osl::ResettableMutexGuard &,
+    bool doRegisterPackage,
+    ::rtl::Reference<AbortChannel> const &,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     BackendImpl * that = getMyBackend();
     const OUString url( getURL() );
 
-    if (registerPackage)
+    if (doRegisterPackage)
     {
         // live insertion:
         if (m_jarFile) {
