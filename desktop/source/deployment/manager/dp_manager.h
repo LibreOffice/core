@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-04 16:54:26 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:08:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,13 +74,11 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
 
     css::uno::Reference<css::deployment::XPackageRegistry> m_xRegistry;
 
-    void initRegistryBackends(
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
+    void initRegistryBackends();
     void initActivationLayer(
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
     ::rtl::OUString detectMediaType(
-        ::rtl::OUString const & title, ::ucb::Content const & ucbContent,
-        bool throw_exc = true );
+        ::ucb::Content const & ucbContent, bool throw_exc = true );
     ::rtl::OUString insertToActivationLayer(
         ::rtl::OUString const & title, ::rtl::OUString const & mediaType,
         ::ucb::Content const & sourceContent, ::rtl::OUString * dbData );
@@ -220,7 +218,6 @@ public:
 
     css::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
     getDeployedPackages_(
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
     virtual css::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
     SAL_CALL getDeployedPackages(
