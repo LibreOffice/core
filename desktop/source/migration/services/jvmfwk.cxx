@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jvmfwk.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:46:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:14:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,13 +300,13 @@ void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< css::uno::Any
                        "] XInitialization::initialize: Argument OldConfiguration has wrong type.");
             if (bSuccess)
             {
-                const css::beans::NamedValue* pIter = aOldConfigValues.getConstArray();
-                const css::beans::NamedValue* pEnd = pIter + aOldConfigValues.getLength();
-                for(;pIter != pEnd;++pIter)
+                const css::beans::NamedValue* pIter2 = aOldConfigValues.getConstArray();
+                const css::beans::NamedValue* pEnd2 = pIter2 + aOldConfigValues.getLength();
+                for(;pIter2 != pEnd2;++pIter2)
                 {
-                    if ( pIter->Name.equalsAscii("org.openoffice.Office.Java") )
+                    if ( pIter2->Name.equalsAscii("org.openoffice.Office.Java") )
                     {
-                        pIter->Value >>= m_xLayer;
+                        pIter2->Value >>= m_xLayer;
                         break;
                     }
                 }
@@ -314,9 +314,13 @@ void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< css::uno::Any
         }
         else if (aValue.Name.equalsAscii("UserData"))
         {
-            sal_Bool bSuccess = aValue.Value >>= m_sUserDir;
-            OSL_ENSURE(bSuccess == sal_True, "[Service implementation " IMPL_NAME
-                       "] XInitialization::initialize: Argument UserData has wrong type.");
+            if ( !(aValue.Value >>= m_sUserDir) )
+            {
+                OSL_ENSURE(
+                    false,
+                    "[Service implementation " IMPL_NAME
+                    "] XInitialization::initialize: Argument UserData has wrong type.");
+            }
         }
     }
 
@@ -324,7 +328,7 @@ void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< css::uno::Any
 
 //XJob
 css::uno::Any SAL_CALL JavaMigration::execute(
-        const css::uno::Sequence<css::beans::NamedValue >& Arguments )
+        const css::uno::Sequence<css::beans::NamedValue >& )
         throw (css::lang::IllegalArgumentException, css::uno::Exception,
                css::uno::RuntimeException)
 {
@@ -385,9 +389,9 @@ void SAL_CALL JavaMigration::endLayer()
 // -----------------------------------------------------------------------------
 
 void SAL_CALL JavaMigration::overrideNode(
-        const ::rtl::OUString& aName,
-        sal_Int16 aAttributes,
-        sal_Bool bClear)
+        const ::rtl::OUString&,
+        sal_Int16,
+        sal_Bool)
     throw(
         MalformedDataException,
         WrappedTargetException )
@@ -398,8 +402,8 @@ void SAL_CALL JavaMigration::overrideNode(
 // -----------------------------------------------------------------------------
 
 void SAL_CALL JavaMigration::addOrReplaceNode(
-        const ::rtl::OUString& aName,
-        sal_Int16 aAttributes)
+        const ::rtl::OUString&,
+        sal_Int16)
     throw(
         MalformedDataException,
         WrappedTargetException )
@@ -415,7 +419,7 @@ void SAL_CALL  JavaMigration::endNode()
 // -----------------------------------------------------------------------------
 
 void SAL_CALL  JavaMigration::dropNode(
-        const ::rtl::OUString& aName )
+        const ::rtl::OUString& )
     throw(
         MalformedDataException,
         WrappedTargetException )
@@ -425,9 +429,9 @@ void SAL_CALL  JavaMigration::dropNode(
 
 void SAL_CALL  JavaMigration::overrideProperty(
         const ::rtl::OUString& aName,
-        sal_Int16 aAttributes,
-        const Type& aType,
-        sal_Bool bClear )
+        sal_Int16,
+        const Type&,
+        sal_Bool )
     throw(
         MalformedDataException,
         WrappedTargetException )
@@ -451,7 +455,7 @@ void SAL_CALL  JavaMigration::setPropertyValue(
         {
         case ENABLE_JAVA:
         {
-            sal_Bool val;
+            sal_Bool val = sal_Bool();
             if ((aValue >>= val) == sal_False)
                 throw MalformedDataException(
                     OUSTR("[Service implementation " IMPL_NAME
@@ -485,8 +489,8 @@ void SAL_CALL  JavaMigration::setPropertyValue(
 // -----------------------------------------------------------------------------
 
 void SAL_CALL JavaMigration::setPropertyValueForLocale(
-        const Any& aValue,
-        const ::rtl::OUString& aLocale )
+        const Any&,
+        const ::rtl::OUString& )
     throw(
         MalformedDataException,
         WrappedTargetException )
@@ -505,9 +509,9 @@ void SAL_CALL  JavaMigration::endProperty()
 // -----------------------------------------------------------------------------
 
 void SAL_CALL  JavaMigration::addProperty(
-        const rtl::OUString& aName,
-        sal_Int16 aAttributes,
-        const Type& aType )
+        const rtl::OUString&,
+        sal_Int16,
+        const Type& )
     throw(
         MalformedDataException,
         WrappedTargetException )
@@ -516,9 +520,9 @@ void SAL_CALL  JavaMigration::addProperty(
 // -----------------------------------------------------------------------------
 
 void SAL_CALL  JavaMigration::addPropertyWithValue(
-        const rtl::OUString& aName,
-        sal_Int16 aAttributes,
-        const Any& aValue )
+        const rtl::OUString&,
+        sal_Int16,
+        const Any& )
     throw(
         MalformedDataException,
         WrappedTargetException )
@@ -526,9 +530,9 @@ void SAL_CALL  JavaMigration::addPropertyWithValue(
 }
 
 void SAL_CALL JavaMigration::addOrReplaceNodeFromTemplate(
-        const rtl::OUString& aName,
-        const TemplateIdentifier& aTemplate,
-        sal_Int16 aAttributes )
+        const rtl::OUString&,
+        const TemplateIdentifier&,
+        sal_Int16 )
     throw(
         MalformedDataException,
         WrappedTargetException )
