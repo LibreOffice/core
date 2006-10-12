@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:48:33 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:44:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,8 @@
 #ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -957,7 +959,9 @@ void XMLFilterSettingsDialog::onSave()
     }
 
     // Open Fileopen-Dialog
-       ::sfx2::FileDialogHelper aDlg( ::sfx2::FILESAVE_AUTOEXTENSION, 0 );
+       ::sfx2::FileDialogHelper aDlg(
+        com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
+        0 );
 
     String aExtensions( RTL_CONSTASCII_USTRINGPARAM("*.jar") );
     String aFilterName( RESID( STR_FILTER_PACKAGE ) );
@@ -1002,7 +1006,8 @@ void XMLFilterSettingsDialog::onOpen()
     XMLFilterVector aFilters;
 
     // Open Fileopen-Dialog
-       ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+       ::sfx2::FileDialogHelper aDlg(
+        com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 
     String aExtensions( RTL_CONSTASCII_USTRINGPARAM("*.jar") );
     String aFilterName( RESID( STR_FILTER_PACKAGE ) );
