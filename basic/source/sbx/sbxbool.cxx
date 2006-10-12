@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxbool.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:08:09 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:32:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,9 @@
 using namespace rtl;
 #endif
 
-INT16 ImpGetBool( const SbxValues* p )
+enum SbxBOOL ImpGetBool( const SbxValues* p )
 {
-    INT16 nRes;
+    enum SbxBOOL nRes;
     switch( p->eType )
     {
         case SbxNULL:
@@ -128,10 +128,10 @@ INT16 ImpGetBool( const SbxValues* p )
         {
             SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
             if( pVal )
-                nRes = pVal->GetBool();
+                nRes = pVal->GetBool() ? SbxTRUE : SbxFALSE;
             else
             {
-                SbxBase::SetError( SbxERR_NO_OBJECT ); nRes = 0;
+                SbxBase::SetError( SbxERR_NO_OBJECT ); nRes = SbxFALSE;
             }
             break;
         }
@@ -166,7 +166,7 @@ INT16 ImpGetBool( const SbxValues* p )
             nRes = !!*p->pLong64 ? SbxTRUE : SbxFALSE; break;
 
         default:
-            SbxBase::SetError( SbxERR_CONVERSION ); nRes = 0;
+            SbxBase::SetError( SbxERR_CONVERSION ); nRes = SbxFALSE;
     }
     return nRes;
 }
