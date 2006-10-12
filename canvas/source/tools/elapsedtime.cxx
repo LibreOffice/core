@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elapsedtime.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:25:35 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:31:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,10 @@
 
 #if defined(WIN) || defined(WNT)
 
+#if defined _MSC_VER
+#pragma warning(push,1)
+#endif
+
 // TEMP!!!
 // Awaiting corresponding functionality in OSL
 //
@@ -49,6 +53,10 @@
 #include <windows.h>
 #include <winbase.h>
 #include <mmsystem.h>
+#endif
+
+#if defined _MSC_VER
+#pragma warning(pop)
 #endif
 
 #include <algorithm>
