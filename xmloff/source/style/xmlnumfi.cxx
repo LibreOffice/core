@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:59:45 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:52:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1128,7 +1128,9 @@ void SvXMLNumFmtElementContext::EndElement()
             if ( rParent.IsFromSystem() )
                 bEffLong = SvXMLNumFmtDefaults::IsSystemLongDay( rParent.GetInternational(), bLong );
 #endif
-            rParent.AddNfKeyword( bEffLong ? NF_KEY_DD : NF_KEY_D );
+            rParent.AddNfKeyword(
+                sal::static_int_cast< sal_uInt16 >(
+                    bEffLong ? NF_KEY_DD : NF_KEY_D ) );
             break;
         case XML_TOK_STYLE_MONTH:
             rParent.UpdateCalendar( sCalendar );
@@ -1140,8 +1142,11 @@ void SvXMLNumFmtElementContext::EndElement()
                 bTextual = SvXMLNumFmtDefaults::IsSystemTextualMonth( rParent.GetInternational(), bLong );
             }
 #endif
-            rParent.AddNfKeyword( bTextual ? ( bEffLong ? NF_KEY_MMMM : NF_KEY_MMM ) :
-                                             ( bEffLong ? NF_KEY_MM : NF_KEY_M ) );
+            rParent.AddNfKeyword(
+                sal::static_int_cast< sal_uInt16 >(
+                    bTextual
+                    ? ( bEffLong ? NF_KEY_MMMM : NF_KEY_MMM )
+                    : ( bEffLong ? NF_KEY_MM : NF_KEY_M ) ) );
             break;
         case XML_TOK_STYLE_YEAR:
             rParent.UpdateCalendar( sCalendar );
@@ -1152,9 +1157,13 @@ void SvXMLNumFmtElementContext::EndElement()
 #endif
             // Y after G (era) is replaced by E
             if ( rParent.HasEra() )
-                rParent.AddNfKeyword( bEffLong ? NF_KEY_EEC : NF_KEY_EC );
+                rParent.AddNfKeyword(
+                    sal::static_int_cast< sal_uInt16 >(
+                        bEffLong ? NF_KEY_EEC : NF_KEY_EC ) );
             else
-                rParent.AddNfKeyword( bEffLong ? NF_KEY_YYYY : NF_KEY_YY );
+                rParent.AddNfKeyword(
+                    sal::static_int_cast< sal_uInt16 >(
+                        bEffLong ? NF_KEY_YYYY : NF_KEY_YY ) );
             break;
         case XML_TOK_STYLE_ERA:
             rParent.UpdateCalendar( sCalendar );
@@ -1163,7 +1172,9 @@ void SvXMLNumFmtElementContext::EndElement()
             if ( rParent.IsFromSystem() )
                 bEffLong = SvXMLNumFmtDefaults::IsSystemLongEra( rParent.GetInternational(), bLong );
 #endif
-            rParent.AddNfKeyword( bEffLong ? NF_KEY_GGG : NF_KEY_G );
+            rParent.AddNfKeyword(
+                sal::static_int_cast< sal_uInt16 >(
+                    bEffLong ? NF_KEY_GGG : NF_KEY_G ) );
             //  HasEra flag is set
             break;
         case XML_TOK_STYLE_DAY_OF_WEEK:
@@ -1173,7 +1184,9 @@ void SvXMLNumFmtElementContext::EndElement()
             if ( rParent.IsFromSystem() )
                 bEffLong = SvXMLNumFmtDefaults::IsSystemLongDayOfWeek( rParent.GetInternational(), bLong );
 #endif
-            rParent.AddNfKeyword( bEffLong ? NF_KEY_NNNN : NF_KEY_NN );
+            rParent.AddNfKeyword(
+                sal::static_int_cast< sal_uInt16 >(
+                    bEffLong ? NF_KEY_NNNN : NF_KEY_NN ) );
             break;
         case XML_TOK_STYLE_WEEK_OF_YEAR:
             rParent.UpdateCalendar( sCalendar );
@@ -1181,20 +1194,28 @@ void SvXMLNumFmtElementContext::EndElement()
             break;
         case XML_TOK_STYLE_QUARTER:
             rParent.UpdateCalendar( sCalendar );
-            rParent.AddNfKeyword( bEffLong ? NF_KEY_QQ : NF_KEY_Q );
+            rParent.AddNfKeyword(
+                sal::static_int_cast< sal_uInt16 >(
+                    bEffLong ? NF_KEY_QQ : NF_KEY_Q ) );
             break;
         case XML_TOK_STYLE_HOURS:
-            rParent.AddNfKeyword( bEffLong ? NF_KEY_HH : NF_KEY_H );
+            rParent.AddNfKeyword(
+                sal::static_int_cast< sal_uInt16 >(
+                    bEffLong ? NF_KEY_HH : NF_KEY_H ) );
             break;
         case XML_TOK_STYLE_AM_PM:
             //! short/long?
             rParent.AddNfKeyword( NF_KEY_AMPM );
             break;
         case XML_TOK_STYLE_MINUTES:
-            rParent.AddNfKeyword( bEffLong ? NF_KEY_MMI : NF_KEY_MI );
+            rParent.AddNfKeyword(
+                sal::static_int_cast< sal_uInt16 >(
+                    bEffLong ? NF_KEY_MMI : NF_KEY_MI ) );
             break;
         case XML_TOK_STYLE_SECONDS:
-            rParent.AddNfKeyword( bEffLong ? NF_KEY_SS : NF_KEY_S );
+            rParent.AddNfKeyword(
+                sal::static_int_cast< sal_uInt16 >(
+                    bEffLong ? NF_KEY_SS : NF_KEY_S ) );
             if ( aNumInfo.nDecimals > 0 )
             {
                 //  manually add the decimal places
@@ -1333,7 +1354,7 @@ sal_uInt16 SvXMLNumFmtDefaults::GetDefaultDateFormat( SvXMLDateElementAttributes
             ( eMins  == rEntry.eMins  || ( rEntry.eMins  == XML_DEA_ANY && eMins  != XML_DEA_NONE ) ) &&
             ( eSecs  == rEntry.eSecs  || ( rEntry.eSecs  == XML_DEA_ANY && eSecs  != XML_DEA_NONE ) ) )
         {
-            return rEntry.eFormat;
+            return sal::static_int_cast< sal_uInt16 >(rEntry.eFormat);
         }
     }
 
@@ -1938,7 +1959,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
             String aDigitStr;
             aDigitStr.Fill( nAddCount, (sal_Unicode)'#' );
             aNumStr.Insert( aDigitStr, 0 );
-            nZeroPos += nAddCount;
+            nZeroPos = nZeroPos + nAddCount;
         }
 
         //  aEmbeddedElements is sorted with ascending positions - loop is from right to left
@@ -2278,7 +2299,7 @@ void SvXMLNumFormatContext::AddColor( const Color& rColor )
     for ( sal_uInt16 i=0; i<XML_NUMF_COLORCOUNT; i++ )
         if ( rColor == aNumFmtStdColors[i] )
         {
-            aColName = OUString( pFormatter->GetKeyword( nFormatLang, NF_KEY_FIRSTCOLOR + i ) );
+            aColName = OUString( pFormatter->GetKeyword( nFormatLang, sal::static_int_cast< USHORT >(NF_KEY_FIRSTCOLOR + i) ) );
             break;
         }
 
