@@ -4,9 +4,9 @@
  *
  *  $RCSfile: supservs.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:21:09 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:25:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
             *pArgs >>= aLocale;
             eNewFormatterLanguage = MsLangId::convertLocaleToLanguage( aLocale);
         }
-#if DBG_UTIL
+#ifdef DBG_UTIL
         else
         {
             DBG_ERROR("SvNumberFormatsSupplierServiceObject::initialize : unknown argument !");
