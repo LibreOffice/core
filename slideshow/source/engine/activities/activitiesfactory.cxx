@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activitiesfactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:31:36 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:57:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,6 +264,8 @@ public:
                                             nModifiedTime ) ) ) );
     }
 
+    using BaseType::perform;
+
     /// perform override for DiscreteActivityBase base
     void perform( sal_uInt32 nFrame, sal_uInt32 nRepeatCount ) const
     {
@@ -501,6 +503,8 @@ public:
                                             maValues[ nIndex+1 ],
                                             nFractionalIndex ) ) ) );
     }
+
+    using BaseType::perform;
 
     /// perform override for DiscreteActivityBase base
     void perform( sal_uInt32 nFrame, sal_uInt32 nRepeatCount ) const
@@ -830,6 +834,8 @@ public:
         if (mpAnim)
             mpAnim->end();
     }
+
+    using SimpleContinuousActivityBase::perform;
 
     /// perform override for ContinuousActivityBase
     virtual void perform( double nModifiedTime, sal_uInt32 ) const
