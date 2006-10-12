@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbaexchange.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:00:31 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:42:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -433,7 +433,9 @@ namespace svx
             if ( m_nFormatFlags & CTF_COLUMN_DESCRIPTOR )
             {
                 Any aContent = makeAny( m_aDescriptor.createPropertyValueSequence() );
-                _pContainer->CopyAny( getDescriptorFormatId(), aContent );
+                _pContainer->CopyAny(
+                    sal::static_int_cast< USHORT >( getDescriptorFormatId() ),
+                    aContent );
             }
         }
     }
