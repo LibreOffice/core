@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filectrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:37:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:12:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,7 @@ void FileControl::Resize()
 
     Size aOutSz = GetOutputSizePixel();
     long nButtonTextWidth = maButton.GetTextWidth( maButtonText );
-    if ( (mnInternalFlags & FILECTRL_ORIGINALBUTTONTEXT == 0) ||
+    if ( ((mnInternalFlags & FILECTRL_ORIGINALBUTTONTEXT) == 0) ||
         nButtonTextWidth < aOutSz.Width()/3 &&
         ( mnFlags & FILECTRL_RESIZEBUTTONBYPATHLEN
         ? ( maEdit.GetTextWidth( maEdit.GetText() )
