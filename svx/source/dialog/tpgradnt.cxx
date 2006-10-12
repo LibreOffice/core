@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpgradnt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:44:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:30:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #define _SVX_TPGRADNT_CXX
 #define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
@@ -207,8 +208,8 @@ void SvxGradientTabPage::Construct()
 
 void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
 {
-    int nPos;
-    int nCount;
+    USHORT nPos;
+    USHORT nCount;
 
     if( *pDlgType == 0 ) // Flaechen-Dialog
     {
@@ -579,7 +580,7 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxGradientTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 {
-    int nPos = aLbGradients.GetSelectEntryPos();
+    USHORT nPos = aLbGradients.GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -652,7 +653,7 @@ IMPL_LINK( SvxGradientTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxGradientTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 {
-    int nPos = aLbGradients.GetSelectEntryPos();
+    USHORT nPos = aLbGradients.GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -702,7 +703,9 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
     if ( nReturn != RET_CANCEL )
     {
-        ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+        ::sfx2::FileDialogHelper aDlg(
+            com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+            0 );
         String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sog" ) );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
@@ -791,7 +794,8 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
 {
-       ::sfx2::FileDialogHelper aDlg( ::sfx2::FILESAVE_SIMPLE, 0 );
+       ::sfx2::FileDialogHelper aDlg(
+        com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sog" ) );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
@@ -881,7 +885,8 @@ IMPL_LINK( SvxGradientTabPage, ChangeGradientHdl_Impl, void *, EMPTYARG )
     {
         XGradientStyle eXGS = pGradient->GetGradientStyle();
 
-        aLbGradientType.SelectEntryPos( eXGS );
+        aLbGradientType.SelectEntryPos(
+            sal::static_int_cast< USHORT >( eXGS ) );
         // Wenn der EIntrag nicht in der Listbox ist, werden die Farben
         // temporaer hinzugenommen
         aLbColorFrom.SetNoSelection();
