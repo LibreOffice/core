@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inplaceobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:40:38 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:20:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ void SAL_CALL OCommonEmbeddedObject::setObjectRectangles( const awt::Rectangle& 
     if ( m_nObjectState != embed::EmbedStates::INPLACE_ACTIVE
       && m_nObjectState != embed::EmbedStates::UI_ACTIVE )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not activated inplace!\n" ),
-                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     awt::Rectangle aNewRectToShow = GetRectangleInterception( aPosRect, aClipRect );
     awt::Rectangle aOldRectToShow = GetRectangleInterception( m_aOwnRectangle, m_aClipRectangle );
