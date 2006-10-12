@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlundo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:59:18 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:02:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,7 @@ public:
 
 class OutlinerUndoChangeDepth : public OutlinerUndoBase
 {
+    using SfxUndoAction::Repeat;
 private:
     USHORT          mnPara;
     USHORT          mnOldDepth;
@@ -77,6 +78,7 @@ public:
 
 class OutlinerUndoCheckPara : public OutlinerUndoBase
 {
+    using SfxUndoAction::Repeat;
 private:
     USHORT          mnPara;
 
@@ -95,6 +97,7 @@ public:
 
 class OLUndoExpand : public EditUndo
 {
+    using SfxUndoAction::Repeat;
     void Restore( BOOL bUndo );
 public:
     OLUndoExpand( Outliner* pOut, USHORT nId );
