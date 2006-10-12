@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:51:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:38:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,24 +347,24 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
     }
 }
 
-void ImpEditView::ImplDrawHighlightRect( Window* pOutWin, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, PolyPolygon* pPolyPoly )
+void ImpEditView::ImplDrawHighlightRect( Window* _pOutWin, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, PolyPolygon* pPolyPoly )
 {
     if ( rDocPosTopLeft.X() != rDocPosBottomRight.X() )
     {
-        sal_Bool bPixelMode = pOutWin->GetMapMode() == MAP_PIXEL;
+        sal_Bool bPixelMode = _pOutWin->GetMapMode() == MAP_PIXEL;
 
         Point aPnt1( GetWindowPos( rDocPosTopLeft ) );
         Point aPnt2( GetWindowPos( rDocPosBottomRight ) );
 
         if ( !IsVertical() )
         {
-            lcl_AllignToPixel( aPnt1, pOutWin, +1, 0 );
-            lcl_AllignToPixel( aPnt2, pOutWin, 0, ( bPixelMode ? 0 : -1 ) );
+            lcl_AllignToPixel( aPnt1, _pOutWin, +1, 0 );
+            lcl_AllignToPixel( aPnt2, _pOutWin, 0, ( bPixelMode ? 0 : -1 ) );
         }
         else
         {
-            lcl_AllignToPixel( aPnt1, pOutWin, 0, +1 );
-            lcl_AllignToPixel( aPnt2, pOutWin, ( bPixelMode ? 0 : +1 ), 0 );
+            lcl_AllignToPixel( aPnt1, _pOutWin, 0, +1 );
+            lcl_AllignToPixel( aPnt2, _pOutWin, ( bPixelMode ? 0 : +1 ), 0 );
         }
 
         Rectangle aRect( aPnt1, aPnt2 );
@@ -379,7 +379,7 @@ void ImpEditView::ImplDrawHighlightRect( Window* pOutWin, const Point& rDocPosTo
         }
         else
         {
-            pOutWin->Invert( aRect );
+            _pOutWin->Invert( aRect );
         }
     }
 }
@@ -1079,6 +1079,8 @@ sal_Bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent )
                 }
             }
             break;
+            default:
+                break;
         }
     }
 
@@ -1558,13 +1560,15 @@ void ImpEditView::ShowDDCursor( const Rectangle& rRect )
             pDragAndDropInfo->pBackground->SetMapMode( aMapMode );
 
         }
+
+#ifdef DBG_UTIL
         Size aCurSzPx( pDragAndDropInfo->pBackground->GetOutputSizePixel() );
         if ( ( aCurSzPx.Width() < aNewSzPx.Width() ) ||( aCurSzPx.Height() < aNewSzPx.Height() ) )
         {
             sal_Bool bDone = pDragAndDropInfo->pBackground->SetOutputSizePixel( aNewSzPx );
             DBG_ASSERT( bDone, "Virtuelles Device kaputt?" );
         }
-
+#endif
 
         aSaveRec = GetWindow()->PixelToLogic( aSaveRec );
 
@@ -1686,8 +1690,8 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
                 {
                     // aToBeDelSel anpassen.
                     DBG_ASSERT( pDragAndDropInfo->aBeginDragSel.nStartPara >= pDragAndDropInfo->aDropSel.nStartPara, "Doch nicht davor?" );
-                    aToBeDelSel.nStartPara += nParaDiff;
-                    aToBeDelSel.nEndPara += nParaDiff;
+                    aToBeDelSel.nStartPara = aToBeDelSel.nStartPara + nParaDiff;
+                    aToBeDelSel.nEndPara = aToBeDelSel.nEndPara + nParaDiff;
                     // Zeichen korrigieren?
                     if ( aToBeDelSel.nStartPara == pDragAndDropInfo->aDropSel.nEndPara )
                     {
@@ -1696,9 +1700,11 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
                             nMoreChars = pDragAndDropInfo->aDropSel.nEndPos - pDragAndDropInfo->aDropSel.nStartPos;
                         else
                             nMoreChars = pDragAndDropInfo->aDropSel.nEndPos;
-                        aToBeDelSel.nStartPos += nMoreChars;
+                        aToBeDelSel.nStartPos =
+                            aToBeDelSel.nStartPos + nMoreChars;
                         if ( aToBeDelSel.nStartPara == aToBeDelSel.nEndPara )
-                            aToBeDelSel.nEndPos += nMoreChars;
+                            aToBeDelSel.nEndPos =
+                                aToBeDelSel.nEndPos + nMoreChars;
                     }
                 }
                 else
@@ -1706,8 +1712,8 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
                     // aToBeDelSel ist ok, aber Selektion der View
                     // muss angepasst werden, wenn davor geloescht wird!
                     DBG_ASSERT( pDragAndDropInfo->aBeginDragSel.nStartPara <= pDragAndDropInfo->aDropSel.nStartPara, "Doch nicht davor?" );
-                    aNewSel.nStartPara -= nParaDiff;
-                    aNewSel.nEndPara -= nParaDiff;
+                    aNewSel.nStartPara = aNewSel.nStartPara - nParaDiff;
+                    aNewSel.nEndPara = aNewSel.nEndPara - nParaDiff;
                     // Zeichen korrigieren?
                     if ( pDragAndDropInfo->aBeginDragSel.nEndPara == pDragAndDropInfo->aDropSel.nStartPara )
                     {
@@ -1716,9 +1722,9 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
                             nLessChars = pDragAndDropInfo->aBeginDragSel.nEndPos - pDragAndDropInfo->aBeginDragSel.nStartPos;
                         else
                             nLessChars = pDragAndDropInfo->aBeginDragSel.nEndPos;
-                        aNewSel.nStartPos -= nLessChars;
+                        aNewSel.nStartPos = aNewSel.nStartPos - nLessChars;
                         if ( aNewSel.nStartPara == aNewSel.nEndPara )
-                            aNewSel.nEndPos -= nLessChars;
+                            aNewSel.nEndPos = aNewSel.nEndPos - nLessChars;
                     }
                 }
 
@@ -1853,7 +1859,7 @@ void ImpEditView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTarg
     dragOver( rDTDEE );
 }
 
-void ImpEditView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException)
+void ImpEditView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
@@ -1877,7 +1883,7 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
 
     if ( GetOutputArea().IsInside( aMousePos ) && !bReadOnly )
     {
-        sal_Int8 nSupportedActions = bReadOnly ? datatransfer::dnd::DNDConstants::ACTION_COPY : datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE;
+//        sal_Int8 nSupportedActions = bReadOnly ? datatransfer::dnd::DNDConstants::ACTION_COPY : datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE;
 
         if ( pDragAndDropInfo->bHasValidData /* && ( nSupportedActions & rDTDE.DropAction ) MT: Default = 0x80 ?! */ )
         {
