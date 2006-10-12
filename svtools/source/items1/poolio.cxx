@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolio.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:06:21 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:22:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -961,7 +961,9 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
                         }
                         //! DBG_ASSERT( bFound, "old-item not found in file" );
                         if ( !bFound )
+                        {
                             SFX_TRACE( "item not found: ", pOldItem );
+                        }
                     }
                 }
             }
