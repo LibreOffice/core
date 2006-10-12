@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abpfinalpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:51:15 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:37:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 //.........................................................................
 namespace abp
@@ -91,12 +92,12 @@ namespace abp
     FinalPage::FinalPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_FINAL))
         ,m_aExplanation         ( this, ResId( FT_FINISH_EXPL ) )
-        ,m_aNameLabel           ( this, ResId( FT_NAME_EXPL ) )
-        ,m_aName                ( this, ResId( ET_DATASOURCENAME ) )
         ,m_aLocationLabel       ( this, ResId( FT_LOCATION ) )
         ,m_aLocation            ( this, ResId( CBB_LOCATION ) )
         ,m_aBrowse              ( this, ResId( PB_BROWSE ) )
         ,m_aRegisterName        ( this, ResId( CB_REGISTER_DS ) )
+        ,m_aNameLabel           ( this, ResId( FT_NAME_EXPL ) )
+        ,m_aName                ( this, ResId( ET_DATASOURCENAME ) )
         ,m_aDuplicateNameError  ( this, ResId( FT_DUPLICATENAME ) )
         ,m_bCheckFileName       (sal_True)
     {
@@ -269,7 +270,7 @@ namespace abp
     {
         OFileNotation aOldFile( m_aLocation.GetText() );
         WinBits nBits(WB_STDMODAL|WB_SAVEAS);
-        ::sfx2::FileDialogHelper aFileDlg( ::sfx2::FILESAVE_AUTOEXTENSION,static_cast<sal_uInt32>(nBits) ,this);
+        ::sfx2::FileDialogHelper aFileDlg( com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,static_cast<sal_uInt32>(nBits) ,this);
         aFileDlg.SetDisplayDirectory( aOldFile.get(OFileNotation::N_URL) );
 
         static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
