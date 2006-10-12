@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activitybase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:31:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:57:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,6 +205,7 @@ namespace presentation
                  mnDecelerationFraction > 0.0) &&
                 mnAccelerationFraction + mnDecelerationFraction <= 1.0 )
             {
+                /*
                 // calc accelerated/decelerated time.
                 //
                 // We have three intervals:
@@ -244,7 +245,7 @@ namespace presentation
                 //   -----------------------------
                 //      0   a              d  1
                 //
-                //
+                //*/
                 const double nC( 1.0 - 0.5*mnAccelerationFraction - 0.5*mnDecelerationFraction );
 
                 // this variable accumulates the new time value
