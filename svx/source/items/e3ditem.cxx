@@ -4,9 +4,9 @@
  *
  *  $RCSfile: e3ditem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:19:29 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:53:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,8 +50,8 @@ using namespace ::com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
-DBG_NAMEEX(SvxVector3DItem);
-DBG_NAME(SvxVector3DItem);
+DBG_NAMEEX(SvxVector3DItem)
+DBG_NAME(SvxVector3DItem)
 
 // -----------------------------------------------------------------------
 
