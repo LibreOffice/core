@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 12:59:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:34:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1131,7 +1131,8 @@ void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
         if ( !bClearPreview )
         {
             Reference<awt::XTabController> xController(xFrame->getController(),UNO_QUERY);
-            if ( !(bClearPreview = !xController.is()) )
+            bClearPreview = !xController.is();
+            if ( !bClearPreview )
             {
                 Reference<XLoadable> xLoadable(xController->getModel(),UNO_QUERY);
                 bClearPreview = !(xLoadable.is() && xLoadable->isLoaded());
