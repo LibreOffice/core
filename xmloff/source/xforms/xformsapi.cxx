@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xformsapi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:31:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:56:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,8 +176,7 @@ Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
         ; // no success!
     }
 
-    if( ! xRet.is() )
-        ; // TODO: rImport.SetError(...);
+    // TODO: if (!xRet.is()) rImport.SetError(...);
 
     return xRet;
 }
