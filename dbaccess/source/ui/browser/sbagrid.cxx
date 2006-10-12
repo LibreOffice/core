@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:58:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:35:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1713,7 +1713,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
                 }
             }
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
