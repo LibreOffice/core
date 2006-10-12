@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltertestdialog.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:49:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:45:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,8 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
+
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -400,7 +402,9 @@ void XMLFilterTestDialog::onExportBrowse()
     try
     {
         // Open Fileopen-Dialog
-           ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+           ::sfx2::FileDialogHelper aDlg(
+            com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+            0 );
 
         Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( OUString::createFromAscii("com.sun.star.document.FilterFactory" ) ), UNO_QUERY );
         Reference< XNameAccess > xTypeDetection( mxMSF->createInstance( OUString::createFromAscii("com.sun.star.document.TypeDetection" ) ), UNO_QUERY );
@@ -647,7 +651,8 @@ void XMLFilterTestDialog::displayXMLFile( const OUString& rURL )
 void XMLFilterTestDialog::onImportBrowse()
 {
     // Open Fileopen-Dialog
-       ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+       ::sfx2::FileDialogHelper aDlg(
+        com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
     String aFilterName( mpFilterInfo->maInterfaceName );
     String aExtensions;
 
