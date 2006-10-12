@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 09:54:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:19:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2226,7 +2226,9 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         if ( !IsError() )
                         {
                             SbxVariable *pMember = NULL;
-                            if ( !( pVar->GetParent() && (pMember = pVar->GetParent()->Find(CUniString("ID"),SbxCLASS_DONTCARE)) ) )
+                            if ( pVar->GetParent() )
+                                pMember = pVar->GetParent()->Find(CUniString("ID"),SbxCLASS_DONTCARE);
+                            if ( pMember == NULL )
                             {
                                 SetError( SbxERR_NAMED_NOT_FOUND );
                             }
@@ -2786,8 +2788,8 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
 
             pShortNames->Insert(pWhatName->pData->Kurzname,pWhatName->pData->aUId,nSequence);
 
-            SbxVariable *pMember;
-            if ( ! (pMember = pImpl->pControlsObj->Find(CUniString("ID"),SbxCLASS_DONTCARE)) )
+            SbxVariable *pMember = pImpl->pControlsObj->Find(CUniString("ID"),SbxCLASS_DONTCARE);
+            if ( pMember == NULL )
             {
                 SbxProperty* pID = new SbxProperty(CUniString("ID"),SbxVARIANT);
                 pImpl->pControlsObj->Insert(pID);
@@ -2799,11 +2801,8 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
             else
                 pMember->PutString(pWhatName->pData->aUId.GetStr());
 
-            if ( ! (pMember = pImpl->pControlsObj->Find(CUniString("name"),SbxCLASS_DONTCARE)) )
-            {
-                pMember = NULL;
-            }
-            else
+            pMember = pImpl->pControlsObj->Find(CUniString("name"),SbxCLASS_DONTCARE);
+            if ( pMember != NULL )
                 pMember->PutString(pWhatName->pData->Kurzname);
 
             return pImpl->pControlsObj;
@@ -2869,7 +2868,7 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.28 $
+    // search $Revision: 1.29 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
@@ -2954,7 +2953,6 @@ xub_StrLen TestToolObj::ImplSearch( const String &aSource, const xub_StrLen nSta
 xub_StrLen TestToolObj::PreCompilePart( String &aSource, xub_StrLen nStart, xub_StrLen nEnd, String aFinalErrorLabel, USHORT &nLabelCount )
 {
     xub_StrLen nTry,nCatch,nEndcatch;
-    xub_StrLen nTry2;
     if( (nTry = ImplSearch( aSource, nStart, nEnd, CUniString("try"), nStart )) == STRING_NOTFOUND )
         return nEnd;
     if ( (nCatch = ImplSearch( aSource, nStart, nEnd, CUniString("catch"), nTry )) == STRING_NOTFOUND )
@@ -2981,8 +2979,11 @@ xub_StrLen TestToolObj::PreCompilePart( String &aSource, xub_StrLen nStart, xub_
     String aEndcatchLabel( ENDCATCH_LABEL);
     aEndcatchLabel += aStr;
 
-    while ( !WasPrecompilerError() && (nTry2 = ImplSearch( aSource, nStart, nEnd, CUniString("try"), nTry+1 )) != STRING_NOTFOUND )
+    while ( !WasPrecompilerError() )
     {   // Wir rekursieren erstmal mit dem 2. Try
+        xub_StrLen nTry2 = ImplSearch( aSource, nStart, nEnd, CUniString("try"), nTry+1 );
+        if ( nTry2 == STRING_NOTFOUND )
+            break;
         if ( nTry2 < nCatch )
             nEnd += PreCompilePart( aSource, nTry2, nEndcatch+8, aCatchLabel, nLabelCount ) - nEndcatch-8;
         else
@@ -3069,7 +3070,7 @@ void TestToolObj::PreCompileDispatchParts( String &aSource, String aStart, Strin
         if ( nEndPart == STRING_NOTFOUND )
             return;
         nPartPos = PreCompilePart( aSource, nPartPos, nEndPart, aFinalLable, nLabelCount );
-        nPartPos += aEnd.Len();
+        nPartPos = nPartPos + aEnd.Len();
     }
 }
 
@@ -4056,10 +4057,10 @@ static ControlDefLoad __READONLY_DATA arRes_Type [] =
         {
             aText.Erase(nStart,nEnd+EndKenn.Len()-nStart);
             aText.Insert(aResult,nStart);
-            nStartPos += aResult.Len();
+            nStartPos = nStartPos + aResult.Len();
         }
         else
-            nStartPos += StartKenn.Len();
+            nStartPos = nStartPos + StartKenn.Len();
     }
 }
 
