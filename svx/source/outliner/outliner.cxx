@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:31:00 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:02:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,8 @@ USHORT lcl_ImplGetDefBulletIndent( USHORT nDepth )
 {
     USHORT nI = 0;
     for ( USHORT n = 0; n <= nDepth; n++ )
-        nI += ( n < nDefStyles ) ? pDefBulletIndents[n] : nDefBulletIndent;
+        nI = nI +
+            ( ( n < nDefStyles ) ? pDefBulletIndents[n] : nDefBulletIndent );
     return nI;
 }
 
@@ -320,9 +321,7 @@ void Outliner::Init( USHORT nMode )
 
     ImplInitDepth( 0, GetMinDepth(), FALSE );
 
-#ifndef SVX_LIGHT
     GetUndoManager().Clear();
-#endif
 }
 
 void Outliner::SetMinDepth( USHORT nDepth, BOOL bCheckParagraphs )
@@ -369,7 +368,7 @@ void Outliner::SetMaxDepth( USHORT nDepth, BOOL bCheckParagraphs )
     }
 }
 
-USHORT Outliner::GetDepth( USHORT nPara ) const
+USHORT Outliner::GetDepth( ULONG nPara ) const
 {
     Paragraph* pPara = pParaList->GetParagraph( nPara );
     DBG_ASSERT( pPara, "Outliner::GetDepth - Paragraph not found!" );
@@ -397,8 +396,10 @@ OutlinerParaObject* Outliner::CreateParaObject( USHORT nStartPara, USHORT nCount
 {
     DBG_CHKTHIS(Outliner,0);
 
-    if ( ( nStartPara + nCount ) > pParaList->GetParagraphCount() )
-        nCount = pParaList->GetParagraphCount() - nStartPara;
+    if ( sal::static_int_cast< ULONG >( nStartPara + nCount ) >
+         pParaList->GetParagraphCount() )
+        nCount = sal::static_int_cast< USHORT >(
+            pParaList->GetParagraphCount() - nStartPara );
 
     // When a new OutlinerParaObject is created because a paragraph is just beeing deleted,
     // it can happen that the ParaList is not updated yet...
@@ -508,7 +509,11 @@ void Outliner::SetText( const XubString& rText, Paragraph* pPara )
 
 // pView == 0 -> Tabulatoren nicht beachten
 
-BOOL Outliner::ImpConvertEdtToOut(Paragraph* pPara,ULONG nPara,EditView* pView)
+BOOL Outliner::ImpConvertEdtToOut(Paragraph*
+#ifdef DBG_UTIL
+                                    pPara
+#endif
+                                    ,ULONG nPara,EditView* pView)
 {
     DBG_CHKTHIS(Outliner,0);
     DBG_ASSERT(pPara,"FilterTabs:No Para");
@@ -553,7 +558,7 @@ BOOL Outliner::ImpConvertEdtToOut(Paragraph* pPara,ULONG nPara,EditView* pView)
         USHORT nPos = nHeadingNumberStart ? nHeadingNumberStart : nNumberingNumberStart;
         String aLevel = aName.Copy( nPos );
         aLevel.EraseLeadingChars( ' ' );
-        nTabs = aLevel.ToInt32();
+        nTabs = sal::static_int_cast< USHORT >(aLevel.ToInt32());
         if( nTabs )
             nTabs--; // ebene 0 = "heading 1"
         bConverted = TRUE;
@@ -572,13 +577,13 @@ BOOL Outliner::ImpConvertEdtToOut(Paragraph* pPara,ULONG nPara,EditView* pView)
 
         //  LRSpaceItem aufaddieren
         const SvxLRSpaceItem& rIndent=(const SvxLRSpaceItem&)rAttrs.Get( bAlreadyOutliner ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE );
-        USHORT nIndent = rIndent.GetTxtLeft();
+        long nIndent = rIndent.GetTxtLeft();
         if( nIndent )
         {
-            USHORT nOffs = nIndent / (USHORT)pEditEngine->GetDefTab();
+            long nOffs = nIndent / (USHORT)pEditEngine->GetDefTab();
             if( !nOffs )
                 nOffs = 1;  // immer mind. 1 Tab
-            nTabs += nOffs;
+            nTabs = sal::static_int_cast< USHORT >(nTabs + nOffs);
         }
     }
 
@@ -600,14 +605,14 @@ BOOL Outliner::ImpConvertEdtToOut(Paragraph* pPara,ULONG nPara,EditView* pView)
     USHORT nOutlLevel = nMinDepth;
     if ( nPara )
     {
-        const SfxUInt16Item& rLevel = (const SfxUInt16Item&) pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
+        const SfxUInt16Item& rLevel = (const SfxUInt16Item&) pEditEngine->GetParaAttrib( sal::static_int_cast< USHORT >(nPara), EE_PARA_OUTLLEVEL );
         nOutlLevel = rLevel.GetValue();
     }
     ImplCheckDepth( nOutlLevel );
 
     SfxItemSet aOldAttrs( GetParaAttribs( nPara ) );
-    ImplInitDepth( nPara, nOutlLevel, FALSE );
-    if ( !ImplHasBullet( nPara ) && aOldAttrs.GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_ON )
+    ImplInitDepth( sal::static_int_cast< USHORT >(nPara), nOutlLevel, FALSE );
+    if ( !ImplHasBullet( sal::static_int_cast< USHORT >(nPara) ) && aOldAttrs.GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_ON )
     {
         // #96298# ImplInitDepth overwrite LRSpace to depth default, but we want to keep it,
         // when hard set in RTF
@@ -633,6 +638,11 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
 
     ImplBlockInsertionCallbacks( TRUE );
     pEditEngine->SetText( *(rPObj.pText) );
+    if( rPObj.nCount != pEditEngine->GetParagraphCount() )
+    {
+        int nop=0;nop++;
+    }
+
     bFirstParaIsEmpty = FALSE;
 
     pParaList->Clear( TRUE );
@@ -660,7 +670,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
     DBG_CHKTHIS(Outliner,0);
     Paragraph* pPara;
 
-    ULONG nCount = rPObj.Count();
+//  ULONG nCount = rPObj.Count();
 
     BOOL bUpdate = pEditEngine->GetUpdateMode();
     pEditEngine->SetUpdateMode( FALSE );
@@ -684,7 +694,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
     {
         pPara = new Paragraph( rPObj.pDepthArr[ n ] );
         pParaList->Insert( pPara, LIST_APPEND );
-        USHORT nP = nPara+n;
+        USHORT nP = sal::static_int_cast< USHORT >(nPara+n);
         DBG_ASSERT(pParaList->GetAbsPos(pPara)==nP,"AddText:Out of sync")
         ImplInitDepth( nP, pPara->GetDepth(), FALSE );
     }
@@ -851,20 +861,18 @@ void Outliner::ImplInitDepth( USHORT nPara, USHORT nDepth, BOOL bCreateUndo, BOO
         ImplCheckNumBulletItem( nPara );
         ImplCalcBulletText( nPara, FALSE, FALSE );
 
-#ifndef SVX_LIGHT
         if ( bUndo )
         {
             InsertUndo( new OutlinerUndoChangeDepth( this, nPara, nOldDepth, nDepth ) );
             if ( bUndoAction )
                 UndoActionEnd( OLUNDO_DEPTH );
         }
-#endif
 
         pEditEngine->SetUpdateMode( bUpdate );
     }
 }
 
-void Outliner::SetParaAttribs( ULONG nPara, const SfxItemSet& rSet, bool bApiCall /* = false */ )
+void Outliner::SetParaAttribs( ULONG nPara, const SfxItemSet& rSet, bool  /* bApiCall = false */ )
 {
     DBG_CHKTHIS(Outliner,0);
 
@@ -883,8 +891,8 @@ void Outliner::SetParaAttribs( ULONG nPara, const SfxItemSet& rSet, bool bApiCal
         if( bLRSpaceChanged )
         {
             const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&)pEditEngine->GetParaAttrib( (USHORT)nPara, EE_PARA_NUMBULLET );
-            Paragraph* pPara = pParaList->GetParagraph( nPara );
-            const USHORT nDepth = pPara->GetDepth();
+            Paragraph* _pPara = pParaList->GetParagraph( nPara );
+            const USHORT nDepth = _pPara->GetDepth();
             if ( rNumBullet.GetNumRule()->GetLevelCount() > nDepth )
             {
                 SvxNumBulletItem* pNewNumBullet = (SvxNumBulletItem*) rNumBullet.Clone();
@@ -910,8 +918,7 @@ BOOL Outliner::Expand( Paragraph* pPara )
 
     if ( pParaList->HasHiddenChilds( pPara ) )
     {
-        OLUndoExpand* pUndo;
-#ifndef SVX_LIGHT
+        OLUndoExpand* pUndo = 0;
         BOOL bUndo = IsUndoEnabled() && !IsInUndo();
         if( bUndo )
         {
@@ -920,9 +927,6 @@ BOOL Outliner::Expand( Paragraph* pPara )
             pUndo->pParas = 0;
             pUndo->nCount = (USHORT)pParaList->GetAbsPos( pPara );
         }
-#else
-        BOOL bUndo = sal_False;
-#endif
         pHdlParagraph = pPara;
         bIsExpanding = TRUE;
         pParaList->Expand( pPara );
@@ -944,9 +948,9 @@ BOOL Outliner::Collapse( Paragraph* pPara )
     DBG_CHKTHIS(Outliner,0);
     if ( pParaList->HasVisibleChilds( pPara ) ) // expandiert
     {
-        OLUndoExpand* pUndo;
+        OLUndoExpand* pUndo = 0;
         BOOL bUndo = FALSE;
-#ifndef SVX_LIGHT
+
         if( !IsInUndo() && IsUndoEnabled() )
             bUndo = TRUE;
         if( bUndo )
@@ -956,7 +960,7 @@ BOOL Outliner::Collapse( Paragraph* pPara )
             pUndo->pParas = 0;
             pUndo->nCount = (USHORT)pParaList->GetAbsPos( pPara );
         }
-#endif
+
         pHdlParagraph = pPara;
         bIsExpanding = FALSE;
         pParaList->Collapse( pPara );
@@ -1257,7 +1261,7 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
     }
 }
 
-void Outliner::InvalidateBullet( Paragraph* pPara, ULONG nPara )
+void Outliner::InvalidateBullet( Paragraph* /*pPara*/, ULONG nPara )
 {
     DBG_CHKTHIS(Outliner,0);
 
@@ -1359,13 +1363,11 @@ void Outliner::ImpFilterIndents( ULONG nFirstPara, ULONG nLastPara )
     pEditEngine->SetUpdateMode( bUpdate );
 }
 
-#ifndef SVX_LIGHT
 SfxUndoManager& Outliner::GetUndoManager()
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetUndoManager();
 }
-#endif
 
 void Outliner::ImpTextPasted( ULONG nStartPara, USHORT nCount )
 {
@@ -1513,7 +1515,7 @@ BOOL Outliner::ImpCanIndentSelectedPages( OutlinerView* pCurView )
 
     // Wenn der erste Absatz auf Ebene 0 liegt darf er auf keinen Fall
     // eingerueckt werden, evtl folgen aber weitere auf Ebene 0.
-    if ( ( (ULONG)pHdlParagraph == 0 ) && ( ImplGetOutlinerMode() != OUTLINERMODE_TEXTOBJECT ) )
+    if ( ( mnFirstSelPage == 0 ) && ( ImplGetOutlinerMode() != OUTLINERMODE_TEXTOBJECT ) )
     {
         if ( nDepthChangedHdlPrevDepth == 1 )   // ist die einzige Seite
             return FALSE;
@@ -1814,7 +1816,7 @@ void Outliner::ParaAttribsChanged( USHORT nPara )
             const SfxUInt16Item& rLevel = (const SfxUInt16Item&) pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
             if ( pPara->GetDepth() != rLevel.GetValue() )
             {
-                USHORT nMin = Min( pPara->GetDepth(), (USHORT)rLevel.GetValue() );
+//              USHORT nMin = Min( pPara->GetDepth(), (USHORT)rLevel.GetValue() );
                 pPara->SetDepth( rLevel.GetValue() );
                 ImplCalcBulletText( nPara, TRUE, TRUE );
             }
@@ -2046,12 +2048,13 @@ long Outliner::RemovingPagesHdl( OutlinerView* pView )
     return aRemovingPagesHdl.IsSet() ? aRemovingPagesHdl.Call( pView ) : TRUE;
 }
 
-BOOL Outliner::ImpCanDeleteSelectedPages( OutlinerView* pCurView, USHORT nFirstPage, USHORT nPages )
+BOOL Outliner::ImpCanDeleteSelectedPages( OutlinerView* pCurView, USHORT _nFirstPage, USHORT nPages )
 {
     DBG_CHKTHIS(Outliner,0);
 
     nDepthChangedHdlPrevDepth = nPages;
-    pHdlParagraph = (Paragraph*)nFirstPage;
+    mnFirstSelPage = _nFirstPage;
+    pHdlParagraph = 0;
     return (BOOL)RemovingPagesHdl( pCurView );
 }
 
@@ -2071,7 +2074,7 @@ IMPL_LINK( Outliner, ParaVisibleStateChangedHdl, Paragraph*, pPara )
     return 0;
 }
 
-IMPL_LINK( Outliner, BeginMovingParagraphsHdl, MoveParagraphsInfo*, pInfos )
+IMPL_LINK( Outliner, BeginMovingParagraphsHdl, MoveParagraphsInfo*, EMPTYARG )
 {
     DBG_CHKTHIS(Outliner,0);
 
@@ -2087,7 +2090,7 @@ IMPL_LINK( Outliner, BeginPasteOrDropHdl, PasteOrDropInfos*, pInfos )
     if ( bCheckStyles )
     {
         UndoActionStart( EDITUNDO_DRAGANDDROP );
-        for ( USHORT n = GetParagraphCount(); n; )
+        for ( ULONG n = GetParagraphCount(); n; )
         {
             if ( GetDepth( --n ) )
             {
@@ -2140,7 +2143,7 @@ IMPL_LINK( Outliner, EndPasteOrDropHdl, PasteOrDropInfos*, pInfos )
         for ( USHORT n = pInfos->nStartPara; n <= pInfos->nEndPara; n++ )
         {
             USHORT nDepth = GetDepth( n );
-            Paragraph* pPara = GetParagraph( n );
+//          Paragraph* pPara = GetParagraph( n );
 
             // Prefer depth from pasted text
             // First paragraph in OutlineView cannot be on Level > 0!
@@ -2396,7 +2399,7 @@ sal_Bool DrawPortionInfo::IsRTL() const
         ubidi_setPara(pBidi, rText.GetBuffer(), rText.Len(), nDefaultDir, NULL, &nError);
         nError = U_ZERO_ERROR;
 
-        sal_Int32 nCount(ubidi_countRuns(pBidi, &nError));
+//        sal_Int32 nCount(ubidi_countRuns(pBidi, &nError));
 
         int32_t nStart(0);
         int32_t nEnd;
