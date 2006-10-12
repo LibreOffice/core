@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impgrfll.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:46:56 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:06:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,15 +106,16 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
     XFillFloatTransparenceItem aFillFloatTransparence((XFillFloatTransparenceItem&)rSet.Get(XATTR_FILLFLOATTRANSPARENCE));
 
     GDIMetaFile* pMtf=NULL;
-    if( ( eFillStyle != XFILL_NONE ) && ( !aFillFloatTransparence.IsEnabled() ) && ( !nTransp ) &&
-        (pMtf=mrXOut.GetOutDev()->GetConnectMetaFile()) )
+    if( ( eFillStyle != XFILL_NONE ) && ( !aFillFloatTransparence.IsEnabled() ) && ( !nTransp ) )
+        pMtf=mrXOut.GetOutDev()->GetConnectMetaFile();
+    if( pMtf != NULL )
     {
         XPolyPolygon aGeometry;
         mrObj.TakeXorPoly(aGeometry, TRUE);
 
         // #104686# Prune non-closed polygons from geometry
         XPolyPolygon aPolyPoly;
-        int i;
+        USHORT i;
         for( i=0; i<aGeometry.Count(); ++i )
         {
             const XPolygon& rPoly = aGeometry.GetObject(i);
@@ -365,8 +366,9 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
 ImpGraphicFill::~ImpGraphicFill()
 {
     GDIMetaFile* pMtf=NULL;
-    if( mbCommentWritten &&
-        (pMtf=mrXOut.GetOutDev()->GetConnectMetaFile()) )
+    if( mbCommentWritten )
+        pMtf=mrXOut.GetOutDev()->GetConnectMetaFile();
+    if( pMtf != NULL )
     {
         pMtf->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_END" ) );
     }
