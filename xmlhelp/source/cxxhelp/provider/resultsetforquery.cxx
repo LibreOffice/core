@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultsetforquery.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:17:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:27:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,8 +224,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
         if( content.is() )
         {
             uno::Reference< XCommandProcessor > cmd( content,uno::UNO_QUERY );
-            if( ! ( cmd->execute( aCommand,0,uno::Reference< XCommandEnvironment >( 0 ) ) >>= m_aItems[m_nRow] ) )
-                ;
+            cmd->execute( aCommand,0,uno::Reference< XCommandEnvironment >( 0 ) ) >>= m_aItems[m_nRow]; //TODO: check return value of operator >>=
         }
     }
     m_nRow = 0xffffffff;
