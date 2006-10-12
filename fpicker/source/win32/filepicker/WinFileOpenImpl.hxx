@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:40:15 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:49:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,15 +217,15 @@ protected:
     virtual void SAL_CALL onTypeChanged( sal_uInt32 nFilterIndex );
 
     // call base class method first when overloading
-    virtual void SAL_CALL onInitDialog( HWND hwndDlg, HWND hwndChild );
+    virtual void SAL_CALL onInitDialog( HWND hwndDlg );
 
     virtual sal_uInt32 SAL_CALL onCtrlCommand( HWND hwndDlg, sal_uInt16 ctrlId, sal_uInt16 notifyCode );
 
 
-    LRESULT SAL_CALL onWMSize(HWND hwnd, WPARAM type, WORD width, WORD height );
-    LRESULT SAL_CALL onWMShow(HWND hwnd, BOOL bShow, int fState);
-    LRESULT SAL_CALL onWMWindowPosChanged(HWND hwnd);
-    LRESULT SAL_CALL onCustomControlHelpRequest(LPHELPINFO lphi);
+    void onWMSize();
+    void onWMShow(BOOL bShow);
+    void onWMWindowPosChanged();
+    void onCustomControlHelpRequest(LPHELPINFO lphi);
 
 private:
     inline void SAL_CALL appendFilterGroupSeparator( );
