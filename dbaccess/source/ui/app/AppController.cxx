@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 12:59:07 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:16:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,7 @@
 #ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 /** === end UNO includes === **/
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -780,8 +781,8 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 }
                 break;
             case SID_DB_APP_DSCONNECTION_TYPE:
-                aReturn.bEnabled = !isDataSourceReadOnly();
-                if ( aReturn.bEnabled && m_xDataSource.is() )
+                aReturn.bEnabled = !isDataSourceReadOnly() && m_xDataSource.is();
+                if ( aReturn.bEnabled )
                 {
                     DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
                     aReturn.bEnabled = DST_EMBEDDED != eType;
@@ -1055,7 +1056,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     if ( !sUrl.getLength() )
                         sUrl = SvtPathOptions().GetWorkPath();
 
-                    ::sfx2::FileDialogHelper aFileDlg( ::sfx2::FILESAVE_AUTOEXTENSION,static_cast<sal_uInt32>(nBits) ,getView());
+                    ::sfx2::FileDialogHelper aFileDlg( com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,static_cast<sal_uInt32>(nBits) ,getView());
                     aFileDlg.SetDisplayDirectory( sUrl );
 
                     const SfxFilter* pFilter = getStandardDatabaseFilter();
