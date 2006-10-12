@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:27:15 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:28:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ int SvRTFParser::_GetNextToken()
                             String aStrBuffer;
                             sal_Unicode* pStr = aStrBuffer.AllocBuffer(
                                                             MAX_TOKEN_LEN );
-                            int nStrLen = 0;
+                            xub_StrLen nStrLen = 0;
                             do {
                                 *(pStr + nStrLen++) = nNextCh;
                                 if( MAX_TOKEN_LEN == nStrLen )
@@ -267,7 +267,8 @@ int SvRTFParser::_GetNextToken()
                 if( 0 <= nOpenBrakets )
                 {
                     RtfParserState_Impl aState( nUCharOverread, GetSrcEncoding() );
-                    aParserStates.Insert( aState, nOpenBrakets );
+                    aParserStates.Insert(
+                        aState, sal::static_int_cast< USHORT >(nOpenBrakets) );
                 }
                 ++nOpenBrakets;
                 DBG_ASSERT( nOpenBrakets == aParserStates.Count(),
@@ -280,7 +281,8 @@ int SvRTFParser::_GetNextToken()
             --nOpenBrakets;
             if( 0 <= nOpenBrakets )
             {
-                aParserStates.Remove( nOpenBrakets );
+                aParserStates.Remove(
+                    sal::static_int_cast< USHORT >(nOpenBrakets) );
                 if( aParserStates.Count() )
                 {
                     const RtfParserState_Impl& rRPS =
