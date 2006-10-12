@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stridedarrayiterator.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-07 14:27:35 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:47:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 #ifndef INCLUDED_BASEBMP_STRIDEDARRAYITERATOR_HXX
 #define INCLUDED_BASEBMP_STRIDEDARRAYITERATOR_HXX
+
+#include <basebmp/metafunctions.hxx>
 
 namespace basebmp
 {
