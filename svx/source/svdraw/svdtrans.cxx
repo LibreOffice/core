@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdtrans.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:01:18 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:16:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -946,7 +946,7 @@ void SdrFormatter::Undirty()
     }
     nMul1*=nDiv2;
     nDiv1*=nMul2;
-    nKomma1-=nKomma2;
+    nKomma1=nKomma1-nKomma2;
 
     if (bSrcInch && bDstMetr) {
         nKomma1+=4;
