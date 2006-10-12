@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:29:14 $
+#   last change: $Author: obo $ $Date: 2006-10-12 12:18:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ PRJNAME=svx
 TARGET=dialogs
 VERSION=$(UPD)
 LIBTARGET=NO
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -138,52 +139,6 @@ SRC2FILES =  \
         tabline.src \
         labdlg.src \
         transfrm.src
-
-EXCEPTIONSFILES=\
-        $(SLO)$/cfg.obj\
-        $(SLO)$/eventdlg.obj \
-        $(SLO)$/linkdlg.obj \
-        $(SLO)$/pastedlg.obj \
-        $(SLO)$/insdlg.obj \
-    $(SLO)$/connpoolconfig.obj \
-    $(SLO)$/connpoolsettings.obj \
-    $(SLO)$/sdbcdriverenum.obj	\
-    $(SLO)$/optgdlg.obj	\
-    $(SLO)$/charmap.obj		\
-    $(SLO)$/_bmpmask.obj	\
-    $(SLO)$/opengrf.obj		\
-    $(SLO)$/hltpbase.obj	\
-    $(SLO)$/hldocntp.obj	\
-    $(SLO)$/hlmarkwn.obj	\
-    $(SLO)$/hyphen.obj		\
-    $(SLO)$/rubydialog.obj 	\
-    $(SLO)$/thesdlg.obj		\
-    $(SLO)$/numpages.obj	\
-    $(SLO)$/splwrap.obj		\
-    $(SLO)$/hangulhanja.obj \
-    $(SLO)$/hangulhanjadlg.obj \
-    $(SLO)$/optasian.obj		\
-    $(SLO)$/optaccessibility.obj	\
-    $(SLO)$/optinet2.obj	\
-    $(SLO)$/optsave.obj		\
-    $(SLO)$/impgrf.obj      \
-    $(SLO)$/optpath.obj	\
-    $(SLO)$/multifil.obj	\
-    $(SLO)$/optdict.obj	\
-    $(SLO)$/cuigaldlg.obj \
-    $(SLO)$/dbregister.obj				\
-    $(SLO)$/doclinkdialog.obj				\
-    $(SLO)$/dbregisterednamesconfig.obj \
-        $(SLO)$/scriptdlg.obj \
-        $(SLO)$/selector.obj \
-    $(SLO)$/showcols.obj \
-    $(SLO)$/svxbmpnumvalueset.obj \
-        $(SLO)$/macropg.obj \
-    $(SLO)$/optjava.obj \
-    $(SLO)$/optupdt.obj \
-    $(SLO)$/docrecovery.obj	\
-    $(SLO)$/treeopt.obj     \
-    $(SLO)$/srchdlg.obj
 
 .IF "$(GUI)"=="UNX"
 EXCEPTIONSFILES +=	$(SLO)$/sendreportunx.obj
