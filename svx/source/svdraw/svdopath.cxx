@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:56:36 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:13:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,7 @@ FASTBOOL SdrPathObj::FindPolyPnt(USHORT nAbsPnt, USHORT& rPolyNum,
             }
             nPnt++;
         }
-        nAbsPnt-=nCnt;
+        nAbsPnt=nAbsPnt-nCnt;
         nPoly++;
     }
     return FALSE;
@@ -341,9 +341,9 @@ sal_Bool SdrPathObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
     //if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
     //  return TRUE;
 
-    BOOL bHideContour(IsHideContour());
-    BOOL bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
-    BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
+    bool bHideContour(IsHideContour());
+    bool bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
+    bool bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
 
     // prepare ItemSet of this object
     const SfxItemSet& rSet = GetObjectItemSet();
@@ -442,7 +442,7 @@ sal_Bool SdrPathObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
 
 SdrObject* SdrPathObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
-    if (pVisiLayer!=NULL && !pVisiLayer->IsSet(nLayerId)) return NULL;
+    if (pVisiLayer!=NULL && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId))) return NULL;
     INT32 nMyTol=nTol;
     FASTBOOL bFilled=IsClosed() && (bTextFrame || HasFill());
 
@@ -455,16 +455,16 @@ SdrObject* SdrPathObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
     aR.Bottom()+=nMyTol;
 
     sal_Bool bHit(sal_False);
-    unsigned nPolyAnz=aPathPolygon.Count();
+    USHORT nPolyAnz=aPathPolygon.Count();
     if (bFilled) {
         PolyPolygon aPP;
-        for (unsigned nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
+        for (USHORT nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
             aPP.Insert(XOutCreatePolygon(aPathPolygon[nPolyNum]));
 //BFS09         aPP.Insert(XOutCreatePolygon(aPathPolygon[nPolyNum],NULL));
         }
         bHit=IsRectTouchesPoly(aPP,aR);
     } else {
-        for (unsigned nPolyNum=0; nPolyNum<nPolyAnz && !bHit; nPolyNum++) {
+        for (USHORT nPolyNum=0; nPolyNum<nPolyAnz && !bHit; nPolyNum++) {
             Polygon aPoly(XOutCreatePolygon(aPathPolygon[nPolyNum]));
 //BFS09         Polygon aPoly(XOutCreatePolygon(aPathPolygon[nPolyNum],NULL));
             bHit=IsRectTouchesLine(aPoly,aR);
@@ -1558,7 +1558,7 @@ XubString SdrPathObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDra
                 UINT16 nPntNum(pHdl->GetPointNum());
                 const XPolygon& rXPoly = aPathPolygon[rDrag.GetHdl()->GetPolyNum()];
                 UINT16 nPntAnz(rXPoly.GetPointCount());
-                BOOL bClose(IsClosed());
+                bool bClose(IsClosed());
 
                 if(bClose)
                     nPntAnz--;
@@ -1589,9 +1589,9 @@ XubString SdrPathObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDra
                 {
                     UINT16 nPntMax(nPntAnz - 1);
                     Point aPt1,aPt2;
-                    BOOL bClose2(IsClosed());
-                    BOOL bPt1(nPntNum > 0);
-                    BOOL bPt2(nPntNum < nPntMax);
+                    bool bClose2(IsClosed());
+                    bool bPt1(nPntNum > 0);
+                    bool bPt2(nPntNum < nPntMax);
 
                     if(bClose2 && nPntAnz > 2)
                     {
@@ -2313,7 +2313,7 @@ USHORT SdrPathObj::GetPointCount() const
     USHORT nPntCnt = 0;
 
     for (USHORT i = 0; i < nPolyCnt; i++)
-        nPntCnt += aPathPolygon[i].GetPointCount();
+        nPntCnt = nPntCnt + aPathPolygon[i].GetPointCount();
 
     return nPntCnt;
 }
@@ -2461,7 +2461,7 @@ USHORT SdrPathObj::NbcInsPoint(const Point& rPos, FASTBOOL bNewObj, FASTBOOL bHi
                         aStart[0]=aPoly[0];
                         aStart[1]=aPoly[1];
                     }
-                    nPnt+=nNextPartPos;
+                    nPnt=nPnt+nNextPartPos;
 
                     if (nPnt>=nPartMax) {
                         aEnd[1]=aPoly[nPartMax-1];
