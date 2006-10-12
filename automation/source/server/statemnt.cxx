@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:37:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:18:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1078,7 +1078,7 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
                 || pBase->GetType() == WINDOW_QUERYBOX )
             {
                 ButtonDialog *pBD = ((ButtonDialog*)pBase);
-                int i;
+                USHORT i;
                 for ( i = 0; i < pBD->GetButtonCount() ; i++ )
                 {
                     aName = String();
@@ -1172,7 +1172,7 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
         }
     }
 
-    for( int i = 0 ; i < pBase->GetChildCount(); i++ )
+    for( USHORT i = 0 ; i < pBase->GetChildCount(); i++ )
         WriteControlData( pBase->GetChild(i), nConf, FALSE );
 }
 
@@ -1226,7 +1226,7 @@ void SysWinContainer::Resizing( Size& rSize )
 {
     Size aSize;
     Size aBestSize;
-    int i;
+    USHORT i;
     BOOL bHasValue = FALSE;
     ULONG nBestValue = 0;
     ULONG nThisValue;
@@ -2818,19 +2818,22 @@ BOOL StatementCommand::Execute()
 
                 if ( aSubMenuId1.GetNum() )
                 {
-                    pPopup = pMenu->GetPopupMenu(aSubMenuId1.GetNum());
+                    pPopup = pMenu->GetPopupMenu(
+                        sal::static_int_cast< USHORT >(aSubMenuId1.GetNum()));
                     pMenu = pPopup;
                 }
 
                 if ( pMenu && aSubMenuId2.GetNum() )
                 {
-                    pPopup = pMenu->GetPopupMenu(aSubMenuId2.GetNum());
+                    pPopup = pMenu->GetPopupMenu(
+                        sal::static_int_cast< USHORT >(aSubMenuId2.GetNum()));
                     pMenu = pPopup;
                 }
 
                 if ( pMenu && aSubMenuId3.GetNum() )
                 {
-                    pPopup = pMenu->GetPopupMenu(aSubMenuId3.GetNum());
+                    pPopup = pMenu->GetPopupMenu(
+                        sal::static_int_cast< USHORT >(aSubMenuId3.GetNum()));
                     pMenu = pPopup;
                 }
 
@@ -2926,10 +2929,10 @@ BOOL StatementCommand::Execute()
                                     BOOL bLastWasSeperator = FALSE;
                                     for ( int i = nLogicalPos ; i >= 0 ; i-- )
                                     {
-                                        if ( !pMenu->IsItemEnabled( pMenu->GetItemId( i ) ) ||
-                                             ( pMenu->GetItemType( i ) == MENUITEM_SEPARATOR && bLastWasSeperator ) )
+                                        if ( !pMenu->IsItemEnabled( pMenu->GetItemId( sal::static_int_cast< USHORT >(i) ) ) ||
+                                             ( pMenu->GetItemType( sal::static_int_cast< USHORT >(i) ) == MENUITEM_SEPARATOR && bLastWasSeperator ) )
                                             nLogicalPos--;
-                                        bLastWasSeperator = pMenu->GetItemType( i ) == MENUITEM_SEPARATOR;
+                                        bLastWasSeperator = pMenu->GetItemType( sal::static_int_cast< USHORT >(i) ) == MENUITEM_SEPARATOR;
                                     }
                                 }
                             }
@@ -3701,7 +3704,7 @@ BOOL IsAccessable(Window *pWin)
 static Window*ImpGetButton( Window *pBase, WinBits nMask, WinBits nWinBits )
 {
     USHORT n = pBase->GetChildCount();
-    for( int i = 0 ; i < n; i++ ) {
+    for( USHORT i = 0 ; i < n; i++ ) {
         Window *pChild = pBase->GetChild(i);
         if(    pChild->GetType() == WINDOW_OKBUTTON
             || pChild->GetType() == WINDOW_CANCELBUTTON
@@ -4045,7 +4048,7 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                 if ( pControl->GetType() == WINDOW_COMBOBOX )
                 {   // Bei COMBOBOX an das Edit direkt liefern
                     Window *pTemp = NULL;
-                    for ( int i = 0 ; i < pControl->GetChildCount() && !pTemp ; i++ )
+                    for ( USHORT i = 0 ; i < pControl->GetChildCount() && !pTemp ; i++ )
                         if ( pControl->GetChild( i )->GetType() == WINDOW_EDIT )
                             pTemp = pControl->GetChild( i );
                     if ( pTemp )
@@ -4068,7 +4071,7 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                         KeyEvent aEvent;
                         if ( ((USHORT)aString1.GetChar(i)) <= 7 )
                         {
-                            USHORT nVal;
+                            USHORT nVal = 0;
                             switch (aString1.GetChar(i))
                             {
                                 case 1: nVal = aString1.GetChar(i+1) + (aString1.GetChar(i+2) << 8);
@@ -4279,8 +4282,8 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                 aSubMenuId3 = SmartId();
                 pMenuWindow = NULL;
                 Point aPos;
-                ToolBox* pTB;
-                if ( (pControl->GetType() == WINDOW_TOOLBOX) ? (pTB = (ToolBox*)pControl)->IsMenuEnabled() : FALSE )
+                ToolBox* pTB = (ToolBox*)pControl;
+                if ( (pControl->GetType() == WINDOW_TOOLBOX) && pTB->IsMenuEnabled() )
                 {
                     Rectangle aRect = pTB->GetMenubuttonRect();
                     AnimateMouse( pControl, aRect.Center() );
@@ -4329,7 +4332,7 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
         case M_IsFadeIn:
         case M_IsPin:
             {
-                WindowAlign aWindowAlign;
+                WindowAlign aWindowAlign = WINDOWALIGN_LEFT;
                 if ( (nParams & PARAM_USHORT_1) )
                 {
                     switch ( nNr1 )
@@ -4350,9 +4353,6 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                             ReportError( aUId, GEN_RES_STR1( S_INVALID_POSITION, MethodString( nMethodId ) ) );
                     }
                 }
-                else
-                    aWindowAlign = WINDOWALIGN_LEFT;
-
 
                 Window* pTemp = NULL;
                 while ( !pTemp && pControl )
@@ -5349,13 +5349,18 @@ BOOL StatementControl::Execute()
                                         MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
                                         ImplMouseButtonDown( pTB, aMEvnt );
 
-                                        Window *pWin = NULL;
+                                        Window *pWin;
                                         // Wait for the window to open.
                                         StatementList::bExecuting = TRUE;       // Bah ist das ein ekliger Hack
                                         {                                           // Das verhindert, daß schon der nächste Befehl ausgeführt wird.
                                             Time aDelay;
-                                            while ( !pWin && !(pWin = GetPopupFloatingWin()) && ( Time() - aDelay ).GetSec() < 15 )
+                                            for ( ;; )
+                                            {
+                                                pWin = GetPopupFloatingWin();
+                                                if ( pWin || ( Time() - aDelay ).GetSec() >= 15 )
+                                                    break;
                                                 SafeReschedule();
+                                            }
                                         }
                                         StatementList::bExecuting = FALSE;  // Bah ist das ein ekliger Hack
 
