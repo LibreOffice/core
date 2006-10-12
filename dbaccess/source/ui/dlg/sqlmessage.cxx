@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:11:47 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:38:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,9 +468,7 @@ namespace
     ::rtl::OUString lcl_getProductName()
     {
         ::rtl::OUString sProductName;
-        ::utl::ConfigManager* pConfigManager = ::utl::ConfigManager::GetConfigManager();
-        OSL_ENSURE( pConfigManager, "lcl_getProductName: no config manager!" );
-        OSL_VERIFY( pConfigManager->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME ) >>= sProductName );
+        OSL_VERIFY( ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME ) >>= sProductName );
         return sProductName;
     }
 
