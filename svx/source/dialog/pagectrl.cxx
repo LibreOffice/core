@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagectrl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:33:29 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:24:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,8 +201,8 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const BOOL bSecond, const BOOL 
     {
         SetLineColor( Color(COL_TRANSPARENT) );
         SetFillColor( rDlgColor );
-        Size aWinSize(GetOutputSize());
-        DrawRect( Rectangle( Point(0,0), aWinSize ) );
+        Size winSize(GetOutputSize());
+        DrawRect( Rectangle( Point(0,0), winSize ) );
 
         if ( pImpl->bResetBackground )
             pImpl->bResetBackground = sal_False;
