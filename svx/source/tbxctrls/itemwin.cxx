@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:05:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:21:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,11 +96,11 @@ using namespace ::com::sun::star::beans;
 
 SvxLineBox::SvxLineBox( Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits ) :
     LineLB( pParent, nBits ),
-    aLogicalSize(40,140),
+    meBmpMode   ( GetDisplayBackground().GetColor().IsDark() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL ),
     nCurPos     ( 0 ),
+    aLogicalSize(40,140),
     bRelease    ( TRUE ),
     mpSh        ( NULL ),
-    meBmpMode   ( GetDisplayBackground().GetColor().IsDark() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL ),
     mxFrame     ( rFrame )
 {
     SetSizePixel( LogicToPixel( aLogicalSize, MAP_APPFONT ));
@@ -119,7 +119,7 @@ SvxLineBox::~SvxLineBox()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxLineBox, DelayHdl_Impl, Timer *, pTimer )
+IMPL_LINK( SvxLineBox, DelayHdl_Impl, Timer *, EMPTYARG )
 {
     if ( GetEntryCount() == 0 )
     {
@@ -339,11 +339,11 @@ SvxColorBox::SvxColorBox(
     const Reference< XFrame >& rFrame,
     WinBits nBits ) :
     ColorLB( pParent, nBits ),
-    aLogicalSize(45,80),
     nCurPos     ( 0 ),
+    aLogicalSize(45,80),
     bRelease    ( TRUE ),
-    mxFrame     ( rFrame ),
-    maCommand   ( rCommand )
+    maCommand   ( rCommand ),
+    mxFrame     ( rFrame )
 {
     SetSizePixel( LogicToPixel( aLogicalSize , MAP_APPFONT));
     Show();
@@ -361,7 +361,7 @@ SvxColorBox::SvxColorBox(
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxColorBox, DelayHdl_Impl, Timer *, pTimer )
+IMPL_LINK( SvxColorBox, DelayHdl_Impl, Timer *, EMPTYARG )
 {
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
