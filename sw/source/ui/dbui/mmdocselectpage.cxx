@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmdocselectpage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:45:56 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:08:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,7 @@
 #include <dbui.hrc>
 #include <mmdocselectpage.hrc>
 
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
