@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:17:34 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:54:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -753,7 +753,7 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
 
 // is string or numeric field?
 sal_Bool XMLTextFieldExport::IsStringField(
-    sal_uInt16 nFieldType,
+    FieldIdEnum nFieldType,
     const Reference<XPropertySet> & xPropSet)
 {
     switch (nFieldType) {
@@ -906,7 +906,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     }
 
     // get Field ID
-    sal_uInt16 nToken = GetFieldID(rTextField, xPropSet);
+    FieldIdEnum nToken = GetFieldID(rTextField, xPropSet);
 
     // export the character style for all fields
     // with one exception: combined character fields export their own
@@ -1597,8 +1597,9 @@ void XMLTextFieldExport::ExportFieldHelper(
         Reference<XDocumentInfo> xDocInfo =xDocInfoSupplier->getDocumentInfo();
         Any aAny;
         ProcessString(XML_NAME,
-                      xDocInfo->getUserFieldName(nToken -
-                                            FIELD_ID_DOCINFO_INFORMATION0));
+                      xDocInfo->getUserFieldName(
+                          sal::static_int_cast< sal_Int16 >(
+                              nToken - FIELD_ID_DOCINFO_INFORMATION0)));
         ProcessBoolean(XML_FIXED,
                        GetBoolProperty(sPropertyIsFixed, rPropSet), sal_False);
         ExportElement(XML_USER_DEFINED, sPresentation);
@@ -3073,7 +3074,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapTemplateDisplayFormat(sal_Int16 nFormat
 }
 
 /// map count/statistics field token to XML name
-enum XMLTokenEnum XMLTextFieldExport::MapCountFieldName(sal_Int16 nToken)
+enum XMLTokenEnum XMLTextFieldExport::MapCountFieldName(FieldIdEnum nToken)
 {
     enum XMLTokenEnum eElement = XML_TOKEN_INVALID;
 
