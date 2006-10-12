@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labdlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:26:21 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:17:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -588,7 +588,7 @@ void SvxCaptionTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxCaptionTabPage::FillValueSet()
 {
-    bool bHighContrast = (bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0);
+    bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
 
     Image** ppBitmaps = bHighContrast ? mpBmpCapTypesH : mpBmpCapTypes;
     aCT_CAPTTYPE.SetItemImage(BMP_CAPTTYPE_1, *(ppBitmaps[0]) );
