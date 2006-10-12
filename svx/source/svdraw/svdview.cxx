@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:02:01 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:17:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -355,7 +355,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         eHit=SDRHIT_HELPLINE; // Hilfslinie im Vordergrund getroffen zum verschieben
     }
     if (IsMacroMode() && eHit==SDRHIT_UNMARKEDOBJECT) {
-        BOOL bRoot=pObj->HasMacro();
+        bool bRoot=pObj->HasMacro();
         BOOL bDeep=pObj!=pHitObj && pHitObj->HasMacro();
         BOOL bMid=FALSE; // Gruppierte Gruppe mit Macro getroffen?
         SdrObject* pMidObj=NULL;
@@ -614,7 +614,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     rVEvt.eEvent=eEvent;
     rVEvt.bCaptureMouse=bMouseLeft && bMouseDown && eEvent!=SDREVENT_NONE;
     rVEvt.bReleaseMouse=bMouseLeft && bMouseUp;
-#if DGB_UTIL
+#ifdef DGB_UTIL
     if (rVEvt.pRootObj!=NULL) {
         if (rVEvt.pRootObj->GetObjList()!=rVEvt.pPV->GetObjList()) {
             DBG_ERROR("SdrView::PickAnything(): pRootObj->GetObjList()!=pPV->GetObjList() !");
