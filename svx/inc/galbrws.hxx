@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galbrws.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:47:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:42:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,7 @@ class GalleryBrowser : public SfxDockingWindow
     friend class GalleryBrowser1;
     friend class GalleryBrowser2;
     friend class GallerySplitter;
+    using Window::KeyInput;
 
 private:
 
