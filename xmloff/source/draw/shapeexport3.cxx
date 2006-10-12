@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:29:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:41:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,7 +319,7 @@ void XMLShapeExport::ImpExport3DShape(
                 SdXMLImExViewBox aViewBox(
                     aMinPoint.X, aMinPoint.Y, aMaxSize.Width, aMaxSize.Height);
                 mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX,
-                    aViewBox.GetExportString(mrExport.GetMM100UnitConverter()));
+                    aViewBox.GetExportString());
 
                 // prepare svx:d element export
                 SdXMLImExSvgDElement aSvgDElement(aViewBox);
@@ -349,7 +349,7 @@ void XMLShapeExport::ImpExport3DShape(
                     BOOL bClosed = (pFirst->X == pLast->X && pFirst->Y == pLast->Y);
 
                     aSvgDElement.AddPolygon(&aPoly, 0L, aMinPoint,
-                        aMaxSize, mrExport.GetMM100UnitConverter(), bClosed);
+                        aMaxSize, bClosed);
 
                     // #80594# corrected error in PolyPolygon3D export for 3D XML
                     pInnerSequenceX++;
