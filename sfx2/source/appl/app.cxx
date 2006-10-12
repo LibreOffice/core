@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:13:23 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:45:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -830,7 +830,7 @@ sal_Bool SfxApplication::IsXScriptURL( const String& rScriptURL )
                 result = TRUE;
             }
         }
-        catch ( ::com::sun::star::uno::RuntimeException& re )
+        catch ( ::com::sun::star::uno::RuntimeException& )
         {
             // ignore, will just return FALSE
         }
