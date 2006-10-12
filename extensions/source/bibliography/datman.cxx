@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:55:46 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:37:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1459,7 +1459,7 @@ void SAL_CALL BibDataManager::load(  ) throw (RuntimeException)
         SetMeAsUidListener();
 
         EventObject aEvt( static_cast< XWeak* >( this ) );
-        NOTIFY_LISTENERS( m_aLoadListeners, XLoadListener, loaded, aEvt );
+        m_aLoadListeners.notifyEach( &XLoadListener::loaded, aEvt );
     }
 }
 
@@ -1477,14 +1477,14 @@ void SAL_CALL BibDataManager::unload(  ) throw (RuntimeException)
         EventObject aEvt( static_cast< XWeak* >( this ) );
 
         {
-            NOTIFY_LISTENERS( m_aLoadListeners, XLoadListener, unloading, aEvt );
+            m_aLoadListeners.notifyEach( &XLoadListener::unloading, aEvt );
         }
 
         RemoveMeAsUidListener();
         xFormAsLoadable->unload();
 
         {
-            NOTIFY_LISTENERS( m_aLoadListeners, XLoadListener, unloaded, aEvt );
+            m_aLoadListeners.notifyEach( &XLoadListener::unloaded, aEvt );
         }
     }
 }
@@ -1503,13 +1503,13 @@ void SAL_CALL BibDataManager::reload(  ) throw (RuntimeException)
         EventObject aEvt( static_cast< XWeak* >( this ) );
 
         {
-            NOTIFY_LISTENERS( m_aLoadListeners, XLoadListener, reloading, aEvt );
+            m_aLoadListeners.notifyEach( &XLoadListener::reloading, aEvt );
         }
 
         xFormAsLoadable->reload();
 
         {
-            NOTIFY_LISTENERS( m_aLoadListeners, XLoadListener, reloaded, aEvt );
+            m_aLoadListeners.notifyEach( &XLoadListener::reloaded, aEvt );
         }
     }
 }
