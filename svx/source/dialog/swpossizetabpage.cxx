@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swpossizetabpage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:42:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:28:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 #ifdef SVX_DLLIMPLEMENTATION
 #undef SVX_DLLIMPLEMENTATION
 #endif
+
+#include <cstddef>
 
 #ifndef _SVX_SWPOSSIZETABPAGE_HXX
 #include <swpossizetabpage.hxx>
@@ -406,11 +408,11 @@ static FrmMap __FAR_DATA aVAsCharHtmlMap[] =
 /*-- 05.03.2004 15:52:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-USHORT lcl_GetFrmMapCount(const FrmMap* pMap)
+std::size_t lcl_GetFrmMapCount(const FrmMap* pMap)
 {
     if ( pMap )
     {
-        int aSizeOf = sizeof(FrmMap);
+        std::size_t aSizeOf = sizeof(FrmMap);
         if( pMap == aVParaHtmlMap)
             return sizeof(aVParaHtmlMap) / aSizeOf;
         if( pMap == aVAsCharHtmlMap)
@@ -541,13 +543,13 @@ ULONG lcl_GetLBRelationsForRelations( const USHORT _nRel )
 // OD 14.11.2003 #i22341# - helper method on order to determine all possible
 // listbox relations in a relation map for a given string ID
 ULONG lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
-                                  const USHORT _eStrId,
+                                  const SvxSwFramePosString::StringId _eStrId,
                                   const bool _bUseMirrorStr )
 {
     ULONG nLBRelations = 0L;
 
-    sal_uInt16 nRelMapSize = lcl_GetFrmMapCount( _pMap );
-    for ( sal_uInt16 nRelMapPos = 0; nRelMapPos < nRelMapSize; ++nRelMapPos )
+    std::size_t nRelMapSize = lcl_GetFrmMapCount( _pMap );
+    for ( std::size_t nRelMapPos = 0; nRelMapPos < nRelMapSize; ++nRelMapPos )
     {
         if ( ( !_bUseMirrorStr && _pMap[nRelMapPos].eStrId == _eStrId ) ||
              ( _bUseMirrorStr && _pMap[nRelMapPos].eMirrorStrId == _eStrId ) )
@@ -1425,7 +1427,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, ProtectHdl, TriStateBox *, EMPTYARG)
 /*-- 05.03.2004 14:20:19---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-short SvxSwPosSizeTabPage::GetRelation(FrmMap */*pMap*/, ListBox &rRelationLB)
+short SvxSwPosSizeTabPage::GetRelation(FrmMap *, ListBox &rRelationLB)
 {
     short nRel = 0;
     USHORT nPos = rRelationLB.GetSelectEntryPos();
@@ -1453,10 +1455,10 @@ short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, USHORT nMapPos, ListBox &/
         if (rRelationLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
         {
             ULONG  nRel = ((RelationMap *)rRelationLB.GetEntryData(rRelationLB.GetSelectEntryPos()))->nLBRelation;
-            USHORT nMapCount = ::lcl_GetFrmMapCount(pMap);
+            std::size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
             SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
 
-            for (USHORT i = 0; i < nMapCount; i++)
+            for (std::size_t i = 0; i < nMapCount; i++)
             {
                 if (pMap[i].eStrId == eStrId)
                 {
@@ -1487,10 +1489,10 @@ USHORT SvxSwPosSizeTabPage::GetMapPos(FrmMap *pMap, ListBox &rAlignLB)
     {
         if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap)
         {
-            USHORT nMapCount = ::lcl_GetFrmMapCount(pMap);
+            std::size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
             String sSelEntry(rAlignLB.GetSelectEntry());
 
-            for (USHORT i = 0; i < nMapCount; i++)
+            for (std::size_t i = 0; i < nMapCount; i++)
             {
                 SvxSwFramePosString::StringId eResId = pMap[i].eStrId;
 
@@ -1498,7 +1500,7 @@ USHORT SvxSwPosSizeTabPage::GetMapPos(FrmMap *pMap, ListBox &rAlignLB)
 
                 if (sEntry == sSelEntry)
                 {
-                    nMapPos = i;
+                    nMapPos = sal::static_int_cast< USHORT >(i);
                     break;
                 }
             }
@@ -1704,7 +1706,7 @@ ULONG SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign
 {
     String sSelEntry;
     ULONG  nLBRelations = 0;
-    USHORT nMapCount = ::lcl_GetFrmMapCount(pMap);
+    std::size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
 
     rLB.Clear();
 
@@ -1716,7 +1718,7 @@ ULONG SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign
             USHORT nRelCount = sizeof(aAsCharRelationMap) / sizeof(RelationMap);
             SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
 
-            for (USHORT _nMapPos = 0; _nMapPos < nMapCount; _nMapPos++)
+            for (std::size_t _nMapPos = 0; _nMapPos < nMapCount; _nMapPos++)
             {
                 if (pMap[_nMapPos].eStrId == eStrId)
                 {
@@ -1864,8 +1866,8 @@ USHORT SvxSwPosSizeTabPage::FillPosLB(FrmMap *_pMap,
                                : ::lcl_GetLBRelationsForRelations( _nRel );
 
     // Listbox fuellen
-    USHORT nCount = ::lcl_GetFrmMapCount(_pMap);
-    for (USHORT i = 0; _pMap && i < nCount; ++i)
+    std::size_t nCount = ::lcl_GetFrmMapCount(_pMap);
+    for (std::size_t i = 0; _pMap && i < nCount; ++i)
     {
 //      #61359# Warum nicht von links/von innen bzw. von oben?
 //      if (!bFormat || (pMap[i].eStrId != SwFPos::FROMLEFT && pMap[i].eStrId != SwFPos::FROMTOP))
