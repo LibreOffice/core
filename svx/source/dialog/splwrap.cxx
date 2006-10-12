@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splwrap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:38:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:27:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,6 +242,10 @@ void SvxSpellWrapper::ShowLanguageErrors()
         rLCS.SetState( i, (nTmpHyph << 8) | nTmpSpell );
     }
 
+}
+
+SvxSpellWrapper::~SvxSpellWrapper()
+{
 }
 
 /*--------------------------------------------------------------------
