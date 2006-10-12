@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdtouch.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:01:04 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:16:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ public:
             bPntInRect=rP.X()>=x1 && rP.X()<=x2 && rP.Y()>=y1 && rP.Y()<=y2;
         }
     }
-    FASTBOOL IsHit() { return (!bLine && (nOCnt & 1)==1) || IsDecided(); }
+    bool IsHit() { return (!bLine && (nOCnt & 1)==1) || IsDecided(); }
 };
 
 #define CAREFUL_MULDIV(Res,Val,Mul,Div) {      \
@@ -251,7 +251,7 @@ sal_Bool IsRectTouchesPoly(const XPolyPolygon& rPoly, const Rectangle& rHit)
     return aHit.IsHit();
 }
 
-sal_Bool IsRectTouchesLine(const Point& rPt1, const Point& rPt2, const Rectangle& rHit)
+bool IsRectTouchesLine(const Point& rPt1, const Point& rPt2, const Rectangle& rHit)
 {
     Polygon aPol(2);
     aPol[0]=rPt1;
@@ -261,14 +261,14 @@ sal_Bool IsRectTouchesLine(const Point& rPt1, const Point& rPt2, const Rectangle
     return aHit.IsHit();
 }
 
-sal_Bool IsRectTouchesLine(const Polygon& rLine, const Rectangle& rHit)
+bool IsRectTouchesLine(const Polygon& rLine, const Rectangle& rHit)
 {
     ImpPolyHitCalc aHit(rHit,TRUE);
     CheckPolyHit(rLine,aHit);
     return aHit.IsHit();
 }
 
-sal_Bool IsRectTouchesLine(const PolyPolygon& rLine, const Rectangle& rHit)
+bool IsRectTouchesLine(const PolyPolygon& rLine, const Rectangle& rHit)
 {
     ImpPolyHitCalc aHit(rHit,TRUE);
     USHORT nAnz=rLine.Count();
@@ -279,14 +279,14 @@ sal_Bool IsRectTouchesLine(const PolyPolygon& rLine, const Rectangle& rHit)
 }
 
 //BFS09FASTBOOL IsRectTouchesLine(const XPolygon& rLine, const Rectangle& rHit, OutputDevice* pOut)
-sal_Bool IsRectTouchesLine(const XPolygon& rLine, const Rectangle& rHit)
+bool IsRectTouchesLine(const XPolygon& rLine, const Rectangle& rHit)
 {
 //BFS09 return IsRectTouchesLine(XOutCreatePolygon(rLine,pOut),rHit);
     return IsRectTouchesLine(XOutCreatePolygon(rLine),rHit);
 }
 
 //BFS09FASTBOOL IsRectTouchesLine(const XPolyPolygon& rLine, const Rectangle& rHit, OutputDevice* pOut)
-sal_Bool IsRectTouchesLine(const XPolyPolygon& rLine, const Rectangle& rHit)
+bool IsRectTouchesLine(const XPolyPolygon& rLine, const Rectangle& rHit)
 {
     ImpPolyHitCalc aHit(rHit,TRUE);
     USHORT nAnz=rLine.Count();
