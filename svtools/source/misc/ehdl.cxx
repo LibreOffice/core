@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ehdl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:09:31 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:23:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,13 +228,13 @@ BOOL SfxErrorHandler::CreateString(
     {
         if(GetMessageString(nErrCode, rStr, nFlags))
         {
-            for (USHORT i = 0; i < rStr.Len();)
+            for (xub_StrLen i = 0; i < rStr.Len();)
             {
                 i = rStr.SearchAndReplace(String::CreateFromAscii( "$(ARG1)" ),
                                           pMsgInfo->GetMessageArg(), i);
                 if (i == STRING_NOTFOUND)
                     break;
-                i += pMsgInfo->GetMessageArg().Len();
+                i = i + pMsgInfo->GetMessageArg().Len();
             }
             return TRUE;
         }
@@ -243,13 +243,13 @@ BOOL SfxErrorHandler::CreateString(
     {
         StringErrorInfo *pStringInfo=PTR_CAST(StringErrorInfo,pErr);
         if(pStringInfo)
-            for (USHORT i = 0; i < rStr.Len();)
+            for (xub_StrLen i = 0; i < rStr.Len();)
             {
                 i = rStr.SearchAndReplace(String::CreateFromAscii( "$(ARG1)" ),
                                           pStringInfo->GetErrorString(), i);
                 if (i == STRING_NOTFOUND)
                     break;
-                i += pStringInfo->GetErrorString().Len();
+                i = i + pStringInfo->GetErrorString().Len();
             }
         else
         {
@@ -467,7 +467,7 @@ BOOL SfxErrorContext::GetString(ULONG nErrId, String &rStr)
     */
 
 {
-    FASTBOOL bRet = FALSE;
+    bool bRet = false;
     ResId* pResId = new ResId( nResId, pMgr );
     {
         {
@@ -477,12 +477,12 @@ BOOL SfxErrorContext::GetString(ULONG nErrId, String &rStr)
             {
                 rStr = ( (ResString)aEr ).GetString();
                 rStr.SearchAndReplace( String::CreateFromAscii( "$(ARG1)" ), aArg1 );
-                bRet = TRUE;
+                bRet = true;
             }
             else
             {
                 DBG_ERRORFILE( "ErrorContext cannot find the resource" );
-                bRet = FALSE;
+                bRet = false;
             }
         }
 
