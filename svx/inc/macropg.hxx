@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:52:20 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:45:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,8 @@ public:
 
     void                        InitAndSetHandler( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xAppEvents, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xDocEvents, ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable > xModifiable );
     virtual BOOL                FillItemSet( SfxItemSet& rSet );
+
+    using SfxTabPage::Reset;
     virtual void                Reset();
 
     void                        DisplayAppEvents( bool appEvents);
