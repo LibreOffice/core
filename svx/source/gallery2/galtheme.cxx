@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:17:13 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:49:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,8 +90,8 @@ using namespace ::com::sun::star::ucb;
 GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry ) :
         pParent               ( pGallery ),
         pThm                  ( pThemeEntry ),
-        mnBroadcasterLockCount( 0 ),
         mnThemeLockCount      ( 0 ),
+        mnBroadcasterLockCount( 0 ),
         nDragPos              ( 0 ),
         bDragging             ( FALSE )
 {
@@ -305,8 +305,8 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ULONG nFor
     INetURLObject   aDir( GetParent()->GetUserURL() );
     INetURLObject   aInfoFileURL( GetParent()->GetUserURL() );
     INetURLObject   aNewURL;
-    sal_uInt32      nNextNumber;
-    sal_Char*       pExt = NULL;
+    sal_uInt32      nNextNumber = 1999;
+    sal_Char const* pExt = NULL;
     BOOL            bExists;
 
     aDir.Append( String( RTL_CONSTASCII_USTRINGPARAM( "dragdrop" ) ) );
@@ -325,8 +325,6 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ULONG nFor
             delete pIStm;
         }
     }
-    else
-        nNextNumber = 1999;
 
     // create extension
     if( nFormat )
@@ -1195,14 +1193,14 @@ BOOL GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, ULONG
     try
     {
         Content         aCnt( rFileOrDirURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< XCommandEnvironment >() );
-        sal_Bool        bFolder;
+        sal_Bool        bFolder = false;
 
         aCnt.getPropertyValue( OUString::createFromAscii( "IsFolder" ) ) >>= bFolder;
 
         if( bFolder )
         {
             uno::Sequence< OUString > aProps( 1 );
-            aProps.getArray()[ 0 ] == OUString::createFromAscii( "Url" );
+            aProps.getArray()[ 0 ] = OUString::createFromAscii( "Url" );
             uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, INCLUDE_DOCUMENTS_ONLY ) );
 
             if( xResultSet.is() )
@@ -1389,22 +1387,22 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
         else
         {
             aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-            bRel = ( ( aPath.Erase( aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength() ) ) == String(aRelURL1.GetMainURL( INetURLObject::NO_DECODE ) ));
+            bRel = ( ( aPath.Erase( sal::static_int_cast< xub_StrLen >( aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength() ) ) ) == String(aRelURL1.GetMainURL( INetURLObject::NO_DECODE ) ));
 
             if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() > ( aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength() + 1 ) ) )
             {
                 aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-                aPath = aPath.Erase( 0, aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength() );
+                aPath = aPath.Erase( 0, sal::static_int_cast< xub_StrLen >( aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength() ) );
             }
             else
             {
                 aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-                bRel = ( ( aPath.Erase( aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength() ) ) == String(aRelURL2.GetMainURL( INetURLObject::NO_DECODE ) ));
+                bRel = ( ( aPath.Erase( sal::static_int_cast< xub_StrLen >( aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength() ) ) ) == String(aRelURL2.GetMainURL( INetURLObject::NO_DECODE ) ));
 
                 if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() > ( aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength() + 1 ) ) )
                 {
                     aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-                    aPath = aPath.Erase( 0, aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength() );
+                    aPath = aPath.Erase( 0, sal::static_int_cast< xub_StrLen >( aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength() ) );
                 }
                 else
                     aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
