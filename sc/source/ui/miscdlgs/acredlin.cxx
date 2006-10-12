@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:00:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:30:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -939,12 +939,16 @@ void ScAcceptChgDlg::UpdateView()
 
     if(nAcceptCount>0)
     {
-        pParent=pTheView->InsertEntry(aStrAllAccepted,NULL,NULL);
+        pParent=pTheView->InsertEntry(
+            aStrAllAccepted, static_cast< RedlinData * >(NULL),
+            static_cast< SvLBoxEntry * >(NULL));
         pParent->EnableChildsOnDemand(TRUE);
     }
     if(nRejectCount>0)
     {
-        pParent=pTheView->InsertEntry(aStrAllRejected,NULL,NULL);
+        pParent=pTheView->InsertEntry(
+            aStrAllRejected, static_cast< RedlinData * >(NULL),
+            static_cast< SvLBoxEntry * >(NULL));
         pParent->EnableChildsOnDemand(TRUE);
     }
     pTheView->SetUpdateMode(TRUE);
