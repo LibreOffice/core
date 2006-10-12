@@ -4,9 +4,9 @@
  *
  *  $RCSfile: player.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:45:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:26:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,12 +34,19 @@
  ************************************************************************/
 
 #include <tools/prewin.h>
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#pragma warning(disable: 4917)
+#endif
 #include <windows.h>
 #include <objbase.h>
 #include <strmif.h>
 #include <control.h>
 #include <uuids.h>
 #include <evcode.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <tools/postwin.h>
 
 #include "player.hxx"
@@ -354,7 +361,8 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
 {
     if( mpBA && ( mbMuted != bSet ) )
     {
-        mpBA->put_Volume( ( mbMuted = bSet ) ? -10000 : mnUnmutedVolume );
+        mbMuted = bSet;
+        mpBA->put_Volume( mbMuted ? -10000 : mnUnmutedVolume );
     }
 }
 
