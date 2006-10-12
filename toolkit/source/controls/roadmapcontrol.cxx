@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmapcontrol.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:17:49 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:32:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -352,7 +352,8 @@ static void lcl_throwIndexOutOfBoundsException( )
         {
             if ( n_CurrentItemID >= (sal_Int32)maRoadmapItems.size() )
             {
-                n_CurrentItemID = maRoadmapItems.size()-1;
+                n_CurrentItemID = sal::static_int_cast< sal_Int16 >(
+                    maRoadmapItems.size()-1);
                 if ( n_CurrentItemID < 0 )
                     return;
                 aAny <<= n_CurrentItemID;
@@ -563,7 +564,7 @@ void UnoRoadmapControl::elementReplaced( const ContainerEvent& rEvent )throw(Run
 
 void SAL_CALL UnoRoadmapControl::itemStateChanged( const ItemEvent& rEvent ) throw (RuntimeException)
 {
-    sal_Int16 CurItemIndex = rEvent.ItemId;
+    sal_Int16 CurItemIndex = sal::static_int_cast< sal_Int16 >(rEvent.ItemId);
     Any aAny;
     aAny <<= CurItemIndex;
     Reference< XControlModel > xModel( getModel( ), UNO_QUERY );
