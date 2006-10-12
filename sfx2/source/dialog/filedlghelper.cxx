@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:31:57 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:52:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,24 +234,11 @@ using namespace ::com::sun;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
+using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 using namespace ::cppu;
-
-//-----------------------------------------------------------------------------
-
-const short FILEOPEN_SIMPLE = TemplateDescription::FILEOPEN_SIMPLE;
-const short FILESAVE_SIMPLE = TemplateDescription::FILESAVE_SIMPLE;
-const short FILESAVE_AUTOEXTENSION_PASSWORD = TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD;
-const short FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS = TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS;
-const short FILESAVE_AUTOEXTENSION_SELECTION = TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION;
-const short FILESAVE_AUTOEXTENSION_TEMPLATE = TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE;
-const short FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE = TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE;
-const short FILEOPEN_PLAY = TemplateDescription::FILEOPEN_PLAY;
-const short FILEOPEN_READONLY_VERSION = TemplateDescription::FILEOPEN_READONLY_VERSION;
-const short FILEOPEN_LINK_PREVIEW = TemplateDescription::FILEOPEN_LINK_PREVIEW;
-const short FILESAVE_AUTOEXTENSION = TemplateDescription::FILESAVE_AUTOEXTENSION;
 
 //-----------------------------------------------------------------------------
 
@@ -1011,7 +998,7 @@ sal_Bool lcl_isSystemFilePicker( const Reference< XFilePicker >& _rxFP )
 // -----------      FileDialogHelper_Impl       ---------------------------
 // ------------------------------------------------------------------------
 
-FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, const short nDialogType, sal_Int64 nFlags, Window* _pPreferredParentWindow )
+FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, sal_Int16 nDialogType, sal_Int64 nFlags, Window* _pPreferredParentWindow )
     :m_nDialogType          ( nDialogType )
     ,meContext              ( FileDialogHelper::UNKNOWN_CONTEXT )
 {
@@ -1246,7 +1233,7 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
     ::comphelper::disposeComponent( mxFileDlg );
 }
 
-#define nMagic (sal_Int16) 0xFFFF
+#define nMagic -1
 
 class PickerThread_Impl : public ::vos::OThread
 {
@@ -2019,12 +2006,7 @@ namespace
                 ::ucb::Content aContent( sPathCheck, Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
                 bValid = aContent.isFolder();
             }
-            catch( const Exception& e )
-            {
-#ifndef GCC
-                e;  // make compiler happy
-#endif
-            }
+            catch( Exception& ) {}
         }
 
         if ( !bValid )
@@ -2247,7 +2229,7 @@ FileDialogHelper::FileDialogHelper(
 // ------------------------------------------------------------------------
 FileDialogHelper::FileDialogHelper( sal_Int64 nFlags )
 {
-    const short nDialogType = getDialogType( nFlags );
+    sal_Int16 nDialogType = getDialogType( nFlags );
 
     mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags );
     mxImp = mpImp;
@@ -2255,7 +2237,7 @@ FileDialogHelper::FileDialogHelper( sal_Int64 nFlags )
 
 // ------------------------------------------------------------------------
 FileDialogHelper::FileDialogHelper(
-    const short nDialogType,
+    sal_Int16 nDialogType,
     sal_Int64 nFlags,
     const String& rFact,
     SfxFilterFlags nMust,
@@ -2270,7 +2252,7 @@ FileDialogHelper::FileDialogHelper(
 
 // ------------------------------------------------------------------------
 FileDialogHelper::FileDialogHelper(
-    const short nDialogType,
+    sal_Int16 nDialogType,
     sal_Int64 nFlags,
     Window* _pPreferredParent )
 {
@@ -2484,9 +2466,9 @@ Reference < XFilePicker > FileDialogHelper::GetFilePicker() const
 }
 
 // ------------------------------------------------------------------------
-const short FileDialogHelper::getDialogType( sal_Int64 nFlags ) const
+sal_Int16 FileDialogHelper::getDialogType( sal_Int64 nFlags ) const
 {
-    short nDialogType = FILEOPEN_SIMPLE;
+    sal_Int16 nDialogType = FILEOPEN_SIMPLE;
 
     if ( nFlags & WB_SAVEAS )
     {
