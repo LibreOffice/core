@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optitems.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:29:29 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:00:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,10 +70,10 @@ TYPEINIT1(SfxHyphenRegionItem, SfxPoolItem);
 SfxSpellCheckItem::SfxSpellCheckItem
 (
     Reference< XSpellChecker1 > &xChecker,
-    sal_uInt16 nWhich
+    sal_uInt16 _nWhich
 ) :
 
-    SfxPoolItem( nWhich )
+    SfxPoolItem( _nWhich )
 {
     xSpellCheck = xChecker;
 }
@@ -92,8 +92,8 @@ SfxSpellCheckItem::SfxSpellCheckItem( const SfxSpellCheckItem& rItem ) :
 SfxItemPresentation SfxSpellCheckItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxMapUnit          ,
+    SfxMapUnit          ,
     String&             rText,
     const IntlWrapper*
 )   const
@@ -109,8 +109,9 @@ SfxItemPresentation SfxSpellCheckItem::GetPresentation
         {
             return ePres;
         }
+        default:
+            return SFX_ITEM_PRESENTATION_NONE;
     }
-    return SFX_ITEM_PRESENTATION_NONE;
 }
 
 // -----------------------------------------------------------------------
@@ -170,8 +171,8 @@ SfxPoolItem* SfxHyphenRegionItem::Clone( SfxItemPool* ) const
 SfxItemPresentation SfxHyphenRegionItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxMapUnit          ,
+    SfxMapUnit          ,
     String&             rText,
     const IntlWrapper*
 )   const
@@ -192,19 +193,20 @@ SfxItemPresentation SfxHyphenRegionItem::GetPresentation
             rText += String( ResId( RID_SVXITEMS_HYPHEN_MINTRAIL, DIALOG_MGR() ) );
             return ePres;
         }
+        default:
+            return SFX_ITEM_PRESENTATION_NONE;
     }
-    return SFX_ITEM_PRESENTATION_NONE;
 }
 
 // -----------------------------------------------------------------------
 
 SfxPoolItem* SfxHyphenRegionItem::Create(SvStream& rStrm, sal_uInt16 ) const
 {
-    sal_uInt8 nMinLead, nMinTrail;
-    rStrm >> nMinLead >> nMinTrail;
+    sal_uInt8 _nMinLead, _nMinTrail;
+    rStrm >> _nMinLead >> _nMinTrail;
     SfxHyphenRegionItem* pAttr = new SfxHyphenRegionItem( Which() );
-    pAttr->GetMinLead() = nMinLead;
-    pAttr->GetMinTrail() = nMinTrail;
+    pAttr->GetMinLead() = _nMinLead;
+    pAttr->GetMinTrail() = _nMinTrail;
     return pAttr;
 }
 
