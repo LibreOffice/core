@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AColumns.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:11:29 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:30:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ Reference< XPropertySet > OColumns::createDescriptor()
 }
 // -------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString&, const Reference< XPropertySet >& descriptor )
 {
     OAdoColumn* pColumn = NULL;
     if ( !getImplementation( pColumn, descriptor ) || pColumn == NULL )
@@ -106,12 +106,14 @@ sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString& _rForName, cons
         );
 
     WpADOColumn aColumn = pColumn->getColumnImpl();
-    DataTypeEnum eType = aColumn.get_Type();
 
 #if OSL_DEBUG_LEVEL > 0
-    sal_Int32 nPrecision    = aColumn.get_Precision();  (void)nPrecision;
-    sal_Int32 nScale        = aColumn.get_NumericScale(); (void)nScale;
-    sal_Int32 nType         = ADOS::MapADOType2Jdbc(eType); (void)nType;
+    sal_Int32 nPrecision;
+    sal_Int32 nScale;
+    sal_Int32 nType;
+    nPrecision = aColumn.get_Precision();
+    nScale = aColumn.get_NumericScale();
+    nType = ADOS::MapADOType2Jdbc(aColumn.get_Type());
 #endif
 
     ::rtl::OUString sTypeName;
