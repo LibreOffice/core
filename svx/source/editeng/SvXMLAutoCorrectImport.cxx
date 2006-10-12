@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectImport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:47:40 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:33:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,9 +97,9 @@ SvXMLWordListContext::SvXMLWordListContext(
    sal_uInt16 nPrefix,
    const OUString& rLocalName,
    const com::sun::star::uno::Reference<
-   com::sun::star::xml::sax::XAttributeList > & xAttrList ) :
-   rLocalRef(rImport),
-   SvXMLImportContext ( rImport, nPrefix, rLocalName )
+   com::sun::star::xml::sax::XAttributeList > & /*xAttrList*/ ) :
+   SvXMLImportContext ( rImport, nPrefix, rLocalName ),
+   rLocalRef(rImport)
 {
 }
 
@@ -127,8 +127,8 @@ SvXMLWordContext::SvXMLWordContext(
    const OUString& rLocalName,
    const com::sun::star::uno::Reference<
    com::sun::star::xml::sax::XAttributeList > & xAttrList ) :
-   rLocalRef(rImport),
-   SvXMLImportContext ( rImport, nPrefix, rLocalName )
+   SvXMLImportContext ( rImport, nPrefix, rLocalName ),
+   rLocalRef(rImport)
 {
     String sRight, sWrong;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -137,9 +137,9 @@ SvXMLWordContext::SvXMLWordContext(
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
-        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName);
+        sal_uInt16 nAttrPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName);
         const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-        if (XML_NAMESPACE_BLOCKLIST == nPrefix)
+        if (XML_NAMESPACE_BLOCKLIST == nAttrPrefix)
         {
             if ( IsXMLToken ( aLocalName, XML_ABBREVIATED_NAME ) )
             {
@@ -214,9 +214,9 @@ SvXMLExceptionListContext::SvXMLExceptionListContext(
    sal_uInt16 nPrefix,
    const OUString& rLocalName,
    const com::sun::star::uno::Reference<
-   com::sun::star::xml::sax::XAttributeList > & xAttrList ) :
-   rLocalRef(rImport),
-   SvXMLImportContext ( rImport, nPrefix, rLocalName )
+   com::sun::star::xml::sax::XAttributeList > & /* xAttrList */ ) :
+   SvXMLImportContext ( rImport, nPrefix, rLocalName ),
+   rLocalRef(rImport)
 {
 }
 
@@ -244,8 +244,8 @@ SvXMLExceptionContext::SvXMLExceptionContext(
    const OUString& rLocalName,
    const com::sun::star::uno::Reference<
    com::sun::star::xml::sax::XAttributeList > & xAttrList ) :
-   rLocalRef(rImport),
-   SvXMLImportContext ( rImport, nPrefix, rLocalName )
+   SvXMLImportContext ( rImport, nPrefix, rLocalName ),
+   rLocalRef(rImport)
 {
     String sWord;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -254,9 +254,9 @@ SvXMLExceptionContext::SvXMLExceptionContext(
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
-        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName);
+        sal_uInt16 nAttrPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName);
         const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-        if (XML_NAMESPACE_BLOCKLIST == nPrefix)
+        if (XML_NAMESPACE_BLOCKLIST == nAttrPrefix)
         {
             if ( IsXMLToken ( aLocalName, XML_ABBREVIATED_NAME ) )
             {
