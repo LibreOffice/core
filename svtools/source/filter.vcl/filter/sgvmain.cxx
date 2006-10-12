@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sgvmain.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:53:05 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:18:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -799,12 +799,12 @@ void CircType::Draw(OutputDevice& rOut)
         if (Radius.x!=Radius.y) {
           if (Radius.x<1) Radius.x=1;
           if (Radius.y<1) Radius.y=1;
-          a.y-=Center.y;
-          b.y-=Center.y;
+          a.y = a.y - Center.y;
+          b.y = b.y - Center.y;
           a.y=iMulDiv(a.y,Radius.y,Radius.x);
           b.y=iMulDiv(b.y,Radius.y,Radius.x);
-          a.y+=Center.y;
-          b.y+=Center.y;
+          a.y = a.y + Center.y;
+          b.y = b.y + Center.y;
         }
         aStrt=Point(a.x,a.y);
         aEnde=Point(b.x,b.y);
