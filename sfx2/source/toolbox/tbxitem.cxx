@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:48:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:58:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1455,7 +1455,7 @@ void SfxPopupWindow::MouseMove( const ::MouseEvent& rMEvt )
         // MouseMove-Event an die Children forwarden
         ::Point       aPos = rMEvt.GetPosPixel();
         ::Point       aScrPos = OutputToScreenPixel( aPos );
-        int i = 0;
+        USHORT i = 0;
         Window* pWindow = GetChild( i );
         while ( pWindow )
         {
