@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgevtatt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:26:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:34:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -483,11 +483,11 @@ namespace dlgprov
                     bHandled = true;
                 }
             }
-            catch( com::sun::star::lang::IllegalArgumentException& e )
+            catch( com::sun::star::lang::IllegalArgumentException& )
             {}
-            catch( com::sun::star::lang::NoSuchMethodException& e )
+            catch( com::sun::star::lang::NoSuchMethodException& )
             {}
-            catch( com::sun::star::reflection::InvocationTargetException& e )
+            catch( com::sun::star::reflection::InvocationTargetException& )
             {}
         }
 
