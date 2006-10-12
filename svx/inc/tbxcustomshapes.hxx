@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxcustomshapes.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:19:22 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:58:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@
 class SVX_DLLPUBLIC SvxTbxCtlCustomShapes : public SfxToolBoxControl
 {
 public:
+    using SfxToolBoxControl::Select;
     virtual void                Select( BOOL bMod1 = FALSE );
     virtual void                StateChanged( USHORT nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
