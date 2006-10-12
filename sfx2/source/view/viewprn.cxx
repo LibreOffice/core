@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:51:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:59:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,7 +347,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
     SfxPrinter*             pPrinter = 0;
     PrintDialog*            pPrintDlg = 0;
     SfxDialogExecutor_Impl* pExecutor = 0;
-    FASTBOOL                bSilent = FALSE;
+    bool                    bSilent = false;
     BOOL bIsAPI = rReq.GetArgs() && rReq.GetArgs()->Count();
 
     const USHORT nId = rReq.GetSlot();
@@ -361,7 +361,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         {
             // quiet mode (AppEvent, API call)
             SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, FALSE);
-            bSilent = pSilentItem ? pSilentItem->GetValue() : FALSE;
+            bSilent = pSilentItem && pSilentItem->GetValue();
 
             // get printer and printer settings from the document
             SfxPrinter *pDocPrinter = GetPrinter(TRUE);
