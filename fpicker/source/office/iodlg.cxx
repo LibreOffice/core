@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:51:21 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:47:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,7 +318,9 @@ namespace
             p1--;
         if ( p1 >= p0 )
             // remove old extension
-            rFile.Erase( p1 - p0 + 1 - ( rExtension.Len() > 0 ? 0 : 1 ) );
+            rFile.Erase(
+                sal::static_int_cast< xub_StrLen >(
+                    p1 - p0 + 1 - ( rExtension.Len() > 0 ? 0 : 1 ) ) );
         else if ( rExtension.Len() )
             // no old extension
             rFile += sal_Unicode( '.' );
@@ -2202,9 +2204,9 @@ short SvtFileDialog::Execute()
     // Instanz fuer den gesetzten Pfad erzeugen und anzeigen.
     INetURLObject aFolderURL( _aPath );
     String aFileName( aFolderURL.getName( INetURLObject::LAST_SEGMENT, false ) );
-    USHORT nFileNameLen = aFileName.Len();
-    BOOL bFileToSelect;
-    if ( ( bFileToSelect = nFileNameLen && aFileName.GetChar( nFileNameLen - 1 ) != INET_PATH_TOKEN ) )
+    xub_StrLen nFileNameLen = aFileName.Len();
+    bool bFileToSelect = nFileNameLen != 0;
+    if ( bFileToSelect && aFileName.GetChar( nFileNameLen - 1 ) != INET_PATH_TOKEN )
     {
         _pImp->_pEdFileName->SetText( GET_DECODED_NAME( aFolderURL ) );
         aFolderURL.removeSegment();
