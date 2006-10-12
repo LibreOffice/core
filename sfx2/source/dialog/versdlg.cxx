@@ -4,9 +4,9 @@
  *
  *  $RCSfile: versdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:37:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:53:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,7 +211,7 @@ SfxVersionsTabListBox_Impl::SfxVersionsTabListBox_Impl( Window* pParent, const R
 }
 
 SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, Window *pParent )
-    : SfxModalDialog( pVwFrame, pParent, SfxResId( DLG_VERSIONS ) )
+    : SfxModalDialog( pParent, SfxResId( DLG_VERSIONS ) )
     , aNewGroup( this, ResId( GB_NEWVERSIONS ) )
     , aSaveButton( this, ResId( PB_SAVE ) )
     , aSaveCheckBox( this, ResId( CB_SAVEONCLOSE ) )
