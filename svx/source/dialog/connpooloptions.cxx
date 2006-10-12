@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connpooloptions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:13:00 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:07:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,7 @@ namespace offapp
     typedef ::svt::EditBrowseBox DriverListControl_Base;
     class DriverListControl : public DriverListControl_Base
     {
+        using Window::Update;
     protected:
         DriverPoolingSettings                   m_aSavedSettings;
         DriverPoolingSettings                   m_aSettings;

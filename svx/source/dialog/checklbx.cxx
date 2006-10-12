@@ -4,9 +4,9 @@
  *
  *  $RCSfile: checklbx.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:11:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:07:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,3 +257,16 @@ void SvxCheckListBox::KeyInput( const KeyEvent& rKEvt )
         SvTreeListBox::KeyInput( rKEvt );
 }
 
+// -----------------------------------------------------------------------
+
+SvLBoxEntry* SvxCheckListBox::InsertEntry( const XubString& rText, SvLBoxEntry* pParent, BOOL bChildsOnDemand, ULONG nPos, void* pUserData )
+{
+    return SvTreeListBox::InsertEntry( rText, pParent, bChildsOnDemand, nPos, pUserData );
+}
+
+// -----------------------------------------------------------------------
+
+SvLBoxEntry* SvxCheckListBox::InsertEntry( const XubString& rText, const Image& rExpandedEntryBmp, const Image& rCollapsedEntryBmp, SvLBoxEntry* pParent, BOOL bChildsOnDemand, ULONG nPos, void* pUserData )
+{
+    return SvTreeListBox::InsertEntry( rText, rExpandedEntryBmp, rCollapsedEntryBmp, pParent, bChildsOnDemand, nPos, pUserData );
+}
