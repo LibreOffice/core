@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linerenderer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-28 12:43:20 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:46:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include <basegfx/point/b2ipoint.hxx>
 #endif
 
+#include <vigra/diff2d.hxx>
 #include <vigra/iteratortraits.hxx>
 
 
