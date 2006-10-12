@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:56:46 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:14:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,8 @@ OInterfaceContainer::OInterfaceContainer(
     m_xEventAttacher = ::comphelper::createEventAttacherManager(m_xServiceFactory);
     OSL_ENSURE( m_xEventAttacher.is(), "OInterfaceContainer::OInterfaceContainer: no event attacher manager! (corrupt installation?)" );
 }
+
+OInterfaceContainer::~OInterfaceContainer() {}
 
 //------------------------------------------------------------------------------
 void OInterfaceContainer::disposing()
