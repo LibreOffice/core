@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:01:33 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:26:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,7 +349,9 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
                                 break;
                 default:        eOp2 = _LOCAL;
             }
-            aGen.Gen( eOp2, pDef->GetId(), pDef->GetType() );
+            aGen.Gen(
+                eOp2, pDef->GetId(),
+                sal::static_int_cast< UINT16 >( pDef->GetType() ) );
         }
 
         // Initialisierung fuer selbstdefinierte Datentypen
@@ -697,7 +699,9 @@ void SbiParser::DefEnum( BOOL bPrivate )
                     aGen.BackChain( nGblChain );
                     nGblChain = 0;
                     bGblDefs = bNewGblDefs = TRUE;
-                    aGen.Gen( eOp, pElem->GetId(), pElem->GetType() );
+                    aGen.Gen(
+                        eOp, pElem->GetId(),
+                        sal::static_int_cast< UINT16 >( pElem->GetType() ) );
 
                     aVar.Gen();
                     USHORT nStringId = aGen.GetParser()->aGblStrings.Add( nCurrentEnumValue, SbxLONG );
@@ -827,7 +831,7 @@ SbiProcDef* SbiParser::ProcDecl( BOOL bDecl )
 
                     USHORT nStringId;
                     if( eType2 == SbxSTRING )
-                        nStringId = aGblStrings.Add( pDefaultExpr->GetString(), eType2 );
+                        nStringId = aGblStrings.Add( pDefaultExpr->GetString() );
                     else
                         nStringId = aGblStrings.Add( pDefaultExpr->GetValue(), eType2 );
 
