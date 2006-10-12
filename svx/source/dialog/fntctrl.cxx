@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntctrl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:19:36 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:12:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -636,7 +636,7 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
 
         // remove line feeds and carriage returns from string
         bool bNotEmpty = false;
-        for ( int i = 0; i < pImpl->aText.Len(); ++i )
+        for ( xub_StrLen i = 0; i < pImpl->aText.Len(); ++i )
         {
             if ( 0xa == pImpl->aText.GetChar( i ) ||
                  0xd == pImpl->aText.GetChar( i ) )
