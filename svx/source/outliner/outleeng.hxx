@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outleeng.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:25:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:01:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #endif
 
 typedef EENotify* EENotifyPtr;
-SV_DECL_PTRARR_DEL( NotifyList, EENotifyPtr, 1, 1 );
+SV_DECL_PTRARR_DEL( NotifyList, EENotifyPtr, 1, 1 )
 
 class OutlinerEditEng : public EditEngine
 {
