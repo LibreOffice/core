@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:20:06 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:20:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,9 @@ SV_DECL_PTRARR_DEL(SvxNumSettingsArr_Impl,SvxNumSettings_ImplPtr,8,4)
 --------------------------------------------------*/
 class SvxSingleNumPickTabPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     FixedLine               aValuesFL;
     SvxNumValueSet*         pExamplesVS;
     SvxNumSettingsArr_Impl  aNumSettingsArr;
@@ -153,6 +156,9 @@ class SvxSingleNumPickTabPage : public SfxTabPage
 
 class SvxBulletPickTabPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     FixedLine           aValuesFL;
     SvxNumValueSet*     pExamplesVS;
     SvxNumRule*         pActNum;
@@ -191,6 +197,9 @@ class SvxBulletPickTabPage : public SfxTabPage
 #define NUM_VALUSET_COUNT 16
 class SvxNumPickTabPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     FixedLine           aValuesFL;
     SvxNumValueSet*     pExamplesVS;
     String              sNumCharFmtName;
@@ -234,6 +243,9 @@ class SvxNumPickTabPage : public SfxTabPage
 --------------------------------------------------*/
 class SvxBitmapPickTabPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     FixedLine           aValuesFL;
     SvxBmpNumValueSet*  pExamplesVS;
     FixedText           aErrorText;
@@ -277,6 +289,9 @@ class SvxBitmapPickTabPage : public SfxTabPage
 --------------------------------------------------*/
 class SvxNumOptionsTabPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     FixedLine       aFormatFL;
     FixedText       aLevelFT;
     MultiListBox    aLevelLB;
@@ -298,7 +313,6 @@ class SvxNumOptionsTabPage : public SfxTabPage
     FixedText       aStartFT;
     NumericField    aStartED;
     PushButton      aBulletPB;
-    TriStateBox     aUseBulletCB;
     FixedText       aAlignFT;
     ListBox         aAlignLB;
     FixedText       aBitmapFT;
@@ -362,7 +376,6 @@ class SvxNumOptionsTabPage : public SfxTabPage
         DECL_LINK( SameLevelHdl_Impl, CheckBox * );
         DECL_LINK( BulColorHdl_Impl, ColorListBox* );
         DECL_LINK( BulRelSizeHdl_Impl, MetricField *);
-        DECL_LINK( UseBulletHdl_Impl, TriStateBox* );
         DECL_LINK( PreviewInvalidateHdl_Impl, Timer* );
 
         DECL_STATIC_LINK( SvxNumOptionsTabPage, GraphicArrivedHdl_Impl, SvxBrushItem* );
@@ -398,6 +411,9 @@ class SvxNumOptionsTabPage : public SfxTabPage
 --------------------------------------------------*/
 class SvxNumPositionTabPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     FixedLine           aPositionFL;
     FixedText           aLevelFT;
     MultiListBox        aLevelLB;
