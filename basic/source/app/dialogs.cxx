@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:56:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:22:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -670,9 +670,11 @@ StringList* GenericOptions::GetAllGroups()
 void GenericOptions::LoadData()
 {
     StringList* pGroups = GetAllGroups();
-    String* pGroup;
-    while ( (pGroup = pGroups->First()) )
+    for (;;)
     {
+        String* pGroup = pGroups->First();
+        if ( pGroup == NULL )
+            break;
         pGroups->Remove( pGroup );
         aConf.SetGroup( ByteString( *pGroup, RTL_TEXTENCODING_UTF8 ) );
         if ( aConf.ReadKey( C_KEY_AKTUELL ).Len() > 0 )
@@ -692,7 +694,7 @@ void GenericOptions::ShowSelectPath( const String aType )
 {
     Point aNPos = aPbNewValue.GetPosPixel();
     Point aDPos = aPbDelValue.GetPosPixel();
-    USHORT nDelta = aDPos.Y() - aNPos.Y();
+    long nDelta = aDPos.Y() - aNPos.Y();
     if ( aType.EqualsIgnoreCaseAscii( "PATH" ) && !bShowSelectPath )
     {   // Show Path button
         nMoveButtons += nDelta;
