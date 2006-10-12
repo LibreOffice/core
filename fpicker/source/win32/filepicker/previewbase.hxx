@@ -4,9 +4,9 @@
  *
  *  $RCSfile: previewbase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:48:00 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:54:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,13 @@
 #include <com/sun/star/uno/Any.hxx>
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 //---------------------------------------------
 // Common interface for previews
@@ -90,7 +96,7 @@ public:
 
     virtual void SAL_CALL getImage(sal_Int16& aImageFormat,com::sun::star::uno::Any& aImage);
 
-    sal_Int16 SAL_CALL getImaginaryShowState() const;
+    sal_Bool SAL_CALL getImaginaryShowState() const;
 
     virtual HWND SAL_CALL getWindowHandle() const;
 
