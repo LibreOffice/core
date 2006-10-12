@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:27:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:18:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,7 @@ static long nTabs[] =
 IMPL_LINK( _HeaderTabListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
 {
     DBG_ASSERT( pBar == &maHeaderBar, "*_HeaderTabListBox::HeaderEndDrag_Impl: something is wrong here..." );
+    (void)pBar;
 
     if( !maHeaderBar.GetCurItemId() )
         return 0;
@@ -224,7 +225,7 @@ void _HeaderTabListBox::Show( BOOL bVisible, USHORT nFlags )
     maHeaderBar.Show( bVisible, nFlags );
 }
 
-void _HeaderTabListBox::Enable( BOOL bEnable, BOOL bChild )
+void _HeaderTabListBox::Enable( bool bEnable, bool bChild )
 {
     maListBox.Enable( bEnable, bChild );
     maHeaderBar.Enable( bEnable, bChild );
@@ -475,7 +476,7 @@ IconLBoxString::IconLBoxString( SvLBoxEntry* pEntry, USHORT nFlags, const String
 
 //===============================================
 void IconLBoxString::Paint( const Point& aPos, SvLBox& aDevice,
-                               USHORT nFlags, SvLBoxEntry* pEntry )
+                               USHORT /*nFlags*/, SvLBoxEntry* /*pEntry*/ )
 {
     String aTxt( GetText() );
     if( aTxt.Len() )
@@ -608,7 +609,7 @@ IMPL_STATIC_LINK( _SvxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
     return GenericHandler_Impl( pThis, pBtn );
 }
 
-IMPL_STATIC_LINK( _SvxMacroTabPage, DoubleClickHdl_Impl, SvTabListBox *, pTabListBox )
+IMPL_STATIC_LINK( _SvxMacroTabPage, DoubleClickHdl_Impl, SvTabListBox *, EMPTYARG )
 {
     return GenericHandler_Impl( pThis, NULL );
 }
@@ -752,9 +753,10 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
     mpImpl->pEventLB->Show();
     mpImpl->pEventLB->ConnectElements();
 
-    short nMinLineHeight = mpImpl->pMacroImg->GetSizePixel().Height() + 2;
+    long nMinLineHeight = mpImpl->pMacroImg->GetSizePixel().Height() + 2;
     if( nMinLineHeight > mpImpl->pEventLB->GetListBox().GetEntryHeight() )
-        mpImpl->pEventLB->GetListBox().SetEntryHeight( nMinLineHeight );
+        mpImpl->pEventLB->GetListBox().SetEntryHeight(
+            sal::static_int_cast< short >(nMinLineHeight) );
 
     mpImpl->pEventLB->Enable( TRUE );
 
