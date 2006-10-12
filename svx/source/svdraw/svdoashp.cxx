@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:53:22 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:11:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2099,7 +2099,7 @@ void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
             com::sun::star::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sMirroredX );
             if ( pAny )
             {
-                sal_Bool bFlip;
+                sal_Bool bFlip = sal_Bool();
                 if ( *pAny >>= bFlip )
                 {
                     if ( bFlip )
@@ -2121,7 +2121,7 @@ void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
             com::sun::star::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sMirroredY );
             if ( pAny )
             {
-                sal_Bool bFlip;
+                sal_Bool bFlip = sal_Bool();
                 if ( *pAny >>= bFlip )
                 {
                     if ( bFlip )
