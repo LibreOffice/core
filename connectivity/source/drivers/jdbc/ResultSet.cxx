@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:48:32 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1437,7 +1437,7 @@ void SAL_CALL java_sql_ResultSet::updateString( sal_Int32 columnIndex, const ::r
     {
 
         // temporaere Variable initialisieren
-        static const char * cSignature = "(ILjava/lang/String)V";
+        static const char * cSignature = "(ILjava/lang/String;)V";
         static const char * cMethodName = "updateString";
         // Java-Call absetzen
         static jmethodID mID = NULL;
