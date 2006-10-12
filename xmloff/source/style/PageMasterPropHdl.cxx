@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageMasterPropHdl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:45:35 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:45:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ XMLPMPropHdl_PageStyleLayout::~XMLPMPropHdl_PageStyleLayout()
 {
 }
 
-sal_Bool XMLPMPropHdl_PageStyleLayout::equals( const Any& rAny1, const Any& rAny2 ) const
+bool XMLPMPropHdl_PageStyleLayout::equals( const Any& rAny1, const Any& rAny2 ) const
 {
     style::PageStyleLayout eLayout1, eLayout2;
     return ((rAny1 >>= eLayout1) && (rAny2 >>= eLayout2)) ? (eLayout1 == eLayout2) : sal_False;
