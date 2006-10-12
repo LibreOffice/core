@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:05:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:29:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -931,7 +931,7 @@ void SbiIoSystem::Shutdown()
     {
         if( pChan[ i ] )
         {
-            USHORT n = pChan[ i ]->Close();
+            SbError n = pChan[ i ]->Close();
             delete pChan[ i ];
             pChan[ i ] = NULL;
             if( n && !nError )
@@ -1022,7 +1022,7 @@ void SbiIoSystem::CloseAll(void)
     {
         if( pChan[ i ] )
         {
-            USHORT n = pChan[ i ]->Close();
+            SbError n = pChan[ i ]->Close();
             delete pChan[ i ];
             pChan[ i ] = NULL;
             if( n && !nError )
