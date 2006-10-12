@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape3d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:06:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:01:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -749,8 +749,6 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             const rtl::OUString sShininess( RTL_CONSTASCII_USTRINGPARAM ( "Shininess" ) );
             const rtl::OUString sMetal( RTL_CONSTASCII_USTRINGPARAM ( "Metal" ) );
             double fSpecular = GetDouble( rGeometryItem, sSpecularity, 0, NULL ) / 100;
-            /* double fDiffuse = */ GetDouble( rGeometryItem, sDiffusion, 0, NULL ) / 100;
-            /* double fShininess = */ GetDouble( rGeometryItem, sShininess, 0, NULL ) / 100;
             sal_Bool bMetal = GetBool( rGeometryItem, sMetal, sal_False );
 
             Color aSpecularCol( 225,225,225 );
