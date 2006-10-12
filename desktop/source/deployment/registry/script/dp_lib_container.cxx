@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_lib_container.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:44:20 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:11:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,6 @@ bool LibraryContainer::remove(
         t_libs_map::iterator const iEnd( m_map.end() );
         while (iPos != iEnd)
         {
-            bool remove = false;
             if (iPos->second.aStorageURL.getLength() > 0)
             {
                 OUString const & storage_url = iPos->second.aStorageURL;
