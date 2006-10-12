@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:17:21 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:28:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,7 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
     }
 }
 
-static sal_Char* aFieldItemNameMap_Impl[] =
+static sal_Char const* aFieldItemNameMap_Impl[] =
 {
     "Date",
     "URL",
@@ -383,7 +383,8 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
                 mpImpl->msString1 = ((SvxURLField*)pData)->GetRepresentation();
                 mpImpl->msString2 = ((SvxURLField*)pData)->GetTargetFrame();
                 mpImpl->msString3 = ((SvxURLField*)pData)->GetURL();
-                mpImpl->mnInt16 = ((SvxURLField*)pData)->GetFormat();
+                mpImpl->mnInt16 = sal::static_int_cast< sal_Int16 >(
+                    ((SvxURLField*)pData)->GetFormat());
                 break;
 
             case ID_EXT_FILEFIELD:
@@ -395,13 +396,14 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
             case ID_AUTHORFIELD:
                 mpImpl->msString1  = ((SvxAuthorField*)pData)->GetFormatted();
                 mpImpl->msString2  = ((SvxAuthorField*)pData)->GetFormatted();
-                mpImpl->mnInt16    = ((SvxAuthorField*)pData)->GetFormat();
+                mpImpl->mnInt16    = sal::static_int_cast< sal_Int16 >(
+                    ((SvxAuthorField*)pData)->GetFormat());
                 mpImpl->mbBoolean1 = ((SvxAuthorField*)pData)->GetType() == SVXAUTHORTYPE_FIX;
                 mpImpl->mbBoolean2 = ((SvxAuthorField*)pData)->GetFormat() != SVXAUTHORFORMAT_SHORTNAME;
                 break;
 
             case ID_MEASUREFIELD:
-                mpImpl->mnInt16     = ((SdrMeasureField*)pData)->GetMeasureFieldKind();
+                mpImpl->mnInt16     = sal::static_int_cast< sal_Int16 >(((SdrMeasureField*)pData)->GetMeasureFieldKind());
                 break;
             }
         }
@@ -481,7 +483,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         // #92009# pass fixed attribute to constructor
         pData = new SvxExtFileField( mpImpl->msString1,
                                      mpImpl->mbBoolean1 ? SVXFILETYPE_FIX : SVXFILETYPE_VAR,
-                                     setFileNameDisplayFormat((SvxFileFormat)mpImpl->mnInt16 ) );
+                                     setFileNameDisplayFormat(mpImpl->mnInt16 ) );
         break;
     }
 
