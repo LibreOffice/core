@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:23:04 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:14:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #include "hldoctp.hxx"
 #include "hyperdlg.hrc"
@@ -224,7 +225,9 @@ void SvxHyperlinkDocTp::SetInitFocus()
 IMPL_LINK ( SvxHyperlinkDocTp, ClickFileopenHdl_Impl, void *, EMPTYARG )
 {
     // Open Fileopen-Dialog
-       ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0, GetParent() );
+       ::sfx2::FileDialogHelper aDlg(
+        com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0,
+        GetParent() );
     String aOldURL( GetCurrentURL() );
     if( aOldURL.EqualsIgnoreCaseAscii( sFileScheme, 0, sizeof( sFileScheme ) - 1 ) ||
         aOldURL.EqualsIgnoreCaseAscii( sPortalFileScheme, 0, sizeof( sFileScheme ) - 1 ) )
@@ -387,6 +390,4 @@ SvxHyperlinkDocTp::EPathType SvxHyperlinkDocTp::GetPathType ( String& aStrPath )
         return Type_Invalid;
     else
         return Type_ExistsFile;
-
-    return Type_Unknown;
 }
