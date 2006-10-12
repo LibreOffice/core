@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framegrabber.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:44:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:26:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,12 +34,19 @@
  ************************************************************************/
 
 #include <tools/prewin.h>
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#pragma warning(disable: 4917)
+#endif
 #include <windows.h>
 #include <objbase.h>
 #include <strmif.h>
 #include <Amvideo.h>
 #include <Qedit.h>
 #include <uuids.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <tools/postwin.h>
 
 #include "framegrabber.hxx"
