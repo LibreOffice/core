@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sessionlistener.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:01:07 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:39:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,6 @@
 
 //_______________________________________________
 // my own includes
-
-#include <vector>
 
 #ifndef __FRAMEWORK_CLASSES_FILTERCACHE_HXX_
 #include <classes/filtercache.hxx>
@@ -84,9 +82,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETEXCEPTION_HPP_
-#include <com/sun/star/lang/WrappedTargetException.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
@@ -99,7 +94,6 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
-#include <osl/conditn.h>
 
 //_______________________________________________
 // other includes
@@ -145,16 +139,6 @@ namespace framework{
  */
 /// @NOHTML
 
-typedef struct SessionItem
-{
-    rtl::OUString Title;
-    rtl::OUString Filter;
-    rtl::OUString OriginalURL;
-    rtl::OUString SaveURL;
-} SessionItem_t;
-
-typedef std::vector< SessionItem_t > SessionList_t;
-
 class SessionListener :   // interfaces
                         public css::lang::XTypeProvider,
                         public css::lang::XInitialization,
@@ -177,21 +161,7 @@ class SessionListener :   // interfaces
 
         css::uno::Reference< css::frame::XSessionManagerClient > m_rSessionManager;
 
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_cfgProv;
-
-        void _doInteraction(const rtl::OUString& title, const rtl::OUString& url, sal_Bool bc, sal_Bool* save, sal_Bool* cancel);
-        sal_Bool _cancelShutdown();
-        sal_Bool _requestInteraction();
-        void _finishInteraction();
-
-        SessionList_t m_sessionList;
-
-        // interaction+shutdown handling
-        oslCondition* _pcInteract;
-        oslCondition* _pcCancelShutdown;
-
         // restore handling
-        oslCondition m_cRestoreDone;
         sal_Bool m_bRestored;
 
     public:
