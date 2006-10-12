@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_service.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:39:26 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:07:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,7 @@ sal_Int16 ServiceImpl::execute() throw (RuntimeException)
 
 // XJobExecutor
 //______________________________________________________________________________
-void ServiceImpl::trigger( OUString const & event ) throw (RuntimeException)
+void ServiceImpl::trigger( OUString const & ) throw (RuntimeException)
 {
     execute();
 }
