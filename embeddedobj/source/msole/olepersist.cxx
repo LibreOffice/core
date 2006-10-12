@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:44:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:23:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1247,13 +1247,13 @@ void OleEmbeddedObject::StoreToLocation_Impl(
     {
         // the object is still not loaded
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Can't store object without persistence!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     OSL_ENSURE( m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!\n" );
 
@@ -1472,12 +1472,12 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
 
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
-                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( !sEntName.getLength() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "Empty element name is provided!\n" ),
-                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
     // May be LOADED should be forbidden here ???
@@ -1492,7 +1492,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
 
         throw embed::WrongStateException(
                     ::rtl::OUString::createFromAscii( "Can't change persistant representation of activated object!\n" ),
-                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
     if ( m_bWaitSaveCompleted )
@@ -1502,7 +1502,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
         else
             throw embed::WrongStateException(
                         ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
     uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
@@ -1599,7 +1599,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
             if ( !aURL.getLength() )
                 throw lang::IllegalArgumentException(
                                     ::rtl::OUString::createFromAscii( "Empty URL is provided in the media descriptor!\n" ),
-                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                     4 );
 
             CreateOleComponent_Impl();
@@ -1621,7 +1621,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
         //}
         else
             throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "Wrong connection mode is provided!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                         3 );
     }
 #else
@@ -1639,7 +1639,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
     }
     else
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "Wrong connection mode is provided!\n" ),
-                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                     3 );
 
 #endif
@@ -1709,7 +1709,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     {
         // the object is still not loaded
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Can't store object without persistence!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
     // it is allowed to call saveCompleted( false ) for nonstored objects
@@ -1795,7 +1795,7 @@ sal_Bool SAL_CALL OleEmbeddedObject::hasEntry()
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_xObjectStream.is() )
         return sal_True;
@@ -1816,13 +1816,13 @@ sal_Bool SAL_CALL OleEmbeddedObject::hasEntry()
     {
         // the object is still not loaded
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object persistence is not initialized!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     return m_aEntryName;
 }
@@ -1851,13 +1851,13 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
     {
         // the object is still not loaded
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Can't store object without persistence!\n" ),
-                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_bReadOnly )
         throw io::IOException(); // TODO: access denied
@@ -1963,13 +1963,13 @@ sal_Bool SAL_CALL OleEmbeddedObject::isReadonly()
     {
         // the object is still not loaded
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object persistence is not initialized!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     return m_bReadOnly;
 }
@@ -1994,13 +1994,13 @@ void SAL_CALL OleEmbeddedObject::reload(
     {
         // the object is still not loaded
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object persistence is not initialized!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     // TODO:
     // throw away current document
@@ -2023,12 +2023,12 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
 
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
-                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( !sEntName.getLength() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "Empty element name is provided!\n" ),
-                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
     // TODO: The object must be at least in Running state;
@@ -2037,7 +2037,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
         // it must be a linked initialized object
         throw embed::WrongStateException(
                     ::rtl::OUString::createFromAscii( "The object is not a valid linked object!\n" ),
-                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
     if ( m_bReadOnly )
@@ -2046,7 +2046,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
 
 #ifdef WNT
@@ -2143,12 +2143,12 @@ sal_Bool SAL_CALL  OleEmbeddedObject::isLink()
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( !m_bIsLink )
         throw embed::WrongStateException(
                     ::rtl::OUString::createFromAscii( "The object is not a link object!\n" ),
-                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     // TODO: probably the link URL can be retrieved from OLE
 
