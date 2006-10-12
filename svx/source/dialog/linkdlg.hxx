@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:27:05 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:18:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,10 +55,12 @@ namespace sfx2
 {
     class SvLinkManager;
     class SvBaseLink;
-};
+}
 
 class SvBaseLinksDlg : public ModalDialog
 {
+    using Window::SetType;
+
     FixedText aFtFiles;
     FixedText aFtLinks;
     FixedText aFtType;
