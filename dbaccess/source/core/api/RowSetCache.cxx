@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:32:31 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:32:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1427,8 +1427,9 @@ sal_Bool ORowSetCache::checkInnerJoin(const ::connectivity::OSQLParseNode *pNode
                 pNode->count() == 3)
     {
         // nur AND Verknüpfung zulassen
-        if ( SQL_ISTOKEN(pNode->getChild(1),AND) && (bOk = checkInnerJoin(pNode->getChild(0),_xConnection,_sUpdateTableName)) )
-            bOk = checkInnerJoin(pNode->getChild(2),_xConnection,_sUpdateTableName);
+        if ( SQL_ISTOKEN(pNode->getChild(1),AND) )
+            bOk = checkInnerJoin(pNode->getChild(0),_xConnection,_sUpdateTableName)
+                && checkInnerJoin(pNode->getChild(2),_xConnection,_sUpdateTableName);
     }
     else if (SQL_ISRULE(pNode,comparison_predicate))
     {
@@ -1442,7 +1443,8 @@ sal_Bool ORowSetCache::checkInnerJoin(const ::connectivity::OSQLParseNode *pNode
         }
         ::rtl::OUString sColumnName,sTableRange;
         OSQLParseTreeIterator::getColumnRange(pNode->getChild(0),_xConnection->getMetaData(),sColumnName,sTableRange);
-        if ( !(bOk =  sTableRange == _sUpdateTableName) )
+        bOk = sTableRange == _sUpdateTableName;
+        if ( !bOk )
         {
             OSQLParseTreeIterator::getColumnRange(pNode->getChild(2),_xConnection->getMetaData(),sColumnName,sTableRange);
             bOk =  sTableRange == _sUpdateTableName;
