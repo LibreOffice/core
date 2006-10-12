@@ -4,9 +4,9 @@
  *
  *  $RCSfile: submission_post.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:07:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:15:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,10 +112,10 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference<
         try {
             // m_aResultStream = Reference< XInputStream >(aSink, UNO_QUERY_THROW);
             m_aResultStream = aSink->getInputStream();
-        } catch (Exception& oe) {
+        } catch (Exception&) {
             OSL_ENSURE(sal_False, "Cannot open reply stream from content");
         }
-    } catch (Exception& e)
+    } catch (Exception&)
     {
         // XXX
         OSL_ENSURE(sal_False, "Exception during UCB operatration.");
