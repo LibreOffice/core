@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdbg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:48:23 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:34:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         case EE_PARA_NUMBULLET:
             {
             aDebStr += "NumItem ";
-            for ( int nLevel = 0; nLevel < 3; nLevel++ )
+            for ( USHORT nLevel = 0; nLevel < 3; nLevel++ )
             {
                 aDebStr += "Level";
                 aDebStr += ByteString::CreateFromInt32( nLevel );
@@ -527,7 +527,7 @@ ByteString EditDbg::GetPortionInfo( ParaPortion* pPPortion )
         aDebStr += ByteString::CreateFromInt32( pPortion->GetSize().Width() );
         aDebStr += ")";
         aDebStr += ";";
-        n += pPortion->GetLen();
+        n = n + pPortion->GetLen();
     }
     aDebStr += "\nGesamtlaenge: ";
     aDebStr += ByteString::CreateFromInt32( n );
@@ -571,7 +571,7 @@ BOOL ParaPortion::DbgCheckTextPortions()
     // pruefen, ob Portionlaenge ok:
     USHORT nXLen = 0;
     for ( USHORT nPortion = 0; nPortion < aTextPortionList.Count(); nPortion++  )
-        nXLen += aTextPortionList[nPortion]->GetLen();
+        nXLen = nXLen + aTextPortionList[nPortion]->GetLen();
     return nXLen == pNode->Len() ? TRUE : FALSE;
 }
 
