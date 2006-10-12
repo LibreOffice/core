@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _bmpmask.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:09:13 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:03:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -291,7 +291,8 @@ IMPL_LINK( MaskData, CbxHdl, CheckBox*, pCbx )
 
 IMPL_LINK( MaskData, CbxTransHdl, CheckBox*, pCbx )
 {
-    if ( bIsReady = pCbx->IsChecked() )
+    bIsReady = pCbx->IsChecked();
+    if ( bIsReady )
     {
         pMask->pQSet1->Disable();
         pMask->pQSet2->Disable();
@@ -363,7 +364,7 @@ IMPL_LINK( MaskData, FocusLbHdl, ColorLB*, pLb )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( MaskData, ExecHdl, PushButton*, pBtn )
+IMPL_LINK( MaskData, ExecHdl, PushButton*, EMPTYARG )
 {
     SfxBoolItem aBItem( SID_BMPMASK_EXEC, TRUE );
     rBindings.GetDispatcher()->Execute( SID_BMPMASK_EXEC, OWN_CALLMODE, &aBItem, 0L );
@@ -373,7 +374,7 @@ IMPL_LINK( MaskData, ExecHdl, PushButton*, pBtn )
 
 //-------------------------------------------------------------------------
 
-void ColorWindow::Paint( const Rectangle &Rect )
+void ColorWindow::Paint( const Rectangle &/*Rect*/ )
 {
     const Color& rOldLineColor = GetLineColor();
     const Color& rOldFillColor = GetFillColor();
@@ -398,7 +399,7 @@ SvxBmpMaskSelectItem::SvxBmpMaskSelectItem( USHORT nId_, SvxBmpMask& rMask,
 
 //-------------------------------------------------------------------------
 
-void SvxBmpMaskSelectItem::StateChanged( USHORT nSID, SfxItemState eState,
+void SvxBmpMaskSelectItem::StateChanged( USHORT nSID, SfxItemState /*eState*/,
                                          const SfxPoolItem* pItem )
 {
     if ( ( nSID == SID_BMPMASK_EXEC ) && pItem )
@@ -437,6 +438,7 @@ SvxBmpMask::SvxBmpMask( SfxBindings *pBindinx,
         aTbxPipette         ( this, ResId( TBX_PIPETTE ) ),
         pCtlPipette         ( new ColorWindow( this, ResId( WND_PIPETTE ) ) ),
         aBtnExec            ( this, ResId( BTN_EXEC ) ),
+        aGrpQ               ( this, ResId( GRP_Q ) ),
 
         aCbx1               ( this, ResId( CBX_1 ) ),
         pQSet1              ( new MaskSet( this, ResId( QCOL_1 ) ) ),
@@ -458,16 +460,15 @@ SvxBmpMask::SvxBmpMask( SfxBindings *pBindinx,
         aSp4                ( this, ResId( SP_4 ) ),
         aLbColor4           ( this, ResId ( LB_4 ) ),
 
-        aCbxTrans           ( this, ResId( CBX_TRANS ) ),
-        aGrpQ               ( this, ResId( GRP_Q ) ),
-        pColTab             ( NULL ),
         pData               ( new MaskData( this, *pBindinx ) ),
-        aPipetteColor       ( COL_WHITE ),
-        aSelItem            ( SID_BMPMASK_EXEC, *this, *pBindinx ),
+        aCbxTrans           ( this, ResId( CBX_TRANS ) ),
         aLbColorTrans       ( this, ResId ( LB_TRANS ) ),
         aFt1                ( this, ResId ( FT_1 ) ),
         aFt2                ( this, ResId ( FT_2 ) ),
         aFt3                ( this, ResId ( FT_3 ) ),
+        pColTab             ( NULL ),
+        aPipetteColor       ( COL_WHITE ),
+        aSelItem            ( SID_BMPMASK_EXEC, *this, *pBindinx ),
         maImgPipette        ( ResId ( IMG_PIPETTE ) ),
         maImgPipetteH       ( ResId ( IMG_PIPETTE_H ) )
 {
@@ -763,7 +764,7 @@ Animation SvxBmpMask::ImpMask( const Animation& rAnimation )
     Color       pSrcCols[4];
     Color       pDstCols[4];
     ULONG       pTols[4];
-    USHORT      nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
+    InitColorArrays( pSrcCols, pDstCols, pTols );
     USHORT      nAnimationCount = aAnimation.Count();
 
     for( USHORT i = 0; i < nAnimationCount; i++ )
@@ -1231,7 +1232,7 @@ void SvxBmpMask::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxBmpMask::ApplyStyle()
 {
-    bool bHighContrast = (bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0);
+    bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
 
     aTbxPipette.SetItemImage( TBI_PIPETTE, bHighContrast ? maImgPipetteH : maImgPipette );
 }
