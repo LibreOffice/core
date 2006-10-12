@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:48:28 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:10:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -664,9 +664,9 @@ void OEditModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( 
 }
 
 //------------------------------------------------------------------------------
-sal_Int16 OEditModel::getPersistenceFlags() const
+sal_uInt16 OEditModel::getPersistenceFlags() const
 {
-    sal_Int16 nFlags = OEditBaseModel::getPersistenceFlags();
+    sal_uInt16 nFlags = OEditBaseModel::getPersistenceFlags();
 
     if (m_bWritingFormattedFake)
         nFlags |= PF_FAKE_FORMATTED_FIELD;
@@ -802,7 +802,7 @@ sal_Bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
             try
             {
                 if ( m_bNumericField )
-                    DBTypeConversion::setValue(m_xColumnUpdate, m_xFormatter, m_aNullDate, sNewValue, m_nFormatKey, m_nFieldType, m_nKeyType);
+                    DBTypeConversion::setValue(m_xColumnUpdate, m_xFormatter, m_aNullDate, sNewValue, m_nFormatKey, sal::static_int_cast< sal_Int16 >(m_nFieldType), m_nKeyType);
                 else
                     m_xColumnUpdate->updateString(sNewValue);
             }
