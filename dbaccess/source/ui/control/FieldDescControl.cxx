@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:59:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:36:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -873,7 +873,7 @@ void OFieldDescControl::ArrangeAggregates()
     {
         Control*    pctrlInputControl;  // das eigentliche Control zur Eingabe
         Control*    pctrlTextControl;   // das Label dazu
-        int         nPosSizeArgument;   // das zweite Argument fuer SetPosSize
+        USHORT      nPosSizeArgument;   // das zweite Argument fuer SetPosSize
     };
     AGGREGATE_DESCRIPTION adAggregates[] = {
         { m_pColumnName, m_pColumnNameText, 1},
@@ -2065,7 +2065,7 @@ sal_Bool OFieldDescControl::isCopyAllowed()
                         m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength           ||
                         m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName      ||
                         m_pActFocusWindow == m_pAutoIncrementValue) &&
-                        reinterpret_cast<Edit*>(m_pActFocusWindow)->GetSelected().Len() != 0;
+                        static_cast<Edit*>(m_pActFocusWindow)->GetSelected().Len() != 0;
 
     return bAllowed;
 }
@@ -2077,7 +2077,7 @@ sal_Bool OFieldDescControl::isCutAllowed()
                         m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength           ||
                         m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName      ||
                         m_pActFocusWindow == m_pAutoIncrementValue) &&
-                        reinterpret_cast<Edit*>(m_pActFocusWindow)->GetSelected().Len() != 0;
+                        static_cast<Edit*>(m_pActFocusWindow)->GetSelected().Len() != 0;
     return bAllowed;
 }
 // -----------------------------------------------------------------------------
@@ -2099,19 +2099,19 @@ sal_Bool OFieldDescControl::isPasteAllowed()
 void OFieldDescControl::cut()
 {
     if(isCutAllowed())
-        reinterpret_cast<Edit*>(m_pActFocusWindow)->Cut();
+        static_cast<Edit*>(m_pActFocusWindow)->Cut();
 }
 // -----------------------------------------------------------------------------
 void OFieldDescControl::copy()
 {
     if(isCopyAllowed()) // this only checks if the focus window is valid
-        reinterpret_cast<Edit*>(m_pActFocusWindow)->Copy();
+        static_cast<Edit*>(m_pActFocusWindow)->Copy();
 }
 // -----------------------------------------------------------------------------
 void OFieldDescControl::paste()
 {
     if(m_pActFocusWindow) // this only checks if the focus window is valid
-        reinterpret_cast<Edit*>(m_pActFocusWindow)->Paste();
+        static_cast<Edit*>(m_pActFocusWindow)->Paste();
 }
 // -----------------------------------------------------------------------------
 sal_Bool OFieldDescControl::isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const
