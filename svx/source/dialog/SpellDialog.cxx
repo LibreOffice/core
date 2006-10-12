@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpellDialog.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:08:36 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:03:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -955,7 +955,7 @@ long SpellDialog::Notify( NotifyEvent& rNEvt )
 /* -----------------10.09.2003 08:26-----------------
 
  --------------------------------------------------*/
-void SpellDialog::Invalidate()
+void SpellDialog::InvalidateDialog()
 {
     aIgnorePB.SetText(aResumeST);
     Window* aDisableArr[] =
@@ -1384,7 +1384,7 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                     USHORT nStart = pErrorAttr->GetStart();
                     USHORT nEnd = pErrorAttr->GetEnd();
                     pTextEngine->RemoveAttrib( 0, *pErrorAttr );
-                    nStart -= nAddedChars;
+                    nStart = nStart - (USHORT)nAddedChars;
                     SetAttrib( *pNewError, 0, nStart - nAddedChars, nEnd );
                     //only if the error is active the mark is moved here
                     if(bIsErrorActive)
@@ -1482,7 +1482,7 @@ bool SentenceEditWindow_Impl::MarkNextError()
             m_nErrorEnd = pNextError->GetEnd();
             ChangeMarkedWord(xEntry->getReplacementText(),
                     SvxLocaleToLanguage( xAlternatives->getLocale() ));
-            aCursor.GetIndex() += (USHORT)xEntry->getReplacementText().getLength();
+            aCursor.GetIndex() = aCursor.GetIndex() + (USHORT)(xEntry->getReplacementText().getLength());
         }
         else
             break;
@@ -1568,7 +1568,7 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const String& rNewWord, LanguageT
         {
             SpellLanguageAttrib aNewLangAttrib( static_cast<const SpellLanguageAttrib&>(pLangAttrib->GetAttr()).GetLanguage());
             pTextEngine->RemoveAttrib(0, *pLangAttrib);
-            pTextEngine->SetAttrib( aNewLangAttrib, 0, m_nErrorEnd + nDiffLen , nTextLen );
+            pTextEngine->SetAttrib( aNewLangAttrib, 0, (USHORT)(m_nErrorEnd + nDiffLen) , nTextLen );
         }
     }
     // undo expanded attributes!
@@ -1836,9 +1836,9 @@ void SentenceEditWindow_Impl::UndoActionEnd( USHORT nId )
 void SentenceEditWindow_Impl::MoveErrorEnd(long nOffset)
 {
     if(nOffset > 0)
-        m_nErrorEnd -= (USHORT)nOffset;
+        m_nErrorEnd = m_nErrorEnd - (USHORT)nOffset;
     else
-        m_nErrorEnd += (USHORT)- nOffset;
+        m_nErrorEnd = m_nErrorEnd -(USHORT)- nOffset;
 }
 /*-- 13.11.2003 15:15:19---------------------------------------------------
 
