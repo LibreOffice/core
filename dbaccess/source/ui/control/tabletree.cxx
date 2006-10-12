@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:03:28 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 09:23:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ void OTableTreeListBox::implSetDefaultImages()
 // -----------------------------------------------------------------------------
 bool  OTableTreeListBox::isFolderEntry( const SvLBoxEntry* _pEntry ) const
 {
-   return reinterpret_cast< int >( _pEntry->GetUserData() ) == FOLDER_INDICATOR;
+   return _pEntry->GetUserData() == reinterpret_cast< void* >(FOLDER_INDICATOR);
 }
 
 // -----------------------------------------------------------------------------
