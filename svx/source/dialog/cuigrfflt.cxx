@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuigrfflt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:14:49 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:09:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -747,6 +747,7 @@ Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic,
 
     switch( maCtlLight.GetActualRP() )
     {
+        default:       DBG_ERROR("svx::GraphicFilterEmboss::GetFilteredGraphic(), unknown Reference Point!" );
         case( RP_LT ): nAzim = 4500,    nElev = 4500; break;
         case( RP_MT ): nAzim = 9000,    nElev = 4500; break;
         case( RP_RT ): nAzim = 13500,   nElev = 4500; break;
