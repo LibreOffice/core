@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctl3d.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:17:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:11:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -528,7 +528,7 @@ void SvxRectCtl3D::MouseButtonDown( const MouseEvent& rMEvt )
 {
     Point aPt = PixelToLogic( rMEvt.GetPosPixel() );
 
-    for( int i = 1; i < 20; i++ )
+    for( short i = 1; i < 20; i++ )
     {
         Rectangle aRect( aPointArray[i] - Point( nRadius, nRadius ),
                          aPointArray[i] + Point( nRadius, nRadius ) );
