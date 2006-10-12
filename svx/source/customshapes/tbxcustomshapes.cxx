@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxcustomshapes.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:08:07 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:03:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,8 @@ SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlCustomShapes, SfxBoolItem);
 \************************************************************************/
 
 SvxTbxCtlCustomShapes::SvxTbxCtlCustomShapes( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
-    m_aSubTbxResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ) ),
-    SfxToolBoxControl( nSlotId, nId, rTbx )
+    SfxToolBoxControl( nSlotId, nId, rTbx ),
+    m_aSubTbxResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ) )
 {
     switch( nSlotId )
     {
@@ -171,7 +171,7 @@ SfxPopupWindow* SvxTbxCtlCustomShapes::CreatePopupWindow()
 
 // -----------------------------------------------------------------------
 
-void SvxTbxCtlCustomShapes::Select( BOOL bMod1 )
+void SvxTbxCtlCustomShapes::Select( BOOL /*bMod1*/ )
 {
      if ( m_aCommand.getLength() > 0 )
     {
