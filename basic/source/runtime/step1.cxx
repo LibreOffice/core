@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:06:49 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,8 +358,8 @@ void SbiRuntime::StepERRHDL( USHORT nOp1 )
     pError = pCode;
     pCode = p;
     pInst->aErrorMsg = String();
-    pInst->nErr =
-    pInst->nErl =
+    pInst->nErr = 0;
+    pInst->nErl = 0;
     nError = 0;
 }
 
@@ -385,8 +385,8 @@ void SbiRuntime::StepRESUME( USHORT nOp1 )
     if( nOp1 > 1 )
         StepJUMP( nOp1 );
     pInst->aErrorMsg = String();
-    pInst->nErr =
-    pInst->nErl =
+    pInst->nErr = 0;
+    pInst->nErl = 0;
     nError = 0;
     bInError = FALSE;
 
@@ -399,7 +399,7 @@ void SbiRuntime::StepRESUME( USHORT nOp1 )
 // Kanal schliessen (+Kanal, 0=Alle)
 void SbiRuntime::StepCLOSE( USHORT nOp1 )
 {
-    short err;
+    SbError err;
     if( !nOp1 )
         pIosys->Shutdown();
     else
