@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formatpaintbrushctrl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:45:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:42:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,8 @@ namespace svx
 
 class SVX_DLLPUBLIC FormatPaintBrushToolBoxControl : public SfxToolBoxControl
 {
+    using SfxToolBoxControl::Select;
+
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     FormatPaintBrushToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
