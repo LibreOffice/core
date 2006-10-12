@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propacc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:59:51 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:25:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,8 +141,9 @@ void SbPropertyValues::setPropertyValue(
                     ::com::sun::star::lang::WrappedTargetException,
                     ::com::sun::star::uno::RuntimeException)
 {
-    USHORT nIndex = GetIndex_Impl( aPropertyName );
-    PropertyValue *pPropVal = _aPropVals.GetObject(nIndex);
+    INT32 nIndex = GetIndex_Impl( aPropertyName );
+    PropertyValue *pPropVal = _aPropVals.GetObject(
+        sal::static_int_cast< USHORT >(nIndex));
     pPropVal->Value = aValue;
 }
 
@@ -154,9 +155,10 @@ Any SbPropertyValues::getPropertyValue(
                     ::com::sun::star::lang::WrappedTargetException,
                     ::com::sun::star::uno::RuntimeException)
 {
-    USHORT nIndex = GetIndex_Impl( aPropertyName );
+    INT32 nIndex = GetIndex_Impl( aPropertyName );
     if ( nIndex != USHRT_MAX )
-        return _aPropVals.GetObject(nIndex)->Value;
+        return _aPropVals.GetObject(
+            sal::static_int_cast< USHORT >(nIndex))->Value;
     return Any();
 }
 
@@ -254,7 +256,7 @@ Sequence< Property > PropertySetInfoImpl::getProperties(void) throw()
 
 Property PropertySetInfoImpl::getPropertyByName(const OUString& Name) throw( RuntimeException )
 {
-    USHORT nIndex = GetIndex_Impl( Name );
+    sal_Int32 nIndex = GetIndex_Impl( Name );
     if( USHRT_MAX != nIndex )
         return _aProps.getConstArray()[ nIndex ];
     return Property();
@@ -262,7 +264,7 @@ Property PropertySetInfoImpl::getPropertyByName(const OUString& Name) throw( Run
 
 sal_Bool PropertySetInfoImpl::hasPropertyByName(const OUString& Name) throw( RuntimeException )
 {
-    USHORT nIndex = GetIndex_Impl( Name );
+    sal_Int32 nIndex = GetIndex_Impl( Name );
     return USHRT_MAX != nIndex;
 }
 
