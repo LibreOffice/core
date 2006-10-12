@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrusioncontrols.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:47:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:41:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,8 @@ namespace svx
 
 class ExtrusionDirectionWindow : public SfxPopupWindow
 {
+    using FloatingWindow::StateChanged;
+
 private:
     ToolbarMenu*        mpMenu;
     ValueSet*           mpDirectionSet;
@@ -147,6 +149,8 @@ public:
 
 class ExtrusionDepthWindow : public SfxPopupWindow
 {
+    using FloatingWindow::StateChanged;
+
 private:
     ToolbarMenu* mpMenu;
 
@@ -224,6 +228,8 @@ public:
 
 class ExtrusionLightingWindow : public SfxPopupWindow
 {
+    using FloatingWindow::StateChanged;
+
 private:
     ToolbarMenu* mpMenu;
     ValueSet*    mpLightingSet;
@@ -304,6 +310,7 @@ public:
 
 class ExtrusionSurfaceWindow : public SfxPopupWindow
 {
+    using FloatingWindow::StateChanged;
 private:
     ToolbarMenu* mpMenu;
 
