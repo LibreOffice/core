@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: mhids.pl,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2005-10-06 12:41:25 $
+#   last change: $Author: obo $ $Date: 2006-10-12 13:49:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -202,6 +202,7 @@ if (!open C_PROG, ">$workfile.c") {
     cleandie("ERROR - open $workfile.c\n for writing failed");
 }
 push @cleanuplist, ".c";
+print C_PROG "#include <stdio.h>\n";
 print C_PROG "#include <wctype.h>\n";
 
 if ( !open PRE, "<$workfile.c2" ) {
