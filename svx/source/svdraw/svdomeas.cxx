@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:55:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:13:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -449,8 +449,8 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     rPol.nLineLen=GetLen(aDelt);
 
     rPol.nLineWdt2=0;
-    long nArrow1Len=0; FASTBOOL bArrow1Center=FALSE;
-    long nArrow2Len=0; FASTBOOL bArrow2Center=FALSE;
+    long nArrow1Len=0; bool bArrow1Center=false;
+    long nArrow2Len=0; bool bArrow2Center=false;
     long nArrow1Wdt=0;
     long nArrow2Wdt=0;
     rPol.nArrow1Wdt=0;
@@ -678,8 +678,8 @@ sal_Bool SdrMeasureObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRe
     ImpMeasurePoly aMPol;
     ImpTakeAttr(aRec);
     ImpCalcGeometrics(aRec,aMPol);
-    FASTBOOL bMerk1=rXOut.IsLineStart();
-    FASTBOOL bMerk2=rXOut.IsLineEnd();
+    bool bMerk1=rXOut.IsLineStart();
+    bool bMerk2=rXOut.IsLineEnd();
     if (aMPol.nMainlineAnz>1) {
         // Je 1 Linienende temporaer abschalten
         rXOut.OverrideLineEnd(FALSE);
