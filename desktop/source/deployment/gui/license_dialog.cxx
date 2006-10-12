@@ -4,9 +4,9 @@
  *
  *  $RCSfile: license_dialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:39:55 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:08:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,9 @@ public:
     const Link& GetScrolledHdl() const { return maScrolledHdl; }
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+protected:
+    using MultiLineEdit::Notify;
 };
 
 struct LicenseDialogImpl : public ModalDialog
@@ -202,7 +205,7 @@ BOOL LicenseView::IsEndReached() const
     return bEndReached;
 }
 
-void LicenseView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.IsA( TYPE(TextHint) ) )
     {
@@ -237,19 +240,19 @@ LicenseDialogImpl::LicenseDialogImpl(
         ModalDialog(pParent, DpGuiResId(RID_DLG_LICENSE))
         ,m_xComponentContext(xContext)
         ,m_sTitle(String(ResId(RID_STR_LICENSE_TITLE)))
-        ,m_pbDown(this, ResId(PB_LICENSE_DOWN))
         ,m_ftHead(this, ResId(FT_LICENSE_HEADER))
         ,m_ftBody1(this, ResId(FT_LICENSE_BODY_1))
         ,m_ftBody1Txt(this, ResId(FT_LICENSE_BODY_1_TXT))
         ,m_ftBody2(this, ResId(FT_LICENSE_BODY_2))
         ,m_ftBody2Txt(this, ResId(FT_LICENSE_BODY_2_TXT))
+        ,m_fiArrow1(this, ResId(FI_LICENSE_ARROW1))
+        ,m_fiArrow2(this, ResId(FI_LICENSE_ARROW2))
         ,m_mlLicense(this, ResId(ML_LICENSE))
+        ,m_pbDown(this, ResId(PB_LICENSE_DOWN))
         ,m_flBottom(this, ResId(FL_LICENSE))
         ,m_acceptButton(this, ResId(BTN_LICENSE_ACCEPT))
         ,m_declineButton(this, ResId(BTN_LICENSE_DECLINE))
         ,m_bLicenseRead(false)
-        ,m_fiArrow1(this, ResId(FI_LICENSE_ARROW1))
-        ,m_fiArrow2(this, ResId(FI_LICENSE_ARROW2))
 
 {
 
@@ -342,7 +345,7 @@ LicenseDialog::LicenseDialog( Sequence<Any> const& args,
 
 // XExecutableDialog
 //______________________________________________________________________________
-void LicenseDialog::setTitle( OUString const & title ) throw (RuntimeException)
+void LicenseDialog::setTitle( OUString const & ) throw (RuntimeException)
 {
 
 }
