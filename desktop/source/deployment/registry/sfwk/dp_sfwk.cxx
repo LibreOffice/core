@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_sfwk.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:45:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:12:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,8 +92,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
     public:
         PackageImpl( ::rtl::Reference<BackendImpl> const & myBackend,
-                     OUString const & url, OUString const & libType,
-                     Reference<XCommandEnvironment> const &xCmdEnv );
+                     OUString const & url, OUString const & libType );
         // XPackage
         virtual OUString SAL_CALL getDescription() throw (RuntimeException);
     };
@@ -128,8 +127,7 @@ OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
 //______________________________________________________________________________
 BackendImpl::PackageImpl::PackageImpl(
     ::rtl::Reference<BackendImpl> const & myBackend,
-    OUString const & url, OUString const & libType,
-    Reference<XCommandEnvironment> const &xCmdEnv )
+    OUString const & url, OUString const & libType )
     : Package( myBackend.get(), url, OUString(), OUString(),
                myBackend->m_xTypeInfo ),
       m_descr(libType)
@@ -295,7 +293,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 OSL_TRACE(" for url %s",
                      rtl::OUStringToOString( sParcelDescURL, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 OSL_TRACE("******************************");
-                return new PackageImpl( this, url, sfwkLibType, xCmdEnv );
+                return new PackageImpl( this, url, sfwkLibType );
             }
         }
     }
@@ -348,9 +346,9 @@ void BackendImpl::PackageImpl:: initPackageHandler()
 //______________________________________________________________________________
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::PackageImpl::isRegistered_(
-    ::osl::ResettableMutexGuard & guard,
-    ::rtl::Reference<AbortChannel> const & abortChannel,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    ::osl::ResettableMutexGuard &,
+    ::rtl::Reference<AbortChannel> const &,
+    Reference<XCommandEnvironment> const & )
 {
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
         true /* IsPresent */,
@@ -362,13 +360,11 @@ BackendImpl::PackageImpl::isRegistered_(
 
 //______________________________________________________________________________
 void BackendImpl::PackageImpl::processPackage_(
-    ::osl::ResettableMutexGuard & guard,
-    bool registerPackage,
-    ::rtl::Reference<AbortChannel> const & abortChannel,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    ::osl::ResettableMutexGuard &,
+    bool doRegisterPackage,
+    ::rtl::Reference<AbortChannel> const &,
+    Reference<XCommandEnvironment> const & )
 {
-    BackendImpl * that = getMyBackend();
-
     if ( !m_xNameCntrPkgHandler.is() )
     {
         OSL_TRACE("no package handler!!!!");
@@ -376,7 +372,7 @@ void BackendImpl::PackageImpl::processPackage_(
             Reference< XInterface >() );
     }
 
-    if (registerPackage)
+    if (doRegisterPackage)
     {
         // will throw if it fails
         m_xNameCntrPkgHandler->insertByName( m_url, makeAny( Reference< XPackage >(this) ) );
