@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ElemTransformerAction.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:41:33 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:56:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ enum XMLElemTransformerAction
                                         // and put them together into the
                                         // current element
                                         // the child elements are removed
-    XML_ETACTION_USER_DEFINED=0x80000000,// user defined actions start here
+    XML_ETACTION_USER_DEFINED=0x40000000,// user defined actions start here
     XML_ETACTION_END=XML_TACTION_END
 };
 
