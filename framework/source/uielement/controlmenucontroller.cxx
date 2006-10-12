@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlmenucontroller.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:18:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:43:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,7 +385,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
 
             if ( MENU_ITEM_NOTFOUND == nPrevInConversion )
                 // none of the items which precede the nSID-slot in the source menu are present in our conversion menu
-                nPrevInConversion = 0 - 1;  // put the item at the first position
+                nPrevInConversion = sal::static_int_cast< sal_uInt16 >(-1); // put the item at the first position
 
             pVCLPopupMenu->InsertItem( nMenuId, m_pResPopupMenu->GetItemText( nMenuId ), m_pResPopupMenu->GetItemBits( nMenuId ), ++nPrevInConversion );
             pVCLPopupMenu->SetItemImage( nMenuId, m_pResPopupMenu->GetItemImage( nMenuId ));
