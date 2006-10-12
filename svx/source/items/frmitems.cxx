@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:19:57 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:54:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,7 +276,7 @@ SfxItemPresentation SvxPaperBinItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -585,8 +585,7 @@ sal_Bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-//  sal_Int32 nMaxVal = bConvert ? TWIP_TO_MM100(USHRT_MAX) : USHRT_MAX;
-    sal_Int32 nVal;
+    sal_Int32 nVal = 0;
     if( nMemberId != MID_FIRST_AUTO &&
             nMemberId != MID_L_REL_MARGIN && nMemberId != MID_R_REL_MARGIN)
         if(!(rVal >>= nVal))
@@ -625,7 +624,7 @@ sal_Bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             break;
 
         case MID_FIRST_LINE_REL_INDENT:
-            SetPropTxtFirstLineOfst ( nVal );
+            SetPropTxtFirstLineOfst ( (USHORT)nVal );
             break;
 
         case MID_FIRST_AUTO:
@@ -834,7 +833,7 @@ SfxPoolItem* SvxLRSpaceItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) cons
         {
             rStrm >> firstline;
             if ( firstline < 0 )
-                left += firstline;  // s.u.: txtleft = ...
+                left = left + static_cast<sal_uInt16>(firstline);   // s.u.: txtleft = ...
         }
         else
             rStrm.Seek( nPos );
@@ -987,12 +986,12 @@ sal_Bool SvxULSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_UP_MARGIN :
             if(!(rVal >>= nVal) || nVal < 0)
                 return sal_False;
-            SetUpper((sal_uInt16)bConvert ? MM100_TO_TWIP(nVal) : nVal);
+            SetUpper((USHORT)(bConvert ? MM100_TO_TWIP(nVal) : nVal));
             break;
         case MID_LO_MARGIN :
             if(!(rVal >>= nVal) || nVal < 0)
                 return sal_False;
-            SetLower((sal_uInt16)bConvert ? MM100_TO_TWIP(nVal) : nVal);
+            SetLower((USHORT)(bConvert ? MM100_TO_TWIP(nVal) : nVal));
             break;
         case MID_UP_REL_MARGIN:
         case MID_LO_REL_MARGIN:
@@ -1001,9 +1000,9 @@ sal_Bool SvxULSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             if((rVal >>= nRel) && nRel > 1 )
             {
                 if(MID_UP_REL_MARGIN == nMemberId)
-                    nPropUpper = nRel;
+                    nPropUpper = (USHORT)nRel;
                 else
-                    nPropLower = nRel;
+                    nPropLower = (USHORT)nRel;
             }
             else
                 return FALSE;
@@ -1183,7 +1182,7 @@ SfxItemPresentation SvxPrintItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -1240,7 +1239,7 @@ SfxItemPresentation SvxOpaqueItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -1331,7 +1330,7 @@ SfxItemPresentation SvxProtectItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -1457,7 +1456,7 @@ sal_Bool SvxShadowItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             bRet = (rVal >>= aShadow.Location);
             if ( !bRet )
             {
-                sal_Int16 nVal;
+                sal_Int16 nVal = 0;
                 bRet = (rVal >>= nVal);
                 aShadow.Location = (table::ShadowLocation) nVal;
             }
@@ -1667,7 +1666,7 @@ XubString SvxShadowItem::GetValueTextByPos( sal_uInt16 nPos ) const
 
 sal_uInt16 SvxShadowItem::GetEnumValue() const
 {
-    return GetLocation();
+    return (sal_uInt16)GetLocation();
 }
 
 // -----------------------------------------------------------------------
@@ -1913,7 +1912,7 @@ sal_Bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     table::BorderLine aRetLine;
-    sal_uInt16 nDist;
+    sal_uInt16 nDist = 0;
     sal_Bool bDistMember = sal_False;
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bSerialize = sal_False;
@@ -1934,7 +1933,6 @@ sal_Bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
             aSeq[8] <<= uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED( nRightDist ) : nRightDist ));
             rVal = uno::makeAny( aSeq );
             return sal_True;
-            break;
         }
         case MID_LEFT_BORDER:
             bSerialize = sal_True;      // intentionally no break!
@@ -2597,9 +2595,7 @@ sal_uInt16 SvxBoxItem::CalcLineSpace( sal_uInt16 nLine, sal_Bool bIgnoreLine ) c
 
     if( pTmp )
     {
-        nDist += pTmp->GetOutWidth();
-        nDist += pTmp->GetInWidth();
-        nDist += pTmp->GetDistance();
+        nDist = nDist + (sal_uInt16)(pTmp->GetOutWidth()) + (sal_uInt16)(pTmp->GetInWidth()) + (sal_uInt16)(pTmp->GetDistance());
     }
     else if( !bIgnoreLine )
         nDist = 0;
@@ -2714,7 +2710,7 @@ SfxItemPresentation SvxBoxInfoItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -2980,7 +2976,7 @@ sal_Bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 {
                     if( bConvert )
                         nVal = MM100_TO_TWIP(nVal);
-                    SetDist( nVal );
+                    SetDefDist( (USHORT)nVal );
                 }
             }
             return sal_True;
@@ -3049,7 +3045,7 @@ sal_Bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         }
         case MID_FLAGS:
         {
-            sal_Int16 nFlags;
+            sal_Int16 nFlags = sal_Int16();
             bRet = (rVal >>= nFlags);
             if ( bRet )
             {
@@ -3062,7 +3058,7 @@ sal_Bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         }
         case MID_VALIDFLAGS:
         {
-            sal_Int16 nFlags;
+            sal_Int16 nFlags = sal_Int16();
             bRet = (rVal >>= nFlags);
             if ( bRet )
                 nValidFlags = (BYTE)nFlags;
@@ -3076,7 +3072,7 @@ sal_Bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             {
                 if( bConvert )
                     nVal = MM100_TO_TWIP(nVal);
-                SetDist( nVal );
+                SetDefDist( (USHORT)nVal );
             }
             break;
         }
@@ -3102,7 +3098,7 @@ SfxItemPresentation SvxFmtBreakItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -3256,7 +3252,7 @@ SfxItemPresentation SvxFmtKeepItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper *
     ) const
 {
 #ifndef SVX_LIGHT
@@ -3388,9 +3384,9 @@ sal_Bool SvxLineItem::PutValue( const uno::Any& rVal, BYTE nMemId )
         switch ( nMemId )
         {
             case MID_FG_COLOR:      pLine->SetColor( Color(nVal) ); break;
-            case MID_OUTER_WIDTH:   pLine->SetOutWidth(nVal);   break;
-            case MID_INNER_WIDTH:   pLine->SetInWidth( nVal);   break;
-            case MID_DISTANCE:      pLine->SetDistance(nVal);   break;
+            case MID_OUTER_WIDTH:   pLine->SetOutWidth((USHORT)nVal);   break;
+            case MID_INNER_WIDTH:   pLine->SetInWidth((USHORT)nVal);   break;
+            case MID_DISTANCE:      pLine->SetDistance((USHORT)nVal);   break;
             default:
                 DBG_ERROR( "Wrong MemberId" );
                 return sal_False;
@@ -3822,7 +3818,7 @@ inline sal_Int8 lcl_PercentToTransparency(long nPercent)
 }
 inline sal_Int8 lcl_TransparencyToPercent(sal_Int32 nTrans)
 {
-    return (nTrans * 100 + 127) / 254;
+    return (sal_Int8)((nTrans * 100 + 127) / 254);
 }
 
 sal_Bool SvxBrushItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
@@ -4008,7 +4004,7 @@ SfxItemPresentation SvxBrushItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/
+    XubString&          rText, const IntlWrapper *
     ) const
 {
 #ifndef SVX_LIGHT
@@ -4444,7 +4440,7 @@ CntWallpaperItem* SvxBrushItem::CreateCntWallpaperItem() const
 {
     CntWallpaperItem* pItem = new CntWallpaperItem( 0 );
     pItem->SetColor( aColor.GetColor() );
-    pItem->SetStyle( GraphicPos2WallpaperStyle( GetGraphicPos() ) );
+    pItem->SetStyle( (USHORT)GraphicPos2WallpaperStyle( GetGraphicPos() ) );
     sal_Bool bLink = (pStrLink != 0);
     if( bLink )
     {
@@ -4452,7 +4448,9 @@ CntWallpaperItem* SvxBrushItem::CreateCntWallpaperItem() const
         pItem->SetBitmapURL( aURL );
     }
     if( pImpl->pGraphicObject )
+    {
         DBG_ERRORFILE( "Don't know what to do with a graphic" );
+    }
 //      pItem->SetGraphic( *pImpl->pGraphic, bLink );
 
     return pItem;
@@ -4479,7 +4477,7 @@ void  SvxBrushItem::ApplyGraphicTransparency_Impl()
 
 SvxFrameDirectionItem::SvxFrameDirectionItem( SvxFrameDirection nValue ,
                                             USHORT _nWhich )
-    : SfxUInt16Item( _nWhich, nValue )
+    : SfxUInt16Item( _nWhich, (UINT16)nValue )
 {
 }
 
@@ -4522,7 +4520,7 @@ SfxItemPresentation SvxFrameDirectionItem::GetPresentation(
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper */*pIntl*/) const
+    XubString&          rText, const IntlWrapper *) const
 {
     SfxItemPresentation eRet = ePres;
     switch( ePres )
@@ -4545,7 +4543,7 @@ SfxItemPresentation SvxFrameDirectionItem::GetPresentation(
 sal_Bool SvxFrameDirectionItem::PutValue( const com::sun::star::uno::Any& rVal,
                                              BYTE )
 {
-    sal_Int16 nVal;
+    sal_Int16 nVal = sal_Int16();
     sal_Bool bRet = ( rVal >>= nVal );
     if( bRet )
     {
