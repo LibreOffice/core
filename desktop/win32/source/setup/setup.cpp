@@ -4,9 +4,9 @@
  *
  *  $RCSfile: setup.cpp,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:53:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:20:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,13 @@
 
 #define WIN // scope W32 API
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 #include <tchar.h>
 #include <assert.h>
 #include <shlwapi.h>
@@ -731,7 +737,7 @@ boolean SetupAppX::LaunchInstaller( LPCTSTR pParam )
     }
 
     DWORD nResult = WaitForProcess( aPI.hProcess );
-    BOOL bRet = true;
+    bool bRet = true;
 
     if( ERROR_SUCCESS != nResult )
     {
@@ -981,7 +987,6 @@ boolean SetupAppX::CheckVersion()
         if ( pDllGetVersion )
         {
             DLLVERSIONINFO aInfo;
-            int n = 0;
 
             aInfo.cbSize = sizeof( DLLVERSIONINFO );
             if ( NOERROR == pDllGetVersion( &aInfo ) )
@@ -1334,7 +1339,7 @@ DWORD SetupAppX::GetNextArgument( LPCTSTR pStr, LPTSTR *pArg, LPTSTR *pNext,
 //--------------------------------------------------------------------------
 boolean SetupAppX::GetCmdLineParameters( LPTSTR *pCmdLine )
 {
-    UINT   nRet   = ERROR_SUCCESS;
+    int    nRet   = ERROR_SUCCESS;
     LPTSTR pStart = NULL;
     LPTSTR pNext  = NULL;
 
