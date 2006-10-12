@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rubydialog.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:41:19 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:48:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,9 @@ public:
 
 class SvxRubyDialog : public SfxModelessDialog
 {
+    using Window::SetText;
+    using Window::GetText;
+
     friend class RubyPreview;
 
     FixedText               aLeftFT;
