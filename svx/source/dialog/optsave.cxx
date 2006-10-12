@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsave.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:32:34 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:23:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,8 +262,8 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     aBackupBtn          ( this, ResId( BTN_BACKUP ) ),
     aAutoSaveBtn        ( this, ResId( BTN_AUTOSAVE ) ),
     aAutoSaveEdit       ( this, ResId( ED_AUTOSAVE ) ),
-    aNoPrettyPrintingBtn( this, ResId( BTN_NOPRETTYPRINTING ) ),
     aMinuteText         ( this, ResId( FT_MINUTE ) ),
+    aNoPrettyPrintingBtn( this, ResId( BTN_NOPRETTYPRINTING ) ),
     aWarnAlienFormatBtn ( this, ResId( BTN_WARNALIENFORMAT ) ),
     aRelBox             ( this, ResId( GB_RELATIVE ) ),
     aRelFsysBtn         ( this, ResId( BTN_RELATIVE_FSYS ) ),
@@ -551,7 +551,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
             Reference< XContainerQuery > xQuery(pImpl->xFact, UNO_QUERY);
             if(xQuery.is())
             {
-                for(int n = 0; n < aApplicationLB.GetEntryCount(); n++)
+                for(USHORT n = 0; n < aApplicationLB.GetEntryCount(); n++)
                 {
                     long nData = (long) aApplicationLB.GetEntryData(n);
                     OUString sCommand;
