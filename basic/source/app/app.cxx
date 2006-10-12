@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:54:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:21:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -514,7 +514,7 @@ void BasicApp::SetFocus()
 IMPL_LINK( BasicApp, LateInit, void *, pDummy )
 {
     (void) pDummy; /* avoid warning about unused parameter */
-    int i;
+    USHORT i;
     for ( i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
     {
         if ( Application::GetCommandLineParam( i ).Copy(0,4).CompareIgnoreCaseToAscii("-run") == COMPARE_EQUAL
@@ -533,7 +533,7 @@ IMPL_LINK( BasicApp, LateInit, void *, pDummy )
             {
                 if ( ByteString( Application::GetCommandLineParam( i+1 ), osl_getThreadTextEncoding() ).IsNumericAscii() )
                 {
-                    MsgEdit::SetMaxLogLen( Application::GetCommandLineParam( i+1 ).ToInt32() );
+                    MsgEdit::SetMaxLogLen( sal::static_int_cast< USHORT >( Application::GetCommandLineParam( i+1 ).ToInt32() ) );
                 }
                 i++;
             }
@@ -1193,7 +1193,7 @@ void BasicFrame::LoadLRU()
     if ( pPopup )
         bAddSep = pPopup->GetItemPos( IDM_FILE_LRU1 ) == MENU_ITEM_NOTFOUND;
 
-    int i;
+    USHORT i;
     for ( i = 1; i <= nMaxLRU && pPopup != NULL; i++)
     {
         String aFile = UniString( aConfig.ReadKey(LRUNr(i)), RTL_TEXTENCODING_UTF8 );
@@ -1241,7 +1241,7 @@ IMPL_LINK( BasicFrame, InitMenu, Menu *, pMenu )
     BOOL bNext   = bHasErr & bNormal;
     BOOL bPrev   = bHasErr & bNormal;
     if( bHasErr ) {
-        USHORT n = pBasic->aErrors.GetCurPos();
+        ULONG n = pBasic->aErrors.GetCurPos();
         if( n == 0 ) bPrev = FALSE;
         if( USHORT(n+1) == pBasic->GetErrors() ) bNext = FALSE;
     }
@@ -1978,8 +1978,8 @@ String BasicFrame::GenRealString( const String &aResString )
                 // insert results of previous resource
                 DBG_ASSERT( aString.SearchAscii( "($Arg" ) == STRING_NOTFOUND, "Argument missing in String");
                 aResult.Insert( aString, nInsertPos );
-                nStart += aString.Len();
-                nEnd += aString.Len();
+                nStart = nStart + aString.Len();
+                nEnd = nEnd + aString.Len();
                 aString.Erase();
             }
 //          if ( Resource::GetResManager()->IsAvailable( ResId( aValue ) ) )
@@ -2005,7 +2005,7 @@ String BasicFrame::GenRealString( const String &aResString )
         else
         {
             DBG_ERROR( CByteString("Unknown replacement in String: ").Append( ByteString( aResult.Copy(nStart,nEnd-nStart), RTL_TEXTENCODING_UTF8 ) ).GetBuffer() );
-            nStartPos += StartKenn.Len();
+            nStartPos = nStartPos + StartKenn.Len();
         }
     }
     if ( bFound )
