@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 16:06:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:04:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,10 @@ class SvStringsISortDtor;
 
 class OfaACorrCheckListBox : public SvxSimpleTable
 {
+    using SvxSimpleTable::SetTabs;
+    using SvTreeListBox::GetCheckButtonState;
+    using SvTreeListBox::SetCheckButtonState;
+
     protected:
         virtual void    SetTabs();
         virtual void    HBarClick();
@@ -127,6 +131,7 @@ class OfaACorrCheckListBox : public SvxSimpleTable
 
 class OfaAutocorrOptionsPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
 
 private:
     SvxCheckListBox aCheckLB;
@@ -158,6 +163,8 @@ public:
 
 class OfaSwAutoFmtOptionsPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
+
     OfaACorrCheckListBox    aCheckLB;
     PushButton      aEditPB;
     FixedText       aHeader1Expl;
@@ -245,10 +252,12 @@ class AutoCorrEdit : public Edit
 
 class DoubleStringArray;
 typedef DoubleStringArray* DoubleStringArrayPtr;
-DECLARE_TABLE(DoubleStringTable, DoubleStringArrayPtr);
+DECLARE_TABLE(DoubleStringTable, DoubleStringArrayPtr)
 
 class OfaAutocorrReplacePage : public SfxTabPage
 {
+        using TabPage::ActivatePage;
+        using TabPage::DeactivatePage;
 
 private:
         CheckBox        aTextOnlyCB;
@@ -302,10 +311,12 @@ public:
 
 struct StringsArrays;
 typedef StringsArrays* StringsArraysPtr;
-DECLARE_TABLE(StringsTable, StringsArraysPtr);
+DECLARE_TABLE(StringsTable, StringsArraysPtr)
 
 class OfaAutocorrExceptPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
 
 private:
         FixedLine       aAbbrevFL;
@@ -352,6 +363,8 @@ public:
 
 class OfaQuoteTabPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
+
 private:
 
     FixedLine   aSingleFL;
@@ -407,6 +420,8 @@ public:
 
 class OfaAutoCompleteTabPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
+
     class AutoCompleteMultiListBox : public MultiListBox
     {
         OfaAutoCompleteTabPage& rPage;
