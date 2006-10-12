@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoedprx.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:16:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:27:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1050,7 +1050,8 @@ USHORT SvxAccessibleTextAdapter::GetLineLen( USHORT nPara, USHORT nLine ) const
     for( nCurrLine=0, nCurrIndex=0, nLastIndex=0; nCurrLine<=nLine; ++nCurrLine )
     {
         nLastIndex = nCurrIndex;
-        nCurrIndex += mrTextForwarder->GetLineLen( nPara, nCurrLine );
+        nCurrIndex =
+            nCurrIndex + mrTextForwarder->GetLineLen( nPara, nCurrLine );
     }
 
     aEndIndex.SetEEIndex( nPara, nCurrIndex, *this );
