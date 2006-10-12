@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InterfaceContainer.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:57:42 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:13:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,8 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
         ::osl::Mutex& _rMutex,
         const ::com::sun::star::uno::Type& _rElementType);
+
+    virtual ~OInterfaceContainer();
 
 public:
 // ::com::sun::star::io::XPersistObject
