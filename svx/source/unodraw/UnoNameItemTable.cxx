@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoNameItemTable.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:10:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:24:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -282,7 +282,6 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
     }
 
     throw container::NoSuchElementException();
-    return aAny;
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
