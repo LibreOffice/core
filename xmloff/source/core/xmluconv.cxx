@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:24:15 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -619,7 +619,7 @@ sal_Bool SvXMLUnitConverter::convertEnum( OUStringBuffer& rBuffer,
     false if no default is set */
 sal_Bool SvXMLUnitConverter::convertEnum(
     OUStringBuffer& rBuffer,
-    sal_uInt16 nValue,
+    unsigned int nValue,
     const SvXMLEnumMapEntry *pMap,
     enum XMLTokenEnum eDefault)
 {
@@ -664,14 +664,17 @@ sal_Bool SvXMLUnitConverter::convertColor( Color& rColor,
     if( rValue.getLength() != 7 || rValue[0] != '#' )
         return sal_False;
 
-    rColor.SetRed( lcl_gethex( rValue[1] ) * 16 +
-                   lcl_gethex( rValue[2] ) );
+    rColor.SetRed(
+        sal::static_int_cast< UINT8 >(
+            lcl_gethex( rValue[1] ) * 16 + lcl_gethex( rValue[2] ) ) );
 
-    rColor.SetGreen( lcl_gethex( rValue[3] ) * 16 +
-                     lcl_gethex( rValue[4] ) );
+    rColor.SetGreen(
+        sal::static_int_cast< UINT8 >(
+            lcl_gethex( rValue[3] ) * 16 + lcl_gethex( rValue[4] ) ) );
 
-    rColor.SetBlue( lcl_gethex( rValue[5] ) * 16 +
-                    lcl_gethex( rValue[6] ) );
+    rColor.SetBlue(
+        sal::static_int_cast< UINT8 >(
+            lcl_gethex( rValue[5] ) * 16 + lcl_gethex( rValue[6] ) ) );
 
     return sal_True;
 }
