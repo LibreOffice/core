@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prioritybooster.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:27:00 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:32:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,15 @@
 
 
 #ifdef WNT
-#include <windows.h>
+# if defined _MSC_VER
+# pragma warning(push,1)
+# endif
+
+# include <windows.h>
+
+# if defined _MSC_VER
+# pragma warning(pop)
+# endif
 #endif
 
 #include "osl/diagnose.h"
@@ -61,10 +69,11 @@ namespace canvas
             HANDLE aCurrThread = GetCurrentThread();
             mpImpl->mnOldPriority = GetThreadPriority( aCurrThread );
 
-            const bool bSuccess( 0 != SetThreadPriority( aCurrThread, mpImpl->mnOldPriority + nDelta ) );
-
-            OSL_ENSURE( bSuccess,
-                        "PriorityBooster::PriorityBooster(): Was not able to modify thread priority" );
+            if ( 0 == SetThreadPriority( aCurrThread, mpImpl->mnOldPriority + nDelta ) )
+            {
+                OSL_ENSURE( false,
+                            "PriorityBooster::PriorityBooster(): Was not able to modify thread priority" );
+            }
 #else
             nDelta = 0; // #i55991# placate gcc warning
 #endif
