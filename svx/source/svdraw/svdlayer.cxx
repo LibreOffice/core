@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdlayer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:52:00 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:10:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,7 +237,7 @@ void SdrLayer::SetName(const XubString& rNewName)
     }
 }
 
-FASTBOOL SdrLayer::operator==(const SdrLayer& rCmpLayer) const
+bool SdrLayer::operator==(const SdrLayer& rCmpLayer) const
 {
     return (nID == rCmpLayer.nID
         && nType == rCmpLayer.nType
@@ -418,7 +418,7 @@ const SdrLayerAdmin& SdrLayerAdmin::operator=(const SdrLayerAdmin& rSrcLayerAdmi
     return *this;
 }
 
-FASTBOOL SdrLayerAdmin::operator==(const SdrLayerAdmin& rCmpLayerAdmin) const
+bool SdrLayerAdmin::operator==(const SdrLayerAdmin& rCmpLayerAdmin) const
 {
     if (pParent!=rCmpLayerAdmin.pParent ||
         aLayer.Count()!=rCmpLayerAdmin.aLayer.Count() ||
@@ -597,7 +597,7 @@ SdrLayerID SdrLayerAdmin::GetUniqueLayerID() const
 {
     SetOfByte aSet;
     sal_Bool bDown = (pParent == NULL);
-    sal_Int32 j;
+    USHORT j;
     for (j=0; j<GetLayerCount(); j++)
     {
         aSet.Set(GetLayer(j)->GetID());
