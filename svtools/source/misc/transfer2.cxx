@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfer2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:13:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:24:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -586,7 +586,7 @@ void TransferDataContainer::CopyImageMap( const ImageMap& rImgMap )
 
 void TransferDataContainer::CopyGraphic( const Graphic& rGrf )
 {
-    USHORT nType = rGrf.GetType();
+    GraphicType nType = rGrf.GetType();
     if( GRAPHIC_NONE != nType )
     {
         if( !pImpl->pGrf )
