@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:09:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3719,7 +3719,7 @@ void FmXFormShell::CreateExternalView()
                 DBG_ASSERT(aOffset != aRadioPositions.end(),
                     "FmXFormShell::CreateExternalView : inconsistent radio descriptions !");
                 sal_Int16 nPosition = (*aOffset).second;
-                nPosition += nOffset;
+                nPosition = nPosition + nOffset;
                     // we alread inserted nOffset additinal columns ....
                 pDispatchArgs->Value <<= nPosition;
                 ++pDispatchArgs;
@@ -4215,7 +4215,7 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
             }
             if (MENU_ITEM_NOTFOUND == nPrevInConversion)
                 // none of the items which precede the nSID-slot in the source menu are present in our conversion menu
-                nPrevInConversion = 0 - 1;  // put the item at the first position
+                nPrevInConversion = sal::static_int_cast< USHORT >(-1); // put the item at the first position
             m_pConversionMenu->InsertItem(nSID, pSource->GetItemText(nSID), pSource->GetItemBits(nSID), ++nPrevInConversion);
             m_pConversionMenu->SetItemImage(nSID, pSource->GetItemImage(nSID));
             m_pConversionMenu->SetHelpId(nSID, pSource->GetHelpId(nSID));
