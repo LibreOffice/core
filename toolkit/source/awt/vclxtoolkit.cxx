@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:15:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:31:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1257,9 +1257,6 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
 
     else if( clipboardName.equals( ::rtl::OUString::createFromAscii("Selection") ) )
     {
-        if( !mxSelection.is() )
-            ;
-
         return mxSelection;
     }
 
@@ -1561,7 +1558,8 @@ long VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
             | (pKeyEvent->GetKeyCode().IsMod2()
                ? ::css::awt::KeyModifier::MOD2 : 0),
             pKeyEvent->GetKeyCode().GetCode(), pKeyEvent->GetCharCode(),
-            pKeyEvent->GetKeyCode().GetFunction());
+            sal::static_int_cast< sal_Int16 >(
+                pKeyEvent->GetKeyCode().GetFunction()));
         for (::sal_Int32 i = 0; i < aHandlers.getLength(); ++i)
         {
             ::css::uno::Reference< ::css::awt::XKeyHandler > xHandler(
