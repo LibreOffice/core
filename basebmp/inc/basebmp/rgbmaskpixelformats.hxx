@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rgbmaskpixelformats.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 11:38:55 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:46:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,31 +129,34 @@ template< typename PixelType,
         const typename base_type::unsigned_pixel_type green(v & GreenMask);
         const typename base_type::unsigned_pixel_type blue (v & BlueMask);
 
+        // shift color nibbles to right-aligend position. ORing it
+        // channel value shifted twice the number of channel bits, to
+        // spread the value into the component_type range
         ColorType res( (shiftRight(red,
                                    base_type::red_shift-8*
-                                   sizeof(typename base_type::component_type)+
+                                   (signed)sizeof(typename base_type::component_type)+
                                    base_type::red_bits)) |
                        (shiftRight(red,
                                    base_type::red_shift-8*
-                                   sizeof(typename base_type::component_type)+
+                                   (signed)sizeof(typename base_type::component_type)+
                                    2*base_type::red_bits)),
 
                        (shiftRight(green,
                                    base_type::green_shift-8*
-                                   sizeof(typename base_type::component_type)+
+                                   (signed)sizeof(typename base_type::component_type)+
                                    base_type::green_bits)) |
                        (shiftRight(green,
                                    base_type::green_shift-8*
-                                   sizeof(typename base_type::component_type)+
+                                   (signed)sizeof(typename base_type::component_type)+
                                    2*base_type::green_bits)),
 
                        (shiftRight(blue,
                                    base_type::blue_shift-8*
-                                   sizeof(typename base_type::component_type)+
+                                   (signed)sizeof(typename base_type::component_type)+
                                    base_type::blue_bits)) |
                        (shiftRight(blue,
                                    base_type::blue_shift-8*
-                                   sizeof(typename base_type::component_type)+
+                                   (signed)sizeof(typename base_type::component_type)+
                                    2*base_type::blue_bits)) );
         return res;
     }
@@ -189,15 +192,15 @@ template< typename PixelType,
         typename base_type::unsigned_pixel_type res(
             (shiftLeft(red,
                        base_type::red_shift-8*
-                       sizeof(typename base_type::component_type)+
+                       (signed)sizeof(typename base_type::component_type)+
                        base_type::red_bits) & RedMask) |
             (shiftLeft(green,
                        base_type::green_shift-8*
-                       sizeof(typename base_type::component_type)+
+                       (signed)sizeof(typename base_type::component_type)+
                        base_type::green_bits) & GreenMask) |
             (shiftLeft(blue,
                        base_type::blue_shift-8*
-                       sizeof(typename base_type::component_type)+
+                       (signed)sizeof(typename base_type::component_type)+
                        base_type::blue_bits) & BlueMask) );
 
         return SwapBytes ? byteSwap(res) : res;
