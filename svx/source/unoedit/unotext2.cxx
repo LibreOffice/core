@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:18:34 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:28:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,8 +195,6 @@ uno::Any SAL_CALL SvxUnoTextContent::queryAggregation( const uno::Type & rType )
     else QUERYINT( lang::XUnoTunnel );
     else
         return OWeakAggObject::queryAggregation( rType );
-
-    return OWeakAggObject::queryAggregation( rType );
 }
 
 uno::Any SAL_CALL SvxUnoTextContent::queryInterface( const uno::Type & rType ) throw( uno::RuntimeException )
@@ -455,7 +453,7 @@ sal_Bool SAL_CALL SvxUnoTextRangeEnumeration::hasMoreElements()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    return mpPortions ? mnNextPortion < mpPortions->Count() : 0;
+    return mpPortions && mnNextPortion < mpPortions->Count();
 }
 
 uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
@@ -550,8 +548,6 @@ uno::Any SAL_CALL SvxUnoTextCursor::queryAggregation( const uno::Type & rType )
     else QUERYINT( lang::XUnoTunnel );
     else
         return OWeakAggObject::queryAggregation( rType );
-
-    return OWeakAggObject::queryAggregation( rType );
 }
 
 uno::Any SAL_CALL SvxUnoTextCursor::queryInterface( const uno::Type & rType )
