@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filepickerstate.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:56:35 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:52:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -639,13 +639,15 @@ void SAL_CALL CExecuteFilePickerState::cacheControlState( HWND hwndControl, CFil
         OSL_ASSERT( lpfnGetValue );
 
         aNonExecFilePickerState->setValue(
-            GetDlgCtrlID( hwndControl ),
+            sal::static_int_cast< sal_Int16 >( GetDlgCtrlID( hwndControl ) ),
             aControlAction,
             lpfnGetValue( hwndControl ) );
 
         aNonExecFilePickerState->setLabel(
-            GetDlgCtrlID( hwndControl ),
-            getLabel( GetDlgCtrlID( hwndControl ) ) );
+            sal::static_int_cast< sal_Int16 >( GetDlgCtrlID( hwndControl ) ),
+            getLabel(
+                sal::static_int_cast< sal_Int16 >(
+                    GetDlgCtrlID( hwndControl ) ) ) );
     }
     else if ( LISTBOX == aCtrlClass )
     {
@@ -658,7 +660,7 @@ void SAL_CALL CExecuteFilePickerState::cacheControlState( HWND hwndControl, CFil
         lpfnGetValue = GetCtrlGetValueFunction( aCtrlClass, aControlAction );
 
         aNonExecFilePickerState->setValue(
-            GetDlgCtrlID( hwndControl ),
+            sal::static_int_cast< sal_Int16 >( GetDlgCtrlID( hwndControl ) ),
             aControlAction,
             lpfnGetValue( hwndControl ) );
 
@@ -667,7 +669,7 @@ void SAL_CALL CExecuteFilePickerState::cacheControlState( HWND hwndControl, CFil
         lpfnGetValue = GetCtrlGetValueFunction( aCtrlClass, aControlAction );
 
         aNonExecFilePickerState->setValue(
-            GetDlgCtrlID( hwndControl ),
+            sal::static_int_cast< sal_Int16 >( GetDlgCtrlID( hwndControl ) ),
             aControlAction,
             lpfnGetValue( hwndControl ) );
     }
@@ -735,8 +737,9 @@ HWND SAL_CALL CExecuteFilePickerState::GetHwndDlgItem( sal_Int16 aControlId, sal
     // the ok and cancel button
     if ( !hwndCtrl && bIncludeStdCtrls )
     {
-        aControlId = CommonFilePickerCtrlIdToWinFileOpenCtrlId( aControlId );
-        hwndCtrl = GetDlgItem( GetParent( m_hwndDlg ), aControlId );
+        hwndCtrl = GetDlgItem(
+            GetParent( m_hwndDlg ),
+            CommonFilePickerCtrlIdToWinFileOpenCtrlId( aControlId ) );
     }
 
     return hwndCtrl;
