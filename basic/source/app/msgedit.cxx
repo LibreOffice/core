@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:56:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:22:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,8 +327,13 @@ void MsgEdit::AddWarning( String aMsg, TTDebugData aDebugData )
         aEditTree.ShowEntry( pThisEntry );
     }
 
-    while ( !aEditTree.IsEntryVisible( pThisEntry ) && ( pThisEntry = aEditTree.GetParent( pThisEntry ) ) )
+    while ( !aEditTree.IsEntryVisible( pThisEntry ) )
+    {
+        pThisEntry = aEditTree.GetParent( pThisEntry );
+        if ( pThisEntry == NULL )
+            break;
         aEditTree.InvalidateEntry( pThisEntry );
+    }
 }
 
 void MsgEdit::AddAssertion( String aMsg, TTDebugData aDebugData )
@@ -357,8 +362,13 @@ void MsgEdit::AddAssertion( String aMsg, TTDebugData aDebugData )
 
     pCurrentAssertion = pThisEntry;
 
-    while ( !aEditTree.IsEntryVisible( pThisEntry ) && ( pThisEntry = aEditTree.GetParent( pThisEntry ) ) )
+    while ( !aEditTree.IsEntryVisible( pThisEntry ) )
+    {
+        pThisEntry = aEditTree.GetParent( pThisEntry );
+        if ( pThisEntry == NULL )
+            break;
         aEditTree.InvalidateEntry( pThisEntry );
+    }
 }
 
 void MsgEdit::AddAssertionStack( String aMsg, TTDebugData aDebugData )
@@ -381,8 +391,13 @@ void MsgEdit::AddAssertionStack( String aMsg, TTDebugData aDebugData )
         aEditTree.ShowEntry( pThisEntry );
     }
 
-    while ( !aEditTree.IsEntryVisible( pThisEntry ) && ( pThisEntry = aEditTree.GetParent( pThisEntry ) ) )
+    while ( !aEditTree.IsEntryVisible( pThisEntry ) )
+    {
+        pThisEntry = aEditTree.GetParent( pThisEntry );
+        if ( pThisEntry == NULL )
+            break;
         aEditTree.InvalidateEntry( pThisEntry );
+    }
 }
 
 void MsgEdit::AddQAError( String aMsg, TTDebugData aDebugData )
@@ -403,8 +418,13 @@ void MsgEdit::AddQAError( String aMsg, TTDebugData aDebugData )
         aEditTree.ShowEntry( pThisEntry );
     }
 
-    while ( !aEditTree.IsEntryVisible( pThisEntry ) && ( pThisEntry = aEditTree.GetParent( pThisEntry ) ) )
+    while ( !aEditTree.IsEntryVisible( pThisEntry ) )
+    {
+        pThisEntry = aEditTree.GetParent( pThisEntry );
+        if ( pThisEntry == NULL )
+            break;
         aEditTree.InvalidateEntry( pThisEntry );
+    }
 }
 
 /*
