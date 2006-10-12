@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcols.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:01:46 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:43:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
     else
     {
         sal_Int32 nPrefixPos = aModelName.indexOf(aModelPrefix);
-#if DBG_UTIL
+#ifdef DBG_UTIL
         sal_Int32 nCompatiblePrefixPos = aModelName.indexOf(aCompatibleModelPrefix);
         DBG_ASSERT( (nPrefixPos != -1) ||   (nCompatiblePrefixPos != -1), "::getColumnTypeByModelName() : wrong servivce !");
 #endif

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confirmdelete.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:03:05 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:44:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,13 +79,12 @@ namespace svxform
         String sMessage(SVX_RES(RID_STR_DELETECONFIRM));
 
         // Changed as per BugID 79541 Branding/Configuration
-        ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
-        Any aProductName = pMgr->GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME);
+        Any aProductName = ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME);
         ::rtl::OUString sProductName;
         aProductName >>= sProductName;
 
         String aTitle = sProductName;
-        aProductName = pMgr->GetDirectConfigProperty(::utl::ConfigManager::PRODUCTVERSION);
+        aProductName = ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTVERSION);
         aProductName >>= sProductName;
         aTitle.AppendAscii(" ");
         aTitle += String(sProductName);
