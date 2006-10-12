@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport4.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:29:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:42:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -576,7 +576,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                         if ( rGeoProp.Value >>= aRect )
                         {
                             SdXMLImExViewBox aViewBox( aRect.X, aRect.Y, aRect.Width, aRect.Height );
-                            rExport.AddAttribute( XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString( rExport.GetMM100UnitConverter() ) );
+                            rExport.AddAttribute( XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString() );
                         }
                     }
                     break;
