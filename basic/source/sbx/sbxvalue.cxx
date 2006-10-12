@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxvalue.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:12:51 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:34:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -546,7 +546,10 @@ BOOL SbxValue::Get( SbxValues& rRes ) const
                 case SbxCURRENCY:rRes.nLong64 = ImpGetCurrency( &p->aData ); break;
                 case SbxDECIMAL: rRes.pDecimal = ImpGetDecimal( &p->aData ); break;
                 case SbxDATE:    rRes.nDouble = ImpGetDate( &p->aData ); break;
-                case SbxBOOL:    rRes.nUShort = ImpGetBool( &p->aData ); break;
+                case SbxBOOL:
+                    rRes.nUShort = sal::static_int_cast< UINT16 >(
+                        ImpGetBool( &p->aData ) );
+                    break;
                 case SbxCHAR:    rRes.nChar = ImpGetChar( &p->aData ); break;
                 case SbxBYTE:    rRes.nByte = ImpGetByte( &p->aData ); break;
                 case SbxUSHORT:  rRes.nUShort = ImpGetUShort( &p->aData ); break;
@@ -761,7 +764,9 @@ BOOL SbxValue::Put( const SbxValues& rVal )
                         if( p->aData.pObj && p->aData.pObj != p )
                         {
                             if ( p != this )
+                            {
                                 DBG_ERROR( "TheRealValue" );
+                            }
                             HACK(nicht bei Parent-Prop - sonst CyclicRef)
                             SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
                             BOOL bParentProp = pThisVar && 5345 ==
@@ -863,7 +868,7 @@ BOOL SbxValue::PutBool( BOOL b )
 {
     SbxValues aRes;
     aRes.eType = SbxBOOL;
-    aRes.nUShort = b ? SbxTRUE : SbxFALSE;
+    aRes.nUShort = sal::static_int_cast< UINT16 >(b ? SbxTRUE : SbxFALSE);
     Put( aRes );
     return BOOL( !IsError() );
 }
@@ -1712,7 +1717,7 @@ BOOL SbxValue::LoadData( SvStream& r, USHORT )
 
 BOOL SbxValue::StoreData( SvStream& r ) const
 {
-    UINT16 nType = aData.eType;
+    UINT16 nType = sal::static_int_cast< UINT16 >(aData.eType);
     r << nType;
     switch( nType & 0x0FFF )
     {
@@ -1773,7 +1778,7 @@ BOOL SbxValue::StoreData( SvStream& r ) const
             break;
         case SbxCHAR:
         {
-            char c = aData.nChar;
+            char c = sal::static_int_cast< char >(aData.nChar);
             r << c;
             break;
         }
