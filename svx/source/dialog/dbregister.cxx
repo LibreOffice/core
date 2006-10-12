@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbregister.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:16:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:10:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,10 +142,10 @@ DatabaseRegistrationDialog::DatabaseRegistrationDialog( Window* pParent, const S
     :RegistrationItemSetHolder( rInAttrs )
     ,SfxSingleTabDialog( pParent, getRegistrationItems(), RID_SFXPAGE_DBREGISTER )
 {
-    SfxTabPage* pPage = DbRegistrationOptionsPage::Create( this, getRegistrationItems() );
+    SfxTabPage* page = DbRegistrationOptionsPage::Create( this, getRegistrationItems() );
 
-    SetTabPage( pPage );
-    SetText( pPage->GetText() );
+    SetTabPage( page );
+    SetText( page->GetText() );
 }
 
 DatabaseRegistrationDialog::~DatabaseRegistrationDialog()
