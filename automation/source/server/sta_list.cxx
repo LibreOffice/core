@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:36:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:17:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -399,7 +399,7 @@ Window* StatementList::SearchClientWin( Window *pBase, Search &aSearch, BOOL May
 
     Window *pResult = NULL;
 
-    int i;
+    USHORT i;
     for( i = 0 ; i < pBase->GetChildCount() && !pResult; i++ )
         pResult = SearchClientWin( pBase->GetChild(i), aSearch );
 
@@ -423,7 +423,7 @@ BOOL SearchUID::IsWinOK( Window *pWin )
     else if ( pWin->GetType() == WINDOW_TOOLBOX )   // Buttons and Controls on ToolBox.
     {
         ToolBox *pTB = ((ToolBox*)pWin);
-        int i;
+        USHORT i;
         for ( i = 0; i < pTB->GetItemCount() ; i++ )
         {
             if ( aUId.Matches( pTB->GetItemCommand(pTB->GetItemId( i )) ) || aUId.Matches( pTB->GetHelpId(pTB->GetItemId( i )) ) )
@@ -605,10 +605,11 @@ Menu* StatementList::GetMatchingMenu( Window* pWin, Menu* pBaseMenu )
                 return pMenu;
         }
 
-        USHORT nSkip = 0;
-        Window* pMenuBarWin = NULL;
-        while ( (pMenuBarWin = GetWinByRT( NULL, WINDOW_MENUBARWINDOW, TRUE, nSkip++, TRUE )) )
+        for ( USHORT nSkip = 0;; )
         {
+            Window* pMenuBarWin = GetWinByRT( NULL, WINDOW_MENUBARWINDOW, TRUE, nSkip++, TRUE );
+            if ( pMenuBarWin == NULL )
+                break;
             Window* pParent = pMenuBarWin->GET_REAL_PARENT();
             if ( pParent && pParent->GetType() == WINDOW_BORDERWINDOW && pParent->IsVisible() )
             {
@@ -935,7 +936,7 @@ String StatementList::ClientTree(Window *pBase, int Indent)
 #endif
 
     String sIndent,aText,aReturn;
-    sIndent.Expand(2*Indent);
+    sIndent.Expand(sal::static_int_cast< xub_StrLen >(2*Indent));
 
     aText = pBase->GetText();
 
@@ -1012,7 +1013,7 @@ String StatementList::ClientTree(Window *pBase, int Indent)
     WRITEc("\n");
 
     aReturn.ConvertLineEnd();
-    int i;
+    USHORT i;
     for (i = 0 ; i < pBase->GetChildCount() ; i++)
     {
         aReturn += ClientTree(pBase->GetChild(i),Indent+1);
