@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:54:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:12:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,7 +266,7 @@ XPolygon SdrCircObj::ImpCalcXPolyCirc(const Rectangle& rRect1, long nStart, long
         }
     }
     ((SdrCircObj*)this)->bXPolyIsLine=eKind==OBJ_CARC;
-    FASTBOOL bClose=eKind==OBJ_CIRC /*|| eKind==OBJ_SECT*/;
+    bool bClose=eKind==OBJ_CIRC /*|| eKind==OBJ_SECT*/;
     XPolygon aXPoly(rRect1.Center(),rx,ry,USHORT(a),USHORT(e),bClose);
     if (eKind!=OBJ_CIRC && nStart==nEnd) {
         if (eKind==OBJ_SECT) {
@@ -339,9 +339,9 @@ sal_Bool SdrCircObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
     //if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
     //  return TRUE;
 
-    BOOL bHideContour(IsHideContour());
-    BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
-    BOOL bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
+    bool bHideContour(IsHideContour());
+    bool bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
+    bool bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
 
     // prepare ItemSet of this object
     const SfxItemSet& rSet = GetObjectItemSet();
@@ -466,7 +466,7 @@ sal_Bool SdrCircObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
         ImpDrawColorLineGeometry(rXOut, aItemSet, *pLineGeometry);
     }
 
-    FASTBOOL bOk=TRUE;
+    bool bOk=true;
     if (HasText()) {
         bOk=SdrTextObj::DoPaintObject(rXOut,rInfoRec);
     }
@@ -481,7 +481,7 @@ sal_Bool SdrCircObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
 
 SdrObject* SdrCircObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
-    if (pVisiLayer!=NULL && !pVisiLayer->IsSet(nLayerId)) return NULL;
+    if (pVisiLayer!=NULL && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId))) return NULL;
     Point aPt(rPnt);
     Point aZero;
     aPt.X()-=aRect.Left();
