@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pfiledlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:34:51 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:25:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,16 +234,16 @@ SvxPluginFileDlg::~SvxPluginFileDlg()
 #define PFDLG_FOUND_SOUND       0x0004
 #define PFDLG_FOUND_VIDEO       0x0008
 
-sal_Bool SvxPluginFileDlg::IsAvailable (sal_uInt16 nKind)
+bool SvxPluginFileDlg::IsAvailable (sal_uInt16 nKind)
 {
     static sal_uInt16 nCheck = 0;
 
     if ( nKind == SID_INSERT_SOUND && ( nCheck & PFDLG_CHECKED_SOUND ) )
-        return (nCheck & PFDLG_FOUND_SOUND);
+        return (nCheck & PFDLG_FOUND_SOUND) != 0;
     if ( nKind == SID_INSERT_VIDEO && ( nCheck & PFDLG_CHECKED_VIDEO ) )
-        return (nCheck & PFDLG_FOUND_VIDEO);
+        return (nCheck & PFDLG_FOUND_VIDEO) != 0;
 
-    sal_Bool bFound=sal_False;
+    bool bFound = false;
     uno::Reference< lang::XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
 
     if( xMgr.is() )
@@ -266,7 +266,7 @@ sal_Bool SvxPluginFileDlg::IsAvailable (sal_uInt16 nKind)
 
                         if( aStrPlugMIMEType.SearchAscii( sAudio ) == 0 )
                         {
-                            bFound=sal_True;
+                            bFound = true;
                             nCheck |= PFDLG_FOUND_SOUND;
                         }
                     }
@@ -277,7 +277,7 @@ sal_Bool SvxPluginFileDlg::IsAvailable (sal_uInt16 nKind)
 
                         if (aStrPlugMIMEType.SearchAscii( sVideo ) == 0)
                         {
-                            bFound=sal_True;
+                            bFound = true;
                             nCheck |= PFDLG_FOUND_VIDEO;
                         }
                     }
