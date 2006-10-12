@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _xpoly.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:22:28 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:30:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ ImpXPolygon::~ImpXPolygon()
 *************************************************************************/
 
 
-FASTBOOL ImpXPolygon::operator==(const ImpXPolygon& rImpXPoly) const
+bool ImpXPolygon::operator==(const ImpXPolygon& rImpXPoly) const
 {
     return nPoints==rImpXPoly.nPoints &&
            (nPoints==0 ||
@@ -267,7 +267,7 @@ void ImpXPolygon::InsertSpace( USHORT nPos, USHORT nCount )
     memset( &pPointAry[nPos], 0, nCount * sizeof( Point ) );
     memset( &pFlagAry [nPos], 0, nCount );
 
-    nPoints += nCount;
+    nPoints = nPoints + nCount;
 }
 
 
@@ -297,7 +297,7 @@ void ImpXPolygon::Remove( USHORT nPos, USHORT nCount )
         }
         memset( &pPointAry[nPoints - nCount], 0, nCount * sizeof( Point ) );
         memset( &pFlagAry [nPoints - nCount], 0, nCount );
-        nPoints -= nCount;
+        nPoints = nPoints - nCount;
     }
 }
 
@@ -1008,16 +1008,16 @@ void XPolygon::SubdivideBezier(USHORT nPos, BOOL bCalcFirst, double fT)
                                 fT  * fU2 * pPoints[nIdx+1].Y() * 3 +
                                 fT2 * fU  * pPoints[nIdx+2].Y() * 3 +
                                 fT3 *       pPoints[nIdx+3].Y());
-    nPos += nPosInc;
-    nIdx += nIdxInc;
+    nPos = nPos + nPosInc;
+    nIdx = nIdx + nIdxInc;
     pPoints[nPos].X() = (long) (fU2 *       pPoints[nIdx  ].X() +
                                 fT  * fU *  pPoints[nIdx+1].X() * 2 +
                                 fT2 *       pPoints[nIdx+2].X());
     pPoints[nPos].Y() = (long) (fU2 *       pPoints[nIdx  ].Y() +
                                 fT  * fU *  pPoints[nIdx+1].Y() * 2 +
                                 fT2 *       pPoints[nIdx+2].Y());
-    nPos += nPosInc;
-    nIdx += nIdxInc;
+    nPos = nPos + nPosInc;
+    nIdx = nIdx + nIdxInc;
     pPoints[nPos].X() = (long) (fU * pPoints[nIdx  ].X() +
                                 fT * pPoints[nIdx+1].X());
     pPoints[nPos].Y() = (long) (fU * pPoints[nIdx  ].Y() +
@@ -1989,12 +1989,12 @@ ImpXPolyPolygon::~ImpXPolyPolygon()
 *************************************************************************/
 
 
-FASTBOOL ImpXPolyPolygon::operator==(const ImpXPolyPolygon& rImpXPolyPoly) const
+bool ImpXPolyPolygon::operator==(const ImpXPolyPolygon& rImpXPolyPoly) const
 {
     USHORT nAnz=(USHORT)aXPolyList.Count();
     const XPolygonList& rCmpList=rImpXPolyPoly.aXPolyList;
     if (nAnz!=(USHORT)rCmpList.Count()) return FALSE;
-    FASTBOOL bEq=TRUE;
+    bool bEq=true;
     for (USHORT i=nAnz; i>0 && bEq;) {
         i--;
         bEq= *aXPolyList.GetObject(i) == *rCmpList.GetObject(i);
