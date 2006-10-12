@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:22:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:30:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -569,7 +569,7 @@ TYPEINIT1_AUTOFACTORY(XLineStyleItem, SfxEnumItem);
 *************************************************************************/
 
 XLineStyleItem::XLineStyleItem(XLineStyle eTheLineStyle) :
-    SfxEnumItem(XATTR_LINESTYLE, eTheLineStyle)
+    SfxEnumItem(XATTR_LINESTYLE, sal::static_int_cast< USHORT >(eTheLineStyle))
 {
 }
 
@@ -677,7 +677,7 @@ sal_Bool XLineStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
         eLS = (::com::sun::star::drawing::LineStyle)nLS;
     }
 
-    SetValue( (XLineStyle)eLS );
+    SetValue( sal::static_int_cast< USHORT >( eLS ) );
     return sal_True;
 }
 
@@ -723,7 +723,7 @@ XDash::XDash(XDashStyle eTheDash, USHORT nTheDots, ULONG nTheDotLen,
 |*
 *************************************************************************/
 
-int XDash::operator==(const XDash& rDash) const
+bool XDash::operator==(const XDash& rDash) const
 {
     return ( eDash      == rDash.eDash      &&
              nDots      == rDash.nDots      &&
@@ -1150,7 +1150,7 @@ sal_Bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE n
 
         case MID_LINEDASH_STYLE:
         {
-            sal_Int16 nVal;
+            sal_Int16 nVal = sal_Int16();
             if(!(rVal >>= nVal))
                 return sal_False;
 
@@ -1168,7 +1168,7 @@ sal_Bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE n
         case MID_LINEDASH_DOTS:
         case MID_LINEDASH_DASHES:
         {
-            sal_Int16 nVal;
+            sal_Int16 nVal = sal_Int16();
             if(!(rVal >>= nVal))
                 return sal_False;
 
@@ -2884,7 +2884,7 @@ TYPEINIT1_AUTOFACTORY(XFillStyleItem, SfxEnumItem);
 *************************************************************************/
 
 XFillStyleItem::XFillStyleItem(XFillStyle eFillStyle) :
-    SfxEnumItem(XATTR_FILLSTYLE, eFillStyle)
+    SfxEnumItem(XATTR_FILLSTYLE, sal::static_int_cast< USHORT >(eFillStyle))
 {
 }
 
@@ -3013,7 +3013,7 @@ sal_Bool XFillStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
         eFS = (::com::sun::star::drawing::FillStyle)nFS;
     }
 
-    SetValue( (XFillStyle)eFS );
+    SetValue( sal::static_int_cast< USHORT >( eFS ) );
 
     return sal_True;
 }
@@ -3265,7 +3265,7 @@ XGradient::XGradient(const Color& rStart, const Color& rEnd,
 |*
 *************************************************************************/
 
-int XGradient::operator==(const XGradient& rGradient) const
+bool XGradient::operator==(const XGradient& rGradient) const
 {
     return ( eStyle         == rGradient.eStyle         &&
              aStartColor    == rGradient.aStartColor    &&
@@ -3742,7 +3742,7 @@ sal_Bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, BY
         case MID_GRADIENT_XOFFSET:
         case MID_GRADIENT_YOFFSET:
         {
-            sal_Int16 nVal;
+            sal_Int16 nVal = sal_Int16();
             if(!(rVal >>= nVal ))
                 return sal_False;
 
@@ -4007,7 +4007,7 @@ XHatch::XHatch(const Color& rCol, XHatchStyle eTheStyle, long nTheDistance,
 |*
 *************************************************************************/
 
-int XHatch::operator==(const XHatch& rHatch) const
+bool XHatch::operator==(const XHatch& rHatch) const
 {
     return ( eStyle     == rHatch.eStyle    &&
              aColor     == rHatch.aColor    &&
@@ -4387,7 +4387,7 @@ sal_Bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
 
         case MID_HATCH_STYLE:
         {
-            sal_Int16 nVal;
+            sal_Int16 nVal = sal_Int16();
             if (!(rVal >>= nVal ))
                 return sal_False;
             aHatch.SetHatchStyle( (XHatchStyle)nVal );
@@ -4464,7 +4464,7 @@ TYPEINIT1_AUTOFACTORY(XFormTextStyleItem, SfxEnumItem);
 *************************************************************************/
 
 XFormTextStyleItem::XFormTextStyleItem(XFormTextStyle eTheStyle) :
-    SfxEnumItem(XATTR_FORMTXTSTYLE, eTheStyle)
+    SfxEnumItem(XATTR_FORMTXTSTYLE, sal::static_int_cast< USHORT >(eTheStyle))
 {
 }
 
@@ -4548,7 +4548,7 @@ sal_Bool XFormTextStyleItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue;
     rVal >>= nValue;
-    SetValue((XFormTextStyle)nValue);
+    SetValue(sal::static_int_cast< USHORT >(nValue));
 
     return sal_True;
 }
@@ -4569,7 +4569,7 @@ TYPEINIT1_AUTOFACTORY(XFormTextAdjustItem, SfxEnumItem);
 *************************************************************************/
 
 XFormTextAdjustItem::XFormTextAdjustItem(XFormTextAdjust eTheAdjust) :
-    SfxEnumItem(XATTR_FORMTXTADJUST, eTheAdjust)
+    SfxEnumItem(XATTR_FORMTXTADJUST, sal::static_int_cast< USHORT >(eTheAdjust))
 {
 }
 
@@ -4653,7 +4653,7 @@ sal_Bool XFormTextAdjustItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/
 {
     sal_Int32 nValue;
     rVal >>= nValue;
-    SetValue((XFormTextAdjust)nValue);
+    SetValue(sal::static_int_cast< USHORT >(nValue));
 
     return sal_True;
 }
@@ -4929,7 +4929,8 @@ TYPEINIT1_AUTOFACTORY(XFormTextShadowItem, SfxEnumItem);
 *************************************************************************/
 
 XFormTextShadowItem::XFormTextShadowItem(XFormTextShadow eFormTextShadow) :
-    SfxEnumItem(XATTR_FORMTXTSHADOW, eFormTextShadow)
+    SfxEnumItem(
+        XATTR_FORMTXTSHADOW, sal::static_int_cast< USHORT >(eFormTextShadow))
 {
 }
 
@@ -5014,7 +5015,7 @@ sal_Bool XFormTextShadowItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/
 {
     sal_Int32 nValue;
     rVal >>= nValue;
-    SetValue((XFormTextShadow)nValue);
+    SetValue(sal::static_int_cast< USHORT >(nValue));
 
     return sal_True;
 }
@@ -5247,7 +5248,8 @@ TYPEINIT1_AUTOFACTORY(XFormTextStdFormItem, SfxEnumItem);
 *************************************************************************/
 
 XFormTextStdFormItem::XFormTextStdFormItem(XFormTextStdForm eFormTextStdForm) :
-    SfxEnumItem(XATTR_FORMTXTSTDFORM, eFormTextStdForm)
+    SfxEnumItem(
+        XATTR_FORMTXTSTDFORM, sal::static_int_cast< USHORT >(eFormTextStdForm))
 {
 }
 
@@ -5332,7 +5334,7 @@ sal_Bool XFormTextStdFormItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*
 {
     sal_Int32 nValue;
     rVal >>= nValue;
-    SetValue((XFormTextStdForm)nValue);
+    SetValue(sal::static_int_cast< USHORT >(nValue));
 
     return sal_True;
 }
