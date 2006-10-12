@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olewrapclient.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:44:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:23:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ class OleWrapperClientSite : public IOleClientSite
 
 public:
     OleWrapperClientSite( OleComponent* pOleComp );
-    ~OleWrapperClientSite(void);
+    virtual ~OleWrapperClientSite(void);
 
     void disconnectOleComponent();
 
