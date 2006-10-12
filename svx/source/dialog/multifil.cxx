@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multifil.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:27:55 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:19:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,8 @@
 #include <ucbhelper/contentbroker.hxx>
 #endif
 
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 
@@ -77,7 +79,8 @@ using namespace com::sun::star::uno;
 
 IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
 {
-    sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+    sfx2::FileDialogHelper aDlg(
+        com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 
     if ( IsClassPathMode() )
     {
