@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UpdateHelperImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:21:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:40:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,7 @@ namespace dbaui
             ,m_xResultSetUpdate(_xRowSet,::com::sun::star::uno::UNO_QUERY)
         {
         }
+        virtual ~ORowUpdateHelper() {}
         virtual void updateString(sal_Int32 _nPos, const ::rtl::OUString& _sValue)
         {
             m_xRowUpdate->updateString(_nPos, _sValue);
@@ -103,6 +104,7 @@ namespace dbaui
            ,m_xParameters(_xPrepared,::com::sun::star::uno::UNO_QUERY)
         {
         }
+        virtual ~OParameterUpdateHelper() {}
         virtual void updateString(sal_Int32 _nPos, const ::rtl::OUString& _sValue)
         {
             m_xParameters->setString(_nPos, _sValue);
