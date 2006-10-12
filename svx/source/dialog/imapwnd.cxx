@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:25:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:16:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,11 +218,11 @@ void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap, BOOL /*bScaleToGrap
     }
 
     // create new drawing objects
-    const sal_Int32 nCount(rImageMap.GetIMapObjectCount());
+    const USHORT nCount(rImageMap.GetIMapObjectCount());
 
-    for ( sal_Int32 i(nCount - 1L); i > -1L; i-- )
+    for ( USHORT i(nCount); i > 0; i-- )
     {
-        SdrObject* pNewObj = CreateObj( rImageMap.GetIMapObject( (sal_uInt32) i ) );
+        SdrObject* pNewObj = CreateObj( rImageMap.GetIMapObject( i - 1 ) );
 
         if ( pNewObj )
         {
@@ -319,7 +319,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
     Point       aPoint;
     Rectangle   aClipRect( aPoint, GetGraphicSize() );
     SdrObject*  pSdrObj = NULL;
-    IMapObject* pCloneIMapObj;
+    IMapObject* pCloneIMapObj = NULL;
 
     switch( pIMapObj->GetType() )
     {
