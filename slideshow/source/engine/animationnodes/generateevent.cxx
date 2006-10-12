@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generateevent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:35:52 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:59:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ EventSharedPtr generateEvent(
     animations::Timing eTiming;
     animations::Event aEvent;
     uno::Sequence<uno::Any> aSequence;
-    double nDelay;
+    double nDelay1;
 
     if (rEventDescription >>= eTiming) {
         switch (eTiming) {
@@ -83,8 +83,8 @@ EventSharedPtr generateEvent(
     else if (rEventDescription >>= aEvent) {
 
         // try to extract additional event delay
-        double nDelay = 0.0;
-        if (aEvent.Offset.hasValue() && !(aEvent.Offset >>= nDelay)) {
+        double nDelay2 = 0.0;
+        if (aEvent.Offset.hasValue() && !(aEvent.Offset >>= nDelay2)) {
             OSL_ENSURE( false, "offset values apart from DOUBLE not "
                         "recognized in animations::Event!" );
         }
@@ -111,7 +111,7 @@ EventSharedPtr generateEvent(
         case animations::EventTrigger::BEGIN_EVENT:
             // try to extract XAnimationNode event source
             if (aEvent.Source >>= xNode) {
-                pEvent = makeDelay( rFunctor, nDelay + nAdditionalDelay );
+                pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
                 rContext.mrUserEventQueue.registerAnimationStartEvent(
                     pEvent, xNode );
             }
@@ -123,7 +123,7 @@ EventSharedPtr generateEvent(
         case animations::EventTrigger::END_EVENT:
             // try to extract XAnimationNode event source
             if (aEvent.Source >>= xNode) {
-                pEvent = makeDelay( rFunctor, nDelay + nAdditionalDelay );
+                pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
                 rContext.mrUserEventQueue.registerAnimationEndEvent(
                     pEvent, xNode );
             }
@@ -137,7 +137,7 @@ EventSharedPtr generateEvent(
             if ((aEvent.Source >>= xShape) &&
                 (pShape = rContext.mpLayerManager->lookupShape(xShape)).get())
             {
-                pEvent = makeDelay( rFunctor, nDelay + nAdditionalDelay );
+                pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
                 rContext.mrUserEventQueue.registerShapeClickEvent(
                     pEvent, pShape );
             }
@@ -151,7 +151,7 @@ EventSharedPtr generateEvent(
             if ((aEvent.Source >>= xShape) &&
                 (pShape = rContext.mpLayerManager->lookupShape(xShape)).get())
             {
-                pEvent = makeDelay( rFunctor, nDelay + nAdditionalDelay );
+                pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
                 rContext.mrUserEventQueue.registerShapeDoubleClickEvent(
                     pEvent, pShape );
             }
@@ -165,7 +165,7 @@ EventSharedPtr generateEvent(
             if ((aEvent.Source >>= xShape) &&
                 (pShape = rContext.mpLayerManager->lookupShape(xShape)).get())
             {
-                pEvent = makeDelay( rFunctor, nDelay + nAdditionalDelay );
+                pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
                 rContext.mrUserEventQueue.registerMouseEnterEvent(
                     pEvent, pShape );
             }
@@ -179,7 +179,7 @@ EventSharedPtr generateEvent(
             if ((aEvent.Source >>= xShape) &&
                 (pShape = rContext.mpLayerManager->lookupShape(xShape)).get())
             {
-                pEvent = makeDelay( rFunctor, nDelay + nAdditionalDelay );
+                pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
                 rContext.mrUserEventQueue.registerMouseLeaveEvent(
                     pEvent, pShape );
             }
@@ -193,13 +193,13 @@ EventSharedPtr generateEvent(
                         "mapped to ON_NEXT!" );
             // FALLTHROUGH intended
         case animations::EventTrigger::ON_NEXT:
-            pEvent = makeDelay( rFunctor, nDelay + nAdditionalDelay );
+            pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
             rContext.mrUserEventQueue.registerNextEffectEvent( pEvent );
             break;
         case animations::EventTrigger::ON_STOP_AUDIO:
             // try to extract XAnimationNode event source
             if (aEvent.Source >>= xNode) {
-                pEvent = makeDelay( rFunctor, nDelay + nAdditionalDelay );
+                pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
                 rContext.mrUserEventQueue.registerAudioStoppedEvent(
                     pEvent, xNode );
             }
@@ -217,8 +217,8 @@ EventSharedPtr generateEvent(
         OSL_ENSURE( false, "sequence of timing primitives "
                     "not yet implemented!" );
     }
-    else if (rEventDescription >>= nDelay) {
-        pEvent = makeDelay( rFunctor, nDelay + nAdditionalDelay );
+    else if (rEventDescription >>= nDelay1) {
+        pEvent = makeDelay( rFunctor, nDelay1 + nAdditionalDelay );
         // schedule delay event
         rContext.mrEventQueue.addEvent( pEvent );
     }
