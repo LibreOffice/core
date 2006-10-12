@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:43:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:29:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -321,7 +321,7 @@ void __EXPORT SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         // VertAdjust and HorAdjust are unequivocal, thus
         SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)rAttrs.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
         SdrTextHorzAdjust eTHA = (SdrTextHorzAdjust)((const SdrTextHorzAdjustItem&)rAttrs.Get(SDRATTR_TEXT_HORZADJUST)).GetValue();
-        RECT_POINT eRP;
+        RECT_POINT eRP = RP_LB;
 
         aTsbFullWidth.EnableTriState( FALSE );
 
@@ -360,7 +360,10 @@ void __EXPORT SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
                     case SDRTEXTHORZADJUST_CENTER: eRP = RP_MB; break;
                     case SDRTEXTHORZADJUST_RIGHT: eRP = RP_RB; break;
                 }
+                break;
             }
+            default:
+                break;
         }
 
         // See if we have to check the "full width" check button.
@@ -490,10 +493,11 @@ BOOL SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
         SdrFitToSizeType eFTS;
         switch( eState )
         {
+            default: ; //prevent warning
+                DBG_ERROR( "svx::SvxTextAttrPage::FillItemSet(), unhandled state!" );
             case STATE_NOCHECK: eFTS = SDRTEXTFIT_NONE; break;
             //case STATE_CHECK: eFTS = SDRTEXTFIT_RESIZEATTR; break;
             case STATE_CHECK: eFTS = SDRTEXTFIT_PROPORTIONAL; break;
-            default: ; //prevent warning
         }
         rAttrs.Put( SdrTextFitToSizeTypeItem( eFTS ) );
     }
@@ -505,6 +509,7 @@ BOOL SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
 
     switch( eRP )
     {
+        default:
         case RP_LT: eTVA = SDRTEXTVERTADJUST_TOP;
                     eTHA = SDRTEXTHORZADJUST_LEFT; break;
         case RP_LM: eTVA = SDRTEXTVERTADJUST_CENTER;
