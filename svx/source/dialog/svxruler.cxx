@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:41:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:27:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1821,8 +1821,9 @@ void SvxRuler::DrawLine_Impl(long &_lTabPos, int nNew, BOOL Hori)
         if( nNew & 1 )
         {
 
-            _lTabPos = ConvertHSizeLogic( GetCorrectedDragPos( nNew&4, nNew&2 )
-                                         + GetNullOffset() );
+            _lTabPos = ConvertHSizeLogic(
+                GetCorrectedDragPos( ( nNew&4 ) != 0, ( nNew&2 ) != 0 ) +
+                GetNullOffset() );
             if(pPagePosItem)
                 _lTabPos += pPagePosItem->GetPos().X();
             pEditWin->InvertTracking(
@@ -2068,6 +2069,8 @@ ADD_DEBUG_TEXT("lLastLMargin: ", String::CreateFromInt32(pRuler_Imp->lLastLMargi
                 int nStartLimit = nBorderCount-2;
                 switch(GetDragType())
                 {
+                default: ;//prevent warning
+                    DBG_ERROR("svx::SvxRuler::DragBorders(), unknown drag type!" );
                 case RULER_TYPE_BORDER:
                     if(pRuler_Imp->bIsTableRows)
                     {
@@ -2105,7 +2108,6 @@ ADD_DEBUG_TEXT("lLastLMargin: ", String::CreateFromInt32(pRuler_Imp->lLastLMargi
                     nStartLimit = nBorderCount - 2;
                     pRuler_Imp->nTotalDist += lDiff;
                 break;
-                default: ;//prevent warning
                 }
 
                 for(int i  = nStartLimit; i >= nLimit; --i)
@@ -2369,7 +2371,8 @@ void SvxRuler::ApplyIndents()
             nNewFirstLineOffset -= pParaBorderItem->GetRight();
         }
     }
-    pParaItem->SetTxtFirstLineOfst(nNewFirstLineOffset);
+    pParaItem->SetTxtFirstLineOfst(
+        sal::static_int_cast< short >(nNewFirstLineOffset));
     pParaItem->SetTxtLeft(nNewTxtLeft);
 
     if(pColumnItem && ((!bRTL && !IsActLastColumn( TRUE ))|| (bRTL && !IsActFirstColumn())))
@@ -2446,16 +2449,16 @@ void SvxRuler::ApplyTabs()
             ++i;
         }
 
-        USHORT i;
-        for(i = 0; i < nCoreIdx; ++i)
+        USHORT j;
+        for(j = 0; j < nCoreIdx; ++j)
         {
-            pItem->Insert((*pTabStopItem)[i]);
+            pItem->Insert((*pTabStopItem)[j]);
         }
-        for(; i < pTabStopItem->Count(); ++i)
+        for(; j < pTabStopItem->Count(); ++j)
         {
-            SvxTabStop aTabStop = (*pTabStopItem)[i];
+            SvxTabStop aTabStop = (*pTabStopItem)[j];
             aTabStop.GetTabPos() = PixelHAdjust(
-                ConvertHPosLogic(pTabs[i+TAB_GAP].nPos -
+                ConvertHPosLogic(pTabs[j+TAB_GAP].nPos -
                                  GetLeftIndent()) -
                 lAppNullOffset,
                 aTabStop.GetTabPos());
@@ -3681,7 +3684,7 @@ void SvxRuler::Command( const CommandEvent& rCEvt )
             for ( USHORT i = RULER_TAB_LEFT; i < RULER_TAB_DEFAULT; ++i )
             {
                 USHORT nStyle = bRTL ? i|RULER_TAB_RTL : i;
-                nStyle |= bHorz ? WB_HORZ : WB_VERT;
+                nStyle |= (USHORT)(bHorz ? WB_HORZ : WB_VERT);
                 DrawTab(&aDev, aPt, nStyle);
                 aMenu.InsertItem(i+1,
                                  String(ResId(RID_SVXSTR_RULER_START+i, DIALOG_MGR())),
