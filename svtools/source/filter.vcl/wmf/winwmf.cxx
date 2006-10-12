@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 09:24:48 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:19:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,7 +345,7 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
             for( i = 0; i < nPoly; i++ )
             {
                 *pWMF >> pnPoints[i];
-                nPoints += pnPoints[i];
+                nPoints = nPoints + pnPoints[i];
             }
             // Polygonpunkte holen:
             pPtAry  = (Point*) new char[ nPoints * sizeof(Point) ];
@@ -475,7 +475,7 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
                                     while ( nDxCount-- )
                                     {
                                         *pWMF >> nDxTmp;
-                                        nDx += nDxTmp;
+                                        nDx = nDx + nDxTmp;
                                     }
                                 }
                             }
@@ -1196,7 +1196,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                     {
                         sal_uInt16 nP;
                         *pStm >> nP;
-                        nPoints += nP;
+                        nPoints = nPoints + nP;
                     }
                     for ( i = 0; i < nPoints; i++ )
                         GetWinExtMax( ReadPoint(), rPlaceableBound, nMapMode );
