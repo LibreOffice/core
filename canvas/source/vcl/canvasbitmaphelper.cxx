@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasbitmaphelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:29:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:32:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,7 @@ namespace vclcanvas
                         pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
                         pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
                         pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
-                        pRes[ nCurrPos++ ] = (sal_Int8)255;
+                        pRes[ nCurrPos++ ] = (sal_uInt8)255;
                     }
                 }
             }
@@ -523,7 +523,7 @@ namespace vclcanvas
             if( pAlphaReadAccess.get() != NULL )
                 pRes[ 3 ] = pAlphaReadAccess->GetPixel( pos.Y, pos.X ).GetIndex();
             else
-                pRes[ 3 ] = (sal_Int8)255;
+                pRes[ 3 ] = (sal_uInt8)255;
 
             return aRes;
         }
