@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usereventqueue.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:29:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:56:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,12 +73,12 @@ typedef std::map<ShapeSharedPtr, ImpEventQueue,
 class MouseEventHandler_ : public MouseEventHandler
 {
 public:
-    virtual bool handleMousePressed( awt::MouseEvent const& e ) { return false;}
-    virtual bool handleMouseReleased( awt::MouseEvent const& e) { return false;}
-    virtual bool handleMouseEntered( awt::MouseEvent const& e ) { return false;}
-    virtual bool handleMouseExited( awt::MouseEvent const& e ) { return false; }
-    virtual bool handleMouseDragged( awt::MouseEvent const& e ) { return false;}
-    virtual bool handleMouseMoved( awt::MouseEvent const& e ) { return false; }
+    virtual bool handleMousePressed( awt::MouseEvent const& /*e*/ ) { return false;}
+    virtual bool handleMouseReleased( awt::MouseEvent const& /*e*/) { return false;}
+    virtual bool handleMouseEntered( awt::MouseEvent const& /*e*/ ) { return false;}
+    virtual bool handleMouseExited( awt::MouseEvent const& /*e*/ ) { return false; }
+    virtual bool handleMouseDragged( awt::MouseEvent const& /*e*/ ) { return false;}
+    virtual bool handleMouseMoved( awt::MouseEvent const& /*e*/ ) { return false; }
 };
 
 /** @return one event has been posted
