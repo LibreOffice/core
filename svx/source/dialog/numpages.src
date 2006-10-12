@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 09:32:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:20:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -413,16 +413,6 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Value = 1 ;
         First = 0 ;
         Last = 65535 ;
-    };
-    TriStateBox CB_USE_BULLET
-    {
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 119 ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
-        Text [ de ] = "~Symbol anzeigen" ;
-        Hide = TRUE;
-        Text [ en-US ] = "Show symbol";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_ALIGN
     {
