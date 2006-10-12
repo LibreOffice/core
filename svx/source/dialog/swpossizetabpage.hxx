@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swpossizetabpage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:32:03 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:28:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,8 @@ struct FrmMap;
 class SdrView;
 class SvxSwPosSizeTabPage : public SfxTabPage
 {
+    using TabPage::DeactivatePage;
+
     FixedLine   m_aSizeFL;
     FixedText   m_aWidthFT;
     MetricField m_aWidthMF;
