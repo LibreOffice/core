@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:43:20 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:55:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -377,7 +377,7 @@ void SfxObjectShell::PrintExec_Impl(SfxRequest &rReq)
 
 void SfxObjectShell::PrintState_Impl(SfxItemSet &rSet)
 {
-    FASTBOOL bPrinting = FALSE;
+    bool bPrinting = false;
     SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this, TYPE(SfxTopViewFrame));
     if ( pFrame )
     {
@@ -1437,7 +1437,7 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
     {
         if( QueryBox( NULL, SfxResId( RID_XMLSEC_QUERY_SAVEBEFORESIGN ) ).Execute() == RET_YES )
         {
-            int nId = SID_SAVEDOC;
+            USHORT nId = SID_SAVEDOC;
             if ( !GetMedium() || !GetMedium()->GetName().Len() )
                 nId = SID_SAVEASDOC;
             SfxRequest aSaveRequest( nId, 0, GetPool() );
