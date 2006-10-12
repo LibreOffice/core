@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tfrmitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:07:28 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:22:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,7 @@ BOOL SfxTargetFrameItem::PutValue( const com::sun::star::uno::Any& rVal,BYTE )
     {
         const String aVal( aValue );
 
-        for ( int i = 0; i <= SfxOpenModeLast; i++ )
+        for ( USHORT i = 0; i <= SfxOpenModeLast; i++ )
             _aFrames[ i ] = aVal.GetToken( i );
 
         return TRUE;
