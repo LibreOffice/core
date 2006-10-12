@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlundo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:31:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:02:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,8 @@
 #include <outlundo.hxx>
 
 
-OutlinerUndoBase::OutlinerUndoBase( USHORT nId, Outliner* pOutliner )
-    : EditUndo( nId, NULL )
+OutlinerUndoBase::OutlinerUndoBase( USHORT _nId, Outliner* pOutliner )
+    : EditUndo( _nId, NULL )
 {
     DBG_ASSERT( pOutliner, "Undo: Outliner?!" );
     mpOutliner = pOutliner;
@@ -102,8 +102,8 @@ void OutlinerUndoCheckPara::Repeat()
 
 DBG_NAME(OLUndoExpand);
 
-OLUndoExpand::OLUndoExpand(Outliner* pOut, USHORT nId )
-    : EditUndo( nId, 0 )
+OLUndoExpand::OLUndoExpand(Outliner* pOut, USHORT _nId )
+    : EditUndo( _nId, 0 )
 {
     DBG_CTOR(OLUndoExpand,0);
     DBG_ASSERT(pOut,"Undo:No Outliner");
@@ -128,8 +128,8 @@ void OLUndoExpand::Restore( BOOL bUndo )
     Paragraph* pPara;
 
     BOOL bExpand = FALSE;
-    USHORT nId = GetId();
-    if((nId == OLUNDO_EXPAND && !bUndo) || (nId == OLUNDO_COLLAPSE && bUndo))
+    USHORT _nId = GetId();
+    if((_nId == OLUNDO_EXPAND && !bUndo) || (_nId == OLUNDO_COLLAPSE && bUndo))
         bExpand = TRUE;
     if( !pParas )
     {
