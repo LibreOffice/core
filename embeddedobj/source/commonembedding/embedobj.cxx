@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:40:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:20:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -427,7 +427,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
     }
     else
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is in unacceptable state!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 }
 
 //----------------------------------------------
@@ -440,7 +440,7 @@ uno::Sequence< sal_Int32 > OCommonEmbeddedObject::GetIntermediateStatesSequence_
 
     if ( nCurInd == m_aAcceptedStates.getLength() )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is in unacceptable state!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     sal_Int32 nDestInd = 0;
     for ( nDestInd = 0; nDestInd < m_aAcceptedStates.getLength(); nDestInd++ )
@@ -450,7 +450,7 @@ uno::Sequence< sal_Int32 > OCommonEmbeddedObject::GetIntermediateStatesSequence_
     if ( nDestInd == m_aAcceptedStates.getLength() )
         throw embed::UnreachableStateException(
             ::rtl::OUString::createFromAscii( "The state either not reachable, or the object allows the state only as an intermediate one!\n" ),
-            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
             m_nObjectState,
             nNewState );
 
@@ -474,7 +474,7 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
 
         if ( m_nObjectState == -1 )
             throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
-                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
         sal_Int32 nOldState = m_nObjectState;
 
@@ -537,7 +537,7 @@ uno::Sequence< sal_Int32 > SAL_CALL OCommonEmbeddedObject::getReachableStates()
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     return m_aAcceptedStates;
 }
@@ -553,7 +553,7 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getCurrentState()
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     return m_nObjectState;
 }
@@ -574,7 +574,7 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     // for internal documents this call is just a duplicate of changeState
     sal_Int32 nNewState = -1;
@@ -605,7 +605,7 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OCommonEmbeddedObject::getSuppor
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     return m_aObjectVerbs;
 }
@@ -625,7 +625,7 @@ void SAL_CALL OCommonEmbeddedObject::setClientSite(
         if ( m_nObjectState != embed::EmbedStates::LOADED && m_nObjectState != embed::EmbedStates::RUNNING )
             throw embed::WrongStateException(
                                     ::rtl::OUString::createFromAscii( "The client site can not be set currently!\n" ),
-                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
         m_xClientSite = xClient;
     }
@@ -642,7 +642,7 @@ uno::Reference< embed::XEmbeddedClient > SAL_CALL OCommonEmbeddedObject::getClie
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     return m_xClientSite;
 }
@@ -659,7 +659,7 @@ void SAL_CALL OCommonEmbeddedObject::update()
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_nUpdateMode == embed::EmbedUpdateModes::EXPLICIT_UPDATE )
     {
@@ -683,7 +683,7 @@ void SAL_CALL OCommonEmbeddedObject::setUpdateMode( sal_Int32 nMode )
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     OSL_ENSURE( nMode == embed::EmbedUpdateModes::ALWAYS_UPDATE
                     || nMode == embed::EmbedUpdateModes::EXPLICIT_UPDATE,
