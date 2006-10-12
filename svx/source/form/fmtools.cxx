@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:10:48 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:46:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -924,7 +924,7 @@ void TransferEventScripts(const Reference< ::com::sun::star::awt::XControlModel>
             for (j=0; j<pCurrentArray->getLength(); ++j, ++pCurrentListeners)
             {
                 UniString aListener = (*pCurrentListeners).getTypeName();
-                sal_Int32 nTokens = aListener.GetTokenCount('.');
+                xub_StrLen nTokens = aListener.GetTokenCount('.');
                 if (nTokens)
                     aListener = aListener.GetToken(nTokens - 1, '.');
 

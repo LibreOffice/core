@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:06:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:45:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -387,9 +387,13 @@ FmEntryData::FmEntryData( const FmEntryData& rEntryData )
 //------------------------------------------------------------------------
 void FmEntryData::Clear()
 {
-    FmEntryData* pEntryData;
-    while( pEntryData = GetChildList()->Remove(ULONG(0)) )
+    for (;;)
+    {
+        FmEntryData* pEntryData = GetChildList()->Remove(ULONG(0));
+        if (pEntryData == NULL)
+            break;
         delete pEntryData;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -508,7 +512,7 @@ FmControlData::FmControlData( const Reference< XFormComponent >& _rxComponent, c
     Reference< XPropertySet >  xSet(m_xFormComponent, UNO_QUERY);
     if( xSet.is() )
     {
-#if DBG_UTIL
+#ifdef DBG_UTIL
         ::rtl::OUString aEntryName = ::comphelper::getString(xSet->getPropertyValue( FM_PROP_NAME ));
 #endif
         SetText( ::comphelper::getString(xSet->getPropertyValue( FM_PROP_NAME )));
