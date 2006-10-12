@@ -4,9 +4,9 @@
  *
  *  $RCSfile: asynceventnotifier.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:40:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:49:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,13 @@
 #include <cppuhelper/interfacecontainer.h>
 #endif
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 #include <list>
 #include <utility>
