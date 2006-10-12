@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-04 16:54:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:08:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ void PackageManagerImpl::initActivationLayer(
                         xResultSet, UNO_QUERY_THROW )->queryContent(),
                     xCmdEnv );
 
-                OUString mediaType( detectMediaType( title, sourceContent,
+                OUString mediaType( detectMediaType( sourceContent,
                                                      false /* no throw */) );
                 if (mediaType.getLength() >0)
                 {
@@ -202,8 +202,7 @@ void PackageManagerImpl::initActivationLayer(
 }
 
 //______________________________________________________________________________
-void PackageManagerImpl::initRegistryBackends(
-    Reference<XCommandEnvironment> const & xCmdEnv )
+void PackageManagerImpl::initRegistryBackends()
 {
     if (m_registryCache.getLength() > 0)
         create_folder( 0, m_registryCache,
@@ -313,7 +312,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             that->reinstallDeployedPackages(
                 Reference<task::XAbortChannel>(), xCmdEnv );
 
-        that->initRegistryBackends( xCmdEnv );
+        that->initRegistryBackends();
         that->initActivationLayer( xCmdEnv );
 
         return xPackageManager;
@@ -456,7 +455,7 @@ void PackageManagerImpl::removeModifyListener(
 
 //______________________________________________________________________________
 OUString PackageManagerImpl::detectMediaType(
-    OUString const & title, ::ucb::Content const & ucbContent_, bool throw_exc )
+    ::ucb::Content const & ucbContent_, bool throw_exc )
 {
     ::ucb::Content ucbContent(ucbContent_);
     OUString url( ucbContent.getURL() );
@@ -635,7 +634,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
 
         OUString mediaType(mediaType_);
         if (mediaType.getLength() == 0)
-            mediaType = detectMediaType( title, sourceContent );
+            mediaType = detectMediaType( sourceContent );
 
         Reference<deployment::XPackage> xPackage;
         {
@@ -882,7 +881,6 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
 //______________________________________________________________________________
 Sequence< Reference<deployment::XPackage> >
 PackageManagerImpl::getDeployedPackages_(
-    Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     ::std::vector< Reference<deployment::XPackage> > packages;
@@ -900,6 +898,7 @@ PackageManagerImpl::getDeployedPackages_(
         }
         catch (lang::IllegalArgumentException & exc) {
             // ignore
+            (void) exc; // avoid warnings
             OSL_ENSURE( 0, ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
@@ -952,7 +951,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage(
 //______________________________________________________________________________
 Sequence< Reference<deployment::XPackage> >
 PackageManagerImpl::getDeployedPackages(
-    Reference<task::XAbortChannel> const & xAbortChannel,
+    Reference<task::XAbortChannel> const &,
     Reference<XCommandEnvironment> const & xCmdEnv_ )
     throw (deployment::DeploymentException, CommandFailedException,
            CommandAbortedException, lang::IllegalArgumentException,
@@ -967,7 +966,7 @@ PackageManagerImpl::getDeployedPackages(
 
     try {
         const ::osl::MutexGuard guard( getMutex() );
-        return getDeployedPackages_( xAbortChannel, xCmdEnv );
+        return getDeployedPackages_( xCmdEnv );
     }
     catch (RuntimeException &) {
         throw;
@@ -1027,7 +1026,7 @@ void PackageManagerImpl::reinstallDeployedPackages(
         m_xRegistry.clear();
         if (m_registryCache.getLength() > 0)
             erase_path( m_registryCache, xCmdEnv );
-        initRegistryBackends( xCmdEnv );
+        initRegistryBackends();
         Reference<util::XUpdatable> xUpdatable( m_xRegistry, UNO_QUERY );
         if (xUpdatable.is())
             xUpdatable->update();
@@ -1035,7 +1034,7 @@ void PackageManagerImpl::reinstallDeployedPackages(
         // reregister all:
         const ::osl::MutexGuard guard( getMutex() );
         const Sequence< Reference<deployment::XPackage> > packages(
-            getDeployedPackages_( xAbortChannel, xCmdEnv ) );
+            getDeployedPackages_( xCmdEnv ) );
         for ( sal_Int32 pos = 0; pos < packages.getLength(); ++pos )
             packages[ pos ]->registerPackage( xAbortChannel, xCmdEnv );
     }
