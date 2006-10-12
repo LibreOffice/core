@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datwin.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:18:52 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:06:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -352,7 +352,7 @@ BrowseEvent BrowserDataWin::CreateBrowseEvent( const Point& rPosPixel )
     BrowseBox *pBox = GetParent();
 
     // seek to row under mouse
-    short nRelRow = rPosPixel.Y() < 0
+    long nRelRow = rPosPixel.Y() < 0
             ? -1
             : rPosPixel.Y() / pBox->GetDataRowHeight();
     long nRow = nRelRow < 0 ? -1 : nRelRow + pBox->nTopRow;
