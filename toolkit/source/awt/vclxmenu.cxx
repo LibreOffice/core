@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxmenu.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:14:04 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:31:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,7 +229,8 @@ void VCLXMenu::removeItem( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::sun::
     sal_Int32 nItemCount = (sal_Int32)mpMenu->GetItemCount();
     if ( mpMenu && ( nCount > 0 ) && ( nPos >= 0 ) && ( nPos < nItemCount ) && ( nItemCount > 0 ))
     {
-        sal_Int16 nP = Min( (int)(nPos+nCount), (int)nItemCount );
+        sal_Int16 nP = sal::static_int_cast< sal_Int16 >(
+            Min( (int)(nPos+nCount), (int)nItemCount ));
         while( nP-nPos > 0 )
             mpMenu->RemoveItem( --nP );
     }
