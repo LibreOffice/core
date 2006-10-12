@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicmigration.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:46:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:14:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,8 +248,10 @@ namespace migration
             *pIter >>= aValue;
             if ( aValue.Name.equalsAscii( "UserData" ) )
             {
-                sal_Bool bSuccess = aValue.Value >>= m_sSourceDir;
-                OSL_ENSURE( bSuccess == sal_True, "BasicMigration::initialize: argument UserData has wrong type!" );
+                if ( !(aValue.Value >>= m_sSourceDir) )
+                {
+                    OSL_ENSURE( false, "BasicMigration::initialize: argument UserData has wrong type!" );
+                }
                 m_sSourceDir += sSourceUserBasic;
                 break;
             }
@@ -260,7 +262,7 @@ namespace migration
     // XJob
     // -----------------------------------------------------------------------------
 
-    Any BasicMigration::execute( const Sequence< beans::NamedValue >& Arguments )
+    Any BasicMigration::execute( const Sequence< beans::NamedValue >& )
         throw (lang::IllegalArgumentException, Exception, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -275,7 +277,7 @@ namespace migration
     // =============================================================================
 
     Reference< XInterface > SAL_CALL BasicMigration_create(
-        Reference< XComponentContext > const & xContext )
+        Reference< XComponentContext > const & )
         SAL_THROW( () )
     {
         return static_cast< lang::XTypeProvider * >( new BasicMigration() );
