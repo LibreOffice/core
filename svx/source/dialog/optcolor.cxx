@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcolor.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:29:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:20:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -377,10 +377,6 @@ sal_Int16 lcl_getGroup( sal_Int16 _nFeature )
  ---------------------------------------------------------------------------*/
 ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rResId) :
         Window(pParent, rResId),
-
-#ifdef WNT
-#pragma warning (disable : 4355)
-#endif
         aGeneralBackWN(this),
         aGeneralFT(&aGeneralBackWN,  ResId(        FT_GENERAL              )),
         aDocColorFT(this, ResId(        FT_DOCCOLOR             )),
@@ -504,9 +500,6 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         aBasicErrorFT(this, ResId( FT_BASICERROR        )),
         aBasicErrorLB(this, ResId( LB_BASICERROR        )),
         aBasicErrorWN(this, ResId( WN_BASICERROR        ))
-#ifdef WNT
-#pragma warning (enable : 4355)
-#endif
 {
     FreeResource();
     sal_Int16 i;
@@ -902,11 +895,11 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(
     sal_Int32 nThirdWidth = aScrollWindow.aWindows[0]->GetPosPixel().X() - nFirstWidth - nSecondWidth;
 
     const WinBits nHeadBits = HIB_VCENTER | HIB_FIXED| HIB_FIXEDPOS;
-    aHeaderHB.InsertItem( 1, sOn, nFirstWidth, nHeadBits|HIB_CENTER);
-    aHeaderHB.InsertItem( 2, sUIElem, nSecondWidth, nHeadBits|HIB_LEFT);
-    aHeaderHB.InsertItem( 3, sColSetting, nThirdWidth, nHeadBits|HIB_LEFT);
+    aHeaderHB.InsertItem( 1, sOn, nFirstWidth, (USHORT)nHeadBits|HIB_CENTER);
+    aHeaderHB.InsertItem( 2, sUIElem, nSecondWidth, (USHORT)nHeadBits|HIB_LEFT);
+    aHeaderHB.InsertItem( 3, sColSetting, nThirdWidth, (USHORT)nHeadBits|HIB_LEFT);
     aHeaderHB.InsertItem( 4, sPreview,
-            aHeaderHB.GetSizePixel().Width() - nFirstWidth - nSecondWidth - nThirdWidth, nHeadBits|HIB_LEFT);
+            aHeaderHB.GetSizePixel().Width() - nFirstWidth - nSecondWidth - nThirdWidth, (USHORT)nHeadBits|HIB_LEFT);
     aHeaderHB.Show();
 
     aVScroll.SetRangeMin(0);
@@ -1235,10 +1228,6 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control*, pCtrl)
 SvxColorOptionsTabPage::SvxColorOptionsTabPage(
     Window* pParent, const SfxItemSet& rCoreSet) :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_COLORCONFIG ), rCoreSet ),
-
-#ifdef WNT
-#pragma warning (disable : 4355)
-#endif
        aColorSchemeFL(  this, ResId( FL_COLORSCHEME ) ),
        aColorSchemeFT(  this, ResId( FT_COLORSCHEME ) ),
        aColorSchemeLB(  this, ResId( LB_COLORSCHEME ) ),
@@ -1248,9 +1237,6 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(
        bFillItemSetCalled(FALSE),
        pColorConfig(0),
        pColorConfigCT(  new ColorConfigCtrl_Impl(this, ResId( CT_COLORCONFIG ) ))
-#ifdef WNT
-#pragma warning (default : 4355)
-#endif
 {
     FreeResource();
     aColorSchemeLB.SetSelectHdl(LINK(this, SvxColorOptionsTabPage, SchemeChangedHdl_Impl));
