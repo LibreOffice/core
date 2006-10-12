@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptdlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:37:11 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:25:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,7 +220,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
 
     for ( sal_Int32 n = 0; n < children.getLength(); n++ )
     {
-        BOOL app = false;
+        bool app = false;
         ::rtl::OUString uiName = children[ n ]->getName();
         ::rtl::OUString factoryURL;
         if ( uiName.equals( userStr ) || uiName.equals( shareStr ) )
@@ -277,7 +277,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
             getLangNodeFromRootNode( children[ n ], lang );
 
         /*SvLBoxEntry* pBasicManagerRootEntry =*/
-            insertEntry( uiName, app == true ? IMG_HARDDISK : IMG_DOCUMENT,
+            insertEntry( uiName, app ? IMG_HARDDISK : IMG_DOCUMENT,
                 0, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries )), factoryURL );
     }
 
@@ -334,7 +334,7 @@ SFTreeListBox::getLangNodeFromRootNode( Reference< browse::XBrowseNode >& rootNo
             }
         }
     }
-    catch ( Exception& e )
+    catch ( Exception& )
     {
         // if getChildNodes() throws an exception we just return
         // the empty Reference
@@ -354,7 +354,7 @@ void SFTreeListBox:: RequestSubEntries( SvLBoxEntry* pRootEntry, Reference< ::co
     {
         children = node->getChildNodes();
     }
-    catch ( Exception& e )
+    catch ( Exception& )
     {
         // if we catch an exception in getChildNodes then no entries are added
     }
@@ -933,7 +933,7 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
                 childNodes = node->getChildNodes();
             }
         }
-        catch ( Exception& e )
+        catch ( Exception& )
         {
             // ignore, will continue on with empty sequence
         }
@@ -1220,7 +1220,7 @@ BOOL SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet >& xPro
         xProps->getPropertyValue( propName ) >>= bTemp;
         result = ( bTemp == sal_True );
     }
-    catch ( Exception& e )
+    catch ( Exception& )
     {
         return result;
     }
@@ -1249,7 +1249,7 @@ String SvxScriptOrgDialog::getListOfChildren( Reference< browse::XBrowseNode > n
             }
         }
     }
-    catch ( Exception& e )
+    catch ( Exception& )
     {
         // ignore, will return an empty string
     }
