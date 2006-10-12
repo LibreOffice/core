@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tparea.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:43:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:29:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -479,7 +479,7 @@ void SvxTransparenceTabPage::Reset(const SfxItemSet& rAttrs)
     // transparence gradient
     const XGradient& rGradient = ((XFillFloatTransparenceItem*)pGradientItem)->GetGradientValue();
     XGradientStyle eXGS(rGradient.GetGradientStyle());
-    aLbTrgrGradientType.SelectEntryPos(eXGS);
+    aLbTrgrGradientType.SelectEntryPos(sal::static_int_cast< USHORT >(eXGS));
     aMtrTrgrAngle.SetValue(rGradient.GetAngle() / 10);
     aMtrTrgrBorder.SetValue(rGradient.GetBorder());
     aMtrTrgrCenterX.SetValue(rGradient.GetXOffset());
@@ -819,8 +819,8 @@ void SvxAreaTabPage::Construct()
 
 void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    int _nPos;
-    int nCount;
+    USHORT _nPos = 0;
+    USHORT nCount;
     //add CHINA001 Begin
     SFX_ITEMSET_ARG (&rSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,sal_False);
     SFX_ITEMSET_ARG (&rSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS,sal_False);
@@ -1218,7 +1218,8 @@ BOOL SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             TriState eState = aTsbTile.GetState();
             if( eState != aTsbTile.GetSavedValue() )
             {
-                XFillBmpTileItem aFillBmpTileItem( eState );
+                XFillBmpTileItem aFillBmpTileItem(
+                    sal::static_int_cast< BOOL >( eState ) );
                 pOld = GetOldItem( rAttrs, XATTR_FILLBMP_TILE );
                 if ( !pOld || !( *(const XFillBmpTileItem*)pOld == aFillBmpTileItem ) )
                 {
@@ -1233,7 +1234,8 @@ BOOL SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             TriState eState = aTsbStretch.GetState();
             if( eState != aTsbStretch.GetSavedValue() )
             {
-                XFillBmpStretchItem aFillBmpStretchItem( eState );
+                XFillBmpStretchItem aFillBmpStretchItem(
+                    sal::static_int_cast< BOOL >( eState ) );
                 pOld = GetOldItem( rAttrs, XATTR_FILLBMP_STRETCH );
                 if ( !pOld || !( *(const XFillBmpStretchItem*)pOld == aFillBmpStretchItem ) )
                 {
@@ -1461,7 +1463,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
     {
         eXFS = (XFillStyle) ( ( ( const XFillStyleItem& ) rAttrs.
                                 Get( GetWhich( XATTR_FILLSTYLE ) ) ).GetValue() );
-        aTypeLB.SelectEntryPos( eXFS );
+        aTypeLB.SelectEntryPos( sal::static_int_cast< USHORT >( eXFS ) );
         switch( eXFS )
         {
             case XFILL_NONE:
@@ -2453,10 +2455,12 @@ IMPL_LINK( SvxAreaTabPage, ModifyTileHdl_Impl, void *, EMPTYARG )
         */
     }
 
-    rXFSet.Put( XFillBmpTileItem( eState ) );
+    rXFSet.Put( XFillBmpTileItem( sal::static_int_cast< BOOL >( eState ) ) );
 
     if( aTsbStretch.IsEnabled() )
-        rXFSet.Put( XFillBmpStretchItem( aTsbStretch.GetState() ) );
+        rXFSet.Put(
+            XFillBmpStretchItem(
+                sal::static_int_cast< BOOL >( aTsbStretch.GetState() ) ) );
 
     if( aTsbScale.IsEnabled() )
         rXFSet.Put( XFillBmpSizeLogItem( aTsbScale.GetState() == STATE_NOCHECK ) );
