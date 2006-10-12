@@ -4,9 +4,9 @@
  *
  *  $RCSfile: postuhdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:56:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:50:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,21 +90,18 @@ XMLPosturePropHdl::~XMLPosturePropHdl()
     // nothing to do
 }
 
-sal_Bool XMLPosturePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLPosturePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
     sal_uInt16 ePosture;
-
-    if( ( bRet = rUnitConverter.convertEnum( ePosture, rStrImpValue, aPostureGenericMapping ) ) )
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum( ePosture, rStrImpValue, aPostureGenericMapping );
+    if( bRet )
         rValue <<= (awt::FontSlant)ePosture;
 
     return bRet;
 }
 
-sal_Bool XMLPosturePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLPosturePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
-    OUStringBuffer aOut;
     awt::FontSlant eSlant;
 
     if( !( rValue >>= eSlant ) )
@@ -117,7 +114,9 @@ sal_Bool XMLPosturePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
         eSlant = (awt::FontSlant)nValue;
     }
 
-    if( ( bRet = rUnitConverter.convertEnum( aOut, (sal_Int32)eSlant, aPostureGenericMapping ) ) )
+    OUStringBuffer aOut;
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum( aOut, (sal_Int32)eSlant, aPostureGenericMapping );
+    if( bRet )
         rStrExpValue = aOut.makeStringAndClear();
 
     return bRet;
