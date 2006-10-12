@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfgrf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:02:55 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:17:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,7 +315,7 @@ xub_StrLen SvxRTFParser::HexToBin( String& rToken )
         if( n & 1 )
             *(pData++) |= nVal & 0x0f;
         else
-            *(pData) = ( nVal << 4 ) & 0xf0;
+            *(pData) = sal::static_int_cast< char >( ( nVal << 4 ) & 0xf0 );
     }
     // the len div 2, because 2 character are one byte
     return bValidData ? nLen / 2  : STRING_NOTFOUND;
@@ -325,7 +325,7 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
 {
     // die alten Daten loeschen
     rGrf.Clear();
-    ULONG nBmpSize = 0;
+//  ULONG nBmpSize = 0;
 
     rtl_TextEncoding eOldEnc = GetSrcEncoding();
     SetSrcEncoding( RTL_TEXTENCODING_MS_1252 );
@@ -333,20 +333,21 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
     const sal_Char* pFilterNm = 0;
     SvCacheStream* pTmpFile = 0;
 
-    int nToken, bValidBmp = TRUE, bFirstTextToken = TRUE;
-    int nOpenBrakets = 1,       // die erste wurde schon vorher erkannt !!
+    int nToken = 0;
+    bool bValidBmp = true, bFirstTextToken = true;
+    int _nOpenBrakets = 1,      // die erste wurde schon vorher erkannt !!
         nValidDataBraket = 1;
 
     if( RTF_SHPPICT == GetStackPtr(0)->nTokenId )
         ++nValidDataBraket;
 
-    while( nOpenBrakets && IsParserWorking() && bValidBmp )
+    while( _nOpenBrakets && IsParserWorking() && bValidBmp )
     {
         nToken = GetNextToken();
         USHORT nVal = USHORT( nTokenValue );
         switch( nToken )
         {
-        case '}':       --nOpenBrakets; break;
+        case '}':       --_nOpenBrakets;    break;
         case '{':
             {
                 if( RTF_IGNOREFLAG != GetNextToken() )
@@ -362,7 +363,7 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
                         eState = SVPAR_ERROR;
                     break;
                 }
-                ++nOpenBrakets;
+                ++_nOpenBrakets;
             }
             break;
 
@@ -467,7 +468,7 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
             // JP 26.06.98: Bug #51719# - nur TextToken auf 1. Ebene
             //              auswerten. Alle anderen sind irgendwelche
             //              nicht auszuwertende Daten
-            if( nValidDataBraket != nOpenBrakets )
+            if( nValidDataBraket != _nOpenBrakets )
                 break;
 
             if( bFirstTextToken )
@@ -478,6 +479,8 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
                     // erstmal die Header und Info-Struktur schreiben
                     if( pTmpFile )
                         ::WriteBMPHeader( *pTmpFile, rPicType );
+                    break;
+                default:
                     break;
                 }
                 bFirstTextToken = FALSE;
@@ -535,6 +538,9 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
     if( !bValidBmp )
     {
         rGrf.Clear();
+        //TODO  If nToken were not initialized to 0 above, it would potentially
+        // be used uninitialized here (if IsParserWorking() is false at the
+        // start of the while loop above):
         if( '}' != nToken )
             SkipGroup();
     }
@@ -554,9 +560,12 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
                 else
                     aSize = OutputDevice::LogicToLogic( aSize,
                                         rGrf.GetPrefMapMode(), aMap );
-                rPicType.nWidth = aSize.Width();
-                rPicType.nHeight = aSize.Height();
+                rPicType.nWidth = sal::static_int_cast< USHORT >(aSize.Width());
+                rPicType.nHeight = sal::static_int_cast< USHORT >(
+                    aSize.Height());
             }
+            break;
+        default:
             break;
         }
 
