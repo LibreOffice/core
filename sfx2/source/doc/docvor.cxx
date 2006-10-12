@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:41:01 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:54:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #include <stdio.h>
 
@@ -1588,7 +1589,9 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
 {
     String aPath;
     String aExtension( DEFINE_CONST_UNICODE( "vor" ) );
-    short nDialogType = bOpen ? ::sfx2::FILEOPEN_SIMPLE : ::sfx2::FILESAVE_SIMPLE;
+    short nDialogType = bOpen
+        ? com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE
+        : com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE;
     sfx2::FileDialogHelper aFileDlg( nDialogType, 0L );
 
     // add "All" filter
@@ -1697,7 +1700,9 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aPaths;
     String aExtension( DEFINE_CONST_UNICODE( "vor" ) );
-    sfx2::FileDialogHelper aFileDlg( ::sfx2::FILEOPEN_SIMPLE , SFXWB_MULTISELECTION );
+    sfx2::FileDialogHelper aFileDlg(
+        com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+        SFXWB_MULTISELECTION );
 
     // add "All" filter
     aFileDlg.AddFilter( String( SfxResId( STR_SFX_FILTERNAME_ALL ) ),
