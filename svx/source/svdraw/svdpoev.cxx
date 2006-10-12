@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpoev.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:00:18 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:15:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ void SdrPolyEditView::ImpCheckPolyPossibilities()
             if (pPath!=NULL && pPts!=NULL) {
                 ULONG nMarkedPntAnz=pPts->GetCount();
                 if (nMarkedPntAnz!=0) {
-                    BOOL bClosed=pPath->IsClosed();
+                    bool bClosed=pPath->IsClosed();
                     bSetMarkedPointsSmoothPossible=TRUE;
                     if (bClosed) bSetMarkedSegmentsKindPossible=TRUE;
                     const XPolyPolygon& rXPP=pPath->GetPathPoly();
@@ -332,8 +332,8 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
                             bKorregFlag=TRUE;
                             for (ULONG nBla=0; nBla<nMarkPtsAnz; nBla++) {
                                 USHORT nPntNum=pPts->GetObject(nBla);
-                                nPntNum+=nNewPt0Idx;
-                                if (nPntNum>=nMax) nPntNum-=nMax;
+                                nPntNum=nPntNum+nNewPt0Idx;
+                                if (nPntNum>=nMax) nPntNum=nPntNum-nMax;
                                 pPts->Replace(nPntNum,nBla);
                             }
                             i=nMarkPtsAnz; // ... und nochmal von vorn
@@ -477,7 +477,7 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
         if (nPtAnz!=0 && pPath!=NULL) {
             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
             XPolyPolygon aXPP(pPath->GetPathPoly());
-            BOOL bClosed=pPath->IsClosed();
+            bool bClosed=pPath->IsClosed();
             for (ULONG nPtNum=0; nPtNum<nPtAnz; nPtNum++) {
                 USHORT nPt=pPts->GetObject(nPtNum);
                 USHORT nPolyNum,nPointNum;
@@ -520,7 +520,7 @@ static void ImpMove(Point& rPt, Point* pC1, Point* pC2, const void* p1, const vo
     if (pC2!=NULL) MovePoint(*pC2,*(const Size*)p1);
 }
 
-void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz, BOOL bCopy)
+void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz, bool bCopy)
 {
     bCopy=FALSE; // noch nicht implementiert
     ForceUndirtyMrkPnt();
@@ -542,7 +542,7 @@ static void ImpResize(Point& rPt, Point* pC1, Point* pC2, const void* p1, const 
     if (pC2!=NULL) ResizePoint(*pC2,*(const Point*)p1,*(const Fraction*)p2,*(const Fraction*)p3);
 }
 
-void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, BOOL bCopy)
+void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy)
 {
     bCopy=FALSE; // noch nicht implementiert
     ForceUndirtyMrkPnt();
@@ -564,7 +564,7 @@ static void ImpRotate(Point& rPt, Point* pC1, Point* pC2, const void* p1, const 
     if (pC2!=NULL) RotatePoint(*pC2,*(const Point*)p1,*(const double*)p3,*(const double*)p4);
 }
 
-void SdrPolyEditView::RotateMarkedPoints(const Point& rRef, long nWink, BOOL bCopy)
+void SdrPolyEditView::RotateMarkedPoints(const Point& rRef, long nWink, bool bCopy)
 {
     bCopy=FALSE; // noch nicht implementiert
     ForceUndirtyMrkPnt();
