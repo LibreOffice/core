@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polysc3d.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:58:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,7 @@ void E3dPolyScene::TakeContour3D(XPolyPolygon& rPoly)
 
 sal_Bool E3dPolyScene::DoPaintObject(XOutputDevice& rOut,   const SdrPaintInfoRec& rInfoRec) const
 {
-    FASTBOOL bOk=TRUE;
+    bool bOk=true;
     if(GetSubList() && GetSubList()->GetObjCount())
     {
         bOk = ((E3dPolyScene*)this)->LocalPaint3D(rOut, rInfoRec);
