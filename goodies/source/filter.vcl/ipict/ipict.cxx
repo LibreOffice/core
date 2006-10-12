@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipict.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:52:11 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -508,7 +508,7 @@ ULONG PictReader::ReadAndDrawArc(PictDrawingMethod eMethod)
     ReadRectangle(aLastArcRect);
     *pPict >> nstartAngle >> narcAngle;
     if (narcAngle<0) {
-        nstartAngle+=narcAngle;
+        nstartAngle = nstartAngle + narcAngle;
         narcAngle=-narcAngle;
     }
     fAng1=((double)nstartAngle)/180.0*3.14159265359;
@@ -533,7 +533,7 @@ ULONG PictReader::ReadAndDrawSameArc(PictDrawingMethod eMethod)
 
     *pPict >> nstartAngle >> narcAngle;
     if (narcAngle<0) {
-        nstartAngle+=narcAngle;
+        nstartAngle = nstartAngle + narcAngle;
         narcAngle=-narcAngle;
     }
     fAng1=((double)nstartAngle)/180.0*3.14159265359;
@@ -654,8 +654,8 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
 
     // PixMap oder Bitmap-Struktur einlesen;
     *pPict >> nRowBytes >> nBndY >> nBndX >> nHeight >> nWidth;
-    nHeight -= nBndY;
-    nWidth -= nBndX;
+    nHeight = nHeight - nBndY;
+    nWidth = nWidth - nBndX;
 
     if ( ( nRowBytes & 0x8000 ) != 0 )
     {   // it is a PixMap
