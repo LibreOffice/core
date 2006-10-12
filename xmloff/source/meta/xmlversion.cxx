@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlversion.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:39:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:44:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -380,12 +380,12 @@ sal_Bool XMLVersionContext::ParseISODateTimeString(
 
     if ( bSuccess )
     {
-        rDateTime.Day = nDay;
-        rDateTime.Month = nMonth;
-        rDateTime.Year = nYear;
-        rDateTime.Hours = nHour;
-        rDateTime.Minutes = nMin;
-        rDateTime.Seconds = nSec;
+        rDateTime.Day = sal::static_int_cast< sal_uInt16 >(nDay);
+        rDateTime.Month = sal::static_int_cast< sal_uInt16 >(nMonth);
+        rDateTime.Year = sal::static_int_cast< sal_uInt16 >(nYear);
+        rDateTime.Hours = sal::static_int_cast< sal_uInt16 >(nHour);
+        rDateTime.Minutes = sal::static_int_cast< sal_uInt16 >(nMin);
+        rDateTime.Seconds = sal::static_int_cast< sal_uInt16 >(nSec);
     }
 
     return bSuccess;
