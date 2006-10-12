@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dcommn.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:36:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:32:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -718,15 +718,15 @@ void Base3DCommon::Create3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
         {
             if(GetShadeModel() == Base3DFlat && nNumPoints != 0)
             {
-                UINT16 aRed(0), aGreen(0), aBlue(0), aAlpha(0);
+                unsigned int aRed(0), aGreen(0), aBlue(0), aAlpha(0);
                 UINT32 i;
                 for(i=0;i<nNumPoints;i++)
                 {
                     B3dEntity& rEnt = aBuffers[aEdgeIndex[i]];
-                    aRed += (UINT16)rEnt.Color().GetRed();
-                    aGreen += (UINT16)rEnt.Color().GetGreen();
-                    aBlue += (UINT16)rEnt.Color().GetBlue();
-                    aAlpha += (UINT16)rEnt.Color().GetTransparency();
+                    aRed += rEnt.Color().GetRed();
+                    aGreen += rEnt.Color().GetGreen();
+                    aBlue += rEnt.Color().GetBlue();
+                    aAlpha += rEnt.Color().GetTransparency();
                 }
                 B3dColor aCol((UINT8)(aAlpha / nNumPoints),
                     (UINT8)(aRed / nNumPoints),
