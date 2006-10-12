@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itga.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:52:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:38:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,27 +177,31 @@ BOOL TGAReader::ReadTGA( SvStream & rTGA, Graphic & rGraphic, PFilterCallback pc
 
     // Kopf einlesen:
 
-    if ( !mpTGA->GetError() && ( mbStatus = ImplReadHeader() ) )
+    if ( !mpTGA->GetError() )
     {
-        Bitmap              aBitmap;
-
-        aBitmap = Bitmap( Size( mpFileHeader->nImageWidth, mpFileHeader->nImageHeight ), mnDestBitDepth );
-        mpAcc = aBitmap.AcquireWriteAccess();
-        if ( mpAcc )
-        {
-            if ( mbIndexing )
-                mbStatus = ImplReadPalette();
-            if ( mbStatus )
-                mbStatus = ImplReadBody();
-        }
-        else
-            mbStatus = FALSE;
-
-        if ( mpAcc )
-            aBitmap.ReleaseAccess ( mpAcc), mpAcc = NULL;
-
+        mbStatus = ImplReadHeader();
         if ( mbStatus )
-            rGraphic = aBitmap;
+        {
+            Bitmap              aBitmap;
+
+            aBitmap = Bitmap( Size( mpFileHeader->nImageWidth, mpFileHeader->nImageHeight ), mnDestBitDepth );
+            mpAcc = aBitmap.AcquireWriteAccess();
+            if ( mpAcc )
+            {
+                if ( mbIndexing )
+                    mbStatus = ImplReadPalette();
+                if ( mbStatus )
+                    mbStatus = ImplReadBody();
+            }
+            else
+                mbStatus = FALSE;
+
+            if ( mpAcc )
+                aBitmap.ReleaseAccess ( mpAcc), mpAcc = NULL;
+
+            if ( mbStatus )
+                rGraphic = aBitmap;
+        }
     }
     return mbStatus;
 }
@@ -234,10 +238,10 @@ BOOL TGAReader::ImplReadHeader()
                 mpFileFooter->nSignature[3] >> mpFileFooter->nPadByte >> mpFileFooter->nStringTerminator;
 
         // check for TRUE, VISI, ON-X, FILE in the signatures
-        if ( mpFileFooter->nSignature[ 0 ] == 'T'<<24|'R'<<16|'U'<<8|'E' &&
-             mpFileFooter->nSignature[ 1 ] == 'V'<<24|'I'<<16|'S'<<8|'I' &&
-             mpFileFooter->nSignature[ 2 ] == 'O'<<24|'N'<<16|'-'<<8|'X' &&
-             mpFileFooter->nSignature[ 3 ] == 'F'<<24|'I'<<16|'L'<<8|'E' )
+        if ( mpFileFooter->nSignature[ 0 ] == (('T'<<24)|('R'<<16)|('U'<<8)|'E') &&
+             mpFileFooter->nSignature[ 1 ] == (('V'<<24)|('I'<<16)|('S'<<8)|'I') &&
+             mpFileFooter->nSignature[ 2 ] == (('O'<<24)|('N'<<16)|('-'<<8)|'X') &&
+             mpFileFooter->nSignature[ 3 ] == (('F'<<24)|('I'<<16)|('L'<<8)|'E') )
         {
             mpExtension = new TGAExtension;
             if ( mpExtension )
