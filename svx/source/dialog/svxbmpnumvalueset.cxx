@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxbmpnumvalueset.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:40:29 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:27:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -432,8 +432,8 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     if(aParentNumberings[i])
                     {
                         //insert old numberings here
-                        sal_Int16 nStartLevel = std::min((sal_Int32)aParentNumberings[i], i);
-                        for(sal_Int16 nParentLevel = i - nStartLevel; nParentLevel < i; nParentLevel++)
+                        sal_Int32 nStartLevel = std::min((sal_Int32)aParentNumberings[i], i);
+                        for(sal_Int32 nParentLevel = i - nStartLevel; nParentLevel < i; nParentLevel++)
                         {
                             OUString sTmp(sLevelTexts[nParentLevel]);
                             sTmp += C2U(".");
