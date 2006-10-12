@@ -4,9 +4,9 @@
  *
  *  $RCSfile: server.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:36:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:17:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -647,7 +647,7 @@ IMPL_LINK( ImplRemoteControl, IdleHdl, Application*, EMPTYARG )
 
 
 
-IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, pApp )
+IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, EMPTYARG )
 {
 #if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Entering CommandHdl\n" );
@@ -733,9 +733,9 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, pApp )
                 }
                 catch ( ... )
                 {
-                    pApp->Quit();
+                    Application::Quit();
                 }
-                pApp->Quit();
+                Application::Quit();
             }
         }
 
