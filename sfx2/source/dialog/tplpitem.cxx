@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tplpitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:37:38 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:53:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ sal_Bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /
 
     if ( rVal >>= aTemplate )
     {
-        SetValue( aTemplate.Value );
+        SetValue( sal::static_int_cast< USHORT >( aTemplate.Value ) );
         aStyle = aTemplate.StyleName;
         return sal_True;
     }
