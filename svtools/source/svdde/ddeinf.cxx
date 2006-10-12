@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddeinf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:24:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:27:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,9 +65,9 @@ HDDEDATA CALLBACK _export DdeInternal::InfCallback(
 DdeServiceList::DdeServiceList( const String* pTopic )
 {
     DWORD       hDdeInst = NULL;
-    HCONVLIST   hConvList;
+    HCONVLIST   hConvList = NULL;
     HCONV       hConv = NULL;
-    short       nStatus = DMLERR_NO_ERROR;
+    UINT        nStatus = DMLERR_NO_ERROR;
     HSZ         hTopic = NULL;
 
     nStatus = DdeInitialize( &hDdeInst, (PFNCALLBACK) DdeInternal::InfCallback,
