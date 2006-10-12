@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pages.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:39:11 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:25:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version .1.
@@ -176,15 +176,15 @@ void WelcomePage::ActivatePage()
 
 LicensePage::LicensePage( svt::OWizardMachine* parent, const ResId& resid)
     : OWizardPage(parent, resid)
-    , m_pbDown(this, WizardResId(PB_LICENSE_DOWN))
+    , m_pParent(parent)
     , m_ftHead(this, WizardResId(FT_LICENSE_HEADER))
     , m_ftBody1(this, WizardResId(FT_LICENSE_BODY_1))
     , m_ftBody1Txt(this, WizardResId(FT_LICENSE_BODY_1_TXT))
     , m_ftBody2(this, WizardResId(FT_LICENSE_BODY_2))
     , m_ftBody2Txt(this, WizardResId(FT_LICENSE_BODY_2_TXT))
     , m_mlLicense(this, WizardResId(ML_LICENSE))
+    , m_pbDown(this, WizardResId(PB_LICENSE_DOWN))
     , m_bLicenseRead(sal_False)
-    , m_pParent(parent)
 {
     FreeResource();
 
@@ -311,7 +311,7 @@ BOOL LicenseView::IsEndReached() const
     return bEndReached;
 }
 
-void LicenseView::Notify( SfxBroadcaster& , const SfxHint& rHint )
+void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.IsA( TYPE(TextHint) ) )
     {
@@ -359,7 +359,7 @@ MigrationPage::MigrationPage( svt::OWizardMachine* parent, const ResId& resid)
 
 sal_Bool MigrationPage::commitPage(COMMIT_REASON _eReason)
 {
-    if (_eReason == eTravelForward && m_cbMigration.IsChecked() && !m_bMigrationDone)
+    if (_eReason == CR_TRAVEL_NEXT && m_cbMigration.IsChecked() && !m_bMigrationDone)
     {
         EnterWait();
         Migration::doMigration();
@@ -475,8 +475,8 @@ void UpdateCheckPage::ActivatePage()
 RegistrationPage::RegistrationPage( svt::OWizardMachine* parent, const ResId& resid)
     : OWizardPage(parent, resid)
     , m_ftHeader(this, WizardResId(FT_REGISTRATION_HEADER))
-    , m_fiImage(this, WizardResId(IMG_REGISTRATION))
     , m_ftBody(this, WizardResId(FT_REGISTRATION_BODY))
+    , m_fiImage(this, WizardResId(IMG_REGISTRATION))
     , m_rbNow(this, WizardResId(RB_REGISTRATION_NOW))
     , m_rbLater(this, WizardResId(RB_REGISTRATION_LATER))
     , m_rbNever(this, WizardResId(RB_REGISTRATION_NEVER))
@@ -538,7 +538,7 @@ void RegistrationPage::updateButtonStates()
 
 sal_Bool RegistrationPage::commitPage(COMMIT_REASON _eReason)
 {
-    if ( _eReason == eFinish )
+    if ( _eReason == CR_FINISH )
     {
         RegOptions aOptions;
         if ( m_rbNow.IsChecked())
@@ -645,30 +645,14 @@ static sal_Int32 checkOEMPreloadFlag()
     */
 }
 
-#if 0
-static void disableOEMPreloadFlag()
-{
-    OUString aSofficeIniFileURL = locateIniFile();
-    if ( aSofficeIniFileURL.getLength() > 0 )
-    {
-        Config aConfig(aSofficeIniFileURL);
-        aConfig.SetGroup( OEM_PRELOAD_SECTION );
-        aConfig.WriteKey( OEM_PRELOAD, STR_FALSE );
-        aConfig.Flush();
-    }
-}
-#endif
-
 WelcomePage::OEMType WelcomePage::checkOEM()
 {
   sal_Int32 oemResult = checkOEMPreloadFlag();
   switch (oemResult) {
   case 1:
     return OEM_NORMAL;
-    break;
   case 2:
     return OEM_EXTENDED;
-    break;
   default:
     return OEM_NONE;
   }
