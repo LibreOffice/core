@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:47:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:07:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ void ImpSdrConnectMarker::Draw(OutputDevice* pOut, FASTBOOL bHiding, FASTBOOL bN
 void ImpSdrConnectMarker::SetTargetObject(const SdrObject* pObj)
 {
     if (pAktObj!=pObj) {
-        BOOL bVisible2=IsVisible();
+        bool bVisible2=IsVisible();
         if (bVisible2) Hide();
         pAktObj=pObj;
         if (bVisible2) Show();
@@ -546,7 +546,7 @@ BOOL SdrCreateView::BegCreateLibObj(const Point& rPnt, SdrObject* pObj, BOOL bMo
     OutputDevice* pOut, short nMinMov, SdrPageView* pPV)
 {
     SetSolidDraggingNow(FALSE); // noch kein SolidDragging bei LibObjs
-    BOOL bRet=FALSE;
+    bool bRet=false;
     UnmarkAllObj();
     BrkAction();
     pConnectMarker->Hide();
@@ -657,7 +657,7 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
 
         if (aPnt==aDragStat.GetNow()) return;
         if (pLibObjDragMeth==NULL) {
-            BOOL bMerk=aDragStat.IsMinMoved();
+            bool bMerk=aDragStat.IsMinMoved();
             if (aDragStat.CheckMinMoved(aPnt)) {
                 Rectangle aBound;
                 if (IsSolidDraggingNow()) aBound=pAktCreate->GetCurrentBoundRect();
