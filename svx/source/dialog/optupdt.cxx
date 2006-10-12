@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optupdt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:32:48 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:23:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage( Window* pParent, const SfxItemSe
         xFactory->createInstance( UNISTRING( "com.sun.star.setup.UpdateCheckConfig" ) ),
         uno::UNO_QUERY_THROW );
 
-    sal_Bool bDownloadSupported;
+    sal_Bool bDownloadSupported = sal_Bool();
     m_xUpdateAccess->getByName( UNISTRING( "DownloadSupported") ) >>= bDownloadSupported;
 
     WinBits nStyle = m_aDestPath.GetStyle();
@@ -225,7 +225,7 @@ BOOL SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
 
 void SvxOnlineUpdateTabPage::Reset( const SfxItemSet& )
 {
-    sal_Bool bValue;
+    sal_Bool bValue = sal_Bool();
     m_xUpdateAccess->getByName( UNISTRING("AutoCheckEnabled") ) >>= bValue;
 
     m_aAutoCheckCheckBox.Check(bValue);
