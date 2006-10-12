@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selector.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:01:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:26:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,12 +82,14 @@ struct SvxGroupInfo_Impl
 };
 
 typedef SvxGroupInfo_Impl* SvxGroupInfoPtr;
-SV_DECL_PTRARR_DEL(SvxGroupInfoArr_Impl, SvxGroupInfoPtr, 5, 5);
-DECL_2BYTEARRAY(USHORTArr, USHORT, 10, 10);
+SV_DECL_PTRARR_DEL(SvxGroupInfoArr_Impl, SvxGroupInfoPtr, 5, 5)
+DECL_2BYTEARRAY(USHORTArr, USHORT, 10, 10)
 
 class ImageProvider
 {
 public:
+    virtual ~ImageProvider() {}
+
     virtual Image GetImage( const rtl::OUString& rCommandURL ) = 0;
 };
 
@@ -110,6 +112,7 @@ public:
     SvLBoxEntry*                    GetEntry_Impl( const String& );
     USHORT                          GetId( SvLBoxEntry *pEntry );
     String                          GetHelpText( SvLBoxEntry *pEntry );
+    using Window::GetHelpText;
     USHORT                          GetCurId()
                                     { return GetId( FirstSelected() ); }
     SvLBoxEntry*                    GetLastSelectedEntry();
@@ -157,6 +160,7 @@ class SvxConfigGroupListBox_Impl : public SvTreeListBox
 protected:
     virtual void    RequestingChilds( SvLBoxEntry *pEntry);
     virtual BOOL    Expand( SvLBoxEntry* pParent );
+    using SvListView::Expand;
 
 public:
             SvxConfigGroupListBox_Impl (
