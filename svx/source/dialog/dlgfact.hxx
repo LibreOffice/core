@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 08:28:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:11:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,14 +105,14 @@ USHORT Class::Execute()                             \
 //for GalleryThemeProperties begin
 class VclAbstractDialog_Impl : public VclAbstractDialog
 {
-    DECL_ABSTDLG_BASE(VclAbstractDialog_Impl,Dialog);
+    DECL_ABSTDLG_BASE(VclAbstractDialog_Impl,Dialog)
 };
 //for GalleryThemeProperties end
 
 //for ActualizeProgress begin
 class VclAbstractRefreshableDialog_Impl : public VclAbstractRefreshableDialog
 {
-    DECL_ABSTDLG_BASE(VclAbstractRefreshableDialog_Impl,Dialog);
+    DECL_ABSTDLG_BASE(VclAbstractRefreshableDialog_Impl,Dialog)
     virtual void        Update() ;
     virtual void        Sync() ;
 };
@@ -120,7 +120,7 @@ class VclAbstractRefreshableDialog_Impl : public VclAbstractRefreshableDialog
 
 class AbstractTabDialog_Impl : public SfxAbstractTabDialog
 {
-    DECL_ABSTDLG_BASE(AbstractTabDialog_Impl,SfxTabDialog);
+    DECL_ABSTDLG_BASE(AbstractTabDialog_Impl,SfxTabDialog)
     virtual void                SetCurPageId( USHORT nId );
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem ); //add by CHINA001
@@ -134,7 +134,7 @@ class AbstractTabDialog_Impl : public SfxAbstractTabDialog
 class SvxDistributeDialog;
 class AbstractSvxDistributeDialog_Impl: public AbstractSvxDistributeDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxDistributeDialog_Impl,SvxDistributeDialog);
+    DECL_ABSTDLG_BASE(AbstractSvxDistributeDialog_Impl,SvxDistributeDialog)
 public:
     virtual SvxDistributeHorizontal GetDistributeHor() const;
     virtual SvxDistributeVertical GetDistributeVer() const;
@@ -144,7 +144,7 @@ public:
 // for HangulHanjaConversionDialog begin
 class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConversionDialog
 {
-    DECL_ABSTDLG_BASE(AbstractHangulHanjaConversionDialog_Impl,HangulHanjaConversionDialog);
+    DECL_ABSTDLG_BASE(AbstractHangulHanjaConversionDialog_Impl,HangulHanjaConversionDialog)
     virtual void    EndDialog(long nResult = 0);
     virtual void    EnableRubySupport( sal_Bool _bVal );
     virtual void    SetByCharacter( sal_Bool _bByCharacter ) ;
@@ -177,7 +177,7 @@ class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConver
 class FmShowColsDialog;
 class AbstractFmShowColsDialog_Impl : public AbstractFmShowColsDialog
 {
-    DECL_ABSTDLG_BASE(AbstractFmShowColsDialog_Impl,FmShowColsDialog);
+    DECL_ABSTDLG_BASE(AbstractFmShowColsDialog_Impl,FmShowColsDialog)
      virtual void   SetColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xCols);
 };
 //for FmShowColsDialog end
@@ -187,7 +187,7 @@ class AbstractFmShowColsDialog_Impl : public AbstractFmShowColsDialog
 class SvxZoomDialog;
 class AbstractSvxZoomDialog_Impl : public AbstractSvxZoomDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxZoomDialog_Impl,SvxZoomDialog);
+    DECL_ABSTDLG_BASE(AbstractSvxZoomDialog_Impl,SvxZoomDialog)
     virtual void    SetLimits( USHORT nMin, USHORT nMax );
     virtual void    HideButton( USHORT nBtnId );
     virtual const SfxItemSet*   GetOutputItemSet() const ;
@@ -200,7 +200,7 @@ namespace svx{ class SpellDialog;}
 class AbstractSpellDialog_Impl : public AbstractSpellDialog
 {
  public:
-    DECL_ABSTDLG_BASE(AbstractSpellDialog_Impl, svx::SpellDialog);
+    DECL_ABSTDLG_BASE(AbstractSpellDialog_Impl, svx::SpellDialog)
     virtual void        SetLanguage( sal_uInt16 nLang );
     virtual sal_Bool    Close();
     virtual void        Invalidate();
@@ -230,7 +230,7 @@ class AbstractSpellDialog_Impl : public AbstractSpellDialog
 class SearchProgress;
 class AbstractSearchProgress_Impl : public AbstractSearchProgress
 {
-    DECL_ABSTDLG_BASE(AbstractSearchProgress_Impl,SearchProgress);
+    DECL_ABSTDLG_BASE(AbstractSearchProgress_Impl,SearchProgress)
     virtual void        Update() ;
     virtual void        Sync() ;
     virtual void    SetFileType( const String& rType ) ;
@@ -244,7 +244,7 @@ class AbstractSearchProgress_Impl : public AbstractSearchProgress
 class TakeProgress;
 class AbstractTakeProgress_Impl : public AbstractTakeProgress
 {
-    DECL_ABSTDLG_BASE(AbstractTakeProgress_Impl,TakeProgress);
+    DECL_ABSTDLG_BASE(AbstractTakeProgress_Impl,TakeProgress)
     virtual void        Update() ;
     virtual void        Sync() ;
     virtual void        SetFile( const INetURLObject& rURL ) ;
@@ -257,7 +257,7 @@ class AbstractTakeProgress_Impl : public AbstractTakeProgress
 class TitleDialog;
 class AbstractTitleDialog_Impl : public AbstractTitleDialog
 {
-    DECL_ABSTDLG_BASE(AbstractTitleDialog_Impl,TitleDialog);
+    DECL_ABSTDLG_BASE(AbstractTitleDialog_Impl,TitleDialog)
     virtual String  GetTitle() const ;
 
 };
@@ -268,7 +268,7 @@ class SvxScriptSelectorDialog;
 class AbstractScriptSelectorDialog_Impl : public AbstractScriptSelectorDialog
 {
     DECL_ABSTDLG_BASE(
-        AbstractScriptSelectorDialog_Impl, SvxScriptSelectorDialog);
+        AbstractScriptSelectorDialog_Impl, SvxScriptSelectorDialog)
 
     virtual String GetScriptURL();
 
@@ -279,7 +279,7 @@ class AbstractScriptSelectorDialog_Impl : public AbstractScriptSelectorDialog
 class GalleryIdDialog;
 class AbstractGalleryIdDialog_Impl : public AbstractGalleryIdDialog
 {
-    DECL_ABSTDLG_BASE(AbstractGalleryIdDialog_Impl,GalleryIdDialog);
+    DECL_ABSTDLG_BASE(AbstractGalleryIdDialog_Impl,GalleryIdDialog)
     virtual ULONG   GetId() const ;
 
 };
@@ -289,7 +289,7 @@ class AbstractGalleryIdDialog_Impl : public AbstractGalleryIdDialog
 class URLDlg;
 class AbstractURLDlg_Impl :public AbstractURLDlg
 {
-    DECL_ABSTDLG_BASE(AbstractURLDlg_Impl,URLDlg);
+    DECL_ABSTDLG_BASE(AbstractURLDlg_Impl,URLDlg)
     virtual String      GetURL() const;
     virtual String      GetDescription() const;
     virtual String      GetTarget() const;
@@ -301,7 +301,7 @@ class AbstractURLDlg_Impl :public AbstractURLDlg
 class SvxHlinkDlgMarkWnd;
 class AbstractSvxHlinkDlgMarkWnd_Impl : public AbstractSvxHlinkDlgMarkWnd
 {
-    DECL_ABSTDLG_BASE(AbstractSvxHlinkDlgMarkWnd_Impl,SvxHlinkDlgMarkWnd);
+    DECL_ABSTDLG_BASE(AbstractSvxHlinkDlgMarkWnd_Impl,SvxHlinkDlgMarkWnd)
     virtual void                Hide( USHORT nFlags = 0 );
     virtual BOOL                IsVisible() const ;
     virtual void                Invalidate( USHORT nFlags = 0 );
@@ -320,7 +320,7 @@ class AbstractSvxHlinkDlgMarkWnd_Impl : public AbstractSvxHlinkDlgMarkWnd
 class SvxCharacterMap;
 class AbstractSvxCharacterMap_Impl :public AbstractSvxCharacterMap
 {
-    DECL_ABSTDLG_BASE(AbstractSvxCharacterMap_Impl,SvxCharacterMap);
+    DECL_ABSTDLG_BASE(AbstractSvxCharacterMap_Impl,SvxCharacterMap)
     virtual void      SetText( const XubString& rStr ); //From Class Window
     virtual void               DisableFontSelection();
 
@@ -339,7 +339,7 @@ class AbstractSvxCharacterMap_Impl :public AbstractSvxCharacterMap
 class SvxSearchSimilarityDialog;
 class AbstractSvxSearchSimilarityDialog_Impl :public AbstractSvxSearchSimilarityDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxSearchSimilarityDialog_Impl,SvxSearchSimilarityDialog);
+    DECL_ABSTDLG_BASE(AbstractSvxSearchSimilarityDialog_Impl,SvxSearchSimilarityDialog)
     virtual USHORT              GetOther();
     virtual USHORT              GetShorter();
     virtual USHORT              GetLonger();
@@ -351,14 +351,14 @@ class AbstractSvxSearchSimilarityDialog_Impl :public AbstractSvxSearchSimilarity
 class SvxJSearchOptionsDialog;
 class AbstractSvxJSearchOptionsDialog_Impl :public AbstractSvxJSearchOptionsDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxJSearchOptionsDialog_Impl,SvxJSearchOptionsDialog);
+    DECL_ABSTDLG_BASE(AbstractSvxJSearchOptionsDialog_Impl,SvxJSearchOptionsDialog)
     virtual INT32           GetTransliterationFlags() const;
 };
 //for SvxJSearchOptionsDialog end
 
 class AbstractSvxTransformTabDialog_Impl : public AbstractSvxTransformTabDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxTransformTabDialog_Impl,SvxTransformTabDialog);
+    DECL_ABSTDLG_BASE(AbstractSvxTransformTabDialog_Impl,SvxTransformTabDialog)
     virtual void SetValidateFramePosLink( const Link& rLink );
     virtual void                SetCurPageId( USHORT nId );
     virtual const SfxItemSet*   GetOutputItemSet() const;
@@ -369,7 +369,7 @@ class AbstractSvxTransformTabDialog_Impl : public AbstractSvxTransformTabDialog
 };
 class AbstractSvxCaptionDialog_Impl : public AbstractSvxCaptionDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxCaptionDialog_Impl,SvxCaptionTabDialog);
+    DECL_ABSTDLG_BASE(AbstractSvxCaptionDialog_Impl,SvxCaptionTabDialog)
     virtual void SetValidateFramePosLink( const Link& rLink );
     virtual void                SetCurPageId( USHORT nId );
     virtual const SfxItemSet*   GetOutputItemSet() const;
@@ -383,7 +383,7 @@ class AbstractSvxCaptionDialog_Impl : public AbstractSvxCaptionDialog
 class FmInputRecordNoDialog;
 class AbstractFmInputRecordNoDialog_Impl :public AbstractFmInputRecordNoDialog
 {
-    DECL_ABSTDLG_BASE(AbstractFmInputRecordNoDialog_Impl,FmInputRecordNoDialog);
+    DECL_ABSTDLG_BASE(AbstractFmInputRecordNoDialog_Impl,FmInputRecordNoDialog)
     virtual void SetValue(long nNew) ;
     virtual long GetValue() const ;
 };
@@ -393,7 +393,7 @@ class AbstractFmInputRecordNoDialog_Impl :public AbstractFmInputRecordNoDialog
 class SvxNewDictionaryDialog;
 class AbstractSvxNewDictionaryDialog_Impl :public AbstractSvxNewDictionaryDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxNewDictionaryDialog_Impl,SvxNewDictionaryDialog);
+    DECL_ABSTDLG_BASE(AbstractSvxNewDictionaryDialog_Impl,SvxNewDictionaryDialog)
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary1 > GetNewDictionary();
 };
 //for SvxNewDictionaryDialog end
@@ -402,7 +402,7 @@ class AbstractSvxNewDictionaryDialog_Impl :public AbstractSvxNewDictionaryDialog
 class SvxNameDialog;
 class AbstractSvxNameDialog_Impl :public AbstractSvxNameDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxNameDialog_Impl,SvxNameDialog);
+    DECL_ABSTDLG_BASE(AbstractSvxNameDialog_Impl,SvxNameDialog)
     virtual void    GetName( String& rName ) ;
     virtual void    SetCheckNameHdl( const Link& rLink, bool bCheckImmediately = false ) ;
     virtual void    SetEditHelpId(ULONG nHelpId) ;
@@ -419,7 +419,7 @@ private:
 class SvxMessDialog;
 class AbstractSvxMessDialog_Impl :public AbstractSvxMessDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxMessDialog_Impl,SvxMessDialog);
+    DECL_ABSTDLG_BASE(AbstractSvxMessDialog_Impl,SvxMessDialog)
     virtual void    SetButtonText( USHORT nBtnId, const String& rNewTxt );
 };
 //for SvxMessDialog end
@@ -428,7 +428,7 @@ class AbstractSvxMessDialog_Impl :public AbstractSvxMessDialog
 class SvxMultiPathDialog;
 class AbstractSvxMultiPathDialog_Impl :public AbstractSvxMultiPathDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxMultiPathDialog_Impl,SvxMultiPathDialog);
+    DECL_ABSTDLG_BASE(AbstractSvxMultiPathDialog_Impl,SvxMultiPathDialog)
     virtual String          GetPath() const;
     virtual void            SetPath( const String& rPath );
     virtual void            EnableRadioButtonMode();
@@ -440,7 +440,7 @@ class AbstractSvxMultiPathDialog_Impl :public AbstractSvxMultiPathDialog
 class SvxMultiFileDialog;
 class AbstractSvxMultiFileDialog_Impl :public AbstractSvxMultiFileDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxMultiFileDialog_Impl,SvxMultiFileDialog);
+    DECL_ABSTDLG_BASE(AbstractSvxMultiFileDialog_Impl,SvxMultiFileDialog)
     virtual String          GetFiles() const ;
     virtual void            SetFiles( const String& rPath ) ;
     //from SvxMultiPathDialog
@@ -459,7 +459,7 @@ class AbstractSvxMultiFileDialog_Impl :public AbstractSvxMultiFileDialog
 class SvxHpLinkDlg;
 class AbstractSvxHpLinkDlg_Impl :public AbstractSvxHpLinkDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSvxHpLinkDlg_Impl,SvxHpLinkDlg);
+    DECL_ABSTDLG_BASE(AbstractSvxHpLinkDlg_Impl,SvxHpLinkDlg)
     virtual Window * GetWindow() ;
 
 };
@@ -469,7 +469,7 @@ class AbstractSvxHpLinkDlg_Impl :public AbstractSvxHpLinkDlg
 class FmSearchDialog;
 class AbstractFmSearchDialog_Impl :public AbstractFmSearchDialog
 {
-    DECL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl,FmSearchDialog);
+    DECL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl,FmSearchDialog)
     virtual void SetFoundHandler(const Link& lnk) ;
     virtual void SetCanceledNotFoundHdl(const Link& lnk);
     virtual void SetActiveField(const String& strField);
@@ -480,7 +480,7 @@ class AbstractFmSearchDialog_Impl :public AbstractFmSearchDialog
 class GraphicFilterDialog;
 class AbstractGraphicFilterDialog_Impl :public AbstractGraphicFilterDialog
 {
-    DECL_ABSTDLG_BASE(AbstractGraphicFilterDialog_Impl,GraphicFilterDialog);
+    DECL_ABSTDLG_BASE(AbstractGraphicFilterDialog_Impl,GraphicFilterDialog)
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
 };
 //for GraphicFilterDialog end
@@ -489,7 +489,7 @@ class AbstractGraphicFilterDialog_Impl :public AbstractGraphicFilterDialog
 class SvxAreaTabDialog;
 class AbstractSvxAreaTabDialog_Impl :public AbstractSvxAreaTabDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxAreaTabDialog_Impl,SvxAreaTabDialog);
+    DECL_ABSTDLG_BASE(AbstractSvxAreaTabDialog_Impl,SvxAreaTabDialog)
     virtual void                SetCurPageId( USHORT nId );
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem );
@@ -505,7 +505,7 @@ class AbstractSvxAreaTabDialog_Impl :public AbstractSvxAreaTabDialog
 class SfxSingleTabDialog;
 class AbstractSfxSingleTabDialog_Impl :public AbstractSfxSingleTabDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSfxSingleTabDialog_Impl,SfxSingleTabDialog);
+    DECL_ABSTDLG_BASE(AbstractSfxSingleTabDialog_Impl,SfxSingleTabDialog)
     virtual const SfxItemSet*   GetOutputItemSet() const;
 
 };
@@ -513,7 +513,7 @@ class AbstractSfxSingleTabDialog_Impl :public AbstractSfxSingleTabDialog
 
 class AbstractInsertObjectDialog_Impl : public SfxAbstractInsertObjectDialog
 {
-    DECL_ABSTDLG_BASE(AbstractInsertObjectDialog_Impl, InsertObjectDialog_Impl);
+    DECL_ABSTDLG_BASE(AbstractInsertObjectDialog_Impl, InsertObjectDialog_Impl)
     virtual com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject();
     virtual BOOL IsCreateNew();
 };
@@ -521,7 +521,7 @@ class AbstractInsertObjectDialog_Impl : public SfxAbstractInsertObjectDialog
 class AbstractPasteDialog_Impl : public SfxAbstractPasteDialog
 {
 public:
-    DECL_ABSTDLG_BASE(AbstractPasteDialog_Impl, SvPasteObjectDialog );
+    DECL_ABSTDLG_BASE(AbstractPasteDialog_Impl, SvPasteObjectDialog )
     virtual void Insert( SotFormatStringId nFormat, const String & rFormatName );
     virtual void SetObjName( const SvGlobalName & rClass, const String & rObjName );
     virtual ULONG GetFormat( const TransferableDataHelper& aHelper,
@@ -532,7 +532,7 @@ public:
 class AbstractLinksDialog_Impl : public SfxAbstractLinksDialog
 {
 public:
-    DECL_ABSTDLG_BASE(AbstractLinksDialog_Impl, SvBaseLinksDlg );
+    DECL_ABSTDLG_BASE(AbstractLinksDialog_Impl, SvBaseLinksDlg )
 };
 
 
@@ -540,7 +540,7 @@ public:
 class SvxPostItDialog;
 class AbstractSvxPostItDialog_Impl :public AbstractSvxPostItDialog
 {
-    DECL_ABSTDLG_BASE( AbstractSvxPostItDialog_Impl, SvxPostItDialog );
+    DECL_ABSTDLG_BASE( AbstractSvxPostItDialog_Impl, SvxPostItDialog )
     virtual void                SetText( const XubString& rStr );  //From class Window
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual void                SetPrevHdl( const Link& rLink ) ;
