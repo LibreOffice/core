@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:31:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:02:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@
 #include <tools/stream.hxx>
 #endif
 
-DBG_NAME(OutlinerParaObject);
+DBG_NAME(OutlinerParaObject)
 
 OutlinerParaObject::OutlinerParaObject( USHORT nParaCount )
 {
@@ -125,7 +125,7 @@ BOOL OutlinerParaObject::ChangeStyleSheets( const XubString& rOldName, SfxStyleF
 
 void OutlinerParaObject::SetStyleSheets( USHORT nLevel, const XubString rNewName, const SfxStyleFamily& rNewFamily )
 {
-    for ( USHORT n = Count(); n; )
+    for ( USHORT n = sal::static_int_cast< USHORT >( Count() ); n; )
     {
         if ( GetDepth( --n ) == nLevel )
             pText->SetStyleSheet( n, rNewName, rNewFamily );
@@ -218,9 +218,9 @@ OutlinerParaObject* OutlinerParaObject::Create( SvStream& rStream, SfxItemPool* 
                 nCurPara++;
                 if( nCount )
                 {
-                    sal_uInt32 nSync = 0;
-                    rStream >> nSync;
-                    DBG_ASSERT(nSync==nSyncRef,"Stream out of sync")
+                    sal_uInt32 _nSync = 0;
+                    rStream >> _nSync;
+                    DBG_ASSERT(_nSync==nSyncRef,"Stream out of sync")
                 }
             }
             if( nVersion == 3 )
