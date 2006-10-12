@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 12:49:47 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:40:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,7 +264,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const :
 
                         if( 0 < nImageId )
                         {
-                            const Image aImage( aImageList.GetImage( nImageId ) );
+                            const Image aImage( aImageList.GetImage( sal::static_int_cast< USHORT >(nImageId) ) );
                             aBmpEx = aImage.GetBitmapEx();
                         }
                         else
