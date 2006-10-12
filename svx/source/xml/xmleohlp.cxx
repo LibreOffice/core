@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:19:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:29:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -354,8 +354,8 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
     {
         DBG_ASSERT( '#' != aURLNoPar[0], "invalid object URL" );
 
-        sal_Int32 nPos = aURLNoPar.lastIndexOf( '/' );
-        if( -1 == nPos )
+        sal_Int32 _nPos = aURLNoPar.lastIndexOf( '/' );
+        if( -1 == _nPos )
         {
             rContainerStorageName = OUString();
             rObjectStorageName = aURLNoPar;
@@ -365,9 +365,9 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
             sal_Int32 nPathStart = 0;
             if( 0 == aURLNoPar.compareToAscii( "./", 2 ) )
                 nPathStart = 2;
-            if( nPos >= nPathStart )
-                rContainerStorageName = aURLNoPar.copy( nPathStart, nPos-nPathStart);
-            rObjectStorageName = aURLNoPar.copy( nPos+1 );
+            if( _nPos >= nPathStart )
+                rContainerStorageName = aURLNoPar.copy( nPathStart, _nPos-nPathStart);
+            rObjectStorageName = aURLNoPar.copy( _nPos+1 );
         }
     }
 
