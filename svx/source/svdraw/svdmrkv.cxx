@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:52:54 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:11:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -865,7 +865,7 @@ void SdrMarkView::SetMarkHandles()
             ULONG nSiz0=aHdl.GetHdlCount();
             pObj->AddToHdlList(aHdl);
             ULONG nSiz1=aHdl.GetHdlCount();
-            BOOL bPoly=pObj->IsPolyObj();
+            bool bPoly=pObj->IsPolyObj();
             const SdrUShortCont* pMrkPnts=pM->GetMarkedPoints();
             for (ULONG i=nSiz0; i<nSiz1; i++) {
                 SdrHdl* pHdl=aHdl.GetHdl(i);
@@ -1478,7 +1478,7 @@ BOOL SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, BOOL bPrev)
     // #110988#
     //ULONG nSearchBeg=bPrev ? pBtmObjHit->GetOrdNum()+1 : pTopObjHit->GetOrdNum();
     sal_uInt32 nSearchBeg;
-    E3dScene* pScene;
+    E3dScene* pScene = NULL;
     SdrObject* pObjHit = (bPrev) ? pBtmObjHit : pTopObjHit;
     sal_Bool bRemap = pObjHit->ISA(E3dCompoundObject)
         ? ((E3dCompoundObject*)pObjHit)->IsAOrdNumRemapCandidate(pScene)
