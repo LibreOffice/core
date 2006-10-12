@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:21:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:12:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -851,8 +851,10 @@ void GraphCtrl::SetEditMode( const BOOL _bEditMode )
 {
     if ( bSdrMode )
     {
-        pView->SetEditMode( bEditMode = _bEditMode );
-        pView->SetCurrentObj( eObjKind = OBJ_NONE );
+        bEditMode = _bEditMode;
+        pView->SetEditMode( bEditMode );
+        eObjKind = OBJ_NONE;
+        pView->SetCurrentObj( sal::static_int_cast< UINT16 >( eObjKind ) );
     }
     else
         bEditMode = FALSE;
@@ -887,8 +889,10 @@ void GraphCtrl::SetObjKind( const SdrObjKind _eObjKind )
 {
     if ( bSdrMode )
     {
-        pView->SetEditMode( bEditMode = FALSE );
-        pView->SetCurrentObj( eObjKind = _eObjKind );
+        bEditMode = FALSE;
+        pView->SetEditMode( bEditMode );
+        eObjKind = _eObjKind;
+        pView->SetCurrentObj( sal::static_int_cast< UINT16 >( eObjKind ) );
     }
     else
         eObjKind = OBJ_NONE;
