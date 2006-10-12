@@ -4,9 +4,9 @@
  *
  *  $RCSfile: processw.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:37:40 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:23:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,8 +65,8 @@ private:
     struct Methods {
         const char* pName;      // Name des Eintrags
         SbxDataType eType;      // Datentyp
-        short nArgs;            // Argumente und Flags
         pMeth pFunc;            // Function Pointer
+        short nArgs;            // Argumente und Flags
     };
     static Methods aProcessMethods[];   // Methodentabelle
     Methods *pMethods;  // Aktuelle Methodentabelle
