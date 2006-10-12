@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:51:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:12:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -715,7 +715,7 @@ void OImageControlControl::implInsertGraphics()
     // build some arguments for the upcoming dialog
     try
     {
-        ::sfx2::FileDialogHelper aDialog( ::sfx2::FILEOPEN_LINK_PREVIEW, SFXWB_GRAPHIC );
+        ::sfx2::FileDialogHelper aDialog( TemplateDescription::FILEOPEN_LINK_PREVIEW, SFXWB_GRAPHIC );
         aDialog.SetTitle( sTitle );
 
         Reference< XFilePickerControlAccess > xController(aDialog.GetFilePicker(), UNO_QUERY);
