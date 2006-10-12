@@ -4,9 +4,9 @@
  *
  *  $RCSfile: evaluation.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:48:48 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:17:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,7 +171,6 @@ rtl::OUString SAL_CALL SOEvaluation::getExactName( const rtl::OUString& rApproxi
         {
             // this is an evaluation version, because it provides "material"
             bExpired = sal_True;
-            sal_Int32 nCount = aSeq.getLength();
             for (int i=0; i<aSeq.getLength(); i++ )
             {
                 NamedValue& rValue = aSeq[i];
