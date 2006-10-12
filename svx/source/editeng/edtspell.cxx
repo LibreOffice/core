@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtspell.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:50:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:37:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,10 +62,10 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::linguistic2;
 
 
-EditSpellWrapper::EditSpellWrapper( Window* pWin,
+EditSpellWrapper::EditSpellWrapper( Window* _pWin,
         Reference< XSpellChecker1 >  &xChecker,
         sal_Bool bIsStart, sal_Bool bIsAllRight, EditView* pView ) :
-    SvxSpellWrapper( pWin, xChecker, bIsStart, bIsAllRight )
+    SvxSpellWrapper( _pWin, xChecker, bIsStart, bIsAllRight )
 {
     DBG_ASSERT( pView, "Es muss eine View uebergeben werden!" );
     // IgnoreList behalten, ReplaceList loeschen...
@@ -78,7 +78,6 @@ void __EXPORT EditSpellWrapper::SpellStart( SvxSpellArea eArea )
 {
     ImpEditEngine* pImpEE = pEditView->GetImpEditEngine();
     SpellInfo* pSpellInfo = pImpEE->GetSpellInfo();
-    sal_Bool bForward = sal_True;
 
     if ( eArea == SVX_SPELL_BODY_START )
     {
@@ -176,7 +175,7 @@ void __EXPORT EditSpellWrapper::ScrollArea()
 }
 
 void __EXPORT EditSpellWrapper::ReplaceAll( const String &rNewText,
-            sal_Int16 nLanguage )
+            sal_Int16 )
 {
     // Wird gerufen, wenn Wort in ReplaceList des SpellCheckers
     pEditView->InsertText( rNewText );
@@ -184,7 +183,7 @@ void __EXPORT EditSpellWrapper::ReplaceAll( const String &rNewText,
 }
 
 void __EXPORT EditSpellWrapper::ChangeWord( const String& rNewWord,
-            const sal_uInt16 nLang )
+            const sal_uInt16 )
 {
     // Wird gerufen, wenn Wort Button Change
     // bzw. intern von mir bei ChangeAll
@@ -202,8 +201,7 @@ void __EXPORT EditSpellWrapper::ChangeThesWord( const String& rNewWord )
     CheckSpellTo();
 }
 
-void __EXPORT EditSpellWrapper::AutoCorrect( const String& rOldWord,
-            const String& rNewWord )
+void __EXPORT EditSpellWrapper::AutoCorrect( const String&, const String& )
 {
 }
 
@@ -245,7 +243,7 @@ void WrongList::TextInserted( sal_uInt16 nPos, sal_uInt16 nNew, sal_Bool bPosIsS
         if ( nInvalidStart > nPos )
             nInvalidStart = nPos;
         if ( nInvalidEnd >= nPos )
-            nInvalidEnd += nNew;
+            nInvalidEnd = nInvalidEnd + nNew;
         else
             nInvalidEnd = nPos+nNew;
     }
@@ -259,20 +257,20 @@ void WrongList::TextInserted( sal_uInt16 nPos, sal_uInt16 nNew, sal_Bool bPosIsS
             // Alle Wrongs hinter der Einfuegeposition verschieben...
             if ( rWrong.nStart > nPos )
             {
-                rWrong.nStart += nNew;
-                rWrong.nEnd += nNew;
+                rWrong.nStart = rWrong.nStart + nNew;
+                rWrong.nEnd = rWrong.nEnd + nNew;
             }
             // 1: Startet davor, geht bis nPos...
             else if ( rWrong.nEnd == nPos )
             {
                 // Sollte bei einem Blank unterbunden werden!
                 if ( !bPosIsSep )
-                    rWrong.nEnd += nNew;
+                    rWrong.nEnd = rWrong.nEnd + nNew;
             }
             // 2: Startet davor, geht hinter Pos...
             else if ( ( rWrong.nStart < nPos ) && ( rWrong.nEnd > nPos ) )
             {
-                rWrong.nEnd += nNew;
+                rWrong.nEnd = rWrong.nEnd + nNew;
                 // Bei einem Trenner das Wrong entfernen und neu pruefen
                 if ( bPosIsSep )
                 {
@@ -287,7 +285,7 @@ void WrongList::TextInserted( sal_uInt16 nPos, sal_uInt16 nNew, sal_Bool bPosIsS
             // 3: Attribut startet auf Pos...
             else if ( rWrong.nStart == nPos )
             {
-                rWrong.nEnd += nNew;
+                rWrong.nEnd = rWrong.nEnd + nNew;
                 if ( bPosIsSep )
                     rWrong.nStart++;
             }
@@ -314,7 +312,7 @@ void WrongList::TextDeleted( sal_uInt16 nPos, sal_uInt16 nDeleted )
         if ( nInvalidEnd > nPos )
         {
             if ( nInvalidEnd > nEndChanges )
-                nInvalidEnd -=nDeleted;
+                nInvalidEnd = nInvalidEnd - nDeleted;
             else
                 nInvalidEnd = nPos+1;
         }
@@ -329,8 +327,8 @@ void WrongList::TextDeleted( sal_uInt16 nPos, sal_uInt16 nDeleted )
             // Alles Wrongs hinter der Einfuegeposition verschieben...
             if ( rWrong.nStart >= nEndChanges )
             {
-                rWrong.nStart -= nDeleted;
-                rWrong.nEnd -= nDeleted;
+                rWrong.nStart = rWrong.nStart - nDeleted;
+                rWrong.nEnd = rWrong.nEnd - nDeleted;
             }
             // 1. Innenliegende Wrongs loeschen...
             else if ( ( rWrong.nStart >= nPos ) && ( rWrong.nEnd <= nEndChanges ) )
@@ -343,14 +341,14 @@ void WrongList::TextDeleted( sal_uInt16 nPos, sal_uInt16 nDeleted )
                 if ( rWrong.nEnd <= nEndChanges )   // endet drinnen
                     rWrong.nEnd = nPos;
                 else
-                    rWrong.nEnd -= nDeleted;        // endet dahinter
+                    rWrong.nEnd = rWrong.nEnd - nDeleted; // endet dahinter
             }
             // 3. Wrong beginnt drinnen, endet dahinter...
             else if ( ( rWrong.nStart >= nPos ) && ( rWrong.nEnd > nEndChanges ) )
             {
                 rWrong.nStart = nEndChanges;
-                rWrong.nStart -= nDeleted;
-                rWrong.nEnd -= nDeleted;
+                rWrong.nStart = rWrong.nStart - nDeleted;
+                rWrong.nEnd = rWrong.nEnd - nDeleted;
             }
         }
         DBG_ASSERT( rWrong.nStart < rWrong.nEnd,
@@ -494,10 +492,10 @@ sal_Bool WrongList::DbgIsBuggy() const
 {
     // Pruefen, ob sich Bereiche ueberlappen
     sal_Bool bError = sal_False;
-    for ( sal_uInt16 nA = 0; !bError && ( nA < Count() ); nA++ )
+    for ( sal_uInt16 _nA = 0; !bError && ( _nA < Count() ); _nA++ )
     {
-        WrongRange& rWrong = GetObject( nA );
-        for ( sal_uInt16 nB = nA+1; !bError && ( nB < Count() ); nB++ )
+        WrongRange& rWrong = GetObject( _nA );
+        for ( sal_uInt16 nB = _nA+1; !bError && ( nB < Count() ); nB++ )
         {
             WrongRange& rNextWrong = GetObject( nB );
             // 1) Start davor, End hinterm anderen Start
@@ -547,7 +545,7 @@ sal_Bool EdtAutoCorrDoc::Insert( sal_uInt16 nPos, const String& rTxt )
     EditSelection aSel = EditPaM( pCurNode, nPos );
     pImpEE->ImpInsertText( aSel, rTxt );
     DBG_ASSERT( nCursor >= nPos, "Cursor mitten im Geschehen ?!" );
-    nCursor += rTxt.Len();
+    nCursor = nCursor + rTxt.Len();
 
     if ( bAllowUndoAction && ( rTxt.Len() == 1 ) )
         ImplStartUndoAction();
@@ -568,7 +566,7 @@ sal_Bool EdtAutoCorrDoc::Replace( sal_uInt16 nPos, const String& rTxt )
     pImpEE->ImpDeleteSelection( EditSelection( EditPaM( pCurNode, nPos ), EditPaM( pCurNode, nEnd ) ) );
 
     if ( nPos == nCursor )
-        nCursor += rTxt.Len();
+        nCursor = nCursor + rTxt.Len();
 
     if ( bAllowUndoAction && ( rTxt.Len() == 1 ) )
         ImplStartUndoAction();
@@ -646,7 +644,7 @@ sal_Bool EdtAutoCorrDoc::HasSymbolChars( sal_uInt16 nStt, sal_uInt16 nEnd )
     return sal_False;
 }
 
-const String* EdtAutoCorrDoc::GetPrevPara( sal_Bool bAtNormalPos )
+const String* EdtAutoCorrDoc::GetPrevPara( sal_Bool )
 {
     // Vorherigen Absatz zurueck geben, damit ermittel werden kann,
     // ob es sich beim aktuellen Wort um einen Satzanfang handelt.
@@ -708,7 +706,7 @@ sal_Bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_uInt16& rSttPos,
         DBG_ASSERT( nCursor >= nEndPos, "Cursor mitten im Geschehen ?!" );
         nCursor -= ( nEndPos-rSttPos );
         pImpEE->ImpInsertText( aSel, pFnd->GetLong() );
-        nCursor += pFnd->GetLong().Len();
+        nCursor = nCursor + pFnd->GetLong().Len();
         if( ppPara )
             *ppPara = pCurNode;
         bRet = sal_True;
@@ -717,7 +715,7 @@ sal_Bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_uInt16& rSttPos,
     return bRet;
 }
 
-LanguageType EdtAutoCorrDoc::GetLanguage( sal_uInt16 nPos, sal_Bool bPrevPara ) const
+LanguageType EdtAutoCorrDoc::GetLanguage( sal_uInt16 nPos, sal_Bool ) const
 {
     return pImpEE->GetLanguage( EditPaM( pCurNode, nPos+1 ) );
 }
