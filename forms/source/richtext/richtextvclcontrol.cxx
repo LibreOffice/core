@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextvclcontrol.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:01:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:14:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@
     #ifndef _URLOBJ_HXX
     #include <tools/urlobj.hxx>
     #endif
+    #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #endif
 
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
@@ -214,8 +215,8 @@ namespace frm
         OSL_ENSURE( _rItem.ISA( SvxFontItem ), "RichTextControl::convert: invalid item type!" );
 
         _rUnoFont.Name    = static_cast< const SvxFontItem& >( _rItem ).GetFamilyName();
-        _rUnoFont.Family  = static_cast< const SvxFontItem& >( _rItem ).GetFamily();
-        _rUnoFont.Pitch   = static_cast< const SvxFontItem& >( _rItem ).GetPitch();
+        _rUnoFont.Family  = sal::static_int_cast< sal_Int16 >( static_cast< const SvxFontItem& >( _rItem ).GetFamily() );
+        _rUnoFont.Pitch   = sal::static_int_cast< sal_Int16 >( static_cast< const SvxFontItem& >( _rItem ).GetPitch() );
         _rUnoFont.CharSet = static_cast< const SvxFontItem& >( _rItem ).GetCharSet();
     }
 
@@ -331,7 +332,7 @@ namespace frm
                         { "Text (*.txt)", "*.txt", EE_FORMAT_TEXT }
                     };
 
-                    ::sfx2::FileDialogHelper aFP( bLoad ? ::sfx2::FILEOPEN_SIMPLE : ::sfx2::FILESAVE_AUTOEXTENSION, 0, this );
+                    ::sfx2::FileDialogHelper aFP( bLoad ? com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE : com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION, 0, this );
 
                     for ( size_t i = 0; i < sizeof( aExportFormats ) / sizeof( aExportFormats[ 0 ] ); ++i )
                     {
