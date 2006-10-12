@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:10:01 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:04:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1023,7 +1023,7 @@ struct DoubleString
     void*   pUserData; // CheckBox -> form. Text Bool -> Selektionstext
 };
 typedef DoubleString* DoubleStringPtr;
-SV_DECL_PTRARR_DEL(DoubleStringArray, DoubleStringPtr, 4, 4);
+SV_DECL_PTRARR_DEL(DoubleStringArray, DoubleStringPtr, 4, 4)
 SV_IMPL_PTRARR(DoubleStringArray, DoubleStringPtr);
 
 /* -----------------19.11.98 16:07-------------------
@@ -1496,8 +1496,9 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
                 nPos = j;
             }
             SvLBoxEntry* pInsEntry =
-                aReplaceTLB.InsertEntry(sEntry, 0,
-                                nPos == USHRT_MAX ? LIST_APPEND : (ULONG)nPos);
+                aReplaceTLB.InsertEntry(
+                    sEntry, static_cast< SvLBoxEntry * >(NULL), false,
+                    nPos == USHRT_MAX ? LIST_APPEND : nPos);
             if( !bReplaceEditChanged && !aTextOnlyCB.IsChecked())
                 pInsEntry->SetUserData(&bHasSelectionText); // neuer formatierter Text
 
@@ -2218,6 +2219,11 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
             if(cDlg == 0)
                 cDlg = pAutoCorrect->GetQuote('\"',FALSE,eLang);  //add by BerryJia for Bug95846 Time:2002-8-13 15:50
         break;
+        default:
+            DBG_ERROR("svx::OfaQuoteTabPage::QuoteHdl(), how to initialize cDlg?" );
+            cDlg = 0;
+            break;
+
     }
     pMap->SetChar(  cDlg );
     pMap->DisableFontSelection();
@@ -2288,7 +2294,7 @@ String OfaQuoteTabPage::ChangeStringExt_Impl( sal_Unicode cChar )
         String sHex = String::CreateFromAscii("0x0000");
         for(USHORT i = 0; i < 4; i++)
         {
-            BYTE cValue = cChar & 0x0f;
+            sal_Unicode cValue = cChar & 0x0f;
             cChar >>= 4;
             sal_Unicode cResult = cValue > 9 ? ('A' + cValue - 10) : ('0' + cValue);
             sHex.SetChar(sHex.Len() - i - 1, cResult);
