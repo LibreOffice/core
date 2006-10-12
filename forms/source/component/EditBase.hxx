@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EditBase.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:48:21 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:10:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ protected:
     void SAL_CALL writeCommonEditProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
     void defaultCommonEditProperties();
 
-    virtual sal_Int16 getPersistenceFlags() const;
+    virtual sal_uInt16 getPersistenceFlags() const;
         // derived classes may use this if they want this base class to write additinal version flags
         // (one of the PF_.... constants). After ::read they may ask for that flags with getLastReadVersion
 };
