@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:19:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:55:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,7 +328,7 @@ class XMLDropCapPropHdl_Impl : public XMLPropertyHandler
 public:
     virtual ~XMLDropCapPropHdl_Impl ();
 
-    virtual sal_Bool equals(
+    virtual bool equals(
             const ::com::sun::star::uno::Any& r1,
             const ::com::sun::star::uno::Any& r2 ) const;
 
@@ -336,18 +336,18 @@ public:
     virtual sal_Bool importXML(
             const ::rtl::OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
             ::rtl::OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
 };
 
 XMLDropCapPropHdl_Impl::~XMLDropCapPropHdl_Impl ()
 {
 }
 
-sal_Bool XMLDropCapPropHdl_Impl::equals(
+bool XMLDropCapPropHdl_Impl::equals(
         const Any& r1,
         const Any& r2 ) const
 {
@@ -389,11 +389,11 @@ public:
     virtual sal_Bool importXML(
             const ::rtl::OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
             ::rtl::OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
 };
 
 sal_Bool XMLOpaquePropHdl_Impl::importXML(
@@ -441,11 +441,11 @@ public:
     virtual sal_Bool importXML(
             const ::rtl::OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
             ::rtl::OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
 };
 
 sal_Bool XMLContourModePropHdl_Impl::importXML(
@@ -493,17 +493,17 @@ public:
     virtual sal_Bool importXML(
             const ::rtl::OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
             ::rtl::OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
 };
 
 sal_Bool XMLParagraphOnlyPropHdl_Impl::importXML(
         const OUString& rStrImpValue,
            Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_True;
     sal_Bool bVal = sal_False;
@@ -511,7 +511,7 @@ sal_Bool XMLParagraphOnlyPropHdl_Impl::importXML(
     if( ! IsXMLToken( rStrImpValue, XML_NO_LIMIT ) )
     {
         sal_Int32 nValue = 0;
-        bRet = rUnitConverter.convertNumber( nValue, rStrImpValue );
+        bRet = SvXMLUnitConverter::convertNumber( nValue, rStrImpValue );
         bVal = 1 == nValue;
     }
 
@@ -559,20 +559,20 @@ public:
     virtual sal_Bool importXML(
             const ::rtl::OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
             ::rtl::OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
 };
 
 sal_Bool XMLWrapPropHdl_Impl::importXML(
         const OUString& rStrImpValue,
            Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& ) const
 {
     sal_uInt16 nWrap;
-    sal_Bool bRet = rUnitConverter.convertEnum( nWrap, rStrImpValue,
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum( nWrap, rStrImpValue,
                                                 pXML_Wrap_Enum );
 
     if( bRet )
@@ -584,14 +584,14 @@ sal_Bool XMLWrapPropHdl_Impl::importXML(
 sal_Bool XMLWrapPropHdl_Impl::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut;
     WrapTextMode eVal;
 
     rValue >>= eVal;
 
-    sal_Bool bRet = rUnitConverter.convertEnum( aOut, eVal, pXML_Wrap_Enum, XML_NONE );
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum( aOut, eVal, pXML_Wrap_Enum, XML_NONE );
 
     rStrExpValue = aOut.makeStringAndClear();
 
@@ -615,11 +615,11 @@ public:
     virtual sal_Bool importXML(
             const ::rtl::OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
             ::rtl::OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
 };
 
 sal_Bool XMLFrameProtectPropHdl_Impl::importXML(
@@ -701,10 +701,10 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_Anchor_Enum[] =
 sal_Bool XMLAnchorTypePropHdl::importXML(
         const OUString& rStrImpValue,
            Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& ) const
 {
     sal_uInt16 nAnchor;
-    sal_Bool bRet = rUnitConverter.convertEnum( nAnchor, rStrImpValue,
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum( nAnchor, rStrImpValue,
                                                 pXML_Anchor_Enum );
 
     if( bRet )
@@ -716,14 +716,14 @@ sal_Bool XMLAnchorTypePropHdl::importXML(
 sal_Bool XMLAnchorTypePropHdl::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut;
     TextContentAnchorType eVal;
 
     rValue >>= eVal;
 
-    sal_Bool bRet = rUnitConverter.convertEnum( aOut, eVal, pXML_Anchor_Enum, XML_PARAGRAPH );
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum( aOut, eVal, pXML_Anchor_Enum, XML_PARAGRAPH );
 
     rStrExpValue = aOut.makeStringAndClear();
 
@@ -735,11 +735,10 @@ XMLAnchorTypePropHdl::~XMLAnchorTypePropHdl()
 }
 
 sal_Bool XMLAnchorTypePropHdl::convert( const OUString& rStrImpValue,
-                 const SvXMLUnitConverter& rUnitConverter,
                  TextContentAnchorType& rType )
 {
     sal_uInt16 nAnchor;
-    sal_Bool bRet = rUnitConverter.convertEnum( nAnchor, rStrImpValue,
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum( nAnchor, rStrImpValue,
                                                 pXML_Anchor_Enum );
     if( bRet )
         rType = (TextContentAnchorType)nAnchor;
@@ -753,7 +752,7 @@ XMLTextColumnsPropertyHandler::~XMLTextColumnsPropertyHandler ()
 {
 }
 
-sal_Bool XMLTextColumnsPropertyHandler::equals(
+bool XMLTextColumnsPropertyHandler::equals(
         const Any& r1,
         const Any& r2 ) const
 {
@@ -818,20 +817,20 @@ public:
     virtual sal_Bool importXML(
             const ::rtl::OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
             ::rtl::OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
 };
 
 sal_Bool XMLHoriMirrorPropHdl_Impl::importXML(
         const OUString& rStrImpValue,
            Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& ) const
 {
     sal_uInt16 nHoriMirror;
-    sal_Bool bRet = rUnitConverter.convertEnum( nHoriMirror, rStrImpValue,
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum( nHoriMirror, rStrImpValue,
                                                 pXML_HoriMirror_Enum );
 
     if( bRet )
@@ -873,11 +872,11 @@ public:
     virtual sal_Bool importXML(
             const ::rtl::OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
             ::rtl::OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
 };
 
 sal_Bool XMLGrfMirrorPropHdl_Impl::importXML(
@@ -974,17 +973,17 @@ public:
     virtual sal_Bool importXML(
             const ::rtl::OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
             ::rtl::OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
 };
 
 sal_Bool XMLTextEmphasizePropHdl_Impl::importXML(
         const OUString& rStrImpValue,
            Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_True;
     sal_uInt16 nVal = FontEmphasis::NONE;
@@ -1006,7 +1005,7 @@ sal_Bool XMLTextEmphasizePropHdl_Impl::importXML(
             bHasPos = sal_True;
         }
         else if( !bHasType &&
-                  rUnitConverter.convertEnum( nVal, aToken,
+                  SvXMLUnitConverter::convertEnum( nVal, aToken,
                                              pXML_Emphasize_Enum ))
         {
             bHasType = sal_True;
@@ -1031,7 +1030,7 @@ sal_Bool XMLTextEmphasizePropHdl_Impl::importXML(
 sal_Bool XMLTextEmphasizePropHdl_Impl::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut( 15 );
     sal_Bool bRet = sal_True;
@@ -1044,7 +1043,7 @@ sal_Bool XMLTextEmphasizePropHdl_Impl::exportXML(
             bBelow = sal_True;
             nType -= 10;
         }
-        bRet = rUnitConverter.convertEnum( aOut, nType,
+        bRet = SvXMLUnitConverter::convertEnum( aOut, nType,
                                            pXML_Emphasize_Enum,
                                            XML_DOT );
         if( bRet )
@@ -1078,11 +1077,11 @@ public:
     virtual sal_Bool importXML(
             const ::rtl::OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
             ::rtl::OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
 };
 
 sal_Bool XMLTextCombineCharPropHdl_Impl::importXML(
@@ -1123,21 +1122,21 @@ public:
     virtual sal_Bool importXML(
             const ::rtl::OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
             ::rtl::OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
 };
 
 sal_Bool XMLTextRelWidthHeightPropHdl_Impl::importXML(
         const OUString& rStrImpValue,
            Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet;
     sal_Int32 nValue;
-    bRet = rUnitConverter.convertPercent( nValue, rStrImpValue );
+    bRet = SvXMLUnitConverter::convertPercent( nValue, rStrImpValue );
     if( bRet )
         rValue <<= (sal_Int16)nValue;
 
@@ -1147,14 +1146,14 @@ sal_Bool XMLTextRelWidthHeightPropHdl_Impl::importXML(
 sal_Bool XMLTextRelWidthHeightPropHdl_Impl::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
     sal_Int16 nValue = sal_Int16();
     if( (rValue >>= nValue) && nValue > 0 )
     {
         OUStringBuffer aOut;
-         rUnitConverter.convertPercent( aOut, nValue );
+         SvXMLUnitConverter::convertPercent( aOut, nValue );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = sal_True;
@@ -1181,11 +1180,11 @@ public:
     virtual sal_Bool importXML(
             const ::rtl::OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
             ::rtl::OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
 };
 
 sal_Bool XMLTextSyncWidthHeightPropHdl_Impl::importXML(
@@ -1230,20 +1229,20 @@ public:
     virtual sal_Bool importXML(
             const ::rtl::OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
             ::rtl::OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
 };
 
 sal_Bool XMLTextRotationAnglePropHdl_Impl::importXML(
         const OUString& rStrImpValue,
            Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue;
-    sal_Bool bRet = rUnitConverter.convertNumber( nValue, rStrImpValue );
+    sal_Bool bRet = SvXMLUnitConverter::convertNumber( nValue, rStrImpValue );
     if( bRet )
     {
         nValue = (nValue % 360 );
@@ -1265,14 +1264,14 @@ sal_Bool XMLTextRotationAnglePropHdl_Impl::importXML(
 sal_Bool XMLTextRotationAnglePropHdl_Impl::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& ) const
 {
     sal_Int16 nAngle = sal_Int16();
     sal_Bool bRet = ( rValue >>= nAngle );
     if( bRet )
     {
         OUStringBuffer aOut;
-        rUnitConverter.convertNumber( aOut, nAngle / 10 );
+        SvXMLUnitConverter::convertNumber( aOut, nAngle / 10 );
         rStrExpValue = aOut.makeStringAndClear();
     }
     OSL_ENSURE( bRet, "illegal rotation angle" );
@@ -1294,20 +1293,20 @@ public:
     virtual sal_Bool importXML(
             const ::rtl::OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
             ::rtl::OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& ) const;
 };
 
 sal_Bool XMLNumber8OneBasedHdl::importXML(
         const OUString& rStrImpValue,
            Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue = 0;
-    sal_Bool bRet = rUnitConverter.convertNumber( nValue, rStrImpValue );
+    sal_Bool bRet = SvXMLUnitConverter::convertNumber( nValue, rStrImpValue );
     if( bRet )
         rValue <<= static_cast<sal_Int8>( nValue - 1 );
     return bRet;
@@ -1316,14 +1315,14 @@ sal_Bool XMLNumber8OneBasedHdl::importXML(
 sal_Bool XMLNumber8OneBasedHdl::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
+        const SvXMLUnitConverter& ) const
 {
     sal_Int8 nValue = sal_Int8();
     sal_Bool bRet = ( rValue >>= nValue );
     if( bRet )
     {
         OUStringBuffer aOut;
-         rUnitConverter.convertNumber( aOut, nValue + 1 );
+         SvXMLUnitConverter::convertNumber( aOut, nValue + 1 );
         rStrExpValue = aOut.makeStringAndClear();
     }
     return bRet;
