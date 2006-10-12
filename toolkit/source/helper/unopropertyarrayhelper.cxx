@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopropertyarrayhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:23:29 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:33:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,13 +62,14 @@ sal_Bool UnoPropertyArrayHelper::ImplHasProperty( sal_uInt16 nPropId ) const
 // ::cppu::IPropertyArrayHelper
 sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( ::rtl::OUString * pPropName, sal_Int16 * pAttributes, sal_Int32 nPropId )
 {
-    sal_Bool bValid = ImplHasProperty( nPropId );
+    sal_uInt16 id = sal::static_int_cast< sal_uInt16 >(nPropId);
+    sal_Bool bValid = ImplHasProperty( id );
     if ( bValid )
     {
         if ( pPropName )
-            *pPropName = GetPropertyName( nPropId );
+            *pPropName = GetPropertyName( id );
         if ( pAttributes )
-            *pAttributes = GetPropertyAttribs( nPropId );
+            *pAttributes = GetPropertyAttribs( id );
     }
     return bValid;
 }
@@ -81,13 +82,14 @@ sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( ::rtl::OUString * 
     sal_uInt32 nProps = maIDs.Count();
     for ( sal_uInt32 s = 0; s < nProps; s++ )
     {
-        sal_uInt32 nId = maIDs.GetObjectKey( s );
+        sal_uInt16 nId = sal::static_int_cast< sal_uInt16 >(
+            maIDs.GetObjectKey( s ));
         aSortedPropsIds.Insert( 1+GetPropertyOrderNr( nId ), (void*)(sal_uInt32)nId );
 
         if ( nId == BASEPROPERTY_FONTDESCRIPTOR )
         {
             // Einzelproperties...
-            for ( sal_uInt32 i = BASEPROPERTY_FONTDESCRIPTORPART_START; i <= BASEPROPERTY_FONTDESCRIPTORPART_END; i++ )
+            for ( sal_uInt16 i = BASEPROPERTY_FONTDESCRIPTORPART_START; i <= BASEPROPERTY_FONTDESCRIPTORPART_END; i++ )
                 aSortedPropsIds.Insert( 1+GetPropertyOrderNr( i ), (void*)(sal_uInt32)i );
         }
     }
