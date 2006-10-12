@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:36:19 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:06:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,6 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                                                 OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                                             UNO_QUERY );
 
-    sal_uInt32                      index = 0;
     DispatchList::const_iterator    p;
     std::vector< DispatchHolder >   aDispatches;
     ::rtl::OUString                 aAsTemplateArg( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate"));
@@ -321,14 +320,14 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                     // We have to be listener to catch errors during dispatching URLs.
                     // Otherwise it would be possible to have an office running without an open
                     // window!!
-                    Sequence < PropertyValue > aArgs(1);
-                    aArgs[0].Name    = ::rtl::OUString::createFromAscii("SynchronMode");
-                    aArgs[0].Value <<= sal_True;
+                    Sequence < PropertyValue > aArgs2(1);
+                    aArgs2[0].Name    = ::rtl::OUString::createFromAscii("SynchronMode");
+                    aArgs2[0].Value <<= sal_True;
                     Reference < XNotifyingDispatch > xDisp( xDispatcher, UNO_QUERY );
                     if ( xDisp.is() )
-                        xDisp->dispatchWithNotification( aURL, aArgs, DispatchWatcher::GetDispatchWatcher() );
+                        xDisp->dispatchWithNotification( aURL, aArgs2, DispatchWatcher::GetDispatchWatcher() );
                     else
-                        xDispatcher->dispatch( aURL, aArgs );
+                        xDispatcher->dispatch( aURL, aArgs2 );
                 }
                 catch ( ::com::sun::star::uno::Exception& )
                 {
@@ -493,9 +492,9 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
         if ( !xList->hasElements() )
         {
             // We don't have any task open so we have to shutdown ourself!!
-            Reference< XDesktop > xDesktop( xTasksSupplier, UNO_QUERY );
-            if ( xDesktop.is() )
-                xDesktop->terminate();
+            Reference< XDesktop > xDesktop2( xTasksSupplier, UNO_QUERY );
+            if ( xDesktop2.is() )
+                xDesktop2->terminate();
         }
     }
 }
@@ -507,7 +506,7 @@ throw(::com::sun::star::uno::RuntimeException)
 }
 
 
-void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& aEvent ) throw( RuntimeException )
+void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& ) throw( RuntimeException )
 {
     osl::ClearableMutexGuard aGuard( GetMutex() );
     sal_Int16 nCount = --m_nRequestCount;
