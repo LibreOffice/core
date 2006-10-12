@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:49:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:08:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -607,7 +607,7 @@ void SdrEditView::ImpCopyAttributes(const SdrObject* pSource, SdrObject* pDest) 
 BOOL SdrEditView::ImpCanConvertForCombine1(const SdrObject* pObj) const
 {
     // #69711 : new condition IsLine() to be able to combine simple Lines
-    BOOL bIsLine = FALSE;
+    bool bIsLine = false;
     const SdrPathObj* pPath=PTR_CAST(SdrPathObj,pObj);
     if (pPath!=NULL)
         bIsLine = pPath->IsLine();

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:49:00 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:08:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,7 @@ void SdrEditView::SetMarkedObjRect(const Rectangle& rRect, BOOL bCopy)
     EndUndo();
 }
 
-void SdrEditView::MoveMarkedObj(const Size& rSiz, BOOL bCopy)
+void SdrEditView::MoveMarkedObj(const Size& rSiz, bool bCopy)
 {
     XubString aStr(ImpGetResStr(STR_EditMove));
     if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
@@ -189,7 +189,7 @@ void SdrEditView::MoveMarkedObj(const Size& rSiz, BOOL bCopy)
     EndUndo();
 }
 
-void SdrEditView::ResizeMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, BOOL bCopy)
+void SdrEditView::ResizeMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy)
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_EditResize,aStr);
@@ -225,7 +225,7 @@ long SdrEditView::GetMarkedObjRotate() const
     return nWink;
 }
 
-void SdrEditView::RotateMarkedObj(const Point& rRef, long nWink, BOOL bCopy)
+void SdrEditView::RotateMarkedObj(const Point& rRef, long nWink, bool bCopy)
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_EditRotate,aStr);
@@ -245,7 +245,7 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, long nWink, BOOL bCopy)
     EndUndo();
 }
 
-void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, BOOL bCopy)
+void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool bCopy)
 {
     XubString aStr;
     Point aDif(rRef2-rRef1);
@@ -304,7 +304,7 @@ long SdrEditView::GetMarkedObjShear() const
     return nWink;
 }
 
-void SdrEditView::ShearMarkedObj(const Point& rRef, long nWink, BOOL bVShear, BOOL bCopy)
+void SdrEditView::ShearMarkedObj(const Point& rRef, long nWink, bool bVShear, bool bCopy)
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_EditShear,aStr);
@@ -372,7 +372,7 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
         Point aCtr0(pO->GetSnapRect().Center());
         Point aCtr1(aCtr0);
         BOOL bRotOk=FALSE;
-        double nSin,nCos;
+        double nSin=0,nCos=0;
         double nWink=0;
         if (rRad.X()!=0 && rRad.Y()!=0) {
             bRotOk=bRotate;
@@ -389,7 +389,7 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
 }
 
 void SdrEditView::CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookMode eMode,
-    BOOL bVertical, BOOL bNoContortion, BOOL bCopy)
+    bool bVertical, bool bNoContortion, bool bCopy)
 {
     Rectangle aMarkRect(GetMarkedObjRect());
     XubString aStr;
@@ -445,7 +445,7 @@ void SdrEditView::ImpDistortObj(SdrObject* pO, const Rectangle& rRef, const XPol
     }
 }
 
-void SdrEditView::DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDistortedRect, BOOL bNoContortion, BOOL bCopy)
+void SdrEditView::DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion, bool bCopy)
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_EditDistort,aStr);
