@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:15:51 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:54:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,9 +138,7 @@ void XMLTextShapeImportHelper::addShape(
             {
                 TextContentAnchorType eNew;
                 // OD 2004-06-01 #i26791# - allow all anchor types
-                if ( XMLAnchorTypePropHdl::convert( rValue,
-                                                rImport.GetMM100UnitConverter(),
-                                                eNew ) )
+                if ( XMLAnchorTypePropHdl::convert( rValue, eNew ) )
                 {
                     eAnchorType = eNew;
                 }
