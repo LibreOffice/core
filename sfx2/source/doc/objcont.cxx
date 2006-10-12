@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:42:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:55:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,7 @@
 #include "docfile.hxx"
 #include "objuno.hxx"
 #include "request.hxx"
+#include "openflag.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1487,7 +1488,7 @@ SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& aTargetURL, BO
 {
     // check for own format
     SfxObjectShellRef xDoc;
-    sal_Int32 nMode = bForWriting ? embed::ElementModes::READWRITE : embed::ElementModes::READ;
+    StreamMode nMode = bForWriting ? SFX_STREAM_READWRITE : SFX_STREAM_READONLY;
     SfxMedium *pMed = new SfxMedium( aTargetURL, nMode, FALSE, 0 );
     const SfxFilter* pFilter = NULL;
     if( SFX_APP()->GetFilterMatcher().GuessFilter( *pMed, &pFilter ) == ERRCODE_NONE && pFilter && pFilter->IsOwnFormat() )
