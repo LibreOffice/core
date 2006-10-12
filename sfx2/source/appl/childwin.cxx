@@ -4,9 +4,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:16:47 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:47:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,8 +157,8 @@ sal_Bool GetPosSizeFromString( const String& rStr, Point& rPos, Size& rSize )
 
 sal_Bool GetSplitSizeFromString( const String& rStr, Size& rSize )
 {
-    sal_Int32 nIndex = rStr.Search( ',' );
-    if (( nIndex >= 0 ) && ( nIndex < rStr.Len()))
+    xub_StrLen nIndex = rStr.Search( ',' );
+    if ( nIndex != STRING_NOTFOUND )
     {
         String aStr = rStr.Copy( nIndex+1 );
 
