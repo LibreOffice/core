@@ -4,9 +4,9 @@
  *
  *  $RCSfile: emfwr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:55:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:18:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -657,7 +657,7 @@ void EMFWriter::ImplWritePath( const PolyPolygon& rPolyPoly, sal_Bool bClosed )
                 for( o = 1; o < aNewPoly.GetSize(); o++ )
                     ImplWritePoint( aNewPoly[ o ] );
                 ImplEndRecord();
-                n += nBezPoints;
+                n = n + nBezPoints;
             }
             else
             {
@@ -680,7 +680,7 @@ void EMFWriter::ImplWritePath( const PolyPolygon& rPolyPoly, sal_Bool bClosed )
                         ImplWritePoint( aNewPoly[ o ] );
                     ImplEndRecord();
                 }
-                n += nPoints;
+                n = n + nPoints;
             }
             if ( bClosed && ( n == rPoly.GetSize() ) )
             {
@@ -749,7 +749,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
 
 void EMFWriter::ImplWriteTextRecord( const Point& rPos, const String rText, const sal_Int32* pDXArray, sal_uInt32 nWidth )
 {
-    UINT32 nLen = rText.Len(), i;
+    xub_StrLen nLen = rText.Len(), i;
 
     if( nLen )
     {
