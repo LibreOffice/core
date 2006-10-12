@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:18:28 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:07:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,7 @@ struct DialogImpl :
         virtual void MouseMove( MouseEvent const & evt );
         virtual void KeyInput( KeyEvent const & evt );
         virtual void RequestingChilds( SvLBoxEntry * pEntry );
+        using SvListView::Expand;
         virtual BOOL Expand( SvLBoxEntry * pParent );
         virtual void DataChanged( DataChangedEvent const & evt );
         virtual PopupMenu * CreateContextMenu(void);
