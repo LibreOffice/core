@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _contdlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:09:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:03:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -401,7 +401,7 @@ const void* SvxContourDlg::GetEditingObject() const
 void SvxContourDlg::Update( const Graphic& rGraphic, BOOL bGraphicLinked,
                             const PolyPolygon* pPolyPoly, void* pEditingObj )
 {
-    pSuperClass->Update( rGraphic, bGraphicLinked, pPolyPoly, pEditingObj );
+    pSuperClass->UpdateGraphic( rGraphic, bGraphicLinked, pPolyPoly, pEditingObj );
 }
 
 
@@ -649,7 +649,7 @@ PolyPolygon SvxSuperContourDlg::GetPolyPolygon( BOOL bRescaleToGraphic )
 |*
 \************************************************************************/
 
-void SvxSuperContourDlg::Update( const Graphic& rGraphic, BOOL _bGraphicLinked,
+void SvxSuperContourDlg::UpdateGraphic( const Graphic& rGraphic, BOOL _bGraphicLinked,
                                  const PolyPolygon* pPolyPoly, void* pEditingObj )
 {
     aUpdateGraphic = rGraphic;
