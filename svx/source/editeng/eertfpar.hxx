@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eertfpar.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:44:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:38:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ public:
     EditPaM     GetCurPaM() const                   { return aCurSel.Max(); }
 };
 
-SV_DECL_REF( EditRTFParser );
+SV_DECL_REF( EditRTFParser )
 SV_IMPL_REF( EditRTFParser );
 
 
