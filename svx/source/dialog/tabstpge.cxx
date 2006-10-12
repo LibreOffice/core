@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabstpge.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:42:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:28:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,10 +146,10 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
     aRightTab       ( this, ResId( BTN_TABTYPE_RIGHT ) ),
     aCenterTab      ( this, ResId( BTN_TABTYPE_CENTER ) ),
     aDezTab         ( this, ResId( BTN_TABTYPE_DECIMAL ) ),
-    pLeftWin        ( new TabWin_Impl( this, ResId( WIN_TABLEFT ), RULER_TAB_LEFT|WB_HORZ ) ),
-    pRightWin       ( new TabWin_Impl( this, ResId( WIN_TABRIGHT ), RULER_TAB_RIGHT|WB_HORZ ) ),
-    pCenterWin      ( new TabWin_Impl( this, ResId( WIN_TABCENTER ), RULER_TAB_CENTER|WB_HORZ ) ),
-    pDezWin         ( new TabWin_Impl( this, ResId( WIN_TABDECIMAL ), RULER_TAB_DECIMAL|WB_HORZ ) ),
+    pLeftWin        ( new TabWin_Impl( this, ResId( WIN_TABLEFT ), (USHORT)(RULER_TAB_LEFT|WB_HORZ) ) ),
+    pRightWin       ( new TabWin_Impl( this, ResId( WIN_TABRIGHT ), (USHORT)(RULER_TAB_RIGHT|WB_HORZ) ) ),
+    pCenterWin      ( new TabWin_Impl( this, ResId( WIN_TABCENTER ), (USHORT)(RULER_TAB_CENTER|WB_HORZ) ) ),
+    pDezWin         ( new TabWin_Impl( this, ResId( WIN_TABDECIMAL ), (USHORT)(RULER_TAB_DECIMAL|WB_HORZ) ) ),
     aDezCharLabel   ( this, ResId( FT_TABTYPE_DECCHAR ) ),
     aDezChar        ( this, ResId( ED_TABTYPE_DECCHAR ) ),
     aTabTypeLabel   ( this, ResId( FL_TABTYPE ) ),
