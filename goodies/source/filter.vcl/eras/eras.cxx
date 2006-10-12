@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eras.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:44:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:34:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,8 @@ BOOL RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS,
     // export code below only handles three discrete cases
     mnDepth = mnDepth <= 1 ? 1 : mnDepth <= 8 ? 8 : 24;
 
-    if ( ( mpAcc = aBmp.AcquireReadAccess() ) )
+    mpAcc = aBmp.AcquireReadAccess();
+    if ( mpAcc )
     {
         mpOStmOldModus = mpOStm->GetNumberFormatInt();
         mpOStm->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
@@ -158,7 +159,8 @@ BOOL RASWriter::ImplWriteHeader()
     mnHeight = mpAcc->Height();
     if ( mnDepth <= 8 )
     {
-        if (!( mnColors = mpAcc->GetPaletteEntryCount() ) )
+        mnColors = mpAcc->GetPaletteEntryCount();
+        if (mnColors == 0)
             mbStatus = FALSE;
     }
         if ( mbStatus && mnWidth && mnHeight && mnDepth )
@@ -239,7 +241,7 @@ void RASWriter::ImplWriteBody()
                     ImplPutByte( nDat );
             }
             if ( x & 7 )
-                ImplPutByte( nDat << ( ( ( x & 7 ) ^ 7 ) + 1) );// write remaining bits
+                ImplPutByte( sal::static_int_cast< BYTE >(nDat << ( ( ( x & 7 ) ^ 7 ) + 1)) );// write remaining bits
             if (!( ( x - 1 ) & 0x8 ) )
                 ImplPutByte( 0 );               // WORD ALIGNMENT ???
         }
