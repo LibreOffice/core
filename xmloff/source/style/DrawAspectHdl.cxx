@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawAspectHdl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:42:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:44:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ DrawAspectHdl::~DrawAspectHdl()
     // nothing to do
 }
 
-sal_Bool DrawAspectHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool DrawAspectHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nAspect = 0;
 
@@ -88,7 +88,8 @@ sal_Bool DrawAspectHdl::importXML( const OUString& rStrImpValue, uno::Any& rValu
     while( aTokenEnum.getNextToken( aToken ) )
     {
         sal_uInt16 nVal;
-        if( rUnitConverter.convertEnum( nVal, aToken, pXML_DrawAspect_Enum ) )
+        if( SvXMLUnitConverter::convertEnum(
+                nVal, aToken, pXML_DrawAspect_Enum ) )
         {
             nAspect = nAspect | (sal_Int32)nVal;
         }
