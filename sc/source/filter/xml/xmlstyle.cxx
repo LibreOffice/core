@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:56:20 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:30:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -969,7 +969,7 @@ XmlScPropHdl_CellProtection::~XmlScPropHdl_CellProtection()
 {
 }
 
-sal_Bool XmlScPropHdl_CellProtection::equals(
+bool XmlScPropHdl_CellProtection::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
@@ -1112,7 +1112,7 @@ XmlScPropHdl_PrintContent::~XmlScPropHdl_PrintContent()
 {
 }
 
-sal_Bool XmlScPropHdl_PrintContent::equals(
+bool XmlScPropHdl_PrintContent::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
@@ -1178,7 +1178,7 @@ XmlScPropHdl_HoriJustify::~XmlScPropHdl_HoriJustify()
 {
 }
 
-sal_Bool XmlScPropHdl_HoriJustify::equals(
+bool XmlScPropHdl_HoriJustify::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
@@ -1278,7 +1278,7 @@ XmlScPropHdl_HoriJustifySource::~XmlScPropHdl_HoriJustifySource()
 {
 }
 
-sal_Bool XmlScPropHdl_HoriJustifySource::equals(
+bool XmlScPropHdl_HoriJustifySource::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
@@ -1339,7 +1339,7 @@ XmlScPropHdl_HoriJustifyRepeat::~XmlScPropHdl_HoriJustifyRepeat()
 {
 }
 
-sal_Bool XmlScPropHdl_HoriJustifyRepeat::equals(
+bool XmlScPropHdl_HoriJustifyRepeat::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
@@ -1400,7 +1400,7 @@ XmlScPropHdl_Orientation::~XmlScPropHdl_Orientation()
 {
 }
 
-sal_Bool XmlScPropHdl_Orientation::equals(
+bool XmlScPropHdl_Orientation::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
@@ -1469,7 +1469,7 @@ XmlScPropHdl_RotateAngle::~XmlScPropHdl_RotateAngle()
 {
 }
 
-sal_Bool XmlScPropHdl_RotateAngle::equals(
+bool XmlScPropHdl_RotateAngle::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
@@ -1521,7 +1521,7 @@ XmlScPropHdl_RotateReference::~XmlScPropHdl_RotateReference()
 {
 }
 
-sal_Bool XmlScPropHdl_RotateReference::equals(
+bool XmlScPropHdl_RotateReference::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
@@ -1614,7 +1614,7 @@ XmlScPropHdl_VertJustify::~XmlScPropHdl_VertJustify()
 {
 }
 
-sal_Bool XmlScPropHdl_VertJustify::equals(
+bool XmlScPropHdl_VertJustify::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
@@ -1707,7 +1707,7 @@ XmlScPropHdl_BreakBefore::~XmlScPropHdl_BreakBefore()
 {
 }
 
-sal_Bool XmlScPropHdl_BreakBefore::equals(
+bool XmlScPropHdl_BreakBefore::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
@@ -1767,7 +1767,7 @@ XmlScPropHdl_IsTextWrapped::~XmlScPropHdl_IsTextWrapped()
 {
 }
 
-sal_Bool XmlScPropHdl_IsTextWrapped::equals(
+bool XmlScPropHdl_IsTextWrapped::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
@@ -1836,7 +1836,7 @@ XmlScPropHdl_Vertical::~XmlScPropHdl_Vertical()
 {
 }
 
-sal_Bool XmlScPropHdl_Vertical::equals(
+bool XmlScPropHdl_Vertical::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
