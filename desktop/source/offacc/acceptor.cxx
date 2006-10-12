@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceptor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:47:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:14:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,7 @@ void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
         m_aProtocol = m_aAcceptString.copy( nIndex1, nIndex2 - nIndex1 );
 
         // start accepting in new thread...
-        oslThread m_aThread = osl_createThread(workerfunc, this);
+        osl_createThread(workerfunc, this);
         m_bInit = sal_True;
         bOk = sal_True;
     }
@@ -230,14 +230,10 @@ Sequence<OUString> SAL_CALL Acceptor::getSupportedServiceNames()
 {
     return Acceptor::impl_getSupportedServiceNames();
 }
-sal_Bool Acceptor::impl_supportsService( const OUString& aServiceName)
-{
-    return sal_False;
-}
-sal_Bool SAL_CALL Acceptor::supportsService( const OUString& aServiceName)
+sal_Bool SAL_CALL Acceptor::supportsService( const OUString&)
     throw (RuntimeException)
 {
-    return Acceptor::impl_supportsService( aServiceName );
+    return sal_False;
 }
 
 // Factory
@@ -313,7 +309,7 @@ extern "C"
 using namespace desktop;
 
 void SAL_CALL
-component_getImplementationEnvironment(const sal_Char **ppEnvironmentTypeName, uno_Environment **ppEnvironment)
+component_getImplementationEnvironment(const sal_Char **ppEnvironmentTypeName, uno_Environment **)
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
@@ -336,7 +332,7 @@ component_writeInfo(void *pServiceManager, void *pRegistryKey)
 }
 
 void * SAL_CALL
-component_getFactory(const sal_Char *pImplementationName, void *pServiceManager, void *pRegistryKey)
+component_getFactory(const sal_Char *pImplementationName, void *pServiceManager, void *)
 {
     void* pReturn = NULL ;
     if  ( pImplementationName && pServiceManager )
