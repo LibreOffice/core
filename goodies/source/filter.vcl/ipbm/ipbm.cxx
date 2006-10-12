@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipbm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:51:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:37:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,7 +269,7 @@ BOOL PBMReader::ImplReadHeader()
 BOOL PBMReader::ImplReadBody()
 {
     BOOL    bPara, bFinished = FALSE;
-    BYTE    nDat, nCount;
+    BYTE    nDat = 0, nCount;
     ULONG   nGrey, nRGB[3];
     ULONG   nWidth = 0;
     ULONG   nHeight = 0;
