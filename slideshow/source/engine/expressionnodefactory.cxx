@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expressionnodefactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:25:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:53:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ namespace presentation
                 {
                 }
 
-                virtual double operator()( double t ) const
+                virtual double operator()( double /*t*/ ) const
                 {
                     return maValue;
                 }
