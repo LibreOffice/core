@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdstrm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:38:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,7 @@ String CmdStream::WandleKeyEventString( String aKeys )
                 }
             }
             aKeys.Insert(Result,nPos1);
-            nPos1 += Result.Len();
+            nPos1 = nPos1 + Result.Len();
         }
         else
             nPos1 = aKeys.Len() + 1;
@@ -222,8 +222,10 @@ void CmdStream::WriteSortedParams( SbxArray* rPar, BOOL IsKeyString )
                     break;
                 case SbxOBJECT:     // whenever a control is passed. TabPage, MenuBar
                     {
-                        SbxProperty *pMember;
-                        if ( rPar->Get( i )->ISA( SbxObject ) && ( pMember = ((SbxObject*)rPar->Get( i ))->GetDfltProperty() ) )
+                        SbxProperty *pMember = NULL;
+                        if ( rPar->Get( i )->ISA( SbxObject ) )
+                            pMember = ((SbxObject*)rPar->Get( i ))->GetDfltProperty();
+                        if ( pMember != NULL )
                         {
                             if ( pMember->GetType() == SbxSTRING )
                             {
