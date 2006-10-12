@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:27:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:17:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,16 +275,15 @@ IMPL_LINK_INLINE_START( SvBaseLinksDlg, ManualClickHdl, RadioButton *, pRadioBut
 }
 IMPL_LINK_INLINE_END( SvBaseLinksDlg, ManualClickHdl, RadioButton *, pRadioButton )
 
-IMPL_LINK( SvBaseLinksDlg, UpdateNowClickHdl, PushButton *, pPushButton )
+IMPL_LINK( SvBaseLinksDlg, UpdateNowClickHdl, PushButton *, EMPTYARG )
 {
-    (void)pPushButton;
-
     SvTabListBox& rListBox = Links();
     USHORT nSelCnt = (USHORT)rListBox.GetSelectionCount();
     if( 255 < nSelCnt )
         nSelCnt = 255;
-    SvPtrarr aLnkArr( (BYTE)nSelCnt );
-    SvUShorts aPosArr( (BYTE)nSelCnt );
+
+    std::vector< SvBaseLink* > aLnkArr;
+    std::vector< USHORT > aPosArr;
 
     SvLBoxEntry* pE = rListBox.FirstSelected();
     while( pE )
@@ -292,17 +291,17 @@ IMPL_LINK( SvBaseLinksDlg, UpdateNowClickHdl, PushButton *, pPushButton )
         USHORT nFndPos = (USHORT)rListBox.GetModel()->GetAbsPos( pE );
         if( LISTBOX_ENTRY_NOTFOUND != nFndPos )
         {
-            aLnkArr.Insert( pE->GetUserData(), aLnkArr.Count() );
-            aPosArr.Insert( nFndPos, aPosArr.Count() );
+            aLnkArr.push_back( static_cast< SvBaseLink* >( pE->GetUserData() ) );
+            aPosArr.push_back( nFndPos );
         }
         pE = rListBox.NextSelected( pE );
     }
 
-    if( aLnkArr.Count() )
+    if( !aLnkArr.empty() )
     {
-        for( USHORT n = 0; n < aLnkArr.Count(); ++n )
+        for( USHORT n = 0; n < aLnkArr.size(); ++n )
         {
-            SvBaseLinkRef xLink = (SvBaseLink*)aLnkArr[ n ];
+            SvBaseLinkRef xLink = aLnkArr[ n ];
 
             // suche erstmal im Array nach dem Eintrag
             for( USHORT i = 0; i < pLinkMgr->GetLinks().Count(); ++i )
@@ -374,9 +373,9 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
         INetURLObject aUrl(sFile);
         if(aUrl.GetProtocol() == INET_PROT_FILE)
         {
-            String sOldPath(aUrl.PathToFileName());
-            USHORT nLen = aUrl.GetName().getLength();
-            sOldPath.Erase(sOldPath.Len() - nLen, nLen);
+            rtl::OUString sOldPath(aUrl.PathToFileName());
+            sal_Int32 nLen = aUrl.GetName().getLength();
+            sOldPath = sOldPath.copy(0, sOldPath.getLength() - nLen);
             aPathDlg.SetPath(sOldPath);
         }
         if(aPathDlg.Execute() == RET_OK)
