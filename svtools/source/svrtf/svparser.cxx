@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svparser.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:28:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:28:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,12 +214,14 @@ sal_Unicode SvParser::GetNextChar()
         BOOL bSeekBack = TRUE;
 
         rInput >> c1;
-        if( !(bErr = (rInput.IsEof() || rInput.GetError())) )
+        bErr = rInput.IsEof() || rInput.GetError();
+        if( !bErr )
         {
             if( 0xff == c1 || 0xfe == c1 )
             {
                 rInput >> c2;
-                if( !(bErr = (rInput.IsEof() || rInput.GetError())) )
+                bErr = rInput.IsEof() || rInput.GetError();
+                if( !bErr )
                 {
                     if( 0xfe == c1 && 0xff == c2 )
                     {
@@ -256,7 +258,8 @@ sal_Unicode SvParser::GetNextChar()
               (!bUCS2BSrcEnc && 0xff == c1 && 0xfe == c2) ) )
             rInput >> c1 >> c2;
 
-        if( !(bErr = (rInput.IsEof() || rInput.GetError())) )
+        bErr = rInput.IsEof() || rInput.GetError();
+        if( !bErr )
         {
             if( bUCS2BSrcEnc )
                 cUC = (sal_Unicode(c1) << 8) | c2;
@@ -276,7 +279,8 @@ sal_Unicode SvParser::GetNextChar()
         {
             sal_Char c1;    // signed, that's the text converter expects
             rInput >> c1;
-            if( !(bErr = (rInput.IsEof() || rInput.GetError())) )
+            bErr = rInput.IsEof() || rInput.GetError();
+            if( !bErr )
             {
                 if (
                      RTL_TEXTENCODING_DONTKNOW == eSrcEnc ||
@@ -311,7 +315,8 @@ sal_Unicode SvParser::GetNextChar()
                             while( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0 )
                             {
                                 rInput >> c1;
-                                if( (bErr = (rInput.IsEof() || rInput.GetError())) )
+                                bErr = rInput.IsEof() || rInput.GetError();
+                                if( bErr )
                                     break;
 
                                 nChars = rtl_convertTextToUnicode(
@@ -352,7 +357,8 @@ sal_Unicode SvParser::GetNextChar()
                                     nLen < 10 )
                             {
                                 rInput >> c1;
-                                if( (bErr = (rInput.IsEof() || rInput.GetError())) )
+                                bErr = rInput.IsEof() || rInput.GetError();
+                                if( bErr )
                                     break;
 
                                 sBuffer[nLen++] = c1;
@@ -508,18 +514,20 @@ SvParser::TokenStackType* SvParser::GetStackPtr( short nCnt )
         if( nCnt >= nTokenStackSize )
             nCnt = (nTokenStackSize-1);
         if( nAktPos + nCnt < nTokenStackSize )
-            nAktPos += BYTE(nCnt);
+            nAktPos = sal::static_int_cast< BYTE >(nAktPos + nCnt);
         else
-            nAktPos += nCnt - nTokenStackSize;
+            nAktPos = sal::static_int_cast< BYTE >(
+                nAktPos + (nCnt - nTokenStackSize));
     }
     else if( nCnt < 0 )
     {
         if( -nCnt >= nTokenStackSize )
             nCnt = -nTokenStackSize+1;
         if( -nCnt <= nAktPos )
-            nAktPos += BYTE(nCnt);
+            nAktPos = sal::static_int_cast< BYTE >(nAktPos + nCnt);
         else
-            nAktPos += nCnt + nTokenStackSize;
+            nAktPos = sal::static_int_cast< BYTE >(
+                nAktPos + (nCnt + nTokenStackSize));
     }
     return pTokenStack + nAktPos;
 }
