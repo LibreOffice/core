@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mnuitem.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:46:36 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:57:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,7 +317,7 @@ void SfxMenuControl::StateChanged
     // ggf. das alte Enum-Menu entfernen/loeschen
     //! delete pOwnMenu->GetMenu().ChangePopupMenu( GetId(), 0 );
 
-    FASTBOOL bCheck = FALSE;
+    bool bCheck = false;
     if ( pState->ISA(SfxBoolItem) )
     {
         // BoolItem fuer checken
