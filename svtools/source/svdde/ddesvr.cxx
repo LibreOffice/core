@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddesvr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:25:38 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:27:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
     {
         case XTYP_WILDCONNECT:
         {
-            short nTopics = 0;
+            int nTopics = 0;
 
 #if 1
             TCHAR chTopicBuf[250];
@@ -481,11 +481,12 @@ DdeService::DdeService( const String& rService )
 
     if ( !pInst->hDdeInstSvr )
     {
-        nStatus = DdeInitialize( &pInst->hDdeInstSvr,
-                                 (PFNCALLBACK)DdeInternal::SvrCallback,
-                                 APPCLASS_STANDARD |
-                                 CBF_SKIP_REGISTRATIONS |
-                                 CBF_SKIP_UNREGISTRATIONS, 0L );
+        nStatus = sal::static_int_cast< short >(
+            DdeInitialize( &pInst->hDdeInstSvr,
+                           (PFNCALLBACK)DdeInternal::SvrCallback,
+                           APPCLASS_STANDARD |
+                           CBF_SKIP_REGISTRATIONS |
+                           CBF_SKIP_UNREGISTRATIONS, 0L ) );
         pInst->pServicesSvr = new DdeServices;
     }
     else
@@ -926,7 +927,7 @@ short DdeItem::GetLinks()
     short nCnt = 0;
     if( pImpData )
         for( USHORT n = pImpData->Count(); n; )
-            nCnt += (*pImpData)[ --n ].nCnt;
+            nCnt = nCnt + (*pImpData)[ --n ].nCnt;
     return nCnt;
 }
 
@@ -984,7 +985,7 @@ String DdeService::SysItems()
     DdeTopic* t;
     for ( t = aTopics.First(); t; t = aTopics.Next() )
     {
-        if ( t->GetName() == String::CreateFromAscii( (const sal_Char *)SZDDESYS_TOPIC ) )
+        if ( t->GetName() == SZDDESYS_TOPIC )
         {
             short n = 0;
             DdeItem* pi;
