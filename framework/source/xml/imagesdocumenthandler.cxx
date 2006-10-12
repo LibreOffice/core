@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagesdocumenthandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:30:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:44:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,7 +268,7 @@ throw(  SAXException, RuntimeException )
                 m_bImagesStartFound = sal_True;
                 m_pImages = new ImageListItemDescriptor;
 
-                for ( int n = 0; n < xAttribs->getLength(); n++ )
+                for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
                 {
                     pImageEntry = m_aImageMap.find( xAttribs->getNameByIndex( n ) );
                     if ( pImageEntry != m_aImageMap.end() )
@@ -376,7 +376,7 @@ throw(  SAXException, RuntimeException )
                 pItem->nIndex = -1;
 
                 // Read attributes for this image definition
-                for ( int n = 0; n < xAttribs->getLength(); n++ )
+                for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
                 {
                     pImageEntry = m_aImageMap.find( xAttribs->getNameByIndex( n ) );
                     if ( pImageEntry != m_aImageMap.end() )
@@ -491,7 +491,7 @@ throw(  SAXException, RuntimeException )
                 ExternalImageItemDescriptor* pItem = new ExternalImageItemDescriptor;
 
                 // Read attributes for this external image definition
-                for ( int n = 0; n < xAttribs->getLength(); n++ )
+                for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
                 {
                     pImageEntry = m_aImageMap.find( xAttribs->getNameByIndex( n ) );
                     if ( pImageEntry != m_aImageMap.end() )
@@ -711,7 +711,7 @@ void OWriteImagesDocumentHandler::WriteImagesDocument() throw
     {
         ImageListDescriptor* pImageList = m_aImageListsItems.pImageList;
 
-        for ( int i = 0; i < m_aImageListsItems.pImageList->Count(); i++ )
+        for ( USHORT i = 0; i < m_aImageListsItems.pImageList->Count(); i++ )
         {
             const ImageListItemDescriptor* pImageItems = (*pImageList)[i];
             WriteImageList( pImageItems );
@@ -795,7 +795,7 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
     ImageItemListDescriptor* pImageItemList = pImageList->pImageItemList;
     if ( pImageItemList )
     {
-        for ( int i = 0; i < pImageItemList->Count(); i++ )
+        for ( USHORT i = 0; i < pImageItemList->Count(); i++ )
             WriteImage( (*pImageItemList)[i] );
     }
 
@@ -830,7 +830,7 @@ void OWriteImagesDocumentHandler::WriteExternalImageList( const ExternalImageIte
     m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_EXTERNALIMAGES )), m_xEmptyList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
-    for ( int i = 0; i < pExternalImageList->Count(); i++ )
+    for ( USHORT i = 0; i < pExternalImageList->Count(); i++ )
     {
         ExternalImageItemDescriptor* pItem = (*pExternalImageList)[i];
         WriteExternalImage( pItem );

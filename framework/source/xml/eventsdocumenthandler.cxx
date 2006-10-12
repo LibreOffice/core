@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventsdocumenthandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:29:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 10:44:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,7 +260,7 @@ throw(  SAXException, RuntimeException )
 
                 m_aEventItems.aEventNames.realloc(  nIndex + 1 );
 
-                for ( int n = 0; n < xAttribs->getLength(); n++ )
+                for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
                 {
                     pEventEntry = m_aEventsMap.find( xAttribs->getNameByIndex( n ) );
                     if ( pEventEntry != m_aEventsMap.end() )
