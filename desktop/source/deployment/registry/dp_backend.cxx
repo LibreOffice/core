@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_backend.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-04 16:55:05 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:09:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,10 @@ void PackageRegistryBackend::disposing( lang::EventObject const & event )
         event.Source, UNO_QUERY_THROW );
     OUString url( xPackage->getURL() );
     ::osl::MutexGuard guard( getMutex() );
-    ::std::size_t erased = m_bound.erase( url );
-    OSL_ASSERT( erased == 1 );
+    if ( m_bound.erase( url ) != 1 )
+    {
+        OSL_ASSERT( false );
+    }
 }
 
 //______________________________________________________________________________
@@ -299,8 +301,8 @@ sal_Bool Package::isBundle() throw (RuntimeException)
 }
 
 ::sal_Bool Package::checkPrerequisites(
-        const css::uno::Reference< css::task::XAbortChannel >& xAbortChannel,
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv )
+        const css::uno::Reference< css::task::XAbortChannel >&,
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& )
         throw (css::deployment::DeploymentException,
             css::ucb::CommandFailedException,
             css::ucb::CommandAbortedException,
@@ -312,8 +314,8 @@ sal_Bool Package::isBundle() throw (RuntimeException)
 
 //______________________________________________________________________________
 Sequence< Reference<deployment::XPackage> > Package::getBundle(
-    Reference<task::XAbortChannel> const & xAbortChannel,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    Reference<task::XAbortChannel> const &,
+    Reference<XCommandEnvironment> const & )
     throw (deployment::DeploymentException,
            CommandFailedException, CommandAbortedException,
            lang::IllegalArgumentException, RuntimeException)
@@ -430,8 +432,8 @@ beans::Optional< beans::Ambiguous<sal_Bool> > Package::isRegistered(
 }
 
 //______________________________________________________________________________
-void Package::processPackage_(
-    bool registerPackage,
+void Package::processPackage_impl(
+    bool doRegisterPackage,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
@@ -446,18 +448,18 @@ void Package::processPackage_(
                                xCmdEnv ) );
             action = (option.IsPresent &&
                       (option.Value.IsAmbiguous ||
-                       (registerPackage ? !option.Value.Value
+                       (doRegisterPackage ? !option.Value.Value
                                         : option.Value.Value)));
             if (action) {
                 OUString displayName( getDisplayName() );
                 ProgressLevel progress(
                     xCmdEnv,
-                    (registerPackage
+                    (doRegisterPackage
                      ? PackageRegistryBackend::StrRegisteringPackage::get()
                      : PackageRegistryBackend::StrRevokingPackage::get())
                     + displayName );
                 processPackage_( guard,
-                                 registerPackage,
+                                 doRegisterPackage,
                                  AbortChannel::get(xAbortChannel),
                                  xCmdEnv );
             }
@@ -478,7 +480,7 @@ void Package::processPackage_(
         catch (Exception &) {
             Any exc( ::cppu::getCaughtException() );
             throw deployment::DeploymentException(
-                (registerPackage
+                (doRegisterPackage
                  ? getResourceString(RID_STR_ERROR_WHILE_REGISTERING)
                  : getResourceString(RID_STR_ERROR_WHILE_REVOKING))
                 + getDisplayName(), static_cast<OWeakObject *>(this), exc );
@@ -501,7 +503,7 @@ void Package::registerPackage(
            CommandFailedException, CommandAbortedException,
            lang::IllegalArgumentException, RuntimeException)
 {
-    processPackage_( true /* register */, xAbortChannel, xCmdEnv );
+    processPackage_impl( true /* register */, xAbortChannel, xCmdEnv );
 }
 
 //______________________________________________________________________________
@@ -512,7 +514,7 @@ void Package::revokePackage(
            CommandFailedException, CommandAbortedException,
            lang::IllegalArgumentException, RuntimeException)
 {
-    processPackage_( false /* revoke */, xAbortChannel, xCmdEnv );
+    processPackage_impl( false /* revoke */, xAbortChannel, xCmdEnv );
 }
 
 //##############################################################################
