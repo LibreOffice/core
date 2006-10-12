@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedField.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:49:47 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:11:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,7 @@ namespace frm
         using OEditBaseModel::getFastPropertyValue;
 
     protected:
-        virtual sal_Int16 getPersistenceFlags() const;
+        virtual sal_uInt16 getPersistenceFlags() const;
             // as we have an own version handling for persistence
 
         // OBoundControlModel overridables
