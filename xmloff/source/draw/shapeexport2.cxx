@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:29:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:41:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -380,12 +380,13 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
         const beans::PropertyValue* pProperties = aProperties.getConstArray();
 
         OUString aStrEventType;
-        presentation::ClickAction eClickAction;
-        presentation::AnimationEffect eEffect;
-        presentation::AnimationSpeed eSpeed;
+        presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
+        presentation::AnimationEffect eEffect =
+            presentation::AnimationEffect_NONE;
+        presentation::AnimationSpeed eSpeed = presentation::AnimationSpeed_SLOW;
         OUString aStrSoundURL;
         sal_Bool bPlayFull = false;
-        sal_Int32 nVerb;
+        sal_Int32 nVerb = 0;
         OUString aStrMacro;
         OUString aStrLibrary;
         OUString aStrBookmark;
@@ -998,7 +999,7 @@ void XMLShapeExport::ImpExportPolygonShape(
         awt::Point aPoint(0, 0);
         awt::Size aSize(FRound(aTRScale.X()), FRound(aTRScale.Y()));
         SdXMLImExViewBox aViewBox(0, 0, aSize.Width, aSize.Height);
-        mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString(mrExport.GetMM100UnitConverter()));
+        mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString());
 
         sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
 
@@ -1028,7 +1029,7 @@ void XMLShapeExport::ImpExportPolygonShape(
                         if(pSequence && pFlags)
                         {
                             aSvgDElement.AddPolygon(pSequence, pFlags,
-                                aPoint, aSize, mrExport.GetMM100UnitConverter(), bClosed);
+                                aPoint, aSize, bClosed);
                         }
                     }
 
@@ -1060,7 +1061,7 @@ void XMLShapeExport::ImpExportPolygonShape(
                     drawing::PointSequence* pSequence = pSourcePolyPolygon->getArray();
                     if(pSequence)
                     {
-                        SdXMLImExPointsElement aPoints(pSequence, aViewBox, aPoint, aSize, mrExport.GetMM100UnitConverter(),
+                        SdXMLImExPointsElement aPoints(pSequence, aViewBox, aPoint, aSize,
                             // #96328#
                             bClosed);
 
@@ -1091,7 +1092,7 @@ void XMLShapeExport::ImpExportPolygonShape(
                             if(pSequence)
                             {
                                 aSvgDElement.AddPolygon(pSequence, 0L, aPoint,
-                                    aSize, mrExport.GetMM100UnitConverter(), bClosed);
+                                    aSize, bClosed);
                             }
                         }
 
