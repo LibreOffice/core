@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:15:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:38:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -474,7 +474,7 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
             {
                 sal_Bool bTranslate = sal_False;
                 ::rtl::OUString aTransPropName;
-                enum XMLTokenEnum eTransToken;
+                enum XMLTokenEnum eTransToken = XML_TOKEN_INVALID;
 
                 uno::Any aAny = xDocPropSet->getPropertyValue(
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasTranslatedColumns" )));
