@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linectrl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:06:22 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:22:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -447,10 +447,12 @@ void SvxLineEndWindow::implInit()
 
     if ( pDocSh )
     {
-        if( pItem = pDocSh->GetItem( SID_LINEEND_LIST ) )
+        pItem = pDocSh->GetItem( SID_LINEEND_LIST );
+        if( pItem )
             pLineEndList = ( (SvxLineEndListItem*) pItem )->GetLineEndList();
 
-        if( pItem = pDocSh->GetItem( SID_ATTR_LINEEND_WIDTH_DEFAULT ) )
+        pItem = pDocSh->GetItem( SID_ATTR_LINEEND_WIDTH_DEFAULT );
+        if( pItem )
             nLineEndWidth = ( (SfxUInt16Item*) pItem )->GetValue();
     }
     DBG_ASSERT( pLineEndList, "LineEndList wurde nicht gefunden" );
@@ -679,7 +681,7 @@ BOOL SvxLineEndWindow::Close()
 // -----------------------------------------------------------------------
 
 void SvxLineEndWindow::StateChanged(
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    USHORT nSID, SfxItemState, const SfxPoolItem* pState )
 {
     if ( nSID == SID_LINEEND_LIST )
     {
@@ -791,7 +793,7 @@ SfxPopupWindow* SvxLineEndToolBoxControl::CreatePopupWindow()
 
 // -----------------------------------------------------------------------
 
-void SvxLineEndToolBoxControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxLineEndToolBoxControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* )
 {
     USHORT nId = GetId();
     ToolBox& rTbx = GetToolBox();
