@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 15:59:32 $
+#   last change: $Author: obo $ $Date: 2006-10-12 15:20:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=\
     $(SLO)$/aeitem.obj	\
-    $(SLO)$/compat.obj	\
     $(SLO)$/eitem.obj	\
     $(SLO)$/flagitem.obj	\
     $(SLO)$/globalnameitem.obj	\
