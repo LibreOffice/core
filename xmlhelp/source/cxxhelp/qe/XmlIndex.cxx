@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XmlIndex.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:20:13 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:28:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,8 @@ XmlIndex::XmlIndex( const rtl::OUString& indexDir )
         if( positionsFile_ )
         {
             //!!! temporary: better than fixed large value, worse than 'intelligent' size mgt
-            if( allInCache_ = true )   // yes, intended
+            allInCache_ = true;
+            if( allInCache_ )   // yes, intended
             {
                 reset();
                 positions_ = new sal_Int8[ positionsL_ = positionsFile_->length() ];
@@ -455,7 +456,7 @@ QueryHitData* XmlIndex::hitToData( QueryHit* hit )
                 {
                     terms[i] = fetch( match );
                 }
-                catch( const excep::XmlSearchException& e )
+                catch( const excep::XmlSearchException& )
                 {
                 }
         }
