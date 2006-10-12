@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpellDialog.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:04:01 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:50:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,8 @@ class SpellDialog;
 // ------------------------------------------------------------------
 class SentenceEditWindow_Impl : public MultiLineEdit/*, public SfxListener*/
 {
+    using MultiLineEdit::SetText;
+
 private:
     USHORT          m_nErrorStart;
     USHORT          m_nErrorEnd;
@@ -171,6 +173,8 @@ public:
 class SpellDialogChildWindow;
 class SpellDialog : public SfxModelessDialog
 {
+    using Window::Invalidate;
+
     friend class SentenceEditWindow_Impl;
 private:
     FixedText           aNotInDictFT;
@@ -261,7 +265,7 @@ public:
     void            SetLanguage( sal_uInt16 nLang );
     virtual sal_Bool    Close();
 
-    void            Invalidate();
+    void            InvalidateDialog();
 };
 } //namespace svx
 
