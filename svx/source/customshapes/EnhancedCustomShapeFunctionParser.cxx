@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFunctionParser.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:07:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:02:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,9 @@ void EnhancedCustomShape::FillEquationParameter( const EnhancedCustomShapeParame
         rDest.nOperation |= ( 0x2000 << nDestPara );
     rDest.nPara[ nDestPara ] = nValue;
 }
+
+ExpressionNode::~ExpressionNode()
+{}
 
 namespace
 {
@@ -302,6 +305,9 @@ public:
             case ENUM_FUNC_YSTRETCH :
             case ENUM_FUNC_HASSTROKE :
             case ENUM_FUNC_HASFILL : aRet.Type = EnhancedCustomShapeParameterType::NORMAL; break;
+
+            default:
+                break;
         }
         return aRet;
     }
@@ -333,6 +339,8 @@ public:
             case UNARY_FUNC_TAN : fRet = tan( (*rArg)() );  break;
             case UNARY_FUNC_ATAN: fRet = atan( (*rArg)() ); break;
             case UNARY_FUNC_NEG : fRet = ::std::negate<double>()( (*rArg)() ); break;
+            default:
+                break;
         }
         return fRet;
     }
@@ -410,12 +418,12 @@ public:
                 EnhancedCustomShapeParameter aSource( mpArg->fillNode( rEquations, NULL, nFlags | EXPRESSION_FLAG_SUMANGLE_MODE ) );
                 if ( aSource.Type == EnhancedCustomShapeParameterType::NORMAL )
                 {   // sumangle needed :-(
-                    EnhancedCustomShapeEquation aEquation;
-                    aEquation.nOperation |= 0xe;    // sumangle
-                    FillEquationParameter( aSource, 1, aEquation );
+                    EnhancedCustomShapeEquation aTmpEquation;
+                    aTmpEquation.nOperation |= 0xe; // sumangle
+                    FillEquationParameter( aSource, 1, aTmpEquation );
                     aSource.Type = EnhancedCustomShapeParameterType::EQUATION;
                     aSource.Value <<= (sal_Int32)rEquations.size();
-                    rEquations.push_back( aEquation );
+                    rEquations.push_back( aTmpEquation );
                 }
                 FillEquationParameter( aSource, 1, aEquation );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -435,12 +443,12 @@ public:
                 EnhancedCustomShapeParameter aSource( mpArg->fillNode( rEquations, NULL, nFlags | EXPRESSION_FLAG_SUMANGLE_MODE ) );
                 if ( aSource.Type == EnhancedCustomShapeParameterType::NORMAL )
                 {   // sumangle needed :-(
-                    EnhancedCustomShapeEquation aEquation;
-                    aEquation.nOperation |= 0xe;    // sumangle
-                    FillEquationParameter( aSource, 1, aEquation );
+                    EnhancedCustomShapeEquation aTmpEquation;
+                    aTmpEquation.nOperation |= 0xe; // sumangle
+                    FillEquationParameter( aSource, 1, aTmpEquation );
                     aSource.Type = EnhancedCustomShapeParameterType::EQUATION;
                     aSource.Value <<= (sal_Int32)rEquations.size();
-                    rEquations.push_back( aEquation );
+                    rEquations.push_back( aTmpEquation );
                 }
                 FillEquationParameter( aSource, 1, aEquation );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -466,6 +474,8 @@ public:
                 rEquations.push_back( aEquation );
             }
             break;
+            default:
+                break;
         }
         return aRet;
     }
@@ -500,6 +510,8 @@ public:
             case BINARY_FUNC_MIN :  fRet = ::std::min( (*rFirstArg)(), (*rSecondArg)() ); break;
             case BINARY_FUNC_MAX :  fRet = ::std::max( (*rFirstArg)(), (*rSecondArg)() ); break;
             case BINARY_FUNC_ATAN2: fRet = atan2( (*rFirstArg)(), (*rSecondArg)() ); break;
+            default:
+                break;
         }
         return fRet;
     }
@@ -687,6 +699,8 @@ public:
                 rEquations.push_back( aEquation );
             }
             break;
+            default:
+                break;
         }
         return aRet;
     }
@@ -1155,7 +1169,7 @@ const ParserContextSharedPtr& getParserContext()
 }
 #endif
 
-};
+}
 
 namespace EnhancedCustomShape  {
 
