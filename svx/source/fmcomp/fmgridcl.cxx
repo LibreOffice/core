@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:01:01 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:42:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -447,7 +447,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         // try to obtain the column object
         if (!xField.is())
         {
-#if DBG_UTIL
+#ifdef DBG_UTIL
             Reference< XServiceInfo >  xServiceInfo(xConnection, UNO_QUERY);
             DBG_ASSERT(xServiceInfo.is() && xServiceInfo->supportsService(SRV_SDB_CONNECTION), "FmGridHeader::ExecuteDrop: invalid connection (no database access connection !)");
 #endif
@@ -1200,7 +1200,8 @@ void FmGridControl::Command(const CommandEvent& _rEvt)
         {   // context menu requested by keyboard
             if  ( 1 == GetSelectColumnCount() || IsDesignMode() )
             {
-                sal_uInt16 nSelId = GetColumnId( FirstSelectedColumn() );
+                sal_uInt16 nSelId = GetColumnId(
+                    sal::static_int_cast< USHORT >( FirstSelectedColumn() ) );
                 ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, sal_False ) );
 
                 Point aRelativePos( pMyHeader->ScreenToOutputPixel( OutputToScreenPixel( aColRect.TopCenter() ) ) );
@@ -2053,7 +2054,7 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
 
                 pBookmarks[i] = m_pSeekCursor->getBookmark();
             }
-    #if DBG_UTIL
+    #ifdef DBG_UTIL
             else
                 DBG_ERROR("FmGridControl::DeleteSelectedRows : a bookmark could not be determined !");
     #endif
@@ -2104,9 +2105,11 @@ namespace
             }
             break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
-            sRetText = getColumnPropertyFromPeer(GetPeer(),
-                                                GetModelColumnPos(_nPosition),
-                                                FM_PROP_LABEL);
+            sRetText = getColumnPropertyFromPeer(
+                GetPeer(),
+                GetModelColumnPos(
+                    sal::static_int_cast< sal_uInt16 >(_nPosition)),
+                FM_PROP_LABEL);
             break;
         default:
             sRetText = DbGridControl::GetAccessibleObjectName(_eObjType,_nPosition);
@@ -2129,9 +2132,11 @@ namespace
             }
             break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
-            sRetText = getColumnPropertyFromPeer(GetPeer(),
-                                                GetModelColumnPos(_nPosition),
-                                                FM_PROP_HELPTEXT);
+            sRetText = getColumnPropertyFromPeer(
+                GetPeer(),
+                GetModelColumnPos(
+                    sal::static_int_cast< sal_uInt16 >(_nPosition)),
+                FM_PROP_HELPTEXT);
             break;
         default:
             sRetText = DbGridControl::GetAccessibleObjectDescription(_eObjType,_nPosition);
@@ -2145,15 +2150,17 @@ void FmGridControl::Select()
     // ... betrifft das unsere Spalten ?
     const MultiSelection* pColumnSelection = GetColumnSelection();
 
-    long nSelectedColumn =
+    sal_uInt16 nSelectedColumn =
         pColumnSelection && pColumnSelection->GetSelectCount()
-            ? ((MultiSelection*)pColumnSelection)->FirstSelected()
-            : -1L;
+            ? sal::static_int_cast< sal_uInt16 >(
+                ((MultiSelection*)pColumnSelection)->FirstSelected())
+            : SAL_MAX_UINT16;
     // die HandleColumn wird nicht selektiert
     switch (nSelectedColumn)
     {
         case -1 : break;    // no selection
-        case  0 : nSelectedColumn = -1; break;  // handle col can't be seledted
+        case  0 : nSelectedColumn = SAL_MAX_UINT16; break;
+                    // handle col can't be seledted
         default :
             // get the model col pos instead of the view col pos
             nSelectedColumn = GetModelColumnPos(GetColumnIdFromViewPos(nSelectedColumn - 1));
@@ -2174,7 +2181,7 @@ void FmGridControl::Select()
                 Reference< XIndexAccess >  xColumns(GetPeer()->getColumns(), UNO_QUERY);
                 Reference< XSelectionSupplier >  xSelSupplier(xColumns, UNO_QUERY);
                 if (xSelSupplier.is())
-                    if (nSelectedColumn != -1)
+                    if (nSelectedColumn != SAL_MAX_UINT16)
                     {
                         Reference< XPropertySet >  xColumn;
                         ::cppu::extractInterface(xColumn,xColumns->getByIndex(nSelectedColumn));
