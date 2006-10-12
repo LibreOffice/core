@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:28:26 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:59:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,8 +249,10 @@ BOOL SvxImportMSVBasic::CopyStorage_Impl( const String& rStorageName,
         // TODO/LATER: should we commit the storage?
         xSrc->CopyTo( xDst );
         xDst->Commit();
-        ErrCode nError;
-        if ( (nError = xDst->GetError() != ERRCODE_NONE) || (nError = xSrc->GetError() != ERRCODE_NONE) )
+        ErrCode nError = xDst->GetError();
+        if ( nError == ERRCODE_NONE )
+            nError = xSrc->GetError();
+        if ( nError != ERRCODE_NONE )
             xRoot->SetError( nError );
         else
             bValidStg = TRUE;
@@ -387,7 +389,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                             {
                                 // npower #i63766# Need to skip instances of Attribute
                                 // that are NOT Attribute statements
-                                nBegin += sAttribute.Len();
+                                nBegin = nBegin + sAttribute.Len();
                                 continue;
                             }
                             xub_StrLen nEnd = pStr->Search(cLineEnd ,nBegin);
@@ -448,8 +450,10 @@ ULONG SvxImportMSVBasic::SaveOrDelMSVBAStorage( BOOL bSaveInto,
             SotStorageRef xDst = xRoot->OpenSotStorage( rStorageName, STREAM_READWRITE | STREAM_TRUNC );
             xSrc->CopyTo( xDst );
             xDst->Commit();
-            ErrCode nError;
-            if ( (nError = xDst->GetError() != ERRCODE_NONE) || (nError = xSrc->GetError() != ERRCODE_NONE) )
+            ErrCode nError = xDst->GetError();
+            if ( nError == ERRCODE_NONE )
+                nError = xSrc->GetError();
+            if ( nError != ERRCODE_NONE )
                 xRoot->SetError( nError );
         }
     }
