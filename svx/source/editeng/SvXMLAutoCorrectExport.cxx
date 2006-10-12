@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectExport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:47:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:33:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ SvXMLAutoCorrectExport::SvXMLAutoCorrectExport(
                             XML_NAMESPACE_BLOCKLIST );
 }
 
-sal_uInt32 SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum eClass)
+sal_uInt32 SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum /*eClass*/)
 {
     GetDocHandler()->startDocument();
 
@@ -106,7 +106,7 @@ SvXMLExceptionListExport::SvXMLExceptionListExport(
                             XML_NAMESPACE_BLOCKLIST );
 }
 
-sal_uInt32 SvXMLExceptionListExport::exportDoc(enum XMLTokenEnum eClass)
+sal_uInt32 SvXMLExceptionListExport::exportDoc(enum XMLTokenEnum /*eClass*/)
 {
     GetDocHandler()->startDocument();
 
