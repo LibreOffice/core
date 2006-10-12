@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuigaldlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:04:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:09:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,7 @@ private:
     SearchThread        maSearchThread;
 
                         DECL_LINK( ClickCancelBtn, void* );
+    void                Terminate();
 
 public:
                         SearchProgress( Window* pParent, const INetURLObject& rStartURL );
@@ -179,6 +180,7 @@ private:
     List                maTakenList;
 
                         DECL_LINK( ClickCancelBtn, void* );
+    void                Terminate();
 
 public:
 
