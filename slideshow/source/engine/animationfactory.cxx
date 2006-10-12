@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationfactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:23:09 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:52:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -704,7 +704,7 @@ namespace presentation
                 }
                 else
                 {
-                    ValueType aValue;
+                    ValueType aValue = ValueType();
 
                     if( !(rAny >>= aValue) )
                     {
@@ -1297,7 +1297,7 @@ namespace presentation
         }
 
         BoolAnimationSharedPtr AnimationFactory::createBoolPropertyAnimation( const ::rtl::OUString&                rAttrName,
-                                                                              const AnimatableShapeSharedPtr&       rShape,
+                                                                              const AnimatableShapeSharedPtr&       /*rShape*/,
                                                                               const LayerManagerSharedPtr&          rLayerManager,
                                                                               int                                   nFlags )
         {
@@ -1371,7 +1371,7 @@ namespace presentation
         }
 
         NumberAnimationSharedPtr AnimationFactory::createPathMotionAnimation( const ::rtl::OUString&            rSVGDPath,
-                                                                              const AnimatableShapeSharedPtr&   rShape,
+                                                                              const AnimatableShapeSharedPtr&   /*rShape*/,
                                                                               const LayerManagerSharedPtr&      rLayerManager,
                                                                               int                               nFlags )
         {
