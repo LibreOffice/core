@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskmisc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:42:00 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:12:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,7 @@ void WindowArrange::ImplTile( const Rectangle& rRect )
     if ( nOffset >= nCols )
     {
         nRows    = nCols -1;
-        nOffset -= nCols;
+        nOffset = nOffset - nCols;
     }
     else
         nRows = nCols;
