@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:02:01 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:43:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -520,22 +520,22 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     long nTextWidth = m_aRecordText.GetTextWidth(aText);
     m_aRecordText.SetPosPixel(Point(nX,nY) );
     m_aRecordText.SetSizePixel(Size(nTextWidth,nH));
-    nX += (sal_uInt16)(nTextWidth + aBorder.Width());
+    nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
 
     m_aAbsolute.SetPosPixel( Point(nX,nY));
     m_aAbsolute.SetSizePixel( Size(3*nH,aRect.GetSize().Height()) ); // Heuristik XXXXXXX
-    nX += (sal_uInt16)((3*nH) + aBorder.Width());
+    nX = sal::static_int_cast< sal_uInt16 >(nX + (3*nH) + aBorder.Width());
 
     aText      = m_aRecordOf.GetText();
     nTextWidth = m_aRecordOf.GetTextWidth(aText);
     m_aRecordOf.SetPosPixel(Point(nX,nY) );
     m_aRecordOf.SetSizePixel(Size(nTextWidth,nH));
-    nX += (sal_uInt16)(nTextWidth + aBorder.Width());
+    nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
 
     nTextWidth = m_aRecordCount.GetTextWidth( String::CreateFromAscii("0000000 (00000) *") );
     m_aRecordCount.SetPosPixel(Point(nX,nY) );
     m_aRecordCount.SetSizePixel(Size(nTextWidth,nH));
-    nX += (sal_uInt16)(nTextWidth + aBorder.Width());
+    nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
 
     Point aButtonPos(nX,nY);
     Size  aButtonSize(nH,nH);
@@ -545,7 +545,8 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     SetPosAndSize(m_aLastBtn, aButtonPos, aButtonSize);
     SetPosAndSize(m_aNewBtn, aButtonPos, aButtonSize);
 
-    nX = aButtonPos.X() + (sal_uInt16)(nH + aBorder.Width());
+    nX = sal::static_int_cast< sal_uInt16 >(
+        aButtonPos.X() + (sal_uInt16)(nH + aBorder.Width()));
 
     // Ist der Font des Edits groesser als das Feld?
     Font aOutputFont = m_aAbsolute.GetFont();
@@ -2429,7 +2430,8 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
 
             if ( bAbsolute )
             {
-                if ((bSuccess = m_pSeekCursor->absolute(nRow + 1)))
+                bSuccess = m_pSeekCursor->absolute(nRow + 1);
+                if (bSuccess)
                     m_nSeekPos = nRow;
             }
             else
@@ -2557,7 +2559,8 @@ void DbGridControl::MoveToNext()
             // when not possible our paint cursor is already on the last row
             // then we must be sure that the data cursor is on the position
             // we call ourself again
-            if (bOk = m_pSeekCursor->next())
+            bOk = m_pSeekCursor->next();
+            if (bOk)
             {
                 m_nSeekPos = m_pSeekCursor->getRow() - 1;
                 MoveToPosition(GetCurRow() + 1);
@@ -3567,7 +3570,7 @@ sal_uInt16 DbGridControl::GetColumnIdFromModelPos( sal_uInt16 nPos ) const
     }
 
     DbGridColumn* pCol = m_aColumns.GetObject(nPos);
-#if (OSL_DEBUG_LEVEL > 0) || DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 0) || defined DBG_UTIL
     // in der Debug-Version rechnen wir die ModelPos in eine ViewPos um und vergleichen das mit dem Wert,
     // den wir zurueckliefern werden (nId an der entsprechenden Col in m_aColumns)
 
@@ -3725,7 +3728,7 @@ void DbGridControl::DisconnectFromFields()
     ColumnFieldValueListeners* pListeners = (ColumnFieldValueListeners*)m_pFieldListeners;
     while (pListeners->size())
     {
-#if DBG_UTIL
+#ifdef DBG_UTIL
         sal_Int32 nOldSize = pListeners->size();
 #endif
         pListeners->begin()->second->dispose();
