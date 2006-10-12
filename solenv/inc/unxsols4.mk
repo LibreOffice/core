@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-11 17:40:18 $
+#   last change: $Author: obo $ $Date: 2006-10-12 13:50:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -117,23 +117,15 @@ CFLAGSWERRCXX=-xwe
 MODULES_WITH_WARNINGS := \
     b_server \
     basctl \
-    basebmp \
-    canvas \
     chart2 \
-    cppcanvas \
-    desktop \
     devtools \
-    dxcanvas \
     extensions \
     filter \
-    glcanvas \
     lingu \
     r_tools \
     sc \
     sd \
-    slideshow \
     starmath \
-    svx \
     sw \
     writerperfect \
     xmlsecurity
