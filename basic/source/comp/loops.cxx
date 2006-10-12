@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loops.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:02:49 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:27:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -413,8 +413,10 @@ void SbiParser::Select()
                     else Next();
                     SbiExpression aCompare( this );
                     aCompare.Gen();
-                    nTrueTarget = aGen.Gen( _CASEIS, nTrueTarget,
-                                  SbxEQ + ( eTok2 - EQ ) );
+                    nTrueTarget = aGen.Gen(
+                        _CASEIS, nTrueTarget,
+                        sal::static_int_cast< UINT16 >(
+                            SbxEQ + ( eTok2 - EQ ) ) );
                 }
                 else
                 {   // CASE expr | expr TO expr
