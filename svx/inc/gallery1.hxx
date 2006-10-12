@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gallery1.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:06:51 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:43:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ public:
     void                    SetId( UINT32 nNewId, BOOL bResetThemeName );
 };
 
-DECLARE_LIST( GalleryThemeList, GalleryThemeEntry* );
+DECLARE_LIST( GalleryThemeList, GalleryThemeEntry* )
 
 // ---------------------------
 // - GalleryImportThemeEntry -
@@ -112,7 +112,7 @@ struct GalleryImportThemeEntry
     INetURLObject   aURL;
     String          aImportName;
 };
-DECLARE_LIST( GalleryImportThemeList, GalleryImportThemeEntry* );
+DECLARE_LIST( GalleryImportThemeList, GalleryImportThemeEntry* )
 
 // -----------------------------------------------------------------------------
 
