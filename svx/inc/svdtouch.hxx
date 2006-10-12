@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdtouch.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:56:07 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:53:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,13 +64,13 @@ sal_Bool IsRectTouchesPoly(const PolyPolygon& rPoly, const Rectangle& rHit);
 sal_Bool IsRectTouchesPoly(const XPolygon& rPoly, const Rectangle& rHit);
 sal_Bool IsRectTouchesPoly(const XPolyPolygon& rPoly, const Rectangle& rHit);
 
-sal_Bool IsRectTouchesLine(const Point& rPt1, const Point& rPt2, const Rectangle& rHit);
-sal_Bool IsRectTouchesLine(const Polygon& rLine, const Rectangle& rHit);
-sal_Bool IsRectTouchesLine(const PolyPolygon& rLine, const Rectangle& rHit);
+bool IsRectTouchesLine(const Point& rPt1, const Point& rPt2, const Rectangle& rHit);
+bool IsRectTouchesLine(const Polygon& rLine, const Rectangle& rHit);
+bool IsRectTouchesLine(const PolyPolygon& rLine, const Rectangle& rHit);
 //BFS09sal_Bool IsRectTouchesLine(const XPolygon& rLine, const Rectangle& rHit, OutputDevice* pOut=NULL);
 //BFS09sal_Bool IsRectTouchesLine(const XPolyPolygon& rLine, const Rectangle& rHit, OutputDevice* pOut=NULL);
-sal_Bool IsRectTouchesLine(const XPolygon& rLine, const Rectangle& rHit);
-sal_Bool IsRectTouchesLine(const XPolyPolygon& rLine, const Rectangle& rHit);
+bool IsRectTouchesLine(const XPolygon& rLine, const Rectangle& rHit);
+bool IsRectTouchesLine(const XPolyPolygon& rLine, const Rectangle& rHit);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
