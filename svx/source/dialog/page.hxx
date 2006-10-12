@@ -4,9 +4,9 @@
  *
  *  $RCSfile: page.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 08:28:40 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 12:23:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,9 @@ typedef USHORT MarginPosition;
 
 class SvxPageDescPage : public SfxTabPage
 {
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     // paper format
     FixedLine           aPaperSizeFl;
     FixedText           aPaperFormatText;
