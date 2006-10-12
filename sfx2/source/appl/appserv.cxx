@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:16:18 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 15:47:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -450,7 +450,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         {
             // Parameter aus werten
             SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPTIPS, FALSE);
-            FASTBOOL bOn = pOnItem
+            bool bOn = pOnItem
                             ? ((SfxBoolItem*)pOnItem)->GetValue()
                             : !Help::IsQuickHelpEnabled();
 
@@ -478,7 +478,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         {
             // Parameter auswerten
             SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPBALLOONS, FALSE);
-            FASTBOOL bOn = pOnItem
+            bool bOn = pOnItem
                             ? ((SfxBoolItem*)pOnItem)->GetValue()
                             : !Help::IsBalloonHelpEnabled();
 
@@ -517,8 +517,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             ::rtl::OUString aDefault;
             String          aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
 
-            if ( aVerId.Len() == 0 )
-                DBG_ERROR( "No BUILDID in bootstrap file" );
+            OSL_ENSURE( aVerId.Len() != 0, "No BUILDID in bootstrap file" );
 
             String aVersion( '[' );
             ( aVersion += aVerId ) += ']';
@@ -531,7 +530,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                             : 0;
             aDialogResId.SetResMgr( pResMgr );
             if ( !Resource::GetResManager()->IsAvailable( aDialogResId ) )
+            {
                 DBG_ERROR( "No RID_DEFAULTABOUT in label-resource-dll" );
+            }
 
             // About-Dialog anzeigen
             AboutDialog* pDlg = new AboutDialog( 0, aDialogResId, aVersion );
@@ -975,7 +976,11 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     Any aRet;
                     Sequence< sal_Int16 > outIndex;
                     Sequence< Any > outArgs( 0 );
-                    if ( pView && ( pObjShell = pView->GetObjectShell() ) )
+                    if ( pView )
+                    {
+                        pObjShell = pView->GetObjectShell();
+                    }
+                    if ( pObjShell )
                     {
                         pObjShell->CallXScript(scriptURL, args, aRet, outIndex, outArgs);
                     }
