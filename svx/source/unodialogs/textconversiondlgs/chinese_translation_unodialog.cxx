@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chinese_translation_unodialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:08:56 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:23:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ uno::Sequence< rtl::OUString > ChineseTranslation_UnoDialog::getSupportedService
 //-------------------------------------------------------------------------
 // ui::dialogs::XExecutableDialog
 
-void SAL_CALL ChineseTranslation_UnoDialog::setTitle( const ::rtl::OUString& _rTitle ) throw(uno::RuntimeException)
+void SAL_CALL ChineseTranslation_UnoDialog::setTitle( const ::rtl::OUString& ) throw(uno::RuntimeException)
 {
     //not implemented - fell free to do so, if you do need this
 }
@@ -254,7 +254,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ChineseTranslation_UnoDialog:
 {
     return 0;
 }
-void SAL_CALL ChineseTranslation_UnoDialog::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ChineseTranslation_UnoDialog::setPropertyValue( const ::rtl::OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     //only read only properties
     throw beans::PropertyVetoException();
@@ -293,19 +293,19 @@ uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const ::rtl::O
     return aRet;
 
 }
-void SAL_CALL ChineseTranslation_UnoDialog::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ChineseTranslation_UnoDialog::addPropertyChangeListener( const ::rtl::OUString& , const uno::Reference< beans::XPropertyChangeListener >&  ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     //only not bound properties -> ignore listener
 }
-void SAL_CALL ChineseTranslation_UnoDialog::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ChineseTranslation_UnoDialog::removePropertyChangeListener( const ::rtl::OUString& , const uno::Reference< beans::XPropertyChangeListener >&  ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     //only not bound properties -> ignore listener
 }
-void SAL_CALL ChineseTranslation_UnoDialog::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ChineseTranslation_UnoDialog::addVetoableChangeListener( const ::rtl::OUString& , const uno::Reference< beans::XVetoableChangeListener >&  ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     //only not bound properties -> ignore listener
 }
-void SAL_CALL ChineseTranslation_UnoDialog::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ChineseTranslation_UnoDialog::removeVetoableChangeListener( const ::rtl::OUString& , const uno::Reference< beans::XVetoableChangeListener >&  ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     //only not bound properties -> ignore listener
 }
