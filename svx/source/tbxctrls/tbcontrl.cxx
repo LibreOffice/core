@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:06:36 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:22:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,6 +214,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxSimpleUndoRedoController, SfxStringItem );
 
 class SvxStyleBox_Impl : public ComboBox
 {
+    using Window::IsVisible;
 public:
     SvxStyleBox_Impl( Window* pParent, USHORT nSlot, const OUString& rCommand, SfxStyleFamily eFamily, const Reference< XDispatchProvider >& rDispatchProvider,
                         const String& rClearFormatKey, const String& rMoreKey, BOOL bInSpecialMode );
@@ -260,6 +261,7 @@ private:
 
 class SvxFontNameBox_Impl : public FontNameBox
 {
+    using Window::Update;
 private:
     const FontList*                pFontList;
     Font                           aCurFont;
@@ -299,6 +301,7 @@ class SvxFontHeightToolBoxControl;
 
 class SvxFontSizeBox_Impl : public FontSizeBox
 {
+    using Window::Update;
 private:
     SvxFontHeightToolBoxControl*    pCtrl;
     String                          aCurText;
@@ -351,6 +354,8 @@ void SvxFrmValueSet_Impl::MouseButtonUp( const MouseEvent& rMEvt )
 
 class SvxFrameWindow_Impl : public SfxPopupWindow
 {
+    using FloatingWindow::StateChanged;
+
 private:
     SvxFrmValueSet_Impl  aFrameSet;
     ImageList       aImgList;
@@ -450,15 +455,15 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(
 
     ComboBox( pParent, SVX_RES( RID_SVXTBX_STYLE ) ),
 
-    eStyleFamily( eFamily ),
     nSlotId     ( nSlot ),
+    eStyleFamily( eFamily ),
     bRelease    ( TRUE ),
-    m_aCommand  ( rCommand ),
+    bVisible(FALSE),
     m_xDispatchProvider( rDispatchProvider ),
+    m_aCommand  ( rCommand ),
     aClearFormatKey ( rClearFormatKey ),
     aMoreKey        ( rMoreKey ),
-    bInSpecialMode  ( bInSpec ),
-    bVisible(FALSE)
+    bInSpecialMode  ( bInSpec )
 {
     aLogicalSize = PixelToLogic( GetSizePixel(), MAP_APPFONT );
     EnableAutocomplete( TRUE );
@@ -652,6 +657,7 @@ void SvxStyleBox_Impl::StateChanged( StateChangedType nStateChange )
 
 IMPL_STATIC_LINK( SvxStyleBox_Impl, FocusHdl_Impl, Control*, _pCtrl )
 {
+    (void)pThis;
     if ( _pCtrl )
         _pCtrl->GrabFocus();
     return 0;
@@ -729,12 +735,11 @@ BOOL GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* pBox
 SvxFontNameBox_Impl::SvxFontNameBox_Impl( Window* pParent, const Reference< XDispatchProvider >& rDispatchProvider, WinBits nStyle ) :
 
     FontNameBox        ( pParent, nStyle | WinBits( WB_DROPDOWN | WB_AUTOHSCROLL ) ),
-    aLogicalSize       ( 75,160 ),
     pFontList          ( NULL ),
+    aLogicalSize       ( 75,160 ),
     nFtCount           ( 0 ),
     bRelease           ( TRUE ),
     m_xDispatchProvider( rDispatchProvider )
-
 {
     SetSizePixel(LogicToPixel( aLogicalSize, MAP_APPFONT ));
     EnableControls_Impl();
@@ -931,8 +936,8 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
     FontSizeBox( pParent, WinBits( WB_DROPDOWN ) ),
 
     pCtrl               ( &rCtrl ),
-    bRelease            ( TRUE ),
     aLogicalSize        ( 30,100 ),
+    bRelease            ( TRUE ),
     m_xDispatchProvider ( rDispatchProvider )
 
 {
@@ -1019,12 +1024,12 @@ void SvxFontSizeBox_Impl::Update( const SvxFontItem& rFontItem )
 
     // Sizes-Liste auff"ullen
     long nOldVal = GetValue(); // alten Wert merken
-    FontInfo aFontInfo;
-    const FontList* pFontList = pFontListItem ? pFontListItem->GetFontList() : NULL;
-    if ( pFontList )
+    FontInfo _aFontInfo;
+    const FontList* _pFontList = pFontListItem ? pFontListItem->GetFontList() : NULL;
+    if ( _pFontList )
     {
-        aFontInfo = FontInfo( pFontList->Get( rFontItem.GetFamilyName(), rFontItem.GetStyleName() ) );
-        Fill( aFontInfo, pFontList );
+        _aFontInfo = FontInfo( _pFontList->Get( rFontItem.GetFamilyName(), rFontItem.GetStyleName() ) );
+        Fill( _aFontInfo, _pFontList );
     }
     SetValue( nOldVal ); // alten Wert wiederherstellen
     aCurText = GetText(); // zum R"ucksetzen bei ESC merken
@@ -1105,8 +1110,8 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     SfxPopupWindow( nSlotId, rFrame, pParentWindow, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK|WB_DIALOGCONTROL ) ),
 
     theSlotId( nSlotId ),
-    maCommand( rCommand ),
-    aColorSet( this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT) )
+    aColorSet( this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT) ),
+    maCommand( rCommand )
 
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
@@ -1223,13 +1228,13 @@ IMPL_LINK( SvxColorWindow_Impl, SelectHdl, void *, EMPTYARG )
     }
     else if ( !nItemId && (SID_ATTR_CHAR_COLOR == theSlotId || SID_ATTR_CHAR_COLOR2  == theSlotId || SID_EXTRUSION_3D_COLOR == theSlotId) )
     {
-        SvxColorItem aColorItem( COL_AUTO, theSlotId );
+        SvxColorItem _aColorItem( COL_AUTO, theSlotId );
         INetURLObject aObj( maCommand );
 
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = aObj.GetURLPath();
-        aColorItem.QueryValue( a );
+        _aColorItem.QueryValue( a );
         aArgs[0].Value = a;
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
                                      maCommand,
@@ -2203,7 +2208,7 @@ struct SvxStyleToolBoxControl::Impl
                     "Heading 3",
                     "Text body"
                 };
-                for( sal_Int32 nStyle = 0; nStyle < sizeof( aWriterStyles ) / sizeof( sal_Char*); ++nStyle )
+                for( sal_uInt32 nStyle = 0; nStyle < sizeof( aWriterStyles ) / sizeof( sal_Char*); ++nStyle )
                 {
                     try
                     {
@@ -2235,7 +2240,7 @@ struct SvxStyleToolBoxControl::Impl
                     xStylesSupplier->getStyleFamilies()->getByName(
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellStyles"))) >>=
                         xCellStyles;
-                for( sal_Int32 nStyle = 0; nStyle < sizeof( aCalcStyles ) / sizeof( sal_Char*); ++nStyle )
+                for( sal_uInt32 nStyle = 0; nStyle < sizeof( aCalcStyles ) / sizeof( sal_Char*); ++nStyle )
                 {
                     try
                     {
@@ -2423,7 +2428,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
             pBox->Clear();
 
             {
-                USHORT  i;
+                USHORT  _i;
                 sal_uInt32  nCnt = pImpl->aDefaultStyles.size();
                 bool    bInsert;
 
@@ -2436,9 +2441,9 @@ void SvxStyleToolBoxControl::FillStyleBox()
                         // sort out default styles
                         bInsert = true;
                         ::rtl::OUString aName( pStyle->GetName() );
-                        for( i = 0 ; i < nCnt ; ++i )
+                        for( _i = 0 ; _i < nCnt ; ++_i )
                         {
-                            if( pImpl->aDefaultStyles[i] == aName )
+                            if( pImpl->aDefaultStyles[_i] == aName )
                             {
                                 bInsert = false;
                                 break;
@@ -2463,12 +2468,12 @@ void SvxStyleToolBoxControl::FillStyleBox()
             if( pImpl->bSpecModeWriter || pImpl->bSpecModeCalc )
             {
                 // insert default styles
-                USHORT  i;
+                USHORT  _i;
                 sal_uInt32  nCnt = pImpl->aDefaultStyles.size();
                 USHORT nPos = 1;
-                for( i = 0 ; i < nCnt ; ++i )
+                for( _i = 0 ; _i < nCnt ; ++_i )
                 {
-                    pBox->InsertEntry( pImpl->aDefaultStyles[i], nPos );
+                    pBox->InsertEntry( pImpl->aDefaultStyles[_i], nPos );
                     ++nPos;
                 }
 
@@ -3286,7 +3291,7 @@ public:
     Image* pSpecialImage;
 
     SvxReloadControllerItem_Impl() :
-        pSpecialImage( 0 ), pNormalImage( new Image( SVX_RES( RID_SVX_RELOAD_NORMAL ) ) ) {}
+        pNormalImage( new Image( SVX_RES( RID_SVX_RELOAD_NORMAL ) ) ), pSpecialImage( 0 ) {}
     ~SvxReloadControllerItem_Impl() { delete pNormalImage; delete pSpecialImage; }
 
     Image& GetNormalImage() { return *pNormalImage; }
@@ -3300,12 +3305,9 @@ public:
 
 // -----------------------------------------------------------------------
 
-SvxReloadControllerItem::SvxReloadControllerItem(
-    USHORT      nSlotId,
-    USHORT      nId,
-    ToolBox&    rTbx  )
-    : pImpl( new SvxReloadControllerItem_Impl ),
-      SfxToolBoxControl( nSlotId, nId, rTbx )
+SvxReloadControllerItem::SvxReloadControllerItem( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+:   SfxToolBoxControl( nSlotId, nId, rTbx )
+,   pImpl( new SvxReloadControllerItem_Impl )
 {
     rTbx.SetItemImage( nId, pImpl->GetNormalImage() );
 }
