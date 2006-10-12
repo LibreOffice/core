@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:05:29 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 14:29:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,7 +200,7 @@ RTLFUNC(CDec)  // JSM
     (void)bWrite;
 
 #ifdef WNT
-    SbxDecimal* pDec;
+    SbxDecimal* pDec = NULL;
     if ( rPar.Count() == 2 )
     {
         SbxVariable *pSbxVariable = rPar.Get(1);
@@ -1938,7 +1938,7 @@ RTLFUNC(DateAdd)
 
     INT32 lNumber = rPar.Get(2)->GetLong();
     double dDate = rPar.Get(3)->GetDate();
-    double dNewDate;
+    double dNewDate = 0;
     if( pInfo->mbSimple )
     {
         double dAdd = pInfo->mdValue * lNumber;
@@ -2020,7 +2020,7 @@ RTLFUNC(DateAdd)
                 StarBASIC::Error( SbERR_BAD_ARGUMENT );
                 return;
             }
-            int nCorrectionDay = nDay;
+            INT16 nCorrectionDay = nDay;
             while( nNewMonth > nTargetMonth )
             {
                 nCorrectionDay--;
