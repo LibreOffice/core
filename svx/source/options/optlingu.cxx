@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:29:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:00:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -362,7 +362,7 @@ public:
                                             SvLBoxEntry* pEntry);
 };
 
-void BrwStringDic_Impl::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
+void BrwStringDic_Impl::Paint( const Point& rPos, SvLBox& rDev, USHORT,
     SvLBoxEntry* pEntry )
 {
     ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
@@ -456,8 +456,7 @@ static const char * aEidToPropName[] =
 
 static inline String lcl_GetPropertyName( EID_OPTIONS eEntryId )
 {
-    DBG_ASSERT( (int) eEntryId < sizeof(aEidToPropName) / sizeof(aEidToPropName[0]),
-            "index out of range" );
+    DBG_ASSERT( (unsigned int) eEntryId < sizeof(aEidToPropName) / sizeof(aEidToPropName[0]), "index out of range" );
     return String::CreateFromAscii( aEidToPropName[ (int) eEntryId ] );
 }
 
@@ -512,7 +511,7 @@ void OptionsUserData::SetChecked( BOOL bVal )
 
 void OptionsUserData::SetNumericValue( BYTE nNumVal )
 {
-    DBG_ASSERT( nNumVal < 256, "value out of range" );
+//  DBG_ASSERT( nNumVal < 256, "value out of range" );
     if (HasNumericValue()  &&  (GetNumericValue() != nNumVal))
     {
         nVal &= 0xffffff00;
@@ -539,7 +538,7 @@ public:
                                             SvLBoxEntry* pEntry);
 };
 
-void BrwString_Impl::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
+void BrwString_Impl::Paint( const Point& rPos, SvLBox& rDev, USHORT,
     SvLBoxEntry* pEntry )
 {
     Point aPos(rPos);
@@ -553,8 +552,8 @@ void BrwString_Impl::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
         Font aFont( aOldFont );
         aFont.SetWeight( WEIGHT_BOLD );
 
-        BOOL bFett = TRUE;
-        USHORT nPos = 0;
+//      BOOL bFett = TRUE;
+//      USHORT nPos = 0;
         //??? das untere byte aus dem user data in string wandeln
         OptionsUserData aData( (ULONG) pEntry->GetUserData() );
         if(aData.HasNumericValue())
@@ -588,9 +587,9 @@ struct ServiceInfo_Impl
     ServiceInfo_Impl() : bConfigured(sal_False) {}
 };
 
-DECLARE_DYNARRAY(ServiceInfoArr, ServiceInfo_Impl *);
+DECLARE_DYNARRAY(ServiceInfoArr, ServiceInfo_Impl *)
 
-DECLARE_TABLE( LangImplNameTable, Sequence< OUString > * );
+DECLARE_TABLE( LangImplNameTable, Sequence< OUString > * )
 
 // SvxLinguData_Impl ----------------------------------------------------
 
@@ -927,13 +926,13 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
 }
 /* -----------------------------22.05.01 10:43--------------------------------
 
- ---------------------------------------------------------------------------*/
+---------------------------------------------------------------------------*/
 SvxLinguData_Impl::SvxLinguData_Impl( const SvxLinguData_Impl &rData ) :
-    xMSF                (rData.xMSF),
-    xLinguSrvcMgr       (rData.xLinguSrvcMgr),
-    aAllServiceLocales  (rData.aAllServiceLocales),
     aDisplayServiceArr  (rData.aDisplayServiceArr),
-    nDisplayServices    (rData.nDisplayServices)
+    nDisplayServices    (rData.nDisplayServices),
+    aAllServiceLocales  (rData.aAllServiceLocales),
+    xMSF                (rData.xMSF),
+    xLinguSrvcMgr       (rData.xLinguSrvcMgr)
 {
 }
 /* -----------------------------22.05.01 10:43--------------------------------
@@ -1289,7 +1288,8 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             if (pImplNames)
             {
 #if OSL_DEBUG_LEVEL > 1
-                const OUString *pTmpStr = pImplNames->getConstArray();
+                const OUString *pTmpStr;
+                pTmpStr = pImplNames->getConstArray();
 #endif
                 Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
                 Locale aLocale( SvxCreateLocale(nLang) );
@@ -1341,7 +1341,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
     for (ULONG i = 0;  i < nEntries;  ++i)
     {
         INT32 nDics = aDics.getLength();
-        const Reference< XDictionary > *pDic = aDics.getConstArray();
+//        const Reference< XDictionary > *pDic = aDics.getConstArray();
 
         aActiveDics.realloc( nDics );
         OUString *pActiveDic = aActiveDics.getArray();
@@ -1462,11 +1462,11 @@ ULONG SvxLinguTabPage::GetDicUserData( const Reference< XDictionary > &rxDic, US
     {
         Reference< frame::XStorable > xStor( rxDic, UNO_QUERY );
 
-        ULONG nUserData = 0;
+//        ULONG nUserData = 0;
         BOOL bChecked = rxDic->isActive();
         BOOL bEditable = !xStor.is() || !xStor->isReadonly();
         BOOL bDeletable = bEditable;
-        BOOL bNegativ = rxDic->getDictionaryType() == DictionaryType_NEGATIVE;
+//        BOOL bNegativ = rxDic->getDictionaryType() == DictionaryType_NEGATIVE;
 
         nRes = DicUserData( nIdx,
                 bChecked, bEditable, bDeletable ).GetUserData();
@@ -1484,7 +1484,7 @@ void SvxLinguTabPage::AddDicBoxEntry(
     String aTxt( ::GetDicInfoStr( rxDic->getName(),
                         SvxLocaleToLanguage( rxDic->getLocale() ),
                         DictionaryType_NEGATIVE == rxDic->getDictionaryType() ) );
-    aLinguDicsCLB.InsertEntry( aTxt );  // append at end
+    aLinguDicsCLB.InsertEntry( aTxt, (USHORT)LISTBOX_APPEND );  // append at end
     SvLBoxEntry* pEntry = aLinguDicsCLB.GetEntry( aLinguDicsCLB.GetEntryCount() - 1 );
     DBG_ASSERT( pEntry, "failed to add entry" );
     if (pEntry)
@@ -1532,7 +1532,7 @@ void SvxLinguTabPage::UpdateModulesBox_Impl()
         {
             pInfo = rAllDispSrvcArr.Get(i);
             DBG_ASSERT( pInfo, "UpdateModulesBox_Impl: data missing" );
-            aLinguModulesCLB.InsertEntry( pInfo ? pInfo->sDisplayName : C2U("!! missing entry !!") );
+            aLinguModulesCLB.InsertEntry( pInfo ? pInfo->sDisplayName : C2U("!! missing entry !!"), (USHORT)LISTBOX_APPEND );
             SvLBoxEntry* pEntry = aLinguModulesCLB.GetEntry(i);
             pEntry->SetUserData( (void *) pInfo );
             aLinguModulesCLB.CheckEntryPos( i, pInfo ? pInfo->bConfigured : FALSE );
@@ -1697,7 +1697,7 @@ IMPL_LINK( SvxLinguTabPage, BoxDoubleClickHdl_Impl, SvTreeListBox *, pBox )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxLinguTabPage, PostDblClickHdl_Impl, SvTreeListBox *, pBox )
+IMPL_LINK( SvxLinguTabPage, PostDblClickHdl_Impl, SvTreeListBox *, EMPTYARG )
 {
     ClickHdl_Impl(&aLinguModulesEditPB);
     return 0;
@@ -1870,12 +1870,12 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
                         ULONG nCnt = aLinguDicsCLB.GetEntryCount();
                         for (ULONG i = 0;  i < nCnt;  ++i)
                         {
-                            SvLBoxEntry *pEntry = aLinguDicsCLB.GetEntry( i );
-                            DBG_ASSERT( pEntry, "missing entry" );
-                            if (pEntry)
+                            SvLBoxEntry *pDicEntry = aLinguDicsCLB.GetEntry( i );
+                            DBG_ASSERT( pDicEntry, "missing entry" );
+                            if (pDicEntry)
                             {
-                                DicUserData aData( (ULONG) pEntry->GetUserData() );
-                                if (aData.GetEntryId() == nDicPos )
+                                DicUserData aDicData( (ULONG) pDicEntry->GetUserData() );
+                                if (aDicData.GetEntryId() == nDicPos )
                                 {
                                     aLinguDicsCLB.RemoveEntry( (USHORT) i );
                                     break;
@@ -2128,14 +2128,6 @@ SvLBoxEntry* SvxEditModulesDlg::CreateEntry( String& rTxt, USHORT nCol )
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-
-static void lcl_UpdateLinguData()
-{
-}
-
-/* ---------------------------------------------------------------------------
-
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
 {
     if (&aModulesCLB == pBox)
@@ -2228,7 +2220,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
     Locale aCurLocale;
     SvxLanguageToLocale(aCurLocale, eCurLanguage);
     SvLBoxTreeList *pModel = aModulesCLB.GetModel();
-    Reference<XLinguServiceManager>&   xMgr = rLinguData.GetManager();
+//  Reference<XLinguServiceManager>&   xMgr = rLinguData.GetManager();
 
     if (pBox)
     {
@@ -2302,7 +2294,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
     aModulesCLB.Clear();
     if(LANGUAGE_DONTKNOW != eCurLanguage)
     {
-        sal_Int32 nEntryPos = 1;
+//      sal_Int32 nEntryPos = 1;
 
         ULONG n;
         ServiceInfo_Impl* pInfo;
@@ -2335,15 +2327,15 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             if (aImplName.getLength() && bIsSuppLang)
             {
                 String aTxt( pInfo->sDisplayName );
-                SvLBoxEntry* pEntry = CreateEntry( aTxt, CBCOL_FIRST );
+                SvLBoxEntry* pNewEntry = CreateEntry( aTxt, CBCOL_FIRST );
                 const Sequence< OUString > *pCfgImplNames = rLinguData.GetSpellTable().Get( eCurLanguage );
                 DBG_ASSERT( pCfgImplNames, "pCfgImplNames missing" );
                 BOOL bChecked = pCfgImplNames && lcl_SeqGetEntryPos( *pCfgImplNames, aImplName ) >= 0;
-                lcl_SetCheckButton( pEntry, bChecked );
+                lcl_SetCheckButton( pNewEntry, bChecked );
                 pUserData = new ModuleUserData_Impl( aImplName, FALSE,
                                         bChecked, TYPE_SPELL, (BYTE)nLocalIndex++ );
-                pEntry->SetUserData( (void *)pUserData );
-                pModel->Insert( pEntry );
+                pNewEntry->SetUserData( (void *)pUserData );
+                pModel->Insert( pNewEntry );
             }
         }
 
@@ -2374,15 +2366,15 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             if (aImplName.getLength() && bIsSuppLang)
             {
                 String aTxt( pInfo->sDisplayName );
-                SvLBoxEntry* pEntry = CreateEntry( aTxt, CBCOL_FIRST );
+                SvLBoxEntry* pNewEntry = CreateEntry( aTxt, CBCOL_FIRST );
                 const Sequence< OUString > *pCfgImplNames = rLinguData.GetHyphTable().Get( eCurLanguage );
                 DBG_ASSERT( pCfgImplNames, "pCfgImplNames missing" );
                 BOOL bChecked = pCfgImplNames && lcl_SeqGetEntryPos( *pCfgImplNames, aImplName ) >= 0;
-                lcl_SetCheckButton( pEntry, bChecked );
+                lcl_SetCheckButton( pNewEntry, bChecked );
                 pUserData = new ModuleUserData_Impl( aImplName, FALSE,
                                         bChecked, TYPE_HYPH, (BYTE)nLocalIndex++ );
-                pEntry->SetUserData( (void *)pUserData );
-                pModel->Insert( pEntry );
+                pNewEntry->SetUserData( (void *)pUserData );
+                pModel->Insert( pNewEntry );
             }
         }
 
@@ -2413,15 +2405,15 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             if (aImplName.getLength() && bIsSuppLang)
             {
                 String aTxt( pInfo->sDisplayName );
-                SvLBoxEntry* pEntry = CreateEntry( aTxt, CBCOL_FIRST );
+                SvLBoxEntry* pNewEntry = CreateEntry( aTxt, CBCOL_FIRST );
                 const Sequence< OUString > *pCfgImplNames = rLinguData.GetThesTable().Get( eCurLanguage );
                 DBG_ASSERT( pCfgImplNames, "pCfgImplNames missing" );
                 BOOL bChecked = pCfgImplNames && lcl_SeqGetEntryPos( *pCfgImplNames, aImplName ) >= 0;
-                lcl_SetCheckButton( pEntry, bChecked );
+                lcl_SetCheckButton( pNewEntry, bChecked );
                 pUserData = new ModuleUserData_Impl( aImplName, FALSE,
                                         bChecked, TYPE_THES, (BYTE)nLocalIndex++ );
-                pEntry->SetUserData( (void *)pUserData );
-                pModel->Insert( pEntry );
+                pNewEntry->SetUserData( (void *)pUserData );
+                pModel->Insert( pNewEntry );
             }
         }
     }
@@ -2481,7 +2473,7 @@ IMPL_LINK( SvxEditModulesDlg, ClickHdl_Impl, PushButton *, pBtn )
 /* -----------------------------27.11.00 20:31--------------------------------
 
  ---------------------------------------------------------------------------*/
-IMPL_LINK( SvxEditModulesDlg, BackHdl_Impl, PushButton *, pBtn )
+IMPL_LINK( SvxEditModulesDlg, BackHdl_Impl, PushButton *, EMPTYARG )
 {
     rLinguData = *pDefaultLinguData;
     LangSelectHdl_Impl(0);
