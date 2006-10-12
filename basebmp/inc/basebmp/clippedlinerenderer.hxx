@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clippedlinerenderer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-28 12:43:19 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 13:45:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include <basegfx/range/b2irange.hxx>
 #endif
 
+#include <vigra/diff2d.hxx>
 #include <vigra/iteratortraits.hxx>
 
 namespace basebmp
