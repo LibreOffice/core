@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontworkgallery.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:44:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-12 11:42:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,7 @@ namespace svx
 
 class FontWorkAlignmentWindow : public SfxPopupWindow
 {
+    using FloatingWindow::StateChanged;
 private:
     ToolbarMenu* mpMenu;
 
@@ -145,6 +146,7 @@ public:
 
 class FontWorkCharacterSpacingWindow : public SfxPopupWindow
 {
+    using FloatingWindow::StateChanged;
 private:
     ToolbarMenu* mpMenu;
 
@@ -201,6 +203,8 @@ public:
 
 class SVX_DLLPUBLIC FontWorkShapeTypeControl : public SfxToolBoxControl
 {
+    using SfxToolBoxControl::Select;
+
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     FontWorkShapeTypeControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
@@ -268,6 +272,6 @@ public:
     void SetSdrObjectRef( SdrObject**, SdrModel* pModel );
 };
 
-};
+}
 
 #endif
