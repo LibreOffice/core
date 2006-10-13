@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagedesc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:22:21 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 08:18:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,9 @@
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>          // fuer GetAttrPool
+#endif
+#ifndef _POOLFMT_HXX
+#include <poolfmt.hxx>
 #endif
 
 /*************************************************************************
@@ -435,10 +438,12 @@ SwPageFtnInfo::SwPageFtnInfo() :
 //  aPen( PEN_SOLID ),
     nLineWidth(10),
     aWidth( 25, 100 ),
-    eAdj( FTNADJ_LEFT ),
     nTopDist( 57 ),         //1mm
     nBottomDist( 57 )
 {
+    eAdj = FRMDIR_HORI_RIGHT_TOP == GetDefaultFrameDirection(GetAppLanguage()) ?
+           FTNADJ_RIGHT :
+           FTNADJ_LEFT;
 //  aPen.SetWidth( 10 );
 }
 
