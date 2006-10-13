@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oinputstreamcontainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:56:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:30:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-
 #include "oinputstreamcontainer.hxx"
 
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
@@ -46,20 +45,28 @@
 using namespace ::com::sun::star;
 
 //-----------------------------------------------
-OInputStreamContainer::OInputStreamContainer( const uno::Reference< io::XInputStream >& xStream )
+OFSInputStreamContainer::OFSInputStreamContainer( const uno::Reference< io::XInputStream >& xStream )
 : m_xInputStream( xStream )
 , m_xSeekable( xStream, uno::UNO_QUERY )
+, m_bSeekable( sal_False )
+, m_bDisposed( sal_False )
+, m_pListenersContainer( NULL )
 {
     m_bSeekable = m_xSeekable.is();
 }
 
 //-----------------------------------------------
-OInputStreamContainer::~OInputStreamContainer()
+OFSInputStreamContainer::~OFSInputStreamContainer()
 {
+    if ( m_pListenersContainer )
+    {
+        delete m_pListenersContainer;
+        m_pListenersContainer = NULL;
+    }
 }
 
 //-----------------------------------------------
-uno::Sequence< uno::Type > SAL_CALL OInputStreamContainer::getTypes()
+uno::Sequence< uno::Type > SAL_CALL OFSInputStreamContainer::getTypes()
         throw ( uno::RuntimeException )
 {
     static ::cppu::OTypeCollection* pTypeCollection = NULL ;
@@ -95,7 +102,7 @@ uno::Sequence< uno::Type > SAL_CALL OInputStreamContainer::getTypes()
 }
 
 //-----------------------------------------------
-uno::Any SAL_CALL OInputStreamContainer::queryInterface( const uno::Type& rType )
+uno::Any SAL_CALL OFSInputStreamContainer::queryInterface( const uno::Type& rType )
         throw( uno::RuntimeException )
 {
     // Attention:
@@ -119,26 +126,31 @@ uno::Any SAL_CALL OInputStreamContainer::queryInterface( const uno::Type& rType 
 }
 
 //-----------------------------------------------
-void SAL_CALL OInputStreamContainer::acquire()
+void SAL_CALL OFSInputStreamContainer::acquire()
         throw()
 {
     ::cppu::OWeakObject::acquire();
 }
 
 //-----------------------------------------------
-void SAL_CALL OInputStreamContainer::release()
+void SAL_CALL OFSInputStreamContainer::release()
         throw()
 {
     ::cppu::OWeakObject::release();
 }
 
 //-----------------------------------------------
-sal_Int32 SAL_CALL OInputStreamContainer::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL OFSInputStreamContainer::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
                 io::IOException,
                 uno::RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
     if ( !m_xInputStream.is() )
         throw uno::RuntimeException();
 
@@ -146,12 +158,17 @@ sal_Int32 SAL_CALL OInputStreamContainer::readBytes( uno::Sequence< sal_Int8 >& 
 }
 
 //-----------------------------------------------
-sal_Int32 SAL_CALL OInputStreamContainer::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 SAL_CALL OFSInputStreamContainer::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
                 io::IOException,
                 uno::RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
     if ( !m_xInputStream.is() )
         throw uno::RuntimeException();
 
@@ -159,12 +176,17 @@ sal_Int32 SAL_CALL OInputStreamContainer::readSomeBytes( uno::Sequence< sal_Int8
 }
 
 //-----------------------------------------------
-void SAL_CALL OInputStreamContainer::skipBytes( sal_Int32 nBytesToSkip )
+void SAL_CALL OFSInputStreamContainer::skipBytes( sal_Int32 nBytesToSkip )
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
                 io::IOException,
                 uno::RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
     if ( !m_xInputStream.is() )
         throw uno::RuntimeException();
 
@@ -172,11 +194,16 @@ void SAL_CALL OInputStreamContainer::skipBytes( sal_Int32 nBytesToSkip )
 }
 
 //-----------------------------------------------
-sal_Int32 SAL_CALL OInputStreamContainer::available(  )
+sal_Int32 SAL_CALL OFSInputStreamContainer::available(  )
         throw ( io::NotConnectedException,
                 io::IOException,
                 uno::RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
     if ( !m_xInputStream.is() )
         throw uno::RuntimeException();
 
@@ -184,21 +211,31 @@ sal_Int32 SAL_CALL OInputStreamContainer::available(  )
 }
 
 //-----------------------------------------------
-void SAL_CALL OInputStreamContainer::closeInput(  )
+void SAL_CALL OFSInputStreamContainer::closeInput(  )
         throw ( io::NotConnectedException,
                 io::IOException,
                 uno::RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
     if ( !m_xInputStream.is() )
         throw uno::RuntimeException();
 
-    return m_xInputStream->closeInput();
+    dispose();
 }
 
 //-----------------------------------------------
-uno::Reference< io::XInputStream > SAL_CALL OInputStreamContainer::getInputStream()
+uno::Reference< io::XInputStream > SAL_CALL OFSInputStreamContainer::getInputStream()
         throw ( uno::RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
     if ( !m_xInputStream.is() )
         return uno::Reference< io::XInputStream >();
 
@@ -206,18 +243,28 @@ uno::Reference< io::XInputStream > SAL_CALL OInputStreamContainer::getInputStrea
 }
 
 //-----------------------------------------------
-uno::Reference< io::XOutputStream > SAL_CALL OInputStreamContainer::getOutputStream()
+uno::Reference< io::XOutputStream > SAL_CALL OFSInputStreamContainer::getOutputStream()
         throw ( uno::RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
     return uno::Reference< io::XOutputStream >();
 }
 
 //-----------------------------------------------
-void SAL_CALL OInputStreamContainer::seek( sal_Int64 location )
+void SAL_CALL OFSInputStreamContainer::seek( sal_Int64 location )
         throw ( lang::IllegalArgumentException,
                 io::IOException,
                 uno::RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
     if ( !m_xSeekable.is() )
         throw uno::RuntimeException();
 
@@ -225,10 +272,15 @@ void SAL_CALL OInputStreamContainer::seek( sal_Int64 location )
 }
 
 //-----------------------------------------------
-sal_Int64 SAL_CALL OInputStreamContainer::getPosition()
+sal_Int64 SAL_CALL OFSInputStreamContainer::getPosition()
         throw ( io::IOException,
                 uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
     if ( !m_xSeekable.is() )
         throw uno::RuntimeException();
 
@@ -236,13 +288,71 @@ sal_Int64 SAL_CALL OInputStreamContainer::getPosition()
 }
 
 //-----------------------------------------------
-sal_Int64 SAL_CALL OInputStreamContainer::getLength()
+sal_Int64 SAL_CALL OFSInputStreamContainer::getLength()
         throw ( io::IOException,
                 uno::RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
     if ( !m_xSeekable.is() )
         throw uno::RuntimeException();
 
     return m_xSeekable->getLength();
 }
+
+//-----------------------------------------------
+void SAL_CALL OFSInputStreamContainer::dispose(  )
+        throw ( uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
+    if ( !m_xInputStream.is() )
+        throw uno::RuntimeException();
+
+    m_xInputStream->closeInput();
+
+    if ( m_pListenersContainer )
+    {
+        lang::EventObject aSource( static_cast< ::cppu::OWeakObject*>( this ) );
+        m_pListenersContainer->disposeAndClear( aSource );
+    }
+
+    m_bDisposed = sal_True;
+}
+
+//-----------------------------------------------
+void SAL_CALL OFSInputStreamContainer::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
+        throw ( uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
+    if ( !m_pListenersContainer )
+        m_pListenersContainer = new ::cppu::OInterfaceContainerHelper( m_aMutex );
+
+    m_pListenersContainer->addInterface( xListener );
+}
+
+//-----------------------------------------------
+void SAL_CALL OFSInputStreamContainer::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
+        throw ( uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
+    if ( m_pListenersContainer )
+        m_pListenersContainer->removeInterface( xListener );
+}
+
+
 

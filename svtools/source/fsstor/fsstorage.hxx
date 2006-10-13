@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fsstorage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:48:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:26:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,32 +44,8 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
-#include <com/sun/star/embed/XTransactedObject.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONBROADCASTER_HPP_
-#include <com/sun/star/embed/XTransactionBroadcaster.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
-#include <com/sun/star/embed/XClassifiedObject.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_EMBED_XENCRYPTIONPROTECTEDSOURCE_HPP_
-#include <com/sun/star/embed/XEncryptionProtectedSource.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
-#include <com/sun/star/util/XCloseable.hpp>
+#ifndef _COM_SUN_STAR_EMBED_XHIERARCHICALSTORAGEACCESS_HPP_
+#include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -117,6 +93,7 @@
 struct FSStorage_Impl;
 class FSStorage : public ::com::sun::star::lang::XTypeProvider
                 , public ::com::sun::star::embed::XStorage
+                , public ::com::sun::star::embed::XHierarchicalStorageAccess
                 , public ::com::sun::star::beans::XPropertySet
                 , public ::cppu::OWeakObject
 {
@@ -372,6 +349,34 @@ public:
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
 
+    //____________________________________________________________________________________________________
+    //  XHierarchicalStorageAccess
+    //____________________________________________________________________________________________________
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream > SAL_CALL openStreamElementByHierarchicalName( const ::rtl::OUString& sStreamPath, ::sal_Int32 nOpenMode )
+        throw ( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream > SAL_CALL openEncryptedStreamElementByHierarchicalName( const ::rtl::OUString& sStreamName, ::sal_Int32 nOpenMode, const ::rtl::OUString& sPassword )
+        throw ( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::NoEncryptionException,
+                ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL removeStreamElementByHierarchicalName( const ::rtl::OUString& sElementPath )
+        throw ( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException,
+                ::com::sun::star::uno::RuntimeException );
 };
 
 #endif

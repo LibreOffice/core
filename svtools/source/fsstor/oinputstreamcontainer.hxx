@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oinputstreamcontainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:49:49 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:27:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,15 +33,15 @@
  *
  ************************************************************************/
 
-#ifndef _INPUTSEEKSTREAM_HXX_
-#define _INPUTSEEKSTREAM_HXX_
+#ifndef _OINPUTSTREAMCONTAINER_HXX_
+#define _OINPUTSTREAMCONTAINER_HXX_
 
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
-#include <com/sun/star/io/XStream.hpp>
+#ifndef _COM_SUN_STAR_EMBED_XEXTENDEDSTORAGESTREAM_HPP_
+#include <com/sun/star/embed/XExtendedStorageStream.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
@@ -52,11 +52,14 @@
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif
+#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
+#include <cppuhelper/interfacecontainer.h>
+#endif
 
 #include <osl/mutex.hxx>
 
-class OInputStreamContainer : public cppu::WeakImplHelper2 < ::com::sun::star::io::XInputStream
-                                                            ,::com::sun::star::io::XStream >
+class OFSInputStreamContainer : public cppu::WeakImplHelper2 < ::com::sun::star::io::XInputStream
+                                                            ,::com::sun::star::embed::XExtendedStorageStream >
                             , public ::com::sun::star::io::XSeekable
 {
 protected:
@@ -67,10 +70,14 @@ protected:
 
     sal_Bool m_bSeekable;
 
-public:
-    OInputStreamContainer( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >& xStream );
+    sal_Bool m_bDisposed;
 
-    virtual ~OInputStreamContainer();
+    ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
+
+public:
+    OFSInputStreamContainer( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >& xStream );
+
+    virtual ~OFSInputStreamContainer();
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType ) throw( ::com::sun::star::uno::RuntimeException );
@@ -97,6 +104,11 @@ public:
     virtual void SAL_CALL seek( sal_Int64 location ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Int64 SAL_CALL getPosition() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Int64 SAL_CALL getLength() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+
+    //XComponent
+    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
 };
 
