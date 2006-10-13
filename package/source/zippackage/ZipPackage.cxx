@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:28:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:51:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,6 +173,7 @@
 #include <ucbhelper/fileidentifierconverter.hxx>
 #include <comphelper/seekableinput.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/ofopxmlhelper.hxx>
 
 using namespace rtl;
 using namespace ucb;
@@ -268,14 +269,14 @@ ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 , bUseManifest ( sal_True )
 , bForceRecovery ( sal_False )
 , m_bMediaTypeFallbackUsed ( sal_False )
-, m_bPackageFormat( sal_True )
+, m_nFormat( PACKAGE_FORMAT ) // package is the default format
 , m_bAllowRemoveOnInsert( sal_True )
 , eMode ( e_IMode_None )
 , xFactory( xNewFactory )
 , pRootFolder( NULL )
 , pZipFile( NULL )
 {
-    xRootFolder = pRootFolder = new ZipPackageFolder( xFactory, m_bPackageFormat, m_bAllowRemoveOnInsert );
+    xRootFolder = pRootFolder = new ZipPackageFolder( xFactory, m_nFormat, m_bAllowRemoveOnInsert );
 }
 
 ZipPackage::~ZipPackage( void )
@@ -300,65 +301,9 @@ ZipPackage::~ZipPackage( void )
 #endif
 }
 
-void ZipPackage::getZipFileContents()
+void ZipPackage::parseManifest()
 {
-    auto_ptr < ZipEnumeration > pEnum ( pZipFile->entries() );
-    ZipPackageStream *pPkgStream;
-    ZipPackageFolder *pPkgFolder, *pCurrent;
-    OUString sTemp, sDirName;
-    sal_Int32 nOldIndex, nIndex, nStreamIndex;
-    FolderHash::iterator aIter;
-
-    while (pEnum->hasMoreElements())
-    {
-        nIndex = nOldIndex = 0;
-        pCurrent = pRootFolder;
-        const ZipEntry & rEntry = *pEnum->nextElement();
-        const OUString & rName = rEntry.sName;
-
-        nStreamIndex = rName.lastIndexOf ( '/' );
-        if ( nStreamIndex != -1 )
-        {
-            sDirName = rName.copy ( 0, nStreamIndex);
-            aIter = aRecent.find ( sDirName );
-            if ( aIter != aRecent.end() )
-                pCurrent = (*aIter).second;
-        }
-
-        if ( pCurrent == pRootFolder )
-        {
-            while ( (nIndex = rName.indexOf('/', nOldIndex) ) != -1 )
-            {
-                sTemp = rName.copy ( nOldIndex, nIndex - nOldIndex );
-                if (nIndex == nOldIndex)
-                    break;
-                if ( !pCurrent->hasByName( sTemp ) )
-                {
-                    pPkgFolder = new ZipPackageFolder( xFactory, m_bPackageFormat, m_bAllowRemoveOnInsert );
-                    pPkgFolder->setName( sTemp );
-                    pPkgFolder->doSetParent( pCurrent, sal_True );
-                    pCurrent = pPkgFolder;
-                }
-                else
-                    pCurrent = pCurrent->doGetByName(sTemp).pFolder;
-                nOldIndex = nIndex+1;
-            }
-            if ( nStreamIndex != -1 && sDirName.getLength() )
-                aRecent [ sDirName ] = pCurrent;
-        }
-        if ( rName.getLength() -1 != nStreamIndex )
-        {
-            nStreamIndex++;
-            sTemp = rName.copy( nStreamIndex, rName.getLength() - nStreamIndex);
-            pPkgStream = new ZipPackageStream( *this, xFactory, m_bAllowRemoveOnInsert );
-            pPkgStream->SetPackageMember( sal_True );
-            pPkgStream->setZipEntry( rEntry );
-            pPkgStream->setName( sTemp );
-            pPkgStream->doSetParent( pCurrent, sal_True );
-        }
-    }
-
-    if ( m_bPackageFormat )
+    if ( m_nFormat == PACKAGE_FORMAT )
     {
         sal_Bool bManifestParsed = sal_False;
         const OUString sMeta ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF" ) );
@@ -522,6 +467,139 @@ void ZipPackage::getZipFileContents()
         }
     }
 }
+
+void ZipPackage::parseContentType()
+{
+    if ( m_nFormat == OFOPXML_FORMAT )
+    {
+        const ::rtl::OUString aContentTypes( RTL_CONSTASCII_USTRINGPARAM ( "[Content_Types].xml" ) );
+        try {
+            // the content type must exist in OFOPXML format!
+            if ( !xRootFolder->hasByName( aContentTypes ) )
+                throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Wrong format!" ) ),
+                                        uno::Reference< uno::XInterface >() );
+
+            uno::Reference< lang::XUnoTunnel > xTunnel;
+            uno::Any aAny = xRootFolder->getByName( aContentTypes );
+            aAny >>= xTunnel;
+            uno::Reference < io::XActiveDataSink > xSink( xTunnel, UNO_QUERY );
+            if ( xSink.is() )
+            {
+                uno::Reference< io::XInputStream > xInStream = xSink->getInputStream();
+                if ( xInStream.is() )
+                {
+                    sal_Int32 nInd = 0;
+                    // here aContentTypeInfo[0] - Defaults, and aContentTypeInfo[1] - Overrides
+                    uno::Sequence< uno::Sequence< beans::StringPair > > aContentTypeInfo =
+                        ::comphelper::OFOPXMLHelper::ReadContentTypeSequence( xInStream, xFactory );
+
+                    if ( aContentTypeInfo.getLength() != 2 )
+                        throw io::IOException();
+
+                    // set the implicit types fist
+                    for ( nInd = 0; nInd < aContentTypeInfo[0].getLength(); nInd++ )
+                        pRootFolder->setChildStreamsTypeByExtension( aContentTypeInfo[0][nInd] );
+
+                    // now set the explicit types
+                    for ( nInd = 0; nInd < aContentTypeInfo[1].getLength(); nInd++ )
+                    {
+                        ::rtl::OUString aPath;
+                        if ( aContentTypeInfo[1][nInd].First.toChar() == (sal_Unicode)'/' )
+                            aPath = aContentTypeInfo[1][nInd].First.copy( 1 );
+                        else
+                            aPath = aContentTypeInfo[1][nInd].First;
+
+                        if ( aPath.getLength() && hasByHierarchicalName( aPath ) )
+                        {
+                            uno::Any aIterAny = getByHierarchicalName( aPath );
+                            uno::Reference < lang::XUnoTunnel > xIterTunnel;
+                            aIterAny >>= xIterTunnel;
+                            sal_Int64 nTest = xIterTunnel->getSomething( ZipPackageStream::static_getImplementationId() );
+                            if ( nTest != 0 )
+                            {
+                                // this is a package stream, in OFOPXML format only streams can have mediatype
+                                ZipPackageStream *pStream = reinterpret_cast < ZipPackageStream* > ( nTest );
+                                pStream->SetMediaType( aContentTypeInfo[1][nInd].Second );
+                            }
+                        }
+                    }
+                }
+            }
+
+            xRootFolder->removeByName( aContentTypes );
+        }
+        catch( uno::Exception& )
+        {
+            if ( !bForceRecovery )
+                throw;
+        }
+    }
+}
+
+void ZipPackage::getZipFileContents()
+{
+    auto_ptr < ZipEnumeration > pEnum ( pZipFile->entries() );
+    ZipPackageStream *pPkgStream;
+    ZipPackageFolder *pPkgFolder, *pCurrent;
+    OUString sTemp, sDirName;
+    sal_Int32 nOldIndex, nIndex, nStreamIndex;
+    FolderHash::iterator aIter;
+
+    while (pEnum->hasMoreElements())
+    {
+        nIndex = nOldIndex = 0;
+        pCurrent = pRootFolder;
+        const ZipEntry & rEntry = *pEnum->nextElement();
+        const OUString & rName = rEntry.sName;
+
+        nStreamIndex = rName.lastIndexOf ( '/' );
+        if ( nStreamIndex != -1 )
+        {
+            sDirName = rName.copy ( 0, nStreamIndex);
+            aIter = aRecent.find ( sDirName );
+            if ( aIter != aRecent.end() )
+                pCurrent = (*aIter).second;
+        }
+
+        if ( pCurrent == pRootFolder )
+        {
+            while ( (nIndex = rName.indexOf('/', nOldIndex) ) != -1 )
+            {
+                sTemp = rName.copy ( nOldIndex, nIndex - nOldIndex );
+                if (nIndex == nOldIndex)
+                    break;
+                if ( !pCurrent->hasByName( sTemp ) )
+                {
+                    pPkgFolder = new ZipPackageFolder( xFactory, m_nFormat, m_bAllowRemoveOnInsert );
+                    pPkgFolder->setName( sTemp );
+                    pPkgFolder->doSetParent( pCurrent, sal_True );
+                    pCurrent = pPkgFolder;
+                }
+                else
+                    pCurrent = pCurrent->doGetByName(sTemp).pFolder;
+                nOldIndex = nIndex+1;
+            }
+            if ( nStreamIndex != -1 && sDirName.getLength() )
+                aRecent [ sDirName ] = pCurrent;
+        }
+        if ( rName.getLength() -1 != nStreamIndex )
+        {
+            nStreamIndex++;
+            sTemp = rName.copy( nStreamIndex, rName.getLength() - nStreamIndex);
+            pPkgStream = new ZipPackageStream( *this, xFactory, m_bAllowRemoveOnInsert );
+            pPkgStream->SetPackageMember( sal_True );
+            pPkgStream->setZipEntryOnLoading( rEntry );
+            pPkgStream->setName( sTemp );
+            pPkgStream->doSetParent( pCurrent, sal_True );
+        }
+    }
+
+    if ( m_nFormat == PACKAGE_FORMAT )
+        parseManifest();
+    else if ( m_nFormat == OFOPXML_FORMAT )
+        parseContentType();
+}
+
 // XInitialization
 void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
         throw(Exception, RuntimeException)
@@ -558,11 +636,16 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                             }
                             else if ( aCommand.equals( OUString::createFromAscii( "purezip" ) ) )
                             {
-                                m_bPackageFormat = sal_False;
-                                pRootFolder->setPackageFormat_Impl( m_bPackageFormat );
+                                m_nFormat = ZIP_FORMAT;
+                                pRootFolder->setPackageFormat_Impl( m_nFormat );
                                 break;
                             }
-
+                            else if ( aCommand.equals( OUString::createFromAscii( "ofopxml" ) ) )
+                            {
+                                m_nFormat = OFOPXML_FORMAT;
+                                pRootFolder->setPackageFormat_Impl( m_nFormat );
+                                break;
+                            }
                         }
                         while ( nIndex >= 0 );
                     }
@@ -607,8 +690,30 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                     aNamedValue.Value >>= bForceRecovery;
                 else if ( aNamedValue.Name.equalsAscii( "PackageFormat" ) )
                 {
-                    aNamedValue.Value >>= m_bPackageFormat;
-                    pRootFolder->setPackageFormat_Impl( m_bPackageFormat );
+                    // setting this argument to true means Package format
+                    // setting it to false means plain Zip format
+
+                    sal_Bool bPackFormat = sal_True;
+                    aNamedValue.Value >>= bPackFormat;
+                    if ( !bPackFormat )
+                        m_nFormat = ZIP_FORMAT;
+
+                    pRootFolder->setPackageFormat_Impl( m_nFormat );
+                }
+                else if ( aNamedValue.Name.equalsAscii( "StorageFormat" ) )
+                {
+                    ::rtl::OUString aFormatName;
+                    aNamedValue.Value >>= aFormatName;
+                    if ( aFormatName.equalsAscii( "PackageFormat" ) )
+                        m_nFormat = PACKAGE_FORMAT;
+                    else if ( aFormatName.equalsAscii( "ZipFormat" ) )
+                        m_nFormat = ZIP_FORMAT;
+                    else if ( aFormatName.equalsAscii( "OFOPXMLFormat" ) )
+                        m_nFormat = OFOPXML_FORMAT;
+                    else
+                        throw lang::IllegalArgumentException(); // TODO:
+
+                    pRootFolder->setPackageFormat_Impl( m_nFormat );
                 }
                 else if ( aNamedValue.Name.equalsAscii( "AllowRemoveOnInsert" ) )
                 {
@@ -862,7 +967,7 @@ Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const 
     if ( aArguments.getLength() )
         aArguments[0] >>= bArg;
     if (bArg)
-        xRef = *new ZipPackageFolder ( xFactory, m_bPackageFormat, m_bAllowRemoveOnInsert );
+        xRef = *new ZipPackageFolder ( xFactory, m_nFormat, m_bAllowRemoveOnInsert );
     else
         xRef = *new ZipPackageStream ( *this, xFactory, m_bAllowRemoveOnInsert );
 
@@ -953,7 +1058,7 @@ sal_Bool ZipPackage::writeFileIsTemp()
 
     try
     {
-        if ( m_bPackageFormat )
+        if ( m_nFormat == PACKAGE_FORMAT )
         {
             // Remove the old manifest.xml file as the
             // manifest will be re-generated and the
@@ -975,6 +1080,16 @@ sal_Bool ZipPackage::writeFileIsTemp()
             // Write a magic file with mimetype
             WriteMimetypeMagicFile( aZipOut );
         }
+        if ( m_nFormat == OFOPXML_FORMAT )
+        {
+            // Remove the old [Content_Types].xml file as the
+            // file will be re-generated
+
+            const ::rtl::OUString aContentTypes( RTL_CONSTASCII_USTRINGPARAM ( "[Content_Types].xml" ) );
+
+            if ( xRootFolder->hasByName( aContentTypes ) )
+                xRootFolder->removeByName( aContentTypes );
+        }
 
         // Create a vector to store data for the manifest.xml file
         vector < Sequence < PropertyValue > > aManList;
@@ -985,13 +1100,16 @@ sal_Bool ZipPackage::writeFileIsTemp()
         const OUString sMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
         const OUString sFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
 
-        Sequence < PropertyValue > aPropSeq ( 2 );
-        aPropSeq [0].Name = sMediaType;
-        aPropSeq [0].Value <<= pRootFolder->GetMediaType( );
-        aPropSeq [1].Name = sFullPath;
-        aPropSeq [1].Value <<= OUString ( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
+        if ( m_nFormat == PACKAGE_FORMAT )
+        {
+            Sequence < PropertyValue > aPropSeq ( 2 );
+            aPropSeq [0].Name = sMediaType;
+            aPropSeq [0].Value <<= pRootFolder->GetMediaType( );
+            aPropSeq [1].Name = sFullPath;
+            aPropSeq [1].Value <<= OUString ( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
 
-        aManList.push_back( aPropSeq );
+            aManList.push_back( aPropSeq );
+        }
 
         // Get a random number generator and seed it with current timestamp
         // This will be used to generate random salt and initialisation vectors
@@ -1009,7 +1127,7 @@ sal_Bool ZipPackage::writeFileIsTemp()
         // Clean up random pool memory
         rtl_random_destroyPool ( aRandomPool );
 
-        if( bUseManifest && m_bPackageFormat )
+        if( bUseManifest && m_nFormat == PACKAGE_FORMAT )
         {
             // Write the manifest
             OUString sManifestWriter( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestWriter" ) );
@@ -1052,6 +1170,55 @@ sal_Bool ZipPackage::writeFileIsTemp()
                         static_cast < OWeakObject * > ( this ),
                         makeAny( aException ) );
             }
+        }
+        else if( m_nFormat == OFOPXML_FORMAT )
+        {
+            ZipEntry* pEntry = new ZipEntry;
+            ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
+            uno::Reference< io::XOutputStream > xConTypeOutStream( *pBuffer, UNO_QUERY );
+
+            pEntry->sName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "[Content_Types].xml") );
+            pEntry->nMethod = DEFLATED;
+            pEntry->nCrc = pEntry->nSize = pEntry->nCompressedSize = -1;
+            pEntry->nTime = ZipOutputStream::getCurrentDosTime();
+
+            // Convert vector into a Sequence
+            // TODO/LATER: use Defaulst entries in future
+            uno::Sequence< beans::StringPair > aDefaultsSequence;
+            uno::Sequence< beans::StringPair > aOverridesSequence( aManList.size() );
+            sal_Int32 nSeqLength = 0;
+            for ( vector< uno::Sequence< beans::PropertyValue > >::const_iterator aIter = aManList.begin(),
+                    aEnd = aManList.end();
+                 aIter != aEnd;
+                 aIter++)
+            {
+                ::rtl::OUString aPath;
+                ::rtl::OUString aType;
+                OSL_ENSURE( (*aIter)[0].Name.equals( sMediaType ) && (*aIter)[1].Name.equals( sFullPath ),
+                            "The mediatype sequence format is wrong!\n" );
+                (*aIter)[0].Value >>= aType;
+                if ( aType.getLength() )
+                {
+                    // only nonempty type makes sence here
+                    nSeqLength++;
+                    (*aIter)[1].Value >>= aPath;
+                    aOverridesSequence[nSeqLength-1].First = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) + aPath;
+                    aOverridesSequence[nSeqLength-1].Second = aType;
+                }
+            }
+            aOverridesSequence.realloc( nSeqLength );
+
+            ::comphelper::OFOPXMLHelper::WriteContentSequence(
+                    xConTypeOutStream, aDefaultsSequence, aOverridesSequence, xFactory );
+
+            sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
+            pBuffer->realloc( nBufferLength );
+
+            // there is no encryption in this format currently
+            vos::ORef < EncryptionData > xEmpty;
+            aZipOut.putNextEntry( *pEntry, xEmpty );
+            aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
+            aZipOut.closeEntry();
         }
 
         aZipOut.finish();
@@ -1454,22 +1621,19 @@ Reference< XPropertySetInfo > SAL_CALL ZipPackage::getPropertySetInfo(  )
 void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
+    if ( m_nFormat != PACKAGE_FORMAT )
+        throw UnknownPropertyException();
+
     if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HasEncryptedEntries") )
       ||aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaTypeFallbackUsed") ) )
         throw PropertyVetoException();
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EncryptionKey") ) )
     {
-        if ( !m_bPackageFormat )
-            throw PropertyVetoException();
-
         if (!( aValue >>= aEncryptionKey ) )
             throw IllegalArgumentException();
     }
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseManifest") ) )
     {
-        if ( !m_bPackageFormat )
-            throw PropertyVetoException();
-
         if (!( aValue >>= bUseManifest ) )
             throw IllegalArgumentException();
     }
@@ -1479,6 +1643,9 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
 Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
+    if ( m_nFormat != PACKAGE_FORMAT )
+        throw UnknownPropertyException();
+
     Any aAny;
     if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "EncryptionKey" ) ) )
     {
