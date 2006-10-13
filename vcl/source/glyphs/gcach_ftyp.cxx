@@ -309,6 +309,8 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
     mnSynthetic( nSynthetic ),
     mnFontId( nFontId ),
     maDevFontAttributes( rDevFontAttributes ),
+    maChar2Glyph( 0 ),
+    maGlyph2Char( 0 ),
     mpExtraKernInfo( pExtraKernInfo )
 {
     // prefer font with low ID
@@ -1352,7 +1354,10 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 
         rc = FT_Glyph_To_Bitmap( &pGlyphFT, nRenderMode, NULL, TRUE );
         if( rc != FT_Err_Ok )
+        {
+            FT_Done_Glyph( pGlyphFT );
             return false;
+        }
     }
 
     const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(pGlyphFT);
@@ -1501,7 +1506,10 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     {
         rc = FT_Glyph_To_Bitmap( &pGlyphFT, FT_RENDER_MODE_NORMAL, NULL, TRUE );
         if( rc != FT_Err_Ok )
+        {
+            FT_Done_Glyph( pGlyphFT );
             return false;
+        }
     }
 
     const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(pGlyphFT);
