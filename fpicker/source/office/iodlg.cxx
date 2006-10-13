@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:47:29 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 09:41:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2654,21 +2654,26 @@ SvStringsDtor* SvtFileDialog::GetPathList() const
 void SvtFileDialog::implArrangeControls()
 {
     // this is the list of controls in the order they should be tabbed
-    // the focus is initially in the first control of this list
+    // from topleft to bottomright
+    // pb: #136070# new order so all LabeledBy relations are correct now
     Control* pControls[] =
     {
-        _pImp->_pFtFileName, _pImp->_pEdFileName, _pImp->_pFtFileVersion, _pImp->_pLbFileVersion,
-        _pImp->_pFtTemplates, _pImp->_pLbTemplates, _pImp->_pFtImageTemplates, _pImp->_pLbImageTemplates,
-        _pImp->_pFtFileType, _pImp->GetFilterListControl(),                             // edit fields/list boxes
-        _pImp->_pCbPassword, _pImp->_pCbAutoExtension, _pImp->_pCbOptions,              // checkboxes
-        _pCbReadOnly, _pCbLinkBox, _pCbPreviewBox, _pCbSelection, _pPbPlay,             // check boxes (continued)
-        _pImp->_pBtnFileOpen, _pImp->_pBtnCancel, _pImp->_pBtnHelp,                     // buttons
-        _pImp->_pBtnUp, _pImp->_pBtnNewFolder, _pImp->_pBtnStandard,                    // image buttons
-        _pFileView                                                                      // the file view
-    };
-        // (including the FixedTexts is important - not for tabbing order (they're irrelevant there), but for working
-        // keyboard shortcuts)
+        _pImp->_pFtCurrentPath,
+        _pImp->_pBtnUp, _pImp->_pBtnNewFolder, _pImp->_pBtnStandard,        // image buttons
+        _pFileView,                                                         // the file view
+        _pImp->_pFtFileName, _pImp->_pEdFileName,
+        _pImp->_pFtFileVersion, _pImp->_pLbFileVersion,
+        _pImp->_pFtTemplates, _pImp->_pLbTemplates,
+        _pImp->_pFtImageTemplates, _pImp->_pLbImageTemplates,
+        _pImp->_pFtFileType, _pImp->GetFilterListControl(),                 // edit fields/list boxes
+        _pImp->_pCbPassword, _pImp->_pCbAutoExtension, _pImp->_pCbOptions,  // checkboxes
+        _pCbReadOnly, _pCbLinkBox, _pCbPreviewBox, _pCbSelection, _pPbPlay, // check boxes (continued)
+        _pImp->_pBtnFileOpen, _pImp->_pBtnCancel, _pImp->_pBtnHelp          // buttons
+
+        // (including the FixedTexts is important - not for tabbing order (they're irrelevant there),
+        // but for working keyboard shortcuts)
         // 96861 - 23.01.2002 - fs@openoffice.org
+    };
 
     // loop through all these controls and adjust the z-order
     Window* pPreviousWin = NULL;
@@ -2686,6 +2691,9 @@ void SvtFileDialog::implArrangeControls()
 
         pPreviousWin = *pCurrent;
     }
+
+    // FileName edit not the first control but it should have the focus initially
+    _pImp->_pEdFileName->GrabFocus();
 }
 
 //*****************************************************************************
