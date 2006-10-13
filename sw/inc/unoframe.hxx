@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoframe.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:26:06 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:08:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,8 @@
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDOBJECTSUPPLIER_HPP_
-#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDOBJECTSUPPLIER2_HPP_
+#include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXTFRAME_HPP_
 #include <com/sun/star/text/XTextFrame.hpp>
@@ -294,10 +294,11 @@ public:
 /*-----------------20.02.98 11:28-------------------
 
 --------------------------------------------------*/
+class SwOLENode;
 typedef cppu::WeakImplHelper3
 <
     ::com::sun::star::text::XTextContent,
-    ::com::sun::star::document::XEmbeddedObjectSupplier,
+    ::com::sun::star::document::XEmbeddedObjectSupplier2,
     ::com::sun::star::document::XEventsSupplier
 >SwXTextEmbeddedObjectBaseClass;
 
@@ -306,6 +307,7 @@ class SwXTextEmbeddedObject : public SwXTextEmbeddedObjectBaseClass,
 {
 protected:
     virtual ~SwXTextEmbeddedObject();
+
 public:
     SwXTextEmbeddedObject( SwDoc *pDoc );
     SwXTextEmbeddedObject(SwFrmFmt& rFmt);
@@ -328,8 +330,12 @@ public:
     virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
 
-    //XEmbeddedObjectSupplier,
+    //XEmbeddedObjectSupplier2
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >  SAL_CALL getEmbeddedObject(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > SAL_CALL getExtendedControlOverEmbeddedObject(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::sal_Int64 SAL_CALL getAspect() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setAspect( ::sal_Int64 _aspect ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL getReplacementGraphic() throw (::com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
