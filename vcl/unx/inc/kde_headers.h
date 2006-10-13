@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kde_headers.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 10:27:42 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 08:33:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,12 +58,7 @@
 #include <qlineedit.h>
 #include <qlistview.h>
 #include <qmainwindow.h>
-
-/* Ugly hack to be able to access QMenuItem::is_enabled */
-#define private public
 #include <qmenudata.h>
-#undef private
-
 #include <qpaintdevice.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
