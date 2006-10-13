@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:48:50 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 10:59:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,7 +215,7 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 #define CTF_FONTWORK_SHADOWTRANSPARENCE 1033
 
 //////////////////////////////////////////////////////////////////////////////
-// OLE
+// OLE part 1
 #define CTF_SD_OLE_VIS_AREA_LEFT        1040
 #define CTF_SD_OLE_VIS_AREA_TOP         1041
 #define CTF_SD_OLE_VIS_AREA_WIDTH       1042
@@ -242,6 +242,11 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 #define CTF_DATE_TIME_TEXT              1056
 #define CTF_DATE_TIME_FORMAT            1057
 #define CTF_DATE_TIME_UPDATE            1058
+
+//////////////////////////////////////////////////////////////////////////////
+// OLE part 2
+#define CTF_SD_OLE_ASPECT               1059
+
 
 //////////////////////////////////////////////////////////////////////////////
 // enum maps for attributes
