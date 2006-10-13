@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:02:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:33:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2058,25 +2058,8 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
         else if ( pObj->ISA( SdrOle2Obj ) ) // OLE-Objekt
         {
             // TODO/LEAN: working with visual area needs running state
-            uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObj)->GetObjRef();
-            if ( xIPObj.is() )
-            {
-                try {
-                    awt::Size aSize = xIPObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
-                    aGraphSize = Size( aSize.Width, aSize.Height );
-                    bObjSupported = TRUE;
-                }
-                catch( embed::NoVisualAreaSizeException& )
-                {
-                    DBG_ERROR( "Couldn't get visual area of the object!\n" );
-                    aGraphSize = Size( 5000, 5000 );
-                    bObjSupported = TRUE;
-                }
-                catch( uno::Exception& )
-                {
-                    // TODO: error handling
-                }
-            }
+            aGraphSize = ((SdrOle2Obj*)pObj)->GetOrigObjSize();
+            bObjSupported = TRUE;
         }
 
         // hat alles geklappt, dann HitTest ausfuehren
