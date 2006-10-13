@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:28:04 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:37:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,7 +269,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 }
 
 BOOL ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::XEmbeddedObject >& xObj,
-                                const Size* pDescSize, const Graphic* pReplGraph, const ::rtl::OUString& aMediaType )
+                                const Size* pDescSize, const Graphic* pReplGraph, const ::rtl::OUString& aMediaType, sal_Int64 nAspect )
 {
     MakeDrawLayer();
     if ( xObj.is() )
@@ -282,43 +282,55 @@ BOOL ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
         else
             aName = aCnt.GetEmbeddedObjectName( xObj );
 
-        // working with visual area can switch object to running state
-        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-        MapUnit aMapObj = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-        MapUnit aMap100 = MAP_100TH_MM;
+        svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
+        if ( pReplGraph )
+            aObjRef.SetGraphic( *pReplGraph, aMediaType );
 
-        if ( pDescSize && pDescSize->Width() && pDescSize->Height() )
+        Size aSize;
+        if ( nAspect == embed::Aspects::MSOLE_ICON )
         {
-            // use size from object descriptor if given
-            Size aSize = OutputDevice::LogicToLogic( *pDescSize, aMap100, aMapObj );
+            MapMode aMapMode( MAP_100TH_MM );
+            aSize = aObjRef.GetSize( &aMapMode );
+        }
+        else
+        {
+            // working with visual area can switch object to running state
+            MapUnit aMapObj = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+            MapUnit aMap100 = MAP_100TH_MM;
+
+            if ( pDescSize && pDescSize->Width() && pDescSize->Height() )
+            {
+                // use size from object descriptor if given
+                aSize = OutputDevice::LogicToLogic( *pDescSize, aMap100, aMapObj );
+                awt::Size aSz;
+                aSz.Width = aSize.Width();
+                aSz.Height = aSize.Height();
+                xObj->setVisualAreaSize( nAspect, aSz );
+            }
+
             awt::Size aSz;
-            aSz.Width = aSize.Width();
-            aSz.Height = aSize.Height();
-            xObj->setVisualAreaSize( nAspect, aSz );
-        }
+            try
+            {
+                aSz = xObj->getVisualAreaSize( nAspect );
+            }
+            catch ( embed::NoVisualAreaSizeException& )
+            {
+                // the default size will be set later
+            }
 
-        awt::Size aSz;
-        try
-        {
-            aSz = xObj->getVisualAreaSize( nAspect );
-        }
-        catch ( embed::NoVisualAreaSizeException& )
-        {
-            // the default size will be set later
-        }
+            aSize = Size( aSz.Width, aSz.Height );
+            aSize = OutputDevice::LogicToLogic( aSize, aMapObj, aMap100 );  // fuer SdrOle2Obj
 
-        Size aSize( aSz.Width, aSz.Height );
-        aSize = OutputDevice::LogicToLogic( aSize, aMapObj, aMap100 );  // fuer SdrOle2Obj
-
-        if( aSize.Height() == 0 || aSize.Width() == 0 )
-        {
-            DBG_ERROR("SvObjectDescriptor::GetSize == 0");
-            aSize.Width() = 5000;
-            aSize.Height() = 5000;
-            aSize = OutputDevice::LogicToLogic( aSize, aMap100, aMapObj );
-            aSz.Width = aSize.Width();
-            aSz.Height = aSize.Height();
-            xObj->setVisualAreaSize( nAspect, aSz );
+            if( aSize.Height() == 0 || aSize.Width() == 0 )
+            {
+                DBG_ERROR("SvObjectDescriptor::GetSize == 0");
+                aSize.Width() = 5000;
+                aSize.Height() = 5000;
+                aSize = OutputDevice::LogicToLogic( aSize, aMap100, aMapObj );
+                aSz.Width = aSize.Width();
+                aSz.Height = aSize.Height();
+                xObj->setVisualAreaSize( nAspect, aSz );
+            }
         }
 
         // don't call AdjustInsertPos
@@ -328,9 +340,7 @@ BOOL ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
         Rectangle aRect( aInsPos, aSize );
 
         ScDrawView* pDrView = GetScDrawView();
-        SdrOle2Obj* pSdrObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect );
-        if ( pReplGraph )
-            pSdrObj->SetGraphicToObj( *pReplGraph, aMediaType );
+        SdrOle2Obj* pSdrObj = new SdrOle2Obj( aObjRef, aName, aRect );
 
         SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
         pDrView->InsertObjectSafe( pSdrObj, *pPV );             // nicht markieren wenn Ole
