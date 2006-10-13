@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:46:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:07:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -891,7 +891,7 @@ public:
     virtual bool Insert(const SwPaM &rRg, const SfxItemSet&, sal_uInt16 nFlags);
     virtual void ReRead(SwPaM&, const String& rGrfName, const String& rFltName, const Graphic* pGraphic, const GraphicObject* pGrfObj);
     virtual void TransliterateText(const SwPaM& rPaM, utl::TransliterationWrapper&);
-    virtual SwFlyFrmFmt* InsertOLE(const SwPaM &rRg, const String& rObjName, const SfxItemSet* pFlyAttrSet,
+    virtual SwFlyFrmFmt* InsertOLE(const SwPaM &rRg, const String& rObjName, sal_Int64 nAspect, const SfxItemSet* pFlyAttrSet,
                            const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
     virtual bool SplitNode(const SwPosition &rPos, bool bChkTableStart);
     virtual bool AppendTxtNode(SwPosition& rPos);
