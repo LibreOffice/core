@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontconfig.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:33:47 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 08:28:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -410,7 +410,7 @@ bool PrintFontManager::initFontconfig()
                 analyzeFontFile( nDirID, aBase, aDummy, aFonts );
 #if OSL_DEBUG_LEVEL > 1
                 if( aFonts.empty() )
-                    fprintf( stderr, "Warning: file is unusable to psprint\n" );
+                    fprintf( stderr, "Warning: file \"%s\" is unusable to psprint\n", aOrgPath.getStr() );
 #endif
             }
             if( aFonts.empty() )
