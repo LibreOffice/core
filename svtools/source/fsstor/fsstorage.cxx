@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fsstorage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:56:45 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:26:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,7 @@
 
 #include "fsstorage.hxx"
 #include "oinputstreamcontainer.hxx"
+#include "ostreamcontainer.hxx"
 
 using namespace ::com::sun::star;
 
@@ -399,6 +400,7 @@ uno::Any SAL_CALL FSStorage::queryInterface( const uno::Type& rType )
                 (   rType
                 ,   static_cast<lang::XTypeProvider*> ( this )
                 ,   static_cast<embed::XStorage*> ( this )
+                ,   static_cast<embed::XHierarchicalStorageAccess*> ( this )
                 ,   static_cast<container::XNameAccess*> ( this )
                 ,   static_cast<container::XElementAccess*> ( this )
                 ,   static_cast<lang::XComponent*> ( this )
@@ -439,6 +441,7 @@ uno::Sequence< uno::Type > SAL_CALL FSStorage::getTypes()
             m_pImpl->m_pTypeCollection = new ::cppu::OTypeCollection
                                 (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
                                 ,   ::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
+                                ,   ::getCppuType( ( const uno::Reference< embed::XHierarchicalStorageAccess >* )NULL )
                                 ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
         }
     }
@@ -597,7 +600,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
 
             ::ucb::Content aResultContent( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
             uno::Reference< io::XInputStream > xInStream = aResultContent.openStream();
-            xResult = static_cast< io::XStream* >( new OInputStreamContainer( xInStream ) );
+            xResult = static_cast< io::XStream* >( new OFSInputStreamContainer( xInStream ) );
         }
     }
     catch( embed::InvalidStorageException& )
@@ -1504,6 +1507,185 @@ void SAL_CALL FSStorage::removeVetoableChangeListener(
         throw lang::DisposedException();
 
     //TODO:
+}
+
+//____________________________________________________________________________________________________
+//  XHierarchicalStorageAccess
+//____________________________________________________________________________________________________
+//-----------------------------------------------
+uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamElementByHierarchicalName( const ::rtl::OUString& sStreamPath, ::sal_Int32 nOpenMode )
+        throw ( embed::InvalidStorageException,
+                lang::IllegalArgumentException,
+                packages::WrongPasswordException,
+                io::IOException,
+                embed::StorageWrappedTargetException,
+                uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( !m_pImpl )
+        throw lang::DisposedException();
+
+    if ( sStreamPath.toChar() == '/' )
+        throw lang::IllegalArgumentException();
+
+    if ( !GetContent() )
+        throw io::IOException(); // TODO: error handling
+
+    INetURLObject aBaseURL( m_pImpl->m_aURL );
+    if ( !aBaseURL.setFinalSlash() )
+        throw uno::RuntimeException();
+
+    INetURLObject aFileURL = INetURLObject::GetAbsURL(
+                aBaseURL.GetMainURL( INetURLObject::NO_DECODE ),
+                sStreamPath );
+
+    if ( ::utl::UCBContentHelper::IsFolder( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+        throw io::IOException();
+
+    if ( ( nOpenMode & embed::ElementModes::NOCREATE )
+      && !::utl::UCBContentHelper::IsDocument( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+        throw io::IOException(); // TODO:
+
+    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv; // TODO: provide InteractionHandler if any
+    uno::Reference< io::XStream > xResult;
+    try
+    {
+        if ( nOpenMode & embed::ElementModes::WRITE )
+        {
+            if ( isLocalFile_Impl( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+            {
+                uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
+                    m_pImpl->m_xFactory->createInstance(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" ) ) ),
+                    uno::UNO_QUERY_THROW );
+                uno::Reference< io::XStream > xStream =
+                    xSimpleFileAccess->openFileReadWrite( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) );
+
+                xResult = static_cast< io::XStream* >( new OFSStreamContainer( xStream ) );
+            }
+            else
+            {
+                // TODO: test whether it really works for http and fwp
+                SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL( INetURLObject::NO_DECODE ),
+                                                                          STREAM_STD_WRITE );
+                if ( pStream )
+                {
+                    if ( !pStream->GetError() )
+                    {
+                        uno::Reference< io::XStream > xStream =
+                            uno::Reference < io::XStream >( new ::utl::OStreamWrapper( *pStream ) );
+                        xResult = static_cast< io::XStream* >( new OFSStreamContainer( xStream ) );
+                    }
+                    else
+                        delete pStream;
+                }
+            }
+
+            if ( !xResult.is() )
+                throw io::IOException();
+
+            if ( ( nOpenMode & embed::ElementModes::TRUNCATE ) )
+            {
+                uno::Reference< io::XTruncate > xTrunc( xResult->getOutputStream(), uno::UNO_QUERY_THROW );
+                xTrunc->truncate();
+            }
+        }
+        else
+        {
+            if ( ( nOpenMode & embed::ElementModes::TRUNCATE )
+              || !::utl::UCBContentHelper::IsDocument( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+                throw io::IOException(); // TODO: access denied
+
+            ::ucb::Content aResultContent( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
+            uno::Reference< io::XInputStream > xInStream = aResultContent.openStream();
+            xResult = static_cast< io::XStream* >( new OFSInputStreamContainer( xInStream ) );
+        }
+    }
+    catch( embed::InvalidStorageException& )
+    {
+        throw;
+    }
+    catch( lang::IllegalArgumentException& )
+    {
+        throw;
+    }
+    catch( packages::WrongPasswordException& )
+    {
+        throw;
+    }
+    catch( embed::StorageWrappedTargetException& )
+    {
+        throw;
+    }
+    catch( io::IOException& )
+    {
+        throw;
+    }
+    catch( uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch( uno::Exception& )
+    {
+          uno::Any aCaught( ::cppu::getCaughtException() );
+        throw embed::StorageWrappedTargetException( ::rtl::OUString::createFromAscii( "Can't copy raw stream" ),
+                                                 uno::Reference< io::XInputStream >(),
+                                                 aCaught );
+    }
+
+    return uno::Reference< embed::XExtendedStorageStream >( xResult, uno::UNO_QUERY_THROW );
+}
+
+//-----------------------------------------------
+uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openEncryptedStreamElementByHierarchicalName( const ::rtl::OUString& /*sStreamName*/, ::sal_Int32 /*nOpenMode*/, const ::rtl::OUString& /*sPassword*/ )
+        throw ( embed::InvalidStorageException,
+                lang::IllegalArgumentException,
+                packages::NoEncryptionException,
+                packages::WrongPasswordException,
+                io::IOException,
+                embed::StorageWrappedTargetException,
+                uno::RuntimeException )
+{
+    throw packages::NoEncryptionException();
+}
+
+//-----------------------------------------------
+void SAL_CALL FSStorage::removeStreamElementByHierarchicalName( const ::rtl::OUString& sStreamPath )
+        throw ( embed::InvalidStorageException,
+                lang::IllegalArgumentException,
+                container::NoSuchElementException,
+                io::IOException,
+                embed::StorageWrappedTargetException,
+                uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( !m_pImpl )
+        throw lang::DisposedException();
+
+    if ( !GetContent() )
+        throw io::IOException(); // TODO: error handling
+
+    // TODO/LATER: may need possibility to create folder if it was removed, since the folder can not be locked
+    INetURLObject aBaseURL( m_pImpl->m_aURL );
+    if ( !aBaseURL.setFinalSlash() )
+        throw uno::RuntimeException();
+
+    INetURLObject aFileURL = INetURLObject::GetAbsURL(
+                aBaseURL.GetMainURL( INetURLObject::NO_DECODE ),
+                sStreamPath );
+
+    if ( !::utl::UCBContentHelper::IsDocument( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+    {
+        if ( ::utl::UCBContentHelper::IsFolder( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+            throw lang::IllegalArgumentException();
+        else
+            throw container::NoSuchElementException(); // TODO:
+    }
+
+    if ( !::utl::UCBContentHelper::Kill( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+        throw io::IOException(); // TODO: error handling
 }
 
 
