@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unokywds.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:16:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:02:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,6 +146,7 @@ SD_CONSTASCII_ACTION( sUNO_Prop_Background,             "Background" );
 SD_CONSTASCII_ACTION( sUNO_Prop_ForbiddenCharacters,    "ForbiddenCharacters" );
 SD_CONSTASCII_ACTION( sUNO_Prop_MapUnit,                "MapUnit" );
 SD_CONSTASCII_ACTION( sUNO_Prop_VisibleArea,            "VisibleArea" );
+SD_CONSTASCII_ACTION( sUNO_Prop_Aspect,                 "Aspect" );
 SD_CONSTASCII_ACTION( sUNO_Prop_TabStop,                "TabStop" );
 SD_CONSTASCII_ACTION( sUNO_Prop_CharLocale,             "CharLocale" );
 SD_CONSTASCII_ACTION( sUNO_Prop_AutomContFocus,         "AutomaticControlFocus" );
