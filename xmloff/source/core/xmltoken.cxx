@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:24:00 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 10:59:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -629,7 +629,7 @@ namespace xmloff { namespace token {
         TOKEN( "down",                            XML_DOWN ),
         TOKEN( "draft",                           XML_DRAFT ),
         TOKEN( "draw",                            XML_DRAW ),
-        TOKEN( "draw-aspect",                     XML_DRAW_ASPECT ),
+        TOKEN( "ole-draw-aspect",                 XML_DRAW_ASPECT ),
         TOKEN( "drawing",                         XML_DRAWING ),
         TOKEN( "drawings",                        XML_DRAWINGS ),
         TOKEN( "drawpool",                        XML_DRAWPOOL ),
