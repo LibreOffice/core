@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablemgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:21:46 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:12:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,7 +239,7 @@ void SwTableFUNC::InsertChart( SchMemChart& rData, const SfxItemSet *pSet )
             aCnt.CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aObjName );
     if ( xObj.is() )
     {
-        pSh->InsertOleObject( xObj );
+        pSh->InsertOleObject( ::svt::EmbeddedObjectRef( xObj, ::com::sun::star::embed::Aspects::MSOLE_CONTENT ) );
 
         //Den Namen der Table am OleNode setzen
         pSh->SetChartName( aName );
