@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:42:38 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:03:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,7 +232,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     }
 
     if( pSdrOleObj )
-        SvEmbedTransferHelper::FillTransferableObjectDescriptor( aObjDesc, pSdrOleObj->GetObjRef() );
+        SvEmbedTransferHelper::FillTransferableObjectDescriptor( aObjDesc, pSdrOleObj->GetObjRef(), pSdrOleObj->GetGraphic(), pSdrOleObj->GetAspect() );
     else
         pTransferable->GetWorkDocument()->GetDocSh()->FillTransferableObjectDescriptor( aObjDesc );
 
@@ -283,7 +283,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
         aDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
 
     if( pSdrOleObj )
-        SvEmbedTransferHelper::FillTransferableObjectDescriptor( aObjDesc, pSdrOleObj->GetObjRef() );
+        SvEmbedTransferHelper::FillTransferableObjectDescriptor( aObjDesc, pSdrOleObj->GetObjRef(), pSdrOleObj->GetGraphic(), pSdrOleObj->GetAspect() );
     else
         pDocSh->FillTransferableObjectDescriptor( aObjDesc );
 
