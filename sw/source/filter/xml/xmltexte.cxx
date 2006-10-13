@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:32:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:11:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,27 +322,31 @@ static void lcl_addURL ( SvXMLExport &rExport, const String &rURL,
     }
 }
 
-void lcl_addOutplaceProperties(
-        const uno::Reference < embed::XEmbeddedObject >& xObj,
+void lcl_addAspect(
+        const svt::EmbeddedObjectRef& rObj,
         const XMLPropertyState **pStates,
         const UniReference < XMLPropertySetMapper >& rMapper )
 {
     {
-        //TODO/LATER: only VisAreaSize is available!
-        //const Rectangle& rVisArea = pEmbed->GetVisArea();
-        awt::Size aSz;
-        try
-        {
-            aSz = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
-        }
-        catch( embed::NoVisualAreaSizeException& )
-        {
-            DBG_ERROR( "Can't get visual area size!\n" );
-            aSz.Width = 5000;
-            aSz.Height = 5000;
-        }
+        sal_Int64 nAspect = rObj.GetViewAspect();
 
-        if( aSz.Width && aSz.Height )
+        if ( nAspect )
+        {
+            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_DRAW_ASPECT ), uno::makeAny( nAspect ) );
+            pStates++;
+        }
+    }
+}
+
+void lcl_addOutplaceProperties(
+        const svt::EmbeddedObjectRef& rObj,
+        const XMLPropertyState **pStates,
+        const UniReference < XMLPropertySetMapper >& rMapper )
+{
+    {
+        Size aSize = rObj.GetSize();
+
+        if( aSize.Width() && aSize.Height() )
         {
             Any aAny;
             //aAny <<= (sal_Int32)rVisArea.Left();
@@ -356,22 +360,14 @@ void lcl_addOutplaceProperties(
             pStates++;
 
             //aAny <<= (sal_Int32)rVisArea.GetWidth();
-            aAny <<= aSz.Width;
+            aAny <<= (sal_Int32)aSize.Width();
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_WIDTH ), aAny );
             pStates++;
 
             //aAny <<= (sal_Int32)rVisArea.GetHeight();
-            aAny <<= aSz.Height;
+            aAny <<= (sal_Int32)aSize.Height();
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_HEIGHT ), aAny );
             pStates++;
-
-            //TODO/LATER: no aspect in object and wrong data type
-            //aAny <<= (sal_Int32)pEmbed->GetViewAspect();
-            aAny <<= (sal_Int32) embed::Aspects::MSOLE_CONTENT;
-            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_DRAW_ASPECT ), aAny );
-            pStates++;
-
-            // TODO: aspect
         }
     }
 }
@@ -452,26 +448,26 @@ void SwXMLTextParagraphExport::_collectTextEmbeddedAutoStyles(
         const Reference < XPropertySet > & rPropSet )
 {
     SwOLENode *pOLENd = GetNoTxtNode( rPropSet )->GetOLENode();
-    SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
-    SfxObjectShell *pPersist = pOLENd->GetDoc()->GetPersist();
-    ASSERT( pPersist, "no persist" );
-    uno::Reference < embed::XEmbeddedObject > xObj = pPersist->GetEmbeddedObjectContainer().GetEmbeddedObject( rOLEObj.GetCurrentPersistName() );
-    if( !xObj.is() )
+    svt::EmbeddedObjectRef& rObjRef = pOLENd->GetOLEObj().GetObject();
+    if( !rObjRef.is() )
         return;
 
-    const XMLPropertyState *aStates[7] = { 0, 0, 0, 0, 0, 0, 0 };
-    SvGlobalName aClassId( xObj->getClassID() );
+    const XMLPropertyState *aStates[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    SvGlobalName aClassId( rObjRef->getClassID() );
 
     if( aIFrameClassId == aClassId )
     {
-        lcl_addFrameProperties( xObj, aStates,
+        lcl_addFrameProperties( rObjRef.GetObject(), aStates,
                GetAutoFramePropMapper()->getPropertySetMapper() );
     }
     else if ( !SotExchange::IsInternal( aClassId ) )
     {
-        lcl_addOutplaceProperties( xObj, aStates,
+        lcl_addOutplaceProperties( rObjRef, aStates,
                GetAutoFramePropMapper()->getPropertySetMapper() );
     }
+
+    lcl_addAspect( rObjRef, aStates,
+           GetAutoFramePropMapper()->getPropertySetMapper() );
 
     Add( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, aStates );
 
@@ -489,12 +485,11 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
 {
     SwOLENode *pOLENd = GetNoTxtNode( rPropSet )->GetOLENode();
     SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
-    SfxObjectShell *pPersist = pOLENd->GetDoc()->GetPersist();
-    uno::Reference < embed::XEmbeddedObject > xObj = pPersist->GetEmbeddedObjectContainer().GetEmbeddedObject( rOLEObj.GetCurrentPersistName() );
-    if( !xObj.is() )
+    svt::EmbeddedObjectRef& rObjRef = rOLEObj.GetObject();
+    if( !rObjRef.is() )
         return;
 
-    SvGlobalName aClassId( xObj->getClassID() );
+    SvGlobalName aClassId( rObjRef->getClassID() );
 
     SvEmbeddedObjectTypes nType = SV_EMBEDDED_OWN;
     if( aPluginClassId == aClassId )
@@ -526,18 +521,21 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         aAny >>= sStyle;
     }
 
-    const XMLPropertyState *aStates[7] = { 0, 0, 0, 0, 0, 0, 0 };
+    const XMLPropertyState *aStates[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
     switch( nType )
     {
     case SV_EMBEDDED_FRAME:
-        lcl_addFrameProperties( xObj, aStates,
+        lcl_addFrameProperties( rObjRef.GetObject(), aStates,
             GetAutoFramePropMapper()->getPropertySetMapper() );
         break;
     case SV_EMBEDDED_OUTPLACE:
-        lcl_addOutplaceProperties( xObj, aStates,
+        lcl_addOutplaceProperties( rObjRef, aStates,
             GetAutoFramePropMapper()->getPropertySetMapper() );
         break;
     }
+
+    lcl_addAspect( rObjRef, aStates,
+        GetAutoFramePropMapper()->getPropertySetMapper() );
 
     OUString sAutoStyle( sStyle );
     sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, sStyle,
@@ -569,7 +567,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             {
                 try
                 {
-                    uno::Reference< embed::XLinkageSupport > xLinkage( xObj, uno::UNO_QUERY );
+                    uno::Reference< embed::XLinkageSupport > xLinkage( rObjRef.GetObject(), uno::UNO_QUERY );
                     bIsOwnLink = xLinkage.is() && xLinkage->isLink();
                     if ( bIsOwnLink )
                         sURL = xLinkage->getLinkURL();
@@ -631,9 +629,9 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     case SV_EMBEDDED_APPLET:
         {
             // It's an applet!
-            if( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
+            if( svt::EmbeddedObjectRef::TryRunningState( rObjRef.GetObject() ) )
             {
-                uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+                uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
                 ::rtl::OUString aStr;
                 Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCodeBase") );
                 aAny >>= aStr;
@@ -678,9 +676,9 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     case SV_EMBEDDED_PLUGIN:
         {
             // It's a plugin!
-            if ( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
+            if ( svt::EmbeddedObjectRef::TryRunningState( rObjRef.GetObject() ) )
             {
-                uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+                uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
                 ::rtl::OUString aStr;
                 Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("PluginURL") );
                 aAny >>= aStr;
@@ -697,9 +695,9 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     case SV_EMBEDDED_FRAME:
         {
             // It's a floating frame!
-            if ( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
+            if ( svt::EmbeddedObjectRef::TryRunningState( rObjRef.GetObject() ) )
             {
-                uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+                uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
                 ::rtl::OUString aStr;
                 Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameURL") );
                 aAny >>= aStr;
@@ -747,9 +745,9 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             break;
         case SV_EMBEDDED_APPLET:
             {
-                if ( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
+                if ( svt::EmbeddedObjectRef::TryRunningState( rObjRef.GetObject() ) )
                 {
-                    uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+                    uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
                     uno::Sequence < beans::PropertyValue > aProps;
                     aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCommands") );
                     aAny >>= aProps;
@@ -773,9 +771,9 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             break;
         case SV_EMBEDDED_PLUGIN:
             {
-                if ( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
+                if ( svt::EmbeddedObjectRef::TryRunningState( rObjRef.GetObject() ) )
                 {
-                    uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+                    uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
                     uno::Sequence < beans::PropertyValue > aProps;
                     aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("PluginCommands") );
                     aAny >>= aProps;
