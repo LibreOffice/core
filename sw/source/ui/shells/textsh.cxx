@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:17:47 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:12:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -399,7 +399,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             {
                 ::rtl::OUString aName;
                 comphelper::EmbeddedObjectContainer aCnt;
-                svt::EmbeddedObjectRef xObj( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aName ) );
+                svt::EmbeddedObjectRef xObj( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aName ), embed::Aspects::MSOLE_CONTENT );
                 if ( xObj.is() )
                 {
                     svt::EmbeddedObjectRef::TryRunningState( xObj.GetObject() );
@@ -464,7 +464,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
                 aApplImpl.CreateApplet(sClass, aEmptyStr, FALSE, sClassLocation, sBaseURL );
                 aApplImpl.FinishApplet();
-                xObj.Assign( aApplImpl.GetApplet() );
+                xObj.Assign( aApplImpl.GetApplet(), embed::Aspects::MSOLE_CONTENT );
                 if( aCommandList.Count() )
                 {
                     uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
@@ -486,7 +486,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             {
                 comphelper::EmbeddedObjectContainer aCnt;
                 ::rtl::OUString aName;
-                xObj.Assign( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aName ) );
+                xObj.Assign( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aName ),
+                            embed::Aspects::MSOLE_CONTENT );
                 svt::EmbeddedObjectRef::TryRunningState( xObj.GetObject() );
                 uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
                 if ( xSet.is() )
@@ -537,7 +538,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         {
             comphelper::EmbeddedObjectContainer aCnt;
             ::rtl::OUString aName;
-            xObj.Assign( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence(), aName ) );
+            xObj.Assign( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence(), aName ),
+                        embed::Aspects::MSOLE_CONTENT );
             svt::EmbeddedObjectRef::TryRunningState( xObj.GetObject() );
             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
             if ( xSet.is() )
