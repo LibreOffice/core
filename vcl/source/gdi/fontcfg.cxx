@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:00:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 08:31:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -411,7 +411,8 @@ FontSubstConfiguration* FontSubstConfiguration::get()
  *  FontSubstConfigItem::FontSubstConfigItem
  */
 
-FontSubstConfiguration::FontSubstConfiguration()
+FontSubstConfiguration::FontSubstConfiguration() :
+    maSubstHash( 300 )
 {
     try
     {
@@ -595,17 +596,20 @@ struct ImplFontAttrWeightSearchData
 
 static ImplFontAttrWeightSearchData const aImplWeightAttrSearchList[] =
 {
+// the attribute names are ordered by "first match wins"
+// e.g. "semilight" should wins over "semi"
 {   "extrablack",           WEIGHT_BLACK },
 {   "ultrablack",           WEIGHT_BLACK },
-{   "black",                WEIGHT_BLACK },
-{   "heavy",                WEIGHT_BLACK },
 {   "ultrabold",            WEIGHT_ULTRABOLD },
 {   "semibold",             WEIGHT_SEMIBOLD },
-{   "bold",                 WEIGHT_BOLD },
-{   "ultralight",           WEIGHT_ULTRALIGHT },
 {   "semilight",            WEIGHT_SEMILIGHT },
-{   "light",                WEIGHT_LIGHT },
+{   "semi",                 WEIGHT_SEMIBOLD },
 {   "demi",                 WEIGHT_SEMIBOLD },
+{   "black",                WEIGHT_BLACK },
+{   "bold",                 WEIGHT_BOLD },
+{   "heavy",                WEIGHT_BOLD },
+{   "ultralight",           WEIGHT_ULTRALIGHT },
+{   "light",                WEIGHT_LIGHT },
 {   "medium",               WEIGHT_MEDIUM },
 {   NULL,                   WEIGHT_DONTKNOW },
 };
@@ -942,6 +946,9 @@ static const enum_convert pWeightNames[] =
     { "light", WEIGHT_LIGHT },
     { "semilight", WEIGHT_SEMILIGHT },
     { "ultrabold", WEIGHT_ULTRABOLD },
+    { "semi", WEIGHT_SEMIBOLD },
+    { "demi", WEIGHT_SEMIBOLD },
+    { "heavy", WEIGHT_SEMIBOLD },
     { "unknown", WEIGHT_DONTKNOW },
     { "thin", WEIGHT_THIN },
     { "ultralight", WEIGHT_ULTRALIGHT }
@@ -977,7 +984,14 @@ void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Referen
                 {
                     OUString aSubst( pLine->getToken( 0, ';', nIndex ) );
                     if( aSubst.getLength() )
+                    {
+                        UniqueSubstHash::iterator aEntry = maSubstHash.find( aSubst );
+                        if (aEntry != maSubstHash.end())
+                            aSubst = *aEntry;
+                        else
+                            maSubstHash.insert( aSubst );
                         rSubstVector.push_back( aSubst );
+                    }
                 }
         }
     }
@@ -1232,7 +1246,8 @@ SettingsConfigItem* SettingsConfigItem::get()
 SettingsConfigItem::SettingsConfigItem()
         :
         ConfigItem( OUString( RTL_CONSTASCII_USTRINGPARAM( SETTINGS_CONFIGNODE ) ),
-                    CONFIG_MODE_DELAYED_UPDATE )
+                    CONFIG_MODE_DELAYED_UPDATE ),
+    m_aSettings( 0 )
 {
     getValues();
 }
@@ -1256,7 +1271,7 @@ void SettingsConfigItem::Commit()
     if( ! IsValidConfigMgr() )
         return;
 
-    std::hash_map< OUString, std::hash_map< OUString, OUString, OUStringHash >, OUStringHash >::const_iterator group;
+    std::hash_map< OUString, SmallOUStrMap, rtl::OUStringHash >::const_iterator group;
 
     for( group = m_aSettings.begin(); group != m_aSettings.end(); ++group )
     {
@@ -1265,7 +1280,7 @@ void SettingsConfigItem::Commit()
         Sequence< PropertyValue > aValues( group->second.size() );
         PropertyValue* pValues = aValues.getArray();
         int nIndex = 0;
-        std::hash_map< OUString, OUString, OUStringHash >::const_iterator it;
+        SmallOUStrMap::const_iterator it;
         for( it = group->second.begin(); it != group->second.end(); ++it )
         {
             String aName( aKeyName );
@@ -1300,9 +1315,10 @@ void SettingsConfigItem::getValues()
 
     m_aSettings.clear();
 
-    int i, j;
     Sequence< OUString > aNames( GetNodeNames( OUString() ) );
-    for( j = 0; j < aNames.getLength(); j++ )
+    m_aSettings.resize( aNames.getLength() );
+
+    for( int j = 0; j < aNames.getLength(); j++ )
     {
 #if OSL_DEBUG_LEVEL > 2
         fprintf( stderr, "found settings data for \"%s\"\n",
@@ -1323,7 +1339,7 @@ void SettingsConfigItem::getValues()
         }
         Sequence< Any > aValues( GetProperties( aSettingsKeys ) );
         const Any* pValue = aValues.getConstArray();
-        for( i = 0; i < aValues.getLength(); i++, pValue++ )
+        for( int i = 0; i < aValues.getLength(); i++, pValue++ )
         {
             if( pValue->getValueTypeClass() == TypeClass_STRING )
             {
@@ -1347,7 +1363,7 @@ void SettingsConfigItem::getValues()
 
 const OUString& SettingsConfigItem::getValue( const OUString& rGroup, const OUString& rKey ) const
 {
-    ::std::hash_map< OUString, ::std::hash_map< OUString, OUString, OUStringHash >, OUStringHash >::const_iterator group = m_aSettings.find( rGroup );
+    ::std::hash_map< OUString, SmallOUStrMap, rtl::OUStringHash >::const_iterator group = m_aSettings.find( rGroup );
     if( group == m_aSettings.end() || group->second.find( rKey ) == group->second.end() )
     {
         static OUString aEmpty;
