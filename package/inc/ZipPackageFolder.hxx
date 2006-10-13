@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 06:10:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:42:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,10 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_STRINGPAIR_HPP_
+#include <com/sun/star/beans/StringPair.hpp>
+#endif
+
 #ifndef _HASHMAPS_HXX
 #include <HashMaps.hxx>
 #endif
@@ -75,26 +79,30 @@ class ZipPackageFolder : public cppu::ImplInheritanceHelper2
 protected:
     ContentHash maContents;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xFactory;
-    sal_Bool m_bPackageFormat;
+    sal_Int16 m_nFormat;
 
 public:
 
     ZipPackageFolder( const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& xFactory,
-                      sal_Bool bPackageFormat,
+                      sal_Int16 nFormat,
                       sal_Bool bAllowRemoveOnInsert );
     virtual ~ZipPackageFolder();
 
+    void setChildStreamsTypeByExtension( const ::com::sun::star::beans::StringPair& aPair );
+
     void doInsertByName ( ZipPackageEntry *pEntry, sal_Bool bSetParent )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
     com::sun::star::packages::ContentInfo & doGetByName( const ::rtl::OUString& aName )
         throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
     static void copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource);
     static ::com::sun::star::uno::Sequence < sal_Int8 > static_getImplementationId()
     {
         return aImplementationId;
     }
 
-    void setPackageFormat_Impl( sal_Bool bPackageFormat ) { m_bPackageFormat = bPackageFormat; }
+    void setPackageFormat_Impl( sal_Int16 nFormat ) { m_nFormat = nFormat; }
     void setRemoveOnInsertMode_Impl( sal_Bool bRemove ) { this->mbAllowRemoveOnInsert = bRemove; }
 
     // Recursive functions
