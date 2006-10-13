@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:04:56 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 09:42:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,6 +155,12 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_LAYOUTMANAGEREVENTS_HPP_
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHHELPER_HPP_
+#include <com/sun/star/frame/XDispatchHelper.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -424,6 +430,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
                 xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY ))
         ,   m_xUIElementFactoryManager( Reference< ::com::sun::star::ui::XUIElementFactory >(
                 xServiceManager->createInstance( SERVICENAME_UIELEMENTFACTORYMANAGER ), UNO_QUERY ))
+        ,   m_bMenuBarCloser( sal_False )
         ,   m_xPersistentWindowStateSupplier( Reference< XNameAccess >(
                 xServiceManager->createInstance( SERVICENAME_WINDOWSTATECONFIGURATION ), UNO_QUERY ))
         ,   m_pGlobalSettings( 0 )
@@ -5784,7 +5791,7 @@ void LayoutManager::implts_updateMenuBarClose()
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
-    Reference <XStatusListener > xListener( m_xMenuBarCloseListener );
+    sal_Bool bShowCloser = m_bMenuBarCloser;
     Reference< css::awt::XWindow > xContainerWindow( m_xContainerWindow );
     aWriteLock.unlock();
 
@@ -5802,7 +5809,8 @@ void LayoutManager::implts_updateMenuBarClose()
             MenuBar* pMenuBar = pSysWindow->GetMenuBar();
             if ( pMenuBar )
             {
-                if ( xListener.is() )
+                // TODO remove link on FALSE ?!
+                if ( bShowCloser )
                 {
                     pMenuBar->ShowCloser( TRUE );
                     pMenuBar->SetCloserHdl( LINK( this, LayoutManager, MenuBarClose ));
@@ -5818,71 +5826,14 @@ void LayoutManager::implts_updateMenuBarClose()
 }
 
 
-void LayoutManager::implts_setMenuBarCloser( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& StatusListener )
-{
-    Reference< XEventListener > xOldListener;
-    Reference< XLayoutManager > xThis;
-
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
-    xOldListener = Reference< XEventListener >( m_xMenuBarCloseListener, UNO_QUERY );
-    m_xMenuBarCloseListener = StatusListener;
-    xThis = Reference< XLayoutManager >( static_cast< OWeakObject* >( this ), UNO_QUERY );
-    Reference< css::awt::XWindow > xContainerWindow( m_xContainerWindow );
-    aWriteLock.unlock();
-
-    if ( xContainerWindow.is() )
-    {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
-
-        Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
-        while ( pWindow && !pWindow->IsSystemWindow() )
-            pWindow = pWindow->GetParent();
-
-        if ( pWindow )
-        {
-            SystemWindow* pSysWindow = (SystemWindow *)pWindow;
-            MenuBar* pMenuBar = pSysWindow->GetMenuBar();
-            if ( pMenuBar )
-            {
-                pMenuBar->ShowCloser( TRUE );
-                pMenuBar->SetCloserHdl( LINK( this, LayoutManager, MenuBarClose ));
-            }
-        }
-    }
-
-    css::lang::EventObject aEvent;
-    aEvent.Source = xThis;
-    if ( xOldListener.is() )
-        xOldListener->disposing( aEvent );
-}
-
-void LayoutManager::implts_clearMenuBarCloser()
+void LayoutManager::implts_setMenuBarCloser(sal_Bool bCloserState)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
-    m_xMenuBarCloseListener = Reference< XStatusListener >();
-    Reference< css::awt::XWindow > xContainerWindow( m_xContainerWindow );
+    m_bMenuBarCloser = bCloserState;
     aWriteLock.unlock();
 
-    if ( xContainerWindow.is() )
-    {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
-        Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
-        while ( pWindow && !pWindow->IsSystemWindow() )
-            pWindow = pWindow->GetParent();
-
-        if ( pWindow )
-        {
-            SystemWindow* pSysWindow = (SystemWindow *)pWindow;
-            MenuBar* pMenuBar = pSysWindow->GetMenuBar();
-            if ( pMenuBar )
-            {
-                pMenuBar->SetCloserHdl( Link() );
-                pMenuBar->ShowCloser( FALSE );
-            }
-        }
-    }
+    implts_updateMenuBarClose();
 }
 
 sal_Int16 LayoutManager::implts_getCurrentSymbolsSize()
@@ -5916,17 +5867,22 @@ sal_Int16 LayoutManager::implts_getCurrentSymbolsStyle()
 IMPL_LINK( LayoutManager, MenuBarClose, MenuBar *, EMPTYARG )
 {
     ReadGuard aReadLock( m_aLock );
-    Reference< XStatusListener > xMenuBarCloseListener = m_xMenuBarCloseListener;
+    css::uno::Reference< css::frame::XDispatchProvider >   xProvider(m_xFrame, css::uno::UNO_QUERY);
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR    = m_xSMGR;
     aReadLock.unlock();
 
-    if ( xMenuBarCloseListener.is() )
-    {
-        Reference< XLayoutManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+    if (! xProvider.is())
+        return 0;
 
-        FeatureStateEvent aEvent;
-        aEvent.Source = xThis;
-        xMenuBarCloseListener->statusChanged( aEvent );
-    }
+    css::uno::Reference< css::frame::XDispatchHelper > xDispatcher(
+        xSMGR->createInstance(SERVICENAME_DISPATCHHELPER), css::uno::UNO_QUERY_THROW);
+
+    xDispatcher->executeDispatch(
+        xProvider,
+        ::rtl::OUString::createFromAscii(".uno:CloseWin"),
+        ::rtl::OUString::createFromAscii("_self"),
+        0,
+        css::uno::Sequence< css::beans::PropertyValue >());
 
     return 0;
 }
@@ -7137,7 +7093,7 @@ sal_Bool SAL_CALL LayoutManager::convertFastPropertyValue( Any&       aConverted
     {
         case LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER :
             bReturn = PropHelper::willPropertyBeChanged(
-                        com::sun::star::uno::makeAny(m_xMenuBarCloseListener),
+                        com::sun::star::uno::makeAny(m_bMenuBarCloser),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -7169,12 +7125,9 @@ void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32        
     {
         case LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER:
         {
-            Reference< XStatusListener > xListener;
-            aValue >>= xListener;
-            if ( xListener.is() )
-                implts_setMenuBarCloser( xListener );
-            else
-                implts_clearMenuBarCloser();
+            sal_Bool bCloserState = sal_False;
+            aValue >>= bCloserState;
+            implts_setMenuBarCloser( bCloserState );
             break;
         }
         case LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS:
@@ -7200,7 +7153,7 @@ void SAL_CALL LayoutManager::getFastPropertyValue( com::sun::star::uno::Any& aVa
     switch( nHandle )
     {
         case LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER:
-            aValue <<= m_xMenuBarCloseListener;
+            aValue <<= m_bMenuBarCloser;
             break;
         case LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS:
             aValue <<= m_bAutomaticToolbars;
