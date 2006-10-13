@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:29:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:52:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,15 +93,16 @@ using namespace com::sun::star::io;
 using namespace cppu;
 using namespace rtl;
 using namespace std;
+using namespace ::com::sun::star;
 using vos::ORef;
 
 Sequence < sal_Int8 > ZipPackageFolder::aImplementationId = Sequence < sal_Int8 > ();
 
 ZipPackageFolder::ZipPackageFolder ( const Reference< XMultiServiceFactory >& xFactory,
-                                     sal_Bool bPackageFormat,
+                                     sal_Int16 nFormat,
                                      sal_Bool bAllowRemoveOnInsert )
 : m_xFactory( xFactory )
-, m_bPackageFormat( bPackageFormat )
+, m_nFormat( nFormat )
 {
     OSL_ENSURE( m_xFactory.is(), "No factory is provided to the package folder!" );
 
@@ -125,6 +126,33 @@ ZipPackageFolder::ZipPackageFolder ( const Reference< XMultiServiceFactory >& xF
 
 ZipPackageFolder::~ZipPackageFolder()
 {
+}
+
+void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& aPair )
+{
+    ::rtl::OUString aExt;
+    if ( aPair.First.toChar() == (sal_Unicode)'.' )
+        aExt = aPair.First;
+    else
+        aExt = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) + aPair.First;
+
+    for ( ContentHash::const_iterator aCI = maContents.begin(), aEnd = maContents.end();
+          aCI != aEnd;
+          aCI++)
+    {
+        const OUString &rShortName = (*aCI).first;
+        const ContentInfo &rInfo = *(*aCI).second;
+
+        if ( rInfo.bFolder )
+            rInfo.pFolder->setChildStreamsTypeByExtension( aPair );
+        else
+        {
+            sal_Int32 nNameLength = rShortName.getLength();
+            sal_Int32 nExtLength = aExt.getLength();
+            if ( nNameLength >= nExtLength && rShortName.match( aExt, nNameLength - nExtLength ) )
+                rInfo.pStream->SetMediaType( aPair.Second );
+        }
+    }
 }
 
 void ZipPackageFolder::copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource)
@@ -272,7 +300,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
     sal_Bool bHaveEncryptionKey = rEncryptionKey.getLength() ? sal_True : sal_False;
 
-    if ( maContents.begin() == maContents.end() && rPath.getLength() )
+    if ( maContents.begin() == maContents.end() && rPath.getLength() && m_nFormat != OFOPXML_FORMAT )
     {
         // it is an empty subfolder, use workaround to store it
         ZipEntry* pTempEntry = new ZipEntry();
@@ -646,7 +674,10 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 pStream->aEntry.nOffset *= -1;
             }
         }
-        rManList.push_back (aPropSet);
+
+        // folder can have a mediatype only in package format
+        if ( m_nFormat == PACKAGE_FORMAT || ( m_nFormat == OFOPXML_FORMAT && !rInfo.bFolder ) )
+            rManList.push_back( aPropSet );
     }
 
     if( bWritingFailed )
@@ -696,8 +727,8 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName,
 {
     if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")))
     {
-        if ( !m_bPackageFormat )
-            throw PropertyVetoException();
+        if ( m_nFormat != PACKAGE_FORMAT )
+            throw UnknownPropertyException();
 
         aValue >>= sMediaType;
     }
@@ -710,7 +741,12 @@ Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+    {
+        if ( m_nFormat != PACKAGE_FORMAT )
+            throw UnknownPropertyException();
+
         return makeAny ( sMediaType );
+    }
     else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Size" ) ) )
         return makeAny ( aEntry.nSize );
     else
