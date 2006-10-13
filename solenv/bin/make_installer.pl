@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.71 $
+#   $Revision: 1.72 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-11 09:03:33 $
+#   last change: $Author: obo $ $Date: 2006-10-13 10:36:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,7 @@ use installer::scpzipfiles;
 use installer::scriptitems;
 use installer::servicesfile;
 use installer::setupscript;
+use installer::simplepackage;
 use installer::sorter;
 use installer::strip;
 use installer::worker;
@@ -221,6 +222,22 @@ if ( $installer::globals::globallogging ) { installer::files::save_hash($logging
 
 installer::ziplist::add_variables_to_allvariableshashref($allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3b.log", $allvariableshashref); }
+
+########################################################
+# Check if this is simple packaging mechanism
+########################################################
+
+installer::simplepackage::check_simple_packager_project($allvariableshashref);
+
+########################################################
+# Re-define logging dir, after all variables are set
+########################################################
+
+my $oldloggingdir = $loggingdir;
+installer::systemactions::remove_empty_directory($oldloggingdir);
+$loggingdir = installer::systemactions::create_directories("logging", "");
+$loggingdir = $loggingdir . $installer::globals::separator;
+$installer::globals::exitlog = $loggingdir;
 
 # checking, whether this is an opensource product
 
@@ -867,6 +884,12 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         installer::scriptitems::replace_setup_variables($profileitemsinproductlanguageresolvedarrayref, $languagestringref, $allvariableshashref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "profileitems4.log", $profileitemsinproductlanguageresolvedarrayref); }
 
+        if ( $installer::globals::is_simple_packager_project )
+        {
+            installer::scriptitems::replace_userdir_variable($profileitemsinproductlanguageresolvedarrayref);
+            if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "profileitems4a.log", $profileitemsinproductlanguageresolvedarrayref); }
+        }
+
         installer::scriptitems::get_Destination_Directory_For_Item_From_Directorylist($profilesinproductlanguageresolvedarrayref, $dirsinproductarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "profiles4.log", $profilesinproductlanguageresolvedarrayref); }
 
@@ -1014,6 +1037,19 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         installer::logger::print_message( "... creating inf files ...\n" );
         installer::worker::create_inf_file($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $folderinproductlanguageresolvedarrayref, $folderitemsinproductlanguageresolvedarrayref, $modulesinproductlanguageresolvedarrayref, $languagesarrayref, $languagestringref, $allvariableshashref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles16c.log", $filesinproductlanguageresolvedarrayref); }
+    }
+
+    ###########################################################
+    # Simple package projects can now start to create the
+    # installation structure by creating Directories, Files
+    # Links and ScpActions. This is the last platform
+    # independent part.
+    ###########################################################
+
+    if ( $installer::globals::is_simple_packager_project )
+    {
+        installer::simplepackage::create_simple_package($filesinproductlanguageresolvedarrayref, $directoriesforepmarrayref, $scpactionsinproductlanguageresolvedarrayref, $linksinproductlanguageresolvedarrayref, $loggingdir, $languagestringref, $shipinstalldir, $allsettingsarrayref, $allvariableshashref, $includepatharrayref);
+        next; # ! leaving the current loop, because no further packaging required.
     }
 
     if ( $installer::globals::debug ) { installer::logger::debuginfo("\nEnd of part 1b: The language dependent part\n"); }
