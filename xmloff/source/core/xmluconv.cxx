@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:39:47 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 10:59:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -710,7 +710,7 @@ void SvXMLUnitConverter::convertNumber( OUStringBuffer& rBuffer,
 /** convert string to number with optional min and max values */
 sal_Bool SvXMLUnitConverter::convertNumber( sal_Int32& rValue,
                                         const OUString& rString,
-                                        sal_Int32 /*nMin*/, sal_Int32 /*nMax*/ )
+                                        sal_Int32 nMin, sal_Int32 nMax )
 {
     sal_Bool bNeg = sal_False;
     rValue = 0;
@@ -742,7 +742,52 @@ sal_Bool SvXMLUnitConverter::convertNumber( sal_Int32& rValue,
     if( bNeg )
         rValue *= -1;
 
-    return nPos == nLen;
+    return ( nPos == nLen && rValue >= nMin && rValue <= nMax );
+}
+
+/** convert 64-bit number to string */
+void SvXMLUnitConverter::convertNumber64( OUStringBuffer& rBuffer,
+                                        sal_Int64 nNumber )
+{
+    rBuffer.append( nNumber );
+}
+
+/** convert string to 64-bit number with optional min and max values */
+sal_Bool SvXMLUnitConverter::convertNumber64( sal_Int64& rValue,
+                                        const OUString& rString,
+                                        sal_Int64 nMin, sal_Int64 nMax )
+{
+    sal_Bool bNeg = sal_False;
+    rValue = 0;
+
+    sal_Int32 nPos = 0L;
+    sal_Int32 nLen = rString.getLength();
+
+    // skip white space
+    while( (nPos < nLen) && (rString[nPos] <= sal_Unicode(' ')) )
+        nPos++;
+
+    if( nPos < nLen && sal_Unicode('-') == rString[nPos] )
+    {
+        bNeg = sal_True;
+        nPos++;
+    }
+
+    // get number
+    while( nPos < nLen &&
+           sal_Unicode('0') <= rString[nPos] &&
+           sal_Unicode('9') >= rString[nPos] )
+    {
+        // TODO: check overflow!
+        rValue *= 10;
+        rValue += (rString[nPos] - sal_Unicode('0'));
+        nPos++;
+    }
+
+    if( bNeg )
+        rValue *= -1;
+
+    return ( nPos == nLen && rValue >= nMin && rValue <= nMax );
 }
 
 /** convert double number to string (using ::rtl::math) */
