@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 11:06:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 09:42:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -443,8 +443,7 @@ namespace framework
             //---------------------------------------------------------------------------------------------------------
             void impl_clearUpMenuBar();
             void implts_reset( sal_Bool bAttach );
-            void implts_clearMenuBarCloser();
-            void implts_setMenuBarCloser( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& StatusListener );
+            void implts_setMenuBarCloser(sal_Bool bCloserState);
             void implts_updateMenuBarClose();
             void implts_lock();
             sal_Bool implts_unlock();
@@ -594,7 +593,7 @@ namespace framework
             com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >          m_xProgressBarBackup;
             css::uno::Reference< ::com::sun::star::frame::XModuleManager >              m_xModuleManager;
             css::uno::Reference< ::com::sun::star::ui::XUIElementFactory >              m_xUIElementFactoryManager;
-            css::uno::Reference< ::com::sun::star::frame::XStatusListener >             m_xMenuBarCloseListener;
+            sal_Bool                                                                    m_bMenuBarCloser : 1;
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowState;
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowStateSupplier;
             GlobalSettings*                                                             m_pGlobalSettings;
