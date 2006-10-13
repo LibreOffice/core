@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:51:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:08:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -971,8 +971,7 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, pTimer )
 
                 //Kennen wir nicht, also muss das Objekt geladen werden.
                 //Wenn es keine Benachrichtigung wuenscht
-                svt::EmbeddedObjectRef xObj = pOLENd->GetOLEObj().GetOleRef();
-                if( xObj.is() ) //Kaputt?
+                if( pOLENd->GetOLEObj().GetOleRef().is() ) //Kaputt?
                 {
                     //TODO/LATER: needs MiscStatus for ResizeOnPrinterChange
                     /*
