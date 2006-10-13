@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdclient.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:46:06 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:02:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,6 +161,16 @@ void Client::ObjectAreaChanged()
 
 void Client::ViewChanged()
 {
+    if ( GetAspect() == embed::Aspects::MSOLE_ICON )
+    {
+        // the iconified object seems not to need such a scaling handling
+        // since the replacement image and the size a completely controlled by the container
+        // TODO/LATER: when the icon exchange is implemented the scaling handling might be required again here
+
+        pSdrOle2Obj->ActionChanged(); // draw needs it to remove lines in slide preview
+        return;
+    }
+
     //TODO/LATER: should we try to avoid the recalculation of the visareasize
     //if we know that it didn't change?
     if (pViewShell->GetActiveWindow())
@@ -171,30 +181,10 @@ void Client::ViewChanged()
             // TODO/LEAN: maybe we can do this without requesting the VisualArea?
             // working with the visual area might need running state, so the object may switch itself to this state
             MapMode             aMap100( MAP_100TH_MM );
-            MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( GetObject()->getMapUnit( GetAspect() ) );
             Rectangle           aVisArea;
-            awt::Size aSz;
-            try
-            {
-                aSz = GetObject()->getVisualAreaSize( GetAspect() );
-            }
-            catch( embed::NoVisualAreaSizeException& e )
-            {
-                (void)e;
-                DBG_ERROR( "sd::Client::ViewChanged(), can not get visual area size!\n" );
-                aSz.Width = 5000;
-                aSz.Height = 5000;
-            }
-            catch( uno::Exception& e )
-            {
-                (void)e;
-                DBG_ERROR( "sd::Client::ViewChanged(), unexcpected exception catched!\n" );
-                aSz.Width = 5000;
-                aSz.Height = 5000;
-            }
+            Size aSize = pSdrOle2Obj->GetOrigObjSize( &aMap100 );
 
-            aVisArea.SetSize( Size( aSz.Width, aSz.Height ) );
-            aVisArea = OutputDevice::LogicToLogic( aVisArea, aMapUnit, aMap100 );
+            aVisArea.SetSize( aSize );
             Rectangle           aLogicRect( pSdrOle2Obj->GetLogicRect() );
             Size                aScaledSize( static_cast< long >( GetScaleWidth() * Fraction( aVisArea.GetWidth() ) ),
                                                 static_cast< long >( GetScaleHeight() * Fraction( aVisArea.GetHeight() ) ) );
