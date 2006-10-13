@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackageEntry.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:17:49 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:51:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ public:
     virtual ~ZipPackageEntry( void );
 
     ::rtl::OUString & GetMediaType () { return sMediaType; }
-    void SetMediaType ( ::rtl::OUString & sNewType) { sMediaType = sNewType; }
+    void SetMediaType ( const ::rtl::OUString & sNewType) { sMediaType = sNewType; }
     void doSetParent ( ZipPackageFolder * pNewParent, sal_Bool bInsert );
     bool IsFolder ( ) { return mbIsFolder; }
     ZipPackageFolder* GetParent ( ) { return pParent; }
