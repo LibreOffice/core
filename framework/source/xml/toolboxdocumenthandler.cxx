@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxdocumenthandler.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:45:09 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 09:43:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,8 +164,14 @@ ToolBarEntryProperty ToolBoxEntries[OReadToolBoxDocumentHandler::TB_XML_ENTRY_CO
 OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XIndexContainer >& rItemContainer ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
     ::cppu::OWeakObject(),
-    m_rItemContainer( rItemContainer )
-{
+    m_rItemContainer( rItemContainer ),
+    m_aType( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE )),
+    m_aLabel( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL )),
+    m_aStyle( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_STYLE )),
+    m_aHelpURL( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL )),
+    m_aIsVisible( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_VISIBLE )),
+    m_aCommandURL( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ))
+ {
     OUString aNamespaceToolBar( RTL_CONSTASCII_USTRINGPARAM( XMLNS_TOOLBAR ));
     OUString aNamespaceXLink( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK ));
     OUString aSeparator( RTL_CONSTASCII_USTRINGPARAM( XMLNS_FILTER_SEPARATOR ));
@@ -445,12 +451,12 @@ throw(  SAXException, RuntimeException )
                 if ( aCommandURL.getLength() > 0 )
                 {
                     Sequence< PropertyValue > aToolbarItemProp( 6 );
-                    aToolbarItemProp[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
-                    aToolbarItemProp[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL ));
-                    aToolbarItemProp[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL ));
-                    aToolbarItemProp[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
-                    aToolbarItemProp[4].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_STYLE ));
-                    aToolbarItemProp[5].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_VISIBLE ));
+                    aToolbarItemProp[0].Name = m_aCommandURL;
+                    aToolbarItemProp[1].Name = m_aHelpURL;
+                    aToolbarItemProp[2].Name = m_aLabel;
+                    aToolbarItemProp[3].Name = m_aType;
+                    aToolbarItemProp[4].Name = m_aStyle;
+                    aToolbarItemProp[5].Name = m_aIsVisible;
 
                     aToolbarItemProp[0].Value = makeAny( aCommandURL );
                     aToolbarItemProp[1].Value = makeAny( aHelpURL );
@@ -479,8 +485,8 @@ throw(  SAXException, RuntimeException )
                 m_bToolBarSpaceStartFound = sal_True;
 
                 Sequence< PropertyValue > aToolbarItemProp( 2 );
-                aToolbarItemProp[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
-                aToolbarItemProp[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
+                aToolbarItemProp[0].Name = m_aCommandURL;
+                aToolbarItemProp[1].Name = m_aType;
 
                 aToolbarItemProp[0].Value <<= rtl::OUString();
                 aToolbarItemProp[1].Value <<= ::com::sun::star::ui::ItemType::SEPARATOR_SPACE;
@@ -504,8 +510,8 @@ throw(  SAXException, RuntimeException )
                 m_bToolBarBreakStartFound = sal_True;
 
                 Sequence< PropertyValue > aToolbarItemProp( 2 );
-                aToolbarItemProp[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
-                aToolbarItemProp[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
+                aToolbarItemProp[0].Name = m_aCommandURL;
+                aToolbarItemProp[1].Name = m_aType;
 
                 aToolbarItemProp[0].Value <<= rtl::OUString();
                 aToolbarItemProp[1].Value <<= ::com::sun::star::ui::ItemType::SEPARATOR_LINEBREAK;
@@ -529,8 +535,8 @@ throw(  SAXException, RuntimeException )
                 m_bToolBarSeparatorStartFound = sal_True;
 
                 Sequence< PropertyValue > aToolbarItemProp( 2 );
-                aToolbarItemProp[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
-                aToolbarItemProp[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
+                aToolbarItemProp[0].Name = m_aCommandURL;
+                aToolbarItemProp[1].Name = m_aType;
 
                 aToolbarItemProp[0].Value <<= rtl::OUString();
                 aToolbarItemProp[1].Value <<= ::com::sun::star::ui::ItemType::SEPARATOR_LINE;
