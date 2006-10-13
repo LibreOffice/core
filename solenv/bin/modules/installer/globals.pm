@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-11 09:04:07 $
+#   last change: $Author: obo $ $Date: 2006-10-13 10:36:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,7 @@ BEGIN
     $epm_path = "";
     $epmoutpath = "";
     $simple = 0;
+    $simpledefaultuserdir = "\$ORIGIN/..";
     $call_epm = 1;
     $packageformat = "";
     $packagename = "";
@@ -196,6 +197,7 @@ BEGIN
     $oooversionstring = "";
 
     $is_copy_only_project = 0;
+    $is_simple_packager_project = 0;
     $addchildprojects = 0;
     $languagepack = 0;
     $tab = 0;
