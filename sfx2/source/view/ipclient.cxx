@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:49:34 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:39:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDPERSIST_HPP_
 #include <com/sun/star/embed/XEmbedPersist.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_EMBEDVERBS_HPP_
+#include <com/sun/star/embed/EmbedVerbs.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
@@ -220,7 +223,7 @@ void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& a
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    if ( m_pClient && aEvent.EventName.equalsAscii("OnVisAreaChanged") )
+    if ( m_pClient && aEvent.EventName.equalsAscii("OnVisAreaChanged") && m_nAspect != embed::Aspects::MSOLE_ICON )
     {
         m_pClient->ViewChanged();
         m_pClient->Invalidate();
@@ -374,7 +377,7 @@ sal_Bool SAL_CALL SfxInPlaceClient_Impl::canInplaceActivate()
         throw uno::RuntimeException();
 
     // we don't want to switch directly from outplace to inplace mode
-    if ( m_xObject->getCurrentState() == embed::EmbedStates::ACTIVE )
+    if ( m_xObject->getCurrentState() == embed::EmbedStates::ACTIVE || m_nAspect == embed::Aspects::MSOLE_ICON )
         return sal_False;
 
     return sal_True;
@@ -780,6 +783,13 @@ void SfxInPlaceClient::SetObjectState( sal_Int32 nState )
 {
     if ( GetObject().is() )
     {
+        if ( m_pImp->m_nAspect == embed::Aspects::MSOLE_ICON
+          && ( nState == embed::EmbedStates::UI_ACTIVE || nState == embed::EmbedStates::INPLACE_ACTIVE ) )
+        {
+            OSL_ENSURE( sal_False, "Iconified object should not be activated inplace!\n" );
+            return;
+        }
+
         try
         {
             GetObject()->changeState( nState );
@@ -989,7 +999,7 @@ SfxInPlaceClient* SfxInPlaceClient::GetClient( SfxObjectShell* pDoc, const com::
 
 sal_Int64 SfxInPlaceClient::GetAspect() const
 {
-    return embed::Aspects::MSOLE_CONTENT;
+    return m_pImp->m_nAspect;
 }
 
 ErrCode SfxInPlaceClient::DoVerb( long nVerb )
@@ -1035,36 +1045,48 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
 
         if ( !bSaveCopyAs )
         {
-            try
+            if ( m_pImp->m_nAspect == embed::Aspects::MSOLE_ICON )
             {
-                m_pImp->m_xObject->setClientSite( m_pImp->m_xClient );
-
-                m_pImp->m_xObject->doVerb( nVerb );
+                if ( nVerb == embed::EmbedVerbs::MS_OLEVERB_PRIMARY || nVerb == embed::EmbedVerbs::MS_OLEVERB_SHOW )
+                    nVerb = embed::EmbedVerbs::MS_OLEVERB_OPEN; // outplace activation
+                else if ( nVerb == embed::EmbedVerbs::MS_OLEVERB_UIACTIVATE
+                       || nVerb == embed::EmbedVerbs::MS_OLEVERB_IPACTIVATE )
+                    nError = ERRCODE_SO_GENERALERROR;
             }
-            catch ( embed::UnreachableStateException& )
+
+            if ( !nError )
             {
-                if ( nVerb == 0 )
+                try
                 {
-                    // a workaround for the default verb, usually makes sence for alien objects
-                    try
+                    m_pImp->m_xObject->setClientSite( m_pImp->m_xClient );
+
+                    m_pImp->m_xObject->doVerb( nVerb );
+                }
+                catch ( embed::UnreachableStateException& )
+                {
+                    if ( nVerb == 0 )
                     {
-                        m_pImp->m_xObject->doVerb( -9 ); // open own view, a workaround verb that is not visible
-                    }
-                    catch ( uno::Exception& )
-                    {
-                        nError = ERRCODE_SO_GENERALERROR;
+                        // a workaround for the default verb, usually makes sence for alien objects
+                        try
+                        {
+                            m_pImp->m_xObject->doVerb( -9 ); // open own view, a workaround verb that is not visible
+                        }
+                        catch ( uno::Exception& )
+                        {
+                            nError = ERRCODE_SO_GENERALERROR;
+                        }
                     }
                 }
-            }
-            catch ( embed::StateChangeInProgressException& )
-            {
-                // TODO/LATER: it would be nice to be able to provide the current target state outside
-                nError = ERRCODE_SO_CANNOT_DOVERB_NOW;
-            }
-            catch ( uno::Exception& )
-            {
-                nError = ERRCODE_SO_GENERALERROR;
-                //TODO/LATER: better error handling
+                catch ( embed::StateChangeInProgressException& )
+                {
+                    // TODO/LATER: it would be nice to be able to provide the current target state outside
+                    nError = ERRCODE_SO_CANNOT_DOVERB_NOW;
+                }
+                catch ( uno::Exception& )
+                {
+                    nError = ERRCODE_SO_GENERALERROR;
+                    //TODO/LATER: better error handling
+                }
             }
         }
     }
