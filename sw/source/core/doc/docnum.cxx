@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:26:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 12:19:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,6 +171,10 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     pOutlineRule->SetRuleType( OUTLINE_RULE );
     pOutlineRule->SetName( String::CreateFromAscii(
                                         SwNumRule::GetOutlineRuleName() ));
+    // --> OD 2006-09-21 #i69522#
+    // assure that the outline numbering rule is an automatic rule
+    pOutlineRule->SetAutoRule( TRUE );
+    // <--
 
     // teste ob die evt. gesetzen CharFormate in diesem Document
     // definiert sind
@@ -719,7 +723,13 @@ USHORT lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
         {
             // check for the outline num
             // --> OD 2005-11-02 #i51089 - TUNING#
-            if ( pNd->GetNum() )
+            // --> OD 2006-09-22 #i68289#
+            // Assure, that text node has the correct numbering level. Otherwise,
+            // its number vector will not fit to the searched level.
+//            if ( pNd->GetNum() )
+            if ( pNd->GetNum() &&
+                 pNd->GetLevel() == ( nLevel - 1 ) )
+            // <--
             {
                 const SwNodeNum & rNdNum = *(pNd->GetNum());
                 SwNodeNum::tNumberVector aLevelVal = rNdNum.GetNumberVector();
@@ -811,6 +821,21 @@ BOOL SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
             rPos.nContent.Assign( pNd, 0 );
             return TRUE;
         }
+
+        // --> OD 2006-09-22 #i68289#
+        // additional search on hyperlink URL without its outline numbering part
+        if ( !sName.Equals( rName ) )
+        {
+            nFndPos = ::lcl_FindOutlineName( GetNodes(), sName, FALSE );
+            if( USHRT_MAX != nFndPos )
+            {
+                SwTxtNode* pNd = rOutlNds[ nFndPos ]->GetTxtNode();
+                rPos.nNode = *pNd;
+                rPos.nContent.Assign( pNd, 0 );
+                return TRUE;
+            }
+        }
+        // <--
     }
     return FALSE;
 }
