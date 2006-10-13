@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:27:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:37:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,19 +108,7 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
         Rectangle aRect = pObj->GetLogicRect();
         Size aDrawSize = aRect.GetSize();
 
-        awt::Size aSz;
-        try
-        {
-            aSz = xObj->getVisualAreaSize( pClient->GetAspect() );
-        }
-        catch ( embed::NoVisualAreaSizeException& )
-        {
-            DBG_ERROR( "Can't get visual area size from the object!\n" );
-            aSz.Width = 5000;
-            aSz.Height = 5000;
-        }
-
-        Size aOleSize( aSz.Width, aSz.Height );
+        Size aOleSize = pObj->GetOrigObjSize();
 
         Fraction aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
         Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
@@ -161,34 +149,20 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             Rectangle aRect = pObj->GetLogicRect();
             Size aDrawSize = aRect.GetSize();
 
-            awt::Size aSz;
-            try
-            {
-                aSz = xObj->getVisualAreaSize( pClient->GetAspect() );
-            }
-            catch ( embed::NoVisualAreaSizeException& )
-            {
-                DBG_ERROR( "Can't get visual area size from the object!\n" );
-                aSz.Width = 5000;
-                aSz.Height = 5000;
-            }
+            MapMode aMapMode( MAP_100TH_MM );
+            Size aOleSize = pObj->GetOrigObjSize( &aMapMode );
 
-            Size aOleSize( aSz.Width, aSz.Height );
-            MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( pClient->GetAspect() ) );
-
-            aOleSize = OutputDevice::LogicToLogic( aOleSize,
-                                                   aUnit, MAP_100TH_MM );
-
-            if ( xObj->getStatus( pClient->GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE )
+            if ( pClient->GetAspect() != embed::Aspects::MSOLE_ICON
+              && ( xObj->getStatus( pClient->GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE ) )
             {
                 //  scale must always be 1 - change VisArea if different from client size
 
                 if ( aDrawSize != aOleSize )
                 {
+                    MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( pClient->GetAspect() ) );
                     aOleSize = OutputDevice::LogicToLogic( aDrawSize,
                                             MAP_100TH_MM, aUnit );
-                    aSz.Width = aOleSize.Width();
-                    aSz.Height = aOleSize.Height();
+                    awt::Size aSz( aOleSize.Width(), aOleSize.Height() );
                     xObj->setVisualAreaSize( pClient->GetAspect(), aSz );
                 }
                 Fraction aOne( 1, 1 );
