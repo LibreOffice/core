@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlexp2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:26:18 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:34:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,19 +195,12 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
         break;
         case OBJ_OLE2:
         {
-            uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-            DBG_ASSERT( xObj.is(), "WriteGraphEntry: no OLE ObjRef" );
-            if ( xObj.is() )
+            Graphic* pGraphic = ((SdrOle2Obj*)pObject)->GetGraphic();
+            if ( pGraphic )
             {
-                TransferableDataHelper aOleData( new SvEmbedTransferHelper( xObj ) );
-                GDIMetaFile aMtf;
-                if( aOleData.GetGDIMetaFile( FORMAT_GDIMETAFILE, aMtf ) )
-                {
-                    Graphic aGraph( aMtf );
-                    String aLinkName;
-                    WriteImage( aLinkName, aGraph, aOpt );
-                    pE->bWritten = TRUE;
-                }
+                String aLinkName;
+                WriteImage( aLinkName, *pGraphic, aOpt );
+                pE->bWritten = TRUE;
             }
         }
         break;
