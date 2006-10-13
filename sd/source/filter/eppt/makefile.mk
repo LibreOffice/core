@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:24:02 $
+#   last change: $Author: obo $ $Date: 2006-10-13 08:29:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,8 @@ SHL1LIBS	=	$(SLB)$/eppt.lib
 
 DEF1NAME=$(SHL1TARGET)
 
-SHL1STDLIBS = 	\
-                $(SVXLIB)			\
+SHL1STDLIBS = 	$(SVXLIB)			\
+                $(SVTOOLLIB)		\
                 $(SOTLIB)           \
                 $(GOODIESLIB)		\
                 $(VCLLIB)			\
@@ -73,7 +73,8 @@ SHL1STDLIBS = 	\
                 $(TOOLSLIB) 		\
                 $(UCBHELPERLIB)		\
                 $(CPPULIB)			\
-                $(SALLIB)
+                $(SALLIB)			\
+                $(COMPHELPERLIB)
 
 # --- Targets --------------------------------------------------------------
 
