@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:14:21 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:01:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1131,24 +1131,8 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
         }
         else if ( pObj->ISA( SdrOle2Obj ) ) // OLE-Objekt
         {
-            ::uno::Reference < embed::XEmbeddedObject > xObj( ( (SdrOle2Obj*) pObj )->GetObjRef() );
-            try
-            {
-                // the object can switch itself to RUNNING state in the following statement
-                awt::Size aSize = xObj->getVisualAreaSize( ( (SdrOle2Obj*) pObj )->GetAspect() );
-                aGraphSize = Size( aSize.Width, aSize.Height );
-                bObjSupported = TRUE;
-            }
-            catch( embed::NoVisualAreaSizeException& )
-            {
-                OSL_ASSERT( "Couldn't get visual area of the object!\n" );
-                aGraphSize = Size( 5000, 5000 );
-                bObjSupported = TRUE;
-            }
-            catch( uno::Exception& )
-            {
-                OSL_ASSERT( "Couldn't get visual area of the object!\n" );
-            }
+            aGraphSize = ( (SdrOle2Obj*) pObj )->GetOrigObjSize();
+            bObjSupported = TRUE;
         }
 
         // hat alles geklappt, dann HitTest ausfuehren
