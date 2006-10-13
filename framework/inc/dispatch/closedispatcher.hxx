@@ -4,9 +4,9 @@
  *
  *  $RCSfile: closedispatcher.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:49:59 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 09:41:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,6 @@ namespace framework{
  */
 class CloseDispatcher : public css::lang::XTypeProvider
                       , public css::frame::XNotifyingDispatch             // => XDispatch
-                      , public css::frame::XStatusListener                // => XEventListener
                       , public css::frame::XDispatchInformationProvider
                         // baseclasses ... order is neccessary for right initialization!
                       , private ThreadHelpBase
@@ -249,14 +248,6 @@ class CloseDispatcher : public css::lang::XTypeProvider
         // XDispatchInformationProvider
         virtual css::uno::Sequence< sal_Int16 >                       SAL_CALL getSupportedCommandGroups         (                         ) throw (css::uno::RuntimeException);
         virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) throw (css::uno::RuntimeException);
-
-        //---------------------------------------
-        // XStatusListener
-        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& aState ) throw(css::uno::RuntimeException);
-
-        //---------------------------------------
-        // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& aSource ) throw(css::uno::RuntimeException);
 
     //-------------------------------------------
     // internal helper
