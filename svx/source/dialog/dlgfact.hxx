@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:11:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:21:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -515,6 +515,7 @@ class AbstractInsertObjectDialog_Impl : public SfxAbstractInsertObjectDialog
 {
     DECL_ABSTDLG_BASE(AbstractInsertObjectDialog_Impl, InsertObjectDialog_Impl)
     virtual com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( ::rtl::OUString* pGraphicMediaType );
     virtual BOOL IsCreateNew();
 };
 
