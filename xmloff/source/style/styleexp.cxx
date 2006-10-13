@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styleexp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:57:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 12:15:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,30 +246,55 @@ sal_Bool XMLStyleExport::exportStyle(
                 OUString sListName;
                 aAny >>= sListName;
 
-                Reference< XChapterNumberingSupplier > xCNSupplier
-                    (GetExport().GetModel(), UNO_QUERY);
-
-                OUString sOutlineName;
-                if (xCNSupplier.is())
+                // --> OD 2006-09-21 #i69523#
+                // An direct set empty list style has to be written. Otherwise,
+                // this information is lost and causes an error, if the parent
+                // style has a list style set.
+                if ( !sListName.getLength() )
                 {
-                    Reference< XIndexReplace > xNumRule
-                        ( xCNSupplier->getChapterNumberingRules() );
-                    DBG_ASSERT( xNumRule.is(), "no chapter numbering rules" );
-
-                    if (xNumRule.is())
-                    {
-                        Reference< XPropertySet > xNumRulePropSet
-                            (xNumRule, UNO_QUERY);
-                        xNumRulePropSet->getPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("Name")) )
-                            >>= sOutlineName;
-                    }
-                }
-
-                if( sListName.getLength() && sListName != sOutlineName)
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                               XML_LIST_STYLE_NAME,
-                              GetExport().EncodeStyleName( sListName ) );
+                                              sListName /* empty string */);
+                }
+                else
+                {
+                    // --> OD 2006-09-27 #i69627#
+                    bool bSuppressListStyle( false );
+                    {
+                        if ( !GetExport().writeOutlineStyleAsNormalListStyle() )
+                        {
+                            Reference< XChapterNumberingSupplier > xCNSupplier
+                                (GetExport().GetModel(), UNO_QUERY);
+
+                            OUString sOutlineName;
+                            if (xCNSupplier.is())
+                            {
+                                Reference< XIndexReplace > xNumRule
+                                    ( xCNSupplier->getChapterNumberingRules() );
+                                DBG_ASSERT( xNumRule.is(), "no chapter numbering rules" );
+
+                                if (xNumRule.is())
+                                {
+                                    Reference< XPropertySet > xNumRulePropSet
+                                        (xNumRule, UNO_QUERY);
+                                    xNumRulePropSet->getPropertyValue(
+                                        OUString(RTL_CONSTASCII_USTRINGPARAM("Name")) )
+                                        >>= sOutlineName;
+                                    bSuppressListStyle = ( sListName == sOutlineName );
+                                }
+                            }
+                        }
+                    }
+
+                    if ( sListName.getLength() && !bSuppressListStyle )
+                    // <--
+                    {
+                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                                  XML_LIST_STYLE_NAME,
+                                  GetExport().EncodeStyleName( sListName ) );
+                    }
+                }
+                // <--
             }
         }
     }
