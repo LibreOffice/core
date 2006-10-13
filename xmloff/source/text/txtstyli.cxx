@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:20:10 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 12:17:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,9 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         else if( IsXMLToken( rLocalName, XML_LIST_STYLE_NAME ) )
         {
             sListStyleName = rValue;
+            // --> OD 2006-09-21 #i69523#
+            mbListStyleSet = sal_True;
+            // <--
         }
         else if( IsXMLToken( rLocalName, XML_MASTER_PAGE_NAME ) )
         {
@@ -192,6 +195,9 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
 ,   bAutoUpdate( sal_False )
 ,   bHasMasterPageName( sal_False )
 ,   bHasCombinedCharactersLetter( sal_False )
+// --> OD 2006-09-21 #i69523#
+,   mbListStyleSet( sal_False )
+// <--
 ,   pEventContext( NULL )
 {
 }
@@ -317,32 +323,54 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
     XMLPropStyleContext::Finish( bOverwrite );
 
     Reference < XStyle > xStyle = GetStyle();
-    if( !(sListStyleName.getLength() || sDropCapTextStyleName.getLength() ||
-        bHasMasterPageName) ||
-        !xStyle.is() || !(bOverwrite || IsNew()) )
+    // --> OD 2006-09-21 #i69523#
+    // consider set empty list style
+//    if ( !( sListStyleName.getLength() ||
+    if ( !( mbListStyleSet ||
+            sDropCapTextStyleName.getLength() ||
+            bHasMasterPageName ) ||
+         !xStyle.is() ||
+         !( bOverwrite || IsNew() ) )
         return;
+    // <--
 
     Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
                 xPropSet->getPropertySetInfo();
 
-    if( sListStyleName.getLength() )
+    // --> OD 2006-09-21 #i69523#
+    // consider set empty list style
+//    if( sListStyleName.getLength() )
+    if ( mbListStyleSet &&
+         xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
     {
-        // change list style name to display name
-        OUString sDisplayListStyleName(
-            GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_LIST,
-                                          sListStyleName ) );
-        // The families cointaner must exist
-        const Reference < XNameContainer >& rNumStyles =
-            GetImport().GetTextImport()->GetNumberingStyles();
-        if( rNumStyles.is() && rNumStyles->hasByName( sDisplayListStyleName ) &&
-            xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
+        if ( !sListStyleName.getLength() )
         {
             Any aAny;
-            aAny <<= sDisplayListStyleName;
+            aAny <<= sListStyleName /* empty string */;
             xPropSet->setPropertyValue( sNumberingStyleName, aAny );
         }
+        else
+        {
+            // change list style name to display name
+            OUString sDisplayListStyleName(
+                GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_LIST,
+                                              sListStyleName ) );
+            // The families container must exist
+            const Reference < XNameContainer >& rNumStyles =
+                GetImport().GetTextImport()->GetNumberingStyles();
+//            if( rNumStyles.is() && rNumStyles->hasByName( sDisplayListStyleName ) &&
+//                xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
+            if ( rNumStyles.is() &&
+                 rNumStyles->hasByName( sDisplayListStyleName ) )
+            {
+                Any aAny;
+                aAny <<= sDisplayListStyleName;
+                xPropSet->setPropertyValue( sNumberingStyleName, aAny );
+            }
+        }
     }
+    // <--
 
     if( sDropCapTextStyleName.getLength() )
     {
