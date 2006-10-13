@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:22:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:10:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <com/sun/star/embed/XEmbedPersist.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
@@ -221,8 +222,11 @@ bool SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
 
         ErrCode nErr = ERRCODE_NONE;
         Rectangle aVisArea;
+        sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT;
+        if ( pOLENd )
+            nAspect = pOLENd->GetAspect();
         SdrOle2Obj *pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-            rStorageName,xObjStg,pDoc->GetDocStorage(),aGraph,aRect,aVisArea,0,nErr,0);
+            rStorageName,xObjStg,pDoc->GetDocStorage(),aGraph,aRect,aVisArea,0,nErr,0,nAspect);
 
         if (pRet)
         {
@@ -343,7 +347,25 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                 waste time rewriting it
                 */
                 if (!bDuplicate)
-                    rWW8Wrt.GetOLEExp().ExportOLEObject( xObj, *xOleStg );
+                {
+                    sal_Int64 nAspect = pOLENd->GetAspect();
+                    svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
+                    rWW8Wrt.GetOLEExp().ExportOLEObject( aObjRef, *xOleStg );
+                    if ( nAspect == ::com::sun::star::embed::Aspects::MSOLE_ICON )
+                    {
+                        ::rtl::OUString aObjInfo( RTL_CONSTASCII_USTRINGPARAM( "\3ObjInfo" ) );
+                        if ( !xOleStg->IsStream( aObjInfo ) )
+                        {
+                            const BYTE pObjInfoData[] = { 0x40, 0x00, 0x03, 0x00 };
+                            SvStorageStreamRef rObjInfoStream = xOleStg->OpenSotStream( aObjInfo );
+                            if ( rObjInfoStream.Is() && !rObjInfoStream->GetError() )
+                            {
+                                rObjInfoStream->Write( pObjInfoData, sizeof( pObjInfoData ) );
+                                xOleStg->Commit();
+                            }
+                        }
+                    }
+                }
 
                 // write as embedded field - the other things will be done
                 // in the escher export
