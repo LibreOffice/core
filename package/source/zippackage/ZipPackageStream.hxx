@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackageStream.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:50:01 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:52:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,8 @@ protected:
 
     sal_Bool m_bHasSeekable;
 
+    sal_Bool m_bCompressedIsSetFromOutside;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& GetOwnSeekStream();
 
 public:
@@ -159,7 +161,7 @@ public:
 
     sal_Bool ParsePackageRawStream();
 
-    void setZipEntry( const ZipEntry &rInEntry);
+    void setZipEntryOnLoading( const ZipEntry &rInEntry);
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawData()
         throw(::com::sun::star::uno::RuntimeException);
 
