@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scfobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:35:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:34:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rect
             GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aName );
     if ( xObj.is() )
     {
-        SdrOle2Obj* pSdrOle2Obj = new SdrOle2Obj( xObj, aName, rRect );
+        SdrOle2Obj* pSdrOle2Obj = new SdrOle2Obj( ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), aName, rRect );
 
         ScDrawLayer* pModel = pDoc->GetDrawLayer();
         if (!pModel)
