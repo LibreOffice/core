@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:25:26 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 12:20:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1164,7 +1164,11 @@ void SwCntntFrm::Cut()
         {
             if ( pUp->GetUpper() )
             {
-                if( pUp->IsFtnFrm() )
+                // --> OD 2006-09-25 #b6448963#
+                // prevent delete of <ColLocked> footnote frame
+//                if( pUp->IsFtnFrm() )
+                if ( pUp->IsFtnFrm() && !pUp->IsColLocked())
+                // <--
                 {
                     if( pUp->GetNext() && !pUp->GetPrev() )
                     {
@@ -1177,12 +1181,16 @@ void SwCntntFrm::Cut()
                 }
                 else
                 {
-                    if( pSct->IsColLocked() || !pSct->IsInFtn() )
+                    // --> OD 2006-09-25 #b6448963#
+//                    if ( pSct->IsColLocked() || !pSct->IsInFtn() )
+                    if ( pSct->IsColLocked() || !pSct->IsInFtn() ||
+                         ( pUp->IsFtnFrm() && pUp->IsColLocked() ) )
+                    // <--
                     {
                         pSct->DelEmpty( FALSE );
-                    // Wenn ein gelockter Bereich nicht geloescht werden darf,
-                    // so ist zumindest seine Groesse durch das Entfernen seines
-                    // letzten Contents ungueltig geworden.
+                        // Wenn ein gelockter Bereich nicht geloescht werden darf,
+                        // so ist zumindest seine Groesse durch das Entfernen seines
+                        // letzten Contents ungueltig geworden.
                         pSct->_InvalidateSize();
                     }
                     else
