@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:32:38 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:11:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,7 +214,7 @@ static void lcl_setObjectVisualArea( const uno::Reference< embed::XEmbeddedObjec
                                     const Size& aVisSize,
                                     const MapUnit& aUnit )
 {
-    if( xObj.is() )
+    if( xObj.is() && nAspect != embed::Aspects::MSOLE_ICON )
     {
         // convert the visual area to the objects units
         MapUnit aObjUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
@@ -381,7 +381,11 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                     lcl_setObjectVisualArea( xObj, nAspect, aTwipSize, MAP_TWIP );
                 }
 
-                pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(), xObj, &aItemSet, NULL, NULL );
+                pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
+                                        ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
+                                        &aItemSet,
+                                        NULL,
+                                        NULL );
                 pOLENd = lcl_GetOLENode( pFrmFmt );
                 if( pOLENd )
                     aObjName = pOLENd->GetOLEObj().GetCurrentPersistName();
@@ -399,10 +403,10 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
                 pNd; pNd = (SwCntntNode*)aIter.Next() )
         {
-            SwOLENode* pOLENd = pNd->GetOLENode();
-            if( pOLENd )
+            SwOLENode* pExistingOLENd = pNd->GetOLENode();
+            if( pExistingOLENd )
             {
-                ::rtl::OUString aExistingName = pOLENd->GetOLEObj().GetCurrentPersistName();
+                ::rtl::OUString aExistingName = pExistingOLENd->GetOLEObj().GetCurrentPersistName();
                 if ( aExistingName.equals( aObjName ) )
                 {
                     OSL_ENSURE( sal_False, "The document contains duplicate object references, means it is partially broken, please let developers know how this document was generated!\n" );
@@ -428,7 +432,10 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         if ( !aName.Len() )
             aName = aObjName;
 
-        pFrmFmt = pDoc->InsertOLE( *pTxtCrsr->GetPaM(), aName, &aItemSet, NULL, NULL );
+        // the correct aspect will be set later
+        // TODO/LATER: Actually it should be set here
+        pFrmFmt = pDoc->InsertOLE( *pTxtCrsr->GetPaM(), aName, embed::Aspects::MSOLE_CONTENT, &aItemSet, NULL, NULL );
+        pOLENd = lcl_GetOLENode( pFrmFmt );
         aObjName = aName;
     }
 
@@ -524,7 +531,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         }
     }
 
-    sal_Int32 nDrawAspect = 0;
+    sal_Int64 nDrawAspect = 0;
     const XMLPropStyleContext *pStyle = 0;
     sal_Bool bHasSizeProps = sal_False;
     if( rStyleName.getLength() )
@@ -584,6 +591,12 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                     case CTF_OLE_DRAW_ASPECT:
                         {
                             rProp.maValue >>= nDrawAspect;
+
+                            if ( !nDrawAspect )
+                                nDrawAspect = embed::Aspects::MSOLE_CONTENT;
+
+                            if ( pOLENd )
+                                pOLENd->GetOLEObj().GetObject().SetViewAspect( nDrawAspect );
                         }
                         break;
                     }
@@ -671,8 +684,10 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
 
         {
             SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
-                                            xObj,
-                                            &aItemSet, NULL, NULL );
+                                            ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
+                                            &aItemSet,
+                                            NULL,
+                                            NULL );
 
             // TODO/LATER: in future may need a way to set replacement image url to the link ( may be even to the object ), needs oasis cws???
 
@@ -730,8 +745,10 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
                             MAP_100TH_MM );
 
     SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
-                                       aAppletImpl.GetApplet(),
-                                       &aAppletImpl.GetItemSet(), NULL, NULL);
+                                       ::svt::EmbeddedObjectRef( aAppletImpl.GetApplet(), embed::Aspects::MSOLE_CONTENT ),
+                                       &aAppletImpl.GetItemSet(),
+                                       NULL,
+                                       NULL);
     SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
     xPropSet = pXFrame;
     if( pDoc->GetDrawModel() )
@@ -803,8 +820,10 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
             }
 
             SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
-                                            xObj,
-                                            &aItemSet, NULL, NULL);
+                                            ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
+                                            &aItemSet,
+                                            NULL,
+                                            NULL);
             SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
             xPropSet = pXFrame;
             if( pDoc->GetDrawModel() )
@@ -954,8 +973,10 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
             }
 
             SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
-                                            xObj,
-                                            &aItemSet, NULL, NULL);
+                                            ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
+                                            &aItemSet,
+                                            NULL,
+                                            NULL);
             SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
             xPropSet = pXFrame;
             if( pDoc->GetDrawModel() )
