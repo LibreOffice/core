@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphconvert.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:22:03 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:30:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
 #endif
 
 #include "mtnotification.hxx"
@@ -108,9 +111,10 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
 // MainThreadNotificationRequest
 // =====================================================================
 
-MainThreadNotificationRequest::MainThreadNotificationRequest( OleEmbeddedObject* pObj )
+MainThreadNotificationRequest::MainThreadNotificationRequest( OleEmbeddedObject* pObj, sal_uInt32 nAspect )
 : m_pObject( pObj )
 , m_xObject( static_cast< embed::XEmbeddedObject* >( pObj ) )
+, m_nAspect( nAspect )
 {}
 
 void MainThreadNotificationRequest::mainThreadWorkerStart( MainThreadNotificationRequest* pMTRequest )
@@ -137,7 +141,10 @@ IMPL_STATIC_LINK_NOINSTANCE( MainThreadNotificationRequest, worker, MainThreadNo
                 {
                     // this is the main thread, the solar mutex must be locked
                     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-                    pMTRequest->m_pObject->OnViewChanged_Impl();
+                    if ( pMTRequest->m_nAspect == embed::Aspects::MSOLE_CONTENT )
+                        pMTRequest->m_pObject->OnViewChanged_Impl();
+                    else if ( pMTRequest->m_nAspect == embed::Aspects::MSOLE_ICON )
+                        pMTRequest->m_pObject->OnIconChanged_Impl();
                 }
             }
             catch( uno::Exception& )
