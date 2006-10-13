@@ -93,10 +93,6 @@ public class TestHelper  {
             return false;
         }
 
-        // free the stream resources, garbage collector may remove the object too late
-        if ( !disposeStream( xStream, sStreamName ) )
-            return false;
-
         return true;
     }
 
@@ -125,7 +121,14 @@ public class TestHelper  {
             return false;
         }
 
-        return WriteBytesToStream( xSubStream, sStreamName, sMediaType, bCompressed, pBytes );
+        if ( !WriteBytesToStream( xSubStream, sStreamName, sMediaType, bCompressed, pBytes ) )
+            return false;
+
+        // free the stream resources, garbage collector may remove the object too late
+        if ( !disposeStream( xSubStream, sStreamName ) )
+            return false;
+
+        return true;
     }
 
     public boolean WriteBytesToEncrSubstream( XStorage xStorage,
@@ -153,7 +156,14 @@ public class TestHelper  {
             return false;
         }
 
-        return WriteBytesToStream( xSubStream, sStreamName, sMediaType, bCompressed, pBytes );
+        if ( !WriteBytesToStream( xSubStream, sStreamName, sMediaType, bCompressed, pBytes ) )
+            return false;
+
+        // free the stream resources, garbage collector may remove the object too late
+        if ( !disposeStream( xSubStream, sStreamName ) )
+            return false;
+
+        return true;
     }
 
     public boolean WBToSubstrOfEncr( XStorage xStorage,
@@ -200,7 +210,223 @@ public class TestHelper  {
             return false;
         }
 
-        return WriteBytesToStream( xSubStream, sStreamName, sMediaType, bCompressed, pBytes );
+        if ( !WriteBytesToStream( xSubStream, sStreamName, sMediaType, bCompressed, pBytes ) )
+            return false;
+
+        // free the stream resources, garbage collector may remove the object too late
+        if ( !disposeStream( xSubStream, sStreamName ) )
+            return false;
+
+        return true;
+    }
+
+    public boolean WriteBytesToStreamH( XStorage xStorage,
+                                          String sStreamPath,
+                                          String sMediaType,
+                                          boolean bCompressed,
+                                          byte[] pBytes,
+                                          boolean bCommit )
+    {
+        // open substream element
+        XStream xSubStream = null;
+        try
+        {
+            XHierarchicalStorageAccess xHStorage =
+                (XHierarchicalStorageAccess) UnoRuntime.queryInterface( XHierarchicalStorageAccess.class, xStorage );
+            if ( xHStorage == null )
+            {
+                Error( "The storage does not support hierarchical access!" );
+                return false;
+            }
+
+            Object oSubStream = xHStorage.openStreamElementByHierarchicalName( sStreamPath, ElementModes.WRITE );
+            xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
+            if ( xSubStream == null )
+            {
+                Error( "Can't create substream '" + sStreamPath + "'!" );
+                return false;
+            }
+        }
+        catch( Exception e )
+        {
+            Error( "Can't create substream '" + sStreamPath + "', exception : " + e + "!" );
+            return false;
+        }
+
+        if ( !WriteBytesToStream( xSubStream, sStreamPath, sMediaType, bCompressed, pBytes ) )
+            return false;
+
+        XTransactedObject xTransact =
+            (XTransactedObject) UnoRuntime.queryInterface( XTransactedObject.class, xSubStream );
+        if ( xTransact == null )
+        {
+            Error( "Substream '" + sStreamPath + "', stream opened for writing must be transacted!" );
+            return false;
+        }
+
+        if ( bCommit )
+        {
+            try {
+                xTransact.commit();
+            } catch( Exception e )
+            {
+                Error( "Can't commit storage after substream '" + sStreamPath + "' change, exception : " + e + "!" );
+                return false;
+            }
+        }
+
+        // free the stream resources, garbage collector may remove the object too late
+        if ( !disposeStream( xSubStream, sStreamPath ) )
+            return false;
+
+        return true;
+    }
+
+    public boolean WriteBytesToEncrStreamH( XStorage xStorage,
+                                          String sStreamPath,
+                                          String sMediaType,
+                                          boolean bCompressed,
+                                          byte[] pBytes,
+                                          String sPass,
+                                          boolean bCommit )
+    {
+        // open substream element
+        XStream xSubStream = null;
+        try
+        {
+            XHierarchicalStorageAccess xHStorage =
+                (XHierarchicalStorageAccess) UnoRuntime.queryInterface( XHierarchicalStorageAccess.class, xStorage );
+            if ( xHStorage == null )
+            {
+                Error( "The storage does not support hierarchical access!" );
+                return false;
+            }
+
+            Object oSubStream = xHStorage.openEncryptedStreamElementByHierarchicalName( sStreamPath,
+                                                                                        ElementModes.WRITE,
+                                                                                        sPass );
+            xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
+            if ( xSubStream == null )
+            {
+                Error( "Can't create substream '" + sStreamPath + "'!" );
+                return false;
+            }
+        }
+        catch( Exception e )
+        {
+            Error( "Can't create substream '" + sStreamPath + "', exception : " + e + "!" );
+            return false;
+        }
+
+        if ( !WriteBytesToStream( xSubStream, sStreamPath, sMediaType, bCompressed, pBytes ) )
+            return false;
+
+        XTransactedObject xTransact =
+            (XTransactedObject) UnoRuntime.queryInterface( XTransactedObject.class, xSubStream );
+        if ( xTransact == null )
+        {
+            Error( "Substream '" + sStreamPath + "', stream opened for writing must be transacted!" );
+            return false;
+        }
+
+        if ( bCommit )
+        {
+            try {
+                xTransact.commit();
+            } catch( Exception e )
+            {
+                Error( "Can't commit storage after substream '" + sStreamPath + "' change, exception : " + e + "!" );
+                return false;
+            }
+        }
+
+        // free the stream resources, garbage collector may remove the object too late
+        if ( !disposeStream( xSubStream, sStreamPath ) )
+            return false;
+
+        return true;
+    }
+
+    public boolean WBToSubstrOfEncrH( XStorage xStorage,
+                                      String sStreamPath,
+                                      String sMediaType,
+                                      boolean bCompressed,
+                                      byte[] pBytes,
+                                      boolean bEncrypted,
+                                      boolean bCommit )
+    {
+        // open substream element
+        XStream xSubStream = null;
+        try
+        {
+            XHierarchicalStorageAccess xHStorage =
+                (XHierarchicalStorageAccess) UnoRuntime.queryInterface( XHierarchicalStorageAccess.class, xStorage );
+            if ( xHStorage == null )
+            {
+                Error( "The storage does not support hierarchical access!" );
+                return false;
+            }
+
+            Object oSubStream = xHStorage.openStreamElementByHierarchicalName( sStreamPath, ElementModes.WRITE );
+            xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
+            if ( xSubStream == null )
+            {
+                Error( "Can't create substream '" + sStreamPath + "'!" );
+                return false;
+            }
+        }
+        catch( Exception e )
+        {
+            Error( "Can't create substream '" + sStreamPath + "', exception : " + e + "!" );
+            return false;
+        }
+
+        // get access to the XPropertySet interface
+        XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, xSubStream );
+        if ( xPropSet == null )
+        {
+            Error( "Can't get XPropertySet implementation from substream '" + sStreamPath + "'!" );
+            return false;
+        }
+
+        // set properties to the stream
+        try
+        {
+            xPropSet.setPropertyValue( "UseCommonStoragePasswordEncryption", new Boolean( bEncrypted ) );
+        }
+        catch( Exception e )
+        {
+            Error( "Can't set 'UseCommonStoragePasswordEncryption' property to substream '" + sStreamPath + "', exception: " + e );
+            return false;
+        }
+
+        if ( !WriteBytesToStream( xSubStream, sStreamPath, sMediaType, bCompressed, pBytes ) )
+            return false;
+
+        XTransactedObject xTransact =
+            (XTransactedObject) UnoRuntime.queryInterface( XTransactedObject.class, xSubStream );
+        if ( xTransact == null )
+        {
+            Error( "Substream '" + sStreamPath + "', stream opened for writing must be transacted!" );
+            return false;
+        }
+
+        if ( bCommit )
+        {
+            try {
+                xTransact.commit();
+            } catch( Exception e )
+            {
+                Error( "Can't commit storage after substream '" + sStreamPath + "' change, exception : " + e + "!" );
+                return false;
+            }
+        }
+
+        // free the stream resources, garbage collector may remove the object too late
+        if ( !disposeStream( xSubStream, sStreamPath ) )
+            return false;
+
+        return true;
     }
 
     public int ChangeStreamPass( XStorage xStorage,
@@ -248,6 +474,83 @@ public class TestHelper  {
 
         // free the stream resources, garbage collector may remove the object too late
         if ( !disposeStream( xSubStream, sStreamName ) )
+            return 0;
+
+        return 1;
+    }
+
+    public int ChangeStreamPassH( XStorage xStorage,
+                                 String sPath,
+                                 String sOldPass,
+                                 String sNewPass,
+                                 boolean bCommit )
+    {
+        // open substream element
+        XHierarchicalStorageAccess xHStorage =
+            (XHierarchicalStorageAccess) UnoRuntime.queryInterface( XHierarchicalStorageAccess.class, xStorage );
+        if ( xHStorage == null )
+        {
+            Error( "The storage does not support hierarchical access!" );
+            return 0;
+        }
+
+        XStream xSubStream = null;
+        try
+        {
+            Object oSubStream = xHStorage.openEncryptedStreamElementByHierarchicalName( sPath, ElementModes.WRITE, sOldPass );
+            xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
+            if ( xSubStream == null )
+            {
+                Error( "Can't open encrypted substream '" + sPath + "'!" );
+                return 0;
+            }
+        }
+        catch( Exception e )
+        {
+            Error( "Can't open encrypted substream '" + sPath + "', exception : " + e + "!" );
+            return 0;
+        }
+
+        // change the password for the stream
+        XEncryptionProtectedSource xStreamEncryption =
+                (XEncryptionProtectedSource) UnoRuntime.queryInterface( XEncryptionProtectedSource.class, xSubStream );
+
+        if ( xStreamEncryption == null )
+        {
+            Message( "Optional interface XEncryptionProtectedSource is not implemented, feature can not be tested!" );
+            return -1;
+        }
+
+        try {
+            xStreamEncryption.setEncryptionPassword( sNewPass );
+        }
+        catch( Exception e )
+        {
+            Error( "Can't change encryption key of the substream '" + sPath + "', exception:" + e );
+            return 0;
+        }
+
+        XTransactedObject xTransact =
+            (XTransactedObject) UnoRuntime.queryInterface( XTransactedObject.class, xSubStream );
+        if ( xTransact == null )
+        {
+            Error( "Substream '" + sPath + "', stream opened for writing must be transacted!" );
+            return 0;
+        }
+
+        if ( bCommit )
+        {
+            try {
+                xTransact.commit();
+            } catch( Exception e )
+            {
+                Error( "Can't commit storage after substream '" + sPath + "' change, exception : " + e + "!" );
+                return 0;
+            }
+        }
+
+        // free the stream resources, garbage collector may remove the object too late
+        if ( !disposeStream( xSubStream, sPath ) )
             return 0;
 
         return 1;
@@ -393,7 +696,7 @@ public class TestHelper  {
             if ( pBytes[ind] != pContents[0][ind] )
             {
                 Error( "SubStream '" + sName + "' contains wrong data! ( byte num. "
-                        + ind + " should be" + pBytes[ind] + " but it is " + pContents[0][ind] + ")" );
+                        + ind + " should be " + pBytes[ind] + " but it is " + pContents[0][ind] + ")" );
                 return false;
             }
         }
@@ -530,6 +833,120 @@ public class TestHelper  {
 
         // free the stream resources, garbage collector may remove the object too late
         if ( !disposeStream( xSubStream, sName ) )
+            return false;
+
+        return bResult;
+    }
+
+    public boolean checkStreamH( XStorage xParentStorage,
+                                String sPath,
+                                String sMediaType,
+                                byte[] pBytes )
+    {
+        // open substream element first
+        XStream xSubStream = null;
+        try
+        {
+            XHierarchicalStorageAccess xHStorage =
+                (XHierarchicalStorageAccess) UnoRuntime.queryInterface( XHierarchicalStorageAccess.class, xParentStorage );
+            if ( xHStorage == null )
+            {
+                Error( "The storage does not support hierarchical access!" );
+                return false;
+            }
+
+            Object oSubStream = xHStorage.openStreamElementByHierarchicalName( sPath, ElementModes.READ );
+            xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
+            if ( xSubStream == null )
+            {
+                Error( "Can't open substream '" + sPath + "'!" );
+                return false;
+            }
+        }
+        catch( Exception e )
+        {
+            Error( "Can't open substream '" + sPath + "', exception : " + e + "!" );
+            return false;
+        }
+
+        boolean bResult = InternalCheckStream( xSubStream, sPath, sMediaType, pBytes );
+
+        // free the stream resources, garbage collector may remove the object too late
+        if ( !disposeStream( xSubStream, sPath ) )
+            return false;
+
+        return bResult;
+    }
+
+    public boolean checkEncrStreamH( XStorage xParentStorage,
+                                    String sPath,
+                                    String sMediaType,
+                                    byte[] pBytes,
+                                    String sPass )
+    {
+        // Important: a common password for any of parent storage should not be set or
+        //            should be different from sPass
+        XHierarchicalStorageAccess xHStorage =
+            (XHierarchicalStorageAccess) UnoRuntime.queryInterface( XHierarchicalStorageAccess.class, xParentStorage );
+        if ( xHStorage == null )
+        {
+            Error( "The storage does not support hierarchical access!" );
+            return false;
+        }
+
+        try
+        {
+            Object oSubStream = xHStorage.openStreamElementByHierarchicalName( sPath, ElementModes.READ );
+            XStream xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
+            Error( "Encrypted substream '" + sPath + "' was opened without password!" );
+            return false;
+        }
+        catch( WrongPasswordException wpe )
+        {}
+        catch( Exception e )
+        {
+            Error( "Unexpected exception in case of opening of encrypted stream '" + sPath + "' without password: " + e + "!" );
+            return false;
+        }
+
+        String sWrongPass = "11";
+        sWrongPass += sPass;
+        try
+        {
+            Object oSubStream = xHStorage.openEncryptedStreamElementByHierarchicalName( sPath, ElementModes.READ, sWrongPass );
+            XStream xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
+            Error( "Encrypted substream '" + sPath + "' was opened with wrong password!" );
+            return false;
+        }
+        catch( WrongPasswordException wpe )
+        {}
+        catch( Exception e )
+        {
+            Error( "Unexpected exception in case of opening of encrypted stream '" + sPath + "' with wrong password: " + e + "!" );
+            return false;
+        }
+
+        XStream xSubStream = null;
+        try
+        {
+            Object oSubStream = xHStorage.openEncryptedStreamElementByHierarchicalName( sPath, ElementModes.READ, sPass );
+            xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
+            if ( xSubStream == null )
+            {
+                Error( "Can't open encrypted substream '" + sPath + "'!" );
+                return false;
+            }
+        }
+        catch( Exception e )
+        {
+            Error( "Can't open encrypted substream '" + sPath + "', exception : " + e + "!" );
+            return false;
+        }
+
+        boolean bResult = InternalCheckStream( xSubStream, sPath, sMediaType, pBytes );
+
+        // free the stream resources, garbage collector may remove the object too late
+        if ( !disposeStream( xSubStream, sPath ) )
             return false;
 
         return bResult;
@@ -984,7 +1401,62 @@ public class TestHelper  {
         try
         {
             Object oDummyStream = xStorage.openStreamElement( sName, nMode );
-            Error( "The trying to open substoream '" + sName + "' must fail!" );
+            Error( "The trying to open substream '" + sName + "' must fail!" );
+        }
+        catch( Exception e )
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean cantOpenStreamH( XStorage xStorage, String sPath, int nMode )
+    {
+        // try to open the substream with specified mode must fail
+
+        XHierarchicalStorageAccess xHStorage =
+            (XHierarchicalStorageAccess) UnoRuntime.queryInterface( XHierarchicalStorageAccess.class, xStorage );
+        if ( xHStorage == null )
+        {
+            Error( "The storage does not support hierarchical access!" );
+            return false;
+        }
+
+        try
+        {
+            Object oDummyStream = xHStorage.openStreamElementByHierarchicalName( sPath, nMode );
+            Error( "The trying to open substream '" + sPath + "' must fail!" );
+        }
+        catch( Exception e )
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean cantOpenEncrStreamH( XStorage xStorage, String sPath, int nMode, String aPass )
+    {
+        // try to open the substream with specified mode must fail
+
+        XHierarchicalStorageAccess xHStorage =
+            (XHierarchicalStorageAccess) UnoRuntime.queryInterface( XHierarchicalStorageAccess.class, xStorage );
+        if ( xHStorage == null )
+        {
+            Error( "The storage does not support hierarchical access!" );
+            return false;
+        }
+
+        try
+        {
+            Object oDummyStream = xHStorage.openEncryptedStreamElementByHierarchicalName( sPath, nMode, aPass );
+            Error( "The trying to open substream '" + sPath + "' must fail!" );
+        }
+        catch( WrongPasswordException wpe )
+        {
+            Error( "The substream '" + sPath + "' must not exist!" );
+            return false;
         }
         catch( Exception e )
         {
@@ -1008,6 +1480,7 @@ public class TestHelper  {
         catch( Exception e )
         {
             Error( "Can't clone storage, exception: " + e );
+            return null;
         }
 
         return xResult;
@@ -1027,6 +1500,7 @@ public class TestHelper  {
         catch( Exception e )
         {
             Error( "Can't clone substorage '" + sName + "', exception: " + e );
+            return null;
         }
 
         return xResult;
