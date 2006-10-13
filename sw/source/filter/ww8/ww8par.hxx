@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:18:29 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:11:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -568,7 +568,8 @@ private:
                                   const Graphic& rGrf,
                                   const Rectangle& rBoundRect,
                                   const Rectangle& rVisArea,
-                                  const int _nCalledByGroup ) const;
+                                  const int _nCalledByGroup,
+                                  sal_Int64 nAspect ) const;
     // <--
 
     //No copying
