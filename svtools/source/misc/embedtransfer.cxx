@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedtransfer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:09:57 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:28:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,8 +71,12 @@
 
 using namespace ::com::sun::star;
 
-SvEmbedTransferHelper::SvEmbedTransferHelper( const uno::Reference< embed::XEmbeddedObject >& xObj )
+SvEmbedTransferHelper::SvEmbedTransferHelper( const uno::Reference< embed::XEmbeddedObject >& xObj,
+                                                Graphic* pGraphic,
+                                                sal_Int64 nAspect )
 : m_xObj( xObj )
+, m_pGraphic( pGraphic ? new Graphic( *pGraphic ) : NULL )
+, m_nAspect( nAspect )
 {
 }
 
@@ -80,6 +84,11 @@ SvEmbedTransferHelper::SvEmbedTransferHelper( const uno::Reference< embed::XEmbe
 
 SvEmbedTransferHelper::~SvEmbedTransferHelper()
 {
+    if ( m_pGraphic )
+    {
+        delete m_pGraphic;
+        m_pGraphic = NULL;
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -107,13 +116,15 @@ sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::D
                 if( nFormat == SOT_FORMATSTR_ID_OBJECTDESCRIPTOR )
                 {
                     TransferableObjectDescriptor aDesc;
-                    FillTransferableObjectDescriptor( aDesc, m_xObj );
+                    FillTransferableObjectDescriptor( aDesc, m_xObj, m_pGraphic, m_nAspect );
                     bRet = SetTransferableObjectDescriptor( aDesc, rFlavor );
                 }
                 else if( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
                 {
                     try
                     {
+                        // TODO/LATER: Propbably the graphic should be copied here as well
+                        // currently it is handled by the applications
                         utl::TempFile aTmp;
                         aTmp.EnableKillingFile( TRUE );
                         uno::Reference < embed::XEmbedPersist > xPers( m_xObj, uno::UNO_QUERY );
@@ -162,6 +173,19 @@ sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::D
                     {
                     }
                 }
+                else if ( nFormat == FORMAT_GDIMETAFILE && m_pGraphic )
+                {
+                    SvMemoryStream aMemStm( 65535, 65535 );
+                    aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
+
+                    const GDIMetaFile& aMetaFile = m_pGraphic->GetGDIMetaFile();
+                    ((GDIMetaFile*)(&aMetaFile))->Write( aMemStm );
+                    uno::Any aAny;
+                    aAny <<= uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ),
+                                                    aMemStm.Seek( STREAM_SEEK_TO_END ) );
+                    SetAny( aAny, rFlavor );
+                    bRet = sal_True;
+                }
                 else if ( m_xObj.is() && :: svt::EmbeddedObjectRef::TryRunningState( m_xObj ) )
                 {
                     uno::Reference< datatransfer::XTransferable > xTransferable( m_xObj->getComponent(), uno::UNO_QUERY );
@@ -191,7 +215,9 @@ void SvEmbedTransferHelper::ObjectReleased()
 }
 
 void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj )
+    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj,
+    Graphic* pGraphic,
+    sal_Int64 nAspect )
 {
     //TODO/LATER: need TypeName to fill it into the Descriptor (will be shown in listbox)
     ::com::sun::star::datatransfer::DataFlavor aFlavor;
@@ -200,27 +226,45 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
     rDesc.maClassName = SvGlobalName( xObj->getClassID() );
     rDesc.maTypeName = aFlavor.HumanPresentableName;
 
-    //TODO/LATER: the object does *not* know its aspect! Per default we assume CONTENT
-    rDesc.mnViewAspect = sal::static_int_cast<sal_uInt16>(embed::Aspects::MSOLE_CONTENT);
+    //TODO/LATER: the aspect size in the descriptor is wrong, unfortunately the stream
+    // representation of the descriptor allows only 4 bytes for the aspect
+    // so for internal transport something different should be found
+    rDesc.mnViewAspect = sal::static_int_cast<sal_uInt16>( nAspect );
 
     //TODO/LATER: status needs to become sal_Int64
     rDesc.mnOle2Misc = sal::static_int_cast<sal_Int32>(xObj->getStatus( rDesc.mnViewAspect ));
 
-    awt::Size aSz;
-    try
+    Size aSize;
+    MapMode aMapMode( MAP_100TH_MM );
+    if ( nAspect == embed::Aspects::MSOLE_ICON )
     {
-        aSz = xObj->getVisualAreaSize( rDesc.mnViewAspect );
+        if ( pGraphic )
+        {
+            aMapMode = pGraphic->GetPrefMapMode();
+            aSize = pGraphic->GetPrefSize();
+        }
+        else
+            aSize = Size( 2500, 2500 );
     }
-    catch( embed::NoVisualAreaSizeException& )
+    else
     {
-        OSL_ENSURE( sal_False, "Can not get visual area size!\n" );
-        aSz.Width = 5000;
-        aSz.Height = 5000;
+        try
+        {
+            awt::Size aSz;
+            aSz = xObj->getVisualAreaSize( rDesc.mnViewAspect );
+            aSize = Size( aSz.Width, aSz.Height );
+        }
+        catch( embed::NoVisualAreaSizeException& )
+        {
+            OSL_ENSURE( sal_False, "Can not get visual area size!\n" );
+            aSize = Size( 5000, 5000 );
+        }
+
+        // TODO/LEAN: getMapUnit can switch object to running state
+        aMapMode = MapMode( VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( rDesc.mnViewAspect ) ) );
     }
 
-    // TODO/LEAN: getMapUnit can switch object to running state
-    MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( rDesc.mnViewAspect ) );
-    rDesc.maSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aMapUnit, MAP_100TH_MM );
+    rDesc.maSize = OutputDevice::LogicToLogic( aSize, aMapMode, MapMode( MAP_100TH_MM ) );
     rDesc.maDragStartPos = Point();
     rDesc.maDisplayName = String();
     rDesc.mbCanLink = FALSE;
