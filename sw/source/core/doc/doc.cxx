@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-22 09:18:29 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:08:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1044,6 +1044,7 @@ SwFlyFrmFmt* SwDoc::Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj,
 }
 
 SwFlyFrmFmt* SwDoc::InsertOLE(const SwPaM &rRg, const String& rObjName,
+                        sal_Int64 nAspect,
                         const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet,
                         SwFrmFmt* pFrmFmt )
@@ -1051,10 +1052,13 @@ SwFlyFrmFmt* SwDoc::InsertOLE(const SwPaM &rRg, const String& rObjName,
     if( !pFrmFmt )
         pFrmFmt = GetFrmFmtFromPool( RES_POOLFRM_OLE );
 
-    return _InsNoTxtNode( *rRg.GetPoint(), GetNodes().MakeOLENode(
-                            SwNodeIndex( GetNodes().GetEndOfAutotext() ),
-                            rObjName,
-                            pDfltGrfFmtColl ),
+    return _InsNoTxtNode( *rRg.GetPoint(),
+                            GetNodes().MakeOLENode(
+                                SwNodeIndex( GetNodes().GetEndOfAutotext() ),
+                                rObjName,
+                                nAspect,
+                                pDfltGrfFmtColl,
+                                0 ),
                             pFlyAttrSet, pGrfAttrSet,
                             pFrmFmt );
 }
