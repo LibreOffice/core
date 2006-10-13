@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:22:52 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:30:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -306,6 +306,7 @@ public:
 
     virtual ~OleEmbeddedObject();
 
+    void OnIconChanged_Impl();
     void OnViewChanged_Impl();
 
 // XEmbeddedObject
