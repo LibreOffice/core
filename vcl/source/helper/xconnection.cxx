@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xconnection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:14:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 08:32:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ using namespace com::sun::star::awt;
 DisplayConnection::DisplayConnection()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    pSVData->mpDisplayConnection = this;
     pSVData->mpDefInst->SetEventCallback( this, dispatchEvent );
     pSVData->mpDefInst->SetErrorEventCallback( this, dispatchErrorEvent );
 
@@ -73,9 +72,12 @@ DisplayConnection::DisplayConnection()
 DisplayConnection::~DisplayConnection()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    pSVData->mpDisplayConnection = NULL;
-    pSVData->mpDefInst->SetEventCallback( NULL, NULL );
-    pSVData->mpDefInst->SetErrorEventCallback( NULL, NULL );
+
+    if( pSVData )
+    {
+        pSVData->mpDefInst->SetEventCallback( NULL, NULL );
+        pSVData->mpDefInst->SetErrorEventCallback( NULL, NULL );
+    }
 }
 
 
