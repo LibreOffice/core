@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xdialogcreator.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:24:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:31:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ uno::Sequence< sal_Int8 > GetRelatedInternalID_Impl( const uno::Sequence< sal_In
 
     // Math
     if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SM_OLE_EMBED_CLASSID_60 ) )
-      || ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SM_OLE_EMBED_CLASSID_60 ) ) )
+      || ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SM_OLE_EMBED_CLASSID_8 ) ) )
         return GetSequenceClassID( SO3_SM_CLASSID_60 );
 
     return aClassID;
@@ -161,13 +161,14 @@ uno::Reference< uno::XInterface > SAL_CALL MSOLEDialogObjectCreator::impl_static
 embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDialog(
             const uno::Reference< embed::XStorage >& xStorage,
             const ::rtl::OUString& sEntName,
-            const uno::Sequence< beans::PropertyValue >& lObjArgs )
+            const uno::Sequence< beans::PropertyValue >& aInObjArgs )
     throw ( lang::IllegalArgumentException,
             io::IOException,
             uno::Exception,
             uno::RuntimeException )
 {
     embed::InsertedObjectInfo aObjectInfo;
+    uno::Sequence< beans::PropertyValue > aObjArgs( aInObjArgs );
 
 #ifdef WNT
 
@@ -196,7 +197,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
     io.lpszFile = szFile;
     io.cchFile = MAX_PATH;
 
-    io.dwFlags = IOF_SELECTCREATENEW | IOF_DISABLELINK | IOF_DISABLEDISPLAYASICON;
+    io.dwFlags = IOF_SELECTCREATENEW | IOF_DISABLELINK;
 
 
     ::vos::OModule aOleDlgLib;
@@ -238,7 +239,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
             //TODO: retrieve ClassName
             ::rtl::OUString aClassName;
             aObjectInfo.Object = uno::Reference< embed::XEmbeddedObject >(
-                            xEmbCreator->createInstanceInitNew( aClassID, aClassName, xStorage, sEntName, lObjArgs ),
+                            xEmbCreator->createInstanceInitNew( aClassID, aClassName, xStorage, sEntName, aObjArgs ),
                             uno::UNO_QUERY );
         }
         else
@@ -271,11 +272,11 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
                 throw uno::RuntimeException();
 
             aObjectInfo.Object = uno::Reference< embed::XEmbeddedObject >(
-                            xEmbCreator->createInstanceInitFromMediaDescriptor( xStorage, sEntName, aMediaDescr, lObjArgs ),
+                            xEmbCreator->createInstanceInitFromMediaDescriptor( xStorage, sEntName, aMediaDescr, aObjArgs ),
                             uno::UNO_QUERY );
         }
 
-        if ((io.dwFlags & IOF_CHECKDISPLAYASICON) && io.hMetaPict != NULL )
+        if ( ( io.dwFlags & IOF_CHECKDISPLAYASICON) && io.hMetaPict != NULL )
         {
             METAFILEPICT* pMF = ( METAFILEPICT* )GlobalLock( io.hMetaPict );
             if ( pMF )
