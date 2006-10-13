@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:50:06 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 08:30:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,8 +255,15 @@ BOOL ImplSVMain()
         pSVData->maAppData.mbInAppMain = FALSE;
     }
 
-    if( pSVData->mpDisplayConnection )
-        pSVData->mpDisplayConnection->dispatchDowningEvent();
+    if( pSVData->mxDisplayConnection.is() )
+    {
+        vcl::DisplayConnection* pConnection =
+            dynamic_cast<vcl::DisplayConnection*>(pSVData->mxDisplayConnection.get());
+
+        if( pConnection )
+            pConnection->dispatchDowningEvent();
+        pSVData->mxDisplayConnection.clear();
+    }
 
     // This is a hack to work around the problem of the asynchronous nature
     // of bridging accessibility through Java: on shutdown there might still
