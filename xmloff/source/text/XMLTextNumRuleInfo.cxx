@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextNumRuleInfo.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:15:23 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 12:16:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,11 +80,16 @@ XMLTextNumRuleInfo::XMLTextNumRuleInfo() :
     Reset();
 }
 
+// --> OD 2006-09-27 #i69627#
 void XMLTextNumRuleInfo::Set(
         const ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XTextContent > & xTextContent )
+                        ::com::sun::star::text::XTextContent > & xTextContent,
+        const sal_Bool bOutlineStyleAsNormalListStyle )
 {
     Reset();
+    // --> OD 2006-09-27 #i69627#
+    mbOutlineStyleAsNormalListStyle = bOutlineStyleAsNormalListStyle;
+    // <--
 
     Reference< XPropertySet > xPropSet( xTextContent, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
@@ -101,18 +106,26 @@ void XMLTextNumRuleInfo::Set(
         aAny >>= xNumRules;
     }
 
-    BOOL bIsOutline = FALSE;
-
-    Reference<XPropertySet> xNumRulesProps(xNumRules, UNO_QUERY);
-    if (xNumRulesProps.is() &&
-        xNumRulesProps->getPropertySetInfo()->
-        hasPropertyByName( sNumberingIsOutline ) )
+    // --> OD 2006-09-27 #i69627#
+    bool bSuppressListStyle( false );
     {
-        aAny = xNumRulesProps->getPropertyValue( sNumberingIsOutline );
-        bIsOutline = *(sal_Bool*)aAny.getValue();
+        if ( !mbOutlineStyleAsNormalListStyle )
+        {
+            BOOL bIsOutline = FALSE;
+            Reference<XPropertySet> xNumRulesProps(xNumRules, UNO_QUERY);
+            if (xNumRulesProps.is() &&
+                xNumRulesProps->getPropertySetInfo()->
+                hasPropertyByName( sNumberingIsOutline ) )
+            {
+                aAny = xNumRulesProps->getPropertyValue( sNumberingIsOutline );
+                bIsOutline = *(sal_Bool*)aAny.getValue();
+                bSuppressListStyle = bIsOutline ? true : false;
+            }
+        }
     }
 
-    if( xNumRules.is() && !bIsOutline )
+    if( xNumRules.is() && !bSuppressListStyle )
+    // <--
     {
         Reference < XNamed > xNamed( xNumRules, UNO_QUERY );
         if( xNamed.is() )
