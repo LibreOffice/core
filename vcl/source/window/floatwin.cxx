@@ -4,9 +4,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:18:34 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 08:32:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,8 +299,6 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
 
     USHORT      nArrangeAry[5];
     USHORT      nArrangeIndex;
-    BOOL        bLeft;
-    BOOL        bTop;
     BOOL        bBreak;
     Point       e1,e2;  // the common edge between the item rect and the floating window
 
@@ -343,8 +341,6 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
 
     for ( ; nArrangeIndex < 5; nArrangeIndex++ )
     {
-        bLeft = FALSE;
-        bTop = FALSE;
         bBreak = TRUE;
         switch ( nArrangeAry[nArrangeIndex] )
         {
@@ -439,7 +435,6 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
             {
                 if ( aPos.Y()+aSize.Height() > aScreenRect.Bottom() )
                 {
-                    bTop = TRUE;
                     aPos.Y() = devRect.Bottom()-aSize.Height()+1;
                     if ( aPos.Y() < aScreenRect.Top() )
                         aPos.Y() = aScreenRect.Top();
@@ -447,9 +442,13 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
             }
             else
             {
-                if ( !bRTL && aPos.X()+aSize.Width() > aScreenRect.Right() )
+                if( bRTL ) // --- RTL --- we're comparing screen coordinates here
                 {
-                    bLeft = TRUE;
+                    if( devRectRTL.Right()-aSize.Width()+1 < aScreenRect.Left() )
+                        aPos.X() -= aScreenRect.Left() - devRectRTL.Right() + aSize.Width() - 1;
+                }
+                else if ( aPos.X()+aSize.Width() > aScreenRect.Right() )
+                {
                     aPos.X() = devRect.Right()-aSize.Width()+1;
                     if ( aPos.X() < aScreenRect.Left() )
                         aPos.X() = aScreenRect.Left();
