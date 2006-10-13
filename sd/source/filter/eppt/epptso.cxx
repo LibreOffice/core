@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 08:29:05 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:12:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,9 @@
 #endif
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
 #include <com/sun/star/i18n/ScriptType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
 #endif
 #ifndef _SV_CVTGRF_HXX
 #include <vcl/cvtgrf.hxx>
@@ -4387,6 +4390,17 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( !aXControlModel.is() )
                     continue;
 
+                sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT;
+                try
+                {
+                    // try to get the aspect when available
+                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                        xShapeProps( mXShape, ::com::sun::star::uno::UNO_QUERY_THROW );
+                    xShapeProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Aspect" ) ) ) >>= nAspect;
+                }
+                catch( ::com::sun::star::uno::Exception& )
+                {}
+
                 *mpExEmbed  << (sal_uInt32)( 0xf | ( EPP_ExControl << 16 ) )
                             << (sal_uInt32)0;               // Size of this container
 
@@ -4408,7 +4422,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
                 *mpExEmbed  << (sal_uInt32)( 1 | ( EPP_ExOleObjAtom << 16 ) )
                             << (sal_uInt32)24
-                            << (sal_uInt32)1
+                            << (sal_uInt32)nAspect
                             << (sal_uInt32)2
                             << (sal_uInt32)mnExEmbed
                             << (sal_uInt32)0
@@ -4921,9 +4935,20 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
                     mnExEmbed++;
 
+                    sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT;
+                    try
+                    {
+                        // try to get the aspect when available
+                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                            xShapeProps( mXShape, ::com::sun::star::uno::UNO_QUERY_THROW );
+                        xShapeProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Aspect" ) ) ) >>= nAspect;
+                    }
+                    catch( ::com::sun::star::uno::Exception& )
+                    {}
+
                     *mpExEmbed  << (sal_uInt32)( 1 | ( EPP_ExOleObjAtom << 16 ) )
                                 << (sal_uInt32)24
-                                << (sal_uInt32)1
+                                << (sal_uInt32)nAspect      // Aspect
                                 << (sal_uInt32)0
                                 << (sal_uInt32)mnExEmbed    // index to the persist table
                                 << (sal_uInt32)0            // subtype
