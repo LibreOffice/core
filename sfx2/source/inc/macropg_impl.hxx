@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg_impl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:05:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 09:47:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,8 @@
 class _SfxMacroTabPage_Impl
 {
 public:
-                                    _SfxMacroTabPage_Impl( void );
-                                    ~_SfxMacroTabPage_Impl();
+    _SfxMacroTabPage_Impl( void );
+    ~_SfxMacroTabPage_Impl();
 
     String                          maStaticMacroLBLabel;
     PushButton*                     pAssignPB;
@@ -59,7 +59,8 @@ public:
     FNGetMacrosOfRangeHdl           fnGetMacroOfRange;
 
     BOOL                            bReadOnly;
+    Timer                           maFillGroupTimer;
 };
 
-
 #endif
+
