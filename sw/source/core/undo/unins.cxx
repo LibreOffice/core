@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:28:52 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:09:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -526,7 +526,7 @@ void SwUndoInsert::Repeat( SwUndoIter& rUndoIter )
             if ( aCnt.StoreEmbeddedObject( rSwOLE.GetOleRef(), aName, sal_True ) )
             {
                 com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > aNew = aCnt.GetEmbeddedObject( aName );
-                rDoc.Insert( *rUndoIter.pAktPam, aNew, NULL, NULL, NULL );
+                rDoc.Insert( *rUndoIter.pAktPam, svt::EmbeddedObjectRef( aNew, ((SwOLENode*)pCNd)->GetAspect() ), NULL, NULL, NULL );
             }
 
             break;
