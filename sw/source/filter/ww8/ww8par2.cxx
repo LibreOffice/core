@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:51:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 08:19:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3260,15 +3260,21 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
     }
 }
 
-SvxFrameDirection MakeDirection(sal_uInt16 nCode)
+SvxFrameDirection MakeDirection(sal_uInt16 nCode, BOOL bIsBiDi)
 {
     SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;
+    // 1: Asian layout with rotated CJK characters
+    // 5: Asian layout
+    // 3: Western layout rotated by 90 degrees
+    // 4: Western layout
     switch (nCode)
     {
         default:
             ASSERT(eDir == 4, "unknown direction code, maybe its a bitfield");
         case 3:
-            eDir = FRMDIR_HORI_LEFT_TOP;
+            // --> FME/Alan Yaniger: 2006-09-15 #i38158# Consider RTL tables:
+            eDir = bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP;
+            // <--
             break;
         case 5:
             eDir = FRMDIR_VERT_TOP_RIGHT;
@@ -3277,7 +3283,9 @@ SvxFrameDirection MakeDirection(sal_uInt16 nCode)
             eDir = FRMDIR_VERT_TOP_RIGHT;
             break;
         case 4:
-            eDir = FRMDIR_HORI_LEFT_TOP;
+            // --> FME/Alan Yaniger: 2006-09-15 #i38158# Consider RTL tables:
+            eDir = bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP;
+            // <--
             break;
     }
     return eDir;
@@ -3287,7 +3295,7 @@ void WW8TabDesc::SetTabDirection(SwTableBox* pBox, short nWwIdx)
 {
     if (nWwIdx < 0 || nWwIdx >= pActBand->nWwCols)
         return;
-    SvxFrameDirectionItem aItem(MakeDirection(pActBand->maDirections[nWwIdx]));
+    SvxFrameDirectionItem aItem(MakeDirection(pActBand->maDirections[nWwIdx], bIsBiDi));
     pBox->GetFrmFmt()->SetAttr(aItem);
 }
 
