@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.245 $
+ *  $Revision: 1.246 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:58:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 08:32:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -899,7 +899,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         mpWindowImpl->mpFrameData->maResizeTimer.SetTimeout( 50 );
         mpWindowImpl->mpFrameData->maResizeTimer.SetTimeoutHdl( LINK( this, Window, ImplHandleResizeTimerHdl ) );
         mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = FALSE;
-        mpWindowImpl->mpFrameData->mbTriggerHangulHanja = FALSE;
 
         if ( pRealParent && IsTopWindow() )
         {
@@ -4675,7 +4674,7 @@ Window::~Window()
     ImplRemoveWindow( TRUE );
 
     // de-register as "top window child" at our parent, if necessary
-    if ( !mpWindowImpl->mpBorderWindow && mpWindowImpl->mpFrame )
+    if ( mpWindowImpl->mbFrame )
     {
         BOOL bIsTopWindow = mpWindowImpl->mpWinData && ( mpWindowImpl->mpWinData->mnIsTopWindow == 1 );
         if ( mpWindowImpl->mpRealParent && bIsTopWindow )
