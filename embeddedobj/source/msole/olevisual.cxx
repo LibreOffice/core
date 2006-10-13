@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olevisual.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:23:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:31:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,12 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
+    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    if ( nAspect == embed::Aspects::MSOLE_ICON )
+        // no representation can be retrieved
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not loaded!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
@@ -179,11 +185,7 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
     m_nCachedAspect = nAspect;
 }
 
-awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64
-#if defined WNT || OSL_DEBUG_LEVEL > 0
-nAspect
-#endif
-)
+awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
@@ -194,6 +196,12 @@ nAspect
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
+
+    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    if ( nAspect == embed::Aspects::MSOLE_ICON )
+        // no representation can be retrieved
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not loaded!\n" ),
@@ -316,7 +324,7 @@ nAspect
     return aResult;
 }
 
-embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 /*nAspect*/ )
+embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 nAspect )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
@@ -327,6 +335,12 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
+
+    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    if ( nAspect == embed::Aspects::MSOLE_ICON )
+        // no representation can be retrieved
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
     // TODO: if the object has cached representation then it should be returned
     // TODO: if the object has no cached representation and is in loaded state it should switch itself to the running state
@@ -398,13 +412,19 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     return GetVisualRepresentationInNativeFormat_Impl( m_xCachedVisualRepresentation );
 }
 
-sal_Int32 SAL_CALL OleEmbeddedObject::getMapUnit( sal_Int64 /*nAspect*/ )
+sal_Int32 SAL_CALL OleEmbeddedObject::getMapUnit( sal_Int64 nAspect )
         throw ( uno::Exception,
                 uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
+
+    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    if ( nAspect == embed::Aspects::MSOLE_ICON )
+        // no representation can be retrieved
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not loaded!\n" ),
