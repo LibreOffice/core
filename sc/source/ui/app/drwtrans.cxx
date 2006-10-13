@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:41:19 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:35:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -354,9 +354,9 @@ void ScDrawTransferObj::AddSupportedFormats()
 
         if ( !aOleData.GetTransferable().is() )
         {
-            uno::Reference < embed::XEmbeddedObject > xObj = GetSingleObject();
-            if ( xObj.is() )
-                aOleData = TransferableDataHelper( new SvEmbedTransferHelper( xObj ) ) ;
+            SdrOle2Obj* pObj = GetSingleObject();
+            if ( pObj && pObj->GetObjRef().is() )
+                aOleData = TransferableDataHelper( new SvEmbedTransferHelper( pObj->GetObjRef(), pObj->GetGraphic(), pObj->GetAspect() ) ) ;
         }
         if ( aOleData.GetTransferable().is() )
         {
@@ -397,9 +397,9 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
     {
         if ( !aOleData.GetTransferable().is() )
         {
-            uno::Reference < embed::XEmbeddedObject > xObj = GetSingleObject();
-            if ( xObj.is() )
-                aOleData = TransferableDataHelper( new SvEmbedTransferHelper( xObj ) );
+            SdrOle2Obj* pObj = GetSingleObject();
+            if ( pObj && pObj->GetObjRef().is() )
+                aOleData = TransferableDataHelper( new SvEmbedTransferHelper( pObj->GetObjRef(), pObj->GetGraphic(), pObj->GetAspect() ) ) ;
         }
 
         if( aOleData.GetTransferable().is() && aOleData.HasFormat( rFlavor ) )
@@ -427,9 +427,9 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
         {
             if ( bOleObj )              // single OLE object
             {
-                uno::Reference < embed::XEmbeddedObject > xObj = GetSingleObject();
-                if ( xObj.is() )
-                    SvEmbedTransferHelper::FillTransferableObjectDescriptor( aObjDesc, xObj );
+                SdrOle2Obj* pObj = GetSingleObject();
+                if ( pObj && pObj->GetObjRef().is() )
+                    SvEmbedTransferHelper::FillTransferableObjectDescriptor( aObjDesc, pObj->GetObjRef(), pObj->GetGraphic(), pObj->GetAspect() );
             }
 
             bOK = SetTransferableObjectDescriptor( aObjDesc, rFlavor );
@@ -470,10 +470,10 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
         {
             if ( bOleObj )              // single OLE object
             {
-                uno::Reference < embed::XEmbeddedObject > xObj = GetSingleObject();
-                if ( xObj.is() )
+                SdrOle2Obj* pObj = GetSingleObject();
+                if ( pObj && pObj->GetObjRef().is() )
                 {
-                    bOK = SetObject( xObj.get(), SCDRAWTRANS_TYPE_EMBOBJ, rFlavor );
+                    bOK = SetObject( pObj->GetObjRef().get(), SCDRAWTRANS_TYPE_EMBOBJ, rFlavor );
                 }
             }
             else                        // create object from contents
@@ -718,7 +718,7 @@ void ScDrawTransferObj::SetDragWasInternal()
     bDragWasInternal = TRUE;
 }
 
-uno::Reference < embed::XEmbeddedObject > ScDrawTransferObj::GetSingleObject()
+SdrOle2Obj* ScDrawTransferObj::GetSingleObject()
 {
     //  if single OLE object was copied, get its object
 
@@ -729,12 +729,11 @@ uno::Reference < embed::XEmbeddedObject > ScDrawTransferObj::GetSingleObject()
         SdrObject* pObject = aIter.Next();
         if (pObject && pObject->GetObjIdentifier() == OBJ_OLE2)
         {
-            SdrOle2Obj* pOleObj = (SdrOle2Obj*) pObject;
-            return pOleObj->GetObjRef();
+            return (SdrOle2Obj*) pObject;
         }
     }
 
-    return uno::Reference < embed::XEmbeddedObject >();
+    return NULL;
 }
 
 //
