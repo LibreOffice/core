@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:09:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:27:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XSTATECHANGELISTENER_HPP_
 #include <com/sun/star/embed/XStateChangeListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
@@ -169,7 +172,7 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject&,
     {
         // TODO/LATER: container must be set before!
         // When is this event created? Who sets the new container when it changed?
-        if( nOldState != embed::EmbedStates::LOADED )
+        if( ( pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON ) && nOldState != embed::EmbedStates::LOADED )
             // get new replacement after deactivation
             pObject->UpdateReplacement();
 
@@ -188,7 +191,7 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject&,
 void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& ) throw (uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( pObject )
+    if ( pObject && pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON )
     {
         if ( nState == embed::EmbedStates::RUNNING )
         {
@@ -217,7 +220,7 @@ void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject&
     }
     else
 #endif
-    if ( pObject && aEvent.EventName.equalsAscii("OnVisAreaChanged") )
+    if ( pObject && aEvent.EventName.equalsAscii("OnVisAreaChanged") && pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON )
     {
         pObject->UpdateReplacement();
     }
@@ -412,12 +415,21 @@ comphelper::EmbeddedObjectContainer* EmbeddedObjectRef::GetContainer() const
 
 MapUnit EmbeddedObjectRef::GetMapUnit() const
 {
-    return VCLUnoHelper::UnoEmbed2VCLMapUnit( mxObj->getMapUnit( mpImp->nViewAspect ) );
+    if ( mpImp->nViewAspect == embed::Aspects::MSOLE_CONTENT )
+        return VCLUnoHelper::UnoEmbed2VCLMapUnit( mxObj->getMapUnit( mpImp->nViewAspect ) );
+    else
+        // TODO/LATER: currently only CONTENT aspect requires communication with the object
+        return MAP_100TH_MM;
 }
 
 sal_Int64 EmbeddedObjectRef::GetViewAspect() const
 {
     return mpImp->nViewAspect;
+}
+
+void EmbeddedObjectRef::SetViewAspect( sal_Int64 nAspect )
+{
+    mpImp->nViewAspect = nAspect;
 }
 
 void EmbeddedObjectRef::Lock( BOOL bLock )
@@ -467,6 +479,65 @@ Graphic* EmbeddedObjectRef::GetGraphic( ::rtl::OUString* pMediaType ) const
     if ( mpImp->pGraphic && pMediaType )
         *pMediaType = mpImp->aMediaType;
     return mpImp->pGraphic;
+}
+
+Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
+{
+    MapMode aSourceMapMode( MAP_100TH_MM );
+    Size aResult;
+
+    if ( mpImp->nViewAspect == embed::Aspects::MSOLE_ICON )
+    {
+        Graphic* pGraphic = GetGraphic();
+        if ( pGraphic )
+        {
+            aSourceMapMode = pGraphic->GetPrefMapMode();
+            aResult = pGraphic->GetPrefSize();
+        }
+        else
+            aResult = Size( 2500, 2500 );
+    }
+    else
+    {
+        awt::Size aSize;
+
+        if ( mxObj.is() )
+        {
+            try
+            {
+                aSize = mxObj->getVisualAreaSize( mpImp->nViewAspect );
+            }
+            catch( embed::NoVisualAreaSizeException& )
+            {
+            }
+            catch( uno::Exception& )
+            {
+                OSL_ENSURE( sal_False, "Something went wrong on getting of the size of the object!" );
+            }
+
+            try
+            {
+                aSourceMapMode = VCLUnoHelper::UnoEmbed2VCLMapUnit( mxObj->getMapUnit( mpImp->nViewAspect ) );
+            }
+            catch( uno::Exception )
+            {
+                OSL_ENSURE( sal_False, "Can not get the map mode!" );
+            }
+        }
+
+        if ( !aSize.Height && !aSize.Width )
+        {
+            aSize.Width = 5000;
+            aSize.Height = 5000;
+        }
+
+        aResult = Size( aSize.Width, aSize.Height );
+    }
+
+    if ( pTargetMapMode )
+        aResult = OutputDevice::LogicToLogic( aResult, aSourceMapMode, *pTargetMapMode );
+
+    return aResult;
 }
 
 Graphic* EmbeddedObjectRef::GetHCGraphic() const
@@ -530,6 +601,37 @@ Graphic* EmbeddedObjectRef::GetHCGraphic() const
     }
 
     return mpImp->pHCGraphic;
+}
+
+void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream >& xInGrStream,
+                                            const ::rtl::OUString& rMediaType )
+{
+    if ( mpImp->pGraphic )
+        delete mpImp->pGraphic;
+    mpImp->pGraphic = new Graphic();
+    mpImp->aMediaType = rMediaType;
+    if ( mpImp->pHCGraphic ) DELETEZ( mpImp->pHCGraphic );
+
+    SvStream* pGraphicStream = ::utl::UcbStreamHelper::CreateStream( xInGrStream );
+
+    if ( pGraphicStream )
+    {
+        GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
+        pGF->ImportGraphic( *mpImp->pGraphic, String(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
+
+        if ( mpImp->pContainer )
+        {
+            pGraphicStream->Seek( 0 );
+            uno::Reference< io::XInputStream > xInSeekGrStream = new ::utl::OSeekableInputStreamWrapper( pGraphicStream );
+
+            mpImp->pContainer->InsertGraphicStream( xInSeekGrStream, mpImp->aPersistName, rMediaType );
+        }
+
+        delete pGraphicStream;
+    }
+
+    mpImp->bNeedUpdate = sal_False;
+
 }
 
 void EmbeddedObjectRef::SetGraphic( const Graphic& rGraphic, const ::rtl::OUString& rMediaType )
