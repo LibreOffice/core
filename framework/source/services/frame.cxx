@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:41:49 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 09:43:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3153,13 +3153,7 @@ void Frame::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::XFrame
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
         xFrameProps->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
         css::uno::Reference< css::beans::XPropertySet > xLayoutProps(xLayoutManager, css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::frame::XStatusListener > xCallback;
-        if (bState)
-        {
-            CloseDispatcher* pHandler = new CloseDispatcher(m_xFactory, xFrame);
-            xCallback = css::uno::Reference< css::frame::XStatusListener >( static_cast< ::cppu::OWeakObject* >(pHandler), css::uno::UNO_QUERY );
-        }
-        xLayoutProps->setPropertyValue(LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, css::uno::makeAny(xCallback));
+        xLayoutProps->setPropertyValue(LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, css::uno::makeAny(bState));
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
