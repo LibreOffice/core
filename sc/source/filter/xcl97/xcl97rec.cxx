@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:38:20 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:34:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -860,7 +860,10 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
 
             // ftPioGrbit subrecord, undocumented as usual
             rStrm.StartRecord( EXC_ID_OBJ_FTPIOGRBIT, 2 );
-            rStrm << UINT16(0x0001);
+            sal_uInt16 nPioGrbit = 0x0001;
+            if ( ((SdrOle2Obj&)rOleObj).GetAspect() == embed::Aspects::MSOLE_ICON )
+                ::set_flag( nPioGrbit, EXC_OBJ_PIO_SYMBOL );
+            rStrm << nPioGrbit;
             rStrm.EndRecord();
 
             // ftPictFmla subrecord, undocumented as usual
