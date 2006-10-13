@@ -37,6 +37,7 @@ ProgressType0	install
 ProgressType1	Installing
 ProgressType2	installed
 ProgressType3	installs
+Quickstarterlinkname	QUICKSTARTERLINKNAMETEMPLATE
 RebootYesNo	Yes
 ReinstallModeText	omus
 SecureCustomProperties	NEWPRODUCTS;SAMEPRODUCTS;OLDPRODUCTS;BETAPRODUCTS
