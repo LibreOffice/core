@@ -4,9 +4,9 @@
  *
  *  $RCSfile: closedispatcher.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:53:13 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 09:42:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,13 +109,12 @@ static ::rtl::OUString URL_CLOSEFRAME  = DECLARE_ASCII(".uno:CloseFrame");
 //_______________________________________________
 // declarations
 
-DEFINE_XINTERFACE_5(CloseDispatcher                                           ,
+DEFINE_XINTERFACE_4(CloseDispatcher                                           ,
                     OWeakObject                                               ,
                     DIRECT_INTERFACE(css::lang::XTypeProvider                ),
                     DIRECT_INTERFACE(css::frame::XNotifyingDispatch          ),
                     DIRECT_INTERFACE(css::frame::XDispatch                   ),
-                    DIRECT_INTERFACE(css::frame::XDispatchInformationProvider),
-                    DIRECT_INTERFACE(css::frame::XStatusListener             ))
+                    DIRECT_INTERFACE(css::frame::XDispatchInformationProvider))
 
 // Note: XStatusListener is an implementation detail. Hide it for scripting!
 DEFINE_XTYPEPROVIDER_4(CloseDispatcher                         ,
@@ -267,45 +266,6 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     // <- SAFE ----------------------------------
 
     m_aAsyncCallback.Post(0);
-}
-
-//-----------------------------------------------
-/**
-    @short  special way to get notifications from the special menu closer.
-
-    @descr  Its not part of the specification of this object doing so.
-            But our new layout manager doesnt provide any other mechanis.
-            So this special dispatcher is registered for the menu closer as callback ...
-
-    @param  aState
-            normaly not needed - because the call itself is enough.
- */
-void SAL_CALL CloseDispatcher::statusChanged(const css::frame::FeatureStateEvent&)
-    throw(css::uno::RuntimeException)
-{
-    // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
-
-    // Check for still running asynchronous operations, which was started before.
-    // Ignore new requests. Our UI user can try it again, if nothing will happen.
-    if (m_xSelfHold.is())
-        return;
-
-    m_xResultListener.clear();
-    m_eOperation = E_CLOSE_WIN;
-    m_xSelfHold  = css::uno::Reference< css::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
-
-    m_aAsyncCallback.Post(0);
-}
-
-//-----------------------------------------------
-void SAL_CALL CloseDispatcher::disposing(const css::lang::EventObject&)
-    throw(css::uno::RuntimeException)
-{
-    LOG_WARNING("CloseDispatcher::disposing()", "Not allowed to be called. Listener interface is an implementation helper only .-)")
 }
 
 //-----------------------------------------------
