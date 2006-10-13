@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 09:58:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 08:30:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1683,7 +1683,11 @@ void Application::SetUnoWrapper( UnoWrapperBase* pWrapper )
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayConnection > Application::GetDisplayConnection()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    return pSVData->mpDisplayConnection ? pSVData->mpDisplayConnection : new ::vcl::DisplayConnection;
+
+    if( !pSVData->mxDisplayConnection.is() )
+        pSVData->mxDisplayConnection.set( new ::vcl::DisplayConnection );
+
+    return pSVData->mxDisplayConnection;
 }
 
 // -----------------------------------------------------------------------
