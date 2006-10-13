@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:44:35 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:15:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ class SwTransferable : public TransferableHelper
     BOOL bCleanUp   :1; //D&D cleanup after Drop (not by internal Drop)
 
     // helper methods for the copy
-    com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > FindOLEObj() const;
+    com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > FindOLEObj( sal_Int64& nAspect ) const;
     Graphic* FindOLEReplacementGraphic() const;
     void DeleteSelection();
 
