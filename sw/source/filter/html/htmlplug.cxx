@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:11:20 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:10:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -520,7 +520,8 @@ void SwHTMLParser::InsertEmbed()
     SetSpace( aSpace, aItemSet, aPropInfo, aFrmSet );
 
     // und in das Dok einfuegen
-    SwFrmFmt* pFlyFmt = pDoc->Insert( *pPam, xObj, &aFrmSet, NULL, NULL );
+    SwFrmFmt* pFlyFmt =
+        pDoc->Insert( *pPam, ::svt::EmbeddedObjectRef( xObj, ::com::sun::star::embed::Aspects::MSOLE_CONTENT ), &aFrmSet, NULL, NULL );
 
     // Namen am FrmFmt setzen
     if( aName.Len() )
@@ -693,8 +694,12 @@ void SwHTMLParser::EndObject()
         pAppletImpl->FinishApplet();
 
         // und in das Dok einfuegen
-        SwFrmFmt* pFlyFmt = pDoc->Insert( *pPam, pAppletImpl->GetApplet(),
-                                          &pAppletImpl->GetItemSet(), NULL, NULL );
+        SwFrmFmt* pFlyFmt =
+            pDoc->Insert( *pPam,
+                    ::svt::EmbeddedObjectRef( pAppletImpl->GetApplet(), ::com::sun::star::embed::Aspects::MSOLE_CONTENT ),
+                    &pAppletImpl->GetItemSet(),
+                    NULL,
+                    NULL );
 
         // den alternativen Namen setzen
         SwNoTxtNode *pNoTxtNd =
@@ -822,8 +827,12 @@ void SwHTMLParser::EndApplet()
     pAppletImpl->FinishApplet();
 
     // und in das Dok einfuegen
-    SwFrmFmt* pFlyFmt = pDoc->Insert( *pPam, pAppletImpl->GetApplet(),
-                                      &pAppletImpl->GetItemSet(), NULL, NULL );
+    SwFrmFmt* pFlyFmt =
+        pDoc->Insert( *pPam,
+                    ::svt::EmbeddedObjectRef( pAppletImpl->GetApplet(), ::com::sun::star::embed::Aspects::MSOLE_CONTENT ),
+                    &pAppletImpl->GetItemSet(),
+                    NULL,
+                    NULL );
 
     // den alternativen Namen setzen
     SwNoTxtNode *pNoTxtNd =
@@ -999,7 +1008,8 @@ void SwHTMLParser::InsertFloatingFrame()
     SetSpace( aSpace, aItemSet, aPropInfo, aFrmSet );
 
     // und in das Dok einfuegen
-    SwFrmFmt* pFlyFmt = pDoc->Insert( *pPam, xObj, &aFrmSet, NULL, NULL );
+    SwFrmFmt* pFlyFmt =
+        pDoc->Insert( *pPam, ::svt::EmbeddedObjectRef( xObj, ::com::sun::star::embed::Aspects::MSOLE_CONTENT ), &aFrmSet, NULL, NULL );
 
     // den alternativen Namen setzen
     SwNoTxtNode *pNoTxtNd =
