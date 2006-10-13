@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:10:22 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 12:20:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2236,6 +2236,17 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
         // be determined. --> no conversion
         return false;
     }
+    // --> OD 2006-09-26 #141404#
+    // no conversion for anchored drawing object, which aren't attached to an
+    // anchor frame.
+    // This is the case for drawing objects, which are anchored inside a page
+    // header/footer of an *unused* page style.
+    if ( dynamic_cast<SwAnchoredDrawObject*>(pAnchoredObj) &&
+         !pAnchoredObj->GetAnchorFrm() )
+    {
+        return false;
+    }
+    // <--
 
     bool bConverted( false );
 
