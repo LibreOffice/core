@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndarr.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:26:45 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:08:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 
 class Graphic;
 class GraphicObject;
-class UniString;
+class String;
 class SwAttrSet;
 class SwCntntNode;
 class SwDoc;
@@ -237,8 +237,8 @@ public:
                             SwAttrSet* pAutoAttr = 0 );
 
     SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,
-                            const UniString& rGrfName,
-                            const UniString& rFltName,
+                            const String& rGrfName,
+                            const String& rFltName,
                             const Graphic* pGraphic,
                             SwGrfFmtColl *pColl,
                             SwAttrSet* pAutoAttr = 0,
@@ -254,9 +254,10 @@ public:
                             SwGrfFmtColl *pColl,
                             SwAttrSet* pAutoAttr = 0 ); // in ndole.cxx
     SwOLENode *MakeOLENode( const SwNodeIndex & rWhere,
-                            const UniString &rName,
+                            const String &rName,
+                            sal_Int64 nAspect,
                             SwGrfFmtColl *pColl,
-                            SwAttrSet* pAutoAttr = 0 ); // in ndole.cxx
+                            SwAttrSet* pAutoAttr ); // in ndole.cxx
 
         // Array aller GliederiungsNodes;
     const SwOutlineNodes& GetOutLineNds() const;
