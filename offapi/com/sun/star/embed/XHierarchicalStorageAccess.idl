@@ -1,0 +1,243 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XHierarchicalStorageAccess.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:17:42 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_XHierarchicalStorageAccess_idl__
+#define __com_sun_star_embed_XHierarchicalStorageAccess_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_io_XStream_idl__
+#include <com/sun/star/io/XStream.idl>
+#endif
+
+#ifndef __com_sun_star_embed_XExtendedStorageStream_idl__
+#include <com/sun/star/embed/XExtendedStorageStream.idl>
+#endif
+
+#ifndef __com_sun_star_io_IOException_idl__
+#include <com/sun/star/io/IOException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_embed_StorageWrappedTargetException_idl__
+#include <com/sun/star/embed/StorageWrappedTargetException.idl>
+#endif
+
+#ifndef __com_sun_star_embed_InvalidStorageException_idl__
+#include <com/sun/star/embed/InvalidStorageException.idl>
+#endif
+
+#ifndef __com_sun_star_packages_WrongPasswordException_idl__
+#include <com/sun/star/packages/WrongPasswordException.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNameAccess_idl__
+#include <com/sun/star/container/XNameAccess.idl>
+#endif
+
+#ifndef __com_sun_star_container_NoSuchElementException_idl__
+#include <com/sun/star/container/NoSuchElementException.idl>
+#endif
+
+#ifndef __com_sun_star_container_ElementExistException_idl__
+#include <com/sun/star/container/ElementExistException.idl>
+#endif
+
+#ifndef __com_sun_star_packages_NoEncryptionException_idl__
+#include <com/sun/star/packages/NoEncryptionException.idl>
+#endif
+
+
+//============================================================================
+
+ module com {  module sun {  module star {  module embed {
+
+//============================================================================
+/** This interface allows hierarchical access to storage tree.
+
+    <p>
+    Currently only streams can be opened using this interface.
+    </p>
+
+    <p>
+    The hierarchical access can not be mixed with a normal access. Thus when
+    in a storage a stream with a path "a/b/c" is accessed using hierarchical
+    access, another stream "a/b/d" can also be opened with hierarchical
+    access ( if it is still not opened ), but the substorage "a" can not be
+    opened ( it is locked by hierarchical access ).
+    </p>
+ */
+interface XHierarchicalStorageAccess
+{
+    // METHODS
+    //
+    // -----------------------------------------------------------------------
+    /** allows to get access to a child stream of the storage, using
+        hierarchical path.
+
+        <p>
+        In case the stream is open in readonly mode the
+        <method scope="com::sun::star::io">XStream::getOutputStream</method>
+        method will return an empty reference.
+        </p>
+
+        @param sStreamPath
+            the path to the substream that should be open
+
+        @param nOpenMode
+            a mode the stream should be open in,
+            can be a combination of <type>ElementModes</type> values
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of provided arguments is illegal
+
+        @throws ::com::sun::star::packages::WrongPasswordException
+            the provided password is wrong
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during stream opening
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+     */
+    XExtendedStorageStream  openStreamElementByHierarchicalName(
+            [in] string sStreamPath,
+            [in] long nOpenMode )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to get access to a child encrypted stream with password using
+        hierarchical path.
+
+        <p>
+        If storage does not allow any encryption this method will always throw
+        <type scope="com::sun::star::packages">NoEncryptionException</type>.
+        </p>
+
+        <p>
+        In case the stream is open in readonly mode the
+        <method scope="com::sun::star::io">XStream::getOutputStream</method>
+        method will return an empty reference.
+        </p>
+
+        @param sStreamPath
+            the path to the substream that should be open
+
+        @param nOpenMode
+            a mode the stream should be open in,
+            can be a combination of <type>ElementModes</type> values
+
+        @param sPassword
+            this parameter allowes to specify a reading password for the
+            stream, the password must be a correct one, otherwise an
+            exception will be thrown
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of provided arguments is illegal
+
+        @throws ::com::sun::star::packages::NoEncryptionException
+            the stream is not encrypted
+
+        @throws ::com::sun::star::packages::WrongPasswordException
+            the provided password is wrong
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during stream opening
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+     */
+    XExtendedStorageStream  openEncryptedStreamElementByHierarchicalName(
+            [in] string sStreamName,
+            [in] long nOpenMode,
+            [in] string sPassword )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::NoEncryptionException,
+                ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** removes a stream specified by hierarchical name from a storage.
+
+        @param sElementPath
+            the path to the element to remove
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for eny reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            an illegal argument is provided
+
+        @throws ::com::sun::star::container::NoSuchElementException
+            there is no element with such name
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during removing
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+
+     */
+    void removeStreamElementByHierarchicalName( [in] string sElementPath )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+};
+
+//============================================================================
+
+}; }; }; };
+
+#endif
+
