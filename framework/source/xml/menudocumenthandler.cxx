@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menudocumenthandler.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:44:28 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 09:43:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,12 @@ static void ExtractMenuParameters( const Sequence< PropertyValue > rProp,
 
 ReadMenuDocumentHandlerBase::ReadMenuDocumentHandlerBase() :
     m_xLocator( 0 ),
-    m_xReader( 0 )
+    m_xReader( 0 ),
+    m_aType( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE )),
+    m_aLabel( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL )),
+    m_aContainer( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER )),
+    m_aHelpURL( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL )),
+    m_aCommandURL( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ))
 {
 }
 
@@ -240,6 +245,24 @@ throw(  SAXException, RuntimeException )
     }
     else
         return OUString();
+}
+
+void ReadMenuDocumentHandlerBase::initPropertyCommon(
+    Sequence< PropertyValue > &rProps, const rtl::OUString &rCommandURL,
+    const rtl::OUString &rHelpId, const rtl::OUString &rLabel)
+{
+    rProps[0].Name = m_aCommandURL;
+    rProps[1].Name = m_aHelpURL;
+    rProps[2].Name = m_aContainer;
+    rProps[3].Name = m_aLabel;
+    rProps[4].Name = m_aType;
+
+    // Common values
+    rProps[0].Value <<= rCommandURL;
+    rProps[1].Value <<= rHelpId;
+    rProps[2].Value <<= Reference< XIndexContainer >();
+    rProps[3].Value <<= rLabel;
+    rProps[4].Value <<= ::com::sun::star::ui::ItemType::DEFAULT;
 }
 
 // -----------------------------------------------------------------------------
@@ -423,17 +446,8 @@ throw( SAXException, RuntimeException )
             if ( aCommandId.getLength() > 0 )
             {
                 Sequence< PropertyValue > aSubMenuProp( 5 );
-                aSubMenuProp[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
-                aSubMenuProp[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL ));
-                aSubMenuProp[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ));
-                aSubMenuProp[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL ));
-                aSubMenuProp[4].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
-
-                aSubMenuProp[0].Value <<= aCommandId;
-                aSubMenuProp[1].Value <<= aHelpId;
+                initPropertyCommon( aSubMenuProp, aCommandId, aHelpId, aLabel );
                 aSubMenuProp[2].Value <<= xSubItemContainer;
-                aSubMenuProp[3].Value <<= aLabel;
-                aSubMenuProp[4].Value <<= ::com::sun::star::ui::ItemType::DEFAULT;
 
                 m_xMenuBarContainer->insertByIndex( m_xMenuBarContainer->getCount(), makeAny( aSubMenuProp ) );
             }
@@ -604,7 +618,6 @@ void SAL_CALL OReadMenuPopupHandler::endDocument(void)
 {
 }
 
-
 void SAL_CALL OReadMenuPopupHandler::startElement(
     const OUString& rName, const Reference< XAttributeList > &xAttrList )
 throw( SAXException, RuntimeException )
@@ -647,17 +660,8 @@ throw( SAXException, RuntimeException )
         if ( aCommandId.getLength() > 0 )
         {
             Sequence< PropertyValue > aSubMenuProp( 5 );
-            aSubMenuProp[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
-            aSubMenuProp[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL ));
-            aSubMenuProp[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ));
-            aSubMenuProp[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL ));
-            aSubMenuProp[4].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
-
-            aSubMenuProp[0].Value <<= aCommandId;
-            aSubMenuProp[1].Value <<= aHelpId;
+            initPropertyCommon( aSubMenuProp, aCommandId, aHelpId, aLabel );
             aSubMenuProp[2].Value <<= xSubItemContainer;
-            aSubMenuProp[3].Value <<= aLabel;
-            aSubMenuProp[4].Value <<= ::com::sun::star::ui::ItemType::DEFAULT;
 
             m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), makeAny( aSubMenuProp ) );
         }
@@ -693,17 +697,8 @@ throw( SAXException, RuntimeException )
         if ( aCommandId.getLength() > 0 )
         {
             Sequence< PropertyValue > aMenuItem( 5 );
-            aMenuItem[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
-            aMenuItem[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL ));
-            aMenuItem[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ));
-            aMenuItem[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL ));
-            aMenuItem[4].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
-
-            aMenuItem[0].Value <<= aCommandId;
-            aMenuItem[1].Value <<= aHelpId;
+            initPropertyCommon( aMenuItem, aCommandId, aHelpId, aLabel );
             aMenuItem[2].Value <<= Reference< XIndexContainer >();
-            aMenuItem[3].Value <<= aLabel;
-            aMenuItem[4].Value <<= ::com::sun::star::ui::ItemType::DEFAULT;
 
             m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), makeAny( aMenuItem ) );
         }
