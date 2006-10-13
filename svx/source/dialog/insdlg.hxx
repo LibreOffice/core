@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:22:58 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:22:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,10 +66,12 @@ protected:
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > m_xObj;
     const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& m_xStorage;
     comphelper::EmbeddedObjectContainer aCnt;
+
     InsertObjectDialog_Impl( Window * pParent, const ResId & rResId, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
 public:
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject()
                         { return m_xObj; }
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( ::rtl::OUString* pGraphicMediaType );
     virtual BOOL IsCreateNew() const;
 };
 
@@ -89,6 +91,9 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
     String      _aOldStr;
     const SvObjectServerList* m_pServers;
 
+    ::com::sun::star::uno::Sequence< sal_Int8 > m_aIconMetaFile;
+    ::rtl::OUString m_aIconMediaType;
+
     DECL_LINK(          DoubleClickHdl, ListBox* );
     DECL_LINK(          BrowseHdl, PushButton* );
     DECL_LINK(          RadioHdl, RadioButton* );
@@ -106,6 +111,9 @@ public:
                             const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
                             const SvObjectServerList* pServers = NULL );
     virtual short       Execute();
+
+    // get replacement for the iconified embedded object and the mediatype of the replacement
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( ::rtl::OUString* pGraphicMediaType );
 };
 
 // class SvInsertPlugInDialog --------------------------------------------
