@@ -1159,19 +1159,6 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
     if ( !pChild )
         return 0;
 
-    if( aKeyCode.GetCode() == KEY_HANGUL_HANJA  &&
-        aKeyCode.GetModifier() == 0
-        )
-    {
-        if ( nSVEvent == EVENT_KEYUP )
-            ImplCallCommand( pChild, COMMAND_HANGUL_HANJA_CONVERSION, NULL );
-        else
-            // ignore hangul-hanja key_down to avoid having it processed twice
-            return 0;
-    }
-    pChild->ImplGetWindowImpl()->mpFrameData->mbTriggerHangulHanja = FALSE;
-
-
     // --- RTL --- mirror cursor keys
     if( (aKeyCode.GetCode() == KEY_LEFT || aKeyCode.GetCode() == KEY_RIGHT) &&
       pChild->ImplHasMirroredGraphics() && pChild->IsRTLEnabled() )
@@ -2201,18 +2188,8 @@ static void ImplHandleSalKeyMod( Window* pWindow, SalKeyModEvent* pEvent )
     // send modkey events only if useful data is available
     if( pEvent->mnModKeyCode != 0 )
     {
-        pChild->ImplGetWindowImpl()->mpFrameData->mbTriggerHangulHanja =
-            pEvent->mnModKeyCode == MODKEY_RMOD1 ? TRUE : FALSE;
-
         CommandModKeyData data( pEvent->mnModKeyCode );
         ImplCallCommand( pChild, COMMAND_MODKEYCHANGE, &data );
-
-        // on right ctrl release possibly trigger hangul/hanja conversion
-        if( pEvent->mnCode == 0 && pChild->ImplGetWindowImpl()->mpFrameData->mbTriggerHangulHanja )
-        {
-            pChild->ImplGetWindowImpl()->mpFrameData->mbTriggerHangulHanja = FALSE;
-            ImplCallCommand( pChild, COMMAND_HANGUL_HANJA_CONVERSION, NULL );
-        }
     }
 }
 
