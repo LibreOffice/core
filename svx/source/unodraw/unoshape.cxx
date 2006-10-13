@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:27:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:24:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2006,6 +2006,8 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
         }
         case OWN_ATTR_OLE_VISAREA:
         {
+            // TODO/LATER: seems to make no sence for iconified object
+
             awt::Rectangle aVisArea;
             if( (rVal >>= aVisArea) && mpObj->ISA(SdrOle2Obj))
             {
@@ -2023,6 +2025,16 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                     }
                 }
 
+                return;
+            }
+            break;
+        }
+        case OWN_ATTR_OLE_ASPECT:
+        {
+            sal_Int64 nAspect;
+            if( (rVal >>= nAspect) && mpObj->ISA(SdrOle2Obj))
+            {
+                ((SdrOle2Obj*)mpObj.get())->SetAspect( nAspect );
                 return;
             }
             break;
@@ -2373,25 +2385,8 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 awt::Rectangle aVisArea;
                 if( mpObj->ISA(SdrOle2Obj))
                 {
-                    uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)mpObj.get())->GetObjRef() );
-                    if ( xObj.is() )
-                    {
-                        try
-                        {
-                            awt::Size aTmp = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
-                            aVisArea = awt::Rectangle( 0, 0, aTmp.Width, aTmp.Height );
-                        }
-                        catch ( embed::NoVisualAreaSizeException& )
-                        {
-                            OSL_ENSURE( sal_False, "Couldn't get the visual area of the object!\n" );
-                            aVisArea.Width = 5000;
-                            aVisArea.Height = 5000;
-                        }
-                        catch ( uno::Exception& )
-                        {
-                            OSL_ENSURE( sal_False, "Couldn't get the visual area of the object!\n" );
-                        }
-                    }
+                    Size aTmp = ((SdrOle2Obj*)mpObj.get())->GetOrigObjSize();
+                    aVisArea = awt::Rectangle( 0, 0, aTmp.Width(), aTmp.Height() );
                 }
 
                 aAny <<= aVisArea;
@@ -2402,33 +2397,49 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 awt::Size aSize;
                 if( mpObj->ISA(SdrOle2Obj))
                 {
-                    uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)mpObj.get())->GetObjRef() );
-                    if( xObj.is() ) // && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
-                    {
-                        try
-                        {
-                            aSize = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
-                        }
-                        catch ( embed::NoVisualAreaSizeException& )
-                        {
-                            OSL_ENSURE( sal_False, "Couldn't get the visual area of the object!\n" );
-                            aSize.Width = 5000;
-                            aSize.Height = 5000;
-                        }
-                    }
+                    Size aTmp = ((SdrOle2Obj*)mpObj.get())->GetOrigObjSize();
+                    aSize = awt::Size( aTmp.Width(), aTmp.Height() );
                 }
+
                 aAny <<= aSize;
                 break;
             }
+            case OWN_ATTR_OLE_ASPECT:
+            {
+                sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+                if( mpObj->ISA(SdrOle2Obj))
+                    nAspect = ((SdrOle2Obj*)mpObj.get())->GetAspect();
+
+                aAny <<= nAspect;
+                break;
+            }
+            case OWN_ATTR_VALUE_GRAPHIC:
+            {
+                uno::Reference< graphic::XGraphic > xGraphic;
+                SdrOle2Obj* pObj = dynamic_cast<SdrOle2Obj*>( mpObj.get() );
+                if( pObj )
+                {
+                    Graphic* pGraphic = pObj->GetGraphic();
+                    if ( pGraphic )
+                        xGraphic = pGraphic->GetXGraphic();
+                }
+
+                aAny <<= xGraphic;
+                break;
+            }
             case OWN_ATTR_OLEMODEL:
+            case OWN_ATTR_OLE_EMBEDDED_OBJECT:
             {
                 SdrOle2Obj* pObj = dynamic_cast<SdrOle2Obj*>( mpObj.get() );
                 if( pObj )
                 {
                     uno::Reference < embed::XEmbeddedObject > xObj( pObj->GetObjRef() );
-                    if( xObj.is() && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
+                    if ( xObj.is()
+                      && ( pMap->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT || svt::EmbeddedObjectRef::TryRunningState( xObj ) ) )
                     {
                         const SdrPageView* pPageView = mpModel->GetPaintingPageView();
+                        sal_Bool bSuccess = sal_False;
+
                         if ( pPageView )
                         {
                             SdrView* pView = (SdrView*)&(pPageView->GetView());
@@ -2436,10 +2447,19 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                             {
                                 SdrPaintView* pPaintView = (SdrPaintView*)pView;
                                 pPaintView->DoConnect( pObj );
+                                bSuccess = sal_True;
                             }
                         }
 
-                        return makeAny( pObj->GetObjRef()->getComponent() );
+                        if ( !bSuccess )
+                            bSuccess = pObj->AddOwnLightClient();
+
+                        OSL_ENSURE( bSuccess, "An object without client is provided!" );
+
+                        if ( pMap->nWID == OWN_ATTR_OLEMODEL )
+                            return makeAny( pObj->GetObjRef()->getComponent() );
+                        else
+                            return makeAny( xObj );
                     }
                 }
 
