@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:58:35 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:39:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1416,36 +1416,41 @@ void SfxFrame::SetWorkWindow_Impl( SfxWorkWindow* pWorkwin )
 void SfxFrame::CreateWorkWindow_Impl()
 {
     SfxFrame* pFrame = this;
-    try
-    {
-        Reference < XChild > xChild( GetCurrentDocument()->GetModel(), UNO_QUERY );
-        if ( xChild.is() )
-        {
-            Reference < XModel > xParent( xChild->getParent(), UNO_QUERY );
-            if ( xParent.is() )
-            {
-                Reference< XController > xParentCtrler = xParent->getCurrentController();
-                if ( xParentCtrler.is() )
-                {
-                    Reference < XFrame > xFrame( xParentCtrler->getFrame() );
-                    SfxFrame* pFr = SfxFrame::GetFirst();
-                    while ( pFr )
-                    {
-                        if ( pFr->GetFrameInterface() == xFrame )
-                        {
-                            pFrame = pFr;
-                            break;
-                        }
 
-                        pFr = SfxFrame::GetNext( *pFr );
+    if ( IsInPlace() )
+    {
+        // this makes sence only for inplace activated objects
+        try
+        {
+            Reference < XChild > xChild( GetCurrentDocument()->GetModel(), UNO_QUERY );
+            if ( xChild.is() )
+            {
+                Reference < XModel > xParent( xChild->getParent(), UNO_QUERY );
+                if ( xParent.is() )
+                {
+                    Reference< XController > xParentCtrler = xParent->getCurrentController();
+                    if ( xParentCtrler.is() )
+                    {
+                        Reference < XFrame > xFrame( xParentCtrler->getFrame() );
+                        SfxFrame* pFr = SfxFrame::GetFirst();
+                        while ( pFr )
+                        {
+                            if ( pFr->GetFrameInterface() == xFrame )
+                            {
+                                pFrame = pFr;
+                                break;
+                            }
+
+                            pFr = SfxFrame::GetNext( *pFr );
+                        }
                     }
                 }
             }
         }
-    }
-    catch(Exception&)
-    {
-        OSL_ENSURE(0,"SfxFrame::CreateWorkWindow_Impl: Exception cachted. Please try to submit a repoducable bug !");
+        catch(Exception&)
+        {
+            OSL_ENSURE(0,"SfxFrame::CreateWorkWindow_Impl: Exception cachted. Please try to submit a repoducable bug !");
+        }
     }
 
     pImp->pWorkWin = new SfxFrameWorkWin_Impl( &pFrame->GetWindow(), this, pFrame );
