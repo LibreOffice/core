@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-27 17:25:58 $
+#   last change: $Author: obo $ $Date: 2006-10-13 11:41:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,8 @@ LIB1FILES=	$(SLB)$/container.lib		\
             $(SLB)$/property.lib		\
             $(SLB)$/streaming.lib		\
             $(SLB)$/compare.lib         \
-            $(SLB)$/officeinstdir.lib
+            $(SLB)$/officeinstdir.lib	\
+            $(SLB)$/xml.lib
 
 SHL1TARGET=$(COMPHLP_TARGET)$(COMPHLP_MAJOR)$(COMID)
 SHL1STDLIBS= \
