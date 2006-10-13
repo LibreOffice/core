@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:20:45 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 08:29:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,12 @@
 #ifndef _SV_GRADIENT_HXX
 #include <vcl/gradient.hxx>
 #endif
+#ifndef _SFXAPP_HXX //autogen
+#include <sfx2/app.hxx>
+#endif
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
+#endif
 //#ifndef _SVX_XIT_HXX
 //#include <svx/xit.hxx>
 //#endif
@@ -132,6 +138,18 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
 #include <com/sun/star/drawing/XControlShape.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
+#include <com/sun/star/i18n/ScriptType.hpp>
 #endif
 #ifndef _SV_CVTGRF_HXX
 #include <vcl/cvtgrf.hxx>
@@ -208,6 +226,8 @@ using namespace vos;
 #define VARIABLE_PITCH          0x02
 
 // ---------------------------------------------------------------------------------------------
+
+com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > xPPTBreakIter;
 
 PPTExBulletProvider::PPTExBulletProvider()
 {
@@ -396,11 +416,19 @@ FontCollection::~FontCollection()
     for( void* pStr = List::First(); pStr; pStr = List::Next() )
         delete (FontCollectionEntry*)pStr;
     delete pVDev;
+    xPPTBreakIter = NULL;
 }
 
 FontCollection::FontCollection() :
     pVDev ( NULL )
 {
+    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+        xMSF = ::comphelper::getProcessServiceFactory();
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+        xInterface = xMSF->createInstance( rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
+    if ( xInterface.is() )
+        xPPTBreakIter = com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator >
+            ( xInterface, com::sun::star::uno::UNO_QUERY );
 }
 
 sal_uInt32 FontCollection::GetId( FontCollectionEntry& rEntry )
@@ -1922,22 +1950,53 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
                 mAny >>= rFontDesc.Pitch;
         }
     }
-    bOk = ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontNameAsian" ) ), bGetPropStateValue );
-    meAsianOrComplexFont = ePropState;
-    if ( bOk )
+
+    sal_Int16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguage() );
+    if ( mpText && mnTextSize && xPPTBreakIter.is() )
     {
-        FontCollectionEntry aFontDesc( *(::rtl::OUString*)mAny.getValue() );
-        sal_uInt32  nCount = rFontCollection.GetCount();
-        mnAsianOrComplexFont = (sal_uInt16)rFontCollection.GetId( aFontDesc );
-        if ( mnAsianOrComplexFont == nCount )
+        rtl::OUString sT( mpText, mnTextSize );
+        nScriptType = xPPTBreakIter->getScriptType( sT, 0 );
+    }
+    if ( nScriptType != com::sun::star::i18n::ScriptType::COMPLEX )
+    {
+        bOk = ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontNameAsian" ) ), bGetPropStateValue );
+        meAsianOrComplexFont = ePropState;
+        if ( bOk )
         {
-            FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
-            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSetAsian" ) ), sal_False ) )
-                mAny >>= rFontDesc.CharSet;
-            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontFamilyAsian" ) ), sal_False ) )
-                mAny >>= rFontDesc.Family;
-            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontPitchAsian" ) ), sal_False ) )
-                mAny >>= rFontDesc.Pitch;
+            FontCollectionEntry aFontDesc( *(::rtl::OUString*)mAny.getValue() );
+            sal_uInt32  nCount = rFontCollection.GetCount();
+            mnAsianOrComplexFont = (sal_uInt16)rFontCollection.GetId( aFontDesc );
+            if ( mnAsianOrComplexFont == nCount )
+            {
+                FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
+                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSetAsian" ) ), sal_False ) )
+                    mAny >>= rFontDesc.CharSet;
+                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontFamilyAsian" ) ), sal_False ) )
+                    mAny >>= rFontDesc.Family;
+                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontPitchAsian" ) ), sal_False ) )
+                    mAny >>= rFontDesc.Pitch;
+            }
+        }
+    }
+    else
+    {
+        bOk = ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontNameComplex" ) ), bGetPropStateValue );
+        meAsianOrComplexFont = ePropState;
+        if ( bOk )
+        {
+            FontCollectionEntry aFontDesc( *(::rtl::OUString*)mAny.getValue() );
+            sal_uInt32  nCount = rFontCollection.GetCount();
+            mnAsianOrComplexFont = (sal_uInt16)rFontCollection.GetId( aFontDesc );
+            if ( mnAsianOrComplexFont == nCount )
+            {
+                FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
+                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSetComplex" ) ), sal_False ) )
+                    mAny >>= rFontDesc.CharSet;
+                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontFamilyComplex" ) ), sal_False ) )
+                    mAny >>= rFontDesc.Family;
+                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontPitchComplex" ) ), sal_False ) )
+                    mAny >>= rFontDesc.Pitch;
+            }
         }
     }
 
