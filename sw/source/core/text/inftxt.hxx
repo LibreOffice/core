@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:37:36 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 08:19:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,6 @@ protected:
     sal_Bool bNotEOL    : 1;
     sal_Bool bURLNotify : 1;
     sal_Bool bStopUnderFlow : 1;// Underflow gestoppt z.B. von einer FlyPortion
-    sal_Bool bArrowDone : 1;    // Pfeil nach links bei gescrollten Absaetzen
     sal_Bool bFtnInside : 1;    // the current line contains a footnote
     sal_Bool bMulti : 1;        // inside a multiportion
     sal_Bool bFirstMulti : 1;   // this flag is used for two purposes:
@@ -532,6 +531,7 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     sal_Bool bFtnDone  : 1;    // Ftn bereits formatiert
     sal_Bool bErgoDone : 1;    // ErgoDone bereits formatiert
     sal_Bool bNumDone  : 1;    // bNumDone bereits formatiert
+    sal_Bool bArrowDone : 1;    // Pfeil nach links bei gescrollten Absaetzen
     sal_Bool bStop   : 1;      // Sofort abbrechen, Zeile verwerfen.
     sal_Bool bNewLine  : 1;    // Noch eine weitere Zeile formatieren.
     sal_Bool bShift  : 1;      // Positionsaend.: Repaint bis auf Weiteres
