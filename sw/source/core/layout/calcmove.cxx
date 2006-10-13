@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:16:49 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 12:19:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1091,6 +1091,9 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 |*************************************************************************/
 
 #define STOP_FLY_FORMAT 10
+// --> OD 2006-09-25 #b6448963# - loop prevention
+const int cnStopFormat = 15;
+// <--
 
 inline void ValidateSz( SwFrm *pFrm )
 {
@@ -1125,6 +1128,9 @@ void SwCntntFrm::MakeAll()
 
     LockJoin();
     long nFormatCount = 0;
+    // --> OD 2006-09-25 #b6448963# - loop prevention
+    int nConsequetiveFormatsWithoutChange = 0;
+    // <--
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
 
 #ifndef PRODUCT
@@ -1268,6 +1274,10 @@ void SwCntntFrm::MakeAll()
 
     while ( !bValidPos || !bValidSize || !bValidPrtArea )
     {
+        // --> OD 2006-09-25 #b6448963# - loop prevention
+        SwRect aOldFrm_StopFormat( Frm() );
+        SwRect aOldPrt_StopFormat( Prt() );
+        // <--
         if ( TRUE == (bMoveable = IsMoveable()) )
         {
             SwFrm *pPre = GetIndPrev();
@@ -1393,7 +1403,20 @@ void SwCntntFrm::MakeAll()
             ++nFormatCount;
             if( nFormatCount > STOP_FLY_FORMAT )
                 SetFlyLock( TRUE );
-            Format();
+            // --> OD 2006-09-25 #b6448963# - loop prevention
+            // No format any longer, if <cnStopFormat> consequetive formats
+            // without change occur.
+            if ( nConsequetiveFormatsWithoutChange <= cnStopFormat )
+            {
+                Format();
+            }
+#if OSL_DEBUG_LEVEL > 1
+            else
+            {
+                ASSERT( false, "debug assertion: <SwCntntFrm::MakeAll()> - format of text frame suppressed by fix b6448963" );
+            }
+#endif
+            // <--
         }
 
         // FME 16.07.2003 #i16930# - removed this code because it did not work
@@ -1516,6 +1539,20 @@ void SwCntntFrm::MakeAll()
                 aOldPrtPos = (Prt().*fnRect->fnGetPos)();
             }
         }
+
+        // --> OD 2006-09-25 #b6448963# - loop prevention
+        {
+            if ( aOldFrm_StopFormat == Frm() &&
+                 aOldPrt_StopFormat == Prt() )
+            {
+                ++nConsequetiveFormatsWithoutChange;
+            }
+            else
+            {
+                nConsequetiveFormatsWithoutChange = 0;
+            }
+        }
+        // <--
 
         //Wieder ein Wert ungueltig? - dann nochmal das ganze...
         if ( !bValidPos || !bValidSize || !bValidPrtArea )
