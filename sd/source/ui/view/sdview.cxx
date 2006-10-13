@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:42:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:03:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -806,20 +806,37 @@ void View::SetMarkedOriginalSize()
                 if( xObj.is() )
                 {
                     // TODO/LEAN: working with VisualArea can switch object to running state
-                    MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( ((SdrOle2Obj*)pObj)->GetAspect() ) );
-                    try
+
+                       sal_Int64 nAspect = ((SdrOle2Obj*)pObj)->GetAspect();
+                    Size aOleSize;
+
+                    if ( nAspect == embed::Aspects::MSOLE_ICON )
                     {
-                        awt::Size aSz = xObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
-                        Size        aOleSize( OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aUnit, MAP_100TH_MM) );
+                        MapMode aMap100( MAP_100TH_MM );
+                        aOleSize = ((SdrOle2Obj*)pObj)->GetOrigObjSize( &aMap100 );
+                        bOK = TRUE;
+                    }
+                    else
+                    {
+                        MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+                        try
+                        {
+                            awt::Size aSz = xObj->getVisualAreaSize( nAspect );
+                            aOleSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aUnit, MAP_100TH_MM );
+                            bOK = TRUE;
+                        }
+                        catch( embed::NoVisualAreaSizeException& )
+                        {}
+                    }
+
+                    if ( bOK )
+                    {
                         Rectangle   aDrawRect( pObj->GetLogicRect() );
 
                         pUndoGroup->AddAction( pDoc->GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
                         pObj->Resize( aDrawRect.TopLeft(), Fraction( aOleSize.Width(), aDrawRect.GetWidth() ),
                                                            Fraction( aOleSize.Height(), aDrawRect.GetHeight() ) );
-                        bOK = TRUE;
                     }
-                    catch( embed::NoVisualAreaSizeException& )
-                    {}
                 }
             }
             else if( pObj->GetObjIdentifier() == OBJ_GRAF )
@@ -961,23 +978,9 @@ void View::DoConnect(SdrOle2Obj* pObj)
                     // TODO/LEAN: working with visual area can switch object to running state
                     Size aDrawSize = aRect.GetSize();
                     awt::Size aSz;
-                    try
-                    {
-                        aSz = xObj->getVisualAreaSize( pSdClient->GetAspect() );
-                    }
-                    catch( embed::NoVisualAreaSizeException& )
-                    {
-                        DBG_ASSERT( sal_False, "Can not get visual area size!\n");
-                        aSz.Width = 5000;
-                        aSz.Height = 5000;
-                    }
 
-                    Size aObjAreaSize( aSz.Width, aSz.Height );
-
-                    MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( pSdClient->GetAspect() ) );
-                    aObjAreaSize = OutputDevice::LogicToLogic( aObjAreaSize,
-                                                           aMapUnit,
-                                                           pDoc->GetScaleUnit() );
+                    MapMode aMapMode( pDoc->GetScaleUnit() );
+                    Size aObjAreaSize = pObj->GetOrigObjSize( &aMapMode );
 
                     Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
                     Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
