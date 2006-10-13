@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ocompinstream.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:24:11 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:48:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,24 +47,27 @@
 #endif
 
 #include "owriteablestream.hxx"
+#include "xstorage.hxx"
 
 using namespace ::com::sun::star;
 
 //-----------------------------------------------
-OInputCompStream::OInputCompStream()
+OInputCompStream::OInputCompStream( sal_Int16 nStorageType )
 : m_pImpl( NULL )
 , m_rMutexRef( new SotMutexHolder )
 , m_pInterfaceContainer( NULL )
 , m_bDisposed( sal_False )
+, m_nStorageType( nStorageType )
 {
 }
 
 //-----------------------------------------------
-OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl )
+OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl, sal_Int16 nStorageType )
 : m_pImpl( &aImpl )
 , m_rMutexRef( m_pImpl->m_rMutexRef )
 , m_pInterfaceContainer( NULL )
 , m_bDisposed( sal_False )
+, m_nStorageType( nStorageType )
 {
     OSL_ENSURE( m_pImpl->m_rMutexRef.Is(), "No mutex is provided!\n" );
     if ( !m_pImpl->m_rMutexRef.Is() )
@@ -74,13 +77,15 @@ OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl )
 //-----------------------------------------------
 OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
                                     uno::Reference < io::XInputStream > xStream,
-                                    const uno::Sequence< beans::PropertyValue >& aProps )
+                                    const uno::Sequence< beans::PropertyValue >& aProps,
+                                    sal_Int16 nStorageType )
 : m_pImpl( &aImpl )
 , m_rMutexRef( m_pImpl->m_rMutexRef )
 , m_xStream( xStream )
 , m_pInterfaceContainer( NULL )
 , m_aProperties( aProps )
 , m_bDisposed( sal_False )
+, m_nStorageType( nStorageType )
 {
     OSL_ENSURE( m_pImpl->m_rMutexRef.Is(), "No mutex is provided!\n" );
     if ( !m_pImpl->m_rMutexRef.Is() )
@@ -91,13 +96,15 @@ OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
 
 //-----------------------------------------------
 OInputCompStream::OInputCompStream( uno::Reference < io::XInputStream > xStream,
-                                    const uno::Sequence< beans::PropertyValue >& aProps )
+                                    const uno::Sequence< beans::PropertyValue >& aProps,
+                                    sal_Int16 nStorageType )
 : m_pImpl( NULL )
 , m_rMutexRef( new SotMutexHolder )
 , m_xStream( xStream )
 , m_pInterfaceContainer( NULL )
 , m_aProperties( aProps )
 , m_bDisposed( sal_False )
+, m_nStorageType( nStorageType )
 {
     OSL_ENSURE( xStream.is(), "No stream is provided!\n" );
 }
@@ -117,6 +124,37 @@ OInputCompStream::~OInputCompStream()
         if ( m_pInterfaceContainer )
             delete m_pInterfaceContainer;
     }
+}
+
+//-----------------------------------------------
+uno::Any SAL_CALL OInputCompStream::queryInterface( const uno::Type& rType )
+        throw( uno::RuntimeException )
+{
+    uno::Any aReturn;
+
+    // common interfaces
+    aReturn <<= ::cppu::queryInterface
+                (   rType
+                    ,   static_cast<io::XInputStream*> ( this )
+                    ,   static_cast<io::XStream*> ( this )
+                    ,   static_cast<lang::XComponent*> ( this )
+                    ,   static_cast<beans::XPropertySet*> ( this )
+                    ,   static_cast<embed::XExtendedStorageStream*> ( this ) );
+
+    if ( aReturn.hasValue() == sal_True )
+        return aReturn ;
+
+    if ( m_nStorageType == OFOPXML_STORAGE )
+    {
+        aReturn <<= ::cppu::queryInterface
+                    (   rType
+                        ,   static_cast<embed::XRelationshipAccess*> ( this ) );
+
+        if ( aReturn.hasValue() == sal_True )
+            return aReturn ;
+    }
+
+    return OWeakObject::queryInterface( rType );
 }
 
 //-----------------------------------------------
@@ -295,6 +333,228 @@ void SAL_CALL OInputCompStream::removeEventListener( const uno::Reference< lang:
 }
 
 //-----------------------------------------------
+sal_Bool SAL_CALL OInputCompStream::hasByID(  const ::rtl::OUString& sID )
+        throw ( io::IOException,
+                uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
+    if ( m_nStorageType != OFOPXML_STORAGE )
+        throw uno::RuntimeException();
+
+    try
+    {
+        getRelationshipByID( sID );
+        return sal_True;
+    }
+    catch( container::NoSuchElementException& )
+    {}
+
+    return sal_False;
+}
+
+//-----------------------------------------------
+::rtl::OUString SAL_CALL OInputCompStream::getTargetByID(  const ::rtl::OUString& sID  )
+        throw ( container::NoSuchElementException,
+                io::IOException,
+                uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
+    if ( m_nStorageType != OFOPXML_STORAGE )
+        throw uno::RuntimeException();
+
+    uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
+    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
+        if ( aSeq[nInd].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Target" ) ) )
+            return aSeq[nInd].Second;
+
+    return ::rtl::OUString();
+}
+
+//-----------------------------------------------
+::rtl::OUString SAL_CALL OInputCompStream::getTypeByID(  const ::rtl::OUString& sID  )
+        throw ( container::NoSuchElementException,
+                io::IOException,
+                uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
+    if ( m_nStorageType != OFOPXML_STORAGE )
+        throw uno::RuntimeException();
+
+    uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
+    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
+        if ( aSeq[nInd].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
+            return aSeq[nInd].Second;
+
+    return ::rtl::OUString();
+}
+
+//-----------------------------------------------
+uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationshipByID(  const ::rtl::OUString& sID  )
+        throw ( container::NoSuchElementException,
+                io::IOException,
+                uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
+    if ( m_nStorageType != OFOPXML_STORAGE )
+        throw uno::RuntimeException();
+
+    // TODO/LATER: in future the unification of the ID could be checked
+    uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
+        for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
+            if ( aSeq[nInd1][nInd2].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Id" ) ) )
+            {
+                if ( aSeq[nInd1][nInd2].Second.equals( sID ) )
+                    return aSeq[nInd1];
+                break;
+            }
+
+    throw container::NoSuchElementException();
+}
+
+//-----------------------------------------------
+uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::getRelationshipsByType(  const ::rtl::OUString& sType  )
+        throw ( io::IOException,
+                uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
+    if ( m_nStorageType != OFOPXML_STORAGE )
+        throw uno::RuntimeException();
+
+    uno::Sequence< uno::Sequence< beans::StringPair > > aResult;
+    sal_Int32 nEntriesNum = 0;
+
+    // TODO/LATER: in future the unification of the ID could be checked
+    uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
+        for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
+            if ( aSeq[nInd1][nInd2].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
+            {
+                if ( aSeq[nInd1][nInd2].Second.equals( sType ) )
+                {
+                    aResult.realloc( nEntriesNum );
+                    aResult[nEntriesNum-1] = aSeq[nInd1];
+                }
+                break;
+            }
+
+    return aResult;
+}
+
+//-----------------------------------------------
+uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::getAllRelationships()
+        throw (io::IOException, uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
+    if ( m_nStorageType != OFOPXML_STORAGE )
+        throw uno::RuntimeException();
+
+    // TODO/LATER: in future the information could be taken directly from m_pImpl when possible
+    uno::Sequence< uno::Sequence< beans::StringPair > > aResult;
+    for ( sal_Int32 aInd = 0; aInd < m_aProperties.getLength(); aInd++ )
+        if ( m_aProperties[aInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RelationsInfo" ) ) )
+        {
+            if ( m_aProperties[aInd].Value >>= aResult )
+                return aResult;
+
+            break;
+        }
+
+    throw io::IOException(); // the relations info could not be read
+}
+
+//-----------------------------------------------
+void SAL_CALL OInputCompStream::insertRelationshipByID(  const ::rtl::OUString& /*sID*/, const uno::Sequence< beans::StringPair >& /*aEntry*/, ::sal_Bool /*bReplace*/  )
+        throw ( container::ElementExistException,
+                io::IOException,
+                uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
+    if ( m_nStorageType != OFOPXML_STORAGE )
+        throw uno::RuntimeException();
+
+    throw io::IOException(); // TODO: Access denied
+}
+
+//-----------------------------------------------
+void SAL_CALL OInputCompStream::removeRelationshipByID(  const ::rtl::OUString& /*sID*/  )
+        throw ( container::NoSuchElementException,
+                io::IOException,
+                uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
+    if ( m_nStorageType != OFOPXML_STORAGE )
+        throw uno::RuntimeException();
+
+    throw io::IOException(); // TODO: Access denied
+}
+
+//-----------------------------------------------
+void SAL_CALL OInputCompStream::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& /*aEntries*/, ::sal_Bool /*bReplace*/  )
+        throw ( container::ElementExistException,
+                io::IOException,
+                uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
+    if ( m_nStorageType != OFOPXML_STORAGE )
+        throw uno::RuntimeException();
+
+    throw io::IOException(); // TODO: Access denied
+}
+
+//-----------------------------------------------
+void SAL_CALL OInputCompStream::clearRelationships()
+        throw ( io::IOException,
+                uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
+    if ( m_nStorageType != OFOPXML_STORAGE )
+        throw uno::RuntimeException();
+
+    throw io::IOException(); // TODO: Access denied
+}
+
+//-----------------------------------------------
 uno::Reference< beans::XPropertySetInfo > SAL_CALL OInputCompStream::getPropertySetInfo()
         throw ( uno::RuntimeException )
 {
@@ -308,7 +568,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OInputCompStream::getProperty
 }
 
 //-----------------------------------------------
-void SAL_CALL OInputCompStream::setPropertyValue( const ::rtl::OUString& /*aPropertyName*/, const uno::Any& /*aValue*/ )
+void SAL_CALL OInputCompStream::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& /*aValue*/ )
         throw ( beans::UnknownPropertyException,
                 beans::PropertyVetoException,
                 lang::IllegalArgumentException,
@@ -320,7 +580,16 @@ void SAL_CALL OInputCompStream::setPropertyValue( const ::rtl::OUString& /*aProp
     if ( m_bDisposed )
         throw lang::DisposedException();
 
-    throw beans::PropertyVetoException(); // TODO
+    // all the provided properties are accessible
+    for ( sal_Int32 aInd = 0; aInd < m_aProperties.getLength(); aInd++ )
+    {
+        if ( m_aProperties[aInd].Name.equals( aPropertyName ) )
+        {
+            throw beans::PropertyVetoException(); // TODO
+        }
+    }
+
+    throw beans::UnknownPropertyException(); // TODO
 }
 
 
@@ -341,24 +610,19 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const ::rtl::OUString& aPr
     else
         aPropertyName = aProp;
 
-    if ( aPropertyName.equalsAscii( "MediaType" )
-      || aPropertyName.equalsAscii( "Size" )
-      || aPropertyName.equalsAscii( "Encrypted" )
-      || aPropertyName.equalsAscii( "Compressed" )
-      || aPropertyName.equalsAscii( "UseCommonStoragePasswordEncryption" ) )
+    if ( aPropertyName.equalsAscii( "RelationsInfo" ) )
+        throw beans::UnknownPropertyException(); // TODO
+
+    // all the provided properties are accessible
+    for ( sal_Int32 aInd = 0; aInd < m_aProperties.getLength(); aInd++ )
     {
-        for ( sal_Int32 aInd = 0; aInd < m_aProperties.getLength(); aInd++ )
+        if ( m_aProperties[aInd].Name.equals( aPropertyName ) )
         {
-            if ( m_aProperties[aInd].Name.equals( aPropertyName ) )
-            {
-                return m_aProperties[aInd].Value;
-            }
+            return m_aProperties[aInd].Value;
         }
     }
-    else if ( aPropertyName.equalsAscii( "EncryptionKey" ) )
-        throw lang::WrappedTargetException(); // TODO: PropertyVetoException
 
-    throw beans::UnknownPropertyException();
+    throw beans::UnknownPropertyException(); // TODO
 }
 
 
