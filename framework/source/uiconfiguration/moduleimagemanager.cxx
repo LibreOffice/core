@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleimagemanager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:15:47 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 09:43:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -763,6 +763,15 @@ void SAL_CALL ModuleImageManager::dispose() throw (::com::sun::star::uno::Runtim
         m_bConfigRead = false;
         m_bModified = false;
         m_bDisposed = true;
+
+        // delete user and default image list on dispose
+        for ( sal_Int32 n=0; n < ImageType_COUNT; n++ )
+        {
+            delete m_pUserImageList[n];
+            m_pUserImageList[n] = 0;
+        }
+        delete m_pDefaultImageList;
+        m_pDefaultImageList = 0;
     }
 }
 
