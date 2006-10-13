@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndole.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:27:39 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:08:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ class SwOLEObj
 
 public:
     SwOLEObj( const svt::EmbeddedObjectRef& pObj );
-    SwOLEObj( const String &rName );
+    SwOLEObj( const String &rName, sal_Int64 nAspect );
     ~SwOLEObj();
 
     BOOL UnloadObject();
@@ -94,7 +94,6 @@ class SwOLENode: public SwNoTxtNode
     friend class SwNodes;
     mutable SwOLEObj aOLEObj;
     Graphic*    pGraphic;
-    sal_Int64   nViewAspect;
     String sChartTblName;       // bei Chart Objecten: Name der ref. Tabelle
     BOOL   bOLESizeInvalid;     //Soll beim SwDoc::PrtOLENotify beruecksichtig
                                 //werden (zum Beispiel kopiert). Ist nicht
@@ -110,6 +109,7 @@ class SwOLENode: public SwNoTxtNode
 
     SwOLENode(  const SwNodeIndex &rWhere,
                 const String &rName,
+                sal_Int64 nAspect,
                 SwGrfFmtColl *pGrfColl,
                 SwAttrSet* pAutoAttr = 0 );
 
@@ -139,7 +139,8 @@ public:
     BOOL IsOLESizeInvalid() const   { return bOLESizeInvalid; }
     void SetOLESizeInvalid( BOOL b ){ bOLESizeInvalid = b; }
 
-    sal_Int64 GetAspect() const { return nViewAspect; }
+    sal_Int64 GetAspect() const { return aOLEObj.GetObject().GetViewAspect(); }
+    void SetAspect( sal_Int64 nAspect) { aOLEObj.GetObject().SetViewAspect( nAspect ); }
 
     // OLE-Object aus dem "Speicher" entfernen
     // inline void Unload() { aOLEObj.Unload(); }
