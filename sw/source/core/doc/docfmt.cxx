@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:25:29 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 12:19:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2404,3 +2404,48 @@ void SwDoc::ChgFmt(SwFmt & rFmt, const SfxPoolItem & rItem)
 
 }
 
+// --> OD 2006-09-27 #i69627#
+namespace docfunc
+{
+    bool HasOutlineStyleToBeWrittenAsNormalListStyle( SwDoc& rDoc )
+    {
+        // If a parent paragraph style of one of the parargraph styles, which
+        // are assigned to the list levels of the outline style, has a list style
+        // set or inherits a list style from its parent style, the outline style
+        // has to be written as a normal list style to the OpenDocument file
+        // format or the OpenOffice.org file format.
+        bool bRet( false );
+
+        const SwTxtFmtColls* pTxtFmtColls( rDoc.GetTxtFmtColls() );
+        if ( pTxtFmtColls )
+        {
+            const USHORT nCount = pTxtFmtColls->Count();
+            for ( USHORT i = 0; i < nCount; ++i )
+            {
+                SwTxtFmtColl* pTxtFmtColl = (*pTxtFmtColls)[i];
+
+                if ( pTxtFmtColl->IsDefault() ||
+                     pTxtFmtColl->GetOutlineLevel() == NO_NUMBERING )
+                {
+                    continue;
+                }
+
+                const SwTxtFmtColl* pParentTxtFmtColl =
+                   dynamic_cast<const SwTxtFmtColl*>( pTxtFmtColl->DerivedFrom());
+                if ( !pParentTxtFmtColl )
+                    continue;
+
+                const SwNumRuleItem& rDirectItem = pParentTxtFmtColl->GetNumRule();
+                if ( rDirectItem.GetValue().Len() != 0 )
+                {
+                    bRet = true;
+                    break;
+                }
+
+            }
+
+        }
+        return bRet;
+    }
+}
+// <--
