@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:39:41 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:13:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,7 +269,10 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
                 uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
                 if( xObj.is() && xPersist.is() && xPersist->hasEntry() )
                 {
-                    pOLEDataHelper = new TransferableDataHelper( new SvEmbedTransferHelper( xObj ) );
+                    pOLEDataHelper = new TransferableDataHelper( new SvEmbedTransferHelper( xObj, static_cast< SdrOle2Obj* >( pObj )->GetGraphic(), static_cast< SdrOle2Obj* >( pObj )->GetAspect() ) );
+
+                    // TODO/LATER: the standalone handling of the graphic should not be used any more in future
+                    // The EmbedDataHelper should bring the graphic in future
                     Graphic* pObjGr = static_cast< SdrOle2Obj* >( pObj )->GetGraphic();
                     if ( pObjGr )
                         pGraphic = new Graphic( *pObjGr );
