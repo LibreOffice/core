@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:43:18 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 09:43:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1065,6 +1065,12 @@ void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
     }
 }
 
+static void lcl_CheckForChildren(Menu* pMenu, USHORT nItemId)
+{
+    if (PopupMenu* pThisPopup = pMenu->GetPopupMenu( nItemId ))
+        pMenu->EnableItem( nItemId, pThisPopup->GetItemCount() ? true : false );
+}
+
 //_________________________________________________________________________________________________________________
 // vcl handler
 //_________________________________________________________________________________________________________________
@@ -1252,7 +1258,12 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                                 // Force update of popup menu
                                 pMenuItemHandler->xPopupMenuController->updatePopupMenu();
                                 bPopupMenu = sal_True;
+                                if (PopupMenu*  pThisPopup = pMenu->GetPopupMenu( pMenuItemHandler->nItemId ))
+                                    pMenu->EnableItem( pMenuItemHandler->nItemId, pThisPopup->GetItemCount() ? true : false );
+
                             }
+
+                            lcl_CheckForChildren(pMenu, pMenuItemHandler->nItemId);
 
                             if ( xMenuItemDispatch.is() )
                             {
@@ -1274,6 +1285,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                     {
                         // Force update of popup menu
                         pMenuItemHandler->xPopupMenuController->updatePopupMenu();
+                        lcl_CheckForChildren(pMenu, pMenuItemHandler->nItemId);
                     }
                     else if ( pMenuItemHandler->xMenuItemDispatch.is() )
                     {
@@ -1292,6 +1304,8 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                         {
                         }
                     }
+                    else if ( pMenuItemHandler->xSubMenuManager.is() )
+                        lcl_CheckForChildren(pMenu, pMenuItemHandler->nItemId);
                 }
             }
         }
@@ -1662,6 +1676,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
                     if ( CreatePopupMenuController( pItemHandler ))
                         pItemHandler->xPopupMenuController->updatePopupMenu();
                 }
+                lcl_CheckForChildren(pMenu, nItemId);
             }
             else if (( aItemCommand.getLength() > nAddonsURLPrefixLength ) &&
                      ( aItemCommand.indexOf( ADDONSPOPUPMENU_URL_PREFIX ) == 0 ))
@@ -1809,6 +1824,8 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
                     if ( CreatePopupMenuController( pItemHandler ))
                         pItemHandler->xPopupMenuController->updatePopupMenu();
                 }
+
+                lcl_CheckForChildren(pMenu, pItemHandler->nItemId);
             }
 
             m_aMenuItemHandlerVector.push_back( pItemHandler );
