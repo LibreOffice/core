@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:23:05 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:31:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1017,6 +1017,13 @@ sal_Bool OleEmbeddedObject::OnShowWindow_Impl( sal_Bool bShow )
     }
 
     return bResult;
+}
+
+//------------------------------------------------------
+void OleEmbeddedObject::OnIconChanged_Impl()
+{
+    // TODO/LATER: currently this notification seems to be impossible
+    // MakeEventListenerNotification_Impl( ::rtl::OUString::createFromAscii( "OnIconChanged" ) );
 }
 
 //------------------------------------------------------
