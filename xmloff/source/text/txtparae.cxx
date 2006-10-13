@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:55:01 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 12:16:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1485,7 +1485,10 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
                 }
                 else
                 {
-                    aNextNumInfo.Set( xTxtCntnt );
+                    // --> OD 2006-09-27 #i69627#
+                    aNextNumInfo.Set( xTxtCntnt,
+                                      GetExport().writeOutlineStyleAsNormalListStyle() );
+                    // <--
 
                     exportListAndSectionChange( xCurrentTextSection, aPropSetHelper,
                                                 TEXT_SECTION, xTxtCntnt,
