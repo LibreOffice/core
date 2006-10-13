@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PackageConstants.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:57:13 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:42:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,5 +42,9 @@
 const sal_Int32 n_ConstBufferSize = 32768;
 const sal_Int32 n_ConstMaxMemoryStreamSize = 20480;
 const sal_Int32 n_ConstDigestLength = 1024;
+
+#define PACKAGE_FORMAT  1
+#define ZIP_FORMAT      2
+#define OFOPXML_FORMAT  3
 
 #endif
