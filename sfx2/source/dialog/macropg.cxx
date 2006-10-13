@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:53:04 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 09:46:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -541,6 +541,25 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, ChangeScriptHdl_Impl, RadioButton*, EMPTYARG
     return 0;
 }
 
+IMPL_STATIC_LINK( _SfxMacroTabPage, TimeOut_Impl, Timer*, EMPTYARG )
+{
+    // FillMacroList() can take a long time -> show wait cursor and disable input
+    SfxTabDialog* pTabDlg = pThis->GetTabDialog();
+    // perhaps the tabpage is part of a SingleTabDialog then pTabDlg == NULL
+    if ( pTabDlg )
+    {
+        pTabDlg->EnterWait();
+        pTabDlg->EnableInput( FALSE );
+    }
+    pThis->FillMacroList();
+    if ( pTabDlg )
+    {
+        pTabDlg->EnableInput( TRUE );
+        pTabDlg->LeaveWait();
+    }
+    return 0;
+}
+
 void _SfxMacroTabPage::InitAndSetHandler()
 {
     // Handler installieren
@@ -579,7 +598,10 @@ void _SfxMacroTabPage::InitAndSetHandler()
     mpImpl->pScriptTypeLB->SelectEntry( sBasicName );
 
     mpImpl->pGroupLB->SetFunctionListBox( mpImpl->pMacroLB );
-    FillMacroList();
+
+    mpImpl->maFillGroupTimer.SetTimeoutHdl( STATIC_LINK( this, _SfxMacroTabPage, TimeOut_Impl ) );
+    mpImpl->maFillGroupTimer.SetTimeout( 0 );
+    mpImpl->maFillGroupTimer.Start();
 }
 
 void _SfxMacroTabPage::FillMacroList()
