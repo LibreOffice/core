@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:25:52 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:22:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svtools/ownlist.hxx>
+#include <comphelper/seqstream.hxx>
 
 #include "svuidlg.hrc"
 
@@ -123,6 +124,11 @@ using namespace ::com::sun::star::ui::dialogs;
 BOOL InsertObjectDialog_Impl::IsCreateNew() const
 {
     return FALSE;
+}
+
+uno::Reference< io::XInputStream > InsertObjectDialog_Impl::GetIconIfIconified( ::rtl::OUString* pGraphicMediaType )
+{
+    return uno::Reference< io::XInputStream >();
 }
 
 InsertObjectDialog_Impl::InsertObjectDialog_Impl( Window * pParent, const ResId & rResId, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage )
@@ -304,7 +310,18 @@ short SvInsertOleDlg::Execute()
 
                             OSL_ENSURE( aNewInf.Object.is(), "The object must be created or an exception must be thrown!" );
                             m_xObj = aNewInf.Object;
-                            // TODO/LATER: use the options from aNewInf ( iconified objects related )
+                            for ( sal_Int32 nInd = 0; nInd < aNewInf.Options.getLength(); nInd++ )
+                                if ( aNewInf.Options[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Icon" ) ) ) )
+                                {
+                                    aNewInf.Options[nInd].Value >>= m_aIconMetaFile;
+                                }
+                                else if ( aNewInf.Options[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IconFormat" ) ) ) )
+                                {
+                                    datatransfer::DataFlavor aFlavor;
+                                    if ( aNewInf.Options[nInd].Value >>= aFlavor )
+                                        m_aIconMediaType = aFlavor.MimeType;
+                                }
+
                         }
                     }
                     catch( ucb::CommandAbortedException& )
@@ -398,6 +415,19 @@ short SvInsertOleDlg::Execute()
 
     m_pServers = 0;
     return nRet;
+}
+
+uno::Reference< io::XInputStream > SvInsertOleDlg::GetIconIfIconified( ::rtl::OUString* pGraphicMediaType )
+{
+    if ( m_aIconMetaFile.getLength() )
+    {
+        if ( pGraphicMediaType )
+            *pGraphicMediaType = m_aIconMediaType;
+
+        return uno::Reference< io::XInputStream >( new ::comphelper::SequenceInputStream( m_aIconMetaFile ) );
+    }
+
+    return uno::Reference< io::XInputStream >();
 }
 
 IMPL_LINK( SvInsertPlugInDialog, BrowseHdl, PushButton *, EMPTYARG )
