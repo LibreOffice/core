@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hdu $ $Date: 2006-09-06 09:00:38 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 08:28:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1852,7 +1852,7 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
     t->unitsPerEm = GetUInt16(table, 18, 1);
     indexfmt = GetInt16(table, 50, 1);
 
-    if (!((indexfmt == 0) || indexfmt == 1)) {
+    if( ((indexfmt != 0) && (indexfmt != 1)) || (t->unitsPerEm <= 0) ) {
         CloseTTFont(t);
         return SF_TTFORMAT;
     }
