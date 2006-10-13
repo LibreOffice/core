@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storagehelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:14:56 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:40:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,15 +50,19 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_ILLEGALTYPEEXCEPTION_HPP_
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #endif
 
 #include <comphelper/fileformat.h>
-#include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
+
+#include <comphelper/storagehelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -268,6 +272,97 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
     }
 
     return nResult;
+}
+
+// ----------------------------------------------------------------------
+uno::Reference< embed::XStorage > OStorageHelper::GetTemporaryStorageOfFormat(
+            const ::rtl::OUString& aFormat,
+            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+    throw ( uno::Exception )
+{
+    uno::Reference< lang::XMultiServiceFactory > xFactoryToUse = xFactory.is() ? xFactory : ::comphelper::getProcessServiceFactory();
+    if ( !xFactoryToUse.is() )
+        throw uno::RuntimeException();
+
+    uno::Reference< io::XStream > xTmpStream(
+        xFactoryToUse->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ) ) ),
+        uno::UNO_QUERY_THROW );
+
+    return GetStorageOfFormatFromStream( aFormat, xTmpStream, embed::ElementModes::READWRITE, xFactoryToUse );
+}
+
+// ----------------------------------------------------------------------
+uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
+            const ::rtl::OUString& aFormat,
+            const ::rtl::OUString& aURL,
+            sal_Int32 nStorageMode,
+            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+    throw ( uno::Exception )
+{
+    uno::Sequence< beans::PropertyValue > aProps( 1 );
+    aProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StorageFormat" ) );
+    aProps[0].Value <<= aFormat;
+
+    uno::Sequence< uno::Any > aArgs( 3 );
+    aArgs[0] <<= aURL;
+    aArgs[1] <<= nStorageMode;
+    aArgs[2] <<= aProps;
+
+    uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( xFactory )->createInstanceWithArguments( aArgs ),
+                                                    uno::UNO_QUERY );
+    if ( !xTempStorage.is() )
+        throw uno::RuntimeException();
+
+    return xTempStorage;
+}
+
+// ----------------------------------------------------------------------
+uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStream(
+            const ::rtl::OUString& aFormat,
+            const uno::Reference < io::XInputStream >& xStream,
+            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+        throw ( uno::Exception )
+{
+    uno::Sequence< beans::PropertyValue > aProps( 1 );
+    aProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StorageFormat" ) );
+    aProps[0].Value <<= aFormat;
+
+    uno::Sequence< uno::Any > aArgs( 3 );
+    aArgs[0] <<= xStream;
+    aArgs[1] <<= embed::ElementModes::READ;
+    aArgs[2] <<= aProps;
+
+    uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( xFactory )->createInstanceWithArguments( aArgs ),
+                                                    uno::UNO_QUERY );
+    if ( !xTempStorage.is() )
+        throw uno::RuntimeException();
+
+    return xTempStorage;
+}
+
+// ----------------------------------------------------------------------
+uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
+            const ::rtl::OUString& aFormat,
+            const uno::Reference < io::XStream >& xStream,
+            sal_Int32 nStorageMode,
+            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+        throw ( uno::Exception )
+{
+    uno::Sequence< beans::PropertyValue > aProps( 1 );
+    aProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StorageFormat" ) );
+    aProps[0].Value <<= aFormat;
+
+    uno::Sequence< uno::Any > aArgs( 3 );
+    aArgs[0] <<= xStream;
+    aArgs[1] <<= nStorageMode;
+    aArgs[2] <<= aProps;
+
+    uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( xFactory )->createInstanceWithArguments( aArgs ),
+                                                    uno::UNO_QUERY );
+    if ( !xTempStorage.is() )
+        throw uno::RuntimeException();
+
+    return xTempStorage;
 }
 
 }
