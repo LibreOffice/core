@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:57:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:09:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2301,7 +2301,9 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
                 }
                 SwFlyFrmFmt* pFmt = 0;
 
-                pFmt = pDoc->Insert(aPam, xIPObj, &aFrmSet, NULL, NULL );
+                // TODO/LATER: Is it the only possible aspect here?
+                sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT;
+                pFmt = pDoc->Insert(aPam, ::svt::EmbeddedObjectRef( xIPObj, nAspect ), &aFrmSet, NULL, NULL );
                 ASSERT( pFmt, "Doc->Insert(notxt) failed." );
 
                 pDoc->EndUndo(UNDO_INSERT, NULL);
@@ -3106,6 +3108,104 @@ uno::Reference< XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(void) thr
     }
     return xRet;
 }
+
+/* --18.05.2006 16:39---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+
+
+uno::Reference< embed::XEmbeddedObject > SAL_CALL SwXTextEmbeddedObject::getExtendedControlOverEmbeddedObject()
+        throw( uno::RuntimeException )
+{
+    uno::Reference< embed::XEmbeddedObject > xResult;
+    SwFrmFmt*   pFmt = GetFrmFmt();
+    if(pFmt)
+    {
+        SwDoc* pDoc = pFmt->GetDoc();
+        const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
+        DBG_ASSERT( pCnt->GetCntntIdx() &&
+                       pDoc->GetNodes()[ pCnt->GetCntntIdx()->
+                                        GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?")
+
+        SwOLENode* pOleNode =  pDoc->GetNodes()[ pCnt->GetCntntIdx()
+                                        ->GetIndex() + 1 ]->GetOLENode();
+        xResult = pOleNode->GetOLEObj().GetOleRef();
+        if ( svt::EmbeddedObjectRef::TryRunningState( xResult ) )
+        {
+            if ( pDoc->GetDocShell() )
+                pDoc->GetDocShell()->CalcAndSetScaleOfOLEObj( pOleNode->GetOLEObj() );
+
+            uno::Reference < lang::XComponent > xComp( xResult->getComponent(), uno::UNO_QUERY );
+            uno::Reference< util::XModifyBroadcaster >  xBrdcst( xComp, uno::UNO_QUERY);
+            uno::Reference< frame::XModel > xModel( xComp, uno::UNO_QUERY);
+            if( xBrdcst.is() && xModel.is() )
+            {
+                SwClientIter aIter( *pFmt );
+                SwXOLEListener* pListener = (SwXOLEListener*)aIter.
+                                        First( TYPE( SwXOLEListener ));
+                //create a new one if the OLE object doesn't have one already
+                if( !pListener )
+                {
+                    uno::Reference< util::XModifyListener > xOLEListener = new SwXOLEListener(*pFmt, xModel);
+                    xBrdcst->addModifyListener( xOLEListener );
+                }
+            }
+        }
+    }
+    return xResult;
+}
+
+sal_Int64 SAL_CALL SwXTextEmbeddedObject::getAspect() throw (::com::sun::star::uno::RuntimeException)
+{
+    SwFrmFmt*   pFmt = GetFrmFmt();
+    if(pFmt)
+    {
+        SwDoc* pDoc = pFmt->GetDoc();
+        const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
+        DBG_ASSERT( pCnt->GetCntntIdx() &&
+                       pDoc->GetNodes()[ pCnt->GetCntntIdx()->
+                                        GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?")
+
+        return pDoc->GetNodes()[ pCnt->GetCntntIdx()->GetIndex() + 1 ]->GetOLENode()->GetAspect();
+    }
+
+    return embed::Aspects::MSOLE_CONTENT; // return the default value
+}
+
+void SAL_CALL SwXTextEmbeddedObject::setAspect( sal_Int64 nAspect ) throw (::com::sun::star::uno::RuntimeException)
+{
+    SwFrmFmt*   pFmt = GetFrmFmt();
+    if(pFmt)
+    {
+        SwDoc* pDoc = pFmt->GetDoc();
+        const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
+        DBG_ASSERT( pCnt->GetCntntIdx() &&
+                       pDoc->GetNodes()[ pCnt->GetCntntIdx()->
+                                        GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?")
+
+        pDoc->GetNodes()[ pCnt->GetCntntIdx()->GetIndex() + 1 ]->GetOLENode()->SetAspect( nAspect );
+    }
+}
+
+uno::Reference< graphic::XGraphic > SAL_CALL SwXTextEmbeddedObject::getReplacementGraphic() throw (::com::sun::star::uno::RuntimeException)
+{
+    SwFrmFmt*   pFmt = GetFrmFmt();
+    if(pFmt)
+    {
+        SwDoc* pDoc = pFmt->GetDoc();
+        const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
+        DBG_ASSERT( pCnt->GetCntntIdx() &&
+                       pDoc->GetNodes()[ pCnt->GetCntntIdx()->
+                                        GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?")
+
+        Graphic* pGraphic = pDoc->GetNodes()[ pCnt->GetCntntIdx()->GetIndex() + 1 ]->GetOLENode()->GetGraphic();
+        if ( pGraphic )
+            return pGraphic->GetXGraphic();
+    }
+
+    return uno::Reference< graphic::XGraphic >();
+}
+
 /* -----------------03.05.99 12:28-------------------
  *
  * --------------------------------------------------*/
