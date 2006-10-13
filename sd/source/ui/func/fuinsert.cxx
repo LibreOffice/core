@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:50:47 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:02:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -453,6 +453,9 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
         SvObjectServerList aServerLst;
         ::rtl::OUString aName;
 
+        ::rtl::OUString aIconMediaType;
+        uno::Reference< io::XInputStream > xIconMetaFile;
+
         SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, sal_False );
         if ( nSlotId == SID_INSERT_OBJECT && pNameItem )
         {
@@ -491,6 +494,11 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                         pDlg->Execute();
                         bCreateNew = pDlg->IsCreateNew();
                         xObj = pDlg->GetObject();
+
+                        xIconMetaFile = pDlg->GetIconIfIconified( &aIconMediaType );
+                        if ( xIconMetaFile.is() )
+                            nAspect = embed::Aspects::MSOLE_ICON;
+
                         if ( xObj.is() )
                             pViewShell->GetObjectShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
                         DELETEZ( pDlg );
@@ -549,32 +557,38 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
             //    aIPObj->OnDocumentPrinterChanged( pDocSh->GetPrinter(FALSE) );
 
             BOOL bInsertNewObject = TRUE;
-            awt::Size aSz;
-            try
-            {
-                aSz = xObj->getVisualAreaSize( nAspect );
-            }
-            catch( embed::NoVisualAreaSizeException& )
-            {
-                // the default size will be set later
-            }
 
-            Size aSize( aSz.Width, aSz.Height );
+            Size aSize;
+            MapUnit aMapUnit = MAP_100TH_MM;
+            if ( nAspect != embed::Aspects::MSOLE_ICON )
+            {
+                awt::Size aSz;
+                try
+                {
+                    aSz = xObj->getVisualAreaSize( nAspect );
+                }
+                catch( embed::NoVisualAreaSizeException& )
+                {
+                    // the default size will be set later
+                }
 
-            MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-            if (aSize.Height() == 0 || aSize.Width() == 0)
-            {
-                // Rechteck mit ausgewogenem Kantenverhaeltnis
-                aSize.Width()  = 14100;
-                aSize.Height() = 10000;
-                Size aTmp = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aMapUnit );
-                aSz.Width = aTmp.Width();
-                aSz.Height = aTmp.Height();
-                xObj->setVisualAreaSize( nAspect, aSz );
-            }
-            else
-            {
-                aSize = OutputDevice::LogicToLogic(aSize, aMapUnit, MAP_100TH_MM);
+                Size aSize( aSz.Width, aSz.Height );
+
+                MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+                if (aSize.Height() == 0 || aSize.Width() == 0)
+                {
+                    // Rechteck mit ausgewogenem Kantenverhaeltnis
+                    aSize.Width()  = 14100;
+                    aSize.Height() = 10000;
+                    Size aTmp = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aMapUnit );
+                    aSz.Width = aTmp.Width();
+                    aSz.Height = aTmp.Height();
+                    xObj->setVisualAreaSize( nAspect, aSz );
+                }
+                else
+                {
+                    aSize = OutputDevice::LogicToLogic(aSize, aMapUnit, MAP_100TH_MM);
+                }
             }
 
             if ( pView->AreObjectsMarked() )
@@ -603,13 +617,21 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                             ( (SdrOle2Obj*) pObj)->SetObjRef(xObj);
                             ( (SdrOle2Obj*) pObj)->SetPersistName(aName);
                             ( (SdrOle2Obj*) pObj)->SetName(aName);
+                            ( (SdrOle2Obj*) pObj)->SetAspect(nAspect);
                             Rectangle aRect = ( (SdrOle2Obj*) pObj)->GetLogicRect();
 
                             pView->HideMarkHdl(NULL);
-                            Size aTmp = OutputDevice::LogicToLogic( aRect.GetSize(), MAP_100TH_MM, aMapUnit );
-                            aSz.Width = aTmp.Width();
-                            aSz.Height = aTmp.Height();
-                            xObj->setVisualAreaSize( nAspect, aSz );
+                            if ( nAspect == embed::Aspects::MSOLE_ICON )
+                            {
+                                if( xIconMetaFile.is() )
+                                    ( (SdrOle2Obj*) pObj)->SetGraphicToObj( xIconMetaFile, aIconMediaType );
+                            }
+                            else
+                            {
+                                Size aTmp = OutputDevice::LogicToLogic( aRect.GetSize(), MAP_100TH_MM, aMapUnit );
+                                awt::Size aSz( aTmp.Width(), aTmp.Height() );
+                                xObj->setVisualAreaSize( nAspect, aSz );
+                            }
                         }
                     }
                 }
@@ -622,11 +644,21 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 **************************************************************/
                 SdrPageView* pPV = pView->GetPageViewPvNum(0);
                 Size aPageSize = pPV->GetPage()->GetSize();
+
+                // get the size from the iconified object
+                ::svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
+                if ( nAspect == embed::Aspects::MSOLE_ICON )
+                {
+                    aObjRef.SetGraphicStream( xIconMetaFile, aIconMediaType );
+                    MapMode aMapMode( MAP_100TH_MM );
+                    aSize = aObjRef.GetSize( &aMapMode );
+                }
+
                 Point aPnt ((aPageSize.Width()  - aSize.Width())  / 2,
                             (aPageSize.Height() - aSize.Height()) / 2);
                 Rectangle aRect (aPnt, aSize);
 
-                SdrOle2Obj* pObj = new SdrOle2Obj(svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
+                SdrOle2Obj* pObj = new SdrOle2Obj( aObjRef, aName, aRect);
 
                 if( pView->InsertObject(pObj, *pPV, SDRINSERT_SETDEFLAYER) )
                 {
@@ -634,29 +666,36 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     //  New size must be set in SdrObject, or a wrong scale will be set at
                     //  ActivateObject.
 
-                    try
+                    if ( nAspect != embed::Aspects::MSOLE_ICON )
                     {
-                        aSz = xObj->getVisualAreaSize( nAspect );
-
-                        Size aNewSize = Window::LogicToLogic( Size( aSz.Width, aSz.Height ),
-                                        MapMode( aMapUnit ), MapMode( MAP_100TH_MM ) );
-                        if ( aNewSize != aSize )
+                        try
                         {
-                            aRect.SetSize( aNewSize );
-                            pObj->SetLogicRect( aRect );
+                            awt::Size aSz = xObj->getVisualAreaSize( nAspect );
+
+                            Size aNewSize = Window::LogicToLogic( Size( aSz.Width, aSz.Height ),
+                                            MapMode( aMapUnit ), MapMode( MAP_100TH_MM ) );
+                            if ( aNewSize != aSize )
+                            {
+                                aRect.SetSize( aNewSize );
+                                pObj->SetLogicRect( aRect );
+                            }
                         }
+                        catch( embed::NoVisualAreaSizeException& )
+                        {}
                     }
-                    catch( embed::NoVisualAreaSizeException& )
-                    {}
 
                     if (bCreateNew)
                     {
                         pView->HideMarkHdl(NULL);
                         pObj->SetLogicRect(aRect);
-                        Size aTmp = OutputDevice::LogicToLogic( aRect.GetSize(), MAP_100TH_MM, aMapUnit );
-                        aSz.Width = aTmp.Width();
-                        aSz.Height = aTmp.Height();
-                        xObj->setVisualAreaSize( nAspect, aSz );
+
+                        if ( nAspect != embed::Aspects::MSOLE_ICON )
+                        {
+                            Size aTmp = OutputDevice::LogicToLogic( aRect.GetSize(), MAP_100TH_MM, aMapUnit );
+                            awt::Size aSz( aTmp.Width(), aTmp.Height() );
+                            xObj->setVisualAreaSize( nAspect, aSz );
+                        }
+
                         pViewShell->ActivateObject(pObj, SVVERB_SHOW);
                     }
 
