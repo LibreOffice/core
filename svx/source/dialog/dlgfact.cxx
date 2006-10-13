@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:11:14 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:21:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,6 +309,11 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > Abstra
 BOOL AbstractInsertObjectDialog_Impl::IsCreateNew()
 {
     return pDlg->IsCreateNew();
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > AbstractInsertObjectDialog_Impl::GetIconIfIconified( ::rtl::OUString* pGraphicMediaType )
+{
+   return pDlg->GetIconIfIconified( pGraphicMediaType );
 }
 
 void AbstractPasteDialog_Impl::Insert( SotFormatStringId nFormat, const String & rFormatName )
