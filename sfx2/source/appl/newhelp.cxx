@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:48:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 09:46:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2610,9 +2610,10 @@ IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SfxHelpTextWindow_Impl, CloseHdl, sfx2::SearchDialog*, EMPTYARG )
+IMPL_LINK( SfxHelpTextWindow_Impl, CloseHdl, sfx2::SearchDialog*, pDlg )
 {
-    delete pSrchDlg;
+    if ( pDlg )
+        delete pSrchDlg;
     pSrchDlg = NULL;
     return 0;
 }
