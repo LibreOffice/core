@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.171 $
+ *  $Revision: 1.172 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:31:24 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:11:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -325,7 +325,8 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
                                       const Graphic& rGrf,
                                       const Rectangle& rBoundRect,
                                       const Rectangle& rVisArea,
-                                      const int _nCalledByGroup ) const
+                                      const int _nCalledByGroup,
+                                      sal_Int64 nAspect ) const
 {
     // --> OD 2004-12-14 #i32596# - no import of OLE object, if it's inside a group.
     // NOTE: This can be undone, if grouping of Writer fly frames is possible or
@@ -355,7 +356,7 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
         {
             ErrCode nError = ERRCODE_NONE;
             pRet = CreateSdrOLEFromStorage( sStorageName, xSrcStg, xDstStg,
-                rGrf, rBoundRect, rVisArea, pStData, nError, nSvxMSDffOLEConvFlags );
+                rGrf, rBoundRect, rVisArea, pStData, nError, nSvxMSDffOLEConvFlags, nAspect );
         }
     }
     return pRet;
