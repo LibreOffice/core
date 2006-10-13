@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:21:26 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 08:33:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,11 +207,19 @@ class WidgetPainter
         */
         QMenuBar     *m_pMenuBar;
 
+        /** Identifiers of menu bar items.
+         */
+        int           m_nMenuBarEnabledItem, m_nMenuBarDisabledItem;
+
         /** Cached popup menu.
 
           @see m_pPushButton
         */
         QPopupMenu   *m_pPopupMenu;
+
+        /** Identifiers of popup menu items.
+         */
+        int           m_nPopupMenuEnabledItem, m_nPopupMenuDisabledItem;
 
     // TODO other widgets
 
@@ -746,8 +754,8 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
         }
         else if ( nPart == PART_MENU_ITEM )
         {
-            QMenuItem qMenuItem;
-            qMenuItem.is_enabled = bool( nStyle & QStyle::Style_Enabled );
+            int nMenuItem = ( nStyle & QStyle::Style_Enabled )? m_nMenuBarEnabledItem: m_nMenuBarDisabledItem;
+            QMenuItem *pMenuItem = static_cast<QMenuBar*>( pWidget )->findItem( nMenuItem );
 
             if ( nStyle & QStyle::Style_Selected )
                 nStyle |= QStyle::Style_Active | QStyle::Style_Down | QStyle::Style_HasFocus;
@@ -755,13 +763,13 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
             kapp->style().drawControl( QStyle::CE_MenuBarItem,
                     &qPainter, pWidget, qRect,
                     pWidget->colorGroup(), nStyle,
-                    QStyleOption( &qMenuItem ) );
+                    QStyleOption( pMenuItem ) );
         }
     }
     else if ( strcmp( "QPopupMenu", pClassName ) == 0 )
     {
-        QMenuItem qMenuItem;
-        qMenuItem.is_enabled = bool( nStyle & QStyle::Style_Enabled );
+        int nMenuItem = ( nStyle & QStyle::Style_Enabled )? m_nPopupMenuEnabledItem: m_nPopupMenuDisabledItem;
+        QMenuItem *pMenuItem = static_cast<QPopupMenu*>( pWidget )->findItem( nMenuItem );
 
         if ( nStyle & QStyle::Style_Selected )
             nStyle |= QStyle::Style_Active;
@@ -769,7 +777,7 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
         kapp->style().drawControl( QStyle::CE_PopupMenuItem,
                 &qPainter, pWidget, qRect,
                 pWidget->colorGroup(), nStyle,
-                QStyleOption( &qMenuItem, 0, 0 ) );
+                QStyleOption( pMenuItem, 0, 0 ) );
     }
     else
     return FALSE;
@@ -1073,7 +1081,15 @@ QToolButton *WidgetPainter::toolButton( const Region& rControlRegion)
 QMenuBar *WidgetPainter::menuBar( const Region& rControlRegion)
 {
     if ( !m_pMenuBar )
-    m_pMenuBar = new QMenuBar( NULL, "menu_bar" );
+    {
+        m_pMenuBar = new QMenuBar( NULL, "menu_bar" );
+
+        m_nMenuBarEnabledItem = m_pMenuBar->insertItem( "" );
+        m_nMenuBarDisabledItem = m_pMenuBar->insertItem( "" );
+
+        m_pMenuBar->setItemEnabled( m_nMenuBarEnabledItem, true );
+        m_pMenuBar->setItemEnabled( m_nMenuBarDisabledItem, false );
+    }
 
     QRect qRect = region2QRect( rControlRegion );
 
@@ -1086,7 +1102,15 @@ QMenuBar *WidgetPainter::menuBar( const Region& rControlRegion)
 QPopupMenu *WidgetPainter::popupMenu( const Region& rControlRegion)
 {
     if ( !m_pPopupMenu )
-    m_pPopupMenu = new QPopupMenu( NULL, "popup_menu" );
+    {
+        m_pPopupMenu = new QPopupMenu( NULL, "popup_menu" );
+
+        m_nPopupMenuEnabledItem = m_pPopupMenu->insertItem( "" );
+        m_nPopupMenuDisabledItem = m_pPopupMenu->insertItem( "" );
+
+        m_pPopupMenu->setItemEnabled( m_nPopupMenuEnabledItem, true );
+        m_pPopupMenu->setItemEnabled( m_nPopupMenuDisabledItem, false );
+    }
 
     QRect qRect = region2QRect( rControlRegion );
 
