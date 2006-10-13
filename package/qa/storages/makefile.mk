@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-24 13:20:39 $
+#   last change: $Author: obo $ $Date: 2006-10-13 11:46:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,9 @@ JAVAFILES       =\
                 Test10.java\
                 Test11.java\
                 Test12.java\
+                Test13.java\
+                Test14.java\
+                Test15.java\
                 RegressionTest_114358.java\
                 RegressionTest_i29169.java\
                 RegressionTest_i30400.java\
