@@ -4,9 +4,9 @@
  *
  *  $RCSfile: specialobject.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:20:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:31:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XWINDOWSUPPLIER_HPP_
 #include <com/sun/star/embed/XWindowSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XWINDOWPEER_HPP_
 #include <com/sun/star/awt/XWindowPeer.hpp>
@@ -146,7 +149,7 @@ uno::Sequence< uno::Type > SAL_CALL OSpecialEmbeddedObject::getTypes()
 
 }
 
-embed::VisualRepresentation SAL_CALL OSpecialEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 /*nAspect*/ )
+embed::VisualRepresentation SAL_CALL OSpecialEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 nAspect )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
@@ -159,6 +162,12 @@ embed::VisualRepresentation SAL_CALL OSpecialEmbeddedObject::getPreferredVisualR
     // TODO: if object is in loaded state it should switch itself to the running state
     if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
+                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+
+    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    if ( nAspect == embed::Aspects::MSOLE_ICON )
+        // no representation can be retrieved
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     // TODO: return for the aspect of the document
@@ -179,7 +188,7 @@ embed::VisualRepresentation SAL_CALL OSpecialEmbeddedObject::getPreferredVisualR
     return aVisualRepresentation;
 }
 
-void SAL_CALL OSpecialEmbeddedObject::setVisualAreaSize( sal_Int64 /*nAspect*/, const awt::Size& aSize )
+void SAL_CALL OSpecialEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
@@ -188,11 +197,17 @@ void SAL_CALL OSpecialEmbeddedObject::setVisualAreaSize( sal_Int64 /*nAspect*/, 
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
+
+    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    if ( nAspect == embed::Aspects::MSOLE_ICON )
+        // no representation can be retrieved
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     maSize = aSize;
 }
 
-awt::Size SAL_CALL OSpecialEmbeddedObject::getVisualAreaSize( sal_Int64 /*nAspect*/ )
+awt::Size SAL_CALL OSpecialEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
@@ -202,20 +217,33 @@ awt::Size SAL_CALL OSpecialEmbeddedObject::getVisualAreaSize( sal_Int64 /*nAspec
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
+    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    if ( nAspect == embed::Aspects::MSOLE_ICON )
+        // no representation can be retrieved
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+
     awt::Size aResult;
     return maSize;
 }
 
-sal_Int32 SAL_CALL OSpecialEmbeddedObject::getMapUnit( sal_Int64 /*nAspect*/ )
+sal_Int32 SAL_CALL OSpecialEmbeddedObject::getMapUnit( sal_Int64 nAspect )
         throw ( uno::Exception,
                 uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
+
+    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    if ( nAspect == embed::Aspects::MSOLE_ICON )
+        // no representation can be retrieved
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     return embed::EmbedMapUnits::ONE_100TH_MM;
 }
