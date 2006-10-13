@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.60 $
+#   $Revision: 1.61 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:29:45 $
+#   last change: $Author: obo $ $Date: 2006-10-13 10:37:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@ TARGET=util
 GEN_HID2=TRUE
 
 .INCLUDE:  settings.mk
+
+# PERL:=@echo
 
 .IF "$(GUI)"=="WNT"
 .IF "$(USE_SHELL)"=="4nt"
@@ -132,6 +134,8 @@ openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
 
 openofficedev: $(foreach,i,$(alllangiso) openofficedev_$i)
 
+openofficedevarchive: $(foreach,i,$(alllangiso) openofficedevarchive_$i)
+
 openofficewithjre: $(foreach,i,$(alllangiso) openofficewithjre_$i)
 
 ooolanguagepack : $(foreach,i,$(alllangiso) ooolanguagepack_$i)
@@ -162,6 +166,8 @@ $(foreach,i,$(alllangiso) openoffice_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) openofficedev_$i) : $(ADDDEPS)
 
+$(foreach,i,$(alllangiso) openofficedevarchive_$i) : $(ADDDEPS)
+
 $(foreach,i,$(alllangiso) openofficewithjre_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(ADDDEPS)
@@ -179,10 +185,10 @@ $(MAKETARGETS) : $(ADDDEPS)
 .IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) openoffice_$i) : $$@{$(PKGFORMAT:^".")}
 .IF "$(MAKETARGETS)"!="" && "$(PKGFORMAT)"!=""
-.IF "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
+.IF "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)" && "$(MAKETARGETS:s/archive//)"=="$(MAKETARGETS)"
 $(MAKETARGETS) : $$@{$(PKGFORMAT:^".")}
 $(MAKETARGETS){$(PKGFORMAT:^".")} : $(ADDDEPS)
-.ENDIF			# "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
+.ENDIF			# "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)" && "$(MAKETARGETS:s/archive//)"=="$(MAKETARGETS)"
 .ENDIF			# "$(MAKETARGETS)"!="" && "$(PKGFORMAT)"!=""
 openoffice_%{$(PKGFORMAT:^".")} :
 .ELSE			# "$(PKGFORMAT)"!=""
@@ -217,6 +223,9 @@ openofficedev_%{$(PKGFORMAT:^".")} :
 openofficedev_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_Dev -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
+
+openofficedevarchive_% :
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_Dev -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format archive
 
 .IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
@@ -364,9 +373,9 @@ $(MISC)$/ure$/services.rdb .ERRREMOVE:
 
 .IF "$(LOCALPYFILES)"!=""
 .IF "$(PKGFORMAT)"==""
-$(foreach,i,$(alllangiso) openoffice_$i openofficewithjre_$i openofficedev_$i ooolanguagepack_$i sdkoo_$i) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
+$(foreach,i,$(alllangiso) openoffice_$i openofficewithjre_$i openofficedev_$i openofficedevarchive_$i ooolanguagepack_$i sdkoo_$i) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
 .ELSE			# "$(PKGFORMAT)"==""
-$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".")} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} ooolanguagepack_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
+$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".")} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} openofficedevarchive_$i ooolanguagepack_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
 .ENDIF			# "$(PKGFORMAT)"==""
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
