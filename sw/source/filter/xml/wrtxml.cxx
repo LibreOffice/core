@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:31:57 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 12:20:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,6 +231,11 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         { "StyleFamilies", sizeof("StyleFamilies")-1, 0,
               &::getCppuType( (Sequence<sal_Int32>*)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
+        // --> OD 2006-09-26 #i69627#
+        { "OutlineStyleAsNormalListStyle", sizeof("OutlineStyleAsNormalListStyle")-1, 0,
+              &::getBooleanCppuType(),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        // <--
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
@@ -348,6 +353,16 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         xInfoSet->setPropertyValue( sAutoTextMode, aAny );
     }
 
+    // --> OD 2006-09-26 #i69627#
+    const sal_Bool bOASIS = ( SotStorage::GetVersion( xStg ) > SOFFICE_FILEFORMAT_60 );
+    if ( bOASIS &&
+         docfunc::HasOutlineStyleToBeWrittenAsNormalListStyle( *pDoc ) )
+    {
+        OUString sOutlineStyleAsNormalListStyle(
+                RTL_CONSTASCII_USTRINGPARAM("OutlineStyleAsNormalListStyle") );
+        xInfoSet->setPropertyValue( sOutlineStyleAsNormalListStyle, makeAny( sal_True ) );
+    }
+    // <--
 
     // filter arguments
     // - graphics + object resolver for styles + content
@@ -401,7 +416,6 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     // export sub streams for package, else full stream into a file
     sal_Bool bWarn = sal_False, bErr = sal_False;
     String sWarnFile, sErrFile;
-    sal_Bool bOASIS = ( SotStorage::GetVersion( xStg ) > SOFFICE_FILEFORMAT_60 );
 
     if( !bOrganizerMode && !bBlock &&
         SFX_CREATE_MODE_EMBEDDED != pDoc->GetDocShell()->GetCreateMode() )
