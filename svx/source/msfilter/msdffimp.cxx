@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:58:48 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:22:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4559,8 +4559,10 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
         // sollte es ein OLE-Object sein?
         if( bGrfRead && !bLinkGrf && IsProperty( DFF_Prop_pictureId ) )
         {
+            // TODO/LATER: in future probably the correct aspect should be provided here
+            sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
             // --> OD 2004-12-14 #i32596# - pass <nCalledByGroup> to method
-            pRet = ImportOLE( GetPropertyValue( DFF_Prop_pictureId ), aGraf, aBoundRect, aVisArea, rObjData.nCalledByGroup );
+            pRet = ImportOLE( GetPropertyValue( DFF_Prop_pictureId ), aGraf, aBoundRect, aVisArea, rObjData.nCalledByGroup, nAspect );
             // <--
         }
         if( !pRet )
@@ -7172,7 +7174,8 @@ SdrObject* SvxMSDffManager::ImportOLE( long nOLEId,
                                        const Graphic& rGrf,
                                        const Rectangle& rBoundRect,
                                        const Rectangle& rVisArea,
-                                       const int /* _nCalledByGroup */ ) const
+                                       const int /* _nCalledByGroup */,
+                                       sal_Int64 nAspect ) const
 // <--
 {
     SdrObject* pRet = 0;
@@ -7183,7 +7186,7 @@ SdrObject* SvxMSDffManager::ImportOLE( long nOLEId,
     if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
         pRet = CreateSdrOLEFromStorage( sStorageName, xSrcStg, xDstStg,
                                         rGrf, rBoundRect, rVisArea, pStData, nError,
-                                        nSvxMSDffOLEConvFlags );
+                                        nSvxMSDffOLEConvFlags, nAspect );
     return pRet;
 }
 
@@ -7660,7 +7663,8 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 const Rectangle& rVisArea,
                 SvStream* pDataStrm,
                 ErrCode& rError,
-                UINT32 nConvertFlags )
+                UINT32 nConvertFlags,
+                sal_Int64 nAspect )
 {
     SdrOle2Obj* pRet = 0;
     if( rSrcStorage.Is() && xDestStorage.is() && rStorageName.Len() )
@@ -7704,9 +7708,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                                 nConvertFlags, *xObjStg, xDestStorage, rGrf, rVisArea ));
                     if ( xObj.is() )
                     {
-                        // object could be converted to own object
-                        // TODO/LATER: needs ViewAspect
-                        svt::EmbeddedObjectRef aObj( xObj );
+                        svt::EmbeddedObjectRef aObj( xObj, nAspect );
 
                         // TODO/LATER: need MediaType
                         aObj.SetGraphic( rGrf, ::rtl::OUString() );
@@ -7769,33 +7771,34 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
             if( xObj.is() )
             {
                 // the visual area must be retrieved from the metafile (object doesn't know it so far)
-                //TODO/LATER: retrieve aspect from MS document
-                sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
 
-                // working with visual area can switch the object to running state
-                awt::Size aAwtSz;
-                try
+                if ( nAspect != embed::Aspects::MSOLE_ICON )
                 {
-                    // the provided visual area should be used, if there is any
-                    if ( rVisArea.IsEmpty() )
+                    // working with visual area can switch the object to running state
+                    awt::Size aAwtSz;
+                    try
                     {
-                        MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-                        Size aSz(lcl_GetPrefSize(rGrf, MapMode(aMapUnit)));
-                        aAwtSz.Width = aSz.Width();
-                        aAwtSz.Height = aSz.Height();
+                        // the provided visual area should be used, if there is any
+                        if ( rVisArea.IsEmpty() )
+                        {
+                            MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+                            Size aSz(lcl_GetPrefSize(rGrf, MapMode(aMapUnit)));
+                            aAwtSz.Width = aSz.Width();
+                            aAwtSz.Height = aSz.Height();
+                        }
+                        else
+                        {
+                            aAwtSz.Width = rVisArea.GetWidth();
+                            aAwtSz.Height = rVisArea.GetHeight();
+                        }
+                        //xInplaceObj->EnableSetModified( FALSE );
+                        xObj->setVisualAreaSize( nAspect, aAwtSz );
+                        //xInplaceObj->EnableSetModified( TRUE );*/
                     }
-                    else
+                    catch( uno::Exception& )
                     {
-                        aAwtSz.Width = rVisArea.GetWidth();
-                        aAwtSz.Height = rVisArea.GetHeight();
+                        OSL_ENSURE( sal_False, "Could not set visual area of the object!\n" );
                     }
-                    //xInplaceObj->EnableSetModified( FALSE );
-                    xObj->setVisualAreaSize( nAspect, aAwtSz );
-                    //xInplaceObj->EnableSetModified( TRUE );*/
-                }
-                catch( uno::Exception& )
-                {
-                    OSL_ENSURE( sal_False, "Could not set visual area of the object!\n" );
                 }
 
                 svt::EmbeddedObjectRef aObj( xObj, nAspect );
