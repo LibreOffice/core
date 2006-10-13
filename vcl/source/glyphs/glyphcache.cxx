@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:13:21 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 08:32:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -372,7 +372,8 @@ inline void GlyphCache::RemovingGlyph( ServerFont& rSF, GlyphData& rGD, int nGly
 // =======================================================================
 
 ServerFont::ServerFont( const ImplFontSelectData& rFSD )
-:   maFontSelData(rFSD),
+:   maGlyphList( 0),
+    maFontSelData(rFSD),
     mnExtInfo(0),
     mnRefCount(1),
     mnBytesUsed( sizeof(ServerFont) ),
@@ -493,7 +494,8 @@ ImplServerFontEntry::~ImplServerFontEntry()
 
 ExtraKernInfo::ExtraKernInfo( sal_IntPtr nFontId )
 :   mbInitialized( false ),
-    mnFontId( nFontId )
+    mnFontId( nFontId ),
+    maUnicodeKernPairs( 0 )
 {}
 
 //--------------------------------------------------------------------------
