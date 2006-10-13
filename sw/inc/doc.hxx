@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:07:48 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 12:18:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2002,6 +2002,25 @@ namespace docfunc
         input parameter - reference to the Writer document, which is investigated.
     */
     bool AllDrawObjsOnPage( SwDoc& p_rDoc );
+
+    /** method to check, if the outline style has to written as a normal list style
+
+        OD 2006-09-27 #i69627#
+        The outline style has to written as a normal list style, if a parent
+        paragraph style of one of the paragraph styles, which are assigned to
+        the list levels of the outline style, has a list style set or inherits
+        a list style from its parent paragraphs style.
+        This information is needed for the OpenDocument file format export.
+
+        @author OD
+
+        @param rDoc
+        input parameter - reference to the text document, which is investigated.
+
+        @return boolean
+        indicating, if the outline style has to written as a normal list style
+    */
+    bool HasOutlineStyleToBeWrittenAsNormalListStyle( SwDoc& rDoc );
 }
 // <--
 #endif  //_DOC_HXX
