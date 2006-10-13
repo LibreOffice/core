@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextNumRuleInfo.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:25:09 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 12:16:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,15 +74,21 @@ class XMLTextNumRuleInfo
     sal_Bool            bIsRestart : 1;
     sal_Bool            bIsNamed : 1;
 
+    // --> OD 2006-09-27 #i69627#
+    sal_Bool mbOutlineStyleAsNormalListStyle : 1;
+    // <--
+
 public:
 
     XMLTextNumRuleInfo();
 
     inline XMLTextNumRuleInfo& operator=( const XMLTextNumRuleInfo& rInfo );
 
-    void Set(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XTextContent > & rTextContnt );
+    // --> OD 2006-09-27 #i69627#
+    void Set( const ::com::sun::star::uno::Reference <
+                        ::com::sun::star::text::XTextContent > & rTextContnt,
+              const sal_Bool bOutlineStyleAsNormalListStyle );
+    // <--
     inline void Reset();
 
     const ::rtl::OUString& GetName() const { return sName; }
@@ -113,6 +119,9 @@ inline XMLTextNumRuleInfo& XMLTextNumRuleInfo::operator=(
     bIsOrdered = rInfo.bIsOrdered;
     bIsRestart = rInfo.bIsRestart;
     bIsNamed = rInfo.bIsNamed;
+    // --> OD 2006-09-27 #i69627#
+    mbOutlineStyleAsNormalListStyle = rInfo.mbOutlineStyleAsNormalListStyle;
+    // <--
 
     return *this;
 }
@@ -123,7 +132,11 @@ inline void XMLTextNumRuleInfo::Reset()
     xNumRules = 0;
     nStartValue = -1;
     nLevel = 0;
-    bIsNumbered = bIsOrdered = bIsRestart = bIsNamed = sal_False;
+    // --> OD 2006-09-27 #i69627#
+//    bIsNumbered = bIsOrdered = bIsRestart = bIsNamed = sal_False;
+    bIsNumbered = bIsOrdered = bIsRestart = bIsNamed =
+    mbOutlineStyleAsNormalListStyle = sal_False;
+    // <--
 }
 
 inline sal_Bool XMLTextNumRuleInfo::HasSameNumRules(
