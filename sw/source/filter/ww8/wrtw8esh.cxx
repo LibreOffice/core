@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:21:13 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:10:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1667,6 +1667,8 @@ INT32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
     {
         SwNodeIndex aIdx(*rFmt.GetCntnt().GetCntntIdx(), 1);
         SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
+        sal_Int64 nAspect = rOLENd.GetAspect();
+
         ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > xObj(rOLENd.GetOLEObj().GetOleRef());
 
         // the rectangle is used to transport the size of the object
@@ -1675,11 +1677,13 @@ INT32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
         ::com::sun::star::awt::Rectangle aRect;
         sal_Bool bRectIsSet = sal_False;
 
-        if ( xObj.is() )
+
+        // TODO/LATER: should the icon size be stored in case of iconified object?
+        if ( xObj.is() && nAspect != embed::Aspects::MSOLE_ICON )
         {
             try
             {
-                ::com::sun::star::awt::Size aSize = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+                ::com::sun::star::awt::Size aSize = xObj->getVisualAreaSize( nAspect );
                 aRect.Width = aSize.Width;
                 aRect.Height = aSize.Height;
                 bRectIsSet = sal_True;
