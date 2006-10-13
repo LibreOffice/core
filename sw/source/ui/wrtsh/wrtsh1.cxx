@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:39:56 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:13:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -523,7 +523,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
         {
             comphelper::EmbeddedObjectContainer aCnt( xStor );
             ::rtl::OUString aName;
-            // TODO/LATER: get aspect
+            // TODO/LATER: get aspect?
             xObj.Assign( aCnt.CreateEmbeddedObject( pName->GetByteSequence(), aName ), embed::Aspects::MSOLE_CONTENT );
         }
         else
@@ -579,8 +579,13 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                     {
                         pDlg->Execute();
                         bDoVerb = pDlg->IsCreateNew();
-                        // TODO/LATER: pass Aspect
-                        xObj.Assign( pDlg->GetObject(), embed::Aspects::MSOLE_CONTENT );
+                        ::rtl::OUString aIconMediaType;
+                        uno::Reference< io::XInputStream > xIconMetaFile = pDlg->GetIconIfIconified( &aIconMediaType );
+                        xObj.Assign( pDlg->GetObject(),
+                                     xIconMetaFile.is() ? embed::Aspects::MSOLE_ICON : embed::Aspects::MSOLE_CONTENT );
+                        if ( xIconMetaFile.is() )
+                            xObj.SetGraphicStream( xIconMetaFile, aIconMediaType );
+
                         DELETEZ( pDlg );
                     }
 
@@ -603,7 +608,19 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                     SetCheckForOLEInCaption( TRUE );
                 }
 
-                CalcAndSetScale( xObj );
+                if ( xObj.GetViewAspect() == embed::Aspects::MSOLE_ICON )
+                {
+                    SwRect aArea = GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() );
+                    aArea.Pos() += GetAnyCurRect( RECT_FLY_EMBEDDED, 0, xObj.GetObject() ).Pos();
+                    MapMode aMapMode( MAP_TWIP );
+                    Size aSize = xObj.GetSize( &aMapMode );
+                    aArea.Width( aSize.Width() );
+                    aArea.Height( aSize.Height() );
+                    RequestObjectResize( aArea, xObj.GetObject() );
+                }
+                else
+                    CalcAndSetScale( xObj );
+
                 //#50270# Error brauchen wir nicht handeln, das erledigt das
                 //DoVerb in der SfxViewShell
                 ErrCode nErr = pClient->DoVerb( SVVERB_SHOW );
@@ -691,28 +708,10 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef&  xRef )
         CalcBoundRect( aBound, aFrmMgr.GetAnchor() );
 
         //The Size should be suggested by the OLE server
-        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-        MapMode aRefMap( VCLUnoHelper::UnoEmbed2VCLMapUnit( xRef->getMapUnit( nAspect ) ) );
+        sal_Int64 nAspect = xRef.GetViewAspect();
+        MapMode aMapMode( MAP_TWIP );
+        Size aSz = xRef.GetSize( &aMapMode );
 
-        awt::Size aSize;
-        try
-        {
-            aSize = xRef->getVisualAreaSize( nAspect );
-        }
-        catch( embed::NoVisualAreaSizeException& )
-        {
-            // the default size will be set later
-        }
-
-        Size aSz( aSize.Width, aSize.Height );
-        if ( !aSz.Width() || !aSz.Height() )
-        {
-            aSz.Width() = aSz.Height() = 5000;
-            aSz = OutputDevice::LogicToLogic
-                                    ( aSz, MapMode( MAP_100TH_MM ), aRefMap );
-        }
-        MapMode aMyMap( MAP_TWIP );
-        aSz = OutputDevice::LogicToLogic( aSz, aRefMap, aMyMap );
         //Object size can be limited
         if ( aSz.Width() > aBound.Width() )
         {
@@ -805,12 +804,14 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     //zwischen der VisArea des Objektes und der ObjArea.
     ASSERT( xObj.is(), "ObjectRef not  valid" );
 
-    sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+    sal_Int64 nAspect = xObj.GetViewAspect();
+    if ( nAspect == embed::Aspects::MSOLE_ICON )
+        return; // the replacement image is completely controlled by container in this case
+
     sal_Int64 nMisc = xObj->getStatus( nAspect );
 
     //Das kann ja wohl nur ein nicht aktives Objekt sein. Diese bekommen
     //auf Wunsch die neue Groesse als VisArea gesetzt (StarChart)
-    // TODO/LATER: how to get aspect?
     if( embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE & nMisc )
     {
         // TODO/MBA: testing
