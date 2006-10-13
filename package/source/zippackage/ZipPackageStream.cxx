@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:30:06 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:52:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,7 @@
 #include <comphelper/seekableinput.hxx>
 #include <comphelper/storagehelper.hxx>
 
+#include <PackageConstants.hxx>
 
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::packages::zip;
@@ -111,6 +112,7 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
 , m_nMagicalHackPos( 0 )
 , m_nMagicalHackSize( 0 )
 , m_bHasSeekable( sal_False )
+, m_bCompressedIsSetFromOutside( sal_False )
 {
     OSL_ENSURE( m_xFactory.is(), "No factory is provided to ZipPackageStream!\n" );
 
@@ -138,7 +140,7 @@ ZipPackageStream::~ZipPackageStream( void )
 {
 }
 
-void ZipPackageStream::setZipEntry( const ZipEntry &rInEntry)
+void ZipPackageStream::setZipEntryOnLoading( const ZipEntry &rInEntry)
 {
     aEntry.nVersion = rInEntry.nVersion;
     aEntry.nFlag = rInEntry.nFlag;
@@ -151,6 +153,9 @@ void ZipPackageStream::setZipEntry( const ZipEntry &rInEntry)
     aEntry.sName = rInEntry.sName;
     aEntry.nNameLen = rInEntry.nNameLen;
     aEntry.nExtraLen = rInEntry.nExtraLen;
+
+    if ( aEntry.nMethod == STORED )
+        bToBeCompressed = sal_False;
 }
 
 //--------------------------------------------------------------------------
@@ -657,7 +662,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
 {
     if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")))
     {
-        if ( !rZipPackage.isInPackageFormat() )
+        if ( rZipPackage.getFormat() != PACKAGE_FORMAT && rZipPackage.getFormat() != OFOPXML_FORMAT )
             throw beans::PropertyVetoException();
 
         if ( aValue >>= sMediaType )
@@ -667,7 +672,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
                 if ( sMediaType.indexOf (OUString( RTL_CONSTASCII_USTRINGPARAM ( "text" ) ) ) != -1
                  || sMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM ( "application/vnd.sun.star.oleobject" ) ) ) )
                     bToBeCompressed = sal_True;
-                else
+                else if ( !m_bCompressedIsSetFromOutside )
                     bToBeCompressed = sal_False;
             }
         }
@@ -686,7 +691,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
     }
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Encrypted") ) )
     {
-        if ( !rZipPackage.isInPackageFormat() )
+        if ( rZipPackage.getFormat() != PACKAGE_FORMAT )
             throw beans::PropertyVetoException();
 
         sal_Bool bEnc = sal_False;
@@ -710,7 +715,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
     }
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EncryptionKey") ) )
     {
-        if ( !rZipPackage.isInPackageFormat() )
+        if ( rZipPackage.getFormat() != PACKAGE_FORMAT )
             throw beans::PropertyVetoException();
 
         Sequence < sal_Int8 > aNewKey;
@@ -765,6 +770,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
                                                 2 );
 
             bToBeCompressed = bCompr;
+            m_bCompressedIsSetFromOutside = sal_True;
         }
         else
             throw IllegalArgumentException( OUString::createFromAscii( "Wrong type for Compressed property!\n" ),
