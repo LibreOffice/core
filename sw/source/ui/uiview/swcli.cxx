@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcli.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:23:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:13:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,14 @@ void SwOleClient::ViewChanged()
     if ( bInDoVerb )
         return;
 
+    if ( GetAspect() == embed::Aspects::MSOLE_ICON )
+    {
+        // the iconified object seems not to need such a scaling handling
+        // since the replacement image and the size a completely controlled by the container
+        // TODO/LATER: when the icon exchange is implemented the scaling handling might be required again here
+        return;
+    }
+
     SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
     Window     *pWin = rSh.GetWin();
 
@@ -165,6 +173,11 @@ void SwOleClient::ViewChanged()
     catch( embed::NoVisualAreaSizeException& )
     {
         // Nothing will be done
+    }
+    catch( uno::Exception& )
+    {
+        // this is an error
+        OSL_ENSURE( sal_False, "Something goes wrong on requesting object size!\n" );
     }
 
     Size aVisSize( aSz.Width, aSz.Height );
