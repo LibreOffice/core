@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:22:44 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 12:15:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,9 +309,15 @@ public:
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper  maInterfaceToIdentifierMapper;
     uno::Reference< uri::XUriReferenceFactory > mxUriReferenceFactory;
     rtl::OUString                               msPackageURI;
+    // --> OD 2006-09-27 #i69627#
+    sal_Bool mbOutlineStyleAsNormalListStyle;
+    // <--
 
 };
 SvXMLExport_Impl::SvXMLExport_Impl()
+    // --> OD 2006-09-27 #i69627#
+    : mbOutlineStyleAsNormalListStyle( false )
+    // <--
 {
     mxUriReferenceFactory = uri::UriReferenceFactory::create(
             comphelper_getProcessComponentContext());
@@ -789,6 +795,16 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             aBaseURL.insertName( sName );
             msOrigFileName = aBaseURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
         }
+
+        // --> OD 2006-09-26 #i69627#
+        OUString sOutlineStyleAsNormalListStyle(
+                RTL_CONSTASCII_USTRINGPARAM("OutlineStyleAsNormalListStyle") );
+        if( xPropertySetInfo->hasPropertyByName( sOutlineStyleAsNormalListStyle ) )
+        {
+            uno::Any aAny = mxExportInfo->getPropertyValue( sOutlineStyleAsNormalListStyle );
+            aAny >>= (mpImpl->mbOutlineStyleAsNormalListStyle);
+        }
+        // <--
     }
 
 }
@@ -2204,6 +2220,13 @@ void SvXMLExport::DisposingModel()
 {
     return mpImpl->maInterfaceToIdentifierMapper;
 }
+
+// --> OD 2006-09-27 #i69627#
+const sal_Bool SvXMLExport::writeOutlineStyleAsNormalListStyle() const
+{
+    return mpImpl->mbOutlineStyleAsNormalListStyle;
+}
+// <--
 
 //=============================================================================
 
