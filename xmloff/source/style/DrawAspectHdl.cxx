@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawAspectHdl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:44:56 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:09:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,23 +81,12 @@ DrawAspectHdl::~DrawAspectHdl()
 
 sal_Bool DrawAspectHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Int32 nAspect = 0;
+    sal_Int64 nAspect = 0;
 
-    SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
-    OUString aToken;
-    while( aTokenEnum.getNextToken( aToken ) )
-    {
-        sal_uInt16 nVal;
-        if( SvXMLUnitConverter::convertEnum(
-                nVal, aToken, pXML_DrawAspect_Enum ) )
-        {
-            nAspect = nAspect | (sal_Int32)nVal;
-        }
-    }
-
+    SvXMLUnitConverter::convertNumber64( nAspect, rStrImpValue );
     rValue <<= nAspect;
 
-    return nAspect != 0;
+    return nAspect > 0;
 }
 
 sal_Bool DrawAspectHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
@@ -105,32 +94,11 @@ sal_Bool DrawAspectHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValu
     sal_Bool bRet = sal_False;
       OUStringBuffer aOut;
 
-    sal_Int32 nAspect;
-    if( rValue >>= nAspect )
+    sal_Int64 nAspect;
+    if( ( rValue >>= nAspect ) && nAspect > 0 )
     {
-        if( (nAspect & 1) != 0 )
-            aOut.append( GetXMLToken(XML_CONTENT) );
-
-        if( (nAspect & 2) != 0 )
-        {
-            if( aOut.getLength() )
-                aOut.append( sal_Unicode(' ') );
-            aOut.append( GetXMLToken(XML_THUMBNAIL) );
-        }
-
-        if( (nAspect & 4) != 0 )
-        {
-            if( aOut.getLength() )
-                aOut.append( sal_Unicode(' ') );
-            aOut.append( GetXMLToken(XML_ICON) );
-        }
-
-        if( (nAspect & 8) != 0 )
-        {
-            if( aOut.getLength() )
-                aOut.append( sal_Unicode(' ') );
-            aOut.append( GetXMLToken(XML_PRINT) );
-        }
+        // store the aspect as an integer value
+        aOut.append( nAspect );
 
         rStrExpValue = aOut.makeStringAndClear();
 
@@ -139,3 +107,4 @@ sal_Bool DrawAspectHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValu
 
     return bRet;
 }
+
