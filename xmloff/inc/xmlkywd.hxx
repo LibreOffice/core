@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.170 $
+ *  $Revision: 1.171 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:15:51 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 10:58:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -585,7 +585,7 @@ XML_CONSTASCII_ACTION( sXML_double_sided, "double-sided" );
 XML_CONSTASCII_ACTION( sXML_down, "down" );
 XML_CONSTASCII_ACTION( sXML_draft, "draft");
 XML_CONSTASCII_ACTION( sXML_draw, "draw" );
-XML_CONSTASCII_ACTION( sXML_draw_aspect, "draw-aspect" );
+XML_CONSTASCII_ACTION( sXML_draw_aspect, "ole-draw-aspect" );
 XML_CONSTASCII_ACTION( sXML_drawing, "drawing" );
 XML_CONSTASCII_ACTION( sXML_drawings, "drawings" );
 XML_CONSTASCII_ACTION( sXML_drawpool , "drawpool" );
