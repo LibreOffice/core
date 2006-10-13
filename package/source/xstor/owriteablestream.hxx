@@ -4,9 +4,9 @@
  *
  *  $RCSfile: owriteablestream.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-24 13:21:09 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,10 @@
 #include <com/sun/star/io/XStream.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
 #endif
@@ -79,8 +83,32 @@
 #include <com/sun/star/embed/XEncryptionProtectedSource.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_XRELATIONSHIPACCESS_HPP_
+#include <com/sun/star/embed/XRelationshipAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_XEXTENDEDSTORAGESTREAM_HPP_
+#include <com/sun/star/embed/XExtendedStorageStream.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONBROADCASTER_HPP_
+#include <com/sun/star/embed/XTransactionBroadcaster.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_STRINGPAIR_HPP_
+#include <com/sun/star/beans/StringPair.hpp>
 #endif
 
 
@@ -88,8 +116,8 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE8_HXX_
-#include <cppuhelper/implbase8.hxx>
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
 #endif
 
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
@@ -112,15 +140,23 @@ struct PreCreationStruct
 
 };
 
+namespace cppu {
+    class OTypeCollection;
+}
+
 struct WSInternalData_Impl
 {
     SotMutexHolderRef m_rSharedMutexRef;
-    ::cppu::OInterfaceContainerHelper m_aListenersContainer; // list of listeners
+    ::cppu::OTypeCollection* m_pTypeCollection;
+    ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
+    sal_Int16 m_nStorageType;
 
     // the mutex reference MUST NOT be empty
-    WSInternalData_Impl( const SotMutexHolderRef rMutexRef )
+    WSInternalData_Impl( const SotMutexHolderRef rMutexRef, sal_Int16 nStorageType )
     : m_rSharedMutexRef( rMutexRef )
+    , m_pTypeCollection( NULL )
     , m_aListenersContainer( rMutexRef->GetMutex() )
+    , m_nStorageType( nStorageType )
     {}
 };
 
@@ -161,6 +197,18 @@ struct OWriteStream_Impl : public PreCreationStruct
 
     sal_Bool m_bHasInsertedStreamOptimization;
 
+    sal_Int16 m_nStorageType;
+
+    // Relations info related data, stored in *.rels file in OFOPXML format
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xOrigRelInfoStream;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > m_aOrigRelInfo;
+    sal_Bool m_bOrigRelInfoBroken;
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > m_aNewRelInfo;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xNewRelInfoStream;
+    sal_Int16 m_nRelInfoStatus;
+
+
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > GetServiceFactory();
 
@@ -170,7 +218,8 @@ private:
 
     void CopyTempFileToOutput( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutStream );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStream_Impl( sal_Int32 nStreamMode );
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStream_Impl( sal_Int32 nStreamMode,
+                                                                                        sal_Bool bHierarchyAccess );
 
     ::rtl::OUString GetCommonRootPass() throw ( ::com::sun::star::packages::NoEncryptionException );
 
@@ -180,16 +229,21 @@ private:
                             sal_Bool bUseCommonPass );
 
 public:
-    OWriteStream_Impl( OStorage_Impl* pParent,
-                       ::com::sun::star::uno::Reference< ::com::sun::star::packages::XDataSinkEncrSupport > xPackageStream,
-                       ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > xPackage,
-                       ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
-                       sal_Bool bForceEncrypted );
+    OWriteStream_Impl(
+                OStorage_Impl* pParent,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::packages::XDataSinkEncrSupport >& xPackageStream,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >& xPackage,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+                sal_Bool bForceEncrypted,
+                sal_Int16 nStorageType,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xRelInfoStream =
+                    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >() );
 
     ~OWriteStream_Impl();
 
     sal_Bool UsesCommonPass_Impl() { return m_bUseCommonPass; }
     sal_Bool HasTempFile_Impl() { return ( m_aTempURL.getLength() != 0 ); }
+    sal_Bool IsTransacted();
 
     sal_Bool HasWriteOwner_Impl() { return ( m_pAntiImpl != NULL ); }
 
@@ -224,16 +278,20 @@ public:
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetStreamProperties();
 
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > GetAllRelationshipsIfAny();
+
     void CopyInternallyTo_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xDestStream,
                                 const ::rtl::OUString& aPass );
     void CopyInternallyTo_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xDestStream );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStream(
                         sal_Int32 nStreamMode,
-                        const ::rtl::OUString& aPass );
+                        const ::rtl::OUString& aPass,
+                        sal_Bool bHierarchyAccess );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStream(
-                        sal_Int32 nStreamMode );
+                        sal_Int32 nStreamMode,
+                        sal_Bool bHierarchyAccess );
 
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetRawInStream();
@@ -251,16 +309,28 @@ public:
     void GetCopyOfLastCommit(
                   ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream,
                             const ::rtl::OUString& aPass );
+
+
+    void CommitStreamRelInfo(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xRelStorage,
+                    const ::rtl::OUString& aOrigStreamName,
+                    const ::rtl::OUString& aNewStreamName );
+
+    void ReadRelInfoIfNecessary();
 };
 
-class OWriteStream : public cppu::WeakImplHelper8 < ::com::sun::star::io::XInputStream
-                                                    ,::com::sun::star::io::XOutputStream
-                                                    ,::com::sun::star::io::XStream
-                                                    ,::com::sun::star::io::XSeekable
-                                                    ,::com::sun::star::io::XTruncate
-                                                    ,::com::sun::star::lang::XComponent
-                                                    ,::com::sun::star::embed::XEncryptionProtectedSource
-                                                    ,::com::sun::star::beans::XPropertySet >
+class OWriteStream : ::com::sun::star::lang::XTypeProvider
+            , public ::com::sun::star::io::XInputStream
+            , public ::com::sun::star::io::XOutputStream
+            , public ::com::sun::star::embed::XExtendedStorageStream
+            , public ::com::sun::star::io::XSeekable
+            , public ::com::sun::star::io::XTruncate
+            , public ::com::sun::star::embed::XEncryptionProtectedSource
+            , public ::com::sun::star::embed::XRelationshipAccess
+            , public ::com::sun::star::embed::XTransactedObject
+            , public ::com::sun::star::embed::XTransactionBroadcaster
+            , public ::com::sun::star::beans::XPropertySet
+            , public ::cppu::OWeakObject
 {
     friend struct OWriteStream_Impl;
 
@@ -275,8 +345,10 @@ protected:
     sal_Bool m_bInStreamDisconnected;
     sal_Bool m_bInitOnDemand;
 
-    OWriteStream( OWriteStream_Impl* pImpl );
-    OWriteStream( OWriteStream_Impl* pImpl, ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xStream );
+    sal_Bool m_bTransacted;
+
+    OWriteStream( OWriteStream_Impl* pImpl, sal_Bool bTransacted );
+    OWriteStream( OWriteStream_Impl* pImpl, ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xStream, sal_Bool bTransacted );
 
     void CloseOutput_Impl();
 
@@ -284,11 +356,25 @@ protected:
 
     void ModifyParentUnlockMutex_Impl( ::osl::ResettableMutexGuard& aGuard );
 
+    void BroadcastTransaction( sal_Int8 nMessage );
+
 public:
 
     virtual ~OWriteStream();
 
     void CheckInitOnDemand();
+
+    // XInterface
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
+        throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL acquire() throw();
+    virtual void SAL_CALL release() throw();
+
+    //  XTypeProvider
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
+        throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+        throw( ::com::sun::star::uno::RuntimeException );
 
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
@@ -331,6 +417,18 @@ public:
         throw ( ::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::io::IOException );
 
+    //XRelationshipAccess
+    virtual ::sal_Bool SAL_CALL hasByID( const ::rtl::OUString& sID ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getTargetByID( const ::rtl::OUString& sID ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getTypeByID( const ::rtl::OUString& sID ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > SAL_CALL getRelationshipByID( const ::rtl::OUString& sID ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > SAL_CALL getRelationshipsByType( const ::rtl::OUString& sType ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > SAL_CALL getAllRelationships(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL insertRelationshipByID( const ::rtl::OUString& sID, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aEntry, ::sal_Bool bReplace ) throw (::com::sun::star::container::ElementExistException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeRelationshipByID( const ::rtl::OUString& sID ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL insertRelationships( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > >& aEntries, ::sal_Bool bReplace ) throw (::com::sun::star::container::ElementExistException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL clearRelationships(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw ( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw ( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
@@ -339,6 +437,24 @@ public:
     virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw ( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw ( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw ( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
+
+    // XTransactedObject
+    virtual void SAL_CALL commit()
+        throw ( ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException,
+                ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL revert()
+        throw ( ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException,
+                ::com::sun::star::uno::RuntimeException );
+
+    // XTransactionBroadcaster
+    virtual void SAL_CALL addTransactionListener(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XTransactionListener >& aListener )
+        throw ( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL removeTransactionListener(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XTransactionListener >& aListener )
+        throw ( ::com::sun::star::uno::RuntimeException );
 
 };
 
