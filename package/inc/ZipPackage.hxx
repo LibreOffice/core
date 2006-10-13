@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:59:22 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:42:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ protected:
     sal_Bool         bForceRecovery;
 
     sal_Bool        m_bMediaTypeFallbackUsed;
-    sal_Bool        m_bPackageFormat;
+    sal_Int16       m_nFormat;
     sal_Bool        m_bAllowRemoveOnInsert;
 
     InitialisationMode eMode;
@@ -128,6 +128,8 @@ protected:
     ZipPackageFolder *pRootFolder;
     ZipFile          *pZipFile;
 
+    void parseManifest();
+    void parseContentType();
     void getZipFileContents();
     sal_Bool writeFileIsTemp();
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XActiveDataStreamer > openOriginalForOutput();
@@ -140,7 +142,7 @@ public:
     virtual ~ZipPackage( void );
     ZipFile& getZipFile() { return *pZipFile;}
     const com::sun::star::uno::Sequence < sal_Int8 > & getEncryptionKey ( ) {return aEncryptionKey;}
-    const sal_Bool isInPackageFormat() { return m_bPackageFormat; }
+    const sal_Int16 getFormat() { return m_nFormat; }
 
     // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
