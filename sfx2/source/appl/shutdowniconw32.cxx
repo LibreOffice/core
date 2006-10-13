@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:39:46 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 08:05:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -665,7 +665,7 @@ void win32_init_sys_tray()
             );
 
         DWORD   dwThreadId;
-        HANDLE  hThread = CreateThread( NULL, 0, SystrayThread, NULL, 0, &dwThreadId );
+        CreateThread( NULL, 0, SystrayThread, NULL, 0, &dwThreadId );
     }
 }
 
