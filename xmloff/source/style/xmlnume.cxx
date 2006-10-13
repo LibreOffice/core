@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:59:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 12:16:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -741,9 +741,27 @@ void SvxXMLNumRuleExport::exportOutline()
 
         if( xNumRule.is() )
         {
-            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                      XML_OUTLINE_STYLE, sal_True, sal_True );
-            exportLevelStyles( xNumRule, sal_True );
+            // --> OD 2006-09-27 #i69627#
+            if ( GetExport().writeOutlineStyleAsNormalListStyle() )
+            {
+                OUString sOutlineStyleName;
+                {
+                    Reference<XPropertySet> xNumRulePropSet(
+                        xCNSupplier->getChapterNumberingRules(), UNO_QUERY );
+                    if (xNumRulePropSet.is())
+                    {
+                        OUString sName( RTL_CONSTASCII_USTRINGPARAM("Name") );
+                        xNumRulePropSet->getPropertyValue( sName ) >>= sOutlineStyleName;
+                    }
+                }
+                exportNumberingRule( sOutlineStyleName, xNumRule );
+            }
+            else
+            {
+                SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
+                                          XML_OUTLINE_STYLE, sal_True, sal_True );
+                exportLevelStyles( xNumRule, sal_True );
+            }
         }
     }
 }
