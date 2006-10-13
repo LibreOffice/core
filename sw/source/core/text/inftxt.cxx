@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:34:55 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 08:18:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1491,6 +1491,7 @@ SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
     bFtnDone = TRUE;
     bErgoDone = TRUE;
     bNumDone = TRUE;
+    bArrowDone = TRUE;
     bStop = FALSE;
     bNewLine = TRUE;
     bShift  = FALSE;
