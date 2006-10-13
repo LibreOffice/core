@@ -4,9 +4,9 @@
  *
  *  $RCSfile: client.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:08:16 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:35:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,6 +192,15 @@ void __EXPORT ScClient::ObjectAreaChanged()
 
 void __EXPORT ScClient::ViewChanged()
 {
+    if ( GetAspect() == embed::Aspects::MSOLE_ICON )
+    {
+        // the iconified object seems not to need such a scaling handling
+        // since the replacement image and the size a completely controlled by the container
+        // TODO/LATER: when the icon exchange is implemented the scaling handling might be required again here
+
+        return;
+    }
+
     uno::Reference < embed::XEmbeddedObject > xObj = GetObject();
 
     // TODO/LEAN: working with Visual Area can switch object to running state
