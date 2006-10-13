@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oseekinstream.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:24:25 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:49:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,9 @@ using namespace ::com::sun::star;
 
 OInputSeekStream::OInputSeekStream( OWriteStream_Impl& pImpl,
                                     uno::Reference < io::XStream > xStream,
-                                    const uno::Sequence< beans::PropertyValue >& aProps )
-: OInputCompStream( pImpl )
+                                    const uno::Sequence< beans::PropertyValue >& aProps,
+                                    sal_Int16 nStorageType )
+: OInputCompStream( pImpl, nStorageType )
 {
     OSL_ENSURE( xStream.is(), "No stream is provided!\n" );
 
@@ -74,8 +75,9 @@ OInputSeekStream::OInputSeekStream( OWriteStream_Impl& pImpl,
 
 OInputSeekStream::OInputSeekStream( OWriteStream_Impl& pImpl,
                                     uno::Reference < io::XInputStream > xStream,
-                                    const uno::Sequence< beans::PropertyValue >& aProps )
-: OInputCompStream( pImpl, xStream, aProps )
+                                    const uno::Sequence< beans::PropertyValue >& aProps,
+                                    sal_Int16 nStorageType )
+: OInputCompStream( pImpl, xStream, aProps, nStorageType )
 {
     if ( m_xStream.is() )
     {
@@ -85,8 +87,9 @@ OInputSeekStream::OInputSeekStream( OWriteStream_Impl& pImpl,
 }
 
 OInputSeekStream::OInputSeekStream( uno::Reference < io::XStream > xStream,
-                                    const uno::Sequence< beans::PropertyValue >& aProps )
-: OInputCompStream()
+                                    const uno::Sequence< beans::PropertyValue >& aProps,
+                                    sal_Int16 nStorageType )
+: OInputCompStream( nStorageType )
 {
     OSL_ENSURE( xStream.is(), "No stream is provided!\n" );
 
@@ -103,8 +106,9 @@ OInputSeekStream::OInputSeekStream( uno::Reference < io::XStream > xStream,
 }
 
 OInputSeekStream::OInputSeekStream( uno::Reference < io::XInputStream > xStream,
-                                    const uno::Sequence< beans::PropertyValue >& aProps )
-: OInputCompStream( xStream, aProps )
+                                    const uno::Sequence< beans::PropertyValue >& aProps,
+                                    sal_Int16 nStorageType )
+: OInputCompStream( xStream, aProps, nStorageType )
 {
     if ( m_xStream.is() )
     {
@@ -137,7 +141,6 @@ uno::Sequence< uno::Type > SAL_CALL OInputSeekStream::getTypes()
     }
 
     return pTypeCollection->getTypes() ;
-
 }
 
 uno::Any SAL_CALL OInputSeekStream::queryInterface( const uno::Type& rType )

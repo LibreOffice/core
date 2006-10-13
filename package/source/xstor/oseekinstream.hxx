@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oseekinstream.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:07:40 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:49:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,17 +51,21 @@ protected:
 public:
     OInputSeekStream( OWriteStream_Impl& pImpl,
                       ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xStream,
-                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps );
+                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
+                      sal_Int16 nStorageType );
 
     OInputSeekStream( OWriteStream_Impl& pImpl,
                       ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > xStream,
-                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps );
+                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
+                      sal_Int16 nStorageType );
 
     OInputSeekStream( ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xStream,
-                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps );
+                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
+                      sal_Int16 nStorageType );
 
     OInputSeekStream( ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > xStream,
-                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps );
+                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
+                      sal_Int16 nStorageType );
 
     virtual ~OInputSeekStream();
 
