@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:44:21 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:12:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -523,7 +523,7 @@ void SwTransferable::InitOle( SfxObjectShell* pDoc, SwDoc& rDoc )
 
 // -----------------------------------------------------------------------
 
-com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > SwTransferable::FindOLEObj() const
+com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > SwTransferable::FindOLEObj( sal_Int64& nAspect ) const
 {
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xObj;
     if( pClpDocFac )
@@ -535,6 +535,7 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > SwTran
             if( ND_OLENODE == pNd->GetNodeType() )
             {
                 xObj = ((SwOLENode*)pNd)->GetOLEObj().GetOleRef();
+                nAspect = ((SwOLENode*)pNd)->GetAspect();
                 break;
             }
     }
@@ -660,10 +661,12 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
         //TODO/MBA: testing - is this the "single OLE object" case?!
         // aus dem ClipDoc das OLE-Object besorgen und von dem die Daten
         // besorgen.
-        com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xObj = FindOLEObj();
+        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT; // will be set in the next statement
+        com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xObj = FindOLEObj( nAspect );
+        Graphic* pOLEGraph = FindOLEReplacementGraphic();
         if( xObj.is() )
         {
-            TransferableDataHelper aD( new SvEmbedTransferHelper( xObj ) );
+            TransferableDataHelper aD( new SvEmbedTransferHelper( xObj, pOLEGraph, nAspect ) );
             ::com::sun::star::uno::Any aAny( aD.GetAny( rFlavor ));
             if( aAny.hasValue() )
                 bOK = SetAny( aAny, rFlavor );
@@ -1992,11 +1995,53 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
 
         if( xObj.is() )
         {
+            svt::EmbeddedObjectRef xObjRef( xObj, aObjDesc.mnViewAspect );
+
+            // try to get the replacement image from the clipboard
+            Graphic aGraphic;
+            ULONG nGrFormat = 0;
+            if( rData.GetGraphic( SOT_FORMATSTR_ID_SVXB, aGraphic ) )
+                nGrFormat = SOT_FORMATSTR_ID_SVXB;
+            else if( rData.GetGraphic( FORMAT_GDIMETAFILE, aGraphic ) )
+                nGrFormat = SOT_FORMAT_GDIMETAFILE;
+            else if( rData.GetGraphic( FORMAT_BITMAP, aGraphic ) )
+                nGrFormat = SOT_FORMAT_BITMAP;
+
+            // insert replacement image ( if there is one ) into the object helper
+            if ( nGrFormat )
+            {
+                datatransfer::DataFlavor aDataFlavor;
+                SotExchange::GetFormatDataFlavor( nGrFormat, aDataFlavor );
+                   xObjRef.SetGraphic( aGraphic, aDataFlavor.MimeType );
+            }
+            else if ( aObjDesc.mnViewAspect == embed::Aspects::MSOLE_ICON )
+            {
+                // it is important to have an icon, let an empty graphic be used
+                // if no other graphic is provided
+                // TODO/LATER: in future a default bitmap could be used
+                ::rtl::OUString aMimeType;
+                MapMode aMapMode( MAP_100TH_MM );
+                aGraphic.SetPrefSize( Size( 2500, 2500 ) );
+                aGraphic.SetPrefMapMode( aMapMode );
+                   xObjRef.SetGraphic( aGraphic, aMimeType );
+            }
+
             //Size einstellen. Ist ein Hack wg. Auslieferung, die Size sollte
             //an das InsertOle uebergeben werden!!!!!!!!!!
-            Size aSize( aObjDesc.maSize );    //immer 100TH_MM
-            if( aSize.Width() && aSize.Height() )
+            Size aSize;
+            if ( aObjDesc.mnViewAspect == embed::Aspects::MSOLE_ICON )
             {
+                   if( aObjDesc.maSize.Width() && aObjDesc.maSize.Height() )
+                    aSize = aObjDesc.maSize;
+                else
+                {
+                    MapMode aMapMode( MAP_100TH_MM );
+                    aSize = xObjRef.GetSize( &aMapMode );
+                }
+            }
+            else if( aObjDesc.maSize.Width() && aObjDesc.maSize.Height() )
+            {
+                aSize = Size( aObjDesc.maSize );    //immer 100TH_MM
                 MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( aObjDesc.mnViewAspect ) );
                 aSize = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aUnit );
                 awt::Size aSz;
@@ -2030,26 +2075,6 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                 }
             }
             //Ende mit Hack!
-
-            svt::EmbeddedObjectRef xObjRef( xObj );
-
-            // try to get the replacement image from the clipboard
-            Graphic aGraphic;
-            ULONG nGrFormat = 0;
-            if( rData.GetGraphic( SOT_FORMATSTR_ID_SVXB, aGraphic ) )
-                nGrFormat = SOT_FORMATSTR_ID_SVXB;
-            else if( rData.GetGraphic( FORMAT_GDIMETAFILE, aGraphic ) )
-                nGrFormat = SOT_FORMAT_GDIMETAFILE;
-            else if( rData.GetGraphic( FORMAT_BITMAP, aGraphic ) )
-                nGrFormat = SOT_FORMAT_BITMAP;
-
-            // insert replacement image ( if there is one ) into the object helper
-            if ( nGrFormat )
-            {
-                datatransfer::DataFlavor aDataFlavor;
-                SotExchange::GetFormatDataFlavor( nGrFormat, aDataFlavor );
-                   xObjRef.SetGraphic( aGraphic, aDataFlavor.MimeType );
-            }
 
             rSh.InsertOleObject( xObjRef );
             nRet = 1;
