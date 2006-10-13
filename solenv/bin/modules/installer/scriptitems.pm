@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-11 09:04:24 $
+#   last change: $Author: obo $ $Date: 2006-10-13 10:36:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -468,6 +468,29 @@ sub replace_setup_variables
         $value =~ s/\<productupdate\>/$productupdatestring/;
 
         $oneitem->{'Value'} = $value;
+    }
+}
+
+################################################################################
+# By defining variable LOCALUSERDIR in *.lst it is possible to change
+# the standard destination of user directory defined in scp2 ($SYSUSERCONFIG).
+################################################################################
+
+sub replace_userdir_variable
+{
+    my ($itemsarrayref) = @_;
+
+    my $userdir = "";
+    if ( $allvariableshashref->{'LOCALUSERDIR'} ) { $userdir = $allvariableshashref->{'LOCALUSERDIR'}; }
+    else { $userdir = $installer::globals::simpledefaultuserdir; }
+
+    if ( $userdir ne "" )
+    {
+        for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
+        {
+            my $oneitem = ${$itemsarrayref}[$i];
+            $oneitem->{'Value'} =~ s/\$SYSUSERCONFIG/$userdir/;
+        }
     }
 }
 
