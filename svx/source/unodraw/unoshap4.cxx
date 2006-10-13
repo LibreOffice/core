@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:27:15 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:24:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -293,6 +293,7 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
         Rectangle aRect = pOle2Obj->GetLogicRect();
         if ( aRect.GetWidth() == 100 && aRect.GetHeight() == 100 )
         {
+            // TODO/LATER: is it possible that this method is used to create an iconified object?
             // default size
             try
             {
