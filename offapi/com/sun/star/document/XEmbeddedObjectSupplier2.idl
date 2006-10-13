@@ -1,0 +1,88 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XEmbeddedObjectSupplier2.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:17:06 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_document_XEmbeddedObjectSupplier2_idl__
+#define __com_sun_star_document_XEmbeddedObjectSupplier2_idl__
+
+#ifndef __com_sun_star_embed_XEmbeddedObject_idl__
+#include <com/sun/star/embed/XEmbeddedObject.idl>
+#endif
+
+#ifndef __com_sun_star_graphic_XGraphic_idl__
+#include <com/sun/star/graphic/XGraphic.idl>
+#endif
+
+#ifndef __com_sun_star_document_XEmbeddedObjectSupplier_idl__
+#include <com/sun/star/document/XEmbeddedObjectSupplier.idl>
+#endif
+
+
+//=============================================================================
+
+module com {   module sun {   module star {   module document {
+
+//=============================================================================
+
+/** represents something that provides an embedded object.
+ */
+interface XEmbeddedObjectSupplier2: com::sun::star::document::XEmbeddedObjectSupplier
+{
+    //-------------------------------------------------------------------------
+    /** returns the object which is embedded into this object.
+
+        <p>
+        This method does not return the model that is controlled by the
+        embedded object, but the embedded object itself.
+        </p>
+     */
+    com::sun::star::embed::XEmbeddedObject getExtendedControlOverEmbeddedObject();
+
+    //-------------------------------------------------------------------------
+    /** allows to control the aspect of the object.
+     */
+    [attribute] hyper Aspect;
+
+    //-------------------------------------------------------------------------
+    /** allows to get the replacement image of the object.
+     */
+    [attribute,readonly] com::sun::star::graphic::XGraphic ReplacementGraphic;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
