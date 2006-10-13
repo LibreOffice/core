@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:27:09 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:36:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,9 @@
 
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
 #endif
 
 class ScPatternAttr;
@@ -144,7 +147,7 @@ public:
                                         BOOL bLink = FALSE, BOOL bAllowDialogs = FALSE );
 
     BOOL            PasteFile( const Point&, const String&, BOOL bLink=FALSE );
-    BOOL            PasteObject( const Point&, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >&, const Size* = NULL, const Graphic* = NULL, const ::rtl::OUString& = ::rtl::OUString() );
+    BOOL            PasteObject( const Point&, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >&, const Size* = NULL, const Graphic* = NULL, const ::rtl::OUString& = ::rtl::OUString(), sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT );
     BOOL            PasteBitmap( const Point&, const Bitmap& );
     BOOL            PasteMetaFile( const Point&, const GDIMetaFile& );
     BOOL            PasteGraphic( const Point& rPos, const Graphic& rGraphic,
