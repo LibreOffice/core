@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:24:30 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:37:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,7 +222,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     {
                         datatransfer::DataFlavor aDataFlavor;
                         SotExchange::GetFormatDataFlavor( nGrFormat, aDataFlavor );
-                        PasteObject( aPos, xObj, &aObjDesc.maSize, &aGraphic, aDataFlavor.MimeType );
+                        PasteObject( aPos, xObj, &aObjDesc.maSize, &aGraphic, aDataFlavor.MimeType, aObjDesc.mnViewAspect );
                     }
                     else
                         PasteObject( aPos, xObj, &aObjDesc.maSize );
@@ -290,7 +290,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     {
                         datatransfer::DataFlavor aDataFlavor;
                         SotExchange::GetFormatDataFlavor( nGrFormat, aDataFlavor );
-                        PasteObject( aPos, xObj, &aObjDesc.maSize, &aGraphic, aDataFlavor.MimeType );
+                        PasteObject( aPos, xObj, &aObjDesc.maSize, &aGraphic, aDataFlavor.MimeType, aObjDesc.mnViewAspect );
                     }
                     else
                         PasteObject( aPos, xObj, &aObjDesc.maSize );
