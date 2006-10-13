@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:45:02 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:03:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -988,10 +988,14 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             }
 
             Rectangle aRect = pObj->GetLogicRect();
-            awt::Size aSz;
-            aSz.Width = aRect.GetWidth();
-            aSz.Height = aRect.GetHeight();
-            xObj->setVisualAreaSize( pObj->GetAspect(), aSz );
+
+            if ( pObj->GetAspect() != embed::Aspects::MSOLE_ICON )
+            {
+                awt::Size aSz;
+                aSz.Width = aRect.GetWidth();
+                aSz.Height = aRect.GetHeight();
+                xObj->setVisualAreaSize( pObj->GetAspect(), aSz );
+            }
 
             GetViewShellBase().SetVerbs( xObj->getSupportedVerbs() );
 
@@ -1031,25 +1035,8 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         Rectangle aRect = pObj->GetLogicRect();
         Size aDrawSize = aRect.GetSize();
 
-        // TODO/LEAN: getMapUnit may switch object to running state
-        awt::Size aSz;
-        try
-        {
-            aSz = pObj->GetObjRef()->getVisualAreaSize( pSdClient->GetAspect() );
-        }
-        catch( embed::NoVisualAreaSizeException& )
-        {
-            OSL_ENSURE ( sal_False, "Can not get visual area size!\n" );
-            aSz.Width = 5000;
-            aSz.Height = 5000;
-        }
-
-        Size aObjAreaSize( aSz.Width, aSz.Height );
-
-        MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( pObj->GetObjRef()->getMapUnit( pSdClient->GetAspect() ) );
-        aObjAreaSize = OutputDevice::LogicToLogic( aObjAreaSize,
-                                                aUnit,
-                                                GetDoc()->GetScaleUnit() );
+        MapMode aMapMode( GetDoc()->GetScaleUnit() );
+        Size aObjAreaSize = pObj->GetOrigObjSize( &aMapMode );
 
         Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
         Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
