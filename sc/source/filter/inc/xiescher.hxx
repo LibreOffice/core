@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:20:19 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:34:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,6 +323,9 @@ public:
     inline const String& GetControlName() const { return maCtrlName; }
     /** Returns the position in Ctrl stream for additional form control data. */
     inline sal_Size      GetCtlsStreamPos() const { return mnCtlsStrmPos; }
+    /** Allows to detect whether the object is iconified. */
+    inline sal_Bool      IsIconified() const { return mbAsSymbol; }
+
 
     /** Sets form control specific properties. */
     void                WriteToPropertySet( ScfPropertySet& rPropSet ) const;
