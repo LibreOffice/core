@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:50:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:35:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,6 +245,11 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
     BOOL bIsFromFile = FALSE;
     ::rtl::OUString aName;
 
+    sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+    ::rtl::OUString aIconMediaType;
+    uno::Reference< io::XInputStream > xIconMetaFile;
+
+
     USHORT nSlot = rReq.GetSlot();
     SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, sal_False );
     if ( nSlot == SID_INSERT_OBJECT && pNameItem )
@@ -281,8 +286,12 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
                 if ( pDlg )
                 {
                     pDlg->Execute();
-                    bIsFromFile = !pDlg->IsCreateNew();
                     xObj = pDlg->GetObject();
+
+                    xIconMetaFile = pDlg->GetIconIfIconified( &aIconMediaType );
+                    if ( xIconMetaFile.is() )
+                        nAspect = embed::Aspects::MSOLE_ICON;
+
                     if ( xObj.is() )
                         pViewSh->GetObjectShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
                     // damit DrawShell eingeschaltet wird (Objekt aktivieren ist unnoetig):
@@ -338,40 +347,51 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
     {
         pView->UnmarkAll();
 
-        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-
         try
         {
-            awt::Size aSz;
-            try
-            {
-                aSz = xObj->getVisualAreaSize( nAspect );
-            }
-            catch( embed::NoVisualAreaSizeException& )
-            {
-                // the default size will be set later
-            }
+            ::svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
+            Size aSize;
+            MapMode aMap100( MAP_100TH_MM );
+            MapUnit aMapUnit = MAP_100TH_MM;
 
-            Size aSize( aSz.Width, aSz.Height );
-
-            MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-            if (aSize.Height() == 0 || aSize.Width() == 0)
+            if ( nAspect == embed::Aspects::MSOLE_ICON )
             {
-                // Rechteck mit ausgewogenem Kantenverhaeltnis
-                aSize.Width() = 5000;
-                aSize.Height() = 5000;
-                Size aTmp = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aMapUnit );
-                aSz.Width = aTmp.Width();
-                aSz.Height = aTmp.Height();
-                xObj->setVisualAreaSize( nAspect, aSz );
-
-                //  re-convert aSize to 1/100th mm to avoid rounding errors in comparison below
-                aSize = Window::LogicToLogic( aTmp,
-                                MapMode( aMapUnit ), MapMode( MAP_100TH_MM ) );
+                aObjRef.SetGraphicStream( xIconMetaFile, aIconMediaType );
+                aSize = aObjRef.GetSize( &aMap100 );
             }
             else
-                aSize = Window::LogicToLogic( aSize,
-                                MapMode( aMapUnit ), MapMode( MAP_100TH_MM ) );
+            {
+                awt::Size aSz;
+                try
+                {
+                    aSz = xObj->getVisualAreaSize( nAspect );
+                }
+                catch( embed::NoVisualAreaSizeException& )
+                {
+                    // the default size will be set later
+                }
+
+                aSize = Size( aSz.Width, aSz.Height );
+
+                aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+                if (aSize.Height() == 0 || aSize.Width() == 0)
+                {
+                    // Rechteck mit ausgewogenem Kantenverhaeltnis
+                    aSize.Width() = 5000;
+                    aSize.Height() = 5000;
+                    Size aTmp = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aMapUnit );
+                    aSz.Width = aTmp.Width();
+                    aSz.Height = aTmp.Height();
+                    xObj->setVisualAreaSize( nAspect, aSz );
+
+                    //  re-convert aSize to 1/100th mm to avoid rounding errors in comparison below
+                    aSize = Window::LogicToLogic( aTmp,
+                                    MapMode( aMapUnit ), aMap100 );
+                }
+                else
+                    aSize = Window::LogicToLogic( aSize,
+                                    MapMode( aMapUnit ), aMap100 );
+            }
 
             //  Chart initialisieren ?
             if ( SvtModuleOptions().IsChart() && SotExchange::IsChart( SvGlobalName( xObj->getClassID() ) ) )
@@ -383,7 +403,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
             if ( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
                 aPnt.X() -= aSize.Width();      // move position to left edge
             Rectangle aRect (aPnt, aSize);
-            SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
+            SdrOle2Obj* pObj = new SdrOle2Obj( aObjRef, aName, aRect);
 
                 // Dieses Objekt nicht vor dem Aktivieren zeichnen
                 // (in MarkListHasChanged kommt ein Update)
@@ -393,25 +413,28 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
             SdrPageView* pPV = pView->GetPageViewPvNum(0);
             pView->InsertObject(pObj, *pPV);
 
-            //  #73279# Math objects change their object size during InsertObject.
-            //  New size must be set in SdrObject, or a wrong scale will be set at
-            //  ActivateObject.
-
-            try
+            if ( nAspect != embed::Aspects::MSOLE_ICON )
             {
-                aSz = xObj->getVisualAreaSize( nAspect );
+                //  #73279# Math objects change their object size during InsertObject.
+                //  New size must be set in SdrObject, or a wrong scale will be set at
+                //  ActivateObject.
 
-                Size aNewSize( aSz.Width, aSz.Height );
-                aNewSize = OutputDevice::LogicToLogic( aNewSize, aMapUnit, MAP_100TH_MM );
-
-                if ( aNewSize != aSize )
+                try
                 {
-                    aRect.SetSize( aNewSize );
-                    pObj->SetLogicRect( aRect );
+                    awt::Size aSz = xObj->getVisualAreaSize( nAspect );
+
+                    Size aNewSize( aSz.Width, aSz.Height );
+                    aNewSize = OutputDevice::LogicToLogic( aNewSize, aMapUnit, MAP_100TH_MM );
+
+                    if ( aNewSize != aSize )
+                    {
+                        aRect.SetSize( aNewSize );
+                        pObj->SetLogicRect( aRect );
+                    }
                 }
+                catch( embed::NoVisualAreaSizeException& )
+                {}
             }
-            catch( embed::NoVisualAreaSizeException& )
-            {}
 
             if ( !rReq.IsAPI() )
             {
