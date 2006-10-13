@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xfactory.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:25:20 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:50:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,8 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
                 static_cast< OWeakObject* >( new OStorage(  xTempStream,
                                                             embed::ElementModes::READWRITE,
                                                             uno::Sequence< beans::PropertyValue >(),
-                                                            m_xFactory ) ),
+                                                            m_xFactory,
+                                                            PACKAGE_STORAGE ) ),
                 uno::UNO_QUERY );
 }
 
@@ -151,11 +152,15 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         if( !( aArguments[1] >>= nStorageMode ) )
         {
             OSL_ENSURE( sal_False, "Wrong second argument!\n" );
-            throw uno::Exception(); // TODO: Illegal argument
+            throw lang::IllegalArgumentException(); // TODO:
         }
         // it's allways possible to read written storage in this implementation
         nStorageMode |= embed::ElementModes::READ;
     }
+
+    if ( ( nStorageMode & embed::ElementModes::TRUNCATE ) == embed::ElementModes::TRUNCATE
+      && ( nStorageMode & embed::ElementModes::WRITE ) != embed::ElementModes::WRITE )
+        throw lang::IllegalArgumentException(); // TODO:
 
     // retrieve storage source stream
     ::rtl::OUString aURL;
@@ -167,13 +172,13 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         if ( !aURL.getLength() )
         {
             OSL_ENSURE( sal_False, "Empty URL is provided!\n" );
-            throw uno::Exception(); // TODO: illegal argument
+            throw lang::IllegalArgumentException(); // TODO:
         }
 
         if ( aURL.equalsIgnoreAsciiCaseAsciiL( "vnd.sun.star.pkg", 16 ) )
         {
             OSL_ENSURE( sal_False, "Packages URL's are not valid for storages!\n" ); // ???
-            throw uno::Exception(); // TODO: illegal argument
+            throw lang::IllegalArgumentException(); // TODO:
         }
 
         uno::Reference < ::com::sun::star::ucb::XSimpleFileAccess > xTempAccess(
@@ -199,6 +204,8 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     uno::Sequence< beans::PropertyValue > aDescr;
     uno::Sequence< beans::PropertyValue > aPropsToSet;
 
+    sal_Int16 nStorageType = PACKAGE_STORAGE;
+
     if ( nArgNum >= 3 )
     {
         if( aArguments[2] >>= aDescr )
@@ -221,6 +228,19 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                     aPropsToSet.realloc( ++nNumArgs );
                     aPropsToSet[nNumArgs-1].Name = aDescr[nInd].Name;
                     aPropsToSet[nNumArgs-1].Value = aDescr[nInd].Value;
+                }
+                else if ( aDescr[nInd].Name.equalsAscii( "StorageFormat" ) )
+                {
+                    ::rtl::OUString aFormatName;
+                    aDescr[nInd].Value >>= aFormatName;
+                    if ( aFormatName.equalsAscii( "PackageFormat" ) )
+                        nStorageType = PACKAGE_STORAGE;
+                    else if ( aFormatName.equalsAscii( "ZipFormat" ) )
+                        nStorageType = ZIP_STORAGE;
+                    else if ( aFormatName.equalsAscii( "OFOPXMLFormat" ) )
+                        nStorageType = OFOPXML_STORAGE;
+                    else
+                        throw lang::IllegalArgumentException(); // TODO:
                 }
                 else
                     OSL_ENSURE( sal_False, "Unacceptable property, will be ignored!\n" );
@@ -252,7 +272,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
             throw io::IOException(); // TODO: this is not a package file
 
         return uno::Reference< uno::XInterface >(
-                    static_cast< OWeakObject* >( new OStorage( xInputStream, nStorageMode, aPropsToSet, m_xFactory ) ),
+                    static_cast< OWeakObject* >( new OStorage( xInputStream, nStorageMode, aPropsToSet, m_xFactory, nStorageType ) ),
                     uno::UNO_QUERY );
     }
     else if ( xStream.is() )
@@ -272,7 +292,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
             throw io::IOException(); // TODO: this is not a package file
 
         return uno::Reference< uno::XInterface >(
-                    static_cast< OWeakObject* >( new OStorage( xStream, nStorageMode, aPropsToSet, m_xFactory ) ),
+                    static_cast< OWeakObject* >( new OStorage( xStream, nStorageMode, aPropsToSet, m_xFactory, nStorageType ) ),
                     uno::UNO_QUERY );
     }
 
