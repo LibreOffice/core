@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storagehelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:40:15 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:40:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,11 @@
 #include "comphelper/comphelperdllapi.h"
 #endif
 
+
+#define PACKAGE_STORAGE_FORMAT_STRING   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageFormat" ) )
+#define ZIP_STORAGE_FORMAT_STRING       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ZipFormat" ) )
+#define OFOPXML_STORAGE_FORMAT_STRING   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OFOPXMLFormat" ) )
+
 namespace comphelper {
 
 class COMPHELPER_DLLPUBLIC OStorageHelper
@@ -126,9 +131,45 @@ public:
             const ::rtl::OUString& aPass )
         throw ( ::com::sun::star::uno::Exception );
 
+    // the following method supports only storages of OOo formats
     static sal_Int32 GetXStorageFormat(
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
         throw ( ::com::sun::star::uno::Exception );
+
+    // The followin methods are related to creation of a storage of specified format
+    static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+        GetTemporaryStorageOfFormat(
+            const ::rtl::OUString& aFormat,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory
+                            = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
+        throw ( ::com::sun::star::uno::Exception );
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+        GetStorageOfFormatFromURL(
+            const ::rtl::OUString& aFormat,
+            const ::rtl::OUString& aURL,
+            sal_Int32 nStorageMode,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory
+                            = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
+        throw ( ::com::sun::star::uno::Exception );
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+        GetStorageOfFormatFromInputStream(
+            const ::rtl::OUString& aFormat,
+            const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >& xStream,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory
+                            = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
+        throw ( ::com::sun::star::uno::Exception );
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+        GetStorageOfFormatFromStream(
+            const ::rtl::OUString& aFormat,
+            const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream >& xStream,
+            sal_Int32 nStorageMode = ::com::sun::star::embed::ElementModes::READWRITE,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory
+                            = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
+        throw ( ::com::sun::star::uno::Exception );
+
 };
 
 }
