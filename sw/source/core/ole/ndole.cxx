@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:26:53 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:09:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,7 +319,6 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
     SwNoTxtNode( rWhere, ND_OLENODE, pGrfColl, pAutoAttr ),
     aOLEObj( xObj ),
     pGraphic(0),
-    nViewAspect( embed::Aspects::MSOLE_CONTENT ),
     bOLESizeInvalid( FALSE ),
     mpObjectLink( NULL )
 {
@@ -328,12 +327,12 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
 
 SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
                     const String &rString,
+                    sal_Int64 nAspect,
                     SwGrfFmtColl *pGrfColl,
                     SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_OLENODE, pGrfColl, pAutoAttr ),
-    aOLEObj( rString ),
+    aOLEObj( rString, nAspect ),
     pGraphic(0),
-    nViewAspect( embed::Aspects::MSOLE_CONTENT ),
     bOLESizeInvalid( FALSE ),
     mpObjectLink( NULL )
 {
@@ -476,12 +475,12 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
 
 
 SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
-    const String &rName, SwGrfFmtColl* pGrfColl, SwAttrSet* pAutoAttr )
+    const String &rName, sal_Int64 nAspect, SwGrfFmtColl* pGrfColl, SwAttrSet* pAutoAttr )
 {
     ASSERT( pGrfColl,"SwNodes::MakeOLENode: Formatpointer ist 0." );
 
     SwOLENode *pNode =
-        new SwOLENode( rWhere, rName, pGrfColl, pAutoAttr );
+        new SwOLENode( rWhere, rName, nAspect, pGrfColl, pAutoAttr );
 
     // set parent if XChild is supported
     //!! needed to supply Math objects with a valid reference device
@@ -498,25 +497,8 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
 
 Size SwOLENode::GetTwipSize() const
 {
-    uno::Reference < embed::XEmbeddedObject > xObj = ((SwOLENode*)this)->aOLEObj.GetOleRef();
-
-    // TODO/LEAN: getMapUnit may switch object to running state
-    awt::Size aSize;
-    try
-    {
-        aSize = xObj->getVisualAreaSize( nViewAspect );
-    }
-    catch( embed::NoVisualAreaSizeException& )
-    {
-        DBG_ASSERT( sal_False, "Can't get visual area size!" );
-        aSize.Width = 5000;
-        aSize.Height = 5000;
-    }
-
-    Size aSz( aSize.Width, aSize.Height );
-    const MapMode aDest( MAP_TWIP );
-    const MapMode aSrc ( VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nViewAspect ) ) );
-    return OutputDevice::LogicToLogic( aSz, aSrc, aDest );
+    MapMode aMapMode( MAP_TWIP );
+    return ((SwOLENode*)this)->aOLEObj.GetObject().GetSize( &aMapMode );
 }
 
 SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
@@ -544,13 +526,14 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         pSrc->GetEmbeddedObjectContainer().GetEmbeddedObject( aOLEObj.aName ),
         aNewName );
 
-    SwOLENode* pOLENd = pDoc->GetNodes().MakeOLENode( rIdx, aNewName,
+    SwOLENode* pOLENd = pDoc->GetNodes().MakeOLENode( rIdx, aNewName, GetAspect(),
                                     (SwGrfFmtColl*)pDoc->GetDfltGrfFmtColl(),
                                     (SwAttrSet*)GetpSwAttrSet() );
 
     pOLENd->SetChartTblName( GetChartTblName() );
     pOLENd->SetAlternateText( GetAlternateText() );
     pOLENd->SetContour( HasContour(), HasAutomaticContour() );
+    pOLENd->SetAspect( GetAspect() ); // the replacement image must be already copied
 
     pOLENd->SetOLESizeInvalid( TRUE );
     pDoc->SetOLEPrtNotifyPending();
@@ -738,12 +721,13 @@ SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
 }
 
 
-SwOLEObj::SwOLEObj( const String &rString ) :
+SwOLEObj::SwOLEObj( const String &rString, sal_Int64 nAspect ) :
     pOLENd( 0 ),
     aName( rString ),
     pListener( 0 )
 {
     xOLERef.Lock( TRUE );
+    xOLERef.SetViewAspect( nAspect );
 }
 
 
@@ -913,7 +897,7 @@ BOOL SwOLEObj::UnloadObject()
     if ( pOLENd )
     {
         const SwDoc* pDoc = pOLENd->GetDoc();
-        bRet = UnloadObject( xOLERef.GetObject(), pDoc, pOLENd->GetAspect() );
+        bRet = UnloadObject( xOLERef.GetObject(), pDoc, xOLERef.GetViewAspect() );
     }
 
     return bRet;
