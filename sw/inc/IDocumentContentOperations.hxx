@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IDocumentContentOperations.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:41:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:07:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
-    virtual SwFlyFrmFmt* InsertOLE(const SwPaM &rRg, const String& rObjName, const SfxItemSet* pFlyAttrSet,
+    virtual SwFlyFrmFmt* InsertOLE(const SwPaM &rRg, const String& rObjName, sal_Int64 nAspect, const SfxItemSet* pFlyAttrSet,
                            const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
     /** Aufspalten eines Nodes an rPos (nur fuer den TxtNode implementiert)
