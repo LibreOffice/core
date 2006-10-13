@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ManifestExport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:22:48 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:47:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,6 @@
 #ifndef _MANIFEST_EXPORT_HXX
 #include <ManifestExport.hxx>
 #endif
-#ifndef _ATTRIBUTE_LIST_HXX
-#include <AttributeList.hxx>
-#endif
 #ifndef _MANIFEST_DEFINES_HXX
 #include <ManifestDefines.hxx>
 #endif
@@ -65,6 +62,7 @@
 #endif
 
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/attributelist.hxx>
 
 using namespace rtl;
 using namespace com::sun::star::beans;
@@ -104,7 +102,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
     const OUString sPBKDF2              ( RTL_CONSTASCII_USTRINGPARAM ( "PBKDF2" ) );
     const OUString sChecksumType        ( RTL_CONSTASCII_USTRINGPARAM ( CHECKSUM_TYPE ) );
 
-    AttributeList * pRootAttrList = new AttributeList;
+    ::comphelper::AttributeList * pRootAttrList = new ::comphelper::AttributeList;
     const Sequence < PropertyValue > *pSequence = rManList.getConstArray();
     const sal_uInt32 nManLength = rManList.getLength();
 
@@ -191,7 +189,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
 
     for (sal_uInt32 i = 0 ; i < nManLength ; i++)
     {
-        AttributeList *pAttrList = new AttributeList;
+        ::comphelper::AttributeList *pAttrList = new ::comphelper::AttributeList;
         const PropertyValue *pValue = pSequence[i].getConstArray();
         OUString aString;
         const PropertyValue *pVector = NULL, *pSalt = NULL, *pIterationCount = NULL, *pDigest = NULL;
@@ -229,7 +227,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
         xHandler->startElement( sFileEntryElement , xAttrList);
         if ( pVector && pSalt && pIterationCount )
         {
-            AttributeList * pNewAttrList = new AttributeList;
+            ::comphelper::AttributeList * pNewAttrList = new ::comphelper::AttributeList;
             Reference < XAttributeList > xNewAttrList (pNewAttrList);
             OUStringBuffer aBuffer;
             Sequence < sal_uInt8 > aSequence;
@@ -244,7 +242,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
             }
             xHandler->startElement( sEncryptionDataElement , xNewAttrList);
 
-            pNewAttrList = new AttributeList;
+            pNewAttrList = new ::comphelper::AttributeList;
             xNewAttrList = pNewAttrList;
 
             pNewAttrList->AddAttribute ( sAlgorithmNameAttribute, sCdataAttribute, sBlowfish );
@@ -258,7 +256,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->endElement( sAlgorithmElement );
 
-            pNewAttrList = new AttributeList;
+            pNewAttrList = new ::comphelper::AttributeList;
             xNewAttrList = pNewAttrList;
 
             pNewAttrList->AddAttribute ( sKeyDerivationNameAttribute, sCdataAttribute, sPBKDF2 );
