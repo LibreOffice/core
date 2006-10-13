@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msoleexp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:59:19 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,7 +303,9 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                     awt::Size aSize;
                     try
                     {
-                        aSize = rObj->getVisualAreaSize( rObj.GetViewAspect() );
+                        // this is an own object, the content size must be stored in the
+                        // extension stream
+                        aSize = rObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
                     }
                     catch( embed::NoVisualAreaSizeException& )
                     {
