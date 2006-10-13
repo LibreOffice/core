@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menudocumenthandler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:09:05 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 09:42:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,16 @@ class ReadMenuDocumentHandlerBase : public ::com::sun::star::xml::sax::XDocument
 
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > m_xLocator;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler> m_xReader;
+        void initPropertyCommon( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > &rProps,
+                                 const rtl::OUString &rCommandURL, const rtl::OUString &rHelpId,
+                                 const rtl::OUString &rLabel);
+    private:
+        rtl::OUString m_aType;
+        rtl::OUString m_aLabel;
+        rtl::OUString m_aContainer;
+        rtl::OUString m_aHelpURL;
+        rtl::OUString m_aCommandURL;
+        ::com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > m_aItemProp;
 };
 
 
