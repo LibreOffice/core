@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:09:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:23:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,7 +382,7 @@ SvStream& operator>>( SvStream& rIn, PptInteractiveInfoAtom& rAtom )
 
 SvStream& operator>>( SvStream& rIn, PptExOleObjAtom& rAtom )
 {
-    rIn >> rAtom.nDummy0
+    rIn >> rAtom.nAspect
         >> rAtom.nDummy1
         >> rAtom.nId
         >> rAtom.nDummy2
@@ -1968,7 +1968,8 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                            const Graphic& rGraf,
                                            const Rectangle& rBoundRect,
                                            const Rectangle& rVisArea,
-                                           const int /*_nCalledByGroup*/) const
+                                           const int /*_nCalledByGroup*/,
+                                           sal_Int64 /*nAspect*/ ) const
 // <--
 {
     SdrObject* pRet = NULL;
@@ -2060,8 +2061,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                     {
                                         pOe->pShell->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aNm );
 
-                                        // TODO/LATER: get ViewAspect from MSDoc
-                                        svt::EmbeddedObjectRef aObj( xObj );
+                                        svt::EmbeddedObjectRef aObj( xObj, pOe->nAspect );
 
                                         // TODO/LATER: need MediaType for Graphic
                                         aObj.SetGraphic( rGraf, ::rtl::OUString() );
@@ -2096,31 +2096,31 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                         pOe->pShell->GetEmbeddedObjectContainer().GetEmbeddedObject( aNm );
                                     if ( xObj.is() )
                                     {
-                                        // TODO/LATER: get ViewAspect from MSDoc
-                                        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-
-                                        //TODO/LATER: keep on hacking?!
-                                        // modifiziert wollen wir nicht werden
-                                        //xInplaceObj->EnableSetModified( FALSE );
-                                        if ( rVisArea.IsEmpty() )
+                                        if ( pOe->nAspect != embed::Aspects::MSOLE_ICON )
                                         {
-                                            MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-                                            Size aSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
-                                                aGraphic.GetPrefMapMode(), MapMode( aMapUnit ) ) );
+                                            //TODO/LATER: keep on hacking?!
+                                            // modifiziert wollen wir nicht werden
+                                            //xInplaceObj->EnableSetModified( FALSE );
+                                            if ( rVisArea.IsEmpty() )
+                                            {
+                                                MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( pOe->nAspect ) );
+                                                Size aSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
+                                                    aGraphic.GetPrefMapMode(), MapMode( aMapUnit ) ) );
 
-                                            awt::Size aSz;
-                                            aSz.Width = aSize.Width();
-                                            aSz.Height = aSize.Height();
-                                            xObj->setVisualAreaSize( nAspect, aSz );
+                                                awt::Size aSz;
+                                                aSz.Width = aSize.Width();
+                                                aSz.Height = aSize.Height();
+                                                xObj->setVisualAreaSize( pOe->nAspect, aSz );
+                                            }
+                                            else
+                                            {
+                                                awt::Size aSize( rVisArea.GetSize().Width(), rVisArea.GetSize().Height() );
+                                                xObj->setVisualAreaSize( pOe->nAspect, aSize );
+                                            }
+                                            //xInplaceObj->EnableSetModified( TRUE );
                                         }
-                                        else
-                                        {
-                                            awt::Size aSize( rVisArea.GetSize().Width(), rVisArea.GetSize().Height() );
-                                            xObj->setVisualAreaSize( nAspect, aSize );
-                                        }
-                                        //xInplaceObj->EnableSetModified( TRUE );
 
-                                        svt::EmbeddedObjectRef aObj( xObj, nAspect );
+                                        svt::EmbeddedObjectRef aObj( xObj, pOe->nAspect );
 
                                         // TODO/LATER: need MediaType for Graphic
                                         aObj.SetGraphic( aGraphic, ::rtl::OUString() );
@@ -2312,7 +2312,8 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                             if ( aHd.nRecType == DFF_PST_ExOleObjStg )
                             {
                                 rStCtrl >> nId;
-                                aOleObjectList.Insert( new PPTOleEntry( aAt.nId, aHd.nFilePos, pShell, nRecType ) );
+                                aOleObjectList.Insert(
+                                    new PPTOleEntry( aAt.nId, aHd.nFilePos, pShell, nRecType, aAt.nAspect ) );
                             }
                         }
                     }
