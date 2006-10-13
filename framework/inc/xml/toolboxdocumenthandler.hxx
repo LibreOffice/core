@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxdocumenthandler.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:54:13 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 09:42:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,12 +178,12 @@ class OReadToolBoxDocumentHandler : public ::com::sun::star::xml::sax::XDocument
                 }
         };
 
-        sal_Bool                                                                        m_bToolBarStartFound;
-        sal_Bool                                                                        m_bToolBarEndFound;
-        sal_Bool                                                                        m_bToolBarItemStartFound;
-        sal_Bool                                                                        m_bToolBarSpaceStartFound;
-        sal_Bool                                                                        m_bToolBarBreakStartFound;
-        sal_Bool                                                                        m_bToolBarSeparatorStartFound;
+        sal_Bool                                                                        m_bToolBarStartFound : 1;
+        sal_Bool                                                                        m_bToolBarEndFound : 1;
+        sal_Bool                                                                        m_bToolBarItemStartFound : 1;
+        sal_Bool                                                                        m_bToolBarSpaceStartFound : 1;
+        sal_Bool                                                                        m_bToolBarBreakStartFound : 1;
+        sal_Bool                                                                        m_bToolBarSeparatorStartFound : 1;
         ToolBoxHashMap                                                                  m_aToolBoxMap;
         com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >    m_rItemContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >        m_xLocator;
@@ -195,6 +195,12 @@ class OReadToolBoxDocumentHandler : public ::com::sun::star::xml::sax::XDocument
         sal_Int32                                                                       m_nHashCode_Style_DropDown;
         sal_Int32                                                                       m_nHashCode_Style_Repeat;
         sal_Int32                                                                       m_nHashCode_Style_DropDownOnly;
+        rtl::OUString                                                                   m_aType;
+        rtl::OUString                                                                   m_aLabel;
+        rtl::OUString                                                                   m_aStyle;
+        rtl::OUString                                                                   m_aHelpURL;
+        rtl::OUString                                                                   m_aIsVisible;
+        rtl::OUString                                                                   m_aCommandURL;
 };
 
 
