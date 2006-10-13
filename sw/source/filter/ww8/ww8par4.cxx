@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:52:09 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:11:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,7 +332,7 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     if (bSuccess)
     {
         const SfxItemSet *pFlySet = pMathFlySet ? pMathFlySet : &rFlySet;
-        pRet = rDoc.InsertOLE(*pPaM, sNewName, pFlySet, &rGrfSet, 0);
+        pRet = rDoc.InsertOLE(*pPaM, sNewName, rObject.GetAspect(), pFlySet, &rGrfSet, 0);
     }
     delete pMathFlySet;
     return pRet;
@@ -444,6 +444,9 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     aSrcStgName += String::CreateFromInt32( nObjLocFc );
 
     SvStorageRef xSrc0 = pStg->OpenSotStorage(CREATE_CONST_ASC(SL::aObjectPool));
+    SvStorageRef xSrc1 = xSrc0->OpenSotStorage( aSrcStgName,
+            STREAM_READWRITE| STREAM_SHARE_DENYALL );
+
 
     if (pGrf)
     {
@@ -455,9 +458,6 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     }
     else
     {
-        SvStorageRef xSrc1 = xSrc0->OpenSotStorage( aSrcStgName,
-            STREAM_READWRITE| STREAM_SHARE_DENYALL );
-
         GDIMetaFile aWMF;
 
         if (ImportOleWMF(xSrc1,aWMF,nX,nY))
@@ -485,9 +485,6 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
             aRect.SetSize(pSize->GetSize());
         }
     }
-
-    SvStorageRef xSrc1 = xSrc0->OpenSotStorage( aSrcStgName,
-        STREAM_READWRITE| STREAM_SHARE_DENYALL );
 
     if (!(bIsHeader || bIsFooter))
     {
@@ -520,10 +517,24 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
                 pTmpData->Seek( nObjLocFc );
             }
 
+            sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+
+            {
+                SvStorageStreamRef xObjInfoSrc = xSrc1->OpenSotStream( CREATE_CONST_ASC( "\3ObjInfo" ),
+                    STREAM_STD_READ | STREAM_NOCREATE );
+                if ( xObjInfoSrc.Is() && !xObjInfoSrc->GetError() )
+                {
+                    BYTE nByte = 0;
+                    *xObjInfoSrc >> nByte;
+                    if ( ( nByte >> 4 ) & embed::Aspects::MSOLE_ICON )
+                        nAspect = embed::Aspects::MSOLE_ICON;
+                }
+            }
+
             ErrCode nError = ERRCODE_NONE;
             pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
                 aSrcStgName, xSrc0, mpDocShell->GetStorage(), rGraph, aRect, aVisArea, pTmpData, nError,
-                SwMSDffManager::GetFilterFlags());
+                SwMSDffManager::GetFilterFlags(), nAspect );
             pDataStream->Seek( nOldPos );
         }
     }
