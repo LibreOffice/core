@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:09:05 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:33:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1622,7 +1622,10 @@ SdrObject* XclImpDffManager::CreateSdrObject( const XclImpOleObj& rOleObj, const
                 SotStorageRef xSrcStrg = GetRootStorage();
                 ErrCode nError = ERRCODE_NONE;
                 xSdrObj.reset( CreateSdrOLEFromStorage( rStorageName, xSrcStrg,
-                    pDocShell->GetStorage(), aGraph, rAnchorRect, aVisArea, 0, nError, mnOleImpFlags ) );
+                    pDocShell->GetStorage(), aGraph, rAnchorRect, aVisArea, 0, nError, mnOleImpFlags,
+                    rOleObj.IsIconified()
+                        ? ::com::sun::star::embed::Aspects::MSOLE_ICON
+                        : ::com::sun::star::embed::Aspects::MSOLE_CONTENT ) );
             }
         }
     }
