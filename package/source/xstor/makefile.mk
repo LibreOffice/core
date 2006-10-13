@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:35:57 $
+#   last change: $Author: obo $ $Date: 2006-10-13 11:48:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
+        $(SLO)$/ohierarchyholder.obj\
         $(SLO)$/ocompinstream.obj\
         $(SLO)$/oseekinstream.obj\
         $(SLO)$/owriteablestream.obj\
