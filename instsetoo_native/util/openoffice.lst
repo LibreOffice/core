@@ -128,6 +128,7 @@ OpenOffice_Dev
 			DOWNLOADBANNER	ooobanner.bmp
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
+			LOCALUSERDIR $ORIGIN/..
 		}
 		active			1
 		compression		5
