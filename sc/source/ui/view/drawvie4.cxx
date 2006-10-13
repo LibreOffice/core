@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:23:35 $
+ *  last change: $Author: obo $ $Date: 2006-10-13 11:37:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,18 +289,29 @@ void ScDrawView::SetMarkedOriginalSize()
             uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
             if ( xObj.is() )    // #121612# NULL for an invalid object that couldn't be loaded
             {
-                MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( ((SdrOle2Obj*)pObj)->GetAspect() ) );
-                awt::Size aSz;
-                try
+                sal_Int64 nAspect = ((SdrOle2Obj*)pObj)->GetAspect();
+
+                if ( nAspect == embed::Aspects::MSOLE_ICON )
                 {
-                    aSz = xObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
-                    aOriginalSize = OutputDevice::LogicToLogic(
-                                        Size( aSz.Width, aSz.Height ),
-                                        aUnit, MAP_100TH_MM );
+                    MapMode aMapMode( MAP_100TH_MM );
+                    aOriginalSize = ((SdrOle2Obj*)pObj)->GetOrigObjSize( &aMapMode );
                     bDo = TRUE;
-                } catch( embed::NoVisualAreaSizeException& )
+                }
+                else
                 {
-                    OSL_ENSURE( sal_False, "Can't get the original size of the object!" );
+                    MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( ((SdrOle2Obj*)pObj)->GetAspect() ) );
+                    awt::Size aSz;
+                    try
+                    {
+                        aSz = xObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
+                        aOriginalSize = OutputDevice::LogicToLogic(
+                                            Size( aSz.Width, aSz.Height ),
+                                            aUnit, MAP_100TH_MM );
+                        bDo = TRUE;
+                    } catch( embed::NoVisualAreaSizeException& )
+                    {
+                        OSL_ENSURE( sal_False, "Can't get the original size of the object!" );
+                    }
                 }
             }
         }
