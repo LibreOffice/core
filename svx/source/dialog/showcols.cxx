@@ -4,9 +4,9 @@
  *
  *  $RCSfile: showcols.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:26:46 $
+ *  last change: $Author: obo $ $Date: 2006-10-16 14:04:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ IMPL_LINK( FmShowColsDialog, OnClickedOk, Button*, EMPTYARG )
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xCol;
         for (sal_uInt16 i=0; i<m_aList.GetSelectEntryCount(); ++i)
         {
-            m_xColumns->getByIndex(reinterpret_cast<sal_Int32>(m_aList.GetEntryData(m_aList.GetSelectEntryPos(i)))) >>= xCol;
+            m_xColumns->getByIndex(sal::static_int_cast<sal_Int32>(reinterpret_cast<sal_uIntPtr>(m_aList.GetEntryData(m_aList.GetSelectEntryPos(i))))) >>= xCol;
             if (xCol.is())
             {
                 try
