@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:08:43 $
+ *  last change: $Author: obo $ $Date: 2006-10-16 08:58:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
+
+#if defined(_MSC_VER)
+#pragma warning(disable:4100)
+#endif
 
 #include "dp_ucb.h"
 #include "dp_resource.h"
