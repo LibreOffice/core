@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:31:02 $
+ *  last change: $Author: mav $ $Date: 2006-10-16 06:20:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1317,7 +1317,7 @@ sal_Bool OleComponent::OnShowWindow_Impl( bool bShow )
 }
 
 //----------------------------------------------
-void OleComponent::OnViewChange_Impl( sal_uInt32 )
+void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
 {
     // TODO: check if it is enough or may be saving notifications are required for Visio2000
     OleEmbeddedObject* pLockObject = NULL;

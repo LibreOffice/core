@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olevisual.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:31:38 $
+ *  last change: $Author: mav $ $Date: 2006-10-16 06:20:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
-                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not loaded!\n" ),
@@ -201,7 +201,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
-                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not loaded!\n" ),
@@ -340,7 +340,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
-                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     // TODO: if the object has cached representation then it should be returned
     // TODO: if the object has no cached representation and is in loaded state it should switch itself to the running state
@@ -424,7 +424,7 @@ sal_Int32 SAL_CALL OleEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
-                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not loaded!\n" ),
