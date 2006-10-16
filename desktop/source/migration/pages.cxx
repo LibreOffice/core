@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pages.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 15:18:17 $
+ *  last change: $Author: obo $ $Date: 2006-10-16 07:59:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version .1.
@@ -439,7 +439,7 @@ UpdateCheckPage::UpdateCheckPage( svt::OWizardMachine* parent, const ResId& resi
 
 sal_Bool UpdateCheckPage::commitPage(COMMIT_REASON _eReason)
 {
-    if ( _eReason == (COMMIT_REASON) eTravelForward )
+    if ( _eReason == CR_TRAVEL_NEXT )
     {
         try {
             Reference < XNameReplace > xUpdateAccess;
