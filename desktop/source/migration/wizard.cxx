@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:27:21 $
+ *  last change: $Author: obo $ $Date: 2006-10-16 07:38:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,11 +112,11 @@ ResMgr *FirstStartWizard::GetResManager()
 FirstStartWizard::FirstStartWizard(Window* pParent)
     :RoadmapWizard( pParent, WizardResId(DLG_FIRSTSTART_WIZARD),
         WZB_NEXT|WZB_PREVIOUS|WZB_FINISH|WZB_CANCEL|WZB_HELP, WizardResId(STR_FIRSTSTART_TITLE))
+    ,m_bOverride(sal_False)
     ,m_aDefaultPath(0)
     ,m_aMigrationPath(0)
     ,m_bDone(sal_False)
     ,m_bAccepted(sal_False)
-    ,m_bOverride(sal_False)
     ,m_bAutomaticUpdChk(sal_True)
 {
     // ---
