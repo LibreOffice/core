@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-16 10:06:08 $
+ *  last change: $Author: obo $ $Date: 2006-10-16 10:46:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
-
-#if defined(_MSC_VER)
-#pragma warning(disable:4100)
-#endif
 
 #include "dp_ucb.h"
 #include "dp_resource.h"
@@ -499,10 +495,9 @@ OUString PackageManagerImpl::detectMediaType(
 
 //______________________________________________________________________________
 OUString PackageManagerImpl::insertToActivationLayer(
-    OUString const & title, OUString const & mediaType,
+    OUString const &/* title */, OUString const & mediaType,
     ::ucb::Content const & sourceContent_, OUString * dbData )
 {
-    OUString dummy = title;             //prevent warning only
     ::ucb::Content sourceContent(sourceContent_);
     Reference<XCommandEnvironment> xCmdEnv(
         sourceContent.getCommandEnvironment() );
