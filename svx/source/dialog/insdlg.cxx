@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:22:07 $
+ *  last change: $Author: mav $ $Date: 2006-10-16 07:24:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ BOOL InsertObjectDialog_Impl::IsCreateNew() const
     return FALSE;
 }
 
-uno::Reference< io::XInputStream > InsertObjectDialog_Impl::GetIconIfIconified( ::rtl::OUString* pGraphicMediaType )
+uno::Reference< io::XInputStream > InsertObjectDialog_Impl::GetIconIfIconified( ::rtl::OUString* /*pGraphicMediaType*/ )
 {
     return uno::Reference< io::XInputStream >();
 }

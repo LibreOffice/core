@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:23:29 $
+ *  last change: $Author: mav $ $Date: 2006-10-16 07:24:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4308,7 +4308,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
     }
 
     rSlideHd.SeekToContent( rIn );
-    DffRecordHeader aTxMasterStyleHd = { 0, 0, 0, 0, 0, 0 }; //TODO: aTxMasterStyleHd initialized here to suppress warning for now, see corresponding TODO below
+    DffRecordHeader aTxMasterStyleHd;
     while ( rIn.Tell() < rSlideHd.GetRecEndFilePos() )
     {
         rIn >> aTxMasterStyleHd;
