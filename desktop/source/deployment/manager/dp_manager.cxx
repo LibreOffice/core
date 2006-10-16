@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-16 08:58:27 $
+ *  last change: $Author: obo $ $Date: 2006-10-16 10:06:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -502,6 +502,7 @@ OUString PackageManagerImpl::insertToActivationLayer(
     OUString const & title, OUString const & mediaType,
     ::ucb::Content const & sourceContent_, OUString * dbData )
 {
+    OUString dummy = title;             //prevent warning only
     ::ucb::Content sourceContent(sourceContent_);
     Reference<XCommandEnvironment> xCmdEnv(
         sourceContent.getCommandEnvironment() );
