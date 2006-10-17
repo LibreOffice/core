@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:21:45 $
+ *  last change: $Author: obo $ $Date: 2006-10-17 14:01:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3192,8 +3192,8 @@ SalColormap::SalColormap( USHORT nDepth )
                                &aVI ) )
         {
             aVI.visual          = new Visual();
-            aVI.visualid        = (VisualID)-1;
-            aVI.screen          = -1;
+            aVI.visualid        = (VisualID)0; // beware of temporary destructor below
+            aVI.screen          = 0;
             aVI.depth           = nDepth;
             aVI.c_class         = TrueColor;
             if( 24 == nDepth ) // 888
@@ -3243,9 +3243,15 @@ SalColormap::SalColormap( USHORT nDepth )
             aVI.visual->blue_mask       = aVI.blue_mask;
             aVI.visual->bits_per_rgb    = aVI.bits_per_rgb;
             aVI.visual->map_entries     = aVI.colormap_size;
-        }
 
-        m_aVisual = SalVisual( &aVI );
+            m_aVisual = SalVisual( &aVI );
+            // give ownership of constructed Visual() to m_aVisual
+            // see SalVisual destructor
+            m_aVisual.visualid        = (VisualID)-1;
+            m_aVisual.screen          = -1;
+        }
+        else
+            m_aVisual = SalVisual( &aVI );
     }
 }
 
