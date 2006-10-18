@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDeco.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:12:20 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:28:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,7 @@
 #ifndef _DBA_COREAPI_COLUMN_HXX_
 #include "column.hxx"
 #endif
+
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
 #endif
@@ -120,8 +121,10 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xColumnMediator;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >       m_xTable;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xColumnDefinitions;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xNumberFormats;
+
     // <properties>
         mutable sal_Int32                                                                   m_nPrivileges;
     // </properties>
@@ -156,15 +159,18 @@ namespace dbaccess
 
         virtual ~ODBTableDecorator();
     public:
-        /** constructs a wrapper supporting the com.sun.star.sdb.Table service.<BR>
-            @param          _rxConn         the connection the table belongs to
-            @param          _rxTable        the table from the driver can be null
+        /** constructs a wrapper supporting the com.sun.star.sdb.Table service.
+
+            @param _rxConn
+                the connection the table belongs to. Must not be <NULL/>
+            @param _rxTable
+                the table from the driver can be <NULL/>
         */
         ODBTableDecorator(
-             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConn
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _rxNumberFormats
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumnDefinitions
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _rxNumberFormats,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumnDefinitions
         )   throw(::com::sun::star::sdbc::SQLException);
 
 
