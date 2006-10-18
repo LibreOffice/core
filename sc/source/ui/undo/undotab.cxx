@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undotab.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:27:52 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:29:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@ TYPEINIT1(ScUndoPrintRange,     SfxUndoAction);
 TYPEINIT1(ScUndoScenarioFlags,  SfxUndoAction);
 TYPEINIT1(ScUndoRenameObject,   SfxUndoAction);
 TYPEINIT1(ScUndoLayoutRTL,      SfxUndoAction);
+TYPEINIT1(ScUndoSetAddressConvention,       SfxUndoAction);
 
 
 // -----------------------------------------------------------------------
@@ -1530,6 +1531,65 @@ String __EXPORT ScUndoLayoutRTL::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_TAB_RTL );
 }
+
+
+
+// -----------------------------------------------------------------------
+//
+//      Set the address convention used for the sheet
+//
+
+ScUndoSetAddressConvention::ScUndoSetAddressConvention( ScDocShell* pShell,
+                                                        ScAddress::Convention eConv ) :
+    ScSimpleUndo( pShell ),
+    eNewConv( eConv )
+{
+    eOldConv = pDocShell->GetDocument()->GetAddressConvention();
+}
+
+__EXPORT ScUndoSetAddressConvention::~ScUndoSetAddressConvention()
+{
+}
+
+void ScUndoSetAddressConvention::DoChange( ScAddress::Convention eConv )
+{
+    pDocShell->SetInUndo( TRUE );
+    ScDocument* pDoc = pDocShell->GetDocument();
+    pDoc->SetAddressConvention( eConv );
+    pDocShell->SetDocumentModified();
+    pDocShell->SetInUndo( FALSE );
+}
+
+void __EXPORT ScUndoSetAddressConvention::Undo()
+{
+    DoChange( eOldConv );
+}
+
+void __EXPORT ScUndoSetAddressConvention::Redo()
+{
+    DoChange( eNewConv );
+}
+
+void __EXPORT ScUndoSetAddressConvention::Repeat(SfxRepeatTarget& rTarget)
+{
+#if 0
+// erAck: 2006-09-07T23:00+0200  commented out in CWS scr1c1
+    if (rTarget.ISA(ScTabViewTarget))
+        ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData()->GetDispatcher().
+            Execute( FID_TAB_USE_R1C1, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+#endif
+}
+
+BOOL __EXPORT ScUndoSetAddressConvention::CanRepeat(SfxRepeatTarget& rTarget) const
+{
+    return (rTarget.ISA(ScTabViewTarget));
+}
+
+String __EXPORT ScUndoSetAddressConvention::GetComment() const
+{
+    return ScGlobal::GetRscString( STR_UNDO_TAB_R1C1 );
+}
+
 
 
 
