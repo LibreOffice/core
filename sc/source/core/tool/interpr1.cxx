@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 11:34:02 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:22:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5361,27 +5361,47 @@ void ScInterpreter::ScDBVarP()
 }
 
 
+#if 0
+// This could be the code to handle Excel notation. However, we don't offer it
+// (yet) at UI level and documents must not use it, as it isn't clarified how
+// to handle interoperability issues.
+
+void ScInterpreter::ScIndirectXL()
+{
+    BYTE nParamCount = GetByte();
+    ScAddress::Convention conv = ScAddress::CONV_XL_A1;
+
+    if (nParamCount == 2 && 0. == GetDouble())
+        conv = ScAddress::CONV_XL_R1C1;
+
+    if ( MustHaveParamCount( nParamCount, 1, 2 )  )
+        {
+        ScAddress::Details const details( conv, aPos );
+        SCTAB nTab = aPos.Tab();
+        String sRefStr( GetString() );
+        ScRefAddress aRefAd, aRefAd2;
+        if ( ConvertDoubleRef( pDok, sRefStr, nTab, aRefAd, aRefAd2, details ) )
+            PushDoubleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab(),
+                aRefAd2.Col(), aRefAd2.Row(), aRefAd2.Tab() );
+        else if ( ConvertSingleRef ( pDok, sRefStr, nTab, aRefAd, details ) )
+            PushSingleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab() );
+        else
+            SetIllegalArgument();
+    }
+}
+
+#endif  // ScIndirectXL
+
+
 void ScInterpreter::ScIndirect()
 {
     BYTE nParamCount = GetByte();
-/*
-    if (nParamCount == 2)
-    {
-        double fBool = GetDouble();
-        if (fBool == 0.0)                           // nur TRUE erlaubt!!
-        {
-            SetIllegalParameter();
-            return;
-        }
-        else
-            nParamCount = 1;
-    }
-*/
     if ( MustHaveParamCount( nParamCount, 1 )  )
     {
         SCTAB nTab = aPos.Tab();
         String sRefStr( GetString() );
         ScRefAddress aRefAd, aRefAd2;
+        /* Always OOO format which does not require a position */
         if ( ConvertDoubleRef( pDok, sRefStr, nTab, aRefAd, aRefAd2 ) )
             PushDoubleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab(),
                 aRefAd2.Col(), aRefAd2.Row(), aRefAd2.Tab() );
@@ -5393,7 +5413,7 @@ void ScInterpreter::ScIndirect()
 }
 
 
-void ScInterpreter::ScAdress()
+void ScInterpreter::ScAddressFunc()
 {
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 4 ) )
@@ -5436,6 +5456,84 @@ void ScInterpreter::ScAdress()
         PushString(aRefStr);
     }
 }
+
+
+#if 0
+// This could be the code to handle Excel notation. However, we don't offer it
+// (yet) at UI level and documents must not use it, as it isn't clarified how
+// to handle interoperability issues.
+
+void ScInterpreter::ScAddressXL()
+{
+    String  sTabStr;
+
+    BYTE    nParamCount = GetByte();
+    if( !MustHaveParamCount( nParamCount, 2, 5 ) )
+        return;
+
+    if( nParamCount >= 5 )
+        sTabStr = GetString();
+
+    ScAddress::Convention eConv = ScAddress::CONV_XL_A1;    // default
+    if( nParamCount >= 4 && (USHORT) ::rtl::math::approxFloor(GetDouble()) == 0 )
+        eConv = ScAddress::CONV_XL_R1C1;
+
+    USHORT  nFlags = SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE;   // default
+    if( nParamCount >= 3 )
+    {
+        USHORT n = (USHORT) ::rtl::math::approxFloor(GetDouble());
+        switch ( n )
+        {
+        default :
+            SetNoValue();
+            return;
+
+        case 5:
+        case 1 : break; // default
+        case 6:
+        case 2 : nFlags = SCA_ROW_ABSOLUTE; break;
+        case 7:
+        case 3 : nFlags = SCA_COL_ABSOLUTE; break;
+        case 8:
+        case 4 : nFlags = 0; break; // both relative
+        }
+    }
+    nFlags |= SCA_VALID | SCA_VALID_ROW | SCA_VALID_COL;
+
+    SCCOL nCol = (SCCOL) ::rtl::math::approxFloor(GetDouble());
+    SCROW nRow = (SCROW) ::rtl::math::approxFloor(GetDouble());
+    if( eConv == ScAddress::CONV_XL_R1C1 )
+    {
+        // YUCK!  The XL interface actually treats rel R1C1 refs differently
+        // than A1
+        if( !(nFlags & SCA_COL_ABSOLUTE) )
+            nCol += aPos.Col() + 1;
+        if( !(nFlags & SCA_ROW_ABSOLUTE) )
+            nRow += aPos.Row() + 1;
+    }
+
+    if( nCol < 1 || nCol > MAXCOL + 1 || nRow < 1 || nRow > MAXROW + 1 )
+    {
+        SetNoValue();
+        return;
+    }
+
+    String aRefStr;
+    const ScAddress::Details    aDetails( eConv, aPos );
+    const ScAddress aAdr( nCol-1, nRow-1, 0);
+    aAdr.Format( aRefStr, nFlags, pDok, aDetails );
+
+    if( nParamCount >= 5 )
+    {   // TODO Do we need to quote this ?
+        sTabStr += static_cast<sal_Unicode>('!');
+        sTabStr += aRefStr;
+        PushString( sTabStr );
+    }
+    else
+        PushString( aRefStr );
+}
+
+#endif  // ScAddressXL()
 
 
 void ScInterpreter::ScOffset()
