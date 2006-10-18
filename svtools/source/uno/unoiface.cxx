@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:30:50 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:13:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,9 +62,6 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_LINEENDFORMAT_HPP_
 #include <com/sun/star/awt/LineEndFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XIMAGEPRODUCER_HPP_
-#include <com/sun/star/awt/XImageProducer.hpp>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -1477,12 +1474,6 @@ SVTXRoadmap::~SVTXRoadmap()
 {
 }
 
-// --------------------------------------------------------------------------------------
-void SVTXRoadmap::SetWindow( Window* _pWindow )
-{
-    VCLXWindow::SetWindow(_pWindow);
-}
-
 void SVTXRoadmap::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     switch ( rVclWindowEvent.GetId() )
@@ -1503,10 +1494,8 @@ void SVTXRoadmap::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         }
         break;
         default:
-        {
-            VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
-        }
-        break;
+            SVTXRoadmap_Base::ProcessWindowEvent( rVclWindowEvent );
+            break;
     }
 }
 
@@ -1562,11 +1551,6 @@ void SVTXRoadmap::removeItemListener( const ::com::sun::star::uno::Reference< ::
     maItemListeners.removeInterface( l );
 }
 
-
-IMPLEMENT_FORWARD_XINTERFACE2( SVTXRoadmap, VCLXWindow, SVTXRoadmap_Base )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( SVTXRoadmap, VCLXWindow, SVTXRoadmap_Base )
-
-
 RMItemData SVTXRoadmap::GetRMItemData( const ::com::sun::star::container::ContainerEvent& _rEvent )
 {
     RMItemData aCurRMItemData;
@@ -1584,7 +1568,6 @@ RMItemData SVTXRoadmap::GetRMItemData( const ::com::sun::star::container::Contai
     }
     return aCurRMItemData;;
 }
-
 
 void SVTXRoadmap::elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent )throw(::com::sun::star::uno::RuntimeException)
 {
@@ -1673,13 +1656,13 @@ void SVTXRoadmap::setProperty( const ::rtl::OUString& PropertyName, const ::com:
             break;
 
             default:
-                VCLXWindow::setProperty( PropertyName, Value );
+                SVTXRoadmap_Base::setProperty( PropertyName, Value );
                 break;
         }
 
     }
     else
-        VCLXWindow::setProperty( PropertyName, Value );
+        SVTXRoadmap_Base::setProperty( PropertyName, Value );
 }
 
 
@@ -1706,74 +1689,19 @@ void SVTXRoadmap::setProperty( const ::rtl::OUString& PropertyName, const ::com:
                 aReturn <<= pField->GetCurrentRoadmapItemID();
                 break;
             default:
-                aReturn <<= VCLXWindow::getProperty(PropertyName);
+                aReturn = SVTXRoadmap_Base::getProperty(PropertyName);
                 break;
         }
     }
     return aReturn;
 }
 
-
-
-void SVTXRoadmap::init( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException)
+void SVTXRoadmap::ImplSetNewImage()
 {
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.Init( Width, Height );
+    OSL_PRECOND( GetWindow(), "SVTXRoadmap::ImplSetNewImage: window is required to be not-NULL!" );
+    ::svt::ORoadmap* pButton = static_cast< ::svt::ORoadmap* >( GetWindow() );
+    pButton->SetRoadmapBitmap( GetBitmap() );
 }
-
-void SVTXRoadmap::setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.SetColorModel( BitCount, RGBAPal.getLength(), (const sal_uInt32*) RGBAPal.getConstArray(), RedMask, GreenMask, BlueMask, AlphaMask );
-}
-
-
-void SVTXRoadmap::setPixelsByBytes( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, const ::com::sun::star::uno::Sequence< sal_Int8 >& ProducerData, sal_Int32 Offset, sal_Int32 Scansize ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.SetPixelsByBytes( X, Y, Width, Height, (sal_uInt8*)ProducerData.getConstArray(), Offset, Scansize );
-    ImplUpdateImage( sal_True );
-}
-
-void SVTXRoadmap::setPixelsByLongs( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, const ::com::sun::star::uno::Sequence< sal_Int32 >& ProducerData, sal_Int32 Offset, sal_Int32 Scansize ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.SetPixelsByLongs( X, Y, Width, Height, (const sal_uInt32*) ProducerData.getConstArray(), Offset, Scansize );
-    ImplUpdateImage( sal_True );
-}
-
-void SVTXRoadmap::complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > & ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.Completed( Status );
-
-    // Controls sollen angemeldet bleiben...
-//  Producer->removeConsumer( this );
-
-    ImplUpdateImage( sal_True );
-}
-
-
-void SVTXRoadmap::ImplUpdateImage( sal_Bool bGetNewImage )
-{
-
-    ::svt::ORoadmap* pControl = (::svt::ORoadmap*) GetWindow();
-    if ( pControl )
-    {
-        sal_Bool bOK = bGetNewImage ? maImageConsumer.GetData( maBitmap ) : sal_True;
-        if ( bOK )
-            pControl->SetRoadmapBitmap( maBitmap );
-    }
-}
-
-
-
-
 
 //  ----------------------------------------------------
 //  class SVTXNumericField
@@ -2364,9 +2292,8 @@ void VCLXProgressBar::setProperty( const ::rtl::OUString& PropertyName, const ::
             }
             break;
             default:
-            {
                 VCLXWindow::setProperty( PropertyName, Value );
-            }
+                break;
         }
     }
 }
@@ -2398,9 +2325,8 @@ void VCLXProgressBar::setProperty( const ::rtl::OUString& PropertyName, const ::
             }
             break;
             default:
-            {
                 aProp <<= VCLXWindow::getProperty( PropertyName );
-            }
+                break;
         }
     }
     return aProp;
