@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:22:14 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:32:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,6 +189,11 @@ namespace
                                     const ::connectivity::OSQLParseNode * pCondition,
                                     const sal_uInt16 nLevel,
                                     sal_Bool bHaving);
+
+    void fillFunctionInfo(          OQueryDesignView* _pView
+                                    ,const ::connectivity::OSQLParseNode* pNode
+                                    ,const ::rtl::OUString& sFunctionTerm
+                                    ,OTableFieldDescRef& aInfo);
 
     //------------------------------------------------------------------------------
     ::rtl::OUString quoteTableAlias(sal_Bool _bQuote, const ::rtl::OUString& _sAliasName, const ::rtl::OUString& _sQuote)
@@ -1033,6 +1038,10 @@ namespace
                             aWorkStr += ::dbtools::quoteName(aQuote, aColumnName);
 
                         aWorkStr +=  ::rtl::OUString(')');
+                    }
+                    else if ( pEntryField->isOtherFunction() )
+                    {
+                        aWorkStr += aColumnName;
                     }
                     else
                     {
@@ -1925,9 +1934,9 @@ namespace
                 }
 
                 // now delete the data for which we haven't any tablewindow
-                OJoinTableView::OTableWindowMap* pTableMap = pTableView->GetTabWinMap();
-                OJoinTableView::OTableWindowMap::iterator aIterTableMap = pTableMap->begin();
-                for(;aIterTableMap != pTableMap->end();++aIterTableMap)
+                OJoinTableView::OTableWindowMap aTableMap(*pTableView->GetTabWinMap());
+                OJoinTableView::OTableWindowMap::iterator aIterTableMap = aTableMap.begin();
+                for(;aIterTableMap != aTableMap.end();++aIterTableMap)
                 {
                     if(aMap.find(aIterTableMap->second->GetComposedName())  == aMap.end() &&
                         aMap.find(aIterTableMap->first)                     == aMap.end())
@@ -1998,6 +2007,35 @@ namespace
             }
         }
         return eErrorCode;
+    }
+    //------------------------------------------------------------------------------
+    void fillFunctionInfo(  OQueryDesignView* _pView
+                            ,const ::connectivity::OSQLParseNode* pNode
+                            ,const ::rtl::OUString& sFunctionTerm
+                            ,OTableFieldDescRef& aInfo)
+    {
+        // get the type out of the funtion name
+        OQueryController* pController = static_cast<OQueryController*>(_pView->getController());
+        sal_Int32 nDataType = DataType::DOUBLE;
+        ::rtl::OUString sFieldName = sFunctionTerm;
+        OSQLParseNode* pFunctionName = pNode->getChild(0);
+        if ( !SQL_ISPUNCTUATION(pFunctionName,"{") )
+        {
+            if ( SQL_ISRULEOR2(pNode,length_exp,char_value_fct) )
+                pFunctionName = pFunctionName->getChild(0);
+
+            ::rtl::OUString sFunctionName = pFunctionName->getTokenValue();
+            if ( !sFunctionName.getLength() )
+                sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_UTF8);
+
+            nDataType = OSQLParser::getFunctionReturnType(
+                                sFunctionName
+                                ,&pController->getParser().getContext());
+        }
+        aInfo->SetDataType(nDataType);
+        aInfo->SetFieldType(TAB_NORMAL_FIELD);
+        aInfo->SetField(sFieldName);
+        aInfo->SetTabWindow(NULL);
     }
     //------------------------------------------------------------------------------
     SqlParseError InstallFields(OQueryDesignView* _pView,
@@ -2121,28 +2159,7 @@ namespace
                         }
                         else
                         {
-                            // get the type out of the funtion name
-                            nFunctionType |= FKT_NUMERIC;
-                            sal_Int32 nDataType = DataType::DOUBLE;
-                            ::rtl::OUString sFieldName = aColumns;
-                            OSQLParseNode* pFunctionName = pColumnRef->getChild(0);
-                            if ( !SQL_ISPUNCTUATION(pFunctionName,"{") )
-                            {
-                                if ( SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct) )
-                                    pFunctionName = pFunctionName->getChild(0);
-
-                                ::rtl::OUString sFunctionName = pFunctionName->getTokenValue();
-                                if ( !sFunctionName.getLength() )
-                                    sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_UTF8);
-
-                                nDataType = OSQLParser::getFunctionReturnType(
-                                                    sFunctionName
-                                                    ,&pController->getParser().getContext());
-                            }
-                            aInfo->SetDataType(nDataType);
-                            aInfo->SetFieldType(TAB_NORMAL_FIELD);
-                            aInfo->SetField(sFieldName);
-                            aInfo->SetTabWindow(NULL);
+                            fillFunctionInfo(_pView,pColumnRef,aColumns,aInfo);
                             aInfo->SetFieldAlias(aColumnAlias);
                         }
 
@@ -2212,6 +2229,7 @@ namespace
             ::connectivity::OSQLParseNode* pNode = pParseRoot->getChild(3)->getChild(4)->getChild(2);
             ::connectivity::OSQLParseNode* pParamRef = NULL;
 
+            OQueryController* pController = static_cast<OQueryController*>(_pView->getController());
             EOrderDir eOrderDir;
             OTableFieldDescRef aDragLeft = new OTableFieldDesc();
             for( sal_uInt32 i=0 ; i<pNode->count() ; i++ )
@@ -2222,17 +2240,17 @@ namespace
                 if (SQL_ISTOKEN( pChild->getChild(1), DESC ) )
                     eOrderDir = ORDER_DESC;
 
-                if(SQL_ISRULE(pChild->getChild(0),column_ref))
+                ::connectivity::OSQLParseNode* pArgument = pChild->getChild(0);
+
+                if(SQL_ISRULE(pArgument,column_ref))
                 {
-                    if( eOk == FillDragInfo(_pView,pChild->getChild(0),aDragLeft))
+                    if( eOk == FillDragInfo(_pView,pArgument,aDragLeft))
                         _pSelectionBrw->AddOrder( aDragLeft, eOrderDir, i);
                     else // it could be a alias name for a field
                     {
                         ::rtl::OUString aTableRange,aColumnName;
-                        OQueryController* pController = static_cast<OQueryController*>(_pView->getController());
-
                         ::connectivity::OSQLParseTreeIterator& rParseIter = pController->getParseIterator();
-                        rParseIter.getColumnRange( pChild->getChild(0), aColumnName, aTableRange );
+                        rParseIter.getColumnRange( pArgument, aColumnName, aTableRange );
 
                         OTableFields& aList = pController->getTableFieldDesc();
                         OTableFields::iterator aIter = aList.begin();
@@ -2244,10 +2262,33 @@ namespace
                         }
                     }
                 }
-                else if(SQL_ISRULE(pChild->getChild(0),general_set_fct) &&
-                        SQL_ISRULE(pParamRef = pChild->getChild(0)->getChild(pChild->getChild(0)->count()-2),column_ref) &&
+                else if(SQL_ISRULE(pArgument, general_set_fct ) &&
+                        SQL_ISRULE(pParamRef = pArgument->getChild(pArgument->count()-2),column_ref) &&
                         eOk == FillDragInfo(_pView,pParamRef,aDragLeft))
                     _pSelectionBrw->AddOrder( aDragLeft, eOrderDir, i );
+                else if( SQL_ISRULE(pArgument, set_fct_spec ) )
+                {
+
+                    Reference< XConnection> xConnection = pController->getConnection();
+                    if(xConnection.is())
+                    {
+                        Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
+                        ::rtl::OUString sCondition;
+                        pArgument->parseNodeToPredicateStr(sCondition,
+                                                            xMetaData,
+                                                            pController->getNumberFormatter(),
+                                                            _pView->getLocale(),
+                                                            static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
+                                                            &pController->getParser().getContext());
+                        fillFunctionInfo(_pView,pArgument,sCondition,aDragLeft);
+                        aDragLeft->SetFunctionType(FKT_OTHER);
+                        aDragLeft->SetOrderDir(eOrderDir);
+                        aDragLeft->SetVisible(sal_False);
+                        _pSelectionBrw->AddOrder( aDragLeft, eOrderDir, i );
+                    }
+                    else
+                        eErrorCode = eColumnNotFound;
+                }
                 else
                     eErrorCode = eColumnNotFound;
             }
