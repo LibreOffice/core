@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlpivot.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:37:50 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:46:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,6 +274,7 @@ const sal_uInt16 EXC_SXFIELD_DATA_DBL       = 0x0560;   /// Only doubles, nothin
 const sal_uInt16 EXC_SXFIELD_DATA_STR_INT   = 0x05A0;   /// Only strings and integers, opt. with doubles.
 const sal_uInt16 EXC_SXFIELD_DATA_STR_DBL   = 0x05E0;   /// Only strings and doubles, nothing else.
 const sal_uInt16 EXC_SXFIELD_DATA_DATE      = 0x0900;   /// Only dates, nothing else.
+const sal_uInt16 EXC_SXFIELD_DATA_DATE_EMP  = 0x0980;   /// Dates and empty strings, nothing else (?).
 const sal_uInt16 EXC_SXFIELD_DATA_DATE_NUM  = 0x0D00;   /// Dates with integers or doubles without strings.
 const sal_uInt16 EXC_SXFIELD_DATA_DATE_STR  = 0x0D80;   /// Dates and strings, opt. with integers or doubles.
 
