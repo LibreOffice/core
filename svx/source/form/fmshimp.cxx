@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:46:14 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:24:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,68 +43,77 @@
 #ifndef _SVX_GRIDCOLS_HXX
 #include "gridcols.hxx"
 #endif
-
 #ifndef _E3D_OBJ3D_HXX
-#include <obj3d.hxx>
+#include "obj3d.hxx"
 #endif
-
 #ifndef _SVX_FMVWIMP_HXX
 #include "fmvwimp.hxx"
 #endif
-
 #ifndef _SVX_FMSHIMP_HXX
 #include "fmshimp.hxx"
 #endif
-
 #ifndef SVX_SOURCE_INC_FMTEXTCONTROLSHELL_HXX
 #include "fmtextcontrolshell.hxx"
 #endif
-
-#ifndef _SVDPAGV_HXX //autogen
+#ifndef _SVDPAGV_HXX
 #include "svdpagv.hxx"
 #endif
-
 #ifndef _SVX_FMPAGE_HXX
 #include "fmpage.hxx"
 #endif
-
-#ifndef _SHL_HXX
-#include <tools/shl.hxx>
+#ifndef _SVX_DIALMGR_HXX
+#include "dialmgr.hxx"
 #endif
-
-#ifndef _SV_MSGBOX_HXX //autogen
-#include <vcl/msgbox.hxx>
-#endif
-
-#ifndef _SVX_DIALMGR_HXX //autogen
-#include <dialmgr.hxx>
-#endif
-
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
-#endif // _SVX_FMRESIDS_HRC
-
+#endif
 #ifndef _SVX_FMITEMS_HXX
 #include "fmitems.hxx"
 #endif
-
 #ifndef _SVX_FMOBJ_HXX
 #include "fmobj.hxx"
 #endif
-
 #ifndef SVX_SOURCE_INC_FORMTOOLBARS_HXX
 #include "formtoolbars.hxx"
 #endif
-
-#ifndef _SFXDISPATCH_HXX //autogen
-#include <sfx2/dispatch.hxx>
+#ifndef _SVX_FMGLOB_HXX
+#include "fmglob.hxx"
 #endif
-#ifndef _SFX_OBJSH_HXX
-#include <sfx2/objsh.hxx>
+#ifndef _SVDITER_HXX
+#include "svditer.hxx"
 #endif
-#ifndef _SFXDOCFILE_HXX
-#include <sfx2/docfile.hxx>
+#ifndef _SVX_FMSERVS_HXX
+#include "fmservs.hxx"
 #endif
+#ifndef _SVX_FMUNOPGE_HXX
+#include "fmpgeimp.hxx"
+#endif
+#ifndef _SVX_FMTOOLS_HXX
+#include "fmtools.hxx"
+#endif
+#ifndef _SVX_FMPROP_HRC
+#include "fmprop.hrc"
+#endif
+#ifndef _SVX_FMSHELL_HXX
+#include "fmshell.hxx"
+#endif
+#ifndef _SVX_SVXIDS_HRC
+#include "svxids.hrc"
+#endif
+#ifndef _SVX_FMMODEL_HXX
+#include "fmmodel.hxx"
+#endif
+#ifndef _SVX_FMUNDO_HXX
+#include "fmundo.hxx"
+#endif
+#ifndef _SVX_FMURL_HXX
+#include "fmurl.hxx"
+#endif
+#ifndef SVX_FORMCONTROLLING_HXX
+#include "formcontrolling.hxx"
+#endif
+#include "svxdlg.hxx"
+#include "dialogs.hrc"
 
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -124,11 +133,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_AWT_XTEXTCOMPONENT_HPP_
 #include <com/sun/star/awt/XTextComponent.hpp>
 #endif
@@ -186,72 +193,46 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #endif
-#ifndef _SVX_FMGLOB_HXX
-#include "fmglob.hxx"
-#endif
-
-#ifndef _SVDITER_HXX //autogen
-#include "svditer.hxx"
-#endif
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-
-#ifndef _SFXVIEWSH_HXX //autogen wg. SfxViewShell
+#ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
 #endif
-#ifndef _SFXVIEWFRM_HXX //autogen wg. SfxViewFrame
+#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
-#ifndef _SFXFRAME_HXX //autogen wg. SfxFrame
+#ifndef _SFXFRAME_HXX
 #include <sfx2/frame.hxx>
 #endif
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
 #endif
-
-#ifndef _SVX_FMSERVS_HXX
-#include "fmservs.hxx"
-#endif // _SVX_FMSERVS_HXX
-
+#ifndef _SHL_HXX
+#include <tools/shl.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
+#ifndef _SFXDISPATCH_HXX
+#include <sfx2/dispatch.hxx>
+#endif
+#ifndef _SFX_OBJSH_HXX
+#include <sfx2/objsh.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
+#endif
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
-
-#ifndef _SVX_FMUNOPGE_HXX
-#include "fmpgeimp.hxx"
-#endif
-#ifndef _SVX_FMTOOLS_HXX
-#include "fmtools.hxx"
-#endif
-#ifndef _SVX_FMPROP_HRC
-#include "fmprop.hrc"
-#endif
-#ifndef _SVX_FMSHELL_HXX
-#include "fmshell.hxx"
-#endif
-#ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
-#endif
-
-#ifndef _SVX_FMMODEL_HXX
-#include "fmmodel.hxx"
-#endif
-#ifndef _SVX_FMUNDO_HXX
-#include "fmundo.hxx"
-#endif
-#ifndef _SVX_FMURL_HXX
-#include "fmurl.hxx"
-#endif
-#ifndef SVX_FORMCONTROLLING_HXX
-#include "formcontrolling.hxx"
-#endif
-
-#ifndef _URLOBJ_HXX //autogen wg. INetURLObject
+#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
@@ -273,8 +254,6 @@
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
-#include "svxdlg.hxx" //CHINA001
-#include "dialogs.hrc" //CHINA001
 
 #include <algorithm>
 #include <functional>
@@ -661,15 +640,19 @@ Reference< XModel > FmXFormShell::getContextDocument() const
     Reference< XModel > xModel;
 
     // determine the type of document we live in
-    Reference< XController > xController;
-    if ( !m_xAttachedFrame.is() )
-        return xModel;
-
-    xController = m_xAttachedFrame->getController();
-    if ( !xController.is() )
-        return xModel;
-
-    return xController->getModel();
+    try
+    {
+        Reference< XController > xController;
+        if ( m_xAttachedFrame.is() )
+            xController = m_xAttachedFrame->getController();
+        if ( xController.is() )
+            xModel = xController->getModel();
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return xModel;
 }
 
 bool
