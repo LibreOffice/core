@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namebuff.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:57:43 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:25:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ public:
                             ShrfmlaBuffer( RootData* pRD );
     virtual                 ~ShrfmlaBuffer();
     void                    Store( const ScRange& rRange, const ScTokenArray& );
-    UINT16                  Find (const ScAddress & aAdress ) const;
+    UINT16                  Find (const ScAddress & rAddress ) const;
 
     static String           CreateName( const ScRange& );
     };
