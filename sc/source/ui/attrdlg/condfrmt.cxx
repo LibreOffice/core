@@ -4,9 +4,9 @@
  *
  *  $RCSfile: condfrmt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:14:12 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:26:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,7 +345,7 @@ void ScConditionalFormatDlg::SetReference( const ScRange& rRef, ScDocument* pDoc
             RefInputStart(pEdActive);
 
         String aStr;
-        rRef.Format( aStr, SCR_ABS_3D, pDoc );
+        rRef.Format( aStr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention () );
         String aVal( pEdActive->GetText() );
         Selection aSel( pEdActive->GetSelection() );
         aSel.Justify();
