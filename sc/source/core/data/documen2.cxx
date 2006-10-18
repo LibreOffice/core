@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:51:42 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:19:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -374,6 +374,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         nInDdeLinkUpdate( 0 ),
         bInUnoBroadcast( FALSE ),
         bInUnoListenerCall( FALSE ),
+        eAddrConv( ScAddress::CONV_OOO ),
         bStyleSheetUsageInvalid( TRUE )
 {
     eSrcSet = gsl_getSystemTextEncoding();
