@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableUndo.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:31:23 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:33:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,9 +220,7 @@ void OTableEditorTypeSelUndoAct::Undo()
 {
     //////////////////////////////////////////////////////////////////////
     // Typ zuruecksetzen
-    pTabEdCtrl->GoToRow( m_nRow );
-    pTabEdCtrl->GoToColumnId( m_nCol );
-    OFieldDescription* pFieldDesc = pTabEdCtrl->GetActRow()->GetActFieldDescr();
+    OFieldDescription* pFieldDesc = pTabEdCtrl->GetFieldDescr(m_nRow);
     if(pFieldDesc)
         m_pNewType = pFieldDesc->getTypeInfo();
     else
@@ -238,8 +236,7 @@ void OTableEditorTypeSelUndoAct::Redo()
 {
     //////////////////////////////////////////////////////////////////////
     // Neuen Typ
-    pTabEdCtrl->GoToRow( m_nRow );
-    pTabEdCtrl->GoToColumnId( m_nCol );
+    pTabEdCtrl->GoToRowColumnId( m_nRow ,m_nCol);
     pTabEdCtrl->SetCellData(m_nRow,m_nCol,m_pNewType);
 
     OTableEditorUndoAct::Redo();
@@ -295,6 +292,7 @@ void OTableEditorDelUndoAct::Undo()
         pOriginalRows->insert( pOriginalRows->begin()+nPos,pNewOrigRow);
     }
 
+    pTabEdCtrl->DisplayData(pTabEdCtrl->GetCurRow());
     pTabEdCtrl->Invalidate();
     OTableEditorUndoAct::Undo();
 }
@@ -314,6 +312,7 @@ void OTableEditorDelUndoAct::Redo()
         pOriginalRows->erase( pOriginalRows->begin()+nPos );
     }
 
+    pTabEdCtrl->DisplayData(pTabEdCtrl->GetCurRow());
     pTabEdCtrl->Invalidate();
     OTableEditorUndoAct::Redo();
 }
