@@ -4,9 +4,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:11:21 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
@@ -177,24 +180,28 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
         Reference<XPropertySet> xColumn;
         for(;pIter != pEnd;++pIter)
         {
-            if (m_xColumns->hasByName(*pIter))
+            try
             {
-                xColumn.set(m_xColumns->getByName(*pIter),UNO_QUERY);
-                OSL_ENSURE(xColumn.is(),"DlgFilterCrit::DlgFilterCrit: Column is null!");
+                xColumn.set( m_xColumns->getByName( *pIter ), UNO_QUERY_THROW );
+
+                sal_Int32 nDataType( 0 );
+                OSL_VERIFY( xColumn->getPropertyValue( PROPERTY_TYPE ) >>= nDataType );
+                sal_Int32 eColumnSearch = ::dbtools::getSearchColumnFlag( m_xConnection, nDataType );
+                if ( eColumnSearch == ColumnSearch::NONE )
+                    continue;
+
+                sal_Bool bIsSearchable( sal_True );
+                OSL_VERIFY( xColumn->getPropertyValue( PROPERTY_ISSEARCHABLE ) >>= bIsSearchable );
+                if ( !bIsSearchable )
+                    continue;
             }
-            else
-                OSL_ENSURE(sal_False, "DlgFilterCrit::DlgFilterCrit: invalid column name!");
-            sal_Int32 nDataType(0);
-            xColumn->getPropertyValue(PROPERTY_TYPE) >>= nDataType;
-            sal_Int32 eColumnSearch = dbtools::getSearchColumnFlag(m_xConnection,nDataType);
-            // TODO
-            // !pColumn->IsFunction()
-            if(eColumnSearch != ColumnSearch::NONE)
+            catch( const Exception& )
             {
-                aLB_WHEREFIELD1.InsertEntry( *pIter );
-                aLB_WHEREFIELD2.InsertEntry( *pIter );
-                aLB_WHEREFIELD3.InsertEntry( *pIter );
+                DBG_UNHANDLED_EXCEPTION();
             }
+            aLB_WHEREFIELD1.InsertEntry( *pIter );
+            aLB_WHEREFIELD2.InsertEntry( *pIter );
+            aLB_WHEREFIELD3.InsertEntry( *pIter );
         }
 
         Reference<XNameAccess> xSelectColumns = Reference<XColumnsSupplier>(m_xQueryComposer,UNO_QUERY)->getColumns();
@@ -268,89 +275,55 @@ DlgFilterCrit::~DlgFilterCrit()
 #define LbPos(x)        ((x).GetSelectEntryPos())
 
 //------------------------------------------------------------------------------
-sal_Int32 DlgFilterCrit::GetOSQLPredicateType(sal_uInt16 nPos,sal_uInt16 nCount) const
+sal_Int32 DlgFilterCrit::GetOSQLPredicateType( const String& _rSelectedPredicate ) const
 {
-    sal_Int32 ePreType( SQLFilterOperator::EQUAL );
+    sal_Int32 nPredicateIndex = -1;
+    for ( xub_StrLen i=0; i<aSTR_COMPARE_OPERATORS.GetTokenCount(); ++i)
+        if ( aSTR_COMPARE_OPERATORS.GetToken(i) == _rSelectedPredicate )
+        {
+            nPredicateIndex = i;
+            break;
+        }
 
-    if(nCount == 10)
+    sal_Int32 nPredicateType = SQLFilterOperator::NOT_SQLNULL;
+    switch ( nPredicateIndex )
     {
-        switch(nPos)
-        {
-        case 0:
-            ePreType = SQLFilterOperator::EQUAL;
-            break;
-        case 1:
-            ePreType = SQLFilterOperator::NOT_EQUAL;
-            break;
-        case 2:
-            ePreType = SQLFilterOperator::LESS;
-            break;
-        case 3:
-            ePreType = SQLFilterOperator::LESS_EQUAL;
-            break;
-        case 4:
-            ePreType = SQLFilterOperator::GREATER;
-            break;
-        case 5:
-            ePreType = SQLFilterOperator::GREATER_EQUAL;
-            break;
-        case 6:
-            ePreType = SQLFilterOperator::LIKE;
-            break;
-        case 7:
-            ePreType = SQLFilterOperator::NOT_LIKE;
-            break;
-        case 8:
-            ePreType = SQLFilterOperator::SQLNULL;
-            break;
-        case 9:
-            ePreType = SQLFilterOperator::NOT_SQLNULL;
-            break;
-        }
+    case 0:
+        nPredicateType = SQLFilterOperator::EQUAL;
+        break;
+    case 1:
+        nPredicateType = SQLFilterOperator::NOT_EQUAL;
+        break;
+    case 2:
+        nPredicateType = SQLFilterOperator::LESS;
+        break;
+    case 3:
+        nPredicateType = SQLFilterOperator::LESS_EQUAL;
+        break;
+    case 4:
+        nPredicateType = SQLFilterOperator::GREATER;
+        break;
+    case 5:
+        nPredicateType = SQLFilterOperator::GREATER_EQUAL;
+        break;
+    case 6:
+        nPredicateType = SQLFilterOperator::LIKE;
+        break;
+    case 7:
+        nPredicateType = SQLFilterOperator::NOT_LIKE;
+        break;
+    case 8:
+        nPredicateType = SQLFilterOperator::SQLNULL;
+        break;
+    case 9:
+        nPredicateType = SQLFilterOperator::NOT_SQLNULL;
+        break;
+    default:
+        OSL_ENSURE( false, "DlgFilterCrit::GetOSQLPredicateType: unknown predicate string!" );
+        break;
     }
-    else if(nCount == 8)
-    {
-        switch(nPos)
-        {
-        case 0:
-            ePreType = SQLFilterOperator::EQUAL;
-            break;
-        case 1:
-            ePreType = SQLFilterOperator::NOT_EQUAL;
-            break;
-        case 2:
-            ePreType = SQLFilterOperator::LESS;
-            break;
-        case 3:
-            ePreType = SQLFilterOperator::LESS_EQUAL;
-            break;
-        case 4:
-            ePreType = SQLFilterOperator::GREATER;
-            break;
-        case 5:
-            ePreType = SQLFilterOperator::GREATER_EQUAL;
-            break;
-        case 6:
-            ePreType = SQLFilterOperator::SQLNULL;
-            break;
-        case 7:
-            ePreType = SQLFilterOperator::NOT_SQLNULL;
-            break;
-        }
-    }
-    else
-    {
-        switch(nPos)
-        {
-        case 0:
-            ePreType = SQLFilterOperator::LIKE;
-            break;
-        case 1:
-            ePreType = SQLFilterOperator::NOT_LIKE;
-            break;
-        }
-    }
-    return ePreType;
+
+    return nPredicateType;
 }
 //------------------------------------------------------------------------------
 sal_uInt16 DlgFilterCrit::GetSelectionPos(sal_Int32 eType,const ListBox& rListBox) const
@@ -424,7 +397,7 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
     {
     }
 
-    _rFilter.Handle = GetOSQLPredicateType(_rComp.GetSelectEntryPos(),_rComp.GetEntryCount());
+    _rFilter.Handle = GetOSQLPredicateType( _rComp.GetSelectEntry() );
     if ( SQLFilterOperator::SQLNULL != _rFilter.Handle && _rFilter.Handle != SQLFilterOperator::NOT_SQLNULL )
     {
         String sPredicateValue = m_aPredicateInput.getPredicateValue( _rValue.GetText(), getMatchingColumn( _rValue ), sal_True );
@@ -905,7 +878,7 @@ void DlgFilterCrit::BuildWherePart()
     }
     catch(Exception)
     {
-        OSL_ENSURE(0,"Could create filter!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
