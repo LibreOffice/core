@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impex.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:33:21 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:47:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,20 @@ inline BOOL ScImportExport::IsEndianSwap( const SvStream& rStrm )
     return rStrm.GetNumberFormatInt() != NUMBERFORMAT_INT_LITTLEENDIAN;
 #endif
 }
+
+
+// Helper class for importing clipboard strings as streams.
+class ScImportStringStream : public SvMemoryStream
+{
+public:
+    ScImportStringStream( const ::rtl::OUString rStr )
+        : SvMemoryStream( (void*)rStr.getStr(),
+                rStr.getLength() * sizeof(sal_Unicode), STREAM_READ)
+    {
+        SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
+        SetEndianSwap( FALSE );
+    }
+};
 
 
 #endif
