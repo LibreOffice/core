@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TTableHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:01:37 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:06:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,9 @@
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include "connectivity/sdbcx/VCollection.hxx"
 #endif
+#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
+#include <unotools/sharedunocomponent.hxx>
+#endif
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
 #endif
@@ -136,6 +139,86 @@ void SAL_CALL OTableHelper::disposing()
     m_xConnection   = NULL;
     m_xMetaData     = NULL;
 }
+
+// -------------------------------------------------------------------------
+namespace
+{
+    typedef sal_Int32   OrdinalPosition;
+    struct ColumnDesc
+    {
+        ::rtl::OUString sName;
+        OrdinalPosition nOrdinalPosition;
+
+        ColumnDesc() {}
+        ColumnDesc( const ::rtl::OUString& _rName, OrdinalPosition _nPosition )
+            :sName( _rName )
+            ,nOrdinalPosition( _nPosition )
+        {
+        }
+    };
+
+    /** collects ColumnDesc's from a resultset produced by XDatabaseMetaData::getColumns
+    */
+    void lcl_collectColumnDescs_throw( const Reference< XResultSet >& _rxResult, ::std::vector< ColumnDesc >& _out_rColumns )
+    {
+        Reference< XRow > xRow( _rxResult, UNO_QUERY_THROW );
+        ::rtl::OUString sName;
+        OrdinalPosition nOrdinalPosition( 0 );
+        while ( _rxResult->next() )
+        {
+            sName = xRow->getString( 4 );           // COLUMN_NAME
+            nOrdinalPosition = xRow->getInt( 17 );  // ORDINAL_POSITION
+            _out_rColumns.push_back( ColumnDesc( sName, nOrdinalPosition ) );
+        }
+    }
+
+    /** checks a given array of ColumnDesc's whether it has reasonable ordinal positions. If not,
+        they will be normalized to be the array index.
+    */
+    void lcl_sanitizeColumnDescs( ::std::vector< ColumnDesc >& _rColumns )
+    {
+        if ( _rColumns.empty() )
+            return;
+
+        // collect all used ordinals
+        ::std::set< OrdinalPosition > aUsedOrdinals;
+        for (   ::std::vector< ColumnDesc >::iterator collect = _rColumns.begin();
+                collect != _rColumns.end();
+                ++collect
+            )
+            aUsedOrdinals.insert( collect->nOrdinalPosition );
+
+        // we need to have as much different ordinals as we have different columns
+        bool bDuplicates = aUsedOrdinals.size() != _rColumns.size();
+        // and it needs to be a continuous range
+        size_t nOrdinalsRange = *aUsedOrdinals.rbegin() - *aUsedOrdinals.begin() + 1;
+        bool bGaps = nOrdinalsRange != _rColumns.size();
+
+        // if that's not the case, normalize it
+        if ( bGaps || bDuplicates )
+        {
+            OSL_ENSURE( false, "lcl_sanitizeColumnDescs: database did provide invalid ORDINAL_POSITION values!" );
+
+            OrdinalPosition nNormalizedPosition = 1;
+            for (   ::std::vector< ColumnDesc >::iterator normalize = _rColumns.begin();
+                    normalize != _rColumns.end();
+                    ++normalize
+                )
+                normalize->nOrdinalPosition = nNormalizedPosition++;
+            return;
+        }
+
+        // what's left is that the range might not be from 1 to <column count>, but for instance
+        // 0 to <column count>-1.
+        size_t nOffset = *aUsedOrdinals.begin() - 1;
+        for (   ::std::vector< ColumnDesc >::iterator offset = _rColumns.begin();
+                offset != _rColumns.end();
+                ++offset
+            )
+            offset->nOrdinalPosition -= nOffset;
+    }
+}
+
 // -------------------------------------------------------------------------
 void OTableHelper::refreshColumns()
 {
@@ -145,20 +228,36 @@ void OTableHelper::refreshColumns()
         Any aCatalog;
         if ( m_CatalogName.getLength() )
             aCatalog <<= m_CatalogName;
-OSL_TRACE( "meta data: %p", getMetaData().get() );
-        Reference< XResultSet > xResult = getMetaData()->getColumns(
+
+        ::utl::SharedUNOComponent< XResultSet > xResult( getMetaData()->getColumns(
             aCatalog,
             m_SchemaName,
             m_Name,
-            ::rtl::OUString::createFromAscii("%"));
+            ::rtl::OUString::createFromAscii("%")
+        ) );
 
-        if ( xResult.is() )
-        {
-            Reference< XRow > xRow(xResult,UNO_QUERY);
-            while( xResult->next() )
-                aVector.push_back(xRow->getString(4));
-            ::comphelper::disposeComponent(xResult);
-        }
+        // collect the column names, together with their ordinal position
+        ::std::vector< ColumnDesc > aColumns;
+        lcl_collectColumnDescs_throw( xResult, aColumns );
+
+        // ensure that the ordinal positions as obtained from the meta data do make sense
+        lcl_sanitizeColumnDescs( aColumns );
+
+        // sort by ordinal position
+        ::std::map< OrdinalPosition, ::rtl::OUString > aSortedColumns;
+        for (   ::std::vector< ColumnDesc >::const_iterator copy = aColumns.begin();
+                copy != aColumns.end();
+                ++copy
+            )
+            aSortedColumns[ copy->nOrdinalPosition ] = copy->sName;
+
+        // copy them to aVector, now that we have the proper ordering
+        ::std::transform(
+            aSortedColumns.begin(),
+            aSortedColumns.end(),
+            ::std::insert_iterator< TStringVector >( aVector, aVector.begin() ),
+            ::std::select2nd< ::std::map< OrdinalPosition, ::rtl::OUString >::value_type >()
+        );
     }
 
     if(m_pColumns)
