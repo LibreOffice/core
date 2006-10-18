@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MQuery.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:02:15 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:10:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,7 @@ namespace connectivity {
 }
 
 // -------------------------------------------------------------------------
+/*
 MQuery::MQuery()
 {
     OSL_TRACE( "IN MQuery::MQuery()\n" );
@@ -105,14 +106,15 @@ MQuery::MQuery()
 
     OSL_TRACE( "\tOUT MQuery::MQuery()\n" );
 }
+*/
 // -------------------------------------------------------------------------
-MQuery::MQuery(const ::std::map< ::rtl::OUString, ::rtl::OUString>  & ca)
+MQuery::MQuery( const OColumnAlias& _ca )
+    :m_rColumnAlias( _ca )
 {
     OSL_TRACE( "IN MQuery::MQuery( ca )\n" );
 
     construct();
 
-    m_aColumnAliasMap = ca;
 #if OSL_DEBUG_LEVEL > 0
     m_oThreadID = osl_getThreadIdentifier(NULL);
 #endif
@@ -164,16 +166,8 @@ void MQuery::setAttributes(::std::vector< ::rtl::OUString> &attrs)
     ::std::vector< ::rtl::OUString>::iterator aIterAttr = attrs.begin();
     ::std::map< ::rtl::OUString, ::rtl::OUString>::iterator aIterMap;
 
-    for(aIterAttr = attrs.begin(); aIterAttr != attrs.end();++aIterAttr)
-    {
-        aIterMap = m_aColumnAliasMap.find(*aIterAttr);
-        if (aIterMap == m_aColumnAliasMap.end()) {
-            // Not found.
-            m_aAttributes.push_back(*aIterAttr);
-        } else {
-            m_aAttributes.push_back(aIterMap->second);
-        }
-    }
+    for ( aIterAttr = attrs.begin(); aIterAttr != attrs.end();++aIterAttr )
+        m_aAttributes.push_back( m_rColumnAlias.getProgrammaticNameOrFallbackToAlias( *aIterAttr ) );
 
     OSL_TRACE("\tOUT MQuery::setAttributes()\n");
 }
@@ -278,13 +272,7 @@ static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
             // Check if it's an alias first...
             rtl::OUString attrName;
             ::std::map< ::rtl::OUString, ::rtl::OUString>::const_iterator aIterMap;
-            aIterMap = _aQuery->getColumnAliasMap().find(evStr->getName());
-            if (aIterMap == _aQuery->getColumnAliasMap().end()) {
-                // Not found.
-                attrName = evStr->getName();
-            } else {
-                attrName = aIterMap->second;
-            }
+            attrName = _aQuery->getColumnAlias().getProgrammaticNameOrFallbackToAlias( evStr->getName() );
             string aMiName = MTypeConverter::ouStringToStlString(attrName);
             boolString->SetName(strdup(aMiName.c_str()));
             OSL_TRACE("Name = %s ;", aMiName.c_str() );
@@ -751,13 +739,7 @@ MQuery::setRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString&
     switch ( nType )
     {
         case DataType::VARCHAR:
-            {
-                ::std::map< ::rtl::OUString, ::rtl::OUString>::const_iterator aIterMap = m_aColumnAliasMap.find(aDBColumnName);
-                if (aIterMap != m_aColumnAliasMap.end())
-                    xResEntry->setValue(aIterMap->second, rValue.getString());
-                else
-                    xResEntry->setValue( aDBColumnName, rValue.getString());
-            }
+            xResEntry->setValue( m_rColumnAlias.getProgrammaticNameOrFallbackToAlias( aDBColumnName ), rValue.getString() );
             break;
         default:
             OSL_ENSURE( sal_False, "invalid data type!" );
@@ -784,14 +766,9 @@ MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString&
     switch ( nType )
     {
         case DataType::VARCHAR:
-            {
-                ::std::map< ::rtl::OUString, ::rtl::OUString>::const_iterator aIterMap = m_aColumnAliasMap.find(aDBColumnName);
-                if (aIterMap != m_aColumnAliasMap.end())
-                    rValue = xResEntry->getValue(aIterMap->second);
-                else
-                    rValue = xResEntry->getValue( aDBColumnName );
-            }
+            rValue = xResEntry->getValue( m_rColumnAlias.getProgrammaticNameOrFallbackToAlias( aDBColumnName ) );
             break;
+
         default:
             rValue.setNull();
             break;
