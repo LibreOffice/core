@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.211 $
+ *  $Revision: 1.212 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:22:47 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 15:12:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -372,8 +372,6 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
                     const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
                     x = rGeom.nX;
                     y = rGeom.nY;
-                    w = rGeom.nWidth;
-                    h = rGeom.nHeight;
                     if( x+(int)w+40 <= (int)aScreenSize.Width() &&
                         y+(int)h+40 <= (int)aScreenSize.Height()
                         )
