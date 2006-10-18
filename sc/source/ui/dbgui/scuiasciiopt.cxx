@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scuiasciiopt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:28:15 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,9 +162,13 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     FreeResource();
 
     String aName = GetText();
-    aName.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" - ["));
-    aName += aDatName;
-    aName += ']';
+    // aDatName is empty if invoked during paste from clipboard.
+    if (aDatName.Len())
+    {
+        aName.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" - ["));
+        aName += aDatName;
+        aName += ']';
+    }
     SetText( aName );
 
     switch(cSep)
