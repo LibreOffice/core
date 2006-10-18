@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:14:57 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:28:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,6 @@
 namespace dbaccess
 {
 
-    typedef ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection > OWeakConnection;
     //==========================================================================
     //= OTables
     //==========================================================================
@@ -106,7 +105,9 @@ namespace dbaccess
                     ,public OTable_Base
                     ,public IColumnFactory
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xColumnMediator;
+    private:
+        ::rtl::Reference< OContainerMediator >                                          m_pColumnMediator;
+
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumnDefinitions;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xDriverColumns;
@@ -195,8 +196,6 @@ namespace dbaccess
 
         // com::sun::star::lang::XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-
-        virtual void refreshColumns();
 
     private:
         using OTable_Base::createArrayHelper;
