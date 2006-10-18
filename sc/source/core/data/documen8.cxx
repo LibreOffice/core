@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:53:00 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:42:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -470,7 +470,7 @@ BYTE ScDocument::GetEditTextDirection(SCTAB nTab) const
 void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo,
                                       BOOL bNumFormatChanged )
 {
-    BOOL bBroadcast = (bNumFormatChanged && GetDocOptions().IsCalcAsShown() && !IsImportingXML());
+    BOOL bBroadcast = (bNumFormatChanged && GetDocOptions().IsCalcAsShown() && !IsImportingXML() && !IsClipboard());
     if ( pAdrFrom && !pAdrTo )
     {
         const SCTAB nTab = pAdrFrom->Tab();
