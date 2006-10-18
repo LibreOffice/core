@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:35:37 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:30:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,101 +277,8 @@ Reference< XInterface > SAL_CALL SbaXGridControl::Create(const Reference<XMultiS
 }
 
 //------------------------------------------------------------------
-String Any2String(const Any& rValue)
-{
-    String  aString;
-    if (rValue.hasValue())
-    {
-        switch (rValue.getValueTypeClass())
-        {
-            case TypeClass_BOOLEAN:
-                aString.CreateFromInt32((sal_Int32)(char)::comphelper::getBOOL(rValue));
-                break;
-            case TypeClass_CHAR:
-                aString.CreateFromInt32((sal_Int32)::comphelper::getINT16(rValue));
-                break;
-            case TypeClass_STRING:
-                aString  = (const sal_Unicode*)::comphelper::getString(rValue);
-                break;
-            case TypeClass_BYTE:
-                aString.CreateFromInt32((char)::comphelper::getBOOL(rValue));
-                break;
-            case TypeClass_LONG:
-                aString.CreateFromInt32(::comphelper::getINT32(rValue));
-                break;
-            case TypeClass_SHORT:
-                aString.CreateFromInt32((sal_Int32)::comphelper::getINT16(rValue));
-                break;
-            case TypeClass_UNSIGNED_SHORT:
-                aString.CreateFromInt32((sal_Int32)::comphelper::getINT16(rValue));
-                break;
-            case TypeClass_UNSIGNED_LONG:
-                aString.CreateFromInt32((sal_Int32)::comphelper::getINT32(rValue));
-                break;
-            case TypeClass_VOID:
-            default:
-                ; // leerstring
-        }
-    }
-    return aString;
-}
 
 //------------------------------------------------------------------
-double Any2Double(const Any& rValue)
-{
-    double aRet = 0;
-    if (rValue.hasValue())
-    {
-        switch (rValue.getValueTypeClass())
-        {
-            case TypeClass_BOOLEAN:
-                aRet = ::comphelper::getBOOL(rValue);
-                break;
-            case TypeClass_CHAR:
-                aRet = ::comphelper::getBOOL(rValue);
-                break;
-            case TypeClass_FLOAT:
-                aRet  = ::comphelper::getFloat(rValue);
-                break;
-            case TypeClass_DOUBLE:
-                aRet  = ::comphelper::getDouble(rValue);
-                break;
-            case TypeClass_LONG:
-                aRet = ::comphelper::getINT32(rValue);
-                break;
-            case TypeClass_SHORT:
-                aRet = ::comphelper::getINT16(rValue);
-                break;
-            case TypeClass_UNSIGNED_SHORT:
-                aRet = ::comphelper::getINT16(rValue);
-                break;
-            case TypeClass_BYTE:
-                aRet  = ::comphelper::getBOOL(rValue);
-                break;
-            case TypeClass_UNSIGNED_LONG:
-                aRet = ::comphelper::getINT32(rValue);
-                break;
-
-            case TypeClass_VOID:
-            default:
-                {
-                    // ripped these three routines somewhere ....
-                    ::com::sun::star::util::Date        aDate;
-                    ::com::sun::star::util::DateTime    aDateTime;
-                    ::com::sun::star::util::Time        aTime;
-                    if (rValue >>= aDate)
-                        aRet =  ::dbtools::DBTypeConversion::toDouble(aDate);
-                    else if (rValue >>= aTime)
-                        aRet =  ::dbtools::DBTypeConversion::toDouble(aTime);
-                    else if (rValue >>= aDateTime)
-                        aRet =  dbtools::DBTypeConversion::toDouble(aDateTime);
-                }
-                break;
-        }
-    }
-    return aRet;
-}
-
 //=======================================================================================
 // SbaXGridControl
 //=======================================================================================
