@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MTable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:21:36 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:09:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #ifndef _CONNECTIVITY_MOZAB_TABLE_HXX_
 #define _CONNECTIVITY_MOZAB_TABLE_HXX_
 
-#ifndef _CONNECTIVITY_SDBCX_TABLE_HXX_
-#include "connectivity/sdbcx/VTable.hxx"
+#ifndef CONNECTIVITY_TABLEHELPER_HXX
+#include "connectivity/TTableHelper.hxx"
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -50,14 +50,11 @@ namespace connectivity
 {
     namespace mozab
     {
-        typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
+        typedef ::connectivity::OTableHelper OTable_Base;
 
-        ::rtl::OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
-
-        class OTable :  public OTable_TYPEDEF
+        class OTable :  public OTable_Base
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
-            OConnection* m_pConnection;
+            OConnection*    m_pConnection;
 
         public:
             OTable( sdbcx::OCollection* _pTables, OConnection* _pConnection);
@@ -65,22 +62,21 @@ namespace connectivity
                     OConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
-                    const ::rtl::OUString& _Description = ::rtl::OUString(),
-                    const ::rtl::OUString& _SchemaName = ::rtl::OUString(),
-                    const ::rtl::OUString& _CatalogName = ::rtl::OUString()
-                );
+                    const ::rtl::OUString& _Description );
 
             OConnection* getConnection() { return m_pConnection;}
 
             sal_Bool isReadOnly() const { return sal_False; }
-            virtual void refreshColumns();
 
             ::rtl::OUString getTableName() const { return m_Name; }
             ::rtl::OUString getSchema() const { return m_SchemaName; }
 
-            // com::sun::star::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-            static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            // OTableHelper overridables
+            virtual sdbcx::OCollection* createColumns( const TStringVector& _rNames );
+            virtual sdbcx::OCollection* createKeys(const TStringVector& _rNames);
+            virtual sdbcx::OCollection* createIndexes(const TStringVector& _rNames);
+        private:
+            using OTable_Base::getConnection;
         };
     }
 }
