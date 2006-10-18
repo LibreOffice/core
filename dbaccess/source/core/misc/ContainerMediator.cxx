@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContainerMediator.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:41:34 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:29:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,14 +38,34 @@
 #ifndef DBA_CONTAINERMEDIATOR_HXX
 #include "ContainerMediator.hxx"
 #endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
-#include <comphelper/property.hxx>
-#endif
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
 #endif
+#ifndef DBA_PROPERTYSETFORWARD_HXX
+#include "PropertyForward.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#endif
+
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
+#endif
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 
@@ -55,15 +75,18 @@ namespace dbaccess
 //........................................................................
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::sdbc;
+    using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
+
 DBG_NAME(OContainerMediator)
-OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContainer
-                                       ,const Reference< XNameAccess >& _xSettings
-                                       ,sal_Bool _bTables)
-    : m_xSettings(_xSettings)
-    , m_xContainer(_xContainer)
-    , m_bTables(_bTables)
+OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContainer, const Reference< XNameAccess >& _xSettings,
+    const Reference< XConnection >& _rxConnection, ContainerType _eType )
+    : m_xSettings( _xSettings )
+    , m_xContainer( _xContainer )
+    , m_aConnection( _rxConnection )
+    , m_eType( _eType )
 {
     DBG_CTOR(OContainerMediator,NULL);
     osl_incrementInterlockedCount(&m_refCount);
@@ -84,21 +107,30 @@ OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContain
 OContainerMediator::~OContainerMediator()
 {
     DBG_DTOR(OContainerMediator,NULL);
-    osl_incrementInterlockedCount(&m_refCount);
+    acquire();
+    impl_cleanup_nothrow();
+}
+
+// -----------------------------------------------------------------------------
+void OContainerMediator::impl_cleanup_nothrow()
+{
     try
     {
-        if ( m_xContainer.is() )
-            m_xContainer->removeContainerListener(this);
-        Reference< XContainer > xContainer(m_xSettings, UNO_QUERY);
+        Reference< XContainer > xContainer( m_xSettings, UNO_QUERY );
         if ( xContainer.is() )
-            xContainer->removeContainerListener(this);
+            xContainer->removeContainerListener( this );
+        m_xSettings = NULL;
+
+        if ( m_xContainer.is() )
+            m_xContainer->removeContainerListener( this );
+        m_xContainer = NULL;
     }
-    catch(Exception&)
+    catch( const Exception& )
     {
-        OSL_ENSURE(sal_False, "OContainerMediator::~OContainerMediator: caught an exception!");
+        DBG_UNHANDLED_EXCEPTION();
     }
-    osl_decrementInterlockedCount( &m_refCount );
 }
+
 // -----------------------------------------------------------------------------
 void SAL_CALL OContainerMediator::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
@@ -111,7 +143,7 @@ void SAL_CALL OContainerMediator::elementInserted( const ContainerEvent& _rEvent
         if ( aFind != m_aForwardList.end() )
         {
             Reference< XPropertySet> xDest(_rEvent.Element,UNO_QUERY);
-            aFind->second.first->setDefinition(xDest);
+            aFind->second->setDefinition( xDest );
         }
     }
 }
@@ -119,101 +151,141 @@ void SAL_CALL OContainerMediator::elementInserted( const ContainerEvent& _rEvent
 void SAL_CALL OContainerMediator::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if ( _rEvent.Source == m_xContainer && m_xSettings.is() )
+    if ( _rEvent.Source == m_xContainer && m_xContainer.is() )
     {
         ::rtl::OUString sElementName;
         _rEvent.Accessor >>= sElementName;
         m_aForwardList.erase(sElementName);
-        Reference<XNameContainer> xNameContainer(m_xSettings,UNO_QUERY);
-        if ( xNameContainer.is() && m_xSettings->hasByName(sElementName) )
-            xNameContainer->removeByName(sElementName);
+        try
+        {
+            Reference<XNameContainer> xNameContainer( m_xSettings, UNO_QUERY_THROW );
+            if ( xNameContainer.is() && m_xSettings->hasByName( sElementName ) )
+                xNameContainer->removeByName( sElementName );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OContainerMediator::elementReplaced( const ContainerEvent& /*_rEvent*/ ) throw(RuntimeException)
 {
-
+    OSL_ENSURE( false, "OContainerMediator::elementReplaced: not yet implemented!" );
+    // we would need to update our PropertyForwarder with the new elements, and initially synchronize them
 }
+
 // -----------------------------------------------------------------------------
 void SAL_CALL OContainerMediator::disposing( const EventObject& Source ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
     if ( Source.Source == m_xContainer || Source.Source == m_xSettings )
-    {
-        Reference< XContainer > xContainer(m_xSettings, UNO_QUERY);
-        if ( xContainer.is() )
-        {
-            xContainer->removeContainerListener(this);
-        }
-        m_xSettings = NULL;
+        impl_cleanup_nothrow();
+}
 
-        if ( m_xContainer.is() )
+// -----------------------------------------------------------------------------
+Reference< XPropertySet > OContainerMediator::impl_getSettingsForInitialization_nothrow( const ::rtl::OUString& _rName,
+    const Reference< XPropertySet >& _rxDestination ) const
+{
+    Reference< XPropertySet > xSettings;
+    try
+    {
+        if ( m_xSettings->hasByName( _rName ) )
+            OSL_VERIFY( m_xSettings->getByName( _rName ) >>= xSettings );
+        else if ( m_eType == eColumns )
         {
-            m_xContainer->removeContainerListener(this);
-            m_xContainer = NULL;
+            do  // artifial loop for easier flow control
+            {
+
+            Reference< XConnection > xConnection( m_aConnection );
+            if ( !xConnection.is() )
+                break;
+
+            Reference< XPropertySetInfo > xPSI( _rxDestination->getPropertySetInfo(), UNO_QUERY_THROW );
+            if  (   !xPSI->hasPropertyByName( PROPERTY_TABLENAME )
+                ||  !xPSI->hasPropertyByName( PROPERTY_REALNAME )
+                )
+                break;
+
+            // determine the composed table name, plus the column name, as indicated by the
+            // respective properties at the destination object
+            ::rtl::OUString sCatalog, sSchema, sTable, sColumn;
+            if ( xPSI->hasPropertyByName( PROPERTY_CATALOGNAME ) )
+            {
+                OSL_VERIFY( _rxDestination->getPropertyValue( PROPERTY_CATALOGNAME ) >>= sCatalog );
+            }
+            if ( xPSI->hasPropertyByName( PROPERTY_SCHEMANAME ) )
+            {
+                OSL_VERIFY( _rxDestination->getPropertyValue( PROPERTY_SCHEMANAME ) >>= sSchema );
+            }
+            OSL_VERIFY( _rxDestination->getPropertyValue( PROPERTY_TABLENAME ) >>= sTable );
+            OSL_VERIFY( _rxDestination->getPropertyValue( PROPERTY_REALNAME ) >>= sColumn );
+
+            ::rtl::OUString sComposedTableName = ::dbtools::composeTableName(
+                xConnection->getMetaData(), sCatalog, sSchema, sTable, sal_False, ::dbtools::eComplete );
+
+            // retrieve the table in question
+            Reference< XTablesSupplier > xSuppTables( xConnection, UNO_QUERY_THROW );
+            Reference< XNameAccess > xTables( xSuppTables->getTables(), UNO_QUERY_THROW );
+            if ( !xTables->hasByName( sComposedTableName ) )
+                break;
+
+            Reference< XColumnsSupplier > xSuppCols( xTables->getByName( sComposedTableName ), UNO_QUERY_THROW );
+            Reference< XNameAccess > xColumns( xSuppCols->getColumns(), UNO_QUERY_THROW );
+            if ( !xColumns->hasByName( sColumn ) )
+                break;
+
+            xSettings.set( xColumns->getByName( sColumn ), UNO_QUERY );
+
+            }
+            while ( false );
         }
     }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return xSettings;
 }
+
 // -----------------------------------------------------------------------------
 void OContainerMediator::notifyElementCreated(const ::rtl::OUString& _sName,const Reference<XPropertySet>& _xDest)
 {
     PropertyForwardList::iterator aFind = m_aForwardList.find(_sName);
     if ( aFind == m_aForwardList.end() && m_xSettings.is() )
     {
-        if ( m_xSettings->hasByName(_sName) )
-        {
-            Reference<XPropertySet> xSetting(m_xSettings->getByName(_sName),UNO_QUERY);
-            if ( xSetting.is() )
-                ::comphelper::copyProperties(xSetting,_xDest);
-        }
-
         ::std::vector< ::rtl::OUString> aPropertyList;
-        if ( m_bTables )
+
+        try
         {
-            aPropertyList.reserve(26);
-            aPropertyList.push_back(PROPERTY_FILTER);
-            aPropertyList.push_back(PROPERTY_ORDER);
-            aPropertyList.push_back(PROPERTY_APPLYFILTER);
-            aPropertyList.push_back(PROPERTY_FONT);
-            aPropertyList.push_back(PROPERTY_ROW_HEIGHT);
-            aPropertyList.push_back(PROPERTY_TEXTCOLOR);
-            aPropertyList.push_back(PROPERTY_TEXTLINECOLOR);
-            aPropertyList.push_back(PROPERTY_TEXTEMPHASIS);
-            aPropertyList.push_back(PROPERTY_TEXTRELIEF);
-            aPropertyList.push_back(PROPERTY_FONTNAME);
-            aPropertyList.push_back(PROPERTY_FONTHEIGHT);
-            aPropertyList.push_back(PROPERTY_FONTWIDTH);
-            aPropertyList.push_back(PROPERTY_FONTSTYLENAME);
-            aPropertyList.push_back(PROPERTY_FONTFAMILY);
-            aPropertyList.push_back(PROPERTY_FONTCHARSET);
-            aPropertyList.push_back(PROPERTY_FONTPITCH);
-            aPropertyList.push_back(PROPERTY_FONTCHARWIDTH);
-            aPropertyList.push_back(PROPERTY_FONTWEIGHT);
-            aPropertyList.push_back(PROPERTY_FONTSLANT);
-            aPropertyList.push_back(PROPERTY_FONTUNDERLINE);
-            aPropertyList.push_back(PROPERTY_FONTSTRIKEOUT);
-            aPropertyList.push_back(PROPERTY_FONTORIENTATION);
-            aPropertyList.push_back(PROPERTY_FONTKERNING);
-            aPropertyList.push_back(PROPERTY_FONTWORDLINEMODE);
-            aPropertyList.push_back(PROPERTY_FONTTYPE);
+            // initially copy from the settings object (if existent) to the newly created object
+            Reference< XPropertySet > xSetting( impl_getSettingsForInitialization_nothrow( _sName, _xDest ) );
+            if ( xSetting.is() )
+                ::comphelper::copyProperties( xSetting, _xDest );
+
+            // collect the to-be-monitored properties
+            Reference< XPropertySetInfo > xPSI( _xDest->getPropertySetInfo(), UNO_QUERY_THROW );
+            Sequence< Property > aProperties( xPSI->getProperties() );
+            const Property* property = aProperties.getConstArray();
+            const Property* propertyEnd = aProperties.getConstArray() + aProperties.getLength();
+            for ( ; property != propertyEnd; ++property )
+            {
+                if ( ( property->Attributes & PropertyAttribute::READONLY ) != 0 )
+                    continue;
+                if ( ( property->Attributes & PropertyAttribute::BOUND ) == 0 )
+                    continue;
+
+                aPropertyList.push_back( property->Name );
+            }
         }
-        else
+        catch( const Exception& )
         {
-            aPropertyList.reserve(9);
-            aPropertyList.push_back(PROPERTY_ALIGN);
-            aPropertyList.push_back(PROPERTY_NUMBERFORMAT);
-            aPropertyList.push_back(PROPERTY_RELATIVEPOSITION);
-            aPropertyList.push_back(PROPERTY_WIDTH);
-            aPropertyList.push_back(PROPERTY_HIDDEN);
-            aPropertyList.push_back(PROPERTY_CONTROLMODEL);
-            aPropertyList.push_back(PROPERTY_HELPTEXT);
-            aPropertyList.push_back(PROPERTY_CONTROLDEFAULT);
+            DBG_UNHANDLED_EXCEPTION();
         }
 
-        OPropertyForward* pForward = new OPropertyForward(_xDest,m_xSettings,_sName,aPropertyList);
-        Reference<XInterface> xTemp = *pForward;
-        m_aForwardList.insert( PropertyForwardList::value_type(_sName,TPropertyForward(pForward,xTemp)));
+        ::rtl::Reference< OPropertyForward > pForward( new OPropertyForward( _xDest, m_xSettings, _sName, aPropertyList ) );
+        m_aForwardList.insert( PropertyForwardList::value_type( _sName, pForward ) );
     }
 }
 // -----------------------------------------------------------------------------
