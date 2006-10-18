@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 22:53:59 $
+#   last change: $Author: ihi $ $Date: 2006-10-18 13:17:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,8 @@ INCPRE+=$(SOLARINCDIR)$/offuh
 
 SLOFILES=	$(SLO)$/formnavigation.obj \
             $(SLO)$/controlfeatureinterception.obj \
-            $(SLO)$/urltransformer.obj
+            $(SLO)$/urltransformer.obj \
+            $(SLO)$/windowstateguard.obj
 
 # --- Targets ----------------------------------
 
