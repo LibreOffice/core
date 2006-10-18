@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 12:59:33 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:29:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,20 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
+#endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
+#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
+#include <com/sun/star/sdbcx/XAppend.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
@@ -726,7 +738,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                 // read all nescessary data
 
                 ::rtl::OUString sCommand;
-                sal_Bool        bEscapeProcessing = sal_True;
+                sal_Bool bEscapeProcessing = sal_True;
 
                 _rPasteData[daCommand] >>= sCommand;
                 if ( _rPasteData.has(daEscapeProcessing) )
@@ -745,11 +757,6 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                     return sal_False;
                 }
 
-                // three properties we can set only if we have a query object as source
-                ::rtl::OUString sUpdateTableName;
-                ::rtl::OUString sUpdateSchemaName;
-                ::rtl::OUString sUpdateCatalogName;
-
                 // the target object name (as we'll suggest it to the user)
                 String sTargetName;
                 Reference< XNameAccess > xQueries;
@@ -766,6 +773,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                     OSL_ENSURE(0,"could not create query default name!");
                 }
 
+                Reference< XPropertySet > xQuery;
                 if (CommandType::QUERY == nCommandType)
                 {
                     // need to extract the statement and the escape processing flag from the query object
@@ -773,7 +781,6 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                     try
                     {
                         // the concrete query
-                        Reference< XPropertySet > xQuery;
                         Reference<XQueryDefinitionsSupplier> xSourceQuerySup(getDataSourceByName_displayError( m_xDatabaseContext, sDataSourceName, getView(), getORB(), true ),UNO_QUERY);
                         if ( xSourceQuerySup.is() )
                             xQueries.set(xSourceQuerySup->getQueryDefinitions(),UNO_QUERY);
@@ -781,18 +788,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                         if ( xQueries.is() && xQueries->hasByName(sCommand) )
                         {
                             xQuery.set(xQueries->getByName(sCommand),UNO_QUERY);
-
-                            if (xQuery.is())
-                            {
-                                // extract all the properties we're interested in
-                                xQuery->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
-                                xQuery->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING) >>= bEscapeProcessing;
-
-                                xQuery->getPropertyValue(PROPERTY_UPDATE_TABLENAME) >>= sUpdateTableName;
-                                xQuery->getPropertyValue(PROPERTY_UPDATE_SCHEMANAME) >>= sUpdateSchemaName;
-                                xQuery->getPropertyValue(PROPERTY_UPDATE_CATALOGNAME) >>= sUpdateCatalogName;
-                                bSuccess = sal_True;
-                            }
+                            bSuccess = xQuery.is();
                             xQueries.clear();
                         }
                     }
@@ -818,6 +814,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
 
                 // here we have everything needed to create a new query object ...
                 // ... ehm, except a new name
+                ensureConnection();
                 DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::QUERY );
                 OSaveAsDlg aAskForName( getView(),
                                         CommandType::QUERY,
@@ -838,13 +835,42 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                 if (xNewQuery.is())
                 {
                     // initialize
-                    xNewQuery->setPropertyValue( PROPERTY_COMMAND, makeAny(sCommand) );
-                    xNewQuery->setPropertyValue( PROPERTY_USE_ESCAPE_PROCESSING, makeAny(bEscapeProcessing) );
-                    xNewQuery->setPropertyValue( PROPERTY_UPDATE_TABLENAME, makeAny(sUpdateTableName) );
-                    xNewQuery->setPropertyValue( PROPERTY_UPDATE_SCHEMANAME, makeAny(sUpdateSchemaName) );
-                    xNewQuery->setPropertyValue( PROPERTY_UPDATE_CATALOGNAME, makeAny(sUpdateCatalogName) );
+                    if ( xQuery.is() )
+                        ::comphelper::copyProperties(xQuery,xNewQuery);
+                    else
+                    {
+                        xNewQuery->setPropertyValue(PROPERTY_COMMAND,makeAny(sCommand));
+                        xNewQuery->setPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING,makeAny(bEscapeProcessing));
+                    }
                     // insert
                     xDestQueries->insertByName( sTargetName, makeAny(xNewQuery) );
+                    xNewQuery.set(xDestQueries->getByName( sTargetName),UNO_QUERY);
+                    if ( xQuery.is() && xNewQuery.is() )
+                    {
+                        Reference<XColumnsSupplier> xSrcColSup(xQuery,UNO_QUERY);
+                        Reference<XColumnsSupplier> xDstColSup(xNewQuery,UNO_QUERY);
+                        if ( xSrcColSup.is() && xDstColSup.is() )
+                        {
+                            Reference<XNameAccess> xSrcNameAccess = xSrcColSup->getColumns();
+                            Reference<XNameAccess> xDstNameAccess = xDstColSup->getColumns();
+                            Reference<XDataDescriptorFactory> xFac(xDstNameAccess,UNO_QUERY);
+                            Reference<XAppend> xAppend(xFac,UNO_QUERY);
+                            if ( xSrcNameAccess.is() && xDstNameAccess.is() && xSrcNameAccess->hasElements() && xAppend.is() )
+                            {
+                                Reference<XPropertySet> xDstProp(xFac->createDataDescriptor());
+
+                                Sequence< ::rtl::OUString> aSeq = xSrcNameAccess->getElementNames();
+                                const ::rtl::OUString* pIter = aSeq.getConstArray();
+                                const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+                                for( ; pIter != pEnd ; ++pIter)
+                                {
+                                    Reference<XPropertySet> xSrcProp(xSrcNameAccess->getByName(*pIter),UNO_QUERY);
+                                    ::comphelper::copyProperties(xSrcProp,xDstProp);
+                                    xAppend->appendByDescriptor(xDstProp);
+                                }
+                            }
+                        }
+                    }
                 }
             }
             else
