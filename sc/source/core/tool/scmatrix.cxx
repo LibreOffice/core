@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmatrix.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:44:27 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:43:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,12 +292,22 @@ void ScMatrix::PutStringEntry( const String* pStr, BYTE bFlag, SCSIZE nIndex )
     DBG_ASSERT( bFlag, "ScMatrix::PutStringEntry: bFlag == 0" );
     if (bIsString == NULL)
         ResetIsString();
-    if ( bIsString[nIndex] && pMat[nIndex].pS )
+    // Make sure all bytes of the union are initialized to be able to access
+    // the value with if (IsValueOrEmpty()) GetDouble(). Backup pS first.
+    String* pS = pMat[nIndex].pS;
+    pMat[nIndex].fVal = 0.0;
+    // An EMPTY entry must not have a string pointer therefor.
+    DBG_ASSERT( (((bFlag & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY) && !pStr) || TRUE,
+            "ScMatrix::PutStringEntry: pStr passed though EMPTY entry");
+    if ( bIsString[nIndex] && pS )
     {
+        if ((bFlag & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY)
+            delete pS, pS = NULL;
         if ( pStr )
-            *(pMat[nIndex].pS) = *pStr;
-        else
-            pMat[nIndex].pS->Erase();
+            *pS = *pStr;
+        else if (pS)
+            pS->Erase();
+        pMat[nIndex].pS = pS;
     }
     else
         pMat[nIndex].pS = (pStr ? new String(*pStr) : NULL);
