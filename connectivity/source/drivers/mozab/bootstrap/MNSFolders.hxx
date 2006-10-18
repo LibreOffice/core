@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSFolders.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:23:18 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:10:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,8 @@
 
 #include <rtl/ustring.hxx>
 
-::rtl::OString getAppDir();
-::rtl::OString getRegistryDir(::com::sun::star::mozilla::MozillaProductType product);
-::rtl::OString getRegistryFileName(::com::sun::star::mozilla::MozillaProductType product);
+::rtl::OUString getRegistryDir(::com::sun::star::mozilla::MozillaProductType product);
+::rtl::OUString getRegistryFileName(::com::sun::star::mozilla::MozillaProductType product);
 
 #endif
 
