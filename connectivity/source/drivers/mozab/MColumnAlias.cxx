@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MColumnAlias.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:55:23 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:07:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,34 +101,20 @@ static const ::rtl::OUString sProgrammaticNames[] =
     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Notes"))
 };
 //------------------------------------------------------------------------------
-OColumnAlias::OColumnAlias()
+OColumnAlias::OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB )
 {
-    // Initialise m_aAlias with the default values from sProgrammaticNames.
-    initialise();
+    for ( size_t i = 0; i < END - BEGIN; ++i )
+        m_aAliasMap[ sProgrammaticNames[i] ] = AliasDescription( sProgrammaticNames[i], static_cast< ProgrammaticName>( i ) );
 
-    // Initialise m_aAlias map with the default values from sProgrammaticNames.
-    setAliasMap();
+    initialize( _rxORB );
 }
-//------------------------------------------------------------------
-OColumnAlias::~OColumnAlias()
-{
-}
-//------------------------------------------------------------------
-void OColumnAlias::initialise()
-{
-    m_aAlias.reserve( END - FIRSTNAME + 1 );
-    for (sal_Int32 i(FIRSTNAME); i < END; ++i)
-        m_aAlias.push_back(sProgrammaticNames[i]);
 
-    return;
-}
 //------------------------------------------------------------------
-void OColumnAlias::setAlias(const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
+void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB )
 {
-        // open our driver settings config node
+    // open our driver settings config node
 
-        // the config path for our own driver's settings
+    // the config path for our own driver's settings
     Reference< XPropertySet > xDriverNode = createDriverConfigNode( _rxORB );
     if ( xDriverNode.is() )
     {
@@ -169,26 +155,33 @@ void OColumnAlias::setAlias(const ::com::sun::star::uno::Reference<
                       sAssignedAlias = *pProgrammaticNames;
 
                 //.............................................................
-                // check the value
-                // look up the programmatic indicated by pProgrammaticNames in the known programmatics
-                const ::rtl::OUString* pProgrammatic = sProgrammaticNames + FIRSTNAME;
-                const ::rtl::OUString* pProgrammaticEnd = sProgrammaticNames + END;
-
-                OSL_ENSURE( (sal_Int32)m_aAlias.size() == pProgrammaticEnd - pProgrammatic,
-                    "OColumnAlias::setAlias: aliases vector not yet initialized!" );
-
-                // the destination where we want to remember the alias
-                ::std::vector< ::rtl::OUString >::iterator aDestination = m_aAlias.begin();
-
-                for ( ; pProgrammatic < pProgrammaticEnd; ++pProgrammatic, ++aDestination )
+            #if OSL_DEBUG_LEVEL > 0
+                bool bFound = false;
+            #endif
+                for (   AliasMap::iterator search = m_aAliasMap.begin();
+                        ( search != m_aAliasMap.end() );
+                        ++search
+                    )
                 {
-                    if ( pProgrammaticNames->equals( *pProgrammatic ) )
+                    if ( search->second.sProgrammaticName == *pProgrammaticNames )
                     {
-                        // add alias to the vector
-                        *aDestination = sAssignedAlias;
+                        AliasDescription aDescription( search->second );
+
+                        // delete this old entry for this programmatic name
+                        m_aAliasMap.erase( search );
+
+                        // insert the same AliasDescription under a new name - its alias
+                        m_aAliasMap[ sAssignedAlias ] = aDescription;
+
+                    #if OSL_DEBUG_LEVEL > 0
+                        bFound = true;
+                    #endif
+
                         break;
                     }
                 }
+
+                OSL_ENSURE( bFound, "OColumnAlias::setAlias: did not find a programmatic name which exists in the configuration!" );
             }
         }
         catch( const Exception& )
@@ -196,31 +189,26 @@ void OColumnAlias::setAlias(const ::com::sun::star::uno::Reference<
             OSL_ENSURE( sal_False, "OColumnAlias::setAlias: could not read my driver's configuration data!" );
         }
     }
+}
 
-    // Initialise m_aAliasMap.
-    setAliasMap();
-
-    return;
-}
 //------------------------------------------------------------------
-const ::std::vector< ::rtl::OUString> & OColumnAlias::getAlias() const
+OColumnAlias::ProgrammaticName OColumnAlias::getProgrammaticNameIndex( const ::rtl::OUString& _rAliasName ) const
 {
-    return m_aAlias;
-}
-//------------------------------------------------------------------
-const ::std::map< ::rtl::OUString, ::rtl::OUString> & OColumnAlias::getAliasMap() const
-{
-    return m_aAliasMap;
-}
-//------------------------------------------------------------------
-void OColumnAlias::setAliasMap()
-{
-        // Fill the map with the values of m_aAlias
-        // and the sProgrammaticNames array.
-    for (sal_Int32 i(FIRSTNAME); i < END; ++i) {
-        m_aAliasMap[m_aAlias[i]] = sProgrammaticNames[i];
+    AliasMap::const_iterator pos = m_aAliasMap.find( _rAliasName );
+    if ( pos == m_aAliasMap.end() )
+    {
+        OSL_ENSURE( false, "OColumnAlias::getProgrammaticNameIndex: unknown column alias!" );
+        return END;
     }
 
-        return;
+    return pos->second.eProgrammaticNameIndex;
 }
+
 //------------------------------------------------------------------
+::rtl::OUString OColumnAlias::getProgrammaticNameOrFallbackToAlias( const ::rtl::OUString& _rAlias ) const
+{
+    AliasMap::const_iterator pos = m_aAliasMap.find( _rAlias );
+    if ( pos == m_aAliasMap.end() )
+        return _rAlias;
+    return pos->second.sProgrammaticName;
+}
