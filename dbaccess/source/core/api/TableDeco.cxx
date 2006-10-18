@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:33:25 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:26:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,17 +122,14 @@ using namespace ::cppu;
 //==========================================================================
 DBG_NAME(ODBTableDecorator)
 // -----------------------------------------------------------------------------
-ODBTableDecorator::ODBTableDecorator(
-         const Reference< XDatabaseMetaData >& _rxMetaData
-        ,const Reference< XColumnsSupplier >& _rxNewTable
-        ,const Reference< XNumberFormatsSupplier >& _rxNumberFormats
-        ,const Reference< XNameAccess >& _xColumnDefinitions
-        ) throw(SQLException)
+ODBTableDecorator::ODBTableDecorator( const Reference< XConnection >& _rxConnection, const Reference< XColumnsSupplier >& _rxNewTable,
+        const Reference< XNumberFormatsSupplier >& _rxNumberFormats, const Reference< XNameAccess >& _xColumnDefinitions ) throw(SQLException)
     :OTableDescriptor_BASE(m_aMutex)
     ,ODataSettings(OTableDescriptor_BASE::rBHelper)
     ,m_xTable(_rxNewTable)
     ,m_xColumnDefinitions(_xColumnDefinitions)
-    ,m_xMetaData(_rxMetaData)
+    ,m_xConnection( _rxConnection )
+    ,m_xMetaData( _rxConnection.is() ? _rxConnection->getMetaData() : Reference< XDatabaseMetaData >() )
     ,m_xNumberFormats( _rxNumberFormats )
     ,m_nPrivileges(-1)
     ,m_pColumns(NULL)
@@ -631,7 +628,7 @@ Reference< XPropertySet > SAL_CALL ODBTableDecorator::createDataDescriptor(  ) t
         xColsSupp = xColsSupp.query( xFactory->createDataDescriptor() );
 
     return new ODBTableDecorator(
-        m_xMetaData,
+        m_xConnection,
         xColsSupp,
         m_xNumberFormats,
         NULL
@@ -671,9 +668,9 @@ void ODBTableDecorator::refreshColumns()
                                     m_xMetaData.is() && m_xMetaData->supportsAlterTableWithDropColumn());
 
         pCol->setParent(*this);
-        OContainerMediator* pMediator = new OContainerMediator(pCol,m_xColumnDefinitions,sal_False);
+        OContainerMediator* pMediator = new OContainerMediator( pCol, m_xColumnDefinitions, m_xConnection, OContainerMediator::eColumns );
         m_xColumnMediator = pMediator;
-        pCol->setMediator(pMediator);
+        pCol->setMediator( pMediator );
         m_pColumns  = pCol;
     }
     else
