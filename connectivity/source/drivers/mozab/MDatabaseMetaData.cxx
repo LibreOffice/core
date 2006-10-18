@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:56:24 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:08:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,6 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
     ODatabaseMetaDataResultSet::ORow  aRow(19);
     aRows.clear();
 
-    const ::std::vector< ::rtl::OUString >& colNames = m_pConnection->getColumnAlias().getAlias();
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ::std::vector< ::rtl::OUString > tables;
@@ -159,6 +158,8 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
     // IS_NULLABLE
     aRow[18] = new ORowSetValueDecorator(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("YES")));
 
+    const OColumnAlias& colNames = m_pConnection->getColumnAlias();
+
     // Iterate over all tables
     for(size_t j = 0; j < tables.size(); j++ ) {
         if(match(tableNamePattern, tables[j],'\0')) {
@@ -168,13 +169,18 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
             OSL_TRACE( "\t\tTableName = %s;\n",OUtoCStr( tables[j] ));
 
             // Iterate over all collumns in the table.
-            for ( size_t i = 0; i < colNames.size(); i++ ) {
-                if(match(columnNamePattern, colNames[i],'\0')) {
-                    OSL_TRACE( "\t\t\tColumnName = %s;\n",OUtoCStr( colNames[i] ));
+            for (   OColumnAlias::AliasMap::const_iterator compare = colNames.begin();
+                    compare != colNames.end();
+                    ++compare
+                )
+            {
+                if ( match( columnNamePattern, compare->first, '\0' ) )
+                {
+                    OSL_TRACE( "\t\t\tColumnName = %s;\n", OUtoCStr( compare->first ) );
                     // COLUMN_NAME
-                    aRow[4] = new ORowSetValueDecorator( colNames[i] );
+                    aRow[4] = new ORowSetValueDecorator( compare->first );
                     // ORDINAL_POSITION
-                    aRow[17] = new ORowSetValueDecorator(sal_Int32(i+1));
+                    aRow[17] = new ORowSetValueDecorator( static_cast< sal_Int32 >( compare->second.eProgrammaticNameIndex ) + 1 );
                     aRows.push_back(aRow);
                 }
             }
