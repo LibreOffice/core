@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opcode.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 12:30:48 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:17:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,7 +268,9 @@ enum OpCodeEnum
         ocDBVarP            = SC_OPCODE_DB_VAR_P,
     // Verwaltungsfunktionen
         ocIndirect          = SC_OPCODE_INDIRECT,
-        ocAdress            = SC_OPCODE_ADRESS,
+        ocIndirectXL        = SC_OPCODE_INDIRECT_XL,
+        ocAddress           = SC_OPCODE_ADDRESS,
+        ocAddressXL         = SC_OPCODE_ADDRESS_XL,
         ocMatch             = SC_OPCODE_MATCH,
         ocCountEmptyCells   = SC_OPCODE_COUNT_EMPTY_CELLS,
         ocCountIf           = SC_OPCODE_COUNT_IF,
