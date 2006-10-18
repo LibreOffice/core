@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MStatement.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:57:57 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:09:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,10 +245,7 @@ void OStatement_Base::createTable( )
             xCreateColumn     = m_pSQLIterator->getCreateColumns();
             OSL_ENSURE(xCreateColumn.isValid(), "Need the Columns!!");
 
-            const OColumnAlias & xColumnAlias = m_pConnection->getColumnAlias();
-            //OSL_ENSURE( !xColumnAlias.empty(), "Need Column Alias");
-            const ::std::map< ::rtl::OUString, ::rtl::OUString> & xAliasMap = xColumnAlias.getAliasMap();
-            //OSL_ENSURE( !xAliasMap.empty(), "Need Column Alias Map");
+            const OColumnAlias& aColumnAlias = m_pConnection->getColumnAlias();
 
             OSQLColumns::const_iterator aIter = xCreateColumn->begin();
             const ::rtl::OUString sProprtyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
@@ -256,10 +253,11 @@ void OStatement_Base::createTable( )
             for (sal_Int32 i = 1; aIter != xCreateColumn->end();++aIter, i++)
             {
                 (*aIter)->getPropertyValue(sProprtyName) >>= sName;
-                if (xAliasMap.find(sName) == xAliasMap.end())
+                if ( !aColumnAlias.hasAlias( sName ) )
                 {
-                    ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Driver does not support column name:"))
-                                                        + sName ,NULL);
+                    ::dbtools::throwGenericSQLException(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Driver does not support column name: " ) ) + sName,
+                        NULL );
                 }
             }
             MDatabaseMetaDataHelper     _aDbHelper;
