@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:20:46 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:37:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -560,6 +560,8 @@ String SfxHelp::GetHelpModuleName_Impl()
         else if ( aFactoryShortName.equalsAscii( "sglobal" ) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "swriter" ) );
         else if ( aFactoryShortName.equalsAscii( "dbquery" ) )
+            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
+        else if ( aFactoryShortName.equalsAscii( "dbbrowser" ) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
         else if ( aFactoryShortName.equalsAscii( "dbrelation" ) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
