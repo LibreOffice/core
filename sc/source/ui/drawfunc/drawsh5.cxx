@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 13:24:49 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:47:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,22 +216,28 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                                         rtl::OUString::createFromAscii( "Label" );
 
                                     uno::Any aAny;
-                                    aAny <<= rtl::OUString(rName);
-                                    xPropSet->setPropertyValue( sPropLabel, aAny );
+                                    if ( xInfo->hasPropertyByName( sPropLabel ) )
+                                    {
+                                        aAny <<= rtl::OUString(rName);
+                                        xPropSet->setPropertyValue( sPropLabel, aAny );
+                                    }
 
                                     ::rtl::OUString aTmp = INetURLObject::GetAbsURL( pViewData->GetDocShell()->GetMedium()->GetBaseURL(), rURL );
                                     aAny <<= aTmp;
                                     xPropSet->setPropertyValue( sPropTargetURL, aAny );
 
-                                    if( rTarget.Len() )
+                                    if( rTarget.Len() && xInfo->hasPropertyByName( sPropTargetFrame ) )
                                     {
                                         aAny <<= rtl::OUString(rTarget);
                                         xPropSet->setPropertyValue( sPropTargetFrame, aAny );
                                     }
 
-                                    form::FormButtonType eButtonType = form::FormButtonType_URL;
-                                    aAny <<= eButtonType;
-                                    xPropSet->setPropertyValue( sPropButtonType, aAny );
+                                    if ( xInfo->hasPropertyByName( sPropButtonType ) )
+                                    {
+                                        form::FormButtonType eButtonType = form::FormButtonType_URL;
+                                        aAny <<= eButtonType;
+                                        xPropSet->setPropertyValue( sPropButtonType, aAny );
+                                    }
 
                                     //! Undo ???
                                     pViewData->GetDocShell()->SetDocumentModified();
