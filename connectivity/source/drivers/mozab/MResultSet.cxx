@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:57:09 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:08:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ OResultSet::OResultSet(OStatement_Base* pStmt, const ::boost::shared_ptr< connec
     ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
     ,m_pSQLIterator( _pSQLIterator )
     ,m_pParseTree( _pSQLIterator->getParseTree() )
-    ,m_aQuery(pStmt->getOwnConnection()->getColumnAlias().getAliasMap())
+    ,m_aQuery( pStmt->getOwnConnection()->getColumnAlias() )
     ,m_pTable(NULL)
     ,m_CurrentRowCount(0)
     ,m_nParamIndex(0)
