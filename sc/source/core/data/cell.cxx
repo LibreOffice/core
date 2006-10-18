@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 11:33:27 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:18:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -542,7 +542,9 @@ ScFormulaCell::ScFormulaCell() :
 }
 
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
-                              const String& rFormula, BYTE cMatInd ) :
+                              const String& rFormula,
+                              ScAddress::Convention eConv,
+                              BYTE cMatInd ) :
     ScBaseCell( CELLTYPE_FORMULA ),
     nErgValue( 0.0 ),
     pCode( NULL ),
@@ -570,7 +572,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     cMatrixFlag ( cMatInd ),
     aPos( rPos )
 {
-    Compile( rFormula, TRUE );  // bNoListening, erledigt Insert
+    Compile( rFormula, TRUE, eConv );   // bNoListening, erledigt Insert
 }
 
 // Wird von den Importfiltern verwendet
@@ -625,6 +627,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
     SvtListener(),
     aErgString( rScFormulaCell.aErgString ),
     nErgValue( rScFormulaCell.nErgValue ),
+    nErgConv( rScFormulaCell.nErgConv ),
     pDocument( pDoc ),
     pPrevious(0),
     pNext(0),
@@ -782,6 +785,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
         if( cFlags & 0x10 )
         {
             rStream.ReadByteString( aErgString, rStream.GetStreamCharSet() );
+            nErgConv = ScAddress::CONV_OOO;
             bIsValue = FALSE;
         }
         pCode->Load( rStream, nVer, aPos );
@@ -917,7 +921,7 @@ ScBaseCell* ScFormulaCell::Clone( ScDocument* pDoc, const ScAddress& rPos,
     return pCell;
 }
 
-void ScFormulaCell::GetFormula( String& rFormula ) const
+void ScFormulaCell::GetFormula( String& rFormula, ScAddress::Convention eConv ) const
 {
     if( pCode->GetError() && !pCode->GetLen() )
     {
@@ -941,7 +945,7 @@ void ScFormulaCell::GetFormula( String& rFormula ) const
             }
             if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
             {
-                ((ScFormulaCell*)pCell)->GetFormula(rFormula);
+                ((ScFormulaCell*)pCell)->GetFormula(rFormula, eConv);
                 return;
             }
             else
@@ -983,7 +987,8 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
     }
 }
 
-void ScFormulaCell::Compile( const String& rFormula, BOOL bNoListening )
+void ScFormulaCell::Compile( const String& rFormula, BOOL bNoListening,
+                             ScAddress::Convention eConv )
 {
     if ( pDocument->IsClipOrUndo() ) return;
     BOOL bWasInFormulaTree = pDocument->IsInFormulaTree( this );
@@ -996,7 +1001,7 @@ void ScFormulaCell::Compile( const String& rFormula, BOOL bNoListening )
     ScCompiler aComp(pDocument, aPos);
     if ( pDocument->IsImportingXML() )
         aComp.SetCompileEnglish( TRUE );
-    pCode = aComp.CompileString( rFormula );
+    pCode = aComp.CompileString( rFormula, eConv );
     if ( pCodeOld )
         delete pCodeOld;
     if( !pCode->GetError() )
@@ -1026,7 +1031,7 @@ void ScFormulaCell::CompileTokenArray( BOOL bNoListening )
 {
     // Noch nicht compiliert?
     if( !pCode->GetLen() && aErgString.Len() )
-        Compile( aErgString );
+        Compile( aErgString, nErgConv );
     else if( bCompile && !pDocument->IsClipOrUndo() && !pCode->GetError() )
     {
         // RPN-Laenge kann sich aendern
@@ -1121,7 +1126,7 @@ void ScFormulaCell::CalcAfterLoad()
     // aber kein TokenArray
     if( !pCode->GetLen() && aErgString.Len() )
     {
-        Compile( aErgString, TRUE );
+        Compile( aErgString, TRUE, nErgConv );
         aErgString.Erase();
         bDirty = TRUE;
         bNewCompiled = TRUE;
