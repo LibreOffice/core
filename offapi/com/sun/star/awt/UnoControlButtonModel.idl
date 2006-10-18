@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoControlButtonModel.idl,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:18:38 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:19:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,15 +38,15 @@
 #ifndef __com_sun_star_awt_FontDescriptor_idl__
 #include <com/sun/star/awt/FontDescriptor.idl>
 #endif
-
 #ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
 #endif
-
 #ifndef __com_sun_star_style_VerticalAlignment_idl__
 #include <com/sun/star/style/VerticalAlignment.idl>
 #endif
-
+#ifndef com_sun_star_graphic_XGraphic_idl
+#include <com/sun/star/graphic/XGraphic.idl>
+#endif
 #ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
 #endif
@@ -160,8 +160,26 @@ published service UnoControlButtonModel
     //-------------------------------------------------------------------------
 
     /** specifies an URL to an image to use for the button.
+        @see Graphic
      */
     [property] string ImageURL;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a graphic to be displayed at the button
+
+        <p>If this property is present, it interacts with the <member>ImageURL</member>in the
+        following way:
+        <ul><li>If <member>ImageURL</member> is set, <member>Graphic</member> will be reset
+            to an object as loaded from the given image URL, or <NULL/> if <member>ImageURL</member>
+            does not point to a valid image file.</li>
+            <li>If <member>Graphic</member> is set, <member>ImageURL</member> will be reset
+            to an empty string.</li>
+        </ul></p>
+
+        @since OOo 2.1
+     */
+    [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
 
     //-------------------------------------------------------------------------
 
