@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangelst.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:27:12 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:17:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,8 +66,12 @@ public:
                         Insert( pR, LIST_APPEND );
                     }
     USHORT          Parse( const String&, ScDocument* = NULL,
-                            USHORT nMask = SCA_VALID );
-    void            Format( String&, USHORT nFlags = 0, ScDocument* = NULL ) const;
+                           USHORT nMask = SCA_VALID,
+                           ScAddress::Convention eConv = ScAddress::CONV_OOO,
+                           char cDelimiter = 0 );
+    void            Format( String&, USHORT nFlags = 0, ScDocument* = NULL,
+                            ScAddress::Convention eConv = ScAddress::CONV_OOO,
+                            char cDelimiter = 0 ) const;
     void            Join( const ScRange&, BOOL bIsInList = FALSE );
     BOOL            UpdateReference( UpdateRefMode, ScDocument*,
                                     const ScRange& rWhere,
