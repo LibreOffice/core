@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:36:55 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:27:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,13 +192,13 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
                                  IWarningsContainer* _pWarningsContainer)
     :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer)
     ,m_xTableDefinitions(_xTableDefinitions)
-    ,m_pMediator(NULL)
+    ,m_pTableMediator( NULL )
     ,m_bInAppend(sal_False)
     ,m_bInDrop(sal_False)
 {
     DBG_CTOR(OTableContainer, NULL);
-    m_pMediator = new OContainerMediator(this,Reference<XNameAccess>(_xTableDefinitions,UNO_QUERY));
-    m_xTableMediator = m_pMediator;
+    m_pTableMediator = new OContainerMediator(
+        this, Reference< XNameAccess >( _xTableDefinitions, UNO_QUERY ), m_xConnection, OContainerMediator::eTables );
 }
 
 //------------------------------------------------------------------------------
@@ -298,7 +298,7 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const ::rtl::OUStr
 
         if ( xSup.is() )
         {
-            ODBTableDecorator* pTable = new ODBTableDecorator( m_xMetaData, xSup, ::dbtools::getNumberFormats( m_xConnection ) ,xColumnDefinitions);
+            ODBTableDecorator* pTable = new ODBTableDecorator( m_xConnection, xSup, ::dbtools::getNumberFormats( m_xConnection ) ,xColumnDefinitions);
             xRet = pTable;
             pTable->construct();
         }
@@ -344,8 +344,8 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const ::rtl::OUStr
         if ( xTableDefinition.is() )
             ::comphelper::copyProperties(xTableDefinition,xDest);
 
-        if ( m_pMediator )
-            m_pMediator->notifyElementCreated(_rName,xDest);
+        if ( m_pTableMediator.is() )
+            m_pTableMediator->notifyElementCreated(_rName,xDest);
     }
 
     return xRet;
@@ -362,7 +362,7 @@ Reference< XPropertySet > OTableContainer::createDescriptor()
     if ( xDataFactory.is() && m_xMetaData.is() )
     {
         xMasterColumnsSup = Reference< XColumnsSupplier >( xDataFactory->createDataDescriptor(), UNO_QUERY );
-        ODBTableDecorator* pTable = new ODBTableDecorator( m_xMetaData, xMasterColumnsSup, ::dbtools::getNumberFormats( m_xConnection ) ,NULL);
+        ODBTableDecorator* pTable = new ODBTableDecorator( m_xConnection, xMasterColumnsSup, ::dbtools::getNumberFormats( m_xConnection ) ,NULL);
         xRet = pTable;
         pTable->construct();
     }
@@ -574,8 +574,7 @@ void SAL_CALL OTableContainer::disposing()
     OFilteredContainer::disposing();
     // say our listeners goobye
     m_xTableDefinitions = NULL;
-    m_pMediator = NULL;
-    m_xTableMediator = NULL;
+    m_pTableMediator = NULL;
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableContainer::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (::com::sun::star::uno::RuntimeException)
@@ -604,12 +603,6 @@ void OTableContainer::addMasterContainerListener()
     if(xCont.is())
         xCont->addContainerListener(this);
 }
-// -----------------------------------------------------------------------------
-void OTableContainer::notifyDataSourceModified()
-{
-    // nothing to do here
-}
-
 // -----------------------------------------------------------------------------
 // two ways to obtain all tables from XDatabaseMetaData::getTables, via passing a particular
 // table type filter:
