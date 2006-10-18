@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSProfileDiscover.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:00:21 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:10:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,9 +161,9 @@ namespace connectivity
 
             //step 1 : get mozilla registry file
             nsCOMPtr<nsILocalFile>  localFile;
-            ::rtl::OString regDir = getRegistryFileName(MozillaProductType_Mozilla);
-            nsCAutoString registryDir(regDir.getStr());
-            rv = NS_NewNativeLocalFile(registryDir, PR_TRUE,
+            ::rtl::OUString regDir( getRegistryFileName( MozillaProductType_Mozilla ) );
+            nsAutoString registryDir(regDir.getStr());
+            rv = NS_NewLocalFile(registryDir, PR_TRUE,
                                 getter_AddRefs(localFile));
             NS_ENSURE_SUCCESS(rv,rv);
             PRBool bExist;
@@ -263,9 +263,10 @@ namespace connectivity
             ProductStruct &m_Product = m_ProductProfileList[index];
 
             nsresult rv;
-            ::rtl::OString regDir = getRegistryDir(product);
-            ::rtl::OUString regDirU = ::rtl::OUString::createFromAscii(regDir) + ::rtl::OUString::createFromAscii("profiles.ini");
-            IniParser parser(regDirU);
+            ::rtl::OUString regDir = getRegistryDir(product);
+            ::rtl::OUString profilesIni( regDir );
+            profilesIni += ::rtl::OUString::createFromAscii( "profiles.ini" );
+            IniParser parser( profilesIni );
             IniSectionMap &mAllSection = *(parser.getAllSection());
 
             IniSectionMap::iterator iBegin = mAllSection.begin();
@@ -317,9 +318,9 @@ namespace connectivity
                     nsCAutoString filePath(sPath.getStr());
 
                     if (isRelative) {
-                        nsCAutoString registryDir(regDir.getStr());
+                        nsAutoString registryDir( regDir.getStr() );
                         nsCOMPtr<nsILocalFile>     mAppData;
-                        rv = NS_NewNativeLocalFile(registryDir, PR_TRUE,
+                        rv = NS_NewLocalFile(registryDir, PR_TRUE,
                                         getter_AddRefs(mAppData));
                         if (NS_FAILED(rv)) continue;
                         rv = rootDir->SetRelativeDescriptor(mAppData, filePath);
