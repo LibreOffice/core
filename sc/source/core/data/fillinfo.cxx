@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillinfo.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:03:40 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:43:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -902,48 +902,72 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
             const SvxLineItem* pTLBR = rInfo.mpTLBRLine;
             const SvxLineItem* pBLTR = rInfo.mpBLTRLine;
 
+            size_t nFirstCol = nCol;
+            size_t nFirstRow = nRow;
+
             // *** merged cells *** -------------------------------------------
 
             if( !rArray.IsMerged( nCol, nRow ) && (rInfo.bMerged || rInfo.bHOverlapped || rInfo.bVOverlapped) )
             {
                 // *** insert merged range in svx::frame::Array ***
 
-                // find last merged column
-                USHORT nLastCellInfoX = nCellInfoX;
-                while( (nLastCellInfoX < nX2 + 2) && rThisRowInfo.pCellInfo[ nLastCellInfoX + 1 ].bHOverlapped )
-                    ++nLastCellInfoX;
-                size_t nLastCol = static_cast< size_t >( nLastCellInfoX - nX1 );
+                /*  #i69369# top-left cell of a merged range may be located in
+                    a hidden column or row. Use lcl_GetMergeRange() to find the
+                    complete merged range, then calculate dimensions and
+                    document position of the visible range. */
 
-                // find last merged row in svx::frame::Array
-                USHORT nLastCellInfoY = nCellInfoY;
-                while( (nLastCellInfoY + 1 < nArrCount) && pRowInfo[ nLastCellInfoY + 1 ].pCellInfo[ nCellInfoX ].bVOverlapped )
-                    ++nLastCellInfoY;
-                size_t nLastRow = static_cast< size_t >( nLastCellInfoY );
+                // note: document columns are always one less than CellInfoX coords
+                // note: document rows must be looked up in RowInfo structs
 
-                // insert merged range
-                rArray.SetMergedRange( nCol, nRow, nLastCol, nLastRow );
+                // current column and row in document coordinates
+                SCCOL nCurrDocCol = static_cast< SCCOL >( nCellInfoX - 1 );
+                SCROW nCurrDocRow = static_cast< SCROW >( (nCellInfoY > 0) ? rThisRowInfo.nRowNo : (nY1 - 1) );
 
-                // *** find additional size not included in svx::frame::Array ***
-
-                // translate cell info coordinates to document coordinates
-                SCCOL nFirstDocCol = static_cast< SCCOL >( nCellInfoX - 1 );
-                SCROW nFirstDocRow = static_cast< SCROW >( nCellInfoY ? rThisRowInfo.nRowNo : (nY1 - 1) );
-                SCCOL nLastDocCol = static_cast< SCCOL >( nLastCellInfoX - 1 );
-                SCROW nLastDocRow = static_cast< SCROW >( nLastCellInfoY ? pRowInfo[ nLastCellInfoY ].nRowNo : (nY1 - 1) );
-
-                // find entire merged range in document, returns document coordinates
+                // find entire merged range in document, returns signed document coordinates
                 SCsCOL nFirstRealDocColS, nLastRealDocColS;
                 SCsROW nFirstRealDocRowS, nLastRealDocRowS;
-                lcl_GetMergeRange( static_cast< SCsCOL >( nFirstDocCol ), static_cast< SCsROW >( nFirstDocRow ),
+                lcl_GetMergeRange( static_cast< SCsCOL >( nCurrDocCol ), static_cast< SCsROW >( nCurrDocRow ),
                     nCellInfoY, this, pRowInfo, nX1,nY1,nX2,nY2,nTab,
                     nFirstRealDocColS, nFirstRealDocRowS, nLastRealDocColS, nLastRealDocRowS );
+
+                // *complete* merged range in document coordinates
                 SCCOL nFirstRealDocCol = static_cast< SCCOL >( nFirstRealDocColS );
                 SCROW nFirstRealDocRow = static_cast< SCROW >( nFirstRealDocRowS );
                 SCCOL nLastRealDocCol  = static_cast< SCCOL >( nLastRealDocColS );
                 SCROW nLastRealDocRow  = static_cast< SCROW >( nLastRealDocRowS );
 
+                // first visible column (nX1-1 is first processed document column)
+                SCCOL nFirstDocCol = (nX1 > 0) ? ::std::max< SCCOL >( nFirstRealDocCol, nX1 - 1 ) : nFirstRealDocCol;
+                USHORT nFirstCellInfoX = static_cast< USHORT >( nFirstDocCol + 1 );
+                nFirstCol = static_cast< size_t >( nFirstCellInfoX - nX1 );
+
+                // last visible column (nX2+1 is last processed document column)
+                SCCOL nLastDocCol = (nX2 < MAXCOL) ? ::std::min< SCCOL >( nLastRealDocCol, nX2 + 1 ) : nLastRealDocCol;
+                USHORT nLastCellInfoX = static_cast< USHORT >( nLastDocCol + 1 );
+                size_t nLastCol = static_cast< size_t >( nLastCellInfoX - nX1 );
+
+                // first visible row
+                USHORT nFirstCellInfoY = nCellInfoY;
+                while( ((nFirstCellInfoY > 1) && (pRowInfo[ nFirstCellInfoY - 1 ].nRowNo >= nFirstRealDocRow)) ||
+                       ((nFirstCellInfoY == 1) && (static_cast< SCROW >( nY1 - 1 ) >= nFirstRealDocRow)) )
+                    --nFirstCellInfoY;
+                SCROW nFirstDocRow = (nFirstCellInfoY > 0) ? pRowInfo[ nFirstCellInfoY ].nRowNo : static_cast< SCROW >( nY1 - 1 );
+                nFirstRow = static_cast< size_t >( nFirstCellInfoY );
+
+                // last visible row
+                USHORT nLastCellInfoY = nCellInfoY;
+                while( (nLastCellInfoY + 1 < nArrCount) && (pRowInfo[ nLastCellInfoY + 1 ].nRowNo <= nLastRealDocRow) )
+                    ++nLastCellInfoY;
+                SCROW nLastDocRow = (nLastCellInfoY > 0) ? pRowInfo[ nLastCellInfoY ].nRowNo : static_cast< SCROW >( nY1 - 1 );
+                size_t nLastRow = static_cast< size_t >( nLastCellInfoY );
+
+                // insert merged range
+                rArray.SetMergedRange( nFirstCol, nFirstRow, nLastCol, nLastRow );
+
+                // *** find additional size not included in svx::frame::Array ***
+
                 // additional space before first column
-                if( nCol == 0 )
+                if( nFirstCol == 0 )
                 {
                     long nSize = 0;
                     for( SCCOL nDocCol = nFirstRealDocCol; nDocCol < nFirstDocCol; ++nDocCol )
@@ -959,7 +983,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                     rArray.SetAddMergedRightSize( nCol, nRow, nSize );
                 }
                 // additional space above first row
-                if( nRow == 0 )
+                if( nFirstRow == 0 )
                 {
                     long nSize = 0;
                     for( SCROW nDocRow = nFirstRealDocRow; nDocRow < nFirstDocRow; ++nDocRow )
@@ -977,7 +1001,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
                 // *** use line attributes from real origin cell ***
 
-                if( (nFirstRealDocCol != nFirstDocCol) || (nFirstRealDocRow != nFirstDocRow) )
+                if( (nFirstRealDocCol != nCurrDocCol) || (nFirstRealDocRow != nCurrDocRow) )
                 {
                     if( const ScPatternAttr* pPattern = GetPattern( nFirstRealDocCol, nFirstRealDocRow, nTab ) )
                     {
@@ -998,16 +1022,16 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
             if( pBox )
             {
-                rArray.SetCellStyleLeft(   nCol, nRow, svx::frame::Style( pBox->GetLeft(),   nScaleX ) );
-                rArray.SetCellStyleRight(  nCol, nRow, svx::frame::Style( pBox->GetRight(),  nScaleX ) );
-                rArray.SetCellStyleTop(    nCol, nRow, svx::frame::Style( pBox->GetTop(),    nScaleY ) );
-                rArray.SetCellStyleBottom( nCol, nRow, svx::frame::Style( pBox->GetBottom(), nScaleY ) );
+                rArray.SetCellStyleLeft(   nFirstCol, nFirstRow, svx::frame::Style( pBox->GetLeft(),   nScaleX ) );
+                rArray.SetCellStyleRight(  nFirstCol, nFirstRow, svx::frame::Style( pBox->GetRight(),  nScaleX ) );
+                rArray.SetCellStyleTop(    nFirstCol, nFirstRow, svx::frame::Style( pBox->GetTop(),    nScaleY ) );
+                rArray.SetCellStyleBottom( nFirstCol, nFirstRow, svx::frame::Style( pBox->GetBottom(), nScaleY ) );
             }
 
             if( pTLBR )
-                rArray.SetCellStyleTLBR( nCol, nRow, svx::frame::Style( pTLBR->GetLine(), nScaleY ) );
+                rArray.SetCellStyleTLBR( nFirstCol, nFirstRow, svx::frame::Style( pTLBR->GetLine(), nScaleY ) );
             if( rInfo.mpBLTRLine )
-                rArray.SetCellStyleBLTR( nCol, nRow, svx::frame::Style( pBLTR->GetLine(), nScaleY ) );
+                rArray.SetCellStyleBLTR( nFirstCol, nFirstRow, svx::frame::Style( pBLTR->GetLine(), nScaleY ) );
         }
     }
 
