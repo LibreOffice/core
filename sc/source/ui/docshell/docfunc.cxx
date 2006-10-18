@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:22:20 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:27:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2219,6 +2219,43 @@ BOOL ScDocFunc::SetLayoutRTL( SCTAB nTab, BOOL bRTL, BOOL bApi )
     {
         pBindings->Invalidate( FID_TAB_RTL );
         pBindings->Invalidate( SID_ATTR_SIZE );
+    }
+
+    return TRUE;
+}
+
+BOOL ScDocFunc::SetAddressConvention( ScAddress::Convention eConv )
+{
+    ScDocument* pDoc = rDocShell.GetDocument();
+
+    if ( pDoc->GetAddressConvention() == eConv )
+        return TRUE;
+
+    BOOL bUndo(pDoc->IsUndoEnabled());
+    ScDocShellModificator aModificator( rDocShell );
+
+    pDoc->SetAddressConvention( eConv );
+
+    if (bUndo)
+    {
+        rDocShell.GetUndoManager()->AddUndoAction( new ScUndoSetAddressConvention( &rDocShell, eConv ) );
+    }
+
+    rDocShell.PostPaint( 0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_ALL );
+
+    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+    if (NULL != pViewSh)
+    {
+        pViewSh->UpdateInputHandler( FALSE, FALSE );
+    }
+
+    aModificator.SetDocumentModified();
+
+    SfxBindings* pBindings = rDocShell.GetViewBindings();
+    if (pBindings)
+    {
+        // erAck: 2006-09-07T22:19+0200  commented out in CWS scr1c1
+        //pBindings->Invalidate( FID_TAB_USE_R1C1 );
     }
 
     return TRUE;
