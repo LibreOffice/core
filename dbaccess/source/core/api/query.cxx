@@ -4,9 +4,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:35:02 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:26:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
     ,ODataSettings(m_aBHelper,sal_True)
     ,m_xCommandDefinition(_rxCommandDefinition)
     ,m_xConnection(_rxConn)
-    ,m_pMediator(NULL)
+    ,m_pColumnMediator( NULL )
     ,m_pWarnings( NULL )
     ,m_bCaseSensitiv(sal_True)
     ,m_eDoingCurrently(NONE)
@@ -193,18 +193,14 @@ void OQuery::rebuildColumns()
 
     try
     {
-        m_pMediator = NULL;
-        m_xColumnMediator = NULL;
+        m_pColumnMediator = NULL;
 
         Reference<XColumnsSupplier> xColSup(m_xCommandDefinition,UNO_QUERY);
         if ( xColSup.is() )
         {
             Reference< XNameAccess > xColumnDefinitions = xColSup->getColumns();
             if ( xColumnDefinitions.is() )
-            {
-                m_pMediator = new OContainerMediator(m_pColumns,xColumnDefinitions,sal_False);
-                m_xColumnMediator = m_pMediator;
-            }
+                m_pColumnMediator = new OContainerMediator( m_pColumns, xColumnDefinitions, m_xConnection, OContainerMediator::eColumns );
         }
 
         // fill the columns with columns from the statement
@@ -257,8 +253,8 @@ void OQuery::rebuildColumns()
 
             implAppendColumn( *pBegin, pColumn );
             Reference<XPropertySet> xDest(*pColumn,UNO_QUERY);
-            if ( m_pMediator )
-                m_pMediator->notifyElementCreated(*pBegin,xDest);
+            if ( m_pColumnMediator.is() )
+                m_pColumnMediator->notifyElementCreated( *pBegin, xDest );
         }
     }
     catch( const SQLContext& e )
@@ -345,7 +341,6 @@ Reference< XPropertySet > SAL_CALL OQuery::createDataDescriptor(  ) throw(Runtim
 void SAL_CALL OQuery::disposing()
 {
     MutexGuard aGuard(m_aMutex);
-    m_xColumnMediator = NULL;
     if (m_xCommandDefinition.is())
     {
         m_xCommandDefinition->removePropertyChangeListener(::rtl::OUString(), this);
