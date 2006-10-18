@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommonTools.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:57:29 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:06:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,6 +223,12 @@ namespace connectivity
             case TypeClass_LONG:
                 aRes = ::rtl::OUString::valueOf(*(sal_Int32*)rValue.getValue());
                 break;
+            case TypeClass_HYPER:
+            {
+                sal_Int64 nValue = 0;
+                OSL_VERIFY( rValue >>= nValue );
+                aRes = ::rtl::OUString::valueOf(nValue);
+            }
             case TypeClass_STRING:
                 rValue >>= aRes;
                 break;
