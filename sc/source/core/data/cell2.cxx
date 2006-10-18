@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 11:33:37 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:19:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,8 @@ void ScEditCell::SetTextObject( const EditTextObject* pObject,
 
 //---------------------------------------------------------------------
 
-void ScFormulaCell::GetEnglishFormula( String& rFormula, BOOL bCompileXML ) const
+void ScFormulaCell::GetEnglishFormula( String& rFormula, BOOL bCompileXML,
+                                       ScAddress::Convention conv ) const
 {
     //! mit GetFormula zusammenfassen !!!
 
@@ -267,7 +268,7 @@ void ScFormulaCell::GetEnglishFormula( String& rFormula, BOOL bCompileXML ) cons
                 pCell = NULL;
             if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
             {
-                ((ScFormulaCell*)pCell)->GetEnglishFormula(rFormula, bCompileXML);
+                ((ScFormulaCell*)pCell)->GetEnglishFormula(rFormula, bCompileXML, conv);
                 return;
             }
             else
@@ -299,7 +300,8 @@ void ScFormulaCell::GetEnglishFormula( String& rFormula, BOOL bCompileXML ) cons
     }
 }
 
-void ScFormulaCell::GetEnglishFormula( rtl::OUStringBuffer& rBuffer, BOOL bCompileXML ) const
+void ScFormulaCell::GetEnglishFormula( rtl::OUStringBuffer& rBuffer, BOOL bCompileXML,
+                                       ScAddress::Convention conv ) const
 {
     //! mit GetFormula zusammenfassen !!!
 
@@ -324,7 +326,7 @@ void ScFormulaCell::GetEnglishFormula( rtl::OUStringBuffer& rBuffer, BOOL bCompi
                 pCell = NULL;
             if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
             {
-                ((ScFormulaCell*)pCell)->GetEnglishFormula(rBuffer, bCompileXML);
+                ((ScFormulaCell*)pCell)->GetEnglishFormula(rBuffer, bCompileXML, conv);
                 return;
             }
             else
@@ -1385,7 +1387,7 @@ void ScFormulaCell::CompileDBFormula( BOOL bCreateFormulaString )
         if ( bRecompile )
         {
             String aFormula;
-            GetFormula( aFormula );
+            GetFormula( aFormula, ScAddress::CONV_OOO);
             if ( GetMatrixFlag() != MM_NONE && aFormula.Len() )
             {
                 if ( aFormula.GetChar( aFormula.Len()-1 ) == '}' )
@@ -1397,6 +1399,7 @@ void ScFormulaCell::CompileDBFormula( BOOL bCreateFormulaString )
             pDocument->RemoveFromFormulaTree( this );
             pCode->Clear();
             aErgString = aFormula;
+            nErgConv = ScAddress::CONV_OOO;
         }
     }
     else if ( !pCode->GetLen() && aErgString.Len() )
@@ -1432,7 +1435,7 @@ void ScFormulaCell::CompileNameFormula( BOOL bCreateFormulaString )
         if ( bRecompile )
         {
             String aFormula;
-            GetFormula( aFormula );
+            GetFormula( aFormula, ScAddress::CONV_OOO);
             if ( GetMatrixFlag() != MM_NONE && aFormula.Len() )
             {
                 if ( aFormula.GetChar( aFormula.Len()-1 ) == '}' )
@@ -1444,6 +1447,7 @@ void ScFormulaCell::CompileNameFormula( BOOL bCreateFormulaString )
             pDocument->RemoveFromFormulaTree( this );
             pCode->Clear();
             aErgString = aFormula;
+            nErgConv = ScAddress::CONV_OOO;
         }
     }
     else if ( !pCode->GetLen() && aErgString.Len() )
