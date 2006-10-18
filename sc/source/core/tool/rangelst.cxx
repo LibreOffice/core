@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangelst.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:40:11 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:23:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,10 +66,33 @@ void ScRangeList::RemoveAll()
     Clear();
 }
 
-USHORT ScRangeList::Parse( const String& rStr, ScDocument* pDoc, USHORT nMask )
+static void defaultDelimiter( char& cDelimiter, ScAddress::Convention eConv)
+{
+    if( cDelimiter == 0)
+    {
+        switch( eConv )
+        {
+        default :
+        case ScAddress::CONV_OOO :
+            cDelimiter = ';';
+            break;
+
+        case ScAddress::CONV_XL_A1 :
+        case ScAddress::CONV_XL_R1C1 :
+            cDelimiter = ',';
+            break;
+        }
+    }
+}
+
+USHORT ScRangeList::Parse( const String& rStr, ScDocument* pDoc, USHORT nMask,
+                           ScAddress::Convention eConv,
+                           char cDelimiter )
 {
     if ( rStr.Len() )
     {
+        defaultDelimiter( cDelimiter, eConv);
+
         nMask |= SCA_VALID;             // falls das jemand vergessen sollte
         USHORT nResult = (USHORT)~0;    // alle Bits setzen
         ScRange aRange;
@@ -82,10 +105,11 @@ USHORT ScRangeList::Parse( const String& rStr, ScDocument* pDoc, USHORT nMask )
         }
         else
             nTab = 0;
-        USHORT nTCount = rStr.GetTokenCount();
+        USHORT nTCount = rStr.GetTokenCount( cDelimiter );
         for ( USHORT i=0; i<nTCount; i++ )
         {
-            aOne = rStr.GetToken(i);
+            aOne = rStr.GetToken( i, cDelimiter );
+            // FIXME : broken for Lotus
             if ( aOne.Search( ':' ) == STRING_NOTFOUND )
             {   // Range muss es sein
                 String aStrTmp( aOne );
@@ -93,7 +117,7 @@ USHORT ScRangeList::Parse( const String& rStr, ScDocument* pDoc, USHORT nMask )
                 aOne += aStrTmp;
             }
             aRange.aStart.SetTab( nTab );   // Default Tab wenn nicht angegeben
-            USHORT nRes = aRange.Parse( aOne, pDoc );
+            USHORT nRes = aRange.Parse( aOne, pDoc, eConv );
             if ( (nRes & nMask) == nMask )
                 Append( aRange );
             nResult &= nRes;        // alle gemeinsamen Bits bleiben erhalten
@@ -105,16 +129,21 @@ USHORT ScRangeList::Parse( const String& rStr, ScDocument* pDoc, USHORT nMask )
 }
 
 
-void ScRangeList::Format( String& rStr, USHORT nFlags, ScDocument* pDoc ) const
+void ScRangeList::Format( String& rStr, USHORT nFlags, ScDocument* pDoc,
+                          ScAddress::Convention eConv,
+                          char cDelimiter ) const
 {
     rStr.Erase();
+
+    defaultDelimiter( cDelimiter, eConv);
+
     ULONG nCnt = Count();
     for ( ULONG nIdx = 0; nIdx < nCnt; nIdx++ )
     {
         String aStr;
-        GetObject( nIdx )->Format( aStr, nFlags, pDoc );
+        GetObject( nIdx )->Format( aStr, nFlags, pDoc, eConv );
         if ( nIdx )
-            rStr += ';';
+            rStr += cDelimiter;
         rStr += aStr;
     }
 }
@@ -789,6 +818,7 @@ ScRangePairList::QsortNameCompare( const void* p1, const void* p2 )
             }
             return 0;
     }
+    return 0; // just in case
 }
 
 
