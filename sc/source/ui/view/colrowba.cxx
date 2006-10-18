@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colrowba.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:52:02 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:29:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,11 @@ ScColBar::~ScColBar()
 {
 }
 
+inline BOOL ScColBar::UseNumericHeader() const
+{
+    return pViewData->GetDocument()->GetAddressConvention() == ScAddress::CONV_XL_R1C1;
+}
+
 SCCOLROW ScColBar::GetPos()
 {
     return pViewData->GetPosX(eWhich);
@@ -112,7 +117,9 @@ USHORT ScColBar::GetEntrySize( SCCOLROW nEntryNo )
 
 String ScColBar::GetEntryText( SCCOLROW nEntryNo )
 {
-    return ColToAlpha( static_cast<SCCOL>(nEntryNo) );
+    return UseNumericHeader()
+        ? String::CreateFromInt32( nEntryNo + 1 )
+        : ColToAlpha( static_cast<SCCOL>(nEntryNo) );
 }
 
 void ScColBar::SetEntrySize( SCCOLROW nPos, USHORT nNewSize )
