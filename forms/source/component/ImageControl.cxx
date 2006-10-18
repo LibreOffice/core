@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:12:28 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:17:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
+#include <com/sun/star/graphic/XGraphic.hpp>
+#endif
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -110,6 +113,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -150,6 +156,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::graphic;
 
 //==================================================================
 // OImageControlModel
@@ -416,7 +423,6 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) 
 //------------------------------------------------------------------------------
 sal_Bool OImageControlModel::handleNewImageURL( const ::rtl::OUString& _rURL, ValueChangeInstigator _eInstigator )
 {
-
     // if the image URL has been set, we have to forward this to the image producer
     // xInStream erzeugen
     Reference< XActiveDataSink > xSink(
@@ -741,6 +747,26 @@ void OImageControlControl::implInsertGraphics()
     }
 }
 
+//------------------------------------------------------------------------------
+bool OImageControlControl::impl_isEmptyGraphics_nothrow() const
+{
+    bool bIsEmpty = true;
+
+    try
+    {
+        Reference< XPropertySet > xModelProps( const_cast< OImageControlControl* >( this )->getModel(), UNO_QUERY_THROW );
+        Reference< XGraphic > xGraphic;
+        OSL_VERIFY( xModelProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Graphic" ) ) ) >>= xGraphic );
+        bIsEmpty = !xGraphic.is();
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    return bIsEmpty;
+}
+
 // MouseListener
 //------------------------------------------------------------------------------
 void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
@@ -765,8 +791,7 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
             xMenu->insertItem( ID_CLEAR_GRAPHICS, FRM_RES_STRING( RID_STR_CLEAR_GRAPHICS ), 0, 1 );
 
             // check if the ImageURL is empty
-            ::rtl::OUString sCurrentURL;
-            if ( m_pImageIndicator->isEmptyImage() )
+            if ( impl_isEmptyGraphics_nothrow() )
                 xMenu->enableItem( ID_CLEAR_GRAPHICS, sal_False );
 
             awt::Rectangle aRect( e.X, e.Y, 0, 0 );
