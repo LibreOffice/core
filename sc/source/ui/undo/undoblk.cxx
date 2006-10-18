@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:26:10 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:47:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,9 +192,7 @@ void ScUndoInsertCells::DoChange( const BOOL bUndo )
     else
         SetChangeTrack();
 
-    ScRange aWorkRange( aEffRange );
-    if ( pDoc->HasAttrib( aWorkRange, HASATTR_MERGED ) )    // zusammengefasste Zellen?
-        pDoc->ExtendMerge( aWorkRange, TRUE );
+    // refresh of merged cells has to be after inserting/deleting
 
     switch (eCmd)
     {
@@ -213,6 +211,12 @@ void ScUndoInsertCells::DoChange( const BOOL bUndo )
                 pDoc->InsertCol( aEffRange );
             break;
     }
+
+    ScRange aWorkRange( aEffRange );
+    if ( eCmd == INS_CELLSRIGHT )                   // only "shift right" requires refresh of the moved area
+        aWorkRange.aEnd.SetCol(MAXCOL);
+    if ( pDoc->HasAttrib( aWorkRange, HASATTR_MERGED ) )
+        pDoc->ExtendMerge( aWorkRange, TRUE );
 
 //? Undo fuer herausgeschobene Attribute ?
 
@@ -362,6 +366,8 @@ void ScUndoDeleteCells::DoChange( const BOOL bUndo )
 
     // are there merged cells?
     ScRange aWorkRange( aEffRange );
+    if ( eCmd == DEL_CELLSLEFT )        // only "shift left" requires refresh of the moved area
+        aWorkRange.aEnd.SetCol(MAXCOL);
     BOOL bMergeBefore = pDoc->HasAttrib( aWorkRange, HASATTR_MERGED );
 
     // Ausfuehren
