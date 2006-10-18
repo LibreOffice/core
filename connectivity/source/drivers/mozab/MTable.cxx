@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MTable.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:58:12 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:09:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,12 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include "connectivity/dbtools.hxx"
 #endif
+#ifndef CONNECTIVITY_TKEYS_HXX
+#include "connectivity/TKeys.hxx"
+#endif
+#ifndef CONNECTIVITY_INDEXESHELPER_HXX
+#include "connectivity/TIndexes.hxx"
+#endif
 #ifndef _CONNECTIVITY_MOZAB_CATALOG_HXX_
 #include "MCatalog.hxx"
 #endif
@@ -94,75 +100,38 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 OTable::OTable( sdbcx::OCollection* _pTables, OConnection* _pConnection)
-    : OTable_TYPEDEF(_pTables, sal_True)
-    ,m_pConnection(_pConnection)
+    :OTable_Base( _pTables, _pConnection, sal_True )
+    ,m_pConnection( _pConnection )
 {
     construct();
 }
 // -------------------------------------------------------------------------
-OTable::OTable( sdbcx::OCollection* _pTables,
-                OConnection* _pConnection,
-                const ::rtl::OUString& _Name,
-                const ::rtl::OUString& _Type,
-                const ::rtl::OUString& _Description ,
-                const ::rtl::OUString& _SchemaName,
-                const ::rtl::OUString& _CatalogName
-                ) : OTable_TYPEDEF(_pTables,sal_True,
-                                  _Name,
-                                  _Type,
-                                  _Description,
-                                  _SchemaName,
-                                  _CatalogName)
-                ,m_pConnection(_pConnection)
+OTable::OTable( sdbcx::OCollection* _pTables, OConnection* _pConnection,
+                const ::rtl::OUString& _Name, const ::rtl::OUString& _Type, const ::rtl::OUString& _Description )
+    :OTable_Base(_pTables, _pConnection, sal_True, _Name, _Type, _Description )
+    ,m_pConnection( _pConnection )
 {
     construct();
 }
-// -------------------------------------------------------------------------
-void OTable::refreshColumns()
-{
-    TStringVector aVector;
-    if(!isNew())
-    {
-        Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
-                                                        m_SchemaName,m_Name,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%")));
 
-        if(xResult.is())
-        {
-            Reference< XRow > xRow(xResult,UNO_QUERY);
-            while(xResult->next())
-                aVector.push_back(xRow->getString(4));
-        }
-    }
-
-    if(m_pColumns)
-        m_pColumns->reFill(aVector);
-    else
-        m_pColumns  = new OColumns(this,m_aMutex,aVector);
-}
 //--------------------------------------------------------------------------
-Sequence< sal_Int8 > OTable::getUnoTunnelImplementationId()
+sdbcx::OCollection* OTable::createColumns( const TStringVector& _rNames )
 {
-    static ::cppu::OImplementationId * pId = 0;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    return new OColumns( this, m_aMutex, _rNames );
 }
 
-// com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
-sal_Int64 OTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
+//--------------------------------------------------------------------------
+sdbcx::OCollection* OTable::createKeys(const TStringVector& _rNames)
 {
-    return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                ? reinterpret_cast< sal_Int64 >( this )
-                : OTable_TYPEDEF::getSomething(rId);
+    return new OKeysHelper( this, m_aMutex, _rNames );
 }
+
+//--------------------------------------------------------------------------
+sdbcx::OCollection* OTable::createIndexes(const TStringVector& _rNames)
+{
+    return new OIndexesHelper( this, m_aMutex, _rNames );
+}
+
 // -----------------------------------------------------------------------------
 
 
