@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:33:53 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:26:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -652,7 +652,7 @@ connectivity::sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _r
     }
 
     Reference<XPropertySet> xDest(xRet,UNO_QUERY);
-    if ( m_pMediator )
+    if ( m_pMediator && xDest.is() )
         m_pMediator->notifyElementCreated(_rName,xDest);
 
     return xRet;
