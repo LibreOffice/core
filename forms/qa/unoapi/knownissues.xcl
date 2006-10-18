@@ -1,42 +1,8 @@
-### 112634 ###
-forms.OButtonControl::com::sun::star::awt::XWindow
-forms.OCheckBoxControl::com::sun::star::awt::XWindow
-forms.OComboBoxControl::com::sun::star::awt::XWindow
-forms.OCurrencyControl::com::sun::star::awt::XWindow
-forms.ODateControl::com::sun::star::awt::XWindow
-forms.OEditControl::com::sun::star::awt::XWindow
-forms.OFormattedControl::com::sun::star::awt::XWindow
-forms.OGroupBoxControl::com::sun::star::awt::XWindow
-forms.OImageButtonControl::com::sun::star::awt::XWindow
-forms.OImageControlControl::com::sun::star::awt::XWindow
-forms.OListBoxControl::com::sun::star::awt::XWindow
-forms.ONumericControl::com::sun::star::awt::XWindow
-forms.OPatternControl::com::sun::star::awt::XWindow
-forms.ORadioButtonControl::com::sun::star::awt::XWindow
-forms.ONavigationBarControl::com::sun::star::awt::XWindow
-
 ### 114044 ###
 forms.ODatabaseForm::com::sun::star::sdbc::XWarningsSupplier
 
 ### i21167 ###
 forms.ODatabaseForm::com::sun::star::form::XLoadable
-
-### i30258 ###
-forms.ODateModel::com::sun::star::form::XUpdateBroadcaster
-forms.OEditModel::com::sun::star::form::XUpdateBroadcaster
-forms.ONumericModel::com::sun::star::form::XUpdateBroadcaster
-forms.OTimeModel::com::sun::star::form::XUpdateBroadcaster
-forms.OComboBoxModel::com::sun::star::form::XUpdateBroadcaster
-forms.OListBoxModel::com::sun::star::form::XUpdateBroadcaster
-forms.OCurrencyModel::com::sun::star::form::XUpdateBroadcaster
-forms.OPatternModel::com::sun::star::form::XUpdateBroadcaster
-forms.OFormattedFieldWrapper::com::sun::star::form::XUpdateBroadcaster
-forms.OListBoxModel::com::sun::star::form::DataAwareControlModel
-forms.ONumericModel::com::sun::star::form::DataAwareControlModel
-forms.OPatternModel::com::sun::star::form::DataAwareControlModel
-
-### i32886 ###
-forms.ORadioButtonModel::com::sun::star::form::binding::BindableDatabaseRadioButton
 
 ### sometimes the property BoundField throws a UndeclaredThrowableException ###
 #forms.OImageControlModel::com::sun::star::form::DataAwareControlModel
