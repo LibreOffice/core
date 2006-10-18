@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:20:59 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:32:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1599,13 +1599,11 @@ void OJoinTableView::HideTabWins()
     OTableWindowMap* pTabWins = GetTabWinMap();
     if ( pTabWins )
     {
-        OTableWindowMap::iterator aIter = pTabWins->begin();
-        while(aIter != pTabWins->end())
-        {
-            OTableWindow* pTabWin = aIter->second;
-            ++aIter;
-            RemoveTabWin(pTabWin);
-        }
+        // working on a copy because the real list will be cleared in inner calls
+        OTableWindowMap aCopy(*pTabWins);
+        OTableWindowMap::iterator aIter = aCopy.begin();
+        for(;aIter != aCopy.end();++aIter)
+            RemoveTabWin(aIter->second);
     }
 
     m_pView->getController()->setModified(sal_True);
