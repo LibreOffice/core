@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 17:07:21 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:44:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,10 +235,12 @@ static const XclFunctionInfo saFuncTable_3[] =
     { ocInfo,               244,    1,  1,  V, { V }, EXC_FUNCFLAG_VOLATILE }
 };
 
-/** Functions new in BIFF4. */
+/** Functions new in BIFF4. Unsupported functions: ASC, DBCS. */
 static const XclFunctionInfo saFuncTable_4[] =
 {
     { ocFixed,              14,     2,  3,  V, { V } },     // BIFF2-3: 2, BIFF4: 2-3
+    { ocNoName,             214,    1,  1,  V, { V }, EXC_FUNCFLAG_IMPORTONLY },    // ASC
+    { ocNoName,             215,    1,  1,  V, { V }, EXC_FUNCFLAG_IMPORTONLY },    // DBCS
     { ocRank,               216,    2,  3,  V, { V, R, V } },
     { ocGDA2,               247,    4,  5,  V, { V } },
     { ocFrequency,          252,    2,  2,  A, { R } },
@@ -327,6 +329,9 @@ static const XclFunctionInfo saFuncTable_5[] =
     { ocCountIf,            346,    2,  2,  V, { R, V } },
     { ocCountEmptyCells,    347,    1,  1,  V, { R } },
     { ocISPMT,              350,    4,  4,  V, { V } },
+    { ocNoName,             351,    3,  3,  V, { V }, EXC_FUNCFLAG_IMPORTONLY },    // DATEDIF
+    { ocNoName,             352,    1,  1,  V, { V }, EXC_FUNCFLAG_IMPORTONLY },    // DATESTRING
+    { ocNoName,             353,    2,  2,  V, { V }, EXC_FUNCFLAG_IMPORTONLY },    // NUMBERSTRING
     { ocRoman,              354,    1,  2,  V, { V } }
 };
 
@@ -338,6 +343,7 @@ const sal_Char* const EXC_FUNCNAME_BAHTTEXT = EXC_FUNCNAME_PREFIX "BAHTTEXT";
 static const XclFunctionInfo saFuncTable_8[] =
 {
     { ocHyperLink,          359,    1,  2,  V, { V } },
+    { ocNoName,             360,    1,  1,  V, { R }, EXC_FUNCFLAG_IMPORTONLY },    // PHONETIC
     { ocAverageA,           361,    1,  30, V, { R } },
     { ocMaxA,               362,    1,  30, V, { R } },
     { ocMinA,               363,    1,  30, V, { R } },
