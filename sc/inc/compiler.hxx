@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 11:33:00 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:16:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,20 +223,41 @@ struct ScStringHashCode
 };
 typedef ::std::hash_map< String, OpCode, ScStringHashCode, ::std::equal_to< String > > ScOpCodeHashMap;
 
+using namespace ::com::sun::star::i18n;
 class ScCompiler
 {
 public:
+    struct Convention
+    {
+        const ScAddress::Convention meConv;
+        const ULONG*                mpCharTable;
+
+
+        Convention( ScAddress::Convention eConvP );
+        ~Convention();
+
+        virtual void MakeRefStr( rtl::OUStringBuffer&   rBuffer,
+                                 const ScCompiler&      rCompiler,
+                                 const ComplRefData&    rRef,
+                                 BOOL bSingleRef ) const = 0;
+        virtual ::com::sun::star::i18n::ParseResult
+                    parseAnyToken( const String& rFormula,
+                                   xub_StrLen nSrcPos,
+                                   const CharClass* pCharClass) const = 0;
+    };
+
     static String*  pSymbolTableNative;             // array of native symbols, offset==OpCode
     static String*  pSymbolTableEnglish;            // array of English symbols, offset==OpCode
     static USHORT   nAnzStrings;                    // count of symbols
     static ScOpCodeHashMap* pSymbolHashMapNative;   // hash map of native symbols
     static ScOpCodeHashMap* pSymbolHashMapEnglish;  // hash map of English symbols
     static CharClass* pCharClassEnglish;            // character classification for en_US locale
-private:
-    static ULONG*   pCharTable;                     // array of ASCII character flags
+    static const Convention *pConventions[ ScAddress::CONV_LAST ];
+
     ScDocument* pDoc;
     ScAddress   aPos;
-    String      cFormula;                           // String -> TokenArray
+
+private:
     String      aCorrectedFormula;                  // autocorrected Formula
     String      aCorrectedSymbol;                   // autocorrected Symbol
     sal_Unicode cSymbol[MAXSTRLEN];                 // current Symbol
@@ -263,7 +284,7 @@ private:
                                             // will not be resolved
     BOOL        bIgnoreErrors;              // on AutoCorrect and CompileForFAP
                                             // ignore errors and create RPN nevertheless
-    BOOL        bCompileXML;
+    const Convention *pConv;
     BOOL        bImportXML;
 
     BOOL   GetToken();
@@ -281,14 +302,6 @@ private:
     void CompareLine();
     void NotLine();
     OpCode Expression();
-
-    String MakeColStr( SCCOL nCol );
-    void MakeColStr( rtl::OUStringBuffer& rBuffer, SCCOL nCol );
-    String MakeRowStr( SCROW nRow );
-    void MakeRowStr( rtl::OUStringBuffer& rBuffer, SCROW nRow );
-    String MakeTabStr( SCTAB nTab, String& aDoc );
-    String MakeRefStr( ComplRefData& rRefData, BOOL bSingleRef );
-    void MakeRefStr( rtl::OUStringBuffer& rBuffer, ComplRefData& rRefData, BOOL bSingleRef );
 
     void SetError(USHORT nError);
     xub_StrLen NextSymbol();
@@ -315,13 +328,13 @@ public:
 
     static void Init();
     static void DeInit();
-    static void CheckTabQuotes( String& );  // for ScAddress::Format()
 
-    // Put quotes around string if non-alphanumeric characters are contained,
-    // quote characters contained within are escaped by '\\'.
-    static BOOL EnQuote( String& );
-    // Remove quotes, escaped quotes are unescaped.
-    static BOOL DeQuote( String& );
+    // for ScAddress::Format()
+    static void CheckTabQuotes( String& aTabName,
+                                const ScAddress::Convention eConv = ScAddress::CONV_OOO );
+
+    static BOOL EnQuote( String& rStr );
+    static BOOL DeQuote( String& rStr );
 
     //! _either_ CompileForFAP _or_ AutoCorrection, _not_ both
     void            SetCompileForFAP( BOOL bVal )
@@ -329,13 +342,18 @@ public:
     void            SetAutoCorrection( BOOL bVal )
                         { bAutoCorrect = bVal; bIgnoreErrors = bVal; }
     void            SetCompileEnglish( BOOL bVal );     // use English SymbolTable
-    void            SetCompileXML( BOOL bVal )
-                        { bCompileXML = bVal; }
+    void            SetRefConvention( const Convention *pConvP );
+    void            SetRefConvention( const ScAddress::Convention eConv );
+
+    void            SetCompileXML( BOOL bVal ); // Deprecate and move to an address conv
     void            SetImportXML( BOOL bVal )
                         { bImportXML = bVal; }
     BOOL            IsCorrected() { return bCorrected; }
     const String&   GetCorrectedFormula() { return aCorrectedFormula; }
-    ScTokenArray* CompileString( const String& rFormula );
+
+    // Use convention from this->aPos by default
+    ScTokenArray* CompileString( const String& rFormula,
+                                 ScAddress::Convention eConv = ScAddress::CONV_UNSPECIFIED );
     BOOL  CompileTokenArray();
     short GetNumFormatType() { return nNumFmt; }
 
@@ -374,30 +392,29 @@ public:
 
     BOOL HasModifiedRange();
 
-    /// Is the CharTable initialized? If not call Init() yourself!
-    static inline BOOL HasCharTable() { return pCharTable != NULL; }
-
-    /// Access the CharTable flags
-    static inline ULONG GetCharTableFlags( sal_Unicode c )
-        { return c < 128 ? pCharTable[ UINT8(c) ] : 0; }
-
     /// If the character is allowed as first character in sheet names or references
-    static inline BOOL IsCharWordChar( sal_Unicode c )
+    static inline BOOL IsCharWordChar( sal_Unicode c,
+                                       const ScAddress::Convention eConv = ScAddress::CONV_OOO )
         {
             return c < 128 ?
-                ((pCharTable[ UINT8(c) ] & SC_COMPILER_C_CHAR_WORD) == SC_COMPILER_C_CHAR_WORD) :
+                ((pConventions[eConv]->mpCharTable[ UINT8(c) ] & SC_COMPILER_C_CHAR_WORD) == SC_COMPILER_C_CHAR_WORD) :
                 ScGlobal::pCharClass->isLetterNumeric( c );
         }
 
     /// If the character is allowed in sheet names or references
-    static inline BOOL IsWordChar( sal_Unicode c )
+    static inline BOOL IsWordChar( sal_Unicode c,
+                                   const ScAddress::Convention eConv = ScAddress::CONV_OOO )
         {
             return c < 128 ?
-                ((pCharTable[ UINT8(c) ] & SC_COMPILER_C_WORD) == SC_COMPILER_C_WORD) :
+                ((pConventions[eConv]->mpCharTable[ UINT8(c) ] & SC_COMPILER_C_WORD) == SC_COMPILER_C_WORD) :
                 ScGlobal::pCharClass->isLetterNumeric( c );
         }
 
 private:
+    /// Access the CharTable flags
+    inline ULONG GetCharTableFlags( sal_Unicode c )
+        { return c < 128 ? pConv->mpCharTable[ UINT8(c) ] : 0; }
+
     static inline void ForceArrayOperator( ScTokenRef& rCurr, const ScTokenRef& rPrev )
         {
             if ( rPrev.Is() && rPrev->HasForceArray() &&
