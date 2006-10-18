@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlReader.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:11:46 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:31:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,10 +76,9 @@ namespace dbaui
         void                TableDataOn(SvxCellHorJustify& eVal,int nToken);
         void                TableFontOn(::com::sun::star::awt::FontDescriptor& _rFont,sal_Int32 &_rTextColor);
         sal_Int16           GetWidthPixel( const HTMLOption* pOption );
-        rtl_TextEncoding    GetEncodingByMIME( const String& rMime );
         void                setTextEncoding();
         void                fetchOptions();
-        ~OHTMLReader();
+        virtual ~OHTMLReader();
     public:
         OHTMLReader(SvStream& rIn,
                     const SharedConnection& _rxConnection,
