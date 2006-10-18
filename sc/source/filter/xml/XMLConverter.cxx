@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:42:44 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:25:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -361,8 +361,10 @@ void ScXMLConverter::GetStringFromRange(
         ScAddress aEndAddress( rRange.aEnd );
         String sStartAddress;
         String sEndAddress;
-        aStartAddress.Format( sStartAddress, nFormatFlags, (ScDocument*) pDocument );
-        aEndAddress.Format( sEndAddress, nFormatFlags, (ScDocument*) pDocument );
+        aStartAddress.Format( sStartAddress, nFormatFlags, (ScDocument*) pDocument,
+                              ScAddress::CONV_OOO );
+        aEndAddress.Format( sEndAddress, nFormatFlags, (ScDocument*) pDocument,
+                            ScAddress::CONV_OOO );
         OUString sOUStartAddress( sStartAddress );
         sOUStartAddress += GetXMLToken( XML__COLON );
         sOUStartAddress += OUString( sEndAddress );
