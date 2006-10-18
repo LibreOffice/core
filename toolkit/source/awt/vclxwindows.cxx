@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:16:24 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:15:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,14 @@
 #ifndef _TOOLKIT_AWT_VCLXWINDOWS_HXX_
 #include <toolkit/awt/vclxwindows.hxx>
 #endif
+
+#ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
+#include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
+#include <com/sun/star/graphic/XGraphic.hpp>
+#endif
+
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLEBUTTON_HXX_
 #include <toolkit/awt/vclxaccessiblebutton.hxx>
 #endif
@@ -136,6 +144,14 @@
 #endif
 
 
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::makeAny;
+using com::sun::star::graphic::XGraphic;
+
+using namespace ::com::sun::star::awt::VisualEffect;
+
+
 static double ImplCalcLongValue( double nValue, sal_uInt16 nDigits )
 {
     double n = nValue;
@@ -154,9 +170,6 @@ static double ImplCalcDoubleValue( double nValue, sal_uInt16 nDigits )
 
 namespace toolkit
 {
-    using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
-    using namespace ::com::sun::star::awt::VisualEffect;
     /** sets the "face color" for button like controls (scroll bar, spin button)
     */
     void setButtonLikeFaceColor( Window* _pWindow, const ::com::sun::star::uno::Any& _rColorValue )
@@ -267,36 +280,34 @@ namespace toolkit
 //  ----------------------------------------------------
 //  class VCLXImageConsumer
 //  ----------------------------------------------------
-::com::sun::star::uno::Any SAL_CALL VCLXImageConsumer::queryInterface( const ::com::sun::star::uno::Type & _rType ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXImageConsumer::ImplSetNewImage()
 {
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( _rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XImageConsumer*, this ) );
-    return ( aRet.hasValue() ? aRet : VCLXWindow::queryInterface( _rType ) );
-}
-
-IMPL_XTYPEPROVIDER_START( VCLXImageConsumer )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer>* ) NULL ),
-    VCLXWindow::getTypes()
-IMPL_XTYPEPROVIDER_END
-
-void SAL_CALL VCLXImageConsumer::acquire() throw()
-{
-    VCLXWindow::acquire();
-}
-
-void SAL_CALL VCLXImageConsumer::release() throw()
-{
-    VCLXWindow::release();
+    OSL_PRECOND( GetWindow(), "VCLXImageConsumer::ImplSetNewImage: window is required to be not-NULL!" );
+    Button* pButton = static_cast< Button* >( GetWindow() );
+    pButton->SetModeBitmap( GetBitmap() );
 }
 
 void VCLXImageConsumer::ImplUpdateImage( sal_Bool bGetNewImage )
 {
-    Button* pButton = static_cast< Button* >( GetWindow() );
-    if ( pButton )
+    if ( !GetWindow() )
+        return;
+
+    if ( bGetNewImage && !maImageConsumer.GetData( maImage ) )
+        return;
+
+    ImplSetNewImage();
+}
+
+void VCLXImageConsumer::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, short Flags ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    if ( GetWindow() )
     {
-        sal_Bool bOK = bGetNewImage ? maImageConsumer.GetData( maBitmap ) : sal_True;
-        if ( bOK )
-            pButton->SetModeBitmap( maBitmap );
+        Size aOldSize = GetWindow()->GetSizePixel();
+        VCLXWindow::setPosSize( X, Y, Width, Height, Flags );
+        if ( ( aOldSize.Width() != Width ) || ( aOldSize.Height() != Height ) )
+            ImplUpdateImage( sal_False );
     }
 }
 
@@ -343,44 +354,51 @@ void VCLXImageConsumer::setProperty( const ::rtl::OUString& PropertyName, const 
     ::vos::OGuard aGuard( GetMutex() );
 
     Button* pButton = static_cast< Button* >( GetWindow() );
-    if ( pButton )
+    if ( !pButton )
+        return;
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
     {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
+        case BASEPROPERTY_GRAPHIC:
         {
-            case BASEPROPERTY_IMAGEALIGN:
+            Reference< XGraphic > xGraphic;
+            OSL_VERIFY( Value >>= xGraphic );
+            maImage = Image( xGraphic );
+            ImplSetNewImage();
+        }
+        break;
+
+        case BASEPROPERTY_IMAGEALIGN:
+        {
+            WindowType eType = GetWindow()->GetType();
+            if (  ( eType == WINDOW_PUSHBUTTON )
+               || ( eType == WINDOW_RADIOBUTTON )
+               || ( eType == WINDOW_CHECKBOX )
+               )
             {
-                WindowType eType = GetWindow()->GetType();
-                if (  ( eType == WINDOW_PUSHBUTTON )
-                   || ( eType == WINDOW_RADIOBUTTON )
-                   || ( eType == WINDOW_CHECKBOX )
-                   )
-                {
-                    sal_Int16 nAlignment = sal_Int16();
-                    if ( Value >>= nAlignment )
-                        pButton->SetImageAlign( static_cast< ImageAlign >( nAlignment ) );
-                }
-            }
-            break;
-            case BASEPROPERTY_IMAGEPOSITION:
-            {
-                WindowType eType = GetWindow()->GetType();
-                if (  ( eType == WINDOW_PUSHBUTTON )
-                   || ( eType == WINDOW_RADIOBUTTON )
-                   || ( eType == WINDOW_CHECKBOX )
-                   )
-                {
-                    sal_Int16 nImagePosition = 2;
-                    OSL_VERIFY( Value >>= nImagePosition );
-                    pButton->SetImageAlign( ::toolkit::translateImagePosition( nImagePosition ) );
-                }
-            }
-            break;
-            default:
-            {
-                VCLXWindow::setProperty( PropertyName, Value );
+                sal_Int16 nAlignment = sal_Int16();
+                if ( Value >>= nAlignment )
+                    pButton->SetImageAlign( static_cast< ImageAlign >( nAlignment ) );
             }
         }
+        break;
+        case BASEPROPERTY_IMAGEPOSITION:
+        {
+            WindowType eType = GetWindow()->GetType();
+            if (  ( eType == WINDOW_PUSHBUTTON )
+               || ( eType == WINDOW_RADIOBUTTON )
+               || ( eType == WINDOW_CHECKBOX )
+               )
+            {
+                sal_Int16 nImagePosition = 2;
+                OSL_VERIFY( Value >>= nImagePosition );
+                pButton->SetImageAlign( ::toolkit::translateImagePosition( nImagePosition ) );
+            }
+        }
+        break;
+        default:
+            VCLXWindow::setProperty( PropertyName, Value );
+            break;
     }
 }
 
@@ -389,41 +407,44 @@ void VCLXImageConsumer::setProperty( const ::rtl::OUString& PropertyName, const 
     ::vos::OGuard aGuard( GetMutex() );
 
     ::com::sun::star::uno::Any aProp;
-    Button* pButton = static_cast< Button* >( GetWindow() );
-    if ( pButton )
+    if ( !GetWindow() )
+        return aProp;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
     {
-        sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        switch ( nPropType )
+        case BASEPROPERTY_GRAPHIC:
+            aProp <<= maImage.GetXGraphic();
+            break;
+        case BASEPROPERTY_IMAGEALIGN:
         {
-            case BASEPROPERTY_IMAGEALIGN:
+            WindowType eType = GetWindow()->GetType();
+            if  (  ( eType == WINDOW_PUSHBUTTON )
+                || ( eType == WINDOW_RADIOBUTTON )
+                || ( eType == WINDOW_CHECKBOX )
+                )
             {
-                WindowType eType = GetWindow()->GetType();
-                if (  ( eType == WINDOW_PUSHBUTTON )
-                   || ( eType == WINDOW_RADIOBUTTON )
-                   || ( eType == WINDOW_CHECKBOX )
-                   )
-                {
-                     aProp <<= ::toolkit::getCompatibleImageAlign( pButton->GetImageAlign() );
-                }
-            }
-            break;
-            case BASEPROPERTY_IMAGEPOSITION:
-            {
-                WindowType eType = GetWindow()->GetType();
-                if (  ( eType == WINDOW_PUSHBUTTON )
-                   || ( eType == WINDOW_RADIOBUTTON )
-                   || ( eType == WINDOW_CHECKBOX )
-                   )
-                {
-                    aProp <<= ::toolkit::translateImagePosition( pButton->GetImageAlign() );
-                }
-            }
-            break;
-            default:
-            {
-                aProp <<= VCLXWindow::getProperty( PropertyName );
+                 aProp <<= ::toolkit::getCompatibleImageAlign( static_cast< Button* >( GetWindow() )->GetImageAlign() );
             }
         }
+        break;
+        case BASEPROPERTY_IMAGEPOSITION:
+        {
+            WindowType eType = GetWindow()->GetType();
+            if  (  ( eType == WINDOW_PUSHBUTTON )
+                || ( eType == WINDOW_RADIOBUTTON )
+                || ( eType == WINDOW_CHECKBOX )
+                )
+            {
+                aProp <<= ::toolkit::translateImagePosition( static_cast< Button* >( GetWindow() )->GetImageAlign() );
+            }
+        }
+        break;
+        default:
+        {
+            aProp <<= VCLXWindow::getProperty( PropertyName );
+        }
+        break;
     }
     return aProp;
 }
@@ -680,91 +701,18 @@ VCLXImageControl::~VCLXImageControl()
 {
 }
 
-void VCLXImageControl::ImplUpdateImage( sal_Bool bGetNewImage )
+void VCLXImageControl::ImplSetNewImage()
 {
-    ImageControl* pControl = (ImageControl*) GetWindow();
-    if ( pControl )
-    {
-        sal_Bool bOK = bGetNewImage ? maImageConsumer.GetData( maBitmap ) : sal_True;
-        if ( bOK )
-            pControl->SetBitmap( maBitmap );
-    }
-}
-
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXImageControl::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XImageConsumer*, this ) );
-    return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
-}
-
-// ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXImageControl )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer>* ) NULL ),
-    VCLXWindow::getTypes()
-IMPL_XTYPEPROVIDER_END
-
-void VCLXImageControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, short Flags ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    if ( GetWindow() )
-    {
-        Size aOldSize = GetWindow()->GetSizePixel();
-        VCLXWindow::setPosSize( X, Y, Width, Height, Flags );
-        if ( ( aOldSize.Width() != Width ) || ( aOldSize.Height() != Height ) )
-            ImplUpdateImage( sal_False );
-    }
-}
-
-void VCLXImageControl::init( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.Init( Width, Height );
-}
-
-void VCLXImageControl::setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.SetColorModel( BitCount, RGBAPal.getLength(), (const sal_uInt32*) RGBAPal.getConstArray(), RedMask, GreenMask, BlueMask, AlphaMask );
-}
-
-void VCLXImageControl::setPixelsByBytes( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, const ::com::sun::star::uno::Sequence< sal_Int8 >& ProducerData, sal_Int32 Offset, sal_Int32 Scansize ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.SetPixelsByBytes( X, Y, Width, Height, (sal_uInt8*)ProducerData.getConstArray(), Offset, Scansize );
-    ImplUpdateImage( sal_True );
-}
-
-void VCLXImageControl::setPixelsByLongs( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, const ::com::sun::star::uno::Sequence< sal_Int32 >& ProducerData, sal_Int32 Offset, sal_Int32 Scansize ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.SetPixelsByLongs( X, Y, Width, Height, (const sal_uInt32*) ProducerData.getConstArray(), Offset, Scansize );
-    ImplUpdateImage( sal_True );
-}
-
-void VCLXImageControl::complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > & ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.Completed( Status );
-
-    // Controls sollen angemeldet bleiben...
-//  Producer->removeConsumer( this );
-
-    ImplUpdateImage( sal_True );
+    OSL_PRECOND( GetWindow(), "VCLXImageControl::ImplSetNewImage: window is required to be not-NULL!" );
+    ImageControl* pControl = static_cast< ImageControl* >( GetWindow() );
+    pControl->SetBitmap( GetBitmap() );
 }
 
 ::com::sun::star::awt::Size VCLXImageControl::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    Size aSz = maBitmap.GetSizePixel();
+    Size aSz = GetBitmap().GetSizePixel();
     aSz = ImplCalcWindowSize( aSz );
 
     return AWTSize(aSz);
@@ -806,9 +754,8 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
             }
             break;
             default:
-            {
-                VCLXWindow::setProperty( PropertyName, Value );
-            }
+                VCLXImageConsumer::setProperty( PropertyName, Value );
+                break;
         }
     }
 }
@@ -825,14 +772,11 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
         switch ( nPropType )
         {
             case BASEPROPERTY_SCALEIMAGE:
-            {
                  aProp <<= (sal_Bool)pImageControl->IsScaleImage();
-            }
-            break;
+                break;
             default:
-            {
-                aProp <<= VCLXWindow::getProperty( PropertyName );
-            }
+                aProp = VCLXImageConsumer::getProperty( PropertyName );
+                break;
         }
     }
     return aProp;
