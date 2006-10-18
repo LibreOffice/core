@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumperole.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:52:09 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:45:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 
 #ifndef _SOT_STORAGE_HXX
 #include <sot/storage.hxx>
+#endif
+#ifndef _SOT_STORINFO_HXX
+#include <sot/storinfo.hxx>
 #endif
 
 namespace scf {
@@ -89,6 +92,31 @@ private:
 };
 
 typedef ScfRef< OleStorageObject > OleStorageObjectRef;
+
+// ============================================================================
+
+class OleStorageIterator : public Base
+{
+public:
+    explicit            OleStorageIterator( const OleStorageObject& rStrg );
+    explicit            OleStorageIterator( SotStorageRef xStrg );
+                        ~OleStorageIterator();
+
+    ULONG               GetSize() const;
+
+    OleStorageIterator& operator++();
+    const SvStorageInfo* operator->() const;
+
+private:
+    void                Construct( SotStorageRef xStrg );
+
+    virtual bool        ImplIsValid() const;
+
+private:
+    typedef ScfRef< SvStorageInfoList > SvStorageInfoListRef;
+    SvStorageInfoListRef mxInfoList;
+    ULONG               mnIndex;
+};
 
 // ============================================================================
 // ============================================================================
