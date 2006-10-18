@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:11:08 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:16:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,6 +244,8 @@ void OControl::disposing()
 {
     OComponentHelper::disposing();
 
+    m_aWindowStateGuard.attach( NULL, NULL );
+
     Reference<com::sun::star::lang::XComponent> xComp;
     if (query_aggregation(m_xAggregate, xComp))
         xComp->dispose();
@@ -318,6 +320,23 @@ InterfaceRef SAL_CALL OControl::getContext() throw (RuntimeException)
 }
 
 //------------------------------------------------------------------------------
+void OControl::impl_resetStateGuard_nothrow()
+{
+    Reference< XWindow2 > xWindow;
+    Reference< XControlModel > xModel;
+    try
+    {
+        xWindow.set( getPeer(), UNO_QUERY );
+        xModel.set( getModel(), UNO_QUERY );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    m_aWindowStateGuard.attach( xWindow, xModel );
+}
+
+//------------------------------------------------------------------------------
 void SAL_CALL OControl::createPeer(const Reference<XToolkit>& _rxToolkit, const Reference<XWindowPeer>& _rxParent) throw (RuntimeException)
 {
     if ( m_xControl.is() )
@@ -331,6 +350,8 @@ void SAL_CALL OControl::createPeer(const Reference<XToolkit>& _rxToolkit, const 
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WheelWithoutFocus" ) ),
                 makeAny( (sal_Bool)sal_False )
             );
+
+        impl_resetStateGuard_nothrow();
     }
 }
 
@@ -343,7 +364,12 @@ Reference<XWindowPeer> SAL_CALL OControl::getPeer() throw ( RuntimeException)
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OControl::setModel(const Reference<XControlModel>& Model) throw ( RuntimeException)
 {
-    return m_xControl.is() ? m_xControl->setModel( Model ) : sal_False;
+    if ( !m_xControl.is() )
+        return sal_False;
+
+    sal_Bool bSuccess = m_xControl->setModel( Model );
+    impl_resetStateGuard_nothrow();
+    return bSuccess;
 }
 
 //------------------------------------------------------------------------------
@@ -1258,23 +1284,6 @@ void OBoundControlModel::resumeValueListening( )
 
     if ( m_pAggPropMultiplexer )
         m_pAggPropMultiplexer->unlock();
-}
-
-//-----------------------------------------------------------------------------
-namespace
-{
-    template< class T >
-    void appendSequence( Sequence< T >& _rInOut, const Sequence< T >& _rAppend )
-    {
-        sal_Int32 nLengthBefore = _rInOut.getLength();
-        sal_Int32 nLengthAppend = _rAppend.getLength();
-        _rInOut.realloc( nLengthBefore + nLengthAppend );
-        ::std::copy(
-            _rAppend.getConstArray(),
-            _rAppend.getConstArray() + nLengthAppend,
-            _rInOut.getArray() + nLengthBefore
-        );
-    }
 }
 
 //-----------------------------------------------------------------------------
