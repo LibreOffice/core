@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumperole.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-27 09:46:46 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:45:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,6 @@
 
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
-#endif
-#ifndef _SOT_STORINFO_HXX
-#include <sot/storinfo.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
@@ -204,20 +201,18 @@ void OleStorageObject::DumpStorageInfo( bool bExtended )
     // directory
     if( bExtended )
     {
-        SvStorageInfoList aInfoList;
-        mxStrg->FillInfoList( &aInfoList );
-        WriteDecItem( "directory-size", static_cast< sal_uInt32 >( aInfoList.Count() ) );
+        OleStorageIterator aIt( mxStrg );
+        WriteDecItem( "directory-size", static_cast< sal_uInt32 >( aIt.GetSize() ) );
 
         IndentGuard aDirIndGuard( Out() );
-        for( ULONG nInfo = 0; nInfo < aInfoList.Count(); ++nInfo )
+        for( ; aIt.IsValid(); ++aIt )
         {
             MultiItemsGuard aMultiGuard( Out() );
             TableGuard aTabGuard( Out(), 14 );
-            SvStorageInfo& rInfo = aInfoList.GetObject( nInfo );
-            const sal_Char* pcType = rInfo.IsStream() ? "stream" :
-                (rInfo.IsStorage() ? "storage" : "unknown");
+            const sal_Char* pcType = aIt->IsStream() ? "stream" :
+                (aIt->IsStorage() ? "storage" : "unknown");
             WriteInfoItem( "type", pcType );
-            WriteStringItem( "name", rInfo.GetName() );
+            WriteStringItem( "name", aIt->GetName() );
         }
     }
 }
@@ -248,15 +243,11 @@ void lclExtractStorage( SotStorageRef xStrg, const String& rDirName )
         if( (eRes == ::osl::FileBase::E_None) || (eRes == ::osl::FileBase::E_EXIST) )
         {
             // process children of the storage
-            SvStorageInfoList aInfoList;
-            xStrg->FillInfoList( &aInfoList );
-            for( ULONG nInfo = 0; nInfo < aInfoList.Count(); ++nInfo )
+            for( OleStorageIterator aIt( xStrg ); aIt.IsValid(); ++aIt )
             {
-                SvStorageInfo& rInfo = aInfoList.GetObject( nInfo );
-
                 // encode all characters < 0x20
                 String aSubName;
-                StringHelper::AppendEncString( aSubName, rInfo.GetName(), false );
+                StringHelper::AppendEncString( aSubName, aIt->GetName(), false );
 
                 // replace all characters reserved in file system
                 static const sal_Unicode spcReserved[] = { '/', '\\', ':', '*', '?', '<', '>', '|', 0 };
@@ -269,14 +260,14 @@ void lclExtractStorage( SotStorageRef xStrg, const String& rDirName )
                 aFullName.Append( '/' ).Append( aSubName );
 
                 // handle storages and streams
-                if( rInfo.IsStorage() )
+                if( aIt->IsStorage() )
                 {
-                    SotStorageRef xSubStrg = ScfTools::OpenStorageRead( xStrg, rInfo.GetName() );
+                    SotStorageRef xSubStrg = ScfTools::OpenStorageRead( xStrg, aIt->GetName() );
                     lclExtractStorage( xSubStrg, aFullName );
                 }
-                else if( rInfo.IsStream() )
+                else if( aIt->IsStream() )
                 {
-                    SotStorageStreamRef xSubStrm = ScfTools::OpenStorageStreamRead( xStrg, rInfo.GetName() );
+                    SotStorageStreamRef xSubStrm = ScfTools::OpenStorageStreamRead( xStrg, aIt->GetName() );
                     lclExtractStream( xSubStrm, aFullName );
                 }
             }
@@ -307,6 +298,54 @@ void OleStorageObject::ExtractStorageToFileSystem()
             lclExtractStorage( xRootStrg, aFullName );
         }
     }
+}
+
+// ============================================================================
+
+OleStorageIterator::OleStorageIterator( const OleStorageObject& rStrg )
+{
+    Construct( rStrg.GetStorage() );
+}
+
+OleStorageIterator::OleStorageIterator( SotStorageRef xStrg )
+{
+    Construct( xStrg );
+}
+
+OleStorageIterator::~OleStorageIterator()
+{
+}
+
+ULONG OleStorageIterator::GetSize() const
+{
+    return mxInfoList.is() ? mxInfoList->Count() : 0;
+}
+
+const SvStorageInfo* OleStorageIterator::operator->() const
+{
+    return IsValid() ? &mxInfoList->GetObject( mnIndex ) : 0;
+}
+
+OleStorageIterator& OleStorageIterator::operator++()
+{
+    if( IsValid() )
+        ++mnIndex;
+    return *this;
+}
+
+void OleStorageIterator::Construct( SotStorageRef xStrg )
+{
+    mnIndex = 0;
+    if( xStrg.Is() )
+    {
+        mxInfoList.reset( new SvStorageInfoList );
+        xStrg->FillInfoList( mxInfoList.get() );
+    }
+}
+
+bool OleStorageIterator::ImplIsValid() const
+{
+    return mxInfoList.is() && (mnIndex < mxInfoList->Count());
 }
 
 // ============================================================================
@@ -661,18 +700,9 @@ DateTime OlePropertyStreamObject::DumpFileTime( const sal_Char* pcName )
 {
     ItemGuard aItem( Out(), pcName );
     sal_uInt64 nFileTime = DumpDec< sal_uInt64 >( 0 );
-#if 0
-    // TODO: available from 680m164
     sal_uInt32 nLower = static_cast< sal_uInt32 >( nFileTime );
     sal_uInt32 nUpper = static_cast< sal_uInt32 >( nFileTime >> 32 );
     DateTime aDateTime = DateTime::CreateFromWin32FileDateTime( nLower, nUpper );
-#else
-    nFileTime /= 100000;
-    Date aDate( 1, 1, 1601 );
-    aDate += static_cast< sal_uInt32 >( nFileTime / 8640000 );
-    Time aTime( static_cast< sal_Int32 >( nFileTime % 8640000 ) );
-    DateTime aDateTime( aDate, aTime );
-#endif
     aDateTime.ConvertToLocalTime();
     WriteDateTimeItem( 0, aDateTime );
     return aDateTime;
