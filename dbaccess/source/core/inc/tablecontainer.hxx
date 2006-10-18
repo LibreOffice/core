@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:15:18 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:29:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,8 +101,7 @@ namespace dbaccess
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xTableDefinitions;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xTableMediator;
-        OContainerMediator*     m_pMediator;
+        ::rtl::Reference< OContainerMediator >                                          m_pTableMediator;
         sal_Bool                m_bInAppend;                // true when we are in append mode
         sal_Bool                m_bInDrop;                  // set when we are in the drop method
 
@@ -123,8 +122,6 @@ namespace dbaccess
                                     const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter,
                                     const ::std::vector< WildCard >& _rWCSearch) const;
         virtual void SAL_CALL disposing();
-
-        virtual void notifyDataSourceModified();
 
         /** retrieve a table type filter to pass to <member scope="com::sun::star::sdbc">XDatabaseMetaData::getTables</member>,
             according to the current data source settings
