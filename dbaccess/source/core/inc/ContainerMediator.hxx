@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContainerMediator.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:32:43 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:28:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,6 @@
 #ifndef DBA_CONTAINERMEDIATOR_HXX
 #define DBA_CONTAINERMEDIATOR_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
 #include <com/sun/star/container/XContainerListener.hpp>
 #endif
@@ -50,37 +47,61 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+#include <com/sun/star/sdbc/XConnection.hpp>
+#endif
+
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
 #endif
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
-#ifndef DBA_PROPERTYSETFORWARD_HXX
-#include "PropertyForward.hxx"
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 
+#include <map>
 
 //........................................................................
 namespace dbaccess
 {
 //........................................................................
 
+    class OPropertyForward;
+
     class OContainerMediator :   public ::comphelper::OBaseMutex
                                 ,public ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener >
     {
-        typedef ::std::pair<OPropertyForward*,::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> > TPropertyForward;
-        DECLARE_STL_USTRINGACCESS_MAP(TPropertyForward,PropertyForwardList);
+    public:
+        enum ContainerType
+        {
+            eColumns,
+            eTables
+        };
+
+    private:
+        typedef ::rtl::Reference< OPropertyForward >                TPropertyForward;
+        typedef ::std::map< ::rtl::OUString, TPropertyForward >     PropertyForwardList;
         PropertyForwardList                                                             m_aForwardList;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xSettings;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >     m_xContainer;
-        sal_Bool                                                                        m_bTables;
+        ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection >     m_aConnection;
+        ContainerType                                                                   m_eType;
+
     protected:
         virtual ~OContainerMediator();
+
     public:
-        OContainerMediator(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xSettings
-                        ,sal_Bool _bTables = sal_True);
+        OContainerMediator(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xSettings,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            ContainerType _eType
+       );
 
         virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
@@ -89,6 +110,30 @@ namespace dbaccess
 
         void notifyElementCreated(const ::rtl::OUString& _sElementName
                                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xElement);
+
+    private:
+        /** cleans up the instance, by deregistering as listener at the containers,
+            and resetting them to <NULL/>
+        */
+        void    impl_cleanup_nothrow();
+
+        /** retrieves the settings object to initialize a container element
+
+            Normally, this object will simply retrieve the object with the given name from our settings
+            container. Hiowever, for columns, there's a fallback in case this settings object does
+            not yet exist: Then, we check if the given destination object refers to a table column, via its
+            TableName and RealName property. If so, this table column is used as initialization object.
+
+            @param _rName
+                the name of the destination object in its container
+            @param _rxDestination
+                the destination object to initialize
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                impl_getSettingsForInitialization_nothrow(
+                    const ::rtl::OUString& _rName,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDestination
+                ) const;
     };
 //........................................................................
 }   // namespace dbaccess
