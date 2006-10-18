@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoControlCheckBoxModel.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:19:17 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:19:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,19 +38,18 @@
 #ifndef __com_sun_star_awt_FontDescriptor_idl__
 #include <com/sun/star/awt/FontDescriptor.idl>
 #endif
-
 #ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
 #endif
-
 #ifndef __com_sun_star_style_VerticalAlignment_idl__
 #include <com/sun/star/style/VerticalAlignment.idl>
 #endif
-
 #ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
 #endif
-
+#ifndef com_sun_star_graphic_XGraphic_idl
+#include <com/sun/star/graphic/XGraphic.idl>
+#endif
 
 //=============================================================================
 
@@ -133,8 +132,26 @@ published service UnoControlCheckBoxModel
     //-------------------------------------------------------------------------
 
     /** specifies an URL to an image to display besides the label of the control
+        @see Graphic
      */
     [optional, property] string ImageURL;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a graphic to be displayed besides the label of the control
+
+        <p>If this property is present, it interacts with the <member>ImageURL</member>in the
+        following way:
+        <ul><li>If <member>ImageURL</member> is set, <member>Graphic</member> will be reset
+            to an object as loaded from the given image URL, or <NULL/> if <member>ImageURL</member>
+            does not point to a valid image file.</li>
+            <li>If <member>Graphic</member> is set, <member>ImageURL</member> will be reset
+            to an empty string.</li>
+        </ul></p>
+
+        @since OOo 2.1
+     */
+    [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
 
     //-------------------------------------------------------------------------
 
