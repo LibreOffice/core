@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:12:40 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:31:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,8 +56,17 @@
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
+#ifndef _SFXDOCINF_HXX
+#include <sfx2/docinf.hxx>
+#endif
+#ifndef _SFXHTML_HXX
+#include <sfx2/sfxhtml.hxx>
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
 #endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
@@ -203,12 +212,9 @@ OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
     ,m_bSDNum(sal_False)
 {
     DBG_CTOR(OHTMLReader,NULL);
-    // If the system encoding is ANSI, this encoding is used as default
-    // source encoding. Otherwise ISO-8859-1 will be used, because this
-    // is the real default encoding.
-    SetSrcEncoding( RTL_TEXTENCODING_MS_1252 == gsl_getSystemTextEncoding()
-                        ? RTL_TEXTENCODING_MS_1252
-                        : RTL_TEXTENCODING_ISO_8859_1 );
+    SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
+    // If the file starts with a BOM, switch to UCS2.
+    SetSwitchToUCS2( TRUE );
 }
 // ---------------------------------------------------------------------------
 OHTMLReader::OHTMLReader(SvStream& rIn,
@@ -227,12 +233,9 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
     ,m_bSDNum(sal_False)
 {
     DBG_CTOR(OHTMLReader,NULL);
-    // If the system encoding is ANSI, this encoding is used as default
-    // source encoding. Otherwise ISO-8859-1 will be used, because this
-    // is the real default encoding.
-    SetSrcEncoding( RTL_TEXTENCODING_MS_1252 == gsl_getSystemTextEncoding()
-                        ? RTL_TEXTENCODING_MS_1252
-                        : RTL_TEXTENCODING_ISO_8859_1 );
+    SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
+    // If the file starts with a BOM, switch to UCS2.
+    SetSwitchToUCS2( TRUE );
 }
 // ---------------------------------------------------------------------------
 OHTMLReader::~OHTMLReader()
@@ -250,41 +253,18 @@ SvParserState OHTMLReader::CallParser()
     return m_bFoundTable ? eParseState : SVPAR_ERROR;
 }
 // -----------------------------------------------------------------------------
-rtl_TextEncoding OHTMLReader::GetEncodingByMIME( const String& rMime )
-{
-    DBG_CHKTHIS(OHTMLReader,NULL);
-    ByteString sType;
-    ByteString sSubType;
-    INetContentTypeParameterList aParameters;
-    ByteString sMime( rMime, RTL_TEXTENCODING_ASCII_US );
-    if (INetContentTypes::parse(sMime, sType, sSubType, &aParameters))
-    {
-        const INetContentTypeParameter * pCharset
-            = aParameters.find("charset");
-        if (pCharset != 0)
-        {
-            ByteString sValue( pCharset->m_sValue, RTL_TEXTENCODING_ASCII_US );
-            return rtl_getTextEncodingFromMimeCharset( sValue.GetBuffer() );
-        }
-    }
-    return RTL_TEXTENCODING_DONTKNOW;
-}
-
-// ---------------------------------------------------------------------------
 void OHTMLReader::NextToken( int nToken )
 {
     DBG_CHKTHIS(OHTMLReader,NULL);
     if(m_bError || !m_nRows) // falls Fehler oder keine Rows mehr zur "Uberpr"ufung dann gleich zur"uck
         return;
+    if ( nToken ==  HTML_META )
+        setTextEncoding();
 
     if(m_xConnection.is())    // gibt an welcher CTOR gerufen wurde und damit, ob eine Tabelle erstellt werden soll
     {
         switch(nToken)
         {
-            case HTML_META:
-                if(!m_bMetaOptions)
-                    setTextEncoding();
-                break;
             case HTML_TABLE_ON:
                 ++m_nTableCount;
                 {   // es kann auch TD oder TH sein, wenn es vorher kein TABLE gab
@@ -676,54 +656,21 @@ void OHTMLReader::setTextEncoding()
     DBG_CHKTHIS(OHTMLReader,NULL);
     m_bMetaOptions = sal_True;
     USHORT nContentOption = HTML_O_CONTENT;
-    String aName, aContent;
-    USHORT nAction = HTML_META_NONE;
-    BOOL bHTTPEquiv = FALSE;
-    const HTMLOptions *pHtmlOptions = GetOptions(&nContentOption);
-    for( USHORT i = pHtmlOptions->Count(); i; )
-    {
-        const HTMLOption *pOption = (*pHtmlOptions)[ --i ];
-        switch( pOption->GetToken() )
-        {
-        case HTML_O_HTTPEQUIV:
-            aName = pOption->GetString();
-            pOption->GetEnum( nAction, getOptions() );
-            bHTTPEquiv = TRUE;
-            break;
-        case HTML_O_CONTENT:
-            aContent = pOption->GetString();
-            break;
-        }
-    }
-    if( bHTTPEquiv || HTML_META_DESCRIPTION!=nAction )
-    {
-        // wenn's keine Description ist CRs und LFs aus dem CONTENT entfernen
-        aContent.EraseAllChars( _CR );
-        aContent.EraseAllChars( _LF );
-    }
-    else
-    {
-        // fuer die Beschreibung die Zeilen-Umbrueche entsprechen wandeln
-        aContent.ConvertLineEnd();
-    }
-    switch( nAction )
-    {
-        case HTML_META_CONTENT_TYPE:
-            if( aContent.Len() )
-            {
-                rtl_TextEncoding eEnc = GetEncodingByMIME( aContent );
-                // If the encoding is set by a META tag, it may only overwrite the
-                // current encoding if both, the current and the new encoding, are 1-BYTE
-                // encodings. Everything else cannot lead to reasonable results.
-                if ( rtl_isOctetTextEncoding( eEnc ) &&
-                        rtl_isOctetTextEncoding( GetSrcEncoding() ) )
-                {
-                    eEnc = GetExtendedCompatibilityTextEncoding( eEnc );
-                    SetSrcEncoding( eEnc );
-                }
-            }
-            break;
-    }
+    rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
+    USHORT nMetaTags = 0;
+
+    ::std::auto_ptr<SfxDocumentInfo> pInfo(new SfxDocumentInfo());
+    SfxHTMLParser::ParseMetaOptions( pInfo.get(), NULL,
+                                  GetOptions(&nContentOption),
+                                  nMetaTags, eEnc );
+
+    // If the encoding is set by a META tag, it may only overwrite the
+    // current encoding if both, the current and the new encoding, are 1-BYTE
+    // encodings. Everything else cannot lead to reasonable results.
+    if( RTL_TEXTENCODING_DONTKNOW != eEnc &&
+        rtl_isOctetTextEncoding( eEnc ) &&
+        rtl_isOctetTextEncoding( GetSrcEncoding() ) )
+        SetSrcEncoding( eEnc );
 }
 // -----------------------------------------------------------------------------
 void OHTMLReader::release()
@@ -738,3 +685,4 @@ OWizTypeSelect* OHTMLReader::createPage(Window* _pParent)
     return new OWizHTMLExtend(_pParent,rInput);
 }
 // -----------------------------------------------------------------------------
+
