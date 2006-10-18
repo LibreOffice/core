@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangeutl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:41:52 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:23:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,13 @@
 BOOL ScRangeUtil::MakeArea( const String&   rAreaStr,
                             ScArea&         rArea,
                             ScDocument*     pDoc,
-                            SCTAB           nTab ) const
+                            SCTAB           nTab,
+                            ScAddress::Details const & rDetails ) const
 {
     // Eingabe in rAreaStr: "$Tabelle1.$A1:$D17"
+
+    // BROKEN BROKEN BROKEN
+    // but it is only used in the consolidate dialog.  Ignore for now.
 
     BOOL        nSuccess    = FALSE;
     USHORT      nPointPos   = rAreaStr.Search('.');
@@ -74,7 +78,7 @@ BOOL ScRangeUtil::MakeArea( const String&   rAreaStr,
             aStrArea += rAreaStr.Copy( nPointPos+1 ); // '.' nicht mitkopieren
         }
 
-    nSuccess = ConvertDoubleRef( pDoc, aStrArea, nTab, startPos, endPos );
+    nSuccess = ConvertDoubleRef( pDoc, aStrArea, nTab, startPos, endPos, rDetails );
 
     if ( nSuccess )
         rArea = ScArea( startPos.Tab(),
@@ -90,6 +94,9 @@ void ScRangeUtil::CutPosString( const String&   theAreaStr,
                                 String&         thePosStr ) const
 {
     String  aPosStr;
+    // BROKEN BROKEN BROKEN
+    // but it is only used in the consolidate dialog.  Ignore for now.
+
     USHORT  nColonPos = theAreaStr.Search(':');
 
     if ( nColonPos != STRING_NOTFOUND )
@@ -106,11 +113,15 @@ BOOL ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
                                 ScDocument*     pDoc,
                                 ScArea***       pppAreas,
                                 USHORT*         pAreaCount,
-                                BOOL            bAcceptCellRef ) const
+                                BOOL            bAcceptCellRef,
+                                ScAddress::Details const & rDetails ) const
 {
     DBG_ASSERT( pDoc, "Kein Dokument uebergeben!" );
     if ( !pDoc )
         return FALSE;
+
+    // BROKEN BROKEN BROKEN
+    // but it is only used in the consolidate dialog.  Ignore for now.
 
     /*
      * Erwartet wird ein String der Form
@@ -146,9 +157,9 @@ BOOL ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
         aStartPosStr = aTempAreaStr.Copy( 0,           nColonPos  );
         aEndPosStr   = aTempAreaStr.Copy( nColonPos+1, STRING_LEN );
 
-        if ( ConvertSingleRef( pDoc, aStartPosStr, 0, aStartPos ) )
+        if ( ConvertSingleRef( pDoc, aStartPosStr, 0, aStartPos, rDetails ) )
         {
-            if ( ConvertSingleRef( pDoc, aEndPosStr, aStartPos.Tab(), aEndPos ) )
+            if ( ConvertSingleRef( pDoc, aEndPosStr, aStartPos.Tab(), aEndPos, rDetails ) )
             {
                 aStartPos.SetRelCol( FALSE );
                 aStartPos.SetRelRow( FALSE );
@@ -194,13 +205,14 @@ BOOL ScRangeUtil::IsAbsArea( const String&  rAreaStr,
                              SCTAB          nTab,
                              String*        pCompleteStr,
                              ScRefAddress*  pStartPos,
-                             ScRefAddress*  pEndPos ) const
+                             ScRefAddress*  pEndPos,
+                             ScAddress::Details const & rDetails ) const
 {
     BOOL        bIsAbsArea = FALSE;
     ScRefAddress    startPos;
     ScRefAddress    endPos;
 
-    bIsAbsArea = ConvertDoubleRef( pDoc, rAreaStr, nTab, startPos, endPos );
+    bIsAbsArea = ConvertDoubleRef( pDoc, rAreaStr, nTab, startPos, endPos, rDetails );
 
     if ( bIsAbsArea )
     {
@@ -213,9 +225,9 @@ BOOL ScRangeUtil::IsAbsArea( const String&  rAreaStr,
 
         if ( pCompleteStr )
         {
-            *pCompleteStr  = startPos.GetRefString( pDoc, MAXTAB+1 );
+            *pCompleteStr  = startPos.GetRefString( pDoc, MAXTAB+1, rDetails );
             *pCompleteStr += ':';
-            *pCompleteStr += endPos  .GetRefString( pDoc, nTab );
+            *pCompleteStr += endPos  .GetRefString( pDoc, nTab, rDetails );
         }
 
         if ( pStartPos && pEndPos )
@@ -234,13 +246,13 @@ BOOL ScRangeUtil::IsAbsPos( const String&   rPosStr,
                             ScDocument*     pDoc,
                             SCTAB           nTab,
                             String*         pCompleteStr,
-                            ScRefAddress*   pPosTripel ) const
+                            ScRefAddress*   pPosTripel,
+                            ScAddress::Details const & rDetails ) const
 {
     BOOL        bIsAbsPos = FALSE;
     ScRefAddress    thePos;
 
-    bIsAbsPos = ConvertSingleRef( pDoc, rPosStr, nTab, thePos );
-
+    bIsAbsPos = ConvertSingleRef( pDoc, rPosStr, nTab, thePos, rDetails );
     thePos.SetRelCol( FALSE );
     thePos.SetRelRow( FALSE );
     thePos.SetRelTab( FALSE );
@@ -250,7 +262,7 @@ BOOL ScRangeUtil::IsAbsPos( const String&   rPosStr,
         if ( pPosTripel )
             *pPosTripel = thePos;
         if ( pCompleteStr )
-            *pCompleteStr = thePos.GetRefString( pDoc, MAXTAB+1 );
+            *pCompleteStr = thePos.GetRefString( pDoc, MAXTAB+1, rDetails );
     }
 
     return bIsAbsPos;
@@ -263,8 +275,8 @@ BOOL ScRangeUtil::MakeRangeFromName (
     ScDocument*     pDoc,
     SCTAB           nCurTab,
     ScRange&        rRange,
-    RutlNameScope   eScope
-                                  ) const
+    RutlNameScope   eScope,
+    ScAddress::Details const & rDetails ) const
 {
     BOOL bResult=FALSE;
     ScRangeUtil     aRangeUtil;
@@ -289,7 +301,7 @@ BOOL ScRangeUtil::MakeRangeFromName (
             pData->GetSymbol( aStrArea );
 
             if ( IsAbsArea( aStrArea, pDoc, nCurTab,
-                                       NULL, &aStartPos, &aEndPos ) )
+                            NULL, &aStartPos, &aEndPos, rDetails ) )
             {
                 nTab       = aStartPos.Tab();
                 nColStart  = aStartPos.Col();
@@ -303,7 +315,7 @@ BOOL ScRangeUtil::MakeRangeFromName (
                 CutPosString( aStrArea, aStrArea );
 
                 if ( IsAbsPos( aStrArea, pDoc, nCurTab,
-                                          NULL, &aStartPos ) )
+                                          NULL, &aStartPos, rDetails ) )
                 {
                     nTab       = aStartPos.Tab();
                     nColStart  = nColEnd = aStartPos.Col();
@@ -424,13 +436,14 @@ SvStream& operator<< ( SvStream& rStream, const ScArea& rArea )
 
 //------------------------------------------------------------------------
 
-void ScArea::GetString( String& rStr, BOOL bAbsolute, ScDocument* pDoc ) const
+void ScArea::GetString( String& rStr, BOOL bAbsolute, ScDocument* pDoc,
+                        ScAddress::Details const & rDetails ) const
 {
     ScRange aRange( ScAddress( nColStart, nRowStart, nTab ),
                     ScAddress( nColEnd,   nRowEnd,   nTab ) );
     USHORT  nFlags = bAbsolute ? SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE : 0;
 
-    aRange.Format( rStr, nFlags, pDoc );
+    aRange.Format( rStr, nFlags, pDoc, rDetails );
 }
 
 //------------------------------------------------------------------------
