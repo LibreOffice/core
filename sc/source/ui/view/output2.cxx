@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 17:05:28 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:48:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1577,6 +1577,17 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                     BOOL bHClip = bLeftClip || bRightClip;
                     BOOL bVClip = FALSE;
 
+                    if ( aClipRect.Top() < nScrY )
+                    {
+                        aClipRect.Top() = nScrY;
+                        bVClip = TRUE;
+                    }
+                    if ( aClipRect.Bottom() > nScrY + nScrH )
+                    {
+                        aClipRect.Bottom() = nScrY + nScrH;         //! minus one?
+                        bVClip = TRUE;
+                    }
+
                     //
                     //      horizontalen Platz testen
                     //
@@ -2620,6 +2631,17 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                 if ( bWrapFields )
                                 {
                                     //  Fields in a cell with automatic breaks: clip to cell width
+                                    bClip = TRUE;
+                                }
+
+                                if ( aClipRect.Top() < nScrY )
+                                {
+                                    aClipRect.Top() = nScrY;
+                                    bClip = TRUE;
+                                }
+                                if ( aClipRect.Bottom() > nScrY + nScrH )
+                                {
+                                    aClipRect.Bottom() = nScrY + nScrH;     //! minus one?
                                     bClip = TRUE;
                                 }
 
