@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.181 $
+ *  $Revision: 1.182 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:35:53 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:30:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,9 @@
 #ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
 #include <com/sun/star/form/XForm.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
+#include <com/sun/star/awt/VisualEffect.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_LINEENDFORMAT_HPP_
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #endif
@@ -186,6 +189,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
@@ -327,6 +333,7 @@
 #include <memory>
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
@@ -538,10 +545,10 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
     {
 
         // create controls and set sizes
-        const long  nFrameWidth = getBrowserView()->LogicToPixel( Size( 3, 0 ), MAP_APPFONT ).Width();
+        const long  nFrameWidth = getBrowserView()->LogicToPixel( ::Size( 3, 0 ), MAP_APPFONT ).Width();
 
         m_pSplitter = new Splitter(getBrowserView(),WB_HSCROLL);
-        m_pSplitter->SetPosSizePixel( Point(0,0), Size(nFrameWidth,0) );
+        m_pSplitter->SetPosSizePixel( ::Point(0,0), ::Size(nFrameWidth,0) );
         m_pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
 
         m_pTreeView = new DBTreeView(getBrowserView(),m_xMultiServiceFacatory, WB_TABSTOP | WB_BORDER);
@@ -553,7 +560,7 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         m_pTreeView->SetHelpId(HID_CTL_TREEVIEW);
 
         // a default pos for the splitter, so that the listbox is about 80 (logical) pixels wide
-        m_pSplitter->SetSplitPosPixel( getBrowserView()->LogicToPixel( Size( 80, 0 ), MAP_APPFONT ).Width() );
+        m_pSplitter->SetSplitPosPixel( getBrowserView()->LogicToPixel( ::Size( 80, 0 ), MAP_APPFONT ).Width() );
 
         getBrowserView()->setSplitter(m_pSplitter);
         getBrowserView()->setTreeView(m_pTreeView);
@@ -656,7 +663,6 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
 {
     try
     {
-
         Reference< ::com::sun::star::form::XGridColumnFactory >  xColFactory(xGrid, UNO_QUERY);
         Reference< XNameContainer >  xColContainer(xGrid, UNO_QUERY);
         clearGridColumns( xColContainer );
@@ -749,21 +755,27 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                             && ::cppu::any2bool(xColumn->getPropertyValue(PROPERTY_ISROWVERSION)))
                     continue;
 
-                sal_Bool bIsFormatted           = sal_False;
                 sal_Bool bFormattedIsNumeric    = sal_True;
                 sal_Int32 nType = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_TYPE));
+
+                ::std::vector< NamedValue > aInitialValues;
+                ::std::vector< ::rtl::OUString > aCopyProperties;
+
                 switch(nType)
                 {
                     case DataType::BIT:
                     case DataType::BOOLEAN:
                         aCurrentModelType = ::rtl::OUString::createFromAscii("CheckBox");
+                        aInitialValues.push_back( NamedValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VisualEffect" ) ), makeAny( VisualEffect::FLAT ) ) );
                         sPropertyName = PROPERTY_DEFAULTSTATE;
                         break;
 
+                    case DataType::LONGVARCHAR:
+                        aInitialValues.push_back( NamedValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MultiLine" ) ), makeAny( (sal_Bool)sal_True ) ) );
+                        // NO break!
                     case DataType::BINARY:
                     case DataType::VARBINARY:
                     case DataType::LONGVARBINARY:
-                    case DataType::LONGVARCHAR:
                         aCurrentModelType = ::rtl::OUString::createFromAscii("TextField");
                         sPropertyName = PROPERTY_DEFAULTTEXT;
                         break;
@@ -771,32 +783,28 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                     case DataType::VARCHAR:
                     case DataType::CHAR:
                         bFormattedIsNumeric = sal_False;
-                        // _NO_ break !
+                        // NO break!
                     default:
                         aCurrentModelType = ::rtl::OUString::createFromAscii("FormattedField");
-                        bIsFormatted = sal_True;
                         sPropertyName = PROPERTY_EFFECTIVEDEFAULT;
+
+                        if ( xSupplier.is() )
+                            aInitialValues.push_back( NamedValue( ::rtl::OUString::createFromAscii( "FormatsSupplier" ), makeAny( xSupplier ) ) );
+                        aInitialValues.push_back( NamedValue( ::rtl::OUString::createFromAscii( "TreatAsNumber" ), makeAny( (sal_Bool)bFormattedIsNumeric ) ) );
+                        aCopyProperties.push_back( PROPERTY_FORMATKEY );
                         break;
                 }
 
+                aInitialValues.push_back( NamedValue( PROPERTY_CONTROLSOURCE, makeAny( *pIter ) ) );
+                aInitialValues.push_back( NamedValue( PROPERTY_LABEL, makeAny( *pIter ) ) );
+
                 Reference< XPropertySet > xCurrentCol = xColFactory->createColumn(aCurrentModelType);
                 Reference< XPropertySetInfo > xColumnPropertyInfo = xCurrentCol->getPropertySetInfo();
-                xCurrentCol->setPropertyValue(PROPERTY_CONTROLSOURCE, makeAny(*pIter));
-                xCurrentCol->setPropertyValue(PROPERTY_LABEL, makeAny(*pIter));
-                if (bIsFormatted)
-                {
-                    if (xSupplier.is())
-                        xCurrentCol->setPropertyValue(::rtl::OUString::createFromAscii("FormatsSupplier"), makeAny(xSupplier));
-                    xCurrentCol->setPropertyValue(PROPERTY_FORMATKEY, xColumn->getPropertyValue(PROPERTY_FORMATKEY));
-                    xCurrentCol->setPropertyValue(::rtl::OUString::createFromAscii("TreatAsNumber"), ::cppu::bool2any(bFormattedIsNumeric));
-                }
 
-                if ( DataType::LONGVARCHAR == nType )
-                    xCurrentCol->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MultiLine" ) ), makeAny( (sal_Bool)sal_True ) );
-
+                // calculate the default
                 Any aDefault;
                 sal_Bool bDefault = xColumnPropertyInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT);
-                if(bDefault)
+                if ( bDefault )
                     aDefault = xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT);
 
                 // default value
@@ -809,26 +817,34 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
 
                 }
 
-                if(aDefault.hasValue())
-                    xCurrentCol->setPropertyValue(sPropertyName, aDefault);
+                if ( aDefault.hasValue() )
+                    aInitialValues.push_back( NamedValue( sPropertyName, aDefault ) );
 
                 // transfer properties from the definition to the UNO-model :
-                // ... the hidden flag
-                xCurrentCol->setPropertyValue(PROPERTY_HIDDEN, xColumn->getPropertyValue(PROPERTY_HIDDEN));
-
-                // ... the initial colum width
-                xCurrentCol->setPropertyValue(PROPERTY_WIDTH, xColumn->getPropertyValue(PROPERTY_WIDTH));
-
-                // ... horizontal justify
-                xCurrentCol->setPropertyValue(PROPERTY_ALIGN, makeAny(sal_Int16(::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_ALIGN)))));
-
-                // ... the 'comment' property as helptext (will usually be shown as header-tooltip)
+                aCopyProperties.push_back( PROPERTY_HIDDEN );
+                aCopyProperties.push_back( PROPERTY_WIDTH );
 
                 Any aDescription; aDescription <<= ::rtl::OUString();
-                if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
-                    aDescription <<= comphelper::getString(xColumn->getPropertyValue(PROPERTY_HELPTEXT));
+                if ( xColumn->getPropertySetInfo()->hasPropertyByName( PROPERTY_HELPTEXT ) )
+                    aDescription <<= ::comphelper::getString( xColumn->getPropertyValue( PROPERTY_HELPTEXT ) );
+                aInitialValues.push_back( NamedValue( PROPERTY_HELPTEXT, aDescription ) );
 
-                xCurrentCol->setPropertyValue(PROPERTY_HELPTEXT, aDescription);
+                // ... horizontal justify
+                aInitialValues.push_back( NamedValue( PROPERTY_ALIGN, makeAny( sal_Int16( ::comphelper::getINT32( xColumn->getPropertyValue( PROPERTY_ALIGN ) ) ) ) ) );
+
+                // now set all those values
+                for ( ::std::vector< NamedValue >::const_iterator property = aInitialValues.begin();
+                      property != aInitialValues.end();
+                      ++property
+                    )
+                {
+                    xCurrentCol->setPropertyValue( property->Name, property->Value );
+                }
+                for ( ::std::vector< ::rtl::OUString >::const_iterator copyPropertyName = aCopyProperties.begin();
+                      copyPropertyName != aCopyProperties.end();
+                      ++copyPropertyName
+                    )
+                    xCurrentCol->setPropertyValue( *copyPropertyName, xColumn->getPropertyValue( *copyPropertyName ) );
 
                 xColContainer->insertByName(*pIter, makeAny(xCurrentCol));
             }
@@ -3473,7 +3489,7 @@ sal_Bool SbaTableQueryBrowser::requestQuickHelp( const SvLBoxEntry* _pEntry, Str
 // -----------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
 {
-    Point aPosition;
+    ::Point aPosition;
     SvLBoxEntry* pEntry = NULL;
     SvLBoxEntry* pOldSelection = NULL;
     if (_rEvent.IsMouseEvent())
