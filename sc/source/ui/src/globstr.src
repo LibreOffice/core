@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 12:44:37 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:28:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1798,6 +1798,18 @@ Resource RID_GLOBSTR
     {
         Text [ de ] = "Tabelle wenden" ;
         Text [ en-US ] = "Flip sheet" ;
+    };
+    String STR_UNDO_TAB_R1C1
+    {
+        Text [ en-US ] = "Toggle the use of R1C1 notation" ;
+        Text[ de ] = "Verwendung der R1C1-Notation umschalten";
+        Text[ es ] = "Alternar el uso de la notación R1C1";
+        Text[ fr ] = "Activer/Désactiver l'usage de la notation R1C1";
+        Text[ it ] = "Alterna l'utilizzo della notazione R1C1";
+        Text[ ja ] = "R1C1表記の使用をトグルする";
+        Text[ pt-BR ] = "Alterna o uso da notação R1C1";
+        Text[ zh-CN ] = "切换使用 R1C1 表示法";
+        Text[ zh-TW ] = "切換使用 R1C1 標記";
     };
     String STR_CHART_MAINTITLE
     {
