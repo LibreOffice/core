@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:18:35 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:44:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,9 @@
 #endif
 #ifndef SC_XLTABLE_HXX
 #include "xltable.hxx"
+#endif
+#ifndef SC_XLPIVOT_HXX
+#include "xlpivot.hxx"
 #endif
 #ifndef SC_XISTRING_HXX
 #include "xistring.hxx"
@@ -360,18 +363,18 @@ RootObjectBase::~RootObjectBase()
 {
 }
 
-void RootObjectBase::Construct( const ObjectBase& rParent, SvStream& rStrm )
+void RootObjectBase::Construct( const ObjectBase& rParent, SvStream& rStrm, XclBiff eBiff )
 {
     StreamObjectRef xStrmObj( new SvStreamObject( rParent, rStrm ) );
     WrappedStreamObject::Construct( rParent, xStrmObj );
-    ConstructOwn();
+    ConstructOwn( eBiff );
 }
 
-void RootObjectBase::Construct( const OleStorageObject& rParentStrg, const String& rStrmName )
+void RootObjectBase::Construct( const OleStorageObject& rParentStrg, const String& rStrmName, XclBiff eBiff )
 {
     StreamObjectRef xStrmObj( new OleStreamObject( rParentStrg, rStrmName ) );
     WrappedStreamObject::Construct( rParentStrg, xStrmObj );
-    ConstructOwn();
+    ConstructOwn( eBiff );
 }
 
 void RootObjectBase::Construct( const RootObjectBase& rParent )
@@ -676,12 +679,12 @@ String RootObjectBase::DumpConstValue()
 
 // ----------------------------------------------------------------------------
 
-void RootObjectBase::ConstructOwn()
+void RootObjectBase::ConstructOwn( XclBiff eBiff )
 {
     if( WrappedStreamObject::ImplIsValid() )
     {
         SvStream& rStrm = GetStream();
-        meBiff = XclImpStream::DetectBiffVersion( rStrm );
+        meBiff = (eBiff == EXC_BIFF_UNKNOWN) ? XclImpStream::DetectBiffVersion( rStrm ) : eBiff;
         mxRootData.reset( new RootData( GetCoreMedium(), meBiff ) );
         if( IsValid( mxRootData ) )
             mxStrm.reset( new XclImpStream( rStrm, mxRootData->GetRoot() ) );
@@ -1560,29 +1563,29 @@ void FormulaObject::DumpAddDataMemArea( size_t nIdx )
 // ============================================================================
 // ============================================================================
 
-RecordStreamObject::RecordStreamObject( const ObjectBase& rParent, SvStream& rStrm )
+RecordStreamObject::RecordStreamObject( const ObjectBase& rParent, SvStream& rStrm, XclBiff eBiff )
 {
-    Construct( rParent, rStrm );
+    Construct( rParent, rStrm, eBiff );
 }
 
-RecordStreamObject::RecordStreamObject( const OleStorageObject& rParentStrg, const String& rStrmName )
+RecordStreamObject::RecordStreamObject( const OleStorageObject& rParentStrg, const String& rStrmName, XclBiff eBiff )
 {
-    Construct( rParentStrg, rStrmName );
+    Construct( rParentStrg, rStrmName, eBiff );
 }
 
 RecordStreamObject::~RecordStreamObject()
 {
 }
 
-void RecordStreamObject::Construct( const ObjectBase& rParent, SvStream& rStrm )
+void RecordStreamObject::Construct( const ObjectBase& rParent, SvStream& rStrm, XclBiff eBiff )
 {
-    RootObjectBase::Construct( rParent, rStrm );
+    RootObjectBase::Construct( rParent, rStrm, eBiff );
     ConstructOwn();
 }
 
-void RecordStreamObject::Construct( const OleStorageObject& rParentStrg, const String& rStrmName )
+void RecordStreamObject::Construct( const OleStorageObject& rParentStrg, const String& rStrmName, XclBiff eBiff )
 {
-    RootObjectBase::Construct( rParentStrg, rStrmName );
+    RootObjectBase::Construct( rParentStrg, rStrmName, eBiff );
     ConstructOwn();
 }
 
@@ -2413,6 +2416,78 @@ void WorkbookStreamObject::DumpXfRec()
 
 // ============================================================================
 
+PivotCacheStreamObject::PivotCacheStreamObject( const ObjectBase& rParent, SvStream& rStrm )
+{
+    RecordStreamObject::Construct( rParent, rStrm, EXC_BIFF8 );
+    ConstructOwn();
+}
+
+PivotCacheStreamObject::PivotCacheStreamObject( const OleStorageObject& rParentStrg, const String& rStrmName )
+{
+    RecordStreamObject::Construct( rParentStrg, rStrmName, EXC_BIFF8 );
+    ConstructOwn();
+}
+
+PivotCacheStreamObject::~PivotCacheStreamObject()
+{
+}
+
+void PivotCacheStreamObject::ImplDumpRecord()
+{
+    XclImpStream& rStrm = GetXclStream();
+    sal_uInt16 nRecId = rStrm.GetRecId();
+    sal_Size nRecSize = rStrm.GetRecSize();
+
+    switch( nRecId )
+    {
+        case EXC_ID_SXDATETIME:
+        {
+            sal_uInt16 nYear, nMonth;
+            sal_uInt8 nDay, nHour, nMin, nSec;
+            rStrm >> nYear >> nMonth >> nDay >> nHour >> nMin >> nSec;
+            DateTime aDateTime(
+                Date( static_cast< USHORT >( nDay ), static_cast< USHORT >( nMonth ), static_cast< USHORT >( nYear ) ),
+                Time( static_cast< ULONG >( nHour ), static_cast< ULONG >( nMin ), static_cast< ULONG >( nSec ) ) );
+            WriteDateTimeItem( "value", aDateTime );
+        }
+        break;
+        case EXC_ID_SXDB:
+            DumpDec< sal_uInt32 >( "source-records" );
+            DumpHex< sal_uInt16 >( "stream-id" );
+            DumpHex< sal_uInt16 >( "flags", "SXDB-FLAGS" );
+            DumpDec< sal_uInt16 >( "block-records" );
+            DumpDec< sal_uInt16 >( "standard-field-count" );
+            DumpDec< sal_uInt16 >( "total-field-count" );
+            DumpUnused( 2 );
+            DumpDec< sal_uInt16 >( "database-type", "SXDB-TYPE" );
+            DumpString( "user-name" );
+        break;
+        case EXC_ID_SXFIELD:
+            DumpHex< sal_uInt16 >( "flags", "SXFIELD-FLAGS" );
+            DumpDec< sal_uInt16 >( "group-child" );
+            DumpDec< sal_uInt16 >( "group-base" );
+            DumpDec< sal_uInt16 >( "visible-items" );
+            DumpDec< sal_uInt16 >( "group-items" );
+            DumpDec< sal_uInt16 >( "base-items" );
+            DumpDec< sal_uInt16 >( "original-items" );
+            if( rStrm.GetRecLeft() >= 3 )
+                DumpString( "item-name" );
+        break;
+        case EXC_ID_SXSTRING:
+            DumpString( "value" );
+        break;
+    }
+}
+
+void PivotCacheStreamObject::ConstructOwn()
+{
+    if( IsValid() )
+    {
+    }
+}
+
+// ============================================================================
+
 VbaProjectStreamObject::VbaProjectStreamObject( const OleStorageObject& rParentStrg )
 {
     OleStreamObject::Construct( rParentStrg, CREATE_STRING( "PROJECT" ) );
@@ -2424,6 +2499,20 @@ void VbaProjectStreamObject::ImplDumpBody()
 }
 
 // ============================================================================
+// ============================================================================
+
+PivotCacheStorageObject::PivotCacheStorageObject( const OleStorageObject& rParentStrg )
+{
+    OleStorageObject::Construct( rParentStrg, EXC_STORAGE_PTCACHE );
+}
+
+void PivotCacheStorageObject::ImplDumpBody()
+{
+    for( OleStorageIterator aIt( *this ); aIt.IsValid(); ++aIt )
+        if( aIt->IsStream() )
+            PivotCacheStreamObject( *this, aIt->GetName() ).Dump();
+}
+
 // ============================================================================
 
 VbaProjectStorageObject::VbaProjectStorageObject( const OleStorageObject& rParentStrg )
@@ -2452,6 +2541,7 @@ void RootStorageObject::ImplDumpBody()
     OlePropertyStreamObject( *this, CREATE_STRING( "\005SummaryInformation" ) ).Dump();
     OlePropertyStreamObject( *this, CREATE_STRING( "\005DocumentSummaryInformation" ) ).Dump();
     OleStreamObject( *this, EXC_STREAM_CTLS ).Dump();
+    PivotCacheStorageObject( *this ).Dump();
     VbaProjectStorageObject( *this ).Dump();
 }
 
