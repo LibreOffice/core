@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:56:09 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:08:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,7 @@ OConnection::OConnection(MozabDriver*   _pDriver)
     ,m_xMetaData(NULL)
     ,m_pDriver(_pDriver)
     ,m_pImplData( new ConnectionImplData )
+    ,m_aColumnAlias( _pDriver->getMSFactory() )
     ,m_nMaxResultRecords( -1 )
     ,m_aNameMapper(NULL)
     ,m_eSDBCAddressType(SDBCAddress::Unknown)
@@ -162,9 +163,6 @@ OConnection::OConnection(MozabDriver*   _pDriver)
     {
         OSL_ENSURE( false, "OConnection::OConnection: could not obtain the component context!" );
     }
-
-    // Initialise m_aColumnAlias.
-    m_aColumnAlias.setAlias(_pDriver->getMSFactory());
 }
 //-----------------------------------------------------------------------------
 OConnection::~OConnection()
