@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:41:01 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:23:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -535,7 +535,6 @@ void ScRangeData::UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable)
 
 void ScRangeData::MakeValidName( String& rName )        // static
 {
-    if (!ScCompiler::HasCharTable())
         ScCompiler::Init();
 
     //  ungueltige Zeichen vorne weglassen
@@ -559,27 +558,24 @@ void ScRangeData::MakeValidName( String& rName )        // static
     }
 
     // Name darf keine Referenz beinhalten, wie in IsNameValid
-    BOOL bOk;
-    do
-    {
-        bOk = TRUE;
+    ScAddress aAddr;
         ScRange aRange;
-        if( aRange.Parse( rName, NULL ) )
-            bOk = FALSE;
-        else
+    int nConv = ScAddress::CONV_UNSPECIFIED; // use int so that op++ works
+
+    // Ensure that the proposed name is not an address under any convention
+    while ( ++nConv != ScAddress::CONV_LAST )
         {
-            ScAddress aAddr;
-            if ( aAddr.Parse( rName, NULL ) )
-                bOk = FALSE;
-        }
-        if ( !bOk )
-        {   //! Range Parse auch bei Bereich mit ungueltigem Tabellennamen gueltig
+        ScAddress::Details details( static_cast<ScAddress::Convention>( nConv ) );
+        while( aRange.Parse( rName, NULL, details )
+               || aAddr.Parse( rName, NULL, details ) )
+        {
+            //! Range Parse auch bei Bereich mit ungueltigem Tabellennamen gueltig
             //! Address Parse dito, Name erzeugt deswegen bei Compile ein #REF!
             if ( rName.SearchAndReplace( ':', '_' ) == STRING_NOTFOUND
               && rName.SearchAndReplace( '.', '_' ) == STRING_NOTFOUND )
                 rName.Insert('_',0);
         }
-    } while ( !bOk );
+    }
 }
 
 BOOL ScRangeData::IsNameValid( const String& rName, ScDocument* pDoc )
@@ -598,12 +594,12 @@ BOOL ScRangeData::IsNameValid( const String& rName, ScDocument* pDoc )
     // Parse nicht auf VALID pruefen, es reicht, wenn irgendein Bestandteil
     // erkannt wurde
     ScRange aRange;
-    if( aRange.Parse( rName, pDoc ) )
+    if( aRange.Parse( rName, pDoc ) )   // THIS IS WRONG
         return FALSE;
     else
     {
         ScAddress aAddr;
-        if ( aAddr.Parse( rName, pDoc ) )
+        if ( aAddr.Parse( rName, pDoc ) )   // THIS IS WRONG
             return FALSE;
     }
     return TRUE;
