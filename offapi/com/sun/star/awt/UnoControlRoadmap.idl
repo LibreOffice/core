@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoControlRoadmap.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:30:36 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:20:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,34 +56,30 @@
 //=============================================================================
 
 /** specifies a Roadmap control. The model of the Roadmap control must be a
- * com::sun::star::awt::UnoControlRoadmapModel
- * Subsequently some characteristics about how the properties of the model are processed:
- *
- * [property] short CurrentItem: The RGB code of the background color is RGB(194, 211, 238)
- *
- * [property] string ImageURL: The image referenced by the ImageUrl
- * is placed in the lower right corner of the control
- *
- * [property] string Text: The Text is displayed in Bold und underlined
- *
- * [property] boolean Complete: When set to false a non interactive RoadmapItem is appended
- * under the last RoadmapItem. Its Label is as follows: (Index + 1) + ". ..."
- *
- * [property] boolean Interactive: When activating a RoadmapItem
- * (see com::sun::star::awt::RoadmapItem) the information about which Item has been selected
- * is passed over when an itemlistener has been registered at the control.
- *
- * */
+    <type>UnoControlRoadmapModel</type>
+
+    <p>The model properties are implemented in the control as follows:
+    <ul><li>CurrentItem: The RGB code of the background color is RGB(194, 211, 238)</li>
+        <li>ImageURL: The image referenced by the URL is placed in the lower right corner
+            of the control.</li>
+        <li>Graphic: The graphic is placed in the lower right corner of the control.</li>
+        <li>Complete: When set to <FALSE/> a non interactive RoadmapItem is appended
+            after the last roadmap item, labeled with three dots, indicating incompleteness.</li>
+        <li>Interactive: When activating a RoadmapItem (see <type>RoadmapItem</type>) the
+            information about which Item has been selected is passed over when an itemlistener
+            has been registered at the control.</li>
+    </ul></p>
+*/
 service UnoControlRoadmap
 {
     service com::sun::star::awt::UnoControl;
 
     /** This interface allows to add an Itemlistener to the roadmap.
-     *  If the property "Interactive" at the com::sun::star::awt::UnoControlRoadmapModel
-     *  is set to 'true' the listener is triggered each time the user selects a RoadmapItem
-     *  by Mouseclick or pressing space bar at the currently focussed RoadmapItem.
-     *  The property ItemID of the com::sun::star::awt::ItemEvent:: is assigned
-     *  the value of the property "ID" of the activated RoadmapItem.
+        If the property "Interactive" at the com::sun::star::awt::UnoControlRoadmapModel
+        is set to 'true' the listener is triggered each time the user selects a RoadmapItem
+        by Mouseclick or pressing space bar at the currently focussed RoadmapItem.
+        The property ItemID of the com::sun::star::awt::ItemEvent:: is assigned
+        the value of the property "ID" of the activated RoadmapItem.
      */
     interface com::sun::star::awt::XItemEventBroadcaster;
 
