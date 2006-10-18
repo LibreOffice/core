@@ -4,9 +4,9 @@
  *
  *  $RCSfile: queryfilter.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:01:12 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:31:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,7 @@ namespace dbaui
 
         void            SetLine( USHORT nIdx,const ::com::sun::star::beans::PropertyValue& _rItem,sal_Bool _bOr );
         void            EnableLines();
-        sal_Int32       GetOSQLPredicateType(USHORT nPos,USHORT nCount) const;
+        sal_Int32       GetOSQLPredicateType( const String& _rSelectedPredicate ) const;
         USHORT          GetSelectionPos(sal_Int32 eType,const ListBox& rListBox) const;
         sal_Bool        getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue,::com::sun::star::beans::PropertyValue& _rFilter) const;
         void            fillLines(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& _aValues);
