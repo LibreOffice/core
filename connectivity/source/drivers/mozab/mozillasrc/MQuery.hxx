@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MQuery.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:19:19 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:11:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,7 @@ namespace connectivity
 
         };
 
-        //
+
         class MQuery : public ErrorResourceAccess
         {
             /*
@@ -223,8 +223,7 @@ namespace connectivity
             sal_Int32                       m_nMaxNrOfReturns;
             sal_Bool                        m_bQuerySubDirs;
             MQueryExpression                m_aExpr;
-            ::std::map< ::rtl::OUString,
-                        ::rtl::OUString>    m_aColumnAliasMap;
+            const OColumnAlias&             m_rColumnAlias;
             mutable sal_Bool                m_aErrorOccurred;
             ::com::sun::star::mozilla::MozillaProductType m_Product;
             ::rtl::OUString                               m_Profile;
@@ -240,60 +239,59 @@ namespace connectivity
              * - Contains accessors to the members of this class.
              * - executeQuery() initiates a non-blocking query.
              */
-            sal_Int32                       executeQuery(OConnection* _pCon);    //
+            sal_Int32                       executeQuery(OConnection* _pCon);
             sal_Int32                       executeQueryProxied(OConnection* _pCon); //Used only by MNSMozabProxy
 
             sal_Int32                       createNewCard(); //return Row count number
-            sal_Int32                       deleteRow(const sal_Int32 rowIndex); //
-            sal_Int32                       commitRow(const sal_Int32 rowIndex); //
-            sal_Bool                        resyncRow(sal_Int32 nDBRow);         //
+            sal_Int32                       deleteRow(const sal_Int32 rowIndex);
+            sal_Int32                       commitRow(const sal_Int32 rowIndex);
+            sal_Bool                        resyncRow(sal_Int32 nDBRow);
 
-            sal_Bool                        isWritable(OConnection* _pCon);                      //
+            sal_Bool                        isWritable(OConnection* _pCon);
 
-            sal_uInt32                      InsertLoginInfo(OConnection* _pCon); //
+            sal_uInt32                      InsertLoginInfo(OConnection* _pCon);
 
-            void                            setAttributes( ::std::vector< ::rtl::OUString>&);           //
-            const                           ::std::vector< ::rtl::OUString> &getAttributes(void) const; //
+            void                            setAttributes( ::std::vector< ::rtl::OUString>&);
+            const                           ::std::vector< ::rtl::OUString> &getAttributes(void) const;
 
-            void                            setAddressbook( ::rtl::OUString&);  //
-            ::rtl::OUString                 getAddressbook(void) const;         //
+            void                            setAddressbook( ::rtl::OUString&);
+            ::rtl::OUString                 getAddressbook(void) const;
 
-            const ::std::map< ::rtl::OUString,::rtl::OUString>&
-                                            getColumnAliasMap() const { return m_aColumnAliasMap; }
+            const OColumnAlias&             getColumnAlias() const { return m_rColumnAlias; }
 
             void                            setExpression( MQueryExpression &_expr );
 
-            void                            setMaxNrOfReturns( const sal_Int32); //
-            sal_Int32                       getMaxNrOfReturns(void) const;       //
+            void                            setMaxNrOfReturns( const sal_Int32);
+            sal_Int32                       getMaxNrOfReturns(void) const;
 
-            void                            setQuerySubDirs( sal_Bool&);         //
-            sal_Bool                        getQuerySubDirs(void) const;         //
+            void                            setQuerySubDirs( sal_Bool&);
+            sal_Bool                        getQuerySubDirs(void) const;
 
-            sal_Int32                       getRowCount( void );                 //
-            sal_uInt32                      getRealRowCount( void );             //
-            sal_Bool                        queryComplete( void );               //
-            sal_Bool                        waitForQueryComplete( void );        //
-            sal_Bool                        checkRowAvailable( sal_Int32 nDBRow );//
+            sal_Int32                       getRowCount( void );
+            sal_uInt32                      getRealRowCount( void );
+            sal_Bool                        queryComplete( void );
+            sal_Bool                        waitForQueryComplete( void );
+            sal_Bool                        checkRowAvailable( sal_Int32 nDBRow );
             sal_Bool                        getRowValue( connectivity::ORowSetValue& rValue,
                                                          sal_Int32 nDBRow,
                                                          const rtl::OUString& aDBColumnName,
-                                                         sal_Int32 nType ) const;//
+                                                         sal_Int32 nType ) const;
             sal_Bool                        setRowValue( connectivity::ORowSetValue& rValue,
                                                          sal_Int32 nDBRow,
                                                          const rtl::OUString& aDBColumnName,
-                                                         sal_Int32 nType ) const;//
-            sal_Int32                       getRowStates(sal_Int32 nDBRow);      //
-            sal_Bool                        setRowStates(sal_Int32 nDBRow,sal_Int32 aState); //
+                                                         sal_Int32 nType ) const;
+            sal_Int32                       getRowStates(sal_Int32 nDBRow);
+            sal_Bool                        setRowStates(sal_Int32 nDBRow,sal_Int32 aState);
 
-            sal_Bool                        errorOccurred() const   //
+            sal_Bool                        errorOccurred() const
                                             { return m_aErrorOccurred; };
 
         public:
-            MQuery();                                                       //
-            MQuery(const ::std::map< ::rtl::OUString, ::rtl::OUString> &);  //
-            virtual ~MQuery();                                              //
-            static MNameMapper* CreateNameMapper(); //
-            static void FreeNameMapper( MNameMapper* _ptr ); //
+//          MQuery();
+            MQuery( const OColumnAlias& _ca );
+            virtual ~MQuery();
+            static MNameMapper* CreateNameMapper();
+            static void FreeNameMapper( MNameMapper* _ptr );
         };
     }
 }
