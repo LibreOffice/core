@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table6.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:10:15 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:20:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             case SVX_SEARCHIN_FORMULA:
             {
                 if ( eCellType == CELLTYPE_FORMULA )
-                    ((ScFormulaCell*)pCell)->GetFormula( aString );
+                    ((ScFormulaCell*)pCell)->GetFormula( aString, ScAddress::CONV_OOO );
                 else if ( eCellType == CELLTYPE_EDIT )
                     bMultiLine = lcl_GetTextWithBreaks(
                         *(const ScEditCell*)pCell, pDocument, aString );
@@ -281,7 +281,7 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 }
                 ScAddress aAdr( nCol, nRow, nTab );
                 ScFormulaCell* pFCell = new ScFormulaCell( pDocument, aAdr,
-                    aString, cMatrixFlag );
+                    aString, ScAddress::CONV_OOO, cMatrixFlag );
                 SCCOL nMatCols;
                 SCROW nMatRows;
                 ((ScFormulaCell*)pCell)->GetMatColsRows( nMatCols, nMatRows );
