@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:32:56 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:15:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1253,12 +1253,12 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                     {
                         if ( rValue.getValueType().getTypeClass() == TypeClass_INTERFACE )
                         {
-                            Reference< XInterface > xPure;
-                            if ( ( rValue >>= xPure ) && xPure.is() )
-                            {
+                            Reference< XInterface > xPure( rValue, UNO_QUERY );
+                            if ( xPure.is() )
                                 rConvertedValue = xPure->queryInterface( *pDestType );
-                                bConverted = rConvertedValue.hasValue();
-                            }
+                            else
+                                rConvertedValue.setValue( NULL, *pDestType );
+                            bConverted = sal_True;
                         }
                     }
                     break;
@@ -1275,9 +1275,17 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
 
                 if (!bConverted)
                 {
+                    ::rtl::OUStringBuffer aErrorMessage;
+                    aErrorMessage.appendAscii( "Unable to convert the given value for the property " );
+                    aErrorMessage.append     ( GetPropertyName( (sal_uInt16)nPropId ) );
+                    aErrorMessage.appendAscii( ".\n" );
+                    aErrorMessage.appendAscii( "Expected type: " );
+                    aErrorMessage.append     ( pDestType->getTypeName() );
+                    aErrorMessage.appendAscii( "\n" );
+                    aErrorMessage.appendAscii( "Found type: " );
+                    aErrorMessage.append     ( rValue.getValueType().getTypeName() );
                     throw ::com::sun::star::lang::IllegalArgumentException(
-                                ::rtl::OUString::createFromAscii("Unable to convert the given value for the property ")
-                            +=  GetPropertyName((sal_uInt16)nPropId),
+                        aErrorMessage.makeStringAndClear(),
                         static_cast< ::com::sun::star::beans::XPropertySet* >(this),
                         1);
                 }
