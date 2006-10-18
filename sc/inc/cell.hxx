@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:24:26 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:15:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,6 +247,7 @@ class ScFormulaCell : public ScBaseCell, public SvtListener
 private:
     String          aErgString;
     double          nErgValue;
+    ScAddress::Convention nErgConv;
     ScTokenArray*   pCode;                  // das neue Token-Array
     ScDocument*     pDocument;
     ScMatrix*       pMatrix;                // Pointer auf Ergebnis-Matrix
@@ -293,8 +294,11 @@ public:
     // leere Zelle, ggf. mit fertigem TokenArray
     ScFormulaCell( ScDocument*, const ScAddress&, const ScTokenArray* = NULL, BYTE=0 );
     // mit Formel
-    ScFormulaCell( ScDocument* pDoc, const ScAddress&,
-                   const String& rFormula, BYTE bMatInd = 0 );
+    ScFormulaCell( ScDocument* pDoc, const ScAddress& aPos,
+                   const String& rFormula,
+                   // Use the conv associated with aPos::nTab by default
+                   ScAddress::Convention eConvP = ScAddress::CONV_UNSPECIFIED,
+                   BYTE bMatInd = 0 );
     // copy-ctor
     // nCopyFlags:  0 := nothing special
     //              0x0001 := readjust 3D references to point to old position even if relative
@@ -307,9 +311,12 @@ public:
     ScBaseCell*     Clone(ScDocument* pDoc, const ScAddress&,
                             BOOL bNoListening = FALSE ) const;
 
-    void            GetFormula( String& rFormula ) const;
-    void            GetEnglishFormula( String& rFormula, BOOL bCompileXML = FALSE ) const;
-    void            GetEnglishFormula( rtl::OUStringBuffer& rBuffer, BOOL bCompileXML = FALSE ) const;
+    void            GetFormula( String& rFormula,
+                                ScAddress::Convention eConv = ScAddress::CONV_OOO) const;
+    void            GetEnglishFormula( String& rFormula, BOOL bCompileXML = FALSE,
+                                       ScAddress::Convention eConv = ScAddress::CONV_OOO) const;
+    void            GetEnglishFormula( rtl::OUStringBuffer& rBuffer, BOOL bCompileXML = FALSE,
+                                       ScAddress::Convention eConv = ScAddress::CONV_OOO) const;
 
     void            Save( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
 
@@ -321,7 +328,9 @@ public:
     BOOL            GetDirty() const { return bDirty; }
     BOOL            NeedsListening() const { return bNeedListening; }
     void            SetNeedsListening( BOOL bVar ) { bNeedListening = bVar; }
-    void            Compile(const String& rFormula, BOOL bNoListening = FALSE );
+    void            Compile(const String& rFormula,
+                            BOOL bNoListening = FALSE,
+                            ScAddress::Convention eConv = ScAddress::CONV_OOO);
     void            CompileTokenArray( BOOL bNoListening = FALSE );
     void            CompileXML( ScProgress& rProgress );        // compile temporary string tokens
     void            CalcAfterLoad();
@@ -408,7 +417,9 @@ public:
     // fuer die Importfilter!
     void            AddRecalcMode( ScRecalcMode );
     void            SetDouble( double n )                   { nErgValue = n; bIsValue = TRUE; }
-    void            SetString( const String& r )            { aErgString = r; bIsValue = FALSE; }
+    void            SetString( const String& r,
+                               ScAddress::Convention eConv = ScAddress::CONV_OOO)
+                        { aErgString = r; nErgConv = eConv; bIsValue = FALSE; }
     void            SetErrCode( USHORT n );
     inline BOOL     IsHyperLinkCell() const { return pCode && pCode->IsHyperLink(); }
     EditTextObject*     CreateURLObject() ;
