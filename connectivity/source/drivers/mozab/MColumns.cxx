@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MColumns.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:55:37 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:07:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
     sdbcx::ObjectType xRet = NULL;
     if(xResult.is())
     {
-                Reference< XRow > xRow(xResult,UNO_QUERY);
+        Reference< XRow > xRow(xResult,UNO_QUERY);
         while(xResult->next())
         {
             if(xRow->getString(4) == _rName)
