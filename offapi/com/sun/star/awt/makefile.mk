@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-08 08:37:54 $
+#   last change: $Author: ihi $ $Date: 2006-10-18 13:21:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -295,6 +295,7 @@ IDLFILES=\
     XWindow.idl\
     XWindow2.idl\
     XWindowListener.idl\
+    XWindowListener2.idl\
     XWindowPeer.idl\
     XMenuExtended.idl
 
