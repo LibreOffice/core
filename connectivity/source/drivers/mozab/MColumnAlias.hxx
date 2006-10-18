@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MColumnAlias.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:16:17 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:07:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,78 +49,93 @@ namespace connectivity
 {
     namespace mozab
     {
-        typedef enum {
-            FIRSTNAME = 0,
-            LASTNAME,
-            DISPLAYNAME,
-            NICKNAME,
-            PRIMARYEMAIL,
-            SECONDEMAIL,
-            PREFERMAILFORMAT,
-            WORKPHONE,
-            HOMEPHONE,
-            FAXNUMBER,
-            PAGERNUMBER,
-            CELLULARNUMBER,
-            HOMEADDRESS,
-            HOMEADDRESS2,
-            HOMECITY,
-            HOMESTATE,
-            HOMEZIPCODE,
-            HOMECOUNTRY,
-            WORKADDRESS,
-            WORKADDRESS2,
-            WORKCITY,
-            WORKSTATE,
-            WORKZIPCODE,
-            WORKCOUNTRY,
-            JOBTITLE,
-            DEPARTMENT,
-            COMPANY,
-            WEBPAGE1,
-            WEBPAGE2,
-            BIRTHYEAR,
-            BIRTHMONTH,
-            BIRTHDAY,
-            CUSTOM1,
-            CUSTOM2,
-            CUSTOM3,
-            CUSTOM4,
-            NOTES,
-            END
-        } ProgrammaticName;
-
         class OColumnAlias
         {
-            /**
-             * m_Alias holds aliases for the mozilla addressbook
-              * column names. This member gets initialised during
-                         * creation of the connection to the driver.
-             * m_aAlias initialises m_aAliasMap which then can be
-                 * used to find the corresponding programmatic name
-             * when an alias is used as a query attribute. Mozilla
-             * expects programmatic names from its clients.
-               *
-             * m_aAlias:   vector of aliases used to initialise m_aAliasMap.
-             * m_AliasMap: map of {alias, programmaticname} pairs.
-             *
-             */
-            private:
-                ::std::vector< ::rtl::OUString> m_aAlias;
-                ::std::map< ::rtl::OUString, ::rtl::OUString> m_aAliasMap;
-            protected:
-                ::osl::Mutex  m_aMutex;
-            public:
-                                void initialise(void);
-                const ::std::vector< ::rtl::OUString> & getAlias(void) const;
-                const ::std::map< ::rtl::OUString, ::rtl::OUString> & getAliasMap(void) const;
-                void setAlias(const ::com::sun::star::uno::Reference<
-                                                    ::com::sun::star::lang::XMultiServiceFactory > &);
-            private:
-                void setAliasMap(void);
-            public:
-                OColumnAlias(void);
-                ~OColumnAlias(void);
+        public:
+            typedef enum {
+                BEGIN = 0,
+
+                FIRSTNAME = BEGIN,
+                LASTNAME,
+                DISPLAYNAME,
+                NICKNAME,
+                PRIMARYEMAIL,
+                SECONDEMAIL,
+                PREFERMAILFORMAT,
+                WORKPHONE,
+                HOMEPHONE,
+                FAXNUMBER,
+                PAGERNUMBER,
+                CELLULARNUMBER,
+                HOMEADDRESS,
+                HOMEADDRESS2,
+                HOMECITY,
+                HOMESTATE,
+                HOMEZIPCODE,
+                HOMECOUNTRY,
+                WORKADDRESS,
+                WORKADDRESS2,
+                WORKCITY,
+                WORKSTATE,
+                WORKZIPCODE,
+                WORKCOUNTRY,
+                JOBTITLE,
+                DEPARTMENT,
+                COMPANY,
+                WEBPAGE1,
+                WEBPAGE2,
+                BIRTHYEAR,
+                BIRTHMONTH,
+                BIRTHDAY,
+                CUSTOM1,
+                CUSTOM2,
+                CUSTOM3,
+                CUSTOM4,
+                NOTES,
+
+                END
+            } ProgrammaticName;
+
+            struct AliasDescription
+            {
+                ::rtl::OUString     sProgrammaticName;
+                ProgrammaticName    eProgrammaticNameIndex;
+
+                AliasDescription()
+                    :eProgrammaticNameIndex( END )
+                {
+                }
+
+                AliasDescription( const ::rtl::OUString& _rName, ProgrammaticName _eIndex )
+                    :sProgrammaticName( _rName ), eProgrammaticNameIndex( _eIndex )
+                {
+                }
+            };
+
+            typedef ::std::map< ::rtl::OUString, AliasDescription > AliasMap;
+
+        private:
+            AliasMap    m_aAliasMap;
+
+        protected:
+            ::osl::Mutex  m_aMutex;
+
+        public:
+            OColumnAlias(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
+
+            ProgrammaticName getProgrammaticNameIndex( const ::rtl::OUString& _rAliasName ) const;
+            inline bool hasAlias( const ::rtl::OUString& _rAlias ) const
+            {
+                return m_aAliasMap.find( _rAlias ) != m_aAliasMap.end();
+            }
+            ::rtl::OUString getProgrammaticNameOrFallbackToAlias( const ::rtl::OUString& _rAlias ) const;
+
+            inline AliasMap::const_iterator begin() const { return m_aAliasMap.begin(); }
+            inline AliasMap::const_iterator end() const { return m_aAliasMap.end(); }
+
+        private:
+            void initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB );
         };
     }
 }
