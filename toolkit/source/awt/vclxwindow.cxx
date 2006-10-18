@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:31:52 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:14:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_ENDPOPUPMODEEVENT_HPP_
 #include <com/sun/star/awt/EndPopupModeEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XWINDOWLISTENER2_HPP_
+#include <com/sun/star/awt/XWindowListener2.hpp>
 #endif
 #ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
 #include <com/sun/star/style/VerticalAlignment.hpp>
@@ -141,6 +144,10 @@
 
 using namespace ::com::sun::star;
 
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::lang::EventObject;
+using ::com::sun::star::awt::XWindowListener2;
 using ::com::sun::star::style::VerticalAlignment;
 using ::com::sun::star::style::VerticalAlignment_TOP;
 using ::com::sun::star::style::VerticalAlignment_MIDDLE;
@@ -171,21 +178,98 @@ using ::com::sun::star::style::VerticalAlignment_MAKE_FIXED_SIZE;
 //====================================================================
 //= VCLXWindowImpl
 //====================================================================
-#define EVENT_MOUSE_PRESSED     0
-#define EVENT_MOUSE_RELEASED    1
-#define EVENT_MOUSE_ENTERED     2
-#define EVENT_MOUSE_EXITED      3
-
-struct AnyMouseEvent : public ::comphelper::EventHolder< ::com::sun::star::awt::MouseEvent >
+namespace
 {
-    sal_Int16   nMouseEventType;
-
-    AnyMouseEvent( const ::com::sun::star::awt::MouseEvent& _rEvent, sal_Int16 _nType )
-        :comphelper::EventHolder< ::com::sun::star::awt::MouseEvent >( _rEvent )
-        ,nMouseEventType( _nType )
+    enum MouseEventType
     {
+        EVENT_MOUSE_PRESSED     = 0,
+        EVENT_MOUSE_RELEASED    = 1,
+        EVENT_MOUSE_ENTERED     = 2,
+        EVENT_MOUSE_EXITED      = 3,
+
+        META_FIRST_MOUSE_EVENT  = 0,
+        META_LAST_MOUSE_EVENT   = 3
+    };
+
+    enum PlainEventType
+    {
+        EVENT_WINDOW_ENABLED    = 4,
+        EVENT_WINDOW_DISABLED   = 5,
+
+        META_FIRST_PLAIN_EVENT  = 4,
+        META_LAST_PLAIN_EVENT   = 5
+    };
+
+#if OSL_DEBUG_LEVEL > 0
+    static void checkEventDefinitions()
+    {
+        OSL_ENSURE( (int)META_LAST_MOUSE_EVENT < (int)META_FIRST_PLAIN_EVENT, "checkEventDefinitions: invalid event definitions!" );
     }
-};
+    #define DBG_CHECK_EVENTS()  checkEventDefinitions()
+#else
+    #define DBG_CHECK_EVENTS()
+#endif
+
+    struct AnyWindowEvent : public ::comphelper::AnyEvent
+    {
+    private:
+        awt::MouseEvent     m_aMouseEvent;
+        lang::EventObject   m_aPlainEvent;
+
+        sal_Int32           m_nEventType;
+
+    public:
+        AnyWindowEvent( const awt::MouseEvent& _rEvent, MouseEventType _nType )
+            :comphelper::AnyEvent()
+            ,m_aMouseEvent( _rEvent )
+            ,m_nEventType( static_cast< sal_Int32 >( _nType ) )
+        {
+            DBG_CHECK_EVENTS();
+        }
+
+        AnyWindowEvent( const lang::EventObject& _rEvent, PlainEventType _nType )
+            :comphelper::AnyEvent()
+            ,m_aPlainEvent( _rEvent )
+            ,m_nEventType( static_cast< sal_Int32 >( _nType ) )
+        {
+            DBG_CHECK_EVENTS();
+        }
+
+        bool    isMouseEvent() const
+        {
+            return ( META_FIRST_MOUSE_EVENT <= m_nEventType ) && ( m_nEventType <= META_LAST_MOUSE_EVENT );
+        }
+
+        bool    isPlainEvent() const
+        {
+            return ( META_FIRST_PLAIN_EVENT <= m_nEventType ) && ( m_nEventType <= META_LAST_PLAIN_EVENT );
+        }
+
+        const awt::MouseEvent& getMouseEvent() const
+        {
+            OSL_ENSURE( isMouseEvent(), "AnyWindowEvent::getMouseEvent: no mouse event!" );
+            return m_aMouseEvent;
+        }
+
+        MouseEventType getMouseEventType() const
+        {
+            OSL_ENSURE( isMouseEvent(), "AnyWindowEvent::getMouseEventType: no mouse event!" );
+            return static_cast< MouseEventType >( m_nEventType );
+        }
+
+        const lang::EventObject& getPlainEvent() const
+        {
+            OSL_ENSURE( isPlainEvent(), "AnyWindowEvent::getPlainEvent: no plain event!" );
+            return m_aPlainEvent;
+        }
+
+        PlainEventType getPlainEventType() const
+        {
+            OSL_ENSURE( isPlainEvent(), "AnyWindowEvent::getPlainEventType: no mouse event!" );
+            return static_cast< PlainEventType >( m_nEventType );
+        }
+    };
+}
 
 class SAL_DLLPRIVATE VCLXWindowImpl : public ::comphelper::IEventProcessor
 {
@@ -198,6 +282,8 @@ private:
     VCLXWindow&                         mrAntiImpl;
     ::vos::IMutex&                      mrMutex;
     bool                                mbDisposed;
+    ::osl::Mutex                        maListenerContainerMutex;
+    ::cppu::OInterfaceContainerHelper   maWindow2Listeners;
 
 #ifdef THREADED_NOTIFICATION
     ::rtl::Reference< ::comphelper::AsyncEventNotifier >
@@ -217,13 +303,22 @@ public:
     */
     VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex );
 
-    /** asynchronously notifies a mousePressed event to the VCLXWindow's XMouseListeners
+    /** asynchronously notifies a mouse event to the VCLXWindow's XMouseListeners
     */
-    void    notifyMouseEvent( const ::com::sun::star::awt::MouseEvent& _rMouseEvent, sal_uInt16 _nType );
+    void    notifyMouseEvent( const awt::MouseEvent& _rMouseEvent, MouseEventType _nType );
+
+    /** asynchronously notifies an event described by an EventObject to the respective listeners
+    */
+    void    notifyPlainEvent( const lang::EventObject& _rPlainEvent, PlainEventType _nType );
 
     /** notifies the object that its VCLXWindow is being disposed
     */
     void    disposing();
+
+    /** returns the container of registered XWindowListener2 listeners
+    */
+    inline ::cppu::OInterfaceContainerHelper&
+            getWindow2Listeners() { return maWindow2Listeners; }
 
     virtual void SAL_CALL acquire();
     virtual void SAL_CALL release();
@@ -238,6 +333,18 @@ protected:
 private:
     DECL_LINK( OnProcessEvent, void* );
 #endif
+
+private:
+    /** notifies an arbitrary event
+        @param _rEvent
+            the event to notify
+        @param _rGuard
+            a guard currentl guarding our mutex, which is released for the actual notification
+    */
+    void impl_notifyAnyEvent(
+        const ::rtl::Reference< ::comphelper::AnyEvent >& _rEvent,
+        ::vos::OClearableGuard& _rGuard
+    );
 
 private:
     /** determines whether the instance is already disposed
@@ -261,6 +368,8 @@ VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex )
     ,mrAntiImpl( _rAntiImpl )
     ,mrMutex( _rMutex )
     ,mbDisposed( false )
+    ,maListenerContainerMutex( )
+    ,maWindow2Listeners( maListenerContainerMutex )
 #ifdef THREADED_NOTIFICATION
     ,mpAsyncNotifier( NULL )
 #else
@@ -297,30 +406,46 @@ void VCLXWindowImpl::disposing()
 }
 
 //--------------------------------------------------------------------
-void VCLXWindowImpl::notifyMouseEvent( const ::com::sun::star::awt::MouseEvent& _rMouseEvent, sal_uInt16 _nType )
+void VCLXWindowImpl::impl_notifyAnyEvent( const ::rtl::Reference< ::comphelper::AnyEvent >& _rEvent, ::vos::OClearableGuard& _rGuard )
+{
+#ifdef THREADED_NOTIFICATION
+    (void)_rGuard;
+    if ( !mpAsyncNotifier.is() )
+    {
+        mpAsyncNotifier = new ::comphelper::AsyncEventNotifier;
+        mpAsyncNotifier->create();
+    }
+    mpAsyncNotifier->addEvent( _rEvent, this );
+
+#else   // #ifdef THREADED_NOTIFICATION
+
+#ifdef SYNCHRON_NOTIFICATION
+    _rGuard.clear();
+    processEvent( *_rEvent );
+#else   // #ifdef SYNCHRON_NOTIFICATION
+    (void)_rGuard;
+    maEvents.push_back( _rEvent );
+    if ( !mnEventId )
+        mnEventId = Application::PostUserEvent( LINK( this, VCLXWindowImpl, OnProcessEvent ) );
+#endif  // #ifdef SYNCHRON_NOTIFICATION
+
+#endif  // // #ifdef THREADED_NOTIFICATION
+}
+
+//--------------------------------------------------------------------
+void VCLXWindowImpl::notifyMouseEvent( const awt::MouseEvent& _rMouseEvent, MouseEventType _nType )
 {
     ::vos::OClearableGuard aGuard( mrMutex );
     if ( mrAntiImpl.GetMouseListeners().getLength() )
-    {
-        ::rtl::Reference< ::comphelper::AnyEvent > aEvent( new AnyMouseEvent( _rMouseEvent, _nType ) );
-#ifdef THREADED_NOTIFICATION
-        if ( !mpAsyncNotifier.is() )
-        {
-            mpAsyncNotifier = new ::comphelper::AsyncEventNotifier;
-            mpAsyncNotifier->create();
-        }
-        mpAsyncNotifier->addEvent( aEvent, this );
-#else
-    #ifdef SYNCHRON_NOTIFICATION
-        aGuard.clear();
-        processEvent( *aEvent );
-    #else
-        maEvents.push_back( aEvent );
-        if ( !mnEventId )
-            mnEventId = Application::PostUserEvent( LINK( this, VCLXWindowImpl, OnProcessEvent ) );
-    #endif
-#endif
-    }
+        impl_notifyAnyEvent( new AnyWindowEvent( _rMouseEvent, _nType ), aGuard );
+}
+
+//--------------------------------------------------------------------
+void VCLXWindowImpl::notifyPlainEvent( const lang::EventObject& _rPlainEvent, PlainEventType _nType )
+{
+    ::vos::OClearableGuard aGuard( mrMutex );
+    if ( maWindow2Listeners.getLength() )
+        impl_notifyAnyEvent( new AnyWindowEvent( _rPlainEvent, _nType ), aGuard );
 }
 
 #if !defined( SYNCHRON_NOTIFICATION ) && !defined( THREADED_NOTIFICATION )
@@ -364,25 +489,47 @@ void VCLXWindowImpl::processEvent( const ::comphelper::AnyEvent& _rEvent )
         // while we were waiting for our mutex, another thread disposed us
         return;
 
-    const AnyMouseEvent& rEventDescriptor( static_cast< const AnyMouseEvent& >( _rEvent ) );
-    const ::com::sun::star::awt::MouseEvent& rEvent( rEventDescriptor.getEventObject() );
-    switch ( rEventDescriptor.nMouseEventType )
+    const AnyWindowEvent& rEventDescriptor( static_cast< const AnyWindowEvent& >( _rEvent ) );
+    if ( rEventDescriptor.isMouseEvent() )
     {
-    case EVENT_MOUSE_PRESSED:
-        mrAntiImpl.GetMouseListeners().mousePressed( rEvent );
-        break;
-    case EVENT_MOUSE_RELEASED:
-        mrAntiImpl.GetMouseListeners().mouseReleased( rEvent );
-        break;
-    case EVENT_MOUSE_ENTERED:
-        mrAntiImpl.GetMouseListeners().mouseEntered( rEvent );
-        break;
-    case EVENT_MOUSE_EXITED:
-        mrAntiImpl.GetMouseListeners().mouseExited( rEvent );
-        break;
-    default:
-        DBG_ERROR( "VCLXWindowImpl::processEvent: what kind of event *is* this?" );
+        const awt::MouseEvent& rEvent( rEventDescriptor.getMouseEvent() );
+        switch ( rEventDescriptor.getMouseEventType() )
+        {
+        case EVENT_MOUSE_PRESSED:
+            mrAntiImpl.GetMouseListeners().mousePressed( rEvent );
+            break;
+        case EVENT_MOUSE_RELEASED:
+            mrAntiImpl.GetMouseListeners().mouseReleased( rEvent );
+            break;
+        case EVENT_MOUSE_ENTERED:
+            mrAntiImpl.GetMouseListeners().mouseEntered( rEvent );
+            break;
+        case EVENT_MOUSE_EXITED:
+            mrAntiImpl.GetMouseListeners().mouseExited( rEvent );
+            break;
+        default:
+            DBG_ERROR( "VCLXWindowImpl::processEvent: what kind of event *is* this (1)?" );
+            break;
+        }
     }
+    else if ( rEventDescriptor.isPlainEvent() )
+    {
+        const lang::EventObject& rEvent( rEventDescriptor.getPlainEvent() );
+        switch ( rEventDescriptor.getPlainEventType() )
+        {
+        case EVENT_WINDOW_ENABLED:
+            maWindow2Listeners.notifyEach( &XWindowListener2::windowEnabled, rEvent );
+            break;
+        case EVENT_WINDOW_DISABLED:
+            maWindow2Listeners.notifyEach( &XWindowListener2::windowDisabled, rEvent );
+            break;
+        default:
+            DBG_ERROR( "VCLXWindowImpl::processEvent: what kind of event *is* this (2)?" );
+            break;
+        }
+    }
+    else
+        DBG_ERROR( "VCLXWindowImpl::processEvent: what kind of event *is* this (3)?" );
 }
 
 //--------------------------------------------------------------------
@@ -433,7 +580,7 @@ void ImplInitKeyEvent( ::com::sun::star::awt::KeyEvent& rEvent, const KeyEvent& 
         rEvt.GetKeyCode().GetFunction());
 }
 
-void ImplInitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent, const MouseEvent& rEvt )
+void ImplInitMouseEvent( awt::MouseEvent& rEvent, const MouseEvent& rEvt )
 {
     rEvent.Modifiers = 0;
     if ( rEvt.IsShift() )
@@ -544,6 +691,16 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
     switch ( rVclWindowEvent.GetId() )
     {
+        case VCLEVENT_WINDOW_ENABLED:
+        case VCLEVENT_WINDOW_DISABLED:
+        {
+            bool bEnabled = ( VCLEVENT_WINDOW_ENABLED == rVclWindowEvent.GetId() );
+            EventObject aEvent( *this );
+            mpImpl->notifyPlainEvent( aEvent,
+                bEnabled ? EVENT_WINDOW_ENABLED : EVENT_WINDOW_DISABLED );
+        }
+        break;
+
         case VCLEVENT_WINDOW_PAINT:
         {
             if ( GetPaintListeners().getLength() )
@@ -769,7 +926,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 }
 
                 MouseEvent aMEvt( aWhere, 1, MOUSE_SIMPLECLICK, MOUSE_LEFT, 0 );
-                ::com::sun::star::awt::MouseEvent aEvent;
+                awt::MouseEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 ImplInitMouseEvent( aEvent, aMEvt );
                 aEvent.PopupTrigger = sal_True;
@@ -782,7 +939,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             MouseEvent* pMouseEvt = (MouseEvent*)rVclWindowEvent.GetData();
             if ( GetMouseListeners().getLength() && ( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() ) )
             {
-                ::com::sun::star::awt::MouseEvent aEvent;
+                awt::MouseEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 ImplInitMouseEvent( aEvent, *pMouseEvt );
 
@@ -794,7 +951,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
             if ( GetMouseMotionListeners().getLength() && !pMouseEvt->IsEnterWindow() && !pMouseEvt->IsLeaveWindow() )
             {
-                ::com::sun::star::awt::MouseEvent aEvent;
+                awt::MouseEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 ImplInitMouseEvent( aEvent, *pMouseEvt );
                 aEvent.ClickCount = 0;  // #92138#
@@ -810,7 +967,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( GetMouseListeners().getLength() )
             {
-                ::com::sun::star::awt::MouseEvent aEvent;
+                awt::MouseEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 ImplInitMouseEvent( aEvent, *(MouseEvent*)rVclWindowEvent.GetData() );
                 mpImpl->notifyMouseEvent( aEvent, EVENT_MOUSE_PRESSED );
@@ -821,7 +978,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( GetMouseListeners().getLength() )
             {
-                ::com::sun::star::awt::MouseEvent aEvent;
+                awt::MouseEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 ImplInitMouseEvent( aEvent, *(MouseEvent*)rVclWindowEvent.GetData() );
                 mpImpl->notifyMouseEvent( aEvent, EVENT_MOUSE_RELEASED );
@@ -1050,13 +1207,6 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
     {
         mbDisposing = sal_True;
 
-        if ( mpImpl )
-        {
-            mpImpl->disposing();
-            mpImpl->release();
-            mpImpl = NULL;
-        }
-
         ::com::sun::star::lang::EventObject aObj;
         aObj.Source = static_cast< ::cppu::OWeakObject* >( this );
 
@@ -1069,6 +1219,13 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
         maPaintListeners.disposeAndClear( aObj );
         maContainerListeners.disposeAndClear( aObj );
         maTopWindowListeners.disposeAndClear( aObj );
+
+        if ( mpImpl )
+        {
+            mpImpl->disposing();
+            mpImpl->release();
+            mpImpl = NULL;
+        }
 
         if ( GetWindow() )
         {
@@ -1192,6 +1349,10 @@ void VCLXWindow::addWindowListener( const ::com::sun::star::uno::Reference< ::co
 
     GetWindowListeners().addInterface( rxListener );
 
+    Reference< XWindowListener2 > xListener2( rxListener, UNO_QUERY );
+    if ( xListener2.is() )
+        mpImpl->getWindow2Listeners().addInterface( xListener2 );
+
     // #100119# Get all resize events, even if height or width 0, or invisible
     if ( GetWindow() )
         GetWindow()->EnableAllResize( TRUE );
@@ -1200,6 +1361,10 @@ void VCLXWindow::addWindowListener( const ::com::sun::star::uno::Reference< ::co
 void VCLXWindow::removeWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
+
+    Reference< XWindowListener2 > xListener2( rxListener, UNO_QUERY );
+    if ( xListener2.is() )
+        mpImpl->getWindow2Listeners().removeInterface( xListener2 );
 
     GetWindowListeners().removeInterface( rxListener );
 }
@@ -2227,8 +2392,6 @@ void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ ) throw(::com::sun::sta
 void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-
-    using namespace ::com::sun::star;
 
     // check if it comes from our AccessibleContext
     uno::Reference< uno::XInterface > aAC( mxAccessibleContext, uno::UNO_QUERY );
