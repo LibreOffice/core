@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undotab.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:03:47 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:28:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -478,6 +478,26 @@ private:
 };
 
 
+class ScUndoSetAddressConvention : public ScSimpleUndo
+{
+public:
+                    TYPEINFO();
+                    ScUndoSetAddressConvention( ScDocShell* pShell,
+                                                ScAddress::Convention eConv );
+    virtual         ~ScUndoSetAddressConvention();
+
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+
+    virtual String  GetComment() const;
+
+private:
+    ScAddress::Convention eNewConv, eOldConv;
+
+    void DoChange( ScAddress::Convention eConv );
+};
 
 #endif
 
