@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:09:05 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:46:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2020,13 +2020,8 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
         const ScValidationData* pData = pDoc->GetValidationEntry( nValidation );
         if (pData && pData->HasErrMsg())
         {
-            const ScPatternAttr* pPattern = pLastPattern;
-            if (!pPattern)
-            {
-                DBG_ERROR("kein Pattern !??!");
-                pPattern = pDoc->GetPattern( aCursorPos.Col(), aCursorPos.Row(),
-                                              aCursorPos.Tab() );
-            }
+            // #i67990# don't use pLastPattern in EnterHandler
+            const ScPatternAttr* pPattern = pDoc->GetPattern( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab() );
             BOOL bOk = pData->IsDataValid( aString, *pPattern, aCursorPos );
 
             if (!bOk)
@@ -2067,12 +2062,14 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
         //  #i3820# If the spell checker flags numerical input as error,
         //  it still has to be treated as number, not EditEngine object.
 
-        if ( pLastPattern && pActiveViewSh )
+        if ( pActiveViewSh )
         {
             ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocument();
+            // #i67990# don't use pLastPattern in EnterHandler
+            const ScPatternAttr* pPattern = pDoc->GetPattern( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab() );
             SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
             // without conditional format, as in ScColumn::SetString
-            sal_uInt32 nFormat = pLastPattern->GetNumberFormat( pFormatter );
+            sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
             double nVal;
             if ( pFormatter->IsNumberFormat( aString, nFormat, nVal ) )
             {
