@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:21:56 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:21:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1936,7 +1936,7 @@ void ScChangeActionContent::SetValueString( String& rValue, ScBaseCell*& pCell,
     {
         rValue.Erase();
         pCell = new ScFormulaCell(
-            pDoc, aBigRange.aStart.MakeAddress(), rStr );
+            pDoc, aBigRange.aStart.MakeAddress(), rStr, ScAddress::CONV_OOO );
         ((ScFormulaCell*)pCell)->SetInChangeTrack( TRUE );
     }
     else
