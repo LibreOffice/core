@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MTables.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:58:27 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:09:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
         if(xResult->next()) // there can be only one table with this name
         {
             OTable* pRet = new OTable(  this, static_cast<OCatalog&>(m_rParent).getConnection(),
-                                        aName,xRow->getString(4),xRow->getString(5),sEmpty);
+                                        aName,xRow->getString(4),xRow->getString(5));
             xRet = pRet;
         }
     }
