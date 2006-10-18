@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen4.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:52:08 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:20:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     if (pArr)
         pCell = new ScFormulaCell( this, aPos, pArr, MM_FORMULA );
     else
-        pCell = new ScFormulaCell( this, aPos, rFormula, MM_FORMULA );
+        pCell = new ScFormulaCell( this, aPos, rFormula, ScAddress::CONV_UNSPECIFIED, MM_FORMULA );
     pCell->SetMatColsRows( nCol2 - nCol1 + 1, nRow2 - nRow1 + 1 );
     for (i = 0; i <= MAXTAB; i++)
     {
@@ -283,7 +283,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     }
     aForString += ')';
 
-    ScFormulaCell aRefCell( this, ScAddress( nCol1, nRow1, nTab1 ), aForString, 0l );
+    ScFormulaCell aRefCell( this, ScAddress( nCol1, nRow1, nTab1 ), aForString, ScAddress::CONV_OOO, 0l );
     for( j = nCol1; j <= nCol2; j++ )
         for( k = nRow1; k <= nRow2; k++ )
             for (i = 0; i <= MAXTAB; i++)
