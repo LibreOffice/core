@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:44:21 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:46:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -379,9 +379,7 @@ BOOL ScImportExport::ImportString( const ::rtl::OUString& rText, ULONG nFmt )
         // formats supporting unicode
         case FORMAT_STRING :
         {
-            SvMemoryStream aStrm( (void*)rText.getStr(), rText.getLength() * sizeof(sal_Unicode), STREAM_READ );
-            aStrm.SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
-            SetNoEndianSwap( aStrm );       //! no swapping in memory
+            ScImportStringStream aStrm( rText);
             return ImportStream( aStrm, String(), nFmt );
             // ImportStream must handle RTL_TEXTENCODING_UNICODE
         }
@@ -1046,7 +1044,8 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     ULONG nOldPos = rStrm.Tell();
     rStrm.Seek( STREAM_SEEK_TO_END );
-    ScProgress aProgress( pDocSh, ScGlobal::GetRscString( STR_LOAD_DOC ), rStrm.Tell() - nOldPos );
+    ::std::auto_ptr<ScProgress> xProgress( new ScProgress( pDocSh,
+            ScGlobal::GetRscString( STR_LOAD_DOC ), rStrm.Tell() - nOldPos ));
     rStrm.Seek( nOldPos );
     if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
         rStrm.StartReadingUnicodeText();
@@ -1054,8 +1053,8 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
     BOOL bOld = ScColumn::bDoubleAlloc;
     ScColumn::bDoubleAlloc = TRUE;
 
-    DBG_ASSERT( !bUndo, "ExtText2Doc mit Undo noch nicht implementiert!" );
     SCCOL nStartCol = aRange.aStart.Col();
+    SCCOL nEndCol = aRange.aEnd.Col();
     SCROW nStartRow = aRange.aStart.Row();
     SCTAB nTab = aRange.aStart.Tab();
 
@@ -1101,76 +1100,141 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
         if ( rStrm.IsEof() )
             break;
     }
-    for( ;; )
+
+    // Determine range for Undo.
+    // TODO: we don't need this during import of a file to a new sheet or
+    // document, could set bDetermineRange=false then.
+    bool bDetermineRange = true;
+
+    // Row heights don't need to be adjusted on the fly if EndPaste() is called
+    // afterwards, which happens only if bDetermineRange. This variable also
+    // survives the toggle of bDetermineRange down at the end of the do{} loop.
+    bool bRangeIsDetermined = bDetermineRange;
+
+    ULONG nOriginalStreamPos = rStrm.Tell();
+
+    do
     {
-        rStrm.ReadCsvLine( aLine, !bFixed, rSeps, cStr);
-        if ( rStrm.IsEof() )
-            break;
-
-        xub_StrLen nLineLen = aLine.Len();
-        SCCOL nCol = nStartCol;
-        bool bMultiLine = false;
-        if ( bFixed )               //  Feste Satzlaenge
+        for( ;; )
         {
-            for ( i=0; i<nInfoCount; i++ )
-            {
-                if ( pColFormat[i] != SC_COL_SKIP )     // sonst auch nCol nicht hochzaehlen
-                {
-                    xub_StrLen nStart = pColStart[i];
-                    xub_StrLen nNext = ( i+1 < nInfoCount ) ? pColStart[i+1] : nLineLen;
-                    aCell = lcl_GetFixed( aLine, nStart, nNext );
-                    bMultiLine |= lcl_PutString( pDoc, nCol, nRow, nTab, aCell, pColFormat[i],
-                        aTransliteration, aCalendar, pEnglishTransliteration, pEnglishCalendar );
-                    ++nCol;
-                }
-            }
-        }
-        else                        //  Nach Trennzeichen suchen
-        {
-            SCCOL nSourceCol = 0;
-            USHORT nInfoStart = 0;
-            const sal_Unicode* p = aLine.GetBuffer();
-            while (*p)
-            {
-                p = ScImportExport::ScanNextFieldFromString( p, aCell, cStr, pSeps, bMerge );
+            rStrm.ReadCsvLine( aLine, !bFixed, rSeps, cStr);
+            if ( rStrm.IsEof() )
+                break;
 
-                BYTE nFmt = SC_COL_STANDARD;
-                for ( i=nInfoStart; i<nInfoCount; i++ )
+            xub_StrLen nLineLen = aLine.Len();
+            SCCOL nCol = nStartCol;
+            bool bMultiLine = false;
+            if ( bFixed )               //  Feste Satzlaenge
+            {
+                // Yes, the check is nCol<=MAXCOL+1, +1 because it is only an
+                // overflow if there is really data following to be put behind
+                // the last column, which doesn't happen if info is
+                // SC_COL_SKIP.
+                for ( i=0; i<nInfoCount && nCol <= MAXCOL+1; i++ )
                 {
-                    if ( pColStart[i] == nSourceCol + 1 )       // pColStart ist 1-basiert
+                    if ( pColFormat[i] != SC_COL_SKIP )     // sonst auch nCol nicht hochzaehlen
                     {
-                        nFmt = pColFormat[i];
-                        nInfoStart = i + 1;     // ColInfos sind in Reihenfolge
-                        break;  // for
+                        if (nCol > MAXCOL)
+                            bOverflow = TRUE;       // display warning on import
+                        else if (!bDetermineRange)
+                        {
+                            xub_StrLen nStart = pColStart[i];
+                            xub_StrLen nNext = ( i+1 < nInfoCount ) ? pColStart[i+1] : nLineLen;
+                            aCell = lcl_GetFixed( aLine, nStart, nNext );
+                            bMultiLine |= lcl_PutString( pDoc, nCol, nRow,
+                                    nTab, aCell, pColFormat[i],
+                                    aTransliteration, aCalendar,
+                                    pEnglishTransliteration, pEnglishCalendar);
+                        }
+                        ++nCol;
                     }
                 }
-                if ( nFmt != SC_COL_SKIP )
+            }
+            else                        //  Nach Trennzeichen suchen
+            {
+                SCCOL nSourceCol = 0;
+                USHORT nInfoStart = 0;
+                const sal_Unicode* p = aLine.GetBuffer();
+                // Yes, the check is nCol<=MAXCOL+1, +1 because it is only an
+                // overflow if there is really data following to be put behind
+                // the last column, which doesn't happen if info is
+                // SC_COL_SKIP.
+                while (*p && nCol <= MAXCOL+1)
                 {
-                    bMultiLine |= lcl_PutString( pDoc, nCol, nRow, nTab, aCell, nFmt,
-                        aTransliteration, aCalendar, pEnglishTransliteration, pEnglishCalendar );
-                    ++nCol;
-                }
+                    p = ScImportExport::ScanNextFieldFromString( p, aCell, cStr, pSeps, bMerge );
 
-                ++nSourceCol;
+                    BYTE nFmt = SC_COL_STANDARD;
+                    for ( i=nInfoStart; i<nInfoCount; i++ )
+                    {
+                        if ( pColStart[i] == nSourceCol + 1 )       // pColStart ist 1-basiert
+                        {
+                            nFmt = pColFormat[i];
+                            nInfoStart = i + 1;     // ColInfos sind in Reihenfolge
+                            break;  // for
+                        }
+                    }
+                    if ( nFmt != SC_COL_SKIP )
+                    {
+                        if (nCol > MAXCOL)
+                            bOverflow = TRUE;       // display warning on import
+                        else if (!bDetermineRange)
+                            bMultiLine |= lcl_PutString( pDoc, nCol, nRow,
+                                    nTab, aCell, nFmt, aTransliteration,
+                                    aCalendar, pEnglishTransliteration,
+                                    pEnglishCalendar);
+                        ++nCol;
+                    }
+
+                    ++nSourceCol;
+                }
+            }
+            if (nEndCol < nCol)
+                nEndCol = nCol;     //! points to the next free or even MAXCOL+2
+
+            if (!bDetermineRange)
+            {
+                if (bMultiLine && !bRangeIsDetermined && pDocSh)
+                    pDocSh->AdjustRowHeight( nRow, nRow, nTab);
+                xProgress->SetStateOnPercent( rStrm.Tell() - nOldPos );
+            }
+            ++nRow;
+            if ( nRow > MAXROW )
+            {
+                bOverflow = TRUE;       // display warning on import
+                break;  // for
             }
         }
-        if (bMultiLine && pDocSh)
-            pDocSh->AdjustRowHeight( nRow, nRow, nTab);
+        // so far nRow/nEndCol pointed to the next free
+        if (nRow > nStartRow)
+            --nRow;
+        if (nEndCol > nStartCol)
+            nEndCol = ::std::min( static_cast<SCCOL>(nEndCol - 1), MAXCOL);
 
-        aProgress.SetStateOnPercent( rStrm.Tell() - nOldPos );
-        ++nRow;
-        if ( nRow > MAXROW )
+        if (bDetermineRange)
         {
-            bOverflow = TRUE;           // beim Import Warnung ausgeben
-            break;
+            aRange.aEnd.SetCol( nEndCol );
+            aRange.aEnd.SetRow( nRow );
+            rStrm.Seek( nOriginalStreamPos );
+            nRow = nStartRow;
+            if (!StartPaste())
+            {
+                EndPaste();
+                return FALSE;
+            }
         }
-    }
+
+        bDetermineRange = !bDetermineRange;     // toggle
+    } while (!bDetermineRange);
 
     ScColumn::bDoubleAlloc = bOld;
-    pDoc->DoColResize( nTab, 0, MAXCOL, 0 );
+    pDoc->DoColResize( nTab, nStartCol, nEndCol, 0 );
 
     delete pEnglishTransliteration;
     delete pEnglishCalendar;
+
+    xProgress.reset();    // make room for AdjustRowHeight progress
+    if (bRangeIsDetermined)
+        EndPaste();
 
     return TRUE;
 }
