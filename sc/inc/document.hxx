@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:15:59 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:16:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -401,6 +401,7 @@ private:
 
     BOOL                bInUnoBroadcast;
     BOOL                bInUnoListenerCall;
+    ScAddress::Convention eAddrConv;
 
     mutable BOOL        bStyleSheetUsageInvalid;
 
@@ -580,6 +581,8 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     void            GetScenarioFlags( SCTAB nTab, USHORT& rFlags ) const;
     BOOL            IsActiveScenario( SCTAB nTab ) const;
     void            SetActiveScenario( SCTAB nTab, BOOL bActive );      // nur fuer Undo etc.
+    ScAddress::Convention GetAddressConvention() const;
+    void            SetAddressConvention( ScAddress::Convention eConv );
     BYTE            GetLinkMode( SCTAB nTab ) const;
     BOOL            IsLinked( SCTAB nTab ) const;
     const String&   GetLinkDoc( SCTAB nTab ) const;
