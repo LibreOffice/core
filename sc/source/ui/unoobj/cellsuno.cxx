@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:29:22 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:29:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4907,8 +4907,15 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByPositio
     return NULL;
 }
 
+
 uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByName(
                         const rtl::OUString& aName ) throw(uno::RuntimeException)
+{
+    return getCellRangeByName( aName, ScAddress::detailsOOOa1 );
+}
+
+uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
+                        const rtl::OUString& aName, const ScAddress::Details& rDetails  ) throw(uno::RuntimeException)
 {
     //  name refers to the whole document (with the range's table as default),
     //  valid only if the range is within this range
@@ -4923,7 +4930,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByName(
         ScRange aCellRange;
         BOOL bFound = FALSE;
         String aString(aName);
-        USHORT nParse = aCellRange.ParseAny( aString, pDoc );
+        USHORT nParse = aCellRange.ParseAny( aString, pDoc, rDetails );
         if ( nParse & SCA_VALID )
         {
             if ( !(nParse & SCA_TAB_3D) )   // keine Tabelle angegeben -> auf dieser Tabelle
