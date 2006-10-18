@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:41:17 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:25:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ ScBaseCell* ScMyCellInfo::CreateCell(ScDocument* pDoc)
             ScAddress aPos;
             sal_Int32 nOffset(0);
             ScXMLConverter::GetAddressFromString(aPos, sFormulaAddress, pDoc, nOffset);
-            pCell = new ScFormulaCell(pDoc, aPos, sFormula, nMatrixFlag);
+            pCell = new ScFormulaCell(pDoc, aPos, sFormula, ScAddress::CONV_OOO, nMatrixFlag);
             static_cast<ScFormulaCell*>(pCell)->SetMatColsRows(static_cast<SCCOL>(nMatrixCols), static_cast<SCROW>(nMatrixRows));
         }
 
@@ -779,11 +779,11 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                         {
                             sal_uInt8 nMatrixFlag = static_cast<ScFormulaCell*>(pCell)->GetMatrixFlag();
                             String sFormula;
-                            static_cast<ScFormulaCell*>(pCell)->GetFormula(sFormula);
+                            static_cast<ScFormulaCell*>(pCell)->GetFormula(sFormula, ScAddress::CONV_OOO);
                             rtl::OUString sOUFormula(sFormula);
                             rtl::OUString sOUFormula2(sOUFormula.copy(2, sOUFormula.getLength() - 3));
                             String sFormula2(sOUFormula2);
-                            pNewCell = new ScFormulaCell(pDoc, aAddress, sFormula2, nMatrixFlag);
+                            pNewCell = new ScFormulaCell(pDoc, aAddress, sFormula2, ScAddress::CONV_OOO, nMatrixFlag);
                             if (pNewCell)
                             {
                                 if (nMatrixFlag == MM_FORMULA)
