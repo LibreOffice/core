@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:43:51 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:32:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -721,7 +721,7 @@ sal_Bool OTableEditorCtrl::SaveModified()
         {
             //////////////////////////////////////////////////////////////////////
             // Type umstellen
-            SwitchType(GetView()->getController()->getTypeInfo(pTypeCell->GetSelectEntryPos()));
+            resetType();
         } break;
     }
 
@@ -825,12 +825,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
     else
     {
         GetUndoManager()->AddUndoAction(new OTableEditorTypeSelUndoAct(this, GetCurRow(), nColId, GetFieldDescr(GetCurRow())->getTypeInfo()));
-        USHORT nPos = pTypeCell->GetSelectEntryPos();
-        if(nPos != LISTBOX_ENTRY_NOTFOUND)
-            SwitchType( GetView()->getController()->getTypeInfo(nPos) );
-        else
-            SwitchType(TOTypeInfoSP());
-
+        resetType();
     }
 
     SaveData(nRow,nColId);
@@ -846,7 +841,15 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
     GetView()->getController()->setModified( sal_True );
     InvalidateFeatures();
 }
-
+// -----------------------------------------------------------------------------
+void OTableEditorCtrl::resetType()
+{
+    USHORT nPos = pTypeCell->GetSelectEntryPos();
+    if(nPos != LISTBOX_ENTRY_NOTFOUND)
+        SwitchType( GetView()->getController()->getTypeInfo(nPos) );
+    else
+        SwitchType(TOTypeInfoSP());
+}
 //------------------------------------------------------------------------------
 void OTableEditorCtrl::CellModified()
 {
