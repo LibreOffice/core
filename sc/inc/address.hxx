@@ -4,9 +4,9 @@
  *
  *  $RCSfile: address.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:23:39 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:15:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,6 +221,9 @@ inline bool ValidColRowTab( SCCOL nCol, SCROW nRow, SCTAB nTab )
 #define SCA_VALID_ROW       0x0100
 #define SCA_VALID_COL       0x0200
 #define SCA_VALID_TAB       0x0400
+// somewhat cheesy kludge to force the display of the document name even for
+// local references.  Requires TAB_3D to be valid
+#define SCA_FORCE_DOC       0x0800
 #define SCA_VALID_ROW2      0x1000
 #define SCA_VALID_COL2      0x2000
 #define SCA_VALID_TAB2      0x4000
@@ -248,6 +251,36 @@ public:
 
     enum Uninitialized      { UNINITIALIZED };
     enum InitializeInvalid  { INITIALIZE_INVALID };
+    enum Convention         {
+        CONV_UNSPECIFIED = -1,  /* useful when we want method to chose, must be first */
+
+        /* elements must be sequential and changes should be reflected in ScCompiler::pCharTables */
+        CONV_OOO     =  0,  /* 'doc'#sheet.A1:sheet2.B2 */
+        CONV_XL_A1,         /* [doc]sheet:sheet2!A1:B2 */
+        CONV_XL_R1C1,       /* [doc]sheet:sheet2!R1C1:R2C2 */
+
+        CONV_LOTUS_A1,      /* external? 3d? A1.B2 <placeholder/> */
+
+        CONV_LAST   /* for loops, must always be last */
+    };
+    struct Details {
+        Convention  eConv;
+        SCROW       nRow;
+        SCCOL       nCol;
+        inline Details( Convention eConvP, SCROW nRowP, SCCOL nColP )
+            : eConv( eConvP ), nRow( nRowP ), nCol( nColP )
+            {}
+        inline Details( Convention eConvP, ScAddress const & rAddr )
+            : eConv( eConvP ), nRow( rAddr.Row() ), nCol( rAddr.Col() )
+            {}
+        inline Details( Convention eConvP)
+            : eConv( eConvP ), nRow( 0 ), nCol( 0 )
+            {}
+        /* Use the convention associated with rAddr::Tab() */
+        Details( const ScDocument* pDoc, const ScAddress & rAddr );
+        void SetPos( const ScDocument* pDoc, const ScAddress & rAddr );
+    };
+    static const Details detailsOOOa1;
 
     inline ScAddress() : nRow(0), nCol(0), nTab(0) {}
     inline ScAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP )
@@ -278,8 +311,12 @@ public:
     inline void IncTab( SCsTAB n=1 ) { nTab += n; }
     inline void GetVars( SCCOL& nColP, SCROW& nRowP, SCTAB& nTabP ) const
     { nColP = nCol; nRowP = nRow; nTabP = nTab; }
-    USHORT Parse( const String&, ScDocument* = NULL );
-    void Format( String&, USHORT = 0, ScDocument* = NULL ) const;
+
+    USHORT Parse( const String&, ScDocument* = NULL,
+                  const Details& rDetails = detailsOOOa1);
+    void Format( String&, USHORT = 0, ScDocument* = NULL,
+                 const Details& rDetails = detailsOOOa1) const;
+
     // The document for the maximum defined sheet number
     bool Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* =NULL );
     inline bool operator==( const ScAddress& r ) const;
@@ -292,8 +329,9 @@ public:
     // moved from ScTripel
     /// "(1,2,3)"
     String GetText() const;
-    /// "A1" or "$A$1"
-    String GetColRowString( bool bAbsolute = FALSE ) const;
+    /// "A1" or "$A$1" or R1C1 or R[1]C[1]
+    String GetColRowString( bool bAbsolute = FALSE,
+                            const Details& rDetails = detailsOOOa1) const;
 };
 
 inline void ScAddress::PutInOrder( ScAddress& r )
@@ -402,11 +440,20 @@ public:
     inline bool IsValid() const { return aStart.IsValid() && aEnd.IsValid(); }
     inline bool In( const ScAddress& ) const;   // is Address& in Range?
     inline bool In( const ScRange& ) const;     // is Range& in Range?
-    USHORT Parse( const String&, ScDocument* = NULL );
-    USHORT ParseAny( const String&, ScDocument* = NULL );
+
+    USHORT Parse( const String&, ScDocument* = NULL,
+                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
+    USHORT ParseAny( const String&, ScDocument* = NULL,
+                     const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
+    USHORT ParseCols( const String&, ScDocument* = NULL,
+                     const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
+    USHORT ParseRows( const String&, ScDocument* = NULL,
+                     const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
+    void Format( String&, USHORT = 0, ScDocument* = NULL,
+                 const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 ) const;
+
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
         SCCOL& nCol2, SCROW& nRow2, SCTAB& nTab2 ) const;
-    void Format( String&, USHORT = 0, ScDocument* = NULL ) const;
     // The document for the maximum defined sheet number
     bool Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* =NULL );
     void Justify();
@@ -563,7 +610,8 @@ public:
     inline  int     operator != ( const ScRefAddress& r ) const
                     { return !(operator==(r)); }
 
-            String  GetRefString( ScDocument* pDoc, SCTAB nActTab) const;
+            String  GetRefString( ScDocument* pDoc, SCTAB nActTab,
+                                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1) const;
 };
 
 inline ScRefAddress& ScRefAddress::operator=( const ScRefAddress& rRef )
@@ -620,11 +668,13 @@ template< typename T > void PutInOrder( T& nStart, T& nEnd )
 }
 
 bool ConvertSingleRef( ScDocument* pDoc, const String& rRefString,
-        SCTAB nDefTab, ScRefAddress& rRefAddress);
+        SCTAB nDefTab, ScRefAddress& rRefAddress,
+        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1);
 
 bool ConvertDoubleRef(ScDocument* pDoc, const String& rRefString,
         SCTAB nDefTab, ScRefAddress& rStartRefAddress,
-        ScRefAddress& rEndRefAddress);
+        ScRefAddress& rEndRefAddress,
+        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1);
 
 /// append alpha representation of column to buffer
 SC_DLLPUBLIC void ColToAlpha( rtl::OUStringBuffer& rBuffer, SCCOL nCol);
