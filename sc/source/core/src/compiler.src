@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 12:32:03 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:21:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1092,7 +1092,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ en-US ] = "INDIRECT" ;
         Text [ x-comment ] = " ";
     };
-    String SC_OPCODE_ADRESS
+    String SC_OPCODE_ADDRESS
     {
         Text [ de ] = "ADRESSE" ;
         Text [ en-US ] = "ADDRESS" ;
@@ -1874,7 +1874,7 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_DB_VAR { Text = "DVAR" ; };
     String SC_OPCODE_DB_VAR_P { Text = "DVARP" ; };
     String SC_OPCODE_INDIRECT { Text = "INDIRECT" ; };
-    String SC_OPCODE_ADRESS { Text = "ADDRESS" ; };
+    String SC_OPCODE_ADDRESS { Text = "ADDRESS" ; };
     String SC_OPCODE_MATCH { Text = "MATCH" ; };
     String SC_OPCODE_COUNT_EMPTY_CELLS { Text = "COUNTBLANK" ; };
     String SC_OPCODE_COUNT_IF { Text = "COUNTIF" ; };
