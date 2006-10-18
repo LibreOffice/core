@@ -4,9 +4,9 @@
  *
  *  $RCSfile: qproform.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:31:33 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:25:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -432,7 +432,7 @@ static const struct
     { ocOr, FT_Op },
     { ocNot, FT_FuncFix1 },
     { ocPush, FT_NOP },     // Unary plus
-    { ocAdress, FT_FuncFix4 }, // Address of
+    { ocAddress, FT_FuncFix4 }, // Address of
     { ocNoName, FT_NotImpl }, // Halt function
     { ocNoName, FT_DLL }, // DLL function
     { ocNoName, FT_NOP }, // Extended operands
