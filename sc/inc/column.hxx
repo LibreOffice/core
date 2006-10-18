@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:27:42 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:16:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,7 +264,8 @@ public:
     BOOL        HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst) const;
 
                 //  TRUE = Zahlformat gesetzt
-    BOOL        SetString( SCROW nRow, SCTAB nTab, const String& rString );
+    BOOL        SetString( SCROW nRow, SCTAB nTab, const String& rString,
+                           ScAddress::Convention conv = ScAddress::CONV_OOO );
     void        SetValue( SCROW nRow, const double& rVal);
     void        SetNote( SCROW nRow, const ScPostIt& rNote );
     void        SetError( SCROW nRow, const USHORT nError);
