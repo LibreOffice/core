@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-06 09:11:17 $
+#   last change: $Author: ihi $ $Date: 2006-10-18 11:32:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_fur_IT.cxx  \
     $(MISC)$/localedata_ga_IE.cxx  \
     $(MISC)$/localedata_gl_ES.cxx  \
+    $(MISC)$/localedata_gsc_FR.cxx \
     $(MISC)$/localedata_gu_IN.cxx  \
     $(MISC)$/localedata_he_IL.cxx  \
     $(MISC)$/localedata_hi_IN.cxx  \
@@ -298,7 +299,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_de_LU.obj	\
     $(SLO)$/localedata_el_GR.obj	\
     $(SLO)$/localedata_et_EE.obj	\
-    $(SLO)$/localedata_eu.obj		\
+    $(SLO)$/localedata_eu.obj	\
     $(SLO)$/localedata_fi_FI.obj	\
     $(SLO)$/localedata_fo_FO.obj	\
     $(SLO)$/localedata_fr_BE.obj	\
@@ -310,6 +311,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_fur_IT.obj	\
     $(SLO)$/localedata_ga_IE.obj	\
     $(SLO)$/localedata_gl_ES.obj	\
+    $(SLO)$/localedata_gsc_FR.obj	\
     $(SLO)$/localedata_hr_HR.obj	\
     $(SLO)$/localedata_is_IS.obj	\
     $(SLO)$/localedata_it_CH.obj	\
@@ -366,7 +368,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_az_AZ.obj \
     $(SLO)$/localedata_bn_IN.obj \
     $(SLO)$/localedata_bn_BD.obj \
-     $(SLO)$/localedata_dz_BT.obj \
+    $(SLO)$/localedata_dz_BT.obj \
     $(SLO)$/localedata_en_IN.obj \
     $(SLO)$/localedata_eo.obj    \
     $(SLO)$/localedata_fa_IR.obj \
