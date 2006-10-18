@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TEditControl.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:32:20 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:32:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,6 +186,7 @@ namespace dbaui
         BOOL IsCopyAllowed( long nRow = -1 );
         BOOL IsPasteAllowed( long nRow = -1 );
         BOOL IsReadOnly();
+        OFieldDescription* GetFieldDescr( long nRow );
 
         // window overloads
         virtual long            PreNotify( NotifyEvent& rNEvt );
@@ -212,7 +213,6 @@ namespace dbaui
         INT32 HasFieldName( const String& rFieldName );
         String GenerateName( const String& rName );
         BOOL SetDataPtr( long nRow );
-        OFieldDescription* GetFieldDescr( long nRow );
 
         void SetEditMode( EEditMode eMode ){ eEditMode = eMode; }
         EEditMode GetEditMode(){ return eEditMode; }
@@ -232,6 +232,8 @@ namespace dbaui
         /** InvalidateFeatures invalidates the slots SID_UNDO | SID_REDO | SID_SAVEDOC
         */
         void InvalidateFeatures();
+
+        void resetType();
     };
 }
 #endif // DBAUI_TABLEEDITORCONTROL_HXX
