@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BColumns.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:05:25 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:06:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,26 @@ sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
                 ::rtl::OUString sTypeName   = xRow->getString(6);
                 sal_Int32 nPrec             = xRow->getInt(7);
                 OAdabasCatalog::correctColumnProperties(nPrec,nType,sTypeName);
+                sal_Bool bAutoIncrement = sal_False;
+                if ( !_rName.equalsAscii("DEFAULT") && !m_pTable->getSchema().equalsAscii("DOMAIN") && !m_pTable->getTableName().equalsAscii("COLUMNS") )
+                {
+                    Reference< XStatement > xStmt = m_pTable->getMetaData()->getConnection()->createStatement(  );
+                    ::rtl::OUString sQuery(RTL_CONSTASCII_USTRINGPARAM("SELECT \"DEFAULT\" FROM DOMAIN.COLUMNS WHERE OWNER = '"));
+                    sQuery += m_pTable->getSchema();
+                    sQuery += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("' AND TABLENAME = '"));
+                    sQuery += m_pTable->getTableName() + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("' AND COLUMNNAME = '"));
+                    sQuery += _rName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
+                    try
+                    {
+                        Reference< XResultSet > xResult2 = xStmt->executeQuery(sQuery);
+                        Reference< XRow > xRow2(xResult2,UNO_QUERY);
+                        if ( xRow2.is() && xResult2->next() )
+                            bAutoIncrement = xRow2->getString(1) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DEFAULT STAMP"));
+                    }
+                    catch(const Exception&)
+                    {
+                    }
+                }
 
                 xRet = new OColumn(_rName,
                                             sTypeName,
@@ -115,7 +135,7 @@ sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
                                             nPrec,
                                             xRow->getInt(9),
                                             nType,
-                                            sal_False,sal_False,sal_False,sal_True);
+                                            bAutoIncrement,sal_False,sal_False,sal_True);
                 break;
             }
         }
