@@ -5,13 +5,28 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbquery
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbrelation
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbtable
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\accelerator
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\accelerator\de
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\accelerator\fr
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\accelerator\en-US
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\accelerator\en-GB
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\accelerator\es
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\menubar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\toolbar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\statusbar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\menubar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\toolbar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\accelerator
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\accelerator\de
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\accelerator\fr
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\accelerator\en-GB
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\accelerator\en-US
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\accelerator\es
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbquery\menubar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbquery\toolbar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbquery\accelerator
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbquery\accelerator\de
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbquery\accelerator\en-US
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbrelation\menubar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbrelation\toolbar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbtable\menubar
@@ -30,7 +45,17 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbtable\toolbar
 touch: ..\%__SRC%\misc\dbaccess.hid %_DEST%\bin%_EXT%\dba.hid
 
 ..\uiconfig\dbapp\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\menubar\*.xml
+..\uiconfig\dbapp\accelerator\de\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\accelerator\de\*.xml
+..\uiconfig\dbapp\accelerator\fr\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\accelerator\fr\*.xml
+..\uiconfig\dbapp\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\accelerator\en-US\*.xml
+..\uiconfig\dbapp\accelerator\en-GB\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\accelerator\en-GB\*.xml
+..\uiconfig\dbapp\accelerator\es\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\accelerator\es\*.xml
 ..\uiconfig\dbbrowser\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\menubar\*.xml
+..\uiconfig\dbbrowser\accelerator\de\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\accelerator\de\*.xml
+..\uiconfig\dbbrowser\accelerator\fr\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\accelerator\fr\*.xml
+..\uiconfig\dbbrowser\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\accelerator\en-US\*.xml
+..\uiconfig\dbbrowser\accelerator\en-GB\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\accelerator\en-GB\*.xml
+..\uiconfig\dbbrowser\accelerator\es\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\accelerator\es\*.xml
 ..\uiconfig\dbquery\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbquery\menubar\*.xml
 ..\uiconfig\dbrelation\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbrelation\menubar\*.xml
 ..\uiconfig\dbtable\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbtable\menubar\*.xml
@@ -38,6 +63,8 @@ touch: ..\%__SRC%\misc\dbaccess.hid %_DEST%\bin%_EXT%\dba.hid
 ..\uiconfig\dbapp\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\statusbar\*.xml
 ..\uiconfig\dbbrowser\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\toolbar\*.xml
 ..\uiconfig\dbquery\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbquery\toolbar\*.xml
+..\uiconfig\dbquery\accelerator\de\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbquery\accelerator\de\*.xml
+..\uiconfig\dbquery\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbquery\accelerator\en-US\*.xml
 ..\uiconfig\dbrelation\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbrelation\toolbar\*.xml
 ..\uiconfig\dbtable\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbtable\toolbar\*.xml
 
