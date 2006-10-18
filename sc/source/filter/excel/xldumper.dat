@@ -395,7 +395,7 @@ begin
   180=RESTART,HELP,GET.BAR,PRODUCT,FACT,GET.CELL,GET.WORKSPACE,GET.WINDOW,GET.DOCUMENT,DPRODUCT
   190=ISNONTEXT,GET.NOTE,NOTE,STDEVP,VARP,DSTDDEVP,DVARP,TRUNC,ISLOGICAL,DBCOUNTA
   200=DELETE.BAR,UNREGISTER,,USDOLLAR,FINDB,SEARCHB,REPLACEB,LEFTB,RIGHTB
-  210=MIDB,LENB,ROUNDUP,ROUNDDOWN,ASC,DBSC,RANK,,,ADDRESS
+  210=MIDB,LENB,ROUNDUP,ROUNDDOWN,ASC,DBCS,RANK,,,ADDRESS
   220=DAYS360,TODAY,VDB,ELSE,ELSE.IF,END.IF,FOR.CELL,MEDIAN,SUMPRODUCT,SINH
   230=COSH,TANH,ASINH,ACOSH,ATANH,DGET,CREATE.OBJECT,VOLATILE,LAST.ERROR,CUSTOM.UNDO
   240=CUSTOM.REPEAT,FORMULA.CONVERT,GET.LINK.INFO,TEXT.BOX,INFO,GROUP,GET.OBJECT,DB,PAUSE,
@@ -494,7 +494,7 @@ multilist=RECORD-NAMES-BIFF3
 begin
   include=RECORD-NAMES-BIFF2
   # worksheet records
-  exclude=0x0006,0x0008,0x0009,0x000B,0x0018,0x0020,0x0021,0x0023,0x0024,0x0025,0x0031,0x0036,0x0037,0x003E,0x0043,0x0044,0x0045
+  exclude=0x0006,0x0008,0x0009,0x000B,0x0018,0x0021,0x0023,0x0025,0x0031,0x0036,0x0037,0x003E,0x0043
   0x0050=,,,,,,BUILTINFMTCOUNT,
   0x0058=TOOLBAR,XCT,CRN,FILESHARING,WRITEACCESS,OBJ,UNCALCED,SAFERECALC
   0x0060=TEMPLATE,INTL,,OBJPROTECT,,,,
@@ -660,6 +660,11 @@ end
 constlist=SIMPLE-RECORDS-BIFF5
 begin
   include=SIMPLE-RECORDS-BIFF4
+  0x00C9=double,dec,value
+  0x00CA=uint16,bool,value
+  0x00CB=uint16,hex,error-code,ERRORCODES
+  0x00CC=int16,dec,value
+  0x00D5=uint16,hex,pivotcache-stream-id
   0x00DA=uint16,bool,strip-cached-values
   0x00DD=uint16,bool,scenarios-protected
   0x1040=uint16,hex,flags,CHRADAR-FLAGS
@@ -1064,15 +1069,6 @@ begin
   0x0080=maximum-axis-cross
 end
 
-# COLINFO --------------------------------------------------------------------
-
-combilist=COLINFO-FLAGS
-begin
-  0x0001=hidden
-  0x0700=uint8,dec,outline-level
-  0x1000=outline-collapsed
-end
-
 # DATEMODE -------------------------------------------------------------------
 
 shortlist=DATEMODE,0,1899-12-31,1904-01-01
@@ -1170,25 +1166,51 @@ shortlist=HIDEOBJ,0,show,placeholder,hide
 
 shortlist=REFMODE,0,R1C1,A1
 
-# ROW ------------------------------------------------------------------------
+# SXDB -----------------------------------------------------------------------
 
-combilist=ROW-HEIGHT
+flagslist=SXDB-FLAGS
 begin
-  0x7FFF=uint16,dec,height,CONV-TWIP-TO-PT
-  0x8000=default-height
+  0x0001=save-data
+  0x0002=invalid
+  0x0004=refresh-on-load
+  0x0008=opt-cache
+  0x0010=backgr-query
+  0x0020=enable-refresh
 end
 
-combilist=ROW-FLAGS
+constlist=SXDB-TYPE
 begin
-  ignore=0x00000100
-  0x00000007=uint8,dec,outline-level
-  0x00000010=outline-collapsed
-  0x00000020=hidden
-  0x00000040=manual-height
-  0x00000080=has-default-xf
-  0x0FFF0000=uint16,dec,default-xf-idx
-  0x10000000=add-space-above
-  0x20000000=add-space-below
+  1=worksheet
+  2=external
+  4=consolidation
+  8=scenario
+end
+
+# SXFIELD --------------------------------------------------------------------
+
+combilist=SXFIELD-FLAGS
+begin
+  0x0001=has-items
+  0x0002=postpone-items
+  0x0004=calculated
+  0x0008=has-child
+  0x0010=numeric-group
+  0x0020=16bit-indexes
+  0x0DE0=uint16,hex,data-type,SXFIELD-TYPE,noshift
+end
+
+constlist=SXFIELD-TYPE
+begin
+  0x0000=none
+  0x0480=string-only
+  0x0520=integer-optdouble
+  0x0560=double-only
+  0x05A0=string-integer-optdouble
+  0x05E0=string-double-only
+  0x0900=date-only
+  0x0980=date-empty-only
+  0x0D00=date-number
+  0x0D80=date-string-optnumber
 end
 
 # WSBOOL ---------------------------------------------------------------------
@@ -1398,7 +1420,7 @@ begin
   0xC0=uint8,dec,font-idx,FONTNAMES
 end
 
-combilist=CELL-XFSTYLE-BIFF2
+flagslist=CELL-XFSTYLE-BIFF2
 begin
   include=XF-STYLEFLAGS-BIFF2
 end
