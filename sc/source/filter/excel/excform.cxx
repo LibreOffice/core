@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:17:16 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:24:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1371,7 +1371,7 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, BYTE nAnz )
         else if( eId == ocIndirect && nAnz == 2 )
             nSkipEnd = 0;
 
-        else if( eId == ocAdress && nAnz > 3 )
+        else if( eId == ocAddress && nAnz > 3 )
             nNull = nAnz - 4;
 
         // Joost-Spezialfaelle
