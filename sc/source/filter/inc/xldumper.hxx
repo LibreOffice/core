@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:20:33 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:45:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,8 +193,8 @@ public:
 
 protected:
     explicit            RootObjectBase();
-    void                Construct( const ObjectBase& rParent, SvStream& rStrm );
-    void                Construct( const OleStorageObject& rParentStrg, const String& rStrmName );
+    void                Construct( const ObjectBase& rParent, SvStream& rStrm, XclBiff eBiff );
+    void                Construct( const OleStorageObject& rParentStrg, const String& rStrmName, XclBiff eBiff );
     void                Construct( const RootObjectBase& rParent );
 
     virtual bool        ImplIsValid() const;
@@ -255,7 +255,7 @@ protected:
 
     // ------------------------------------------------------------------------
 private:
-    void                ConstructOwn();
+    void                ConstructOwn( XclBiff eBiff );
 
 private:
     typedef ScfRef< XclImpStream > XclImpStreamRef;
@@ -461,14 +461,14 @@ typedef ScfRef< FormulaObject > FormulaObjectRef;
 class RecordStreamObject : public RootObjectBase
 {
 public:
-    explicit            RecordStreamObject( const ObjectBase& rParent, SvStream& rStrm );
-    explicit            RecordStreamObject( const OleStorageObject& rParentStrg, const String& rStrmName );
+    explicit            RecordStreamObject( const ObjectBase& rParent, SvStream& rStrm, XclBiff eBiff = EXC_BIFF_UNKNOWN );
+    explicit            RecordStreamObject( const OleStorageObject& rParentStrg, const String& rStrmName, XclBiff eBiff = EXC_BIFF_UNKNOWN );
     virtual             ~RecordStreamObject();
 
 protected:
     inline explicit     RecordStreamObject() {}
-    void                Construct( const ObjectBase& rParent, SvStream& rStrm );
-    void                Construct( const OleStorageObject& rParentStrg, const String& rStrmName );
+    void                Construct( const ObjectBase& rParent, SvStream& rStrm, XclBiff eBiff = EXC_BIFF_UNKNOWN );
+    void                Construct( const OleStorageObject& rParentStrg, const String& rStrmName, XclBiff eBiff = EXC_BIFF_UNKNOWN );
 
     virtual bool        ImplIsValid() const;
     virtual void        ImplDumpBody();
@@ -558,6 +558,22 @@ private:
 
 // ============================================================================
 
+class PivotCacheStreamObject : public RecordStreamObject
+{
+public:
+    explicit            PivotCacheStreamObject( const ObjectBase& rParent, SvStream& rStrm );
+    explicit            PivotCacheStreamObject( const OleStorageObject& rParentStrg, const String& rStrmName );
+    virtual             ~PivotCacheStreamObject();
+
+protected:
+    virtual void        ImplDumpRecord();
+
+private:
+    void                ConstructOwn();
+};
+
+// ============================================================================
+
 class VbaProjectStreamObject : public OleStreamObject
 {
 public:
@@ -568,6 +584,17 @@ protected:
 };
 
 // ============================================================================
+// ============================================================================
+
+class PivotCacheStorageObject : public OleStorageObject
+{
+public:
+    explicit            PivotCacheStorageObject( const OleStorageObject& rParentStrg );
+
+protected:
+    virtual void        ImplDumpBody();
+};
+
 // ============================================================================
 
 class VbaProjectStorageObject : public OleStorageObject
