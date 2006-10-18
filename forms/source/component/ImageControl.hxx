@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageControl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:51:58 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:17:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,6 +250,10 @@ public:
 private:
     void    implClearGraphics( sal_Bool _bForce );
     void    implInsertGraphics();
+
+    /** determines whether the control does currently have an empty grahic set
+    */
+    bool    impl_isEmptyGraphics_nothrow() const;
 };
 
 //.........................................................................
