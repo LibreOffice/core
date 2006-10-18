@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview4.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:10:05 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:48:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,6 +349,9 @@ void ScTabView::EndSelection()
 // static
 void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, BOOL bLayoutRTL )
 {
+    if ( nVisible == 0 )
+        nVisible = 1;       // #i59893# don't use visible size 0
+
     //  RTL layout uses a negative range to simulate a mirrored scroll bar.
     //  SetScrollBar/GetScrollBarPos hide this so outside of these functions normal cell
     //  addresses can be used.
