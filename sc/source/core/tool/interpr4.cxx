@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:35:54 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:22:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3401,7 +3401,7 @@ StackVar ScInterpreter::Interpret()
                 case ocDBVar            : ScDBVar();                    break;
                 case ocDBVarP           : ScDBVarP();                   break;
                 case ocIndirect         : ScIndirect();                 break;
-                case ocAdress           : ScAdress();                   break;
+                case ocAddress          : ScAddressFunc();              break;
                 case ocMatch            : ScMatch();                    break;
                 case ocCountEmptyCells  : ScCountEmptyCells();          break;
                 case ocCountIf          : ScCountIf();                  break;
