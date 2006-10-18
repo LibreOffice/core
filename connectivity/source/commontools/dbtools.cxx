@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 12:44:40 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:06:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1709,6 +1709,14 @@ sal_Bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
         case TypeClass_LONG:
             _rxUpdatedObject->updateInt(_nColumnIndex, *(sal_Int32*)_rValue.getValue());
             break;
+
+        case TypeClass_HYPER:
+        {
+            sal_Int64 nValue = 0;
+            OSL_VERIFY( _rValue >>= nValue );
+            _rxUpdatedObject->updateLong( _nColumnIndex, nValue );
+        }
+        break;
 
         case TypeClass_FLOAT:
             _rxUpdatedObject->updateFloat(_nColumnIndex, *(float*)_rValue.getValue());
