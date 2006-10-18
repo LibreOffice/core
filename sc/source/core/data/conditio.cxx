@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:50:45 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:19:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -536,6 +536,8 @@ void ScConditionEntry::CompileXML()
     if ( aSrcString.Len() )
     {
         ScAddress aNew;
+        /* XML is always in OOo:A1 format, although R1C1 would be more amenable
+         * to compression */
         if ( aNew.Parse( aSrcString, pDoc ) & SCA_VALID )
             aSrcPos = aNew;
         // if the position is invalid, there isn't much we can do at this time
