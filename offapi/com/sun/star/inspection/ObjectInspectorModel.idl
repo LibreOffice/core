@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectInspectorModel.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:02:39 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:21:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,10 @@ module com {  module sun {  module star {  module inspection {
 //-----------------------------------------------------------------------------
 /** describes a default implementation of an ObjectInspectorModel
 
-    This service, which is globally available, simplifies usage of an <type>ObjectInspector</type>.
+    <p>This service simplifies usage of an <type>ObjectInspector</type>.</p>
 
-    The <type>XObjectInspectorModel</type> implemented by this service will not provide any property
-    categories, nor apply any particular order to the properties provided by its handler(s).
+    <p>The <type>XObjectInspectorModel</type> implemented by this service will not provide any property
+    categories, nor apply any particular order to the properties provided by its handler(s).</p>
 
     @see ObjectInspector
     @see XObjectInspectorModel
