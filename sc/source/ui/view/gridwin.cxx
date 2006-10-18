@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:58:09 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:47:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3470,6 +3470,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                                  IsDropFormatSupported( SOT_FORMATSTR_ID_SBA_DATAEXCHANGE ) ||
                                  IsDropFormatSupported( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE ) ||
                                  ( !bMove && (
+                                    IsDropFormatSupported( SOT_FORMAT_FILE_LIST ) ||
                                      IsDropFormatSupported( SOT_FORMAT_FILE ) ||
                                      IsDropFormatSupported( SOT_FORMATSTR_ID_SOLK ) ||
                                      IsDropFormatSupported( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) ||
@@ -3484,6 +3485,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                         if ( IsDropFormatSupported( SOT_FORMATSTR_ID_LINK_SOURCE ) ||
                              IsDropFormatSupported( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ) ||
                              IsDropFormatSupported( SOT_FORMATSTR_ID_LINK ) ||
+                             IsDropFormatSupported( SOT_FORMAT_FILE_LIST ) ||
                              IsDropFormatSupported( SOT_FORMAT_FILE ) ||
                              IsDropFormatSupported( SOT_FORMATSTR_ID_SOLK ) ||
                              IsDropFormatSupported( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) ||
@@ -3594,14 +3596,16 @@ ULONG lcl_GetDropFormatId( const uno::Reference<datatransfer::XTransferable>& xT
         nFormatId = SOT_FORMATSTR_ID_SYLK;
     else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK ) )
         nFormatId = SOT_FORMATSTR_ID_LINK;
+    else if ( aDataHelper.HasFormat( SOT_FORMAT_FILE_LIST ) )
+        nFormatId = SOT_FORMAT_FILE_LIST;
+    else if ( aDataHelper.HasFormat( SOT_FORMAT_FILE ) )    // #i62773# FILE_LIST/FILE before STRING (Unix file managers)
+        nFormatId = SOT_FORMAT_FILE;
     else if ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) )
         nFormatId = SOT_FORMAT_STRING;
     else if ( aDataHelper.HasFormat( SOT_FORMAT_GDIMETAFILE ) )
         nFormatId = SOT_FORMAT_GDIMETAFILE;
     else if ( aDataHelper.HasFormat( SOT_FORMAT_BITMAP ) )
         nFormatId = SOT_FORMAT_BITMAP;
-    else if ( aDataHelper.HasFormat( SOT_FORMAT_FILE ) )
-        nFormatId = SOT_FORMAT_FILE;
 
     return nFormatId;
 }
@@ -3617,6 +3621,8 @@ ULONG lcl_GetDropLinkId( const uno::Reference<datatransfer::XTransferable>& xTra
         nFormatId = SOT_FORMATSTR_ID_LINK_SOURCE_OLE;
     else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK ) )
         nFormatId = SOT_FORMATSTR_ID_LINK;
+    else if ( aDataHelper.HasFormat( SOT_FORMAT_FILE_LIST ) )
+        nFormatId = SOT_FORMAT_FILE_LIST;
     else if ( aDataHelper.HasFormat( SOT_FORMAT_FILE ) )
         nFormatId = SOT_FORMAT_FILE;
     else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SOLK ) )
