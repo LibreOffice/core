@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:57:25 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:09:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 #ifndef CONNECTIVITY_SRESULSETMETADATA_HXX
 #include "MResultSetMetaData.hxx"
 #endif
@@ -61,6 +64,7 @@ using namespace connectivity::mozab;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::beans;
 using namespace ::dbtools;
 using namespace ::comphelper;
 
@@ -111,8 +115,17 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 /*column*/ ) th
 {
     checkColumnIndex(column);
 
-    Any aName((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-    return aName.hasValue() ? getString(aName) : getString((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
+    ::rtl::OUString sColumnName;
+    try
+    {
+        Reference< XPropertySet > xColumnProps( (*m_xColumns)[column-1], UNO_QUERY_THROW );
+        OSL_VERIFY( xColumnProps->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_NAME ) ) >>= sColumnName );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return sColumnName;
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
@@ -179,9 +192,28 @@ sal_Int32 SAL_CALL OResultSetMetaData::isNullable( sal_Int32 column ) throw(SQLE
 }
 // -------------------------------------------------------------------------
 
-sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    OSL_TRACE("In/Out : OResultSetMetaData::isSearchable() : True");
+    ::rtl::OUString sColumnName( getColumnName( column ) );
+
+    if ( !m_pTable || !m_pTable->getConnection() )
+    {
+        OSL_ENSURE( false, "OResultSetMetaData::isSearchable: suspicious: called without table or connection!" );
+        return sal_False;
+    }
+
+    if ( m_pTable->getConnection()->isLDAP() )
+    {
+        const OColumnAlias& aAliases( m_pTable->getConnection()->getColumnAlias() );
+        OColumnAlias::ProgrammaticName eProgrammatic( aAliases.getProgrammaticNameIndex( sColumnName ) );
+        if  (   ( eProgrammatic == OColumnAlias::HOMECOUNTRY )
+            ||  ( eProgrammatic == OColumnAlias::WORKCOUNTRY )
+            )
+            // for those, we know that they're not searchable in the Mozilla/LDAP implementation.
+            // There might be more ...
+            return sal_False;
+    }
+
     return sal_True;
 }
 // -------------------------------------------------------------------------
