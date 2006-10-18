@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-28 14:57:38 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:18:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,9 @@
 #ifndef _FRM_IDS_HXX_
 #include "ids.hxx"
 #endif
+#ifndef FORMS_WINDOWSTATEGUARD_HXX
+#include "windowstateguard.hxx"
+#endif
 
 #ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
 #include <comphelper/propmultiplex.hxx>
@@ -216,6 +219,7 @@ protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                                 m_xServiceFactory;
+    WindowStateGuard                            m_aWindowStateGuard;
 
 public:
     /** constructs a control
@@ -307,6 +311,9 @@ protected:
         // overwrite this and call the base class if you have additional types
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > getAggregateServiceNames();
+
+private:
+    void    impl_resetStateGuard_nothrow();
 };
 
 //==================================================================
