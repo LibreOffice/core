@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 09:42:52 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 15:07:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1363,19 +1363,22 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
     sal_Bool bGetSettingsState( sal_False );
 
     WriteGuard aWriteLock( m_aLock );
-    sal_Bool bGlobalSettings( m_bGlobalSettings );
     Reference< XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
-    GlobalSettings* pGlobalSettings( 0 );
-    if ( m_pGlobalSettings == 0 )
-    {
-        m_pGlobalSettings = new GlobalSettings( m_xSMGR );
-        bGetSettingsState = sal_True;
-    }
-    pGlobalSettings = m_pGlobalSettings;
     aWriteLock.unlock();
 
     if ( xPersistentWindowState.is() )
     {
+        aWriteLock.lock();
+        sal_Bool bGlobalSettings( m_bGlobalSettings );
+        GlobalSettings* pGlobalSettings( 0 );
+        if ( m_pGlobalSettings == 0 )
+        {
+            m_pGlobalSettings = new GlobalSettings( m_xSMGR );
+            bGetSettingsState = sal_True;
+        }
+        pGlobalSettings = m_pGlobalSettings;
+        aWriteLock.unlock();
+
         try
         {
             Any a;
