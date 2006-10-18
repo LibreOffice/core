@@ -4,9 +4,9 @@
  *
  *  $RCSfile: query.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:06:03 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:27:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,8 +94,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           m_xCommandDefinition;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xConnection;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >       m_xCommandPropInfo;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xColumnMediator;
-    OContainerMediator* m_pMediator;
+    ::rtl::Reference< OContainerMediator >                                              m_pColumnMediator;
     IWarningsContainer* m_pWarnings;
     sal_Bool            m_bCaseSensitiv : 1;        // assume case sensitivity of the column names ?
 
