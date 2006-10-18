@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<accel:acceleratorlist xmlns:accel="http://openoffice.org/2001/accel" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <accel:item accel:code="KEY_G" accel:mod1="true" xlink:href=".uno:RecSearch"/>
+</accel:acceleratorlist>
