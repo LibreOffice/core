@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:32:14 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:26:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -434,8 +434,10 @@ void ORowSetCache::setMaxRowSize(sal_Int32 _nSize)
         sal_Int32 nKeyPos = (m_aMatrixIter - m_pMatrix->begin());
         m_pMatrix->resize(_nSize);
 
-        CHECK_MATRIX_POS(nKeyPos);
-        m_aMatrixIter = m_pMatrix->begin() + nKeyPos;
+        if ( nKeyPos < _nSize )
+            m_aMatrixIter = m_pMatrix->begin() + nKeyPos;
+        else
+            m_aMatrixIter = m_pMatrix->end();
         m_aMatrixEnd = m_pMatrix->end();
 
         // now adjust their positions because a resize invalid all iterators
@@ -448,7 +450,10 @@ void ORowSetCache::setMaxRowSize(sal_Int32 _nSize)
             if ( aPosChangeIter->second )
             {
                 CHECK_MATRIX_POS(*aIter);
-                aCacheIter->second.aIterator = m_pMatrix->begin() + *aIter++;
+                if ( *aIter < _nSize )
+                    aCacheIter->second.aIterator = m_pMatrix->begin() + *aIter++;
+                else
+                    aCacheIter->second.aIterator = m_pMatrix->end();
             }
         }
     }
