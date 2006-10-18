@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 12:30:14 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:16:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,7 +254,7 @@
 #define SC_OPCODE_DB_VAR            277
 #define SC_OPCODE_DB_VAR_P          278
 #define SC_OPCODE_INDIRECT          279     /* Verwaltungsfunktionen */
-#define SC_OPCODE_ADRESS            280
+#define SC_OPCODE_ADDRESS           280
 #define SC_OPCODE_MATCH             281
 #define SC_OPCODE_COUNT_EMPTY_CELLS 282
 #define SC_OPCODE_COUNT_IF          283
@@ -362,9 +362,11 @@
 #define SC_OPCODE_CELL              385
 #define SC_OPCODE_ISPMT             386
 #define SC_OPCODE_HYPERLINK         387
-#define SC_OPCODE_END_2_PAR         388
+#define SC_OPCODE_INDIRECT_XL       388     /* See also INDIRECT for OOO variant */
+#define SC_OPCODE_ADDRESS_XL        389     /* See also ADRESS for OOO variant */
+#define SC_OPCODE_END_2_PAR         390
 
-#define SC_OPCODE_LAST_OPCODE_ID    387      /* letzter OpCode */
+#define SC_OPCODE_LAST_OPCODE_ID    389      /* last OpCode */
 
 /*** Interna ***/
 #define SC_OPCODE_INTERNAL_BEGIN   9995
