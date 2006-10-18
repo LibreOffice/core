@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:51:55 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:20:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,6 +382,16 @@ BOOL ScDocument::IsLinked( SCTAB nTab ) const
     if (ValidTab(nTab) && pTab[nTab])
         return pTab[nTab]->IsLinked();
     return FALSE;
+}
+
+ScAddress::Convention ScDocument::GetAddressConvention() const
+{
+    return eAddrConv;
+}
+
+void ScDocument::SetAddressConvention( ScAddress::Convention eConv )
+{
+    eAddrConv = eConv;
 }
 
 BOOL ScDocument::GetLinkMode( SCTAB nTab ) const
