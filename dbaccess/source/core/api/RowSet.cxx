@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:32:02 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:25:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1594,8 +1594,8 @@ void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
 
     // do the real execute
     execute_NoApprove_NoNewConn(aGuard);
-
 }
+
 //------------------------------------------------------------------------------
 void ORowSet::setStatementResultSetType( const Reference< XPropertySet >& _rxStatement, sal_Int32 _nDesiredResultSetType, sal_Int32 _nDesiredResultSetConcurrency )
 {
@@ -1711,6 +1711,92 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
     }
 
     return xResultSet;
+}
+
+// -----------------------------------------------------------------------------
+void ORowSet::impl_initializeColumnSettings_nothrow( const Reference< XPropertySet >& _rxTemplateColumn, const Reference< XPropertySet >& _rxRowSetColumn )
+{
+    OSL_ENSURE( _rxTemplateColumn.is() && _rxRowSetColumn.is(),
+        "ORowSet::impl_initializeColumnSettings_nothrow: this will crash!" );
+
+    bool bHaveAnyColumnSetting = false;
+    try
+    {
+        Reference< XPropertySetInfo > xInfo( _rxTemplateColumn->getPropertySetInfo(), UNO_QUERY_THROW );
+
+        // a number of properties is plain copied
+        const ::rtl::OUString aPropertyNames[] = {
+            PROPERTY_ALIGN, PROPERTY_RELATIVEPOSITION, PROPERTY_WIDTH, PROPERTY_HIDDEN, PROPERTY_CONTROLMODEL,
+            PROPERTY_HELPTEXT, PROPERTY_CONTROLDEFAULT
+        };
+        for ( size_t i=0; i<sizeof( aPropertyNames ) / sizeof( aPropertyNames[0] ); ++i )
+        {
+            if ( xInfo->hasPropertyByName( aPropertyNames[i] ) )
+            {
+                _rxRowSetColumn->setPropertyValue( aPropertyNames[i], _rxTemplateColumn->getPropertyValue( aPropertyNames[i] ) );
+                bHaveAnyColumnSetting = true;
+            }
+        }
+
+        // the format key is slightly more complex
+        sal_Int32 nFormatKey = 0;
+        if( xInfo->hasPropertyByName( PROPERTY_NUMBERFORMAT ) )
+        {
+            _rxTemplateColumn->getPropertyValue( PROPERTY_NUMBERFORMAT ) >>= nFormatKey;
+            bHaveAnyColumnSetting = true;
+        }
+        if ( !nFormatKey && m_xNumberFormatTypes.is() )
+            nFormatKey = ::dbtools::getDefaultNumberFormat( _rxTemplateColumn, m_xNumberFormatTypes, SvtSysLocale().GetLocaleData().getLocale() );
+        _rxRowSetColumn->setPropertyValue( PROPERTY_NUMBERFORMAT, makeAny( nFormatKey ) );
+    }
+    catch(Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION();
+        return;
+    }
+
+    if ( bHaveAnyColumnSetting )
+        return;
+
+    // the template column could not provide *any* setting. Okay, probably it's a parser column, which
+    // does not offer those. However, perhaps the template column referes to a table column, which we
+    // can use as new template column
+    try
+    {
+        Reference< XPropertySetInfo > xInfo( _rxTemplateColumn->getPropertySetInfo(), UNO_QUERY_THROW );
+        if ( !xInfo->hasPropertyByName( PROPERTY_TABLENAME ) )
+            // no chance
+            return;
+
+        ::rtl::OUString sTableName;
+        OSL_VERIFY( _rxTemplateColumn->getPropertyValue( PROPERTY_TABLENAME ) >>= sTableName );
+
+        Reference< XNameAccess > xTables( impl_getTables_throw(), UNO_QUERY_THROW );
+        if ( !xTables->hasByName( sTableName ) )
+            // no chance
+            return;
+
+        Reference< XColumnsSupplier > xTableColSup( xTables->getByName( sTableName ), UNO_QUERY_THROW );
+        Reference< XNameAccess > xTableCols( xTableColSup->getColumns(), UNO_QUERY_THROW );
+
+        ::rtl::OUString sTableColumnName;
+
+        // get the "Name" or (preferred) "RealName" property of the column
+        ::rtl::OUString sNamePropertyName( PROPERTY_NAME );
+        if ( xInfo->hasPropertyByName( PROPERTY_REALNAME ) )
+            sNamePropertyName = PROPERTY_REALNAME;
+        OSL_VERIFY( _rxTemplateColumn->getPropertyValue( sNamePropertyName ) >>= sTableColumnName );
+
+        if ( !xTableCols->hasByName( sTableColumnName ) )
+            return;
+
+        Reference< XPropertySet > xTableColumn( xTableCols->getByName( sTableColumnName ), UNO_QUERY_THROW );
+        impl_initializeColumnSettings_nothrow( xTableColumn, _rxRowSetColumn );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1836,25 +1922,26 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
         else
         {
             // create the rowset columns
-            Reference<XResultSetMetaData> xMeta = getMetaData();
-            if ( xMeta.is() )
-            {
-                sal_Int32 nCount = xMeta->getColumnCount();
-                m_aDataColumns.reserve(nCount+1);
-                aColumns->reserve(nCount+1);
-                ::std::map<Reference<XPropertySet>,int> aColumnMap; // need to find duplicates
+            Reference< XResultSetMetaData > xMeta( getMetaData(), UNO_QUERY_THROW );
+            sal_Int32 nCount = xMeta->getColumnCount();
+            m_aDataColumns.reserve(nCount+1);
+            aColumns->reserve(nCount+1);
+            ::std::set< Reference< XPropertySet > > aAllColumns;
 
-                for(sal_Int32 i=1; i <= nCount ;++i)
+            for(sal_Int32 i=1; i <= nCount ;++i)
+            {
+                ::rtl::OUString sName = xMeta->getColumnName(i);
+
+                // retrieve the column number |i|
+                Reference<XPropertySet> xColumn;
                 {
                     sal_Bool bReFetchName = sal_False;
-                    ::rtl::OUString sName = xMeta->getColumnName(i);
-                    Reference<XPropertySet> xColumn;
                     if (m_xColumns->hasByName(sName))
                         m_xColumns->getByName(sName) >>= xColumn;
                     if (!xColumn.is() && m_xColumns->hasByName(xMeta->getColumnLabel(i)))
                         m_xColumns->getByName(xMeta->getColumnLabel(i)) >>= xColumn;
                     // check if column already in the list we need another
-                    if(aColumnMap.find(xColumn) != aColumnMap.end())
+                    if ( aAllColumns.find( xColumn ) != aAllColumns.end() )
                     {
                         xColumn = NULL;
                         bReFetchName = sal_True;
@@ -1876,8 +1963,11 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     }
                     if(bReFetchName && xColumn.is())
                         xColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
-                    aColumnMap.insert(::std::map< Reference<XPropertySet>,int>::value_type(xColumn,0));
+                    aAllColumns.insert( xColumn );
+                }
 
+                // create a RowSetDataColumn
+                {
                     Reference<XPropertySetInfo> xInfo = xColumn.is() ? xColumn->getPropertySetInfo() : Reference<XPropertySetInfo>();
                     if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
                         aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
@@ -1902,34 +1992,8 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     aNames.push_back(sName);
                     m_aDataColumns.push_back(pColumn);
 
-                    try
-                    {
-                        if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_ALIGN))
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
-
-                        nFormatKey = 0;
-                        if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_NUMBERFORMAT))
-                            nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
-                        if (!nFormatKey && xColumn.is() && m_xNumberFormatTypes.is())
-                            nFormatKey = ::dbtools::getDefaultNumberFormat(xColumn,m_xNumberFormatTypes,aLocale);
-
-                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
-                        if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_RELATIVEPOSITION))
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
-                        if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_WIDTH))
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,xColumn->getPropertyValue(PROPERTY_WIDTH));
-                        if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_HIDDEN))
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,xColumn->getPropertyValue(PROPERTY_HIDDEN));
-                        if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_CONTROLMODEL))
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLMODEL,xColumn->getPropertyValue(PROPERTY_CONTROLMODEL));
-                        if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_HELPTEXT))
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HELPTEXT,xColumn->getPropertyValue(PROPERTY_HELPTEXT));
-                        if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLDEFAULT,xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT));
-                    }
-                    catch(Exception&)
-                    {
-                    }
+                    if ( xColumn.is() )
+                        impl_initializeColumnSettings_nothrow( xColumn, pColumn );
                 }
             }
         }
@@ -2121,7 +2185,6 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
     }
     return m_xActiveConnection;
 }
-
 //------------------------------------------------------------------------------
 Reference< XNameAccess > ORowSet::impl_getTables_throw()
 {
