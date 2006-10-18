@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GenericPropertyHandler.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:01:53 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:21:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,13 +46,13 @@ module com {  module sun {  module star {  module inspection {
 //-----------------------------------------------------------------------------
 /** implements a general-purpose XPropertyHandler
 
-    The property handler implemented by this service will do an introspection
+    <p>The property handler implemented by this service will do an introspection
     on the provided components, and expose the properties obtained via
-    XIntrospectionAccess::getProperties.
+    XIntrospectionAccess::getProperties.</p>
 
-    The handler will automatically determine the best type of property control
+    <p>The handler will automatically determine the best type of property control
     to represent a certain property, depending on the property type. This includes,
-    for example, list box controls to represent enumeration properties.
+    for example, list box controls to represent enumeration properties.</p>
 
     @see XPropertyHandler
     @see com::sun::star::beans::XIntrospectionAccess
