@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-28 14:56:18 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:13:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,12 @@
 
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -282,12 +288,13 @@ class ImageProducerControlModel : public ::com::sun::star::awt::XImageProducer,
                                   public UnoControlModel
 {
 private:
-    std::list< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > > maListeners;
-    sal_Bool                                                                               mbAdjustingImagePosition;
+    std::list< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > >  maListeners;
+    bool                                                                                    mbAdjustingImagePosition;
+    bool                                                                                    mbAdjustingGraphic;
 
 protected:
-    ImageProducerControlModel() : mbAdjustingImagePosition( sal_False ) { }
-    ImageProducerControlModel( const ImageProducerControlModel& _rSource ) : com::sun::star::awt::XImageProducer(), UnoControlModel( _rSource ), mbAdjustingImagePosition( sal_False ) { }
+    ImageProducerControlModel() : mbAdjustingImagePosition( false ), mbAdjustingGraphic( false ) { }
+    ImageProducerControlModel( const ImageProducerControlModel& _rSource ) : com::sun::star::awt::XImageProducer(), UnoControlModel( _rSource ), mbAdjustingImagePosition( false ), mbAdjustingGraphic( false ) { }
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -301,6 +308,9 @@ protected:
 
     // ::cppu::OPropertySetHelper
     void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception);
+
+    // UnoControlModel
+    ::com::sun::star::uno::Any ImplGetDefaultValue( sal_uInt16 nPropId ) const;
 
 private:
         ImageProducerControlModel& operator=( const ImageProducerControlModel& );   // never implemented
@@ -430,8 +440,10 @@ public:
 //  ----------------------------------------------------
 //  class UnoImageControlControl
 //  ----------------------------------------------------
-class UnoImageControlControl :  public ImageConsumerControl,
-                                public ::com::sun::star::awt::XLayoutConstrains
+typedef ::cppu::AggImplInheritanceHelper1   <   ImageConsumerControl
+                                            ,   ::com::sun::star::awt::XLayoutConstrains
+                                            >   UnoImageControlControl_Base;
+class UnoImageControlControl : public UnoImageControlControl_Base
 {
 private:
     ActionListenerMultiplexer   maActionListeners;
@@ -442,15 +454,7 @@ public:
                             UnoImageControlControl();
     ::rtl::OUString         GetComponentServiceName();
 
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return ImageConsumerControl::queryInterface(rType); }
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XControl
     sal_Bool SAL_CALL isTransparent(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -494,11 +498,13 @@ public:
 //  ----------------------------------------------------
 //  class UnoRadioButtonControl
 //  ----------------------------------------------------
-class UnoRadioButtonControl :   public ImageConsumerControl,
-                                public ::com::sun::star::awt::XButton,
-                                public ::com::sun::star::awt::XRadioButton,
-                                public ::com::sun::star::awt::XItemListener,
-                                public ::com::sun::star::awt::XLayoutConstrains
+typedef ::cppu::AggImplInheritanceHelper4   <   ImageConsumerControl
+                                            ,   ::com::sun::star::awt::XButton
+                                            ,   ::com::sun::star::awt::XRadioButton
+                                            ,   ::com::sun::star::awt::XItemListener
+                                            ,   ::com::sun::star::awt::XLayoutConstrains
+                                            >   UnoRadioButtonControl_Base;
+class UnoRadioButtonControl : public UnoRadioButtonControl_Base
 {
 private:
     ItemListenerMultiplexer     maItemListeners;
@@ -510,17 +516,9 @@ public:
                             UnoRadioButtonControl();
     ::rtl::OUString         GetComponentServiceName();
 
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return ImageConsumerControl::queryInterface(rType); }
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException) { ImageConsumerControl::disposing( Source ); }
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XControl
     sal_Bool SAL_CALL isTransparent(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -578,11 +576,13 @@ public:
 //  ----------------------------------------------------
 //  class UnoCheckBoxControl
 //  ----------------------------------------------------
-class UnoCheckBoxControl :  public ImageConsumerControl,
-                            public ::com::sun::star::awt::XButton,
-                            public ::com::sun::star::awt::XCheckBox,
-                            public ::com::sun::star::awt::XItemListener,
-                            public ::com::sun::star::awt::XLayoutConstrains
+typedef ::cppu::AggImplInheritanceHelper4   <   ImageConsumerControl
+                                            ,   ::com::sun::star::awt::XButton
+                                            ,   ::com::sun::star::awt::XCheckBox
+                                            ,   ::com::sun::star::awt::XItemListener
+                                            ,   ::com::sun::star::awt::XLayoutConstrains
+                                            >   UnoCheckBoxControl_Base;
+class UnoCheckBoxControl : public UnoCheckBoxControl_Base
 {
 private:
     ItemListenerMultiplexer     maItemListeners;
@@ -595,17 +595,9 @@ public:
                             ~UnoCheckBoxControl(){;}
     ::rtl::OUString         GetComponentServiceName();
 
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return ImageConsumerControl::queryInterface(rType); }
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException) { ImageConsumerControl::disposing( Source ); }
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XControl
     sal_Bool SAL_CALL isTransparent(  ) throw(::com::sun::star::uno::RuntimeException);
