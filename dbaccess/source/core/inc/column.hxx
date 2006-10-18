@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:12:31 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:28:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,9 +289,6 @@ namespace dbaccess
                     ,public TXChild
     {
         OContainerMediator*     m_pMediator;
-            // in case we are asked to load our UI, but do not have the columns, yet, we don't create them
-            // instead we store the column settings and merge them into the real columns as soon as they're
-            // inserted
 
     protected:
         // comes from the driver can be null
