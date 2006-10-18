@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:16:16 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:29:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1893,6 +1893,7 @@ void OApplicationController::renameEntry()
                         xRename.set(xContainer->getByName(*aList.begin()),UNO_QUERY);
                         sal_Int32 nCommandType = eType == E_QUERY ? CommandType::QUERY : CommandType::TABLE;
 
+                        ensureConnection();
                         pNameChecker.reset( new DynamicTableOrQueryNameCheck( getConnection(), nCommandType ) );
                         aDialog.reset( new OSaveAsDlg(
                             getView(), nCommandType, getORB(), getConnection(),
