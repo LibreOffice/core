@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dptabsrc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:01:09 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:42:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1508,8 +1508,14 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
     else if ( aNameStr.EqualsAscii( SC_UNO_ISDATALA ) )                 // read-only properties
         lcl_SetBoolInAny( aRet, getIsDataLayoutDimension() );
     else if ( aNameStr.EqualsAscii( SC_UNO_NUMBERFO ) )
-        aRet <<= (sal_Int32) pSource->GetData()->GetNumberFormat(
-                                            ( nSourceDim >= 0 ) ? nSourceDim : nDim );
+    {
+        sal_Int32 nFormat = 0;
+        sheet::GeneralFunction eFunc = (sheet::GeneralFunction)getFunction();
+        // #i63745# don't use source format for "count"
+        if ( eFunc != sheet::GeneralFunction_COUNT && eFunc != sheet::GeneralFunction_COUNTNUMS )
+            nFormat = pSource->GetData()->GetNumberFormat( ( nSourceDim >= 0 ) ? nSourceDim : nDim );
+        aRet <<= nFormat;
+    }
     else if ( aNameStr.EqualsAscii( SC_UNO_ORIGINAL ) )
     {
         uno::Reference<container::XNamed> xOriginal;
