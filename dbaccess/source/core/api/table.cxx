@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:36:41 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:27:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,7 +231,7 @@ void SAL_CALL ODBTable::disposing()
     OTable_Base::disposing();
     m_xColumnDefinitions = NULL;
     m_xDriverColumns = NULL;
-    m_xColumnMediator = NULL;
+    m_pColumnMediator = NULL;
 }
 
 //------------------------------------------------------------------------------
@@ -432,11 +432,6 @@ void SAL_CALL ODBTable::alterColumnByName( const ::rtl::OUString& _rName, const 
         throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_ALTER_BY_NAME),*this,SQLSTATE_GENERAL,1000,Any() );
     m_pColumns->refresh();
 }
-// -------------------------------------------------------------------------
-void ODBTable::refreshColumns()
-{
-    OTable_Base::refreshColumns();
-}
 // -----------------------------------------------------------------------------
 sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
 {
@@ -477,9 +472,8 @@ sdbcx::OCollection* ODBTable::createColumns(const TStringVector& _rNames)
                                     xMeta.is() && xMeta->supportsAlterTableWithDropColumn());
     static_cast<OColumnsHelper*>(pCol)->setParent(this);
     pCol->setParent(*this);
-    OContainerMediator* pMediator = new OContainerMediator(pCol,m_xColumnDefinitions,sal_False);
-    m_xColumnMediator = pMediator;
-    pCol->setMediator(pMediator);
+    m_pColumnMediator = new OContainerMediator( pCol, m_xColumnDefinitions, getConnection(), OContainerMediator::eColumns );
+    pCol->setMediator( m_pColumnMediator.get() );
     return pCol;
 }
 // -----------------------------------------------------------------------------
