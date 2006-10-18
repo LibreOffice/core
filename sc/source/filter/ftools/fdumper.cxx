@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:19:23 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:44:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,14 +93,7 @@ void ItemFormat::Set( DataType eDataType, FormatType eFmtType, const String& rIt
     maListName = rListName;
 }
 
-void ItemFormat::Parse( const String& rFormatStr )
-{
-    ScfStringVec aFormatVec;
-    StringHelper::ConvertStringToStringList( aFormatVec, rFormatStr, false );
-    Parse( aFormatVec );
-}
-
-void ItemFormat::Parse( const ScfStringVec& rFormatVec )
+ScfStringVec::const_iterator ItemFormat::Parse( const ScfStringVec& rFormatVec )
 {
     Set( DATATYPE_VOID, FORMATTYPE_NONE, String::EmptyString() );
 
@@ -122,6 +115,17 @@ void ItemFormat::Parse( const ScfStringVec& rFormatVec )
         else if( aFmtType.EqualsAscii( "unknown" ) )
             Set( meDataType, FORMATTYPE_HEX, CREATE_STRING( SCF_DUMP_UNKNOWN ) );
     }
+
+    return aIt;
+}
+
+ScfStringVec ItemFormat::Parse( const String& rFormatStr )
+{
+    ScfStringVec aFormatVec;
+    StringHelper::ConvertStringToStringList( aFormatVec, rFormatStr, false );
+    ScfStringVec::const_iterator aIt = Parse( aFormatVec );
+    const ScfStringVec& rFormatVec = aFormatVec;
+    return ScfStringVec( aIt, rFormatVec.end() );
 }
 
 // ============================================================================
@@ -1040,9 +1044,15 @@ CombiList::CombiList( const ConfigCoreData& rCoreData ) :
 void CombiList::ImplSetName( sal_Int64 nKey, const String& rName )
 {
     if( (nKey & (nKey - 1)) != 0 )  // more than a single bit set?
-        maFmtMap[ nKey ].Parse( rName );
+    {
+        ExtItemFormat& rItemFmt = maFmtMap[ nKey ];
+        ScfStringVec aRemain = rItemFmt.Parse( rName );
+        rItemFmt.mbShiftValue = aRemain.empty() || !aRemain.front().EqualsAscii( "noshift" );
+    }
     else
+    {
         FlagsList::ImplSetName( nKey, rName );
+    }
 }
 
 String CombiList::ImplGetName( const Config& rCfg, sal_Int64 nKey ) const
@@ -1051,53 +1061,44 @@ String CombiList::ImplGetName( const Config& rCfg, sal_Int64 nKey ) const
     sal_Int64 nFound = 0;
     String aName;
     // add known flag fields
-    for( ItemFormatMap::const_iterator aIt = maFmtMap.begin(), aEnd = maFmtMap.end(); aIt != aEnd; ++aIt )
+    for( ExtItemFormatMap::const_iterator aIt = maFmtMap.begin(), aEnd = maFmtMap.end(); aIt != aEnd; ++aIt )
     {
         sal_Int64 nMask = aIt->first;
         if( nMask != 0 )
         {
-            const ItemFormat& rItemFmt = aIt->second;
+            const ExtItemFormat& rItemFmt = aIt->second;
 
             sal_uInt64 nUFlags = static_cast< sal_uInt64 >( nFlags );
             sal_uInt64 nUMask = static_cast< sal_uInt64 >( nMask );
-            while( (nUMask & 1) == 0 ) { nUFlags >>= 1; nUMask >>= 1; }
+            if( rItemFmt.mbShiftValue )
+                while( (nUMask & 1) == 0 ) { nUFlags >>= 1; nUMask >>= 1; }
+
+            sal_uInt64 nUValue = nUFlags & nUMask;
+            sal_Int64 nSValue = static_cast< sal_Int64 >( nUValue );
+            if( ::get_flag< sal_uInt64 >( nUValue, (nUMask + 1) >> 1 ) )
+                ::set_flag( nSValue, static_cast< sal_Int64 >( ~nUMask ) );
 
             String aItem = rItemFmt.maItemName;
-
-            if( (nUMask & (nUMask + 1)) == 0 )  // all bits in one block
+            String aValue;
+            switch( rItemFmt.meDataType )
             {
-                sal_uInt64 nUValue = nUFlags & nUMask;
-                sal_Int64 nSValue = static_cast< sal_Int64 >( nUValue );
-                if( ::get_flag< sal_uInt64 >( nUValue, (nUMask + 1) >> 1 ) )
-                    ::set_flag( nSValue, static_cast< sal_Int64 >( ~nUMask ) );
-
-                String aValue;
-                switch( rItemFmt.meDataType )
-                {
-                    case DATATYPE_INT8:     StringHelper::AppendValue( aValue, static_cast< sal_Int8 >( nSValue ), rItemFmt.meFmtType );    break;
-                    case DATATYPE_UINT8:    StringHelper::AppendValue( aValue, static_cast< sal_uInt8 >( nUValue ), rItemFmt.meFmtType );   break;
-                    case DATATYPE_INT16:    StringHelper::AppendValue( aValue, static_cast< sal_Int16 >( nSValue ), rItemFmt.meFmtType );   break;
-                    case DATATYPE_UINT16:   StringHelper::AppendValue( aValue, static_cast< sal_uInt16 >( nUValue ), rItemFmt.meFmtType );  break;
-                    case DATATYPE_INT32:    StringHelper::AppendValue( aValue, static_cast< sal_Int32 >( nSValue ), rItemFmt.meFmtType );   break;
-                    case DATATYPE_UINT32:   StringHelper::AppendValue( aValue, static_cast< sal_uInt32 >( nUValue ), rItemFmt.meFmtType );  break;
-                    case DATATYPE_INT64:    StringHelper::AppendValue( aValue, nSValue, rItemFmt.meFmtType );                               break;
-                    case DATATYPE_UINT64:   StringHelper::AppendValue( aValue, nUValue, rItemFmt.meFmtType );                               break;
-                    case DATATYPE_FLOAT:    StringHelper::AppendValue( aValue, static_cast< float >( nSValue ), rItemFmt.meFmtType );       break;
-                    case DATATYPE_DOUBLE:   StringHelper::AppendValue( aValue, static_cast< double >( nSValue ), rItemFmt.meFmtType );      break;
-                    default:;
-                }
-                StringHelper::AppendToken( aItem, aValue, SCF_DUMP_ITEMSEP );
-                if( rItemFmt.maListName.Len() > 0 )
-                {
-                    String aName = rCfg.GetName( rItemFmt.maListName, static_cast< sal_Int64 >( nUValue ) );
-                    StringHelper::AppendToken( aItem, aName, SCF_DUMP_ITEMSEP );
-                }
+                case DATATYPE_INT8:     StringHelper::AppendValue( aValue, static_cast< sal_Int8 >( nSValue ), rItemFmt.meFmtType );    break;
+                case DATATYPE_UINT8:    StringHelper::AppendValue( aValue, static_cast< sal_uInt8 >( nUValue ), rItemFmt.meFmtType );   break;
+                case DATATYPE_INT16:    StringHelper::AppendValue( aValue, static_cast< sal_Int16 >( nSValue ), rItemFmt.meFmtType );   break;
+                case DATATYPE_UINT16:   StringHelper::AppendValue( aValue, static_cast< sal_uInt16 >( nUValue ), rItemFmt.meFmtType );  break;
+                case DATATYPE_INT32:    StringHelper::AppendValue( aValue, static_cast< sal_Int32 >( nSValue ), rItemFmt.meFmtType );   break;
+                case DATATYPE_UINT32:   StringHelper::AppendValue( aValue, static_cast< sal_uInt32 >( nUValue ), rItemFmt.meFmtType );  break;
+                case DATATYPE_INT64:    StringHelper::AppendValue( aValue, nSValue, rItemFmt.meFmtType );                               break;
+                case DATATYPE_UINT64:   StringHelper::AppendValue( aValue, nUValue, rItemFmt.meFmtType );                               break;
+                case DATATYPE_FLOAT:    StringHelper::AppendValue( aValue, static_cast< float >( nSValue ), rItemFmt.meFmtType );       break;
+                case DATATYPE_DOUBLE:   StringHelper::AppendValue( aValue, static_cast< double >( nSValue ), rItemFmt.meFmtType );      break;
+                default:;
             }
-            else
+            StringHelper::AppendToken( aItem, aValue, SCF_DUMP_ITEMSEP );
+            if( rItemFmt.maListName.Len() > 0 )
             {
-                String aValue;
-                StringHelper::AppendShortHex( aValue, nFlags & nMask );
-                StringHelper::AppendToken( aItem, aValue, SCF_DUMP_ITEMSEP );
+                String aName = rCfg.GetName( rItemFmt.maListName, static_cast< sal_Int64 >( nUValue ) );
+                StringHelper::AppendToken( aItem, aName, SCF_DUMP_ITEMSEP );
             }
             StringHelper::Enclose( aItem, '(', ')' );
             StringHelper::AppendToken( aName, aItem );
