@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:37:14 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:30:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -900,7 +900,8 @@ void ODbTypeWizDialogSetup::enterState(WizardState _nState)
             break;
         case PAGE_DBSETUPWIZARD_FINAL:
             enableButtons( WZB_FINISH, sal_True);
-            pFinalPage->enableTableWizardCheckBox(m_pCollection->supportsTableCreation(m_eType));
+            if ( pFinalPage )
+                pFinalPage->enableTableWizardCheckBox(m_pCollection->supportsTableCreation(m_eType));
             break;
     }
 }
