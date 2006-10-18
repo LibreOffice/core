@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleCellBase.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:01:04 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:26:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,6 +271,7 @@ sal_Int32
     String sName( ScResId(STR_ACC_CELL_NAME) );
     String sAddress;
     // Document not needed, because only the cell address, but not the tablename is needed
+    // always us OOO notation
     maCellAddress.Format( sAddress, SCA_VALID, NULL );
     sName.SearchAndReplaceAscii("%1", sAddress);
     return rtl::OUString(sName);
