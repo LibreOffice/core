@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:37:31 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@
 #include <sfx2/docfile.hxx>
 #include <sot/clsids.hxx>
 #include <sot/formats.hxx>
+#include <sot/filelist.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/ptitem.hxx>
 #include <svtools/stritem.hxx>
@@ -91,6 +92,12 @@
 #include "scextopt.hxx"
 #include "tabvwsh.hxx"      //  wegen GetViewFrame
 #include "compiler.hxx"
+
+#include "asciiopt.hxx"
+#include "scabstdlg.hxx"
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
 
 #ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
@@ -327,8 +334,63 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             if ( aDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream.Is() )
                 // mba: clipboard always must contain absolute URLs (could be from alien source)
                 bRet = aObj.ImportStream( *xStream, String(), nFormatId );
-            else if ( aDataHelper.GetString( nFormatId, aStr ) )
+#if 1
+            else if (aDataHelper.GetString( nFormatId, aStr ))
                 bRet = aObj.ImportString( aStr, nFormatId );
+#else
+/* #i15509# was temporarily rejected due to QA time constraints. Enable again for OOo2.2 */
+            else if (nFormatId == FORMAT_STRING && aDataHelper.GetString( nFormatId, aStr ))
+            {
+                // Do CSV dialog if more than one line or a usual delimiter
+                // [,;\t ] is contained within.
+                sal_Int32 nDelim;
+                nDelim = aStr.indexOf('\n');
+                if (nDelim < 0)
+                    nDelim = aStr.indexOf(',');
+                if (nDelim < 0)
+                    nDelim = aStr.indexOf(';');
+                if (nDelim < 0)
+                    nDelim = aStr.indexOf('\t');
+                if (nDelim < 0)
+                    nDelim = aStr.indexOf(' ');
+#if 0
+                ::rtl::OString tmpStr = OUStringToOString( aStr,
+                        RTL_TEXTENCODING_UTF8 );
+                fprintf( stderr, "String is '%s' (%d) [%d]\n", tmpStr.getStr(),
+                        tmpStr.getLength(), nDelim);
+#endif
+                if (nDelim >= 0 && nDelim != aStr.getLength () - 1)
+                {
+                    ScImportStringStream aStrm( aStr);
+                    ScAbstractDialogFactory* pFact =
+                        ScAbstractDialogFactory::Create();
+                    AbstractScImportAsciiDlg *pDlg =
+                        pFact->CreateScImportAsciiDlg( NULL, String(), &aStrm,
+                                ResId( RID_SCDLG_ASCII));
+
+                    if (pDlg->Execute() == RET_OK)
+                    {
+                        ScAsciiOptions aOptions;
+                        pDlg->GetOptions( aOptions );
+                        aObj.SetExtOptions( aOptions );
+
+                        bRet = aObj.ImportString( aStr, nFormatId );
+
+                        // TODO: what if (aObj.IsOverflow())
+                        // Content was partially pasted, which can be undone by
+                        // the user though.
+                        if (aObj.IsOverflow())
+                            bRet = FALSE;
+                    }
+                    else
+                        bRet = FALSE;
+                }
+                else
+                    bRet = aObj.ImportString( aStr, nFormatId );
+            }
+            else if (nFormatId != FORMAT_STRING && aDataHelper.GetString( nFormatId, aStr ))
+                bRet = aObj.ImportString( aStr, nFormatId );
+#endif
 
             InvalidateAttribs();
             GetViewData()->UpdateInputHandler();
@@ -567,20 +629,22 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
     }
     else if ( nFormatId == SOT_FORMAT_FILE )
     {
-        //! multiple files?
-        //USHORT nCount = DragServer::GetItemCount();
-        //if (nCount == 0)  // normal handling (not D&D)
+        String aFile;
+        if ( aDataHelper.GetString( nFormatId, aFile ) )
+            bRet = PasteFile( aPos, aFile, bLink );
+    }
+    else if ( nFormatId == SOT_FORMAT_FILE_LIST )
+    {
+        FileList aFileList;
+        if ( aDataHelper.GetFileList( nFormatId, aFileList ) )
         {
-            String aFile;
-            if ( aDataHelper.GetString( nFormatId, aFile ) )
-                bRet = PasteFile( aPos, aFile, bLink );
-        }
-#if 0
-        else        // use multiple items from drag server
-        {
-            for( USHORT i = 0; i < nCount ; i++ )
+            ULONG nCount = aFileList.Count();
+            for( ULONG i = 0; i < nCount ; i++ )
             {
-                String aFile = DragServer::PasteFile( i );
+                String aFile = aFileList.GetFile( i );
+
+                PasteFile( aPos, aFile, bLink );
+#if 0
                 SfxStringItem aNameItem( FID_INSERT_FILE, aFile );
                 SfxPointItem aPosItem( FN_PARAM_1, aPos );
                 SfxDispatcher* pDisp =
@@ -588,13 +652,13 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 if (pDisp)
                     pDisp->Execute( FID_INSERT_FILE, SFX_CALLMODE_ASYNCHRON,
                                         &aNameItem, &aPosItem, (void*)0 );
+#endif
 
                 aPos.X() += 400;
                 aPos.Y() += 400;
             }
             bRet = TRUE;
         }
-#endif
     }
     else if ( nFormatId == SOT_FORMATSTR_ID_SOLK ||
               nFormatId == SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ||
