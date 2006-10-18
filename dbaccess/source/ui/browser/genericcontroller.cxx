@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:58:43 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:30:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -752,7 +752,7 @@ void OGenericUnoController::dispatch(const URL& _aURL, const Sequence< PropertyV
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "frank.schoenheit@sun.com", sLog.getStr() );
 #endif
 
-    executeUnChecked(_aURL,aArgs);
+    executeChecked(_aURL,aArgs);
 }
 
 // -----------------------------------------------------------------------
