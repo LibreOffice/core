@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XWindow.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:00:02 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:21:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,10 @@ published interface XWindow: com::sun::star::lang::XComponent
     //-------------------------------------------------------------------------
 
     /** adds a window listener to the object.
+
+        @param xListener
+            the listener to add. If this listener also supports the <type>XWindowListener2</type> interface,
+            it will receive the additional events declared in XWindowListener2.
      */
     [oneway] void addWindowListener( [in] com::sun::star::awt::XWindowListener xListener );
 
