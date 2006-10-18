@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeformula.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:55:19 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:24:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1402,7 +1402,7 @@ void XclExpFmlaCompImpl::AppendDefaultParam( XclExpFuncData& rFuncData )
 
     switch( rFuncData.GetOpCode() )
     {
-        case ocAdress:
+        case ocAddress:
             AppendBoolToken( true );
         break;
         case ocExternal:
