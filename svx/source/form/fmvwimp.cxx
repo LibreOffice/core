@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:47:45 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:24:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -907,47 +907,48 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, /*EMPTYTAG*/)
 
     // get the forms collection of the page we belong to
     FmFormPage* pPage = m_pView ? PTR_CAST(FmFormPage, m_pView->GetPageViewPvNum(0)->GetPage()) : NULL;
-    Reference< XIndexAccess > xForms;
-    if (pPage)
-        xForms = Reference< XIndexAccess >(pPage->GetForms(), UNO_QUERY);
+    if ( !pPage )
+        return 0L;
+    Reference< XIndexAccess > xForms( pPage->GetForms(), UNO_QUERY );
+    if ( !xForms.is() )
+        return 0L;
+
     FmXPageViewWinRec* pViewWinRec = m_aWinList.size() ? m_aWinList[0] : NULL;
-    if (pViewWinRec)
+    if ( !pViewWinRec )
+        return 0L;
+    try
     {
-        try
+        // go for the tab controller of the first form
+        sal_Int32 nObjects = xForms->getCount();
+        Reference< XForm > xForm;
+        if (nObjects)
+            ::cppu::extractInterface(xForm, xForms->getByIndex(0));
+
+        Reference< XTabController > xTabControllerModel(pViewWinRec->getController( xForm ), UNO_QUERY);
+        // go for the first control of the controller
+        Sequence< Reference< XControl > > aControls;
+        if (xTabControllerModel.is())
+            aControls = xTabControllerModel->getControls();
+
+        // set the focus to this first control
+        Reference< XWindow > xControlWindow( lcl_firstFocussableControl( aControls ), UNO_QUERY );
+        if (xControlWindow.is())
+            xControlWindow->setFocus();
+
+        // ensure that the control is visible
+        // 80210 - 12/07/00 - FS
+        if (xControlWindow.is() && m_pView->GetActualOutDev() && (OUTDEV_WINDOW == m_pView->GetActualOutDev()->GetOutDevType()))
         {
-            // go for the tab controller of the first form
-            sal_Int32 nObjects = xForms->getCount();
-            Reference< XForm > xForm;
-            if (nObjects)
-                ::cppu::extractInterface(xForm, xForms->getByIndex(0));
-
-            Reference< XTabController > xTabControllerModel(pViewWinRec->getController( xForm ), UNO_QUERY);
-            // go for the first control of the controller
-            Sequence< Reference< XControl > > aControls;
-            if (xTabControllerModel.is())
-                aControls = xTabControllerModel->getControls();
-
-            // set the focus to this first control
-            Reference< XWindow > xControlWindow( lcl_firstFocussableControl( aControls ), UNO_QUERY );
-            if (xControlWindow.is())
-                xControlWindow->setFocus();
-
-            // ensure that the control is visible
-            // 80210 - 12/07/00 - FS
-            if (xControlWindow.is() && m_pView->GetActualOutDev() && (OUTDEV_WINDOW == m_pView->GetActualOutDev()->GetOutDevType()))
-            {
-                const Window* pWindow = static_cast<const Window*>(m_pView->GetActualOutDev());
-                awt::Rectangle aRect = xControlWindow->getPosSize();
-                ::Rectangle aNonUnoRect(aRect.X, aRect.Y, aRect.X + aRect.Width, aRect.Y + aRect.Height);
-                m_pView->MakeVisible(pWindow->PixelToLogic(aNonUnoRect), *const_cast<Window*>(pWindow));
-            }
-        }
-        catch(Exception&)
-        {
-            DBG_ERROR("FmXFormView::OnAutoFocus: could not activate the first control!");
+            const Window* pWindow = static_cast<const Window*>(m_pView->GetActualOutDev());
+            awt::Rectangle aRect = xControlWindow->getPosSize();
+            ::Rectangle aNonUnoRect(aRect.X, aRect.Y, aRect.X + aRect.Width, aRect.Y + aRect.Height);
+            m_pView->MakeVisible(pWindow->PixelToLogic(aNonUnoRect), *const_cast<Window*>(pWindow));
         }
     }
-    return 0L;
+    catch(Exception&)
+    {
+        DBG_ERROR("FmXFormView::OnAutoFocus: could not activate the first control!");
+    }
 }
 
 // -----------------------------------------------------------------------------
