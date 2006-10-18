@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:41:43 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:25:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -431,6 +431,18 @@ namespace dbaccess
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxStatement,
             sal_Int32 _nDesiredResultSetType,
             sal_Int32 _nDesiredResultSetConcurrency
+        );
+
+        /** initializes a given RowSet column with the ColumnSettings (width, format, hidden, etc.) from a
+            template column.
+
+            If the template column supports any of the known column settings, they're plain copied. If not,
+            the template column is examined for a TableName and Name property, and the table column described
+            by those is used to find and copy the column settings.
+        */
+        void    impl_initializeColumnSettings_nothrow(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxTemplateColumn,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxRowSetColumn
         );
 
     protected:
