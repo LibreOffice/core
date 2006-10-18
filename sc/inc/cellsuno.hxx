@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:33:00 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:15:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -870,6 +870,9 @@ public:
                                         ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > SAL_CALL
                             getCellRangeByName( const ::rtl::OUString& aRange )
+                                throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
+                            getCellRangeByName( const ::rtl::OUString& aRange,  const ScAddress::Details& rDetails )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XPropertySet ueberladen wegen Range-Properties
