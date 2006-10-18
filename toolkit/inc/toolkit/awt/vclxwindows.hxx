@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-28 14:56:07 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:13:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,9 +166,6 @@
 #ifndef _COM_SUN_STAR_AWT_XDIALOG_HPP_
 #include <com/sun/star/awt/XDialog.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
-#include <com/sun/star/awt/ScrollBarOrientation.hpp>
-#endif
 #ifndef _COM_SUN_STAR_AWT_XRADIOBUTTON_HPP_
 #include <com/sun/star/awt/XRadioButton.hpp>
 #endif
@@ -178,59 +175,17 @@
 #ifndef _COM_SUN_STAR_AWT_XPATTERNFIELD_HPP_
 #include <com/sun/star/awt/XPatternField.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_VCLWINDOWPEERATTRIBUTE_HPP_
-#include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTABCONTROLLER_HPP_
-#include <com/sun/star/awt/XTabController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XVCLCONTAINER_HPP_
-#include <com/sun/star/awt/XVclContainer.hpp>
-#endif
 #ifndef _COM_SUN_STAR_AWT_XDATEFIELD_HPP_
 #include <com/sun/star/awt/XDateField.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XCOMBOBOX_HPP_
 #include <com/sun/star/awt/XComboBox.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_XCONTROL_HPP_
-#include <com/sun/star/awt/XControl.hpp>
-#endif
 #ifndef _COM_SUN_STAR_AWT_XCHECKBOX_HPP_
 #include <com/sun/star/awt/XCheckBox.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XIMAGECONSUMER_HPP_
 #include <com/sun/star/awt/XImageConsumer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_MESSAGEBOXCOMMAND_HPP_
-#include <com/sun/star/awt/MessageBoxCommand.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XLAYOUTCONSTRAINS_HPP_
-#include <com/sun/star/awt/XLayoutConstrains.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XPROGRESSBAR_HPP_
-#include <com/sun/star/awt/XProgressBar.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_MENUITEMSTYLE_HPP_
-#include <com/sun/star/awt/MenuItemStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XPOPUPMENU_HPP_
-#include <com/sun/star/awt/XPopupMenu.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XMENUBAR_HPP_
-#include <com/sun/star/awt/XMenuBar.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_POPUPMENUDIRECTION_HPP_
-#include <com/sun/star/awt/PopupMenuDirection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_MENUEVENT_HPP_
-#include <com/sun/star/awt/MenuEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XMENULISTENER_HPP_
-#include <com/sun/star/awt/XMenuListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XMENU_HPP_
-#include <com/sun/star/awt/XMenu.hpp>
 #endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
@@ -243,9 +198,13 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxtopwindow.hxx>
 
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+
 #include <vcl/pointr.hxx>
 #include <vcl/imgcons.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/image.hxx>
 
 class Button;
 class CheckBox;
@@ -267,22 +226,21 @@ class VclMenuEvent;
 //  ----------------------------------------------------
 
 
-class VCLXImageConsumer :public ::com::sun::star::awt::XImageConsumer
-                        ,public VCLXWindow
+typedef ::cppu::ImplInheritanceHelper1< VCLXWindow, ::com::sun::star::awt::XImageConsumer >  VCLXImageConsumer_Base;
+class TOOLKIT_DLLPUBLIC VCLXImageConsumer : public VCLXImageConsumer_Base
 {
 private:
+    /// implements our XImageConsumer functionality
     ImageConsumer               maImageConsumer;
-    BitmapEx                    maBitmap;
+    /// the image we currently display
+    Image                       maImage;
 
 protected:
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw();
-    void                                        SAL_CALL release() throw();
+    BitmapEx                    GetBitmap() const { return maImage.GetBitmapEx(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+protected:
+    // ::com::sun::star::awt::XWindow
+    void SAL_CALL setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XImageConsumer
     void SAL_CALL init( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException);
@@ -299,7 +257,14 @@ protected:
     void            ImplUpdateImage( sal_Bool bGetNewImage );
 
 protected:
-    VCLXImageConsumer() : VCLXWindow() { }
+    /** forward our bitmap to our window
+        @precond
+            our mutex is locked
+        @precond
+            GetWindow is not <NULL/>
+        @see GetBitmap
+    */
+    virtual void    ImplSetNewImage();
 };
 
 //  ----------------------------------------------------
@@ -313,8 +278,6 @@ class VCLXButton :public VCLXButton_Base
 {
 private:
     ::rtl::OUString             maActionCommand;
-    ImageConsumer               maImageConsumer;
-    BitmapEx                    maBitmap;
     ActionListenerMultiplexer   maActionListeners;
     ItemListenerMultiplexer     maItemListeners;
 
@@ -352,37 +315,11 @@ public:
 //  ----------------------------------------------------
 //  class VCLXImageControl
 //  ----------------------------------------------------
-class VCLXImageControl :    public ::com::sun::star::awt::XImageConsumer,
-                            public VCLXWindow
+class VCLXImageControl : public VCLXImageConsumer
 {
-    ImageConsumer   maImageConsumer;
-    BitmapEx        maBitmap;
-
-protected:
-    void            ImplUpdateImage( sal_Bool bGetNewImage );
-
 public:
                     VCLXImageControl();
                     ~VCLXImageControl();
-
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::awt::XWindow
-    void SAL_CALL setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::awt::XImageConsumer
-    void SAL_CALL init( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setPixelsByBytes( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int8 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setPixelsByLongs( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int32 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer >& xProducer ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XLayoutConstrains
     ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -392,6 +329,9 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+protected:
+    virtual void    ImplSetNewImage();
 };
 
 //  ----------------------------------------------------
