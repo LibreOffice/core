@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xipivot.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:12:34 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:43:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,6 +247,7 @@ void XclImpPCField::ReadSxfield( XclImpStream& rStrm )
         (nType == EXC_SXFIELD_DATA_STR_INT) ||
         (nType == EXC_SXFIELD_DATA_STR_DBL) ||
         (nType == EXC_SXFIELD_DATA_DATE) ||
+        (nType == EXC_SXFIELD_DATA_DATE_EMP) ||
         (nType == EXC_SXFIELD_DATA_DATE_NUM) ||
         (nType == EXC_SXFIELD_DATA_DATE_STR);
     bool bTypeNone =
