@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:44:32 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:24:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,7 +219,7 @@ static const XclFunctionInfo saFuncTable_3[] =
     { ocRKP,                51,     1,  4,  A, { R, R, V, V } },    // BIFF2: 1-2, BIFF3: 1-4
     { ocGrowth,             52,     1,  4,  A, { R, R, R, V } },    // BIFF2: 1-3, BIFF3: 1-4
     { ocTrunc,              197,    1,  2,  V, { V } },             // BIFF2: 1,   BIFF3: 1-2
-    { ocAdress,             219,    2,  5,  V, { V, V, V, E, V } },
+    { ocAddress,            219,    2,  5,  V, { V, V, V, E, V } },
     { ocGetDiffDate360,     220,    2,  2,  V, { V, V, C, I } },
     { ocGetActDate,         221,    0,  0,  V, {}, EXC_FUNCFLAG_VOLATILE },
     { ocVBD,                222,    5,  7,  V, { V } },
