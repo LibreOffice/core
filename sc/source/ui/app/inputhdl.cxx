@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:46:15 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:26:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,13 +167,27 @@ void ScInputHandler::InitRangeFinder( const String& rFormula )
 
         //  Text zwischen Trennern
         nStart = nPos;
+handle_r1c1:
         while ( nPos<nLen && !ScGlobal::UnicodeStrChr( aDelimiters.GetBuffer(), pChar[nPos] ) )
             ++nPos;
+
+        // for R1C1 '-' in R[-]... or C[-]... are not delimiters
+        // Nothing heroic here to ensure that there are '[]' around a negative
+        // integer.  we need to clean up this code.
+        if( nPos < nLen && nPos > 0 &&
+            '-' == pChar[nPos] && '[' == pChar[nPos-1] &&
+            NULL != pDoc &&
+            ScAddress::CONV_XL_R1C1 == pDoc->GetAddressConvention() )
+        {
+            nPos++;
+            goto handle_r1c1;
+        }
 
         if ( nPos > nStart )
         {
             String aTest = rFormula.Copy( nStart, nPos-nStart );
-            USHORT nFlags = aRange.ParseAny( aTest, pDoc );
+            const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
+            USHORT nFlags = aRange.ParseAny( aTest, pDoc, aAddrDetails );
             if ( nFlags & SCA_VALID )
             {
                 //  Tabelle setzen, wenn nicht angegeben
@@ -245,7 +259,9 @@ void ScInputHandler::UpdateRange( USHORT nIndex, const ScRange& rNew )
         ScRange aJustified = rNew;
         aJustified.Justify();           // Ref in der Formel immer richtigherum anzeigen
         String aNewStr;
-        aJustified.Format( aNewStr, pData->nFlags, pDocView->GetViewData()->GetDocument() );
+        ScDocument* pDoc = pDocView->GetViewData()->GetDocument();
+        const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
+        aJustified.Format( aNewStr, pData->nFlags, pDoc, aAddrDetails );
         ESelection aOldSel( 0, nOldStart, 0, nOldEnd );
 
         DataChanging();
@@ -2438,6 +2454,7 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
     //  String aus Referenz erzeugen
 
     String aRefStr;
+    const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
     if (bOtherDoc)
     {
         //  Referenz auf anderes Dokument
@@ -2445,7 +2462,7 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
         DBG_ASSERT(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
 
         String aTmp;
-        rRef.Format( aTmp, SCA_VALID|SCA_TAB_3D, pDoc );        // immer 3d
+        rRef.Format( aTmp, SCA_VALID|SCA_TAB_3D, pDoc, aAddrDetails );      // immer 3d
 
         SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
         String aFileName = pObjSh->GetMedium()->GetName();
@@ -2459,9 +2476,9 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
     {
         if ( ( rRef.aStart.Tab() != aCursorPos.Tab() ||
                 rRef.aStart.Tab() != rRef.aEnd.Tab() ) && pDoc )
-            rRef.Format( aRefStr, SCA_VALID|SCA_TAB_3D, pDoc );
+            rRef.Format( aRefStr, SCA_VALID|SCA_TAB_3D, pDoc, aAddrDetails );
         else
-            rRef.Format( aRefStr, SCA_VALID );
+            rRef.Format( aRefStr, SCA_VALID, pDoc, aAddrDetails );
     }
 
     if (pTableView || pTopView)
@@ -2954,6 +2971,8 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                     const EditTextObject*   pData   = pState->GetEditData();
                     String                  aString = pState->GetString();
                     BOOL                    bTxtMod = FALSE;
+                    ScDocShell* pDocSh = pActiveViewSh->GetViewData()->GetDocShell();
+                    ScDocument* pDoc = pDocSh->GetDocument();
 
                     aCursorPos  = pState->GetPos();
 
@@ -2989,6 +3008,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                     if ( pInputWin )                        // Bereichsanzeige
                     {
                         String aPosStr;
+                        const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
 
                         //  Ist der Bereich ein Name?
                         //! per Timer suchen ???
@@ -2999,16 +3019,17 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
                         if ( !aPosStr.Len() )           // kein Name -> formatieren
                         {
+                            USHORT nFlags = 0;
+                            if( aAddrDetails.eConv == ScAddress::CONV_XL_R1C1 )
+                                nFlags |= SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE;
                             if ( rSPos != rEPos )
                             {
-                                String aStr;
-                                rSPos.Format( aPosStr, SCA_VALID );
-                                aPosStr += ':';
-                                rEPos.Format( aStr, SCA_VALID );
-                                aPosStr += aStr;
+                                ScRange r(rSPos, rEPos);
+                                nFlags |= (nFlags << 4);
+                                r.Format( aPosStr, SCA_VALID | nFlags, pDoc, aAddrDetails );
                             }
                             else
-                                aCursorPos.Format( aPosStr, SCA_VALID );
+                                aCursorPos.Format( aPosStr, SCA_VALID | nFlags, pDoc, aAddrDetails );
                         }
 
                         pInputWin->SetPosString(aPosStr);
