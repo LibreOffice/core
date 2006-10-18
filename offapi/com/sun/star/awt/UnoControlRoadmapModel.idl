@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoControlRoadmapModel.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:30:50 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:20:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,17 +39,15 @@
 #ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
 #endif
-
 #ifndef __com_sun_star_container_XIndexContainer_idl__
 #include <com/sun/star/container/XIndexContainer.idl>
 #endif
-
 #ifndef __com_sun_star_beans_XPropertyChangeListener_idl__
 #include <com/sun/star/beans/XPropertyChangeListener.idl>
 #endif
-
-
-
+#ifndef com_sun_star_graphic_XGraphic_idl
+#include <com/sun/star/graphic/XGraphic.idl>
+#endif
 
 //=============================================================================
 
@@ -61,15 +59,15 @@
  */
 service UnoControlRoadmapModel
 {
-     service com::sun::star::awt::UnoControlModel;
+    service com::sun::star::awt::UnoControlModel;
 
     /** The control serves as an indexed container typically for RoadmapItems
-     *  as specified in com::sun::star::awt:RoadmapItem. The RoadmapItems are
-     *  held in a sequence.
-     *  When inserting such items their ID is set equal to the Index of their
-     *  insertion by default.
-     *  After removing items the CurrentItem property is - when beyound the upper sequence
-     *  boundaries - set equal to last index of the RoadmapItem Array.
+        as specified in com::sun::star::awt:RoadmapItem. The RoadmapItems are
+        held in a sequence.
+        When inserting such items their ID is set equal to the Index of their
+        insertion by default.
+        After removing items the CurrentItem property is - when beyound the upper sequence
+        boundaries - set equal to last index of the RoadmapItem Array.
      */
     interface com::sun::star::container::XIndexContainer;
 
@@ -77,20 +75,23 @@ service UnoControlRoadmapModel
 
 
     /** specifies the background color (RGB) of the control.
-     * The Default value is white
+        The Default value is white
      */
     [property] long BackgroundColor;
 
     //-------------------------------------------------------------------------
 
-    /** determines whether a control is interactive or not.
+    /** determines whether the control is interactive or not.
+
+        <p>A roadmap control which is interactive allows selecting its items out-of-order,
+        by simply clicking them.</p>
      */
     [property] boolean Interactive;
 
     //-------------------------------------------------------------------------
 
     /** determines whether the control container is complete or not. If it is
-     * false than a non - interactive RoadmapItem is appended
+        false than a non - interactive RoadmapItem is appended
      */
     [property] boolean Complete;
 
@@ -98,10 +99,27 @@ service UnoControlRoadmapModel
     //-------------------------------------------------------------------------
 
     /** specifies an URL to an image to use for the control.
-     *  The image is placed in the lower right corner of the control
+        The image is placed in the lower right corner of the control
+        @see Graphic
      */
     [property] string ImageURL;
 
+    //-------------------------------------------------------------------------
+
+    /** specifies a graphic to be displayed on the control
+
+        <p>If this property is present, it interacts with the <member>ImageURL</member>in the
+        following way:
+        <ul><li>If <member>ImageURL</member> is set, <member>Graphic</member> will be reset
+            to an object as loaded from the given image URL, or <NULL/> if <member>ImageURL</member>
+            does not point to a valid image file.</li>
+            <li>If <member>Graphic</member> is set, <member>ImageURL</member> will be reset
+            to an empty string.</li>
+        </ul></p>
+
+        @since OOo 2.1
+     */
+    [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
 
     //-------------------------------------------------------------------------
 
@@ -130,9 +148,9 @@ service UnoControlRoadmapModel
     //-------------------------------------------------------------------------
 
     /** refers to the  ID of the currently selected item. Initially this property is set to '-1'
-     *  which is equal to 'undefined"
-     *  If the Roadmap Item that the CurrentItemID refers to is removed the property
-     *  'CurrentItemID' is set to -1
+        which is equal to 'undefined"
+        If the Roadmap Item that the CurrentItemID refers to is removed the property
+        'CurrentItemID' is set to -1
      */
     [property] short CurrentItemID;
 
