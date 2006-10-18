@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListSelection.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:31:25 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:16:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ public class ListSelection extends integration.forms.TestCase implements com.sun
     {
         try
         {
-            final int runs = 20;
+            final int runs = 10;
             java.util.Random generator = new java.util.Random();
             for ( int i = 0; i < runs; ++i )
             {
@@ -146,7 +146,7 @@ public class ListSelection extends integration.forms.TestCase implements com.sun
                 {
                     synchronized( this )
                     {
-                        this.wait( 200 );
+                        this.wait( 500 );
                     }
                 }
                 catch( java.lang.InterruptedException e ) { }
