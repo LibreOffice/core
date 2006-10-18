@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reffind.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:51:35 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:18:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
 
 class ScDocument;
 
@@ -48,6 +51,7 @@ class ScRefFinder
 {
 private:
     String      aFormula;
+    ScAddress::Convention eConv;
     ScDocument* pDoc;
     xub_StrLen  nFound;
     xub_StrLen  nSelStart;
@@ -56,7 +60,9 @@ private:
 public:
     static const sal_Unicode __FAR_DATA pDelimiters[];
 
-    ScRefFinder( const String& rFormula, ScDocument* pDocument = NULL );
+    ScRefFinder( const String& rFormula,
+             ScDocument* pDocument = NULL,
+             ScAddress::Convention eConvP = ScAddress::CONV_OOO );
     ~ScRefFinder();
 
     const String&   GetText() const     { return aFormula; }
