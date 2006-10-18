@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:52:00 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 11:45:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,11 +138,13 @@ struct ItemFormat
         The vector must contain at least 2 strings. The struct is filled from
         the strings in the vector in the following order:
         1) Data type (one of: [u]int8, [u]int16, [u]int32, [u]int64, float, double).
-        2) Format type (one of: dec, hex, bin, fix, bool).
+        2) Format type (one of: dec, hex, bin, fix, bool, unused, unknown).
         3) Item name (optional).
         4) Name list name (optional).
+
+        @return  Iterator pointing to the first unhandled string.
      */
-    void                Parse( const ScfStringVec& rFormatVec );
+    ScfStringVec::const_iterator Parse( const ScfStringVec& rFormatVec );
 
     /** Initializes the struct from a string containing the item format.
 
@@ -153,8 +155,10 @@ struct ItemFormat
         FORMATTYPE is the format type of the item (see above for possible values).
         ITEMNAME is the name of the item (optional).
         LISTNAME is the name of a name list (optional).
+
+        @return  List containing remaining unhandled format strings.
      */
-    void                Parse( const String& rFormatStr );
+    ScfStringVec        Parse( const String& rFormatStr );
 };
 
 // ============================================================================
@@ -585,8 +589,13 @@ protected:
     virtual void        ImplIncludeList( const NameListBase& rList );
 
 private:
-    typedef ::std::map< sal_Int64, ItemFormat > ItemFormatMap;
-    ItemFormatMap       maFmtMap;
+    struct ExtItemFormat : public ItemFormat
+    {
+        bool                mbShiftValue;
+        inline explicit     ExtItemFormat() : mbShiftValue( true ) {}
+    };
+    typedef ::std::map< sal_Int64, ExtItemFormat > ExtItemFormatMap;
+    ExtItemFormatMap    maFmtMap;
 };
 
 // ============================================================================
