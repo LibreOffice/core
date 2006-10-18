@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangeutl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:50:35 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:17:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,8 @@ public:
     BOOL    MakeArea            ( const String&     rAreaStr,
                                   ScArea&           rArea,
                                   ScDocument*       pDoc,
-                                  SCTAB         nTab ) const;
+                                  SCTAB         nTab,
+                                  ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
     void    CutPosString        ( const String&     theAreaStr,
                                   String&           thePosStr ) const;
@@ -80,14 +81,16 @@ public:
                                   ScDocument*       pDoc,
                                   ScArea***         pppAreas    = 0,
                                   USHORT*           pAreaCount  = 0,
-                                  BOOL              bAcceptCellRef = FALSE ) const;
+                                  BOOL              bAcceptCellRef = FALSE,
+                                  ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
     BOOL    IsAbsArea           ( const String& rAreaStr,
                                   ScDocument*   pDoc,
                                   SCTAB     nTab,
                                   String*       pCompleteStr = 0,
                                   ScRefAddress* pStartPos    = 0,
-                                  ScRefAddress* pEndPos      = 0 ) const;
+                                  ScRefAddress* pEndPos      = 0,
+                                  ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
     BOOL    IsRefArea           ( const String& rAreaStr,
                                   ScDocument*   pDoc,
@@ -100,14 +103,15 @@ public:
                                   ScDocument*   pDoc,
                                   SCTAB     nTab,
                                   String*       pCompleteStr = 0,
-                                  ScRefAddress* pPosTripel   = 0 ) const;
+                                  ScRefAddress* pPosTripel   = 0,
+                                  ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
     BOOL    MakeRangeFromName   ( const String& rName,
                                     ScDocument*     pDoc,
                                     SCTAB           nCurTab,
                                     ScRange&        rRange,
-                                    RutlNameScope eScope=RUTL_NAMES
-                                  ) const;
+                                  RutlNameScope eScope=RUTL_NAMES,
+                                  ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 };
 
 //------------------------------------------------------------------------
@@ -128,7 +132,8 @@ public:
     BOOL    operator==  ( const ScArea& r ) const;
     BOOL    operator!=  ( const ScArea& r ) const  { return !( operator==(r) ); }
     void    GetString   ( String& rStr,
-                          BOOL bAbsolute = TRUE, ScDocument* pDoc = NULL ) const;
+                          BOOL bAbsolute = TRUE, ScDocument* pDoc = NULL,
+                          ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
 public:
     SCTAB nTab;
