@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:08:57 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 13:07:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,18 @@ sal_Int32 SAL_CALL OAdabasResultSetMetaData::isNullable( sal_Int32 column ) thro
     if ( !bFound )
         nValue = getNumColAttrib(column,SQL_DESC_NULLABLE);
     return nValue;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OAdabasResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(SQLException, RuntimeException)
+{
+    if ( m_aSelectColumns.isValid() && column > 0 && column <= (sal_Int32)m_aSelectColumns->size() )
+    {
+        sal_Bool bAutoIncrement = sal_False;
+        (*m_aSelectColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
+        return bAutoIncrement;
+    }
+
+    return getNumColAttrib(column,SQL_DESC_AUTO_UNIQUE_VALUE) == SQL_TRUE;
 }
 // -------------------------------------------------------------------------
 
