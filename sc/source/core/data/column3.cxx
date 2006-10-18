@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:50:15 $
+ *  last change: $Author: ihi $ $Date: 2006-10-18 12:19:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1230,7 +1230,8 @@ void ScColumn::StartListeningInArea( SCROW nRow1, SCROW nRow2 )
 
 
 //  TRUE = Zahlformat gesetzt
-BOOL ScColumn::SetString( SCROW nRow, SCTAB nTab, const String& rString )
+BOOL ScColumn::SetString( SCROW nRow, SCTAB nTab, const String& rString,
+                          ScAddress::Convention conv )
 {
     BOOL bNumFmtSet = FALSE;
     if (VALIDROW(nRow))
@@ -1267,7 +1268,7 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTab, const String& rString )
                     pNewCell = new ScStringCell( rString );
                 else                                            // =Formel
                     pNewCell = new ScFormulaCell( pDocument,
-                        ScAddress( nCol, nRow, nTab ), rString, 0 );
+                        ScAddress( nCol, nRow, nTab ), rString, conv, 0 );
             }
             else if ( cFirstChar == '\'')                       // 'Text
                 pNewCell = new ScStringCell( rString.Copy(1) );
