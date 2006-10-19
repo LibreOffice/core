@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrfillbitmapattribute.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:47:34 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,11 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
 #include <drawinglayer/attribute/sdrfillbitmapattribute.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
 #endif
 
@@ -55,7 +55,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        sdrFillBitmapAttribute::sdrFillBitmapAttribute(
+        SdrFillBitmapAttribute::SdrFillBitmapAttribute(
             const Bitmap& rBitmap, const basegfx::B2DVector& rSize, const basegfx::B2DVector& rOffset,
             const basegfx::B2DVector& rOffsetPosition, const basegfx::B2DVector& rRectPoint,
             bool bTiling, bool bStretch, bool bLogSize)
@@ -70,7 +70,7 @@ namespace drawinglayer
         {
         }
 
-        bool sdrFillBitmapAttribute::operator==(const sdrFillBitmapAttribute& rCandidate) const
+        bool SdrFillBitmapAttribute::operator==(const SdrFillBitmapAttribute& rCandidate) const
         {
             return (maBitmap == rCandidate.maBitmap
                 && maSize == rCandidate.maSize
@@ -82,7 +82,7 @@ namespace drawinglayer
                 && mbLogSize == rCandidate.mbLogSize);
         }
 
-        fillBitmapAttribute sdrFillBitmapAttribute::getFillBitmapAttribute(const basegfx::B2DRange& rRange) const
+        FillBitmapAttribute SdrFillBitmapAttribute::getFillBitmapAttribute(const basegfx::B2DRange& rRange) const
         {
             // get logical size of bitmap (before expanding eventually)
             Bitmap aBitmap(maBitmap);
@@ -236,7 +236,7 @@ namespace drawinglayer
                 aBitmapSize.setY(aBitmapSize.getY() / fRangeHeight);
             }
 
-            return fillBitmapAttribute(aBitmap, aBitmapTopLeft, aBitmapSize, mbTiling);
+            return FillBitmapAttribute(aBitmap, aBitmapTopLeft, aBitmapSize, mbTiling);
         }
     } // end of namespace attribute
 } // end of namespace drawinglayer

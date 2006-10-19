@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strokeattribute.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:36:38 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:30:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
-#define _DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
+#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
 
 #ifndef _BGFX_POLYGON_B2DLINEGEOMETRY_HXX
 #include <basegfx/polygon/b2dlinegeometry.hxx>
@@ -55,16 +55,16 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class strokeAttribute
+        class StrokeAttribute
         {
-            basegfx::BColor                         maColor;                // color
+            basegfx::BColor                             maColor;                // color
             double                                      mfWidth;                // absolute line width
-            basegfx::tools::B2DLineJoin             meLineJoin;             // type of LineJoin
+            basegfx::tools::B2DLineJoin                 meLineJoin;             // type of LineJoin
             ::std::vector< double >                     maDotDashArray;         // array of double which defines the dot-dash pattern
             double                                      mfFullDotDashLen;       // sum of maDotDashArray (for convenience)
 
         public:
-            strokeAttribute(
+            StrokeAttribute(
                 const basegfx::BColor& rColor,
                 double fWidth,
                 basegfx::tools::B2DLineJoin aB2DLineJoin,
@@ -78,12 +78,12 @@ namespace drawinglayer
             {
             }
 
-            strokeAttribute(const strokeAttribute& rCandidate)
+            StrokeAttribute(const StrokeAttribute& rCandidate)
             {
                 *this = rCandidate;
             }
 
-            strokeAttribute& operator=(const strokeAttribute& rCandidate)
+            StrokeAttribute& operator=(const StrokeAttribute& rCandidate)
             {
                 maColor = rCandidate.maColor;
                 mfWidth = rCandidate.mfWidth;
@@ -94,12 +94,12 @@ namespace drawinglayer
                 return *this;
             }
 
-            ~strokeAttribute()
+            ~StrokeAttribute()
             {
             }
 
             // compare operator
-            bool operator==(const strokeAttribute& rCandidate) const
+            bool operator==(const StrokeAttribute& rCandidate) const
             {
                 return (maColor == rCandidate.maColor
                     && mfWidth == rCandidate.mfWidth
@@ -112,7 +112,7 @@ namespace drawinglayer
             const basegfx::BColor& getColor() const { return maColor; }
             double getWidth() const { return mfWidth; }
             basegfx::tools::B2DLineJoin getLineJoin() const { return meLineJoin; }
-            const ::std::vector< double >& getDotDashArray() { return maDotDashArray; }
+            const ::std::vector< double >& getDotDashArray() const { return maDotDashArray; }
             double getFullDotDashLen() const { return mfFullDotDashLen; }
         };
     } // end of namespace attribute
@@ -120,6 +120,6 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
+#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
 
 // eof

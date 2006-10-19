@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrsphereprimitive3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2006-09-27 16:33:18 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:38:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,29 +33,33 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDRSPHEREPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRSPHEREPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/sdrsphereprimitive3d.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B3DPOLYPOLYGON_HXX
-#include <basegfx/polygon/b3dpolypolygon.hxx>
 #endif
 
 #ifndef _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDRDECOMPOSITIONTOOLS3D_HXX
-#include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
 #include <basegfx/polygon/b3dpolygon.hxx>
 #endif
 
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
-#include <basegfx/matrix/b2dhommatrix.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRDECOMPOSITIONTOOLS3D_HXX
+#include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
 #endif
+
+#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
+#include <basegfx/tools/canvastools.hxx>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -63,8 +67,9 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        void sdrSpherePrimitive3D::decompose(primitiveVector3D& rTarget)
+        Primitive3DSequence SdrSpherePrimitive3D::createLocalDecomposition(double /*fTime*/) const
         {
+            Primitive3DSequence aRetval;
             const basegfx::B3DRange aUnitRange(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 
             // add fill
@@ -136,7 +141,7 @@ namespace drawinglayer
 
                     // transform texture coordinates to texture size
                     basegfx::B2DHomMatrix aTexMatrix;
-                    aTexMatrix.scale(maTextureSize.getX(), maTextureSize.getY());
+                    aTexMatrix.scale(getTextureSize().getX(), getTextureSize().getY());
                     aFill.transformTextureCoordiantes(aTexMatrix);
                 }
 
@@ -149,60 +154,57 @@ namespace drawinglayer
                 }
 
                 // create single PolyPolygonFill primitives
-                add3DPolyPolygonFillPrimitive(
-                    a3DPolyPolygonVector, maTransform, maTextureSize, rTarget,
+                aRetval = create3DPolyPolygonFillPrimitives(
+                    a3DPolyPolygonVector, getTransform(), getTextureSize(),
                     getSdr3DObjectAttribute(), *getSdrLFSAttribute().getFill(),
                     getSdrLFSAttribute().getFillFloatTransGradient());
             }
 
             // add line
-            if(maSdrLFSAttribute.getLine())
+            if(getSdrLFSAttribute().getLine())
             {
                 basegfx::B3DPolyPolygon aSphere(basegfx::tools::createSpherePolyPolygonFromB3DRange(aUnitRange, getHorizontalSegments(), getVerticalSegments()));
-                add3DPolyPolygonLinePrimitive(aSphere, maTransform, rTarget, *maSdrLFSAttribute.getLine());
+                const Primitive3DSequence aLines(create3DPolyPolygonLinePrimitives(aSphere, getTransform(), *getSdrLFSAttribute().getLine()));
+                appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aLines);
             }
 
             // add shadow
-            if(getSdrLFSAttribute().getShadow())
+            if(getSdrLFSAttribute().getShadow() && aRetval.hasElements())
             {
-                addShadowPrimitive3D(rTarget, *getSdrLFSAttribute().getShadow(), getSdr3DObjectAttribute().getShadow3D());
+                const Primitive3DSequence aShadow(createShadowPrimitive3D(aRetval, *getSdrLFSAttribute().getShadow(), getSdr3DObjectAttribute().getShadow3D()));
+                appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aShadow);
             }
+
+            return aRetval;
         }
 
-        sdrSpherePrimitive3D::sdrSpherePrimitive3D(
+        SdrSpherePrimitive3D::SdrSpherePrimitive3D(
             const basegfx::B3DHomMatrix& rTransform,
             const basegfx::B2DVector& rTextureSize,
-            const attribute::sdrLineFillShadowAttribute& rSdrLFSAttribute,
-            const attribute::sdr3DObjectAttribute& rSdr3DObjectAttribute,
-            sal_uInt32 nHorizontalSegments, sal_uInt32 nVerticalSegments)
-        :   sdrPrimitive3D(rTransform, rTextureSize, rSdrLFSAttribute, rSdr3DObjectAttribute),
+            const attribute::SdrLineFillShadowAttribute& rSdrLFSAttribute,
+            const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute,
+            sal_uInt32 nHorizontalSegments,
+            sal_uInt32 nVerticalSegments)
+        :   SdrPrimitive3D(rTransform, rTextureSize, rSdrLFSAttribute, rSdr3DObjectAttribute),
             mnHorizontalSegments(nHorizontalSegments),
             mnVerticalSegments(nVerticalSegments)
         {
         }
 
-        sdrSpherePrimitive3D::~sdrSpherePrimitive3D()
+        bool SdrSpherePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-        }
-
-        bool sdrSpherePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
-        {
-            if(sdrPrimitive3D::operator==(rPrimitive))
+            if(SdrPrimitive3D::operator==(rPrimitive))
             {
-                const sdrSpherePrimitive3D& rCompare = static_cast< const sdrSpherePrimitive3D& >(rPrimitive);
-                return (mnHorizontalSegments == rCompare.mnHorizontalSegments
-                    && mnVerticalSegments == rCompare.mnVerticalSegments);
+                const SdrSpherePrimitive3D& rCompare = static_cast< const SdrSpherePrimitive3D& >(rPrimitive);
+
+                return (getHorizontalSegments() == rCompare.getHorizontalSegments()
+                    && getVerticalSegments() == rCompare.getVerticalSegments());
             }
 
             return false;
         }
 
-        PrimitiveID sdrSpherePrimitive3D::getID() const
-        {
-            return CreatePrimitiveID('S', 'S', 'P', '3');
-        }
-
-        basegfx::B3DRange sdrSpherePrimitive3D::get3DRange() const
+        basegfx::B3DRange SdrSpherePrimitive3D::getB3DRange(double /*fTime*/) const
         {
             // use defaut from sdrPrimitive3D which uses transformation expanded by line width/2
             // The parent implementation which uses the ranges of the decomposition would be more
@@ -211,6 +213,11 @@ namespace drawinglayer
             // ranges where the new method is more correct, but the need to keep the old behaviour
             // has priority here.
             return getStandard3DRange();
+        }
+
+        sal_uInt32 SdrSpherePrimitive3D::getPrimitiveID() const
+        {
+            return Create3DPrimitiveID('3','S','p','h');
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

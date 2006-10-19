@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrattribute3d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:36:37 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:30:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
-#define _DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
+#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
 
 #ifndef _BGFX_VECTOR_B2DVECTOR_HXX
 #include <basegfx/vector/b2dvector.hxx>
@@ -72,7 +72,7 @@
 #include <basegfx/color/bcolor.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
 #include <drawinglayer/attribute/materialattribute3d.hxx>
 #endif
 
@@ -87,7 +87,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class sdr3DObjectAttribute
+        class Sdr3DObjectAttribute
         {
             // 3D object attribute definitions
             ::com::sun::star::drawing::NormalsKind              maNormalsKind;              // normals type (0..2)
@@ -95,7 +95,7 @@ namespace drawinglayer
             ::com::sun::star::drawing::TextureProjectionMode    maTextureProjectionY;       // texture projection type Y (0..2)
             ::com::sun::star::drawing::TextureKind2             maTextureKind;              // texture kind (see uno API)
             ::com::sun::star::drawing::TextureMode              maTextureMode;              // texture kind (see uno API)
-            materialAttribute3D                                 maMaterial;                 // object, specular and emissive colors, SpecularIntensity
+            MaterialAttribute3D                                 maMaterial;                 // object, specular and emissive colors, SpecularIntensity
 
             // bitfield
             unsigned                                            mbNormalsInvert : 1;        // invert normals
@@ -104,21 +104,20 @@ namespace drawinglayer
             unsigned                                            mbTextureFilter : 1;        // filter texture to make more smooth
 
         public:
-            sdr3DObjectAttribute(
+            Sdr3DObjectAttribute(
                 ::com::sun::star::drawing::NormalsKind  aNormalsKind,
                 ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionX,
                 ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionY,
                 ::com::sun::star::drawing::TextureKind2 aTextureKind,
                 ::com::sun::star::drawing::TextureMode aTextureMode,
-                const materialAttribute3D& rMaterial,
+                const MaterialAttribute3D& rMaterial,
                 bool bNormalsInvert,
                 bool bDoubleSided,
                 bool bShadow3D,
                 bool bTextureFilter);
-            ~sdr3DObjectAttribute();
 
             // compare operator
-            bool operator==(const sdr3DObjectAttribute& rCandidate) const;
+            bool operator==(const Sdr3DObjectAttribute& rCandidate) const;
 
             // data access
             ::com::sun::star::drawing::NormalsKind getNormalsKind() const { return maNormalsKind; }
@@ -126,7 +125,7 @@ namespace drawinglayer
             ::com::sun::star::drawing::TextureProjectionMode getTextureProjectionY() const { return maTextureProjectionY; }
             ::com::sun::star::drawing::TextureKind2 getTextureKind() const { return maTextureKind; }
             ::com::sun::star::drawing::TextureMode getTextureMode() const { return maTextureMode; }
-            const materialAttribute3D& getMaterial() const { return maMaterial; }
+            const MaterialAttribute3D& getMaterial() const { return maMaterial; }
             bool getNormalsInvert() const { return mbNormalsInvert; }
             bool getDoubleSided() const { return mbDoubleSided; }
             bool getShadow3D() const { return mbShadow3D; }
@@ -141,21 +140,23 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class sdr3DLightAttribute
+        class Sdr3DLightAttribute
         {
             // 3D light attribute definitions
-            basegfx::BColor                         maColor;
-            basegfx::B3DVector                      maDirection;
+            basegfx::BColor                             maColor;
+            basegfx::B3DVector                          maDirection;
 
             // bitfield
             unsigned                                    mbSpecular : 1;
 
         public:
-            sdr3DLightAttribute(const basegfx::BColor& rColor, const basegfx::B3DVector& rDirection, bool bSpecular);
-            ~sdr3DLightAttribute();
+            Sdr3DLightAttribute(
+                const basegfx::BColor& rColor,
+                const basegfx::B3DVector& rDirection,
+                bool bSpecular);
 
             // compare operator
-            bool operator==(const sdr3DLightAttribute& rCandidate) const;
+            bool operator==(const Sdr3DLightAttribute& rCandidate) const;
 
             // data access
             const basegfx::BColor& getColor() const { return maColor; }
@@ -171,27 +172,27 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class sdrLightingAttribute
+        class SdrLightingAttribute
         {
             // 3D light attribute definitions
-            basegfx::BColor                         maAmbientLight;
-            ::std::vector< sdr3DLightAttribute >        maLightVector;
+            basegfx::BColor                             maAmbientLight;
+            ::std::vector< Sdr3DLightAttribute >        maLightVector;
 
         public:
-            sdrLightingAttribute(
+            SdrLightingAttribute(
                 const basegfx::BColor& rAmbientLight,
-                const ::std::vector< sdr3DLightAttribute >& rLightVector);
-            ~sdrLightingAttribute();
+                const ::std::vector< Sdr3DLightAttribute >& rLightVector);
 
             // compare operator
-            bool operator==(const sdrLightingAttribute& rCandidate) const;
+            bool operator==(const SdrLightingAttribute& rCandidate) const;
 
             // data access
             const basegfx::BColor& getAmbientLight() const { return maAmbientLight; }
-            const ::std::vector< sdr3DLightAttribute >& getLightVector() const { return maLightVector; }
+            const ::std::vector< Sdr3DLightAttribute >& getLightVector() const { return maLightVector; }
 
             // color model solver
-            basegfx::BColor solveColorModel(const basegfx::B3DVector& rNormalInEyeCoordinates,
+            basegfx::BColor solveColorModel(
+                const basegfx::B3DVector& rNormalInEyeCoordinates,
                 const basegfx::BColor& rColor, const basegfx::BColor& rSpecular,
                 const basegfx::BColor& rEmission, sal_uInt16 nSpecularIntensity) const;
         };
@@ -204,7 +205,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class sdrSceneAttribute
+        class SdrSceneAttribute
         {
             // 3D scene attribute definitions
             double                                      mfDistance;
@@ -216,16 +217,15 @@ namespace drawinglayer
             unsigned                                    mbTwoSidedLighting : 1;
 
         public:
-            sdrSceneAttribute(
+            SdrSceneAttribute(
                 double fDistance,
                 double fShadowSlant,
                 ::com::sun::star::drawing::ProjectionMode aProjectionMode,
                 ::com::sun::star::drawing::ShadeMode aShadeMode,
                 bool bTwoSidedLighting);
-            ~sdrSceneAttribute();
 
             // compare operator
-            bool operator==(const sdrSceneAttribute& rCandidate) const;
+            bool operator==(const SdrSceneAttribute& rCandidate) const;
 
             // data access
             double getDistance() const { return mfDistance; }
@@ -239,6 +239,6 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
+#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
 
 // eof

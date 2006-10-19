@@ -4,9 +4,9 @@
  *
  *  $RCSfile: modifiedcolorprimitive3d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:38:14 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:32:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,11 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX
-#define _DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_VECTORPRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/vectorprimitive3d.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_GROUPPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/groupprimitive3d.hxx>
 #endif
 
 #ifndef _BGFX_COLOR_BCOLORMODIFIER_HXX
@@ -50,31 +50,31 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class modifiedColorPrimitive3D : public vectorPrimitive3D
+        class ModifiedColorPrimitive3D : public GroupPrimitive3D
         {
-        protected:
+        private:
             basegfx::BColorModifier                 maColorModifier;
 
         public:
-            modifiedColorPrimitive3D(
-                const primitiveVector3D& rPrimitiveVector,
+            ModifiedColorPrimitive3D(
+                const Primitive3DSequence& rChildren,
                 const basegfx::BColorModifier& rColorModifier);
-            virtual ~modifiedColorPrimitive3D();
 
             // get data
             const basegfx::BColorModifier& getColorModifier() const { return maColorModifier; }
 
             // compare operator
-            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // id generator
-            virtual PrimitiveID getID() const;
+            // provide unique ID
+            virtual sal_uInt32 getPrimitiveID() const;
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX
+#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX
 
+//////////////////////////////////////////////////////////////////////////////
 // eof

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polypolygonprimitive3d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:38:13 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:32:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,23 +33,19 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE_HXX
-#define _DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE3D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE3D_HXX
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_PRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/primitive3d.hxx>
-#endif
-
-#ifndef _DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
-#include <drawinglayer/attribute/materialattribute3d.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_BASEPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B3DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_TEXTURE_TEXTURE_HXX
-#include <drawinglayer/texture/texture.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
+#include <drawinglayer/attribute/materialattribute3d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -58,41 +54,41 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class polyPolygonMaterialPrimitive3D : public basePrimitive3D
+        class PolyPolygonMaterialPrimitive3D : public BasePrimitive3D
         {
-        protected:
-            basegfx::B3DPolyPolygon                 maPolyPolygon;
-            attribute::materialAttribute3D              maMaterial;
+        private:
+            basegfx::B3DPolyPolygon                     maPolyPolygon;
+            attribute::MaterialAttribute3D              maMaterial;
 
             // bitfield
             unsigned                                    mbDoubleSided : 1;
 
         public:
-            polyPolygonMaterialPrimitive3D(
+            PolyPolygonMaterialPrimitive3D(
                 const basegfx::B3DPolyPolygon& rPolyPolygon,
-                const attribute::materialAttribute3D& rMaterial,
+                const attribute::MaterialAttribute3D& rMaterial,
                 bool bDoubleSided);
-            virtual ~polyPolygonMaterialPrimitive3D();
 
             // get data
             const basegfx::B3DPolyPolygon& getB3DPolyPolygon() const { return maPolyPolygon; }
-            const attribute::materialAttribute3D& getMaterial() const { return maMaterial; }
+            const attribute::MaterialAttribute3D& getMaterial() const { return maMaterial; }
             bool getDoubleSided() const { return mbDoubleSided; }
 
             // compare operator
-            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // id generator
-            virtual PrimitiveID getID() const;
+            // get range
+            virtual basegfx::B3DRange getB3DRange(double fTime) const;
 
-            // get 3Drange of primitive. Default implementation uses decomposition
-            virtual basegfx::B3DRange get3DRange() const;
+            // provide unique ID
+            virtual sal_uInt32 getPrimitiveID() const;
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE_HXX
+#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE3D_HXX
 
+//////////////////////////////////////////////////////////////////////////////
 // eof

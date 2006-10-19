@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillbitmapattribute.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:47:33 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
 #endif
 
@@ -43,7 +43,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        fillBitmapAttribute::fillBitmapAttribute(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize, bool bTiling)
+        FillBitmapAttribute::FillBitmapAttribute(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize, bool bTiling)
         :   maBitmap(rBitmap),
             maTopLeft(rTopLeft),
             maSize(rSize),
@@ -51,7 +51,7 @@ namespace drawinglayer
         {
         }
 
-        bool fillBitmapAttribute::operator==(const fillBitmapAttribute& rCandidate) const
+        bool FillBitmapAttribute::operator==(const FillBitmapAttribute& rCandidate) const
         {
             return (maBitmap == rCandidate.maBitmap
                 && maTopLeft == rCandidate.maTopLeft

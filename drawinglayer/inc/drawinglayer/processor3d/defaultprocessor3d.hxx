@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultprocessor3d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:45:32 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:33:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,10 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PROCESSOR3D_DEFAULTPROCESSOR3D_HXX
-#define _DRAWINGLAYER_PROCESSOR3D_DEFAULTPROCESSOR3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_DEFAULTPROCESSOR3D_HXX
+#define INCLUDED_DRAWINGLAYER_PROCESSOR3D_DEFAULTPROCESSOR3D_HXX
 
-#ifndef _DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
 #endif
 
@@ -44,24 +44,24 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #endif
 
-#ifndef _BGFX_COLOR_BCOLOR_HXX
-#include <basegfx/color/bcolor.hxx>
+#ifndef _BGFX_RANGE_B2DRANGE_HXX
+#include <basegfx/range/b2drange.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_GEOMETRY_TRANSFORMATION3D_HXX
+#ifndef _BGFX_COLOR_BCOLORMODIFIER_HXX
+#include <basegfx/color/bcolormodifier.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BASEPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_GEOMETRY_TRANSFORMATION3D_HXX
 #include <drawinglayer/geometry/transformation3d.hxx>
 #endif
 
 #ifndef _SV_BITMAPEX_HXX
 #include <vcl/bitmapex.hxx>
-#endif
-
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/modifiedcolorprimitive3d.hxx>
-#endif
-
-#ifndef _BGFX_RANGE_B2DRANGE_HXX
-#include <basegfx/range/b2drange.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -71,23 +71,24 @@ namespace basegfx {
 }
 
 namespace drawinglayer { namespace attribute {
-    class sdrSceneAttribute;
-    class sdrLightingAttribute;
-    class materialAttribute3D;
+    class SdrSceneAttribute;
+    class SdrLightingAttribute;
+    class MaterialAttribute3D;
 }}
 
 namespace drawinglayer { namespace primitive3d {
-    class polygonHairlinePrimitive3D;
-    class polyPolygonMaterialPrimitive3D;
-    class gradientTexturePrimitive3D;
-    class hatchTexturePrimitive3D;
-    class bitmapTexturePrimitive3D;
-    class transparenceTexturePrimitive3D;
-    class transformPrimitive3D;
+    class PolygonHairlinePrimitive3D;
+    class PolyPolygonMaterialPrimitive3D;
+    class GradientTexturePrimitive3D;
+    class HatchTexturePrimitive3D;
+    class BitmapTexturePrimitive3D;
+    class AlphaTexturePrimitive3D;
+    class TransformPrimitive3D;
+    class ModifiedColorPrimitive3D;
 }}
 
 namespace drawinglayer { namespace texture {
-    class geoTexSvx;
+    class GeoTexSvx;
 }}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -96,12 +97,12 @@ namespace drawinglayer
 {
     namespace processor3d
     {
-        class defaultProcessor3D : public baseProcessor3D
+        class DefaultProcessor3D : public BaseProcessor3D
         {
-        protected:
+        private:
             // render information
-            const attribute::sdrSceneAttribute&                 mrSdrSceneAttribute;    // read-only scene infos (normal handling, etc...)
-            const attribute::sdrLightingAttribute&              mrSdrLightingAttribute; // read-only light infos (lights, etc...)
+            const attribute::SdrSceneAttribute&                 mrSdrSceneAttribute;    // read-only scene infos (normal handling, etc...)
+            const attribute::SdrLightingAttribute&              mrSdrLightingAttribute; // read-only light infos (lights, etc...)
             basegfx::B3DHomMatrix                               maDeviceToView;         // scale and translate to map to target view size
             basegfx::B3DHomMatrix                               maWorldToEye;           // world to eye coordinates
             basegfx::B3DHomMatrix                               maWorldToView;          // mul maWorldToEye with maProjection and maDeviceToView
@@ -116,10 +117,10 @@ namespace drawinglayer
             basegfx::BColorModifierStack                        maBColorModifierStack;
 
             // the current active texture
-            texture::geoTexSvx*                             mpGeoTexSvx;
+            texture::GeoTexSvx*                                 mpGeoTexSvx;
 
             // the current active transparence texture
-            texture::geoTexSvx*                             mpTransparenceGeoTexSvx;
+            texture::GeoTexSvx*                                 mpTransparenceGeoTexSvx;
 
             // bitfield
             unsigned                                            mbModulate : 1;
@@ -129,43 +130,43 @@ namespace drawinglayer
 
             //////////////////////////////////////////////////////////////////////////////
             // rendering support
-            void impRender_GRX3(const primitive3d::gradientTexturePrimitive3D& rPrimitive, bool bTransparence);
-            void impRender_HAX3(const primitive3d::hatchTexturePrimitive3D& rPrimitive);
-            void impRender_BMX3(const primitive3d::bitmapTexturePrimitive3D& rPrimitive);
-            void impRender_MCOL(const primitive3d::modifiedColorPrimitive3D& rModifiedCandidate);
-            void impRender_POH3(const primitive3d::polygonHairlinePrimitive3D& rPrimitive);
-            void impRender_POM3(const primitive3d::polyPolygonMaterialPrimitive3D& rPrimitive);
-            void impRender_TRN3(const primitive3d::transformPrimitive3D& rTransformCandidate);
+            void impRender_GRX3(const primitive3d::GradientTexturePrimitive3D& rPrimitive, bool bTransparence);
+            void impRender_HAX3(const primitive3d::HatchTexturePrimitive3D& rPrimitive);
+            void impRender_BMX3(const primitive3d::BitmapTexturePrimitive3D& rPrimitive);
+            void impRender_MCOL(const primitive3d::ModifiedColorPrimitive3D& rModifiedCandidate);
+            void impRender_POH3(const primitive3d::PolygonHairlinePrimitive3D& rPrimitive);
+            void impRender_POM3(const primitive3d::PolyPolygonMaterialPrimitive3D& rPrimitive);
+            void impRender_TRN3(const primitive3d::TransformPrimitive3D& rTransformCandidate);
 
             //////////////////////////////////////////////////////////////////////////////
             // lighting support
             basegfx::BColor impSolveColorModel(
                 basegfx::B3DVector aNormal,
-                const attribute::materialAttribute3D& rMaterial);
+                const attribute::MaterialAttribute3D& rMaterial);
 
         public:
-            defaultProcessor3D(
-                const geometry::viewInformation& rViewInformation,
-                const geometry::transformation3D& rTransformation3D,
-                const attribute::sdrSceneAttribute& rSdrSceneAttribute,
-                const attribute::sdrLightingAttribute& rSdrLightingAttribute,
+            DefaultProcessor3D(
+                const geometry::ViewInformation2D& rViewInformation,
+                const geometry::Transformation3D& rTransformation3D,
+                const attribute::SdrSceneAttribute& rSdrSceneAttribute,
+                const attribute::SdrLightingAttribute& rSdrLightingAttribute,
                 double fSizeX,
                 double fSizeY,
                 const basegfx::B2DRange& rVisiblePart);
-            virtual ~defaultProcessor3D();
+            virtual ~DefaultProcessor3D();
 
             // the central processing method
-            virtual void process(const primitive3d::primitiveVector3D& rSource);
+            virtual void process(const primitive3d::Primitive3DSequence& rSource);
 
             // helpers for drawing transparent parts in 2nd run
-            void processNonTransparent(const primitive3d::primitiveVector3D& rSource);
-            void processTransparent(const primitive3d::primitiveVector3D& rSource);
+            void processNonTransparent(const primitive3d::Primitive3DSequence& rSource);
+            void processTransparent(const primitive3d::Primitive3DSequence& rSource);
 
             // data read access
-            const attribute::sdrLightingAttribute& getSdrLightingAttribute() const { return mrSdrLightingAttribute; }
+            const attribute::SdrLightingAttribute& getSdrLightingAttribute() const { return mrSdrLightingAttribute; }
             const basegfx::BColorModifierStack& getBColorModifierStack() const { return maBColorModifierStack; }
-            const texture::geoTexSvx* getGeoTexSvx() const { return mpGeoTexSvx; }
-            const texture::geoTexSvx* getTransparenceGeoTexSvx() const { return mpTransparenceGeoTexSvx; }
+            const texture::GeoTexSvx* getGeoTexSvx() const { return mpGeoTexSvx; }
+            const texture::GeoTexSvx* getTransparenceGeoTexSvx() const { return mpTransparenceGeoTexSvx; }
             bool getModulate() const { return mbModulate; }
             bool getFilter() const { return mbFilter; }
 

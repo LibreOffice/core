@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultprocessor3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-09-27 16:33:27 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:39:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,60 +33,82 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PROCESSOR3D_DEFAULTPROCESSOR3D_HXX
-#include <drawinglayer/processor3d/defaultprocessor3d.hxx>
-#endif
+//////////////////////////////////////////////////////////////////////////////
+// includes for namespace basegfx
 
-#ifndef _SV_BMPACC_HXX
-#include <vcl/bmpacc.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_DEFAULTPROCESSOR3D_HXX
+#include <drawinglayer/processor3d/defaultprocessor3d.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
 #include <basegfx/polygon/b3dpolygon.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_POLYGONPRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
-#endif
-
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/modifiedcolorprimitive3d.hxx>
-#endif
-
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE_HXX
-#include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B3DPOLYGONCLIPPER_HXX
-#include <basegfx/polygon/b3dpolygonclipper.hxx>
-#endif
-
 #ifndef _BGFX_RASTER_BZPIXELRASTER_HXX
 #include <basegfx/raster/bzpixelraster.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
+#ifndef _SV_BMPACC_HXX
+#include <vcl/bmpacc.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
+#include <drawinglayer/attribute/materialattribute3d.hxx>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+// includes for namespace drawinglayer
+
+#ifndef INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE_HXX
+#include <drawinglayer/texture/texture.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
 #include <drawinglayer/attribute/sdrattribute3d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
+#include <drawinglayer/attribute/fillattribute.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_HATCHTEXTUREPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/modifiedcolorprimitive3d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYGONPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B3DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b3dpolygontools.hxx>
 #endif
 
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
+#endif
+
 #ifndef _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/textureprimitive3d.hxx>
-#endif
-
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_HATCHTEXTUREPRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
-#endif
-
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRLABELPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/sdrlabelprimitive3d.hxx>
+#endif
+
+#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
+#include <basegfx/tools/canvastools.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION2D_HXX
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -606,8 +628,8 @@ namespace drawinglayer
         {
         protected:
             basegfx::BZPixelRaster&                     mrBuffer;
-            const attribute::materialAttribute3D&           mrMaterial;
-            const processor3d::defaultProcessor3D&  mrProcessor;
+            const attribute::MaterialAttribute3D&       mrMaterial;
+            const processor3d::DefaultProcessor3D&      mrProcessor;
 
             // virtual rasterconverter
             virtual void processSpan(const basegfx::B3DScanlineEntry& rA, const basegfx::B3DScanlineEntry& rB, sal_Int32 nLine, sal_uInt32 nSpanCount);
@@ -617,8 +639,8 @@ namespace drawinglayer
             BZPolyRaCon(
                 bool bArea,
                 basegfx::BZPixelRaster& rBuffer,
-                const attribute::materialAttribute3D& rMaterial,
-                const processor3d::defaultProcessor3D& rProcessor)
+                const attribute::MaterialAttribute3D& rMaterial,
+                const processor3d::DefaultProcessor3D& rProcessor)
             :   B3DPolyPolygonRasterConverter(bArea),
                 mrBuffer(rBuffer),
                 mrMaterial(rMaterial),
@@ -942,46 +964,41 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class geoTexSvxMono : public geoTexSvx
+        class GeoTexSvxMono : public GeoTexSvx
         {
         protected:
-            basegfx::BColor                         maSingleColor;
+            basegfx::BColor                             maSingleColor;
             double                                      mfOpacity;
 
         public:
-            geoTexSvxMono(const basegfx::BColor& rSingleColor, double fOpacity);
-            virtual ~geoTexSvxMono();
+            GeoTexSvxMono(const basegfx::BColor& rSingleColor, double fOpacity);
 
             // compare operator
-            virtual bool operator==(const geoTexSvx& rGeoTexSvx) const;
+            virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const;
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const;
             virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const;
         };
 
-        geoTexSvxMono::geoTexSvxMono(const basegfx::BColor& rSingleColor, double fOpacity)
+        GeoTexSvxMono::GeoTexSvxMono(const basegfx::BColor& rSingleColor, double fOpacity)
         :   maSingleColor(rSingleColor),
             mfOpacity(fOpacity)
         {
         }
 
-        geoTexSvxMono::~geoTexSvxMono()
+        bool GeoTexSvxMono::operator==(const GeoTexSvx& rGeoTexSvx) const
         {
-        }
-
-        bool geoTexSvxMono::operator==(const geoTexSvx& rGeoTexSvx) const
-        {
-            const geoTexSvxMono* pCompare = dynamic_cast< const geoTexSvxMono* >(&rGeoTexSvx);
+            const GeoTexSvxMono* pCompare = dynamic_cast< const GeoTexSvxMono* >(&rGeoTexSvx);
             return (pCompare
                 && maSingleColor == pCompare->maSingleColor
                 && mfOpacity == pCompare->mfOpacity);
         }
 
-        void geoTexSvxMono::modifyBColor(const basegfx::B2DPoint& /*rUV*/, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
+        void GeoTexSvxMono::modifyBColor(const basegfx::B2DPoint& /*rUV*/, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             rBColor = maSingleColor;
         }
 
-        void geoTexSvxMono::modifyOpacity(const basegfx::B2DPoint& /*rUV*/, double& rfOpacity) const
+        void GeoTexSvxMono::modifyOpacity(const basegfx::B2DPoint& /*rUV*/, double& rfOpacity) const
         {
             rfOpacity = mfOpacity;
         }
@@ -994,13 +1011,13 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class geoTexSvxBitmap : public geoTexSvx
+        class GeoTexSvxBitmap : public GeoTexSvx
         {
         protected:
             Bitmap                                      maBitmap;
             BitmapReadAccess*                           mpRead;
             basegfx::B2DPoint                           maTopLeft;
-            basegfx::B2DVector                      maSize;
+            basegfx::B2DVector                          maSize;
             double                                      mfMulX;
             double                                      mfMulY;
 
@@ -1008,13 +1025,13 @@ namespace drawinglayer
             bool impIsValid(const basegfx::B2DPoint& rUV, sal_Int32& rX, sal_Int32& rY) const;
 
         public:
-            geoTexSvxBitmap(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize);
-            virtual ~geoTexSvxBitmap();
+            GeoTexSvxBitmap(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize);
+            virtual ~GeoTexSvxBitmap();
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const;
             virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const;
         };
 
-        geoTexSvxBitmap::geoTexSvxBitmap(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize)
+        GeoTexSvxBitmap::GeoTexSvxBitmap(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize)
         :   maBitmap(rBitmap),
             mpRead(0L),
             maTopLeft(rTopLeft),
@@ -1023,17 +1040,17 @@ namespace drawinglayer
             mfMulY(0.0)
         {
             mpRead = maBitmap.AcquireReadAccess();
-            OSL_ENSURE(mpRead, "geoTexSvxBitmap: Got no read access to Bitmap (!)");
+            OSL_ENSURE(mpRead, "GeoTexSvxBitmap: Got no read access to Bitmap (!)");
             mfMulX = (double)mpRead->Width() / maSize.getX();
             mfMulY = (double)mpRead->Height() / maSize.getY();
         }
 
-        geoTexSvxBitmap::~geoTexSvxBitmap()
+        GeoTexSvxBitmap::~GeoTexSvxBitmap()
         {
             delete mpRead;
         }
 
-        bool geoTexSvxBitmap::impIsValid(const basegfx::B2DPoint& rUV, sal_Int32& rX, sal_Int32& rY) const
+        bool GeoTexSvxBitmap::impIsValid(const basegfx::B2DPoint& rUV, sal_Int32& rX, sal_Int32& rY) const
         {
             if(mpRead)
             {
@@ -1050,7 +1067,7 @@ namespace drawinglayer
             return false;
         }
 
-        void geoTexSvxBitmap::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
+        void GeoTexSvxBitmap::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
         {
             sal_Int32 nX, nY;
 
@@ -1064,7 +1081,7 @@ namespace drawinglayer
             }
         }
 
-        void geoTexSvxBitmap::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
+        void GeoTexSvxBitmap::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
         {
             sal_Int32 nX, nY;
 
@@ -1086,7 +1103,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class geoTexSvxBitmapTiled : public geoTexSvxBitmap
+        class GeoTexSvxBitmapTiled : public GeoTexSvxBitmap
         {
         protected:
             // helpers
@@ -1109,34 +1126,29 @@ namespace drawinglayer
             }
 
         public:
-            geoTexSvxBitmapTiled(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize);
-            virtual ~geoTexSvxBitmapTiled();
+            GeoTexSvxBitmapTiled(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize);
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const;
             virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const;
         };
 
-        geoTexSvxBitmapTiled::geoTexSvxBitmapTiled(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize)
-        :   geoTexSvxBitmap(rBitmap, rTopLeft, rSize)
+        GeoTexSvxBitmapTiled::GeoTexSvxBitmapTiled(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize)
+        :   GeoTexSvxBitmap(rBitmap, rTopLeft, rSize)
         {
         }
 
-        geoTexSvxBitmapTiled::~geoTexSvxBitmapTiled()
-        {
-        }
-
-        void geoTexSvxBitmapTiled::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
+        void GeoTexSvxBitmapTiled::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
         {
             if(mpRead)
             {
-                geoTexSvxBitmap::modifyBColor(impGetCorrected(rUV), rBColor, rfOpacity);
+                GeoTexSvxBitmap::modifyBColor(impGetCorrected(rUV), rBColor, rfOpacity);
             }
         }
 
-        void geoTexSvxBitmapTiled::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
+        void GeoTexSvxBitmapTiled::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
         {
             if(mpRead)
             {
-                geoTexSvxBitmap::modifyOpacity(impGetCorrected(rUV), rfOpacity);
+                GeoTexSvxBitmap::modifyOpacity(impGetCorrected(rUV), rfOpacity);
             }
         }
     } // end of namespace texture
@@ -1148,14 +1160,14 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class geoTexSvxMultiHatch : public geoTexSvx
+        class GeoTexSvxMultiHatch : public GeoTexSvx
         {
         protected:
-            basegfx::BColor             maColor;
+            basegfx::BColor                 maColor;
             double                          mfLogicPixelSize;
-            geoTexSvxHatch*                 mp0;
-            geoTexSvxHatch*                 mp1;
-            geoTexSvxHatch*                 mp2;
+            GeoTexSvxHatch*                 mp0;
+            GeoTexSvxHatch*                 mp1;
+            GeoTexSvxHatch*                 mp2;
 
             // bitfield
             unsigned                        mbFillBackground : 1;
@@ -1164,8 +1176,8 @@ namespace drawinglayer
             bool impIsOnHatch(const basegfx::B2DPoint& rUV) const;
 
         public:
-            geoTexSvxMultiHatch(const primitive3d::hatchTexturePrimitive3D& rPrimitive, double fLogicPixelSize);
-            virtual ~geoTexSvxMultiHatch();
+            GeoTexSvxMultiHatch(const primitive3d::HatchTexturePrimitive3D& rPrimitive, double fLogicPixelSize);
+            virtual ~GeoTexSvxMultiHatch();
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const;
             virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const;
 
@@ -1173,38 +1185,38 @@ namespace drawinglayer
             bool getFillBackground() const { return mbFillBackground; }
         };
 
-        geoTexSvxMultiHatch::geoTexSvxMultiHatch(const primitive3d::hatchTexturePrimitive3D& rPrimitive, double fLogicPixelSize)
+        GeoTexSvxMultiHatch::GeoTexSvxMultiHatch(const primitive3d::HatchTexturePrimitive3D& rPrimitive, double fLogicPixelSize)
         :   mfLogicPixelSize(fLogicPixelSize),
             mp0(0L),
             mp1(0L),
             mp2(0L)
         {
-            const attribute::fillHatchAttribute& rHatch(rPrimitive.getHatch());
+            const attribute::FillHatchAttribute& rHatch(rPrimitive.getHatch());
             const basegfx::B2DRange aOutlineRange(0.0, 0.0, rPrimitive.getTextureSize().getX(), rPrimitive.getTextureSize().getY());
             const double fAngleA(-rHatch.getAngle());
             maColor = rHatch.getColor();
             mbFillBackground = rHatch.isFillBackground();
-            mp0 = new geoTexSvxHatch(aOutlineRange, rHatch.getDistance(), fAngleA);
+            mp0 = new GeoTexSvxHatch(aOutlineRange, rHatch.getDistance(), fAngleA);
 
             if(attribute::HATCHSTYLE_DOUBLE == rHatch.getStyle() || attribute::HATCHSTYLE_TRIPLE == rHatch.getStyle())
             {
-                mp1 = new geoTexSvxHatch(aOutlineRange, rHatch.getDistance(), fAngleA + F_PI2);
+                mp1 = new GeoTexSvxHatch(aOutlineRange, rHatch.getDistance(), fAngleA + F_PI2);
             }
 
             if(attribute::HATCHSTYLE_TRIPLE == rHatch.getStyle())
             {
-                mp2 = new geoTexSvxHatch(aOutlineRange, rHatch.getDistance(), fAngleA + F_PI4);
+                mp2 = new GeoTexSvxHatch(aOutlineRange, rHatch.getDistance(), fAngleA + F_PI4);
             }
         }
 
-        geoTexSvxMultiHatch::~geoTexSvxMultiHatch()
+        GeoTexSvxMultiHatch::~GeoTexSvxMultiHatch()
         {
             delete mp0;
             delete mp1;
             delete mp2;
         }
 
-        bool geoTexSvxMultiHatch::impIsOnHatch(const basegfx::B2DPoint& rUV) const
+        bool GeoTexSvxMultiHatch::impIsOnHatch(const basegfx::B2DPoint& rUV) const
         {
             double fSmallestDistance();
 
@@ -1226,7 +1238,7 @@ namespace drawinglayer
             return false;
         }
 
-        void geoTexSvxMultiHatch::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
+        void GeoTexSvxMultiHatch::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
         {
             if(impIsOnHatch(rUV))
             {
@@ -1238,7 +1250,7 @@ namespace drawinglayer
             }
         }
 
-        void geoTexSvxMultiHatch::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
+        void GeoTexSvxMultiHatch::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
         {
             if(mbFillBackground || impIsOnHatch(rUV))
             {
@@ -1260,26 +1272,26 @@ namespace drawinglayer
 {
     namespace processor3d
     {
-        void defaultProcessor3D::impRender_GRX3(const primitive3d::gradientTexturePrimitive3D& rPrimitive, bool bTransparence)
+        void DefaultProcessor3D::impRender_GRX3(const primitive3d::GradientTexturePrimitive3D& rPrimitive, bool bTransparence)
         {
-            const primitive3d::primitiveVector3D& rSubList = rPrimitive.getPrimitives();
+            const primitive3d::Primitive3DSequence& rSubSequence = rPrimitive.getChildren();
 
-            if(rSubList.size())
+            if(rSubSequence.hasElements())
             {
                 // rescue values
                 const bool bOldModulate(mbModulate); mbModulate = rPrimitive.getModulate();
                 const bool bOldFilter(mbFilter); mbFilter = rPrimitive.getFilter();
-                texture::geoTexSvx* pOldTex = (bTransparence) ? mpTransparenceGeoTexSvx : mpGeoTexSvx;
+                texture::GeoTexSvx* pOldTex = (bTransparence) ? mpTransparenceGeoTexSvx : mpGeoTexSvx;
 
                 // create texture
-                const attribute::fillGradientAttribute& rFillGradient = rPrimitive.getGradient();
+                const attribute::FillGradientAttribute& rFillGradient = rPrimitive.getGradient();
                 const basegfx::B2DRange aOutlineRange(0.0, 0.0, rPrimitive.getTextureSize().getX(), rPrimitive.getTextureSize().getY());
                 const attribute::GradientStyle aGradientStyle(rFillGradient.getStyle());
                 sal_uInt32 nSteps(rFillGradient.getSteps());
                 const basegfx::BColor aStart(rFillGradient.getStartColor());
                 const basegfx::BColor aEnd(rFillGradient.getEndColor());
                 const sal_uInt32 nMaxSteps(sal_uInt32((aStart.getMaximumDistance(aEnd) * 127.5) + 0.5));
-                texture::geoTexSvx* pNewTex = 0L;
+                texture::GeoTexSvx* pNewTex = 0L;
 
                 if(nMaxSteps)
                 {
@@ -1303,32 +1315,32 @@ namespace drawinglayer
                     {
                         case attribute::GRADIENTSTYLE_LINEAR:
                         {
-                            pNewTex = new texture::geoTexSvxGradientLinear(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), -rFillGradient.getAngle());
+                            pNewTex = new texture::GeoTexSvxGradientLinear(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), -rFillGradient.getAngle());
                             break;
                         }
                         case attribute::GRADIENTSTYLE_AXIAL:
                         {
-                            pNewTex = new texture::geoTexSvxGradientAxial(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), -rFillGradient.getAngle());
+                            pNewTex = new texture::GeoTexSvxGradientAxial(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), -rFillGradient.getAngle());
                             break;
                         }
                         case attribute::GRADIENTSTYLE_RADIAL:
                         {
-                            pNewTex = new texture::geoTexSvxGradientRadial(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY());
+                            pNewTex = new texture::GeoTexSvxGradientRadial(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY());
                             break;
                         }
                         case attribute::GRADIENTSTYLE_ELLIPTICAL:
                         {
-                            pNewTex = new texture::geoTexSvxGradientElliptical(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), -rFillGradient.getAngle());
+                            pNewTex = new texture::GeoTexSvxGradientElliptical(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), -rFillGradient.getAngle());
                             break;
                         }
                         case attribute::GRADIENTSTYLE_SQUARE:
                         {
-                            pNewTex = new texture::geoTexSvxGradientSquare(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), -rFillGradient.getAngle());
+                            pNewTex = new texture::GeoTexSvxGradientSquare(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), -rFillGradient.getAngle());
                             break;
                         }
                         case attribute::GRADIENTSTYLE_RECT:
                         {
-                            pNewTex = new texture::geoTexSvxGradientRect(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), -rFillGradient.getAngle());
+                            pNewTex = new texture::GeoTexSvxGradientRect(aOutlineRange, aStart, aEnd, nSteps, rFillGradient.getBorder(), rFillGradient.getOffsetX(), rFillGradient.getOffsetY(), -rFillGradient.getAngle());
                             break;
                         }
                     }
@@ -1336,7 +1348,7 @@ namespace drawinglayer
                 else
                 {
                     // no color distance -> same color, use simple texture
-                    pNewTex = new texture::geoTexSvxMono(aStart, 1.0 - aStart.luminance());
+                    pNewTex = new texture::GeoTexSvxMono(aStart, 1.0 - aStart.luminance());
                 }
 
                 // set created texture
@@ -1350,7 +1362,7 @@ namespace drawinglayer
                 }
 
                 // process sub-list
-                process(rSubList);
+                process(rSubSequence);
 
                 // delete texture
                 delete pNewTex;
@@ -1370,16 +1382,16 @@ namespace drawinglayer
             }
         }
 
-        void defaultProcessor3D::impRender_HAX3(const primitive3d::hatchTexturePrimitive3D& rPrimitive)
+        void DefaultProcessor3D::impRender_HAX3(const primitive3d::HatchTexturePrimitive3D& rPrimitive)
         {
-            const primitive3d::primitiveVector3D& rSubList = rPrimitive.getPrimitives();
+            const primitive3d::Primitive3DSequence& rSubSequence = rPrimitive.getChildren();
 
-            if(rSubList.size())
+            if(rSubSequence.hasElements())
             {
                 // rescue values
                 const bool bOldModulate(mbModulate); mbModulate = rPrimitive.getModulate();
                 const bool bOldFilter(mbFilter); mbFilter = rPrimitive.getFilter();
-                texture::geoTexSvx* pOldTex = mpGeoTexSvx;
+                texture::GeoTexSvx* pOldTex = mpGeoTexSvx;
 
                 // calculate logic pixel size in world coordinates
                 const basegfx::B3DPoint aZero(maInvWorldToView * basegfx::B3DPoint(0.0, 0.0, 0.0));
@@ -1403,11 +1415,11 @@ namespace drawinglayer
                 const double fLogicTexSize(fLogicTexSizeX > fLogicTexSizeY ? fLogicTexSizeX : fLogicTexSizeY);
 
                 // create texture and set
-                texture::geoTexSvxMultiHatch* pNewTex = new texture::geoTexSvxMultiHatch(rPrimitive, fLogicTexSize);
+                texture::GeoTexSvxMultiHatch* pNewTex = new texture::GeoTexSvxMultiHatch(rPrimitive, fLogicTexSize);
                 mpGeoTexSvx = pNewTex;
 
                 // process sub-list
-                process(rSubList);
+                process(rSubSequence);
 
                 // delete texture
                 delete mpGeoTexSvx;
@@ -1419,37 +1431,37 @@ namespace drawinglayer
             }
         }
 
-        void defaultProcessor3D::impRender_BMX3(const primitive3d::bitmapTexturePrimitive3D& rPrimitive)
+        void DefaultProcessor3D::impRender_BMX3(const primitive3d::BitmapTexturePrimitive3D& rPrimitive)
         {
-            const primitive3d::primitiveVector3D& rSubList = rPrimitive.getPrimitives();
+            const primitive3d::Primitive3DSequence& rSubSequence = rPrimitive.getChildren();
 
-            if(rSubList.size())
+            if(rSubSequence.hasElements())
             {
                 // rescue values
                 const bool bOldModulate(mbModulate); mbModulate = rPrimitive.getModulate();
                 const bool bOldFilter(mbFilter); mbFilter = rPrimitive.getFilter();
-                texture::geoTexSvx* pOldTex = mpGeoTexSvx;
+                texture::GeoTexSvx* pOldTex = mpGeoTexSvx;
 
                 // create texture
-                const attribute::fillBitmapAttribute& rFillBitmapAttribute = rPrimitive.getBitmap();
+                const attribute::FillBitmapAttribute& rFillBitmapAttribute = rPrimitive.getBitmap();
 
                 if(rFillBitmapAttribute.getTiling())
                 {
-                    mpGeoTexSvx = new texture::geoTexSvxBitmapTiled(
+                    mpGeoTexSvx = new texture::GeoTexSvxBitmapTiled(
                         rFillBitmapAttribute.getBitmap(),
                         rFillBitmapAttribute.getTopLeft() * rPrimitive.getTextureSize(),
                         rFillBitmapAttribute.getSize() * rPrimitive.getTextureSize());
                 }
                 else
                 {
-                    mpGeoTexSvx = new texture::geoTexSvxBitmap(
+                    mpGeoTexSvx = new texture::GeoTexSvxBitmap(
                         rFillBitmapAttribute.getBitmap(),
                         rFillBitmapAttribute.getTopLeft() * rPrimitive.getTextureSize(),
                         rFillBitmapAttribute.getSize() * rPrimitive.getTextureSize());
                 }
 
                 // process sub-list
-                process(rSubList);
+                process(rSubSequence);
 
                 // delete texture
                 delete mpGeoTexSvx;
@@ -1461,19 +1473,19 @@ namespace drawinglayer
             }
         }
 
-        void defaultProcessor3D::impRender_MCOL(const primitive3d::modifiedColorPrimitive3D& rModifiedCandidate)
+        void DefaultProcessor3D::impRender_MCOL(const primitive3d::ModifiedColorPrimitive3D& rModifiedCandidate)
         {
-            const primitive3d::primitiveVector3D& rSubList = rModifiedCandidate.getPrimitives();
+            const primitive3d::Primitive3DSequence& rSubSequence = rModifiedCandidate.getChildren();
 
-            if(rSubList.size())
+            if(rSubSequence.hasElements())
             {
                 maBColorModifierStack.push(rModifiedCandidate.getColorModifier());
-                process(rModifiedCandidate.getPrimitives());
+                process(rModifiedCandidate.getChildren());
                 maBColorModifierStack.pop();
             }
         }
 
-        void defaultProcessor3D::impRender_POH3(const primitive3d::polygonHairlinePrimitive3D& rPrimitive)
+        void DefaultProcessor3D::impRender_POH3(const primitive3d::PolygonHairlinePrimitive3D& rPrimitive)
         {
             basegfx::B3DPolygon aHairline(rPrimitive.getB3DPolygon());
 
@@ -1491,7 +1503,7 @@ namespace drawinglayer
 
                 if(a2DRange.overlaps(maRasterRange))
                 {
-                    const attribute::materialAttribute3D aMaterial(rPrimitive.getBColor());
+                    const attribute::MaterialAttribute3D aMaterial(rPrimitive.getBColor());
                     BZPolyRaCon aNewRaCon(false, *mpBZPixelRaster, aMaterial, *this);
                     aNewRaCon.addPolygon(aHairline, maInvEyeToView);
                     aNewRaCon.rasterconvert(0L, mpBZPixelRaster->getHeight());
@@ -1499,7 +1511,7 @@ namespace drawinglayer
             }
         }
 
-        void defaultProcessor3D::impRender_POM3(const primitive3d::polyPolygonMaterialPrimitive3D& rPrimitive)
+        void DefaultProcessor3D::impRender_POM3(const primitive3d::PolyPolygonMaterialPrimitive3D& rPrimitive)
         {
             basegfx::B3DPolyPolygon aFill(rPrimitive.getB3DPolyPolygon());
             basegfx::BColor aObjectColor(rPrimitive.getMaterial().getColor());
@@ -1636,7 +1648,7 @@ namespace drawinglayer
             if(bPaintIt)
             {
                 // draw it to ZBuffer
-                const attribute::materialAttribute3D aMaterial(
+                const attribute::MaterialAttribute3D aMaterial(
                     aObjectColor, rPrimitive.getMaterial().getSpecular(),
                     rPrimitive.getMaterial().getEmission(),
                     rPrimitive.getMaterial().getSpecularIntensity());
@@ -1651,7 +1663,7 @@ namespace drawinglayer
             }
         }
 
-        void defaultProcessor3D::impRender_TRN3(const primitive3d::transformPrimitive3D& rTransformCandidate)
+        void DefaultProcessor3D::impRender_TRN3(const primitive3d::TransformPrimitive3D& rTransformCandidate)
         {
             // remember current transformations
             basegfx::B3DHomMatrix aLastWorldToView(maWorldToView);
@@ -1665,7 +1677,7 @@ namespace drawinglayer
             maInvWorldToView.invert();
 
             // let break down
-            process(rTransformCandidate.getPrimitives());
+            process(rTransformCandidate.getChildren());
 
             // restore transformations
             maWorldToView = aLastWorldToView;
@@ -1673,132 +1685,144 @@ namespace drawinglayer
             maInvWorldToView = aLastInvWorldToView;
         }
 
-        void defaultProcessor3D::process(const primitive3d::primitiveVector3D& rSource)
+        void DefaultProcessor3D::process(const primitive3d::Primitive3DSequence& rSource)
         {
-            for(sal_uInt32 a(0L); a < rSource.size(); a++)
+            if(rSource.hasElements())
             {
-                const primitive3d::referencedPrimitive3D& rCandidate = rSource[a];
+                const sal_Int32 nCount(rSource.getLength());
 
-                switch(rCandidate.getID())
+                for(sal_Int32 a(0L); a < nCount; a++)
                 {
-                    case CreatePrimitiveID('G', 'R', 'X', '3'):
-                    {
-                        // gradientTexturePrimitive3D
-                        const primitive3d::gradientTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::gradientTexturePrimitive3D& >(rCandidate.getBasePrimitive());
-                        impRender_GRX3(rPrimitive, false);
-                        break;
-                    }
+                    // get reference
+                    const primitive3d::Primitive3DReference xReference(rSource[a]);
 
-                    case CreatePrimitiveID('H', 'A', 'X', '3'):
+                    if(xReference.is())
                     {
-                        static bool bDoHatchDecomposition(true);
+                        // try to cast to BasePrimitive3D implementation
+                        const primitive3d::BasePrimitive3D* pBasePrimitive = dynamic_cast< const primitive3d::BasePrimitive3D* >(xReference.get());
 
-                        if(bDoHatchDecomposition)
+                        if(pBasePrimitive)
                         {
-                            // let break down
-                            process(rCandidate.getBasePrimitive().getDecomposition());
+                            // it is a BasePrimitive3D implementation, use getPrimitiveID() call for switch
+                            switch(pBasePrimitive->getPrimitiveID())
+                            {
+                                case Create3DPrimitiveID('3','G','T','e') :
+                                {
+                                    // GradientTexturePrimitive3D
+                                    const primitive3d::GradientTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::GradientTexturePrimitive3D& >(*pBasePrimitive);
+                                    impRender_GRX3(rPrimitive, false);
+                                    break;
+                                }
+                                case Create3DPrimitiveID('3','H','T','e') :
+                                {
+                                    // HatchTexturePrimitive3D
+                                    static bool bDoHatchDecomposition(true);
+
+                                    if(bDoHatchDecomposition)
+                                    {
+                                        // let break down
+                                        process(pBasePrimitive->get3DDecomposition(getTime()));
+                                    }
+                                    else
+                                    {
+                                        // hatchTexturePrimitive3D
+                                        const primitive3d::HatchTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::HatchTexturePrimitive3D& >(*pBasePrimitive);
+                                        impRender_HAX3(rPrimitive);
+                                    }
+                                    break;
+                                }
+                                case Create3DPrimitiveID('3','B','T','e') :
+                                {
+                                    // BitmapTexturePrimitive3D
+                                    const primitive3d::BitmapTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::BitmapTexturePrimitive3D& >(*pBasePrimitive);
+                                    impRender_BMX3(rPrimitive);
+                                    break;
+                                }
+                                case Create3DPrimitiveID('3','A','T','e') :
+                                {
+                                    // AlphaTexturePrimitive3D
+                                    const primitive3d::AlphaTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::AlphaTexturePrimitive3D& >(*pBasePrimitive);
+
+                                    if(mbProcessTransparent)
+                                    {
+                                        impRender_GRX3(rPrimitive, true);
+                                    }
+                                    else
+                                    {
+                                        mbContainsTransparent = true;
+                                    }
+                                    break;
+                                }
+                                case Create3DPrimitiveID('3','M','C','o') :
+                                {
+                                    // ModifiedColorPrimitive3D
+                                    // Force output to unified color.
+                                    const primitive3d::ModifiedColorPrimitive3D& rPrimitive = static_cast< const primitive3d::ModifiedColorPrimitive3D& >(*pBasePrimitive);
+                                    impRender_MCOL(rPrimitive);
+                                    break;
+                                }
+                                case Create3DPrimitiveID('3','P','H','a') :
+                                {
+                                    // directdraw of PolygonHairlinePrimitive3D
+                                    const primitive3d::PolygonHairlinePrimitive3D& rPrimitive = static_cast< const primitive3d::PolygonHairlinePrimitive3D& >(*pBasePrimitive);
+
+                                    if((bool)mbProcessTransparent == (0L != mpTransparenceGeoTexSvx))
+                                    {
+                                        impRender_POH3(rPrimitive);
+                                    }
+                                    break;
+                                }
+                                case Create3DPrimitiveID('3','P','P','M') :
+                                {
+                                    // directdraw of PolyPolygonMaterialPrimitive3D
+                                    const primitive3d::PolyPolygonMaterialPrimitive3D& rPrimitive = static_cast< const primitive3d::PolyPolygonMaterialPrimitive3D& >(*pBasePrimitive);
+
+                                    if((bool)mbProcessTransparent == (0L != mpTransparenceGeoTexSvx))
+                                    {
+                                        impRender_POM3(rPrimitive);
+                                    }
+                                    break;
+                                }
+                                case Create3DPrimitiveID('3','T','r','a') :
+                                {
+                                    // transform group (TransformPrimitive3D)
+                                    impRender_TRN3(static_cast< const primitive3d::TransformPrimitive3D& >(*pBasePrimitive));
+                                    break;
+                                }
+                                case Create3DPrimitiveID('3','L','a','b') :
+                                {
+                                    // SdrLabelPrimitive3D. Accept, but ignore. Is handled by the scenePrimitive decompose
+                                    // method which creates 2d text objects at the 3d-projection-dependent positions.
+                                    break;
+                                }
+                                default:
+                                {
+                                    // process recursively
+                                    process(pBasePrimitive->get3DDecomposition(getTime()));
+                                    break;
+                                }
+                            }
                         }
                         else
                         {
-                            // hatchTexturePrimitive3D
-                            const primitive3d::hatchTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::hatchTexturePrimitive3D& >(rCandidate.getBasePrimitive());
-                            impRender_HAX3(rPrimitive);
+                            // unknown implementation, use UNO API call instead and process recursively
+                            com::sun::star::graphic::Primitive3DParameters aPrimitive3DParameters;
+                            aPrimitive3DParameters.Time = getTime();
+                            process(xReference->getDecomposition(aPrimitive3DParameters));
                         }
-
-                        break;
-                    }
-
-                    case CreatePrimitiveID('B', 'M', 'X', '3'):
-                    {
-                        // bitmapTexturePrimitive3D
-                        const primitive3d::bitmapTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::bitmapTexturePrimitive3D& >(rCandidate.getBasePrimitive());
-                        impRender_BMX3(rPrimitive);
-                        break;
-                    }
-
-                    case CreatePrimitiveID('T', 'R', 'X', '3'):
-                    {
-                        // transparenceTexturePrimitive3D
-                        const primitive3d::transparenceTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::transparenceTexturePrimitive3D& >(rCandidate.getBasePrimitive());
-
-                        if(mbProcessTransparent)
-                        {
-                            impRender_GRX3(rPrimitive, true);
-                        }
-                        else
-                        {
-                            mbContainsTransparent = true;
-                        }
-
-                        break;
-                    }
-
-                    case CreatePrimitiveID('M', 'C', 'L', '3'):
-                    {
-                        // modified color group. Force output to unified color.
-                        const primitive3d::modifiedColorPrimitive3D& rPrimitive = static_cast< const primitive3d::modifiedColorPrimitive3D& >(rCandidate.getBasePrimitive());
-                        impRender_MCOL(rPrimitive);
-                        break;
-                    }
-
-                    case CreatePrimitiveID('P', 'O', 'H', '3'):
-                    {
-                        // directdraw of polygonHairlinePrimitive3D
-                        const primitive3d::polygonHairlinePrimitive3D& rPrimitive = static_cast< const primitive3d::polygonHairlinePrimitive3D& >(rCandidate.getBasePrimitive());
-
-                        if((bool)mbProcessTransparent == (0L != mpTransparenceGeoTexSvx))
-                        {
-                            impRender_POH3(rPrimitive);
-                        }
-
-                        break;
-                    }
-
-                    case CreatePrimitiveID('P', 'O', 'M', '3'):
-                    {
-                        // directdraw of polyPolygonMaterialPrimitive3D
-                        const primitive3d::polyPolygonMaterialPrimitive3D& rPrimitive = static_cast< const primitive3d::polyPolygonMaterialPrimitive3D& >(rCandidate.getBasePrimitive());
-
-                        if((bool)mbProcessTransparent == (0L != mpTransparenceGeoTexSvx))
-                        {
-                            impRender_POM3(rPrimitive);
-                        }
-
-                        break;
-                    }
-
-                    case CreatePrimitiveID('T', 'R', 'N', '3'):
-                    {
-                        // transform group.
-                        impRender_TRN3(static_cast< const primitive3d::transformPrimitive3D& >(rCandidate.getBasePrimitive()));
-                        break;
-                    }
-
-                    case CreatePrimitiveID('L', 'A', 'B', '3'):
-                    {
-                        // sdrLabelPrimitive3D. Accept, but ignore. Is handled by the scenePrimitive decompose
-                        // method which creates 2d text objects at the 3d-projection-dependent positions.
-                        break;
-                    }
-
-                    default:
-                    {
-                        // let break down
-                        process(rCandidate.getBasePrimitive().getDecomposition());
-                        break;
                     }
                 }
             }
         }
 
-        void defaultProcessor3D::processNonTransparent(const primitive3d::primitiveVector3D& rSource)
+        void DefaultProcessor3D::processNonTransparent(const primitive3d::Primitive3DSequence& rSource)
         {
             mbProcessTransparent = false;
             mbContainsTransparent = false;
             process(rSource);
         }
 
-        void defaultProcessor3D::processTransparent(const primitive3d::primitiveVector3D& rSource)
+        void DefaultProcessor3D::processTransparent(const primitive3d::Primitive3DSequence& rSource)
         {
             if(mbContainsTransparent)
             {
@@ -1807,17 +1831,17 @@ namespace drawinglayer
             }
         }
 
-        defaultProcessor3D::defaultProcessor3D(
-            const geometry::viewInformation& rViewInformation,
-            const geometry::transformation3D& rTransformation3D,
-            const attribute::sdrSceneAttribute& rSdrSceneAttribute,
-            const attribute::sdrLightingAttribute& rsdrLightingAttribute,
+        DefaultProcessor3D::DefaultProcessor3D(
+            const geometry::ViewInformation2D& rViewInformation,
+            const geometry::Transformation3D& rTransformation3D,
+            const attribute::SdrSceneAttribute& rSdrSceneAttribute,
+            const attribute::SdrLightingAttribute& rSdrLightingAttribute,
             double fSizeX,
             double fSizeY,
             const basegfx::B2DRange& rVisiblePart)
-        :   baseProcessor3D(rViewInformation, rTransformation3D),
+        :   BaseProcessor3D(rViewInformation.getViewTime()),
             mrSdrSceneAttribute(rSdrSceneAttribute),
-            mrSdrLightingAttribute(rsdrLightingAttribute),
+            mrSdrLightingAttribute(rSdrLightingAttribute),
             mpGeoTexSvx(0L),
             mpTransparenceGeoTexSvx(0L),
             mbModulate(false),
@@ -1826,8 +1850,8 @@ namespace drawinglayer
             mbContainsTransparent(false)
         {
             // generate ViewSizes
-            const double fFullViewSizeX((getViewInformation().getViewTransformation() * basegfx::B2DVector(fSizeX, 0.0)).getLength());
-            const double fFullViewSizeY((getViewInformation().getViewTransformation() * basegfx::B2DVector(0.0, fSizeY)).getLength());
+            const double fFullViewSizeX((rViewInformation.getViewTransformation() * basegfx::B2DVector(fSizeX, 0.0)).getLength());
+            const double fFullViewSizeY((rViewInformation.getViewTransformation() * basegfx::B2DVector(0.0, fSizeY)).getLength());
             const double fViewSizeX(fFullViewSizeX * rVisiblePart.getWidth());
             const double fViewSizeY(fFullViewSizeY * rVisiblePart.getHeight());
             const sal_uInt32 nViewSizeX((sal_uInt32)floor(fViewSizeX));
@@ -1837,7 +1861,7 @@ namespace drawinglayer
             {
                 // create view unit buffer
                 mpBZPixelRaster = new basegfx::BZPixelRaster(nViewSizeX + 1L, nViewSizeY + 1L);
-                OSL_ENSURE(mpBZPixelRaster, "defaultProcessor3D: Could not allocate basegfx::BZPixelRaster (!)");
+                OSL_ENSURE(mpBZPixelRaster, "DefaultProcessor3D: Could not allocate basegfx::BZPixelRaster (!)");
 
                 // create DeviceToView
                 // outcome is [-1.0 .. 1.0] in X,Y and Z.
@@ -1865,13 +1889,13 @@ namespace drawinglayer
                 }
 
                 // create world to eye transformation
-                maWorldToEye = getTransformation3D().getOrientation() * getTransformation3D().getTransformation();
+                maWorldToEye = rTransformation3D.getOrientation() * rTransformation3D.getTransformation();
 
                 // create EyeToView transformation
-                maWorldToView = maDeviceToView * getTransformation3D().getProjection() * maWorldToEye;
+                maWorldToView = maDeviceToView * rTransformation3D.getProjection() * maWorldToEye;
 
                 // create inverse EyeToView transformation
-                maInvEyeToView = maDeviceToView * getTransformation3D().getProjection();
+                maInvEyeToView = maDeviceToView * rTransformation3D.getProjection();
                 maInvEyeToView.invert();
 
                 // create inverse WorldToView transformation
@@ -1884,7 +1908,7 @@ namespace drawinglayer
             }
         }
 
-        defaultProcessor3D::~defaultProcessor3D()
+        DefaultProcessor3D::~DefaultProcessor3D()
         {
             if(mpBZPixelRaster)
             {
@@ -1892,7 +1916,7 @@ namespace drawinglayer
             }
         }
 
-        BitmapEx defaultProcessor3D::getBitmapEx() const
+        BitmapEx DefaultProcessor3D::getBitmapEx() const
         {
             if(mpBZPixelRaster)
             {

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrlatheprimitive3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:51:15 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:38:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,20 +33,12 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDRLATHEPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRLATHEPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/sdrlatheprimitive3d.hxx>
 #endif
 
-#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
-
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
-#include <drawinglayer/primitive3d/sdrextrudelathetools3d.hxx>
-#endif
-
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDRDECOMPOSITIONTOOLS3D_HXX
-#include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
@@ -57,9 +49,17 @@
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #endif
 
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
-#include <basegfx/matrix/b2dhommatrix.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRDECOMPOSITIONTOOLS3D_HXX
+#include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
 #endif
+
+#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
+#include <basegfx/tools/canvastools.hxx>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -67,15 +67,17 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        void sdrLathePrimitive3D::decompose(primitiveVector3D& rTarget)
+        Primitive3DSequence SdrLathePrimitive3D::createLocalDecomposition(double /*fTime*/) const
         {
+            Primitive3DSequence aRetval;
+
             // get slices
-            const sliceVector& rSliceVector = getSlices();
+            const Slice3DVector& rSliceVector = getSlices();
 
             if(rSliceVector.size())
             {
-                const bool bBackScale(!basegfx::fTools::equal(mfBackScale, 1.0));
-                const bool bClosedRotation(!bBackScale && mnHorizontalSegments && basegfx::fTools::equal(mfRotation, F_2PI));
+                const bool bBackScale(!basegfx::fTools::equal(getBackScale(), 1.0));
+                const bool bClosedRotation(!bBackScale && getHorizontalSegments() && basegfx::fTools::equal(getRotation(), F_2PI));
 
                 // add fill
                 if(getSdrLFSAttribute().getFill())
@@ -104,7 +106,7 @@ namespace drawinglayer
                     // create geometry
                     ::std::vector< basegfx::B3DPolyPolygon > aFill;
                     extractPlanesFromSlice(aFill, rSliceVector,
-                        bCreateNormals, mbSmoothHorizontalNormals, mbSmoothNormals, mbSmoothLids, bClosedRotation,
+                        bCreateNormals, getSmoothHorizontalNormals(), getSmoothNormals(), getSmoothLids(), bClosedRotation,
                         0.85, 0.6, bCreateTextureCoordiantesX || bCreateTextureCoordiantesY, aTexTransform);
 
                     // get full range
@@ -176,7 +178,7 @@ namespace drawinglayer
 
                         // transform texture coordinates to texture size
                         basegfx::B2DHomMatrix aTexMatrix;
-                        aTexMatrix.scale(maTextureSize.getX(), maTextureSize.getY());
+                        aTexMatrix.scale(getTextureSize().getX(), getTextureSize().getY());
 
                         for(a = 0L; a < aFill.size(); a++)
                         {
@@ -185,8 +187,8 @@ namespace drawinglayer
                     }
 
                     // create single PolyPolygonFill primitives
-                    add3DPolyPolygonFillPrimitive(
-                        aFill, maTransform, maTextureSize, rTarget,
+                    aRetval = create3DPolyPolygonFillPrimitives(
+                        aFill, getTransform(), getTextureSize(),
                         getSdr3DObjectAttribute(), *getSdrLFSAttribute().getFill(),
                         getSdrLFSAttribute().getFillFloatTransGradient());
                 }
@@ -196,21 +198,25 @@ namespace drawinglayer
                 {
                     basegfx::B3DPolyPolygon aLine;
                     extractLinesFromSlice(aLine, rSliceVector, bClosedRotation);
-                    add3DPolyPolygonLinePrimitive(aLine, maTransform, rTarget, *maSdrLFSAttribute.getLine());
+                    const Primitive3DSequence aLines(create3DPolyPolygonLinePrimitives(aLine, getTransform(), *getSdrLFSAttribute().getLine()));
+                    appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aLines);
                 }
 
                 // add shadow
-                if(getSdrLFSAttribute().getShadow())
+                if(getSdrLFSAttribute().getShadow() && aRetval.hasElements())
                 {
-                    addShadowPrimitive3D(rTarget, *getSdrLFSAttribute().getShadow(), getSdr3DObjectAttribute().getShadow3D());
+                    const Primitive3DSequence aShadow(createShadowPrimitive3D(aRetval, *getSdrLFSAttribute().getShadow(), getSdr3DObjectAttribute().getShadow3D()));
+                    appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aShadow);
                 }
             }
+
+            return aRetval;
         }
 
-        void sdrLathePrimitive3D::impCreateSlices()
+        void SdrLathePrimitive3D::impCreateSlices()
         {
             // prepare the polygon
-            basegfx::B2DPolyPolygon aCandidate(basegfx::tools::adaptiveSubdivideByDistance(maPolyPolygon));
+            basegfx::B2DPolyPolygon aCandidate(basegfx::tools::adaptiveSubdivideByDistance(getPolyPolygon()));
             aCandidate.removeDoublePoints();
             aCandidate = basegfx::tools::correctOrientations(aCandidate);
             aCandidate = basegfx::tools::correctOutmostPolygon(aCandidate);
@@ -221,31 +227,31 @@ namespace drawinglayer
             const basegfx::B2DPolygon aSubCandidate(aCandidate.getB2DPolygon(0L));
             const sal_uInt32 nSubEdgeCount(aSubCandidate.isClosed() ? aSubCandidate.count() : (aSubCandidate.count() ? aSubCandidate.count() - 1L : 0L));
 
-            if(nSubEdgeCount != mnVerticalSegments)
+            if(nSubEdgeCount != getVerticalSegments())
             {
-                aCandidate = basegfx::tools::reSegmentPolyPolygon(aCandidate, mnVerticalSegments);
+                aCandidate = basegfx::tools::reSegmentPolyPolygon(aCandidate, getVerticalSegments());
             }
 
             // prepare slices as geometry
-            createLatheSlices(maSlices, aCandidate, mfBackScale, mfDiagonal, mfRotation, mnHorizontalSegments, mbCharacterMode, mbCloseFront, mbCloseBack);
+            createLatheSlices(maSlices, aCandidate, getBackScale(), getDiagonal(), getRotation(), getHorizontalSegments(), getCharacterMode(), getCloseFront(), getCloseBack());
         }
 
-        const sliceVector& sdrLathePrimitive3D::getSlices() const
+        const Slice3DVector& SdrLathePrimitive3D::getSlices() const
         {
-            if(maPolyPolygon.count() && !maSlices.size() && (getSdrLFSAttribute().getFill() || getSdrLFSAttribute().getLine()))
+            if(getPolyPolygon().count() && !maSlices.size() && (getSdrLFSAttribute().getFill() || getSdrLFSAttribute().getLine()))
             {
                 ::osl::Mutex m_mutex;
-                const_cast< sdrLathePrimitive3D& >(*this).impCreateSlices();
+                const_cast< SdrLathePrimitive3D& >(*this).impCreateSlices();
             }
 
             return maSlices;
         }
 
-        sdrLathePrimitive3D::sdrLathePrimitive3D(
+        SdrLathePrimitive3D::SdrLathePrimitive3D(
             const basegfx::B3DHomMatrix& rTransform,
             const basegfx::B2DVector& rTextureSize,
-            const attribute::sdrLineFillShadowAttribute& rSdrLFSAttribute,
-            const attribute::sdr3DObjectAttribute& rSdr3DObjectAttribute,
+            const attribute::SdrLineFillShadowAttribute& rSdrLFSAttribute,
+            const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute,
             const basegfx::B2DPolyPolygon& rPolyPolygon,
             sal_uInt32 nHorizontalSegments,
             sal_uInt32 nVerticalSegments,
@@ -258,7 +264,7 @@ namespace drawinglayer
             bool bCharacterMode,
             bool bCloseFront,
             bool bCloseBack)
-        :   sdrPrimitive3D(rTransform, rTextureSize, rSdrLFSAttribute, rSdr3DObjectAttribute),
+        :   SdrPrimitive3D(rTransform, rTextureSize, rSdrLFSAttribute, rSdr3DObjectAttribute),
             maPolyPolygon(rPolyPolygon),
             mnHorizontalSegments(nHorizontalSegments),
             mnVerticalSegments(nVerticalSegments),
@@ -273,66 +279,58 @@ namespace drawinglayer
             mbCloseBack(bCloseBack)
         {
             // make sure Rotation is positive
-            if(basegfx::fTools::lessOrEqual(mfRotation, 0.0))
+            if(basegfx::fTools::lessOrEqual(getRotation(), 0.0))
             {
                 mfRotation = 0.0;
             }
 
-            // make sure the percentage value mfDiagonal is between 0.0 and 1.0
-            if(basegfx::fTools::lessOrEqual(mfDiagonal, 0.0))
+            // make sure the percentage value getDiagonal() is between 0.0 and 1.0
+            if(basegfx::fTools::lessOrEqual(getDiagonal(), 0.0))
             {
                 mfDiagonal = 0.0;
             }
-            else if(basegfx::fTools::moreOrEqual(mfDiagonal, 1.0))
+            else if(basegfx::fTools::moreOrEqual(getDiagonal(), 1.0))
             {
                 mfDiagonal = 1.0;
             }
 
             // no close front/back when polygon is not closed
-            if(maPolyPolygon.count() && !maPolyPolygon.getB2DPolygon(0L).isClosed())
+            if(getPolyPolygon().count() && !getPolyPolygon().getB2DPolygon(0L).isClosed())
             {
                 mbCloseFront = mbCloseBack = false;
             }
 
             // no edge rounding when not closing
-            if(!mbCloseFront && !mbCloseBack)
+            if(!getCloseFront() && !getCloseBack())
             {
                 mfDiagonal = 0.0;
             }
         }
 
-        sdrLathePrimitive3D::~sdrLathePrimitive3D()
+        bool SdrLathePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-        }
-
-        bool sdrLathePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
-        {
-            if(sdrPrimitive3D::operator==(rPrimitive))
+            if(SdrPrimitive3D::operator==(rPrimitive))
             {
-                const sdrLathePrimitive3D& rCompare = static_cast< const sdrLathePrimitive3D& >(rPrimitive);
-                return (maPolyPolygon == rCompare.maPolyPolygon
-                    && mnHorizontalSegments == rCompare.mnHorizontalSegments
-                    && mnVerticalSegments == rCompare.mnVerticalSegments
-                    && mfDiagonal == rCompare.mfDiagonal
-                    && mfBackScale == rCompare.mfBackScale
-                    && mfRotation == rCompare.mfRotation
-                    && mbSmoothNormals == rCompare.mbSmoothNormals
-                    && mbSmoothHorizontalNormals == rCompare.mbSmoothHorizontalNormals
-                    && mbSmoothLids == rCompare.mbSmoothLids
-                    && mbCharacterMode == rCompare.mbCharacterMode
-                    && mbCloseFront == rCompare.mbCloseFront
-                    && mbCloseBack == rCompare.mbCloseBack);
+                const SdrLathePrimitive3D& rCompare = static_cast< const SdrLathePrimitive3D& >(rPrimitive);
+
+                return (getPolyPolygon() == rCompare.getPolyPolygon()
+                    && getHorizontalSegments() == rCompare.getHorizontalSegments()
+                    && getVerticalSegments() == rCompare.getVerticalSegments()
+                    && getDiagonal() == rCompare.getDiagonal()
+                    && getBackScale() == rCompare.getBackScale()
+                    && getRotation() == rCompare.getRotation()
+                    && getSmoothNormals() == rCompare.getSmoothNormals()
+                    && getSmoothHorizontalNormals() == rCompare.getSmoothHorizontalNormals()
+                    && getSmoothLids() == rCompare.getSmoothLids()
+                    && getCharacterMode() == rCompare.getCharacterMode()
+                    && getCloseFront() == rCompare.getCloseFront()
+                    && getCloseBack() == rCompare.getCloseBack());
             }
 
             return false;
         }
 
-        PrimitiveID sdrLathePrimitive3D::getID() const
-        {
-            return CreatePrimitiveID('S', 'L', 'A', '3');
-        }
-
-        basegfx::B3DRange sdrLathePrimitive3D::get3DRange() const
+        basegfx::B3DRange SdrLathePrimitive3D::getB3DRange(double /*fTime*/) const
         {
             // use defaut from sdrPrimitive3D which uses transformation expanded by line width/2
             // The parent implementation which uses the ranges of the decomposition would be more
@@ -341,6 +339,11 @@ namespace drawinglayer
             // ranges where the new method is more correct, but the need to keep the old behaviour
             // has priority here.
             return get3DRangeFromSlices(getSlices());
+        }
+
+        sal_uInt32 SdrLathePrimitive3D::getPrimitiveID() const
+        {
+            return Create3DPrimitiveID('3','L','a','t');
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

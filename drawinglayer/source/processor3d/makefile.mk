@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: aw $ $Date: 2006-08-09 16:57:48 $
+#   last change: $Author: aw $ $Date: 2006-10-19 10:39:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 PRJ=..$/..
 PRJNAME=drawinglayer
 TARGET=processor3d
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------
 
@@ -46,8 +47,11 @@ TARGET=processor3d
 SLOFILES= \
         $(SLO)$/baseprocessor3d.obj		\
         $(SLO)$/defaultprocessor3d.obj	\
-        $(SLO)$/shadow3dextractor.obj	\
-        $(SLO)$/label3dextractor.obj
+        $(SLO)$/label3dextractor.obj	\
+        $(SLO)$/shadow3dextractor.obj
+
+
+
 
 # --- Targets ----------------------------------
 

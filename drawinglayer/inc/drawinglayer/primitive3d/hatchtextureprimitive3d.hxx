@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hatchtextureprimitive3d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:38:13 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:32:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,10 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_HATCHTEXTUREPRIMITIVE3D_HXX
-#define _DRAWINGLAYER_PRIMITIVE3D_HATCHTEXTUREPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_HATCHTEXTUREPRIMITIVE3D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_HATCHTEXTUREPRIMITIVE3D_HXX
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/textureprimitive3d.hxx>
 #endif
 
@@ -46,40 +46,38 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class hatchTexturePrimitive3D : public texturePrimitive3D
+        class HatchTexturePrimitive3D : public TexturePrimitive3D
         {
+        private:
+            attribute::FillHatchAttribute                   maHatch;
+
         protected:
-            attribute::fillHatchAttribute                   maHatch;
-
-            //  create decomposition
-            virtual void decompose(primitiveVector3D& rTarget);
-
-            // helpers
-            void impCreateDecomposition(const primitiveVector3D& rSource, primitiveVector3D& rDest);
+            // local decomposition.
+            virtual Primitive3DSequence createLocalDecomposition(double fTime) const;
 
         public:
-            hatchTexturePrimitive3D(
-                const attribute::fillHatchAttribute& rHatch,
-                const primitiveVector3D& rPrimitiveVector,
+            HatchTexturePrimitive3D(
+                const attribute::FillHatchAttribute& rHatch,
+                const Primitive3DSequence& rChildren,
                 const basegfx::B2DVector& rTextureSize,
                 bool bModulate,
                 bool bFilter);
-            virtual ~hatchTexturePrimitive3D();
 
             // get data
-            const attribute::fillHatchAttribute& getHatch() const { return maHatch; }
+            const attribute::FillHatchAttribute& getHatch() const { return maHatch; }
 
             // compare operator
-            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // id generator
-            virtual PrimitiveID getID() const;
+            // provide unique ID
+            virtual sal_uInt32 getPrimitiveID() const;
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif // _DRAWINGLAYER_PRIMITIVE3D_HATCHTEXTUREPRIMITIVE3D_HXX
+#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_HATCHTEXTUREPRIMITIVE3D_HXX
 
+//////////////////////////////////////////////////////////////////////////////
 // eof

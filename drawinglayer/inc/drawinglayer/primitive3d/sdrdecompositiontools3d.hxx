@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrdecompositiontools3d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:38:13 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,11 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDRDECOMPOSITIONTOOLS3D_HXX
-#define _DRAWINGLAYER_PRIMITIVE3D_SDRDECOMPOSITIONTOOLS3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRDECOMPOSITIONTOOLS3D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRDECOMPOSITIONTOOLS3D_HXX
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_PRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/primitive3d.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_BASEPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #endif
 
 #include <vector>
@@ -52,11 +52,11 @@ namespace basegfx {
 }
 
 namespace drawinglayer { namespace attribute {
-    class sdrLineAttribute;
-    class sdrFillAttribute;
-    class sdr3DObjectAttribute;
-    class fillGradientAttribute;
-    class sdrShadowAttribute;
+    class SdrLineAttribute;
+    class SdrFillAttribute;
+    class Sdr3DObjectAttribute;
+    class FillGradientAttribute;
+    class SdrShadowAttribute;
 }}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -65,24 +65,22 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        void add3DPolyPolygonLinePrimitive(
+        Primitive3DSequence create3DPolyPolygonLinePrimitives(
             const basegfx::B3DPolyPolygon& rUnitPolyPolygon,
             const basegfx::B3DHomMatrix& rObjectTransform,
-            primitiveVector3D& rTarget,
-            const attribute::sdrLineAttribute& rLine);
+            const attribute::SdrLineAttribute& rLine);
 
-        void add3DPolyPolygonFillPrimitive(
+        Primitive3DSequence create3DPolyPolygonFillPrimitives(
             const ::std::vector< basegfx::B3DPolyPolygon >& r3DPolyPolygonVector,
             const basegfx::B3DHomMatrix& rObjectTransform,
             const basegfx::B2DVector& rTextureSize,
-            primitiveVector3D& rTarget,
-            const attribute::sdr3DObjectAttribute& aSdr3DObjectAttribute,
-            const attribute::sdrFillAttribute& rFill,
-            const attribute::fillGradientAttribute* pFillGradient = 0L);
+            const attribute::Sdr3DObjectAttribute& aSdr3DObjectAttribute,
+            const attribute::SdrFillAttribute& rFill,
+            const attribute::FillGradientAttribute* pFillGradient = 0L);
 
-        void addShadowPrimitive3D(
-            primitiveVector3D& rTarget,
-            const attribute::sdrShadowAttribute& rShadow,
+        Primitive3DSequence createShadowPrimitive3D(
+            const Primitive3DSequence& rSource,
+            const attribute::SdrShadowAttribute& rShadow,
             bool bShadow3D);
     } // end of namespace overlay
 } // end of namespace drawinglayer

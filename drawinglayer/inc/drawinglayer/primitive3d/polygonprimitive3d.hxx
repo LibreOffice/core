@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive3d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:38:13 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:32:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,11 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_POLYGONPRIMITIVE3D_HXX
-#define _DRAWINGLAYER_PRIMITIVE3D_POLYGONPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYGONPRIMITIVE3D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYGONPRIMITIVE3D_HXX
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_PRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/primitive3d.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_BASEPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #endif
 
 #ifndef _BGFX_COLOR_BCOLOR_HXX
@@ -48,12 +48,9 @@
 #include <basegfx/polygon/b3dpolygon.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
 #include <drawinglayer/attribute/strokeattribute.hxx>
 #endif
-
-//////////////////////////////////////////////////////////////////////////////
-// predefines
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -61,28 +58,29 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class polygonHairlinePrimitive3D : public basePrimitive3D
+        class PolygonHairlinePrimitive3D : public BasePrimitive3D
         {
-        protected:
+        private:
             basegfx::B3DPolygon                     maPolygon;
             basegfx::BColor                         maBColor;
 
         public:
-            polygonHairlinePrimitive3D(const basegfx::B3DPolygon& rPolygon, const basegfx::BColor& rBColor);
-            virtual ~polygonHairlinePrimitive3D();
+            PolygonHairlinePrimitive3D(
+                const basegfx::B3DPolygon& rPolygon,
+                const basegfx::BColor& rBColor);
 
             // get data
             const basegfx::B3DPolygon& getB3DPolygon() const { return maPolygon; }
             const basegfx::BColor& getBColor() const { return maBColor; }
 
             // compare operator
-            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // id generator
-            virtual PrimitiveID getID() const;
+            // get range
+            virtual basegfx::B3DRange getB3DRange(double fTime) const;
 
-            // get 3Drange of primitive. Default implementation uses decomposition
-            virtual basegfx::B3DRange get3DRange() const;
+            // provide unique ID
+            virtual sal_uInt32 getPrimitiveID() const;
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -93,36 +91,37 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class polygonStrokePrimitive3D : public basePrimitive3D
+        class PolygonStrokePrimitive3D : public BasePrimitive3D
         {
-        protected:
+        private:
             basegfx::B3DPolygon                     maPolygon;
-            attribute::strokeAttribute                  maStrokeAttribute;
+            attribute::StrokeAttribute              maStrokeAttribute;
 
-            //  create decomposition
-            virtual void decompose(primitiveVector3D& rTarget);
+        protected:
+            // local decomposition.
+            virtual Primitive3DSequence createLocalDecomposition(double fTime) const;
 
         public:
-            polygonStrokePrimitive3D(
+            PolygonStrokePrimitive3D(
                 const basegfx::B3DPolygon& rPolygon,
-                const attribute::strokeAttribute& rStrokeAttribute);
-            virtual ~polygonStrokePrimitive3D();
+                const attribute::StrokeAttribute& rStrokeAttribute);
 
             // get data
             basegfx::B3DPolygon getB3DPolygon() const { return maPolygon; }
-            const attribute::strokeAttribute& getStrokeAttribute() const { return maStrokeAttribute; }
+            const attribute::StrokeAttribute& getStrokeAttribute() const { return maStrokeAttribute; }
 
             // compare operator
-            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // id generator
-            virtual PrimitiveID getID() const;
+            // provide unique ID
+            virtual sal_uInt32 getPrimitiveID() const;
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif // _DRAWINGLAYER_PRIMITIVE_POLYGONPRIMITIVE_HXX
+#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYGONPRIMITIVE3D_HXX
 
+//////////////////////////////////////////////////////////////////////////////
 // eof

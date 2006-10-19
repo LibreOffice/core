@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textureprimitive3d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:38:13 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,18 +33,18 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
-#define _DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_VECTORPRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/vectorprimitive3d.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_GROUPPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/groupprimitive3d.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
 #include <drawinglayer/attribute/fillattribute.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
 #endif
 
@@ -58,10 +58,10 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class texturePrimitive3D : public vectorPrimitive3D
+        class TexturePrimitive3D : public GroupPrimitive3D
         {
-        protected:
-            basegfx::B2DVector                      maTextureSize;
+        private:
+            basegfx::B2DVector                          maTextureSize;
 
             // bitfield
             // flag if texture shall be modulated with white interpolated color
@@ -71,12 +71,11 @@ namespace drawinglayer
             unsigned                                    mbFilter : 1;
 
         public:
-            texturePrimitive3D(
-                const primitiveVector3D& rPrimitiveVector,
+            TexturePrimitive3D(
+                const Primitive3DSequence& rChildren,
                 const basegfx::B2DVector& rTextureSize,
                 bool bModulate,
                 bool bFilter);
-            virtual ~texturePrimitive3D();
 
             // get data
             const basegfx::B2DVector& getTextureSize() const { return maTextureSize; }
@@ -84,7 +83,7 @@ namespace drawinglayer
             bool getFilter() const { return mbFilter; }
 
             // compare operator
-            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -95,28 +94,28 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class simpleTransparenceTexturePrimitive3D : public texturePrimitive3D
+        class UnifiedAlphaTexturePrimitive3D : public TexturePrimitive3D
         {
-        protected:
+        private:
             double                                      mfTransparence;
 
-            //  create decomposition
-            virtual void decompose(primitiveVector3D& rTarget);
+        protected:
+            // local decomposition.
+            virtual Primitive3DSequence createLocalDecomposition(double fTime) const;
 
         public:
-            simpleTransparenceTexturePrimitive3D(
+            UnifiedAlphaTexturePrimitive3D(
                 double fTransparence,
-                const primitiveVector3D& rPrimitiveVector);
-            virtual ~simpleTransparenceTexturePrimitive3D();
+                const Primitive3DSequence& rChildren);
 
             // get data
             double getTransparence() const { return mfTransparence; }
 
             // compare operator
-            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // id generator
-            virtual PrimitiveID getID() const;
+            // provide unique ID
+            virtual sal_uInt32 getPrimitiveID() const;
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -127,31 +126,31 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class gradientTexturePrimitive3D : public texturePrimitive3D
+        class GradientTexturePrimitive3D : public TexturePrimitive3D
         {
-        protected:
-            attribute::fillGradientAttribute        maGradient;
+        private:
+            attribute::FillGradientAttribute        maGradient;
 
-            //  create decomposition
-            virtual void decompose(primitiveVector3D& rTarget);
+        protected:
+            // local decomposition.
+            virtual Primitive3DSequence createLocalDecomposition(double fTime) const;
 
         public:
-            gradientTexturePrimitive3D(
-                const attribute::fillGradientAttribute& rGradient,
-                const primitiveVector3D& rPrimitiveVector,
+            GradientTexturePrimitive3D(
+                const attribute::FillGradientAttribute& rGradient,
+                const Primitive3DSequence& rChildren,
                 const basegfx::B2DVector& rTextureSize,
                 bool bModulate,
                 bool bFilter);
-            virtual ~gradientTexturePrimitive3D();
 
             // get data
-            const attribute::fillGradientAttribute& getGradient() const { return maGradient; }
+            const attribute::FillGradientAttribute& getGradient() const { return maGradient; }
 
             // compare operator
-            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // id generator
-            virtual PrimitiveID getID() const;
+            // provide unique ID
+            virtual sal_uInt32 getPrimitiveID() const;
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -162,31 +161,31 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class bitmapTexturePrimitive3D : public texturePrimitive3D
+        class BitmapTexturePrimitive3D : public TexturePrimitive3D
         {
-        protected:
-            attribute::fillBitmapAttribute      maBitmap;
+        private:
+            attribute::FillBitmapAttribute      maBitmap;
 
-            //  create decomposition
-            virtual void decompose(primitiveVector3D& rTarget);
+        protected:
+            // local decomposition.
+            virtual Primitive3DSequence createLocalDecomposition(double fTime) const;
 
         public:
-            bitmapTexturePrimitive3D(
-                const attribute::fillBitmapAttribute& rBitmap,
-                const primitiveVector3D& rPrimitiveVector,
+            BitmapTexturePrimitive3D(
+                const attribute::FillBitmapAttribute& rBitmap,
+                const Primitive3DSequence& rChildren,
                 const basegfx::B2DVector& rTextureSize,
                 bool bModulate,
                 bool bFilter);
-            virtual ~bitmapTexturePrimitive3D();
 
             // get data
-            const attribute::fillBitmapAttribute& getBitmap() const { return maBitmap; }
+            const attribute::FillBitmapAttribute& getBitmap() const { return maBitmap; }
 
             // compare operator
-            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // id generator
-            virtual PrimitiveID getID() const;
+            // provide unique ID
+            virtual sal_uInt32 getPrimitiveID() const;
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -197,26 +196,26 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class transparenceTexturePrimitive3D : public gradientTexturePrimitive3D
+        class AlphaTexturePrimitive3D : public GradientTexturePrimitive3D
         {
         public:
-            transparenceTexturePrimitive3D(
-                const attribute::fillGradientAttribute& rGradient,
-                const primitiveVector3D& rPrimitiveVector,
+            AlphaTexturePrimitive3D(
+                const attribute::FillGradientAttribute& rGradient,
+                const Primitive3DSequence& rChildren,
                 const basegfx::B2DVector& rTextureSize);
-            virtual ~transparenceTexturePrimitive3D();
 
             // compare operator
-            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // id generator
-            virtual PrimitiveID getID() const;
+            // provide unique ID
+            virtual sal_uInt32 getPrimitiveID() const;
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif // _DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
+#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
 
+//////////////////////////////////////////////////////////////////////////////
 // eof

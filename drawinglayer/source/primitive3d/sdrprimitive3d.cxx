@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrprimitive3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:51:15 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:38:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,11 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/sdrprimitive3d.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
 #include <drawinglayer/attribute/sdrattribute.hxx>
 #endif
 
@@ -47,18 +47,22 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
+using namespace com::sun::star;
+
+//////////////////////////////////////////////////////////////////////////////
+
 namespace drawinglayer
 {
     namespace primitive3d
     {
-        basegfx::B3DRange sdrPrimitive3D::getStandard3DRange() const
+        basegfx::B3DRange SdrPrimitive3D::getStandard3DRange() const
         {
             basegfx::B3DRange aUnitRange(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
             aUnitRange.transform(getTransform());
 
-            if(maSdrLFSAttribute.getLine())
+            if(getSdrLFSAttribute().getLine())
             {
-                const attribute::sdrLineAttribute& rLine = *maSdrLFSAttribute.getLine();
+                const attribute::SdrLineAttribute& rLine = *getSdrLFSAttribute().getLine();
 
                 if(rLine.isVisible() && !basegfx::fTools::equalZero(rLine.getWidth()))
                 {
@@ -70,7 +74,7 @@ namespace drawinglayer
             return aUnitRange;
         }
 
-        basegfx::B3DRange sdrPrimitive3D::get3DRangeFromSlices(const sliceVector& rSlices) const
+        basegfx::B3DRange SdrPrimitive3D::get3DRangeFromSlices(const Slice3DVector& rSlices) const
         {
             basegfx::B3DRange aRetval;
 
@@ -83,9 +87,9 @@ namespace drawinglayer
 
                 aRetval.transform(getTransform());
 
-                if(maSdrLFSAttribute.getLine())
+                if(getSdrLFSAttribute().getLine())
                 {
-                    const attribute::sdrLineAttribute& rLine = *maSdrLFSAttribute.getLine();
+                    const attribute::SdrLineAttribute& rLine = *getSdrLFSAttribute().getLine();
 
                     if(rLine.isVisible() && !basegfx::fTools::equalZero(rLine.getWidth()))
                     {
@@ -98,12 +102,12 @@ namespace drawinglayer
             return aRetval;
         }
 
-        sdrPrimitive3D::sdrPrimitive3D(
+        SdrPrimitive3D::SdrPrimitive3D(
             const basegfx::B3DHomMatrix& rTransform,
             const basegfx::B2DVector& rTextureSize,
-            const attribute::sdrLineFillShadowAttribute& rSdrLFSAttribute,
-            const attribute::sdr3DObjectAttribute& rSdr3DObjectAttribute)
-        :   basePrimitive3D(),
+            const attribute::SdrLineFillShadowAttribute& rSdrLFSAttribute,
+            const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute)
+        :   BasePrimitive3D(),
             maTransform(rTransform),
             maTextureSize(rTextureSize),
             maSdrLFSAttribute(rSdrLFSAttribute),
@@ -111,20 +115,16 @@ namespace drawinglayer
         {
         }
 
-        sdrPrimitive3D::~sdrPrimitive3D()
+        bool SdrPrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-        }
-
-        bool sdrPrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
-        {
-            if(getID() == rPrimitive.getID())
+            if(BasePrimitive3D::operator==(rPrimitive))
             {
-                const sdrPrimitive3D& rCompare = static_cast< const sdrPrimitive3D& >(rPrimitive);
+                const SdrPrimitive3D& rCompare = static_cast< const SdrPrimitive3D& >(rPrimitive);
 
-                return (maTransform == rCompare.maTransform
-                    && maTextureSize == rCompare.maTextureSize
-                    && maSdrLFSAttribute == rCompare.maSdrLFSAttribute
-                    && maSdr3DObjectAttribute == rCompare.maSdr3DObjectAttribute);
+                return (getTransform() == rCompare.getTransform()
+                    && getTextureSize() == rCompare.getTextureSize()
+                    && getSdrLFSAttribute() == rCompare.getSdrLFSAttribute()
+                    && getSdr3DObjectAttribute() == rCompare.getSdr3DObjectAttribute());
             }
 
             return false;

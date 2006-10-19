@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrallattribute3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:47:33 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,15 +33,15 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
 #include <drawinglayer/attribute/sdrallattribute3d.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
 #include <drawinglayer/attribute/sdrattribute.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
 #include <drawinglayer/attribute/fillattribute.hxx>
 #endif
 
@@ -55,12 +55,12 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        sdrLineFillShadowAttribute::sdrLineFillShadowAttribute(
-            sdrLineAttribute* pLine,
-            sdrFillAttribute* pFill,
-            sdrLineStartEndAttribute* pLineStartEnd,
-            sdrShadowAttribute* pShadow,
-            fillGradientAttribute* pFillFloatTransGradient)
+        SdrLineFillShadowAttribute::SdrLineFillShadowAttribute(
+            SdrLineAttribute* pLine,
+            SdrFillAttribute* pFill,
+            SdrLineStartEndAttribute* pLineStartEnd,
+            SdrShadowAttribute* pShadow,
+            FillGradientAttribute* pFillFloatTransGradient)
         :   mpShadow(pShadow),
             mpLine(pLine),
             mpLineStartEnd(pLineStartEnd),
@@ -69,7 +69,7 @@ namespace drawinglayer
         {
         }
 
-        sdrLineFillShadowAttribute::sdrLineFillShadowAttribute(const sdrLineFillShadowAttribute& rCandidate)
+        SdrLineFillShadowAttribute::SdrLineFillShadowAttribute(const SdrLineFillShadowAttribute& rCandidate)
         :   mpShadow(0L),
             mpLine(0L),
             mpLineStartEnd(0L),
@@ -82,7 +82,7 @@ namespace drawinglayer
             }
         }
 
-        sdrLineFillShadowAttribute::~sdrLineFillShadowAttribute()
+        SdrLineFillShadowAttribute::~SdrLineFillShadowAttribute()
         {
             delete mpShadow;
             delete mpLine;
@@ -91,7 +91,7 @@ namespace drawinglayer
             delete mpFillFloatTransGradient;
         }
 
-        sdrLineFillShadowAttribute& sdrLineFillShadowAttribute::operator=(const sdrLineFillShadowAttribute& rCandidate)
+        SdrLineFillShadowAttribute& SdrLineFillShadowAttribute::operator=(const SdrLineFillShadowAttribute& rCandidate)
         {
             // handle mpShadow
             {
@@ -105,7 +105,7 @@ namespace drawinglayer
                 // copy mpShadow if necessary
                 if(!mpShadow && rCandidate.mpShadow)
                 {
-                    mpShadow = new sdrShadowAttribute(*rCandidate.mpShadow);
+                    mpShadow = new SdrShadowAttribute(*rCandidate.mpShadow);
                 }
             }
 
@@ -121,7 +121,7 @@ namespace drawinglayer
                 // copy mpLine if necessary
                 if(!mpLine && rCandidate.mpLine)
                 {
-                    mpLine = new sdrLineAttribute(*rCandidate.mpLine);
+                    mpLine = new SdrLineAttribute(*rCandidate.mpLine);
                 }
             }
 
@@ -137,7 +137,7 @@ namespace drawinglayer
                 // copy mpLineStartEnd if necessary
                 if(!mpLineStartEnd && rCandidate.mpLineStartEnd)
                 {
-                    mpLineStartEnd = new sdrLineStartEndAttribute(*rCandidate.mpLineStartEnd);
+                    mpLineStartEnd = new SdrLineStartEndAttribute(*rCandidate.mpLineStartEnd);
                 }
             }
 
@@ -153,7 +153,7 @@ namespace drawinglayer
                 // copy mpFill if necessary
                 if(!mpFill && rCandidate.mpFill)
                 {
-                    mpFill = new sdrFillAttribute(*rCandidate.mpFill);
+                    mpFill = new SdrFillAttribute(*rCandidate.mpFill);
                 }
             }
 
@@ -169,14 +169,14 @@ namespace drawinglayer
                 // copy mpFillFloatTransGradient if necessary
                 if(!mpFillFloatTransGradient && rCandidate.mpFillFloatTransGradient)
                 {
-                    mpFillFloatTransGradient = new fillGradientAttribute(*rCandidate.mpFillFloatTransGradient);
+                    mpFillFloatTransGradient = new FillGradientAttribute(*rCandidate.mpFillFloatTransGradient);
                 }
             }
 
             return *this;
         }
 
-        bool sdrLineFillShadowAttribute::operator==(const sdrLineFillShadowAttribute& rCandidate) const
+        bool SdrLineFillShadowAttribute::operator==(const SdrLineFillShadowAttribute& rCandidate) const
         {
             // handle mpShadow
             if(!pointerOrContentEqual(mpShadow, rCandidate.mpShadow))

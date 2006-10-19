@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrallattribute3d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:36:37 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:30:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,18 +33,18 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
-#define _DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
+#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
 namespace drawinglayer { namespace attribute {
-    class sdrLineAttribute;
-    class sdrFillAttribute;
-    class sdrLineStartEndAttribute;
-    class sdrShadowAttribute;
-    class fillGradientAttribute;
+    class SdrLineAttribute;
+    class SdrFillAttribute;
+    class SdrLineStartEndAttribute;
+    class SdrShadowAttribute;
+    class FillGradientAttribute;
 }}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -53,46 +53,46 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class sdrLineFillShadowAttribute
+        class SdrLineFillShadowAttribute
         {
             // shadow, line, lineStartEnd, fill, transGradient and compound3D attributes
-            sdrShadowAttribute*                 mpShadow;                   // shadow attributes (if used)
-            sdrLineAttribute*                   mpLine;                     // line attributes (if used)
-            sdrLineStartEndAttribute*           mpLineStartEnd;             // line start end (if used)
-            sdrFillAttribute*                   mpFill;                     // fill attributes (if used)
-            fillGradientAttribute*              mpFillFloatTransGradient;   // fill float transparence gradient (if used)
+            SdrShadowAttribute*                 mpShadow;                   // shadow attributes (if used)
+            SdrLineAttribute*                   mpLine;                     // line attributes (if used)
+            SdrLineStartEndAttribute*           mpLineStartEnd;             // line start end (if used)
+            SdrFillAttribute*                   mpFill;                     // fill attributes (if used)
+            FillGradientAttribute*              mpFillFloatTransGradient;   // fill float transparence gradient (if used)
 
         public:
-            sdrLineFillShadowAttribute(
-                sdrLineAttribute* pLine = 0L,
-                sdrFillAttribute* pFill = 0L,
-                sdrLineStartEndAttribute* pLineStartEnd = 0L,
-                sdrShadowAttribute* pShadow = 0L,
-                fillGradientAttribute* pFillFloatTransGradient = 0L);
-            ~sdrLineFillShadowAttribute();
+            SdrLineFillShadowAttribute(
+                SdrLineAttribute* pLine = 0L,
+                SdrFillAttribute* pFill = 0L,
+                SdrLineStartEndAttribute* pLineStartEnd = 0L,
+                SdrShadowAttribute* pShadow = 0L,
+                FillGradientAttribute* pFillFloatTransGradient = 0L);
+            ~SdrLineFillShadowAttribute();
 
             // copy constructor and assigment operator
-            sdrLineFillShadowAttribute(const sdrLineFillShadowAttribute& rCandidate);
-            sdrLineFillShadowAttribute& operator=(const sdrLineFillShadowAttribute& rCandidate);
+            SdrLineFillShadowAttribute(const SdrLineFillShadowAttribute& rCandidate);
+            SdrLineFillShadowAttribute& operator=(const SdrLineFillShadowAttribute& rCandidate);
 
             // compare operator
-            bool operator==(const sdrLineFillShadowAttribute& rCandidate) const;
+            bool operator==(const SdrLineFillShadowAttribute& rCandidate) const;
 
             // bool access
             bool isVisible() const { return (mpFill || mpLine); }
 
             // data access
-            const sdrShadowAttribute* getShadow() const { return mpShadow; }
-            const sdrLineAttribute* getLine() const { return mpLine; }
-            const sdrLineStartEndAttribute* getLineStartEnd() const { return mpLineStartEnd; }
-            const sdrFillAttribute* getFill() const { return mpFill; }
-            const fillGradientAttribute* getFillFloatTransGradient() const { return mpFillFloatTransGradient; }
+            const SdrShadowAttribute* getShadow() const { return mpShadow; }
+            const SdrLineAttribute* getLine() const { return mpLine; }
+            const SdrLineStartEndAttribute* getLineStartEnd() const { return mpLineStartEnd; }
+            const SdrFillAttribute* getFill() const { return mpFill; }
+            const FillGradientAttribute* getFillFloatTransGradient() const { return mpFillFloatTransGradient; }
         };
     } // end of namespace overlay
 } // end of namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif // _DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
+#endif // INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
 
 // eof

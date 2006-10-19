@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprocessor3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:57:47 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:39:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,13 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
 #endif
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -43,15 +47,12 @@ namespace drawinglayer
 {
     namespace processor3d
     {
-        baseProcessor3D::baseProcessor3D(
-            const geometry::viewInformation& rViewInformation,
-            const geometry::transformation3D& rTransformation3D)
-        :   maViewInformation(rViewInformation),
-            maTransformation3D(rTransformation3D)
+        BaseProcessor3D::BaseProcessor3D(double fTime)
+        :   mfTime(fTime)
         {
         }
 
-        baseProcessor3D::~baseProcessor3D()
+        BaseProcessor3D::~BaseProcessor3D()
         {
         }
     } // end of namespace processor3d
@@ -63,21 +64,16 @@ namespace drawinglayer
 {
     namespace processor3d
     {
-        collectingProcessor3D::collectingProcessor3D(
-            const geometry::viewInformation& rViewInformation,
-            const geometry::transformation3D& rTransformation3D)
-        :   baseProcessor3D(rViewInformation, rTransformation3D)
+        CollectingProcessor3D::CollectingProcessor3D(double fTime)
+        :   BaseProcessor3D(fTime),
+            maPrimitiveSequence()
         {
         }
 
-        collectingProcessor3D::~collectingProcessor3D()
-        {
-        }
-
-        void collectingProcessor3D::process(const primitive3d::primitiveVector3D& rSource)
+        void CollectingProcessor3D::process(const primitive3d::Primitive3DSequence& rSource)
         {
             // accept everything
-            maPrimitiveVector.insert(maPrimitiveVector.end(), rSource.begin(), rSource.end());
+            primitive3d::appendPrimitive3DSequenceToPrimitive3DSequence(maPrimitiveSequence, rSource);
         }
     } // end of namespace processor3d
 } // end of namespace drawinglayer

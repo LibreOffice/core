@@ -4,9 +4,9 @@
  *
  *  $RCSfile: materialattribute3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:47:33 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
 #include <drawinglayer/attribute/materialattribute3d.hxx>
 #endif
 
@@ -47,7 +47,7 @@ namespace drawinglayer
 {
     namespace
     {
-        class impMaterialAttribute3D
+        class ImpMaterialAttribute3D
         {
         public:
             // materialAttribute3D definitions
@@ -59,7 +59,7 @@ namespace drawinglayer
             // refcounter
             sal_uInt32                                  mnRefCount;
 
-            impMaterialAttribute3D(const basegfx::BColor& rColor, const basegfx::BColor& rSpecular, const basegfx::BColor& rEmission, sal_uInt16 nSpecularIntensity)
+            ImpMaterialAttribute3D(const basegfx::BColor& rColor, const basegfx::BColor& rSpecular, const basegfx::BColor& rEmission, sal_uInt16 nSpecularIntensity)
             :   maColor(rColor),
                 maSpecular(rSpecular),
                 maEmission(rEmission),
@@ -68,7 +68,7 @@ namespace drawinglayer
             {
             }
 
-            impMaterialAttribute3D(const basegfx::BColor& rColor)
+            ImpMaterialAttribute3D(const basegfx::BColor& rColor)
             :   maColor(rColor),
                 maSpecular(1.0, 1.0, 1.0),
                 maEmission(),
@@ -77,13 +77,13 @@ namespace drawinglayer
             {
             }
 
-            impMaterialAttribute3D()
+            ImpMaterialAttribute3D()
             :   mnSpecularIntensity(0),
                 mnRefCount(0L)
             {
             }
 
-            bool operator==(const impMaterialAttribute3D& rCandidate) const
+            bool operator==(const ImpMaterialAttribute3D& rCandidate) const
             {
                 return (maColor == rCandidate.maColor
                     && maSpecular == rCandidate.maSpecular
@@ -105,28 +105,28 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        materialAttribute3D::materialAttribute3D(const basegfx::BColor& rColor, const basegfx::BColor& rSpecular, const basegfx::BColor& rEmission, sal_uInt16 nSpecularIntensity)
-        :   mpMaterialAttribute3D(new impMaterialAttribute3D(rColor, rSpecular, rEmission, nSpecularIntensity))
+        MaterialAttribute3D::MaterialAttribute3D(const basegfx::BColor& rColor, const basegfx::BColor& rSpecular, const basegfx::BColor& rEmission, sal_uInt16 nSpecularIntensity)
+        :   mpMaterialAttribute3D(new ImpMaterialAttribute3D(rColor, rSpecular, rEmission, nSpecularIntensity))
         {
         }
 
-        materialAttribute3D::materialAttribute3D(const basegfx::BColor& rColor)
-        :   mpMaterialAttribute3D(new impMaterialAttribute3D(rColor))
+        MaterialAttribute3D::MaterialAttribute3D(const basegfx::BColor& rColor)
+        :   mpMaterialAttribute3D(new ImpMaterialAttribute3D(rColor))
         {
         }
 
-        materialAttribute3D::materialAttribute3D()
-        :   mpMaterialAttribute3D(new impMaterialAttribute3D())
+        MaterialAttribute3D::MaterialAttribute3D()
+        :   mpMaterialAttribute3D(new ImpMaterialAttribute3D())
         {
         }
 
-        materialAttribute3D::materialAttribute3D(const materialAttribute3D& rCandidate)
+        MaterialAttribute3D::MaterialAttribute3D(const MaterialAttribute3D& rCandidate)
         :   mpMaterialAttribute3D(rCandidate.mpMaterialAttribute3D)
         {
             mpMaterialAttribute3D->mnRefCount++;
         }
 
-        materialAttribute3D::~materialAttribute3D()
+        MaterialAttribute3D::~MaterialAttribute3D()
         {
             if(mpMaterialAttribute3D->mnRefCount)
             {
@@ -138,7 +138,7 @@ namespace drawinglayer
             }
         }
 
-        materialAttribute3D& materialAttribute3D::operator=(const materialAttribute3D& rCandidate)
+        MaterialAttribute3D& MaterialAttribute3D::operator=(const MaterialAttribute3D& rCandidate)
         {
             if(rCandidate.mpMaterialAttribute3D != mpMaterialAttribute3D)
             {
@@ -158,7 +158,7 @@ namespace drawinglayer
             return *this;
         }
 
-        bool materialAttribute3D::operator==(const materialAttribute3D& rCandidate) const
+        bool MaterialAttribute3D::operator==(const MaterialAttribute3D& rCandidate) const
         {
             if(rCandidate.mpMaterialAttribute3D == mpMaterialAttribute3D)
             {
@@ -168,22 +168,22 @@ namespace drawinglayer
             return (*rCandidate.mpMaterialAttribute3D == *mpMaterialAttribute3D);
         }
 
-        const basegfx::BColor& materialAttribute3D::getColor() const
+        const basegfx::BColor& MaterialAttribute3D::getColor() const
         {
             return mpMaterialAttribute3D->getColor();
         }
 
-        const basegfx::BColor& materialAttribute3D::getSpecular() const
+        const basegfx::BColor& MaterialAttribute3D::getSpecular() const
         {
             return mpMaterialAttribute3D->getSpecular();
         }
 
-        const basegfx::BColor& materialAttribute3D::getEmission() const
+        const basegfx::BColor& MaterialAttribute3D::getEmission() const
         {
             return mpMaterialAttribute3D->getEmission();
         }
 
-        sal_uInt16 materialAttribute3D::getSpecularIntensity() const
+        sal_uInt16 MaterialAttribute3D::getSpecularIntensity() const
         {
             return mpMaterialAttribute3D->getSpecularIntensity();
         }

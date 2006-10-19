@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrlatheprimitive3d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:38:12 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,10 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDRLATHEPRIMITIVE3D_HXX
-#define _DRAWINGLAYER_PRIMITIVE3D_SDRLATHEPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRLATHEPRIMITIVE3D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRLATHEPRIMITIVE3D_HXX
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/sdrprimitive3d.hxx>
 #endif
 
@@ -45,25 +45,19 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
-// predefines
-
-//////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
     namespace primitive3d
     {
-        class sdrLathePrimitive3D : public sdrPrimitive3D
+        class SdrLathePrimitive3D : public SdrPrimitive3D
         {
         private:
-            // create slices
-            void impCreateSlices();
-
             // geometry helper for slices
-            sliceVector                                 maSlices;
+            Slice3DVector                               maSlices;
 
-        protected:
-            basegfx::B2DPolyPolygon                 maPolyPolygon;
+            // primitive data
+            basegfx::B2DPolyPolygon                     maPolyPolygon;
             sal_uInt32                                  mnHorizontalSegments;
             sal_uInt32                                  mnVerticalSegments;
             double                                      mfDiagonal;
@@ -78,18 +72,22 @@ namespace drawinglayer
             unsigned                                    mbCloseFront : 1;
             unsigned                                    mbCloseBack : 1;
 
-            //  create decomposition
-            virtual void decompose(primitiveVector3D& rTarget);
+            // create slices
+            void impCreateSlices();
 
             // get (evtl. create) slices
-            const sliceVector& getSlices() const;
+            const Slice3DVector& getSlices() const;
+
+        protected:
+            // local decomposition.
+            virtual Primitive3DSequence createLocalDecomposition(double fTime) const;
 
         public:
-            sdrLathePrimitive3D(
+            SdrLathePrimitive3D(
                 const basegfx::B3DHomMatrix& rTransform,
                 const basegfx::B2DVector& rTextureSize,
-                const attribute::sdrLineFillShadowAttribute& rSdrLFSAttribute,
-                const attribute::sdr3DObjectAttribute& rSdr3DObjectAttribute,
+                const attribute::SdrLineFillShadowAttribute& rSdrLFSAttribute,
+                const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute,
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
                 sal_uInt32 nHorizontalSegments,
                 sal_uInt32 nVerticalSegments,
@@ -102,21 +100,11 @@ namespace drawinglayer
                 bool bCharacterMode,
                 bool bCloseFront,
                 bool bCloseBack);
-            virtual ~sdrLathePrimitive3D();
-
-            // compare operator
-            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
-
-            // id generator
-            virtual PrimitiveID getID() const;
-
-            // get 3D range of primitive.
-            virtual basegfx::B3DRange get3DRange() const;
 
             // data access
             const basegfx::B2DPolyPolygon& getPolyPolygon() const { return maPolyPolygon; }
             sal_uInt32 getHorizontalSegments() const { return mnHorizontalSegments; }
-            sal_uInt32 getVerticalSegments() const { return mnVerticalSegments ; }
+            sal_uInt32 getVerticalSegments() const { return mnVerticalSegments; }
             double getDiagonal() const { return mfDiagonal; }
             double getBackScale() const { return mfBackScale; }
             double getRotation() const { return mfRotation; }
@@ -126,12 +114,22 @@ namespace drawinglayer
             bool getCharacterMode() const { return mbCharacterMode; }
             bool getCloseFront() const { return mbCloseFront; }
             bool getCloseBack() const { return mbCloseBack; }
+
+            // compare operator
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
+
+            // get range
+            virtual basegfx::B3DRange getB3DRange(double fTime) const;
+
+            // provide unique ID
+            virtual sal_uInt32 getPrimitiveID() const;
         };
-    } // end of namespace overlay
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_DRAWINGLAYER_PRIMITIVE3D_SDRLATHEPRIMITIVE3D_HXX
+#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRLATHEPRIMITIVE3D_HXX
 
+//////////////////////////////////////////////////////////////////////////////
 // eof

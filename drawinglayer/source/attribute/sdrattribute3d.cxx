@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrattribute3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:47:34 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
 #include <drawinglayer/attribute/sdrattribute3d.hxx>
 #endif
 
@@ -43,13 +43,13 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        sdr3DObjectAttribute::sdr3DObjectAttribute(
+        Sdr3DObjectAttribute::Sdr3DObjectAttribute(
             ::com::sun::star::drawing::NormalsKind  aNormalsKind,
             ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionX,
             ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionY,
             ::com::sun::star::drawing::TextureKind2 aTextureKind,
             ::com::sun::star::drawing::TextureMode aTextureMode,
-            const materialAttribute3D& rMaterial,
+            const MaterialAttribute3D& rMaterial,
             bool bNormalsInvert,
             bool bDoubleSided,
             bool bShadow3D,
@@ -67,22 +67,18 @@ namespace drawinglayer
         {
         }
 
-        sdr3DObjectAttribute::~sdr3DObjectAttribute()
-        {
-        }
-
-        bool sdr3DObjectAttribute::operator==(const sdr3DObjectAttribute& rCandidate) const
+        bool Sdr3DObjectAttribute::operator==(const Sdr3DObjectAttribute& rCandidate) const
         {
             return (maNormalsKind == rCandidate.maNormalsKind
-            && maTextureProjectionX == rCandidate.maTextureProjectionX
-            && maTextureProjectionY == rCandidate.maTextureProjectionY
-            && maTextureKind == rCandidate.maTextureKind
-            && maTextureMode == rCandidate.maTextureMode
-            && maMaterial == rCandidate.maMaterial
-            && mbNormalsInvert == rCandidate.mbNormalsInvert
-            && mbDoubleSided == rCandidate.mbDoubleSided
-            && mbShadow3D == rCandidate.mbShadow3D
-            && mbTextureFilter == rCandidate.mbTextureFilter);
+                && maTextureProjectionX == rCandidate.maTextureProjectionX
+                && maTextureProjectionY == rCandidate.maTextureProjectionY
+                && maTextureKind == rCandidate.maTextureKind
+                && maTextureMode == rCandidate.maTextureMode
+                && maMaterial == rCandidate.maMaterial
+                && mbNormalsInvert == rCandidate.mbNormalsInvert
+                && mbDoubleSided == rCandidate.mbDoubleSided
+                && mbShadow3D == rCandidate.mbShadow3D
+                && mbTextureFilter == rCandidate.mbTextureFilter);
         }
     } // end of namespace attribute
 } // end of namespace drawinglayer
@@ -93,18 +89,14 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        sdr3DLightAttribute::sdr3DLightAttribute(const basegfx::BColor& rColor, const basegfx::B3DVector& rDirection, bool bSpecular)
+        Sdr3DLightAttribute::Sdr3DLightAttribute(const basegfx::BColor& rColor, const basegfx::B3DVector& rDirection, bool bSpecular)
         :   maColor(rColor),
             maDirection(rDirection),
             mbSpecular(bSpecular)
         {
         }
 
-        sdr3DLightAttribute::~sdr3DLightAttribute()
-        {
-        }
-
-        bool sdr3DLightAttribute::operator==(const sdr3DLightAttribute& rCandidate) const
+        bool Sdr3DLightAttribute::operator==(const Sdr3DLightAttribute& rCandidate) const
         {
             return (maColor == rCandidate.maColor
                 && maDirection == rCandidate.maDirection
@@ -119,26 +111,22 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        sdrLightingAttribute::sdrLightingAttribute(
+        SdrLightingAttribute::SdrLightingAttribute(
             const basegfx::BColor& rAmbientLight,
-            const ::std::vector< sdr3DLightAttribute >& rLightVector)
+            const ::std::vector< Sdr3DLightAttribute >& rLightVector)
         :   maAmbientLight(rAmbientLight),
             maLightVector(rLightVector)
         {
         }
 
-        sdrLightingAttribute::~sdrLightingAttribute()
-        {
-        }
-
-        bool sdrLightingAttribute::operator==(const sdrLightingAttribute& rCandidate) const
+        bool SdrLightingAttribute::operator==(const SdrLightingAttribute& rCandidate) const
         {
             return (maAmbientLight == rCandidate.maAmbientLight
                 && maLightVector == rCandidate.maLightVector);
         }
 
         // color model solver
-        basegfx::BColor sdrLightingAttribute::solveColorModel(
+        basegfx::BColor SdrLightingAttribute::solveColorModel(
             const basegfx::B3DVector& rNormalInEyeCoordinates,
             const basegfx::BColor& rColor, const basegfx::BColor& rSpecular,
             const basegfx::BColor& rEmission, sal_uInt16 nSpecularIntensity) const
@@ -160,7 +148,7 @@ namespace drawinglayer
 
                 for(sal_uInt32 a(0L); a < nLightCount; a++)
                 {
-                    const sdr3DLightAttribute& rLight(maLightVector[a]);
+                    const Sdr3DLightAttribute& rLight(maLightVector[a]);
                     const double fCosFac(rLight.getDirection().scalar(aEyeNormal));
 
                     if(basegfx::fTools::more(fCosFac, 0.0))
@@ -198,7 +186,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        sdrSceneAttribute::sdrSceneAttribute(
+        SdrSceneAttribute::SdrSceneAttribute(
             double fDistance,
             double fShadowSlant,
             ::com::sun::star::drawing::ProjectionMode aProjectionMode,
@@ -212,11 +200,7 @@ namespace drawinglayer
         {
         }
 
-        sdrSceneAttribute::~sdrSceneAttribute()
-        {
-        }
-
-        bool sdrSceneAttribute::operator==(const sdrSceneAttribute& rCandidate) const
+        bool SdrSceneAttribute::operator==(const SdrSceneAttribute& rCandidate) const
         {
             return (mfDistance == rCandidate.mfDistance
                 && mfShadowSlant == rCandidate.mfShadowSlant

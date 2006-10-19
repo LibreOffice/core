@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrattribute.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:47:34 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,15 +33,15 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
 #include <drawinglayer/attribute/sdrattribute.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
 #include <drawinglayer/attribute/fillattribute.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
 #include <drawinglayer/attribute/sdrfillbitmapattribute.hxx>
 #endif
 
@@ -51,7 +51,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        sdrLineAttribute::sdrLineAttribute(
+        SdrLineAttribute::SdrLineAttribute(
             basegfx::tools::B2DLineJoin eJoin, double fWidth, double fTransparence, const basegfx::BColor& rColor,
             const ::std::vector< double >& rDotDashArray, double fFullDotDashLen)
         :   meJoin(eJoin),
@@ -63,11 +63,11 @@ namespace drawinglayer
         {
         }
 
-        sdrLineAttribute::~sdrLineAttribute()
+        SdrLineAttribute::~SdrLineAttribute()
         {
         }
 
-        bool sdrLineAttribute::operator==(const sdrLineAttribute& rCandidate) const
+        bool SdrLineAttribute::operator==(const SdrLineAttribute& rCandidate) const
         {
             return (meJoin == rCandidate.meJoin
                 && mfWidth == rCandidate.mfWidth
@@ -84,7 +84,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        sdrLineStartEndAttribute::sdrLineStartEndAttribute(
+        SdrLineStartEndAttribute::SdrLineStartEndAttribute(
             const basegfx::B2DPolyPolygon& rStartPolyPolygon, const basegfx::B2DPolyPolygon& rEndPolyPolygon,
             double fStartWidth, double fEndWidth, bool bStartActive, bool bEndActive, bool bStartCentered, bool bEndCentered)
         :   maStartPolyPolygon(rStartPolyPolygon),
@@ -98,11 +98,11 @@ namespace drawinglayer
         {
         }
 
-        sdrLineStartEndAttribute::~sdrLineStartEndAttribute()
+        SdrLineStartEndAttribute::~SdrLineStartEndAttribute()
         {
         }
 
-        bool sdrLineStartEndAttribute::operator==(const sdrLineStartEndAttribute& rCandidate) const
+        bool SdrLineStartEndAttribute::operator==(const SdrLineStartEndAttribute& rCandidate) const
         {
             return (mbStartActive == rCandidate.mbStartActive
                 && mbEndActive == rCandidate.mbEndActive
@@ -122,18 +122,18 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        sdrShadowAttribute::sdrShadowAttribute(const basegfx::B2DVector& rOffset, double fTransparence, const basegfx::BColor& rColor)
+        SdrShadowAttribute::SdrShadowAttribute(const basegfx::B2DVector& rOffset, double fTransparence, const basegfx::BColor& rColor)
         :   maOffset(rOffset),
             mfTransparence(fTransparence),
             maColor(rColor)
         {
         }
 
-        sdrShadowAttribute::~sdrShadowAttribute()
+        SdrShadowAttribute::~SdrShadowAttribute()
         {
         }
 
-        bool sdrShadowAttribute::operator==(const sdrShadowAttribute& rCandidate) const
+        bool SdrShadowAttribute::operator==(const SdrShadowAttribute& rCandidate) const
         {
             return (mfTransparence == rCandidate.mfTransparence
                 && maColor == rCandidate.maColor
@@ -148,9 +148,12 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        sdrFillAttribute::sdrFillAttribute(
-            double fTransparence, const basegfx::BColor& rColor, fillGradientAttribute* pGradient,
-            fillHatchAttribute* pHatch, sdrFillBitmapAttribute* pBitmap)
+        SdrFillAttribute::SdrFillAttribute(
+            double fTransparence,
+            const basegfx::BColor& rColor,
+            FillGradientAttribute* pGradient,
+            FillHatchAttribute* pHatch,
+            SdrFillBitmapAttribute* pBitmap)
         :   mfTransparence(fTransparence),
             maColor(rColor),
             mpGradient(pGradient),
@@ -159,7 +162,7 @@ namespace drawinglayer
         {
         }
 
-        sdrFillAttribute::sdrFillAttribute(const sdrFillAttribute& rCandidate)
+        SdrFillAttribute::SdrFillAttribute(const SdrFillAttribute& rCandidate)
         :   mfTransparence(1.0),
             mpGradient(0L),
             mpHatch(0L),
@@ -171,14 +174,14 @@ namespace drawinglayer
             }
         }
 
-        sdrFillAttribute::~sdrFillAttribute()
+        SdrFillAttribute::~SdrFillAttribute()
         {
             delete mpGradient;
             delete mpHatch;
             delete mpBitmap;
         }
 
-        sdrFillAttribute& sdrFillAttribute::operator=(const sdrFillAttribute& rCandidate)
+        SdrFillAttribute& SdrFillAttribute::operator=(const SdrFillAttribute& rCandidate)
         {
             // copy data
             mfTransparence = rCandidate.mfTransparence;
@@ -196,7 +199,7 @@ namespace drawinglayer
                 // copy mpGradient if necessary
                 if(!mpGradient && rCandidate.mpGradient)
                 {
-                    mpGradient = new fillGradientAttribute(*rCandidate.mpGradient);
+                    mpGradient = new FillGradientAttribute(*rCandidate.mpGradient);
                 }
             }
 
@@ -212,7 +215,7 @@ namespace drawinglayer
                 // copy mpHatch if necessary
                 if(!mpHatch && rCandidate.mpHatch)
                 {
-                    mpHatch = new fillHatchAttribute(*rCandidate.mpHatch);
+                    mpHatch = new FillHatchAttribute(*rCandidate.mpHatch);
                 }
             }
 
@@ -228,14 +231,14 @@ namespace drawinglayer
                 // copy mpBitmap if necessary
                 if(!mpBitmap && rCandidate.mpBitmap)
                 {
-                    mpBitmap = new sdrFillBitmapAttribute(*rCandidate.mpBitmap);
+                    mpBitmap = new SdrFillBitmapAttribute(*rCandidate.mpBitmap);
                 }
             }
 
             return *this;
         }
 
-        bool sdrFillAttribute::operator==(const sdrFillAttribute& rCandidate) const
+        bool SdrFillAttribute::operator==(const SdrFillAttribute& rCandidate) const
         {
             if(mfTransparence != rCandidate.mfTransparence)
                 return false;

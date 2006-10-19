@@ -4,9 +4,9 @@
  *
  *  $RCSfile: materialattribute3d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:36:38 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:30:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
-#define _DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
+#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -44,7 +44,7 @@
 // predefines
 
 namespace drawinglayer { namespace {
-    class impMaterialAttribute3D;
+    class ImpMaterialAttribute3D;
 }}
 
 namespace basegfx {
@@ -57,25 +57,25 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class materialAttribute3D
+        class MaterialAttribute3D
         {
         private:
-            impMaterialAttribute3D*                             mpMaterialAttribute3D;
+            ImpMaterialAttribute3D*                             mpMaterialAttribute3D;
 
         public:
             // constructors/destructor
-            materialAttribute3D(const basegfx::BColor& rColor, const basegfx::BColor& rSpecular, const basegfx::BColor& rEmission, sal_uInt16 nSpecularIntensity);
-            materialAttribute3D(const basegfx::BColor& rColor);
-            materialAttribute3D();
-            materialAttribute3D(const materialAttribute3D& rCandidate);
-            ~materialAttribute3D();
+            MaterialAttribute3D(const basegfx::BColor& rColor, const basegfx::BColor& rSpecular, const basegfx::BColor& rEmission, sal_uInt16 nSpecularIntensity);
+            MaterialAttribute3D(const basegfx::BColor& rColor);
+            MaterialAttribute3D();
+            MaterialAttribute3D(const MaterialAttribute3D& rCandidate);
+            ~MaterialAttribute3D();
 
             // assignment operator
-            materialAttribute3D& operator=(const materialAttribute3D& rCandidate);
+            MaterialAttribute3D& operator=(const MaterialAttribute3D& rCandidate);
 
             // compare operator
-            bool operator==(const materialAttribute3D& rCandidate) const;
-            bool operator!=(const materialAttribute3D& rCandidate) const { return !operator==(rCandidate); }
+            bool operator==(const MaterialAttribute3D& rCandidate) const;
+            bool operator!=(const MaterialAttribute3D& rCandidate) const { return !operator==(rCandidate); }
 
             // data access
             const basegfx::BColor& getColor() const;
@@ -88,6 +88,6 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
+#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
 
 // eof

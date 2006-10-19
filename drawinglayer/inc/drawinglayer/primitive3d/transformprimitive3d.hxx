@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transformprimitive3d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:38:14 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:32:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,11 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
-#define _DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_VECTORPRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/vectorprimitive3d.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_GROUPPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/groupprimitive3d.hxx>
 #endif
 
 #ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
@@ -50,32 +50,34 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class transformPrimitive3D : public vectorPrimitive3D
+        class TransformPrimitive3D : public GroupPrimitive3D
         {
-        protected:
+        private:
             basegfx::B3DHomMatrix                   maTransformation;
 
         public:
-            transformPrimitive3D(const basegfx::B3DHomMatrix& rTransformation, const primitiveVector3D& rPrimitiveVector);
-            virtual ~transformPrimitive3D();
+            TransformPrimitive3D(
+                const basegfx::B3DHomMatrix& rTransformation,
+                const Primitive3DSequence& rChildren);
 
             // get data
             const basegfx::B3DHomMatrix& getTransformation() const { return maTransformation; }
 
             // compare operator
-            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // id generator
-            virtual PrimitiveID getID() const;
+            // get range
+            virtual basegfx::B3DRange getB3DRange(double fTime) const;
 
-            // get 3D range of primitive (for 3D geometries). Default implementation uses decomposition, analog to getRange
-            virtual basegfx::B3DRange get3DRange() const;
+            // provide unique ID
+            virtual sal_uInt32 getPrimitiveID() const;
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
+#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
 
+//////////////////////////////////////////////////////////////////////////////
 // eof

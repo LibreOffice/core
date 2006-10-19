@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shadow3dextractor.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:45:32 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:33:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,19 +33,27 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PROCESSOR3D_SHADOW3DEXTRACTOR_HXX
-#define _DRAWINGLAYER_PROCESSOR3D_SHADOW3DEXTRACTOR_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_SHADOW3DEXTRACTOR_HXX
+#define INCLUDED_DRAWINGLAYER_PROCESSOR3D_SHADOW3DEXTRACTOR_HXX
 
-#ifndef _DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
 #endif
 
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
-#include <basegfx/matrix/b2dhommatrix.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BASEPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_GEOMETRY_TRANSFORMATION3D_HXX
+#include <drawinglayer/geometry/transformation3d.hxx>
 #endif
 
 #ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
 #include <basegfx/matrix/b3dhommatrix.hxx>
+#endif
+
+#ifndef _BGFX_COLOR_BCOLOR_HXX
+#include <basegfx/color/bcolor.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
@@ -64,24 +72,9 @@
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #endif
 
-#ifndef _BGFX_COLOR_BCOLOR_HXX
-#include <basegfx/color/bcolor.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
+#include <drawinglayer/attribute/sdrattribute3d.hxx>
 #endif
-
-#ifndef _DRAWINGLAYER_PRIMITIVE_PRIMITIVE_HXX
-#include <drawinglayer/primitive/primitive.hxx>
-#endif
-
-//////////////////////////////////////////////////////////////////////////////
-// predefines
-
-namespace drawinglayer { namespace geometry {
-    class viewInformation;
-}}
-
-namespace drawinglayer { namespace attribute {
-    class sdrLightingAttribute;
-}}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -89,25 +82,28 @@ namespace drawinglayer
 {
     namespace processor3d
     {
-        class shadow3DExtractingProcessor : public baseProcessor3D
+        class Shadow3DExtractingProcessor : public BaseProcessor3D
         {
-        protected:
-            // result holding vector (2D) and target vector for stacking (inited to &maPrimitiveVector)
-            primitive::primitiveVector                      maPrimitiveVector;
-            primitive::primitiveVector*                     mpTargetVector;
+        private:
+            // result holding vector (2D) and target vector for stacking (inited to &maPrimitive2DSequence)
+            primitive2d::Primitive2DSequence                maPrimitive2DSequence;
+            primitive2d::Primitive2DSequence*               mpPrimitive2DSequence;
+
+            // the 3d transformation stack
+            const geometry::Transformation3D                maTransformation3D;
 
             // prepared data (transformations) for 2D/3D shadow calculations
             basegfx::B3DHomMatrix                           maWorldToEye;
             basegfx::B3DHomMatrix                           maEyeToView;
             basegfx::B3DHomMatrix                           maWorldToView;
-            basegfx::B3DVector                          maLightNormal;
-            basegfx::B3DVector                          maShadowPlaneNormal;
+            basegfx::B3DVector                              maLightNormal;
+            basegfx::B3DVector                              maShadowPlaneNormal;
             basegfx::B3DPoint                               maPlanePoint;
             double                                          mfLightPlaneScalar;
 
             // the shadow color used for sub-primitives. Can stay at black since
             // the encapsulating 2d shadow primitive will contain the color
-            basegfx::BColor                             maPrimitiveColor;
+            basegfx::BColor                                 maPrimitiveColor;
 
             // bitfield
             // flag if shadow plane projection preparation leaded to valid results
@@ -119,24 +115,24 @@ namespace drawinglayer
             // flag if conversion shall use projection
             unsigned                                        mbUseProjection : 1;
 
-            // protected helpers
+            // helpers
             basegfx::B2DPolygon impDoShadowProjection(const basegfx::B3DPolygon& rSource);
             basegfx::B2DPolyPolygon impDoShadowProjection(const basegfx::B3DPolyPolygon& rSource);
 
         public:
-            shadow3DExtractingProcessor(
-                const geometry::viewInformation& rViewInformation,
-                const geometry::transformation3D& rTransformation3D,
-                const attribute::sdrLightingAttribute& rSdrLightingAttribute,
-                const primitive3d::primitiveVector3D& rPrimitiveVector,
+            Shadow3DExtractingProcessor(
+                double fTime,
+                const geometry::Transformation3D& rTransformation3D,
+                const attribute::SdrLightingAttribute& rSdrLightingAttribute,
+                const primitive3d::Primitive3DSequence& rPrimitiveVector,
                 double fShadowSlant);
-            virtual ~shadow3DExtractingProcessor();
 
             // the central processing method
-            virtual void process(const primitive3d::primitiveVector3D& rSource);
+            virtual void process(const primitive3d::Primitive3DSequence& rSource);
 
             // data access
-            const primitive::primitiveVector& getPrimitives() const { return maPrimitiveVector; }
+            const primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
+            const geometry::Transformation3D& getTransformation3D() const { return maTransformation3D; }
         };
     } // end of namespace processor3d
 } // end of namespace drawinglayer

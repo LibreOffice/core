@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygontubeprimitive3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2006-09-27 16:33:17 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:38:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,35 +33,31 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_POLYGONTUBEPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYGONTUBEPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/polygontubeprimitive3d.hxx>
 #endif
 
-#ifndef _BGFX_POLYGON_B3DPOLYPOLYGON_HXX
-#include <basegfx/polygon/b3dpolypolygon.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
+#include <drawinglayer/attribute/materialattribute3d.hxx>
 #endif
 
 #ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
-#include <drawinglayer/attribute/materialattribute3d.hxx>
+#ifndef _BGFX_POLYGON_B3DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b3dpolypolygon.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
-#endif
-
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
 #endif
 
 #ifndef _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #endif
 
@@ -73,14 +69,14 @@ namespace drawinglayer
     {
         namespace // anonymous namespace
         {
-            const primitiveVector3D& getLineTubeSegments(
+            Primitive3DSequence getLineTubeSegments(
                 sal_uInt32 nSegments,
-                const attribute::materialAttribute3D& rMaterial)
+                const attribute::MaterialAttribute3D& rMaterial)
             {
                 // static data for buffered tube primitives
-                static primitiveVector3D aLineTubeList;
+                static Primitive3DSequence aLineTubeList;
                 static sal_uInt32 nLineTubeSegments(0L);
-                static attribute::materialAttribute3D aLineMaterial;
+                static attribute::MaterialAttribute3D aLineMaterial;
 
                 // may exclusively change static data, use mutex
                 ::osl::Mutex m_mutex;
@@ -89,10 +85,10 @@ namespace drawinglayer
                 {
                     nLineTubeSegments = nSegments;
                     aLineMaterial = rMaterial;
-                    aLineTubeList.clear();
+                    aLineTubeList = Primitive3DSequence();
                 }
 
-                if(0L == aLineTubeList.size() && 0L != nLineTubeSegments)
+                if(!aLineTubeList.hasElements() && 0L != nLineTubeSegments)
                 {
                     const basegfx::B3DPoint aLeft(0.0, 0.0, 0.0);
                     const basegfx::B3DPoint aRight(1.0, 0.0, 0.0);
@@ -100,6 +96,7 @@ namespace drawinglayer
                     basegfx::B3DPoint aLastRight(1.0, 1.0, 0.0);
                     basegfx::B3DHomMatrix aRot;
                     aRot.rotate(F_2PI / (double)nLineTubeSegments, 0.0, 0.0);
+                    aLineTubeList.realloc(nLineTubeSegments);
 
                     for(sal_uInt32 a(0L); a < nLineTubeSegments; a++)
                     {
@@ -122,8 +119,8 @@ namespace drawinglayer
                         aNewPolygon.setClosed(true);
 
                         const basegfx::B3DPolyPolygon aNewPolyPolygon(aNewPolygon);
-                        basePrimitive3D* pNew = new polyPolygonMaterialPrimitive3D(aNewPolyPolygon, aLineMaterial, false);
-                        aLineTubeList.push_back(referencedPrimitive3D(*pNew));
+                        const Primitive3DReference xRef(new PolyPolygonMaterialPrimitive3D(aNewPolyPolygon, aLineMaterial, false));
+                        aLineTubeList[a] = xRef;
 
                         aLastLeft = aNextLeft;
                         aLastRight = aNextRight;
@@ -133,14 +130,14 @@ namespace drawinglayer
                 return aLineTubeList;
             }
 
-            const primitiveVector3D& getLineCapSegments(
+            Primitive3DSequence getLineCapSegments(
                 sal_uInt32 nSegments,
-                const attribute::materialAttribute3D& rMaterial)
+                const attribute::MaterialAttribute3D& rMaterial)
             {
                 // static data for buffered tube primitives
-                static primitiveVector3D aLineCapList;
+                static Primitive3DSequence aLineCapList;
                 static sal_uInt32 nLineCapSegments(0L);
-                static attribute::materialAttribute3D aLineMaterial;
+                static attribute::MaterialAttribute3D aLineMaterial;
 
                 // may exclusively change static data, use mutex
                 ::osl::Mutex m_mutex;
@@ -149,15 +146,16 @@ namespace drawinglayer
                 {
                     nLineCapSegments = nSegments;
                     aLineMaterial = rMaterial;
-                    aLineCapList.clear();
+                    aLineCapList = Primitive3DSequence();
                 }
 
-                if(0L == aLineCapList.size() && 0L != nLineCapSegments)
+                if(!aLineCapList.hasElements() && 0L != nLineCapSegments)
                 {
                     const basegfx::B3DPoint aNull(0.0, 0.0, 0.0);
                     basegfx::B3DPoint aLast(0.0, 1.0, 0.0);
                     basegfx::B3DHomMatrix aRot;
                     aRot.rotate(F_2PI / (double)nLineCapSegments, 0.0, 0.0);
+                    aLineCapList.realloc(nLineCapSegments);
 
                     for(sal_uInt32 a(0L); a < nLineCapSegments; a++)
                     {
@@ -176,8 +174,8 @@ namespace drawinglayer
                         aNewPolygon.setClosed(true);
 
                         const basegfx::B3DPolyPolygon aNewPolyPolygon(aNewPolygon);
-                        basePrimitive3D* pNew = new polyPolygonMaterialPrimitive3D(aNewPolyPolygon, aLineMaterial, false);
-                        aLineCapList.push_back(referencedPrimitive3D(*pNew));
+                        const Primitive3DReference xRef(new PolyPolygonMaterialPrimitive3D(aNewPolyPolygon, aLineMaterial, false));
+                        aLineCapList[a] = xRef;
 
                         aLast = aNext;
                     }
@@ -186,10 +184,9 @@ namespace drawinglayer
                 return aLineCapList;
             }
 
-            void getLineJoinSegments(
-                primitiveVector3D& rDest,
+            Primitive3DSequence getLineJoinSegments(
                 sal_uInt32 nSegments,
-                const attribute::materialAttribute3D& rMaterial,
+                const attribute::MaterialAttribute3D& rMaterial,
                 double fAngle,
                 double /*fDegreeStepWidth*/,
                 double fMiterMinimumAngle,
@@ -197,6 +194,7 @@ namespace drawinglayer
             {
                 // nSegments is for whole circle, adapt to half circle
                 const sal_uInt32 nVerSeg(nSegments >> 1L);
+                std::vector< BasePrimitive3D* > aResultVector;
 
                 if(nVerSeg)
                 {
@@ -214,8 +212,8 @@ namespace drawinglayer
                             {
                                 const basegfx::B3DPolygon aPartPolygon(aSphere.getB3DPolygon(a));
                                 const basegfx::B3DPolyPolygon aPartPolyPolygon(aPartPolygon);
-                                basePrimitive3D* pNew = new polyPolygonMaterialPrimitive3D(aPartPolyPolygon, rMaterial, false);
-                                rDest.push_back(referencedPrimitive3D(*pNew));
+                                BasePrimitive3D* pNew = new PolyPolygonMaterialPrimitive3D(aPartPolyPolygon, rMaterial, false);
+                                aResultVector.push_back(pNew);
                             }
                         }
                         else
@@ -363,8 +361,8 @@ namespace drawinglayer
                             if(aNewPolygon.count())
                             {
                                 const basegfx::B3DPolyPolygon aNewPolyPolygon(aNewPolygon);
-                                basePrimitive3D* pNew = new polyPolygonMaterialPrimitive3D(aNewPolyPolygon, rMaterial, false);
-                                rDest.push_back(referencedPrimitive3D(*pNew));
+                                BasePrimitive3D* pNew = new PolyPolygonMaterialPrimitive3D(aNewPolyPolygon, rMaterial, false);
+                                aResultVector.push_back(pNew);
                             }
 
                             if(bMiter && aMiterPolygon.count())
@@ -377,8 +375,8 @@ namespace drawinglayer
 
                                 // create primitive
                                 const basegfx::B3DPolyPolygon aMiterPolyPolygon(aMiterPolygon);
-                                basePrimitive3D* pNew = new polyPolygonMaterialPrimitive3D(aMiterPolyPolygon, rMaterial, false);
-                                rDest.push_back(referencedPrimitive3D(*pNew));
+                                BasePrimitive3D* pNew = new PolyPolygonMaterialPrimitive3D(aMiterPolyPolygon, rMaterial, false);
+                                aResultVector.push_back(pNew);
                             }
 
                             // prepare next step
@@ -395,6 +393,15 @@ namespace drawinglayer
                         }
                     }
                 }
+
+                Primitive3DSequence aRetval(aResultVector.size());
+
+                for(sal_uInt32 a(0L); a < aResultVector.size(); a++)
+                {
+                    aRetval[a] = Primitive3DReference(aResultVector[a]);
+                }
+
+                return aRetval;
             }
 
             basegfx::B3DHomMatrix getRotationFromVector(const basegfx::B3DVector& rVector)
@@ -418,30 +425,35 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
+using namespace com::sun::star;
+
+//////////////////////////////////////////////////////////////////////////////
+
 namespace drawinglayer
 {
     namespace primitive3d
     {
-        void polygonTubePrimitive3D::decompose(primitiveVector3D& rTarget)
+        Primitive3DSequence PolygonTubePrimitive3D::createLocalDecomposition(double /*fTime*/) const
         {
-            const sal_uInt32 nPointCount(maPolygon.count());
+            const sal_uInt32 nPointCount(getB3DPolygon().count());
+            std::vector< BasePrimitive3D* > aResultVector;
 
             if(0L != nPointCount)
             {
-                if(basegfx::fTools::more(mfRadius, 0.0))
+                if(basegfx::fTools::more(getRadius(), 0.0))
                 {
-                    const attribute::materialAttribute3D aMaterial(maBColor);
+                    const attribute::MaterialAttribute3D aMaterial(getBColor());
                     static sal_uInt32 nSegments(8L); // default for 3d line segments, for more quality just raise this value (in even steps)
-                    const bool bClosed(maPolygon.isClosed());
-                    const bool bNoLineJoin(basegfx::tools::B2DLINEJOIN_NONE == maLineJoin);
+                    const bool bClosed(getB3DPolygon().isClosed());
+                    const bool bNoLineJoin(basegfx::tools::B2DLINEJOIN_NONE == getLineJoin());
                     const sal_uInt32 nLoopCount(bClosed ? nPointCount : nPointCount - 1L);
-                    basegfx::B3DPoint aLast(maPolygon.getB3DPoint(nPointCount - 1L));
-                    basegfx::B3DPoint aCurr(maPolygon.getB3DPoint(0L));
+                    basegfx::B3DPoint aLast(getB3DPolygon().getB3DPoint(nPointCount - 1L));
+                    basegfx::B3DPoint aCurr(getB3DPolygon().getB3DPoint(0L));
 
                     for(sal_uInt32 a(0L); a < nLoopCount; a++)
                     {
                         // get next data
-                        const basegfx::B3DPoint aNext(maPolygon.getB3DPoint((a + 1L) % nPointCount));
+                        const basegfx::B3DPoint aNext(getB3DPolygon().getB3DPoint((a + 1L) % nPointCount));
                         const basegfx::B3DVector aForw(aNext - aCurr);
                         const double fForwLen(aForw.getLength());
 
@@ -452,15 +464,15 @@ namespace drawinglayer
 
                             // create default transformation with scale and rotate
                             basegfx::B3DHomMatrix aVectorTrans;
-                            aVectorTrans.scale(fForwLen, mfRadius, mfRadius);
+                            aVectorTrans.scale(fForwLen, getRadius(), getRadius());
                             aVectorTrans *= aRotVector;
                             aVectorTrans.translate(aCurr.getX(), aCurr.getY(), aCurr.getZ());
 
                             if(bNoLineJoin || (!bClosed && !a))
                             {
                                 // line start edge, build transformed primitiveVector3D
-                                transformPrimitive3D* pNewTransformedA = new transformPrimitive3D(aVectorTrans, getLineCapSegments(nSegments, aMaterial));
-                                rTarget.push_back(referencedPrimitive3D(*pNewTransformedA));
+                                TransformPrimitive3D* pNewTransformedA = new TransformPrimitive3D(aVectorTrans, getLineCapSegments(nSegments, aMaterial));
+                                aResultVector.push_back(pNewTransformedA);
                             }
                             else
                             {
@@ -469,10 +481,9 @@ namespace drawinglayer
 
                                 if(!basegfx::fTools::equalZero(fCross))
                                 {
-                                    // line connect non-parallel, aBack, aForw, use maLineJoin
-                                    primitiveVector3D aNewList;
+                                    // line connect non-parallel, aBack, aForw, use getLineJoin()
                                     const double fAngle(acos(aBack.scalar(aForw) / (fForwLen * aBack.getLength()))); // 0.0 .. F_PI2
-                                    getLineJoinSegments(aNewList, nSegments, aMaterial, fAngle, mfDegreeStepWidth, mfMiterMinimumAngle, maLineJoin);
+                                    Primitive3DSequence aNewList(getLineJoinSegments(nSegments, aMaterial, fAngle, getDegreeStepWidth(), getMiterMinimumAngle(), getLineJoin()));
 
                                     // calculate transformation. First, get angle in YZ between nForw projected on (1, 0, 0) and nBack
                                     basegfx::B3DHomMatrix aInvRotVector(aRotVector);
@@ -486,18 +497,18 @@ namespace drawinglayer
                                     aSphereTrans.rotate(0.0, F_PI2, 0.0);
                                     aSphereTrans.rotate(F_PI - fRotInYZ, 0.0, 0.0);
                                     aSphereTrans *= aRotVector;
-                                    aSphereTrans.scale(mfRadius, mfRadius, mfRadius);
+                                    aSphereTrans.scale(getRadius(), getRadius(), getRadius());
                                     aSphereTrans.translate(aCurr.getX(), aCurr.getY(), aCurr.getZ());
 
                                     // line start edge, build transformed primitiveVector3D
-                                    transformPrimitive3D* pNewTransformedB = new transformPrimitive3D(aSphereTrans, aNewList);
-                                    rTarget.push_back(referencedPrimitive3D(*pNewTransformedB));
+                                    TransformPrimitive3D* pNewTransformedB = new TransformPrimitive3D(aSphereTrans, aNewList);
+                                    aResultVector.push_back(pNewTransformedB);
                                 }
                             }
 
                             // create line segments, build transformed primitiveVector3D
-                            transformPrimitive3D* pNewTransformedC = new transformPrimitive3D(aVectorTrans, getLineTubeSegments(nSegments, aMaterial));
-                            rTarget.push_back(referencedPrimitive3D(*pNewTransformedC));
+                            TransformPrimitive3D* pNewTransformedC = new TransformPrimitive3D(aVectorTrans, getLineTubeSegments(nSegments, aMaterial));
+                            aResultVector.push_back(pNewTransformedC);
 
                             if(bNoLineJoin || (!bClosed && ((a + 1L) == nLoopCount)))
                             {
@@ -505,13 +516,13 @@ namespace drawinglayer
                                 basegfx::B3DHomMatrix aBackTrans;
                                 aBackTrans.rotate(0.0, F_PI, 0.0);
                                 aBackTrans.translate(1.0, 0.0, 0.0);
-                                aBackTrans.scale(fForwLen, mfRadius, mfRadius);
+                                aBackTrans.scale(fForwLen, getRadius(), getRadius());
                                 aBackTrans *= aRotVector;
                                 aBackTrans.translate(aCurr.getX(), aCurr.getY(), aCurr.getZ());
 
                                 // line end edge, build transformed primitiveVector3D
-                                transformPrimitive3D* pNewTransformedD = new transformPrimitive3D(aBackTrans, getLineCapSegments(nSegments, aMaterial));
-                                rTarget.push_back(referencedPrimitive3D(*pNewTransformedD));
+                                TransformPrimitive3D* pNewTransformedD = new TransformPrimitive3D(aBackTrans, getLineCapSegments(nSegments, aMaterial));
+                                aResultVector.push_back(pNewTransformedD);
                             }
                         }
 
@@ -523,19 +534,29 @@ namespace drawinglayer
                 else
                 {
                     // create hairline
-                    polygonHairlinePrimitive3D* pNew = new polygonHairlinePrimitive3D(maPolygon, maBColor);
-                    rTarget.push_back(referencedPrimitive3D(*pNew));
+                    PolygonHairlinePrimitive3D* pNew = new PolygonHairlinePrimitive3D(getB3DPolygon(), getBColor());
+                    aResultVector.push_back(pNew);
                 }
             }
+
+            // prepare return value
+            Primitive3DSequence aRetval(aResultVector.size());
+
+            for(sal_uInt32 a(0L); a < aResultVector.size(); a++)
+            {
+                aRetval[a] = Primitive3DReference(aResultVector[a]);
+            }
+
+            return aRetval;
         }
 
-        polygonTubePrimitive3D::polygonTubePrimitive3D(
+        PolygonTubePrimitive3D::PolygonTubePrimitive3D(
             const basegfx::B3DPolygon& rPolygon,
             const basegfx::BColor& rBColor,
             double fRadius, basegfx::tools::B2DLineJoin aLineJoin,
             double fDegreeStepWidth,
             double fMiterMinimumAngle)
-        :   polygonHairlinePrimitive3D(rPolygon, rBColor),
+        :   PolygonHairlinePrimitive3D(rPolygon, rBColor),
             mfRadius(fRadius),
             mfDegreeStepWidth(fDegreeStepWidth),
             mfMiterMinimumAngle(fMiterMinimumAngle),
@@ -543,28 +564,24 @@ namespace drawinglayer
         {
         }
 
-        polygonTubePrimitive3D::~polygonTubePrimitive3D()
+        bool PolygonTubePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-        }
-
-        bool polygonTubePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
-        {
-            if(polygonHairlinePrimitive3D::operator==(rPrimitive))
+            if(PolygonHairlinePrimitive3D::operator==(rPrimitive))
             {
-                const polygonTubePrimitive3D& rCompare = (polygonTubePrimitive3D&)rPrimitive;
+                const PolygonTubePrimitive3D& rCompare = (PolygonTubePrimitive3D&)rPrimitive;
 
-                return (mfRadius == rCompare.mfRadius
-                    && mfDegreeStepWidth == rCompare.mfDegreeStepWidth
-                    && mfMiterMinimumAngle == rCompare.mfMiterMinimumAngle
-                    && maLineJoin == rCompare.maLineJoin);
+                return (getRadius() == rCompare.getRadius()
+                    && getDegreeStepWidth() == rCompare.getDegreeStepWidth()
+                    && getMiterMinimumAngle() == rCompare.getMiterMinimumAngle()
+                    && getLineJoin() == rCompare.getLineJoin());
             }
 
             return false;
         }
 
-        PrimitiveID polygonTubePrimitive3D::getID() const
+        sal_uInt32 PolygonTubePrimitive3D::getPrimitiveID() const
         {
-            return CreatePrimitiveID('T', 'U', 'B', '3');
+            return Create3DPrimitiveID('3','P','T','u');
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

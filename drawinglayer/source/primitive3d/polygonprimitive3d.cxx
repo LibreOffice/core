@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:51:15 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:38:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_POLYGONPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYGONPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 #endif
 
@@ -41,13 +41,21 @@
 #include <basegfx/polygon/b3dpolygontools.hxx>
 #endif
 
+#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
+#include <basegfx/tools/canvastools.hxx>
+#endif
+
 #ifndef _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_POLYGONTUBEPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYGONTUBEPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/polygontubeprimitive3d.hxx>
 #endif
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -55,38 +63,36 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        polygonHairlinePrimitive3D::polygonHairlinePrimitive3D(const basegfx::B3DPolygon& rPolygon, const basegfx::BColor& rBColor)
-        :   basePrimitive3D(),
+        PolygonHairlinePrimitive3D::PolygonHairlinePrimitive3D(
+            const basegfx::B3DPolygon& rPolygon,
+            const basegfx::BColor& rBColor)
+        :   BasePrimitive3D(),
             maPolygon(rPolygon),
             maBColor(rBColor)
         {
         }
 
-        polygonHairlinePrimitive3D::~polygonHairlinePrimitive3D()
+        bool PolygonHairlinePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-        }
-
-        bool polygonHairlinePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
-        {
-            if(getID() == rPrimitive.getID())
+            if(BasePrimitive3D::operator==(rPrimitive))
             {
-                const polygonHairlinePrimitive3D& rCompare = (polygonHairlinePrimitive3D&)rPrimitive;
+                const PolygonHairlinePrimitive3D& rCompare = (PolygonHairlinePrimitive3D&)rPrimitive;
 
-                return (maPolygon == rCompare.maPolygon
-                    && maBColor == rCompare.maBColor);
+                return (getB3DPolygon() == rCompare.getB3DPolygon()
+                    && getBColor() == rCompare.getBColor());
             }
 
             return false;
         }
 
-        PrimitiveID polygonHairlinePrimitive3D::getID() const
+        basegfx::B3DRange PolygonHairlinePrimitive3D::getB3DRange(double /*fTime*/) const
         {
-            return CreatePrimitiveID('P', 'O', 'H', '3');
+            return basegfx::tools::getRange(getB3DPolygon());
         }
 
-        basegfx::B3DRange polygonHairlinePrimitive3D::get3DRange() const
+        sal_uInt32 PolygonHairlinePrimitive3D::getPrimitiveID() const
         {
-            return basegfx::tools::getRange(maPolygon);
+            return Create3DPrimitiveID('3','P','H','a');
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -97,34 +103,37 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        void polygonStrokePrimitive3D::decompose(primitiveVector3D& rTarget)
+        Primitive3DSequence PolygonStrokePrimitive3D::createLocalDecomposition(double /*fTime*/) const
         {
-            if(maPolygon.count())
-            {
-                basegfx::B3DPolyPolygon aHairLinePolyPolygon(maPolygon);
+            Primitive3DSequence aRetval;
 
-                if(0.0 != maStrokeAttribute.getFullDotDashLen())
+            if(getB3DPolygon().count())
+            {
+                basegfx::B3DPolyPolygon aHairLinePolyPolygon(getB3DPolygon());
+
+                if(0.0 != getStrokeAttribute().getFullDotDashLen())
                 {
                     // apply LineStyle
-                    aHairLinePolyPolygon = basegfx::tools::applyLineDashing(aHairLinePolyPolygon, maStrokeAttribute.getDotDashArray(), maStrokeAttribute.getFullDotDashLen());
+                    aHairLinePolyPolygon = basegfx::tools::applyLineDashing(aHairLinePolyPolygon, getStrokeAttribute().getDotDashArray(), getStrokeAttribute().getFullDotDashLen());
 
                     // merge LineStyle polygons to bigger parts
                     aHairLinePolyPolygon = basegfx::tools::mergeDashedLines(aHairLinePolyPolygon);
                 }
 
-                if(maStrokeAttribute.getWidth())
+                // prepare result
+                aRetval.realloc(aHairLinePolyPolygon.count());
+
+                if(getStrokeAttribute().getWidth())
                 {
                     // create fat line data
-                    const double fRadius(maStrokeAttribute.getWidth() / 2.0);
-                    const basegfx::tools::B2DLineJoin aLineJoin(maStrokeAttribute.getLineJoin());
+                    const double fRadius(getStrokeAttribute().getWidth() / 2.0);
+                    const basegfx::tools::B2DLineJoin aLineJoin(getStrokeAttribute().getLineJoin());
 
                     for(sal_uInt32 a(0L); a < aHairLinePolyPolygon.count(); a++)
                     {
                         // create tube primitives
-                        polygonTubePrimitive3D* pNew = new polygonTubePrimitive3D(aHairLinePolyPolygon.getB3DPolygon(a),
-                            maStrokeAttribute.getColor(),
-                            fRadius, aLineJoin);
-                        rTarget.push_back(referencedPrimitive3D(*pNew));
+                        const Primitive3DReference xRef(new PolygonTubePrimitive3D(aHairLinePolyPolygon.getB3DPolygon(a), getStrokeAttribute().getColor(), fRadius, aLineJoin));
+                        aRetval[a] = xRef;
                     }
                 }
                 else
@@ -133,42 +142,40 @@ namespace drawinglayer
                     for(sal_uInt32 a(0L); a < aHairLinePolyPolygon.count(); a++)
                     {
                         const basegfx::B3DPolygon aCandidate = aHairLinePolyPolygon.getB3DPolygon(a);
-                        basePrimitive3D* pNew = new polygonHairlinePrimitive3D(aCandidate, maStrokeAttribute.getColor());
-                        rTarget.push_back(referencedPrimitive3D(*pNew));
+                        const Primitive3DReference xRef(new PolygonHairlinePrimitive3D(aCandidate, getStrokeAttribute().getColor()));
+                        aRetval[a] = xRef;
                     }
                 }
             }
+
+            return aRetval;
         }
 
-        polygonStrokePrimitive3D::polygonStrokePrimitive3D(
+        PolygonStrokePrimitive3D::PolygonStrokePrimitive3D(
             const basegfx::B3DPolygon& rPolygon,
-            const attribute::strokeAttribute& rStrokeAttribute)
-        :   basePrimitive3D(),
+            const attribute::StrokeAttribute& rStrokeAttribute)
+        :   BasePrimitive3D(),
             maPolygon(rPolygon),
             maStrokeAttribute(rStrokeAttribute)
         {
         }
 
-        polygonStrokePrimitive3D::~polygonStrokePrimitive3D()
+        bool PolygonStrokePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-        }
-
-        bool polygonStrokePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
-        {
-            if(getID() == rPrimitive.getID())
+            if(BasePrimitive3D::operator==(rPrimitive))
             {
-                const polygonStrokePrimitive3D& rCompare = (polygonStrokePrimitive3D&)rPrimitive;
+                const PolygonStrokePrimitive3D& rCompare = (PolygonStrokePrimitive3D&)rPrimitive;
 
-                return (maPolygon == rCompare.maPolygon
-                    && maStrokeAttribute == rCompare.maStrokeAttribute);
+                return (getB3DPolygon() == rCompare.getB3DPolygon()
+                    && getStrokeAttribute() == rCompare.getStrokeAttribute());
             }
 
             return false;
         }
 
-        PrimitiveID polygonStrokePrimitive3D::getID() const
+        sal_uInt32 PolygonStrokePrimitive3D::getPrimitiveID() const
         {
-            return CreatePrimitiveID('P', 'L', 'S', '3');
+            return Create3DPrimitiveID('3','P','S','t');
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

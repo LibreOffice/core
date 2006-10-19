@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudelathetools3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2006-09-27 16:33:18 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:38:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
 #include <drawinglayer/primitive3d/sdrextrudelathetools3d.hxx>
 #endif
 
@@ -91,7 +91,9 @@ namespace
     //////////////////////////////////////////////////////////////////////////////
     // common helpers
 
-    basegfx::B2DPolyPolygon impScalePolyPolygonOnCenter(const basegfx::B2DPolyPolygon& rSource, double fScale)
+    basegfx::B2DPolyPolygon impScalePolyPolygonOnCenter(
+        const basegfx::B2DPolyPolygon& rSource,
+        double fScale)
     {
         basegfx::B2DPolyPolygon aRetval(rSource);
 
@@ -110,7 +112,11 @@ namespace
         return aRetval;
     }
 
-    void impGetOuterPolyPolygon(basegfx::B2DPolyPolygon& rPolygon, basegfx::B2DPolyPolygon& rOuterPolyPolygon, double fOffset, bool bCharacterMode)
+    void impGetOuterPolyPolygon(
+        basegfx::B2DPolyPolygon& rPolygon,
+        basegfx::B2DPolyPolygon& rOuterPolyPolygon,
+        double fOffset,
+        bool bCharacterMode)
     {
         rOuterPolyPolygon = rPolygon;
 
@@ -144,8 +150,14 @@ namespace
         }
     }
 
-    void impAddInBetweenFill(basegfx::B3DPolyPolygon& rTarget, const basegfx::B3DPolyPolygon& rPolA, const basegfx::B3DPolyPolygon& rPolB,
-        double fTexVerStart, double fTexVerStop, bool bCreateNormals, bool bCreateTextureCoordinates)
+    void impAddInBetweenFill(
+        basegfx::B3DPolyPolygon& rTarget,
+        const basegfx::B3DPolyPolygon& rPolA,
+        const basegfx::B3DPolyPolygon& rPolB,
+        double fTexVerStart,
+        double fTexVerStop,
+        bool bCreateNormals,
+        bool bCreateTextureCoordinates)
     {
         OSL_ENSURE(rPolA.count() == rPolB.count(), "impAddInBetweenFill: unequally sized polygons (!)");
         const sal_uInt32 nPolygonCount(rPolA.count());
@@ -222,7 +234,9 @@ namespace
         }
     }
 
-    void impSetNormal(basegfx::B3DPolyPolygon& rCandidate, const basegfx::B3DVector& rNormal)
+    void impSetNormal(
+        basegfx::B3DPolyPolygon& rCandidate,
+        const basegfx::B3DVector& rNormal)
     {
         for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
         {
@@ -237,7 +251,10 @@ namespace
         }
     }
 
-    void impCreateInBetweenNormals(basegfx::B3DPolyPolygon& rPolA, basegfx::B3DPolyPolygon& rPolB, bool bSmoothHorizontalNormals)
+    void impCreateInBetweenNormals(
+        basegfx::B3DPolyPolygon& rPolA,
+        basegfx::B3DPolyPolygon& rPolB,
+        bool bSmoothHorizontalNormals)
     {
         OSL_ENSURE(rPolA.count() == rPolB.count(), "sdrExtrudePrimitive3D: unequally sized polygons (!)");
 
@@ -316,7 +333,10 @@ namespace
         }
     }
 
-    void impMixNormals(basegfx::B3DPolyPolygon& rPolA, const basegfx::B3DPolyPolygon& rPolB, double fWeightA)
+    void impMixNormals(
+        basegfx::B3DPolyPolygon& rPolA,
+        const basegfx::B3DPolyPolygon& rPolB,
+        double fWeightA)
     {
         const double fWeightB(1.0 - fWeightA);
         OSL_ENSURE(rPolA.count() == rPolB.count(), "sdrExtrudePrimitive3D: unequally sized polygons (!)");
@@ -340,7 +360,6 @@ namespace
             rPolA.setB3DPolygon(a, aSubA);
         }
     }
-
 } // end of anonymous namespace
 
 //////////////////////////////////////////////////////////////////////////////
@@ -349,14 +368,21 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        void createLatheSlices(sliceVector& rSliceVector, const basegfx::B2DPolyPolygon& rSource,
-            double fBackScale, double fDiagonal, double fRotation, sal_uInt32 nSteps,
-            bool bCharacterMode, bool bCloseFront, bool bCloseBack)
+        void createLatheSlices(
+            Slice3DVector& rSliceVector,
+            const basegfx::B2DPolyPolygon& rSource,
+            double fBackScale,
+            double fDiagonal,
+            double fRotation,
+            sal_uInt32 nSteps,
+            bool bCharacterMode,
+            bool bCloseFront,
+            bool bCloseBack)
         {
             if(basegfx::fTools::equalZero(fRotation) || 0L == nSteps)
             {
                 // no rotation or no steps, just one plane
-                rSliceVector.push_back(slice(rSource, basegfx::B3DHomMatrix()));
+                rSliceVector.push_back(Slice3D(rSource, basegfx::B3DHomMatrix()));
             }
             else
             {
@@ -398,7 +424,7 @@ namespace drawinglayer
                         impGetOuterPolyPolygon(aFront, aOuterFront, fOffsetLen, bCharacterMode);
                         basegfx::B3DHomMatrix aTransform;
                         aTransform.translate(0.0, 0.0, fOffsetLen);
-                        rSliceVector.push_back(slice(aOuterFront, aTransform, SLICETYPE_FRONTCAP));
+                        rSliceVector.push_back(Slice3D(aOuterFront, aTransform, SLICETYPE3D_FRONTCAP));
                     }
 
                     if(bCloseBack)
@@ -413,7 +439,7 @@ namespace drawinglayer
                 // add start polygon (a = 0L)
                 if(!bClosedRotation)
                 {
-                    rSliceVector.push_back(slice(aFront, basegfx::B3DHomMatrix()));
+                    rSliceVector.push_back(Slice3D(aFront, basegfx::B3DHomMatrix()));
                 }
 
                 // create segments (a + 1 .. nSteps)
@@ -425,24 +451,30 @@ namespace drawinglayer
                     basegfx::B2DPolyPolygon aNewPoly(bBackScale ? basegfx::tools::interpolate(aFront, aBack, fStep) : aFront);
                     basegfx::B3DHomMatrix aNewMat;
                     aNewMat.rotate(0.0, fRotation * fStep, 0.0);
-                    rSliceVector.push_back(slice(aNewPoly, aNewMat));
+                    rSliceVector.push_back(Slice3D(aNewPoly, aNewMat));
                 }
 
                 if(bCloseBack)
                 {
-                    rSliceVector.push_back(slice(aOuterBack, aTransformBack, SLICETYPE_BACKCAP));
+                    rSliceVector.push_back(Slice3D(aOuterBack, aTransformBack, SLICETYPE3D_BACKCAP));
                 }
             }
         }
 
-        void createExtrudeSlices(sliceVector& rSliceVector, const basegfx::B2DPolyPolygon& rSource,
-            double fBackScale, double fDiagonal, double fDepth,
-            bool bCharacterMode, bool bCloseFront, bool bCloseBack)
+        void createExtrudeSlices(
+            Slice3DVector& rSliceVector,
+            const basegfx::B2DPolyPolygon& rSource,
+            double fBackScale,
+            double fDiagonal,
+            double fDepth,
+            bool bCharacterMode,
+            bool bCloseFront,
+            bool bCloseBack)
         {
             if(basegfx::fTools::equalZero(fDepth))
             {
                 // no depth, just one plane
-                rSliceVector.push_back(slice(rSource, basegfx::B3DHomMatrix()));
+                rSliceVector.push_back(Slice3D(rSource, basegfx::B3DHomMatrix()));
             }
             else
             {
@@ -474,7 +506,7 @@ namespace drawinglayer
                     impGetOuterPolyPolygon(aFront, aOuterFront, fOffset, bCharacterMode);
                     basegfx::B3DHomMatrix aTransformFront;
                     aTransformFront.translate(0.0, 0.0, fDepth);
-                    rSliceVector.push_back(slice(aOuterFront, aTransformFront, SLICETYPE_FRONTCAP));
+                    rSliceVector.push_back(Slice3D(aOuterFront, aTransformFront, SLICETYPE3D_FRONTCAP));
                 }
 
                 if(bCloseBack)
@@ -489,26 +521,29 @@ namespace drawinglayer
                     basegfx::B3DHomMatrix aTransformA, aTransformB;
 
                     aTransformA.translate(0.0, 0.0, fZFront);
-                    rSliceVector.push_back(slice(aFront, aTransformA));
+                    rSliceVector.push_back(Slice3D(aFront, aTransformA));
 
                     aTransformB.translate(0.0, 0.0, fZBack);
-                    rSliceVector.push_back(slice(aBack, aTransformB));
+                    rSliceVector.push_back(Slice3D(aBack, aTransformB));
                 }
 
                 if(bCloseBack)
                 {
-                    rSliceVector.push_back(slice(aOuterBack, basegfx::B3DHomMatrix(), SLICETYPE_BACKCAP));
+                    rSliceVector.push_back(Slice3D(aOuterBack, basegfx::B3DHomMatrix(), SLICETYPE3D_BACKCAP));
                 }
             }
         }
 
-        void extractLinesFromSlice(basegfx::B3DPolyPolygon& rLine, const sliceVector& rSliceVector, bool bClosed)
+        void extractLinesFromSlice(
+            basegfx::B3DPolyPolygon& rLine,
+            const Slice3DVector& rSliceVector,
+            bool bClosed)
         {
             const sal_uInt32 nNumSlices(rSliceVector.size());
 
             if(nNumSlices)
             {
-                // slices self
+                // Slice3Ds self
                 for(sal_uInt32 a(0L); a < nNumSlices; a++)
                 {
                     rLine.append(rSliceVector[a].getB3DPolyPolygon());
@@ -539,9 +574,18 @@ namespace drawinglayer
             }
         }
 
-        void extractPlanesFromSlice(::std::vector< basegfx::B3DPolyPolygon >& rFill, const sliceVector& rSliceVector,
-            bool bCreateNormals, bool bSmoothHorizontalNormals, bool bSmoothNormals, bool bSmoothLids, bool bClosed,
-            double fSmoothNormalsMix, double fSmoothLidsMix, bool bCreateTextureCoordinates, const basegfx::B2DHomMatrix& rTexTransform)
+        void extractPlanesFromSlice(
+            ::std::vector< basegfx::B3DPolyPolygon >& rFill,
+            const Slice3DVector& rSliceVector,
+            bool bCreateNormals,
+            bool bSmoothHorizontalNormals,
+            bool bSmoothNormals,
+            bool bSmoothLids,
+            bool bClosed,
+            double fSmoothNormalsMix,
+            double fSmoothLidsMix,
+            bool bCreateTextureCoordinates,
+            const basegfx::B2DHomMatrix& rTexTransform)
         {
             const sal_uInt32 nNumSlices(rSliceVector.size());
 
@@ -596,9 +640,9 @@ namespace drawinglayer
 
                 for(a = 0L; a < nLoopCount; a++)
                 {
-                    const slice& rSliceA(rSliceVector[a]);
-                    const slice& rSliceB(rSliceVector[(a + 1L) % nNumSlices]);
-                    const bool bAcceptPair(SLICETYPE_REGULAR == rSliceA.getSliceType() && SLICETYPE_REGULAR == rSliceB.getSliceType());
+                    const Slice3D& rSliceA(rSliceVector[a]);
+                    const Slice3D& rSliceB(rSliceVector[(a + 1L) % nNumSlices]);
+                    const bool bAcceptPair(SLICETYPE3D_REGULAR == rSliceA.getSliceType() && SLICETYPE3D_REGULAR == rSliceB.getSliceType());
                     basegfx::B3DPolyPolygon aPolA(rSliceA.getB3DPolyPolygon());
                     basegfx::B3DPolyPolygon aPolB(rSliceB.getB3DPolyPolygon());
 
@@ -611,11 +655,11 @@ namespace drawinglayer
 
                         {
                             const sal_uInt32 nIndPrev((a + nNumSlices - 1L) % nNumSlices);
-                            const slice& rSlicePrev(rSliceVector[nIndPrev]);
+                            const Slice3D& rSlicePrev(rSliceVector[nIndPrev]);
                             basegfx::B3DPolyPolygon aPrev(rSlicePrev.getB3DPolyPolygon());
                             basegfx::B3DPolyPolygon aPolAA(rSliceA.getB3DPolyPolygon());
 
-                            if(SLICETYPE_FRONTCAP == rSlicePrev.getSliceType())
+                            if(SLICETYPE3D_FRONTCAP == rSlicePrev.getSliceType())
                             {
                                 basegfx::B3DPolyPolygon aFront(rSlicePrev.getB3DPolyPolygon());
                                 const bool bHasSlant(aPolAA != aPrev);
@@ -701,11 +745,11 @@ namespace drawinglayer
 
                         {
                             const sal_uInt32 nIndNext((a + 2L) % nNumSlices);
-                            const slice& rSliceNext(rSliceVector[nIndNext]);
+                            const Slice3D& rSliceNext(rSliceVector[nIndNext]);
                             basegfx::B3DPolyPolygon aNext(rSliceNext.getB3DPolyPolygon());
                             basegfx::B3DPolyPolygon aPolBB(rSliceB.getB3DPolyPolygon());
 
-                            if(SLICETYPE_BACKCAP == rSliceNext.getSliceType())
+                            if(SLICETYPE3D_BACKCAP == rSliceNext.getSliceType())
                             {
                                 basegfx::B3DPolyPolygon aBack(rSliceNext.getB3DPolyPolygon());
                                 const bool bHasSlant(aPolBB != aNext);

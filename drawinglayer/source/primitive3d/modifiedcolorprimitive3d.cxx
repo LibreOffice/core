@@ -4,9 +4,9 @@
  *
  *  $RCSfile: modifiedcolorprimitive3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:51:15 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:38:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,13 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/modifiedcolorprimitive3d.hxx>
 #endif
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -43,32 +47,29 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        modifiedColorPrimitive3D::modifiedColorPrimitive3D(
-            const primitiveVector3D& rPrimitiveVector,
+        ModifiedColorPrimitive3D::ModifiedColorPrimitive3D(
+            const Primitive3DSequence& rChildren,
             const basegfx::BColorModifier& rColorModifier)
-        :   vectorPrimitive3D(rPrimitiveVector),
+        :   GroupPrimitive3D(rChildren),
             maColorModifier(rColorModifier)
         {
         }
 
-        modifiedColorPrimitive3D::~modifiedColorPrimitive3D()
+        bool ModifiedColorPrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-        }
-
-        bool modifiedColorPrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
-        {
-            if(vectorPrimitive3D::operator==(rPrimitive))
+            if(GroupPrimitive3D::operator==(rPrimitive))
             {
-                const modifiedColorPrimitive3D& rCompare = (modifiedColorPrimitive3D&)rPrimitive;
+                const ModifiedColorPrimitive3D& rCompare = (ModifiedColorPrimitive3D&)rPrimitive;
+
                 return (maColorModifier == rCompare.maColorModifier);
             }
 
             return false;
         }
 
-        PrimitiveID modifiedColorPrimitive3D::getID() const
+        sal_uInt32 ModifiedColorPrimitive3D::getPrimitiveID() const
         {
-            return CreatePrimitiveID('M', 'C', 'L', '3');
+            return Create3DPrimitiveID('3','M','C','o');
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

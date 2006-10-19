@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrattribute.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:36:38 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:30:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
-#define _DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
+#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
 
 #ifndef _BGFX_POLYGON_B2DLINEGEOMETRY_HXX
 #include <basegfx/polygon/b2dlinegeometry.hxx>
@@ -55,9 +55,9 @@
 class SdrTextObj;
 
 namespace drawinglayer { namespace attribute {
-    class sdrFillBitmapAttribute;
-    class fillHatchAttribute;
-    class fillGradientAttribute;
+    class SdrFillBitmapAttribute;
+    class FillHatchAttribute;
+    class FillGradientAttribute;
 }}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -66,24 +66,24 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class sdrLineAttribute
+        class SdrLineAttribute
         {
             // line definitions
-            basegfx::tools::B2DLineJoin         meJoin;             // B2DLINEJOIN_* defines
+            basegfx::tools::B2DLineJoin             meJoin;             // B2DLINEJOIN_* defines
             double                                  mfWidth;            // 1/100th mm, 0.0==hair
             double                                  mfTransparence;     // [0.0 .. 1.0], 0.0==no transp.
-            basegfx::BColor                     maColor;            // color of line
+            basegfx::BColor                         maColor;            // color of line
             ::std::vector< double >                 maDotDashArray;     // array of double which defines the dot-dash pattern
             double                                  mfFullDotDashLen;   // sum of maDotDashArray (for convenience)
 
         public:
-            sdrLineAttribute(
+            SdrLineAttribute(
                 basegfx::tools::B2DLineJoin eJoin, double fWidth, double fTransparence, const basegfx::BColor& rColor,
                 const ::std::vector< double >& rDotDashArray, double fFullDotDashLen);
-            ~sdrLineAttribute();
+            ~SdrLineAttribute();
 
             // compare operator
-            bool operator==(const sdrLineAttribute& rCandidate) const;
+            bool operator==(const SdrLineAttribute& rCandidate) const;
 
             // bool access
             bool isVisible() const { return (1.0 != mfTransparence); }
@@ -106,11 +106,11 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class sdrLineStartEndAttribute
+        class SdrLineStartEndAttribute
         {
             // line arrow definitions
-            basegfx::B2DPolyPolygon             maStartPolyPolygon;     // start Line PolyPolygon
-            basegfx::B2DPolyPolygon             maEndPolyPolygon;       // end Line PolyPolygon
+            basegfx::B2DPolyPolygon                 maStartPolyPolygon;     // start Line PolyPolygon
+            basegfx::B2DPolyPolygon                 maEndPolyPolygon;       // end Line PolyPolygon
             double                                  mfStartWidth;           // 1/100th mm
             double                                  mfEndWidth;             // 1/100th mm
 
@@ -121,13 +121,13 @@ namespace drawinglayer
             unsigned                                mbEndCentered : 1L;     // Line is centered on line end point
 
         public:
-            sdrLineStartEndAttribute(
+            SdrLineStartEndAttribute(
                 const basegfx::B2DPolyPolygon& rStartPolyPolygon, const basegfx::B2DPolyPolygon& rEndPolyPolygon,
                 double fStartWidth, double fEndWidth, bool bStartActive, bool bEndActive, bool bStartCentered, bool bEndCentered);
-            ~sdrLineStartEndAttribute();
+            ~SdrLineStartEndAttribute();
 
             // compare operator
-            bool operator==(const sdrLineStartEndAttribute& rCandidate) const;
+            bool operator==(const SdrLineStartEndAttribute& rCandidate) const;
 
             // bool access
             bool isStartActive() const { return mbStartActive; }
@@ -151,20 +151,20 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class sdrShadowAttribute
+        class SdrShadowAttribute
         {
             // shadow definitions
             basegfx::B2DVector                  maOffset;                   // shadow offset 1/100th mm
-            double                                  mfTransparence;             // [0.0 .. 1.0], 0.0==no transp.
+            double                              mfTransparence;             // [0.0 .. 1.0], 0.0==no transp.
             basegfx::BColor                     maColor;                    // color of shadow
 
         public:
-            sdrShadowAttribute(
+            SdrShadowAttribute(
                 const basegfx::B2DVector& rOffset, double fTransparence, const basegfx::BColor& rColor);
-            ~sdrShadowAttribute();
+            ~SdrShadowAttribute();
 
             // compare operator
-            bool operator==(const sdrShadowAttribute& rCandidate) const;
+            bool operator==(const SdrShadowAttribute& rCandidate) const;
 
             // bool access
             bool isVisible() const { return (1.0 != mfTransparence); }
@@ -183,27 +183,27 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class sdrFillAttribute
+        class SdrFillAttribute
         {
             // fill definitions
             double                                  mfTransparence;     // [0.0 .. 1.0], 0.0==no transp.
-            basegfx::BColor                     maColor;            // fill color
-            fillGradientAttribute*                  mpGradient;         // fill gradient (if used)
-            fillHatchAttribute*                     mpHatch;            // fill hatch (if used)
-            sdrFillBitmapAttribute*                 mpBitmap;           // fill bitmap (if used)
+            basegfx::BColor                         maColor;            // fill color
+            FillGradientAttribute*                  mpGradient;         // fill gradient (if used)
+            FillHatchAttribute*                     mpHatch;            // fill hatch (if used)
+            SdrFillBitmapAttribute*                 mpBitmap;           // fill bitmap (if used)
 
         public:
-            sdrFillAttribute(
-                double fTransparence, const basegfx::BColor& rColor, fillGradientAttribute* pGradient = 0L,
-                fillHatchAttribute* pHatch = 0L, sdrFillBitmapAttribute* pBitmap = 0L);
-            ~sdrFillAttribute();
+            SdrFillAttribute(
+                double fTransparence, const basegfx::BColor& rColor, FillGradientAttribute* pGradient = 0L,
+                FillHatchAttribute* pHatch = 0L, SdrFillBitmapAttribute* pBitmap = 0L);
+            ~SdrFillAttribute();
 
             // copy constructor and assigment operator
-            sdrFillAttribute(const sdrFillAttribute& rCandidate);
-            sdrFillAttribute& operator=(const sdrFillAttribute& rCandidate);
+            SdrFillAttribute(const SdrFillAttribute& rCandidate);
+            SdrFillAttribute& operator=(const SdrFillAttribute& rCandidate);
 
             // compare operator
-            bool operator==(const sdrFillAttribute& rCandidate) const;
+            bool operator==(const SdrFillAttribute& rCandidate) const;
 
             // bool access
             bool isGradient() const { return (0L != mpGradient); }
@@ -215,15 +215,15 @@ namespace drawinglayer
             // data access
             double getTransparence() const { return mfTransparence; }
             const basegfx::BColor& getColor() const { return maColor; }
-            const fillGradientAttribute* getGradient() const { return mpGradient; }
-            const fillHatchAttribute* getHatch() const { return mpHatch; }
-            const sdrFillBitmapAttribute* getBitmap() const { return mpBitmap; }
+            const FillGradientAttribute* getGradient() const { return mpGradient; }
+            const FillHatchAttribute* getHatch() const { return mpHatch; }
+            const SdrFillBitmapAttribute* getBitmap() const { return mpBitmap; }
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
+#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
 
 // eof

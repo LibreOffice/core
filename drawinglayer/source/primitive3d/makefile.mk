@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: aw $ $Date: 2006-08-09 16:51:14 $
+#   last change: $Author: aw $ $Date: 2006-10-19 10:38:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 PRJ=..$/..
 PRJNAME=drawinglayer
 TARGET=primitive3d
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------
 
@@ -44,25 +45,25 @@ TARGET=primitive3d
 # --- Files -------------------------------------
 
 SLOFILES= \
-        $(SLO)$/primitive3d.obj					\
-        $(SLO)$/vectorprimitive3d.obj			\
-        $(SLO)$/shadowprimitive3d.obj			\
-        $(SLO)$/textureprimitive3d.obj			\
+        $(SLO)$/baseprimitive3d.obj				\
+        $(SLO)$/groupprimitive3d.obj			\
         $(SLO)$/hatchtextureprimitive3d.obj		\
-        $(SLO)$/polygontubeprimitive3d.obj		\
-        $(SLO)$/polygonprimitive3d.obj			\
+        $(SLO)$/modifiedcolorprimitive3d.obj	\
         $(SLO)$/polypolygonprimitive3d.obj		\
-        $(SLO)$/transformprimitive3d.obj		\
+        $(SLO)$/polygonprimitive3d.obj			\
+        $(SLO)$/polygontubeprimitive3d.obj		\
+        $(SLO)$/sdrcubeprimitive3d.obj			\
         $(SLO)$/sdrdecompositiontools3d.obj		\
         $(SLO)$/sdrextrudelathetools3d.obj		\
-        $(SLO)$/sdrprimitive3d.obj				\
-        $(SLO)$/sdrlabelprimitive3d.obj			\
-        $(SLO)$/sdrcubeprimitive3d.obj			\
         $(SLO)$/sdrextrudeprimitive3d.obj		\
-        $(SLO)$/sdrsphereprimitive3d.obj		\
+        $(SLO)$/sdrlabelprimitive3d.obj			\
         $(SLO)$/sdrlatheprimitive3d.obj			\
-        $(SLO)$/sdrpolygonprimitive3d.obj		\
-        $(SLO)$/modifiedcolorprimitive3d.obj
+        $(SLO)$/sdrpolypolygonprimitive3d.obj	\
+        $(SLO)$/sdrprimitive3d.obj				\
+        $(SLO)$/sdrsphereprimitive3d.obj		\
+        $(SLO)$/shadowprimitive3d.obj			\
+        $(SLO)$/textureprimitive3d.obj			\
+        $(SLO)$/transformprimitive3d.obj
 
 # --- Targets ----------------------------------
 

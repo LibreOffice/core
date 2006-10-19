@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudelathetools3d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:38:14 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
-#define _DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
-
-#include <vector>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
 
 #ifndef _BGFX_POLYGON_B3DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b3dpolypolygon.hxx>
@@ -45,6 +43,8 @@
 #ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #endif
+
+#include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -55,30 +55,35 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        // slice types
-        enum sliceType
+        // Slice3D types
+        enum SliceType3D
         {
-            SLICETYPE_REGULAR,      // normal geoemtry slice
-            SLICETYPE_FRONTCAP,     // front cap
-            SLICETYPE_BACKCAP       // back cap
+            SLICETYPE3D_REGULAR,        // normal geoemtry Slice3D
+            SLICETYPE3D_FRONTCAP,       // front cap
+            SLICETYPE3D_BACKCAP         // back cap
         };
 
-        // class to hold one 3D slice
-        class slice
+        // class to hold one Slice3D
+        class Slice3D
         {
         protected:
             basegfx::B3DPolyPolygon                 maPolyPolygon;
-            sliceType                                   maSliceType;
+            SliceType3D                             maSliceType;
 
         public:
-            slice(const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B3DHomMatrix& aTransform, sliceType aSliceType = SLICETYPE_REGULAR)
+            Slice3D(
+                const basegfx::B2DPolyPolygon& rPolyPolygon,
+                const basegfx::B3DHomMatrix& aTransform,
+                SliceType3D aSliceType = SLICETYPE3D_REGULAR)
             :   maPolyPolygon(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(rPolyPolygon)),
                 maSliceType(aSliceType)
             {
                 maPolyPolygon.transform(aTransform);
             }
 
-            slice(const basegfx::B3DPolyPolygon& rPolyPolygon, sliceType aSliceType = SLICETYPE_REGULAR)
+            Slice3D(
+                const basegfx::B3DPolyPolygon& rPolyPolygon,
+                SliceType3D aSliceType = SLICETYPE3D_REGULAR)
             :   maPolyPolygon(rPolyPolygon),
                 maSliceType(aSliceType)
             {
@@ -86,25 +91,52 @@ namespace drawinglayer
 
             // data access
             const basegfx::B3DPolyPolygon& getB3DPolyPolygon() const { return maPolyPolygon; }
-            sliceType getSliceType() const { return maSliceType; }
+            SliceType3D getSliceType() const { return maSliceType; }
         };
 
-        // typedef for a group of slices
-        typedef ::std::vector< slice > sliceVector;
+        // typedef for a group of Slice3Ds
+        typedef ::std::vector< Slice3D > Slice3DVector;
 
         // helpers for creation
-        void createLatheSlices(sliceVector& rSliceVector, const basegfx::B2DPolyPolygon& rSource,
-            double fBackScale, double fDiagonal, double fRotation, sal_uInt32 nSteps,
-            bool bCharacterMode, bool bCloseFront, bool bCloseBack);
-        void createExtrudeSlices(sliceVector& rSliceVector, const basegfx::B2DPolyPolygon& rSource,
-            double fBackScale, double fDiagonal, double fDepth,
-            bool bCharacterMode, bool bCloseFront, bool bCloseBack);
+        void createLatheSlices(
+            Slice3DVector& rSliceVector,
+            const basegfx::B2DPolyPolygon& rSource,
+            double fBackScale,
+            double fDiagonal,
+            double fRotation,
+            sal_uInt32 nSteps,
+            bool bCharacterMode,
+            bool bCloseFront,
+            bool bCloseBack);
+
+        void createExtrudeSlices(
+            Slice3DVector& rSliceVector,
+            const basegfx::B2DPolyPolygon& rSource,
+            double fBackScale,
+            double fDiagonal,
+            double fDepth,
+            bool bCharacterMode,
+            bool bCloseFront,
+            bool bCloseBack);
 
         // helpers for geometry extraction
-        void extractLinesFromSlice(basegfx::B3DPolyPolygon& rLine, const sliceVector& rSliceVector, bool bClosed);
-        void extractPlanesFromSlice(::std::vector< basegfx::B3DPolyPolygon >& rFill, const sliceVector& rSliceVector,
-            bool bCreateNormals, bool bSmoothHorizontalNormals, bool bSmoothNormals, bool bSmoothLids, bool bClosed,
-            double fSmoothNormalsMix, double fSmoothLidsMix, bool bCreateTextureCoordinates, const basegfx::B2DHomMatrix& rTexTransform);
+        void extractLinesFromSlice(
+            basegfx::B3DPolyPolygon& rLine,
+            const Slice3DVector& rSliceVector,
+            bool bClosed);
+
+        void extractPlanesFromSlice(
+            ::std::vector< basegfx::B3DPolyPolygon >& rFill,
+            const Slice3DVector& rSliceVector,
+            bool bCreateNormals,
+            bool bSmoothHorizontalNormals,
+            bool bSmoothNormals,
+            bool bSmoothLids,
+            bool bClosed,
+            double fSmoothNormalsMix,
+            double fSmoothLidsMix,
+            bool bCreateTextureCoordinates,
+            const basegfx::B2DHomMatrix& rTexTransform);
 
     } // end of namespace overlay
 } // end of namespace drawinglayer

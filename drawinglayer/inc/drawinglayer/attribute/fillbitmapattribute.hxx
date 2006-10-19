@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillbitmapattribute.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:36:39 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:30:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
-#define _DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
+#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
 
 #ifndef _SV_BITMAP_HXX
 #include <vcl/bitmap.hxx>
@@ -50,7 +50,6 @@
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
-class SfxItemSet;
 
 namespace basegfx {
     class B2DRange;
@@ -63,18 +62,18 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class fillBitmapAttribute
+        class FillBitmapAttribute
         {
             Bitmap                                      maBitmap;
             basegfx::B2DPoint                           maTopLeft;
-            basegfx::B2DVector                      maSize;
+            basegfx::B2DVector                          maSize;
 
             // bitfield
             unsigned                                    mbTiling : 1;
 
         public:
-            fillBitmapAttribute(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize, bool bTiling);
-            bool operator==(const fillBitmapAttribute& rCandidate) const;
+            FillBitmapAttribute(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize, bool bTiling);
+            bool operator==(const FillBitmapAttribute& rCandidate) const;
 
             // data access
             const Bitmap& getBitmap() const { return maBitmap; }
@@ -87,6 +86,6 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
+#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
 
 // eof

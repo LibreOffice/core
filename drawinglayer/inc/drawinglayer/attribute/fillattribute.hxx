@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillattribute.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:36:37 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:30:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
-#define _DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
+#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
 
 #ifndef _BGFX_COLOR_BCOLOR_HXX
 #include <basegfx/color/bcolor.hxx>
@@ -73,10 +73,10 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class fillGradientAttribute
+        class FillGradientAttribute
         {
-            basegfx::BColor                         maStartColor;
-            basegfx::BColor                         maEndColor;
+            basegfx::BColor                             maStartColor;
+            basegfx::BColor                             maEndColor;
             double                                      mfBorder;
             double                                      mfOffsetX;
             double                                      mfOffsetY;
@@ -85,10 +85,10 @@ namespace drawinglayer
             sal_uInt16                                  mnSteps;
 
         public:
-            fillGradientAttribute(
+            FillGradientAttribute(
                 GradientStyle eStyle, double fBorder, double fOffsetX, double fOffsetY, double fAngle,
                 const basegfx::BColor& rStartColor, const basegfx::BColor& rEndColor, sal_uInt16 nSteps);
-            bool operator==(const fillGradientAttribute& rCandidate) const;
+            bool operator==(const FillGradientAttribute& rCandidate) const;
 
             // data access
             const basegfx::BColor& getStartColor() const { return maStartColor; }
@@ -109,19 +109,19 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class fillHatchAttribute
+        class FillHatchAttribute
         {
             double                                      mfDistance;
             double                                      mfAngle;
-            basegfx::BColor                         maColor;
+            basegfx::BColor                             maColor;
             HatchStyle                                  meStyle;
 
             // bitfield
             unsigned                                    mbFillBackground : 1;
 
         public:
-            fillHatchAttribute(HatchStyle eStyle, double fDistance, double fAngle, const basegfx::BColor& rColor, bool bFillBackground);
-            bool operator==(const fillHatchAttribute& rCandidate) const;
+            FillHatchAttribute(HatchStyle eStyle, double fDistance, double fAngle, const basegfx::BColor& rColor, bool bFillBackground);
+            bool operator==(const FillHatchAttribute& rCandidate) const;
 
             // data access
             double getDistance() const { return mfDistance; }
@@ -135,6 +135,6 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
+#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
 
 // eof

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillattribute.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:47:33 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
 #include <drawinglayer/attribute/fillattribute.hxx>
 #endif
 
@@ -47,7 +47,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        fillGradientAttribute::fillGradientAttribute(GradientStyle eStyle, double fBorder, double fOffsetX, double fOffsetY, double fAngle,
+        FillGradientAttribute::FillGradientAttribute(GradientStyle eStyle, double fBorder, double fOffsetX, double fOffsetY, double fAngle,
             const basegfx::BColor& rStartColor, const basegfx::BColor& rEndColor, sal_uInt16 nSteps)
         :   maStartColor(rStartColor),
             maEndColor(rEndColor),
@@ -60,7 +60,7 @@ namespace drawinglayer
         {
         }
 
-        bool fillGradientAttribute::operator==(const fillGradientAttribute& rCandidate) const
+        bool FillGradientAttribute::operator==(const FillGradientAttribute& rCandidate) const
         {
             return (meStyle == rCandidate.meStyle
                 && maStartColor == rCandidate.maStartColor
@@ -80,7 +80,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        fillHatchAttribute::fillHatchAttribute(HatchStyle eStyle, double fDistance, double fAngle, const basegfx::BColor& rColor, bool bFillBackground)
+        FillHatchAttribute::FillHatchAttribute(HatchStyle eStyle, double fDistance, double fAngle, const basegfx::BColor& rColor, bool bFillBackground)
         :   mfDistance(fDistance),
             mfAngle(fAngle),
             maColor(rColor),
@@ -89,7 +89,7 @@ namespace drawinglayer
         {
         }
 
-        bool fillHatchAttribute::operator==(const fillHatchAttribute& rCandidate) const
+        bool FillHatchAttribute::operator==(const FillHatchAttribute& rCandidate) const
         {
             return (meStyle == rCandidate.meStyle
                 && mfDistance == rCandidate.mfDistance

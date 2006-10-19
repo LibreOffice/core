@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprocessor3d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:45:32 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:33:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,23 +33,12 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
-#define _DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
+#define INCLUDED_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
 
-#ifndef _DRAWINGLAYER_GEOMETRY_VIEWINFORMATION_HXX
-#include <drawinglayer/geometry/viewinformation.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_BASEPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #endif
-
-#ifndef _DRAWINGLAYER_GEOMETRY_TRANSFORMATION3D_HXX
-#include <drawinglayer/geometry/transformation3d.hxx>
-#endif
-
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_PRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/primitive3d.hxx>
-#endif
-
-//////////////////////////////////////////////////////////////////////////////
-// predefines
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -57,25 +46,20 @@ namespace drawinglayer
 {
     namespace processor3d
     {
-        class baseProcessor3D
+        class BaseProcessor3D
         {
-        protected:
-            // the view information and the complete 3d stack
-            const geometry::viewInformation         maViewInformation;
-            const geometry::transformation3D        maTransformation3D;
+        private:
+            double                                              mfTime;
 
         public:
-            baseProcessor3D(
-                const geometry::viewInformation& rViewInformation,
-                const geometry::transformation3D& rTransformation3D);
-            virtual ~baseProcessor3D();
+            BaseProcessor3D(double fTime);
+            virtual ~BaseProcessor3D();
 
             // the central processing method
-            virtual void process(const primitive3d::primitiveVector3D& rSource) = 0;
+            virtual void process(const primitive3d::Primitive3DSequence& rSource) = 0;
 
             // data access
-            const geometry::viewInformation& getViewInformation() const { return maViewInformation; }
-            const geometry::transformation3D& getTransformation3D() const { return maTransformation3D; }
+            double getTime() const { return mfTime; }
         };
     } // end of namespace processor3d
 } // end of namespace drawinglayer
@@ -86,22 +70,30 @@ namespace drawinglayer
 {
     namespace processor3d
     {
-        class collectingProcessor3D : public baseProcessor3D
+        class CollectingProcessor3D : public BaseProcessor3D
         {
-        protected:
-            primitive3d::primitiveVector3D      maPrimitiveVector;
+        private:
+            primitive3d::Primitive3DSequence                        maPrimitiveSequence;
 
         public:
-            collectingProcessor3D(
-                const geometry::viewInformation& rViewInformation,
-                const geometry::transformation3D& rTransformation3D);
-            virtual ~collectingProcessor3D();
+            CollectingProcessor3D(double fTime);
 
             // the central processing method
-            virtual void process(const primitive3d::primitiveVector3D& rSource);
+            virtual void process(const primitive3d::Primitive3DSequence& rSource);
+
+            // helpers for adding to local sequence
+            void appendPrimitive3DSequence(const primitive3d::Primitive3DSequence& rSource)
+            {
+                primitive3d::appendPrimitive3DSequenceToPrimitive3DSequence(maPrimitiveSequence, rSource);
+            }
+
+            void appendPrimitive3DReference(const primitive3d::Primitive3DReference& rSource)
+            {
+                primitive3d::appendPrimitive3DReferenceToPrimitive3DSequence(maPrimitiveSequence, rSource);
+            }
 
             // data access
-            const primitive3d::primitiveVector3D& getPrimitives() const { return maPrimitiveVector; }
+            const primitive3d::Primitive3DSequence& getPrimitive3DSequence() const { return maPrimitiveSequence; }
         };
     } // end of namespace processor3d
 } // end of namespace drawinglayer

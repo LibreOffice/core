@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationtiming.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:39:25 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:30:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
-#define _DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
+#define INCLUDED_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -50,18 +50,18 @@ namespace drawinglayer
     {
         //////////////////////////////////////////////////////////////////////////////
 
-        class animationEntry
+        class AnimationEntry
         {
         private:
-            animationEntry(const animationEntry&);
-            animationEntry& operator=(const animationEntry& rCandidate);
+            AnimationEntry(const AnimationEntry&);
+            AnimationEntry& operator=(const AnimationEntry& rCandidate);
 
         public:
-            animationEntry();
-            virtual ~animationEntry();
-            virtual animationEntry* clone() const = 0;
+            AnimationEntry();
+            virtual ~AnimationEntry();
+            virtual AnimationEntry* clone() const = 0;
 
-            virtual bool operator==(const animationEntry& rCandidate) const = 0;
+            virtual bool operator==(const AnimationEntry& rCandidate) const = 0;
             virtual double getDuration() const = 0;
             virtual double getStateAtTime(double fTime) const = 0;
             virtual double getNextEventTime(double fTime) const = 0;
@@ -69,18 +69,18 @@ namespace drawinglayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        class animationEntryFixed : public animationEntry
+        class AnimationEntryFixed : public AnimationEntry
         {
         protected:
             double                                      mfDuration;
             double                                      mfState;
 
         public:
-            animationEntryFixed(double fDuration, double fState = 0.0);
-            virtual ~animationEntryFixed();
-            virtual animationEntry* clone() const;
+            AnimationEntryFixed(double fDuration, double fState = 0.0);
+            virtual ~AnimationEntryFixed();
+            virtual AnimationEntry* clone() const;
 
-            virtual bool operator==(const animationEntry& rCandidate) const;
+            virtual bool operator==(const AnimationEntry& rCandidate) const;
             virtual double getDuration() const;
             virtual double getStateAtTime(double fTime) const;
             virtual double getNextEventTime(double fTime) const;
@@ -88,7 +88,7 @@ namespace drawinglayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        class animationEntryLinear : public animationEntry
+        class AnimationEntryLinear : public AnimationEntry
         {
         protected:
             double                                      mfDuration;
@@ -97,11 +97,11 @@ namespace drawinglayer
             double                                      mfStop;
 
         public:
-            animationEntryLinear(double fDuration, double fFrequency = 250.0, double fStart = 0.0, double fStop = 1.0);
-            virtual ~animationEntryLinear();
-            virtual animationEntry* clone() const;
+            AnimationEntryLinear(double fDuration, double fFrequency = 250.0, double fStart = 0.0, double fStop = 1.0);
+            virtual ~AnimationEntryLinear();
+            virtual AnimationEntry* clone() const;
 
-            virtual bool operator==(const animationEntry& rCandidate) const;
+            virtual bool operator==(const AnimationEntry& rCandidate) const;
             virtual double getDuration() const;
             virtual double getStateAtTime(double fTime) const;
             virtual double getNextEventTime(double fTime) const;
@@ -109,22 +109,22 @@ namespace drawinglayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        class animationEntryList : public animationEntry
+        class AnimationEntryList : public AnimationEntry
         {
         protected:
             double                                      mfDuration;
-            ::std::vector< animationEntry* >            maEntries;
+            ::std::vector< AnimationEntry* >            maEntries;
 
             // helpers
             sal_uInt32 impGetIndexAtTime(double fTime, double &rfAddedTime) const;
 
         public:
-            animationEntryList();
-            virtual ~animationEntryList();
-            virtual animationEntry* clone() const;
+            AnimationEntryList();
+            virtual ~AnimationEntryList();
+            virtual AnimationEntry* clone() const;
 
-            virtual bool operator==(const animationEntry& rCandidate) const;
-            void append(const animationEntry& rCandidate);
+            virtual bool operator==(const AnimationEntry& rCandidate) const;
+            void append(const AnimationEntry& rCandidate);
             virtual double getDuration() const;
             virtual double getStateAtTime(double fTime) const;
             virtual double getNextEventTime(double fTime) const;
@@ -132,17 +132,17 @@ namespace drawinglayer
 
         //////////////////////////////////////////////////////////////////////////////
 
-        class animationEntryLoop : public animationEntryList
+        class AnimationEntryLoop : public AnimationEntryList
         {
         protected:
             sal_uInt32                                  mnRepeat;
 
         public:
-            animationEntryLoop(sal_uInt32 nRepeat = 0xffffffff);
-            virtual ~animationEntryLoop();
-            virtual animationEntry* clone() const;
+            AnimationEntryLoop(sal_uInt32 nRepeat = 0xffffffff);
+            virtual ~AnimationEntryLoop();
+            virtual AnimationEntry* clone() const;
 
-            virtual bool operator==(const animationEntry& rCandidate) const;
+            virtual bool operator==(const AnimationEntry& rCandidate) const;
             virtual double getDuration() const;
             virtual double getStateAtTime(double fTime) const;
             virtual double getNextEventTime(double fTime) const;
@@ -154,6 +154,6 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
+#endif //INCLUDED_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
 
 // eof

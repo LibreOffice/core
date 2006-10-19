@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textureprimitive3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:51:16 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:38:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,13 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/textureprimitive3d.hxx>
 #endif
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -43,27 +47,25 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        texturePrimitive3D::texturePrimitive3D(
-            const primitiveVector3D& rPrimitiveVector,
+        TexturePrimitive3D::TexturePrimitive3D(
+            const Primitive3DSequence& rChildren,
             const basegfx::B2DVector& rTextureSize,
             bool bModulate, bool bFilter)
-        :   vectorPrimitive3D(rPrimitiveVector),
+        :   GroupPrimitive3D(rChildren),
             maTextureSize(rTextureSize),
             mbModulate(bModulate),
             mbFilter(bFilter)
         {
         }
 
-        texturePrimitive3D::~texturePrimitive3D()
+        bool TexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-        }
-
-        bool texturePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
-        {
-            if(vectorPrimitive3D::operator==(rPrimitive))
+            if(GroupPrimitive3D::operator==(rPrimitive))
             {
-                const texturePrimitive3D& rCompare = (texturePrimitive3D&)rPrimitive;
-                return (mbModulate == rCompare.mbModulate && mbFilter == rCompare.mbFilter);
+                const TexturePrimitive3D& rCompare = (TexturePrimitive3D&)rPrimitive;
+
+                return (getModulate() == rCompare.getModulate()
+                    && getFilter() == rCompare.getFilter());
             }
 
             return false;
@@ -77,53 +79,51 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        void simpleTransparenceTexturePrimitive3D::decompose(primitiveVector3D& rTarget)
+        Primitive3DSequence UnifiedAlphaTexturePrimitive3D::createLocalDecomposition(double /*fTime*/) const
         {
-            if(0.0 == mfTransparence)
+            if(0.0 == getTransparence())
             {
-                // no transparence used, so just add the content
-                rTarget.insert(rTarget.end(), maPrimitiveVector.begin(), maPrimitiveVector.end());
+                // no transparence used, so just use content
+                return getChildren();
             }
-            else if(mfTransparence > 0.0 && mfTransparence < 1.0)
+            else if(getTransparence() > 0.0 && getTransparence() < 1.0)
             {
-                // create transparenceTexturePrimitive3D with fixed transparence as replacement
-                const basegfx::BColor aGray(mfTransparence, mfTransparence, mfTransparence);
-                const attribute::fillGradientAttribute aFillGradient(attribute::GRADIENTSTYLE_LINEAR, 0.0, 0.0, 0.0, 0.0, aGray, aGray, 1);
-                basePrimitive3D* pNewTransparenceTexturePrimitive3D = new transparenceTexturePrimitive3D(aFillGradient, maPrimitiveVector, maTextureSize);
-                rTarget.push_back(referencedPrimitive3D(*pNewTransparenceTexturePrimitive3D));
+                // create AlphaTexturePrimitive3D with fixed transparence as replacement
+                const basegfx::BColor aGray(getTransparence(), getTransparence(), getTransparence());
+                const attribute::FillGradientAttribute aFillGradient(attribute::GRADIENTSTYLE_LINEAR, 0.0, 0.0, 0.0, 0.0, aGray, aGray, 1);
+                const Primitive3DReference xRef(new AlphaTexturePrimitive3D(aFillGradient, getChildren(), getTextureSize()));
+                return Primitive3DSequence(&xRef, 1L);
             }
             else
             {
                 // completely transparent or invalid definition, add nothing
+                return Primitive3DSequence();
             }
         }
 
-        simpleTransparenceTexturePrimitive3D::simpleTransparenceTexturePrimitive3D(
+        UnifiedAlphaTexturePrimitive3D::UnifiedAlphaTexturePrimitive3D(
             double fTransparence,
-            const primitiveVector3D& rPrimitiveVector)
-        :   texturePrimitive3D(rPrimitiveVector, basegfx::B2DVector(), false, false),
+            const Primitive3DSequence& rChildren)
+        :   TexturePrimitive3D(rChildren, basegfx::B2DVector(), false, false),
             mfTransparence(fTransparence)
         {
         }
 
-        simpleTransparenceTexturePrimitive3D::~simpleTransparenceTexturePrimitive3D()
+        bool UnifiedAlphaTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-        }
-
-        bool simpleTransparenceTexturePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
-        {
-            if(texturePrimitive3D::operator==(rPrimitive))
+            if(TexturePrimitive3D::operator==(rPrimitive))
             {
-                const simpleTransparenceTexturePrimitive3D& rCompare = (simpleTransparenceTexturePrimitive3D&)rPrimitive;
-                return (mfTransparence == rCompare.mfTransparence);
+                const UnifiedAlphaTexturePrimitive3D& rCompare = (UnifiedAlphaTexturePrimitive3D&)rPrimitive;
+
+                return (getTransparence() == rCompare.getTransparence());
             }
 
             return false;
         }
 
-        PrimitiveID simpleTransparenceTexturePrimitive3D::getID() const
+        sal_uInt32 UnifiedAlphaTexturePrimitive3D::getPrimitiveID() const
         {
-            return CreatePrimitiveID('S', 'T', 'X', '3');
+            return Create3DPrimitiveID('3','U','A','T');
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -134,40 +134,37 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        void gradientTexturePrimitive3D::decompose(primitiveVector3D& rTarget)
+        Primitive3DSequence GradientTexturePrimitive3D::createLocalDecomposition(double /*fTime*/) const
         {
-            rTarget.insert(rTarget.end(), maPrimitiveVector.begin(), maPrimitiveVector.end());
+            return getChildren();
         }
 
-        gradientTexturePrimitive3D::gradientTexturePrimitive3D(
-            const attribute::fillGradientAttribute& rGradient,
-            const primitiveVector3D& rPrimitiveVector,
+        GradientTexturePrimitive3D::GradientTexturePrimitive3D(
+            const attribute::FillGradientAttribute& rGradient,
+            const Primitive3DSequence& rChildren,
             const basegfx::B2DVector& rTextureSize,
             bool bModulate,
             bool bFilter)
-        :   texturePrimitive3D(rPrimitiveVector, rTextureSize, bModulate, bFilter),
+        :   TexturePrimitive3D(rChildren, rTextureSize, bModulate, bFilter),
             maGradient(rGradient)
         {
         }
 
-        gradientTexturePrimitive3D::~gradientTexturePrimitive3D()
+        bool GradientTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-        }
-
-        bool gradientTexturePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
-        {
-            if(texturePrimitive3D::operator==(rPrimitive))
+            if(TexturePrimitive3D::operator==(rPrimitive))
             {
-                const gradientTexturePrimitive3D& rCompare = (gradientTexturePrimitive3D&)rPrimitive;
-                return (maGradient == rCompare.maGradient);
+                const GradientTexturePrimitive3D& rCompare = (GradientTexturePrimitive3D&)rPrimitive;
+
+                return (getGradient() == rCompare.getGradient());
             }
 
             return false;
         }
 
-        PrimitiveID gradientTexturePrimitive3D::getID() const
+        sal_uInt32 GradientTexturePrimitive3D::getPrimitiveID() const
         {
-            return CreatePrimitiveID('G', 'R', 'X', '3');
+            return Create3DPrimitiveID('3','G','T','e');
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -178,39 +175,36 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        void bitmapTexturePrimitive3D::decompose(primitiveVector3D& rTarget)
+        Primitive3DSequence BitmapTexturePrimitive3D::createLocalDecomposition(double /*fTime*/) const
         {
-            rTarget.insert(rTarget.end(), maPrimitiveVector.begin(), maPrimitiveVector.end());
+            return getChildren();
         }
 
-        bitmapTexturePrimitive3D::bitmapTexturePrimitive3D(
-            const attribute::fillBitmapAttribute& rBitmap,
-            const primitiveVector3D& rPrimitiveVector,
+        BitmapTexturePrimitive3D::BitmapTexturePrimitive3D(
+            const attribute::FillBitmapAttribute& rBitmap,
+            const Primitive3DSequence& rChildren,
             const basegfx::B2DVector& rTextureSize,
             bool bModulate, bool bFilter)
-        :   texturePrimitive3D(rPrimitiveVector, rTextureSize, bModulate, bFilter),
+        :   TexturePrimitive3D(rChildren, rTextureSize, bModulate, bFilter),
             maBitmap(rBitmap)
         {
         }
 
-        bitmapTexturePrimitive3D::~bitmapTexturePrimitive3D()
+        bool BitmapTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-        }
-
-        bool bitmapTexturePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
-        {
-            if(texturePrimitive3D::operator==(rPrimitive))
+            if(TexturePrimitive3D::operator==(rPrimitive))
             {
-                const bitmapTexturePrimitive3D& rCompare = (bitmapTexturePrimitive3D&)rPrimitive;
-                return (maBitmap == rCompare.maBitmap);
+                const BitmapTexturePrimitive3D& rCompare = (BitmapTexturePrimitive3D&)rPrimitive;
+
+                return (getBitmap() == rCompare.getBitmap());
             }
 
             return false;
         }
 
-        PrimitiveID bitmapTexturePrimitive3D::getID() const
+        sal_uInt32 BitmapTexturePrimitive3D::getPrimitiveID() const
         {
-            return CreatePrimitiveID('B', 'M', 'X', '3');
+            return Create3DPrimitiveID('3','B','T','e');
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -221,26 +215,22 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        transparenceTexturePrimitive3D::transparenceTexturePrimitive3D(
-            const attribute::fillGradientAttribute& rGradient,
-            const primitiveVector3D& rPrimitiveVector,
+        AlphaTexturePrimitive3D::AlphaTexturePrimitive3D(
+            const attribute::FillGradientAttribute& rGradient,
+            const Primitive3DSequence& rChildren,
             const basegfx::B2DVector& rTextureSize)
-        :   gradientTexturePrimitive3D(rGradient, rPrimitiveVector, rTextureSize, false, false)
+        :   GradientTexturePrimitive3D(rGradient, rChildren, rTextureSize, false, false)
         {
         }
 
-        transparenceTexturePrimitive3D::~transparenceTexturePrimitive3D()
+        bool AlphaTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
+            return (GradientTexturePrimitive3D::operator==(rPrimitive));
         }
 
-        bool transparenceTexturePrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
+        sal_uInt32 AlphaTexturePrimitive3D::getPrimitiveID() const
         {
-            return (gradientTexturePrimitive3D::operator==(rPrimitive));
-        }
-
-        PrimitiveID transparenceTexturePrimitive3D::getID() const
-        {
-            return CreatePrimitiveID('T', 'R', 'X', '3');
+            return Create3DPrimitiveID('3','A','T','e');
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

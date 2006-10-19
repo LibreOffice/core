@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: aw $ $Date: 2006-08-09 16:58:53 $
+#   last change: $Author: aw $ $Date: 2006-10-19 10:26:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,10 @@ TARGET=drawinglayer
 
 LIB1TARGET=$(SLB)$/drawinglayer.lib
 LIB1FILES=\
-    $(SLB)$/primitive.lib	\
+    $(SLB)$/primitive2d.lib	\
     $(SLB)$/primitive3d.lib	\
     $(SLB)$/geometry.lib	\
-    $(SLB)$/processor.lib	\
+    $(SLB)$/processor2d.lib	\
     $(SLB)$/processor3d.lib	\
     $(SLB)$/attribute.lib	\
     $(SLB)$/animation.lib	\

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polypolygonprimitive3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:51:15 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:38:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
 #endif
 
@@ -41,49 +41,53 @@
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #endif
 
+#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
+#include <basegfx/tools/canvastools.hxx>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
     namespace primitive3d
     {
-        polyPolygonMaterialPrimitive3D::polyPolygonMaterialPrimitive3D(
+        PolyPolygonMaterialPrimitive3D::PolyPolygonMaterialPrimitive3D(
             const basegfx::B3DPolyPolygon& rPolyPolygon,
-            const attribute::materialAttribute3D& rMaterial,
+            const attribute::MaterialAttribute3D& rMaterial,
             bool bDoubleSided)
-        :   basePrimitive3D(),
+        :   BasePrimitive3D(),
             maPolyPolygon(rPolyPolygon),
             maMaterial(rMaterial),
             mbDoubleSided(bDoubleSided)
         {
         }
 
-        polyPolygonMaterialPrimitive3D::~polyPolygonMaterialPrimitive3D()
+        bool PolyPolygonMaterialPrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-        }
-
-        bool polyPolygonMaterialPrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
-        {
-            if(getID() == rPrimitive.getID())
+            if(BasePrimitive3D::operator==(rPrimitive))
             {
-                const polyPolygonMaterialPrimitive3D& rCompare = (polyPolygonMaterialPrimitive3D&)rPrimitive;
+                const PolyPolygonMaterialPrimitive3D& rCompare = (PolyPolygonMaterialPrimitive3D&)rPrimitive;
 
-                return (maPolyPolygon == rCompare.maPolyPolygon
-                    && maMaterial == rCompare.maMaterial
-                    && mbDoubleSided == rCompare.mbDoubleSided);
+                return (getB3DPolyPolygon() == rCompare.getB3DPolyPolygon()
+                    && getMaterial() == rCompare.getMaterial()
+                    && getDoubleSided() == rCompare.getDoubleSided());
             }
 
             return false;
         }
 
-        PrimitiveID polyPolygonMaterialPrimitive3D::getID() const
+        basegfx::B3DRange PolyPolygonMaterialPrimitive3D::getB3DRange(double /*fTime*/) const
         {
-            return CreatePrimitiveID('P', 'O', 'M', '3');
+            return basegfx::tools::getRange(getB3DPolyPolygon());
         }
 
-        basegfx::B3DRange polyPolygonMaterialPrimitive3D::get3DRange() const
+        sal_uInt32 PolyPolygonMaterialPrimitive3D::getPrimitiveID() const
         {
-            return basegfx::tools::getRange(maPolyPolygon);
+            return Create3DPrimitiveID('3','P','P','M');
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

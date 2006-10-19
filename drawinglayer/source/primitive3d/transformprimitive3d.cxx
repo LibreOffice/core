@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transformprimitive3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:51:16 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:38:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,17 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #endif
+
+#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
+#include <basegfx/tools/canvastools.hxx>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -43,37 +51,36 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        transformPrimitive3D::transformPrimitive3D(const basegfx::B3DHomMatrix& rTransformation, const primitiveVector3D& rPrimitiveVector)
-        :   vectorPrimitive3D(rPrimitiveVector),
+        TransformPrimitive3D::TransformPrimitive3D(
+            const basegfx::B3DHomMatrix& rTransformation,
+            const Primitive3DSequence& rChildren)
+        :   GroupPrimitive3D(rChildren),
             maTransformation(rTransformation)
         {
         }
 
-        transformPrimitive3D::~transformPrimitive3D()
+        bool TransformPrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-        }
-
-        bool transformPrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
-        {
-            if(vectorPrimitive3D::operator==(rPrimitive))
+            if(GroupPrimitive3D::operator==(rPrimitive))
             {
-                const transformPrimitive3D& rCompare = static_cast< const transformPrimitive3D& >(rPrimitive);
-                return (maTransformation == rCompare.maTransformation);
+                const TransformPrimitive3D& rCompare = static_cast< const TransformPrimitive3D& >(rPrimitive);
+
+                return (getTransformation() == rCompare.getTransformation());
             }
 
             return false;
         }
 
-        PrimitiveID transformPrimitive3D::getID() const
+        basegfx::B3DRange TransformPrimitive3D::getB3DRange(double fTime) const
         {
-            return CreatePrimitiveID('T', 'R', 'N', '3');
+            basegfx::B3DRange aRetval(getB3DRangeFromPrimitive3DSequence(getChildren(), fTime));
+            aRetval.transform(getTransformation());
+            return aRetval;
         }
 
-        basegfx::B3DRange transformPrimitive3D::get3DRange() const
+        sal_uInt32 TransformPrimitive3D::getPrimitiveID() const
         {
-            basegfx::B3DRange aRetval(get3DRangeFromVector(maPrimitiveVector));
-            aRetval.transform(maTransformation);
-            return aRetval;
+            return Create3DPrimitiveID('3','T','r','a');
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

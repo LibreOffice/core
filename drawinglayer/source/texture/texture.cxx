@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texture.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-09-27 16:33:43 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:39:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_TEXTURE_TEXTURE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE_HXX
 #include <drawinglayer/texture/texture.hxx>
 #endif
 
@@ -47,26 +47,26 @@ namespace drawinglayer
 {
     namespace texture
     {
-        geoTexSvx::geoTexSvx()
+        GeoTexSvx::GeoTexSvx()
         {
         }
 
-        geoTexSvx::~geoTexSvx()
+        GeoTexSvx::~GeoTexSvx()
         {
         }
 
-        bool geoTexSvx::operator==(const geoTexSvx& /*rGeoTexSvx*/) const
+        bool GeoTexSvx::operator==(const GeoTexSvx& /*rGeoTexSvx*/) const
         {
             // default implementation says yes (no data -> no difference)
             return true;
         }
 
-        void geoTexSvx::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& /*rMatrices*/)
+        void GeoTexSvx::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& /*rMatrices*/)
         {
             // default implementation does nothing
         }
 
-        void geoTexSvx::modifyBColor(const basegfx::B2DPoint& /*rUV*/, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
+        void GeoTexSvx::modifyBColor(const basegfx::B2DPoint& /*rUV*/, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             // base implementation creates random color (for testing only, may also be pure virtual)
             rBColor.setRed((rand() & 0x7fff) / 32767.0);
@@ -74,7 +74,7 @@ namespace drawinglayer
             rBColor.setBlue((rand() & 0x7fff) / 32767.0);
         }
 
-        void geoTexSvx::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
+        void GeoTexSvx::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
         {
             // base implementation uses inverse of luminance of solved color
             basegfx::BColor aBaseColor;
@@ -90,7 +90,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        void geoTexSvxGradient::impAppendMatrix(::std::vector< basegfx::B2DHomMatrix >& rMatrices, const basegfx::B2DRange& rRange)
+        void GeoTexSvxGradient::impAppendMatrix(::std::vector< basegfx::B2DHomMatrix >& rMatrices, const basegfx::B2DRange& rRange)
         {
             basegfx::B2DHomMatrix aNew;
             aNew.set(0, 0, rRange.getWidth());
@@ -100,7 +100,7 @@ namespace drawinglayer
             rMatrices.push_back(maTextureTransform * aNew);
         }
 
-        void geoTexSvxGradient::impAppendColorsRadial(::std::vector< basegfx::BColor >& rColors)
+        void GeoTexSvxGradient::impAppendColorsRadial(::std::vector< basegfx::BColor >& rColors)
         {
             if(mnSteps)
             {
@@ -115,7 +115,7 @@ namespace drawinglayer
             }
         }
 
-        geoTexSvxGradient::geoTexSvxGradient(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder)
+        GeoTexSvxGradient::GeoTexSvxGradient(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder)
         :   maTargetRange(rTargetRange),
             maStart(rStart),
             maEnd(rEnd),
@@ -125,13 +125,13 @@ namespace drawinglayer
         {
         }
 
-        geoTexSvxGradient::~geoTexSvxGradient()
+        GeoTexSvxGradient::~GeoTexSvxGradient()
         {
         }
 
-        bool geoTexSvxGradient::operator==(const geoTexSvx& rGeoTexSvx) const
+        bool GeoTexSvxGradient::operator==(const GeoTexSvx& rGeoTexSvx) const
         {
-            const geoTexSvxGradient* pCompare = dynamic_cast< const geoTexSvxGradient* >(&rGeoTexSvx);
+            const GeoTexSvxGradient* pCompare = dynamic_cast< const GeoTexSvxGradient* >(&rGeoTexSvx);
             return (pCompare
                 && maTextureTransform == pCompare->maTextureTransform
                 && maTargetRange == pCompare->maTargetRange
@@ -148,8 +148,8 @@ namespace drawinglayer
 {
     namespace texture
     {
-        geoTexSvxGradientLinear::geoTexSvxGradientLinear(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fAngle)
-        :   geoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
+        GeoTexSvxGradientLinear::GeoTexSvxGradientLinear(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fAngle)
+        :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
         {
             double fTargetSizeX(maTargetRange.getWidth());
             double fTargetSizeY(maTargetRange.getHeight());
@@ -201,11 +201,11 @@ namespace drawinglayer
             }
         }
 
-        geoTexSvxGradientLinear::~geoTexSvxGradientLinear()
+        GeoTexSvxGradientLinear::~GeoTexSvxGradientLinear()
         {
         }
 
-        void geoTexSvxGradientLinear::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
+        void GeoTexSvxGradientLinear::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
         {
             if(mnSteps)
             {
@@ -223,7 +223,7 @@ namespace drawinglayer
             }
         }
 
-        void geoTexSvxGradientLinear::appendColors(::std::vector< basegfx::BColor >& rColors)
+        void GeoTexSvxGradientLinear::appendColors(::std::vector< basegfx::BColor >& rColors)
         {
             if(mnSteps)
             {
@@ -236,7 +236,7 @@ namespace drawinglayer
             }
         }
 
-        void geoTexSvxGradientLinear::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
+        void GeoTexSvxGradientLinear::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
 
@@ -270,8 +270,8 @@ namespace drawinglayer
 {
     namespace texture
     {
-        geoTexSvxGradientAxial::geoTexSvxGradientAxial(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fAngle)
-        :   geoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
+        GeoTexSvxGradientAxial::GeoTexSvxGradientAxial(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fAngle)
+        :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
         {
             double fTargetSizeX(maTargetRange.getWidth());
             double fTargetSizeY(maTargetRange.getHeight());
@@ -326,11 +326,11 @@ namespace drawinglayer
             mfInternalSteps = (double)((mnSteps * 2L) - 1L);
         }
 
-        geoTexSvxGradientAxial::~geoTexSvxGradientAxial()
+        GeoTexSvxGradientAxial::~GeoTexSvxGradientAxial()
         {
         }
 
-        void geoTexSvxGradientAxial::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
+        void GeoTexSvxGradientAxial::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
         {
             if(mnSteps)
             {
@@ -350,7 +350,7 @@ namespace drawinglayer
             }
         }
 
-        void geoTexSvxGradientAxial::appendColors(::std::vector< basegfx::BColor >& rColors)
+        void GeoTexSvxGradientAxial::appendColors(::std::vector< basegfx::BColor >& rColors)
         {
             if(mnSteps)
             {
@@ -363,7 +363,7 @@ namespace drawinglayer
             }
         }
 
-        void geoTexSvxGradientAxial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
+        void GeoTexSvxGradientAxial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
             const double fAbsY(fabs(aCoor.getY()));
@@ -392,8 +392,8 @@ namespace drawinglayer
 {
     namespace texture
     {
-        geoTexSvxGradientRadial::geoTexSvxGradientRadial(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY)
-        :   geoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
+        GeoTexSvxGradientRadial::GeoTexSvxGradientRadial(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY)
+        :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
         {
             double fTargetSizeX(maTargetRange.getWidth());
             double fTargetSizeY(maTargetRange.getHeight());
@@ -437,11 +437,11 @@ namespace drawinglayer
             }
         }
 
-        geoTexSvxGradientRadial::~geoTexSvxGradientRadial()
+        GeoTexSvxGradientRadial::~GeoTexSvxGradientRadial()
         {
         }
 
-        void geoTexSvxGradientRadial::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
+        void GeoTexSvxGradientRadial::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
         {
             if(mnSteps)
             {
@@ -478,12 +478,12 @@ namespace drawinglayer
             }
         }
 
-        void geoTexSvxGradientRadial::appendColors(::std::vector< basegfx::BColor >& rColors)
+        void GeoTexSvxGradientRadial::appendColors(::std::vector< basegfx::BColor >& rColors)
         {
             impAppendColorsRadial(rColors);
         }
 
-        void geoTexSvxGradientRadial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
+        void GeoTexSvxGradientRadial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
             const double fDist(aCoor.getX() * aCoor.getX() + aCoor.getY() * aCoor.getY());
@@ -512,8 +512,8 @@ namespace drawinglayer
 {
     namespace texture
     {
-        geoTexSvxGradientElliptical::geoTexSvxGradientElliptical(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY, double fAngle)
-        :   geoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
+        GeoTexSvxGradientElliptical::GeoTexSvxGradientElliptical(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY, double fAngle)
+        :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
         {
             double fTargetSizeX(maTargetRange.getWidth());
             double fTargetSizeY(maTargetRange.getHeight());
@@ -567,11 +567,11 @@ namespace drawinglayer
             }
         }
 
-        geoTexSvxGradientElliptical::~geoTexSvxGradientElliptical()
+        GeoTexSvxGradientElliptical::~GeoTexSvxGradientElliptical()
         {
         }
 
-        void geoTexSvxGradientElliptical::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
+        void GeoTexSvxGradientElliptical::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
         {
             if(mnSteps)
             {
@@ -608,12 +608,12 @@ namespace drawinglayer
             }
         }
 
-        void geoTexSvxGradientElliptical::appendColors(::std::vector< basegfx::BColor >& rColors)
+        void GeoTexSvxGradientElliptical::appendColors(::std::vector< basegfx::BColor >& rColors)
         {
             impAppendColorsRadial(rColors);
         }
 
-        void geoTexSvxGradientElliptical::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
+        void GeoTexSvxGradientElliptical::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
             const double fDist(aCoor.getX() * aCoor.getX() + aCoor.getY() * aCoor.getY());
@@ -642,8 +642,8 @@ namespace drawinglayer
 {
     namespace texture
     {
-        geoTexSvxGradientSquare::geoTexSvxGradientSquare(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY, double fAngle)
-        :   geoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
+        GeoTexSvxGradientSquare::GeoTexSvxGradientSquare(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY, double fAngle)
+        :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
         {
             double fTargetSizeX(maTargetRange.getWidth());
             double fTargetSizeY(maTargetRange.getHeight());
@@ -704,11 +704,11 @@ namespace drawinglayer
             }
         }
 
-        geoTexSvxGradientSquare::~geoTexSvxGradientSquare()
+        GeoTexSvxGradientSquare::~GeoTexSvxGradientSquare()
         {
         }
 
-        void geoTexSvxGradientSquare::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
+        void GeoTexSvxGradientSquare::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
         {
             if(mnSteps)
             {
@@ -753,12 +753,12 @@ namespace drawinglayer
             }
         }
 
-        void geoTexSvxGradientSquare::appendColors(::std::vector< basegfx::BColor >& rColors)
+        void GeoTexSvxGradientSquare::appendColors(::std::vector< basegfx::BColor >& rColors)
         {
             impAppendColorsRadial(rColors);
         }
 
-        void geoTexSvxGradientSquare::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
+        void GeoTexSvxGradientSquare::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
             const double fAbsX(fabs(aCoor.getX()));
@@ -788,8 +788,8 @@ namespace drawinglayer
 {
     namespace texture
     {
-        geoTexSvxGradientRect::geoTexSvxGradientRect(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY, double fAngle)
-        :   geoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
+        GeoTexSvxGradientRect::GeoTexSvxGradientRect(const basegfx::B2DRange& rTargetRange, const basegfx::BColor& rStart, const basegfx::BColor& rEnd, sal_uInt32 nSteps, double fBorder, double fOffsetX, double fOffsetY, double fAngle)
+        :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
         {
             double fTargetSizeX(maTargetRange.getWidth());
             double fTargetSizeY(maTargetRange.getHeight());
@@ -850,11 +850,11 @@ namespace drawinglayer
             }
         }
 
-        geoTexSvxGradientRect::~geoTexSvxGradientRect()
+        GeoTexSvxGradientRect::~GeoTexSvxGradientRect()
         {
         }
 
-        void geoTexSvxGradientRect::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
+        void GeoTexSvxGradientRect::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
         {
             if(mnSteps)
             {
@@ -891,12 +891,12 @@ namespace drawinglayer
             }
         }
 
-        void geoTexSvxGradientRect::appendColors(::std::vector< basegfx::BColor >& rColors)
+        void GeoTexSvxGradientRect::appendColors(::std::vector< basegfx::BColor >& rColors)
         {
             impAppendColorsRadial(rColors);
         }
 
-        void geoTexSvxGradientRect::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
+        void GeoTexSvxGradientRect::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
             const double fAbsX(fabs(aCoor.getX()));
@@ -926,7 +926,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        geoTexSvxHatch::geoTexSvxHatch(const basegfx::B2DRange& rTargetRange, double fDistance, double fAngle)
+        GeoTexSvxHatch::GeoTexSvxHatch(const basegfx::B2DRange& rTargetRange, double fDistance, double fAngle)
         :   mfDistance(0.1),
             mfAngle(fAngle),
             mnSteps(10L)
@@ -976,13 +976,13 @@ namespace drawinglayer
             maBackTextureTransform.invert();
         }
 
-        geoTexSvxHatch::~geoTexSvxHatch()
+        GeoTexSvxHatch::~GeoTexSvxHatch()
         {
         }
 
-        bool geoTexSvxHatch::operator==(const geoTexSvx& rGeoTexSvx) const
+        bool GeoTexSvxHatch::operator==(const GeoTexSvx& rGeoTexSvx) const
         {
-            const geoTexSvxHatch* pCompare = dynamic_cast< const geoTexSvxHatch* >(&rGeoTexSvx);
+            const GeoTexSvxHatch* pCompare = dynamic_cast< const GeoTexSvxHatch* >(&rGeoTexSvx);
             return (pCompare
                 && maTextureTransform == pCompare->maTextureTransform
                 && mfDistance == pCompare->mfDistance
@@ -990,7 +990,7 @@ namespace drawinglayer
                 && mnSteps == pCompare->mnSteps);
         }
 
-        void geoTexSvxHatch::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
+        void GeoTexSvxHatch::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
         {
             for(sal_uInt32 a(1L); a < mnSteps; a++)
             {
@@ -1002,7 +1002,7 @@ namespace drawinglayer
             }
         }
 
-        double geoTexSvxHatch::getDistanceToHatch(const basegfx::B2DPoint& rUV) const
+        double GeoTexSvxHatch::getDistanceToHatch(const basegfx::B2DPoint& rUV) const
         {
             const basegfx::B2DPoint aCoor(maBackTextureTransform * rUV);
             return fmod(aCoor.getY(), mfDistance);
@@ -1016,7 +1016,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        geoTexSvxTiled::geoTexSvxTiled(const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize)
+        GeoTexSvxTiled::GeoTexSvxTiled(const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize)
         :   maTopLeft(rTopLeft),
             maSize(rSize)
         {
@@ -1031,19 +1031,19 @@ namespace drawinglayer
             }
         }
 
-        geoTexSvxTiled::~geoTexSvxTiled()
+        GeoTexSvxTiled::~GeoTexSvxTiled()
         {
         }
 
-        bool geoTexSvxTiled::operator==(const geoTexSvx& rGeoTexSvx) const
+        bool GeoTexSvxTiled::operator==(const GeoTexSvx& rGeoTexSvx) const
         {
-            const geoTexSvxTiled* pCompare = dynamic_cast< const geoTexSvxTiled* >(&rGeoTexSvx);
+            const GeoTexSvxTiled* pCompare = dynamic_cast< const GeoTexSvxTiled* >(&rGeoTexSvx);
             return (pCompare
                 && maTopLeft == pCompare->maTopLeft
                 && maSize == pCompare->maSize);
         }
 
-        void geoTexSvxTiled::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
+        void GeoTexSvxTiled::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
         {
             double fStartX(maTopLeft.getX());
             double fStartY(maTopLeft.getY());

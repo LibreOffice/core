@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrprimitive3d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:38:13 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,35 +33,32 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
-#define _DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_PRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/primitive3d.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_BASEPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #endif
 
 #ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
+#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
+#include <basegfx/vector/b2dvector.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
 #include <drawinglayer/attribute/sdrallattribute3d.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
-#include <drawinglayer/attribute/sdrattribute.hxx>
-#endif
-
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
-#include <drawinglayer/primitive3d/sdrextrudelathetools3d.hxx>
-#endif
-
-#ifndef _DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
 #include <drawinglayer/attribute/sdrattribute3d.hxx>
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-// predefines
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
+#include <drawinglayer/primitive3d/sdrextrudelathetools3d.hxx>
+#endif
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -69,44 +66,45 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class sdrPrimitive3D : public basePrimitive3D
+        class SdrPrimitive3D : public BasePrimitive3D
         {
-        protected:
+        private:
             basegfx::B3DHomMatrix                       maTransform;
-            basegfx::B2DVector                      maTextureSize;
-            attribute::sdrLineFillShadowAttribute       maSdrLFSAttribute;
-            attribute::sdr3DObjectAttribute             maSdr3DObjectAttribute;
+            basegfx::B2DVector                          maTextureSize;
+            attribute::SdrLineFillShadowAttribute       maSdrLFSAttribute;
+            attribute::Sdr3DObjectAttribute             maSdr3DObjectAttribute;
 
+        protected:
             // Standard implementation for primitive3D which
             // will use maTransform as range and expand by evtl. line width / 2
             basegfx::B3DRange getStandard3DRange() const;
 
             // implementation for primitive3D which
-            // will use given slices and expand by evtl. line width / 2
-            basegfx::B3DRange get3DRangeFromSlices(const sliceVector& rSlices) const;
+            // will use given Slice3Ds and expand by evtl. line width / 2
+            basegfx::B3DRange get3DRangeFromSlices(const Slice3DVector& rSlices) const;
 
         public:
-            sdrPrimitive3D(
+            SdrPrimitive3D(
                 const basegfx::B3DHomMatrix& rTransform,
                 const basegfx::B2DVector& rTextureSize,
-                const attribute::sdrLineFillShadowAttribute& rSdrLFSAttribute,
-                const attribute::sdr3DObjectAttribute& rSdr3DObjectAttribute);
-            virtual ~sdrPrimitive3D();
-
-            // compare operator
-            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
+                const attribute::SdrLineFillShadowAttribute& rSdrLFSAttribute,
+                const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute);
 
             // data access
             const basegfx::B3DHomMatrix& getTransform() const { return maTransform; }
             const basegfx::B2DVector& getTextureSize() const { return maTextureSize; }
-            const attribute::sdrLineFillShadowAttribute& getSdrLFSAttribute() const { return maSdrLFSAttribute; }
-            const attribute::sdr3DObjectAttribute getSdr3DObjectAttribute() const { return maSdr3DObjectAttribute; }
+            const attribute::SdrLineFillShadowAttribute& getSdrLFSAttribute() const { return maSdrLFSAttribute; }
+            const attribute::Sdr3DObjectAttribute getSdr3DObjectAttribute() const { return maSdr3DObjectAttribute; }
+
+            // compare operator
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
         };
-    } // end of namespace overlay
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_DRAWINGLAYER_PRIMITIVE3D_SDRCUBEPRIMITIVE3D_HXX
+#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
 
+//////////////////////////////////////////////////////////////////////////////
 // eof

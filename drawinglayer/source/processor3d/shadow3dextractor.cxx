@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shadow3dextractor.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:57:48 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:39:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,23 +33,27 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PROCESSOR3D_SHADOW3DEXTRACTOR_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_SHADOW3DEXTRACTOR_HXX
 #include <drawinglayer/processor3d/shadow3dextractor.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SHADOWPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SHADOWPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/shadowprimitive3d.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_PRIMITIVE_SHADOWPRIMITIVE_HXX
-#include <drawinglayer/primitive/shadowprimitive.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_SHADOWPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_UNIFIEDALPHAPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_POLYGONPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYGONPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 #endif
 
@@ -57,7 +61,11 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYGONPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
 #endif
 
@@ -65,25 +73,17 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_GEOMETRY_TRANSFORMATION3D_HXX
-#include <drawinglayer/geometry/transformation3d.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYPOLYGONPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
-#include <drawinglayer/attribute/sdrattribute3d.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRLABELPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/sdrlabelprimitive3d.hxx>
 #endif
 
-#ifndef _DRAWINGLAYER_PRIMITIVE_SIMPLETRANSPARENCEPRIMITIVE_HXX
-#include <drawinglayer/primitive/simpletransparenceprimitive.hxx>
-#endif
+//////////////////////////////////////////////////////////////////////////////
 
-#ifndef _DRAWINGLAYER_PRIMITIVE_POLYGONPRIMITIVE_HXX
-#include <drawinglayer/primitive/polygonprimitive.hxx>
-#endif
-
-#ifndef _DRAWINGLAYER_PRIMITIVE_POLYPOLYGONPRIMITIVE_HXX
-#include <drawinglayer/primitive/polypolygonprimitive.hxx>
-#endif
+using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -91,14 +91,16 @@ namespace drawinglayer
 {
     namespace processor3d
     {
-        shadow3DExtractingProcessor::shadow3DExtractingProcessor(
-            const geometry::viewInformation& rViewInformation,
-            const geometry::transformation3D& rTransformation3D,
-            const attribute::sdrLightingAttribute& rSdrLightingAttribute,
-            const primitive3d::primitiveVector3D& rPrimitiveVector,
+        Shadow3DExtractingProcessor::Shadow3DExtractingProcessor(
+            double fTime,
+            const geometry::Transformation3D& rTransformation3D,
+            const attribute::SdrLightingAttribute& rSdrLightingAttribute,
+            const primitive3d::Primitive3DSequence& rPrimitiveSequence,
             double fShadowSlant)
-        :   baseProcessor3D(rViewInformation, rTransformation3D),
-            mpTargetVector(&maPrimitiveVector),
+        :   BaseProcessor3D(fTime),
+            maPrimitive2DSequence(),
+            mpPrimitive2DSequence(&maPrimitive2DSequence),
+            maTransformation3D(rTransformation3D),
             mbShadowProjectionIsValid(false),
             mbConvert(false),
             mbUseProjection(false)
@@ -126,10 +128,10 @@ namespace drawinglayer
                 maShadowPlaneNormal.normalize();
                 mfLightPlaneScalar = maLightNormal.scalar(maShadowPlaneNormal);
 
+                // use only when scalar is > 0.0, so the light is in front of the object
                 if(basegfx::fTools::more(mfLightPlaneScalar, 0.0))
                 {
-                    // use only when scalar is > 0.0, so the light is in front of the object
-                    basegfx::B3DRange aContained3DRange(get3DRangeFromVector(rPrimitiveVector));
+                    basegfx::B3DRange aContained3DRange(primitive3d::getB3DRangeFromPrimitive3DSequence(rPrimitiveSequence, getTime()));
                     aContained3DRange.transform(maWorldToEye);
                     maPlanePoint.setX(maShadowPlaneNormal.getX() < 0.0 ? aContained3DRange.getMinX() : aContained3DRange.getMaxX());
                     maPlanePoint.setY(maShadowPlaneNormal.getY() > 0.0 ? aContained3DRange.getMinY() : aContained3DRange.getMaxY());
@@ -141,164 +143,174 @@ namespace drawinglayer
             }
         }
 
-        shadow3DExtractingProcessor::~shadow3DExtractingProcessor()
+        void Shadow3DExtractingProcessor::process(const primitive3d::Primitive3DSequence& rSource)
         {
-        }
-
-        void shadow3DExtractingProcessor::process(const primitive3d::primitiveVector3D& rSource)
-        {
-            for(sal_uInt32 a(0L); a < rSource.size(); a++)
+            if(rSource.hasElements())
             {
-                // get reference
-                const primitive3d::referencedPrimitive3D& rCandidate = rSource[a];
+                const sal_Int32 nCount(rSource.getLength());
 
-                switch(rCandidate.getID())
+                for(sal_Int32 a(0L); a < nCount; a++)
                 {
-                    case CreatePrimitiveID('S', 'H', 'D', '3'):
+                    // get reference
+                    const primitive3d::Primitive3DReference xReference(rSource[a]);
+
+                    if(xReference.is())
                     {
-                        // shadow3d object. Call recursive with content and start conversion
-                        const primitive3d::shadowPrimitive3D& rPrimitive = static_cast< const primitive3d::shadowPrimitive3D& >(rCandidate.getBasePrimitive());
+                        // try to cast to BasePrimitive3D implementation
+                        const primitive3d::BasePrimitive3D* pBasePrimitive = dynamic_cast< const primitive3d::BasePrimitive3D* >(xReference.get());
 
-                        // set new target
-                        primitive::primitiveVector aNewSubList;
-                        primitive::primitiveVector* pLastTargetVector = mpTargetVector;
-                        mpTargetVector = &aNewSubList;
-
-                        // activate convert
-                        const bool bLastConvert(mbConvert);
-                        mbConvert = true;
-
-                        // set projection flag
-                        const bool bLastUseProjection(mbUseProjection);
-                        mbUseProjection = rPrimitive.getShadow3D();
-
-                        // process content
-                        process(rPrimitive.getPrimitives());
-
-                        // restore values
-                        mbUseProjection = bLastUseProjection;
-                        mbConvert = bLastConvert;
-                        mpTargetVector = pLastTargetVector;
-
-                        // create 2d shadow primitive with result
-                        primitive::shadowPrimitive* pNew = new primitive::shadowPrimitive(rPrimitive.getShadowTransform(), rPrimitive.getShadowColor(), aNewSubList);
-
-                        if(basegfx::fTools::more(rPrimitive.getShadowTransparence(), 0.0))
+                        if(pBasePrimitive)
                         {
-                            // create simpleTransparencePrimitive, add created primitives
-                            primitive::primitiveVector aNewTransPrimitiveVector;
-                            aNewTransPrimitiveVector.push_back(primitive::referencedPrimitive(*pNew));
-                            primitive::simpleTransparencePrimitive* pNewTrans = new primitive::simpleTransparencePrimitive(rPrimitive.getShadowTransparence(), aNewTransPrimitiveVector);
-                            mpTargetVector->push_back(primitive::referencedPrimitive(*pNewTrans));
+                            // it is a BasePrimitive3D implementation, use getPrimitiveID() call for switch
+                            switch(pBasePrimitive->getPrimitiveID())
+                            {
+                                case Create3DPrimitiveID('3','S','h','a') :
+                                {
+                                    // shadow3d object. Call recursive with content and start conversion
+                                    const primitive3d::ShadowPrimitive3D& rPrimitive = static_cast< const primitive3d::ShadowPrimitive3D& >(*pBasePrimitive);
+
+                                    // set new target
+                                    primitive2d::Primitive2DSequence aNewSubList;
+                                    primitive2d::Primitive2DSequence* pLastTargetSequence = mpPrimitive2DSequence;
+                                    mpPrimitive2DSequence = &aNewSubList;
+
+                                    // activate convert
+                                    const bool bLastConvert(mbConvert);
+                                    mbConvert = true;
+
+                                    // set projection flag
+                                    const bool bLastUseProjection(mbUseProjection);
+                                    mbUseProjection = rPrimitive.getShadow3D();
+
+                                    // process content
+                                    process(rPrimitive.getChildren());
+
+                                    // restore values
+                                    mbUseProjection = bLastUseProjection;
+                                    mbConvert = bLastConvert;
+                                    mpPrimitive2DSequence = pLastTargetSequence;
+
+                                    // create 2d shadow primitive with result
+                                    const primitive2d::Primitive2DReference xRef(new primitive2d::ShadowPrimitive2D(rPrimitive.getShadowTransform(), rPrimitive.getShadowColor(), aNewSubList));
+
+                                    if(basegfx::fTools::more(rPrimitive.getShadowTransparence(), 0.0))
+                                    {
+                                        // create simpleTransparencePrimitive, add created primitives
+                                        const primitive2d::Primitive2DSequence aNewTransPrimitiveVector(&xRef, 1L);
+                                        const primitive2d::Primitive2DReference xRef2(new primitive2d::UnifiedAlphaPrimitive2D(aNewTransPrimitiveVector, rPrimitive.getShadowTransparence()));
+                                        primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(*mpPrimitive2DSequence, xRef2);
+                                    }
+                                    else
+                                    {
+                                        // add directly
+                                        primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(*mpPrimitive2DSequence, xRef);
+                                    }
+                                    break;
+                                }
+                                case Create3DPrimitiveID('3','T','r','a') :
+                                {
+                                    // transform group. Remember current transformations
+                                    const primitive3d::TransformPrimitive3D& rPrimitive = static_cast< const primitive3d::TransformPrimitive3D& >(*pBasePrimitive);
+                                    basegfx::B3DHomMatrix aLastWorldToView(maWorldToView);
+                                    basegfx::B3DHomMatrix aLastWorldToEye(maWorldToEye);
+
+                                    // create new transformations
+                                    maWorldToView = maWorldToView * rPrimitive.getTransformation();
+                                    maWorldToEye = maWorldToEye * rPrimitive.getTransformation();
+
+                                    // let break down
+                                    process(rPrimitive.getChildren());
+
+                                    // restore transformations
+                                    maWorldToView = aLastWorldToView;
+                                    maWorldToEye = aLastWorldToEye;
+                                    break;
+                                }
+                                case Create3DPrimitiveID('3','P','H','a') :
+                                {
+                                    // PolygonHairlinePrimitive3D
+                                    if(mbConvert)
+                                    {
+                                        const primitive3d::PolygonHairlinePrimitive3D& rPrimitive = static_cast< const primitive3d::PolygonHairlinePrimitive3D& >(*pBasePrimitive);
+                                        basegfx::B2DPolygon a2DHairline;
+
+                                        if(mbUseProjection)
+                                        {
+                                            if(mbShadowProjectionIsValid)
+                                            {
+                                                a2DHairline = impDoShadowProjection(rPrimitive.getB3DPolygon());
+                                            }
+                                        }
+                                        else
+                                        {
+                                            a2DHairline = basegfx::tools::createB2DPolygonFromB3DPolygon(rPrimitive.getB3DPolygon(), maWorldToView);
+                                        }
+
+                                        if(a2DHairline.count())
+                                        {
+                                            a2DHairline.transform(getTransformation3D().getObjectTransformation());
+                                            const primitive2d::Primitive2DReference xRef(new primitive2d::PolygonHairlinePrimitive2D(a2DHairline, maPrimitiveColor));
+                                            primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(*mpPrimitive2DSequence, xRef);
+                                        }
+                                    }
+                                    break;
+                                }
+                                case Create3DPrimitiveID('3','P','P','M') :
+                                {
+                                    // PolyPolygonMaterialPrimitive3D
+                                    if(mbConvert)
+                                    {
+                                        const primitive3d::PolyPolygonMaterialPrimitive3D& rPrimitive = static_cast< const primitive3d::PolyPolygonMaterialPrimitive3D& >(*pBasePrimitive);
+                                        basegfx::B2DPolyPolygon a2DFill;
+
+                                        if(mbUseProjection)
+                                        {
+                                            if(mbShadowProjectionIsValid)
+                                            {
+                                                a2DFill = impDoShadowProjection(rPrimitive.getB3DPolyPolygon());
+                                            }
+                                        }
+                                        else
+                                        {
+                                            a2DFill = basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(rPrimitive.getB3DPolyPolygon(), maWorldToView);
+                                        }
+
+                                        if(a2DFill.count())
+                                        {
+                                            a2DFill.transform(getTransformation3D().getObjectTransformation());
+                                            const primitive2d::Primitive2DReference xRef(new primitive2d::PolyPolygonColorPrimitive2D(a2DFill, maPrimitiveColor));
+                                            primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(*mpPrimitive2DSequence, xRef);
+                                        }
+                                    }
+                                    break;
+                                }
+                                case Create3DPrimitiveID('3','L','a','b') :
+                                {
+                                    // SdrLabelPrimitive3D
+                                    // has no 3d shadow, accept and ignore
+                                    break;
+                                }
+                                default :
+                                {
+                                    // process recursively
+                                    process(pBasePrimitive->get3DDecomposition(getTime()));
+                                    break;
+                                }
+                            }
                         }
                         else
                         {
-                            // add directly
-                            mpTargetVector->push_back(primitive::referencedPrimitive(*pNew));
+                            // unknown implementation, use UNO API call instead and process recursively
+                            com::sun::star::graphic::Primitive3DParameters aPrimitive3DParameters;
+                            aPrimitive3DParameters.Time = getTime();
+                            process(xReference->getDecomposition(aPrimitive3DParameters));
                         }
-
-                        break;
-                    }
-
-                    case CreatePrimitiveID('T', 'R', 'N', '3'):
-                    {
-                        // transform group. Remember current transformations
-                        const primitive3d::transformPrimitive3D& rPrimitive = static_cast< const primitive3d::transformPrimitive3D& >(rCandidate.getBasePrimitive());
-                        basegfx::B3DHomMatrix aLastWorldToView(maWorldToView);
-                        basegfx::B3DHomMatrix aLastWorldToEye(maWorldToEye);
-
-                        // create new transformations
-                        maWorldToView = maWorldToView * rPrimitive.getTransformation();
-                        maWorldToEye = maWorldToEye * rPrimitive.getTransformation();
-
-                        // let break down
-                        process(rPrimitive.getPrimitives());
-
-                        // restore transformations
-                        maWorldToView = aLastWorldToView;
-                        maWorldToEye = aLastWorldToEye;
-                        break;
-                    }
-
-                    case CreatePrimitiveID('P', 'O', 'H', '3'):
-                    {
-                        // polygonHairlinePrimitive3D
-                        if(mbConvert)
-                        {
-                            const primitive3d::polygonHairlinePrimitive3D& rPrimitive = static_cast< const primitive3d::polygonHairlinePrimitive3D& >(rCandidate.getBasePrimitive());
-                            basegfx::B2DPolygon a2DHairline;
-
-                            if(mbUseProjection)
-                            {
-                                if(mbShadowProjectionIsValid)
-                                {
-                                    a2DHairline = impDoShadowProjection(rPrimitive.getB3DPolygon());
-                                }
-                            }
-                            else
-                            {
-                                a2DHairline = basegfx::tools::createB2DPolygonFromB3DPolygon(rPrimitive.getB3DPolygon(), maWorldToView);
-                            }
-
-                            if(a2DHairline.count())
-                            {
-                                a2DHairline.transform(getTransformation3D().getObjectTransformation());
-                                primitive::polygonHairlinePrimitive* pNew = new primitive::polygonHairlinePrimitive(a2DHairline, maPrimitiveColor);
-                                mpTargetVector->push_back(primitive::referencedPrimitive(*pNew));
-                            }
-                        }
-
-                        break;
-                    }
-
-                    case CreatePrimitiveID('P', 'O', 'M', '3'):
-                    {
-                        // polyPolygonMaterialPrimitive3D
-                        if(mbConvert)
-                        {
-                            const primitive3d::polyPolygonMaterialPrimitive3D& rPrimitive = static_cast< const primitive3d::polyPolygonMaterialPrimitive3D& >(rCandidate.getBasePrimitive());
-                            basegfx::B2DPolyPolygon a2DFill;
-
-                            if(mbUseProjection)
-                            {
-                                if(mbShadowProjectionIsValid)
-                                {
-                                    a2DFill = impDoShadowProjection(rPrimitive.getB3DPolyPolygon());
-                                }
-                            }
-                            else
-                            {
-                                a2DFill = basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(rPrimitive.getB3DPolyPolygon(), maWorldToView);
-                            }
-
-                            if(a2DFill.count())
-                            {
-                                a2DFill.transform(getTransformation3D().getObjectTransformation());
-                                primitive::polyPolygonColorPrimitive* pNew = new primitive::polyPolygonColorPrimitive(a2DFill, maPrimitiveColor);
-                                mpTargetVector->push_back(primitive::referencedPrimitive(*pNew));
-                            }
-                        }
-
-                        break;
-                    }
-
-                    case CreatePrimitiveID('L', 'A', 'B', '3'):
-                    {
-                        // has no 3d shadow, accept and ignore
-                        break;
-                    }
-
-                    default:
-                    {
-                        // let break down
-                        process(rCandidate.getBasePrimitive().getDecomposition());
-                        break;
                     }
                 }
             }
         }
 
-        basegfx::B2DPolygon shadow3DExtractingProcessor::impDoShadowProjection(const basegfx::B3DPolygon& rSource)
+        basegfx::B2DPolygon Shadow3DExtractingProcessor::impDoShadowProjection(const basegfx::B3DPolygon& rSource)
         {
             basegfx::B2DPolygon aRetval;
 
@@ -327,7 +339,7 @@ namespace drawinglayer
             return aRetval;
         }
 
-        basegfx::B2DPolyPolygon shadow3DExtractingProcessor::impDoShadowProjection(const basegfx::B3DPolyPolygon& rSource)
+        basegfx::B2DPolyPolygon Shadow3DExtractingProcessor::impDoShadowProjection(const basegfx::B3DPolyPolygon& rSource)
         {
             basegfx::B2DPolyPolygon aRetval;
 

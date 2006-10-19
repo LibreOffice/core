@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shadowprimitive3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:51:16 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:38:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,13 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SHADOWPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SHADOWPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/shadowprimitive3d.hxx>
 #endif
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -43,10 +47,13 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        shadowPrimitive3D::shadowPrimitive3D(
-            const basegfx::B2DHomMatrix& rShadowTransform, const basegfx::BColor& rShadowColor,
-            double fShadowTransparence, bool bShadow3D, const primitiveVector3D& rPrimitiveVector)
-        :   vectorPrimitive3D(rPrimitiveVector),
+        ShadowPrimitive3D::ShadowPrimitive3D(
+            const basegfx::B2DHomMatrix& rShadowTransform,
+            const basegfx::BColor& rShadowColor,
+            double fShadowTransparence,
+            bool bShadow3D,
+            const Primitive3DSequence& rChildren)
+        :   GroupPrimitive3D(rChildren),
             maShadowTransform(rShadowTransform),
             maShadowColor(rShadowColor),
             mfShadowTransparence(fShadowTransparence),
@@ -54,27 +61,24 @@ namespace drawinglayer
         {
         }
 
-        shadowPrimitive3D::~shadowPrimitive3D()
+        bool ShadowPrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-        }
-
-        bool shadowPrimitive3D::operator==(const basePrimitive3D& rPrimitive) const
-        {
-            if(vectorPrimitive3D::operator==(rPrimitive))
+            if(GroupPrimitive3D::operator==(rPrimitive))
             {
-                const shadowPrimitive3D& rCompare = (shadowPrimitive3D&)rPrimitive;
-                return (maShadowTransform == rCompare.maShadowTransform
-                    && maShadowColor == rCompare.maShadowColor
-                    && mfShadowTransparence == rCompare.mfShadowTransparence
-                    && mbShadow3D == rCompare.mbShadow3D);
+                const ShadowPrimitive3D& rCompare = (ShadowPrimitive3D&)rPrimitive;
+
+                return (getShadowTransform() == rCompare.getShadowTransform()
+                    && getShadowColor() == rCompare.getShadowColor()
+                    && getShadowTransparence() == rCompare.getShadowTransparence()
+                    && getShadow3D() == rCompare.getShadow3D());
             }
 
             return false;
         }
 
-        PrimitiveID shadowPrimitive3D::getID() const
+        sal_uInt32 ShadowPrimitive3D::getPrimitiveID() const
         {
-            return CreatePrimitiveID('S', 'H', 'D', '3');
+            return Create3DPrimitiveID('3','S','h','a');
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

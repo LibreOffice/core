@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrfillbitmapattribute.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:36:39 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:30:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
-#define _DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
+#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
 
 #ifndef _SV_BITMAP_HXX
 #include <vcl/bitmap.hxx>
@@ -48,8 +48,8 @@
 // predefines
 class SfxItemSet;
 
-namespace drawinglayer {    namespace attribute {
-    class fillBitmapAttribute;
+namespace drawinglayer { namespace attribute {
+    class FillBitmapAttribute;
 }}
 
 namespace basegfx {
@@ -62,7 +62,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class sdrFillBitmapAttribute
+        class SdrFillBitmapAttribute
         {
             Bitmap                                      maBitmap;
             basegfx::B2DVector                      maSize;
@@ -76,22 +76,22 @@ namespace drawinglayer
             unsigned                                    mbLogSize : 1;
 
         public:
-            sdrFillBitmapAttribute(
+            SdrFillBitmapAttribute(
                 const Bitmap& rBitmap, const basegfx::B2DVector& rSize, const basegfx::B2DVector& rOffset,
                 const basegfx::B2DVector& rOffsetPosition, const basegfx::B2DVector& rRectPoint,
                 bool bTiling, bool bStretch, bool bLogSize);
-            bool operator==(const sdrFillBitmapAttribute& rCandidate) const;
+            bool operator==(const SdrFillBitmapAttribute& rCandidate) const;
 
             // data access
             const Bitmap& getBitmap() const { return maBitmap; }
             bool getTiling() const { return mbTiling; }
-            fillBitmapAttribute getFillBitmapAttribute(const basegfx::B2DRange& rRange) const;
+            FillBitmapAttribute getFillBitmapAttribute(const basegfx::B2DRange& rRange) const;
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
+#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
 
 // eof

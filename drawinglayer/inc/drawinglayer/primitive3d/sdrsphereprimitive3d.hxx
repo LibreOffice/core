@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrsphereprimitive3d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-08-09 16:38:13 $
+ *  last change: $Author: aw $ $Date: 2006-10-19 10:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,15 +33,12 @@
  *
  ************************************************************************/
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDRSPHEREPRIMITIVE3D_HXX
-#define _DRAWINGLAYER_PRIMITIVE3D_SDRSPHEREPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRSPHEREPRIMITIVE3D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRSPHEREPRIMITIVE3D_HXX
 
-#ifndef _DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/sdrprimitive3d.hxx>
 #endif
-
-//////////////////////////////////////////////////////////////////////////////
-// predefines
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -49,42 +46,44 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class sdrSpherePrimitive3D : public sdrPrimitive3D
+        class SdrSpherePrimitive3D : public SdrPrimitive3D
         {
-        protected:
+        private:
             sal_uInt32                                  mnHorizontalSegments;
             sal_uInt32                                  mnVerticalSegments;
 
-            //  create decomposition
-            virtual void decompose(primitiveVector3D& rTarget);
+        protected:
+            // local decomposition.
+            virtual Primitive3DSequence createLocalDecomposition(double fTime) const;
 
         public:
-            sdrSpherePrimitive3D(
+            SdrSpherePrimitive3D(
                 const basegfx::B3DHomMatrix& rTransform,
                 const basegfx::B2DVector& rTextureSize,
-                const attribute::sdrLineFillShadowAttribute& rSdrLFSAttribute,
-                const attribute::sdr3DObjectAttribute& rSdr3DObjectAttribute,
-                sal_uInt32 nHorizontalSegments, sal_uInt32 nVerticalSegments);
-            virtual ~sdrSpherePrimitive3D();
-
-            // compare operator
-            virtual bool operator==(const basePrimitive3D& rPrimitive) const;
-
-            // id generator
-            virtual PrimitiveID getID() const;
-
-            // get 3D range of primitive.
-            virtual basegfx::B3DRange get3DRange() const;
+                const attribute::SdrLineFillShadowAttribute& rSdrLFSAttribute,
+                const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute,
+                sal_uInt32 nHorizontalSegments,
+                sal_uInt32 nVerticalSegments);
 
             // data access
             sal_uInt32 getHorizontalSegments() const { return mnHorizontalSegments; }
-            sal_uInt32 getVerticalSegments() const { return mnVerticalSegments ; }
+            sal_uInt32 getVerticalSegments() const { return mnVerticalSegments; }
+
+            // compare operator
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
+
+            // get range
+            virtual basegfx::B3DRange getB3DRange(double fTime) const;
+
+            // provide unique ID
+            virtual sal_uInt32 getPrimitiveID() const;
         };
-    } // end of namespace overlay
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_DRAWINGLAYER_PRIMITIVE3D_SDRSPHEREPRIMITIVE3D_HXX
+#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRSPHEREPRIMITIVE3D_HXX
 
+//////////////////////////////////////////////////////////////////////////////
 // eof
