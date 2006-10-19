@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:52:06 $
+ *  last change: $Author: mav $ $Date: 2006-10-19 14:30:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -727,8 +727,9 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName,
 {
     if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")))
     {
-        if ( m_nFormat != PACKAGE_FORMAT )
-            throw UnknownPropertyException();
+        // TODO/LATER: activate when zip ucp is ready
+        // if ( m_nFormat != PACKAGE_FORMAT )
+        //  throw UnknownPropertyException();
 
         aValue >>= sMediaType;
     }
@@ -742,8 +743,9 @@ Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
 {
     if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
     {
-        if ( m_nFormat != PACKAGE_FORMAT )
-            throw UnknownPropertyException();
+        // TODO/LATER: activate when zip ucp is ready
+        // if ( m_nFormat != PACKAGE_FORMAT )
+        //  throw UnknownPropertyException();
 
         return makeAny ( sMediaType );
     }

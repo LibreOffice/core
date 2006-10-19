@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:51:35 $
+ *  last change: $Author: mav $ $Date: 2006-10-19 14:30:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1643,8 +1643,9 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
 Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    if ( m_nFormat != PACKAGE_FORMAT )
-        throw UnknownPropertyException();
+    // TODO/LATER: Activate the check when zip-ucp is ready
+    // if ( m_nFormat != PACKAGE_FORMAT )
+    //  throw UnknownPropertyException();
 
     Any aAny;
     if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "EncryptionKey" ) ) )
