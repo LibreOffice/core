@@ -1,7 +1,7 @@
 # unroll begin
 
 .IF "$(HIDSID1PARTICLE)"!=""
-$(HIDSID1PARTICLE): $(SDI1TARGET) $(MISC)$/$(SDI1NAME).sid
+$(HIDSID1PARTICLE): $(SDI1TARGET)
     @echo ------------------------------
     @echo Making: $@
     @+-$(RM) $@.$(ROUT).tmp $@
@@ -34,7 +34,7 @@ $(SDI1TARGET): $(SVSDI1DEPEND) $(SDI1NAME).sdi
 # unroll begin
 
 .IF "$(HIDSID2PARTICLE)"!=""
-$(HIDSID2PARTICLE): $(SDI2TARGET) $(MISC)$/$(SDI2NAME).sid
+$(HIDSID2PARTICLE): $(SDI2TARGET)
     @echo ------------------------------
     @echo Making: $@
     @+-$(RM) $@.$(ROUT).tmp $@
@@ -67,7 +67,7 @@ $(SDI2TARGET): $(SVSDI2DEPEND) $(SDI2NAME).sdi
 # unroll begin
 
 .IF "$(HIDSID3PARTICLE)"!=""
-$(HIDSID3PARTICLE): $(SDI3TARGET) $(MISC)$/$(SDI3NAME).sid
+$(HIDSID3PARTICLE): $(SDI3TARGET)
     @echo ------------------------------
     @echo Making: $@
     @+-$(RM) $@.$(ROUT).tmp $@
@@ -100,7 +100,7 @@ $(SDI3TARGET): $(SVSDI3DEPEND) $(SDI3NAME).sdi
 # unroll begin
 
 .IF "$(HIDSID4PARTICLE)"!=""
-$(HIDSID4PARTICLE): $(SDI4TARGET) $(MISC)$/$(SDI4NAME).sid
+$(HIDSID4PARTICLE): $(SDI4TARGET)
     @echo ------------------------------
     @echo Making: $@
     @+-$(RM) $@.$(ROUT).tmp $@
@@ -133,7 +133,7 @@ $(SDI4TARGET): $(SVSDI4DEPEND) $(SDI4NAME).sdi
 # unroll begin
 
 .IF "$(HIDSID5PARTICLE)"!=""
-$(HIDSID5PARTICLE): $(SDI5TARGET) $(MISC)$/$(SDI5NAME).sid
+$(HIDSID5PARTICLE): $(SDI5TARGET)
     @echo ------------------------------
     @echo Making: $@
     @+-$(RM) $@.$(ROUT).tmp $@
@@ -166,7 +166,7 @@ $(SDI5TARGET): $(SVSDI5DEPEND) $(SDI5NAME).sdi
 # unroll begin
 
 .IF "$(HIDSID6PARTICLE)"!=""
-$(HIDSID6PARTICLE): $(SDI6TARGET) $(MISC)$/$(SDI6NAME).sid
+$(HIDSID6PARTICLE): $(SDI6TARGET)
     @echo ------------------------------
     @echo Making: $@
     @+-$(RM) $@.$(ROUT).tmp $@
@@ -199,7 +199,7 @@ $(SDI6TARGET): $(SVSDI6DEPEND) $(SDI6NAME).sdi
 # unroll begin
 
 .IF "$(HIDSID7PARTICLE)"!=""
-$(HIDSID7PARTICLE): $(SDI7TARGET) $(MISC)$/$(SDI7NAME).sid
+$(HIDSID7PARTICLE): $(SDI7TARGET)
     @echo ------------------------------
     @echo Making: $@
     @+-$(RM) $@.$(ROUT).tmp $@
@@ -232,7 +232,7 @@ $(SDI7TARGET): $(SVSDI7DEPEND) $(SDI7NAME).sdi
 # unroll begin
 
 .IF "$(HIDSID8PARTICLE)"!=""
-$(HIDSID8PARTICLE): $(SDI8TARGET) $(MISC)$/$(SDI8NAME).sid
+$(HIDSID8PARTICLE): $(SDI8TARGET)
     @echo ------------------------------
     @echo Making: $@
     @+-$(RM) $@.$(ROUT).tmp $@
@@ -265,7 +265,7 @@ $(SDI8TARGET): $(SVSDI8DEPEND) $(SDI8NAME).sdi
 # unroll begin
 
 .IF "$(HIDSID9PARTICLE)"!=""
-$(HIDSID9PARTICLE): $(SDI9TARGET) $(MISC)$/$(SDI9NAME).sid
+$(HIDSID9PARTICLE): $(SDI9TARGET)
     @echo ------------------------------
     @echo Making: $@
     @+-$(RM) $@.$(ROUT).tmp $@
@@ -298,7 +298,7 @@ $(SDI9TARGET): $(SVSDI9DEPEND) $(SDI9NAME).sdi
 # unroll begin
 
 .IF "$(HIDSID10PARTICLE)"!=""
-$(HIDSID10PARTICLE): $(SDI10TARGET) $(MISC)$/$(SDI10NAME).sid
+$(HIDSID10PARTICLE): $(SDI10TARGET)
     @echo ------------------------------
     @echo Making: $@
     @+-$(RM) $@.$(ROUT).tmp $@
