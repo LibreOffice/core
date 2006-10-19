@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:24:14 $
+ *  last change: $Author: vg $ $Date: 2006-10-19 10:51:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -949,6 +949,7 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, /*EMPTYTAG*/)
     {
         DBG_ERROR("FmXFormView::OnAutoFocus: could not activate the first control!");
     }
+    return 0L;
 }
 
 // -----------------------------------------------------------------------------
