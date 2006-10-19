@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 08:05:40 $
+ *  last change: $Author: obo $ $Date: 2006-10-19 08:05:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,10 @@
 
 #ifdef WNT
 
+#pragma warning(disable:4668 4715 4917 4005 4239 4245 4100 4189 4505 )
+
 // Support Windows 95 too
+#undef WINVER
 #define WINVER 0x0400
 #define USE_APP_SHORTCUTS
 //
