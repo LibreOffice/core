@@ -4,9 +4,9 @@
  *
  *  $RCSfile: depapp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-04-20 15:15:01 $
+ *  last change: $Author: obo $ $Date: 2006-10-23 11:36:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,7 @@ SAL_IMPLEMENT_MAIN()
                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
 
     InitVCL( xMS );
+    ::comphelper::setProcessServiceFactory(xMS);
     aMyApp.Main();
     DeInitVCL();
     return 0;
