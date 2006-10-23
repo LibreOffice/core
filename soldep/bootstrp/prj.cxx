@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obo $ $Date: 2006-04-26 12:26:12 $
+ *  last change: $Author: obo $ $Date: 2006-10-23 12:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include <bootstrp/sstring.hxx>
 #include <vos/mutex.hxx>
 
+#define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <tools/stream.hxx>
 #include <tools/geninfo.hxx>
 #include "prj.hxx"
@@ -318,6 +319,78 @@ ByteString CommandData::GetCommandTypeString()
     return aRetStr;
 }
 
+/*****************************************************************************/
+CommandData& CommandData::operator>>  ( SvStream& rStream )
+/*****************************************************************************/
+{
+    rStream << aPrj;
+    rStream << aLogFileName;
+    rStream << aInpath;
+    rStream << aUpd;
+    rStream << aUpdMinor;
+    rStream << aProduct;
+    rStream << aCommand;
+    rStream << aPath;
+    rStream << aPrePath;
+    rStream << aPreFix;
+    rStream << aCommandPara;
+    rStream << aComment;
+    rStream << sClientRestriction;
+
+    rStream << nOSType;
+    rStream << nCommand;
+    rStream << nDepth;
+
+    if (pDepList)
+    {
+        rStream << sal_True;
+        *pDepList >> rStream;
+    }
+    else
+        rStream << sal_False;
+
+    return *this;
+}
+
+/*****************************************************************************/
+CommandData& CommandData::operator<<  ( SvStream& rStream )
+/*****************************************************************************/
+{
+    rStream >> aPrj;
+    rStream >> aLogFileName;
+    rStream >> aInpath;
+    rStream >> aUpd;
+    rStream >> aUpdMinor;
+    rStream >> aProduct;
+    rStream >> aCommand;
+    rStream >> aPath;
+    rStream >> aPrePath;
+    rStream >> aPreFix;
+    rStream >> aCommandPara;
+    rStream >> aComment;
+    rStream >> sClientRestriction;
+
+    rStream >> nOSType;
+    rStream >> nCommand;
+    rStream >> nDepth;
+
+    BOOL bDepList;
+    rStream >> bDepList;
+    if (pDepList)
+        pDepList->CleanUp();
+    if (bDepList)
+    {
+        if (!pDepList)
+            pDepList = new SByteStringList();
+        *pDepList << rStream;
+    }
+    else
+        DELETEZ (pDepList);
+
+    return *this;
+}
+
+
 
 //
 // class DepInfo
@@ -360,6 +433,48 @@ void DepInfo::RemoveProject ()
         delete pProject;
         pProject = NULL;
     }
+}
+
+/*****************************************************************************/
+DepInfo& DepInfo::operator<<  ( SvStream& rStream )
+/*****************************************************************************/
+{
+    RemoveProject();
+    pProject = new ByteString();
+    rStream >> *pProject;
+
+    BOOL bModeList;
+    rStream >> bModeList;
+    if (pModeList)
+        pModeList->CleanUp();
+    if (bModeList)
+    {
+        if (!pModeList)
+            pModeList = new SByteStringList();
+        *pModeList << rStream;
+    }
+    else
+        DELETEZ (pModeList);
+
+    rStream >> bAllModes;
+    return *this;
+}
+
+/*****************************************************************************/
+DepInfo& DepInfo::operator>>  ( SvStream& rStream )
+/*****************************************************************************/
+{
+    rStream << *pProject;
+    if (pModeList)
+    {
+        rStream << sal_True;
+        *pModeList >> rStream;
+    }
+    else
+        rStream << sal_False;
+    rStream << bAllModes;
+
+    return *this;
 }
 
 //
@@ -618,6 +733,35 @@ SByteStringList* SDepInfoList::GetAllDepModes()
         pInfo = Next();
     }
     return pAllModeList;
+}
+
+/*****************************************************************************/
+SDepInfoList& SDepInfoList::operator<< ( SvStream& rStream )
+/*****************************************************************************/
+{
+    ULONG nCount;
+    rStream >> nCount;
+    for ( USHORT i = 0; i < nCount; i++ ) {
+        DepInfo* pDepInfo = new DepInfo();
+        *pDepInfo << rStream;
+        Insert (pDepInfo, LIST_APPEND);
+    }
+    return *this;
+}
+
+/*****************************************************************************/
+SDepInfoList& SDepInfoList::operator>> ( SvStream& rStream )
+/*****************************************************************************/
+{
+    ULONG nCount = Count();
+    rStream << nCount;
+    DepInfo* pDepInfo = First();
+    while (pDepInfo) {
+        *pDepInfo >> rStream;
+        pDepInfo = Next();
+    }
+
+    return *this;
 }
 
 /*****************************************************************************/
@@ -911,6 +1055,72 @@ void Prj::ExtractDependencies()
         pData = GetObject(nPos);
     }
 }
+
+/*****************************************************************************/
+Prj& Prj::operator>>  ( SvStream& rStream )
+/*****************************************************************************/
+{
+    rStream << bVisited;
+    rStream << aProjectName;
+    rStream << aProjectPrefix;
+    rStream << bHardDependencies;
+    rStream << bFixedDependencies;
+    rStream << bSorted;
+    rStream << bIsAvailable;
+
+    if (pPrjDepInfoList)
+    {
+        rStream << sal_True;
+        *pPrjDepInfoList >> rStream;
+    }
+    else
+        rStream << sal_False;
+
+    ULONG nCount = Count();
+    rStream << nCount;
+
+    CommandData* pData = First();
+    while (pData) {
+        *pData >> rStream;
+        pData = Next();
+    }
+
+    return *this;
+}
+
+/*****************************************************************************/
+Prj& Prj::operator<<  ( SvStream& rStream )
+/*****************************************************************************/
+{
+       rStream >> bVisited;
+    rStream >> aProjectName;
+    rStream >> aProjectPrefix;
+    rStream >> bHardDependencies;
+    rStream >> bFixedDependencies;
+    rStream >> bSorted;
+    rStream >> bIsAvailable;
+
+    BOOL bDepList;
+    rStream >> bDepList;
+    DELETEZ (pPrjDepInfoList);
+    if (bDepList)
+    {
+        pPrjDepInfoList = new SDepInfoList();
+        *pPrjDepInfoList << rStream;
+    }
+
+    ULONG nCount;
+    rStream >> nCount;
+
+    for ( USHORT i = 0; i < nCount; i++ ) {
+        CommandData* pData = new CommandData();
+        *pData << rStream;
+        Insert (pData, LIST_APPEND);
+    }
+
+    return *this;
+}
+
 
 //
 //  class Star
@@ -1384,8 +1594,7 @@ void Star::ExpandPrj_Impl( Prj *pPrj, Prj *pDepPrj )
 void Star::Expand_Impl()
 /*****************************************************************************/
 {
-    for ( ULONG i = 0; i < Count(); i++ )
-    {
+    for ( ULONG i = 0; i < Count(); i++ ) {
         for ( ULONG j = 0; j < Count(); j++ )
             GetObject( j )->bVisited = FALSE;
 
@@ -1973,6 +2182,94 @@ int Star::GetJobType ( ByteString& JobType ) {
     return nCommandType;
 };
 
+/*****************************************************************************/
+void Star::PutPrjIntoStream (SByteStringList* pPrjNameList, SvStream* pStream)
+/*****************************************************************************/
+{
+    aMutex.acquire();
+    *pStream << sal_False; // not full Star / only some Projects
+
+    ULONG nCount = pPrjNameList->Count();
+    *pStream << nCount;
+    ByteString* pStr = pPrjNameList->First();
+    while (pStr) {
+        Prj* pPrj = GetPrj (*pStr);
+        *pPrj >> *pStream;
+        pStr = pPrjNameList->Next();
+    }
+    aMutex.release();
+}
+
+/*****************************************************************************/
+Star& Star::operator>>  ( SvStream& rStream )
+/*****************************************************************************/
+{
+    aMutex.acquire();
+    rStream << sal_True; // full Star
+    rStream << nStarMode;
+    if (pDepMode)
+    {
+        rStream << sal_True;
+        *pDepMode >> rStream;
+    }
+    else
+        rStream << sal_False;
+
+    ULONG nCount = Count();
+    rStream << nCount;
+    Prj* pPrj = First();
+    while (pPrj) {
+        *pPrj >> rStream;
+        pPrj = Next();
+    }
+    aMutex.release();
+
+    return *this;
+}
+
+/*****************************************************************************/
+Star& Star::operator<<  ( SvStream& rStream )
+/*****************************************************************************/
+{
+    aMutex.acquire();
+    BOOL bFullList;
+    rStream >> bFullList;
+    if (bFullList)
+    {
+        rStream >> nStarMode;
+        BOOL bDepMode;
+        rStream >> bDepMode;
+        if (pDepMode)
+            pDepMode->CleanUp();
+        if (bDepMode)
+        {
+            if (!pDepMode)
+                pDepMode = new SByteStringList();
+            *pDepMode << rStream;
+        }
+        else
+            DELETEZ (pDepMode);
+
+    }
+    ULONG nCount;
+    rStream >> nCount;
+    for ( USHORT i = 0; i < nCount; i++ ) {
+        Prj* pPrj = new Prj();
+        *pPrj << rStream;
+        pPrj->SetMode(pDepMode);
+        if (HasProject (pPrj->GetProjectName())) {
+            Prj* pTmpPrj = GetPrj( pPrj->GetProjectName() );
+            Replace (pPrj, pTmpPrj);
+            delete pTmpPrj;
+        }
+        else
+            Insert (pPrj, LIST_APPEND);
+    }
+    Expand_Impl();
+    aMutex.release();
+    return *this;
+}
+
 
 
 //
@@ -2091,6 +2388,7 @@ StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, GenericInformationList *
                                     aPrjEntry += DirEntry( ssProject );
                                     aPrjEntry += DirEntry( sPrjDir );
                                     aPrjEntry += DirEntry( sSolarFile );
+
                                     pFileList->Insert( new String( aPrjEntry.GetFull()), LIST_APPEND );
 
                                     ByteString sFile( aPrjEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
