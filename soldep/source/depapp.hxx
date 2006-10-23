@@ -4,9 +4,9 @@
  *
  *  $RCSfile: depapp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obo $ $Date: 2006-04-20 15:16:03 $
+ *  last change: $Author: obo $ $Date: 2006-10-23 11:31:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 
 
 #include <svtools/solar.hrc>
-#include <tools/solver.h>
 #include <tools/resmgr.hxx>
 #include <bootstrp/sstring.hxx>
 #include <vcl/event.hxx>
@@ -113,3 +112,4 @@ public:
 static MyApp aMyApp;
 
 #endif
+
