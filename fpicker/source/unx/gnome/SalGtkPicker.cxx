@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkPicker.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:52:36 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:02:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,8 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
+#include <comphelper/processfactory.hxx>
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
 #endif
@@ -90,7 +92,6 @@ rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
     if (INET_PROT_FILE == aURL.GetProtocol())
     {
         gchar *pEncodedFileName = g_filename_from_uri(pIn, NULL, NULL);
-
         if ( pEncodedFileName )
         {
             rtl::OUString sEncoded(pEncodedFileName, strlen(pEncodedFileName),
@@ -100,7 +101,11 @@ rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
             sURL = aCurrentURL.getExternalURL();
         }
         else
-            sURL = rtl::OUString();
+        {
+            OUString aNewURL = Reference<uri::XExternalUriReferenceTranslator>(Reference<XMultiServiceFactory>(comphelper::getProcessServiceFactory(), UNO_QUERY_THROW)->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uri.ExternalUriReferenceTranslator"))), UNO_QUERY_THROW)->translateToInternal(sURL);
+            if( aNewURL.getLength() )
+                sURL = aNewURL;
+        }
     }
     return sURL;
 }
