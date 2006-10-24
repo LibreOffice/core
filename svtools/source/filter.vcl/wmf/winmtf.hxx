@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:08:37 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:33:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,13 @@
 #define WIN_MTF_ASSERT
 #endif
 
+#include <vector>
 #include <math.h>
 #include <stdlib.h>
 #include <sot/object.hxx>
+#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
+#include <boost/shared_ptr.hpp>
+#endif
 #ifndef _TOOL_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -494,7 +498,7 @@ struct SaveStruct
     sal_Bool            bFillStyleSelected;
 };
 
-DECLARE_STACK( SaveStack, SaveStruct* )
+typedef ::boost::shared_ptr< SaveStruct > SaveStructPtr;
 
 // -----------------------------------------------------------------------------
 
@@ -582,15 +586,15 @@ class WinMtfOutput
         RasterOp            meLatestRasterOp;
         RasterOp            meRasterOp;
 
-        GDIObj**            mpGDIObj;
-        sal_uInt32          mnEntrys;
-        Point               maActPos;               // wird. (ist gleich TRANSPARENT oder nicht)
+        std::vector< GDIObj* > vGDIObj;
+
+        Point               maActPos;
 
         sal_uInt32          mnRop;
         sal_Bool            mbNopMode;
         sal_Bool            mbFillStyleSelected;
 
-        SaveStack           maSaveStack;            // Stapel fuer aktuelle Zustaende bzw. DCs (Drawing-Contexts)
+        std::vector< SaveStructPtr > vSaveStack;
 
         sal_uInt32          mnGfxMode;
         sal_uInt32          mnMapMode;
