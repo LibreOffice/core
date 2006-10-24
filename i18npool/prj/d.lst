@@ -39,5 +39,3 @@ mkdir: %_DEST%\inc%_EXT%\i18npool
 ..\%__SRC%\bin\i18nisolang*.dll %_DEST%\bin%_EXT%\i18nisolang*.dll
 ..\%__SRC%\lib\libi18nisolang*.so %_DEST%\lib%_EXT%\libi18nisolang*.so
 ..\%__SRC%\lib\libi18nisolang*.dylib %_DEST%\lib%_EXT%\libi18nisolang*.dylib
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
