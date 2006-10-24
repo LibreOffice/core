@@ -1,0 +1,19 @@
+wf	writerfilter	: soltools sal boost cppu cppuhelper ucbhelper NULL
+wf	writerfilter	usr1	-	all	wf_mkout NULL
+wf	writerfilter\winwordplugin	nmake	-	w	wf_winwordplugin NULL
+wf	writerfilter\source\rtftok	nmake	-	all	wf_rtftok NULL
+wf	writerfilter\source\doctok	nmake	-	all	wf_doctok NULL
+wf	writerfilter\unocomponent\debugservices\rtftok	nmake	-	all	wf_debugservicesrtftok NULL
+wf	writerfilter\unocomponent\debugservices\xxml	nmake	-	all	wf_debugservicesxxml NULL
+wf	writerfilter\unocomponent\debugservices\odsl	nmake	-	all	wf_debugservicesodl NULL
+wf	writerfilter\unocomponent\debugservices\rtfsl	nmake	-	all	wf_debugservicesrtfsl NULL
+wf	writerfilter\unocomponent\debugservices\doctok	nmake	-	all	wf_debugservicesdoctok NULL
+wf	writerfilter\unocomponent	nmake	-	all	wf_unocomponent wf_rtftok wf_doctok wf_debugservicesrtftok wf_debugservicesxxml wf_debugservicesodl wf_debugservicesrtfsl wf_debugservicesdoctok wf_odiapi NULL
+wf  writerfilter\source\odiapi\core    nmake   -   all wf_odiapicore NULL
+wf  writerfilter\source\odiapi\qname    nmake   -   all wf_qname NULL
+wf	writerfilter\source\odiapi\props	nmake	- all	wf_odiapiprops wf_qname NULL
+wf	writerfilter\source\odiapi\xxml	nmake	- all	wf_odiapixxml wf_odiapiprops wf_qname NULL
+wf	writerfilter\source\odiapi\sl	nmake	- all	wf_odiapisl wf_odiapixxml wf_odiapiprops wf_qname NULL
+wf  writerfilter\source\filter      nmake   - all   wf_filter wf_doctok NULL
+wf  writerfilter\source\dmapper      nmake   - all   wf_dmapper wf_doctok NULL
+wf  writerfilter\util   nmake   - all   wf_odiapi wf_odiapisl wf_odiapixxml wf_odiapiprops wf_qname wf_odiapicore wf_filter wf_dmapper NULL
