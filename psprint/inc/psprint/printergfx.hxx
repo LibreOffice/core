@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printergfx.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:35:07 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:06:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,6 +274,7 @@ private:
     fontID          getFontSubstitute () const;
     fontID          getFallbackID () const { return mnFallbackID; }
 
+    bool            mbStrictSO52Compatibility;
 public:
     /* grahics status update */
     void            PSSetColor ();
@@ -444,6 +445,9 @@ public:
                                 sal_Unicode* pUnicodes,
                                 sal_Int16 nLen,
                                 sal_Int32* pDeltaArray );
+
+    bool getStrictSO52Compatibility() const;
+    void setStrictSO52Compatibility( bool );
 };
 
 } /* namespace psp */
