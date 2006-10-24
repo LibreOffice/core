@@ -1,5 +1,3 @@
 ..\%__SRC%\class\jut.jar %_DEST%\bin%_EXT%\jut.jar
 
 ..\%__SRC%\bin\jut_src.zip %COMMON_DEST%\bin%_EXT%\jut_src.zip
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
