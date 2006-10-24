@@ -123,5 +123,3 @@ hedabu: ..\inc\tools\weakbase.h %_DEST%\inc%_EXT%\tools\weakbase.h
 ..\%__SRC%\bin\rscdep %_DEST%\bin%_EXT%\rscdep
 ..\%__SRC%\bin\so_checksum.exe %_DEST%\bin%_EXT%\so_checksum.exe
 ..\%__SRC%\bin\so_checksum %_DEST%\bin%_EXT%\so_checksum
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
