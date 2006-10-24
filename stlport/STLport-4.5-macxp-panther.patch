@@ -1,60 +1,5 @@
---- misc/STLport-4.5/stlport/stdarg.h	2001-01-27 02:39:59.000000000 +0100
-+++ misc/build/STLport-4.5/stlport/stdarg.h	2005-05-01 19:37:22.000000000 +0200
-@@ -20,7 +20,11 @@
- #  define _STLP_DONT_POP_0x261
- # endif
- 
-+#if defined(__GNUC__) && defined(__APPLE__) && (BUILD_OS_MAJOR >= 10) && (BUILD_OS_MINOR >= 4) && (__GNUC__ == 3)
-+#  include _STLP_NATIVE_HEADER(../stdarg.h)
-+#else
- # include _STLP_NATIVE_C_HEADER(stdarg.h)
-+#endif
- 
- # if (_STLP_OUTERMOST_HEADER_ID == 0x261)
- #  if ! defined (_STLP_DONT_POP_0x261)
---- misc/STLport-4.5/stlport/stl/c_locale.h	2001-05-31 05:24:41.000000000 +0200
-+++ misc/build/STLport-4.5/stlport/stl/c_locale.h	2005-05-01 23:19:20.000000000 +0200
-@@ -290,16 +290,28 @@
- #  define _Locale_ALPHA  256
- 
- # elif defined (__GNUC__) && defined (__APPLE__)
-- 
--# define _Locale_CNTRL _C
--# define _Locale_UPPER _U
--# define _Locale_LOWER _L
--# define _Locale_DIGIT _D
--# define _Locale_XDIGIT _X
--# define _Locale_PUNCT _P
--# define _Locale_SPACE _S
--# define _Locale_PRINT _R
--# define _Locale_ALPHA _A
-+
-+#  if (BUILD_OS_MAJOR >= 10) && (BUILD_OS_MINOR >= 4)
-+#   define _Locale_CNTRL _CTYPE_C
-+#   define _Locale_UPPER _CTYPE_U
-+#   define _Locale_LOWER _CTYPE_L
-+#   define _Locale_DIGIT _CTYPE_D
-+#   define _Locale_XDIGIT _CTYPE_X
-+#   define _Locale_PUNCT _CTYPE_P
-+#   define _Locale_SPACE _CTYPE_S
-+#   define _Locale_PRINT _CTYPE_R
-+#   define _Locale_ALPHA _CTYPE_A
-+#  else
-+#   define _Locale_CNTRL _C
-+#   define _Locale_UPPER _U
-+#   define _Locale_LOWER _L
-+#   define _Locale_DIGIT _D
-+#   define _Locale_XDIGIT _X
-+#   define _Locale_PUNCT _P
-+#   define _Locale_SPACE _S
-+#   define _Locale_PRINT _R
-+#   define _Locale_ALPHA _A
-+#  endif /*BUILD_OS_MAJOR*/
- 
- # elif defined (__hpux) || defined (__osf__)
-  
-*** misc/STLport-4.5/src/dll_main.cpp	Fri Aug 24 21:14:19 2001
---- misc/build/STLport-4.5/src/dll_main.cpp	Fri Oct 31 12:11:56 2003
+*** misc/STLport-4.5/src/dll_main.cpp	Sat Aug 25 03:14:19 2001
+--- misc/build/STLport-4.5/src/dll_main.cpp	Sun Sep 17 09:25:58 2006
 ***************
 *** 147,152 ****
 --- 147,156 ----
@@ -68,8 +13,8 @@
   template class _STLP_CLASS_DECLSPEC __node_alloc<false,0>;
   template class _STLP_CLASS_DECLSPEC __node_alloc<true,0>;
   template class _STLP_CLASS_DECLSPEC __debug_alloc< __node_alloc<true,0> >;
-*** misc/STLport-4.5/src/gcc-3.0-freebsd.mak	Mon Nov 10 18:30:01 2003
---- misc/build/STLport-4.5/src/gcc-3.0-freebsd.mak	Fri Oct 31 12:11:56 2003
+*** misc/STLport-4.5/src/gcc-3.0-freebsd.mak	Sun Sep 17 09:26:44 2006
+--- misc/build/STLport-4.5/src/gcc-3.0-freebsd.mak	Sun Sep 17 09:25:58 2006
 ***************
 *** 1 ****
 ! dummy
@@ -133,8 +78,8 @@
 ! #	$(CXX) $(CXXFLAGS) -O4 -S -pto $<  -o $@
 ! 
 ! 
-*** misc/STLport-4.5/src/gcc-3.0-macosx.mak	Mon Nov 10 18:30:01 2003
---- misc/build/STLport-4.5/src/gcc-3.0-macosx.mak	Fri Oct 31 12:11:56 2003
+*** misc/STLport-4.5/src/gcc-3.0-macosx.mak	Sun Sep 17 09:26:44 2006
+--- misc/build/STLport-4.5/src/gcc-3.0-macosx.mak	Sun Sep 17 09:25:58 2006
 ***************
 *** 1 ****
 ! dummy
@@ -198,8 +143,8 @@
 ! #	$(CXX) $(CXXFLAGS) -O4 -S -pto $<  -o $@
 ! 
 ! 
-*** misc/STLport-4.5/src/gcc-3.0.mak	Mon Nov 10 18:30:01 2003
---- misc/build/STLport-4.5/src/gcc-3.0.mak	Fri Oct 31 12:11:56 2003
+*** misc/STLport-4.5/src/gcc-3.0.mak	Sun Sep 17 09:26:44 2006
+--- misc/build/STLport-4.5/src/gcc-3.0.mak	Sun Sep 17 09:25:58 2006
 ***************
 *** 1 ****
 ! dummy
@@ -263,8 +208,8 @@
 ! #	$(CXX) $(CXXFLAGS) -O4 -S -pto $<  -o $@
 ! 
 ! 
-*** misc/STLport-4.5/src/gcc-freebsd.mak	Sat Jul 28 23:36:25 2001
---- misc/build/STLport-4.5/src/gcc-freebsd.mak	Fri Oct 31 12:11:56 2003
+*** misc/STLport-4.5/src/gcc-freebsd.mak	Sun Jul 29 05:36:25 2001
+--- misc/build/STLport-4.5/src/gcc-freebsd.mak	Sun Sep 17 09:25:58 2006
 ***************
 *** 5,12 ****
   #
@@ -324,8 +269,8 @@
   
   CXXFLAGS_DEBUG_static = $(CXXFLAGS_COMMON) -g
   CXXFLAGS_DEBUG_dynamic = $(CXXFLAGS_COMMON) -g -fPIC
-*** misc/STLport-4.5/stlport/config/stl_gcc.h	Tue Sep  4 13:10:16 2001
---- misc/build/STLport-4.5/stlport/config/stl_gcc.h	Fri Oct 31 12:11:56 2003
+*** misc/STLport-4.5/stlport/config/stl_gcc.h	Tue Sep  4 19:10:16 2001
+--- misc/build/STLport-4.5/stlport/config/stl_gcc.h	Sun Sep 17 09:25:58 2006
 ***************
 *** 71,80 ****
    * static data members in template classes */
@@ -410,8 +355,8 @@
   
   # elif (__GNUC_MINOR__ < 8)
   
-*** misc/STLport-4.5/stlport/cwchar	Fri Jan 26 20:39:42 2001
---- misc/build/STLport-4.5/stlport/cwchar	Fri Oct 31 12:11:56 2003
+*** misc/STLport-4.5/stlport/cwchar	Sat Jan 27 02:39:42 2001
+--- misc/build/STLport-4.5/stlport/cwchar	Sun Sep 17 09:25:58 2006
 ***************
 *** 21,26 ****
 --- 21,29 ----
@@ -424,8 +369,24 @@
   # include <stl/_cwchar.h>
   
   # if (_STLP_OUTERMOST_HEADER_ID == 0x120)
-*** misc/STLport-4.5/stlport/stdexcept	Mon May 21 20:50:21 2001
---- misc/build/STLport-4.5/stlport/stdexcept	Fri Oct 31 12:11:56 2003
+*** misc/STLport-4.5/stlport/stdarg.h	Sat Jan 27 02:39:59 2001
+--- misc/build/STLport-4.5/stlport/stdarg.h	Sun Sep 17 09:25:58 2006
+***************
+*** 20,26 ****
+--- 20,30 ----
+  #  define _STLP_DONT_POP_0x261
+  # endif
+  
++ #if defined(__GNUC__) && defined(__APPLE__) && (BUILD_OS_MAJOR >= 10) && (BUILD_OS_MINOR >= 4) && (__GNUC__ == 3)
++ #  include _STLP_NATIVE_HEADER(../stdarg.h)
++ #else
+  # include _STLP_NATIVE_C_HEADER(stdarg.h)
++ #endif
+  
+  # if (_STLP_OUTERMOST_HEADER_ID == 0x261)
+  #  if ! defined (_STLP_DONT_POP_0x261)
+*** misc/STLport-4.5/stlport/stdexcept	Tue May 22 02:50:21 2001
+--- misc/build/STLport-4.5/stlport/stdexcept	Sun Sep 17 09:25:58 2006
 ***************
 *** 49,54 ****
 --- 49,61 ----
@@ -442,8 +403,27 @@
   class _STLP_CLASS_DECLSPEC __Named_exception : public _STLP_EXCEPTION_BASE {
   public:
     __Named_exception(const string& __str) 
-*** misc/STLport-4.5/stlport/stl/_threads.h	Tue Sep  4 13:10:20 2001
---- misc/build/STLport-4.5/stlport/stl/_threads.h	Fri Oct 31 12:11:56 2003
+*** misc/STLport-4.5/stlport/stl/_ios_base.h	Tue Sep  4 19:10:18 2001
+--- misc/build/STLport-4.5/stlport/stl/_ios_base.h	Sun Sep 17 09:26:37 2006
+***************
+*** 291,297 ****
+  template <class Facet>
+  locale::facet* _M_get_facet(ios_base& __i, Facet*)
+  {
+! 
+  }
+  
+  // ----------------------------------------------------------------------
+--- 291,297 ----
+  template <class Facet>
+  locale::facet* _M_get_facet(ios_base& __i, Facet*)
+  {
+!     return NULL;
+  }
+  
+  // ----------------------------------------------------------------------
+*** misc/STLport-4.5/stlport/stl/_threads.h	Tue Sep  4 19:10:20 2001
+--- misc/build/STLport-4.5/stlport/stl/_threads.h	Sun Sep 17 09:25:58 2006
 ***************
 *** 42,49 ****
   #  include <cstdlib>
@@ -463,8 +443,57 @@
   # define _STLP_MUTEX_INITIALIZER
   # endif
   
-*** misc/STLport-4.5/stlport/wchar.h	Fri Jan 26 20:40:06 2001
---- misc/build/STLport-4.5/stlport/wchar.h	Mon Nov 10 18:29:44 2003
+*** misc/STLport-4.5/stlport/stl/c_locale.h	Thu May 31 05:24:41 2001
+--- misc/build/STLport-4.5/stlport/stl/c_locale.h	Sun Sep 17 09:25:58 2006
+***************
+*** 290,305 ****
+  #  define _Locale_ALPHA  256
+  
+  # elif defined (__GNUC__) && defined (__APPLE__)
+!  
+! # define _Locale_CNTRL _C
+! # define _Locale_UPPER _U
+! # define _Locale_LOWER _L
+! # define _Locale_DIGIT _D
+! # define _Locale_XDIGIT _X
+! # define _Locale_PUNCT _P
+! # define _Locale_SPACE _S
+! # define _Locale_PRINT _R
+! # define _Locale_ALPHA _A
+  
+  # elif defined (__hpux) || defined (__osf__)
+   
+--- 290,317 ----
+  #  define _Locale_ALPHA  256
+  
+  # elif defined (__GNUC__) && defined (__APPLE__)
+! 
+! #  if (BUILD_OS_MAJOR >= 10) && (BUILD_OS_MINOR >= 4)
+! #   define _Locale_CNTRL _CTYPE_C
+! #   define _Locale_UPPER _CTYPE_U
+! #   define _Locale_LOWER _CTYPE_L
+! #   define _Locale_DIGIT _CTYPE_D
+! #   define _Locale_XDIGIT _CTYPE_X
+! #   define _Locale_PUNCT _CTYPE_P
+! #   define _Locale_SPACE _CTYPE_S
+! #   define _Locale_PRINT _CTYPE_R
+! #   define _Locale_ALPHA _CTYPE_A
+! #  else
+! #   define _Locale_CNTRL _C
+! #   define _Locale_UPPER _U
+! #   define _Locale_LOWER _L
+! #   define _Locale_DIGIT _D
+! #   define _Locale_XDIGIT _X
+! #   define _Locale_PUNCT _P
+! #   define _Locale_SPACE _S
+! #   define _Locale_PRINT _R
+! #   define _Locale_ALPHA _A
+! #  endif /*BUILD_OS_MAJOR*/
+  
+  # elif defined (__hpux) || defined (__osf__)
+   
+*** misc/STLport-4.5/stlport/wchar.h	Sat Jan 27 02:40:06 2001
+--- misc/build/STLport-4.5/stlport/wchar.h	Sun Sep 17 09:25:58 2006
 ***************
 *** 28,38 ****
   using _STLP_VENDOR_CSTD::strspn;
