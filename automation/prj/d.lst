@@ -24,5 +24,3 @@ hedabu: ..\inc\simplecm.hxx %_DEST%\inc%_EXT%\automation\simplecm.hxx
 
 ..\%__SRC%\bin\testtoolrc %_DEST%\lib%_EXT%\testtoolrc
 ..\%__SRC%\bin\testtool.ini %_DEST%\bin%_EXT%\testtool.ini
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
