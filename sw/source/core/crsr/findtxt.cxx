@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findtxt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:46:35 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:08:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,88 +91,128 @@ using namespace com::sun::star::util;
 
 
 String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
-                        xub_StrLen& rEnde, SvULongs& rArr, String& rRet )
+                      xub_StrLen& rEnde, SvULongs& rArr, String& rRet )
 {
     rRet = rNd.GetTxt();
     if( rArr.Count() )
         rArr.Remove( 0, rArr.Count() );
 
     const SwpHints *pHts = rNd.GetpSwpHints();
-    if( pHts )
+
+    USHORT n = 0;
+    xub_StrLen nSoftHyphen = nStart;
+    xub_StrLen nHintStart = STRING_LEN;
+    bool bNewHint       = true;
+    bool bNewSoftHyphen = true;
+    const xub_StrLen nEnd = rEnde;
+    SvULongs aReplaced;
+
+    do
     {
-        SvULongs aReplaced;
+        if ( bNewHint )
+            nHintStart = pHts && n < pHts->Count() ?
+                         *(*pHts)[n]->GetStart() :
+                         STRING_LEN;
 
-        for( USHORT n = 0; n < pHts->Count(); ++n )
+        if ( bNewSoftHyphen )
+            nSoftHyphen = rNd.GetTxt().Search( CHAR_SOFTHYPHEN, nSoftHyphen );
+
+        bNewHint       = false;
+        bNewSoftHyphen = false;
+
+        xub_StrLen nStt = 0;
+
+        // Check if next stop is a hint.
+        if ( STRING_LEN != nHintStart && nHintStart < nSoftHyphen && nHintStart < nEnd )
         {
-            const SwTxtAttr *pHt = (*pHts)[n];
+            nStt = nHintStart;
+            bNewHint = true;
+        }
+        // Check if next stop is a soft hyphen.
+        else if ( STRING_LEN != nSoftHyphen && nSoftHyphen < nHintStart && nSoftHyphen < nEnd )
+        {
+            nStt = nSoftHyphen;
+            bNewSoftHyphen = true;
+        }
+        // If nSoftHyphen == nHintStart, the current hint *must* be a hint with an end.
+        else if ( STRING_LEN != nSoftHyphen && nSoftHyphen == nHintStart )
+        {
+            nStt = nSoftHyphen;
+            bNewHint = true;
+            bNewSoftHyphen = true;
+        }
+        else
+            break;
 
-            if( pHt->GetEnd() )         // nur Attribute ohne Ende
-                continue;
+        const xub_StrLen nAkt = nStt - rArr.Count();
 
-            register xub_StrLen nStt = *pHt->GetStart();
-            if(  nStt < nStart )
-                continue;
-
-            const xub_StrLen nAkt = nStt - rArr.Count();
-
-            //JP 17.05.00: Task 75806 ask for ">=" and not for ">"
-            if( nAkt >= rEnde )         // uebers Ende hinaus =
-                break;                  // das wars
-
-            switch( pHt->Which() )
+        if ( bNewHint )
+        {
+            const SwTxtAttr* pHt = (*pHts)[n];
+            if ( !pHt->GetEnd() && nStt >= nStart )
             {
-            case RES_TXTATR_FLYCNT:
-            case RES_TXTATR_FTN:
-            case RES_TXTATR_FIELD:
-            case RES_TXTATR_REFMARK:
-            case RES_TXTATR_TOXMARK:
+                //JP 17.05.00: Task 75806 ask for ">=" and not for ">"
+                   switch( pHt->Which() )
                 {
-// JP 06.05.98: mit Bug 50100 werden sie als Trenner erwuenscht und nicht
-//              mehr zum Wort dazu gehoerend.
-// MA 23.06.98: mit Bug 51215 sollen sie konsequenterweise auch am
-//              Satzanfang und -ende ignoriert werden wenn sie Leer sind.
-//              Dazu werden sie schlicht entfernt. Fuer den Anfang entfernen
-//              wir sie einfach.
-//              Fuer das Ende merken wir uns die Ersetzungen und entferenen
-//              hinterher alle am Stringende (koenten ja 'normale' 0x7f drinstehen
-                    BOOL bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
-                        !((SwTxtFld*)pHt)->GetFld().GetFld()->Expand().Len();
-                    if ( bEmpty && nStart == nAkt )
-                    {
-                        rArr.Insert( nAkt, rArr.Count() );
-                        --rEnde;
-                        rRet.Erase( nAkt, 1 );
-                    }
-                    else
-                    {
-                        if ( bEmpty )
-                            aReplaced.Insert( nAkt, aReplaced.Count() );
-                        rRet.SetChar( nAkt, '\x7f' );
-                    }
-                }
-                break;
-
-                case RES_TXTATR_HARDBLANK:
+                case RES_TXTATR_FLYCNT:
+                case RES_TXTATR_FTN:
+                   case RES_TXTATR_FIELD:
+                case RES_TXTATR_REFMARK:
+                   case RES_TXTATR_TOXMARK:
+                       {
+                        // JP 06.05.98: mit Bug 50100 werden sie als Trenner erwuenscht und nicht
+                        //              mehr zum Wort dazu gehoerend.
+                        // MA 23.06.98: mit Bug 51215 sollen sie konsequenterweise auch am
+                        //              Satzanfang und -ende ignoriert werden wenn sie Leer sind.
+                        //              Dazu werden sie schlicht entfernt. Fuer den Anfang entfernen
+                        //              wir sie einfach.
+                        //              Fuer das Ende merken wir uns die Ersetzungen und entferenen
+                        //              hinterher alle am Stringende (koenten ja 'normale' 0x7f drinstehen
+                           BOOL bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
+                            !((SwTxtFld*)pHt)->GetFld().GetFld()->Expand().Len();
+                        if ( bEmpty && nStart == nAkt )
+                           {
+                            rArr.Insert( nAkt, rArr.Count() );
+                            --rEnde;
+                            rRet.Erase( nAkt, 1 );
+                           }
+                        else
+                           {
+                            if ( bEmpty )
+                                aReplaced.Insert( nAkt, aReplaced.Count() );
+                            rRet.SetChar( nAkt, '\x7f' );
+                           }
+                       }
+                       break;
+                   case RES_TXTATR_HARDBLANK:
                     rRet.SetChar( nAkt, ((SwTxtHardBlank*)pHt)->GetChar() );
                     break;
-                default:
-                    {
-                        rArr.Insert( nAkt, rArr.Count() );
-                        --rEnde;
-                        rRet.Erase( nAkt, 1 );
-                    }
+                   default:
+                    ASSERT( false, "unknown case in lcl_CleanStr" )
                     break;
+                }
             }
+            ++n;
         }
-        for( USHORT i = aReplaced.Count(); i; )
+
+        if ( bNewSoftHyphen )
         {
-            const xub_StrLen nTmp = aReplaced[ --i ];
-            if( nTmp == rRet.Len()-1 )
-            {
-                rRet.Erase( nTmp );
-                rArr.Insert( nTmp, rArr.Count() );
-                --rEnde;
-            }
+              rArr.Insert( nAkt, rArr.Count() );
+            --rEnde;
+               rRet.Erase( nAkt, 1 );
+            ++nSoftHyphen;
+        }
+    }
+    while ( true );
+
+    for( USHORT i = aReplaced.Count(); i; )
+    {
+        const xub_StrLen nTmp = aReplaced[ --i ];
+        if( nTmp == rRet.Len() - 1 )
+        {
+            rRet.Erase( nTmp );
+            rArr.Insert( nTmp, rArr.Count() );
+            --rEnde;
         }
     }
 
