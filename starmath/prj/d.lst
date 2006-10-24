@@ -22,5 +22,3 @@ mkdir: %_DEST%\inc%_EXT%\starmath
 ..\uiconfig\smath\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\smath\toolbar\*.xml
 ..\uiconfig\smath\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\smath\accelerator\en-US\*.xml
 ..\uiconfig\smath\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\smath\statusbar\*.xml
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
