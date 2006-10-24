@@ -12,5 +12,3 @@ mkdir: %_DEST%\inc%_EXT%\comphelper
 mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\inc\comphelper\extract.hxx %_DEST%\inc%_EXT%\cppuhelper\extract.hxx
 ..\version.mk  %_DEST%\inc%_EXT%\comphelper\version.mk
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
