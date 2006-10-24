@@ -13,5 +13,3 @@ mkdir: %_DEST%\inc%_EXT%\vos
 ..\%__SRC%\slb\cppvos.lib %_DEST%\lib%_EXT%\xvos.lib
 
 ..\%__SRC%\bin\vos*.dll %_DEST%\bin%_EXT%\vos*.dll
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
