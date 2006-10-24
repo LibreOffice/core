@@ -4,9 +4,9 @@
  *
  *  $RCSfile: common_gfx.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:36:32 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:06:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,8 @@ PrinterGfx::PrinterGfx() :
         maFillColor (0xff,0,0),
         maTextColor (0,0,0),
         maLineColor (0, 0xff, 0),
-        mpFontSubstitutes( NULL )
+        mpFontSubstitutes( NULL ),
+        mbStrictSO52Compatibility( false )
 {
     maVirtualStatus.mfLineWidth = 1.0;
     maVirtualStatus.mnTextHeight = 12;
