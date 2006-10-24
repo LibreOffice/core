@@ -67,6 +67,4 @@ mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\%__SRC%\lib\libcppuhelper*.a %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\cppuhelper*.lib %_DEST%\lib%_EXT%\*
 
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
-
 linklib: libuno_cppuhelper*.*.*
