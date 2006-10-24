@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-04 10:10:35 $
+#   last change: $Author: hr $ $Date: 2006-10-24 15:35:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ SCP1FILES +=                           \
              file_quickstart.par       \
              registryitem_quickstart.par
 
-.IF "$(NETTOOLKIT)"==""
+.IF "$(DISABLE_ACTIVEX)"==""
 SCP1FILES +=                           \
              module_activex.par        \
              file_activex.par          \
@@ -248,7 +248,7 @@ SCP2FILES +=                           \
              file_quickstart.par       \
              registryitem_quickstart.par
 
-.IF "$(NETTOOLKIT)"==""
+.IF "$(DISABLE_ACTIVEX)"==""
 SCP2FILES +=                           \
              module_activex.par        \
              file_activex.par          \
