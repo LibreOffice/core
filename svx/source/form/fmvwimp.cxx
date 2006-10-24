@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2006-10-19 10:51:38 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:12:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -742,7 +742,7 @@ IMPL_LINK(FmXFormView, OnDelayedErrorMessage, void*, /*EMPTYTAG*/)
 void FmXFormView::onFirstViewActivation( const FmFormModel* _pDocModel )
 {
     if ( _pDocModel && _pDocModel->GetAutoControlFocus() )
-        Application::PostUserEvent( LINK( this, FmXFormView, OnAutoFocus ) );
+        m_nAutoFocusEvent = Application::PostUserEvent( LINK( this, FmXFormView, OnAutoFocus ) );
 }
 
 //------------------------------------------------------------------------------
@@ -842,7 +842,7 @@ FmFormShell* FmXFormView::GetFormShell() const
 void FmXFormView::AutoFocus( sal_Bool _bSync )
 {
     if (m_nAutoFocusEvent)
-          Application::RemoveUserEvent(m_nAutoFocusEvent);
+        Application::RemoveUserEvent(m_nAutoFocusEvent);
 
     if ( _bSync )
         OnAutoFocus( NULL );
