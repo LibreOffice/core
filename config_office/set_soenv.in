@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.120 $
-# Date:        $Date: 2006-10-24 14:23:25 $
+# Version:     $Revision: 1.121 $
+# Date:        $Date: 2006-10-24 15:34:49 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -595,7 +595,7 @@ elsif ( $platform =~ m/cygwin/ )
           $MFC_INCLUDE = "";
       } elsif ( "@COMEX@" eq "11" ) { # .NET 2005 needs M1400
           $CVER        = "M1400";
-          if ( "@NETTOOLKIT@" ) {
+          if ( "@DISABLE_ACTIVEX@" ) {
               $ATL_LIB     = $PSDK_HOME.$ds."lib"; # Doesn't exist for VSE
               $ATL_INCLUDE = $PSDK_HOME.$ds."include".$ds."atl";
               $MFC_LIB     = $PSDK_HOME.$ds."lib"; # Doesn't exist for VSE
@@ -1669,7 +1669,7 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "MFC_LIB",           $MFC_LIB,         "e" );
    ToFile( "MFC_INCLUDE",       $MFC_INCLUDE,       "e" );
    ToFile( "NSIS_PATH",         "@NSIS_PATH@",      "e" );
-   ToFile( "NETTOOLKIT",        "@NETTOOLKIT@",     "e" );
+   ToFile( "DISABLE_ACTIVEX",   "@DISABLE_ACTIVEX@","e" );
    ToFile( "USE_NEW_SDK",       $USE_NEW_SDK,       "e" );
 }
 ToFile( "PERL",              $PERL,              "e" );
@@ -1746,6 +1746,7 @@ ToFile( "JAM_PSDK_HOME",     $JAM_PSDK_HOME,     "e" );
 ToFile( "USE_SYSTEM_STL",    "@USE_SYSTEM_STL@", "e" );
 ToFile( "ALLOC",             "@ALLOC@",          "e" );
 ToFile( "ENABLE_SYMBOLS",    "@ENABLE_SYMBOLS@",    "e" );
+ToFile( "DISABLE_STRIP",     "@DISABLE_STRIP@",     "e" );
 ToFile( "ENABLE_CRASHDUMP",  "@ENABLE_CRASHDUMP@",  "e" );
 ToFile( "ENABLE_CUPS",       "@ENABLE_CUPS@",       "e" );
 ToFile( "ENABLE_FONTCONFIG", "@ENABLE_FONTCONFIG@", "e" );
