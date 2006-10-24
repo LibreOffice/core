@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFunctionParser.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:02:31 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:42:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,9 @@
 #endif
 #include <boost/spirit/core.hpp>
 
+#if (OSL_DEBUG_LEVEL > 0)
 #include <iostream>
+#endif
 #include <functional>
 #include <algorithm>
 #include <stack>
