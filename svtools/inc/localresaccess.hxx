@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localresaccess.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:54:45 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:07:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 #ifndef _TOOLS_RCID_H
 #include <tools/rcid.h>
 #endif
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
 
 //.........................................................................
 namespace svt
@@ -69,11 +72,13 @@ namespace svt
             :Resource(_rId.SetRT(_rType).SetAutoRelease(sal_False))
             ,m_pManager(_rId.GetResMgr())
         {
+            OSL_ENSURE( m_pManager != NULL, "OLocalResourceAccess::OLocalResourceAccess: invalid resource manager!" );
         }
 
         ~OLocalResourceAccess()
         {
-            m_pManager->Increment(m_pManager->GetRemainSize());
+            if ( m_pManager )
+                m_pManager->Increment( m_pManager->GetRemainSize() );
             FreeResource();
         }
 
