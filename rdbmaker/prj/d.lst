@@ -2,5 +2,3 @@
 ..\%__SRC%\bin\rdbmaker.pdb %_DEST%\bin%_EXT%\rdbmaker.pdb
 
 ..\%__SRC%\bin\rdbmaker %_DEST%\bin%_EXT%\rdbmaker
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
