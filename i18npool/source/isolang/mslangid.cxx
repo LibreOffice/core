@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mslangid.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 09:09:26 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:09:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,10 @@ void MsLangId::convertLanguageToLocale( LanguageType nLang,
         ;   // nothing => empty locale
     else
     {
-        nLang = MsLangId::getRealLanguage( nLang);
+        // Still resolve LANGUAGE_DONTKNOW if resolving is not requested,
+        // but not LANGUAGE_NONE or others.
+        if (bResolveSystem || nLang == LANGUAGE_DONTKNOW)
+            nLang = MsLangId::getRealLanguage( nLang);
         convertLanguageToLocale( nLang, aLocale);
     }
     return aLocale;
