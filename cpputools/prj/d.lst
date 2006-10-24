@@ -10,9 +10,3 @@
 ..\%__SRC%\bin\regsingleton %_DEST%\bin%_EXT%\regsingleton
 ..\%__SRC%\bin\sp2bv.exe %_DEST%\bin%_EXT%\sp2bv.exe
 ..\%__SRC%\bin\sp2bv %_DEST%\bin%_EXT%\sp2bv
-
-
-
-
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
