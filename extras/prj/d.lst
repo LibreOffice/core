@@ -16,5 +16,3 @@ mkdir: %COMMON_DEST%\pck%_EXT%\openoffice
 ..\source\shellnew\soffice.* %COMMON_DEST%\pck%_EXT%\soffice.*
 ..\unx\source\fonts\fonts\type1\fontunxtype1portal.zip %COMMON_DEST%\pck%_EXT%\fontunxtype1portal.zip
 ..\unx\source\fonts\fonts.dir %COMMON_DEST%\pck%_EXT%\openoffice\fonts.dir
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
