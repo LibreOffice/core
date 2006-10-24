@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:09:39 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:06:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -720,6 +720,11 @@ bool OSQLParseNode::impl_parseTableNameNodeToString_throw( ::rtl::OUString& rStr
             if ( rParam.bQuote )
                 rString += SetQuotation( sTableOrQueryName, rParam.aIdentifierQuote, rParam.aIdentifierQuote );
         }
+
+        // don't forget to remove the query name from the history, else multiple inclusions
+        // won't work
+        // #i69227# / 2006-10-10 / frank.schoenheit@sun.com
+        rParam.pSubQueryHistory->erase( sTableOrQueryName );
 
         return true;
     }
