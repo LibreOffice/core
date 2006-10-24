@@ -79,5 +79,3 @@ mkdir: %COMMON_DEST%\pck%_EXT%\staroffice_bitmap
 ..\res\so_login_image.bmp %COMMON_DEST%\pck%_EXT%\staroffice_bitmap\ssologin.bmp
 ..\res\ssu_login_image.bmp %COMMON_DEST%\pck%_EXT%\starsuite_bitmap\ssologin.bmp
 ..\res\open_login_image.bmp %COMMON_DEST%\pck%_EXT%\ssologin.bmp
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
