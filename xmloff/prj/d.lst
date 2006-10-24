@@ -112,6 +112,4 @@ hedabu: ..\inc\XMLStringVector.hxx %_DEST%\inc%_EXT%\xmloff\XMLStringVector.hxx
 
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
-
 ..\xml\components.xml %_DEST%\xml%_EXT%\components.xml
