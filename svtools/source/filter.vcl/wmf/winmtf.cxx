@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:55:30 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:33:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -594,8 +594,8 @@ void WinMtfOutput::SelectObject( INT32 nIndex )
     {
         nIndex &= 0xffff;       // zur Sicherheit: mehr als 65535 nicht zulassen
 
-        if ( (UINT32)nIndex < mnEntrys )
-            pGDIObj = mpGDIObj[ nIndex ];
+        if ( (UINT32)nIndex < vGDIObj.size() )
+            pGDIObj = vGDIObj[ nIndex ];
     }
 
     if( pGDIObj == NULL )
@@ -735,12 +735,10 @@ void WinMtfOutput::SetTextAlign( UINT32 nAlign )
 
 void WinMtfOutput::ImplResizeObjectArry( UINT32 nNewEntrys )
 {
-    GDIObj** pGDIObj = new GDIObj*[ mnEntrys << 1 ];
-    UINT32 nIndex;
-    for ( nIndex = 0; nIndex < mnEntrys; nIndex++ )
-        pGDIObj[ nIndex ] = mpGDIObj[ nIndex ];
-    for ( mnEntrys = nNewEntrys; nIndex < mnEntrys; pGDIObj[ nIndex++ ] = NULL );
-    delete[] mpGDIObj, mpGDIObj = pGDIObj;
+    sal_uInt32 i = vGDIObj.size();
+    vGDIObj.resize( nNewEntrys );
+    for ( ; i < nNewEntrys ; i++ )
+        vGDIObj[ i ] = NULL;
 }
 
 //-----------------------------------------------------------------------------------
@@ -802,15 +800,15 @@ void WinMtfOutput::CreateObject( GDIObjectType eType, void* pStyle )
         }
     }
     UINT32 nIndex;
-    for ( nIndex = 0; nIndex < mnEntrys; nIndex++ )
+    for ( nIndex = 0; nIndex < vGDIObj.size(); nIndex++ )
     {
-        if ( mpGDIObj[ nIndex ] == NULL )
+        if ( vGDIObj[ nIndex ] == NULL )
             break;
     }
-    if ( nIndex == mnEntrys )
-        ImplResizeObjectArry( mnEntrys << 1 );
+    if ( nIndex == vGDIObj.size() )
+        ImplResizeObjectArry( vGDIObj.size() + 16 );
 
-    mpGDIObj[ nIndex ] = new GDIObj( eType, pStyle );
+    vGDIObj[ nIndex ] = new GDIObj( eType, pStyle );
 }
 
 //-----------------------------------------------------------------------------------
@@ -838,13 +836,13 @@ void WinMtfOutput::CreateObject( INT32 nIndex, GDIObjectType eType, void* pStyle
                 }
             }
         }
-        if ( (UINT32)nIndex >= mnEntrys )
+        if ( (UINT32)nIndex >= vGDIObj.size() )
             ImplResizeObjectArry( nIndex + 16 );
 
-        if ( mpGDIObj[ nIndex ] != NULL )
-            delete mpGDIObj[ nIndex ];
+        if ( vGDIObj[ nIndex ] != NULL )
+            delete vGDIObj[ nIndex ];
 
-        mpGDIObj[ nIndex ] = new GDIObj( eType, pStyle );
+        vGDIObj[ nIndex ] = new GDIObj( eType, pStyle );
     }
     else
     {
@@ -873,10 +871,10 @@ void WinMtfOutput::DeleteObject( sal_Int32 nIndex )
 {
     if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
     {
-        if ( (sal_uInt32)nIndex < mnEntrys )
+        if ( (sal_uInt32)nIndex < vGDIObj.size() )
         {
-            delete mpGDIObj[ nIndex ];
-            mpGDIObj[ nIndex ] = NULL;
+            delete vGDIObj[ nIndex ];
+            vGDIObj[ nIndex ] = NULL;
         }
     }
 }
@@ -928,7 +926,6 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     mnBkMode            ( OPAQUE ),
     meLatestRasterOp    ( ROP_INVERT ),
     meRasterOp          ( ROP_OVERPAINT ),
-    mnEntrys            ( 16 ),
     maActPos            ( Point() ),
     mbNopMode           ( sal_False ),
     mbFillStyleSelected ( sal_False ),
@@ -949,11 +946,9 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     mpGDIMetaFile       ( &rGDIMetaFile )
 {
     mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_CLIPREGION ) );      // The original clipregion has to be on top
-    mpGDIObj = new GDIObj*[ mnEntrys ];                                     // of the stack so it can always be restored
-    for ( UINT32 i = 0; i < mnEntrys; i++ )                                 // this is necessary to be able to support
-    {                                                                       // SetClipRgn( NULL ) and similar ClipRgn actions (SJ)
-        mpGDIObj[ i ] = NULL;
-    }
+                                                                            // of the stack so it can always be restored
+                                                                            // this is necessary to be able to support
+                                                                            // SetClipRgn( NULL ) and similar ClipRgn actions (SJ)
 
     maFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Arial" )) );  // sj: #i57205#, we do have some scaling problems if using
     maFont.SetCharSet( gsl_getSystemTextEncoding() );                       // the default font then most times a x11 font is used, we
@@ -970,9 +965,6 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
 
 WinMtfOutput::~WinMtfOutput()
 {
-    while( maSaveStack.Count() )
-        delete maSaveStack.Pop();
-
     mpGDIMetaFile->AddAction( new MetaPopAction() );
     mpGDIMetaFile->SetPrefMapMode( MAP_100TH_MM );
     if ( mrclFrame.IsEmpty() )
@@ -980,11 +972,8 @@ WinMtfOutput::~WinMtfOutput()
     else
         mpGDIMetaFile->SetPrefSize( mrclFrame.GetSize() );
 
-    for ( UINT32 i = 0; i < mnEntrys; i++ )
-    {
-        delete mpGDIObj[ i ];
-    }
-    delete[] mpGDIObj;
+    for ( UINT32 i = 0; i < vGDIObj.size(); i++ )
+        delete vGDIObj[ i ];
 };
 
 //-----------------------------------------------------------------------------------
@@ -2129,7 +2118,7 @@ void WinMtfOutput::ModifyWorldTransform( const XForm& rXForm, UINT32 nMode )
 void WinMtfOutput::Push()                       // !! to be able to access the original ClipRegion it
 {                                               // is not allowed to use the MetaPushAction()
     UpdateClipRegion();                         // (the original clip region is on top of the stack) (SJ)
-    SaveStruct* pSave = new SaveStruct;
+    SaveStructPtr pSave( new SaveStruct );
 
     pSave->aLineStyle = maLineStyle;
     pSave->aFillStyle = maFillStyle;
@@ -2159,7 +2148,8 @@ void WinMtfOutput::Push()                       // !! to be able to access the o
 
     pSave->aPathObj = aPathObj;
     pSave->aClipPath = aClipPath;
-    maSaveStack.Push( pSave );
+
+    vSaveStack.push_back( pSave );
 }
 
 //-----------------------------------------------------------------------------------
@@ -2167,10 +2157,10 @@ void WinMtfOutput::Push()                       // !! to be able to access the o
 void WinMtfOutput::Pop()
 {
     // Die aktuellen Daten vom Stack holen
-    if( maSaveStack.Count() )
+    if( vSaveStack.size() )
     {
         // Die aktuelle Daten auf dem Stack sichern
-        SaveStruct* pSave = maSaveStack.Pop();
+        SaveStructPtr pSave( vSaveStack.back() );
 
         maLineStyle = pSave->aLineStyle;
         maFillStyle = pSave->aFillStyle;
@@ -2206,7 +2196,7 @@ void WinMtfOutput::Pop()
         }
         if ( meLatestRasterOp != meRasterOp )
             mpGDIMetaFile->AddAction( new MetaRasterOpAction( meRasterOp ) );
-        delete pSave;
+        vSaveStack.pop_back();
     }
 }
 
