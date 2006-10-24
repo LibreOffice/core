@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:15:38 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:05:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,6 +322,8 @@ public:
 
     void            SetDirty();
     inline void     SetDirtyVar() { bDirty = TRUE; }
+    // If setting entire document dirty after load, no broadcasts but still append to FormulaTree.
+    void            SetDirtyAfterLoad();
     inline void     ResetTableOpDirtyVar() { bTableOpDirty = FALSE; }
     void            SetTableOpDirty();
     BOOL            IsDirtyOrInTableOpDirty() const;
