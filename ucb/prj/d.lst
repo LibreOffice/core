@@ -32,5 +32,3 @@
 ..\source\ucp\tdoc\ucptdoc.xml %_DEST%\xml%_EXT%\ucptdoc.xml
 
 ..\%__SRC%\misc\ucpgvfs-ucd.txt  %_DEST%\bin%_EXT%\ucpgvfs-ucd.txt
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
