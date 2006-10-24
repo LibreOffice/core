@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextmodel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:00:47 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:11:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,10 @@
 
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
+#endif
+
+#ifndef _COMPHELPER_GUARDING_HXX_
+#include <comphelper/guarding.hxx>
 #endif
 
 #ifndef _TOOLKIT_AWT_VCLXDEVICE_HXX_
@@ -407,6 +411,7 @@ namespace frm
             }
             else if ( PROPERTY_ID_TEXT == _nHandle )
             {
+                MutexRelease aReleaseMutex( m_aMutex );
                 impl_smlock_setEngineText( m_sLastKnownEngineText );
             }
         }
