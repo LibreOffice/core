@@ -5,5 +5,3 @@
 ..\source\stm\stm.xml %_DEST%\xml%_EXT%\streams.uno.xml
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
