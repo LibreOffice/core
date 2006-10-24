@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:30:52 $
+#   last change: $Author: hr $ $Date: 2006-10-24 15:35:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@ use_shl_versions=
 
 .INCLUDE : settings.mk
 
-.IF "$(GUI)" == "WNT" && "$(NETTOOLKIT)"==""
+.IF "$(GUI)" == "WNT" && "$(DISABLE_ACTIVEX)"==""
 
 VERSIONOBJ=
 LIBTARGET=NO
