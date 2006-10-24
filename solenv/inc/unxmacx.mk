@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:04:13 $
+#   last change: $Author: hr $ $Date: 2006-10-24 13:26:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,74 @@ CFLAGSOUTOBJ=-o
 # ---------------------------------
 CFLAGSOPT=-O2 -fno-strict-aliasing
 CFLAGSNOOPT=-O0
+
+# -Wshadow does not work for C with nested uses of pthread_cleanup_push:
+CFLAGSWARNCC=-Wall -Wextra -Wendif-labels
+CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wshadow -Wno-ctor-dtor-privacy \
+    -Wno-non-virtual-dtor
+CFLAGSWALLCC=$(CFLAGSWARNCC)
+CFLAGSWALLCXX=$(CFLAGSWARNCXX)
+CFLAGSWERRCC=-Werror
+
+# Once all modules on this platform compile without warnings, set
+# COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
+# settings.mk):
+MODULES_WITH_WARNINGS := \
+    agg \
+    autodoc \
+    avmedia \
+    b_server \
+    basctl \
+    basebmp \
+    basic \
+    bridges \
+    canvas \
+    chart2 \
+    comphelper \
+    configmgr \
+    connectivity \
+    cppcanvas \
+    dbaccess \
+    desktop \
+    devtools \
+    dxcanvas \
+    dtrans \
+    extensions \
+    filter \
+    forms \
+    fpicker \
+    framework \
+    glcanvas \
+    i18npool \
+    lingu \
+    package \
+    psprint \
+    pyuno \
+    r_tools \
+    registry \
+    remotebridges \
+    sal \
+    sc \
+    sd \
+    sfx2 \
+    slideshow \
+    starmath \
+    stoc \
+    svtools \
+    svx \
+    sw \
+    testtools \
+    toolkit \
+    tools \
+    ucb \
+    ucbhelper \
+    uui \
+    vcl \
+    writerperfect \
+    xmlscript \
+    xmlsecurity \
+    xmltrans \
+    xmloff
 
 # Currently, there is no nas support for OS X...
 CDEFS+= -DNO_AUDIO
