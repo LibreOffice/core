@@ -2,5 +2,3 @@
 ..\%__SRC%\bin\xml2cmp %_DEST%\bin%_EXT%\xml2cmp
 ..\%__SRC%\bin\srvdepy.exe %_DEST%\bin%_EXT%\srvdepy.exe
 ..\%__SRC%\bin\srvdepy %_DEST%\bin%_EXT%\srvdepy
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
