@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:43:16 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:12:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -715,6 +715,8 @@ void DbCellControl::implAdjustGenericFieldSetting( const Reference< XPropertySet
 //------------------------------------------------------------------------------
 void DbCellControl::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(RuntimeException)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     Reference< XPropertySet > xSourceProps( _rEvent.Source, UNO_QUERY );
 
     if  (   _rEvent.PropertyName.equalsAscii( FM_PROP_VALUE )
