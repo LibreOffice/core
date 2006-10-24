@@ -131,6 +131,7 @@ static void InitGammaTable()
         aGammaTable[x] = (unsigned char)a;
     }
 }
+
 // -----------------------------------------------------------------------
 
 static FT_Library aLibFT = 0;
@@ -140,6 +141,7 @@ static int nFTVERSION = 0;
 static FT_Error (*pFTNewSize)(FT_Face,FT_Size*);
 static FT_Error (*pFTActivateSize)(FT_Size);
 static FT_Error (*pFTDoneSize)(FT_Size);
+static FT_Error (*pFTEmbolden)(FT_GlyphSlot);
 static bool bEnableSizeFT = false;
 
 struct EqStr{ bool operator()(const char* a, const char* b) const { return !strcmp(a,b); } };
@@ -464,6 +466,7 @@ FreetypeManager::FreetypeManager()
     pFTNewSize      = (FT_Error(*)(FT_Face,FT_Size*))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_New_Size" );
     pFTActivateSize = (FT_Error(*)(FT_Size))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Activate_Size" );
     pFTDoneSize     = (FT_Error(*)(FT_Size))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Done_Size" );
+    pFTEmbolden     = (FT_Error(*)(FT_GlyphSlot))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_GlyphSlot_Embolden" );
 
     bEnableSizeFT = (pFTNewSize!=NULL) && (pFTActivateSize!=NULL) && (pFTDoneSize!=NULL);
 
@@ -477,6 +480,9 @@ FreetypeManager::FreetypeManager()
     // reason: double free in freetype's embedded bitmap handling
     if( nFTVERSION == 2103 )
         nDefaultPrioEmbedded = 0;
+    // disable artificial emboldening with the Freetype API for older versions
+    if( nFTVERSION < 2110 )
+        pFTEmbolden = NULL;
 
 #else // RTLD_DEFAULT
     // assume systems where dlsym is not possible use supplied library
@@ -1254,6 +1260,8 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     }
     rGD.SetCharWidth( (nCharWidth + 32) >> 6 );
 
+    if( mbArtBold && pFTEmbolden )
+        (*pFTEmbolden)( maFaceFT->glyph );
     FT_Glyph pGlyphFT;
     rc = FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
 
@@ -1327,6 +1335,9 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     if( rc != FT_Err_Ok )
         return false;
 
+    if( mbArtBold && pFTEmbolden )
+        (*pFTEmbolden)( maFaceFT->glyph );
+
     FT_Glyph pGlyphFT;
     rc = FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
     if( rc != FT_Err_Ok )
@@ -1368,7 +1379,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     const FT_Bitmap& rBitmapFT  = rBmpGlyphFT->bitmap;
     rRawBitmap.mnHeight         = rBitmapFT.rows;
     rRawBitmap.mnBitCount       = 1;
-    if( mbArtBold )
+    if( mbArtBold && !pFTEmbolden )
     {
         rRawBitmap.mnWidth = rBitmapFT.width + 1;
         int nLineBytes = (rRawBitmap.mnWidth + 7) >> 3;
@@ -1389,7 +1400,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
         rRawBitmap.mpBits = new unsigned char[ rRawBitmap.mnAllocated ];
     }
 
-    if( !mbArtBold )
+    if( !mbArtBold || pFTEmbolden )
     {
         memcpy( rRawBitmap.mpBits, rBitmapFT.buffer, nNeededSize );
     }
@@ -1480,6 +1491,9 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     if( rc != FT_Err_Ok )
         return false;
 
+    if( mbArtBold && pFTEmbolden )
+        (*pFTEmbolden)( maFaceFT->glyph );
+
     FT_Glyph pGlyphFT;
     rc = FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
     if( rc != FT_Err_Ok )
@@ -1521,7 +1535,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     rRawBitmap.mnWidth          = rBitmapFT.width;
     rRawBitmap.mnBitCount       = 8;
     rRawBitmap.mnScanlineSize   = bEmbedded ? rBitmapFT.width : rBitmapFT.pitch;
-    if( mbArtBold )
+    if( mbArtBold && !pFTEmbolden )
     {
         ++rRawBitmap.mnWidth;
             ++rRawBitmap.mnScanlineSize;
@@ -1564,7 +1578,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
         }
     }
 
-    if( mbArtBold )
+    if( mbArtBold && !pFTEmbolden )
     {
         // overlay with glyph image shifted by one left pixel
         unsigned char* p = rRawBitmap.mpBits;
@@ -2144,6 +2158,9 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex,
     if( rc != FT_Err_Ok )
         return false;
 
+    if( mbArtBold && pFTEmbolden )
+        (*pFTEmbolden)( maFaceFT->glyph );
+
     FT_Glyph pGlyphFT;
     rc = FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
     if( rc != FT_Err_Ok )
@@ -2151,6 +2168,17 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex,
 
     if( pGlyphFT->format != FT_GLYPH_FORMAT_OUTLINE )
         return false;
+
+    if( mbArtItalic )
+    {
+        FT_Matrix aMatrix;
+        aMatrix.xx = aMatrix.yy = 0x10000L;
+        if( nFTVERSION >= 2102 )    // Freetype 2.1.2 API swapped xy with yx
+            aMatrix.xy = 0x6000L, aMatrix.yx = 0;
+        else
+            aMatrix.yx = 0x6000L, aMatrix.xy = 0;
+        FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
+    }
 
     FT_Outline& rOutline = reinterpret_cast<FT_OutlineGlyphRec*>(pGlyphFT)->outline;
     if( !rOutline.n_points )    // blank glyphs are ok
