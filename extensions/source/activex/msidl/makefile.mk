@@ -1,12 +1,12 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/activex/msidl/makefile.mk,v 1.4 2004-11-17 12:43:51 obo Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/activex/msidl/makefile.mk,v 1.5 2006-10-24 15:36:06 hr Exp $
 #
 # =========================================================================
 #
-#     $Date: 2004-11-17 12:43:51 $
-#     $Author: obo $
-#     $Revision: 1.4 $
+#     $Date: 2006-10-24 15:36:06 $
+#     $Author: hr $
+#     $Revision: 1.5 $
 #
 # =========================================================================
 #
@@ -25,7 +25,7 @@ TARGET=msidl
 
 .INCLUDE : settings.mk
 
-.IF "$(GUI)" == "WNT" && "$(NETTOOLKIT)"==""
+.IF "$(GUI)" == "WNT" && "$(DISABLE_ACTIVEX)"==""
 
 # --- Targets ----------------------------------
 
