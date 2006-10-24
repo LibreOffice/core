@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmundo.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-28 15:02:45 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:13:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,6 +197,7 @@ class SVX_DLLPRIVATE FmXUndoEnvironment
     oslInterlockedCount                     m_Locks;
     ::osl::Mutex                            m_aMutex;
     sal_Bool                                bReadOnly;
+    bool                                    m_bDisposed;
 
 public:
     FmXUndoEnvironment(FmFormModel& _rModel);
