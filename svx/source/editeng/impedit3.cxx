@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:39:32 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:52:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2084,10 +2084,15 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, USHORT nStart, USHORT n
 
     while ( ( aWordSel.Min().GetNode() == pNode ) && ( aWordSel.Min().GetIndex() < nEnd ) )
     {
+        USHORT nSavPos = aWordSel.Max().GetIndex();
         if ( aWordSel.Max().GetIndex() > nEnd )
            aWordSel.Max().GetIndex() = nEnd;
 
         String aWord = GetSelected( aWordSel );
+
+        // restore selection for proper iteration at the end of the function
+        aWordSel.Max().GetIndex() = nSavPos;
+
         xub_StrLen nIdx = 0;
         xub_StrLen nKashidaPos = STRING_LEN;
         xub_Unicode cCh;
