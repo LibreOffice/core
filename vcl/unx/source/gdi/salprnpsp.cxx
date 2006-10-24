@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:39:41 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:12:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -464,6 +464,18 @@ SalInfoPrinter* X11SalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
         pJobSetup->maPrinterName    = pQueueInfo->maPrinterName;
         pJobSetup->maDriver         = aInfo.m_aDriverName;
         copyJobDataToJobSetup( pJobSetup, aInfo );
+
+        // set/clear backwards compatibility flag
+        bool bStrictSO52Compatibility = false;
+        std::hash_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
+            pJobSetup->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StrictSO52Compatibility" ) ) );
+
+        if( compat_it != pJobSetup->maValueMap.end() )
+        {
+            if( compat_it->second.equalsIgnoreAsciiCaseAscii( "true" ) )
+                bStrictSO52Compatibility = true;
+        }
+        pPrinter->m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );
     }
 
 
@@ -722,10 +734,23 @@ BOOL PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
 // should be merged into the independent data
 BOOL PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
 {
+    // set/clear backwards compatibility flag
+    bool bStrictSO52Compatibility = false;
+    std::hash_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
+        pJobSetup->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StrictSO52Compatibility" ) ) );
+
+    if( compat_it != pJobSetup->maValueMap.end() )
+    {
+        if( compat_it->second.equalsIgnoreAsciiCaseAscii( "true" ) )
+            bStrictSO52Compatibility = true;
+    }
+    m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );
+
     if( pJobSetup->mpDriverData )
         return SetData( ~0, pJobSetup );
 
     copyJobDataToJobSetup( pJobSetup, m_aJobData );
+
     return TRUE;
 }
 
@@ -1074,6 +1099,19 @@ BOOL PspSalPrinter::StartJob(
         }
     }
     m_aPrinterGfx.Init( m_aJobData );
+
+    // set/clear backwards compatibility flag
+    bool bStrictSO52Compatibility = false;
+    std::hash_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
+        pJobSetup->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StrictSO52Compatibility" ) ) );
+
+    if( compat_it != pJobSetup->maValueMap.end() )
+    {
+        if( compat_it->second.equalsIgnoreAsciiCaseAscii( "true" ) )
+            bStrictSO52Compatibility = true;
+    }
+    m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );
+
     return m_aPrintJob.StartJob( m_aTmpFile.Len() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx ) ? TRUE : FALSE;
 }
 
