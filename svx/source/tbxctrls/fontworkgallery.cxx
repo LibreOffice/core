@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontworkgallery.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:20:25 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:43:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,6 +386,7 @@ FontWorkAlignmentWindow::FontWorkAlignmentWindow(
     mxFrame( rFrame ),
     mbPopupMode( true )
 {
+    SetHelpId( HID_WIN_FONTWORK_ALIGN );
     implInit();
 }
 
@@ -410,6 +411,7 @@ FontWorkAlignmentWindow::FontWorkAlignmentWindow(
     mxFrame( rFrame ),
     mbPopupMode( true )
 {
+    SetHelpId( HID_WIN_FONTWORK_ALIGN );
     implInit();
 }
 
@@ -633,6 +635,7 @@ FontWorkCharacterSpacingWindow::FontWorkCharacterSpacingWindow(
     mxFrame( rFrame ),
     mbPopupMode( true )
 {
+    SetHelpId( HID_WIN_FONTWORK_CHARSPACE );
     implInit();
 }
 
@@ -648,6 +651,7 @@ FontWorkCharacterSpacingWindow::FontWorkCharacterSpacingWindow(
     mxFrame( rFrame ),
     mbPopupMode( true )
 {
+    SetHelpId( HID_WIN_FONTWORK_CHARSPACE );
     implInit();
 }
 
