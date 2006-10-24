@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:12:16 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:07:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -389,6 +389,7 @@ DBG_NAME(FormattedField);
     ,m_bValueDirty(TRUE)            \
     ,m_bEnableEmptyField(TRUE)      \
     ,m_bAutoColor(FALSE)            \
+    ,m_bEnableNaN(FALSE)            \
     ,m_dCurrentValue(0)             \
     ,m_dDefaultValue(0)             \
     ,m_nFormatKey(0)                \
