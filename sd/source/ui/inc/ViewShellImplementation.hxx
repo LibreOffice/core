@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellImplementation.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:29:33 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:36:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,8 +84,11 @@ public:
         /** Release the lock.  When the UI is captured
             (Application::IsUICaptured() returns <TRUE/>) then the lock is
             released later asynchronously.
+            @param bForce
+                When this flag is <TRUE/> then the lock is released even
+                when IsUICaptured() returns <TRUE/>.
         */
-        void Release (void);
+        void Release (bool bForce = false);
         DECL_LINK(TimeoutCallback,Timer*);
     private:
         ::std::auto_ptr<sd::ToolBarManager::UpdateLock> mpLock;
