@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuigaldlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:09:10 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:42:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -667,6 +667,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     String              aType( GAL_RESID( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
     BOOL                bReadOnly = pThm->IsReadOnly() && !pThm->IsImported();
 
+    aEdtMSName.SetHelpId( HID_GALLERY_EDIT_MSNAME );
     aEdtMSName.SetText( pThm->GetName() );
     aEdtMSName.SetReadOnly( bReadOnly );
 
