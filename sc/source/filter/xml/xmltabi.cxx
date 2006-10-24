@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:58:34 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:06:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,15 +248,11 @@ void ScXMLTableContext::EndElement()
             for (i = 0; i < nDepth; ++i)
             {
                 sal_Int32 nCount(pColArray->GetCount(static_cast<USHORT>(i)));
-                sal_Bool bChanged(sal_False);
-                for (sal_Int32 j = 0; j < nCount && !bChanged; ++j)
+                for (sal_Int32 j = 0; j < nCount; ++j)
                 {
                     ScOutlineEntry* pEntry(pColArray->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j)));
                     if (pEntry->IsHidden())
-                    {
                         pColArray->SetVisibleBelow(static_cast<USHORT>(i), static_cast<USHORT>(j), sal_False);
-                        bChanged = sal_True;
-                    }
                 }
             }
             ScOutlineArray* pRowArray(pOutlineTable->GetRowArray());
@@ -264,15 +260,11 @@ void ScXMLTableContext::EndElement()
             for (i = 0; i < nDepth; ++i)
             {
                 sal_Int32 nCount(pRowArray->GetCount(static_cast<USHORT>(i)));
-                sal_Bool bChanged(sal_False);
-                for (sal_Int32 j = 0; j < nCount && !bChanged; ++j)
+                for (sal_Int32 j = 0; j < nCount; ++j)
                 {
                     ScOutlineEntry* pEntry(pRowArray->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j)));
                     if (pEntry->IsHidden())
-                    {
                         pRowArray->SetVisibleBelow(static_cast<USHORT>(i), static_cast<USHORT>(j), sal_False);
-                        bChanged = sal_True;
-                    }
                 }
             }
         }
