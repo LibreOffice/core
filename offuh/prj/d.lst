@@ -331,4 +331,3 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\xml\wrapper
 ..\%__SRC%\inc\offuh\com\sun\star\xml\wrapper\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\xml\wrapper\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\xml\wrapper\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\xml\wrapper\*.hdl
 #i20156 - end
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\offuh\*.dylib; fi"
