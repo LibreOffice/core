@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 10:59:05 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:33:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2249,7 +2249,7 @@ namespace xmloff { namespace token {
         TOKEN( "mirror-horizontal" ,                    XML_MIRROR_HORIZONTAL ),
         TOKEN( "extrusion-allowed" ,                    XML_EXTRUSION_ALLOWED ),
         TOKEN( "text-path-allowed" ,                    XML_TEXT_PATH_ALLOWED ),
-        TOKEN( "conentric-gradient-fill-allowed" ,      XML_CONCENTRIC_GRADIENT_FILL_ALLOWED ),
+        TOKEN( "concentric-gradient-fill-allowed" ,     XML_CONCENTRIC_GRADIENT_FILL_ALLOWED ),
         TOKEN( "extrusion" ,                            XML_EXTRUSION ),
         TOKEN( "extrusion-brightness" ,             XML_EXTRUSION_BRIGHTNESS ),
         TOKEN( "extrusion-depth" ,                      XML_EXTRUSION_DEPTH ),
