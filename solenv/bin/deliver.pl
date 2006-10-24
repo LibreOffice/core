@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.107 $
+#   $Revision: 1.108 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-22 08:55:16 $
+#   last change: $Author: hr $ $Date: 2006-10-24 15:33:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.107 $ ';
+$id_str = ' $Revision: 1.108 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -146,7 +146,7 @@ if ( ! $opt_delete ) {
             warn("Warning: do we need stripping for windows gcc? Nothing defined yet.");
         }
     } else {
-        if (((defined $ENV{ENABLE_SYMBOLS}) && ($ENV{ENABLE_SYMBOLS} ne "TRUE") && ($ENV{ENABLE_SYMBOLS} ne "SMALL")) || (!defined $ENV{ENABLE_SYMBOLS})) {
+        if ((!defined $ENV{DISABLE_STRIP}) || ($ENV{DISABLE_STRIP} eq "")) {
             $strip = 'strip';
             $strip .= " -R '.comment' -s" if ($ENV{OS} eq 'LINUX');
         }
