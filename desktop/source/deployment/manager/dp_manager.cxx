@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-16 10:46:07 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:56:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -575,10 +575,10 @@ bool PackageManagerImpl::checkUpdate(
     {
         // package already deployed, interact --force:
         Any request(
-            deployment::VersionException(
+            (deployment::VersionException(
                 getResourceString( RID_STR_PACKAGE_ALREADY_ADDED ) + title,
                 static_cast<OWeakObject *>(this), package,
-                getDeployedPackage_( title, origCmdEnv ) ) );
+                getDeployedPackage_( title, origCmdEnv ) ) ) );
         bool replace = false, abort = false;
         if (! interactContinuation(
                 request, task::XInteractionApprove::static_type(),
