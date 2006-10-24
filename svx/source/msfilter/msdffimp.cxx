@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:22:50 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:42:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2228,7 +2228,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             double fBackDepth = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DExtrudeBackward, 1270 * 360 )) / 360.0;
             double fForeDepth = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DExtrudeForward ), 0 ) / 360.0;
             double fDepth = fBackDepth + fForeDepth;
-            double fFraction = fForeDepth / fDepth;
+            double fFraction = fDepth != 0.0 ? fForeDepth / fDepth : 0;
             EnhancedCustomShapeParameterPair aDepthParaPair;
             aDepthParaPair.First.Value <<= fDepth;
             aDepthParaPair.First.Type = EnhancedCustomShapeParameterType::NORMAL;
