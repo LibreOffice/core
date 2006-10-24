@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:43:07 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:15:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -719,13 +719,21 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
         return bError;
     }
 
+    Reference<XConnection> xConnection( pController->getConnection() );
+    Reference< XDatabaseMetaData > xMetaData;
+    if ( xConnection.is() )
+        xMetaData = xConnection->getMetaData();
+    OSL_ENSURE( xMetaData.is(), "OSelectionBrowseBox::saveField: invalid connection/meta data!" );
+    if ( !xMetaData.is() )
+        return sal_True;
+
     ::rtl::OUString sErrorMsg;
     // second test if the name can be set as select columns in a pseudo statement
     // we have to look which entries  we should quote
 
     ::rtl::OUString sSql;
     sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
-    sSql += _sFieldName;
+    sSql += ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), _sFieldName );
     sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM x"));
 
     ::connectivity::OSQLParser& rParser( pController->getParser() );
@@ -745,10 +753,6 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
         } // travel through the select column parse node
         else
         {
-            Reference<XConnection> xConnection = pController->getConnection();
-            if ( !xConnection.is() )
-                return sal_True;
-            Reference<XDatabaseMetaData> xMetaData = xConnection->getMetaData();
             ::comphelper::UStringMixEqual bCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
 
             OTableFieldDescRef aSelEntry = _pEntry;
