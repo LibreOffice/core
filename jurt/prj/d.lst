@@ -4,5 +4,3 @@
 ..\%__SRC%\lib\libjpipe*.dylib %_DEST%\lib%_EXT%\libjpipe*.dylib
 
 ..\%__SRC%\bin\jurt_src.zip %COMMON_DEST%\bin%_EXT%\jurt_src.zip
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
