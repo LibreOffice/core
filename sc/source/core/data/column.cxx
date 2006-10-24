@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:49:45 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:06:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2107,10 +2107,27 @@ void ScColumn::SetDirtyAfterLoad()
     for (SCSIZE i=0; i<nCount; i++)
     {
         ScFormulaCell* p = (ScFormulaCell*) pItems[i].pCell;
+#if 1
+        // Simply set dirty and append to FormulaTree, without broadcasting,
+        // which is a magnitude faster. This is used to calculate the entire
+        // document, e.g. when loading alien file formats.
+        if ( p->GetCellType() == CELLTYPE_FORMULA )
+            p->SetDirtyAfterLoad();
+#else
+/* This was used with the binary file format that stored results, where only
+ * newly compiled and volatile functions and their dependents had to be
+ * recalculated, which was faster then. Since that was moved to 'binfilter' to
+ * convert to an XML file this isn't needed anymore, and not used for other
+ * file formats. Kept for reference in case mechanism needs to be reactivated
+ * for some file formats, we'd have to introduce a controlling parameter to
+ * this method here then.
+*/
+
+        // If the cell was alsready dirty because of CalcAfterLoad,
+        // FormulaTracking has to take place.
         if ( p->GetCellType() == CELLTYPE_FORMULA && p->GetDirty() )
             p->SetDirty();
-            // wenn die Zelle durch CalcAfterLoad schon bDirty war, muss
-            // jetzt noch FormulaTracking stattfinden
+#endif
     }
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
