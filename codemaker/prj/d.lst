@@ -12,6 +12,3 @@
 ..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
 ..\%__SRC%\lib\i*.lib %_DEST%\lib%_EXT%\i*.lib
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
-
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
