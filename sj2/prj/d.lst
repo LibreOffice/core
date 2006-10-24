@@ -7,5 +7,3 @@ mkdir: %_DEST%\inc%_EXT%\sj2
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\slb\sj.lib %_DEST%\lib%_EXT%\xsj.lib
 ..\%__SRC%\bin\j?????_g.dll %_DEST%\bin%_EXT%\j?????_g.dll
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
