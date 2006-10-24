@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:25:43 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:04:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1587,10 +1587,12 @@ BOOL ImpSvNumberInputScan::ScanMidString( const String& rString,
         {
             if (bDecSepInDateSeps)                  // . also date separator
             {
-                if (eScannedType != NUMBERFORMAT_UNDEFINED &&
-                    eScannedType != NUMBERFORMAT_DATE)  // already another type
+                if (    eScannedType != NUMBERFORMAT_UNDEFINED &&
+                        eScannedType != NUMBERFORMAT_DATE &&
+                        eScannedType != NUMBERFORMAT_DATETIME)  // already another type
                     return MatchedReturn();
-                eScannedType = NUMBERFORMAT_DATE;   // !!! it IS a date
+                if (eScannedType == NUMBERFORMAT_UNDEFINED)
+                    eScannedType = NUMBERFORMAT_DATE;   // !!! it IS a date
                 SkipBlanks(rString, nPos);
             }
             else
@@ -1705,8 +1707,19 @@ BOOL ImpSvNumberInputScan::ScanMidString( const String& rString,
 
     if ( SkipString(rTime, rString, nPos) )         // time separator?
     {
-        if (nDecPos)                                // already , => error
-            return MatchedReturn();
+        if (nDecPos)                                // already . => maybe error
+        {
+            if (bDecSepInDateSeps)                  // . also date sep
+            {
+                if (    eScannedType != NUMBERFORMAT_DATE &&    // already another type than date
+                        eScannedType != NUMBERFORMAT_DATETIME)  // or date time
+                    return MatchedReturn();
+                if (eScannedType == NUMBERFORMAT_DATE)
+                    nDecPos = 0;                    // reset for time transition
+            }
+            else
+                return MatchedReturn();
+        }
         if (   (   eScannedType == NUMBERFORMAT_DATE        // already date type
                 || eScannedType == NUMBERFORMAT_DATETIME)   // or date time
             && nAnzNums > 3)                                // and more than 3 numbers? (31.Dez.94 8:23)
@@ -1818,10 +1831,12 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
         {
             if (bDecSepInDateSeps)                  // . also date sep
             {
-                if (eScannedType != NUMBERFORMAT_UNDEFINED &&
-                    eScannedType != NUMBERFORMAT_DATE)  // already another type
+                if (    eScannedType != NUMBERFORMAT_UNDEFINED &&
+                        eScannedType != NUMBERFORMAT_DATE &&
+                        eScannedType != NUMBERFORMAT_DATETIME)  // already another type
                     return MatchedReturn();
-                eScannedType = NUMBERFORMAT_DATE;   // !!! it IS a date
+                if (eScannedType == NUMBERFORMAT_UNDEFINED)
+                    eScannedType = NUMBERFORMAT_DATE;   // !!! it IS a date
                 SkipBlanks(rString, nPos);
             }
             else
