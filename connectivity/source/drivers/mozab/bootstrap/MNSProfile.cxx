@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSProfile.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:59:44 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:05:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -474,10 +474,9 @@ NS_IMETHODIMP nsProfile::GetProfileDir(const PRUnichar *profileName, nsIFile **p
     rtl::OUString path = xMozillaBootstrap->getProfilePath(xMozillaBootstrap->getCurrentProduct(),profileName);
 
     nsCOMPtr<nsILocalFile>  localFile;
-    rtl::OString sPath = OUStringToOString(path, RTL_TEXTENCODING_UTF8);
-    nsCAutoString filePath(sPath.getStr());
+    nsAutoString filePath(path.getStr());
 
-    rv = NS_NewNativeLocalFile(filePath, PR_TRUE,
+    rv = NS_NewLocalFile(filePath, PR_TRUE,
                                    getter_AddRefs(localFile));
     if (localFile && NS_SUCCEEDED(rv))
         return localFile->QueryInterface(NS_GET_IID(nsIFile), (void**)profileDir);
