@@ -3,6 +3,3 @@
 ..\%__SRC%\bin\officebean.dll %_DEST%\bin%_EXT%\officebean.dll
 ..\%__SRC%\lib\libofficebean.so %_DEST%\lib%_EXT%\libofficebean.so
 ..\%__SRC%\lib\*officebean.dylib %_DEST%\lib%_EXT%\*officebean.dylib
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
-
