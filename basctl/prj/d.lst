@@ -24,5 +24,3 @@ mkdir: %_DEST%\inc%_EXT%\basctl
 ..\uiconfig\basicide\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\BasicIDE\toolbar\*.xml
 ..\uiconfig\basicide\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\BasicIDE\accelerator\en-US\*.xml
 ..\uiconfig\basicide\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\BasicIDE\statusbar\*.xml
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
