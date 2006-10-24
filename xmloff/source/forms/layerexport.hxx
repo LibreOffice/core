@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerexport.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 09:25:35 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:10:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,6 @@
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
-#endif
 
 class SvXMLExport;
 class SvXMLNumFmtExport;
@@ -71,8 +68,22 @@ namespace xmloff
 {
 //.........................................................................
 
-    typedef ::std::set< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, ::comphelper::OInterfaceCompare< ::com::sun::star::beans::XPropertySet > >
-            PropertySetBag;
+    typedef ::std::set  <   ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                        ,   OPropertySetCompare
+                        >   PropertySetBag;
+
+    // maps objects (property sets) to strings, e.g. control ids.
+    typedef ::std::map  <   ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                        ,   ::rtl::OUString
+                        ,   OPropertySetCompare
+                        >   MapPropertySet2String;
+
+    // map pages to maps (of property sets to strings)
+    typedef ::std::map  <   ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
+                        ,   MapPropertySet2String
+                        ,   ODrawPageCompare
+                        >   MapPropertySet2Map;
+
     //=====================================================================
     //= OFormLayerXMLExport_Impl
     //=====================================================================
@@ -113,22 +124,17 @@ namespace xmloff
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >
                                                     m_xControlNumberFormats;
 
-        DECLARE_STL_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, ::rtl::OUString, OPropertySetCompare, MapPropertySet2String);
-            // maps objects (property sets) to strings, e.g. control ids.
-        DECLARE_STL_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >, MapPropertySet2String, ODrawPageCompare, MapPropertySet2Map);
-            // map pages to maps (of property sets to strings)
-
         MapPropertySet2Map  m_aControlIds;
-            // the control ids of all control on all pages we ever examined
+            // the control ids of all controls on all pages we ever examined
 
         MapPropertySet2Map  m_aReferringControls;
             // for a given page (iter->first), and a given control (iter->second->first), this is the comma-separated
             // lists of ids of the controls refering to the control given.
 
-        MapPropertySet2MapIterator
+        MapPropertySet2Map::iterator
                             m_aCurrentPageIds;
             // the iterator for the control id map for the page beeing handled
-        MapPropertySet2MapIterator
+        MapPropertySet2Map::iterator
                             m_aCurrentPageReferring;
             // the same for the map of referring controls
 
