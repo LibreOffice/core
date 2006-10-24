@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:33:48 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:37:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,11 @@ ViewShell::Implementation::~Implementation (void)
     {
         ::boost::shared_ptr<ToolBarManagerLock> pLock(mpUpdateLockForMouse);
         if (pLock.get() != NULL)
-            pLock->Release();
+        {
+            // Force the ToolBarManagerLock to be released even when the
+            // IsUICaptured() returns <TRUE/>.
+            pLock->Release(true);
+        }
     }
 }
 
@@ -428,11 +432,11 @@ IMPL_LINK(ViewShell::Implementation::ToolBarManagerLock,TimeoutCallback,Timer*,p
 
 
 
-void ViewShell::Implementation::ToolBarManagerLock::Release (void)
+void ViewShell::Implementation::ToolBarManagerLock::Release (bool bForce)
 {
     // If possible then release the lock now.  Otherwise try again when the
     // timer expires.
-    if ( ! Application::IsUICaptured())
+    if (bForce || ! Application::IsUICaptured())
         mpSelf.reset();
 }
 
