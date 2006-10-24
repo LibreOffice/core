@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:36:57 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:10:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,8 @@
 #endif
 /** === end UNO includes === **/
 
+#include <numeric>
+
 //.........................................................................
 namespace xmloff
 {
@@ -223,13 +225,13 @@ namespace xmloff
     {
         // the list of the referring controls
         ::rtl::OUString sReferringControls;
-        ConstMapPropertySet2StringIterator aReferring = m_aCurrentPageReferring->second.find(_rxControl);
+        MapPropertySet2String::const_iterator aReferring = m_aCurrentPageReferring->second.find(_rxControl);
         if (aReferring != m_aCurrentPageReferring->second.end())
             sReferringControls = aReferring->second;
 
         // the control id (should already have been created in examineForms)
         ::rtl::OUString sControlId;
-        ConstMapPropertySet2StringIterator aControlId = m_aCurrentPageIds->second.find(_rxControl);
+        MapPropertySet2String::const_iterator aControlId = m_aCurrentPageIds->second.find(_rxControl);
         OSL_ENSURE(aControlId != m_aCurrentPageIds->second.end(), "OFormLayerXMLExport_Impl::exportControl: could not find the control id!");
         if (aControlId != m_aCurrentPageIds->second.end())
             sControlId = aControlId->second;
@@ -452,7 +454,7 @@ namespace xmloff
         if ( bKnownPage )
             return sal_True;
 
-        // if the page is not yet know, this does not automatically mean that it has
+        // if the page is not yet known, this does not automatically mean that it has
         // not been examined. Instead, examineForms returns silently and successfully
         // if a page is a XFormsPageSupplier2, but does not have a forms collection
         // (This behaviour of examineForms is a performance optimization, to not force
@@ -574,10 +576,48 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    namespace
+    {
+        struct AccumulateSize : public ::std::binary_function< size_t, MapPropertySet2Map::value_type, size_t >
+        {
+            const size_t operator()( size_t _size, const MapPropertySet2Map::value_type& _map )
+            {
+                return _size + _map.second.size();
+            }
+        };
+
+        ::rtl::OUString lcl_findFreeControlId( const MapPropertySet2Map& _rAllPagesControlIds )
+        {
+            static const ::rtl::OUString sControlIdBase( RTL_CONSTASCII_USTRINGPARAM( "control" ) );
+            ::rtl::OUString sControlId = sControlIdBase;
+
+            size_t nKnownControlCount = ::std::accumulate( _rAllPagesControlIds.begin(), _rAllPagesControlIds.end(), (size_t)0, AccumulateSize() );
+            sControlId += ::rtl::OUString::valueOf( (sal_Int32)nKnownControlCount + 1 );
+
+        #ifdef DBG_UTIL
+            // Check if the id is already used. It shouldn't, as we currently have no mechanism for removing entries
+            // from the map, so the approach used above (take the accumulated map size) should be sufficient. But if
+            // somebody changes this (e.g. allows removing entries from the map), the assertion below probably will fail.
+            for (   MapPropertySet2Map::const_iterator outer = _rAllPagesControlIds.begin();
+                    outer != _rAllPagesControlIds.end();
+                    ++outer
+                )
+                for (   MapPropertySet2String::const_iterator inner = outer->second.begin();
+                        inner != outer->second.end();
+                        ++inner
+                    )
+                {
+                    OSL_ENSURE( inner->second != sControlId,
+                        "lcl_findFreeControlId: auto-generated control ID is already used!" );
+                }
+        #endif
+            return sControlId;
+        }
+    }
+
+    //---------------------------------------------------------------------
     sal_Bool OFormLayerXMLExport_Impl::checkExamineControl(const Reference< XPropertySet >& _rxObject)
     {
-        static const ::rtl::OUString sControlId(RTL_CONSTASCII_USTRINGPARAM("control"));
-
         Reference< XPropertySetInfo > xCurrentInfo = _rxObject->getPropertySetInfo();
         OSL_ENSURE(xCurrentInfo.is(), "OFormLayerXMLExport_Impl::checkExamineControl: no property set info");
 
@@ -588,19 +628,7 @@ namespace xmloff
             // generate a new control id
 
             // find a free id
-            ::rtl::OUString sCurrentId = sControlId;
-            sCurrentId += ::rtl::OUString::valueOf((sal_Int32)(m_aCurrentPageIds->second.size() + 1));
-        #ifdef DBG_UTIL
-            // Check if the id is already used. It shouldn't, as we currently have no mechanism for removing entries
-            // from the map, so the approach used above (take the map size) should be sufficient. But if somebody
-            // changes this (e.g. allows removing entries from the map), this assertion here probably will fail.
-            for (   ConstMapPropertySet2StringIterator aCheck = m_aCurrentPageIds->second.begin();
-                    aCheck != m_aCurrentPageIds->second.end();
-                    ++aCheck
-                )
-                OSL_ENSURE(aCheck->second != sCurrentId,
-                    "OFormLayerXMLExport_Impl::checkExamineControl: auto-generated control ID is already used!");
-        #endif
+            ::rtl::OUString sCurrentId = lcl_findFreeControlId( m_aControlIds );
             // add it to the map
             m_aCurrentPageIds->second[_rxObject] = sCurrentId;
 
