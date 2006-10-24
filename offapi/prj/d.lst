@@ -216,5 +216,3 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 ..\com\sun\star\xml\csax\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\csax
 ..\com\sun\star\xml\wrapper\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 #i20156 - end
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
