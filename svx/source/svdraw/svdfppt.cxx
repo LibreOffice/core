@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: mav $ $Date: 2006-10-16 07:24:36 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:42:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -804,16 +804,24 @@ SdrObject* SdrEscherImport::ReadObjText( PPTTextObj* /*pTextObj*/, SdrObject* pO
     return pObj;
 }
 
-void SdrEscherImport::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& /*rHd*/, void* /*pData*/, DffObjData& rObj )
+void SdrEscherImport::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, void* /*pData*/, DffObjData& rObj )
 {
-    INT16 ls, os, rs, us;
-    rSt >> os >> ls >> rs >> us; // etwas seltsame Koordinatenreihenfolge ...
-    sal_Int32 l = ls, o = os, r = rs, u = us;
+    sal_Int32 l, t, r, b;
+    if ( rHd.nRecLen == 16 )
+    {
+        rSt >> l >> t >> r >> b;
+    }
+    else
+    {
+        INT16 ls, ts, rs, bs;
+        rSt >> ts >> ls >> rs >> bs; // etwas seltsame Koordinatenreihenfolge ...
+        l = ls, t = ts, r = rs, b = bs;
+    }
     Scale( l );
-    Scale( o );
+    Scale( t );
     Scale( r );
-    Scale( u );
-    rObj.aChildAnchor = Rectangle( l, o, r, u );
+    Scale( b );
+    rObj.aChildAnchor = Rectangle( l, t, r, b );
     rObj.bChildAnchor = TRUE;
     return;
 };
