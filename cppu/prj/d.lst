@@ -44,6 +44,4 @@ mkdir: %_DEST%\inc%_EXT%\uno
 ..\%__SRC%\bin\cppu* %_DEST%\bin%_EXT%\*
 ..\%__SRC%\lib\libuno_cppu.*.* %_DEST%\lib%_EXT%\*
 
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
-
 linklib: libuno_cppu.*.*
