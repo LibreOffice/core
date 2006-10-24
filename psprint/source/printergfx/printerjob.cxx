@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:37:02 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:06:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -915,7 +915,7 @@ bool PrinterJob::writeProlog (osl::File* pFile, const JobData& rJobData )
     // JobPatchFile feature needs to be emitted at begin of prolog
     writeJobPatch( pFile, rJobData );
 
-    const sal_Char pProlog[] = {
+    static const sal_Char pProlog[] = {
         "%%BeginResource: procset PSPrint-Prolog 1.0 0\n"
         "/ISO1252Encoding [\n"
         "/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef\n"
@@ -1002,7 +1002,94 @@ bool PrinterJob::writeProlog (osl::File* pFile, const JobData& rJobData )
         "%%EndResource\n"
         "%%EndProlog\n"
     };
-    WritePS (pFile, pProlog);
+    static const sal_Char pSO52CompatProlog[] = {
+        "%%BeginResource: procset PSPrint-Prolog 1.0 0\n"
+        "/ISO1252Encoding [\n"
+        "/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef\n"
+        "/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef\n"
+        "/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef\n"
+        "/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef\n"
+        "/space /exclam /quotedbl /numbersign /dollar /percent /ampersand /quoteright\n"
+        "/parenleft /parenright /asterisk /plus /comma /minus /period /slash\n"
+        "/zero /one /two /three /four /five /six /seven\n"
+        "/eight /nine /colon /semicolon /less /equal /greater /question\n"
+        "/at /A /B /C /D /E /F /G\n"
+        "/H /I /J /K /L /M /N /O\n"
+        "/P /Q /R /S /T /U /V /W\n"
+        "/X /Y /Z /bracketleft /backslash /bracketright /asciicircum /underscore\n"
+        "/grave /a /b /c /d /e /f /g\n"
+        "/h /i /j /k /l /m /n /o\n"
+        "/p /q /r /s /t /u /v /w\n"
+        "/x /y /z /braceleft /bar /braceright /asciitilde /unused\n"
+        "/Euro /unused /quotesinglbase /florin /quotedblbase /ellipsis /dagger /daggerdbl\n"
+        "/circumflex /perthousand /Scaron /guilsinglleft /OE /unused /Zcaron /unused\n"
+        "/unused /quoteleft /quoteright /quotedblleft /quotedblright /bullet /endash /emdash\n"
+        "/tilde /trademark /scaron /guilsinglright /oe /unused /zcaron /Ydieresis\n"
+        "/space /exclamdown /cent /sterling /currency /yen /brokenbar /section\n"
+        "/dieresis /copyright /ordfeminine /guillemotleft /logicalnot /hyphen /registered /macron\n"
+        "/degree /plusminus /twosuperior /threesuperior /acute /mu /paragraph /periodcentered\n"
+        "/cedilla /onesuperior /ordmasculine /guillemotright /onequarter /onehalf /threequarters /questiondown\n"
+        "/Agrave /Aacute /Acircumflex /Atilde /Adieresis /Aring /AE /Ccedilla\n"
+        "/Egrave /Eacute /Ecircumflex /Edieresis /Igrave /Iacute /Icircumflex /Idieresis\n"
+        "/Eth /Ntilde /Ograve /Oacute /Ocircumflex /Otilde /Odieresis /multiply\n"
+        "/Oslash /Ugrave /Uacute /Ucircumflex /Udieresis /Yacute /Thorn /germandbls\n"
+        "/agrave /aacute /acircumflex /atilde /adieresis /aring /ae /ccedilla\n"
+        "/egrave /eacute /ecircumflex /edieresis /igrave /iacute /icircumflex /idieresis\n"
+        "/eth /ntilde /ograve /oacute /ocircumflex /otilde /odieresis /divide\n"
+        "/oslash /ugrave /uacute /ucircumflex /udieresis /yacute /thorn /ydieresis] def\n"
+        "\n"
+        "/psp_definefont { exch dup findfont dup length dict begin { 1 index /FID ne\n"
+        "{ def } { pop pop } ifelse } forall /Encoding 3 -1 roll def\n"
+        "currentdict end exch pop definefont pop } def\n"
+        "\n"
+        "/pathdict dup 8 dict def load begin\n"
+        "/rcmd { { currentfile 1 string readstring pop 0 get dup 32 gt { exit }\n"
+        "{ pop } ifelse } loop dup 126 eq { pop exit } if 65 sub dup 16#3 and 1\n"
+        "add exch dup 16#C and -2 bitshift 16#3 and 1 add exch 16#10 and 16#10\n"
+        "eq 3 1 roll exch } def\n"
+        "/rhex { dup 1 sub exch currentfile exch string readhexstring pop dup 0\n"
+        "get dup 16#80 and 16#80 eq dup 3 1 roll { 16#7f and } if 2 index 0 3\n"
+        "-1 roll put 3 1 roll 0 0 1 5 -1 roll { 2 index exch get add 256 mul }\n"
+        "for 256 div exch pop exch { neg } if } def\n"
+        "/xcmd { rcmd exch rhex exch rhex exch 5 -1 roll add exch 4 -1 roll add\n"
+        "1 index 1 index 5 -1 roll { moveto } { lineto } ifelse } def end\n"
+        "/readpath { 0 0 pathdict begin { xcmd } loop end pop pop } def\n"
+        "\n"
+        "systemdict /languagelevel known not {\n"
+        "/xshow { exch dup length 0 1 3 -1 roll 1 sub { dup 3 index exch get\n"
+        "exch 2 index exch get 1 string dup 0 4 -1 roll put currentpoint 3 -1\n"
+        "roll show moveto 0 rmoveto } for pop pop } def\n"
+        "/rectangle { 4 -2 roll moveto 1 index 0 rlineto 0 exch rlineto neg 0\n"
+        "rlineto closepath } def\n"
+        "/rectfill { rectangle fill } def\n"
+        "/rectstroke { rectangle stroke } def } if\n"
+        "/bshow { currentlinewidth 3 1 roll currentpoint 3 index show moveto\n"
+        "setlinewidth false charpath stroke setlinewidth } def\n"
+        "/bxshow { currentlinewidth 4 1 roll setlinewidth exch dup length 1 sub\n"
+        "0 1 3 -1 roll { 1 string 2 index 2 index get 1 index exch 0 exch put dup\n"
+        "currentpoint 3 -1 roll show moveto currentpoint 3 -1 roll false charpath\n"
+        "stroke moveto 2 index exch get 0 rmoveto } for pop pop setlinewidth } def\n"
+        "\n"
+        "/psp_lzwfilter { currentfile /ASCII85Decode filter /LZWDecode filter } def\n"
+        "/psp_ascii85filter { currentfile /ASCII85Decode filter } def\n"
+        "/psp_lzwstring { psp_lzwfilter 1024 string readstring } def\n"
+        "/psp_ascii85string { psp_ascii85filter 1024 string readstring } def\n"
+        "/psp_imagedict {\n"
+        "/psp_bitspercomponent { 3 eq { 1 }{ 8 } ifelse } def\n"
+        "/psp_decodearray { [ [0 1 0 1 0 1] [0 255] [0 1] [0 255] ] exch get }\n"
+        "def 7 dict dup\n"
+        "/ImageType 1 put dup\n"
+        "/Width 7 -1 roll put dup\n"
+        "/Height 5 index put dup\n"
+        "/BitsPerComponent 4 index psp_bitspercomponent put dup\n"
+        "/Decode 5 -1 roll psp_decodearray put dup\n"
+        "/ImageMatrix [1 0 0 1 0 0] dup 5 8 -1 roll put put dup\n"
+        "/DataSource 4 -1 roll 1 eq { psp_lzwfilter } { psp_ascii85filter } ifelse put\n"
+        "} def\n"
+        "%%EndResource\n"
+        "%%EndProlog\n"
+    };
+    WritePS (pFile, m_pGraphics && m_pGraphics->getStrictSO52Compatibility() ? pSO52CompatProlog : pProlog);
 
     return true;
 }
