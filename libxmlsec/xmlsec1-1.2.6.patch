@@ -17,8 +17,25 @@
   
   .SUFFIXES:
   .SUFFIXES: .c .lo .o .obj
-*** misc/xmlsec1-1.2.6/configure	2004-08-26 08:00:34.000000000 +0200
---- misc/build/xmlsec1-1.2.6/configure	2006-05-08 12:19:38.812054000 +0200
+*** misc/xmlsec1-1.2.6/configure	Thu Aug 26 08:00:34 2004
+--- misc/build/xmlsec1-1.2.6/configure	Thu Sep 28 18:00:38 2006
+***************
+*** 9046,9052 ****
+        ;;
+      esac
+      output_verbose_link_cmd='echo'
+!     archive_cmds='$CC -dynamiclib $allow_undefined_flag -o $lib $libobjs $deplibs$compiler_flags -install_name $rpath/$soname $verstring'
+      module_cmds='$CC $allow_undefined_flag -o $lib -bundle $libobjs $deplibs$compiler_flags'
+      # Don't fix this by using the ld -exported_symbols_list flag, it doesn't exist in older darwin ld's
+      archive_expsym_cmds='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC -dynamiclib $allow_undefined_flag  -o $lib $libobjs $deplibs$compiler_flags -install_name $rpath/$soname $verstring~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
+--- 9046,9052 ----
+        ;;
+      esac
+      output_verbose_link_cmd='echo'
+!     archive_cmds='$CC -dynamiclib $allow_undefined_flag -o $lib $libobjs $deplibs$compiler_flags -install_name @executable_path/$soname $verstring'
+      module_cmds='$CC $allow_undefined_flag -o $lib -bundle $libobjs $deplibs$compiler_flags'
+      # Don't fix this by using the ld -exported_symbols_list flag, it doesn't exist in older darwin ld's
+      archive_expsym_cmds='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC -dynamiclib $allow_undefined_flag  -o $lib $libobjs $deplibs$compiler_flags -install_name $rpath/$soname $verstring~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
 ***************
 *** 24598,24604 ****
   fi
