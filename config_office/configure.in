@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-10-11 09:26:04 $
+dnl * Date: $Date: 2006-10-24 14:23:11 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.182 $ )
+AC_REVISION( $Revision: 1.183 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2800,6 +2800,27 @@ fi
 AC_SUBST(SYSTEM_LIBWPD)
 AC_SUBST(LIBWPD_CFLAGS)
 AC_SUBST(LIBWPD_LIBS)
+
+dnl ===================================================================
+dnl Check whether freetype2 supports emboldening
+dnl ===================================================================
+if test "$SYSTEM_FREETYPE" = "YES" ; then
+    save_CPPFLAGS="$CPPFLAGS"
+    save_LDFLAGS="$LDFLAGS"
+    save_LIBS="$LIBS"
+    CPPFLAGS="$CPPFLAGS $FREETYPE_CFLAGS"
+    LDFLAGS="$LDFLAGS $FREETYPE_LIBS"
+    AC_CHECK_LIB(freetype, FT_GlyphSlot_Embolden,
+                 [USE_FT_EMBOLDEN="YES"], [USE_FT_EMBOLDEN="NO"], [])
+    LDFLAGS="$save_LDFLAGS"
+    CPPFLAGS="$save_CPPFLAGS"
+    LIBS="$save_LIBS"
+else
+    # It was added in freetype-2.1.10
+    USE_FT_EMBOLDEN="NO"
+    AC_MSG_WARN([Internal freetype2 does not support emboldening.])
+fi
+AC_SUBST(USE_FT_EMBOLDEN)
 
 dnl ===================================================================
 dnl Check for system libxml
