@@ -10,5 +10,3 @@ mkdir: %_DEST%\inc%_EXT%\configmgr
 ..\%__SRC%\misc\configimport.sh %_DEST%\bin%_EXT%\setofficelang
 
 ..\%__SRC%\misc\configmgr2.uno.xml %_DEST%\xml%_EXT%\configmgr2.uno.xml
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
