@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:16:59 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:11:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1213,7 +1213,16 @@ void OBoundControlModel::clonedFrom( const OControlModel* _pOriginal )
     // the value binding can be handled as if somebody called setValueBinding here
     // By definition, bindings can be share between bindables
     if ( pBoundOriginal && pBoundOriginal->m_xExternalBinding.is() )
-        setValueBinding( pBoundOriginal->m_xExternalBinding );
+    {
+        try
+        {
+            setValueBinding( pBoundOriginal->m_xExternalBinding );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------
