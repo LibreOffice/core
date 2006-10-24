@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:05:25 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:37:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,13 +221,21 @@ sal_Int32 Clipboard::GetInsertionPosition (::Window* pWindow)
 {
     sal_Int32 nInsertPosition = -1;
 
-    // Determine the insertion position.  That is
-    // a) When the focus indicator is visible, then before or after the
+    // Determine the insertion position:
+    // a) When the insertion indicator is visible, then at that position.
+    // b) When the focus indicator is visible, then before or after the
     // focused page, depending on user input to a dialog.
-    // b) When there is a selection but no focus, then after the
+    // c) When there is a selection but no focus, then after the
     // selection.
-    // c) After the last page when there is no selection and no focus.
-    if (mrController.GetFocusManager().IsFocusShowing())
+    // d) After the last page when there is no selection and no focus.
+
+    view::InsertionIndicatorOverlay& rInsertionIndicatorOverlay (
+        mrController.GetView().GetOverlay().GetInsertionIndicatorOverlay());
+    if (rInsertionIndicatorOverlay.IsShowing())
+    {
+        nInsertPosition = rInsertionIndicatorOverlay.GetInsertionPageIndex();
+    }
+    else if (mrController.GetFocusManager().IsFocusShowing())
     {
         SdInsertPasteDlg aDialog (pWindow);
         if (aDialog.Execute() == RET_OK)
