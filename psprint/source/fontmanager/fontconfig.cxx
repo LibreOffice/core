@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontconfig.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 08:28:06 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:06:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -690,6 +690,8 @@ bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star
 
     return bSuccess;
 #else
+    (void)rInfo;
+    (void)rLocale;
     return false;
 #endif
 }
