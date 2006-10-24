@@ -6,5 +6,3 @@ mkdir: %_DEST%\inc%_EXT%\external\regexp
 ..\%__SRC%\lib\libi18nregexp*.so %_DEST%\lib%_EXT%\libi18nregexp*.so
 ..\%__SRC%\lib\libi18nregexp*.dylib %_DEST%\lib%_EXT%\libi18nregexp*.dylib
 ..\%__SRC%\lib\ii18nregexp.lib %_DEST%\lib%_EXT%\ii18nregexp.lib
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
