@@ -4,9 +4,9 @@
  *
  *  $RCSfile: isolang.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 09:43:00 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:09:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -390,6 +390,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_GASCON,                "gsc", "FR" },
     { LANGUAGE_USER_GERMAN_BELGIUM,         "de", "BE" },
     { LANGUAGE_USER_CHUVASH,                "cv", "RU" },
+    { LANGUAGE_NONE,                       "zxx", ""   },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
 
