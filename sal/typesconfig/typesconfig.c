@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typesconfig.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:49:50 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:28:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@
 #include <setjmp.h>
 #endif
 
-#define printTypeSize(Type,Name)    printf( "sizeof(%s)\t\t= %d\n", Name, sizeof (Type) )
+#define printTypeSize(Type,Name)    printf( "sizeof(%s)\t\t= %d\n", Name, (int) sizeof (Type) )
 
 #define isSignedType(Type)  (((Type)-1) < 0)
 #define printTypeSign(Type,Name)    printf( "%s\t\t= %s %s\n", Name, ( isSignedType(Type) ? "signed" : "unsigned" ), Name )
@@ -393,11 +393,11 @@ void Description_Print( struct Description* pThis, char* name )
 
   for ( i = 0; i < 3; i++ )
     fprintf( f, "#define SAL_TYPES_ALIGNMENT%d\t%d\n",  1 << (i+1), pThis->nAlignment[i] );
-  fprintf( f, "#define SAL_TYPES_SIZEOFSHORT\t%d\n", sizeof( short ) );
-  fprintf( f, "#define SAL_TYPES_SIZEOFINT\t%d\n", sizeof( int ) );
-  fprintf( f, "#define SAL_TYPES_SIZEOFLONG\t%d\n", sizeof( long ) );
-  fprintf( f, "#define SAL_TYPES_SIZEOFLONGLONG\t%d\n", sizeof( long long ) );
-  fprintf( f, "#define SAL_TYPES_SIZEOFPOINTER\t%d\n", sizeof( void* ) );
+  fprintf( f, "#define SAL_TYPES_SIZEOFSHORT\t%d\n", (int) sizeof( short ) );
+  fprintf( f, "#define SAL_TYPES_SIZEOFINT\t%d\n", (int) sizeof( int ) );
+  fprintf( f, "#define SAL_TYPES_SIZEOFLONG\t%d\n", (int) sizeof( long ) );
+  fprintf( f, "#define SAL_TYPES_SIZEOFLONGLONG\t%d\n", (int) sizeof( long long ) );
+  fprintf( f, "#define SAL_TYPES_SIZEOFPOINTER\t%d\n", (int) sizeof( void* ) );
 
 /* Disabled for now, becuase OOo code assumes sizeof(double) == 8 and this is not
  * likely to change any time soon.  fa (2004-03-15)
