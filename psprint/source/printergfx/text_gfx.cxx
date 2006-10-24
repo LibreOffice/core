@@ -4,9 +4,9 @@
  *
  *  $RCSfile: text_gfx.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:37:29 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:07:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -672,7 +672,38 @@ PrinterGfx::getCharMetric (const Font3 &rFont, sal_Unicode n_char, CharacterMetr
     {
         fontID n_font = rFont.GetFont(n);
         if (n_font != -1)
+        {
+            if( mbStrictSO52Compatibility )
+            {
+                fonttype::type eType = mrFontMgr.getFontType( n_font );
+                if( (eType == fonttype::Builtin || eType == fonttype::Type1) )
+                {
+                    // note: any character exchanged here MUST also be changed
+                    // in the compatibility ISO encoding vector in the prolog
+                    // in printerjob.cxx
+                    sal_Unicode aRepl = 0;
+                    if( n_char == 0x2d )
+                        aRepl = 0x2212;
+                    else if( n_char == 0x27 )
+                        aRepl = 0x2019;
+                    /*
+                    additional characters that may need backwards compatibility:
+                    ISO5589   StdEnc   Unicode    suggested n_char -> aRepl
+                    0264      0302     0x00B4     0x00B4 (acute) -> 0x2019 (quiteright)
+                    0246      -        0x00A6     0x00A6 (brokenbar) -> 0x007C (bar)
+                    0225      0267     0x0095     0x0095 () -> 0x2022 (bullet)
+                    0140      0301     0x0060     0x0060 (grave) -> ?
+                    */
+                    if( aRepl )
+                    {
+                        mrFontMgr.getMetrics( n_font, aRepl, aRepl, p_bbox );
+                        if (p_bbox->width >= 0 && p_bbox->height >= 0)
+                            return n_font;
+                    }
+                }
+            }
             mrFontMgr.getMetrics( n_font, n_char, n_char, p_bbox );
+        }
         if (p_bbox->width >= 0 && p_bbox->height >= 0)
             return n_font;
     }
@@ -827,4 +858,14 @@ PrinterGfx::writeResources( osl::File* pFile, std::list< rtl::OString >& rSuppli
                            RTL_TEXTENCODING_ASCII_US ) );
         }
     }
+}
+
+bool PrinterGfx::getStrictSO52Compatibility() const
+{
+    return mbStrictSO52Compatibility;
+}
+
+void PrinterGfx::setStrictSO52Compatibility( bool bCompat)
+{
+    mbStrictSO52Compatibility = bCompat;
 }
