@@ -13,5 +13,3 @@ mkdir: %_DEST%\pck%_EXT%
 REM ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 
 ..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
