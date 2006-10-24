@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontworkgallery.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:02:51 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:43:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,7 @@
  *
  ************************************************************************/
 
+#include "helpid.hrc"
 #include "dialogs.hrc"
 #include "fontworkgallery.hrc"
 #include "svtools/controldims.hrc"
@@ -63,7 +64,7 @@ ModalDialog RID_SVX_MDLG_FONTWORK_GALLERY
     };
     Control CTL_FAVORITES
     {
-         //HelpId = HID_SD_CTL_FAVORITES ;
+        HelpId = HID_CTL_FONTWORK_FAVORITES ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 3 , 14 ) ;
         Size = MAP_APPFONT ( WIDTH - 6,
