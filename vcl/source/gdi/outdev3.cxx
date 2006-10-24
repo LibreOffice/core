@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.221 $
+ *  $Revision: 1.222 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:06:55 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 14:08:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -592,9 +592,9 @@ static ImplLocalizedFontName aImplLocalizedNamesList[] =
 {   "baekmukbatang",        aBaekmukBatang },
 {   "fzheiti",              aFzHeiTiCN },
 {   "fzheiti",              aFzHeiTiTW },
-{   "fzkaiti",              aFzHeiTiCN },
-{   "fzkaiti",              aFzHeiTiTW },
-{   "fzmingti",             aFzMingTi },
+{   "fzkaiti",              aFzKaiTiCN },
+{   "fzkaitib",             aFzKaiTiTW },
+{   "fzmingtib",            aFzMingTi },
 {   "fzsongti",             aFzSongTi },
 {   "hymyeongjoextra",      aHYMyeongJoExtra },
 {   "hysinmyeongjomedium",  aHYSinMyeongJoMedium },
