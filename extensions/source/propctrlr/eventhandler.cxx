@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventhandler.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:16:34 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:17:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1184,6 +1184,19 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
+    namespace
+    {
+        static bool lcl_endsWith( const ::rtl::OUString& _rText, const ::rtl::OUString& _rCheck )
+        {
+            sal_Int32 nTextLen = _rText.getLength();
+            sal_Int32 nCheckLen = _rCheck.getLength();
+            if ( nCheckLen > nTextLen )
+                return false;
+
+            return _rText.indexOf( _rCheck ) == ( nTextLen - nCheckLen );
+        }
+    }
+    //--------------------------------------------------------------------
     void EventHandler::impl_setFormComponentScriptEvent_nothrow( const ScriptEventDescriptor& _rScriptEvent )
     {
         try
@@ -1201,7 +1214,10 @@ namespace pcr
             sal_Int32 eventCount = aEvents.getLength(), event = 0;
             for ( event = 0; event < eventCount; ++event, ++pEvent )
             {
-                if ( pEvent->EventMethod == _rScriptEvent.ListenerType )
+                if  (   ( pEvent->EventMethod == _rScriptEvent.EventMethod )
+                    &&  ( lcl_endsWith( _rScriptEvent.ListenerType, pEvent->ListenerType ) )
+                          // (strange enough, the events we get from getScriptEvents are not fully qualified)
+                    )
                 {
                     // yes
                     if ( !bResetScript )
