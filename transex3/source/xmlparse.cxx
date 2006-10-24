@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlparse.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:21:26 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:26:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1424,7 +1424,7 @@ XMLUtil::XMLUtil(){
 void XMLUtil::dump(){
 /*****************************************************************************/
     int cnt=1;
-    printf("size=%d\n",lMap.size());
+    printf("size=%lu\n",static_cast<unsigned long>(lMap.size()));
     for(HashMap::iterator pos = lMap.begin(); pos != lMap.end() ; ++pos){
         fprintf(stdout,"key=%s , value=%d , no=%d\n",pos->first.GetBuffer(),pos->second,cnt++);
     }
