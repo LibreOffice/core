@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:44:53 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:42:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,10 @@
 #define HID_PAGE_CONNECTION                     (HID_SVX_START +  89)
 #define HID_PAGE_CONNECTION_CTL_PREVIEW         (HID_SVX_START +  90)
 #define HID_PAGE_DISTRIBUTE                     (HID_SVX_START +  91)
+
+#define HID_WIN_FONTWORK_ALIGN                  (HID_SVX_START +  92)
+#define HID_WIN_FONTWORK_CHARSPACE              (HID_SVX_START +  93)
+#define HID_CTL_FONTWORK_FAVORITES              (HID_SVX_START +  94)
 
 #define HID_BACKGROUND_CTL_BGDCOLORSET          (HID_SVX_START + 100)
 #define HID_BACKGROUND_CTL_PATTERNSET           (HID_SVX_START + 101)
@@ -680,7 +684,6 @@
 #define HID_COLORPAGE_BASICERROR_CB                 (HID_SVX_EXT0_START + 108)
 #define HID_SVXPAGE_SWPOSSIZE                       (HID_SVX_EXT0_START + 109)
 
-#define HID_POPUP_EXTRUSION_DIRECTION               (HID_SVX_EXT0_START + 109)
 #define HID_POPUP_EXTRUSION_DEPTH                   (HID_SVX_EXT0_START + 110)
 #define HID_POPUP_EXTRUSION_LIGHTING                (HID_SVX_EXT0_START + 111)
 #define HID_POPUP_EXTRUSION_SURFACE                 (HID_SVX_EXT0_START + 112)
@@ -691,6 +694,8 @@
 #define HID_VALUESET_EXTRUSION_LIGHTING             (HID_SVX_EXT0_START + 117)
 #define HID_MENU_EXTRUSION_SURFACE                  (HID_SVX_EXT0_START + 118)
 #define HID_SCRIPTORG_DIALOG                        (HID_SVX_EXT0_START + 119)
+#define HID_POPUP_EXTRUSION_DIRECTION               (HID_SVX_EXT0_START + 120)
+#define HID_GALLERY_EDIT_MSNAME                     (HID_SVX_EXT0_START + 121)
 
 // Hangul Hanja extensions
 #define HID_HANGULHANJA_OPT_DLG                     (HID_SVX_EXT0_START + 122)
