@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSProfileDiscover.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:10:35 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:05:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,7 +310,7 @@ namespace connectivity
                     }
 
                     nsCOMPtr<nsILocalFile> rootDir;
-                    rv = NS_NewNativeLocalFile(EmptyCString(), PR_TRUE,
+                    rv = NS_NewLocalFile(EmptyString(), PR_TRUE,
                                             getter_AddRefs(rootDir));
                     if (NS_FAILED(rv)) continue;
 
@@ -461,12 +461,12 @@ namespace connectivity
             ::rtl::OUString path = getProfilePath(product,profileName);
             if (!path.getLength())
                 return sal_True;
-            ::rtl::OString sPath = ::rtl::OUStringToOString(path, RTL_TEXTENCODING_UTF8);
-            nsCAutoString filePath(sPath.getStr());
+
+            nsAutoString filePath(path.getStr());
 
             nsresult rv;
             nsCOMPtr<nsILocalFile>  localFile;
-            rv = NS_NewNativeLocalFile(filePath, PR_TRUE,
+            rv = NS_NewLocalFile(filePath, PR_TRUE,
                                 getter_AddRefs(localFile));
             NS_ENSURE_SUCCESS(rv,sal_True);
 
