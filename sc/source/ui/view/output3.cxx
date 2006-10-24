@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:05:52 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 13:06:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,12 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer, const Rectangle
     rOutl.EnableAutoColor( bUseStyleColor );
     rOutl.SetDefaultHorizontalTextDirection(
                 (EEHorizontalTextDirection)pDoc->GetEditTextDirection( nTab ) );
+
+    //  #i69767# The hyphenator must be set (used to be before drawing a text shape with hyphenation).
+    //  LinguMgr::GetHyphenator (EditEngine) uses a wrapper now that creates the real hyphenator on demand,
+    //  so it's not a performance problem to call UseHyphenator even when it's not needed.
+
+    pModel->UseHyphenator();
 
     ULONG nOldDrawMode = pDev->GetDrawMode();
     if ( bUseStyleColor && Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
