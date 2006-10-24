@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:47:14 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:12:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,6 +203,7 @@ FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
                    ,m_pScriptingEnv( ::svxform::createDefaultFormScriptingEnvironment( _rModel ) )
                    ,m_Locks( 0 )
                    ,bReadOnly( sal_False )
+                   ,m_bDisposed( false )
 {
     DBG_CTOR(FmXUndoEnvironment,NULL);
 }
@@ -218,6 +219,10 @@ FmXUndoEnvironment::~FmXUndoEnvironment()
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::dispose()
 {
+    OSL_ENSURE( !m_bDisposed, "FmXUndoEnvironment::dispose: disposed twice?" );
+    if ( !m_bDisposed )
+        return;
+
     Lock();
 
     sal_uInt16 nCount = rModel.GetPageCount();
@@ -252,6 +257,8 @@ void FmXUndoEnvironment::dispose()
         EndListening( rModel );
 
     m_pScriptingEnv->dispose();
+
+    m_bDisposed = true;
 }
 
 //------------------------------------------------------------------------------
@@ -841,6 +848,8 @@ void FmXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObje
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::AddElement(const Reference< XInterface >& _rxElement )
 {
+    OSL_ENSURE( !m_bDisposed, "FmXUndoEnvironment::AddElement: not when I'm already disposed!" );
+
     // am Container horchen
     Reference< XIndexContainer > xContainer( _rxElement, UNO_QUERY );
     if ( xContainer.is() )
@@ -852,6 +861,9 @@ void FmXUndoEnvironment::AddElement(const Reference< XInterface >& _rxElement )
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::RemoveElement(const Reference< XInterface >& _rxElement)
 {
+    if ( m_bDisposed )
+        return;
+
     switchListening( _rxElement, false );
 
     if (!bReadOnly)
@@ -1173,7 +1185,3 @@ String FmUndoModelReplaceAction::GetComment() const
 {
     return SVX_RES(RID_STR_UNDO_MODEL_REPLACE);
 }
-
-
-
-
