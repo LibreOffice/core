@@ -315,6 +315,26 @@
 
     The initial data was setup according to the ICU collation chart at
     http://oss.software.ibm.com/icu/charts/collation/
+
+    Possible notations in the syntax are:
+
+    '-' (dash): Ellipsis, all letters elided by the ellipsis are included as
+    index keys in alphabetic order. For example, 'A-Z' includes all ASCII
+    letters A to Z.
+
+    '[]' (square brackets): all letters included in square brackets are
+    skipping letters. It is used for CTL languages, for example in Thai
+    (th_TH), to skip prefix vowels or signs. For example, if ["] double quote
+    is defined as skipping letter, index item '"Index"' will be under 'I', not
+    '"'.
+
+    '{}' (curly brackets): define multiple letters index key, for example 'Cs'
+    is one of the index keys for Hungarian (hu_HU).
+
+    '()' (parentheses): define optional description for index key. If defined,
+    the description will be shown as index key title, instead of the index key
+    itself. For example, 'E(E, É)' in Hungarian adds entries with 'E' to the
+    description 'E, É'.
 -->
 <!ELEMENT IndexKey (#PCDATA)>
 <!ATTLIST IndexKey  %UNOModule;>
