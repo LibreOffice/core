@@ -29,5 +29,3 @@ mkdir: %_DEST%\inc%_EXT%\stoc
 ..\source\security\sec.xml %_DEST%\xml%_EXT%\security.uno.xml
 ..\source\typeconv\tcv.xml %_DEST%\xml%_EXT%\typeconverter.uno.xml
 ..\source\uriproc\module.xml %_DEST%\xml%_EXT%\uriproc.uno.xml
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
