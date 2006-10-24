@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:37:01 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 14:18:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -502,7 +502,13 @@ CacheItem FilterCache::getItem(      EItemType        eType,
         ::rtl::OUString sDocService;
         rFilter[PROPNAME_DOCUMENTSERVICE] >>= sDocService;
 
-        if (! impl_isModuleInstalled(sDocService))
+        // --> PB 2006-10-18 #142498#
+        // In Standalone-Impress the module WriterWeb is not installed
+        // but it is there to load help pages
+        sal_Bool bIsHelpFilter = sItem.equalsAscii( "writer_web_HTML_help" );
+
+        if ( !bIsHelpFilter && !impl_isModuleInstalled(sDocService) )
+        // <--
         {
             ::rtl::OUStringBuffer sMsg(256);
             sMsg.appendAscii("The requested filter '"                                                               );
