@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guw.cc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-15 11:19:35 $
+ *  last change: $Author: hr $ $Date: 2006-10-24 15:35:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,19 +80,23 @@ bool debug_light = false;
 
 // The commands are treated case insensitive, the parameters
 // are case sensitive.
-const string ignorepara[] = { "echo /TEST QQQ CCC uno:",
+const string ignorepara[] = { "echo /TEST",
                               "cl -clr: -Z",
                               "climaker StarOffice/OpenOffice",
                               "csc -target:",
-                              "lib OUT: EXTRACT: out: def: machine:",
-                              "link BASE: DEBUG DLL LIBPATH MACHINE: MAP"
-                                  " NODEFAULTLIB OPT PDB RELEASE SUBSYSTEM"
-                                  " STACK out: map: ENTRY: implib: delayload:"
-                                  " def COMMENT:",
-                              "regcomp -env: vnd.sun.star.expand:"
-                                  " vnd.openoffice.pymodule",
-                              "regmerge /UCR",
+                              "ccache -DUDATA_SO_SUFFIX -DSTATIC_O"
+                                " -DLOCAL_RULE_LANGS",
+                              "gcc -DUDATA_SO_SUFFIX -DSTATIC_O"
+                                " -DLOCAL_RULE_LANGS",
+                              "lib /OUT: -out: -def: -machine:",
+                              "link /BASE: /COMMENT: /DEBUG: /DLL /ENTRY:"
+                                " /MACHINE: /MAP /NODEFAULTLIB /OPT: /RELEASE"
+                                " /STACK: /SUBSYSTEM: -NODEFAULTLIB:"
+                                " -def: delayload: -implib: -map: -out:",
                               "rc -D",
+                              "regcomp -env: vnd.sun.star.expand:"
+                                " vnd.openoffice.pymodule:",
+                              "regmerge /UCR",
                               "rsc -DOOO_" };
 
 vector<string> ignorepara_vec;
@@ -310,21 +314,21 @@ bool is_ignorepara(const string &para) {
 int winFormat(string &para) {
   string su1, su2;
 
-  // Instead of ([/[:alnum:]_~\\. \\-]+)   use   ((/?[[:alnum:]_~\\. \\-]+)+)
+  // Instead of ([/[:alnum:]_~. +-]+)   use   ((/?[[:alnum:]_~. +-]+)+)
 
-  // find [-]X<something>=<path>, sometimes with quotes or "/" at the end
-  if (match2s(para, "^(-?[[:alpha:]][[:alnum:]_\\.]*=)[\'\"]?((/?[[:alnum:]_~\\. \\-]+)+)[\'\"]?$",
+  // find [-][-]X<something>=<path>, sometimes with quotes or "/" at the end
+  if (match2s(para, "^(-?-?[[:alpha:]][[:alnum:]_.-]*=)[\'\"]?((/?[[:alnum:]_~. +-]+)+)[\'\"]?$",
               su1, su2)) {
 
     myCygpath(su2);
     para.assign(su1 + su2);
     if ( debug )
-      cerr << "   WinFormat - ([-]<something>=<path>)\n"
+      cerr << "   WinFormat - ([-][-]<something>=<path>)\n"
            << "      " << para << endl;
 
   }
   // find -X<something>:<path>, sometimes with quotes or "/" at the end
-  else if (match2s(para, "^(-[[:alpha:]][[:alnum:]_\\.]*:)[\'\"]?((/?[[:alnum:]_~\\. \\-]+)+)[\'\"]?$",
+  else if (match2s(para, "^(-[[:alpha:]][[:alnum:]_.]*:)[\'\"]?((/?[[:alnum:]_~. +-]+)+)[\'\"]?$",
                    su1, su2)) {
 
     myCygpath(su2);
@@ -348,7 +352,7 @@ int winFormat(string &para) {
   // See iz35982 for the reason for the special treatment of this switch.
   // This regex evaluates <something>:///<path>, sometimes with
   // quotes or "/" at the end
-  else if (match2s(para, "^([[:alpha:]][[:alnum:]_]*:)[\'\"]?///((/?[[:alnum:]_~\\. \\-]+)+)[\'\"]?$",
+  else if (match2s(para, "^([[:alpha:]][[:alnum:]_]*:)[\'\"]?///((/?[[:alnum:]_~. +-]+)+)[\'\"]?$",
                    su1, su2)) {
 
     myCygpath(su2);
@@ -362,7 +366,7 @@ int winFormat(string &para) {
 
   }
   // find -X<absolute path>, sometimes with quotes or "/" at the end
-  else if (match2s(para, "^(-[[:alpha:]])[\'\"]?((/[[:alnum:]_~\\. \\-]+)+)[\'\"]?$",
+  else if (match2s(para, "^(-[[:alpha:]])[\'\"]?((/[[:alnum:]_~. +-]+)+)[\'\"]?$",
                    su1, su2)) {
 
     myCygpath(su2);
@@ -374,7 +378,7 @@ int winFormat(string &para) {
   }
   // find -FX<path> (MSVC switches for output naming), sometimes with quotes
   // or "/" at the end
-  else if (match2s(para, "^(-F[ARdemopr])[\'\"]?(/[/[:alnum:]_~\\. \\-]+)[\'\"]?$",
+  else if (match2s(para, "^(-F[ARdemopr])[\'\"]?(/[/[:alnum:]_~. +-]+)[\'\"]?$",
                    su1, su2)) {
 
     myCygpath(su2);
@@ -409,12 +413,12 @@ int winFormat(string &para) {
   }
 
   // Sanity check for -X<abspath>
-  if (match2s(para, "^(-[[:alpha:]])[\'\"]?((/[[:alnum:]_~\\. \\-]+)+)",
+  if (match2s(para, "^(-[[:alpha:]])[\'\"]?((/[[:alnum:]_~. +-]+)+)",
               su1, su2)) {
     Fatal("Not converted -X/... type switch in :" + para);
   }
   // Sanity check for [-]X<something>(:|=)<abspath> case
-  if (match2s(para, "^(-?[[:alpha:]][[:alnum:]_\\.]*[=:])[\'\"]?((/[[:alnum:]_~\\. \\-]+)+)",
+  if (match2s(para, "^(-?[[:alpha:]][[:alnum:]_.]*[=:])[\'\"]?((/[[:alnum:]_~. +-]+)+)",
               su1, su2)) {
     Fatal("Not processed [-]X<something>(=|:)/... in :" + para);
   }
@@ -596,7 +600,7 @@ void rep_subn_cyg(string &argument)
   // work in ?tg_app.mk.
   // FIXME: Better would be to use a DOSified $(APP1ICON) there and remove
   // the special " treatment here.
-  const char *pattern = "(^|[;,])[\'\"]?([[:alnum:]_~\\. \\-]*(/[[:alnum:]_~\\. \\-]+)+/?)[\'\"]?([;,]|$)";
+  const char *pattern = "(^|[;,])[\'\"]?([[:alnum:]_~. +-]*(/[[:alnum:]_~. +-]+)+/?)[\'\"]?([;,]|$)";
   const int subexp = 2;
 
   int status, pos=0;
