@@ -38,5 +38,3 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\statusbar
 ..\uiconfig\scalc\accelerator\es\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\scalc\accelerator\es\*.xml
 ..\uiconfig\scalc\accelerator\fr\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\scalc\accelerator\fr\*.xml
 ..\uiconfig\scalc\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\scalc\statusbar\*.xml
-
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
