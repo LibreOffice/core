@@ -4,9 +4,9 @@
  *
  *  $RCSfile: depper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-04-24 11:18:48 $
+ *  last change: $Author: obo $ $Date: 2006-10-25 16:28:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ Depper::Depper( Window* pBaseWindow ):
     mpGraphPrjWin->SetBackground( Wallpaper( Color( COL_BLUE )));
     mpGraphPrjWin->Hide();
     mpBaseWin->SetBackground( Wallpaper( Color( COL_WHITE )));
-    mpBasePrjWin->SetBackground( Wallpaper( Color( COL_YELLOW )));
+    mpBasePrjWin->SetBackground( Wallpaper( Color( COL_LIGHTGRAY )));
 /*
     mpGraphWin->SetZOrder( NULL, WINDOW_ZORDER_FIRST );
     mpGraphPrjWin->SetZOrder( NULL, WINDOW_ZORDER_FIRST );
