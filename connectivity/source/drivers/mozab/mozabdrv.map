@@ -3,7 +3,6 @@ MOZABDRV_1_0 {
         OMozabConnection_CreateInstance;
         OMozillaBootstrap_CreateInstance;
         setMozabServiceFactory;
-        getSdbcScheme;
     local:
         *;
 };
