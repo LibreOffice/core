@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2006-04-26 11:48:20 $
+#   last change: $Author: obo $ $Date: 2006-10-25 13:02:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,10 +67,11 @@ TARGET=soldep
 
 
 # --- Settings -----------------------------------------------------
-RSCDEFIMG=$(PRJNAME)
+RSCDEFIMG=ooo_custom_images$/soldep
 .INCLUDE :  $(PRJ)$/util$/perl.mk
 .INCLUDE :  settings.mk
-RSCLOCINC=..$/res
+RSCLOCINC=-I..$/..$/ooo_custom_images$/soldep
+CUSTOM_IMGAGE_SETS+=soldep
 
 
 
