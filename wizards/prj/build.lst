@@ -14,7 +14,7 @@ wz      wizards\source\tutorials                                nmake           
 wz      wizards\source\standard                                 nmake           -       all     wz_standard NULL
 wz      wizards\source\launcher                                 nmake           -       all     wz_launcher NULL
 wz      wizards\com\sun\star\wizards                            nmake           -       all     wz_commonwiz NULL
-wz      wizards\com\sun\star\wizards\query                      nmake           -       all     wz_querywiz wz_commonwiz NULL
+wz      wizards\com\sun\star\wizards\query                      nmake           -       all     wz_querywiz wz_formwiz wz_commonwiz NULL
 wz      wizards\com\sun\star\wizards\report                     nmake           -       all     wz_reportwiz wz_commonwiz NULL
 wz      wizards\com\sun\star\wizards\table                      nmake           -       all     wz_tablewiz wz_commonwiz NULL
 wz      wizards\com\sun\star\wizards\form                       nmake           -       all     wz_formwiz wz_commonwiz NULL
