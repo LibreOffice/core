@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interlck.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:06:36 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 12:00:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,8 @@
 #include <osl/interlck.h>
 #include <osl/diagnose.h>
 
+extern int osl_isSingleCPU;
+
 /* For all Intel x86 above x486 we use a spezial inline assembler implementation.
    The main reason is that WIN9? does not return the result of the operation.
    Instead there is only returned a value greater than zero is the increment
@@ -56,10 +58,17 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
 {
     __asm
     {
-         mov         ecx, pCount
-           mov         eax, 1
-           lock xadd   dword ptr [ecx],eax
-           inc         eax
+        mov         ecx, pCount
+        mov         eax, 1
+        mov         edx, osl_isSingleCPU
+        cmp         edx, 0
+        je          is_not_single
+        xadd        dword ptr [ecx],eax
+        jmp         cont
+    is_not_single:
+        lock xadd   dword ptr [ecx],eax
+    cont:
+        inc         eax
     }
 }
 #pragma warning(default: 4035)
@@ -79,10 +88,17 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
 {
     __asm
     {
-         mov         ecx, pCount
-           mov         eax, -1
-           lock xadd   dword ptr [ecx],eax
-           dec         eax
+        mov         ecx, pCount
+        or          eax, -1
+        mov         edx, osl_isSingleCPU
+        cmp         edx, 0
+        je          is_not_single
+        xadd        dword ptr [ecx],eax
+        jmp         cont
+    is_not_single:
+        lock xadd   dword ptr [ecx],eax
+    cont:
+        dec         eax
     }
 }
 #pragma warning(default: 4035)
@@ -92,5 +108,3 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
     return (InterlockedDecrement(pCount));
 }
 #endif
-
-
