@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mapping.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 15:54:32 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 12:15:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,11 +56,13 @@
 #ifndef INCLUDED_CPPU_UNOTYPE_HXX
 #include "cppu/unotype.hxx"
 #endif
+#ifndef _UNO_ENVIRONMENT_HXX_
+#include "uno/environment.hxx"
+#endif
 
 typedef struct _typelib_TypeDescription typelib_TypeDescription;
 typedef struct _typelib_InterfaceTypeDescription typelib_InterfaceTypeDescription;
 typedef struct _uno_Interface uno_Interface;
-typedef struct _uno_Environment uno_Environment;
 
 namespace com
 {
@@ -115,6 +117,17 @@ public:
     inline Mapping(
         uno_Environment * pFrom, uno_Environment * pTo,
         const ::rtl::OUString & rAddPurpose = ::rtl::OUString() )
+        SAL_THROW( () );
+
+    /** Holds a mapping from the specified source to the specified destination
+        environment.
+
+        @param from         source environment
+        @param to           destination environment
+        @param rAddPurpose  additional purpose
+    */
+    inline Mapping(const Environment & rFrom, const Environment & rTo,
+                   const ::rtl::OUString & rAddPurpose = ::rtl::OUString() )
         SAL_THROW( () );
 
     /** Constructor.
@@ -230,6 +243,14 @@ inline Mapping::Mapping(
     : _pMapping( 0 )
 {
     uno_getMapping( &_pMapping, pFrom, pTo, rAddPurpose.pData );
+}
+//__________________________________________________________________________________________________
+inline Mapping::Mapping(
+    const Environment & rFrom, const Environment & rTo, const ::rtl::OUString & rAddPurpose )
+    SAL_THROW( () )
+        : _pMapping(0)
+{
+    uno_getMapping( &_pMapping, rFrom.get(), rTo.get(), rAddPurpose.pData );
 }
 //__________________________________________________________________________________________________
 inline Mapping::Mapping( uno_Mapping * pMapping ) SAL_THROW( () )
