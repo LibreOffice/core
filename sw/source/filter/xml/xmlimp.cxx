@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:29:21 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 11:59:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1158,6 +1158,9 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     // --> OD 2006-04-13 #b6402800#
     bool bClipAsCharacterAnchoredWriterFlyFrames( false );
     // <--
+    // --> FME 2006-10-09 #i60945#
+    bool bUnixForceZeroExtLeading = false;
+    // <--
 
     OUString sRedlineProtectionKey( RTL_CONSTASCII_USTRINGPARAM( "RedlineProtectionKey" ) );
 
@@ -1237,6 +1240,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 // --> OD 2006-04-13 #b6402800#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ClipAsCharacterAnchoredWriterFlyFrames")) )
                     bClipAsCharacterAnchoredWriterFlyFrames = true;
+                // <--
+                // --> FME 2006-10-09 #i60945#
+                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UnxForceZeroExtLeading")) )
+                    bUnixForceZeroExtLeading = true;
                 // <--
             }
             catch( Exception& )
@@ -1386,6 +1393,14 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("ClipAsCharacterAnchoredWriterFlyFrames") ), makeAny( true ) );
+    }
+    // <--
+
+    // --> FME 2006-10-09 #i60945#
+    if ( !bUnixForceZeroExtLeading )
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("UnxForceZeroExtLeading") ), makeAny( true ) );
     }
     // <--
 
