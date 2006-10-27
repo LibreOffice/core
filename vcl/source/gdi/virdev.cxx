@@ -4,9 +4,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:11:55 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 12:00:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,8 +419,9 @@ void VirtualDevice::SetReferenceDevice( RefDevMode eRefDevMode )
 
     // avoid adjusting font lists when already in refdev mode
     BYTE nOldRefDevMode = meRefDevMode;
-    meRefDevMode = (BYTE)eRefDevMode;
-    if( nOldRefDevMode != REFDEV_NONE )
+    BYTE nOldCompatFlag = (BYTE)meRefDevMode & REFDEV_FORCE_ZERO_EXTLEAD;
+    meRefDevMode = (BYTE)(eRefDevMode | nOldCompatFlag);
+    if( (nOldRefDevMode ^ nOldCompatFlag) != REFDEV_NONE )
         return;
 
     // the reference device should have only scalable fonts
@@ -457,3 +458,11 @@ void VirtualDevice::SetReferenceDevice( RefDevMode eRefDevMode )
 }
 
 // -----------------------------------------------------------------------
+
+void VirtualDevice::Compat_ZeroExtleadBug()
+{
+    meRefDevMode = (BYTE)meRefDevMode | REFDEV_FORCE_ZERO_EXTLEAD;
+}
+
+// -----------------------------------------------------------------------
+
