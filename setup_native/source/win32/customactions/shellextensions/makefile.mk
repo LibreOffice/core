@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:18:08 $
+#   last change: $Author: rt $ $Date: 2006-10-27 12:10:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,8 @@ SLOFILES = \
     $(SLO)$/upgrade.obj \
     $(SLO)$/iconcache.obj \
     $(SLO)$/postuninstall.obj \
-    $(SLO)$/migrateinstallpath.obj
+    $(SLO)$/migrateinstallpath.obj \
+    $(SLO)$/registerextensions.obj
 
 
 STDSHL += \
