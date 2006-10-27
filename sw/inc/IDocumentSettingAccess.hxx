@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IDocumentSettingAccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:13:28 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 11:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,8 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          TABLE_ROW_KEEP,
          IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION,
          CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME,
+
+         UNIX_FORCE_ZERO_EXT_LEADING,
          // COMPATIBILITY FLAGS END
 
          BROWSE_MODE,
