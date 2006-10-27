@@ -4,9 +4,9 @@
  *
  *  $RCSfile: environment.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:40:49 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 12:14:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,15 @@ public:
     */
     inline Environment( uno_Environment * pEnv = 0 ) SAL_THROW( () );
 
+    /** Gets a specific environment. If the specified environment does not exist, then a default one
+        is created and registered.
+
+        @param envTypeName      type name of the environment
+        @param pContext         context pointer
+    */
+    inline explicit Environment( rtl::OUString const & envEypeName, void * pContext = NULL ) SAL_THROW( () );
+
+
     /** Copy constructor: acquires given environment
 
         @param rEnv another environment
@@ -152,6 +161,12 @@ inline Environment::Environment( uno_Environment * pEnv ) SAL_THROW( () )
 {
     if (_pEnv)
         (*_pEnv->acquire)( _pEnv );
+}
+//__________________________________________________________________________________________________
+inline Environment::Environment( rtl::OUString const & rEnvTypeName, void * pContext ) SAL_THROW( () )
+    : _pEnv(NULL)
+{
+    uno_getEnvironment(&_pEnv, rEnvTypeName.pData, pContext);
 }
 //__________________________________________________________________________________________________
 inline Environment::Environment( const Environment & rEnv ) SAL_THROW( () )
