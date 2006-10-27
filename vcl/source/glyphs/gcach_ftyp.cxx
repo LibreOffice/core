@@ -963,10 +963,9 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
         rTo.mnExtLeading = 0;
         if( pHHEA != NULL )
         {
-            // extleading formula from www.microsoft.com/typography/otspec/recom.htm
             int nExtLeading = pHHEA->Line_Gap;
             nExtLeading -= (pOS2->usWinAscent + pOS2->usWinDescent);
-            nExtLeading -= (pHHEA->Ascender - pHHEA->Descender);
+            nExtLeading += (pHHEA->Ascender - pHHEA->Descender);
             if( nExtLeading > 0 )
                 rTo.mnExtLeading = (long)(nExtLeading * fScale + 0.5);
         }
