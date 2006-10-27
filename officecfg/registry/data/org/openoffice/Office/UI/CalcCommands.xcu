@@ -746,6 +746,12 @@
                     <value xml:lang="en-US">Show Note</value>
                 </prop>
             </node>
+            <node oor:name=".uno:DeleteNote" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Notiz löschen</value>
+                    <value xml:lang="en-US">Delete Note</value>
+                </prop>
+            </node>
             <node oor:name=".uno:InputLineVisible" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Rechenleiste</value>
