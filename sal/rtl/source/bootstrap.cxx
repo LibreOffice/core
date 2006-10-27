@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:04:23 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 12:14:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,6 +228,10 @@ static OUString & getIniFileName_Impl()
             // append config file suffix
             fileName += OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE("")));
         }
+
+        OUString workDir;
+        osl_getProcessWorkingDir(&workDir.pData);
+        osl::FileBase::getAbsoluteFileURL(workDir, fileName, fileName);
 
         static OUString theFileName;
         if(fileName.getLength())
