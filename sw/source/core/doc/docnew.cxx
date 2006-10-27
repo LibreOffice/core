@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:48:31 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 11:59:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,6 +394,7 @@ SwDoc::SwDoc() :
     mbIgnoreTabsAndBlanksForLineCalculation = false;        // hidden
     mbDoNotCaptureDrawObjsOnPage            = false;        // hidden
     mbClipAsCharacterAnchoredWriterFlyFrames= false;        // hidden
+    mbUnixForceZeroExtLeading               = false;        // hidden
 
     //
     // COMPATIBILITY FLAGS END
@@ -685,7 +686,15 @@ SwDoc::~SwDoc()
 VirtualDevice& SwDoc::CreateVirtualDevice_() const
 {
     VirtualDevice* pNewVir = new VirtualDevice( 1 );
-    pNewVir->SetReferenceDevice(VirtualDevice::REFDEV_MODE_MSO1);
+
+    // <--
+    pNewVir->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
+
+    // --> FME 2006-10-09 #i60945# External leading compatibility for unix systems.
+    if ( get(IDocumentSettingAccess::UNIX_FORCE_ZERO_EXT_LEADING ) )
+        pNewVir->Compat_ZeroExtleadBug();
+    // <--
+
     MapMode aMapMode( pNewVir->GetMapMode() );
     aMapMode.SetMapUnit( MAP_TWIP );
     pNewVir->SetMapMode( aMapMode );
