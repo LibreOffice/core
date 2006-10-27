@@ -2,9 +2,9 @@
 #
 #   $RCSfile: perl.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2006-05-15 09:57:45 $
+#   last change: $Author: obo $ $Date: 2006-10-27 07:17:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,21 +63,24 @@
 .IF "$(GUI)"=="WNT"
 SOLARINC+=-I$(BUILD_TOOLS)$/..$/perl$/lib$/core
 PERL_LIB=$(BUILD_TOOLS)$/..$/perl$/lib$/core$/perl58.lib
-.ELSE
+.ENDIF 
+
 .IF "$(OS)$(CPU)" == "LINUXI"
 SOLARINC+=-I$(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i686-linux$/CORE
 PERL_LIB=	-lcrypt \
             $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i686-linux$/CORE$/libperl.a \
             $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i686-linux$/auto/DynaLoader/DynaLoader.a
-.ELSE
+.ENDIF
+
 .IF "$(OS)$(CPU)" == "SOLARISS"
 SOLARINC+=-I$(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/sun4-solaris$/CORE
 PERL_LIB=	-lsocket \
             -lnsl \
             -ldl \
-            $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/sun4-solaris$/CORE$/libperl.a \
-            $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/sun4-solaris$/auto/DynaLoader/DynaLoader.a
-.ELSE
+            $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/sun4-solaris$/CORE$/shared$/libperl.so \
+            $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/sun4-solaris$/CORE$/shared$/DynaLoader.a
+.ENDIF
+
 .IF "$(OS)$(CPU)" == "SOLARISI"
 SOLARINC+=-I$(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i86pc-solaris$/CORE
 PERL_LIB=	-lsocket \
@@ -86,6 +89,4 @@ PERL_LIB=	-lsocket \
             $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i86pc-solaris$/CORE$/libperl.a \
             $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i86pc-solaris$/auto/DynaLoader/DynaLoader.a
 .ENDIF 
-.ENDIF 
-.ENDIF 
-.ENDIF 
+
