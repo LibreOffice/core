@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 08:56:14 $
+#   last change: $Author: rt $ $Date: 2006-10-27 12:15:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,10 +80,21 @@ ALLIDLFILES:= \
         language_binding.idl	\
         alignment.idl
 
+
+APP2TARGET  := Mapping.test
+APP2OBJS    := $(OBJ)$/Mapping.test.obj
+APP2STDLIBS := $(CPPULIB) $(SALLIB) 
+
+APP3TARGET  := Environment.test
+APP3OBJS    := $(OBJ)$/Environment.test.obj
+APP3STDLIBS := $(CPPULIB) $(SALLIB) 
+
+
+
 # --- Targets ------------------------------------------------------
 
 .IF "$(depend)" == ""
-ALL : $(BIN)$/testcppu.rdb unoheader ALLTAR 
+ALL : $(BIN)$/testcppu.rdb unoheader ALLTAR
 .ELSE
 ALL: 	ALLDEP
 .ENDIF
@@ -134,7 +145,7 @@ TYPES:=		-Ttest.XLanguageBindingTest \
         -Tcom.sun.star.beans.XPropertySet \
         -Tcom.sun.star.reflection.XIdlClassProvider \
         -Tcom.sun.star.container.XHierarchicalNameAccess \
-         -Tcom.sun.star.uno.XCurrentContext
+        -Tcom.sun.star.uno.XCurrentContext
 
 $(BIN)$/testcppu.rdb: $(ALLIDLFILES)
     +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
@@ -144,7 +155,7 @@ $(BIN)$/testcppu.rdb: $(ALLIDLFILES)
 
 # 	+regcomp -register -r $@ -c javaloader.dll
 # 	+regcomp -register -r $@ -c jen.dll
-    
+
 unoheader: $(BIN)$/testcppu.rdb
     +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) $(TYPES) $(BIN)$/testcppu.rdb
 #	+cunomaker -BUCR -O$(UNOUCROUT) $(TYPES) $(BIN)$/testcppu.rdb
