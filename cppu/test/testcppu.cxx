@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:22:25 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 12:16:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,16 @@
  *
  ************************************************************************/
 
+#if !defined(OSL_DEBUG_LEVEL) || OSL_DEBUG_LEVEL == 0
+# undef OSL_DEBUG_LEVEL
+# define OSL_DEBUG_LEVEL 2
+#endif
+
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppu.hxx"
+
+#include "sal/main.h"
+
 #include <stdio.h>
 
 #include <uno/environment.h>
@@ -137,16 +145,16 @@ void testCppu()
         b.get<sal_Int8>();
         OSL_ASSERT(false);
     }
-    catch (RuntimeException & exc) {
-        exc;
+    catch (RuntimeException & /*exc*/) {
+//        exc;
     }
     try {
         const Sequence<beans::PropertyValue> seq(
             b.get< Sequence<beans::PropertyValue> >() );
         OSL_ASSERT(false);
     }
-    catch (RuntimeException & exc) {
-        exc;
+    catch (RuntimeException & /*exc*/) {
+//         exc;
     }
 
     sal_Int32 big = 0x7fffffff;
@@ -255,17 +263,17 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     // test the destructor
     long a1[ sizeof( Test1 ) / sizeof(long) +1 ];
     uno_type_constructData( &a1, getCppuType( (Test1*)0).getTypeLibType() );
-    uno_type_destructData( &a1, getCppuType( (Test1*)0).getTypeLibType(), cpp_release );
+    uno_type_destructData( &a1, getCppuType( (Test1*)0).getTypeLibType(), reinterpret_cast<uno_ReleaseFunc>(cpp_release) );
 
     long a2[ sizeof( Test2 ) / sizeof(long) +1 ];
     uno_type_constructData( &a2, getCppuType( (Test2*)0).getTypeLibType() );
-    uno_type_destructData( &a2, getCppuType( (Test2*)0).getTypeLibType(), cpp_release );
+    uno_type_destructData( &a2, getCppuType( (Test2*)0).getTypeLibType(), reinterpret_cast<uno_ReleaseFunc>(cpp_release) );
 
     long a3[ sizeof( Test3 ) / sizeof(long) +1 ];
     uno_type_constructData( &a3, getCppuType( (Test3*)0).getTypeLibType() );
     OUString aTestString( RTL_CONSTASCII_USTRINGPARAM("test") );
     ((Test3*)a3)->aString = aTestString;
-    uno_type_destructData( &a3, getCppuType( (Test3*)0).getTypeLibType(), cpp_release );
+    uno_type_destructData( &a3, getCppuType( (Test3*)0).getTypeLibType(), reinterpret_cast<uno_ReleaseFunc>(cpp_release) );
     OSL_ASSERT( aTestString.pData->refCount == 1 );
     }
 
@@ -276,7 +284,7 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     a1.dDouble = 3.6;
     a1.bBool = sal_True;
     char sz1[sizeof( Test1 )];
-    uno_type_copyData( sz1, &a1, getCppuType( (Test1*)0).getTypeLibType(), cpp_acquire );
+    uno_type_copyData( sz1, &a1, getCppuType( (Test1*)0).getTypeLibType(), reinterpret_cast<uno_AcquireFunc>(cpp_acquire) );
     OSL_ASSERT( ((Test1*)sz1)->nInt16 == 4 && ((Test1*)sz1)->dDouble == 3.6 && ((Test1*)sz1)->bBool == sal_True);
 
     Test2 a2;
@@ -285,7 +293,8 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     a2.aTest1.dDouble = 3.6;
     a2.aTest1.bBool = sal_True;
     char sz2[sizeof( Test2 )];
-    uno_type_copyData( sz2, &a2, getCppuType( (Test2*)0).getTypeLibType(), cpp_acquire );
+    uno_type_copyData( sz2, &a2, getCppuType( (Test2*)0).getTypeLibType(),
+                       reinterpret_cast<uno_AcquireFunc>(cpp_acquire) );
     OSL_ASSERT( ((Test2*)sz2)->nInt16 == 2 );
     OSL_ASSERT(((Test2*)sz2)->aTest1.nInt16 == 4 );
     OSL_ASSERT( ((Test2*)sz2)->aTest1.dDouble == 3.6 );
@@ -309,7 +318,8 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     a3.bBool = sal_True;
     a3.aAny = makeAny( (sal_Int32)2 );
     char sz3[sizeof( Test3 )];
-    uno_type_copyData( sz3, &a3, getCppuType( (Test3*)0).getTypeLibType(), cpp_acquire );
+    uno_type_copyData( sz3, &a3, getCppuType( (Test3*)0).getTypeLibType(),
+                       reinterpret_cast<uno_AcquireFunc>(cpp_acquire) );
     OSL_ASSERT( ((Test3*)sz3)->nInt8 == 2 );
     OSL_ASSERT( ((Test3*)sz3)->nFloat == (float)2 );
     OSL_ASSERT( ((Test3*)sz3)->nDouble == 2 );
@@ -341,7 +351,9 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     bAssignable = uno_type_assignData(
         &sz1, getCppuType( (Test1*)0).getTypeLibType(),
         &a1, getCppuType( (Test1*)0).getTypeLibType(),
-        cpp_queryInterface, cpp_acquire, cpp_release );
+        reinterpret_cast<uno_QueryInterfaceFunc>(cpp_queryInterface),
+        reinterpret_cast<uno_AcquireFunc>(cpp_acquire),
+        reinterpret_cast<uno_ReleaseFunc>(cpp_release) );
     OSL_ASSERT( bAssignable );
     OSL_ASSERT( sz1.nInt16 == 4 && sz1.dDouble == 3.6 && sz1.bBool == sal_True);
 
@@ -354,7 +366,9 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     bAssignable = uno_type_assignData(
         &sz2, getCppuType( (Test2*)0).getTypeLibType(),
         &a2, getCppuType( (Test2*)0).getTypeLibType(),
-        cpp_queryInterface, cpp_acquire, cpp_release );
+        reinterpret_cast<uno_QueryInterfaceFunc>(cpp_queryInterface),
+        reinterpret_cast<uno_AcquireFunc>(cpp_acquire),
+        reinterpret_cast<uno_ReleaseFunc>(cpp_release) );
     OSL_ASSERT( bAssignable );
     OSL_ASSERT( sz2.nInt16 == 2 && sz2.aTest1.nInt16 == 4
                 && sz2.aTest1.dDouble == 3.6 && sz2.aTest1.bBool == sal_True);
@@ -382,7 +396,9 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     bAssignable = uno_type_assignData(
         &sz3, getCppuType( (Test3*)0).getTypeLibType(),
         &a3, getCppuType( (Test3*)0).getTypeLibType(),
-        cpp_queryInterface, cpp_acquire, cpp_release );
+        reinterpret_cast<uno_QueryInterfaceFunc>(cpp_queryInterface),
+        reinterpret_cast<uno_AcquireFunc>(cpp_acquire),
+        reinterpret_cast<uno_ReleaseFunc>(cpp_release) );
     OSL_ASSERT( bAssignable );
     OSL_ASSERT( sz3.nInt8 == 2 );
     OSL_ASSERT( sz3.nFloat == (float)2 );
@@ -406,7 +422,8 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     bAssignable = uno_type_assignData(
         &a1, getCppuType( (Test1*)0).getTypeLibType(),
         &a2, getCppuType( (Test2*)0).getTypeLibType(),
-        cpp_queryInterface, cpp_acquire, cpp_release );
+        reinterpret_cast<uno_QueryInterfaceFunc>(cpp_queryInterface),
+        reinterpret_cast<uno_AcquireFunc>(cpp_acquire), reinterpret_cast<uno_ReleaseFunc>(cpp_release) );
     OSL_ASSERT( !bAssignable );
     }
 
@@ -458,8 +475,8 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     aAny.setValue( &c, getCppuCharType() );
     OSL_ASSERT( aAny.getValueType() == getCppuCharType() );
     OSL_ASSERT( *(sal_Unicode*)aAny.getValue() == L'2' );
-    sal_Bool b = sal_True;
-    aAny.setValue( &b, getCppuBooleanType() );
+    sal_Bool b2 = sal_True;
+    aAny.setValue( &b2, getCppuBooleanType() );
     OSL_ASSERT( aAny.getValueType() == getCppuBooleanType() );
     OSL_ASSERT( *(sal_Bool*)aAny.getValue() == sal_True );
     }
@@ -513,6 +530,7 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     seqAny[ 0 ] <<= sal_Int32(5);
     seqAny.realloc( 200000 ); // hopefully different memory
     seqAny[ 1 ] <<= sal_Int32(6);
+
     uno_Any * pAnys = (uno_Any *)seqAny.getConstArray();
     OSL_ASSERT( pAnys[ 1 ].pData == &pAnys[ 1 ].pReserved );
     OSL_ASSERT( *(sal_Int32 *)pAnys[ 1 ].pData == sal_Int32(6) );
@@ -633,7 +651,7 @@ static sal_Bool s_aAssignableFromTab[11][11] =
 /* TypeClass_DOUBLE */          { 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1 }
 };
 template < class T >
-static void test_assignSimple( const T & rVal, /*const*/ Any /*&*/ rAny )
+void test_assignSimple( const T & rVal, /*const*/ Any /*&*/ rAny )
 {
     typelib_TypeDescription * pTD = 0;
     ::getCppuType( &rVal ).getDescription( &pTD );
@@ -649,7 +667,7 @@ static void test_assignSimple( const T & rVal, /*const*/ Any /*&*/ rAny )
     typelib_typedescription_release( pTD );
 }
 template < class T >
-static void test_simple_assignment( const T & rVal )
+void test_simple_assignment( const T & rVal )
 {
     // bool
     sal_Bool tr = sal_True;
@@ -827,8 +845,12 @@ void SAL_CALL typedescription_Callback
 
 void test_cache()
 {
-    typelib_typedescription_registerCallback( (void *)1, typedescription_Callback_1 );
-    typelib_typedescription_registerCallback( 0, typedescription_Callback );
+    typelib_typedescription_registerCallback(
+        (void *)1,
+        reinterpret_cast<typelib_typedescription_Callback>(typedescription_Callback_1) );
+    typelib_typedescription_registerCallback(
+        0,
+        reinterpret_cast<typelib_typedescription_Callback>(typedescription_Callback) );
 
     for( sal_Int32 i = 0; i < 300; i++ )
     {
@@ -854,27 +876,31 @@ void test_cache()
     OSL_ASSERT( nCallback_1 == 301 );
     OSL_ASSERT( nCallback == 301 );
 
-    typelib_typedescription_revokeCallback( (void *)1, typedescription_Callback_1 );
-    typelib_typedescription_revokeCallback( 0, typedescription_Callback );
+    typelib_typedescription_revokeCallback(
+        (void *)1,
+        reinterpret_cast<typelib_typedescription_Callback>(typedescription_Callback_1) );
+    typelib_typedescription_revokeCallback(
+        0,
+        reinterpret_cast<typelib_typedescription_Callback>(typedescription_Callback) );
 }
 
 static OUString s_aAddPurpose;
 
 static void SAL_CALL getMappingCallback(
-    uno_Mapping ** ppMapping,
-    uno_Environment * pFrom, uno_Environment * pTo, rtl_uString * pAddPurpose )
+    uno_Mapping ** /*ppMapping*/,
+    uno_Environment * /*pFrom*/, uno_Environment * /*pTo*/, rtl_uString * pAddPurpose )
 {
     s_aAddPurpose = pAddPurpose;
 }
 static void testMappingCallback()
 {
-    uno_registerMappingCallback( getMappingCallback );
+    uno_registerMappingCallback( reinterpret_cast<uno_getMappingFunc>(getMappingCallback) );
     OSL_ASSERT( ! s_aAddPurpose.getLength() );
     Mapping aTest(
         OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ),
         OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("test") ) );
-    uno_revokeMappingCallback( getMappingCallback );
+    uno_revokeMappingCallback( reinterpret_cast<uno_getMappingFunc>(getMappingCallback) );
     OSL_ASSERT( s_aAddPurpose.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("test") ) );
     s_aAddPurpose = OUString();
     Mapping aTest2(
@@ -1030,20 +1056,22 @@ void testArray(void)
     OSL_ASSERT( pTypeRef );
 
     sal_Int32 a1[2][4];
-    sal_Int32 a2[2][4] = { 1,2,3,4,5,6,7,8 };
+    sal_Int32 a2[2][4] = { {1,2,3,4}, {5,6,7,8} };
     uno_constructData( &a1, pType );
 //  uno_type_constructData( &a1, pTypeRef );
 
     sal_Bool bAssignable = uno_assignData(&a1, pType, a2, pType,
-                   cpp_queryInterface, cpp_acquire, cpp_release );
+                                          reinterpret_cast<uno_QueryInterfaceFunc>(cpp_queryInterface),
+                                          reinterpret_cast<uno_AcquireFunc>(cpp_acquire),
+                                          reinterpret_cast<uno_ReleaseFunc>(cpp_release) );
     sal_Int32 i,j;
     for ( i=0; i<2; i++ )
         for ( j=0; j<4; j++ )
             OSL_ASSERT( a1[i][j] == a2[i][j] );
 
-    uno_destructData( a1, pType, cpp_release );
+    uno_destructData( a1, pType, reinterpret_cast<uno_ReleaseFunc>(cpp_release) );
 //  uno_type_destructData( &a1, pTypeRef, cpp_release );
-    uno_destructData( a2, pType, cpp_release );
+    uno_destructData( a2, pType, reinterpret_cast<uno_ReleaseFunc>(cpp_release) );
 
     typelib_typedescription_release(pType);
     typelib_typedescriptionreference_release(pTypeRef);
@@ -1068,17 +1096,21 @@ void testArray(void)
     void* p = rtl_allocateMemory(8 * sizeof(rtl_uString*));
     void* p2 = rtl_allocateMemory(8 * sizeof(rtl_uString*));
     rtl_uString** ppS = (rtl_uString**)p;
-    rtl_uString* sa1[2][4] = { st1.pData,st2.pData,st3.pData,st4.pData,
-                               st5.pData,st6.pData,st7.pData,st8.pData };
-    rtl_uString* sa2[2][4] = { s1.pData,s2.pData,s3.pData,s4.pData,
-                               s5.pData,s6.pData,s7.pData,s8.pData };
+    rtl_uString* sa1[2][4] = { {st1.pData,st2.pData,st3.pData,st4.pData},
+                               {st5.pData,st6.pData,st7.pData,st8.pData} };
+    rtl_uString* sa2[2][4] = { {s1.pData,s2.pData,s3.pData,s4.pData},
+                               {s5.pData,s6.pData,s7.pData,s8.pData} };
     uno_constructData( p, pType );
 
     bAssignable = uno_assignData(p, pType, sa2, pType,
-                   cpp_queryInterface, cpp_acquire, cpp_release );
+                                 reinterpret_cast<uno_QueryInterfaceFunc>(cpp_queryInterface),
+                                 reinterpret_cast<uno_AcquireFunc>(cpp_acquire),
+                                 reinterpret_cast<uno_ReleaseFunc>(cpp_release) );
 
     bAssignable = uno_assignData(sa1, pType, p, pType,
-                   cpp_queryInterface, cpp_acquire, cpp_release );
+                                 reinterpret_cast<uno_QueryInterfaceFunc>(cpp_queryInterface),
+                                 reinterpret_cast<uno_AcquireFunc>(cpp_acquire),
+                                 reinterpret_cast<uno_ReleaseFunc>(cpp_release) );
 
     for ( i=0; i<2; i++ )
         for ( j=0; j<4; j++ )
@@ -1106,38 +1138,38 @@ void testArray(void)
             OSL_ASSERT( sA[i][j] == (*sB)[i][j] );
 
     // requires a specialized getCppuType function 'getCppuType( const Sequence< OUString[2][4] >* )'
-    Sequence< OUString[2][4] > aSeq(2);
-    OUString (*pSeq)[2][4] = aSeq.getArray();
-    uno_copyData(pSeq[0], sA, pType, cpp_acquire);
-    uno_copyData(pSeq[1], sA, pType, cpp_acquire);
+//  Sequence< OUString[2][4] > aSeq(2);
+//  OUString (*pSeq)[2][4] = aSeq.getArray();
+//  uno_copyData(pSeq[0], sA, pType, cpp_acquire);
+//  uno_copyData(pSeq[1], sA, pType, cpp_acquire);
 
-    OSL_ASSERT( aSeq[0][0][0] == sA[0][0] );
-    OSL_ASSERT( aSeq[0][0][1] == sA[0][1] );
-    OSL_ASSERT( aSeq[0][0][2] == sA[0][2] );
-    OSL_ASSERT( aSeq[0][0][3] == sA[0][3] );
-    OSL_ASSERT( aSeq[0][1][0] == sA[1][0] );
-    OSL_ASSERT( aSeq[0][1][1] == sA[1][1] );
-    OSL_ASSERT( aSeq[0][1][2] == sA[1][2] );
-    OSL_ASSERT( aSeq[0][1][3] == sA[1][3] );
+//  OSL_ASSERT( aSeq[0][0][0] == sA[0][0] );
+//  OSL_ASSERT( aSeq[0][0][1] == sA[0][1] );
+//  OSL_ASSERT( aSeq[0][0][2] == sA[0][2] );
+//  OSL_ASSERT( aSeq[0][0][3] == sA[0][3] );
+//  OSL_ASSERT( aSeq[0][1][0] == sA[1][0] );
+//  OSL_ASSERT( aSeq[0][1][1] == sA[1][1] );
+//  OSL_ASSERT( aSeq[0][1][2] == sA[1][2] );
+//  OSL_ASSERT( aSeq[0][1][3] == sA[1][3] );
 
-    OSL_ASSERT( aSeq[1][0][0] == sA[0][0] );
-    OSL_ASSERT( aSeq[1][0][1] == sA[0][1] );
-    OSL_ASSERT( aSeq[1][0][2] == sA[0][2] );
-    OSL_ASSERT( aSeq[1][0][3] == sA[0][3] );
-    OSL_ASSERT( aSeq[1][1][0] == sA[1][0] );
-    OSL_ASSERT( aSeq[1][1][1] == sA[1][1] );
-    OSL_ASSERT( aSeq[1][1][2] == sA[1][2] );
-    OSL_ASSERT( aSeq[1][1][3] == sA[1][3] );
+//  OSL_ASSERT( aSeq[1][0][0] == sA[0][0] );
+//  OSL_ASSERT( aSeq[1][0][1] == sA[0][1] );
+//  OSL_ASSERT( aSeq[1][0][2] == sA[0][2] );
+//  OSL_ASSERT( aSeq[1][0][3] == sA[0][3] );
+//  OSL_ASSERT( aSeq[1][1][0] == sA[1][0] );
+//  OSL_ASSERT( aSeq[1][1][1] == sA[1][1] );
+//  OSL_ASSERT( aSeq[1][1][2] == sA[1][2] );
+//  OSL_ASSERT( aSeq[1][1][3] == sA[1][3] );
 
     uno_constructData( p2, pType );
     ppS = (rtl_uString**)p2;
-    uno_copyData(p2, sa1, pType, cpp_acquire);
-    uno_copyData(sa2, p2, pType, cpp_acquire);
+    uno_copyData(p2, sa1, pType, reinterpret_cast<uno_AcquireFunc>(cpp_acquire));
+    uno_copyData(sa2, p2, pType, reinterpret_cast<uno_AcquireFunc>(cpp_acquire));
 
-    uno_destructData( p, pType, cpp_release );
-    uno_destructData( p2, pType, cpp_release );
-    uno_destructData( sa1, pType, cpp_release );
-    uno_destructData( sa2, pType, cpp_release );
+    uno_destructData( p, pType, reinterpret_cast<uno_ReleaseFunc>(cpp_release));
+    uno_destructData( p2, pType, reinterpret_cast<uno_ReleaseFunc>(cpp_release) );
+    uno_destructData( sa1, pType, reinterpret_cast<uno_ReleaseFunc>(cpp_release) );
+    uno_destructData( sa2, pType, reinterpret_cast<uno_ReleaseFunc>(cpp_release) );
 
     rtl_freeMemory(p);
     rtl_freeMemory(p2);
@@ -1150,7 +1182,7 @@ void testArray(void)
 /*
  * main.
  */
-int SAL_CALL main(int argc, char **argv)
+SAL_IMPLEMENT_MAIN_WITH_ARGS(/*argc*/, /*argv*/)
 {
     rtl::OUString const cppName(
         RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
