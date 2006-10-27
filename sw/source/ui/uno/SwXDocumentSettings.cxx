@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:32:24 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 11:59:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,10 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE,
     // <--
     // --> OD 2006-04-13 #b6402800#
-    HANDLE_CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAMES
+    HANDLE_CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAMES,
+    // <--
+    // --> FME 2006-10-09 #i60945#
+    HANDLE_UNIX_FORCE_ZERO_EXT_LEADING
     // <--
 };
 
@@ -240,6 +243,9 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         // <--
         // --> OD 2006-04-13 #b6402800#
         { RTL_CONSTASCII_STRINGPARAM("ClipAsCharacterAnchoredWriterFlyFrames"), HANDLE_CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAMES, CPPUTYPE_BOOLEAN, 0, 0},
+        // <--
+        // --> FME 2006-10-09 #i60945#
+        { RTL_CONSTASCII_STRINGPARAM("UnxForceZeroExtLeading"), HANDLE_UNIX_FORCE_ZERO_EXT_LEADING, CPPUTYPE_BOOLEAN, 0, 0},
         // <--
 
 /*
@@ -726,6 +732,14 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         }
         break;
         // <--
+        // --> FME 2006-10-09 #i60945#
+        case HANDLE_UNIX_FORCE_ZERO_EXT_LEADING:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::UNIX_FORCE_ZERO_EXT_LEADING, bTmp);
+        }
+        break;
+        // <--
 
         default:
             throw UnknownPropertyException();
@@ -1030,6 +1044,15 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         }
         break;
         // <--
+        // --> FME 2006-10-09 #i60945#
+        case HANDLE_UNIX_FORCE_ZERO_EXT_LEADING:
+        {
+            sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::UNIX_FORCE_ZERO_EXT_LEADING);
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        // <--
+
         default:
             throw UnknownPropertyException();
     }
