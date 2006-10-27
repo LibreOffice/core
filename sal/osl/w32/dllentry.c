@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 11:12:33 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 12:00:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,9 @@ static void InitDCOM(void)
 //------------------------------------------------------------------------------
 // DllMain
 //------------------------------------------------------------------------------
+#ifdef _M_IX86
+int osl_isSingleCPU = 0;
+#endif
 
 static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
 {
@@ -180,6 +183,16 @@ static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvR
                 if ((SystemInfo.dwProcessorType != PROCESSOR_INTEL_486) &&
                     (SystemInfo.dwProcessorType != PROCESSOR_INTEL_PENTIUM))
                     showMessage(ERR_GENERAL_WRONG_CPU);
+
+                /* Determine if we are on a multiprocessor/multicore/HT x86/x64 system
+                 *
+                 * The lock prefix for atomic operations in osl_[inc|de]crementInterlockedCount()
+                 * comes with a cost and is especially expensive on pre HT x86 single processor
+                 * systems, where it isn't needed at all.
+                 */
+                if ( SystemInfo.dwNumberOfProcessors == 1 ) {
+                    osl_isSingleCPU = 1;
+                }
 #endif
                 /* Suppress file error messages from system like "Floppy A: not inserted" */
                 SetErrorMode( SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS );
