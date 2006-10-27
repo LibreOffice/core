@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:30:10 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 15:29:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1827,11 +1827,12 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
     //  4) Inhalte loeschen
     //  5) Undo-Aktion anlegen
 
+    BOOL bDrawUndo = bObjects || ( nFlags & IDF_NOTE );     // needed for shown notes
+    if ( bDrawUndo && bRecord )
+        pDoc->BeginDrawUndo();
+
     if (bObjects)
     {
-        if (bRecord)
-            pDoc->BeginDrawUndo();
-
         if (bMulti)
             pDoc->DeleteObjectsInSelection( aFuncMark );
         else
@@ -1880,7 +1881,7 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
     {
         pDocSh->GetUndoManager()->AddUndoAction(
             new ScUndoDeleteContents( pDocSh, aFuncMark, aExtendedRange,
-                                      pUndoDoc, bMulti, nFlags, bObjects ) );
+                                      pUndoDoc, bMulti, nFlags, bDrawUndo ) );
     }
 
     if (!AdjustRowHeight( aExtendedRange.aStart.Row(), aExtendedRange.aEnd.Row() ))
