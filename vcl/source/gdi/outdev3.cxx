@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.222 $
+ *  $Revision: 1.223 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 14:08:45 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 12:00:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -7278,6 +7278,14 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.mpImplMetric->mnExtLeading  = ImplDevicePixelToLogicHeight( pMetric->mnExtLeading );
     aMetric.mpImplMetric->mnLineHeight  = ImplDevicePixelToLogicHeight( pMetric->mnAscent+pMetric->mnDescent+mnEmphasisAscent+mnEmphasisDescent );
     aMetric.mpImplMetric->mnSlant       = ImplDevicePixelToLogicHeight( pMetric->mnSlant );
+
+#ifdef UNX
+    // backwards compatible line metrics after fixing #i60945#
+    if( (meOutDevType == OUTDEV_VIRDEV)
+    &&  static_cast<const VirtualDevice*>(this)->ForceZeroExtleadBug() )
+        aMetric.mpImplMetric->mnExtLeading = 0;
+#endif
+
     return aMetric;
 }
 
