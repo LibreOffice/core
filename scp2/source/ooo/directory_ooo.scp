@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directory_ooo.scp,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 10:09:30 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 12:11:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,6 +371,17 @@ Directory gid_Dir_Share
     ParentID = gid_Dir_Bundle_Contents_Macos;
 #endif
     DosName = "share";
+End
+
+Directory gid_Dir_Share_Extension
+    ParentID = gid_Dir_Share;
+    DosName = "extension";
+End
+
+Directory gid_Dir_Share_Extension_Install
+    ParentID = gid_Dir_Share_Extension;
+    DosName = "install";
+    Styles = (CREATE);
 End
 
 Directory gid_Dir_Share_Migration
