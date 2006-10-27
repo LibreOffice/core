@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh.sdi,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:42:09 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 15:28:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,6 +187,7 @@ interface CellSelection
     SID_OPENDLG_CONDFRMT    [ ExecMethod = Execute; StateMethod = GetBlockState; ]
     FID_CONDITIONAL_FORMAT  [ ExecMethod = ExecuteEdit; ]
     FID_NOTE_VISIBLE        [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_DELETE_NOTE         [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_DEC_INDENT          [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_INC_INDENT          [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
 
