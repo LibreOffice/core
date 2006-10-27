@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scalc.sdi,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:14:17 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 15:28:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4374,6 +4374,31 @@ SfxBoolItem NoteVisible FID_NOTE_VISIBLE
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem DeleteNote SID_DELETE_NOTE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
+
+//--------------------------------------------------------------------------
 SfxStringItem NumberFormat SID_NUMBER_FORMAT
 
 [
@@ -7598,5 +7623,4 @@ SfxBoolItem SheetRightToLeft FID_TAB_RTL
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
-
 
