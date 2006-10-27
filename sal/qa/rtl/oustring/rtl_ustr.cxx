@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_ustr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:58:25 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 12:14:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -933,6 +933,90 @@ namespace rtl_ustr
         CPPUNIT_TEST_SUITE_END();
     };
 
+
+
+
+    class ascii_compare_WithLength : public CppUnit::TestFixture
+    {
+    public:
+        void zero_length()
+        {
+            sal_Unicode pUnicode[] = {0xffff, 0xffff};
+            char const * pAscii = "reference";
+
+            sal_Int32 value = rtl_ustr_ascii_compare_WithLength(pUnicode, 0, pAscii);
+            CPPUNIT_ASSERT_MESSAGE("ref string is empty, compare failed, needs to be <0.", value < 0);
+        }
+
+        void equal_ascii_shorter()
+        {
+            rtl::OUString refStr(RTL_CONSTASCII_USTRINGPARAM("referenceString"));
+            char const * pAscii = "reference";
+
+            sal_Int32 value = rtl_ustr_ascii_compare_WithLength(refStr.pData->buffer, refStr.pData->length, pAscii);
+            CPPUNIT_ASSERT_MESSAGE("ref string is bigger, compare failed, needs to be >0.", value > 0);
+        }
+
+        void equal_ascii_shorter_asciiLength()
+        {
+            rtl::OUString refStr(RTL_CONSTASCII_USTRINGPARAM("referenceString"));
+            char const * pAscii = "reference";
+
+            sal_Int32 value = rtl_ustr_ascii_compare_WithLength(refStr.pData->buffer, rtl_str_getLength(pAscii), pAscii);
+            CPPUNIT_ASSERT_MESSAGE("ref string is bigger despite ascii length, compare failed, needs to be == 0.", value == 0);
+        }
+
+        void equal_ref_shorter()
+        {
+            rtl::OUString refStr(RTL_CONSTASCII_USTRINGPARAM("reference"));
+            char const * pAscii = "referenceString";
+
+            sal_Int32 value = rtl_ustr_ascii_compare_WithLength(refStr.pData->buffer, refStr.pData->length, pAscii);
+            CPPUNIT_ASSERT_MESSAGE("ascii string is bigger, but only compared to ref length, needs to be 0.", value < 0);
+        }
+
+        void equal()
+        {
+            rtl::OUString refStr(RTL_CONSTASCII_USTRINGPARAM("reference"));
+            char const * pAscii = "reference";
+
+            sal_Int32 value = rtl_ustr_ascii_compare_WithLength(refStr.pData->buffer, refStr.pData->length, pAscii);
+            CPPUNIT_ASSERT_MESSAGE("strings are equal, compare failed, needs to be 0.", value == 0);
+        }
+
+        void unequal_reference_bigger()
+       {
+            rtl::OUString refStr(RTL_CONSTASCII_USTRINGPARAM("defghi"));
+            char const * pAscii = "abc";
+
+            sal_Int32 value = rtl_ustr_ascii_compare_WithLength(refStr.pData->buffer, refStr.pData->length, pAscii);
+            CPPUNIT_ASSERT_MESSAGE("strings are unequal and ref is bigger, needs to be >0.", value > 0);
+        }
+
+        void unequal_ascii_bigger()
+        {
+            rtl::OUString refStr(RTL_CONSTASCII_USTRINGPARAM("abc"));
+            char const * pAscii = "defghi";
+
+            sal_Int32 value = rtl_ustr_ascii_compare_WithLength(refStr.pData->buffer, refStr.pData->length, pAscii);
+
+            CPPUNIT_ASSERT_MESSAGE("strings are unequal and ascii is bigger, needs to be <0.", value < 0);
+        }
+
+        CPPUNIT_TEST_SUITE(ascii_compare_WithLength);
+        CPPUNIT_TEST(zero_length);
+        CPPUNIT_TEST(equal_ascii_shorter);
+        CPPUNIT_TEST(equal_ascii_shorter_asciiLength);
+        CPPUNIT_TEST(equal_ref_shorter);
+        CPPUNIT_TEST(equal);
+        CPPUNIT_TEST(unequal_reference_bigger);
+        CPPUNIT_TEST(unequal_ascii_bigger);
+        CPPUNIT_TEST_SUITE_END();
+    };
+
+
+
+
     class ascii_shortenedCompareIgnoreAsciiCase_WithLength : public CppUnit::TestFixture
     {
     public:
@@ -1310,6 +1394,8 @@ namespace rtl_ustr
 // -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::compare, "rtl_ustr");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::compareIgnoreAsciiCase, "rtl_ustr");
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::ascii_compare_WithLength, "rtl_ustr");
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::shortenedCompareIgnoreAsciiCase_WithLength, "rtl_ustr");
 // CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::hashCode, "rtl_ustr");
