@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interlck.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:57:16 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 11:59:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,39 +46,59 @@
 #elif defined ( GCC ) && ( defined ( X86 ) || defined ( X86_64 ) )
 /* That's possible on x86-64 too since oslInterlockedCount is a sal_Int32 */
 
+extern int osl_isSingleCPU;
+
 /*****************************************************************************/
 /* osl_incrementInterlockedCount */
 /*****************************************************************************/
 oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
-    oslInterlockedCount nCount;
+    register oslInterlockedCount nCount asm("%eax");
 
-    __asm__ __volatile__ (
-        "movl $1, %0\n\t"
-        "lock\n\t"
-        "xaddl %0, %2\n\t"
-        "incl %0"
-    :   "=&r" (nCount), "=m" (*pCount)
-    :   "m" (*pCount)
-    :   "memory");
+    nCount = 1;
 
-    return nCount;
+    if ( osl_isSingleCPU ) {
+        __asm__ __volatile__ (
+            "xaddl %0, %1\n\t"
+        :   "+r" (nCount), "+m" (*pCount)
+        :   /* nothing */
+        :   "memory");
+    }
+    else {
+        __asm__ __volatile__ (
+            "lock\n\t"
+            "xaddl %0, %1\n\t"
+        :   "+r" (nCount), "+m" (*pCount)
+        :   /* nothing */
+        :   "memory");
+    }
+
+    return ++nCount;
 }
 
 oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
 {
-    oslInterlockedCount nCount;
+    register oslInterlockedCount nCount asm("%eax");
 
-    __asm__ __volatile__ (
-        "movl $-1, %0\n\t"
-        "lock\n\t"
-        "xaddl %0, %2\n\t"
-        "decl %0"
-    :   "=&r" (nCount), "=m" (*pCount)
-    :   "m" (*pCount)
-    :   "memory");
+    nCount = -1;
 
-    return nCount;
+    if ( osl_isSingleCPU ) {
+        __asm__ __volatile__ (
+            "xaddl %0, %1\n\t"
+        :   "+r" (nCount), "+m" (*pCount)
+        :   /* nothing */
+        :   "memory");
+    }
+    else {
+        __asm__ __volatile__ (
+            "lock\n\t"
+            "xaddl %0, %1\n\t"
+        :   "+r" (nCount), "+m" (*pCount)
+        :   /* nothing */
+        :   "memory");
+    }
+
+    return --nCount;
 }
 
 #elif defined ( GCC ) && defined ( POWERPC )
