@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:51:12 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 15:29:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1977,6 +1977,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 else
                     rReq.Ignore();
             }
+            break;
+
+        case SID_DELETE_NOTE:
+            pTabViewShell->DeleteContents( IDF_NOTE );      // delete all notes in selection
+            rReq.Done();
             break;
 
         case SID_CHARMAP:
