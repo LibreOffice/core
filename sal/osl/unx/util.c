@@ -4,9 +4,9 @@
  *
  *  $RCSfile: util.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:20:09 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 11:59:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -395,6 +395,34 @@ void osl_InitSparcV9(void)
         if ( !strcmp( "sparc", name.machine ))
         return;
     osl_InterlockedCountSetV9(sal_True);
+    }
+}
+#endif
+
+#if    ( defined(LINUX) && defined(__GNUC__) && (defined(X86) || defined(X86_64)) )\
+    || ( defined(SOLARIS) && defined (__SUNPRO_C) && defined(__i386) )
+/* Determine if we are on a multiprocessor/multicore/HT x86/x64 system
+ *
+ * The lock prefix for atomic operations in osl_[inc|de]crementInterlockedCount()
+ * comes with a cost and is especially expensive on pre HT x86 single processor
+ * systems, where it isn't needed at all.
+ *
+ * This should be run as early as possible, thus it's placed in the init section
+ */
+#if defined(__GNUC__)
+void osl_interlockedCountCheckForSingleCPU(void)  __attribute__((constructor));
+#elif defined(__SUNPRO_C)
+void osl_interlockedCountCheckForSingleCPU(void);
+#pragma init (osl_interlockedCountCheckForSingleCPU)
+#endif
+
+int osl_isSingleCPU = 0;
+void osl_interlockedCountCheckForSingleCPU(void)
+{
+    /* In case sysconfig fails be on the safe side,
+     * consider it a multiprocessor/multicore/HT system */
+    if ( sysconf(_SC_NPROCESSORS_CONF) == 1 ) {
+        osl_isSingleCPU = 1;
     }
 }
 #endif
