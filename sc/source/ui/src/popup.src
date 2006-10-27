@@ -4,9 +4,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:08:44 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 15:28:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ Menu RID_POPUP_CELLS
             Identifier = FID_INS_CELL ;
             HelpId = FID_INS_CELL ;
             Text [ de ] = "Zellen ~einfügen..." ;
-            Text [ en-US ] = "Insert C~ells..." ;
+            Text [ en-US ] = "~Insert..." ;
             Text [ x-comment ] = " ";
         };
         MenuItem
@@ -85,7 +85,7 @@ Menu RID_POPUP_CELLS
             Identifier = FID_DELETE_CELL ;
             HelpId = FID_DELETE_CELL ;
             Text [ de ] = "Zellen ~löschen..." ;
-            Text [ en-US ] = "De~lete Cells..." ;
+            Text [ en-US ] = "De~lete..." ;
             Text [ x-comment ] = " ";
         };
         MenuItem
@@ -94,6 +94,31 @@ Menu RID_POPUP_CELLS
             HelpId = SID_DELETE ;
             Text [ de ] = "Inhalte lö~schen..." ;
             Text [ en-US ] = "Delete C~ontents..." ;
+            Text [ x-comment ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = SID_INSERT_POSTIT ;
+            HelpId = SID_INSERT_POSTIT ;
+            Text [ de ] = "~Notiz einfügen" ;
+            Text [ en-US ] = "Insert ~Note" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETE_NOTE ;
+            HelpId = SID_DELETE_NOTE ;
+            Text [ de ] = "N~otiz löschen" ;
+            Text [ en-US ] = "D~elete Note" ;
+        };
+        MenuItem
+        {
+            Identifier = FID_NOTE_VISIBLE ;
+            HelpId = FID_NOTE_VISIBLE ;
+            Text [ de ] = "Notiz ~anzeigen" ;
+            Text [ en-US ] = "Sho~w Note" ;
             Text [ x-comment ] = " ";
         };
          //------------------------------
@@ -132,17 +157,6 @@ Menu RID_POPUP_CELLS
             HelpId = FID_PASTE_CONTENTS ;
             Text [ de ] = "In~halte einfügen..." ;
             Text [ en-US ] = "P~aste Special..." ;
-            Text [ x-comment ] = " ";
-        };
-         //------------------------------
-        MenuItem { Separator = TRUE ; };
-         //------------------------------
-        MenuItem
-        {
-            Identifier = FID_NOTE_VISIBLE ;
-            HelpId = FID_NOTE_VISIBLE ;
-            Text [ de ] = "~Notiz anzeigen" ;
-            Text [ en-US ] = "Sho~w Note" ;
             Text [ x-comment ] = " ";
         };
          //------------------------------
