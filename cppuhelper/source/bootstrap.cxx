@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:39:21 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 12:13:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,14 +85,13 @@ using namespace ::com::sun::star::uno;
 namespace cppu
 {
 
-extern "C" { static void SAL_CALL MyDummySymbolWithinLibrary(){} }
 OUString const & get_this_libpath()
 {
     static OUString s_path;
     if (0 == s_path.getLength())
     {
         OUString path;
-        Module::getUrlFromAddress( MyDummySymbolWithinLibrary, path );
+        Module::getUrlFromAddress( reinterpret_cast<oslGenericFunction>(get_this_libpath), path );
         path = path.copy( 0, path.lastIndexOf( '/' ) );
         MutexGuard guard( Mutex::getGlobalMutex() );
         if (0 == s_path.getLength())
