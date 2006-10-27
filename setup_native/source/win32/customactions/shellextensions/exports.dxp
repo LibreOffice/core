@@ -6,4 +6,5 @@ SetProductInstallMode
 RebuildShellIconCache
 ExecutePostUninstallScript
 MigrateInstallPath
-
+RegisterExtensions
+DeregisterExtensions
