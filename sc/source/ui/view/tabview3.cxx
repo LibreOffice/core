@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:09:54 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 15:29:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -440,6 +440,7 @@ void ScTabView::SelectionChanged()
     rBindings.Invalidate( SID_CURRENTCELL );    // -> Navigator
     rBindings.Invalidate( SID_AUTO_FILTER );    // -> Menue
     rBindings.Invalidate( FID_NOTE_VISIBLE );
+    rBindings.Invalidate( SID_DELETE_NOTE );
 
         //  Funktionen, die evtl disabled werden muessen
 
