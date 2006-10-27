@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 12:18:57 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 11:58:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -555,6 +555,9 @@ class SwDoc :
     // - Introduced in order to re-activate clipping of as-character anchored
     //   Writer fly frames in method <SwFlyInCntFrm::MakeAll()> for documents,
     //   which are created with version prior SO8/OOo 2.0
+    //
+    // SO8pp4
+    // mbUnixForceZeroExtLeading                def = FALSE, hidden
 
     bool mbParaSpaceMax                     : 1;
     bool mbParaSpaceMaxAtPages              : 1;
@@ -576,11 +579,11 @@ class SwDoc :
     bool mbDoNotJustifyLinesWithManualBreak         : 1;   // FME 2005-06-08 #i49277#
     bool mbDoNotResetParaAttrsForNumFont            : 1;   // FME 2005-08-11 #i53199#
     bool mbTableRowKeep                             : 1;   // FME 2006-02-10 #131283#
-    bool mbIgnoreTabsAndBlanksForLineCalculation    : 1; // FME 2006-03-01 #i3952#
+    bool mbIgnoreTabsAndBlanksForLineCalculation    : 1;   // FME 2006-03-01 #i3952#
     bool mbDoNotCaptureDrawObjsOnPage               : 1;   // OD 2006-03-14 #i62875#
     bool mbOutlineLevelYieldsOutlineRule            : 1;
     bool mbClipAsCharacterAnchoredWriterFlyFrames   : 1;   // OD 2006-04-13 #b6402800#
-    bool mbDummyNonUIFlag1                          : 1;   // use this if necessary
+    bool mbUnixForceZeroExtLeading                  : 1;   // FME 2006-10-09 #i60945#
     bool mbDummyNonUIFlag2                          : 1;   // use this if necessary
 
     //
