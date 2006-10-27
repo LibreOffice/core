@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:14:36 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 12:14:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,8 +158,8 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_compare_WithLength( const sal_Unicode* pStr1,
                                                       sal_Int32 nStr1Len,
                                                       const sal_Char* pStr2 )
 {
-    sal_Int32 nRet;
-    while( ((nRet = ((sal_Int32)(*pStr1))-
+    sal_Int32 nRet = 0;
+    while( ((nRet = (nStr1Len ? (sal_Int32)(*pStr1) : 0)-
                     ((sal_Int32)((unsigned char)(*pStr2)))) == 0) &&
            nStr1Len && *pStr2 )
     {
