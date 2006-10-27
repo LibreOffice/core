@@ -4,9 +4,9 @@
  *
  *  $RCSfile: depapp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-23 11:36:37 $
+ *  last change: $Author: obo $ $Date: 2006-10-27 07:54:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,10 @@
 
 void MyApp::Main()
 {
+#if defined(WNT)
     pDebugFile = fopen( "fprintf.out", "w" );
+#endif
+
     pMyApp = GetpApp();
     MyWin aMainWin( NULL, WB_APP | WB_STDWORK );
     pAppWindow = &aMainWin;
