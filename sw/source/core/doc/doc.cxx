@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:08:43 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 12:02:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,6 +299,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         // --> OD 2006-08-25 #i68949#
         case CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME: return mbClipAsCharacterAnchoredWriterFlyFrames;
         // <--
+        case UNIX_FORCE_ZERO_EXT_LEADING: return mbUnixForceZeroExtLeading;
          // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE: return mbBrowseMode;
@@ -404,6 +405,10 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             mbClipAsCharacterAnchoredWriterFlyFrames = value;
             break;
         // <--
+        case UNIX_FORCE_ZERO_EXT_LEADING:
+            mbUnixForceZeroExtLeading = value;
+            break;
+
          // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE:
