@@ -9,6 +9,8 @@ mkdir: %_DEST%\bin%_EXT%\userscripts
 ..\%__SRC%\bin\langpackscript.sh %_DEST%\bin%_EXT%\langpackscript.sh
 ..\%__SRC%\bin\linuxpatchscript.sh %_DEST%\bin%_EXT%\linuxpatchscript.sh
 ..\%__SRC%\bin\downloadscript.sh %_DEST%\bin%_EXT%\downloadscript.sh
+..\%__SRC%\bin\register_extensions %_DEST%\bin%_EXT%\register_extensions
+..\%__SRC%\bin\deregister_extensions %_DEST%\bin%_EXT%\deregister_extensions
 ..\source\win32\msi-encodinglist.txt %_DEST%\bin%_EXT%\msi-encodinglist.txt
 ..\source\win32\patchlist.txt %_DEST%\bin%_EXT%\patchlist.txt
 ..\source\win32\nsis\downloadtemplate.nsi %_DEST%\bin%_EXT%\downloadtemplate.nsi
