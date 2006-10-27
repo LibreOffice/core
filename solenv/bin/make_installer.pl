@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.72 $
+#   $Revision: 1.73 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-13 10:36:00 $
+#   last change: $Author: rt $ $Date: 2006-10-27 12:08:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1368,7 +1368,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 installer::epmfile::put_files_into_epmfile($filesinpackage, \@epmfile );
                 installer::epmfile::put_links_into_epmfile($linksinpackage, \@epmfile );
 
-                if ((!( $shellscriptsfilename eq "" )) && (!($installer::globals::iswindowsbuild))) { installer::epmfile::adding_shellscripts_to_epm_file(\@epmfile, $shellscriptsfilename, $packagerootpath, $allvariableshashref); }
+                if ((!( $shellscriptsfilename eq "" )) && (!($installer::globals::iswindowsbuild))) { installer::epmfile::adding_shellscripts_to_epm_file(\@epmfile, $shellscriptsfilename, $packagerootpath, $allvariableshashref, $filesinpackage); }
 
                 installer::files::save_file($completeepmfilename ,\@epmfile);
 
