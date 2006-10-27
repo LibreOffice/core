@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:51:00 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 15:29:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@
 #include "globstr.hrc"
 #include "transobj.hxx"
 #include "drwtrans.hxx"
+#include "dociter.hxx"
 
 //------------------------------------------------------------------
 
@@ -901,6 +902,41 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         rSet.Put( SfxBoolItem( nWhich, bShown ) );
                     }
                     else
+                        rSet.DisableItem( nWhich );
+                }
+                break;
+
+            case SID_DELETE_NOTE:
+                {
+                    BOOL bEnable = FALSE;
+                    if ( rMark.IsMarked() || rMark.IsMultiMarked() )
+                    {
+                        if ( pDoc->IsSelectionEditable( rMark ) )
+                        {
+                            // look for at least one note in selection
+                            ScRangeList aRanges;
+                            rMark.FillRangeListWithMarks( &aRanges, FALSE );
+                            ULONG nCount = aRanges.Count();
+                            for (ULONG nPos=0; nPos<nCount && !bEnable; nPos++)
+                            {
+                                ScCellIterator aIter( pDoc, *aRanges.GetObject(nPos) );
+                                ScBaseCell* pCell = aIter.GetFirst();
+                                while ( pCell && !bEnable )
+                                {
+                                    if ( pCell->GetNotePtr() )
+                                        bEnable = TRUE;             // note found
+                                    pCell = aIter.GetNext();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ScPostIt aNote(pDoc);
+                        bEnable = pDoc->IsBlockEditable( nTab, nPosX,nPosY, nPosX,nPosY ) &&
+                                  pDoc->GetNote( nPosX, nPosY, nTab, aNote );
+                    }
+                    if ( !bEnable )
                         rSet.DisableItem( nWhich );
                 }
                 break;
