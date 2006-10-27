@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_di.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:21:59 $
+ *  last change: $Author: rt $ $Date: 2006-10-27 12:16:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,11 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#if !defined(OSL_DEBUG_LEVEL) || OSL_DEBUG_LEVEL == 0
+# undef OSL_DEBUG_LEVEL
+# define OSL_DEBUG_LEVEL 2
+#endif
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppu.hxx"
@@ -495,7 +500,7 @@ static sal_Bool performTest(
 }
 
 //__________________________________________________________________________________________________
-test::TestData Test_Impl::raiseException( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte, sal_Int16& nShort, sal_uInt16& nUShort, sal_Int32& nLong, sal_uInt32& nULong, sal_Int64& nHyper, sal_uInt64& nUHyper, float& fFloat, double& fDouble, test::TestEnum& eEnum, ::rtl::OUString& aString, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xInterface, ::com::sun::star::uno::Any& aAny, ::com::sun::star::uno::Sequence< test::TestElement >& aSequence, test::TestData& aStruct )
+test::TestData Test_Impl::raiseException( sal_Bool& /*bBool*/, sal_Unicode& /*cChar*/, sal_Int8& /*nByte*/, sal_Int16& /*nShort*/, sal_uInt16& /*nUShort*/, sal_Int32& /*nLong*/, sal_uInt32& /*nULong*/, sal_Int64& /*nHyper*/, sal_uInt64& /*nUHyper*/, float& /*fFloat*/, double& /*fDouble*/, test::TestEnum& /*eEnum*/, ::rtl::OUString& /*aString*/, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& /*xInterface*/, ::com::sun::star::uno::Any& /*aAny*/, ::com::sun::star::uno::Sequence< test::TestElement >& /*aSequence*/, test::TestData& /*aStruct*/ )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     lang::IllegalArgumentException aExc;
@@ -503,7 +508,6 @@ test::TestData Test_Impl::raiseException( sal_Bool& bBool, sal_Unicode& cChar, s
     aExc.Message          = OUString::createFromAscii( "dum dum dum ich tanz im kreis herum..." );
     aExc.Context          = getInterface();
     throw aExc;
-    return test::TestData();
 }
 //__________________________________________________________________________________________________
 sal_Int32 Test_Impl::getRuntimeException() throw(::com::sun::star::uno::RuntimeException)
@@ -512,10 +516,9 @@ sal_Int32 Test_Impl::getRuntimeException() throw(::com::sun::star::uno::RuntimeE
     aExc.Message          = OUString::createFromAscii( "dum dum dum ich tanz im kreis herum..." );
     aExc.Context          = getInterface();
     throw aExc;
-    return 0;
 }
 //__________________________________________________________________________________________________
-void Test_Impl::setRuntimeException( sal_Int32 _runtimeexception ) throw(::com::sun::star::uno::RuntimeException)
+void Test_Impl::setRuntimeException( sal_Int32 /*_runtimeexception*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
     lang::DisposedException aExc;
     aExc.Message          = OUString::createFromAscii( "dum dum dum ich tanz im kreis herum..." );
@@ -638,7 +641,7 @@ static void checkInvalidInterfaceQuery(
         Reference< lang::XComponent > xComp( xObj, UNO_QUERY_THROW );
         OSL_ASSERT( 0 );
     }
-    catch (RuntimeException & exc)
+    catch (RuntimeException & /*exc*/)
     {
 //         OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
 //         OSL_TRACE( str.getStr() );
@@ -678,8 +681,8 @@ void test_CppBridge(void)
     TestDummy * p = new TestDummy();
     Reference< XInterface > xDummy( *p );
     {
-        Test_Impl * p = new Test_Impl();
-        Reference< XLanguageBindingTest > xOriginal( p );
+        Test_Impl * p2 = new Test_Impl();
+        Reference< XLanguageBindingTest > xOriginal( p2 );
         checkInvalidInterfaceQuery( xOriginal );
         {
             const char * pExtraMapping = "";
@@ -731,7 +734,7 @@ void test_CppBridge(void)
                 exit( 1 );
             }
         }
-        OSL_ENSURE( p->getRefCount() == 1, "### test object ref count > 1 !" );
+        OSL_ENSURE( p2->getRefCount() == 1, "### test object ref count > 1 !" );
     }
     OSL_ENSURE( p->getRefCount() == 1, "### dummy object ref count > 1 !" );
     }
@@ -745,8 +748,8 @@ void test_CBridge(void)
     TestDummy * p = new TestDummy();
     Reference< XInterface > xDummy( *p );
     {
-        Test_Impl * p = new Test_Impl();
-        Reference< XLanguageBindingTest > xOriginal( p );
+        Test_Impl * p2 = new Test_Impl();
+        Reference< XLanguageBindingTest > xOriginal( p2 );
         checkInvalidInterfaceQuery( xOriginal );
         {
             Reference< XLanguageBindingTest > xMapped;
