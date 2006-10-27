@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:15:38 $
+#   last change: $Author: rt $ $Date: 2006-10-27 12:08:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -526,9 +526,29 @@ sub replace_many_variables_in_shellscripts
     foreach $key (keys %{$variableshashref})
     {
         my $value = $variableshashref->{$key};
-        $value = lc($value);    # lowercase !
+        if ( ! $value =~ /.oxt/ ) { $value = lc($value); }  # lowercase !
         if ( $installer::globals::issolarisbuild) { $value =~ s/\.org/org/g; }  # openofficeorg instead of openoffice.org
         replace_variable_in_shellscripts($scriptref, $value, $key);
+    }
+}
+
+#######################################
+# Setting oxt file name variable
+#######################################
+
+sub set_oxt_filename
+{
+    my ($filesinpackage, $allvariables) = @_;
+
+    for ( my $i = 0; $i <= $#{$filesinpackage}; $i++ )
+    {
+        my $onefile = ${$filesinpackage}[$i];
+        if ( $onefile->{'Name'} =~ /.oxt\s*$/ )
+        {
+            $allvariables->{'OXTFILENAME'} = $onefile->{'Name'};
+            # $allvariables->{'FULLOXTFILENAME'} = $onefile->{'destination'};
+            last;  # only one oxt file for each rpm!
+        }
     }
 }
 
@@ -538,7 +558,10 @@ sub replace_many_variables_in_shellscripts
 
 sub adding_shellscripts_to_epm_file
 {
-    my ($epmfileref, $shellscriptsfilename, $localrootpath, $allvariableshashref) = @_;
+    my ($epmfileref, $shellscriptsfilename, $localrootpath, $allvariableshashref, $filesinpackage) = @_;
+
+    # Setting variable for ${OXTFILENAME} into $allvariableshashref, if this is a RPM with an extension
+    set_oxt_filename($filesinpackage, $allvariableshashref);
 
     # $installer::globals::shellscriptsfilename
 
