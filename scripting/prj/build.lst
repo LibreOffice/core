@@ -1,12 +1,13 @@
 tc	scripting	:	bridges rdbmaker vcl xmlscript basic sfx2 rhino BSH:beanshell javaunohelper NULL
-tc	scripting									usr1	-	all	tc_mkout NULL
-tc	scripting\source\provider				nmake	-	all	tc_scriptingprovider NULL
-tc	scripting\source\basprov				nmake	-	all	tc_scriptingbasprov NULL
-tc	scripting\source\dlgprov				nmake	-	all	tc_scriptingdlgprov NULL
-tc	scripting\source\pyprov				nmake	-	all	tc_scriptingpyprov NULL
-tc	scripting\source\protocolhandler			nmake	-	all	tc_scriptingprotocolhandler tc_scriptingprovider NULL
-tc	scripting\java						nmake	-	all	tc_scriptingjava tc_scriptingprovider tc_scriptingprotocolhandler NULL
-tc	scripting\examples\java				nmake	-	all	tc_scriptingexamplesjava tc_scriptingjava  NULL
-tc	scripting\examples				nmake	-	all	tc_scriptingexamples tc_scriptingexamplesjava  NULL
-tc	scripting\util						nmake	-	all	tc_scriptingutil tc_scriptingprovider tc_scriptingprotocolhandler tc_scriptingbasprov tc_scriptingpyprov tc_scriptingjava tc_scriptingexamplesjava tc_scriptingexamples NULL
+tc	scripting									usr1	-	all	tc1_mkout NULL
+tc	scripting\inc								nmake	-	all	tc1_inc NULL
+tc	scripting\source\provider				nmake	-	all	tc1_scriptingprovider tc1_inc NULL
+tc	scripting\source\basprov				nmake	-	all	tc1_scriptingbasprov tc1_inc NULL
+tc	scripting\source\dlgprov				nmake	-	all	tc1_scriptingdlgprov tc1_inc NULL
+tc	scripting\source\pyprov				nmake	-	all	tc1_scriptingpyprov tc1_inc NULL
+tc	scripting\source\protocolhandler			nmake	-	all	tc1_scriptingprotocolhandler tc1_scriptingprovider tc1_inc NULL
+tc	scripting\java						nmake	-	all	tc1_scriptingjava tc1_scriptingprovider tc1_scriptingprotocolhandler NULL
+tc	scripting\examples\java				nmake	-	all	tc1_scriptingexamplesjava tc1_scriptingjava  NULL
+tc	scripting\examples				nmake	-	all	tc1_scriptingexamples tc1_scriptingexamplesjava  tc1_inc NULL
+tc	scripting\util						nmake	-	all	tc1_scriptingutil tc1_scriptingprovider tc1_scriptingprotocolhandler tc1_scriptingbasprov tc1_scriptingpyprov tc1_scriptingjava tc1_scriptingexamplesjava tc1_scriptingexamples NULL
 
