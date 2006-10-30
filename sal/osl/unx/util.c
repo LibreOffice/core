@@ -4,9 +4,9 @@
  *
  *  $RCSfile: util.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 11:59:44 $
+ *  last change: $Author: hr $ $Date: 2006-10-30 15:47:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -399,8 +399,12 @@ void osl_InitSparcV9(void)
 }
 #endif
 
-#if    ( defined(LINUX) && defined(__GNUC__) && (defined(X86) || defined(X86_64)) )\
+#if    ( defined(__GNUC__) && (defined(X86) || defined(X86_64)) )\
     || ( defined(SOLARIS) && defined (__SUNPRO_C) && defined(__i386) )
+
+/* Safe default */
+int osl_isSingleCPU = 0;
+
 /* Determine if we are on a multiprocessor/multicore/HT x86/x64 system
  *
  * The lock prefix for atomic operations in osl_[inc|de]crementInterlockedCount()
@@ -409,6 +413,7 @@ void osl_InitSparcV9(void)
  *
  * This should be run as early as possible, thus it's placed in the init section
  */
+#if defined(_SC_NPROCESSORS_CONF) /* i.e. MACOSX for Intel doesn't have this */
 #if defined(__GNUC__)
 void osl_interlockedCountCheckForSingleCPU(void)  __attribute__((constructor));
 #elif defined(__SUNPRO_C)
@@ -416,7 +421,6 @@ void osl_interlockedCountCheckForSingleCPU(void);
 #pragma init (osl_interlockedCountCheckForSingleCPU)
 #endif
 
-int osl_isSingleCPU = 0;
 void osl_interlockedCountCheckForSingleCPU(void)
 {
     /* In case sysconfig fails be on the safe side,
@@ -425,4 +429,5 @@ void osl_interlockedCountCheckForSingleCPU(void)
         osl_isSingleCPU = 1;
     }
 }
+#endif /* defined(_SC_NPROCESSORS_CONF) */
 #endif
