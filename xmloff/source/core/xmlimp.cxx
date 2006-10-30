@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:39:33 $
+ *  last change: $Author: rt $ $Date: 2006-10-30 09:05:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,10 +148,8 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
-#ifdef CONV_STAR_FONTS
 #ifndef _VCL_FONTCVT_HXX
 #include <vcl/fontcvt.hxx>
-#endif
 #endif
 
 #define LOGFILE_AUTHOR "unknown"
@@ -243,10 +241,8 @@ void SAL_CALL SvXMLImportEventListener::disposing( const lang::EventObject& )
 class SvXMLImport_Impl
 {
 public:
-#ifdef CONV_STAR_FONTS
     FontToSubsFontConverter hBatsFontConv;
     FontToSubsFontConverter hMathFontConv;
-#endif
 
     bool mbOwnGraphicResolver;
     bool mbOwnEmbeddedResolver;
@@ -259,9 +255,7 @@ public:
     // <--
 
     SvXMLImport_Impl() :
-#ifdef CONV_STAR_FONTS
         hBatsFontConv( 0 ), hMathFontConv( 0 ),
-#endif
         mbOwnGraphicResolver( false ),
         mbOwnEmbeddedResolver( false ),
         // --> OD 2004-08-11 #i28749#
@@ -270,12 +264,10 @@ public:
     {}
     ~SvXMLImport_Impl()
     {
-#ifdef CONV_STAR_FONTS
         if( hBatsFontConv )
             DestroyFontToSubsFontConverter( hBatsFontConv );
         if( hMathFontConv )
             DestroyFontToSubsFontConverter( hMathFontConv );
-#endif
     }
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper  maInterfaceToIdentifierMapper;
@@ -1633,7 +1625,6 @@ void SvXMLImport::_CreateDataStylesImport()
 }
 
 
-#ifdef CONV_STAR_FONTS
 sal_Unicode SvXMLImport::ConvStarBatsCharToStarSymbol( sal_Unicode c )
 {
     sal_Unicode cNew = c;
@@ -1669,7 +1660,6 @@ sal_Unicode SvXMLImport::ConvStarMathCharToStarSymbol( sal_Unicode c )
 
     return cNew;
 }
-#endif
 
 
 
