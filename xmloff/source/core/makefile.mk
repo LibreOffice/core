@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:20:15 $
+#   last change: $Author: rt $ $Date: 2006-10-30 09:05:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
-CDEFS+=-DCONV_STAR_FONTS
 
 # --- to build xmlkywd.obj in obj, too -----------------------------
 
@@ -83,27 +82,6 @@ SLOFILES =	\
         $(SLO)$/XMLBase64Export.obj \
         $(SLO)$/XMLBase64ImportContext.obj \
         $(SLO)$/XMLBasicExportFilter.obj
-
-SVXLIGHTOBJFILES =	\
-        $(OBJ)$/facreg.obj		\
-        $(OBJ)$/xmlcnitm.obj	\
-        $(OBJ)$/attrlist.obj	\
-        $(OBJ)$/i18nmap.obj		\
-        $(OBJ)$/nmspmap.obj		\
-        $(OBJ)$/unoatrcn.obj	\
-        $(OBJ)$/xmlehelp.obj	\
-        $(OBJ)$/xmlerror.obj	\
-        $(OBJ)$/xmlictxt.obj	\
-        $(OBJ)$/xmlimp.obj		\
-        $(OBJ)$/xmlkywd.obj		\
-        $(OBJ)$/xmltkmap.obj	\
-        $(OBJ)$/xmltoken.obj	\
-        $(OBJ)$/xmluconv.obj	\
-        $(OBJ)$/ProgressBarHelper.obj	\
-        $(OBJ)$/PropertySetMerger.obj	\
-        $(OBJ)$/DocumentSettingsContext.obj \
-        $(OBJ)$/XMLEmbeddedObjectImportContext.obj \
-        $(OBJ)$/XMLBase64ImportContext.obj
 
 # --- Targets -------------------------------------------------------
 
