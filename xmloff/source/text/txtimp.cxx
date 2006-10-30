@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:18:17 $
+ *  last change: $Author: rt $ $Date: 2006-10-30 09:07:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -891,7 +891,6 @@ void XMLTextImportHelper::DeleteParagraph()
     }
 }
 
-#ifdef CONV_STAR_FONTS
 OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
                                                 const OUString& rStyleName,
                                                 sal_uInt8& rFlags,
@@ -970,7 +969,6 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
 
     return bConverted ? sChars.makeStringAndClear() : rChars;
 }
-#endif
 
 OUString XMLTextImportHelper::SetStyleAndAttrs(
         SvXMLImport& rImport,
