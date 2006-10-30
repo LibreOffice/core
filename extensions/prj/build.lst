@@ -1,31 +1,31 @@
 ex	extensions	:	rdbmaker svx SANE:sane TWAIN:twain np_sdk offuh stoc uui officecfg NULL
 ex	extensions					usr1	-	all	ex_mkout NULL
-ex	extensions\inc					get		-	all	ex_inc NULL
-ex	extensions\inc\ucbhelper			get		-	all	ex_incucbh NULL
-ex	extensions\source\plugin\workben		get	-	all	ex_plwkb NULL
-ex	extensions\source\plugin\inc\plugin\win		get	-	all	ex_piwi NULL
-ex	extensions\source\plugin\inc\plugin\unx		get	-	all	ex_piux NULL
-ex	extensions\source\activex\msidl		nmake	-	w	ex_axmsidl NULL
-ex	extensions\source\activex\main		nmake	-	w	ex_axmain ex_axmsidl.w NULL
-ex	extensions\source\ole				nmake	-	w	ex_ole ex_xmlextr NULL
-ex	extensions\source\resource			nmake	-	all	ex_resrc NULL
-ex	extensions\source\installation			nmake	-	w	ex_inst NULL
-ex	extensions\source\installation\office\protchk		nmake	-	all	ex_pchk NULL
-ex	extensions\source\plugin\base			nmake	-	all	ex_plbase NULL
-ex	extensions\source\plugin\win			nmake	-	w	ex_plwin ex_plbase NULL
-ex	extensions\source\plugin\unx			nmake	-	u	ex_plunx NULL
-ex	extensions\source\plugin\util			nmake	-	all	ex_plutil ex_plbase ex_plunx.u ex_plwin.w NULL
-ex	extensions\source\scanner			nmake	-	all	ex_scan ex_resrc NULL
-ex	extensions\source\svg				nmake	-	all	ex_svg ex_scan NULL
-ex	extensions\source\packer			nmake	-	all	ex_pck NULL
-ex	extensions\source\bibliography			nmake	-	all	ex_bib NULL
-ex	extensions\source\xmlextract			nmake	-	all	ex_xmlextr ex_svg NULL
-ex	extensions\source\propctrlr			nmake	-	all	ex_propctrlr ex_bib NULL
-ex	extensions\source\dbpilots			nmake	-	all	ex_dbpilots NULL
-ex	extensions\source\abpilot			nmake	-	all	ex_abpilot NULL
-ex	extensions\source\preload			nmake	-	all	ex_preload	NULL
-ex	extensions\source\config\ldap		nmake 	-	all ex_ldap NULL
-ex	extensions\source\nsplugin\source	nmake	-	all	ex_nsplugin NULL
-ex	extensions\source\update\check      	nmake	-	all	ex_updchk NULL
-ex	extensions\source\update\ui      	nmake	-	all	ex_updchkui NULL
+ex	extensions\inc					nmake		-	all	ex_inc NULL
+ex	extensions\inc\ucbhelper			get		-	all	ex_incucbh ex_inc NULL
+ex	extensions\source\plugin\workben		get	-	all	ex_plwkb ex_inc NULL
+ex	extensions\source\plugin\inc\plugin\win		get	-	all	ex_piwi ex_inc NULL
+ex	extensions\source\plugin\inc\plugin\unx		get	-	all	ex_piux ex_inc NULL
+ex	extensions\source\activex\msidl		nmake	-	w	ex_axmsidl ex_inc NULL
+ex	extensions\source\activex\main		nmake	-	w	ex_axmain ex_axmsidl.w ex_inc NULL
+ex	extensions\source\ole				nmake	-	w	ex_ole ex_xmlextr ex_inc NULL
+ex	extensions\source\resource			nmake	-	all	ex_resrc ex_inc NULL
+ex	extensions\source\installation			nmake	-	w	ex_inst ex_inc NULL
+ex	extensions\source\installation\office\protchk		nmake	-	all	ex_pchk ex_inc NULL
+ex	extensions\source\plugin\base			nmake	-	all	ex_plbase ex_inc NULL
+ex	extensions\source\plugin\win			nmake	-	w	ex_plwin ex_plbase ex_inc NULL
+ex	extensions\source\plugin\unx			nmake	-	u	ex_plunx ex_inc NULL
+ex	extensions\source\plugin\util			nmake	-	all	ex_plutil ex_plbase ex_plunx.u ex_plwin.w ex_inc NULL
+ex	extensions\source\scanner			nmake	-	all	ex_scan ex_resrc ex_inc NULL
+ex	extensions\source\svg				nmake	-	all	ex_svg ex_scan ex_inc NULL
+ex	extensions\source\packer			nmake	-	all	ex_pck ex_inc NULL
+ex	extensions\source\bibliography			nmake	-	all	ex_bib ex_inc NULL
+ex	extensions\source\xmlextract			nmake	-	all	ex_xmlextr ex_svg ex_inc NULL
+ex	extensions\source\propctrlr			nmake	-	all	ex_propctrlr ex_bib ex_inc NULL
+ex	extensions\source\dbpilots			nmake	-	all	ex_dbpilots ex_inc NULL
+ex	extensions\source\abpilot			nmake	-	all	ex_abpilot ex_inc NULL
+ex	extensions\source\preload			nmake	-	all	ex_preload	ex_inc NULL
+ex	extensions\source\config\ldap		nmake 	-	all ex_ldap ex_inc NULL
+ex	extensions\source\nsplugin\source	nmake	-	all	ex_nsplugin ex_inc NULL
+ex	extensions\source\update\check      	nmake	-	all	ex_updchk ex_inc NULL
+ex	extensions\source\update\ui      	nmake	-	all	ex_updchkui ex_inc NULL
 ex  extensions\util						nmake   -   all ex_util ex_preload ex_abpilot ex_dbpilots ex_ldap ex_propctrlr ex_pchk.w ex_bib ex_plutil ex_updchk ex_updchkui NULL
