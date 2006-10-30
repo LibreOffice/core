@@ -1,9 +1,9 @@
 t2  testshl2   :  sal NULL
 t2  testshl2						usr1    -   all t2_mkout NULL
-t2  testshl2\source\win32              nmake   -   n   t2_win NULL
-t2  testshl2\source\cppunit            nmake   -   all t2_tss t2_win.n NULL
-t2  testshl2\source\result             nmake   -   all t2_tsr t2_tss t2_win.n NULL
-t2  testshl2\source                    nmake   -   all t2_tst t2_tsr t2_tss t2_win.n NULL
-t2  testshl2\util                      nmake   -   all t2_tstu t2_tst t2_tsr t2_tss NULL
-t2  testshl2\inc                       get     -   all t2_tsti NULL
+t2  testshl2\inc					   nmake   -    all t2_inc NULL
+t2  testshl2\source\win32              nmake   -   n   t2_win t2_inc NULL
+t2  testshl2\source\cppunit            nmake   -   all t2_tss t2_win.n t2_inc NULL
+t2  testshl2\source\result             nmake   -   all t2_tsr t2_tss t2_win.n t2_inc NULL
+t2  testshl2\source                    nmake   -   all t2_tst t2_tsr t2_tss t2_win.n t2_inc NULL
+t2  testshl2\util                      nmake   -   all t2_tstu t2_tst t2_tsr t2_tss t2_inc NULL
 
