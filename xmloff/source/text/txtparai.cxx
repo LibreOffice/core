@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:55:17 $
+ *  last change: $Author: rt $ $Date: 2006-10-30 09:07:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,9 +349,7 @@ class XMLImpSpanContext_Impl : public SvXMLImportContext
 
     sal_Bool&       rIgnoreLeadingSpace;
 
-#ifdef CONV_STAR_FONTS
     sal_uInt8               nStarFontsConvFlags;
-#endif
 
 public:
 
@@ -364,9 +362,7 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList,
             XMLHints_Impl& rHnts,
             sal_Bool& rIgnLeadSpace
-#ifdef CONV_STAR_FONTS
     ,sal_uInt8              nSFConvFlags
-#endif
                           );
 
     virtual ~XMLImpSpanContext_Impl();
@@ -377,9 +373,7 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList,
             sal_uInt16 nToken, XMLHints_Impl& rHnts,
             sal_Bool& rIgnLeadSpace
-#ifdef CONV_STAR_FONTS
     ,sal_uInt8              nStarFontsConvFlags = 0
-#endif
              );
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -1277,18 +1271,14 @@ XMLImpSpanContext_Impl::XMLImpSpanContext_Impl(
         const Reference< xml::sax::XAttributeList > & xAttrList,
         XMLHints_Impl& rHnts,
         sal_Bool& rIgnLeadSpace
-#ifdef CONV_STAR_FONTS
     ,sal_uInt8              nSFConvFlags
-#endif
                                               )
 :   SvXMLImportContext( rImport, nPrfx, rLName )
 ,   sTextFrame(RTL_CONSTASCII_USTRINGPARAM("TextFrame"))
 ,   rHints( rHnts )
 ,   pHint( 0  )
 ,   rIgnoreLeadingSpace( rIgnLeadSpace )
-#ifdef CONV_STAR_FONTS
 ,   nStarFontsConvFlags( nSFConvFlags & (CONV_FROM_STAR_BATS|CONV_FROM_STAR_MATH) )
-#endif
 {
     OUString aStyleName;
 
@@ -1328,9 +1318,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         sal_uInt16 nToken,
         XMLHints_Impl& rHints,
         sal_Bool& rIgnoreLeadingSpace
-#ifdef CONV_STAR_FONTS
     ,sal_uInt8              nStarFontsConvFlags
-#endif
      )
 {
     SvXMLImportContext *pContext = 0;
@@ -1342,9 +1330,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
                                                rLocalName, xAttrList,
                                                rHints,
                                                rIgnoreLeadingSpace
-#ifdef CONV_STAR_FONTS
                                                ,nStarFontsConvFlags
-#endif
                                              );
         break;
 
@@ -1568,15 +1554,12 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
 
     return CreateChildContext( GetImport(), nPrefix, rLocalName, xAttrList,
                                nToken, rHints, rIgnoreLeadingSpace
-#ifdef CONV_STAR_FONTS
                                ,nStarFontsConvFlags
-#endif
                              );
 }
 
 void XMLImpSpanContext_Impl::Characters( const OUString& rChars )
 {
-#ifdef CONV_STAR_FONTS
     OUString sStyleName;
     if( pHint )
         sStyleName = pHint->GetStyleName();
@@ -1585,9 +1568,6 @@ void XMLImpSpanContext_Impl::Characters( const OUString& rChars )
                                                        nStarFontsConvFlags,
                                                        sal_False, GetImport() );
     GetImport().GetTextImport()->InsertString( sChars, rIgnoreLeadingSpace );
-#else
-    GetImport().GetTextImport()->InsertString( rChars, rIgnoreLeadingSpace );
-#endif
 }
 
 // ---------------------------------------------------------------------
@@ -1609,9 +1589,7 @@ XMLParaContext::XMLParaContext(
     bIsListHeader( false ),
     bIsRestart (false),
     nStartValue(0)
-#ifdef CONV_STAR_FONTS
     ,nStarFontsConvFlags( 0 )
-#endif
 {
     const SvXMLTokenMap& rTokenMap =
         GetImport().GetTextImport()->GetTextPAttrTokenMap();
@@ -1944,23 +1922,17 @@ SvXMLImportContext *XMLParaContext::CreateChildContext(
     return XMLImpSpanContext_Impl::CreateChildContext(
                                 GetImport(), nPrefix, rLocalName, xAttrList,
                                    nToken, *pHints, bIgnoreLeadingSpace
-#ifdef CONV_STAR_FONTS
                                 , nStarFontsConvFlags
-#endif
                                                      );
 }
 
 void XMLParaContext::Characters( const OUString& rChars )
 {
-#ifdef CONV_STAR_FONTS
     OUString sChars =
         GetImport().GetTextImport()->ConvertStarFonts( rChars, sStyleName,
                                                        nStarFontsConvFlags,
                                                        sal_True, GetImport() );
     GetImport().GetTextImport()->InsertString( sChars, bIgnoreLeadingSpace );
-#else
-    GetImport().GetTextImport()->InsertString( rChars, bIgnoreLeadingSpace );
-#endif
 }
 
 
