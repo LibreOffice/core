@@ -1,7 +1,8 @@
 jv jvmfwk : cppu cppuhelper sal LIBXML2:libxml2 NULL
-jv jvmfwk\source nmake - all jf_framework NULL
-jv jvmfwk\plugins\sunmajor\pluginlib nmake - all jf_sunmajorlib NULL
-jv jvmfwk\plugins\sunmajor\javaenvsetup nmake - u jf_sunjavaldx jf_framework NULL
-jv jvmfwk\distributions\StarOffice nmake - all jf_staroffice jf_framework NULL
-jv jvmfwk\distributions\OpenOfficeorg nmake - all jf_openoffice jf_framework NULL
-jv jvmfwk\distributions\ure nmake - all jf_ure NULL
+jv jvmfwk\inc nmake - all jf_inc NULL
+jv jvmfwk\source nmake - all jf_framework jf_inc NULL
+jv jvmfwk\plugins\sunmajor\pluginlib nmake - all jf_sunmajorlib jf_inc NULL
+jv jvmfwk\plugins\sunmajor\javaenvsetup nmake - u jf_sunjavaldx jf_framework jf_inc NULL
+jv jvmfwk\distributions\StarOffice nmake - all jf_staroffice jf_framework jf_inc NULL
+jv jvmfwk\distributions\OpenOfficeorg nmake - all jf_openoffice jf_framework jf_inc NULL
+jv jvmfwk\distributions\ure nmake - all jf_ure jf_inc NULL
