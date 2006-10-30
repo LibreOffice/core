@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 16:00:04 $
+#   last change: $Author: rt $ $Date: 2006-10-30 09:08:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,6 @@ AUTOSEG := true
 ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
-
-CDEFS += -DCONV_STAR_FONTS
 
 SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1OBJS = \
