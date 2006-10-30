@@ -1,4 +1,5 @@
 hw	hwpfilter	:	offuh cppuhelper ZLIB:zlib NULL
 hw	hwpfilter							usr1	-	all	hw_mkout NULL
 hw	hwpfilter\prj						get		-	all	hw_prj NULL
-hw	hwpfilter\source					nmake	-	all	hw_source NULL
+hw	hwpfilter\inc						nmake	-	all	hw_inc NULL
+hw	hwpfilter\source					nmake	-	all	hw_source hw_inc NULL
