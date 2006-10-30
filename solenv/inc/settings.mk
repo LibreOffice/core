@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.203 $
+#   $Revision: 1.204 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 16:20:35 $
+#   last change: $Author: rt $ $Date: 2006-10-30 08:54:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1119,16 +1119,16 @@ CFLAGS+=$(CFLAGSNOOPT)
 .ENDIF
 
 .IF "$(ENABLE_EXCEPTIONS)"!=""
-CFLAGSCXX+=$(CFLAGSEXCEPTIONS)
-CDEFS+=-DEXCEPTIONS_ON
+GLOBAL_EXCEPTIONS_FLAGS+=$(CFLAGSEXCEPTIONS)
+GLOBAL_EXCEPTIONS_FLAGS+=-DEXCEPTIONS_ON
 .ELSE
-.IF "$(OLD_EXCEPTIONS)"==""
-CDEFS+=-DEXCEPTIONS_OFF
-CFLAGSCXX+=$(CFLAGS_NO_EXCEPTIONS)
-.ELSE
-CDEFS+=-DEXCEPTIONS_ON
+GLOBAL_EXCEPTIONS_FLAGS+=-DEXCEPTIONS_OFF
+GLOBAL_EXCEPTIONS_FLAGS+=$(CFLAGS_NO_EXCEPTIONS)
 .ENDIF
-.ENDIF
+# used if an object appears in the EXCEPTIONSFILES list
+# see also rules.mk
+LOCAL_EXCEPTIONS_FLAGS+=$(CFLAGSEXCEPTIONS)
+LOCAL_EXCEPTIONS_FLAGS+=-DEXCEPTIONS_ON
 
 # compose flags and defines for GUI
 .IF "$(TARGETTYPE)"=="GUI"
