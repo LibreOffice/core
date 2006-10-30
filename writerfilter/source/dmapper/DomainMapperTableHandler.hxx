@@ -50,7 +50,7 @@ public:
     virtual void startTable(unsigned int nRows, unsigned int nDepth,
                             PropertyMapPtr pProps);
     virtual void endTable();
-    virtual void startRow(unsigned int nRows, PropertyMapPtr pProps);
+    virtual void startRow(unsigned int nCells, PropertyMapPtr pProps);
     virtual void endRow();
     virtual void startCell(const Handle_t & start, PropertyMapPtr pProps);
     virtual void endCell(const Handle_t & end);
