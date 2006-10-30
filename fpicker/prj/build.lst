@@ -1,8 +1,9 @@
 fp	fpicker	:	rdbmaker svtools NULL
-fp	fpicker\source\generic				nmake	-	all	fp_generic NULL
-fp	fpicker\source\office				nmake	-	all	fp_office NULL
-fp	fpicker\source\unx\gnome			nmake	-	u	fp_gnome_filepicker NULL
-fp	fpicker\source\win32\filepicker		nmake	-	w	fp_win32_filepicker NULL
-fp	fpicker\source\win32\folderpicker	nmake	-	w	fp_win32_folderpicker NULL
-fp  fpicker\source\win32\misc			nmake	-	w	fp_win32_misc fp_win32_filepicker.w fp_win32_folderpicker.w NULL
+fp	fpicker\inc							nmake	-	all	fp_inc NULL
+fp	fpicker\source\generic				nmake	-	all	fp_generic fp_inc NULL
+fp	fpicker\source\office				nmake	-	all	fp_office fp_inc NULL
+fp	fpicker\source\unx\gnome			nmake	-	u	fp_gnome_filepicker fp_inc NULL
+fp	fpicker\source\win32\filepicker		nmake	-	w	fp_win32_filepicker fp_inc NULL
+fp	fpicker\source\win32\folderpicker	nmake	-	w	fp_win32_folderpicker fp_inc NULL
+fp  fpicker\source\win32\misc			nmake	-	w	fp_win32_misc fp_win32_filepicker.w fp_win32_folderpicker.w fp_inc NULL
 fp	fpicker\util				nmake	-	all	fp_util fp_win32_filepicker.w fp_win32_misc.w fp_win32_folderpicker.w NULL
