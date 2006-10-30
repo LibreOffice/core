@@ -22,7 +22,7 @@ SHELL *:= $(COMSPEC)
 
    SHELLFLAGS       *:= $(SWITCHAR)c
    GROUPFLAGS       *:= $(SHELLFLAGS)
-   SHELLMETAS       *:= "<>|
+   SHELLMETAS       *:= "<>|%&
 # Fix syntax highlighting: "
    GROUPSUFFIX      *:= .bat
    DIVFILE          *=  $(TMPFILE:s,/,\,)
