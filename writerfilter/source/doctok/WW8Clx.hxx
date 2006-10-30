@@ -33,7 +33,7 @@ public:
     WW8Clx(WW8Stream & rStream,
            sal_uInt32 nOffset, sal_uInt32 nCount);
 
-    virtual void dump(WW8OutputWithDepth & o) const;
+    virtual void dump(OutputWithDepth<string> & o) const;
 
     /**
        Return the number of pieces.

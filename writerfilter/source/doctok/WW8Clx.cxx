@@ -48,7 +48,7 @@ sal_Bool WW8Clx::isComplexFc(sal_uInt32 nIndex) const
     return bResult;
 }
 
-void WW8Clx::dump(WW8OutputWithDepth & o) const
+void WW8Clx::dump(OutputWithDepth<string> & o) const
 {
     WW8StructBase::dump(o);
 }
