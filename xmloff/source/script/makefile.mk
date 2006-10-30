@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 14:20:47 $
+#   last change: $Author: rt $ $Date: 2006-10-30 09:06:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@ PRJ=..$/..
 
 PRJNAME=xmloff
 TARGET=script
-AUTOSEG=true
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -58,12 +57,6 @@ SLOFILES =	\
         $(SLO)$/XMLStarBasicExportHandler.obj \
         $(SLO)$/xmlscripti.obj \
         $(SLO)$/xmlbasici.obj
-
-SVXLIGHTOBJFILES =	\
-        $(OBJ)$/xmlscripti.obj \
-        $(OBJ)$/XMLEventImportHelper.obj \
-        $(OBJ)$/XMLEventsImportContext.obj
-
 
 # --- Tagets -------------------------------------------------------
 
