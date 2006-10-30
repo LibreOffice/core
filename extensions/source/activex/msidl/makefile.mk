@@ -1,12 +1,12 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/activex/msidl/makefile.mk,v 1.5 2006-10-24 15:36:06 hr Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/activex/msidl/makefile.mk,v 1.6 2006-10-30 08:08:42 rt Exp $
 #
 # =========================================================================
 #
-#     $Date: 2006-10-24 15:36:06 $
-#     $Author: hr $
-#     $Revision: 1.5 $
+#     $Date: 2006-10-30 08:08:42 $
+#     $Author: rt $
+#     $Revision: 1.6 $
 #
 # =========================================================================
 #
@@ -29,7 +29,7 @@ TARGET=msidl
 
 # --- Targets ----------------------------------
 
-ALL : activex_component
+ALL : $(MISC)$/activex_component
 
 MTL=midl.exe
 MTL_PROJ=
@@ -38,8 +38,8 @@ SOURCE=so_activex.idl
 
 MTL_SWITCHES=-tlb $(MISC)$/so_activex.tlb -h $(MISC)$/so_activex.h -iid $(MISC)$/so_activex_i.c -dlldata $(MISC)$/so_activex_dll.c -proxy $(MISC)$/so_activex_p.c -Oicf
 
-activex_component : $(SOURCE) 
-    $(WRAPCMD) $(MTL) $(MTL_SWITCHES) $(INCLUDE) $(SOURCE) 
+$(MISC)$/activex_component : $(SOURCE) 
+    $(WRAPCMD) $(MTL) $(MTL_SWITCHES) $(INCLUDE) $(SOURCE) && $(TOUCH) $@
 
 .ENDIF
 
