@@ -82,7 +82,7 @@ public:
     virtual bool isPap() const;
     virtual sal_uInt32 get_istd() const;
 
-    virtual void insert(WW8PropertySet::Pointer_t /*pSet*/) {}
+    virtual void insert(const WW8PropertySet::Pointer_t /*pSet*/) {}
 
     virtual void resolve(Properties & rHandler);
 
