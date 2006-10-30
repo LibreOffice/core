@@ -7,8 +7,8 @@
 #include <WW8FKP.hxx>
 #endif
 
-#ifndef INCLUDED_WW8_OUTPUT_WITH_DEPTH_HXX
-#include <WW8OutputWithDepth.hxx>
+#ifndef INCLUDED_OUTPUT_WITH_DEPTH_HXX
+#include <doctok/OutputWithDepth.hxx>
 #endif
 
 namespace doctok
@@ -62,7 +62,7 @@ public:
     virtual doctok::Reference<Properties>::Pointer_t
     getProperties(const Fc & rFc) const;
 
-    virtual void dump(WW8OutputWithDepth & o) const;
+    virtual void dump(OutputWithDepth<string> & o) const;
 };
 
 /**
@@ -81,7 +81,7 @@ public:
     virtual doctok::Reference<Properties>::Pointer_t
     getProperties(const Fc & rFc) const;
 
-    virtual void dump(WW8OutputWithDepth & o) const;
+    virtual void dump(OutputWithDepth<string> & o) const;
 };
 
 /**

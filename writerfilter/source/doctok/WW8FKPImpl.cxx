@@ -67,7 +67,7 @@ doctok::Reference<Properties>::Pointer_t WW8CHPFKPImpl::getProperties(const Fc &
     return pResult;
 }
 
-void WW8CHPFKPImpl::dump(WW8OutputWithDepth & o) const
+void WW8CHPFKPImpl::dump(OutputWithDepth<string> & o) const
 {
     o.addItem("<fkp type='CHP'>");
 
@@ -131,7 +131,7 @@ WW8PAPFKPImpl::getProperties(const Fc & rFc) const
     return pResult;
 }
 
-void WW8PAPFKPImpl::dump(WW8OutputWithDepth & o) const
+void WW8PAPFKPImpl::dump(OutputWithDepth<string> & o) const
 {
     o.addItem("<fkp type='PAP'>");
 
