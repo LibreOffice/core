@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 14:44:58 $
+#   last change: $Author: rt $ $Date: 2006-10-30 09:06:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,17 +37,13 @@ PRJ=..$/..
 
 PRJNAME=xmloff
 TARGET=style
-AUTOSEG=true
 
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
-CDEFS += -DCONV_STAR_FONTS
 
 # --- Files --------------------------------------------------------
 
