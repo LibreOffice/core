@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_dep.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:39:29 $
+#   last change: $Author: rt $ $Date: 2006-10-30 08:54:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,12 @@ ALLDEP .PHONY:
     @+-$(RM) $(MISC)$/$(COMP7TYPELIST).mk >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(COMP8TYPELIST).mk >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(COMP9TYPELIST).mk >& $(NULLDEV)
+.IF "$(DEPFILE_SLO)"!=""	
+    @+-$(RM) $(DEPFILE_SLO) >& $(NULLDEV)
+.ENDIF			# "$(DEPFILE_SLO)"!=""	
+.IF "$(DEPFILE_OBJ)"!=""	
+    @+-$(RM) $(DEPFILE_OBJ) >& $(NULLDEV)
+.ENDIF			# "$(DEPFILE_OBJ)"!=""	
 .IF "$(DEPFILES)" != ""
 #to keep win9x happy
 .IF "$(GROUPSHELL:b:l)"=="4dos"
