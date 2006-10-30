@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.75 $
+#   $Revision: 1.76 $
 #
-#   last change: $Author: rt $ $Date: 2006-10-30 08:53:49 $
+#   last change: $Author: rt $ $Date: 2006-10-30 16:44:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -468,7 +468,7 @@ $(MISC)$/%.dpz :
 .IF "$(USE_SHELL)"!="4nt"
     +dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) make_zip_deps=true $(ZIPDEPFILES)
 .ELSE			# "$(USE_SHELL)"!="4nt"
-    +$(TYPE) $(mktmp $(ZIPDEPFILES:s/\/\\/)) | xargs -n 20 dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) make_zip_deps=true
+    +$(TYPE) $(mktmp $(ZIPDEPFILES:s/\/\\/)) | xargs dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) make_zip_deps=true
 .ENDIF			# "$(USE_SHELL)"!="4nt"
     $(TYPE) $(ZIPDEPFILES) $(mktmp $(NULL)) | grep -v "CVS" >> $@
     echo zipdep_langs=$(alllangiso) >> $@
