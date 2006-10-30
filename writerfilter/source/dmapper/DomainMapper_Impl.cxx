@@ -567,7 +567,7 @@ ListTablePtr DomainMapper_Impl::GetListTable()
 void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 {
     uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
-    if(xTextAppendAndConvert.is())
+    if(xTextAppendAndConvert.is() && ! m_TableManager.isIgnore())
     {
         try
         {
@@ -591,7 +591,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 void DomainMapper_Impl::appendTextPortion( const ::rtl::OUString& rString, PropertyMapPtr pPropertyMap )
 {
     uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
-    if(xTextAppendAndConvert.is())
+    if(xTextAppendAndConvert.is() && ! m_TableManager.isIgnore())
     {
         try
         {
