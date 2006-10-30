@@ -1,5 +1,5 @@
 lg	linguistic	:	xmloff sfx2 NULL
 lg	linguistic								usr1	-	all	lg_mkout NULL
 lg	linguistic\prj							get		-	all	lg_prj NULL
-lg	linguistic\inc							get		-	all	lg_inc NULL
-lg	linguistic\source						nmake	-	all	lg_src NULL
+lg	linguistic\inc							nmake	-	all	lg_inc NULL
+lg	linguistic\source						nmake	-	all	lg_src lg_inc NULL
