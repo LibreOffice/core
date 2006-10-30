@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 20:23:09 $
+#   last change: $Author: rt $ $Date: 2006-10-30 09:21:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,13 +38,6 @@ PRJ=..$/..$/..
 PRJNAME=sc
 TARGET=app
 
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=ui_pch
-PDBTARGET=ui_pch
-PROJECTPCHSOURCE=..$/pch$/ui_pch
-
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  scpre.mk
@@ -53,9 +46,6 @@ AUTOSEG=true
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-#OBJFILES = \
-#	$(OBJ)$/sclib.obj  \
 
 SLOFILES =  \
     $(SLO)$/scmod.obj  \
@@ -85,20 +75,6 @@ EXCEPTIONSFILES= \
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-#$(SLO)$/sclib.obj :	$(INCCOM)$/scdll0.hxx
-#$(OBJ)$/sclib.obj :	$(INCCOM)$/scdll0.hxx
-
-$(INCCOM)$/scdll0.hxx: makefile.mk
-.IF "$(GUI)"=="UNX"
-    echo \#define DLL_NAME \"libsc$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
-.ELSE			# "$(GUI)"=="UNX"
-.IF "$(USE_SHELL)"!="4nt"
-    echo \#define DLL_NAME \"sc$(UPD)$(DLLPOSTFIX).DLL\" >$@
-.ELSE			#  "$(USE_SHELL)"!="4nt"
-    echo #define DLL_NAME "sc$(UPD)$(DLLPOSTFIX).DLL" >$@
-.ENDIF			#  "$(USE_SHELL)"!="4nt"
-.ENDIF			# "$(GUI)"=="UNX"
 
 $(SRS)$/app.srs: $(SOLARINCDIR)$/svx$/globlmn.hrc
 
