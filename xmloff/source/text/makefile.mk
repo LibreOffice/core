@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 15:27:34 $
+#   last change: $Author: rt $ $Date: 2006-10-30 09:06:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,17 +37,13 @@ PRJ=..$/..
 
 PRJNAME=xmloff
 TARGET=text
-AUTOSEG=true
 
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
-CDEFS += -DCONV_STAR_FONTS
 
 # --- Files --------------------------------------------------------
 
@@ -132,45 +128,6 @@ SLOFILES =	\
         $(SLO)$/XMLStringBufferImportContext.obj \
         $(SLO)$/XMLTrackedChangesImportContext.obj \
         $(SLO)$/XMLCalculationSettingsContext.obj
-
-SVXLIGHTOBJFILES =	\
-        $(OBJ)$/txtdropi.obj \
-        $(OBJ)$/txtfldi.obj \
-        $(OBJ)$/txtimp.obj \
-        $(OBJ)$/txtimppr.obj \
-        $(OBJ)$/txtparai.obj \
-        $(OBJ)$/txtprhdl.obj \
-        $(OBJ)$/txtprmap.obj \
-        $(OBJ)$/txtstyli.obj \
-        $(OBJ)$/txtvfldi.obj \
-        $(OBJ)$/XMLAutoMarkFileContext.obj \
-        $(OBJ)$/XMLAutoTextEventImport.obj \
-        $(OBJ)$/XMLAutoTextContainerEventImport.obj \
-        $(OBJ)$/XMLChangedRegionImportContext.obj \
-        $(OBJ)$/XMLChangeElementImportContext.obj \
-        $(OBJ)$/XMLChangeInfoContext.obj \
-        $(OBJ)$/XMLLineNumberingExport.obj \
-        $(OBJ)$/XMLLineNumberingImportContext.obj \
-        $(OBJ)$/XMLLineNumberingSeparatorImportContext.obj \
-        $(OBJ)$/XMLPropertyBackpatcher.obj \
-        $(SLO)$/XMLTextCharStyleNamesElementExport.obj \
-        $(OBJ)$/XMLTextFrameContext.obj \
-        $(OBJ)$/XMLTextFrameHyperlinkContext.obj \
-        $(OBJ)$/XMLTextHeaderFooterContext.obj \
-        $(OBJ)$/XMLTextListAutoStylePool.obj \
-        $(OBJ)$/XMLTextListBlockContext.obj \
-        $(OBJ)$/XMLTextListItemContext.obj \
-        $(OBJ)$/XMLTextMarkImportContext.obj \
-        $(OBJ)$/XMLTextMasterPageContext.obj \
-        $(OBJ)$/XMLTextMasterPageExport.obj \
-        $(OBJ)$/XMLTextMasterStylesContext.obj \
-        $(OBJ)$/XMLTextNumRuleInfo.obj \
-        $(OBJ)$/XMLTextPropertySetContext.obj \
-        $(OBJ)$/XMLTextShapeImportHelper.obj \
-        $(OBJ)$/XMLTextShapeStyleContext.obj \
-        $(OBJ)$/XMLTextTableContext.obj \
-        $(OBJ)$/XMLChangeImportContext.obj \
-        $(OBJ)$/XMLStringBufferImportContext.obj
 
 # --- Tagets -------------------------------------------------------
 
