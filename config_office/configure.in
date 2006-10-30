@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2006-10-24 15:34:36 $
+dnl * Date: $Date: 2006-10-30 09:18:36 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.184 $ )
+AC_REVISION( $Revision: 1.185 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -39,6 +39,9 @@ AC_ARG_WITH(openldap,
 ],,)
 AC_ARG_ENABLE(lockdown,
 [  --enable-lockdown       Enables the gconf integration work in OOo
+],,)
+AC_ARG_ENABLE(pch,
+[  --enable-pch            Enables the use of precompiledr C/C++ header files
 ],,)
 AC_ARG_ENABLE(libsn,
 [  --enable-libsn          Enables the use of libstartup-notification
@@ -828,6 +831,24 @@ else
    fi
 fi
 AC_SUBST(ENABLE_CRASHDUMP)
+
+dnl ===================================================================
+dnl Set the ENABLE_PCH variable. (Activate --enable-pch)
+dnl ===================================================================
+AC_MSG_CHECKING([whether to enable pch feature])
+if test -n "$enable_pch" && test "$enable_pch" != "no"; then
+   if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
+	   ENABLE_PCH="TRUE"
+	   AC_MSG_RESULT([yes])
+   else
+	   ENABLE_PCH=""
+	   AC_MSG_WARN([Precompiled header not yet supported for your platform/compiler])
+   fi
+else
+   ENABLE_PCH=""
+   AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_PCH)
 
 if test "$_os" = "WINNT"; then
    BUILD_TYPE="$BUILD_TYPE TWAIN"
