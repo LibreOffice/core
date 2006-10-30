@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabwinfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-08 08:34:49 $
+ *  last change: $Author: rt $ $Date: 2006-10-30 08:11:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_framework.hxx"
 
 #ifndef __FRAMEWORK_TABWIN_TABWINFACTORY_HXX_
 #include <tabwin/tabwinfactory.hxx>
