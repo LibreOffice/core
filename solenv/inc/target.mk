@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.184 $
+#   $Revision: 1.185 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-11 09:54:51 $
+#   last change: $Author: rt $ $Date: 2006-10-30 08:54:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -115,23 +115,32 @@ DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP9OBJS:s/.obj/.dpcc/))
 DEPFILESx+=$(uniq $(DEPFILES_TEST))
 .ENDIF			# "$(TESTOBJECTS)"!=""
 
-#DEPFILESx+=$(CXXFILES) $(CFILES) $(HXXFILES) $(RCFILES)
 .IF "$(L10N_framework)"==""
-DEPFILESx+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(DEPOBJFILES:s/.obj/.dpcc/)))
-DEPFILESx+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(OBJFILES:s/.obj/.dpcc/))
-DEPFILESx+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SLOFILES:s/.obj/.dpcc/))
+DEPFILESx+:=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(DEPOBJFILES:s/.obj/.dpcc/)))
+# point to not existing directory as there is no creation intended anyway and
+# stat call looks faster
+DEPCOLLECT_SLO+:=$(subst,$(SLO)$/,not_existing$/s_ $(SLOFILES:s/.obj/.dpcc/))
+DEPCOLLECT_OBJ+:=$(subst,$(OBJ)$/,not_existing$/o_ $(OBJFILES:s/.obj/.dpcc/))
 .ENDIF			# "$(L10N_framework)"==""
-DEPFILESx+=$(subst,$(PAR),$(MISC) $(ALLPARFILES:s/.par/.dpsc/))
+DEPFILESx+:=$(subst,$(PAR),$(MISC) $(ALLPARFILES:s/.par/.dpsc/))
 .IF "$(L10N_framework)"==""
 .IF "$(RCFILES)"!=""
 .IF "$(RESNAME)"!=""
-DEPFILESx+=$(MISC)$/$(RESNAME).dpcc
+DEPFILESx+:=$(MISC)$/$(RESNAME).dpcc
 .ELSE			# "$(RESNAME)"!=""
-DEPFILESx+=$(MISC)$/$(TARGET).dprc
+DEPFILESx+:=$(MISC)$/$(TARGET).dprc
 .ENDIF			# "$(RESNAME)"!=""
 .ENDIF			# "$(RCFILES)"!=""
 .ENDIF          # "$(L10N_framework)"==""
-DEPFILES=$(uniq $(DEPFILESx))
+DEPFILES:=$(uniq $(DEPFILESx))
+DEPCOLLECT_SLO!:=$(uniq $(DEPCOLLECT_SLO))
+.IF "$(DEPCOLLECT_SLO)"!=""
+DEPFILE_SLO+:=$(MISC)$/all_$(TARGET).dpslo
+.ENDIF			# "$(DEPCOLLECT_SLO)"!=""
+DEPCOLLECT_OBJ!:=$(uniq $(DEPCOLLECT_OBJ))
+.IF "$(DEPCOLLECT_OBJ)"!=""
+DEPFILE_OBJ+:=$(MISC)$/all_$(TARGET).dpobj
+.ENDIF			# "$(DEPCOLLECT_OBJ)"!=""
 .ENDIF			# "$(nodep)"==""
 
 .IF "$(TESTOBJECTS)"!=""
@@ -266,10 +275,6 @@ CLASSPATH:=.$(PATH_SEPERATOR)$(CLASSDIR)$(PATH_SEPERATOR)$(XCLASSPATH)$(PATH_SEP
 
 .IF "$(NOOPTFILES)" != ""
 NOOPTTARGET=do_it_noopt
-.ENDIF
-
-.IF "$(EXCEPTIONSFILES)" != ""
-EXCEPTIONSTARGET=do_it_exceptions
 .ENDIF
 
 .IF "$(EXCEPTIONSNOOPTFILES)" != ""
@@ -1363,7 +1368,7 @@ ALLTAR: \
         $(UNOIDLDEPTARGETS) \
         $(URDTARGET) \
         $(URDDOCTARGET) \
-        $(DEPFILES) \
+        $(DEPFILES) $(DEPFILE_SLO) $(DEPFILE_OBJ) \
         $(DPRTARGET) \
         $(DPZTARGET) \
         $(ZIPALL) \
@@ -1466,6 +1471,8 @@ ALLTAR: \
         $(CONVERTUNIXTEXT) \
         $(LOCALIZE_ME_DEST)\
         last_target
+
+ALLTAR : "$(SOLARINCDIR)$/$(UPD)minor.mk"
 
 .IF "$(EXCEPTIONSNOOPT_FLAG)"==""
 TARGETDEPS+=$(EXCEPTIONSNOOPTTARGET)
@@ -1865,6 +1872,18 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 .IF "$(DEPFILES)" != ""
 .INCLUDE : $(DEPFILES)
 .ENDIF			# "$(DEPFILES)" != ""
+.IF "$(nodep)"==""
+.IF "$(DEPCOLLECT_SLO)" != ""
+.PHONY : $(DEPCOLLECT_SLO)
+.INCLUDE .IGNORE : $(DEPCOLLECT_SLO)
+.INCLUDE : $(DEPFILE_SLO)
+.ENDIF			# "$(DEPCOLLECT_SLO)" != ""
+.IF "$(DEPCOLLECT_OBJ)" != ""
+.PHONY : $(DEPCOLLECT_OBJ)
+.INCLUDE .IGNORE : $(DEPCOLLECT_OBJ)
+.INCLUDE : $(DEPFILE_OBJ)
+.ENDIF			# "$(DEPCOLLECT_OBJ)" != ""
+.ENDIF			# "$(nodep)"==""
 .ENDIF			# "$(CXXFILES)$(CFILES)$(RCFILES)$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
 .ELSE		# MAKEFILERC
 .ENDIF		# MAKEFILERC
