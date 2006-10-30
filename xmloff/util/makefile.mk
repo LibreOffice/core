@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 14:59:40 $
+#   last change: $Author: rt $ $Date: 2006-10-30 09:08:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ USE_DEFFILE=TRUE
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 
 # --- Allgemein ----------------------------------------------------
-NO_BSYMBOLIC=TRUE
 ENABLE_EXCEPTIONS=TRUE
 
 LIB1TARGET= $(SLB)$/xo.lib
@@ -113,23 +112,7 @@ SHL5STDLIBS= \
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
     SHL5STDLIBS += -lxo$(OFFICEUPD)$(DLLPOSTFIX)
 .ELSE
-    SHL5STDLIBS += $(LIBPRE) ixo.lib
-.ENDIF
-
-# --- Static-Lib ---------------------------------------------------------
-
-.IF "$(SVXLIGHT)" != "" 
-LIB2TARGET= $(LB)$/xol.lib
-LIB2ARCHIV= $(LB)$/libxol.a
-LIB2FILES=  \
-            $(LB)$/sxl_core.lib\
-            $(LB)$/sxl_meta.lib\
-            $(LB)$/sxl_draw.lib\
-            $(LB)$/sxl_forms.lib\
-            $(LB)$/sxl_script.lib\
-            $(LB)$/sxl_style.lib\
-            $(LB)$/sxl_text.lib \
-            $(LB)$/sxl_transform.lib
+    SHL5STDLIBS += ixo.lib
 .ENDIF
 
 # --- Def-File ---------------------------------------------------------
