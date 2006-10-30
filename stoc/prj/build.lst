@@ -1,20 +1,21 @@
 tc	stoc	:	rdbmaker cppuhelper cppu jvmaccess sal salhelper jvmfwk NULL
 tc	stoc									usr1	-	all	tc_mkout NULL
-tc	stoc\source\defaultregistry				nmake	-	all	tc_defr NULL
-tc	stoc\source\implementationregistration	nmake	-	all	tc_ireg tc_defr NULL
-tc	stoc\source\loader						nmake	-	all	tc_loa tc_ireg NULL
-tc	stoc\source\servicemanager				nmake	-	all	tc_smgr tc_loa NULL
-tc	stoc\source\security					nmake	-	all	tc_sec tc_loa NULL
-tc	stoc\source\simpleregistry				nmake	-	all	tc_sreg tc_smgr NULL
-tc	stoc\source\registry_tdprovider			nmake	-	all	tc_regtd tc_sreg NULL
-tc	stoc\source\tdmanager					nmake	-	all	tc_tdmng tc_regtd NULL
-tc	stoc\source\corereflection				nmake	-	all	tc_corerefl tc_tdmng NULL
-tc	stoc\source\inspect						nmake	-	all	tc_inspect tc_corerefl NULL
-tc	stoc\source\invocation					nmake	-	all	tc_invocation tc_inspect NULL
-tc	stoc\source\invocation_adapterfactory	nmake	-	all	tc_iadapter tc_invocation NULL
-tc	stoc\source\namingservice				nmake	-	all	tc_nservice tc_iadapter NULL
-tc	stoc\source\proxy_factory				nmake	-	all	tc_proxyfact NULL
-tc	stoc\source\typeconv					nmake	-	all	tc_tcv tc_nservice NULL
-tc	stoc\source\javavm						nmake	-	all	tc_jvm NULL
-tc	stoc\source\javaloader					nmake	-	all	tc_jvload NULL
-tc  stoc\source\uriproc                     nmake   -   all tc_uriproc NULL
+tc	stoc\inc								nmake	-	all	tc_inc NULL
+tc	stoc\source\defaultregistry				nmake	-	all	tc_defr tc_inc NULL
+tc	stoc\source\implementationregistration	nmake	-	all	tc_ireg tc_defr tc_inc NULL
+tc	stoc\source\loader						nmake	-	all	tc_loa tc_ireg tc_inc NULL
+tc	stoc\source\servicemanager				nmake	-	all	tc_smgr tc_loa tc_inc NULL
+tc	stoc\source\security					nmake	-	all	tc_sec tc_loa tc_inc NULL
+tc	stoc\source\simpleregistry				nmake	-	all	tc_sreg tc_smgr tc_inc NULL
+tc	stoc\source\registry_tdprovider			nmake	-	all	tc_regtd tc_sreg tc_inc NULL
+tc	stoc\source\tdmanager					nmake	-	all	tc_tdmng tc_regtd tc_inc NULL
+tc	stoc\source\corereflection				nmake	-	all	tc_corerefl tc_tdmng tc_inc NULL
+tc	stoc\source\inspect						nmake	-	all	tc_inspect tc_corerefl tc_inc NULL
+tc	stoc\source\invocation					nmake	-	all	tc_invocation tc_inspect tc_inc NULL
+tc	stoc\source\invocation_adapterfactory	nmake	-	all	tc_iadapter tc_invocation tc_inc NULL
+tc	stoc\source\namingservice				nmake	-	all	tc_nservice tc_iadapter tc_inc NULL
+tc	stoc\source\proxy_factory				nmake	-	all	tc_proxyfact tc_inc NULL
+tc	stoc\source\typeconv					nmake	-	all	tc_tcv tc_nservice tc_inc NULL
+tc	stoc\source\javavm						nmake	-	all	tc_jvm tc_inc NULL
+tc	stoc\source\javaloader					nmake	-	all	tc_jvload tc_inc NULL
+tc  stoc\source\uriproc                     nmake   -   all tc_uriproc tc_inc NULL
