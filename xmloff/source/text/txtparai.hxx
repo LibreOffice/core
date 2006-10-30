@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparai.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:50:52 $
+ *  last change: $Author: rt $ $Date: 2006-10-30 09:07:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,11 +50,9 @@ namespace text {  class XTextRange; }
 namespace xml { namespace sax { class XAttributeList; } }
 } } }
 
-#ifdef CONV_STAR_FONTS
 #define CONV_FROM_STAR_BATS 1
 #define CONV_FROM_STAR_MATH 2
 #define CONV_STAR_FONT_FLAGS_VALID 4
-#endif
 
 class XMLParaContext : public SvXMLImportContext
 {
@@ -69,9 +67,7 @@ class XMLParaContext : public SvXMLImportContext
     sal_Bool                bIsListHeader;
     sal_Bool                bIsRestart;
     sal_Int16               nStartValue;
-#ifdef CONV_STAR_FONTS
     sal_uInt8               nStarFontsConvFlags;
-#endif
 
 public:
 
