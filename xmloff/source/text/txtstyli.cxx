@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 12:17:23 $
+ *  last change: $Author: rt $ $Date: 2006-10-30 09:08:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -439,11 +439,9 @@ void XMLTextStyleContext::FillPropertySet(
             { CTF_COMBINED_CHARACTERS_FIELD, -1 },
             { CTF_KEEP_TOGETHER, -1 },
             { CTF_BORDER_MODEL, -1 },
-#ifdef CONV_STAR_FONTS
             { CTF_FONTFAMILYNAME, -1 },
             { CTF_FONTFAMILYNAME_CJK, -1 },
             { CTF_FONTFAMILYNAME_CTL, -1 },
-#endif
             { -1, -1 }
         };
         xImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
@@ -490,7 +488,6 @@ void XMLTextStyleContext::FillPropertySet(
         }
 
 
-#ifdef CONV_STAR_FONTS
         // check for StarBats and StarMath fonts
 
         if (!xInfo.is())
@@ -543,6 +540,5 @@ void XMLTextStyleContext::FillPropertySet(
                 // else: no style name found -> illegal value -> ignore
             }
         }
-#endif
     }
 }
