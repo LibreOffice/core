@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:59:58 $
+ *  last change: $Author: rt $ $Date: 2006-10-30 09:06:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,10 +210,8 @@ static __FAR_DATA SvXMLTokenMapEntry aLevelAttrTokenMap[] =
 class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
 {
     friend class SvxXMLListLevelStyleAttrContext_Impl;
-#ifdef CONV_STAR_FONTS
     const OUString      sStarBats;
     const OUString      sStarMath;
-#endif
 
     OUString            sPrefix;
     OUString            sSuffix;
@@ -294,10 +292,8 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
         const Reference< xml::sax::XAttributeList > & xAttrList )
 
 :   SvXMLImportContext( rImport, nPrfx, rLName )
-#ifdef CONV_STAR_FONTS
 ,   sStarBats( RTL_CONSTASCII_USTRINGPARAM( "StarBats" ) )
 ,   sStarMath( RTL_CONSTASCII_USTRINGPARAM( "StarMath" ) )
-#endif
 ,   sNumFormat( OUString::createFromAscii( "1" ) )
 ,   nLevel( -1L )
 ,   nSpaceBefore( 0L )
@@ -527,7 +523,6 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
                 aFDesc.CharSet = eBulletFontEncoding;
                 aFDesc.Weight = WEIGHT_DONTKNOW;
                 //aFDesc.Transparant = sal_True;
-#ifdef CONV_STAR_FONTS
                 sal_Bool bStarSymbol = sal_False;
                 if( aFDesc.Name.equalsIgnoreAsciiCase( sStarBats ) )
                 {
@@ -542,7 +537,6 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
                 if( bStarSymbol )
                     aFDesc.Name =
                         OUString( RTL_CONSTASCII_USTRINGPARAM("StarSymbol" ) );
-#endif
             }
 
             if( cBullet )
