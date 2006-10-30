@@ -1,27 +1,28 @@
 sh    shell	: offuh rdbmaker tools sal vcl EXPAT:expat transex3 NULL
-sh    shell\source\win32                           nmake   -   w   sh_win32 NULL
-sh    shell\source\win32\simplemail                nmake   -   w   sh_win32_simplemail NULL
-sh    shell\source\unix\exec                       nmake   -   u   sh_unix NULL
-sh    shell\source\unix\misc                       nmake   -   u   sh_unix_misc NULL
-sh    shell\source\cmdmail                         nmake   -   u   sh_cmdmail NULL
-sh    shell\source\all                             nmake   -   all sh_all NULL
-sh    shell\source\unix\sysshell                   nmake   -   u   sh_unix_sysshell sh_all NULL
-sh    shell\source\win32\sysshell                  nmake   -   w   sh_win32_sysshell NULL
-sh    shell\source\tools\lngconvex                 nmake   -   w   sh_win32_lngconv NULL
-sh    shell\source\tools\regsvrex                  nmake   -   w   sh_win32_regsvrex  NULL
-sh    shell\source\all\zipfile                     nmake   -   w   sh_all_zipfile  NULL
-sh    shell\source\all\ooofilereader               nmake   -   w   sh_all_ooofilereader sh_all_zipfile.w sh_all NULL
-sh    shell\source\win32\shlxthandler\res          nmake   -   w   sh_win32_shlxthandler_res sh_win32_lngconv.w NULL
-sh    shell\source\win32\shlxthandler\util         nmake   -   w   sh_win32_shlxthandler_util  NULL
-sh    shell\source\win32\shlxthandler\propsheets   nmake   -   w   sh_win32_shlxthandler_propsheets  NULL
-sh    shell\source\win32\shlxthandler\infotips     nmake   -   w   sh_win32_shlxthandler_infotips  NULL
-sh    shell\source\win32\shlxthandler\columninfo   nmake   -   w   sh_win32_shlxthandler_columninfo  NULL
-sh    shell\source\win32\shlxthandler\thumbviewer  nmake   -   w   sh_win32_shlxthandler_thumbviewer NULL
-sh    shell\source\win32\shlxthandler              nmake   -   w   sh_win32_shlxthandler sh_win32_lngconv.w sh_win32_shlxthandler_res.w sh_win32_shlxthandler_util.w sh_all_zipfile.w sh_all_ooofilereader.w sh_win32_shlxthandler_propsheets.w sh_win32_shlxthandler_infotips.w sh_win32_shlxthandler_columninfo.w sh_win32_shlxthandler_thumbviewer.w NULL
-sh    shell\source\backends\localebe               nmake   -   all sh_backends_localebe NULL
-sh    shell\source\backends\wininetbe              nmake   -   w   sh_backends_wininetbe NULL
-sh    shell\source\backends\gconfbe                nmake   -   u   sh_backends_gconfbe NULL
-sh    shell\source\backends\kdebe                  nmake   -   u   sh_backends_kdebe NULL
-sh    shell\source\backends\desktopbe              nmake   -   u   sh_backends_desktopbe NULL
-sh    shell\source\win32\shlxthandler\ooofilt      nmake   -   w   sh_win32_shlxthandler_ooofilt sh_all_zipfile.w sh_all_ooofilereader.w sh_win32_shlxthandler_util.w sh_all NULL
-sh    shell\source\win32\shlxthandler\ooofilt\proxy nmake   -   w   sh_win32_ooofiltproxy NULL 
+sh    shell\inc			                           nmake   -   all sh_inc NULL
+sh    shell\source\win32                           nmake   -   w   sh_win32 sh_inc NULL
+sh    shell\source\win32\simplemail                nmake   -   w   sh_win32_simplemail sh_inc NULL
+sh    shell\source\unix\exec                       nmake   -   u   sh_unix sh_inc NULL
+sh    shell\source\unix\misc                       nmake   -   u   sh_unix_misc sh_inc NULL
+sh    shell\source\cmdmail                         nmake   -   u   sh_cmdmail sh_inc NULL
+sh    shell\source\all                             nmake   -   all sh_all sh_inc NULL
+sh    shell\source\unix\sysshell                   nmake   -   u   sh_unix_sysshell sh_all sh_inc NULL
+sh    shell\source\win32\sysshell                  nmake   -   w   sh_win32_sysshell sh_inc NULL
+sh    shell\source\tools\lngconvex                 nmake   -   w   sh_win32_lngconv sh_inc NULL
+sh    shell\source\tools\regsvrex                  nmake   -   w   sh_win32_regsvrex  sh_inc NULL
+sh    shell\source\all\zipfile                     nmake   -   w   sh_all_zipfile  sh_inc NULL
+sh    shell\source\all\ooofilereader               nmake   -   w   sh_all_ooofilereader sh_all_zipfile.w sh_all sh_inc NULL
+sh    shell\source\win32\shlxthandler\res          nmake   -   w   sh_win32_shlxthandler_res sh_win32_lngconv.w sh_inc NULL
+sh    shell\source\win32\shlxthandler\util         nmake   -   w   sh_win32_shlxthandler_util  sh_inc NULL
+sh    shell\source\win32\shlxthandler\propsheets   nmake   -   w   sh_win32_shlxthandler_propsheets  sh_inc NULL
+sh    shell\source\win32\shlxthandler\infotips     nmake   -   w   sh_win32_shlxthandler_infotips  sh_inc NULL
+sh    shell\source\win32\shlxthandler\columninfo   nmake   -   w   sh_win32_shlxthandler_columninfo  sh_inc NULL
+sh    shell\source\win32\shlxthandler\thumbviewer  nmake   -   w   sh_win32_shlxthandler_thumbviewer sh_inc NULL
+sh    shell\source\win32\shlxthandler              nmake   -   w   sh_win32_shlxthandler sh_win32_lngconv.w sh_win32_shlxthandler_res.w sh_win32_shlxthandler_util.w sh_all_zipfile.w sh_all_ooofilereader.w sh_win32_shlxthandler_propsheets.w sh_win32_shlxthandler_infotips.w sh_win32_shlxthandler_columninfo.w sh_win32_shlxthandler_thumbviewer.w sh_inc NULL
+sh    shell\source\backends\localebe               nmake   -   all sh_backends_localebe sh_inc NULL
+sh    shell\source\backends\wininetbe              nmake   -   w   sh_backends_wininetbe sh_inc NULL
+sh    shell\source\backends\gconfbe                nmake   -   u   sh_backends_gconfbe sh_inc NULL
+sh    shell\source\backends\kdebe                  nmake   -   u   sh_backends_kdebe sh_inc NULL
+sh    shell\source\backends\desktopbe              nmake   -   u   sh_backends_desktopbe sh_inc NULL
+sh    shell\source\win32\shlxthandler\ooofilt      nmake   -   w   sh_win32_shlxthandler_ooofilt sh_all_zipfile.w sh_all_ooofilereader.w sh_win32_shlxthandler_util.w sh_all sh_inc NULL
+sh    shell\source\win32\shlxthandler\ooofilt\proxy nmake   -   w   sh_win32_ooofiltproxy sh_inc NULL 
