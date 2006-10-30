@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:18:31 $
+ *  last change: $Author: rt $ $Date: 2006-10-30 09:07:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,6 @@ sal_Bool XMLTextImportPropertyMapper::handleSpecialItem(
         }
         break;
 
-#ifdef CONV_STAR_FONTS
     // If we want to do StarMath/StarSymbol font conversion, then we'll
     // want these special items to be treated just like regular ones...
     // For the Writer, we'll catch and convert them in _FillPropertySet;
@@ -154,7 +153,6 @@ sal_Bool XMLTextImportPropertyMapper::handleSpecialItem(
         bRet = getPropertySetMapper()->importXML( rValue, rProperty,
                                                   rUnitConverter );
         break;
-#endif
 
     default:
         bRet = SvXMLImportPropertyMapper::handleSpecialItem( rProperty,
