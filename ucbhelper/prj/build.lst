@@ -1,5 +1,6 @@
 uh	ucbhelper : offuh sal vos cppu cppuhelper salhelper NULL
 uh	ucbhelper   			usr1	-	all	uh_mkout NULL
-uh	ucbhelper\source\client		nmake	-	all	uh_client NULL
-uh	ucbhelper\source\provider	nmake	-	all	uh_provider NULL
+uh	ucbhelper\inc   			nmake	-	all	uh_inc NULL
+uh	ucbhelper\source\client		nmake	-	all	uh_client uh_inc NULL
+uh	ucbhelper\source\provider	nmake	-	all	uh_provider uh_inc NULL
 uh	ucbhelper\util			nmake	-	all	uh_util uh_client uh_provider NULL
