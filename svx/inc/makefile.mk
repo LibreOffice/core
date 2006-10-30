@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 18:03:07 $
+#   last change: $Author: rt $ $Date: 2006-10-30 08:47:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,4 +48,11 @@ TARGET=inc
 LOCALIZE_ME=globlmn_tmpl.hrc
 
 .INCLUDE :  target.mk
+
+.IF "$(ENABLE_PCH)"!=""
+ALLTAR : \
+    $(SLO)$/precompiled.pch \
+    $(SLO)$/precompiled_ex.pch
+    
+.ENDIF			# "$(ENABLE_PCH)"!=""
 
