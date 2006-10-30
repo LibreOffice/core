@@ -2,9 +2,9 @@
 #
 #   $RCSfile: perl.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-27 07:17:52 $
+#   last change: $Author: obo $ $Date: 2006-10-30 16:50:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,7 @@ SOLARINC+=-I$(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i86pc-solaris$/CORE
 PERL_LIB=	-lsocket \
             -lnsl \
             -ldl \
-            $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i86pc-solaris$/CORE$/libperl.a \
-            $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i86pc-solaris$/auto/DynaLoader/DynaLoader.a
+            $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i86pc-solaris$/CORE$/shared$/libperl.so \
+            $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i86pc-solaris$/CORE$/shared$/DynaLoader.a 
 .ENDIF 
 
