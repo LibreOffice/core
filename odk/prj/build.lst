@@ -1,9 +1,10 @@
 od	odk	::	cppuhelper cpputools io jurt jut javaunohelper sandbox remotebridges stoc udkapi ridljar offapi unoil autodoc netbeans_integration unodevtools external SUN:officenames NULL
 od	odk					usr1	-	all	od_mkout NULL
-od	odk\source\com\sun\star\lib\loader	nmake	-	all	od_loader NULL
-od	odk\source\unoapploader\win	nmake	-	n	od_unoapploaderwin NULL
-od	odk\source\unoapploader\unx	nmake	-	u	od_unoapploaderunx NULL
-od	odk\source\unowinreg\win	nmake	-	all	od_unowinreg NULL
+od	odk\inc				nmake	-	all	od_inc NULL
+od	odk\source\com\sun\star\lib\loader	nmake	-	all	od_loader od_inc NULL
+od	odk\source\unoapploader\win	nmake	-	n	od_unoapploaderwin od_inc NULL
+od	odk\source\unoapploader\unx	nmake	-	u	od_unoapploaderunx od_inc NULL
+od	odk\source\unowinreg\win	nmake	-	all	od_unowinreg od_inc NULL
 od	odk\pack\unzip_udk			nmake	-	all	od_unzip_udk NULL
 od	odk\pack\copying			nmake	-	all	od_copying od_unzip_udk od_loader od_unoapploaderwin.n od_unoapploaderunx.u od_unowinreg NULL
 od	odk\pack\checkinc			nmake	-	all	od_checkinc od_copying NULL
