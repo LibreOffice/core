@@ -810,5 +810,5 @@ char* append_slash(path)
             strcat(new_string, "/");
     };
     return new_string;
-};
+}
 
