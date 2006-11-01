@@ -4,9 +4,9 @@
  *
  *  $RCSfile: buffer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:26:17 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:13:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 #include "sbcomp.hxx"
 #include "buffer.hxx"
 #include <string.h>
+
+const static UINT32 UP_LIMIT=0xFFFFFF00L;
 
 // Der SbiBuffer wird in Inkrements von mindestens 16 Bytes erweitert.
 // Dies ist notwendig, da viele Klassen von einer Pufferlaenge
@@ -78,14 +80,14 @@ char* SbiBuffer::GetBuffer()
 BOOL SbiBuffer::Check( USHORT n )
 {
     if( !n ) return TRUE;
-    if( ((long) nOff + n ) > (long) nSize )
+    if( ( static_cast<UINT32>( nOff )+ n ) >  static_cast<UINT32>( nSize ) )
     {
         if( nInc == 0 )
             return FALSE;
         USHORT nn = 0;
         while( nn < n ) nn = nn + nInc;
         char* p;
-        if( ((long) nSize + nn ) > 0xFF00L ) p = NULL;
+        if( ( static_cast<UINT32>( nSize ) + nn ) > UP_LIMIT ) p = NULL;
         else p = new char [nSize + nn];
         if( !p )
         {
@@ -108,11 +110,11 @@ BOOL SbiBuffer::Check( USHORT n )
 
 // Angleich des Puffers auf die uebergebene Byte-Grenze
 
-void SbiBuffer::Align( short n )
+void SbiBuffer::Align( INT32 n )
 {
     if( nOff % n ) {
-        USHORT nn =( ( nOff + n ) / n ) * n;
-        if( nn <= 0xFF00 )
+        UINT32 nn =( ( nOff + n ) / n ) * n;
+        if( nn <= UP_LIMIT )
         {
             nn = nn - nOff;
             if( Check( nn ) )
@@ -127,13 +129,17 @@ void SbiBuffer::Align( short n )
 
 // Patch einer Location
 
-void SbiBuffer::Patch( USHORT off, UINT16 val )
+void SbiBuffer::Patch( UINT32 off, UINT32 val )
 {
-    if( ( off + sizeof( UINT16 ) ) < nOff )
+    if( ( off + sizeof( UINT32 ) ) < nOff )
     {
+        UINT16 val1 = ( val & 0xFFFF );
+        UINT16 val2 = ( val >> 16 );
         BYTE* p = (BYTE*) pBuf + off;
-        *p++ = (char) ( val & 0xFF );
-        *p   = (char) ( val >> 8 );
+        *p++ = (char) ( val1 & 0xFF );
+        *p++ = (char) ( val1 >> 8 );
+        *p++ = (char) ( val2 & 0xFF );
+        *p   = (char) ( val2 >> 8 );
     }
 }
 
@@ -141,24 +147,29 @@ void SbiBuffer::Patch( USHORT off, UINT16 val )
 // bauen eine Kette auf. Der Anfang der Kette ist beim uebergebenen
 // Parameter, das Ende der Kette ist 0.
 
-void SbiBuffer::Chain( USHORT off )
+void SbiBuffer::Chain( UINT32 off )
 {
     if( off && pBuf )
     {
         BYTE *ip;
-        USHORT i = off;
-        USHORT val = nOff;
+        UINT32 i = off;
+        UINT32 val1 = (nOff & 0xFFFF);
+        UINT32 val2 = (nOff >> 16);
         do
         {
             ip = (BYTE*) pBuf + i;
-            i = ( *ip ) | ( *(ip+1) << 8 );
+            BYTE* pTmp = ip;
+                     i =  *pTmp++; i |= *pTmp++ << 8; i |= *pTmp++ << 16; i |= *pTmp++ << 24;
+
             if( i >= nOff )
             {
                 pParser->Error( SbERR_INTERNAL_ERROR, "BACKCHAIN" );
                 break;
             }
-            *ip++ = (char) ( val & 0xFF );
-            *ip   = (char) ( val >> 8 );
+            *ip++ = (char) ( val1 & 0xFF );
+            *ip++ = (char) ( val1 >> 8 );
+            *ip++ = (char) ( val2 & 0xFF );
+            *ip   = (char) ( val2 >> 8 );
         } while( i );
     }
 }
@@ -198,6 +209,25 @@ BOOL SbiBuffer::operator +=( UINT16 n )
         nOff += 2; return TRUE;
     } else return FALSE;
 }
+
+BOOL SbiBuffer::operator +=( UINT32 n )
+{
+    if( Check( 4 ) )
+    {
+        UINT16 n1 = ( n & 0xFFFF );
+        UINT16 n2 = ( n >> 16 );
+        if ( operator +=( n1 ) && operator +=( n2 ) )
+            return TRUE;
+        return TRUE;
+    }
+    return FALSE;
+}
+
+BOOL SbiBuffer::operator +=( INT32 n )
+{
+    return operator +=( (UINT32) n );
+}
+
 
 BOOL SbiBuffer::operator +=( const String& n )
 {
