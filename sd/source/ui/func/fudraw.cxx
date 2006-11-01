@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:49:27 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:15:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -494,7 +494,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             if (!pDocSh->IsReadOnly())
             {
-                if ( pView->IsPresObjSelected(FALSE, TRUE, FALSE, TRUE) )
+                if ( pView && pView->IsPresObjSelected(FALSE, TRUE, FALSE, TRUE) )
                 {
                     InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
                 }
