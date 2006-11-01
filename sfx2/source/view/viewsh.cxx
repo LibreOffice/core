@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:59:57 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:29:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -563,6 +563,23 @@ SfxInPlaceClient* SfxViewShell::GetIPClient() const
 }
 
 //--------------------------------------------------------------------
+
+SfxInPlaceClient* SfxViewShell::GetUIActiveIPClient_Impl() const
+{
+    // this method is needed as long as SFX still manages the border space for ChildWindows (see SfxFrame::Resize)
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(FALSE);
+    if ( !pClients )
+        return 0;
+
+    for (USHORT n=0; n < pClients->Count(); n++)
+    {
+        SfxInPlaceClient* pIPClient = pClients->GetObject(n);
+        if ( pIPClient->IsUIActive() )
+            return pIPClient;
+    }
+
+    return NULL;
+}
 
 SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
 {
@@ -1343,20 +1360,9 @@ void SfxViewShell::GotFocus() const
 }
 
 //--------------------------------------------------------------------
-void SfxViewShell::ResetAllClients( SfxInPlaceClient *pIP, BOOL bDisconnect )
-
-/*  [Beschreibung]
-
-    Diese Methode dient dazu, bei UI-Aktivierung eins IPClients alle anderen
-    noch bestehenden Verbindungen zu trennen.
-
-*/
-
+void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient *pIP )
 {
 
-    // SO2 stellt sicher, da\s nur ein Object gleichzeitig UI-aktiv ist.
-    // Aus Speicherplatzgr"unden werden aber alle Objekte, die nicht aktiv
-    // sind oder sein m"ussen, disconnected.
     SfxInPlaceClientList *pClients = GetIPClientList_Impl(FALSE);
     if ( !pClients )
         return;
@@ -1364,8 +1370,8 @@ void SfxViewShell::ResetAllClients( SfxInPlaceClient *pIP, BOOL bDisconnect )
     for ( USHORT n=0; n < pClients->Count(); n++ )
     {
         SfxInPlaceClient* pIPClient = pClients->GetObject(n);
-        if( pIPClient != pIP && pIPClient->GetObject().is() && !(pIPClient->GetObjectMiscStatus() & SVOBJ_MISCSTATUS_ACTIVATEWHENVISIBLE) )
-            pIPClient->SetObjectState( bDisconnect ? embed::EmbedStates::LOADED : embed::EmbedStates::RUNNING );
+        if( pIPClient != pIP )
+            pIPClient->ResetObject();
     }
 }
 
