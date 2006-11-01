@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:01:37 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 10:14:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -614,7 +614,12 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
                 }
                 else
                 {
-                    pPage->SetBorder(0, 0, 0, 0);
+                    // The printer is not available.  Use a border of 10mm
+                    // on each side instead.
+                    // This has to be kept synchronized with the border
+                    // width set in the
+                    // SvxPageDescPage::PaperSizeSelect_Impl callback.
+                    pPage->SetBorder(1000, 1000, 1000, 1000);
                 }
             }
             else
