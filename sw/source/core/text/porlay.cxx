@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:37:55 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:13:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@
 
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentContentOperations.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n::ScriptType;
@@ -1367,6 +1368,29 @@ USHORT SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, XubString& rText,
     }
 
     return nNumOfHiddenChars;
+}
+
+/*************************************************************************
+ *                        SwScriptInfo::DeleteHiddenRanges(..)
+ * Takes a SwTxtNode and deletes the hidden ranges from the node.
+ **************************************************************************/
+
+void SwScriptInfo::DeleteHiddenRanges( SwTxtNode& rNode )
+{
+    PositionList aList;
+    xub_StrLen nHiddenStart;
+    xub_StrLen nHiddenEnd;
+    GetBoundsOfHiddenRange( rNode, 0, nHiddenStart, nHiddenEnd, &aList );
+    PositionList::const_reverse_iterator rFirst( aList.end() );
+    PositionList::const_reverse_iterator rLast( aList.begin() );
+    while ( rFirst != rLast )
+    {
+        nHiddenEnd = *(rFirst++);
+        nHiddenStart = *(rFirst++);
+
+        SwPaM aPam( rNode, nHiddenStart, rNode, nHiddenEnd );
+        rNode.getIDocumentContentOperations()->Delete( aPam );
+    }
 }
 
 /*************************************************************************
