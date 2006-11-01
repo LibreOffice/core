@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrintManager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:32:06 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 10:15:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,7 @@
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
 #endif
+#include <svx/paperinf.hxx>
 
 namespace sd {
 
@@ -650,6 +651,8 @@ ErrCode PrintManager::DoPrint (
 
 void PrintManager::PreparePrint (PrintDialog* pPrintDialog)
 {
+    (void)pPrintDialog;
+
     SfxPrinter* pPrinter = GetPrinter(TRUE);
 
     if (!pPrinter)
@@ -784,37 +787,47 @@ bool PrintManager::FitPageToPrinterWithDialog (
                 )
             )
         {
-            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");
-            AbstractSdPrintDlg* pDlg = pFact->CreateSdPrintDlg(ResId( DLG_PRINT_WARNINGS ), mrBase.GetWindow() );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
-            // Do not show the dialog when the bSilent flag is set.  We do
-            // create the dialog anyway so that we can extract the default
-            // method of mapping internal pages to printer pages from it.
-            if ( ! bSilent)
-                nRet = pDlg->Execute();
-            if( nRet == RET_OK )
+            if (IsScreenFormat())
             {
-                switch (pDlg->GetAttr())
-                {
-                    case 1:
-                        pPrintOpts->SetPagesize();
-                        break;
-
-                    case 2:
-                        // Tiling is the default behaviour in
-                        // ViewShell::PrintStdOrNotes().  The poperty of
-                        // pPrintOpts is ignored there so setting it here
-                        // may only lead to unwanted side effects.
-                        break;
-
-                    case 3:
-                        pPrintOpts->SetCutPage();
-                        break;
-                }
-                bContinuePrinting = true;
+                // For the screen format the page content is always scaled
+                // to the printable area of the printer pages.
+                pPrintOpts->SetPagesize();
             }
-            delete pDlg;
+            else
+            {
+                SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");
+                AbstractSdPrintDlg* pDlg = pFact->CreateSdPrintDlg(ResId( DLG_PRINT_WARNINGS ), mrBase.GetWindow() );
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                // Do not show the dialog when the bSilent flag is set.  We
+                // do create the dialog anyway so that we can extract the
+                // default method of mapping internal pages to printer pages
+                // from it.
+                if ( ! bSilent)
+                    nRet = pDlg->Execute();
+                if( nRet == RET_OK )
+                {
+                    switch (pDlg->GetAttr())
+                    {
+                        case 1:
+                            pPrintOpts->SetPagesize();
+                            break;
+
+                        case 2:
+                            // Tiling is the default behaviour in
+                            // ViewShell::PrintStdOrNotes().  The poperty of
+                            // pPrintOpts is ignored there so setting it
+                            // here may only lead to unwanted side effects.
+                            break;
+
+                        case 3:
+                            pPrintOpts->SetCutPage();
+                            break;
+                    }
+                    bContinuePrinting = true;
+                }
+                delete pDlg;
+            }
         }
 
         // The user has pressed the 'Cancel' button.  Restore the old values and
@@ -1556,11 +1569,12 @@ void PrintManager::PrintStdOrNotes (
                                 // Handle 3.  Print parts of the page in the
                                 // size of the printable area until the
                                 // whole page is covered.
-                                for (aPageOrigin = Point(0,0);
+                                Point aOrigin (-aPageOfs.X(), -aPageOfs.Y());
+                                for (aPageOrigin = aOrigin;
                                      -aPageOrigin.Y()<aPageHeight;
                                          aPageOrigin.Y() -= aPrintHeight)
                                 {
-                                    for (aPageOrigin.X()=0;
+                                    for (aPageOrigin.X()=aOrigin.X();
                                          -aPageOrigin.X()<aPageWidth;
                                              aPageOrigin.X() -= aPrintWidth)
                                     {
@@ -1660,5 +1674,26 @@ void PrintManager::PrintPage (
 
     pPrintView->HidePage( pPrintView->GetPageView( pPage ) );
 }
+
+
+
+
+bool PrintManager::IsScreenFormat (void)
+{
+    // Determine the page size.
+    SdPage* pPage = mrBase.GetDocument()->GetSdPage(0, PK_STANDARD);
+    Size aPaperSize (pPage->GetSize());
+
+    // Take Orientation into account.
+    if (pPage->GetOrientation() == ORIENTATION_LANDSCAPE)
+        Swap(aPaperSize);
+
+    // Check whether paper size is 'Screen'
+    SvxPaper ePaper (SvxPaperInfo::GetPaper(aPaperSize, MAP_100TH_MM, TRUE));
+    return (ePaper == SVX_PAPER_SCREEN);
+}
+
+
+
 
 } // end of namespace sd
