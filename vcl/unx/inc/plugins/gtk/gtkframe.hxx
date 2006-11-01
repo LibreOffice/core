@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:02:54 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:30:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,6 +205,8 @@ class GtkSalFrame : public SalFrame
     Size                            m_aMinSize;
     Rectangle                       m_aRestorePosSize;
 
+    GdkRegion*                      m_pRegion;
+
     void Init( SalFrame* pParent, ULONG nStyle );
     void Init( SystemParentData* pSysData );
     void InitCommon();
@@ -366,6 +368,16 @@ public:
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
 
     virtual void                SetBackgroundBitmap( SalBitmap* );
+
+    // shaped system windows
+    // set clip region to none (-> rectangular windows, normal state)
+    virtual void                    ResetClipRegion();
+    // start setting the clipregion consisting of nRects rectangles
+    virtual void                    BeginSetClipRegion( ULONG nRects );
+    // add a rectangle to the clip region
+    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    // done setting up the clipregion
+    virtual void                    EndSetClipRegion();
 
     static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > getAccessible( bool bCreate = true );
