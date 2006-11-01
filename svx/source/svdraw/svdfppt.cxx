@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:42:56 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:20:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5665,11 +5665,17 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
 {
     UINT32  nVal;
     if ( GetAttrib( PPT_CharAttr_Bold, nVal, nDestinationInstance ) )
+    {
         rSet.Put( SvxWeightItem( nVal != 0 ? WEIGHT_BOLD : WEIGHT_NORMAL ) );
-
+        rSet.Put( SvxWeightItem( nVal != 0 ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
+        rSet.Put( SvxWeightItem( nVal != 0 ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
+    }
     if ( GetAttrib( PPT_CharAttr_Italic, nVal, nDestinationInstance ) )
+    {
         rSet.Put( SvxPostureItem( nVal != 0 ? ITALIC_NORMAL : ITALIC_NONE ) );
-
+        rSet.Put( SvxPostureItem( nVal != 0 ? ITALIC_NORMAL : ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
+        rSet.Put( SvxPostureItem( nVal != 0 ? ITALIC_NORMAL : ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
+    }
     if ( GetAttrib( PPT_CharAttr_Underline, nVal, nDestinationInstance ) )
         rSet.Put( SvxUnderlineItem( nVal != 0 ? UNDERLINE_SINGLE : UNDERLINE_NONE ) );
 
