@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:13:08 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 17:46:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,7 +224,6 @@ SdrGrafObj::SdrGrafObj()
 {
     pGraphic = new GraphicObject;
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
-    nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     bNoShear = TRUE;
     //BFS01bCopyToPoolOnAfterRead = FALSE;
 
@@ -249,7 +248,6 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect)
 {
     pGraphic = new GraphicObject( rGrf );
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
-    nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     bNoShear = TRUE;
     //BFS01bCopyToPoolOnAfterRead = FALSE;
 
@@ -274,7 +272,6 @@ SdrGrafObj::SdrGrafObj( const Graphic& rGrf )
 {
     pGraphic = new GraphicObject( rGrf );
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
-    nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     bNoShear = TRUE;
     //BFS01bCopyToPoolOnAfterRead = FALSE;
 
@@ -306,7 +303,6 @@ void SdrGrafObj::SetGraphicObject( const GraphicObject& rGrfObj )
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
     pGraphic->SetUserData();
     mbIsPreview = sal_False;
-    nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     SetChanged();
     BroadcastObjectChange();
 }
@@ -326,7 +322,6 @@ void SdrGrafObj::SetGraphic( const Graphic& rGrf )
     pGraphic->SetGraphic( rGrf );
     pGraphic->SetUserData();
     mbIsPreview = sal_False;
-    nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     SetChanged();
     BroadcastObjectChange();
 }
@@ -432,13 +427,10 @@ void SdrGrafObj::SetGrafStreamURL( const String& rGraphicStreamURL )
     if( !rGraphicStreamURL.Len() )
     {
         pGraphic->SetUserData();
-        nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     }
     else if( pModel->IsSwapGraphics() )
     {
         pGraphic->SetUserData( rGraphicStreamURL );
-
-        nGrafStreamPos = GRAFSTREAMPOS_INVALID;
 
         // set state of graphic object to 'swapped out'
         if( pGraphic->GetType() == GRAPHIC_NONE )
@@ -1416,11 +1408,10 @@ void SdrGrafObj::SetModel( SdrModel* pNewModel )
 
     if( bChg )
     {
-        if( ( GRAFSTREAMPOS_INVALID != nGrafStreamPos ) || pGraphic->HasUserData() )
+        if( pGraphic->HasUserData() )
         {
             ForceSwapIn();
             pGraphic->SetUserData();
-            nGrafStreamPos = GRAFSTREAMPOS_INVALID;
         }
 
         if( pGraphicLink != NULL )
@@ -1735,7 +1726,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
 //          {
                 const ULONG nSwapMode = pModel->GetSwapGraphicsMode();
 
-                if( ( ( GRAFSTREAMPOS_INVALID != nGrafStreamPos ) || pGraphic->HasUserData() || pGraphicLink ) &&
+                if( ( pGraphic->HasUserData() || pGraphicLink ) &&
                     ( nSwapMode & SDR_SWAPGRAPHICSMODE_PURGE ) )
                 {
                     pRet = NULL;
@@ -1744,7 +1735,6 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                 {
                     pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
                     pGraphic->SetUserData();
-                    nGrafStreamPos = GRAFSTREAMPOS_INVALID;
                 }
             }
         }
@@ -1754,7 +1744,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
         // kann aus dem original Doc-Stream nachgeladen werden...
         if( pModel != NULL )
         {
-            if( ( GRAFSTREAMPOS_INVALID != nGrafStreamPos ) || pGraphic->HasUserData() )
+            if( pGraphic->HasUserData() )
             {
                 SdrDocumentStreamInfo aStreamInfo;
 
@@ -1767,49 +1757,39 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                 {
                     Graphic aGraphic;
 
-                    if( pGraphic->HasUserData() )
+                    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL;
+                    if( mbInsidePaint && GetViewContact().IsPreviewRendererOnly() )
                     {
-                        com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL;
-                        if( mbInsidePaint && GetViewContact().IsPreviewRendererOnly() )
-                        {
 //                          Rectangle aSnapRect(GetSnapRect());
 //                          const Rectangle aSnapRectPixel(pOutDev->LogicToPixel(aSnapRect));
 
-                            pFilterData = new com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >( 3 );
+                        pFilterData = new com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >( 3 );
 
-                            com::sun::star::awt::Size aPreviewSizeHint( 64, 64 );
-                            sal_Bool bAllowPartialStreamRead = sal_True;
-                            sal_Bool bCreateNativeLink = sal_False;
-                            (*pFilterData)[ 0 ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "PreviewSizeHint" ) );
-                            (*pFilterData)[ 0 ].Value <<= aPreviewSizeHint;
-                            (*pFilterData)[ 1 ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "AllowPartialStreamRead" ) );
-                            (*pFilterData)[ 1 ].Value <<= bAllowPartialStreamRead;
-                            (*pFilterData)[ 2 ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "CreateNativeLink" ) );
-                            (*pFilterData)[ 2 ].Value <<= bCreateNativeLink;
+                        com::sun::star::awt::Size aPreviewSizeHint( 64, 64 );
+                        sal_Bool bAllowPartialStreamRead = sal_True;
+                        sal_Bool bCreateNativeLink = sal_False;
+                        (*pFilterData)[ 0 ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "PreviewSizeHint" ) );
+                        (*pFilterData)[ 0 ].Value <<= aPreviewSizeHint;
+                        (*pFilterData)[ 1 ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "AllowPartialStreamRead" ) );
+                        (*pFilterData)[ 1 ].Value <<= bAllowPartialStreamRead;
+                        (*pFilterData)[ 2 ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "CreateNativeLink" ) );
+                        (*pFilterData)[ 2 ].Value <<= bCreateNativeLink;
 
-                            mbIsPreview = sal_True;
-                        }
-
-                        if( !GetGrfFilter()->ImportGraphic( aGraphic, String(), *pStream,
-                            GRFILTER_FORMAT_DONTKNOW, NULL, 0, pFilterData ) )
-                        {
-                            const String aUserData( pGraphic->GetUserData() );
-
-                            pGraphic->SetGraphic( aGraphic );
-                            pGraphic->SetUserData( aUserData );
-                            pRet = GRFMGR_AUTOSWAPSTREAM_NONE;
-                        }
-                        delete pFilterData;
+                        mbIsPreview = sal_True;
                     }
-                    else
+
+                    if( !GetGrfFilter()->ImportGraphic( aGraphic, String(), *pStream,
+                                                        GRFILTER_FORMAT_DONTKNOW, NULL, 0, pFilterData ) )
                     {
-                        pStream->Seek( nGrafStreamPos );
-                        *pStream >> aGraphic;
-                        pGraphic->SetGraphic( aGraphic );
+                        const String aUserData( pGraphic->GetUserData() );
 
-                        if( !pStream->GetError() )
-                            pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
+                        pGraphic->SetGraphic( aGraphic );
+                        pGraphic->SetUserData( aUserData );
+
+                        // #142146# Graphic successfully swapped in.
+                        pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
                     }
+                    delete pFilterData;
 
                     pStream->ResetError();
 
