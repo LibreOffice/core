@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_spritehelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:21:35 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:46:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,7 @@ namespace cairocanvas
                             getClip() ));
 
             //cairo_reset_clip( pCairo );
-            drawPolyPolygonImplementation( aClipPoly, Clip, pCairo );
+            doPolyPolygonImplementation( aClipPoly, Clip, pCairo );
         }
 
         OSL_TRACE ("aSize %f x %f\n", aSize.getX(), aSize.getY() );
