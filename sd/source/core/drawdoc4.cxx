@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:14:49 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:14:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,6 +227,9 @@
 #include "stlpool.hxx"
 #include "helpids.h"
 #include "sdiocmpt.hxx"
+#ifndef _SHAPELIST_HXX
+#include "shapelist.hxx"
+#endif
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -736,12 +739,8 @@ void SdDrawDocument::StartOnlineSpelling(BOOL bForceSpelling)
 
         SdPage* pPage = NULL;
         SdrObject* pObj = NULL;
-        pOnlineSpellingList = new List(64, 32);
+        pOnlineSpellingList = new ShapeList;
         USHORT nPage;
-
-        // Um im OnlineSpellingHdl mit List::Next() arbeiten zu  koennen,
-        // wird ein Position 0 ein Dummy-Objekt (NULL-Pointer) eingefuegt
-        pOnlineSpellingList->Insert(NULL, LIST_APPEND);
 
         for ( nPage = 0; nPage < GetPageCount(); nPage++ )
         {
@@ -755,7 +754,7 @@ void SdDrawDocument::StartOnlineSpelling(BOOL bForceSpelling)
             FillOnlineSpellingList((SdPage*) GetMasterPage(nPage));
         }
 
-        pOnlineSpellingList->Seek(ULONG(0));
+        pOnlineSpellingList->seekShape(0);
         pOnlineSpellingTimer = new Timer();
         pOnlineSpellingTimer->SetTimeoutHdl( LINK(this, SdDrawDocument, OnlineSpellingHdl) );
         pOnlineSpellingTimer->SetTimeout(250);
@@ -778,10 +777,13 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
     {
         pObj = aIter.Next();
 
+        if( !pObj )
+            continue;
+
         if (pObj->GetOutlinerParaObject())
         {
             // Textobjekt gefunden
-            pOnlineSpellingList->Insert(pObj, LIST_APPEND);
+            pOnlineSpellingList->addShape(*pObj);
         }
         else if (pObj->GetObjIdentifier() == OBJ_GRUP)
         {
@@ -802,7 +804,7 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
 
             if (bSubTextObjFound)
             {
-                pOnlineSpellingList->Insert(pObj, LIST_APPEND);
+                pOnlineSpellingList->addShape(*pObj);
             }
         }
     }
@@ -817,13 +819,12 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
 IMPL_LINK(SdDrawDocument, OnlineSpellingHdl, Timer*, pTimer)
 {
     if (pOnlineSpellingList!=NULL
-        && ( !bOnlineSpell ||
-            pOnlineSpellingList->GetCurPos() < pOnlineSpellingList->Count() + 1))
+        && ( !bOnlineSpell || pOnlineSpellingList->hasMore()))
     {
         /**********************************************************************
         * Naechstes Objekt spellen
         **********************************************************************/
-        SdrObject* pObj = (SdrObject*) pOnlineSpellingList->Next();
+        SdrObject* pObj = pOnlineSpellingList->getNextShape();
 
         if (pObj)
         {
@@ -930,12 +931,12 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 \************************************************************************/
 void SdDrawDocument::InsertObject(SdrObject* pObj, SdPage* pPage)
 {
-    if (pOnlineSpellingList)
+    if(pOnlineSpellingList && pObj)
     {
-        if (pObj->GetOutlinerParaObject())
+        if (pObj->GetOutlinerParaObject() || (pObj->GetObjIdentifier() == OBJ_GRUP))
         {
             // Objekt in OnlineSpelling-Liste aufnehmen
-            pOnlineSpellingList->Insert(pObj, LIST_APPEND);
+            pOnlineSpellingList->addShape(*pObj);
         }
     }
 }
@@ -947,12 +948,12 @@ void SdDrawDocument::InsertObject(SdrObject* pObj, SdPage* pPage)
 \************************************************************************/
 void SdDrawDocument::RemoveObject(SdrObject* pObj, SdPage* pPage)
 {
-    if (pOnlineSpellingList)
+    if(pOnlineSpellingList && pObj)
     {
-        if (pObj->GetOutlinerParaObject())
+        if (pObj->GetOutlinerParaObject() || (pObj->GetObjIdentifier() == OBJ_GRUP))
         {
             // Objekt in OnlineSpelling-Liste durch NULL-Pointer ersetzt
-            pOnlineSpellingList->Replace(NULL, pObj);
+            pOnlineSpellingList->removeShape(*pObj);
         }
     }
 }
