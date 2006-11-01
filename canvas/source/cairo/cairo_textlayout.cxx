@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_textlayout.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:21:50 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:46:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 
+#include <vcl/metric.hxx>
+#include <vcl/virdev.hxx>
+
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
@@ -53,14 +56,48 @@ using namespace ::com::sun::star;
 
 namespace cairocanvas
 {
+    namespace
+    {
+        void setupLayoutMode( OutputDevice& rOutDev,
+                              sal_Int8      nTextDirection )
+        {
+            // TODO(P3): avoid if already correctly set
+            ULONG nLayoutMode;
+            switch( nTextDirection )
+            {
+                default:
+                    nLayoutMode = 0;
+                    break;
+                case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
+                    nLayoutMode = TEXT_LAYOUT_BIDI_LTR;
+                    break;
+                case rendering::TextDirection::STRONG_LEFT_TO_RIGHT:
+                    nLayoutMode = TEXT_LAYOUT_BIDI_LTR | TEXT_LAYOUT_BIDI_STRONG;
+                    break;
+                case rendering::TextDirection::WEAK_RIGHT_TO_LEFT:
+                    nLayoutMode = TEXT_LAYOUT_BIDI_RTL;
+                    break;
+                case rendering::TextDirection::STRONG_RIGHT_TO_LEFT:
+                    nLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_BIDI_STRONG;
+                    break;
+            }
+
+            // set calculated layout mode. Origin is always the left edge,
+            // as required at the API spec
+            rOutDev.SetLayoutMode( nLayoutMode | TEXT_LAYOUT_TEXTORIGIN_LEFT );
+        }
+    }
+
     TextLayout::TextLayout( const rendering::StringContext&     aText,
                             sal_Int8                            nDirection,
                             sal_Int64                           nRandomSeed,
-                            const CanvasFont::Reference&        rFont ) :
+                            const CanvasFont::Reference&        rFont,
+                            const DeviceRef&                    rRefDevice ) :
         TextLayout_Base( m_aMutex ),
         maText( aText ),
         maLogicalAdvancements(),
         mpFont( rFont ),
+        mpRefDevice( rRefDevice ),
         mnTextDirection( nDirection )
     {
     }
@@ -71,7 +108,10 @@ namespace cairocanvas
 
     void SAL_CALL TextLayout::disposing()
     {
+        ::osl::MutexGuard aGuard( m_aMutex );
+
         mpFont.reset();
+        mpRefDevice.clear();
     }
 
     // XTextLayout
@@ -123,25 +163,36 @@ namespace cairocanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        ENSURE_AND_THROW( mpFont.get(),
-                          "TextLayout::queryTextBounds(): invalid font" );
+        OutputDevice* pOutDev = mpRefDevice->getOutputWindow();
+        if( !pOutDev )
+            return geometry::RealRectangle2D();
 
-        // fake text bounds by either taking the advancement values,
-        // or assuming square glyph boxes (width similar to height)
-        const rendering::FontRequest& rFontRequest( mpFont->getFontRequest() );
-        const double nFontSize( ::std::max( rFontRequest.CellSize,
-                                            rFontRequest.ReferenceAdvancement ) );
+        VirtualDevice aVDev( *pOutDev );
+        aVDev.SetFont( mpFont->getVCLFont() );
+
+        // need metrics for Y offset, the XCanvas always renders
+        // relative to baseline
+        const ::FontMetric& aMetric( aVDev.GetFontMetric() );
+
+        setupLayoutMode( aVDev, mnTextDirection );
+
+        const sal_Int32 nAboveBaseline( -aMetric.GetIntLeading() - aMetric.GetAscent() );
+        const sal_Int32 nBelowBaseline( aMetric.GetDescent() );
+
         if( maLogicalAdvancements.getLength() )
         {
-            return geometry::RealRectangle2D( 0, -nFontSize/2,
+            return geometry::RealRectangle2D( 0, nAboveBaseline,
                                               maLogicalAdvancements[ maLogicalAdvancements.getLength()-1 ],
-                                              nFontSize/2 );
+                                              nBelowBaseline );
         }
         else
         {
-            return geometry::RealRectangle2D( 0, -nFontSize/2,
-                                              nFontSize * maText.Length,
-                                              nFontSize/2 );
+            return geometry::RealRectangle2D( 0, nAboveBaseline,
+                                              aVDev.GetTextWidth(
+                                                  maText.Text,
+                                                  ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
+                                                  ::canvas::tools::numeric_cast<USHORT>(maText.Length) ),
+                                              nBelowBaseline );
         }
     }
 
@@ -255,38 +306,6 @@ namespace cairocanvas
         cairo_restore( pCairo );
 
         return true;
-    }
-
-    namespace
-    {
-        void setupLayoutMode( OutputDevice& rOutDev,
-                              sal_Int8      nTextDirection )
-        {
-            // TODO(P3): avoid if already correctly set
-            ULONG nLayoutMode;
-            switch( nTextDirection )
-            {
-                default:
-                    nLayoutMode = 0;
-                    break;
-                case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
-                    nLayoutMode = TEXT_LAYOUT_BIDI_LTR;
-                    break;
-                case rendering::TextDirection::STRONG_LEFT_TO_RIGHT:
-                    nLayoutMode = TEXT_LAYOUT_BIDI_LTR | TEXT_LAYOUT_BIDI_STRONG;
-                    break;
-                case rendering::TextDirection::WEAK_RIGHT_TO_LEFT:
-                    nLayoutMode = TEXT_LAYOUT_BIDI_RTL;
-                    break;
-                case rendering::TextDirection::STRONG_RIGHT_TO_LEFT:
-                    nLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_BIDI_STRONG;
-                    break;
-            }
-
-            // set calculated layout mode. Origin is always the left edge,
-            // as required at the API spec
-            rOutDev.SetLayoutMode( nLayoutMode | TEXT_LAYOUT_TEXTORIGIN_LEFT );
-        }
     }
 
     namespace
