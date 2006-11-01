@@ -4,9 +4,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:24:40 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:12:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -425,7 +425,9 @@ BOOL SbiDisas::DisasLine( String& rText )
         }
         else
         {
-            snprintf( cBuf, sizeof(cBuf), "Lbl%04X", nPC );
+            // fix warning (now error) for "Lbl%04lX" format
+            // nPC is now a sal_Int32
+            snprintf( cBuf, sizeof(cBuf), "Lbl%08lX", nPC );
             rText.AppendAscii( cBuf );
         }
         rText += ':';
