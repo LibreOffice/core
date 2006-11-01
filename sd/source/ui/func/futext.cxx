@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:57:09 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:16:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -712,7 +712,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    if (pView->MouseButtonUp(rMEvt, pWindow) || rMEvt.GetClicks() == 2 )
+    if( pView && pView->MouseButtonUp(rMEvt, pWindow) || rMEvt.GetClicks() == 2 )
         return (TRUE); // Event von der SdrView ausgewertet
 
     BOOL bEmptyTextObj = FALSE;
@@ -735,7 +735,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
             pTextObj = NULL;
     }
 
-    if (pView->IsDragObj())
+    if( pView && pView->IsDragObj())
     {
         /**********************************************************************
         * Objekt wurde verschoben
@@ -753,7 +753,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
         pView->ForceMarkedToAnotherPage();
         pView->SetCurrentObj(OBJ_TEXT);
     }
-    else if (pView->IsCreateObj() && rMEvt.IsLeft())
+    else if( pView && pView->IsCreateObj() && rMEvt.IsLeft())
     {
         /**********************************************************************
         * Objekt wurde erzeugt
@@ -826,7 +826,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
             SetInEditMode(rMEvt, FALSE);
         }
     }
-    else if (pView->IsAction())
+    else if ( pView && pView->IsAction())
     {
         pView->EndAction();
     }
@@ -835,7 +835,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
     pWindow->ReleaseMouse();
     USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
-    if ( !pView->AreObjectsMarked() &&
+    if ( pView && !pView->AreObjectsMarked() &&
          Abs(aMDPos.X() - aPnt.X()) < nDrgLog &&
          Abs(aMDPos.Y() - aPnt.Y()) < nDrgLog &&
          !rMEvt.IsShift() && !rMEvt.IsMod2() )
@@ -846,7 +846,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
         pView->MarkObj(aVEvt.pRootObj, pPV);
     }
 
-    if ( !pTextObj )
+    if ( !pTextObj && pView )
     {
         if ( ( (!bEmptyTextObj   &&  bPermanent) ||
              (!bFirstObjCreated && !bPermanent) ) &&
