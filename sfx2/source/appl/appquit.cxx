@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:15:50 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:25:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,7 +194,7 @@ void SfxApplication::Deinitialize()
     pAppData_Impl->pAppDispat->Pop( *this, SFX_SHELL_POP_UNTIL );
     pAppData_Impl->pAppDispat->Flush();
     pAppData_Impl->bDowning = TRUE;
-    pAppData_Impl->pAppDispat->DoDeactivate_Impl( TRUE );
+    pAppData_Impl->pAppDispat->DoDeactivate_Impl( TRUE, NULL );
 
     // call derived application-exit
     Exit();
