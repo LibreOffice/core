@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2006-05-05 08:52:39 $
+#   last change: $Author: vg $ $Date: 2006-11-01 16:19:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@ IDLFILES=\
     XLibraryContainer2.idl\
     XLibraryContainerPassword.idl\
     XLibraryContainerExport.idl\
+    ModuleSizeExceededRequest.idl\
 
 # ------------------------------------------------------------------
 
