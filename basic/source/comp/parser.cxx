@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:03:03 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:14:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ struct SbiParseStack {              // "Stack" fuer Statement-Blocks
     SbiParseStack* pNext;           // Chain
     SbiExprNode* pWithVar;          // Variable fuer WITH
     SbiToken eExitTok;              // Exit-Token
-    USHORT  nChain;                 // JUMP-Chain
+    UINT32  nChain;                 // JUMP-Chain
 };
 
 struct SbiStatement {
