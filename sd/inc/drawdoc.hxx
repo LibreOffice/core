@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:44:55 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:14:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,7 @@ SV_DECL_REF(DrawDocShell)
 #endif
 class DrawDocShell;
 class UndoManager;
+class ShapeList;
 }
 
 class ImpDrawPageListWatcher;
@@ -198,7 +199,7 @@ private:
     ::sd::Outliner* pInternalOutliner;  // internal outliner for creation of text objects
     Timer*              pWorkStartupTimer;
     Timer*              pOnlineSpellingTimer;
-    List*               pOnlineSpellingList;
+    sd::ShapeList*      pOnlineSpellingList;
     SvxSearchItem*      pOnlineSearchItem;
     List*               pFrameViewList;
     List*               pCustomShowList;
