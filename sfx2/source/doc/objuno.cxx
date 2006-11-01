@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:43:51 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:54:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,12 +60,17 @@
 #ifndef _COM_SUN_STAR_IO_IOEXCEPTION_HPP_
 #include <com/sun/star/io/IOException.hpp>
 #endif
+
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
 #endif
 
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
 
 
 #include <tools/errcode.hxx>
@@ -118,10 +123,12 @@ SfxItemPropertyMap aDocInfoPropertyMap_Impl[] =
     { "AutoloadSecs"    , 12, MID_DOCINFO_AUTOLOADSECS, &::getCppuType((const sal_Int16*)0),     PROPERTY_UNBOUND, 0 },
     { "AutoloadURL"     , 11, MID_DOCINFO_AUTOLOADURL, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "BlindCopiesTo"   , 13, WID_BCC,            &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+    { "CharLocale"      , 10, MID_DOCINFO_CHARLOCALE, &::getCppuType((const lang::Locale*)0), PROPERTY_UNBOUND, 0 },
     { "CopyTo"          , 6 , WID_CC,             &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "CreationDate"    , 12, WID_DATE_CREATED,   &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
     { "DefaultTarget"   , 13, MID_DOCINFO_DEFAULTTARGET, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "Description"     , 11, MID_DOCINFO_DESCRIPTION, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+    { "DocumentStatistic"   , 17 , MID_DOCINFO_STATISTIC, &::getCppuType((const uno::Sequence< beans::NamedValue >*)0), PROPERTY_UNBOUND, 0 },
     { "EditingCycles"   , 13, MID_DOCINFO_REVISION, &::getCppuType((const sal_Int16*)0),   PROPERTY_UNBOUND, 0 },
     { "EditingDuration" , 15, MID_DOCINFO_EDITTIME, &::getCppuType((const sal_Int32*)0),   PROPERTY_UNBOUND, 0 },
     { "InReplyTo"       , 9 , WID_IN_REPLY_TO,    &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
@@ -911,6 +918,26 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
                 break;
         }
     }
+    else if ( aValue.getValueType() == ::getCppuType((const uno::Sequence< beans::NamedValue >*)0) )
+    {
+        if ( nHandle == MID_DOCINFO_STATISTIC && _bStandalone )
+        {
+            aValue >>= _aStatistic;
+            bModified = sal_False;
+        }
+        else
+            bModified = sal_False;
+    }
+    else if ( aValue.getValueType() == ::getCppuType((const lang::Locale*)0) )
+    {
+        if ( nHandle == MID_DOCINFO_CHARLOCALE && _bStandalone )
+        {
+            aValue >>= _aCharLocale;
+            bModified = sal_False;
+        }
+        else
+            bModified = sal_False;
+    }
 
     Reference < XModel > xModel( _wModel.get(), UNO_QUERY );
     if ( bModified && xModel.is() )
@@ -1062,6 +1089,17 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
             case MID_DOCINFO_DEFAULTTARGET:
                 aValue <<=  rtl::OUString( _pInfo->GetDefaultTarget() );
                 break;
+            case MID_DOCINFO_STATISTIC:
+                // in case it is not a standalone object the property makes no sence
+                if ( _bStandalone )
+                    aValue <<= _aStatistic;
+                break;
+            case MID_DOCINFO_CHARLOCALE:
+                // in case it is not a standalone object the property makes no sence
+                if ( _bStandalone && _aCharLocale.Language.getLength() )
+                    aValue <<= _aCharLocale;
+                break;
+
             default:
                 aValue <<= ::rtl::OUString();
                 break;
@@ -1154,35 +1192,29 @@ SfxStandaloneDocumentInfoObject::~SfxStandaloneDocumentInfoObject()
 
 //-----------------------------------------------------------------------------
 
+void SfxStandaloneDocumentInfoObject::Clear()
+{
+    if ( _pInfo )
+        DELETEZ( _pInfo );
+
+    if ( _pMedium )
+        DELETEZ( _pMedium );
+
+    if ( _pFilter )
+        _pFilter = NULL;
+
+    _aStatistic.realloc( 0 );
+    _aCharLocale = lang::Locale();
+}
+
+//-----------------------------------------------------------------------------
+
 uno::Reference< embed::XStorage > SfxStandaloneDocumentInfoObject::GetStorage_Impl( const ::rtl::OUString& rName, sal_Bool bWrite )
 {
     return ::comphelper::OStorageHelper::GetStorageFromURL(
                         rName,
                         bWrite ? embed::ElementModes::READWRITE : embed::ElementModes::READ,
                         _xFactory );
-
-
-    // The medium should not be used here any more
-    // Medium erstellen
-//  if ( _pMedium )
-//      delete _pMedium;
-//
-//    _pMedium = new SfxMedium( rName, bWrite ? SFX_STREAM_READWRITE : SFX_STREAM_READONLY, sal_True );
-//    if ( !_pMedium->GetStorage().is() || SVSTREAM_OK != _pMedium->GetError() )
-//      // Datei existiert nicht oder ist kein Storage
-//      return NULL;
-
-//  // Filter-Detection wegen FileFormat-Version
-//  _pFilter = 0;
-//  if ( 0 != SFX_APP()->GetFilterMatcher().GuessFilter( *_pMedium, &_pFilter )
-//          || !bWrite && !_pFilter )
-//      // unbekanntes Dateiformat
-//      return NULL;
-
-    // Storage "offnen
-//  uno::Reference< embed::XStorage > xStor = _pMedium->GetStorage();
-//  DBG_ASSERT( xStor.is(), "no storage" );
-//  return xStor;
 }
 
 //-----------------------------------------------------------------------------
@@ -1226,16 +1258,15 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     sal_Bool bOK = sal_False;
+
+    // completely new initialization
+    Clear();
+
     uno::Reference< embed::XStorage > xStorage = GetStorage_Impl( aURL, sal_False );
-    uno::Reference< container::XNameAccess > xStorNameAccess( xStorage, uno::UNO_QUERY );
-    if ( xStorNameAccess.is() )
+    if ( xStorage.is() )
     {
         try
         {
-            // completely new initialization
-            if ( _pInfo )
-                DELETEZ( _pInfo );
-
             _pInfo = new SfxDocumentInfo;
 
             // set the mediatype from the storage
@@ -1254,7 +1285,7 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
                 aParserInput.sSystemId = aURL;
 
                 ::rtl::OUString aDocName = ::rtl::OUString::createFromAscii( "meta.xml" );
-                if ( xStorNameAccess->hasByName( aDocName ) && xStorage->isStreamElement( aDocName ) )
+                if ( xStorage->hasByName( aDocName ) && xStorage->isStreamElement( aDocName ) )
                 {
                     uno::Reference< io::XStream > xStorageStream =
                             xStorage->openStreamElement( aDocName, embed::ElementModes::READ );
@@ -1293,19 +1324,132 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
         {
         }
     }
+    else
+    {
+        _pMedium = new SfxMedium( aURL, SFX_STREAM_READONLY, sal_True );
+        SvStream* pStream = _pMedium->GetInStream();
+        if ( pStream )
+        {
+            SvStorageRef rStorage = new SvStorage( pStream, sal_False );
+            if ( !rStorage->GetName().Len() )
+                rStorage->SetName( aURL );
 
-//  DELETEZ( _pMedium );
+            if ( !rStorage->GetError() && !SFX_APP()->GetFilterMatcher().GuessFilter( *_pMedium, &_pFilter ) && _pFilter )
+            {
+                rStorage->SetVersion( _pFilter->GetVersion() );
+                bOK = _pInfo->LoadFromBinaryFormat( rStorage );
+            }
+        }
+        DELETEZ( _pMedium );
+    }
+
     if ( !bOK )
         throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_CANTREAD );
 }
 
 //-----------------------------------------------------------------------------
 
-void SAL_CALL  SfxStandaloneDocumentInfoObject::storeIntoURL(const ::rtl::OUString& /*aURL*/) throw( ::com::sun::star::io::IOException )
+void SAL_CALL  SfxStandaloneDocumentInfoObject::storeIntoURL(const ::rtl::OUString& aURL) throw( ::com::sun::star::io::IOException )
 {
-    // TODO: the old code seems to be oriented to SO5 documents
-    //       a storing for new formats is required
-    throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_CANTWRITE );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( !_pInfo )
+        throw uno::RuntimeException();
+
+    sal_Bool bOK = sal_False;
+    uno::Reference< embed::XStorage > xStorage = GetStorage_Impl( aURL, sal_True );
+    if ( xStorage.is() )
+    {
+        try
+        {
+            // set the mediatype to the storage
+            ::rtl::OUString aMTPropName( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
+            ::rtl::OUString aMediaType;
+            uno::Reference< beans::XPropertySet > xStorProps( xStorage, uno::UNO_QUERY_THROW );
+            xStorProps->setPropertyValue( aMTPropName,
+                                            uno::makeAny( ::rtl::OUString( _pInfo->GetSpecialMimeType() ) ) );
+
+            uno::Reference< io::XStream > xStorageStream = xStorage->openStreamElement(
+                                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "meta.xml" ) ),
+                                                        embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+
+            uno::Reference< beans::XPropertySet > xStreamProps( xStorageStream, uno::UNO_QUERY_THROW );
+            xStreamProps->setPropertyValue( aMTPropName,
+                                            uno::makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/xml" ) ) ) );
+            xStreamProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) ),
+                                            uno::makeAny( (sal_Bool) sal_False ) );
+            xStreamProps->setPropertyValue(
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseCommonStoragePasswordEncryption" ) ),
+                                    uno::makeAny( (sal_Bool) sal_False ) );
+
+
+            uno::Reference< io::XOutputStream > xInfoOutput = xStorageStream->getOutputStream();
+            if ( !xInfoOutput.is() )
+                throw uno::RuntimeException();
+
+            // Export to XML meta data using SAX writer
+            uno::Reference< io::XActiveDataSource > xSaxWriter(
+                            _xFactory->createInstance(
+                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ),
+                            UNO_QUERY_THROW );
+            xSaxWriter->setOutputStream( xInfoOutput );
+
+            sal_Bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
+            const sal_Char *pServiceName = bOasis
+                ? "com.sun.star.document.XMLOasisMetaExporter"
+                : "com.sun.star.document.XMLMetaExporter";
+
+            // create exporter service
+            uno::Reference< xml::sax::XDocumentHandler > xDocHandler( xSaxWriter, UNO_QUERY_THROW );
+            uno::Sequence< uno::Any > aSeq( 1 );
+            aSeq[0] <<= xDocHandler;
+               uno::Reference< document::XExporter > xExporter(
+                            _xFactory->createInstanceWithArguments(
+                                rtl::OUString::createFromAscii( pServiceName ),
+                                aSeq ),
+                            UNO_QUERY_THROW );
+            xExporter->setSourceDocument( this );
+
+            uno::Reference< document::XFilter > xFilter ( xExporter, uno::UNO_QUERY_THROW );
+            if ( xFilter->filter( uno::Sequence< beans::PropertyValue >() ) )
+            {
+                uno::Reference< embed::XTransactedObject > xTransaction( xStorage, uno::UNO_QUERY );
+                if ( xTransaction.is() )
+                    xTransaction->commit();
+
+                bOK = sal_True;
+            }
+        }
+        catch( uno::RuntimeException& )
+        {
+            throw;
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
+    else
+    {
+        _pMedium = new SfxMedium( aURL, SFX_STREAM_READWRITE, sal_True );
+        SvStream* pStream = _pMedium->GetOutStream();
+        if ( pStream )
+        {
+            SvStorageRef rStorage = new SvStorage( pStream, sal_False );
+            if ( !rStorage->GetName().Len() )
+                rStorage->SetName( aURL );
+
+            if ( !rStorage->GetError() )
+            {
+                if ( !_pInfo )
+                    _pInfo = new SfxDocumentInfo;
+
+                bOK = _pInfo->SaveToBinaryFormat( rStorage ) && rStorage->Commit();
+            }
+        }
+        DELETEZ( _pMedium );
+    }
+
+    if ( !bOK )
+        throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_CANTWRITE );
 }
 
 //=============================================================================
