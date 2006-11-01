@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:14:55 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:25:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -355,7 +355,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
     // App-Dispatcher aufbauen
     pAppData_Impl->pAppDispat->Push(*this);
     pAppData_Impl->pAppDispat->Flush();
-    pAppData_Impl->pAppDispat->DoActivate_Impl( sal_True );
+    pAppData_Impl->pAppDispat->DoActivate_Impl( sal_True, NULL );
 
     // start LateInit
     SfxAppData_Impl *pAppData = Get_Impl();
