@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:26:08 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:00:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1060,6 +1060,9 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                             node is a first level child of the Root and is NOT
                             either the current document, user or share */
                             Reference< browse::XBrowseNode >& theChild = children[n];
+                            //#139111# some crash reports show that it might be unset
+                            if(!theChild.is())
+                                continue;
                             ::rtl::OUString uiName = theChild->getName();
                             BOOL bDisplay = TRUE;
 
