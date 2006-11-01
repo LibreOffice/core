@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-12 13:50:39 $
+#   last change: $Author: vg $ $Date: 2006-11-01 14:07:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -177,6 +177,11 @@ LINKFLAGSPROF=-L$(COMPATH)/WS6U1/lib/libp -xpg -z allextract
 LINKFLAGSDEBUG=
 LINKFLAGSOPT=
 LINKVERSIONMAPFLAG=-M
+
+# mapfile for non-executable stack
+LINKFLAGSNOEXSTK*=$(LINKVERSIONMAPFLAG) $(SOLARENV)/src/solaris_noexstk.map
+LINKFLAGSAPPGUI+=$(LINKFLAGSNOEXSTK)
+LINKFLAGSAPPCUI+=$(LINKFLAGSNOEXSTK)
 
 APPLINKSTATIC=$(STATIC)
 APPLINKSHARED=$(DIRECT)
