@@ -4,9 +4,9 @@
  *
  *  $RCSfile: threadex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:14:30 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:56:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,11 +86,13 @@ SolarThreadExecutor::SolarThreadExecutor()
     :m_nReturn( 0 )
     ,m_bTimeout( false )
 {
+    m_aStart = osl_createCondition();
     m_aFinish = osl_createCondition();
 }
 
 SolarThreadExecutor::~SolarThreadExecutor()
 {
+    osl_destroyCondition( m_aStart );
     osl_destroyCondition( m_aFinish );
 }
 
@@ -98,6 +100,7 @@ IMPL_LINK( SolarThreadExecutor, worker, void*, EMPTYARG )
 {
     if ( !m_bTimeout )
     {
+        osl_setCondition( m_aStart );
         m_nReturn = doIt();
         osl_setCondition( m_aFinish );
     }
@@ -108,16 +111,20 @@ long SolarThreadExecutor::impl_execute( const TimeValue* _pTimeout )
 {
     if( ::vos::OThread::getCurrentIdentifier() == Application::GetMainThreadIdentifier() )
     {
+        osl_setCondition( m_aStart );
         m_nReturn = doIt();
         osl_setCondition( m_aFinish );
     }
     else
     {
+        osl_resetCondition( m_aStart );
         osl_resetCondition( m_aFinish );
         ULONG nSolarMutexCount = Application::ReleaseSolarMutex();
         Application::PostUserEvent( LINK( this, SolarThreadExecutor, worker ) );
-        if ( osl_cond_result_timeout == osl_waitCondition( m_aFinish, _pTimeout ) )
+        if ( osl_cond_result_timeout == osl_waitCondition( m_aStart, _pTimeout ) )
             m_bTimeout = true;
+        else
+            osl_waitCondition( m_aFinish, NULL );
         if( nSolarMutexCount )
             Application::AcquireSolarMutex( nSolarMutexCount );
     }
