@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:16:33 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:25:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -639,6 +639,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxUnoAnyItem( SID_POSTDATA, rProp.Value ) );
                 }
+                else if ( aName == sFrame )
+                {
+                    Reference< XFrame > xVal;
+                    sal_Bool bOK = (rProp.Value >>= xVal);
+                    DBG_ASSERT( bOK, "invalid type for Frame" )
+                    if (bOK)
+                        rSet.Put( SfxUnoAnyItem( SID_FILLFRAME, rProp.Value ) );
+                }
                 else if ( aName == sAsTemplate )
                 {
                     sal_Bool bVal = sal_False;
@@ -1027,6 +1035,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     //            nAdditional++;
             if ( rSet.GetItemState( SID_POSTDATA ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_FILLFRAME ) == SFX_ITEM_SET )
+                nAdditional++;
             if ( rSet.GetItemState( SID_CHARSET ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_TARGETNAME ) == SFX_ITEM_SET )
@@ -1135,6 +1145,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_OUTPUTSTREAM )
                         continue;
                     if ( nId == SID_POSTDATA )
+                        continue;
+                    if ( nId == SID_FILLFRAME )
                         continue;
                     if ( nId == SID_TEMPLATE )
                         continue;
@@ -1381,6 +1393,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_POSTDATA, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = sPostData;
+                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_FILLFRAME, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = sFrame;
                 pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_TEMPLATE, sal_False, &pItem ) == SFX_ITEM_SET )
