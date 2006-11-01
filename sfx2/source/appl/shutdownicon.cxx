@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-09 15:56:53 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,24 +237,33 @@ void ShutdownIcon::OpenURL( const ::rtl::OUString& aURL, const ::rtl::OUString& 
 {
     if ( getInstance() && getInstance()->m_xDesktop.is() )
     {
-        Reference < XComponentLoader > xLoader ( getInstance()->m_xDesktop, UNO_QUERY );
-        if( xLoader.is() )
+        Reference < XDispatchProvider > xDispatchProvider( getInstance()->m_xDesktop, UNO_QUERY );
+        if ( xDispatchProvider.is() )
         {
-            try
+            com::sun::star::util::URL aDispatchURL;
+            aDispatchURL.Complete = aURL;
+
+            Reference < com::sun::star::util::XURLTransformer > xURLTransformer(
+                ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.util.URLTransformer") ),
+                com::sun::star::uno::UNO_QUERY );
+            if ( xURLTransformer.is() )
             {
-                xLoader->loadComponentFromURL(
-                    aURL,
-                    rTarget,
-                    0,
-                    aArgs );
-            }
-            catch( IOException )
-            {
-                OSL_ENSURE( 0, "IOException in loadComponentFromURL!");
-            }
-            catch( IllegalArgumentException )
-            {
-                OSL_ENSURE( 0, "IllegalArgumentException in loadComponentFromURL!");
+                try
+                {
+                    Reference< com::sun::star::frame::XDispatch > xDispatch;
+
+                    xURLTransformer->parseStrict( aDispatchURL );
+                    xDispatch = xDispatchProvider->queryDispatch( aDispatchURL, rTarget, 0 );
+                    if ( xDispatch.is() )
+                        xDispatch->dispatch( aDispatchURL, aArgs );
+                }
+                catch ( com::sun::star::uno::RuntimeException& )
+                {
+                    throw;
+                }
+                catch ( com::sun::star::uno::Exception& )
+                {
+                }
             }
         }
     }
@@ -286,23 +295,11 @@ void ShutdownIcon::FileOpen()
                     Sequence< OUString >        sFiles = xPicker->getFiles();
                     int                         nFiles = sFiles.getLength();
 
-                    int                         nArgs=3;
-                    Sequence< PropertyValue >   aArgs(3);
+                    int                         nArgs=0;
+                    Sequence< PropertyValue >   aArgs;
 
-                    Reference < com::sun::star::task::XInteractionHandler > xInteraction(
-                        ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.task.InteractionHandler") ),
-                        com::sun::star::uno::UNO_QUERY );
-
-                    aArgs[0].Name = OUString::createFromAscii( "InteractionHandler" );
-                    aArgs[0].Value <<= xInteraction;
-
-                    sal_Int16 nMacroExecMode = ::com::sun::star::document::MacroExecMode::USE_CONFIG;
-                    aArgs[1].Name = OUString::createFromAscii( "MacroExecutionMode" );
-                    aArgs[1].Value <<= nMacroExecMode;
-
-                    sal_Int16 nUpdateDoc = ::com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG;
-                    aArgs[2].Name = OUString::createFromAscii( "UpdateDocMode" );
-                    aArgs[2].Value <<= nUpdateDoc;
+                    // No default arguments anymore as they are provided by the dispatch
+                    // provider automatically.
 
                     // pb: #102643# use the filedlghelper to get the current filter name,
                     // because it removes the extensions before you get the filter name.
