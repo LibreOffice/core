@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_impress.scp,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 13:30:38 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 13:53:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ File gid_File_Help_Simpress_Zip
     Dir = gid_Dir_Help_Isolanguage;
     TXT_FILE_BODY;
     Styles = (ARCHIVE,DONT_OVERWRITE,PATCH);
-    EXTRA_ALL_LANG(simpress);
+    EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(simpress);
     Patchfiles = ("simpress.db",
                   "simpress.ht",
                   "simpress.jar",
