@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flyfrm.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-15 11:41:22 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:11:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,6 +155,10 @@ protected:
     // --> OD 2006-08-10 #i68520#
     virtual const bool _SetObjTop( const SwTwips _nTop );
     virtual const bool _SetObjLeft( const SwTwips _nLeft );
+    // <--
+
+    // --> OD 2006-10-05 #i70122#
+    virtual const SwRect GetObjBoundRect() const;
     // <--
 public:
     // OD 2004-03-23 #i26791#
