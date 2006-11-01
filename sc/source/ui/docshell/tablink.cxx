@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:46:08 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 10:16:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,9 @@
 #include "undotab.hxx"
 #include "global.hxx"
 #include "hints.hxx"
+#include "cell.hxx"
+#include "dociter.hxx"
+#include "opcode.hxx"
 
 TYPEINIT1(ScTableLink, ::sfx2::SvBaseLink);
 
@@ -300,12 +303,78 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
             {
                 pDoc->DeleteAreaTab( 0,0,MAXCOL,MAXROW, nTab, IDF_ALL );
 //              pDoc->ClearDrawPage(nTab);
-                //  Fehler eintragen
-                pDoc->SetString( 0,0,nTab, ScGlobal::GetRscString(STR_LINKERROR) );
-                pDoc->SetString( 0,1,nTab, ScGlobal::GetRscString(STR_LINKERRORFILE) );
-                pDoc->SetString( 1,1,nTab, aNewUrl );
-                pDoc->SetString( 0,2,nTab, ScGlobal::GetRscString(STR_LINKERRORTAB) );
-                pDoc->SetString( 1,2,nTab, aTabName );
+
+                bool bShowError = true;
+                if ( nMode == SC_LINK_VALUE )
+                {
+                    //  #139464# Value link (used with external references in formulas):
+                    //  Look for formulas that reference the sheet, and put errors in the referenced cells.
+
+                    ScRangeList aErrorCells;        // cells on the linked sheets that need error values
+
+                    ScCellIterator aCellIter( pDoc, 0,0,0, MAXCOL,MAXROW,MAXTAB );          // all sheets
+                    ScBaseCell* pCell = aCellIter.GetFirst();
+                    while (pCell)
+                    {
+                        if (pCell->GetCellType() == CELLTYPE_FORMULA)
+                        {
+                            ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+
+                            ScDetectiveRefIter aRefIter( pFCell );
+                            ScRange aRefRange;
+                            while ( aRefIter.GetNextRef( aRefRange ) )
+                            {
+                                if ( aRefRange.aStart.Tab() <= nTab && aRefRange.aEnd.Tab() >= nTab )
+                                {
+                                    // use first cell of range references (don't fill potentially large ranges)
+
+                                    aErrorCells.Join( ScRange( aRefRange.aStart ) );
+                                }
+                            }
+                        }
+                        pCell = aCellIter.GetNext();
+                    }
+
+                    ULONG nRanges = aErrorCells.Count();
+                    if ( nRanges )                          // found any?
+                    {
+                        ScTokenArray aTokenArr;
+                        aTokenArr.AddOpCode( ocNoValue );
+                        aTokenArr.AddOpCode( ocOpen );
+                        aTokenArr.AddOpCode( ocClose );
+                        aTokenArr.AddOpCode( ocStop );
+
+                        for (ULONG nPos=0; nPos<nRanges; nPos++)
+                        {
+                            const ScRange* pRange = aErrorCells.GetObject(nPos);
+                            SCCOL nStartCol = pRange->aStart.Col();
+                            SCROW nStartRow = pRange->aStart.Row();
+                            SCCOL nEndCol = pRange->aEnd.Col();
+                            SCROW nEndRow = pRange->aEnd.Row();
+                            for (SCROW nRow=nStartRow; nRow<=nEndRow; nRow++)
+                                for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
+                                {
+                                    ScAddress aDestPos( nCol, nRow, nTab );
+                                    ScFormulaCell* pNewCell = new ScFormulaCell( pDoc, aDestPos, &aTokenArr );
+                                    pDoc->PutCell( aDestPos, pNewCell );
+                                }
+                        }
+
+                        bShowError = false;
+                    }
+                    // if no references were found, insert error message (don't leave the sheet empty)
+                }
+
+                if ( bShowError )
+                {
+                    //  Normal link or no references: put error message on sheet.
+
+                    pDoc->SetString( 0,0,nTab, ScGlobal::GetRscString(STR_LINKERROR) );
+                    pDoc->SetString( 0,1,nTab, ScGlobal::GetRscString(STR_LINKERRORFILE) );
+                    pDoc->SetString( 1,1,nTab, aNewUrl );
+                    pDoc->SetString( 0,2,nTab, ScGlobal::GetRscString(STR_LINKERRORTAB) );
+                    pDoc->SetString( 1,2,nTab, aTabName );
+                }
 
                 bNotFound = TRUE;
             }
