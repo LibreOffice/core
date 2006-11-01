@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawController.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:23:03 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:17:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,6 +305,7 @@ void SAL_CALL
     DrawController::disposing (const lang::EventObject& rEventObject)
     throw (uno::RuntimeException)
 {
+    (void)rEventObject;
 }
 
 
@@ -476,24 +477,26 @@ void DrawController::FireChangeLayerMode (bool bLayerMode) throw()
 
 
 
-void DrawController::FireSwitchCurrentPage (SdPage* pCurrentPage) throw()
+void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
 {
-    if (pCurrentPage != mpCurrentPage)
+    SdrPage* pCurrentPage  = mpCurrentPage.get();
+    if (pNewCurrentPage != pCurrentPage)
+    {
         try
         {
             Any aNewValue (
-                makeAny(Reference<drawing::XDrawPage>(pCurrentPage->getUnoPage(), UNO_QUERY)));
+                makeAny(Reference<drawing::XDrawPage>(pNewCurrentPage->getUnoPage(), UNO_QUERY)));
 
             Any aOldValue;
-            if (mpCurrentPage != NULL)
+            if (pCurrentPage != NULL)
             {
-                Reference<drawing::XDrawPage> xOldPage (mpCurrentPage->getUnoPage(), UNO_QUERY);
+                Reference<drawing::XDrawPage> xOldPage (pCurrentPage->getUnoPage(), UNO_QUERY);
                 aOldValue <<= xOldPage;
             }
 
             FirePropertyChange(PROPERTY_CURRENTPAGE, aNewValue, aOldValue);
 
-            mpCurrentPage = pCurrentPage;
+            mpCurrentPage.reset(pNewCurrentPage);
         }
         catch( uno::Exception& e )
         {
@@ -505,6 +508,7 @@ void DrawController::FireSwitchCurrentPage (SdPage* pCurrentPage) throw()
                         comphelper::anyToString( cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 )).getStr() );
         }
+    }
 }
 
 
