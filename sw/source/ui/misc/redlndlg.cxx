@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:09:20 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:59:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -553,6 +553,10 @@ void SwRedlineAcceptDlg::Init(USHORT nStart)
     InitAuthors();
 
     pTable->SetUpdateMode(TRUE);
+    // #i69618# this moves the list box to the right position, visually
+    SvLBoxEntry* pSelEntry = pTable->FirstSelected();
+    if( pSelEntry )
+        pTable->MakeVisible( pSelEntry );
 }
 
 /*------------------------------------------------------------------------
