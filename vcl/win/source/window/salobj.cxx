@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:47:35 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:31:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -796,7 +796,7 @@ void WinSalObject::EndSetClipRegion()
         ULONG nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
         hRegion = ExtCreateRegion( NULL, nSize, mpClipRgnData );
         if ( mpClipRgnData != mpStdClipRgnData )
-            delete mpClipRgnData;
+            delete [] (BYTE*)mpClipRgnData;
     }
 
     DBG_ASSERT( hRegion, "SalObject::EndSetClipRegion() - Can't create ClipRegion" );
