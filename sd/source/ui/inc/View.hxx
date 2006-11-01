@@ -4,9 +4,9 @@
  *
  *  $RCSfile: View.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:32:00 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:16:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ struct SdViewRedrawRec
 };
 
 
-class View : public FmFormView, public sdr::ObjectUser
+class View : public FmFormView
 {
 public:
     TYPEINFO();
@@ -198,8 +198,6 @@ public:
     bool isRecordingUndo() const;
 
 protected:
-    virtual void ObjectInDestruction(const SdrObject& rObject);
-
     DECL_LINK( ParagraphInsertedHdl, ::Outliner * );
     DECL_LINK( ParagraphRemovingHdl, ::Outliner * );
 
