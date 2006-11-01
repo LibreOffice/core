@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ToolBarManager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:32:34 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:05:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -321,6 +321,8 @@ public:
         would still be referenced.
     */
     void ReleaseAllToolBarShells (void);
+
+    void ToolBarsDestroyed(void);
 
     void PreUpdate (void);
     void PostUpdate (void);
@@ -637,6 +639,11 @@ void ToolBarManager::SelectionHasChanged (
 }
 
 
+void ToolBarManager::ToolBarsDestroyed(void)
+{
+    if (mpImpl.get() != NULL)
+        mpImpl->ToolBarsDestroyed();
+}
 
 
 //===== ToolBarManager::Implementation =======================================
@@ -678,7 +685,6 @@ ToolBarManager::Implementation::Implementation (
 
 
 
-
 /** The order of statements is important.
     First unregister listeners, which may post user events.
     Then remove pending user events.
@@ -697,6 +703,10 @@ ToolBarManager::Implementation::~Implementation (void)
 }
 
 
+void ToolBarManager::Implementation::ToolBarsDestroyed(void)
+{
+    maToolBarList.MarkAllToolBarsAsNotActive();
+}
 
 
 void ToolBarManager::Implementation::SetValid (bool bValid)
