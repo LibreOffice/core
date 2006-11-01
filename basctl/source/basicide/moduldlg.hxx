@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:44:49 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:23:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,7 +279,7 @@ protected:
     void                NewLib();
     void                InsertLib();
     void                implExportLib( const String& aLibName, const String& aTargetURL,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > Handler );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler );
     void                Export();
     void                ExportAsPackage( const String& aLibName );
     void                ExportAsBasic( const String& aLibName );
