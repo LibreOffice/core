@@ -4,9 +4,9 @@
 #
 #   $RCSfile: macro.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 01:16:18 $
+#   last change: $Author: vg $ $Date: 2006-11-01 13:52:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,12 @@ if ( !defined $completelangiso_var) {
     exit 1;
 }
 
+my $poorhelplocalizations_var = $ENV{WITH_POOR_HELP_LOCALIZATIONS};
+my %poorhelplocalizations;
+foreach $lang (split (/ /, $poorhelplocalizations_var)) {
+  $poorhelplocalizations{$lang}++;
+}
+
 startup_check();
 if ( "$completelangiso_var" eq "$lastcompletelangiso_var" ) {
     print STDERR "No new languages. Keeping old file\n";
@@ -61,6 +67,7 @@ write_DIR_ISOLANGUAGE_ALL_LANG_2();
 write_DIR_ISOLANGUAGE_ALL_LANG();
 write_DIR_IDENT_ALL_LANG();
 write_EXTRA_ALL_LANG();
+write_EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG();
 write_EXTRA_IDENT_ALL_LANG();
 write_RESFILE_ALL_LANG();
 write_SHORT_RESFILE_ALL_LANG();
@@ -126,6 +133,19 @@ sub write_EXTRA_ALL_LANG
     foreach $lang (@completelangiso) {
         print OUTFILE "\\\n\tName ($lang) = EXTRAFILENAME(name,_$lang)";
         print OUTFILE "; " if ( $lang ne $completelangiso[$#completelangiso]);
+    }
+    print OUTFILE "\n\n";
+}
+
+sub write_EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG
+{
+    my $first = 1;
+    print OUTFILE "#define EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(name) ";
+    foreach $lang (@completelangiso) {
+        next if ( $poorhelplocalizations{$lang} );
+        print OUTFILE ";" unless $first;
+        $first = 0;
+        print OUTFILE "\\\n\tName ($lang) = EXTRAFILENAME(name,_$lang)";
     }
     print OUTFILE "\n\n";
 }
