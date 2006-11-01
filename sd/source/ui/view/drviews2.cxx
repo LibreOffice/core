@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:36:25 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:17:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,6 +237,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
     // Waehrend einer Native-Diashow wird nichts ausgefuehrt!
     if(mpSlideShow &&
        rReq.GetSlot() != SID_NAVIGATOR)
+        return;
+
+    DBG_ASSERT( pDrView, "sd::DrawViewShell::FuTemporary(), no draw view!" );
+    if( !pDrView )
         return;
 
     CheckLineTo (rReq);
