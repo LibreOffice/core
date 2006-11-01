@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:53:56 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:15:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1077,15 +1077,18 @@ void FuPoor::DoPaste()
 
 IMPL_LINK( FuPoor, DragHdl, Timer *, pTimer )
 {
-    USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(HITPIX,0)).Width() );
-    SdrHdl* pHdl = pView->HitHandle(aMDPos, *pWindow);
-
-    if ( pHdl==NULL && pView->IsMarkedHit(aMDPos, nHitLog)
-         && !pView->IsPresObjSelected(FALSE, TRUE) )
+    if( pView )
     {
-        pWindow->ReleaseMouse();
-        bIsInDragMode = TRUE;
-        pView->StartDrag( aMDPos, pWindow );
+        USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+        SdrHdl* pHdl = pView->HitHandle(aMDPos, *pWindow);
+
+        if ( pHdl==NULL && pView->IsMarkedHit(aMDPos, nHitLog)
+             && !pView->IsPresObjSelected(FALSE, TRUE) )
+        {
+            pWindow->ReleaseMouse();
+            bIsInDragMode = TRUE;
+            pView->StartDrag( aMDPos, pWindow );
+        }
     }
     return 0;
 }
