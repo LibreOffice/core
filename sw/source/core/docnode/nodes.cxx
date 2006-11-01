@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:01:52 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:11:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,7 +311,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
 
             RemoveNode( rDelPos.GetIndex(), 1, FALSE );     // Indizies verschieben !!
             SwCntntNode * pCNd = pNd->GetCntntNode();
-            rNds.Insert( pNd, aInsPos );
+            rNds.InsertNode( pNd, aInsPos, false );
 
             if( pCNd )
             {
@@ -626,7 +626,7 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
                             RemoveNode( aMvIdx.GetIndex(), 1, FALSE );
                             pNd->pStartOfSection = pSttNode;
-                            rNodes.Insert( pNd, aIdx );
+                            rNodes.InsertNode( pNd, aIdx );
 
                             // setze bei Start/EndNodes die richtigen Indizies
                             if( bInsOutlineIdx && bOutlNd )
@@ -735,8 +735,8 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     RemoveNode( nSttPos, 1, FALSE ); // SttNode loeschen
 
                     pSttNd->pStartOfSection = aIdx.GetNode().pStartOfSection;
-                    rNodes.Insert( pSttNd, aIdx  );
-                    rNodes.Insert( pAktNode, aIdx );
+                    rNodes.InsertNode( pSttNd, aIdx  );
+                    rNodes.InsertNode( pAktNode, aIdx );
                     aIdx--;
                     pSttNd->pEndOfSection = (SwEndNode*)pAktNode;
 
@@ -2614,16 +2614,44 @@ void SwNodes::DeRegisterIndex( SwNodeIndex& rIdx )
     rIdx.pPrev = 0;
 }
 
-void SwNodes::Insert( const SwNodePtr pNode, const SwNodeIndex& rPos )
+// --> OD 2006-10-16 #137792#
+void SwNodes::InsertNode( const SwNodePtr pNode,
+                          const SwNodeIndex& rPos,
+                          const bool bSyncNumberAndNumRule )
+// <--
 {
     const ElementPtr pIns = pNode;
     BigPtrArray::Insert( pIns, rPos.GetIndex() );
+    // --> OD 2006-10-16 #137792#
+    if ( bSyncNumberAndNumRule )
+    {
+        SwTxtNode* pTxtNd = pNode->GetTxtNode();
+        if ( pTxtNd )
+        {
+            pTxtNd->SyncNumberAndNumRule();
+        }
+    }
+    // <--
 }
 
-void SwNodes::Insert(const SwNodePtr pNode, ULONG nPos)
+// --> OD 2006-10-16 #137792#
+void SwNodes::InsertNode( const SwNodePtr pNode,
+                          ULONG nPos,
+                          const bool bSyncNumberAndNumRule )
+// <--
 {
     const ElementPtr pIns = pNode;
     BigPtrArray::Insert( pIns, nPos );
+    // --> OD 2006-10-16 #137792#
+    if ( bSyncNumberAndNumRule )
+    {
+        SwTxtNode* pTxtNd = pNode->GetTxtNode();
+        if ( pTxtNd )
+        {
+            pTxtNd->SyncNumberAndNumRule();
+        }
+    }
+    // <--
 }
 
 // ->#112139#
