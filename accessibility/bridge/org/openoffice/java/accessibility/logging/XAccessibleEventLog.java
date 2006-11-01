@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XAccessibleEventLog.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-08-17 13:25:58 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:09:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,9 @@ public class XAccessibleEventLog implements XAccessibleEventListener {
                 break;
             case AccessibleStateType.SELECTED:
                 logMessage(o, s + javax.accessibility.AccessibleState.SELECTED);
+                break;
+            case AccessibleStateType.SENSITIVE:
+                logMessage(o, s + "sensitive");
                 break;
             case AccessibleStateType.SHOWING:
                 logMessage(o, s + javax.accessibility.AccessibleState.SHOWING);
