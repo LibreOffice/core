@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:05:26 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:16:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1807,14 +1807,14 @@ void LoadEnv::impl_reactForLoadingState()
     16.01.2005 13:04
 -----------------------------------------------*/
 void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
-                                                sal_Bool                                /*bForceToFront*/)
+                                                sal_Bool bForceToFront)
 {
     css::uno::Reference< css::awt::XTopWindow > xTopWindow(xWindow, css::uno::UNO_QUERY);
 
     if (xWindow.is())
         xWindow->setVisible(sal_True);
 
-    if (xTopWindow.is())
+    if (xTopWindow.is() && bForceToFront)
         xTopWindow->toFront();
 
 /* #i19976#
