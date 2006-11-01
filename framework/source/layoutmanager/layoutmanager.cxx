@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:49:31 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:16:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3110,6 +3110,12 @@ void LayoutManager::implts_setVisibleState( sal_Bool bShow )
 
 void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
 {
+    // notify listeners
+    css::uno::Any a;
+    if ( bSetVisible )
+        implts_notifyListeners( css::frame::LayoutManagerEvents::VISIBLE, a );
+    else
+        implts_notifyListeners( css::frame::LayoutManagerEvents::INVISIBLE, a );
     std::vector< Reference< css::awt::XWindow > > aWinVector;
     sal_Bool bOld;
 
@@ -3238,13 +3244,6 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
         {
         }
     }
-
-    // notify listeners
-    css::uno::Any a;
-    if ( bSetVisible )
-        implts_notifyListeners( css::frame::LayoutManagerEvents::VISIBLE, a );
-    else
-        implts_notifyListeners( css::frame::LayoutManagerEvents::INVISIBLE, a );
 }
 
 void LayoutManager::implts_destroyStatusBar()
@@ -3725,7 +3724,6 @@ throw ( RuntimeException )
     WriteGuard aWriteLock( m_aLock );
 
     if (( m_xDockingAreaAcceptor == xDockingAreaAcceptor ) ||
-          !xDockingAreaAcceptor.is() ||
           !m_xFrame.is() )
         return;
 
@@ -3736,7 +3734,7 @@ throw ( RuntimeException )
     if ( m_xDockingAreaAcceptor.is() )
     {
         Reference< css::awt::XWindow > xWindow( m_xDockingAreaAcceptor->getContainerWindow() );
-        if ( xWindow.is() && m_xFrame->getContainerWindow() != m_xContainerWindow )
+        if ( xWindow.is() && ( m_xFrame->getContainerWindow() != m_xContainerWindow || !xDockingAreaAcceptor.is() ) )
             xWindow->removeWindowListener( Reference< css::awt::XWindowListener >( static_cast< OWeakObject * >( this ), UNO_QUERY ));
 
         oldDockingAreaWindows.push_back( m_xDockAreaWindows[DockingArea_DOCKINGAREA_TOP] );
@@ -3769,6 +3767,10 @@ throw ( RuntimeException )
         m_xContainerWindow = m_xDockingAreaAcceptor->getContainerWindow();
         m_xContainerWindow->addWindowListener( Reference< css::awt::XWindowListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
 
+        // we always must keep a connection to the window of our frame for resize events
+        if ( m_xContainerWindow != m_xFrame->getContainerWindow() )
+            m_xFrame->getContainerWindow()->addWindowListener( Reference< css::awt::XWindowListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+
         // #i37884# set initial visibility state - in the plugin case the container window is already shown
         // and we get no notification anymore
         {
@@ -3788,9 +3790,11 @@ throw ( RuntimeException )
         m_xDockAreaWindows[DockingArea_DOCKINGAREA_LEFT]   = xLeftDockWindow;
         m_xDockAreaWindows[DockingArea_DOCKINGAREA_RIGHT]  = xRightDockWindow;
     }
+
     aWriteLock.unlock();
      /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
+    if ( xDockingAreaAcceptor.is() )
     {
         vos::OGuard aGuard( Application::GetSolarMutex() );
         ::DockingAreaWindow* pWindow;
@@ -3828,14 +3832,17 @@ throw ( RuntimeException )
         }
     }
 
-    if ( bAutomaticToolbars )
+    if ( m_xDockingAreaAcceptor.is() )
     {
-        implts_createAddonsToolBars(); // create addon toolbars
-        implts_createCustomToolBars(); // create custom toolbars
-        implts_createNonContextSensitiveToolBars();
+        if ( bAutomaticToolbars )
+        {
+            implts_createAddonsToolBars(); // create addon toolbars
+            implts_createCustomToolBars(); // create custom toolbars
+            implts_createNonContextSensitiveToolBars();
+        }
+        implts_sortUIElements();
+        implts_doLayout( sal_True );
     }
-    implts_sortUIElements();
-    implts_doLayout( sal_True );
 }
 
 IMPL_LINK( LayoutManager, WindowEventListener, VclSimpleEvent*, pEvent )
@@ -5202,6 +5209,13 @@ throw (RuntimeException)
     aReadLock.unlock();
 
     RTL_LOGFILE_TRACE1( "framework (cd100003) ::LayoutManager::lock lockCount=%d", nLockCount );
+#ifdef DBG_UTIL
+    ByteString aStr("LayoutManager::lock ");
+    aStr += ByteString::CreateFromInt32((long)this);
+    aStr += " - ";
+    aStr += ByteString::CreateFromInt32(nLockCount);
+    DBG_TRACE( aStr.GetBuffer() );
+#endif
 
     Any a( nLockCount );
     implts_notifyListeners( css::frame::LayoutManagerEvents::LOCK, a );
@@ -5217,7 +5231,13 @@ throw (RuntimeException)
     aReadLock.unlock();
 
     RTL_LOGFILE_TRACE1( "framework (cd100003) ::LayoutManager::unlock lockCount=%d", nLockCount );
-
+#ifdef DBG_UTIL
+    ByteString aStr("LayoutManager::unlock ");
+    aStr += ByteString::CreateFromInt32((long)this);
+    aStr += " - ";
+    aStr += ByteString::CreateFromInt32(nLockCount);
+    DBG_TRACE( aStr.GetBuffer() );
+#endif
     // conform to documentation: unlock with lock count == 0 means force a layout
 
     WriteGuard aWriteLock( m_aLock );
@@ -5225,11 +5245,11 @@ throw (RuntimeException)
         m_aAsyncLayoutTimer.Stop();
     aWriteLock.unlock();
 
-    if ( bDoLayout )
-      doLayout();
-
     Any a( nLockCount );
     implts_notifyListeners( css::frame::LayoutManagerEvents::UNLOCK, a );
+
+    if ( bDoLayout )
+      doLayout();
 }
 
 void SAL_CALL LayoutManager::doLayout()
@@ -6591,13 +6611,16 @@ throw( css::uno::RuntimeException )
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
+    if ( !m_xDockingAreaAcceptor.is() )
+        return;
+
     // Request to set docking area space again.
     css::awt::Rectangle               aDockingArea( m_aDockingArea );
     Reference< XDockingAreaAcceptor > xDockingAreaAcceptor( m_xDockingAreaAcceptor );
     Reference< css::awt::XWindow >    xContainerWindow( m_xContainerWindow );
 
     Reference< XInterface > xIfac( xContainerWindow, UNO_QUERY );
-    if ( xIfac == aEvent.Source )
+    if ( xIfac == aEvent.Source && m_bVisible )
     {
         // We have to call our resize handler at least once synchronously, as some
         // application modules need this. So we have to check if this is the first
@@ -6614,6 +6637,8 @@ throw( css::uno::RuntimeException )
     }
     else if ( m_xFrame.is() && aEvent.Source == m_xFrame->getContainerWindow() )
     {
+        // the container window of my DockingAreaAcceptor is not the same as of my frame
+        // I still have to resize my frames' window as nobody else will do it
         Reference< css::awt::XWindow > xComponentWindow( m_xFrame->getComponentWindow() );
         if( xComponentWindow.is() == sal_True )
         {
@@ -6631,6 +6656,7 @@ throw( css::uno::RuntimeException )
     }
     else
     {
+        // resize event for one of the UIElements
         sal_Bool bLocked( m_bDockingInProgress );
         sal_Bool bDoLayout( m_bDoLayout );
         aWriteLock.unlock();
