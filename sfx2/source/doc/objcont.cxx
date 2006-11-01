@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:55:24 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:27:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1514,21 +1514,6 @@ SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& aTargetURL, BO
 
     return xDoc;
 }
-
-/*
-SfxToolBoxConfig* SfxObjectShell::GetToolBoxConfig_Impl()
-{
-    //TODO/LATER: new API after recync to docking1 cws???
-    if ( !pImp->pTbxConfig )
-    {
-        pImp->pTbxConfig = new SfxToolBoxConfig(
-//REMOVE                GetConfigManager() ? pImp->pCfgMgr : SFX_APP()->GetConfigManager_Impl() );
-                                        SFX_APP()->GetConfigManager_Impl() );
-    }
-
-    return pImp->pTbxConfig;
-} */
-
 
 sal_Bool SfxObjectShell::IsHelpDocument() const
 {
