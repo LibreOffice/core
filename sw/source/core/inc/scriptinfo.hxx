@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptinfo.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:21:42 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:12:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,6 +222,15 @@ public:
     static USHORT MaskHiddenRanges( const SwTxtNode& rNode, XubString& rText,
                                     const xub_StrLen nStt, const xub_StrLen nEnd,
                                     const xub_Unicode cChar );
+
+/** Hidden text attribute handling
+
+    @descr  Takes a SwTxtNode and deletes the hidden ranges from the node.
+
+    @param  rNode
+                The text node.
+ */
+    static void DeleteHiddenRanges( SwTxtNode& rNode );
 
     //
     // HIDDEN TEXT STUFF END
