@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:15:37 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:29:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1764,7 +1764,7 @@ void ImplBorderWindow::ImplInit( Window* pParent,
         {
             mpWindowImpl->mbOverlapWin  = TRUE;
             mpWindowImpl->mbFrame       = TRUE;
-            mbFrameBorder   = TRUE;
+            mbFrameBorder   = (nOrgStyle & WB_NOBORDER) ? FALSE : TRUE;
         }
         else
         {
