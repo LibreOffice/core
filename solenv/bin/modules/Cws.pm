@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-07 16:31:41 $
+#   last change: $Author: vg $ $Date: 2006-11-01 10:13:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -514,6 +514,17 @@ sub get_current_milestone
     my $master    = shift;
 
     return $self->get_current_milestone_from_eis($master);
+}
+
+# Set BuildID of milestone
+sub set_milestone_buildid
+{
+    my $self         = shift;
+    my $master      = shift;
+    my $milestone   = shift;
+    my $buildid     = shift;
+
+    return $self->set_milestone_buildid_in_eis($master, $milestone, $buildid);
 }
 
 # Declare milestone 'removed'
@@ -1188,6 +1199,26 @@ sub set_integration_milestone_in_eis
     eval { $result = $eis->setIntegrationMilestone($id, $milestone, $buildid) };
     if ( $@ ) {
         carp("ERROR: set_integration_milestone(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return $result;
+}
+
+sub set_milestone_buildid_in_eis
+{
+    my $self      = shift;
+    my $master    = shift;
+    my $milestone = shift;
+    my $buildid   = shift;
+
+    $master    = Eis::to_string($master);
+    $milestone = Eis::to_string($milestone);
+    $buildid   = Eis::to_string($buildid);
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->setMilestoneBuild( $master, $milestone, $buildid ) };
+    if ( $@ ) {
+        carp("ERROR: set_milestone_buildid(): EIS database transaction failed. Reason:\n$@\n");
     }
     return $result;
 }
