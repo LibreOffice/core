@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:01:21 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:19:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2181,6 +2181,22 @@ put_itemset:
             aSet.SetParent(&rStyleSet);
             rPropSet.setPropertyValue(*pMap, rValue, aSet);
             rStyleSet.Put(aSet);
+            // --> OD 2006-10-18 #i70223#
+            if ( SFX_STYLE_FAMILY_PARA == eFamily &&
+                 pMap->nWID == RES_PARATR_NUMRULE &&
+                 rBase.pNewBase && rBase.pNewBase->GetCollection() &&
+                 rBase.pNewBase->GetCollection()->GetOutlineLevel() < MAXLEVEL /* assigned to list level of outline style */)
+            {
+                OUString sNewNumberingRuleName;
+                rValue >>= sNewNumberingRuleName;
+                String sTmp( sNewNumberingRuleName );
+                if ( sNewNumberingRuleName.getLength() == 0 ||
+                     sTmp != pDoc->GetOutlineNumRule()->GetName() )
+                {
+                    // delete assignment to list level of outline style.
+                    rBase.pNewBase->GetCollection()->SetOutlineLevel( NO_NUMBERING );
+                }
+            }
         }
     }
 }
