@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvashelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:18:51 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:45:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,7 @@ namespace cairocanvas
         aViewMatrix.x0 = round( aViewMatrix.x0 );
         aViewMatrix.y0 = round( aViewMatrix.y0 );
         cairo_set_matrix( mpCairo, &aViewMatrix );
-        drawPolyPolygonPath( viewState.Clip, Clip );
+        doPolyPolygonPath( viewState.Clip, Clip );
     }
 
     aCombinedMatrix.x0 = round( aCombinedMatrix.x0 );
@@ -172,7 +172,7 @@ namespace cairocanvas
         if( renderState.Clip.is() ) {
         OSL_TRACE ("render clip BEGIN\n");
 
-        drawPolyPolygonPath( renderState.Clip, Clip );
+        doPolyPolygonPath( renderState.Clip, Clip );
         OSL_TRACE ("render clip END\n");
     }
 
@@ -712,7 +712,7 @@ namespace cairocanvas
     cairo_set_matrix( pCairo, &aOrigMatrix );
     }
 
-    void drawPolyPolygonImplementation( ::basegfx::B2DPolyPolygon aPolyPolygon,
+    void doPolyPolygonImplementation( ::basegfx::B2DPolyPolygon aPolyPolygon,
                     Operation aOperation,
                     Cairo* pCairo,
                     const uno::Sequence< rendering::Texture >* pTextures,
@@ -748,7 +748,7 @@ namespace cairocanvas
             nY = round( nY );
         }
 
-        if( aOperation != Clip ) {
+        if( aOperation == Stroke ) {
             nX += 0.5;
             nY += 0.5;
         }
@@ -773,7 +773,7 @@ namespace cairocanvas
             nY = round( nY );
             }
 
-            if( aOperation != Clip ) {
+            if( aOperation == Stroke ) {
             nX += 0.5;
             nY += 0.5;
             }
@@ -784,7 +784,7 @@ namespace cairocanvas
             nBX = aB.getX();
             nBY = aB.getY();
 
-            if( aOperation != Clip ) {
+            if( aOperation == Stroke ) {
                 nAX += 0.5;
                 nAY += 0.5;
                 nBX += 0.5;
@@ -830,7 +830,7 @@ namespace cairocanvas
 //      clipNULL( pCairo );
     }
 
-    void CanvasHelper::drawPolyPolygonPath( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
+    void CanvasHelper::doPolyPolygonPath( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                         Operation aOperation,
                         const uno::Sequence< rendering::Texture >* pTextures,
                         Cairo* pCairo ) const
@@ -840,7 +840,7 @@ namespace cairocanvas
     if( !pCairo )
         pCairo = mpCairo;
 
-    drawPolyPolygonImplementation( aPoly, aOperation, pCairo, pTextures, mpDevice );
+    doPolyPolygonImplementation( aPoly, aOperation, pCairo, pTextures, mpDevice );
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawPolyPolygon( const rendering::XCanvas*                          pCanvas,
@@ -859,7 +859,7 @@ namespace cairocanvas
         cairo_set_line_width( mpCairo, 1 );
 
         useStates( viewState, renderState, true );
-        drawPolyPolygonPath( xPolyPolygon, Stroke );
+        doPolyPolygonPath( xPolyPolygon, Stroke );
 
         cairo_restore( mpCairo );
     } else
@@ -928,7 +928,7 @@ namespace cairocanvas
 
         // TODO(rodo) use LineArray of strokeAttributes
 
-        drawPolyPolygonPath( xPolyPolygon, Stroke );
+        doPolyPolygonPath( xPolyPolygon, Stroke );
 
         cairo_restore( mpCairo );
     } else
@@ -989,7 +989,7 @@ namespace cairocanvas
         cairo_save( mpCairo );
 
         useStates( viewState, renderState, true );
-        drawPolyPolygonPath( xPolyPolygon, Fill );
+        doPolyPolygonPath( xPolyPolygon, Fill );
 
         cairo_restore( mpCairo );
     } else
@@ -1012,7 +1012,7 @@ namespace cairocanvas
         cairo_save( mpCairo );
 
         useStates( viewState, renderState, true );
-        drawPolyPolygonPath( xPolyPolygon, Fill, &textures );
+        doPolyPolygonPath( xPolyPolygon, Fill, &textures );
 
         cairo_restore( mpCairo );
     }
@@ -1039,6 +1039,7 @@ namespace cairocanvas
                                                                                        bool bHasAlpha )
     {
         uno::Reference< rendering::XCachedPrimitive > rv = uno::Reference< rendering::XCachedPrimitive >(NULL);
+                geometry::IntegerSize2D aBitmapSize = rSize;
 
         if( mpCairo ) {
             const ::basegfx::B2ISize& aSize = mpDevice->getSizePixel();
@@ -1067,10 +1068,11 @@ namespace cairocanvas
 
                     dWidth = round( rSize.Width * aMatrix.xx );
                     dHeight = round( rSize.Height* aMatrix.yy );
+                                        aBitmapSize.Width = static_cast<sal_Int32>( dWidth );
+                                        aBitmapSize.Height = static_cast<sal_Int32>( dHeight );
 
-                    Surface* pScaledSurface = mpDevice->getSurface( ::basegfx::B2ISize( static_cast<sal_Int32>( dWidth ),
-                                                                                        static_cast<sal_Int32>( dHeight ) ),
-                                                                    bHasAlpha ? CAIRO_CONTENT_COLOR_ALPHA : CAIRO_CONTENT_COLOR );
+                    Surface* pScaledSurface = mpDevice->getSurface( ::basegfx::B2ISize( aBitmapSize.Width, aBitmapSize.Height ),
+                                                                                        bHasAlpha ? CAIRO_CONTENT_COLOR_ALPHA : CAIRO_CONTENT_COLOR );
                     Cairo* pCairo = pScaledSurface->getCairo();
 
                     // cairo_set_operator( pCairo, CAIRO_OPERATOR_SOURCE );
@@ -1095,8 +1097,8 @@ namespace cairocanvas
                 double x, y, width, height;
 
                 x = y = 0;
-                width = rSize.Width;
-                height = rSize.Height;
+                width = aBitmapSize.Width;
+                height = aBitmapSize.Height;
                 cairo_matrix_transform_point( &aMatrix, &x, &y );
                 cairo_matrix_transform_distance( &aMatrix, &width, &height );
 
@@ -1121,8 +1123,14 @@ namespace cairocanvas
             }
 
             cairo_set_source_surface( mpCairo, pSurface->mpSurface, 0, 0 );
-//          if( !bHasAlpha )
-//              cairo_set_operator( mpCairo, CAIRO_OPERATOR_SOURCE );
+             if( !bHasAlpha &&
+                ::rtl::math::approxEqual( aMatrix.xx, 1 ) &&
+                ::rtl::math::approxEqual( aMatrix.yy, 1 ) &&
+                ::rtl::math::approxEqual( aMatrix.x0, 0 ) &&
+                ::rtl::math::approxEqual( aMatrix.y0, 0 ) )
+                 cairo_set_operator( mpCairo, CAIRO_OPERATOR_SOURCE );
+            cairo_rectangle( mpCairo, 0, 0, aBitmapSize.Width, aBitmapSize.Height );
+            cairo_clip( mpCairo );
             cairo_paint( mpCairo );
             cairo_restore( mpCairo );
         } else
