@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.170 $
+ *  $Revision: 1.171 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 12:11:42 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 13:53:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -448,13 +448,6 @@ End
 
 #endif
 
-File gid_File_Bmp_Installation
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = "oo_product.bmp";
-    Styles = (PACKED);
-End
-
 File gid_File_Bmp_Intro
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
@@ -612,7 +605,7 @@ STD_RES_FILE( gid_File_Res_Eme, eme )
 File gid_File_Help_Common_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY_PATCH;
-    EXTRA_ALL_LANG(shared);
+    EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(shared);
     Patchfiles = ("shared.db",
                   "shared.ht",
                   "shared.jar",
@@ -630,7 +623,7 @@ End
 File gid_File_Help_Sbasic_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY_PATCH;
-    EXTRA_ALL_LANG(sbasic);
+    EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(sbasic);
     Patchfiles = ("sbasic.db",
                   "sbasic.ht",
                   "sbasic.jar",
@@ -650,7 +643,7 @@ End
 File gid_File_Help_Schart_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY_PATCH;
-    EXTRA_ALL_LANG(schart);
+    EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(schart);
 End
 
 #endif
