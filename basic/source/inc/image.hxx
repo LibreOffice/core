@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:12:10 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:15:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
 #endif
+#include <filefmt.hxx>
 
 // Diese Klasse liest das vom Compiler erzeugte Image ein und verwaltet
 // den Zugriff auf die einzelnen Elemente.
@@ -51,23 +52,25 @@ class SbiImage {
 
     SbxArrayRef    rTypes;          // User defined types
     SbxArrayRef    rEnums;          // Enum types
-    UINT16*        pStringOff;      // StringId-Offsets
+    UINT32*        pStringOff;      // StringId-Offsets
     sal_Unicode*   pStrings;        // StringPool
     char*          pCode;           // Code-Image
+    char*          pLegacyPCode;        // Code-Image
     BOOL           bError;          // TRUE: Fehler
     USHORT         nFlags;          // Flags (s.u.)
     short          nStrings;        // Anzahl Strings
-    UINT16         nStringSize;     // Groesse des String-Puffers
-    UINT16         nCodeSize;       // Groesse des Code-Blocks
+    UINT32         nStringSize;     // Groesse des String-Puffers
+    UINT32         nCodeSize;       // Groesse des Code-Blocks
+    UINT16         nLegacyCodeSize;     // Groesse des Code-Blocks
     UINT16         nDimBase;        // OPTION BASE-Wert
     rtl_TextEncoding eCharSet;      // Zeichensatz fuer Strings
                                     // temporaere Verwaltungs-Variable:
     short          nStringIdx;      // aktueller String-Index
-    UINT16         nStringOff;      // aktuelle Pos im Stringpuffer
+    UINT32         nStringOff;      // aktuelle Pos im Stringpuffer
                                     // Routinen fuer Compiler:
     void MakeStrings( short );      // StringPool einrichten
     void AddString( const String& );// String zufuegen
-    void AddCode( char*, USHORT );  // Codeblock dazu
+    void AddCode( char*, UINT32 );  // Codeblock dazu
     void AddType(SbxObject *);      // User-Type mit aufnehmen
     void AddEnum(SbxObject *);      // Register enum type
 
@@ -81,12 +84,15 @@ public:
     SbiImage();
    ~SbiImage();
     void Clear();                   // Inhalt loeschen
+    BOOL Load( SvStream&, UINT32& nVer );       // Loads image from stream
+                            // nVer is set to version
+                            // of image
     BOOL Load( SvStream& );
-    BOOL Save( SvStream& );
+    BOOL Save( SvStream&, UINT32 = B_CURVERSION );
     BOOL IsError()                  { return bError;    }
 
     const char* GetCode() const     { return pCode;     }
-    USHORT      GetCodeSize() const { return nCodeSize; }
+    UINT32      GetCodeSize() const { return nCodeSize; }
     ::rtl::OUString& GetSource32()  { return aOUSource; }
     USHORT      GetBase() const     { return nDimBase;  }
     String      GetString( short nId ) const;
@@ -97,6 +103,11 @@ public:
 
     void        SetFlag( USHORT n ) { nFlags |= n;      }
     USHORT      GetFlag( USHORT n ) const { return nFlags & n; }
+    UINT16      CalcLegacyOffset( INT32 nOffset );
+    UINT32      CalcNewOffset( INT16 nOffset );
+    void        ReleaseLegacyBuffer();
+    BOOL        ExceedsLegacyLimits();
+
 };
 
 #define SBIMG_EXPLICIT      0x0001  // OPTION EXPLICIT ist aktiv
