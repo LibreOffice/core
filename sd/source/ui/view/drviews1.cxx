@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:36:12 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:05:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,9 +275,7 @@ void DrawViewShell::SelectionHasChanged (void)
             // we need to deselect it now
             if (!pOleObj)
             {
-                // TODO/CLEANUP: SetViewFrame should be done in SFX only
-                pIPClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
-                SfxViewFrame::SetViewFrame( GetViewFrame() );
+                pIPClient->DeactivateObject();
                 pDrView->ShowMarkHdl(NULL);
             }
             else
