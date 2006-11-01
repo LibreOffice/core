@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:38:09 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:09:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -486,8 +486,15 @@ size_t SwAccessiblePortionData::FindLastBreak(
     size_t nResult = FindBreak( rPositions, nValue );
 
     // skip 'zero-length' portions
-    while( rPositions[nResult+1] <= nValue )
+    // --> OD 2006-10-19 #i70538#
+    // consider size of <rPosition> and ignore last entry
+//    while( rPositions[nResult+1] <= nValue )
+    while ( nResult < rPositions.size() - 2 &&
+            rPositions[nResult+1] <= nValue )
+    {
         nResult++;
+    }
+    // <--
 
     return nResult;
 }
@@ -565,8 +572,11 @@ sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( USHORT nPos )
     DBG_ASSERT( nPos <= pTxtNode->GetTxt().Len(), "illegal position" );
 
     // find the portion number
-    size_t nPortionNo = FindBreak( aModelPositions,
-                                   static_cast<sal_Int32>(nPos) );
+    // --> OD 2006-10-19 #i70538#
+    // consider "empty" model portions - e.g. number portion
+    size_t nPortionNo = FindLastBreak( aModelPositions,
+                                       static_cast<sal_Int32>(nPos) );
+    // <--
 
     sal_Int32 nRet = aAccessiblePositions[nPortionNo];
 
