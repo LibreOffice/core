@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmtlb.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:34:07 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:59:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -507,7 +507,9 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
             {
                 UINT32 nFormat = ((SfxUInt32Item*)pItem)->GetValue();
                 // oj #105473# change order of calls
-                eCurLanguage = pFormatter->GetEntry(nFormat)->GetLanguage();
+                const SvNumberformat* pFmt = pFormatter->GetEntry(nFormat);
+                if( pFmt )
+                    eCurLanguage = pFmt->GetLanguage();
                 // SetDefFormat uses eCurLanguage to look for if this format already in the list
                 SetDefFormat(nFormat);
             }
