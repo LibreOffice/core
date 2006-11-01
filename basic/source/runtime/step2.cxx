@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:31:26 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:17:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ using namespace com::sun::star::lang;
 // 0x8000 - Argv ist belegt
 
 SbxVariable* SbiRuntime::FindElement
-    ( SbxObject* pObj, USHORT nOp1, USHORT nOp2, SbError nNotFound, BOOL bLocal )
+    ( SbxObject* pObj, UINT32 nOp1, UINT32 nOp2, SbError nNotFound, BOOL bLocal )
 {
     SbxVariable* pElem = NULL;
     if( !pObj )
@@ -298,7 +298,7 @@ SbxBase* SbiRuntime::FindElementExtern( const String& rName )
 // Dabei auch die Argumente umsetzen, falls benannte Parameter
 // verwendet wurden
 
-void SbiRuntime::SetupArgs( SbxVariable* p, USHORT nOp1 )
+void SbiRuntime::SetupArgs( SbxVariable* p, UINT32 nOp1 )
 {
     if( nOp1 & 0x8000 )
     {
@@ -546,14 +546,14 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
 
 // Laden eines Elements aus der Runtime-Library (+StringID+Typ)
 
-void SbiRuntime::StepRTL( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepRTL( UINT32 nOp1, UINT32 nOp2 )
 {
     PushVar( FindElement( rBasic.pRtl, nOp1, nOp2, SbERR_PROC_UNDEFINED, FALSE ) );
 }
 
 // Laden einer lokalen/globalen Variablen (+StringID+Typ)
 
-void SbiRuntime::StepFIND( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepFIND( UINT32 nOp1, UINT32 nOp2 )
 {
     if( !refLocals )
         refLocals = new SbxArray;
@@ -561,7 +561,7 @@ void SbiRuntime::StepFIND( USHORT nOp1, USHORT nOp2 )
 }
 
 // Search inside a class module (CM) to enable global search in time
-void SbiRuntime::StepFIND_CM( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepFIND_CM( UINT32 nOp1, UINT32 nOp2 )
 {
     if( !refLocals )
         refLocals = new SbxArray;
@@ -577,7 +577,7 @@ void SbiRuntime::StepFIND_CM( USHORT nOp1, USHORT nOp2 )
 // Laden eines Objekt-Elements (+StringID+Typ)
 // Das Objekt liegt auf TOS
 
-void SbiRuntime::StepELEM( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepELEM( UINT32 nOp1, UINT32 nOp2 )
 {
     // Liegt auf dem TOS ein Objekt?
     SbxVariableRef pObjVar = PopVar();
@@ -601,12 +601,12 @@ void SbiRuntime::StepELEM( USHORT nOp1, USHORT nOp2 )
 
 // Laden eines Parameters (+Offset+Typ)
 // Wenn der Datentyp nicht stimmen sollte, eine Kopie anlegen
-// Der Datentyp SbxEMPTY zeigt an, daá kein Parameter angegeben ist.
+// Der Datentyp SbxEMPTY zeigt an, daa kein Parameter angegeben ist.
 // Get( 0 ) darf EMPTY sein
 
-void SbiRuntime::StepPARAM( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepPARAM( UINT32 nOp1, UINT32 nOp2 )
 {
-    USHORT i = nOp1 & 0x7FFF;
+    UINT32 i = nOp1 & 0x7FFF;
     SbxDataType t = (SbxDataType) nOp2;
     SbxVariable* p;
 
@@ -668,7 +668,7 @@ void SbiRuntime::StepPARAM( USHORT nOp1, USHORT nOp2 )
 
 // Case-Test (+True-Target+Test-Opcode)
 
-void SbiRuntime::StepCASEIS( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepCASEIS( UINT32 nOp1, UINT32 nOp2 )
 {
     if( !refCaseStk || !refCaseStk->Count() )
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
@@ -684,7 +684,7 @@ void SbiRuntime::StepCASEIS( USHORT nOp1, USHORT nOp2 )
 // Aufruf einer DLL-Prozedur (+StringID+Typ)
 // Auch hier zeigt das MSB des StringIDs an, dass Argv belegt ist
 
-void SbiRuntime::StepCALL( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepCALL( UINT32 nOp1, UINT32 nOp2 )
 {
     String aName = pImg->GetString( nOp1 & 0x7FFF );
     SbxArray* pArgs = NULL;
@@ -699,7 +699,7 @@ void SbiRuntime::StepCALL( USHORT nOp1, USHORT nOp2 )
 // Aufruf einer DLL-Prozedur nach CDecl (+StringID+Typ)
 // Auch hier zeigt das MSB des StringIDs an, dass Argv belegt ist
 
-void SbiRuntime::StepCALLC( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepCALLC( UINT32 nOp1, UINT32 nOp2 )
 {
     String aName = pImg->GetString( nOp1 & 0x7FFF );
     SbxArray* pArgs = NULL;
@@ -714,7 +714,7 @@ void SbiRuntime::StepCALLC( USHORT nOp1, USHORT nOp2 )
 
 // Beginn eines Statements (+Line+Col)
 
-void SbiRuntime::StepSTMNT( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepSTMNT( UINT32 nOp1, UINT32 nOp2 )
 {
     // Wenn der Expr-Stack am Anfang einen Statements eine Variable enthaelt,
     // hat ein Trottel X als Funktion aufgerufen, obwohl es eine Variable ist!
@@ -744,7 +744,7 @@ void SbiRuntime::StepSTMNT( USHORT nOp1, USHORT nOp2 )
         StarBASIC::FatalError( SbERR_NO_METHOD );
         return;
     }
-    pStmnt = pCode - 5;
+    pStmnt = pCode - 9;
     USHORT nOld = nLine;
     nLine = nOp1;
 
@@ -815,7 +815,7 @@ void SbiRuntime::StepSTMNT( USHORT nOp1, USHORT nOp2 )
 //        Kanalnummer
 //        Dateiname
 
-void SbiRuntime::StepOPEN( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepOPEN( UINT32 nOp1, UINT32 nOp2 )
 {
     SbxVariableRef pName = PopVar();
     SbxVariableRef pChan = PopVar();
@@ -829,7 +829,7 @@ void SbiRuntime::StepOPEN( USHORT nOp1, USHORT nOp2 )
 
 // Objekt kreieren (+StringID+StringID)
 
-void SbiRuntime::StepCREATE( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepCREATE( UINT32 nOp1, UINT32 nOp2 )
 {
     String aClass( pImg->GetString( nOp2 ) );
     SbxObject *pObj = SbxBase::CreateObject( aClass );
@@ -847,12 +847,12 @@ void SbiRuntime::StepCREATE( USHORT nOp1, USHORT nOp2 )
     }
 }
 
-void SbiRuntime::StepDCREATE( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepDCREATE( UINT32 nOp1, UINT32 nOp2 )
 {
     StepDCREATE_IMPL( nOp1, nOp2 );
 }
 
-void SbiRuntime::StepDCREATE_REDIMP( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepDCREATE_REDIMP( UINT32 nOp1, UINT32 nOp2 )
 {
     StepDCREATE_IMPL( nOp1, nOp2 );
 }
@@ -879,7 +879,7 @@ void implCopyDimArray_DCREATE( SbxDimArray* pNewArray, SbxDimArray* pOldArray, s
 }
 
 // #56204 Objekt-Array kreieren (+StringID+StringID), DCREATE == Dim-Create
-void SbiRuntime::StepDCREATE_IMPL( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepDCREATE_IMPL( UINT32 nOp1, UINT32 nOp2 )
 {
     SbxVariableRef refVar = PopVar();
 
@@ -994,7 +994,7 @@ void SbiRuntime::StepDCREATE_IMPL( USHORT nOp1, USHORT nOp2 )
 
 SbxObject* createUserTypeImpl( const String& rClassName );  // sb.cxx
 
-void SbiRuntime::StepTCREATE( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepTCREATE( UINT32 nOp1, UINT32 nOp2 )
 {
     String aName( pImg->GetString( nOp1 ) );
     String aClass( pImg->GetString( nOp2 ) );
@@ -1010,7 +1010,7 @@ void SbiRuntime::StepTCREATE( USHORT nOp1, USHORT nOp2 )
 
 // Einrichten einer lokalen Variablen (+StringID+Typ)
 
-void SbiRuntime::StepLOCAL( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepLOCAL( UINT32 nOp1, UINT32 nOp2 )
 {
     if( !refLocals.Is() )
         refLocals = new SbxArray;
@@ -1026,7 +1026,7 @@ void SbiRuntime::StepLOCAL( USHORT nOp1, USHORT nOp2 )
 
 // Einrichten einer modulglobalen Variablen (+StringID+Typ)
 
-void SbiRuntime::StepPUBLIC_Impl( USHORT nOp1, USHORT nOp2, bool bUsedForClassModule )
+void SbiRuntime::StepPUBLIC_Impl( UINT32 nOp1, UINT32 nOp2, bool bUsedForClassModule )
 {
     String aName( pImg->GetString( nOp1 ) );
     SbxDataType t = (SbxDataType) nOp2;
@@ -1048,14 +1048,14 @@ void SbiRuntime::StepPUBLIC_Impl( USHORT nOp1, USHORT nOp2, bool bUsedForClassMo
     }
 }
 
-void SbiRuntime::StepPUBLIC( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepPUBLIC( UINT32 nOp1, UINT32 nOp2 )
 {
     StepPUBLIC_Impl( nOp1, nOp2, false );
 }
 
 // Einrichten einer globalen Variablen (+StringID+Typ)
 
-void SbiRuntime::StepGLOBAL( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepGLOBAL( UINT32 nOp1, UINT32 nOp2 )
 {
     if( pImg->GetFlag( SBIMG_CLASSMODULE ) )
         StepPUBLIC_Impl( nOp1, nOp2, true );
@@ -1082,7 +1082,7 @@ void SbiRuntime::StepGLOBAL( USHORT nOp1, USHORT nOp2 )
 // Creates global variable that isn't reinitialised when
 // basic is restarted, P=PERSIST (+StringID+Typ)
 
-void SbiRuntime::StepGLOBAL_P( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepGLOBAL_P( UINT32 nOp1, UINT32 nOp2 )
 {
     if( pMod->pImage->bFirstInit )
     {
@@ -1094,7 +1094,7 @@ void SbiRuntime::StepGLOBAL_P( USHORT nOp1, USHORT nOp2 )
 // Searches for global variable, behavior depends on the fact
 // if the variable is initialised for the first time
 
-void SbiRuntime::StepFIND_G( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepFIND_G( UINT32 nOp1, UINT32 nOp2 )
 {
     if( pMod->pImage->bFirstInit )
     {
@@ -1116,7 +1116,7 @@ void SbiRuntime::StepFIND_G( USHORT nOp1, USHORT nOp2 )
 
 // Einrichten einer statischen Variablen (+StringID+Typ)
 
-void SbiRuntime::StepSTATIC( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepSTATIC( UINT32 nOp1, UINT32 nOp2 )
 {
     (void)nOp1;
     (void)nOp2;
