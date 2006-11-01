@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckconfig.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 09:56:38 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 10:13:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
@@ -53,12 +53,20 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #endif
 
-class UpdateCheckConfig : public ::cppu::WeakImplHelper3<
+#ifndef _COM_SUN_STAR_UTIL_XCHANGESNOTIFIER_HPP_
+#include <com/sun/star/util/XChangesNotifier.hpp>
+#endif
+
+#include <list>
+
+class UpdateCheckConfig : public ::cppu::WeakImplHelper4<
     ::com::sun::star::container::XNameReplace,
     ::com::sun::star::util::XChangesBatch,
+    ::com::sun::star::util::XChangesNotifier,
     ::com::sun::star::lang::XServiceInfo >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xUpdateAccess;
+    std::list < ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesListener > > m_aListenerList;
 
 public:
     UpdateCheckConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext);
@@ -99,7 +107,13 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::util::ElementChange > SAL_CALL getPendingChanges(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-     // XServiceInfo
+    // XChangesNotifier
+    virtual void SAL_CALL addChangesListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeChangesListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & serviceName)
