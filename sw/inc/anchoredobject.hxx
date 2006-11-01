@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobject.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-15 11:39:31 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:09:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,6 +252,10 @@ class SwAnchoredObject
         // --> OD 2006-08-10 #i68520#
         virtual const bool _SetObjTop( const SwTwips _nTop) = 0;
         virtual const bool _SetObjLeft( const SwTwips _nLeft) = 0;
+        // <--
+
+        // --> OD 2006-10-05 #i70122#
+        virtual const SwRect GetObjBoundRect() const = 0;
         // <--
     public:
         TYPEINFO();
