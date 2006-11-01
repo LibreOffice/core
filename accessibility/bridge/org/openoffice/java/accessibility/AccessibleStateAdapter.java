@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleStateAdapter.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:34:06 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:07:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,10 +81,19 @@ public class AccessibleStateAdapter {
         System.err.println("*** ERROR *** " + s + " state is a toplevel window state " + c);
     }
 
-    private static void printOutOfSyncMessage(AccessibleState s, java.awt.Component c) {
-        System.err.println("*** ERROR *** " + s + " state out of sync for " + c);
+    private static String getDisplayName(java.awt.Component c) {
+        javax.accessibility.Accessible a = (javax.accessibility.Accessible) c;
+        if( a != null) {
+            javax.accessibility.AccessibleContext ac = a.getAccessibleContext();
+            return "[" + ac.getAccessibleRole() + "] " + ac.getAccessibleName();
+        } else {
+            return c.toString();
+        }
     }
 
+    private static void printOutOfSyncMessage(AccessibleState s, java.awt.Component c, boolean enabled) {
+        System.err.println("*** ERROR *** " + s + " state out of sync (" + !enabled + ", " + enabled + ") for " + getDisplayName(c));
+    }
 
     public static AccessibleState getAccessibleState(Object any) {
        try {
@@ -149,22 +158,22 @@ public class AccessibleStateAdapter {
                 // Report out-of-sync messages
                 if (!Build.PRODUCT) {
                     if (!isFocusInSync) {
-                        printOutOfSyncMessage(AccessibleState.FOCUSED, c);
+                        printOutOfSyncMessage(AccessibleState.FOCUSED, c, c.isFocusOwner());
                     }
                     if (!isActiveInSync) {
-                        printOutOfSyncMessage(AccessibleState.ACTIVE, c);
+                        printOutOfSyncMessage(AccessibleState.ACTIVE, c, ((java.awt.Window) c).isActive());
                     }
                     if (as.contains(AccessibleState.ENABLED) != c.isEnabled()) {
-                        printOutOfSyncMessage(AccessibleState.ENABLED, c);
+                        printOutOfSyncMessage(AccessibleState.ENABLED, c, c.isEnabled());
                     }
                     if (as.contains(AccessibleState.FOCUSABLE) != c.isFocusable()) {
-                        printOutOfSyncMessage(AccessibleState.FOCUSABLE, c);
+                        printOutOfSyncMessage(AccessibleState.FOCUSABLE, c, c.isFocusable());
                     }
                     if (as.contains(AccessibleState.SHOWING) != c.isShowing()) {
-                        printOutOfSyncMessage(AccessibleState.SHOWING, c);
+                        printOutOfSyncMessage(AccessibleState.SHOWING, c, c.isShowing());
                     }
                     if (as.contains(AccessibleState.VISIBLE) != c.isVisible()) {
-                        printOutOfSyncMessage(AccessibleState.VISIBLE, c);
+                        printOutOfSyncMessage(AccessibleState.VISIBLE, c, c.isVisible());
                     }
 
                     // The following states are for toplevel windows only
