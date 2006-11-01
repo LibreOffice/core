@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:21:59 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:26:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,9 +323,23 @@ throw (css::uno::RuntimeException)
     if ( m_pWrkWin )
     {
         if ( eLayoutEvent == css::frame::LayoutManagerEvents::VISIBLE )
+        {
+            m_pWrkWin->MakeVisible_Impl( TRUE );
             m_pWrkWin->ShowChilds_Impl();
+        }
         else if ( eLayoutEvent == css::frame::LayoutManagerEvents::INVISIBLE )
+        {
+            m_pWrkWin->MakeVisible_Impl( FALSE );
             m_pWrkWin->HideChilds_Impl();
+        }
+        else if ( eLayoutEvent == css::frame::LayoutManagerEvents::LOCK )
+        {
+            m_pWrkWin->Lock_Impl( TRUE );
+        }
+        else if ( eLayoutEvent == css::frame::LayoutManagerEvents::UNLOCK )
+        {
+            m_pWrkWin->Lock_Impl( FALSE );
+        }
     }
 }
 
@@ -582,37 +596,6 @@ SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( Window *pWin, SfxFrame *pFrm, SfxFra
 }
 
 //====================================================================
-// ctor f"ur workwin eines InPlaceObjects.
-#if 0
-SfxIPWorkWin_Impl::SfxIPWorkWin_Impl( WorkWindow *pWin, SfxBindings& rB,
-                        SfxInPlaceEnv_Impl *pE) :
-    SfxWorkWindow(pWin, rB),
-    pEnv(pE)
-{
-    // Die ben"otigten SplitWindows (je eins f"ur jede Seite) werden erzeugt
-    for ( USHORT n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
-    {
-        // Die SplitWindows sind direkte ChildWindows des WorkWindows und enthalten
-        // die angedockten Fenster.
-
-        SfxChildAlignment eAlign =
-                        ( n == SFX_SPLITWINDOWS_LEFT ? SFX_ALIGN_LEFT :
-                            n == SFX_SPLITWINDOWS_RIGHT ? SFX_ALIGN_RIGHT :
-                            n == SFX_SPLITWINDOWS_TOP ? SFX_ALIGN_TOP :
-                                SFX_ALIGN_BOTTOM );
-        SfxSplitWindow *pWin = new SfxSplitWindow(pWorkWin, eAlign, this, FALSE);
-        pSplit[n] = pWin;
-    }
-
-    nOrigMode = SFX_VISIBILITY_STANDARD;
-    nUpdateMode = SFX_VISIBILITY_STANDARD;
-    //nOrigMode = SFX_VISIBILITY_SERVER;
-    //nUpdateMode = SFX_VISIBILITY_SERVER;
-    if ( !pParent )
-        aStatBar.bOn = sal_True;
-}
-#endif
-//====================================================================
 // ctor der Basisklasse
 
 SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pParentWorkwin ) :
@@ -629,7 +612,7 @@ SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pPar
     bAllChildsVisible(TRUE),
     bIsFullScreen( FALSE ),
     bShowStatusBar( TRUE ),
-    bLocked( FALSE ),
+    m_nLock( 0 ),
     m_aStatusBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" )),
     m_aLayoutManagerPropName( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )),
     m_aTbxTypeName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" )),
@@ -693,7 +676,18 @@ SystemWindow* SfxWorkWindow::GetTopWindow() const
 
 void SfxWorkWindow::Lock_Impl( BOOL bLock )
 {
-    bLocked = bLock;
+    if ( bLock )
+        m_nLock++;
+    else
+        --m_nLock;
+    if ( m_nLock<0 )
+    {
+        DBG_ERROR("Lock count underflow!")
+        m_nLock = 0;
+    }
+
+    if ( !m_nLock )
+        ArrangeChilds_Impl();
 }
 
 void SfxWorkWindow::ChangeWindow_Impl( Window *pNew )
@@ -837,40 +831,9 @@ void SfxWorkWindow::ArrangeChilds_Impl()
     Arrange_Impl();
 }
 
-//====================================================================
-// Virtuelle Methode zum Anordnen der Childfenster. Bei InPlaceObjects
-// steht daf"ur als Fl"ache das Rectangle zur Verf"ugung, das am
-// InPlaceClient als TopOuterRect abgefragt werden kann. Diese wird
-// durch den von Arrange_Impl() errechneten SvBorder verringert.
-#if 0
-void SfxIPWorkWin_Impl::ArrangeChilds_Impl()
-{
-    aClientArea = GetTopRect_Impl();
-    if ( aClientArea.IsEmpty() )
-        return;
-
-    SvBorder aBorder;
-    if ( nChilds )
-        aBorder = Arrange_Impl();
-
-    // Wenn das zugeh"orige Objekt noch die UI-Kontrolle hat, mu\s der
-    // AppBorder gesetzt werden; wenn hier allerdings die UITools entfernt
-    // werden, tut das demn"achst der Container.
-    // (->SfxContainerEnv_Impl::UIToolsShown())
-
-    if ( pEnv->IsShowUITools() )
-        pEnv->GetContainerEnv()->SetTopToolSpacePixel(aBorder);
-    ArrangeAutoHideWindows( NULL );
-}
-#endif
-//====================================================================
-// Virtuelle Methode zum Anordnen der Childfenster. Bei einer Task
-// steht daf"ur als Fl"ache die OutputSize des TaskWindows zur Verf"ugung.
-// Sie wird durch den von Arrange_Impl() errechneten SvBorder verringert.
-
 void SfxFrameWorkWin_Impl::ArrangeChilds_Impl()
 {
-    if ( pFrame->IsClosing_Impl() || bLocked )
+    if ( pFrame->IsClosing_Impl() || m_nLock )
         return;
 
     SfxInPlaceClient *pClient = 0;
@@ -1149,9 +1112,8 @@ void SfxWorkWindow::ReleaseChild_Impl( Window& rWindow )
 //  DBG_ASSERT( pChilds, "releasing unregistered child" );
 
     SfxChild_Impl *pChild = 0;
-    USHORT nCount = pChilds->Count();
     USHORT nPos;
-    for ( nPos = 0; nPos < nCount; ++nPos )
+    for ( nPos = 0; nPos < pChilds->Count(); ++nPos )
     {
         pChild = (*pChilds)[nPos];
         if ( pChild )
@@ -1159,7 +1121,7 @@ void SfxWorkWindow::ReleaseChild_Impl( Window& rWindow )
             break;
     }
 
-    if ( nPos < nCount )
+    if ( nPos < pChilds->Count() )
     {
         bSorted = FALSE;
         nChilds--;
@@ -1408,17 +1370,6 @@ void SfxFrameWorkWin_Impl::UpdateObjectBars_Impl()
 
     ShowChilds_Impl();
 }
-#if 0
-void SfxIPWorkWin_Impl::UpdateObjectBars_Impl()
-{
-    SfxWorkWindow::UpdateObjectBars_Impl();
-    if ( pWorkWin->IsVisible() )
-    {
-        ArrangeChilds_Impl();
-        ShowChilds_Impl();
-    }
-}
-#endif
 
 Reference< ::com::sun::star::task::XStatusIndicator > SfxWorkWindow::GetStatusIndicator()
 {
@@ -1648,18 +1599,6 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
 
         if ( pChildWin && !bCreate )
         {
-            Window *pWindow = pChildWin->GetWindow();
-            if ( pWindow && ( pWindow->HasFocus() || pWindow->HasChildPathFocus( TRUE ) ) )
-            {
-                // Wenn der Focus auf dem Childwindow sitzt, mu\s er auf das aktuelle
-                // Dokument gesetzt werden
-                // Nein !! Das fuehrt gerne mal zu Rekursionen, da im GetFocus-Notify erneut ein Update ausgel"ost wird!
-                // ->#66426#
-                // SfxViewFrame *pView = SfxViewFrame::Current();
-                // if ( pView )
-                //  pView->GetFrame()->GrabFocusOnComponent_Impl();
-            }
-
             if ( !pChildWin->QueryClose() || pChildWin->IsHideNotDelete() || Application::IsUICaptured() )
             {
                 if ( pCW->pCli )
@@ -2295,18 +2234,6 @@ void SfxWorkWindow::ToggleChildWindow_Impl(USHORT nId, BOOL bSetFocus)
         {
             if ( pChild->QueryClose() )
             {
-                Window *pWindow = pChild->GetWindow();
-                if ( pWindow && ( pWindow->HasFocus() || pWindow->HasChildPathFocus( TRUE ) ) )
-                {
-                    // Wenn der Focus auf dem Childwindow sitzt, mu\s er auf das aktuelle
-                    // Dokument gesetzt werden
-                    // Nein !! Das fuehrt gerne mal zu Rekursionen, da im GetFocus-Notify erneut ein Update ausgel"ost wird!
-                // ->#66426#
-                    // SfxViewFrame *pView = SfxViewFrame::Current();
-                    // if ( pView )
-                    //  pView->GetFrame()->GrabFocusOnComponent_Impl();
-                }
-
                 if ( pChild && pChild->IsHideAtToggle() )
                 {
                     pCW->bCreate = !pCW->bCreate;
@@ -2681,16 +2608,6 @@ Rectangle SfxFrameWorkWin_Impl::GetTopRect_Impl()
 }
 
 //------------------------------------------------------------------------
-// Virtuelle Methode, die die Gr"o\se der Fl"ache (client area) des parent
-// windows liefert, in der Child-Fenster angeordnet werden k"onnen.
-// in der ClientArea des parent findet.
-#if 0
-Rectangle SfxIPWorkWin_Impl::GetTopRect_Impl()
-{
-    return pEnv->GetContainerEnv()->GetTopOuterRectPixel();
-}
-#endif
-//------------------------------------------------------------------------
 // Virtuelle Methode, um herauszufinden, ob ein Child-Fenster noch Platz
 // in der ClientArea des parent findet.
 
@@ -2703,25 +2620,6 @@ BOOL SfxWorkWindow::RequestTopToolSpacePixel_Impl( SvBorder aBorder )
     else
         return TRUE;;
 }
-
-//------------------------------------------------------------------------
-// Implementation am InPlaceObject: benutzt die SO-Methode, um am InPlaceClient
-// um Platz nachzusuchen.
-#if 0
-BOOL SfxIPWorkWin_Impl::RequestTopToolSpacePixel_Impl( SvBorder aBorder )
-{
-    if ( !IsDockingAllowed() )
-        return FALSE;
-    else
-        return pEnv->GetContainerEnv()->RequestTopToolSpacePixel( aBorder );
-}
-
-void SfxIPWorkWin_Impl::SaveStatus_Impl(SfxChildWindow *pChild, const SfxChildWinInfo &rInfo)
-{
-    if ( pEnv->IsInternalInPlace() )
-        SfxWorkWindow::SaveStatus_Impl( pChild, rInfo );
-}
-#endif
 
 void SfxWorkWindow::SaveStatus_Impl(SfxChildWindow *pChild, const SfxChildWinInfo &rInfo)
 {
@@ -2877,7 +2775,7 @@ void SfxWorkWindow::EndAutoShow_Impl( Point aPos )
 
 void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
 {
-    if ( bLocked )
+    if ( m_nLock )
         return;
 
     if ( pParent )
