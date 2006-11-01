@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-06 10:38:51 $
+#   last change: $Author: vg $ $Date: 2006-11-01 16:20:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,7 @@ SFX_OBJECTS = \
     $(SLO)$/workwin.obj \
         $(SLO)$/xpackcreator.obj \
     $(SLO)$/fwkhelper.obj \
+    $(SLO)$/modsizeexceeded.obj \
     $(SLO)$/updatedlg.obj
 
 .IF "$(GUI)"=="UNX"
