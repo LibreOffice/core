@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:30:29 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:16:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -500,7 +500,7 @@ SbxArray* SbiInstance::GetLocals( SbMethod* pMeth )
 
 // Achtung: pMeth kann auch NULL sein (beim Aufruf des Init-Codes)
 
-SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, USHORT nStart )
+SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, UINT32 nStart )
          : rBasic( *(StarBASIC*)pm->pParent ), pInst( pINST ),
            pMod( pm ), pMeth( pe ), pImg( pMod->pImage )
 {
@@ -666,22 +666,22 @@ BOOL SbiRuntime::Step()
             if( pInst->IsReschedule() && bStaticGlobalEnableReschedule )
                 Application::Reschedule();
         }
-
         SbiOpcode eOp = (SbiOpcode ) ( *pCode++ );
-        USHORT nOp1, nOp2;
+        UINT32 nOp1, nOp2;
         if( eOp <= SbOP0_END )
         {
             (this->*( aStep0[ eOp ] ) )();
         }
         else if( eOp >= SbOP1_START && eOp <= SbOP1_END )
         {
-            nOp1 = *pCode++; nOp1 |= *pCode++ << 8;
+            nOp1 = *pCode++; nOp1 |= *pCode++ << 8; nOp1 |= *pCode++ << 16; nOp1 |= *pCode++ << 24;
+
             (this->*( aStep1[ eOp - SbOP1_START ] ) )( nOp1 );
         }
         else if( eOp >= SbOP2_START && eOp <= SbOP2_END )
         {
-            nOp1 = *pCode++; nOp1 |= *pCode++ << 8;
-            nOp2 = *pCode++; nOp2 |= *pCode++ << 8;
+            nOp1 = *pCode++; nOp1 |= *pCode++ << 8; nOp1 |= *pCode++ << 16; nOp1 |= *pCode++ << 24;
+            nOp2 = *pCode++; nOp2 |= *pCode++ << 8; nOp2 |= *pCode++ << 16; nOp2 |= *pCode++ << 24;
             (this->*( aStep2[ eOp - SbOP2_START ] ) )( nOp1, nOp2 );
         }
         else
