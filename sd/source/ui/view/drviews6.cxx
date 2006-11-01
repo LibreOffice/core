@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:37:21 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:17:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
     const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
 
     if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() &&
-         !pDrView->IsPresObjSelected() )
+         pDrView && !pDrView->IsPresObjSelected() )
     {
         const SfxItemSet& rSet = *rReq.GetArgs();
         const SfxPoolItem* pItem;
