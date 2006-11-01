@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourceids.xsl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:33 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-01 14:15:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,9 @@
  *
  *  $RCSfile: resourceids.xsl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:33 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-01 14:15:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,8 +109,10 @@ namespace NS_rtf {
             </xsl:call-template>
             <xsl:text> = </xsl:text>
             <xsl:value-of select='10000 + position()'/>
-            <xsl:text>;</xsl:text>
-            <xsl:value-of select="@name"/>
+            <xsl:text>; // 0x</xsl:text>
+            <xsl:call-template name="dectohex">
+              <xsl:with-param name="number" select="10000 + position()"/>
+            </xsl:call-template>
             <xsl:text>&#xa;</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
@@ -128,7 +130,11 @@ namespace NS_rtf {
             </xsl:call-template>
             <xsl:text> = </xsl:text>
             <xsl:value-of select='20000 + position()'/>
-            <xsl:text>; &#xa;</xsl:text>
+            <xsl:text>; // 0x</xsl:text>
+            <xsl:call-template name="dectohex">
+              <xsl:with-param name="number" select="20000 + position()"/>
+            </xsl:call-template>
+            <xsl:text>&#xa;</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:for-each>
@@ -146,8 +152,10 @@ namespace NS_rtf {
             </xsl:call-template>
             <xsl:text> = </xsl:text>
             <xsl:value-of select='30000 + position()'/>
-            <xsl:text>; // </xsl:text>
-            <xsl:value-of select="@name"/>
+            <xsl:text>; // 0x</xsl:text>
+            <xsl:call-template name="dectohex">
+              <xsl:with-param name="number" select="30000 + position()"/>
+            </xsl:call-template>
             <xsl:text>&#xa;</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
@@ -158,8 +166,18 @@ namespace NS_rtf {
 #endif // INCLUDED_RESOURCESIDS&#xa;</xsl:text></out>
 </xsl:template>
 
-  <xsl:template name='idtoqname'>
-    <xsl:param name='id'/>LN_<xsl:value-of select='substring-after($id, ":")'/>
-  </xsl:template>
+<xsl:template name='idtoqname'>
+  <xsl:param name='id'/>LN_<xsl:value-of select='substring-after($id, ":")'/>
+</xsl:template>
+
+<xsl:template name='dectohex'>
+  <xsl:param name="number"/>
+  <xsl:if test="$number > 16">
+    <xsl:call-template name="dectohex">
+      <xsl:with-param name="number" select="floor($number div 16)"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:value-of select="substring('0123456789abcdef', $number mod 16, 1)"/>
+</xsl:template>
 
 </xsl:stylesheet>
