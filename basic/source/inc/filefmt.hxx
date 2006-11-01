@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filefmt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:31:37 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:15:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,9 @@ class SvStream;
 // Version 10: #29955 For-Schleifen-Level in Statement-PCodes generieren
 // Version 11: #29955 Wegen Build-Inkonsistenzen Neu-Compilieren erzwingen
 
-#define B_CURVERSION 0x00000011L
+#define B_LEGACYVERSION 0x00000011L
+#define B_CURVERSION 0x00000012L
+#define B_EXT_IMG_VERSION 0x00000012L
 
 // Eine Datei enthaelt entweder einen Modul- oder einen Library-Record.
 // Diese Records enthalten wiederum weitere Records. Jeder Record hat
