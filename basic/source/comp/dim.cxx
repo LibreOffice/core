@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:26:32 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:13:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,7 +267,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
     SbiDimList* pDim;
 
     // AB 9.7.97, #40689, Statics -> Modul-Initialisierung, in Sub ueberspringen
-    USHORT nEndOfStaticLbl = 0;
+    UINT32 nEndOfStaticLbl = 0;
     if( bStatic )
     {
         nEndOfStaticLbl = aGen.Gen( _JUMP, 0 );
