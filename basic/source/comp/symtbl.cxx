@@ -4,9 +4,9 @@
  *
  *  $RCSfile: symtbl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:27:56 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:14:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,7 +265,7 @@ USHORT SbiSymPool::Define( const String& rName )
     return p->Define();
 }
 
-USHORT SbiSymPool::Reference( const String& rName )
+UINT32 SbiSymPool::Reference( const String& rName )
 {
     SbiSymDef* p = Find( rName );
     if( !p )
@@ -365,11 +365,11 @@ void SbiSymDef::SetType( SbxDataType t )
 // Es wird der Wert zurueckgeliefert, der als Operand gespeichert
 // werden soll.
 
-USHORT SbiSymDef::Reference()
+UINT32 SbiSymDef::Reference()
 {
     if( !bChained )
     {
-        USHORT n = nChain;
+        UINT32 n = nChain;
         nChain = pIn->pParser->aGen.GetOffset();
         return n;
     }
@@ -381,7 +381,7 @@ USHORT SbiSymDef::Reference()
 
 USHORT SbiSymDef::Define()
 {
-    USHORT n = pIn->pParser->aGen.GetPC();
+    UINT32 n = pIn->pParser->aGen.GetPC();
     pIn->pParser->aGen.GenStmnt();
     if( nChain ) pIn->pParser->aGen.BackChain( nChain );
     nChain = n;
