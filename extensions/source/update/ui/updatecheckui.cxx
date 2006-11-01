@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckui.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:37:31 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 10:13:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,7 @@
 #define PROPERTY_CLICK_HDL      RTL_CONSTASCII_STRINGPARAM("MenuClickHDL")
 #define PROPERTY_DEFAULT_TITLE  RTL_CONSTASCII_STRINGPARAM("DefaultHeading")
 #define PROPERTY_DEFAULT_TEXT   RTL_CONSTASCII_STRINGPARAM("DefaultText")
+#define PROPERTY_SHOW_MENUICON  RTL_CONSTASCII_STRINGPARAM("MenuIconVisible")
 
 #define START_TIMER 1
 
@@ -119,20 +120,6 @@ static rtl::OUString getImplementationName()
 
 namespace
 {
-
-//------------------------------------------------------------------------------
-ResId UpdResId( sal_uInt32 nID )
-{
-    static ResMgr* pResMgr = ResMgr::CreateResMgr( "updchk" MAKE_NUMSTR(SUPD) );
-    return ResId( nID, pResMgr );
-}
-
-//------------------------------------------------------------------------------
-ResId SfxResId( sal_uInt32 nID )
-{
-    static ResMgr* pResMgr = ResMgr::CreateResMgr( "sfx" MAKE_NUMSTR(SUPD) );
-    return ResId( nID, pResMgr );
-}
 
 //------------------------------------------------------------------------------
 class BubbleWindow : public FloatingWindow
@@ -163,11 +150,14 @@ public:
     void            SetTipPosPixel( const Point& rTipPos ) { maTipPos = rTipPos; }
 };
 
+//------------------------------------------------------------------------------
 class UpdateCheckUI : public ::cppu::WeakImplHelper3
                         < lang::XServiceInfo, document::XEventListener, beans::XPropertySet >
 {
     uno::Reference< uno::XComponentContext > m_xContext;
     uno::Reference< task::XJob > mrJob;
+    rtl::OUString       maDefaultTitle;
+    rtl::OUString       maDefaultText;
     rtl::OUString       maBubbleTitle;
     rtl::OUString       maBubbleText;
     rtl::OUString       maBubbleImageURL;
@@ -175,12 +165,15 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper3
     BubbleWindow*       mpBubbleWin;
     SystemWindow*       mpIconSysWin;
     MenuBar*            mpIconMBar;
+    ResMgr*             mpUpdResMgr;
+    ResMgr*             mpSfxResMgr;
     ULONG               mnLastUserEvent;
     Timer               maWaitTimer;
     Timer               maRetryTimer;
     Timer               maTimeoutTimer;
     Link                maWindowEventHdl;
     sal_Bool            mbShowBubble;
+    sal_Bool            mbShowMenuIcon;
     USHORT              mnIconID;
 
 private:
@@ -192,10 +185,9 @@ private:
                     DECL_LINK( WindowEventHdl, VclWindowEvent* );
 
     BubbleWindow*   GetBubbleWindow();
-    void            RemoveBubbleWindow();
+    void            RemoveBubbleWindow( sal_Bool bRemoveIcon );
     Image           GetMenuBarIcon( MenuBar* pMBar );
     void            AddMenuBarIcon();
-    BOOL            ExistsIconWin( SystemWindow* pLastWin );
     Image           GetBubbleImage( ::rtl::OUString &rURL );
 
     uno::Reference< document::XEventBroadcaster > getGlobalEventBroadcaster() const
@@ -248,9 +240,15 @@ UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xCont
     mpBubbleWin = NULL;
     mpIconSysWin = NULL;
     mpIconMBar = NULL;
-    mnLastUserEvent = Application::PostUserEvent( LINK( this, UpdateCheckUI, UserEventHdl ) );
     mbShowBubble = FALSE;
+    mbShowMenuIcon = TRUE;
     mnIconID = 0;
+
+    mpUpdResMgr = ResMgr::CreateResMgr( "updchk" MAKE_NUMSTR(SUPD) );
+    mpSfxResMgr = ResMgr::CreateResMgr( "sfx" MAKE_NUMSTR(SUPD) );
+
+    maDefaultTitle = String( ResId( RID_UPDATE_DEFAULT_TITLE, mpUpdResMgr ) );
+    maDefaultText = String( ResId( RID_UPDATE_DEFAULT_TEXT, mpUpdResMgr ) );
     maBubbleImage = GetBubbleImage( maBubbleImageURL );
 
     maWaitTimer.SetTimeout( 400 );
@@ -266,12 +264,15 @@ UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xCont
     xBroadcaster->addEventListener( this );
 
     maWindowEventHdl = LINK( this, UpdateCheckUI, WindowEventHdl );
+    mnLastUserEvent = Application::PostUserEvent( LINK( this, UpdateCheckUI, UserEventHdl ) );
 }
 
 //------------------------------------------------------------------------------
 UpdateCheckUI::~UpdateCheckUI()
 {
-    RemoveBubbleWindow();
+    RemoveBubbleWindow( TRUE );
+    delete mpUpdResMgr;
+    delete mpSfxResMgr;
 }
 
 //------------------------------------------------------------------------------
@@ -348,7 +349,7 @@ Image UpdateCheckUI::GetMenuBarIcon( MenuBar* pMBar )
             nResID = RID_UPDATE_AVAILABLE_16;
     }
 
-    return Image( UpdResId( nResID ) );
+    return Image( ResId( nResID, mpUpdResMgr ) );
 }
 
 //------------------------------------------------------------------------------
@@ -396,33 +397,11 @@ Image UpdateCheckUI::GetBubbleImage( ::rtl::OUString &rURL )
 }
 
 //------------------------------------------------------------------------------
-BOOL UpdateCheckUI::ExistsIconWin( SystemWindow* pLastWin )
-{
-    if ( !pLastWin )
-        return FALSE;
-
-    Window *pTopWin = Application::GetFirstTopLevelWindow();
-    Window *pActiveWin = Application::GetActiveTopWindow();
-    SystemWindow *pSysWin = NULL;
-
-    if ( pActiveWin )
-        pSysWin = pActiveWin->GetSystemWindow();
-
-    while ( ( pSysWin != pLastWin ) && pTopWin )
-    {
-        pSysWin = pTopWin->GetSystemWindow();
-        pTopWin = Application::GetNextTopLevelWindow( pTopWin );
-    }
-
-    if ( pSysWin == pLastWin )
-        return TRUE;
-    else
-        return FALSE;
-}
-
-//------------------------------------------------------------------------------
 void UpdateCheckUI::AddMenuBarIcon()
 {
+    if ( ! mbShowMenuIcon )
+        return;
+
     vos::OGuard aGuard( Application::GetSolarMutex() );
 
     Window *pTopWin = Application::GetFirstTopLevelWindow();
@@ -439,20 +418,15 @@ void UpdateCheckUI::AddMenuBarIcon()
     }
 
     if ( !pActiveSysWin && mpIconSysWin )
-        RemoveBubbleWindow();
+        RemoveBubbleWindow( FALSE );
 
     if ( pActiveSysWin ) {
         MenuBar *pActiveMBar = pActiveSysWin->GetMenuBar();
         if ( ( pActiveSysWin != mpIconSysWin ) ||
              ( pActiveMBar != mpIconMBar ) )
         {
-            RemoveBubbleWindow();
-            if ( mpIconSysWin &&
-                 ExistsIconWin( mpIconSysWin ) &&
-                 ( mpIconSysWin->GetMenuBar() == mpIconMBar ) )
-            {
-                mpIconMBar->RemoveMenuBarButton( mnIconID );
-            }
+            RemoveBubbleWindow( TRUE );
+
             if ( pActiveMBar )
             {
                 Image aImage = GetMenuBarIcon( pActiveMBar );
@@ -461,8 +435,9 @@ void UpdateCheckUI::AddMenuBarIcon()
                 pActiveMBar->SetMenuBarButtonHighlightHdl( mnIconID,
                                     LINK( this, UpdateCheckUI, HighlightHdl ) );
             }
-            mpIconSysWin = pActiveSysWin;
             mpIconMBar = pActiveMBar;
+            mpIconSysWin = pActiveSysWin;
+            mpIconSysWin->AddEventListener( maWindowEventHdl );
 
             if ( mbShowBubble && pActiveMBar )
             {
@@ -501,7 +476,7 @@ void SAL_CALL UpdateCheckUI::notifyEvent(const document::EventObject& rEvent)
     }
     if( rEvent.EventName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("OnPrepareViewClosing") ) == 0 )
     {
-        RemoveBubbleWindow();
+        RemoveBubbleWindow( TRUE );
     }
 }
 
@@ -565,6 +540,23 @@ void UpdateCheckUI::setPropertyValue(const rtl::OUString& rPropertyName,
         else
             throw lang::IllegalArgumentException();
     }
+    else if (rPropertyName.compareToAscii( PROPERTY_SHOW_MENUICON ) == 0) {
+        sal_Bool bShowMenuIcon;
+        rValue >>= bShowMenuIcon;
+        if ( bShowMenuIcon != mbShowMenuIcon )
+        {
+            mbShowMenuIcon = bShowMenuIcon;
+            if ( bShowMenuIcon )
+            {
+                if( ! mnLastUserEvent )
+                    mnLastUserEvent = Application::PostUserEvent( LINK( this, UpdateCheckUI, UserEventHdl ) );
+            }
+            else
+            {
+                RemoveBubbleWindow( TRUE );
+            }
+        }
+    }
     else
         throw beans::UnknownPropertyException();
 
@@ -591,15 +583,11 @@ uno::Any UpdateCheckUI::getPropertyValue(const rtl::OUString& rPropertyName)
     else if( rPropertyName.compareToAscii( PROPERTY_CLICK_HDL ) == 0 )
         aRet = uno::makeAny( mrJob );
     else if( rPropertyName.compareToAscii( PROPERTY_DEFAULT_TITLE ) == 0 )
-    {
-        rtl::OUString aTitle = String( UpdResId( RID_UPDATE_DEFAULT_TITLE ) );
-        aRet = uno::makeAny( aTitle );
-    }
+        aRet = uno::makeAny( maDefaultTitle );
     else if( rPropertyName.compareToAscii( PROPERTY_DEFAULT_TEXT ) == 0 )
-    {
-        rtl::OUString aText = String( UpdResId( RID_UPDATE_DEFAULT_TEXT ) );
-        aRet = uno::makeAny( aText );
-    }
+        aRet = uno::makeAny( maDefaultText );
+    else if( rPropertyName.compareToAscii( PROPERTY_SHOW_MENUICON ) == 0 )
+        aRet = uno::makeAny( mbShowMenuIcon );
     else
         throw beans::UnknownPropertyException();
 
@@ -654,7 +642,6 @@ BubbleWindow * UpdateCheckUI::GetBubbleWindow()
                                          XubString( maBubbleTitle ),
                                        XubString( maBubbleText ),
                                        maBubbleImage );
-        mpIconSysWin->AddEventListener( maWindowEventHdl );
     }
 
     Rectangle aIconRect = mpIconMBar->GetMenuBarButtonRectPixel( mnIconID );
@@ -666,7 +653,7 @@ BubbleWindow * UpdateCheckUI::GetBubbleWindow()
 }
 
 //------------------------------------------------------------------------------
-void UpdateCheckUI::RemoveBubbleWindow()
+void UpdateCheckUI::RemoveBubbleWindow( sal_Bool bRemoveIcon )
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
 
@@ -675,12 +662,21 @@ void UpdateCheckUI::RemoveBubbleWindow()
 
     if ( mpBubbleWin )
     {
-        if ( mpIconSysWin )
-            mpIconSysWin->RemoveEventListener( maWindowEventHdl );
-
         delete mpBubbleWin;
         mpBubbleWin = NULL;
-        OSL_TRACE( "UpdateCheckUI::RemoveBubbleWindow" );
+    }
+
+    if ( bRemoveIcon )
+    {
+        if ( mpIconSysWin && mpIconMBar &&
+             ( mpIconSysWin->GetMenuBar() == mpIconMBar ) )
+        {
+            mpIconMBar->RemoveMenuBarButton( mnIconID );
+
+            mpIconSysWin = NULL;
+            mpIconMBar = NULL;
+            mnIconID = 0;
+        }
     }
 }
 
@@ -698,7 +694,7 @@ IMPL_LINK( UpdateCheckUI, ClickHdl, USHORT*, EMPTYARG )
             mrJob->execute( aEmpty );
         }
         catch(const uno::Exception&) {
-            ErrorBox( NULL, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
+            ErrorBox( NULL, ResId( MSG_ERR_NO_WEBBROWSER_FOUND, mpSfxResMgr )).Execute();
         }
     }
 
@@ -711,7 +707,7 @@ IMPL_LINK( UpdateCheckUI, HighlightHdl, MenuBar::MenuBarButtonCallbackArg*, pDat
     if ( pData->bHighlight )
         maWaitTimer.Start();
     else
-        RemoveBubbleWindow();
+        RemoveBubbleWindow( FALSE );
 
     return 0;
 }
@@ -730,7 +726,7 @@ IMPL_LINK( UpdateCheckUI, WaitTimeOutHdl, Timer*, EMPTYARG )
 // -----------------------------------------------------------------------
 IMPL_LINK( UpdateCheckUI, TimeOutHdl, Timer*, EMPTYARG )
 {
-    RemoveBubbleWindow();
+    RemoveBubbleWindow( FALSE );
 
     return 0;
 }
@@ -748,11 +744,21 @@ IMPL_LINK( UpdateCheckUI, UserEventHdl, UpdateCheckUI*, EMPTYARG )
 // -----------------------------------------------------------------------
 IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
 {
-    if ( ( VCLEVENT_OBJECT_DYING == pEvent->GetId() ) && mpBubbleWin )
+    if ( VCLEVENT_OBJECT_DYING == pEvent->GetId() )
     {
-        OSL_TRACE( "UpdateCheckUI::WindowEventHdl" );
         if ( mpIconSysWin == pEvent->GetWindow() )
-            RemoveBubbleWindow();
+            RemoveBubbleWindow( TRUE );
+    }
+
+    if ( VCLEVENT_WINDOW_ACTIVATE == pEvent->GetId() )
+    {
+        Window *pActWin = pEvent->GetWindow();
+        if ( pActWin && pActWin->IsTopWindow() )
+        {
+            SystemWindow *pActiveSysWin = pActWin->GetSystemWindow();
+            if ( ( pActiveSysWin != mpIconSysWin ) && !mnLastUserEvent )
+                mnLastUserEvent = Application::PostUserEvent( LINK( this, UpdateCheckUI, UserEventHdl ) );
+        }
     }
 
     return 0;
