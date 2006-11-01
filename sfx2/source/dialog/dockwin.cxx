@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:31:42 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:27:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1475,12 +1475,7 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
 
         if ( nHelpId )
             SfxHelp::OpenHelpAgent( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
-/*
-        // Nur wg. PlugIn
-        SfxViewFrame *pFrame = pBindings->GetDispatcher_Impl()->GetFrame();
-        if ( pFrame )
-            pFrame->MakeActive_Impl();
-*/
+
         // In VCL geht Notify zun"achst an das Fenster selbst,
         // also base class rufen, sonst erf"ahrt der parent nichts
         if ( rEvt.GetWindow() == this )
