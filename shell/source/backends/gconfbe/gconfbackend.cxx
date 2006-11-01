@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gconfbackend.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:36:52 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:22:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,6 +251,24 @@ static const ConfigurationValue CommonConfigurationValuesList[] =
         "/desktop/gnome/url-handlers/mailto/command",
         "org.openoffice.Office.Common/ExternalMailer/Program",
         "string",
+        sal_False,
+        sal_True,
+        SETTINGS_LAST
+    },
+    {
+        SETTING_SOURCEVIEWFONT_NAME,
+        "/desktop/gnome/interface/monospace_font_name",
+        "org.openoffice.Office.Common/Font/SourceViewFont/FontName",
+        "string",
+        sal_False,
+        sal_True,
+        SETTINGS_LAST
+    },
+    {
+        SETTING_SOURCEVIEWFONT_HEIGHT,
+        "/desktop/gnome/interface/monospace_font_name",
+        "org.openoffice.Office.Common/Font/SourceViewFont/FontHeight",
+        "short",
         sal_False,
         sal_True,
         SETTINGS_LAST
