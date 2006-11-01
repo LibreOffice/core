@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckconfig.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:30:23 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 10:12:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ UpdateCheckConfig::UpdateCheckConfig(const uno::Reference<uno::XComponentContext
 
 UpdateCheckConfig::~UpdateCheckConfig()
 {
-
+    m_aListenerList.clear();
 }
 
 //------------------------------------------------------------------------------
@@ -185,8 +185,18 @@ UpdateCheckConfig::commitChanges(  )
     throw (lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Reference< util::XChangesBatch > xChangesBatch(m_xUpdateAccess, uno::UNO_QUERY);
-    if( xChangesBatch.is() )
+    if( xChangesBatch.is() && xChangesBatch->hasPendingChanges() )
+    {
+        util::ChangesEvent aChangesEvt;
+        aChangesEvt.Changes = xChangesBatch->getPendingChanges();
         xChangesBatch->commitChanges();
+
+        ::std::list< uno::Reference< util::XChangesListener > >::iterator it;
+        for( it = m_aListenerList.begin(); it != m_aListenerList.end(); ++it )
+        {
+            (*it)->changesOccurred( aChangesEvt );
+        }
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -213,6 +223,28 @@ UpdateCheckConfig::getPendingChanges(  ) throw (uno::RuntimeException)
     return uno::Sequence< util::ElementChange >();
 }
 
+
+//------------------------------------------------------------------------------
+// XChangesNotifier
+
+void SAL_CALL
+UpdateCheckConfig::addChangesListener( const uno::Reference< util::XChangesListener >& aListener )
+        throw ( uno::RuntimeException )
+{
+    m_aListenerList.push_back( aListener );
+}
+
+//------------------------------------------------------------------------------
+
+void SAL_CALL
+UpdateCheckConfig::removeChangesListener( const uno::Reference< util::XChangesListener >& aListener )
+        throw ( uno::RuntimeException )
+{
+    m_aListenerList.remove( aListener );
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
 rtl::OUString SAL_CALL
