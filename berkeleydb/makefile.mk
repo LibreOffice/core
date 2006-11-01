@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:52:16 $
+#   last change: $Author: vg $ $Date: 2006-11-01 14:08:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_DIR_OUT=$(CONFIGURE_DIR)
 .IF "$(OS)"=="IRIX"
 CONFIGURE_ACTION= $(CONFIG_SHELL) ..$/dist$/configure
-BUILD_ACTION=gmake
+BUILD_ACTION=gmake 
 .ELSE
 BUILD_ACTION=make
 .ENDIF
