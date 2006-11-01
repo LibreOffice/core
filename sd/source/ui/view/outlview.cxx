@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:41:44 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 10:15:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1856,6 +1856,7 @@ void OutlineView::TryToMergeUndoActions()
                     // the top EditUndo of the previous undo list
 
                     // first remove the merged undo action
+                    DBG_ASSERT( pListAction->aUndoActions[nEditPos] == pEditUndo, "sd::OutlineView::TryToMergeUndoActions(), wrong edit pos!" );
                     pListAction->aUndoActions.Remove(nEditPos);
                     delete pEditUndo;
 
@@ -1882,15 +1883,14 @@ void OutlineView::TryToMergeUndoActions()
 
                             if( pSourceList && pDestinationList )
                             {
-                                const USHORT nCount = pSourceList->aUndoActions.Count();
-                                nAction = 0;
+                                USHORT nCount = pSourceList->aUndoActions.Count();
                                 USHORT nDestAction = pDestinationList->aUndoActions.Count();
-                                while( nAction < nCount )
+                                while( nCount-- )
                                 {
-                                    const SfxUndoAction* pTemp = pSourceList->aUndoActions.GetObject(nAction++);
+                                    const SfxUndoAction* pTemp = pSourceList->aUndoActions.GetObject(0);
+                                    pSourceList->aUndoActions.Remove(0);
                                     pDestinationList->aUndoActions.Insert( pTemp, nDestAction++ );
                                 }
-                                pSourceList->aUndoActions.Remove( nCount - 1 );
                                 pDestinationList->nCurUndoAction = pDestinationList->aUndoActions.Count();
 
                                 pListAction->aUndoActions.Remove(0);
@@ -1906,17 +1906,15 @@ void OutlineView::TryToMergeUndoActions()
                         // now we have to move all remaining doc undo actions from the top undo
                         // list to the previous undo list and remove the top undo list
 
-                        const USHORT nCount = pListAction->aUndoActions.Count();
-                        nAction = 0;
+                        USHORT nCount = pListAction->aUndoActions.Count();
                         USHORT nDestAction = pPrevListAction->aUndoActions.Count();
-                        while( nAction < nCount )
+                        while( nCount-- )
                         {
-                            const SfxUndoAction* pTemp = pListAction->aUndoActions.GetObject(nAction++);
+                            const SfxUndoAction* pTemp = pListAction->aUndoActions.GetObject(0);
+                            pListAction->aUndoActions.Remove(0);
                             if( pTemp )
                                 pPrevListAction->aUndoActions.Insert( pTemp, nDestAction++ );
                         }
-
-                        pListAction->aUndoActions.Remove( nCount - 1 );
                         pPrevListAction->nCurUndoAction = pPrevListAction->aUndoActions.Count();
                     }
 
