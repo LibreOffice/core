@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hatchwindow.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:50:19 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:18:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,11 +43,13 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-
+class SvResizeWindow;
 class VCLXHatchWindow : public ::com::sun::star::embed::XHatchWindow,
                         public VCLXWindow
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XHatchWindowController > m_xController;
+    ::com::sun::star::awt::Size aHatchBorderSize;
+    SvResizeWindow* pHatchWindow;
 
 public:
     VCLXHatchWindow();
@@ -60,6 +62,8 @@ public:
     void QueryObjAreaPixel( Rectangle & );
     void RequestObjAreaPixel( const Rectangle & );
     void InplaceDeactivate();
+    void Activated();
+    void Deactivated();
 
     // XInterface
     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -72,6 +76,8 @@ public:
 
     // XHatchWindow
     virtual void SAL_CALL setController( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XHatchWindowController >& xController ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Size SAL_CALL getHatchBorderSize() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setHatchBorderSize( const ::com::sun::star::awt::Size& _hatchbordersize ) throw (::com::sun::star::uno::RuntimeException);
 
     // XComponent
     virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
