@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleObjectFactory.java,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-06 13:11:03 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:06:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,18 +358,17 @@ public class AccessibleObjectFactory {
 //              }
                 break;
             case AccessibleRole.MENU_BAR:
-                c = new Container(javax.accessibility.AccessibleRole.MENU_BAR, xAccessible, xAccessibleContext);
+                c = new MenuContainer(javax.accessibility.AccessibleRole.MENU_BAR, xAccessible, xAccessibleContext);
                 break;
             case AccessibleRole.MENU_ITEM:
                 c = new MenuItem(xAccessible, xAccessibleContext);
-                c.setFocusable(false);
                 // Menu items are always visible, but change SHOWING state
 //              if (!xAccessibleStateSet.contains(AccessibleStateType.SHOWING)) {
 //                  c.setVisible(false);
 //              }
                 break;
             case AccessibleRole.POPUP_MENU:
-                c = new Container(javax.accessibility.AccessibleRole.POPUP_MENU, xAccessible, xAccessibleContext);
+                c = new MenuContainer(javax.accessibility.AccessibleRole.POPUP_MENU, xAccessible, xAccessibleContext);
                 break;
             case AccessibleRole.OPTION_PANE:
                 c = new Container(javax.accessibility.AccessibleRole.OPTION_PANE,
