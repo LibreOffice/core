@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:39:22 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:28:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -914,27 +914,6 @@ SfxFrame* SfxFrame::SearchFrame_Impl( const String& rName, sal_Bool bDeep )
 
 //-------------------------------------------------------------------------
 
-SfxViewFrame* SfxFrame::ActivateChildFrame_Impl()
-{
-    // Irgendeinen ChildFrame suchen, der aktiviert werden kann
-    BOOL bSetFocus = GetCurrentViewFrame() && GetCurrentViewFrame()->GetViewShell()->GetWindow()->HasChildPathFocus( TRUE );
-    for ( sal_uInt16 n=0; n<GetChildFrameCount(); n++ )
-    {
-        // Wenn es ein ViewFrame ohne FrameSet ist, aktivieren
-        SfxFrame *pAct = GetChildFrame(n);
-        SfxViewFrame *pViewFrm = pAct->GetCurrentViewFrame();
-        if ( pViewFrm && !( pAct->GetFrameType() & SFXFRAME_FRAMESET ) &&
-                                pViewFrm->GetObjectShell() )
-                pViewFrm->MakeActive_Impl( bSetFocus );
-        else
-            pViewFrm = pAct->ActivateChildFrame_Impl();
-        if ( pViewFrm )
-            return pViewFrm;
-    }
-
-    return NULL;
-}
-
 //-------------------------------------------------------------------------
 
 void SfxFrame::Activate_Impl( sal_Bool bBeamerOn )
@@ -1541,9 +1520,10 @@ void SfxFrame::Resize()
         }
         else
         {
+            // check for IPClient that contains UIactive object or object that is currently UI activating
             SfxWorkWindow *pWork = GetWorkWindow_Impl();
-            SfxInPlaceClient* pClient = GetCurrentViewFrame()->GetViewShell() ? GetCurrentViewFrame()->GetViewShell()->GetIPClient() : 0;
-            if ( pClient && pClient->GetObject()->getCurrentState() != embed::EmbedStates::LOADED )
+            SfxInPlaceClient* pClient = GetCurrentViewFrame()->GetViewShell() ? GetCurrentViewFrame()->GetViewShell()->GetUIActiveIPClient_Impl() : 0;
+            if ( pClient )
             {
                 uno::Reference < lang::XUnoTunnel > xObj( pClient->GetObject()->getComponent(), uno::UNO_QUERY );
                 uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
