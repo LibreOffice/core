@@ -79,20 +79,20 @@ sal_Int32 lcl_ConvertColor(sal_Int32 nIntValue)
 
 /*-- 09.06.2006 09:52:11---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 DomainMapper::DomainMapper(uno::Reference< lang::XComponent > xModel) :
-    m_pImpl( new DomainMapper_Impl( *this, xModel ))
+m_pImpl( new DomainMapper_Impl( *this, xModel ))
 {
 }
 /*-- 09.06.2006 09:52:12---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 DomainMapper::~DomainMapper()
 {
 }
 /*-- 09.06.2006 09:52:12---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
 {
     sal_Int32 nIntValue = val.getInt();
@@ -100,205 +100,1012 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
         m_pImpl->GetFIB().SetData( Name, nIntValue );
     else
     {
+
+        /* WRITERFILTERSTATUS: table: attributedata */
         switch( Name )
         {
-            case NS_rtf::LN_ISTD: //index of applied style
-            {
-                //search for the style with the given id and apply it
-                //as CharStyleName or ParaStyleName
-                const StyleSheetEntry* pEntry = m_pImpl->GetStyleSheetTable()->FindStyleSheetByISTD(nIntValue);
-                if(pEntry)
-                {
-                    bool bParaStyle = pEntry->nPropertyCalls > 1;
-                    if(bParaStyle)
-                        m_pImpl->SetCurrentParaStyleId(nIntValue);
-                    m_pImpl->GetTopContext()->Insert(
-                            bParaStyle ?
-                                PROP_PARA_STYLE_NAME  : PROP_CHAR_STYLE_NAME,
-                            uno::makeAny( pEntry->sStyleName ) );
-                }
-            }
+            /* attributes to be ignored */
+        case NS_rtf::LN_UNUSED4:
+        case NS_rtf::LN_UNUSED8:
+        case NS_rtf::LN_UNUSED1_3:
+        case NS_rtf::LN_UNUSED1_7:
+        case NS_rtf::LN_UNUSED8_3:
+        case NS_rtf::LN_FWRITERESERVATION:
+        case NS_rtf::LN_FLOADOVERRIDE:
+        case NS_rtf::LN_FFAREAST:
+        case NS_rtf::LN_FCRYPTO:
+        case NS_rtf::LN_NFIBBACK:
+        case NS_rtf::LN_LKEY:
+        case NS_rtf::LN_ENVR:
+        case NS_rtf::LN_FMAC:
+        case NS_rtf::LN_FWORD97SAVED:
+        case NS_rtf::LN_FCMAC:
+        case NS_rtf::LN_PNFBPCHPFIRST_W6:
+        case NS_rtf::LN_PNCHPFIRST_W6:
+        case NS_rtf::LN_CPNBTECHP_W6:
+        case NS_rtf::LN_PNFBPPAPFIRST_W6:
+        case NS_rtf::LN_PNPAPFIRST_W6:
+        case NS_rtf::LN_CPNBTEPAP_W6:
+        case NS_rtf::LN_PNFBPLVCFIRST_W6:
+        case NS_rtf::LN_PNLVCFIRST_W6:
+        case NS_rtf::LN_CPNBTELVC_W6:
+        case NS_rtf::LN_CBMAC:
+        case NS_rtf::LN_LPRODUCTCREATED:
+        case NS_rtf::LN_LPRODUCTREVISED:
+        case NS_rtf::LN_CCPMCR:
+        case NS_rtf::LN_PNFBPCHPFIRST:
+        case NS_rtf::LN_PNFBPPAPFIRST:
+        case NS_rtf::LN_PNFBPLVCFIRST:
+        case NS_rtf::LN_FCISLANDFIRST:
+        case NS_rtf::LN_FCISLANDLIM:
+        case NS_rtf::LN_FCSTSHFORIG:
+        case NS_rtf::LN_LCBSTSHFORIG:
+        case NS_rtf::LN_FCPLCFPAD:
+        case NS_rtf::LN_LCBPLCFPAD:
+        case NS_rtf::LN_FCSTTBFGLSY:
+        case NS_rtf::LN_LCBSTTBFGLSY:
+        case NS_rtf::LN_FCPLCFGLSY:
+        case NS_rtf::LN_LCBPLCFGLSY:
+        case NS_rtf::LN_FCPLCFSEA:
+        case NS_rtf::LN_LCBPLCFSEA:
+        case NS_rtf::LN_FCPLCFFLDMCR:
+        case NS_rtf::LN_LCBPLCFFLDMCR:
+        case NS_rtf::LN_FCCMDS:
+        case NS_rtf::LN_LCBCMDS:
+        case NS_rtf::LN_FCPLCMCR:
+        case NS_rtf::LN_LCBPLCMCR:
+        case NS_rtf::LN_FCSTTBFMCR:
+        case NS_rtf::LN_LCBSTTBFMCR:
+        case NS_rtf::LN_FCPRDRVR:
+        case NS_rtf::LN_LCBPRDRVR:
+        case NS_rtf::LN_FCPRENVPORT:
+        case NS_rtf::LN_LCBPRENVPORT:
+        case NS_rtf::LN_FCPRENVLAND:
+        case NS_rtf::LN_LCBPRENVLAND:
+        case NS_rtf::LN_FCWSS:
+        case NS_rtf::LN_LCBWSS:
+        case NS_rtf::LN_FCPLCFPGDFTN:
+        case NS_rtf::LN_LCBPLCFPGDFTN:
+        case NS_rtf::LN_FCAUTOSAVESOURCE:
+        case NS_rtf::LN_LCBAUTOSAVESOURCE:
+        case NS_rtf::LN_FCPLCDOAMOM:
+        case NS_rtf::LN_LCBPLCDOAMOM:
+        case NS_rtf::LN_FCPLCDOAHDR:
+        case NS_rtf::LN_LCBPLCDOAHDR:
+        case NS_rtf::LN_FCPMS:
+        case NS_rtf::LN_LCBPMS:
+        case NS_rtf::LN_FCPLCFPGDEDN:
+        case NS_rtf::LN_LCBPLCFPGDEDN:
+        case NS_rtf::LN_FCPLCFWKB:
+        case NS_rtf::LN_LCBPLCFWKB:
+        case NS_rtf::LN_FCPLCFSPL:
+        case NS_rtf::LN_LCBPLCFSPL:
+        case NS_rtf::LN_FCSTWUSER:
+        case NS_rtf::LN_LCBSTWUSER:
+        case NS_rtf::LN_FCUNUSED:
+        case NS_rtf::LN_LCBUNUSED:
+        case NS_rtf::LN_FCSTTBFINTLFLD:
+        case NS_rtf::LN_LCBSTTBFINTLFLD:
+        case NS_rtf::LN_FCROUTESLIP:
+        case NS_rtf::LN_LCBROUTESLIP:
+        case NS_rtf::LN_FCSTTBSAVEDBY:
+        case NS_rtf::LN_LCBSTTBSAVEDBY:
+        case NS_rtf::LN_FCSTTBFNM:
+        case NS_rtf::LN_LCBSTTBFNM:
+        case NS_rtf::LN_FCDOCUNDO:
+        case NS_rtf::LN_LCBDOCUNDO:
+        case NS_rtf::LN_FCRGBUSE:
+        case NS_rtf::LN_LCBRGBUSE:
+        case NS_rtf::LN_FCUSP:
+        case NS_rtf::LN_LCBUSP:
+        case NS_rtf::LN_FCUSKF:
+        case NS_rtf::LN_LCBUSKF:
+        case NS_rtf::LN_FCPLCUPCRGBUSE:
+        case NS_rtf::LN_LCBPLCUPCRGBUSE:
+        case NS_rtf::LN_FCPLCUPCUSP:
+        case NS_rtf::LN_LCBPLCUPCUSP:
+        case NS_rtf::LN_FCPLGOSL:
+        case NS_rtf::LN_LCBPLGOSL:
+        case NS_rtf::LN_FCPLCOCX:
+        case NS_rtf::LN_LCBPLCOCX:
+        case NS_rtf::LN_DWLOWDATETIME:
+        case NS_rtf::LN_DWHIGHDATETIME:
+        case NS_rtf::LN_FCPLCASUMY:
+        case NS_rtf::LN_LCBPLCASUMY:
+        case NS_rtf::LN_FCPLCFGRAM:
+        case NS_rtf::LN_LCBPLCFGRAM:
+        case NS_rtf::LN_FCSTTBFUSSR:
             break;
-    //        case NS_rtf::LN_ISTARTAT: break;
-    //        case NS_rtf::LN_NFC: break;
-    //        case NS_rtf::LN_FLEGAL: break;
-    //        case NS_rtf::LN_FNORESTART: break;
-    //        case NS_rtf::LN_FPREV: break;
-    //        case NS_rtf::LN_FPREVSPACE: break;
-    //        case NS_rtf::LN_FWORD6: break;
-    //        case NS_rtf::LN_UNUSED5_7: break;
-    //        case NS_rtf::LN_RGBXCHNUMS: break;
-    //        case NS_rtf::LN_IXCHFOLLOW: break;
-    //        case NS_rtf::LN_DXASPACE: break;
-    //        case NS_rtf::LN_DXAINDENT: break;
-    //        case NS_rtf::LN_CBGRPPRLCHPX: break;
-    //        case NS_rtf::LN_CBGRPPRLPAPX: break;
-    //        case NS_rtf::LN_LSID: break;
-    //        case NS_rtf::LN_TPLC: break;
-    //        case NS_rtf::LN_RGISTD: break;
-    //        case NS_rtf::LN_FSIMPLELIST: break;
-    //        case NS_rtf::LN_FRESTARTHDN: break;
-    //        case NS_rtf::LN_UNSIGNED26_2: break;
-    //        case NS_rtf::LN_ILVL: break;
-    //        case NS_rtf::LN_FSTARTAT: break;
-    //        case NS_rtf::LN_FFORMATTING: break;
-    //        case NS_rtf::LN_UNSIGNED4_6: break;
-    //        case NS_rtf::LN_UNUSED4: break;
-    //        case NS_rtf::LN_UNUSED8: break;
-    //        case NS_rtf::LN_CLFOLVL: break;
-    //        case NS_rtf::LN_CBFFNM1: break;
-    //        case NS_rtf::LN_PRQ: break;
-    //        case NS_rtf::LN_FTRUETYPE: break;
-    //        case NS_rtf::LN_UNUSED1_3: break;
-    //        case NS_rtf::LN_FF: break;
-    //        case NS_rtf::LN_UNUSED1_7: break;
-    //        case NS_rtf::LN_WWEIGHT: break;
-            case NS_rtf::LN_CHS:
+        case NS_rtf::LN_ISTD: //index of applied style
+            /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */            {
+            //search for the style with the given id and apply it
+            //as CharStyleName or ParaStyleName
+            const StyleSheetEntry* pEntry = m_pImpl->GetStyleSheetTable()->FindStyleSheetByISTD(nIntValue);
+            if(pEntry)
+            {
+                bool bParaStyle = pEntry->nPropertyCalls > 1;
+                if(bParaStyle)
+                    m_pImpl->SetCurrentParaStyleId(nIntValue);
+                m_pImpl->GetTopContext()->Insert(
+                                                 bParaStyle ?
+                                                 PROP_PARA_STYLE_NAME  : PROP_CHAR_STYLE_NAME,
+                                                 uno::makeAny( pEntry->sStyleName ) );
+            }
+        }
+        break;
+        case NS_rtf::LN_ISTARTAT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_NFC:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FLEGAL:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FNORESTART:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FPREV:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FPREVSPACE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FWORD6:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_UNUSED5_7:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_RGBXCHNUMS:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_IXCHFOLLOW:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_DXASPACE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_DXAINDENT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_CBGRPPRLCHPX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_CBGRPPRLPAPX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_LSID:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_TPLC:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_RGISTD:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FSIMPLELIST:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FRESTARTHDN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_UNSIGNED26_2:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_ILVL:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FSTARTAT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FFORMATTING:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_UNSIGNED4_6:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_CLFOLVL:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_CBFFNM1:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_PRQ:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FTRUETYPE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FF:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_WWEIGHT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_CHS:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
             {
                 m_pImpl->GetFIB().SetLNCHS( nIntValue );
             }
             break;
             break;
-    //        case NS_rtf::LN_IXCHSZALT: break;
-    //        case NS_rtf::LN_PANOSE: break;
-    //        case NS_rtf::LN_FS: break;
-    //        case NS_rtf::LN_STI: break;
-    //        case NS_rtf::LN_FSCRATCH: break;
-    //        case NS_rtf::LN_FINVALHEIGHT: break;
-    //        case NS_rtf::LN_FHASUPE: break;
-    //        case NS_rtf::LN_FMASSCOPY: break;
-    //        case NS_rtf::LN_SGC: break;
-    //        case NS_rtf::LN_ISTDBASE: break;
-    //        case NS_rtf::LN_CUPX: break;
-    //        case NS_rtf::LN_ISTDNEXT: break;
-    //        case NS_rtf::LN_BCHUPE: break;
-    //        case NS_rtf::LN_FAUTOREDEF: break;
-    //        case NS_rtf::LN_FHIDDEN: break;
-    //        case NS_rtf::LN_UNUSED8_3: break;
-    //        case NS_rtf::LN_CSTD: break;
-    //        case NS_rtf::LN_CBSTDBASEINFILE: break;
-    //        case NS_rtf::LN_FSTDSTYLENAMESWRITTEN: break;
-    //        case NS_rtf::LN_UNUSED4_2: break;
-    //        case NS_rtf::LN_STIMAXWHENSAVED: break;
-    //        case NS_rtf::LN_ISTDMAXFIXEDWHENSAVED: break;
-    //        case NS_rtf::LN_NVERBUILTINNAMESWHENSAVED: break;
-    //        case NS_rtf::LN_RGFTCSTANDARDCHPSTSH: break;
-    /*        case NS_rtf::LN_WIDENT:             case NS_rtf::LN_NFIB:            case NS_rtf::LN_NPRODUCT:            case NS_rtf::LN_LID:            case NS_rtf::LN_PNNEXT:            case NS_rtf::LN_FDOT:            case NS_rtf::LN_FGLSY:            case NS_rtf::LN_FCOMPLEX:            case NS_rtf::LN_FHASPIC:
-            case NS_rtf::LN_CQUICKSAVES:            case NS_rtf::LN_FENCRYPTED:            case NS_rtf::LN_FWHICHTBLSTM:            case NS_rtf::LN_FREADONLYRECOMMENDED:            case NS_rtf::LN_FWRITERESERVATION:            case NS_rtf::LN_FEXTCHAR:            case NS_rtf::LN_FLOADOVERRIDE:            case NS_rtf::LN_FFAREAST:
-            case NS_rtf::LN_FCRYPTO:            case NS_rtf::LN_NFIBBACK:            case NS_rtf::LN_LKEY:            case NS_rtf::LN_ENVR:            case NS_rtf::LN_FMAC:            case NS_rtf::LN_FEMPTYSPECIAL:            case NS_rtf::LN_FLOADOVERRIDEPAGE:            case NS_rtf::LN_FFUTURESAVEDUNDO:
-            case NS_rtf::LN_FWORD97SAVED:             case NS_rtf::LN_FSPARE0:            case NS_rtf::LN_CHSTABLES:            case NS_rtf::LN_FCMIN:            case NS_rtf::LN_FCMAC:            case NS_rtf::LN_CSW:            case NS_rtf::LN_WMAGICCREATED:            case NS_rtf::LN_WMAGICREVISED:            case NS_rtf::LN_WMAGICCREATEDPRIVATE:
-            case NS_rtf::LN_WMAGICREVISEDPRIVATE:            case NS_rtf::LN_PNFBPCHPFIRST_W6:            case NS_rtf::LN_PNCHPFIRST_W6:            case NS_rtf::LN_CPNBTECHP_W6:            case NS_rtf::LN_PNFBPPAPFIRST_W6:            case NS_rtf::LN_PNPAPFIRST_W6:            case NS_rtf::LN_CPNBTEPAP_W6:            case NS_rtf::LN_PNFBPLVCFIRST_W6:
-            case NS_rtf::LN_PNLVCFIRST_W6:            case NS_rtf::LN_CPNBTELVC_W6:            case NS_rtf::LN_LIDFE:            case NS_rtf::LN_CLW:            case NS_rtf::LN_CBMAC:            case NS_rtf::LN_LPRODUCTCREATED:            case NS_rtf::LN_LPRODUCTREVISED:            case NS_rtf::LN_CCPTEXT:
-            case NS_rtf::LN_CCPFTN:            case NS_rtf::LN_CCPHDD:            case NS_rtf::LN_CCPMCR:            case NS_rtf::LN_CCPATN:            case NS_rtf::LN_CCPEDN:            case NS_rtf::LN_CCPTXBX:            case NS_rtf::LN_CCPHDRTXBX:            case NS_rtf::LN_PNFBPCHPFIRST:            case NS_rtf::LN_PNCHPFIRST:            case NS_rtf::LN_CPNBTECHP:
-            case NS_rtf::LN_PNFBPPAPFIRST:            case NS_rtf::LN_PNPAPFIRST:            case NS_rtf::LN_CPNBTEPAP:            case NS_rtf::LN_PNFBPLVCFIRST:            case NS_rtf::LN_PNLVCFIRST:            case NS_rtf::LN_CPNBTELVC:            case NS_rtf::LN_FCISLANDFIRST:            case NS_rtf::LN_FCISLANDLIM:            case NS_rtf::LN_CFCLCB:            case NS_rtf::LN_FCSTSHFORIG:
-            case NS_rtf::LN_LCBSTSHFORIG:            case NS_rtf::LN_FCSTSHF:            case NS_rtf::LN_LCBSTSHF:            case NS_rtf::LN_FCPLCFFNDREF:           case NS_rtf::LN_LCBPLCFFNDREF:            case NS_rtf::LN_FCPLCFFNDTXT:            case NS_rtf::LN_LCBPLCFFNDTXT:            case NS_rtf::LN_FCPLCFANDREF:            case NS_rtf::LN_LCBPLCFANDREF:            case NS_rtf::LN_FCPLCFANDTXT:            case NS_rtf::LN_LCBPLCFANDTXT:            case NS_rtf::LN_FCPLCFSED:            case NS_rtf::LN_LCBPLCFSED:
-            case NS_rtf::LN_FCPLCFPAD:            case NS_rtf::LN_LCBPLCFPAD:            case NS_rtf::LN_FCPLCFPHE:            case NS_rtf::LN_LCBPLCFPHE:            case NS_rtf::LN_FCSTTBFGLSY:            case NS_rtf::LN_LCBSTTBFGLSY:            case NS_rtf::LN_FCPLCFGLSY:            case NS_rtf::LN_LCBPLCFGLSY:            case NS_rtf::LN_FCPLCFHDD:            case NS_rtf::LN_LCBPLCFHDD:            case NS_rtf::LN_FCPLCFBTECHPX:            case NS_rtf::LN_LCBPLCFBTECHPX:
-            case NS_rtf::LN_FCPLCFBTEPAPX:            case NS_rtf::LN_LCBPLCFBTEPAPX:            case NS_rtf::LN_FCPLCFSEA:            case NS_rtf::LN_LCBPLCFSEA:            case NS_rtf::LN_FCSTTBFFFN:            case NS_rtf::LN_LCBSTTBFFFN:            case NS_rtf::LN_FCPLCFFLDMOM:            case NS_rtf::LN_LCBPLCFFLDMOM:            case NS_rtf::LN_FCPLCFFLDHDR:            case NS_rtf::LN_LCBPLCFFLDHDR:
-            case NS_rtf::LN_FCPLCFFLDFTN:            case NS_rtf::LN_LCBPLCFFLDFTN:            case NS_rtf::LN_FCPLCFFLDATN:            case NS_rtf::LN_LCBPLCFFLDATN:            case NS_rtf::LN_FCPLCFFLDMCR:            case NS_rtf::LN_LCBPLCFFLDMCR:            case NS_rtf::LN_FCSTTBFBKMK:            case NS_rtf::LN_LCBSTTBFBKMK:            case NS_rtf::LN_FCPLCFBKF:            case NS_rtf::LN_LCBPLCFBKF:            case NS_rtf::LN_FCPLCFBKL:            case NS_rtf::LN_LCBPLCFBKL:
-            case NS_rtf::LN_FCCMDS:            case NS_rtf::LN_LCBCMDS:            case NS_rtf::LN_FCPLCMCR:            case NS_rtf::LN_LCBPLCMCR:            case NS_rtf::LN_FCSTTBFMCR:            case NS_rtf::LN_LCBSTTBFMCR:            case NS_rtf::LN_FCPRDRVR:            case NS_rtf::LN_LCBPRDRVR:            case NS_rtf::LN_FCPRENVPORT:           case NS_rtf::LN_LCBPRENVPORT:            case NS_rtf::LN_FCPRENVLAND:            case NS_rtf::LN_LCBPRENVLAND:
-            case NS_rtf::LN_FCWSS:            case NS_rtf::LN_LCBWSS:            case NS_rtf::LN_FCDOP:            case NS_rtf::LN_LCBDOP:            case NS_rtf::LN_FCSTTBFASSOC:            case NS_rtf::LN_LCBSTTBFASSOC:            case NS_rtf::LN_FCCLX:            case NS_rtf::LN_LCBCLX:            case NS_rtf::LN_FCPLCFPGDFTN:            case NS_rtf::LN_LCBPLCFPGDFTN:           case NS_rtf::LN_FCAUTOSAVESOURCE:
-            case NS_rtf::LN_LCBAUTOSAVESOURCE:            case NS_rtf::LN_FCGRPXSTATNOWNERS:            case NS_rtf::LN_LCBGRPXSTATNOWNERS:            case NS_rtf::LN_FCSTTBFATNBKMK:            case NS_rtf::LN_LCBSTTBFATNBKMK:            case NS_rtf::LN_FCPLCDOAMOM:            case NS_rtf::LN_LCBPLCDOAMOM:            case NS_rtf::LN_FCPLCDOAHDR:            case NS_rtf::LN_LCBPLCDOAHDR:            case NS_rtf::LN_FCPLCSPAMOM:            case NS_rtf::LN_LCBPLCSPAMOM:            case NS_rtf::LN_FCPLCSPAHDR:
-            case NS_rtf::LN_LCBPLCSPAHDR:            case NS_rtf::LN_FCPLCFATNBKF:            case NS_rtf::LN_LCBPLCFATNBKF:            case NS_rtf::LN_FCPLCFATNBKL:            case NS_rtf::LN_LCBPLCFATNBKL:            case NS_rtf::LN_FCPMS:            case NS_rtf::LN_LCBPMS:            case NS_rtf::LN_FCFORMFLDSTTBF:            case NS_rtf::LN_LCBFORMFLDSTTBF:            case NS_rtf::LN_FCPLCFENDREF:
-            case NS_rtf::LN_LCBPLCFENDREF:            case NS_rtf::LN_FCPLCFENDTXT:            case NS_rtf::LN_LCBPLCFENDTXT:            case NS_rtf::LN_FCPLCFFLDEDN:            case NS_rtf::LN_LCBPLCFFLDEDN:            case NS_rtf::LN_FCPLCFPGDEDN:            case NS_rtf::LN_LCBPLCFPGDEDN:            case NS_rtf::LN_FCDGGINFO:            case NS_rtf::LN_LCBDGGINFO:            case NS_rtf::LN_FCSTTBFRMARK:
-            case NS_rtf::LN_LCBSTTBFRMARK:            case NS_rtf::LN_FCSTTBFCAPTION:            case NS_rtf::LN_LCBSTTBFCAPTION:            case NS_rtf::LN_FCSTTBFAUTOCAPTION:            case NS_rtf::LN_LCBSTTBFAUTOCAPTION:            case NS_rtf::LN_FCPLCFWKB:            case NS_rtf::LN_LCBPLCFWKB:            case NS_rtf::LN_FCPLCFSPL:            case NS_rtf::LN_LCBPLCFSPL:            case NS_rtf::LN_FCPLCFTXBXTXT:            case NS_rtf::LN_LCBPLCFTXBXTXT:
-            case NS_rtf::LN_FCPLCFFLDTXBX:            case NS_rtf::LN_LCBPLCFFLDTXBX:            case NS_rtf::LN_FCPLCFHDRTXBXTXT:            case NS_rtf::LN_LCBPLCFHDRTXBXTXT:            case NS_rtf::LN_FCPLCFFLDHDRTXBX:            case NS_rtf::LN_LCBPLCFFLDHDRTXBX:            case NS_rtf::LN_FCSTWUSER:            case NS_rtf::LN_LCBSTWUSER:            case NS_rtf::LN_FCSTTBTTMBD:            case NS_rtf::LN_LCBSTTBTTMBD:
-            case NS_rtf::LN_FCUNUSED:            case NS_rtf::LN_LCBUNUSED:            case NS_rtf::LN_FCPGDMOTHER:            case NS_rtf::LN_LCBPGDMOTHER:            case NS_rtf::LN_FCBKDMOTHER:            case NS_rtf::LN_LCBBKDMOTHER:            case NS_rtf::LN_FCPGDFTN:            case NS_rtf::LN_LCBPGDFTN:            case NS_rtf::LN_FCBKDFTN:            case NS_rtf::LN_LCBBKDFTN:            case NS_rtf::LN_FCPGDEDN:            case NS_rtf::LN_LCBPGDEDN:
-            case NS_rtf::LN_FCBKDEDN:            case NS_rtf::LN_LCBBKDEDN:            case NS_rtf::LN_FCSTTBFINTLFLD:            case NS_rtf::LN_LCBSTTBFINTLFLD:            case NS_rtf::LN_FCROUTESLIP:            case NS_rtf::LN_LCBROUTESLIP:            case NS_rtf::LN_FCSTTBSAVEDBY:            case NS_rtf::LN_LCBSTTBSAVEDBY:            case NS_rtf::LN_FCSTTBFNM:            case NS_rtf::LN_LCBSTTBFNM:            case NS_rtf::LN_FCPLCFLST:
-            case NS_rtf::LN_LCBPLCFLST:            case NS_rtf::LN_FCPLFLFO:            case NS_rtf::LN_LCBPLFLFO:            case NS_rtf::LN_FCPLCFTXBXBKD:            case NS_rtf::LN_LCBPLCFTXBXBKD:            case NS_rtf::LN_FCPLCFTXBXHDRBKD:            case NS_rtf::LN_LCBPLCFTXBXHDRBKD:            case NS_rtf::LN_FCDOCUNDO:            case NS_rtf::LN_LCBDOCUNDO:            case NS_rtf::LN_FCRGBUSE:            case NS_rtf::LN_LCBRGBUSE:
-            case NS_rtf::LN_FCUSP:            case NS_rtf::LN_LCBUSP:            case NS_rtf::LN_FCUSKF:            case NS_rtf::LN_LCBUSKF:            case NS_rtf::LN_FCPLCUPCRGBUSE:            case NS_rtf::LN_LCBPLCUPCRGBUSE:            case NS_rtf::LN_FCPLCUPCUSP:            case NS_rtf::LN_LCBPLCUPCUSP:           case NS_rtf::LN_FCSTTBGLSYSTYLE:
-            case NS_rtf::LN_LCBSTTBGLSYSTYLE:            case NS_rtf::LN_FCPLGOSL:            case NS_rtf::LN_LCBPLGOSL:            case NS_rtf::LN_FCPLCOCX:           case NS_rtf::LN_LCBPLCOCX:            case NS_rtf::LN_FCPLCFBTELVC:            case NS_rtf::LN_LCBPLCFBTELVC:            case NS_rtf::LN_DWLOWDATETIME:            case NS_rtf::LN_DWHIGHDATETIME:            case NS_rtf::LN_FCPLCFLVC:            case NS_rtf::LN_LCBPLCFLVC:           case NS_rtf::LN_FCPLCASUMY:
-            case NS_rtf::LN_LCBPLCASUMY:            case NS_rtf::LN_FCPLCFGRAM:            case NS_rtf::LN_LCBPLCFGRAM:            case NS_rtf::LN_FCSTTBLISTNAMES:            case NS_rtf::LN_LCBSTTBLISTNAMES:            case NS_rtf::LN_FCSTTBFUSSR:
-            case NS_rtf::LN_LCBSTTBFUSSR:             {
+        case NS_rtf::LN_IXCHSZALT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_PANOSE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FS:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_STI:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FSCRATCH:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FINVALHEIGHT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FHASUPE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FMASSCOPY:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_SGC:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_ISTDBASE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_CUPX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_ISTDNEXT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_BCHUPE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FAUTOREDEF:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FHIDDEN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_CSTD:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_CBSTDBASEINFILE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FSTDSTYLENAMESWRITTEN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_UNUSED4_2:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_STIMAXWHENSAVED:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_ISTDMAXFIXEDWHENSAVED:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_NVERBUILTINNAMESWHENSAVED:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_RGFTCSTANDARDCHPSTSH:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_WIDENT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_NFIB:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_NPRODUCT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+        case NS_rtf::LN_LID:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+        case NS_rtf::LN_PNNEXT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+        case NS_rtf::LN_FDOT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+        case NS_rtf::LN_FGLSY:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+        case NS_rtf::LN_FCOMPLEX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+        case NS_rtf::LN_FHASPIC:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_CQUICKSAVES:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FENCRYPTED:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FWHICHTBLSTM:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FREADONLYRECOMMENDED:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FEXTCHAR:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FEMPTYSPECIAL:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FLOADOVERRIDEPAGE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FFUTURESAVEDUNDO:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FSPARE0:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_CHSTABLES:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCMIN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_CSW:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_WMAGICCREATED:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_WMAGICREVISED:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_WMAGICCREATEDPRIVATE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+
+        case NS_rtf::LN_WMAGICREVISEDPRIVATE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LIDFE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_CLW:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_CCPTEXT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+
+        case NS_rtf::LN_CCPFTN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_CCPHDD:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_CCPATN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_CCPEDN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_CCPTXBX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_CCPHDRTXBX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_PNCHPFIRST:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_CPNBTECHP:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_PNPAPFIRST:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_CPNBTEPAP:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_PNLVCFIRST:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_CPNBTELVC:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_CFCLCB:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCSTSHF:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBSTSHF:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFFNDREF:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFFNDREF:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFFNDTXT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFFNDTXT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFANDREF:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFANDREF:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFANDTXT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFANDTXT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFSED:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFSED:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFPHE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFPHE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFHDD:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFHDD:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFBTECHPX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFBTECHPX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+
+        case NS_rtf::LN_FCPLCFBTEPAPX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFBTEPAPX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCSTTBFFFN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBSTTBFFFN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFFLDMOM:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFFLDMOM:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFFLDHDR:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFFLDHDR:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+
+        case NS_rtf::LN_FCPLCFFLDFTN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFFLDFTN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFFLDATN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFFLDATN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCSTTBFBKMK:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBSTTBFBKMK:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFBKF:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFBKF:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFBKL:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFBKL:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCDOP:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBDOP:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCSTTBFASSOC:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBSTTBFASSOC:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCCLX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBCLX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCGRPXSTATNOWNERS:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBGRPXSTATNOWNERS:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCSTTBFATNBKMK:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBSTTBFATNBKMK:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCSPAMOM:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCSPAMOM:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCSPAHDR:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+
+        case NS_rtf::LN_LCBPLCSPAHDR:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFATNBKF:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFATNBKF:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFATNBKL:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFATNBKL:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCFORMFLDSTTBF:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBFORMFLDSTTBF:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFENDREF:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+
+        case NS_rtf::LN_LCBPLCFENDREF:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFENDTXT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFENDTXT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFFLDEDN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFFLDEDN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCDGGINFO:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBDGGINFO:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCSTTBFRMARK:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+
+        case NS_rtf::LN_LCBSTTBFRMARK:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCSTTBFCAPTION:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBSTTBFCAPTION:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCSTTBFAUTOCAPTION:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBSTTBFAUTOCAPTION:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFTXBXTXT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFFLDTXBX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFFLDTXBX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFHDRTXBXTXT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFHDRTXBXTXT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFFLDHDRTXBX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFFLDHDRTXBX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCSTTBTTMBD:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBSTTBTTMBD:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPGDMOTHER:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPGDMOTHER:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCBKDMOTHER:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBBKDMOTHER:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPGDFTN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPGDFTN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCBKDFTN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBBKDFTN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPGDEDN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPGDEDN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+
+        case NS_rtf::LN_FCBKDEDN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBBKDEDN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFLST:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+
+        case NS_rtf::LN_LCBPLCFLST:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLFLFO:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLFLFO:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFTXBXBKD:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFTXBXBKD:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFTXBXHDRBKD:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFTXBXHDRBKD:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCSTTBGLSYSTYLE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+
+        case NS_rtf::LN_LCBSTTBGLSYSTYLE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFBTELVC:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFBTELVC:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCPLCFLVC:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBPLCFLVC:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCSTTBLISTNAMES:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBSTTBLISTNAMES:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_LCBSTTBFUSSR:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            {
                 m_pImpl->GetFIB().SetData( Name, nIntValue );
             }
-            break;*/
-            case NS_rtf::LN_FN:
-            case NS_rtf::LN_FCSEPX:
-            case NS_rtf::LN_FNMPR:
-            case NS_rtf::LN_FCMPR:
-                //section descriptor, unused or internally used
             break;
-    //        case NS_rtf::LN_ICOFORE: break;
-    //        case NS_rtf::LN_ICOBACK: break;
-    //        case NS_rtf::LN_IPAT: break;
-    //        case NS_rtf::LN_SHDFORECOLOR: break;
-    //        case NS_rtf::LN_SHDBACKCOLOR: break;
-    //        case NS_rtf::LN_SHDPATTERN: break;
-    //        case NS_rtf::LN_DPTLINEWIDTH: break;
-    //        case NS_rtf::LN_BRCTYPE: break;
-    //        case NS_rtf::LN_ICO: break;
-    //        case NS_rtf::LN_DPTSPACE: break;
-    //        case NS_rtf::LN_FSHADOW: break;
-    //        case NS_rtf::LN_FFRAME: break;
-    //        case NS_rtf::LN_UNUSED2_15: break;
-    //        case NS_rtf::LN_FFIRSTMERGED: break;
-    //        case NS_rtf::LN_FMERGED: break;
-    //        case NS_rtf::LN_FVERTICAL: break;
-    //        case NS_rtf::LN_FBACKWARD: break;
-    //        case NS_rtf::LN_FROTATEFONT: break;
-    //        case NS_rtf::LN_FVERTMERGE: break;
-    //        case NS_rtf::LN_FVERTRESTART: break;
-    //        case NS_rtf::LN_VERTALIGN: break;
-    //        case NS_rtf::LN_FUNUSED: break;
-    //        case NS_rtf::LN_WUNUSED: break;
-    //        case NS_rtf::LN_BRCTOP: break;
-    //        case NS_rtf::LN_BRCLEFT: break;
-    //        case NS_rtf::LN_BRCBOTTOM: break;
-    //        case NS_rtf::LN_BRCRIGHT: break;
-    //        case NS_rtf::LN_IBKL: break;
-    //        case NS_rtf::LN_ITCFIRST: break;
-    //        case NS_rtf::LN_FPUB: break;
-    //        case NS_rtf::LN_ITCLIM: break;
-    //        case NS_rtf::LN_FCOL: break;
-    //        case NS_rtf::LN_LINECOLOR: break;
-    //        case NS_rtf::LN_LINEWIDTH: break;
-    //        case NS_rtf::LN_LINETYPE: break;
-    //        case NS_rtf::LN_MM: break;
-    //        case NS_rtf::LN_XEXT: break;
-    //        case NS_rtf::LN_YEXT: break;
-    //        case NS_rtf::LN_HMF: break;
-    //        case NS_rtf::LN_LCB: break;
-    //        case NS_rtf::LN_CBHEADER: break;
-    //        case NS_rtf::LN_MFP: break;
-    //        case NS_rtf::LN_BM_RCWINMF: break;
-    //        case NS_rtf::LN_DXAGOAL: break;
-    //        case NS_rtf::LN_DYAGOAL: break;
-    //        case NS_rtf::LN_MX: break;
-    //        case NS_rtf::LN_MY: break;
-    //        case NS_rtf::LN_DXACROPLEFT: break;
-    //        case NS_rtf::LN_DYACROPTOP: break;
-    //        case NS_rtf::LN_DXACROPRIGHT: break;
-    //        case NS_rtf::LN_DYACROPBOTTOM: break;
-    //        case NS_rtf::LN_BRCL: break;
-    //        case NS_rtf::LN_FFRAMEEMPTY: break;
-    //        case NS_rtf::LN_FBITMAP: break;
-    //        case NS_rtf::LN_FDRAWHATCH: break;
-    //        case NS_rtf::LN_FERROR: break;
-    //        case NS_rtf::LN_BPP: break;
-    //        case NS_rtf::LN_DXAORIGIN: break;
-    //        case NS_rtf::LN_DYAORIGIN: break;
-    //        case NS_rtf::LN_CPROPS: break;
-    //        case NS_rtf::LN_LINEPROPSTOP: break;
-    //        case NS_rtf::LN_LINEPROPSLEFT: break;
-    //        case NS_rtf::LN_LINEPROPSBOTTOM: break;
-    //        case NS_rtf::LN_LINEPROPSRIGHT: break;
-    //        case NS_rtf::LN_LINEPROPSHORIZONTAL: break;
-    //        case NS_rtf::LN_LINEPROPSVERTICAL: break;
-    //        case NS_rtf::LN_headerr: break;
-    //        case NS_rtf::LN_footerr: break;
-    //        case NS_rtf::LN_endnote: break;
-    //        case NS_rtf::LN_BOOKMARKNAME: break;
+        case NS_rtf::LN_FN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
 
-    //        case NS_rtf::LN_LISTLEVEL: break;
-    //        case NS_rtf::LN_LFO: break;
-    //        case NS_rtf::LN_F: break;
-    //        case NS_rtf::LN_ALTFONTNAME: break;
-    //        case NS_rtf::LN_XSZFFN: break;
-    //        case NS_rtf::LN_XSTZNAME: break;
-    //        case NS_rtf::LN_XSTZNAME1: break;
-    //        case NS_rtf::LN_UPXSTART: break;
-    //        case NS_rtf::LN_UPX: break;
-            case NS_rtf::LN_sed:
+        case NS_rtf::LN_FCSEPX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FNMPR:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        case NS_rtf::LN_FCMPR:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+            //section descriptor, unused or internally used
+            break;
+        case NS_rtf::LN_ICOFORE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_ICOBACK:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_IPAT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_SHDFORECOLOR:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_SHDBACKCOLOR:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_SHDPATTERN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_DPTLINEWIDTH:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_BRCTYPE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_ICO:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_DPTSPACE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FSHADOW:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FFRAME:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_UNUSED2_15:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FFIRSTMERGED:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FMERGED:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FVERTICAL:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FBACKWARD:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FROTATEFONT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FVERTMERGE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FVERTRESTART:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_VERTALIGN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FUNUSED:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_BRCTOP:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_BRCLEFT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_BRCBOTTOM:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_BRCRIGHT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_IBKL:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_ITCFIRST:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FPUB:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_ITCLIM:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FCOL:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_LINECOLOR:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_LINEWIDTH:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_LINETYPE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_MM:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_XEXT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_YEXT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_HMF:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_LCB:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_CBHEADER:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_MFP:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_BM_RCWINMF:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_DXAGOAL:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_DYAGOAL:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_MX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_MY:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_DXACROPLEFT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_DYACROPTOP:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_DXACROPRIGHT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_DYACROPBOTTOM:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_BRCL:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FFRAMEEMPTY:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FBITMAP:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FDRAWHATCH:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FERROR:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_BPP:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_DXAORIGIN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_DYAORIGIN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_CPROPS:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_LINEPROPSTOP:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_LINEPROPSLEFT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_LINEPROPSBOTTOM:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_LINEPROPSRIGHT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_LINEPROPSHORIZONTAL:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_LINEPROPSVERTICAL:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_headerr:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_footerr:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_endnote:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_BOOKMARKNAME:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+
+        case NS_rtf::LN_LISTLEVEL:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_LFO:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_F:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_ALTFONTNAME:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_XSZFFN:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_XSTZNAME:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_XSTZNAME1:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_UPXSTART:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_UPX:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_sed:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
             {
                 //section properties
                 doctok::Reference<Properties>::Pointer_t pProperties = val.getProperties();
@@ -308,7 +1115,9 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
                 }
             }
             break;
-            case NS_rtf::LN_tbdAdd: //
+        case NS_rtf::LN_tbdAdd:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            //
             {
                 doctok::Reference<Properties>::Pointer_t pProperties = val.getProperties();
                 if( pProperties.get())
@@ -319,28 +1128,59 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
                 }
             }
             break;
-            case NS_rtf::LN_dxaDel: //deleted tab
-            case NS_rtf::LN_dxaAdd: //set tab
-            case NS_rtf::LN_TLC: //tab leading characters - for decimal tabs
-            case NS_rtf::LN_JC: //tab justification
-                    m_pImpl->ModifyCurrentTabStop(Name, nIntValue);
+        case NS_rtf::LN_dxaDel:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            //deleted tab
+        case NS_rtf::LN_dxaAdd:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            //set tab
+        case NS_rtf::LN_TLC:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            //tab leading characters - for decimal tabs
+        case NS_rtf::LN_JC:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            //tab justification
+            m_pImpl->ModifyCurrentTabStop(Name, nIntValue);
             break;
-            case NS_rtf::LN_UNUSED0_6: // really unused
+        case NS_rtf::LN_UNUSED0_6:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            // really unused
             break;
-    //        case NS_rtf::LN_picf: break;
-    //        case NS_rtf::LN_rgbrc: break;
-    //        case NS_rtf::LN_shd: break;
-    //        case NS_rtf::LN_cellShd: break;
-    //        case NS_rtf::LN_cellTopColor: break;
-    //        case NS_rtf::LN_cellLeftColor: break;
-    //        case NS_rtf::LN_cellBottomColor: break;
-    //        case NS_rtf::LN_cellRightColor: break;
+        case NS_rtf::LN_rgbrc:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_shd:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_cellShd:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_cellTopColor:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_cellLeftColor:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_cellBottomColor:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_cellRightColor:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
 
-    //        case NS_rtf::LN_LISTTABLE: break;
-    //        case NS_rtf::LN_LFOTABLE: break;
-    //        case NS_rtf::LN_FONTTABLE: break;
-    //        case NS_rtf::LN_STYLESHEET: break;
-            default:
+        case NS_rtf::LN_LISTTABLE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_LFOTABLE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_FONTTABLE:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        case NS_rtf::LN_STYLESHEET:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            break;
+        default:
             {
                 //int nVal = val.getInt();
             }
@@ -349,7 +1189,7 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
 }
 /*-- 09.06.2006 09:52:12---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 void DomainMapper::sprm(doctok::Sprm & sprm_)
 {
     m_pImpl->getTableManager().sprm(sprm_);
@@ -358,7 +1198,7 @@ void DomainMapper::sprm(doctok::Sprm & sprm_)
 }
 /*-- 20.06.2006 09:58:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType eSprmType )
 {
     OSL_ENSURE(rContext.get(), "PropertyMap has to be valid!");
@@ -1548,7 +2388,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 void DomainMapper::entry(int /*pos*/,
                          doctok::Reference<Properties>::Pointer_t ref)
 {
@@ -1556,28 +2396,28 @@ void DomainMapper::entry(int /*pos*/,
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 void DomainMapper::data(const sal_uInt8* /*buf*/, size_t /*len*/,
                         doctok::Reference<Properties>::Pointer_t /*ref*/)
 {
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 void DomainMapper::startSectionGroup()
 {
     m_pImpl->PushProperties(CONTEXT_SECTION);
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 void DomainMapper::endSectionGroup()
 {
     m_pImpl->PopProperties(CONTEXT_SECTION);
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 void DomainMapper::startParagraphGroup()
 {
     m_pImpl->getTableManager().startParagraphGroup();
@@ -1585,7 +2425,7 @@ void DomainMapper::startParagraphGroup()
 }
 /*-- 09.06.2006 09:52:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 void DomainMapper::endParagraphGroup()
 {
     m_pImpl->PopProperties(CONTEXT_PARAGRAPH);
@@ -1593,21 +2433,21 @@ void DomainMapper::endParagraphGroup()
 }
 /*-- 09.06.2006 09:52:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 void DomainMapper::startCharacterGroup()
 {
     m_pImpl->PushProperties(CONTEXT_CHARACTER);
 }
 /*-- 09.06.2006 09:52:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 void DomainMapper::endCharacterGroup()
 {
     m_pImpl->PopProperties(CONTEXT_CHARACTER);
 }
 /*-- 09.06.2006 09:52:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 void DomainMapper::text(const sal_uInt8 * data_, size_t len)
 {
     try
@@ -1622,25 +2462,25 @@ void DomainMapper::text(const sal_uInt8 * data_, size_t len)
             bContinue = false;
             switch(*data_)
             {
-                case 0x07:
-                case 0x0d:
+            case 0x07:
+            case 0x0d:
                 m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)); break;
-                case 0x13: m_pImpl->SetFieldMode( true );break;
-                case 0x14: /* delimiter not necessarily available */
-                case 0x15: /* end of field */
-                    m_pImpl->SetFieldMode( false );
+            case 0x13: m_pImpl->SetFieldMode( true );break;
+            case 0x14: /* delimiter not necessarily available */
+            case 0x15: /* end of field */
+                m_pImpl->SetFieldMode( false );
                 break;
-                default: bContinue = true;
+            default: bContinue = true;
             }
         }
         if(bContinue)
         {
             if( m_pImpl->IsFieldMode())
-               m_pImpl->CreateField( sText );
+                m_pImpl->CreateField( sText );
             else if( m_pImpl->IsFieldAvailable())
-               /*depending on the success of the field insert operation this result will be
-                          set at the field or directly inserted into the text*/
-               m_pImpl->SetFieldResult( sText );
+                /*depending on the success of the field insert operation this result will be
+                  set at the field or directly inserted into the text*/
+                m_pImpl->SetFieldResult( sText );
             else
             {
                 PropertyMapPtr pContext = m_pImpl->GetTopContext();
@@ -1659,7 +2499,7 @@ void DomainMapper::text(const sal_uInt8 * data_, size_t len)
 }
 /*-- 09.06.2006 09:52:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
 {
     try
@@ -1687,46 +2527,55 @@ void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
 }
 /*-- 09.06.2006 09:52:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 void DomainMapper::props(doctok::Reference<Properties>::Pointer_t ref)
 {
     ref->resolve(*this);
 }
 /*-- 09.06.2006 09:52:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 void DomainMapper::table(doctok::Id name, doctok::Reference<Table>::Pointer_t ref)
 {
+    /* WRITERFILTERSTATUS: table: attributedata */
     switch(name)
     {
-        case NS_rtf::LN_FONTTABLE:
+    case NS_rtf::LN_FONTTABLE:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
         {
             // create a font table object that listens to the attributes
             // each entry call inserts a new font entry
             ref->resolve( *m_pImpl->GetFontTable() );
         }
         break;
-        case NS_rtf::LN_STYLESHEET:
-            //same as above to import style sheets
-            m_pImpl->SetStyleSheetImport( true );
-            ref->resolve( *m_pImpl->GetStyleSheetTable() );
-            m_pImpl->GetStyleSheetTable()->ApplyStyleSheets(m_pImpl->GetTextDocument());
-            m_pImpl->SetStyleSheetImport( false );
+    case NS_rtf::LN_STYLESHEET:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        //same as above to import style sheets
+        m_pImpl->SetStyleSheetImport( true );
+        ref->resolve( *m_pImpl->GetStyleSheetTable() );
+        m_pImpl->GetStyleSheetTable()->ApplyStyleSheets(m_pImpl->GetTextDocument());
+        m_pImpl->SetStyleSheetImport( false );
         break;
-        case NS_rtf::LN_LISTTABLE:
-            //the same for list tables
-            ref->resolve( *m_pImpl->GetListTable() );
+    case NS_rtf::LN_LISTTABLE:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        //the same for list tables
+        ref->resolve( *m_pImpl->GetListTable() );
         break;
-        case NS_rtf::LN_LFOTABLE:
-            ref->resolve( *m_pImpl->GetLFOTable() );
+    case NS_rtf::LN_LFOTABLE:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        ref->resolve( *m_pImpl->GetLFOTable() );
         break;
-        default:
-            OSL_ASSERT("which table is to be filled here?");
+    default:
+        OSL_ASSERT("which table is to be filled here?");
     }
 }
 /*-- 09.06.2006 09:52:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 void DomainMapper::substream(doctok::Id name, ::doctok::Reference<Stream>::Pointer_t ref)
 {
     m_pImpl->getTableManager().startLevel();
@@ -1735,37 +2584,63 @@ void DomainMapper::substream(doctok::Id name, ::doctok::Reference<Stream>::Point
     //string sName = (*doctok::QNameToString::Instance())(name);
     //--<debug
     //import of page header/footer
+
+    /* WRITERFILTERSTATUS: table: attributedata */
     switch( name )
     {
-        case NS_rtf::LN_headerl:
-            m_pImpl->PushPageHeader(SectionPropertyMap::PAGE_LEFT);
+    case NS_rtf::LN_headerl:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        m_pImpl->PushPageHeader(SectionPropertyMap::PAGE_LEFT);
         break;
-        case NS_rtf::LN_headerr:
-            m_pImpl->PushPageHeader(SectionPropertyMap::PAGE_RIGHT);
+    case NS_rtf::LN_headerr:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        m_pImpl->PushPageHeader(SectionPropertyMap::PAGE_RIGHT);
         break;
-        case NS_rtf::LN_headerf:
-            m_pImpl->PushPageHeader(SectionPropertyMap::PAGE_FIRST);
+    case NS_rtf::LN_headerf:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        m_pImpl->PushPageHeader(SectionPropertyMap::PAGE_FIRST);
         break;
-        case NS_rtf::LN_footerl:
-            m_pImpl->PushPageFooter(SectionPropertyMap::PAGE_LEFT);
+    case NS_rtf::LN_footerl:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        m_pImpl->PushPageFooter(SectionPropertyMap::PAGE_LEFT);
         break;
-        case NS_rtf::LN_footerr:
-            m_pImpl->PushPageFooter(SectionPropertyMap::PAGE_RIGHT);
+    case NS_rtf::LN_footerr:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        m_pImpl->PushPageFooter(SectionPropertyMap::PAGE_RIGHT);
         break;
-        case NS_rtf::LN_footerf:
-            m_pImpl->PushPageFooter(SectionPropertyMap::PAGE_FIRST);
+    case NS_rtf::LN_footerf:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        m_pImpl->PushPageFooter(SectionPropertyMap::PAGE_FIRST);
         break;
     }
     ref->resolve(*this);
     switch( name )
     {
-        case NS_rtf::LN_headerl:
-        case NS_rtf::LN_headerr:
-        case NS_rtf::LN_headerf:
-        case NS_rtf::LN_footerl:
-        case NS_rtf::LN_footerr:
-        case NS_rtf::LN_footerf:
-            m_pImpl->PopPageHeaderFooter();
+    case NS_rtf::LN_headerl:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+    case NS_rtf::LN_headerr:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+    case NS_rtf::LN_headerf:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+    case NS_rtf::LN_footerl:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+    case NS_rtf::LN_footerr:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+    case NS_rtf::LN_footerf:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+
+        m_pImpl->PopPageHeaderFooter();
         break;
     }
 
@@ -1773,7 +2648,7 @@ void DomainMapper::substream(doctok::Id name, ::doctok::Reference<Stream>::Point
 }
 /*-- 09.06.2006 09:52:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+-----------------------------------------------------------------------*/
 void DomainMapper::info(const string & /*info_*/)
 {
 }
