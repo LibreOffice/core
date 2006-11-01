@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:49:08 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:28:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -514,6 +514,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
     }
 
     aSet.Put( SfxFrameItem( SID_DOCFRAME, pFrame ) );
+    aSet.Put( SfxUnoAnyItem( SID_FILLFRAME, css::uno::makeAny(xFrame) ) );
     aSet.Put( SfxStringItem( SID_FILTER_NAME, aFilterName ) );
 
     // !TODO: replace by direct construction of model (needs view factory)
