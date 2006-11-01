@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-30 09:08:04 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:07:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,9 +295,13 @@ void XMLTextStyleContext::CreateAndInsert( sal_Bool bOverwrite )
         pEventContext->ReleaseRef();
     }
 
-    if( nOutlineLevel > 0 )
-        GetImport().GetTextImport()->SetOutlineStyle( nOutlineLevel,
+    // --> OD 2006-10-12 #i69629#
+    if ( nOutlineLevel > 0 )
+    {
+        GetImport().GetTextImport()->AddOutlineStyleCandidate( nOutlineLevel,
                                                       GetDisplayName() );
+    }
+    // <--
 }
 
 void XMLTextStyleContext::SetDefaults( )
@@ -344,31 +348,53 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
     if ( mbListStyleSet &&
          xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
     {
-        if ( !sListStyleName.getLength() )
+        // --> OD 2006-10-12 #i70223#
+        // Only for text document from version prior OOo 2.1 resp. SO 8 PU5:
+        // - Do not apply list style, if paragraph style has a default outline
+        //   level > 0 and thus, will be assigned to the corresponding list
+        //   level of the outline style.
+        bool bApplyListStyle( true );
+        if ( nOutlineLevel > 0 )
         {
-            Any aAny;
-            aAny <<= sListStyleName /* empty string */;
-            xPropSet->setPropertyValue( sNumberingStyleName, aAny );
-        }
-        else
-        {
-            // change list style name to display name
-            OUString sDisplayListStyleName(
-                GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_LIST,
-                                              sListStyleName ) );
-            // The families container must exist
-            const Reference < XNameContainer >& rNumStyles =
-                GetImport().GetTextImport()->GetNumberingStyles();
-//            if( rNumStyles.is() && rNumStyles->hasByName( sDisplayListStyleName ) &&
-//                xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
-            if ( rNumStyles.is() &&
-                 rNumStyles->hasByName( sDisplayListStyleName ) )
+            sal_Int32 nUPD( 0 );
+            sal_Int32 nBuild( 0 );
+            GetImport().getBuildIds( nUPD, nBuild );
+            if ( nUPD < 680 ||
+                 ( nUPD == 680 && nBuild <= 9073 /* BuildId of OOo 2.0.4/SO8 PU4 */ ) )
             {
-                Any aAny;
-                aAny <<= sDisplayListStyleName;
-                xPropSet->setPropertyValue( sNumberingStyleName, aAny );
+                bApplyListStyle = false;
             }
         }
+
+        if ( bApplyListStyle )
+        {
+            if ( !sListStyleName.getLength() )
+            {
+                Any aAny;
+                aAny <<= sListStyleName /* empty string */;
+                xPropSet->setPropertyValue( sNumberingStyleName, aAny );
+            }
+            else
+            {
+                // change list style name to display name
+                OUString sDisplayListStyleName(
+                    GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_LIST,
+                                                  sListStyleName ) );
+                // The families container must exist
+                const Reference < XNameContainer >& rNumStyles =
+                    GetImport().GetTextImport()->GetNumberingStyles();
+    //            if( rNumStyles.is() && rNumStyles->hasByName( sDisplayListStyleName ) &&
+    //                xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
+                if ( rNumStyles.is() &&
+                     rNumStyles->hasByName( sDisplayListStyleName ) )
+                {
+                    Any aAny;
+                    aAny <<= sDisplayListStyleName;
+                    xPropSet->setPropertyValue( sNumberingStyleName, aAny );
+                }
+            }
+        }
+        // <--
     }
     // <--
 
