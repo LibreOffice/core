@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:51:23 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:29:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1407,7 +1407,7 @@ void SfxViewFrame::DoActivate( sal_Bool bUI, SfxViewFrame* pOldFrame )
     pSfxApp->TestFreeResources_Impl();
 #endif
 
-    pDispatcher->DoActivate_Impl( bUI );
+    pDispatcher->DoActivate_Impl( bUI, pOldFrame );
 
     // Wenn ich einen parent habe und dieser ist kein parent des alten
     // ViewFrames, erh"alt er ein ParentActivate
@@ -1444,7 +1444,7 @@ void SfxViewFrame::DoDeactivate(sal_Bool bUI, SfxViewFrame* pNewFrame )
 {
     DBG_CHKTHIS(SfxViewFrame, 0);
     SFX_APP();
-    pDispatcher->DoDeactivate_Impl( bUI );
+    pDispatcher->DoDeactivate_Impl( bUI, pNewFrame );
 
     // Wenn ich einen parent habe und dieser ist kein parent des neuen
     // ViewFrames, erh"alt er ein ParentDeactivate
@@ -1806,7 +1806,7 @@ void SfxViewFrame::KillDispatcher_Impl()
 //------------------------------------------------------------------------
 SfxViewFrame* SfxViewFrame::Current()
 {
-    return SFX_APP() ? SFX_APP()->Get_Impl()->pViewFrame : NULL;
+    return SfxApplication::Is_Impl() ? SFX_APP()->Get_Impl()->pViewFrame : NULL;
 }
 
 //--------------------------------------------------------------------
@@ -2153,12 +2153,12 @@ void SfxViewFrame::Show()
         GetWindow().Show();
     GetFrame()->GetWindow().Show();
 
-    SfxViewFrame* pCurrent = SfxViewFrame::Current();
+/*    SfxViewFrame* pCurrent = SfxViewFrame::Current();
     if ( GetFrame()->GetFrameInterface()->isActive() &&
             pCurrent != this &&
             ( !pCurrent || pCurrent->GetParentViewFrame_Impl() != this ) &&
             !GetActiveChildFrame_Impl() )
-        MakeActive_Impl( FALSE );
+        MakeActive_Impl( FALSE );*/
 }
 
 //--------------------------------------------------------------------
@@ -2210,10 +2210,14 @@ void SfxViewFrame::MakeActive_Impl( BOOL bGrabFocus )
 
                 SfxViewFrame* pCurrent = SfxViewFrame::Current();
                 css::uno::Reference< css::frame::XFrame > xFrame = GetFrame()->GetFrameInterface();
-                if ( xFrame->isActive() || !bPreview && ( !pCurrent || bGrabFocus ) )
+                if ( !bPreview )
                 {
                     SetViewFrame( this );
                     GetBindings().SetActiveFrame( css::uno::Reference< css::frame::XFrame >() );
+                    uno::Reference< frame::XFramesSupplier > xSupp( xFrame, uno::UNO_QUERY );
+                    if ( xSupp.is() )
+                        xSupp->setActiveFrame( uno::Reference < frame::XFrame >() );
+
                     css::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
                     Window* pWindow = VCLUnoHelper::GetWindow(xContainerWindow);
                     if (pWindow && pWindow->HasChildPathFocus() && bGrabFocus)
@@ -2462,13 +2466,9 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
     DBG_ASSERT( !pSh || nOldNo != USHRT_MAX, "old shell id not found" );
 
     // does a ViewShell exist already?
-    sal_Bool bHasFocus = sal_False;
     SfxViewShell *pOldSh = pSh;
     if ( pOldSh )
     {
-        if ( !bHasFocus )
-            bHasFocus = pOldSh->GetWindow() && pOldSh->GetWindow()->HasChildPathFocus( sal_True );
-
         // ask wether it can be closed
         if ( !pOldSh->PrepareClose() )
             return sal_False;
@@ -2554,11 +2554,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
         DoAdjustPosSizePixel( pSh, Point(), GetWindow().GetOutputSizePixel() );
 
     if ( pEditWin && pSh->IsShowView_Impl() )
-    {
         pEditWin->Show();
-        if ( bHasFocus )
-            GetFrame()->GrabFocusOnComponent_Impl();
-    }
 
     GetBindings().LEAVEREGISTRATIONS();
     delete pOldSh;
@@ -2631,7 +2627,7 @@ void SfxViewFrame::ExecView_Impl
         {
             SfxInPlaceClient* pClient = GetViewShell()->GetUIActiveClient();
             if ( pClient )
-                pClient->SetObjectState( embed::EmbedStates::RUNNING );
+                pClient->DeactivateObject();
             break;
         }
 
