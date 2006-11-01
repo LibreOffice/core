@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsi.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:40:04 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:18:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,7 @@ void DrawViewShell::AssignFrom3DWindow()
     if( pWin )
     {
         Svx3DWin* p3DWin = (Svx3DWin*) pWin->GetWindow();
-        if( p3DWin )
+        if( p3DWin && GetView() )
         {
             if(!GetView()->IsPresObjSelected())
             {
