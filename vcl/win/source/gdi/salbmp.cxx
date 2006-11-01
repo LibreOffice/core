@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:44:37 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:48:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -648,6 +648,9 @@ bool WinSalBitmap::GetSystemData( BitmapSystemData& rData )
         bRet = true;
         rData.pDIB = mhDIB;
         rData.pDDB = mhDDB;
+        const Size& rSize = GetSize ();
+        rData.mnWidth = rSize.Width();
+        rData.mnHeight = rSize.Height();
     }
     return bRet;
 }
