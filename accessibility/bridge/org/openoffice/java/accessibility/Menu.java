@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Menu.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:39:11 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:08:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,10 +176,8 @@ public class Menu extends AbstractButton
 
                     break;
 
+                // #i56539# Java 1.5 does not fire ACCESSIBLE_SELECTION_PROPERTY for menus
                 case AccessibleEventId.SELECTION_CHANGED:
-                    firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_SELECTION_PROPERTY,
-                        null, null);
-
                     break;
 
                 default:
@@ -274,7 +272,13 @@ public class Menu extends AbstractButton
         /** Adds the specified Accessible child of the object to the object's selection */
         public void addAccessibleSelection(int i) {
             try {
-                unoAccessibleSelection.selectAccessibleChild(i);
+                javax.accessibility.Accessible a = getAccessibleChild(i);
+
+                // selecting menu items invokes the click action in Java 1.5
+                if( a instanceof MenuItem )
+                    a.getAccessibleContext().getAccessibleAction().doAccessibleAction(0);
+                else
+                    unoAccessibleSelection.selectAccessibleChild(i);
             } catch (java.lang.Exception e) {
                 /*
                 * Possible exceptions are:
