@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 15:07:38 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:49:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4238,15 +4238,21 @@ throw (::com::sun::star::uno::RuntimeException)
             {
                 createElement( ResourceURL );
 
-                // we need VCL here to pass special flags to Show()
-                vos::OGuard aGuard( Application::GetSolarMutex() );
-                Reference< css::awt::XWindow > xWindow(
-                    m_aStatusBarElement.m_xUIElement->getRealInterface(), UNO_QUERY );
-                Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-                if ( pWindow )
+                // There are some situation where we are not able to create an element.
+                // Therefore we have to check the reference before further action.
+                // See #i70019#
+                css::uno::Reference< css::ui::XUIElement > xUIElement( m_aStatusBarElement.m_xUIElement );
+                if ( xUIElement.is() )
                 {
-                    pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
-                    doLayout();
+                    // we need VCL here to pass special flags to Show()
+                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
+                    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+                    if ( pWindow )
+                    {
+                        pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                        doLayout();
+                    }
                 }
             }
         }
