@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:39:08 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:17:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,6 +309,9 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     CheckLineTo (rReq);
     USHORT nOldSId = 0;
     BOOL bPermanent = FALSE;
+
+    if( !pDrView )
+        return;
 
     if(HasCurrentFunction())
     {
@@ -747,6 +750,9 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         return;
 
     CheckLineTo (rReq);
+
+    if( !pDrView )
+        return;
 
     USHORT nSId = rReq.GetSlot();
 
