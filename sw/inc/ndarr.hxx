@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndarr.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:08:01 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:09:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,8 +105,16 @@ class SwNodes: private BigPtrArray
 
     SwNodeIndex* pRoot;                 // Liste aller Indizies auf Nodes
 
-    void Insert( const SwNodePtr pNode, const SwNodeIndex& rPos );
-    void Insert( const SwNodePtr pNode, ULONG nPos);
+    // --> OD 2006-10-16 #137792#
+    // - rename from <Insert(..)> to <InsertNode(..)>
+    // - add 3rd optional parameter <bSyncNumberAndNumRule>
+    void InsertNode( const SwNodePtr pNode,
+                     const SwNodeIndex& rPos,
+                     const bool bSyncNumberAndNumRule = true );
+    void InsertNode( const SwNodePtr pNode,
+                     ULONG nPos,
+                     const bool bSyncNumberAndNumRule = true);
+    // <--
 //  void Remove( const SwNodeIndex& rPos, USHORT nLen = 1 );
 //  void Remove( ULONG nPos, USHORT nLen = 1 );
 //  BOOL Move( const SwIndex & rOldPos, const SwIndex & rNewPos );
