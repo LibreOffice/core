@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonsoptions.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:44:13 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1353,12 +1353,12 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesMenuItem( const OUStrin
     Sequence< OUString > lResult( PROPERTYCOUNT_MENUITEM );
 
     // Create property names dependent from the root node name
-    lResult[0] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_URL              ] );
-    lResult[1] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TITLE            ] );
-    lResult[2] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_IMAGEIDENTIFIER  ] );
-    lResult[3] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TARGET           ] );
-    lResult[4] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_SUBMENU          ] );
-    lResult[5] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT          ] );
+    lResult[OFFSET_MENUITEM_URL]             = OUString( aPropertyRootNode + m_aPropNames[ INDEX_URL             ] );
+    lResult[OFFSET_MENUITEM_TITLE]           = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TITLE           ] );
+    lResult[OFFSET_MENUITEM_IMAGEIDENTIFIER] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_IMAGEIDENTIFIER ] );
+    lResult[OFFSET_MENUITEM_TARGET]          = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TARGET          ] );
+    lResult[OFFSET_MENUITEM_CONTEXT]         = OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT         ] );
+    lResult[OFFSET_MENUITEM_SUBMENU]         = OUString( aPropertyRootNode + m_aPropNames[ INDEX_SUBMENU         ] );
 
     return lResult;
 }
@@ -1372,9 +1372,9 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesPopupMenu( const OUStri
     Sequence< OUString > lResult( PROPERTYCOUNT_POPUPMENU-1 );
 
     // Create property names dependent from the root node name
-    lResult[0] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TITLE    ] );
-    lResult[1] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT  ] );
-    lResult[2] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_SUBMENU  ] );
+    lResult[OFFSET_POPUPMENU_TITLE]   = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TITLE ] );
+    lResult[OFFSET_POPUPMENU_CONTEXT] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT   ] );
+    lResult[OFFSET_POPUPMENU_SUBMENU] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_SUBMENU   ] );
 
     return lResult;
 }
