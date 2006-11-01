@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.184 $
+ *  $Revision: 1.185 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:55:53 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:22:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,6 +229,7 @@
 #include "fltoptint.hxx"
 #include "viewfrm.hxx"
 #include "graphhelp.hxx"
+#include "modsizeexceeded.hxx"
 
 #include "../appl/app.hrc"
 
@@ -1253,6 +1254,14 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     sal_Bool bStorageBasedTarget = IsPackageStorageFormat_Impl( rMedium );
     sal_Bool bOwnSource = IsOwnStorageFormat_Impl( *pMedium );
     sal_Bool bOwnTarget = IsOwnStorageFormat_Impl( rMedium );
+
+    // Examine target format to determine whether to query if any password
+    // protected libraries exceed the size we can handler
+    if ( bOwnTarget && !QuerySaveSizeExceededModules_Impl( rMedium.GetInteractionHandler() ) )
+    {
+        SetError( ERRCODE_IO_ABORT );
+        return sal_False;
+    }
 
     sal_Bool bNeedsDisconnectionOnFail = sal_False;
 
@@ -3846,5 +3855,24 @@ sal_Bool SfxObjectShell::WriteThumbnail( sal_Bool bEncrypted,
 
 void SfxObjectShell::UpdateLinks()
 {
+}
+
+sal_Bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )
+{
+    uno::Sequence< rtl::OUString > sModules;
+    if ( xHandler.is() )
+    {
+        SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
+        if( pBasicCont && pBasicCont->LegacyPsswdBinaryLimitExceeded( sModules ) )
+        {
+            ModuleSizeExceeded* pReq =  new ModuleSizeExceeded( sModules );
+            uno::Reference< task::XInteractionRequest > xReq( pReq );
+            xHandler->handle( xReq );
+            return pReq->isApprove();
+        }
+    }
+
+    // No interaction handler, default is to continue to save
+    return sal_True;
 }
 
