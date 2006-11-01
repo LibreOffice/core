@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoreddrawobject.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-15 11:39:16 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:08:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,9 @@ class SwAnchoredDrawObject : public SwAnchoredObject
         virtual const bool _SetObjLeft( const SwTwips _nLeft);
         // <--
 
+        // --> OD 2006-10-05 #i70122#
+        virtual const SwRect GetObjBoundRect() const;
+        // <--
     public:
         TYPEINFO();
 
