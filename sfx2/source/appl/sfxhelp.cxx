@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:37:06 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 13:51:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,11 @@
 #include <svtools/pathoptions.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/process.h>
+#include <osl/file.hxx>
+#ifndef _UTL_BOOTSTRAP_HXX
+#include <unotools/bootstrap.hxx>
+#endif
+
 #include <rtl/uri.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/ehdl.hxx>
@@ -168,16 +173,52 @@ void NoHelpErrorBox::RequestHelp( const HelpEvent& )
 
 #define STARTERLIST 0
 
+rtl::OUString HelpLocaleString()
+{
+    static rtl::OUString aLocaleStr;
+    if (!aLocaleStr.getLength())
+    {
+        // detect installed locale
+        Any aLocale =
+            ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
+               ::utl::ConfigManager::LOCALE );
+        bool bOk = (aLocale >>= aLocaleStr);
+        if ( bOk )
+        {
+            rtl::OUString aBaseInstallPath;
+            // utl::Bootstrap::PathStatus aBaseLocateResult =
+            utl::Bootstrap::locateBaseInstallation(aBaseInstallPath);
+            static const char *szHelpPath = "/help/";
+
+            rtl::OUString sHelpPath = aBaseInstallPath +
+                rtl::OUString::createFromAscii(szHelpPath) + aLocaleStr;
+            osl::DirectoryItem aDirItem;
+
+            if (!osl::DirectoryItem::get(sHelpPath, aDirItem) == osl::FileBase::E_None)
+            {
+                bOk = false;
+                String sLang(aLocaleStr);
+                xub_StrLen nSepPos = sLang.Search( '-' );
+                if (nSepPos != STRING_NOTFOUND)
+                {
+                    bOk = true;
+                    sLang = sLang.Copy( 0, nSepPos );
+                    sHelpPath = aBaseInstallPath +
+                        rtl::OUString::createFromAscii(szHelpPath) + sLang;
+                    if (!osl::DirectoryItem::get(sHelpPath, aDirItem) == osl::FileBase::E_None)
+                        bOk = false;
+                }
+            }
+        }
+        if (!bOk)
+            aLocaleStr = rtl::OUString( DEFINE_CONST_UNICODE("en") );
+    }
+    return aLocaleStr;
+}
+
 void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark )
 {
-    // this completes a help url with the system parameters "Language" and "System"
-    // detect installed locale
-    Any aLocale =
-        ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
-    ::rtl::OUString aLocaleStr;
-    if ( !( aLocale >>= aLocaleStr ) )
-        // fallback is english
-        aLocaleStr = ::rtl::OUString( DEFINE_CONST_UNICODE("en") );
+    ::rtl::OUString aLocaleStr(HelpLocaleString());
 
     // query part exists?
     if ( bQuestionMark )
@@ -192,6 +233,7 @@ void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark )
     rURL += String( aLocaleStr );
     rURL += DEFINE_CONST_UNICODE("&System=");
     rURL += SvtHelpOptions().GetSystem();
+
 }
 
 // -----------------------------------------------------------------------
@@ -429,11 +471,8 @@ SfxHelp::SfxHelp() :
 
     pImp = new SfxHelp_Impl( bIsDebug );
 
-    Any aLocale =
-        ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
-    ::rtl::OUString aLocaleStr;
-    if ( !( aLocale >>= aLocaleStr ) )
-        aLocaleStr = ::rtl::OUString( DEFINE_CONST_UNICODE("en") );
+    ::rtl::OUString aLocaleStr = HelpLocaleString();
+
     sal_Int32 nSepPos = aLocaleStr.indexOf( '_' );
     if ( nSepPos != -1 )
     {
