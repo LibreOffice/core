@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loops.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:27:26 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:14:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 
 void SbiParser::If()
 {
-    USHORT nEndLbl;
+    UINT32 nEndLbl;
     SbiToken eTok = NIL;
     // Ende-Tokens ignorieren:
     SbiExpression aCond( this );
@@ -54,7 +54,7 @@ void SbiParser::If()
         // eingefuegt werden, damit bei ELSEIF nicht erneut die Bedingung
         // ausgewertet wird. Die Tabelle nimmt alle Absprungstellen auf.
 #define JMP_TABLE_SIZE 100
-        USHORT pnJmpToEndLbl[JMP_TABLE_SIZE];   // 100 ELSEIFs zulaessig
+        UINT32 pnJmpToEndLbl[JMP_TABLE_SIZE];   // 100 ELSEIFs zulaessig
         USHORT iJmp = 0;                        // aktueller Tabellen-Index
 
         // multiline IF
@@ -102,7 +102,7 @@ void SbiParser::If()
         if( eTok == ELSE )
         {
             Next();
-            USHORT nElseLbl = nEndLbl;
+            UINT32 nElseLbl = nEndLbl;
             nEndLbl = aGen.Gen( _JUMP, 0 );
             aGen.BackChain( nElseLbl );
 
@@ -135,7 +135,7 @@ void SbiParser::If()
         if( eTok == ELSE )
         {
             Next();
-            USHORT nElseLbl = nEndLbl;
+            UINT32 nElseLbl = nEndLbl;
             nEndLbl = aGen.Gen( _JUMP, 0 );
             aGen.BackChain( nElseLbl );
             while( !bAbort )
@@ -164,7 +164,7 @@ void SbiParser::NoIf()
 
 void SbiParser::DoLoop()
 {
-    USHORT nStartLbl = aGen.GetPC();
+    UINT32 nStartLbl = aGen.GetPC();
     OpenBlock( DO );
     SbiToken eTok = Next();
     if( IsEoln( eTok ) )
@@ -191,7 +191,7 @@ void SbiParser::DoLoop()
             SbiExpression aCond( this );
             aCond.Gen();
         }
-        USHORT nEndLbl = aGen.Gen( eTok == UNTIL ? _JUMPT : _JUMPF, 0 );
+        UINT32 nEndLbl = aGen.Gen( eTok == UNTIL ? _JUMPT : _JUMPF, 0 );
         StmntBlock( LOOP );
         TestEoln();
         aGen.Gen( _JUMP, nStartLbl );
@@ -205,9 +205,9 @@ void SbiParser::DoLoop()
 void SbiParser::While()
 {
     SbiExpression aCond( this );
-    USHORT nStartLbl = aGen.GetPC();
+    UINT32 nStartLbl = aGen.GetPC();
     aCond.Gen();
-    USHORT nEndLbl = aGen.Gen( _JUMPF, 0 );
+    UINT32 nEndLbl = aGen.Gen( _JUMPF, 0 );
     StmntBlock( WEND );
     aGen.Gen( _JUMP, nStartLbl );
     aGen.BackChain( nEndLbl );
@@ -256,9 +256,9 @@ void SbiParser::For()
         aGen.Gen( _INITFOR );
     }
 
-    USHORT nLoop = aGen.GetPC();
+    UINT32 nLoop = aGen.GetPC();
     // Test durchfuehren, evtl. Stack freigeben
-    USHORT nEndTarget = aGen.Gen( _TESTFOR, 0 );
+    UINT32 nEndTarget = aGen.Gen( _TESTFOR, 0 );
     OpenBlock( FOR );
     StmntBlock( NEXT );
     aGen.Gen( _NEXT );
@@ -313,7 +313,7 @@ void SbiParser::OnGoto()
 {
     SbiExpression aCond( this );
     aCond.Gen();
-    USHORT nLabelsTarget = aGen.Gen( _ONJUMP, 0 );
+    UINT32 nLabelsTarget = aGen.Gen( _ONJUMP, 0 );
     SbiToken eTok = Next();
     if( eTok != GOTO && eTok != GOSUB )
     {
@@ -321,14 +321,14 @@ void SbiParser::OnGoto()
         eTok = GOTO;
     }
     // Label-Tabelle einlesen:
-    short nLbl = 0;
+    UINT32 nLbl = 0;
     do
     {
         SbiToken eTok2 = NIL;
         eTok2 = Next(); // Label holen
         if( MayBeLabel() )
         {
-            USHORT nOff = pProc->GetLabels().Reference( aSym );
+            UINT32 nOff = pProc->GetLabels().Reference( aSym );
             aGen.Gen( _JUMP, nOff );
             nLbl++;
         }
@@ -348,7 +348,7 @@ void SbiParser::Goto()
     Next();
     if( MayBeLabel() )
     {
-        USHORT nOff = pProc->GetLabels().Reference( aSym );
+        UINT32 nOff = pProc->GetLabels().Reference( aSym );
         aGen.Gen( eOp, nOff );
     }
     else Error( SbERR_LABEL_EXPECTED );
@@ -361,7 +361,7 @@ void SbiParser::Return()
     Next();
     if( MayBeLabel() )
     {
-        USHORT nOff = pProc->GetLabels().Reference( aSym );
+        UINT32 nOff = pProc->GetLabels().Reference( aSym );
         aGen.Gen( _RETURN, nOff );
     }
     else aGen.Gen( _RETURN, 0 );
@@ -377,8 +377,8 @@ void SbiParser::Select()
     aCase.Gen();
     aGen.Gen( _CASE );
     TestEoln();
-    USHORT nNextTarget = 0;
-    USHORT nDoneTarget = 0;
+    UINT32 nNextTarget = 0;
+    UINT32 nDoneTarget = 0;
     BOOL bElse = FALSE;
     // Die Cases einlesen:
     while( !bAbort )
@@ -391,7 +391,7 @@ void SbiParser::Select()
             aGen.Statement();
             // Jeden Case einlesen
             BOOL bDone = FALSE;
-            USHORT nTrueTarget = 0;
+            UINT32 nTrueTarget = 0;
             if( Peek() == ELSE )
             {
                 // CASE ELSE
@@ -501,7 +501,7 @@ void SbiParser::On()
                     aGen.Gen( _STDERROR );
                 else
                 {
-                    USHORT nOff = pProc->GetLabels().Reference( aSym );
+                    UINT32 nOff = pProc->GetLabels().Reference( aSym );
                     aGen.Gen( _ERRHDL, nOff );
                 }
             }
@@ -533,7 +533,7 @@ void SbiParser::On()
 
 void SbiParser::Resume()
 {
-    USHORT nLbl;
+    UINT32 nLbl;
 
     switch( Next() )
     {
