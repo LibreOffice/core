@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_math.scp,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:52:42 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 13:53:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ End
 File gid_File_Help_Smath_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY_PATCH;
-    EXTRA_ALL_LANG(smath);
+    EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(smath);
     Patchfiles = ("smath.cfg",
                   "smath.db",
                   "smath.ht",
