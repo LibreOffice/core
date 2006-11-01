@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:03:02 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -684,9 +684,6 @@ BOOL View::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
         pOL->SetParaRemovingHdl(LINK(this, View, ParagraphRemovingHdl));
     }
 
-    if( GetTextEditObject() )
-        GetTextEditObject()->AddObjectUser( *this );
-
     return(bReturn);
 }
 
@@ -722,9 +719,6 @@ SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FunctionReference x
                 xFunc = ( (DrawViewShell*) pViewShell)->GetOldFunction();
         }
     }
-
-    if( GetTextEditObject() )
-        GetTextEditObject()->RemoveObjectUser( *this );
 
     FuText* pFuText = dynamic_cast<FuText*>(xFunc.get());
     if ( pFuText )
@@ -1146,14 +1140,6 @@ IMPL_LINK( View, ParagraphRemovingHdl, ::Outliner *, pOutliner )
             pPage->onParagraphRemoving( pOutliner, pPara, pObj );
     }
     return 0;
-}
-
-void View::ObjectInDestruction(const SdrObject& rObject)
-{
-    if( GetTextEditObject() == &rObject )
-    {
-        pTextEditObj = 0;
-    }
 }
 
 bool View::isRecordingUndo() const
