@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_devicehelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:19:35 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:46:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -378,7 +378,11 @@ namespace cairocanvas
 
     Surface* DeviceHelper::getSurface( BitmapSystemData& rData, const Size& rSize )
     {
-        return new Surface ( mpSysData, &rData, rSize.Width(), rSize.Height() );
+        OSL_TRACE( "requested size: %d x %d available size: %d x %d", rSize.Width (), rSize.Height (), rData.mnWidth, rData.mnHeight );
+        if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
+            return new Surface ( mpSysData, &rData, rSize.Width(), rSize.Height() );
+        else
+            return NULL;
     }
 
     void DeviceHelper::flush()
