@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:42:42 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:20:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,12 @@
 #ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_STATECHANGEINPROGRESSEXCEPTION_HPP_
+#include <com/sun/star/embed/StateChangeInProgressException.hpp>
+#endif
+
+#include <com/sun/star/embed/EmbedMisc.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -165,7 +171,8 @@
 // #include <toolkit/helper/vclunohelper.hxx>
 // #include <vcl/window.hxx>
 
-#define HATCH_BORDER_WIDTH 4
+#define HATCH_BORDER_WIDTH (((m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) && \
+                             m_pEmbedObj->getCurrentState()!=embed::EmbedStates::UI_ACTIVE) ? 0 : 4 )
 
 using namespace ::com::sun::star;
 
@@ -433,10 +440,10 @@ sal_Bool DocumentHolder::SetFrameLMVisibility( const uno::Reference< frame::XFra
 
             // MBA: locking is done only on the container LM, because it is not about hiding windows, it's about
             // giving up control over the component window (and stopping to listen for resize events of the container window)
-            //if ( bVisible )
-            //    xLayoutManager->unlock();
-            //else
-            //    xLayoutManager->lock();
+            if ( bVisible )
+                xLayoutManager->unlock();
+            else
+                xLayoutManager->lock();
 
             bResult = sal_True;
         }
@@ -498,8 +505,8 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
             aOwnRectangle.Y += aHatchRectangle.Y;
         }
 
-        awt::WindowDescriptor aOwnWinDescriptor( awt::WindowClass_SIMPLE,
-                                                ::rtl::OUString(),
+        awt::WindowDescriptor aOwnWinDescriptor( awt::WindowClass_TOP,
+                                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("dockingwindow") ),
                                                 xMyParent,
                                                 0,
                                                 awt::Rectangle(),//aOwnRectangle,
@@ -751,60 +758,88 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::
     sal_Bool bResult = sal_False;
     if ( xContainerLM.is() )
     {
+        // the LM of the embedded frame and its current DockingAreaAcceptor
            uno::Reference< ::com::sun::star::frame::XLayoutManager > xOwnLM;
            uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor > xDocAreaAcc;
 
-        try {
+        try
+        {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
             xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) >>= xOwnLM;
             xDocAreaAcc = xContainerLM->getDockingAreaAcceptor();
-        } catch( uno::Exception& )
-        {}
+        }
+        catch( uno::Exception& ){}
 
+        // make sure that lock state of LM is correct even if an exception is thrown in between
+        sal_Bool bUnlock = sal_False;
+        sal_Bool bLock = sal_False;
         if ( xOwnLM.is() && xDocAreaAcc.is() )
         {
             try
             {
-                m_xCachedDocAreaAcc = xOwnLM->getDockingAreaAcceptor();
+                // take over the control over the containers window
+                // as long as the LM is invisible and locked an empty tool space will be used on resizing
                 xOwnLM->setDockingAreaAcceptor( xDocAreaAcc );
 
+                // try to merge menues; don't do anything else if it fails
                 if ( MergeMenues_Impl( xOwnLM, xContainerLM, xContainerDP, aContModuleName ) )
                 {
-                       xContainerLM->setVisible( sal_False );
+                    // make sure that the container LM does not control the size of the containers window anymore
+                    // this must be done after merging menues as we won't get the container menu otherwise
+                    xContainerLM->setDockingAreaAcceptor( uno::Reference < ui::XDockingAreaAcceptor >() );
+
+                    // prevent further changes at this LM
+                    xContainerLM->setVisible( sal_False );
                        xContainerLM->lock();
+                    bUnlock = sal_True;
 
-                       xOwnLM->setVisible( sal_True );
-                       xOwnLM->doLayout();
+                    // by unlocking the LM each layout change will now resize the containers window; pending layouts will be processed now
+                    xOwnLM->setVisible( sal_True );
 
+                    uno::Reference< frame::XFramesSupplier > xSupp( m_xFrame->getCreator(), uno::UNO_QUERY );
+                    if ( xSupp.is() )
+                        xSupp->setActiveFrame( m_xFrame );
+
+                    xOwnLM->unlock();
+                    bLock = sal_True;
                        bResult = sal_True;
+
+                    // TODO/LATER: The following action should be done only if the window is not hidden
+                    // otherwise the activation must fail, unfortunatelly currently it is not possible
+                    // to detect whether the window is hidden using UNO API
+                    m_xOwnWindow->setFocus();
                 }
-
-                uno::Reference< frame::XFramesSupplier > xSupp(
-                    m_xFrame->getCreator(), uno::UNO_QUERY );
-                if ( xSupp.is() )
-                    xSupp->setActiveFrame( m_xFrame );
-
-                // TODO/LATER: The following action should be done only if the window is not hidden
-                // otherwise the activation must fail, unfortunatelly currently it is not possible
-                // to detect whether the window is hidden using UNO API
-                m_xOwnWindow->setFocus();
             }
             catch( uno::Exception& )
             {
-                try {
-                    xOwnLM->setDockingAreaAcceptor( m_xCachedDocAreaAcc );
-                       m_xCachedDocAreaAcc = uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor >();
+                // activation failed; reestablish old state
+                try
+                {
+                    uno::Reference< frame::XFramesSupplier > xSupp( m_xFrame->getCreator(), uno::UNO_QUERY );
+                    if ( xSupp.is() )
+                        xSupp->setActiveFrame( 0 );
 
+                    // remove control about containers window from own LM
+                    if ( bLock )
+                        xOwnLM->lock();
                     xOwnLM->setVisible( sal_False );
-                    uno::Reference< ::com::sun::star::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM,
-                                                                                                      uno::UNO_QUERY_THROW );
-                    xMerge->removeMergedMenuBar();
-                } catch( uno::Exception& ) {}
+                    xOwnLM->setDockingAreaAcceptor( uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor >() );
 
-                try {
-                    xContainerLM->unlock();
+                    // unmerge menu
+                    uno::Reference< ::com::sun::star::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM, uno::UNO_QUERY_THROW );
+                    xMerge->removeMergedMenuBar();
+                }
+                catch( uno::Exception& ) {}
+
+                try
+                {
+                    // reestablish control of containers window
+                    xContainerLM->setDockingAreaAcceptor( xDocAreaAcc );
                     xContainerLM->setVisible( sal_True );
-                } catch( uno::Exception& ) {}
+                    if ( bUnlock )
+                        xContainerLM->unlock();
+                }
+                catch( uno::Exception& ) {}
             }
         }
     }
@@ -830,21 +865,22 @@ sal_Bool DocumentHolder::HideUI( const uno::Reference< ::com::sun::star::frame::
         if ( xOwnLM.is() )
         {
             try {
-                uno::Reference< frame::XFramesSupplier > xSupp(
-                    m_xFrame->getCreator(), uno::UNO_QUERY );
+                uno::Reference< frame::XFramesSupplier > xSupp( m_xFrame->getCreator(), uno::UNO_QUERY );
                 if ( xSupp.is() )
                     xSupp->setActiveFrame( 0 );
 
-                uno::Reference< ::com::sun::star::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM,
-                                                                                                uno::UNO_QUERY_THROW );
+                uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor > xDocAreaAcc = xOwnLM->getDockingAreaAcceptor();
+
+                xOwnLM->setDockingAreaAcceptor( uno::Reference < ui::XDockingAreaAcceptor >() );
+                xOwnLM->lock();
+                xOwnLM->setVisible( sal_False );
+
+                uno::Reference< ::com::sun::star::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM, uno::UNO_QUERY_THROW );
                 xMerge->removeMergedMenuBar();
 
-                xOwnLM->setDockingAreaAcceptor( m_xCachedDocAreaAcc );
-                   m_xCachedDocAreaAcc = uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor >();
-
-                xOwnLM->setVisible( sal_False );
-                xContainerLM->unlock();
+                xContainerLM->setDockingAreaAcceptor( xDocAreaAcc );
                 xContainerLM->setVisible( sal_True );
+                xContainerLM->unlock();
 
                 xContainerLM->doLayout();
                 bResult = sal_True;
@@ -1417,4 +1453,45 @@ awt::Rectangle SAL_CALL DocumentHolder::calcAdjustedRectangle( const awt::Rectan
     return aResult;
 }
 
+void SAL_CALL DocumentHolder::activated(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if ( (m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) )
+    {
+        if ( m_pEmbedObj->getCurrentState() != embed::EmbedStates::UI_ACTIVE &&
+        !(m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_NOUIACTIVATE) )
+        {
+            try
+            {
+                m_pEmbedObj->changeState( embed::EmbedStates::UI_ACTIVE );
+            }
+            catch ( com::sun::star::embed::StateChangeInProgressException& )
+            {
+                // must catch this exception because focus is grabbed while UI activation in doVerb()
+            }
+            catch ( com::sun::star::uno::Exception& )
+            {
+                // no outgoing exceptions specified here
+            }
+        }
+        else
+        {
+            uno::Reference< frame::XFramesSupplier > xSupp( m_xFrame->getCreator(), uno::UNO_QUERY );
+            if ( xSupp.is() )
+                xSupp->setActiveFrame( m_xFrame );
+        }
+    }
+}
 
+void DocumentHolder::ResizeHatchWindow()
+{
+    awt::Rectangle aHatchRect = AddBorderToArea( m_aObjRect );
+    ResizeWindows_Impl( aHatchRect );
+    uno::Reference< embed::XHatchWindow > xHatchWindow( m_xHatchWindow, uno::UNO_QUERY );
+    xHatchWindow->setHatchBorderSize( awt::Size( HATCH_BORDER_WIDTH, HATCH_BORDER_WIDTH ) );
+}
+
+void SAL_CALL DocumentHolder::deactivated(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    // deactivation is too unspecific to be useful; usually we only trigger code from activation
+    // so UIDeactivation is actively triggered by the container
+}
