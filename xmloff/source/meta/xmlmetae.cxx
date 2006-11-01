@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:39:24 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:51:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,8 @@ using namespace ::xmloff::token;
 #define PROP_EDITINGDURATION "EditingDuration"
 
 #define PROP_CHARLOCALE     "CharLocale"
+#define PROP_DOCSTATISTIC   "DocumentStatistic"
+
 const sal_Char *sOpenOfficeOrgProject ="OpenOffice.org_project";
 
 
@@ -176,6 +178,42 @@ SfxXMLMetaExport::SfxXMLMetaExport(
     // for Image etc. there is no XModel and no document info
 //  DBG_ASSERT( xInfoProp.is(), "no document info properties" );
 }
+
+SfxXMLMetaExport::SfxXMLMetaExport(
+        SvXMLExport& rExp,
+        const uno::Reference<document::XDocumentInfo>& rDocInfo ) :
+    rExport( rExp ),
+    xDocInfo( rDocInfo )
+{
+    xInfoProp = uno::Reference<beans::XPropertySet>( xDocInfo, uno::UNO_QUERY );
+
+    if ( xInfoProp.is() )
+    {
+        //  get document language from document info
+        //  (not available for all document types)
+
+        try
+        {
+            xInfoProp->getPropertyValue( rtl::OUString::createFromAscii( PROP_CHARLOCALE ) ) >>= aLocale;
+        }
+        catch (beans::UnknownPropertyException&)
+        {
+            // no error
+        }
+
+        try
+        {
+            // the document statistic is requested in this way only if the exporter is not based on model
+            // but on document info directly
+            xInfoProp->getPropertyValue( rtl::OUString::createFromAscii( PROP_DOCSTATISTIC ) ) >>= aDocStatistic;
+        }
+        catch (beans::UnknownPropertyException&)
+        {
+            // no error
+        }
+    }
+}
+
 
 SfxXMLMetaExport::~SfxXMLMetaExport()
 {
@@ -553,6 +591,41 @@ void SfxXMLMetaExport::Export()
         SvXMLElementExport aElem( rExport, XML_NAMESPACE_META,
                                   XML_USER_DEFINED, sal_True, sal_False );
         rExport.Characters( sValueBuffer.makeStringAndClear() );
+    }
+
+    // write document statistic if there is any provided
+    if ( aDocStatistic.getLength() )
+    {
+        for ( sal_Int32 nInd = 0; nInd < aDocStatistic.getLength(); nInd++ )
+        {
+            sal_Int32 nValue = 0;
+            if ( aDocStatistic[nInd].Value >>= nValue )
+            {
+                ::rtl::OUString aValue = rtl::OUString::valueOf( nValue );
+
+                if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TableCount" ) ) ) )
+                    rExport.AddAttribute( XML_NAMESPACE_META, XML_TABLE_COUNT, aValue );
+                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ObjectCount" ) ) ) )
+                    rExport.AddAttribute( XML_NAMESPACE_META, XML_OBJECT_COUNT, aValue );
+                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ImageCount" ) ) ) )
+                    rExport.AddAttribute( XML_NAMESPACE_META, XML_IMAGE_COUNT, aValue );
+                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageCount" ) ) ) )
+                    rExport.AddAttribute( XML_NAMESPACE_META, XML_PAGE_COUNT, aValue );
+                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParagraphCount" ) ) ) )
+                    rExport.AddAttribute( XML_NAMESPACE_META, XML_PARAGRAPH_COUNT, aValue );
+                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WordCount" ) ) ) )
+                    rExport.AddAttribute( XML_NAMESPACE_META, XML_WORD_COUNT, aValue );
+                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharacterCount" ) ) ) )
+                    rExport.AddAttribute( XML_NAMESPACE_META, XML_CHARACTER_COUNT, aValue );
+                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CellCount" ) ) ) )
+                    rExport.AddAttribute( XML_NAMESPACE_META, XML_CELL_COUNT, aValue );
+                else
+                {
+                    DBG_ASSERT( sal_False, "Unknown statistic value!\n" );
+                }
+            }
+        }
+        SvXMLElementExport aElem( rExport, XML_NAMESPACE_META, XML_DOCUMENT_STATISTIC, sal_True, sal_True );
     }
 }
 
