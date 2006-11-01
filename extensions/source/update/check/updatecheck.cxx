@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheck.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:37:03 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 10:12:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,12 @@
 #include <com/sun/star/task/XJob.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XCHANGESLISTENER_HPP_
+#include <com/sun/star/util/XChangesListener.hpp>
+#endif
+
+#include <comphelper/processfactory.hxx>
+
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif // _RTL_USTRBUF_HXX_
@@ -112,6 +118,7 @@ extern "C" void SAL_CALL myThreadFunc(void*);
 #define PROPERTY_CLICK_HDL      UNISTRING("MenuClickHDL")
 #define PROPERTY_DEFAULT_TITLE  UNISTRING("DefaultHeading")
 #define PROPERTY_DEFAULT_TEXT   UNISTRING("DefaultText")
+#define PROPERTY_SHOW_MENUICON  UNISTRING("MenuIconVisible")
 
 //------------------------------------------------------------------------------
 
@@ -157,7 +164,7 @@ void setValue( uno::Sequence< beans::NamedValue >& rNamedValues, const sal_Char 
 namespace
 {
 
-class UpdateCheckJob : public ::cppu::WeakImplHelper3< task::XJob, lang::XServiceInfo, lang::XEventListener >
+class UpdateCheckJob : public ::cppu::WeakImplHelper3< task::XJob, lang::XServiceInfo, util::XChangesListener >
 {
     uno::Reference<uno::XComponentContext> m_xContext;
 
@@ -167,6 +174,8 @@ class UpdateCheckJob : public ::cppu::WeakImplHelper3< task::XJob, lang::XServic
         rtl::OUString const & rNodePath,
         rtl::OUString const & rService,
         uno::Reference< lang::XMultiServiceFactory > const & rConfigProvider ) const;
+
+    uno::Reference< container::XNameAccess > getOwnConfigAccess() const;
 
     inline uno::Reference< container::XNameAccess > getNameAccess(
         rtl::OUString const & rNodePath,
@@ -195,6 +204,8 @@ class UpdateCheckJob : public ::cppu::WeakImplHelper3< task::XJob, lang::XServic
     oslCondition m_hCondition;
 
     void makeGlobal(const uno::Sequence<beans::NamedValue>& rNamedValues)
+        throw (uno::RuntimeException);
+    void createAndStartThread( rtl::OUString &rBuildID )
         throw (uno::RuntimeException);
 
     rtl::OUString m_aBuildId;
@@ -233,6 +244,10 @@ public:
     // XJob
     virtual uno::Any SAL_CALL execute(const uno::Sequence<beans::NamedValue>&)
         throw (lang::IllegalArgumentException, uno::Exception);
+
+    // XChangesListener
+    virtual void SAL_CALL changesOccurred( const util::ChangesEvent& Event )
+        throw ( uno::RuntimeException );
 
     // XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName()
@@ -340,6 +355,29 @@ UpdateCheckJob::getConfigAccess(
 }
 
 //------------------------------------------------------------------------------
+uno::Reference< container::XNameAccess >
+UpdateCheckJob::getOwnConfigAccess() const
+{
+    uno::Reference<uno::XComponentContext> xContext(m_xContext);
+
+    if( !xContext.is() )
+        throw uno::RuntimeException(
+            UNISTRING( "UpdateCheckJob: empty component context" ), *this );
+
+    uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
+
+    if( !xServiceManager.is() )
+        throw uno::RuntimeException(
+            UNISTRING( "UpdateCheckJob: unable to obtain service manager from component context" ), *this );
+
+    uno::Reference< container::XNameAccess > xNameAccess(
+        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.setup.UpdateCheckConfig" ), xContext ),
+        uno::UNO_QUERY_THROW);
+
+    return xNameAccess;
+}
+
+//------------------------------------------------------------------------------
 
 inline uno::Reference< container::XNameAccess >
 UpdateCheckJob::getNameAccess(
@@ -384,9 +422,6 @@ UpdateCheckJob::getUIService(sal_Bool bShowBubble) const
     if( !xServiceManager.is() )
         throw uno::RuntimeException(
             UNISTRING( "UpdateCheckJob: unable to obtain service manager from component context" ), *this );
-
-    rtl::OUString aPlaceholder( RTL_CONSTASCII_USTRINGPARAM("%PRODUCTNAME") );
-    rtl::OUString aProductName = getProductName();
 
     xUpdateCheckUI = xServiceManager->createInstanceWithContext(
         UNISTRING( "com.sun.star.setup.UpdateCheckUI" ), xContext );
@@ -637,35 +672,47 @@ UpdateCheckJob::makeGlobal(const uno::Sequence<beans::NamedValue>& rNamedValues)
         aBuildId = rtl::OUString();
     }
 
-
     sal_Bool isEnabled = getValue< sal_Bool > (rNamedValues, "AutoCheckEnabled");
-    if( isEnabled != sal_True )
-        return;
+    if( isEnabled == sal_True )
+    {
+        createAndStartThread( aBuildId );
+    }
+}
 
+//------------------------------------------------------------------------------
+
+void
+UpdateCheckJob::createAndStartThread( rtl::OUString &rBuildId )
+    throw (uno::RuntimeException)
+{
     // If we found an update earlier, turn on menu bar icon
-    if( aBuildId.getLength() > 0 )
+    if( ( rBuildId.getLength() > 0 ) && ! m_xUIService.is() )
     {
         m_xUIService = getUIService(sal_False);
         OSL_TRACE( "UI Service initialization %s\n", m_xUIService.is() ? "succeeded" : "failed" );
     }
 
-
     // Initialize thread resources ..
-    uno::Reference< lang::XComponent > xComponent(m_xContext, uno::UNO_QUERY_THROW);
-
-    m_hCondition = osl_createCondition();
+    if ( m_hCondition == 0 )
+        m_hCondition = osl_createCondition();
     if( m_hCondition == 0 )
         throw uno::RuntimeException(
             UNISTRING( "UpdateCheckJob: unable to create condition object" ), *this);
 
-    m_hThread = osl_createSuspendedThread( myThreadFunc, this );
+    if ( m_hThread == 0 )
+        m_hThread = osl_createSuspendedThread( myThreadFunc, this );
     if( m_hThread == 0 )
         throw uno::RuntimeException(
             UNISTRING( "UpdateCheckJob: unable to create thread object" ), *this);
 
     // .. , hook up as terminate listener and remember this instace before ..
-    xComponent->addEventListener(this);
-    g_aInstance = static_cast< cppu::OWeakObject *> (this);
+    if ( ! g_aInstance.is() )
+    {
+        uno::Reference< lang::XComponent > xComponent(m_xContext, uno::UNO_QUERY_THROW);
+
+        xComponent->addEventListener(this);
+        g_aInstance = static_cast< cppu::OWeakObject *> (this);
+    }
 
 #ifdef WNT
     rtl::OUString aPath;
@@ -678,12 +725,15 @@ UpdateCheckJob::makeGlobal(const uno::Sequence<beans::NamedValue>& rNamedValues)
             aPath  += UNISTRING( "onlinecheck" );
         }
 
-        m_hModule = osl_loadModule(aPath.pData, SAL_LOADMODULE_DEFAULT);
+        if ( ! m_hModule )
+        {
+            m_hModule = osl_loadModule(aPath.pData, SAL_LOADMODULE_DEFAULT);
 
-        if( m_hModule )
-            m_pHasInternetConnection = reinterpret_cast < sal_Bool (*) () > (
-                osl_getFunctionSymbol(m_hModule,
-                    UNISTRING("hasInternetConnection").pData));
+            if( m_hModule )
+                m_pHasInternetConnection = reinterpret_cast < sal_Bool (*) () > (
+                    osl_getFunctionSymbol(m_hModule,
+                        UNISTRING("hasInternetConnection").pData));
+        }
     }
 #endif
 
@@ -712,14 +762,22 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
     if( aEventName.equalsAscii("onFirstVisibleTask") )
     {
         makeGlobal(aConfig);
+
+        uno::Reference < util::XChangesNotifier > xChangesNotifier;
+        xChangesNotifier = uno::Reference < util::XChangesNotifier >( getOwnConfigAccess(), uno::UNO_QUERY_THROW );
+
+        if ( xChangesNotifier.is() )
+            xChangesNotifier->addChangesListener( uno::Reference< util::XChangesListener >(const_cast <UpdateCheckJob *> (this) ) );
     }
     else if( aConfig.getLength() > 0 )
     {
-        uno::Reference< container::XNameReplace > xCFGUpdate =
-            getUpdateAccess( UNISTRING("org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments") );
+        uno::Reference < container::XNameReplace > xCFGUpdate;
+        xCFGUpdate = uno::Reference < container::XNameReplace >( getOwnConfigAccess(), uno::UNO_QUERY_THROW );
 
         rtl::OUString aDownloadURL;
         rtl::OUString aVersionFound;
+        uno::Sequence< beans::NamedValue > aResult(1);
+        aResult[0].Name = UNISTRING("SendDispatchResult");
 
         if( checkForUpdates(m_xContext, getInteractionHandler(), aDownloadURL, aVersionFound) )
         {
@@ -729,7 +787,11 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
                 xCFGUpdate->replaceByName(UNISTRING("DownloadURL"), uno::makeAny(aDownloadURL));
                 xCFGUpdate->replaceByName(UNISTRING("UpdateFoundFor"), uno::makeAny(getBuildId()));
             }
-
+            else
+            {
+                uno::Any aEmptyAny = uno::makeAny( rtl::OUString() );
+                xCFGUpdate->replaceByName(UNISTRING("UpdateFoundFor"), aEmptyAny);
+            }
 
             TimeValue systime;
             osl_getSystemTime(&systime);
@@ -742,27 +804,16 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
 
             // setValue< sal_Int64 > (aConfig, "NextCheck", nOffset + systime.Seconds);
 
-
             frame::DispatchResultEvent aResultEvent(*this, frame::DispatchResultState::SUCCESS, uno::makeAny(aDownloadURL));
-/*
-            uno::Sequence< beans::NamedValue > aResult(2);
-            aResult[0].Name = UNISTRING("SaveArguments");
-            aResult[0].Value = uno::makeAny(aConfig);
-*/
-            uno::Sequence< beans::NamedValue > aResult(1);
-            aResult[0].Name = UNISTRING("SendDispatchResult");
-            aResult[0].Value = uno::makeAny(aResultEvent);
 
-            return uno::makeAny(aResult);
+            aResult[0].Value = uno::makeAny(aResultEvent);
         }
         else
         {
-            uno::Sequence< beans::NamedValue > aResult(1);
-            aResult[0].Name = UNISTRING("SendDispatchResult");
             aResult[0].Value = uno::makeAny(sal_False);
-
-            return uno::makeAny(aResult);
         }
+
+        return uno::makeAny(aResult);
     }
     else
     {
@@ -777,6 +828,80 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
     }
 
     return uno::Any();
+}
+
+//------------------------------------------------------------------------------
+// XChangesListener
+
+void SAL_CALL
+UpdateCheckJob::changesOccurred( const util::ChangesEvent& rEvent )
+        throw ( uno::RuntimeException )
+{
+    sal_Int32 nCount = rEvent.Changes.getLength();
+    rtl::OUString aString;
+
+    for ( sal_Int32 i=0; i<nCount; i++ )
+    {
+        uno::Any aAccessor = rEvent.Changes[i].Accessor;
+        aAccessor >>= aString;
+        if ( aString.indexOf( UNISTRING( "AutoCheckEnabled" ) ) != -1 )
+        {
+            sal_Bool bAutoCheck;
+            rEvent.Changes[i].Element >>= bAutoCheck;
+
+            if ( m_xUIService.is() )
+            {
+                uno::Reference< beans::XPropertySet > xSetProperties(m_xUIService, uno::UNO_QUERY_THROW);
+                xSetProperties->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::makeAny( bAutoCheck ) );
+            }
+            if ( bAutoCheck )
+            {
+                uno::Reference< container::XNameReplace > xCFGUpdate =
+                    getUpdateAccess( UNISTRING("org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments") );
+                xCFGUpdate->getByName( UNISTRING("UpdateFoundFor") ) >>= aString;
+
+                createAndStartThread( aString );
+            }
+            else if ( m_hThread )
+            {
+                osl_terminateThread(m_hThread);
+                osl_setCondition(m_hCondition);
+                osl_joinWithThread(m_hThread);
+                osl_destroyThread(m_hThread);
+                osl_resetCondition(m_hCondition);
+                m_hThread = 0;
+            }
+        }
+        else if ( aString.indexOf( UNISTRING( "CheckInterval" ) ) != -1 )
+        {
+            if ( m_hThread )
+            {
+                osl_setCondition(m_hCondition);
+                osl_resetCondition(m_hCondition);
+            }
+        }
+        else if ( aString.indexOf( UNISTRING( "UpdateFoundFor" ) ) != -1 )
+        {
+            rEvent.Changes[i].Element >>= aString;
+
+            sal_Bool bAutoCheck = sal_False;
+            uno::Reference< container::XNameReplace > xCFGUpdate =
+                getUpdateAccess( UNISTRING("org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments") );
+            xCFGUpdate->getByName( UNISTRING("AutoCheckEnabled") ) >>= bAutoCheck;
+
+            if ( m_xUIService.is() )
+            {
+                uno::Reference< beans::XPropertySet > xSetProperties(m_xUIService, uno::UNO_QUERY_THROW);
+
+                if ( ( aString.getLength() == 0 ) && xSetProperties.is() )
+                    xSetProperties->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::makeAny( sal_False ) );
+                else if ( ( aString.getLength() != 0 )&& xSetProperties.is() && bAutoCheck )
+                    xSetProperties->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::makeAny( sal_True ) );
+            }
+            else if ( ( aString.getLength() != 0 ) && bAutoCheck )
+                createAndStartThread( aString );
+        }
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -839,7 +964,11 @@ createJobInstance(const uno::Reference<uno::XComponentContext>& xContext)
 static uno::Reference<uno::XInterface> SAL_CALL
 createConfigInstance(const uno::Reference<uno::XComponentContext>& xContext)
 {
-    return * new UpdateCheckConfig(xContext);
+    static uno::Reference<uno::XInterface> xConfig;
+
+    if ( !xConfig.is() )
+        xConfig = * new UpdateCheckConfig( xContext );
+    return xConfig;
 }
 
 //------------------------------------------------------------------------------
