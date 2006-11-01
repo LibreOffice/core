@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MenuItem.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:39:38 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:08:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,31 @@ package org.openoffice.java.accessibility;
 
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleEventListener;
 
 
 class MenuItem extends ToggleButton {
     public MenuItem(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
         super(xAccessible, xAccessibleContext);
+    }
+
+    protected class AccessibleMenuItemListener extends AccessibleUNOComponentListener {
+
+        protected AccessibleMenuItemListener() {
+        }
+
+        protected void setComponentState(short state, boolean enable) {
+
+            // #i56538# menu items in Java 1.5 are ARMED, not SELECTED
+            if( state == com.sun.star.accessibility.AccessibleStateType.SELECTED )
+                fireStatePropertyChange(javax.accessibility.AccessibleState.ARMED, enable);
+            else
+                super.setComponentState(state, enable);
+        }
+    };
+
+    protected XAccessibleEventListener createEventListener() {
+        return new AccessibleMenuItemListener();
     }
 
     /** Creates the AccessibleContext associated with this object */
@@ -62,5 +82,26 @@ class MenuItem extends ToggleButton {
                 return super.getAccessibleIndexInParent();
             }
         }
+
+        /**
+        * Gets the current state set of this object.
+        *
+        * @return an instance of <code>AccessibleStateSet</code>
+        *    containing the current state set of the object
+        * @see AccessibleState
+        */
+        public javax.accessibility.AccessibleStateSet getAccessibleStateSet() {
+            javax.accessibility.AccessibleStateSet stateSet = super.getAccessibleStateSet();
+
+            // #i56538# menu items in Java do not have SELECTABLE ..
+            stateSet.remove(javax.accessibility.AccessibleState.SELECTABLE);
+
+            // .. and also ARMED insted of SELECTED
+            if( stateSet.remove(javax.accessibility.AccessibleState.SELECTED) )
+                stateSet.add(javax.accessibility.AccessibleState.ARMED);
+
+            return stateSet;
+        }
+
     }
 }
