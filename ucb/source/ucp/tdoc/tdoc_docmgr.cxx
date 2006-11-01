@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_docmgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:01:42 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 10:13:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,7 +307,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                         m_pDocEventListener->notifyDocumentClosed( aDocId );
                     }
 
-                    m_aDocs.erase( it );
+
                     break;
                 }
                 ++it;
@@ -315,6 +315,9 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
 
             OSL_ENSURE( it != m_aDocs.end(),
                         "OnUnload event notified for unknown document!" );
+
+            if( it != m_aDocs.end() )
+                m_aDocs.erase( it );
         }
     }
     else if ( Event.EventName.equalsAsciiL(
