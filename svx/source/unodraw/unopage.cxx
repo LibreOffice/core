@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:26:16 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:20:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,13 +52,11 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-#ifndef SVX_LIGHT
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
 #ifndef _SOT_CLSIDS_HXX
 #include <sot/clsids.hxx>
-#endif
 #endif
 
 #include <rtl/uuid.h>
@@ -795,65 +793,65 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                     pRet = new SvxGraphicObject( pObj );
                     break;
                 case OBJ_FRAME:
-#ifndef SVX_LIGHT
                     pRet = new SvxFrameShape( pObj );
                     break;
-#endif
                 case OBJ_OLE2_APPLET:
-#ifndef SVX_LIGHT
                     pRet = new SvxAppletShape( pObj );
                     break;
-#endif
                 case OBJ_OLE2_PLUGIN:
-#ifndef SVX_LIGHT
                     pRet = new SvxPluginShape( pObj );
                     break;
-#endif
                  case OBJ_OLE2:
                      {
-#ifndef SVX_LIGHT
                         if( pObj && !pObj->IsEmptyPresObj() && mpPage )
                         {
-                            SfxObjectShell *pPersist = mpPage->GetSdrPage()->GetModel()->GetPersist();
-                            if( pPersist )
+                            SdrPage* pSdrPage = mpPage->GetSdrPage();
+                            if( pSdrPage )
                             {
-                                uno::Reference < embed::XEmbeddedObject > xObject = pPersist->GetEmbeddedObjectContainer().
-                                        GetEmbeddedObject( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
-
-                                // TODO CL->KA: Why is this not working anymore?
-                                if( xObject.is() )
+                                SdrModel* pSdrModel = pSdrPage->GetModel();
+                                if( pSdrModel )
                                 {
-                                    SvGlobalName aClassId( xObject->getClassID() );
+                                    SfxObjectShell *pPersist = pSdrModel->GetPersist();
+                                    if( pPersist )
+                                    {
+                                        uno::Reference < embed::XEmbeddedObject > xObject = pPersist->GetEmbeddedObjectContainer().
+                                                GetEmbeddedObject( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
 
-                                    const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
-                                    const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
-                                    const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
+                                        // TODO CL->KA: Why is this not working anymore?
+                                        if( xObject.is() )
+                                        {
+                                            SvGlobalName aClassId( xObject->getClassID() );
 
-                                    if( aPluginClassId == aClassId )
-                                    {
-                                        pRet = new SvxPluginShape( pObj );
-                                        nType = OBJ_OLE2_PLUGIN;
-                                    }
-                                    else if( aAppletClassId == aClassId )
-                                    {
-                                        pRet = new SvxAppletShape( pObj );
-                                        nType = OBJ_OLE2_APPLET;
-                                    }
-                                    else if( aIFrameClassId == aClassId )
-                                    {
-                                        pRet = new SvxFrameShape( pObj );
-                                        nType = OBJ_FRAME;
+                                            const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
+                                            const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
+                                            const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
+
+                                            if( aPluginClassId == aClassId )
+                                            {
+                                                pRet = new SvxPluginShape( pObj );
+                                                nType = OBJ_OLE2_PLUGIN;
+                                            }
+                                            else if( aAppletClassId == aClassId )
+                                            {
+                                                pRet = new SvxAppletShape( pObj );
+                                                nType = OBJ_OLE2_APPLET;
+                                            }
+                                            else if( aIFrameClassId == aClassId )
+                                            {
+                                                pRet = new SvxFrameShape( pObj );
+                                                nType = OBJ_FRAME;
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
-#endif
                         if( pRet == NULL )
                         {
                             pRet = new SvxOle2Shape( pObj, ImplGetSvxOle2PropertyMap() );
                         }
-                        break;
                      }
+                    break;
                 case OBJ_EDGE:
                     pRet = new SvxShapeConnector( pObj );
                     break;
