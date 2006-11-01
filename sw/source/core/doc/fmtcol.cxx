@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:55:52 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:10:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,11 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     SvxULSpaceItem *pNewULSpace = 0, *pOldULSpace = 0;
     SvxLRSpaceItem *pNewLRSpace = 0, *pOldLRSpace = 0;
     SvxFontHeightItem* aFontSizeArr[3] = {0,0,0};
+    // --> OD 2006-10-17 #i70223#
+    const bool bAssignedToListLevelOfOutlineStyle( 0 <= GetOutlineLevel() &&
+                                                   GetOutlineLevel() < MAXLEVEL );
+    const SwNumRuleItem* pNewNumRuleItem( 0L );
+    // <--
 
     SwAttrSetChg *pNewChgSet = 0,  *pOldChgSet = 0;
 
@@ -120,6 +125,13 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                         FALSE, (const SfxPoolItem**)&(aFontSizeArr[1]) );
         pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_CTL_FONTSIZE,
                         FALSE, (const SfxPoolItem**)&(aFontSizeArr[2]) );
+        // --> OD 2006-10-17 #i70223#
+        if ( bAssignedToListLevelOfOutlineStyle )
+        {
+            pNewChgSet->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, FALSE,
+                                                   (const SfxPoolItem**)&pNewNumRuleItem );
+        }
+        // <--
 
         break;
 
@@ -154,9 +166,30 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     case RES_CHRATR_CTL_FONTSIZE:
         aFontSizeArr[2] = (SvxFontHeightItem*)pNew;
         break;
+    // --> OD 2006-10-17 #i70223#
+    case RES_PARATR_NUMRULE:
+    {
+        if ( bAssignedToListLevelOfOutlineStyle )
+        {
+            pNewNumRuleItem = (SwNumRuleItem*)pNew;
+        }
+    }
     default:
         break;
     }
+
+    // --> OD 2006-10-17 #i70223#
+    if ( bAssignedToListLevelOfOutlineStyle && pNewNumRuleItem )
+    {
+        String sNumRuleName = pNewNumRuleItem->GetValue();
+        if ( sNumRuleName.Len() == 0 ||
+             sNumRuleName != GetDoc()->GetOutlineNumRule()->GetName() )
+        {
+            // delete assignment to list level of outline style.
+            SetOutlineLevel( NO_NUMBERING );
+        }
+    }
+    // <--
 
     int bWeiter = TRUE;
 
@@ -450,7 +483,3 @@ void SwTxtFmtColl::SetOutlineLevel( BYTE nLevel )
 
 
 //FEATURE::CONDCOLL
-
-
-
-
