@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:06:48 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -375,7 +375,8 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::GetEmbeddedOb
     return xObj;
 }
 
-uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbeddedObject( const uno::Sequence < sal_Int8 >& rClassId, ::rtl::OUString& rNewName )
+uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbeddedObject( const uno::Sequence < sal_Int8 >& rClassId,
+            const uno::Sequence < beans::PropertyValue >& rArgs, ::rtl::OUString& rNewName )
 {
     RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::CreateEmbeddedObject" );
 
@@ -393,7 +394,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
 
         xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
                     rClassId, ::rtl::OUString(), pImpl->mxStorage, rNewName,
-                    uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
+                    rArgs ), uno::UNO_QUERY );
 
         AddEmbeddedObject( xObj, rNewName );
 
@@ -405,6 +406,11 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
     }
 
     return xObj;
+}
+
+uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbeddedObject( const uno::Sequence < sal_Int8 >& rClassId, ::rtl::OUString& rNewName )
+{
+    return CreateEmbeddedObject( rClassId, uno::Sequence < beans::PropertyValue >(), rNewName );
 }
 
 void EmbeddedObjectContainer::AddEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, const ::rtl::OUString& rName )
