@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_textlayout.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:39:35 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:47:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,8 @@ namespace cairocanvas
         TextLayout( const ::com::sun::star::rendering::StringContext& aText,
                     sal_Int8                                                  nDirection,
                     sal_Int64                                                 nRandomSeed,
-                    const CanvasFont::Reference&                              rFont );
+                    const CanvasFont::Reference&                              rFont,
+                    const DeviceRef&                                          rRefDevice );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
@@ -113,6 +114,7 @@ namespace cairocanvas
         ::com::sun::star::rendering::StringContext maText;
         ::com::sun::star::uno::Sequence< double >  maLogicalAdvancements;
         CanvasFont::Reference                      mpFont;
+        DeviceRef                                  mpRefDevice;
         sal_Int8                                   mnTextDirection;
 
     void useFont( ::cairo::Cairo* pCairo );
