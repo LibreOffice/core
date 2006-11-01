@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:55:45 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:28:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,7 +294,7 @@ protected:
     BOOL                    bAllChildsVisible : 1;
     BOOL                    bIsFullScreen : 1;
     BOOL                    bShowStatusBar : 1;
-    BOOL                    bLocked : 1;
+    sal_Int32               m_nLock;
     rtl::OUString           m_aStatusBarResName;
     rtl::OUString           m_aLayoutManagerPropName;
     rtl::OUString           m_aTbxTypeName;
@@ -401,42 +401,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > GetStatusIndicator();
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetFrameInterface();
 };
-/*
-class SfxPIWorkWin_Impl : public SfxWorkWindow
-{
-    SfxPlugInEnv_Impl*  pEnv;
-    Window*             pDialogParent;
 
-public:
-                        SfxPIWorkWin_Impl(
-                            Window *pWin, SfxBindings &rBindings,
-                            SfxPlugInEnv_Impl*  pE);
-    virtual             Window* GetModalDialogParent() const;
-
-private:
-    virtual void        ArrangeChilds_Impl();
-    virtual void        UpdateObjectBars_Impl();
-    virtual void        SaveStatus_Impl(SfxChildWindow*, const SfxChildWinInfo&);
-    virtual void        InitializeChild_Impl(SfxChildWin_Impl*);
-    virtual Rectangle   GetTopRect_Impl();
-};
-
-
-class SfxIPWorkWin_Impl : public SfxWorkWindow
-{
-    SfxInPlaceEnv_Impl* pEnv;
-
-public:
-                        SfxIPWorkWin_Impl( WorkWindow *pWin, SfxBindings &rBindings,
-                                SfxInPlaceEnv_Impl* pE);
-private:
-    virtual BOOL        RequestTopToolSpacePixel_Impl( SvBorder aBorder );
-    virtual void        UpdateObjectBars_Impl();
-    virtual Rectangle   GetTopRect_Impl();
-    virtual void        ArrangeChilds_Impl();
-    virtual void        SaveStatus_Impl(SfxChildWindow*, const SfxChildWinInfo&);
-};
-*/
 class SfxFrameWorkWin_Impl : public SfxWorkWindow
 {
     SfxFrame*           pMasterFrame;
