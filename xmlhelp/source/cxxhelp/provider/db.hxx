@@ -4,9 +4,9 @@
  *
  *  $RCSfile: db.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:39:17 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:07:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ extern "C" {
 
 namespace berkeleydbproxy {
 
-    class DbEnv;
     class Dbc;
     class Dbt;
 
@@ -82,33 +81,13 @@ namespace berkeleydbproxy {
     };
 
 
-    class DbEnv : db_internal::Noncopyable
-    {
-        friend class Db;
-
-    private:
-        DB_ENV* m_pDBENV;
-
-    public:
-        explicit DbEnv(u_int32_t flags);
-        ~DbEnv();
-
-        int open(const char *db_home, u_int32_t flags, int mode);
-        void close(u_int32_t flags);
-
-        int set_alloc(
-                  db_malloc_fcn_type app_malloc,
-                  db_realloc_fcn_type app_realloc,
-                  db_free_fcn_type app_free);
-    };
-
     class Db : db_internal::Noncopyable
     {
     private:
         DB* m_pDBP;
 
     public:
-        Db(DbEnv* dbbenv,u_int32_t flags);
+        Db();
         ~Db();
 
         int close(u_int32_t flags);
