@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:27:32 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:07:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -574,7 +574,7 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
     if( aPair.second && ! it->second )
     {
 
-        Db* table = new Db( 0,DB_CXX_NO_EXCEPTIONS );
+        Db* table = new Db();
 
         rtl::OUString fileNameOU =
             getInstallPathAsSystemPath() +
@@ -797,7 +797,7 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
                                fileNameOU.getLength(),
                                osl_getThreadTextEncoding() );
 
-        Db table(0,DB_CXX_NO_EXCEPTIONS);
+        Db table;
         if( 0 == table.open( 0,fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
         {
             std::vector<KeywordInfo::KeywordElement> aVector;
