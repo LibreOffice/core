@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:52:57 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 10:12:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,7 +174,7 @@ void FTPURL::parse(const rtl::OUString& url)
     const char* p2 = aIdent.getStr();
 
     rtl::OString lower = aIdent.toAsciiLowerCase();
-    if(lower.getLength() >= 6 &&
+    if(lower.getLength() < 6 ||
        strncmp("ftp://",lower.getStr(),6))
         throw malformed_exception();
 
