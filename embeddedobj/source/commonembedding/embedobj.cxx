@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:20:02 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:19:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,8 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+
+#include <com/sun/star/embed/EmbedMisc.hpp>
 
 #include <rtl/logfile.hxx>
 
@@ -342,48 +344,55 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         }
         else if ( nNextState == embed::EmbedStates::UI_ACTIVE )
         {
-            uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY_THROW );
-            // TODO:
-            uno::Reference< ::com::sun::star::frame::XLayoutManager > xContainerLM =
-                        xInplaceClient->getLayoutManager();
-            if ( xContainerLM.is() )
+            if ( !(m_nMiscStatus & embed::EmbedMisc::MS_EMBED_NOUIACTIVATE) )
             {
-                // dispatch provider may not be provided
-                uno::Reference< frame::XDispatchProvider > xContainerDP = xInplaceClient->getInplaceDispatchProvider();
-
-                // get the container module name
-                ::rtl::OUString aModuleName;
-                try
+                uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY_THROW );
+                // TODO:
+                uno::Reference< ::com::sun::star::frame::XLayoutManager > xContainerLM =
+                            xInplaceClient->getLayoutManager();
+                if ( xContainerLM.is() )
                 {
-                    uno::Reference< embed::XComponentSupplier > xCompSupl( m_xClientSite, uno::UNO_QUERY_THROW );
-                    uno::Reference< uno::XInterface > xContDoc( xCompSupl->getComponent(), uno::UNO_QUERY_THROW );
+                    // dispatch provider may not be provided
+                    uno::Reference< frame::XDispatchProvider > xContainerDP = xInplaceClient->getInplaceDispatchProvider();
 
-                    uno::Reference< frame::XModuleManager > xManager(
-                        m_xFactory->createInstance(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ) ) ),
-                        uno::UNO_QUERY_THROW );
+                    // get the container module name
+                    ::rtl::OUString aModuleName;
+                    try
+                    {
+                        uno::Reference< embed::XComponentSupplier > xCompSupl( m_xClientSite, uno::UNO_QUERY_THROW );
+                        uno::Reference< uno::XInterface > xContDoc( xCompSupl->getComponent(), uno::UNO_QUERY_THROW );
 
-                    aModuleName = xManager->identify( xContDoc );
-                }
-                catch( uno::Exception& )
-                {}
+                        uno::Reference< frame::XModuleManager > xManager(
+                            m_xFactory->createInstance(
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ) ) ),
+                            uno::UNO_QUERY_THROW );
 
-                // TODO/LATER: wrong order of calls; but with the correct order the statusbar is set to the wrong place
-                sal_Bool bOk = m_pDocHolder->ShowUI( xContainerLM, xContainerDP, aModuleName );
-                xInplaceClient->activatingUI();
+                        aModuleName = xManager->identify( xContDoc );
+                    }
+                    catch( uno::Exception& )
+                    {}
 
-                if ( bOk )
-                {
-                    m_nObjectState = nNextState;
+                    // if currently another object is UIactive it will be deactivated; usually this will activate the LM of
+                    // the container. Locking the LM will prevent flicker.
+                    xContainerLM->lock();
+                    xInplaceClient->activatingUI();
+                    sal_Bool bOk = m_pDocHolder->ShowUI( xContainerLM, xContainerDP, aModuleName );
+                    xContainerLM->unlock();
+
+                    if ( bOk )
+                    {
+                        m_nObjectState = nNextState;
+                        m_pDocHolder->ResizeHatchWindow();
+                    }
+                    else
+                    {
+                        xInplaceClient->deactivatedUI();
+                        throw embed::WrongStateException(); //TODO: can't activate UI
+                    }
                 }
                 else
-                {
-                    xInplaceClient->deactivatedUI();
                     throw embed::WrongStateException(); //TODO: can't activate UI
-                }
             }
-            else
-                throw embed::WrongStateException(); //TODO: can't activate UI
         }
         else
         {
@@ -419,6 +428,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             if ( bOk )
             {
                 m_nObjectState = nNextState;
+                m_pDocHolder->ResizeHatchWindow();
                    xInplaceClient->deactivatedUI();
             }
             else
