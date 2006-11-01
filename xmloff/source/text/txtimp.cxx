@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-30 09:07:07 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:07:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,6 +192,11 @@
 #ifndef _XMLOFF_NUMBERSTYLESIMPORT_HXX
 #include "XMLNumberStylesImport.hxx"
 #endif
+// --> OD 2006-10-12 #i69629#
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
+#include <com/sun/star/beans/XPropertyState.hpp>
+#endif
+// <--
 
 using namespace ::rtl;
 using namespace ::std;
@@ -540,7 +545,9 @@ XMLTextImportHelper::XMLTextImportHelper(
 ,   pNextFrmNames( 0 )
 
 ,   pRenameMap( 0 )
-,   pOutlineStyles( 0 )
+// --> OD 2006-10-12 #i69629#
+,   mpOutlineStylesCandidates( 0 )
+// <--
 
 ,   pFootnoteBackpatcher( NULL )
 ,   pSequenceIdBackpatcher( NULL )
@@ -676,7 +683,9 @@ XMLTextImportHelper::~XMLTextImportHelper()
 
     delete pPrevFrmNames;
     delete pNextFrmNames;
-    delete [] pOutlineStyles;
+    // --> OD 2006-10-12 #i69629#
+    delete [] mpOutlineStylesCandidates;
+    // <--
 
     _FinitBackpatcher();
 }
@@ -977,8 +986,8 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         sal_Bool bPara,
         sal_Int8 nOutlineLevel )
 {
-    sal_uInt16 nFamily = bPara ? XML_STYLE_FAMILY_TEXT_PARAGRAPH
-                               : XML_STYLE_FAMILY_TEXT_TEXT;
+    const sal_uInt16 nFamily = bPara ? XML_STYLE_FAMILY_TEXT_PARAGRAPH
+                                     : XML_STYLE_FAMILY_TEXT_TEXT;
     XMLTextStyleContext *pStyle = 0;
     OUString sStyleName( rStyleName );
     if( sStyleName.getLength() && xAutoStyles.Is() )
@@ -997,8 +1006,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     // style
     if( sStyleName.getLength() )
     {
-        sStyleName =
-            rImport.GetStyleDisplayName( nFamily, sStyleName );
+        sStyleName = rImport.GetStyleDisplayName( nFamily, sStyleName );
         const String& rPropName = bPara ? sParaStyleName : sCharStyleName;
         const Reference < XNameContainer > & rStyles = bPara ? xParaStyles
                                                           : xTextStyles;
@@ -1235,22 +1243,49 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             }
         }
         // <--
-        // --> OD 2005-08-25 #i53198# - always assure that outline style is
-        // set, if no default outline level is found at the style.
+        // --> OD 2006-10-13 #i69629# - correction:
+        // - for text document from version OOo 2.0.4/SO 8 PU4 and earlier
+        //   the paragraph style of a heading should be assigned to the
+        //   corresponding list level of the outline style.
+        // - for other text documents the paragraph style of a heading is only
+        //   a candidate for an assignment to the list level of the outline
+        //   style, if it has no direct list style property and (if exists) the
+        //   automatic paragraph style has also no direct list style set.
         if( xParaStyles->hasByName( sStyleName ) )
         {
-            Reference<XPropertySet> xStyle(
-                xParaStyles->getByName( sStyleName ), UNO_QUERY );
-            if( xStyle.is() )
+            bool bOutlineStyleCandidate( false );
+
+            sal_Int32 nUPD( 0 );
+            sal_Int32 nBuild( 0 );
+            rImport.getBuildIds( nUPD, nBuild );
+            if ( nUPD < 680 ||
+                 ( nUPD == 680 && nBuild <= 9073 ) /* BuildId of OOo 2.0.4/SO8 PU4 */ )
             {
-                const OUString sDefaultOutlineLevel(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultOutlineLevel")) );
-                sal_Int8 nDefaultOutlineLevel = -1;
-                xStyle->getPropertyValue( sDefaultOutlineLevel ) >>= nDefaultOutlineLevel;
-                if ( nDefaultOutlineLevel == -1 )
+                bOutlineStyleCandidate = true;
+            }
+            else
+            {
+                Reference< XPropertyState > xStylePropState(
+                                xParaStyles->getByName( sStyleName ), UNO_QUERY );
+                if ( xStylePropState.is() &&
+                     xStylePropState->getPropertyState( sNumberingStyleName ) == PropertyState_DIRECT_VALUE )
                 {
-                    SetOutlineStyle( nOutlineLevel, sStyleName );
+                    bOutlineStyleCandidate = false;
                 }
+                else if ( pStyle && /* automatic paragraph style */
+                          pStyle->IsListStyleSet() )
+                {
+                    bOutlineStyleCandidate = false;
+                }
+                else
+                {
+                    bOutlineStyleCandidate = true;
+                }
+            }
+
+            if ( bOutlineStyleCandidate )
+            {
+                AddOutlineStyleCandidate( nOutlineLevel, sStyleName );
             }
         }
         // <--
@@ -1260,38 +1295,43 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     return sStyleName;
 }
 
-void XMLTextImportHelper::FindOutlineStyleName(
-    ::rtl::OUString& rStyleName,
-    sal_Int8 nLevel )
+// --> OD 2006-10-12 #i69629#
+// adjustments to reflect change of internal data structure <mpOutlineStylesCandidates>
+void XMLTextImportHelper::FindOutlineStyleName( ::rtl::OUString& rStyleName,
+                                                sal_Int8 nOutlineLevel )
 {
     // style name empty?
     if( rStyleName.getLength() == 0 )
     {
         // Empty? Then we need o do stuff. Let's do error checking first.
         if( xChapterNumbering.is() &&
-            ( nLevel > 0 ) &&
-            ( nLevel <= xChapterNumbering->getCount() ) )
+            ( nOutlineLevel > 0 ) &&
+            ( nOutlineLevel <= xChapterNumbering->getCount() ) )
         {
-            nLevel--;   // for the remainder, the level's are 0-based
+            nOutlineLevel--;   // for the remainder, the level's are 0-based
 
             // empty style name: look-up previously used name
 
             // if we don't have a previously used name, we'll use the default
-            if( pOutlineStyles == NULL )
-                pOutlineStyles = new OUString[xChapterNumbering->getCount()];
+            if ( mpOutlineStylesCandidates == NULL )
+            {
+                mpOutlineStylesCandidates = new ::std::vector<OUString>[xChapterNumbering->getCount()];
+            }
 
-            if( pOutlineStyles[nLevel] == NULL )
+            if ( mpOutlineStylesCandidates[nOutlineLevel].size() == 0 )
             {
                 // no other name used previously? Then use default
 
                 // iterate over property value sequence to find the style name
                 Sequence<PropertyValue> aProperties;
-                xChapterNumbering->getByIndex( nLevel ) >>= aProperties;
+                xChapterNumbering->getByIndex( nOutlineLevel ) >>= aProperties;
                 for( sal_Int32 i = 0; i < aProperties.getLength(); i++ )
                 {
                     if( aProperties[i].Name == sHeadingStyleName )
                     {
-                        aProperties[i].Value >>= pOutlineStyles[nLevel];
+                        rtl::OUString aOutlineStyle;
+                        aProperties[i].Value >>= aOutlineStyle;
+                        mpOutlineStylesCandidates[nOutlineLevel].push_back( aOutlineStyle );
                         break;  // early out, if we found it!.
                     }
                 }
@@ -1299,60 +1339,191 @@ void XMLTextImportHelper::FindOutlineStyleName(
 
             // finally, we'll use the previously used style name for this
             // format (or the default we've just put into that style)
-            rStyleName = pOutlineStyles[nLevel];
+            rStyleName = mpOutlineStylesCandidates[nOutlineLevel][0];
         }
         // else: nothing we can do, so we'll leave it empty
     }
     // else: we already had a style name, so we let it pass.
 }
+// <--
 
-void XMLTextImportHelper::SetOutlineStyle(
-        sal_Int8 nLevel,
-        const OUString& rStyleName )
+// --> OD 2006-10-12 #i69629#
+void XMLTextImportHelper::AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel,
+                                                    const OUString& rStyleName )
 {
-    if( rStyleName.getLength() &&
-        xChapterNumbering.is() &&
-        nLevel > 0 && nLevel <= xChapterNumbering->getCount() )
+    if ( rStyleName.getLength() &&
+         xChapterNumbering.is() &&
+         nOutlineLevel > 0 && nOutlineLevel <= xChapterNumbering->getCount() )
     {
-        if( !pOutlineStyles )
+        if( !mpOutlineStylesCandidates )
         {
 #ifdef IRIX
             /* GCC 2 bug when member function is called as part of an array
              * initialiser
              */
             sal_Int8 count = xChapterNumbering->getCount();
-            pOutlineStyles = new OUString[count];
+            mpOutlineStylesCandidates = new ::std::vector<OUString>[count];
 #else
-            pOutlineStyles = new OUString[xChapterNumbering->getCount()];
+            mpOutlineStylesCandidates = new ::std::vector<OUString>[xChapterNumbering->getCount()];
 #endif
         }
-        pOutlineStyles[nLevel-1] = rStyleName;
+        mpOutlineStylesCandidates[nOutlineLevel-1].push_back( rStyleName );
     }
 }
+// <--
 
+// --> OD 2006-10-12 #i69629#
+// helper method to determine, if a paragraph style has a list style (inclusive
+// an empty one) inherits a list style (inclusive an empty one) from one of its parents
+sal_Bool lcl_HasListStyle( OUString sStyleName,
+                           const Reference < XNameContainer >& xParaStyles,
+                           SvXMLImport& rImport,
+                           const OUString& sNumberingStyleName,
+                           const OUString& sOutlineStyleName )
+{
+    sal_Bool bRet( sal_False );
+
+    if ( !xParaStyles->hasByName( sStyleName ) )
+    {
+        // error case
+        return sal_True;
+    }
+
+    Reference< XPropertyState > xPropState( xParaStyles->getByName( sStyleName ),
+                                            UNO_QUERY );
+    if ( !xPropState.is() )
+    {
+        // error case
+        return sal_False;
+    }
+
+    if ( xPropState->getPropertyState( sNumberingStyleName ) == PropertyState_DIRECT_VALUE )
+    {
+        // list style found
+        bRet = sal_True;
+        // special case: the set list style equals the chapter numbering
+        Reference< XPropertySet > xPropSet( xPropState, UNO_QUERY );
+        if ( xPropSet.is() )
+        {
+            OUString sListStyle;
+            xPropSet->getPropertyValue( sNumberingStyleName ) >>= sListStyle;
+            if ( sListStyle == sOutlineStyleName )
+            {
+                bRet = sal_False;
+            }
+        }
+    }
+    else
+    {
+        // search list style at parent
+        Reference<XStyle> xStyle( xPropState, UNO_QUERY );
+        while ( xStyle.is() )
+        {
+            OUString aParentStyle( xStyle->getParentStyle() );
+            if ( aParentStyle.getLength() > 0 )
+            {
+                aParentStyle =
+                    rImport.GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_PARAGRAPH,
+                                                 aParentStyle );
+            }
+            if ( aParentStyle.getLength() == 0 ||
+                 !xParaStyles->hasByName( aParentStyle ) )
+            {
+                // no list style found
+                break;
+            }
+            else
+            {
+                xPropState = Reference< XPropertyState >(
+                                    xParaStyles->getByName( aParentStyle ),
+                                    UNO_QUERY );
+                if ( !xPropState.is() )
+                {
+                    // error case
+                    return sal_True;
+                }
+                if ( xPropState->getPropertyState( sNumberingStyleName ) == PropertyState_DIRECT_VALUE )
+                {
+                    // list style found
+                    bRet = sal_True;
+                    break;
+                }
+                else
+                {
+                    // search list style at parent
+                    xStyle = Reference<XStyle>( xPropState, UNO_QUERY );
+                }
+            }
+        }
+    }
+
+    return bRet;
+}
+// <--
+// --> OD 2006-10-12 #i69629#
 void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
 {
-    if( (pOutlineStyles!=0 || bSetEmptyLevels) &&
-        xChapterNumbering.is() &&
-        !( IsInsertMode() || IsStylesOnlyMode() ) )
+    if ( ( mpOutlineStylesCandidates != NULL || bSetEmptyLevels ) &&
+         xChapterNumbering.is() &&
+         !( IsInsertMode() || IsStylesOnlyMode() ) )
     {
+        sal_Int32 nUPD( 0 );
+        sal_Int32 nBuild( 0 );
+        GetXMLImport().getBuildIds( nUPD, nBuild );
+
+        OUString sOutlineStyleName;
+        {
+            Reference<XPropertySet> xChapterNumRule( xChapterNumbering, UNO_QUERY );
+            const OUString sName(RTL_CONSTASCII_USTRINGPARAM("Name"));
+            xChapterNumRule->getPropertyValue(sName) >>= sOutlineStyleName;
+        }
+
         OUString sEmpty;
         sal_Int32 nCount = xChapterNumbering->getCount();
-        for( sal_Int32 i=0; i < nCount; i++ )
+        for( sal_Int32 i=0; i < nCount; ++i )
         {
-            if( bSetEmptyLevels ||
-                (pOutlineStyles && pOutlineStyles[i].getLength() > 0 ) )
+            if ( bSetEmptyLevels ||
+                 ( mpOutlineStylesCandidates &&
+                   mpOutlineStylesCandidates[i].size() > 0 ) )
             {
+                // determine, which candidate is one to be assigned to the list
+                // level of the outline style
+                OUString sChoosenStyle( sEmpty );
+                if ( mpOutlineStylesCandidates &&
+                     mpOutlineStylesCandidates[i].size() > 0 )
+                {
+                    if ( nUPD < 680 ||
+                         ( nUPD == 680 && nBuild <= 9073 /* BuildId of OOo 2.0.4/SO8 PU4 */ ) )
+                    {
+                        sChoosenStyle = mpOutlineStylesCandidates[i][0];
+                    }
+                    else
+                    {
+                        for ( sal_uInt32 j = 0; j < mpOutlineStylesCandidates[i].size(); ++j )
+                        {
+                            if ( !lcl_HasListStyle( mpOutlineStylesCandidates[i][j],
+                                                    xParaStyles, GetXMLImport(),
+                                                    sNumberingStyleName,
+                                                    sOutlineStyleName ) )
+                            {
+                                sChoosenStyle = mpOutlineStylesCandidates[i][j];
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 Sequence < PropertyValue > aProps( 1 );
                 PropertyValue *pProps = aProps.getArray();
                 pProps->Name = sHeadingStyleName;
-                pProps->Value <<= pOutlineStyles ? pOutlineStyles[i] : sEmpty;
+                pProps->Value <<= sChoosenStyle;
 
                 xChapterNumbering->replaceByIndex( i, makeAny( aProps ) );
             }
         }
     }
 }
+// <--
 
 void XMLTextImportHelper::SetHyperlink(
     SvXMLImport& rImport,
