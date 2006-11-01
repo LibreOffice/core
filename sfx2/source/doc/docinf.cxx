@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:39:49 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:54:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1631,6 +1631,283 @@ sal_Bool TestValidity_Impl( const String& rString, sal_Bool bURL )
 
     return bRet;
 }
+
+//------------------------------------------------------------------------
+
+BOOL SfxDocumentInfo::LoadFromBinaryFormat( SvStream& rStream )
+{
+    long d, t;
+    USHORT nUS;
+    BYTE nByte;
+    FileHeader aHeader(rStream);
+    if( ! aHeader.aHeader.EqualsAscii( pDocInfoHeader ))
+    {
+        rStream.SetError(SVSTREAM_FILEFORMAT_ERROR);
+        return FALSE;
+    }
+    Free();
+    bPasswd = aHeader.bPasswd;
+    rStream >> nUS;
+    //eFileCharSet = (CharSet)nUS;
+    eFileCharSet = GetSOLoadTextEncoding( nUS );
+
+        // Einstellen an den Streams
+    rStream.SetStreamCharSet(eFileCharSet);
+
+    rStream >> nByte;
+    bPortableGraphics = nByte? 1: 0;
+    rStream >> nByte;
+    bQueryTemplate = nByte? 1: 0;
+
+    aCreated.Load(rStream);
+    aChanged.Load(rStream);
+    aPrinted.Load(rStream);
+
+    rStream.ReadByteString( aTitle );
+    Skip(rStream, SFXDOCINFO_TITLELENMAX - aTitle.Len());
+    rStream.ReadByteString( aTheme );
+    Skip(rStream, SFXDOCINFO_THEMELENMAX - aTheme.Len());
+    rStream.ReadByteString( aComment );
+    Skip(rStream, SFXDOCINFO_COMMENTLENMAX- aComment.Len());
+    rStream.ReadByteString( aKeywords );
+    Skip(rStream, SFXDOCINFO_KEYWORDLENMAX - aKeywords.Len());
+
+    USHORT i;
+    for(i = 0; i < MAXDOCUSERKEYS; ++i)
+        aUserKeys[i].Load(rStream);
+
+    rStream.ReadByteString( aTemplateName );
+    rStream.ReadByteString( aTemplateFileName );
+    rStream >> d >> t;
+    aTemplateDate = DateTime(Date(d), Time(t));
+
+    // wurde mal fuer MB in Panik eingebaut und dann doch nie benutzt :-)
+    if ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_40 )
+    {
+        USHORT nMailAddr;
+        rStream >> nMailAddr;
+        for( i = 0; i < nMailAddr; i++ )
+        {
+            String aDummyString;
+            USHORT nDummyFlags;
+            rStream.ReadByteString( aDummyString );
+            rStream >> nDummyFlags;
+        }
+    }
+
+    rStream >> lTime;
+    if(aHeader.nVersion > 4)
+        rStream >> nDocNo;
+    else
+        nDocNo = 1;
+    rStream >> nUserDataSize;
+    if(nUserDataSize) {
+        pUserData = new char[nUserDataSize];
+        rStream.Read(pUserData,nUserDataSize);
+    }
+
+    BOOL bOK = (rStream.GetError() == SVSTREAM_OK);
+    nByte = 0;                          // wg.Kompatibilitaet;
+    rStream >> nByte;                   // evtl. nicht in DocInfo enthalten
+    bTemplateConfig = nByte ? 1 : 0;
+    if( aHeader.nVersion > 5 )
+    {
+        rStream >> bReloadEnabled;
+        rStream.ReadByteString( aReloadURL );
+        rStream >> nReloadSecs;
+        rStream.ReadByteString( aDefaultTarget );
+
+        if ( !TestValidity_Impl( aReloadURL, sal_True ) )
+        {
+            // the reload url is invalid -> reset all reload attributes
+            bReloadEnabled = FALSE;
+            aReloadURL.Erase();
+            nReloadSecs = 60;
+            aDefaultTarget.Erase();
+        }
+        else if ( !TestValidity_Impl( aDefaultTarget, sal_False ) )
+            // the default target is invalid -> reset it
+            aDefaultTarget.Erase();
+    }
+    if ( aHeader.nVersion > 6 )
+    {
+        rStream >> nByte;
+        bSaveGraphicsCompressed = nByte? 1: 0;
+    }
+    if ( aHeader.nVersion > 7 )
+    {
+        rStream >> nByte;
+        bSaveOriginalGraphics = nByte? 1: 0;
+    }
+    if ( aHeader.nVersion > 8 )
+    {
+        rStream >> nByte;
+        bSaveVersionOnClose = nByte? 1: 0;
+
+        rStream.ReadByteString( pImp->aCopiesTo );
+        rStream.ReadByteString( pImp->aOriginal );
+        rStream.ReadByteString( pImp->aReferences );
+        rStream.ReadByteString( pImp->aRecipient );
+        rStream.ReadByteString( pImp->aReplyTo );
+        rStream.ReadByteString( pImp->aBlindCopies );
+        rStream.ReadByteString( pImp->aInReplyTo );
+        rStream.ReadByteString( pImp->aNewsgroups );
+        rStream >> pImp->nPriority;
+    }
+    if ( aHeader.nVersion > 9 )
+    {
+        rStream.ReadByteString( pImp->aSpecialMimeType );
+    }
+    if ( aHeader.nVersion > 10 )
+    {
+        rStream >> nByte;
+        pImp->bUseUserData = nByte ? TRUE : FALSE;
+    }
+    return bOK;
+}
+
+
+//-------------------------------------------------------------------------
+
+BOOL SfxDocumentInfo::SaveToBinaryFormat( SvStream& rStream ) const
+{
+    FileHeader aHeader(pDocInfoHeader, VERSION, bPasswd? 1: 0);
+    aHeader.Save(rStream);
+    CharSet eNewFileCharSet = GetSOStoreTextEncoding( eFileCharSet );
+    rStream << (USHORT)eNewFileCharSet;
+    rStream.SetStreamCharSet(eNewFileCharSet);
+    rStream << (bPortableGraphics? (BYTE)1: (BYTE)0)
+            << (bQueryTemplate? (BYTE)1: (BYTE)0);
+    aCreated.Save(rStream);
+    aChanged.Save(rStream);
+    aPrinted.Save(rStream);
+
+    DBG_ASSERT( aTitle.Len() <= SFXDOCINFO_TITLELENMAX , "length of title overflow" );
+    DBG_ASSERT( aTheme.Len() <= SFXDOCINFO_THEMELENMAX , "length of theme overflow" );
+    DBG_ASSERT( aComment.Len() <= SFXDOCINFO_COMMENTLENMAX , "length of description overflow" );
+    DBG_ASSERT( aKeywords.Len() <= SFXDOCINFO_KEYWORDLENMAX , "length of keywords overflow" );
+
+    // save the title
+    String aString = aTitle;
+    aString.Erase( SFXDOCINFO_TITLELENMAX );
+    rStream.WriteByteString( aString );
+    PaddWithBlanks_Impl(rStream, SFXDOCINFO_TITLELENMAX - aString.Len());
+    // save the theme
+    aString = aTheme;
+    aString.Erase( SFXDOCINFO_THEMELENMAX );
+    rStream.WriteByteString( aString );
+    PaddWithBlanks_Impl(rStream, SFXDOCINFO_THEMELENMAX - aString.Len());
+    // save the description
+    aString = aComment;
+    aString.Erase( SFXDOCINFO_COMMENTLENMAX );
+    rStream.WriteByteString( aString );
+    PaddWithBlanks_Impl(rStream, SFXDOCINFO_COMMENTLENMAX - aString.Len());
+    // save the keywords
+    aString = aKeywords;
+    aString.Erase( SFXDOCINFO_KEYWORDLENMAX );
+    rStream.WriteByteString( aString );
+    PaddWithBlanks_Impl(rStream, SFXDOCINFO_KEYWORDLENMAX - aString.Len());
+
+    for(USHORT i = 0; i < MAXDOCUSERKEYS; ++i)
+        aUserKeys[i].Save(rStream);
+    rStream.WriteByteString( aTemplateName );
+    rStream.WriteByteString( aTemplateFileName );
+    rStream << (long)aTemplateDate.GetDate()
+            << (long)aTemplateDate.GetTime();
+
+    // wurde mal fuer MB in Panik eingebaut und dann doch nie benutzt :-)
+    if ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_40 )
+        rStream << (USHORT) 0;
+
+    rStream << GetTime() << GetDocumentNumber();
+
+    rStream << nUserDataSize;
+    if(pUserData)
+        rStream.Write(pUserData, nUserDataSize);
+    rStream << (bTemplateConfig? (BYTE)1: (BYTE)0);
+    if( aHeader.nVersion > 5 )
+    {
+        rStream << bReloadEnabled;
+        rStream.WriteByteString( aReloadURL );
+        rStream << nReloadSecs;
+        rStream.WriteByteString( aDefaultTarget );
+    }
+    if ( aHeader.nVersion > 6 )
+        rStream << (bSaveGraphicsCompressed? (BYTE)1: (BYTE)0);
+    if ( aHeader.nVersion > 7 )
+        rStream << (bSaveOriginalGraphics? (BYTE)1: (BYTE)0);
+    if ( aHeader.nVersion > 8 )
+    {
+        rStream << (bSaveVersionOnClose? (BYTE)1: (BYTE)0);
+        rStream.WriteByteString( pImp->aCopiesTo );
+        rStream.WriteByteString( pImp->aOriginal );
+        rStream.WriteByteString( pImp->aReferences );
+        rStream.WriteByteString( pImp->aRecipient );
+        rStream.WriteByteString( pImp->aReplyTo );
+        rStream.WriteByteString( pImp->aBlindCopies );
+        rStream.WriteByteString( pImp->aInReplyTo );
+        rStream.WriteByteString( pImp->aNewsgroups );
+        rStream << pImp->nPriority;
+    }
+    if ( aHeader.nVersion > 9 )
+    {
+        rStream.WriteByteString( pImp->aSpecialMimeType );
+    }
+    if ( aHeader.nVersion > 10 )
+    {
+        rStream << ( pImp->bUseUserData ? (BYTE)1: (BYTE)0 );
+    }
+
+    return rStream.GetError() == SVSTREAM_OK;
+}
+
+//-------------------------------------------------------------------------
+
+sal_Bool SfxDocumentInfo::LoadFromBinaryFormat( SotStorage* pStorage )
+{
+    if(!pStorage->IsStream( String::CreateFromAscii( pDocInfoSlot )))
+        return FALSE;
+
+    if ( pStorage->GetVersion() >= SOFFICE_FILEFORMAT_60 )
+    {
+        DBG_ERROR("This method only supports binary file format, use service StandaloneDocumentInfo!");
+        return FALSE;
+    }
+
+    SotStorageStreamRef rStr = pStorage->OpenSotStream( String::CreateFromAscii( pDocInfoSlot ),STREAM_STD_READ);
+    if(!rStr.Is())
+        return FALSE;
+    rStr->SetVersion( pStorage->GetVersion() );
+    rStr->SetBufferSize(STREAM_BUFFER_SIZE);
+    BOOL bRet = LoadFromBinaryFormat(*rStr);
+    if ( bRet )
+    {
+        String aStr = SotExchange::GetFormatMimeType( pStorage->GetFormat() );
+        USHORT nPos = aStr.Search(';');
+        if ( nPos != STRING_NOTFOUND )
+            pImp->aSpecialMimeType = aStr.Copy( 0, nPos );
+        else
+            pImp->aSpecialMimeType = aStr;
+    }
+
+    return bRet;
+}
+
+//-------------------------------------------------------------------------
+
+BOOL SfxDocumentInfo::SaveToBinaryFormat( SotStorage* pStorage ) const
+{
+    SotStorageStreamRef aStr = pStorage->OpenSotStream( String::CreateFromAscii( pDocInfoSlot ), STREAM_TRUNC | STREAM_STD_READWRITE);
+    if(!aStr.Is())
+        return FALSE;
+    aStr->SetVersion( pStorage->GetVersion() );
+    aStr->SetBufferSize(STREAM_BUFFER_SIZE);
+    if(!SaveToBinaryFormat(*aStr))
+        return FALSE;
+    return SavePropertySet( pStorage );
+}
+
+//-------------------------------------------------------------------------
 
 sal_uInt32 SfxDocumentInfo::LoadPropertySet( SotStorage* pStorage )
 {
