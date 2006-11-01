@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.212 $
+ *  $Revision: 1.213 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 15:12:56 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:30:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 #include <FWS.hxx>
+#include <X11/extensions/shape.h>
 #include <postx.h>
 
 #include <salunx.h>
@@ -670,6 +671,10 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
 
     mnIconID                    = 1; // ICON_DEFAULT
 
+    m_pClipRectangles           = NULL;
+    m_nCurClipRect              = 0;
+    m_nMaxClipRect              = 0;
+
     if( mpParent )
         mpParent->maChildren.push_back( this );
 
@@ -711,6 +716,13 @@ void X11SalFrame::passOnSaveYourSelf()
 X11SalFrame::~X11SalFrame()
 {
     notifyDelete();
+
+    if( m_pClipRectangles )
+    {
+        delete [] m_pClipRectangles;
+        m_pClipRectangles = NULL;
+        m_nCurClipRect = m_nMaxClipRect = 0;
+    }
 
     if( mhBackgroundPixmap )
     {
@@ -4076,5 +4088,79 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
     }
 
     return nRet;
+}
+
+void X11SalFrame::ResetClipRegion()
+{
+    delete [] m_pClipRectangles;
+    m_pClipRectangles = NULL;
+    m_nCurClipRect = m_nMaxClipRect = 0;
+
+    const int   dest_kind   = ShapeBounding;
+    const int   op          = ShapeSet;
+    const int   ordering    = YSorted;
+
+    XWindowAttributes win_attrib;
+    XRectangle        win_size;
+
+    XLIB_Window aShapeWindow = mhShellWindow;
+
+    XGetWindowAttributes ( GetDisplay()->GetDisplay(),
+                           aShapeWindow,
+                           &win_attrib );
+
+    win_size.x      = 0;
+    win_size.y      = 0;
+    win_size.width  = win_attrib.width;
+    win_size.height = win_attrib.height;
+
+    XShapeCombineRectangles ( GetDisplay()->GetDisplay(),
+                              aShapeWindow,
+                              dest_kind,
+                              0, 0,             // x_off, y_off
+                              &win_size,        // list of rectangles
+                              1,                // number of rectangles
+                              op, ordering );
+}
+
+void X11SalFrame::BeginSetClipRegion( ULONG nRects )
+{
+    if( m_pClipRectangles )
+        delete [] m_pClipRectangles;
+    if( nRects )
+        m_pClipRectangles = new XRectangle[nRects];
+    else
+        m_pClipRectangles = NULL;
+    m_nMaxClipRect = static_cast<int>(nRects);
+    m_nCurClipRect = 0;
+}
+
+void X11SalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+{
+    if( m_pClipRectangles && m_nCurClipRect < m_nMaxClipRect )
+    {
+        m_pClipRectangles[m_nCurClipRect].x      = nX;
+        m_pClipRectangles[m_nCurClipRect].y      = nY;
+        m_pClipRectangles[m_nCurClipRect].width  = nWidth;
+        m_pClipRectangles[m_nCurClipRect].height = nHeight;
+        m_nCurClipRect++;
+    }
+}
+
+void X11SalFrame::EndSetClipRegion()
+{
+    const int   dest_kind   = ShapeBounding;
+    const int   ordering    = YSorted;
+    const int   op = ShapeSet;
+
+    XLIB_Window aShapeWindow = mhShellWindow;
+    XShapeCombineRectangles ( GetDisplay()->GetDisplay(),
+                              aShapeWindow,
+                              dest_kind,
+                              0, 0, // x_off, y_off
+                              m_pClipRectangles,
+                              m_nCurClipRect,
+                              op, ordering );
+
 }
 
