@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconstr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:48:32 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:15:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,7 +214,7 @@ BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    if ( pView->IsDragObj() )
+    if ( pView && pView->IsDragObj() )
     {
         FrameView* pFrameView = pViewShell->GetFrameView();
         BOOL bDragWithCopy = (rMEvt.IsMod1() && pFrameView->IsDragWithCopy());
@@ -227,7 +227,7 @@ BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
         pView->SetDragWithCopy(bDragWithCopy);
         pView->EndDragObj( pView->IsDragWithCopy() );
     }
-    else if ( pView->IsMarkObj() )
+    else if ( pView && pView->IsMarkObj() )
     {
         pView->EndMarkObj();
     }
@@ -236,7 +236,7 @@ BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
         bReturn = FALSE;
     }
 
-    if ( !pView->IsAction() )
+    if ( pView &&  !pView->IsAction() )
     {
         pWindow->ReleaseMouse();
         USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
