@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:55:05 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:15:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -727,6 +727,9 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         aDragTimer.Stop();
         bIsInDragMode = FALSE;
     }
+
+    if( !pView )
+        return (FALSE);
 
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
     USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(HITPIX,0)).Width() );
