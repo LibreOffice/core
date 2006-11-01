@@ -4,9 +4,9 @@
  *
  *  $RCSfile: buffer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:31:37 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:14:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,24 +49,27 @@ class SbiBuffer {                   // Code/Konstanten-Puffer:
     SbiParser* pParser;             // fuer Fehlermeldungen
     char*   pBuf;                   // Puffer-Pointer
     char*   pCur;                   // aktueller Puffer-Pointer
-    USHORT  nOff;                   // aktuelles Offset
-    USHORT  nSize;                  // aktuelle Groesse
+    UINT32  nOff;                   // aktuelles Offset
+    UINT32  nSize;                  // aktuelle Groesse
     short   nInc;                   // Inkrement
     BOOL    Check( USHORT );        // Buffergroesse testen
 public:
     SbiBuffer( SbiParser*, short ); // Inkrement
    ~SbiBuffer();
-    void Patch( USHORT, USHORT );   // Patchen
-    void Chain( USHORT );           // Back-Chain
-    void Align( short );            // Alignment
+    void Patch( UINT32, UINT32 );   // Patchen
+    void Chain( UINT32 );           // Back-Chain
+    void Align( INT32 );            // Alignment
     BOOL Add( const void*, USHORT );// Element anfuegen
     BOOL operator += (const String&);// Basic-String speichern
     BOOL operator += (INT8);        // Zeichen speichern
     BOOL operator += (INT16);       // Integer speichern
     BOOL operator += (UINT8);       // Zeichen speichern
     BOOL operator += (UINT16);      // Integer speichern
+    BOOL operator += (UINT32);      // Integer speichern
+    BOOL operator += (INT32);       // Integer speichern
     char*  GetBuffer();             // Puffer rausgeben (selbst loeschen!)
-    USHORT GetSize()                { return nOff; }
+    char*  GetBufferPtr(){ return pBuf; }
+    UINT32 GetSize()                { return nOff; }
 };
 
 #endif

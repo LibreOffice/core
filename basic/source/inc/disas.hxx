@@ -4,9 +4,9 @@
  *
  *  $RCSfile: disas.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:31:37 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:15:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,15 +38,15 @@
 
 #include "image.hxx"
 #include "opcodes.hxx"
-
+// find a place for this limit ( also used in
 class SvStream;
-
+#define MAX_LABELS 0x20000000L
 class SbiDisas {
     const SbiImage& rImg;
     SbModule* pMod;
-    char     cLabels[ 8192 ];       // Bitvektor fuer Labels
-    USHORT   nOff;                  // aktuelle Position
-    USHORT   nPC;                   // Position des Opcodes
+    char     cLabels[ MAX_LABELS ];     // Bitvektor fuer Labels
+    UINT32   nOff;                  // aktuelle Position
+    UINT32   nPC;                   // Position des Opcodes
     SbiOpcode eOp;                  // Opcode
     USHORT   nOp1, nOp2;            // Operanden
     short    nParts;                // 1, 2 oder 3
