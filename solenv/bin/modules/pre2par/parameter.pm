@@ -4,9 +4,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:31:36 $
+#   last change: $Author: vg $ $Date: 2006-11-01 13:49:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,11 +53,12 @@ $pre2par::globals::prog V1.0 (c) Ingo Schmidt 2003
 The following parameter are needed:
 -s: path to the pre file
 -o: path to the par file
--l: path to the ulf file
+-l: path to the ulf file (mlf or jlf file)
+-v: log  process (optional)
 
 Example:
 
-perl pre2par.pl -S readme.pre -o readme.par
+perl pre2par.pl -l test.mlf -s readme.pre -o readme.par -v
 
 ---------------------------------------------------------
 Ende
@@ -99,7 +100,7 @@ sub control_parameter
     if ($pre2par::globals::prefilename eq "")
     {
         print "\n************************************************\n";
-        print "Error: Name of the input file not set (-i)!";
+        print "Error: Name of the input file not set (-s)!";
         print "\n************************************************\n";
         usage();
         exit(-1);
@@ -173,7 +174,7 @@ sub make_path_absolute
 sub outputparameter
 {
     $pre2par::globals::logging ? ($logoption = " -v") : ($logoption = "");
-    print "\n$pre2par::globals::prog -s $pre2par::globals::prefilename -o $pre2par::globals::parfilename$logoption\n";
+    print "\n$pre2par::globals::prog -l $pre2par::globals::langfilename -s $pre2par::globals::prefilename -o $pre2par::globals::parfilename$logoption\n";
 
 #   print "\n********************************************************\n";
 #   print "This is $pre2par::globals::prog, version 1.0\n";
