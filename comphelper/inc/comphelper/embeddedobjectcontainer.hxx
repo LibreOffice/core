@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:42:55 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:30:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,10 @@ public:
     // create an object from a ClassId
     ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >
                         CreateEmbeddedObject( const com::sun::star::uno::Sequence < sal_Int8 >&, ::rtl::OUString& );
+
+    ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >
+                        CreateEmbeddedObject( const com::sun::star::uno::Sequence < sal_Int8 >&,
+                        const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, ::rtl::OUString& );
 
     // insert an embedded object into the container - objects persistant representation will be added to the storage
     sal_Bool            InsertEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, ::rtl::OUString& );
