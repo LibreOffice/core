@@ -4,9 +4,9 @@
  *
  *  $RCSfile: providerhelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:23:08 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:52:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -412,12 +412,22 @@ sal_Bool ContentProviderImplHelper::renameAdditionalPropertySet(
                 sal_Int32 nCount = aKeys.getLength();
                 if ( nCount > 0 )
                 {
+                    OUString aOldKeyWithSlash = rOldKey;
+                    OUString aOldKeyWithoutSlash;
+                    if ( aOldKeyWithSlash.lastIndexOf( (sal_Unicode)'/' != aOldKeyWithSlash.getLength() - 1 ) )
+                    {
+                        aOldKeyWithSlash += OUString( (sal_Unicode)'/' );
+                        aOldKeyWithoutSlash = rOldKey;
+                    }
+                    else if ( rOldKey.getLength() )
+                        aOldKeyWithoutSlash = rOldKey.copy( 0, rOldKey.getLength() - 1 );
+
                     const OUString* pKeys = aKeys.getConstArray();
                     for ( sal_Int32 n = 0; n < nCount; ++n )
                     {
                         const OUString& rKey = pKeys[ n ];
-                        if ( rKey.compareTo(
-                                        rOldKey, rOldKey.getLength() ) == 0 )
+                        if ( rKey.compareTo( aOldKeyWithSlash, aOldKeyWithSlash.getLength() ) == 0
+                          || rKey.equals( aOldKeyWithoutSlash ) )
                         {
                             OUString aNewKey
                                 = rKey.replaceAt(
@@ -482,12 +492,22 @@ sal_Bool ContentProviderImplHelper::copyAdditionalPropertySet(
                 sal_Int32 nCount = aKeys.getLength();
                 if ( nCount > 0 )
                 {
+                    OUString aSrcKeyWithSlash = rSourceKey;
+                    OUString aSrcKeyWithoutSlash;
+                    if ( aSrcKeyWithSlash.lastIndexOf( (sal_Unicode)'/' != aSrcKeyWithSlash.getLength() - 1 ) )
+                    {
+                        aSrcKeyWithSlash += OUString( (sal_Unicode)'/' );
+                        aSrcKeyWithoutSlash = rSourceKey;
+                    }
+                    else if ( rSourceKey.getLength() )
+                        aSrcKeyWithoutSlash = rSourceKey.copy( 0, rSourceKey.getLength() - 1 );
+
                     const OUString* pKeys = aKeys.getConstArray();
                     for ( sal_Int32 n = 0; n < nCount; ++n )
                     {
                         const OUString& rKey = pKeys[ n ];
-                        if ( rKey.compareTo(
-                                    rSourceKey, rSourceKey.getLength() ) == 0 )
+                        if ( rKey.compareTo( aSrcKeyWithSlash, aSrcKeyWithSlash.getLength() ) == 0
+                          || rKey.equals( aSrcKeyWithoutSlash ) )
                         {
                             OUString aNewKey
                                 = rKey.replaceAt(
@@ -625,11 +645,22 @@ sal_Bool ContentProviderImplHelper::removeAdditionalPropertySet(
                 sal_Int32 nCount = aKeys.getLength();
                 if ( nCount > 0 )
                 {
+                    OUString aKeyWithSlash = rKey;
+                    OUString aKeyWithoutSlash;
+                    if ( aKeyWithSlash.lastIndexOf( (sal_Unicode)'/' != aKeyWithSlash.getLength() - 1 ) )
+                    {
+                        aKeyWithSlash += OUString( (sal_Unicode)'/' );
+                        aKeyWithoutSlash = rKey;
+                    }
+                    else if ( rKey.getLength() )
+                        aKeyWithoutSlash = rKey.copy( 0, rKey.getLength() - 1 );
+
                     const OUString* pKeys = aKeys.getConstArray();
                     for ( sal_Int32 n = 0; n < nCount; ++n )
                     {
                         const OUString& rCurrKey = pKeys[ n ];
-                        if ( rCurrKey.compareTo( rKey, rKey.getLength() ) == 0 )
+                        if ( rCurrKey.compareTo( aKeyWithSlash, aKeyWithSlash.getLength() ) == 0
+                          || rCurrKey.equals( aKeyWithoutSlash ) )
                         {
                             if ( !removeAdditionalPropertySet(
                                                         rCurrKey, sal_False ) )
