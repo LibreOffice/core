@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node2lay.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:01:37 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:11:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,7 +252,9 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
             SwFrm* pFrm = bMaster ? rpFrm->FindPrev() : rpFrm->FindNext();
             if( pFrm && pFrm->IsSctFrm() )
             {
-                if( ((SwSectionNode*)pNode)->GetSection() ==
+                // #137684#: pFrm could be a "dummy"-section
+                if( ((SwSectionFrm*)pFrm)->GetSection() &&
+                    ((SwSectionNode*)pNode)->GetSection() ==
                     *((SwSectionFrm*)pFrm)->GetSection() )
                 {
                     // OD 2004-06-02 #i22922# - consider columned sections
