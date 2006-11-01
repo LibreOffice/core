@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:25:10 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:13:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,17 +44,18 @@
 #include "sb.hxx"
 #include <string.h>     // memset() etc
 #include "image.hxx"
-#include "filefmt.hxx"
-
+#include <codegen.hxx>
 SbiImage::SbiImage()
 {
     pStringOff = NULL;
     pStrings   = NULL;
     pCode      = NULL;
+    pLegacyPCode       = NULL;
     nFlags     =
     nStrings   =
     nStringSize=
     nCodeSize  =
+    nLegacyCodeSize  =
     nDimBase   = 0;
     bInit      =
     bError     = FALSE;
@@ -72,12 +73,14 @@ void SbiImage::Clear()
     delete[] pStringOff;
     delete[] pStrings;
     delete[] pCode;
+    ReleaseLegacyBuffer();
     pStringOff = NULL;
     pStrings   = NULL;
     pCode      = NULL;
     nFlags     =
     nStrings   =
     nStringSize=
+    nLegacyCodeSize  = 0;
     nCodeSize  = 0;
     eCharSet   = gsl_getSystemTextEncoding();
     nDimBase   = 0;
@@ -125,6 +128,12 @@ void SbiCloseRecord( SvStream& r, ULONG nOff )
 
 BOOL SbiImage::Load( SvStream& r )
 {
+    UINT32 nVersion = 0;            // Versionsnummer
+    return Load( r, nVersion );
+}
+BOOL SbiImage::Load( SvStream& r, UINT32& nVersion )
+{
+
     UINT16 nSign, nCount;
     UINT32 nLen, nOff;
 
@@ -132,7 +141,6 @@ BOOL SbiImage::Load( SvStream& r )
     // Master-Record einlesen
     r >> nSign >> nLen >> nCount;
     ULONG nLast = r.Tell() + nLen;
-    UINT32 nVersion = 0;            // Versionsnummer
     UINT32 nCharSet;                // System-Zeichensatz
     UINT32 lDimBase;
     UINT16 nReserved1;
@@ -145,9 +153,11 @@ BOOL SbiImage::Load( SvStream& r )
           >> nFlags >> nReserved1 >> nReserved2 >> nReserved3;
         eCharSet = (CharSet) nCharSet;
         eCharSet = GetSOLoadTextEncoding( eCharSet );
-        bBadVer  = BOOL( nVersion != B_CURVERSION );
+        bBadVer  = BOOL( nVersion > B_CURVERSION );
         nDimBase = (USHORT) lDimBase;
     }
+
+    bool bLegacy = ( nVersion < B_EXT_IMG_VERSION );
 
     ULONG nNext;
     while( ( nNext = r.Tell() ) < nLast )
@@ -190,8 +200,27 @@ BOOL SbiImage::Load( SvStream& r )
             case B_PCODE:
                 if( bBadVer ) break;
                 pCode = new char[ nLen ];
-                nCodeSize = (USHORT) nLen;
+                nCodeSize = nLen;
                 r.Read( pCode, nCodeSize );
+                if ( bLegacy )
+                {
+                    ReleaseLegacyBuffer(); // release any previously held buffer
+                    nLegacyCodeSize = nCodeSize;
+                    pLegacyPCode = pCode;
+
+                    PCodeBuffConvertor< UINT16, UINT32 > aLegacyToNew( (BYTE*)pLegacyPCode, nLegacyCodeSize );
+                    aLegacyToNew.convert();
+                    pCode = (char*)aLegacyToNew.GetBuffer();
+                    nCodeSize = aLegacyToNew.GetSize();
+                    // we don't release the legacy buffer
+                    // right now, thats because the module
+                    // needs it to fix up the method
+                    // nStart members. When that is done
+                    // the module can release the buffer
+                    // or it can wait until this routine
+                    // is called again or when this class                       // destructs all of which will trigger
+                    // release of the buffer.
+                }
                 break;
             case B_PUBLICS:
             case B_POOLDIR:
@@ -241,16 +270,29 @@ done:
     return BOOL( !bError );
 }
 
-BOOL SbiImage::Save( SvStream& r )
+BOOL SbiImage::Save( SvStream& r, UINT32 nVer )
 {
+    bool bLegacy = ( nVer < B_EXT_IMG_VERSION );
+
+    // detect if old code exceeds legacy limits
+    // if so, then disallow save
+    if ( bLegacy && ExceedsLegacyLimits() )
+    {
+        SbiImage aEmptyImg;
+        aEmptyImg.aName = aName;
+        aEmptyImg.Save( r, B_LEGACYVERSION );
+        return TRUE;
+    }
     // Erst mal der Header:
     ULONG nStart = SbiOpenRecord( r, B_MODULE, 1 );
     ULONG nPos;
 
     eCharSet = GetSOStoreTextEncoding( eCharSet );
-
-    r << (INT32) B_CURVERSION
-      << (INT32) eCharSet
+    if ( bLegacy )
+        r << (INT32) B_LEGACYVERSION;
+    else
+        r << (INT32) B_CURVERSION;
+    r  << (INT32) eCharSet
       << (INT32) nDimBase
       << (INT16) nFlags
       << (INT16) 0
@@ -310,7 +352,17 @@ BOOL SbiImage::Save( SvStream& r )
     if( pCode && SbiGood( r ) )
     {
         nPos = SbiOpenRecord( r, B_PCODE, 1 );
-        r.Write( pCode, nCodeSize );
+        if ( bLegacy )
+        {
+            ReleaseLegacyBuffer(); // release any previously held buffer
+            PCodeBuffConvertor< UINT32, UINT16 > aNewToLegacy( (BYTE*)pCode, nCodeSize );
+            aNewToLegacy.convert();
+            pLegacyPCode = (char*)aNewToLegacy.GetBuffer();
+            nLegacyCodeSize = aNewToLegacy.GetSize();
+                r.Write( pLegacyPCode, nLegacyCodeSize );
+        }
+        else
+            r.Write( pCode, nCodeSize );
         SbiCloseRecord( r, nPos );
     }
     // String-Pool?
@@ -356,11 +408,11 @@ void SbiImage::MakeStrings( short nSize )
     nStrings = nStringIdx = nStringOff = 0;
     nStringSize = 1024;
     pStrings = new sal_Unicode[ nStringSize ];
-    pStringOff = new UINT16[ nSize ];
+    pStringOff = new UINT32[ nSize ];
     if( pStrings && pStringOff )
     {
         nStrings = nSize;
-        memset( pStringOff, 0, nSize * sizeof( UINT16 ) );
+        memset( pStringOff, 0, nSize * sizeof( UINT32 ) );
         memset( pStrings, 0, nStringSize * sizeof( sal_Unicode ) );
     }
     else
@@ -378,16 +430,16 @@ void SbiImage::AddString( const String& r )
         bError = TRUE;
     if( !bError )
     {
-        UINT16 len = r.Len() + 1;
-        long needed = (long) nStringOff + len;
-        if( needed > 0xFF00L )
+        xub_StrLen  len = r.Len() + 1;
+        UINT32 needed = nStringOff + len;
+        if( needed > 0xFFFFFF00L )
             bError = TRUE;  // out of mem!
-        else if( (USHORT) needed > nStringSize )
+        else if( needed > nStringSize )
         {
             UINT32 nNewLen = needed + 1024;
             nNewLen &= 0xFFFFFC00;  // trim to 1K border
-            if( nNewLen > 0xFF00L )
-                nNewLen = 0xFF00L;
+            if( nNewLen > 0xFFFFFF00L )
+                nNewLen = 0xFFFFFF00L;
             sal_Unicode* p = NULL;
             if( (p = new sal_Unicode[ nNewLen ]) != NULL )
             {
@@ -418,7 +470,7 @@ void SbiImage::AddString( const String& r )
 // und ist bereits per new angelegt. Ausserdem enthaelt er alle Integers
 // im Big Endian-Format, kann also direkt gelesen/geschrieben werden.
 
-void SbiImage::AddCode( char* p, USHORT s )
+void SbiImage::AddCode( char* p, UINT32 s )
 {
     pCode = p;
     nCodeSize = s;
@@ -452,14 +504,14 @@ String SbiImage::GetString( short nId ) const
 {
     if( nId && nId <= nStrings )
     {
-        USHORT nOff = pStringOff[ nId - 1 ];
+        UINT32 nOff = pStringOff[ nId - 1 ];
         sal_Unicode* pStr = pStrings + nOff;
 
         // #i42467: Special treatment for vbNullChar
         if( *pStr == 0 )
         {
-            USHORT nNextOff = (nId < nStrings) ? pStringOff[ nId ] : nStringOff;
-            USHORT nLen = nNextOff - nOff - 1;
+            UINT32 nNextOff = (nId < nStrings) ? pStringOff[ nId ] : nStringOff;
+            UINT32 nLen = nNextOff - nOff - 1;
             if( nLen == 1 )
             {
                 // Force length 1 and make char 0 afterwards
@@ -482,3 +534,29 @@ const SbxObject* SbiImage::FindType (String aTypeName) const
     return rTypes.Is() ? (SbxObject*)rTypes->Find(aTypeName,SbxCLASS_OBJECT) : NULL;
 }
 
+UINT16
+SbiImage::CalcLegacyOffset( INT32 nOffset )
+{
+    return SbiCodeGen::calcLegacyOffSet( (BYTE*)pCode, nOffset ) ;
+}
+UINT32
+SbiImage::CalcNewOffset( INT16 nOffset )
+{
+    return SbiCodeGen::calcNewOffSet( (BYTE*)pLegacyPCode, nOffset ) ;
+}
+
+void
+SbiImage::ReleaseLegacyBuffer()
+{
+    delete[] pLegacyPCode;
+    pLegacyPCode = NULL;
+    nLegacyCodeSize = 0;
+}
+
+BOOL
+SbiImage::ExceedsLegacyLimits()
+{
+    if ( ( nStringSize > 0xFF00L ) || ( CalcLegacyOffset( nCodeSize ) > 0xFF00L ) )
+        return TRUE;
+    return FALSE;
+}
