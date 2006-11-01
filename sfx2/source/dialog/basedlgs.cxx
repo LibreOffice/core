@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:52:20 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:26:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -373,15 +373,6 @@ long SfxModelessDialog::Notify( NotifyEvent& rEvt )
 {
     if ( rEvt.GetType() == EVENT_GETFOCUS )
     {
-/*
-        SfxViewFrame *pFrame = pBindings->GetDispatcher_Impl()->GetFrame();
-        if ( pFrame )
-            pFrame->MakeActive_Impl();
-
-        if ( rEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
-            ModelessDialog::ParentNotify( rEvt );
-        return sal_True;
- */
         pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
         pImp->pMgr->Activate_Impl();
         Window* pWindow = rEvt.GetWindow();
@@ -482,19 +473,6 @@ long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
 */
 
 {
-/*
-    if ( rEvt.GetType() == EVENT_GETFOCUS || rEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
-    {
-        SfxViewFrame *pFrame = pBindings->GetDispatcher_Impl()->GetFrame();
-        if ( pFrame )
-            pFrame->MakeActive_Impl();
-
-        if ( rEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
-            FloatingWindow::ParentNotify( rEvt );
-        return sal_True;
-    }
-*/
-
     if ( rEvt.GetType() == EVENT_GETFOCUS )
     {
         pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
