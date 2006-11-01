@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-29 11:15:04 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:17:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,7 @@
 #ifndef _COM_SUN_STAR_TASK_DOCUMENTPASSWORDREQUEST_HPP_
 #include "com/sun/star/task/DocumentPasswordRequest.hpp"
 #endif
+#include "com/sun/star/script/ModuleSizeExceededRequest.hpp"
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP_
 #include "com/sun/star/task/XInteractionAbort.hpp"
 #endif
@@ -704,7 +705,30 @@ UUIInteractionHandler::handle_impl(
                                        rRequest->getContinuations());
             return;
         }
-
+        star::script::ModuleSizeExceededRequest aModSizeException;
+        if (aAnyRequest >>= aModSizeException )
+        {
+            ErrCode nErrorCode = ERRCODE_UUI_IO_MODULESIZEEXCEEDED;
+            std::vector< rtl::OUString > aArguments;
+            star::uno::Sequence< rtl::OUString > sModules = aModSizeException.Names;
+            if ( sModules.getLength() )
+            {
+                rtl::OUString aName;
+                for ( sal_Int32 index=0; index< sModules.getLength(); ++index )
+                {
+                    if ( index )
+                        aName = aName + rtl::OUString( ',' ) + sModules[index];
+                    else
+                        aName = sModules[index]; // 1st name
+                }
+                aArguments.push_back( aName );
+            }
+            handleErrorRequest( star::task::InteractionClassification_WARNING,
+                                nErrorCode,
+                                aArguments,
+                                rRequest->getContinuations());
+            return;
+        }
         star::ucb::NameClashException aNCException;
         if (aAnyRequest >>= aNCException)
         {
