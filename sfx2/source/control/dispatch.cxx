@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:50:39 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:26:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -791,7 +791,7 @@ SfxViewFrame* SfxDispatcher::GetFrame() const
 }
 
 //--------------------------------------------------------------------
-void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI )
+void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
 
 /*  [Beschreibung]
 
@@ -842,6 +842,19 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI )
     for ( int i = int(pImp->aStack.Count()) - 1; i >= 0; --i )
         pImp->aStack.Top( (sal_uInt16) i )->DoActivate_Impl(pImp->pFrame, bMDI);
 
+    if ( bMDI && pImp->pFrame )
+    {
+        //SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
+        SfxBindings *pBind = GetBindings();
+        while ( pBind )
+        {
+            pBind->HidePopupCtrls_Impl( FALSE );
+            pBind = pBind->GetSubBindings_Impl();
+        }
+
+        pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->HidePopups_Impl( FALSE, FALSE, 1 );
+    }
+
     if ( pImp->aToDoStack.Count() )
     {
         if (sal_True)
@@ -867,7 +880,7 @@ void SfxDispatcher::DoParentActivate_Impl()
 }
 
 //--------------------------------------------------------------------
-void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI )
+void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
 
 /*  [Beschreibung]
 
@@ -919,6 +932,32 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI )
 
     for ( sal_uInt16 i = 0; i < pImp->aStack.Count(); ++i )
         pImp->aStack.Top(i)->DoDeactivate_Impl(pImp->pFrame, bMDI);
+
+    BOOL bHidePopups = bMDI && pImp->pFrame;
+    if ( pNew && pImp->pFrame )
+    {
+        com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xOldFrame(
+            pNew->GetFrame()->GetFrameInterface()->getCreator(), com::sun::star::uno::UNO_QUERY );
+
+        com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xMyFrame(
+            GetFrame()->GetFrame()->GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
+
+        if ( xOldFrame == xMyFrame )
+            bHidePopups = FALSE;
+    }
+
+    if ( bHidePopups )
+    {
+        //SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
+        SfxBindings *pBind = GetBindings();
+        while ( pBind )
+        {
+            pBind->HidePopupCtrls_Impl( TRUE );
+            pBind = pBind->GetSubBindings_Impl();
+        }
+
+        pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->HidePopups_Impl( TRUE, FALSE, 1 );
+    }
 
     Flush();
 }
@@ -1900,14 +1939,14 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, 
             {
                 if ( pSlot->IsMode(SFX_SLOT_CONTAINER) )
                 {
-                    if ( !pWorkWin->IsVisible_Impl( SFX_VISIBILITY_CLIENT ) )
-                        continue;
+                    if ( pWorkWin->IsVisible_Impl( SFX_VISIBILITY_CLIENT ) )
+                    //    continue;
                     nMode |= SFX_VISIBILITY_CLIENT;
                 }
                 else
                 {
-                    if ( !pWorkWin->IsVisible_Impl( SFX_VISIBILITY_SERVER ) )
-                        continue;
+                    if ( pWorkWin->IsVisible_Impl( SFX_VISIBILITY_SERVER ) )
+                    //    continue;
                     nMode |= SFX_VISIBILITY_SERVER;
                 }
             }
@@ -2866,6 +2905,27 @@ void SfxDispatcher::HideUI( sal_Bool bHide )
 //      bHide = sal_True;
     sal_Bool bWasHidden = pImp->bNoUI;
     pImp->bNoUI = bHide;
+    if ( pImp->pFrame )
+    {
+        SfxTopViewFrame* pTop= PTR_CAST( SfxTopViewFrame, pImp->pFrame->GetTopViewFrame() );
+        if ( pTop && pTop->GetBindings().GetDispatcher() == this )
+        {
+            SfxTopFrame* pFrm = pTop->GetTopFrame_Impl();
+            if ( pFrm->IsMenuBarOn_Impl() )
+            {
+                com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > xPropSet( pFrm->GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
+                if ( xPropSet.is() )
+                {
+                    com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+                    com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+                    aValue >>= xLayoutManager;
+                    if ( xLayoutManager.is() )
+                        xLayoutManager->setVisible( !bHide );
+                }
+            }
+        }
+    }
+
     if ( bHide != bWasHidden )
         Update_Impl( sal_True );
 }
