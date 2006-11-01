@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.246 $
+ *  $Revision: 1.247 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 08:32:58 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:29:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5950,6 +5950,12 @@ void Window::SetWindowRegionPixel()
 
     if ( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->SetWindowRegionPixel();
+    else if( mpWindowImpl->mbFrame )
+    {
+        mpWindowImpl->maWinRegion = Region( REGION_NULL);
+        mpWindowImpl->mbWinRegion = FALSE;
+        mpWindowImpl->mpFrame->ResetClipRegion();
+    }
     else
     {
         if ( mpWindowImpl->mbWinRegion )
@@ -5981,6 +5987,39 @@ void Window::SetWindowRegionPixel( const Region& rRegion )
 
     if ( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->SetWindowRegionPixel( rRegion );
+    else if( mpWindowImpl->mbFrame )
+    {
+        if( rRegion.GetType() != REGION_NULL )
+        {
+            mpWindowImpl->maWinRegion = rRegion;
+            mpWindowImpl->mbWinRegion = ! rRegion.IsEmpty();
+            if( mpWindowImpl->mbWinRegion )
+            {
+                // ClipRegion setzen/updaten
+                long                nX;
+                long                nY;
+                long                nWidth;
+                long                nHeight;
+                ULONG               nRectCount;
+                ImplRegionInfo      aInfo;
+                BOOL                bRegionRect;
+
+                nRectCount = mpWindowImpl->maWinRegion.GetRectCount();
+                mpWindowImpl->mpFrame->BeginSetClipRegion( nRectCount );
+                bRegionRect = mpWindowImpl->maWinRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
+                while ( bRegionRect )
+                {
+                    mpWindowImpl->mpFrame->UnionClipRegion( nX, nY, nWidth, nHeight );
+                    bRegionRect = mpWindowImpl->maWinRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
+                }
+                mpWindowImpl->mpFrame->EndSetClipRegion();
+            }
+            else
+                SetWindowRegionPixel();
+        }
+        else
+            SetWindowRegionPixel();
+    }
     else
     {
         BOOL bInvalidate = FALSE;
