@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:48:56 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 10:11:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2555,6 +2555,7 @@ shell::getv(
     if ( aFileStatus.getFileType() == osl::FileStatus::Link )
     {
         // Assume failure
+        aIsRegular = false;
         osl::FileBase::RC   result = osl::FileBase::E_INVAL;
         osl::DirectoryItem  aTargetItem;
         osl::DirectoryItem::get( aFileStatus.getLinkTargetURL(), aTargetItem );
@@ -2567,12 +2568,6 @@ shell::getv(
                 aIsRegular =
                     aTargetStatus.getFileType() == osl::FileStatus::Regular;
         }
-
-        // FIXME: aIsRegular undefined in error case.
-        // Don't know how to transport error
-        OSL_ENSURE( osl::FileBase::E_None == result,
-                    "shell::getv: Link target can't be retrieved."
-                    " Missing error handling !!!" );
     }
     else
         aIsRegular = aFileStatus.getFileType() == osl::FileStatus::Regular;
