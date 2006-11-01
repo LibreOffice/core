@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textaction.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:00:26 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 17:48:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1966,148 +1966,158 @@ namespace cppcanvas
                 // PolyPolygon. That polygon is then converted to
                 // device coordinate system.
 
+                // #i68512# Temporarily switch off font rotation
+                // (which is already contained in the render state
+                // transformation matrix - otherwise, glyph polygons
+                // will be rotated twice)
+                const ::Font aOrigFont( rVDev.GetFont() );
+                ::Font       aUnrotatedFont( aOrigFont );
+                aUnrotatedFont.SetOrientation(0);
+                rVDev.SetFont( aUnrotatedFont );
+
                 // TODO(F3): Don't understand parameter semantics of
                 // GetTextOutlines()
                 ::PolyPolygon   aResultingVCLPolyPolygon;
                 PolyPolyVector  aVCLPolyPolyVector;
-                if( rVDev.GetTextOutlines( aVCLPolyPolyVector, rText,
-                                           static_cast<USHORT>(nStartPos),
-                                           static_cast<USHORT>(nStartPos),
-                                           static_cast<USHORT>(nLen),
-                                           TRUE, 0, pDXArray ) )
+                const bool bHaveOutlines( rVDev.GetTextOutlines( aVCLPolyPolyVector, rText,
+                                                                 static_cast<USHORT>(nStartPos),
+                                                                 static_cast<USHORT>(nStartPos),
+                                                                 static_cast<USHORT>(nLen),
+                                                                 TRUE, 0, pDXArray ) );
+                rVDev.SetFont(aOrigFont);
+
+                if( !bHaveOutlines )
+                    return ActionSharedPtr();
+
+                ::std::vector< sal_Int32 > aPolygonGlyphMap;
+
+                // first glyph starts at polygon index 0
+                aPolygonGlyphMap.push_back( 0 );
+
+                // temporarily remove offsetting from mapmode
+                // (outline polygons must stay at origin, only
+                // need to be scaled)
+                const ::MapMode aOldMapMode( rVDev.GetMapMode() );
+
+                ::MapMode aScaleOnlyMapMode( aOldMapMode );
+                aScaleOnlyMapMode.SetOrigin( ::Point() );
+                rVDev.SetMapMode( aScaleOnlyMapMode );
+
+                PolyPolyVector::const_iterator       aIter( aVCLPolyPolyVector.begin() );
+                const PolyPolyVector::const_iterator aEnd( aVCLPolyPolyVector.end() );
+                for( ; aIter!= aEnd; ++aIter )
                 {
-                    ::std::vector< sal_Int32 > aPolygonGlyphMap;
+                    ::PolyPolygon aVCLPolyPolygon;
 
-                    // first glyph starts at polygon index 0
-                    aPolygonGlyphMap.push_back( 0 );
+                    aVCLPolyPolygon = rVDev.LogicToPixel( *aIter );
 
-                    // temporarily remove offsetting from mapmode
-                    // (outline polygons must stay at origin, only
-                    // need to be scaled)
-                    const ::MapMode aOldMapMode( rVDev.GetMapMode() );
-
-                    ::MapMode aScaleOnlyMapMode( aOldMapMode );
-                    aScaleOnlyMapMode.SetOrigin( ::Point() );
-                    rVDev.SetMapMode( aScaleOnlyMapMode );
-
-                    PolyPolyVector::const_iterator       aIter( aVCLPolyPolyVector.begin() );
-                    const PolyPolyVector::const_iterator aEnd( aVCLPolyPolyVector.end() );
-                    for( ; aIter!= aEnd; ++aIter )
+                    // append result to collecting polypoly
+                    for( USHORT i=0; i<aVCLPolyPolygon.Count(); ++i )
                     {
-                        ::PolyPolygon aVCLPolyPolygon;
-
-                        aVCLPolyPolygon = rVDev.LogicToPixel( *aIter );
-
-                        // append result to collecting polypoly
-                        for( USHORT i=0; i<aVCLPolyPolygon.Count(); ++i )
+                        // #i47795# Ensure closed polygons (since
+                        // FreeType returns the glyph outlines
+                        // open)
+                        const ::Polygon& rPoly( aVCLPolyPolygon.GetObject( i ) );
+                        const USHORT nCount( rPoly.GetSize() );
+                        if( nCount<3 ||
+                            rPoly[0] == rPoly[nCount-1] )
                         {
-                            // #i47795# Ensure closed polygons (since
-                            // FreeType returns the glyph outlines
-                            // open)
-                            const ::Polygon& rPoly( aVCLPolyPolygon.GetObject( i ) );
-                            const USHORT nCount( rPoly.GetSize() );
-                            if( nCount<3 ||
-                                rPoly[0] == rPoly[nCount-1] )
+                            // polygon either degenerate, or
+                            // already closed.
+                            aResultingVCLPolyPolygon.Insert( rPoly );
+                        }
+                        else
+                        {
+                            ::Polygon aPoly(nCount+1);
+
+                            // close polygon explicitely
+                            if( rPoly.HasFlags() )
                             {
-                                // polygon either degenerate, or
-                                // already closed.
-                                aResultingVCLPolyPolygon.Insert( rPoly );
+                                for( USHORT j=0; j<nCount; ++j )
+                                {
+                                    aPoly[j] = rPoly[j];
+                                    aPoly.SetFlags(j, rPoly.GetFlags(j));
+                                }
+
+                                // duplicate first point
+                                aPoly[nCount] = rPoly[0];
+                                aPoly.SetFlags(nCount, POLY_NORMAL);
                             }
                             else
                             {
-                                ::Polygon aPoly(nCount+1);
-
-                                // close polygon explicitely
-                                if( rPoly.HasFlags() )
+                                for( USHORT j=0; j<nCount; ++j )
                                 {
-                                    for( USHORT j=0; j<nCount; ++j )
-                                    {
-                                        aPoly[j] = rPoly[j];
-                                        aPoly.SetFlags(j, rPoly.GetFlags(j));
-                                    }
-
-                                    // duplicate first point
-                                    aPoly[nCount] = rPoly[0];
-                                    aPoly.SetFlags(nCount, POLY_NORMAL);
-                                }
-                                else
-                                {
-                                    for( USHORT j=0; j<nCount; ++j )
-                                    {
-                                        aPoly[j] = rPoly[j];
-                                    }
-
-                                    // duplicate first point
-                                    aPoly[nCount] = rPoly[0];
+                                    aPoly[j] = rPoly[j];
                                 }
 
-                                aResultingVCLPolyPolygon.Insert( aPoly );
+                                // duplicate first point
+                                aPoly[nCount] = rPoly[0];
                             }
+
+                            aResultingVCLPolyPolygon.Insert( aPoly );
                         }
-
-                        // TODO(F3): Depending on the semantics of
-                        // GetTextOutlines(), this here is wrong!
-
-                        // calc next glyph index
-                        aPolygonGlyphMap.push_back( aResultingVCLPolyPolygon.Count() );
                     }
 
-                    rVDev.SetMapMode( aOldMapMode );
+                    // TODO(F3): Depending on the semantics of
+                    // GetTextOutlines(), this here is wrong!
 
-                    const uno::Sequence< double > aCharWidthSeq(
-                        pDXArray ?
-                        setupDXArray( pDXArray, nLen, rVDev ) :
-                        setupDXArray( rText,
-                                      nStartPos,
-                                      nLen,
-                                      rVDev ) );
-                    const uno::Reference< rendering::XPolyPolygon2D > xTextPoly(
-                        ::vcl::unotools::xPolyPolygonFromPolyPolygon(
-                            rCanvas->getUNOCanvas()->getDevice(),
-                            aResultingVCLPolyPolygon ) );
-
-                    ::Point aEmptyPoint;
-                    if( rParms.maTextTransformation.isValid() )
-                    {
-                        return ActionSharedPtr(
-                            new OutlineAction(
-                                rStartPoint,
-                                rReliefOffset,
-                                rReliefColor,
-                                rShadowOffset,
-                                rShadowColor,
-                                aResultingVCLPolyPolygon.GetBoundRect(),
-                                xTextPoly,
-                                aPolygonGlyphMap,
-                                aCharWidthSeq,
-                                rVDev,
-                                rCanvas,
-                                rState,
-                                rParms.maTextTransformation.getValue() ) );
-                    }
-                    else
-                    {
-                        return ActionSharedPtr(
-                            new OutlineAction(
-                                rStartPoint,
-                                rReliefOffset,
-                                rReliefColor,
-                                rShadowOffset,
-                                rShadowColor,
-                                aResultingVCLPolyPolygon.GetBoundRect(),
-                                xTextPoly,
-                                aPolygonGlyphMap,
-                                aCharWidthSeq,
-                                rVDev,
-                                rCanvas,
-                                rState  ) );
-                    }
+                    // calc next glyph index
+                    aPolygonGlyphMap.push_back( aResultingVCLPolyPolygon.Count() );
                 }
 
-                return ActionSharedPtr();
+                rVDev.SetMapMode( aOldMapMode );
+
+                const uno::Sequence< double > aCharWidthSeq(
+                    pDXArray ?
+                    setupDXArray( pDXArray, nLen, rVDev ) :
+                    setupDXArray( rText,
+                                  nStartPos,
+                                  nLen,
+                                  rVDev ) );
+                const uno::Reference< rendering::XPolyPolygon2D > xTextPoly(
+                    ::vcl::unotools::xPolyPolygonFromPolyPolygon(
+                        rCanvas->getUNOCanvas()->getDevice(),
+                        aResultingVCLPolyPolygon ) );
+
+                ::Point aEmptyPoint;
+                if( rParms.maTextTransformation.isValid() )
+                {
+                    return ActionSharedPtr(
+                        new OutlineAction(
+                            rStartPoint,
+                            rReliefOffset,
+                            rReliefColor,
+                            rShadowOffset,
+                            rShadowColor,
+                            aResultingVCLPolyPolygon.GetBoundRect(),
+                            xTextPoly,
+                            aPolygonGlyphMap,
+                            aCharWidthSeq,
+                            rVDev,
+                            rCanvas,
+                            rState,
+                            rParms.maTextTransformation.getValue() ) );
+                }
+                else
+                {
+                    return ActionSharedPtr(
+                        new OutlineAction(
+                            rStartPoint,
+                            rReliefOffset,
+                            rReliefColor,
+                            rShadowOffset,
+                            rShadowColor,
+                            aResultingVCLPolyPolygon.GetBoundRect(),
+                            xTextPoly,
+                            aPolygonGlyphMap,
+                            aCharWidthSeq,
+                            rVDev,
+                            rCanvas,
+                            rState  ) );
+                }
             }
 
-        }
+        } // namespace
 
 
         // ---------------------------------------------------------------------------------
