@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckui.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 10:13:25 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:32:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    Paint( const Rectangle& rRect );
     void            Resize();
-    void            Show( BOOL bVisible = TRUE, USHORT nFlags = 0 );
+    void            Show( BOOL bVisible = TRUE, USHORT nFlags = SHOW_NOACTIVATE );
     void            SetTipPosPixel( const Point& rTipPos ) { maTipPos = rTipPos; }
 };
 
@@ -718,7 +718,9 @@ IMPL_LINK( UpdateCheckUI, WaitTimeOutHdl, Timer*, EMPTYARG )
     mpBubbleWin = GetBubbleWindow();
 
     if ( mpBubbleWin )
+    {
         mpBubbleWin->Show();
+    }
 
     return 0;
 }
@@ -779,7 +781,10 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
 //------------------------------------------------------------------------------
 BubbleWindow::BubbleWindow( Window* pParent, const XubString& rTitle,
                             const XubString& rText, const Image& rImage )
-    : FloatingWindow( pParent, 0 )
+    : FloatingWindow( pParent, WB_SYSTEMWINDOW
+                               | WB_OWNERDRAWDECORATION
+                               | WB_NOBORDER
+                    )
 {
     maMaxTextSize = Size( TEXT_MAX_WIDTH, TEXT_MAX_HEIGHT );
     maBubbleTitle = rTitle;
