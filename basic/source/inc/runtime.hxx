@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:44:06 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:16:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -321,8 +321,8 @@ public:
 class SbiRuntime
 {
     typedef void( SbiRuntime::*pStep0 )();
-    typedef void( SbiRuntime::*pStep1 )( USHORT nOp1 );
-    typedef void( SbiRuntime::*pStep2 )( USHORT nOp1, USHORT nOp2 );
+    typedef void( SbiRuntime::*pStep1 )( UINT32 nOp1 );
+    typedef void( SbiRuntime::*pStep2 )( UINT32 nOp1, UINT32 nOp2 );
     static pStep0 aStep0[];         // Opcode-Tabelle Gruppe 0
     static pStep1 aStep1[];         // Opcode-Tabelle Gruppe 1
     static pStep2 aStep2[];         // Opcode-Tabelle Gruppe 2
@@ -390,8 +390,8 @@ class SbiRuntime
     }
 
     SbxVariable* FindElement
-    ( SbxObject* pObj, USHORT nOp1, USHORT nOp2, SbError, BOOL );
-    void SetupArgs( SbxVariable*, USHORT );
+    ( SbxObject* pObj, UINT32 nOp1, UINT32 nOp2, SbError, BOOL );
+    void SetupArgs( SbxVariable*, UINT32 );
     SbxVariable* CheckArray( SbxVariable* );
 
     void PushVar( SbxVariable* );   // Variable push
@@ -448,38 +448,39 @@ class SbiRuntime
     void StepRESTART(), StepEMPTY(),    StepLEAVE();
     void StepLSET(),    StepRSET(),     StepREDIMP_ERASE();
     // Alle Opcodes mit einem Operanden
-    void StepLOADNC( USHORT ),  StepLOADSC( USHORT ),   StepLOADI( USHORT );
-    void StepARGN( USHORT ),    StepBASED( USHORT ),    StepPAD( USHORT );
-    void StepJUMP( USHORT ),    StepJUMPT( USHORT );
-    void StepJUMPF( USHORT ),   StepONJUMP( USHORT );
-    void StepGOSUB( USHORT ),   StepRETURN( USHORT );
-    void StepTESTFOR( USHORT ), StepCASETO( USHORT ),   StepERRHDL( USHORT );
-    void StepRESUME( USHORT ),  StepSETCLASS( USHORT ), StepTESTCLASS( USHORT ), StepLIB( USHORT );
+    void StepLOADNC( UINT32 ),  StepLOADSC( UINT32 ),   StepLOADI( UINT32 );
+    void StepARGN( UINT32 ),    StepBASED( UINT32 ),    StepPAD( UINT32 );
+    void StepJUMP( UINT32 ),    StepJUMPT( UINT32 );
+    void StepJUMPF( UINT32 ),   StepONJUMP( UINT32 );
+    void StepGOSUB( UINT32 ),   StepRETURN( UINT32 );
+    void StepTESTFOR( UINT32 ), StepCASETO( UINT32 ),   StepERRHDL( UINT32 );
+    void StepRESUME( UINT32 ),  StepSETCLASS( UINT32 ), StepTESTCLASS( UINT32 ), StepLIB( UINT32 );
     bool checkClass_Impl( const SbxVariableRef& refVal, const String& aClass, bool bRaiseErrors );
-    void StepCLOSE( USHORT ),   StepPRCHAR( USHORT ),   StepARGTYP( USHORT );
+    void StepCLOSE( UINT32 ),   StepPRCHAR( UINT32 ),   StepARGTYP( UINT32 );
     // Alle Opcodes mit zwei Operanden
-    void StepRTL( USHORT, USHORT ),     StepPUBLIC( USHORT, USHORT );
-    void StepPUBLIC_Impl( USHORT, USHORT, bool bUsedForClassModule );
-    void StepFIND( USHORT, USHORT ),    StepELEM( USHORT, USHORT );
-    void StepGLOBAL( USHORT, USHORT ),  StepLOCAL( USHORT, USHORT );
-    void StepPARAM( USHORT, USHORT),    StepCREATE( USHORT, USHORT );
-    void StepCALL( USHORT, USHORT ),    StepCALLC( USHORT, USHORT );
-    void StepCASEIS( USHORT, USHORT ),  StepSTMNT( USHORT, USHORT );
-    void StepOPEN( USHORT, USHORT ),    StepSTATIC( USHORT, USHORT );
-    void StepTCREATE(USHORT,USHORT),    StepDCREATE(USHORT,USHORT);
-    void StepGLOBAL_P( USHORT, USHORT ),StepFIND_G( USHORT, USHORT );
-    void StepDCREATE_REDIMP(USHORT,USHORT), StepDCREATE_IMPL(USHORT,USHORT);
-    void StepFIND_CM( USHORT, USHORT );
+    void StepRTL( UINT32, UINT32 ),     StepPUBLIC( UINT32, UINT32 );
+    void StepPUBLIC_Impl( UINT32, UINT32, bool bUsedForClassModule );
+    void StepFIND( UINT32, UINT32 ),    StepELEM( UINT32, UINT32 );
+    void StepGLOBAL( UINT32, UINT32 ),  StepLOCAL( UINT32, UINT32 );
+    void StepPARAM( UINT32, UINT32),    StepCREATE( UINT32, UINT32 );
+    void StepCALL( UINT32, UINT32 ),    StepCALLC( UINT32, UINT32 );
+    void StepCASEIS( UINT32, UINT32 ),  StepSTMNT( UINT32, UINT32 );
+    void StepOPEN( UINT32, UINT32 ),    StepSTATIC( UINT32, UINT32 );
+    void StepTCREATE(UINT32,UINT32),    StepDCREATE(UINT32,UINT32);
+    void StepGLOBAL_P( UINT32, UINT32 ),StepFIND_G( UINT32, UINT32 );
+    void StepDCREATE_REDIMP(UINT32,UINT32), StepDCREATE_IMPL(UINT32,UINT32);
+    void StepFIND_CM( UINT32, UINT32 );
 public:
     USHORT      GetImageFlag( USHORT n ) const;
     USHORT      GetBase();
     xub_StrLen  nLine,nCol1,nCol2;  // aktuelle Zeile, Spaltenbereich
     SbiRuntime* pNext;               // Stack-Chain
 
-    SbiRuntime( SbModule*, SbMethod*, USHORT );
+    SbiRuntime( SbModule*, SbMethod*, UINT32 );
    ~SbiRuntime();
     void Error( SbError );          // Fehler setzen, falls != 0
     void FatalError( SbError );     // Fehlerbehandlung=Standard, Fehler setzen
+    void DumpPCode();
     BOOL Step();                    // Einzelschritt (ein Opcode)
     void Stop()            { bRun = FALSE;   }
     BOOL IsRun()           { return bRun;    }
