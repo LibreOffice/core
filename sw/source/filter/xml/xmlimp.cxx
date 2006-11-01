@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 11:59:15 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:20:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,8 +254,13 @@ SvXMLImportContext *SwXMLBodyContext_Impl::CreateChildContext(
 
 // ----------------------------------------------------------------------------
 
+// --> OD 2006-10-11 #i69629#
+// enhance class <SwXMLDocContext_Impl> in order to be able to create subclasses
 class SwXMLDocContext_Impl : public SvXMLImportContext
 {
+// --> OD 2006-10-11 #i69629#
+protected:
+// <--
     const SwXMLImport& GetSwImport() const
         { return (const SwXMLImport&)GetImport(); }
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
@@ -348,6 +353,102 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
     return pContext;
 }
 
+// --> OD 2006-10-11 #i69629#
+// new subclass <SwXMLOfficeDocContext_Impl> of class <SwXMLDocContext_Impl>
+class SwXMLOfficeDocContext_Impl : public SwXMLDocContext_Impl
+{
+public:
+
+    SwXMLOfficeDocContext_Impl( SwXMLImport& rImport,
+                                sal_uInt16 nPrfx,
+                                const OUString& rLName,
+                                const Reference< xml::sax::XAttributeList > & xAttrList );
+    virtual ~SwXMLOfficeDocContext_Impl();
+
+    TYPEINFO();
+
+    virtual SvXMLImportContext *CreateChildContext(
+                            sal_uInt16 nPrefix,
+                            const OUString& rLocalName,
+                            const Reference< xml::sax::XAttributeList > & xAttrList );
+};
+
+SwXMLOfficeDocContext_Impl::SwXMLOfficeDocContext_Impl(
+                    SwXMLImport& rImport,
+                    sal_uInt16 nPrfx,
+                    const OUString& rLName,
+                    const Reference< xml::sax::XAttributeList > & xAttrList ) :
+    SwXMLDocContext_Impl( rImport, nPrfx, rLName, xAttrList )
+{
+}
+
+SwXMLOfficeDocContext_Impl::~SwXMLOfficeDocContext_Impl()
+{
+}
+
+TYPEINIT1( SwXMLOfficeDocContext_Impl, SwXMLDocContext_Impl );
+
+SvXMLImportContext* SwXMLOfficeDocContext_Impl::CreateChildContext(
+                            sal_uInt16 nPrefix,
+                            const OUString& rLocalName,
+                            const Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    // assign paragraph styles to list levels of outline style after all styles
+    // are imported and finished. This is the case, when <office:body> starts
+    // in flat OpenDocument file format.
+    {
+        const SvXMLTokenMap& rTokenMap = GetSwImport().GetDocElemTokenMap();
+        if ( rTokenMap.Get( nPrefix, rLocalName ) == XML_TOK_DOC_BODY )
+        {
+            GetImport().GetTextImport()->SetOutlineStyles( sal_True );
+        }
+    }
+
+    return SwXMLDocContext_Impl::CreateChildContext( nPrefix, rLocalName, xAttrList );
+}
+// <--
+
+// --> OD 2006-10-11 #i69629#
+// new subclass <SwXMLDocStylesContext_Impl> of class <SwXMLDocContext_Impl>
+class SwXMLDocStylesContext_Impl : public SwXMLDocContext_Impl
+{
+public:
+
+    SwXMLDocStylesContext_Impl( SwXMLImport& rImport,
+                                sal_uInt16 nPrfx,
+                                const OUString& rLName,
+                                const Reference< xml::sax::XAttributeList > & xAttrList );
+    virtual ~SwXMLDocStylesContext_Impl();
+
+    TYPEINFO();
+
+    virtual void EndElement();
+};
+
+SwXMLDocStylesContext_Impl::SwXMLDocStylesContext_Impl(
+                    SwXMLImport& rImport,
+                    sal_uInt16 nPrfx,
+                    const OUString& rLName,
+                    const Reference< xml::sax::XAttributeList > & xAttrList ) :
+    SwXMLDocContext_Impl( rImport, nPrfx, rLName, xAttrList )
+{
+}
+
+SwXMLDocStylesContext_Impl::~SwXMLDocStylesContext_Impl()
+{
+}
+
+TYPEINIT1( SwXMLDocStylesContext_Impl, SwXMLDocContext_Impl );
+
+void SwXMLDocStylesContext_Impl::EndElement()
+{
+    // --> OD 2006-10-11 #i69629#
+    // assign paragraph styles to list levels of outline style after all styles
+    // are imported and finished.
+    GetImport().GetTextImport()->SetOutlineStyles( sal_True );
+    // <--
+}
+// <--
 //----------------------------------------------------------------------------
 
 const SvXMLTokenMap& SwXMLImport::GetDocElemTokenMap()
@@ -365,14 +466,30 @@ SvXMLImportContext *SwXMLImport::CreateContext(
 {
     SvXMLImportContext *pContext = 0;
 
+    // --> OD 2006-10-11 #i69629#
+    // own subclasses for <office:document> and <office:document-styles>
     if( XML_NAMESPACE_OFFICE==nPrefix &&
-        ( IsXMLToken( rLocalName, XML_DOCUMENT ) ||
-          IsXMLToken( rLocalName, XML_DOCUMENT_META ) ||
+//        ( IsXMLToken( rLocalName, XML_DOCUMENT ) ||
+        ( IsXMLToken( rLocalName, XML_DOCUMENT_META ) ||
           IsXMLToken( rLocalName, XML_DOCUMENT_SETTINGS ) ||
-          IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) ||
+//          IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) ||
           IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT ) ))
         pContext = new SwXMLDocContext_Impl( *this, nPrefix, rLocalName,
                                              xAttrList );
+    else if ( XML_NAMESPACE_OFFICE==nPrefix &&
+              IsXMLToken( rLocalName, XML_DOCUMENT ) )
+    {
+        // flat OpenDocument file format
+        pContext = new SwXMLOfficeDocContext_Impl( *this, nPrefix, rLocalName,
+                                                   xAttrList );
+    }
+    else if ( XML_NAMESPACE_OFFICE==nPrefix &&
+              IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) )
+    {
+        pContext = new SwXMLDocStylesContext_Impl( *this, nPrefix, rLocalName,
+                                                   xAttrList );
+    }
+    // <--
     else
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
 
