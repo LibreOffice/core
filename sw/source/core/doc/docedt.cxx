@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:25:16 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:10:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -457,19 +457,19 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
 }
 
 
-int lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
+bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                  const SwNodeIndex& rInsPos,
                  SwFtnIdxs& rFtnArr, SwFtnIdxs& rSaveArr,
                  const SwIndex* pSttCnt = 0, const SwIndex* pEndCnt = 0 )
 {
-    int bUpdateFtn = sal_False;
+    bool bUpdateFtn = sal_False;
+    const SwNodes& rNds = rInsPos.GetNodes();
+    const bool bDelFtn = rInsPos.GetIndex() < rNds.GetEndOfAutotext().GetIndex() &&
+                rSttNd.GetIndex() >= rNds.GetEndOfAutotext().GetIndex();
+    const bool bSaveFtn = !bDelFtn &&
+                    rInsPos.GetIndex() >= rNds.GetEndOfExtras().GetIndex();
     if( rFtnArr.Count() )
     {
-        const SwNodes& rNds = rInsPos.GetNodes();
-        int bDelFtn = rInsPos.GetIndex() < rNds.GetEndOfAutotext().GetIndex() &&
-                    rSttNd.GetIndex() >= rNds.GetEndOfAutotext().GetIndex();
-        int bSaveFtn = !bDelFtn &&
-                        rInsPos.GetIndex() >= rNds.GetEndOfExtras().GetIndex();
 
         sal_uInt16 nPos;
         rFtnArr.SeekEntry( rSttNd, &nPos );
@@ -537,6 +537,33 @@ int lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                 }
                 bUpdateFtn = sal_True;
             }
+        }
+    }
+    // When moving from redline section into document content section, e.g.
+    // after loading a document with (delete-)redlines, the footnote array
+    // has to be adjusted... (#i70572)
+    if( bSaveFtn )
+    {
+        SwNodeIndex aIdx( rSttNd );
+        while( aIdx < rEndNd ) // Check the moved section
+        {
+            SwNode* pNode = &aIdx.GetNode();
+            if( pNode->IsTxtNode() ) // Looking for text nodes...
+            {
+                SwpHints *pHints = ((SwTxtNode*)pNode)->GetpSwpHints();
+                if( pHints && pHints->HasFtn() ) //...with footnotes
+                {
+                    bUpdateFtn = sal_True; // Heureka
+                    USHORT nCount = pHints->Count();
+                    for( USHORT i = 0; i < nCount; ++i )
+                    {
+                        SwTxtAttr *pAttr = pHints->GetHt( i );
+                        if( pAttr->Which() == RES_TXTATR_FTN )
+                            rSaveArr.Insert( (SwTxtFtn*)pAttr );
+                    }
+                }
+            }
+            ++aIdx;
         }
     }
     return bUpdateFtn;
