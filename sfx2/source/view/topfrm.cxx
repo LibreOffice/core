@@ -4,9 +4,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:50:53 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:29:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XMATERIALHOLDER_HPP_
 #include <com/sun/star/beans/XMaterialHolder.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XWINDOW2_HPP_
+#include <com/sun/star/awt/XWindow2.hpp>
 #endif
 
 #ifndef _SV_MENU_HXX
@@ -232,21 +235,15 @@ long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
         return sal_False;
 
     SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
-//REMOVE        if ( !pView || !pView->GetObjectShell() || pView->GetObjectShell()->IsHandsOff() )
     if ( !pView || !pView->GetObjectShell() )
         return Window::Notify( rNEvt );
 
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
     {
-        /*
-        SfxViewFrame* pCurrent = SfxViewFrame::Current();
-        SfxViewFrame* pContainer = pCurrent ? pCurrent->GetParentViewFrame_Impl() : NULL;
-        if ( !pContainer )
-            pContainer = pCurrent;
-        if ( pView && pView != pContainer )*/
-        if ( pView->GetViewShell() && !pView->GetViewShell()->GetIPClient() )
+        if ( pView->GetViewShell() && !pView->GetViewShell()->GetUIActiveIPClient_Impl() && !pFrame->IsInPlace() )
             pView->MakeActive_Impl( FALSE );
 
+        // TODO/LATER: do we still need this code?
         Window* pWindow = rNEvt.GetWindow();
         ULONG nHelpId  = 0;
         while ( !nHelpId && pWindow )
@@ -257,6 +254,8 @@ long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
 
         if ( nHelpId )
             SfxHelp::OpenHelpAgent( pFrame, nHelpId );
+
+        return sal_True;
     }
     else if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -632,6 +631,10 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, Window* pWindow, USHORT 
     if ( xDesktop.is() )
         xDesktop->getFrames()->append( xFrame );
 
+    uno::Reference< awt::XWindow2 > xWin( VCLUnoHelper::GetInterface ( pWindow ), uno::UNO_QUERY );
+    if ( xWin.is() && xWin->isActive() )
+        xFrame->activate();
+
     SfxTopFrame* pFrame = new SfxTopFrame( pWindow );
     pFrame->SetFrameInterface_Impl( xFrame );
     pFrame->pImp->bHidden = bHidden;
@@ -895,7 +898,6 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
 
     SetFrameType_Impl( GetFrameType() & ~SFXFRAME_FRAMESET );
     sal_Bool bBrowsing = sal_True;
-    BOOL bSetFocus = GetWindow().HasChildPathFocus( TRUE );
     SfxViewFrame *pFrame = GetCurrentViewFrame();
     if ( pFrame )
     {
@@ -937,7 +939,10 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
         {
             pFrame->ForceOuterResize_Impl( FALSE );
             pFrame->GetBindings().HidePopups(TRUE);
+
+            // MBA: layoutmanager of inplace frame starts locked and invisible
             GetWorkWindow_Impl()->MakeVisible_Impl( FALSE );
+            GetWorkWindow_Impl()->Lock_Impl( TRUE );
 
             GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
             if ( GetCurrentViewFrame() )
@@ -1011,9 +1016,12 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
         if ( pPluginMode && pPluginMode->GetValue() == 3)
             GetWorkWindow_Impl()->SetInternalDockingAllowed(FALSE);
 
+        if ( !IsInPlace() )
+            pFrame->GetDispatcher()->Update_Impl();
         pFrame->Show();
         GetWindow().Show();
-        pFrame->MakeActive_Impl( TRUE );
+        if ( !IsInPlace() )
+            pFrame->MakeActive_Impl( GetFrameInterface()->isActive() );
         pDoc->OwnerLock( sal_False );
 
         // Dont show container window! Its done by framework or directly
@@ -1033,11 +1041,6 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
         DBG_ASSERT( !IsInPlace() && !pPluginMode && !pPluginItem, "Special modes not compatible with hidden mode!" );
         GetWindow().Show();
     }
-
-    if ( bSetFocus )
-        // if the old component had the focus when it was destroyed, the focus has been transferred to
-        // the ViewFrameWindow
-        GrabFocusOnComponent_Impl();
 
     // Jetzt UpdateTitle, hidden TopFrames haben sonst keinen Namen!
     pFrame->UpdateTitle();
@@ -1631,38 +1634,16 @@ void SfxTopViewFrame::SetZoomFactor( const Fraction &rZoomX, const Fraction &rZo
 void SfxTopViewFrame::Activate( sal_Bool bMDI )
 {
     DBG_ASSERT(GetViewShell(), "Keine Shell");
-    if ( bMDI && !pImp->bActive )
-    {
+    if ( bMDI )
         pImp->bActive = sal_True;
-        SfxWorkWindow *pWorkWin = GetFrame()->GetWorkWindow_Impl();
-        SfxBindings *pBind = &GetBindings();
-        while ( pBind )
-        {
-            pBind->HidePopupCtrls_Impl( FALSE );
-            pBind = pBind->GetSubBindings_Impl();
-        }
-
-        pWorkWin->HidePopups_Impl( FALSE, FALSE, 1 );
-    }
 //(mba): hier evtl. wie in Beanframe NotifyEvent ?!
 }
 
 void SfxTopViewFrame::Deactivate( sal_Bool bMDI )
 {
     DBG_ASSERT(GetViewShell(), "Keine Shell");
-    if ( bMDI && pImp->bActive )
-    {
+    if ( bMDI )
         pImp->bActive = sal_False;
-        SfxWorkWindow *pWorkWin = GetFrame()->GetWorkWindow_Impl();
-        SfxBindings *pBind = &GetBindings();
-        while ( pBind )
-        {
-            pBind->HidePopupCtrls_Impl( TRUE );
-            pBind = pBind->GetSubBindings_Impl();
-        }
-
-        pWorkWin->HidePopups_Impl( TRUE, FALSE, 1 );
-    }
 //(mba): hier evtl. wie in Beanframe NotifyEvent ?!
 }
 
