@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kde_headers.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 08:33:24 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:23:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef INCLUDED_VCL_KDE_HEADERS_H
 #define INCLUDED_VCL_KDE_HEADERS_H
 
-/* ********* Suppress warnings:if needed */
+/* ********* Suppress warnings if needed */
 #ifndef _SAL_CONFIG_H_
 #include "sal/config.h"
 #endif
@@ -54,6 +54,7 @@
 #include <qaccessible.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
+#include <qfont.h>
 #include <qframe.h>
 #include <qlineedit.h>
 #include <qlistview.h>
