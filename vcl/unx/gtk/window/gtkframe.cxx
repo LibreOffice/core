@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 09:59:53 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:10:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -672,11 +672,13 @@ GtkSalFrame::GetAtkRole( GtkWindow* window )
     if( aDefaultRole == ATK_ROLE_INVALID )
         aDefaultRole = atk_role_register( "redundant object" );
 
-    AtkRole role = aDefaultRole;
+    AtkRole role = ATK_ROLE_INVALID;
 
     GtkSalFrame * pFrame = getFromWindow( window );
     if( pFrame )
     {
+        role = aDefaultRole;
+
         Window *pWindow = static_cast <Window *> (pFrame->GetInstance());
         if( pWindow )
         {
