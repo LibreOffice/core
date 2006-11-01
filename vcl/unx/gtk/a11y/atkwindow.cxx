@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkwindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:28:42 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:10:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,13 @@ static void
 ooo_window_wrapper_real_initialize(AtkObject *obj, gpointer data)
 {
     window_real_initialize(obj, data);
-    obj->role = GtkSalFrame::GetAtkRole( GTK_WINDOW( data ) );
+
+    /* GetAtkRole returns ATK_ROLE_INVALID for all non VCL windows, i.e.
+     * native Gtk+ file picker etc.
+     */
+    AtkRole newRole = GtkSalFrame::GetAtkRole( GTK_WINDOW( data ) );
+    if( newRole != ATK_ROLE_INVALID )
+        obj->role = newRole;
 
     if( obj->role == ATK_ROLE_TOOL_TIP )
     {
