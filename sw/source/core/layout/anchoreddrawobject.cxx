@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:16:07 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:12:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -580,6 +580,9 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtLayout()
         const Point aNewAnchorPos =
                     GetAnchorFrm()->GetFrmAnchorPos( ::HasWrap( GetDrawObj() ) );
         DrawObj()->SetAnchorPos( aNewAnchorPos );
+        // --> OD 2006-10-05 #i70122# - missing invalidation
+        InvalidateObjRectWithSpaces();
+        // <--
     }
     // <--
     SetCurrRelPos( aObjPositioning.GetRelPos() );
@@ -607,6 +610,9 @@ void SwAnchoredDrawObject::_SetDrawObjAnchor()
         DrawObj()->SetAnchorPos( aNewAnchorPos );
         // correct object position, caused by setting new anchor position
         DrawObj()->Move( aMove );
+        // --> OD 2006-10-05 #i70122# - missing invalidation
+        InvalidateObjRectWithSpaces();
+        // <--
     }
 }
 
@@ -724,6 +730,13 @@ const SwRect SwAnchoredDrawObject::GetObjRect() const
     //return GetDrawObj()->GetCurrentBoundRect();
     return GetDrawObj()->GetSnapRect();
 }
+
+// --> OD 2006-10-05 #i70122#
+const SwRect SwAnchoredDrawObject::GetObjBoundRect() const
+{
+    return GetDrawObj()->GetCurrentBoundRect();
+}
+// <--
 
 // --> OD 2006-08-10 #i68520#
 const bool SwAnchoredDrawObject::_SetObjTop( const SwTwips _nTop )
