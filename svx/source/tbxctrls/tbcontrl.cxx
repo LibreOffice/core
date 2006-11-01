@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:22:17 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:20:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2699,7 +2699,6 @@ void SvxFontNameToolBoxControl::StateChanged(
     USHORT               nId    = GetId();
     ToolBox&             rTbx   = GetToolBox();
     SvxFontNameBox_Impl* pBox   = (SvxFontNameBox_Impl*)(rTbx.GetItemWindow( nId ));
-    TriState             eTri   = STATE_NOCHECK;
 
     DBG_ASSERT( pBox, "Control not found!" );
 
@@ -2714,8 +2713,11 @@ void SvxFontNameToolBoxControl::StateChanged(
 
         if ( SFX_ITEM_AVAILABLE == eState )
         {
-            DBG_ASSERT( pState->ISA(SvxFontItem), "falscher ItemType" );
-            pBox->Update( (const SvxFontItem*) pState );
+            const SvxFontItem* pFontItem = dynamic_cast< const SvxFontItem* >( pState );
+
+            DBG_ASSERT( pFontItem, "svx::SvxFontNameToolBoxControl::StateChanged(), wrong item type!" );
+            if( pFontItem )
+                pBox->Update( pFontItem );
         }
         else
             pBox->SetText( String() );
@@ -2723,21 +2725,6 @@ void SvxFontNameToolBoxControl::StateChanged(
     }
 
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-
-    switch ( eState )
-    {
-        case SFX_ITEM_AVAILABLE:
-            eTri = ((const SfxBoolItem*)pState)->GetValue()
-                        ? STATE_CHECK
-                        : STATE_NOCHECK;
-            break;
-
-        case SFX_ITEM_DONTCARE:
-            eTri = STATE_DONTKNOW;
-            break;
-    }
-
-    rTbx.SetItemState( nId, eTri );
 }
 
 // -----------------------------------------------------------------------
