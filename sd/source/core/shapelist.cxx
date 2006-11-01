@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapelist.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:16:55 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:14:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,11 @@
 
 using namespace sd;
 
+ShapeList::ShapeList()
+{
+    maIter = maShapeList.end();
+}
+
 ShapeList::~ShapeList()
 {
     clear();
@@ -78,8 +83,14 @@ SdrObject* ShapeList::removeShape( SdrObject& rObject )
     ListImpl::iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), &rObject ) );
     if( aIter != maShapeList.end() )
     {
+        bool bIterErased = aIter == maIter;
+
         (*aIter)->RemoveObjectUser(*this);
         aIter = maShapeList.erase( aIter );
+
+        if( bIterErased )
+            maIter = aIter;
+
         if( aIter != maShapeList.end() )
             return (*aIter);
     }
@@ -100,6 +111,8 @@ void ShapeList::clear()
     ListImpl::iterator aIter( aShapeList.begin() );
     while( aIter != aShapeList.end() )
         (*aIter++)->RemoveObjectUser(*this);
+
+    maIter = aShapeList.end();
 }
 
 /** returns true if this list is empty */
@@ -160,10 +173,39 @@ void ShapeList::ObjectInDestruction(const SdrObject& rObject)
     ListImpl::iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), &rObject ) );
     if( aIter != maShapeList.end() )
     {
-        maShapeList.erase( aIter );
+        bool bIterErased = aIter == maIter;
+
+        aIter = maShapeList.erase( aIter );
+
+        if( bIterErased )
+            maIter = aIter;
     }
     else
     {
         DBG_ERROR("sd::ShapeList::ObjectInDestruction(), got a call from an unknown friend!");
     }
+}
+
+SdrObject* ShapeList::getNextShape()
+{
+    if( maIter != maShapeList.end() )
+    {
+        return (*maIter++);
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void ShapeList::seekShape( sal_uInt32 nIndex )
+{
+    maIter = maShapeList.begin();
+    while( nIndex-- && (maIter != maShapeList.end()) )
+        maIter++;
+}
+
+bool ShapeList::hasMore() const
+{
+    return maIter != maShapeList.end();
 }
