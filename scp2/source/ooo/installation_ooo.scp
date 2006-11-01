@@ -4,9 +4,9 @@
  *
  *  $RCSfile: installation_ooo.scp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:39:23 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 13:53:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@ Installation gid_Installation
     UserDirProductVersion = "${USERDIRPRODUCTVERSION}";
     SxwFormatVersion = "1.1";
     VendorName = "OpenOffice.org";
-    Bitmap = "oo_product.bmp";
   #ifdef WNT
     DefaultDestPath = "<winprogpath>\%PRODUCTNAME%PRODUCTVERSION";
   #else
