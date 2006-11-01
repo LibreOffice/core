@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swappatchfiles.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-13 11:48:53 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 13:51:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -849,6 +849,50 @@ extern "C" UINT __stdcall SetNewFeatureState( MSIHANDLE handle )
         MsiSetFeatureState(handle,sValueName.c_str(),INSTALLSTATE_ABSENT); // do not install this feature
         // mystr = TEXT("OnlineUpdate wird NICHT installiert!");
         // MessageBox(NULL, mystr.c_str(), "INSTALLSTATE_ABSENT", MB_OK);
+    }
+
+    return ERROR_SUCCESS;
+}
+
+extern "C" UINT __stdcall ShowOnlineUpdateDialog( MSIHANDLE handle )
+{
+    // Checking existence of file "updchk.uno.dll", which shows, that
+    // Online Update functionality is always available. Then the dialog
+    // that offers the Online Update is superfluous.
+
+    std::_tstring sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
+    std::_tstring sProgramDir = sInstDir + TEXT("program\\");
+    std::_tstring sSearchFile = sProgramDir + TEXT("updchk.uno.dll");
+
+    WIN32_FIND_DATA data;
+    HANDLE hdl = FindFirstFile(sSearchFile.c_str(), &data);
+    if (hdl != INVALID_HANDLE_VALUE)  // the file exists
+    {
+        // std::_tstring mystr;
+        // mystr = "Found file: " + sSearchFile;
+        // MessageBox( NULL, mystr.c_str(), "Found file", MB_OK );
+
+        // And finally setting property SHOW_ONLINEUPDATE_DIALOG
+        // to hide this dialog
+        UnsetMsiProperty(handle, TEXT("SHOW_ONLINEUPDATE_DIALOG"));
+
+        // Setting SELECT_OU_FEATURE to 1, which is probably superfluous
+        // because this is already the default value. But only this
+        // guarantees, that CustomAction SetNewFeatureState always sets
+        // the correct FeatureState for "gm_o_Onlineupdate", if it is
+        // already installed.
+        SetMsiProperty(handle, TEXT("SELECT_OU_FEATURE"));
+    }
+    else
+    {
+        // std::_tstring mystr;
+        // mystr = "Did not find file: " + sSearchFile;
+        // MessageBox( NULL, mystr.c_str(), "File not found", MB_OK );
+
+        // If the file does not exist, the Online Update dialog
+        // has to be shown.
+        SetMsiProperty(handle, TEXT("SHOW_ONLINEUPDATE_DIALOG"));
+        FindClose(hdl);
     }
 
     return ERROR_SUCCESS;
