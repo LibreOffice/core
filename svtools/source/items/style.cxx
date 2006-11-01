@@ -4,9 +4,9 @@
  *
  *  $RCSfile: style.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:20:49 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:19:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,6 +224,9 @@ const XubString& SfxStyleSheetBase::GetParent() const
 
 BOOL SfxStyleSheetBase::SetParent( const XubString& rName )
 {
+    if ( rName == aName )
+        return FALSE;
+
     if( aParent != rName )
     {
         SfxStyleSheetBase* pIter = rPool.Find(rName, nFamily);
@@ -255,6 +258,9 @@ const XubString& SfxStyleSheetBase::GetFollow() const
 
 BOOL SfxStyleSheetBase::SetFollow( const XubString& rName )
 {
+    if ( rName == aName )
+        return FALSE;
+
     if( aFollow != rName )
     {
         if( !rPool.Find( rName, nFamily ) )
