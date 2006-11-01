@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:10:57 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:56:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,7 +367,7 @@ inline bool IsControlChar( sal_Unicode cChar )
     if( (0x0001 <= cChar) && (cChar <= 0x001F) )
         return true;
     // formatting characters
-    if( (0x200B <= cChar) && (cChar <= 0x200F) )
+    if( (0x200E <= cChar) && (cChar <= 0x200F) )
         return true;
     if( (0x2028 <= cChar) && (cChar <= 0x202E) )
         return true;
