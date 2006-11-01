@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:25:52 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:22:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -395,12 +395,7 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     if (pIPClient)
     {
         if ( pIPClient->IsObjectInPlaceActive() )
-        {
-            //TODO/CLEANUP
-            //nur im SFX Viewframe setzen
-            pIPClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
-            SfxViewFrame::SetViewFrame(pViewShell->GetViewFrame()); // 242.a: ???
-        }
+            pIPClient->DeactivateObject();
     }
 
     USHORT nClicks = rMEvt.GetClicks();
