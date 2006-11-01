@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:01:08 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:29:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,10 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
     SalI18N_InputContext *mpInputContext;
     Bool            mbInputFocus;
 
+    XRectangle*     m_pClipRectangles;
+    int             m_nCurClipRect;
+    int             m_nMaxClipRect;
+
 
     void            GetPosSize( Rectangle &rPosSize );
     void            SetSize   ( const Size      &rSize );
@@ -267,6 +271,16 @@ public:
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetBackgroundBitmap( SalBitmap* pBitmap );
+
+    // shaped system windows
+    // set clip region to none (-> rectangular windows, normal state)
+    virtual void                    ResetClipRegion();
+    // start setting the clipregion consisting of nRects rectangles
+    virtual void                    BeginSetClipRegion( ULONG nRects );
+    // add a rectangle to the clip region
+    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    // done setting up the clipregion
+    virtual void                    EndSetClipRegion();
 
     static void SaveYourselfDone( SalFrame* );
     static Bool checkKeyReleaseForRepeat( Display*, XEvent*, XPointer pX11SalFrame );
