@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:56:47 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:22:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3417,6 +3417,7 @@ void SfxBaseModel::impl_store(  const   OUSTRING&                   sURL        
         TransformParameters( SID_SAVEASDOC, seqArguments, *aParams );
 
         SFX_ITEMSET_ARG( aParams, pCopyStreamItem, SfxBoolItem, SID_COPY_STREAM_IF_POSSIBLE, sal_False );
+
         if ( pCopyStreamItem && pCopyStreamItem->GetValue() && !bSaveTo )
             throw ILLEGALARGUMENTIOEXCEPTION(
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CopyStreamIfPossible parameter is not acceptable for storeAsURL() call!") ),
