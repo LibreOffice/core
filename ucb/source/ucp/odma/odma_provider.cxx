@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odma_provider.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:58:37 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 10:12:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ ContentProvider::ContentProvider(
 ContentProvider::~ContentProvider()
 {
     ContentsMap::iterator aIter = m_aContents.begin();
-    for (;aIter != m_aContents.begin() ;++aIter )
+    for (;aIter != m_aContents.end() ;++aIter )
     {
         if(aIter->second->m_bIsOpen)
             closeDocument(aIter->first);
