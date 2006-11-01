@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvashelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:34:57 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:45:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,7 +283,7 @@ namespace cairocanvas
             LINE_COLOR, FILL_COLOR, TEXT_COLOR, IGNORE_COLOR
         };
 
-    void drawPolyPolygonPath( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
+    void doPolyPolygonPath( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
                   Operation aOperation,
                   const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >* pTextures=NULL,
                   ::cairo::Cairo* pCairo=NULL ) const;
@@ -324,7 +324,7 @@ namespace cairocanvas
         SurfaceProvider* mpSurfaceProvider;
     };
 
-    void drawPolyPolygonImplementation( ::basegfx::B2DPolyPolygon aPolyPolygon,
+    void doPolyPolygonImplementation( ::basegfx::B2DPolyPolygon aPolyPolygon,
                     Operation aOperation,
                     ::cairo::Cairo* pCairo,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >* pTextures=NULL,
