@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framecontainer.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:46:34 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:16:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,7 +350,7 @@ sal_Bool FrameContainer::hasElements() const
  *****************************************************************************************************************/
 void FrameContainer::setActive( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
-    if (xFrame.is() && exist(xFrame))
+    if ( !xFrame.is() || exist(xFrame) )
     {
         /* SAFE { */
         WriteGuard aWriteLock( m_aLock );
