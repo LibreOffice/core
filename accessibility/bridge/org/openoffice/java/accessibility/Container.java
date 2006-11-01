@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Container.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:31:13 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:07:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,6 +238,9 @@ public class Container extends java.awt.Container implements javax.accessibility
                     break;
                 case AccessibleStateType.SELECTED:
                     fireStatePropertyChange(AccessibleState.SELECTED, enable);
+                    break;
+                case AccessibleStateType.SENSITIVE:
+                    // This state equals ENABLED in OOo (but not in Gtk+) and does not exist in Java 1.5
                     break;
                 case AccessibleStateType.SHOWING:
                 case AccessibleStateType.VISIBLE:
