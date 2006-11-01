@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgutil.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:11:48 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:00:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,8 +137,11 @@ void SetFieldUnit( MetricField& rField, FieldUnit eUnit, BOOL bAll )
             rField.SetSpinSize( 10 );
     }
 
-    if ( FUNIT_POINT == eUnit && rField.GetDecimalDigits() > 1 )
-        rField.SetDecimalDigits( 1 );
+    if ( FUNIT_POINT == eUnit )
+    {
+        if( rField.GetDecimalDigits() > 1 )
+            rField.SetDecimalDigits( 1 );
+    }
     else
         rField.SetDecimalDigits( 2 );
 
