@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 12:57:54 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:20:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1549,6 +1549,12 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
             ? true : false;
         SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode();
         ASSERT( pTxtNode, "No Text-Node at PaM-Position" );
+        // --> OD 2006-10-19 #134160# - make code robust
+        if ( !pTxtNode )
+        {
+            return bRes;
+        }
+        // <--
 
         SwNumRule * pNumRule = pTxtNode->GetNumRule(); // #i27610#
 
