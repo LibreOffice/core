@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atktext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:27:50 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:10:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,8 +184,15 @@ static accessibility::XAccessibleTextAttributes*
         if( !pWrap->mpTextAttributes && pWrap->mpContext )
         {
             uno::Any any = pWrap->mpContext->queryInterface( accessibility::XAccessibleTextAttributes::static_type(NULL) );
-            pWrap->mpTextAttributes = reinterpret_cast< accessibility::XAccessibleTextAttributes * > (any.pReserved);
-            pWrap->mpTextAttributes->acquire();
+            /* Since this not a dedicated interface in Atk and thus has not
+             * been queried during wrapper initialization, we need to check
+             * the return value here.
+             */
+            if( typelib_TypeClass_INTERFACE == any.pType->eTypeClass )
+            {
+                pWrap->mpTextAttributes = reinterpret_cast< accessibility::XAccessibleTextAttributes * > (any.pReserved);
+                pWrap->mpTextAttributes->acquire();
+            }
         }
 
         return pWrap->mpTextAttributes;
@@ -207,15 +214,36 @@ text_wrapper_get_text (AtkText *text,
 
     g_return_val_if_fail( (end_offset == -1) || (end_offset >= start_offset), NULL );
 
+    /* at-spi expects the delete event to be send before the deletion happened
+     * so we save the deleted string object in the UNO event notification and
+     * fool libatk-bridge.so here ..
+     */
+    void * pData = g_object_get_data( G_OBJECT(text), "ooo::text_changed::delete" );
+    if( pData != NULL )
+    {
+        accessibility::TextSegment * pTextSegment =
+            reinterpret_cast <accessibility::TextSegment *> (pData);
+
+        if( pTextSegment->SegmentStart == start_offset &&
+            pTextSegment->SegmentEnd == end_offset )
+        {
+            rtl::OString aUtf8 = rtl::OUStringToOString( pTextSegment->SegmentText, RTL_TEXTENCODING_UTF8 );
+            return g_strdup( aUtf8.getStr() );
+        }
+    }
+
     try {
         accessibility::XAccessibleText* pText = getText( text );
         if( pText )
         {
-            rtl::OString aUtf8 = rtl::OUStringToOString( pText->getText(), RTL_TEXTENCODING_UTF8 );
+            rtl::OUString aText;
+
             if( -1 == end_offset )
-                ret = g_strdup( aUtf8.getStr() );
+                aText = pText->getText();
             else
-                ret = g_strndup( aUtf8.getStr() + start_offset, end_offset - start_offset );
+                aText = pText->getTextRange(start_offset, end_offset);
+
+            ret = g_strdup( rtl::OUStringToOString(aText, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
     catch(const uno::Exception& e) {
