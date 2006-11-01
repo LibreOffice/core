@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:24:34 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 17:46:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -938,8 +938,8 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                     // output position)
                     MapMode aLocalMapMode( aMap );
                     aLocalMapMode.SetOrigin(
-                        Point( -aTextRect.Left(),
-                               -aTextRect.Top() ) );
+                        Point( -aPaintRectangle.Left(),
+                               -aPaintRectangle.Top() ) );
                     pMtf->SetPrefMapMode( aLocalMapMode );
 
                     pMtf->AddAction( new MetaCommentAction(
