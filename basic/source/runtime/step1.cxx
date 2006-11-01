@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:31:12 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:16:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 
 // Laden einer numerischen Konstanten (+ID)
 
-void SbiRuntime::StepLOADNC( USHORT nOp1 )
+void SbiRuntime::StepLOADNC( UINT32 nOp1 )
 {
     SbxVariable* p = new SbxVariable( SbxDOUBLE );
 
@@ -70,7 +70,7 @@ void SbiRuntime::StepLOADNC( USHORT nOp1 )
 
 // Laden einer Stringkonstanten (+ID)
 
-void SbiRuntime::StepLOADSC( USHORT nOp1 )
+void SbiRuntime::StepLOADSC( UINT32 nOp1 )
 {
     SbxVariable* p = new SbxVariable;
     p->PutString( pImg->GetString( nOp1 ) );
@@ -79,7 +79,7 @@ void SbiRuntime::StepLOADSC( USHORT nOp1 )
 
 // Immediate Load (+Wert)
 
-void SbiRuntime::StepLOADI( USHORT nOp1 )
+void SbiRuntime::StepLOADI( UINT32 nOp1 )
 {
     SbxVariable* p = new SbxVariable;
     p->PutInteger( nOp1 );
@@ -88,7 +88,7 @@ void SbiRuntime::StepLOADI( USHORT nOp1 )
 
 // Speichern eines named Arguments in Argv (+Arg-Nr ab 1!)
 
-void SbiRuntime::StepARGN( USHORT nOp1 )
+void SbiRuntime::StepARGN( UINT32 nOp1 )
 {
     if( !refArgv )
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
@@ -103,7 +103,7 @@ void SbiRuntime::StepARGN( USHORT nOp1 )
 
 // Konvertierung des Typs eines Arguments in Argv fuer DECLARE-Fkt. (+Typ)
 
-void SbiRuntime::StepARGTYP( USHORT nOp1 )
+void SbiRuntime::StepARGTYP( UINT32 nOp1 )
 {
     if( !refArgv )
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
@@ -148,7 +148,7 @@ void SbiRuntime::StepARGTYP( USHORT nOp1 )
 
 // String auf feste Laenge bringen (+Laenge)
 
-void SbiRuntime::StepPAD( USHORT nOp1 )
+void SbiRuntime::StepPAD( UINT32 nOp1 )
 {
     SbxVariable* p = GetTOS();
     String& s = (String&)(const String&) *p;
@@ -160,9 +160,11 @@ void SbiRuntime::StepPAD( USHORT nOp1 )
 
 // Sprung (+Target)
 
-void SbiRuntime::StepJUMP( USHORT nOp1 )
+void SbiRuntime::StepJUMP( UINT32 nOp1 )
 {
 #ifndef PRODUCT
+    // #QUESTION shouln't this be
+    // if( (BYTE*)( nOp1+pImagGetCode() ) >= pImg->GetCodeSize() )
     if( nOp1 >= pImg->GetCodeSize() )
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
 #endif
@@ -171,7 +173,7 @@ void SbiRuntime::StepJUMP( USHORT nOp1 )
 
 // TOS auswerten, bedingter Sprung (+Target)
 
-void SbiRuntime::StepJUMPT( USHORT nOp1 )
+void SbiRuntime::StepJUMPT( UINT32 nOp1 )
 {
     SbxVariableRef p = PopVar();
     if( p->GetBool() )
@@ -180,7 +182,7 @@ void SbiRuntime::StepJUMPT( USHORT nOp1 )
 
 // TOS auswerten, bedingter Sprung (+Target)
 
-void SbiRuntime::StepJUMPF( USHORT nOp1 )
+void SbiRuntime::StepJUMPF( UINT32 nOp1 )
 {
     SbxVariableRef p = PopVar();
     if( !p->GetBool() )
@@ -195,24 +197,26 @@ void SbiRuntime::StepJUMPF( USHORT nOp1 )
 // ...
 //Falls im Operanden 0x8000 gesetzt ist, Returnadresse pushen (ON..GOSUB)
 
-void SbiRuntime::StepONJUMP( USHORT nOp1 )
+void SbiRuntime::StepONJUMP( UINT32 nOp1 )
 {
     SbxVariableRef p = PopVar();
     INT16 n = p->GetInteger();
     if( nOp1 & 0x8000 )
     {
         nOp1 &= 0x7FFF;
-        PushGosub( pCode + 3 * nOp1 );
+        //PushGosub( pCode + 3 * nOp1 );
+        PushGosub( pCode + 5 * nOp1 );
     }
-    if( n < 1 || n > (short) nOp1 )
+    if( n < 1 || static_cast<UINT32>(n) >  nOp1 )
         n = nOp1 + 1;
-    nOp1 = (USHORT) ( (const char*) pCode - pImg->GetCode() ) + 3 * --n;
+    //nOp1 = (UINT32) ( (const char*) pCode - pImg->GetCode() ) + 3 * --n;
+    nOp1 = (UINT32) ( (const char*) pCode - pImg->GetCode() ) + 5 * --n;
     StepJUMP( nOp1 );
 }
 
 // UP-Aufruf (+Target)
 
-void SbiRuntime::StepGOSUB( USHORT nOp1 )
+void SbiRuntime::StepGOSUB( UINT32 nOp1 )
 {
     PushGosub( pCode );
     if( nOp1 >= pImg->GetCodeSize() )
@@ -222,7 +226,7 @@ void SbiRuntime::StepGOSUB( USHORT nOp1 )
 
 // UP-Return (+0 oder Target)
 
-void SbiRuntime::StepRETURN( USHORT nOp1 )
+void SbiRuntime::StepRETURN( UINT32 nOp1 )
 {
     PopGosub();
     if( nOp1 )
@@ -233,7 +237,7 @@ void SbiRuntime::StepRETURN( USHORT nOp1 )
 
 void unoToSbxValue( SbxVariable* pVar, const Any& aValue );
 
-void SbiRuntime::StepTESTFOR( USHORT nOp1 )
+void SbiRuntime::StepTESTFOR( UINT32 nOp1 )
 {
     if( !pForStk )
     {
@@ -335,7 +339,7 @@ void SbiRuntime::StepTESTFOR( USHORT nOp1 )
 
 // Tos+1 <= Tos+2 <= Tos, 2xremove (+Target)
 
-void SbiRuntime::StepCASETO( USHORT nOp1 )
+void SbiRuntime::StepCASETO( UINT32 nOp1 )
 {
     if( !refCaseStk || !refCaseStk->Count() )
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
@@ -351,7 +355,7 @@ void SbiRuntime::StepCASETO( USHORT nOp1 )
 
 // Fehler-Handler
 
-void SbiRuntime::StepERRHDL( USHORT nOp1 )
+void SbiRuntime::StepERRHDL( UINT32 nOp1 )
 {
     const BYTE* p = pCode;
     StepJUMP( nOp1 );
@@ -365,7 +369,7 @@ void SbiRuntime::StepERRHDL( USHORT nOp1 )
 
 // Resume nach Fehlern (+0=statement, 1=next or Label)
 
-void SbiRuntime::StepRESUME( USHORT nOp1 )
+void SbiRuntime::StepRESUME( UINT32 nOp1 )
 {
     // AB #32714 Resume ohne Error? -> Fehler
     if( !bInError )
@@ -397,7 +401,7 @@ void SbiRuntime::StepRESUME( USHORT nOp1 )
 }
 
 // Kanal schliessen (+Kanal, 0=Alle)
-void SbiRuntime::StepCLOSE( USHORT nOp1 )
+void SbiRuntime::StepCLOSE( UINT32 nOp1 )
 {
     SbError err;
     if( !nOp1 )
@@ -416,7 +420,7 @@ void SbiRuntime::StepCLOSE( USHORT nOp1 )
 
 // Zeichen ausgeben (+char)
 
-void SbiRuntime::StepPRCHAR( USHORT nOp1 )
+void SbiRuntime::StepPRCHAR( UINT32 nOp1 )
 {
     ByteString s( (char) nOp1 );
     pIosys->Write( s );
@@ -493,7 +497,7 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
     return bOk;
 }
 
-void SbiRuntime::StepSETCLASS( USHORT nOp1 )
+void SbiRuntime::StepSETCLASS( UINT32 nOp1 )
 {
     SbxVariableRef refVal = PopVar();
     SbxVariableRef refVar = PopVar();
@@ -504,7 +508,7 @@ void SbiRuntime::StepSETCLASS( USHORT nOp1 )
         StepSET_Impl( refVal, refVar );
 }
 
-void SbiRuntime::StepTESTCLASS( USHORT nOp1 )
+void SbiRuntime::StepTESTCLASS( UINT32 nOp1 )
 {
     SbxVariableRef xObjVal = PopVar();
     String aClass( pImg->GetString( nOp1 ) );
@@ -517,7 +521,7 @@ void SbiRuntime::StepTESTCLASS( USHORT nOp1 )
 
 // Library fuer anschliessenden Declare-Call definieren
 
-void SbiRuntime::StepLIB( USHORT nOp1 )
+void SbiRuntime::StepLIB( UINT32 nOp1 )
 {
     aLibName = pImg->GetString( nOp1 );
 }
@@ -526,7 +530,7 @@ void SbiRuntime::StepLIB( USHORT nOp1 )
 // Dieser Opcode wird vor DIM/REDIM-Anweisungen gepusht,
 // wenn nur ein Index angegeben wurde.
 
-void SbiRuntime::StepBASED( USHORT nOp1 )
+void SbiRuntime::StepBASED( UINT32 nOp1 )
 {
     SbxVariable* p1 = new SbxVariable;
     SbxVariableRef x2 = PopVar();
