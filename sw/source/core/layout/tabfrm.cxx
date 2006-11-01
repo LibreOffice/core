@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:24:28 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:12:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4719,6 +4719,9 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                             // the drawing layer
                             pFly->GetVirtDrawObj()->SetChanged();
                             // <--
+                            // --> OD 2006-10-13 #i59280#
+                            pFly->InvalidateObjRectWithSpaces();
+                            // <--
                         }
 
                         if ( pFly->IsFlyInCntFrm() )
@@ -4825,6 +4828,9 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                             {
                                 pAnchoredObj->DrawObj()->Move( Size( 0, lDiff ) );
                             }
+                            // --> OD 2006-10-13 #i58280#
+                            pAnchoredObj->InvalidateObjRectWithSpaces();
+                            // <--
                         }
                         // <--
                         pAnchoredObj->InvalidateObjPos();
