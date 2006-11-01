@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: checkdeliver.pl,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-10 16:41:19 $
+#   last change: $Author: vg $ $Date: 2006-11-01 10:13:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@ my $srcdir    = '';
 my $solverdir = '';
 my $platform  = '';
 my $milestoneext = '';
+my $local_env = 0;
 my @exceptionmodlist = ("postprocess", "instset.*native"); # modules not yet delivered
 
 #### main #####
@@ -97,6 +98,21 @@ sub get_globals
     if ( ! -d $solverdir ) {
         die "Error: cannot find solver directory '$solverdir'\n";
     }
+
+    # Check for local env., taken from solenv/bin/modules/installer/control.pm
+    # In this case the content of SOLARENV starts with the content of SOL_TMP
+    my $solarenv = "";
+    my $sol_tmp;
+    if ( $ENV{'SOLARENV'} ) {
+        $solarenv = $ENV{'SOLARENV'};
+    }
+    if ( $ENV{'SOL_TMP'} ) {
+        $sol_tmp = $ENV{'SOL_TMP'};
+    }
+    if ( defined $sol_tmp && ( $solarenv =~ /^\s*\Q$sol_tmp\E/ )) {
+        # Content of SOLARENV starts with the content of SOL_TMP: Local environment
+        $local_env = 1;
+    }
 }
 
 sub get_deliver_lists
@@ -138,6 +154,14 @@ sub check
         print STDERR "Error: cannot determine module name from \'$listname\'\n";
         return 1;
     }
+    # do not bother about non existing modules in in local environment
+    if ( $local_env ) {
+        if (( ! -d "$srcdir/$module" ) && ( ! -e "$srcdir/$module.lnk/prj/d.lst" )) {
+            print STDERR "Warning: local environment, module '$module' not found. Skipping.\n";
+            return $error;
+        }
+    }
+
     # read deliver log file
     open( DELIVERLOG, "< $listname" ) or die( "Error: cannot open file \'$listname\'\n$!");
     foreach ( <DELIVERLOG> ) {
