@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atklistener.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:27:09 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:10:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,9 +358,22 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             // TODO: when GNOME starts to send "update" kind of events, change
             // we need to re-think this implementation as well
             if( aEvent.OldValue >>= aDeletedText )
+            {
+                /* Remember the text segment here to be able to return removed text in get_text().
+                 * This is clearly a hack to be used until appropriate API exists in atk to pass
+                 * the string value directly or we find a compelling reason to start caching the
+                 * UTF-8 converted strings in the atk wrapper object.
+                 */
+
+                g_object_set_data( G_OBJECT(mpAccessible), "ooo::text_changed::delete", &aDeletedText);
+
                 g_signal_emit_by_name( mpAccessible, "text_changed::delete",
                                        (gint) aDeletedText.SegmentStart,
                                        (gint)( aDeletedText.SegmentEnd - aDeletedText.SegmentStart ) );
+
+                g_object_steal_data( G_OBJECT(mpAccessible), "ooo::text_changed::delete" );
+            }
+
             if( aEvent.NewValue >>= aInsertedText )
                 g_signal_emit_by_name( mpAccessible, "text_changed::insert",
                                        (gint) aInsertedText.SegmentStart,
@@ -400,7 +413,6 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             accessibility::AccessibleTableModelChange aChange;
             aEvent.NewValue >>= aChange;
 
-            g_warning( "Test me: table model change event" );
             sal_Int32 nRowsChanged = aChange.LastRow - aChange.FirstRow + 1;
             sal_Int32 nColumnsChanged = aChange.LastColumn - aChange.FirstColumn + 1;
 
