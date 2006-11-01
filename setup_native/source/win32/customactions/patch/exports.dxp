@@ -6,3 +6,4 @@ ShutDownQuickstarter
 IsOfficeRunning
 SetFeatureState
 SetNewFeatureState
+ShowOnlineUpdateDialog
