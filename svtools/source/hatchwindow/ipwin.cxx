@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipwin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:57:53 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:18:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -482,6 +482,7 @@ SvResizeWindow::SvResizeWindow
 )
     : Window( pParent, WB_CLIPCHILDREN )
     , m_nMoveGrab( -1 )
+    , m_bActive( sal_False )
     , m_pWrapper( pWrapper )
 {
     OSL_ENSURE( pParent != NULL && pWrapper != NULL, "Wrong initialization of hatch window!\n" );
@@ -665,5 +666,31 @@ void SvResizeWindow::Resize()
 void SvResizeWindow::Paint( const Rectangle & /*rRect*/ )
 {
     m_aResizer.Draw( this );
+}
+
+long SvResizeWindow::PreNotify( NotifyEvent& rEvt )
+{
+    if ( rEvt.GetType() == EVENT_GETFOCUS && !m_bActive )
+    {
+        m_bActive = sal_True;
+        m_pWrapper->Activated();
+    }
+
+    return Window::PreNotify(rEvt);
+}
+
+long SvResizeWindow::Notify( NotifyEvent& rEvt )
+{
+    if ( rEvt.GetType() == EVENT_LOSEFOCUS && m_bActive )
+    {
+        BOOL bHasFocus = HasChildPathFocus(TRUE);
+        if ( !bHasFocus )
+        {
+            m_bActive = sal_False;
+            m_pWrapper->Deactivated();
+        }
+    }
+
+    return Window::Notify(rEvt);
 }
 
