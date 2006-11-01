@@ -4,9 +4,9 @@
 #
 #   $RCSfile: simplepackage.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-13 10:36:40 $
+#   last change: $Author: vg $ $Date: 2006-11-01 13:48:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,6 @@ sub check_simple_packager_project
 sub create_package
 {
     my ( $installdir, $packagename, $includepatharrayref ) = @_;
-
 
     # moving dir into temporary directory
     my $pid = $$; # process id
@@ -157,6 +156,29 @@ sub create_simple_package
 
     my $installlogdir = installer::systemactions::create_directory_next_to_directory($installdir, "log");
 
+    # Setting package name (similar to the download name)
+    my $packagename = "";
+
+    if ( $installer::globals::packageformat eq "archive" )
+    {
+        if ( $allvariables->{'OOODOWNLOADNAME'} )
+        {
+            $packagename = installer::download::set_download_filename($languagestringref, $allvariables);
+        }
+        else
+        {
+            $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
+            $packagename = installer::download::resolve_variables_in_downloadname($allvariables, $$downloadname, $languagestringref);
+        }
+    }
+
+    # Creating subfolder in installdir, which shall become the root of package or zip file
+    my $subfolderdir = "";
+    if ( $packagename ne "" ) { $subfolderdir = $installdir . $installer::globals::separator . $packagename; }
+    else { $subfolderdir = $installdir; }
+
+    if ( ! -d $subfolderdir ) { installer::systemactions::create_directory($subfolderdir); }
+
     # Create directories, copy files and ScpActions
 
     installer::logger::print_message( "... creating directories ...\n" );
@@ -168,7 +190,7 @@ sub create_simple_package
 
         if ( $onedir->{'HostName'} )
         {
-            my $destdir = $installdir . $installer::globals::separator . $onedir->{'HostName'};
+            my $destdir = $subfolderdir . $installer::globals::separator . $onedir->{'HostName'};
             if ( ! -d $destdir ) { installer::systemactions::create_directory_structure($destdir); }
         }
     }
@@ -177,7 +199,6 @@ sub create_simple_package
     if (( $installer::globals::strip ) && ( ! $installer::globals::iswindowsbuild )) { installer::strip::strip_libraries($filesref, $languagestringref); }
 
     # copy Files
-
     installer::logger::print_message( "... copying files ...\n" );
     installer::logger::include_header_into_logfile("Copying files:");
 
@@ -189,7 +210,7 @@ sub create_simple_package
 
         my $source = $onefile->{'sourcepath'};
         my $destination = $onefile->{'destination'};
-        $destination = $installdir . $installer::globals::separator . $destination;
+        $destination = $subfolderdir . $installer::globals::separator . $destination;
 
         # Replacing $$ by $ is necessary to install files with $ in its name (back-masquerading)
         # Otherwise, the following shell command does not work and the file list is not correct
@@ -219,7 +240,7 @@ sub create_simple_package
     {
         my $onelink = ${$linksref}[$i];
         my $destination = $onelink->{'destination'};
-        $destination = $installdir . $installer::globals::separator . $destination;
+        $destination = $subfolderdir . $installer::globals::separator . $destination;
         my $destinationfile = $onelink->{'destinationfile'};
 
         my $localcall = "ln -sf $destinationfile $destination \>\/dev\/null 2\>\&1";
@@ -231,23 +252,9 @@ sub create_simple_package
 
     if ( $installer::globals::packageformat eq "archive" )
     {
-        # Setting package name (similar to the download name)
-
-        my $packagename = "";
-        if ( $allvariables->{'OOODOWNLOADNAME'} )
-        {
-            $packagename = installer::download::set_download_filename($languagestringref, $allvariables);
-        }
-        else
-        {
-            $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
-            $packagename = installer::download::resolve_variables_in_downloadname($allvariables, $$downloadname, $languagestringref);
-        }
-
         # creating a package
         # -> zip for Windows
         # -> tar.gz for all other platforms
-
         create_package($installdir, $packagename, $includepatharrayref);
     }
 
