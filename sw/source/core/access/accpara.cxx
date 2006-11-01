@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:37:55 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:09:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,7 +238,17 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
             if( GetPortionData().IsValidCorePosition( nIndex ) )
             {
                 // Yes, it's us!
-                nRet = GetPortionData().GetAccessiblePosition( nIndex );
+                // --> OD 2006-10-19 #70538#
+                // consider that cursor/caret is in front of the list label
+                if ( pCaret->IsInFrontOfLabel() )
+                {
+                    nRet = 0;
+                }
+                else
+                {
+                    nRet = GetPortionData().GetAccessiblePosition( nIndex );
+                }
+                // <--
 
                 DBG_ASSERT( nRet >= 0, "invalid cursor?" );
                 DBG_ASSERT( nRet <= GetPortionData().GetAccessibleString().
