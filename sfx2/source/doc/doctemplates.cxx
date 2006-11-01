@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:40:33 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:54:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -896,7 +896,9 @@ sal_Bool SfxDocTplService_Impl::CreateNewUniqueFolderWithPrefix( const ::rtl::OU
        {
         for ( sal_Int32 nInd = 0; nInd < 32000; nInd++ )
         {
-            ::rtl::OUString aTryName = aPrefix + ::rtl::OUString::valueOf( nInd );
+            ::rtl::OUString aTryName = aPrefix;
+            if ( nInd )
+                aTryName += ::rtl::OUString::valueOf( nInd );
 
             try
             {
@@ -1280,6 +1282,12 @@ void SfxDocTplService_Impl::doUpdate()
         {
             if ( pGroup->getInHierarchy() )
             {
+                Content aGroup;
+                if ( Content::create( pGroup->getHierarchyURL(), maCmdEnv, aGroup ) )
+                    setProperty( aGroup,
+                                 OUString( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) ),
+                                 makeAny( pGroup->getTargetURL() ) );
+
                 ULONG nCount = pGroup->count();
                 for ( ULONG i=0; i<nCount; i++ )
                 {
@@ -2527,10 +2535,11 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
     if ( !pGroup )
     {
         pGroup = new GroupData_Impl( aTitle );
-        if ( bWriteableGroup )
-            pGroup->setTargetURL( rOwnURL );
         rList.Insert( pGroup );
     }
+
+    if ( bWriteableGroup )
+        pGroup->setTargetURL( rOwnURL );
 
     pGroup->setInUse();
 
