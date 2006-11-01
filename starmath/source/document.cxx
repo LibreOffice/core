@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:52:24 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:15:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1430,37 +1430,6 @@ void SmDocShell::SetVisArea(const Rectangle & rVisArea)
         EnableSetModified( bIsEnabled );
 }
 
-
-void SmDocShell::UIActivate (BOOL bActivate)
-{
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::UIActivate" );
-
-    SmViewShell *pViewSh = SmGetActiveView();
-    if (bActivate)
-    {
-        SfxObjectShell::UIActivate (bActivate);
-        SmCmdBoxWrapper *pWrapper = NULL;
-        if (pViewSh)
-            pWrapper = (SmCmdBoxWrapper *)pViewSh->GetViewFrame()->
-                    GetChildWindow( SmCmdBoxWrapper::GetChildWindowId() );
-
-        SmEditWindow *pEditWin = pWrapper ? pWrapper->GetEditWindow() : 0;
-        if (pEditWin)
-            pEditWin->GrabFocus();
-    }
-    else
-    {
-        if (pViewSh)
-        {
-            pViewSh->GetViewFrame()->GetDispatcher()->Execute(
-                    SID_GETEDITTEXT, SFX_CALLMODE_STANDARD,
-                    new SfxVoidItem (SID_GETEDITTEXT), 0L);
-            Repaint();
-        }
-
-        SfxObjectShell::UIActivate (bActivate);
-    }
-}
 
 void SmDocShell::FillClass(SvGlobalName* pClassName,
                            sal_uInt32*  pFormat,
