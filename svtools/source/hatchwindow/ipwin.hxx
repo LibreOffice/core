@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipwin.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:51:15 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:19:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,7 @@ class SvResizeWindow : public Window
     Pointer         m_aOldPointer;
     short           m_nMoveGrab;  // Letzer Pointertyp
     SvResizeHelper  m_aResizer;
+    sal_Bool        m_bActive;
 
     VCLXHatchWindow* m_pWrapper;
 public:
@@ -118,6 +119,8 @@ public:
     void    KeyInput( const KeyEvent & rEvt );
     void    Resize();
     void    Paint( const Rectangle & );
+    long    Notify( NotifyEvent& rNEvt );
+    long    PreNotify( NotifyEvent& rNEvt );
 
     void    QueryObjAreaPixel( Rectangle & );
     void    RequestObjAreaPixel( const Rectangle & );
