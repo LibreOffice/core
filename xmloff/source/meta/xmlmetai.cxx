@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:44:16 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:51:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,13 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+
+#include <xmluconv.hxx>
 
 #include "xmlmetai.hxx"
 #include "xmltkmap.hxx"
@@ -96,7 +99,7 @@ using namespace ::xmloff::token;
 #define PROP_EDITINGDURATION "EditingDuration"
 
 #define PROP_CHARLOCALE     "CharLocale"
-
+#define PROP_DOCSTATISTIC   "DocumentStatistic"
 
 //-------------------------------------------------------------------------
 
@@ -476,7 +479,106 @@ SfxXMLMetaElementContext::SfxXMLMetaElementContext( SvXMLImport& rImport, sal_uI
         }
     }
     else if ( nElementType == XML_TOK_META_DOCUMENT_STATISTIC )
+    {
+        // everything is in attributes
+
+        // set the attributes to the document
+        // TODO/LATER: in future the statistic should be read from the document info
         GetImport().SetStatisticAttributes(xAttrList);
+
+        // provide the attributes to the document info
+        uno::Reference<beans::XPropertySet> xInfoProp = rParent.GetInfoProp();
+        if ( xInfoProp.is() )
+        {
+            sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+            uno::Sequence< beans::NamedValue > aDocStatistic( nAttrCount );
+            sal_Int16 nRecognizedCount = 0;
+            for( sal_Int16 i=0; i < nAttrCount; i++ )
+            {
+                rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+                rtl::OUString aLocalName;
+                sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(
+                                                    sAttrName, &aLocalName );
+
+                rtl::OUString sValue = xAttrList->getValueByIndex( i );
+                sal_Int32 nValue;
+                if( !GetImport().GetMM100UnitConverter().convertNumber( nValue, sValue ) )
+                    continue;
+
+                if ( nPrefix == XML_NAMESPACE_META )
+                {
+                    // Common document statistic
+                    if ( IsXMLToken( aLocalName, XML_TABLE_COUNT ) )
+                    {
+                        nRecognizedCount++;
+                        aDocStatistic[nRecognizedCount-1].Name =
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TableCount" ) );
+                        aDocStatistic[nRecognizedCount-1].Value <<= nValue;
+                    }
+                    else if ( IsXMLToken( aLocalName, XML_OBJECT_COUNT ) )
+                    {
+                        nRecognizedCount++;
+                        aDocStatistic[nRecognizedCount-1].Name =
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ObjectCount" ) );
+                        aDocStatistic[nRecognizedCount-1].Value <<= nValue;
+                    }
+                    // Writer related document statistic
+                    else if ( IsXMLToken( aLocalName, XML_IMAGE_COUNT ) )
+                    {
+                        nRecognizedCount++;
+                        aDocStatistic[nRecognizedCount-1].Name =
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ImageCount" ) );
+                        aDocStatistic[nRecognizedCount-1].Value <<= nValue;
+                    }
+                    else if ( IsXMLToken( aLocalName, XML_PAGE_COUNT ) )
+                    {
+                        nRecognizedCount++;
+                        aDocStatistic[nRecognizedCount-1].Name =
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageCount" ) );
+                        aDocStatistic[nRecognizedCount-1].Value <<= nValue;
+                    }
+                    else if ( IsXMLToken( aLocalName, XML_PARAGRAPH_COUNT ) )
+                    {
+                        nRecognizedCount++;
+                        aDocStatistic[nRecognizedCount-1].Name =
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParagraphCount" ) );
+                        aDocStatistic[nRecognizedCount-1].Value <<= nValue;
+                    }
+                    else if ( IsXMLToken( aLocalName, XML_WORD_COUNT ) )
+                    {
+                        nRecognizedCount++;
+                        aDocStatistic[nRecognizedCount-1].Name =
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WordCount" ) );
+                        aDocStatistic[nRecognizedCount-1].Value <<= nValue;
+                    }
+                    else if ( IsXMLToken( aLocalName, XML_CHARACTER_COUNT ) )
+                    {
+                        nRecognizedCount++;
+                        aDocStatistic[nRecognizedCount-1].Name =
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharacterCount" ) );
+                        aDocStatistic[nRecognizedCount-1].Value <<= nValue;
+                    }
+                    // Spreadsheet related document statistic
+                    else if ( IsXMLToken( aLocalName, XML_CELL_COUNT ) )
+                    {
+                        nRecognizedCount++;
+                        aDocStatistic[nRecognizedCount-1].Name =
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CellCount" ) );
+                        aDocStatistic[nRecognizedCount-1].Value <<= nValue;
+                    }
+                }
+            }
+
+            if ( nRecognizedCount )
+            {
+                aDocStatistic.realloc( nRecognizedCount );
+                 aPropAny <<= aDocStatistic;
+                xInfoProp->setPropertyValue(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PROP_DOCSTATISTIC ) ),
+                    aPropAny );
+            }
+        }
+    }
 }
 
 SfxXMLMetaElementContext::~SfxXMLMetaElementContext()
@@ -555,6 +657,12 @@ void SfxXMLMetaElementContext::EndElement()
         case XML_TOK_META_LANGUAGE:
             {
                 uno::Reference<beans::XPropertySet> xDocProp = rParent.GetDocProp();
+                if ( !xDocProp.is() )
+                {
+                    // if it is a standalone document info service try to use the info prop
+                    xDocProp = xInfoProp;
+                }
+
                 if ( xDocProp.is() )
                 {
                     //  set document language in document properties
@@ -621,6 +729,7 @@ void SfxXMLMetaElementContext::EndElement()
             }
             break;
         case XML_TOK_META_DOCUMENT_STATISTIC:
+            //  nothing to do, everything is handled in attributes
             break;
         case XML_TOK_META_GENERATOR:
             {
