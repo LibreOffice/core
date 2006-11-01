@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nochaos.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:45:57 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:28:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,9 +214,8 @@ CntStaticPoolDefaults_Impl::CntStaticPoolDefaults_Impl( CntItemPool* /*pPool*/ )
   m_ppDefaults( new SfxPoolItem* [ m_nItems ] ),
   m_pItemInfos( new SfxItemInfo  [ m_nItems ] )
 {
-    rtl_zeroMemory( m_ppDefaults, sizeof( m_ppDefaults ) * m_nItems );
-    rtl_zeroMemory( m_pItemInfos, sizeof( m_pItemInfos ) * m_nItems );
-
+    rtl_zeroMemory( m_ppDefaults, sizeof( SfxPoolItem* ) * m_nItems );
+    rtl_zeroMemory( m_pItemInfos, sizeof( SfxItemInfo ) * m_nItems );
     Insert(
         new SfxStringItem( WID_CHAOS_START, String() ),
         0,
