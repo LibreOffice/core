@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:29:49 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:26:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -790,7 +790,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         }
         SfxAllItemSet aInternalSet( SFX_APP()->GetPool() );
         if (xFrameRef.is()) // an empty set is no problem ... but an empty frame reference can be a problem !
-            aInternalSet.Put( SfxUnoAnyItem( SID_DOCFRAME, css::uno::makeAny(xFrameRef) ) );
+            aInternalSet.Put( SfxUnoAnyItem( SID_FILLFRAME, css::uno::makeAny(xFrameRef) ) );
 
         sal_Bool bSuccess = sal_False;
         sal_Bool bFailure = sal_False;
