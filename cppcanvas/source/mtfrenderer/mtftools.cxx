@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mtftools.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:59:56 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 17:48:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,6 +300,10 @@ namespace cppcanvas
                                          const ::cppcanvas::internal::OutDevState&  rState )
         {
             const BOOL bOldMode( rVDev.IsMapModeEnabled() );
+
+            // #i68512# Force metric regeneration with mapmode enabled
+            // (prolly OutDev bug)
+            rVDev.GetFontMetric();
 
             // will restore map mode below
             const_cast< ::VirtualDevice& >(rVDev).EnableMapMode( FALSE );
