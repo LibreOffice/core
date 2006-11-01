@@ -4,9 +4,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:20:41 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:20:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -969,6 +969,12 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         else if ( lObjArgs[nObjInd].Name.equalsAscii( "DefaultParentBaseURL" ) )
         {
             lObjArgs[nObjInd].Value >>= m_aDefaultParentBaseURL;
+        }
+        else if ( lObjArgs[nObjInd].Name.equalsAscii( "IndividualMiscStatus" ) )
+        {
+            sal_Int64 nMiscStatus=0;
+            lObjArgs[nObjInd].Value >>= nMiscStatus;
+            m_nMiscStatus |= nMiscStatus;
         }
 
     sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
