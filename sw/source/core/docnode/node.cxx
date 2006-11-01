@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:01:24 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:11:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,7 +249,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const BYTE nNdType )
     if( rWhere.GetIndex() )
     {
         SwNode* pNd = rNodes[ rWhere.GetIndex() -1 ];
-        rNodes.Insert( pInsNd, rWhere );
+        rNodes.InsertNode( pInsNd, rWhere, false );
         if( 0 == ( pStartOfSection = pNd->GetStartNode()) )
         {
             pStartOfSection = pNd->pStartOfSection;
@@ -262,7 +262,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const BYTE nNdType )
     }
     else
     {
-        rNodes.Insert( pInsNd, rWhere );
+        rNodes.InsertNode( pInsNd, rWhere, false );
         pStartOfSection = (SwStartNode*)this;
     }
 
@@ -282,7 +282,7 @@ SwNode::SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNdType )
     if( nPos )
     {
         SwNode* pNd = rNodes[ nPos - 1 ];
-        rNodes.Insert( pInsNd, nPos );
+        rNodes.InsertNode( pInsNd, nPos, false );
         if( 0 == ( pStartOfSection = pNd->GetStartNode()) )
         {
             pStartOfSection = pNd->pStartOfSection;
@@ -295,7 +295,7 @@ SwNode::SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNdType )
     }
     else
     {
-        rNodes.Insert( pInsNd, nPos );
+        rNodes.InsertNode( pInsNd, nPos, false );
         pStartOfSection = (SwStartNode*)this;
     }
 
