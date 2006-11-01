@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 12:19:38 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:10:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1058,26 +1058,32 @@ void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
     if ( ! rPam.HasMark())
     {
         SwTxtNode * pTxtNd = rPam.GetPoint()->nNode.GetNode().GetTxtNode();
-        SwNumRule * pRule = pTxtNd->GetNumRuleSync();
+        // --> OD 2006-10-19 #134160#
+        // consider case that the PaM doesn't denote a text node - e.g. it denotes a graphic node
+        if ( pTxtNd )
+        {
+            SwNumRule * pRule = pTxtNd->GetNumRuleSync();
 
-        if (pRule && pRule->GetName() == pNew->GetName())
-        {
-            bSetItem = sal_False;
-        }
-        // --> OD 2005-10-26 #b6340308# - only clear numbering attribute at
-        // text node, if at paragraph style the new numbering rule is found.
-        else if ( !pRule )
-        {
-            SwTxtFmtColl* pColl = pTxtNd->GetTxtColl();
-            if ( pColl )
+            if (pRule && pRule->GetName() == pNew->GetName())
             {
-                SwNumRule* pCollRule = FindNumRulePtr(pColl->GetNumRule().GetValue());
-                if ( pCollRule && pCollRule->GetName() == pNew->GetName() )
+                bSetItem = sal_False;
+            }
+            // --> OD 2005-10-26 #b6340308# - only clear numbering attribute at
+            // text node, if at paragraph style the new numbering rule is found.
+            else if ( !pRule )
+            {
+                SwTxtFmtColl* pColl = pTxtNd->GetTxtColl();
+                if ( pColl )
                 {
-                    pTxtNd->SwCntntNode::ResetAttr( RES_PARATR_NUMRULE );
-                    bSetItem = sal_False;
+                    SwNumRule* pCollRule = FindNumRulePtr(pColl->GetNumRule().GetValue());
+                    if ( pCollRule && pCollRule->GetName() == pNew->GetName() )
+                    {
+                        pTxtNd->SwCntntNode::ResetAttr( RES_PARATR_NUMRULE );
+                        bSetItem = sal_False;
+                    }
                 }
             }
+            // <--
         }
         // <--
     }
@@ -1850,15 +1856,21 @@ BOOL SwDoc::NumUpDown( const SwPaM& rPam, BOOL bDown )
         {
             SwTxtNode* pTNd = GetNodes()[ nTmp ]->GetTxtNode();
 
-            SwNumRule * pRule = pTNd->GetNumRule();
-
-            if (pRule)
+            // --> OD 2006-10-19 #134160# - make code robust:
+            // consider case that the node doesn't denote a text node.
+            if ( pTNd )
             {
-                BYTE nLevel = pTNd->GetLevel();
-                if( (-1 == nDiff && 0 >= nLevel) ||
-                    (1 == nDiff && MAXLEVEL - 1 <= nLevel))
-                    bRet = FALSE;
+                SwNumRule * pRule = pTNd->GetNumRule();
+
+                if (pRule)
+                {
+                    BYTE nLevel = pTNd->GetLevel();
+                    if( (-1 == nDiff && 0 >= nLevel) ||
+                        (1 == nDiff && MAXLEVEL - 1 <= nLevel))
+                        bRet = FALSE;
+                }
             }
+            // <--
         }
 
         if( bRet )
