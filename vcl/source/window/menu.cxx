@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:35:20 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:09:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -714,6 +714,7 @@ void DecoToolBox::SetImages( long nMaxHeight )
 class MenuBarWindow : public Window
 {
     friend class MenuBar;
+    friend class Menu;
 
 private:
     struct AddButtonEntry
@@ -3057,6 +3058,23 @@ bool Menu::IsHighlighted( USHORT nItemPos ) const
     }
 
     return bRet;
+}
+
+void Menu::HighlightItem( USHORT nItemPos )
+{
+    if ( pWindow )
+    {
+        if ( bIsMenuBar )
+        {
+            MenuBarWindow* pMenuWin = static_cast< MenuBarWindow* >( pWindow );
+            pMenuWin->SetAutoPopup( FALSE );
+            pMenuWin->ChangeHighlightItem( nItemPos, FALSE );
+        }
+        else
+        {
+            static_cast< MenuFloatingWindow* >( pWindow )->ChangeHighlightItem( nItemPos, FALSE );
+        }
+    }
 }
 
 // -----------
