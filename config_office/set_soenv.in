@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.122 $
-# Date:        $Date: 2006-10-30 09:18:48 $
+# Version:     $Revision: 1.123 $
+# Date:        $Date: 2006-11-01 13:49:54 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1498,6 +1498,7 @@ else
 }
 # Languages
 ToFile( "WITH_LANG",         "@WITH_LANG@",      "e" );
+ToFile( "WITH_POOR_HELP_LOCALIZATIONS", "@WITH_POOR_HELP_LOCALIZATIONS@", "e" );
 
 ToFile( "CALL_CDECL",        $CALL_CDECL,        "e" );
 ToFile( "COMMON_OUTDIR",     $COMMON_OUTDIR,     "e" );
