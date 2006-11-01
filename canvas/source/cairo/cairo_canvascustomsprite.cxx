@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvascustomsprite.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:18:22 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:45:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,10 @@ namespace cairocanvas
     {
         ENSURE_AND_THROW( rRefDevice.get(),
                           "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
+
+        OSL_TRACE("sprite size: %d, %d",
+                  ::canvas::tools::roundUp( rSpriteSize.Width ),
+                  ::canvas::tools::roundUp( rSpriteSize.Height ));
 
         //mpBufferSurface = mpSpriteCanvas->getSurface( aSize, CAIRO_CONTENT_COLOR );
         mpBufferSurface = mpSpriteCanvas->getSurface( maSize );
