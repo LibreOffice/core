@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_base.scp,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:51:46 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 13:52:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ End
 File gid_File_Help_Sdatabase_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY_PATCH;
-    EXTRA_ALL_LANG(sdatabase);
+    EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(sdatabase);
     Patchfiles = ("sdatabase.db",
                   "sdatabase.ht",
                   "sdatabase.jar",
