@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:39:17 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:20:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,7 @@ public:
     OCommonEmbeddedObject* GetEmbedObject() { return m_pEmbedObj; }
 
     void SetComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable >& xDoc, sal_Bool bReadOnly );
-
+    void ResizeHatchWindow();
     void LockOffice();
     void FreeOffice();
 
@@ -241,7 +241,8 @@ public:
 // XHatchWindowController
     virtual void SAL_CALL requestPositioning( const ::com::sun::star::awt::Rectangle& aRect ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::awt::Rectangle SAL_CALL calcAdjustedRectangle( const ::com::sun::star::awt::Rectangle& aRect ) throw (::com::sun::star::uno::RuntimeException);
-
+    virtual void SAL_CALL activated(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL deactivated(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif
