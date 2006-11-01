@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsanalyze.pl,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-22 16:20:03 $
+#   last change: $Author: vg $ $Date: 2006-11-01 10:12:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ $log = Logging->new() if (!$@);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.15 $ ';
+my $id_str = ' $Revision: 1.16 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -582,6 +582,12 @@ sub integrate_module
                         if ( $rev =~ /^$master_branch_rev\.\d+/ ) {
                             $last_rev = $rev;
                         }
+                    }
+                    if ( !defined($last_rev) ) {
+                        # no revision has ever been committed on the
+                        # master branch => give $last_rev an artificial
+                        # "0" revision
+                        $last_rev = $master_branch_rev . '.0';
                     }
                 }
                 my @rev_field = split(/\./, $last_rev);
