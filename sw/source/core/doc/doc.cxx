@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 12:02:57 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:10:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1537,24 +1537,33 @@ BOOL SwDoc::RemoveInvisibleContent()
         SwClientIter aIter( *GetSysFldType( RES_HIDDENPARAFLD ) );
         for( SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
                 pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
+        {
             if( pFmtFld->GetTxtFld() &&
                 0 != ( pTxtNd = (SwTxtNode*)pFmtFld->GetTxtFld()->GetpTxtNode() ) &&
                 pTxtNd->GetpSwpHints() && pTxtNd->HasHiddenParaField() &&
                 &pTxtNd->GetNodes() == &GetNodes() )
             {
                 bRet = TRUE;
-                // ein versteckter Absatz -> entfernen oder Inhalt loeschen?
                 SwPaM aPam( *pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().Len() );
 
-                if( 2 != pTxtNd->EndOfSectionIndex() -
-                        pTxtNd->StartOfSectionIndex() )
+                // Remove hidden paragraph or delete contents:
+                // Delete contents if
+                // 1. removing the paragraph would result in an empty section or
+                // 2. if the paragraph is the last paragraph in the section and
+                //    there is no paragraph in front of the paragraph:
+                if ( ( 2 == pTxtNd->EndOfSectionIndex() - pTxtNd->StartOfSectionIndex() ) ||
+                     ( 1 == pTxtNd->EndOfSectionIndex() - pTxtNd->GetIndex() &&
+                       !GetNodes()[ pTxtNd->GetIndex() - 1 ]->GetTxtNode() ) )
+                {
+                    Delete( aPam );
+                }
+                else
                 {
                     aPam.DeleteMark();
                     DelFullPara( aPam );
                 }
-                else
-                    Delete( aPam );
             }
+        }
     }
 
     //
@@ -1571,16 +1580,30 @@ BOOL SwDoc::RemoveInvisibleContent()
             {
                 bRemoved = TRUE;
                 bRet = TRUE;
-                aPam.DeleteMark();
-                DelFullPara( aPam );
+
+                // Remove hidden paragraph or delete contents:
+                // Delete contents if
+                // 1. removing the paragraph would result in an empty section or
+                // 2. if the paragraph is the last paragraph in the section and
+                //    there is no paragraph in front of the paragraph:
+
+                if ( ( 2 == pTxtNd->EndOfSectionIndex() - pTxtNd->StartOfSectionIndex() ) ||
+                     ( 1 == pTxtNd->EndOfSectionIndex() - pTxtNd->GetIndex() &&
+                       !GetNodes()[ pTxtNd->GetIndex() - 1 ]->GetTxtNode() ) )
+                {
+                    Delete( aPam );
+                }
+                else
+                {
+                    aPam.DeleteMark();
+                    DelFullPara( aPam );
+                }
             }
             else if ( pTxtNd->HasHiddenCharAttribute( false ) )
             {
                 bRemoved = TRUE;
                 bRet = TRUE;
-                //!!!! NEEDS FIX TRA !!!!!!
-                //                SwScriptInfo::DeleteHiddenRanges( *pTxtNd );
-                //!!!! NEEDS FIX TRA !!!!!!
+                SwScriptInfo::DeleteHiddenRanges( *pTxtNd );
             }
 
             // --> FME 2006-01-11 #120473#
