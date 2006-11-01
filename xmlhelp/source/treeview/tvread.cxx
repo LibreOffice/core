@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tvread.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-30 08:35:42 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 13:50:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -748,7 +748,11 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
              osl::FileBase::E_None == osl::DirectoryItem::get( url + locale.copy( 0,idx ),
                                                                aDirItem ) )
         ret = locale.copy( 0,idx );
-
+    else
+        {
+        locale = rtl::OUString::createFromAscii( "en-US" );
+        ret = rtl::OUString::createFromAscii("en");
+        }
     url = url + ret;
 
     // first of all, try do determine whether there are any *.tree files present
