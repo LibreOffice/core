@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:03:31 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 10:15:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1016,7 +1016,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                             // if the size still was not set the default size will be set later
                         }
 
-                        Size aSize( aSz.Width, aSz.Height );
+                        aSize = Size( aSz.Width, aSz.Height );
 
                         if( !aSize.Width() || !aSize.Height() )
                         {
