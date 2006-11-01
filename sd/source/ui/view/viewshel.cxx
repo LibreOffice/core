@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:45:30 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:05:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -465,6 +465,7 @@ void ViewShell::Activate(BOOL bIsMDIActivate)
 void ViewShell::UIActivating( SfxInPlaceClient* pCli )
 {
     OSL_ASSERT (GetViewShell()!=NULL);
+    GetViewShellBase().GetToolBarManager().ToolBarsDestroyed();
 }
 
 
@@ -472,6 +473,9 @@ void ViewShell::UIActivating( SfxInPlaceClient* pCli )
 void ViewShell::UIDeactivated( SfxInPlaceClient* pCli )
 {
     OSL_ASSERT (GetViewShell()!=NULL);
+    GetViewShellBase().GetToolBarManager().ToolBarsDestroyed();
+    if ( GetDrawView() )
+        GetViewShellBase().GetToolBarManager().SelectionHasChanged(*this, *GetDrawView());
 }
 
 /*************************************************************************
