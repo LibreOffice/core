@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:27:11 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:22:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -434,14 +434,8 @@ void __EXPORT ScDrawView::MarkListHasChanged()
     {
         //  #41730# beim ViewShell::Activate aus dem Reset2Open nicht die Handles anzeigen
         bDisableHdl = TRUE;
-
-            //TODO/CLEANUP
-            //nur im SFX Viewframe setzen
-        pClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
-        SfxViewFrame::SetViewFrame(pViewSh->GetViewFrame());
-
+        pClient->DeactivateObject();
         bDisableHdl = FALSE;
-
         //  Image-Ole wieder durch Grafik ersetzen passiert jetzt in ScClient::UIActivate
     }
 
