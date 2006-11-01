@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowscustomaction_ooo.scp,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 12:12:08 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 13:54:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,6 +283,15 @@ WindowsCustomAction gid_Customaction_Patch_SetFeatureState
 	Target = "SetFeatureState";
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed", "SetNewFeatureState");
+End
+
+WindowsCustomAction gid_Customaction_Patch_ShowOnlineUpdateDialog
+	Name = "ShowOnlineUpdateDialog";
+	Typ = "65";
+	Source = "patchmsi.dll";
+	Target = "ShowOnlineUpdateDialog";
+	Inbinarytable = 1;
+	Assignment1 = ("ControlEvent", "DestinationFolder", "Next", "DoAction", "ShowOnlineUpdateDialog", "1", "0");
 End
 
 WindowsCustomAction gid_Customaction_Patch_DeinstallExchangeFiles
