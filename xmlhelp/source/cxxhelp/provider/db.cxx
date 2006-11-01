@@ -4,9 +4,9 @@
  *
  *  $RCSfile: db.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:16:31 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:07:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,44 +59,6 @@ namespace berkeleydbproxy {
 
 //----------------------------------------------------------------------------
 
-DbEnv::DbEnv(u_int32_t flags)
-: m_pDBENV(0)
-{
-    db_internal::check_error( db_env_create(&m_pDBENV,flags), "DbEnv::DbEnv" );
-}
-
-DbEnv::~DbEnv()
-{
-    if (m_pDBENV)
-    {
-        // should not happen
-        // TODO: add assert
-        m_pDBENV->close(m_pDBENV,0);
-    }
-}
-
-int DbEnv::open(const char *db_home, u_int32_t flags, int mode)
-{
-  return db_internal::check_error( m_pDBENV->open(m_pDBENV,db_home,flags,mode), "DbEnv::open" );
-}
-
-void DbEnv::close(u_int32_t flags)
-{
-    int error = m_pDBENV->close(m_pDBENV,flags);
-    m_pDBENV = 0;
-
-    db_internal::check_error(error, "DbEnv::close");
-}
-
-int DbEnv::set_alloc(db_malloc_fcn_type app_malloc,
-                     db_realloc_fcn_type app_realloc,
-                     db_free_fcn_type app_free)
-{
-    int err = m_pDBENV->set_alloc(m_pDBENV,app_malloc,app_realloc,app_free);
-    return db_internal::check_error(err,"Db::set_alloc");
-}
-//----------------------------------------------------------------------------
-
 int Db::set_alloc(   db_malloc_fcn_type app_malloc,
                      db_realloc_fcn_type app_realloc,
                      db_free_fcn_type app_free)
@@ -105,10 +67,9 @@ int Db::set_alloc(   db_malloc_fcn_type app_malloc,
     return db_internal::check_error(err,"Db::set_alloc");
 }
 
-Db::Db(DbEnv* pDbenv,u_int32_t flags)
-: m_pDBP(0)
+Db::Db()
 {
-    db_internal::check_error( db_create(&m_pDBP,pDbenv ? pDbenv->m_pDBENV:0,flags),"Db::Db" );
+    db_internal::check_error( db_create(&m_pDBP,0,0),"Db::Db" );
 }
 
 
