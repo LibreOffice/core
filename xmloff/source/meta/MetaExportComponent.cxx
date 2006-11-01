@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MetaExportComponent.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:38:57 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:50:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,10 +64,18 @@
 #include <com/sun/star/uno/Exception.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+
 // #110680#
 //#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 //#include <comphelper/processfactory.hxx>
 //#endif
+
+#ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
+#include <comphelper/genericpropertyset.hxx>
+#endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -89,6 +97,10 @@
 #include "xmlmetae.hxx"
 #endif
 
+#ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
+#include "PropertySetMerger.hxx"
+#endif
+
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -101,7 +113,7 @@ using namespace ::xmloff::token;
 XMLMetaExportComponent::XMLMetaExportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         sal_uInt16 nFlags )
-:   SvXMLExport( xServiceFactory, MAP_INCH, XML_META, nFlags )
+:   SvXMLExport( xServiceFactory, MAP_INCH, XML_TEXT, nFlags )
 {
 }
 
@@ -109,31 +121,121 @@ XMLMetaExportComponent::~XMLMetaExportComponent()
 {
 }
 
+void SAL_CALL XMLMetaExportComponent::setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+{
+    try
+    {
+        SvXMLExport::setSourceDocument( xDoc );
+    }
+    catch( lang::IllegalArgumentException& )
+    {
+        // allow to use document info service without model access
+        // this is required for standalone document info exporter
+        xDocInfo = uno::Reference< document::XDocumentInfo >::query( xDoc );
+        if( !xDocInfo.is() )
+            throw lang::IllegalArgumentException();
+    }
+}
+
 sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
 {
-    GetDocHandler()->startDocument();
+    uno::Reference< xml::sax::XDocumentHandler > xDocHandler = GetDocHandler();
+
+    if( (getExportFlags() & EXPORT_OASIS) == 0 )
     {
+        uno::Reference< lang::XMultiServiceFactory > xFactory = getServiceFactory();
+        if( xFactory.is() )
+        {
+            try
+            {
+                ::comphelper::PropertyMapEntry aInfoMap[] =
+                {
+                    { "Class", sizeof("Class")-1, 0,
+                        &::getCppuType((::rtl::OUString*)0),
+                          beans::PropertyAttribute::MAYBEVOID, 0},
+                    { NULL, 0, 0, NULL, 0, 0 }
+                };
+                uno::Reference< beans::XPropertySet > xConvPropSet(
+                    ::comphelper::GenericPropertySet_CreateInstance(
+                            new ::comphelper::PropertySetInfo( aInfoMap ) ) );
+
+                uno::Any aAny;
+                aAny <<= GetXMLToken( XML_TEXT );
+                xConvPropSet->setPropertyValue(
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Class")), aAny );
+
+                uno::Reference< beans::XPropertySet > xPropSet =
+                    getExportInfo().is()
+                        ?  PropertySetMerger_CreateInstance( getExportInfo(),
+                                                          xConvPropSet )
+                        : getExportInfo();
+
+                uno::Sequence< uno::Any > aArgs( 3 );
+                aArgs[0] <<= xDocHandler;
+                aArgs[1] <<= xPropSet;
+                aArgs[2] <<= GetModel();
+
+                // get filter component
+                xDocHandler = uno::Reference< xml::sax::XDocumentHandler >(
+                    xFactory->createInstanceWithArguments(
+                        ::rtl::OUString::createFromAscii("com.sun.star.comp.Oasis2OOoTransformer"),
+                        aArgs),
+                    uno::UNO_QUERY_THROW );
+
+                SetDocHandler( xDocHandler );
+            }
+            catch( com::sun::star::uno::Exception& )
+            {
+                OSL_ENSURE( sal_False, "Can not intantiate com.sun.star.comp.Oasis2OOoTransformer!\n");
+            }
+        }
+    }
+
+
+    xDocHandler->startDocument();
+    {
+#if 0
         GetAttrList().AddAttribute(
-            GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_DC ),
-            GetNamespaceMap().GetNameByKey( XML_NAMESPACE_DC ) );
+                GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_DC ),
+                GetNamespaceMap().GetNameByKey( XML_NAMESPACE_DC ) );
         GetAttrList().AddAttribute(
-            GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_META ),
-            GetNamespaceMap().GetNameByKey( XML_NAMESPACE_META ) );
+                GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_META ),
+                GetNamespaceMap().GetNameByKey( XML_NAMESPACE_META ) );
         GetAttrList().AddAttribute(
-            GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_OFFICE ),
-            GetNamespaceMap().GetNameByKey( XML_NAMESPACE_OFFICE ) );
+                GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_OFFICE ),
+                GetNamespaceMap().GetNameByKey( XML_NAMESPACE_OFFICE ) );
+#else
+        sal_uInt16 nPos = GetNamespaceMap().GetFirstKey();
+        while( USHRT_MAX != nPos )
+        {
+            GetAttrList().AddAttribute( GetNamespaceMap().GetAttrNameByKey( nPos ), GetNamespaceMap().GetNameByKey( nPos ) );
+            nPos = GetNamespaceMap().GetNextKey( nPos );
+        }
+#endif
+
+        AddAttribute( XML_NAMESPACE_OFFICE, XML_VERSION, ::rtl::OUString::createFromAscii( "1.0" ) );
 
         SvXMLElementExport aDocElem( *this, XML_NAMESPACE_OFFICE, XML_DOCUMENT_META,
                         sal_True, sal_True );
-        {
 
+        {
             SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_META,
                             sal_True, sal_True );
-            SfxXMLMetaExport aMeta( *this, GetModel() );
-            aMeta.Export();
+
+            if ( xDocInfo.is() )
+            {
+                // standalone document exporter case
+                SfxXMLMetaExport aMeta( *this, xDocInfo );
+                aMeta.Export();
+            }
+            else
+            {
+                SfxXMLMetaExport aMeta( *this, GetModel() );
+                aMeta.Export();
+            }
         }
     }
-    GetDocHandler()->endDocument();
+    xDocHandler->endDocument();
     return 0;
 }
 
@@ -163,7 +265,7 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance
 {
     // #110680#
     // return (cppu::OWeakObject*)new XMLMetaExportComponent;
-    return (cppu::OWeakObject*)new XMLMetaExportComponent(rSMgr, EXPORT_ALL|EXPORT_OASIS);
+    return (cppu::OWeakObject*)new XMLMetaExportComponent(rSMgr, EXPORT_META|EXPORT_OASIS);
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL XMLMetaExportOOO_getSupportedServiceNames()
@@ -186,6 +288,6 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportOOO_createInstance(
 {
     // #110680#
     // return (cppu::OWeakObject*)new XMLMetaExportComponent;
-    return (cppu::OWeakObject*)new XMLMetaExportComponent(rSMgr, EXPORT_ALL);
+    return (cppu::OWeakObject*)new XMLMetaExportComponent(rSMgr, EXPORT_META);
 }
 
