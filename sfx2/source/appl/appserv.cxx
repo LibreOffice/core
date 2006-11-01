@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:47:23 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:25:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,7 +340,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                 Reference< XFrame > xFrame;
                 const SfxItemSet* pIntSet = rReq.GetInternalArgs_Impl();
-                SFX_ITEMSET_ARG( pIntSet, pFrame, SfxUnoAnyItem, SID_DOCFRAME, FALSE );
+                SFX_ITEMSET_ARG( pIntSet, pFrame, SfxUnoAnyItem, SID_FILLFRAME, FALSE );
                 if (pFrame)
                     pFrame->GetValue() >>= xFrame;
 
@@ -838,7 +838,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             const SfxItemSet* pArgs = rReq.GetInternalArgs_Impl();
             const SfxPoolItem* pItem = NULL;
             Reference < XFrame > xFrame;
-            if ( pArgs && pArgs->GetItemState( SID_DOCFRAME, sal_False, &pItem ) == SFX_ITEM_SET )
+            if ( pArgs && pArgs->GetItemState( SID_FILLFRAME, sal_False, &pItem ) == SFX_ITEM_SET )
                  ( (SfxUnoAnyItem*)pItem )->GetValue() >>= xFrame;
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             if ( pFact )
