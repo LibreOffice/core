@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:10:49 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:29:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -415,6 +415,9 @@ GtkSalFrame::~GtkSalFrame()
 
     getDisplay()->deregisterFrame( this );
 
+    if( m_pRegion )
+        gdk_region_destroy( m_pRegion );
+
     if( m_hBackgroundPixmap )
     {
         XSetWindowBackgroundPixmap( getDisplay()->GetDisplay(),
@@ -507,6 +510,7 @@ void GtkSalFrame::InitCommon()
     m_hBackgroundPixmap = None;
     m_nSavedScreenSaverTimeout = 0;
     m_nExtStyle         = 0;
+    m_pRegion           = NULL;
 
     gtk_widget_set_app_paintable( GTK_WIDGET(m_pWindow), TRUE );
     gtk_widget_set_double_buffered( GTK_WIDGET(m_pWindow), FALSE );
@@ -1963,6 +1967,8 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, int nScreen )
         delete m_pIMHandler;
         m_pIMHandler = NULL;
     }
+    if( m_pRegion )
+        gdk_region_destroy( m_pRegion );
     if( m_pFixedContainer )
         gtk_widget_destroy( GTK_WIDGET(m_pFixedContainer) );
     if( m_pWindow )
@@ -2013,6 +2019,39 @@ bool GtkSalFrame::SetPluginParent( SystemParentData* pSysParent )
 {
     createNewWindow( pSysParent->aWindow, m_nScreen );
     return true;
+}
+
+void GtkSalFrame::ResetClipRegion()
+{
+    if( m_pWindow )
+        gdk_window_shape_combine_region( GTK_WIDGET(m_pWindow)->window, NULL, 0, 0 );
+}
+
+void GtkSalFrame::BeginSetClipRegion( ULONG )
+{
+    if( m_pRegion )
+        gdk_region_destroy( m_pRegion );
+    m_pRegion = gdk_region_new();
+}
+
+void GtkSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+{
+    if( m_pRegion )
+    {
+        GdkRectangle aRect;
+        aRect.x         = nX;
+        aRect.y         = nY;
+        aRect.width     = nWidth;
+        aRect.height    = nHeight;
+
+        gdk_region_union_with_rect( m_pRegion, &aRect );
+    }
+}
+
+void GtkSalFrame::EndSetClipRegion()
+{
+    if( m_pWindow && m_pRegion )
+        gdk_window_shape_combine_region( GTK_WIDGET(m_pWindow)->window, m_pRegion, 0, 0 );
 }
 
 bool GtkSalFrame::Dispatch( const XEvent* pEvent )
