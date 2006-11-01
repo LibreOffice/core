@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:18:03 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:12:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1821,6 +1821,11 @@ void SwFlyFrm::MakeObjPos()
                 aObjPositioning( *GetVirtDrawObj() );
         aObjPositioning.CalcPosition();
 
+        // --> OD 2006-10-05 #i58280#
+        // update relative position
+        SetCurrRelPos( aObjPositioning.GetRelPos() );
+        // <--
+
         SWRECTFN( GetAnchorFrm() );
         aFrm.Pos( aObjPositioning.GetRelPos() );
         aFrm.Pos() += (GetAnchorFrm()->Frm().*fnRect->fnGetPos)();
@@ -2770,6 +2775,14 @@ const SwRect SwFlyFrm::GetObjRect() const
 {
     return Frm();
 }
+
+// --> OD 2006-10-05 #i70122#
+// for Writer fly frames the bounding rectangle equals the object rectangles
+const SwRect SwFlyFrm::GetObjBoundRect() const
+{
+    return GetObjRect();
+}
+// <--
 
 // --> OD 2006-08-10 #i68520#
 const bool SwFlyFrm::_SetObjTop( const SwTwips _nTop )
