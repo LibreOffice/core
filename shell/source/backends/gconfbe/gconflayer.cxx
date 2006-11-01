@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gconflayer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:37:20 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:22:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,24 @@ uno::Any makeAnyOfGconfValue( GConfValue *aGconfValue )
 
 //------------------------------------------------------------------------------
 
+static void splitFontName( GConfValue *aGconfValue, rtl::OUString &rName, sal_Int16 &rHeight)
+{
+   rtl::OString aFont( gconf_value_get_string( aGconfValue ) );
+   aFont.trim();
+   sal_Int32 nIdx = aFont.lastIndexOf( ' ' );
+   if (nIdx < 1) { // urk
+       rHeight = 12;
+       nIdx = aFont.getLength();
+   } else {
+       rtl::OString aSize = aFont.copy( nIdx + 1 );
+       rHeight = static_cast<sal_Int16>( aSize.toInt32() );
+   }
+
+   rName = rtl::OStringToOUString( aFont.copy( 0, nIdx ), RTL_TEXTENCODING_UTF8 );
+}
+
+//------------------------------------------------------------------------------
+
 uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValue )
 {
     switch( aValue.nSettingId )
@@ -208,6 +226,20 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
             return uno::makeAny( aSurname );
         }
 
+        case SETTING_SOURCEVIEWFONT_NAME:
+        case SETTING_SOURCEVIEWFONT_HEIGHT:
+        {
+            rtl::OUString aName;
+            sal_Int16 nHeight;
+
+            splitFontName (aGconfValue, aName, nHeight);
+            if (aValue.nSettingId == SETTING_SOURCEVIEWFONT_NAME)
+                return uno::makeAny( aName );
+            else
+                return uno::makeAny( nHeight );
+        }
+
+
         default:
             fprintf( stderr, "Unhandled setting to translate.\n" );
             break;
@@ -227,8 +259,12 @@ sal_Bool SAL_CALL isDependencySatisfied( const ConfigurationValue aValue )
             GConfClient* aClient = GconfBackend::getGconfClient();
             GConfValue* aGconfValue = gconf_client_get( aClient, GCONF_PROXY_MODE_KEY, NULL );
 
-            if( ( aGconfValue != NULL ) && ( g_strcasecmp( "manual", gconf_value_get_string( aGconfValue ) ) == 0 ) )
-                return sal_True;
+            if ( aGconfValue != NULL )
+            {
+                bool bOk = g_strcasecmp( "manual", gconf_value_get_string( aGconfValue ) ) == 0;
+                gconf_value_free( aGconfValue );
+                if (bOk) return sal_True;
+            }
         }
             break;
 
@@ -274,8 +310,12 @@ sal_Bool SAL_CALL isDependencySatisfied( const ConfigurationValue aValue )
             GConfClient* aClient = GconfBackend::getGconfClient();
             GConfValue* aGconfValue = gconf_client_get( aClient, GCONF_AUTO_SAVE_KEY, NULL );
 
-            if( ( aGconfValue != NULL ) && gconf_value_get_bool( aGconfValue ) )
-                return sal_True;
+            if( ( aGconfValue != NULL ) )
+            {
+                bool bOk = gconf_value_get_bool( aGconfValue );
+                gconf_value_free( aGconfValue );
+                if (bOk) return sal_True;
+            }
         }
             break;
 #endif // ENABLE_LOCKDOWN
@@ -313,10 +353,10 @@ void SAL_CALL GconfLayer::readData( const uno::Reference<backend::XLayerHandler>
 
     for( i = 0; i < m_nConfigurationValues; i++ )
     {
-        aGconfValue = gconf_client_get( aClient, m_pConfigurationValuesList[i].GconfItem, NULL );
-
         if( ( m_pConfigurationValuesList[i].nDependsOn != SETTINGS_LAST ) && !isDependencySatisfied( m_pConfigurationValuesList[i] ) )
             continue;
+
+        aGconfValue = gconf_client_get( aClient, m_pConfigurationValuesList[i].GconfItem, NULL );
 
         if( aGconfValue != NULL )
         {
@@ -328,6 +368,8 @@ void SAL_CALL GconfLayer::readData( const uno::Reference<backend::XLayerHandler>
                 aPropInfoList[nProperties].Value = translateToOOo( m_pConfigurationValuesList[i], aGconfValue );
             else
                 aPropInfoList[nProperties].Value = makeAnyOfGconfValue( aGconfValue );
+
+            gconf_value_free( aGconfValue );
 
             nProperties++;
         }
@@ -384,6 +426,7 @@ rtl::OUString SAL_CALL GconfLayer::getTimestamp( void )
                     break;
             }
             nHashCode = (nHashCode << 5) - nHashCode;
+            gconf_value_free( aGconfValue );
         }
     }
 
