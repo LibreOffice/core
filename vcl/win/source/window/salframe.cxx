@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:08:38 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:31:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1032,6 +1032,9 @@ WinSalFrame::WinSalFrame()
     mbNoIcon            = FALSE;
     mSelectedhMenu      = 0;
     mLastActivatedhMenu = 0;
+    mpClipRgnData       = NULL;
+    mbFirstClipRect     = TRUE;
+    mpNextClipRect      = NULL;
     mnDisplay           = 0;
 
     memset( &maState, 0, sizeof( SalFrameState ) );
@@ -1060,6 +1063,9 @@ WinSalFrame::WinSalFrame()
 WinSalFrame::~WinSalFrame()
 {
     SalData* pSalData = GetSalData();
+
+    if( mpClipRgnData )
+        delete [] (BYTE*)mpClipRgnData;
 
     // remove frame from framelist
     WinSalFrame** ppFrame = &pSalData->mpFirstFrame;
@@ -3171,6 +3177,113 @@ SalFrame::SalPointerState WinSalFrame::GetPointerState()
 
 void WinSalFrame::SetBackgroundBitmap( SalBitmap* )
 {
+}
+
+// -----------------------------------------------------------------------
+
+void WinSalFrame::ResetClipRegion()
+{
+    SetWindowRgn( mhWnd, 0, TRUE );
+}
+
+// -----------------------------------------------------------------------
+
+void WinSalFrame::BeginSetClipRegion( ULONG nRects )
+{
+    if( mpClipRgnData )
+        delete [] (BYTE*)mpClipRgnData;
+    ULONG nRectBufSize = sizeof(RECT)*nRects;
+    mpClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+nRectBufSize];
+    mpClipRgnData->rdh.dwSize     = sizeof( RGNDATAHEADER );
+    mpClipRgnData->rdh.iType      = RDH_RECTANGLES;
+    mpClipRgnData->rdh.nCount     = nRects;
+    mpClipRgnData->rdh.nRgnSize  = nRectBufSize;
+    SetRectEmpty( &(mpClipRgnData->rdh.rcBound) );
+    mpNextClipRect        = (RECT*)(&(mpClipRgnData->Buffer));
+    mbFirstClipRect       = TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+void WinSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+{
+    if( ! mpClipRgnData )
+        return;
+
+    RECT*       pRect = mpNextClipRect;
+    RECT*       pBoundRect = &(mpClipRgnData->rdh.rcBound);
+    long        nRight = nX + nWidth;
+    long        nBottom = nY + nHeight;
+
+    if ( mbFirstClipRect )
+    {
+        pBoundRect->left    = nX;
+        pBoundRect->top     = nY;
+        pBoundRect->right   = nRight;
+        pBoundRect->bottom  = nBottom;
+        mbFirstClipRect = FALSE;
+    }
+    else
+    {
+        if ( nX < pBoundRect->left )
+            pBoundRect->left = (int)nX;
+
+        if ( nY < pBoundRect->top )
+            pBoundRect->top = (int)nY;
+
+        if ( nRight > pBoundRect->right )
+            pBoundRect->right = (int)nRight;
+
+        if ( nBottom > pBoundRect->bottom )
+            pBoundRect->bottom = (int)nBottom;
+    }
+
+    pRect->left     = (int)nX;
+    pRect->top      = (int)nY;
+    pRect->right    = (int)nRight;
+    pRect->bottom   = (int)nBottom;
+    if( (mpNextClipRect  - (RECT*)(&mpClipRgnData->Buffer)) < (int)mpClipRgnData->rdh.nCount )
+        mpNextClipRect++;
+}
+
+// -----------------------------------------------------------------------
+
+void WinSalFrame::EndSetClipRegion()
+{
+    if( ! mpClipRgnData )
+        return;
+
+    HRGN hRegion;
+
+    // create region from accumulated rectangles
+    if ( mpClipRgnData->rdh.nCount == 1 )
+    {
+        RECT* pRect = &(mpClipRgnData->rdh.rcBound);
+        hRegion = CreateRectRgn( pRect->left, pRect->top,
+                                 pRect->right, pRect->bottom );
+    }
+    else
+    {
+        ULONG nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
+        hRegion = ExtCreateRegion( NULL, nSize, mpClipRgnData );
+    }
+    delete [] (BYTE*)mpClipRgnData;
+    mpClipRgnData = NULL;
+
+    DBG_ASSERT( hRegion, "WinSalFrame::EndSetClipRegion() - Can't create ClipRegion" );
+    if( hRegion )
+    {
+        RECT aWindowRect;
+        GetWindowRect( mhWnd, &aWindowRect );
+        POINT aPt;
+        aPt.x=0;
+        aPt.y=0;
+        ClientToScreen( mhWnd, &aPt );
+        OffsetRgn( hRegion, aPt.x - aWindowRect.left, aPt.y - aWindowRect.top );
+
+        if( SetWindowRgn( mhWnd, hRegion, TRUE ) == 0 )
+            DeleteObject( hRegion );
+    }
 }
 
 // -----------------------------------------------------------------------
