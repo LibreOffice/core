@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:26:01 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:13:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -992,7 +992,7 @@ const BYTE* SbModule::FindNextStmnt( const BYTE* p, USHORT& nLine, USHORT& nCol 
 const BYTE* SbModule::FindNextStmnt( const BYTE* p, USHORT& nLine, USHORT& nCol,
     BOOL bFollowJumps, const SbiImage* pImg ) const
 {
-    USHORT nPC = (USHORT) ( p - (const BYTE*) pImage->GetCode() );
+    UINT32 nPC = (UINT32) ( p - (const BYTE*) pImage->GetCode() );
     while( nPC < pImage->GetCodeSize() )
     {
         SbiOpcode eOp = (SbiOpcode ) ( *p++ );
@@ -1000,21 +1000,24 @@ const BYTE* SbModule::FindNextStmnt( const BYTE* p, USHORT& nLine, USHORT& nCol,
         if( bFollowJumps && eOp == _JUMP && pImg )
         {
             DBG_ASSERT( pImg, "FindNextStmnt: pImg==NULL with FollowJumps option" );
-            USHORT nOp1 = *p++; nOp1 |= *p++ << 8;
+            UINT32 nOp1 = *p++; nOp1 |= *p++ << 8;
+            nOp1 |= *p++ << 16; nOp1 |= *p++ << 24;
             p = (const BYTE*) pImg->GetCode() + nOp1;
         }
         else if( eOp >= SbOP1_START && eOp <= SbOP1_END )
-            p += 2, nPC += 2;
+            p += 4, nPC += 4;
         else if( eOp == _STMNT )
         {
-            USHORT nl, nc;
+            UINT32 nl, nc;
             nl = *p++; nl |= *p++ << 8;
+            nl |= *p++ << 16 ; nl |= *p++ << 24;
             nc = *p++; nc |= *p++ << 8;
+            nc |= *p++ << 16 ; nc |= *p++ << 24;
             nLine = nl; nCol = nc;
             return p;
         }
         else if( eOp >= SbOP2_START && eOp <= SbOP2_END )
-            p += 4, nPC += 4;
+            p += 8, nPC += 8;
         else if( !( eOp >= SbOP0_START && eOp <= SbOP0_END ) )
         {
             StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
@@ -1123,6 +1126,26 @@ void SbModule::ClearAllBP()
     delete pBreaks; pBreaks = NULL;
 }
 
+void
+SbModule::fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg ) const
+{
+        if ( !pImg )
+            pImg = pImage;
+        for( UINT32 i = 0; i < pMethods->Count(); i++ )
+        {
+            SbMethod* pMeth = PTR_CAST(SbMethod,pMethods->Get( i ) );
+            if( pMeth )
+            {
+                //fixup method start positions
+                if ( bCvtToLegacy )
+                    pMeth->nStart = pImg->CalcLegacyOffset( pMeth->nStart );
+                else
+                    pMeth->nStart = pImg->CalcNewOffset( pMeth->nStart );
+            }
+        }
+
+}
+
 BOOL SbModule::LoadData( SvStream& rStrm, USHORT nVer )
 {
     Clear();
@@ -1135,14 +1158,21 @@ BOOL SbModule::LoadData( SvStream& rStrm, USHORT nVer )
     if( bImage )
     {
         SbiImage* p = new SbiImage;
-        if( !p->Load( rStrm ) )
+        UINT32 nImgVer = 0;
+
+        if( !p->Load( rStrm, nImgVer ) )
         {
             delete p;
             return FALSE;
         }
+        // If the image is in old format, we fix up the method start offsets
+        if ( nImgVer < B_EXT_IMG_VERSION )
+        {
+            fixUpMethodStart( false, p );
+            p->ReleaseLegacyBuffer();
+        }
         aComment = p->aComment;
         SetName( p->aName );
-        // Ist Code vorhanden?
         if( p->GetCodeSize() )
         {
             aOUSource = p->aOUSource;
@@ -1166,15 +1196,28 @@ BOOL SbModule::LoadData( SvStream& rStrm, USHORT nVer )
 
 BOOL SbModule::StoreData( SvStream& rStrm ) const
 {
-    if( !SbxObject::StoreData( rStrm ) )
+    BOOL bFixup = ( pImage && !pImage->ExceedsLegacyLimits() );
+    if ( bFixup )
+        fixUpMethodStart( true );
+    BOOL bRet = SbxObject::StoreData( rStrm );
+    if ( !bRet )
         return FALSE;
+
     if( pImage )
     {
         pImage->aOUSource = aOUSource;
         pImage->aComment = aComment;
         pImage->aName = GetName();
         rStrm << (BYTE) 1;
-        return pImage->Save( rStrm );
+        // # PCode is saved only for legacy formats only
+        // It should be noted that it probably isn't necessary
+        // It would be better not to store the image ( more flexible with
+        // formats )
+        bool bRes = pImage->Save( rStrm, B_LEGACYVERSION );
+        if ( bFixup )
+            fixUpMethodStart( false ); // restore method starts
+        return bRes;
+
     }
     else
     {
@@ -1187,12 +1230,31 @@ BOOL SbModule::StoreData( SvStream& rStrm ) const
     }
 }
 
+BOOL SbModule::ExceedsLegacyModuleSize()
+{
+    if ( !IsCompiled() )
+        Compile();
+    if ( pImage && pImage->ExceedsLegacyLimits() )
+        return true;
+    return false;
+}
+
+
 // Store only image, no source
 BOOL SbModule::StoreBinaryData( SvStream& rStrm )
+{
+    return StoreBinaryData( rStrm, 0 );
+}
+
+BOOL SbModule::StoreBinaryData( SvStream& rStrm, USHORT nVer )
 {
     BOOL bRet = Compile();
     if( bRet )
     {
+        BOOL bFixup = ( !nVer && !pImage->ExceedsLegacyLimits() );// save in old image format, fix up method starts
+
+        if ( bFixup ) // save in old image format, fix up method starts
+            fixUpMethodStart( true );
          bRet = SbxObject::StoreData( rStrm );
         if( bRet )
         {
@@ -1201,13 +1263,21 @@ BOOL SbModule::StoreBinaryData( SvStream& rStrm )
             pImage->aName = GetName();
 
             rStrm << (BYTE) 1;
-            bRet = pImage->Save( rStrm );
+                    if ( nVer )
+                        bRet = pImage->Save( rStrm, B_EXT_IMG_VERSION );
+                    else
+                        bRet = pImage->Save( rStrm, B_LEGACYVERSION );
+                    if ( bFixup )
+                        fixUpMethodStart( false ); // restore method starts
 
             pImage->aOUSource = aOUSource;
         }
     }
     return bRet;
 }
+
+// Called for >= OO 1.0 passwd protected libraries only
+//
 
 BOOL SbModule::LoadBinaryData( SvStream& rStrm )
 {
@@ -1881,11 +1951,13 @@ BOOL SbMethod::LoadData( SvStream& rStrm, USHORT nVer )
         return FALSE;
     INT16 n;
     rStrm >> n;
+    INT16 nTempStart = nStart;
     // nDebugFlags = n;     // AB 16.1.96: Nicht mehr uebernehmen
     if( nVer == 2 )
-        rStrm >> nLine1 >> nLine2 >> nStart >> bInvalid;
+        rStrm >> nLine1 >> nLine2 >> nTempStart >> bInvalid;
     // AB: 2.7.1996: HACK wegen 'Referenz kann nicht gesichert werden'
     SetFlag( SBX_NO_MODIFY );
+    nStart = nTempStart;
     return TRUE;
 }
 
