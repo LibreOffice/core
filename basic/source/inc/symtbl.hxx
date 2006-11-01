@@ -4,9 +4,9 @@
  *
  *  $RCSfile: symtbl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:37:20 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:16:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ public:
     SbiSymDef* First(), *Next();        // Iteratoren
 
     USHORT Define( const String& );     // Label definieren
-    USHORT Reference( const String& );  // Label referenzieren
+    UINT32 Reference( const String& );  // Label referenzieren
     void   CheckRefs();                 // offene Referenzen suchen
 };
 
@@ -139,7 +139,7 @@ protected:
     USHORT     nTypeId;             // String-ID des Datentyps (Dim X AS Dytentyp)
     USHORT     nProcId;             // aktuelles ProcId fuer STATIC-Variable
     USHORT     nPos;                // Positions-Nummer
-    USHORT     nChain;              // Backchain-Kette
+    UINT32     nChain;              // Backchain-Kette
     BOOL       bNew     : 1;        // TRUE: Dim As New...
     BOOL       bChained : 1;        // TRUE: Symbol ist in Code definiert
     BOOL       bByVal   : 1;        // TRUE: ByVal-Parameter
@@ -160,7 +160,7 @@ public:
     const String& GetName();
     SbiSymScope GetScope() const;
     USHORT     GetProcId() const{ return nProcId;   }
-    USHORT     GetAddr() const  { return nChain;    }
+    UINT32     GetAddr() const  { return nChain;    }
     USHORT     GetId() const    { return nId;       }
     USHORT     GetTypeId() const{ return nTypeId;   }
     void       SetTypeId( USHORT n ) { nTypeId = n; eType = SbxOBJECT; }
@@ -189,7 +189,7 @@ public:
 
     SbiSymPool& GetPool();
     USHORT     Define();        // Symbol in Code definieren
-    USHORT     Reference();     // Symbol in Code referenzieren
+    UINT32     Reference();     // Symbol in Code referenzieren
 
 private:
     SbiSymDef( const SbiSymDef& );
