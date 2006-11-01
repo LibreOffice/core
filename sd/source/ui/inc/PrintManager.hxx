@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrintManager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 10:28:47 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 10:15:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,6 +203,11 @@ private:
         ::sd::View* pPrintView,
         SdPage* pPage,
         BOOL bPrintMarkedOnly);
+
+    /** Return <TRUE/> when the document pages have the 'Screen' size.  Only
+        the first page of the document is used to determine the size.
+    */
+    bool IsScreenFormat (void);
 };
 
 } // end of namespace sd
