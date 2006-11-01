@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:54:43 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:27:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -575,18 +575,6 @@ BOOL SfxOrganizeListBox_Impl::Select( SvLBoxEntry* pEntry, BOOL bSelect )
 
 //-------------------------------------------------------------------------
 
-BOOL SfxOrganizeListBox_Impl::IsStandard_Impl( SvLBoxEntry *pEntry) const
-{
-    String aStd(SfxResId(STR_STANDARD));
-    aStd.ToUpperAscii();
-    String aEntry = GetEntryText(pEntry);
-    aEntry.ToUpperAscii();
-    return !GetModel()->GetDepth(pEntry) &&
-        aEntry.Match(aStd)>=aStd.Len();
-}
-
-//-------------------------------------------------------------------------
-
 BOOL SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvLBox *pSourceBox,
                                             SvLBoxEntry *pSource,
                                             SvLBoxEntry* pTarget,
@@ -960,7 +948,7 @@ BOOL SfxOrganizeListBox_Impl::EditingEntry( SvLBoxEntry* pEntry, Selection&  )
 
 {
     if( VIEW_TEMPLATES == eViewType &&
-        GetModel()->GetDepth(pEntry) < 2 &&  !IsStandard_Impl(pEntry))
+        GetModel()->GetDepth(pEntry) < 2 )
     {
         pDlg->pSuspend = new SuspendAccel( &pDlg->aEditAcc );
         return TRUE;
@@ -1787,8 +1775,6 @@ BOOL SfxOrganizeDlg_Impl::DontDelete_Impl( SvLBoxEntry *pEntry)
         nDepth++;
     if( nDepth > 2 && !pEntry->GetUserData() ||
        //Delete ueber GetContent verboten
-       pFocusBox->IsStandard_Impl(pEntry) ||
-       //StandardVorlage nicht loeschen
        nDepth==2 || //Vorlage / Konfigurtionsrubrik nicht loeshcen
        (nDepth==1 && SfxOrganizeListBox_Impl::VIEW_FILES ==
         pFocusBox->GetViewType()) || //Files nicht loeschen
@@ -1911,17 +1897,10 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
             if(nDepth < 2)
             {
                 if(0 == nDepth && pFocusBox->GetLevelCount_Impl(0) < 2) return 1;
-                if(SfxOrganizeListBox_Impl::VIEW_TEMPLATES ==
-                        pFocusBox->GetViewType())
+                if(SfxOrganizeListBox_Impl::VIEW_TEMPLATES == pFocusBox->GetViewType())
                 {
                     USHORT nResId = nDepth? STR_DELETE_TEMPLATE :
                                             STR_DELETE_REGION;
-                    String aStd(SfxResId(STR_STANDARD));
-                    aStd.ToUpperAscii();
-                    String aStdText(pFocusBox->GetEntryText(pEntry));
-                    aStdText.ToUpperAscii();
-                    if(!nDepth && aStdText.Match(aStd)>=aStd.Len())
-                        return 1;
                     if( !QueryDelete_Impl(
                         pDialog, nResId, pFocusBox->GetEntryText(pEntry)))
                         return 1;
@@ -1946,12 +1925,6 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
             // Inhaltsformen
             else if(nDepth + pFocusBox->GetDocLevel() >= 2)
             {
-                String aStd(SfxResId(STR_STANDARD));
-                aStd.ToUpperAscii();
-                String aStdText(pFocusBox->GetEntryText(pEntry));
-                aStdText.ToUpperAscii();
-                if(!nDepth && aStdText.Match(aStd)>=aStd.Len())
-                    return 1;
                 if(!QueryDelete_Impl(pDialog, STR_DELETE_TEMPLATE, pFocusBox->GetEntryText(pEntry)))
                     return 1;
                 Path aPath(pFocusBox, pEntry);
