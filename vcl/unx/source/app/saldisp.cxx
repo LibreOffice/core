@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-17 14:01:51 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:57:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1110,7 +1110,7 @@ bHandleStartupNotification
     if ( bHandleStartupNotification )
     {
         m_pSnDisplay = sn_display_new( pDisp_, SnErrorTrapPush, SnErrorTrapPop );
-        m_pSnLauncheeContext = sn_launchee_context_new_from_environment( m_pSnDisplay, nScreen_ );
+        m_pSnLauncheeContext = sn_launchee_context_new_from_environment( m_pSnDisplay, m_nDefaultScreen );
 #  ifdef DBG_UTIL
         if( !m_pSnLauncheeContext )
             fprintf( stderr, "Failed to get launch feedback info from "
