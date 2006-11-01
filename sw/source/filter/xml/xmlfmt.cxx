@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:28:38 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:20:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1015,8 +1015,12 @@ OUString SwXMLStylesContext_Impl::GetServiceName( sal_uInt16 nFamily ) const
 void SwXMLStylesContext_Impl::EndElement()
 {
     GetSwImport().InsertStyles( bAutoStyles );
-    if( !bAutoStyles )
-        GetImport().GetTextImport()->SetOutlineStyles( sal_True );
+    // --> OD 2006-10-11 #i69629#
+    // assign paragraph styles to list levels of outline style after all styles
+    // are imported and finished.
+//    if( !bAutoStyles )
+//        GetImport().GetTextImport()->SetOutlineStyles( sal_True );
+    // <--
 }
 
 // ---------------------------------------------------------------------
