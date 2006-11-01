@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:37:17 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:23:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,12 +286,7 @@ void ScTabViewShell::DeactivateOle()
 
     ScClient* pClient = (ScClient*) GetIPClient();
     if ( pClient && pClient->IsObjectInPlaceActive() )
-    {
-            //TODO/CLEANUP
-            //nur im SFX Viewframe setzen
-        pClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
-        SfxViewFrame::SetViewFrame(GetViewFrame());
-    }
+        pClient->DeactivateObject();
 }
 
 void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
