@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:12:25 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:15:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ class SbiParser : public SbiTokenizer
     SbiProcDef* pProc;              // aktuelle Prozedur
     SbiExprNode*  pWithVar;         // aktuelle With-Variable
     SbiToken    eEndTok;            // das Ende-Token
-    USHORT      nGblChain;          // Chainkette fuer globale DIMs
+    UINT32      nGblChain;          // Chainkette fuer globale DIMs
     BOOL        bGblDefs;           // TRUE globale Definitionen allgemein
     BOOL        bNewGblDefs;        // TRUE globale Definitionen vor Sub
     BOOL        bSingleLineIf;      // TRUE einzeiliges if-Statement
