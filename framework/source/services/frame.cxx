@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 09:43:05 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:17:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
+
+//#include <typeinfo>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -1465,7 +1467,8 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     css::uno::Reference< css::awt::XWindow >       xContainerWindow    = m_xContainerWindow;
     css::uno::Reference< css::awt::XWindow >       xOldComponentWindow = m_xComponentWindow;
     css::uno::Reference< css::frame::XController > xOldController      = m_xController;
-    sal_Bool                                       bHadFocus           = m_eActiveState==E_FOCUS;
+    Window*                                        pOwnWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+    sal_Bool                                       bHadFocus           = pOwnWindow->HasChildPathFocus();
     sal_Bool                                       bWasConnected       = m_bConnected;
     aReadLock.unlock();
     /* } SAFE */
@@ -2319,11 +2322,25 @@ aEvent
         {
             css::uno::Reference< css::awt::XWindow >  xParentWindow   = xParent->getContainerWindow()             ;
             Window*                                   pParentWindow   = VCLUnoHelper::GetWindow( xParentWindow    );
-            if( pFocusWindow==NULL || pParentWindow->IsChild( pFocusWindow ) )
+            //#i70261#: dialogs opend from an OLE object will cause a deactivate on the frame of the OLE object
+            // on Solaris/Linux at that time pFocusWindow is still NULL because the focus handling is different; right after
+            // the deactivation the focus will be set into the dialog!
+            // currently I see no case where a sub frame could get a deactivate with pFocusWindow being NULL permanently
+            // so for now this case is omitted from handled deactivations
+            if( pFocusWindow && pParentWindow->IsChild( pFocusWindow ) )
             {
                 css::uno::Reference< css::frame::XFramesSupplier > xSupplier( xParent, css::uno::UNO_QUERY );
                 if( xSupplier.is() == sal_True )
                 {
+/*
+                    if ( pFocusWindow )
+                    {
+                        const char* p = typeid(*pFocusWindow).name();
+                        fprintf(stderr, "FocusWindow: %s\n", p);
+                    }
+                    else
+                        fprintf(stderr, "No FocusWindow\n");
+*/
                     aSolarGuard.clear();
                     xSupplier->setActiveFrame( css::uno::Reference< css::frame::XFrame >() );
                 }
@@ -2828,6 +2845,25 @@ void Frame::implts_sendFrameActionEvent( const css::frame::FrameAction& aAction 
 *//*-*****************************************************************************************************/
 void Frame::implts_resizeComponentWindow()
 {
+    // usually the LayoutManager does the resizing
+    // in case there is no LayoutManager resizing has to be done here
+    if ( !m_xLayoutManager.is() )
+    {
+        css::uno::Reference< css::awt::XWindow > xComponentWindow( getComponentWindow() );
+        if( xComponentWindow.is() == sal_True )
+        {
+            css::uno::Reference< css::awt::XDevice > xDevice( getContainerWindow(), css::uno::UNO_QUERY );
+
+            // Convert relativ size to output size.
+            css::awt::Rectangle  aRectangle  = getContainerWindow()->getPosSize();
+            css::awt::DeviceInfo aInfo       = xDevice->getInfo();
+            css::awt::Size       aSize       (  aRectangle.Width  - aInfo.LeftInset - aInfo.RightInset  ,
+                                                aRectangle.Height - aInfo.TopInset  - aInfo.BottomInset );
+
+            // Resize our component window.
+            xComponentWindow->setPosSize( 0, 0, aSize.Width, aSize.Height, css::awt::PosSize::POSSIZE );
+        }
+    }
 }
 
 /*-****************************************************************************************************//**
