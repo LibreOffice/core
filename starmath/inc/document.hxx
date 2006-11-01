@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:49:09 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:15:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,8 +238,6 @@ public:
     void        GetState(SfxItemSet &);
 
     virtual void SetVisArea (const Rectangle & rVisArea);
-    virtual void UIActivate (BOOL bActivate);
-
     virtual void SetModified(BOOL bModified);
 };
 
