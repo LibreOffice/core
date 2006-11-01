@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapelist.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:23:20 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:14:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@ namespace sd
     class ShapeList : public sdr::ObjectUser
     {
     public:
+        ShapeList();
         virtual ~ShapeList();
 
         /** adds the given shape to this list */
@@ -73,11 +74,24 @@ namespace sd
             returns the last shape if pObj is 0 */
         SdrObject* getPreviousShape( SdrObject* pObj ) const;
 
+        /**
+        */
+        SdrObject* getNextShape();
+
+        /**
+        */
+        void seekShape( sal_uInt32 nIndex );
+
+        /**
+        */
+        bool hasMore() const;
+
     private:
         virtual void ObjectInDestruction(const SdrObject& rObject);
 
         typedef std::list< SdrObject* > ListImpl;
         ListImpl maShapeList;
+        ListImpl::iterator maIter;
     };
 }
 
