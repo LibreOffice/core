@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:40:18 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:54:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1846,9 +1846,7 @@ sal_Bool SfxDocumentTemplates::GetLogicNames
 
     aFullPath.SetSmartProtocol( INET_PROT_FILE );
     aFullPath.SetURL( rPath );
-    aFullPath.CutLastName();
-
-    OUString aPathTo = aFullPath.GetMainURL( INetURLObject::NO_DECODE );
+    OUString aPath( aFullPath.GetMainURL( INetURLObject::NO_DECODE ) );
 
     RegionData_Impl *pData = NULL;
     DocTempl_EntryData_Impl  *pEntry = NULL;
@@ -1859,10 +1857,9 @@ sal_Bool SfxDocumentTemplates::GetLogicNames
     for ( ULONG i=0; !bFound && (i<nCount); i++ )
     {
         pData = pImp->GetRegion( i );
-        if ( pData->GetTargetURL() == aPathTo )
+        if ( pData )
         {
             ULONG nChildCount = pData->GetCount();
-            OUString aPath( rPath );
 
             for ( ULONG j=0; !bFound && (j<nChildCount); j++ )
             {
