@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hatchwindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:57:27 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 18:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@ using namespace ::com::sun::star;
 
 VCLXHatchWindow::VCLXHatchWindow()
 : VCLXWindow()
+, pHatchWindow(0)
 {
 }
 
@@ -70,8 +71,9 @@ void VCLXHatchWindow::initializeWindow( const uno::Reference< awt::XWindowPeer >
     if ( !pParent )
         throw lang::IllegalArgumentException(); // TODO
 
-    SvResizeWindow* pHatchWindow = new SvResizeWindow( pParent, this );
+    pHatchWindow = new SvResizeWindow( pParent, this );
     pHatchWindow->SetPosSizePixel( aBounds.X, aBounds.Y, aBounds.Width, aBounds.Height );
+    aHatchBorderSize = aSize;
     pHatchWindow->SetHatchBorderPixel( Size( aSize.Width, aSize.Height ) );
 
     SetWindow( pHatchWindow );
@@ -192,6 +194,20 @@ uno::Sequence< sal_Int8 > SAL_CALL VCLXHatchWindow::getImplementationId()
     return pID->getImplementationId() ;
 }
 
+::com::sun::star::awt::Size SAL_CALL VCLXHatchWindow::getHatchBorderSize() throw (::com::sun::star::uno::RuntimeException)
+{
+    return aHatchBorderSize;
+}
+
+void SAL_CALL VCLXHatchWindow::setHatchBorderSize( const ::com::sun::star::awt::Size& _hatchbordersize ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if ( pHatchWindow )
+    {
+        aHatchBorderSize = _hatchbordersize;
+        pHatchWindow->SetHatchBorderPixel( Size( aHatchBorderSize.Width, aHatchBorderSize.Height ) );
+    }
+}
+
 void SAL_CALL VCLXHatchWindow::setController( const uno::Reference< embed::XHatchWindowController >& xController )
     throw (uno::RuntimeException)
 {
@@ -201,6 +217,7 @@ void SAL_CALL VCLXHatchWindow::setController( const uno::Reference< embed::XHatc
 void SAL_CALL VCLXHatchWindow::dispose()
     throw (uno::RuntimeException)
 {
+    pHatchWindow = 0;
     VCLXWindow::dispose();
 }
 
@@ -216,3 +233,14 @@ void SAL_CALL VCLXHatchWindow::removeEventListener( const uno::Reference< lang::
     VCLXWindow::removeEventListener( xListener );
 }
 
+void VCLXHatchWindow::Activated()
+{
+    if ( m_xController.is() )
+        m_xController->activated();
+}
+
+void VCLXHatchWindow::Deactivated()
+{
+    if ( m_xController.is() )
+        m_xController->deactivated();
+}
