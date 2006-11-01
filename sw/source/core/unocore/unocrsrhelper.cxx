@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:55:59 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:13:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,7 +244,10 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
         case FN_NUMBER_NEWSTART:
         {
             const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
-            const SwNumRule* pRule = pTxtNd->GetNumRule();
+            // --> OD 2006-10-19 #134160# - make code robust:
+            // consider case that PaM doesn't denote a text node
+            const SwNumRule* pRule = pTxtNd ? pTxtNd->GetNumRule() : 0;
+            // <--
             // hier wird Multiselektion nicht beruecksichtigt
             if( pRule )
             {
