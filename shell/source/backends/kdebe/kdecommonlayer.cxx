@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdecommonlayer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:37:59 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,9 +91,10 @@ void SAL_CALL KDECommonLayer::readData( const uno::Reference<backend::XLayerHand
         ) ), static_cast < backend::XLayer * > (this) );
     }
 
-    uno::Sequence<backend::PropertyInfo> aPropInfoList(1);
+    uno::Sequence<backend::PropertyInfo> aPropInfoList(3);
     sal_Int32 nProperties = 0;
 
+    // Email client settings
     KEMailSettings aEmailSettings;
     QString aClientProgram;
     ::rtl::OUString sClientProgram;
@@ -112,6 +113,31 @@ void SAL_CALL KDECommonLayer::readData( const uno::Reference<backend::XLayerHand
     aPropInfoList[nProperties].Protected = sal_False;
     aPropInfoList[nProperties++].Value = uno::makeAny( sClientProgram );
 
+    // Source code font settings
+    QFont aFixedFont;
+    QString aFontName;
+    :: rtl::OUString sFontName;
+    short nFontHeight;
+
+    aFixedFont = KGlobalSettings::fixedFont();
+    aFontName = aFixedFont.family();
+    sFontName = (const sal_Unicode *) aFontName.ucs2();
+    nFontHeight = aFixedFont.pointSize();
+
+    aPropInfoList[nProperties].Name = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.Common/Font/SourceViewFont/FontName") );
+    aPropInfoList[nProperties].Type = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM( "string" ) );
+    aPropInfoList[nProperties].Protected = sal_False;
+    aPropInfoList[nProperties++].Value = uno::makeAny( sFontName );
+
+    aPropInfoList[nProperties].Name = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.Common/Font/SourceViewFont/FontHeight") );
+    aPropInfoList[nProperties].Type = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM( "short" ) );
+    aPropInfoList[nProperties].Protected = sal_False;
+    aPropInfoList[nProperties++].Value = uno::makeAny( nFontHeight );
+
     if( nProperties > 0 )
     {
         aPropInfoList.realloc(nProperties);
@@ -127,14 +153,18 @@ rtl::OUString SAL_CALL KDECommonLayer::getTimestamp(void)
     // Return the value as timestamp to avoid regenerating the binary cache
     // on each office launch.
 
-    ::rtl::OUString sTimeStamp,
-                    sep( RTL_CONSTASCII_USTRINGPARAM( "$" ) );
-
     KEMailSettings aEmailSettings;
     QString aClientProgram = aEmailSettings.getSetting( KEMailSettings::ClientProgram );
     aClientProgram = aClientProgram.section(SPACE, 0, 0);
 
+    QString aFixedFont = KGlobalSettings::fixedFont().toString();
+
+    ::rtl::OUString sTimeStamp,
+                    sep( RTL_CONSTASCII_USTRINGPARAM( "$" ) );
+
     sTimeStamp = (const sal_Unicode *) aClientProgram.ucs2();
+    sTimeStamp += sep;
+    sTimeStamp += (const sal_Unicode *) aFixedFont.ucs2();
 
     return sTimeStamp;
 }
