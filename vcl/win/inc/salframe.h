@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:08:03 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:30:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -17,7 +17,7 @@
  *    Copyright 2005 by Sun Microsystems, Inc.
  *    901 San Antonio Road, Palo Alto, CA 94303, USA
  *
- *    This library is free software; you can redistribute it and/or
+ *    This library is free software; <you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
  *    License version 2.1, as published by the Free Software Foundation.
  *
@@ -101,6 +101,10 @@ public:
     BOOL                    mbAtCursorIME;          // TRUE: Wir behandeln nur einige IME-Messages
     BOOL                    mbCandidateMode;        // TRUE: Wir befinden uns im Candidate-Modus
     static BOOL             mbInReparent;           // TRUE: ignore focus lost and gain due to reparenting
+
+    RGNDATA*                mpClipRgnData;
+    RECT*                   mpNextClipRect;
+    BOOL                    mbFirstClipRect;
     sal_Int32               mnDisplay;              // Display used for Fullscreen, 0 is primary monitor
 
 public:
@@ -148,6 +152,10 @@ public:
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetBackgroundBitmap( SalBitmap* );
+    virtual void                ResetClipRegion();
+    virtual void                BeginSetClipRegion( ULONG nRects );
+    virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual void                EndSetClipRegion();
 };
 
 void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect );
