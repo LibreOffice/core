@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paperinf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:22:10 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 15:25:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,6 +275,7 @@ SvxPaper SvxPaperInfo::GetDefaultSvxPaper( LanguageType eLanguage )
         case LANGUAGE_ENGLISH_US:
         case LANGUAGE_ENGLISH_CAN:
         case LANGUAGE_FRENCH_CANADIAN:
+        case LANGUAGE_SPANISH_MEXICAN:
             ePaper = SvxPaper( SVX_PAPER_LETTER );
             break;
         default:
