@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawController.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:19:23 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 14:16:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
 #endif
+#include <tools/weakbase.hxx>
 #include <memory>
 #include <vector>
 
@@ -269,7 +270,7 @@ private:
     ViewShellBase& mrBase;
 
     Rectangle maLastVisArea;
-    SdPage* mpCurrentPage;
+    ::tools::WeakReference<SdrPage> mpCurrentPage;
     bool mbMasterPageMode;
     bool mbLayerMode;
 
