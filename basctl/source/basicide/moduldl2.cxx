@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-04 16:23:17 $
+ *  last change: $Author: vg $ $Date: 2006-11-01 16:23:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,9 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#include <com/sun/star/util/VetoException.hpp>
+#include <com/sun/star/script/ModuleSizeExceededRequest.hpp>
+
 using namespace ::comphelper;
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -118,10 +121,28 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
 
 
+typedef ::cppu::WeakImplHelper1< task::XInteractionHandler > HandlerImpl_BASE;
+
+class DummyInteractionHandler  : public HandlerImpl_BASE
+{
+    Reference< task::XInteractionHandler > m_xHandler;
+public:
+    DummyInteractionHandler( const Reference< task::XInteractionHandler >& xHandler ) : m_xHandler( xHandler ){}
+
+    virtual void SAL_CALL handle( const Reference< task::XInteractionRequest >& rRequest ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        if ( m_xHandler.is() )
+        {
+        script::ModuleSizeExceededRequest aModSizeException;
+        if ( rRequest->getRequest() >>= aModSizeException )
+            m_xHandler->handle( rRequest );
+        }
+    }
+};
+
 //----------------------------------------------------------------------------
 //  BasicLibUserData
 //----------------------------------------------------------------------------
-
 class BasicLibUserData
 {
 private:
@@ -1253,22 +1274,27 @@ void LibPage::Export( void )
 
     if ( xNewDlg->Execute() == RET_OK )
     {
-        if( xNewDlg->isExportAsPackage() )
-            ExportAsPackage( aLibName );
-        else
-            ExportAsBasic( aLibName );
+        try
+        {
+            if( xNewDlg->isExportAsPackage() )
+                ExportAsPackage( aLibName );
+            else
+                ExportAsBasic( aLibName );
+        }
+        catch( util::VetoException& ve ) // user cancled operation
+        {
+        }
     }
 }
 
 void LibPage::implExportLib( const String& aLibName, const String& aTargetURL,
-    const Reference< task::XInteractionHandler > Handler )
+    const Reference< task::XInteractionHandler >& Handler )
 {
     ::rtl::OUString aOULibName( aLibName );
     Reference< script::XLibraryContainerExport > xModLibContainerExport
         ( BasicIDE::GetModuleLibraryContainer( m_pCurShell ), UNO_QUERY );
     Reference< script::XLibraryContainerExport > xDlgLibContainerExport
         ( BasicIDE::GetDialogLibraryContainer( m_pCurShell ), UNO_QUERY );
-
     if ( xModLibContainerExport.is() )
         xModLibContainerExport->exportLibrary( aOULibName, aTargetURL, Handler );
 
@@ -1377,7 +1403,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
         OUString aSourcePath = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
         if( xSFA->exists( aSourcePath ) )
             xSFA->kill( aSourcePath );
-        Reference< task::XInteractionHandler > xDummyHandler;
+        Reference< task::XInteractionHandler > xDummyHandler( new DummyInteractionHandler( xHandler ) );
         implExportLib( aLibName, aTmpPath, xDummyHandler );
 
         Reference< XCommandEnvironment > xCmdEnv =
@@ -1486,7 +1512,7 @@ void LibPage::ExportAsBasic( const String& aLibName )
             String aTargetURL = xFolderPicker->getDirectory();
             IDE_DLL()->GetExtraData()->SetAddLibPath( aTargetURL );
 
-            Reference< task::XInteractionHandler > xDummyHandler;
+            Reference< task::XInteractionHandler > xDummyHandler( new DummyInteractionHandler( xHandler ) );
             implExportLib( aLibName, aTargetURL, xDummyHandler );
         }
     }
