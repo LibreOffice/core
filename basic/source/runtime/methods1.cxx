@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 11:03:21 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 16:33:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -521,18 +521,25 @@ RTLFUNC(Switch)
     rPar.Get(0)->PutNull();
 }
 
-
-RTLFUNC(Wait)
+//i#64882# Common wait impl for existing Wait and new WaitUntil
+// rtl functions
+void Wait_Impl( bool bDurationBased, SbxArray& rPar )
 {
-    (void)pBasic;
-    (void)bWrite;
-
     if( rPar.Count() != 2 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    long nWait = rPar.Get(1)->GetLong();
+    long nWait = 0;
+    if ( bDurationBased )
+    {
+        double dWait = rPar.Get(1)->GetDouble();
+        double dNow = Now_Impl();
+         double dSecs = (double)( ( dWait - dNow ) * (double)( 24.0*3600.0) );
+        nWait = (long)( dSecs * 1000 ); // wait in thousands of sec
+    }
+    else
+        nWait = rPar.Get(1)->GetLong();
     if( nWait < 0 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -544,6 +551,23 @@ RTLFUNC(Wait)
     aTimer.Start();
     while ( aTimer.IsActive() )
         Application::Yield();
+}
+
+//i#64882#
+RTLFUNC(Wait)
+{
+    (void)pBasic;
+    (void)bWrite;
+    Wait_Impl( false, rPar );
+}
+
+//i#64882# add new WaitUntil ( for application.wait )
+// share wait_impl with 'normal' oobasic wait
+RTLFUNC(WaitUntil)
+{
+    (void)pBasic;
+    (void)bWrite;
+    Wait_Impl( true, rPar );
 }
 
 RTLFUNC(GetGUIVersion)
