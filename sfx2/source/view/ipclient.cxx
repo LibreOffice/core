@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:39:35 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 09:52:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #endif
 
+#include <com/sun/star/embed/EmbedMisc.hpp>
 #include <svtools/embedhlp.hxx>
 #include <vcl/svapp.hxx>
 
@@ -98,6 +99,7 @@
 #include "dispatch.hxx"
 #include "workwin.hxx"
 #include "guisaveas.hxx"
+#include "topfrm.hxx"
 
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
@@ -143,6 +145,7 @@ public:
     sal_Int64                       m_nAspect;              // ViewAspect that is assigned from the container
     Rectangle                       m_aLastObjAreaPixel;    // area of object in coordinate system of the container (without scaling)
     sal_Bool                        m_bStoreObject;
+    sal_Bool                        m_bUIActive;            // set and cleared when notification for UI (de)activation is sent
 
     uno::Reference < embed::XEmbeddedObject > m_xObject;
     uno::Reference < embed::XEmbeddedClient > m_xClient;
@@ -205,6 +208,7 @@ throw (::com::sun::star::uno::RuntimeException)
     }
     else if ( m_pClient && nNewState == embed::EmbedStates::UI_ACTIVE )
     {
+/*
         uno::Reference < lang::XUnoTunnel > xObj( m_xObject->getComponent(), uno::UNO_QUERY );
         uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
         sal_Int64 nHandle = xObj.is() ? xObj->getSomething( aSeq ) : 0;
@@ -216,6 +220,7 @@ throw (::com::sun::star::uno::RuntimeException)
             SfxWorkWindow *pWorkWin = pFrame->GetFrame()->GetWorkWindow_Impl();
             pWorkWin->UpdateObjectBars_Impl();
         }
+*/
     }
 }
 
@@ -406,47 +411,8 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingUI()
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
 
-#if 0
-    // make LayoutManager of container invisible (currently needs SFX code)
-    uno::Reference < ::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager();
-    xLayoutManager->lock();
-    xLayoutManager->setVisible( sal_False );
-#endif
-    SfxWorkWindow* pClientWorkWin = m_pClient->GetViewShell()->GetViewFrame()->GetFrame()->GetWorkWindow_Impl();
-    pClientWorkWin->Lock_Impl( TRUE );
-    pClientWorkWin->MakeVisible_Impl( FALSE );
-
-    // make LayoutManager of object visible and force placement of objects tools
-    uno::Reference < lang::XUnoTunnel > xObj( m_xObject->getComponent(), uno::UNO_QUERY );
-    uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
-    sal_Int64 nHandle = xObj.is() ? xObj->getSomething( aSeq ) : 0;
-    if ( nHandle )
-    {
-        // currently needs SFX code
-        SfxObjectShell* pDoc = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
-        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDoc );
-        SfxWorkWindow* pWorkWin = pFrame->GetFrame()->GetWorkWindow_Impl();
-        pWorkWin->MakeVisible_Impl( TRUE );
-        pWorkWin->Lock_Impl( FALSE );
-
-#if 0
-        uno::Reference < beans::XPropertySet > xFrame( pFrame->GetFrame()->GetFrameInterface(), uno::UNO_QUERY );
-        try
-        {
-            uno::Reference< ::com::sun::star::frame::XLayoutManager > xMan;
-            uno::Any aAny = xFrame->getPropertyValue( ::rtl::OUString::createFromAscii("LayoutManager") );
-            aAny >>= xMan;
-            xMan->setVisible( sal_True );
-            xMan->unlock();
-        }
-        catch ( uno::Exception& )
-        {
-        }
-#endif
-        pDoc->UIActivate( TRUE );
-    }
-
-    // remove containers tools
+    m_pClient->GetViewShell()->ResetAllClients_Impl(m_pClient);
+    m_bUIActive = TRUE;
     m_pClient->GetViewShell()->UIActivating( m_pClient );
 }
 
@@ -472,54 +438,8 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedUI()
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
 
-#if 0
-    // make LayoutManager of container visible again (currently needs SFX code)
-    uno::Reference < ::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager();
-    xLayoutManager->setVisible( sal_True );
-    xLayoutManager->unlock();
-#endif
-
-    SfxWorkWindow* pClientWorkWin = m_pClient->GetViewShell()->GetViewFrame()->GetFrame()->GetWorkWindow_Impl();
-    pClientWorkWin->MakeVisible_Impl( TRUE );
-    pClientWorkWin->Lock_Impl( FALSE );
-    pClientWorkWin->UpdateObjectBars_Impl();
-
-    // make LayoutManager of object invisible
-    SfxObjectShell* pDoc = 0;
-    uno::Reference < lang::XUnoTunnel > xObj( m_xObject->getComponent(), uno::UNO_QUERY );
-    uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
-    sal_Int64 nHandle = xObj.is() ? xObj->getSomething( aSeq ) : 0;
-    if ( nHandle )
-    {
-        // currently needs SFX code
-        pDoc = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
-        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDoc );
-        SfxWorkWindow* pWorkWin = pFrame->GetFrame()->GetWorkWindow_Impl();
-        pWorkWin->MakeVisible_Impl( FALSE );
-        pWorkWin->Lock_Impl( TRUE );
-
-#if 0
-        uno::Reference < beans::XPropertySet > xFrame( pFrame->GetFrame()->GetFrameInterface(), uno::UNO_QUERY );
-        try
-        {
-            uno::Reference< ::com::sun::star::frame::XLayoutManager > xMan;
-            uno::Any aAny = xFrame->getPropertyValue( ::rtl::OUString::createFromAscii("LayoutManager") );
-            aAny >>= xMan;
-            xMan->setVisible( sal_False );
-            xMan->lock();
-        }
-        catch ( uno::Exception& )
-        {
-        }
-#endif
-    }
-
-    // show containers tools
     m_pClient->GetViewShell()->UIDeactivated( m_pClient );
-
-    if ( pDoc )
-        // force removal of objects tools
-        pDoc->UIActivate( FALSE );
+    m_bUIActive = FALSE;
 }
 
 //--------------------------------------------------------------------
@@ -755,6 +675,7 @@ SfxInPlaceClient::SfxInPlaceClient( SfxViewShell* pViewShell, Window *pDraw, sal
     m_pImp->m_aTimer.SetTimeout( SFX_CLIENTACTIVATE_TIMEOUT );
     m_pImp->m_aTimer.SetTimeoutHdl( LINK( m_pImp, SfxInPlaceClient_Impl, TimerHdl ) );
     m_pImp->m_bStoreObject = sal_True;
+    m_pImp->m_bUIActive = FALSE;
 }
 
 //--------------------------------------------------------------------
@@ -1056,6 +977,9 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
 
             if ( !nError )
             {
+
+                if ( m_pViewSh )
+                    ((SfxTopFrame*)m_pViewSh->GetViewFrame()->GetTopFrame())->LockResize_Impl(TRUE);
                 try
                 {
                     m_pImp->m_xObject->setClientSite( m_pImp->m_xClient );
@@ -1086,6 +1010,13 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                 {
                     nError = ERRCODE_SO_GENERALERROR;
                     //TODO/LATER: better error handling
+                }
+
+                if ( m_pViewSh )
+                {
+                    SfxViewFrame* pFrame = m_pViewSh->GetViewFrame();
+                    ((SfxTopFrame*)pFrame->GetTopFrame())->LockResize_Impl(FALSE);
+                    pFrame->GetTopFrame()->Resize();
                 }
             }
         }
@@ -1125,3 +1056,68 @@ void SfxInPlaceClient::MakeVisible()
     // dummy implementation
 }
 
+void SfxInPlaceClient::DeactivateObject()
+{
+    if ( GetObject().is() )
+    {
+        try
+        {
+            m_pImp->m_bUIActive = FALSE;
+            BOOL bHasFocus = FALSE;
+            uno::Reference< frame::XModel > xModel( m_pImp->m_xObject->getComponent(), uno::UNO_QUERY );
+            if ( xModel.is() )
+            {
+                uno::Reference< frame::XController > xController = xModel->getCurrentController();
+                if ( xController.is() )
+                {
+                    Window* pWindow = VCLUnoHelper::GetWindow( xController->getFrame()->getContainerWindow() );
+                    bHasFocus = pWindow->HasChildPathFocus( TRUE );
+                }
+            }
+
+            if ( m_pViewSh )
+                ((SfxTopFrame*)m_pViewSh->GetViewFrame()->GetTopFrame())->LockResize_Impl(TRUE);
+
+            if ( m_pImp->m_xObject->getStatus( m_pImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
+            {
+                m_pImp->m_xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
+                if ( bHasFocus && m_pViewSh )
+                    m_pViewSh->GetWindow()->GrabFocus();
+            }
+            else
+                m_pImp->m_xObject->changeState( embed::EmbedStates::RUNNING );
+
+            if ( m_pViewSh )
+            {
+                SfxViewFrame* pFrame = m_pViewSh->GetViewFrame();
+                SfxViewFrame::SetViewFrame( pFrame );
+                ((SfxTopFrame*)pFrame->GetTopFrame())->LockResize_Impl(FALSE);
+                pFrame->GetTopFrame()->Resize();
+            }
+        }
+        catch (com::sun::star::uno::Exception& )
+        {}
+    }
+}
+
+void SfxInPlaceClient::ResetObject()
+{
+    if ( GetObject().is() )
+    {
+        try
+        {
+            m_pImp->m_bUIActive = FALSE;
+            if ( m_pImp->m_xObject->getStatus( m_pImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
+                m_pImp->m_xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
+            else
+                m_pImp->m_xObject->changeState( embed::EmbedStates::RUNNING );
+        }
+        catch (com::sun::star::uno::Exception& )
+        {}
+    }
+}
+
+BOOL SfxInPlaceClient::IsUIActive()
+{
+    return m_pImp->m_bUIActive;
+}
