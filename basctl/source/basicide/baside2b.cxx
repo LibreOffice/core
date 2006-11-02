@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:24:48 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 11:05:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -460,7 +460,8 @@ void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
             bDone = TRUE; // CTRL-Y schlucken, damit kein Vorlagenkatalog
         else
         {
-            if ( ( rKEvt.GetKeyCode().GetCode() == KEY_TAB ) && !rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsMod2() )
+            if ( ( rKEvt.GetKeyCode().GetCode() == KEY_TAB ) && !rKEvt.GetKeyCode().IsMod1() &&
+                  !rKEvt.GetKeyCode().IsMod2() && !GetEditView()->IsReadOnly() )
             {
                 TextSelection aSel( pEditView->GetSelection() );
                 if ( aSel.GetStart().GetPara() != aSel.GetEnd().GetPara() )
@@ -2173,52 +2174,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                 SbxVariable* pVar = (SbxVariable*)pSBX;
                 // Sonderbehandlung fuer Arrays:
                 SbxDataType eType = pVar->GetType();
-                if ( (BYTE)eType == (BYTE)SbxOBJECT )
-                {
-                    SbxObject* pObj = NULL;
-                    SbxBase* pBase = pVar->GetObject();
-                    if( pBase && pBase->ISA( SbxObject ) )
-                        pObj = (SbxObject*)pBase;
-
-                    if( pObj )
-                    {
-                        // Check if member list has changed
-                        bool bObjChanged = false;
-                        if( pItem->mpObject != NULL && pItem->maMemberList.mpMemberNames != NULL )
-                        {
-                            SbxArray* pProps = pObj->GetProperties();
-                            USHORT nPropCount = pProps->Count();
-                            for( USHORT i = 0 ; i < nPropCount - 3 ; i++ )
-                            {
-                                SbxVariable* pVar = pProps->Get( i );
-                                String aName( pVar->GetName() );
-                                if( pItem->maMemberList.mpMemberNames[i] != aName )
-                                {
-                                    bObjChanged = true;
-                                    break;
-                                }
-                            }
-                            if( bObjChanged )
-                                bCollapse = true;
-                        }
-
-                        pItem->mpObject = pObj;
-                        implEnableChildren( pEntry, true );
-                        aTypeStr = getBasicObjectTypeName( pObj );
-                    }
-                    else
-                    {
-                        aWatchStr = String( RTL_CONSTASCII_USTRINGPARAM( "Null" ) );
-                        if( pItem->mpObject != NULL )
-                        {
-                            bCollapse = true;
-                            pItem->clearWatchItem( false );
-
-                            implEnableChildren( pEntry, false );
-                        }
-                    }
-                }
-                else if ( eType & SbxARRAY )
+                if ( eType & SbxARRAY )
                 {
                     // Mehrdimensionale Arrays beruecksichtigen!
                     SbxBase* pBase = pVar->GetObject();
@@ -2282,6 +2238,51 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                     }
                     else
                         aWatchStr += String( RTL_CONSTASCII_USTRINGPARAM( "<?>" ) );
+                }
+                else if ( (BYTE)eType == (BYTE)SbxOBJECT )
+                {
+                    SbxObject* pObj = NULL;
+                    SbxBase* pBase = pVar->GetObject();
+                    if( pBase && pBase->ISA( SbxObject ) )
+                        pObj = (SbxObject*)pBase;
+
+                    if( pObj )
+                    {
+                        // Check if member list has changed
+                        bool bObjChanged = false;
+                        if( pItem->mpObject != NULL && pItem->maMemberList.mpMemberNames != NULL )
+                        {
+                            SbxArray* pProps = pObj->GetProperties();
+                            USHORT nPropCount = pProps->Count();
+                            for( USHORT i = 0 ; i < nPropCount - 3 ; i++ )
+                            {
+                                SbxVariable* pVar = pProps->Get( i );
+                                String aName( pVar->GetName() );
+                                if( pItem->maMemberList.mpMemberNames[i] != aName )
+                                {
+                                    bObjChanged = true;
+                                    break;
+                                }
+                            }
+                            if( bObjChanged )
+                                bCollapse = true;
+                        }
+
+                        pItem->mpObject = pObj;
+                        implEnableChildren( pEntry, true );
+                        aTypeStr = getBasicObjectTypeName( pObj );
+                    }
+                    else
+                    {
+                        aWatchStr = String( RTL_CONSTASCII_USTRINGPARAM( "Null" ) );
+                        if( pItem->mpObject != NULL )
+                        {
+                            bCollapse = true;
+                            pItem->clearWatchItem( false );
+
+                            implEnableChildren( pEntry, false );
+                        }
+                    }
                 }
                 else
                 {
