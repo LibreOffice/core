@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:16:41 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 15:32:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -502,7 +502,7 @@ SbxArray* SbiInstance::GetLocals( SbMethod* pMeth )
 
 SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, UINT32 nStart )
          : rBasic( *(StarBASIC*)pm->pParent ), pInst( pINST ),
-           pMod( pm ), pMeth( pe ), pImg( pMod->pImage )
+           pMod( pm ), pMeth( pe ), pImg( pMod->pImage ), m_nLastTime(0)
 {
     nFlags    = pe ? pe->GetDebugFlags() : 0;
     pIosys    = pInst->pIosys;
@@ -657,8 +657,15 @@ BOOL SbiRuntime::Step()
     if( bRun )
     {
         // Unbedingt gelegentlich die Kontrolle abgeben!
-        if( !( ++nOps & 0x1F ) && pInst->IsReschedule() && bStaticGlobalEnableReschedule )
-            Application::Reschedule();
+        if( !( ++nOps & 0xF ) && pInst->IsReschedule() && bStaticGlobalEnableReschedule )
+        {
+            sal_uInt32 nTime = osl_getGlobalTimer();
+            if (nTime - m_nLastTime > 5 ) // 20 ms
+            {
+                Application::Reschedule();
+                m_nLastTime = nTime;
+            }
+        }
 
         // #i48868 blocked by next call level?
         while( bBlocked )
