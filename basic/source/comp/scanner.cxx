@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scanner.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:27:41 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 11:02:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,8 +350,8 @@ BOOL SbiScanner::NextSym()
     else if( *pLine == '&' )
     {
         pLine++; nCol++;
-        sal_Unicode cmp1[] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' };
-        sal_Unicode cmp2[] = { '0', '1', '2', '3', '4', '5', '6', '7' };
+        sal_Unicode cmp1[] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F', 0 };
+        sal_Unicode cmp2[] = { '0', '1', '2', '3', '4', '5', '6', '7', 0 };
         sal_Unicode *cmp = cmp1;
         //char *cmp = "0123456789ABCDEF";
         sal_Unicode base = 16;
