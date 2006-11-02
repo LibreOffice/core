@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 11:03:40 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 16:33:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -593,6 +593,9 @@ static Methods aMethods[] = {
 
 { "Wait",           SbxNULL,      1 | _FUNCTION, RTLNAME(Wait),0            },
   { "Milliseconds", SbxLONG, 0,NULL,0 },
+//#i64882#
+{ "WaitUntil",          SbxNULL,      1 | _FUNCTION, RTLNAME(WaitUntil),0      },
+  { "Date", SbxDOUBLE, 0,NULL,0 },
 { "Weekday",        SbxINTEGER,   2 | _FUNCTION, RTLNAME(Weekday),0         },
   { "Date",         SbxDATE, 0,NULL,0 },
   { "Firstdayofweek", SbxINTEGER, _OPT, NULL,0 },
