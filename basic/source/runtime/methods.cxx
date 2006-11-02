@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 11:03:11 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 16:33:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2051,13 +2051,8 @@ RTLFUNC(Second)
     }
 }
 
-// Date Now(void)
-
-RTLFUNC(Now)
+double Now_Impl()
 {
-    (void)pBasic;
-    (void)bWrite;
-
     Date aDate;
     Time aTime;
     double aSerial = (double)GetDayDiff( aDate );
@@ -2067,7 +2062,16 @@ RTLFUNC(Now)
     nSeconds += aTime.GetSec();
     double nDays = ((double)nSeconds) / (double)(24.0*3600.0);
     aSerial += nDays;
-    rPar.Get(0)->PutDate( aSerial );
+    return aSerial;
+}
+
+// Date Now(void)
+
+RTLFUNC(Now)
+{
+        (void)pBasic;
+        (void)bWrite;
+    rPar.Get(0)->PutDate( Now_Impl() );
 }
 
 // Date Time(void)
