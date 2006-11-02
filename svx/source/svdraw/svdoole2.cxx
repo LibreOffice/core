@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:23:44 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 09:51:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1531,6 +1531,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
     if ( GetAspect() == embed::Aspects::MSOLE_ICON )
         return;
 
+    // the object area of an embedded object was changed, e.g. by user interaction an a selected object
     GetObjRef();
     if ( xObjRef.is() )
     {
@@ -1545,7 +1546,11 @@ void SdrOle2Obj::ImpSetVisAreaSize()
 
         if ( pClient || bHasOwnClient )
         {
-            if ( (nMiscStatus & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) && svt::EmbeddedObjectRef::TryRunningState( xObjRef.GetObject() ) )
+            // TODO/LATER: IMHO we need to do similar things when object is UIActive or OutplaceActive?! (MBA)
+            if ( (nMiscStatus & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) &&
+                    svt::EmbeddedObjectRef::TryRunningState( xObjRef.GetObject() )
+                    || xObjRef->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE
+                    )
             {
                 Fraction aScaleWidth;
                 Fraction aScaleHeight;
@@ -1560,8 +1565,11 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                     aScaleHeight = mpImpl->pLightClient->GetScaleHeight();
                 }
 
-                // server wants to resize itself (f.e. Chart wants to recalculate the layout)
-                // the scaling should not change, but it might exist already and must be used in calculations
+                // The object wants to resize itself (f.e. Chart wants to recalculate the layout)
+                // or object is inplace active and so has a window that must be resized also
+                // In these cases the change in the object area size will be reflected in a change of the
+                // objects' visual area. The scaling will not change, but it might exist already and must
+                // be used in calculations
                 MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObjRef->getMapUnit( GetAspect() ) );
                 Size aVisSize( (long)( Fraction( aRect.GetWidth() ) / aScaleWidth ),
                                 (long)( Fraction( aRect.GetHeight() ) / aScaleHeight ) );
@@ -1584,16 +1592,23 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                                                 (long)( Fraction( long( aSz.Height ) ) * aScaleHeight ) ) );
                 if (aVisSize != aAcceptedVisArea.GetSize())
                 {
-                    // server changed VisArea to its liking
+                    // server changed VisArea to its liking and the VisArea is different than the suggested one
+                    // store the new value as given by the object
                     MapUnit aNewMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObjRef->getMapUnit( GetAspect() ) );
                     aRect.SetSize(OutputDevice::LogicToLogic( aAcceptedVisArea.GetSize(), aNewMapUnit, pModel->GetScaleUnit()));
                 }
 
+                // make the new object area known to the client
+                // compared to the "else" branch aRect might have been changed by the object and no additional scaling was applied
+                pClient->SetObjArea(aRect);
+
+                // we need a new replacement image as the object has resized itself
                 xObjRef.UpdateReplacement();
             }
             else
             {
-                // change object scaling
+                // The object isn't active and does not want to resize itself so the changed object area size
+                // will be reflected in a changed object scaling
                 Fraction aScaleWidth;
                 Fraction aScaleHeight;
                 Size aObjAreaSize;
