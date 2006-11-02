@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:54:08 $
+ *  last change: $Author: mav $ $Date: 2006-11-02 15:22:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2107,12 +2107,12 @@ void SfxDocumentInfo::SetReloadURL( const String& rString )
     aReloadURL = rString;
 }
 
-ULONG SfxDocumentInfo::GetReloadDelay() const
+sal_uInt32 SfxDocumentInfo::GetReloadDelay() const
 {
     return nReloadSecs;
 }
 
-void SfxDocumentInfo::SetReloadDelay( ULONG nSec )
+void SfxDocumentInfo::SetReloadDelay( sal_uInt32 nSec )
 {
     nReloadSecs = nSec;
 }
