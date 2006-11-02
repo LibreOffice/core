@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbunoobj.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:44:31 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 16:32:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,7 @@ class SbUnoObject: public SbxObject
     void implCreateAll( void );
 
 public:
+    static bool getDefaultPropName( SbUnoObject* pUnoObj, String& sDfltProp );
     TYPEINFO();
     SbUnoObject( const String& aName_, const Any& aUnoObj_ );
     ~SbUnoObject();
