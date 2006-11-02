@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImportFilter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:34 $
+ *  last change: $Author: os $ $Date: 2006-11-02 12:48:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
     //create the tokenizer and domain mapper
     doctok::WW8Stream::Pointer_t pDocStream = doctok::WW8DocumentFactory::createStream(m_xContext, xInputStream);
     doctok::WW8Document::Pointer_t pDocument = doctok::WW8DocumentFactory::createDocument(pDocStream);
-    doctok::Stream::Pointer_t pStream(new dmapper::DomainMapper(m_xDoc));
+    doctok::Stream::Pointer_t pStream(new dmapper::DomainMapper(m_xContext, m_xDoc));
     pDocument->resolve(*pStream);
 
     return sal_True;
