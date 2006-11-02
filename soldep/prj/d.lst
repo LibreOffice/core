@@ -1,7 +1,7 @@
 mkdir: %_DEST%\inc%_EXT%\soldep
 mkdir: %_DEST%\inc%_EXT%\bootstrp2
 hedabu: ..\inc\sdtresid.hxx %_DEST%\inc%_EXT%\soldep\sdtresid.hxx
-..\%__SRC%\bin\dep*.res %_DEST%\bin%_EXT%\additional\dep*.res
+..\%__SRC%\bin\soldepl.exe %_DEST%\bin%_EXT%\soldepl.exe
 ..\%__SRC%\bin\bootstrpdt?????.dll %_DEST%\bin%_EXT%\bootstrpdt?????.dll
 ..\%__SRC%\bin\soldep?????.dll %_DEST%\bin%_EXT%\soldep?????.dll
 ..\%__SRC%\lib\libbootstrpdt?????.so %_DEST%\lib%_EXT%\libbootstrpdt?????.so
@@ -34,7 +34,7 @@ hedabu: ..\inc\soldlg.hrc %_DEST%\inc%_EXT%\soldep\soldlg.hrc
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
 ..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
-..\%COMMON_OUTDIR%\bin\dep*.res %_DEST%\bin%_EXT%\additional\dep*.res
+..\%__SRC%\bin\dep*.res %_DEST%\bin%_EXT%\additional\dep*.res
 
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
