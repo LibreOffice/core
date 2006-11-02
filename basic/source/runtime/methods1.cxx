@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:29:59 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 11:03:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2546,11 +2546,20 @@ RTLFUNC(CompatibilityMode)
     (void)pBasic;
     (void)bWrite;
 
-    rPar.Get(0)->PutEmpty();
-    if ( rPar.Count() != 2 )
+    bool bEnabled = false;
+    USHORT nCount = rPar.Count();
+    if ( nCount != 1 && nCount != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-    if( pINST )
-        pINST->EnableCompatibility( rPar.Get(1)->GetBool() );
+
+    SbiInstance* pInst = pINST;
+    if( pInst )
+    {
+        if ( nCount == 2 )
+            pInst->EnableCompatibility( rPar.Get(1)->GetBool() );
+
+        bEnabled = pInst->IsCompatibility();
+    }
+    rPar.Get(0)->PutBool( bEnabled );
 }
 
 RTLFUNC(Input)
