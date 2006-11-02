@@ -196,7 +196,7 @@ int main(argc, argv)
         fatalerr("cannot open \"%s\"\n", argv[1]+1);
         fstat(afd, &ast);
         args = (char *)malloc(ast.st_size + 1);
-        if ((ast.st_size = read(afd, args, ast.st_size)) < 0)
+        if ((ast.st_size = read(afd, args, (size_t) ast.st_size)) < 0)
         fatalerr("failed to read %s\n", argv[1]+1);
         args[ast.st_size] = '\0';
         close(afd);
