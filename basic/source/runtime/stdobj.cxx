@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:06:10 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 11:03:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@ static Methods aMethods[] = {
 { "CLEAR_TAB",      SbxINTEGER,       _CPROP,    RTLNAME(CLEAR_TAB),0       },
 { "CLng",           SbxLONG,      1 | _FUNCTION, RTLNAME(CLng),0            },
   { "expression",   SbxVARIANT, 0,NULL,0 },
-{ "CompatibilityMode",  SbxNULL,  1 | _FUNCTION, RTLNAME(CompatibilityMode),0},
+{ "CompatibilityMode",  SbxBOOL,  1 | _FUNCTION, RTLNAME(CompatibilityMode),0},
   { "bEnable",      SbxBOOL, 0,NULL,0 },
 { "ConvertFromUrl", SbxSTRING,    1 | _FUNCTION, RTLNAME(ConvertFromUrl),0  },
   { "Url",          SbxSTRING, 0,NULL,0 },
