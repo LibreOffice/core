@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 15:32:56 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 16:36:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,7 @@ SbiRuntime::pStep0 SbiRuntime::aStep0[] = { // Alle Opcodes ohne Operanden
     &SbiRuntime::StepRSET,      // Speichern Objekt TOS ==> TOS-1
     &SbiRuntime::StepREDIMP_ERASE,// Copy array object for REDIMP
     &SbiRuntime::StepINITFOREACH,// Init for each loop
+    &SbiRuntime::StepVBASET,// vba-like set statement
 };
 
 SbiRuntime::pStep1 SbiRuntime::aStep1[] = { // Alle Opcodes mit einem Operanden
