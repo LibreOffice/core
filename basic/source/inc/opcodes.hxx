@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opcodes.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:31:38 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 16:32:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,7 @@ enum SbiOpcode {
     _RSET,              // Speichern Objekt TOS ==> TOS-1
     _REDIMP_ERASE,      // Copies array to be later used by REDIM PRESERVE before erasing it
     _INITFOREACH,
+    _VBASET,            // VBA-like Set
     SbOP0_END,
 
     // Alle Opcodes mit einem Operanden
@@ -131,7 +132,6 @@ enum SbiOpcode {
     _BASED,             // TOS wird um BASE erhoeht, BASE davor gepusht (+base)
     // Typanpassung im Argv
     _ARGTYP,            // Letzten Parameter in Argv konvertieren (+Typ)
-
     SbOP1_END,
 
     // Alle Opcodes mit zwei Operanden
