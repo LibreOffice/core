@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:30:44 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 16:34:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,8 @@
 
 #include <algorithm>
 
+SbxVariable* getDefaultProp( SbxVariable* pRef );
+
 void SbiRuntime::StepNOP()
 {}
 
@@ -61,6 +63,36 @@ void SbiRuntime::StepArith( SbxOperator eOp )
     SbxVariableRef p1 = PopVar();
     TOSMakeTemp();
     SbxVariable* p2 = GetTOS();
+
+    bool bVBAInterop =  SbiRuntime::isVBAEnabled();
+
+    // This could & should be moved to the MakeTempTOS() method in runtime.cxx
+    // In the code which this is cut'npaste from there is a check for a ref
+    // count != 1 based on which the copy of the SbxVariable is done.
+    // see orig code in MakeTempTOS ( and I'm not sure what the significance,
+    // of that is )
+    // here we alway seem to have a refcount of 1. Also it seems that
+    // MakeTempTOS is called for other operation, so I hold off for now
+    // until I have a better idea
+    if ( bVBAInterop
+        && ( p2->GetType() == SbxOBJECT || p2->GetType() == SbxVARIANT )
+    )
+    {
+        SbxVariable* pDflt = getDefaultProp( p2 );
+        if ( pDflt )
+        {
+            pDflt->Broadcast( SBX_HINT_DATAWANTED );
+            // replacing new p2 on stack causes object pointed by
+            // pDft->pParent to be deleted, when p2->Compute() is
+            // called below pParent is accessed ( but its deleted )
+            // so set it to NULL now
+            pDflt->SetParent( NULL );
+            p2 = new SbxVariable( *pDflt );
+            p2->SetFlag( SBX_READWRITE );
+            refExprStk->Put( p2, nExprLvl - 1 );
+        }
+    }
+
     p2->ResetFlag( SBX_FIXED );
     p2->Compute( eOp, *p1 );
 
@@ -212,9 +244,34 @@ void SbiRuntime::StepPUT()
         n = refVar->GetFlags();
         refVar->SetFlag( SBX_WRITE );
     }
+    bool bVBAInterop =  SbiRuntime::isVBAEnabled();
+
+    // if left side arg is an object or variant and right handside isn't
+    // either an object or a variant then try and see if a default
+    // property exists.
+    // to use e.g. Range{"A1") = 34
+    // could equate to Range("A1").Value = 34
+    if ( bVBAInterop )
+    {
+        if ( refVar->GetType() == SbxOBJECT  )
+        {
+            SbxVariable* pDflt = getDefaultProp( refVar );
+            if ( pDflt )
+                refVar = pDflt;
+        }
+        if (  refVal->GetType() == SbxOBJECT  )
+        {
+            SbxVariable* pDflt = getDefaultProp( refVal );
+            if ( pDflt )
+                refVal = pDflt;
+        }
+    }
+
     *refVar = *refVal;
+    // lhs is a property who's value is currently null
+    if ( !bVBAInterop || ( bVBAInterop && refVar->GetType() != SbxEMPTY ) )
     // #67607 Uno-Structs kopieren
-    checkUnoStructCopy( refVal, refVar );
+        checkUnoStructCopy( refVal, refVar );
     if( bFlagsChanged )
         refVar->SetFlags( n );
 }
@@ -223,29 +280,43 @@ void SbiRuntime::StepPUT()
 // Speichern Objektvariable
 // Nicht-Objekt-Variable fuehren zu Fehlern
 
-void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar )
+void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, bool bHandleDefaultProp )
 {
     // #67733 Typen mit Array-Flag sind auch ok
     SbxDataType eValType = refVal->GetType();
     SbxDataType eVarType = refVar->GetType();
-    if( (eValType != SbxOBJECT && eValType != SbxEMPTY && !(eValType & SbxARRAY)) ||
-        (eVarType != SbxOBJECT && eVarType != SbxEMPTY && !(eVarType & SbxARRAY) ) )
+        if( (eValType != SbxOBJECT
+            && eValType != SbxEMPTY
+// seems like when using the default method its possible for objects
+// to be empty ( no broadcast has taken place yet ) or the actual value is
+
+            && !bHandleDefaultProp
+            && !(eValType & SbxARRAY)) ||
+            (eVarType != SbxOBJECT
+            && eVarType != SbxEMPTY
+            && !bHandleDefaultProp
+            && !(eVarType & SbxARRAY) ) )
     {
         Error( SbERR_INVALID_USAGE_OBJECT );
     }
     else
     {
-        // Auf refVal GetObject fuer Collections ausloesen
-        SbxBase* pObjVarObj = refVal->GetObject();
-        if( pObjVarObj )
+        // Getting in here causes problems with objects with default properties
+        // if they are SbxEMPTY I guess
+        if ( !bHandleDefaultProp || ( bHandleDefaultProp && refVal->GetType() == SbxOBJECT ) )
         {
-            SbxVariableRef refObjVal = PTR_CAST(SbxObject,pObjVarObj);
+        // Auf refVal GetObject fuer Collections ausloesen
+            SbxBase* pObjVarObj = refVal->GetObject();
+            if( pObjVarObj )
+            {
+                SbxVariableRef refObjVal = PTR_CAST(SbxObject,pObjVarObj);
 
-            // #67733 Typen mit Array-Flag sind auch ok
-            if( refObjVal )
-                refVal = refObjVal;
-            else if( !(eValType & SbxARRAY) )
-                refVal = NULL;
+                // #67733 Typen mit Array-Flag sind auch ok
+                if( refObjVal )
+                    refVal = refObjVal;
+                else if( !(eValType & SbxARRAY) )
+                    refVal = NULL;
+            }
         }
 
         // #52896 Wenn Uno-Sequences bzw. allgemein Arrays einer als
@@ -270,9 +341,57 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar )
             if( pProcProperty )
                 pProcProperty->setSet( true );
 
+            if ( bHandleDefaultProp )
+            {
+                // get default properties for lhs & rhs where necessary
+                SbxVariable* defaultProp = NULL;
+                bool bLHSHasDefaultProp = false;
+                // LHS try determine if a default prop exists
+                if ( refVar->GetType() == SbxOBJECT )
+                {
+                    SbxVariable* pDflt = getDefaultProp( refVar );
+                    if ( pDflt )
+                    {
+                        refVar = pDflt;
+                        bLHSHasDefaultProp = true;
+                    }
+                }
+                // RHS only get a default prop is the rhs has one
+                if (  refVal->GetType() == SbxOBJECT )
+                {
+                    // check if lhs is a null object
+                    // if it is then use the object not the default property
+                    SbxObject* pObj = NULL;
+
+
+                    pObj = PTR_CAST(SbxObject,(SbxVariable*)refVar);
+
+                    // calling GetObject on a SbxEMPTY variable raises
+                    // object not set errors, make sure its an Object
+                    if ( !pObj && refVar->GetType() == SbxOBJECT )
+                    {
+                        SbxBase* pObjVarObj = refVar->GetObject();
+                        pObj = PTR_CAST(SbxObject,pObjVarObj);
+                    }
+                    SbxVariable* pDflt = NULL;
+                    if ( pObj || bLHSHasDefaultProp )
+                        // lhs is either a valid object || or has a defaultProp
+                        pDflt = getDefaultProp( refVal );
+                    if ( pDflt )
+                        refVal = pDflt;
+                }
+            }
+
             *refVar = *refVal;
+
+            // lhs is a property who's value is currently (Empty e.g. no broadcast yet)
+            // in this case if there is a default prop involved the value of the
+            // default property may infact be void so the type will also be SbxEMPTY
+            // in this case we do not want to call checkUnoStructCopy 'cause that will
+            // cause an error also
+            if ( !bHandleDefaultProp || ( bHandleDefaultProp && ( refVar->GetType() != SbxEMPTY ) ) )
             // #67607 Uno-Structs kopieren
-            checkUnoStructCopy( refVal, refVar );
+                checkUnoStructCopy( refVal, refVar );
             if( bFlagsChanged )
                 refVar->SetFlags( n );
         }
@@ -283,9 +402,17 @@ void SbiRuntime::StepSET()
 {
     SbxVariableRef refVal = PopVar();
     SbxVariableRef refVar = PopVar();
-
-    StepSET_Impl( refVal, refVar );
+    StepSET_Impl( refVal, refVar, SbiRuntime::isVBAEnabled() ); // this is really assigment
 }
+
+void SbiRuntime::StepVBASET()
+{
+    SbxVariableRef refVal = PopVar();
+    SbxVariableRef refVar = PopVar();
+    // don't handle default property
+    StepSET_Impl( refVal, refVar, false ); // set obj = something
+}
+
 
 // JSM 07.10.95
 void SbiRuntime::StepLSET()
