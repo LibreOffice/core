@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 11:02:58 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 16:32:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -439,8 +439,8 @@ class SbiRuntime
     void StepNOT(),     StepCAT(),      StepLIKE(),     StepIS();
     void StepCLONE(),   StepOLDBASED(), StepARGC();
     void StepARGV(),    StepINPUT(),    StepLINPUT(),   StepSTOP();
-    void StepGET(),     StepSET(),      StepPUT(),      StepPUTC();
-    void StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar );
+    void StepGET(),     StepSET(),  StepVBASET(),   StepPUT(),      StepPUTC();
+    void StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, bool bDefaultHandling = false );
     void StepDIM(),     StepREDIM(),    StepREDIMP(),   StepERASE();
     void StepINITFOR(), StepNEXT(),     StepERROR(),    StepINITFOREACH();
     void StepCASE(),    StepENDCASE(),  StepSTDERROR();
