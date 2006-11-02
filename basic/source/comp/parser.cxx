@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:14:20 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 16:32:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -603,10 +603,20 @@ void SbiParser::Set()
         SbiExpression aExpr( this );
         aLvalue.Gen();
         aExpr.Gen();
+        // Its a good idea to distinguish between
+        // set someting = another &
+        // someting = another
+        // ( its necessary for vba objects where set is object
+        // specific and also doesn't involve processing default params )
         if( pDef->GetTypeId() )
             aGen.Gen( _SETCLASS, pDef->GetTypeId() );
         else
-            aGen.Gen( _SET );
+        {
+            if ( bVBASupportOn )
+                aGen.Gen( _VBASET );
+            else
+                aGen.Gen( _SET );
+        }
     }
     // aGen.Gen( _SET );
 }
