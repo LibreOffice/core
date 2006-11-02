@@ -4,9 +4,9 @@
  *
  *  $RCSfile: io.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:02:36 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 11:02:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -316,10 +316,13 @@ void SbiParser::Close()
     else
     for( ;; )
     {
-        if( Channel( TRUE ) )
-            aGen.Gen( _CLOSE, 1 );
-        else
-            break;
+        SbiExpression aExpr( this );
+        while( Peek() == COMMA || Peek() == SEMICOLON )
+            Next();
+        aExpr.Gen();
+        aGen.Gen( _CHANNEL );
+        aGen.Gen( _CLOSE, 1 );
+
         if( IsEoln( Peek() ) )
             break;
     }
