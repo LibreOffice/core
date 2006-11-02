@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8Picture.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:31 $
+ *  last change: $Author: os $ $Date: 2006-11-02 12:49:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,8 @@ namespace doctok
 doctok::Reference<Properties>::Pointer_t
 WW8PICF::get_DffRecord()
 {
-    return doctok::Reference<Properties>::Pointer_t
-        (new DffBlock(this, get_cbHeader(), getCount() - get_cbHeader(), 0));
+    doctok::Reference<Properties>::Pointer_t pRet(new DffBlock(this, get_cbHeader(), getCount() - get_cbHeader(), 0));
+    return pRet;
 }
 
 doctok::Reference<Properties>::Pointer_t

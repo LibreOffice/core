@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8Text.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:32 $
+ *  last change: $Author: os $ $Date: 2006-11-02 12:49:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,9 +69,15 @@ sal_uInt32 WW8sprmPChgTabsPapx::get_tbdAdd_count()
 doctok::Reference<Properties>::Pointer_t
 WW8sprmPChgTabsPapx::get_tbdAdd(sal_uInt32 pos)
 {
-    return doctok::Reference<Properties>::Pointer_t
-        (new WW8TBD(this,
+    //wntmsci compiler cannot handle 'too many inlines' ;-)
+    doctok::Reference<Properties>::Pointer_t pRet( new WW8TBD(this,
                     0x4 + get_dxaDel_count() * 2 + 1 + get_dxaAdd_count() * 2
                     + pos, 1));
+    return pRet;
+
+/*    return doctok::Reference<Properties>::Pointer_t
+        (new WW8TBD(this,
+                    0x4 + get_dxaDel_count() * 2 + 1 + get_dxaAdd_count() * 2
+                    + pos, 1));*/
 }
 }
