@@ -4,9 +4,9 @@
  *
  *  $RCSfile: communi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:33:49 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 12:16:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,6 @@ SV_IMPL_PTRARR_SORT( CommunicationLinkList, CommunicationLink* );
 
 NAMESPACE_VOS(OMutex) *pMPostUserEvent=NULL;        // Notwendig, da nicht threadfest
 
-
 CommunicationLinkViaSocket::CommunicationLinkViaSocket( CommunicationManager *pMan, NAMESPACE_VOS(OStreamSocket) *pSocket )
 : SimpleCommunicationLinkViaSocket( pMan, pSocket )
 , nConnectionClosedEventId( 0 )
@@ -97,6 +96,7 @@ CommunicationLinkViaSocket::CommunicationLinkViaSocket( CommunicationManager *pM
 , bShutdownStarted( FALSE )
 , bDestroying( FALSE )
 {
+    SetPutDataReceivedHdl(LINK( this, CommunicationLinkViaSocket, PutDataReceivedHdl ));
     if ( !pMPostUserEvent )
         pMPostUserEvent = new NAMESPACE_VOS(OMutex);
     // this is necassary to prevent the running thread from sending the close event
@@ -232,7 +232,7 @@ void CommunicationLinkViaSocket::run()
         {
             NAMESPACE_VOS(OGuard) aGuard( aMDataReceived );
             NAMESPACE_VOS(OGuard) aGuard2( *pMPostUserEvent );
-            nDataReceivedEventId = GetpApp()->PostUserEvent( LINK( this, CommunicationLinkViaSocket, DataReceived ) );
+            mlPutDataReceived.Call(this);
         }
     }
     TimeValue sNochEins = {0, 1000000};
@@ -276,6 +276,11 @@ long CommunicationLinkViaSocket::DataReceived( void* EMPTYARG )
     return CommunicationLink::DataReceived( );
 }
 
+IMPL_LINK( CommunicationLinkViaSocket, PutDataReceivedHdl, CommunicationLinkViaSocket*, EMPTYARG )
+{
+    nDataReceivedEventId = GetpApp()->PostUserEvent( LINK( this, CommunicationLinkViaSocket, DataReceived ) );
+    return 0;
+}
 
 
 
