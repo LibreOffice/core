@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:17:07 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 15:49:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -517,14 +517,11 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                 if ( refTemp )
                                 {
                                     meth->SetParameters( pPar );
-                                    SbxVariable* pNew = new SbxMethod( *(SbxMethod*)pMeth );
+                                    SbxVariable* pNew = new SbxMethod( *(SbxMethod*)meth );
                                     pElem = pNew;
                                 }
-
                             }
                         }
-
-
                     }
 
                     // #42940, 0.Parameter zu NULL setzen, damit sich Var nicht selbst haelt
