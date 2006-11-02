@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:25:45 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 16:32:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,7 @@
 #include <com/sun/star/script/XAllListener.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/script/XDefaultProperty.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XIdlArray.hpp>
@@ -130,6 +131,39 @@ static String aIllegalArgumentExceptionName
     ( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.IllegalArgumentException" ) );
 static OUString aSeqLevelStr( RTL_CONSTASCII_USTRINGPARAM("[]") );
 
+// Gets the default property for an uno object. Note: There is some
+// redirection built in. The property name specifies the name
+// of the default property.
+
+bool SbUnoObject::getDefaultPropName( SbUnoObject* pUnoObj, String& sDfltProp )
+{
+    bool result = false;
+    Reference< XDefaultProperty> xDefaultProp( pUnoObj->maTmpUnoObj, UNO_QUERY );
+    if ( xDefaultProp.is() )
+    {
+        sDfltProp = xDefaultProp->getDefaultPropertyName();
+        if ( sDfltProp.Len() )
+            result = true;
+    }
+    return result;
+}
+
+SbxVariable* getDefaultProp( SbxVariable* pRef )
+{
+    SbxVariable* pDefaultProp = NULL;
+    SbxObject* pObj = PTR_CAST(SbxObject,(SbxVariable*) pRef);
+    if ( !pObj )
+    {
+        SbxBase* pObjVarObj = pRef->GetObject();
+        pObj = PTR_CAST(SbxObject,pObjVarObj);
+    }
+    if ( pObj && pObj->ISA(SbUnoObject) )
+    {
+        SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,(SbxObject*)pObj);
+        pDefaultProp = pUnoObj->GetDfltProperty();
+    }
+    return pDefaultProp;
+}
 
 Reference< XComponentContext > getComponentContext_Impl( void )
 {
@@ -649,6 +683,13 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             // SbUnoObject instanzieren
             String aName;
             SbUnoObject* pSbUnoObject = new SbUnoObject( aName, aValue );
+            if ( SbiRuntime::isVBAEnabled() )
+            {
+                String sDfltPropName;
+
+                if ( SbUnoObject::getDefaultPropName( pSbUnoObject, sDfltPropName ) )
+                        pSbUnoObject->SetDfltProperty( sDfltPropName );
+            }
             SbxObjectRef xWrapper = (SbxObject*)pSbUnoObject;
 
             // #51475 Wenn das Objekt ungueltig ist null liefern
