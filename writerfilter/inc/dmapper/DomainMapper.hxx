@@ -1,3 +1,37 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: DomainMapper.hxx,v $
+ *
+ *  $Revision: 1.4 $
+ *
+ *  last change: $Author: os $ $Date: 2006-11-02 12:38:17 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
 #ifndef INCLUDED_DOMAINMAPPER_HXX
 #define INCLUDED_DOMAINMAPPER_HXX
 
@@ -7,6 +41,11 @@
 #include <doctok/WW8ResourceModel.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 
+namespace com{ namespace sun {namespace star{
+    namespace uno{
+        class XComponentContext;
+    }
+}}}
 namespace dmapper
 {
 using namespace std;
@@ -29,7 +68,8 @@ class WRITERFILTER_DLLPUBLIC DomainMapper : public doctok::Properties, public do
     DomainMapper_Impl   *m_pImpl;
 
 public:
-    DomainMapper(::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModel);
+    DomainMapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+                                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModel);
     virtual ~DomainMapper();
 
     // Properties

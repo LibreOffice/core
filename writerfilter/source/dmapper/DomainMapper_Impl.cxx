@@ -1,3 +1,37 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: DomainMapper_Impl.cxx,v $
+ *
+ *  $Revision: 1.3 $
+ *
+ *  last change: $Author: os $ $Date: 2006-11-02 12:37:24 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
 #ifndef INCLUDED_DMAPPER_DOMAINMAPPER_IMPL_HXX
 #include <DomainMapper_Impl.hxx>
 #endif
@@ -6,6 +40,9 @@
 #endif
 #ifndef INCLUDED_DOMAIN_MAPPER_TABLE_HANDLER_HXX
 #include <DomainMapperTableHandler.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -332,10 +369,12 @@ void FIB::SetData( doctok::Id nName, sal_Int32 nValue )
   -----------------------------------------------------------------------*/
 DomainMapper_Impl::DomainMapper_Impl(
             DomainMapper& rDMapper,
-            uno::Reference< lang::XComponent >  xModel ) :
+            uno::Reference < uno::XComponentContext >  xContext,
+            uno::Reference< lang::XComponent >  xModel) :
         m_rDMapper( rDMapper ),
         m_xTextDocument( xModel, uno::UNO_QUERY ),
         m_xTextFactory( xModel, uno::UNO_QUERY ),
+        m_xComponentContext( xContext ),
         m_bFieldMode( false ),
         m_bSetUserFieldContent( false ),
         m_nCurrentTabStopIndex( 0 ),
@@ -600,6 +639,26 @@ void DomainMapper_Impl::appendTextPortion( const ::rtl::OUString& rString, Prope
                 (rString, pPropertyMap->GetPropertyValues());
 
             //m_TableManager.handle(xTextRange);
+        }
+        catch(const lang::IllegalArgumentException& )
+        {
+        }
+        catch(const uno::Exception& )
+        {
+        }
+    }
+}
+/*-- 02.11.2006 12:08:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapper_Impl::appendTextContent( const uno::Reference< text::XTextContent > xContent)
+{
+    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
+    if(xTextAppendAndConvert.is() && ! m_TableManager.isIgnore())
+    {
+        try
+        {
+            xTextAppendAndConvert->appendTextContent( xContent );
         }
         catch(const lang::IllegalArgumentException& )
         {
@@ -1539,6 +1598,27 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::FindOrCreateFieldMaster
 //    }
 
 //}
+
+/*-- 01.11.2006 14:57:44---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+GraphicImportPtr DomainMapper_Impl::GetGraphicImport()
+{
+    if(!m_pGraphicImport)
+        m_pGraphicImport.reset( new GraphicImport( m_xComponentContext, m_xTextFactory ) );
+    return m_pGraphicImport;
+}
+/*-- 01.11.2006 09:25:40---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void  DomainMapper_Impl::ImportGraphic(doctok::Reference< doctok::Properties >::Pointer_t ref)
+{
+    //create the graphic
+    ref->resolve( *GetGraphicImport() );
+    //insert it into the document at the current cursor position
+    appendTextContent( m_pGraphicImport->GetGraphicObject() );
+    m_pGraphicImport.reset();
+}
 
 
 }

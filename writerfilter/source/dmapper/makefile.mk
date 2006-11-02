@@ -1,15 +1,16 @@
-#************************************************************************
+#*************************************************************************
 #
-#  OpenOffice.org - a multi-platform office productivity suite
+#   OpenOffice.org - a multi-platform office productivity suite
 #
-#  $RCSfile: makefile.mk,v $
+#   $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:30:29 $
+#   last change: $Author: os $ $Date: 2006-11-02 12:37:25 $
 #
-#  The Contents of this file are made available subject to
-#  the terms of GNU Lesser General Public License Version 2.1.
+#   The Contents of this file are made available subject to
+#   the terms of GNU Lesser General Public License Version 2.1.
+#
 #
 #     GNU Lesser General Public License Version 2.1
 #     =============================================
@@ -30,7 +31,7 @@
 #     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 #     MA  02111-1307  USA
 #
-# ***********************************************************************/
+#*************************************************************************
 PRJ=..$/..
 PRJNAME=writerfilter
 TARGET=dmapper
@@ -54,7 +55,8 @@ SLOFILES=           $(SLO)$/ConversionHelper.obj \
                     $(SLO)$/FontTable.obj   \
                     $(SLO)$/StyleSheetTable.obj \
                     $(SLO)$/ListTable.obj  \
-                    $(SLO)$/LFOTable.obj  
+                    $(SLO)$/LFOTable.obj    \
+                    $(SLO)$/GraphicImport.obj  \
 
 # --- Targets ----------------------------------
 

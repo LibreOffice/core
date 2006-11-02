@@ -1,3 +1,37 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: DomainMapper.cxx,v $
+ *
+ *  $Revision: 1.5 $
+ *
+ *  last change: $Author: os $ $Date: 2006-11-02 12:37:23 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
 #ifndef INCLUDED_DOMAINMAPPER_HXX
 #include <dmapper/DomainMapper.hxx>
 #endif
@@ -44,9 +78,6 @@
 #ifndef _COM_SUN_STAR_STYLE_LINESPACINGMODE_HPP_
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
 #endif
@@ -79,9 +110,10 @@ sal_Int32 lcl_ConvertColor(sal_Int32 nIntValue)
 
 /*-- 09.06.2006 09:52:11---------------------------------------------------
 
------------------------------------------------------------------------*/
-DomainMapper::DomainMapper(uno::Reference< lang::XComponent > xModel) :
-m_pImpl( new DomainMapper_Impl( *this, xModel ))
+  -----------------------------------------------------------------------*/
+DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xContext,
+                            uno::Reference< lang::XComponent > xModel) :
+    m_pImpl( new DomainMapper_Impl( *this, xContext, xModel ))
 {
 }
 /*-- 09.06.2006 09:52:12---------------------------------------------------
@@ -1419,7 +1451,7 @@ void DomainMapper::sprm(doctok::Sprm & sprm_)
 }
 /*-- 20.06.2006 09:58:33---------------------------------------------------
 
------------------------------------------------------------------------*/
+  -----------------------------------------------------------------------*/
 void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType eSprmType )
 {
     OSL_ENSURE(rContext.get(), "PropertyMap has to be valid!");
@@ -1472,7 +1504,6 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
             rContext->Insert( PROP_PARA_LAST_LINE_ADJUST, uno::makeAny( nLastLineAdjust ) );
         }
         break;
-
     case 0x2404:
         /* WRITERFILTERSTATUS: done: 0, planned: 3, spent: 0 */
         /* WRITERFILTERSTATUS: comment: */
@@ -1824,15 +1855,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0x0855:   // sprmCFSpec
         break;
     case 0x6A03:   // sprmCPicLocation
-        {
             //is being resolved on the tokenizer side
-            /*
-                        doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
-                        if( pProperties.get())
-                        {
-                        pProperties->resolve(*this);
-                        }
-            */        }
         break;
     case 0x4804:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
@@ -2751,7 +2774,13 @@ void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
 -----------------------------------------------------------------------*/
 void DomainMapper::props(doctok::Reference<Properties>::Pointer_t ref)
 {
-    ref->resolve(*this);
+    string sType = ref->getType();
+    if( sType == "PICF" )
+    {
+        m_pImpl->ImportGraphic(ref);
+    }
+    else
+        ref->resolve(*this);
 }
 /*-- 09.06.2006 09:52:15---------------------------------------------------
 
