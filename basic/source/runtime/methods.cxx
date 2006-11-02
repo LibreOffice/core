@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:29:43 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 11:03:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -451,23 +451,11 @@ RTLFUNC(CurDir)
         }
     }
     char* pBuffer = new char[ _MAX_PATH ];
-#ifdef MTW
-    int old = _getdrive();
-    _chdrive(nCurDir);
-
-    if ( getcwd( pBuffer, _MAX_PATH ) != 0 )
-        rPar.Get(0)->PutString( String::CreateFromAscii( pBuffer ) );
-    else
-        StarBASIC::Error( SbERR_NO_DEVICE );
-    delete [] pBuffer;
-    _chdrive(old);
-#else
     if ( _getdcwd( nCurDir, pBuffer, _MAX_PATH ) != 0 )
         rPar.Get(0)->PutString( String::CreateFromAscii( pBuffer ) );
     else
         StarBASIC::Error( SbERR_NO_DEVICE );
     delete [] pBuffer;
-#endif
 
 #elif defined( UNX )
 
@@ -674,9 +662,9 @@ RTLFUNC(Kill) // JSM
             if( xSFI.is() )
             {
                 String aFullPath = getFullPath( aFileSpec );
-                if( !xSFI->exists( aFullPath ) )
+                if( !xSFI->exists( aFullPath ) || xSFI->isFolder( aFullPath ) )
                 {
-                    StarBASIC::Error( SbERR_PATH_NOT_FOUND );
+                    StarBASIC::Error( SbERR_FILE_NOT_FOUND );
                     return;
                 }
                 try
