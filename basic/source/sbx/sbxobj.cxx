@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:11:04 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 16:34:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,16 +320,21 @@ BOOL SbxObject::Call( const XubString& rName, SbxArray* pParam )
     return FALSE;
 }
 
+SbxProperty* SbxObject::GetDfltProperty()
+{
+    if ( !pDfltProp && aDfltPropName.Len() )
+    {
+        pDfltProp = (SbxProperty*) Find( aDfltPropName, SbxCLASS_PROPERTY );
+        if( !pDfltProp )
+            pDfltProp = (SbxProperty*) Make( aDfltPropName, SbxCLASS_PROPERTY, SbxVARIANT );
+    }
+    return pDfltProp;
+}
 void SbxObject::SetDfltProperty( const XubString& rName )
 {
-    if( rName.Len() )
-    {
-        pDfltProp = (SbxProperty*) Find( rName, SbxCLASS_PROPERTY );
-        if( !pDfltProp )
-            pDfltProp = (SbxProperty*) Make( rName, SbxCLASS_PROPERTY, SbxVARIANT );
-    }
-    else
+    if ( rName != aDfltPropName )
         pDfltProp = NULL;
+    aDfltPropName = rName;
     SetModified( TRUE );
 }
 
