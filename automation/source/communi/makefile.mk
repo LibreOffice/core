@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 00:20:53 $
+#   last change: $Author: vg $ $Date: 2006-11-02 12:17:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ TARGET=communi
 # --- Files --------------------------------------------------------
 
 SLOFILES=   \
-    $(SLO)$/communi.obj \
+    $(SLO)$/communi.obj
 
 # --- Targets ------------------------------------------------------
 
