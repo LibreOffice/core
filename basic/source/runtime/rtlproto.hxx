@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtlproto.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:30:14 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 16:33:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,6 +300,9 @@ extern RTLFUNC(Blue);
 
 extern RTLFUNC(Switch);
 extern RTLFUNC(Wait);
+//i#64882# add new WaitUntil
+extern RTLFUNC(WaitUntil);
+
 extern RTLFUNC(GetGUIVersion);
 extern RTLFUNC(Choose);
 extern RTLFUNC(Trim);
@@ -345,3 +348,5 @@ extern RTLFUNC(CompatibilityMode);
 extern RTLFUNC(CDec);
 
 
+extern double Now_Impl();
+extern void Wait_Impl( bool bDurationBased, SbxArray& rPar );
