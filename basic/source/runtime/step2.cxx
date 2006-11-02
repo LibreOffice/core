@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 15:49:01 $
+ *  last change: $Author: vg $ $Date: 2006-11-02 16:37:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,54 @@
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
 
+const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
+const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
+//  i#i68894#
+SbxArray* getVBAGlobals( StarBASIC* pSBasic )
+{
+    SbxVariableRef pThisComp = pSBasic->Find( aThisComponent, SbxCLASS_OBJECT );
+    static SbxArrayRef pArray;
+    static bool isInitialised = false;
+    if ( isInitialised )
+        return pArray;
+
+    if (pThisComp && pThisComp->IsObject())
+    {
+        SbxObject *pObj = static_cast<SbxObject *>(pThisComp->GetObject());
+        SbxVariable *vba;
+        if ((vba = pObj->Find( aVBAHook, SbxCLASS_DONTCARE/* SbxCLASS_PROPERTY */ ) ) &&
+            (vba->GetType() & SbxARRAY))
+        {
+            pArray = static_cast<SbxArray *>(vba->GetObject());
+            isInitialised = true;
+            return pArray;
+        }
+    }
+    return NULL;
+}
+
+//  i#i68894#
+SbxVariable* VBAFind( const String& rName, SbxClassType t, StarBASIC* pBasic )
+{
+    if( rName == aThisComponent )
+        return NULL;
+
+    SbxArray *pVBAGlobals = getVBAGlobals( pBasic );
+    for (USHORT i = 0; pVBAGlobals && i < pVBAGlobals->Count(); i++)
+    {
+        SbxVariable *pElem = pVBAGlobals->Get( i );
+        if (!pElem || !pElem->IsObject())
+            continue;
+        SbxObject *pVba = static_cast<SbxObject *>(pElem->GetObject());
+        SbxVariable *pVbaVar;
+        if( pVba && (pVbaVar = pVba->Find( rName, t ) ) )
+        {
+            return pVbaVar;
+        }
+    }
+    return NULL;
+
+}
 
 // Suchen eines Elements
 // Die Bits im String-ID:
@@ -60,6 +108,9 @@ using namespace com::sun::star::lang;
 SbxVariable* SbiRuntime::FindElement
     ( SbxObject* pObj, UINT32 nOp1, UINT32 nOp2, SbError nNotFound, BOOL bLocal )
 {
+
+    bool bIsVBAInterOp = SbiRuntime::isVBAEnabled();
+
     SbxVariable* pElem = NULL;
     if( !pObj )
     {
@@ -97,15 +148,29 @@ SbxVariable* SbiRuntime::FindElement
             // Ist es ein globaler Uno-Bezeichner?
             if( bLocal && !pElem )
             {
-                // #72382 VORSICHT! Liefert jetzt wegen unbekannten
-                // Modulen IMMER ein Ergebnis!
-                SbxVariable* pUnoClass = findUnoClass( aName );
-                if( pUnoClass )
+                bool bSetName = true; // preserve normal behaviour
+
+                // i#i68894# if VBAInterOp favour searching vba globals
+                // over searching for uno classess
+                if ( bIsVBAInterOp )
                 {
-                    pElem = new SbxVariable( t );
-                    SbxValues aRes( SbxOBJECT );
-                    aRes.pObj = pUnoClass;
-                    pElem->SbxVariable::Put( aRes );
+                    // Try Find in VBA symbols space
+                    pElem = VBAFind( aName, SbxCLASS_DONTCARE, &rBasic );
+                    if ( pElem )
+                        bSetName = false; // don't overwrite uno name
+                }
+                else
+                {
+                    // #72382 VORSICHT! Liefert jetzt wegen unbekannten
+                    // Modulen IMMER ein Ergebnis!
+                    SbxVariable* pUnoClass = findUnoClass( aName );
+                    if( pUnoClass )
+                    {
+                        pElem = new SbxVariable( t );
+                        SbxValues aRes( SbxOBJECT );
+                        aRes.pObj = pUnoClass;
+                        pElem->SbxVariable::Put( aRes );
+                    }
                 }
 
                 // #62939 Wenn eine Uno-Klasse gefunden wurde, muss
@@ -120,7 +185,8 @@ SbxVariable* SbiRuntime::FindElement
 
                     // #72382 Lokal speichern, sonst werden alle implizit
                     // deklarierten Vars automatisch global !
-                    pElem->SetName( aName );
+                    if ( bSetName )
+                        pElem->SetName( aName );
                     refLocals->Put( pElem, refLocals->Count() );
                 }
             }
@@ -506,7 +572,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                             Reference< XDefaultMethod > xDfltMethod( x, UNO_QUERY );
 
                             if ( xDfltMethod.is() )
-                                sDefaultMethod = xDfltMethod->getName();
+                                sDefaultMethod = xDfltMethod->getDefaultMethodName();
                             else if( xIndexAccess.is() )
                                 sDefaultMethod = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getByIndex" ) );
 
