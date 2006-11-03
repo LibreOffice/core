@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 16:34:01 $
+ *  last change: $Author: obo $ $Date: 2006-11-03 07:03:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,7 +344,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
             if ( bHandleDefaultProp )
             {
                 // get default properties for lhs & rhs where necessary
-                SbxVariable* defaultProp = NULL;
+                // SbxVariable* defaultProp = NULL; unused variable
                 bool bLHSHasDefaultProp = false;
                 // LHS try determine if a default prop exists
                 if ( refVar->GetType() == SbxOBJECT )
