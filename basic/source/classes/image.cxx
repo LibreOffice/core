@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:13:02 $
+ *  last change: $Author: obo $ $Date: 2006-11-03 07:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,10 @@ SbiImage::SbiImage()
     pStrings   = NULL;
     pCode      = NULL;
     pLegacyPCode       = NULL;
-    nFlags     =
-    nStrings   =
-    nStringSize=
-    nCodeSize  =
+    nFlags     = 0;
+    nStrings   = 0;
+    nStringSize= 0;
+    nCodeSize  = 0;
     nLegacyCodeSize  =
     nDimBase   = 0;
     bInit      =
@@ -77,9 +77,9 @@ void SbiImage::Clear()
     pStringOff = NULL;
     pStrings   = NULL;
     pCode      = NULL;
-    nFlags     =
-    nStrings   =
-    nStringSize=
+    nFlags     = 0;
+    nStrings   = 0;
+    nStringSize= 0;
     nLegacyCodeSize  = 0;
     nCodeSize  = 0;
     eCharSet   = gsl_getSystemTextEncoding();
@@ -205,7 +205,7 @@ BOOL SbiImage::Load( SvStream& r, UINT32& nVersion )
                 if ( bLegacy )
                 {
                     ReleaseLegacyBuffer(); // release any previously held buffer
-                    nLegacyCodeSize = nCodeSize;
+                    nLegacyCodeSize = (UINT16) nCodeSize;
                     pLegacyPCode = pCode;
 
                     PCodeBuffConvertor< UINT16, UINT32 > aLegacyToNew( (BYTE*)pLegacyPCode, nLegacyCodeSize );
@@ -246,7 +246,7 @@ BOOL SbiImage::Load( SvStream& r, UINT32& nVersion )
                     r.Read( pByteStrings, nStringSize );
                     for( short j = 0; j < nStrings; j++ )
                     {
-                        USHORT nOff2 = pStringOff[ j ];
+                        USHORT nOff2 = (USHORT) pStringOff[ j ];
                         String aStr( pByteStrings + nOff2, eCharSet );
                         memcpy( pStrings + nOff2, aStr.GetBuffer(), (aStr.Len() + 1) * sizeof( sal_Unicode ) );
                     }
@@ -380,7 +380,7 @@ BOOL SbiImage::Save( SvStream& r, UINT32 nVer )
         char* pByteStrings = new char[ nStringSize ];
         for( i = 0; i < nStrings; i++ )
         {
-            USHORT nOff = pStringOff[ i ];
+            USHORT nOff = (USHORT) pStringOff[ i ];
             ByteString aStr( pStrings + nOff, eCharSet );
             memcpy( pByteStrings + nOff, aStr.GetBuffer(), (aStr.Len() + 1) * sizeof( char ) );
         }
@@ -405,7 +405,9 @@ BOOL SbiImage::Save( SvStream& r, UINT32 nVer )
 
 void SbiImage::MakeStrings( short nSize )
 {
-    nStrings = nStringIdx = nStringOff = 0;
+    nStrings = 0;
+    nStringIdx = 0;
+    nStringOff = 0;
     nStringSize = 1024;
     pStrings = new sal_Unicode[ nStringSize ];
     pStringOff = new UINT32[ nSize ];
