@@ -4,9 +4,9 @@
  *
  *  $RCSfile: buffer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:13:28 $
+ *  last change: $Author: vg $ $Date: 2006-11-03 15:11:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ void SbiBuffer::Align( INT32 n )
         if( nn <= UP_LIMIT )
         {
             nn = nn - nOff;
-            if( Check( nn ) )
+            if( Check( static_cast<USHORT>(nn) ) )
             {
                 memset( pCur, 0, nn );
                 pCur += nn;
@@ -133,8 +133,8 @@ void SbiBuffer::Patch( UINT32 off, UINT32 val )
 {
     if( ( off + sizeof( UINT32 ) ) < nOff )
     {
-        UINT16 val1 = ( val & 0xFFFF );
-        UINT16 val2 = ( val >> 16 );
+        UINT16 val1 = static_cast<UINT16>( val & 0xFFFF );
+        UINT16 val2 = static_cast<UINT16>( val >> 16 );
         BYTE* p = (BYTE*) pBuf + off;
         *p++ = (char) ( val1 & 0xFF );
         *p++ = (char) ( val1 >> 8 );
@@ -214,8 +214,8 @@ BOOL SbiBuffer::operator +=( UINT32 n )
 {
     if( Check( 4 ) )
     {
-        UINT16 n1 = ( n & 0xFFFF );
-        UINT16 n2 = ( n >> 16 );
+        UINT16 n1 = static_cast<UINT16>( n & 0xFFFF );
+        UINT16 n2 = static_cast<UINT16>( n >> 16 );
         if ( operator +=( n1 ) && operator +=( n2 ) )
             return TRUE;
         return TRUE;

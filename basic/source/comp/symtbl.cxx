@@ -4,9 +4,9 @@
  *
  *  $RCSfile: symtbl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:14:34 $
+ *  last change: $Author: vg $ $Date: 2006-11-03 15:10:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,7 +253,7 @@ SbiSymDef* SbiSymPool::Get( USHORT n ) const
         return aData.GetObject( n );
 }
 
-USHORT SbiSymPool::Define( const String& rName )
+UINT32 SbiSymPool::Define( const String& rName )
 {
     SbiSymDef* p = Find( rName );
     if( p )
@@ -296,12 +296,12 @@ void SbiSymPool::CheckRefs()
 SbiSymDef::SbiSymDef( const String& rName ) : aName( rName )
 {
     eType    = SbxEMPTY;
-    nDims    =
-    nTypeId  =
-    nProcId  =
-    nId      =
-    nPos     =
-    nLen     =
+    nDims    = 0;
+    nTypeId  = 0;
+    nProcId  = 0;
+    nId      = 0;
+    nPos     = 0;
+    nLen     = 0;
     nChain   = 0;
     bAs      =
     bNew     =
@@ -379,7 +379,7 @@ UINT32 SbiSymDef::Reference()
 // Definition eines Symbols.
 // Hier wird der Backchain aufgeloest, falls vorhanden
 
-USHORT SbiSymDef::Define()
+UINT32 SbiSymDef::Define()
 {
     UINT32 n = pIn->pParser->aGen.GetPC();
     pIn->pParser->aGen.GenStmnt();

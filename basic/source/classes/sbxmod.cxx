@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:13:15 $
+ *  last change: $Author: vg $ $Date: 2006-11-03 15:10:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1013,7 +1013,7 @@ const BYTE* SbModule::FindNextStmnt( const BYTE* p, USHORT& nLine, USHORT& nCol,
             nl |= *p++ << 16 ; nl |= *p++ << 24;
             nc = *p++; nc |= *p++ << 8;
             nc |= *p++ << 16 ; nc |= *p++ << 24;
-            nLine = nl; nCol = nc;
+            nLine = (USHORT)nl; nCol = (USHORT)nc;
             return p;
         }
         else if( eOp >= SbOP2_START && eOp <= SbOP2_END )
@@ -1133,14 +1133,14 @@ SbModule::fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg ) const
             pImg = pImage;
         for( UINT32 i = 0; i < pMethods->Count(); i++ )
         {
-            SbMethod* pMeth = PTR_CAST(SbMethod,pMethods->Get( i ) );
+            SbMethod* pMeth = PTR_CAST(SbMethod,pMethods->Get( (USHORT)i ) );
             if( pMeth )
             {
                 //fixup method start positions
                 if ( bCvtToLegacy )
                     pMeth->nStart = pImg->CalcLegacyOffset( pMeth->nStart );
                 else
-                    pMeth->nStart = pImg->CalcNewOffset( pMeth->nStart );
+                    pMeth->nStart = pImg->CalcNewOffset( (USHORT)pMeth->nStart );
             }
         }
 
@@ -1951,7 +1951,7 @@ BOOL SbMethod::LoadData( SvStream& rStrm, USHORT nVer )
         return FALSE;
     INT16 n;
     rStrm >> n;
-    INT16 nTempStart = nStart;
+    INT16 nTempStart = (INT16)nStart;
     // nDebugFlags = n;     // AB 16.1.96: Nicht mehr uebernehmen
     if( nVer == 2 )
         rStrm >> nLine1 >> nLine2 >> nTempStart >> bInvalid;

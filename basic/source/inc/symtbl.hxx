@@ -4,9 +4,9 @@
  *
  *  $RCSfile: symtbl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:16:27 $
+ *  last change: $Author: vg $ $Date: 2006-11-03 15:10:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ public:
     SbiSymDef* Get( USHORT ) const;     // Variable per Position suchen
     SbiSymDef* First(), *Next();        // Iteratoren
 
-    USHORT Define( const String& );     // Label definieren
+    UINT32 Define( const String& );     // Label definieren
     UINT32 Reference( const String& );  // Label referenzieren
     void   CheckRefs();                 // offene Referenzen suchen
 };
@@ -188,7 +188,7 @@ public:
     BOOL       IsGlobal() const { return bGlobal;   }
 
     SbiSymPool& GetPool();
-    USHORT     Define();        // Symbol in Code definieren
+    UINT32     Define();        // Symbol in Code definieren
     UINT32     Reference();     // Symbol in Code referenzieren
 
 private:

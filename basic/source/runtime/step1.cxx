@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:16:55 $
+ *  last change: $Author: vg $ $Date: 2006-11-03 15:10:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ void SbiRuntime::StepLOADNC( UINT32 nOp1 )
     SbxVariable* p = new SbxVariable( SbxDOUBLE );
 
     // #57844 Lokalisierte Funktion benutzen
-    String aStr = pImg->GetString( nOp1 );
+    String aStr = pImg->GetString( static_cast<short>( nOp1 ) );
     // Auch , zulassen !!!
     USHORT iComma = aStr.Search( ',' );
     if( iComma != STRING_NOTFOUND )
@@ -73,7 +73,7 @@ void SbiRuntime::StepLOADNC( UINT32 nOp1 )
 void SbiRuntime::StepLOADSC( UINT32 nOp1 )
 {
     SbxVariable* p = new SbxVariable;
-    p->PutString( pImg->GetString( nOp1 ) );
+    p->PutString( pImg->GetString( static_cast<short>( nOp1 ) ) );
     PushVar( p );
 }
 
@@ -82,7 +82,7 @@ void SbiRuntime::StepLOADSC( UINT32 nOp1 )
 void SbiRuntime::StepLOADI( UINT32 nOp1 )
 {
     SbxVariable* p = new SbxVariable;
-    p->PutInteger( nOp1 );
+    p->PutInteger( static_cast<INT16>( nOp1 ) );
     PushVar( p );
 }
 
@@ -94,7 +94,7 @@ void SbiRuntime::StepARGN( UINT32 nOp1 )
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
     else
     {
-        String aAlias( pImg->GetString( nOp1 ) );
+        String aAlias( pImg->GetString( static_cast<short>( nOp1 ) ) );
         SbxVariableRef pVal = PopVar();
         refArgv->Put( pVal, nArgc );
         refArgv->PutAlias( aAlias, nArgc++ );
@@ -153,9 +153,9 @@ void SbiRuntime::StepPAD( UINT32 nOp1 )
     SbxVariable* p = GetTOS();
     String& s = (String&)(const String&) *p;
     if( s.Len() > nOp1 )
-        s.Erase( nOp1 );
+        s.Erase( static_cast<xub_StrLen>( nOp1 ) );
     else
-        s.Expand( nOp1, ' ' );
+        s.Expand( static_cast<xub_StrLen>( nOp1 ), ' ' );
 }
 
 // Sprung (+Target)
@@ -207,8 +207,8 @@ void SbiRuntime::StepONJUMP( UINT32 nOp1 )
         //PushGosub( pCode + 3 * nOp1 );
         PushGosub( pCode + 5 * nOp1 );
     }
-    if( n < 1 || static_cast<UINT32>(n) >  nOp1 )
-        n = nOp1 + 1;
+    if( n < 1 || static_cast<UINT32>(n) > nOp1 )
+        n = static_cast<INT16>( nOp1 + 1 );
     //nOp1 = (UINT32) ( (const char*) pCode - pImg->GetCode() ) + 3 * --n;
     nOp1 = (UINT32) ( (const char*) pCode - pImg->GetCode() ) + 5 * --n;
     StepJUMP( nOp1 );
@@ -501,7 +501,7 @@ void SbiRuntime::StepSETCLASS( UINT32 nOp1 )
 {
     SbxVariableRef refVal = PopVar();
     SbxVariableRef refVar = PopVar();
-    String aClass( pImg->GetString( nOp1 ) );
+    String aClass( pImg->GetString( static_cast<short>( nOp1 ) ) );
 
     bool bOk = checkClass_Impl( refVal, aClass, true );
     if( bOk )
@@ -511,7 +511,7 @@ void SbiRuntime::StepSETCLASS( UINT32 nOp1 )
 void SbiRuntime::StepTESTCLASS( UINT32 nOp1 )
 {
     SbxVariableRef xObjVal = PopVar();
-    String aClass( pImg->GetString( nOp1 ) );
+    String aClass( pImg->GetString( static_cast<short>( nOp1 ) ) );
     bool bOk = checkClass_Impl( xObjVal, aClass, false );
 
     SbxVariable* pRet = new SbxVariable;
@@ -523,7 +523,7 @@ void SbiRuntime::StepTESTCLASS( UINT32 nOp1 )
 
 void SbiRuntime::StepLIB( UINT32 nOp1 )
 {
-    aLibName = pImg->GetString( nOp1 );
+    aLibName = pImg->GetString( static_cast<short>( nOp1 ) );
 }
 
 // TOS wird um BASE erhoeht, BASE davor gepusht (+BASE)
@@ -537,7 +537,7 @@ void SbiRuntime::StepBASED( UINT32 nOp1 )
 
     // #109275 Check compatiblity mode
     bool bCompatible = ((nOp1 & 0x8000) != 0);
-    USHORT uBase = (nOp1 & 1);      // Can only be 0 or 1
+    USHORT uBase = static_cast<USHORT>(nOp1 & 1);       // Can only be 0 or 1
     p1->PutInteger( uBase );
     if( !bCompatible )
         x2->Compute( SbxPLUS, *p1 );

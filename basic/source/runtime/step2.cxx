@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 16:37:23 $
+ *  last change: $Author: vg $ $Date: 2006-11-03 15:10:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,9 +66,8 @@ SbxArray* getVBAGlobals( StarBASIC* pSBasic )
     if (pThisComp && pThisComp->IsObject())
     {
         SbxObject *pObj = static_cast<SbxObject *>(pThisComp->GetObject());
-        SbxVariable *vba;
-        if ((vba = pObj->Find( aVBAHook, SbxCLASS_DONTCARE/* SbxCLASS_PROPERTY */ ) ) &&
-            (vba->GetType() & SbxARRAY))
+        SbxVariable *vba = pObj->Find( aVBAHook, SbxCLASS_DONTCARE/* SbxCLASS_PROPERTY */ );
+        if ( vba && (vba->GetType() & SbxARRAY) )
         {
             pArray = static_cast<SbxArray *>(vba->GetObject());
             isInitialised = true;
@@ -91,8 +90,8 @@ SbxVariable* VBAFind( const String& rName, SbxClassType t, StarBASIC* pBasic )
         if (!pElem || !pElem->IsObject())
             continue;
         SbxObject *pVba = static_cast<SbxObject *>(pElem->GetObject());
-        SbxVariable *pVbaVar;
-        if( pVba && (pVbaVar = pVba->Find( rName, t ) ) )
+        SbxVariable *pVbaVar = pVba ? pVba->Find( rName, t ) : NULL;
+        if( pVbaVar )
         {
             return pVbaVar;
         }
@@ -121,7 +120,7 @@ SbxVariable* SbiRuntime::FindElement
     {
         BOOL bFatalError = FALSE;
         SbxDataType t = (SbxDataType) nOp2;
-        String aName( pImg->GetString( nOp1 & 0x7FFF ) );
+        String aName( pImg->GetString( static_cast<short>( nOp1 & 0x7FFF ) ) );
         if( bLocal )
             pElem = refLocals->Find( aName, SbxCLASS_DONTCARE );
         if( !pElem )
@@ -669,7 +668,7 @@ void SbiRuntime::StepELEM( UINT32 nOp1, UINT32 nOp2 )
 
 void SbiRuntime::StepPARAM( UINT32 nOp1, UINT32 nOp2 )
 {
-    UINT32 i = nOp1 & 0x7FFF;
+    USHORT i = static_cast<USHORT>( nOp1 & 0x7FFF );
     SbxDataType t = (SbxDataType) nOp2;
     SbxVariable* p;
 
@@ -749,7 +748,7 @@ void SbiRuntime::StepCASEIS( UINT32 nOp1, UINT32 nOp2 )
 
 void SbiRuntime::StepCALL( UINT32 nOp1, UINT32 nOp2 )
 {
-    String aName = pImg->GetString( nOp1 & 0x7FFF );
+    String aName = pImg->GetString( static_cast<short>( nOp1 & 0x7FFF ) );
     SbxArray* pArgs = NULL;
     if( nOp1 & 0x8000 )
         pArgs = refArgv;
@@ -764,7 +763,7 @@ void SbiRuntime::StepCALL( UINT32 nOp1, UINT32 nOp2 )
 
 void SbiRuntime::StepCALLC( UINT32 nOp1, UINT32 nOp2 )
 {
-    String aName = pImg->GetString( nOp1 & 0x7FFF );
+    String aName = pImg->GetString( static_cast<short>( nOp1 & 0x7FFF ) );
     SbxArray* pArgs = NULL;
     if( nOp1 & 0x8000 )
         pArgs = refArgv;
@@ -809,10 +808,10 @@ void SbiRuntime::StepSTMNT( UINT32 nOp1, UINT32 nOp2 )
     }
     pStmnt = pCode - 9;
     USHORT nOld = nLine;
-    nLine = nOp1;
+    nLine = static_cast<short>( nOp1 );
 
     // #29955 & 0xFF, um for-Schleifen-Ebene wegzufiltern
-    nCol1 = nOp2 & 0xFF;
+    nCol1 = static_cast<short>( nOp2 & 0xFF );
 
     // Suchen des naechsten STMNT-Befehls,
     // um die End-Spalte dieses Statements zu setzen
@@ -835,7 +834,7 @@ void SbiRuntime::StepSTMNT( UINT32 nOp1, UINT32 nOp2 )
     if( !bInError )
     {
         // (Bei Sprüngen aus Schleifen tritt hier eine Differenz auf)
-        USHORT nExspectedForLevel = nOp2 / 0x100;
+        USHORT nExspectedForLevel = static_cast<USHORT>( nOp2 / 0x100 );
         if( pGosubStk )
             nExspectedForLevel = nExspectedForLevel + pGosubStk->nStartForLvl;
 
@@ -860,7 +859,7 @@ void SbiRuntime::StepSTMNT( UINT32 nOp1, UINT32 nOp2 )
     // Breakpoints nur bei STMNT-Befehlen in neuer Zeile!
     else if( ( nOp1 != nOld )
         && ( nFlags & SbDEBUG_BREAK )
-        && pMod->IsBP( nOp1 ) )
+        && pMod->IsBP( static_cast<USHORT>( nOp1 ) ) )
     {
         StarBASIC* pBreakBasic = GetCurrentBasic( &rBasic );
         USHORT nNewFlags = pBreakBasic->BreakPoint( nLine, nCol1, nCol2 );
@@ -886,7 +885,8 @@ void SbiRuntime::StepOPEN( UINT32 nOp1, UINT32 nOp2 )
     short nBlkLen = pLen->GetInteger();
     short nChan   = pChan->GetInteger();
     ByteString aName( pName->GetString(), gsl_getSystemTextEncoding() );
-    pIosys->Open( nChan, aName, nOp1, nOp2, nBlkLen );
+    pIosys->Open( nChan, aName, static_cast<short>( nOp1 ),
+        static_cast<short>( nOp2 ), nBlkLen );
     Error( pIosys->GetError() );
 }
 
@@ -894,13 +894,13 @@ void SbiRuntime::StepOPEN( UINT32 nOp1, UINT32 nOp2 )
 
 void SbiRuntime::StepCREATE( UINT32 nOp1, UINT32 nOp2 )
 {
-    String aClass( pImg->GetString( nOp2 ) );
+    String aClass( pImg->GetString( static_cast<short>( nOp2 ) ) );
     SbxObject *pObj = SbxBase::CreateObject( aClass );
     if( !pObj )
         Error( SbERR_INVALID_OBJECT );
     else
     {
-        String aName( pImg->GetString( nOp1 ) );
+        String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
         pObj->SetName( aName );
     // Das Objekt muss BASIC rufen koennen
         pObj->SetParent( &rBasic );
@@ -980,7 +980,7 @@ void SbiRuntime::StepDCREATE_IMPL( UINT32 nOp1, UINT32 nOp2 )
         }
 
         // Objekte anlegen und ins Array eintragen
-        String aClass( pImg->GetString( nOp2 ) );
+        String aClass( pImg->GetString( static_cast<short>( nOp2 ) ) );
         for( i = 0 ; i < nTotalSize ; i++ )
         {
             SbxObject *pClassObj = SbxBase::CreateObject( aClass );
@@ -991,7 +991,7 @@ void SbiRuntime::StepDCREATE_IMPL( UINT32 nOp1, UINT32 nOp2 )
             }
             else
             {
-                String aName( pImg->GetString( nOp1 ) );
+                String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
                 pClassObj->SetName( aName );
                 // Das Objekt muss BASIC rufen koennen
                 pClassObj->SetParent( &rBasic );
@@ -1059,8 +1059,8 @@ SbxObject* createUserTypeImpl( const String& rClassName );  // sb.cxx
 
 void SbiRuntime::StepTCREATE( UINT32 nOp1, UINT32 nOp2 )
 {
-    String aName( pImg->GetString( nOp1 ) );
-    String aClass( pImg->GetString( nOp2 ) );
+    String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
+    String aClass( pImg->GetString( static_cast<short>( nOp2 ) ) );
 
     SbxObject* pCopyObj = createUserTypeImpl( aClass );
     if( pCopyObj )
@@ -1077,7 +1077,7 @@ void SbiRuntime::StepLOCAL( UINT32 nOp1, UINT32 nOp2 )
 {
     if( !refLocals.Is() )
         refLocals = new SbxArray;
-    String aName( pImg->GetString( nOp1 ) );
+    String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
     if( refLocals->Find( aName, SbxCLASS_DONTCARE ) == NULL )
     {
         SbxDataType t = (SbxDataType) nOp2;
@@ -1091,7 +1091,7 @@ void SbiRuntime::StepLOCAL( UINT32 nOp1, UINT32 nOp2 )
 
 void SbiRuntime::StepPUBLIC_Impl( UINT32 nOp1, UINT32 nOp2, bool bUsedForClassModule )
 {
-    String aName( pImg->GetString( nOp1 ) );
+    String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
     SbxDataType t = (SbxDataType) nOp2;
     BOOL bFlag = pMod->IsSet( SBX_NO_MODIFY );
     pMod->SetFlag( SBX_NO_MODIFY );
@@ -1123,7 +1123,7 @@ void SbiRuntime::StepGLOBAL( UINT32 nOp1, UINT32 nOp2 )
     if( pImg->GetFlag( SBIMG_CLASSMODULE ) )
         StepPUBLIC_Impl( nOp1, nOp2, true );
 
-    String aName( pImg->GetString( nOp1 ) );
+    String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
     SbxDataType t = (SbxDataType) nOp2;
     BOOL bFlag = rBasic.IsSet( SBX_NO_MODIFY );
     rBasic.SetFlag( SBX_NO_MODIFY );
@@ -1168,7 +1168,7 @@ void SbiRuntime::StepFIND_G( UINT32 nOp1, UINT32 nOp2 )
     {
         // Return dummy variable
         SbxDataType t = (SbxDataType) nOp2;
-        String aName( pImg->GetString( nOp1 & 0x7FFF ) );
+        String aName( pImg->GetString( static_cast<short>( nOp1 & 0x7FFF ) ) );
 
         SbxVariable* pDummyVar = new SbxVariable( t );
         pDummyVar->SetName( aName );

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: codegen.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:13:40 $
+ *  last change: $Author: vg $ $Date: 2006-11-03 15:11:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,13 +345,18 @@ template < class T >
 class PCodeVisitor
 {
 public:
-   virtual void start( BYTE* pStart ) = 0;
-   virtual void processOpCode0( SbiOpcode eOp ) = 0;
-   virtual void processOpCode1( SbiOpcode eOp, T nOp1 ) = 0;
-   virtual void processOpCode2( SbiOpcode eOp, T nOp1, T nOp2 ) = 0;
-   virtual bool processParams() = 0;
-   virtual void end() = 0;
+    virtual ~PCodeVisitor();
+
+    virtual void start( BYTE* pStart ) = 0;
+    virtual void processOpCode0( SbiOpcode eOp ) = 0;
+    virtual void processOpCode1( SbiOpcode eOp, T nOp1 ) = 0;
+    virtual void processOpCode2( SbiOpcode eOp, T nOp1, T nOp2 ) = 0;
+    virtual bool processParams() = 0;
+    virtual void end() = 0;
 };
+
+template <class T> PCodeVisitor< T >::~PCodeVisitor()
+{}
 
 template <class T>
 class PCodeBufferWalker
@@ -464,11 +469,11 @@ public:
             case _RETURN:
             case _ERRHDL:
             case _TESTFOR:
-                nOp1 = convertBufferOffSet(m_pStart, nOp1);
+                nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );
                 break;
             case _RESUME:
                 if ( nOp1 > 1 )
-                    nOp1 = convertBufferOffSet(m_pStart, nOp1);
+                    nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );
                 break;
             default:
                 break; //
@@ -481,7 +486,7 @@ public:
         m_ConvertedBuf += (UINT8)eOp;
         if ( eOp == _CASEIS )
                 if ( nOp1 )
-                    nOp1  = convertBufferOffSet(m_pStart, nOp1);
+                    nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );
         m_ConvertedBuf += (S)nOp1;
         m_ConvertedBuf += (S)nOp2;
 
@@ -524,7 +529,7 @@ PCodeBuffConvertor<T,S>::convert()
     BufferTransformer< T, S > aTrnsfrmer;
     aBuf.visitBuffer( aTrnsfrmer );
     m_pCnvtdBuf = (BYTE*)aTrnsfrmer.buffer().GetBuffer();
-    m_nCnvtdSize = aTrnsfrmer.buffer().GetSize();
+    m_nCnvtdSize = static_cast<S>( aTrnsfrmer.buffer().GetSize() );
 }
 
 void NeverRunsEver()
