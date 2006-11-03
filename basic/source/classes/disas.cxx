@@ -4,9 +4,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:12:48 $
+ *  last change: $Author: obo $ $Date: 2006-11-03 07:19:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,7 +244,10 @@ BOOL SbModule::Disassemble( String& rText )
 SbiDisas::SbiDisas( SbModule* p, const SbiImage* q ) : rImg( *q ), pMod( p )
 {
     memset( cLabels, 0, 8192 );
-    nLine = nOff = nPC = nOp1 = nOp2 = nParts = 0;
+    nLine = 0;
+    nOff = 0;
+    nPC = 0;
+    nOp1 = nOp2 = nParts = (USHORT) 0;
     eOp = _NOP;
     // Label-Bits setzen
     nOff = 0;
@@ -274,7 +277,7 @@ SbiDisas::SbiDisas( SbModule* p, const SbiImage* q ) : rImg( *q ), pMod( p )
         SbMethod* pMeth = PTR_CAST(SbMethod,pMod->GetMethods()->Get( i ));
         if( pMeth )
         {
-            USHORT nPos = pMeth->GetId();
+            USHORT nPos = (USHORT) (pMeth->GetId());
             cLabels[ nPos >> 3 ] |= ( 1 << ( nPos & 7 ) );
         }
     }
