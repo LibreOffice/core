@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XFilterManager.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:40:30 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:55:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ published interface XFilterManager: com::sun::star::uno::XInterface
     /** Returns the currently selected filter.
 
         @returns
-        The the name of the selected filter or an empty string if
+        The name of the selected filter or an empty string if
         there is no filter or no filter is currently selected.
     */
     string getCurrentFilter( );
