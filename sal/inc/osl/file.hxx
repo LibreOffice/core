@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:27:47 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:52:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1784,6 +1784,11 @@ public:
 
     inline RC getNextItem( DirectoryItem& rItem, sal_uInt32 nHint = 0 )
     {
+        if( rItem._pData )
+        {
+            osl_releaseDirectoryItem( rItem._pData );
+            rItem._pData = 0;
+        }
         return ( RC) osl_getNextDirectoryItem( _pData, &rItem._pData, nHint );
     }
 
