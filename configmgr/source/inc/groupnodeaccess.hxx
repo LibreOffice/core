@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupnodeaccess.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:48:05 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:47:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ namespace configmgr
     // -------------------------------------------------------------------------
         inline
         NodeAccess::Name GroupNodeAccess::getName() const
-        { return NodeAccess::wrapName( data().info.getName(m_aAccessor) ); }
+        { return NodeAccess::wrapName( data().info.getName() ); }
 
         inline
         NodeAccess::Attributes GroupNodeAccess::getAttributes() const

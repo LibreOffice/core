@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodeaccess.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:51:08 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:48:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ namespace configmgr
             bool isValid() const { return m_pData.is(); }
             bool isLocalRoot() const { return data().isFragmentRoot(); }
 
-            Name getName() const { return wrapName( data().getName(m_aAccessor) ); }
+            Name getName() const { return wrapName( data().getName() ); }
             Attributes getAttributes() const { return data().getAttributes(); }
 
             bool isDefault()   const { return data().isDefault(); }
@@ -143,7 +143,7 @@ namespace configmgr
             bool isValid() const { return m_pData.is(); }
             bool isLocalRoot() const { return data().isFragmentRoot(); }
 
-            Name getName() const { return NodeAccess::wrapName( data().getName(*m_pAccessor) ); }
+            Name getName() const { return NodeAccess::wrapName( data().getName() ); }
             Attributes getAttributes() const { return data().getAttributes(); }
 
             bool isDefault()   const { return data().isDefault(); }
