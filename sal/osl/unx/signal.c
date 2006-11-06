@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:19:24 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:52:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,6 +385,7 @@ static int fputs_xml( const char *string, FILE *stream )
 
 static int ReportCrash( int Signal )
 {
+#ifdef SAL_ENABLE_CRASH_REPORT
     static sal_Bool bCrashReporterExecuted = sal_False;
     sal_Bool        bAutoCrashReport = sal_False;
 
@@ -668,6 +669,12 @@ static int ReportCrash( int Signal )
     }
 
     return 1;
+#else /* defined SAL_ENABLE_CRASH_REPORT */
+    /* the utility crash_report is not build, so do the same as when
+       the option -nocrashreport is used */
+    (void) Signal; // avoid warnings
+    return -1;
+#endif /* defined SAL_ENABLE_CRASH_REPORT */
 }
 
 static void PrintStack( int sig )
