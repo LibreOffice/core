@@ -4,9 +4,9 @@
  *
  *  $RCSfile: options.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:15:12 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:40:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,9 +137,9 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                     OString tmp(s);
                     sal_Int32 nIndex = 0;
                     inc = OString();
-                    do inc = inc + " -I" + tmp.getToken( 0, ';', nIndex ); while( nIndex != -1 );
+                    do inc = inc + " -I\"" + tmp.getToken( 0, ';', nIndex ) +"\""; while( nIndex != -1 );
                 } else
-                    inc = OString("-I") + s;
+                    inc = OString("-I\"") + s + "\"";
 
                 if (m_options.count("-I") > 0)
                 {
