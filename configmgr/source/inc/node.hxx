@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:50:55 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:48:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ namespace configmgr
             Flags::Field    flags;
             Type ::Field    type;   // contains discriminator for union
 
-            rtl::OUString       getName(memory::Accessor const & _aAccessor) const;
+            rtl::OUString       getName() const;
             node::Attributes    getNodeInfoAttributes() const;
             bool isDefault() const;
             bool isLocalized() const;
@@ -114,13 +114,14 @@ namespace configmgr
 
             // low-level helper for template data abstraction
             static
-            Address allocTemplateData(memory::Allocator const & _anAllocator, NameChar const * pName, NameChar const * pModule);
+            Address allocTemplateData(memory::Allocator const & _anAllocator,
+                                      const rtl::OUString &rName,
+                                      const rtl::OUString &rModule);
+            static
+            Address copyTemplateData(memory::Allocator const & _anAllocator,
+                                     Address _aTemplateData);
             static
             void releaseTemplateData(memory::Allocator const & _anAllocator, Address _aTemplateData);
-            static
-            NameChar const * getTemplateDataName(memory::Accessor const & _anAccessor, Address _aTemplateData);
-            static
-            NameChar const * getTemplateDataModule(memory::Accessor const & _anAccessor, Address _aTemplateData);
         };
     //-----------------------------------------------------------------------------
         struct ValueNode
@@ -150,8 +151,8 @@ namespace configmgr
             ValueNode value;
 
             // info access
-            bool isNamed(rtl::OUString const & _aName, memory::Accessor const & _aAccessor) const;
-            rtl::OUString       getName(memory::Accessor const & _aAccessor) const;
+            bool isNamed(rtl::OUString const & _aName) const;
+            rtl::OUString       getName() const;
             node::Attributes    getAttributes() const;
             bool isDefault() const;
             bool isLocalized() const;

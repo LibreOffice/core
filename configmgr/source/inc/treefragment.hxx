@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treefragment.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:59:29 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:49:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,9 +134,9 @@ namespace configmgr
             bool isDefault() const;
             bool isNew() const;
 
-            bool isNamed(rtl::OUString const & _aName, memory::Accessor const & _aAccessor) const;
+            bool isNamed(rtl::OUString const & _aName) const;
 
-            rtl::OUString               getName(memory::Accessor const & _aAccessor) const;
+            rtl::OUString               getName() const;
             configmgr::node::Attributes getAttributes()const;
         };
     //-----------------------------------------------------------------------------
