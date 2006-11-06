@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:40:16 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:40:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2851,8 +2851,9 @@ void DbFilterField::Init(Window* pParent, const Reference< XRowSet >& xCursor)
 
     // filter cells are never readonly
     // 31.07.2002 - 101584 - fs@openoffice.org
-    if ( FormComponentType::LISTBOX != m_nControlClass )
-        static_cast< Edit* >( m_pWindow )->SetReadOnly( sal_False );
+    Edit* pAsEdit = dynamic_cast< Edit* >( m_pWindow );
+    if ( pAsEdit )
+        pAsEdit->SetReadOnly( sal_False );
 }
 
 //------------------------------------------------------------------------------
