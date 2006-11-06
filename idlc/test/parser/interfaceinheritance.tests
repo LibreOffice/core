@@ -4,9 +4,9 @@
 #
 #   $RCSfile: interfaceinheritance.tests,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:17:53 $
+#   last change: $Author: kz $ $Date: 2006-11-06 14:41:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,9 +34,6 @@
 #*************************************************************************
 
 EXPECT FAILURE "interfaceinheritance.tests 1":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base {};
 interface Derived {
     interface Base;
@@ -45,9 +42,6 @@ interface Derived {
 
 
 EXPECT FAILURE "interfaceinheritance.tests 2":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base {};
 interface Derived {
     interface Base;
@@ -56,9 +50,6 @@ interface Derived {
 
 
 EXPECT FAILURE "interfaceinheritance.tests 3":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base {};
 interface Derived {
     [optional] interface Base;
@@ -67,9 +58,6 @@ interface Derived {
 
 
 EXPECT FAILURE "interfaceinheritance.tests 4":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base {};
 interface Derived {
     [optional] interface Base;
@@ -78,9 +66,6 @@ interface Derived {
 
 
 EXPECT FAILURE "interfaceinheritance.tests 5":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2: Base1 {};
 interface Derived {
@@ -90,9 +75,6 @@ interface Derived {
 
 
 EXPECT FAILURE "interfaceinheritance.tests 6":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2: Base1 {};
 interface Derived {
@@ -102,9 +84,6 @@ interface Derived {
 
 
 EXPECT FAILURE "interfaceinheritance.tests 7":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2: Base1 {};
 interface Derived {
@@ -114,9 +93,6 @@ interface Derived {
 
 
 EXPECT FAILURE "interfaceinheritance.tests 8":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2: Base1 {};
 interface Derived {
@@ -126,9 +102,6 @@ interface Derived {
 
 
 EXPECT SUCCESS "interfaceinheritance.tests 9":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2: Base1 {};
 interface Derived {
@@ -138,9 +111,6 @@ interface Derived {
 
 
 EXPECT SUCCESS "interfaceinheritance.tests 10":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2: Base1 {};
 interface Derived {
@@ -150,9 +120,6 @@ interface Derived {
 
 
 EXPECT SUCCESS "interfaceinheritance.tests 11":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2: Base1 {};
 interface Derived {
@@ -162,9 +129,6 @@ interface Derived {
 
 
 EXPECT SUCCESS "interfaceinheritance.tests 12":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2: Base1 {};
 interface Derived {
@@ -174,9 +138,6 @@ interface Derived {
 
 
 EXPECT SUCCESS "interfaceinheritance.tests 13":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2 { [optional] interface Base1; };
 interface Derived {
@@ -186,9 +147,6 @@ interface Derived {
 
 
 EXPECT SUCCESS "interfaceinheritance.tests 14":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2 { [optional] interface Base1; };
 interface Derived {
@@ -198,9 +156,6 @@ interface Derived {
 
 
 EXPECT FAILURE "interfaceinheritance.tests 15":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2 { [optional] interface Base1; };
 interface Derived {
@@ -210,9 +165,6 @@ interface Derived {
 
 
 EXPECT FAILURE "interfaceinheritance.tests 16":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2 { [optional] interface Base1; };
 interface Derived {
@@ -222,9 +174,6 @@ interface Derived {
 
 
 EXPECT SUCCESS "interfaceinheritance.tests 17":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2 { [optional] interface Base1; };
 interface Derived {
@@ -234,9 +183,6 @@ interface Derived {
 
 
 EXPECT SUCCESS "interfaceinheritance.tests 18":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2 { [optional] interface Base1; };
 interface Derived {
@@ -246,9 +192,6 @@ interface Derived {
 
 
 EXPECT SUCCESS "interfaceinheritance.tests 19":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2 { [optional] interface Base1; };
 interface Derived {
@@ -258,9 +201,6 @@ interface Derived {
 
 
 EXPECT SUCCESS "interfaceinheritance.tests 20":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2 { [optional] interface Base1; };
 interface Derived {
@@ -270,9 +210,6 @@ interface Derived {
 
 
 EXPECT SUCCESS "interfaceinheritance.tests 21":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2: Base1 {};
 interface Base3: Base1 {};
@@ -283,9 +220,6 @@ interface Derived {
 
 
 EXPECT SUCCESS "interfaceinheritance.tests 22":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2: Base1 {};
 interface Base3: Base1 {};
@@ -296,9 +230,6 @@ interface Derived {
 
 
 EXPECT SUCCESS "interfaceinheritance.tests 23":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2: Base1 {};
 interface Base3: Base1 {};
@@ -309,9 +240,6 @@ interface Derived {
 
 
 EXPECT SUCCESS "interfaceinheritance.tests 24":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base1 {};
 interface Base2: Base1 {};
 interface Base3: Base1 {};
@@ -322,9 +250,6 @@ interface Derived {
 
 
 EXPECT SUCCESS "interfaceinheritance.tests 25":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base {};
 interface Derived {
     [optional] interface Base;
@@ -339,9 +264,6 @@ interface Derived {
 
 
 EXPECT FAILURE "interfaceinheritance.tests 27":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base;
 interface Derived {
     [optional] interface Base;
@@ -349,9 +271,6 @@ interface Derived {
 
 
 EXPECT FAILURE "interfaceinheritance.tests 28":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base {};
 typedef Base Hidden;
 interface Derived {
@@ -361,9 +280,6 @@ interface Derived {
 
 
 EXPECT FAILURE "interfaceinheritance.tests 29":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Base {};
 typedef Base Hidden;
 interface Derived {
