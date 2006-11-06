@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDatabaseMetaData.idl,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:35:03 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:54:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1331,7 +1331,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         PROCEDURE_SCHEM, and PROCEDURE_NAME.
         </p>
         <p>
-        Each procedure description has the the following columns:
+        Each procedure description has the following columns:
         </p>
         <ol>
         <li>
