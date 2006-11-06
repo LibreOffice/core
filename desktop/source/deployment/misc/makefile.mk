@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-04 16:54:52 $
+#   last change: $Author: kz $ $Date: 2006-11-06 14:55:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,10 @@ LIB1OBJFILES = \
         $(SLO)$/dp_log.obj \
         $(SLO)$/dp_persmap.obj \
         $(SLO)$/dp_services.obj       \
-        $(SLO)$/db.obj
+        $(SLO)$/db.obj \
+        $(SLO)$/dp_version.obj
 
-SLOFILES = $(LIB1OBJFILES) $(SLO)$/dp_version.obj
+SLOFILES = $(LIB1OBJFILES)
 
 OBJFILES = $(OBJ)$/dp_version.obj
 
