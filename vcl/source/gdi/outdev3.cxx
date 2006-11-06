@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.223 $
+ *  $Revision: 1.224 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 12:00:31 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:49:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1458,14 +1458,11 @@ bool ImplFontData::IsBetterMatch( const ImplFontSelectData& rFSD, FontMatchStatu
         nMatch += 20000;
 
     // prefer NORMAL font width
-    // TODO: change when the upper layers can tell their preference
+    // TODO: change when the upper layers can tell their width preference
     if( meWidthType == WIDTH_NORMAL )
-        nMatch += 10000;
-
-    // prefer NORMAL font weight
-    // TODO: change when the upper layers can tell their preference
-    if( meWeight == WEIGHT_NORMAL )
-        nMatch += 100;
+        nMatch += 400;
+    else if( (meWidthType == WIDTH_SEMI_EXPANDED) || (meWidthType == WIDTH_SEMI_CONDENSED) )
+        nMatch += 300;
 
     if( rFSD.meWeight != WEIGHT_DONTKNOW )
     {
@@ -1486,6 +1483,19 @@ bool ImplFontData::IsBetterMatch( const ImplFontSelectData& rFSD, FontMatchStatu
             nMatch += 700;
         else if ( nWeightDiff < +50 && nWeightDiff > -50)
             nMatch += 200;
+    }
+    else // requested weight == WEIGHT_DONTKNOW
+    {
+        // prefer NORMAL font weight
+        // TODO: change when the upper layers can tell their weight preference
+        if( meWeight == WEIGHT_NORMAL )
+            nMatch += 450;
+        else if( meWeight == WEIGHT_MEDIUM )
+            nMatch += 350;
+        else if( (meWeight == WEIGHT_SEMILIGHT) || (meWeight == WEIGHT_SEMIBOLD) )
+            nMatch += 200;
+        else if( meWeight == WEIGHT_LIGHT )
+            nMatch += 150;
     }
 
     if ( rFSD.meItalic == ITALIC_NONE )
