@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:34:47 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:39:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,10 +215,10 @@ sal_Bool checkFileContent(const OString& targetFileName, const OString& tmpFileN
                 if ( rtl_compareMemory(buffer1, buffer2, n2) != 0 )
                     bFindChanges =  sal_True;
         }
-
-        fclose(target);
-        fclose(tmp);
     }
+
+    if (target) fclose(target);
+    if (tmp) fclose(tmp);
 
     return bFindChanges;
 }
