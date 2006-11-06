@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.172 $
+ *  $Revision: 1.173 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:11:00 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:53:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2382,7 +2382,11 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
                                             // in Tabellen
         while (nInTable < nCellLevel)
         {
-            nInTable += StartTable(nStartCp);
+            if (StartTable(nStartCp))
+                ++nInTable;
+            else
+                break;
+
             maApos.push_back(false);
         }
         // nach StartTable ist ein ReSync noetig ( eigentlich nur, falls die
@@ -2892,7 +2896,8 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTxtPos, bool& rbStartLine)
     bool bStartAttr = pPlcxMan->Get(&aRes); // hole Attribut-Pos
     aRes.nAktCp = rTxtPos;              // Akt. Cp-Pos
 
-    if ((aRes.nFlags & MAN_MASK_NEW_SEP) && !bIgnoreText)   // neue Section
+    bool bNewSection = (aRes.nFlags & MAN_MASK_NEW_SEP) && !bIgnoreText;
+    if ( bNewSection )  // neue Section
     {
         ASSERT(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
         // PageDesc erzeugen und fuellen
@@ -2989,7 +2994,8 @@ void SwWW8ImplReader::ReadAttrs(WW8_CP& rNext, WW8_CP& rTxtPos, bool& rbStartLin
         do
         {
             rNext = ReadTextAttr( rTxtPos, rbStartLine );
-        }while( rTxtPos >= rNext );
+        }
+        while( rTxtPos >= rNext );
 
     }
     else if ( rbStartLine )
@@ -3062,7 +3068,6 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
     WW8_CP l = nStartCp;
     while ( l<nStartCp+nTextLen )
     {
-
         ReadAttrs( nNext, l, bStartLine );// behandelt auch Section-Breaks
         ASSERT(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
 
