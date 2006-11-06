@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:15:01 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:42:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -731,223 +731,237 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
     // second test if the name can be set as select columns in a pseudo statement
     // we have to look which entries  we should quote
 
-    ::rtl::OUString sSql;
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
-    sSql += ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), _sFieldName );
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM x"));
-
+    size_t nPass = 4;
     ::connectivity::OSQLParser& rParser( pController->getParser() );
-    // first try the international version
-    OSQLParseNode* pParseNode = rParser.parseTree(sErrorMsg, sSql,sal_True);
-    if ( !pParseNode ) // if that doesn't work try the english one
-        pParseNode = rParser.parseTree(sErrorMsg, sSql,sal_False);
-
-    if ( pParseNode ) // we got a valid select column
+    OSQLParseNode* pParseNode = NULL;
+    // 4 passes in trying to interprete the field name
+    // - don't quote the field name, parse internationally
+    // - don't quote the field name, parse en-US
+    // - quote the field name, parse internationally
+    // - quote the field name, parse en-US
+    do
     {
-        // find what type of column has be inserted
-        ::connectivity::OSQLParseNode* pSelection = pParseNode->getChild(2);
-        if ( SQL_ISRULE(pSelection,selection) ) // we found the asterix
-        {
-            _pEntry->SetField(_sFieldName);
-            clearEntryFunctionField(_sFieldName,_pEntry,_bListAction,_pEntry->GetColumnId());
-        } // travel through the select column parse node
+        bool bQuote = ( nPass <= 2 );
+        bool bInternational = ( nPass % 2 ) == 0;
+
+        ::rtl::OUString sSql;
+        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
+        if ( bQuote )
+            sSql += ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), _sFieldName );
         else
-        {
-            ::comphelper::UStringMixEqual bCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
+            sSql += _sFieldName;
+        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM x"));
 
-            OTableFieldDescRef aSelEntry = _pEntry;
-            USHORT nColumnId = aSelEntry->GetColumnId();
-
-            sal_uInt32 nCount = pSelection->count();
-            for (sal_uInt32 i = 0; i < nCount; ++i)
-            {
-                if ( i > 0 ) // may we have to append more than one field
-                {
-                    USHORT nColumnPostion;
-                    aSelEntry = FindFirstFreeCol(nColumnPostion);
-                    if ( !aSelEntry.isValid() )
-                    {
-                        AppendNewCol(1);
-                        aSelEntry = FindFirstFreeCol(nColumnPostion);
-                    }
-                    ++nColumnPostion;
-                    nColumnId = GetColumnId(nColumnPostion);
-                }
-
-                ::connectivity::OSQLParseNode* pChild = pSelection->getChild( i );
-                OSL_ENSURE(SQL_ISRULE(pChild,derived_column), "No derived column found!");
-                // get the column alias
-                ::rtl::OUString sColumnAlias = OSQLParseTreeIterator::getColumnAlias(pChild);
-                if ( sColumnAlias.getLength() ) // we found an as clause
-                {
-                    String aSelectionAlias = aSelEntry->GetFieldAlias();
-                    aSelEntry->SetFieldAlias( sColumnAlias );
-                    // append undo
-                    appendUndoAction(aSelectionAlias,aSelEntry->GetFieldAlias(),BROW_COLUMNALIAS_ROW,_bListAction);
-                    if ( m_bVisibleRow[BROW_COLUMNALIAS_ROW] )
-                        RowModified(GetBrowseRow(BROW_COLUMNALIAS_ROW), nColumnId);
-                }
-
-                ::connectivity::OSQLParseNode* pColumnRef = pChild->getChild(0);
-                if (
-                        pColumnRef->count() == 3 &&
-                        SQL_ISPUNCTUATION(pColumnRef->getChild(0),"(") &&
-                        SQL_ISPUNCTUATION(pColumnRef->getChild(2),")")
-                    )
-                    pColumnRef = pColumnRef->getChild(1);
-
-                if ( SQL_ISRULE(pColumnRef,column_ref) ) // we found a valid column name or more column names
-                {
-                    // look if we can find the corresponding table
-                    bError = fillColumnRef(pColumnRef,xMetaData,aSelEntry,_bListAction);
-
-                    // we found a simple column so we must clear the function fields but only when the column name is '*'
-                    // and the function is different to count
-                    clearEntryFunctionField(_sFieldName,aSelEntry,_bListAction,nColumnId);
-                }
-                else
-                {
-                    // first check if we have a aggregate function and only a function
-                    if ( SQL_ISRULE(pColumnRef,general_set_fct) )
-                    {
-                        String sLocalizedFunctionName;
-                        if ( GetFunctionName(pColumnRef->getChild(0)->getTokenID(),sLocalizedFunctionName) )
-                        {
-                            String sOldLocalizedFunctionName = aSelEntry->GetFunction();
-                            aSelEntry->SetFunction(sLocalizedFunctionName);
-                            sal_uInt32 nFunCount = pColumnRef->count() - 1;
-                            sal_Int32 nFunctionType = FKT_AGGREGATE;
-                            sal_Bool bQuote = sal_False;
-                            // may be there exists only one parameter which is a column, fill all information into our fields
-                            if ( nFunCount == 4 && SQL_ISRULE(pColumnRef->getChild(3),column_ref) )
-                                bError = fillColumnRef(pColumnRef->getChild(3),xMetaData,aSelEntry,_bListAction);
-                            else if ( nFunCount == 3 ) // we have a COUNT(*) here, so take the first table
-                                bError = fillColumnRef(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")),::rtl::OUString(),xMetaData,aSelEntry,_bListAction);
-                            else
-                            {
-                                nFunctionType |= FKT_NUMERIC;
-                                bQuote = sal_True;
-                                aSelEntry->SetDataType(DataType::DOUBLE);
-                                aSelEntry->SetFieldType(TAB_NORMAL_FIELD);
-                            }
-
-                            // now parse the parameters
-                            ::rtl::OUString sParameters;
-                            for(sal_uInt32 function = 2; function < nFunCount; ++function) // we only want to parse the parameters of the function
-                                pColumnRef->getChild(function)->parseNodeToStr(sParameters,xMetaData,&rParser.getContext(),sal_True,bQuote);
-
-                            aSelEntry->SetFunctionType(nFunctionType);
-                            aSelEntry->SetField(sParameters);
-                            if ( aSelEntry->IsGroupBy() )
-                            {
-                                sOldLocalizedFunctionName = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount()-1);
-                                aSelEntry->SetGroupBy(sal_False);
-                            }
-
-                            // append undo action
-                            notifyFunctionFieldChanged(sOldLocalizedFunctionName,sLocalizedFunctionName,_bListAction, nColumnId);
-                        }
-                        else
-                            OSL_ENSURE(0,"Unsupported function inserted!");
-
-                    }
-                    else if( SQL_ISRULEOR2(pColumnRef,position_exp,extract_exp) ||
-                             SQL_ISRULEOR2(pColumnRef,fold,char_substring_fct)  ||
-                             SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct) )
-                                // a calculation has been found ( can be calc and function )
-                    {
-                        // append the whole text as field name
-                        // so we first clear the function field
-                        clearEntryFunctionField(_sFieldName,aSelEntry,_bListAction,nColumnId);
-                        sal_Bool bQuote = sal_True;
-                        sal_Int32 nDataType = DataType::DOUBLE;
-                        OSQLParseNode* pFunctionName = pColumnRef->getChild(0);
-                        if ( !SQL_ISPUNCTUATION(pFunctionName,"{") )
-                        {
-                            if ( SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct) )
-                                pFunctionName = pFunctionName->getChild(0);
-
-                            if ( pFunctionName )
-                            {
-                                ::rtl::OUString sFunctionName = pFunctionName->getTokenValue();
-                                if ( !sFunctionName.getLength() )
-                                    sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_MS_1252);
-
-                                nDataType = OSQLParser::getFunctionReturnType(
-                                                    sFunctionName
-                                                    ,&pController->getParser().getContext());
-                                aSelEntry->SetDataType(nDataType);
-                            }
-                        }
-
-
-                        // now parse the whole statement
-                        sal_uInt32 nFunCount = pColumnRef->count();
-                        ::rtl::OUString sParameters;
-                        for(sal_uInt32 function = 0; function < nFunCount; ++function)
-                            pColumnRef->getChild(function)->parseNodeToStr(sParameters,xMetaData,&rParser.getContext(),sal_True,bQuote);
-
-                        ::rtl::OUString aSelectionAlias = aSelEntry->GetAlias();
-                        aSelEntry->SetAlias(::rtl::OUString());
-
-                        sal_Int32 nNewFunctionType = aSelEntry->GetFunctionType() | FKT_NUMERIC | FKT_OTHER;
-                        aSelEntry->SetFunctionType(nNewFunctionType);
-
-
-                        aSelEntry->SetFieldType(TAB_NORMAL_FIELD);
-
-                        aSelEntry->SetTabWindow(NULL);
-
-                        aSelEntry->SetField(sParameters);
-                        notifyTableFieldChanged(aSelectionAlias,aSelEntry->GetAlias(),_bListAction, nColumnId);
-                    }
-                    else
-                    {
-                        clearEntryFunctionField(_sFieldName,aSelEntry,_bListAction,nColumnId);
-
-                        ::rtl::OUString aColumns;
-                        pColumnRef->parseNodeToStr( aColumns,
-                                                    xMetaData,
-                                                    &pController->getParser().getContext(),
-                                                    sal_True,
-                                                    sal_True);
-                        // get the type out of the funtion name
-                        sal_Int32 nDataType = DataType::DOUBLE;
-                        aSelEntry->SetDataType(nDataType);
-                        aSelEntry->SetField(aColumns);
-                        aSelEntry->SetFieldType(TAB_NORMAL_FIELD);
-                        aSelEntry->SetTabWindow(NULL);
-                        aSelEntry->SetAlias(::rtl::OUString());
-                        aSelEntry->SetFieldAlias(sColumnAlias);
-                        aSelEntry->SetFunctionType(FKT_NUMERIC | FKT_OTHER);
-
-                        notifyTableFieldChanged(sOldAlias,aSelEntry->GetAlias(),_bListAction, nColumnId);
-                    }
-                }
-                if ( i > 0 && InsertField(aSelEntry,BROWSER_INVALIDID,sal_True,sal_False).isEmpty() ) // may we have to append more than one field
-                { // the field could not be isnerted
-                    String sErrorMessage( ModuleRes( RID_STR_FIELD_DOESNT_EXIST ) );
-                    sErrorMessage.SearchAndReplaceAscii("$name$",aSelEntry->GetField());
-                    OSQLMessageBox aDlg( this,
-                        String( ModuleRes( STR_STAT_WARNING ) ), sErrorMessage,
-                        WB_OK | WB_DEF_OK, OSQLMessageBox::Warning );
-                    aDlg.Execute();
-                    bError = sal_True;
-                }
-            }
-        }
-        delete pParseNode;
+        pParseNode = rParser.parseTree( sErrorMsg, sSql, bInternational );
     }
-    else // something different which we have to check (may be a select statement)
+    while ( ( pParseNode == NULL ) && ( --nPass > 0 ) );
+
+    if ( pParseNode == NULL )
     {
+        // something different which we have to check (may be a select statement)
         String sErrorMessage( ModuleRes( STR_QRY_COLUMN_NOT_FOUND ) );
         sErrorMessage.SearchAndReplaceAscii("$name$",_sFieldName);
         OSQLMessageBox aDlg( this,
             String( ModuleRes( STR_STAT_WARNING ) ), sErrorMessage,
             WB_OK | WB_DEF_OK, OSQLMessageBox::Warning );
         aDlg.Execute();
-        bError = sal_True;
+        return sal_True;
     }
+
+    // we got a valid select column
+    // find what type of column has be inserted
+    ::connectivity::OSQLParseNode* pSelection = pParseNode->getChild(2);
+    if ( SQL_ISRULE(pSelection,selection) ) // we found the asterix
+    {
+        _pEntry->SetField(_sFieldName);
+        clearEntryFunctionField(_sFieldName,_pEntry,_bListAction,_pEntry->GetColumnId());
+    } // travel through the select column parse node
+    else
+    {
+        ::comphelper::UStringMixEqual bCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
+
+        OTableFieldDescRef aSelEntry = _pEntry;
+        USHORT nColumnId = aSelEntry->GetColumnId();
+
+        sal_uInt32 nCount = pSelection->count();
+        for (sal_uInt32 i = 0; i < nCount; ++i)
+        {
+            if ( i > 0 ) // may we have to append more than one field
+            {
+                USHORT nColumnPostion;
+                aSelEntry = FindFirstFreeCol(nColumnPostion);
+                if ( !aSelEntry.isValid() )
+                {
+                    AppendNewCol(1);
+                    aSelEntry = FindFirstFreeCol(nColumnPostion);
+                }
+                ++nColumnPostion;
+                nColumnId = GetColumnId(nColumnPostion);
+            }
+
+            ::connectivity::OSQLParseNode* pChild = pSelection->getChild( i );
+            OSL_ENSURE(SQL_ISRULE(pChild,derived_column), "No derived column found!");
+            // get the column alias
+            ::rtl::OUString sColumnAlias = OSQLParseTreeIterator::getColumnAlias(pChild);
+            if ( sColumnAlias.getLength() ) // we found an as clause
+            {
+                String aSelectionAlias = aSelEntry->GetFieldAlias();
+                aSelEntry->SetFieldAlias( sColumnAlias );
+                // append undo
+                appendUndoAction(aSelectionAlias,aSelEntry->GetFieldAlias(),BROW_COLUMNALIAS_ROW,_bListAction);
+                if ( m_bVisibleRow[BROW_COLUMNALIAS_ROW] )
+                    RowModified(GetBrowseRow(BROW_COLUMNALIAS_ROW), nColumnId);
+            }
+
+            ::connectivity::OSQLParseNode* pColumnRef = pChild->getChild(0);
+            if (
+                    pColumnRef->count() == 3 &&
+                    SQL_ISPUNCTUATION(pColumnRef->getChild(0),"(") &&
+                    SQL_ISPUNCTUATION(pColumnRef->getChild(2),")")
+                )
+                pColumnRef = pColumnRef->getChild(1);
+
+            if ( SQL_ISRULE(pColumnRef,column_ref) ) // we found a valid column name or more column names
+            {
+                // look if we can find the corresponding table
+                bError = fillColumnRef(pColumnRef,xMetaData,aSelEntry,_bListAction);
+
+                // we found a simple column so we must clear the function fields but only when the column name is '*'
+                // and the function is different to count
+                clearEntryFunctionField(_sFieldName,aSelEntry,_bListAction,nColumnId);
+            }
+            else
+            {
+                // first check if we have a aggregate function and only a function
+                if ( SQL_ISRULE(pColumnRef,general_set_fct) )
+                {
+                    String sLocalizedFunctionName;
+                    if ( GetFunctionName(pColumnRef->getChild(0)->getTokenID(),sLocalizedFunctionName) )
+                    {
+                        String sOldLocalizedFunctionName = aSelEntry->GetFunction();
+                        aSelEntry->SetFunction(sLocalizedFunctionName);
+                        sal_uInt32 nFunCount = pColumnRef->count() - 1;
+                        sal_Int32 nFunctionType = FKT_AGGREGATE;
+                        sal_Bool bQuote = sal_False;
+                        // may be there exists only one parameter which is a column, fill all information into our fields
+                        if ( nFunCount == 4 && SQL_ISRULE(pColumnRef->getChild(3),column_ref) )
+                            bError = fillColumnRef(pColumnRef->getChild(3),xMetaData,aSelEntry,_bListAction);
+                        else if ( nFunCount == 3 ) // we have a COUNT(*) here, so take the first table
+                            bError = fillColumnRef(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")),::rtl::OUString(),xMetaData,aSelEntry,_bListAction);
+                        else
+                        {
+                            nFunctionType |= FKT_NUMERIC;
+                            bQuote = sal_True;
+                            aSelEntry->SetDataType(DataType::DOUBLE);
+                            aSelEntry->SetFieldType(TAB_NORMAL_FIELD);
+                        }
+
+                        // now parse the parameters
+                        ::rtl::OUString sParameters;
+                        for(sal_uInt32 function = 2; function < nFunCount; ++function) // we only want to parse the parameters of the function
+                            pColumnRef->getChild(function)->parseNodeToStr(sParameters,xMetaData,&rParser.getContext(),sal_True,bQuote);
+
+                        aSelEntry->SetFunctionType(nFunctionType);
+                        aSelEntry->SetField(sParameters);
+                        if ( aSelEntry->IsGroupBy() )
+                        {
+                            sOldLocalizedFunctionName = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount()-1);
+                            aSelEntry->SetGroupBy(sal_False);
+                        }
+
+                        // append undo action
+                        notifyFunctionFieldChanged(sOldLocalizedFunctionName,sLocalizedFunctionName,_bListAction, nColumnId);
+                    }
+                    else
+                        OSL_ENSURE(0,"Unsupported function inserted!");
+
+                }
+                else if( SQL_ISRULEOR2(pColumnRef,position_exp,extract_exp) ||
+                            SQL_ISRULEOR2(pColumnRef,fold,char_substring_fct)   ||
+                            SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct) )
+                            // a calculation has been found ( can be calc and function )
+                {
+                    // append the whole text as field name
+                    // so we first clear the function field
+                    clearEntryFunctionField(_sFieldName,aSelEntry,_bListAction,nColumnId);
+                    sal_Bool bQuote = sal_True;
+                    sal_Int32 nDataType = DataType::DOUBLE;
+                    OSQLParseNode* pFunctionName = pColumnRef->getChild(0);
+                    if ( !SQL_ISPUNCTUATION(pFunctionName,"{") )
+                    {
+                        if ( SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct) )
+                            pFunctionName = pFunctionName->getChild(0);
+
+                        if ( pFunctionName )
+                        {
+                            ::rtl::OUString sFunctionName = pFunctionName->getTokenValue();
+                            if ( !sFunctionName.getLength() )
+                                sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_MS_1252);
+
+                            nDataType = OSQLParser::getFunctionReturnType(
+                                                sFunctionName
+                                                ,&pController->getParser().getContext());
+                            aSelEntry->SetDataType(nDataType);
+                        }
+                    }
+
+
+                    // now parse the whole statement
+                    sal_uInt32 nFunCount = pColumnRef->count();
+                    ::rtl::OUString sParameters;
+                    for(sal_uInt32 function = 0; function < nFunCount; ++function)
+                        pColumnRef->getChild(function)->parseNodeToStr(sParameters,xMetaData,&rParser.getContext(),sal_True,bQuote);
+
+                    ::rtl::OUString aSelectionAlias = aSelEntry->GetAlias();
+                    aSelEntry->SetAlias(::rtl::OUString());
+
+                    sal_Int32 nNewFunctionType = aSelEntry->GetFunctionType() | FKT_NUMERIC | FKT_OTHER;
+                    aSelEntry->SetFunctionType(nNewFunctionType);
+
+
+                    aSelEntry->SetFieldType(TAB_NORMAL_FIELD);
+
+                    aSelEntry->SetTabWindow(NULL);
+
+                    aSelEntry->SetField(sParameters);
+                    notifyTableFieldChanged(aSelectionAlias,aSelEntry->GetAlias(),_bListAction, nColumnId);
+                }
+                else
+                {
+                    clearEntryFunctionField(_sFieldName,aSelEntry,_bListAction,nColumnId);
+
+                    ::rtl::OUString aColumns;
+                    pColumnRef->parseNodeToStr( aColumns,
+                                                xMetaData,
+                                                &pController->getParser().getContext(),
+                                                sal_True,
+                                                sal_True);
+                    // get the type out of the funtion name
+                    sal_Int32 nDataType = DataType::DOUBLE;
+                    aSelEntry->SetDataType(nDataType);
+                    aSelEntry->SetField(aColumns);
+                    aSelEntry->SetFieldType(TAB_NORMAL_FIELD);
+                    aSelEntry->SetTabWindow(NULL);
+                    aSelEntry->SetAlias(::rtl::OUString());
+                    aSelEntry->SetFieldAlias(sColumnAlias);
+                    aSelEntry->SetFunctionType(FKT_NUMERIC | FKT_OTHER);
+
+                    notifyTableFieldChanged(sOldAlias,aSelEntry->GetAlias(),_bListAction, nColumnId);
+                }
+            }
+            if ( i > 0 && InsertField(aSelEntry,BROWSER_INVALIDID,sal_True,sal_False).isEmpty() ) // may we have to append more than one field
+            { // the field could not be isnerted
+                String sErrorMessage( ModuleRes( RID_STR_FIELD_DOESNT_EXIST ) );
+                sErrorMessage.SearchAndReplaceAscii("$name$",aSelEntry->GetField());
+                OSQLMessageBox aDlg( this,
+                    String( ModuleRes( STR_STAT_WARNING ) ), sErrorMessage,
+                    WB_OK | WB_DEF_OK, OSQLMessageBox::Warning );
+                aDlg.Execute();
+                bError = sal_True;
+            }
+        }
+    }
+    delete pParseNode;
 
     return bError;
 }
