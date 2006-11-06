@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:10:05 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:41:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1330,7 +1330,10 @@ void SwDoc::ResetModified()
     //  Bit 1:  -> neuer Zustand
     long nCall = mbModified ? 1 : 0;
     mbModified = FALSE;
-    pDocStat->bModified = FALSE;
+    // If there is already a document statistic, we assume that
+    // it is correct. In this case we reset the modified flag.
+    if ( 0 != pDocStat->nChar )
+        pDocStat->bModified = FALSE;
     nUndoSavePos = nUndoPos;
     if( nCall && aOle2Link.IsSet() )
     {
