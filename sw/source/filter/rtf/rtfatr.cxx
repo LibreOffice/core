@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:13:57 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:52:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,9 +385,9 @@ SvStream& OutComment( Writer& rWrt, const char* pStr, BOOL bSetFlag )
     return (rWrt.Strm() << '{' << sRTF_IGNORE << pStr);
 }
 
-Writer& OutRTF_AsByteString( Writer& rWrt, const String& rStr )
+Writer& OutRTF_AsByteString( Writer& rWrt, const String& rStr, rtl_TextEncoding eEncoding)
 {
-    ByteString sOutStr( rStr, DEF_ENCODING );
+    ByteString sOutStr( rStr, eEncoding );
     rWrt.Strm() << sOutStr.GetBuffer();
     return rWrt;
 }
@@ -1255,7 +1255,7 @@ static Writer& OutRTF_SwTxtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
                 sURL = aTmp.GetFull();
             }
 */          rWrt.Strm() << '\"';
-            RTFOutFuncs::Out_String( rWrt.Strm(), sURL, rRTFWrt.eCurrentCharSet,
+            RTFOutFuncs::Out_String( rWrt.Strm(), sURL, rRTFWrt.eCurrentEncoding,
                                     rRTFWrt.bWriteHelpFmt ) << "\" ";
             sURL = aTmp.GetMark();
         }
@@ -1264,7 +1264,7 @@ static Writer& OutRTF_SwTxtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
         {
             rWrt.Strm() << "\\\\l \"";
             sURL.Erase( 0, 1 );
-            RTFOutFuncs::Out_String( rWrt.Strm(), sURL, rRTFWrt.eCurrentCharSet,
+            RTFOutFuncs::Out_String( rWrt.Strm(), sURL, rRTFWrt.eCurrentEncoding,
                                     rRTFWrt.bWriteHelpFmt ) << "\" ";
         }
 
@@ -1272,7 +1272,7 @@ static Writer& OutRTF_SwTxtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
         {
             rWrt.Strm() << "\\\\t \"";
             RTFOutFuncs::Out_String( rWrt.Strm(), rURL.GetTargetFrame(),
-                        DEF_ENCODING, rRTFWrt.bWriteHelpFmt ) << "\" ";
+                        rRTFWrt.eDefaultEncoding, rRTFWrt.bWriteHelpFmt ) << "\" ";
         }
 
         rWrt.Strm() << "}{" << sRTF_FLDRSLT << ' ';
@@ -1543,7 +1543,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         if (nStrPos != nEnde)
         {
             RTFOutFuncs::Out_String(rWrt.Strm(), String(rStr.GetChar(nStrPos)),
-                rRTFWrt.eCurrentCharSet, rRTFWrt.bWriteHelpFmt);
+                rRTFWrt.eCurrentEncoding, rRTFWrt.bWriteHelpFmt);
         }
     }
 
@@ -1859,7 +1859,7 @@ static Writer& OutRTF_SwGrfNode(Writer& rWrt, SwCntntNode & rNode)
     // Bitmap als File-Referenz speichern
     rRTFWrt.Strm() << sRTF_FIELD << sRTF_FLDPRIV;
     OutComment( rRTFWrt, sRTF_FLDINST ) << "{\\\\import ";
-    RTFOutFuncs::Out_String( rWrt.Strm(), aGrfNm, DEF_ENCODING,
+    RTFOutFuncs::Out_String( rWrt.Strm(), aGrfNm, rRTFWrt.eDefaultEncoding,
                                 rRTFWrt.bWriteHelpFmt );
     rRTFWrt.Strm() << "}}{" << sRTF_FLDRSLT << " }}";
     rRTFWrt.Strm() << '}' << SwRTFWriter::sNewLine;
@@ -2350,7 +2350,7 @@ static Writer& OutRTF_SwFont( Writer& rWrt, const SfxPoolItem& rHt )
         const sal_Char* pCmd = bAssoc ? sRTF_AF : sRTF_F;
         rWrt.Strm() << pCmd;
         rWrt.OutULong(rRTFWrt.GetId(rFont));
-        rRTFWrt.eCurrentCharSet = rFont.GetCharSet();
+        rRTFWrt.eCurrentEncoding = rtl_getTextEncodingFromWindowsCharset(sw::ms::rtl_TextEncodingToWinCharset(rFont.GetCharSet()));
     }
     return rWrt;
 }
@@ -2865,11 +2865,11 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             rWrt.Strm() << aFldStt.GetBuffer() << "EQ \\\\o (\\\\s\\\\up ";
             rWrt.OutLong( nHeight/2 ) << '(';
             RTFOutFuncs::Out_String( rWrt.Strm(), rFldPar1.Copy(0,nAbove),
-                                    DEF_ENCODING, rRTFWrt.bWriteHelpFmt );
+                                    rRTFWrt.eDefaultEncoding, rRTFWrt.bWriteHelpFmt );
             rWrt.Strm() << "), \\\\s\\\\do ";
             rWrt.OutLong( nHeight/5 ) << '(';
             RTFOutFuncs::Out_String( rWrt.Strm(), rFldPar1.Copy( nAbove ),
-                                    DEF_ENCODING, rRTFWrt.bWriteHelpFmt )
+                                    rRTFWrt.eDefaultEncoding, rRTFWrt.bWriteHelpFmt )
                     << "))";
         }
         break;
@@ -2880,7 +2880,7 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
     case RES_USERFLD:
             rWrt.Strm() << aFldStt.GetBuffer();
             RTFOutFuncs::Out_String( rWrt.Strm(), pFld->GetTyp()->GetName(),
-                                    DEF_ENCODING, rRTFWrt.bWriteHelpFmt );
+                                    rRTFWrt.eDefaultEncoding, rRTFWrt.bWriteHelpFmt );
             break;
     case RES_GETREFFLD:
         {
@@ -2892,7 +2892,7 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
                 case REF_SETREFATTR:
                 case REF_BOOKMARK:
                     RTFOutFuncs::Out_String( rWrt.Strm(), rRFld.GetSetRefName(),
-                                    DEF_ENCODING, rRTFWrt.bWriteHelpFmt );
+                                    rRTFWrt.eDefaultEncoding, rRTFWrt.bWriteHelpFmt );
                     nFldTyp = 3;
                     break;
             }
@@ -2964,7 +2964,7 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             sOut += DB_DELIM;
             sOut += (String)aData.sCommand;
             RTFOutFuncs::Out_String( rWrt.Strm(), sOut,
-                                    DEF_ENCODING, rRTFWrt.bWriteHelpFmt );
+                                    rRTFWrt.eDefaultEncoding, rRTFWrt.bWriteHelpFmt );
     }
     break;
     case RES_AUTHORFLD:
@@ -2974,11 +2974,11 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
     case RES_HIDDENTXTFLD:
             if( TYP_CONDTXTFLD == ((SwHiddenTxtField*)pFld)->GetSubType() )
                 RTFOutFuncs::Out_String( rWrt.Strm(), pFld->Expand(),
-                                        DEF_ENCODING, rRTFWrt.bWriteHelpFmt );
+                                        rRTFWrt.eDefaultEncoding, rRTFWrt.bWriteHelpFmt );
             else
             {
                 rWrt.Strm() << '{' << sRTF_V << ' ';
-                OutRTF_AsByteString( rWrt, pFld->GetPar2() ).Strm()
+                OutRTF_AsByteString( rWrt, pFld->GetPar2(), rRTFWrt.eDefaultEncoding ).Strm()
                             << '}' << SwRTFWriter::sNewLine;
             }
             return rWrt;        // nicht bis zum Ende, kein RTF-Feld !!
@@ -3030,7 +3030,7 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             if( ' ' != cCh )            // vorweg immer einen Trenner
                 rWrt.Strm() << ' ';
             RTFOutFuncs::Out_String( rWrt.Strm(), pFld->Expand(),
-                                        DEF_ENCODING, rRTFWrt.bWriteHelpFmt );
+                                        rRTFWrt.eDefaultEncoding, rRTFWrt.bWriteHelpFmt );
         }
         break;
     }
@@ -3039,7 +3039,7 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
     {
         rWrt.Strm() << "}{" << sRTF_FLDRSLT << ' ';
         RTFOutFuncs::Out_String( rWrt.Strm(), pFld->Expand(),
-                                        DEF_ENCODING, rRTFWrt.bWriteHelpFmt );
+                                        rRTFWrt.eDefaultEncoding, rRTFWrt.bWriteHelpFmt );
         rWrt.Strm() << "}}";
         rRTFWrt.bOutFmtAttr = FALSE;
     }
@@ -3086,12 +3086,12 @@ static Writer& OutRTF_SwFtn( Writer& rWrt, const SfxPoolItem& rHt )
         }
         else
         {
-            OutRTF_AsByteString( rWrt, rFtn.GetNumStr() );
+            OutRTF_AsByteString( rWrt, rFtn.GetNumStr(), rRTFWrt.eDefaultEncoding );
             OutComment( rWrt, sRTF_FOOTNOTE );
             if( rFtn.IsEndNote() )
                 rWrt.Strm() << sRTF_FTNALT;
             rWrt.Strm() << ' ';
-            OutRTF_AsByteString( rWrt, rFtn.GetNumStr() );
+            OutRTF_AsByteString( rWrt, rFtn.GetNumStr(), rRTFWrt.eDefaultEncoding );
         }
         RTFSaveData aSaveData( rRTFWrt, nStart, nEnd );
         // damit kein \par ausgegeben wird !!
@@ -3108,7 +3108,7 @@ static Writer& OutRTF_SwFtn( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutRTF_SwHardBlank( Writer& rWrt, const SfxPoolItem& rHt)
 {
     RTFOutFuncs::Out_String(rWrt.Strm(),
-        String(((SwFmtHardBlank&)rHt).GetChar()), DEF_ENCODING,
+        String(((SwFmtHardBlank&)rHt).GetChar()), ((SwRTFWriter&)rWrt).eDefaultEncoding,
         ((SwRTFWriter&)rWrt).bWriteHelpFmt);
     return rWrt;
 }
@@ -3189,7 +3189,7 @@ static Writer& OutRTF_SwTxtRuby( Writer& rWrt, const SfxPoolItem& rHt )
                 << " EQ \\\\* jc" << cJC
                 << " \\\\* \"Font:";
     RTFOutFuncs::Out_String( rWrt.Strm(), pFont->GetFamilyName(),
-                            DEF_ENCODING, rRTFWrt.bWriteHelpFmt );
+                            rRTFWrt.eDefaultEncoding, rRTFWrt.bWriteHelpFmt );
     rWrt.Strm() << "\" \\\\* hps";
     rWrt.OutLong( nHeight );
     rWrt.Strm() << " \\\\o";
@@ -3217,7 +3217,7 @@ static Writer& OutRTF_SwTxtRuby( Writer& rWrt, const SfxPoolItem& rHt )
             rWrt.Strm() << ' ';
     }
     RTFOutFuncs::Out_String( rWrt.Strm(), rRuby.GetText(),
-                            DEF_ENCODING, rRTFWrt.bWriteHelpFmt );
+                            rRTFWrt.eDefaultEncoding, rRTFWrt.bWriteHelpFmt );
     if( pFmt )
         rWrt.Strm() << '}';
 
