@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_package.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:10:59 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:55:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 #include "dp_ucb.h"
 #include "dp_interact.h"
 #include "dp_description.hxx"
+#include "dp_version.hxx"
 #include "rtl/uri.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase1.hxx"
@@ -608,27 +609,43 @@ bool BackendImpl::PackageImpl::checkDependencies(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "/desc:description/desc:dependencies/*"))));
     sal_Int32 n = deps->getLength();
-    if (n == 0) {
+    css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
+        unsatisfied(n);
+    sal_Int32 unsat = 0;
+    for (int i = 0; i < n; ++i) {
+        css::uno::Reference< css::xml::dom::XElement > e(
+            deps->item(i), css::uno::UNO_QUERY_THROW);
+        // Currently, the only satisfied dependency is OpenOffice.org-minimal-
+        // version with a value of the current OOo release or less (the actual
+        // version string has to be updated here for every OOo release):
+        if (!(e->getNamespaceURI().equalsAsciiL(
+                  RTL_CONSTASCII_STRINGPARAM(
+                      "http://openoffice.org/extensions/description/2006"))
+              && e->getTagName().equalsAsciiL(
+                  RTL_CONSTASCII_STRINGPARAM("OpenOffice.org-minimal-version"))
+              && (dp_misc::compareVersions(
+                      e->getAttribute(
+                          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))),
+                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2.1")))
+                  != dp_misc::GREATER)))
+        {
+            unsatisfied[unsat++] = e;
+        }
+    }
+    unsatisfied.realloc(unsat);
+    if (unsatisfied.getLength() == 0) {
         return true;
     } else {
-        // Until any kinds of dependencies are actually specified, all
-        // dependencies are unsatisfied:
-        css::deployment::DependencyException e;
-        e.Message = rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("unsatisfied dependencies"));
-        e.Context = static_cast<OWeakObject *>(this);
-        e.UnsatisfiedDependencies.realloc(n);
-        for (sal_Int32 i = 0; i < n; ++i) {
-            e.UnsatisfiedDependencies[i] =
-                css::uno::Reference< css::xml::dom::XElement >(
-                    deps->item(i), css::uno::UNO_QUERY_THROW);
-        }
-        Any ae(e);
+        Any e(
+            css::deployment::DependencyException(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("unsatisfied dependencies")),
+                static_cast<OWeakObject *>(this), unsatisfied));
         if (!interactContinuation(
-                ae, cppu::UnoType< css::task::XInteractionApprove >::get(),
+                e, cppu::UnoType< css::task::XInteractionApprove >::get(),
                 environment, NULL, NULL))
         {
-            cppu::throwException(ae);
+            cppu::throwException(e);
         }
         return false;
     }
