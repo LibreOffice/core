@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:20:21 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:49:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,10 +70,6 @@
 #ifndef INCLUDED_VECTOR
 #include <vector>
 #define INCLUDED_VECTOR
-#endif
-#ifndef INCLUDED_IOSTREAM
-#include <iostream>
-#define INCLUDED_IOSTREAM
 #endif
 #ifndef INCLUDED_EXCEPTION
 #include <exception>
