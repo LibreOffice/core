@@ -4,9 +4,9 @@
  *
  *  $RCSfile: builddata.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:19:52 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:49:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,7 +304,7 @@ namespace configmgr
         Result handle(GroupNodeAccess const & _aNode);
         Result handle(SetNodeAccess const & _aNode);
 
-        Address makeTemplateData(Accessor const & _aSourceAccessor, Address _aSourceTemplate);
+        Address makeTemplateData(Address _aSourceTemplate);
     };
 //-----------------------------------------------------------------------------
 
@@ -743,7 +743,7 @@ TreeAddress CopyingDataTreeBuilder::buildTree(TreeAccessor const & _aSourceTree)
 
     TreeFragment const & aSrc = _aSourceTree.data();
 
-    sharable::String aTreeName = allocString( allocator(), aSrc.getName(_aSourceTree.accessor()));
+    sharable::String aTreeName = allocString( aSrc.getName());
     this->builder().resetTreeFragment(aTreeName, aSrc.header.state);
 
     this->visitNode(_aSourceTree.getRootNode());
@@ -756,7 +756,7 @@ NodeVisitor::Result CopyingDataTreeBuilder::handle(ValueNodeAccess const & _aNod
 {
     sharable::ValueNode const & aSrc = _aNode.data();
 
-    sharable::Name aNodeName = allocName( allocator(), aSrc.info.getName(_aNode.accessor()));
+    sharable::Name aNodeName = allocName( aSrc.info.getName());
     Flags::Field aFlags = aSrc.info.flags;
 
     AnyData::TypeCode aType = AnyData::TypeCode( aSrc.info.type & Type::mask_valuetype );
@@ -782,7 +782,7 @@ NodeVisitor::Result CopyingDataTreeBuilder::handle(GroupNodeAccess const & _aNod
 {
     sharable::GroupNode const & aSrc = _aNode.data();
 
-    sharable::Name aNodeName = allocName( allocator(), aSrc.info.getName(_aNode.accessor()));
+    sharable::Name aNodeName = allocName( aSrc.info.getName());
     Flags::Field aFlags = aSrc.info.flags;
 
     Offset nGroupOffset = this->builder().startGroup(aNodeName,aFlags);
@@ -797,9 +797,9 @@ NodeVisitor::Result CopyingDataTreeBuilder::handle(SetNodeAccess const & _aNode)
 {
     sharable::SetNode const & aSrc = _aNode.data();
 
-    sharable::Name aNodeName = allocName( allocator(), aSrc.info.getName(_aNode.accessor()));
+    sharable::Name aNodeName = allocName( aSrc.info.getName());
     Flags::Field aFlags = aSrc.info.flags;
-    Address aTemplate = this->makeTemplateData(_aNode.accessor(), aSrc.elementType);
+    Address aTemplate = this->makeTemplateData(aSrc.elementType);
 
     this->builder().addSet(aNodeName,aFlags,aTemplate);
 
@@ -812,12 +812,9 @@ NodeVisitor::Result CopyingDataTreeBuilder::handle(SetNodeAccess const & _aNode)
 }
 //-----------------------------------------------------------------------------
 
-Address CopyingDataTreeBuilder::makeTemplateData(Accessor const & _aSourceAccessor, Address _aSourceTemplate)
+Address CopyingDataTreeBuilder::makeTemplateData(Address _aSourceTemplate)
 {
-    NameChar const * pTemplateName      = SetNode::getTemplateDataName(_aSourceAccessor,_aSourceTemplate);
-    NameChar const * pTemplateModule    = SetNode::getTemplateDataModule(_aSourceAccessor,_aSourceTemplate);
-
-    return SetNode::allocTemplateData(allocator(), pTemplateName, pTemplateModule );
+    return SetNode::copyTemplateData(allocator(), _aSourceTemplate);
 }
 //-----------------------------------------------------------------------------
 
@@ -854,7 +851,7 @@ Name ConvertingDataTreeBuilder::allocName(INode const & _aNode)
         m_sRootName = rtl::OUString();
     }
 
-    return sharable::allocName( allocator(), sNextName);
+    return sharable::allocName( sNextName);
 }
 //-----------------------------------------------------------------------------
 
@@ -863,7 +860,7 @@ TreeAddress ConvertingDataTreeBuilder::buildElement(INode const& _aNode, OUStrin
     m_sRootName = _aTypeName;
     m_bWithDefaults = _bWithDefaults;
 
-    sharable::String aTreeName = allocString( allocator(), _aNode.getName());
+    sharable::String aTreeName = allocString( _aNode.getName());
     this->builder().resetTreeFragment(aTreeName, makeState(_aNode.getAttributes()));
 
 
@@ -878,7 +875,7 @@ TreeAddress ConvertingDataTreeBuilder::buildTree(OUString const & _aTreeName, IN
     m_sRootName = OUString();
     m_bWithDefaults = _bWithDefaults;
 
-    sharable::String aTreeName = allocString( allocator(), _aTreeName );
+    sharable::String aTreeName = allocString( _aTreeName );
     this->builder().resetTreeFragment(aTreeName, makeState(_aNode.getAttributes()));
 
 
@@ -1007,10 +1004,7 @@ Flags::Field ConvertingDataTreeBuilder::makeFlags(node::Attributes const & _aAtt
 
 Address ConvertingDataTreeBuilder::makeTemplateData(rtl::OUString const & _aTemplateName, rtl::OUString const & _aTemplateModule)
 {
-    NameChar const * pTemplateName      = _aTemplateName.getStr();
-    NameChar const * pTemplateModule    = _aTemplateModule.getStr();
-
-    return SetNode::allocTemplateData(allocator(), pTemplateName, pTemplateModule );
+    return SetNode::allocTemplateData(allocator(), _aTemplateName, _aTemplateModule );
 }
 //-----------------------------------------------------------------------------
 
@@ -1242,7 +1236,7 @@ void DataTreeCleanup::destroyData(TreeFragmentHeader * _pHeader)
 
     sharable::String aName = _pHeader->name;
 
-    freeString( allocator(), aName );
+    freeString( aName );
 }
 //-----------------------------------------------------------------------------
 
@@ -1250,7 +1244,7 @@ void DataTreeCleanup::destroyData(NodeInfo * _pNodeInfo)
 {
     Name aName = _pNodeInfo->name;
 
-    if (aName) freeName( allocator(), aName );
+    if (aName) freeName( aName );
 }
 //-----------------------------------------------------------------------------
 
