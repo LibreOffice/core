@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtrtf.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:11:09 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:53:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,8 @@ public:
     const SwPageDesc* pAktPageDesc;     // aktuell gesetzter PageDesc.
     USHORT nBkmkTabPos;             // akt. Position in der Bookmark-Tabelle
     USHORT nCurScript;                  // actual scripttype
-    rtl_TextEncoding eCurrentCharSet;
+    rtl_TextEncoding eDefaultEncoding;
+    rtl_TextEncoding eCurrentEncoding;
 
 #if defined(MAC) || defined(UNX)
     static const sal_Char sNewLine;                 // nur \012 oder \015
@@ -235,7 +236,7 @@ struct RTFSaveData
 
 
 // einige Funktions-Deklarationen
-Writer& OutRTF_AsByteString( Writer& rWrt, const String& rStr );
+Writer& OutRTF_AsByteString( Writer& rWrt, const String& rStr, rtl_TextEncoding eEncoding);
 Writer& OutRTF_SwFmt( Writer& rWrt, const SwFmt& );
 Writer& OutRTF_SwTblNode(Writer& , const SwTableNode&);
 Writer& OutRTF_SwSectionNode( Writer& , SwSectionNode & );
