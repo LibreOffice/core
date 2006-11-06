@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idlc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:14:18 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:40:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@
 #include <idlc/astbasetype.hxx>
 #endif
 #include "idlc/astdeclaration.hxx"
+#include "idlc/astparameter.hxx"
 #include "idlc/astsequence.hxx"
 #include "idlc/asttype.hxx"
 #include "idlc/asttypedef.hxx"
@@ -143,6 +144,49 @@ AstScope* SAL_CALL declAsScope(AstDeclaration* pDecl)
    }
 }
 
+static void SAL_CALL predefineXInterface(AstModule* pRoot)
+{
+    // define the modules  com::sun::star::uno
+    AstModule* pParentScope = pRoot;
+    AstModule* pModule = new AstModule(OString("com"), pParentScope);
+    pParentScope->addDeclaration(pModule);
+    pParentScope = pModule;
+    pModule = new AstModule(OString("sun"), pParentScope);
+    pParentScope->addDeclaration(pModule);
+    pParentScope = pModule;
+    pModule = new AstModule(OString("star"), pParentScope);
+    pParentScope->addDeclaration(pModule);
+    pParentScope = pModule;
+    pModule = new AstModule(OString("uno"), pParentScope);
+    pParentScope->addDeclaration(pModule);
+    pParentScope = pModule;
+
+    // define XInterface
+    AstInterface* pInterface = new AstInterface(OString("XInterface"), NULL, pParentScope);
+    pInterface->setDefined();
+    pInterface->setPublished();
+    pParentScope->addDeclaration(pInterface);
+
+    // define XInterface::queryInterface
+    AstOperation* pOp = new AstOperation(0, (AstType*)(pRoot->lookupPrimitiveType(ET_any)),
+                                         OString("queryInterface"), pInterface);
+    AstParameter* pParam = new AstParameter(DIR_IN, false,
+                                            (AstType*)(pRoot->lookupPrimitiveType(ET_type)),
+                                            OString("aType"), pOp);
+    pOp->addDeclaration(pParam);
+    pInterface->addMember(pOp);
+
+    // define XInterface::acquire
+    pOp = new AstOperation(1, (AstType*)(pRoot->lookupPrimitiveType(ET_void)),
+                                         OString("acquire"), pInterface);
+    pInterface->addMember(pOp);
+
+    // define XInterface::release
+    pOp = new AstOperation(1, (AstType*)(pRoot->lookupPrimitiveType(ET_void)),
+                                         OString("release"), pInterface);
+    pInterface->addMember(pOp);
+}
+
 static void SAL_CALL initializePredefinedTypes(AstModule* pRoot)
 {
     AstBaseType* pPredefined = NULL;
@@ -199,6 +243,7 @@ Idlc::Idlc(Options* pOptions)
     : m_pOptions(pOptions)
     , m_bIsDocValid(sal_False)
     , m_bIsInMainfile(sal_True)
+    , m_published(false)
     , m_errorCount(0)
     , m_warningCount(0)
     , m_lineNumber(0)
@@ -231,10 +276,15 @@ void Idlc::init()
     // push the root node on the stack
     m_pScopes->push(m_pRoot);
     initializePredefinedTypes(m_pRoot);
+    predefineXInterface(m_pRoot);
 }
 
 void Idlc::reset()
 {
+    m_bIsDocValid = sal_False;
+    m_bIsInMainfile = sal_True;
+    m_published = false;
+
     m_errorCount = 0;
     m_warningCount = 0;
     m_lineNumber = 0;
