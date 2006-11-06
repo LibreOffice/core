@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fdcomp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:12:38 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 15:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,9 +37,6 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_odk.hxx"
 
 #include <stdio.h>
 
