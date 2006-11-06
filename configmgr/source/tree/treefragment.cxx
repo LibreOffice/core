@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treefragment.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:23:20 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:51:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,16 +52,16 @@ namespace configmgr
     namespace sharable
     {
 //-----------------------------------------------------------------------------
-rtl::OUString TreeFragment::getName(memory::Accessor const & _aAccessor) const
+rtl::OUString TreeFragment::getName() const
 {
-    return readString(_aAccessor,this->header.name);
+    return readString(this->header.name);
 }
 //-----------------------------------------------------------------------------
 
-bool TreeFragment::isNamed(rtl::OUString const & _aName, memory::Accessor const & _aAccessor) const
+bool TreeFragment::isNamed(rtl::OUString const & _aName) const
 {
     // TODO: optimize comparison
-    return !!(this->getName(_aAccessor) == _aName);
+    return !!(this->getName() == _aName);
 }
 //-----------------------------------------------------------------------------
 

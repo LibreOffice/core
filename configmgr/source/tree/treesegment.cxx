@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treesegment.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:23:48 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:51:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,9 +231,7 @@ TreeSegment::Name TreeSegment::getName() const
 
     if (!is()) return Name();
 
-    Accessor accessor = getAccessor();
-
-    return configuration::makeElementName( getTreeData()->getName(accessor), Name::NoValidate() );
+    return configuration::makeElementName( getTreeData()->getName(), Name::NoValidate() );
 }
 
 // -----------------------------------------------------------------------------
@@ -247,11 +245,11 @@ void TreeSegment::setName(Name const & _aNewName)
 
         sharable::String aOldName = getTreeDataForUpdate(aUpdater)->header.name;
 
-        sharable::String aNewName = sharable::allocString(aUpdater.allocator(),_aNewName.toString());
+        sharable::String aNewName = sharable::allocString(_aNewName.toString());
 
         getTreeDataForUpdate(aUpdater)->header.name = aNewName;
 
-        sharable::freeString(aUpdater.allocator(),aOldName);
+        sharable::freeString(aOldName);
     }
 }
 // -----------------------------------------------------------------------------
