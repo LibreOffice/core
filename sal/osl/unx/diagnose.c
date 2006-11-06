@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:16:57 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:41:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,34 +164,44 @@ static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
 #if defined(SPARC)
 
 #define FRAME_PTR_OFFSET 1
-#define FRAME_OFFSET 0
+#define FRAME_OFFSET     0
+
+#if defined(__sparcv9)
+#define STACK_BIAS 0x7ff
+#else
+#define STACK_BIAS 0
+#endif
 
 #elif defined(INTEL)
 
 #define FRAME_PTR_OFFSET 3
-#define FRAME_OFFSET 1
+#define FRAME_OFFSET     0
+#define STACK_BIAS       0
 
 #endif /* (SPARC || INTEL) */
 
 static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
 {
-    struct frame * fp;
     jmp_buf        ctx;
+    long           fpval;
+    struct frame * fp;
     int            i;
 
 #if defined(SPARC)
     asm("ta 3");
 #endif /* SPARC */
     setjmp (ctx);
-    fp = (struct frame*)(((size_t*)(ctx))[FRAME_PTR_OFFSET]);
+
+    fpval = ((long*)(ctx))[FRAME_PTR_OFFSET];
+    fp = (struct frame*)((char*)(fpval) + STACK_BIAS);
 
     for (i = 0; (i < FRAME_OFFSET) && (fp != 0); i++)
-        fp = (struct frame *) fp->fr_savfp;
+        fp = (struct frame*)((char*)(fp->fr_savfp) + STACK_BIAS);
 
-    for (i = 0; fp && fp->fr_savpc; i++)
+    for (i = 0; (fp != 0) && (fp->fr_savpc != 0) && (fp->fr_savpc != -1); i++)
     {
         osl_diagnose_frame_Impl (f, i, (void*)(fp->fr_savpc));
-        fp = (struct frame *) fp->fr_savfp;
+        fp = (struct frame*)((char*)(fp->fr_savfp) + STACK_BIAS);
     }
 }
 
