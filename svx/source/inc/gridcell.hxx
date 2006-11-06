@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-28 15:02:57 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:40:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -415,6 +415,13 @@ protected:
 protected:
     // DbCellControl
     virtual void implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
+
+protected:
+    inline void implSetMaxTextLen( sal_Int16 _nMaxLen )
+    {
+        implSetEffectiveMaxTextLen( _nMaxLen ? _nMaxLen : EDIT_NOLIMIT );
+    }
+    virtual void implSetEffectiveMaxTextLen( sal_Int16 _nMaxLen );
 };
 
 //==================================================================
@@ -447,6 +454,8 @@ protected:
     // DbCellControl
     virtual sal_Bool    commitControl( );
     virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+    // DbLimitedLengthField
+    virtual void        implSetEffectiveMaxTextLen( sal_Int16 _nMaxLen );
 };
 
 //==================================================================
