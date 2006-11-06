@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:08:56 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:49:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -792,10 +792,15 @@ BOOL PNGReaderImpl::ImplReadTransparent()
     if( mbTransparent && !mbAlphaChannel && !mpMaskBmp )
     {
         if( bNeedAlpha)
+        {
             mpAlphaMask = new AlphaMask( maTargetSize );
+            mpMaskAcc = mpAlphaMask->AcquireWriteAccess();
+        }
         else
+        {
             mpMaskBmp = new Bitmap( maTargetSize, 1 );
-        mpMaskAcc = mpMaskBmp->AcquireWriteAccess();
+            mpMaskAcc = mpMaskBmp->AcquireWriteAccess();
+        }
         mbTransparent = (mpMaskAcc != NULL);
         if( !mbTransparent )
             return FALSE;
