@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_version.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-04 16:53:59 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:54:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,14 @@
 namespace com { namespace sun { namespace star { namespace deployment {
     class XPackage;
 } } } }
+namespace rtl { class OUString; }
 
 namespace dp_misc {
 
 enum Order { LESS, EQUAL, GREATER };
+
+Order compareVersions(
+    ::rtl::OUString const & version1, ::rtl::OUString const & version2);
 
 Order comparePackageVersions(
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage >
