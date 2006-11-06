@@ -91,10 +91,11 @@ $Endings = $SP* $ZW* $NLF?;
 #
 $Openings = (($QUcm $SP*)? $OPcm $SP*)*;
 
+$DOT=\u002e;
 #
 #  Closings  Seqences that follow words, and that should not be separated from them,
 #            Rule LB 8, 11, 15
-$Closings =  ($SP*( ($CL ($SP* $NScm)?  |  $EX  ) $Extend*) | $HYcm | $NScm)*;
+$Closings =  ($SP*( ($CL ($SP* $NScm)?  |  $EX  ) $Extend*) | $IS | $HYcm  | $NScm)*;
 
 #
 #  Words.  Includes mixed Alpha-numerics.
