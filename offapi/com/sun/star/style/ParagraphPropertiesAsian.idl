@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ParagraphPropertiesAsian.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:31:24 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:54:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ published service ParagraphPropertiesAsian
          */
         [property] boolean ParaIsCharacterDistance;
         //-------------------------------------------------------------------------
-        /** determines if the the rules for forbidden characters at the start or end
+        /** determines if the rules for forbidden characters at the start or end
             of text lines are considered.
          */
         [property] boolean ParaIsForbiddenRules;
