@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tcvtjp6.tab,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:38:54 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:53:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -574,7 +574,7 @@ static ImplDBCSEUDCData const aImplSJISDBCSEUDCTab[DBCS_EUDC_SJIS_COUNT] =
     /* EUDC-Range */
     /* Lead:    F0-F9 */
     /* Trail:   40-7E, 80-FC */
-    { 0xF0, 0xF9, 0x40, 0x7E, 0x7F, 0xFC, 0, 0, 2, 0xBC, 0xE000, 0xE757 }
+    { 0xF0, 0xF9, 0x40, 0x7E, 0x80, 0xFC, 0, 0, 2, 0xBC, 0xE000, 0xE757 }
 };
 
 /* ----------------------------------------------------------------------- */
