@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javacompskeleton.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 16:24:24 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:43:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,7 @@ void generateImports(std::ostream & o,
         }
     }
 
+
 //     std::hash_set< OString, OStringHash >::const_iterator iter =
 //                    interfaces.begin();
 //     while (iter != interfaces.end())
@@ -97,7 +98,7 @@ void generateImports(std::ostream & o,
 void generateCompFunctions(std::ostream & o, const OString & classname)
 {
     o << "    public static XSingleComponentFactory __getComponentFactory("
-        "String sImplementationName ) {\n"
+        " String sImplementationName ) {\n"
         "        XSingleComponentFactory xFactory = null;\n\n"
         "        if ( sImplementationName.equals( m_implementationName ) )\n"
         "            xFactory = Factory.createComponentFactory("
@@ -105,7 +106,7 @@ void generateCompFunctions(std::ostream & o, const OString & classname)
         "        return xFactory;\n    }\n\n";
 
     o << "    public static boolean __writeRegistryServiceInfo("
-        "XRegistryKey xRegistryKey ) {\n"
+        " XRegistryKey xRegistryKey ) {\n"
         "        return Factory.writeRegistryServiceInfo(m_implementationName,\n"
         "                                                m_serviceNames,\n"
         "                                                xRegistryKey);\n"
@@ -441,6 +442,91 @@ void generateXCompatibilityNamesBodies(std::ostream& o)
         "        return seqLocalizedNames;\n    }\n\n";
 }
 
+void generateXInitializationBodies(std::ostream& o)
+{
+    o << "    // com.sun.star.lang.XInitialization:\n"
+        "    public void initialize( Object[] object )\n"
+        "        throws com.sun.star.uno.Exception\n    {\n"
+        "        if ( object.length > 0 )\n        {\n"
+        "            m_xFrame = (com.sun.star.frame.XFrame)UnoRuntime.queryInterface(\n"
+        "                com.sun.star.frame.XFrame.class, object[0]);\n        }\n    }\n\n";
+}
+
+void generateXDispatchBodies(std::ostream& o, ProgramOptions const & options)
+{
+    // com.sun.star.frame.XDispatch
+    // dispatch
+    o << "    // com.sun.star.frame.XDispatch:\n"
+        "     public void dispatch( com.sun.star.util.URL aURL,\n"
+        "                           com.sun.star.beans.PropertyValue[] aArguments )\n    {\n";
+
+    ProtocolCmdMap::const_iterator iter = options.protocolCmdMap.begin();
+    while (iter != options.protocolCmdMap.end()) {
+        o << "         if ( aURL.Protocol.compareTo(\"" << (*iter).first
+          << "\") == 0 )\n        {\n";
+
+        for (std::vector< OString >::const_iterator i = (*iter).second.begin();
+             i != (*iter).second.end(); ++i) {
+            o << "            if ( aURL.Path.compareTo(\"" << (*i) << "\") == 0 )\n"
+                "            {\n                // add your own code here\n"
+                "                return;\n            }\n";
+        }
+
+        o << "        }\n";
+        iter++;
+    }
+    o << "    }\n\n";
+
+    // addStatusListener
+    o << "    public void addStatusListener( com.sun.star.frame.XStatusListener xControl,\n"
+        "                                    com.sun.star.util.URL aURL )\n    {\n"
+        "        // add your own code here\n    }\n\n";
+
+    // com.sun.star.frame.XDispatch
+    o << "    public void removeStatusListener( com.sun.star.frame.XStatusListener xControl,\n"
+        "                                       com.sun.star.util.URL aURL )\n    {\n"
+        "        // add your own code here\n    }\n\n";
+}
+
+void generateXDispatchProviderBodies(std::ostream& o, ProgramOptions const & options)
+{
+    // com.sun.star.frame.XDispatchProvider
+    // queryDispatch
+    o << "    // com.sun.star.frame.XDispatchProvider:\n"
+        "    public com.sun.star.frame.XDispatch queryDispatch( com.sun.star.util.URL aURL,\n"
+        "                                                       String sTargetFrameName,\n"
+        "                                                       int iSearchFlags )\n    {\n";
+
+    ProtocolCmdMap::const_iterator iter = options.protocolCmdMap.begin();
+    while (iter != options.protocolCmdMap.end()) {
+        o << "        if ( aURL.Protocol.compareTo(\"" << (*iter).first
+          << "\") == 0 )\n        {\n";
+
+        for (std::vector< OString >::const_iterator i = (*iter).second.begin();
+             i != (*iter).second.end(); ++i) {
+            o << "            if ( aURL.Path.compareTo(\"" << (*i) << "\") == 0 )\n"
+                "                return this;\n";
+        }
+
+        o << "        }\n";
+        iter++;
+    }
+    o << "        return null;\n    }\n\n";
+
+    // queryDispatches
+    o << "    // com.sun.star.frame.XDispatchProvider:\n"
+        "    public com.sun.star.frame.XDispatch[] queryDispatches(\n"
+        "         com.sun.star.frame.DispatchDescriptor[] seqDescriptors )\n    {\n"
+        "        int nCount = seqDescriptors.length;\n"
+        "        com.sun.star.frame.XDispatch[] seqDispatcher =\n"
+        "            new com.sun.star.frame.XDispatch[seqDescriptors.length];\n\n"
+        "        for( int i=0; i < nCount; ++i )\n        {\n"
+        "            seqDispatcher[i] = queryDispatch(seqDescriptors[i].FeatureURL,\n"
+        "                                             seqDescriptors[i].FrameName,\n"
+        "                                             seqDescriptors[i].SearchFlags );\n"
+        "        }\n        return seqDispatcher;\n    }\n\n";
+}
+
 void generateMethodBodies(std::ostream& o,
          ProgramOptions const & options,
          TypeManager const & manager,
@@ -484,7 +570,21 @@ void generateMethodBodies(std::ostream& o,
                     continue;
                 }
             }
-
+            if (options.componenttype == 3) {
+                if (type.equals("com.sun.star.lang.XInitialization")) {
+                    generateXInitializationBodies(o);
+                    generated.add(type);
+                    continue;
+                } else if (type.equals("com.sun.star.frame.XDispatch")) {
+                    generateXDispatchBodies(o, options);
+                    generated.add(type);
+                    continue;
+                } else if (type.equals("com.sun.star.frame.XDispatchProvider")) {
+                    generateXDispatchProviderBodies(o, options);
+                    generated.add(type);
+                    continue;
+                }
+            }
             typereg::Reader reader(manager.getTypeReader(type.replace('.','/')));
             printMethods(o, options, manager, reader, generated, "_",
                          indentation, true, usepropertymixin);
@@ -679,6 +779,11 @@ void generateClassDefinition(std::ostream& o,
 
     o << "    private final XComponentContext m_xContext;\n";
 
+    // additional member for add-ons
+    if (options.componenttype == 3) {
+        o << "    private com.sun.star.frame.XFrame m_xFrame;\n";
+    }
+
     // check property helper
     if (propertyhelper.getLength() > 1)
         o << "    private final PropertySetMixin m_prophlp;\n";
@@ -777,6 +882,30 @@ void generateSkeleton(ProgramOptions const & options,
     while (iter != types.end()) {
         checkType(manager, *iter, interfaces, services, properties);
         iter++;
+    }
+
+    if (options.componenttype == 3) {
+        // the Protocolhandler service is mandatory for an protocol handler add-on,
+        // so it is defaulted. The XDispatchProvider provides Dispatch objects for
+        // certain functions and the generated impl object implements XDispatch
+        // directly for simplicity reasons.
+        checkType(manager, "com.sun.star.frame.ProtocolHandler",
+                  interfaces, services, properties);
+        checkType(manager, "com.sun.star.frame.XDispatch",
+                  interfaces, services, properties);
+
+
+//         ProtocolCmdMap::const_iterator iter2 = options.protocolCmdMap.begin();
+//         while (iter2 != options.protocolCmdMap.end()) {
+//             fprintf(stdout, "prt=%s\n", (*iter2).first.getStr());
+
+//             for (std::vector< OString >::const_iterator i = (*iter2).second.begin();
+//                  i != (*iter2).second.end(); ++i) {
+//                 fprintf(stdout, "cmd=%s\n", (*i).getStr());
+//             }
+//             iter2++;
+//         }
+//         return;
     }
 
     if (options.componenttype == 2) {
