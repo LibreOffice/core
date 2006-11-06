@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anydata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:09:39 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:47:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ AnyData allocSimpleData(memory::Allocator const& _anAllocator, TypeCode _aSimple
         {
             rtl::OUString sValue;
             OSL_VERIFY(_aAny >>= sValue );
-            aResult.stringValue = allocString(_anAllocator,sValue);
+            aResult.stringValue = allocString(sValue);
         }
         break;
 
@@ -394,7 +394,7 @@ void freeSimpleData(memory::Allocator const& _anAllocator, TypeCode _aSimpleType
     switch (_aSimpleType)
     {
     case Type::value_string:
-        freeString(_anAllocator, _aData.stringValue);
+        freeString(_aData.stringValue);
         break;
 
     case Type::value_boolean:
@@ -448,7 +448,7 @@ uno::Any readSimpleData(memory::Accessor const& _anAccessor, TypeCode _aSimpleTy
     {
     case Type::value_string:
         {
-            rtl::OUString sValue = readString(_anAccessor,_aData.stringValue);
+            rtl::OUString sValue = readString(_aData.stringValue);
             return uno::makeAny(sValue);
         }
 
