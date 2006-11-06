@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-19 09:55:27 $
+#   last change: $Author: kz $ $Date: 2006-11-06 14:52:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,10 @@ CFLAGS+=-DPAM_LINK
 .IF "$(CRYPT_LINK)" == "YES"
 CFLAGS+=-DCRYPT_LINK
 .ENDIF
+.ENDIF
+
+.IF "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" == ""
+CFLAGS+=-DSAL_ENABLE_CRASH_REPORT
 .ENDIF
 
 .INCLUDE :  target.mk
