@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequence.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:10:23 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:47:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,7 @@ void allocSeqData(Allocator const& _anAllocator, Address _aDestAddr,
 
             while (--_nElements >= 0)
             {
-                String aElement = allocString(_anAllocator,*pSource);
+                String aElement = allocString(*pSource);
 
                 String * pDest = static_cast<String*>( _anAllocator.access(_aDestAddr) );
                 *pDest = aElement;
@@ -274,7 +274,7 @@ void freeSeqData(Allocator const& _anAllocator, Address _aDataAddr,
 
             for (sal_Int32 i = 0; i < _nElements; ++i)
             {
-                freeString(_anAllocator,pElements[i]);
+                freeString(pElements[i]);
             }
         }
         break;
@@ -365,7 +365,7 @@ sal_Sequence * readSeqData(Accessor const & _anAccessor, Address _aDataAddr, Typ
 
             for (sal_Int32 i = 0; i < _nElements; ++i)
             {
-                pResult[i] = readString(_anAccessor,pElements[i]);
+                pResult[i] = readString(pElements[i]);
             }
 
             sal_Sequence * pRet = aResult.get();
