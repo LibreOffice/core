@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TimeField.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:45:17 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:52:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 
 //=============================================================================
 
-/** sepecifies the the control model for a field which can be used to input time values.
+/** sepecifies the control model for a field which can be used to input time values.
  */
 published service TimeField
 {
