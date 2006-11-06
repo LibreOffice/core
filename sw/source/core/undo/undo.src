@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undo.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:49:21 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:52:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ String STR_RESET_ATTR_UNDO
 };
 String STR_INSFMT_ATTR_UNDO
 {
-    Text [ de ] = "Formatvorlage Ã¤ndern: $1" ;
+    Text [ de ] = "Formatvorlage ändern: $1" ;
     Text [ en-US ] = "Change style: $1" ;
 };
 String STR_INSERT_DOC_UNDO
