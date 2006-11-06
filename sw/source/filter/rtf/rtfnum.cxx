@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfnum.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:14:45 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:52:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1241,7 +1241,7 @@ void SwRTFWriter::OutRTFListTab()
                     Strm() << "\\'";
                     OutHex( sOut.Len() );
                     RTFOutFuncs::Out_String( Strm(), sOut,
-                                            DEF_ENCODING, bWriteHelpFmt );
+                                            eDefaultEncoding, bWriteHelpFmt );
                 }
             }
             else
@@ -1274,7 +1274,7 @@ void SwRTFWriter::OutRTFListTab()
 
                 if( rFmt.GetPrefix().Len() )
                     RTFOutFuncs::Out_String( Strm(), rFmt.GetPrefix(),
-                                            DEF_ENCODING, bWriteHelpFmt );
+                                            eDefaultEncoding, bWriteHelpFmt );
 
 
                 for( xub_StrLen x = 0; x < sNumStr.Len(); ++x )
@@ -1288,7 +1288,7 @@ void SwRTFWriter::OutRTFListTab()
 
                 if( rFmt.GetSuffix().Len() )
                     RTFOutFuncs::Out_String( Strm(), rFmt.GetSuffix(),
-                                            DEF_ENCODING, bWriteHelpFmt );
+                                            eDefaultEncoding, bWriteHelpFmt );
             }
 
             // write the levelnumbers
@@ -1327,7 +1327,7 @@ void SwRTFWriter::OutRTFListTab()
         if( !pRule->IsAutoRule() )
         {
             Strm() << '{' << sRTF_LISTNAME << ' ';
-            RTFOutFuncs::Out_String( Strm(), pRule->GetName(), DEF_ENCODING,
+            RTFOutFuncs::Out_String( Strm(), pRule->GetName(), eDefaultEncoding,
                                     bWriteHelpFmt ) << ";}" ;
         }
         Strm() << sRTF_LISTID;
@@ -1452,7 +1452,7 @@ BOOL SwRTFWriter::OutListNum( const SwTxtNode& rNd )
 
             if (sTxt.Len())
             {
-                RTFOutFuncs::Out_String(Strm(), sTxt, DEF_ENCODING,
+                RTFOutFuncs::Out_String(Strm(), sTxt, eDefaultEncoding,
                     bWriteHelpFmt);
             }
 
