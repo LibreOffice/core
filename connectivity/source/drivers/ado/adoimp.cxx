@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adoimp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:17:56 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:35:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -339,9 +339,12 @@ sal_Int32 ADOS::mapRights2Ado(sal_Int32 nRights)
 // -----------------------------------------------------------------------------
 WpADOField ADOS::getField(ADORecordset* _pRecordSet,sal_Int32 _nColumnIndex) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    if ( !_pRecordSet )
+        return WpADOField();
+
     ADOFields* pFields  = NULL;
     _pRecordSet->get_Fields(&pFields);
-    WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(pFields);                   \
+    WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(pFields);
     if(_nColumnIndex <= 0 || _nColumnIndex > aFields.GetItemCount())
         ::dbtools::throwInvalidIndexException(NULL);
     WpADOField aField(aFields.GetItem(_nColumnIndex-1));
