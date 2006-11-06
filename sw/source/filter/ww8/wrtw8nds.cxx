@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:21:29 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:53:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2324,7 +2324,8 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
 
         for (nBox = 0, nRealBox = 0; nRealBox < nWWColMax; ++nBox)
         {
-            if( nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ] )
+            if( (nBox > 0 && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ])
+                || pBoxArr[nBox] == NULL)
                 continue;
 
             const SwFrmFmt* pBoxFmt = pBoxArr[ nBox ]->GetBox()->GetFrmFmt();
