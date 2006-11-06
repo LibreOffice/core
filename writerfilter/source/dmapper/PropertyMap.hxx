@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2006-11-02 12:37:24 $
+ *  last change: $Author: os $ $Date: 2006-11-06 15:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,13 @@ namespace com{namespace sun{namespace star{
 }}}
 
 namespace dmapper{
+enum BorderPosition
+{
+    BORDER_LEFT,
+    BORDER_RIGHT,
+    BORDER_TOP,
+    BORDER_BOTTOM
+};
 /*-- 15.06.2006 08:22:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -122,13 +129,6 @@ class SectionPropertyMap : public PropertyMap
         PAGE_FIRST,
         PAGE_LEFT,
         PAGE_RIGHT
-    };
-    enum BorderPosition
-    {
-        BORDER_LEFT,
-        BORDER_RIGHT,
-        BORDER_TOP,
-        BORDER_BOTTOM
     };
 
     const ::rtl::OUString&  GetPageStyleName( PageType eType );

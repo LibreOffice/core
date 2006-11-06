@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConversionHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2006-11-02 12:37:23 $
+ *  last change: $Author: os $ $Date: 2006-11-06 15:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@ namespace ConversionHelper{
 
     // create a border line and return the distance value
     sal_Int32 MakeBorderLine( sal_Int32 nSprmValue, ::com::sun::star::table::BorderLine& rToFill );
+    sal_Int32 MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
+                              sal_Int32 nLineColor,           sal_Int32 nLineDistance,
+                              ::com::sun::star::table::BorderLine& rToFill );
     //convert the number format string form MS format to SO format
     ::rtl::OUString ConvertMSFormatStringToSO(
             const ::rtl::OUString& rFormat, ::com::sun::star::lang::Locale& rLocale, bool bHijri);

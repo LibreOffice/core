@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConversionHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2006-11-02 12:37:23 $
+ *  last change: $Author: os $ $Date: 2006-11-06 15:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,12 @@ sal_Int32 ConversionHelper::MakeBorderLine( sal_Int32 nSprmValue, table::BorderL
     sal_Int32 nLineColor    = (nSprmValue & 0xff0000)>>16;
     sal_Int32 nLineDistance = (((nSprmValue & 0x3f000000)>>24) * 2540 + 36)/72L;
     sal_Int32 nLineThickness = TWIP_TO_MM100(nLineThicknessTwip);
-
+    return MakeBorderLine( nLineThickness, nLineType, nLineColor, nLineDistance, rToFill);
+}
+sal_Int32 ConversionHelper::MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
+                                            sal_Int32 nLineColor,       sal_Int32 nLineDistance,
+                                            table::BorderLine& rToFill )
+{
     static const sal_Int32 aBorderDefColor[] =
     {
         COL_AUTO, COL_BLACK, COL_LIGHTBLUE, COL_LIGHTCYAN, COL_LIGHTGREEN,

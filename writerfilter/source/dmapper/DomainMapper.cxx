@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2006-11-02 12:37:23 $
+ *  last change: $Author: os $ $Date: 2006-11-06 15:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2451,12 +2451,12 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
             SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
             if(pSectionContext)
             {
-                static const SectionPropertyMap::BorderPosition aPositions[4] =
+                static const BorderPosition aPositions[4] =
                     {
-                        SectionPropertyMap::BORDER_TOP,
-                        SectionPropertyMap::BORDER_LEFT,
-                        SectionPropertyMap::BORDER_BOTTOM,
-                        SectionPropertyMap::BORDER_RIGHT
+                        BORDER_TOP,
+                        BORDER_LEFT,
+                        BORDER_BOTTOM,
+                        BORDER_RIGHT
                     };
                 pSectionContext->SetBorder( aPositions[nId - 0x702B], nLineDistance, aBorderLine );
             }
