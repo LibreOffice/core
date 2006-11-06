@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:56:30 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:54:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1180,27 +1180,28 @@ void GenericSalLayout::Justify( long nNewWidth )
 
             // do not stretch non-stretchable glyphs
             if( (pG->mnOrigWidth <= 0) || (nStretchable <= 0) )
-            continue;
+                continue;
 
             // distribute extra space equally to stretchable glyphs
             int nDeltaWidth = nDiffWidth / nStretchable--;
             nDiffWidth     -= nDeltaWidth;
             pG->mnNewWidth += nDeltaWidth;
             nDeltaSum      += nDeltaWidth;
-    }
+        }
     }
     else // condensed case
     {
-    // squeeze width by moving glyphs proportionally
+        // squeeze width by moving glyphs proportionally
+        double fSqueeze = (double)nNewWidth / nOldWidth;
         for( pG = mpGlyphItems; ++pG < pGRight;)
-    {
-        int nX = pG->maLinearPos.X() - maBasePoint.X();
-        nX = nX * nNewWidth / nOldWidth;
-        pG->maLinearPos.X() = nX + maBasePoint.X();
-    }
-    // adjust glyph widths to new positions
+        {
+            int nX = pG->maLinearPos.X() - maBasePoint.X();
+            nX = (int)(nX * fSqueeze);
+            pG->maLinearPos.X() = nX + maBasePoint.X();
+        }
+        // adjust glyph widths to new positions
         for( pG = mpGlyphItems; pG < pGRight; ++pG )
-        pG->mnNewWidth = pG[1].maLinearPos.X() - pG[0].maLinearPos.X();
+            pG->mnNewWidth = pG[1].maLinearPos.X() - pG[0].maLinearPos.X();
     }
 }
 
