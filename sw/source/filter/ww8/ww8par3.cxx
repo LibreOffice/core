@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:20:08 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:54:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1170,7 +1170,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             rSt >> aLFO.nLfoLvl;
             rSt.SeekRel( 3 );
             // soviele Overrides existieren
-            if ((nMaxLevel < aLFO.nLfoLvl) && rSt.GetError())
+            if ((nMaxLevel < aLFO.nLfoLvl) || rSt.GetError())
                 break;
 
             // die Parent NumRule der entsprechenden Liste ermitteln
