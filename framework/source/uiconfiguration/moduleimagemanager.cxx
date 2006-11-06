@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleimagemanager.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 09:43:16 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:39:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,15 +43,12 @@
 #ifndef __FRAMEWORK_UICONFIGURATION_MODULEIMAGEMANAGER_HXX_
 #include <uiconfiguration/moduleimagemanager.hxx>
 #endif
-
 #ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
 #include <threadhelp/resetableguard.hxx>
 #endif
-
 #ifndef __FRAMEWORK_XML_IMAGESCONFIGURATION_HXX_
 #include <xml/imagesconfiguration.hxx>
 #endif
-
 #ifndef __FRAMEWORK_UICONFIGURATION_GRAPHICNAMEACCESS_HXX_
 #include <uiconfiguration/graphicnameaccess.hxx>
 #endif
@@ -69,34 +66,30 @@
 #ifndef _COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
 #include <com/sun/star/ui/UIElementType.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_UI_CONFIGURATIONEVENT_HPP_
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
 #include <com/sun/star/io/XStream.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_UI_IMAGETYPE_HPP_
 #include <com/sun/star/ui/ImageType.hpp>
 #endif
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/XUriReference.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -105,6 +98,7 @@
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
+#include <osl/file.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/urlobj.hxx>
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
@@ -206,6 +200,35 @@ static GlobalImageList* getGlobalImageList( const uno::Reference< XMultiServiceF
     return pGlobalImageList;
 }
 
+static rtl::OUString getCanonicalName( const rtl::OUString& rFileName )
+{
+    bool               bRemoveSlash( true );
+    sal_Int32          nLength = rFileName.getLength();
+    const sal_Unicode* pString = rFileName.getStr();
+
+    rtl::OUStringBuffer aBuf( nLength );
+    for ( sal_Int32 i = 0; i < nLength; i++ )
+    {
+        const sal_Unicode c = pString[i];
+        switch ( c )
+        {
+            // map forbidden characters to escape
+            case '/' : if ( !bRemoveSlash )
+                         aBuf.appendAscii( "%2f" );
+                       break;
+            case '\\': aBuf.appendAscii( "%5c" ); bRemoveSlash = false; break;
+            case ':' : aBuf.appendAscii( "%3a" ); bRemoveSlash = false; break;
+            case '*' : aBuf.appendAscii( "%2a" ); bRemoveSlash = false; break;
+            case '?' : aBuf.appendAscii( "%3f" ); bRemoveSlash = false; break;
+            case '<' : aBuf.appendAscii( "%3c" ); bRemoveSlash = false; break;
+            case '>' : aBuf.appendAscii( "%3e" ); bRemoveSlash = false; break;
+            case '|' : aBuf.appendAscii( "%7c" ); bRemoveSlash = false; break;
+            default: aBuf.append( c ); bRemoveSlash = false;
+        }
+    }
+    return aBuf.makeStringAndClear();
+}
+
 //_________________________________________________________________________________________________________________
 
 CmdImageList::CmdImageList( const uno::Reference< XMultiServiceFactory >& rServiceManager, const rtl::OUString& aModuleIdentifier ) :
@@ -267,7 +290,7 @@ void CmdImageList::impl_fillCommandToImageNameMap()
             }
         }
 
-        // We have to map commands which uses special characters like '/',':','?'
+        // We have to map commands which uses special characters like '/',':','?','\','<'.'>','|'
         String aExt = String::CreateFromAscii( IMAGE_EXTENSION );
         m_aImageCommandNameVector.resize(aCmdImageSeq.getLength() );
         m_aImageNameVector.resize( aCmdImageSeq.getLength() );
@@ -278,12 +301,39 @@ void CmdImageList::impl_fillCommandToImageNameMap()
 
         // Create a image name vector that must be provided to the vcl imagelist. We also need
         // a command to image name map to speed up access time for image retrieval.
+        OUString aUNOString( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
+        String   aEmptyString;
         for ( sal_uInt32 i = 0; i < m_aImageCommandNameVector.size(); i++ )
         {
-            INetURLObject aURLObj( m_aImageCommandNameVector[i] );
-            m_aImageNameVector[i] = ( aURLObj.GetURLPath().toAsciiLowerCase() += aExt );
-            m_aCommandToImageNameMap.insert( CommandToImageNameMap::value_type( m_aImageCommandNameVector[i],
-                                                                                m_aImageNameVector[i] ));
+            OUString aCommandName( m_aImageCommandNameVector[i] );
+            String   aImageName;
+
+            if ( aCommandName.indexOf( aUNOString ) != 0 )
+            {
+                INetURLObject aUrlObject( aCommandName, INetURLObject::ENCODE_ALL );
+                aImageName = aUrlObject.GetURLPath();
+                aImageName = getCanonicalName( aImageName ); // convert to valid filename
+            }
+            else
+            {
+                // just remove the schema
+                if ( aCommandName.getLength() > 5 )
+                    aImageName = aCommandName.copy( 5 );
+                else
+                    aImageName = aEmptyString;
+
+                // Search for query part.
+                sal_Int32 nIndex = aImageName.Search( '?' );
+                if ( nIndex != STRING_NOTFOUND )
+                    aImageName = getCanonicalName( aImageName ); // convert to valid filename
+            }
+            // Image names are not case-dependent. Always use lower case characters to
+            // reflect this.
+            aImageName += aExt;
+            aImageName.ToLowerAscii();
+
+            m_aImageNameVector[i] = aImageName;
+            m_aCommandToImageNameMap.insert( CommandToImageNameMap::value_type( aCommandName, aImageName ));
         }
 
         m_bVectorInit = sal_True;
