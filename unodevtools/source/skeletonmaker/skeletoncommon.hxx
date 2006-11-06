@@ -4,9 +4,9 @@
  *
  *  $RCSfile: skeletoncommon.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 16:24:36 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:43:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,16 @@
 
 #include <fstream>
 #include <hash_set>
-#include <hash_map>
+#include <map>
 
 namespace skeletonmaker {
+
+typedef ::std::map< ::rtl::OString, ::std::vector< ::rtl::OString >,
+                    ::std::less< ::rtl::OString > > ProtocolCmdMap;
+
+typedef ::std::vector< ::std::pair< rtl::OString,
+                     ::std::pair< rtl::OString, sal_Int16 > > > AttributeInfo;
+
 
 struct ProgramOptions {
     ProgramOptions(): java5(true), all(false), dump(false), license(false),
@@ -77,14 +84,9 @@ struct ProgramOptions {
     short componenttype;
     rtl::OString outputpath;
     rtl::OString implname;
+    ProtocolCmdMap protocolCmdMap;
 };
 
-// typedef ::std::hash_map< ::rtl::OString,
-//                          ::std::pair< rtl::OString, sal_Int16 >,
-//                          rtl::OStringHash > StringPairHashMap;
-
-typedef ::std::vector< ::std::pair< rtl::OString,
-                     ::std::pair< rtl::OString, sal_Int16 > > > AttributeInfo;
 
 /**
    print the standard OpenOffice.org license header
