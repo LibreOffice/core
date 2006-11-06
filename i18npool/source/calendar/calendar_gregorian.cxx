@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 09:09:02 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:40:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,23 +57,21 @@ using namespace ::rtl;
 
 Calendar_gregorian::Calendar_gregorian()
 {
+    init(NULL);
+}
+Calendar_gregorian::Calendar_gregorian(Era *_earArray)
+{
+    init(_earArray);
+}
+void SAL_CALL
+Calendar_gregorian::init(Era *_eraArray)
+{
         cCalendar = "com.sun.star.i18n.Calendar_gregorian";
-        init(NULL);
-}
-
-Calendar_gregorian::Calendar_gregorian(Era *_eraArray)
-{
-        init(_eraArray);
-}
-
-void SAL_CALL Calendar_gregorian::init(Era *_eraArray) throw(RuntimeException)
-{
         UErrorCode status;
         body = icu::Calendar::createInstance(status = U_ZERO_ERROR);
         if (!body || !U_SUCCESS(status)) throw ERROR;
-        eraArray = _eraArray;
-        // init. fieldValue[]
-        getValue();
+
+        eraArray=_eraArray;
 }
 
 Calendar_gregorian::~Calendar_gregorian()
@@ -142,6 +140,9 @@ Calendar_buddhist::Calendar_buddhist() : Calendar_gregorian(buddhist_eraArray)
 void SAL_CALL
 Calendar_gregorian::loadCalendar( const OUString& uniqueID, const com::sun::star::lang::Locale& rLocale ) throw(RuntimeException)
 {
+        // init. fieldValue[]
+        getValue();
+
         aLocale = rLocale;
         Sequence< Calendar> xC = LocaleData().getAllCalendars(rLocale);
         for (sal_Int32 i = 0; i < xC.getLength(); i++)
