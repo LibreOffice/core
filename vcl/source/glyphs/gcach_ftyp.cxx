@@ -85,7 +85,7 @@ typedef FT_Vector* FT_Vector_CPtr;
 
 // TODO: move file mapping stuff to OSL
 #if defined(UNX)
-    #if !defined(MACOSX) && !defined(HPUX)
+    #if !defined(HPUX)
         // PORTERS: dlfcn is used for code dependend on FT version
         #include <dlfcn.h>
     #endif
