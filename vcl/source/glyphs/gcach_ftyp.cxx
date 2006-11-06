@@ -1302,6 +1302,9 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
 
     FT_Int nLoadFlags = mnLoadFlags;
+    // #i70930# force mono-hinting for monochrome text
+    nLoadFlags &= ~0xF0000;
+    nLoadFlags |= FT_LOAD_TARGET_MONO;
 
     if( mbArtItalic )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
