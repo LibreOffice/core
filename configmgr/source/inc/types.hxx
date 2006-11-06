@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:31:06 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:49:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
+#ifndef _RTL_USTRING_H_
+#include <rtl/ustring.h>
+#endif
 
 //-----------------------------------------------------------------------------
 namespace rtl { class OUString; }
@@ -50,11 +53,6 @@ namespace rtl { class OUString; }
 
 namespace configmgr
 {
-//-----------------------------------------------------------------------------
-
-    namespace memory { class Allocator; class Accessor; }
-    //-----------------------------------------------------------------------------
-
     namespace sharable
     {
     //-----------------------------------------------------------------------------
@@ -65,29 +63,22 @@ namespace configmgr
         typedef sal_uInt8  Byte;
 
     // some derived types
-        typedef Address Name;    // points to counted sequence of char (7-bit ASCII) (!?)
-        typedef Address String;  // points to counted sequence of sal_Unicode
+        typedef rtl_uString *  Name;
+        typedef rtl_uString *  String;
         typedef Address List;    // singly linked intrusive, used for set elements
         typedef Address Vector;   // points to counted sequence of some type
 
     //-----------------------------------------------------------------------------
 
-        // for now Name == String
-        typedef sal_Unicode NameChar;
-        Name allocName(memory::Allocator const& _anAllocator, ::rtl::OUString const & _sString);
-        // Name copyName(memory::Allocator const& _anAllocator, Name _aName);
-        void freeName(memory::Allocator const& _anAllocator, Name _aName);
-        ::rtl::OUString readName(memory::Accessor const& _anAccessor, Name _aName);
-        NameChar const * accessName(memory::Accessor const& _anAccessor, Name _aName);
+        Name allocName(::rtl::OUString const & _sString);
+        void freeName(Name _aName);
+        ::rtl::OUString readName(Name _aName);
 
     //-----------------------------------------------------------------------------
 
-        typedef sal_Unicode StringChar;
-        String allocString(memory::Allocator const& _anAllocator, ::rtl::OUString const & _sString);
-        // String copyString(memory::Allocator const& _anAllocator, String _aString);
-        void   freeString(memory::Allocator const& _anAllocator, String _aString);
-        ::rtl::OUString readString(memory::Accessor const& _anAccessor, String _aString);
-        StringChar const * accessString(memory::Accessor const& _anAccessor, String _aString);
+        String allocString(::rtl::OUString const & _sString);
+        void   freeString(String _aString);
+        ::rtl::OUString readString(String _aString);
 
     //-----------------------------------------------------------------------------
     }
