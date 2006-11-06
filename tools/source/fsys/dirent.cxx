@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:53:03 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:45:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 
 #if !defined UNX
 #include <io.h>
+#include <process.h>
 #endif
 
 #if defined UNX
@@ -2076,7 +2077,7 @@ USHORT DirEntry::GetMaxNameLen( FSysPathStyle eFormatter )
 |*
 |*    DirEntry::TempName()
 |*
-|*    Beschreibung      FSYS.SDW
+|*    Beschreibung      FSYS.SDW - Aha, wo?
 |*    Ersterstellung    VB 06.09.93 (im SWG)
 |*    Letzte Aenderung  MI 06.02.98
 |*
@@ -2166,9 +2167,8 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
         // ab hier leicht modifizierter Code von VB
         DirEntry aRet(FSYS_FLAG_INVALID);
         i = strlen(dir);
-        // need to add ?\\? + prefix + number + .ext + '\0'
-        // please note that number is of length 5 not 3
-#       define TMPNAME_SIZE  ( 1 + 5 + 5 + 4 + 1 )
+        // need to add ?\\? + prefix + number + pid + .ext + '\0'
+#       define TMPNAME_SIZE  ( 1 + 5 + 5 + 10 + 4 + 1 )
         ret_val = new char[i + TMPNAME_SIZE ];
         if (ret_val)
         {
@@ -2190,24 +2190,24 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
             ret_val[i + 5] = '\0';      /* strncpy doesn't put a 0 if more  */
             i = strlen(ret_val);        /* than 'n' chars.          */
 
-            /* Prefix can have 5 chars, leaving 3 for numbers.
-               26 ** 3 == 17576
+            /* Prefix can have 5 chars, leaving 3 for numbers. 26 ** 3 == 17576
+             * Welcome to the 21st century, we can have longer filenames now ;)
+             * New format: pfx + "5 char milli/micro second res" + "current pid" + ".tmp"
              */
 #if defined MSC && defined WNT
+            /* Milliseconds !! */
             static unsigned long u = GetTickCount();
+            unsigned long mypid = static_cast<unsigned long>(_getpid());
 #else
+            /* Microseconds !! */
             static unsigned long u = clock();
+            unsigned long mypid = static_cast<unsigned long>(getpid());
 #endif
-            for ( unsigned long nOld = u; ++u != nOld; )
+            for ( unsigned long nOld = u; ++u != nOld; ) /* Hae??? */
             {
-                 u %= (26*26*26);
-                 unsigned nTemp = (unsigned)u;
-#if defined WNT
-                itoa(nTemp,ret_val + i,26);
-#else
-                // the number needs length 5 not 3 !!!!
-                sprintf(ret_val+i, "%03u", nTemp);
-#endif
+                u %= 100000;  /* on *NIX repeats every 100ms, maybe less if CLOCKS_PER_SEC > 10^6 */
+                snprintf(ret_val+i, TMPNAME_SIZE, "%05lu%lu", u, mypid);
+
                 strcat(ret_val,ext);
 
                         if ( FSYS_KIND_FILE == eKind )
