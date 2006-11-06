@@ -4,9 +4,9 @@
  *
  *  $RCSfile: binaryreadhandler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:03:08 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:46:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,8 @@ namespace configmgr
         , m_aNodeFactory()
         , m_aComponentName(_aComponentName)
         {
+            for (int i = 0; i < LastEntry; i++)
+                m_nInsert[i] = 0;
         }
         // -----------------------------------------------------------------------------
         BinaryReadHandler::~BinaryReadHandler()
@@ -286,6 +288,21 @@ namespace configmgr
             m_BinaryReader.read (_aString);
         }
 
+        void BinaryReadHandler::readName(rtl::OUString &_aString, NamePool ePool)
+            SAL_THROW( (io::IOException, uno::RuntimeException) )
+        {
+            m_BinaryReader.read (_aString);
+            const int nElems = (sizeof (m_aPreviousName[0])
+                                / sizeof (m_aPreviousName[0][0]));
+            for (int i = 0; i < nElems; i++)
+            {
+                if (m_aPreviousName[ePool][i] == _aString)
+                    _aString = m_aPreviousName[ePool][i];
+            }
+            m_aPreviousName[ePool][m_nInsert[ePool]++] = _aString;
+            m_nInsert[ePool] %= nElems;
+        }
+
         // -----------------------------------------------------------------------------
         void BinaryReadHandler::readAttributes(node::Attributes  &_aAttributes)
             SAL_THROW( (io::IOException, uno::RuntimeException) )
@@ -314,7 +331,7 @@ namespace configmgr
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
             readAttributes(_aAttributes);
-            readString(_aName);
+            readName(_aName, GroupName);
         }
         // -----------------------------------------------------------------------------
         void BinaryReadHandler::readSet(rtl::OUString &_aName, node::Attributes &_aAttributes,
@@ -322,9 +339,9 @@ namespace configmgr
             SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
             readAttributes(_aAttributes);
-            readString(_aName);
-            readString(_sInstanceName);
-            readString(_sInstanceModule);
+            readName(_aName, SetName);
+            readName(_sInstanceName, InstanceName);
+            readName(_sInstanceModule, InstanceModule);
         }
 
         // -----------------------------------------------------------------------------
@@ -424,7 +441,7 @@ namespace configmgr
 
             ValueFlags::Type eBasicType = readValueFlags(bSeq, bHasValue, bHasDefault);
             readAttributes(_aAttributes);
-            readString(_aName);
+            readName(_aName, ValueName);
 
             if (!bSeq && (bHasValue || bHasDefault))
             {
