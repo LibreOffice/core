@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:53:32 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:35:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,12 +78,11 @@ namespace connectivity
             OResultSetMetaData( const OResultSetMetaData& );            // never implemented
             OResultSetMetaData& operator=( const OResultSetMetaData& ); // never implemented
 
+        protected:
+            virtual ~OResultSetMetaData();
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            OResultSetMetaData( ADORecordset* _pRecordSet)
-                    :   m_pRecordSet(_pRecordSet),
-                        m_nColCount(-1){m_pRecordSet->AddRef();}
-            ~OResultSetMetaData();
+            OResultSetMetaData( ADORecordset* _pRecordSet);
 
             virtual sal_Int32 SAL_CALL getColumnCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL isAutoIncrement( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
