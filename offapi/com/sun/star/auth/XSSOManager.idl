@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSSOManager.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:46:42 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:51:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ published interface XSSOManager : ::com::sun::star::uno::XInterface
         will be created.
 
         @param TargetPrincipal
-        the name of the target/acceptor side principal to which the the source
+        the name of the target/acceptor side principal to which the source
         principal intends to authenticate.
 
         @paran TargetHost
