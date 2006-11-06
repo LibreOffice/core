@@ -4,9 +4,9 @@
 #
 #   $RCSfile: polystruct.tests,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-09 10:49:05 $
+#   last change: $Author: kz $ $Date: 2006-11-06 14:41:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -231,9 +231,6 @@ struct Struct3 { Struct2<Struct1<long, unsigned long> > member; };
 
 
 EXPECT FAILURE "polystruct.tests 42":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 struct Struct<T> { long member; };
 interface X { void f([in] Struct<unsigned hyper> p); };
 
