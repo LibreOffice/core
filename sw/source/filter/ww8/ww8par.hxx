@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:11:15 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:54:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -700,6 +700,7 @@ public:
     sal_uInt32 GetPageLeft() const;
     sal_uInt32 GetPageRight() const;
     sal_uInt32 GetPageWidth() const;
+    bool empty() const { return maSegments.empty(); }
     sal_uInt32 GetTextAreaWidth() const;
 };
 
