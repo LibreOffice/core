@@ -4,9 +4,9 @@
 #
 #   $RCSfile: typedef.tests,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:19:49 $
+#   last change: $Author: kz $ $Date: 2006-11-06 14:42:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,6 @@ struct Struct: T2 { long member2; };
 
 
 EXPECT SUCCESS "typedef.tests 3":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Interface1 {};
 typedef Interface1 T1;
 typedef T1 T2;
@@ -57,9 +54,6 @@ interface Interface2: T2 {};
 
 
 EXPECT FAILURE "typedef.tests 4":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 interface Interface1;
 typedef Interface1 T1;
 typedef T1 T2;
@@ -67,9 +61,6 @@ interface Interface2: T2 {};
 
 
 EXPECT FAILURE "typedef.tests 5":
-module com { module sun { module star { module uno {
-    interface XInterface { void acquire(); };
-}; }; }; };
 typedef long T1;
 typedef T1 T2;
 interface Interface: T2 {};
