@@ -4,9 +4,9 @@
  *
  *  $RCSfile: skeletonmaker.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 16:24:48 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:43:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,11 @@ static const char usageText[] =
 "    calc-add-in generates a language specific code skeleton for a calc add-in\n"
 "                using the implementation name as the file and class name. A \n"
 "                service type is necessary, referencing an interface which defines\n"
-"                the new add-in functions."
+"                the new add-in functions.\n"
+// "    add-on      generates a language specific code skeleton for an add-on compnent\n"
+// "                using the implementation name as the file and class name. The protocol\n"
+// "                name(s) and the corresponding command(s) have to be specified with the\n"
+// "                '-p' option.\n"
 "\n options:\n"
 "    -env:INIFILENAME=<url> url specifies a URL to an UNO ini|rc file of an\n"
 "                           existing UNO environment (URE, office installation).\n"
@@ -114,6 +118,9 @@ static const char usageText[] =
 "                           return values are dumped.\n"
 "    -t <name>              specifies an UNOIDL type name, e.g.\n"
 "                           com.sun.star.text.XText (can be used more than once)\n"
+// "    -p <protocol:cmd(s)>   specifies an add-on protocol name and the corresponding\n"
+// "                           command names, where the commands are a ',' separated list\n"
+// "                           of unique commands. This option is only valid for add-ons.\n"
 "    -V, --version          print version number and exit\n"
 "    -h, --help             print this help and exit\n\n"
 " Sun Microsystems (R) ";
@@ -130,8 +137,12 @@ void printUsageAndExit(const char* programname, const char* version)
         << "<type> ...\n"
         << "        " << programname
         << " (-env:INIFILENAME=<url> | -env:UNO_TYPES=<url>)\n"
-        << "                          clc-add-in [<options>] -n <name> -t "
+        << "                          calc-add-in [<options>] -n <name> -t "
         << "<add-in_service>\n"
+//         << "        " << programname
+//         << " (-env:INIFILENAME=<url> | -env:UNO_TYPES=<url>)\n"
+//         << "                          add-on [<options>] -n <name> -p"
+//         << "<protocol_name:command,...>\n"
         << "        " << programname << " -V, --version\n"
         << "        " << programname << " -h, --help\n"
         << usageText
@@ -142,7 +153,7 @@ void printUsageAndExit(const char* programname, const char* version)
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, /*argv*/)
 {
-    const char* version = "0.3";
+    const char* version = "0.4";
     const char* programname = "uno-skeletonmaker";
 
     if ( argc <= 1 ) {
@@ -173,6 +184,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, /*argv*/)
         options.dump = false;
         options.shortnames = true;
         options.componenttype = 2;
+    } else if ( arg.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("add-on"))) ) {
+        options.dump = false;
+        options.shortnames = true;
+        options.componenttype = 3;
     } else if ( readOption( &bOption, "h", &nPos, arg) ||
                 readOption( &bOption, "help", &nPos, arg) ) {
         printUsageAndExit(programname, version);
@@ -255,6 +270,23 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, /*argv*/)
             types.push_back(OUStringToOString(sOption, RTL_TEXTENCODING_UTF8));
             continue;
         }
+        if ( readOption( &sOption, "p", &nPos, arg) ) {
+            OString sTmp(OUStringToOString(sOption, RTL_TEXTENCODING_UTF8));
+            sal_Int32 nIndex= sTmp.indexOf(':');
+            OString sPrt = sTmp.copy(0, nIndex+1);
+            OString sCmds = sTmp.copy(nIndex+1);
+
+            nIndex = 0;
+            std::vector< OString > vCmds;
+            do {
+                OString sCmd = sCmds.getToken( 0, ',', nIndex );
+                vCmds.push_back(sCmd);
+            } while ( nIndex >= 0 );
+
+            options.protocolCmdMap.insert(ProtocolCmdMap::value_type(sPrt, vCmds));
+            continue;
+        }
+
 
         // else illegal argument
         OUStringBuffer buf( 64 );
@@ -265,7 +297,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, /*argv*/)
                                Reference< XInterface >());
     }
 
-    if ( types.empty() ) {
+    if ( types.empty() && options.componenttype != 3) {
         std::cerr
             << ("\nError: no type is specified, use the -T option at least once\n");
         printUsageAndExit(programname, version);
