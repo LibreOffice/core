@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:06:38 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:49:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1612,6 +1612,322 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color& rColor )
 
 // ------------------------------------------------------------------------
 
+Bitmap OutputDevice::ImplBlendWithAlpha( Bitmap              aBmp,
+                                         BitmapReadAccess*   pP,
+                                         BitmapReadAccess*   pA,
+                                         const Rectangle&    aDstRect,
+                                         const sal_Int32     nOffY,
+                                         const sal_Int32     nDstHeight,
+                                         const sal_Int32     nOffX,
+                                         const sal_Int32     nDstWidth,
+                                         const long*         pMapX,
+                                         const long*         pMapY )
+{
+    BitmapColor aDstCol,aSrcCol;
+    BYTE        nSrcAlpha, nDstAlpha;
+    Bitmap      res;
+    int         nX, nOutX, nY, nOutY;
+
+    OSL_ENSURE(mpAlphaVDev,
+               "ImplBlendWithAlpha(): call me only with valid alpha VDev!" );
+
+    BOOL bOldMapMode( mpAlphaVDev->IsMapModeEnabled() );
+    mpAlphaVDev->EnableMapMode(FALSE);
+
+    Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmap( aDstRect.TopLeft(), aDstRect.GetSize() ) );
+    BitmapWriteAccess*  pAlphaW = aAlphaBitmap.AcquireWriteAccess();
+
+    if( GetBitCount() <= 8 )
+    {
+        Bitmap              aDither( aBmp.GetSizePixel(), 8 );
+        BitmapColor         aIndex( 0 );
+        BitmapReadAccess*   pB = aBmp.AcquireReadAccess();
+        BitmapWriteAccess*  pW = aDither.AcquireWriteAccess();
+
+        if( pB && pP && pA && pW && pAlphaW )
+        {
+            for( nY = 0, nOutY = nOffY; nY < nDstHeight; nY++, nOutY++ )
+            {
+                const long nMapY = pMapY[ nY ];
+                const long nModY = ( nOutY & 0x0FL ) << 4L;
+
+                for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
+                {
+                    const long  nMapX = pMapX[ nX ];
+                    const ULONG nD = nVCLDitherLut[ nModY | ( nOutX & 0x0FL ) ];
+
+                    aSrcCol = pP->GetColor( nMapY, nMapX );
+                    aDstCol = pB->GetColor( nY, nX );
+                    nSrcAlpha  = 255 - pA->GetPixel( nMapY, nMapX ).GetBlueOrIndex();
+                    nDstAlpha  = 255 - pAlphaW->GetPixel( nY, nX ).GetBlueOrIndex();
+
+                    if( nSrcAlpha + nDstAlpha == 0 )
+                    {
+                        // #i70653# zero alpha -> zero color values
+                        aIndex.SetIndex( (BYTE) ( nVCLRLut[ ( nVCLLut[ 0 ] + nD ) >> 16UL ] +
+                                                  nVCLGLut[ ( nVCLLut[ 0 ] + nD ) >> 16UL ] +
+                                                  nVCLBLut[ ( nVCLLut[ 0 ] + nD ) >> 16UL ] ) );
+                    }
+                    else
+                    {
+                        aDstCol.SetRed( (BYTE)(((int)(aSrcCol.GetRed())*nSrcAlpha + (int)(aDstCol.GetRed())*nDstAlpha) /
+                                               (nSrcAlpha+nDstAlpha)) );
+                        aDstCol.SetGreen( (BYTE)(((int)(aSrcCol.GetGreen())*nSrcAlpha + (int)(aDstCol.GetGreen())*nDstAlpha) /
+                                                 (nSrcAlpha+nDstAlpha)) );
+                        aDstCol.SetBlue( (BYTE)(((int)(aSrcCol.GetBlue())*nSrcAlpha + (int)(aDstCol.GetBlue())*nDstAlpha) /
+                                                (nSrcAlpha+nDstAlpha)) );
+
+                        aIndex.SetIndex( (BYTE) ( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16UL ] +
+                                                  nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16UL ] +
+                                                  nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16UL ] ) );
+                    }
+                    pW->SetPixel( nY, nX, aIndex );
+
+                    // Have to perform the compositing 'algebra' in
+                    // the inverse alpha space (with 255 meaning
+                    // opaque), otherwise, transitivity is not
+                    // achieved.
+                    nSrcAlpha = 255-COLOR_CHANNEL_MERGE( 255, (BYTE)nDstAlpha, nSrcAlpha );
+
+                    aIndex.SetIndex( (BYTE) ( nVCLRLut[ ( nVCLLut[ nSrcAlpha ] + nD ) >> 16UL ] +
+                                              nVCLGLut[ ( nVCLLut[ nSrcAlpha ] + nD ) >> 16UL ] +
+                                              nVCLBLut[ ( nVCLLut[ nSrcAlpha ] + nD ) >> 16UL ] ) );
+                    pAlphaW->SetPixel( nY, nX, aIndex );
+                }
+            }
+        }
+
+        aBmp.ReleaseAccess( pB );
+        aDither.ReleaseAccess( pW );
+        res = aDither;
+    }
+    else
+    {
+        BitmapWriteAccess*  pB = aBmp.AcquireWriteAccess();
+        if( pP && pA && pB )
+        {
+            for( nY = 0; nY < nDstHeight; nY++ )
+            {
+                const long  nMapY = pMapY[ nY ];
+
+                for( nX = 0; nX < nDstWidth; nX++ )
+                {
+                    const long nMapX = pMapX[ nX ];
+
+                    aSrcCol = pP->GetColor( nMapY, nMapX );
+                    aDstCol = pB->GetColor( nY, nX );
+                    nSrcAlpha  = 255 - pA->GetPixel( nMapY, nMapX ).GetBlueOrIndex();
+                    nDstAlpha  = 255 - pAlphaW->GetPixel( nY, nX ).GetBlueOrIndex();
+
+                    if( nSrcAlpha + nDstAlpha == 0 )
+                    {
+                        // #i70653# zero alpha -> zero color values
+                        aDstCol.SetRed(0);
+                        aDstCol.SetGreen(0);
+                        aDstCol.SetBlue(0);
+                    }
+                    else
+                    {
+                        aDstCol.SetRed( (BYTE)(((int)(aSrcCol.GetRed())*nSrcAlpha + (int)(aDstCol.GetRed())*nDstAlpha) /
+                                               (nSrcAlpha+nDstAlpha)) );
+                        aDstCol.SetGreen( (BYTE)(((int)(aSrcCol.GetGreen())*nSrcAlpha + (int)(aDstCol.GetGreen())*nDstAlpha) /
+                                                 (nSrcAlpha+nDstAlpha)) );
+                        aDstCol.SetBlue( (BYTE)(((int)(aSrcCol.GetBlue())*nSrcAlpha + (int)(aDstCol.GetBlue())*nDstAlpha) /
+                                                (nSrcAlpha+nDstAlpha)) );
+                    }
+
+                    pB->SetPixel( nY, nX, aDstCol );
+
+                    // Have to perform the compositing 'algebra' in
+                    // the inverse alpha space (with 255 meaning
+                    // opaque), otherwise, transitivity is not
+                    // achieved.
+                    nSrcAlpha = 255-COLOR_CHANNEL_MERGE( 255, (BYTE)nDstAlpha, nSrcAlpha );
+
+                    pAlphaW->SetPixel( nY, nX, Color(nSrcAlpha, nSrcAlpha, nSrcAlpha) );
+                }
+            }
+        }
+
+        aBmp.ReleaseAccess( pB );
+        res = aBmp;
+    }
+
+    aAlphaBitmap.ReleaseAccess( pAlphaW );
+    mpAlphaVDev->DrawBitmap( aDstRect.TopLeft(), aAlphaBitmap );
+    mpAlphaVDev->EnableMapMode( bOldMapMode );
+
+    return res;
+}
+
+// ------------------------------------------------------------------------
+
+Bitmap OutputDevice::ImplBlend( Bitmap              aBmp,
+                                BitmapReadAccess*   pP,
+                                BitmapReadAccess*   pA,
+                                const sal_Int32     nOffY,
+                                const sal_Int32     nDstHeight,
+                                const sal_Int32     nOffX,
+                                const sal_Int32     nDstWidth,
+                                const Rectangle&    aBmpRect,
+                                const Size&         aOutSz,
+                                const bool          bHMirr,
+                                const bool          bVMirr,
+                                const long*         pMapX,
+                                const long*         pMapY )
+{
+    BitmapColor aDstCol;
+    Bitmap      res;
+    int         nX, nOutX, nY, nOutY;
+
+    if( GetBitCount() <= 8 )
+    {
+        Bitmap              aDither( aBmp.GetSizePixel(), 8 );
+        BitmapColor         aIndex( 0 );
+        BitmapReadAccess*   pB = aBmp.AcquireReadAccess();
+        BitmapWriteAccess*  pW = aDither.AcquireWriteAccess();
+
+        if( pB && pP && pA && pW )
+        {
+            for( nY = 0, nOutY = nOffY; nY < nDstHeight; nY++, nOutY++ )
+            {
+                const long nMapY = pMapY[ nY ];
+                const long nModY = ( nOutY & 0x0FL ) << 4L;
+
+                for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
+                {
+                    const long  nMapX = pMapX[ nX ];
+                    const ULONG nD = nVCLDitherLut[ nModY | ( nOutX & 0x0FL ) ];
+
+                    aDstCol = pB->GetColor( nY, nX );
+                    aDstCol.Merge( pP->GetColor( nMapY, nMapX ), (BYTE) pA->GetPixel( nMapY, nMapX ) );
+                    aIndex.SetIndex( (BYTE) ( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16UL ] +
+                                              nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16UL ] +
+                                              nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16UL ] ) );
+                    pW->SetPixel( nY, nX, aIndex );
+                }
+            }
+        }
+
+        aBmp.ReleaseAccess( pB );
+        aDither.ReleaseAccess( pW );
+        res = aDither;
+    }
+    else
+    {
+        BitmapWriteAccess*  pB = aBmp.AcquireWriteAccess();
+
+        bool bFastBlend = false;
+        if( pP && pA && pB )
+        {
+            SalTwoRect aTR;
+            aTR.mnSrcX      = aBmpRect.Left();
+            aTR.mnSrcY      = aBmpRect.Top();
+            aTR.mnSrcWidth  = aBmpRect.GetWidth();
+            aTR.mnSrcHeight = aBmpRect.GetHeight();
+            aTR.mnDestX     = nOffX;
+            aTR.mnDestY     = nOffY;
+            aTR.mnDestWidth = aOutSz.Width();
+            aTR.mnDestHeight= aOutSz.Height();
+
+            if( !bHMirr || !bVMirr )
+                bFastBlend = ImplFastBitmapBlending( *pB,*pP,*pA, aTR );
+        }
+
+        if( pP && pA && pB && !bFastBlend )
+        {
+            switch( pP->GetScanlineFormat() )
+            {
+                case( BMP_FORMAT_8BIT_PAL ):
+                    {
+                        for( nY = 0; nY < nDstHeight; nY++ )
+                        {
+                            const long  nMapY = pMapY[ nY ];
+                            Scanline    pPScan = pP->GetScanline( nMapY );
+                            Scanline    pAScan = pA->GetScanline( nMapY );
+
+                            for( nX = 0; nX < nDstWidth; nX++ )
+                            {
+                                const long nMapX = pMapX[ nX ];
+                                aDstCol = pB->GetPixel( nY, nX );
+                                pB->SetPixel( nY, nX, aDstCol.Merge( pP->GetPaletteColor( pPScan[ nMapX ] ),
+                                                                     pAScan[ nMapX ] ) );
+                            }
+                        }
+                    }
+                    break;
+
+                case( BMP_FORMAT_24BIT_TC_BGR ):
+                    {
+                        for( nY = 0; nY < nDstHeight; nY++ )
+                        {
+                            const long  nMapY = pMapY[ nY ];
+                            Scanline    pPScan = pP->GetScanline( nMapY );
+                            Scanline    pAScan = pA->GetScanline( nMapY );
+
+                            for( nX = 0; nX < nDstWidth; nX++ )
+                            {
+                                const long  nMapX = pMapX[ nX ];
+                                Scanline    pTmp = pPScan + nMapX * 3;
+
+                                aDstCol = pB->GetPixel( nY, nX );
+                                pB->SetPixel( nY, nX, aDstCol.Merge( pTmp[ 2 ], pTmp[ 1 ], pTmp[ 0 ],
+                                                                     pAScan[ nMapX ] ) );
+                            }
+                        }
+                    }
+                    break;
+
+                case( BMP_FORMAT_24BIT_TC_RGB ):
+                    {
+                        for( nY = 0; nY < nDstHeight; nY++ )
+                        {
+                            const long  nMapY = pMapY[ nY ];
+                            Scanline    pPScan = pP->GetScanline( nMapY );
+                            Scanline    pAScan = pA->GetScanline( nMapY );
+
+                            for( nX = 0; nX < nDstWidth; nX++ )
+                            {
+                                const long  nMapX = pMapX[ nX ];
+                                Scanline    pTmp = pPScan + nMapX * 3;
+
+                                aDstCol = pB->GetPixel( nY, nX );
+                                pB->SetPixel( nY, nX, aDstCol.Merge( pTmp[ 0 ], pTmp[ 1 ], pTmp[ 2 ],
+                                                                     pAScan[ nMapX ] ) );
+                            }
+                        }
+                    }
+                    break;
+
+                default:
+                {
+                    for( nY = 0; nY < nDstHeight; nY++ )
+                    {
+                        const long  nMapY = pMapY[ nY ];
+                        Scanline    pAScan = pA->GetScanline( nMapY );
+
+                        for( nX = 0; nX < nDstWidth; nX++ )
+                        {
+                            const long nMapX = pMapX[ nX ];
+                            aDstCol = pB->GetPixel( nY, nX );
+                            pB->SetPixel( nY, nX, aDstCol.Merge( pP->GetColor( nMapY, nMapX ),
+                                                                 pAScan[ nMapX ] ) );
+                        }
+                    }
+                }
+                break;
+            }
+        }
+
+        aBmp.ReleaseAccess( pB );
+        res = aBmp;
+    }
+
+    return res;
+}
+
+// ------------------------------------------------------------------------
+
 void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
                                   const Point& rDestPt, const Size& rDestSize,
                                   const Point& rSrcPtPixel, const Size& rSrcSizePixel )
@@ -1663,11 +1979,6 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
             if( aBmp.ImplGetImpBitmap() )
                 aDstRect.SetSize( aBmp.GetSizePixel() );
 
-            // #110958# Disable alpha VDev, we're doing the necessary
-            // stuff explicitely furher below
-            if( mpAlphaVDev )
-                mpAlphaVDev = NULL;
-
             BitmapColor     aDstCol;
             const long      nSrcWidth = aBmpRect.GetWidth(), nSrcHeight = aBmpRect.GetHeight();
             const long      nDstWidth = aDstRect.GetWidth(), nDstHeight = aDstRect.GetHeight();
@@ -1713,253 +2024,38 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
             // #i38887# reading from screen may sometimes fail
             if( aBmp.ImplGetImpBitmap() )
             {
-                if( GetBitCount() <= 8 )
+                Bitmap aTmp;
+
+                if( mpAlphaVDev )
                 {
-                    Bitmap              aDither( aBmp.GetSizePixel(), 8 );
-                    BitmapColor         aIndex( 0 );
-                    BitmapReadAccess*   pB = aBmp.AcquireReadAccess();
-                    BitmapWriteAccess*  pW = aDither.AcquireWriteAccess();
-
-                    if( pB && pP && pA && pW )
-                    {
-                        for( nY = 0, nOutY = nOffY; nY < nDstHeight; nY++, nOutY++ )
-                        {
-                            const long nMapY = pMapY[ nY ];
-                            const long nModY = ( nOutY & 0x0FL ) << 4L;
-
-                            for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
-                            {
-                                const long  nMapX = pMapX[ nX ];
-                                const ULONG nD = nVCLDitherLut[ nModY | ( nOutX & 0x0FL ) ];
-
-                                aDstCol = pB->GetColor( nY, nX );
-                                aDstCol.Merge( pP->GetColor( nMapY, nMapX ), (BYTE) pA->GetPixel( nMapY, nMapX ) );
-                                aIndex.SetIndex( (BYTE) ( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16UL ] +
-                                                          nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16UL ] +
-                                                          nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16UL ] ) );
-                                pW->SetPixel( nY, nX, aIndex );
-                            }
-                        }
-                    }
-
-                    aBmp.ReleaseAccess( pB );
-                    aDither.ReleaseAccess( pW );
-                    DrawBitmap( aDstRect.TopLeft(), aDither );
+                    aTmp = ImplBlendWithAlpha(
+                        aBmp,pP,pA,
+                        aDstRect,
+                        nOffY,nDstHeight,
+                        nOffX,nDstWidth,
+                        pMapX,pMapY );
                 }
                 else
                 {
-                    BitmapWriteAccess*  pB = aBmp.AcquireWriteAccess();
-
-                    bool bFastBlend = false;
-                    if( pP && pA && pB )
-                    {
-                        SalTwoRect aTR;
-                        aTR.mnSrcX      = aBmpRect.Left();
-                        aTR.mnSrcY      = aBmpRect.Top();
-                        aTR.mnSrcWidth  = aBmpRect.GetWidth();
-                        aTR.mnSrcHeight = aBmpRect.GetHeight();
-                        aTR.mnDestX     = nOffX;
-                        aTR.mnDestY     = nOffY;
-                        aTR.mnDestWidth = aOutSz.Width();
-                        aTR.mnDestHeight= aOutSz.Height();
-
-                        if( !bHMirr || !bVMirr )
-                            bFastBlend = ImplFastBitmapBlending( *pB,*pP,*pA, aTR );
-                    }
-
-                    if( pP && pA && pB && !bFastBlend )
-                    {
-                        switch( pP->GetScanlineFormat() )
-                        {
-                            case( BMP_FORMAT_8BIT_PAL ):
-                                {
-                                    for( nY = 0; nY < nDstHeight; nY++ )
-                                    {
-                                        const long  nMapY = pMapY[ nY ];
-                                        Scanline    pPScan = pP->GetScanline( nMapY );
-                                        Scanline    pAScan = pA->GetScanline( nMapY );
-
-                                        for( nX = 0; nX < nDstWidth; nX++ )
-                                        {
-                                            const long nMapX = pMapX[ nX ];
-                                            aDstCol = pB->GetPixel( nY, nX );
-                                            pB->SetPixel( nY, nX, aDstCol.Merge( pP->GetPaletteColor( pPScan[ nMapX ] ),
-                                                                                 pAScan[ nMapX ] ) );
-                                        }
-                                    }
-                                }
-                                break;
-
-                            case( BMP_FORMAT_24BIT_TC_BGR ):
-                                {
-                                    for( nY = 0; nY < nDstHeight; nY++ )
-                                    {
-                                        const long  nMapY = pMapY[ nY ];
-                                        Scanline    pPScan = pP->GetScanline( nMapY );
-                                        Scanline    pAScan = pA->GetScanline( nMapY );
-
-                                        for( nX = 0; nX < nDstWidth; nX++ )
-                                        {
-                                            const long  nMapX = pMapX[ nX ];
-                                            Scanline    pTmp = pPScan + nMapX * 3;
-
-                                            aDstCol = pB->GetPixel( nY, nX );
-                                            pB->SetPixel( nY, nX, aDstCol.Merge( pTmp[ 2 ], pTmp[ 1 ], pTmp[ 0 ],
-                                                                                 pAScan[ nMapX ] ) );
-                                        }
-                                    }
-                                }
-                                break;
-
-                            case( BMP_FORMAT_24BIT_TC_RGB ):
-                                {
-                                    for( nY = 0; nY < nDstHeight; nY++ )
-                                    {
-                                        const long  nMapY = pMapY[ nY ];
-                                        Scanline    pPScan = pP->GetScanline( nMapY );
-                                        Scanline    pAScan = pA->GetScanline( nMapY );
-
-                                        for( nX = 0; nX < nDstWidth; nX++ )
-                                        {
-                                            const long  nMapX = pMapX[ nX ];
-                                            Scanline    pTmp = pPScan + nMapX * 3;
-
-                                            aDstCol = pB->GetPixel( nY, nX );
-                                            pB->SetPixel( nY, nX, aDstCol.Merge( pTmp[ 0 ], pTmp[ 1 ], pTmp[ 2 ],
-                                                                                 pAScan[ nMapX ] ) );
-                                        }
-                                    }
-                                }
-                                break;
-
-                            default:
-                            {
-                                for( nY = 0; nY < nDstHeight; nY++ )
-                                {
-                                    const long  nMapY = pMapY[ nY ];
-                                    Scanline    pAScan = pA->GetScanline( nMapY );
-
-                                    for( nX = 0; nX < nDstWidth; nX++ )
-                                    {
-                                        const long nMapX = pMapX[ nX ];
-                                        aDstCol = pB->GetPixel( nY, nX );
-                                        pB->SetPixel( nY, nX, aDstCol.Merge( pP->GetColor( nMapY, nMapX ),
-                                                                             pAScan[ nMapX ] ) );
-                                    }
-                                }
-                            }
-                            break;
-                        }
-                    }
-
-                    aBmp.ReleaseAccess( pB );
-                    DrawBitmap( aDstRect.TopLeft(), aBmp );
-                }
-            }
-
-            // #110958# Enable alpha VDev again
-            mpAlphaVDev = pOldVDev;
-
-            // #110958# Perform merging of bitmap and VDev alpha channel
-            if( mpAlphaVDev )
-            {
-                BOOL bOldMapMode( mpAlphaVDev->IsMapModeEnabled() );
-                mpAlphaVDev->EnableMapMode(FALSE);
-                Bitmap aBitmap( mpAlphaVDev->GetBitmap( aDstRect.TopLeft(), aDstRect.GetSize() ) );
-                BitmapWriteAccess*  pW = aBitmap.AcquireWriteAccess();
-                BYTE nAlpha;
-
-                if( pW && pA )
-                {
-                    if( mpAlphaVDev->GetBitCount() < 8 )
-                    {
-                        // Less than 8 bit for backbuffer - try dithering of alpha channel
-                        BitmapColor aIndex( 0 );
-
-                        for( nY = 0, nOutY = nOffY; nY < nDstHeight; nY++, nOutY++ )
-                        {
-                            const long nMapY = pMapY[ nY ];
-                            const long nModY = ( nOutY & 0x0FL ) << 4L;
-                            Scanline  pAScan = pA->GetScanline( nMapY );
-
-                            for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
-                            {
-                                const long  nMapX = pMapX[ nX ];
-                                const ULONG nD = nVCLDitherLut[ nModY | ( nOutX & 0x0FL ) ];
-
-                                nAlpha = pAScan[ nMapX ];
-
-                                // Have to perform the compositing
-                                // 'algebra' in the inverse alpha
-                                // space (with 255 meaning opaque),
-                                // otherwise, transitivity is not
-                                // achieved.
-                                nAlpha = 255-COLOR_CHANNEL_MERGE( 255, (BYTE) 255-pW->GetColor( nY, nX ), 255-nAlpha );
-
-                                aIndex.SetIndex( (BYTE) ( nVCLRLut[ ( nVCLLut[ nAlpha ] + nD ) >> 16UL ] +
-                                                          nVCLGLut[ ( nVCLLut[ nAlpha ] + nD ) >> 16UL ] +
-                                                          nVCLBLut[ ( nVCLLut[ nAlpha ] + nD ) >> 16UL ] ) );
-                                pW->SetPixel( nY, nX, aIndex );
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if( pW->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL ||
-                            pW->GetScanlineFormat() == BMP_FORMAT_8BIT_TC_MASK )
-                        {
-                            // optimized handling for 8 bit alpha - 8 bit backbuffer
-                            for( nY = 0; nY < nDstHeight; nY++ )
-                            {
-                                const long  nMapY = pMapY[ nY ];
-                                Scanline    pWScan = pW->GetScanline( nY );
-                                Scanline    pAScan = pA->GetScanline( nMapY );
-
-                                for( nX = 0; nX < nDstWidth; nX++ )
-                                {
-                                    const long nMapX = pMapX[ nX ];
-
-                                    nAlpha = pAScan[ nMapX ];
-
-                                    // Have to perform the compositing
-                                    // 'algebra' in the inverse alpha
-                                    // space (with 255 meaning opaque),
-                                    // otherwise, transitivity is not
-                                    // achieved.
-                                    pWScan[ nX ] = 255 - COLOR_CHANNEL_MERGE( 255, 255-pWScan[ nX ], 255-nAlpha );
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // optimized handling for 8 bit alpha - >8 bit backbuffer
-                            for( nY = 0; nY < nDstHeight; nY++ )
-                            {
-                                const long  nMapY = pMapY[ nY ];
-                                Scanline    pAScan = pA->GetScanline( nMapY );
-
-                                for( nX = 0; nX < nDstWidth; nX++ )
-                                {
-                                    const long nMapX = pMapX[ nX ];
-                                    nAlpha = pAScan[ nMapX ];
-
-                                    // Have to perform the compositing
-                                    // 'algebra' in the inverse alpha
-                                    // space (with 255 meaning opaque),
-                                    // otherwise, transitivity is not
-                                    // achieved.
-                                    nAlpha = 255 - COLOR_CHANNEL_MERGE( 255, 255-pW->GetColor( nY, nX ).GetBlue(), 255-nAlpha );
-
-                                    pW->SetPixel( nY, nX, Color(nAlpha, nAlpha, nAlpha) );
-                                }
-                            }
-                        }
-                    }
+                    aTmp = ImplBlend(
+                        aBmp,pP,pA,
+                        nOffY,nDstHeight,
+                        nOffX,nDstWidth,
+                        aBmpRect,aOutSz,
+                        bHMirr,bVMirr,
+                        pMapX,pMapY );
                 }
 
-                aBitmap.ReleaseAccess( pW );
-                 mpAlphaVDev->DrawBitmap( aDstRect.TopLeft(), aBitmap );
-                mpAlphaVDev->EnableMapMode( bOldMapMode );
+                // #110958# Disable alpha VDev, we're doing the necessary
+                // stuff explicitely furher below
+                if( mpAlphaVDev )
+                    mpAlphaVDev = NULL;
+
+                DrawBitmap( aDstRect.TopLeft(),
+                            aTmp );
+
+                // #110958# Enable alpha VDev again
+                mpAlphaVDev = pOldVDev;
             }
 
             ( (Bitmap&) rBmp ).ReleaseAccess( pP );
