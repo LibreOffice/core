@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:15:19 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:34:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,10 +60,18 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
+OResultSetMetaData::OResultSetMetaData( ADORecordset* _pRecordSet)
+                    :   m_pRecordSet(_pRecordSet),
+                        m_nColCount(-1)
+{
+    if ( m_pRecordSet )
+        m_pRecordSet->AddRef();
+}
 // -------------------------------------------------------------------------
 OResultSetMetaData::~OResultSetMetaData()
 {
-    m_pRecordSet->Release();
+    if ( m_pRecordSet )
+        m_pRecordSet->Release();
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) throw(SQLException, RuntimeException)
@@ -84,8 +92,11 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column ) throw(S
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  ) throw(SQLException, RuntimeException)
 {
-    if(m_nColCount != -1)
+    if(m_nColCount != -1 )
         return m_nColCount;
+
+    if ( !m_pRecordSet )
+        return 0;
 
     ADOFields* pFields  = NULL;
     m_pRecordSet->get_Fields(&pFields);
