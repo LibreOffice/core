@@ -1,4 +1,4 @@
-#! /usr/bin/csh
+#! /bin/csh
 
 # This script sets all enviroment variables, which are necessary for building 
 # the examples of the Office Development Kit.
