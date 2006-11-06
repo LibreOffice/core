@@ -4,9 +4,9 @@
 #
 #   $RCSfile: attribute.tests,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:17:00 $
+#   last change: $Author: kz $ $Date: 2006-11-06 14:41:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,28 +34,19 @@
 #*************************************************************************
 
 EXPECT SUCCESS "attribute.tests 1":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
-interface X {
+interface I1 {
     [attribute] long a;
 };
 
 
 EXPECT SUCCESS "attribute.tests 2":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
-interface X {
+interface I1 {
     [attribute] long a {};
 };
 
 
 EXPECT FAILURE "attribute.tests 3":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
-interface X {
+interface I1 {
     [attribute] long a {
         get raises ();
     };
@@ -63,11 +54,8 @@ interface X {
 
 
 EXPECT SUCCESS "attribute.tests 4":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 exception E1 {};
-interface X {
+interface I1 {
     [attribute] long a {
         get raises (E1);
     };
@@ -75,11 +63,8 @@ interface X {
 
 
 EXPECT SUCCESS "attribute.tests 5":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 exception E1 {};
-interface X {
+interface I1 {
     [attribute] long a {
         set raises (E1);
     };
@@ -87,11 +72,8 @@ interface X {
 
 
 EXPECT SUCCESS "attribute.tests 6":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 exception E1 {};
-interface X {
+interface I1 {
     [attribute] long a {
         get raises (E1);
         set raises (E1);
@@ -100,11 +82,8 @@ interface X {
 
 
 EXPECT SUCCESS "attribute.tests 7":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 exception E1 {};
-interface X {
+interface I1 {
     [attribute] long a {
         set raises (E1);
         get raises (E1);
@@ -113,11 +92,8 @@ interface X {
 
 
 EXPECT FAILURE "attribute.tests 8":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 exception E1 {};
-interface X {
+interface I1 {
     [attribute] long a {
         get raises (E1);
         get raises (E1);
@@ -126,11 +102,8 @@ interface X {
 
 
 EXPECT FAILURE "attribute.tests 9":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 exception E1 {};
-interface X {
+interface I1 {
     void E1();
     [attribute] long a {
         get raises (E1);
@@ -139,11 +112,8 @@ interface X {
 
 
 EXPECT FAILURE "attribute.tests 10":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 exception E1 {};
-interface X {
+interface I1 {
     [attribute] long E1 {
         get raises (E1);
     };
@@ -151,11 +121,8 @@ interface X {
 
 
 EXPECT SUCCESS "attribute.tests 11":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 exception E1 {};
-interface X {
+interface I1 {
     [attribute] long a {
         get raises (E1,E1);
     };
@@ -163,11 +130,8 @@ interface X {
 
 
 EXPECT SUCCESS "attribute.tests 12":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 exception E1 {};
-interface X {
+interface I1 {
     [attribute, readonly] long a {
         get raises (E1);
     };
@@ -175,11 +139,8 @@ interface X {
 
 
 EXPECT FAILURE "attribute.tests 13":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 exception E1 {};
-interface X {
+interface I1 {
     [attribute, readonly] long a {
         set raises (E1);
     };
@@ -187,126 +148,84 @@ interface X {
 
 
 EXPECT FAILURE "attribute.tests 14":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
-interface X {
+interface I1 {
     [] long a;
 };
 
 
 EXPECT SUCCESS "attribute.tests 15":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
-interface X {
+interface I1 {
     [attribute] long a;
 };
 
 
 EXPECT FAILURE "attribute.tests 16":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
-interface X {
+interface I1 {
     [attribute, property] long a;
 };
 
 
 EXPECT FAILURE "attribute.tests 17":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
-interface X {
+interface I1 {
     [attribute, optional] long a;
 };
 
 
 EXPECT FAILURE "attribute.tests 18":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
-interface X {
+interface I1 {
     [attribute, maybevoid] long a;
 };
 
 
 EXPECT FAILURE "attribute.tests 19":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
-interface X {
+interface I1 {
     [attribute, constrained] long a;
 };
 
 
 EXPECT FAILURE "attribute.tests 20":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
-interface X {
+interface I1 {
     [attribute, transient] long a;
 };
 
 
 EXPECT FAILURE "attribute.tests 21":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
-interface X {
+interface I1 {
     [attribute, maybeambigious] long a;
 };
 
 
 EXPECT FAILURE "attribute.tests 22":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
-interface X {
+interface I1 {
     [attribute, maybedefault] long a;
 };
 
 
 EXPECT FAILURE "attribute.tests 23":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
-interface X {
+interface I1 {
     [attribute, removeable] long a;
 };
 
 
 EXPECT SUCCESS "attribute.tests 24":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
-interface X {
+interface I1 {
     [attribute, bound] long a;
 };
 
 
 EXPECT SUCCESS "attribute.tests 25":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
-interface X {
+interface I1 {
     [bound, attribute] long a;
 };
 
 
 EXPECT SUCCESS "attribute.tests 26":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
-interface X {
+interface I1 {
     [attribute, readonly] long a;
 };
 
 
 EXPECT SUCCESS "attribute.tests 27":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
-interface X {
+interface I1 {
     [attribute, bound, readonly] long a;
 };
