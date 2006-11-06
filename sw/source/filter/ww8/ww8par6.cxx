@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.170 $
+ *  $Revision: 1.171 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:25:11 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:54:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3644,9 +3644,11 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
                 nId = RES_CHRATR_CTL_FONT;
                 break;
             case 93:
+            case 111:
             case 0x4a4f:
                 nId = RES_CHRATR_FONT;
                 break;
+            case 112:
             case 0x4a50:
                 nId = RES_CHRATR_CJK_FONT;
                 break;
@@ -5352,8 +5354,8 @@ const wwSprmDispatcher *GetWW6SprmDispatcher()
                                                      //percentage to grow hps short
         {110, 0},                                    //"sprmCCondHyhen", chp.ysri
                                                      //ysri short
-        {111, &SwWW8ImplReader::Read_BoldBiDiUsw},   //"111 bidi bold ?",
-        {112, &SwWW8ImplReader::Read_BoldBiDiUsw},   //"112 bidi italic ?",
+        {111, &SwWW8ImplReader::Read_FontCode},      //ww7 font
+        {112, &SwWW8ImplReader::Read_FontCode},      //ww7 CJK font
         {113, &SwWW8ImplReader::Read_FontCode},      //ww7 rtl font
         {114, &SwWW8ImplReader::Read_Language},      //ww7 lid
         {115, &SwWW8ImplReader::Read_TxtColor},      //ww7 rtl colour ?
