@@ -104,3 +104,9 @@
   com/sun/star/style/Style.idl
   com/sun/star/text/CellProperties.idl
   com/sun/star/text/TextTableRow.idl
+
+10/25/06 (JSC): TaskID=i70808
+  update reference type library with the released version of OOo2.0.4. The
+  new reference type library is taken from the release source tree OOD680m5.
+
+  
