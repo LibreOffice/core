@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:21:33 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:50:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_configmgr.hxx"
 
+#include "types.hxx"
 #include "node.hxx"
 
 #ifndef INCLUDED_SHARABLE_ANYDATA_HXX
@@ -79,9 +80,9 @@ namespace configmgr
     //        Flags::Field    flags;
       //      Type ::Field    type;   // contains discriminator for union
 
-rtl::OUString NodeInfo::getName(memory::Accessor const & _aAccessor) const
+rtl::OUString NodeInfo::getName() const
 {
-    return readString(_aAccessor,this->name);
+    return readName(this->name);
 }
 //-----------------------------------------------------------------------------
 
@@ -237,10 +238,10 @@ SetNodeTemplateData const * readTemplateData(memory::Accessor const & _anAccesso
 }
 //-----------------------------------------------------------------------------
 
-Address SetNode::allocTemplateData(memory::Allocator const & _anAllocator, NameChar const * pName, NameChar const * pModule)
+Address SetNode::allocTemplateData(memory::Allocator const & _anAllocator,
+                                   const rtl::OUString &rName,
+                                   const rtl::OUString &rModule)
 {
-    rtl::OUString aName(pName), aModule(pModule);
-
     Address aData = _anAllocator.allocate(sizeof(SetNodeTemplateData));
 
     if (aData)
@@ -249,11 +250,23 @@ Address SetNode::allocTemplateData(memory::Allocator const & _anAllocator, NameC
 
         OSL_ENSURE(pData, "Creating template data: unexpected NULL data");
 
-        pData->name     = allocName(_anAllocator,aName);
-        pData->module   = allocName(_anAllocator,aModule);
+        pData->name   = allocName(rName);
+        pData->module = allocName(rModule);
     }
     return aData;
 }
+
+Address SetNode::copyTemplateData(memory::Allocator const & _anAllocator,
+                                  Address _aTemplateData)
+{
+    SetNodeTemplateData const * pData = readTemplateData(_anAllocator,_aTemplateData);
+
+    OSL_ENSURE(pData, "Copying template data: unexpected NULL data");
+
+    return allocTemplateData(_anAllocator, readName(pData->name),
+                             readName(pData->module));
+}
+
 //-----------------------------------------------------------------------------
 
 void SetNode::releaseTemplateData(memory::Allocator const & _anAllocator, Address _aTemplateData)
@@ -264,35 +277,12 @@ void SetNode::releaseTemplateData(memory::Allocator const & _anAllocator, Addres
 
     OSL_ENSURE(pData, "Freeing template data: unexpected NULL data");
 
-    freeName(_anAllocator,pData->name);
-    freeName(_anAllocator,pData->module);
+    freeName(pData->name);
+    freeName(pData->module);
 
     _anAllocator.deallocate(_aTemplateData);
 }
-//-----------------------------------------------------------------------------
 
-NameChar const * SetNode::getTemplateDataName(memory::Accessor const & _anAccessor, Address _aTemplateData)
-{
-    OSL_PRECOND(_aTemplateData, "Reading template data: unexpected NULL pointer");
-
-    SetNodeTemplateData const * pData = readTemplateData(_anAccessor,_aTemplateData);
-
-    OSL_ENSURE(pData, "Reading template data: unexpected NULL data");
-
-    return accessName(_anAccessor,pData->name);
-}
-//-----------------------------------------------------------------------------
-
-NameChar const * SetNode::getTemplateDataModule(memory::Accessor const & _anAccessor, Address _aTemplateData)
-{
-    OSL_PRECOND(_aTemplateData, "Reading template data: unexpected NULL pointer");
-
-    SetNodeTemplateData const * pData = readTemplateData(_anAccessor,_aTemplateData);
-
-    OSL_ENSURE(pData, "Reading template data: unexpected NULL data");
-
-    return accessName(_anAccessor,pData->module);
-}
 //-----------------------------------------------------------------------------
 
 rtl::OUString SetNode::getElementTemplateName(memory::Accessor const & _anAccessor)   const
@@ -301,7 +291,7 @@ rtl::OUString SetNode::getElementTemplateName(memory::Accessor const & _anAccess
 
     OSL_ENSURE(pData, "ERROR: No template data found for set");
 
-    return readName(_anAccessor,pData->name);
+    return readName(pData->name);
 }
 //-----------------------------------------------------------------------------
 
@@ -311,7 +301,7 @@ rtl::OUString SetNode::getElementTemplateModule(memory::Accessor const & _anAcce
 
     OSL_ENSURE(pData, "ERROR: No template data found for set");
 
-    return readName(_anAccessor,pData->module);
+    return readName(pData->module);
 }
 //-----------------------------------------------------------------------------
 
@@ -407,15 +397,15 @@ uno::Any    ValueNode::getDefaultValue(memory::Accessor const & _aAccessor)    c
 }
 //-----------------------------------------------------------------------------
 
-bool Node::isNamed(rtl::OUString const & _aName, memory::Accessor const & _aAccessor) const
+bool Node::isNamed(rtl::OUString const & _aName) const
 {
-    return 0 == rtl_ustr_compare(_aName.getStr(),accessString(_aAccessor,node.info.name));
+    return _aName == readName(node.info.name);
 }
 //-----------------------------------------------------------------------------
 
-rtl::OUString Node::getName(memory::Accessor const & _aAccessor) const
+rtl::OUString Node::getName() const
 {
-    return node.info.getName(_aAccessor);
+    return node.info.getName();
 }
 //-----------------------------------------------------------------------------
 
