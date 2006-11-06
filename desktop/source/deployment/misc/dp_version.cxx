@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_version.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-04 16:54:37 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:54:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include "sal/config.h"
 
 #include "com/sun/star/deployment/XPackage.hpp"
+#include "rtl/ustring.hxx"
 
 #include "dp_version.hxx"
 
@@ -47,23 +48,21 @@ namespace {
 namespace css = ::com::sun::star;
 
 ::sal_Int64 getElement(::rtl::OUString const & version, ::sal_Int32 * index) {
-    ::rtl::OUString s(version.getToken(0, '.', *index));
-    return *index < 0 ? 0 : s.toInt64(); // TODO: token too large
+    // If getToken returns an empty string (because *index is outside the range
+    // of version) toInt64 will conveniently return 0:
+    return version.getToken(0, '.', *index).toInt64(); // TODO: value too large
 }
 
 }
 
 namespace dp_misc {
 
-::dp_misc::Order comparePackageVersions(
-    css::uno::Reference< css::deployment::XPackage > const & package1,
-    css::uno::Reference< css::deployment::XPackage > const & package2)
+::dp_misc::Order compareVersions(
+    ::rtl::OUString const & version1, ::rtl::OUString const & version2)
 {
-    ::rtl::OUString s1(package1->getVersion());
-    ::rtl::OUString s2(package2->getVersion());
     for (::sal_Int32 i1 = 0, i2 = 0; i1 >= 0 || i2 >= 0;) {
-        ::sal_Int64 e1(getElement(s1, &i1));
-        ::sal_Int64 e2(getElement(s2, &i2));
+        ::sal_Int64 e1(getElement(version1, &i1));
+        ::sal_Int64 e2(getElement(version2, &i2));
         if (e1 < e2) {
             return ::dp_misc::LESS;
         } else if (e1 > e2) {
@@ -71,6 +70,13 @@ namespace dp_misc {
         }
     }
     return ::dp_misc::EQUAL;
+}
+
+::dp_misc::Order comparePackageVersions(
+    css::uno::Reference< css::deployment::XPackage > const & package1,
+    css::uno::Reference< css::deployment::XPackage > const & package2)
+{
+    return compareVersions(package1->getVersion(), package2->getVersion());
 }
 
 }
