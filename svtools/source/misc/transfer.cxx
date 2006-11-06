@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:23:51 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:44:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1248,6 +1248,7 @@ TransferableDataHelper::~TransferableDataHelper()
         ::osl::MutexGuard aGuard( mpImpl->maMutex );
         delete mpFormats, mpFormats = NULL;
     }
+    delete mpImpl;
 }
 
 // -----------------------------------------------------------------------------
