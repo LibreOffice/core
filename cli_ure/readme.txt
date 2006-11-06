@@ -4,9 +4,9 @@
  *
  *  $RCSfile: readme.txt,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 10:49:40 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 15:08:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@ Adapting version after a release of an office
 =============================================
 After a release the entries in cli_ure/version/version.txt must be changed to reflect the versions
 of the assemblies at the time of the release. Please refer to the document at 
-http://udk.openoffice.org/common/man/spec/assemblyversioninghistory.html
+http://udk.openoffice.org/common/man/spec/assemblyversioning.html
 for more information about versioning of assemblies. 
 
 
@@ -109,9 +109,6 @@ XYZ_POLICY_ASSEMBLY: remain unchanged.
 
 Commit the changes and rebuild the project.
 
-The document 
-http://udk.openoffice.org/common/man/spec/assemblyversioninghistory.html
-should be updated to contain the new versions.
 
 The automatic test in cli_ure/qa/versioning should be extended. See the readme.txt in that directory 
 for more information.
