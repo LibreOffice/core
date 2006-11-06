@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageProperties.idl,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 13:23:13 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:54:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,7 @@ published service PageProperties
  */
 [property, maybevoid] long HeaderRightMargin;
 //-----------------------------------------------------------------------------
-/** determines if the the background color of the header is transparent.
+/** determines if the background color of the header is transparent.
 
     <p>If this property is set to <TRUE/>,
     <member>PageStyle::HeaderBackColor</member> will not be used.</p>
