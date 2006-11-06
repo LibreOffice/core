@@ -4,9 +4,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:14:52 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:34:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(Runt
 
 Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) throw(SQLException, RuntimeException)
 {
-    if(!m_xMetaData.is())
+    if(!m_xMetaData.is() && m_RecordSet.IsValid())
         m_xMetaData = new OResultSetMetaData(m_RecordSet);
     return m_xMetaData;
 }
@@ -334,7 +334,6 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
     CHECK_RETURN(m_RecordSet.put_CacheSize(m_nFetchSize))
     CHECK_RETURN(m_RecordSet.put_MaxRecords(m_nMaxRows))
     CHECK_RETURN(m_RecordSet.Open(aCmd,aCon,m_eCursorType,m_eLockType,adOpenUnspecified))
-
     CHECK_RETURN(m_RecordSet.get_CacheSize(m_nFetchSize))
     CHECK_RETURN(m_RecordSet.get_MaxRecords(m_nMaxRows))
     CHECK_RETURN(m_RecordSet.get_CursorType(m_eCursorType))
