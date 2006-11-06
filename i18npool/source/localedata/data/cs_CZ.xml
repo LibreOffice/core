@@ -223,7 +223,7 @@
 <LC_COLLATION ref="en_US"/>
 <LC_SEARCH ref="en_US"/>
 <LC_INDEX>
-<IndexKey unoid="alphanumeric" default="true" phonetic="false">A-Z Á Č Ď É Ě Í Ň Ó Ř Š Ť Ú Ů Ý Ž</IndexKey>
+<IndexKey unoid="alphanumeric" default="true" phonetic="false">A-C Č D-H {Ch} I-R Ř S Š T-Z Ž</IndexKey>
 <UnicodeScript>0</UnicodeScript>
 <UnicodeScript>1</UnicodeScript>
 <UnicodeScript>2</UnicodeScript>
