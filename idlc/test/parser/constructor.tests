@@ -4,9 +4,9 @@
 #
 #   $RCSfile: constructor.tests,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-19 13:46:41 $
+#   last change: $Author: kz $ $Date: 2006-11-06 14:41:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,25 +34,16 @@
 #*************************************************************************
 
 EXPECT SUCCESS "constructor.tests 1":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 interface X {};
 service S: X;
 
 
 EXPECT SUCCESS "constructor.tests 2":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 interface X {};
 service S: X {};
 
 
 EXPECT SUCCESS "constructor.tests 3":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 interface X {};
 service S: X {
     f();
@@ -60,9 +51,6 @@ service S: X {
 
 
 EXPECT FAILURE "constructor.tests 4":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 interface X {};
 service S: X {
     f();
@@ -71,27 +59,18 @@ service S: X {
 
 
 EXPECT FAILURE "constructor.tests 5":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 interface X {
     void f([in] any... p);
 };
 
 
 EXPECT FAILURE "constructor.tests 6":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 interface X {
     void f([out] any... p);
 };
 
 
 EXPECT SUCCESS "constructor.tests 7":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 interface X {};
 service S: X {
     f([in] any... p);
@@ -99,9 +78,6 @@ service S: X {
 
 
 EXPECT SUCCESS "constructor.tests 8":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 interface X {};
 typedef any some;
 service S: X {
@@ -110,9 +86,6 @@ service S: X {
 
 
 EXPECT FAILURE "constructor.tests 9":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 interface X {};
 service S: X {
     f([in] long p1, [in] any... p2);
@@ -120,9 +93,6 @@ service S: X {
 
 
 EXPECT FAILURE "constructor.tests 10":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 interface X {};
 service S: X {
     f([in] any... p2, [in] long p1);
@@ -130,9 +100,6 @@ service S: X {
 
 
 EXPECT FAILURE "constructor.tests 11":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 interface X {};
 service S: X {
     f([in] long p1, [in] long... p2);
@@ -140,9 +107,6 @@ service S: X {
 
 
 EXPECT FAILURE "constructor.tests 12":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 interface X {};
 service S: X {
     f([out] long p);
@@ -150,9 +114,6 @@ service S: X {
 
 
 EXPECT FAILURE "constructor.tests 13":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 interface X {};
 service S: X {
     f([out] any... p);
@@ -160,9 +121,6 @@ service S: X {
 
 
 EXPECT FAILURE "constructor.tests 14":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-}; }; }; };
 interface X {};
 singleton S: X {
     f();
@@ -170,50 +128,50 @@ singleton S: X {
 
 
 EXPECT FAILURE "constructor.tests 15":
-module com { module sun { module star { module uno {
-    interface XInterface {};
-service S: com::sun::star::uno::XInterface {
-    c1([in] long a, [in] com::sun::star::uno::XInterface b);
-    c2([in] long c, [in] XInterface d);
+module com { module sun { module star { module test {
+    interface X {};
+service S: com::sun::star::test::X {
+    c1([in] long a, [in] com::sun::star::test::X b);
+    c2([in] long c, [in] X d);
 };
 }; }; }; };
 
 
 EXPECT FAILURE "constructor.tests 16":
-module com { module sun { module star { module uno {
-    interface XInterface {};
+module com { module sun { module star { module test {
+    interface X {};
 }; }; }; };
 typedef long T;
-service S: com::sun::star::uno::XInterface {
+service S: com::sun::star::test::X {
     c1([in] sequence<long> a);
     c2([in] sequence<T> b);
 };
 
 
 EXPECT FAILURE "constructor.tests 17":
-module com { module sun { module star { module uno {
-    interface XInterface {};
+module com { module sun { module star { module test {
+    interface X {};
 }; }; }; };
-service S: com::sun::star::uno::XInterface {
+service S: com::sun::star::test::X {
     c1([in] any... a);
     c2([in] any... b);
 };
 
 
 EXPECT SUCCESS "constructor.tests 18":
-module com { module sun { module star { module uno {
-    interface XInterface {};
+module com { module sun { module star { module test {
+    interface X {};
 }; }; }; };
-service S: com::sun::star::uno::XInterface {
+service S: com::sun::star::test::X {
     c1([in] any... a);
     c2([in] sequence<any> b);
 };
 
 
 EXPECT SUCCESS "constructor.tests 19":
-module com { module sun { module star { module uno {
-    interface XInterface { void m(); };
+module com { module sun { module star { module test {
+    interface X { void m(); };
 }; }; }; };
-service S: com::sun::star::uno::XInterface {
+service S: com::sun::star::test::X {
     c([in] any... a);
 };
