@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:31:10 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:54:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -943,8 +943,8 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
             {
                 nScreenX = aRect.X;
                 nScreenY = aRect.Y;
-                nScreenDX = aRect.Width;
-                nScreenDY = aRect.Height;
+                nScreenDX = aRect.Width+1;  // difference between java/awt convention and vcl
+                nScreenDY = aRect.Height+1; // difference between java/awt convention and vcl
             }
         }
         else
