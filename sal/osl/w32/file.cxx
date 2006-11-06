@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:47:05 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:53:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2127,7 +2127,7 @@ namespace /* private */
 
         OSL_ENSURE_FILE(
             strUTF8->length == strURL->length ||
-            0 != rtl_ustr_ascii_shortenedCompare_WithLength( strURL->buffer, strURL->length, "file:\\\\", 7 )
+            0 != rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( strURL->buffer, strURL->length, "file:\\\\", 7 )
             ,"osl_getSystemPathFromFileURL: \"%s\" is not encoded !!!", strURL );
 
         bValidEncoded = _osl_decodeURL( strUTF8, &strDecodedURL );
@@ -2149,15 +2149,15 @@ namespace /* private */
 
             /* Must start with "file://" */
 
-            if ( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( pDecodedURL, nDecodedLen, "file:\\\\", 7 ) )
+            if ( 0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL, nDecodedLen, "file:\\\\", 7 ) )
             {
                 sal_uInt32  nSkip;
 
-                if ( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( pDecodedURL, nDecodedLen, "file:\\\\\\", 8 ) )
+                if ( 0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL, nDecodedLen, "file:\\\\\\", 8 ) )
                     nSkip = 8;
                 else if (
-                    0 == rtl_ustr_ascii_shortenedCompare_WithLength( pDecodedURL, nDecodedLen, "file:\\\\localhost\\", 17 ) ||
-                    0 == rtl_ustr_ascii_shortenedCompare_WithLength( pDecodedURL, nDecodedLen, "file:\\\\127.0.0.1\\", 17 )
+                    0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL, nDecodedLen, "file:\\\\localhost\\", 17 ) ||
+                    0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL, nDecodedLen, "file:\\\\127.0.0.1\\", 17 )
                 )
                     nSkip = 17;
                 else
