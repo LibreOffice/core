@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:34:48 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:42:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -454,7 +454,7 @@ void OAppDetailPageHelper::getSelectionElementNames( ::std::vector< ::rtl::OUStr
     if ( getElementType() == E_TABLE )
     {
         const OTableTreeListBox& rTreeView = dynamic_cast< const OTableTreeListBox& >( *m_pLists[nPos] );
-        sComposedName = rTreeView.getQualifiedTableName( _pEntry );
+        sComposedName = rTreeView.getQualifiedTableName( pEntry );
     }
     else
     {
