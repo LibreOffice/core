@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Paths.xcu,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:36:47 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:40:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,6 +191,11 @@
         </node>
 
         <node oor:name="UserConfig" oor:op="fuse" oor:mandatory="true">
+            <prop oor:name="IsSinglePath" oor:finalized="true">
+                <value>true</value>
+            </prop>
+            <node oor:name="InternalPaths" oor:finalized="true" />
+            <prop oor:name="UserPaths" oor:finalized="true" />
             <prop oor:name="WritePath">
                      <value>$(userurl)/config</value>
             </prop>
