@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:18:22 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:42:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -569,7 +569,7 @@ BOOL View::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPresOb
     BOOL bSelected = FALSE;
     BOOL bMasterPage = FALSE;
     long nMark;
-    long nMarkMax = pMarkList->GetMarkCount() - 1;
+    long nMarkMax = long(pMarkList->GetMarkCount()) - 1;
 
     for (nMark = nMarkMax; (nMark >= 0) && !bSelected; nMark--)
     {
