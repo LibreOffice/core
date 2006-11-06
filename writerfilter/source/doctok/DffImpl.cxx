@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DffImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:29 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-06 10:48:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,9 +350,14 @@ rtl::OUString DffBSE::get_blipname()
 
 WW8BinaryObjReference::Pointer_t DffBSE::get_binary()
 {
-    return WW8BinaryObjReference::Pointer_t
-        (new WW8BinaryObjReference(this, WW8FBSE::getSize() + 0x8,
-                                   getCount() - WW8FBSE::getSize() - 0x8));
+    WW8BinaryObjReference::Pointer_t pResult;
+
+    if (getCount() > 0x45)
+        pResult = WW8BinaryObjReference::Pointer_t
+            (new WW8BinaryObjReference(this, 0x45,
+                                       getCount() - 0x45));
+
+    return pResult;
 }
 
 // WW8FOPTE
