@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:05:28 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:44:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,7 +305,7 @@ void X11GlyphPeer::SetDisplay( const SalDisplay& rSalDisplay )
 enum { INFO_EMPTY=0, INFO_PIXMAP, INFO_XRENDER, INFO_RAWBMP, INFO_MULTISCREEN };
 static const Glyph NO_GLYPHID = 0;
 static RawBitmap* const NO_RAWBMP = NULL;
-static const Pixmap NO_PIXMAP = 0;
+static const Pixmap NO_PIXMAP = ~0;
 
 // ---------------------------------------------------------------------------
 
@@ -313,18 +313,31 @@ MultiScreenGlyph* X11GlyphPeer::PrepareForMultiscreen( ExtGlyphData& rEGD ) cons
 {
     // prepare to store screen specific pixmaps
     MultiScreenGlyph* pMSGlyph = (MultiScreenGlyph*)new char[ mnExtByteCount ];
+
+    // init the glyph formats
     pMSGlyph->mpRawBitmap = NO_RAWBMP;
     pMSGlyph->maXRGlyphId = NO_GLYPHID;
     for( int i = 0; i < mnMaxScreens; ++i )
         pMSGlyph->maPixmaps[i] = NO_PIXMAP;
+    // reuse already available glyph formats
     if( rEGD.meInfo == INFO_XRENDER )
         pMSGlyph->maXRGlyphId = reinterpret_cast<Glyph>(rEGD.mpData);
     else if( rEGD.meInfo == INFO_RAWBMP )
         pMSGlyph->mpRawBitmap = reinterpret_cast<RawBitmap*>(rEGD.mpData);
     else if( rEGD.meInfo == INFO_PIXMAP )
-        pMSGlyph->maPixmaps[ mnDefaultScreen ] = reinterpret_cast<Pixmap>(rEGD.mpData);
+    {
+        Pixmap aPixmap = reinterpret_cast<Pixmap>(rEGD.mpData);
+        if( aPixmap != None )
+            // pixmap for the default screen is available
+            pMSGlyph->maPixmaps[ mnDefaultScreen ] = aPixmap;
+        else // empty pixmap for all screens is available
+            for( int i = 0; i < mnMaxScreens; ++i )
+                pMSGlyph->maPixmaps[ i ] = None;
+    }
+    // enable use of multiscreen glyph
     rEGD.mpData = (void*)pMSGlyph;
     rEGD.meInfo = INFO_MULTISCREEN;
+
     return pMSGlyph;
  }
 
@@ -504,6 +517,8 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& /*rServerFont*/, GlyphData& rGlyph
                 {
                     if( pMSGlyph->maPixmaps[i] == NO_PIXMAP )
                         continue;
+                    if( pMSGlyph->maPixmaps[i] == None )
+                        continue;
                     XFreePixmap( mpDisplay, pMSGlyph->maPixmaps[i] );
                     mnBytesUsed -= nHeight * ((nWidth + 7) >> 3);
                 }
@@ -610,6 +625,7 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex, int nR
     Pixmap aPixmap = GetPixmap( rGlyphData, nReqScreen );
     if( aPixmap == NO_PIXMAP )
     {
+        aPixmap = None;
         if( rServerFont.GetGlyphBitmap1( nGlyphIndex, maRawBitmap ) )
         {
             // #94666# circumvent bug in some X11 systems, e.g. XF410.LynxEM.v163
@@ -697,8 +713,6 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex, int nR
 
             if( aPixmap == NO_PIXMAP )
                 aPixmap = None;
-
-            SetPixmap( rGlyphData, aPixmap, nReqScreen );
         }
     }
 
