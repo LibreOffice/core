@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:15:29 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:53:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,11 @@ SV_DECL_VARARR( RTFColorTbl, Color, 5, 8 )
 SV_IMPL_VARARR( RTFColorTbl, Color )
 
 
-SwRTFWriter::SwRTFWriter( const String& rFltName, const String& rBaseURL ) : eCurrentCharSet(DEF_ENCODING)
+SwRTFWriter::SwRTFWriter( const String& rFltName, const String & rBaseURL ) :
+    eDefaultEncoding(
+        rtl_getTextEncodingFromWindowsCharset(
+            sw::ms::rtl_TextEncodingToWinCharset(DEF_ENCODING))),
+    eCurrentEncoding(eDefaultEncoding)
 {
     SetBaseURL( rBaseURL );
     // schreibe Win-RTF-HelpFileFmt
@@ -635,7 +639,7 @@ void SwRTFWriter::MakeHeader()
                 sOut += DB_DELIM;
                 sOut += (String)aData.sCommand;
                 RTFOutFuncs::Out_String( Strm(), sOut,
-                                        DEF_ENCODING, bWriteHelpFmt );
+                                        eDefaultEncoding, bWriteHelpFmt );
                 Strm() << "}{" << sRTF_FLDRSLT << " }}";
                 break;
             }
@@ -671,20 +675,20 @@ void SwRTFWriter::OutUnicodeSafeRecord(const sal_Char *pToken,
 {
     if (rContent.Len())
     {
-        bool bNeedUnicodeWrapper = !CharsetSufficient(rContent, DEF_ENCODING);
+        bool bNeedUnicodeWrapper = !CharsetSufficient(rContent, eDefaultEncoding);
 
         if (bNeedUnicodeWrapper)
             Strm() << '{' << sRTF_UPR;
 
         Strm() << '{' << pToken << ' ';
-        OutRTF_AsByteString(*this, rContent);
+        OutRTF_AsByteString(*this, rContent, eDefaultEncoding);
         Strm() << '}';
 
         if (bNeedUnicodeWrapper)
         {
             OutComment(*this, sRTF_UD);
             Strm() << '{' << pToken << ' ';
-            RTFOutFuncs::Out_String(Strm(), rContent, DEF_ENCODING,
+            RTFOutFuncs::Out_String(Strm(), rContent, eDefaultEncoding,
                 bWriteHelpFmt);
             Strm() << "}}}";
         }
@@ -979,7 +983,7 @@ void RTF_WrtRedlineAuthor::Write(Writer &rWrt)
     {
         rRTFWrt.Strm() << '{';
         // rWrt.bWriteHelpFmt
-        RTFOutFuncs::Out_String( rRTFWrt.Strm(), *aIter, DEF_ENCODING,  rRTFWrt.bWriteHelpFmt  ) << ";}";
+        RTFOutFuncs::Out_String( rRTFWrt.Strm(), *aIter, rRTFWrt.eDefaultEncoding,  rRTFWrt.bWriteHelpFmt  ) << ";}";
     }
     rRTFWrt.Strm() << '}' << SwRTFWriter::sNewLine;
 }
@@ -1153,7 +1157,7 @@ void SwRTFWriter::OutRTFStyleTab()
         }
 
         Strm() << ' ';
-        RTFOutFuncs::Out_String( Strm(), XlateFmtName( pColl->GetName(), GET_POOLID_TXTCOLL ), DEF_ENCODING,
+        RTFOutFuncs::Out_String( Strm(), XlateFmtName( pColl->GetName(), GET_POOLID_TXTCOLL ), eDefaultEncoding,
                         bWriteHelpFmt ) << ";}" << SwRTFWriter::sNewLine;
     }
 
@@ -1180,7 +1184,7 @@ void SwRTFWriter::OutRTFStyleTab()
                 }
 
         Strm() << ' ';
-        RTFOutFuncs::Out_String( Strm(), XlateFmtName( pFmt->GetName(), GET_POOLID_CHRFMT ), DEF_ENCODING,
+        RTFOutFuncs::Out_String( Strm(), XlateFmtName( pFmt->GetName(), GET_POOLID_CHRFMT ), eDefaultEncoding,
                     bWriteHelpFmt ) << ";}" << SwRTFWriter::sNewLine;
     }
 
@@ -1351,13 +1355,13 @@ void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
             else
             {
                 Strm() << ' ';
-                OutRTF_AsByteString( *this, pBookmark->GetShortName() );
+                OutRTF_AsByteString( *this, pBookmark->GetShortName(), eDefaultEncoding );
             }
             Strm() << '}';
         }
         OutComment( *this, sRTF_BKMKSTART ) << ' ';
         RTFOutFuncs::Out_String( Strm(), pBookmark->GetName(),
-                                DEF_ENCODING, bWriteHelpFmt ) << '}';
+                                eDefaultEncoding, bWriteHelpFmt ) << '}';
     }
 
     if (pEndPos->nNode.GetIndex() == pCurPam->GetPoint()->nNode.GetIndex() &&
@@ -1380,13 +1384,13 @@ void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
             else
             {
                 Strm() << ' ';
-                OutRTF_AsByteString( *this, pBookmark->GetShortName() );
+                OutRTF_AsByteString( *this, pBookmark->GetShortName(), eDefaultEncoding );
             }
             Strm() << '}';
         }
         OutComment( *this, sRTF_BKMKEND ) << ' ';
         RTFOutFuncs::Out_String( Strm(), pBookmark->GetName(),
-                                DEF_ENCODING, bWriteHelpFmt ) << '}';
+                                eDefaultEncoding, bWriteHelpFmt ) << '}';
 
         if( ++nBkmkTabPos >= pDoc->getBookmarks().Count() )
             nBkmkTabPos = USHRT_MAX;
@@ -1521,7 +1525,7 @@ void SwRTFWriter::OutPageDesc()
                 break;
         Strm() << sRTF_PGDSCNXT;
         OutULong( i ) << ' ';
-        RTFOutFuncs::Out_String( Strm(), XlateFmtName( rPageDesc.GetName(), GET_POOLID_PAGEDESC ), DEF_ENCODING,
+        RTFOutFuncs::Out_String( Strm(), XlateFmtName( rPageDesc.GetName(), GET_POOLID_PAGEDESC ), eDefaultEncoding,
                     bWriteHelpFmt ) << ";}";
     }
     Strm() << '}' << SwRTFWriter::sNewLine;
