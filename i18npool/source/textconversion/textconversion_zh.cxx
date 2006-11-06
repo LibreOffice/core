@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconversion_zh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:24:29 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:41:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                                     word.getLength() / conversions[0].getLength());
                             newStr->buffer[count++] = conversions[0][current++];
                         }
-                        offset[count-1] = nStartPos + currPos + word.getLength() - 1;
+                        // offset[count-1] = nStartPos + currPos + word.getLength() - 1;
                     } else {
                         while (current < conversions[0].getLength())
                             newStr->buffer[count++] = conversions[0][current++];
@@ -205,7 +205,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                                     word.getLength() / convertedLength);
                                 newStr->buffer[count++] = wordData[current++];
                             }
-                            offset[count-1]=nStartPos + currPos + word.getLength() - 1;
+                            // offset[count-1]=nStartPos + currPos + word.getLength() - 1;
                         } else {
                             while (wordData[current])
                                 newStr->buffer[count++] = wordData[current++];
