@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSynchronousFrameLoader.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:27:33 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:53:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ published interface XSynchronousFrameLoader: com::sun::star::uno::XInterface
         <p>
         No notifications (neither to the frame or the caller) must be notified.
         Because it's a synchronous process this cancel call can be forced by
-        another thread the the loader thread only. Method
+        another thread the loader thread only. Method
         <member>XSynchronousFrameLoader::load()</member> must return <FALSE/>
         then and caller of this method <member>XSynchronousFrameLoader::cancel()</member>
         already knows the state ...
