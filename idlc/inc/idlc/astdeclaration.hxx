@@ -4,9 +4,9 @@
  *
  *  $RCSfile: astdeclaration.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:56:00 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:40:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,9 +132,11 @@ public:
 
     sal_Bool hasAncestor(AstDeclaration* pDecl);
 
+    void setPublished() { m_bPublished = true; }
     bool isPublished() const { return m_bPublished; }
 
     virtual sal_Bool dump(RegistryKey& rKey);
+
 protected:
     ::rtl::OString      m_localName;
     ::rtl::OString      m_scopedName;       // full qualified name
