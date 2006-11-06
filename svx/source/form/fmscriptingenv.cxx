@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmscriptingenv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-30 08:47:52 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:41:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,9 +85,6 @@
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
 #endif
-#ifndef COMPHELPER_ASYNCNOTIFICATION_HXX
-#include <comphelper/asyncnotification.hxx>
-#endif
 
 #include <boost/shared_ptr.hpp>
 
@@ -118,8 +115,6 @@ namespace svxform
 
     class FormScriptingEnvironment;
 
-    typedef ::comphelper::EventHolder< ScriptEvent >    ScriptEventDescription;
-
     //====================================================================
     //= FormScriptListener
     //====================================================================
@@ -129,12 +124,10 @@ namespace svxform
     /** implements the XScriptListener interface, is used by FormScriptingEnvironment
     */
     class FormScriptListener    :public FormScriptListener_Base
-                                ,public ::comphelper::IEventProcessor
     {
     private:
         ::osl::Mutex                                            m_aMutex;
         ::rtl::Reference< FormScriptingEnvironment >            m_pScriptExecutor;
-        ::rtl::Reference< ::comphelper::AsyncEventNotifier >    m_pNotifier;
 
     public:
         FormScriptListener( const ::rtl::Reference< FormScriptingEnvironment >& _pScriptExecutor );
@@ -147,11 +140,6 @@ namespace svxform
 
         // lifetime control
         void SAL_CALL dispose();
-
-        // IEventProcessor
-        virtual void processEvent( const ::comphelper::AnyEvent& _rEvent );
-        virtual void SAL_CALL acquire() throw();
-        virtual void SAL_CALL release() throw();
 
     protected:
         ~FormScriptListener();
@@ -189,6 +177,9 @@ namespace svxform
                 m_pScriptExecutor is not <NULL/>.
         */
         void    impl_doFireScriptEvent_nothrow( ::osl::ClearableMutexGuard& _rGuard, const ScriptEvent& _rEvent, Any* _pSyncronousResult );
+
+    private:
+        DECL_LINK( OnAsyncScriptEvent, ScriptEvent* );
     };
 
     //====================================================================
@@ -237,7 +228,6 @@ namespace svxform
     //--------------------------------------------------------------------
     FormScriptListener::FormScriptListener( const ::rtl::Reference< FormScriptingEnvironment >& _pScriptExecutor )
         :m_pScriptExecutor( _pScriptExecutor )
-        ,m_pNotifier( NULL )
     {
     }
 
@@ -292,12 +282,8 @@ namespace svxform
             return;
         }
 
-        if ( !m_pNotifier.is() )
-        {
-            m_pNotifier.set( new ::comphelper::AsyncEventNotifier );
-            m_pNotifier->create();
-        }
-        m_pNotifier->addEvent( new ScriptEventDescription( _rEvent ), this );
+        acquire();
+        Application::PostUserEvent( LINK( this, FormScriptListener, OnAsyncScriptEvent ), new ScriptEvent( _rEvent ) );
     }
 
     //--------------------------------------------------------------------
@@ -322,40 +308,28 @@ namespace svxform
     void SAL_CALL FormScriptListener::dispose()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-
-        if ( m_pNotifier.is() )
-        {
-            m_pNotifier->removeEventsForProcessor( this );
-            m_pNotifier->terminate();
-            m_pNotifier = NULL;
-        }
-
         m_pScriptExecutor = NULL;
     }
 
     //--------------------------------------------------------------------
-    void FormScriptListener::processEvent( const ::comphelper::AnyEvent& _rEvent )
+    IMPL_LINK( FormScriptListener, OnAsyncScriptEvent, ScriptEvent*, _pEvent )
     {
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
-        if ( impl_isDisposed_nothrow() )
-            return;
+        OSL_PRECOND( _pEvent != NULL, "FormScriptListener::OnAsyncScriptEvent: invalid event!" );
+        if ( !_pEvent )
+            return 1L;
 
-        const ScriptEventDescription& rScriptEvent = static_cast< const ScriptEventDescription& >( _rEvent );
-        impl_doFireScriptEvent_nothrow( aGuard, rScriptEvent.getEventObject(), NULL );
+        {
+            ::osl::ClearableMutexGuard aGuard( m_aMutex );
+
+            if ( !impl_isDisposed_nothrow() )
+                impl_doFireScriptEvent_nothrow( aGuard, *_pEvent, NULL );
+        }
+
+        delete _pEvent;
+        // we acquired ourself immediately before posting the event
+        release();
+        return 0L;
     }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL FormScriptListener::acquire() throw()
-    {
-        FormScriptListener_Base::acquire();
-    }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL FormScriptListener::release() throw()
-    {
-        FormScriptListener_Base::release();
-    }
-
 
     //====================================================================
     //= FormScriptingEnvironment
