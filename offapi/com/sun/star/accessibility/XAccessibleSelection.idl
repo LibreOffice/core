@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XAccessibleSelection.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:33:05 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:51:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ published interface XAccessibleSelection : ::com::sun::star::uno::XInterface
 
         @param nChildIndex
             Index of the child which is to add to the selection.  This index
-            referes to all the the children of this object.
+            referes to all the children of this object.
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the given index does not lie in the valid range of 0 up to
             the result of
