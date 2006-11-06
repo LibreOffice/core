@@ -330,8 +330,86 @@
   	if (environ == NULL)
   		environ = *_NSGetEnviron();
   #endif
-*** misc/Python-2.3.4/PCbuild/_bsddb.dep	Thu Jun 29 12:10:03 2006
---- misc/build/Python-2.3.4/PCbuild/_bsddb.dep	Thu Jun 29 11:02:19 2006
+*** misc/Python-2.3.4/Modules/readline.c	Thu Nov 13 08:42:13 2003
+--- misc/build/Python-2.3.4/Modules/readline.c	Thu Oct 19 20:01:01 2006
+***************
+*** 93,99 ****
+  	return Py_None;
+  }
+  
+! static int history_length = -1; /* do not truncate history by default */
+  PyDoc_STRVAR(doc_read_history_file,
+  "read_history_file([filename]) -> None\n\
+  Load a readline history file.\n\
+--- 93,99 ----
+  	return Py_None;
+  }
+  
+! static int _history_length = -1; /* do not truncate history by default */
+  PyDoc_STRVAR(doc_read_history_file,
+  "read_history_file([filename]) -> None\n\
+  Load a readline history file.\n\
+***************
+*** 109,116 ****
+  	if (!PyArg_ParseTuple(args, "|z:write_history_file", &s))
+  		return NULL;
+  	errno = write_history(s);
+! 	if (!errno && history_length >= 0)
+! 		history_truncate_file(s, history_length);
+  	if (errno)
+  		return PyErr_SetFromErrno(PyExc_IOError);
+  	Py_INCREF(Py_None);
+--- 109,116 ----
+  	if (!PyArg_ParseTuple(args, "|z:write_history_file", &s))
+  		return NULL;
+  	errno = write_history(s);
+! 	if (!errno && _history_length >= 0)
+! 		history_truncate_file(s, _history_length);
+  	if (errno)
+  		return PyErr_SetFromErrno(PyExc_IOError);
+  	Py_INCREF(Py_None);
+***************
+*** 128,137 ****
+  static PyObject*
+  set_history_length(PyObject *self, PyObject *args)
+  {
+! 	int length = history_length;
+  	if (!PyArg_ParseTuple(args, "i:set_history_length", &length))
+  		return NULL;
+! 	history_length = length;
+  	Py_INCREF(Py_None);
+  	return Py_None;
+  }
+--- 128,137 ----
+  static PyObject*
+  set_history_length(PyObject *self, PyObject *args)
+  {
+! 	int length = _history_length;
+  	if (!PyArg_ParseTuple(args, "i:set_history_length", &length))
+  		return NULL;
+! 	_history_length = length;
+  	Py_INCREF(Py_None);
+  	return Py_None;
+  }
+***************
+*** 148,154 ****
+  static PyObject*
+  get_history_length(PyObject *self, PyObject *noarg)
+  {
+! 	return PyInt_FromLong(history_length);
+  }
+  
+  PyDoc_STRVAR(get_history_length_doc,
+--- 148,154 ----
+  static PyObject*
+  get_history_length(PyObject *self, PyObject *noarg)
+  {
+! 	return PyInt_FromLong(_history_length);
+  }
+  
+  PyDoc_STRVAR(get_history_length_doc,
+*** misc/Python-2.3.4/PCbuild/_bsddb.dep	Thu Oct 19 20:05:08 2006
+--- misc/build/Python-2.3.4/PCbuild/_bsddb.dep	Thu Oct 19 20:00:02 2006
 ***************
 *** 1 ****
 ! dummy
