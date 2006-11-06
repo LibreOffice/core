@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:12:25 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:40:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1052,11 +1052,16 @@ void DbLimitedLengthField::implAdjustGenericFieldSetting( const Reference< XProp
     {
         sal_Int16 nMaxLen = 0;
         _rxModel->getPropertyValue( FM_PROP_MAXTEXTLEN ) >>= nMaxLen;
-        static_cast< Edit* >( m_pWindow )->SetMaxTextLen( nMaxLen );
-
-        if ( m_pPainter )
-            static_cast< Edit* >( m_pPainter )->SetMaxTextLen( nMaxLen );
+        implSetMaxTextLen( nMaxLen );
     }
+}
+
+//------------------------------------------------------------------------------
+void DbLimitedLengthField::implSetEffectiveMaxTextLen( sal_Int16 _nMaxLen )
+{
+    dynamic_cast< Edit* >( m_pWindow )->SetMaxTextLen( _nMaxLen );
+    if ( m_pPainter )
+        dynamic_cast< Edit* >( m_pPainter )->SetMaxTextLen( _nMaxLen );
 }
 
 //==============================================================================
@@ -1226,6 +1231,14 @@ sal_Bool DbTextField::commitControl()
     return sal_True;
 }
 
+//------------------------------------------------------------------------------
+void DbTextField::implSetEffectiveMaxTextLen( sal_Int16 _nMaxLen )
+{
+    if ( m_pEdit )
+        m_pEdit->SetMaxTextLen( _nMaxLen );
+    if ( m_pPainterImplementation )
+        m_pPainterImplementation->SetMaxTextLen( _nMaxLen );
+}
 
 //==============================================================================
 //= DbFormattedField
@@ -2038,7 +2051,7 @@ DbCurrencyField::DbCurrencyField(DbGridColumn& _rColumn)
 void DbCurrencyField::implAdjustGenericFieldSetting( const Reference< XPropertySet >& _rxModel )
 {
     DBG_ASSERT( m_pWindow, "DbCurrencyField::implAdjustGenericFieldSetting: not to be called without window!" );
-    DBG_ASSERT( _rxModel.is(), "DbCurrencyField::1: invalid model!" );
+    DBG_ASSERT( _rxModel.is(), "DbCurrencyField::implAdjustGenericFieldSetting: invalid model!" );
     if ( m_pWindow && _rxModel.is() )
     {
         m_nScale                = getINT16( _rxModel->getPropertyValue( FM_PROP_DECIMAL_ACCURACY ) );
@@ -3574,9 +3587,6 @@ IMPL_LINK( FmXEditCell, OnTextChanged, void*, EMPTYARG )
 }
 
 /*************************************************************************/
-//SMART_UNO_IMPLEMENTATION(FmXCheckBoxCell, FmXDataCell);
-
-
 DBG_NAME(FmXCheckBoxCell);
 //------------------------------------------------------------------------------
 FmXCheckBoxCell::FmXCheckBoxCell(DbGridColumn* pColumn, DbCellControl* pControl)
