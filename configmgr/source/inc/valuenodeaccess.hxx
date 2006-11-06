@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valuenodeaccess.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:02:20 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:49:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ namespace configmgr
 
         inline
         NodeAccess::Name ValueNodeAccess::getName() const
-        { return NodeAccess::wrapName( data().info.getName(m_aAccessor) ); }
+        { return NodeAccess::wrapName( data().info.getName() ); }
 
         inline
         NodeAccess::Attributes ValueNodeAccess::getAttributes() const
