@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_textcvt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:01:14 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:53:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2431,6 +2431,18 @@ void Test::testComplex() {
               5,
               false,
               false,
+              true,
+              false,
+              RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
+
+            // Bug #i62310#:
+            { RTL_TEXTENCODING_SHIFT_JIS,
+              RTL_CONSTASCII_STRINGPARAM(
+                  "\xF0\x40\xF0\x7E\xF0\x80\xF0\xFC\xF1\x40\xF9\xFC"),
+              { 0xE000, 0xE03E, 0xE03F, 0xE0BB, 0xE0BC, 0xE757 },
+              6,
+              true,
+              true,
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR }
