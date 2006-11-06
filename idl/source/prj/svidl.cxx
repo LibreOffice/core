@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svidl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:49:42 $
+ *  last change: $Author: kz $ $Date: 2006-11-06 14:54:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,72 +326,94 @@ int cdecl main ( int argc, char ** argv)
     {
         BOOL bErr = FALSE;
         BOOL bDoMove = aCommand.aTargetFile.Len() == 0;
-        String aErrFile;
+        String aErrFile, aErrFile2;
         if( !bErr && aCommand.aListFile.Len() )
         {
             bErr |= !FileMove_Impl( aCommand.aListFile, aTmpListFile, bDoMove );
-            if( bErr )
+            if( bErr ) {
                 aErrFile = aCommand.aListFile;
+                aErrFile2 = aTmpListFile;
+            }
         }
         if( !bErr && aCommand.aSlotMapFile.Len() )
         {
             bErr |= !FileMove_Impl( aCommand.aSlotMapFile, aTmpSlotMapFile, bDoMove );
-            if( bErr )
+            if( bErr ) {
                 aErrFile = aCommand.aSlotMapFile;
+                aErrFile2 = aTmpSlotMapFile;
+            }
         }
         if( !bErr && aCommand.aSfxItemFile.Len() )
         {
             bErr |= !FileMove_Impl( aCommand.aSfxItemFile, aTmpSfxItemFile, bDoMove );
-            if( bErr )
+            if( bErr ) {
                 aErrFile = aCommand.aSfxItemFile;
+                aErrFile2 = aTmpSfxItemFile;
+            }
         }
         if( !bErr && aCommand.aDataBaseFile.Len() )
         {
             bErr |= !FileMove_Impl( aCommand.aDataBaseFile, aTmpDataBaseFile, bDoMove );
-            if( bErr )
+            if( bErr ) {
                 aErrFile = aCommand.aDataBaseFile;
+                aErrFile2 = aTmpDataBaseFile;
+            }
         }
         if( !bErr && aCommand.aCallingFile.Len() )
         {
             bErr |= !FileMove_Impl( aCommand.aCallingFile, aTmpCallingFile, bDoMove );
-            if( bErr )
+            if( bErr ) {
                 aErrFile = aCommand.aCallingFile;
+                aErrFile2 = aTmpCallingFile;
+            }
         }
         if( !bErr && aCommand.aCxxFile.Len() )
         {
             bErr |= !FileMove_Impl( aCommand.aCxxFile, aTmpCxxFile, bDoMove );
-            if( bErr )
+            if( bErr ) {
                 aErrFile = aCommand.aCxxFile;
+                aErrFile2 = aTmpCxxFile;
+            }
         }
         if( !bErr && aCommand.aHxxFile.Len() )
         {
             bErr |= !FileMove_Impl( aCommand.aHxxFile, aTmpHxxFile, bDoMove );
-            if( bErr )
+            if( bErr ) {
                 aErrFile = aCommand.aHxxFile;
+                aErrFile2 = aTmpHxxFile;
+            }
         }
         if( !bErr && aCommand.aHelpIdFile.Len() )
         {
             bErr |= !FileMove_Impl( aCommand.aHelpIdFile, aTmpHelpIdFile, bDoMove );
-            if( bErr )
+            if( bErr ) {
                 aErrFile = aCommand.aHelpIdFile;
+                aErrFile2 = aTmpHelpIdFile;
+            }
         }
         if( !bErr && aCommand.aCSVFile.Len() )
         {
             bErr |= !FileMove_Impl( aCommand.aCSVFile, aTmpCSVFile, bDoMove );
-            if( bErr )
+            if( bErr ) {
                 aErrFile = aCommand.aCSVFile;
+                aErrFile2 = aTmpCSVFile;
+            }
         }
         if( !bErr && aCommand.aDocuFile.Len() )
         {
             bErr |= !FileMove_Impl( aCommand.aDocuFile, aTmpDocuFile, bDoMove );
-            if( bErr )
+            if( bErr ) {
                 aErrFile = aCommand.aDocuFile;
+                aErrFile2 = aTmpDocuFile;
+            }
         }
 
         if( bErr )
         {
             nExit = -1;
-            ByteString aStr = "cannot write file: ";
+            ByteString aStr = "cannot move file from: ";
+            aStr += ByteString( aErrFile2, RTL_TEXTENCODING_UTF8 );
+            aStr += "\n              to file: ";
             aStr += ByteString( aErrFile, RTL_TEXTENCODING_UTF8 );
             fprintf( stderr, "%s\n", aStr.GetBuffer() );
         }
