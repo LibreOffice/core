@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:22:21 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:53:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1170,7 +1170,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUSTRING&               
     if ( m_pData->m_pObjectShell.Is() )
     {
         m_pData->m_sURL = rURL;
-        m_pData->m_seqArguments = uno::Sequence< beans::PropertyValue >( rArgs.getLength() );
+        uno::Sequence< beans::PropertyValue > aNewSeqArgs( rArgs.getLength() );
         sal_Int32 nNewLen = 0;
 
         for ( sal_Int32 nInd = 0; nInd < rArgs.getLength(); nInd++ )
@@ -1194,11 +1194,13 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUSTRING&               
             else if ( !rArgs[nInd].Name.equalsAscii( "Stream" ) && !rArgs[nInd].Name.equalsAscii( "InputStream" ) )
             {
                 // TODO/LATER: all the parameters that are accepted by ItemSet of the DocShell must be ignored here
-                m_pData->m_seqArguments[nNewLen++] = rArgs[nInd];
+                aNewSeqArgs[nNewLen++] = rArgs[nInd];
             }
         }
 
-        m_pData->m_seqArguments.realloc( nNewLen );
+        aNewSeqArgs.realloc( nNewLen );
+
+        m_pData->m_seqArguments = aNewSeqArgs;
 
         if( m_pData->m_pObjectShell->GetMedium() )
         {
