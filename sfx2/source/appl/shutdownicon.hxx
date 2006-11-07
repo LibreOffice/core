@@ -78,9 +78,13 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         oslGenericFunction m_pDeInitSystray;
         ::osl::Module  *m_pPlugin;
 
+        bool m_bInitialized;
         void initSystray();
         void deInitSystray();
 
+        static bool LoadModule( osl::Module **pModule,
+                                oslGenericFunction *pInit,
+                                oslGenericFunction *pDeInit );
         static void EnterModalMode();
         static void LeaveModalMode();
         static rtl::OUString getShortcutName();
@@ -95,6 +99,7 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         SFX_DECL_XSERVICEINFO
 
         static ShutdownIcon* getInstance();
+        static ShutdownIcon* createInstance();
 
         static void terminateDesktop();
         static void addTerminateListener();
@@ -107,6 +112,8 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         static void SetAutostart( bool bActivate );
         static bool GetAutostart();
         static bool bModalMode;
+
+        void init() throw( ::com::sun::star::uno::Exception );
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >
                     GetWrapperFactory( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSMgr );
