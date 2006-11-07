@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-06 10:40:01 $
+#   last change: $Author: kz $ $Date: 2006-11-07 15:32:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,7 @@ RESLIB1SRSFILES=$(SFXSRSLIST)
 
 # gtk quick-starter
 .IF "$(GUI)"=="UNX"
-.IF "$(ENABLE_GTK)" != ""
+.IF "$(ENABLE_SYSTRAY_GTK)"=="TRUE"
 PKGCONFIG_MODULES=gtk+-2.0
 .INCLUDE: pkg_config.mk
 CFLAGS+=$(PKGCONFIG_CFLAGS)
@@ -158,7 +158,7 @@ SHL3STDLIBS+=$(PKGCONFIG_LIBS:s/ -lpangoxft-1.0//)
 SHL3SONAME+=-z nodefs
 SHL3NOCHECK=TRUE
 .ENDIF          # "$(PKGCONFIG_ROOT)"!=""
-.ENDIF # "$(ENABLE_GTK)" != ""
+.ENDIF # "$(ENABLE_SYSTRAY_GTK)"=="TRUE"
 .ENDIF # "$(GUI)"=="UNX"
 
 # --- Targets ------------------------------------------------------
