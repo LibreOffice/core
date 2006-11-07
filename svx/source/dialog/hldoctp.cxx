@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:14:28 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:49:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,7 +235,11 @@ IMPL_LINK ( SvxHyperlinkDocTp, ClickFileopenHdl_Impl, void *, EMPTYARG )
         aDlg.SetDisplayDirectory( aOldURL );
     }
 
-    if ( aDlg.Execute() == ERRCODE_NONE )
+    DisableClose( sal_True );
+    ErrCode nError = aDlg.Execute();
+    DisableClose( sal_False );
+
+    if ( ERRCODE_NONE == nError )
     {
         String aURL( aDlg.GetPath() );
         String aPath;
