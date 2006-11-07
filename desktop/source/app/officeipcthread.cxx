@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:07:16 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:55:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -788,8 +788,8 @@ void SAL_CALL OfficeIPCThread::run()
                 delete pRequest;
                 pRequest = NULL;
             }
-            if ((( aArguments.CompareTo( sc_aShowSequence, sc_nShSeqLength ) == COMPARE_EQUAL ) ||
-                !bDocRequestSent ) && !bAcceptorRequest )
+            if (( aArguments.CompareTo( sc_aShowSequence, sc_nShSeqLength ) == COMPARE_EQUAL ) ||
+                aArguments.Len() == 0 )
             {
                 // no document was sent, just bring Office to front
                 ApplicationEvent* pAppEvent =
