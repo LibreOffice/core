@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attributelist.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:41:10 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:49:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_comphelper.hxx"
 
 #ifndef _ATTRIBUTE_LIST_HXX
 #include <comphelper/attributelist.hxx>
