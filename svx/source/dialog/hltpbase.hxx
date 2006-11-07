@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hltpbase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:15:10 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:50:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,6 +170,8 @@ private:
     Edit                *mpEdText;
     ImageButton         *mpBtScript;
 
+    sal_Bool            mbIsCloseDisabled;
+
 protected:
     Window*             mpDialog;
 
@@ -200,6 +202,8 @@ protected:
     BOOL            FileExists( const INetURLObject& rURL );
     static String   GetSchemeFromURL( String aStrURL );
 
+    inline void     DisableClose( sal_Bool _bDisable ) { mbIsCloseDisabled = _bDisable; }
+
 public:
     SvxHyperlinkTabPageBase ( Window *pParent, const ResId &rResId, const SfxItemSet& rItemSet);
     virtual ~SvxHyperlinkTabPageBase ();
@@ -218,8 +222,9 @@ public:
     Size GetSizeExtraWnd ()       { return ( mpMarkWnd->GetSizePixel() ); }
     BOOL MoveToExtraWnd ( Point aNewPos, BOOL bDisConnectDlg = FALSE );
 
-    virtual void ActivatePage();
-    virtual void DeactivatePage();
+    virtual void        ActivatePage();
+    virtual void        DeactivatePage();
+    virtual sal_Bool    QueryClose();
 
 protected:
     virtual BOOL ShouldOpenMarkWnd();
@@ -237,6 +242,5 @@ protected:
     const BOOL IsHTMLDoc() const;
 };
 
-
-
 #endif // _SVX_TABBASE_HYPERLINK_HXX
+
