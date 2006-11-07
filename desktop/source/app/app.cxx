@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.198 $
+ *  $Revision: 1.199 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:54:44 $
+ *  last change: $Author: rt $ $Date: 2006-11-07 15:29:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2636,6 +2636,7 @@ void Desktop::OpenClients()
         }
     }
 
+    sal_Bool bShutdown( sal_False );
     if ( !pArgs->IsServer() )
     {
         ProcessDocumentsRequest aRequest;
@@ -2690,9 +2691,13 @@ void Desktop::OpenClients()
             }
 
             // Process request
-            OfficeIPCThread::ExecuteCmdLineRequests( aRequest );
+            bShutdown = OfficeIPCThread::ExecuteCmdLineRequests( aRequest );
         }
     }
+
+    // Don't do anything if we have successfully called terminate at desktop
+    if ( bShutdown )
+        return;
 
     // no default document if a document was loaded by recovery or by command line or if soffice is used as server
     Reference< XFramesSupplier > xTasksSupplier(

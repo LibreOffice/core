@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeipcthread.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:12:08 $
+ *  last change: $Author: rt $ $Date: 2006-11-07 15:30:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,7 @@ class OfficeIPCThread : public vos::OThread
     static void                 BlockAllRequests();
     static sal_Bool             AreRequestsPending();
     static void                 RequestsCompleted( int n = 1 );
-    static void                 ExecuteCmdLineRequests( ProcessDocumentsRequest& );
+    static sal_Bool             ExecuteCmdLineRequests( ProcessDocumentsRequest& );
 
     // return FALSE if second office
     static Status               EnableOfficeIPCThread();

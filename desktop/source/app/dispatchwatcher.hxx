@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatchwatcher.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:08:33 $
+ *  last change: $Author: rt $ $Date: 2006-11-07 15:30:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame:
         static DispatchWatcher* GetDispatchWatcher();
 
         // execute new dispatch request
-        void executeDispatchRequests( const DispatchList& aDispatches );
+        sal_Bool executeDispatchRequests( const DispatchList& aDispatches );
 
     private:
         DispatchWatcher();

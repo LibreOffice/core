@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:06:07 $
+ *  last change: $Author: rt $ $Date: 2006-11-07 15:29:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,7 @@ DispatchWatcher::~DispatchWatcher()
 }
 
 
-void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequestsList )
+sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequestsList )
 {
     Reference< XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
                                                 OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
@@ -494,9 +494,11 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
             // We don't have any task open so we have to shutdown ourself!!
             Reference< XDesktop > xDesktop2( xTasksSupplier, UNO_QUERY );
             if ( xDesktop2.is() )
-                xDesktop2->terminate();
+                return xDesktop2->terminate();
         }
     }
+
+    return sal_False;
 }
 
 

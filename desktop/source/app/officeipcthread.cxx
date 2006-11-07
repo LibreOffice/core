@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:55:11 $
+ *  last change: $Author: rt $ $Date: 2006-11-07 15:30:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -845,7 +845,7 @@ static void AddToDispatchList(
     }
 }
 
-void OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest )
+sal_Bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest )
 {
     ::rtl::OUString                 aEmpty;
     DispatchWatcher::DispatchList   aDispatchList;
@@ -860,6 +860,7 @@ void OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest 
     AddToDispatchList( aDispatchList, aRequest.aForceNewList, DispatchWatcher::REQUEST_FORCENEW, aEmpty, aRequest.aModule );
 
     osl::ClearableMutexGuard aGuard( GetMutex() );
+    sal_Bool bShutdown( sal_False );
 
     if ( pGlobalOfficeIPCThread )
     {
@@ -873,12 +874,14 @@ void OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest 
         aGuard.clear();
 
         // Execute dispatch requests
-        pGlobalOfficeIPCThread->mpDispatchWatcher->executeDispatchRequests( aDispatchList );
+        bShutdown = pGlobalOfficeIPCThread->mpDispatchWatcher->executeDispatchRequests( aDispatchList );
 
         // set processed flag
         if (aRequest.pcProcessed != NULL)
             aRequest.pcProcessed->set();
     }
+
+    return bShutdown;
 }
 
 }
