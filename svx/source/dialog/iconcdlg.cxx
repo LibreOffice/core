@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iconcdlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:15:52 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:50:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,6 +170,13 @@ void IconChoicePage::FillUserData()
 BOOL IconChoicePage::IsReadOnly() const
 {
     return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool IconChoicePage::QueryClose()
+{
+    return sal_True;
 }
 
 /**********************************************************************
@@ -1233,6 +1240,24 @@ void IconChoiceDialog::Start( BOOL bShow )
     if ( bShow )
         Window::Show();
 
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool IconChoiceDialog::QueryClose()
+{
+    sal_Bool bRet = sal_True;
+    const ULONG nCount = maPageList.Count();
+    for ( ULONG i = 0; i < nCount; ++i )
+    {
+        IconChoicePageData* pData = maPageList.GetObject(i);
+        if ( pData->pPage && !pData->pPage->QueryClose() )
+        {
+            bRet = sal_False;
+            break;
+        }
+    }
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
