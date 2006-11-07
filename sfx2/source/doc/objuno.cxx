@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:54:51 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 15:21:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1211,10 +1211,19 @@ void SfxStandaloneDocumentInfoObject::Clear()
 
 uno::Reference< embed::XStorage > SfxStandaloneDocumentInfoObject::GetStorage_Impl( const ::rtl::OUString& rName, sal_Bool bWrite )
 {
+    // catch unexpected exceptions under solaris
+    // Client code checks the returned reference but is not interested on error details.
+    try
+    {
     return ::comphelper::OStorageHelper::GetStorageFromURL(
                         rName,
                         bWrite ? embed::ElementModes::READWRITE : embed::ElementModes::READ,
                         _xFactory );
+    }
+    catch(const uno::Exception&)
+    {}
+
+    return uno::Reference< embed::XStorage >();
 }
 
 //-----------------------------------------------------------------------------
