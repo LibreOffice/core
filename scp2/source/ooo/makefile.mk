@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-11 09:29:42 $
+#   last change: $Author: kz $ $Date: 2006-11-07 15:32:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,10 @@ SCPDEFS+=-DGTK_TWO_FOUR
 .ENDIF
 .ENDIF
 .ENDIF			# "$(GUI)"=="UNX"
+
+.IF "$(ENABLE_SYSTRAY_GTK)" != ""
+SCPDEFS+=-DENABLE_SYSTRAY_GTK
+.ENDIF
 
 .IF "$(ENABLE_PASF)" != ""
 SCPDEFS+=-DUSE_PASF
