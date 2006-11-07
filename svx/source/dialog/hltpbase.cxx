@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:14:56 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:49:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,12 +322,13 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( Window *pParent,
     mpFtText                ( NULL ),
     mpEdText                ( NULL ),
     mpBtScript              ( NULL ),
+    mbIsCloseDisabled       ( sal_False ),
     mpDialog                ( pParent ),
     mbStdControlsInit       ( FALSE )
+
 {
     // create bookmark-window
     mpMarkWnd = new SvxHlinkDlgMarkWnd ( this );
-
 }
 
 SvxHyperlinkTabPageBase::~SvxHyperlinkTabPageBase ()
@@ -359,6 +360,11 @@ void SvxHyperlinkTabPageBase::ActivatePage()
 void SvxHyperlinkTabPageBase::DeactivatePage()
 {
     TabPage::DeactivatePage();
+}
+
+sal_Bool SvxHyperlinkTabPageBase::QueryClose()
+{
+    return !mbIsCloseDisabled;
 }
 
 void SvxHyperlinkTabPageBase::InitStdControls ()
@@ -624,7 +630,10 @@ IMPL_LINK ( SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, void *, EMPTYARG )
             GetParent()->EnableInput( TRUE );
         // <--
         // execute dlg
-        if ( RET_OK == aDlg.Execute() )
+        DisableClose( sal_True );
+        short nRet = aDlg.Execute();
+        DisableClose( sal_False );
+        if ( RET_OK == nRet )
         {
             const SfxItemSet* pOutSet = aDlg.GetOutputItemSet();
             const SfxPoolItem* pItem;
