@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:53:18 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:53:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1114,7 +1114,7 @@ SfxItemSet* SfxTabDialog::CreateInputItemSet( USHORT )
 
 {
     DBG_WARNINGFILE( "CreateInputItemSet nicht implementiert" );
-    return 0;
+    return new SfxAllItemSet( SFX_APP()->GetPool() );
 }
 
 // -----------------------------------------------------------------------
