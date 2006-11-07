@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyperdlg.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:55:05 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:48:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,31 +38,13 @@
 
 // include ---------------------------------------------------------------
 
-//CHINA001 #ifndef _SVX_HLNKITEM_HXX
-//CHINA001 #include <hlnkitem.hxx>
-//CHINA001 #endif
 #ifndef _SFX_CHILDWIN_HXX
 #include <sfx2/childwin.hxx>
-#endif
-#ifndef _SFXCTRLITEM_HXX
-#include <sfx2/ctrlitem.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX
-#include <sfx2/bindings.hxx>
-#endif
-
-#ifndef _SV_IMAGE_HXX
-#include <vcl/image.hxx>
 #endif
 
 #ifndef INCLUDED_SVXDLLAPI_H
 #include "svx/svxdllapi.h"
 #endif
-
-//CHINA001 #include "iconcdlg.hxx"
-
-
-
 
 /*************************************************************************
 |*
@@ -70,15 +52,20 @@
 |*
 \************************************************************************/
 
+class AbstractSvxHpLinkDlg;
+
 class SVX_DLLPUBLIC SvxHlinkDlgWrapper : public SfxChildWindow
 {
+private:
+    AbstractSvxHpLinkDlg*   mpDlg;
+
 public:
     SvxHlinkDlgWrapper( Window*pParent, USHORT nId,
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
     SFX_DECL_CHILDWINDOW(SvxHlinkDlgWrapper);
+    virtual sal_Bool    QueryClose();
 };
 
-
-
 #endif // _SVX_TAB_HYPERLINK_HXX
+
