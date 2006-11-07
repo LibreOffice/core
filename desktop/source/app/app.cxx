@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.197 $
+ *  $Revision: 1.198 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:03:59 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:54:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,7 +342,6 @@ using namespace ::com::sun::star::container;
 namespace css = ::com::sun::star;
 
 ResMgr*                 desktop::Desktop::pResMgr = 0;
-sal_Bool                desktop::Desktop::bSuppressOpenDefault = sal_False;
 
 namespace desktop
 {
@@ -1644,7 +1643,6 @@ void Desktop::Main()
             (!bExistsSessionData                                                   )
            )
         {
-            ::desktop::Desktop::bSuppressOpenDefault = sal_True;
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create BackingComponent" );
             Reference< XFrame > xDesktopFrame( xSMgr->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
@@ -2697,7 +2695,11 @@ void Desktop::OpenClients()
     }
 
     // no default document if a document was loaded by recovery or by command line or if soffice is used as server
-    if ( bLoaded || xFirst.is() || pArgs->IsServer() )
+    Reference< XFramesSupplier > xTasksSupplier(
+            ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+            ::com::sun::star::uno::UNO_QUERY_THROW );
+    Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY_THROW );
+    if ( xList->hasElements() || pArgs->IsServer() )
         return;
 
     if ( pArgs->IsQuickstart() || pArgs->IsInvisible() || pArgs->IsBean() )
@@ -2710,8 +2712,6 @@ void Desktop::OpenClients()
 
 void Desktop::OpenDefault()
 {
-    if (::desktop::Desktop::bSuppressOpenDefault)
-        return;
 
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::OpenDefault" );
 
@@ -2825,9 +2825,11 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 {
     if ( rAppEvent.GetEvent() == "APPEAR" && !GetCommandLineArgs()->IsInvisible() )
     {
+        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+
         // find active task - the active task is always a visible task
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFramesSupplier >
-                xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                xDesktop( xSMGR->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                 ::com::sun::star::uno::UNO_QUERY );
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xTask = xDesktop->getActiveFrame();
         if ( !xTask.is() )
@@ -2844,8 +2846,38 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             xTop->toFront();
         }
         else
+        {
             // no visible task that could be activated found
-            OpenDefault();
+            Reference< XFrame > xBackingFrame;
+            Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xDesktopFrame( xDesktop, UNO_QUERY );
+
+            xBackingFrame = xDesktopFrame->findFrame(OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0);
+            if (xBackingFrame.is())
+                xContainerWindow = xBackingFrame->getContainerWindow();
+            if (xContainerWindow.is())
+            {
+                Sequence< Any > lArgs(1);
+                lArgs[0] <<= xContainerWindow;
+                Reference< XController > xBackingComp(
+                    xSMGR->createInstanceWithArguments(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule") ), lArgs),
+                    UNO_QUERY);
+                if (xBackingComp.is())
+                {
+                    Reference< ::com::sun::star::awt::XWindow > xBackingWin(xBackingComp, UNO_QUERY);
+                    // Attention: You MUST(!) call setComponent() before you call attachFrame().
+                    // Because the backing component set the property "IsBackingMode" of the frame
+                    // to true inside attachFrame(). But setComponent() reset this state everytimes ...
+                    xBackingFrame->setComponent(xBackingWin, xBackingComp);
+                    xBackingComp->attachFrame(xBackingFrame);
+                    xContainerWindow->setVisible(sal_True);
+
+                    Window* pCompWindow = VCLUnoHelper::GetWindow(xBackingFrame->getComponentWindow());
+                    if (pCompWindow)
+                        pCompWindow->Update();
+                }
+            }
+        }
     }
     else if ( rAppEvent.GetEvent() == "QUICKSTART" && !GetCommandLineArgs()->IsInvisible()  )
     {
