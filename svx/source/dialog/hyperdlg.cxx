@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyperdlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:24:15 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:50:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,15 +79,17 @@ struct MyStruct
 SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* _pParent, USHORT nId,
                                                 SfxBindings* pBindings,
                                                 SfxChildWinInfo* pInfo ) :
-    SfxChildWindow( _pParent, nId )
+    SfxChildWindow( _pParent, nId ),
+
+    mpDlg( NULL )
 
 {
     //CHINA001 pWindow = new SvxHpLinkDlg( _pParent, pBindings );
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-    AbstractSvxHpLinkDlg* pDlg = pFact->CreateSvxHpLinkDlg( _pParent, pBindings, ResId(SID_HYPERLINK_DIALOG) );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-    pWindow = pDlg->GetWindow();
+    mpDlg = pFact->CreateSvxHpLinkDlg( _pParent, pBindings, ResId(SID_HYPERLINK_DIALOG) );
+    DBG_ASSERT(mpDlg, "Dialogdiet fail!");//CHINA001
+    pWindow = mpDlg->GetWindow();
     ((MyStruct*)pImp)->bVisible = FALSE;
 
     if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 )
@@ -113,5 +115,10 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* _pParent, USHORT nId,
 SfxChildWinInfo SvxHlinkDlgWrapper::GetInfo() const
 {
     return SfxChildWindow::GetInfo();
+}
+
+sal_Bool SvxHlinkDlgWrapper::QueryClose()
+{
+    return mpDlg ? mpDlg->QueryClose() : sal_True;
 }
 
