@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjava.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:22:22 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:51:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -924,6 +924,8 @@ SvxJavaClassPathDlg::SvxJavaClassPathDlg( Window* pParent ) :
         m_aPathList.SetSizePixel( aBoxSz );
     }
 
+    EnableRemoveButton();
+
     // set initial focus to path list
     m_aPathList.GrabFocus();
 }
@@ -959,7 +961,10 @@ IMPL_LINK( SvxJavaClassPathDlg, AddArchiveHdl_Impl, PushButton *, EMPTYARG )
         INetURLObject aURL( sURL );
         String sFile = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sURL ) )
-            m_aPathList.InsertEntry( sFile, SvFileInformationManager::GetImage( aURL ) );
+        {
+            USHORT nPos = m_aPathList.InsertEntry( sFile, SvFileInformationManager::GetImage( aURL ) );
+            m_aPathList.SelectEntryPos( nPos );
+        }
         else
         {
             String sMsg( SVX_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
@@ -967,6 +972,7 @@ IMPL_LINK( SvxJavaClassPathDlg, AddArchiveHdl_Impl, PushButton *, EMPTYARG )
             ErrorBox( this, WB_OK, sMsg ).Execute();
         }
     }
+    EnableRemoveButton();
     return 0;
 }
 
@@ -978,29 +984,33 @@ IMPL_LINK( SvxJavaClassPathDlg, AddPathHdl_Impl, PushButton *, EMPTYARG )
     Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     Reference < XFolderPicker > xFolderPicker( xFactory->createInstance( sService ), UNO_QUERY );
 
-    String sFolder;
+    String sOldFolder;
     if ( m_aPathList.GetSelectEntryCount() > 0 )
     {
         INetURLObject aObj( m_aPathList.GetSelectEntry(), INetURLObject::FSYS_DETECT );
-        sFolder = aObj.GetMainURL( INetURLObject::NO_DECODE );
+        sOldFolder = aObj.GetMainURL( INetURLObject::NO_DECODE );
     }
     else
-         sFolder = SvtPathOptions().GetWorkPath();
-    xFolderPicker->setDisplayDirectory( sFolder );
+        sOldFolder = SvtPathOptions().GetWorkPath();
+    xFolderPicker->setDisplayDirectory( sOldFolder );
     if ( xFolderPicker->execute() == ExecutableDialogResults::OK )
     {
         String sFolderURL( xFolderPicker->getDirectory() );
         INetURLObject aURL( sFolderURL );
-        String _sFolder = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
+        String sNewFolder = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sFolderURL ) )
-            m_aPathList.InsertEntry( _sFolder, SvFileInformationManager::GetImage( aURL ) );
+        {
+            USHORT nPos = m_aPathList.InsertEntry( sNewFolder, SvFileInformationManager::GetImage( aURL ) );
+            m_aPathList.SelectEntryPos( nPos );
+        }
         else
         {
             String sMsg( SVX_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
-            sMsg.SearchAndReplaceAscii( "%1", _sFolder );
+            sMsg.SearchAndReplaceAscii( "%1", sNewFolder );
             ErrorBox( this, WB_OK, sMsg ).Execute();
         }
     }
+    EnableRemoveButton();
     return 0;
 }
 
@@ -1021,6 +1031,7 @@ IMPL_LINK( SvxJavaClassPathDlg, RemoveHdl_Impl, PushButton *, EMPTYARG )
         }
     }
 
+    EnableRemoveButton();
     return 0;
 }
 
