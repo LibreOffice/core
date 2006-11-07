@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:53:53 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 15:31:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,51 +167,93 @@ extern "C" {
 #define DOSTRING( x )                       #x
 #define STRING( x )                         DOSTRING( x )
 
+bool ShutdownIcon::LoadModule( osl::Module **pModule,
+                               oslGenericFunction *pInit,
+                               oslGenericFunction *pDeInit )
+{
+    if ( pModule )
+    {
+        OSL_ASSERT ( pInit && pDeInit );
+        *pInit = *pDeInit = NULL;
+        *pModule = NULL;
+    }
+
+#ifdef ENABLE_QUICKSTART_APPLET
+#  ifdef WIN32
+    if ( pModule )
+    {
+        *pInit = win32_init_sys_tray;
+        *pDeInit = win32_shutdown_sys_tray;
+    }
+    return true;
+#  else // UNX
+    osl::Module *pPlugin;
+    pPlugin = new osl::Module();
+
+    oslGenericFunction pTmpInit = NULL;
+    oslGenericFunction pTmpDeInit = NULL;
+    if ( pPlugin->load( OUString (RTL_CONSTASCII_USTRINGPARAM( STRING( PLUGIN_NAME ) ) ) ) )
+    {
+        pTmpInit = pPlugin->getFunctionSymbol(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "plugin_init_sys_tray" ) ) );
+        pTmpDeInit = pPlugin->getFunctionSymbol(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "plugin_shutdown_sys_tray" ) ) );
+    }
+    if ( !pTmpInit || !pTmpDeInit )
+    {
+        delete pPlugin;
+        pPlugin = NULL;
+    }
+    if ( pModule )
+    {
+        *pModule = pPlugin;
+        *pInit = pTmpInit;
+        *pDeInit = pTmpDeInit;
+    }
+    else
+    {
+        bool bRet = pPlugin != NULL;
+        delete pPlugin;
+        return bRet;
+    }
+#  endif // UNX
+#endif // ENABLE_QUICKSTART_APPLET
+    if ( pModule )
+    {
+        if ( !*pInit )
+            *pInit = disabled_initSystray;
+        if ( !*pDeInit )
+            *pDeInit = disabled_deInitSystray;
+    }
+
+    return true;
+}
+
 void ShutdownIcon::initSystray()
 {
-#ifdef ENABLE_QUICKSTART_APPLET
-    if (!m_pInitSystray)
-    {
-#  ifdef WIN32
-        m_pInitSystray = win32_init_sys_tray;
-        m_pDeInitSystray = win32_shutdown_sys_tray;
-#  else // UNX
-        m_pPlugin = new osl::Module();
-        if ( m_pPlugin->load( OUString (RTL_CONSTASCII_USTRINGPARAM( STRING( PLUGIN_NAME ) ) ) ) )
-        {
-            m_pInitSystray = m_pPlugin->getFunctionSymbol(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "plugin_init_sys_tray" ) ) );
-            m_pDeInitSystray = m_pPlugin->getFunctionSymbol(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "plugin_shutdown_sys_tray" ) ) );
-            OSL_ASSERT (m_pInitSystray && m_pDeInitSystray);
-        }
-        else
-        {
-            delete m_pPlugin;
-            m_pPlugin = 0;
-        }
-#  endif // UNX
-    }
-#endif // ENABLE_QUICKSTART_APPLET
-    if (!m_pInitSystray ||
-        !m_pDeInitSystray)
-    {
-        m_pInitSystray = disabled_initSystray;
-        m_pDeInitSystray = disabled_deInitSystray;
-    }
+    if (m_bInitialized)
+        return;
+    m_bInitialized = true;
+
+    (void) LoadModule( &m_pPlugin, &m_pInitSystray, &m_pDeInitSystray );
+    m_bVeto = true;
     m_pInitSystray();
 }
 
 void ShutdownIcon::deInitSystray()
 {
+    if (!m_bInitialized)
+        return;
     if (m_pDeInitSystray)
     m_pDeInitSystray();
 
+    m_bVeto = false;
     m_pInitSystray = 0;
     m_pDeInitSystray = 0;
     if (m_pPlugin)
         delete m_pPlugin;
     m_pPlugin = 0;
+    m_bInitialized = false;
 }
 
 
@@ -222,7 +264,8 @@ ShutdownIcon::ShutdownIcon( Reference< XMultiServiceFactory > aSMgr ) :
     m_xServiceManager( aSMgr ),
     m_pInitSystray( 0 ),
     m_pDeInitSystray( 0 ),
-    m_pPlugin( 0 )
+    m_pPlugin( 0 ),
+    m_bInitialized( false )
 {
 }
 
@@ -502,6 +545,41 @@ ShutdownIcon* ShutdownIcon::getInstance()
     return pShutdownIcon;
 }
 
+// ---------------------------------------------------------------------------
+
+ShutdownIcon* ShutdownIcon::createInstance()
+{
+    if (pShutdownIcon)
+        return pShutdownIcon;
+
+    ShutdownIcon *pIcon = NULL;
+    try {
+        Reference< XMultiServiceFactory > xSMgr( comphelper::getProcessServiceFactory() );
+        pIcon = new ShutdownIcon( xSMgr );
+        pIcon->init ();
+        pShutdownIcon = pIcon;
+    } catch (...) {
+        delete pIcon;
+    }
+
+    return pShutdownIcon;
+}
+
+void ShutdownIcon::init() throw( ::com::sun::star::uno::Exception )
+{
+    // access resource system and sfx only protected by solarmutex
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ResMgr *pResMgr = SfxResId::GetResMgr();
+
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+    m_pResMgr = pResMgr;
+    aGuard.clear();
+    Reference < XDesktop > xDesktop( m_xServiceManager->createInstance(
+                                             DEFINE_CONST_UNICODE( "com.sun.star.frame.Desktop" )),
+                                     UNO_QUERY );
+    aGuard.reset();
+    m_xDesktop = xDesktop;
+}
 
 // ---------------------------------------------------------------------------
 
@@ -567,16 +645,8 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
                 if( !bQuickstart && !GetAutostart() )
                     return;
                 aGuard.clear();
-                // access resource system and sfx only protected by solarmutex
-                vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-
-                m_pResMgr = SfxResId::GetResMgr();
+                init ();
                 aGuard.reset();
-
-                m_xDesktop = Reference < XDesktop >( m_xServiceManager->createInstance(
-                                                            DEFINE_CONST_UNICODE( "com.sun.star.frame.Desktop" )),
-                                                        UNO_QUERY );
-
                 if ( !m_xDesktop.is() )
                     return;
 
@@ -624,7 +694,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
     return false;
 #endif // !ENABLE_QUICKSTART_APPLET
 #ifdef UNX
-    return true;
+    return LoadModule( NULL, NULL, NULL);
 #endif // UNX
 }
 #endif // !WNT
@@ -727,12 +797,18 @@ void ShutdownIcon::SetAutostart( bool bActivate )
                                                   osl_getThreadTextEncoding() );
         symlink( aDesktopFileUnx, aShortcutUnx );
 #endif // UNX
+        ShutdownIcon *pIcon = ShutdownIcon::createInstance();
+        if( pIcon )
+            pIcon->initSystray();
     }
     else
     {
         OUString aShortcutUrl;
         ::osl::File::getFileURLFromSystemPath( aShortcut, aShortcutUrl );
         ::osl::File::remove( aShortcutUrl );
+        ShutdownIcon *pIcon = getInstance();
+        if( pIcon )
+            pIcon->deInitSystray();
     }
 #else
     (void)bActivate; // unused variable
