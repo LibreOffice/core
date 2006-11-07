@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowstateguard.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:17:57 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:47:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_forms.hxx"
 
 #ifndef FORMS_WINDOWSTATEGUARD_HXX
 #include "windowstateguard.hxx"
