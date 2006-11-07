@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:47:03 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 15:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1265,6 +1265,12 @@ String STR_QUICKSTART_PRELAUNCH
     Text [ de ] = "%PRODUCTNAME beim Systemstart laden" ;
     Text [ en-US ] = "Load %PRODUCTNAME During System Start-Up" ;
     Text [ x-comment ] = " " ;
+};
+String STR_QUICKSTART_PRELAUNCH_UNX
+{
+    Text[ en-US ] = "Disable systray quickstarter";
+    Text[ de ] = "Schnellstarter deaktivieren";
+    Text [ x-comment ] = " ";
 };
 String STR_QUICKSTART_LNKNAME
 {
