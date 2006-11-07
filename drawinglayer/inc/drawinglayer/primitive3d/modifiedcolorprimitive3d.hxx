@@ -4,9 +4,9 @@
  *
  *  $RCSfile: modifiedcolorprimitive3d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:32:39 $
+ *  last change: $Author: aw $ $Date: 2006-11-07 15:49:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ namespace drawinglayer
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
             // provide unique ID
-            virtual sal_uInt32 getPrimitiveID() const;
+            DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

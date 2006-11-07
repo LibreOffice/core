@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polypolygonprimitive2d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:35:04 $
+ *  last change: $Author: aw $ $Date: 2006-11-07 15:49:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,10 +103,9 @@ namespace drawinglayer
             return basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(getB2DPolyPolygon()));
         }
 
-        sal_uInt32 PolyPolygonColorPrimitive2D::getPrimitiveID() const
-        {
-            return Create2DPrimitiveID('2','P','P','C');
-        }
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(PolyPolygonColorPrimitive2D, '2','P','P','C')
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
@@ -150,10 +149,9 @@ namespace drawinglayer
             return false;
         }
 
-        sal_uInt32 PolyPolygonGradientPrimitive2D::getPrimitiveID() const
-        {
-            return Create2DPrimitiveID('2','P','P','G');
-        }
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(PolyPolygonGradientPrimitive2D, '2','P','P','G')
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
@@ -197,10 +195,9 @@ namespace drawinglayer
             return false;
         }
 
-        sal_uInt32 PolyPolygonHatchPrimitive2D::getPrimitiveID() const
-        {
-            return Create2DPrimitiveID('2','P','P','H');
-        }
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(PolyPolygonHatchPrimitive2D, '2','P','P','H')
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
@@ -250,10 +247,9 @@ namespace drawinglayer
             return false;
         }
 
-        sal_uInt32 PolyPolygonBitmapPrimitive2D::getPrimitiveID() const
-        {
-            return Create2DPrimitiveID('2','P','P','B');
-        }
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(PolyPolygonBitmapPrimitive2D, '2','P','P','B')
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

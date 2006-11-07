@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hatchtextureprimitive3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:38:32 $
+ *  last change: $Author: aw $ $Date: 2006-11-07 15:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,10 +332,9 @@ namespace drawinglayer
             return false;
         }
 
-        sal_uInt32 HatchTexturePrimitive3D::getPrimitiveID() const
-        {
-            return Create3DPrimitiveID('3','H','T','e');
-        }
+        // provide unique ID
+        ImplPrimitrive3DIDBlock(HatchTexturePrimitive3D, '3','H','T','e')
+
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 

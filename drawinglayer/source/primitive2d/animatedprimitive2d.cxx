@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animatedprimitive2d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:35:01 $
+ *  last change: $Author: aw $ $Date: 2006-11-07 15:49:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,10 +137,9 @@ namespace drawinglayer
             return BasePrimitive2D::getB2DRange(rViewInformation);
         }
 
-        sal_uInt32 AnimatedSwitchPrimitive2D::getPrimitiveID() const
-        {
-            return Create2DPrimitiveID('2','A','S','w');
-        }
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(AnimatedSwitchPrimitive2D, '2','A','S','w')
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
@@ -173,10 +172,9 @@ namespace drawinglayer
         {
         }
 
-        sal_uInt32 AnimatedBlinkPrimitive2D::getPrimitiveID() const
-        {
-            return Create2DPrimitiveID('2','A','B','l');
-        }
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(AnimatedBlinkPrimitive2D, '2','A','B','l')
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
@@ -245,10 +243,9 @@ namespace drawinglayer
         {
         }
 
-        sal_uInt32 AnimatedInterpolatePrimitive2D::getPrimitiveID() const
-        {
-            return Create2DPrimitiveID('2','A','I','n');
-        }
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(AnimatedInterpolatePrimitive2D, '2','A','I','n')
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

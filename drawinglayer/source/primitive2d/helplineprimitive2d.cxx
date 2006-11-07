@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helplineprimitive2d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:35:03 $
+ *  last change: $Author: aw $ $Date: 2006-11-07 15:49:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,11 +210,6 @@ namespace drawinglayer
             return false;
         }
 
-        sal_uInt32 HelplinePrimitive2D::getPrimitiveID() const
-        {
-            return Create2DPrimitiveID('2','H','e','l');
-        }
-
         Primitive2DSequence HelplinePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
@@ -238,6 +233,10 @@ namespace drawinglayer
             // use parent implementation
             return BasePrimitive2D::get2DDecomposition(rViewInformation);
         }
+
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(HelplinePrimitive2D, '2','H','e','l')
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

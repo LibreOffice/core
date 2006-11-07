@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive2d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:35:03 $
+ *  last change: $Author: aw $ $Date: 2006-11-07 15:49:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,10 +91,9 @@ namespace drawinglayer
             return basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(getB2DPolygon()));
         }
 
-        sal_uInt32 PolygonHairlinePrimitive2D::getPrimitiveID() const
-        {
-            return Create2DPrimitiveID('2','P','H','a');
-        }
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(PolygonHairlinePrimitive2D, '2','P','H','a')
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
@@ -181,10 +180,9 @@ namespace drawinglayer
             return basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(getB2DPolygon()));
         }
 
-        sal_uInt32 PolygonMarkerPrimitive2D::getPrimitiveID() const
-        {
-            return Create2DPrimitiveID('2','P','M','a');
-        }
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(PolygonMarkerPrimitive2D, '2','P','M','a')
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
@@ -305,10 +303,9 @@ namespace drawinglayer
             return aRetval;
         }
 
-        sal_uInt32 PolygonStrokePrimitive2D::getPrimitiveID() const
-        {
-            return Create2DPrimitiveID('2','P','S','t');
-        }
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(PolygonStrokePrimitive2D, '2','P','S','t')
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
@@ -423,10 +420,9 @@ namespace drawinglayer
             }
         }
 
-        sal_uInt32 PolygonStrokeArrowPrimitive2D::getPrimitiveID() const
-        {
-            return Create2DPrimitiveID('2','P','S','A');
-        }
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(PolygonStrokeArrowPrimitive2D, '2','P','S','A')
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

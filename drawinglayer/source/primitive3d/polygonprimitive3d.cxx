@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:38:32 $
+ *  last change: $Author: aw $ $Date: 2006-11-07 15:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,10 +90,9 @@ namespace drawinglayer
             return basegfx::tools::getRange(getB3DPolygon());
         }
 
-        sal_uInt32 PolygonHairlinePrimitive3D::getPrimitiveID() const
-        {
-            return Create3DPrimitiveID('3','P','H','a');
-        }
+        // provide unique ID
+        ImplPrimitrive3DIDBlock(PolygonHairlinePrimitive3D, '3','P','H','a')
+
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
@@ -173,10 +172,9 @@ namespace drawinglayer
             return false;
         }
 
-        sal_uInt32 PolygonStrokePrimitive3D::getPrimitiveID() const
-        {
-            return Create3DPrimitiveID('3','P','S','t');
-        }
+        // provide unique ID
+        ImplPrimitrive3DIDBlock(PolygonStrokePrimitive3D, '3','P','S','t')
+
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 

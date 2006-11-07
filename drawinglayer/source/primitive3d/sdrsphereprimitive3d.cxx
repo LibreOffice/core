@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrsphereprimitive3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:38:34 $
+ *  last change: $Author: aw $ $Date: 2006-11-07 15:49:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,10 +215,9 @@ namespace drawinglayer
             return getStandard3DRange();
         }
 
-        sal_uInt32 SdrSpherePrimitive3D::getPrimitiveID() const
-        {
-            return Create3DPrimitiveID('3','S','p','h');
-        }
+        // provide unique ID
+        ImplPrimitrive3DIDBlock(SdrSpherePrimitive3D, '3','S','p','h')
+
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 

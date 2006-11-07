@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unifiedalphaprimitive2d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:35:04 $
+ *  last change: $Author: aw $ $Date: 2006-11-07 15:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,10 +113,9 @@ namespace drawinglayer
             return false;
         }
 
-        sal_uInt32 UnifiedAlphaPrimitive2D::getPrimitiveID() const
-        {
-            return Create2DPrimitiveID('2','U','A','l');
-        }
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(UnifiedAlphaPrimitive2D, '2','U','A','l')
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

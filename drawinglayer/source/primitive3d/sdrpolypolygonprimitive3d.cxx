@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpolypolygonprimitive3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:38:34 $
+ *  last change: $Author: aw $ $Date: 2006-11-07 15:49:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,10 +114,9 @@ namespace drawinglayer
             return false;
         }
 
-        sal_uInt32 SdrPolyPolygonPrimitive3D::getPrimitiveID() const
-        {
-            return Create3DPrimitiveID('3','P','P','o');
-        }
+        // provide unique ID
+        ImplPrimitrive3DIDBlock(SdrPolyPolygonPrimitive3D, '3','P','P','o')
+
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 

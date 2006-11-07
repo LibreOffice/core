@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:35:04 $
+ *  last change: $Author: aw $ $Date: 2006-11-07 15:49:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,11 +265,6 @@ namespace drawinglayer
             return false;
         }
 
-        sal_uInt32 ScenePrimitive2D::getPrimitiveID() const
-        {
-            return Create2DPrimitiveID('2','S','c','e');
-        }
-
         basegfx::B2DRange ScenePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             // call parent. Do not calculate using unit range since the decomposition may extend the range
@@ -420,6 +415,10 @@ namespace drawinglayer
             // return if there are label primitives
             return maLabelPrimitives.hasElements();
         }
+
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(ScenePrimitive2D, '2','S','c','e')
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

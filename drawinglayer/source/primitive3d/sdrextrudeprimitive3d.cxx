@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudeprimitive3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:38:33 $
+ *  last change: $Author: aw $ $Date: 2006-11-07 15:49:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -330,10 +330,9 @@ namespace drawinglayer
             return get3DRangeFromSlices(getSlices());
         }
 
-        sal_uInt32 SdrExtrudePrimitive3D::getPrimitiveID() const
-        {
-            return Create3DPrimitiveID('3','E','x','t');
-        }
+        // provide unique ID
+        ImplPrimitrive3DIDBlock(SdrExtrudePrimitive3D, '3','E','x','t')
+
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 

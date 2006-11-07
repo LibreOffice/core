@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprimitive3d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:32:39 $
+ *  last change: $Author: aw $ $Date: 2006-11-07 15:49:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,18 @@
 // defines for Create3DPrimitiveID
 
 #define Create3DPrimitiveID(a, b, c, d) ((((((a << 8L)|b)<<8L)|c)<<8L)|d)
+
+//////////////////////////////////////////////////////////////////////////////
+// defines for DeclPrimitrive3DIDBlock and ImplPrimitrive3DIDBlock
+// Added to be able to simply change identification stuff later, e.g. add
+// a identification string and/or ID to the interface and to the implementation
+// ATM used to delclare implement getPrimitiveID()
+
+#define DeclPrimitrive3DIDBlock() \
+    virtual sal_uInt32 getPrimitiveID() const;
+
+#define ImplPrimitrive3DIDBlock(TheClass, a, b, c, d) \
+    sal_uInt32 TheClass##::getPrimitiveID() const { return Create3DPrimitiveID(a, b, c, d); }
 
 //////////////////////////////////////////////////////////////////////////////
 // basePrimitive3D class

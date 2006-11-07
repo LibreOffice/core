@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alphaprimitive2d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:35:01 $
+ *  last change: $Author: aw $ $Date: 2006-11-07 15:49:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,10 +67,8 @@ namespace drawinglayer
             return false;
         }
 
-        sal_uInt32 AlphaPrimitive2D::getPrimitiveID() const
-        {
-            return Create2DPrimitiveID('2','A','l','p');
-        }
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(AlphaPrimitive2D, '2','A','l','p')
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

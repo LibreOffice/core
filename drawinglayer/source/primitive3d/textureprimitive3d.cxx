@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textureprimitive3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:38:34 $
+ *  last change: $Author: aw $ $Date: 2006-11-07 15:49:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,10 +121,9 @@ namespace drawinglayer
             return false;
         }
 
-        sal_uInt32 UnifiedAlphaTexturePrimitive3D::getPrimitiveID() const
-        {
-            return Create3DPrimitiveID('3','U','A','T');
-        }
+        // provide unique ID
+        ImplPrimitrive3DIDBlock(UnifiedAlphaTexturePrimitive3D, '3','U','A','T')
+
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
@@ -162,10 +161,9 @@ namespace drawinglayer
             return false;
         }
 
-        sal_uInt32 GradientTexturePrimitive3D::getPrimitiveID() const
-        {
-            return Create3DPrimitiveID('3','G','T','e');
-        }
+        // provide unique ID
+        ImplPrimitrive3DIDBlock(GradientTexturePrimitive3D, '3','G','T','e')
+
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
@@ -202,10 +200,9 @@ namespace drawinglayer
             return false;
         }
 
-        sal_uInt32 BitmapTexturePrimitive3D::getPrimitiveID() const
-        {
-            return Create3DPrimitiveID('3','B','T','e');
-        }
+        // provide unique ID
+        ImplPrimitrive3DIDBlock(BitmapTexturePrimitive3D, '3','B','T','e')
+
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
@@ -228,10 +225,9 @@ namespace drawinglayer
             return (GradientTexturePrimitive3D::operator==(rPrimitive));
         }
 
-        sal_uInt32 AlphaTexturePrimitive3D::getPrimitiveID() const
-        {
-            return Create3DPrimitiveID('3','A','T','e');
-        }
+        // provide unique ID
+        ImplPrimitrive3DIDBlock(AlphaTexturePrimitive3D, '3','A','T','e')
+
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 

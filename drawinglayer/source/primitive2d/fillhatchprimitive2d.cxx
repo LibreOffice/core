@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillhatchprimitive2d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:35:02 $
+ *  last change: $Author: aw $ $Date: 2006-11-07 15:49:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,10 +164,9 @@ namespace drawinglayer
             return getObjectRange();
         }
 
-        sal_uInt32 FillHatchPrimitive2D::getPrimitiveID() const
-        {
-            return Create2DPrimitiveID('2','F','H','a');
-        }
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(FillHatchPrimitive2D, '2','F','H','a')
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
