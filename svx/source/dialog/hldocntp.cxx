@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:14:15 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -519,8 +519,10 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
         bHandleFileName = TRUE;
 
     xFolderPicker->setDisplayDirectory( aStrPath );
-
-    if( xFolderPicker->execute() == ExecutableDialogResults::OK )
+    DisableClose( sal_True );
+    sal_Int16 nResult = xFolderPicker->execute();
+    DisableClose( sal_False );
+    if( ExecutableDialogResults::OK == nResult )
     {
         sal_Char const  sSlash[] = "/";
 
@@ -562,3 +564,4 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
     }
     return( 0L );
 }
+
