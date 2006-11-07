@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:01:33 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:44:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1159,7 +1159,19 @@ sal_Bool SvStream::ReadCsvLine( String& rStr, sal_Bool bEmbeddedLineBreak,
 sal_Size SvStream::SeekRel( sal_sSize nPos )
 {
     sal_Size nActualPos = Tell();
-    nActualPos += nPos;
+
+    if ( nPos >= 0 )
+    {
+        if ( SAL_MAX_SIZE - nActualPos > (sal_Size)nPos )
+            nActualPos += nPos;
+    }
+    else
+    {
+        sal_Size nAbsPos = (sal_Size)-nPos;
+        if ( nActualPos >= nAbsPos )
+            nActualPos -= nAbsPos;
+    }
+
     pBufPos = pRWBuf + nActualPos;
     return Seek( nActualPos );
 }
