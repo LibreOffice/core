@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:04:58 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:43:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,9 @@
 #ifndef _SV_ACCEL_HXX
 #include <vcl/accel.hxx>
 #endif
+#ifndef _SV_TIMER_HXX
+#include <vcl/timer.hxx>
+#endif
 #ifndef _TOOLKIT_AWT_VCLXMENU_HXX_
 #include <toolkit/awt/vclxmenu.hxx>
 #endif
@@ -223,6 +226,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         DECL_LINK( Highlight, Menu * );
         DECL_LINK( Activate, Menu * );
         DECL_LINK( Deactivate, Menu * );
+        DECL_LINK( AsyncSettingsHdl, Timer * );
 
         void RemoveListener();
         void RequestImages();
@@ -297,7 +301,9 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >            m_xGlobalAcceleratorManager;
         // #110897#
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >               mxServiceFactory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >                  m_xDeferedItemContainer;
         sal_Int16                                                                                      m_nSymbolsStyle;
+        Timer                                                                                          m_aAsyncSettingsTimer;
 };
 
 } // namespace
