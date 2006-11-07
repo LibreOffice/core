@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-01 16:20:51 $
+#   last change: $Author: kz $ $Date: 2006-11-07 15:31:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,13 +53,13 @@ CFLAGS+=-DENABLE_QUICKSTART_APPLET
 
 .IF "$(GUI)"=="UNX"
         CDEFS+=-DDLL_NAME=libsfx$(UPD)$(DLLPOSTFIX)$(DLLPOST)
-.IF "$(ENABLE_GTK)" != ""
+.IF "$(ENABLE_SYSTRAY_GTK)"=="TRUE"
         PKGCONFIG_MODULES=gtk+-2.0
         .INCLUDE: pkg_config.mk
         CFLAGS+=$(PKGCONFIG_CFLAGS)
         CFLAGS+=-DENABLE_QUICKSTART_APPLET
         CDEFS+=-DPLUGIN_NAME=libqstart_gtk$(UPD)$(DLLPOSTFIX)$(DLLPOST)
-.ENDIF # "$(ENABLE_QUICKSTART_APPLET)"=="TRUE"
+.ENDIF # "$(ENABLE_SYSTRAY_GTK)"=="TRUE"
 .ELSE
         CDEFS+=-DDLL_NAME=sfx$(UPD)$(DLLPOSTFIX)$(DLLPOST)
 .ENDIF
@@ -114,16 +114,14 @@ SFX_OBJECTS = \
     $(SLO)$/modsizeexceeded.obj \
     $(SLO)$/updatedlg.obj
 
-.IF "$(GUI)"=="UNX"
-QUICKSTART_OBJECTS = \
-    $(SLO)$/shutdowniconunx.obj
-.ENDIF
-
-SLOFILES = $(SFX_OBJECTS) $(QUICKSTART_OBJECTS)
+SLOFILES = $(SFX_OBJECTS)
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1OBJFILES= $(SFX_OBJECTS)
 
-.IF "$(GUI)"=="UNX"
+.IF "$(ENABLE_SYSTRAY_GTK)"=="TRUE"
+QUICKSTART_OBJECTS = $(SLO)$/shutdowniconunx.obj
+SLOFILES += $(QUICKSTART_OBJECTS)
+
 LIB2TARGET= $(SLB)$/quickstart.lib
 LIB2OBJFILES= $(QUICKSTART_OBJECTS)
 .ENDIF
