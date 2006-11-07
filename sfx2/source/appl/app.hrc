@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:46:13 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 15:30:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,6 +211,7 @@
 #define STR_HELP_BUTTON_SEARCHDIALOG            (RID_SFX_APP_START+142)
 #define STR_HELP_MENU_TEXT_SELECTION_MODE       (RID_SFX_APP_START+143)
 #define STR_HELP_MENU_TEXT_COPY                 (RID_SFX_APP_START+144)
+#define STR_QUICKSTART_PRELAUNCH_UNX            (RID_SFX_APP_START+146)
 
 #define RID_HELP_ONSTARTUP_BOX                  (RID_SFX_APP_START+144)
 #define RID_HELP_ONSTARTUP_TEXT                 (RID_SFX_APP_START+145)
