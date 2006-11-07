@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:21:52 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:48:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -460,8 +460,8 @@ class SvxHpLinkDlg;
 class AbstractSvxHpLinkDlg_Impl :public AbstractSvxHpLinkDlg
 {
     DECL_ABSTDLG_BASE(AbstractSvxHpLinkDlg_Impl,SvxHpLinkDlg)
-    virtual Window * GetWindow() ;
-
+    virtual Window*     GetWindow();
+    virtual sal_Bool    QueryClose();
 };
 //for SvxHpLinkDlg end
 
