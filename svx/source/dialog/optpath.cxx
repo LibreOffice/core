@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpath.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:23:03 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:52:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -362,6 +362,11 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
 
     for( USHORT i = 0; i <= (USHORT)SvtPathOptions::PATH_WORK; ++i )
     {
+        // only writer uses autotext
+        if ( i == SvtPathOptions::PATH_AUTOTEXT
+            && !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+            continue;
+
         switch (i)
         {
             case SvtPathOptions::PATH_AUTOCORRECT:
