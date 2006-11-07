@@ -18,7 +18,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-//#include <config.h>
 #include <string.h>
 #include <libintl.h>
 
@@ -68,6 +67,9 @@ static void egg_tray_icon_get_property (GObject    *object,
 static void egg_tray_icon_realize   (GtkWidget *widget);
 static void egg_tray_icon_unrealize (GtkWidget *widget);
 
+static void egg_tray_icon_add (GtkContainer *container,
+                   GtkWidget    *widget);
+
 #ifdef GDK_WINDOWING_X11
 static void egg_tray_icon_update_manager_window    (EggTrayIcon *icon,
                             gboolean     dock_if_realized);
@@ -91,7 +93,8 @@ egg_tray_icon_get_type (void)
     NULL, /* class_data */
     sizeof (EggTrayIcon),
     0,    /* n_preallocs */
-    (GInstanceInitFunc) egg_tray_icon_init
+    (GInstanceInitFunc) egg_tray_icon_init,
+    NULL
       };
 
       our_type = g_type_register_static (GTK_TYPE_PLUG, "EggTrayIcon", &our_info, 0);
@@ -114,6 +117,7 @@ egg_tray_icon_class_init (EggTrayIconClass *klass)
 {
   GObjectClass *gobject_class = (GObjectClass *)klass;
   GtkWidgetClass *widget_class = (GtkWidgetClass *)klass;
+  GtkContainerClass *container_class = (GtkContainerClass *)klass;
 
   parent_class = g_type_class_peek_parent (klass);
 
@@ -121,6 +125,8 @@ egg_tray_icon_class_init (EggTrayIconClass *klass)
 
   widget_class->realize   = egg_tray_icon_realize;
   widget_class->unrealize = egg_tray_icon_unrealize;
+
+  container_class->add = egg_tray_icon_add;
 
   g_object_class_install_property (gobject_class,
                    PROP_ORIENTATION,
@@ -368,6 +374,36 @@ egg_tray_icon_manager_window_destroyed (EggTrayIcon *icon)
 
 #endif
 
+static gboolean
+transparent_expose_event (GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
+{
+  gdk_window_clear_area (widget->window, event->area.x, event->area.y,
+             event->area.width, event->area.height);
+  return FALSE;
+}
+
+static void
+make_transparent_again (GtkWidget *widget, GtkStyle *previous_style,
+            gpointer user_data)
+{
+  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+}
+
+static void
+make_transparent (GtkWidget *widget, gpointer user_data)
+{
+  if (GTK_WIDGET_NO_WINDOW (widget) || GTK_WIDGET_APP_PAINTABLE (widget))
+    return;
+
+  gtk_widget_set_app_paintable (widget, TRUE);
+  gtk_widget_set_double_buffered (widget, FALSE);
+  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+  g_signal_connect (widget, "expose_event",
+            G_CALLBACK (transparent_expose_event), NULL);
+  g_signal_connect_after (widget, "style_set",
+              G_CALLBACK (make_transparent_again), NULL);
+}
+
 static void
 egg_tray_icon_realize (GtkWidget *widget)
 {
@@ -381,6 +417,8 @@ egg_tray_icon_realize (GtkWidget *widget)
 
   if (GTK_WIDGET_CLASS (parent_class)->realize)
     GTK_WIDGET_CLASS (parent_class)->realize (widget);
+
+  make_transparent (widget, NULL);
 
   screen = gtk_widget_get_screen (widget);
   display = gdk_screen_get_display (screen);
@@ -412,6 +450,14 @@ egg_tray_icon_realize (GtkWidget *widget)
   gdk_window_add_filter (root_window,
              egg_tray_icon_manager_filter, icon);
 #endif
+}
+
+static void
+egg_tray_icon_add (GtkContainer *container, GtkWidget *widget)
+{
+  g_signal_connect (widget, "realize",
+            G_CALLBACK (make_transparent), NULL);
+  GTK_CONTAINER_CLASS (parent_class)->add (container, widget);
 }
 
 EggTrayIcon *
