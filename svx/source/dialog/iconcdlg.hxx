@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iconcdlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:16:06 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:50:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,6 +175,7 @@ public :
     String              GetUserData() { return aUserString; }
     virtual void        FillUserData();
     virtual BOOL        IsReadOnly() const;
+    virtual sal_Bool    QueryClose();
 
     static const SfxPoolItem* GetItem( const SfxItemSet& rSet, USHORT nSlot );
 
@@ -302,6 +303,7 @@ public :
 
     short               Execute();
     void                Start( BOOL bShow = TRUE );
+    sal_Bool            QueryClose();
 
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
 
