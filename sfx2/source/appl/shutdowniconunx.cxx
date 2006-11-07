@@ -47,33 +47,31 @@ static ResMgr *pVCLResMgr;
 static EggTrayIcon *pTrayIcon;
 static GtkWidget *pExitMenuItem = NULL;
 static GtkWidget *pOpenMenuItem = NULL;
-static GtkCheckMenuItem *pAutostartMenuItem = NULL;
 
-static void open_url_cb( GtkWidget * /* button */, gpointer data )
+static void open_url_cb( GtkWidget *, gpointer data )
 {
     ShutdownIcon::OpenURL( *(OUString *)data,
                            OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
 }
 
-static void open_file_cb()
+static void open_file_cb( GtkWidget * )
 {
     if ( !ShutdownIcon::bModalMode )
         ShutdownIcon::FileOpen();
 }
 
-static void open_template_cb()
+static void open_template_cb( GtkWidget * )
 {
     if ( !ShutdownIcon::bModalMode )
         ShutdownIcon::FromTemplate();
 }
 
-static void prelaunch_toggled_cb( GtkCheckMenuItem *pItem )
+static void systray_disable_cb()
 {
-    ShutdownIcon::SetAutostart(
-        gtk_check_menu_item_get_active( pItem ) );
+    ShutdownIcon::SetAutostart( false );
 }
 
-static void exit_quickstarter_cb()
+static void exit_quickstarter_cb( GtkWidget * )
 {
     egg_tray_icon_cancel_message (pTrayIcon, 1 );
     ShutdownIcon::getInstance()->terminateDesktop();
@@ -205,6 +203,27 @@ static void add_ugly_db_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
     }
 }
 
+static GtkWidget *
+add_image_menu_item( GtkMenuShell *pMenuShell,
+                     const gchar *stock_id,
+                     rtl::OUString aLabel,
+                     GCallback     activate_cb )
+{
+    OString aUtfLabel = rtl::OUStringToOString (aLabel, RTL_TEXTENCODING_UTF8 );
+
+    GtkWidget *pImage;
+    pImage = gtk_image_new_from_stock( stock_id, GTK_ICON_SIZE_MENU );
+
+    GtkWidget *pMenuItem;
+    pMenuItem = gtk_image_menu_item_new_with_label( aUtfLabel );
+    gtk_image_menu_item_set_image( GTK_IMAGE_MENU_ITEM( pMenuItem ), pImage );
+
+    gtk_menu_shell_append( pMenuShell, pMenuItem );
+    g_signal_connect( pMenuItem, "activate", activate_cb, NULL);
+
+    return pMenuItem;
+}
+
 static void populate_menu( GtkWidget *pMenu )
 {
     ShutdownIcon *pShutdownIcon = ShutdownIcon::getInstance();
@@ -241,45 +260,26 @@ static void populate_menu( GtkWidget *pMenu )
     pMenuItem = gtk_separator_menu_item_new();
     gtk_menu_shell_append( pMenuShell, pMenuItem );
 
-    aLabel = rtl::OUStringToOString (
-            pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ),
-            RTL_TEXTENCODING_UTF8 );
-
-    GtkWidget *pImage;
-    pImage = gtk_image_new_from_stock( GTK_STOCK_OPEN, GTK_ICON_SIZE_MENU );
-    pMenuItem = gtk_image_menu_item_new_with_label( aLabel );
-    gtk_image_menu_item_set_image( GTK_IMAGE_MENU_ITEM( pMenuItem ), pImage );
-    gtk_menu_shell_append( pMenuShell, pMenuItem );
-    g_signal_connect( pMenuItem, "activate", G_CALLBACK( open_file_cb ), NULL );
-    pOpenMenuItem = GTK_WIDGET( pMenuItem );
+    pOpenMenuItem = add_image_menu_item
+        (pMenuShell, GTK_STOCK_OPEN,
+         pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ),
+         G_CALLBACK( open_file_cb ));
 
     pMenuItem = gtk_separator_menu_item_new();
     gtk_menu_shell_append( pMenuShell, pMenuItem );
 
-    aLabel = rtl::OUStringToOString (
-            pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH ),
-            RTL_TEXTENCODING_UTF8 );
-
-    pMenuItem = gtk_check_menu_item_new_with_label( aLabel );
-    pAutostartMenuItem = GTK_CHECK_MENU_ITEM( pMenuItem );
-    gtk_menu_shell_append( pMenuShell, pMenuItem);
-    gtk_check_menu_item_set_active( pAutostartMenuItem,
-                                    ShutdownIcon::GetAutostart() );
-    g_signal_connect( pMenuItem, "activate", G_CALLBACK( prelaunch_toggled_cb ), NULL );
+    (void) add_image_menu_item
+        ( pMenuShell, GTK_STOCK_CLOSE,
+          pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH_UNX ),
+          G_CALLBACK( systray_disable_cb ) );
 
     pMenuItem = gtk_separator_menu_item_new();
     gtk_menu_shell_append( pMenuShell, pMenuItem );
 
-    aLabel = rtl::OUStringToOString (
-            pShutdownIcon->GetResString( STR_QUICKSTART_EXIT ),
-            RTL_TEXTENCODING_UTF8 );
-
-    pImage = gtk_image_new_from_stock( GTK_STOCK_QUIT,  GTK_ICON_SIZE_MENU );
-    pMenuItem = gtk_image_menu_item_new_with_label( aLabel );
-    gtk_image_menu_item_set_image( GTK_IMAGE_MENU_ITEM( pMenuItem ), pImage );
-    gtk_menu_shell_append( pMenuShell, pMenuItem );
-    g_signal_connect( pMenuItem, "activate", G_CALLBACK( exit_quickstarter_cb ), NULL );
-    pExitMenuItem = GTK_WIDGET( pMenuItem );
+    pExitMenuItem = add_image_menu_item
+        ( pMenuShell, GTK_STOCK_QUIT,
+          pShutdownIcon->GetResString( STR_QUICKSTART_EXIT ),
+          G_CALLBACK( exit_quickstarter_cb ) );
 
     gtk_widget_show_all( pMenu );
 }
@@ -289,25 +289,62 @@ static void refresh_menu( GtkWidget *pMenu )
     if (!pExitMenuItem)
         populate_menu( pMenu );
 
-    gtk_check_menu_item_set_active( pAutostartMenuItem,
-                                    ShutdownIcon::GetAutostart() );
-
     bool bModal = ShutdownIcon::bModalMode;
     gtk_widget_set_sensitive( pExitMenuItem, !bModal);
     gtk_widget_set_sensitive( pOpenMenuItem, !bModal);
 }
 
-static void display_menu_cb( GtkWidget * /* pButton */, GtkWidget *pMenu )
+static void
+layout_menu( GtkMenu *menu,
+             gint *x, gint *y, gboolean *push_in,
+             gpointer )
 {
+    GtkRequisition req;
+    GtkWidget *ebox = GTK_BIN( pTrayIcon )->child;
+
+    gtk_widget_size_request( GTK_WIDGET( menu ), &req );
+    gdk_window_get_origin( ebox->window, x, y );
+
+    (*x) += ebox->allocation.x;
+    (*y) += ebox->allocation.y;
+
+    if (*y >= gdk_screen_get_height (gtk_widget_get_screen (ebox)) / 2)
+        (*y) -= req.height;
+    else
+        (*y) += ebox->allocation.height;
+
+    *push_in = TRUE;
+}
+
+static gboolean display_menu_cb( GtkWidget *,
+                                 GdkEventButton *event, GtkWidget *pMenu )
+{
+    if (event->button == 2)
+        return FALSE;
+
+#ifdef TEMPLATE_DIALOG_MORE_POLISHED
+    if (event->button == 1 &&
+        event->type == GDK_2BUTTON_PRESS)
+    {
+        open_template_cb( NULL );
+        return TRUE;
+    }
+    if (event->button == 3)
+    {
+        ... as below ...
+#endif
+
     refresh_menu( pMenu );
 
     gtk_menu_popup( GTK_MENU( pMenu ), NULL, NULL,
-                    NULL, NULL, 0, gtk_get_current_event_time() );
+                    layout_menu, NULL, 0, event->time );
+
+    return TRUE;
 }
 
 extern "C" {
     static gboolean
-    show_at_idle (gpointer /* dummy */)
+    show_at_idle( gpointer )
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
         gtk_widget_show_all( GTK_WIDGET( pTrayIcon ) );
@@ -331,12 +368,12 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
 
     pTrayIcon = egg_tray_icon_new( aLabel );
 
-    GtkWidget *pButton = gtk_toggle_button_new();
+    GtkWidget *pParent = gtk_event_box_new();
     GtkTooltips *pTooltips = gtk_tooltips_new();
-    gtk_tooltips_set_tip( GTK_TOOLTIPS( pTooltips ), pButton, aLabel, NULL );
+    gtk_tooltips_set_tip( GTK_TOOLTIPS( pTooltips ), pParent, aLabel, NULL );
 
     GtkWidget *pIconImage = gtk_image_new();
-    gtk_container_add( GTK_CONTAINER( pButton ), pIconImage );
+    gtk_container_add( GTK_CONTAINER( pParent ), pIconImage );
 
     pVCLResMgr = CREATEVERSIONRESMGR( vcl );
 
@@ -347,9 +384,9 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
     GtkWidget *pMenu = gtk_menu_new();
     g_signal_connect (pMenu, "deactivate",
                       G_CALLBACK (menu_deactivate_cb), NULL);
-    g_signal_connect( pButton, "clicked",
+    g_signal_connect( pParent, "button_press_event",
                       G_CALLBACK( display_menu_cb ), pMenu );
-    gtk_container_add( GTK_CONTAINER( pTrayIcon ), pButton );
+    gtk_container_add( GTK_CONTAINER( pTrayIcon ), pParent );
 
     // Show at idle to avoid artefacts at startup
     g_idle_add (show_at_idle, (gpointer) pTrayIcon);
@@ -368,7 +405,6 @@ void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray()
     pTrayIcon = NULL;
     pExitMenuItem = NULL;
     pOpenMenuItem = NULL;
-    pAutostartMenuItem = NULL;
 }
 
 #endif // ENABLE_QUICKSTART_APPLET
