@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 09:43:27 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:43:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -543,6 +543,10 @@ Any SAL_CALL MenuBarManager::getMenuHandle( const ::com::sun::star::uno::Sequenc
 
 MenuBarManager::~MenuBarManager()
 {
+    // stop asynchronous settings timer
+    m_xDeferedItemContainer.clear();
+    m_aAsyncSettingsTimer.Stop();
+
     DBG_ASSERT( OWeakObject::m_refCount == 0, "Who wants to delete an object with refcount > 0!" );
 }
 
@@ -552,6 +556,11 @@ void MenuBarManager::Destroy()
 
     if ( !m_bDisposed )
     {
+        // stop asynchronous settings timer and
+        // release defered item container reference
+        m_aAsyncSettingsTimer.Stop();
+        m_xDeferedItemContainer.clear();
+
         std::vector< MenuItemHandler* >::iterator p;
         for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
         {
@@ -564,7 +573,10 @@ void MenuBarManager::Destroy()
         m_aMenuItemHandlerVector.clear();
 
         if ( m_bDeleteMenu )
+        {
             delete m_pVCLMenu;
+            m_pVCLMenu = 0;
+        }
     }
 }
 
@@ -1318,11 +1330,37 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
 IMPL_LINK( MenuBarManager, Deactivate, Menu *, pMenu )
 {
     if ( pMenu == m_pVCLMenu )
+    {
         m_bActive = sal_False;
+        if ( pMenu->IsMenuBar() && m_xDeferedItemContainer.is() )
+        {
+            // Start timer to handle settings asynchronous
+            // Changing the menu inside this handler leads to
+            // a crash under X!
+            m_aAsyncSettingsTimer.SetTimeoutHdl(LINK(this, MenuBarManager, AsyncSettingsHdl));
+            m_aAsyncSettingsTimer.SetTimeout(10);
+            m_aAsyncSettingsTimer.Start();
+        }
+    }
 
     return 1;
 }
 
+IMPL_LINK( MenuBarManager, AsyncSettingsHdl, Timer*,)
+{
+    OGuard  aGuard( Application::GetSolarMutex() );
+    Reference< XInterface > xSelfHold(
+        static_cast< ::cppu::OWeakObject* >( this ), UNO_QUERY_THROW );
+
+    m_aAsyncSettingsTimer.Stop();
+    if ( !m_bActive && m_xDeferedItemContainer.is() )
+    {
+        SetItemContainer( m_xDeferedItemContainer );
+        m_xDeferedItemContainer.clear();
+    }
+
+    return 0;
+}
 
 IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
 {
@@ -2127,6 +2165,13 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
     // Clear MenuBarManager structures
     {
         vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+
+        // Check active state as we cannot change our VCL menu during activation by the user
+        if ( m_bActive )
+        {
+            m_xDeferedItemContainer = rItemContainer;
+            return;
+        }
 
         RemoveListener();
         std::vector< MenuItemHandler* >::iterator p;
