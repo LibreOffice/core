@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:00:30 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 15:20:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -587,6 +587,8 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor * )
                             node is a first level child of the Root and is NOT
                             either the current document, user or share */
                             Reference< browse::XBrowseNode >& theChild = children[n];
+                            if ( !theChild.is() )
+                                continue;
                             ::rtl::OUString uiName = theChild->getName();
                             BOOL bDisplay = TRUE;
 
@@ -905,6 +907,8 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
 
                     for ( long n = 0; n < children.getLength(); n++ )
                     {
+                        if (!children[n].is())
+                            continue;
                         if (children[n]->getType() == browse::BrowseNodeTypes::SCRIPT)
                         {
                             OUString uri;
@@ -1060,8 +1064,9 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                             node is a first level child of the Root and is NOT
                             either the current document, user or share */
                             Reference< browse::XBrowseNode >& theChild = children[n];
+
                             //#139111# some crash reports show that it might be unset
-                            if(!theChild.is())
+                            if ( !theChild.is() )
                                 continue;
                             ::rtl::OUString uiName = theChild->getName();
                             BOOL bDisplay = TRUE;
