@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjava.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:22:35 $
+ *  last change: $Author: kz $ $Date: 2006-11-07 14:51:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,6 +206,9 @@ private:
     DECL_LINK(              RemoveHdl_Impl, PushButton * );
 
     bool                    IsPathDuplicate( const String& _rPath );
+    inline void             EnableRemoveButton()
+                                { m_aRemoveBtn.Enable(
+                                    m_aPathList.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND ); }
 
 public:
     SvxJavaClassPathDlg( Window* pParent );
