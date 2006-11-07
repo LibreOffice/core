@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2006-10-30 08:54:48 $
+#   last change: $Author: kz $ $Date: 2006-11-07 14:46:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ RSCDEFS+=-DFULL_DESK
 CFLAGSEXCEPTIONS=-GX
 CFLAGS_NO_EXCEPTIONS=
 
-CFLAGS_CREATE_PCH=-I$(PRJ)$/inc$/pch -Fo$(SLO)$/ -Ycprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pchname.pch -DPRECOMPILED_HEADERS
+CFLAGS_CREATE_PCH=-I$(PRJ)$/inc$/pch -Fo$(SLO)$/pchname.obj -Ycprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pchname.pch -DPRECOMPILED_HEADERS
 CFLAGS_USE_PCH=-I$(PRJ)$/inc$/pch -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pchname.pch -DPRECOMPILED_HEADERS
 CFLAGS_USE_EXCEPTIONS_PCH=-I$(PRJ)$/inc$/pch -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pchname_ex.pch -DPRECOMPILED_HEADERS
 .IF "$(CALL_CDECL)"=="TRUE"
