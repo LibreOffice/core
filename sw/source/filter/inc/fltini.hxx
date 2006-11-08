@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltini.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:07:57 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 13:33:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,52 +50,6 @@ class SwNodeIndex;
 
 // die speziellen Reader
 
-class Sw6Reader: public Reader
-{
-    virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
-};
-
-class W4WReader: public StgReader
-{
-    String sVersion;
-    USHORT nFilter;
-    BOOL bStorageFlag;
-    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
-    // wir wollen die Streams / Storages nicht geoeffnet haben
-    virtual int SetStrmStgPtr();
-public:
-    W4WReader() : StgReader(), nFilter(0), bStorageFlag(FALSE) {}
-    virtual int GetReaderType();
-    virtual void SetFltName( const String& rFltName );
-
-    USHORT GetFilter() const { return nFilter; }
-    const String& GetVersion() const { return sVersion; }
-};
-
-#ifdef DEBUG_SH
-
-class Internal_W4WReader: public W4WReader
-{
-    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
-};
-
-#endif
-
-class ExcelReader : public StgReader
-{
-    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
-public:
-    virtual int GetReaderType();
-};
-
-class LotusReader : public Reader
-{
-    CharSet eCodeSet;
-    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
-public:
-    virtual void SetFltName( const String& rFltNm );
-};
-
 class HTMLReader: public Reader
 {
     // wir wollen die Streams / Storages nicht geoeffnet haben
@@ -137,7 +91,6 @@ public:
 
 // die speziellen Writer
 
-void GetW4WWriter( const String&, const String&, WriterRef& );
 void GetWW8Writer( const String&, const String&, WriterRef& );
 
 
