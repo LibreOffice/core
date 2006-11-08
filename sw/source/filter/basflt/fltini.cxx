@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:04:52 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 13:29:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,9 +101,6 @@
 #ifndef _SWGPAR_HXX
 #include <swgpar.hxx>           // fuer den SW/G Parser
 #endif
-#ifndef _W4WFLT_HXX
-#include <w4wflt.hxx>           // AutoDetect
-#endif
 #ifndef _HINTS_HXX //autogen
 #include <hints.hxx>
 #endif
@@ -151,14 +148,14 @@ using namespace utl;
 using namespace rtl;
 using namespace com::sun::star::uno;
 
-SwRead ReadRtf = 0, ReadAscii = 0, ReadSwg = 0, ReadSw3 = 0,
+SwRead ReadRtf = 0, ReadAscii = 0, /*ReadSwg = 0, ReadSw3 = 0,*/
         ReadHTML = 0, ReadXML = 0;
 
-SwRead SwGetReaderSw3() // SW_DLLPUBLIC
+/*SwRead SwGetReaderSw3() // SW_DLLPUBLIC
 {
     return ReadSw3;
 }
-
+*/
 SwRead SwGetReaderXML() // SW_DLLPUBLIC
 {
     return ReadXML;
@@ -183,35 +180,20 @@ void _InitFilter()
     SwRead pRd, pWW8Rd = new WW8Reader;
 
     USHORT nCnt = 0;
-    //_SetFltPtr( nCnt, (ReadSw3 = new Sw3Reader), FILTER_SW5 );
-    //_SetFltPtr( nCnt, ReadSw3, FILTER_SW4 );
-    //_SetFltPtr( nCnt, ReadSw3, FILTER_SW3 );
-    _SetFltPtr( nCnt, (ReadSwg = new SwgReader), FILTER_SWG );
-    _SetFltPtr( nCnt, ReadSwg, FILTER_SWGV );
     _SetFltPtr( nCnt, (ReadRtf = new RtfReader), FILTER_RTF );
-    _SetFltPtr( nCnt, new Sw6Reader, sSwDos );
     _SetFltPtr( nCnt, (ReadAscii = new AsciiReader), FILTER_BAS );
     _SetFltPtr( nCnt, pWW8Rd, sWW6 );
     _SetFltPtr( nCnt, pWW8Rd, FILTER_WW8 );
-    _SetFltPtr( nCnt, new W4WReader, FILTER_W4W );
     _SetFltPtr( nCnt, ReadRtf, sRtfWH );
-    _SetFltPtr( nCnt, ( pRd = new ExcelReader ), sCExcel );
-    _SetFltPtr( nCnt, pRd, sExcel );
-    _SetFltPtr( nCnt, new LotusReader, sLotusD );
     _SetFltPtr( nCnt, (ReadHTML = new HTMLReader), sHTML);
     _SetFltPtr( nCnt, new WW1Reader, sWW1 );
     _SetFltPtr( nCnt, pWW8Rd, sWW5 );
-    _SetFltPtr( nCnt, ReadSwg, sSwg1 );
     _SetFltPtr( nCnt, (ReadXML = new XMLReader), FILTER_XML );
 
 #ifdef NEW_WW97_EXPORT
     aReaderWriter[ 8-3 ].fnGetWriter =  &::GetWW8Writer;
     aReaderWriter[ 9-3 ].fnGetWriter = &::GetWW8Writer;
 #endif
-
-#ifdef DEBUG_SH
-    _SetFltPtr( nCnt, new Internal_W4WReader, sW4W_Int);
-#endif // DEBUG_SH
 
     _SetFltPtr( nCnt, ReadAscii, FILTER_TEXT );
 
@@ -295,12 +277,12 @@ const SfxFilter* SwIoSystem::GetFilterOfFilterTxt( const String& rFilterNm,
 
 /////////////// die Storage Reader/Writer ////////////////////////////////
 
-void GetSw3Writer( const String&, const String& rBaseURL, WriterRef& xRet )
+/*void GetSw3Writer( const String&, const String& rBaseURL, WriterRef& xRet )
 {
     DBG_ERROR( "Shouldn't happen!");
     xRet = new Sw3Writer;
 }
-
+*/
 
 ULONG StgReader::OpenMainStream( SvStorageStreamRef& rRef, USHORT& rBuffSize )
 {
@@ -375,9 +357,9 @@ USHORT Sw3Reader::GetSectionList( SfxMedium& rMedium,
 }
 */
 
-ULONG Sw3Writer::WriteStorage()
+/*ULONG Sw3Writer::WriteStorage()
 {
-    ULONG nRet;    /*
+    ULONG nRet;
     if( pIO )
     {
         // der gleiche Storage -> Save, sonst SaveAs aufrufen
@@ -392,7 +374,7 @@ ULONG Sw3Writer::WriteStorage()
     {
         ASSERT( !this, "Sw3-Writer ohne IO-System" )
         nRet = ERR_SWG_WRITE_ERROR;
-    }*/
+    }
     return nRet;
 }
 
@@ -403,7 +385,7 @@ ULONG Sw3Writer::WriteMedium( SfxMedium& )
 }
 
 BOOL Sw3Writer::IsSw3Writer() const { return TRUE; }
-
+*/
 
 void Writer::SetPasswd( const String& ) {}
 
@@ -412,80 +394,24 @@ void Writer::SetVersion( const String&, long ) {}
 
 
 BOOL Writer::IsStgWriter() const { return FALSE; }
-BOOL Writer::IsSw3Writer() const { return FALSE; }
+//BOOL Writer::IsSw3Writer() const { return FALSE; }
 
 BOOL StgWriter::IsStgWriter() const { return TRUE; }
 
 /*  */
 
 
-ULONG SwgReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const String& rFileName )
-{
-    if( !pStrm )
-    {
-        ASSERT( !this, "SWG-Read ohne Stream" );
-        return ERR_SWG_READ_ERROR;
-    }
-    SwSwgParser *pSwgParser = new SwSwgParser( &rDoc, &rPam, pStrm,
-                                                rFileName, !bInsertMode );
-    USHORT nBits = SWGRD_NORMAL;
-    SwgReader* pRdr = (SwgReader*) ReadSwg;
-    if( pRdr->aOpt.IsFmtsOnly() )
-    {
-        nBits = 0;
-        if( pRdr->aOpt.IsFrmFmts()   ) nBits |= SWGRD_FRAMEFMTS;
-        if( pRdr->aOpt.IsTxtFmts()   ) nBits |= SWGRD_CHARFMTS | SWGRD_PARAFMTS;
-        if( pRdr->aOpt.IsPageDescs() ) nBits |= SWGRD_PAGEFMTS;
-        if( !pRdr->aOpt.IsMerge() )
-            nBits |= SWGRD_FORCE;
-    }
-    ULONG nRet = pSwgParser->CallParser( nBits );
-    delete pSwgParser;
-
-    // die Flags muessen natuerlich wieder geloescht werden!
-    pRdr->aOpt.ResetAllFmtsOnly();
-
-    return nRet;
-}
-
 
 BOOL SwReader::NeedsPasswd( const Reader& rOptions )
 {
     BOOL bRes = FALSE;
-    if( &rOptions == ReadSwg )
-    {
-        if( !pStrm && pMedium && !pMedium->IsStorage() )
-            pStrm = pMedium->GetInStream();
-
-        ASSERT( pStrm, "Passwort-Test ohne Stream" );
-        if( pStrm )
-        {
-            SwSwgParser *pSwgParser = new SwSwgParser( pStrm );
-            bRes = pSwgParser->NeedsPasswd();
-            delete pSwgParser;
-        }
-    }
     return bRes;
 }
 
 
 BOOL SwReader::CheckPasswd( const String& rPasswd, const Reader& rOptions )
 {
-    BOOL bRes = TRUE;
-    if( &rOptions == ReadSwg )
-    {
-        if( !pStrm && pMedium && !pMedium->IsStorage() )
-            pStrm = pMedium->GetInStream();
-
-        ASSERT( pStrm, "Passwort-Check ohne Stream" );
-        if( pStrm )
-        {
-            SwSwgParser *pSwgParser = new SwSwgParser( pStrm );
-            bRes = pSwgParser->CheckPasswd( rPasswd );
-            delete pSwgParser;
-        }
-    }
-    return bRes;
+    return TRUE;
 }
 
 
@@ -586,13 +512,6 @@ sal_Bool SwFilterOptions::CheckNodeContentExist( const sal_Char* pNode,
 }
 
 /*  */
-
-
-void LotusReader::SetFltName( const String& rFltNm )
-{
-    eCodeSet = rFltNm.EqualsAscii( sLotusD ) ? RTL_TEXTENCODING_IBM_850
-                                             : RTL_TEXTENCODING_MS_1252;
-}
 
 
 void StgReader::SetFltName( const String& rFltNm )
