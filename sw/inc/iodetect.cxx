@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:18:41 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 13:22:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,62 +102,21 @@ struct SwIoDetect
 #ifdef DEBUG_SH
 
 #define DEB_SH_SwIoEntry(sNm, cCharLen, pWrt, bDel) , SwIoEntry(sNm, cCharLen, pWrt, bDel)
-#define W4W_CHECK_FOR_INTERNAL_FILTER                          \
-    if( nW4WId == 3 )                                          \
-        for( nCnt = 0; nCnt < nFltrCount; nCnt++ )             \
-            if( 0 == ( pFilter = pFCntnr->GetFilter( nCnt ))-> \
-                GetUserData().Search( sW4W_Int ))              \
-                return pFilter;
-
-#define W4W_INFOBOX InfoBox(0, String("Textformat wurde nicht erkannt.")).Execute();
-
-#define W4W_FILTER_NOT_FOUND                                    \
-        aW4WName = String::CreateFromAscii("W4W-Filter Nr. ");  \
-        aW4WName += String::CreateFromInt32(nW4WId);            \
-        aW4WName += '.';                                        \
-        aW4WName += String::CreateFromInt32(nVersion);           \
-        aW4WName.AppendAscii(" detected, ist aber nicht installiert");\
-        InfoBox( 0, aW4WName ).Execute();
-
 #else
-
 #define DEB_SH_SwIoEntry(sNm, cCharLen, pWrt, bDel)
-#define W4W_CHECK_FOR_INTERNAL_FILTER
-#define W4W_INFOBOX
-#define W4W_FILTER_NOT_FOUND
-
 #endif
 
 const USHORT MAXFILTER =
 #ifdef DEBUG_SH
         1 +
 #endif
-        18;
+        10;
 
-#define FORAMTNAME_SW4      "StarWriter 4.0"
-#define FORAMTNAME_SW3      "StarWriter 3.0"
-#define FORAMTNAME_SWGLOB   "StarWriter/Global 4.0"
-
-
-const sal_Char __FAR_DATA FILTER_SWG[]  = "SWG";
-const sal_Char __FAR_DATA FILTER_SW3[]  = "CSW3";
-const sal_Char __FAR_DATA FILTER_SW4[]  = "CSW4";
-const sal_Char __FAR_DATA FILTER_SW5[]  = "CSW5";
 const sal_Char __FAR_DATA FILTER_BAS[]  = "BAS";
 const sal_Char __FAR_DATA FILTER_RTF[]  = "RTF";
-const sal_Char __FAR_DATA FILTER_W4W[]  = "W4W";
-const sal_Char __FAR_DATA FILTER_SWGV[] = "SWGV";
-const sal_Char __FAR_DATA FILTER_SW3V[] = "CSW3V";
-const sal_Char __FAR_DATA FILTER_SW4V[] = "CSW4V";
-const sal_Char __FAR_DATA FILTER_SW5V[] = "CSW5V";
 const sal_Char __FAR_DATA FILTER_SWW4V[]    = "CSW4VWEB";
 const sal_Char __FAR_DATA FILTER_SWW5V[]    = "CSW5VWEB";
-const sal_Char __FAR_DATA sSwg1[]         = "SWG1";
 const sal_Char __FAR_DATA sRtfWH[]      = "WH_RTF";
-const sal_Char __FAR_DATA sCExcel[]     = "CEXCEL";
-const sal_Char __FAR_DATA sExcel[]      = "EXCEL";
-const sal_Char __FAR_DATA sLotusD[]     = "LOTUSD";
-const sal_Char __FAR_DATA sLotusW[]     = "LOTUSW";
 const sal_Char __FAR_DATA sHTML[]       = "HTML";
 const sal_Char __FAR_DATA sWW1[]            = "WW1";
 const sal_Char __FAR_DATA sWW5[]            = "WW6";
@@ -165,13 +124,11 @@ const sal_Char __FAR_DATA sWW6[]            = "CWW6";
 const sal_Char __FAR_DATA FILTER_WW8[]  = "CWW8";
 const sal_Char __FAR_DATA FILTER_TEXT_DLG[] = "TEXT_DLG";
 const sal_Char __FAR_DATA FILTER_TEXT[]     = "TEXT";
-const sal_Char __FAR_DATA sW4W_Int[]        = "W4_INT";
 const sal_Char __FAR_DATA sDebug[]      = "DEBUG";
 const sal_Char __FAR_DATA sUndo[]       = "UNDO";
 const sal_Char __FAR_DATA FILTER_XML[]  = "CXML";
 const sal_Char __FAR_DATA FILTER_XMLV[]     = "CXMLV";
 const sal_Char __FAR_DATA FILTER_XMLVW[]    = "CXMLVWEB";
-const sal_Char __FAR_DATA sSwDos[]      = "SW6";
 
 #ifdef _DLL_
 const sal_Char* GetFILTER_XML()
@@ -193,24 +150,24 @@ SwIoDetect aReaderWriter[ MAXFILTER ] =
 ///*  0*/ SwIoEntry(FILTER_SW5,       4,          &::GetSw3Writer,    TRUE),
 ///*  1*/ SwIoEntry(FILTER_SW4,       4,          &::GetSw3Writer,    FALSE),
 ///*  2*/ SwIoEntry(FILTER_SW3,       4,          &::GetSw3Writer,    FALSE),
-/*  3*/ SwIoEntry(FILTER_SWG,       STRING_LEN, 0,                  TRUE),
-/*  4*/ SwIoEntry(FILTER_SWGV,      4,          0,                  FALSE),
+///*  3*/ SwIoEntry(FILTER_SWG,       STRING_LEN, 0,                  TRUE),
+///*  4*/ SwIoEntry(FILTER_SWGV,      4,          0,                  FALSE),
 /*  5*/ SwIoEntry(FILTER_RTF,       STRING_LEN, &::GetRTFWriter,    TRUE),
-/*  6*/ SwIoEntry(sSwDos,           STRING_LEN, 0,                  TRUE),
+///*  6*/ SwIoEntry(sSwDos,           STRING_LEN,   0,                  TRUE),
 /*  7*/ SwIoEntry(FILTER_BAS,       STRING_LEN, &::GetASCWriter,    FALSE),
 /*  8*/ SwIoEntry(sWW6,             STRING_LEN, &::GetWW8Writer,    TRUE),
 /*  9*/ SwIoEntry(FILTER_WW8,       STRING_LEN, &::GetWW8Writer,    FALSE),
-/* 10*/ SwIoEntry(FILTER_W4W,       3,          &::GetW4WWriter,    TRUE),
+///* 10*/ SwIoEntry(FILTER_W4W,         3,          &::GetW4WWriter,    TRUE),
 /* 11*/ SwIoEntry(sRtfWH,           STRING_LEN, &::GetRTFWriter,    FALSE),
-/* 12*/ SwIoEntry(sCExcel,          5,          0,                  TRUE),
-/* 13*/ SwIoEntry(sExcel,           4,          0,                  FALSE),
-/* 14*/ SwIoEntry(sLotusD,          5,          0,                  TRUE),
+///* 12*/ SwIoEntry(sCExcel,            5,          0,                  TRUE),
+///* 13*/ SwIoEntry(sExcel,         4,          0,                  FALSE),
+///* 14*/ SwIoEntry(sLotusD,            5,          0,                  TRUE),
 /* 15*/ SwIoEntry(sHTML,            4,          &::GetHTMLWriter,   TRUE),
 /* 16*/ SwIoEntry(sWW1,             STRING_LEN, 0,                  TRUE),
 /* 17*/ SwIoEntry(sWW5,             STRING_LEN, 0,                  FALSE),
-/* 18*/ SwIoEntry(sSwg1,            4,          0,                  FALSE),
-/* 19*/ SwIoEntry(FILTER_XML,       4,          &::GetXMLWriter,    TRUE)
-/* opt*/ DEB_SH_SwIoEntry(sW4W_Int, STRING_LEN, 0,                  TRUE),
+///* 18*/ SwIoEntry(sSwg1,            4,          0,                 FALSE),
+/* 19*/ SwIoEntry(FILTER_XML,       4,          &::GetXMLWriter,    TRUE),
+///* opt*/ DEB_SH_SwIoEntry(sW4W_Int, STRING_LEN, 0,                  TRUE),
 /*last*/ SwIoEntry(FILTER_TEXT,     4,          &::GetASCWriter,    TRUE)
 };
 
@@ -240,28 +197,8 @@ const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, ULONG nLen_,
     int bRet = FALSE;
     if( sHTML == pName )
         bRet = HTMLParser::IsHTMLFormat( pHeader, TRUE, RTL_TEXTENCODING_DONTKNOW );
-    else if( FILTER_SWG == pName )
-        bRet = 0 == strncmp( FILTER_SWG, pHeader, 3 ) &&
-                '1' != *(pHeader + 3);
-    else if( sSwg1 == pName )
-        bRet = 0 == strncmp( FILTER_SWG, pHeader, 3 ) &&
-                '1' == *(pHeader + 3);
     else if( FILTER_RTF == pName )
         bRet = 0 == strncmp( "{\\rtf", pHeader, 5 );
-    else if( sLotusD == pName )
-        bRet = 0 == *pHeader++ && 0 == *pHeader++ &&
-                2 == *pHeader++ && 0 == *pHeader++ &&
-                ( 4 == *pHeader || 6 == *pHeader ) && 4 == *++pHeader;
-    else if( sExcel == pName )
-    {
-        if( 0x09 == *pHeader++ )
-        {
-            if( 0x00 == *pHeader )
-                bRet = 0x04 == *++pHeader && 0 == *++pHeader;
-            else if( 0x02 == *pHeader || 0x04 == *pHeader )
-                bRet = 0x06 == *++pHeader && 0 == *++pHeader;
-        }
-    }
     else if( sWW5 == pName )
     {
         W1_FIB *pW1Header = (W1_FIB*)pHeader;
@@ -276,18 +213,8 @@ const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, ULONG nLen_,
                  && ((W1_FIB*)pHeader)->nFibGet() == 0x21)
                 && ((W1_FIB*)pHeader)->fComplexGet() == 0);
     }
-    else if( sSwDos == pName )
-    {
-        sal_Char __READONLY_DATA sSw6_FormatStt[] =         ".\\\\\\ WRITER ";
-        sal_Char __READONLY_DATA sSw6_FormatEnd[] =         " \\\\\\";
-
-        bRet = 0 == strncmp( sSw6_FormatStt, pHeader, 12 ) &&
-                  0 == strncmp( sSw6_FormatEnd, pHeader + 12 + 1, 4 );
-    }
     else if (FILTER_TEXT == pName)
         bRet = SwIoSystem::IsDetectableText(pHeader, nLen_);
-    else if (FILTER_W4W == pName)
-        bRet = SwIoSystem::IsDetectableW4W(rFileName, rUserData);
     return bRet ? pName : 0;
 }
 
@@ -295,13 +222,6 @@ const String SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
 {
     /* bei den StorageFiltern noch den SubStorageNamen setzen */
     const String& rUserData = rFltr.GetUserData();
-    if( rUserData.EqualsAscii(FILTER_SW5) || rUserData.EqualsAscii(FILTER_SW5V) ||
-        rUserData.EqualsAscii(FILTER_SWW5V) ||
-        rUserData.EqualsAscii(FILTER_SW4 )|| rUserData.EqualsAscii(FILTER_SW4V) ||
-        rUserData.EqualsAscii(FILTER_SWW4V) ||
-        rUserData.EqualsAscii(FILTER_SW3 )|| rUserData.EqualsAscii(FILTER_SW3V) )
-        return String::CreateFromAscii(
-                RTL_CONSTASCII_STRINGPARAM( "StarWriterDocument" ));
     if( rUserData.EqualsAscii(FILTER_XML) ||
         rUserData.EqualsAscii(FILTER_XMLV) ||
         rUserData.EqualsAscii(FILTER_XMLVW) )
@@ -310,9 +230,6 @@ const String SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
     if( rUserData.EqualsAscii(sWW6) || rUserData.EqualsAscii(FILTER_WW8) )
         return String::CreateFromAscii(
                 RTL_CONSTASCII_STRINGPARAM( "WordDocument" ));
-    if( rUserData.EqualsAscii(sExcel) || rUserData.EqualsAscii(sCExcel) )
-        return String::CreateFromAscii(
-                RTL_CONSTASCII_STRINGPARAM( "Book" ));
     return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "" ));
 }
 const SfxFilter* SwIoSystem::GetFilterOfFormat(const String& rFmtNm,
@@ -393,8 +310,8 @@ FASTBOOL SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter
                 bRet = !(nByte & 1);
             }
         }
-        else if( !rFilter.GetUserData().EqualsAscii(sCExcel) )
-            bRet = rFilter.GetFormat() == nStgFmtId;
+//      else if( !rFilter.GetUserData().EqualsAscii(sCExcel) )
+//          bRet = rFilter.GetFormat() == nStgFmtId;
     }
     return bRet;
 }
@@ -636,29 +553,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
     {
         if( pMedium )
             pMedium->CloseInStream();
-        USHORT nVersion, nW4WId = AutoDetec( rFileName, nVersion );
 
-        if( 1 < nW4WId )
-        {
-            String aW4WName( String::CreateFromAscii(FILTER_W4W ));
-            if( nW4WId < 10 )
-                aW4WName += '0';
-            aW4WName += String::CreateFromInt32(nW4WId);
-            aW4WName += '_';
-            aW4WName += String::CreateFromInt32(nVersion);
-
-            pFilter = aIter.First();
-            while ( pFilter )
-            {
-                if( 0 == pFilter->GetUserData().Search( aW4WName ) )
-                    return pFilter;
-                pFilter = aIter.Next();
-            }
-
-            W4W_CHECK_FOR_INTERNAL_FILTER
-            W4W_FILTER_NOT_FOUND
-            return 0;
-        }
     }
     return SwIoSystem::GetTextFilter( aBuffer, nBytesRead);
 }
@@ -815,30 +710,5 @@ const SfxFilter* SwIoSystem::GetTextFilter( const sal_Char* pBuf, ULONG nLen)
     return SwIoSystem::GetFilterOfFormat( String::CreateFromAscii(pNm), 0 );
 }
 
-bool SwIoSystem::IsDetectableW4W(const String& rFileName, const String& rUserData)
-{
-    bool bRet(false);
-    if (rFileName.Len())
-    {
-        USHORT nVersion, nW4WId = AutoDetec( rFileName, nVersion );
-        if( 1 < nW4WId )
-        {
-            if(rUserData.Len())
-            {
-                String aW4WName( String::CreateFromAscii(FILTER_W4W ));
-                if( nW4WId < 10 )
-                    aW4WName += '0';
-                aW4WName += String::CreateFromInt32(nW4WId);
-                aW4WName += '_';
-                aW4WName += String::CreateFromInt32(nVersion);
-                if( 0 == rUserData.Search( aW4WName ) )
-                    bRet = true;
-            }
-            else
-                bRet = true;
-        }
-    }
-    return bRet;
-}
 
 #endif
