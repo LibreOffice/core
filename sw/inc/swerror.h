@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swerror.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:13:45 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 13:23:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,8 +50,8 @@
 
 
 // Import Fehler
-#define ERR_SWG_FILE_FORMAT_ERROR       (ERROR_SW_READ_BASE | 1 )
-#define ERR_SWG_READ_ERROR              (ERROR_SW_READ_BASE | 2 )
+#define ERR_SWG_FILE_FORMAT_ERROR     (ERROR_SW_READ_BASE | 1 )
+#define ERR_SWG_READ_ERROR              (ERROR_SW_READ_BASE   | 2 )
 
 #define ERR_SW6_INPUT_FILE              (ERROR_SW_READ_BASE | 4 )
 #define ERR_SW6_NOWRITER_FILE           (ERROR_SW_READ_BASE | 5 )
@@ -61,9 +61,6 @@
 #define ERR_WW6_NO_WW6_FILE_ERR         (ERROR_SW_READ_BASE | 8 )
 #define ERR_WW6_FASTSAVE_ERR            (ERROR_SW_READ_BASE | 9 )
 
-#define ERR_W4W_WRITE_TMP_ERROR         (ERROR_SW_READ_BASE | 10 )
-#define ERR_EXCLOT_WRONG_RANGE          (ERROR_SW_READ_BASE | 11 )
-
 #define ERR_FORMAT_ROWCOL               (ERROR_SW_READ_BASE | 12)
 
 #define ERR_SWG_NEW_VERSION             (ERROR_SW_READ_BASE | 13)
@@ -72,20 +69,12 @@
 #define ERR_FORMAT_FILE_ROWCOL          (ERROR_SW_READ_BASE | 15)
 
 // Export Fehler
-#define ERR_SWG_WRITE_ERROR             (ERROR_SW_WRITE_BASE | 30 )
-#define ERR_SWG_OLD_GLOSSARY            (ERROR_SW_WRITE_BASE | 31 )
-#define ERR_SWG_CANNOT_WRITE            (ERROR_SW_WRITE_BASE | 32 )
-#define ERR_W4W_READ_TMP_ERROR          (ERROR_SW_WRITE_BASE | 33 )
-#define ERR_SWG_LARGE_DOC_ERROR         (ERROR_SW_WRITE_BASE | 34 )
+#define ERR_SWG_WRITE_ERROR               (ERROR_SW_WRITE_BASE | 30 )
+#define   ERR_SWG_OLD_GLOSSARY            (ERROR_SW_WRITE_BASE | 31 )
 #define ERR_WRITE_ERROR_FILE            (ERROR_SW_WRITE_BASE | 35 )
 
 // Import/Export Fehler
-#define ERR_SWG_INTERNAL_ERROR          (ERROR_SW_BASE  | 50 )
-
-#define ERR_W4W_MEM                     (ERROR_SW_BASE  | 51 )
-#define ERR_W4W_WRITE_FULL              (ERROR_SW_BASE  | 52 )
-#define ERR_W4W_INTERNAL_ERROR          (ERROR_SW_BASE  | 53 )
-#define ERR_W4W_DLL_ERROR               (ERROR_SW_BASE  | 54 )
+#define ERR_SWG_INTERNAL_ERROR            (ERROR_SW_BASE  | 50 )
 
 #define ERR_TXTBLOCK_NEWFILE_ERROR      (ERROR_SW_BASE|ERRCODE_CLASS_LOCKING | 55 )
 
