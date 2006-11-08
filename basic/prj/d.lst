@@ -51,3 +51,6 @@ hedabu: ..\inc\sbxvar.hxx %_DEST%\inc%_EXT%\basic\sbxvar.hxx
 hedabu: ..\inc\sbxbase.hxx %_DEST%\inc%_EXT%\basic\sbxbase.hxx
 hedabu: ..\inc\sbxfac.hxx %_DEST%\inc%_EXT%\basic\sbxfac.hxx
 hedabu: ..\inc\sbxmstrm.hxx %_DEST%\inc%_EXT%\basic\sbxmstrm.hxx
+
+hedabu: ..\inc\namecont.hxx %_DEST%\inc%_EXT%\basic\namecont.hxx
+hedabu: ..\inc\basicmanagerrepository.hxx %_DEST%\inc%_EXT%\basic\basicmanagerrepository.hxx
