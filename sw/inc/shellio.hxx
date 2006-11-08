@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:31:15 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 13:22:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ class SvStream;
 class SvStrings;
 class SvxFontItem;
 class SvxMacroTableDtor;
-class Sw3Io;
+//class Sw3Io;
 class SwCntntNode;
 class SwCrsrShell;
 class SwDoc;
@@ -334,11 +334,11 @@ public:
     AsciiReader(): Reader() {}
 };
 
-class SwgReader: public Reader
+/*class SwgReader: public Reader
 {
     virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 };
-
+*/
 class StgReader : public Reader
 {
     String aFltName;
@@ -353,7 +353,7 @@ public:
 };
 
 
-class Sw3Reader : public StgReader
+/*class Sw3Reader : public StgReader
 {
     Sw3Io* pIO;
     virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
@@ -366,7 +366,7 @@ public:
     // returns the count of it
     virtual USHORT GetSectionList( SfxMedium& rMedium,
                                 SvStrings& rStrings ) const;
-};
+};*/
 
 /*  */
 ////////////////////////////////////////////////////////////////////////////
@@ -379,8 +379,8 @@ class SwImpBlocks;
 
 class SW_DLLPUBLIC SwTextBlocks
 {
-    friend class Sw2TextBlocks;
-    friend class Sw3IoImp;
+//  friend class Sw2TextBlocks;
+//  friend class Sw3IoImp;
     SwImpBlocks* pImp;
     ULONG        nErr;
 
@@ -442,9 +442,9 @@ public:
 extern void _InitFilter();
 extern void _FinitFilter();
 
-extern SwRead ReadRtf, ReadAscii, ReadSwg, ReadSw3, ReadHTML, ReadXML;
+extern SwRead ReadRtf, ReadAscii, /*ReadSwg, ReadSw3, */ReadHTML, ReadXML;
 
-SW_DLLPUBLIC SwRead SwGetReaderSw3();
+//SW_DLLPUBLIC SwRead SwGetReaderSw3();
 SW_DLLPUBLIC SwRead SwGetReaderXML();
 
 // END source/filter/basflt/fltini.cxx
@@ -523,7 +523,7 @@ public:
     virtual void SetPasswd( const String& );
     virtual void SetVersion( const String&, long );
     virtual BOOL IsStgWriter() const;
-    virtual BOOL IsSw3Writer() const;
+//  virtual BOOL IsSw3Writer() const;
 
     void SetShowProgress( BOOL bFlag = FALSE )  { bShowProgress = bFlag; }
 
@@ -607,7 +607,7 @@ public:
     SotStorage& GetStorage() const       { return *pStg; }
 };
 
-class Sw3Writer : public StgWriter
+/*class Sw3Writer : public StgWriter
 {
     Sw3Io* pIO;
     BOOL bSaveAs : 1;
@@ -621,7 +621,7 @@ public:
     virtual BOOL IsSw3Writer() const;
 };
 
-
+*/
 
 // Schnittstellenklasse fuer den allgemeinen Zugriff auf die
 // speziellen Writer
@@ -666,7 +666,7 @@ public:
 
 void GetRTFWriter( const String&, const String&, WriterRef& );
 void GetASCWriter( const String&, const String&, WriterRef& );
-void GetSw3Writer( const String&, const String&, WriterRef& );
+//void GetSw3Writer( const String&, const String&, WriterRef& );
 void GetHTMLWriter( const String&, const String&, WriterRef& );
 void GetXMLWriter( const String&, const String&, WriterRef& );
 
@@ -702,7 +702,7 @@ public:
 
         static bool IsDetectableText(const sal_Char* pBuf, ULONG &rLen,
         CharSet *pCharSet=0, bool *pSwap=0, LineEnd *pLineEnd=0);
-    static bool IsDetectableW4W(const String& rFileName, const String& rUserData);
+//    static bool IsDetectableW4W(const String& rFileName, const String& rUserData);
 
     static const SfxFilter* GetTextFilter(const sal_Char* pBuf, ULONG nLen);
     // gebe einen bestimmten Reader zurueck
@@ -720,22 +720,22 @@ public:
 // bekannt. Die UI-Seite benutzt die GetReader()/GetWriter() -Funktionen,
 // um die speziellen zu erhalten.
 
-extern const sal_Char __FAR_DATA FILTER_SWG[];  // SWG-Filter
+//extern const sal_Char __FAR_DATA FILTER_SWG[];  // SWG-Filter
 extern const sal_Char __FAR_DATA FILTER_RTF[];  // RTF-Filter
 extern const sal_Char __FAR_DATA FILTER_TEXT[]; // Text-Filter mit Default-CodeSet
 extern const sal_Char __FAR_DATA FILTER_BAS[];  // StarBasic (identisch mit ANSI)
-extern const sal_Char __FAR_DATA FILTER_W4W[];  // W4W-Filter
+//extern const sal_Char __FAR_DATA FILTER_W4W[];    // W4W-Filter
 extern const sal_Char __FAR_DATA FILTER_WW8[];  // WinWord 97-Filter
-extern const sal_Char __FAR_DATA FILTER_SW3[];  // SW3-Storage Filter
-extern const sal_Char __FAR_DATA FILTER_SW4[];  // SW4-Storage Filter
-extern const sal_Char __FAR_DATA FILTER_SW4[];  // SW4-Storage Filter
-extern const sal_Char __FAR_DATA FILTER_SW5[];  // SW5-Storage Filter
-extern const sal_Char __FAR_DATA FILTER_SWGV[]; // SWG-Vorlagen Filter
-extern const sal_Char __FAR_DATA FILTER_SW3V[]; // SW3-Storage Vorlagen Filter
-extern const sal_Char __FAR_DATA FILTER_SW4V[]; // SW4-Storage Vorlagen Filter
-extern const sal_Char __FAR_DATA FILTER_SW5V[]; // SW5-Storage Vorlagen Filter
-extern const sal_Char __FAR_DATA FILTER_SWW4V[];    // SW/Web Storage Vorlagen Filter
-extern const sal_Char __FAR_DATA FILTER_SWW5V[];    // SW/Web Storage Vorlagen Filter
+//extern const sal_Char __FAR_DATA FILTER_SW3[];    // SW3-Storage Filter
+//extern const sal_Char __FAR_DATA FILTER_SW4[];    // SW4-Storage Filter
+//extern const sal_Char __FAR_DATA FILTER_SW4[];    // SW4-Storage Filter
+//extern const sal_Char __FAR_DATA FILTER_SW5[];    // SW5-Storage Filter
+//extern const sal_Char __FAR_DATA FILTER_SWGV[];   // SWG-Vorlagen Filter
+//extern const sal_Char __FAR_DATA FILTER_SW3V[];   // SW3-Storage Vorlagen Filter
+//extern const sal_Char __FAR_DATA FILTER_SW4V[];   // SW4-Storage Vorlagen Filter
+//extern const sal_Char __FAR_DATA FILTER_SW5V[];   // SW5-Storage Vorlagen Filter
+//extern const sal_Char __FAR_DATA FILTER_SWW4V[];  // SW/Web Storage Vorlagen Filter
+//extern const sal_Char __FAR_DATA FILTER_SWW5V[];  // SW/Web Storage Vorlagen Filter
 extern const sal_Char __FAR_DATA FILTER_TEXT_DLG[]; // text filter with encoding dialog
 extern const sal_Char __FAR_DATA FILTER_XML[];  // XML filter
 extern const sal_Char __FAR_DATA FILTER_XMLV[]; // XML filter
