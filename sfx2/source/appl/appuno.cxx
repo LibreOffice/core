@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:25:47 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 11:57:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include "sal/config.h"
 
 #include "appuno.hxx"
+#include "appbaslib.hxx"
 
 #include "sfx2/dllapi.h"
 
@@ -213,8 +214,6 @@ using namespace ::com::sun::star::io;
 #include "dispatch.hxx"
 #include "doctemplates.hxx"
 #include "shutdownicon.hxx"
-#include "scriptcont.hxx"
-#include "dlgcont.hxx"
 #include "objshimp.hxx"
 #include "fltoptint.hxx"
 #include "docfile.hxx"
@@ -225,6 +224,7 @@ using namespace ::com::sun::star::io;
 #include "applet.hxx"
 #include "plugin.hxx"
 #include "iframe.hxx"
+
 
 #define FRAMELOADER_SERVICENAME         "com.sun.star.frame.FrameLoader"
 #define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
@@ -2237,15 +2237,6 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     xNewKey = xKey->createKey( aTempStr );
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.office.Quickstart") );
 
-    // script library container service
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += SfxScriptLibraryContainer::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.script.ScriptLibraryContainer") );
-
     // application script library container service
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += SfxApplicationScriptLibraryContainer::impl_getStaticImplementationName();
@@ -2254,15 +2245,6 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.script.ApplicationScriptLibraryContainer") );
-
-    // dialog library container service
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += SfxDialogLibraryContainer::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.script.DialogLibraryContainer") );
 
     // application dialog library container service
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
@@ -2317,8 +2299,6 @@ SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
         IF_NAME_CREATECOMPONENTFACTORY( SfxAppDispatchProvider )
         IF_NAME_CREATECOMPONENTFACTORY( SfxDocTplService )
         IF_NAME_CREATECOMPONENTFACTORY( ShutdownIcon )
-        IF_NAME_CREATECOMPONENTFACTORY( SfxScriptLibraryContainer )
-        IF_NAME_CREATECOMPONENTFACTORY( SfxDialogLibraryContainer )
         IF_NAME_CREATECOMPONENTFACTORY( SfxApplicationScriptLibraryContainer )
         IF_NAME_CREATECOMPONENTFACTORY( SfxApplicationDialogLibraryContainer )
 #ifdef TEST_HANDLERS
