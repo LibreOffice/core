@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 11:58:39 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 13:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -314,8 +314,9 @@ class SwDoc :
     public IDocumentLayoutAccess,
     public IDocumentTimerAccess
 {
-    friend void _InitCore();  // new pACmpltWords
-    friend void _FinitCore(); // delete pACmpltWords
+
+    friend void _InitCore();
+    friend void _FinitCore();
 
     //---------------- private Member --------------------------------
 
