@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:52:27 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 13:37:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -381,7 +381,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         }
         // Fuer's Dokument-Einfuegen noch die FF-Version, wenn's der
         // eigene Filter ist.
-        ASSERT( pRead != ReadSw3 || pRead != ReadXML || pFlt->GetVersion(),
+        ASSERT( /*pRead != ReadSw3 || */pRead != ReadXML || pFlt->GetVersion(),
                 "Am Filter ist keine FF-Version gesetzt" );
         //if( (pRead == ReadSw3 || pRead == ReadXML) && pFlt->GetVersion() )
         //    aStor->SetVersion( (long)pFlt->GetVersion() );
@@ -808,7 +808,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     // <--
 
     if( xWriter->IsStgWriter() &&
-        ( xWriter->IsSw3Writer() ||
+        ( /*xWriter->IsSw3Writer() ||*/
           pFlt->GetUserData().EqualsAscii( FILTER_XML ) ||
            pFlt->GetUserData().EqualsAscii( FILTER_XMLV ) ||
            pFlt->GetUserData().EqualsAscii( FILTER_XMLVW ) ) )
