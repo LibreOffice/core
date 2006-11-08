@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.104 $
+#   $Revision: 1.105 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-06 10:35:19 $
+#   last change: $Author: kz $ $Date: 2006-11-08 12:06:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.104 $$"
+LIBSMKREV!:="$$Revision: 1.105 $$"
 
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 
@@ -83,7 +83,8 @@ ODBCBASELIB=-lodbcbase$(ODBC_MAJOR)
 DBFILELIB=-lfile$(OFFICEUPD)$(DLLPOSTFIX)
 RMCXTLIB=-lrmcxt
 BTSTRPLIB=-lbtstrp
-BTSTRPDTLIB=-lbootstrpdt
+BTSTRPDTLIB=-lbootstrpdt$(OFFICEUPD)$(DLLPOSTFIX)
+SOLDEPLIB=-lsoldep$(OFFICEUPD)$(DLLPOSTFIX)
 TRANSEXLIB=-ltransex
 IOTXLIB=
 OTXLIB=-lotx_ind
@@ -347,8 +348,9 @@ FWELIB=ifwe.lib
 FWILIB=ifwi.lib
 BTSTRPLIB=btstrp.lib
 BTSTRPDTLIB=bootstrpdt.lib
+SOLDEPLIB=soldep.lib
 TRANSEXLIB=transex.lib
-ICOLIB= icom.lib
+ICOLIB=icom.lib
 SVTOOLLIB=svtool.lib
 XMLSECLIB=libxmlsec.lib
 XMLSECLIB-MS=libxmlsec-mscrypto.lib
