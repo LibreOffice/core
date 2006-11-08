@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 04:44:08 $
+#   last change: $Author: kz $ $Date: 2006-11-08 13:24:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,20 +48,7 @@ TARGET=swg
 
 # --- Files --------------------------------------------------------
 SLOFILES =  \
-        $(SLO)$/rdcont.obj \
-        $(SLO)$/rdflds.obj \
-        $(SLO)$/rdfmts.obj \
-        $(SLO)$/rdhnt.obj \
-        $(SLO)$/rdmisc.obj \
-        $(SLO)$/rdnds.obj \
-        $(SLO)$/rdnum.obj \
-        $(SLO)$/rdpage.obj \
-        $(SLO)$/rdswg.obj \
-        $(SLO)$/rdtox.obj \
-        $(SLO)$/swgpar.obj \
-        $(SLO)$/swgstr.obj \
-                $(SLO)$/sw2block.obj \
-        $(SLO)$/swblocks.obj	\
+        $(SLO)$/swblocks.obj    \
         $(SLO)$/SwXMLBlockImport.obj	\
         $(SLO)$/SwXMLSectionList.obj	\
         $(SLO)$/SwXMLBlockExport.obj	\
