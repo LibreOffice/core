@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.77 $
+#   $Revision: 1.78 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-07 14:46:12 $
+#   last change: $Author: kz $ $Date: 2006-11-08 12:03:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -571,6 +571,8 @@ $(MISC)$/%.sh : %.sh
     @+-$(RM) -f $@ >& $(NULLDEV)
     @+tr -d "\015" < $< > $@
 
+# merge targets
+.IF "$(WITH_LANG)"!=""
 $(COMMONMISC)$/$(TARGET)$/%.ulf : %.ulf
     -$(MKDIR) $(@:d)
     +-$(RM) $@
@@ -585,25 +587,36 @@ $(COMMONMISC)$/$(TARGET)$/%.xrb : %.xrb
     +$(RENAME) $@.$(INPATH) $@
     +-$(RM) $@.$(INPATH)
 
-$(COMMONMISC)$/$(TARGET)$/%.xrm : %.xrm
-    -$(MKDIR) $(@:d)
-    +-$(RM) $@
-    $(WRAPCMD) $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
-    +$(RENAME) $@.$(INPATH) $@
-    +-$(RM) $@.$(INPATH)
+.ENDIF			# "$(WITH_LANG)"!=""
 
+.IF "$(WITH_LANG)"!=""
 $(COMMONMISC)$/$(TARGET)$/%.jlf : $$(@:db).ulf
+.ELSE			# "$(WITH_LANG)"!=""
+$(COMMONMISC)$/$(TARGET)$/%.jlf : $$(@:b).ulf
+.ENDIF			# "$(WITH_LANG)"!=""
+    @-$(MKDIRHIER) $(@:d)
     +-$(RM) $@
     $(WRAPCMD) $(ULFCONV) -o $@.$(INPATH) $<
     +$(RENAME) $@.$(INPATH) $@
     +-$(RM) $@.$(INPATH)
 
+.IF "$(WITH_LANG)"!=""
 $(COMMONMISC)$/$(TARGET)$/%.mlf : $$(@:db).ulf
+.ELSE			# "$(WITH_LANG)"!=""
+$(COMMONMISC)$/$(TARGET)$/%.mlf : $$(@:b).ulf
+.ENDIF			# "$(WITH_LANG)"!=""
+    @-$(MKDIRHIER) $(@:d)
     +-$(RM) $@
     @$(WRAPCMD) $(ULFCONV) -o $@.$(INPATH) -t $(SOLARBINDIR)$/msi-encodinglist.txt $<
     @+$(RENAME) $@.$(INPATH) $@
     @+-$(RM) $@.$(INPATH)
 
+$(COMMONMISC)$/$(TARGET)$/%.xrm : %.xrm
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
 
 # dirty hack
 # if local *.sdf file is missing
