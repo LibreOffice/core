@@ -4,9 +4,9 @@
  *
  *  $RCSfile: componentmodule.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:42:24 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 12:01:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,9 +146,12 @@ namespace comphelper
         void registerImplementation( const ComponentDescription& _rComp );
 
         /** write the registration information of all known components
-            <p>writes the registration information of all components which are currently registered into the
-            specified registry.<p/>
-            <p>Usually used from within component_writeInfo.<p/>
+
+            Writes the registration information of all components which are currently registered into the
+            specified registry.
+
+            Usually used from within component_writeInfo.
+
             @param_rxServiceManager
                 the service manager
             @param _rRootKey
@@ -159,6 +162,10 @@ namespace comphelper
         sal_Bool writeComponentInfos(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceManager,
             const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rRootKey);
+
+        /** version of writeComponentInfos which directly takes the arguments you got in your component_writeInfo call
+        */
+        sal_Bool writeComponentInfos( void* pServiceManager, void* pRegistryKey );
 
         /** creates a Factory for the component with the given implementation name.
             <p>Usually used from within component_getFactory.<p/>
@@ -172,6 +179,12 @@ namespace comphelper
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getComponentFactory(
             const ::rtl::OUString& _rImplementationName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceManager
+        );
+
+        /** version of getComponentFactory which directly takes the arguments you got in your component_getFactory call
+        */
+        void* getComponentFactory(
+            const sal_Char* _pImplementationName, void* _pServiceManager, void* _pRegistryKey
         );
 
     public:
@@ -246,6 +259,98 @@ namespace comphelper
             TYPE::getSupportedServiceNames_static(),
             TYPE::Create
         );
+    }
+
+    //==========================================================================
+    //= helpers
+    //==========================================================================
+
+    //==========================================================================
+    // declaring a OModule for a component library
+
+#define DECLARE_COMPONENT_MODULE( ModuleClass, ClientClass ) \
+    /* -------------------------------------------------------------------- */ \
+    class ModuleClass : public ::comphelper::OModule \
+    { \
+        friend struct CreateModuleClass; \
+        typedef ::comphelper::OModule BaseClass; \
+    \
+    public: \
+        static ModuleClass& getInstance(); \
+    \
+    private: \
+        ModuleClass(); \
+    }; \
+    \
+    /* -------------------------------------------------------------------- */ \
+    class ClientClass : public ::comphelper::OModuleClient \
+    { \
+    private: \
+        typedef ::comphelper::OModuleClient BaseClass; \
+    \
+    public: \
+        ClientClass() : BaseClass( ModuleClass::getInstance() ) \
+        { \
+        } \
+    }; \
+    \
+    /* -------------------------------------------------------------------- */ \
+    template < class TYPE > \
+    class OAutoRegistration : public ::comphelper::OAutoRegistration< TYPE > \
+    { \
+    private: \
+        typedef ::comphelper::OAutoRegistration< TYPE >    BaseClass; \
+    \
+    public: \
+        OAutoRegistration() : BaseClass( ModuleClass::getInstance() ) \
+        { \
+        } \
+    };
+
+    //==========================================================================
+    //= implementing a OModule for a component library
+
+#define IMPLEMENT_COMPONENT_MODULE( ModuleClass ) \
+    struct CreateModuleClass \
+    { \
+        ModuleClass* operator()() \
+        { \
+            static ModuleClass* pModule = new ModuleClass; \
+            return pModule; \
+        } \
+    }; \
+    \
+    ModuleClass::ModuleClass() \
+        :BaseClass() \
+    { \
+    } \
+    \
+    ModuleClass& ModuleClass::getInstance() \
+    { \
+        return *rtl_Instance< ModuleClass, CreateModuleClass, ::osl::MutexGuard, ::osl::GetGlobalMutex >:: \
+            create( CreateModuleClass(), ::osl::GetGlobalMutex() ); \
+    } \
+
+    //==========================================================================
+    //= implementing the API of a component library (component_*)
+
+#define IMPLEMENT_COMPONENT_LIBRARY_API( module_class, initializer_function )   \
+    extern "C" void SAL_CALL component_getImplementationEnvironment(    \
+        const sal_Char **ppEnvTypeName, uno_Environment ** /*ppEnv*/ )  \
+    {   \
+        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;    \
+    }   \
+    extern "C" sal_Bool SAL_CALL component_writeInfo( \
+        void* pServiceManager, void* pRegistryKey ) \
+    {   \
+        initializer_function(); \
+        return module_class::getInstance().writeComponentInfos( pServiceManager, pRegistryKey );  \
+    }   \
+    extern "C" void* SAL_CALL component_getFactory( \
+        const sal_Char* pImplementationName, void* pServiceManager, void* pRegistryKey ) \
+    { \
+        initializer_function(); \
+        return module_class::getInstance().getComponentFactory( pImplementationName, pServiceManager, pRegistryKey );   \
     }
 
 //........................................................................
