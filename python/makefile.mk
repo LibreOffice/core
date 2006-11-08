@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:54:46 $
+#   last change: $Author: kz $ $Date: 2006-11-08 11:58:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ CC:=$(COMPATH)$/bin$/cc
 .IF "$(OS)" == "IRIX"
 BUILD_ACTION=$(ENV_BUILD) gmake -j$(EXTMAXPROCESS) ; gmake install
 .ELSE
-BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) ; $(GNUMAKE) install ; chmod -R g+w $(MYCWD)/python-inst
+BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) ; $(GNUMAKE) install ; chmod -R ug+w $(MYCWD)/python-inst
 .ENDIF
 .ELSE
 # ----------------------------------
