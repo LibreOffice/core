@@ -4,9 +4,9 @@
  *
  *  $RCSfile: componentmodule.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:10:24 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 12:01:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,14 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------------
+    sal_Bool OModule::writeComponentInfos( void* pServiceManager, void* pRegistryKey )
+    {
+        Reference< XMultiServiceFactory > xFactory( static_cast< XMultiServiceFactory* >( pServiceManager ) );
+        Reference< XRegistryKey > xRegistryKey( static_cast< XRegistryKey* >( pRegistryKey ) );
+        return writeComponentInfos( xFactory, xRegistryKey );
+    }
+
+    //--------------------------------------------------------------------------
     sal_Bool OModule::writeComponentInfos(
             const Reference< XMultiServiceFactory >& /*_rxServiceManager*/,
             const Reference< XRegistryKey >& _rxRootKey )
@@ -184,6 +192,16 @@ namespace comphelper
         }
 
         return sal_True;
+    }
+
+    //--------------------------------------------------------------------------
+    void* OModule::getComponentFactory( const sal_Char* _pImplementationName, void* _pServiceManager, void* /*_pRegistryKey*/ )
+    {
+        Reference< XInterface > xFactory( getComponentFactory(
+            ::rtl::OUString::createFromAscii( _pImplementationName ),
+            Reference< XMultiServiceFactory >( static_cast< XMultiServiceFactory* >( _pServiceManager ) )
+        ) );
+        return xFactory.get();
     }
 
     //--------------------------------------------------------------------------
