@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:28:28 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 13:22:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -373,8 +373,8 @@ private:
 class SwCntntNode: public SwModify, public SwNode, public SwIndexReg
 {
     // Der Reader darf NewAttrSet() aufrufen!
-    friend class SwSwgReader;
-    friend class Sw3IoImp;
+//  friend class SwSwgReader;
+//  friend class Sw3IoImp;
 
 //FEATURE::CONDCOLL
     SwDepend* pCondColl;
