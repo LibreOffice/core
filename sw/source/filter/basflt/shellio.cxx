@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:30:19 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 13:29:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -479,8 +479,8 @@ ULONG SwReader::Read( const Reader& rOptions )
     }
     // <--
 
-    if( po == ReadSw3 )         // am Sw3-Reader noch den pIo-Pointer "loeschen"
-        ((Sw3Reader*)po)->SetSw3Io( 0 );
+//  if( po == ReadSw3 )         // am Sw3-Reader noch den pIo-Pointer "loeschen"
+//      ((Sw3Reader*)po)->SetSw3Io( 0 );
 
     po->SetReadUTF8( FALSE );
     po->SetBlockMode( FALSE );
