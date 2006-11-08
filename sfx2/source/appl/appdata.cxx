@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:14:28 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 11:57:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,32 @@
 #include "objshimp.hxx"
 #include "appuno.hxx"
 #include "imestatuswindow.hxx"
+#include "appbaslib.hxx"
+
+#include <basic/basicmanagerrepository.hxx>
+#include <basic/basmgr.hxx>
+
+using ::basic::BasicManagerRepository;
+using ::basic::BasicManagerCreationListener;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::frame::XModel;
+
+class SfxBasicManagerCreationListener : public ::basic::BasicManagerCreationListener
+{
+private:
+    SfxAppData_Impl& m_rAppData;
+
+public:
+    SfxBasicManagerCreationListener( SfxAppData_Impl& _rAppData ) :m_rAppData( _rAppData ) { }
+
+    virtual void onBasicManagerCreated( const Reference< XModel >& _rxForDocument, BasicManager& _rBasicManager );
+};
+
+void SfxBasicManagerCreationListener::onBasicManagerCreated( const Reference< XModel >& _rxForDocument, BasicManager& _rBasicManager )
+{
+    if ( _rxForDocument == NULL )
+        m_rAppData.OnApplicationBasicManagerCreated( _rBasicManager );
+}
 
 SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         pDdeService( 0 ),
@@ -127,8 +153,8 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
     , pSfxResManager(0)
     , pOfaResMgr(0)
     , pSimpleResManager(0)
-    , pBasicLibContainer(0)
-    , pDialogLibContainer(0)
+    , pBasicManager( new SfxBasicManagerHolder )
+    , pBasMgrListener( new SfxBasicManagerCreationListener( *this ) )
     , pViewFrame( 0 )
     , pSlotPool( 0 )
     , pResMgr( 0 )
@@ -140,6 +166,7 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         bInQuit(sal_False),
         bInvalidateOnUnlock(sal_False)
 {
+    BasicManagerRepository::registerCreationListener( *pBasMgrListener );
 }
 
 SfxAppData_Impl::~SfxAppData_Impl()
@@ -148,6 +175,10 @@ SfxAppData_Impl::~SfxAppData_Impl()
     delete pTopFrames;
     delete pCancelMgr;
     delete pSecureURLs;
+    delete pBasicManager;
+
+    BasicManagerRepository::revokeCreationListener( *pBasMgrListener );
+    delete pBasMgrListener;
 }
 
 IMPL_STATIC_LINK( SfxAppData_Impl, CreateDocumentTemplates, void*, EMPTYARG)
@@ -177,4 +208,18 @@ SfxDocumentTemplates* SfxAppData_Impl::GetDocumentTemplates()
     else
         pTemplates->ReInitFromComponent();
     return pTemplates;
+}
+
+void SfxAppData_Impl::OnApplicationBasicManagerCreated( BasicManager& _rBasicManager )
+{
+    pBasicManager->reset( &_rBasicManager );
+
+    // global constants, additionally to the ones already added by createApplicationBasicManager:
+    // ThisComponent
+    Reference< XModel > xThisComponent;
+    SfxObjectShell* pDoc = SfxObjectShell::Current();
+    if ( pDoc )
+        xThisComponent = pDoc->GetModel();
+    _rBasicManager.InsertGlobalUNOConstant( "ThisComponent", makeAny( xThisComponent ) );
+    pThisDocument = pDoc;
 }
