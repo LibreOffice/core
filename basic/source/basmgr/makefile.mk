@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 17:38:37 $
+#   last change: $Author: kz $ $Date: 2006-11-08 11:53:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@ PRJ=..$/..
 
 PRJNAME=basic
 TARGET=basicmgr
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------------
 
@@ -46,11 +47,10 @@ TARGET=basicmgr
 
 # --- Allgemein -----------------------------------------------------------
 
-CXXFILES = basmgr.cxx
+SLOFILES= \
+        $(SLO)$/basmgr.obj \
+        $(SLO)$/basicmanagerrepository.obj
 
-SLOFILES=  $(SLO)$/basmgr.obj
-
-EXCEPTIONSFILES= $(SLO)$/basmgr.obj
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
