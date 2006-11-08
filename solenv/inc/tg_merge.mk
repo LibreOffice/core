@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_merge.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 14:09:08 $
+#   last change: $Author: kz $ $Date: 2006-11-08 12:04:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,7 @@ MKFILENAME:=tg_merge.mk
 
 # look for the according rules in "rules.mk"
 
-# dependencies from *.ulf to par-files
-.IF "$(ULFPARFILES)"!=""
-$(ULFPARFILES) : $(COMMONMISC)$/$(TARGET)$/$$(@:b).$(LANGFILEEXT)
-.ENDIF          # "$(PARFILES)"!=""
-
+.IF "$(WITH_LANG)"!=""
 .IF "$(ULFFILES)"!=""
 $(foreach,i,$(ULFFILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
 .ENDIF          # "$(ULFFILES)"!=""
@@ -51,14 +47,19 @@ $(foreach,i,$(ULFFILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf
 $(foreach,i,$(XMLPROPERTIES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
 .ENDIF          # "$(ULFFILES)"!=""
 
-# *.xrm merge
-.IF "$(READMEFILES)"!=""
-$(uniq $(foreach,i,$(READMEFILES) $(COMMONMISC)$/$(TARGET)$/$(i:b).xrm)) : $$(@:f) localize.sdf
-.ENDIF          # "$(ULFFILES)"!=""
-
 # *.xcu merge
 .IF "$(LOCALIZEDFILES)"!=""
 $(foreach,i,$(LOCALIZEDFILES) $(PROCESSOUT)$/merge$/{$(subst,.,$/ $(PACKAGE))}$/$(i:b).xcu) : $$(@:f) localize.sdf 
 .ENDIF          # "$(ULFFILES)"!=""
+.ENDIF			# "$(WITH_LANG)"!=""
 
+# dependencies from *.ulf to par-files
+.IF "$(ULFPARFILES)"!=""
+$(ULFPARFILES) : $(COMMONMISC)$/$(TARGET)$/$$(@:b).$(LANGFILEEXT)
+.ENDIF          # "$(PARFILES)"!=""
+
+# *.xrm merge
+.IF "$(READMEFILES)"!=""
+$(uniq $(foreach,i,$(READMEFILES) $(COMMONMISC)$/$(TARGET)$/$(i:b).xrm)) : $$(@:f) localize.sdf
+.ENDIF          # "$(ULFFILES)"!=""
 
