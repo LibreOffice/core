@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_config.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 16:35:36 $
+#   last change: $Author: kz $ $Date: 2006-11-08 12:03:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,7 @@ $(PROCESSOUT)$/registry$/data$/$(PACKAGEDIR)$/%.xcu : %.xcu
     +$(RM) $(@:d)$*.val > $(NULLDEV)
 
 # --- localizations ---
+.IF "$(WITH_LANG)"!=""
 .IF "$(XCU_LANG)"!=""
 $(XCU_LANG) : localize.sdf
 .ENDIF			# "$(XCU_LANG)"!=""
@@ -167,7 +168,10 @@ $(XCU_LANG) : $(XSLDIR)$/alllang.xsl
 .ENDIF
 
 $(PROCESSOUT)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.xcu :| $(PROCESSOUT)$/merge$/$(PACKAGEDIR)$/%.xcu
-    @echo -------------+ creating locale dependent entries
+.ELSE			# "$(WITH_LANG)"!=""
+$(PROCESSOUT)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.xcu :| %.xcu
+.ENDIF			# "$(WITH_LANG)"!=""
+    @echo ------------- creating locale dependent entries
     -$(MKDIRHIER) $(@:d)
 .IF "$(XSLTPROC)"=="NO_XSLTPROC"
     $(JAVAI) $(JAVACPS) $(XML_APIS_JAR)$(PATH_SEPERATOR)$(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(XERCES_JAR)$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/alllang.xsl $(@:d)$*.tmp xcs=$(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs schemaRoot=$(XCSROOT)$/registry$/schema locale={$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(PROCESSOUT)$/registry$/res$/, $@))}	
