@@ -24,7 +24,7 @@ run_mozilla() {
         moz=$1
     fi
 
-    if file "$moz" | grep "script" > /dev/null && grep "NPL" "$moz" > /dev/null; then
+    if file "$moz" | grep "script" > /dev/null && grep "[NM]PL" "$moz" > /dev/null; then
         "$moz" -remote 'ping()' 2>/dev/null >/dev/null
         if [ $? -eq 2 ]; then
             "$1" -compose "$2" &
@@ -94,7 +94,7 @@ fi
 # autodetect mail client from executable name
 case `basename "$MAILER" | sed 's/-.*$//'` in
 
-    mozilla | netscape | thunderbird)
+    mozilla | netscape | seamonkey | thunderbird)
 
         while [ "$1" != "" ]; do
             case $1 in
