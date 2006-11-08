@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltglbls.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:14:39 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 13:33:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,6 @@ public:
 
     SvNumberFormatter *pNumFormatter;
     LanguageType    eDefLanguage;
-    String          aStandard;      // fuer Excel-Standard-Format
     ULONG           nStandard;
     ULONG           nDefFormat;     // = 0xFFFFFFFF
 
@@ -116,33 +115,6 @@ public:
     inline void     RowLimitter( USHORT &rRow );
 };
 
-
-
-
-
-// ----- for Excel-Import only -------------------------------------------
-
-enum ExcelRecordTypes { ERT_Biff2, ERT_Biff3, ERT_Biff4, ERT_Biff5 };
-
-class ExcGlob : public FilterGlobals
-{
-public:
-    ExcGlob( SwDoc& rDoc, const SwPaM& rPam );
-    ~ExcGlob();
-
-    XF_Buffer           *pXF_Buff;
-    FontBuffer          *pFontBuff;
-    ColorBuffer         *pColorBuff;
-    ExcelRecordTypes    eHauptDateiTyp;
-};
-
-// ----- for Lotus-Import only -------------------------------------------
-class LotGlob : public FilterGlobals
-{
-public:
-    LotGlob( SwDoc& rDoc, const SwPaM& rPam )
-        : FilterGlobals( rDoc, rPam ) {}
-};
 
 
 
