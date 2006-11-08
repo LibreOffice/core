@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2006-10-24 13:26:19 $
+#   last change: $Author: rt $ $Date: 2006-11-08 14:03:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,8 @@ CFLAGSOPT=-O2 -fno-strict-aliasing
 CFLAGSNOOPT=-O0
 
 # -Wshadow does not work for C with nested uses of pthread_cleanup_push:
-CFLAGSWARNCC=-Wall -Wextra -Wendif-labels
+# -Wextra doesn not work for gcc-3.3
+CFLAGSWARNCC=-Wall -Wendif-labels
 CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wshadow -Wno-ctor-dtor-privacy \
     -Wno-non-virtual-dtor
 CFLAGSWALLCC=$(CFLAGSWARNCC)
