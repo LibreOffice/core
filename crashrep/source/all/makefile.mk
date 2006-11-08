@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:41:32 $
+#   last change: $Author: kz $ $Date: 2006-11-08 11:57:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,5 +51,7 @@ ULFFILES = \
 
 .INCLUDE :	target.mk
 
+.IF "$(WITH_LANG)"!=""
 ALLTAR : $(foreach,i,$(ULFFILES) $(COMMONMISC)$/$(TARGET)$/$i)
+.ENDIF			# "$(WITH_LANG)"!=""
 
