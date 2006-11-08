@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8Document.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:26 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-08 09:54:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,13 @@ public:
     virtual string getSubStreamNames() const = 0;
 
     virtual uno::Sequence<rtl::OUString> getSubStreamUNames() const = 0;
+
+    /**
+       Dumps content of stream to output.
+
+       @param o     the target output
+    */
+    virtual void dump(OutputWithDepth<string> & o) const = 0;
 
     //virtual bool put(sal_uInt32 nOffset, const Sequence & rSeq) = 0;
 };
