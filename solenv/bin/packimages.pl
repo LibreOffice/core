@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: packimages.pl,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2006-02-27 16:35:18 $
+#   last change: $Author: kz $ $Date: 2006-11-08 12:06:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ my @custom_list;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.14 $ ';
+my $id_str = ' $Revision: 1.15 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -104,24 +104,25 @@ sub parse_options
     my $opt_help;
     my $p = Getopt::Long::Parser->new();
     my @custom_path_list;
+    my $custom_path_extended;
     my $success =$p->getoptions(
                              '-h' => \$opt_help,
                              '-o=s' => \$out_file,
                              '-g=s' => \$global_path,
                              '-m=s' => \$module_path,
                              '-c=s' => \@custom_path_list,
+                             '-e=s' => \$custom_path_extended,
                              '-l=s' => \@imagelist_path,
                              '-v'   => \$verbose,
                              '-vv'  => \$extra_verbose
                             );
-
+    push @custom_path_list, $custom_path_extended if ($custom_path_extended);
     if ( $opt_help || !$success || !$out_file || !$global_path
         || !$module_path || !@custom_path_list || !@imagelist_path )
     {
         usage();
         exit(1);
     }
-
     #define intermediate output file
     $tmp_out_file="$out_file"."$$".$ENV{INPATH};
     # Sanity checks.
