@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.185 $
+ *  $Revision: 1.186 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:22:05 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 12:07:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,14 +222,13 @@
 #include "dispatch.hxx"
 #include "openflag.hxx"
 #include "helper.hxx"
-#include "dlgcont.hxx"
 #include "filedlghelper.hxx"
-#include "scriptcont.hxx"
 #include "event.hxx"
 #include "fltoptint.hxx"
 #include "viewfrm.hxx"
 #include "graphhelp.hxx"
 #include "modsizeexceeded.hxx"
+#include "appbaslib.hxx"
 
 #include "../appl/app.hrc"
 
@@ -246,6 +245,8 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::document;
 using namespace ::rtl;
 using namespace ::cppu;
+
+using ::basic::SfxLibraryContainer;
 
 namespace css = ::com::sun::star;
 
@@ -651,13 +652,8 @@ sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
 //REMOVE
 //REMOVE        // Force document library containers to release storage
 //REMOVE        SotStorageRef xDummyStorage;
-//REMOVE        SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
-//REMOVE        if( pDialogCont )
-//REMOVE            pDialogCont->setStorage( xDummyStorage );
-//REMOVE
-//REMOVE        SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
-//REMOVE        if( pBasicCont )
-//REMOVE            pBasicCont->setStorage( xDummyStorage );
+//REMOVE        pImp->pBasicManager->setStorage( SfxBasicManagerHolder::DIALOGS, xDummyStorage );
+//REMOVE        pImp->pBasicManager->setStorage( SfxBasicManagerHolder::SCRIPTS, xDummyStorage );
 //REMOVE    }
 
 //REMOVE    //-------------------------------------------------------------------------
@@ -1165,26 +1161,15 @@ sal_Bool SfxObjectShell::DoSave()
                     GetMedium()->GetStorage()->copyElementTo( aDialogsStorageName, xTmpStorage, aDialogsStorageName );
 
                 GetBasicManager();
-                SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
-                SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
 
                 // disconnect from the current storage
-                if( pDialogCont )
-                    pDialogCont->setStorage( xTmpStorage );
-                if( pBasicCont )
-                    pBasicCont->setStorage( xTmpStorage );
+                pImp->pBasicManager->setStorage( xTmpStorage );
 
                 // store to the current storage
-                if( pDialogCont )
-                    pDialogCont->storeLibrariesToStorage( GetMedium()->GetStorage() );
-                if( pBasicCont )
-                    pBasicCont->storeLibrariesToStorage( GetMedium()->GetStorage() );
+                pImp->pBasicManager->storeLibrariesToStorage( GetMedium()->GetStorage() );
 
                 // connect to the current storage back
-                if( pDialogCont )
-                    pDialogCont->setStorage( GetMedium()->GetStorage() );
-                if( pBasicCont )
-                    pBasicCont->setStorage( GetMedium()->GetStorage() );
+                pImp->pBasicManager->setStorage( GetMedium()->GetStorage() );
             }
             catch( uno::Exception& )
             {
@@ -1275,8 +1260,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         || pImp->nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_INVALID ) )
     {
         // the checking of the library modified state iterates over the libraries, should be done only when required
-        bTryToPreservScriptSignature = !( ( pImp->pDialogLibContainer && pImp->pDialogLibContainer->isContainerModified() )
-                                        || ( pImp->pBasicLibContainer && pImp->pBasicLibContainer->isContainerModified() ) );
+        bTryToPreservScriptSignature = !pImp->pBasicManager->isAnyContainerModified();
     }
 
     // use UCB for case sensitive/insensitive file name comparison
@@ -1879,15 +1863,7 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
             bResult = SaveCompleted( xTmpStorage );
 
             if ( bResult )
-            {
-                SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
-                if( pDialogCont )
-                    pDialogCont->setStorage( xTmpStorage );
-
-                SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
-                if( pBasicCont )
-                    pBasicCont->setStorage( xTmpStorage );
-            }
+                pImp->pBasicManager->setStorage( xTmpStorage );
         }
         catch( uno::Exception& )
         {}
@@ -2029,13 +2005,7 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
 
         // TODO/LATER: may be this code will be replaced, but not sure
         // Set storage in document library containers
-        SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
-        if( pDialogCont )
-            pDialogCont->setStorage( xStorage );
-
-        SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
-        if( pBasicCont )
-            pBasicCont->setStorage( xStorage );
+        pImp->pBasicManager->setStorage( xStorage );
     }
     else
     {
@@ -3062,14 +3032,8 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
         // Initialize Basic
         GetBasicManager();
 
-        // Save dialog container
-        SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
-        if( pDialogCont )
-            pDialogCont->storeLibrariesToStorage( xStorage );
-
-        SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
-        if( pBasicCont )
-            pBasicCont->storeLibrariesToStorage( xStorage );
+        // Save dialog/script container
+        pImp->pBasicManager->storeLibrariesToStorage( xStorage );
 
         return SaveAs( rMedium );
     }
