@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: kz $ $Date: 2005-10-06 12:42:26 $
+#   last change: $Author: kz $ $Date: 2006-11-08 11:55:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@ LIB1FILES=		\
     $(SLB)$/basicmgr.lib \
     $(SLB)$/classes.lib \
     $(SLB)$/comp.lib \
+    $(SLB)$/uno.lib \
     $(SLB)$/runtime.lib \
     $(SLB)$/sbx.lib
 
@@ -69,7 +70,8 @@ SHL1STDLIBS= \
             $(COMPHELPERLIB) \
             $(UNOTOOLSLIB) \
             $(SOTLIB) \
-            $(VOSLIB)
+            $(VOSLIB) \
+            $(XMLSCRIPTLIB)
 
 .IF "$(SOLAR_JAVA)" != "TRUE"
 SHL1STDLIBS+=$(SJLIB)
