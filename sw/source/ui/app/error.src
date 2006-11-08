@@ -4,9 +4,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:14:03 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 13:38:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,18 +133,6 @@ Resource RID_SW_ERRHDL
         Text [ en-US ] = "This file was saved with WinWord in 'Fast Save' mode. Please unmark the WinWord option 'Allow Fast Saves' and save the file again." ;
         Text [ x-comment ] = " ";
     };
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_WRITE_TMP_ERROR )
-    {
-        Text [ de ] = "Fehler beim Schreiben der Temporärdatei." ;
-        Text [ en-US ] = "Error writing temporary file." ;
-        Text [ x-comment ] = " ";
-    };
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_EXCLOT_WRONG_RANGE )
-    {
-        Text [ de ] = "Einfügebereich in Ini-Datei zu groß." ;
-        Text [ en-US ] = "Inserted section in ini file too large." ;
-        Text [ x-comment ] = " ";
-    };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_ROWCOL )
     {
         Text [ de ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt." ;
@@ -180,24 +168,6 @@ Resource RID_SW_ERRHDL
         Text [ en-US ] = "Wrong AutoText document version." ;
         Text [ x-comment ] = " ";
     };
-    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_CANNOT_WRITE )
-    {
-        Text [ de ] = "Das Dokument kann nicht angelegt werden." ;
-        Text [ en-US ] = "The document cannot be created." ;
-        Text [ x-comment ] = " ";
-    };
-    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_READ_TMP_ERROR )
-    {
-        Text [ de ] = "Fehler beim Lesen der Temporärdatei." ;
-        Text [ en-US ] = "Error reading temporary file." ;
-        Text [ x-comment ] = " ";
-    };
-    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_LARGE_DOC_ERROR )
-    {
-        Text [ de ] = "Das Dokument überschreitet die mögliche 3.1/4.0-Textdokument-Größe." ;
-        Text [ en-US ] = "The document exceeds the allowed 3.1/4.0 text document size." ;
-        Text [ x-comment ] = " ";
-    };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_WRITE_ERROR_FILE )
     {
         Text [ de ] = "Fehler beim Schreiben des Teildokuments $(ARG1)." ;
@@ -214,54 +184,6 @@ Resource RID_SW_ERRHDL
     {
         Text [ de ] = "Interner Fehler im %PRODUCTNAME Writer Dateiformat." ;
         Text [ en-US ] = "Internal error in %PRODUCTNAME Writer file format." ;
-        Text [ x-comment ] = " ";
-    };
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_MEM )
-    {
-        Text [ de ] = "Nicht genügend Speicher vorhanden." ;
-        Text [ en-US ] = "Insufficient memory." ;
-        Text [ x-comment ] = " ";
-    };
-    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_MEM )
-    {
-        Text [ de ] = "Nicht genügend Speicher vorhanden." ;
-        Text [ en-US ] = "Insufficient memory." ;
-        Text [ x-comment ] = " ";
-    };
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_WRITE_FULL )
-    {
-        Text [ de ] = "Nicht genügend Platz auf dem Speichermedium." ;
-        Text [ en-US ] = "Not enough disk space." ;
-        Text [ x-comment ] = " ";
-    };
-    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_WRITE_FULL )
-    {
-        Text [ de ] = "Nicht genügend Platz auf dem Speichermedium." ;
-        Text [ en-US ] = "Not enough disk space." ;
-        Text [ x-comment ] = " ";
-    };
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_INTERNAL_ERROR )
-    {
-        Text [ de ] = "Unbekannter Fehler im W4W-Filter." ;
-        Text [ en-US ] = "Unknown error in W4W filter." ;
-        Text [ x-comment ] = " ";
-    };
-    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_INTERNAL_ERROR )
-    {
-        Text [ de ] = "Unbekannter Fehler im W4W-Filter." ;
-        Text [ en-US ] = "Unknown error in W4W filter." ;
-        Text [ x-comment ] = " ";
-    };
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_DLL_ERROR )
-    {
-        Text [ de ] = "Fehler beim Laden des Konverters." ;
-        Text [ en-US ] = "Error loading converter." ;
-        Text [ x-comment ] = " ";
-    };
-    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_DLL_ERROR )
-    {
-        Text [ de ] = "Fehler beim Laden des Konverters." ;
-        Text [ en-US ] = "Error loading converter." ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_LOCKING , ERR_TXTBLOCK_NEWFILE_ERROR )
