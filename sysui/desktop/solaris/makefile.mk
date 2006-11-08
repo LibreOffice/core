@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-13 14:57:50 $
+#   last change: $Author: kz $ $Date: 2006-11-08 11:55:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,11 @@ PKGFILE = $(BIN)$/pkg$/openoffice.org-desktop-integration.tar.gz
 PKGDATESTRING = $(shell date -u +%Y.%m.%d)
 PKGARCH=sparc,i386
 
+.IF "$(WITH_LANG)"!=""
 ULFDIR = $(COMMONMISC)$/desktopshare
+.ELSE			# "$(WITH_LANG)"!=""
+ULFDIR:=..$/share
+.ENDIF			# "$(WITH_LANG)"!=""
 
 FASPAC=`test -f $(SOLARBINDIR)/faspac-so.sh && echo "/sbin/sh" || echo "echo"`
 
