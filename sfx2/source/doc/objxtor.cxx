@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:56:07 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 11:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,14 +134,20 @@
 #include "appuno.hxx"
 #include "sfxsids.hrc"
 #include "basmgr.hxx"
-#include "dlgcont.hxx"
-#include "scriptcont.hxx"
 #include "QuerySaveDocument.hxx"
 #include "helpid.hrc"
 #include "msg.hxx"
+#include "appbaslib.hxx"
+
+#include <basic/namecont.hxx>
+#include <basic/basicmanagerrepository.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
+
+using ::basic::BasicManagerRepository;
+using ::basic::SfxLibraryContainer;
 
 #ifndef _UNO_MAPPING_HXX_
 #include <uno/mapping.hxx>
@@ -162,12 +168,90 @@ static SfxObjectShell* pWorkingDoc = NULL;
 TYPEINIT1(SfxObjectShell, SfxShell);
 
 //--------------------------------------------------------------------
+SfxObjectShell_Impl::SfxObjectShell_Impl()
+:mpObjectContainer(0)
+    ,pAccMgr(0)
+    ,pDocInfo ( 0)
+    ,pCfgMgr( 0)
+    ,pBasicManager( new SfxBasicManagerHolder )
+    ,pProgress( 0)
+    ,nTime()
+    ,nVisualDocumentNumber( USHRT_MAX)
+    ,nDocumentSignatureState( SIGNATURESTATE_UNKNOWN )
+    ,nScriptingSignatureState( SIGNATURESTATE_UNKNOWN )
+    ,bTemplateConfig( sal_False)
+    ,bInList( sal_False)
+    ,bClosing( sal_False)
+    ,bSetInPlaceObj( sal_False)
+    ,bIsSaving( sal_False)
+    ,bPasswd( sal_False)
+    ,bIsTmp( sal_False)
+    ,bIsNamedVisible( sal_False)
+    ,bIsTemplate(sal_False)
+    ,bIsAbortingImport ( sal_False)
+    ,bImportDone ( sal_False)
+    ,bInPrepareClose( sal_False )
+    ,bPreparedForClose( sal_False )
+    ,bWaitingForPicklist( sal_False )
+    ,bModuleSearched( sal_False )
+    ,bIsBasicDefault( sal_True )
+    ,bIsHelpObjSh( sal_False )
+    ,bForbidCaching( sal_False )
+    ,bForbidReload( sal_False )
+    ,bSupportsEventMacros( sal_True )
+    ,bLoadingWindows( sal_False )
+    ,bBasicInitialized( sal_False )
+//    ,bHidden( sal_False )
+    ,bIsPrintJobCancelable( sal_True )
+    ,bOwnsStorage( sal_True )
+    ,bNoBaseURL( sal_False )
+    ,bInitialized( sal_False )
+    ,bSignatureErrorIsShown( sal_False )
+    ,bModelInitialized( sal_False )
+    ,bPreserveVersions( sal_True )
+    ,m_bMacroSignBroken( sal_False )
+    ,lErr(ERRCODE_NONE)
+    ,nEventId ( 0)
+    ,bDoNotTouchDocInfo( sal_False )
+    ,pReloadTimer ( 0)
+    ,pMarkData( 0 )
+    ,nLoadedFlags ( SFX_LOADED_MAINDOCUMENT )
+    ,nFlagsInProgress( 0 )
+    ,bInFrame( sal_False )
+    ,bModalMode( sal_False )
+    ,bRunningMacro( sal_False )
+    ,bReloadAvailable( sal_False )
+    ,nAutoLoadLocks( 0 )
+    ,pModule( 0 )
+    ,pFrame( 0 )
+    ,pTbxConfig( 0 )
+    ,pEventConfig(NULL)
+    ,eFlags( SFXOBJECTSHELL_UNDEFINED )
+    ,pCloser( 0 )
+    ,bReadOnlyUI( sal_False )
+    ,bHiddenLockedByAPI( sal_False )
+    ,bInCloseEvent( sal_False )
+    ,nStyleFilter( 0 )
+    ,nMacroMode( -1 )
+    ,bDisposing( sal_False )
+    ,bMacroDisabled( sal_False )
+    ,bMacroDisabledMessageIsShown( sal_False )
+    ,m_bEnableSetModified( sal_True )
+    ,m_bIsModified( sal_False )
+    ,m_nMapUnit( MAP_100TH_MM )
+    ,m_bCreateTempStor( sal_False )
+    ,m_bIsInit( sal_False )
+{
+}
+
+//--------------------------------------------------------------------
 
 SfxObjectShell_Impl::~SfxObjectShell_Impl()
 {
     if ( pPendingCloser == pCloser )
         pPendingCloser = 0;
     delete pCloser;
+    delete pBasicManager;
 }
 
 // initializes a document from a file-description
@@ -251,12 +335,7 @@ SfxObjectShell::~SfxObjectShell()
         pSfxApp->ReleaseIndex(pImp->nVisualDocumentNumber);
 
     // Basic-Manager zerst"oren
-    if ( pImp->pBasicMgr )
-        DELETEX(pImp->pBasicMgr);
-    if( pImp->pBasicLibContainer )
-        pImp->pBasicLibContainer->release();
-    if( pImp->pDialogLibContainer )
-        pImp->pDialogLibContainer->release();
+    pImp->pBasicManager->reset( NULL );
 
     if ( pSfxApp->GetDdeService() )
         pSfxApp->RemoveDdeTopic( this );
@@ -586,7 +665,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
 
 BasicManager* SfxObjectShell::GetBasicManager() const
 {
-    return HasBasic() ? pImp->pBasicMgr : SFX_APP()->GetBasicManager();
+    return HasBasic() ? pImp->pBasicManager->get() : SFX_APP()->GetBasicManager();
 }
 
 sal_Bool SfxObjectShell::HasBasic() const
@@ -594,31 +673,27 @@ sal_Bool SfxObjectShell::HasBasic() const
     if ( !pImp->bBasicInitialized )
     {
         String aName( GetMedium()->GetName() );
-        ((SfxObjectShell*)this)->InitBasicManager_Impl( ((SfxObjectShell*)this)->GetStorage(), aName.Len() ? &aName : NULL );
+        const_cast< SfxObjectShell* >( this )->InitBasicManager_Impl();
     }
-    return pImp->pBasicMgr != NULL;
+    return pImp->pBasicManager->isValid();
 }
 
 //--------------------------------------------------------------------
 
 Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
 {
-    if( !pImp->pDialogLibContainer )
+    if( !pImp->pBasicManager->isValid() )
         GetBasicManager();
-    Reference< XLibraryContainer > xRet
-        = static_cast< XLibraryContainer* >( pImp->pDialogLibContainer );
-    return xRet;
+    return pImp->pBasicManager->getLibraryContainer( SfxBasicManagerHolder::DIALOGS );
 }
 
 //--------------------------------------------------------------------
 
 Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
 {
-    if( !pImp->pBasicLibContainer )
+    if( !pImp->pBasicManager->isValid() )
         GetBasicManager();
-    Reference< XLibraryContainer > xRet
-        = static_cast< XLibraryContainer* >( pImp->pBasicLibContainer );
-    return xRet;
+    return pImp->pBasicManager->getLibraryContainer( SfxBasicManagerHolder::SCRIPTS );
 }
 
 //--------------------------------------------------------------------
@@ -630,20 +705,11 @@ StarBASIC* SfxObjectShell::GetBasic() const
 
 //--------------------------------------------------------------------
 
-void SfxObjectShell::InitBasicManager_Impl
-(
-    const uno::Reference< embed::XStorage >& xDocStorage
-                            /* Storage, aus dem das Dokument geladen wird
-                               (aus <SvPersist::Load()>) bzw. 0, falls es
-                               sich um ein neues Dokument handelt
-                               (aus <SvPersist::InitNew()>). */
-    , const String* /*pName*/
-)
+void SfxObjectShell::InitBasicManager_Impl()
 /*  [Beschreibung]
 
-    Erzeugt einen Dokument-BasicManager und l"adt diesen ggf. (xDocStorage != 0)
-    aus dem Storage.
-
+    creates a document's BasicManager and loads it, if we are already based on
+    a storage.
 
     [Anmerkung]
 
@@ -653,123 +719,11 @@ void SfxObjectShell::InitBasicManager_Impl
 */
 
 {
-    StarBASIC *pAppBasic = SFX_APP()->GetBasic();
-    DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicMgr, "Lokaler BasicManager bereits vorhanden");
-
+    DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicManager->isValid(), "Lokaler BasicManager bereits vorhanden");
     pImp->bBasicInitialized = TRUE;
-    BasicManager* pBasicManager( 0 );
-    uno::Reference< embed::XStorage > xStorage = xDocStorage;
-    if ( xStorage.is() )
-    {
-        //String aOldURL = INetURLObject::GetBaseURL();
-        //String aNewURL;
-        //if( HasName() )
-        //    aNewURL = GetMedium()->GetName();
-        //else
-        //{
-        //    aNewURL = GetDocInfo().GetTemplateFileName();
-        //    // Bei Templates keine URL...
-        //    aNewURL = URIHelper::SmartRelToAbs( aNewURL );
-        //}
 
-        // load BASIC-manager
-        SfxErrorContext aErrContext( ERRCTX_SFX_LOADBASIC, GetTitle() );
-        String aAppBasicDir = SvtPathOptions().GetBasicPath();
-
-        // Storage and BaseURL are only needed by binary documents!
-        SotStorageRef xDummyStor = new SotStorage( ::rtl::OUString() );
-        pImp->pBasicMgr = pBasicManager = new BasicManager( *xDummyStor, String() /* TODO/LATER: xStorage */,
-                                                            pAppBasic,
-                                                            &aAppBasicDir );
-        if ( pImp->pBasicMgr->HasErrors() )
-        {
-            // handle errors
-            BasicError *pErr = pImp->pBasicMgr->GetFirstError();
-            while ( pErr )
-            {
-                // show message to user
-                if ( ERRCODE_BUTTON_CANCEL ==
-                     ErrorHandler::HandleError( pErr->GetErrorId() ) )
-                {
-                    // user wants to break loading of BASIC-manager
-                    delete pImp->pBasicMgr;
-                    xStorage = uno::Reference< embed::XStorage >();
-                    break;
-                }
-                pErr = pImp->pBasicMgr->GetNextError();
-            }
-        }
-    }
-
-    // not loaded?
-    if ( !xStorage.is() )
-    {
-        // create new BASIC-manager
-        StarBASIC *pBas = new StarBASIC(pAppBasic);
-        pBas->SetFlag( SBX_EXTSEARCH );
-        pImp->pBasicMgr = pBasicManager = new BasicManager( pBas );
-    }
-
-    // Basic container
-    SfxScriptLibraryContainer* pBasicCont = new SfxScriptLibraryContainer
-        ( DEFINE_CONST_UNICODE( "StarBasic" ), pBasicManager, xStorage );
-    pBasicCont->acquire();  // Hold via UNO
-    Reference< XLibraryContainer > xBasicCont = static_cast< XLibraryContainer* >( pBasicCont );
-    pImp->pBasicLibContainer = pBasicCont;
-    sal_Bool bBasicModified = pImp->pBasicLibContainer->isContainerModified();
-
-    // Dialog container
-    SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer( xStorage );
-    pDialogCont->acquire(); // Hold via UNO
-    Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
-    pImp->pDialogLibContainer = pDialogCont;
-    sal_Bool bDialogModified = pImp->pDialogLibContainer->isContainerModified();
-
-    LibraryContainerInfo* pInfo = new LibraryContainerInfo
-        ( xBasicCont, xDialogCont, static_cast< OldBasicPassword* >( pBasicCont ) );
-    pBasicManager->SetLibraryContainerInfo( pInfo );
-    pBasicCont->setBasicManager( pBasicManager );
-
-    // damit auch Dialoge etc. 'qualifiziert' angesprochen werden k"onnen
-    StarBASIC *pBas = pImp->pBasicMgr->GetLib(0);
-    // Initialize Uno
-    //pBas->setRoot( GetModel() );
-    sal_Bool bWasModified = pBas->IsModified();
-    pBas->SetParent( pAppBasic );
-
-    // Properties im Doc-BASIC
-    // ThisComponent
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xInterface ( GetModel(), ::com::sun::star::uno::UNO_QUERY );
-    ::com::sun::star::uno::Any aComponent;
-    aComponent <<= xInterface;
-    SbxObjectRef xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent );
-    xUnoObj->SetFlag( SBX_DONTSTORE );
-    pBas->Insert( xUnoObj );
-
-    // Standard lib name
-    rtl::OUString aStdLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-
-    // Basic container
-    if ( xBasicCont.is() && !xBasicCont->hasByName( aStdLibName ) )
-        xBasicCont->createLibrary( aStdLibName );   // create Standard library
-    Any aBasicCont;
-    aBasicCont <<= xBasicCont;
-    xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("BasicLibraries"), aBasicCont );
-    pBas->Insert( xUnoObj );
-
-    // Dialog container
-    if ( xDialogCont.is() && !xDialogCont->hasByName( aStdLibName ) )
-        xDialogCont->createLibrary( aStdLibName );  // create Standard library
-    Any aDialogCont;
-    aDialogCont <<= xDialogCont;
-    xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("DialogLibraries"), aDialogCont );
-    pBas->Insert( xUnoObj );
-
-
-    // Modify-Flag wird bei MakeVariable gesetzt
-    pBas->SetModified( bWasModified );
-    pImp->pBasicLibContainer->setContainerModified( bBasicModified );
-    pImp->pDialogLibContainer->setContainerModified( bDialogModified );
+    pImp->pBasicManager->reset( BasicManagerRepository::getDocumentBasicManager( GetModel() ) );
+    DBG_ASSERT( pImp->pBasicManager->isValid(), "SfxObjectShell::InitBasicManager_Impl: did not get a BasicManager!" );
 }
 
 //--------------------------------------------------------------------
