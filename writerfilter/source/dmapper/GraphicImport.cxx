@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicImport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2006-11-06 15:00:54 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-08 09:50:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,9 +66,14 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #endif
 
+#include <iostream>
+
 namespace dmapper
 {
+using namespace ::std;
 using namespace ::com::sun::star;
+using namespace writerfilter;
+
 class XInputStreamHelper : public cppu::WeakImplHelper1
 <    io::XInputStream   >
 {
@@ -79,7 +84,7 @@ public:
     XInputStreamHelper(const sal_uInt8* buf, size_t len) :
         pBuffer( buf ),
         nLength( len ),
-        nPosition( 0x19 ) //hack - the tokenizer provides a wrong binary block!
+        nPosition( 0 )
         {
         }
     ~XInputStreamHelper();
@@ -208,10 +213,10 @@ struct GraphicImport_Impl
 
   -----------------------------------------------------------------------*/
 GraphicImport::GraphicImport(uno::Reference < uno::XComponentContext >    xComponentContext,
-                             uno::Reference< lang::XMultiServiceFactory > xTextFactory ) :
-    m_xComponentContext( xComponentContext )
-    ,m_xTextFactory( xTextFactory)
-    ,m_pImpl( new GraphicImport_Impl)
+                             uno::Reference< lang::XMultiServiceFactory > xTextFactory )
+: m_pImpl( new GraphicImport_Impl)
+  ,m_xComponentContext( xComponentContext )
+  ,m_xTextFactory( xTextFactory)
 {
 }
 /*-- 01.11.2006 09:42:42---------------------------------------------------
@@ -414,9 +419,9 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
 /*-- 01.11.2006 09:45:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::sprm(doctok::Sprm & sprm)
+void GraphicImport::sprm(doctok::Sprm & sprm_)
 {
-    sal_uInt32 nId = sprm.getId();
+    sal_uInt32 nId = sprm_.getId();
     /* WRITERFILTERSTATUS: table: PICFsprmdata */
     switch(nId)
     {
@@ -426,7 +431,7 @@ void GraphicImport::sprm(doctok::Sprm & sprm)
         case 0xf010: //part of 0xf004 -
         case 0xf007:
         {
-            doctok::Reference<Properties>::Pointer_t pProperties = sprm.getProps();
+            doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
             if( pProperties.get())
             {
                 pProperties->resolve(*this);
@@ -435,13 +440,13 @@ void GraphicImport::sprm(doctok::Sprm & sprm)
         break;
         case 0x271b:
         {
-            doctok::Reference<BinaryObj>::Pointer_t pPictureData = sprm.getBinary();
+            doctok::Reference<BinaryObj>::Pointer_t pPictureData = sprm_.getBinary();
             if( pPictureData.get())
                 pPictureData->resolve(*this);
         }
         break;
         default:
-            doctok::Value::Pointer_t pValue = sprm.getValue();
+            doctok::Value::Pointer_t pValue = sprm_.getValue();
             if( pValue.get() )
                 pValue->getInt();
     }
@@ -473,6 +478,8 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, doctok::Reference<Pro
         //
         if(xGraphic.is())
         {
+            clog << "Graphic loaded" << endl;
+
             uno::Reference< beans::XPropertySet > xGraphicProperties(
             m_xTextFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextGraphicObject"))),
             uno::UNO_QUERY_THROW);
@@ -486,6 +493,7 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, doctok::Reference<Pro
     }
     catch( const uno::Exception& )
     {
+        clog << __FUNCTION__ << " failed!" << endl;
     }
 
 }
