@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:25:19 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 11:57:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,9 +88,14 @@
 #include "doctempl.hxx"
 #include "viewfrm.hxx"
 #include "objsh.hxx"
-#include "dlgcont.hxx"
-#include "scriptcont.hxx"
 #include "docfac.hxx"
+#include "appbaslib.hxx"
+
+#ifndef BASICMANAGERREPOSITORY_HXX
+#include <basic/basicmanagerrepository.hxx>
+#endif
+
+using ::basic::BasicManagerRepository;
 
 #ifndef PRODUCT
 DECLARE_LIST( SfxFrameWindowFactoryArray_Impl, SfxFrameWindowFactory* )
@@ -169,7 +174,7 @@ void SfxApplication::Deinitialize()
     StarBASIC::Stop();
 
     // ggf. BASIC speichern
-    BasicManager* pBasMgr = GetAppBasicManager();
+    BasicManager* pBasMgr = BasicManagerRepository::getApplicationBasicManager( false );
     if ( pBasMgr && pBasMgr->IsModified() )
         SaveBasicManager();
 
@@ -201,13 +206,9 @@ void SfxApplication::Deinitialize()
 
     // Controller u."a. freigeben
     // dabei sollten auch restliche Komponenten ( Beamer! ) verschwinden
-    DELETEZ( pBasMgr );
-    SetAppBasicManager( NULL );
-
-    if( pAppData_Impl->pBasicLibContainer )
-        pAppData_Impl->pBasicLibContainer->release();
-    if( pAppData_Impl->pDialogLibContainer )
-        pAppData_Impl->pDialogLibContainer->release();
+    BasicManagerRepository::resetApplicationBasicManager();
+    pAppData_Impl->pBasicManager->reset( NULL );
+        // this will also delete pBasMgr
 
     DBG_ASSERT( pAppData_Impl->pViewFrame == 0, "active foreign ViewFrame" );
 
