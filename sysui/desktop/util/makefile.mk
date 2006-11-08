@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:20:41 $
+#   last change: $Author: kz $ $Date: 2006-11-08 11:56:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,6 @@ ALLTAR: $(SCRIPTS) $(TARFILE) $(TARFILE2)
 $(SCRIPTS) : $$(@:f)
     +@rm -f $@ 2>/dev/null
     +@cat $(@:f) | tr -d "\015" > $@
-    +@chmod 555 $@
 
 .IF "$(TARFILE)" != ""
 
