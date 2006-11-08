@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmfmt.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:24:49 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 13:21:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,8 @@ class SW_DLLPUBLIC SwFrmFmt: public SwFmt
 {
     friend class SwDoc;
     friend class SwPageDesc;    //darf den protected CTor rufen.
-    friend class SwSwgReader;   // der SW2-Reader auch!
-    friend class Sw3IoImp;      // der SW3-Reader auch!
+//  friend class SwSwgReader;   // der SW2-Reader auch!
+//  friend class Sw3IoImp;      // der SW3-Reader auch!
 
 protected:
     SwFrmFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
