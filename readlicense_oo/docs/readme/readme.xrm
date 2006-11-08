@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE Readme SYSTEM "../../../docs/readme.dtd">
+<!DOCTYPE Readme SYSTEM "../readme.dtd">
 <Readme name="ooo_readme" col-span="0">
 	<Section id="Welcome">
 		<Paragraph id="A1" style="H1">
