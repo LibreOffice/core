@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ulfconv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:08:39 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 11:59:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,7 +315,7 @@ int main( int argc, char * const argv[] )
     {
         ostream = fopen(outfile, "w");
         if ( ostream == NULL ) {
-            fprintf(stderr, "ulfconv: %s : %s\n", argv[argi], strerror(errno));
+            fprintf(stderr, "ulfconv: %s : %s\n", outfile, strerror(errno));
             exit(2);
         }
     }
