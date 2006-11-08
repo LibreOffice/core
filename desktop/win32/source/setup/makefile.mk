@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 13:19:23 $
+#   last change: $Author: kz $ $Date: 2006-11-08 12:06:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,12 @@ RCFILES=	$(RES)$/$(TARGET).rc
 
 ULFFILES=	setup.ulf
 
+.IF "$(WITH_LANG)"!=""
+ULFDIR:=$(COMMONMISC)$/$(TARGET)
+.ELSE			# "$(WITH_LANG)"!=""
+ULFDIR:=.
+.ENDIF			# "$(WITH_LANG)"!=""
+
 OBJFILES= 	$(OBJ)$/setup_main.obj \
             $(OBJ)$/setup_a.obj \
             $(OBJ)$/setup_w.obj
@@ -81,6 +87,6 @@ APP1NOSVRES=	$(RES)$/$(TARGET).res
 
 .INCLUDE :  target.mk
 
-$(RCFILES) : $(COMMONMISC)$/$(TARGET)$/setup.ulf makefile.mk rcfooter.txt rcheader.txt rctmpl.txt
-    $(WRAPCMD) lngconvex.exe -ulf $(COMMONMISC)$/$(TARGET)$/setup.ulf -rc $(RCFILES) -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
+$(RCFILES) : $(ULFDIR)$/setup.ulf makefile.mk rcfooter.txt rcheader.txt rctmpl.txt
+    $(WRAPCMD) lngconvex.exe -ulf $(ULFDIR)$/setup.ulf -rc $(RCFILES) -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
 
