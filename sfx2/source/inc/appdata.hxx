@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdata.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:47:29 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 11:59:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,14 +78,15 @@ class SfxViewFrameArr_Impl;
 class SfxViewShellArr_Impl;
 class SfxObjectShellArr_Impl;
 class ResMgr;
-class SfxDialogLibraryContainer;
-class SfxScriptLibraryContainer;
 class SimpleResMgr;
 class SfxViewFrame;
 class SfxSlotPool;
 class SfxResourceManager;
 class SfxDispatcher;
 class SfxInterface;
+class BasicManager;
+class SfxBasicManagerHolder;
+class SfxBasicManagerCreationListener;
 
 namespace sfx2 { namespace appl { class ImeStatusWindow; } }
 
@@ -153,8 +154,9 @@ public:
     ResMgr*                     pSfxResManager;
     ResMgr*                     pOfaResMgr;
     SimpleResMgr*               pSimpleResManager;
-    SfxScriptLibraryContainer*  pBasicLibContainer;
-    SfxDialogLibraryContainer*  pDialogLibContainer;
+    SfxBasicManagerHolder*      pBasicManager;
+    SfxBasicManagerCreationListener*
+                                pBasMgrListener;
     SfxViewFrame*               pViewFrame;
     SfxSlotPool*                pSlotPool;
     SfxResourceManager*         pResMgr;
@@ -176,6 +178,12 @@ public:
     SfxDocumentTemplates*       GetDocumentTemplates();
     DECL_STATIC_LINK(           SfxAppData_Impl, CreateDocumentTemplates, void* );
     void                        DeInitDDE();
+
+    /** called when the Application's BasicManager has been created. This can happen
+        explicitly in SfxApplication::GetBasicManager, or implicitly if a document's
+        BasicManager is created before the application's BasicManager exists.
+    */
+    void                        OnApplicationBasicManagerCreated( BasicManager& _rManager );
 };
 
 #endif // #ifndef _SFX_APPDATA_HXX
