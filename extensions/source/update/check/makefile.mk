@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 14:03:32 $
+#   last change: $Author: kz $ $Date: 2006-11-08 12:00:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -106,11 +106,17 @@ LOCALIZEDFILES= \
 
 ALLTAR : $(MYXCUFILES)
 
-$(SPOOLDIR)$/$(PACKAGEDIR)$/Addons$/Addons-onlineupdate.xcu : $(PROCESSOUT)$/merge$/$(PACKAGEDIR)$/Addons.xcu
+.IF "$(WITH_LANG)"!=""
+XCU_SOURCEDIR:=$(PROCESSOUT)$/merge$/$(PACKAGEDIR)
+.ELSE			# "$(WITH_LANG)"!=""
+XCU_SOURCEDIR:=.
+.ENDIF			# "$(WITH_LANG)"!=""
+
+$(SPOOLDIR)$/$(PACKAGEDIR)$/Addons$/Addons-onlineupdate.xcu : $(XCU_SOURCEDIR)$/Addons.xcu
     @$(MKDIRHIER) $(@:d)
     @+$(COPY) $< $@
 
-$(SPOOLDIR)$/$(PACKAGEDIR)$/Jobs$/Jobs-onlineupdate.xcu : $(PROCESSOUT)$/merge$/$(PACKAGEDIR)$/Jobs.xcu
+$(SPOOLDIR)$/$(PACKAGEDIR)$/Jobs$/Jobs-onlineupdate.xcu : $(XCU_SOURCEDIR)$/Jobs.xcu
     @$(MKDIRHIER) $(@:d)
     @+$(PERL) transform.pl < $< > $@
 #	@+$(COPY) $< $@
