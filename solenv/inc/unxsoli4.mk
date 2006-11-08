@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsoli4.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-01 14:07:08 $
+#   last change: $Author: kz $ $Date: 2006-11-08 12:07:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,7 @@ MODULES_WITH_WARNINGS := \
     r_tools \
     sc \
     sd \
+    soldep \
     starmath \
     sw \
     writerperfect \
