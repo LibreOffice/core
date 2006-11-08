@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2006-06-30 08:59:38 $
+#   last change: $Author: kz $ $Date: 2006-11-08 11:54:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,11 @@ DEBDEPN = \
     $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/icons/{$(KDEICONLIST)} 
         
 DEBDIR  = $(shell cd $(BIN); pwd)
+.IF "$(WITH_LANG)"!=""
 ULFDIR = $(COMMONMISC)$/desktopshare
+.ELSE			# "$(WITH_LANG)"!=""
+ULFDIR:=..$/share
+.ENDIF			# "$(WITH_LANG)"!=""
     
 .ENDIF
 
