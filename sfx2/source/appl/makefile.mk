@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-07 15:31:13 $
+#   last change: $Author: kz $ $Date: 2006-11-08 11:58:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -89,8 +89,8 @@ SFX_OBJECTS = \
     $(SLO)$/appreg.obj \
     $(SLO)$/appserv.obj \
     $(SLO)$/appuno.obj \
+    $(SLO)$/appbaslib.obj \
     $(SLO)$/childwin.obj \
-    $(SLO)$/dlgcont.obj \
     $(SLO)$/helpdispatch.obj \
     $(SLO)$/helpinterceptor.obj \
     $(SLO)$/imagemgr.obj\
@@ -100,9 +100,7 @@ SFX_OBJECTS = \
         $(SLO)$/linksrc.obj \
         $(SLO)$/lnkbase2.obj \
     $(SLO)$/module.obj \
-    $(SLO)$/namecont.obj \
     $(SLO)$/newhelp.obj \
-    $(SLO)$/scriptcont.obj \
     $(SLO)$/sfxdll.obj \
     $(SLO)$/sfxhelp.obj \
     $(SLO)$/sfxpicklist.obj \
