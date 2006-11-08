@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:30 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-08 09:53:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1248,6 +1248,15 @@ void WW8DocumentImpl::resolveText(WW8DocumentIterator::Pointer_t pIt,
 
         if (isSpecial(nChar))
         {
+            switch (nChar)
+            {
+            case 0x1:
+                resolvePicture(rStream);
+                break;
+            default:
+                break;
+            }
+
             if (bComplex)
             {
                 rStream.text(&aSeq[0], nIndex);
@@ -1257,15 +1266,6 @@ void WW8DocumentImpl::resolveText(WW8DocumentIterator::Pointer_t pIt,
             {
                 rStream.utext(&aSeq[0], nIndex / 2);
                 rStream.utext(&aSeq[nIndex], 1);
-            }
-
-            switch (nChar)
-            {
-            case 0x1:
-                resolvePicture(rStream);
-                break;
-            default:
-                break;
             }
         }
         else
@@ -1323,6 +1323,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 {
     if (! bSubDocument)
     {
+
         //mpPieceTable->dump(clog);
 
         //copy(mCpAndFcs.begin(), mCpAndFcs.end(), ostream_iterator<CpAndFc>(clog, ", "));
