@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-12 13:50:09 $
+#   last change: $Author: kz $ $Date: 2006-11-08 12:06:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -149,6 +149,7 @@ MODULES_WITH_WARNINGS := \
     r_tools \
     sc \
     sd \
+    soldep \
     starmath \
     sw \
     writerperfect \
