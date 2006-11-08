@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bookmrk.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:16:52 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 13:20:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ struct SwPosition;  // fwd Decl. wg. UI
 class SwBookmark : public SwModify
 {
     friend class SwDoc;         // fuers Loeschen
-    friend class Sw3IoImp;      // fuers Setzen der Position(en)
+//  friend class Sw3IoImp;      // fuers Setzen der Position(en)
 
     SwPosition *pPos1, *pPos2;  // wird im CTOR gesetzt, im DTOR geloescht
                                 // pPos1 is always != 0, pPos2 may be 0
