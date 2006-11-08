@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:04:10 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 13:28:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,7 +365,7 @@ ULONG SwASCIIParser::ReadChars()
         hConverter = rtl_createTextToUnicodeConverter( currentCharSet );
         ASSERT( hConverter, "no string convert avaiable" );
         if (!hConverter)
-            return ERR_W4W_DLL_ERROR | ERROR_SW_READ_BASE;
+            return ERROR_SW_READ_BASE;
         bSwapUnicode = false;
         hContext = rtl_createTextToUnicodeContext( hConverter );
     }
