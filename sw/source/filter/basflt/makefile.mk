@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 05:35:27 $
+#   last change: $Author: kz $ $Date: 2006-11-08 13:29:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,7 @@ SLOFILES = \
         $(SLO)$/docfact.obj \
         $(SLO)$/fltini.obj \
         $(SLO)$/shellio.obj \
-        $(SLO)$/w4wflt.obj \
-        $(SLO)$/w4wflt_detect.obj 
+
 
 EXCEPTIONSFILES = \
                 $(SLO)$/fltini.obj
