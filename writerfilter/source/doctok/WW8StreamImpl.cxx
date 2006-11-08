@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8StreamImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:32 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-08 09:52:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,4 +176,23 @@ uno::Sequence<rtl::OUString> WW8StreamImpl::getSubStreamUNames() const
     return xOLESimpleStorage->getElementNames();
 }
 
+void WW8StreamImpl::dump(OutputWithDepth<string> & o) const
+{
+    o.addItem("<stream>");
+
+    Sequence aSeq;
+    sal_uInt32 nOffset = 0;
+    sal_uInt32 nStep = 16;
+
+    do
+    {
+        aSeq = get(nOffset, nStep);
+        dumpLine(o, aSeq, nOffset, nStep);
+
+        nOffset += nStep;
+    }
+    while (aSeq.getCount() == nStep);
+
+    o.addItem("</stream>");
+}
 }

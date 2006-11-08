@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8StreamImpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:32 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-08 09:52:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,9 @@
 #ifndef INCLUDED_WW8_DOCUMENT_HXX
 #include <doctok/WW8Document.hxx>
 #endif
+#ifndef INCLUDED_OUTPUT_WITH_DEPTH_HXX
+#include <doctok/OutputWithDepth.hxx>
+#endif
 
 namespace doctok
 {
@@ -71,5 +74,7 @@ public:
 
     virtual string getSubStreamNames() const;
     virtual uno::Sequence<rtl::OUString> getSubStreamUNames() const;
+
+    virtual void dump(OutputWithDepth<string> & o) const;
 };
 }
