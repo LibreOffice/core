@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:32:02 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 13:27:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,10 +142,8 @@ short SwImpBlocks::GetFileType( const String& rFile )
         return SWBLK_XML;
     if( SvStorage::IsStorageFile( rFile ) )
         return SWBLK_SW3;
-    // Kein Storage: Ist es eine SWG-Datei?
-    const SfxFilter* pFltr = SwIoSystem::GetFileFilter( rFile, aEmptyStr );
-    return( pFltr && pFltr->GetUserData().EqualsAscii(FILTER_SWG) )
-                            ? SWBLK_SW2 : SWBLK_NONE;
+    //otherwise return NONE
+    return SWBLK_NONE;
 }
 
 
