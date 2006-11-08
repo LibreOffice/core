@@ -4,9 +4,9 @@
 #
 #   $RCSfile: packagedef.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 14:48:29 $
+#   last change: $Author: kz $ $Date: 2006-11-08 12:02:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,11 @@
 #*************************************************************************
 
 DIR_FILTERCFGOUT := $(MISC)$/filters
+.IF "$(WITH_LANG)"!=""
 DIR_LOCFRAG      := $(DIR_FILTERCFGOUT)$/ui$/fragments
+.ELSE			# "$(WITH_LANG)"!=""
+DIR_LOCFRAG      := $(PRJ)$/source$/config$/fragments
+.ENDIF			# "$(WITH_LANG)"!=""
 DIR_LOCMERGE     := $(DIR_FILTERCFGOUT)$/ui$/merge
 DIR_LANGPACK     := $(DIR_FILTERCFGOUT)$/ui$/langpacks
 DIR_MODPACKS     := $(DIR_FILTERCFGOUT)$/modulepacks
