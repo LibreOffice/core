@@ -4,9 +4,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:47:22 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 13:20:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,8 +64,8 @@ class SwDoc;
 
 class SwFmt : public SwModify
 {
-    friend class SwSwgReader;
-    friend class SwSwgWriter;
+//  friend class SwSwgReader;
+//  friend class SwSwgWriter;
 
     String aFmtName;
     SwAttrSet aSet;
