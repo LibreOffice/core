@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.185 $
+#   $Revision: 1.186 $
 #
-#   last change: $Author: rt $ $Date: 2006-10-30 08:54:14 $
+#   last change: $Author: kz $ $Date: 2006-11-08 12:03:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1727,19 +1727,40 @@ $(TARGETDEPS) : $(LOCALIZE_ME_DEST)
 .ENDIF          # "$(TARGETDEPS)"!=""
 
 .IF "$(LOCALIZE_ME_DEST)"!=""
+
+.IF "$(WITH_LANG)"==""
+$(LOCALIZE_ME_DEST) : $(LOCALIZE_ME)
+    +-$(RM) $(INCCOM)$/$(TARGET)_lastrun.mk
+    -$(MKDIR) $(@:d)
+    +-$(RM) $@
+    +$(COPY) $(@:b:+"_tmpl")$(@:e) $@
+
+.ELSE			# "$(WITH_LANG)"==""
+#  LASTRUN_MERGED
+.INCLUDE .IGNORE : $(INCCOM)$/$(TARGET)_lastrun.mk
+.IF "$(LASTRUN_MERGED)"=="TRUE"
 $(LOCALIZE_ME_DEST) : $(LOCALIZE_ME) localize.sdf 
+.ELSE			# "$(LASTRUN_MERGED)"=="TRUE"
+$(LOCALIZE_ME_DEST) .PHONY : $(LOCALIZE_ME) localize.sdf 
+    echo LASTRUN_MERGED:=TRUE > $(INCCOM)$/$(TARGET)_lastrun.mk
+.ENDIF			# "$(LASTRUN_MERGED)"=="TRUE"
     -$(MKDIR) $(@:d)
     +-$(RM) $@
     $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:b:+"_tmpl")$(@:e) -o $(@:d)$/$(@:b:+"_tmpl")$(@:e).$(INPATH) -m localize.sdf -l all
-    +$(RENAME) $(@:d)$/$(@:b:+"_tmpl")$(@:e).$(INPATH) $@
+    +$(RENAME) $(@:d)$(@:b:+"_tmpl")$(@:e).$(INPATH) $@
 
+.ENDIF			# "$(WITH_LANG)"==""
 .ENDIF          # "$(LOCALIZE_ME_DEST)"!=""
 
 .IF "$(XMLPROPERTIES)"!=""
 .IF "$(L10N_framework)"!=""
 XML_ISO_CODE*=-ISO99 $(L10N_framework)
 .ENDIF
+.IF "$(WITH_LANG)"!=""
 $(MISC)$/$(TARGET)_%.done : $(COMMONMISC)$/$(TARGET)$/%.xrb
+.ELSE			# "$(WITH_LANG)"!=""
+$(MISC)$/$(TARGET)_%.done : %.xrb
+.ENDIF			# "$(WITH_LANG)"!=""
     @+-$(RM) $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
     +$(WRAPCMD) native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm$(TARGET) && xmlex -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
     @+$(RM)  $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
