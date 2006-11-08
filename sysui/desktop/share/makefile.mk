@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-06 10:34:34 $
+#   last change: $Author: kz $ $Date: 2006-11-08 11:55:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,12 @@ TARGET=desktopshare
 # type icons :-), we are stripping all '.' for now.
 ICONPREFIX = $(UNIXFILENAME:s/.//g)
 
+.IF "$(WITH_LANG)"!=""
+ULFDIR:=$(COMMONMISC)$/$(TARGET)
+.ELSE			# "$(WITH_LANG)"!=""
+ULFDIR:=.
+.ENDIF			# "$(WITH_LANG)"!=""
+
 ULFFILES= \
     documents.ulf \
     launcher_comment.ulf \
@@ -86,13 +92,13 @@ ALLTAR : $(LAUNCHERFLAGFILE) $(MIMEINFO) $(SPECFILES)
 # Copy/patch the .desktop files to the output tree and 
 # merge-in the translations. 
 #
-$(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN) ../productversion.mk brand.pl translate.pl $(COMMONMISC)$/$(TARGET)$/launcher_name.ulf $(COMMONMISC)$/$(TARGET)$/launcher_comment.ulf
+$(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN) ../productversion.mk brand.pl translate.pl $(ULFDIR)$/launcher_name.ulf $(ULFDIR)$/launcher_comment.ulf
     @$(MKDIRHIER) $(@:db).$(INPATH)
     @echo Creating desktop entries ..
     @echo ---------------------------------
     @$(PERL) brand.pl -p "$(LONGPRODUCTNAME)" -u $(UNIXFILENAME) --iconprefix "$(ICONPREFIX)-" $(LAUNCHERDEPN) $(@:db).$(INPATH)
-    @$(PERL) translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db).$(INPATH) --ext "desktop" --key "Name" $(COMMONMISC)$/$(TARGET)$/launcher_name.ulf
-    @$(PERL) translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db).$(INPATH) --ext "desktop" --key "Comment" $(COMMONMISC)$/$(TARGET)$/launcher_comment.ulf
+    @$(PERL) translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db).$(INPATH) --ext "desktop" --key "Name" $(ULFDIR)$/launcher_name.ulf
+    @$(PERL) translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db).$(INPATH) --ext "desktop" --key "Comment" $(ULFDIR)$/launcher_comment.ulf
 .IF "$(WITH_LIBSN)"=="YES"
     @noop x$(foreach,i,$(LAUNCHERLIST) $(shell +echo "StartupNotify=true" >> $(@:db).$(INPATH)/$i.desktop))x
 .ENDIF
@@ -103,7 +109,7 @@ $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN) ../productversion.mk brand.pl translate.pl
 # Create shared mime info xml file
 #
 $(MIMEINFO) : $(shell ls ../mimetypes/*.desktop) create_mime_xml.pl
-$(MIMEINFO) : $(COMMONMISC)$/$(TARGET)$/documents.ulf
+$(MIMEINFO) : $(ULFDIR)$/documents.ulf
     @echo Create shared mime info xml file ..
     @echo ---------------------------------
     @$(PERL) create_mime_xml.pl $< > $(@).$(INPATH)
