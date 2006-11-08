@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2006-08-30 15:09:01 $
+#   last change: $Author: kz $ $Date: 2006-11-08 11:57:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,11 +49,22 @@ SYSDOCS=$(foreach,j,$(READMEFILES) $(j:d)$(j:b)$(j:e))
 ALLDOCS:=$(foreach,i,$(alllangiso) $(foreach,j,$(READMEFILES) $(j:d)$(j:b)_$i$(j:e)))
 ALLSYSDOCS:=$(foreach,i,$(alllangiso) $(foreach,j,$(SYSDOCS) $(j:d)$(GUI)$/$(j:b)_$i$(j:e)))
 
+.IF "$(WITH_LANG)"!="en-US"
+MERGEDXRM=$(COMMONMISC)$/$(TARGET)$/$(READMEFILES:b:+".xrm")
+MERGEDXRMDIR=$(COMMONMISC)$/$(TARGET)
+.ELSE			# "$(WITH_LANG)"!="en-US"
+MERGEDXRM=$(READMEFILES:b:+".xrm")
+MERGEDXRMDIR=.
+.ENDIF			# "$(WITH_LANG)"!="en-US"
+
 .INCLUDE : target.mk
 
 ALLTAR : $(ALLSYSDOCS)
 
-$(ALLDOCS) : $(COMMONMISC)$/$(TARGET)$/$(READMEFILES:b:+".xrm") $(PRJ)$/docs/readme.xsl
+$(ALLDOCS) : $(MERGEDXRMDIR)$/$(READMEFILES:b:+".xrm") $(PRJ)$/docs/readme.xsl $(COMMONMISC)$/readme.dtd
+
+$(COMMONMISC)$/readme.dtd : ..$/readme.dtd
+    +$(COPY) $< $@
 
 $(MISC)$/$(GUI)$/README%.html : $(MISC)$/readme%.html
     @+-$(MKDIR) $(@:d)
@@ -70,7 +81,7 @@ $(MISC)$/$(GUI)$/readme% : $(MISC)$/readme%
 $(MISC)$/readme%.html :
     @+-$(MKDIR) $(@:d)
 .IF "$(XSLTPROC)"=="NO_XSLTPROC"
-    $(JAVAI) $(JAVACPS) $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $(subst,_$(@:b:s/_/./:e:s/.//), $(COMMONMISC)$/$(TARGET)$/$(@:b).xrm) ..$/readme.xsl os1=$(OS) gui1=$(GUI) cp1=$(CPUNAME) com1=$(COM) lang1=$(@:b:s/_/./:e:s/.//) type=html file=$@
+    $(JAVAI) $(JAVACPS) $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $(subst,_$(@:b:s/_/./:e:s/.//), $(MERGEDXRMDIR)$/$(@:b).xrm) ..$/readme.xsl os1=$(OS) gui1=$(GUI) cp1=$(CPUNAME) com1=$(COM) lang1=$(@:b:s/_/./:e:s/.//) type=html file=$@
 .ELSE
     sed 's|xmlns:xt="http://www.jclark.com/xt"||;s|extension-element-prefixes="xt"||;s|.*xt:document.*||;s|<xsl:output method = "HTML" doctype-public = "-//W3C//DTD HTML 3.2//EN" />|<xsl:output method="html" doctype-public="-//W3C//DTD HTML 3.2//EN" />|' < ..$/readme.xsl | xsltproc -o $@ \
              --stringparam os1 $(OS) \
@@ -80,13 +91,13 @@ $(MISC)$/readme%.html :
              --stringparam lang1 $(@:b:s/_/./:e:s/.//) \
              --stringparam type html \
          - \
-             $(subst,_$(@:b:s/_/./:e:s/.//), $(COMMONMISC)$/$(TARGET)$/$(@:b).xrm)
+             $(subst,_$(@:b:s/_/./:e:s/.//), $(MERGEDXRMDIR)$/$(@:b).xrm)
 .ENDIF
 
 $(MISC)$/readme%.txt :
     @+-$(MKDIR) $(@:d)
 .IF "$(XSLTPROC)"=="NO_XSLTPROC"
-    $(JAVAI) $(JAVACPS) $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $(subst,_$(@:b:s/_/./:e:s/.//), $(COMMONMISC)$/$(TARGET)$/$(@:b).xrm) ..$/readme.xsl os1=$(OS) gui1=$(GUI) cp1=$(CPUNAME) com1=$(COM) lang1=$(@:b:s/_/./:e:s/.//) type=text file=$@
+    $(JAVAI) $(JAVACPS) $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(XML_APIS_JAR)$(PATH_SEPERATOR)$(XERCES_JAR) -Dcom.jclark.xsl.sax.parser=org.apache.xerces.parsers.SAXParser com.jclark.xsl.sax.Driver $(subst,_$(@:b:s/_/./:e:s/.//), $(MERGEDXRMDIR)$/$(@:b).xrm) ..$/readme.xsl os1=$(OS) gui1=$(GUI) cp1=$(CPUNAME) com1=$(COM) lang1=$(@:b:s/_/./:e:s/.//) type=text file=$@
 .ELSE
     sed 's|xmlns:xt="http://www.jclark.com/xt"||;s|extension-element-prefixes="xt"||;s|.*xt:document.*||;s|<xsl:output method = "HTML" doctype-public = "-//W3C//DTD HTML 3.2//EN" />|<xsl:output method="text" />|' < ..$/readme.xsl | xsltproc -o $@ \
              --stringparam os1 $(OS) \
@@ -96,6 +107,6 @@ $(MISC)$/readme%.txt :
              --stringparam lang1 $(@:b:s/_/./:e:s/.//) \
              --stringparam type text \
              - \
-             $(subst,_$(@:b:s/_/./:e:s/.//), $(COMMONMISC)$/$(TARGET)$/$(@:b).xrm)
+             $(subst,_$(@:b:s/_/./:e:s/.//), $(MERGEDXRMDIR)$/$(@:b).xrm)
 .ENDIF
 
