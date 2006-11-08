@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 17:17:24 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 12:00:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,20 +62,25 @@ struct MarkData_Impl
     SfxViewFrame* pFrame;
 };
 
+namespace basic
+{
+    class SfxDialogLibraryContainer;
+    class SfxScriptLibraryContainer;
+    class SfxLibraryContainer;
+}
+
 class SfxFrame;
-class SfxDialogLibraryContainer;
-class SfxScriptLibraryContainer;
 class SfxToolBoxConfig;
 class SfxAcceleratorManager;
+class SfxBasicManagerHolder;
 struct SfxObjectShell_Impl
 {
     ::comphelper::EmbeddedObjectContainer* mpObjectContainer;
     SfxAcceleratorManager*  pAccMgr;
     SfxDocumentInfo*    pDocInfo;
     SfxConfigManager*   pCfgMgr;
-    BasicManager*       pBasicMgr;          // Doc-BASIC oder 0
-    SfxScriptLibraryContainer* pBasicLibContainer;
-    SfxDialogLibraryContainer* pDialogLibContainer;
+    SfxBasicManagerHolder*
+                        pBasicManager;
     SfxProgress*        pProgress;
     String              aTitle;
     String              aTempName;
@@ -165,82 +170,7 @@ struct SfxObjectShell_Impl
     sal_Bool                m_bIsInit;
 
 
-    SfxObjectShell_Impl() :
-              mpObjectContainer(0),
-              pAccMgr(0),
-              pDocInfo ( 0),
-              pCfgMgr( 0),
-              pBasicMgr( 0),
-              pBasicLibContainer( 0 ),
-              pDialogLibContainer( 0 ),
-              pProgress( 0),
-              nTime(),
-              nVisualDocumentNumber( USHRT_MAX),
-              nDocumentSignatureState( SIGNATURESTATE_UNKNOWN ),
-              nScriptingSignatureState( SIGNATURESTATE_UNKNOWN ),
-              bTemplateConfig( sal_False),
-              bInList( sal_False),
-              bClosing( sal_False),
-              bSetInPlaceObj( sal_False),
-              bIsSaving( sal_False),
-              bPasswd( sal_False),
-              bIsTmp( sal_False),
-              bIsNamedVisible( sal_False),
-              bIsTemplate(sal_False),
-              bIsAbortingImport ( sal_False),
-              bImportDone ( sal_False),
-              bInPrepareClose( sal_False ),
-              bPreparedForClose( sal_False ),
-              bWaitingForPicklist( sal_False ),
-              bModuleSearched( sal_False ),
-              bIsBasicDefault( sal_True ),
-              bIsHelpObjSh( sal_False ),
-              bForbidCaching( sal_False ),
-              bForbidReload( sal_False ),
-              bSupportsEventMacros( sal_True ),
-              bLoadingWindows( sal_False ),
-              bBasicInitialized( sal_False ),
-//              bHidden( sal_False ),
-              bIsPrintJobCancelable( sal_True ),
-              bOwnsStorage( sal_True ),
-              bNoBaseURL( sal_False ),
-              bInitialized( sal_False ),
-              bSignatureErrorIsShown( sal_False ),
-              bModelInitialized( sal_False ),
-              bPreserveVersions( sal_True ),
-              m_bMacroSignBroken( sal_False ),
-        lErr(ERRCODE_NONE),
-        nEventId ( 0),
-        bDoNotTouchDocInfo( sal_False ),
-        pReloadTimer ( 0),
-        pMarkData( 0 ),
-        nLoadedFlags ( SFX_LOADED_MAINDOCUMENT ),
-        nFlagsInProgress( 0 ),
-        bInFrame( sal_False ),
-        bModalMode( sal_False ),
-              bRunningMacro( sal_False ),
-              bReloadAvailable( sal_False ),
-        nAutoLoadLocks( 0 ),
-              pModule( 0 ),
-        pFrame( 0 ),
-              pTbxConfig( 0 ),
-        pEventConfig(NULL),
-        eFlags( SFXOBJECTSHELL_UNDEFINED ),
-        pCloser( 0 ),
-        bReadOnlyUI( sal_False ),
-        bHiddenLockedByAPI( sal_False ),
-              bInCloseEvent( sal_False )
-              , nStyleFilter( 0 )
-              , nMacroMode( -1 )
-        , bDisposing( sal_False )
-        , bMacroDisabled( sal_False )
-        , bMacroDisabledMessageIsShown( sal_False )
-        , m_bEnableSetModified( sal_True )
-        , m_bIsModified( sal_False )
-        , m_nMapUnit( MAP_100TH_MM )
-        , m_bCreateTempStor( sal_False )
-        , m_bIsInit( sal_False )
-    {}
+    SfxObjectShell_Impl();
     ~SfxObjectShell_Impl();
 
 };
