@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:07:27 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 13:38:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1872,7 +1872,8 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     if( aMed.IsStorage() )
     {
         ULONG nVersion = pFlt ? pFlt->GetVersion() : 0;
-        pRead = nVersion >= SOFFICE_FILEFORMAT_60 ? ReadXML : ReadSw3;
+        DBG_ASSERT(nVersion >= SOFFICE_FILEFORMAT_60, "which file version?")
+        pRead =  ReadXML;
         // the SW3IO - Reader need the pam/wrtshell, because only then he
         // insert the styles!
         if( bUnoCall )
@@ -1886,9 +1887,9 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     }
     else if( pFlt )
     {
-        if( pFlt->GetUserData().EqualsAscii( FILTER_SWG ) ||
-            pFlt->GetUserData().EqualsAscii( FILTER_SWGV ))
-            pRead = ReadSwg;
+//      if( pFlt->GetUserData().EqualsAscii( FILTER_SWG ) ||
+//          pFlt->GetUserData().EqualsAscii( FILTER_SWGV ))
+//          pRead = ReadSwg;
         pReader = new SwReader( aMed, rURL, pDoc );
     }
 
