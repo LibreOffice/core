@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:27:48 $
+ *  last change: $Author: kz $ $Date: 2006-11-08 11:58:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,7 @@ using namespace ::com::sun::star::script;
 #include "../appl/app.hrc"
 #include "secmacrowarnings.hxx"
 #include "sfxdlg.hxx"
-#include "scriptcont.hxx"
+#include "appbaslib.hxx"
 
 using namespace ::com::sun::star;
 
@@ -2196,7 +2196,8 @@ void SfxObjectShell::InPlaceActivate( BOOL )
 
 BOOL SfxObjectShell::HasMacrosLib_Impl() const
 {
-    BOOL bHasMacros = (pImp->pBasicLibContainer != 0);
+    Reference< XLibraryContainer > xContainer( pImp->pBasicManager->getLibraryContainer( SfxBasicManagerHolder::SCRIPTS ) );
+    BOOL bHasMacros = xContainer.is();
     try
     {
         if ( bHasMacros )
@@ -2205,10 +2206,10 @@ BOOL SfxObjectShell::HasMacrosLib_Impl() const
 
             // if there are libraries except "Standard" library
             // we assume that they are not empty (because they have been created by the user)
-            if ( pImp->pBasicLibContainer->hasElements() )
+            if ( xContainer->hasElements() )
             {
                 ::rtl::OUString aStdLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-                uno::Sequence< ::rtl::OUString > aElements = pImp->pBasicLibContainer->getElementNames();
+                uno::Sequence< ::rtl::OUString > aElements = xContainer->getElementNames();
                 if ( aElements.getLength() )
                 {
                     if ( aElements.getLength() > 1 || !aElements[0].equals( aStdLibName ) )
@@ -2218,7 +2219,7 @@ BOOL SfxObjectShell::HasMacrosLib_Impl() const
                         // usually a "Standard" library is always present (design)
                         // for this reason we must check if it's empty
                         uno::Reference < container::XNameAccess > xLib;
-                        uno::Any aAny = pImp->pBasicLibContainer->getByName( aStdLibName );
+                        uno::Any aAny = xContainer->getByName( aStdLibName );
                         aAny >>= xLib;
                         if ( xLib.is() )
                             bHasMacros = xLib->hasElements();
