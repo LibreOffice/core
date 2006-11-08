@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-19 15:29:04 $
+#   last change: $Author: kz $ $Date: 2006-11-08 11:56:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,11 @@ RPMDEPN = \
     $(MISC)/$(TARGET)/opt/gnome/share/icons/gnome/{$(GNOMEICONLIST)} \
     $(MISC)/$(TARGET)/opt/kde3/share/icons/{$(KDEICONLIST)} 
         
+.IF "$(WITH_LANG)"!=""
 ULFDIR = $(COMMONMISC)$/desktopshare
+.ELSE			# "$(WITH_LANG)"!=""
+ULFDIR:=..$/share
+.ENDIF			# "$(WITH_LANG)"!=""
 
 .ENDIF
 
