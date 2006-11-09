@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:32 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:59:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,8 @@ class WW8BinaryObjReference : public doctok::Reference<BinaryObj>,
 {
 public:
     typedef boost::shared_ptr<WW8BinaryObjReference> Pointer_t;
+    WW8BinaryObjReference(WW8Stream & rStream, sal_uInt32 nOffset,
+                          sal_uInt32 nCount);
     WW8BinaryObjReference(WW8StructBase & rParent, sal_uInt32 nOffset,
                           sal_uInt32 nCount);
     WW8BinaryObjReference(WW8StructBase * rParent, sal_uInt32 nOffset,
