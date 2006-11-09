@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptcont.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 11:54:56 $
+ *  last change: $Author: kz $ $Date: 2006-11-09 10:57:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -742,7 +742,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                                 throw uno::RuntimeException();
                             xEncr->setEncryptionPassword( pLib->maPassword );
                         }
-                        catch( ::com::sun::star::packages::WrongPasswordException& e )
+                        catch( ::com::sun::star::packages::WrongPasswordException& )
                         {
                             xSourceStream = xElementRootStorage->openEncryptedStreamElement(
                                 aSourceStreamName,
