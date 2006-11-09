@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-07 14:46:33 $
+#   last change: $Author: obo $ $Date: 2006-11-09 09:07:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -225,6 +225,7 @@ MODULES_WITH_WARNINGS := \
     r_tools \
     sc \
     sd \
+    soldep \
     starmath \
     sw \
     writerperfect \
