@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:32 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:57:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ namespace doctok
 {
 using namespace ::std;
 
-WW8OutputWithDepth output;
 string gInfo = "";
 
 typedef WW8PropertySet::Pointer_t TablePropsPointer_t;
@@ -241,6 +240,12 @@ WW8BinaryObjReference::WW8BinaryObjReference
 {
 }
 
+WW8BinaryObjReference::WW8BinaryObjReference
+(WW8Stream & rStream, sal_uInt32 nOffset, sal_uInt32 nCount)
+: WW8StructBase(rStream, nOffset, nCount)
+{
+}
+
 doctok::Reference<BinaryObj>::Pointer_t
 WW8BinaryObjReference::getBinary()
 {
@@ -263,10 +268,10 @@ string WW8BinaryObjReference::getType() const
 }
 
 void WW8BinaryObjHandler::data
-(const sal_uInt8 * /*buf*/, size_t /*length*/,
+(const sal_uInt8 * buf, size_t length,
  doctok::Reference<Properties>::Pointer_t /*pRef*/)
 {
-#if 0
+#if 1
     SubSequence<sal_uInt8> aSeq(buf, length);
 
     aSeq.dump(output);

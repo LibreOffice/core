@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PLCF.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:29 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:50:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,10 +181,10 @@ T * PLCF<T>::getEntryByFc(sal_uInt32 nFc) const
 }
 
 template <class T>
-void PLCF<T>::dump(OutputWithDepth<string> & output) const
+void PLCF<T>::dump(OutputWithDepth<string> & output_) const
 {
-    output.addItem("<plcf>");
-    WW8StructBase::dump(output);
+    output_.addItem("<plcf>");
+    WW8StructBase::dump(output_);
 
     sal_uInt32 nCount = getEntryCount();
     for (sal_uInt32 n = 0; n < nCount; ++n)
@@ -192,11 +192,11 @@ void PLCF<T>::dump(OutputWithDepth<string> & output) const
         Fc aFc = getFc(n);
         typename T::Pointer_t pT = getEntry(n);
 
-        output.addItem("<plcfentry cpandfc=\"" + aFc.toString() + "\">");
-        pT->dump(output);
-        output.addItem("</plcfentry>");
+        output_.addItem("<plcfentry cpandfc=\"" + aFc.toString() + "\">");
+        pT->dump(output_);
+        output_.addItem("</plcfentry>");
     }
-    output.addItem("</plcf>>");
+    output_.addItem("</plcf>>");
 }
 
 }
