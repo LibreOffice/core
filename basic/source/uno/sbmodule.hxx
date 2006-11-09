@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbmodule.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 11:54:34 $
+ *  last change: $Author: kz $ $Date: 2006-11-09 10:37:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ namespace basic
 {
 //........................................................................
 
-    DECLARE_COMPONENT_MODULE( BasicModule, BasicModuleClient );
+    DECLARE_COMPONENT_MODULE( BasicModule, BasicModuleClient )
 
 //........................................................................
 } // namespace basic
