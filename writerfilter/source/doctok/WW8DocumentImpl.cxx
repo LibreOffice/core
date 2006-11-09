@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-08 09:53:30 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:53:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -413,6 +413,8 @@ WW8DocumentImpl::WW8DocumentImpl(WW8Stream::Pointer_t rpStream)
         mpDffBlock = DffBlock::Pointer_t
             (new DffBlock(*mpTableStream, mpFib->get_fcDggInfo(),
                          mpFib->get_lcbDggInfo(), 1));
+
+        mpDffBlock->setDocument(this);
     }
 
     mpShapeHelper = ShapeHelper::Pointer_t
@@ -1125,8 +1127,24 @@ WW8DocumentImpl::getShape(const CpAndFc & rCpAndFc) const
 doctok::Reference<Properties>::Pointer_t
 WW8DocumentImpl::getShape(sal_uInt32 nSpid)
 {
-    DffRecord * pTmp = new DffRecord(*mpDffBlock->getShape(nSpid));
+    DffSpContainer * pTmp = new DffSpContainer(*mpDffBlock->getShape(nSpid));
+
+    pTmp->setDocument(this);
+
     return doctok::Reference<Properties>::Pointer_t(pTmp);
+}
+
+doctok::Reference<Properties>::Pointer_t
+WW8DocumentImpl::getBlip(sal_uInt32 nBid)
+{
+    doctok::Reference<Properties>::Pointer_t pResult;
+
+    DffBSE * pBlip = new DffBSE(*mpDffBlock->getBlip(nBid));
+
+    if (pBlip != NULL)
+        pResult = doctok::Reference<Properties>::Pointer_t(pBlip);
+
+    return pResult;
 }
 
 doctok::Reference<Properties>::Pointer_t
@@ -1328,6 +1346,10 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 
         //copy(mCpAndFcs.begin(), mCpAndFcs.end(), ostream_iterator<CpAndFc>(clog, ", "));
 
+        //mpDocStream->dump(output);
+
+        //output.addItem(mTextboxHeaderEndCpAndFc.toString());
+
         doctok::Reference<Properties>::Pointer_t pFib
             (new WW8Fib(*mpFib));
         rStream.props(pFib);
@@ -1337,7 +1359,6 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             WW8StructBase aStructBase(*mpTableStream, mpFib->get_fcPlcftxbxTxt(),
                                       mpFib->get_lcbPlcftxbxTxt());
 
-            WW8OutputWithDepth output;
             output.addItem("<textboxes>");
             aStructBase.dump(output);
             output.addItem("</textboxes>");
@@ -1349,7 +1370,6 @@ void WW8DocumentImpl::resolve(Stream & rStream)
                                mpFib->get_fcPlcftxbxBkd(),
                                mpFib->get_lcbPlcftxbxBkd());
 
-            WW8OutputWithDepth output;
             output.addItem("<textboxes.breaks>");
             aPLCF.dump(output);
             output.addItem("</textboxes.breaks>");
