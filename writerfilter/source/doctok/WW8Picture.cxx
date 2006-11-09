@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8Picture.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2006-11-02 12:49:39 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:56:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,4 +52,3 @@ WW8FSPA::get_shape()
     return getDocument()->getShape(get_spid());
 }
 }
-

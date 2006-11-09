@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocTokTestService.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:37 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-09 16:03:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
 
             uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess(
             xFactory->createInstanceWithContext(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")), 
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")),
                 xContext), uno::UNO_QUERY_THROW );
 
             rtl_uString *dir=NULL;
@@ -112,7 +112,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
 
             uno::Reference<io::XInputStream> xInputStream = xFileAccess->openFileRead(absFileUrl);
             doctok::WW8Stream::Pointer_t pDocStream = doctok::WW8DocumentFactory::createStream(xContext, xInputStream);
-                
+
             doctok::WW8Document::Pointer_t pDocument = doctok::WW8DocumentFactory::createDocument(pDocStream);
 
 #if 0
