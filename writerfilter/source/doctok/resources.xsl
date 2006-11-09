@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resources.xsl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:33 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:52:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,9 @@
  *
  *  $RCSfile: resources.xsl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:33 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:52:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -816,15 +816,18 @@ class </xsl:text>
 <xsl:text> : public DffRecord
 {
 public:
+    typedef boost::shared_ptr &lt; </xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text> &gt; Pointer_t;&#xa;
     </xsl:text>
     <xsl:value-of select="$classname"/>
-    <xsl:text>::</xsl:text>
+    <xsl:text>(WW8StructBase * pParent, sal_uInt32 nOffset, sal_uInt32 nCount)&#xa;
+    : DffRecord(pParent, nOffset, nCount) {}&#xa;
+    </xsl:text>
     <xsl:value-of select="$classname"/>
-    <xsl:text>(WW8StructBase * pParent, sal_uInt32 nOffset, sal_uInt32 nCount)
-    : DffRecord(pParent, nOffset, nCount) {}
-    virtual </xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text>::~</xsl:text>
+    <xsl:text>(DffRecord &amp; rRecord)&#xa;
+    : DffRecord(rRecord) {}
+    virtual ~</xsl:text>
     <xsl:value-of select="$classname"/>
     <xsl:text>();
 
