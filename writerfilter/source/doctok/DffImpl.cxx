@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DffImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-06 10:48:06 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:49:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 
 #include "resources.hxx"
+#include "WW8DocumentImpl.hxx"
 
 namespace doctok
 {
@@ -356,6 +357,22 @@ WW8BinaryObjReference::Pointer_t DffBSE::get_binary()
         pResult = WW8BinaryObjReference::Pointer_t
             (new WW8BinaryObjReference(this, 0x45,
                                        getCount() - 0x45));
+    else
+    {
+        WW8FBSE aFBSE(this, 0x8);
+
+        if (aFBSE.get_foDelay() > 0 && getDocument() != NULL)
+        {
+            WW8StructBase aStructBase(*getDocument()->getDocStream(),
+                                      aFBSE.get_foDelay(), 0x8);
+
+            sal_uInt32 nCount = aStructBase.getU32(0x4) - 0x11;
+
+            pResult = WW8BinaryObjReference::Pointer_t
+                (new WW8BinaryObjReference(*getDocument()->getDocStream(),
+                                           aFBSE.get_foDelay() + 0x19, nCount));
+        }
+    }
 
     return pResult;
 }
@@ -387,6 +404,24 @@ rtl::OUString DffFSP::get_shptypename()
     string aName = (*ShapeTypeToString::Instance())(get_shptype());
 
     return rtl::OUString::createFromAscii(aName.c_str());
+}
+
+// DffSpContainer
+
+doctok::Reference<Properties>::Pointer_t
+DffSpContainer::get_blip()
+{
+    doctok::Reference<Properties>::Pointer_t pResult;
+
+    if (getShapeType() == 75)
+    {
+        sal_uInt32 nBid = getShapeBid();
+
+        if (getDocument() != NULL)
+            pResult = getDocument()->getBlip(nBid);
+    }
+
+    return pResult;
 }
 
 }

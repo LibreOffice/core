@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dff.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:29 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:48:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,8 @@
 #include "resources.hxx"
 
 namespace doctok {
+
+typedef boost::shared_ptr<WW8Value> WW8ValueSharedPointer_t;
 
 DffRecord::DffRecord(WW8Stream & rStream, sal_uInt32 nOffset,
                      sal_uInt32 nCount)
@@ -194,10 +196,79 @@ void DffRecord::resolve(Properties & rHandler)
     {
         resolveChildren(rHandler);
     }
-    else
+
+    resolveLocal(rHandler);
+}
+
+sal_uInt32 DffRecord::getShapeType()
+{
+    sal_uInt32 nResult = 0;
+
+    Records_t aRecords = findRecords(0xf00a);
+
+    if (aRecords.size() > 0)
     {
-        resolveLocal(rHandler);
+        DffFSP * pDffFSP = dynamic_cast<DffFSP*>((*aRecords.begin()).get());
+        nResult = pDffFSP->get_shptype();
     }
+
+    return nResult;
+}
+
+class DffOPTHandler : public Properties
+{
+    map<Id, WW8ValueSharedPointer_t> mMap;
+
+public:
+    DffOPTHandler() {}
+    virtual ~DffOPTHandler() {}
+
+    virtual void attribute(Id name, Value & val)
+    {
+        WW8Value & rTmpVal = dynamic_cast<WW8Value &>(val);
+        WW8ValueSharedPointer_t pVal(dynamic_cast<WW8Value *>(rTmpVal.clone()));
+        mMap[name] = pVal;
+    }
+
+    virtual void sprm(Sprm & /*sprm_*/)
+    {
+    }
+
+    WW8ValueSharedPointer_t & getValue(Id name)
+    {
+        return mMap[name];
+    }
+
+};
+
+sal_uInt32 DffRecord::getShapeBid()
+{
+    sal_uInt32 nResult = 0;
+
+    if (getShapeType() == 75)
+    {
+        Records_t aRecords = findRecords(0xf00b);
+
+        if (aRecords.size() > 0)
+        {
+            DffOPTHandler aHandler;
+            DffOPT * pOpts = dynamic_cast<DffOPT*>((*aRecords.begin()).get());
+
+            sal_uInt32 nCount = pOpts->get_property_count();
+
+            for (sal_uInt32 n = 0; n < nCount; ++n)
+            {
+                pOpts->get_property(n)->resolve(aHandler);
+            }
+
+            WW8ValueSharedPointer_t pVal = aHandler.getValue(260);
+
+            if (pVal.get() != NULL)
+                nResult = pVal->getInt();
+        }
+    }
+
+    return nResult;
 }
 
 string DffRecord::getType() const
@@ -356,6 +427,20 @@ DffRecord::Pointer_t DffBlock::getShape(sal_uInt32 nSpid)
                 break;
             }
         }
+    }
+
+    return pResult;
+}
+
+DffRecord::Pointer_t DffBlock::getBlip(sal_uInt32 nBlip)
+{
+    DffRecord::Pointer_t pResult;
+
+    Records_t aRecords = findRecords(0xf007);
+
+    if (nBlip < aRecords.size())
+    {
+        pResult = aRecords[nBlip];
     }
 
     return pResult;

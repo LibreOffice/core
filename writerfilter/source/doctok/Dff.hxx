@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dff.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:29 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:49:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,9 @@
  *
  *  $RCSfile: Dff.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:29 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:49:09 $
  *
  ******************************************************************/
 
@@ -97,6 +97,9 @@ public:
     Records_t::iterator begin();
     Records_t::iterator end();
 
+    sal_uInt32 getShapeType();
+    sal_uInt32 getShapeBid();
+
     /* Properties methods */
     virtual void resolve(Properties & rHandler);
     virtual string getType() const;
@@ -141,6 +144,7 @@ public:
                      bool bRecursive = true, bool bAny = false);
 
     DffRecord::Pointer_t getShape(sal_uInt32 nSpid);
+    DffRecord::Pointer_t getBlip(sal_uInt32 nBlip);
 
     Records_t::iterator begin();
     Records_t::iterator end();
