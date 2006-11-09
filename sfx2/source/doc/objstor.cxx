@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.186 $
+ *  $Revision: 1.187 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 12:07:05 $
+ *  last change: $Author: kz $ $Date: 2006-11-09 14:29:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3823,10 +3823,15 @@ void SfxObjectShell::UpdateLinks()
 
 sal_Bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )
 {
+        (void) xHandler;
+/*      Task 71380 Needed to be comented out as related code
+        from cws npower3 got lost with moving LibraryContainer
+        implementation from sfx2 to basic.
+
     uno::Sequence< rtl::OUString > sModules;
     if ( xHandler.is() )
     {
-        SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
+        ::basic::SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
         if( pBasicCont && pBasicCont->LegacyPsswdBinaryLimitExceeded( sModules ) )
         {
             ModuleSizeExceeded* pReq =  new ModuleSizeExceeded( sModules );
@@ -3835,7 +3840,7 @@ sal_Bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference
             return pReq->isApprove();
         }
     }
-
+*/
     // No interaction handler, default is to continue to save
     return sal_True;
 }
