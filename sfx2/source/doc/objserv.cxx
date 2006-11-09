@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:21:48 $
+ *  last change: $Author: rt $ $Date: 2006-11-09 11:01:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,6 @@
 #include "../appl/app.hrc"
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#include "scriptcont.hxx"
 
 #ifndef _SFX_HELPID_HRC
 #include "helpid.hrc"
