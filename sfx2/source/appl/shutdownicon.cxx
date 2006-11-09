@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 15:31:27 $
+ *  last change: $Author: rt $ $Date: 2006-11-09 09:59:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -692,10 +692,11 @@ bool ShutdownIcon::IsQuickstarterInstalled()
 {
 #ifndef ENABLE_QUICKSTART_APPLET
     return false;
-#endif // !ENABLE_QUICKSTART_APPLET
+#else // !ENABLE_QUICKSTART_APPLET
 #ifdef UNX
     return LoadModule( NULL, NULL, NULL);
 #endif // UNX
+#endif // !ENABLE_QUICKSTART_APPLET
 }
 #endif // !WNT
 
