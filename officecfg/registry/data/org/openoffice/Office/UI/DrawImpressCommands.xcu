@@ -155,7 +155,7 @@
             </node>
             <node oor:name=".uno:GlueEditMode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Klebepunkte</value>
+                    <value xml:lang="de">Kle~bepunkte</value>
                     <value xml:lang="en-US">~Glue Points</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -752,7 +752,7 @@
             </node>
             <node oor:name=".uno:NameGroup" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Obje~kt benennen...</value>
+                    <value xml:lang="de">Objekt be~nennen...</value>
                     <value xml:lang="en-US">~Name Object...</value>
                 </prop>
             </node>
@@ -1022,7 +1022,7 @@
             </node>
             <node oor:name=".uno:Connect" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Verbinden</value>
+                    <value xml:lang="de">Ver~binden</value>
                     <value xml:lang="en-US">C~onnect</value>
                 </prop>
             </node>
@@ -1709,7 +1709,7 @@
             </node>
             <node oor:name=".uno:ConvertMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Umwandeln</value>
+                    <value xml:lang="de">Um~wandeln</value>
                     <value xml:lang="en-US">~Convert</value>
                 </prop>
             </node>
