@@ -109,3 +109,5 @@ gl    1252  1110   # Galician
 kn       0  1099   # Kannada
 ms       0  1086   # Malay (Malaysian)
 tg       0  1064   # Tajik
+ka       0  1079   # Georgian
+eo       0  1553   
