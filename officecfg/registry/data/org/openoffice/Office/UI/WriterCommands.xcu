@@ -120,7 +120,7 @@
             </node>
             <node oor:name=".uno:InsertSection" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Bereic~h...</value>
+                    <value xml:lang="de">~Bereich...</value>
                     <value xml:lang="en-US">~Section...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -985,7 +985,7 @@
             </node>
             <node oor:name=".uno:ResetAttributes" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Standardformatierung</value>
+                    <value xml:lang="de">Stan~dardformatierung</value>
                     <value xml:lang="en-US">~Default Formatting</value>
                 </prop>
             </node>
@@ -1147,7 +1147,7 @@
             </node>
             <node oor:name=".uno:TableSort" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Sortieren...</value>
+                    <value xml:lang="de">Sorti~eren...</value>
                     <value xml:lang="en-US">So~rt...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -2576,7 +2576,7 @@
             </node>
             <node oor:name=".uno:AutoFormatMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">AutoFormat</value>
+                    <value xml:lang="de">A~utoFormat</value>
                     <value xml:lang="en-US">Auto~Format</value>
                 </prop>
             </node>
