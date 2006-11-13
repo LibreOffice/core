@@ -32,7 +32,7 @@
             </node>
             <node oor:name=".uno:ResetAttributes" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Standard~formatierung</value>
+                    <value xml:lang="de">Stan~dardformatierung</value>
                     <value xml:lang="en-US">~Default Formatting</value>
                 </prop>
             </node>
@@ -445,7 +445,7 @@
             </node>
             <node oor:name=".uno:ConditionalFormatDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Bedingte Formatierung...</value>
+                    <value xml:lang="de">Bed~ingte Formatierung...</value>
                     <value xml:lang="en-US">C~onditional Formatting...</value>
                 </prop>
             </node>
@@ -788,7 +788,7 @@
             </node>
             <node oor:name=".uno:PagebreakMode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">S~eitenumbruch-Vorschau</value>
+                    <value xml:lang="de">Seitenumbruch-~Vorschau</value>
                     <value xml:lang="en-US">~Page Break Preview</value>
                 </prop>
             </node>
@@ -1192,7 +1192,7 @@
                     <value xml:lang="en-US">Format ~Page...</value>
                 </prop>
                 <prop oor:name="ContextLabel" oor:type="xs:string">
-                    <value xml:lang="de">Se~ite...</value>
+                    <value xml:lang="de">~Seite...</value>
                     <value xml:lang="en-US">~Page...</value>
                 </prop>
             </node>
@@ -1746,13 +1746,13 @@
             </node>
             <node oor:name=".uno:RowMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Z~eile</value>
+                    <value xml:lang="de">Zei~le</value>
                     <value xml:lang="en-US">~Row</value>
                 </prop>
             </node>
             <node oor:name=".uno:ColumnMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Spalte</value>
+                    <value xml:lang="de">S~palte</value>
                     <value xml:lang="en-US">Colu~mn</value>
                 </prop>
             </node>
@@ -1770,13 +1770,13 @@
             </node>
             <node oor:name=".uno:PrintRangesMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">D~ruckbereiche</value>
+                    <value xml:lang="de">Druck~bereiche</value>
                     <value xml:lang="en-US">Pri~nt Ranges</value>
                 </prop>
             </node>
             <node oor:name=".uno:DrawGraphicMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Grafik</value>
+                    <value xml:lang="de">G~rafik</value>
                     <value xml:lang="en-US">Graph~ic</value>
                 </prop>
             </node>
