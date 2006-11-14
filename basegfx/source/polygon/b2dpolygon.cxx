@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolygon.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:01:18 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:07:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1164,8 +1164,10 @@ namespace basegfx
 
     void B2DPolygon::transform(const ::basegfx::B2DHomMatrix& rMatrix)
     {
-        if(count())
+        if(mpPolygon->count() && !rMatrix.isIdentity())
+        {
             mpPolygon->transform(rMatrix);
+        }
     }
 } // end of namespace basegfx
 
