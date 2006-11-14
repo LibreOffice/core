@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globl3d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:50:39 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:38:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,15 +48,9 @@ const UINT32 E3dInventor = UINT32('E')*0x00000001+
                            UINT32('D')*0x00010000+
                            UINT32('1')*0x01000000;
 
-//BFS01const UINT16 E3D_DISPLAYOBJ_ID   = 1;
 const UINT16 E3D_SCENE_ID       = 2;
 const UINT16 E3D_POLYSCENE_ID   = 3;
-//BFS01const UINT16 E3D_LIGHT_ID        = 5;
-//BFS01const UINT16 E3D_DISTLIGHT_ID    = 6;
-//BFS01const UINT16 E3D_POINTLIGHT_ID   = 7;
-//BFS01const UINT16 E3D_SPOTLIGHT_ID    = 8;
 const UINT16 E3D_OBJECT_ID      = 10;
-//BFS01const UINT16 E3D_POLYOBJ_ID  = 11;
 const UINT16 E3D_CUBEOBJ_ID     = 12;
 const UINT16 E3D_SPHEREOBJ_ID   = 13;
 const UINT16 E3D_POINTOBJ_ID    = 14;
