@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:12:54 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:15:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,18 +230,14 @@ void GraphCtrl::InitSdrModel()
     // View anlegen
     pView = new GraphCtrlView( pModel, this );
     pView->SetWorkArea( Rectangle( Point(), aGraphSize ) );
-//BFS09 pView->SetHlplVisible( FALSE );
-//BFS09 pView->SetGridVisible( FALSE );
-//BFS09 pView->SetBordVisible( FALSE );
-//BFS09 pView->SetPageVisible( FALSE );
     pView->EnableExtendedMouseEventDispatcher( TRUE );
-    pView->ShowPagePgNum( 0, Point() );
+    pView->ShowSdrPage(pView->GetModel()->GetPage(0));
+//  pView->ShowSdrPage(pView->GetModel()->GetPage(0));
     pView->SetFrameDragSingles( TRUE );
     pView->SetMarkedPointsSmooth( SDRPATHSMOOTH_SYMMETRIC );
     pView->SetEditMode( TRUE );
 
-    //BFS09
-    pView->SetPagePaintingAllowed(sal_False);
+    pView->SetPagePaintingAllowed(false);
 
     // Tell the accessibility object about the changes.
     if (mpAccContext != NULL)
@@ -651,8 +647,8 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                 if(pHdl->GetKind() == HDL_POLY)
                 {
                     // rescue ID of point with focus
-                    sal_uInt16 nPol(pHdl->GetPolyNum());
-                    sal_uInt16 nPnt(pHdl->GetPointNum());
+                    sal_uInt32 nPol(pHdl->GetPolyNum());
+                    sal_uInt32 nPnt(pHdl->GetPointNum());
 
                     if(pView->IsPointMarked(*pHdl))
                     {
@@ -737,7 +733,7 @@ void GraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
                 SdrHitKind      eHit = pView->PickAnything( rMEvt, SDRMOUSEBUTTONDOWN, aVEvt );
 
                 if ( nPolyEdit == SID_BEZIER_INSERT && eHit == SDRHIT_MARKEDOBJECT )
-                    pView->BegInsObjPoint( aLogPt, rMEvt.IsMod1(), NULL, 0 );
+                    pView->BegInsObjPoint( aLogPt, rMEvt.IsMod1());
                 else
                     pView->MouseButtonDown( rMEvt, this );
             }
@@ -773,7 +769,7 @@ void GraphCtrl::MouseMove(const MouseEvent& rMEvt)
         pView->MouseMove( rMEvt, this );
 
         if( ( SID_BEZIER_INSERT == nPolyEdit ) &&
-            !pView->HitHandle( aLogPos, *this ) &&
+            !pView->PickHandle( aLogPos ) &&
             !pView->IsInsObjPoint() )
         {
             SetPointer( POINTER_CROSS );
