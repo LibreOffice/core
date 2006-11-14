@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 10:15:41 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:45:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,7 +369,7 @@ void OutlineView::AdjustPosSizePixel(
 |*
 \************************************************************************/
 
-void OutlineView::AddWin (::sd::Window* pWin)
+void OutlineView::AddWindowToPaintView(::sd::Window* pWin)
 {
     BOOL bAdded = FALSE;
     BOOL bValidArea = FALSE;
@@ -403,7 +403,7 @@ void OutlineView::AddWin (::sd::Window* pWin)
     // weisser Hintergrund im Outliner
     pWin->SetBackground( Wallpaper( aWhiteColor ) );
 
-    ::sd::View::AddWin(pWin);
+    ::sd::View::AddWindowToPaintView(pWin);
 }
 
 /*************************************************************************
@@ -412,7 +412,7 @@ void OutlineView::AddWin (::sd::Window* pWin)
 |*
 \************************************************************************/
 
-void OutlineView::DelWin (::sd::Window* pWin)
+void OutlineView::DeleteWindowFromPaintView(::sd::Window* pWin)
 {
     BOOL bRemoved = FALSE;
     USHORT nView = 0;
@@ -436,7 +436,7 @@ void OutlineView::DelWin (::sd::Window* pWin)
         nView++;
     }
 
-    ::sd::View::DelWin(pWin);
+    ::sd::View::DeleteWindowFromPaintView(pWin);
 }
 
 /*************************************************************************
