@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 10:59:20 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:14:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,8 +113,8 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #endif
 
-#ifndef _SVX_VECTOR3D_HXX
-#include <goodies/vector3d.hxx>
+#ifndef _BGFX_VECTOR_B3DVECTOR_HXX
+#include <basegfx/vector/b3dvector.hxx>
 #endif
 
 using namespace rtl;
@@ -1565,9 +1565,8 @@ sal_Bool SvXMLTokenEnumerator::getNextToken( OUString& rToken )
 
 // ---
 
-/** convert string to vector3D */
-sal_Bool SvXMLUnitConverter::convertVector3D( Vector3D& rVector,
-    const OUString& rValue )
+/** convert string to ::basegfx::B3DVector */
+sal_Bool SvXMLUnitConverter::convertB3DVector( ::basegfx::B3DVector& rVector, const OUString& rValue )
 {
     if(!rValue.getLength() || rValue[0] != '(')
         return sal_False;
@@ -1598,35 +1597,34 @@ sal_Bool SvXMLUnitConverter::convertVector3D( Vector3D& rVector,
 
     rtl_math_ConversionStatus eStatus;
 
-    rVector.X() = ::rtl::math::stringToDouble(aContentX, sal_Unicode('.'),
-            sal_Unicode(','), &eStatus, NULL);
+    rVector.setX(::rtl::math::stringToDouble(aContentX, sal_Unicode('.'),
+            sal_Unicode(','), &eStatus, NULL));
 
     if( eStatus != rtl_math_ConversionStatus_Ok )
         return sal_False;
 
-    rVector.Y() = ::rtl::math::stringToDouble(aContentY, sal_Unicode('.'),
-            sal_Unicode(','), &eStatus, NULL);
+    rVector.setY(::rtl::math::stringToDouble(aContentY, sal_Unicode('.'),
+            sal_Unicode(','), &eStatus, NULL));
 
     if( eStatus != rtl_math_ConversionStatus_Ok )
         return sal_False;
 
-    rVector.Z() = ::rtl::math::stringToDouble(aContentZ, sal_Unicode('.'),
-            sal_Unicode(','), &eStatus, NULL);
+    rVector.setZ(::rtl::math::stringToDouble(aContentZ, sal_Unicode('.'),
+            sal_Unicode(','), &eStatus, NULL));
 
 
     return ( eStatus == rtl_math_ConversionStatus_Ok );
 }
 
-/** convert vector3D to string */
-void SvXMLUnitConverter::convertVector3D( OUStringBuffer &rBuffer,
-    const Vector3D& rVector )
+/** convert ::basegfx::B3DVector to string */
+void SvXMLUnitConverter::convertB3DVector( OUStringBuffer &rBuffer, const ::basegfx::B3DVector& rVector )
 {
     rBuffer.append(sal_Unicode('('));
-    convertDouble(rBuffer, rVector.X());
+    convertDouble(rBuffer, rVector.getX());
     rBuffer.append(sal_Unicode(' '));
-    convertDouble(rBuffer, rVector.Y());
+    convertDouble(rBuffer, rVector.getY());
     rBuffer.append(sal_Unicode(' '));
-    convertDouble(rBuffer, rVector.Z());
+    convertDouble(rBuffer, rVector.getZ());
     rBuffer.append(sal_Unicode(')'));
 }
 
