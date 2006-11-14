@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-29 14:38:02 $
+#   last change: $Author: ihi $ $Date: 2006-11-14 13:38:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,16 +45,36 @@ TARGET=svdraw
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=\
-         $(SLO)$/svdobj.obj          \
+EXCEPTIONSFILES= \
+         $(SLO)$/svdxcgv.obj		 \
+         $(SLO)$/svdpage.obj         \
          $(SLO)$/svdoimp.obj         \
+         $(SLO)$/svdobj.obj          \
+         $(SLO)$/svdedtv1.obj        \
+         $(SLO)$/svdcrtv.obj         \
+         $(SLO)$/svdograf.obj        \
+         $(SLO)$/svdoole2.obj        \
+         $(SLO)$/svdhdl.obj          \
+         $(SLO)$/svdmrkv.obj         \
+         $(SLO)$/svdogrp.obj         \
+         $(SLO)$/svdotxln.obj        \
+         $(SLO)$/svdouno.obj         \
+         $(SLO)$/svdfppt.obj         \
+         $(SLO)$/svdpagv.obj		 \
+         $(SLO)$/svddrgmt.obj        \
+         $(SLO)$/svdpntv.obj         \
+         $(SLO)$/svdsnpv.obj         \
+         $(SLO)$/svdview.obj         \
+         $(SLO)$/svdoashp.obj
+
+SLOFILES=\
+         $(EXCEPTIONSFILES)          \
          $(SLO)$/svdoattr.obj        \
          $(SLO)$/svdotext.obj        \
          $(SLO)$/svdotxat.obj        \
          $(SLO)$/svdotxdr.obj        \
          $(SLO)$/svdotxed.obj        \
          $(SLO)$/svdotxfl.obj        \
-         $(SLO)$/svdotxln.obj        \
          $(SLO)$/svdotxtr.obj        \
          $(SLO)$/svdorect.obj        \
          $(SLO)$/svdoedge.obj        \
@@ -62,44 +82,35 @@ SLOFILES=\
          $(SLO)$/svdopath.obj        \
          $(SLO)$/svdocapt.obj        \
          $(SLO)$/svdocirc.obj        \
-         $(SLO)$/svdograf.obj        \
-         $(SLO)$/svdogrp.obj         \
          $(SLO)$/svdopage.obj        \
-         $(SLO)$/svdouno.obj         \
          $(SLO)$/svdoutl.obj         \
          $(SLO)$/svdovirt.obj        \
          $(SLO)$/svdoutlinercache.obj \
          $(SLO)$/gradtrns.obj         \
          $(SLO)$/svdattr.obj         \
-         $(SLO)$/svdcrtmt.obj        \
-         $(SLO)$/svdcrtv.obj         \
          $(SLO)$/svddrag.obj         \
          $(SLO)$/svddrgmt.obj        \
          $(SLO)$/svddrgv.obj         \
          $(SLO)$/svdedtv.obj         \
-         $(SLO)$/svdedtv1.obj        \
          $(SLO)$/svdedtv2.obj        \
          $(SLO)$/svdedxv.obj         \
          $(SLO)$/svdetc.obj          \
          $(SLO)$/svdfmtf.obj		\
-         $(SLO)$/svdfppt.obj         \
          $(SLO)$/svdglev.obj         \
          $(SLO)$/svdglue.obj         \
-         $(SLO)$/svdoole2.obj        \
-         $(SLO)$/svdhdl.obj          \
          $(SLO)$/svdhlpln.obj        \
          $(SLO)$/svdibrow.obj        \
          $(SLO)$/svditer.obj         \
          $(SLO)$/svdlayer.obj        \
          $(SLO)$/svdmark.obj         \
          $(SLO)$/svdmodel.obj        \
-         $(SLO)$/svdmrkv.obj         \
          $(SLO)$/svdmrkv1.obj        \
          $(SLO)$/impgrfll.obj        \
-         $(SLO)$/svdpage.obj         \
+         $(SLO)$/sdrcomment.obj         \
          $(SLO)$/sdrmasterpagedescriptor.obj         \
-         $(SLO)$/svdpagv.obj         \
+         $(SLO)$/sdrpagewindow.obj         \
          $(SLO)$/svdpntv.obj         \
+         $(SLO)$/sdrpaintwindow.obj         \
          $(SLO)$/svdpoev.obj         \
          $(SLO)$/svdscrol.obj        \
          $(SLO)$/svdsnpv.obj         \
@@ -109,29 +120,8 @@ SLOFILES=\
          $(SLO)$/svdundo.obj         \
          $(SLO)$/svdview.obj         \
          $(SLO)$/svdviter.obj        \
-         $(SLO)$/svdvmark.obj        \
-         $(SLO)$/svdxcgv.obj		 \
          $(SLO)$/clonelist.obj		 \
-         $(SLO)$/svdoashp.obj		 \
          $(SLO)$/svdomedia.obj		 
-
-EXCEPTIONSFILES= \
-         $(SLO)$/svdoole2.obj        \
-         $(SLO)$/svdhdl.obj          \
-         $(SLO)$/svdmrkv.obj         \
-         $(SLO)$/svdogrp.obj         \
-         $(SLO)$/svdotxln.obj        \
-         $(SLO)$/svdouno.obj         \
-         $(SLO)$/svdfppt.obj         \
-         $(SLO)$/svdpagv.obj		 \
-         $(SLO)$/svdograf.obj		\
-         $(SLO)$/svdcrtv.obj         \
-         $(SLO)$/svdedtv1.obj        \
-         $(SLO)$/svdobj.obj          \
-         $(SLO)$/svdoimp.obj         \
-         $(SLO)$/svdpage.obj         \
-         $(SLO)$/svdxcgv.obj		 \
-         $(SLO)$/svdoashp.obj        
 
 SRS1NAME=svdstr
 SRC1FILES= svdstr.src
