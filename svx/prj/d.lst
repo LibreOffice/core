@@ -136,11 +136,10 @@ hedabu: ..\inc\langtab.hxx %_DEST%\inc%_EXT%\svx\langtab.hxx
 hedabu: ..\inc\layctrl.hxx %_DEST%\inc%_EXT%\svx\layctrl.hxx
 hedabu: ..\inc\lboxctrl.hxx %_DEST%\inc%_EXT%\svx\lboxctrl.hxx
 hedabu: ..\inc\lcolitem.hxx %_DEST%\inc%_EXT%\svx\lcolitem.hxx
-hedabu: ..\inc\light3d.hxx %_DEST%\inc%_EXT%\svx\light3d.hxx
+hedabu: ..\inc\lgview3d.hxx %_DEST%\inc%_EXT%\svx\lgview3d.hxx
 hedabu: ..\inc\linectrl.hxx %_DEST%\inc%_EXT%\svx\linectrl.hxx
 hedabu: ..\inc\lrspitem.hxx %_DEST%\inc%_EXT%\svx\lrspitem.hxx
 hedabu: ..\inc\lspcitem.hxx %_DEST%\inc%_EXT%\svx\lspcitem.hxx
-hedabu: ..\inc\matrix3d.hxx %_DEST%\inc%_EXT%\svx\matrix3d.hxx
 hedabu: ..\inc\measctrl.hxx %_DEST%\inc%_EXT%\svx\measctrl.hxx
 hedabu: ..\inc\modctrl.hxx %_DEST%\inc%_EXT%\svx\modctrl.hxx
 hedabu: ..\inc\nhypitem.hxx %_DEST%\inc%_EXT%\svx\nhypitem.hxx
@@ -182,20 +181,16 @@ hedabu: ..\inc\sdangitm.hxx %_DEST%\inc%_EXT%\svx\sdangitm.hxx
 hedabu: ..\inc\sderitm.hxx %_DEST%\inc%_EXT%\svx\sderitm.hxx
 hedabu: ..\inc\sdgcoitm.hxx %_DEST%\inc%_EXT%\svx\sdgcoitm.hxx
 hedabu: ..\inc\sdgcpitm.hxx %_DEST%\inc%_EXT%\svx\sdgcpitm.hxx
-hedabu: ..\inc\sdgrsitm.hxx %_DEST%\inc%_EXT%\svx\sdgrsitm.hxx
 hedabu: ..\inc\sdgluitm.hxx %_DEST%\inc%_EXT%\svx\sdgluitm.hxx
 hedabu: ..\inc\sdginitm.hxx %_DEST%\inc%_EXT%\svx\sdginitm.hxx
 hedabu: ..\inc\sdggaitm.hxx %_DEST%\inc%_EXT%\svx\sdggaitm.hxx
 hedabu: ..\inc\sdgmoitm.hxx %_DEST%\inc%_EXT%\svx\sdgmoitm.hxx
 hedabu: ..\inc\sdgtritm.hxx %_DEST%\inc%_EXT%\svx\sdgtritm.hxx
 hedabu: ..\inc\sdmetitm.hxx %_DEST%\inc%_EXT%\svx\sdmetitm.hxx
-hedabu: ..\inc\sdmsitm.hxx %_DEST%\inc%_EXT%\svx\sdmsitm.hxx
-hedabu: ..\inc\sdolsitm.hxx %_DEST%\inc%_EXT%\svx\sdolsitm.hxx
 hedabu: ..\inc\sdooitm.hxx %_DEST%\inc%_EXT%\svx\sdooitm.hxx
 hedabu: ..\inc\sdprcitm.hxx %_DEST%\inc%_EXT%\svx\sdprcitm.hxx
 hedabu: ..\inc\sdshcitm.hxx %_DEST%\inc%_EXT%\svx\sdshcitm.hxx
 hedabu: ..\inc\sdshitm.hxx %_DEST%\inc%_EXT%\svx\sdshitm.hxx
-hedabu: ..\inc\sdshsitm.hxx %_DEST%\inc%_EXT%\svx\sdshsitm.hxx
 hedabu: ..\inc\sdshtitm.hxx %_DEST%\inc%_EXT%\svx\sdshtitm.hxx
 hedabu: ..\inc\sdsxyitm.hxx %_DEST%\inc%_EXT%\svx\sdsxyitm.hxx
 hedabu: ..\inc\sdtaaitm.hxx %_DEST%\inc%_EXT%\svx\sdtaaitm.hxx
@@ -259,15 +254,16 @@ hedabu: ..\inc\svdoole2.hxx %_DEST%\inc%_EXT%\svx\svdoole2.hxx
 hedabu: ..\inc\svdopage.hxx %_DEST%\inc%_EXT%\svx\svdopage.hxx
 hedabu: ..\inc\svdopath.hxx %_DEST%\inc%_EXT%\svx\svdopath.hxx
 hedabu: ..\inc\svdorect.hxx %_DEST%\inc%_EXT%\svx\svdorect.hxx
-hedabu: ..\inc\svdosmev.hxx %_DEST%\inc%_EXT%\svx\svdosmev.hxx
-hedabu: ..\inc\svdosmrt.hxx %_DEST%\inc%_EXT%\svx\svdosmrt.hxx
 hedabu: ..\inc\svdotext.hxx %_DEST%\inc%_EXT%\svx\svdotext.hxx
 hedabu: ..\inc\svdovirt.hxx %_DEST%\inc%_EXT%\svx\svdovirt.hxx
 hedabu: ..\inc\svdpage.hxx %_DEST%\inc%_EXT%\svx\svdpage.hxx
-hedabu: ..\inc\sdrpageuser.hxx %_DEST%\inc%_EXT%\svx\sdrpageuser.hxx
 hedabu: ..\inc\sdrmasterpagedescriptor.hxx %_DEST%\inc%_EXT%\svx\sdrmasterpagedescriptor.hxx
+hedabu: ..\inc\sdrcomment.hxx %_DEST%\inc%_EXT%\svx\sdrcomment.hxx
+hedabu: ..\inc\sdrpageuser.hxx %_DEST%\inc%_EXT%\svx\sdrpageuser.hxx
 hedabu: ..\inc\svdpagv.hxx %_DEST%\inc%_EXT%\svx\svdpagv.hxx
+hedabu: ..\inc\sdrpagewindow.hxx %_DEST%\inc%_EXT%\svx\sdrpagewindow.hxx
 hedabu: ..\inc\svdpntv.hxx %_DEST%\inc%_EXT%\svx\svdpntv.hxx
+hedabu: ..\inc\sdrpaintwindow.hxx %_DEST%\inc%_EXT%\svx\sdrpaintwindow.hxx
 hedabu: ..\inc\svdpoev.hxx %_DEST%\inc%_EXT%\svx\svdpoev.hxx
 hedabu: ..\inc\svdpool.hxx %_DEST%\inc%_EXT%\svx\svdpool.hxx
 hedabu: ..\inc\svdsnpv.hxx %_DEST%\inc%_EXT%\svx\svdsnpv.hxx
@@ -276,7 +272,6 @@ hedabu: ..\inc\svdtrans.hxx %_DEST%\inc%_EXT%\svx\svdtrans.hxx
 hedabu: ..\inc\svdundo.hxx %_DEST%\inc%_EXT%\svx\svdundo.hxx
 hedabu: ..\inc\svdoutl.hxx %_DEST%\inc%_EXT%\svx\svdoutl.hxx
 hedabu: ..\inc\svdview.hxx %_DEST%\inc%_EXT%\svx\svdview.hxx
-hedabu: ..\inc\svdvmark.hxx %_DEST%\inc%_EXT%\svx\svdvmark.hxx
 hedabu: ..\inc\svdxcgv.hxx %_DEST%\inc%_EXT%\svx\svdxcgv.hxx
 hedabu: ..\inc\svimbase.hxx %_DEST%\inc%_EXT%\svx\svimbase.hxx
 hedabu: ..\inc\svxbox.hxx %_DEST%\inc%_EXT%\svx\svxbox.hxx
@@ -291,14 +286,11 @@ hedabu: ..\inc\sxcecitm.hxx %_DEST%\inc%_EXT%\svx\sxcecitm.hxx
 hedabu: ..\inc\sxcgitm.hxx %_DEST%\inc%_EXT%\svx\sxcgitm.hxx
 hedabu: ..\inc\sxciaitm.hxx %_DEST%\inc%_EXT%\svx\sxciaitm.hxx
 hedabu: ..\inc\sxcikitm.hxx %_DEST%\inc%_EXT%\svx\sxcikitm.hxx
-hedabu: ..\inc\sxcisitm.hxx %_DEST%\inc%_EXT%\svx\sxcisitm.hxx
 hedabu: ..\inc\sxcllitm.hxx %_DEST%\inc%_EXT%\svx\sxcllitm.hxx
-hedabu: ..\inc\sxcsitm.hxx %_DEST%\inc%_EXT%\svx\sxcsitm.hxx
 hedabu: ..\inc\sxctitm.hxx %_DEST%\inc%_EXT%\svx\sxctitm.hxx
 hedabu: ..\inc\sxekitm.hxx %_DEST%\inc%_EXT%\svx\sxekitm.hxx
 hedabu: ..\inc\sxelditm.hxx %_DEST%\inc%_EXT%\svx\sxelditm.hxx
 hedabu: ..\inc\sxenditm.hxx %_DEST%\inc%_EXT%\svx\sxenditm.hxx
-hedabu: ..\inc\sxesitm.hxx %_DEST%\inc%_EXT%\svx\sxesitm.hxx
 hedabu: ..\inc\sxfiitm.hxx %_DEST%\inc%_EXT%\svx\sxfiitm.hxx
 hedabu: ..\inc\sxlayitm.hxx %_DEST%\inc%_EXT%\svx\sxlayitm.hxx
 hedabu: ..\inc\sxlogitm.hxx %_DEST%\inc%_EXT%\svx\sxlogitm.hxx
@@ -308,7 +300,6 @@ hedabu: ..\inc\sxmkitm.hxx %_DEST%\inc%_EXT%\svx\sxmkitm.hxx
 hedabu: ..\inc\sxmlhitm.hxx %_DEST%\inc%_EXT%\svx\sxmlhitm.hxx
 hedabu: ..\inc\sxmoitm.hxx %_DEST%\inc%_EXT%\svx\sxmoitm.hxx
 hedabu: ..\inc\sxmovitm.hxx %_DEST%\inc%_EXT%\svx\sxmovitm.hxx
-hedabu: ..\inc\sxmseitm.hxx %_DEST%\inc%_EXT%\svx\sxmseitm.hxx
 hedabu: ..\inc\sxmsitm.hxx %_DEST%\inc%_EXT%\svx\sxmsitm.hxx
 hedabu: ..\inc\sxmspitm.hxx %_DEST%\inc%_EXT%\svx\sxmspitm.hxx
 hedabu: ..\inc\sxmsuitm.hxx %_DEST%\inc%_EXT%\svx\sxmsuitm.hxx
@@ -434,7 +425,6 @@ hedabu: ..\inc\xtextit.hxx %_DEST%\inc%_EXT%\svx\xtextit.hxx
 hedabu: ..\inc\xtextit.hxx %_DEST%\inc%_EXT%\xtextit.hxx
 hedabu: ..\inc\xtextit0.hxx %_DEST%\inc%_EXT%\svx\xtextit0.hxx
 hedabu: ..\inc\xtextit0.hxx %_DEST%\inc%_EXT%\xtextit0.hxx
-hedabu: ..\inc\xtxasit.hxx %_DEST%\inc%_EXT%\svx\xtxasit.hxx
 hedabu: ..\inc\xexch.hxx %_DEST%\inc%_EXT%\svx\xexch.hxx
 hedabu: ..\inc\zoomctrl.hxx %_DEST%\inc%_EXT%\svx\zoomctrl.hxx
 hedabu: ..\inc\zoomitem.hxx %_DEST%\inc%_EXT%\svx\zoomitem.hxx
@@ -598,17 +588,30 @@ hedabu: ..\inc\svx\sdr\contact\viewcontactofsdrobj.hxx %_DEST%\inc%_EXT%\svx\sdr
 ..\inc\svx\sdr\contact\viewcontactofe3dscene.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofe3dscene.hxx
 ..\inc\svx\sdr\contact\viewcontactofgraphic.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofgraphic.hxx
 ..\inc\svx\sdr\contact\viewcontactofgroup.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofgroup.hxx
+hedabu: ..\inc\svx\sdr\contact\viewcontactofmasterpage.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofmasterpage.hxx
+hedabu: ..\inc\svx\sdr\contact\viewcontactofmasterpagedescriptor.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofmasterpagedescriptor.hxx
 ..\inc\svx\sdr\contact\viewcontactofpageobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofpageobj.hxx
 hedabu: ..\inc\svx\sdr\contact\viewcontactofsdrobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofsdrobj.hxx
 ..\inc\svx\sdr\contact\viewcontactofsdrpage.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofsdrpage.hxx
 ..\inc\svx\sdr\contact\viewcontactoftextobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactoftextobj.hxx
 ..\inc\svx\sdr\contact\viewobjectcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewobjectcontact.hxx
 ..\inc\svx\sdr\contact\viewobjectcontactlist.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewobjectcontactlist.hxx
-..\inc\svx\sdr\contact\objectcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontact.hxx
-..\inc\svx\sdr\contact\objectcontactofobjlistpainter.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontactofobjlistpainter.hxx
-..\inc\svx\sdr\contact\objectcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontact.hxx
 ..\inc\svx\sdr\contact\viewobjectcontactredirector.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewobjectcontactredirector.hxx
 ..\inc\svx\sdr\contact\vocbitmapbuffer.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\vocbitmapbuffer.hxx
+
+mkdir: %_DEST%\inc%_EXT%\svx\sdr\overlay
+..\inc\svx\sdr\overlay\overlayanimatedbitmapex.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayanimatedbitmapex.hxx
+..\inc\svx\sdr\overlay\overlaybitmap.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaybitmap.hxx
+..\inc\svx\sdr\overlay\overlaybitmapex.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaybitmapex.hxx
+..\inc\svx\sdr\overlay\overlayline.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayline.hxx
+hedabu: ..\inc\svx\sdr\overlay\overlayhelpline.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayhelpline.hxx
+..\inc\svx\sdr\overlay\overlaylinestriped.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaylinestriped.hxx
+..\inc\svx\sdr\overlay\overlaymanager.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaymanager.hxx
+..\inc\svx\sdr\overlay\overlaymanagerbuffered.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaymanagerbuffered.hxx
+..\inc\svx\sdr\overlay\overlayobject.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayobject.hxx
+..\inc\svx\sdr\overlay\overlayobjectlist.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayobjectlist.hxx
+..\inc\svx\sdr\overlay\overlaytriangle.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaytriangle.hxx
+..\inc\svx\sdr\overlay\overlaypolypolygon.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaypolypolygon.hxx
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\animation
 ..\inc\svx\sdr\animation\ainfographic.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\ainfographic.hxx
