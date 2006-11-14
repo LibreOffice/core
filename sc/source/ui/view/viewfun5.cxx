@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:48:43 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:00:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -484,7 +484,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     }
                 }
 
-                pDrawView->InsertObjectSafe(pObj, *pDrawView->GetPageViewPvNum(0));
+                pDrawView->InsertObjectSafe(pObj, *pDrawView->GetSdrPageView());
 
                 GetViewData()->GetViewShell()->SetDrawShell( TRUE );
                 bRet = TRUE;
@@ -533,9 +533,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
             SvxDrawingLayerImport( pModel, xInputStream );
 
-//BFS04         pModel->SetStreamingSdrModel(FALSE);
-
-                                        // set everything to right layer:
+            // set everything to right layer:
             ULONG nObjCount = 0;
             USHORT nPages = pModel->GetPageCount();
             for (USHORT i=0; i<nPages; i++)
