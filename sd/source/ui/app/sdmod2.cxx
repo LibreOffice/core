@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:31:55 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:25:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -788,7 +788,7 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
             // #74495# make sure no one is in text edit mode, cause there
             // are some pointers remembered else (!)
             if(pViewShell->GetView())
-                pViewShell->GetView()->EndTextEdit();
+                pViewShell->GetView()->SdrEndTextEdit();
 
             ::sd::FrameView* pFrameView = pViewShell->GetFrameView();
             pFrameView->Update(pOptions);
