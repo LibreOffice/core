@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlged.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:18:38 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:29:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
+#include <com/sun/star/awt/XControlContainer.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DATATRANSFER_DATAFLAVOR_HPP_
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #endif
@@ -61,7 +64,6 @@
 #ifndef _SFXBRDCST_HXX
 #include <svtools/brdcst.hxx>
 #endif
-
 
 #define DLGED_PAGE_WIDTH_MIN    1280
 #define DLGED_PAGE_HEIGHT_MIN   1024
@@ -132,6 +134,7 @@ protected:
     DlgEdView*          pDlgEdView;
     DlgEdForm*          pDlgEdForm;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >     m_xUnoControlDialogModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >        m_xControlContainer;
     ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >       m_ClipboardDataFlavors;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xSupplier;
     DlgEdFactory*       pObjFac;
@@ -155,6 +158,13 @@ public:
 
     void            SetWindow( Window* pWindow );
     Window*         GetWindow() const { return pWindow; }
+
+    /** returns the control container associated with our window
+        @see GetWindow
+        @see SetWindow
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+                    GetWindowControlContainer();
 
     void            SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
     DlgEdForm*      GetDlgEdForm() const { return pDlgEdForm; }
