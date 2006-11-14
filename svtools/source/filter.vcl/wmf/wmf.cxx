@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:56:05 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:43:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,7 @@
 
 // -----------------------------------------------------------------------------
 
-BOOL ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile,
-                              PFilterCallback pCallback, void * pCallerData)
+BOOL ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem )
 {
     UINT32 nMetaType;
     UINT32 nOrgPos = rStreamWMF.Tell();
@@ -55,12 +54,12 @@ BOOL ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile,
     rStreamWMF.Seek( nOrgPos );
     if ( nMetaType == 0x464d4520 )
     {
-        if ( EnhWMFReader( rStreamWMF, rGDIMetaFile, pCallback, pCallerData ).ReadEnhWMF() == FALSE )
+        if ( EnhWMFReader( rStreamWMF, rGDIMetaFile, pConfigItem ).ReadEnhWMF() == FALSE )
             rStreamWMF.SetError( SVSTREAM_FILEFORMAT_ERROR );
     }
     else
     {
-        WMFReader( rStreamWMF, rGDIMetaFile, pCallback, pCallerData ).ReadWMF();
+        WMFReader( rStreamWMF, rGDIMetaFile, pConfigItem ).ReadWMF();
     }
     rStreamWMF.SetNumberFormatInt( nOrigNumberFormat );
     return !rStreamWMF.GetError();
@@ -68,7 +67,7 @@ BOOL ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile,
 
 // -----------------------------------------------------------------------------
 
-BOOL ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF )
+BOOL ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem* pFilterConfigItem )
 {
     UINT32 nMetaType;
     UINT32 nOrgPos = rStream.Tell();
@@ -79,12 +78,12 @@ BOOL ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF )
     rStream.Seek( nOrgPos );
     if ( nMetaType == 0x464d4520 )
     {
-        if ( EnhWMFReader( rStream, rMTF, NULL, NULL ).ReadEnhWMF() == FALSE )
+        if ( EnhWMFReader( rStream, rMTF, NULL ).ReadEnhWMF() == FALSE )
             rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
     }
     else
     {
-        WMFReader( rStream, rMTF, NULL, NULL ).ReadWMF();
+        WMFReader( rStream, rMTF, pFilterConfigItem ).ReadWMF();
     }
     rStream.SetNumberFormatInt( nOrigNumberFormat );
     return !rStream.GetError();
@@ -93,32 +92,31 @@ BOOL ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF )
 // -----------------------------------------------------------------------------
 
 BOOL ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
-                              PFilterCallback pCallback, void * pCallerData,
-                              BOOL bPlaceable)
+                              FilterConfigItem* pConfigItem, BOOL bPlaceable)
 {
     WMFWriter aWMFWriter;
-    return aWMFWriter.WriteWMF(rMTF,rTargetStream,pCallback,pCallerData,bPlaceable);
+    return aWMFWriter.WriteWMF( rMTF, rTargetStream, pConfigItem, bPlaceable );
 }
 
 // -----------------------------------------------------------------------------
 
 BOOL ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
-                              PFilterCallback pCallback, void * pCallerData )
+                              FilterConfigItem* pConfigItem )
 {
     EMFWriter aEMFWriter;
-    return aEMFWriter.WriteEMF( rMTF, rTargetStream, pCallback, pCallerData );
+    return aEMFWriter.WriteEMF( rMTF, rTargetStream, pConfigItem );
 }
 
 // -----------------------------------------------------------------------------
 
 BOOL WriteWindowMetafile( SvStream& rStream, const GDIMetaFile& rMTF )
 {
-    return WMFWriter().WriteWMF( rMTF, rStream, NULL, NULL );
+    return WMFWriter().WriteWMF( rMTF, rStream, NULL );
 }
 
 // -----------------------------------------------------------------------------
 
 BOOL WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF )
 {
-    return WMFWriter().WriteWMF( rMTF, rStream, NULL, NULL, FALSE );
+    return WMFWriter().WriteWMF( rMTF, rStream, NULL, FALSE );
 }
