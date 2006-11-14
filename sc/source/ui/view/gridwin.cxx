@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:47:54 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:56:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,7 @@
 #include <vcl/cursor.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/hatch.hxx>
 #include <sot/formats.hxx>
 #include <sot/clsids.hxx>
 
@@ -138,6 +139,26 @@
 #include "viewuno.hxx"
 #include "compiler.hxx"
 #include "editable.hxx"
+
+// #114409#
+#ifndef _SV_SALBTYPE_HXX
+#include <vcl/salbtype.hxx>     // FRound
+#endif
+#ifndef SC_DRAWVIEW_HXX
+#include "drawview.hxx"
+#endif
+#ifndef _SDRPAGEWINDOW_HXX
+#include <svx/sdrpagewindow.hxx>
+#endif
+#ifndef _SDRPAINTWINDOW_HXX
+#include <svx/sdrpaintwindow.hxx>
+#endif
+#ifndef _SDR_OVERLAY_OVERLAYMANAGER_HXX
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
+#endif
 
 using namespace com::sun::star;
 
@@ -433,8 +454,14 @@ void lcl_UnLockComment( SdrView* pView, SdrPageView* pPV, SdrModel* pDoc, const 
 //==================================================================
 
 //  WB_DIALOGCONTROL noetig fuer UNO-Controls
-ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhichPos ) :
-            Window( pParent, WB_CLIPCHILDREN | WB_DIALOGCONTROL ),
+ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhichPos )
+:           Window( pParent, WB_CLIPCHILDREN | WB_DIALOGCONTROL ),
+            mpOOCursors( NULL ),
+            mpOOSelection( NULL ),
+            mpOOAutoFill( NULL ),
+            mpOODragRect( NULL ),
+            mpOOHeader( NULL ),
+            mpOOShrink( NULL ),
             DropTargetHelper( this ),
             DragSourceHelper( this ),
             pViewData( pData ),
@@ -450,6 +477,7 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             bDPMouse( FALSE ),
             bRFMouse( FALSE ),
             nPagebreakMouse( SC_PD_NONE ),
+            bPagebreakDrawn( FALSE ),
             nPageScript( 0 ),
             bDragRect( FALSE ),
             pFilterBox( NULL ),
@@ -502,6 +530,9 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
 
 __EXPORT ScGridWindow::~ScGridWindow()
 {
+    // #114409#
+    ImpDestroyOverlayObjects();
+
     delete pFilterBox;
     delete pFilterFloat;
     delete pNoteMarker;
@@ -2565,8 +2596,9 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
                 bDPMouse = FALSE;               // gezeichnet wird per bDragRect
             if (bDragRect)
             {
-                pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
+                // pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
                 bDragRect = FALSE;
+                UpdateDragRectOverlay();
             }
             if (bRFMouse)
             {
@@ -2575,10 +2607,11 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
             }
             if (nPagebreakMouse)
             {
-                if (bPagebreakDrawn)
-                    DrawDragRect( aPagebreakDrag.aStart.Col(), aPagebreakDrag.aStart.Row(),
-                                    aPagebreakDrag.aEnd.Col(), aPagebreakDrag.aEnd.Row(), FALSE );
+                // if (bPagebreakDrawn)
+                //  DrawDragRect( aPagebreakDrag.aStart.Col(), aPagebreakDrag.aStart.Row(),
+                //                  aPagebreakDrag.aEnd.Col(), aPagebreakDrag.aEnd.Row(), FALSE );
                 bPagebreakDrawn = FALSE;
+                UpdateDragRectOverlay();
                 nPagebreakMouse = SC_PD_NONE;
             }
 
@@ -3042,7 +3075,7 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel )
             pDrawView->UnmarkAllObj();
             // Unlock the Internal Layer in order to activate the context menu.
             // re-lock in ScDrawView::MarkListHasChanged()
-            lcl_UnLockComment( pDrawView, pDrawView->GetPageViewPvNum(0), pDrawView->GetModel(), aLogicPos );
+            lcl_UnLockComment( pDrawView, pDrawView->GetSdrPageView(), pDrawView->GetModel(), aLogicPos );
             bHitDraw = pDrawView->MarkObj( aLogicPos );
             // draw shell is activated in MarkListHasChanged
         }
@@ -3182,16 +3215,16 @@ BOOL ScGridWindow::DropScroll( const Point& rMousePos )
 
     if ( nDx != 0 || nDy != 0 )
     {
-        if (bDragRect)
-            pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
+//      if (bDragRect)
+//          pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
 
         if ( nDx != 0 )
             pViewData->GetView()->ScrollX( nDx, WhichH(eWhich) );
         if ( nDy != 0 )
             pViewData->GetView()->ScrollY( nDy, WhichV(eWhich) );
 
-        if (bDragRect)
-            pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
+//      if (bDragRect)
+//          pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
     }
 
     return FALSE;
@@ -3258,9 +3291,10 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
 {
     if ( rEvt.mbLeaving )
     {
-        if (bDragRect)
-            pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
+        // if (bDragRect)
+        //  pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
         bDragRect = FALSE;
+        UpdateDragRectOverlay();
         return rEvt.mnAction;
     }
 
@@ -3277,8 +3311,9 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
             {
                 if (bDragRect)          // Rechteck loeschen
                 {
-                    pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
+                    // pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
                     bDragRect = FALSE;
+                    UpdateDragRectOverlay();
                 }
 
                 //! highlight chart? (selection border?)
@@ -3328,8 +3363,9 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
         {
             if (bDragRect)
             {
-                pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
+                // pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
                 bDragRect = FALSE;
+                UpdateDragRectOverlay();
             }
             return DND_ACTION_NONE;
         }
@@ -3338,8 +3374,8 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
              nDragStartX+nSizeX-1 != nDragEndX || nDragStartY+nSizeY-1 != nDragEndY ||
              !bDragRect )
         {
-            if (bDragRect)
-                pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
+            // if (bDragRect)
+            //  pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
 
             nDragStartX = nNewDragX;
             nDragStartY = nNewDragY;
@@ -3347,7 +3383,9 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
             nDragEndY = nDragStartY+nSizeY-1;
             bDragRect = TRUE;
 
-            pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
+            // pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
+
+            UpdateDragRectOverlay();
 
             //  show target position as tip help
 #if 0
@@ -3641,9 +3679,10 @@ ULONG lcl_GetDropLinkId( const uno::Reference<datatransfer::XTransferable>& xTra
 sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
 {
     // hide drop marker
-    if (bDragRect)
-        pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
+    // if (bDragRect)
+    //  pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
     bDragRect = FALSE;
+    UpdateDragRectOverlay();
 
     ScModule* pScMod = SC_MOD();
     const ScDragData& rData = pScMod->GetDragData();
@@ -4038,7 +4077,7 @@ void ScGridWindow::ScrollPixel( long nDifX, long nDifY )
     HideNoteMarker();
 
     bIsInScroll = TRUE;
-    BOOL bXor=DrawBeforeScroll();
+    //BOOL bXor=DrawBeforeScroll();
 
     SetMapMode(MAP_PIXEL);
     Scroll( nDifX, nDifY, SCROLL_CHILDREN );
@@ -4046,7 +4085,7 @@ void ScGridWindow::ScrollPixel( long nDifX, long nDifY )
 
     UpdateEditViewPos();
 
-    DrawAfterScroll(bXor);
+    DrawAfterScroll(); //bXor);
     bIsInScroll = FALSE;
 }
 
@@ -4087,6 +4126,8 @@ void ScGridWindow::UpdateAutoFillMark(BOOL bMarked, const ScRange& rMarkRange)
         if ( bMarked )
             aAutoMarkPos = rMarkRange.aEnd;
         ShowCursor();
+
+        UpdateAutoFillOverlay();
     }
 }
 
@@ -4862,6 +4903,702 @@ BOOL ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRang
     return FALSE;
 }
 
+// #114409#
+void ScGridWindow::DrawLayerCreated()
+{
+    SetMapMode( GetDrawMapMode() );
 
+    // initially create overlay objects
+    ImpCreateOverlayObjects();
+}
 
+// #114409#
+void ScGridWindow::CursorChanged()
+{
+    // here the created OverlayObjects may be transformed in later versions. For
+    // now, just re-create them
 
+    UpdateCursorOverlay();
+}
+
+// #114409#
+void ScGridWindow::ImpCreateOverlayObjects()
+{
+    UpdateCursorOverlay();
+    UpdateSelectionOverlay();
+    UpdateAutoFillOverlay();
+    UpdateDragRectOverlay();
+    UpdateHeaderOverlay();
+    UpdateShrinkOverlay();
+}
+
+// #114409#
+void ScGridWindow::ImpDestroyOverlayObjects()
+{
+    DeleteCursorOverlay();
+    DeleteSelectionOverlay();
+    DeleteAutoFillOverlay();
+    DeleteDragRectOverlay();
+    DeleteHeaderOverlay();
+    DeleteShrinkOverlay();
+}
+
+void ScGridWindow::UpdateAllOverlays()
+{
+    // delete and re-allocate all overlay objects
+
+    ImpDestroyOverlayObjects();
+    ImpCreateOverlayObjects();
+}
+
+void ScGridWindow::DeleteCursorOverlay()
+{
+    DELETEZ( mpOOCursors );
+}
+
+void ScGridWindow::UpdateCursorOverlay()
+{
+    MapMode aDrawMode = GetDrawMapMode();
+    MapMode aOldMode = GetMapMode();
+    if ( aOldMode != aDrawMode )
+        SetMapMode( aDrawMode );
+
+    // Existing OverlayObjects may be transformed in later versions.
+    // For now, just re-create them.
+
+    DeleteCursorOverlay();
+
+    std::vector<Rectangle> aPixelRects;
+
+    //
+    //  determine the cursor rectangles in pixels (moved from ScGridWindow::DrawCursor)
+    //
+
+    SCTAB nTab = pViewData->GetTabNo();
+    SCCOL nX = pViewData->GetCurX();
+    SCROW nY = pViewData->GetCurY();
+
+    //  don't show the cursor in overlapped cells
+
+    ScDocument* pDoc = pViewData->GetDocument();
+    const ScPatternAttr* pPattern = pDoc->GetPattern(nX,nY,nTab);
+    const ScMergeFlagAttr& rMerge = (const ScMergeFlagAttr&) pPattern->GetItem(ATTR_MERGE_FLAG);
+    BOOL bOverlapped = rMerge.IsOverlapped();
+
+    //  left or above of the screen?
+
+    BOOL bVis = ( nX>=pViewData->GetPosX(eHWhich) && nY>=pViewData->GetPosY(eVWhich) );
+    if (!bVis)
+    {
+        SCCOL nEndX = nX;
+        SCROW nEndY = nY;
+        ScDocument* pDoc = pViewData->GetDocument();
+        const ScMergeAttr& rMerge = (const ScMergeAttr&) pPattern->GetItem(ATTR_MERGE);
+        if (rMerge.GetColMerge() > 1)
+            nEndX += rMerge.GetColMerge()-1;
+        if (rMerge.GetRowMerge() > 1)
+            nEndY += rMerge.GetRowMerge()-1;
+        bVis = ( nEndX>=pViewData->GetPosX(eHWhich) && nEndY>=pViewData->GetPosY(eVWhich) );
+    }
+
+    if ( bVis && !bOverlapped && !pViewData->HasEditView(eWhich) && pViewData->IsActive() )
+    {
+        Point aScrPos = pViewData->GetScrPos( nX, nY, eWhich, TRUE );
+        BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+
+        //  completely right of/below the screen?
+        //  (test with logical start position in aScrPos)
+        BOOL bMaybeVisible;
+        if ( bLayoutRTL )
+            bMaybeVisible = ( aScrPos.X() >= -2 && aScrPos.Y() >= -2 );
+        else
+        {
+            Size aOutSize = GetOutputSizePixel();
+            bMaybeVisible = ( aScrPos.X() <= aOutSize.Width() + 2 && aScrPos.Y() <= aOutSize.Height() + 2 );
+        }
+        if ( bMaybeVisible )
+        {
+            long nSizeXPix;
+            long nSizeYPix;
+            pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
+
+            if ( bLayoutRTL )
+                aScrPos.X() -= nSizeXPix - 2;       // move instead of mirroring
+
+            BOOL bFix = ( pViewData->GetHSplitMode() == SC_SPLIT_FIX ||
+                            pViewData->GetVSplitMode() == SC_SPLIT_FIX );
+            if ( pViewData->GetActivePart()==eWhich || bFix )
+            {
+                aScrPos.X() -= 2;
+                aScrPos.Y() -= 2;
+                Rectangle aRect( aScrPos, Size( nSizeXPix + 3, nSizeYPix + 3 ) );
+
+                aPixelRects.push_back(Rectangle( aRect.Left(), aRect.Top(), aRect.Left()+2, aRect.Bottom() ));
+                aPixelRects.push_back(Rectangle( aRect.Right()-2, aRect.Top(), aRect.Right(), aRect.Bottom() ));
+                aPixelRects.push_back(Rectangle( aRect.Left()+3, aRect.Top(), aRect.Right()-3, aRect.Top()+2 ));
+                aPixelRects.push_back(Rectangle( aRect.Left()+3, aRect.Bottom()-2, aRect.Right()-3, aRect.Bottom() ));
+            }
+            else
+            {
+                Rectangle aRect( aScrPos, Size( nSizeXPix - 1, nSizeYPix - 1 ) );
+                aPixelRects.push_back( aRect );
+            }
+        }
+    }
+
+    //
+    //  convert into logic units and create overlay object
+    //
+
+    if ( aPixelRects.size() )
+    {
+        sdr::overlay::OverlayObjectCell::RangeVector aRanges;
+
+        std::vector<Rectangle>::const_iterator aPixelEnd( aPixelRects.end() );
+        for ( std::vector<Rectangle>::const_iterator aPixelIter( aPixelRects.begin() );
+              aPixelIter != aPixelEnd; ++aPixelIter )
+        {
+            Rectangle aLogic( PixelToLogic( *aPixelIter, aDrawMode ) );
+
+            const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
+            const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
+            const basegfx::B2DRange a2DRange(aTopLeft, aBottomRight);
+
+            aRanges.push_back( a2DRange );
+        }
+
+        // #i70788# get the OverlayManager safely
+        ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
+
+        if(pOverlayManager)
+        {
+            ScOverlayType eType = SC_OVERLAY_INVERT;
+//                ScOverlayType eType = SC_OVERLAY_HATCH;
+//                ScOverlayType eType = SC_OVERLAY_TRANSPARENT;
+
+            Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
+            sdr::overlay::OverlayObjectCell* pOverlay = new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
+
+            pOverlayManager->add(*pOverlay);
+            mpOOCursors = new ::sdr::overlay::OverlayObjectList;
+            mpOOCursors->append(*pOverlay);
+        }
+    }
+
+    if ( aOldMode != aDrawMode )
+        SetMapMode( aOldMode );
+}
+
+void ScGridWindow::DeleteSelectionOverlay()
+{
+    DELETEZ( mpOOSelection );
+}
+
+void ScGridWindow::UpdateSelectionOverlay()
+{
+    MapMode aDrawMode = GetDrawMapMode();
+    MapMode aOldMode = GetMapMode();
+    if ( aOldMode != aDrawMode )
+        SetMapMode( aDrawMode );
+
+    DeleteSelectionOverlay();
+
+    std::vector<Rectangle> aPixelRects;
+    GetSelectionRects( aPixelRects );
+
+    if ( aPixelRects.size() && pViewData->IsActive() )
+    {
+        sdr::overlay::OverlayObjectCell::RangeVector aRanges;
+
+        std::vector<Rectangle>::const_iterator aPixelEnd( aPixelRects.end() );
+        for ( std::vector<Rectangle>::const_iterator aPixelIter( aPixelRects.begin() );
+              aPixelIter != aPixelEnd; ++aPixelIter )
+        {
+            Rectangle aLogic( PixelToLogic( *aPixelIter, aDrawMode ) );
+
+            const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
+            const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
+            const basegfx::B2DRange a2DRange(aTopLeft, aBottomRight);
+
+            aRanges.push_back( a2DRange );
+        }
+
+        // #i70788# get the OverlayManager safely
+        ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
+
+        if(pOverlayManager)
+        {
+            ScOverlayType eType = SC_OVERLAY_INVERT;
+//                ScOverlayType eType = SC_OVERLAY_HATCH;
+//                ScOverlayType eType = SC_OVERLAY_LIGHT_TRANSPARENT;
+
+            Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
+            sdr::overlay::OverlayObjectCell* pOverlay =
+                new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
+
+            pOverlayManager->add(*pOverlay);
+            mpOOSelection = new ::sdr::overlay::OverlayObjectList;
+            mpOOSelection->append(*pOverlay);
+        }
+    }
+
+    if ( aOldMode != aDrawMode )
+        SetMapMode( aOldMode );
+}
+
+void ScGridWindow::DeleteAutoFillOverlay()
+{
+    DELETEZ( mpOOAutoFill );
+}
+
+void ScGridWindow::UpdateAutoFillOverlay()
+{
+    MapMode aDrawMode = GetDrawMapMode();
+    MapMode aOldMode = GetMapMode();
+    if ( aOldMode != aDrawMode )
+        SetMapMode( aDrawMode );
+
+    DeleteAutoFillOverlay();
+
+    //
+    //  get the AutoFill handle rectangle in pixels (moved from ScGridWindow::DrawAutoFillMark)
+    //
+
+    if ( bAutoMarkVisible && aAutoMarkPos.Tab() == pViewData->GetTabNo() &&
+         !pViewData->HasEditView(eWhich) && pViewData->IsActive() )
+    {
+        SCCOL nX = aAutoMarkPos.Col();
+        SCROW nY = aAutoMarkPos.Row();
+        SCTAB nTab = pViewData->GetTabNo();
+        ScDocument* pDoc = pViewData->GetDocument();
+        BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+
+        Point aFillPos = pViewData->GetScrPos( nX, nY, eWhich, TRUE );
+        long nSizeXPix;
+        long nSizeYPix;
+        pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
+        if ( bLayoutRTL )
+            aFillPos.X() -= nSizeXPix + 3;
+        else
+            aFillPos.X() += nSizeXPix - 2;
+
+        aFillPos.Y() += nSizeYPix;
+        aFillPos.Y() -= 2;
+        Rectangle aFillRect( aFillPos, Size(6,6) );
+
+        //
+        //  convert into logic units
+        //
+
+        sdr::overlay::OverlayObjectCell::RangeVector aRanges;
+
+        Rectangle aLogic( PixelToLogic( aFillRect, aDrawMode ) );
+
+        const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
+        const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
+        const basegfx::B2DRange a2DRange(aTopLeft, aBottomRight);
+
+        aRanges.push_back( a2DRange );
+
+        // #i70788# get the OverlayManager safely
+        ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
+
+        if(pOverlayManager)
+        {
+            ScOverlayType eType = SC_OVERLAY_INVERT;
+//                ScOverlayType eType = SC_OVERLAY_HATCH;
+//                ScOverlayType eType = SC_OVERLAY_TRANSPARENT;
+
+            Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
+            sdr::overlay::OverlayObjectCell* pOverlay =
+                new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
+
+            pOverlayManager->add(*pOverlay);
+            mpOOAutoFill = new ::sdr::overlay::OverlayObjectList;
+            mpOOAutoFill->append(*pOverlay);
+        }
+    }
+
+    if ( aOldMode != aDrawMode )
+        SetMapMode( aOldMode );
+}
+
+void ScGridWindow::DeleteDragRectOverlay()
+{
+    DELETEZ( mpOODragRect );
+}
+
+void ScGridWindow::UpdateDragRectOverlay()
+{
+    MapMode aDrawMode = GetDrawMapMode();
+    MapMode aOldMode = GetMapMode();
+    if ( aOldMode != aDrawMode )
+        SetMapMode( aDrawMode );
+
+    DeleteDragRectOverlay();
+
+    //
+    //  get the rectangles in pixels (moved from DrawDragRect)
+    //
+
+    if ( bDragRect || bPagebreakDrawn )
+    {
+        std::vector<Rectangle> aPixelRects;
+
+        SCCOL nX1 = bDragRect ? nDragStartX : aPagebreakDrag.aStart.Col();
+        SCROW nY1 = bDragRect ? nDragStartY : aPagebreakDrag.aStart.Row();
+        SCCOL nX2 = bDragRect ? nDragEndX : aPagebreakDrag.aEnd.Col();
+        SCROW nY2 = bDragRect ? nDragEndY : aPagebreakDrag.aEnd.Row();
+
+        SCTAB nTab = pViewData->GetTabNo();
+
+        SCCOL nPosX = pViewData->GetPosX(WhichH(eWhich));
+        SCROW nPosY = pViewData->GetPosY(WhichV(eWhich));
+        if (nX1 < nPosX) nX1 = nPosX;
+        if (nX2 < nPosX) nX2 = nPosX;
+        if (nY1 < nPosY) nY1 = nPosY;
+        if (nY2 < nPosY) nY2 = nPosY;
+
+        Point aScrPos( pViewData->GetScrPos( nX1, nY1, eWhich ) );
+
+        long nSizeXPix=0;
+        long nSizeYPix=0;
+        ScDocument* pDoc = pViewData->GetDocument();
+        double nPPTX = pViewData->GetPPTX();
+        double nPPTY = pViewData->GetPPTY();
+        SCCOLROW i;
+
+        BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+        long nLayoutSign = bLayoutRTL ? -1 : 1;
+
+        if (ValidCol(nX2) && nX2>=nX1)
+            for (i=nX1; i<=nX2; i++)
+                nSizeXPix += ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(i), nTab ), nPPTX );
+        else
+        {
+            aScrPos.X() -= nLayoutSign;
+            nSizeXPix   += 2;
+        }
+
+        if (ValidRow(nY2) && nY2>=nY1)
+            for (i=nY1; i<=nY2; i++)
+                nSizeYPix += ScViewData::ToPixel( pDoc->GetRowHeight( i, nTab ), nPPTY );
+        else
+        {
+            aScrPos.Y() -= 1;
+            nSizeYPix   += 2;
+        }
+
+        aScrPos.X() -= 2 * nLayoutSign;
+        aScrPos.Y() -= 2;
+//      Rectangle aRect( aScrPos, Size( nSizeXPix + 3, nSizeYPix + 3 ) );
+        Rectangle aRect( aScrPos.X(), aScrPos.Y(),
+                         aScrPos.X() + ( nSizeXPix + 2 ) * nLayoutSign, aScrPos.Y() + nSizeYPix + 2 );
+        if ( bLayoutRTL )
+        {
+            aRect.Left() = aRect.Right();   // end position is left
+            aRect.Right() = aScrPos.X();
+        }
+
+        aPixelRects.push_back(Rectangle( aRect.Left(), aRect.Top(), aRect.Left()+2, aRect.Bottom() ));
+        aPixelRects.push_back(Rectangle( aRect.Right()-2, aRect.Top(), aRect.Right(), aRect.Bottom() ));
+        aPixelRects.push_back(Rectangle( aRect.Left()+3, aRect.Top(), aRect.Right()-3, aRect.Top()+2 ));
+        aPixelRects.push_back(Rectangle( aRect.Left()+3, aRect.Bottom()-2, aRect.Right()-3, aRect.Bottom() ));
+
+        //
+        //  convert into logic units and create overlay object
+        //
+
+        sdr::overlay::OverlayObjectCell::RangeVector aRanges;
+
+        std::vector<Rectangle>::const_iterator aPixelEnd( aPixelRects.end() );
+        for ( std::vector<Rectangle>::const_iterator aPixelIter( aPixelRects.begin() );
+              aPixelIter != aPixelEnd; ++aPixelIter )
+        {
+            Rectangle aLogic( PixelToLogic( *aPixelIter, aDrawMode ) );
+
+            const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
+            const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
+            const basegfx::B2DRange a2DRange(aTopLeft, aBottomRight);
+
+            aRanges.push_back( a2DRange );
+        }
+
+        // #i70788# get the OverlayManager safely
+        ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
+
+        if(pOverlayManager)
+        {
+            ScOverlayType eType = SC_OVERLAY_INVERT;
+//                ScOverlayType eType = SC_OVERLAY_HATCH;
+//                ScOverlayType eType = SC_OVERLAY_TRANSPARENT;
+
+            Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
+            sdr::overlay::OverlayObjectCell* pOverlay =
+                new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
+
+            pOverlayManager->add(*pOverlay);
+            mpOODragRect = new ::sdr::overlay::OverlayObjectList;
+            mpOODragRect->append(*pOverlay);
+        }
+    }
+
+    if ( aOldMode != aDrawMode )
+        SetMapMode( aOldMode );
+}
+
+void ScGridWindow::DeleteHeaderOverlay()
+{
+    DELETEZ( mpOOHeader );
+}
+
+void ScGridWindow::UpdateHeaderOverlay()
+{
+    MapMode aDrawMode = GetDrawMapMode();
+    MapMode aOldMode = GetMapMode();
+    if ( aOldMode != aDrawMode )
+        SetMapMode( aDrawMode );
+
+    DeleteHeaderOverlay();
+
+    //  Pixel rectangle is in aInvertRect
+
+    //
+    //  convert into logic units and create overlay object
+    //
+
+    if ( !aInvertRect.IsEmpty() )
+    {
+        Rectangle aLogic( PixelToLogic( aInvertRect, aDrawMode ) );
+
+        const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
+        const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
+        const basegfx::B2DRange a2DRange(aTopLeft, aBottomRight);
+
+        sdr::overlay::OverlayObjectCell::RangeVector aRanges;
+        aRanges.push_back( a2DRange );
+
+        // #i70788# get the OverlayManager safely
+        ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
+
+        if(pOverlayManager)
+        {
+            ScOverlayType eType = SC_OVERLAY_INVERT;
+//                ScOverlayType eType = SC_OVERLAY_HATCH;
+//                ScOverlayType eType = SC_OVERLAY_TRANSPARENT;
+
+            Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
+            sdr::overlay::OverlayObjectCell* pOverlay =
+                new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
+
+            pOverlayManager->add(*pOverlay);
+            mpOOHeader = new ::sdr::overlay::OverlayObjectList;
+            mpOOHeader->append(*pOverlay);
+        }
+    }
+
+    if ( aOldMode != aDrawMode )
+        SetMapMode( aOldMode );
+}
+
+void ScGridWindow::DeleteShrinkOverlay()
+{
+    DELETEZ( mpOOShrink );
+}
+
+void ScGridWindow::UpdateShrinkOverlay()
+{
+    MapMode aDrawMode = GetDrawMapMode();
+    MapMode aOldMode = GetMapMode();
+    if ( aOldMode != aDrawMode )
+        SetMapMode( aDrawMode );
+
+    DeleteShrinkOverlay();
+
+    //
+    //  get the rectangle in pixels
+    //
+
+    Rectangle aPixRect;
+    ScRange aRange;
+    SCTAB nTab = pViewData->GetTabNo();
+    if ( pViewData->IsRefMode() && nTab >= pViewData->GetRefStartZ() && nTab <= pViewData->GetRefEndZ() &&
+         pViewData->GetDelMark( aRange ) )
+    {
+        //! limit to visible area
+        if ( aRange.aStart.Col() <= aRange.aEnd.Col() &&
+             aRange.aStart.Row() <= aRange.aEnd.Row() )
+        {
+            Point aStart = pViewData->GetScrPos( aRange.aStart.Col(),
+                                                 aRange.aStart.Row(), eWhich );
+            Point aEnd = pViewData->GetScrPos( aRange.aEnd.Col()+1,
+                                               aRange.aEnd.Row()+1, eWhich );
+            aEnd.X() -= 1;
+            aEnd.Y() -= 1;
+
+            aPixRect = Rectangle( aStart,aEnd );
+        }
+    }
+
+    //
+    //  convert into logic units and create overlay object
+    //
+
+    if ( !aPixRect.IsEmpty() )
+    {
+        Rectangle aLogic( PixelToLogic( aPixRect, aDrawMode ) );
+
+        const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
+        const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
+        const basegfx::B2DRange a2DRange(aTopLeft, aBottomRight);
+
+        sdr::overlay::OverlayObjectCell::RangeVector aRanges;
+        aRanges.push_back( a2DRange );
+
+        // #i70788# get the OverlayManager safely
+        ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
+
+        if(pOverlayManager)
+        {
+            ScOverlayType eType = SC_OVERLAY_INVERT;
+//                ScOverlayType eType = SC_OVERLAY_HATCH;
+//                ScOverlayType eType = SC_OVERLAY_TRANSPARENT;
+
+            Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
+            sdr::overlay::OverlayObjectCell* pOverlay =
+                new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
+
+            pOverlayManager->add(*pOverlay);
+            mpOOShrink = new ::sdr::overlay::OverlayObjectList;
+            mpOOShrink->append(*pOverlay);
+        }
+    }
+
+    if ( aOldMode != aDrawMode )
+        SetMapMode( aOldMode );
+}
+
+// #i70788# central method to get the OverlayManager safely
+::sdr::overlay::OverlayManager* ScGridWindow::getOverlayManager()
+{
+    SdrPageView* pPV = pViewData->GetView()->GetScDrawView()->GetSdrPageView();
+
+    if(pPV)
+    {
+        SdrPageWindow* pPageWin = pPV->FindPageWindow( *this );
+
+        if ( pPageWin )
+        {
+            return (pPageWin->GetOverlayManager());
+        }
+    }
+
+    return 0L;
+}
+
+void ScGridWindow::flushOverlayManager()
+{
+    // #i70788# get the OverlayManager safely
+    ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
+
+    if(pOverlayManager)
+    {
+        pOverlayManager->flush();
+    }
+}
+
+// ---------------------------------------------------------------------------
+
+// #114409#
+namespace sdr
+{
+    namespace overlay
+    {
+        OverlayObjectCell::OverlayObjectCell( ScOverlayType eType, const Color& rColor, const RangeVector& rRects )
+        :   OverlayObject( rColor ),
+            mePaintType( eType ),
+            maRectangles( rRects )
+        {
+        }
+
+        OverlayObjectCell::~OverlayObjectCell()
+        {
+        }
+
+        void OverlayObjectCell::drawGeometry(OutputDevice& rOutputDevice)
+        {
+            // set colors
+            rOutputDevice.SetLineColor();
+            rOutputDevice.SetFillColor(getBaseColor());
+
+            if ( mePaintType == SC_OVERLAY_INVERT )
+            {
+                rOutputDevice.Push();
+                rOutputDevice.SetRasterOp( ROP_XOR );
+                rOutputDevice.SetFillColor( COL_WHITE );
+            }
+
+            for(sal_uInt32 a(0L);a < maRectangles.size(); a++)
+            {
+                const basegfx::B2DRange& rRange(maRectangles[a]);
+                const Rectangle aRectangle(FRound(rRange.getMinX()), FRound(rRange.getMinY()), FRound(rRange.getMaxX()), FRound(rRange.getMaxY()));
+
+                switch(mePaintType)
+                {
+                    case SC_OVERLAY_INVERT :
+                    {
+                        rOutputDevice.DrawRect( aRectangle );
+
+                        // if(OUTDEV_WINDOW == rOutputDevice.GetOutDevType())
+                        // {
+                        //  ((Window&)rOutputDevice).Invert(aRectangle, INVERT_HIGHLIGHT);
+                        // }
+
+                        break;
+                    }
+                    case SC_OVERLAY_HATCH :
+                    {
+                        rOutputDevice.DrawHatch(PolyPolygon(Polygon(aRectangle)), Hatch(HATCH_SINGLE, getBaseColor(), 2, 450));
+                        break;
+                    }
+                    case SC_OVERLAY_TRANSPARENT :
+                    {
+                        rOutputDevice.DrawTransparent(PolyPolygon(Polygon(aRectangle)), 50);
+                        break;
+                    }
+                    case SC_OVERLAY_LIGHT_TRANSPARENT :
+                    {
+                        rOutputDevice.DrawTransparent(PolyPolygon(Polygon(aRectangle)), 80);
+                        break;
+                    }
+                }
+            }
+
+            if ( mePaintType == SC_OVERLAY_INVERT )
+                rOutputDevice.Pop();
+        }
+
+        void OverlayObjectCell::createBaseRange(OutputDevice& rOutputDevice)
+        {
+            maBaseRange.reset();
+
+            for(sal_uInt32 a(0L); a < maRectangles.size(); a++)
+            {
+                maBaseRange.expand(maRectangles[a]);
+            }
+        }
+
+        void OverlayObjectCell::transform(const basegfx::B2DHomMatrix& rMatrix)
+        {
+            for(sal_uInt32 a(0L); a < maRectangles.size(); a++)
+            {
+                maRectangles[a].transform(rMatrix);
+            }
+        }
+
+    } // end of namespace overlay
+} // end of namespace sdr
+
+// ---------------------------------------------------------------------------
+
+// eof
