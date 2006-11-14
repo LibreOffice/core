@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:22:33 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:52:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
     if ( rMEvt.IsLeft() )
     {
-        SdrHdl* pHdl = pView->HitHandle(aMDPos, *pWindow);
+        SdrHdl* pHdl = pView->PickHandle(aMDPos);
         SdrObject* pObj;
         SdrPageView* pPV;
 
@@ -229,7 +229,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                 // if a comment: unlock the internal layer here.
                 // re-lock in ScDrawView::MarkListHasChanged()
-                TestComment( pView->GetPageViewPvNum(0), aMDPos );
+                TestComment( pView->GetSdrPageView(), aMDPos );
 
                 if ( pView->MarkObj(aMDPos, -2, FALSE, rMEvt.IsMod1()) )
                 {
@@ -245,7 +245,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         if ( !bWasOleActive )
                             aDragTimer.Start();
 
-                        pHdl=pView->HitHandle(aMDPos, *pWindow);
+                        pHdl=pView->PickHandle(aMDPos);
                         pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
                         bReturn = TRUE;
                     }
@@ -262,7 +262,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         //*********************************************************
                         //Objekt selektieren
                         //********************************************************
-                        pView->BegMarkObj(aMDPos, (OutputDevice*) NULL);
+                        pView->BegMarkObj(aMDPos);
                         bReturn = TRUE;
                     }
                 }
@@ -315,7 +315,7 @@ BOOL __EXPORT FuSelection::MouseMove(const MouseEvent& rMEvt)
     if( bVCAction )
     {
         //  GetSbxForm gibts nicht mehr - Basic-Controls sind tot
-        //SdrPageView* pPgView = pView->GetPageViewPvNum(0);
+        //SdrPageView* pPgView = pView->GetPageViewByIndex(0);
         //ScDrawPage*  pPage     = (ScDrawPage*)pPgView->GetPage();
         //VCSbxForm* pForm = (VCSbxForm*)(SbxObject*)(pPage->GetSbxForm());
         //((VCManager*)(pForm->GetVCContainer()))->
@@ -428,7 +428,7 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         {
                             if (((SdrOle2Obj*) pObj)->GetObjRef().is())
                             {
-                                pView->HideMarkHdl(NULL);
+                                pView->HideMarkHdl();
                                 pViewShell->ActivateObject( (SdrOle2Obj*) pObj, 0 );
                             }
                         }
@@ -461,7 +461,7 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 }
             }
         }
-        else if ( TestDetective( pView->GetPageViewPvNum(0), aPnt ) )
+        else if ( TestDetective( pView->GetSdrPageView(), aPnt ) )
             bReturn = TRUE;
     }
 
@@ -470,12 +470,12 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     if( bVCAction )
     {
         //  GetSbxForm gibts nicht mehr - Basic-Controls sind tot
-        //SdrPageView* pPgView = pView->GetPageViewPvNum(0);
+        //SdrPageView* pPgView = pView->GetPageViewByIndex(0);
         //ScDrawPage*  pPage     = (ScDrawPage*)pPgView->GetPage();
         //VCSbxForm* pForm = (VCSbxForm*)(SbxObject*)(pPage->GetSbxForm());
         //((VCManager*)(pForm->GetVCContainer()))->
         //    MouseButtonUp( pWindow, rMEvt );
-        pView->ShowMarkHdl( pWindow );
+        pView->ShowMarkHdl();
         bVCAction = FALSE;
         bReturn = TRUE;
     }
