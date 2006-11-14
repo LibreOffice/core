@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:52:55 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:52:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,7 @@ SdrOutliner* FuText::MakeOutliner()
     //  Die EditEngine benutzt beim RTF Export (Clipboard / Drag&Drop)
     //  den MapMode des RefDevices, um die Fontgroesse zu setzen
 
-    //  #i10426# The ref device isn't set to the EditEngine before BegTextEdit now,
+    //  #i10426# The ref device isn't set to the EditEngine before SdrBeginTextEdit now,
     //  so the device must be taken from the model here.
     OutputDevice* pRef = pDrDoc->GetRefDevice();
     if (pRef && pRef != pWindow)
