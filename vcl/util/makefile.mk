@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.82 $
+#   $Revision: 1.83 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-06 10:07:49 $
+#   last change: $Author: ihi $ $Date: 2006-11-14 15:26:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -210,6 +210,7 @@ DEFLIB1NAME =vcl
 
 SHL1STDLIBS += uwinapi.lib      \
                gdi32.lib        \
+               msimg32.lib     \
                winspool.lib     \
                ole32.lib        \
                shell32.lib      \
