@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dragmt3d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:39:58 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:35:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,8 @@
 #include "view3d.hxx"
 #endif
 
-#ifndef _POLY3D_HXX
-#include "poly3d.hxx"
+#ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
+#include <basegfx/polygon/b3dpolygon.hxx>
 #endif
 
 #ifndef _SV_TIMER_HXX
@@ -64,11 +64,11 @@ class E3dDragMethodUnit
 {
 public:
     E3dObject*          p3DObj;
-    Polygon3D           aWireframePoly;
-    Matrix4D            aDisplayTransform;
-    Matrix4D            aInvDisplayTransform;
-    Matrix4D            aInitTransform;
-    Matrix4D            aTransform;
+    basegfx::B3DPolygon         aWireframePoly;
+    basegfx::B3DHomMatrix           aDisplayTransform;
+    basegfx::B3DHomMatrix           aInvDisplayTransform;
+    basegfx::B3DHomMatrix            aInitTransform;
+    basegfx::B3DHomMatrix           aTransform;
     INT32               nStartAngle;
     INT32               nLastAngle;
 
@@ -97,7 +97,6 @@ class E3dDragMethod : public SdrDragMethod
 protected:
     E3dDragMethodUnitGroup      aGrp;
     E3dDragConstraint           eConstraint;
-    //BFS01E3dDragDetail                eDragDetail;
     Point                       aLastPos;
     Rectangle                   aFullBound;
     BOOL                        bMoveFull;
@@ -108,7 +107,6 @@ public:
     TYPEINFO();
     E3dDragMethod(SdrDragView &rView,
         const SdrMarkList& rMark,
-        //BFS01E3dDragDetail eDetail,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
         BOOL bFull=FALSE);
 
@@ -119,10 +117,13 @@ public:
     virtual void Brk();
     virtual FASTBOOL End(FASTBOOL bCopy);
 
-    virtual void DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const;
+    //virtual void DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const;
     E3dView& Get3DView()  { return (E3dView&)rView;  }
 
     DECL_LINK(TimerInterruptHdl, void*);
+
+    // for migration from XOR to overlay
+    virtual void CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverlayManager, ::sdr::overlay::OverlayObjectList& rOverlayList);
 };
 
 
@@ -134,13 +135,12 @@ public:
 
 class E3dDragRotate : public E3dDragMethod
 {
-    Vector3D                aGlobalCenter;
+    basegfx::B3DPoint           aGlobalCenter;
 
 public:
     TYPEINFO();
     E3dDragRotate(SdrDragView &rView,
         const SdrMarkList& rMark,
-        //BFS01E3dDragDetail eDetail,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
         BOOL bFull=FALSE);
 
@@ -164,7 +164,6 @@ public:
     TYPEINFO();
     E3dDragMove(SdrDragView &rView,
         const SdrMarkList& rMark,
-        //BFS01E3dDragDetail eDetail,
         SdrHdlKind eDrgHdl = HDL_MOVE,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
         BOOL bFull=FALSE);
