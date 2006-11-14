@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:40:45 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:11:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,27 @@
 #ifdef VERT_DISTANCE
 #include <math.h>
 #endif
+
+#ifndef _E3D_OBJ3D_HXX //autogen
+#include <svx/obj3d.hxx>
+#endif
+
+#ifndef _TXTRANGE_HXX //autogen
+#include <svx/txtrange.hxx>
+#endif
+
+#ifndef _SVX_LRSPITEM_HXX //autogen
+#include <svx/lrspitem.hxx>
+#endif
+#ifndef _SVX_ULSPITEM_HXX //autogen
+#include <svx/ulspitem.hxx>
+#endif
+// --> OD 2004-06-16 #i28701#
+#ifndef _SVX_LSPCITEM_HXX
+#include <svx/lspcitem.hxx>
+#endif
+// <--
+
 #ifndef _TXTFLCNT_HXX //autogen
 #include <txtflcnt.hxx>
 #endif
@@ -1794,8 +1815,9 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
             nPntCnt -= pTextRanger[ --nObjCnt ]->GetPointCount();
             delete pTextRanger[ nObjCnt ];
         }
-        XPolyPolygon aXPoly;
-        XPolyPolygon *pXPoly = NULL;
+        ::basegfx::B2DPolyPolygon aPolyPolygon;
+        ::basegfx::B2DPolyPolygon* pPolyPolygon = 0L;
+
         if ( pObj->ISA(SwVirtFlyDrawObj) )
         {
             // Vorsicht #37347: Das GetContour() fuehrt zum Laden der Grafik,
@@ -1805,14 +1827,18 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
             if( !((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetContour( aPoly ) )
                 aPoly = PolyPolygon( ((SwVirtFlyDrawObj*)pObj)->
                                      GetFlyFrm()->Frm().SVRect() );
-            aXPoly = XPolyPolygon( aPoly );
+            aPolyPolygon.clear();
+            aPolyPolygon.append(aPoly.getB2DPolyPolygon());
         }
         else
         {
             if( !pObj->ISA( E3dObject ) )
-                pObj->TakeXorPoly( aXPoly, sal_True );
-            pXPoly = new XPolyPolygon();
-            pObj->TakeContour( *pXPoly );
+            {
+                aPolyPolygon = pObj->TakeXorPoly( sal_True );
+            }
+
+            ::basegfx::B2DPolyPolygon aContourPoly(pObj->TakeContour());
+            pPolyPolygon = new ::basegfx::B2DPolyPolygon(aContourPoly);
         }
         const SvxLRSpaceItem &rLRSpace = pFmt->GetLRSpace();
         const SvxULSpaceItem &rULSpace = pFmt->GetULSpace();
@@ -1820,13 +1846,13 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         memmove( (SdrObject**)pSdrObj + 1, pSdrObj, nObjCnt++ * sizeof( SdrObject* ) );
         pSdrObj[ 0 ] = pObj; // Wg. #37347 darf das Object erst nach dem
                              // GetContour() eingetragen werden.
-        pTextRanger[ 0 ] = new TextRanger( aXPoly, pXPoly, 20,
+        pTextRanger[ 0 ] = new TextRanger( aPolyPolygon, pPolyPolygon, 20,
             (USHORT)rLRSpace.GetLeft(), (USHORT)rLRSpace.GetRight(),
             pFmt->GetSurround().IsOutside(), sal_False, pFrm->IsVertical() );
         pTextRanger[ 0 ]->SetUpper( rULSpace.GetUpper() );
         pTextRanger[ 0 ]->SetLower( rULSpace.GetLower() );
 
-        delete pXPoly;
+        delete pPolyPolygon;
         // UPPER_LOWER_TEST
 #ifndef PRODUCT
         const SwRootFrm* pTmpRootFrm = pFmt->getIDocumentLayoutAccess()->GetRootFrm();
