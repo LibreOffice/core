@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:31:14 $
+#   last change: $Author: ihi $ $Date: 2006-11-14 16:13:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ SLOFILES =	$(SLO)$/expm.obj
 
 SHL1TARGET= 	exp$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= 	expm
-SHL1STDLIBS=	$(VCLLIB) $(TOOLSLIB) $(SALLIB)
+SHL1STDLIBS=	$(VCLLIB) $(TOOLSLIB) $(SALLIB) $(SVTOOLLIB)
 SHL1LIBS=		$(SLB)$/expm.lib
 
 .IF "$(GUI)" != "UNX"
