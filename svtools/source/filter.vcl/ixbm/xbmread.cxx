@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xbmread.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:18:46 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:41:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 // - XBMReader -
 // -------------
 
-XBMReader::XBMReader( SvStream& rStm, void* ) :
+XBMReader::XBMReader( SvStream& rStm ) :
             rIStm           ( rStm ),
             pAcc1           ( NULL ),
             nLastPos        ( rStm.Tell() ),
@@ -380,14 +380,14 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
 // - ImportXBM -
 // -------------
 
-BOOL ImportXBM( SvStream& rStm, Graphic& rGraphic, void* pCallerData )
+BOOL ImportXBM( SvStream& rStm, Graphic& rGraphic )
 {
     XBMReader*  pXBMReader = (XBMReader*) rGraphic.GetContext();
     ReadState   eReadState;
     BOOL        bRet = TRUE;
 
     if( !pXBMReader )
-        pXBMReader = new XBMReader( rStm, pCallerData );
+        pXBMReader = new XBMReader( rStm );
 
     rGraphic.SetContext( NULL );
     eReadState = pXBMReader->ReadXBM( rGraphic );
