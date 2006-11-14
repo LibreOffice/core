@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:25:41 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:51:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,7 +385,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                     if( pObj && pObj->ISA( SdrOle2Obj ) && !bOle )
                     {
-                        pView->HideMarkHdl(NULL);
+                        pView->HideMarkHdl();
                         pViewShell->ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
 
                         // consumed
@@ -703,8 +703,8 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                     if(pHdl->GetKind() == HDL_POLY)
                     {
                         // rescue ID of point with focus
-                        sal_uInt16 nPol(pHdl->GetPolyNum());
-                        sal_uInt16 nPnt(pHdl->GetPointNum());
+                        sal_uInt32 nPol(pHdl->GetPolyNum());
+                        sal_uInt32 nPnt(pHdl->GetPointNum());
 
                         if(pView->IsPointMarked(*pHdl))
                         {
@@ -861,7 +861,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         Point aPosPixel = pWindow->GetPointerPosPixel();
         BOOL bAlt       = pMEvt && pMEvt->IsMod2();
         Point aPnt      = pWindow->PixelToLogic( aPosPixel );
-        SdrHdl* pHdl    = pView->HitHandle(aPnt, *pWindow);
+        SdrHdl* pHdl    = pView->PickHandle(aPnt);
         SdrObject* pObj;
         SdrPageView* pPV;
 
@@ -910,7 +910,7 @@ BOOL FuDraw::IsSizingOrMovingNote( const MouseEvent& rMEvt ) const
             {
                 Point aMPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
                 bIsSizingOrMoving =
-                    pView->HitHandle( aMPos, *pWindow ) ||      // handles to resize the note
+                    pView->PickHandle( aMPos ) ||      // handles to resize the note
                     pView->IsTextEditFrameHit( aMPos );         // frame for moving the note
             }
         }
