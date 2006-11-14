@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdcrtmt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:23:59 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:39:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,79 +35,6 @@
 
 #ifndef _SVDCRTMT_HXX
 #define _SVDCRTMT_HXX
-
-#ifndef _SVDHDL_HXX
-#include "svdhdl.hxx"
-#endif
-
-#ifndef _SVDCRTV_HXX
-#include "svdcrtv.hxx"
-#endif
-
-#ifndef _SVDDRGM1_HXX
-#include "svddrgm1.hxx"
-#endif
-
-//************************************************************
-//   ImpSdrCreateLibObjMove
-//************************************************************
-
-class ImpSdrCreateLibObjMove : public SdrDragMove
-{
-    Point                       aObjCenter;
-    Rectangle                   aObjRect;
-
-private:
-    SdrCreateView& View() const { return *((SdrCreateView*)&rView); }
-    SdrPageView& CreatePV() const { return *View().pCreatePV; }
-    SdrObject& CreateObj() const { return *View().pAktCreate; }
-
-public:
-    TYPEINFO();
-    ImpSdrCreateLibObjMove(SdrDragView& rNewView): SdrDragMove(rNewView) {}
-
-    virtual void Draw() const;
-    virtual void Show();
-    virtual void Hide();
-
-    virtual void TakeComment(String& rStr) const;
-
-    virtual FASTBOOL Beg();
-    virtual void MovAllPoints();
-    virtual void Mov(const Point& rPnt);
-    virtual FASTBOOL End(FASTBOOL bCopy);
-};
-
-//************************************************************
-//   ImpSdrCreateLibObjResize
-//************************************************************
-
-class ImpSdrCreateLibObjResize : public SdrDragResize
-{
-    Rectangle                   aObjRect;
-    FASTBOOL                    bForceOrtho;
-private:
-    SdrCreateView& View() const { return *((SdrCreateView*)&rView); }
-    SdrPageView& CreatePV() const { return *View().pCreatePV; }
-    SdrObject& CreateObj() const { return *View().pAktCreate; }
-
-public:
-    TYPEINFO();
-    ImpSdrCreateLibObjResize(SdrDragView& rNewView): SdrDragResize(rNewView) {}
-
-    virtual void Draw() const;
-    virtual void Show();
-    virtual void Hide();
-
-    virtual void TakeComment(String& rStr) const;
-
-    virtual FASTBOOL Beg();
-    virtual void MovAllPoints();
-    virtual void Mov(const Point& rPnt);
-    virtual FASTBOOL End(FASTBOOL bCopy);
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif //_SVDCRTMT_HXX
 
