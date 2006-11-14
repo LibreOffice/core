@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsQueueProcessor.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 10:30:14 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:35:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,8 +199,8 @@ template <class Queue, class RequestData, class BitmapFactory>
                 {
                     // Save some values while we hold the mutex of the queue.
                     pPage = pRequest->GetPage();
-                    aDirtyRectangle = pRequest->GetViewContact().GetPaintRectangle()
-                        - mrView.GetPageViewPvNum(0)->GetOffset();
+                    aDirtyRectangle = pRequest->GetViewContact().GetPaintRectangle();
+                        // - mrView.GetPageViewPvNum(0)->GetOffset();
                     aPreviewPixelSize = pRequest->GetPreviewPixelBox(*mrView.GetWindow()).GetSize();
                     bRequestIsValid = true;
                     SSCD_SET_STATUS(pPage,RENDERING);
