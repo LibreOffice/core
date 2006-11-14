@@ -4,9 +4,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:14:38 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:09:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,9 +64,6 @@
 #endif
 #ifndef _SVX_FILLITEM_HXX //autogen
 #include <svx/xfillit.hxx>
-#endif
-#ifndef _SVDVMARK_HXX //autogen
-#include <svx/svdvmark.hxx>
 #endif
 #ifndef _SVDCAPT_HXX //autogen
 #include <svx/svdocapt.hxx>
@@ -161,6 +158,10 @@
 #include <HandleAnchorNodeChg.hxx>
 #endif
 // <--
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
 
 #define SCROLLVAL 75
 
@@ -686,7 +687,7 @@ void SwFEShell::Scroll( const Point &rPt )
          (!Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() ||
           Imp()->IsDragPossible( rPt )) )
     {
-        SwSaveHdl aSave( Imp() );
+        //SwSaveHdl aSave( Imp() );
         ScrollMDI( this, aRect, SCROLLVAL, SCROLLVAL );
     }
 }
@@ -721,8 +722,8 @@ long SwFEShell::BeginDrag( const Point* pPt, BOOL )
     if ( pView && pView->AreObjectsMarked() )
     {
         delete pChainFrom; delete pChainTo; pChainFrom = pChainTo = 0;
-        SdrHdl* pHdl = pView->HitHandle( *pPt, *GetWin() );
-        pView->BegDragObj( *pPt, GetWin(), pHdl );
+        SdrHdl* pHdl = pView->PickHandle( *pPt );
+        pView->BegDragObj( *pPt, 0 /*GetWin()*/, pHdl );
         ::FrameNotify( this, FLY_DRAG );
         return 1;
     }
@@ -781,7 +782,7 @@ long SwFEShell::EndDrag( const Point *, BOOL )
 
         // Reanimation from the hack #50778 to fix bug #97057
         // May be not the best solution, but the one with lowest risc at the moment.
-        pView->ShowShownXor( GetOut() );
+        //pView->ShowShownXor( GetOut() );
 
         pView->EndDragObj();
         // JP 18.08.95: DrawUndo-Action auf FlyFrames werden nicht gespeichert
@@ -1151,7 +1152,7 @@ void SwFEShell::EndTextEdit()
     }
     if ( !pObj->GetUpGroup() )
     {
-        if ( SDRENDTEXTEDIT_SHOULDBEDELETED == pView->EndTextEdit( TRUE ) )
+        if ( SDRENDTEXTEDIT_SHOULDBEDELETED == pView->SdrEndTextEdit(sal_True) )
         {
             if ( pView->GetMarkedObjectList().GetMarkCount() > 1 )
             {
@@ -1177,7 +1178,7 @@ void SwFEShell::EndTextEdit()
         }
     }
     else
-        pView->EndTextEdit();
+        pView->SdrEndTextEdit();
     EndAllAction();
 }
 
@@ -1335,7 +1336,7 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
                 pBest = pFly->GetVirtDrawObj();
         }
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-        SdrPageView* pPV = Imp()->GetDrawView()->GetPageViewPvNum( 0 );
+        SdrPageView* pPV = Imp()->GetDrawView()->GetSdrPageView();
 
         if( !pBest || rMrkList.GetMarkCount() == 1 )
         {
@@ -1998,9 +1999,9 @@ BOOL SwFEShell::BeginMark( const Point &rPos )
         SwDrawView* pDView = Imp()->GetDrawView();
 
         if (pDView->HasMarkablePoints())
-            return pDView->BegMarkPoints( rPos, (OutputDevice*) NULL );
+            return pDView->BegMarkPoints( rPos );
         else
-            return pDView->BegMarkObj( rPos, (OutputDevice*) NULL );
+            return pDView->BegMarkObj( rPos );
     }
     else
         return FALSE;
@@ -2069,7 +2070,7 @@ BOOL SwFEShell::EndMark()
                     {
                         if ( !bShowHdl )
                         {
-                            pDView->HideMarkHdl( GetOut() );
+                            pDView->HideMarkHdl();
                             bShowHdl = TRUE;
                         }
                         rMrkList.DeleteMark( i );
@@ -2081,7 +2082,7 @@ BOOL SwFEShell::EndMark()
             {
                 pDView->MarkListHasChanged();
                 pDView->AdjustMarkHdl();
-                pDView->ShowMarkHdl( GetOut() );
+                pDView->ShowMarkHdl();
             }
 
             if ( rMrkList.GetMarkCount() )
@@ -2796,9 +2797,15 @@ void SwFEShell::Unchain( SwFrmFmt &rFmt )
 void SwFEShell::HideChainMarker()
 {
     if ( pChainFrom )
-        pChainFrom->Hide();
+    {
+        delete pChainFrom;
+        pChainFrom = 0L;
+    }
     if ( pChainTo )
-        pChainTo->Hide();
+    {
+        delete pChainTo;
+        pChainTo = 0L;
+    }
 }
 
 void SwFEShell::SetChainMarker()
@@ -2809,36 +2816,43 @@ void SwFEShell::SetChainMarker()
     {
         SwFlyFrm *pFly = FindFlyFrm();
 
-        XPolygon aPoly(3);
         if ( pFly->GetPrevLink() )
         {
             bDelFrom = FALSE;
             const SwFrm *pPre = pFly->GetPrevLink();
-            aPoly[0] = Point( pPre->Frm().Right(), pPre->Frm().Bottom());
-            aPoly[1] = pFly->Frm().Pos();
+
+            Point aStart( pPre->Frm().Right(), pPre->Frm().Bottom());
+            Point aEnd(pFly->Frm().Pos());
+
             if ( !pChainFrom )
-                pChainFrom = new SdrViewUserMarker( GetDrawView() );
-            pChainFrom->SetPolyLine( TRUE );
-            pChainFrom->SetXPolygon( aPoly );
-            pChainFrom->Show();
+            {
+                pChainFrom = new SdrDropMarkerOverlay( *GetDrawView(), aStart, aEnd );
+            }
         }
         if ( pFly->GetNextLink() )
         {
             bDelTo = FALSE;
             const SwFlyFrm *pNxt = pFly->GetNextLink();
-            aPoly[0] = Point( pFly->Frm().Right(), pFly->Frm().Bottom());
-            aPoly[1] = pNxt->Frm().Pos();
+
+            Point aStart( pFly->Frm().Right(), pFly->Frm().Bottom());
+            Point aEnd(pNxt->Frm().Pos());
+
             if ( !pChainTo )
-                pChainTo = new SdrViewUserMarker( GetDrawView() );
-            pChainTo->SetXPolygon( aPoly );
-            pChainTo->SetPolyLine( TRUE );
-            pChainTo->Show();
+            {
+                pChainTo = new SdrDropMarkerOverlay( *GetDrawView(), aStart, aEnd );
+            }
         }
     }
+
     if ( bDelFrom )
+    {
         delete pChainFrom, pChainFrom = 0;
+    }
+
     if ( bDelTo )
+    {
         delete pChainTo,   pChainTo = 0;
+    }
 }
 
 long SwFEShell::GetSectionWidth( SwFmt& rFmt ) const
@@ -2914,82 +2928,74 @@ void SwFEShell::CreateDefaultShape(UINT16 eSdrObjectKind, const Rectangle& rRect
         }
         else if(pObj->ISA(SdrPathObj))
         {
-            XPolyPolygon aPoly;
+            ::basegfx::B2DPolyPolygon aPoly;
 
             switch(eSdrObjectKind)
             {
                 case OBJ_PATHLINE:
                 {
-                    XPolygon aInnerPoly;
-                    aInnerPoly[0] = aRect.BottomLeft();
-                    aInnerPoly[1] = aRect.BottomCenter();
-                    aInnerPoly[2] = aRect.BottomCenter();
-                    aInnerPoly[3] = aRect.Center();
-                    aInnerPoly[4] = aRect.TopCenter();
-                    aInnerPoly[5] = aRect.TopCenter();
-                    aInnerPoly[6] = aRect.TopRight();
-
-                    aInnerPoly.SetFlags(1, XPOLY_CONTROL);
-                    aInnerPoly.SetFlags(2, XPOLY_CONTROL);
-                    aInnerPoly.SetFlags(3, XPOLY_SYMMTR);
-                    aInnerPoly.SetFlags(4, XPOLY_CONTROL);
-                    aInnerPoly.SetFlags(5, XPOLY_CONTROL);
-
-                    aPoly.Insert(aInnerPoly);
+                    ::basegfx::B2DPolygon aInnerPoly;
+                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Left(), aRect.Bottom()));
+                    aInnerPoly.setControlPointA(0L, ::basegfx::B2DPoint(aRect.Center().X(), aRect.Bottom()));
+                    aInnerPoly.setControlPointB(0L, aInnerPoly.getControlPointA(0L));
+                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Center().X(), aRect.Center().Y()));
+                    aInnerPoly.setControlPointA(1L, ::basegfx::B2DPoint(aRect.Center().X(), aRect.Top()));
+                    aInnerPoly.setControlPointB(1L, aInnerPoly.getControlPointA(1L));
+                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Right(), aRect.Top()));
+                    aInnerPoly.setClosed(true);
+                    aPoly.append(aInnerPoly);
                 }
                 break;
                 case OBJ_FREELINE:
                 {
-                    XPolygon aInnerPoly;
-                    aInnerPoly[0] = aRect.BottomLeft();
-                    aInnerPoly[1] = aRect.TopLeft();
-                    aInnerPoly[2] = aRect.TopCenter();
-                    aInnerPoly[3] = aRect.Center();
-                    aInnerPoly[4] = aRect.BottomCenter();
-                    aInnerPoly[5] = aRect.BottomRight();
-                    aInnerPoly[6] = aRect.TopRight();
-
-                    aInnerPoly.SetFlags(1, XPOLY_CONTROL);
-                    aInnerPoly.SetFlags(2, XPOLY_CONTROL);
-                    aInnerPoly.SetFlags(3, XPOLY_SMOOTH);
-                    aInnerPoly.SetFlags(4, XPOLY_CONTROL);
-                    aInnerPoly.SetFlags(5, XPOLY_CONTROL);
-
-                    aInnerPoly[7] = aRect.BottomRight();
-
-                    aPoly.Insert(aInnerPoly);
+                    ::basegfx::B2DPolygon aInnerPoly;
+                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Left(), aRect.Bottom()));
+                    aInnerPoly.setControlPointA(0L, ::basegfx::B2DPoint(aRect.Left(), aRect.Top()));
+                    aInnerPoly.setControlPointB(0L, ::basegfx::B2DPoint(aRect.Center().X(), aRect.Top()));
+                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Center().X(), aRect.Center().Y()));
+                    aInnerPoly.setControlPointA(1L, ::basegfx::B2DPoint(aRect.Center().X(), aRect.Bottom()));
+                    aInnerPoly.setControlPointB(1L, ::basegfx::B2DPoint(aRect.Right(), aRect.Bottom()));
+                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Right(), aRect.Top()));
+                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Right(), aRect.Bottom()));
+                    aInnerPoly.setClosed(true);
+                    aPoly.append(aInnerPoly);
                 }
                 break;
                 case OBJ_POLY:
                 case OBJ_PLIN:
                 {
-                    XPolygon aInnerPoly;
+                    ::basegfx::B2DPolygon aInnerPoly;
                     sal_Int32 nWdt(aRect.GetWidth());
                     sal_Int32 nHgt(aRect.GetHeight());
 
-                    aInnerPoly[0] = aRect.BottomLeft();
-                    aInnerPoly[1] = aRect.TopLeft() + Point((nWdt * 30) / 100, (nHgt * 70) / 100);
-                    aInnerPoly[2] = aRect.TopLeft() + Point(0, (nHgt * 15) / 100);
-                    aInnerPoly[3] = aRect.TopLeft() + Point((nWdt * 65) / 100, 0);
-                    aInnerPoly[4] = aRect.TopLeft() + Point(nWdt, (nHgt * 30) / 100);
-                    aInnerPoly[5] = aRect.TopLeft() + Point((nWdt * 80) / 100, (nHgt * 50) / 100);
-                    aInnerPoly[6] = aRect.TopLeft() + Point((nWdt * 80) / 100, (nHgt * 75) / 100);
-                    aInnerPoly[7] = aRect.BottomRight();
+                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Left(), aRect.Bottom()));
+                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Left() + (nWdt * 30) / 100, aRect.Top() + (nHgt * 70) / 100));
+                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Left(), aRect.Top() + (nHgt * 15) / 100));
+                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Left() + (nWdt * 65) / 100, aRect.Top()));
+                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Left() + nWdt, aRect.Top() + (nHgt * 30) / 100));
+                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Left() + (nWdt * 80) / 100, aRect.Top() + (nHgt * 50) / 100));
+                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Left() + (nWdt * 80) / 100, aRect.Top() + (nHgt * 75) / 100));
+                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Bottom(), aRect.Right()));
 
                     if(OBJ_PLIN == eSdrObjectKind)
                     {
-                        aInnerPoly[8] = aRect.BottomCenter();
+                        aInnerPoly.append(::basegfx::B2DPoint(aRect.Center().X(), aRect.Bottom()));
+                    }
+                    else
+                    {
+                        aInnerPoly.setClosed(true);
                     }
 
-                    aPoly.Insert(aInnerPoly);
+                    aPoly.append(aInnerPoly);
                 }
                 break;
                 case OBJ_LINE :
                 {
-                    aPoly.Insert(XPolygon(2));
                     sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
-                    aPoly[0][0] = Point(aRect.TopLeft().X(), nYMiddle);
-                    aPoly[0][1] = Point(aRect.BottomRight().X(), nYMiddle);
+                    ::basegfx::B2DPolygon aTempPoly;
+                    aTempPoly.append(::basegfx::B2DPoint(aRect.TopLeft().X(), nYMiddle));
+                    aTempPoly.append(::basegfx::B2DPoint(aRect.BottomRight().X(), nYMiddle));
+                    aPoly.append(aTempPoly);
                 }
                 break;
             }
@@ -3045,8 +3051,8 @@ void SwFEShell::CreateDefaultShape(UINT16 eSdrObjectKind, const Rectangle& rRect
                 pObj->SetMergedItemSetAndBroadcast(aSet);
             }
         }
-        SdrPageView* pPageView = pDrawView->GetPageViewPvNum(0);
-        pDrawView->InsertObject(pObj, *pPageView, pDrawView->IsSolidDraggingNow() ? SDRINSERT_NOBROADCAST : 0);
+        SdrPageView* pPageView = pDrawView->GetSdrPageView();
+        pDrawView->InsertObjectAtView(pObj, *pPageView);
     }
     ImpEndCreate();
 }
