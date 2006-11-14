@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:16:47 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:26:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,11 @@
 #include <svtools/itempool.hxx>
 #include <sfx2/docfile.hxx>
 #include <avmedia/mediawindow.hxx>
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 #include "impgrf.hxx"
 #include "svdpage.hxx"
 #include "svdograf.hxx"
@@ -194,7 +199,6 @@ BOOL GallerySvDrawImport( SvStream& rIStm, FmFormModel& rModel )
         uno::Reference< io::XInputStream > xInputStream( new utl::OInputStreamWrapper( rIStm ) );
 
         rModel.GetItemPool().SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
-//BFS04     rModel.SetStreamingSdrModel( TRUE );
         uno::Reference< lang::XComponent > xComponent;
 
         bRet = SvxDrawingLayerImport( &rModel, xInputStream, xComponent, "com.sun.star.comp.Draw.XMLOasisImporter" );
@@ -204,8 +208,6 @@ BOOL GallerySvDrawImport( SvStream& rIStm, FmFormModel& rModel )
             bRet = SvxDrawingLayerImport( &rModel, xInputStream, xComponent, "com.sun.star.comp.Draw.XMLImporter" );
         }
 
-//        bRet = SvxDrawingLayerImport( &rModel, xInputStream );
-//BFS04     rModel.SetStreamingSdrModel( FALSE );
     }
 
     return bRet;
@@ -444,7 +446,9 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
                 if( mpFilter )
                 {
                     aProgressText = String( GAL_RESID( RID_SVXSTR_GALLERY_FILTER ) );
-                    mpFilter->SetUpdatePercentHdl( LINK( this, GalleryProgress, Update ) );
+//                  mpFilter->SetUpdatePercentHdl( LINK( this, GalleryProgress, Update ) );     // sj: progress wasn't working up from SO7 at all
+//                                                                                              // so I am removing this. The gallery progress should
+//                                                                                              // be changed to use the XStatusIndicator instead of XProgressMonitor
                 }
                 else
                     aProgressText = String( RTL_CONSTASCII_USTRINGPARAM( "Gallery" ) );
@@ -460,8 +464,8 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
 
 GalleryProgress::~GalleryProgress()
 {
-    if( mpFilter )
-        mpFilter->SetUpdatePercentHdl( Link() );
+//  if( mpFilter )
+//      mpFilter->SetUpdatePercentHdl( Link() );
 }
 
 // ------------------------------------------------------------------------
@@ -470,14 +474,6 @@ void GalleryProgress::Update( ULONG nVal, ULONG nMaxVal )
 {
     if( mxProgressBar.is() && nMaxVal )
         mxProgressBar->setValue( Min( (ULONG)( (double) nVal / nMaxVal * GALLERY_PROGRESS_RANGE ), (ULONG) GALLERY_PROGRESS_RANGE ) );
-}
-
-// ------------------------------------------------------------------------
-
-IMPL_LINK( GalleryProgress, Update, GraphicFilter*, pFilter )
-{
-    Update( pFilter->GetPercent(), 100 );
-    return 0L;
 }
 
 // -----------------------
