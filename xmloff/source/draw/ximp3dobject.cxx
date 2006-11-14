@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximp3dobject.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:30:39 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:15:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,8 +262,8 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
         {
             case XML_TOK_3DCUBEOBJ_MINEDGE:
             {
-                Vector3D aNewVec;
-                GetImport().GetMM100UnitConverter().convertVector3D(aNewVec, sValue);
+                ::basegfx::B3DVector aNewVec;
+                GetImport().GetMM100UnitConverter().convertB3DVector(aNewVec, sValue);
 
                 if(aNewVec != maMinEdge)
                 {
@@ -274,8 +274,8 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
             }
             case XML_TOK_3DCUBEOBJ_MAXEDGE:
             {
-                Vector3D aNewVec;
-                GetImport().GetMM100UnitConverter().convertVector3D(aNewVec, sValue);
+                ::basegfx::B3DVector aNewVec;
+                GetImport().GetMM100UnitConverter().convertB3DVector(aNewVec, sValue);
 
                 if(aNewVec != maMaxEdge)
                 {
@@ -317,13 +317,13 @@ void SdXML3DCubeObjectShapeContext::StartElement(const uno::Reference< xml::sax:
             // convert from min, max to size to be set
             maMaxEdge = maMaxEdge - maMinEdge;
 
-            aPosition3D.PositionX = maMinEdge.X();
-            aPosition3D.PositionY = maMinEdge.Y();
-            aPosition3D.PositionZ = maMinEdge.Z();
+            aPosition3D.PositionX = maMinEdge.getX();
+            aPosition3D.PositionY = maMinEdge.getY();
+            aPosition3D.PositionZ = maMinEdge.getZ();
 
-            aDirection3D.DirectionX = maMaxEdge.X();
-            aDirection3D.DirectionY = maMaxEdge.Y();
-            aDirection3D.DirectionZ = maMaxEdge.Z();
+            aDirection3D.DirectionX = maMaxEdge.getX();
+            aDirection3D.DirectionY = maMaxEdge.getY();
+            aDirection3D.DirectionZ = maMaxEdge.getZ();
 
             uno::Any aAny;
             aAny <<= aPosition3D;
@@ -373,8 +373,8 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
         {
             case XML_TOK_3DSPHEREOBJ_CENTER:
             {
-                Vector3D aNewVec;
-                GetImport().GetMM100UnitConverter().convertVector3D(aNewVec, sValue);
+                ::basegfx::B3DVector aNewVec;
+                GetImport().GetMM100UnitConverter().convertB3DVector(aNewVec, sValue);
 
                 if(aNewVec != maCenter)
                 {
@@ -385,8 +385,8 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
             }
             case XML_TOK_3DSPHEREOBJ_SIZE:
             {
-                Vector3D aNewVec;
-                GetImport().GetMM100UnitConverter().convertVector3D(aNewVec, sValue);
+                ::basegfx::B3DVector aNewVec;
+                GetImport().GetMM100UnitConverter().convertB3DVector(aNewVec, sValue);
 
                 if(aNewVec != maSize)
                 {
@@ -425,13 +425,13 @@ void SdXML3DSphereObjectShapeContext::StartElement(const uno::Reference< xml::sa
             drawing::Position3D aPosition3D;
             drawing::Direction3D aDirection3D;
 
-            aPosition3D.PositionX = maCenter.X();
-            aPosition3D.PositionY = maCenter.Y();
-            aPosition3D.PositionZ = maCenter.Z();
+            aPosition3D.PositionX = maCenter.getX();
+            aPosition3D.PositionY = maCenter.getY();
+            aPosition3D.PositionZ = maCenter.getZ();
 
-            aDirection3D.DirectionX = maSize.X();
-            aDirection3D.DirectionY = maSize.Y();
-            aDirection3D.DirectionZ = maSize.Z();
+            aDirection3D.DirectionX = maSize.getX();
+            aDirection3D.DirectionY = maSize.getY();
+            aDirection3D.DirectionZ = maSize.getZ();
 
             uno::Any aAny;
             aAny <<= aPosition3D;
