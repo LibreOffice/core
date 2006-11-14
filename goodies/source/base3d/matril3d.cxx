@@ -4,9 +4,9 @@
  *
  *  $RCSfile: matril3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:40:15 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:09:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,24 +121,6 @@ void B3dMaterial::SetShininess(UINT16 nNew)
 UINT16 B3dMaterial::GetShininess() const
 {
     return nExponent;
-}
-
-void B3dMaterial::WriteData(SvStream& rOut) const
-{
-    rOut << aAmbient;
-    rOut << aDiffuse;
-    rOut << aSpecular;
-    rOut << aEmission;
-    rOut << nExponent;
-}
-
-void B3dMaterial::ReadData(SvStream& rIn)
-{
-    rIn >> aAmbient;
-    rIn >> aDiffuse;
-    rIn >> aSpecular;
-    rIn >> aEmission;
-    rIn >> nExponent;
 }
 
 /*************************************************************************
