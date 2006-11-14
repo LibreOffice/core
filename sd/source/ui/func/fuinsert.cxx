@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:04:32 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:29:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,10 +143,13 @@
 #include "GraphicDocShell.hxx"
 #endif
 #include "strings.hrc"
-#include "graphpro.hxx"
 #include "drawdoc.hxx"
 #include "sdgrffilter.hxx"
 #include "sdxfer.hxx"
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 using namespace com::sun::star;
 
@@ -409,8 +412,8 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
             aPos.Y() -= aSize.Height() / 2;
             Rectangle aRect (aPos, aSize);
             SdrOle2Obj* pOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aObjName, aRect );
-            SdrPageView* pPV = pView->GetPageViewPvNum(0);
-            if( pView->InsertObject(pOleObj, *pPV, SDRINSERT_SETDEFLAYER) )
+            SdrPageView* pPV = pView->GetSdrPageView();
+            if( pView->InsertObjectAtView(pOleObj, *pPV, SDRINSERT_SETDEFLAYER) )
             {
                 if (nSlotId == SID_INSERT_DIAGRAM)
                 {
@@ -426,7 +429,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     pOleObj->SetProgName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarMath" ) ) );
                 }
 
-                pView->HideMarkHdl(NULL);
+                pView->HideMarkHdl();
                 pOleObj->SetLogicRect(aRect);
                 Size aTmp = OutputDevice::LogicToLogic( aRect.GetSize(), MAP_100TH_MM, aUnit );
                 aSz.Width = aTmp.Width();
@@ -620,7 +623,8 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                             ( (SdrOle2Obj*) pObj)->SetAspect(nAspect);
                             Rectangle aRect = ( (SdrOle2Obj*) pObj)->GetLogicRect();
 
-                            pView->HideMarkHdl(NULL);
+                            pView->HideMarkHdl();
+
                             if ( nAspect == embed::Aspects::MSOLE_ICON )
                             {
                                 if( xIconMetaFile.is() )
@@ -642,7 +646,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 /**************************************************************
                 * Ein neues OLE-Objekt wird erzeugt
                 **************************************************************/
-                SdrPageView* pPV = pView->GetPageViewPvNum(0);
+                SdrPageView* pPV = pView->GetSdrPageView();
                 Size aPageSize = pPV->GetPage()->GetSize();
 
                 // get the size from the iconified object
@@ -660,7 +664,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                 SdrOle2Obj* pObj = new SdrOle2Obj( aObjRef, aName, aRect);
 
-                if( pView->InsertObject(pObj, *pPV, SDRINSERT_SETDEFLAYER) )
+                if( pView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER) )
                 {
                     //  #73279# Math objects change their object size during InsertObject.
                     //  New size must be set in SdrObject, or a wrong scale will be set at
@@ -686,7 +690,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                     if (bCreateNew)
                     {
-                        pView->HideMarkHdl(NULL);
+                        pView->HideMarkHdl();
                         pObj->SetLogicRect(aRect);
 
                         if ( nAspect != embed::Aspects::MSOLE_ICON )
