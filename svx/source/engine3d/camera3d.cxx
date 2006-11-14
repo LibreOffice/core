@@ -4,9 +4,9 @@
  *
  *  $RCSfile: camera3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:54:26 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:17:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 |*
 \************************************************************************/
 
-Camera3D::Camera3D(const Vector3D& rPos, const Vector3D& rLookAt,
+Camera3D::Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
                    double fFocalLen, double fBankAng) :
     aResetPos(rPos),
     aResetLookAt(rLookAt),
@@ -73,8 +73,8 @@ Camera3D::Camera3D(const Vector3D& rPos, const Vector3D& rLookAt,
 
 Camera3D::Camera3D()
 {
-    Vector3D aVector3D(0,0,1);
-    Camera3D(aVector3D, Vector3D());
+    basegfx::B3DPoint aVector3D(0.0 ,0.0 ,1.0);
+    Camera3D(aVector3D, basegfx::B3DPoint());
 }
 
 /*************************************************************************
@@ -98,7 +98,7 @@ void Camera3D::Reset()
 |*
 \************************************************************************/
 
-void Camera3D::SetDefaults(const Vector3D& rPos, const Vector3D& rLookAt,
+void Camera3D::SetDefaults(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
                             double fFocalLen, double fBankAng)
 {
     aResetPos           = rPos;
@@ -126,7 +126,7 @@ void Camera3D::SetViewWindow(double fX, double fY, double fW, double fH)
 |*
 \************************************************************************/
 
-void Camera3D::SetPosition(const Vector3D& rNewPos)
+void Camera3D::SetPosition(const basegfx::B3DPoint& rNewPos)
 {
     if ( rNewPos != aPosition )
     {
@@ -143,7 +143,7 @@ void Camera3D::SetPosition(const Vector3D& rNewPos)
 |*
 \************************************************************************/
 
-void Camera3D::SetLookAt(const Vector3D& rNewLookAt)
+void Camera3D::SetLookAt(const basegfx::B3DPoint& rNewLookAt)
 {
     if ( rNewLookAt != aLookAt )
     {
@@ -159,8 +159,8 @@ void Camera3D::SetLookAt(const Vector3D& rNewLookAt)
 |*
 \************************************************************************/
 
-void Camera3D::SetPosAndLookAt(const Vector3D& rNewPos,
-                               const Vector3D& rNewLookAt)
+void Camera3D::SetPosAndLookAt(const basegfx::B3DPoint& rNewPos,
+                               const basegfx::B3DPoint& rNewLookAt)
 {
     if ( rNewPos != aPosition || rNewLookAt != aLookAt )
     {
@@ -181,35 +181,88 @@ void Camera3D::SetPosAndLookAt(const Vector3D& rNewPos,
 
 void Camera3D::SetBankAngle(double fAngle)
 {
-    Vector3D aDiff = aPosition - aLookAt;
-    Vector3D aPrj = aDiff;
-
+    basegfx::B3DVector aDiff(aPosition - aLookAt);
+    basegfx::B3DVector aPrj(aDiff);
     fBankAngle = fAngle;
 
-    if ( aDiff.Y() == 0 )
-        aPrj.Y() = -1;
+    if ( aDiff.getY() == 0 )
+    {
+        aPrj.setY(-1.0);
+    }
     else
     {   // aPrj = Projektion von aDiff auf die XZ-Ebene
-        aPrj.Y() = 0;
-        if ( aDiff.Y() < 0 )
+        aPrj.setY(0.0);
+
+        if ( aDiff.getY() < 0.0 )
+        {
             aPrj = -aPrj;
+        }
     }
+
     // von aDiff nach oben zeigenden View-Up-Vektor berechnen
-    aPrj |= aDiff;
-    aPrj |= aDiff;
-    aDiff.Normalize();
+    aPrj = aPrj.getPerpendicular(aDiff);
+    aPrj = aPrj.getPerpendicular(aDiff);
+    aDiff.normalize();
 
     // auf Z-Achse rotieren, dort um BankAngle drehen und zurueck
-    Matrix4D aTf;
-    double fV = sqrt(aDiff.Y() * aDiff.Y() + aDiff.Z() * aDiff.Z());
+    basegfx::B3DHomMatrix aTf;
+    const double fV(sqrt(aDiff.getY() * aDiff.getY() + aDiff.getZ() * aDiff.getZ()));
 
-    if ( fV != 0 )
-        aTf.RotateX(aDiff.Y() / fV, aDiff.Z() / fV);
-    aTf.RotateY(-aDiff.X(), fV);
-    aTf.RotateZ(fBankAngle);
-    aTf.RotateY(aDiff.X(), fV);
-    if ( fV != 0 )
-        aTf.RotateX(-aDiff.Y() / fV, aDiff.Z() / fV);
+    if ( fV != 0.0 )
+    {
+        basegfx::B3DHomMatrix aTemp;
+        const double fSin(aDiff.getY() / fV);
+        const double fCos(aDiff.getZ() / fV);
+
+        aTemp.set(1, 1, fCos);
+        aTemp.set(2, 2, fCos);
+        aTemp.set(2, 1, fSin);
+        aTemp.set(1, 2, -fSin);
+
+        aTf *= aTemp;
+    }
+
+    {
+        basegfx::B3DHomMatrix aTemp;
+        const double fSin(-aDiff.getX());
+        const double fCos(fV);
+
+        aTemp.set(0, 0, fCos);
+        aTemp.set(2, 2, fCos);
+        aTemp.set(0, 2, fSin);
+        aTemp.set(2, 0, -fSin);
+
+        aTf *= aTemp;
+    }
+
+    aTf.rotate(0.0, 0.0, fBankAngle);
+
+    {
+        basegfx::B3DHomMatrix aTemp;
+        const double fSin(aDiff.getX());
+        const double fCos(fV);
+
+        aTemp.set(0, 0, fCos);
+        aTemp.set(2, 2, fCos);
+        aTemp.set(0, 2, fSin);
+        aTemp.set(2, 0, -fSin);
+
+        aTf *= aTemp;
+    }
+
+    if ( fV != 0.0 )
+    {
+        basegfx::B3DHomMatrix aTemp;
+        const double fSin(-aDiff.getY() / fV);
+        const double fCos(aDiff.getZ() / fV);
+
+        aTemp.set(1, 1, fCos);
+        aTemp.set(2, 2, fCos);
+        aTemp.set(2, 1, fSin);
+        aTemp.set(1, 2, -fSin);
+
+        aTf *= aTemp;
+    }
 
     SetVUV(aTf * aPrj);
 }
@@ -224,7 +277,7 @@ void Camera3D::SetFocalLength(double fLen)
 {
     if ( fLen < 5 )
         fLen = 5;
-    SetPRP(Vector3D(0, 0, fLen / 35.0 * aViewWin.W));
+    SetPRP(basegfx::B3DPoint(0.0, 0.0, fLen / 35.0 * aViewWin.W));
     fFocalLength = fLen;
 }
 
@@ -236,14 +289,45 @@ void Camera3D::SetFocalLength(double fLen)
 
 void Camera3D::Rotate(double fHAngle, double fVAngle)
 {
-    Matrix4D aTf;
-    Vector3D aDiff = aLookAt - aPosition;
-    double fV = sqrt(aDiff.X() * aDiff.X() + aDiff.Z() * aDiff.Z());
+    basegfx::B3DHomMatrix aTf;
+    basegfx::B3DVector aDiff(aLookAt - aPosition);
+    const double fV(sqrt(aDiff.getX() * aDiff.getX() + aDiff.getZ() * aDiff.getZ()));
 
-    if ( fV != 0 )  aTf.RotateY(aDiff.Z() / fV, aDiff.X() / fV);
-    aTf.RotateZ(fVAngle);
-    if ( fV != 0 )  aTf.RotateY(-aDiff.Z() / fV, aDiff.X() / fV);
-    aTf.RotateY(fHAngle);
+    if ( fV != 0.0 )
+    {
+        basegfx::B3DHomMatrix aTemp;
+        const double fSin(aDiff.getZ() / fV);
+        const double fCos(aDiff.getX() / fV);
+
+        aTemp.set(0, 0, fCos);
+        aTemp.set(2, 2, fCos);
+        aTemp.set(0, 2, fSin);
+        aTemp.set(2, 0, -fSin);
+
+        aTf *= aTemp;
+    }
+
+    {
+        aTf.rotate(0.0, 0.0, fVAngle);
+    }
+
+    if ( fV != 0.0 )
+    {
+        basegfx::B3DHomMatrix aTemp;
+        const double fSin(-aDiff.getZ() / fV);
+        const double fCos(aDiff.getX() / fV);
+
+        aTemp.set(0, 0, fCos);
+        aTemp.set(2, 2, fCos);
+        aTemp.set(0, 2, fSin);
+        aTemp.set(2, 0, -fSin);
+
+        aTf *= aTemp;
+    }
+
+    {
+        aTf.rotate(0.0, fHAngle, 0.0);
+    }
 
     aDiff *= aTf;
     SetLookAt(aPosition + aDiff);
@@ -258,171 +342,49 @@ void Camera3D::Rotate(double fHAngle, double fVAngle)
 
 void Camera3D::RotateAroundLookAt(double fHAngle, double fVAngle)
 {
-    Matrix4D aTf;
-    Vector3D aDiff = aPosition - aLookAt;
-    double fV = sqrt(aDiff.X() * aDiff.X() + aDiff.Z() * aDiff.Z());
+    basegfx::B3DHomMatrix aTf;
+    basegfx::B3DVector aDiff(aPosition - aLookAt);
+    const double fV(sqrt(aDiff.getX() * aDiff.getX() + aDiff.getZ() * aDiff.getZ()));
 
-    if ( fV != 0 )  aTf.RotateY(aDiff.Z() / fV, aDiff.X() / fV);
-    aTf.RotateZ(fVAngle);
-    if ( fV != 0 )  aTf.RotateY(-aDiff.Z() / fV, aDiff.X() / fV);
-    aTf.RotateY(fHAngle);
+    if ( fV != 0.0 )
+    {
+        basegfx::B3DHomMatrix aTemp;
+        const double fSin(aDiff.getZ() / fV);
+        const double fCos(aDiff.getX() / fV);
+
+        aTemp.set(0, 0, fCos);
+        aTemp.set(2, 2, fCos);
+        aTemp.set(0, 2, fSin);
+        aTemp.set(2, 0, -fSin);
+
+        aTf *= aTemp;
+    }
+
+    {
+        aTf.rotate(0.0, 0.0, fVAngle);
+    }
+
+    if ( fV != 0.0 )
+    {
+        basegfx::B3DHomMatrix aTemp;
+        const double fSin(-aDiff.getZ() / fV);
+        const double fCos(aDiff.getX() / fV);
+
+        aTemp.set(0, 0, fCos);
+        aTemp.set(2, 2, fCos);
+        aTemp.set(0, 2, fSin);
+        aTemp.set(2, 0, -fSin);
+
+        aTf *= aTemp;
+    }
+
+    {
+        aTf.rotate(0.0, fHAngle, 0.0);
+    }
 
     aDiff *= aTf;
     SetPosition(aLookAt + aDiff);
 }
-
-/*************************************************************************
-|*
-|* Stream-Out-Operator fuer Camera3D   fuer die Filerevision 3.1
-|*
-\************************************************************************/
-
-//BFS01void Camera3D::WriteData31(SvStream& rOut) const
-//BFS01{
-//BFS01#ifndef SVX_LIGHT
-//BFS01 Viewport3D::WriteData(rOut);
-//BFS01
-//BFS01 rOut << aResetPos;
-//BFS01 rOut << aResetLookAt;
-//BFS01 rOut << fResetFocalLength;
-//BFS01 rOut << fResetBankAngle;
-//BFS01 rOut << aPosition;
-//BFS01 rOut << aLookAt;
-//BFS01 rOut << fFocalLength;
-//BFS01 rOut << fBankAngle;
-//BFS01 rOut << BOOL(bAutoAdjustProjection);
-//BFS01#endif
-//BFS01}
-
-/*************************************************************************
-|*
-|* Stream-Out-Operator fuer Camera3D
-|* Zur Version 356 wurde das Fileformat inkompatibel, wenn man das alte
-|* Format schreiben will, muss man die Version am Stream abfragen.
-|*
-\************************************************************************/
-
-//BFS01void Camera3D::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01#ifndef SVX_LIGHT
-//BFS01
-//BFS01 if (rOut.GetVersion() < 3560)  // FG: Ab der Release 356 wurde das Fileformat geaendert
-//BFS01 {                              //     Falls das Format der Version 31 geschrieben werden soll
-//BFS01     WriteData31(rOut);         //     muss am Stream die Version der 3.1 gesetzt sein.
-//BFS01     return;                    //     Im Prinzip kann man auf diese Art auch Zwischenversionen
-//BFS01 }                              //     erzeugen.
-//BFS01
-//BFS01 SdrDownCompat aCompat(rOut, STREAM_WRITE);
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("Camera3D");
-//BFS01#endif
-//BFS01 Viewport3D::WriteData(rOut);
-//BFS01
-//BFS01 rOut << aResetPos;              // Alles Vektoren 3*double
-//BFS01 rOut << aResetLookAt;
-//BFS01 rOut << fResetFocalLength;
-//BFS01 rOut << fResetBankAngle;
-//BFS01 rOut << aPosition;
-//BFS01 rOut << aLookAt;
-//BFS01 rOut << fFocalLength;
-//BFS01 rOut << fBankAngle;
-//BFS01 rOut << BOOL(bAutoAdjustProjection);
-//BFS01#endif
-//BFS01}
-
-/*************************************************************************
-|*
-|* Stream-In-Operator fuer Camera3D
-|*
-\************************************************************************/
-
-//BFS01void Camera3D::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 if ( rIn.GetError() != SVSTREAM_OK )
-//BFS01     return;
-//BFS01
-//BFS01 if ((rHead.GetVersion() < 13) || (rIn.GetVersion() < 3560))
-//BFS01 {
-//BFS01     ReadData31(rIn);
-//BFS01     return;
-//BFS01 }
-//BFS01
-//BFS01 SdrDownCompat aCompat(rIn, STREAM_READ);
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("Camera3D");
-//BFS01#endif
-//BFS01
-//BFS01 Viewport3D::ReadData(rHead, rIn);
-//BFS01
-//BFS01 BOOL bTmp;
-//BFS01
-//BFS01 rIn >> aResetPos;
-//BFS01 rIn >> aResetLookAt;
-//BFS01 rIn >> fResetFocalLength;
-//BFS01 rIn >> fResetBankAngle;
-//BFS01 rIn >> aPosition;
-//BFS01 rIn >> aLookAt;
-//BFS01 rIn >> fFocalLength;
-//BFS01 rIn >> fBankAngle;
-//BFS01 rIn >> bTmp; bAutoAdjustProjection = bTmp;
-//BFS01
-//BFS01 SetVPD(0);
-//BFS01 SetPosAndLookAt(aPosition, aLookAt);
-//BFS01}
-
-/*************************************************************************
-|*
-|* Stream-In-Operator fuer Camera3D
-|*
-\************************************************************************/
-
-//BFS01void Camera3D::ReadData31(SvStream& rIn)
-//BFS01{
-//BFS01 if ( rIn.GetError() != SVSTREAM_OK )
-//BFS01     return;
-//BFS01
-//BFS01 Viewport3D::ReadData31 (rIn);
-//BFS01
-//BFS01 BOOL bTmp;
-//BFS01
-//BFS01 rIn >> aResetPos;
-//BFS01 rIn >> aResetLookAt;
-//BFS01 rIn >> fResetFocalLength;
-//BFS01 rIn >> fResetBankAngle;
-//BFS01 rIn >> aPosition;
-//BFS01 rIn >> aLookAt;
-//BFS01 rIn >> fFocalLength;
-//BFS01 rIn >> fBankAngle;
-//BFS01 rIn >> bTmp; bAutoAdjustProjection = bTmp;
-//BFS01
-//BFS01 SetVPD(0);
-//BFS01 SetPosAndLookAt(aPosition, aLookAt);
-//BFS01}
-
-/*************************************************************************
-|*
-|* Stream-Out-Operator fuer Camera3D
-|*
-\************************************************************************/
-
-//BFS01SvStream& operator<<(SvStream& rOStream, const Camera3D& rCam)
-//BFS01{
-//BFS01 rCam.WriteData31(rOStream);
-//BFS01 return rOStream;
-//BFS01}
-
-/*************************************************************************
-|*
-|* Stream-In-Operator fuer Camera3D
-|*
-\************************************************************************/
-
-//BFS01SvStream& operator>>(SvStream& rIStream, Camera3D& rCam)
-//BFS01{
-//BFS01 rCam.ReadData31(rIStream);
-//BFS01 return rIStream;
-//BFS01}
-
 
 /*************************************************************************
 |*
@@ -432,9 +394,12 @@ void Camera3D::RotateAroundLookAt(double fHAngle, double fVAngle)
 
 void Camera3D::SetFocalLengthWithCorrect(double fLen)
 {
-    if ( fLen < 5 )
-        fLen = 5;
-    SetPRP(Vector3D(0, 0, aPRP.Z () * fLen / fFocalLength));
+    if ( fLen < 5.0 )
+    {
+        fLen = 5.0;
+    }
+
+    SetPRP(basegfx::B3DPoint(0.0, 0.0, aPRP.getZ() * fLen / fFocalLength));
     fFocalLength = fLen;
 }
 
