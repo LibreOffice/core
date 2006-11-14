@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:56:28 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:54:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -444,6 +444,10 @@ public:
     void            RecalcPPT();
 
     void            CreateAnchorHandles(SdrHdlList& rHdl, const ScAddress& rAddress);
+
+    void            UpdateSelectionOverlay();
+    void            UpdateShrinkOverlay();
+    void            UpdateAllOverlays();
 
     void            UpdateFormulas();
     void            InterpretVisible();
