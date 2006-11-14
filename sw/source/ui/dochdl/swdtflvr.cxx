@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:12:14 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:15:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,6 +298,14 @@
 #endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
+#endif
+
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
 #endif
 
 extern BOOL bFrmDrag;
@@ -792,7 +800,6 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
         {
             //JP 28.02.2001: dont change the sequence of commands - Bug 8
             SdrModel *pModel = (SdrModel*)pObject;
-//BFS04         pModel->SetStreamingSdrModel( TRUE );
             xStream->SetBufferSize( 16348 );
 
             // #108584#
@@ -826,8 +833,6 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
                 if( SvxDrawingLayerExport( pModel, xDocOut ) )
                     xStream->Commit();
             }
-
-//BFS04         pModel->SetStreamingSdrModel( FALSE );
 
             bRet = ERRCODE_NONE == xStream->GetError();
         }
