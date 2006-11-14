@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:41:00 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:17:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,6 @@ class   SwView;
 class   SwRect;
 class   ViewShell;
 class   SwAnchorMarker;
-class   SdrViewUserMarker;
 class   SdrObject;
 class   SwShadowCursor;
 class   DataChangedEvent;
@@ -68,6 +67,7 @@ class   SvxAutoCorrect;
 class   SwPaM;
 struct  SwApplyTemplate;
 struct  QuickHelpData;
+class SdrDropMarkerOverlay;
 
 /*--------------------------------------------------------------------
     Beschreibung:   Eingabe-Fenster
@@ -121,10 +121,10 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     SwApplyTemplate     *pApplyTempl;
     SwAnchorMarker      *pAnchorMarker; // zum Verschieben eines Ankers
 
-    SdrViewUserMarker   *pUserMarker;
-    SdrObject           *pUserMarkerObj;
-    SwShadowCursor      *pShadCrsr;
-    Point               *pRowColumnSelectionStart; // save position where table row/column selection has been started
+    SdrDropMarkerOverlay    *pUserMarker;
+    SdrObject               *pUserMarkerObj;
+    SwShadowCursor          *pShadCrsr;
+    Point                   *pRowColumnSelectionStart; // save position where table row/column selection has been started
 
     SwView         &rView;
 
