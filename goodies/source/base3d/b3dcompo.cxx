@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dcompo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:37:12 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:06:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,7 @@ BOOL B3dComplexPolygon::ArePointsEqual(B3dEntity& rFirst,
     B3dEntity& rSecond)
 {
     // Wenn der Punkt dem letzten gleich ist, gar nicht behandeln
-    if(rFirst.Point().GetVector3D() == rSecond.Point().GetVector3D())
+    if(rFirst.Point() == rSecond.Point())
         return TRUE;
     return FALSE;
 }
@@ -385,16 +385,16 @@ void B3dComplexPolygon::ChooseNormal()
         UINT32 nNext = (nHigh + 1 != aEntityBuffer.Count()) ? nHigh + 1 : nNewPolyStart;
 
         // Punkt, Vorgaenger und Nachfolger holen
-        const Vector3D& rHigh = aEntityBuffer[nHigh].Point().GetVector3D();
-        const Vector3D& rPrev = aEntityBuffer[nPrev].Point().GetVector3D();
-        const Vector3D& rNext = aEntityBuffer[nNext].Point().GetVector3D();
+        const basegfx::B3DPoint& rHigh = aEntityBuffer[nHigh].Point();
+        const basegfx::B3DPoint& rPrev = aEntityBuffer[nPrev].Point();
+        const basegfx::B3DPoint& rNext = aEntityBuffer[nNext].Point();
 
         // Normale bilden
-        aNormal = (rPrev - rHigh)|(rNext - rHigh);
-        if(aNormal != Vector3D())
-            aNormal.Normalize();
+        aNormal = basegfx::B3DVector(rPrev - rHigh).getPerpendicular(basegfx::B3DVector(rNext - rHigh));
+        if(!aNormal.equalZero())
+            aNormal.normalize();
         else
-            aNormal = Vector3D(0.0, 0.0, -1.0);
+            aNormal = basegfx::B3DVector(0.0, 0.0, -1.0);
     }
     bNormalValid = TRUE;
 }
@@ -966,12 +966,12 @@ void B3dComplexPolygon::ExtractTriangle()
     BOOL bStartIsEdgePoint = FALSE;
     if(pList)
     {
-        const Vector3D& rListStart = pList->GetStart()->Point().GetVector3D();
-        if((rListStart - pEdgeList->GetStart()->Point().GetVector3D()).GetLength() < SMALL_DVALUE)
+        const basegfx::B3DPoint& rListStart = pList->GetStart()->Point();
+        if(rListStart.equal(pEdgeList->GetStart()->Point()))
             bStartIsEdgePoint = TRUE;
-        else if((rListStart - pLeft->GetEnd()->Point().GetVector3D()).GetLength() < SMALL_DVALUE)
+        else if(rListStart.equal(pLeft->GetEnd()->Point()))
             bStartIsEdgePoint = TRUE;
-        else if((rListStart - pRight->GetEnd()->Point().GetVector3D()).GetLength() < SMALL_DVALUE)
+        else if(rListStart.equal(pRight->GetEnd()->Point()))
             bStartIsEdgePoint = TRUE;
     }
 
@@ -1010,11 +1010,8 @@ void B3dComplexPolygon::ExtractTriangle()
                     // Anhand des ersten Dreiecks entscheiden,
                     // in welcher Orientierung die Dreiecke
                     // auszugeben sind
-                    Vector3D aTmpNormal =
-                        (pEntLeft->Point().GetVector3D() - pEntTop->Point().GetVector3D())
-                        |(pEntRight->Point().GetVector3D() - pEntTop->Point().GetVector3D());
-
-                    bOrientation = (aNormal.Scalar(aTmpNormal) > 0.0) ? TRUE : FALSE;
+                    basegfx::B3DVector aTmpNormal(basegfx::B3DVector(pEntLeft->Point() - pEntTop->Point()).getPerpendicular(pEntRight->Point() - pEntTop->Point()));
+                    bOrientation = (aNormal.scalar(aTmpNormal) > 0.0) ? TRUE : FALSE;
                     bOrientationValid = TRUE;
                 }
 
