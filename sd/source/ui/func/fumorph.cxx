@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fumorph.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:52:12 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:29:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,23 @@
 #ifndef SD_WINDOW_HXX
 #include "Window.hxx"
 #endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
+#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#endif
+
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
+#ifndef _B3D_B3DCOLOR_HXX
+#include <goodies/b3dcolor.hxx>
+#endif
+
 //CHINA001 #ifndef SD_MORPH_DLG_HXX
 //CHINA001 #include "morphdlg.hxx"
 //CHINA001 #endif
@@ -137,10 +154,10 @@ void FuMorph::DoExecute( SfxRequest& rReq )
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         if(pPolyObj1 && pPolyObj2 && (pDlg->Execute() == RET_OK)) //CHINA001 if(pPolyObj1 && pPolyObj2 && (aDlg.Execute() == RET_OK))
         {
-            List aPolyPolyList3D;
-            PolyPolygon3D aPolyPoly1;
-            PolyPolygon3D aPolyPoly2;
-            PolyPolygon3D* pPolyPoly;
+            List aPolyPolyList;
+            ::basegfx::B2DPolyPolygon aPolyPoly1;
+            ::basegfx::B2DPolyPolygon aPolyPoly2;
+            ::basegfx::B2DPolyPolygon* pPolyPoly;
 
             pDlg->SaveSettings(); //CHINA001 aDlg.SaveSettings();
 
@@ -153,51 +170,57 @@ void FuMorph::DoExecute( SfxRequest& rReq )
             {
                 SdrObject* pObj = aIter1.Next();
                 if(pObj && pObj->ISA(SdrPathObj))
-                    aPolyPoly1.Insert(((SdrPathObj*)pObj)->GetPathPoly());
+                    aPolyPoly1.append(((SdrPathObj*)pObj)->GetPathPoly());
             }
 
             while(aIter2.IsMore())
             {
                 SdrObject* pObj = aIter2.Next();
                 if(pObj && pObj->ISA(SdrPathObj))
-                    aPolyPoly2.Insert(((SdrPathObj*)pObj)->GetPathPoly());
+                    aPolyPoly2.append(((SdrPathObj*)pObj)->GetPathPoly());
             }
 
             // Morphing durchfuehren
-            if(aPolyPoly1.Count() && aPolyPoly2.Count())
+            if(aPolyPoly1.count() && aPolyPoly2.count())
             {
-                aPolyPoly1.SetDirections();
-                aPolyPoly1.RemoveDoublePoints();
-                BOOL bIsClockwise1 = aPolyPoly1.IsClockwise();
+                aPolyPoly1 = ::basegfx::tools::correctOrientations(aPolyPoly1);
+                aPolyPoly1.removeDoublePoints();
+                ::basegfx::B2VectorOrientation eIsClockwise1(::basegfx::tools::getOrientation(aPolyPoly1.getB2DPolygon(0L)));
 
-                aPolyPoly2.SetDirections();
-                aPolyPoly2.RemoveDoublePoints();
-                BOOL bIsClockwise2 = aPolyPoly2.IsClockwise();
+                aPolyPoly2 = ::basegfx::tools::correctOrientations(aPolyPoly2);
+                aPolyPoly2.removeDoublePoints();
+                ::basegfx::B2VectorOrientation eIsClockwise2(::basegfx::tools::getOrientation(aPolyPoly2.getB2DPolygon(0L)));
 
                 // set same orientation
-                if(bIsClockwise1 != bIsClockwise2)
-                    aPolyPoly2.FlipDirections();
+                if(eIsClockwise1 != eIsClockwise2)
+                    aPolyPoly2.flip();
 
                 // force same poly count
-                if(aPolyPoly1.Count() < aPolyPoly2.Count())
+                if(aPolyPoly1.count() < aPolyPoly2.count())
                     ImpAddPolys(aPolyPoly1, aPolyPoly2);
-                else if(aPolyPoly2.Count() < aPolyPoly1.Count())
+                else if(aPolyPoly2.count() < aPolyPoly1.count())
                     ImpAddPolys(aPolyPoly2, aPolyPoly1);
 
                 // use orientation flag from dialog
                 if(!pDlg->IsOrientationFade()) //CHINA001 if(!aDlg.IsOrientationFade())
-                    aPolyPoly2.FlipDirections();
+                    aPolyPoly2.flip();
 
                 // force same point counts
-                for( USHORT a = 0; a < aPolyPoly1.Count(); a++ )
+                for( sal_uInt32 a(0L); a < aPolyPoly1.count(); a++ )
                 {
-                    if(aPolyPoly1[ a].GetPointCount() < aPolyPoly2[ a].GetPointCount())
-                        ImpEqualizePolyPointCount(aPolyPoly1[a], aPolyPoly2[a]);
-                    else if(aPolyPoly2[a].GetPointCount() < aPolyPoly1[a].GetPointCount())
-                        ImpEqualizePolyPointCount(aPolyPoly2[a], aPolyPoly1[a]);
+                    ::basegfx::B2DPolygon aSub1(aPolyPoly1.getB2DPolygon(a));
+                    ::basegfx::B2DPolygon aSub2(aPolyPoly2.getB2DPolygon(a));
+
+                    if(aSub1.count() < aSub2.count())
+                        ImpEqualizePolyPointCount(aSub1, aSub2);
+                    else if(aSub2.count() < aSub1.count())
+                        ImpEqualizePolyPointCount(aSub2, aSub1);
+
+                    aPolyPoly1.setB2DPolygon(a, aSub1);
+                    aPolyPoly2.setB2DPolygon(a, aSub2);
                 }
 
-                if(ImpMorphPolygons(aPolyPoly1, aPolyPoly2, pDlg->GetFadeSteps(), aPolyPolyList3D)) //CHINA001 if(ImpMorphPolygons(aPolyPoly1, aPolyPoly2, aDlg.GetFadeSteps(), aPolyPolyList3D))
+                if(ImpMorphPolygons(aPolyPoly1, aPolyPoly2, pDlg->GetFadeSteps(), aPolyPolyList)) //CHINA001 if(ImpMorphPolygons(aPolyPoly1, aPolyPoly2, aDlg.GetFadeSteps(), aPolyPolyList))
                 {
                     String aString(pView->GetDescriptionOfMarkedObjects());
 
@@ -205,13 +228,15 @@ void FuMorph::DoExecute( SfxRequest& rReq )
                     aString.Append(String(SdResId(STR_UNDO_MORPHING)));
 
                     pView->BegUndo(aString);
-                    ImpInsertPolygons(aPolyPolyList3D, pDlg->IsAttributeFade(), pObj1, pObj2); //CHINA001 ImpInsertPolygons(aPolyPolyList3D, aDlg.IsAttributeFade(), pObj1, pObj2);
+                    ImpInsertPolygons(aPolyPolyList, pDlg->IsAttributeFade(), pObj1, pObj2); //CHINA001 ImpInsertPolygons(aPolyPolyList, aDlg.IsAttributeFade(), pObj1, pObj2);
                     pView->EndUndo();
                 }
 
                 // erzeugte Polygone wieder loeschen
-                for(pPolyPoly = (PolyPolygon3D*)aPolyPolyList3D.First(); pPolyPoly; pPolyPoly = (PolyPolygon3D*)aPolyPolyList3D.Next())
+                for(pPolyPoly = (::basegfx::B2DPolyPolygon*)aPolyPolyList.First(); pPolyPoly; pPolyPoly = (::basegfx::B2DPolyPolygon *)aPolyPolyList.Next())
+                {
                     delete pPolyPoly;
+                }
             }
         }
         delete pDlg; //add by CHINA001
@@ -223,47 +248,99 @@ void FuMorph::DoExecute( SfxRequest& rReq )
     }
 }
 
+::basegfx::B2DPolygon ImpGetExpandedPolygon(const ::basegfx::B2DPolygon& rCandidate, sal_uInt32 nNum)
+{
+    if(rCandidate.count() && nNum && rCandidate.count() != nNum)
+    {
+        // length of step in dest poly
+        ::basegfx::B2DPolygon aRetval;
+        const double fStep(::basegfx::tools::getLength(rCandidate) / (double)(rCandidate.isClosed() ? nNum : nNum - 1L));
+        double fDestPos(0.0);
+        double fSrcPos(0.0);
+        sal_uInt32 nSrcPos(0L);
+        sal_uInt32 nSrcPosNext((nSrcPos + 1L == rCandidate.count()) ? 0L : nSrcPos + 1L);
+        double fNextSrcLen(::basegfx::B2DVector(rCandidate.getB2DPoint(nSrcPos) - rCandidate.getB2DPoint(nSrcPosNext)).getLength());
+
+        for(sal_uInt32 b(0L); b < nNum; b++)
+        {
+            // calc fDestPos in source
+            while(fSrcPos + fNextSrcLen < fDestPos)
+            {
+                fSrcPos += fNextSrcLen;
+                nSrcPos++;
+                nSrcPosNext = (nSrcPos + 1L == rCandidate.count()) ? 0L : nSrcPos + 1L;
+                fNextSrcLen = ::basegfx::B2DVector(rCandidate.getB2DPoint(nSrcPos) - rCandidate.getB2DPoint(nSrcPosNext)).getLength();
+            }
+
+            // fDestPos is between fSrcPos and (fSrcPos + fNextSrcLen)
+            const double fLenA((fDestPos - fSrcPos) / fNextSrcLen);
+            const ::basegfx::B2DPoint aOld1(rCandidate.getB2DPoint(nSrcPos));
+            const ::basegfx::B2DPoint aOld2(rCandidate.getB2DPoint(nSrcPosNext));
+            ::basegfx::B2DPoint aNewPoint(::basegfx::interpolate(aOld1, aOld2, fLenA));
+            aRetval.append(aNewPoint);
+
+            // next step
+            fDestPos += fStep;
+        }
+
+        if(aRetval.count() >= 3L)
+        {
+            aRetval.setClosed(rCandidate.isClosed());
+        }
+
+        return aRetval;
+    }
+    else
+    {
+        return rCandidate;
+    }
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // make the point count of the polygons equal in adding points
 //
-void FuMorph::ImpEqualizePolyPointCount(Polygon3D& rSmall, const Polygon3D& rBig)
+void FuMorph::ImpEqualizePolyPointCount(::basegfx::B2DPolygon& rSmall, const ::basegfx::B2DPolygon& rBig)
 {
     // create poly with equal point count
-    const sal_uInt16 nCnt = rBig.GetPointCount();
-    Polygon3D aPoly1 = rSmall.GetExpandedPolygon(nCnt);
+    const sal_uInt32 nCnt(rBig.count());
+    ::basegfx::B2DPolygon aPoly1(ImpGetExpandedPolygon(rSmall, nCnt));
 
     // create transformation for rBig to do the compare
-    Volume3D aSrcSize = rBig.GetPolySize();
-    Vector3D aSrcPos = (aSrcSize.MinVec() + aSrcSize.MaxVec()) / 2.0;
-    Volume3D aDstSize = rSmall.GetPolySize();
-    Vector3D aDstPos = (aDstSize.MinVec() + aDstSize.MaxVec()) / 2.0;
-    Matrix4D aTrans;
-    aTrans.Translate(-aSrcPos.X(), -aSrcPos.Y(), 0.0);
-    aTrans.Scale(
-        aDstSize.GetWidth()/aSrcSize.GetWidth(),
-        aDstSize.GetHeight()/aSrcSize.GetHeight(), 1.0);
-    aTrans.Translate(aDstPos.X(), aDstPos.Y(), 0.0);
+    const ::basegfx::B2DRange aSrcSize(::basegfx::tools::getRange(rBig));
+    const ::basegfx::B2DPoint aSrcPos(aSrcSize.getCenter());
+    const ::basegfx::B2DRange aDstSize(::basegfx::tools::getRange(rSmall));
+    const ::basegfx::B2DPoint aDstPos(aDstSize.getCenter());
+    ::basegfx::B2DHomMatrix aTrans;
+
+    aTrans.translate(-aSrcPos.getX(), -aSrcPos.getY());
+    aTrans.scale(aDstSize.getWidth() / aSrcSize.getWidth(), aDstSize.getHeight() / aSrcSize.getHeight());
+    aTrans.translate(aDstPos.getX(), aDstPos.getY());
 
     // transpose points to have smooth linear blending
-    Polygon3D aPoly2(nCnt);
-    sal_uInt16 nInd = ImpGetNearestIndex(aPoly1, aTrans * rBig[0]);
-    for(sal_uInt16 a(0); a < nCnt; a++)
-        aPoly2[(a + nCnt - nInd) % nCnt] = aPoly1[a];
+    ::basegfx::B2DPolygon aPoly2;
+    aPoly2.append(::basegfx::B2DPoint(), nCnt);
+    sal_uInt32 nInd(ImpGetNearestIndex(aPoly1, aTrans * rBig.getB2DPoint(0L)));
 
-    aPoly2.SetClosed(rBig.IsClosed());
+    for(sal_uInt32 a(0L); a < nCnt; a++)
+    {
+        aPoly2.setB2DPoint((a + nCnt - nInd) % nCnt, aPoly1.getB2DPoint(a));
+    }
+
+    aPoly2.setClosed(rBig.isClosed());
     rSmall = aPoly2;
 }
 
 //////////////////////////////////////////////////////////////////////////////
 //
-sal_uInt16 FuMorph::ImpGetNearestIndex(const Polygon3D& rPoly, const Vector3D& rPos)
+sal_uInt32 FuMorph::ImpGetNearestIndex(const ::basegfx::B2DPolygon& rPoly, const ::basegfx::B2DPoint& rPos)
 {
     double fMinDist;
-    sal_uInt16 nActInd;
+    sal_uInt32 nActInd;
 
-    for(sal_uInt16 a(0); a < rPoly.GetPointCount(); a++)
+    for(sal_uInt32 a(0L); a < rPoly.count(); a++)
     {
-        double fNewDist = (rPoly[a] - rPos).GetLength();
+        double fNewDist(::basegfx::B2DVector(rPoly.getB2DPoint(a) - rPos).getLength());
+
         if(!a || fNewDist < fMinDist)
         {
             fMinDist = fNewDist;
@@ -277,26 +354,27 @@ sal_uInt16 FuMorph::ImpGetNearestIndex(const Polygon3D& rPoly, const Vector3D& r
 //////////////////////////////////////////////////////////////////////////////
 // add to a point reduced polys until count is same
 //
-void FuMorph::ImpAddPolys(PolyPolygon3D& rSmaller, const PolyPolygon3D& rBigger)
+void FuMorph::ImpAddPolys(::basegfx::B2DPolyPolygon& rSmaller, const ::basegfx::B2DPolyPolygon& rBigger)
 {
-    while(rSmaller.Count() < rBigger.Count())
+    while(rSmaller.count() < rBigger.count())
     {
-        const Polygon3D& rToBeCopied = rBigger[rSmaller.Count()];
-        Polygon3D aNewPoly(rToBeCopied.GetPointCount());
-        Volume3D aToBeCopiedPolySize = rToBeCopied.GetPolySize();
-        Vector3D aNewPoint = (aToBeCopiedPolySize.MinVec() + aToBeCopiedPolySize.MaxVec()) / 2.0;
+        const ::basegfx::B2DPolygon aToBeCopied(rBigger.getB2DPolygon(rSmaller.count()));
+        const ::basegfx::B2DRange aToBeCopiedPolySize(::basegfx::tools::getRange(aToBeCopied));
+        ::basegfx::B2DPoint aNewPoint(aToBeCopiedPolySize.getCenter());
+        ::basegfx::B2DPolygon aNewPoly;
 
-        Volume3D aSrcSize = rBigger[0].GetPolySize();
-        Vector3D aSrcPos = (aSrcSize.MinVec() + aSrcSize.MaxVec()) / 2.0;
-        Volume3D aDstSize = rSmaller[0].GetPolySize();
-        Vector3D aDstPos = (aDstSize.MinVec() + aDstSize.MaxVec()) / 2.0;
-
+        const ::basegfx::B2DRange aSrcSize(::basegfx::tools::getRange(rBigger.getB2DPolygon(0L)));
+        const ::basegfx::B2DPoint aSrcPos(aSrcSize.getCenter());
+        const ::basegfx::B2DRange aDstSize(::basegfx::tools::getRange(rSmaller.getB2DPolygon(0L)));
+        const ::basegfx::B2DPoint aDstPos(aDstSize.getCenter());
         aNewPoint = aNewPoint - aSrcPos + aDstPos;
 
-        for(sal_uInt16 a(0); a < rToBeCopied.GetPointCount(); a++)
-            aNewPoly[a] = aNewPoint;
+        for(sal_uInt32 a(0L); a < aToBeCopied.count(); a++)
+        {
+            aNewPoly.append(aNewPoint);
+        }
 
-        rSmaller.Insert(aNewPoly, POLYPOLY3D_APPEND);
+        rSmaller.append(aNewPoly);
     }
 }
 
@@ -312,7 +390,7 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
     Color               aEndLineCol;
     long                nStartLineWidth;
     long                nEndLineWidth;
-    SdrPageView*        pPageView = pView->GetPageViewPvNum( 0 );
+    SdrPageView*        pPageView = pView->GetSdrPageView();
     SfxItemPool*        pPool = pObj1->GetObjectItemPool();
     SfxItemSet          aSet1( *pPool,SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,EE_ITEMS_START,EE_ITEMS_END,0 );
     SfxItemSet          aSet2( aSet1 );
@@ -375,8 +453,8 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
 
         for ( ULONG i = 0; i < nCount; i++, fFactor += fStep )
         {
-            const PolyPolygon3D& rPolyPoly3D = *(PolyPolygon3D*)rPolyPolyList3D.GetObject(i);
-            SdrPathObj* pNewObj = new SdrPathObj(OBJ_POLY, rPolyPoly3D.GetXPolyPolygon());
+            const ::basegfx::B2DPolyPolygon& rPolyPoly3D = *(::basegfx::B2DPolyPolygon*)rPolyPolyList3D.GetObject(i);
+            SdrPathObj* pNewObj = new SdrPathObj(OBJ_POLY, rPolyPoly3D);
             B3dColor aLineCol, aFillCol;
             aLineCol.CalcInBetween(aStartLineCol, aEndLineCol, fFactor);
             aFillCol.CalcInBetween(aStartFillCol, aEndFillCol, fFactor);
@@ -407,7 +485,7 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
             pObjList->InsertObject( pObj1->Clone(), 0 );
             pObjList->InsertObject( pObj2->Clone(), LIST_APPEND );
             pView->DeleteMarked();
-            pView->InsertObject ( pObjGroup, *pPageView, SDRINSERT_SETDEFLAYER );
+            pView->InsertObjectAtView( pObjGroup, *pPageView, SDRINSERT_SETDEFLAYER );
         }
     }
 }
@@ -415,32 +493,30 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
 //////////////////////////////////////////////////////////////////////////////
 // create single morphed PolyPolygon
 //
-PolyPolygon3D* FuMorph::ImpCreateMorphedPolygon(
-    const PolyPolygon3D& rPolyPolyStart,
-    const PolyPolygon3D& rPolyPolyEnd,
-    const double fMorphingFactor)
+::basegfx::B2DPolyPolygon* FuMorph::ImpCreateMorphedPolygon(
+    const ::basegfx::B2DPolyPolygon& rPolyPolyStart,
+    const ::basegfx::B2DPolyPolygon& rPolyPolyEnd,
+    double fMorphingFactor)
 {
-    PolyPolygon3D* pNewPolyPolygon = new PolyPolygon3D();
+    ::basegfx::B2DPolyPolygon* pNewPolyPolygon = new ::basegfx::B2DPolyPolygon();
     const double fFactor = 1.0 - fMorphingFactor;
 
-    for(sal_uInt16 a(0); a < rPolyPolyStart.Count(); a++)
+    for(sal_uInt32 a(0L); a < rPolyPolyStart.count(); a++)
     {
-        const Polygon3D& rPolyStart = rPolyPolyStart[a];
-        const Polygon3D& rPolyEnd = rPolyPolyEnd[a];
-        const sal_uInt16 nCount = rPolyStart.GetPointCount();
-        Polygon3D aNewPolygon(nCount);
+        const ::basegfx::B2DPolygon aPolyStart(rPolyPolyStart.getB2DPolygon(a));
+        const ::basegfx::B2DPolygon aPolyEnd(rPolyPolyEnd.getB2DPolygon(a));
+        const sal_uInt32 nCount(aPolyStart.count());
+        ::basegfx::B2DPolygon aNewPolygon;
 
-        for(sal_uInt16 b(0); b < nCount; b++)
+        for(sal_uInt32 b(0L); b < nCount; b++)
         {
-            const Vector3D& rPtStart = rPolyStart[b];
-            const Vector3D& rPtEnd = rPolyEnd[b];
-
-            aNewPolygon[b] = rPtEnd + ((rPtStart - rPtEnd) * fFactor);
+            const ::basegfx::B2DPoint& aPtStart(aPolyStart.getB2DPoint(b));
+            const ::basegfx::B2DPoint& aPtEnd(aPolyEnd.getB2DPoint(b));
+            aNewPolygon.append(aPtEnd + ((aPtStart - aPtEnd) * fFactor));
         }
 
-        aNewPolygon.SetClosed(rPolyStart.IsClosed() && rPolyEnd.IsClosed());
-
-        pNewPolyPolygon->Insert(aNewPolygon, POLYPOLY3D_APPEND);
+        aNewPolygon.setClosed(aPolyStart.isClosed() && aPolyEnd.isClosed());
+        pNewPolyPolygon->append(aNewPolygon);
     }
 
     return pNewPolyPolygon;
@@ -449,32 +525,33 @@ PolyPolygon3D* FuMorph::ImpCreateMorphedPolygon(
 //////////////////////////////////////////////////////////////////////////////
 // create morphed PolyPolygons
 //
-BOOL FuMorph::ImpMorphPolygons(
-    const PolyPolygon3D& rPolyPoly1, const PolyPolygon3D& rPolyPoly2,
-    const USHORT nSteps, List& rPolyPolyList3D)
+sal_Bool FuMorph::ImpMorphPolygons(
+    const ::basegfx::B2DPolyPolygon& rPolyPoly1,
+    const ::basegfx::B2DPolyPolygon& rPolyPoly2,
+    const sal_uInt16 nSteps, List& rPolyPolyList3D)
 {
     if(nSteps)
     {
-        Volume3D aStartPolySize = rPolyPoly1.GetPolySize();
-        Vector3D aStartCenter = (aStartPolySize.MinVec() + aStartPolySize.MaxVec()) / 2.0;
-        Volume3D aEndPolySize = rPolyPoly2.GetPolySize();
-        Vector3D aEndCenter = (aEndPolySize.MinVec() + aEndPolySize.MaxVec()) / 2.0;
-        Vector3D aDelta = aEndCenter - aStartCenter;
-        const double fFactor = 1.0/(nSteps+1);
-        double fValue = 0.0;
+        const ::basegfx::B2DRange aStartPolySize(::basegfx::tools::getRange(rPolyPoly1));
+        const ::basegfx::B2DPoint aStartCenter(aStartPolySize.getCenter());
+        const ::basegfx::B2DRange aEndPolySize(::basegfx::tools::getRange(rPolyPoly2));
+        const ::basegfx::B2DPoint aEndCenter(aEndPolySize.getCenter());
+        const ::basegfx::B2DPoint aDelta(aEndCenter - aStartCenter);
+        const double fFactor(1.0 / (nSteps + 1));
+        double fValue(0.0);
 
         for(sal_uInt16 i(0); i < nSteps; i++)
         {
             fValue += fFactor;
-            PolyPolygon3D* pNewPolyPoly3D = ImpCreateMorphedPolygon(rPolyPoly1, rPolyPoly2, fValue);
+            ::basegfx::B2DPolyPolygon* pNewPolyPoly3D = ImpCreateMorphedPolygon(rPolyPoly1, rPolyPoly2, fValue);
 
-            Volume3D aNewPolySize = pNewPolyPoly3D->GetPolySize();
-            Vector3D aNewS = (aNewPolySize.MinVec() + aNewPolySize.MaxVec()) / 2.0;
-            Vector3D aRealS = aStartCenter + (aDelta * fValue);
-            Matrix4D aTrans;
-            Vector3D aDiff = aRealS - aNewS;
-            aTrans.Translate(aDiff.X(), aDiff.Y(), aDiff.Z());
-            pNewPolyPoly3D->Transform(aTrans);
+            const ::basegfx::B2DRange aNewPolySize(::basegfx::tools::getRange(*pNewPolyPoly3D));
+            const ::basegfx::B2DPoint aNewS(aNewPolySize.getCenter());
+            const ::basegfx::B2DPoint aRealS(aStartCenter + (aDelta * fValue));
+            ::basegfx::B2DHomMatrix aTrans;
+            const ::basegfx::B2DPoint aDiff(aRealS - aNewS);
+            aTrans.translate(aDiff.getX(), aDiff.getY());
+            pNewPolyPoly3D->transform(aTrans);
             rPolyPolyList3D.Insert(pNewPolyPoly3D, LIST_APPEND);
         }
     }
