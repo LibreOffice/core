@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:15:08 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:10:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,9 @@
 #ifndef _LIST_HXX //autogen
 #include <tools/list.hxx>
 #endif
-#ifndef _SVDVMARK_HXX //autogen
-#include <svx/svdvmark.hxx>
-#endif
+//#ifndef _SVDVMARK_HXX //autogen
+//#include <svx/svdvmark.hxx>
+//#endif
 #ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
 #endif
