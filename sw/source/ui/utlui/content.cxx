@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:32:38 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:21:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3074,7 +3074,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
             SdrView* pDrawView = pActiveShell->GetDrawView();
             if (pDrawView)
             {
-                pDrawView->EndTextEdit();
+                pDrawView->SdrEndTextEdit();
                 pDrawView->UnmarkAll();
                 SdrModel* pModel = pActiveShell->getIDocumentDrawModelAccess()->GetDrawModel();
                 SdrPage* pPage = pModel->GetPage(0);
@@ -3087,7 +3087,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
                     if ( pTemp->GetName() == pCnt->GetName() )
                     // <--
                     {
-                        SdrPageView* pPV = pDrawView->GetPageViewPvNum(0);
+                        SdrPageView* pPV = pDrawView->GetSdrPageView();
                         if( pPV )
                         {
                             pDrawView->MarkObj( pTemp, pPV );
