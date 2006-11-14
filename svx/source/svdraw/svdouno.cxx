@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:58:39 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:48:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#ifndef SVX_SDR_CONTACT_VIEWCONTACTOFUNOCONTROL_HXX
+#include <svx/sdr/contact/viewcontactofunocontrol.hxx>
+#endif
+#ifndef SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFUNOCONTROL_HXX
+#include <svx/sdr/contact/viewobjectcontactofunocontrol.hxx>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
@@ -122,8 +128,17 @@
 #include <set>
 #include <memory>
 
+#ifndef _SDRPAGEWINDOW_HXX
+#include <sdrpagewindow.hxx>
+#endif
+
+#ifndef _SDRPAINTWINDOW_HXX
+#include <sdrpaintwindow.hxx>
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::sdr::contact;
 
 //************************************************************
 //   Defines
@@ -184,12 +199,6 @@ struct SAL_DLLPRIVATE SdrUnoObjDataHolder
 {
     mutable ::rtl::Reference< SdrControlEventListenerImpl >
                                     pEventListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
-                                    xPainterControl;
-        // unfortunately, the drawing layer does not really have a separation between mode and view
-        // The SdrUnoObj is responsible for painting, though it's a model part. However, only
-        // XControl's can paint, but not XControlModel's. In some situations, we cannot
-        // obtain an XControl for our XControlModel, then we use a dedicated painter control.
 };
 
 // =============================================================================
@@ -197,55 +206,33 @@ namespace
 {
     void lcl_ensureControlVisibility( SdrView* _pView, const SdrUnoObj* _pObject, bool _bVisible )
     {
-        SdrPageView* pPageView = _pView ? _pView->GetPageView( _pObject->GetPage() ) : NULL;
+        OSL_PRECOND( _pObject, "lcl_ensureControlVisibility: no object -> no survival!" );
+
+        SdrPageView* pPageView = _pView ? _pView->GetSdrPageView() : NULL;
         DBG_ASSERT( pPageView, "lcl_ensureControlVisibility: no view found!" );
+        if ( !pPageView )
+            return;
 
-        if ( pPageView )
+        ViewContact& rUnoControlContact( _pObject->GetViewContact() );
+
+        for ( sal_uInt32 i = 0; i < pPageView->PageWindowCount(); ++i )
         {
-            // loop through all the views windows
-            // const SdrPageViewWinList& rViewWins = pPageView->GetWinList();
-            // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
-            sal_uInt32 nWins(pPageView->WindowCount());
+            const SdrPageWindow* pPageWindow = pPageView->GetPageWindow( i );
+            DBG_ASSERT( pPageWindow, "lcl_ensureControlVisibility: invalid PageViewWindow!" );
+            if ( !pPageWindow )
+                continue;
 
-            for(sal_uInt32 i=0L; i<nWins; ++i )
-            {
-                // const SdrPageViewWinRec& rWinData = rViewWins[i];
-                const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(i);
+            if ( !pPageWindow->HasObjectContact() )
+                continue;
 
-                // loop through all controls in this window
-                const SdrUnoControlList& rControlsInThisWin = rPageViewWindow.GetControlList();
-                USHORT nControlsInThisWin = rControlsInThisWin.GetCount();
-                for ( USHORT j=0; j<nControlsInThisWin; ++j )
-                {
-                    const SdrUnoControlRec& rControlData = rControlsInThisWin[j];
-                    if ( rControlData.GetUnoObj() == _pObject )
-                    {
-                        // yep - this control is the representation of the given FmFormObj in the
-                        // given view
-                        // is the control in alive mode?
-                        uno::Reference< awt::XControl > xControl( rControlData.GetControl(), uno::UNO_QUERY );
-                        DBG_ASSERT( xControl.is(), "lcl_ensureControlVisibility: no control!" );
-                        if ( xControl.is() && !xControl->isDesignMode() )
-                        {
-                            // yes, alive mode. Is the visibility correct?
-                            if ( (bool)rControlData.IsVisible() != _bVisible )
-                            {
-                                // no -> adjust it
-                                uno::Reference< awt::XWindow > xControlWindow( xControl, uno::UNO_QUERY );
-                                DBG_ASSERT( xControlWindow.is(), "lcl_ensureControlVisibility: the control is no window!" );
-                                if ( xControlWindow.is() )
-                                {
-                                    xControlWindow->setVisible( _bVisible );
-                                    DBG_ASSERT( (bool)rControlData.IsVisible() == _bVisible, "lcl_ensureControlVisibility: this didn't work!" );
-                                        // now this would mean that either IsVisible is not reliable (which would
-                                        // be bad 'cause we used it above) or that showing/hiding the window
-                                        // did not work as intended.
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            ObjectContact& rPageViewContact( pPageWindow->GetObjectContact() );
+            const ViewObjectContact& rViewObjectContact( rUnoControlContact.GetViewObjectContact( rPageViewContact ) );
+            const ViewObjectContactOfUnoControl* pUnoControlContact = dynamic_cast< const ViewObjectContactOfUnoControl* >( &rViewObjectContact );
+            DBG_ASSERT( pUnoControlContact, "lcl_ensureControlVisibility: wrong ViewObjectContact type!" );
+            if ( !pUnoControlContact )
+                continue;
+
+            pUnoControlContact->ensureControlVisibility( _bVisible );
         }
     }
 }
@@ -299,8 +286,6 @@ SdrUnoObj::~SdrUnoObj()
             else
                 m_pImpl->pEventListener->StopListening(xComp);
         }
-        // clean up the painter control
-        ::comphelper::disposeComponent( m_pImpl->xPainterControl );
     }
     catch( const uno::Exception& )
     {
@@ -344,32 +329,6 @@ UINT16 SdrUnoObj::GetObjIdentifier() const
 }
 
 // ----------------------------------------------------------------------------
-uno::Reference< awt::XControl > SdrUnoObj::getPainterControl() const
-{
-    if ( m_pImpl->xPainterControl.is() )
-        return m_pImpl->xPainterControl;
-
-    try
-    {
-        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-        DBG_ASSERT( xFactory.is(), "SdrUnoObj::getPainterControl: no service factory!" );
-        if ( xFactory.is() )
-        {
-            ::rtl::OUString sControlServiceName = GetUnoControlTypeName();
-            m_pImpl->xPainterControl = m_pImpl->xPainterControl.query( xFactory->createInstance( sControlServiceName ) );
-            if ( m_pImpl->xPainterControl.is() )
-                m_pImpl->xPainterControl->setModel( GetUnoControlModel() );
-        }
-    }
-    catch( const uno::Exception& )
-    {
-        DBG_ERROR( "SdrUnoObj::getPainterControl: caught an exception!" );
-    }
-    DBG_ASSERT( m_pImpl->xPainterControl.is(), "SdrUnoObj::getPainterControl: could not create the painter control!" );
-    return m_pImpl->xPainterControl;
-}
-
-// ----------------------------------------------------------------------------
 namespace
 {
     /** helper class to restore graphics at <awt::XView> object after <SdrUnoObj::Paint>
@@ -399,223 +358,10 @@ namespace
 }
 
 // ----------------------------------------------------------------------------
-sal_Bool SdrUnoObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrUnoObj::DoPaintObject(XOutputDevice& /*rXOut*/, const SdrPaintInfoRec& /*rInfoRec*/) const
 {
-    const SdrPageView* pPV              = rInfoRec.pPV;
-    OutputDevice* pOut                  = rXOut.GetOutDev();
-    OutDevType eOutDevType              = pOut->GetOutDevType();
-    const SdrUnoControlRec* pControlRec = NULL;
-    vcl::PDFExtOutDevData* pPDFExport   = PTR_CAST( vcl::PDFExtOutDevData, pOut->GetExtOutDevData() );
-    uno::Reference< awt::XControl > xControl;
-
-    if ( pPV && xUnoControlModel.is() )
-    {
-        const SdrPageViewWindow* pWindow = pPV->FindWindow(*pOut);
-        if ( !pWindow )
-        {
-            if ( eOutDevType == OUTDEV_VIRDEV )
-            {
-                // Controls koennen sich z.Z. noch nicht ins VDev zeichnen,
-                // daher wird das korrespondierende, im ersten Window liegende
-                // Control invalidiert (s.u.)
-                if(pPV->WindowCount() > 0)
-                    // Liste enhaelt Windows, daher nehmen wir das erste
-                    pWindow = pPV->GetWindow(0L);
-            }
-        }
-
-        if ( pWindow )
-        {
-            const SdrUnoControlList& rControlList = pWindow->GetControlList();
-            USHORT nCtrlNum = rControlList.Find(xUnoControlModel);
-
-            if (nCtrlNum != SDRUNOCONTROL_NOTFOUND)
-                pControlRec = &rControlList[nCtrlNum];
-        }
-    }
-
-    if ( pControlRec )
-        xControl = pControlRec->GetControl();
-
-    if ( !xControl.is() && ( eOutDevType == OUTDEV_VIRDEV ) )
-    {
-        // if we didn't find a control, but need to paint onto a virtual device,
-        // use a temporary control
-        xControl = getPainterControl();
-    }
-
-    if ( xControl.is() )
-    {
-        uno::Reference< awt::XView > xView( xControl, uno::UNO_QUERY );
-        if ( !xView.is() )
-            return FALSE;
-
-        ::std::auto_ptr< SdrUnoControlPaintGuard > aLockForPaint;
-        if ( pControlRec )
-            aLockForPaint.reset( new SdrUnoControlPaintGuard( *const_cast< SdrUnoControlRec* >( pControlRec ) ) );
-
-        const MapMode& rMap = pOut->GetMapMode();
-        xView->setZoom( (float)double( rMap.GetScaleX() ),
-                        (float)double( rMap.GetScaleY() )
-                       );
-
-        uno::Reference< awt::XWindow > xWindow( xControl, uno::UNO_QUERY );
-        if ( xWindow.is() )
-        {
-            Point aPixPos(pOut->LogicToPixel(aRect.TopLeft()));
-            Size aPixSize(pOut->LogicToPixel(aRect.GetSize()));
-            xWindow->setPosSize(aPixPos.X(), aPixPos.Y(),
-                                aPixSize.Width(), aPixSize.Height(),
-                                awt::PosSize::POSSIZE);
-        }
-
-        // OD 08.05.2003 #109432# - create helper object to restore graphics
-        // at <awt::XView> object.
-        RestoreXViewGraphics aRestXViewGraph( xView );
-
-        BOOL bInvalidatePeer = FALSE;
-        switch ( eOutDevType )
-        {
-        case OUTDEV_WINDOW:
-        {
-            // don't paint if there's a "alive control" which paints itself
-            BOOL bDesignMode = pPV ? pPV->GetView().IsDesignMode() : TRUE;
-            BOOL bPrintPreview = pPV ? pPV->GetView().IsPrintPreview() : FALSE;
-            if ( bDesignMode || bPrintPreview )
-            {
-                if ( bPrintPreview )
-                {
-                    uno::Reference< awt::XGraphics > x( pOut->CreateUnoGraphics() );
-                    xView->setGraphics( x );
-                }
-
-                // don't draw if we're in print preview and the control isn't printable
-                // FS - 10/06/99
-                sal_Bool bDrawIt = sal_True;
-                if ( bPrintPreview )
-                {
-                    uno::Reference< beans::XPropertySet > xP( xControl->getModel(), uno::UNO_QUERY );
-                    if (xP.is())
-                    {
-                        uno::Reference< beans::XPropertySetInfo > xPropInfo = xP->getPropertySetInfo();
-                        if( xPropInfo.is() && xPropInfo->hasPropertyByName( rtl::OUString::createFromAscii("Printable")) )
-                        {
-                            uno::Any aVal( xP->getPropertyValue( rtl::OUString::createFromAscii("Printable")) );
-                            OSL_VERIFY( aVal >>= bDrawIt );
-                        }
-                        else
-                            bDrawIt = sal_False;
-                    }
-                    else
-                        bDrawIt = sal_False;
-                }
-
-                if (bDrawIt)
-                {
-                    if( pPV->GetView().IsFillDraft() )
-                    {
-                        const SfxItemSet& rSet = GetObjectItemSet();
-
-                        // perepare ItemSet to avoid old XOut filling
-                        SfxItemSet aEmptySet(*rSet.GetPool());
-                        aEmptySet.Put(XFillStyleItem(XFILL_NONE));
-                        rXOut.SetFillAttr(aEmptySet);
-
-                        rXOut.SetLineAttr(rSet);
-
-                        rXOut.DrawRect( aRect );
-                    }
-                    else
-                    {
-                        Point aP = pOut->LogicToPixel(aRect.TopLeft());
-                        xView->draw(aP.X(), aP.Y());
-                    }
-                }
-            }
-            else if ( xControl->isTransparent() )
-            {
-                bInvalidatePeer = TRUE;
-            }
-        }
-        break;
-
-        case OUTDEV_PRINTER:
-        {
-            uno::Reference< beans::XPropertySet > xP(xControl->getModel(), uno::UNO_QUERY);
-            if (xP.is())
-            {
-                uno::Reference< beans::XPropertySetInfo > xPropInfo = xP->getPropertySetInfo();
-                if( xPropInfo.is() && xPropInfo->hasPropertyByName( rtl::OUString::createFromAscii("Printable")) )
-                {
-                    uno::Any aVal( xP->getPropertyValue( rtl::OUString::createFromAscii("Printable")) );
-                    if( aVal.hasValue() && aVal.getValueType() == ::getCppuBooleanType() && *(sal_Bool*)aVal.getValue() )
-                    {
-                        uno::Reference< awt::XGraphics > x = pOut->CreateUnoGraphics(); // UNO3
-                        xView->setGraphics( x );
-                        Point aP = pOut->LogicToPixel(aRect.TopLeft());
-                        xView->draw(aP.X(), aP.Y());
-                    }
-                }
-            }
-        }
-        break;
-
-        case OUTDEV_VIRDEV:
-        {
-            bool bDefaultDraw = true;
-            if ( pPDFExport )
-            {
-                ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget > pPDFControl;
-                ::svxform::describePDFControl( xControl, pPDFControl );
-                if ( pPDFControl.get() != NULL )
-                {
-                    // still need to fill in the location
-                    pPDFControl->Location = aRect;
-
-                    Size aFontSize( pPDFControl->TextFont.GetSize() );
-                    aFontSize = pOut->LogicToLogic( aFontSize, MapMode( MAP_POINT ), pOut->GetMapMode() );
-                    pPDFControl->TextFont.SetSize( aFontSize );
-
-                    pPDFExport->BeginStructureElement( vcl::PDFWriter::Form );
-                    pPDFExport->CreateControl( *pPDFControl.get() );
-                    pPDFExport->EndStructureElement();
-                    bDefaultDraw = false;
-                }
-            }
-
-            if ( bDefaultDraw )
-            {
-                uno::Reference< awt::XGraphics > x = pOut->CreateUnoGraphics();
-                xView->setGraphics( x );
-                Point aP = pOut->LogicToPixel( aRect.TopLeft() );
-                try
-                {
-                    xView->draw( aP.X(), aP.Y() );
-                }
-                catch( const uno::Exception& )
-                {
-                    OSL_ENSURE( sal_False, "caught an exception while drawing the object!" );
-                }
-            }
-        }
-        break;
-
-        default:
-            DBG_ERROR( "SdrUnoObj::DoPaintObject: Ehm - what kind of device is this?" );
-        }
-
-        if ( bInvalidatePeer )
-        {
-            uno::Reference< awt::XWindowPeer > xPeer(xControl->getPeer());
-            if (xPeer.is())
-            {
-                xPeer->invalidate(INVALIDATE_NOTRANSPARENT |
-                                    INVALIDATE_CHILDREN);
-            }
-        }
-    }
-
-    return TRUE;
+    DBG_ERROR( "SdrUnoObj::DoPaintObject: dead code!" );
+    return sal_False;
 }
 
 SdrObject* SdrUnoObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
@@ -733,73 +479,6 @@ FASTBOOL SdrUnoObj::HasSpecialDrag() const
     return FALSE;
 }
 
-void SdrUnoObj::VisAreaChanged(const OutputDevice* pOut)
-{
-    if (!xUnoControlModel.is())
-        return;
-
-    if (pOut)
-    {
-        // Nur dieses eine OutDev beruecksichtigen
-        uno::Reference< awt::XWindow > xWindow(GetUnoControl(pOut), uno::UNO_QUERY);
-        if (xWindow.is())
-        {
-            Rectangle aPixRect(pOut->LogicToPixel(aRect));
-            xWindow->setPosSize(aPixRect.Left(), aPixRect.Top(),
-                         aPixRect.GetWidth(), aPixRect.GetHeight(), awt::PosSize::POSSIZE);
-        }
-    }
-    else if (pModel)
-    {
-        // Controls aller PageViews beruecksichtigen
-        USHORT nLstPos = pModel->GetListenerCount();
-        uno::Reference< awt::XWindow > xWindow;
-        Point aPixPos;
-        Size aPixSize;
-        SfxListener* pListener;
-        SdrPageView* pPV;
-        const SdrUnoControlRec* pControlRec = NULL;
-
-        for (; nLstPos ;)
-        {
-            pListener = pModel->GetListener(--nLstPos);
-
-            if (pListener && pListener->ISA(SdrPageView))
-            {
-                pPV = (SdrPageView*) pListener;
-                // const SdrPageViewWinList& rWL = pPV->GetWinList();
-                // const SdrPageViewWindows& rPageViewWindows = pPV->GetPageViewWindows();
-                sal_uInt32 nPos(pPV->WindowCount());
-
-                for (; nPos ; )
-                {
-                    // Controls aller OutDevs beruecksichtigen
-                    // const SdrPageViewWinRec& rWR = rWL[--nPos];
-                    const SdrPageViewWindow& rPageViewWindow = *pPV->GetWindow(--nPos);
-                    const SdrUnoControlList& rControlList = rPageViewWindow.GetControlList();
-                    USHORT nCtrlNum = rControlList.Find(xUnoControlModel);
-                    pControlRec = (nCtrlNum != SDRUNOCONTROL_NOTFOUND) ? &rControlList[nCtrlNum] : NULL;
-                    if (pControlRec)
-                    {
-                        xWindow = uno::Reference< awt::XWindow >(pControlRec->GetControl(), uno::UNO_QUERY);
-                        if (xWindow.is())
-                        {
-                            // #62560 Pixelverschiebung weil mit einem Rechteck
-                            // und nicht mit Point, Size gearbeitet wurde
-                            OutputDevice& rOut = rPageViewWindow.GetOutputDevice();
-                            aPixPos = rOut.LogicToPixel(aRect.TopLeft());
-                            aPixSize = rOut.LogicToPixel(aRect.GetSize());
-                            xWindow->setPosSize(aPixPos.X(), aPixPos.Y(),
-                                                aPixSize.Width(), aPixSize.Height(),
-                                                awt::PosSize::POSSIZE);
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
 void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     SdrRectObj::NbcResize(rRef,xFact,yFact);
@@ -819,26 +498,6 @@ void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
         aGeo.nTan       = 0.0;
         SetRectsDirty();
     }
-
-    VisAreaChanged();
-}
-
-void SdrUnoObj::NbcMove(const Size& rSize)
-{
-    SdrRectObj::NbcMove(rSize);
-    VisAreaChanged();
-}
-
-void SdrUnoObj::NbcSetSnapRect(const Rectangle& rRect)
-{
-    SdrRectObj::NbcSetSnapRect(rRect);
-    VisAreaChanged();
-}
-
-void SdrUnoObj::NbcSetLogicRect(const Rectangle& rRect)
-{
-    SdrRectObj::NbcSetLogicRect(rRect);
-    VisAreaChanged();
 }
 
 // -----------------------------------------------------------------------------
@@ -952,44 +611,6 @@ void SdrUnoObj::CreateUnoControlModel(const String& rModelName,
     SetUnoControlModel(xModel);
 }
 
-//BFS01void SdrUnoObj::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01 SdrRectObj::WriteData(rOut);
-//BFS01 SdrDownCompat aCompat(rOut, STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrUnoObj");
-//BFS01#endif
-//BFS01
-//BFS01 if (bOwnUnoControlModel)                    // nur als besitzt des Models dieses auch schreiben
-//BFS01 {
-//BFS01     // UNICODE: rOut << aUnoControlModelTypeName;
-//BFS01     rOut.WriteByteString(aUnoControlModelTypeName);
-//BFS01 }
-//BFS01}
-
-//BFS01void SdrUnoObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 if (rIn.GetError() != 0)
-//BFS01     return;
-//BFS01
-//BFS01 SdrRectObj::ReadData(rHead,rIn);
-//BFS01
-//BFS01 SdrDownCompat aCompat(rIn, STREAM_READ);    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrUnoObj");
-//BFS01#endif
-//BFS01
-//BFS01 if (bOwnUnoControlModel)                    // nur als besitzt des Models dieses auch lesen
-//BFS01 {
-//BFS01     // UNICODE: rIn >> aUnoControlModelTypeName;
-//BFS01     rIn.ReadByteString(aUnoControlModelTypeName);
-//BFS01
-//BFS01     CreateUnoControlModel(aUnoControlModelTypeName);
-//BFS01 }
-//BFS01}
-
 void SdrUnoObj::SetUnoControlModel( uno::Reference< awt::XControlModel > xModel)
 {
     if (xUnoControlModel.is())
@@ -997,17 +618,9 @@ void SdrUnoObj::SetUnoControlModel( uno::Reference< awt::XControlModel > xModel)
         uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
         if (xComp.is())
             m_pImpl->pEventListener->StopListening(xComp);
-
-        if (pModel)
-        {
-            SdrHint aHint(*this);
-            aHint.SetKind(HINT_CONTROLREMOVED);
-            pModel->Broadcast(aHint);
-        }
     }
 
     xUnoControlModel = xModel;
-    m_pImpl->xPainterControl.clear();
 
     // control model muss servicename des controls enthalten
     if (xUnoControlModel.is())
@@ -1024,102 +637,50 @@ void SdrUnoObj::SetUnoControlModel( uno::Reference< awt::XControlModel > xModel)
         uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
         if (xComp.is())
             m_pImpl->pEventListener->StartListening(xComp);
-
-        if (pModel)
-        {
-            SdrHint aHint(*this);
-            aHint.SetKind(HINT_CONTROLINSERTED);
-            pModel->Broadcast(aHint);
-        }
     }
+
+    // invalidate all ViewObject contacts
+    ViewContactOfUnoControl* pVC = NULL;
+    if ( impl_getViewContact( pVC ) )
+        pVC->invalidateAllContacts( ViewContactOfUnoControl::SdrUnoObjAccessControl() );
 }
 
-uno::Reference< awt::XControl > SdrUnoObj::GetUnoControl(const OutputDevice* pOut) const
+//------------------------------------------------------------------------
+uno::Reference< awt::XControl > SdrUnoObj::GetUnoControl(const OutputDevice* _pDevice) const
 {
-    uno::Reference< awt::XControl > xUnoControl;
+    uno::Reference< awt::XControl > xControl;
 
-    if (pModel && xUnoControlModel.is())
-    {
-        USHORT nLstCnt = pModel->GetListenerCount();
+    ViewContactOfUnoControl* pVC = NULL;
+    if ( impl_getViewContact( pVC ) )
+        xControl = pVC->getUnoControlForDevice( _pDevice, ViewContactOfUnoControl::SdrUnoObjAccessControl() );
 
-        for (USHORT nLst = 0; nLst < nLstCnt && !xUnoControl.is(); nLst++ )
-        {
-            // Unter allen Listenern die PageViews suchen
-            SfxListener* pListener = pModel->GetListener(nLst);
-
-            if (pListener && pListener->ISA(SdrPageView))
-            {
-                // PageView gefunden
-                SdrPageView* pPV = (SdrPageView*) pListener;
-                // const SdrPageViewWinList& rWL = pPV->GetWinList();
-                // const SdrPageViewWindows& rPageViewWindows = pPV->GetPageViewWindows();
-                sal_uInt32 nWRCnt(pPV->WindowCount());
-
-                for (sal_uInt32 nWR = 0L; nWR < nWRCnt && !xUnoControl.is(); nWR++)
-                {
-                    // Alle WinRecords der PageView untersuchen
-                    // const SdrPageViewWinRec& rWR = rWL[nWR];
-                    const SdrPageViewWindow& rPageViewWindow = *pPV->GetWindow(nWR);
-
-                    if (pOut == &rPageViewWindow.GetOutputDevice())
-                    {
-                        // Richtiges OutputDevice gefunden
-                        // Darin nun das Control suchen
-                        const SdrUnoControlList& rControlList = rPageViewWindow.GetControlList();
-                        USHORT nCtrlNum = rControlList.Find(xUnoControlModel);
-                        if (nCtrlNum != SDRUNOCONTROL_NOTFOUND)
-                        {
-                            const SdrUnoControlRec* pControlRec = &rControlList[nCtrlNum];
-                            if (pControlRec && pControlRec->GetControl().is())
-                            {
-                                xUnoControl = pControlRec->GetControl();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return xUnoControl;
+    return xControl;
 }
 
-OutputDevice* SdrUnoObj::GetOutputDevice(uno::Reference< awt::XControl > _xControl) const
+//------------------------------------------------------------------------
+uno::Reference< awt::XControl > SdrUnoObj::GetTemporaryControlForWindow(
+    const Window& _rWindow, uno::Reference< awt::XControlContainer >& _inout_ControlContainer ) const
 {
-    OutputDevice* pOut = NULL;
-    if (pModel && xUnoControlModel.is() && _xControl.is() && _xControl->getModel() == xUnoControlModel)
-    {
-        USHORT nLstCnt = pModel->GetListenerCount();
-        for (USHORT nLst = 0; nLst < nLstCnt && !pOut; nLst++ )
-        {
-            // Unter allen Listenern die PageViews suchen
-            SfxListener* pListener = pModel->GetListener(nLst);
-            if (pListener && pListener->ISA(SdrPageView))
-            {
-                // PageView gefunden
-                SdrPageView* pPV = (SdrPageView*) pListener;
-                if (pPV)
-                {
-                    // const SdrPageViewWinList& rWL = pPV->GetWinList();
-                    // const SdrPageViewWindows& rPageViewWindows = pPV->GetPageViewWindows();
-                    sal_uInt32 nWRCnt(pPV->WindowCount());
+    uno::Reference< awt::XControl > xControl;
 
-                    for (sal_uInt32 nWR = 0L; nWR < nWRCnt && !pOut; nWR++)
-                    {
-                        // Alle WinRecords der PageView untersuchen
-                        // const SdrPageViewWinRec& rWR = rWL[nWR];
-                        const SdrPageViewWindow& rPageViewWindow = *pPV->GetWindow(nWR);
-                        const SdrUnoControlList& rControlList = rPageViewWindow.GetControlList();
+    ViewContactOfUnoControl* pVC = NULL;
+    if ( impl_getViewContact( pVC ) )
+        xControl = pVC->getTemporaryControlForWindow( _rWindow, _inout_ControlContainer );
 
-                        if (SDRUNOCONTROL_NOTFOUND != rControlList.Find(_xControl))
-                        {
-                            pOut = &rPageViewWindow.GetOutputDevice();
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return pOut;
+    return xControl;
 }
 
+//------------------------------------------------------------------------
+bool SdrUnoObj::impl_getViewContact( ViewContactOfUnoControl*& _out_rpContact ) const
+{
+    ViewContact& rViewContact( GetViewContact() );
+    _out_rpContact = dynamic_cast< ViewContactOfUnoControl* >( &rViewContact );
+    DBG_ASSERT( _out_rpContact, "SdrUnoObj::impl_getViewContact: could not find my ViewContact!" );
+    return ( _out_rpContact != NULL );
+}
 
+//------------------------------------------------------------------------
+::sdr::contact::ViewContact* SdrUnoObj::CreateObjectSpecificViewContact()
+{
+  return new ::sdr::contact::ViewContactOfUnoControl( *this );
+}
