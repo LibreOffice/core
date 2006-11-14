@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:03:15 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:13:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,11 @@
 #include <anchoredobject.hxx>
 #endif
 // <--
+
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
+
 BOOL ViewShell::bLstAct = FALSE;
 ShellResource *ViewShell::pShellRes = 0;
 Window *ViewShell::pCareWindow = 0;
@@ -177,6 +182,42 @@ TYPEINIT0(ViewShell);
 |*
 ******************************************************************************/
 
+// #i68597# need to tell DrawingLayer about paint start
+void ViewShell::DLPrePaint(const Region& rRegion)
+{
+    if(Imp()->GetDrawView())
+    {
+        Imp()->GetDrawView()->BeginDrawLayers(GetWin(), rRegion, sal_False);
+    }
+}
+
+// #i68597# need to tell DrawingLayer about paint stop
+void ViewShell::DLPostPaint(const Region& rRegion)
+{
+    if(Imp()->GetDrawView())
+    {
+        Imp()->GetDrawView()->EndDrawLayers(GetWin());
+    }
+}
+
+// #i68597# tell DrawingLayer about region change start
+void ViewShell::DLPreOutsidePaint(const Region& rRegion)
+{
+    if(Imp()->GetDrawView())
+    {
+        Imp()->GetDrawView()->BeginDrawLayers(GetWin(), rRegion, sal_False);
+    }
+}
+
+// #i68597# tell DrawingLayer about region change stop
+void ViewShell::DLPostOutsidePaint(const Region& rRegion)
+{
+    if(Imp()->GetDrawView())
+    {
+        Imp()->GetDrawView()->EndDrawLayers(GetWin());
+    }
+}
+
 void ViewShell::ImplEndAction( const BOOL bIdleEnd )
 {
     //Fuer den Drucker gibt es hier nichts zu tun.
@@ -186,9 +227,6 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
         UISizeNotify();
         return;
     }
-
-    // #94195# remember when the handles need refresh at end of method
-    sal_Bool bRefreshMarker(sal_False);
 
     bInEndAction = TRUE;
 
@@ -247,16 +285,6 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
             {
                 if ( bPaintsFromSystem )
                     Imp()->AddPaintRect( aInvalidRect );
-
-                // AW 22.09.99: tell DrawView that drawing order will be rearranged
-                // to give it a chance to react with proper IAO updates
-                if (HasDrawView())
-                {
-                    GetDrawView()->ForceInvalidateMarkHandles();
-
-                    // #94195# set remark
-                    bRefreshMarker = sal_True;
-                }
 
                 ResetInvalidRect();
                 bPaintsFromSystem = TRUE;
@@ -394,12 +422,6 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
 #endif
     if ( Imp()->IsScrolled() )
         Imp()->RestartScrollTimer();
-
-    // #94195# refresh handles when they were hard removed for display change
-    if(bRefreshMarker && HasDrawView())
-    {
-        GetDrawView()->AdjustMarkHdl(FALSE);
-    }
 
     if( Imp()->IsAccessible() )
         Imp()->FireAccessibleEvents();
@@ -1124,7 +1146,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
 
     SET_CURR_SHELL( this );
 
-    SwSaveHdl aSaveHdl( Imp() );
+    //SwSaveHdl aSaveHdl( Imp() );
 
     if ( bFull )
         GetWin()->Invalidate();
@@ -1511,8 +1533,26 @@ void ViewShell::_PaintDesktop( const SwRegionRects &rRegion )
     SW_MOD()->GetColorConfig();
     */
     GetOut()->SetFillColor( SwViewOption::GetAppBackgroundColor());
+    GetOut()->SetLineColor();
+
     for ( USHORT i = 0; i < rRegion.Count(); ++i )
-        GetOut()->DrawRect( rRegion[i].SVRect() );
+    {
+        const Rectangle aRectangle(rRegion[i].SVRect());
+
+        // #i68597# inform Drawinglayer about display change
+        if(!IsPaintInProgress())
+        {
+            DLPreOutsidePaint(Region(aRectangle));
+        }
+
+        GetOut()->DrawRect(aRectangle);
+
+        if(!IsPaintInProgress())
+        {
+            DLPostOutsidePaint(Region(aRectangle));
+        }
+    }
+
     GetOut()->Pop();
 }
 
@@ -1703,6 +1743,10 @@ void ViewShell::Paint(const Rectangle &rRect)
             if( !GetOut()->GetConnectMetaFile() && GetOut()->IsClipRegion())
                 GetOut()->SetClipRegion();
 
+            // #i68597#
+            const Region aDLRegion(Region(aRect.SVRect()));
+            DLPrePaint(aDLRegion);
+
             if ( IsPreView() )
             {
                 //Falls sinnvoll gleich das alte InvalidRect verarbeiten bzw.
@@ -1715,9 +1759,9 @@ void ViewShell::Paint(const Rectangle &rRect)
             }
             else
             {
-                SwSaveHdl *pSaveHdl = 0;
-                if ( Imp()->HasDrawView() )
-                    pSaveHdl = new SwSaveHdl( Imp() );
+                //SwSaveHdl *pSaveHdl = 0;
+                //if ( Imp()->HasDrawView() )
+                //  pSaveHdl = new SwSaveHdl( Imp() );
 
                 //Wenn eine der sichtbaren Seiten noch irgendetwas zum Repaint
                 //angemeldet hat, so muessen Repaints ausgeloest werden.
@@ -1732,11 +1776,15 @@ void ViewShell::Paint(const Rectangle &rRect)
                     GetLayout()->Paint( aRect );
                     ViewShell::bLstAct = FALSE;
                 }
-                delete pSaveHdl;
+
+                //delete pSaveHdl;
             }
             SwRootFrm::SetNoVirDev( FALSE );
             bPaintInProgress = FALSE;
             UISizeNotify();
+
+            // #i68597#
+            DLPostPaint(aDLRegion);
         }
     }
     else
@@ -2039,7 +2087,6 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
             ( rSz.Width() ? rSz.Width() / (rOpt.GetDivisionX()+1) : 0,
               rSz.Height()? rSz.Height()/ (rOpt.GetDivisionY()+1) : 0);
         pDView->SetGridFine( aFSize );
-        pDView->SetSnapGrid( aFSize );
         Fraction aSnGrWdtX(rSz.Width(), rOpt.GetDivisionX() + 1);
         Fraction aSnGrWdtY(rSz.Height(), rOpt.GetDivisionY() + 1);
         pDView->SetSnapGridWidth( aSnGrWdtX, aSnGrWdtY );
