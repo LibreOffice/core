@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Splines.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:34:00 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:34:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -352,9 +352,6 @@ double lcl_SplineCalculation::GetInterpolatedValue( double x )
               ( b*b*b - b ) * m_aSecDerivY[ m_nKHigh ] ) *
              ( h*h ) / 6.0 );
 }
-
-// this is the maximum number of points that will be inserted into an XPolygon
-//const lcl_tSizeType nPolygonSizeThreshold = 0xff00;
 
 tPointVecType makeVector( const drawing::PolyPolygonShape3D& rPoly, sal_Int32 nPolyIndex=0 )
 {
