@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:41:21 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:14:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,14 @@
 
 #include "xmlnmspe.hxx"
 
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
+#ifndef _BGFX_TUPLE_B2DTUPLE_HXX
+#include <basegfx/tuple/b2dtuple.hxx>
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -145,21 +153,21 @@ void XMLShapeExport::ImpExportNewTrans(const uno::Reference< beans::XPropertySet
     sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
     // get matrix
-    Matrix3D aMat;
-    ImpExportNewTrans_GetMatrix3D(aMat, xPropSet);
+    ::basegfx::B2DHomMatrix aMatrix;
+    ImpExportNewTrans_GetB2DHomMatrix(aMatrix, xPropSet);
 
     // decompose and correct abour pRefPoint
-    Vector2D aTRScale;
+    ::basegfx::B2DTuple aTRScale;
     double fTRShear(0.0);
     double fTRRotate(0.0);
-    Vector2D aTRTranslate;
-    ImpExportNewTrans_DecomposeAndRefPoint(aMat, aTRScale, fTRShear, fTRRotate, aTRTranslate, pRefPoint);
+    ::basegfx::B2DTuple aTRTranslate;
+    ImpExportNewTrans_DecomposeAndRefPoint(aMatrix, aTRScale, fTRShear, fTRRotate, aTRTranslate, pRefPoint);
 
     // use features and write
     ImpExportNewTrans_FeaturesAndWrite(aTRScale, fTRShear, fTRRotate, aTRTranslate, nFeatures);
 }
 
-void XMLShapeExport::ImpExportNewTrans_GetMatrix3D(Matrix3D& rMat,
+void XMLShapeExport::ImpExportNewTrans_GetB2DHomMatrix(::basegfx::B2DHomMatrix& rMatrix,
     const uno::Reference< beans::XPropertySet >& xPropSet)
 {
     // --> OD 2004-08-09 #i28749# - Get <TransformationInHoriL2R>, if it exist
@@ -186,66 +194,71 @@ void XMLShapeExport::ImpExportNewTrans_GetMatrix3D(Matrix3D& rMat,
     // <--
     drawing::HomogenMatrix3 aMatrix;
     aAny >>= aMatrix;
-    rMat[0] = Point3D( aMatrix.Line1.Column1, aMatrix.Line1.Column2, aMatrix.Line1.Column3 );
-    rMat[1] = Point3D( aMatrix.Line2.Column1, aMatrix.Line2.Column2, aMatrix.Line2.Column3 );
-    rMat[2] = Point3D( aMatrix.Line3.Column1, aMatrix.Line3.Column2, aMatrix.Line3.Column3 );
+
+    rMatrix.set(0, 0, aMatrix.Line1.Column1);
+    rMatrix.set(0, 1, aMatrix.Line1.Column2);
+    rMatrix.set(0, 2, aMatrix.Line1.Column3);
+    rMatrix.set(1, 0, aMatrix.Line2.Column1);
+    rMatrix.set(1, 1, aMatrix.Line2.Column2);
+    rMatrix.set(1, 2, aMatrix.Line2.Column3);
+    rMatrix.set(2, 0, aMatrix.Line3.Column1);
+    rMatrix.set(2, 1, aMatrix.Line3.Column2);
+    rMatrix.set(2, 2, aMatrix.Line3.Column3);
 }
 
-void XMLShapeExport::ImpExportNewTrans_DecomposeAndRefPoint(const Matrix3D& rMat,
-    Vector2D& rTRScale, double& fTRShear, double& fTRRotate, Vector2D& rTRTranslate,
-    awt::Point* pRefPoint)
+void XMLShapeExport::ImpExportNewTrans_DecomposeAndRefPoint(const ::basegfx::B2DHomMatrix& rMatrix, ::basegfx::B2DTuple& rTRScale,
+    double& fTRShear, double& fTRRotate, ::basegfx::B2DTuple& rTRTranslate, com::sun::star::awt::Point* pRefPoint)
 {
     // decompose matrix
-    rMat.DecomposeAndCorrect(rTRScale, fTRShear, fTRRotate, rTRTranslate);
+    rMatrix.decompose(rTRScale, rTRTranslate, fTRRotate, fTRShear);
 
     // correct translation about pRefPoint
     if(pRefPoint)
     {
-        rTRTranslate.X() -= pRefPoint->X;
-        rTRTranslate.Y() -= pRefPoint->Y;
+        rTRTranslate -= ::basegfx::B2DTuple(pRefPoint->X, pRefPoint->Y);
     }
 }
 
-void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(Vector2D& rTRScale, double fTRShear,
-    double fTRRotate, Vector2D& rTRTranslate, const sal_Int32 nFeatures)
+void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTRScale, double fTRShear,
+    double fTRRotate, ::basegfx::B2DTuple& rTRTranslate, const sal_Int32 nFeatures)
 {
     // allways write Size (rTRScale) since this statement carries the union
     // of the object
     OUString aStr;
     OUStringBuffer sStringBuffer;
-    Vector2D aTRScale = rTRScale;
+    ::basegfx::B2DTuple aTRScale(rTRScale);
 
     // svg: width
     if(!(nFeatures & SEF_EXPORT_WIDTH))
     {
-        aTRScale.X() = 1.0;
+        aTRScale.setX(1.0);
     }
     else
     {
-        if( aTRScale.X() > 0 )
-            aTRScale.X() -= 1;
-        else if( aTRScale.X() < 0 )
-            aTRScale.X() += 1;
+        if( aTRScale.getX() > 0.0 )
+            aTRScale.setX(aTRScale.getX() - 1.0);
+        else if( aTRScale.getX() < 0.0 )
+            aTRScale.setX(aTRScale.getX() + 1.0);
     }
 
-    mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(aTRScale.X()));
+    mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(aTRScale.getX()));
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_WIDTH, aStr);
 
     // svg: height
     if(!(nFeatures & SEF_EXPORT_HEIGHT))
     {
-        aTRScale.Y() = 1.0;
+        aTRScale.setY(1.0);
     }
     else
     {
-        if( aTRScale.Y() > 0 )
-            aTRScale.Y() -= 1;
-        else if( aTRScale.Y() < 0 )
-            aTRScale.Y() += 1;
+        if( aTRScale.getY() > 0.0 )
+            aTRScale.setY(aTRScale.getY() - 1.0);
+        else if( aTRScale.getY() < 0.0 )
+            aTRScale.setY(aTRScale.getY() + 1.0);
     }
 
-    mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(aTRScale.Y()));
+    mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(aTRScale.getY()));
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_HEIGHT, aStr);
 
@@ -271,7 +284,7 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(Vector2D& rTRScale, doub
         if(nFeatures & SEF_EXPORT_X)
         {
             // svg: x
-            mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(rTRTranslate.X()));
+            mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(rTRTranslate.getX()));
             aStr = sStringBuffer.makeStringAndClear();
             mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X, aStr);
         }
@@ -279,7 +292,7 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(Vector2D& rTRScale, doub
         if(nFeatures & SEF_EXPORT_Y)
         {
             // svg: y
-            mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(rTRTranslate.Y()));
+            mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(rTRTranslate.getY()));
             aStr = sStringBuffer.makeStringAndClear();
             mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y, aStr);
         }
@@ -809,18 +822,18 @@ void XMLShapeExport::ImpExportLineShape(
         // since this slot take anchor pos into account.
 
         // get matrix
-        Matrix3D aMat;
-        ImpExportNewTrans_GetMatrix3D(aMat, xPropSet);
+        ::basegfx::B2DHomMatrix aMatrix;
+        ImpExportNewTrans_GetB2DHomMatrix(aMatrix, xPropSet);
 
         // decompose and correct about pRefPoint
-        Vector2D aTRScale;
+        ::basegfx::B2DTuple aTRScale;
         double fTRShear(0.0);
         double fTRRotate(0.0);
-        Vector2D aTRTranslate;
-        ImpExportNewTrans_DecomposeAndRefPoint(aMat, aTRScale, fTRShear, fTRRotate, aTRTranslate, pRefPoint);
+        ::basegfx::B2DTuple aTRTranslate;
+        ImpExportNewTrans_DecomposeAndRefPoint(aMatrix, aTRScale, fTRShear, fTRRotate, aTRTranslate, pRefPoint);
 
         // create base position
-        awt::Point aBasePosition(FRound(aTRTranslate.X()), FRound(aTRTranslate.Y()));
+        awt::Point aBasePosition(FRound(aTRTranslate.getX()), FRound(aTRTranslate.getY()));
 
         // get the two points
         uno::Any aAny(xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry"))));
@@ -982,22 +995,22 @@ void XMLShapeExport::ImpExportPolygonShape(
             || eShapeType == XmlShapeTypeDrawOpenBezierShape);
 
         // get matrix
-        Matrix3D aMat;
-        ImpExportNewTrans_GetMatrix3D(aMat, xPropSet);
+        ::basegfx::B2DHomMatrix aMatrix;
+        ImpExportNewTrans_GetB2DHomMatrix(aMatrix, xPropSet);
 
         // decompose and correct abour pRefPoint
-        Vector2D aTRScale;
+        ::basegfx::B2DTuple aTRScale;
         double fTRShear(0.0);
         double fTRRotate(0.0);
-        Vector2D aTRTranslate;
-        ImpExportNewTrans_DecomposeAndRefPoint(aMat, aTRScale, fTRShear, fTRRotate, aTRTranslate, pRefPoint);
+        ::basegfx::B2DTuple aTRTranslate;
+        ImpExportNewTrans_DecomposeAndRefPoint(aMatrix, aTRScale, fTRShear, fTRRotate, aTRTranslate, pRefPoint);
 
         // use features and write
         ImpExportNewTrans_FeaturesAndWrite(aTRScale, fTRShear, fTRRotate, aTRTranslate, nFeatures);
 
         // create and export ViewBox
         awt::Point aPoint(0, 0);
-        awt::Size aSize(FRound(aTRScale.X()), FRound(aTRScale.Y()));
+        awt::Size aSize(FRound(aTRScale.getX()), FRound(aTRScale.getY()));
         SdXMLImExViewBox aViewBox(0, 0, aSize.Width, aSize.Height);
         mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString());
 
