@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:17:33 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:42:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,7 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
         const SfxPoolItem* pItem;
 
         if ( pDrView->IsTextEdit() )
-            pDrView->EndTextEdit();
+            pDrView->SdrEndTextEdit();
 
         if ( rSet.GetItemState(XATTR_FORMTXTSTDFORM, TRUE, &pItem) ==
              SFX_ITEM_SET &&
@@ -188,7 +188,7 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
             SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)GetViewFrame()->
                                         GetChildWindow(nId)->GetWindow();
 
-            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetPageViewPvNum(0),
+            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetSdrPageView(),
                                     rSet, *rMarkList.GetMark(0)->GetMarkedSdrObj(),
                                    ((const XFormTextStdFormItem*) pItem)->
                                    GetValue());
@@ -491,7 +491,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 
                     if( aNewGraphic != rOldGraphic )
                     {
-                        SdrPageView* pPV = pDrView->GetPageViewPvNum( 0 );
+                        SdrPageView* pPV = pDrView->GetSdrPageView();
 
                         pNewObj->SetEmptyPresObj( FALSE );
                         pNewObj->SetGraphic( ( (SvxBmpMask*) GetViewFrame()->GetChildWindow(
@@ -502,7 +502,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
                         aStr += (sal_Unicode)( ' ' ), aStr += String( SdResId( STR_EYEDROPPER ) );
 
                         pDrView->BegUndo( aStr );
-                        pDrView->ReplaceObject( pObj, *pPV, pNewObj );
+                        pDrView->ReplaceObjectAtView( pObj, *pPV, pNewObj );
                         pDrView->EndUndo();
                     }
                 }
@@ -769,7 +769,7 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
             // ist nicht mehr noetig, falls der Parameter TRUE uebergeben wird. Dann wird sofort und
             // ohne Benutzereingriff ein gekippter Rotationskoerper mit einer Achse links neben dem
             // Umschliessenden Rechteck der slektierten Objekte gezeichnet.
-            pDrView->EndTextEdit();
+            pDrView->SdrEndTextEdit();
             if(GetActiveWindow())
                 GetActiveWindow()->EnterWait();
             pDrView->End3DCreation(TRUE);
@@ -803,7 +803,7 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
 
         case SID_SUMMARY_PAGE:
         {
-            pDrView->EndTextEdit();
+            pDrView->SdrEndTextEdit();
             SetCurrentFunction( FuSummaryPage::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
             Cancel();
         }
