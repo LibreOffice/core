@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdglob.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:43:58 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:47:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,6 @@ public:
 // IDs von SDR_StringCacheBegin (256) bis
 // SDR_StringCacheEnd (weiss ich grad' nicht).
 // Hierzu siehe auch SvdStr.Hrc
-//BFS06const String& ImpGetResStr(USHORT nResID);
 String ImpGetResStr(sal_uInt16 nResID);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
