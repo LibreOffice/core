@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:59:08 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:56:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -375,8 +375,9 @@ BOOL ScGridWindow::PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove )
     {
         if (bDragRect)
         {
-            DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
+            // DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
             bDragRect = FALSE;
+            UpdateDragRectOverlay();
         }
 
         if ( nDx != 0 )
@@ -543,8 +544,8 @@ BOOL ScGridWindow::PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove )
             if ( nNewStartX != nDragStartX || nNewEndX != nDragEndX ||
                  nNewStartY != nDragStartY || nNewEndY != nDragEndY || !bDragRect )
             {
-                if (bDragRect)
-                    DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
+                //if (bDragRect)
+                //  DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
 
                 nDragStartX = nNewStartX;
                 nDragStartY = nNewStartY;
@@ -552,15 +553,18 @@ BOOL ScGridWindow::PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove )
                 nDragEndY = nNewEndY;
                 bDragRect = TRUE;
 
-                DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
+                // DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
+
+                UpdateDragRectOverlay();
             }
         }
         else
         {
             if (bDragRect)
             {
-                DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
+                // DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
                 bDragRect = FALSE;
+                UpdateDragRectOverlay();
             }
 
             if (!bNothing)
@@ -578,9 +582,10 @@ BOOL ScGridWindow::PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove )
     {
         if (bMove)
             SetPointer( Pointer( POINTER_PIVOT_DELETE ) );
-        if (bDragRect)
-            DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
+        // if (bDragRect)
+        //  DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
         bDragRect = FALSE;
+        UpdateDragRectOverlay();
 
         if (!bMove)
             DoPivotDrop( TRUE, FALSE,0 );
@@ -748,8 +753,8 @@ void ScGridWindow::UpdateDragRect( BOOL bShowRange, const Rectangle& rPosRect )
         return;         // everything unchanged
     }
 
-    if ( bDragRect )
-        DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
+    // if ( bDragRect )
+    //  DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
     if ( bShowRange )
     {
         nDragStartX = nStartX;
@@ -757,10 +762,12 @@ void ScGridWindow::UpdateDragRect( BOOL bShowRange, const Rectangle& rPosRect )
         nDragEndX = nEndX;
         nDragEndY = nEndY;
         bDragRect = TRUE;
-        DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
+        // DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
     }
     else
         bDragRect = FALSE;
+
+    UpdateDragRectOverlay();
 }
 
 // -----------------------------------------------------------------------
@@ -921,9 +928,10 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
     {
         if ( bPagebreakDrawn )          // weginvertieren
         {
-            DrawDragRect( aPagebreakDrag.aStart.Col(), aPagebreakDrag.aStart.Row(),
-                            aPagebreakDrag.aEnd.Col(), aPagebreakDrag.aEnd.Row(), FALSE );
+            // DrawDragRect( aPagebreakDrag.aStart.Col(), aPagebreakDrag.aStart.Row(),
+            //              aPagebreakDrag.aEnd.Col(), aPagebreakDrag.aEnd.Row(), FALSE );
             bPagebreakDrawn = FALSE;
+            UpdateDragRectOverlay();
         }
 
         if ( nDx != 0 ) pViewData->GetView()->ScrollX( nDx, WhichH(eWhich) );
@@ -1028,18 +1036,19 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
         if ( bPagebreakDrawn )
         {
             // weginvertieren
-            DrawDragRect( aPagebreakDrag.aStart.Col(), aPagebreakDrag.aStart.Row(),
-                            aPagebreakDrag.aEnd.Col(), aPagebreakDrag.aEnd.Row(), FALSE );
+            // DrawDragRect( aPagebreakDrag.aStart.Col(), aPagebreakDrag.aStart.Row(),
+            //              aPagebreakDrag.aEnd.Col(), aPagebreakDrag.aEnd.Row(), FALSE );
             bPagebreakDrawn = FALSE;
         }
         aPagebreakDrag = aDrawRange;
         if ( !bUp && !bHide )
         {
             // hininvertieren
-            DrawDragRect( aPagebreakDrag.aStart.Col(), aPagebreakDrag.aStart.Row(),
-                            aPagebreakDrag.aEnd.Col(), aPagebreakDrag.aEnd.Row(), FALSE );
+            // DrawDragRect( aPagebreakDrag.aStart.Col(), aPagebreakDrag.aStart.Row(),
+            //              aPagebreakDrag.aEnd.Col(), aPagebreakDrag.aEnd.Row(), FALSE );
             bPagebreakDrawn = TRUE;
         }
+        UpdateDragRectOverlay();
     }
 
     //  bei ButtonUp die Aenderung ausfuehren
