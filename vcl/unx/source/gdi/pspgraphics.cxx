@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-27 10:53:35 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:25:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1449,3 +1449,14 @@ bool PspGraphics::filterText( const String& rOrig, String& rNewText, xub_StrLen 
     return bRet && m_bSwallowFaxNo;
 }
 
+bool PspGraphics::drawAlphaBitmap( const SalTwoRect&,
+                                   const SalBitmap&,
+                                   const SalBitmap& )
+{
+    return false;
+}
+
+bool PspGraphics::drawAlphaRect( long, long, long, long, sal_uInt8 )
+{
+    return false;
+}
