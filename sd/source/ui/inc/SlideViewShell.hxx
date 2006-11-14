@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideViewShell.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:27:25 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:33:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,8 +102,8 @@ public:
         sliders.
     */
     virtual void ArrangeGUIElements (void);
-    virtual void    AddWindow(::sd::Window* pWin) { pSlideView->AddWin((OutputDevice*) pWin); }
-    virtual void    RemoveWindow(::sd::Window* pWin) { pSlideView->DelWin((OutputDevice*) pWin); }
+    virtual void    AddWindow(::sd::Window* pWin) { pSlideView->AddWindowToPaintView((OutputDevice*) pWin); }
+    virtual void    RemoveWindow(::sd::Window* pWin) { pSlideView->DeleteWindowFromPaintView((OutputDevice*) pWin); }
 
     virtual BOOL    KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
     virtual void    MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin);
