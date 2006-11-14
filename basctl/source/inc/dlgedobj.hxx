@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:20:33 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:29:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,9 +85,6 @@ protected:
     DlgEdObj(const ::rtl::OUString& rModelName,
              const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac);
 
-//BFS01 virtual void     WriteData(SvStream& rOut) const;                           // not working yet
-//BFS01 virtual void     ReadData(const SdrObjIOHeader& rHead, SvStream& rIn);      // not working yet
-
     virtual void NbcMove( const Size& rSize );
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
@@ -110,6 +107,10 @@ protected:
     virtual bool TransformFormToSdrCoordinates(
         sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
         sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
+
+    /** returns the DeviceInfo for the given DlgEdForm object (needed for the various Transform* methods)
+    */
+    ::com::sun::star::awt::DeviceInfo getFormDeviceInfo( const DlgEdForm& _rForm );
 
 public:
     TYPEINFO();
