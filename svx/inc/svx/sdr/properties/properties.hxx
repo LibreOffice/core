@@ -4,9 +4,9 @@
  *
  *  $RCSfile: properties.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:08:59 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:11:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,10 +164,6 @@ namespace sdr
 
             // Get the installed StyleSheet.
             virtual SfxStyleSheet* GetStyleSheet() const = 0;
-
-            // pre/post-process saving for binary file format compatibility. Can be removed later.
-            //BFS01virtual void PreProcessSave() = 0;
-            //BFS01virtual void PostProcessSave() = 0;
 
             // Scale the local ItemSet as far as it contains metric items. This needs to be
             // overloaded to do it for hierarchical objects like e.g. groups.
