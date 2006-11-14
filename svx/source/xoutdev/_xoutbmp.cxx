@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _xoutbmp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:22:13 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:55:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -482,7 +482,7 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
                 {
                     aURL.setExtension( aExt );
                     rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
-                    nErr = ExportGraphic( aGraphic, aURL, *pFilter, nFilter, TRUE, NULL );
+                    nErr = ExportGraphic( aGraphic, aURL, *pFilter, nFilter, NULL );
                 }
             }
         }
@@ -501,11 +501,8 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
 #pragma optimize ( "", off )
 #endif
 
-// SJ: bIgnoreOptions is not used anymore
-
 USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                   GraphicFilter& rFilter, const USHORT nFormat,
-                                  BOOL /*bIgnoreOptions*/,
                                   const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData )
 {
     DBG_ASSERT( rURL.GetProtocol() != INET_PROT_NOT_VALID, "XOutBitmap::ExportGraphic(...): invalid URL" );
@@ -518,8 +515,7 @@ USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& 
     {
         pGrfFilter = &rFilter;
 
-        nRet = rFilter.ExportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ),
-                    *pOStm, nFormat, sal_True, pFilterData );
+        nRet = rFilter.ExportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pOStm, nFormat, pFilterData );
 
         pGrfFilter = NULL;
         aMedium.Commit();
