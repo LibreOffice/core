@@ -4,9 +4,9 @@
  *
  *  $RCSfile: measureproperties.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:43:48 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:37:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,10 +60,6 @@
 #include <svdomeas.hxx>
 #endif
 
-#ifndef SXMSEITM_HXX
-#include <sxmseitm.hxx>
-#endif
-
 #ifndef _SXMSUITM_HXX
 #include <sxmsuitm.hxx>
 #endif
@@ -82,6 +78,14 @@
 
 #ifndef _SVX_XLNEDWIT_HXX
 #include <xlnedwit.hxx>
+#endif
+
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -151,36 +155,6 @@ namespace sdr
             TextProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
         }
 
-//BFS01     void MeasureProperties::PreProcessSave()
-//BFS01     {
-//BFS01         // call parent
-//BFS01         TextProperties::PreProcessSave();
-//BFS01
-//BFS01         // force ItemSet
-//BFS01         GetObjectItemSet();
-//BFS01
-//BFS01         // prepare SetItems for storage
-//BFS01         const SfxItemSet& rSet = *mpItemSet;
-//BFS01         const SfxItemSet* pParent = mpStyleSheet ? &(mpStyleSheet->GetItemSet()) : 0L;
-//BFS01
-//BFS01         SdrMeasureSetItem aMeasAttr(rSet.GetPool());
-//BFS01         aMeasAttr.GetItemSet().Put(rSet);
-//BFS01         aMeasAttr.GetItemSet().SetParent(pParent);
-//BFS01         mpItemSet->Put(aMeasAttr);
-//BFS01     }
-
-//BFS01     void MeasureProperties::PostProcessSave()
-//BFS01     {
-//BFS01         // call parent
-//BFS01         TextProperties::PostProcessSave();
-//BFS01
-//BFS01         // remove SetItems from local itemset
-//BFS01         if(mpItemSet)
-//BFS01         {
-//BFS01             mpItemSet->ClearItem(SDRATTRSET_MEASURE);
-//BFS01         }
-//BFS01     }
-
         void MeasureProperties::ForceDefaultAttributes()
         {
             // call parent
@@ -194,15 +168,15 @@ namespace sdr
             // from one application to another
             mpItemSet->Put(SdrMeasureShowUnitItem(TRUE));
 
-            XPolygon aXP(4);            //      []
-            aXP[0] = Point(100,0);      // 0,4__[]__2,4
-            aXP[1] = Point(200,400);    //    \    /
-            aXP[2] = Point(0,400);      //     \  /
-            aXP[3] = Point(100,0);      //      \/1,0
+            basegfx::B2DPolygon aNewPolygon;
+            aNewPolygon.append(basegfx::B2DPoint(100.0, 0.0));
+            aNewPolygon.append(basegfx::B2DPoint(200.0, 400.0));
+            aNewPolygon.append(basegfx::B2DPoint(0.0, 400.0));
+            aNewPolygon.setClosed(true);
 
-            mpItemSet->Put(XLineStartItem(String(), aXP));
+            mpItemSet->Put(XLineStartItem(String(), basegfx::B2DPolyPolygon(aNewPolygon)));
             mpItemSet->Put(XLineStartWidthItem(200));
-            mpItemSet->Put(XLineEndItem(String(), aXP));
+            mpItemSet->Put(XLineEndItem(String(), basegfx::B2DPolyPolygon(aNewPolygon)));
             mpItemSet->Put(XLineEndWidthItem(200));
             mpItemSet->Put(XLineStyleItem(XLINE_SOLID));
         }
