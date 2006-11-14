@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 10:15:55 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:46:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -453,7 +453,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                     // drop on layer tab bar
                     SdrLayerAdmin&  rLayerAdmin = pDoc->GetLayerAdmin();
                     SdrLayer*       pLayer = rLayerAdmin.GetLayerPerID( nLayer );
-                    SdrPageView*    pPV = GetPageViewPvNum( 0 );
+                    SdrPageView*    pPV = GetSdrPageView();
                     String          aLayer( pLayer->GetName() );
 
                     if( !pPV->IsLayerLocked( aLayer ) )
@@ -482,7 +482,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                 }
                 else
                 {
-                    SdrPageView*    pPV = GetPageViewPvNum( 0 );
+                    SdrPageView*    pPV = GetSdrPageView();
                     BOOL            bDropOnTabBar = TRUE;
 
                     if( !pPage && pPV->GetPage()->GetPageNum() != nDragSrcPgNum )
@@ -679,34 +679,8 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                     SdDrawDocument* pModel = (SdDrawDocument*) pSourceView->GetAllMarkedModel();
                     bReturn = Paste( *pModel, aDropPos, pPage, nPasteOptions );
 
-//BFS02                 if( bLink )
-//BFS02                 {
-//BFS02                     SdrObject*      pObj = NULL;
-//BFS02                     SdPage*         pWorkPage = pModel->GetSdPage( 0, PK_STANDARD );
-//BFS02                     SdrObjListIter  aIter( *pWorkPage, IM_DEEPWITHGROUPS );
-//BFS02                     String          aDocName( pSourceDoc->GetDocSh()->GetMedium()->GetName() );
-//BFS02
-//BFS02                     while( aIter.IsMore() )
-//BFS02                     {
-//BFS02                         pObj = aIter.Next();
-//BFS02
-//BFS02                         String aName( pObj->GetName() );
-//BFS02
-//BFS02                         if( aName.Len() )
-//BFS02                         {
-//BFS02                             SdrObject* pNewObj = pDoc->GetObj( aName );
-//BFS02
-//BFS02                             if( pNewObj )
-//BFS02                             {
-//BFS02                                 if( pNewObj->ISA( SdrObjGroup ) )
-//BFS02                                     ( (SdrObjGroup*) pNewObj )->SetGroupLink( aDocName, aName );
-//BFS02                             }
-//BFS02                         }
-//BFS02                     }
-//BFS02                 }
-
                     if( !pPage )
-                        pPage = (SdPage*) GetPageViewPvNum( 0 )->GetPage();
+                        pPage = (SdPage*) GetSdrPageView()->GetPage();
 
                     String aLayout( pPage->GetLayoutName() );
                     aLayout.Erase( aLayout.SearchAscii( SD_LT_SEPARATOR ) );
@@ -745,7 +719,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
             bReturn = Paste( *pWorkModel, aDropPos, pPage, nPasteOptions );
 
             if( !pPage )
-                pPage = (SdPage*) GetPageViewPvNum( 0 )->GetPage();
+                pPage = (SdPage*) GetSdrPageView()->GetPage();
 
             String aLayout(pPage->GetLayoutName());
             aLayout.Erase(aLayout.SearchAscii(SD_LT_SEPARATOR));
@@ -762,10 +736,6 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
             SdDrawDocument* pModel = new SdDrawDocument( DOCUMENT_TYPE_IMPRESS, pDocSh );
             pModel->GetItemPool().SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
-//          pModel->GetItemPool().FreezeIdRanges();
-
-//BFS04         pModel->SetStreamingSdrModel( TRUE );
-
             Reference< XComponent > xComponent( new SdXImpressDocument( pModel, sal_True ) );
             pModel->setUnoModel( Reference< XInterface >::query( xComponent ) );
 
@@ -773,8 +743,6 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
             com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
             bReturn = SvxDrawingLayerImport( pModel, xInputStream, xComponent, "com.sun.star.comp.Impress.XMLOasisImporter" );
-
-//BFS04         pModel->SetStreamingSdrModel( FALSE );
 
             if( pModel->GetPageCount() == 0 )
             {
@@ -811,7 +779,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                             BegUndo( String( SdResId(STR_UNDO_DRAGDROP ) ) );
                             pNewObj->NbcSetLayer( pPickObj->GetLayer() );
-                            SdrPage* pWorkPage = GetPageViewPvNum( 0 )->GetPage();
+                            SdrPage* pWorkPage = GetSdrPageView()->GetPage();
                             pWorkPage->InsertObject( pNewObj );
                             AddUndo( pDoc->GetSdrUndoFactory().CreateUndoNewObject( *pNewObj ) );
                             AddUndo( pDoc->GetSdrUndoFactory().CreateUndoDeleteObject( *pPickObj ) );
@@ -894,7 +862,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 aRect.SetPos( aDropPos );
                 pObj->SetLogicRect( aRect );
-                InsertObject( pObj, *GetPageViewPvNum( 0 ), SDRINSERT_SETDEFLAYER );
+                InsertObjectAtView( pObj, *GetSdrPageView(), SDRINSERT_SETDEFLAYER );
                 bReturn = TRUE;
             }
         }
@@ -947,7 +915,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                     bReturn = Paste( *pModel, aDropPos, pPage, nPasteOptions );
 
                     if( !pPage )
-                        pPage = (SdPage*) GetPageViewPvNum( 0 )->GetPage();
+                        pPage = (SdPage*) GetSdrPageView()->GetPage();
 
                     String aLayout(pPage->GetLayoutName());
                     aLayout.Erase(aLayout.SearchAscii(SD_LT_SEPARATOR));
@@ -1038,7 +1006,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     Rectangle       aRect( aDropPos, aSize );
                     SdrOle2Obj*     pObj = new SdrOle2Obj( aObjRef, aName, aRect );
-                    SdrPageView*    pPV = GetPageViewPvNum( 0 );
+                    SdrPageView*    pPV = GetSdrPageView();
                     ULONG           nOptions = SDRINSERT_SETDEFLAYER;
 
                     if (pViewSh!=NULL)
@@ -1050,7 +1018,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                             nOptions |= SDRINSERT_DONTMARK;
                     }
 
-                    InsertObject( pObj, *pPV, nOptions );
+                    InsertObjectAtView( pObj, *pPV, nOptions );
 
                     if( pImageMap )
                         pObj->InsertUserData( new SdIMapInfo( *pImageMap ) );
@@ -1183,7 +1151,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     Rectangle       aRect( aDropPos, aSize );
                     SdrOle2Obj*     pObj = new SdrOle2Obj( aObjRef, aName, aRect );
-                    SdrPageView*    pPV = GetPageViewPvNum( 0 );
+                    SdrPageView*    pPV = GetSdrPageView();
                     ULONG           nOptions = SDRINSERT_SETDEFLAYER;
 
                     if (pViewSh!=NULL)
@@ -1195,7 +1163,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                             nOptions |= SDRINSERT_DONTMARK;
                     }
 
-                    InsertObject( pObj, *pPV, nOptions );
+                    InsertObjectAtView( pObj, *pPV, nOptions );
 
                     if( pImageMap )
                         pObj->InsertUserData( new SdIMapInfo( *pImageMap ) );
@@ -1338,7 +1306,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                 Point                   aHitPosL( rPos );
                 Point                   aHitPosT( rPos );
                 Point                   aHitPosB( rPos );
-                const SetOfByte*        pVisiLayer = &GetPageViewPvNum(0)->GetVisibleLayers();
+                const SetOfByte*        pVisiLayer = &GetSdrPageView()->GetVisibleLayers();
 
                 aHitPosR.X() += n2HitLog;
                 aHitPosL.X() -= n2HitLog;
