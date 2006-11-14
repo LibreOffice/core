@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:28:12 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:47:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,18 @@
 #endif
 #ifndef _SVX_WRITINGMODEITEM_HXX
 #include <svx/writingmodeitem.hxx>
+#endif
+
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
 #endif
 
 #include "detfunc.hxx"
@@ -178,41 +190,42 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     //  #66479# Standard-Linienenden (wie aus XLineEndList::Create) selber zusammenbasteln,
     //  um von den konfigurierten Linienenden unabhaengig zu sein
 
-    XPolygon aTriangle(4);
-    aTriangle[0].X()=10; aTriangle[0].Y()= 0;
-    aTriangle[1].X()= 0; aTriangle[1].Y()=30;
-    aTriangle[2].X()=20; aTriangle[2].Y()=30;
-    aTriangle[3].X()=10; aTriangle[3].Y()= 0;   // #99319# line end polygon must be closed
+    basegfx::B2DPolygon aTriangle;
+    aTriangle.append(basegfx::B2DPoint(10.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(0.0, 30.0));
+    aTriangle.append(basegfx::B2DPoint(20.0, 30.0));
+    aTriangle.setClosed(true);
 
-    XPolygon aSquare(5);
-    aSquare[0].X()= 0; aSquare[0].Y()= 0;
-    aSquare[1].X()=10; aSquare[1].Y()= 0;
-    aSquare[2].X()=10; aSquare[2].Y()=10;
-    aSquare[3].X()= 0; aSquare[3].Y()=10;
-    aSquare[4].X()= 0; aSquare[4].Y()= 0;       // #99319# line end polygon must be closed
+    basegfx::B2DPolygon aSquare;
+    aSquare.append(basegfx::B2DPoint(0.0, 0.0));
+    aSquare.append(basegfx::B2DPoint(10.0, 0.0));
+    aSquare.append(basegfx::B2DPoint(10.0, 10.0));
+    aSquare.append(basegfx::B2DPoint(0.0, 10.0));
+    aSquare.setClosed(true);
 
-    XPolygon aCircle(Point(0,0),100,100);
+    basegfx::B2DPolygon aCircle(basegfx::tools::createPolygonFromEllipse(basegfx::B2DPoint(0.0, 0.0), 100.0, 100.0));
+    aCircle.setClosed(true);
 
     String aName = SC_LINEEND_NAME;
 
-    aArrowSet.Put( XLineStartItem( aName, aCircle ) );
+    aArrowSet.Put( XLineStartItem( aName, basegfx::B2DPolyPolygon(aCircle) ) );
     aArrowSet.Put( XLineStartWidthItem( 200 ) );
     aArrowSet.Put( XLineStartCenterItem( TRUE ) );
-    aArrowSet.Put( XLineEndItem( aName, aTriangle ) );
+    aArrowSet.Put( XLineEndItem( aName, basegfx::B2DPolyPolygon(aTriangle) ) );
     aArrowSet.Put( XLineEndWidthItem( 200 ) );
     aArrowSet.Put( XLineEndCenterItem( FALSE ) );
 
-    aToTabSet.Put( XLineStartItem( aName, aCircle ) );
+    aToTabSet.Put( XLineStartItem( aName, basegfx::B2DPolyPolygon(aCircle) ) );
     aToTabSet.Put( XLineStartWidthItem( 200 ) );
     aToTabSet.Put( XLineStartCenterItem( TRUE ) );
-    aToTabSet.Put( XLineEndItem( aName, aSquare ) );
+    aToTabSet.Put( XLineEndItem( aName, basegfx::B2DPolyPolygon(aSquare) ) );
     aToTabSet.Put( XLineEndWidthItem( 300 ) );
     aToTabSet.Put( XLineEndCenterItem( FALSE ) );
 
-    aFromTabSet.Put( XLineStartItem( aName, aSquare ) );
+    aFromTabSet.Put( XLineStartItem( aName, basegfx::B2DPolyPolygon(aSquare) ) );
     aFromTabSet.Put( XLineStartWidthItem( 300 ) );
     aFromTabSet.Put( XLineStartCenterItem( TRUE ) );
-    aFromTabSet.Put( XLineEndItem( aName, aTriangle ) );
+    aFromTabSet.Put( XLineEndItem( aName, basegfx::B2DPolyPolygon(aTriangle) ) );
     aFromTabSet.Put( XLineEndWidthItem( 200 ) );
     aFromTabSet.Put( XLineEndCenterItem( FALSE ) );
 
@@ -226,15 +239,15 @@ ScCommentData::ScCommentData( ScDocument* pDoc, SdrModel* pModel ) :
     aCaptionSet( pModel->GetItemPool(), SDRATTR_START, SDRATTR_END,
                                         EE_ITEMS_START, EE_ITEMS_END, 0,0 )
 {
-    XPolygon aTriangle(4);
-    aTriangle[0].X()=10; aTriangle[0].Y()= 0;
-    aTriangle[1].X()= 0; aTriangle[1].Y()=30;
-    aTriangle[2].X()=20; aTriangle[2].Y()=30;
-    aTriangle[3].X()=10; aTriangle[3].Y()= 0;   // #99319# line end polygon must be closed
+    basegfx::B2DPolygon aTriangle;
+    aTriangle.append(basegfx::B2DPoint(10.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(0.0, 30.0));
+    aTriangle.append(basegfx::B2DPoint(20.0, 30.0));
+    aTriangle.setClosed(true);
 
     String aName = SC_LINEEND_NAME;
 
-    aCaptionSet.Put( XLineStartItem( aName, aTriangle ) );
+    aCaptionSet.Put( XLineStartItem( aName, basegfx::B2DPolyPolygon(aTriangle) ) );
     aCaptionSet.Put( XLineStartWidthItem( 200 ) );
     aCaptionSet.Put( XLineStartCenterItem( FALSE ) );
     aCaptionSet.Put( XFillStyleItem( XFILL_SOLID ) );
@@ -369,24 +382,20 @@ Point ScDetectiveFunc::GetDrawPos( SCCOL nCol, SCROW nRow, BOOL bArrow )
     return aPos;
 }
 
-BOOL lcl_IsOtherTab( const XPolygon& rPolygon )
+BOOL lcl_IsOtherTab( const basegfx::B2DPolyPolygon& rPolyPolygon )
 {
     //  test if rPolygon is the line end for "other table" (rectangle)
-
-    USHORT nCount = rPolygon.GetPointCount();
-    if ( nCount == 4 )
+    if(1L == rPolyPolygon.count())
     {
-        //  4 points -> it is a rectangle (not closed) only if the first and last point are different
+        const basegfx::B2DPolygon aSubPoly(rPolyPolygon.getB2DPolygon(0L));
 
-        return rPolygon[0] != rPolygon[3];
+        if(4L == aSubPoly.count() && aSubPoly.isClosed())
+        {
+            return true;
+        }
     }
-    else if ( nCount == 5 )
-    {
-        //  5 points -> it is a rectangle (closed) only if the first and last point are equal
 
-        return rPolygon[0] == rPolygon[4];
-    }
-    return FALSE;
+    return false;
 }
 
 BOOL ScDetectiveFunc::HasArrow( const ScAddress& rStart,
@@ -538,12 +547,12 @@ BOOL ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
 
     ColorData nColorData = ( bRed ? GetErrorColor() : GetArrowColor() );
     rAttrSet.Put( XLineColorItem( String(), Color( nColorData ) ) );
-    Point aPointArr[2] = {aStartPos, aEndPos};
-    SdrPathObj* pArrow = new SdrPathObj(OBJ_LINE,
-                XPolyPolygon(XPolygon(Polygon(2, aPointArr))));
 
+    basegfx::B2DPolygon aTempPoly;
+    aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
+    aTempPoly.append(basegfx::B2DPoint(aEndPos.X(), aEndPos.Y()));
+    SdrPathObj* pArrow = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aTempPoly));
     pArrow->NbcSetLogicRect(Rectangle(aStartPos,aEndPos));  //! noetig ???
-
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
 
     ScDrawLayer::SetAnchor( pArrow, SCA_CELL );
@@ -611,10 +620,11 @@ BOOL ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
 
     ColorData nColorData = ( bRed ? GetErrorColor() : GetArrowColor() );
     rAttrSet.Put( XLineColorItem( String(), Color( nColorData ) ) );
-    Point aPointArr[2] = {aStartPos, aEndPos};
-    SdrPathObj* pArrow = new SdrPathObj(OBJ_LINE,
-                XPolyPolygon(XPolygon(Polygon(2, aPointArr))));
 
+    basegfx::B2DPolygon aTempPoly;
+    aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
+    aTempPoly.append(basegfx::B2DPoint(aEndPos.X(), aEndPos.Y()));
+    SdrPathObj* pArrow = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aTempPoly));
     pArrow->NbcSetLogicRect(Rectangle(aStartPos,aEndPos));  //! noetig ???
 
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
