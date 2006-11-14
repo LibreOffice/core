@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:33:33 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:42:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -713,15 +713,16 @@ class WinMtf
     UINT32              nStartPos, nEndPos;
     List                aBmpSaveList;
 
-    PFilterCallback     pCallback;
-    void*               pCallerData;
+    FilterConfigItem*   pFilterConfigItem;
+
+    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
     // Sorgt dafuer, das aSampledBrush der aktuelle Brush des GDIMetaFiles ist.
 
     Color               ReadColor();
-    BOOL                Callback( USHORT nPercent );
+    void                Callback( USHORT nPercent );
 
-                        WinMtf( WinMtfOutput* pOut, SvStream& rStreamWMF, PFilterCallback pcallback, void * pcallerdata );
+                        WinMtf( WinMtfOutput* pOut, SvStream& rStreamWMF, FilterConfigItem* pConfigItem = NULL );
                         ~WinMtf();
 
     public:
@@ -740,10 +741,8 @@ class EnhWMFReader : public WinMtf
     void            ImplExtTextOut( BOOL bWideCharakter );
 
 public:
-                    EnhWMFReader( SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile,
-                                    PFilterCallback pcallback, void * pcallerdata ) : WinMtf( new WinMtfOutput( rGDIMetaFile ), rStreamWMF,
-                                                                                        pcallback, pcallerdata ),
-                                                                                            bRecordPath( sal_False ) {};
+                    EnhWMFReader( SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, FilterConfigItem* pConfigItem = NULL )
+                                    : WinMtf( new WinMtfOutput( rGDIMetaFile ), rStreamWMF, pConfigItem ), bRecordPath( sal_False ) {};
                     ~EnhWMFReader();
 
     BOOL            ReadEnhWMF();
@@ -777,9 +776,8 @@ private:
 
 public:
 
-                    WMFReader( SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile,
-                                PFilterCallback pcallback, void * pcallerdata ) : WinMtf( new WinMtfOutput( rGDIMetaFile ), rStreamWMF,
-                                                                                    pcallback, pcallerdata ) {};
+                    WMFReader( SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, FilterConfigItem* pConfigItem = NULL )
+                        : WinMtf( new WinMtfOutput( rGDIMetaFile ), rStreamWMF, pConfigItem ) {};
 
     // Liesst aus dem Stream eine WMF-Datei und fuellt das GDIMetaFile
     void            ReadWMF();
