@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Clipping.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:35:17 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:35:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,9 +168,6 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
                                       , drawing::PolyPolygonShape3D& aResult
                                       , bool bSplitPiecesToDifferentPolygons )
 {
-    //rPolygon:    XPolygon --> drawing::PolyPolygonShape3D
-    //aResult: XPolyPolygon --> drawing::PolyPolygonShape3D
-
     aResult.SequenceX.realloc(0);
     aResult.SequenceY.realloc(0);
     aResult.SequenceZ.realloc(0);
@@ -193,7 +190,7 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
         aTo = getPointFromPoly(rPolygon,nOldPoint);
         if( lcl_clip2d_(aFrom, aTo, rRectangle) )
         {
-            // compose an XPolygon of as many consecutive points as possible
+            // compose an Polygon of as many consecutive points as possible
             if(aFrom == aLast)
             {
                 if( !(aTo==aFrom) )
