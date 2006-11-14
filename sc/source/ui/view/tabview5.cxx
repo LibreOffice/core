@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview5.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:10:17 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:59:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,9 @@
 #include "scmod.hxx"
 #include "AccessibilityHints.hxx"
 
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
+#endif
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -191,10 +194,10 @@ __EXPORT ScTabView::~ScTabView()
             if (pGridWin[i])
             {
                 pDrawView->VCRemoveWin(pGridWin[i]);
-                pDrawView->DelWin(pGridWin[i]);
+                pDrawView->DeleteWindowFromPaintView(pGridWin[i]);
             }
 
-        pDrawView->HidePagePvNum(0);
+        pDrawView->HideSdrPage();
         delete pDrawView;
     }
 
@@ -224,7 +227,7 @@ void ScTabView::MakeDrawView( BYTE nForceDesignMode )
     if (!pDrawView)
     {
         ScDrawLayer* pLayer = aViewData.GetDocument()->GetDrawLayer();
-        DBG_ASSERT(pLayer, "wo ist der DrawLayer ??");
+        DBG_ASSERT(pLayer, "wo ist der Draw Layer ??");
 
         USHORT i;
         pDrawView = new ScDrawView( pGridWin[SC_SPLIT_BOTTOMLEFT], &aViewData );
@@ -232,7 +235,7 @@ void ScTabView::MakeDrawView( BYTE nForceDesignMode )
             if (pGridWin[i])
             {
                 if ( SC_SPLIT_BOTTOMLEFT != (ScSplitPos)i )
-                    pDrawView->AddWin(pGridWin[i]);
+                    pDrawView->AddWindowToPaintView(pGridWin[i]);
                 pDrawView->VCAddWin(pGridWin[i]);
             }
         pDrawView->RecalcScale();
@@ -268,8 +271,11 @@ void ScTabView::DoAddWin( ScGridWindow* pWin )
 {
     if (pDrawView)
     {
-        pDrawView->AddWin(pWin);
+        pDrawView->AddWindowToPaintView(pWin);
         pDrawView->VCAddWin(pWin);
+
+        // #114409#
+        pWin->DrawLayerCreated();
     }
 }
 
@@ -287,8 +293,8 @@ void ScTabView::TabChanged()
                 pDrawView->VCRemoveWin(pGridWin[i]);    // fuer alte Page
 
         SCTAB nTab = aViewData.GetTabNo();
-        pDrawView->HideAllPages();
-        pDrawView->ShowPagePgNum( static_cast<sal_uInt16>(nTab), Point() );
+        pDrawView->HideSdrPage();
+        pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
 
         UpdateLayerLocks();
 
@@ -552,10 +558,10 @@ void ScTabView::DrawShowMarkHdl(BOOL bShow)
     if (bShow)
     {
         if (!pDrawView->IsDisableHdl())
-            pDrawView->ShowMarkHdl(NULL);
+            pDrawView->ShowMarkHdl();
     }
     else
-        pDrawView->HideMarkHdl(NULL);
+        pDrawView->HideMarkHdl();
 }
 
 void ScTabView::UpdateDrawTextOutliner()
