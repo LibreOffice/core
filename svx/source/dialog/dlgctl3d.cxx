@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctl3d.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:11:01 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:15:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,19 +155,19 @@ void Svx3DPreviewControl::Construct()
     // Kameraeinstellungen, Perspektive ...
     Camera3D& rCamera  = (Camera3D&) pScene->GetCamera();
     const Volume3D& rVolume = pScene->GetBoundVolume();
-    double fW = rVolume.GetWidth();
-    double fH = rVolume.GetHeight();
-    double fCamZ = rVolume.MaxVec().Z() + ((fW + fH) / 2.0);
+    double fW = rVolume.getWidth();
+    double fH = rVolume.getHeight();
+    double fCamZ = rVolume.getMaxZ() + ((fW + fH) / 2.0);
 
     rCamera.SetAutoAdjustProjection(FALSE);
     rCamera.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
-    Vector3D aLookAt;
+    basegfx::B3DPoint aLookAt;
     double fDefaultCamPosZ = p3DView->GetDefaultCamPosZ();
-    Vector3D aCamPos(0.0, 0.0, fCamZ < fDefaultCamPosZ ? fDefaultCamPosZ : fCamZ);
+    basegfx::B3DPoint aCamPos(0.0, 0.0, fCamZ < fDefaultCamPosZ ? fDefaultCamPosZ : fCamZ);
     rCamera.SetPosAndLookAt(aCamPos, aLookAt);
     double fDefaultCamFocal = p3DView->GetDefaultCamFocal();
     rCamera.SetFocalLength(fDefaultCamFocal);
-    rCamera.SetDefaults(Vector3D(0.0, 0.0, fDefaultCamPosZ), aLookAt, fDefaultCamFocal);
+    rCamera.SetDefaults(basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt, fDefaultCamFocal);
 
     pScene->SetCamera( rCamera );
     pFmPage->InsertObject( pScene );
@@ -197,7 +197,8 @@ void Svx3DPreviewControl::Construct()
 //  SfxItemSet aDefaultSet = p3DView->Get3DAttributes();
 
     // PageView
-    SdrPageView* pPageView = p3DView->ShowPage( pFmPage, Point() );
+    SdrPageView* pPageView = p3DView->ShowSdrPage( pFmPage );
+//  SdrPageView* pPageView = p3DView->ShowPage( pFmPage, Point() );
     p3DView->SetMarkHdlHidden( TRUE );
 
     // Szene markieren
@@ -277,8 +278,8 @@ void Svx3DPreviewControl::SetObjectType( UINT16 nType )
                 // Kugel erzeugen
                 p3DObj = new E3dSphereObj(
                     p3DView->Get3DDefaultAttributes(),
-                    Vector3D( 0, 0, 0 ),
-                    Vector3D( 5000, 5000, 5000 ));
+                    basegfx::B3DPoint( 0, 0, 0 ),
+                    basegfx::B3DVector( 5000, 5000, 5000 ));
             }
             break;
 
@@ -287,8 +288,8 @@ void Svx3DPreviewControl::SetObjectType( UINT16 nType )
                 // Wuerfel erzeugen
                 p3DObj = new E3dCubeObj(
                     p3DView->Get3DDefaultAttributes(),
-                    Vector3D( -2500, -2500, -2500 ),
-                    Vector3D( 5000, 5000, 5000 ));
+                    basegfx::B3DPoint( -2500, -2500, -2500 ),
+                    basegfx::B3DVector( 5000, 5000, 5000 ));
             }
             break;
         }
@@ -342,326 +343,6 @@ void Svx3DPreviewControl::Set3DObject( const E3dObject* pObj )
         Resize();
     }
 }
-
-/*************************************************************************
-|*
-|*  Control zur Darstellung und Auswahl der Eckpunkte (und Mittelpunkt)
-|*  eines 3D-Objekts
-|*
-\************************************************************************/
-
-SvxRectCtl3D::SvxRectCtl3D( Window* pParent,
-                            const ResId& rResId,
-                            USHORT nBorderWidth,
-                            USHORT nBorderHeight,
-                            USHORT nCircle ) :
-                        Control( pParent, rResId ),
-                        nBW( nBorderWidth ),
-                        nBH( nBorderHeight ),
-                        nRadius( nCircle)
-
-{
-    // Do never mirror the preview window.  This explicitly includes right
-    // to left writing environments.
-    EnableRTL (FALSE);
-
-    SetMapMode( MAP_100TH_MM );
-    SetBackground( Wallpaper( Color( COL_LIGHTGRAY ) ) );
-
-    aSize = GetOutputSize();
-    long nW = aSize.Width() - nBW;
-    long nH = aSize.Height() - nBH;
-    long nBWh = nBW / 2; // BorderWidthHalf
-    long nBHh = nBH / 2; // BorderHeightHalf
-
-    // PointArray wird mit Koordinaten des Controls gefuellt,
-    // um schneller painten zu k”nnen
-
-    aPointArray[0]  = Point(); // Leer -> dummy
-    aPointArray[1]  = Point( nW*1/2 + nBWh, 0      + nBHh );
-    aPointArray[2]  = Point( nW*1/4 + nBWh, nH*1/8 + nBHh );
-    aPointArray[3]  = Point( nW*3/4 + nBWh, nH*1/8 + nBHh );
-    aPointArray[4]  = Point( 0      + nBWh, nH*2/8 + nBHh );
-    aPointArray[5]  = Point( nW*1/2 + nBWh, nH*2/8 + nBHh );
-    aPointArray[6]  = Point( nW     + nBWh, nH*2/8 + nBHh );
-    aPointArray[7]  = Point( nW*1/4 + nBWh, nH*3/8 + nBHh );
-    aPointArray[8]  = Point( nW*3/4 + nBWh, nH*3/8 + nBHh );
-    aPointArray[9]  = Point( 0      + nBWh, nH*4/8 + nBHh );
-    aPointArray[10] = Point( nW*1/2 + nBWh, nH*4/8 + nBHh );
-    aPointArray[11] = Point( nW     + nBWh, nH*4/8 + nBHh );
-    aPointArray[12] = Point( nW*1/4 + nBWh, nH*5/8 + nBHh );
-    aPointArray[13] = Point( nW*3/4 + nBWh, nH*5/8 + nBHh );
-    aPointArray[14] = Point( 0      + nBWh, nH*6/8 + nBHh );
-    aPointArray[15] = Point( nW*1/2 + nBWh, nH*6/8 + nBHh );
-    aPointArray[16] = Point( nW     + nBWh, nH*6/8 + nBHh );
-    aPointArray[17] = Point( nW*1/4 + nBWh, nH*7/8 + nBHh );
-    aPointArray[18] = Point( nW*3/4 + nBWh, nH*7/8 + nBHh );
-    aPointArray[19] = Point( nW*1/2 + nBWh, nH     + nBHh );
-
-    // Distanz -> halbe Rahmenbreite
-    nDist = (short) nBWh;
-
-    aPolyPoints1[0] = Point( aPointArray[19].X(),
-                         aPointArray[19].Y() - nDist );
-    aPolyPoints1[1] = Point( ( aPointArray[14].X() + aPointArray[17].X() ) / 2,
-                         ( aPointArray[14].Y() + aPointArray[17].Y() ) / 2 - nDist );
-    aPolyPoints1[2] = Point( ( aPointArray[4].X() + aPointArray[7].X() ) / 2,
-                         ( aPointArray[4].Y() + aPointArray[7].Y() ) / 2 + nDist );
-    aPolyPoints1[3] = Point( aPointArray[10].X(),
-                         aPointArray[10].Y() + nDist );
-
-    aPolyPoints2[0] = aPolyPoints1[0];
-    aPolyPoints2[1] = Point( ( aPointArray[16].X() + aPointArray[18].X() ) / 2,
-                         ( aPointArray[16].Y() + aPointArray[18].Y() ) / 2 - nDist);
-    aPolyPoints2[2] = Point( ( aPointArray[6].X() + aPointArray[8].X() ) / 2,
-                         ( aPointArray[6].Y() + aPointArray[8].Y() ) / 2 + nDist );
-    aPolyPoints2[3] = aPolyPoints1[3];
-
-    aPolyPoints3[0] = aPolyPoints1[3];
-    aPolyPoints3[1] = aPolyPoints1[2];
-    aPolyPoints3[2] = Point( ( aPointArray[2].X() + aPointArray[3].X() ) / 2,
-                         ( aPointArray[2].Y() + aPointArray[3].Y() ) / 2 + nDist );
-    aPolyPoints3[3] = aPolyPoints2[2];
-
-    aPoly1 = Polygon( 4, aPolyPoints1 );
-    aPoly2 = Polygon( 4, aPolyPoints2 );
-    aPoly3 = Polygon( 4, aPolyPoints3 );
-
-    Reset();
-}
-
-/*************************************************************************
-|*
-|*  Dtor
-|*
-\************************************************************************/
-
-SvxRectCtl3D::~SvxRectCtl3D()
-{
-}
-
-/*************************************************************************
-|*
-|*  Zeichnet das Control (Rechteck mit 9 Kreisen)
-|*
-\************************************************************************/
-
-void SvxRectCtl3D::Paint( const Rectangle& )
-{
-
-    if( IsEnabled() )
-        SetLineColor( Color( COL_BLACK ) );
-    else
-        SetLineColor( Color( COL_GRAY ) );
-
-    // Zeichnen des Polygons ( Darstellungsobjekt )
-    SetFillColor( Color( COL_GRAY ) );
-    DrawPolygon( aPoly1 );
-    SetFillColor( Color( COL_CYAN ) );
-    DrawPolygon( aPoly2 );
-    SetFillColor( Color( COL_LIGHTGRAY ) );
-    DrawPolygon( aPoly3 );
-
-    // Zeichnen des Drahtgeruestes
-    DrawLine( aPointArray[ 1], aPointArray[ 4] );
-    DrawLine( aPointArray[ 1], aPointArray[ 6] );
-    DrawLine( aPointArray[ 4], aPointArray[10] );
-    DrawLine( aPointArray[ 6], aPointArray[10] );
-    DrawLine( aPointArray[ 4], aPointArray[14] );
-    DrawLine( aPointArray[10], aPointArray[19] );
-    DrawLine( aPointArray[ 6], aPointArray[16] );
-    DrawLine( aPointArray[14], aPointArray[19] );
-    DrawLine( aPointArray[16], aPointArray[19] );
-
-    // Zeichnen der Kreise
-    if( IsEnabled() )
-    {
-        SetLineColor( Color( COL_LIGHTBLUE ) );
-        SetFillColor( Color( COL_WHITE ) );
-    }
-    else
-    {
-        SetLineColor( Color( COL_GRAY ) );
-        SetFillColor( Color( COL_LIGHTGRAY ) );
-    }
-    for( int i = 1; i < 20; i++ )
-    {
-        if( nActPoint == i )
-        {
-            const Color& rOldLineColor = GetLineColor();
-            const Color& rOldFillColor = GetFillColor();
-
-            SetLineColor( Color( COL_YELLOW ) );
-            SetFillColor( Color( COL_WHITE ) );
-
-            DrawEllipse( Rectangle(
-                    aPointArray[i] - Point( nRadius+100, nRadius+100 ),
-                    aPointArray[i] + Point( nRadius+100, nRadius+100 ) ) );
-
-            DrawEllipse( Rectangle(
-                    aPointArray[i] - Point( nRadius+50, nRadius+50 ),
-                    aPointArray[i] + Point( nRadius+50, nRadius+50 ) ) );
-
-            SetFillColor( Color( COL_YELLOW ) );
-
-            DrawEllipse( Rectangle(
-                    aPointArray[i] - Point( nRadius, nRadius ),
-                    aPointArray[i] + Point( nRadius, nRadius ) ) );
-
-            SetLineColor( rOldLineColor );
-            SetFillColor( rOldFillColor );
-        }
-        else
-            DrawEllipse( Rectangle(
-                aPointArray[i] - Point( nRadius, nRadius ),
-                aPointArray[i] + Point( nRadius, nRadius ) ) );
-    }
-}
-
-/*************************************************************************
-|*
-|*  Das angeklickte Rechteck wird ermittelt um die Farbe zu wechseln
-|*
-\************************************************************************/
-
-void SvxRectCtl3D::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    Point aPt = PixelToLogic( rMEvt.GetPosPixel() );
-
-    for( short i = 1; i < 20; i++ )
-    {
-        Rectangle aRect( aPointArray[i] - Point( nRadius, nRadius ),
-                         aPointArray[i] + Point( nRadius, nRadius ) );
-        if( aRect.IsInside( aPt ) )
-        {
-            nOldPoint = nActPoint;
-            nActPoint = i;
-
-            // Neuen Kreis neu Zeichnen
-            aRect = Rectangle( aPointArray[i] - Point( nRadius+100, nRadius+100 ),
-                        aPointArray[i] + Point( nRadius+100, nRadius+100 ) );
-            Invalidate( aRect );
-
-            // Alten Kreis neu Zeichnen
-            aRect = Rectangle( aPointArray[nOldPoint] - Point( nRadius+100, nRadius+100 ),
-                        aPointArray[nOldPoint] + Point( nRadius+100, nRadius+100 ) );
-            Invalidate( aRect );
-
-            break;
-        }
-    }
-}
-
-/*************************************************************************
-|*
-|*  Bewirkt den Ursprungszustand des Controls
-|*
-\************************************************************************/
-
-void SvxRectCtl3D::Reset()
-{
-    nActPoint = 10;
-    nOldPoint = 0;
-    Invalidate();
-}
-
-/*************************************************************************
-|*
-|*  Gibt den aktuell ausgewaehlten Point als Vector zurueck
-|*
-\************************************************************************/
-
-Vector3D SvxRectCtl3D::GetVector()
-{
-    return( PointNumToVector( nActPoint ) );
-}
-
-/*************************************************************************
-|*
-|*  Setzt den uebergebenen Vector als Point
-|*
-\************************************************************************/
-
-void SvxRectCtl3D::SetPoint( Vector3D nVect )
-{
-    nActPoint = VectorToPointNum( nVect );
-    if( nActPoint )
-        Invalidate();
-}
-
-/*************************************************************************
-|*
-|*  Konvertiert den uebergebenen Punkt in einen Vector3D
-|*
-\************************************************************************/
-
-Vector3D SvxRectCtl3D::PointNumToVector( short nPoint )
-{
-    Vector3D aVect;
-
-    switch( nPoint )
-    {
-        case  1: aVect.X() =  0.0;  aVect.Y() =  1.0; aVect.Z() = -1.0; break;
-        case  2: aVect.X() = -1.0;  aVect.Y() =  1.0; aVect.Z() = -1.0; break;
-        case  3: aVect.X() =  1.0;  aVect.Y() =  1.0; aVect.Z() = -1.0; break;
-        case  4: aVect.X() = -1.0;  aVect.Y() =  1.0; aVect.Z() =  0.0; break;
-        case  5: aVect.X() =  0.0;  aVect.Y() =  1.0; aVect.Z() =  0.0; break;
-        case  6: aVect.X() =  1.0;  aVect.Y() =  1.0; aVect.Z() =  0.0; break;
-        case  7: aVect.X() = -1.0;  aVect.Y() =  1.0; aVect.Z() =  1.0; break;
-        case  8: aVect.X() =  1.0;  aVect.Y() =  1.0; aVect.Z() =  1.0; break;
-        case  9: aVect.X() = -1.0;  aVect.Y() =  0.0; aVect.Z() =  0.0; break;
-        case 10: aVect.X() =  0.0;  aVect.Y() =  1.0; aVect.Z() =  1.0; break;
-        case 11: aVect.X() =  1.0;  aVect.Y() =  0.0; aVect.Z() =  0.0; break;
-        case 12: aVect.X() = -1.0;  aVect.Y() =  0.0; aVect.Z() =  1.0; break;
-        case 13: aVect.X() =  1.0;  aVect.Y() =  0.0; aVect.Z() =  1.0; break;
-        case 14: aVect.X() = -1.0;  aVect.Y() = -1.0; aVect.Z() =  0.0; break;
-        case 15: aVect.X() =  0.0;  aVect.Y() =  0.0; aVect.Z() =  1.0; break;
-        case 16: aVect.X() =  1.0;  aVect.Y() = -1.0; aVect.Z() =  0.0; break;
-        case 17: aVect.X() = -1.0;  aVect.Y() = -1.0; aVect.Z() =  1.0; break;
-        case 18: aVect.X() =  1.0;  aVect.Y() = -1.0; aVect.Z() =  1.0; break;
-        case 19: aVect.X() =  0.0;  aVect.Y() = -1.0; aVect.Z() =  1.0; break;
-        default: aVect.X() = -1.0;  aVect.Y() = -1.0; aVect.Z() = -1.0; break;
-    }
-
-    return( aVect );
-}
-
-/*************************************************************************
-|*
-|*  Konvertiert den uebergebenen Vector3D in einen Punkt
-|*
-\************************************************************************/
-
-short SvxRectCtl3D::VectorToPointNum( Vector3D aVect )
-{
-    short nPoint = 0;
-
-    if     ( fabs (aVect.X()          ) < 1e-3 && fabs (aVect.Y() - 0.70711) < 1e-3 && fabs (aVect.Z() + 0.70711) < 1e-3 ) nPoint =  1;
-    else if( fabs (aVect.X() + 0.57735) < 1e-3 && fabs (aVect.Y() - 0.57735) < 1e-3 && fabs (aVect.Z() + 0.57735) < 1e-3 ) nPoint =  2;
-    else if( fabs (aVect.X() - 0.57735) < 1e-3 && fabs (aVect.Y() - 0.57735) < 1e-3 && fabs (aVect.Z() + 0.57735) < 1e-3 ) nPoint =  3;
-    else if( fabs (aVect.X() + 0.70711) < 1e-3 && fabs (aVect.Y() - 0.70711) < 1e-3 && fabs (aVect.Z()          ) < 1e-3 ) nPoint =  4;
-    else if( fabs (aVect.X()          ) < 1e-3 && fabs (aVect.Y() - 1.0    ) < 1e-3 && fabs (aVect.Z()          ) < 1e-3 ) nPoint =  5;
-    else if( fabs (aVect.X() - 0.70711) < 1e-3 && fabs (aVect.Y() - 0.70711) < 1e-3 && fabs (aVect.Z()          ) < 1e-3 ) nPoint =  6;
-    else if( fabs (aVect.X() + 0.57735) < 1e-3 && fabs (aVect.Y() - 0.57735) < 1e-3 && fabs (aVect.Z() - 0.57735) < 1e-3 ) nPoint =  7;
-    else if( fabs (aVect.X() - 0.57735) < 1e-3 && fabs (aVect.Y() - 0.57735) < 1e-3 && fabs (aVect.Z() - 0.57735) < 1e-3 ) nPoint =  8;
-    else if( fabs (aVect.X() + 1.0    ) < 1e-3 && fabs (aVect.Y()          ) < 1e-3 && fabs (aVect.Z()          ) < 1e-3 ) nPoint =  9;
-    else if( fabs (aVect.X()          ) < 1e-3 && fabs (aVect.Y() - 0.70711) < 1e-3 && fabs (aVect.Z() - 0.70711) < 1e-3 ) nPoint = 10;
-    else if( fabs (aVect.X() - 1.0    ) < 1e-3 && fabs (aVect.Y()          ) < 1e-3 && fabs (aVect.Z()          ) < 1e-3 ) nPoint = 11;
-    else if( fabs (aVect.X() + 0.70711) < 1e-3 && fabs (aVect.Y()          ) < 1e-3 && fabs (aVect.Z() - 0.70711) < 1e-3 ) nPoint = 12;
-    else if( fabs (aVect.X() - 0.70711) < 1e-3 && fabs (aVect.Y()          ) < 1e-3 && fabs (aVect.Z() - 0.70711) < 1e-3 ) nPoint = 13;
-    else if( fabs (aVect.X() + 0.70711) < 1e-3 && fabs (aVect.Y() + 0.70711) < 1e-3 && fabs (aVect.Z()          ) < 1e-3 ) nPoint = 14;
-    else if( fabs (aVect.X()          ) < 1e-3 && fabs (aVect.Y()          ) < 1e-3 && fabs (aVect.Z() - 1.0    ) < 1e-3 ) nPoint = 15;
-    else if( fabs (aVect.X() - 0.70711) < 1e-3 && fabs (aVect.Y() + 0.70711) < 1e-3 && fabs (aVect.Z()          ) < 1e-3 ) nPoint = 16;
-    else if( fabs (aVect.X() + 0.57735) < 1e-3 && fabs (aVect.Y() + 0.57735) < 1e-3 && fabs (aVect.Z() - 0.57735) < 1e-3 ) nPoint = 17;
-    else if( fabs (aVect.X() - 0.57735) < 1e-3 && fabs (aVect.Y() + 0.57735) < 1e-3 && fabs (aVect.Z() - 0.57735) < 1e-3 ) nPoint = 18;
-    else if( fabs (aVect.X()          ) < 1e-3 && fabs (aVect.Y() + 0.70711) < 1e-3 && fabs (aVect.Z() - 0.70711) < 1e-3 ) nPoint = 19;
-
-    return( nPoint );
-}
-
-
-
-
 
 /*************************************************************************
 |*
@@ -736,13 +417,13 @@ void SvxPreviewCtl3D::Paint( const Rectangle& )
     aVisible = PixelToLogic(aVisible);
 
     // Orientierung
-    Matrix4D mOrient;
+    basegfx::B3DHomMatrix mOrient;
     aCameraSet.SetObjectTrans(mOrient);
-    mOrient.Orientation(
-        Point4D(0.0, 0.0, fDistance, 1.0),
-        Vector3D(0.0, 0.0, 1.0),
-        Vector3D(0.0, 1.0, 0.0));
-    aCameraSet.SetOrientation(mOrient);
+    aCameraSet.SetOrientation(
+        basegfx::B3DPoint(0.0, 0.0, fDistance),
+        basegfx::B3DVector(0.0, 0.0, 1.0),
+        basegfx::B3DVector(0.0, 1.0, 0.0));
+//  aCameraSet.SetOrientation(mOrient);
 
     // Matritzen setzen
     pBase3D->SetTransformationSet(&aCameraSet);
@@ -974,9 +655,9 @@ void SvxPreviewCtl3D::SetShadeMode(UINT16 nNew)
 void SvxPreviewCtl3D::CreateGeometry()
 {
     // Wuerfel erzeugen fuer Objektgroesse
-    B3dVolume aVolume;
-    aVolume.MinVec() = Vector3D(-1.0, -1.0, -1.0);
-    aVolume.MaxVec() = Vector3D( 1.0,  1.0,  1.0);
+    basegfx::B3DRange aVolume;
+    aVolume.expand(basegfx::B3DPoint(-1.0, -1.0, -1.0));
+    aVolume.expand(basegfx::B3DPoint( 1.0,  1.0,  1.0));
 
     if(bGeometryCube)
     {
@@ -1006,13 +687,13 @@ void SvxPreviewCtl3D::CreateGeometry()
     // Gesetzte Rotation ausfuehren
     if(fRotateX != 0.0 || fRotateY != 0.0 || fRotateZ != 0.0)
     {
-        Matrix4D aRotMat;
+        basegfx::B3DHomMatrix aRotMat;
         if(fRotateY != 0.0)
-            aRotMat.RotateY(fRotateY * F_PI180);
+            aRotMat.rotate(0.0, fRotateY * F_PI180, 0.0);
         if(fRotateX != 0.0)
-            aRotMat.RotateX(-fRotateX * F_PI180);
+            aRotMat.rotate(-fRotateX * F_PI180, 0.0, 0.0);
         if(fRotateZ != 0.0)
-            aRotMat.RotateZ(fRotateZ * F_PI180);
+            aRotMat.rotate(0.0, 0.0, fRotateZ * F_PI180);
         aGeometry.Transform(aRotMat);
     }
 }
@@ -1140,18 +821,18 @@ void SvxLightPrevievCtl3D::DrawLightGeometry(Base3DLightNumber eLightNum,
 {
     // Geometrie bereitstellen
     B3dGeometry aNew;
-    Matrix4D aTrans;
+    basegfx::B3DHomMatrix aTrans;
     double fRadius = fObjectRadius + fDistanceToObject;
     Color aLineColor(COL_YELLOW);
     aNew = aLightGeometry;
 
     if(eLightNum == eSelectedLight)
-        aTrans.Scale(fScaleSizeSelected, fScaleSizeSelected, fScaleSizeSelected);
+        aTrans.scale(fScaleSizeSelected, fScaleSizeSelected, fScaleSizeSelected);
 
-    Vector3D aDirection = aLights.GetDirection(eLightNum);
-    aDirection.Normalize();
+    basegfx::B3DVector aDirection(aLights.GetDirection(eLightNum));
+    aDirection.normalize();
     aDirection *= fRadius;
-    aTrans.Translate(aDirection);
+    aTrans.translate(aDirection.getX(), aDirection.getY(), aDirection.getZ());
 
     aNew.Transform(aTrans);
 
@@ -1177,21 +858,21 @@ void SvxLightPrevievCtl3D::DrawLightGeometry(Base3DLightNumber eLightNum,
         pBase3D->SetLineWidth();
 
         // Kreis am Boden zeichnen
-        Vector3D aPoint(0.0, -fRadius, fRadius);
+        basegfx::B3DPoint aPoint(0.0, -fRadius, fRadius);
         pBase3D->StartPrimitive(Base3DLineLoop);
         pBase3D->SetColor(aLineColor);
 
         double fWink;
         for(fWink=-F_PI;fWink < F_PI; fWink += F_2PI/24.0)
         {
-            aPoint.Z() = -cos(fWink) * fRadius;
-            aPoint.X() = -sin(fWink) * fRadius;
+            aPoint.setZ(-cos(fWink) * fRadius);
+            aPoint.setX(-sin(fWink) * fRadius);
             pBase3D->AddVertex(aPoint);
         }
         pBase3D->EndPrimitive();
 
         // Kreisbogen zeichnen
-        double fBodenWinkel = atan2(-aDirection.X(), -aDirection.Z());
+        double fBodenWinkel = atan2(-aDirection.getX(), -aDirection.getZ());
         double fSinBoden = sin(fBodenWinkel) * fRadius;
         double fCosBoden = cos(fBodenWinkel) * fRadius;
         pBase3D->StartPrimitive(Base3DLineStrip);
@@ -1199,9 +880,9 @@ void SvxLightPrevievCtl3D::DrawLightGeometry(Base3DLightNumber eLightNum,
 
         for(fWink=-F_PI2;fWink < F_PI2; fWink += F_PI/12.0)
         {
-            aPoint.X() = cos(fWink) * -fSinBoden;
-            aPoint.Y() = sin(fWink) * fRadius;
-            aPoint.Z() = cos(fWink) * -fCosBoden;
+            aPoint.setX(cos(fWink) * -fSinBoden);
+            aPoint.setY(sin(fWink) * fRadius);
+            aPoint.setZ(cos(fWink) * -fCosBoden);
             pBase3D->AddVertex(aPoint);
         }
         pBase3D->EndPrimitive();
@@ -1209,12 +890,12 @@ void SvxLightPrevievCtl3D::DrawLightGeometry(Base3DLightNumber eLightNum,
         // Verbindung zeichnen
         pBase3D->StartPrimitive(Base3DLineStrip);
         pBase3D->SetColor(aLineColor);
-        aPoint = Vector3D(0.0, -fRadius, 0.0);
+        aPoint = basegfx::B3DPoint(0.0, -fRadius, 0.0);
         pBase3D->AddVertex(aPoint);
-        aPoint.X() = -fSinBoden;
-        aPoint.Z() = -fCosBoden;
+        aPoint.setX(-fSinBoden);
+        aPoint.setZ(-fCosBoden);
         pBase3D->AddVertex(aPoint);
-        aPoint.Y() = 0.0;
+        aPoint.setY(0.0);
         pBase3D->AddVertex(aPoint);
         pBase3D->EndPrimitive();
 
@@ -1227,9 +908,9 @@ void SvxLightPrevievCtl3D::DrawLightGeometry(Base3DLightNumber eLightNum,
 void SvxLightPrevievCtl3D::CreateLightGeometry()
 {
     // Wuerfel erzeugen fuer Objektgroesse
-    B3dVolume aVolume;
-    aVolume.MinVec() = Vector3D(-fLampSize, -fLampSize, -fLampSize);
-    aVolume.MaxVec() = Vector3D( fLampSize,  fLampSize,  fLampSize);
+    basegfx::B3DRange aVolume;
+    aVolume.expand(basegfx::B3DPoint(-fLampSize, -fLampSize, -fLampSize));
+    aVolume.expand(basegfx::B3DPoint( fLampSize,  fLampSize,  fLampSize));
 
     // Kugel erzeugen
     aLightGeometry.CreateSphere(aVolume, 4.0, 3.0);
@@ -1252,10 +933,10 @@ void SvxLightPrevievCtl3D::GetPosition(double& rHor, double& rVer)
 {
     if(IsSelectionValid())
     {
-        Vector3D aDirection = aLights.GetDirection(eSelectedLight);
-        aDirection.Normalize();
-        rHor = atan2(-aDirection.X(), -aDirection.Z()) + F_PI; // 0..2PI
-        rVer = atan2(aDirection.Y(), aDirection.GetXZLength()); // -PI2..PI2
+        basegfx::B3DVector aDirection(aLights.GetDirection(eSelectedLight));
+        aDirection.normalize();
+        rHor = atan2(-aDirection.getX(), -aDirection.getZ()) + F_PI; // 0..2PI
+        rVer = atan2(aDirection.getY(), aDirection.getXZLength()); // -PI2..PI2
         rHor /= F_PI180; // 0..360.0
         rVer /= F_PI180; // -90.0..90.0
     }
@@ -1270,13 +951,13 @@ void SvxLightPrevievCtl3D::SetPosition(double fHor, double fVer)
 {
     if(IsSelectionValid())
     {
-        Vector3D aDirection;
+        basegfx::B3DVector aDirection;
         fHor = (fHor * F_PI180) - F_PI; // -PI..PI
         fVer *= F_PI180; // -PI2..PI2
-        aDirection.X() = cos(fVer) * -sin(fHor);
-        aDirection.Y() = sin(fVer);
-        aDirection.Z() = cos(fVer) * -cos(fHor);
-        aDirection.Normalize();
+        aDirection.setX(cos(fVer) * -sin(fHor));
+        aDirection.setY(sin(fVer));
+        aDirection.setZ(cos(fVer) * -cos(fHor));
+        aDirection.normalize();
         aLights.SetDirection(aDirection, eSelectedLight);
         Invalidate();
     }
@@ -1437,15 +1118,15 @@ void SvxLightPrevievCtl3D::TrySelection(Point aPosPixel)
         Base3DLightNumber eActualLight = (Base3DLightNumber)(Base3DLight0 + a);
         if(aLights.IsEnabled(eActualLight))
         {
-            Vector3D aLightPos = aLights.GetDirection(eActualLight);
-            aLightPos.Normalize();
+            basegfx::B3DVector aLightPos(aLights.GetDirection(eActualLight));
+            aLightPos.normalize();
             aLightPos *= GetObjectRadius() + GetDistanceToObject();
-            Vector3D aScreenPos = aCameraSet.ObjectToViewCoor(aLightPos);
-            Point aScreenPosPixel((long)(aScreenPos.X() + 0.5), (long)(aScreenPos.Y() + 0.5));
+            basegfx::B3DPoint aScreenPos(aCameraSet.ObjectToViewCoor(aLightPos));
+            Point aScreenPosPixel((long)(aScreenPos.getX() + 0.5), (long)(aScreenPos.getY() + 0.5));
             aScreenPosPixel = LogicToPixel(aScreenPosPixel);
             aScreenPosPixel -= aPosPixel;
-            INT32 nDistance = (aScreenPosPixel.X() * aScreenPosPixel.X())
-                + (aScreenPosPixel.Y() * aScreenPosPixel.Y());
+            INT32 nDistance = (aScreenPosPixel.getX() * aScreenPosPixel.getX()) + (aScreenPosPixel.getY() * aScreenPosPixel.getY());
+
             if(nDistance < nInteractionStartDistance)
             {
                 eNew = eActualLight;
@@ -1470,8 +1151,8 @@ void SvxLightPrevievCtl3D::TrySelection(Point aPosPixel)
         Point aPosLogic = PixelToLogic(aPosPixel);
 
         // Punkte generieren
-        Vector3D aHitFront(aPosLogic.X(), aPosLogic.Y(), 0.0);
-        Vector3D aHitBack(aPosLogic.X(), aPosLogic.Y(), ZBUFFER_DEPTH_RANGE);
+        basegfx::B3DPoint aHitFront(aPosLogic.X(), aPosLogic.Y(), 0.0);
+        basegfx::B3DPoint aHitBack(aPosLogic.X(), aPosLogic.Y(), ZBUFFER_DEPTH_RANGE);
 
         // Umrechnen
         aHitFront = aCameraSet.ViewToObjectCoor(aHitFront);
@@ -1559,18 +1240,18 @@ SvxLightCtl3D::~SvxLightCtl3D()
 {
 }
 
-void SvxLightCtl3D::SetVector(const Vector3D& rNew)
+void SvxLightCtl3D::SetVector(const basegfx::B3DVector& rNew)
 {
     aVector = rNew;
-    aVector.Normalize();
+    aVector.normalize();
     bVectorValid = TRUE;
 }
 
-const Vector3D& SvxLightCtl3D::GetVector()
+const basegfx::B3DVector& SvxLightCtl3D::GetVector()
 {
     // Grobe Anbindung an altes Verhalten, um eine Reaktion zu haben
     aVector = aLightControl.GetLightGroup()->GetDirection(aLightControl.GetSelectedLight());
-    aVector.Normalize();
+    aVector.normalize();
     return aVector;
 }
 
