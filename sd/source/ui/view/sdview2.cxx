@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:03:17 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:45:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,6 +146,10 @@
 #endif
 #include "helpids.h"
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 namespace sd {
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -203,7 +207,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     TransferableObjectDescriptor    aObjDesc;
     String                          aDisplayName;
     SdrOle2Obj*                     pSdrOleObj = NULL;
-    SdrPageView*                    pPgView = GetPageViewPvNum( 0 );
+    SdrPageView*                    pPgView = GetSdrPageView();
     SdPage*                         pOldPage = pPgView ? ( (SdPage*) pPgView->GetPage() ) : NULL;
     SdPage*                         pNewPage = (SdPage*) pTransferable->GetWorkDocument()->GetPage( 0 );
 
@@ -468,7 +472,7 @@ void View::StartDrag( const Point& rStartPos, Window* pWindow )
         BrkAction();
 
         if( IsTextEdit() )
-            EndTextEdit();
+            SdrEndTextEdit();
 
         DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >( pDocSh ? pDocSh->GetViewShell() : 0 );
 
@@ -481,7 +485,7 @@ void View::StartDrag( const Point& rStartPos, Window* pWindow )
         }
 
         pDragSrcMarkList = new SdrMarkList(GetMarkedObjectList());
-        nDragSrcPgNum = GetPageViewPvNum(0)->GetPage()->GetPageNum();
+        nDragSrcPgNum = GetSdrPageView()->GetPage()->GetPageNum();
 
         String aStr( SdResId(STR_UNDO_DRAGDROP) );
         aStr += sal_Unicode(' ');
@@ -550,7 +554,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                              ::sd::Window* pTargetWindow, USHORT nPage, USHORT nLayer )
 {
     String          aLayerName( GetActiveLayer() );
-    SdrPageView*    pPV = GetPageViewPvNum(0);
+    SdrPageView*    pPV = GetSdrPageView();
     sal_Int8        nDropAction = rEvt.mnAction;
     sal_Int8        nRet = DND_ACTION_NONE;
 
@@ -623,19 +627,28 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
 
                         if( pIAOHandle && ( HDL_COLR == pIAOHandle->GetKind() ) )
                         {
-                            const B2dIAOGroup& rIAOGroup = pIAOHandle->GetIAOGroup();
-
-                            if( rIAOGroup.IsHit( rEvt.maPosPixel ) )
+                            if(pIAOHandle->getOverlayObjectList().isHitPixel(rEvt.maPosPixel))
                             {
                                 nRet = nDropAction;
                                 static_cast< SdrHdlColor* >( pIAOHandle )->SetSize( SDR_HANDLE_COLOR_SIZE_SELECTED );
                             }
                             else
+                            {
                                 static_cast< SdrHdlColor* >( pIAOHandle )->SetSize( SDR_HANDLE_COLOR_SIZE_NORMAL );
+                            }
+
+                            //OLMconst B2dIAOGroup& rIAOGroup = pIAOHandle->GetIAOGroup();
+                            //OLMif( rIAOGroup.IsHit( rEvt.maPosPixel ) )
+                            //OLM{
+                            //OLM    nRet = nDropAction;
+                            //OLM    static_cast< SdrHdlColor* >( pIAOHandle )->SetSize( SDR_HANDLE_COLOR_SIZE_SELECTED );
+                            //OLM}
+                            //OLMelse
+                            //OLM    static_cast< SdrHdlColor* >( pIAOHandle )->SetSize( SDR_HANDLE_COLOR_SIZE_NORMAL );
                         }
                     }
 
-                    RefreshAllIAOManagers();
+                    //OLMRefreshAllIAOManagers();
                 }
 
                 // check object insert
@@ -661,14 +674,16 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                     if( bHasPickObj && !bIsPresTarget &&
                         ( !pPickObj->ISA( SdrGrafObj ) || bGraphic || bMtf || bBitmap || ( bXFillExchange && !pPickObj->ISA( SdrGrafObj ) && !pPickObj->ISA( SdrOle2Obj ) ) ) )
                     {
-                        if( !pDropMarker )
-                            pDropMarker = new SdrViewUserMarker(this);
 
                         if( pDropMarkerObj != pPickObj )
                         {
                             pDropMarkerObj = pPickObj;
-                            pDropMarker->SetXPolyPolygon( pDropMarkerObj, GetPageViewPvNum( 0 ) );
-                            pDropMarker->Show();
+                            ImplClearDrawDropMarker();
+
+                            if(pDropMarkerObj)
+                            {
+                                pDropMarker = new SdrDropMarkerOverlay(*this, *pDropMarkerObj);
+                            }
                         }
 
                         nRet = nDropAction;
@@ -688,7 +703,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
 
                     if( pDropMarker )
                     {
-                        pDropMarker->Hide();
+                        ImplClearDrawDropMarker();
                         pDropMarkerObj = NULL;
                     }
 
@@ -705,8 +720,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
     // destroy drop marker if this is a leaving event
     if( rEvt.mbLeaving && pDropMarker )
     {
-        pDropMarker->Hide();
-        delete pDropMarker, pDropMarker = NULL;
+        ImplClearDrawDropMarker();
         pDropMarkerObj = NULL;
     }
 
@@ -718,7 +732,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
 sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                               ::sd::Window* pTargetWindow, USHORT nPage, USHORT nLayer )
 {
-    SdrPageView*    pPV = GetPageViewPvNum( 0 );
+    SdrPageView*    pPV = GetSdrPageView();
     String          aActiveLayer = GetActiveLayer();
     sal_Int8        nDropAction = rEvt.mnAction;
     sal_Int8        nRet = DND_ACTION_NONE;
@@ -726,8 +740,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
     // destroy drop marker if it is shown
     if( pDropMarker )
     {
-        pDropMarker->Hide();
-        delete pDropMarker, pDropMarker = NULL;
+        ImplClearDrawDropMarker();
         pDropMarkerObj = NULL;
     }
 
@@ -776,9 +789,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
 
                     if( pIAOHandle && ( HDL_COLR == pIAOHandle->GetKind() ) )
                     {
-                        const B2dIAOGroup& rIAOGroup = pIAOHandle->GetIAOGroup();
-
-                        if( rIAOGroup.IsHit( rEvt.maPosPixel ) )
+                        if(pIAOHandle->getOverlayObjectList().isHitPixel(rEvt.maPosPixel))
                         {
                             SotStorageStreamRef xStm;
 
@@ -792,6 +803,20 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 nRet = nDropAction;
                             }
                         }
+
+                        //OLMconst B2dIAOGroup& rIAOGroup = pIAOHandle->GetIAOGroup();
+                        //OLMif( rIAOGroup.IsHit( rEvt.maPosPixel ) )
+                        //OLM{
+                        //OLM   SotStorageStreamRef xStm;
+                        //OLM   if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_XFA, xStm ) && xStm.Is() )
+                        //OLM    {
+                        //OLM        XFillExchangeData aFillData( XFillAttrSetItem( &pDoc->GetPool() ) );
+                        //OLM       *xStm >> aFillData;
+                        //OLM        const Color aColor( ( (XFillColorItem&) aFillData.GetXFillAttrSetItem()->GetItemSet().Get( XATTR_FILLCOLOR ) ).GetValue() );
+                        //OLM       static_cast< SdrHdlColor* >( pIAOHandle )->SetColor( aColor, TRUE );
+                        //OLM        nRet = nDropAction;
+                        //OLM    }
+                        //OLM}
                     }
                 }
             }
@@ -920,7 +945,7 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
         Point   aPos;
         List    aBookmarkList;
         String  aBookmark;
-        SdPage* pPage = (SdPage*) GetPageViewPvNum( 0 )->GetPage();
+        SdPage* pPage = (SdPage*) GetSdrPageView()->GetPage();
         USHORT  nPgPos = 0xFFFF;
 
         if( pSdNavigatorDropEvent->mpTargetWindow )
