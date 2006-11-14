@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 12:53:15 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:02:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,9 @@
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
 #endif
-#ifndef _B2D_MATRIX3D_HXX
-#include <goodies/matrix3d.hxx>
-#endif
+//#ifndef _B2D_MATRIX3D_HXX
+//#include <goodies/matrix3d.hxx>
+//#endif
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
@@ -66,6 +66,10 @@
 #endif
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
+#endif
+
+#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
+#include <basegfx/matrix/b3dhommatrix.hxx>
 #endif
 
 #ifndef _OSL_FILE_HXX_
@@ -232,11 +236,11 @@ public:
     void addRGBA( const Color& rColor );
     void addRGB( const Color& rColor );
     void addRect( const Rectangle& rRect );
-    void addMatrix( const Matrix3D& rMatrix );
+    void addMatrix( const ::basegfx::B3DHomMatrix& rMatrix );
     void addString( const char* pString );
     void addStream( SvStream& rIn );
 
-    static void writeMatrix( SvStream& rOut, const Matrix3D& rMatrix );
+    static void writeMatrix( SvStream& rOut, const ::basegfx::B3DHomMatrix& rMatrix );
     static void writeRect( SvStream& rOut, const Rectangle& rRect );
 
 private:
@@ -279,7 +283,7 @@ public:
     FillStyle( const Rectangle& rBoundRect, const Gradient& rGradient );
 
     /** this c'tor creates a tiled or clipped bitmap fill style */
-    FillStyle( sal_uInt16 nBitmapId, bool bClipped, const Matrix3D& rMatrix );
+    FillStyle( sal_uInt16 nBitmapId, bool bClipped, const ::basegfx::B3DHomMatrix& rMatrix );
 
     void addTo( Tag* pTag ) const;
 
@@ -287,7 +291,7 @@ private:
     void Impl_addGradient( Tag* pTag ) const;
 
     FillStyleType   meType;
-    Matrix3D        maMatrix;
+    ::basegfx::B3DHomMatrix     maMatrix;
     sal_uInt16      mnBitmapId;
     Color           maColor;
     Gradient        maGradient;
