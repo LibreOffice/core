@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:25:28 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:21:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,10 @@
 
 #ifndef _SVX_EXTRUSION_BAR_HXX
 #include <svx/extrusionbar.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -472,7 +476,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     }
 
     if(bEndTextEdit && pSdrView && pSdrView->IsTextEdit())
-        pSdrView->EndTextEdit( sal_True );
+        pSdrView->SdrEndTextEdit( sal_True );
 
     AttrChangedNotify(pWrtShell);
 }
@@ -567,7 +571,7 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
     pSdrView->SetHitTolerancePixel( 2 );
 
     if( pSdrView->IsMarkedHit( aDocPos ) &&
-        !pSdrView->HitHandle( aDocPos, *pSh->GetOut() ) && IsTextTool() &&
+        !pSdrView->PickHandle( aDocPos ) && IsTextTool() &&
         pSdrView->PickObj( aDocPos, pObj, pPV, SDRSEARCH_PICKTEXTEDIT ) &&
 
         // #108784#
@@ -579,7 +583,7 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
 
         !pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT))
     {
-        bReturn = BeginTextEdit(pObj, pPV, pEditWin, FALSE );
+        bReturn = BeginTextEdit( pObj, pPV, pEditWin, sal_False );
     }
 
     pSdrView->SetHitTolerancePixel( nOld );
@@ -590,8 +594,7 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
 /******************************************************************************
  *  Beschreibung: DrawTextEditMode einschalten
  ******************************************************************************/
-sal_Bool SwView::BeginTextEdit( SdrObject* pObj, SdrPageView* pPV,
-                                Window* pWin, sal_Bool bIsNewObj )
+sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin, sal_Bool bIsNewObj)
 {
     SwWrtShell *pSh = &GetWrtShell();
     SdrView *pSdrView = pSh->GetDrawView();
@@ -667,10 +670,10 @@ sal_Bool SwView::BeginTextEdit( SdrObject* pObj, SdrPageView* pPV,
     // set in each case, thus it will be correct for all objects
     ((SdrTextObj*)pToBeActivated)->SetTextEditOffset(aNewTextEditOffset);
 
-    sal_Bool bRet = pSdrView->BegTextEdit( pToBeActivated, pPV, pWin, TRUE, pOutliner, 0, FALSE, FALSE, FALSE );
+    sal_Bool bRet(pSdrView->SdrBeginTextEdit( pToBeActivated, pPV, pWin, sal_True, pOutliner, 0, sal_False, sal_False, sal_False ));
 
     // #i7672#
-    // Since BegTextEdit actually creates the OutlinerView and thus also
+    // Since SdrBeginTextEdit actually creates the OutlinerView and thus also
     // sets the background color, an own background color needs to be set
     // after TextEditing was started. This is now done here.
     if(bRet)
