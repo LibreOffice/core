@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 08:32:06 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:23:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,14 +54,18 @@
 // GlyphCache
 // =======================================================================
 
-GlyphCache::GlyphCache( ULONG nMaxSize )
-:   mnMaxSize(nMaxSize),
+static GlyphCache* pInstance = NULL;
+
+GlyphCache::GlyphCache( GlyphCachePeer& rPeer )
+:   mrPeer( rPeer ),
+    mnMaxSize( 1500000 ),
     mnBytesUsed(sizeof(GlyphCache)),
     mnLruIndex(0),
     mnGlyphCount(0),
     mpCurrentGCFont(NULL),
     mpFtManager(NULL)
 {
+    pInstance = this;
     mpFtManager = new FreetypeManager;
 }
 
@@ -127,28 +131,18 @@ bool GlyphCache::IFSD_Equal::operator()( const ImplFontSelectData& rA, const Imp
 
 GlyphCache& GlyphCache::GetInstance()
 {
-    static GlyphCache aGlyphCache( 1500000 );
-    return aGlyphCache;
+    return *pInstance;
 }
 
 // -----------------------------------------------------------------------
 
-void GlyphCache::EnsureInstance( GlyphCachePeer& rPeer, bool bInitFonts )
+void GlyphCache::LoadFonts()
 {
-    GlyphCache& rGlyphCache = GetInstance();
-    if( rGlyphCache.mpPeer == &rPeer )
-        return;
-
-    rGlyphCache.mpPeer = &rPeer;
-
-    if( bInitFonts )
-    {
-        if( const char* pFontPath = ::getenv( "SAL_FONTPATH_PRIVATE" ) )
-            rGlyphCache.AddFontPath( String::CreateFromAscii( pFontPath ) );
-        const String& rFontPath = Application::GetFontPath();
-        if( rFontPath.Len() > 0 )
-            rGlyphCache.AddFontPath( rFontPath );
-    }
+    if( const char* pFontPath = ::getenv( "SAL_FONTPATH_PRIVATE" ) )
+        AddFontPath( String::CreateFromAscii( pFontPath ) );
+    const String& rFontPath = Application::GetFontPath();
+    if( rFontPath.Len() > 0 )
+        AddFontPath( rFontPath );
 }
 
 // -----------------------------------------------------------------------
@@ -259,7 +253,7 @@ void GlyphCache::UncacheFont( ServerFont& rServerFont )
     // The caching algorithm needs a non-const object
     ServerFont* pFont = const_cast<ServerFont*>( &rServerFont );
     if( (pFont->Release() <= 0)
-    &&  (mnMaxSize <= (mnBytesUsed + mpPeer->GetByteCount())) )
+    &&  (mnMaxSize <= (mnBytesUsed + mrPeer.GetByteCount())) )
     {
         mpCurrentGCFont = pFont;
         GarbageCollect();
@@ -318,7 +312,7 @@ void GlyphCache::GarbageCollect()
             mpCurrentGCFont = NULL;
     const ImplFontSelectData& rIFSD = pServerFont->GetFontSelData();
         maFontList.erase( rIFSD );
-        mpPeer->RemovingFont( *pServerFont );
+        mrPeer.RemovingFont( *pServerFont );
         mnBytesUsed -= pServerFont->GetByteCount();
 
         // remove font from list of garbage collected fonts
@@ -354,7 +348,7 @@ inline void GlyphCache::AddedGlyph( ServerFont& rServerFont, GlyphData& rGlyphDa
 
 void GlyphCache::GrowNotify()
 {
-    if( (mnBytesUsed + mpPeer->GetByteCount()) > mnMaxSize )
+    if( (mnBytesUsed + mrPeer.GetByteCount()) > mnMaxSize )
         GarbageCollect();
 }
 
@@ -362,7 +356,7 @@ void GlyphCache::GrowNotify()
 
 inline void GlyphCache::RemovingGlyph( ServerFont& rSF, GlyphData& rGD, int nGlyphIndex )
 {
-    mpPeer->RemovingGlyph( rSF, rGD, nGlyphIndex );
+    mrPeer.RemovingGlyph( rSF, rGD, nGlyphIndex );
     mnBytesUsed -= sizeof( GlyphData );
     --mnGlyphCount;
 }
