@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dhommatrix.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 09:54:28 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:04:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,14 @@
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
+#endif
+
+#ifndef _BGFX_POINT_B3DPOINT_HXX
+#include <basegfx/point/b3dpoint.hxx>
+#endif
+
+#ifndef _BGFX_VECTOR_B3DVECTOR_HXX
+#include <basegfx/vector/b3dvector.hxx>
 #endif
 
 #ifndef INCLUDED_O3TL_COW_WRAPPER_HXX
@@ -106,6 +114,22 @@ namespace basegfx
         void shearXY(double fSx, double fSy);
         void shearYZ(double fSy, double fSz);
         void shearXZ(double fSx, double fSz);
+
+        // Projection matrices, used for converting between eye and
+        // clip coordinates
+        void frustum(double fLeft = -1.0, double fRight = 1.0,
+            double fBottom = -1.0, double fTop = 1.0,
+            double fNear = 0.001, double fFar = 1.0);
+
+        void ortho(double fLeft = -1.0, double fRight = 1.0,
+            double fBottom = -1.0, double fTop = 1.0,
+            double fNear = 0.0, double fFar = 1.0);
+
+        // build orientation matrix
+        void orientation(
+            B3DPoint aVRP = B3DPoint(0.0,0.0,1.0),
+            B3DVector aVPN = B3DVector(0.0,0.0,1.0),
+            B3DVector aVUV = B3DVector(0.0,1.0,0.0));
 
         // addition, subtraction
         B3DHomMatrix& operator+=(const B3DHomMatrix& rMat);
