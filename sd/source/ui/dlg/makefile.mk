@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-06 09:51:44 $
+#   last change: $Author: ihi $ $Date: 2006-11-14 14:26:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,6 @@ SLOFILES =  \
         $(SLO)$/dlgassim.obj	\
         $(SLO)$/dlgass.obj  \
         $(SLO)$/assclass.obj \
-        $(SLO)$/graphpro.obj \
         $(SLO)$/navigatr.obj \
         $(SLO)$/sdpreslt.obj \
         $(SLO)$/morphdlg.obj	\
@@ -152,7 +151,6 @@ LIB1OBJFILES= \
         $(SLO)$/filedlg.obj   \
         $(SLO)$/unchss.obj  \
         $(SLO)$/assclass.obj \
-        $(SLO)$/graphpro.obj \
         $(SLO)$/navigatr.obj \
         $(SLO)$/docprev.obj     \
         $(SLO)$/ins_paste.obj \
