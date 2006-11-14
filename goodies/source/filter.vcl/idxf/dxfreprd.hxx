@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dxfreprd.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:56:13 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:14:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,9 +119,7 @@ public:
         rtl_TextEncoding getTextEncoding() const;
         void setTextEncoding(rtl_TextEncoding aEnc);
 
-    BOOL Read(SvStream & rIStream,
-              PFilterCallback pCallback, void * pCallerData,
-              USHORT nMinPercent, USHORT nMaxPercent);
+    BOOL Read( SvStream & rIStream, USHORT nMinPercent, USHORT nMaxPercent);
         // Liesst die komplette DXF-Datei ein.
 
 private:
