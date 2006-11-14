@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrrect.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:02:19 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:12:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,9 +174,29 @@ void ViewShell::Scroll()
                         // OD 18.02.2003 #107562# - align rectangle for scrolling
                         SwRect aAlignedScrollRect( aRectangle );
                         ::SwAlignRect( aAlignedScrollRect, this );
+
+                        // #i68597# when scrolling, let DrawingLayer know about refreshed areas,
+                        // even when no DL objects are in the area. This is needed to allow
+                        // fully buffered overlay.
+                        Rectangle aDLRect;
+
+                        if(!IsPaintInProgress())
+                        {
+                            aDLRect = aAlignedScrollRect.SVRect();
+                            aDLRect.Move( -rScroll.GetOffs(), 0);
+                            DLPreOutsidePaint(Region(aDLRect));
+                        }
+
                         GetWin()->Scroll( -rScroll.GetOffs(), 0,
                                           aAlignedScrollRect.SVRect(),
                                           SCROLL_CHILDREN );
+
+                        // #i68597#
+                        if(!IsPaintInProgress())
+                        {
+                            DLPostOutsidePaint(Region(aDLRect));
+                        }
+
                         SwRect aRect( aRectangle );
                         Imp()->ScrolledRect( aRect, -rScroll.GetOffs() );
                         if ( bPositive )
@@ -194,11 +214,31 @@ void ViewShell::Scroll()
                         // OD 18.02.2003 #107562# - use aligned rectangle for scrolling
                         SwRect aAlignedScrollRect( aRectangle );
                         ::SwAlignRect( aAlignedScrollRect, this );
+
+                        // #i68597# when scrolling, let DrawingLayer know about refreshed areas,
+                        // even when no DL objects are in the area. This is needed to allow
+                        // fully buffered overlay.
+                        Rectangle aDLRect;
+
+                        if(!IsPaintInProgress())
+                        {
+                            aDLRect = aAlignedScrollRect.SVRect();
+                            aDLRect.Move( 0, rScroll.GetOffs());
+                            DLPreOutsidePaint(Region(aDLRect));
+                        }
+
                         // OD 2004-05-28 #i29527# - add flag SCROLL_NOWINDOWINVALIDATE
                         // to avoid repaint, due to invalidate window areas.
                         GetWin()->Scroll( 0, rScroll.GetOffs(),
                                           aAlignedScrollRect.SVRect(),
                                           SCROLL_CHILDREN | SCROLL_NOWINDOWINVALIDATE );
+
+                        // #i68597#
+                        if(!IsPaintInProgress())
+                        {
+                            DLPostOutsidePaint(Region(aDLRect));
+                        }
+
                         SwRect aRect( aRectangle );
                         Imp()->ScrolledRect( aRect, rScroll.GetOffs() );
                         if ( bPositive )
@@ -527,7 +567,7 @@ IMPL_LINK( SwViewImp, RefreshScrolledHdl, Timer *, EMPTYARG )
                                 pScroll->GetWidth(), rStripe.GetHeight() );
                     if( aTmpRect.IsOver( aRect ) )
                     {
-                        SwSaveHdl aSaveHdl( this );
+                        // SwSaveHdl aSaveHdl( this );
                         if( !bNoRefresh )
                             _RefreshScrolledArea( aTmpRect );
                     }
