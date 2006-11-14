@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:05:19 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:27:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -630,6 +630,24 @@ protected:
             if and only if <member>m_xInteractionHandler</member> is valid when the method returns
     */
     bool ensureInteractionHandler();
+
+    /** replaces one of our controls with another one
+
+        Upon successful replacing, the old control will be disposed. Also, internal members pointing
+        to the current or active control will be adjusted. Yet more, if the replaced control was
+        the active control, the new control will be made active.
+
+        @param _rxExistentControl
+            The control to replace. Must be one of the controls in our ControlContainer.
+        @param _rxNewControl
+            The control which should replace the existent control.
+        @return
+            <TRUE/> if and only if the control was successfully replaced
+    */
+    bool    replaceControl(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxExistentControl,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxNewControl
+    );
 
     // we're listening at all bound controls for modifications
     void startControlModifyListening(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);
