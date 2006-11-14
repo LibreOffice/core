@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:23:50 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:20:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -380,7 +380,7 @@ IMPL_LINK( SwView, FormControlActivated, FmFormShell*, EMPTYARG )
         // if we're editing text currently, cancel this
         SdrView *pSdrView = pWrtShell ? pWrtShell->GetDrawView() : NULL;
         if ( pSdrView && pSdrView->IsTextEdit() )
-            pSdrView->EndTextEdit( sal_True );
+            pSdrView->SdrEndTextEdit( sal_True );
 
         const_cast< SwView* >( this )->AttrChangedNotify( pWrtShell );
     }
@@ -1204,7 +1204,7 @@ SwView::~SwView()
     //JP 27.11.00: Bug 80631 - the last view must end the text edit
     SdrView *pSdrView = pWrtShell ? pWrtShell->GetDrawView() : 0;
     if( pSdrView && pSdrView->IsTextEdit() )
-        pSdrView->EndTextEdit( sal_True );
+        pSdrView->SdrEndTextEdit( sal_True );
 
     SetWindow( 0 );
 
