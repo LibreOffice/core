@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.141 $
+ *  $Revision: 1.142 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:19:30 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:29:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -498,7 +498,7 @@ BOOL Impl_OlePres::Read( SvStream & rStm )
     if( nFormat == FORMAT_GDIMETAFILE )
     {
         pMtf = new GDIMetaFile();
-        ReadWindowMetafile( rStm, *pMtf );
+        ReadWindowMetafile( rStm, *pMtf, NULL );
     }
     else if( nFormat == FORMAT_BITMAP )
     {
@@ -1503,11 +1503,12 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd,
-                            const MSO_LineEndWidth eLineWidth, const MSO_LineEndLength eLineLenght,
-                                sal_Int32& rnArrowWidth, XPolygon& rXPoly, sal_Bool& rbArrowCenter,
-                                    String& rsArrowName )
+static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd,
+    const MSO_LineEndWidth eLineWidth, const MSO_LineEndLength eLineLenght,
+    sal_Int32& rnArrowWidth, sal_Bool& rbArrowCenter,
+    String& rsArrowName )
 {
+    basegfx::B2DPolygon aRetval;
     double      fLineWidth = nLineWidth < 70 ? 70.0 : nLineWidth;
     double      fLenghtMul, fWidthMul;
     sal_Int32   nLineNumber;
@@ -1530,12 +1531,12 @@ static void GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd
     {
         case mso_lineArrowEnd :
         {
-            XPolygon aTriangle( 4 );
-            aTriangle[ 0 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
-            aTriangle[ 1 ] = Point( (sal_Int32)( fWidthMul * fLineWidth ), (sal_Int32)( fLenghtMul * fLineWidth ) );
-            aTriangle[ 2 ] = Point( 0, (sal_Int32)( fLenghtMul * fLineWidth ) );
-            aTriangle[ 3 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
-            rXPoly = aTriangle;
+            basegfx::B2DPolygon aTriangle;
+            aTriangle.append(basegfx::B2DPoint( fWidthMul * fLineWidth * 0.50, 0.0 ));
+            aTriangle.append(basegfx::B2DPoint( fWidthMul * fLineWidth, fLenghtMul * fLineWidth ));
+            aTriangle.append(basegfx::B2DPoint( 0.0, fLenghtMul * fLineWidth ));
+            aTriangle.setClosed(true);
+            aRetval = aTriangle;
             rsArrowName = String( RTL_CONSTASCII_STRINGPARAM( "msArrowEnd " ), RTL_TEXTENCODING_UTF8 );
         }
         break;
@@ -1556,48 +1557,48 @@ static void GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd
                 case mso_lineNarrowArrow        : fWidthMul = 3.5; break;
                 case mso_lineWideArrow          : fWidthMul = 6.0; break;
             }
-            XPolygon aTriangle( 7 );
-            aTriangle[ 0 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
-            aTriangle[ 1 ] = Point( (sal_Int32)( fWidthMul * fLineWidth ), (sal_Int32)( fLenghtMul * fLineWidth * 0.91 ) );
-            aTriangle[ 2 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.85 ), (sal_Int32)( fLenghtMul * fLineWidth ) );
-            aTriangle[ 3 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), (sal_Int32)( fLenghtMul * fLineWidth * 0.36 ) );
-            aTriangle[ 4 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.15 ), (sal_Int32)( fLenghtMul * fLineWidth ) );
-            aTriangle[ 5 ] = Point( 0, (sal_Int32)( fLenghtMul * fLineWidth * 0.91 ) );
-            aTriangle[ 6 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
-            rXPoly = aTriangle;
+            basegfx::B2DPolygon aTriangle;
+            aTriangle.append(basegfx::B2DPoint( fWidthMul * fLineWidth * 0.50 , 0.0 ));
+            aTriangle.append(basegfx::B2DPoint( fWidthMul * fLineWidth, fLenghtMul * fLineWidth * 0.91 ));
+            aTriangle.append(basegfx::B2DPoint( fWidthMul * fLineWidth * 0.85, fLenghtMul * fLineWidth ));
+            aTriangle.append(basegfx::B2DPoint( fWidthMul * fLineWidth * 0.50, fLenghtMul * fLineWidth * 0.36 ));
+            aTriangle.append(basegfx::B2DPoint( fWidthMul * fLineWidth * 0.15, fLenghtMul * fLineWidth ));
+            aTriangle.append(basegfx::B2DPoint( 0.0, fLenghtMul * fLineWidth * 0.91 ));
+            aTriangle.setClosed(true);
+            aRetval = aTriangle;
             rsArrowName = String( RTL_CONSTASCII_STRINGPARAM( "msArrowOpenEnd " ), RTL_TEXTENCODING_UTF8 );
         }
         break;
         case mso_lineArrowStealthEnd :
         {
-            XPolygon aTriangle( 5 );
-            aTriangle[ 0 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
-            aTriangle[ 1 ] = Point( (sal_Int32)( fWidthMul * fLineWidth ), (sal_Int32)( fLenghtMul * fLineWidth ) );
-            aTriangle[ 2 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), (sal_Int32)( fLenghtMul * fLineWidth * 0.60 ) );
-            aTriangle[ 3 ] = Point( 0, (sal_Int32)( fLenghtMul * fLineWidth ) );
-            aTriangle[ 4 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
-            rXPoly = aTriangle;
+            basegfx::B2DPolygon aTriangle;
+            aTriangle.append(basegfx::B2DPoint( fWidthMul * fLineWidth * 0.50 , 0.0 ));
+            aTriangle.append(basegfx::B2DPoint( fWidthMul * fLineWidth , fLenghtMul * fLineWidth ));
+            aTriangle.append(basegfx::B2DPoint( fWidthMul * fLineWidth * 0.50 , fLenghtMul * fLineWidth * 0.60 ));
+            aTriangle.append(basegfx::B2DPoint( 0.0, fLenghtMul * fLineWidth ));
+            aTriangle.setClosed(true);
+            aRetval = aTriangle;
             rsArrowName = String( RTL_CONSTASCII_STRINGPARAM( "msArrowStealthEnd " ), RTL_TEXTENCODING_UTF8 );
         }
         break;
         case mso_lineArrowDiamondEnd :
         {
-            XPolygon aTriangle( 5 );
-            aTriangle[ 0 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
-            aTriangle[ 1 ] = Point( (sal_Int32)( fWidthMul * fLineWidth ), (sal_Int32)( fLenghtMul * fLineWidth * 0.50 ) );
-            aTriangle[ 2 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), (sal_Int32)( fLenghtMul * fLineWidth ) );
-            aTriangle[ 3 ] = Point( 0, (sal_Int32)( fLenghtMul * fLineWidth * 0.50 ) );
-            aTriangle[ 4 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
-            rXPoly = aTriangle;
+            basegfx::B2DPolygon aTriangle;
+            aTriangle.append(basegfx::B2DPoint( fWidthMul * fLineWidth * 0.50 , 0.0 ));
+            aTriangle.append(basegfx::B2DPoint( fWidthMul * fLineWidth , fLenghtMul * fLineWidth * 0.50 ));
+            aTriangle.append(basegfx::B2DPoint( fWidthMul * fLineWidth * 0.50 , fLenghtMul * fLineWidth ));
+            aTriangle.append(basegfx::B2DPoint( 0.0, fLenghtMul * fLineWidth * 0.50 ));
+            aTriangle.setClosed(true);
+            aRetval = aTriangle;
             rbArrowCenter = sal_True;
             rsArrowName = String( RTL_CONSTASCII_STRINGPARAM( "msArrowDiamondEnd " ), RTL_TEXTENCODING_UTF8 );
         }
         break;
         case mso_lineArrowOvalEnd :
         {
-            rXPoly = XPolygon( Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 ),
+            aRetval = XPolygon( Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 ),
                                 (sal_Int32)( fWidthMul * fLineWidth * 0.50 ),
-                                    (sal_Int32)( fLenghtMul * fLineWidth * 0.50 ), 0, 3600 );
+                                    (sal_Int32)( fLenghtMul * fLineWidth * 0.50 ), 0, 3600 ).getB2DPolygon();
             rbArrowCenter = sal_True;
             rsArrowName = String( RTL_CONSTASCII_STRINGPARAM( "msArrowOvalEnd " ), RTL_TEXTENCODING_UTF8 );
         }
@@ -1606,6 +1607,8 @@ static void GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd
     }
     rsArrowName.Append( String::CreateFromInt32( nLineNumber ) );
     rnArrowWidth = (sal_Int32)( fLineWidth * fWidthMul );
+
+    return aRetval;
 }
 
 void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eShapeType ) const // #i28269#
@@ -1723,14 +1726,13 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
                 MSO_LineEndWidth    eWidth = (MSO_LineEndWidth)GetPropertyValue( DFF_Prop_lineStartArrowWidth, mso_lineMediumWidthArrow );
                 MSO_LineEndLength   eLenght = (MSO_LineEndLength)GetPropertyValue( DFF_Prop_lineStartArrowLength, mso_lineMediumLenArrow );
 
-                XPolygon    aPoly;
                 sal_Int32   nArrowWidth;
                 sal_Bool    bArrowCenter;
                 String      aArrowName;
-                GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, aPoly, bArrowCenter, aArrowName );
+                basegfx::B2DPolygon aPoly(GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, bArrowCenter, aArrowName ));
 
                 rSet.Put( XLineStartWidthItem( nArrowWidth ) );
-                rSet.Put( XLineStartItem( aArrowName, aPoly ) );
+                rSet.Put( XLineStartItem( aArrowName, basegfx::B2DPolyPolygon(aPoly) ) );
                 rSet.Put( XLineStartCenterItem( bArrowCenter ) );
             }
             /////////////
@@ -1742,14 +1744,13 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
                 MSO_LineEndWidth    eWidth = (MSO_LineEndWidth)GetPropertyValue( DFF_Prop_lineEndArrowWidth, mso_lineMediumWidthArrow );
                 MSO_LineEndLength   eLenght = (MSO_LineEndLength)GetPropertyValue( DFF_Prop_lineEndArrowLength, mso_lineMediumLenArrow );
 
-                XPolygon    aPoly;
                 sal_Int32   nArrowWidth;
                 sal_Bool    bArrowCenter;
                 String      aArrowName;
-                GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, aPoly, bArrowCenter, aArrowName );
+                basegfx::B2DPolygon aPoly(GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, bArrowCenter, aArrowName ));
 
                 rSet.Put( XLineEndWidthItem( nArrowWidth ) );
-                rSet.Put( XLineEndItem( aArrowName, aPoly ) );
+                rSet.Put( XLineEndItem( aArrowName, basegfx::B2DPolyPolygon(aPoly) ) );
                 rSet.Put( XLineEndCenterItem( bArrowCenter ) );
             }
             if ( IsProperty( DFF_Prop_lineEndCapStyle ) )
@@ -3515,25 +3516,7 @@ void SvxMSDffManager::Scale( PolyPolygon& rPoly ) const
         Scale( rPoly[ nPolyNum ] );
 }
 
-void SvxMSDffManager::Scale( XPolygon& rPoly ) const
-{
-    if ( !bNeedMap )
-        return;
-    USHORT nPointAnz = rPoly.GetPointCount();
-    for ( USHORT nPointNum = 0; nPointNum < nPointAnz; nPointNum++ )
-        Scale( rPoly[ nPointNum ] );
-}
-
-void SvxMSDffManager::Scale( XPolyPolygon& rPoly ) const
-{
-    if ( !bNeedMap )
-        return;
-    USHORT nPolyAnz = rPoly.Count();
-    for ( USHORT nPolyNum = 0; nPolyNum < nPolyAnz; nPolyNum++ )
-        Scale( rPoly[ nPolyNum ] );
-}
-
-void SvxMSDffManager::ScaleEmu( sal_Int32& rVal ) const
+void SvxMSDffManager::ScaleEmu( long& rVal ) const
 {
     rVal = BigMulDiv( rVal, nEmuMul, nEmuDiv );
 }
@@ -5253,7 +5236,10 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     }
                     else if ( aObjData.eShapeType == mso_sptLine )
                     {
-                        pRet = new SdrPathObj( aBoundRect.TopLeft(), aBoundRect.BottomRight() );
+                        basegfx::B2DPolygon aPoly;
+                        aPoly.append(basegfx::B2DPoint(aBoundRect.Left(), aBoundRect.Top()));
+                        aPoly.append(basegfx::B2DPoint(aBoundRect.Right(), aBoundRect.Bottom()));
+                        pRet = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPoly));
                     }
                     else if( bIsConnector )
                     {
@@ -5298,8 +5284,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             }
                             nSpFlags &= ~( SP_FFLIPV | SP_FFLIPH );
 
-                            pRet->NbcSetPoint(aPoint1, 0);  // Startpunkt
-                            pRet->NbcSetPoint(aPoint2, 1);  // Endpunkt
+                            pRet->NbcSetPoint(aPoint1, 0L); // Startpunkt
+                            pRet->NbcSetPoint(aPoint2, 1L); // Endpunkt
 
                             sal_Int32 n1HorzDist, n1VertDist, n2HorzDist, n2VertDist;
                             n1HorzDist = n1VertDist = n2HorzDist = n2VertDist = 0;
@@ -5358,7 +5344,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     {
                         // Das Polygon des Objektes muss geschlossen werden
                         if(!((SdrPathObj*)pRet)->IsClosed())
-                            ((SdrPathObj*)pRet)->ToggleClosed(0);
+                            ((SdrPathObj*)pRet)->ToggleClosed(); //0);
                     }
                 }
                 // Handelt es sich um 3D?
