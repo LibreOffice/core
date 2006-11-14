@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconarc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:47:25 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:27:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,9 +151,9 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
                        aNewRectangle,
                        (long) (pPhiStart->GetValue () * 10.0),
                        (long) (pPhiEnd->GetValue () * 10.0));
-        SdrPageView *pPV = pView->GetPageViewPvNum (0);
+        SdrPageView *pPV = pView->GetSdrPageView();
 
-        pView->InsertObject(pNewCircle, *pPV, SDRINSERT_SETDEFLAYER);
+        pView->InsertObjectAtView(pNewCircle, *pPV, SDRINSERT_SETDEFLAYER);
     }
 }
 
@@ -216,11 +216,11 @@ BOOL FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
     {
         Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-        ULONG nCount = pView->GetPageViewPvNum(0)->GetObjList()->GetObjCount();
+        ULONG nCount = pView->GetSdrPageView()->GetObjList()->GetObjCount();
 
         if (pView->EndCreateObj(SDRCREATE_NEXTPOINT) )
         {
-            if (nCount != pView->GetPageViewPvNum(0)->GetObjList()->GetObjCount())
+            if (nCount != pView->GetSdrPageView()->GetObjList()->GetObjCount())
             {
                 bCreated = TRUE;
             }
