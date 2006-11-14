@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphicproperties.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:43:05 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:37:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,36 +143,6 @@ namespace sdr
             // local changes
             rObj.ImpSetAttrToGrafInfo();
         }
-
-//BFS01     void GraphicProperties::PreProcessSave()
-//BFS01     {
-//BFS01         // call parent
-//BFS01         RectangleProperties::PreProcessSave();
-//BFS01
-//BFS01         // force ItemSet
-//BFS01         GetObjectItemSet();
-//BFS01
-//BFS01         // prepare SetItems for storage
-//BFS01         const SfxItemSet& rSet = *mpItemSet;
-//BFS01         const SfxItemSet* pParent = mpStyleSheet ? &(mpStyleSheet->GetItemSet()) : 0L;
-//BFS01
-//BFS01         SdrGrafSetItem aGrafAttr(rSet.GetPool());
-//BFS01         aGrafAttr.GetItemSet().Put(rSet);
-//BFS01         aGrafAttr.GetItemSet().SetParent(pParent);
-//BFS01         mpItemSet->Put(aGrafAttr);
-//BFS01     }
-
-//BFS01     void GraphicProperties::PostProcessSave()
-//BFS01     {
-//BFS01         // call parent
-//BFS01         RectangleProperties::PostProcessSave();
-//BFS01
-//BFS01         // remove SetItems from local itemset
-//BFS01         if(mpItemSet)
-//BFS01         {
-//BFS01             mpItemSet->ClearItem(SDRATTRSET_GRAF);
-//BFS01         }
-//BFS01     }
 
         void GraphicProperties::ForceDefaultAttributes()
         {
