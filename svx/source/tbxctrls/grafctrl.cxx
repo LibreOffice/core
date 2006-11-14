@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:20:54 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:52:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -368,8 +368,8 @@ ImplGrafControl::ImplGrafControl( Window* pParent, USHORT nSlotId, const rtl::OU
     maImage.SetModeImage( aImageHC, BMP_COLOR_HIGHCONTRAST );
     maImage.SetSizePixel( aImgSize );
     // we want to see the backbround of the toolbox, not of the FixedImage or Control
-    maImage.SetBackground( Wallpaper( Color( COL_TRANSPARENT ) ) );
-    SetBackground( Wallpaper( Color( COL_TRANSPARENT ) ) );
+    maImage.SetBackground( Wallpaper( COL_TRANSPARENT ) );
+    SetBackground( Wallpaper( COL_TRANSPARENT ) );
 
     if( aImgSize.Height() > aFldSize.Height() )
         nImgY = 0, nFldY = ( aImgSize.Height() - aFldSize.Height() ) >> 1;
