@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:25:18 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:50:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,6 +235,14 @@
 #include <svx/svdocapt.hxx>
 #endif
 
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
+#endif
+
 #include "scresid.hxx"
 
 //------------------------------------------------------------------------
@@ -445,14 +453,11 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
             {
                 if(pObj->ISA(SdrPathObj))
                 {
-                    XPolyPolygon aPoly;
-                    aPoly.Insert(XPolygon(2));
-
                     sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
-                    aPoly[0][0] = Point(aStart.X(), nYMiddle);
-                    aPoly[0][1] = Point(aEnd.X(), nYMiddle);
-
-                    ((SdrPathObj*)pObj)->SetPathPoly(aPoly);
+                    basegfx::B2DPolygon aPoly;
+                    aPoly.append(basegfx::B2DPoint(aStart.X(), nYMiddle));
+                    aPoly.append(basegfx::B2DPoint(aEnd.X(), nYMiddle));
+                    ((SdrPathObj*)pObj)->SetPathPoly(basegfx::B2DPolyPolygon(aPoly));
                 }
                 else
                 {
