@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:49:07 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:26:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,14 @@
 #include "gallery.hrc"
 #include "galmisc.hxx"
 #include "galobj.hxx"
+
+#ifndef _SV_SALBTYPE_HXX
+#include <vcl/salbtype.hxx>     // FRound
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 // -------------
 // - SgaObject -
@@ -534,7 +542,8 @@ BOOL SgaObjectSvDraw::DrawCentered( OutputDevice* pOut, const FmFormModel& rMode
 
             pOut->Push();
             pOut->SetMapMode( aMap );
-            aView.ShowPage( const_cast< FmFormPage* >( pPage ), Point() );
+            aView.ShowSdrPage( const_cast< FmFormPage* >( pPage ));
+//            aView.ShowSdrPage( const_cast< FmFormPage* >( pPage ), Point() );
             aView.CompleteRedraw( pOut, Rectangle( pOut->PixelToLogic( Point() ), pOut->GetOutputSize() ) );
             pOut->Pop();
 
