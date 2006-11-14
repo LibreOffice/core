@@ -4,9 +4,9 @@
  *
  *  $RCSfile: etiff.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:44:50 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:12:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,6 @@ class TIFFWriter
 {
 private:
 
-    PFilterCallback     mpCallback;
-    void*               mpCallerData;
     SvStream*           mpOStm;
     UINT32              mnStreamOfs;
 
@@ -113,6 +111,8 @@ private:
     ULONG               nOffset;
     ULONG               dwShift;
 
+    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
+
     void                ImplCallback( UINT32 nPercent );
     BOOL                ImplWriteHeader( BOOL bMultiPage );
     void                ImplWritePalette();
@@ -129,9 +129,7 @@ public:
                         TIFFWriter();
                         ~TIFFWriter();
 
-    BOOL                WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF,
-                                    PFilterCallback pCallback, void* pCallerdata,
-                                        FilterConfigItem* pConfigItem );
+    BOOL                WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF, FilterConfigItem* pFilterConfigItem );
 };
 
 // ------------------------------------------------------------------------
@@ -157,9 +155,7 @@ TIFFWriter::~TIFFWriter()
 
 // ------------------------------------------------------------------------
 
-BOOL TIFFWriter::WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF,
-                      PFilterCallback pCallback, void* pCallerdata,
-                          FilterConfigItem* )
+BOOL TIFFWriter::WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF, FilterConfigItem* pFilterConfigItem)
 {
     ULONG*  pDummy = new ULONG; delete pDummy; // damit unter OS/2
                                                // das richtige (Tools-)new
@@ -167,9 +163,18 @@ BOOL TIFFWriter::WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF,
                                                // in dieser DLL nur Vector-news
                                                // gibt;
 
+    if ( pFilterConfigItem )
+    {
+        xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
+        if ( xStatusIndicator.is() )
+        {
+            rtl::OUString aMsg;
+            xStatusIndicator->start( aMsg, 100 );
+        }
+    }
+
+    // #i69169# copy stream
     mpOStm = &rTIFF;
-    mpCallback = pCallback;
-    mpCallerData = pCallerdata;
 
     const UINT16    nOldFormat = mpOStm->GetNumberFormatInt();
     mnStreamOfs = mpOStm->Tell();
@@ -240,6 +245,9 @@ BOOL TIFFWriter::WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF,
     }
     mpOStm->SetNumberFormatInt( nOldFormat );
 
+    if ( xStatusIndicator.is() )
+        xStatusIndicator->end();
+
     return mbStatus;
 }
 
@@ -247,13 +255,14 @@ BOOL TIFFWriter::WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF,
 
 void TIFFWriter::ImplCallback( UINT32 nPercent )
 {
-    if( nPercent >= mnLastPercent + 3 )
+    if ( xStatusIndicator.is() )
     {
-        mnLastPercent = nPercent;
-
-        if( mpCallback && ( nPercent <= 100 ) && mbStatus )
-            if ( ( (*mpCallback)( mpCallerData, (UINT16) nPercent ) ) )
-                mbStatus = FALSE;
+        if( nPercent >= mnLastPercent + 3 )
+        {
+            mnLastPercent = nPercent;
+            if ( nPercent <= 100 )
+                xStatusIndicator->setValue( nPercent );
+        }
     }
 }
 
@@ -610,11 +619,9 @@ void TIFFWriter::EndCompression()
 // - exported function -
 // ---------------------
 
-extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic,
-                                               PFilterCallback pCallback, void* pCallerData,
-                                               FilterConfigItem* pConfigItem, BOOL )
+extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, BOOL )
 {
-    return TIFFWriter().WriteTIFF( rGraphic, rStream, pCallback, pCallerData, pConfigItem );
+    return TIFFWriter().WriteTIFF( rGraphic, rStream, pFilterConfigItem );
 }
 
 #ifndef GCC
