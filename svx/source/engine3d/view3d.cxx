@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:59:21 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:22:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,32 +166,118 @@
 #include <xflbmtit.hxx>
 #endif
 
+#ifndef _BGFX_RANGE_B2DRANGE_HXX
+#include <basegfx/range/b2drange.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
+#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#endif
+
 #include "xlnwtit.hxx"
+
+#ifndef _SDR_OVERLAY_OVERLAYPOLYPOLYGON_HXX
+#include <svx/sdr/overlay/overlaypolypolygon.hxx>
+#endif
+
+#ifndef _SDR_OVERLAY_OVERLAYMANAGER_HXX
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#endif
+
+#ifndef _SDRPAINTWINDOW_HXX
+#include <sdrpaintwindow.hxx>
+#endif
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
 TYPEINIT1(E3dView, SdrView);
 
-long Scalar (Point aPoint1,
-             Point aPoint2);
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Migrate Marking
 
-Point ScaleVector (Point  aPoint,
-                   double nScale);
+class Impl3DMirrorConstructOverlay
+{
+    // The OverlayObjects
+    ::sdr::overlay::OverlayObjectList               maObjects;
 
-double NormVector (Point aPoint);
+    // the view
+    const E3dView&                                  mrView;
 
-BOOL LineCutting (Point aP1,
-                  Point aP2,
-                  Point aP3,
-                  Point aP4);
+    // the unmirrored polygons and their count
+    sal_uInt32                                      mnCount;
+    basegfx::B2DPolyPolygon*                        mpPolygons;
 
-long Point2Line (Point aP1,
-                 Point aP2,
-                 Point aP3);
+public:
+    Impl3DMirrorConstructOverlay(const E3dView& rView);
+    ~Impl3DMirrorConstructOverlay();
 
-long DistPoint2Line (Point u,
-                     Point v1,
-                     Point v);
+    void SetMirrorAxis(Point aMirrorAxisA, Point aMirrorAxisB);
+};
+
+Impl3DMirrorConstructOverlay::Impl3DMirrorConstructOverlay(const E3dView& rView)
+:   mrView(rView)
+{
+    const SdrMarkList& rMarkList = mrView.GetMarkedObjectList();
+    mnCount = rMarkList.GetMarkCount();
+    mpPolygons = new basegfx::B2DPolyPolygon[mnCount];
+
+    for(sal_uInt32 a(0L); a < mnCount; a++)
+    {
+        SdrMark *pMark = rMarkList.GetMark(a);
+        SdrObject *pObj = pMark->GetMarkedSdrObj();
+        mpPolygons[mnCount - (a + 1L)] = pObj->TakeXorPoly(sal_False);
+    }
+}
+
+Impl3DMirrorConstructOverlay::~Impl3DMirrorConstructOverlay()
+{
+    // The OverlayObjects are cleared using the destructor of OverlayObjectList.
+    // That destructor calls clear() at the list which removes all objects from the
+    // OverlayManager and deletes them.
+    delete[] mpPolygons;
+}
+
+void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirrorAxisB)
+{
+    // get rid of old overlay objects
+    maObjects.clear();
+
+    // create new ones
+    for(sal_uInt32 a(0L); a < mrView.PaintWindowCount(); a++)
+    {
+        SdrPaintWindow* pCandidate = mrView.GetPaintWindow(a);
+        ::sdr::overlay::OverlayManager* pTargetOverlay = pCandidate->GetOverlayManager();
+
+        if(pTargetOverlay)
+        {
+            for(sal_uInt32 b(0L); b < mnCount; b++)
+            {
+                basegfx::B2DPolyPolygon aPolyPolygon(mpPolygons[b]);
+
+                // translate and rotate polygon so that given edge is on x axis, them mirror in y and translate back
+                const basegfx::B2DVector aEdge(aMirrorAxisB.X() - aMirrorAxisA.X(), aMirrorAxisB.Y() - aMirrorAxisA.Y());
+                basegfx::B2DHomMatrix aMatrixTransform;
+
+                aMatrixTransform.translate(-aMirrorAxisA.X(), -aMirrorAxisA.Y());
+                aMatrixTransform.rotate(-atan2(aEdge.getY(), aEdge.getX()));
+                aMatrixTransform.scale(1.0, -1.0);
+                aMatrixTransform.rotate(atan2(aEdge.getY(), aEdge.getX()));
+                aMatrixTransform.translate(aMirrorAxisA.X(), aMirrorAxisA.Y());
+
+                // apply to polygon
+                aPolyPolygon.transform(aMatrixTransform);
+
+                ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(aPolyPolygon);
+                pTargetOverlay->add(*pNew);
+                maObjects.append(*pNew);
+            }
+        }
+    }
+}
 
 /*************************************************************************
 |*
@@ -201,30 +287,6 @@ long DistPoint2Line (Point u,
 
 E3dView::E3dView(SdrModel* pModel, OutputDevice* pOut) :
     SdrView(pModel, pOut)
-{
-    InitView ();
-}
-
-/*************************************************************************
-|*
-|* Konstruktor 2
-|*
-\************************************************************************/
-
-E3dView::E3dView(SdrModel* pModel, XOutputDevice* pExtOut) :
-    SdrView(pModel, pExtOut)
-{
-    InitView ();
-}
-
-/*************************************************************************
-|*
-|* Konstruktor 3
-|*
-\************************************************************************/
-
-E3dView::E3dView(SdrModel* pModel) :
-    SdrView(pModel)
 {
     InitView ();
 }
@@ -304,7 +366,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
             aInfoRec.nPaintMode|=SDRPAINTMODE_ANILIKEPRN;
 
             Point aOfs(-rOfs.X(), -rOfs.Y());
-            aOfs += pM->GetPageView()->GetOffset();
+//          aOfs += pM->GetPageView()->GetOffset();
 
             if(aOfs != pXOut->GetOffset())
                 pXOut->SetOffset(aOfs);
@@ -422,10 +484,9 @@ SdrModel* E3dView::GetMarkedObjModel() const
                 // (dies koennten nur Szenen sein)
                 if(!IsObjMarked(pObj))
                 {
-                    USHORT nAnz=GetPageViewCount();
-                    for (USHORT nv=0; nv<nAnz; nv++) {
-                        SdrPageView* pPV=GetPageViewPvNum(nv);
-                        ((E3dView*)this)->MarkObj(pObj,pPV,FALSE,TRUE);
+                    if(GetSdrPageView())
+                    {
+                        ((E3dView*)this)->MarkObj(pObj, GetSdrPageView(), FALSE, TRUE);
                     }
                 }
             }
@@ -586,90 +647,88 @@ BOOL E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDs
                     bRetval = TRUE;
 
                     // Transformation ObjectToEye Src
-                    Matrix4D aMatSrc;
+                    basegfx::B3DHomMatrix aMatSrc;
                     aMatSrc = ((E3dCompoundObject*)pObj)->GetFullTransform();
                     aMatSrc *= rCameraSetSrc.GetOrientation();
 
                     // Tanslation und scale von source
-                    B3dVolume aDevVolSrc = rCameraSetSrc.GetDeviceVolume();
+                    basegfx::B3DRange aDevVolSrc(rCameraSetSrc.GetDeviceVolume());
 
                     // auf Augkoordinaten umstellen
-                    double fTemp = aDevVolSrc.MinVec().Z();
-                    aDevVolSrc.MinVec().Z() = -aDevVolSrc.MaxVec().Z();
-                    aDevVolSrc.MaxVec().Z() = -fTemp;
+                    aDevVolSrc = basegfx::B3DRange(
+                        aDevVolSrc.getMinX(), aDevVolSrc.getMinY(), -aDevVolSrc.getMaxZ(),
+                        aDevVolSrc.getMaxX(), aDevVolSrc.getMaxY(), -aDevVolSrc.getMinZ());
 
-                    Vector3D aProjScaleSrc(
-                        2.0 / aDevVolSrc.GetWidth(),
-                        2.0 / aDevVolSrc.GetHeight(),
-                        2.0 / aDevVolSrc.GetDepth());
-                    Vector3D aProjTransSrc(
-                        -1.0 * ((aDevVolSrc.MaxVec().X() + aDevVolSrc.MinVec().X()) / aDevVolSrc.GetWidth()),
-                        -1.0 * ((aDevVolSrc.MaxVec().Y() + aDevVolSrc.MinVec().Y()) / aDevVolSrc.GetHeight()),
-                        -1.0 * ((aDevVolSrc.MaxVec().Z() + aDevVolSrc.MinVec().Z()) / aDevVolSrc.GetDepth()));
-                    Vector3D aViewScaleSrc(rCameraSetSrc.GetScale());
-                    aViewScaleSrc.Z() = 1.0;
+                    basegfx::B3DPoint aProjScaleSrc(
+                        2.0 / aDevVolSrc.getWidth(),
+                        2.0 / aDevVolSrc.getHeight(),
+                        2.0 / aDevVolSrc.getDepth());
+                    basegfx::B3DPoint aProjTransSrc(
+                        -1.0 * ((aDevVolSrc.getMaxX() + aDevVolSrc.getMinX()) / aDevVolSrc.getWidth()),
+                        -1.0 * ((aDevVolSrc.getMaxY() + aDevVolSrc.getMinY()) / aDevVolSrc.getHeight()),
+                        -1.0 * ((aDevVolSrc.getMaxZ() + aDevVolSrc.getMinZ()) / aDevVolSrc.getDepth()));
+                    basegfx::B3DPoint aViewScaleSrc(rCameraSetSrc.GetScale());
+                    aViewScaleSrc.setZ(1.0);
 
                     // Tanslation und scale von dest
-                    B3dVolume aDevVolDst = rCameraSetDst.GetDeviceVolume();
+                    basegfx::B3DRange aDevVolDst(rCameraSetDst.GetDeviceVolume());
 
                     // auf Augkoordinaten umstellen
-                    fTemp = aDevVolDst.MinVec().Z();
-                    aDevVolDst.MinVec().Z() = -aDevVolDst.MaxVec().Z();
-                    aDevVolDst.MaxVec().Z() = -fTemp;
+                    aDevVolDst = basegfx::B3DRange(
+                        aDevVolDst.getMinX(), aDevVolDst.getMinY(), -aDevVolDst.getMaxZ(),
+                        aDevVolDst.getMaxX(), aDevVolDst.getMaxY(), -aDevVolDst.getMinZ());
 
-                    Vector3D aProjScaleDst(
-                        2.0 / aDevVolDst.GetWidth(),
-                        2.0 / aDevVolDst.GetHeight(),
-                        2.0 / aDevVolDst.GetDepth());
-                    Vector3D aProjTransDst(
-                        -1.0 * ((aDevVolDst.MaxVec().X() + aDevVolDst.MinVec().X()) / aDevVolDst.GetWidth()),
-                        -1.0 * ((aDevVolDst.MaxVec().Y() + aDevVolDst.MinVec().Y()) / aDevVolDst.GetHeight()),
-                        -1.0 * ((aDevVolDst.MaxVec().Z() + aDevVolDst.MinVec().Z()) / aDevVolDst.GetDepth()));
-                    Vector3D aViewScaleDst(rCameraSetDst.GetScale());
-                    aViewScaleDst.Z() = 1.0;
+                    basegfx::B3DPoint aProjScaleDst(
+                        2.0 / aDevVolDst.getWidth(),
+                        2.0 / aDevVolDst.getHeight(),
+                        2.0 / aDevVolDst.getDepth());
+                    basegfx::B3DPoint aProjTransDst(
+                        -1.0 * ((aDevVolDst.getMaxX() + aDevVolDst.getMinX()) / aDevVolDst.getWidth()),
+                        -1.0 * ((aDevVolDst.getMaxY() + aDevVolDst.getMinY()) / aDevVolDst.getHeight()),
+                        -1.0 * ((aDevVolDst.getMaxZ() + aDevVolDst.getMinZ()) / aDevVolDst.getDepth()));
+                    basegfx::B3DPoint aViewScaleDst(rCameraSetDst.GetScale());
+                    aViewScaleDst.setZ(1.0);
 
                     // Groesse des Objektes in Augkoordinaten Src
-                    Volume3D aObjVolSrc;
-                    aObjVolSrc.Union(((E3dCompoundObject*)pObj)->GetBoundVolume().GetTransformVolume(aMatSrc));
+                    basegfx::B3DRange aObjVolSrc(((E3dCompoundObject*)pObj)->GetBoundVolume().GetTransformVolume(aMatSrc));
 
                     // Vorlaeufige Groesse in Augkoordinaten Dst
-                    Matrix4D aMatZwi = aMatSrc;
-                    aMatZwi.Scale(aProjScaleSrc);
-                    aMatZwi.Translate(aProjTransSrc);
-                    aMatZwi.Scale(aViewScaleSrc);
+                    basegfx::B3DHomMatrix aMatZwi = aMatSrc;
+                    aMatZwi.scale(aProjScaleSrc.getX(), aProjScaleSrc.getY(), aProjScaleSrc.getZ());
+                    aMatZwi.translate(aProjTransSrc.getX(), aProjTransSrc.getY(), aProjTransSrc.getZ());
+                    aMatZwi.scale(aViewScaleSrc.getX(), aViewScaleSrc.getY(), aViewScaleSrc.getZ());
 
-                    Matrix4D aMatDst;
-                    aMatDst.Scale(aProjScaleDst);
-                    aMatDst.Translate(aProjTransDst);
-                    aMatDst.Scale(aViewScaleDst);
-                    aMatDst.Invert();
+                    basegfx::B3DHomMatrix aMatDst;
+                    aMatDst.scale(aProjScaleDst.getX(), aProjScaleDst.getY(), aProjScaleDst.getZ());
+                    aMatDst.translate(aProjTransDst.getX(), aProjTransDst.getY(), aProjTransDst.getZ());
+                    aMatDst.scale(aViewScaleDst.getX(), aViewScaleDst.getY(), aViewScaleDst.getZ());
+                    aMatDst.invert();
 
                     aMatZwi *= aMatDst;
 
-                    Volume3D aObjVolDst;
-                    aObjVolDst.Union(((E3dCompoundObject*)pObj)->GetBoundVolume().GetTransformVolume(aMatZwi));
+                    basegfx::B3DRange aObjVolDst(((E3dCompoundObject*)pObj)->GetBoundVolume().GetTransformVolume(aMatZwi));
 
                     // Beide verhaeltnistiefen berechnen und mitteln
-                    double fDepthOne = (aObjVolSrc.GetDepth() * aObjVolDst.GetWidth()) / aObjVolSrc.GetWidth();
-                    double fDepthTwo = (aObjVolSrc.GetDepth() * aObjVolDst.GetHeight()) / aObjVolSrc.GetHeight();
+                    double fDepthOne = (aObjVolSrc.getDepth() * aObjVolDst.getWidth()) / aObjVolSrc.getWidth();
+                    double fDepthTwo = (aObjVolSrc.getDepth() * aObjVolDst.getHeight()) / aObjVolSrc.getHeight();
                     double fWantedDepth = (fDepthOne + fDepthTwo) / 2.0;
 
                     // Faktor zum Tiefe anpassen bilden
-                    double fFactor = fWantedDepth / aObjVolDst.GetDepth();
-                    Vector3D aDepthScale(1.0, 1.0, fFactor);
+                    double fFactor = fWantedDepth / aObjVolDst.getDepth();
+                    basegfx::B3DPoint aDepthScale(1.0, 1.0, fFactor);
 
                     // Endgueltige Transformation bilden
-                    aMatSrc.Scale(aProjScaleSrc);
-                    aMatSrc.Translate(aProjTransSrc);
-                    aMatSrc.Scale(aViewScaleSrc);
-                    aMatSrc.Scale(aDepthScale);
+                    aMatSrc.scale(aProjScaleSrc.getX(), aProjScaleSrc.getY(), aProjScaleSrc.getZ());
+                    aMatSrc.translate(aProjTransSrc.getX(), aProjTransSrc.getY(), aProjTransSrc.getZ());
+                    aMatSrc.scale(aViewScaleSrc.getX(), aViewScaleSrc.getY(), aViewScaleSrc.getZ());
+                    aMatSrc.scale(aDepthScale.getX(), aDepthScale.getY(), aDepthScale.getZ());
 
                     aMatDst = pDstScene->GetFullTransform();
                     aMatDst *= rCameraSetDst.GetOrientation();
-                    aMatDst.Scale(aProjScaleDst);
-                    aMatDst.Translate(aProjTransDst);
-                    aMatDst.Scale(aViewScaleDst);
-                    aMatDst.Invert();
+                    aMatDst.scale(aProjScaleDst.getX(), aProjScaleDst.getY(), aProjScaleDst.getZ());
+                    aMatDst.translate(aProjTransDst.getX(), aProjTransDst.getY(), aProjTransDst.getZ());
+                    aMatDst.scale(aViewScaleDst.getX(), aViewScaleDst.getY(), aViewScaleDst.getZ());
+                    aMatDst.invert();
 
                     aMatSrc *= aMatDst;
 
@@ -683,30 +742,33 @@ BOOL E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDs
                     // #83403# translate in view coor
                     {
                         // screen position of center of old object
-                        Matrix4D aSrcFullTrans = ((E3dCompoundObject*)pObj)->GetFullTransform();
+                        basegfx::B3DHomMatrix aSrcFullTrans = ((E3dCompoundObject*)pObj)->GetFullTransform();
                         rCameraSetSrc.SetObjectTrans(aSrcFullTrans);
-                        Vector3D aSrcCenter = ((E3dCompoundObject*)pObj)->GetCenter();
+                        basegfx::B3DPoint aSrcCenter(((E3dCompoundObject*)pObj)->GetCenter());
                         aSrcCenter = rCameraSetSrc.ObjectToViewCoor(aSrcCenter);
+
                         if(aOffset.X() != 0 || aOffset.Y() != 0)
-                            aSrcCenter += Vector3D((double)aOffset.X(), (double)aOffset.Y(), 0.0);
+                        {
+                            aSrcCenter += basegfx::B3DPoint((double)aOffset.X(), (double)aOffset.Y(), 0.0);
+                        }
 
                         // to have a valid Z-Coor in dst system, calc current center of dst object
-                        Matrix4D aDstFullTrans = pNew->GetFullTransform();
+                        basegfx::B3DHomMatrix aDstFullTrans = pNew->GetFullTransform();
                         rCameraSetDst.SetObjectTrans(aDstFullTrans);
-                        Vector3D aDstCenter = pNew->GetCenter();
+                        basegfx::B3DPoint aDstCenter(pNew->GetCenter());
                         aDstCenter = rCameraSetDst.ObjectToEyeCoor(aDstCenter);
 
                         // convert aSrcCenter to a eye position of dst scene
-                        Vector3D aNewDstCenter = rCameraSetDst.ViewToEyeCoor(aSrcCenter);
-                        aNewDstCenter.Z() = aDstCenter.Z();
+                        basegfx::B3DPoint aNewDstCenter(rCameraSetDst.ViewToEyeCoor(aSrcCenter));
+                        aNewDstCenter.setZ(aDstCenter.getZ());
 
                         // transform back to object coor
                         aNewDstCenter = rCameraSetDst.EyeToObjectCoor(aNewDstCenter);
 
                         // get transform vector
-                        Vector3D aTransformCorrection = aNewDstCenter - pNew->GetCenter();
-                        Matrix4D aTransCorrMat;
-                        aTransCorrMat.Translate(aTransformCorrection);
+                        basegfx::B3DPoint aTransformCorrection(aNewDstCenter - pNew->GetCenter());
+                        basegfx::B3DHomMatrix aTransCorrMat;
+                        aTransCorrMat.translate(aTransformCorrection.getX(), aTransformCorrection.getY(), aTransformCorrection.getZ());
 
                         // treanslate new object, add translate in front of obj transform
                         pNew->SetTransform(pNew->GetTransform() * aTransCorrMat); // #112587#
@@ -841,7 +903,7 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
     }
 }
 
-void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, BOOL bExtrude, double fDepth, Matrix4D& rLatheMat)
+void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, BOOL bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat)
 {
     // Einzelnes PathObject, dieses umwanden
     SdrPathObj* pPath = PTR_CAST(SdrPathObj, pObj);
@@ -890,9 +952,9 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, BOO
         }
         else
         {
-            PolyPolygon3D aPolyPoly3D(pPath->GetPathPoly(), aDefault.GetDefaultLatheScale());
-            aPolyPoly3D.Transform(rLatheMat);
-            p3DObj = new E3dLatheObj(aDefault, aPolyPoly3D);
+            basegfx::B2DPolyPolygon aPolyPoly2D(pPath->GetPathPoly());
+            aPolyPoly2D.transform(rLatheMat);
+            p3DObj = new E3dLatheObj(aDefault, aPolyPoly2D);
         }
 
         // Attribute setzen
@@ -910,7 +972,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, BOO
     }
 }
 
-void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, BOOL bExtrude, double fDepth, Matrix4D& rLatheMat)
+void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, BOOL bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat)
 {
     if(pObj)
     {
@@ -981,7 +1043,7 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, BOOL bExtrude
 |*
 \************************************************************************/
 
-void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, Vector3D aPnt1, Vector3D aPnt2)
+void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, basegfx::B2DPoint aPnt1, basegfx::B2DPoint aPnt2)
 {
     if(AreObjectsMarked())
     {
@@ -1004,7 +1066,7 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, Vector3D aPnt1, Vector3D aPnt2
         // Tiefe relativ zur Groesse der Selektion bestimmen
         double fDepth = 0.0;
         double fRot3D = 0.0;
-        Matrix4D aLatheMat;
+        basegfx::B2DHomMatrix aLatheMat;
 
         if(bExtrude)
         {
@@ -1019,33 +1081,33 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, Vector3D aPnt1, Vector3D aPnt2
             {
                 // Rotation um Kontrollpunkt1 mit eigestelltem Winkel
                 // fuer 3D Koordinaten
-                Vector3D aDiff = aPnt1 - aPnt2;
-                fRot3D = atan2(aDiff.Y(), aDiff.X()) - F_PI2;
+                basegfx::B2DPoint aDiff(aPnt1 - aPnt2);
+                fRot3D = atan2(aDiff.getY(), aDiff.getX()) - F_PI2;
 
                 if(fabs(fRot3D) < SMALL_DVALUE)
                     fRot3D = 0.0;
 
                 if(fRot3D != 0.0)
                 {
-                    aLatheMat.Translate(-aPnt2);
-                    aLatheMat.RotateZ(-fRot3D);
-                    aLatheMat.Translate(aPnt2);
+                    aLatheMat.translate(-aPnt2.getX(), -aPnt2.getY());
+                    aLatheMat.rotate(-fRot3D);
+                    aLatheMat.translate(aPnt2.getX(), aPnt2.getY());
                 }
             }
 
-            if(aPnt2.X() != 0.0)
+            if(aPnt2.getX() != 0.0)
             {
                 // Translation auf Y=0 - Achse
-                aLatheMat.TranslateX(-aPnt2.X());
+                aLatheMat.translate(-aPnt2.getX(), 0.0);
             }
             else
             {
-                aLatheMat.Translate((double)-aRect.Left());
+                aLatheMat.translate((double)-aRect.Left(), 0.0);
             }
 
             // Inverse Matrix bilden, um die Zielausdehnung zu bestimmen
-            Matrix4D aInvLatheMat = aLatheMat;
-            aInvLatheMat.Invert();
+            basegfx::B2DHomMatrix aInvLatheMat(aLatheMat);
+            aInvLatheMat.invert();
 
             // SnapRect Ausdehnung mittels Spiegelung an der Rotationsachse
             // erweitern
@@ -1054,35 +1116,35 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, Vector3D aPnt1, Vector3D aPnt2
                 SdrMark* pMark = GetSdrMarkByIndex(a);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
                 Rectangle aTurnRect = pObj->GetSnapRect();
-                Vector3D aRot;
+                basegfx::B2DPoint aRot;
                 Point aRotPnt;
 
-                aRot = Vector3D(aTurnRect.Left(), -aTurnRect.Top(), 0.0);
+                aRot = basegfx::B2DPoint(aTurnRect.Left(), -aTurnRect.Top());
                 aRot *= aLatheMat;
-                aRot.X() = -aRot.X();
+                aRot.setX(-aRot.getX());
                 aRot *= aInvLatheMat;
-                aRotPnt = Point((long)(aRot.X() + 0.5), (long)(-aRot.Y() - 0.5));
+                aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
                 aRect.Union(Rectangle(aRotPnt, aRotPnt));
 
-                aRot = Vector3D(aTurnRect.Left(), -aTurnRect.Bottom(), 0.0);
+                aRot = basegfx::B2DPoint(aTurnRect.Left(), -aTurnRect.Bottom());
                 aRot *= aLatheMat;
-                aRot.X() = -aRot.X();
+                aRot.setX(-aRot.getX());
                 aRot *= aInvLatheMat;
-                aRotPnt = Point((long)(aRot.X() + 0.5), (long)(-aRot.Y() - 0.5));
+                aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
                 aRect.Union(Rectangle(aRotPnt, aRotPnt));
 
-                aRot = Vector3D(aTurnRect.Right(), -aTurnRect.Top(), 0.0);
+                aRot = basegfx::B2DPoint(aTurnRect.Right(), -aTurnRect.Top());
                 aRot *= aLatheMat;
-                aRot.X() = -aRot.X();
+                aRot.setX(-aRot.getX());
                 aRot *= aInvLatheMat;
-                aRotPnt = Point((long)(aRot.X() + 0.5), (long)(-aRot.Y() - 0.5));
+                aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
                 aRect.Union(Rectangle(aRotPnt, aRotPnt));
 
-                aRot = Vector3D(aTurnRect.Right(), -aTurnRect.Bottom(), 0.0);
+                aRot = basegfx::B2DPoint(aTurnRect.Right(), -aTurnRect.Bottom());
                 aRot *= aLatheMat;
-                aRot.X() = -aRot.X();
+                aRot.setX(-aRot.getX());
                 aRot *= aInvLatheMat;
-                aRotPnt = Point((long)(aRot.X() + 0.5), (long)(-aRot.Y() - 0.5));
+                aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
                 aRect.Union(Rectangle(aRotPnt, aRotPnt));
             }
         }
@@ -1104,17 +1166,16 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, Vector3D aPnt1, Vector3D aPnt2
                 DoDepthArrange(pScene, fDepth);
 
             // 3D-Objekte auf die Mitte des Gesamtrechtecks zentrieren
-            Vector3D aCenter = pScene->GetCenter();
-            Matrix4D aMatrix;
+            basegfx::B3DPoint aCenter(pScene->GetCenter());
+            basegfx::B3DHomMatrix aMatrix;
 
-            aMatrix.Translate(-aCenter);
+            aMatrix.translate(-aCenter.getX(), -aCenter.getY(), -aCenter.getZ());
             pScene->SetTransform(aMatrix * pScene->GetTransform()); // #112587#
 
             // Szene initialisieren
             pScene->NbcSetSnapRect(aRect);
             Volume3D aBoundVol = pScene->GetBoundVolume();
-            InitScene(pScene, (double)aRect.GetWidth(),
-                (double)aRect.GetHeight(), aBoundVol.GetDepth());
+            InitScene(pScene, (double)aRect.GetWidth(), (double)aRect.GetHeight(), aBoundVol.getDepth());
 
             // Transformationen initialisieren, damit bei RecalcSnapRect()
             // richtig gerechnet wird
@@ -1125,7 +1186,7 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, Vector3D aPnt1, Vector3D aPnt2
             SdrObject* pRepObj = GetMarkedObjectByIndex(0);
             SdrPageView* pPV = GetSdrPageViewOfMarkedByIndex(0);
             MarkObj(pRepObj, pPV, TRUE);
-            ReplaceObject(pRepObj, *pPV, pScene, FALSE);
+            ReplaceObjectAtView(pRepObj, *pPV, pScene, FALSE);
             DeleteMarked();
             MarkObj(pScene, pPV);
 
@@ -1138,7 +1199,6 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, Vector3D aPnt1, Vector3D aPnt2
             // Default-Rotation setzen
             double XRotateDefault = 20;
             pScene->RotateX(DEG2RAD(XRotateDefault));
-            //BFS01pScene->SetSortingMode(E3D_SORT_FAST_SORTING|E3D_SORT_IN_PARENTS|E3D_SORT_TEST_LENGTH);
 
             // SnapRects der Objekte ungueltig
             pScene->CorrectSceneDimensions();
@@ -1178,6 +1238,63 @@ struct E3dDepthLayer
     ~E3dDepthLayer() { while(pNext) { E3dDepthNeighbour* pSucc = pNext->pNext; delete pNext; pNext = pSucc; }}
 };
 
+bool ImpDoesOverlap(const basegfx::B2DPolygon& rPolygonA, const basegfx::B2DPolygon& rPolygonB)
+{
+    bool bRetval(false);
+    const basegfx::B2DRange aRangeA(basegfx::tools::getRange(rPolygonA));
+    const basegfx::B2DRange aRangeB(basegfx::tools::getRange(rPolygonB));
+
+    if(aRangeA.overlaps(aRangeB))
+    {
+        // A in B ?
+        if(basegfx::tools::isInside(rPolygonA, rPolygonB))
+            return true;
+
+        // B in A ?
+        if(basegfx::tools::isInside(rPolygonB, rPolygonA))
+            return true;
+
+        // A and B the same ?
+        if(basegfx::tools::isInside(rPolygonB, rPolygonA, true))
+            return true;
+    }
+
+    return bRetval;
+}
+
+bool ImpDoesOverlap(const basegfx::B2DPolyPolygon& rPolyPolygonA, const basegfx::B2DPolyPolygon& rPolyPolygonB)
+{
+    bool bRetval(false);
+    const basegfx::B2DRange aRangeA(basegfx::tools::getRange(rPolyPolygonA));
+    const basegfx::B2DRange aRangeB(basegfx::tools::getRange(rPolyPolygonB));
+
+    if(aRangeA.overlaps(aRangeB))
+    {
+        const sal_uInt32 nCntA(rPolyPolygonA.count());
+        const sal_uInt32 nCntB(rPolyPolygonB.count());
+
+        for(sal_uInt32 a(0L); !bRetval && a < nCntA; a++)
+        {
+            const basegfx::B2DPolygon aPolygonA(rPolyPolygonA.getB2DPolygon(a));
+
+            if(aPolygonA.isClosed())
+            {
+                for(sal_uInt32 b(0L); !bRetval && b < nCntB; b++)
+                {
+                    const basegfx::B2DPolygon aPolygonB(rPolyPolygonB.getB2DPolygon(b));
+
+                    if(aPolygonB.isClosed())
+                    {
+                        bRetval = ImpDoesOverlap(aPolygonA, aPolygonB);
+                    }
+                }
+            }
+        }
+    }
+
+    return bRetval;
+}
+
 void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
 {
     if(pScene && pScene->GetSubList() && pScene->GetSubList()->GetObjCount() > 1)
@@ -1196,7 +1313,7 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
             if(pSubObj && pSubObj->ISA(E3dExtrudeObj))
             {
                 E3dExtrudeObj* pExtrudeObj = (E3dExtrudeObj*)pSubObj;
-                const PolyPolygon3D& rExtrudePoly = pExtrudeObj->GetExtrudePolygon();
+                const basegfx::B2DPolyPolygon aExtrudePoly(pExtrudeObj->GetExtrudePolygon());
 
                 const SfxItemSet& rLocalSet = pExtrudeObj->GetMergedItemSet();
                 XFillStyle eLocalFillStyle = ITEMVALUE(rLocalSet, XATTR_FILLSTYLE, XFillStyleItem);
@@ -1213,8 +1330,8 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
                     while(!bOverlap && pAct)
                     {
                         // ueberlappen sich pAct->pObj und pExtrudeObj ?
-                        const PolyPolygon3D& rActPoly = pAct->pObj->GetExtrudePolygon();
-                        bOverlap = rExtrudePoly.DoesOverlap(rActPoly, DEGREE_FLAG_X|DEGREE_FLAG_Y);
+                        const basegfx::B2DPolyPolygon aActPoly(pAct->pObj->GetExtrudePolygon());
+                        bOverlap = ImpDoesOverlap(aExtrudePoly, aActPoly);
 
                         if(bOverlap)
                         {
@@ -1322,15 +1439,10 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
     SdrHdl* pHdl, short nMinMov,
     SdrDragMethod* pForcedMeth)
 {
-#ifndef SVX_LIGHT
-    if (b3dCreationActive && GetMarkedObjectCount())
+    if(Is3DRotationCreationActive() && GetMarkedObjectCount())
     {
         // bestimme alle selektierten Polygone und gebe die gespiegelte Hilfsfigur aus
-        if (!pMirrorPolygon && !pMirroredPolygon)
-        {
-            CreateMirrorPolygons ();
-            ShowMirrorPolygons (aRef1, aRef2);
-        }
+        mpMirrorOverlay->SetMirrorAxis(aRef1, aRef2);
     }
     else
     {
@@ -1402,7 +1514,7 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
 
                         // die nicht erlaubten Rotationen ausmaskieren
                         eConstraint = E3dDragConstraint(eConstraint& eDragConstraint);
-                        pForcedMeth = new E3dDragRotate(*this, GetMarkedObjectList(), /*BFS01eDragDetail,*/ eConstraint,
+                        pForcedMeth = new E3dDragRotate(*this, GetMarkedObjectList(), eConstraint,
                                                         SvtOptions3D().IsShowFull() );
                     }
                     break;
@@ -1411,7 +1523,7 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                     {
                         if(!bThereAreRootScenes)
                         {
-                            pForcedMeth = new E3dDragMove(*this, GetMarkedObjectList(), /*BFS01eDragDetail,*/ eDragHdl, eConstraint,
+                            pForcedMeth = new E3dDragMove(*this, GetMarkedObjectList(), eDragHdl, eConstraint,
                                                           SvtOptions3D().IsShowFull() );
                         }
                     }
@@ -1425,13 +1537,6 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                     case SDRDRAG_GRADIENT:
                     default:
                     {
-//BFS01                     long nCnt = GetMarkedObjectCount();
-//BFS01                     for(long nObjs = 0;nObjs < nCnt;nObjs++)
-//BFS01                     {
-//BFS01                         SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
-//BFS01                         if(pObj && pObj->ISA(E3dObject))
-//BFS01                             ((E3dObject*) pObj)->SetDragDetail(eDragDetail);
-//BFS01                     }
                     }
                     break;
                 }
@@ -1439,9 +1544,6 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
         }
     }
     return SdrView::BegDragObj(rPnt, pOut, pHdl, nMinMov, pForcedMeth);
-#else
-    return sal_False;
-#endif
 }
 
 /*************************************************************************
@@ -1478,7 +1580,7 @@ E3dScene* E3dView::GetMarkedScene()
 |*
 \************************************************************************/
 
-void E3dView::SetCurrent3DObj(E3dObject* p3DObj)
+E3dScene* E3dView::SetCurrent3DObj(E3dObject* p3DObj)
 {
     DBG_ASSERT(p3DObj != NULL, "Nana, wer steckt denn hier 'nen NULL-Zeiger rein?");
     E3dScene* pScene = NULL;
@@ -1486,21 +1588,22 @@ void E3dView::SetCurrent3DObj(E3dObject* p3DObj)
     // get transformed BoundVolume of the object
     Volume3D aVolume;
     const Volume3D& rObjVol = p3DObj->GetBoundVolume();
-    const Matrix4D& rObjTrans = p3DObj->GetTransform();
-    aVolume.Union(rObjVol.GetTransformVolume(rObjTrans));
+    const basegfx::B3DHomMatrix& rObjTrans = p3DObj->GetTransform();
+    aVolume.expand(rObjVol.GetTransformVolume(rObjTrans));
 
-    double fW = aVolume.GetWidth();
-    double fH = aVolume.GetHeight();
+    double fW(aVolume.getWidth());
+    double fH(aVolume.getHeight());
 
     Rectangle aRect(0,0, (long) fW, (long) fH);
 
     pScene = new E3dPolyScene(Get3DDefaultAttributes());
 
-    InitScene(pScene, fW, fH, aVolume.MaxVec().Z() + ((fW + fH) / 4.0));
+    InitScene(pScene, fW, fH, aVolume.getMaxZ() + ((fW + fH) / 4.0));
 
     pScene->Insert3DObj(p3DObj);
     pScene->NbcSetSnapRect(aRect);
-    SetCurrentLibObj(pScene);
+
+    return pScene;
 }
 
 /*************************************************************************
@@ -1515,14 +1618,14 @@ void E3dView::InitScene(E3dScene* pScene, double fW, double fH, double fCamZ)
 
     aCam.SetAutoAdjustProjection(FALSE);
     aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
-    Vector3D aLookAt;
+    basegfx::B3DPoint aLookAt;
 
     double fDefaultCamPosZ = GetDefaultCamPosZ();
-    Vector3D aCamPos(0.0, 0.0, fCamZ < fDefaultCamPosZ ? fDefaultCamPosZ : fCamZ);
+    basegfx::B3DPoint aCamPos(0.0, 0.0, fCamZ < fDefaultCamPosZ ? fDefaultCamPosZ : fCamZ);
 
     aCam.SetPosAndLookAt(aCamPos, aLookAt);
     aCam.SetFocalLength(GetDefaultCamFocal());
-    aCam.SetDefaults(Vector3D(0.0, 0.0, fDefaultCamPosZ), aLookAt, GetDefaultCamFocal());
+    aCam.SetDefaults(basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt, GetDefaultCamFocal());
     pScene->SetCamera(aCam);
 }
 
@@ -1532,16 +1635,14 @@ void E3dView::InitScene(E3dScene* pScene, double fW, double fH, double fCamZ)
 |*
 \************************************************************************/
 
-void E3dView::Start3DCreation ()
+void E3dView::Start3DCreation()
 {
-    b3dCreationActive = TRUE;
-
     if (GetMarkedObjectCount())
     {
         // irgendwelche Markierungen ermitteln und ausschalten
         BOOL bVis = IsMarkHdlShown();
 
-        if (bVis) HideMarkHdl(NULL);
+        if (bVis) HideMarkHdl();
 
         // bestimme die koordinaten fuer JOEs Mirrorachse
         // entgegen der normalen Achse wird diese an die linke Seite des Objektes
@@ -1551,7 +1652,7 @@ void E3dView::Start3DCreation ()
         long          nMinLen = 0;
         long          nObjDst = 0;
         long          nOutHgt = 0;
-        OutputDevice* pOut    = GetWin(0);
+        OutputDevice* pOut    = GetFirstOutputDevice(); //GetWin(0);
 
         // erstmal Darstellungsgrenzen bestimmen
         if (pOut != NULL)
@@ -1581,21 +1682,21 @@ void E3dView::Start3DCreation ()
         }
 
         // und dann die Markierungen oben und unten an das Objekt heften
-        Rectangle aR;
-        for(UINT32 nMark = 0; nMark < GetMarkedObjectCount(); nMark++)
+        basegfx::B2DRange aR;
+        for(sal_uInt32 nMark(0L); nMark < GetMarkedObjectCount(); nMark++)
         {
-            XPolyPolygon aXPP;
             SdrObject* pMark = GetMarkedObjectByIndex(nMark);
-            pMark->TakeXorPoly(aXPP, FALSE);
-            aR.Union(aXPP.GetBoundRect());
+            basegfx::B2DPolyPolygon aXPP(pMark->TakeXorPoly(FALSE));
+            aR.expand(basegfx::tools::getRange(aXPP));
         }
-        Point     aCenter(aR.Center());
-        long      nMarkHgt = aR.GetHeight() - 1;
+
+        basegfx::B2DPoint aCenter(aR.getCenter());
+        long      nMarkHgt = FRound(aR.getHeight()) - 1;
         long      nHgt     = nMarkHgt + nObjDst * 2;
 
         if (nHgt < nMinLen) nHgt = nMinLen;
 
-        long nY1 = aCenter.Y() - (nHgt + 1) / 2;
+        long nY1 = FRound(aCenter.getY()) - (nHgt + 1) / 2;
         long nY2 = nY1 + nHgt;
 
         if (pOut && (nMinLen > nOutHgt)) nMinLen = nOutHgt;
@@ -1613,7 +1714,7 @@ void E3dView::Start3DCreation ()
             }
         }
 
-        aRef1.X() = aR.Left();    // Initial Achse um 2/100mm nach links
+        aRef1.X() = FRound(aR.getMinX());    // Initial Achse um 2/100mm nach links
         aRef1.Y() = nY1;
         aRef2.X() = aRef1.X();
         aRef2.Y() = nY2;
@@ -1621,14 +1722,16 @@ void E3dView::Start3DCreation ()
         // Markierungen einschalten
         SetMarkHandles();
 
-        if (bVis) ShowMarkHdl(NULL);
+        if (bVis) ShowMarkHdl();
         if (AreObjectsMarked()) MarkListHasChanged();
 
         // SpiegelPolygone SOFORT zeigen
-        CreateMirrorPolygons ();
-        const SdrHdlList &aHdlList = GetHdlList ();
-        ShowMirrorPolygons (aHdlList.GetHdl (HDL_REF1)->GetPos (),
-                            aHdlList.GetHdl (HDL_REF2)->GetPos ());
+        const SdrHdlList &aHdlList = GetHdlList();
+        mpMirrorOverlay = new Impl3DMirrorConstructOverlay(*this);
+        mpMirrorOverlay->SetMirrorAxis(aHdlList.GetHdl(HDL_REF1)->GetPos(), aHdlList.GetHdl(HDL_REF2)->GetPos());
+        //CreateMirrorPolygons ();
+        //ShowMirrorPolygons (aHdlList.GetHdl (HDL_REF1)->GetPos (),
+        //                  aHdlList.GetHdl (HDL_REF2)->GetPos ());
     }
 }
 
@@ -1640,7 +1743,7 @@ void E3dView::Start3DCreation ()
 
 void E3dView::MovAction(const Point& rPnt)
 {
-    if (b3dCreationActive)
+    if(Is3DRotationCreationActive())
     {
         SdrHdl* pHdl = GetDragHdl();
 
@@ -1656,12 +1759,11 @@ void E3dView::MovAction(const Point& rPnt)
                 const SdrHdlList &aHdlList = GetHdlList ();
 
                 // loesche das gespiegelte Polygon, spiegele das Original und zeichne es neu
-                b3dCreationActive = FALSE;  // Damit in DrawDragObj() gezeichnet wird
-                b3dCreationActive = TRUE;   // restaurieren (Trick)
-                ShowMirrored ();
+                //ShowMirrored ();
                 SdrView::MovAction (rPnt);
-                ShowMirrorPolygons (aHdlList.GetHdl (HDL_REF1)->GetPos (),
-                                    aHdlList.GetHdl (HDL_REF2)->GetPos ());
+                mpMirrorOverlay->SetMirrorAxis(
+                    aHdlList.GetHdl (HDL_REF1)->GetPos(),
+                    aHdlList.GetHdl (HDL_REF2)->GetPos());
             }
         }
         else
@@ -1687,6 +1789,8 @@ void E3dView::MovAction(const Point& rPnt)
 
 void E3dView::End3DCreation(BOOL bUseDefaultValuesForMirrorAxes)
 {
+    ResetCreationActive();
+
     if(AreObjectsMarked())
     {
         if(bUseDefaultValuesForMirrorAxes)
@@ -1697,79 +1801,24 @@ void E3dView::End3DCreation(BOOL bUseDefaultValuesForMirrorAxes)
             if(aRect.GetHeight() <= 1)
                 aRect.SetSize(Size(aRect.GetWidth(), 500));
 
-            Vector3D aPnt1(aRect.Left(), -aRect.Top(), 0.0);
-            Vector3D aPnt2(aRect.Left(), -aRect.Bottom(), 0.0);
+            basegfx::B2DPoint aPnt1(aRect.Left(), -aRect.Top());
+            basegfx::B2DPoint aPnt2(aRect.Left(), -aRect.Bottom());
 
             ConvertMarkedObjTo3D(FALSE, aPnt1, aPnt2);
         }
         else
         {
             // Hilfsfigur ausschalten
-            ShowMirrored();
-
-            // irgendwo kassieren wir eine Rekursion, also unterbinden
-            b3dCreationActive = FALSE;
-
             // bestimme aus den Handlepositionen und den Versatz der Punkte
             const SdrHdlList &aHdlList = GetHdlList();
             Point aMirrorRef1 = aHdlList.GetHdl(HDL_REF1)->GetPos();
             Point aMirrorRef2 = aHdlList.GetHdl(HDL_REF2)->GetPos();
 
-            Vector3D aPnt1(aMirrorRef1.X(), -aMirrorRef1.Y(), 0.0);
-            Vector3D aPnt2(aMirrorRef2.X(), -aMirrorRef2.Y(), 0.0);
+            basegfx::B2DPoint aPnt1(aMirrorRef1.X(), -aMirrorRef1.Y());
+            basegfx::B2DPoint aPnt2(aMirrorRef2.X(), -aMirrorRef2.Y());
 
             ConvertMarkedObjTo3D(FALSE, aPnt1, aPnt2);
         }
-    }
-
-    ResetCreationActive();
-}
-
-/*************************************************************************
-|*
-|* stelle das Mirrorobjekt dar
-|*
-\************************************************************************/
-
-void E3dView::ShowMirrored ()
-{
-    if (b3dCreationActive)
-    {
-        OutputDevice  *pOut = GetWin(0);
-        RasterOp      eRop0 = pOut->GetRasterOp();
-
-        Color aOldLineColor( pXOut->GetLineColor() );
-        Color aOldFillColor( pXOut->GetFillColor() );
-        Color aNewLineColor( COL_BLACK );
-        Color aNewFillColor( COL_TRANSPARENT );
-
-
-        // invertiere die Darstellung
-        pOut->SetRasterOp(ROP_INVERT);
-        pXOut->SetOutDev(pOut);
-        pXOut->OverrideLineColor( aNewLineColor );
-        pXOut->OverrideFillColor( aNewFillColor );
-
-        for (long nMark = 0;
-                  nMark < nPolyCnt;
-                  nMark ++)
-        {
-            const XPolyPolygon &rXPP    = pMirroredPolygon [nMark];
-            USHORT             nPolyAnz = rXPP.Count();
-
-            for (USHORT nPolyNum = 0;
-                       nPolyNum < nPolyAnz;
-                       nPolyNum ++)
-            {
-                const XPolygon &rXP = rXPP [nPolyNum];
-
-                pXOut->DrawXPolyLine(rXP);
-            }
-        }
-
-        pXOut->OverrideLineColor( aOldLineColor );
-        pXOut->OverrideFillColor( aOldFillColor );
-        pOut->SetRasterOp(eRop0);
     }
 }
 
@@ -1781,55 +1830,6 @@ void E3dView::ShowMirrored ()
 
 E3dView::~E3dView ()
 {
-    /*#90353#*/delete [] pMirrorPolygon;
-    /*#90353#*/delete [] pMirroredPolygon;
-    /*#90353#*/delete [] pMarkedObjs;
-}
-
-/*************************************************************************
-|*
-|* Bestimme Anzahl der Polygone und kopiere in die Spiegelpolygone
-|*
-\************************************************************************/
-
-void E3dView::CreateMirrorPolygons ()
-{
-    nPolyCnt         = GetMarkedObjectCount();
-    pMirrorPolygon   = new XPolyPolygon [nPolyCnt];
-    pMirroredPolygon = new XPolyPolygon [nPolyCnt];
-    pMarkedObjs      = new SdrObject* [nPolyCnt];
-    pMyPV            = GetSdrPageViewOfMarkedByIndex(0);
-
-    for (long nMark = nPolyCnt;
-              nMark > 0;
-        )
-    {
-        SdrMark   *pMark = GetSdrMarkByIndex(-- nMark);
-        SdrObject *pObj  = pMark->GetMarkedSdrObj();
-
-        pObj->TakeXorPoly (pMirrorPolygon [nMark], FALSE);
-        pMarkedObjs [nMark] = pObj;
-    }
-}
-
-/*************************************************************************
-|*
-|* spiegele die originalpolygone und stelle sie als hilfsfigur dar
-|*
-\************************************************************************/
-
-void E3dView::ShowMirrorPolygons (Point aMirrorPoint1,
-                                  Point aMirrorPoint2)
-{
-    for (long nMark = 0;
-              nMark < nPolyCnt;
-              nMark ++)
-    {
-        pMirroredPolygon [nMark] = pMirrorPolygon [nMark];
-        MirrorXPoly(pMirroredPolygon [nMark], aMirrorPoint1, aMirrorPoint2);
-    }
-
-    if (nPolyCnt) ShowMirrored ();
 }
 
 /*************************************************************************
@@ -1840,116 +1840,11 @@ void E3dView::ShowMirrorPolygons (Point aMirrorPoint1,
 
 void E3dView::ResetCreationActive ()
 {
-    /*#90353#*/delete [] pMirrorPolygon;
-    /*#90353#*/delete [] pMirroredPolygon;
-    /*#90353#*/delete [] pMarkedObjs;
-
-    pMarkedObjs       = 0;
-    pMirrorPolygon    =
-    pMirroredPolygon  = 0;
-    b3dCreationActive = FALSE;
-    nPolyCnt          = 0;
-}
-
-/*************************************************************************
-|*
-|* Skalarprodukt zweier Punktvektoren
-|*
-\************************************************************************/
-
-long Scalar (Point aPoint1,
-             Point aPoint2)
-{
-    return aPoint1.X () * aPoint2.X () + aPoint1.Y () * aPoint2.Y ();
-}
-
-/*************************************************************************
-|*
-|* Skalarprodukt zweier Punktvektoren
-|*
-\************************************************************************/
-
-Point ScaleVector (Point  aPoint,
-                   double nScale)
-{
-    return Point ((long) ((double) aPoint.X () * nScale), (long) ((double) aPoint.Y () * nScale));
-}
-
-/*************************************************************************
-|*
-|* Skalarprodukt zweier Punktvektoren
-|*
-\************************************************************************/
-
-double NormVector (Point aPoint)
-{
-    return sqrt ((double) Scalar (aPoint, aPoint));
-}
-
-/*************************************************************************
-|*
-|* Pruefe, ob sich zwei Geradensegemente schneiden
-|* Dazu wird ueber einfache Determinanten bestimmt, wie die Endpunkte
-|* zu der jeweils anderen Gerade liegen.
-|*
-\************************************************************************/
-
-BOOL LineCutting (Point aP1,
-                  Point aP2,
-                  Point aP3,
-                  Point aP4)
-{
-    long nS1 = Point2Line (aP1, aP3, aP4);
-    long nS2 = Point2Line (aP2, aP3, aP4);
-    long nS3 = Point2Line (aP3, aP1, aP2);
-    long nS4 = Point2Line (aP4, aP1, aP2);
-
-    // die werte koennen reichlich gross werden, also geht eine multiplikation daneben
-    //BOOL bCut (((nS1 < 0) && (nS2 > 0) || (nS1 > 0) && (nS2 < 0)) &&
-    //          ((nS3 < 0) && (nS4 > 0) || (nS3 > 0) && (nS4 < 0)));
-
-    //if (bCut)
-    //{
-    //    BOOL bStop = bCut;
-    //}
-
-    return ((nS1 < 0) && (nS2 > 0) || (nS1 > 0) && (nS2 < 0)) &&
-           ((nS3 < 0) && (nS4 > 0) || (nS3 > 0) && (nS4 < 0));
-}
-
-/*************************************************************************
-|*
-|* Bestimme, ob sich ein Punkt aP1 rechts oder links eines Geradensegments,
-|* definiert durch aP2 und aP3, befindet.
-|* >0 : rechts, <0 : links, =0 : auf dem Geradensegment
-|* Die Vektoren (Punkte) liegen in der homogenen Form vor, wobei die
-|* Skalierung =1 gesetzt ist (schneller und einfacher).
-|*
-\************************************************************************/
-
-long Point2Line (Point aP1,
-                 Point aP2,
-                 Point aP3)
-{
-    return (aP2.X () * aP3.Y () - aP2.Y () * aP3.X ()) -
-           (aP1.X () * aP3.Y () - aP1.Y () * aP3.X ()) +
-           (aP1.X () * aP2.Y () - aP1.Y () * aP2.X ());
-}
-
-/*************************************************************************
-|*
-|* Bestimme den Abstand eines Punktes u zu einem Geradensegment,
-|* definiert durch v1 und v.
-|*
-\************************************************************************/
-
-long DistPoint2Line (Point u,
-                     Point v1,
-                     Point v)
-{
-    Point w = v1 - v;
-
-    return (long) NormVector (v - ScaleVector (w, (double) Scalar (v - u, w) / (double) Scalar (w, w)) - u);
+    if(mpMirrorOverlay)
+    {
+        delete mpMirrorOverlay;
+        mpMirrorOverlay = 0L;
+    }
 }
 
 /*************************************************************************
@@ -1961,13 +1856,6 @@ long DistPoint2Line (Point u,
 void E3dView::InitView ()
 {
     eDragConstraint          = E3DDRAG_CONSTR_XYZ;
-    //BFS01eDragDetail           = E3DDETAIL_ONEBOX;
-    b3dCreationActive        = FALSE;
-    pMirrorPolygon           = 0;
-    pMirroredPolygon         = 0;
-    nPolyCnt                 = 0;
-    pMyPV                    = 0;
-    pMarkedObjs              = 0;
     fDefaultScaleX           =
     fDefaultScaleY           =
     fDefaultScaleZ           = 1.0;
@@ -1981,46 +1869,8 @@ void E3dView::InitView ()
     nVDefaultSegments        = 12;
     aDefaultLightColor       = RGB_Color(COL_WHITE);
     aDefaultAmbientColor     = RGB_Color(COL_BLACK);
-    aDefaultLightPos         = Vector3D (1, 1, 1); // old: Vector3D (0, 0, 1);
-    aDefaultLightPos.Normalize();
     bDoubleSided             = FALSE;
-}
-
-/*************************************************************************
-|*
-|* Zeige eine Hilfsfigur
-|*
-\************************************************************************/
-
-void E3dView::ShowDragObj (OutputDevice *pOut)
-{
-    SdrView::ShowDragObj (pOut);
-}
-
-/*************************************************************************
-|*
-|* Verdecke eine Hilfsfigur
-|*
-\************************************************************************/
-
-void E3dView::HideDragObj (OutputDevice *pOut)
-{
-    SdrView::HideDragObj (pOut);
-}
-
-/*************************************************************************
-|*
-|* Zeige eine Hilfsfigur
-|*
-\************************************************************************/
-
-void E3dView::DrawDragObj (OutputDevice *pOut,
-                           BOOL     bFull) const
-{
-    if (!b3dCreationActive)
-    {
-        SdrView::DrawDragObj (pOut, bFull);
-    }
+    mpMirrorOverlay = 0L;
 }
 
 /*************************************************************************
@@ -2104,7 +1954,7 @@ void E3dView::BreakSingle3DObj(E3dObject* pObj)
         SdrAttrObj* pNewObj = pObj->GetBreakObj();
         if(pNewObj)
         {
-            InsertObject(pNewObj, *GetPageViewPvNum(0), SDRINSERT_DONTMARK);
+            InsertObjectAtView(pNewObj, *GetSdrPageView(), SDRINSERT_DONTMARK);
             pNewObj->SetChanged();
             pNewObj->BroadcastObjectChange();
         }
@@ -2116,7 +1966,6 @@ void E3dView::BreakSingle3DObj(E3dObject* pObj)
 |* Szenen mischen
 |*
 \************************************************************************/
-// Wird bisher noch nirgenswo (weder im Draw oder Chart) aufgerufen
 
 void E3dView::MergeScenes ()
 {
@@ -2149,8 +1998,6 @@ void E3dView::MergeScenes ()
                     ******************************************************/
                     SdrObject* pSubObj = aIter.Next();
 
-//BFS01                    if (!pSubObj->ISA(E3dLight))
-//BFS01                    {
                         E3dObject *pNewObj = 0;
 
                         switch (pSubObj->GetObjIdentifier())
@@ -2159,11 +2006,6 @@ void E3dView::MergeScenes ()
                                 pNewObj = new E3dObject;
                                 *(E3dObject*)pNewObj = *(E3dObject*)pSubObj;
                                 break;
-
-//BFS01                         case E3D_POLYOBJ_ID :
-//BFS01                             pNewObj = new E3dPolyObj;
-//BFS01                             *(E3dPolyObj*)pNewObj= *(E3dPolyObj*)pSubObj;
-//BFS01                             break;
 
                             case E3D_CUBEOBJ_ID :
                                 pNewObj = new E3dCubeObj;
@@ -2203,13 +2045,12 @@ void E3dView::MergeScenes ()
 
                         Rectangle aBoundRect = pSubObj->GetCurrentBoundRect();
 
-                        Matrix4D aMatrix;
-                        aMatrix.Translate(Vector3D(aBoundRect.Left () - aCenter.X (), aCenter.Y(), 0));
+                        basegfx::B3DHomMatrix aMatrix;
+                        aMatrix.translate(aBoundRect.Left() - aCenter.getX(), aCenter.getY(), 0.0);
                         pNewObj->SetTransform(aMatrix * pNewObj->GetTransform()); // #112587#
 
-                        if (pNewObj) aBoundVol.Union (pNewObj->GetBoundVolume());
+                        if (pNewObj) aBoundVol.expand(pNewObj->GetBoundVolume());
                         pScene->Insert3DObj (pNewObj);
-//BFS01                    }
                 }
             }
 
@@ -2229,19 +2070,19 @@ void E3dView::MergeScenes ()
         double fH = aAllBoundRect.GetHeight();
         Rectangle aRect(0,0, (long) fW, (long) fH);
 
-        InitScene(pScene, fW, fH, aBoundVol.MaxVec().Z() +  + ((fW + fH) / 4.0));
+        InitScene(pScene, fW, fH, aBoundVol.getMaxZ() +  + ((fW + fH) / 4.0));
 
         pScene->FitSnapRectToBoundVol();
         pScene->NbcSetSnapRect(aRect);
 
         Camera3D &aCamera  = (Camera3D&) pScene->GetCamera ();
-        Vector3D aMinVec (aBoundVol.MinVec ());
-        Vector3D aMaxVec (aBoundVol.MaxVec ());
-        double fDeepth = fabs (aMaxVec.Z () - aMinVec.Z ());
+        basegfx::B3DPoint aMinVec(aBoundVol.getMinimum());
+        basegfx::B3DPoint aMaxVec(aBoundVol.getMaximum());
+        double fDeepth(fabs(aMaxVec.getZ() - aMinVec.getZ()));
 
-        aCamera.SetPRP (Vector3D (0, 0, 1000));
-        double fDefaultCamPosZ = GetDefaultCamPosZ();
-        aCamera.SetPosition (Vector3D(0.0, 0.0, fDefaultCamPosZ + fDeepth / 2));
+        aCamera.SetPRP(basegfx::B3DPoint(0.0, 0.0, 1000.0));
+        double fDefaultCamPosZ(GetDefaultCamPosZ());
+        aCamera.SetPosition(basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ + fDeepth / 2.0));
         aCamera.SetFocalLength(GetDefaultCamFocal());
         pScene->SetCamera (aCamera);
 
@@ -2252,7 +2093,7 @@ void E3dView::MergeScenes ()
         // richtig gerechnet wird
         pScene->InitTransformationSet();
 
-        InsertObject (pScene, *(GetSdrPageViewOfMarkedByIndex(0)));
+        InsertObjectAtView(pScene, *(GetSdrPageViewOfMarkedByIndex(0)));
 
         // SnapRects der Objekte ungueltig
         pScene->SetRectsDirty();
@@ -2296,12 +2137,6 @@ void E3dView::CheckPossibilities()
         if(bGrpEnterPossible && bCoumpound)
             bGrpEnterPossible = FALSE;
     }
-
-//  bGroupPossible
-//  bCombinePossible
-//  bUnGroupPossible
-//  bGrpEnterPossible
 }
 
-
-
+// eof
