@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 16:25:30 $
+#   last change: $Author: ihi $ $Date: 2006-11-14 13:30:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
 #*************************************************************************
 
 PRJ=..$/..$/..
+PRJINC=$(PRJ)$/source
 
 PRJNAME=svx
 TARGET=contact
@@ -46,7 +47,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
+EXCEPTIONSFILES=\
+        $(SLO)$/viewobjectcontactofunocontrol.obj
+
 SLOFILES=\
+        $(EXCEPTIONSFILES)                              \
         $(SLO)$/displayinfo.obj							\
         $(SLO)$/viewcontact.obj							\
         $(SLO)$/viewcontactpainthelper.obj				\
@@ -63,12 +68,14 @@ SLOFILES=\
         $(SLO)$/objectcontactofobjlistpainter.obj		\
         $(SLO)$/objectcontactofpageview.obj				\
         $(SLO)$/viewobjectcontact.obj					\
+        $(SLO)$/viewobjectcontactredirector.obj			\
         $(SLO)$/vocbitmapbuffer.obj						\
         $(SLO)$/vocofmasterpagedescriptor.obj			\
         $(SLO)$/viewobjectcontactlist.obj				\
-        $(SLO)$/viewobjectcontactredirector.obj			\
         $(SLO)$/viewcontactofsdrobjcustomshape.obj      \
         $(SLO)$/viewcontactofsdrmediaobj.obj			\
         $(SLO)$/viewobjectcontactofsdrmediaobj.obj		\
+        $(SLO)$/viewcontactofunocontrol.obj				\
         $(SLO)$/sdrmediawindow.obj					
+        
 .INCLUDE :  target.mk
