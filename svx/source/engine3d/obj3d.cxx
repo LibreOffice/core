@@ -4,9 +4,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:57:03 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:20:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,10 +67,6 @@
 
 #ifndef _CAMERA3D_HXX
 #include "camera3d.hxx"
-#endif
-
-#ifndef _E3D_VOLMRK3D_HXX
-#include "volmrk3d.hxx"
 #endif
 
 #ifndef _E3D_SCENE3D_HXX
@@ -158,7 +154,7 @@
 #endif
 
 #ifndef _B3D_B3DTRANS_HXX
-#include "b3dtrans.hxx"
+#include <goodies/b3dtrans.hxx>
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
@@ -239,6 +235,22 @@
 
 #ifndef _SVX_XLNDSIT_HXX
 #include <xlndsit.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
+#include <basegfx/polygon/b3dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
+#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B3DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b3dpolygontools.hxx>
 #endif
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
@@ -334,10 +346,6 @@ sdr::properties::BaseProperties* E3dObject::CreateObjectSpecificProperties()
 TYPEINIT1(E3dObject, SdrAttrObj);
 
 E3dObject::E3dObject() :
-    //BFS01nLogicalGroup(0),
-    //BFS01nObjTreeLevel(0),
-    //BFS01eDragDetail(E3DDETAIL_ONEBOX),
-    //BFS01nPartOfParent(0),
     bTfHasChanged(TRUE),
     bBoundVolValid(TRUE),
     bIsSelected(FALSE)
@@ -484,38 +492,6 @@ void E3dObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
 /*************************************************************************
 |*
-|* Layer abfragen
-|*
-\************************************************************************/
-
-//BFS01SdrLayerID E3dObject::GetLayer() const
-//BFS01{
-    //BFS01FASTBOOL bFirst = TRUE;
-    //BFS01E3dObjList* pOL = pSub;
-    //BFS01ULONG       nObjCnt = pOL->GetObjCount();
-//BFS01 SdrLayerID  nLayer = SdrLayerID(nLayerID);
-
-    //BFS01for ( ULONG i = 0; i < nObjCnt; i++ )
-    //BFS01{
-    //BFS01 SdrLayerID nObjLayer;
-    //BFS01 if(pOL->GetObj(i)->ISA(E3dPolyObj))
-    //BFS01     nObjLayer = SdrLayerID(nLayerID);
-    //BFS01 else
-    //BFS01     nObjLayer = pOL->GetObj(i)->GetLayer();
-
-    //BFS01 if (bFirst)
-    //BFS01 {
-    //BFS01     nLayer = nObjLayer;
-    //BFS01     bFirst = FALSE;
-    //BFS01 }
-    //BFS01 else if ( nObjLayer != nLayer )
-    //BFS01     return 0;
-    //BFS01}
-//BFS01 return nLayer;
-//BFS01}
-
-/*************************************************************************
-|*
 |* Layer setzen
 |*
 \************************************************************************/
@@ -575,9 +551,6 @@ void E3dObject::SetModel(SdrModel* pNewModel)
 \************************************************************************/
 void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-#ifndef SVX_LIGHT
-    // SdrAttrObj::NbcResize(rRef, xFact, yFact);
-
     // Bewegung in X,Y im Augkoordinatensystem
     E3dScene* pScene = GetScene();
 
@@ -585,27 +558,27 @@ void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
     {
         // pos ermitteln
         B3dTransformationSet& rTransSet = pScene->GetCameraSet();
-        Vector3D aScaleCenter((double)rRef.X(), (double)rRef.Y(), 32768.0);
+        basegfx::B3DPoint aScaleCenter((double)rRef.X(), (double)rRef.Y(), 32768.0);
         aScaleCenter = rTransSet.ViewToEyeCoor(aScaleCenter);
 
         // scale-faktoren holen
-        double fScaleX = xFact;
-        double fScaleY = yFact;
+        double fScaleX(xFact);
+        double fScaleY(yFact);
 
         // build transform
-        Matrix4D mFullTransform(GetFullTransform());
-        Matrix4D mTrans(mFullTransform);
+        basegfx::B3DHomMatrix mFullTransform(GetFullTransform());
+        basegfx::B3DHomMatrix mTrans(mFullTransform);
 
         mTrans *= rTransSet.GetOrientation();
-        mTrans.Translate(-aScaleCenter);
-        mTrans.Scale(fScaleX, fScaleY, 1.0);
-        mTrans.Translate(aScaleCenter);
+        mTrans.translate(-aScaleCenter.getX(), -aScaleCenter.getY(), -aScaleCenter.getZ());
+        mTrans.scale(fScaleX, fScaleY, 1.0);
+        mTrans.translate(aScaleCenter.getX(), aScaleCenter.getY(), aScaleCenter.getZ());
         mTrans *= rTransSet.GetInvOrientation();
-        mFullTransform.Invert();
+        mFullTransform.invert();
         mTrans *= mFullTransform;
 
         // anwenden
-        Matrix4D mObjTrans(GetTransform());
+        basegfx::B3DHomMatrix mObjTrans(GetTransform());
         mObjTrans *= mTrans;
         SetTransform(mObjTrans);
 
@@ -613,7 +586,6 @@ void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
         // changed
         pScene->CorrectSceneDimensions();
     }
-#endif
 }
 
 /*************************************************************************
@@ -623,7 +595,6 @@ void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
 \************************************************************************/
 void E3dObject::NbcMove(const Size& rSize)
 {
-#ifndef SVX_LIGHT
     // Bewegung in X,Y im Augkoordinatensystem
     E3dScene* pScene = GetScene();
 
@@ -633,11 +604,11 @@ void E3dObject::NbcMove(const Size& rSize)
         Rectangle aRect = pScene->GetSnapRect();
 
         // Transformation Weltkoordinaten bis eine VOR Objektkoordinaten holen
-        Matrix4D mInvDispTransform;
+        basegfx::B3DHomMatrix mInvDispTransform;
         if(GetParentObj())
         {
             mInvDispTransform = GetParentObj()->GetFullTransform();
-            mInvDispTransform.Invert();
+            mInvDispTransform.invert();
         }
 
         // BoundVolume von Weltkoordinaten in Eye-Koordinaten
@@ -646,13 +617,13 @@ void E3dObject::NbcMove(const Size& rSize)
         Volume3D aEyeVol = rVol.GetTransformVolume(rTransSet.GetOrientation());
 
         // relativen Bewegungsvektor in Augkoordinaten bilden
-        Vector3D aMove(
-            (double)rSize.Width() * aEyeVol.GetWidth() / (double)aRect.GetWidth(),
-            (double)-rSize.Height() * aEyeVol.GetHeight() / (double)aRect.GetHeight(),
+        basegfx::B3DPoint aMove(
+            (double)rSize.Width() * aEyeVol.getWidth() / (double)aRect.GetWidth(),
+            (double)-rSize.Height() * aEyeVol.getHeight() / (double)aRect.GetHeight(),
             0.0);
 
         // Bewegungsvektor in lokale Koordinaten des Parents des Objektes
-        Vector3D aPos;
+        basegfx::B3DPoint aPos;
         aMove = rTransSet.EyeToWorldCoor(aMove);
         aMove *= mInvDispTransform;
         aPos = rTransSet.EyeToWorldCoor(aPos);
@@ -666,7 +637,6 @@ void E3dObject::NbcMove(const Size& rSize)
         // changed
         pScene->CorrectSceneDimensions();
     }
-#endif
 }
 
 /*************************************************************************
@@ -686,10 +656,10 @@ SdrObjList* E3dObject::GetSubList() const
 |*
 \************************************************************************/
 
-USHORT E3dObject::GetHdlCount() const
+sal_uInt32 E3dObject::GetHdlCount() const
 {
     // 8 Eckpunkte + 1 E3dVolumeMarker (= Wireframe-Darstellung)
-    return 9;
+    return 9L;
 }
 
 /*************************************************************************
@@ -700,23 +670,21 @@ USHORT E3dObject::GetHdlCount() const
 
 void E3dObject::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    XPolyPolygon     aXPP(12);
-    XPolygon         aLine(2);
-    E3dVolumeMarker* pVolMarker;
-    USHORT           nPolyCnt;
+    const basegfx::B2DPolyPolygon aPolyPoly(ImpCreateWireframePoly());
+    const sal_uInt32 nPolyCount(aPolyPoly.count());
 
-    ((E3dObject*) this)->ImpCreateWireframePoly(aXPP/*BFS01, E3DDETAIL_ONEBOX*/);
-    nPolyCnt = aXPP.Count();
-
-    for ( USHORT i = 0; i < nPolyCnt; i += 3 )
+    for(sal_uInt32 a(0L); a < nPolyCount; a += 3L)
     {
-        rHdlList.AddHdl(new SdrHdl(aXPP[i][0], HDL_BWGT));
-        rHdlList.AddHdl(new SdrHdl(aXPP[i][1], HDL_BWGT));
+        const basegfx::B2DPolygon aPoly(aPolyPoly.getB2DPolygon(a));
+        const basegfx::B2DPoint aPointA(aPoly.getB2DPoint(0L));
+        const basegfx::B2DPoint aPointB(aPoly.getB2DPoint(1L));
+        rHdlList.AddHdl(new SdrHdl(Point(FRound(aPointA.getX()), FRound(aPointA.getY())), HDL_BWGT));
+        rHdlList.AddHdl(new SdrHdl(Point(FRound(aPointB.getX()), FRound(aPointB.getY())), HDL_BWGT));
     }
 
-    if ( nPolyCnt > 0 )
+    if(nPolyCount)
     {
-        pVolMarker = new E3dVolumeMarker(aXPP);
+        E3dVolumeMarker* pVolMarker = new E3dVolumeMarker(aPolyPoly);
         rHdlList.AddHdl(pVolMarker);
     }
 }
@@ -778,17 +746,23 @@ void E3dObject::Paint3D(XOutputDevice& rOut, Base3D* pBase3D,
 |*
 \************************************************************************/
 
-void E3dObject::TakeContour3D(XPolyPolygon& rPoly)
+basegfx::B2DPolyPolygon E3dObject::ImpTakeContour3D() const
 {
+    basegfx::B2DPolyPolygon aRetval;
+
     if(pSub && pSub->GetObjCount())
     {
         for (ULONG i = 0; i < pSub->GetObjCount(); i++)
         {
+#ifdef DBG_UTIL
             SdrObject* pObj = pSub->GetObj(i);
             DBG_ASSERT(pObj->ISA(E3dObject), "AW: In E3dObject sind nur 3D-Objekte erlaubt!");
-            ((E3dObject*)pObj)->TakeContour3D(rPoly);
+#endif
+            aRetval.append(ImpTakeContour3D());
         }
     }
+
+    return aRetval;
 }
 
 /*************************************************************************
@@ -901,7 +875,6 @@ void E3dObject::StructureChanged(const E3dObject* p3DObj)
 void E3dObject::Insert3DObj(E3dObject* p3DObj)
 {
     DBG_ASSERT(p3DObj, "Insert3DObj mit NULL-Zeiger!");
-//BFS01 p3DObj->SetObjTreeLevel(nObjTreeLevel + 1);
     SdrPage* pPg = pPage;
     pSub->InsertObject(p3DObj);
     pPage = pPg;
@@ -979,8 +952,8 @@ void E3dObject::RecalcBoundVolume()
             // beruecksichtigen
             E3dObject* p3DObj = (E3dObject*) pObj;
             const Volume3D& rVol = p3DObj->GetBoundVolume();
-            const Matrix4D& rTf  = p3DObj->GetTransform();
-            aBoundVol.Union(rVol.GetTransformVolume(rTf));
+            const basegfx::B3DHomMatrix& rTf  = p3DObj->GetTransform();
+            aBoundVol.expand(rVol.GetTransformVolume(rTf));
         }
 
         aLocalBoundVol = aBoundVol;
@@ -1001,14 +974,8 @@ void E3dObject::RecalcBoundVolume()
 
             if(nLineWidth)
             {
-                double fExpand = nLineWidth / 2.0;
-
-                Vector3D aExpand(fExpand, fExpand, fExpand);
-                Vector3D aMinVec(aBoundVol.MinVec() - aExpand);
-                Vector3D aMaxVec(aBoundVol.MaxVec() + aExpand);
-
-                aBoundVol.Union(aMinVec);
-                aBoundVol.Union(aMaxVec);
+                double fExpand(nLineWidth / 2.0);
+                aBoundVol.grow(fExpand);
             }
         }
     }
@@ -1022,13 +989,12 @@ void E3dObject::RecalcBoundVolume()
 |*
 \************************************************************************/
 
-const Volume3D& E3dObject::GetBoundVolume()
+const Volume3D& E3dObject::GetBoundVolume() const
 {
     if ( !bBoundVolValid )
-        RecalcBoundVolume();
-
-    if(!aBoundVol.IsValid())
-        aBoundVol = Volume3D(Vector3D(), Vector3D());
+    {
+        ((E3dObject*)this)->RecalcBoundVolume();
+    }
 
     return aBoundVol;
 }
@@ -1039,10 +1005,9 @@ const Volume3D& E3dObject::GetBoundVolume()
 |*
 \************************************************************************/
 
-Vector3D E3dObject::GetCenter()
+basegfx::B3DPoint E3dObject::GetCenter()
 {
-    Volume3D aVolume = GetBoundVolume();
-    return (aVolume.MaxVec() + aVolume.MinVec()) / 2.0;
+    return GetBoundVolume().getCenter();
 }
 
 /*************************************************************************
@@ -1092,41 +1057,22 @@ void E3dObject::SetTransformChanged()
 
 /*************************************************************************
 |*
-|* hierarchische Transformation ueber alle Parents bestimmen und mit
-|* der uebergebenen Matrix verketten
-|*
-\************************************************************************/
-
-void E3dObject::GetFullTransform(Matrix4D& rMatrix) const
-{
-    if ( bTfHasChanged )
-    {
-        rMatrix *= aTfMatrix;
-        if ( GetParentObj() )
-            GetParentObj()->GetFullTransform(rMatrix);
-    }
-    else
-        rMatrix *= aFullTfMatrix;
-}
-
-/*************************************************************************
-|*
 |* hierarchische Transformation ueber alle Parents bestimmen, in
 |* aFullTfMatrix ablegen und diese zurueckgeben
 |*
 \************************************************************************/
 
-const Matrix4D& E3dObject::GetFullTransform()
+const basegfx::B3DHomMatrix& E3dObject::GetFullTransform() const
 {
-    if ( bTfHasChanged )
+    if(bTfHasChanged)
     {
-        aFullTfMatrix = aTfMatrix;
-
+        E3dObject* pThis = (E3dObject*)this;
+        pThis->aFullTfMatrix = aTfMatrix;
         if ( GetParentObj() )
-            aFullTfMatrix *= GetParentObj()->GetFullTransform();
-
-        bTfHasChanged = FALSE;
+            pThis->aFullTfMatrix *= GetParentObj()->GetFullTransform();
+        pThis->bTfHasChanged = FALSE;
     }
+
     return aFullTfMatrix;
 }
 
@@ -1136,7 +1082,7 @@ const Matrix4D& E3dObject::GetFullTransform()
 |*
 \************************************************************************/
 
-const Matrix4D& E3dObject::GetTransform() const
+const basegfx::B3DHomMatrix& E3dObject::GetTransform() const
 {
     return aTfMatrix;
 }
@@ -1147,7 +1093,7 @@ const Matrix4D& E3dObject::GetTransform() const
 |*
 \************************************************************************/
 
-void E3dObject::NbcSetTransform(const Matrix4D& rMatrix)
+void E3dObject::NbcSetTransform(const basegfx::B3DHomMatrix& rMatrix)
 {
     aTfMatrix = rMatrix;
     SetTransformChanged();
@@ -1162,7 +1108,7 @@ void E3dObject::NbcSetTransform(const Matrix4D& rMatrix)
 
 void E3dObject::NbcResetTransform()
 {
-    aTfMatrix.Identity();
+    aTfMatrix.identity();
     SetTransformChanged();
     StructureChanged(this);
 }
@@ -1173,7 +1119,7 @@ void E3dObject::NbcResetTransform()
 |*
 \************************************************************************/
 
-void E3dObject::SetTransform(const Matrix4D& rMatrix)
+void E3dObject::SetTransform(const basegfx::B3DHomMatrix& rMatrix)
 {
     // #110094#-14 SendRepaintBroadcast();
     NbcSetTransform(rMatrix);
@@ -1203,9 +1149,9 @@ void E3dObject::ResetTransform()
 |*
 \************************************************************************/
 
-void E3dObject::NbcTranslate(const Vector3D& rTrans)
+void E3dObject::NbcTranslate(const basegfx::B3DVector& rTrans)
 {
-    aTfMatrix.Translate(rTrans);
+    aTfMatrix.translate(rTrans.getX(), rTrans.getY(), rTrans.getZ());
     SetTransformChanged();
     StructureChanged(this);
 }
@@ -1215,7 +1161,7 @@ void E3dObject::NbcTranslate(const Vector3D& rTrans)
 |*
 \************************************************************************/
 
-void E3dObject::Translate(const Vector3D& rTrans)
+void E3dObject::Translate(const basegfx::B3DVector& rTrans)
 {
     // #110094#-14 SendRepaintBroadcast();
     NbcTranslate(rTrans);
@@ -1232,7 +1178,7 @@ void E3dObject::Translate(const Vector3D& rTrans)
 
 void E3dObject::NbcScaleX(double fSx)
 {
-    aTfMatrix.ScaleX(fSx);
+    aTfMatrix.scale(fSx, 1.0, 1.0);
     SetTransformChanged();
     StructureChanged(this);
 }
@@ -1241,7 +1187,7 @@ void E3dObject::NbcScaleX(double fSx)
 
 void E3dObject::NbcScaleY(double fSy)
 {
-    aTfMatrix.ScaleY(fSy);
+    aTfMatrix.scale(1.0, fSy, 1.0);
     SetTransformChanged();
     StructureChanged(this);
 }
@@ -1250,7 +1196,7 @@ void E3dObject::NbcScaleY(double fSy)
 
 void E3dObject::NbcScaleZ(double fSz)
 {
-    aTfMatrix.ScaleZ(fSz);
+    aTfMatrix.scale(1.0, 1.0, fSz);
     SetTransformChanged();
     StructureChanged(this);
 }
@@ -1259,7 +1205,7 @@ void E3dObject::NbcScaleZ(double fSz)
 
 void E3dObject::NbcScale(double fSx, double fSy, double fSz)
 {
-    aTfMatrix.Scale(fSx, fSy, fSz);
+    aTfMatrix.scale(fSx, fSy, fSz);
     SetTransformChanged();
     StructureChanged(this);
 }
@@ -1272,7 +1218,7 @@ void E3dObject::NbcScale(double fSx, double fSy, double fSz)
 
 void E3dObject::NbcScale(double fS)
 {
-    aTfMatrix.Scale(fS, fS, fS);
+    aTfMatrix.scale(fS, fS, fS);
     SetTransformChanged();
     StructureChanged(this);
 }
@@ -1344,7 +1290,7 @@ void E3dObject::Scale(double fS)
 
 void E3dObject::NbcRotateX(double fAng)
 {
-    aTfMatrix.RotateX(fAng);
+    aTfMatrix.rotate(fAng, 0.0, 0.0);
     SetTransformChanged();
     StructureChanged(this);
 }
@@ -1353,7 +1299,7 @@ void E3dObject::NbcRotateX(double fAng)
 
 void E3dObject::NbcRotateY(double fAng)
 {
-    aTfMatrix.RotateY(fAng);
+    aTfMatrix.rotate(0.0, fAng, 0.0);
     SetTransformChanged();
     StructureChanged(this);
 }
@@ -1362,7 +1308,7 @@ void E3dObject::NbcRotateY(double fAng)
 
 void E3dObject::NbcRotateZ(double fAng)
 {
-    aTfMatrix.RotateZ(fAng);
+    aTfMatrix.rotate(0.0, 0.0, fAng);
     SetTransformChanged();
     StructureChanged(this);
 }
@@ -1406,71 +1352,14 @@ void E3dObject::RotateZ(double fAng)
 
 /*************************************************************************
 |*
-|* Objektbaum-Ebene des Objekts und aller Children setzen
-|*
-\************************************************************************/
-
-//BFS01void E3dObject::SetObjTreeLevel(USHORT nNewLevel)
-//BFS01{
-//BFS01 nObjTreeLevel = nNewLevel;
-//BFS01 nNewLevel++;
-//BFS01
-//BFS01 E3dObjList* pOL = pSub;
-//BFS01 ULONG nObjCnt = pOL->GetObjCount();
-//BFS01
-//BFS01 for (ULONG i = 0; i < nObjCnt; i++)
-//BFS01 {
-//BFS01     SdrObject* pObj = pOL->GetObj(i);
-//BFS01     DBG_ASSERT(pObj->ISA(E3dObject), "In E3dObject sind nur 3D-Objekte erlaubt!");
-//BFS01
-//BFS01     ((E3dObject*) pObj)->SetObjTreeLevel(nNewLevel);
-//BFS01 }
-//BFS01}
-
-/*************************************************************************
-|*
-|* logische Gruppe setzen
-|*
-\************************************************************************/
-
-//BFS01void E3dObject::SetLogicalGroup(USHORT nGroup)
-//BFS01{
-//BFS01 nLogicalGroup = nGroup;
-//BFS01}
-
-/*************************************************************************
-|*
 |* Linien fuer die Wireframe-Darstellung des Objekts dem uebergebenen
-|* Polygon3D hinzufuegen. Als default wird das BoundVolume verwendet.
+|* basegfx::B3DPolygon hinzufuegen. Als default wird das BoundVolume verwendet.
 |*
 \************************************************************************/
 
-void E3dObject::CreateWireframe(Polygon3D& rWirePoly, const Matrix4D* pTf /*BFS01 , E3dDragDetail eDetail*/)
+void E3dObject::CreateWireframe(basegfx::B3DPolygon& rWirePoly, const basegfx::B3DHomMatrix* pTf) const
 {
-//BFS01 if ( eDetail == E3DDETAIL_DEFAULT )
-//BFS01     eDetail = eDragDetail;
-
-//BFS01 if ( eDetail == E3DDETAIL_ALLBOXES || eDetail == E3DDETAIL_ALLLINES )
-//BFS01 {
-//BFS01     E3dObjList* pOL = pSub;
-//BFS01     ULONG nObjCnt = pOL->GetObjCount();
-//BFS01
-//BFS01     for (ULONG i = 0; i < nObjCnt; i++)
-//BFS01     {
-//BFS01         E3dObject* pObj = (E3dObject*)pOL->GetObj(i);
-//BFS01         DBG_ASSERT(pObj->ISA(E3dObject), "In E3dObject sind nur 3D-Objekte erlaubt!");
-//BFS01
-//BFS01         Matrix4D aLocalTf(pObj->GetTransform());
-//BFS01         if(pTf)
-//BFS01             aLocalTf *= *pTf;
-//BFS01         pObj->CreateWireframe(rWirePoly, &aLocalTf, eDetail);
-//BFS01     }
-
-//BFS01     if(eDetail == E3DDETAIL_ALLBOXES && nObjCnt != 1)
-//BFS01         GetBoundVolume().CreateWireframe(rWirePoly, pTf);
-//BFS01 }
-//BFS01 else
-        GetBoundVolume().CreateWireframe(rWirePoly, pTf);
+    GetBoundVolume().CreateWireframe(rWirePoly, pTf);
 }
 
 /*************************************************************************
@@ -1506,47 +1395,42 @@ void E3dObject::TakeObjNamePlural(XubString& rName) const
 
 /*************************************************************************
 |*
-|* Wireframe-XPolyPolygon erzeugen
+|* Wireframe-PolyPolygon erzeugen
 |*
 \************************************************************************/
 
-void E3dObject::ImpCreateWireframePoly(XPolyPolygon& rXPP/*BFS01, E3dDragDetail eDetail*/)
+basegfx::B2DPolyPolygon E3dObject::ImpCreateWireframePoly() const
 {
-    // Neue Methode
+    basegfx::B2DPolyPolygon aRetval;
     E3dScene* pScene = GetScene();
-    Polygon3D aPoly3D(24, 240);
-    XPolygon aLine(2);
-    USHORT nPntCnt;
-
-    // WireFrame herstellen
-    CreateWireframe(aPoly3D, NULL/*BFS01, eDetail*/);
-    nPntCnt = aPoly3D.GetPointCount();
 
     if(pScene)
     {
-        // Maximas holen in DeviceKoordinaten
-        Volume3D aVolume = pScene->FitInSnapRect();
+        basegfx::B3DPolygon aPoly3D;
+        CreateWireframe(aPoly3D, 0L);
+        const sal_uInt32 nPntCnt(aPoly3D.count());
 
-        // Maximas fuer Abbildung verwenden
-        pScene->GetCameraSet().SetDeviceVolume(aVolume, FALSE);
-        Matrix4D mTransform = GetFullTransform();
-        pScene->GetCameraSet().SetObjectTrans(mTransform);
-
-        if ( nPntCnt > 1 )
+        if(nPntCnt)
         {
-            Vector3D aVec;
-            for ( USHORT i = 0; i < nPntCnt; i += 2 )
+            const Volume3D aVolume(pScene->FitInSnapRect());
+            pScene->GetCameraSet().SetDeviceVolume(aVolume, sal_False);
+            pScene->GetCameraSet().SetObjectTrans(GetFullTransform());
+
+            for(sal_uInt32 a(0L); a < nPntCnt;)
             {
-                aVec = pScene->GetCameraSet().ObjectToViewCoor(aPoly3D[i]);
-                aLine[0] = Point((long)(aVec.X() + 0.5), (long)(aVec.Y() + 0.5));
-
-                aVec = pScene->GetCameraSet().ObjectToViewCoor(aPoly3D[i+1]);
-                aLine[1] = Point((long)(aVec.X() + 0.5), (long)(aVec.Y() + 0.5));
-
-                rXPP.Insert(aLine);
+                basegfx::B3DPoint aPointA(aPoly3D.getB3DPoint(a++));
+                aPointA = pScene->GetCameraSet().ObjectToViewCoor(aPointA);
+                basegfx::B3DPoint aPointB(aPoly3D.getB3DPoint(a++));
+                aPointB = pScene->GetCameraSet().ObjectToViewCoor(aPointB);
+                basegfx::B2DPolygon aTmpPoly;
+                aTmpPoly.append(basegfx::B2DPoint(aPointA.getX(), aPointA.getY()));
+                aTmpPoly.append(basegfx::B2DPoint(aPointB.getX(), aPointB.getY()));
+                aRetval.append(aTmpPoly);
             }
         }
     }
+
+    return aRetval;
 }
 
 /*************************************************************************
@@ -1555,12 +1439,9 @@ void E3dObject::ImpCreateWireframePoly(XPolyPolygon& rXPP/*BFS01, E3dDragDetail 
 |*
 \************************************************************************/
 
-void E3dObject::TakeXorPoly(XPolyPolygon& rXPP, FASTBOOL /*bDetail*/) const
+basegfx::B2DPolyPolygon E3dObject::TakeXorPoly(sal_Bool /*bDetail*/) const
 {
-    rXPP.Clear();
-    // Const mal wieder weg, da evtl. das BoundVolume neu generiert wird
-    //BFS01static E3dDragDetail eDetail = E3DDETAIL_DEFAULT;
-    ((E3dObject*) this)->ImpCreateWireframePoly(rXPP/*BFS01, eDetail*/);
+    return ImpCreateWireframePoly();
 }
 
 /*************************************************************************
@@ -1637,10 +1518,6 @@ void E3dObject::operator=(const SdrObject& rObj)
     aLocalBoundVol  = r3DObj.aLocalBoundVol;
 
     aTfMatrix       = r3DObj.aTfMatrix;
-    //BFS01nLogicalGroup   = r3DObj.nLogicalGroup;
-    //BFS01nObjTreeLevel   = r3DObj.nObjTreeLevel;
-    //BFS01nPartOfParent   = r3DObj.nPartOfParent;
-    //BFS01eDragDetail     = r3DObj.eDragDetail;
 
     // Da sich der Parent geaendert haben kann, Gesamttransformation beim
     // naechsten Mal auf jeden Fall neu bestimmen
@@ -1649,179 +1526,6 @@ void E3dObject::operator=(const SdrObject& rObj)
     // Selektionsstatus kopieren
     bIsSelected = r3DObj.bIsSelected;
 }
-
-/*************************************************************************
-|*
-|* Nur die Member des E3dObjekts in den Stream speichern
-|* Dies wird direkt auch von E3dSphere gerufen um zu verhindern dass die
-|* Subliste weggeschrieben wird. (FG)
-|*
-\************************************************************************/
-
-//BFS01#ifndef SVX_LIGHT
-//BFS01void E3dObject::WriteOnlyOwnMembers(SvStream& rOut) const
-//BFS01{
-//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01 SdrDownCompat aCompat(rOut, STREAM_WRITE);
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("E3dObjectOwnMembers");
-//BFS01#endif
-//BFS01
-//BFS01 rOut << aLocalBoundVol;
-//BFS01
-//BFS01 Old_Matrix3D aMat3D;
-//BFS01 aMat3D = aTfMatrix;
-//BFS01 rOut << aMat3D;
-//BFS01
-//BFS01 rOut << nLogicalGroup;
-//BFS01 rOut << nObjTreeLevel;
-//BFS01 rOut << nPartOfParent;
-//BFS01 rOut << UINT16(eDragDetail);
-//BFS01}
-//BFS01#endif
-
-/*************************************************************************
-|*
-|* Objektdaten in Stream speichern
-|*
-\************************************************************************/
-
-//BFS01void E3dObject::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01#ifndef SVX_LIGHT
-//BFS01 long position = rOut.Tell();
-//BFS01 SdrAttrObj::WriteData(rOut);
-//BFS01 position = rOut.Tell();
-//BFS01
-//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01 SdrDownCompat aCompat(rOut, STREAM_WRITE);
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("E3dObject");
-//BFS01#endif
-//BFS01
-//BFS01 position = rOut.Tell();
-//BFS01 pSub->Save(rOut);
-//BFS01 position = rOut.Tell();
-//BFS01
-//BFS01 if (rOut.GetVersion() < 3560)
-//BFS01 {
-//BFS01     rOut << aLocalBoundVol;
-//BFS01
-//BFS01     Old_Matrix3D aMat3D;
-//BFS01     aMat3D = aTfMatrix;
-//BFS01     rOut << aMat3D;
-//BFS01
-//BFS01     rOut << nLogicalGroup;
-//BFS01     rOut << nObjTreeLevel;
-//BFS01     rOut << nPartOfParent;
-//BFS01     rOut << UINT16(eDragDetail);
-//BFS01 }
-//BFS01 else
-//BFS01 {
-//BFS01     WriteOnlyOwnMembers(rOut);
-//BFS01 }
-//BFS01 position = rOut.Tell();
-//BFS01#endif
-//BFS01}
-
-/*************************************************************************
-|*
-|* Objektdaten aus Stream laden
-|*
-\************************************************************************/
-
-//BFS01void E3dObject::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 long position = rIn.Tell();
-//BFS01 if (ImpCheckSubRecords (rHead, rIn))
-//BFS01 {
-//BFS01     position = rIn.Tell();
-//BFS01     SdrAttrObj::ReadData(rHead, rIn);
-//BFS01     position = rIn.Tell();
-//BFS01     // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01     SdrDownCompat aCompat(rIn, STREAM_READ);
-//BFS01#ifdef DBG_UTIL
-//BFS01     aCompat.SetID("E3dObject");
-//BFS01#endif
-//BFS01     pSub->Load(rIn, *pPage);
-//BFS01
-//BFS01     position = rIn.Tell();
-//BFS01     if ((rIn.GetVersion() < 3560) || (rHead.GetVersion() <= 12))
-//BFS01     {
-//BFS01         UINT16  nTmp16;
-//BFS01
-//BFS01         rIn >> aLocalBoundVol;
-//BFS01
-//BFS01         Old_Matrix3D aMat3D;
-//BFS01         rIn >> aMat3D;
-//BFS01         aTfMatrix = Matrix4D(aMat3D);
-//BFS01
-//BFS01         rIn >> nLogicalGroup;
-//BFS01         rIn >> nObjTreeLevel;
-//BFS01         rIn >> nPartOfParent;
-//BFS01         rIn >> nTmp16; eDragDetail = E3dDragDetail(nTmp16);
-//BFS01     }
-//BFS01     else
-//BFS01     {
-//BFS01         ReadOnlyOwnMembers(rHead, rIn);
-//BFS01     }
-//BFS01     position = rIn.Tell();
-//BFS01
-//BFS01     // Wie ein veraendertes Objekt behandeln
-//BFS01     SetTransformChanged();
-//BFS01     StructureChanged(this);
-//BFS01
-//BFS01     // BoundVolume muss neu berechnet werden
-//BFS01     bBoundVolValid = FALSE;
-//BFS01
-//BFS01     // SnapRect auch
-//BFS01     bSnapRectDirty = TRUE;
-//BFS01 }
-//BFS01}
-
-/*************************************************************************
-|*
-|* Nur die Daten des E3dObject aus Stream laden (nicht der Sublisten und
-|* der Basisklassen). Wird von E3dSphere auch genutzt. (FileFormat-Optimierung)
-|*
-\************************************************************************/
-
-//BFS01void E3dObject::ReadOnlyOwnMembers(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01 SdrDownCompat aCompat(rIn, STREAM_READ);
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("E3dObjectOwnMembers");
-//BFS01#endif
-//BFS01 UINT16  nTmp16;
-//BFS01
-//BFS01 rIn >> aLocalBoundVol;
-//BFS01
-//BFS01 Old_Matrix3D aMat3D;
-//BFS01 rIn >> aMat3D;
-//BFS01 aTfMatrix = Matrix4D(aMat3D);
-//BFS01
-//BFS01 rIn >> nLogicalGroup;
-//BFS01 rIn >> nObjTreeLevel;
-//BFS01 rIn >> nPartOfParent;
-//BFS01 rIn >> nTmp16; eDragDetail = E3dDragDetail(nTmp16);
-//BFS01
-//BFS01 bBoundVolValid = FALSE;
-//BFS01}
-
-
-/*************************************************************************
-|*
-|* nach dem Laden...
-|*
-\************************************************************************/
-
-//BFS01void E3dObject::AfterRead()
-//BFS01{
-//BFS01 SdrAttrObj::AfterRead();
-//BFS01 if (pSub)
-//BFS01     pSub->AfterRead();
-//BFS01}
 
 /*************************************************************************
 |*
@@ -1864,40 +1568,6 @@ void E3dObject::RestGeoData(const SdrObjGeoData& rGeo)
     SdrAttrObj::RestGeoData (rGeo);
     GetScene()->FitSnapRectToBoundVol();
 }
-
-/*************************************************************************
-|*
-|* Pruefe, ob die SubRecords ok sind und mit der Factory gelesen werden
-|* koennen.
-|*
-\************************************************************************/
-
-//BFS01BOOL E3dObject::ImpCheckSubRecords (const SdrObjIOHeader& rHead,
-//BFS01                                 SvStream&             rIn)
-//BFS01{
-//BFS01 BOOL bDoRead = FALSE;
-//BFS01
-//BFS01 if ( rIn.GetError() == SVSTREAM_OK )
-//BFS01 {
-//BFS01     if (rHead.GetVersion () <= 12)
-//BFS01     {
-//BFS01         ULONG nPos0 = rIn.Tell();
-//BFS01         // Einen SubRecord ueberspringen (SdrObject)
-//BFS01         { SdrDownCompat aCompat(rIn,STREAM_READ); }
-//BFS01         // Nocheinen SubRecord ueberspringen (SdrAttrObj)
-//BFS01         { SdrDownCompat aCompat(rIn,STREAM_READ); }
-//BFS01         // Und nun muesste meiner kommen
-//BFS01         bDoRead = rHead.GetBytesLeft() != 0;
-//BFS01         rIn.Seek (nPos0); // FilePos wieder restaurieren
-//BFS01     }
-//BFS01     else
-//BFS01     {
-//BFS01         bDoRead = TRUE;
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 return bDoRead;
-//BFS01}
 
 /*************************************************************************
 |*
@@ -1950,8 +1620,6 @@ E3dCompoundObject::E3dCompoundObject() : E3dObject()
     E3dDefaultAttributes aDefault;
     SetDefaultAttributes(aDefault);
 
-    //BFS01bBytesLeft = FALSE;
-    //BFS01bCreateE3dPolyObj = FALSE;
     bGeometryValid = FALSE;
     bFullTfIsPositive = TRUE;
 }
@@ -1961,8 +1629,6 @@ E3dCompoundObject::E3dCompoundObject(E3dDefaultAttributes& rDefault) : E3dObject
     // Defaults setzen
     SetDefaultAttributes(rDefault);
 
-    //BFS01bBytesLeft = FALSE;
-    //BFS01bCreateE3dPolyObj = FALSE;
     bGeometryValid = FALSE;
 }
 
@@ -2032,15 +1698,15 @@ void E3dCompoundObject::RecalcSnapRect()
         const Volume3D& rBoundVol = GetBoundVolume();
         maSnapRect = Rectangle();
 
-        if(rBoundVol.IsValid())
+        if(!rBoundVol.isEmpty())
         {
-            const Matrix4D& rTrans = GetFullTransform();
+            const basegfx::B3DHomMatrix& rTrans = GetFullTransform();
             Vol3DPointIterator aIter(rBoundVol, &rTrans);
-            Vector3D aTfVec;
+            basegfx::B3DPoint aTfVec;
             while ( aIter.Next(aTfVec) )
             {
                 aTfVec = pScene->GetCameraSet().WorldToViewCoor(aTfVec);
-                Point aPoint((long)(aTfVec.X() + 0.5), (long)(aTfVec.Y() + 0.5));
+                Point aPoint((long)(aTfVec.getX() + 0.5), (long)(aTfVec.getY() + 0.5));
                 maSnapRect.Union(Rectangle(aPoint, aPoint));
             }
         }
@@ -2068,19 +1734,18 @@ void E3dCompoundObject::RecalcBoundRect()
         if(DoDrawShadow())
         {
             // ObjectTrans setzen
-            Matrix4D mTransform = GetFullTransform();
+            basegfx::B3DHomMatrix mTransform = GetFullTransform();
             pScene->GetCameraSet().SetObjectTrans(mTransform);
 
             // Schattenpolygon holen
-            PolyPolygon3D aShadowPoly3D;
-            ImpGetShadowPolygon(aShadowPoly3D);
+            basegfx::B2DPolyPolygon aShadowPoly2D(ImpGetShadowPolygon());
 
             // invert Y coor cause of GetPolyPolygon() later
-            Matrix4D aTransMat;
-            aTransMat.Scale(1.0, -1.0, 1.0);
-            aShadowPoly3D.Transform(aTransMat);
+            basegfx::B2DHomMatrix aTransMat;
+            aTransMat.scale(1.0, -1.0);
+            aShadowPoly2D.transform(aTransMat);
 
-            PolyPolygon aShadowPoly(aShadowPoly3D.GetPolyPolygon());
+            PolyPolygon aShadowPoly(aShadowPoly2D);
 
             // Hinzufuegen
             aOutRect.Union(aShadowPoly.GetBoundRect());
@@ -2107,217 +1772,20 @@ void E3dCompoundObject::RecalcBoundRect()
 |*
 \************************************************************************/
 
-const Volume3D& E3dCompoundObject::GetBoundVolume()
+const Volume3D& E3dCompoundObject::GetBoundVolume() const
 {
     // Geometrie aktuell?
     if(!bGeometryValid)
     {
         // Neu erzeugen und eine Neubestimmung des BoundVol erzwingen
-        ReCreateGeometry();
-        bBoundVolValid = FALSE;
+        E3dCompoundObject* pThis = (E3dCompoundObject*)this;
+        pThis->ReCreateGeometry();
+        pThis->bBoundVolValid = FALSE;
     }
 
     // call parent
     return E3dObject::GetBoundVolume();
 }
-
-/*************************************************************************
-|*
-|* Rausschreiben der Datenmember eines E3dCompounds
-|*
-\************************************************************************/
-
-//BFS01void E3dCompoundObject::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01#ifndef SVX_LIGHT
-//BFS01#ifdef E3D_STREAMING
-//BFS01
-//BFS01 if (!aLocalBoundVol.IsValid() && aBoundVol.IsValid())
-//BFS01 {
-//BFS01     // Das aLocalBoundVol wird gespeichert.
-//BFS01     // Ist dieses ungueltig, so wird das aBoundVol genommen
-//BFS01     // (sollten beim E3dCompoundObject sowieso gleich sein)
-//BFS01     ((E3dCompoundObject*) this)->aLocalBoundVol = aBoundVol;
-//BFS01 }
-//BFS01
-//BFS01 E3dObject::WriteData(rOut);
-//BFS01 if (rOut.GetVersion() < 3560)
-//BFS01 {
-//BFS01     // In diesem Fall passiert nichts, da vor der Version 4.0
-//BFS01     // also im Falle der Revision 3.1
-//BFS01 }
-//BFS01 else
-//BFS01 {
-//BFS01     SdrDownCompat aCompat(rOut, STREAM_WRITE);
-//BFS01#ifdef DBG_UTIL
-//BFS01     aCompat.SetID("E3dCompoundObject");
-//BFS01#endif
-//BFS01     rOut << BOOL(GetDoubleSided());
-//BFS01#endif
-//BFS01
-//BFS01     // neue Parameter zur Geometrieerzeugung
-//BFS01     rOut << BOOL(bCreateNormals);
-//BFS01     rOut << BOOL(bCreateTexture);
-//BFS01
-//BFS01     sal_uInt16 nVal = GetNormalsKind();
-//BFS01     rOut << BOOL(nVal > 0);
-//BFS01     rOut << BOOL(nVal > 1);
-//BFS01
-//BFS01     nVal = GetTextureProjectionX();
-//BFS01     rOut << BOOL(nVal > 0);
-//BFS01     rOut << BOOL(nVal > 1);
-//BFS01
-//BFS01     nVal = GetTextureProjectionY();
-//BFS01     rOut << BOOL(nVal > 0);
-//BFS01     rOut << BOOL(nVal > 1);
-//BFS01
-//BFS01     rOut << BOOL(GetShadow3D());
-//BFS01
-//BFS01     // neu al 384:
-//BFS01     rOut << GetMaterialAmbientColor();
-//BFS01     rOut << GetMaterialColor();
-//BFS01     rOut << GetMaterialSpecular();
-//BFS01     rOut << GetMaterialEmission();
-//BFS01     rOut << GetMaterialSpecularIntensity();
-//BFS01
-//BFS01     aBackMaterial.WriteData(rOut);
-//BFS01
-//BFS01     rOut << (UINT16)GetTextureKind();
-//BFS01
-//BFS01     rOut << (UINT16)GetTextureMode();
-//BFS01
-//BFS01     rOut << BOOL(GetNormalsInvert());
-//BFS01
-//BFS01     // neu ab 534: (hat noch gefehlt)
-//BFS01     rOut << BOOL(GetTextureFilter());
-//BFS01 }
-//BFS01#endif
-//BFS01}
-
-/*************************************************************************
-|*
-|* Einlesen der Datenmember eines E3dCompounds
-|*
-\************************************************************************/
-
-//BFS01void E3dCompoundObject::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 if ( rIn.GetError() != SVSTREAM_OK )
-//BFS01     return;
-//BFS01
-//BFS01 E3dObject::ReadData(rHead, rIn);
-//BFS01
-//BFS01   // Vor der Filerevision 13 wurde das Objekt nie geschrieben.
-//BFS01   // auch kein Kompatibilitaetsrecord.
-//BFS01 if ((rHead.GetVersion() < 13) || (rIn.GetVersion() < 3560))
-//BFS01 {
-//BFS01     return;
-//BFS01 }
-//BFS01
-//BFS01 SdrDownCompat aCompat(rIn, STREAM_READ);
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("E3dCompoundObject");
-//BFS01#endif
-//BFS01
-//BFS01 bBytesLeft = FALSE;
-//BFS01 if (aCompat.GetBytesLeft () >= sizeof (BOOL))
-//BFS01 {
-//BFS01     BOOL bTmp, bTmp2;
-//BFS01     sal_uInt16 nTmp;
-//BFS01
-//BFS01     rIn >> bTmp;
-//BFS01     GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(bTmp));
-//BFS01
-//BFS01     // neue Parameter zur Geometrieerzeugung
-//BFS01     if (aCompat.GetBytesLeft () >= sizeof (BOOL))
-//BFS01     {
-//BFS01         rIn >> bTmp;
-//BFS01         bCreateNormals = bTmp;
-//BFS01
-//BFS01         rIn >> bTmp;
-//BFS01         bCreateTexture = bTmp;
-//BFS01
-//BFS01         rIn >> bTmp;
-//BFS01         rIn >> bTmp2;
-//BFS01         if(bTmp == FALSE && bTmp2 == FALSE)
-//BFS01             nTmp = 0;
-//BFS01         else if(bTmp == TRUE && bTmp2 == FALSE)
-//BFS01             nTmp = 1;
-//BFS01         else
-//BFS01             nTmp = 2;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DNormalsKindItem(nTmp));
-//BFS01
-//BFS01         rIn >> bTmp;
-//BFS01         rIn >> bTmp2;
-//BFS01         if(bTmp == FALSE && bTmp2 == FALSE)
-//BFS01             nTmp = 0;
-//BFS01         else if(bTmp == TRUE && bTmp2 == FALSE)
-//BFS01             nTmp = 1;
-//BFS01         else
-//BFS01             nTmp = 2;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DTextureProjectionXItem(nTmp));
-//BFS01
-//BFS01         rIn >> bTmp;
-//BFS01         rIn >> bTmp2;
-//BFS01         if(bTmp == FALSE && bTmp2 == FALSE)
-//BFS01             nTmp = 0;
-//BFS01         else if(bTmp == TRUE && bTmp2 == FALSE)
-//BFS01             nTmp = 1;
-//BFS01         else
-//BFS01             nTmp = 2;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DTextureProjectionYItem(nTmp));
-//BFS01
-//BFS01         rIn >> bTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DShadow3DItem(bTmp));
-//BFS01
-//BFS01         // Setze ein Flag fuer den Aufrufer, dass neues Format
-//BFS01         // zu lesen ist
-//BFS01         bBytesLeft = TRUE;
-//BFS01     }
-//BFS01
-//BFS01     // neu al 384:
-//BFS01     if (aCompat.GetBytesLeft () >= sizeof (B3dMaterial))
-//BFS01     {
-//BFS01         UINT16 nTmp;
-//BFS01
-//BFS01         Color aCol;
-//BFS01
-//BFS01         rIn >> aCol;
-//BFS01         SetMaterialAmbientColor(aCol);
-//BFS01
-//BFS01         rIn >> aCol;
-//BFS01         // do NOT use, this is the old 3D-Color(!)
-//BFS01         // SetItem(XFillColorItem(String(), aCol));
-//BFS01
-//BFS01         rIn >> aCol;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DMaterialSpecularItem(aCol));
-//BFS01
-//BFS01         rIn >> aCol;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DMaterialEmissionItem(aCol));
-//BFS01
-//BFS01         rIn >> nTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DMaterialSpecularIntensityItem(nTmp));
-//BFS01
-//BFS01         aBackMaterial.ReadData(rIn);
-//BFS01
-//BFS01         rIn >> nTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DTextureKindItem(nTmp));
-//BFS01
-//BFS01         rIn >> nTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DTextureModeItem(nTmp));
-//BFS01
-//BFS01         rIn >> bTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DNormalsInvertItem(bTmp));
-//BFS01     }
-//BFS01
-//BFS01     // neu ab 534: (hat noch gefehlt)
-//BFS01     if (aCompat.GetBytesLeft () >= sizeof (BOOL))
-//BFS01     {
-//BFS01         rIn >> bTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DTextureFilterItem(bTmp));
-//BFS01     }
-//BFS01 }
-//BFS01}
 
 /*************************************************************************
 |*
@@ -2537,11 +2005,11 @@ Bitmap E3dCompoundObject::GetHatchBitmap(const SfxItemSet& rSet)
 |*
 \************************************************************************/
 
-::basegfx::B3DPolyPolygon E3dCompoundObject::Get3DLineGeometry() const
+basegfx::B3DPolyPolygon E3dCompoundObject::Get3DLineGeometry() const
 {
-    ::basegfx::B3DPolyPolygon aRetval;
-    B3dEntityBucket& rEntityBucket = ((E3dCompoundObject*)this)->GetDisplayGeometry().GetEntityBucket();
-    GeometryIndexValueBucket& rIndexBucket = ((E3dCompoundObject*)this)->GetDisplayGeometry().GetIndexBucket();
+    basegfx::B3DPolyPolygon aRetval;
+    const B3dEntityBucket& rEntityBucket = GetDisplayGeometry().GetEntityBucket();
+    const GeometryIndexValueBucket& rIndexBucket = GetDisplayGeometry().GetIndexBucket();
     sal_uInt32 nPolyCounter(0L);
     sal_uInt32 nEntityCounter(0L);
 
@@ -2549,27 +2017,24 @@ Bitmap E3dCompoundObject::GetHatchBitmap(const SfxItemSet& rSet)
     {
         // next primitive
         sal_uInt32 nUpperBound(rIndexBucket[nPolyCounter++].GetIndex());
-        ::basegfx::B3DPoint aLastPoint;
-
+        basegfx::B3DPoint aLastPoint;
         sal_Bool bLastLineVisible(rEntityBucket[nUpperBound - 1].IsEdgeVisible());
 
         if(bLastLineVisible)
         {
-            Vector3D aVector(rEntityBucket[nUpperBound - 1].Point().GetVector3D());
-            aLastPoint = ::basegfx::B3DPoint(aVector.X(), aVector.Y(), aVector.Z());
+            aLastPoint = rEntityBucket[nUpperBound - 1].Point();
         }
 
         while(nEntityCounter < nUpperBound)
         {
-            Vector3D aVector(rEntityBucket[nEntityCounter].Point().GetVector3D());
-            ::basegfx::B3DPoint aNewPoint(aVector.X(), aVector.Y(), aVector.Z());
+            basegfx::B3DPoint aNewPoint(rEntityBucket[nEntityCounter].Point());
 
             if(bLastLineVisible)
             {
                 if(aLastPoint != aNewPoint)
                 {
                     // fill polygon
-                    ::basegfx::B3DPolygon aNewPoly;
+                    basegfx::B3DPolygon aNewPoly;
                     aNewPoly.append(aLastPoint);
                     aNewPoly.append(aNewPoint);
 
@@ -2625,57 +2090,30 @@ void E3dCompoundObject::CreateGeometry()
     if(bCreateNormals)
     {
         if(GetNormalsKind() > 1)
-            GetDisplayGeometry().CreateDefaultNormalsSphere();
+            aDisplayGeometry.CreateDefaultNormalsSphere();
         if(GetNormalsInvert())
-            GetDisplayGeometry().InvertNormals();
+            aDisplayGeometry.InvertNormals();
     }
 
     if(bCreateTexture)
     {
-        GetDisplayGeometry().CreateDefaultTexture(
+        aDisplayGeometry.CreateDefaultTexture(
             ((GetTextureProjectionX() > 0) ? B3D_CREATE_DEFAULT_X : FALSE)
             |((GetTextureProjectionY() > 0) ? B3D_CREATE_DEFAULT_Y : FALSE),
             GetTextureProjectionX() > 1);
     }
 
-    // Am Ende der Geometrieerzeugung das model an den erzeugten
-    // PolyObj's setzen, d.h. beim ueberladen dieser Funktion
-    // den parent am Ende rufen.
-    //BFS01if(bCreateE3dPolyObj)
-    //BFS01 SetModel(pModel);
-
     // Das Ende der Geometrieerzeugung anzeigen
     aDisplayGeometry.EndDescription();
 }
 
-void E3dCompoundObject::ReCreateGeometry(/*BFS01 BOOL bCreateOldGeometry*/)
+void E3dCompoundObject::ReCreateGeometry()
 {
     // Geometrie zerstoeren
     DestroyGeometry();
 
-    // Flag fuer Geometrieerzeugung setzen
-    //BFS01bCreateE3dPolyObj = bCreateOldGeometry;
-
     // ... und neu erzeugen
     CreateGeometry();
-}
-
-void E3dCompoundObject::GetFullTransform(Matrix4D& rMatrix) const
-{
-    E3dObject::GetFullTransform( rMatrix );
-}
-const Matrix4D& E3dCompoundObject::GetFullTransform()
-{
-    if ( bTfHasChanged )
-    {
-        aFullTfMatrix = aTfMatrix;
-
-        if ( GetParentObj() )
-            aFullTfMatrix *= GetParentObj()->GetFullTransform();
-
-        bTfHasChanged = FALSE;
-    }
-    return aFullTfMatrix;
 }
 
 /*************************************************************************
@@ -2684,32 +2122,27 @@ const Matrix4D& E3dCompoundObject::GetFullTransform()
 |*
 \************************************************************************/
 
-void E3dCompoundObject::AddGeometry(const PolyPolygon3D& rPolyPolygon3D,
+void E3dCompoundObject::AddGeometry(
+    const basegfx::B3DPolyPolygon& rPolyPolygon,
     BOOL bHintIsComplex, BOOL bOutline)
 {
-    if(rPolyPolygon3D.Count())
+    if(rPolyPolygon.count())
     {
-        // eventuell alte Geometrie erzeugen (z.B. zum speichern)
-        //BFS01if(bCreateE3dPolyObj)
-        //BFS01{
-        //BFS01 E3dPolyObj* pObj = new E3dPolyObj(
-        //BFS01     rPolyPolygon3D, GetDoubleSided(), TRUE);
-        //BFS01 pObj->SetPartOfParent();
-        //BFS01 Insert3DObj(pObj);
-        //BFS01}
-
         // neue Geometrie erzeugen
-        for(USHORT a = 0; a < rPolyPolygon3D.Count(); a++ )
+        for(sal_uInt32 a(0L); a < rPolyPolygon.count(); a++)
         {
-            const Polygon3D& rPoly3D = rPolyPolygon3D[a];
+            const basegfx::B3DPolygon aPoly3D(rPolyPolygon.getB3DPolygon(a));
             aDisplayGeometry.StartObject(bHintIsComplex, bOutline);
-            for(USHORT b = 0; b < rPoly3D.GetPointCount(); b++ )
-                aDisplayGeometry.AddEdge(rPoly3D[b]);
+
+            for(sal_uInt32 b(0L); b < aPoly3D.count(); b++ )
+            {
+                aDisplayGeometry.AddEdge(aPoly3D.getB3DPoint(b));
+            }
         }
         aDisplayGeometry.EndObject();
 
         // LocalBoundVolume pflegen
-        aLocalBoundVol.Union(rPolyPolygon3D.GetPolySize());
+        aLocalBoundVol.expand(basegfx::tools::getRange(rPolyPolygon));
 
         // Eigenes BoundVol nicht mehr gueltig
         SetBoundVolInvalid();
@@ -2718,34 +2151,28 @@ void E3dCompoundObject::AddGeometry(const PolyPolygon3D& rPolyPolygon3D,
 }
 
 void E3dCompoundObject::AddGeometry(
-    const PolyPolygon3D& rPolyPolygon3D,
-    const PolyPolygon3D& rPolyNormal3D,
+    const basegfx::B3DPolyPolygon& rPolyPolygon,
+    const basegfx::B3DPolyPolygon& rPolyPolygonNormal,
     BOOL bHintIsComplex, BOOL bOutline)
 {
-    if(rPolyPolygon3D.Count())
+    if(rPolyPolygon.count())
     {
-        // eventuell alte Geometrie erzeugen (z.B. zum speichern)
-        //BFS01if(bCreateE3dPolyObj)
-        //BFS01{
-        //BFS01 E3dPolyObj* pObj = new E3dPolyObj(
-        //BFS01     rPolyPolygon3D, rPolyNormal3D, GetDoubleSided(), TRUE);
-        //BFS01 pObj->SetPartOfParent();
-        //BFS01 Insert3DObj(pObj);
-        //BFS01}
-
         // neue Geometrie erzeugen
-        for(USHORT a = 0; a < rPolyPolygon3D.Count(); a++ )
+        for(sal_uInt32 a(0L); a < rPolyPolygon.count(); a++ )
         {
-            const Polygon3D& rPoly3D = rPolyPolygon3D[a];
-            const Polygon3D& rNormal3D = rPolyNormal3D[a];
+            const basegfx::B3DPolygon aPoly3D(rPolyPolygon.getB3DPolygon(a));
+            const basegfx::B3DPolygon aNormal3D(rPolyPolygonNormal.getB3DPolygon(a));
             aDisplayGeometry.StartObject(bHintIsComplex, bOutline);
-            for(USHORT b = 0; b < rPoly3D.GetPointCount(); b++ )
-                aDisplayGeometry.AddEdge(rPoly3D[b], rNormal3D[b]);
+
+            for(sal_uInt32 b(0L); b < aPoly3D.count(); b++ )
+            {
+                aDisplayGeometry.AddEdge(aPoly3D.getB3DPoint(b), aNormal3D.getB3DPoint(b));
+            }
         }
         aDisplayGeometry.EndObject();
 
         // LocalBoundVolume pflegen
-        aLocalBoundVol.Union(rPolyPolygon3D.GetPolySize());
+        aLocalBoundVol.expand(basegfx::tools::getRange(rPolyPolygon));
 
         // Eigenes BoundVol nicht mehr gueltig
         SetBoundVolInvalid();
@@ -2754,37 +2181,30 @@ void E3dCompoundObject::AddGeometry(
 }
 
 void E3dCompoundObject::AddGeometry(
-    const PolyPolygon3D& rPolyPolygon3D,
-    const PolyPolygon3D& rPolyNormal3D,
-    const PolyPolygon3D& rPolyTexture3D,
+    const basegfx::B3DPolyPolygon& rPolyPolygon,
+    const basegfx::B3DPolyPolygon& rPolyPolygonNormal,
+    const basegfx::B2DPolyPolygon& rPolyPolygonTexture,
     BOOL bHintIsComplex, BOOL bOutline)
 {
-    if(rPolyPolygon3D.Count())
+    if(rPolyPolygon.count())
     {
-        // eventuell alte Geometrie erzeugen (z.B. zum speichern)
-        //BFS01if(bCreateE3dPolyObj)
-        //BFS01{
-        //BFS01 E3dPolyObj* pObj = new E3dPolyObj(
-        //BFS01     rPolyPolygon3D, rPolyNormal3D,
-        //BFS01     rPolyTexture3D, GetDoubleSided(), TRUE);
-        //BFS01 pObj->SetPartOfParent();
-        //BFS01 Insert3DObj(pObj);
-        //BFS01}
-
         // neue Geometrie erzeugen
-        for(USHORT a = 0; a < rPolyPolygon3D.Count(); a++ )
+        for(sal_uInt32 a(0L); a < rPolyPolygon.count(); a++ )
         {
-            const Polygon3D& rPoly3D = rPolyPolygon3D[a];
-            const Polygon3D& rNormal3D = rPolyNormal3D[a];
-            const Polygon3D& rTexture3D = rPolyTexture3D[a];
+            const basegfx::B3DPolygon aPoly3D(rPolyPolygon.getB3DPolygon(a));
+            const basegfx::B3DPolygon aNormal3D(rPolyPolygonNormal.getB3DPolygon(a));
+            const basegfx::B2DPolygon aTexture2D(rPolyPolygonTexture.getB2DPolygon(a));
             aDisplayGeometry.StartObject(bHintIsComplex, bOutline);
-            for(USHORT b = 0; b < rPoly3D.GetPointCount(); b++ )
-                aDisplayGeometry.AddEdge(rPoly3D[b], rNormal3D[b], rTexture3D[b]);
+
+            for(sal_uInt32 b(0L); b < aPoly3D.count(); b++ )
+            {
+                aDisplayGeometry.AddEdge(aPoly3D.getB3DPoint(b), aNormal3D.getB3DPoint(b), aTexture2D.getB2DPoint(b));
+            }
         }
         aDisplayGeometry.EndObject();
 
         // LocalBoundVolume pflegen
-        aLocalBoundVol.Union(rPolyPolygon3D.GetPolySize());
+        aLocalBoundVol.expand(basegfx::tools::getRange(rPolyPolygon));
 
         // Eigenes BoundVol nicht mehr gueltig
         SetBoundVolInvalid();
@@ -2798,80 +2218,230 @@ void E3dCompoundObject::AddGeometry(
 |*
 \************************************************************************/
 
-void E3dCompoundObject::RotatePoly(
-    PolyPolygon3D& rPolyPolyRotate,
-    Matrix4D& rRotMat)
-{
-    USHORT nPolyCnt = rPolyPolyRotate.Count();
-
-    for(UINT16 a=0;a<nPolyCnt;a++)
-    {
-        Polygon3D& rPolyRotate = rPolyPolyRotate[a];
-        USHORT nPntCnt = rPolyRotate.GetPointCount();
-
-        for(UINT16 b=0;b<nPntCnt;b++)
-            rPolyRotate[b] *= rRotMat;
-    }
-}
-
-void E3dCompoundObject::GrowPoly(
-    PolyPolygon3D& rPolyPolyGrow,
-    PolyPolygon3D& rPolyPolyNormals,
+basegfx::B3DPolyPolygon E3dCompoundObject::ImpGrowPoly(
+    const basegfx::B3DPolyPolygon& rPolyPolyGrow,
+    const basegfx::B3DPolyPolygon& rPolyPolyNormals,
     double fFactor)
 {
-    USHORT nPolyCnt = rPolyPolyGrow.Count();
+    basegfx::B3DPolyPolygon aRetval;
+    const sal_uInt32 nPolyCount(rPolyPolyGrow.count());
+    const bool bClosed(rPolyPolyGrow.isClosed());
 
-    for(UINT16 a=0;a<nPolyCnt;a++)
+    for(sal_uInt32 a(0L); a < nPolyCount; a++)
     {
-        Polygon3D& rPolyGrow = rPolyPolyGrow[a];
-        const Polygon3D& rPolyNormals = rPolyPolyNormals[a];
-        USHORT nPntCnt = rPolyGrow.GetPointCount();
+        const basegfx::B3DPolygon aPolyGrow(rPolyPolyGrow.getB3DPolygon(a));
+        const basegfx::B3DPolygon aPolyNormals(rPolyPolyNormals.getB3DPolygon(a));
+        const sal_uInt32 nPointCount(aPolyGrow.count());
+        basegfx::B3DPolygon aNewPolyGrow;
 
-        for(UINT16 b=0;b<nPntCnt;b++)
-            rPolyGrow[b] += rPolyNormals[b] * fFactor;
+        for(sal_uInt32 b(0L); b < nPointCount; b++)
+        {
+            aNewPolyGrow.append(aPolyGrow.getB3DPoint(b) + (aPolyNormals.getB3DPoint(b) * fFactor));
+        }
+
+        aNewPolyGrow.setClosed(bClosed);
+        aRetval.append(aNewPolyGrow);
     }
+
+    return aRetval;
 }
 
-void E3dCompoundObject::AddNormals(
-    PolyPolygon3D& rPolyPolyDest,
-    const PolyPolygon3D& rPolyPolySource)
+basegfx::B2VectorOrientation E3dCompoundObject::ImpGetOrientationInPoint(
+    const basegfx::B3DPolygon& rPolygon,
+    sal_uInt32 nIndex)
 {
-    USHORT nPolyCnt = rPolyPolyDest.Count();
+    sal_uInt32 nPntCnt(rPolygon.count());
+    basegfx::B2VectorOrientation eRetval(basegfx::ORIENTATION_NEUTRAL);
 
-    for(UINT16 a=0;a<nPolyCnt;a++)
+    if(nIndex < nPntCnt)
     {
-        Polygon3D& rPolyDest = rPolyPolyDest[a];
-        const Polygon3D& rPolySource = rPolyPolySource[a];
-        USHORT nPntCnt = rPolyDest.GetPointCount();
+        const basegfx::B3DPoint aMid(rPolygon.getB3DPoint(nIndex));
+        const basegfx::B3DPoint aPre(rPolygon.getB3DPoint((nIndex == 0L) ? nPntCnt - 1L : nIndex - 1L));
+        const basegfx::B3DPoint aPos(rPolygon.getB3DPoint((nIndex == nPntCnt - 1L) ? 0L : nIndex + 1L));
+        const basegfx::B3DVector aVecA(aPre - aMid);
+        const basegfx::B3DVector aVecB(aPos - aMid);
+        const basegfx::B3DVector aNormal(aVecA.getPerpendicular(aVecB));
 
-        for(UINT16 b=0;b<nPntCnt;b++)
+        if(aNormal.getZ() > 0.0)
         {
-            rPolyDest[b] += rPolySource[b];
-            rPolyDest[b].Normalize();
+            eRetval = basegfx::ORIENTATION_POSITIVE;
+        }
+        else if(aNormal.getZ() < 0.0)
+        {
+            eRetval = basegfx::ORIENTATION_NEGATIVE;
         }
     }
+
+    return eRetval;
 }
 
-void E3dCompoundObject::ScalePoly(
-    PolyPolygon3D& rPolyPolyScale,
-    double fFactor)
+basegfx::B3DPolyPolygon E3dCompoundObject::ImpCorrectGrownPoly(
+    const basegfx::B3DPolyPolygon& aToBeCorrected,
+    const basegfx::B3DPolyPolygon& aOriginal)
 {
-    USHORT nPolyCnt = rPolyPolyScale.Count();
-    Vector3D aMiddle = rPolyPolyScale.GetMiddle();
+    const sal_uInt32 aOriginalCount(aOriginal.count());
+    const sal_uInt32 aToBeCorrectedCount(aToBeCorrected.count());
+    const bool bClosed(aToBeCorrected.isClosed());
 
-    for(UINT16 a=0;a<nPolyCnt;a++)
+    if(aOriginalCount == aToBeCorrectedCount)
     {
-        Polygon3D& rPolyScale = rPolyPolyScale[a];
-        USHORT nPntCnt = rPolyScale.GetPointCount();
+        basegfx::B3DPolyPolygon aRetval;
 
-        for(UINT16 b=0;b<nPntCnt;b++)
-            rPolyScale[b] = ((rPolyScale[b] - aMiddle) * fFactor) + aMiddle;
+        for(sal_uInt32 a(0L); a < aToBeCorrectedCount; a++)
+        {
+            const basegfx::B3DPolygon aCorr(aToBeCorrected.getB3DPolygon(a));
+            const basegfx::B3DPolygon aOrig(aOriginal.getB3DPolygon(a));
+            const sal_uInt32 aOrigCount(aOrig.count());
+            const sal_uInt32 aCorrCount(aCorr.count());
+
+            if(aOrigCount == aCorrCount && aOrigCount > 2L)
+            {
+                sal_uInt32 nNumDiff(0L);
+                sal_uInt32 nDoneStart(0xffffffff);
+
+                // Testen auf Anzahl Aenderungen
+                sal_uInt32 b;
+
+                for(b = 0L; b < aOrigCount; b++)
+                {
+                    const basegfx::B2VectorOrientation eOrig(ImpGetOrientationInPoint(aOrig, b));
+                    const basegfx::B2VectorOrientation eCorr(ImpGetOrientationInPoint(aCorr, b));
+
+                    if(eOrig != eCorr)
+                    {
+                        nNumDiff++;
+                    }
+                    else
+                    {
+                        if(nDoneStart == 0xffffffff)
+                        {
+                            // eventuellen Startpunkt auf gleiche Orientierung legen
+                            nDoneStart = b;
+                        }
+                    }
+                }
+
+                if(nNumDiff == aOrigCount)
+                {
+                    // Komplett umgedreht, alles auf einen Punkt
+                    const basegfx::B3DRange aCorrRange = basegfx::tools::getRange(aCorr);
+                    basegfx::B3DPolygon aNew;
+
+                    aNew.append(aCorrRange.getCenter(), aCorrCount);
+                    aRetval.append(aNew);
+                }
+                else if(nNumDiff)
+                {
+                    // es gibt welche, nDoneStart ist gesetzt. Erzeuge (und
+                    // setze) nDoneEnd
+                    sal_uInt32 nDoneEnd(nDoneStart);
+                    sal_uInt32 nStartLoop(0L);
+                    BOOL bInLoop(FALSE);
+                    basegfx::B3DPolygon aNew(aCorr);
+
+                    // einen step mehr in der Schleife, um Loops abzuschliessen
+                    BOOL bFirstStep(TRUE);
+
+                    while(nDoneEnd != nDoneStart || bFirstStep)
+                    {
+                        bFirstStep = FALSE;
+
+                        // nCandidate ist Kandidat fuer Test
+                        const sal_uInt32 nCandidate((nDoneEnd == aOrigCount - 1L) ? 0L : nDoneEnd + 1L);
+                        const basegfx::B2VectorOrientation eOrig(ImpGetOrientationInPoint(aOrig, nCandidate));
+                        const basegfx::B2VectorOrientation eCorr(ImpGetOrientationInPoint(aCorr, nCandidate));
+
+                        if(eOrig == eCorr)
+                        {
+                            // Orientierung ist gleich
+                            if(bInLoop)
+                            {
+                                // Punkte innerhalb bInLoop auf ihr Zentrum setzen
+                                basegfx::B3DPoint aMiddle;
+                                sal_uInt32 nCounter(0L);
+                                sal_uInt32 nStart(nStartLoop);
+
+                                while(nStart != nCandidate)
+                                {
+                                    aMiddle += aCorr.getB3DPoint(nStart);
+                                    nCounter++;
+                                    nStart = (nStart == aOrigCount - 1L) ? 0L : nStart + 1L;
+                                }
+
+                                // Mittelwert bilden
+                                aMiddle /= (double)nCounter;
+
+                                // Punkte umsetzen
+                                nStart = nStartLoop;
+                                while(nStart != nCandidate)
+                                {
+                                    aNew.setB3DPoint(nStart, aMiddle);
+                                    nStart = (nStart == aOrigCount - 1L) ? 0L : nStart + 1L;
+                                }
+
+                                // Loop beenden
+                                bInLoop = FALSE;
+                            }
+                        }
+                        else
+                        {
+                            // Orientierung unterschiedlich
+                            if(!bInLoop)
+                            {
+                                // Start eines Loop mit geaenderter Orientierung
+                                nStartLoop = nCandidate;
+                                bInLoop = TRUE;
+                            }
+                        }
+
+                        // Weitergehen
+                        nDoneEnd = nCandidate;
+                    }
+
+                    aRetval.append(aNew);
+                }
+                else
+                {
+                    // no change, append original
+                    aRetval.append(aCorr);
+                }
+            }
+            else
+            {
+                // less than 2 -> no change, append original
+                aRetval.append(aCorr);
+            }
+        }
+
+        aRetval.setClosed(bClosed);
+        return aRetval;
+    }
+    else
+    {
+        return aToBeCorrected;
     }
 }
 
-void E3dCompoundObject::CreateFront(
-    const PolyPolygon3D& rPolyPoly3D,
-    const PolyPolygon3D& rFrontNormals,
+basegfx::B3DPolyPolygon E3dCompoundObject::ImpScalePoly(
+    const basegfx::B3DPolyPolygon& rPolyPolyScale,
+    double fFactor)
+{
+    basegfx::B3DPolyPolygon aRetval(rPolyPolyScale);
+    const basegfx::B3DRange aPolyPolyRange(basegfx::tools::getRange(rPolyPolyScale));
+    const basegfx::B3DPoint aCenter(aPolyPolyRange.getCenter());
+    basegfx::B3DHomMatrix aTransform;
+
+    aTransform.translate(-aCenter.getX(), -aCenter.getY(), -aCenter.getZ());
+    aTransform.scale(fFactor, fFactor, fFactor);
+    aTransform.translate(aCenter.getX(), aCenter.getY(), aCenter.getZ());
+    aRetval.transform(aTransform);
+
+    return aRetval;
+}
+
+void E3dCompoundObject::ImpCreateFront(
+    const basegfx::B3DPolyPolygon& rPolyPoly3D,
+    const basegfx::B3DPolyPolygon& rFrontNormals,
     BOOL bDoCreateNormals,
     BOOL bDoCreateTexture)
 {
@@ -2880,357 +2450,347 @@ void E3dCompoundObject::CreateFront(
     {
         if(bDoCreateTexture)
         {
-            // Polygon fuer die Textur erzeugen
-            PolyPolygon3D aPolyTexture = rPolyPoly3D;
-            Volume3D aSize = aPolyTexture.GetPolySize();
-            Matrix4D aTrans;
+            // create default texture polygon
+            const basegfx::B3DRange aRange(basegfx::tools::getRange(rPolyPoly3D));
+            const double fScaleX(0.0 == aRange.getWidth() ? 1.0 : 1.0 / aRange.getWidth());
+            const double fScaleY(0.0 == aRange.getHeight() ? 1.0 : 1.0 / aRange.getHeight());
+            const double fScaleZ(0.0 == aRange.getDepth() ? 1.0 : 1.0 / aRange.getDepth());
+            basegfx::B3DHomMatrix aTrans3DTo2D;
 
-            aTrans.Identity();
-            aTrans.Translate(-aSize.MinVec());
-            aPolyTexture.Transform(aTrans);
-
-            double fFactorX(1.0), fFactorY(1.0), fFactorZ(1.0);
-
-            if(aSize.GetWidth() != 0.0)
-                fFactorX = 1.0 / aSize.GetWidth();
-
-            if(aSize.GetHeight() != 0.0)
-                fFactorY = 1.0 / aSize.GetHeight();
-
-            if(aSize.GetDepth() != 0.0)
-                fFactorZ = 1.0 / aSize.GetDepth();
-
-            aTrans.Identity();
-            aTrans.Scale(fFactorX, -fFactorY, fFactorZ);
-            aTrans.Translate(Vector3D(0.0, 1.0, 0.0));
-            aPolyTexture.Transform(aTrans);
+            aTrans3DTo2D.translate(-aRange.getMinX(), -aRange.getMinY(), -aRange.getMinZ());
+            aTrans3DTo2D.scale(fScaleX, -fScaleY, fScaleZ);
+            aTrans3DTo2D.translate(0.0, 1.0, 0.0);
+            basegfx::B2DPolyPolygon aPolyTexture(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(rPolyPoly3D, aTrans3DTo2D));
 
             AddGeometry(rPolyPoly3D, rFrontNormals, aPolyTexture, TRUE);
         }
         else
-            AddGeometry(rPolyPoly3D, rFrontNormals, TRUE);
-    }
-    else
-        AddGeometry(rPolyPoly3D, TRUE);
-}
-
-void E3dCompoundObject::AddFrontNormals(
-    const PolyPolygon3D& rPolyPoly3D,
-    PolyPolygon3D& rNormalsFront,
-    Vector3D &rOffset)
-{
-    Vector3D aFrontNormal = -rOffset;
-    aFrontNormal.Normalize();
-    USHORT nPolyCnt = rPolyPoly3D.Count();
-
-    for(UINT16 a=0;a<nPolyCnt;a++)
-    {
-        const Polygon3D& rPoly3D = rPolyPoly3D[a];
-        Polygon3D& rNormalPoly = rNormalsFront[a];
-        USHORT nPntCnt = rPoly3D.GetPointCount();
-
-        for(UINT16 b=0;b<nPntCnt;b++)
         {
-            rNormalPoly[b] += aFrontNormal;
-            rNormalPoly[b].Normalize();
+            AddGeometry(rPolyPoly3D, rFrontNormals, TRUE);
         }
     }
+    else
+    {
+        AddGeometry(rPolyPoly3D, TRUE);
+    }
 }
 
-void E3dCompoundObject::CreateBack(
-    const PolyPolygon3D& rPolyPoly3D,
-    const PolyPolygon3D& rBackNormals,
+void E3dCompoundObject::ImpCreateBack(
+    const basegfx::B3DPolyPolygon& rPolyPoly3D,
+    const basegfx::B3DPolyPolygon& rBackNormals,
     BOOL bDoCreateNormals,
     BOOL bDoCreateTexture)
 {
-    // PolyPolygon umdrehen
-    PolyPolygon3D aLocalPoly = rPolyPoly3D;
-    aLocalPoly.FlipDirections();
+    // flip polys
+    basegfx::B3DPolyPolygon aPolyPoly3D(rPolyPoly3D);
+    basegfx::B3DPolyPolygon aBackNormals(rBackNormals);
+    aPolyPoly3D.flip();
+    aBackNormals.flip();
 
-    // Rueckseite
-    if(bDoCreateNormals)
+    // use ImpCreateFront with flipped polys
+    ImpCreateFront(aPolyPoly3D, aBackNormals, bDoCreateNormals, bDoCreateTexture);
+}
+
+basegfx::B3DPolyPolygon E3dCompoundObject::ImpCreateByPattern(const basegfx::B3DPolyPolygon& rPattern)
+{
+    basegfx::B3DPolyPolygon aRetval;
+    const sal_uInt32 nPolyCount(rPattern.count());
+    const bool bClosed(rPattern.isClosed());
+
+    for(sal_uInt32 a(0L); a < nPolyCount; a++)
     {
-        PolyPolygon3D aLocalNormals = rBackNormals;
-        aLocalNormals.FlipDirections();
-        if(bDoCreateTexture)
+        basegfx::B3DPolygon aNew;
+        aNew.append(basegfx::B3DPoint(), rPattern.getB3DPolygon(a).count());
+        aNew.setClosed(bClosed);
+        aRetval.append(aNew);
+    }
+
+    return aRetval;
+}
+
+basegfx::B3DPolyPolygon E3dCompoundObject::ImpAddFrontNormals(
+    const basegfx::B3DPolyPolygon& rNormalsFront,
+    const basegfx::B3DPoint& rOffset)
+{
+    basegfx::B3DPoint aBackOffset(-rOffset);
+    return ImpAddBackNormals(rNormalsFront, aBackOffset);
+}
+
+basegfx::B3DPolyPolygon E3dCompoundObject::ImpAddBackNormals(
+    const basegfx::B3DPolyPolygon& rNormalsBack,
+    const basegfx::B3DPoint& rOffset)
+{
+    basegfx::B3DPolyPolygon aRetval;
+    basegfx::B3DVector aOffset(rOffset);
+    aOffset.normalize();
+    basegfx::B3DPoint aValue(aOffset);
+    const sal_uInt32 nPolyCount(rNormalsBack.count());
+    const bool bClosed(rNormalsBack.isClosed());
+
+    for(sal_uInt32 a(0L); a < nPolyCount; a++)
+    {
+        const basegfx::B3DPolygon aPoly(rNormalsBack.getB3DPolygon(a));
+        const sal_uInt32 nPointCount(aPoly.count());
+        basegfx::B3DPolygon aNew;
+
+        for(sal_uInt32 b(0L); b < nPointCount; b++)
         {
-            // Polygon fuer die Textur erzeugen
-            PolyPolygon3D aPolyTexture(aLocalPoly);
-            Volume3D aSize = aPolyTexture.GetPolySize();
-            Matrix4D aTrans;
+            aNew.append(aPoly.getB3DPoint(b) + aValue);
+        }
 
-            aTrans.Identity();
-            aTrans.Translate(-aSize.MinVec());
-            aPolyTexture.Transform(aTrans);
+        aNew.setClosed(bClosed);
+        aRetval.append(aNew);
+    }
 
-            double fFactorX(1.0), fFactorY(1.0), fFactorZ(1.0);
+    return aRetval;
+}
 
-            if(aSize.GetWidth() != 0.0)
-                fFactorX = 1.0 / aSize.GetWidth();
+basegfx::B3DPolyPolygon E3dCompoundObject::ImpAddInBetweenNormals(
+    const basegfx::B3DPolyPolygon& rPolyPolyFront,
+    const basegfx::B3DPolyPolygon& rPolyPolyBack,
+    const basegfx::B3DPolyPolygon& rPolyPolyNormals,
+    BOOL bSmoothed)
+{
+    basegfx::B3DPolyPolygon aRetval;
+    const sal_uInt32 nPolyCnt(rPolyPolyFront.count());
+    const bool bClosed(rPolyPolyFront.isClosed());
 
-            if(aSize.GetHeight() != 0.0)
-                fFactorY = 1.0 / aSize.GetHeight();
+    // Verbindungsstuecke
+    for(sal_uInt32 a(0L); a < nPolyCnt; a++)
+    {
+        const basegfx::B3DPolygon aPoly3DFront(rPolyPolyFront.getB3DPolygon(a));
+        const basegfx::B3DPolygon aPoly3DBack(rPolyPolyBack.getB3DPolygon(a));
+        const basegfx::B3DPolygon aNormalPoly(rPolyPolyNormals.getB3DPolygon(a));
+        const sal_uInt32 nPntCnt(aPoly3DFront.count());
 
-            if(aSize.GetDepth() != 0.0)
-                fFactorZ = 1.0 / aSize.GetDepth();
+        if(aPoly3DBack.isClosed())
+        {
+            const basegfx::B3DVector aVecA(aPoly3DBack.getB3DPoint(nPntCnt - 1L) - aPoly3DFront.getB3DPoint(nPntCnt - 1L));
+            const basegfx::B3DVector aVecB(aPoly3DFront.getB3DPoint(0L) - aPoly3DFront.getB3DPoint(nPntCnt - 1L));
+            basegfx::B3DVector aNormal(aVecA.getPerpendicular(aVecB));
+            aNormal.normalize();
+            basegfx::B3DPolygon aNewPoly;
 
-            aTrans.Identity();
-            aTrans.Scale(fFactorX, -fFactorY, fFactorZ);
-            aTrans.Translate(Vector3D(0.0, 1.0, 0.0));
-            aPolyTexture.Transform(aTrans);
+            for(sal_uInt32 i(0L); i < nPntCnt; i++)
+            {
+                const basegfx::B3DVector aVecC(aPoly3DBack.getB3DPoint(i) - aPoly3DFront.getB3DPoint(i));
+                const basegfx::B3DVector aVecD(aPoly3DFront.getB3DPoint((i + 1L == nPntCnt) ? 0L : i + 1L) - aPoly3DFront.getB3DPoint(i));
+                basegfx::B3DVector aNextNormal(aVecC.getPerpendicular(aVecD));
+                aNextNormal.normalize();
+                basegfx::B3DVector aNew;
 
-            AddGeometry(aLocalPoly, aLocalNormals, aPolyTexture, TRUE);
+                if(bSmoothed)
+                {
+                    basegfx::B3DVector aMidNormal(aNormal + aNextNormal);
+                    aMidNormal.normalize();
+                    aNew = aNormalPoly.getB3DPoint(i) + aMidNormal;
+                }
+                else
+                {
+                    aNew = aNormalPoly.getB3DPoint(i) + aNormal;
+                }
+
+                aNew.normalize();
+                aNewPoly.append(aNew);
+                aNormal = aNextNormal;
+            }
+
+            aNewPoly.setClosed(bClosed);
+            aRetval.append(aNewPoly);
         }
         else
-            AddGeometry(aLocalPoly, aLocalNormals, TRUE);
-    }
-    else
-    {
-        AddGeometry(aLocalPoly, TRUE);
-    }
-}
-
-void E3dCompoundObject::AddBackNormals(
-    const PolyPolygon3D& rPolyPoly3D,
-    PolyPolygon3D& rNormalsBack,
-    Vector3D& rOffset)
-{
-    Vector3D aBackNormal = rOffset;
-    aBackNormal.Normalize();
-    USHORT nPolyCnt = rPolyPoly3D.Count();
-
-    for(UINT16 a=0;a<nPolyCnt;a++)
-    {
-        const Polygon3D& rPoly3D = rPolyPoly3D[a];
-        Polygon3D& rNormalPoly = rNormalsBack[a];
-        USHORT nPntCnt = rPoly3D.GetPointCount();
-
-        for(UINT16 b=0;b<nPntCnt;b++)
         {
-            rNormalPoly[b] += aBackNormal;
-            rNormalPoly[b].Normalize();
+            basegfx::B3DVector aNormal;
+
+            if(aPoly3DBack.getB3DPoint(0L) == aPoly3DFront.getB3DPoint(0L))
+            {
+                const basegfx::B3DVector aVecA(aPoly3DBack.getB3DPoint(1L) - aPoly3DFront.getB3DPoint(1L));
+                const basegfx::B3DVector aVecB(aPoly3DFront.getB3DPoint(1L) - aPoly3DFront.getB3DPoint(0L));
+                aNormal = aVecA.getPerpendicular(aVecB);
+            }
+            else
+            {
+                const basegfx::B3DVector aVecA(aPoly3DBack.getB3DPoint(0L) - aPoly3DFront.getB3DPoint(0L));
+                const basegfx::B3DVector aVecB(aPoly3DFront.getB3DPoint(1L) - aPoly3DFront.getB3DPoint(0L));
+                aNormal = aVecA.getPerpendicular(aVecB);
+            }
+
+            aNormal.normalize();
+            basegfx::B3DVector aNew(aNormalPoly.getB3DPoint(0L) + aNormal);
+            aNew.normalize();
+            basegfx::B3DPolygon aNewPoly;
+            aNewPoly.append(aNew);
+
+            for(sal_uInt32 i(1L); i < nPntCnt; i++)
+            {
+                basegfx::B3DVector aNextNormal;
+
+                if(i + 1L == nPntCnt)
+                {
+                    aNextNormal = aNormal;
+                }
+                else
+                {
+                    const basegfx::B3DVector aVecA(aPoly3DBack.getB3DPoint(i) - aPoly3DFront.getB3DPoint(i));
+                    const basegfx::B3DVector aVecB(aPoly3DFront.getB3DPoint(i + 1L) - aPoly3DFront.getB3DPoint(i));
+                    aNextNormal = aVecA.getPerpendicular(aVecB);
+                }
+
+                aNextNormal.normalize();
+
+                if(bSmoothed)
+                {
+                    basegfx::B3DVector aMidNormal(aNormal + aNextNormal);
+                    aMidNormal.normalize();
+                    aNew = aNormalPoly.getB3DPoint(i) + aMidNormal;
+                }
+                else
+                {
+                    aNew = aNormalPoly.getB3DPoint(i) + aNormal;
+                }
+
+                aNew.normalize();
+                aNewPoly.append(aNew);
+                aNormal = aNextNormal;
+            }
+
+            aNewPoly.setClosed(bClosed);
+            aRetval.append(aNewPoly);
         }
     }
+
+    return aRetval;
 }
 
-void E3dCompoundObject::CreateInBetween(
-    const PolyPolygon3D& rPolyPolyFront,
-    const PolyPolygon3D& rPolyPolyBack,
-    const PolyPolygon3D& rFrontNormals,
-    const PolyPolygon3D& rBackNormals,
+void E3dCompoundObject::ImpCreateInBetween(
+    const basegfx::B3DPolyPolygon& rPolyPolyFront,
+    const basegfx::B3DPolyPolygon& rPolyPolyBack,
+    const basegfx::B3DPolyPolygon& rFrontNormals,
+    const basegfx::B3DPolyPolygon& rBackNormals,
     BOOL bDoCreateNormals,
     double fSurroundFactor,
     double fTextureStart,
     double fTextureDepth,
     BOOL bRotateTexture90)
 {
-    USHORT nPolyCnt = rPolyPolyFront.Count();
-    BOOL bDoCreateTexture = (fTextureDepth == 0.0) ? FALSE : TRUE;
+    const sal_uInt32 nPolyCnt(rPolyPolyFront.count());
+    bool bDoCreateTexture(0.0 != fTextureDepth);
     double fPolyLength(0.0), fPolyPos(0.0);
-    USHORT nLastIndex(0);
+    sal_uInt32 nLastIndex(0L);
 
     // Verbindungsstuecke
     if(bDoCreateNormals)
     {
-        for(UINT16 a=0;a<nPolyCnt;a++)
+        for(sal_uInt32 a(0L); a < nPolyCnt; a++)
         {
-            const Polygon3D& rPoly3DFront = rPolyPolyFront[a];
-            const Polygon3D& rPoly3DBack = rPolyPolyBack[a];
+            const basegfx::B3DPolygon aPoly3DFront(rPolyPolyFront.getB3DPolygon(a));
+            const basegfx::B3DPolygon aPoly3DBack(rPolyPolyBack.getB3DPolygon(a));
+            const basegfx::B3DPolygon aPolyNormalsFront(rFrontNormals.getB3DPolygon(a));
+            const basegfx::B3DPolygon aPolyNormalsBack(rBackNormals.getB3DPolygon(a));
+            const sal_uInt32 nPntCnt(aPoly3DFront.count());
+            const sal_uInt32 nPrefillIndex(aPoly3DFront.isClosed() ? nPntCnt - 1L : 0L);
+            basegfx::B3DPolygon aRect3D;
+            basegfx::B3DPolygon aNormal3D;
+            basegfx::B2DPolygon aTexture2D;
 
-            const Polygon3D& rPolyNormalsFront = rFrontNormals[a];
-            const Polygon3D& rPolyNormalsBack = rBackNormals[a];
-
-            Polygon3D   aRect3D(4);
-            Polygon3D   aNormal3D(4);
-            Polygon3D   aTexture3D(4);
-            USHORT nPntCnt = rPoly3DFront.GetPointCount();
-            USHORT nPrefillIndex = rPoly3DFront.IsClosed() ? nPntCnt - 1 : 0;
-
-            aRect3D[3] = rPoly3DFront[nPrefillIndex];
-            aRect3D[2] = rPoly3DBack[nPrefillIndex];
-            aNormal3D[3] = rPolyNormalsFront[nPrefillIndex];
-            aNormal3D[2] = rPolyNormalsBack[nPrefillIndex];
+            aRect3D.append(basegfx::B3DPoint(), 4L);
+            aNormal3D.append(basegfx::B3DPoint(), 4L);
+            aTexture2D.append(basegfx::B2DPoint(), 4L);
+            aRect3D.setB3DPoint(3L, aPoly3DFront.getB3DPoint(nPrefillIndex));
+            aRect3D.setB3DPoint(2L, aPoly3DBack.getB3DPoint(nPrefillIndex));
+            aNormal3D.setB3DPoint(3L, aPolyNormalsFront.getB3DPoint(nPrefillIndex));
+            aNormal3D.setB3DPoint(2L, aPolyNormalsBack.getB3DPoint(nPrefillIndex));
 
             if(bDoCreateTexture)
             {
-                fPolyLength = rPoly3DFront.GetLength();
+                fPolyLength = basegfx::tools::getLength(aPoly3DFront);
                 fPolyPos = 0.0;
-                nLastIndex = rPoly3DFront.IsClosed() ? nPntCnt - 1 : 0;
+                nLastIndex = aPoly3DFront.isClosed() ? nPntCnt - 1L : 0L;
 
                 if(bRotateTexture90)
                 {
                     // X,Y vertauschen
-                    aTexture3D[3].X() = fTextureStart;
-                    aTexture3D[3].Y() = (1.0 - fPolyPos) * fSurroundFactor;
-
-                    aTexture3D[2].X() = fTextureStart + fTextureDepth;
-                    aTexture3D[2].Y() = (1.0 - fPolyPos) * fSurroundFactor;
+                    aTexture2D.setB2DPoint(3L, basegfx::B2DPoint(fTextureStart, (1.0 - fPolyPos) * fSurroundFactor));
+                    aTexture2D.setB2DPoint(2L, basegfx::B2DPoint(fTextureStart + fTextureDepth, (1.0 - fPolyPos) * fSurroundFactor));
                 }
                 else
                 {
-                    aTexture3D[3].X() = fPolyPos * fSurroundFactor;
-                    aTexture3D[3].Y() = fTextureStart;
-
-                    aTexture3D[2].X() = fPolyPos * fSurroundFactor;
-                    aTexture3D[2].Y() = fTextureStart + fTextureDepth;
+                    aTexture2D.setB2DPoint(3L, basegfx::B2DPoint(fPolyPos * fSurroundFactor, fTextureStart));
+                    aTexture2D.setB2DPoint(2L, basegfx::B2DPoint(fPolyPos * fSurroundFactor, fTextureStart + fTextureDepth));
                 }
             }
 
-            for (USHORT i = rPoly3DFront.IsClosed() ? 0 : 1; i < nPntCnt; i++)
+            for(sal_uInt32 i(aPoly3DFront.isClosed() ? 0L : 1L); i < nPntCnt; i++)
             {
-                aRect3D[0] = aRect3D[3];
-                aRect3D[1] = aRect3D[2];
+                aRect3D.setB3DPoint(0L, aRect3D.getB3DPoint(3L));
+                aRect3D.setB3DPoint(1L, aRect3D.getB3DPoint(2L));
 
-                aRect3D[3] = rPoly3DFront[i];
-                aRect3D[2] = rPoly3DBack[i];
+                aRect3D.setB3DPoint(3L, aPoly3DFront.getB3DPoint(i));
+                aRect3D.setB3DPoint(2L, aPoly3DBack.getB3DPoint(i));
 
-                aNormal3D[0] = aNormal3D[3];
-                aNormal3D[1] = aNormal3D[2];
+                aNormal3D.setB3DPoint(0L, aNormal3D.getB3DPoint(3L));
+                aNormal3D.setB3DPoint(1L, aNormal3D.getB3DPoint(2L));
 
-                aNormal3D[3] = rPolyNormalsFront[i];
-                aNormal3D[2] = rPolyNormalsBack[i];
+                aNormal3D.setB3DPoint(3L, aPolyNormalsFront.getB3DPoint(i));
+                aNormal3D.setB3DPoint(2L, aPolyNormalsBack.getB3DPoint(i));
 
                 if(bDoCreateTexture)
                 {
                     // Texturkoordinaten ermitteln
-                    Vector3D aPart = rPoly3DFront[i] - rPoly3DFront[nLastIndex];
-                    fPolyPos += aPart.GetLength() / fPolyLength;
+                    basegfx::B3DVector aPart(aPoly3DFront.getB3DPoint(i) - aPoly3DFront.getB3DPoint(nLastIndex));
+                    fPolyPos += aPart.getLength() / fPolyLength;
                     nLastIndex = i;
 
                     // Der Abschnitt am Polygon entspricht dem Teil
                     // von fPolyPos bis fPolyPos+fPartLength
 
-                    aTexture3D[0] = aTexture3D[3];
-                    aTexture3D[1] = aTexture3D[2];
+                    aTexture2D.setB2DPoint(0L, aTexture2D.getB2DPoint(3L));
+                    aTexture2D.setB2DPoint(1L, aTexture2D.getB2DPoint(2L));
 
                     if(bRotateTexture90)
                     {
                         // X,Y vertauschen
-                        aTexture3D[3].X() = fTextureStart;
-                        aTexture3D[3].Y() = (1.0 - fPolyPos) * fSurroundFactor;
-
-                        aTexture3D[2].X() = fTextureStart + fTextureDepth;
-                        aTexture3D[2].Y() = (1.0 - fPolyPos) * fSurroundFactor;
+                        aTexture2D.setB2DPoint(3L, basegfx::B2DPoint(fTextureStart, (1.0 - fPolyPos) * fSurroundFactor));
+                        aTexture2D.setB2DPoint(2L, basegfx::B2DPoint(fTextureStart + fTextureDepth, (1.0 - fPolyPos) * fSurroundFactor));
                     }
                     else
                     {
-                        aTexture3D[3].X() = fPolyPos * fSurroundFactor;
-                        aTexture3D[3].Y() = fTextureStart;
-
-                        aTexture3D[2].X() = fPolyPos * fSurroundFactor;
-                        aTexture3D[2].Y() = fTextureStart + fTextureDepth;
+                        aTexture2D.setB2DPoint(3L, basegfx::B2DPoint(fPolyPos * fSurroundFactor, fTextureStart));
+                        aTexture2D.setB2DPoint(2L, basegfx::B2DPoint(fPolyPos * fSurroundFactor, fTextureStart + fTextureDepth));
                     }
 
-                    AddGeometry(aRect3D, aNormal3D, aTexture3D, FALSE);
+                    AddGeometry(basegfx::B3DPolyPolygon(aRect3D), basegfx::B3DPolyPolygon(aNormal3D), basegfx::B2DPolyPolygon(aTexture2D), FALSE);
                 }
                 else
-                    AddGeometry(aRect3D, aNormal3D, FALSE);
+                {
+                    AddGeometry(basegfx::B3DPolyPolygon(aRect3D), basegfx::B3DPolyPolygon(aNormal3D), FALSE);
+                }
             }
         }
     }
     else
     {
-        for(UINT16 a=0;a<nPolyCnt;a++)
+        for(sal_uInt32 a(0L); a < nPolyCnt; a++)
         {
-            const Polygon3D& rPoly3DFront = rPolyPolyFront[a];
-            const Polygon3D& rPoly3DBack = rPolyPolyBack[a];
-            Polygon3D   aRect3D(4);
-            USHORT nPntCnt = rPoly3DFront.GetPointCount();
-            USHORT nPrefillIndex = rPoly3DFront.IsClosed() ? nPntCnt - 1 : 0;
+            const basegfx::B3DPolygon aPoly3DFront(rPolyPolyFront.getB3DPolygon(a));
+            const basegfx::B3DPolygon aPoly3DBack(rPolyPolyBack.getB3DPolygon(a));
+            basegfx::B3DPolygon aRect3D;
+            const sal_uInt32 nPntCnt(aPoly3DFront.count());
+            const sal_uInt32 nPrefillIndex(aPoly3DFront.isClosed() ? nPntCnt - 1L : 0L);
 
-            aRect3D[3] = rPoly3DFront[nPrefillIndex];
-            aRect3D[2] = rPoly3DBack[nPrefillIndex];
+            aRect3D.append(basegfx::B3DPoint(), 4L);
+            aRect3D.setB3DPoint(3L, aPoly3DFront.getB3DPoint(nPrefillIndex));
+            aRect3D.setB3DPoint(2L, aPoly3DBack.getB3DPoint(nPrefillIndex));
 
-            for (USHORT i = rPoly3DFront.IsClosed() ? 0 : 1; i < nPntCnt; i++)
+            for(sal_uInt32 i(aPoly3DFront.isClosed() ? 0L : 1L); i < nPntCnt; i++)
             {
-                aRect3D[0] = aRect3D[3];
-                aRect3D[1] = aRect3D[2];
+                aRect3D.setB3DPoint(0L, aRect3D.getB3DPoint(3L));
+                aRect3D.setB3DPoint(1L, aRect3D.getB3DPoint(2L));
 
-                aRect3D[3] = rPoly3DFront[i];
-                aRect3D[2] = rPoly3DBack[i];
+                aRect3D.setB3DPoint(3L, aPoly3DFront.getB3DPoint(i));
+                aRect3D.setB3DPoint(2L, aPoly3DBack.getB3DPoint(i));
 
-                AddGeometry(aRect3D, FALSE);
-            }
-        }
-    }
-}
-
-void E3dCompoundObject::AddInBetweenNormals(
-    const PolyPolygon3D& rPolyPolyFront,
-    const PolyPolygon3D& rPolyPolyBack,
-    PolyPolygon3D& rNormals,
-    BOOL bSmoothed)
-{
-    USHORT nPolyCnt = rPolyPolyFront.Count();
-
-    // Verbindungsstuecke
-    for(UINT16 a=0;a<nPolyCnt;a++)
-    {
-        const Polygon3D& rPoly3DFront = rPolyPolyFront[a];
-        const Polygon3D& rPoly3DBack = rPolyPolyBack[a];
-        Polygon3D& rNormalPoly = rNormals[a];
-        USHORT nPntCnt = rPoly3DFront.GetPointCount();
-
-        if(rPoly3DBack.IsClosed())
-        {
-            Vector3D aNormal = (rPoly3DBack[nPntCnt - 1] - rPoly3DFront[nPntCnt - 1])
-                      |(rPoly3DFront[0] - rPoly3DFront[nPntCnt - 1]);
-            aNormal.Normalize();
-            for (USHORT i = 0; i < nPntCnt; i++)
-            {
-                Vector3D aNextNormal = (rPoly3DBack[i] - rPoly3DFront[i])
-                    |(rPoly3DFront[(i+1 == nPntCnt) ? 0 : i+1] - rPoly3DFront[i]);
-                aNextNormal.Normalize();
-                if(bSmoothed)
-                {
-                    Vector3D aMidNormal = aNormal + aNextNormal;
-                    aMidNormal.Normalize();
-                    rNormalPoly[i] += aMidNormal;
-                }
-                else
-                    rNormalPoly[i] += aNormal;
-                rNormalPoly[i].Normalize();
-                aNormal = aNextNormal;
-            }
-        }
-        else
-        {
-            Vector3D aNormal;
-            if(rPoly3DBack[0] == rPoly3DFront[0])
-            {
-                aNormal = (rPoly3DBack[1] - rPoly3DFront[1])
-                      |(rPoly3DFront[1] - rPoly3DFront[0]);
-            }
-            else
-            {
-                aNormal = (rPoly3DBack[0] - rPoly3DFront[0])
-                      |(rPoly3DFront[1] - rPoly3DFront[0]);
-            }
-            aNormal.Normalize();
-            rNormalPoly[0] += aNormal; rNormalPoly[0].Normalize();
-            for (USHORT i = 1; i < nPntCnt; i++)
-            {
-                Vector3D aNextNormal;
-                if(i+1 == nPntCnt)
-                {
-                    aNextNormal = aNormal;
-                }
-                else
-                {
-                    aNextNormal = (rPoly3DBack[i] - rPoly3DFront[i])
-                        |(rPoly3DFront[i+1] - rPoly3DFront[i]);
-                }
-                aNextNormal.Normalize();
-                if(bSmoothed)
-                {
-                    Vector3D aMidNormal = aNormal + aNextNormal;
-                    aMidNormal.Normalize();
-                    rNormalPoly[i] += aMidNormal;
-                }
-                else
-                    rNormalPoly[i] += aNormal;
-                rNormalPoly[i].Normalize();
-                aNormal = aNextNormal;
+                AddGeometry(basegfx::B3DPolyPolygon(aRect3D), FALSE);
             }
         }
     }
@@ -3254,8 +2814,6 @@ void E3dCompoundObject::operator=(const SdrObject& rObj)
     bCreateNormals = r3DObj.bCreateNormals;
     bCreateTexture = r3DObj.bCreateTexture;
     bGeometryValid = r3DObj.bGeometryValid;
-    //BFS01bBytesLeft = r3DObj.bBytesLeft;
-    //BFS01bCreateE3dPolyObj = r3DObj.bCreateE3dPolyObj;
 
     // neu ab 383:
     aMaterialAmbientColor = r3DObj.aMaterialAmbientColor;
@@ -3270,14 +2828,11 @@ void E3dCompoundObject::operator=(const SdrObject& rObj)
 |*
 \************************************************************************/
 
-void E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& /*rOut*/, Base3D* pBase3D,
-    BOOL& bDrawObject, UINT16 nDrawFlags, BOOL bGhosted, BOOL bIsFillDraft)
+sal_Bool E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& /*rOut*/, Base3D* pBase3D, UINT16 nDrawFlags, BOOL bGhosted, BOOL bIsFillDraft)
 {
-    if(bIsFillDraft)
-    {
-        bDrawObject = FALSE;
-    }
-    else
+    sal_Bool bDrawObject(sal_True);
+
+    if(!bIsFillDraft)
     {
         const SfxItemSet& rSet = GetObjectItemSet();
         const XFillStyle eFillStyle = ((const XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
@@ -3344,7 +2899,7 @@ void E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& /*rOut*/, Base3D* pBas
                 B3dTexture* pTexture = NULL;
                 Base3DTextureWrap eWrapX(Base3DTextureRepeat);
                 Base3DTextureWrap eWrapY(Base3DTextureRepeat);
-                Matrix4D mTexture;
+                basegfx::B2DHomMatrix mTexture;
 
                 // now test the different draw modes and cases
                 if((pBase3D->GetOutputDevice()->GetDrawMode() & DRAWMODE_WHITEFILL) != 0)
@@ -3432,8 +2987,8 @@ void E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& /*rOut*/, Base3D* pBas
                     Size aSize(
                         labs(((const SfxMetricItem&)(rSet.Get(XATTR_FILLBMP_SIZEX))).GetValue()),
                         labs(((const SfxMetricItem&)(rSet.Get(XATTR_FILLBMP_SIZEY))).GetValue()));
-                    Vector3D aScaleVector(1.0, 1.0, 1.0);
-                    Vector3D aTranslateVector(0.0, 0.0, 0.0);
+                    basegfx::B2DPoint aScaleVector(1.0, 1.0);
+                    basegfx::B2DPoint aTranslateVector(0.0, 0.0);
 
                     // Groesse beachten, logische Groesse einer Kachel bestimmen
                     // erst mal in 1/100 mm
@@ -3483,13 +3038,13 @@ void E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& /*rOut*/, Base3D* pBas
                         // relative Groesse
                         // 0..100 Prozent in aSize, relativ flag
                         aLogicalSize = Size(
-                            (long)((rVol.GetWidth() * (double)aSize.Width() / 100.0) + 0.5),
-                            (long)((rVol.GetHeight() * (double)aSize.Height() / 100.0) + 0.5));
+                            (long)((rVol.getWidth() * (double)aSize.Width() / 100.0) + 0.5),
+                            (long)((rVol.getHeight() * (double)aSize.Height() / 100.0) + 0.5));
                     }
 
                     // Skalieren
-                    aScaleVector.X() = rVol.GetWidth() / (double)aLogicalSize.Width();
-                    aScaleVector.Y() = rVol.GetHeight() / (double)aLogicalSize.Height();
+                    aScaleVector.setX(rVol.getWidth() / (double)aLogicalSize.Width());
+                    aScaleVector.setY(rVol.getHeight() / (double)aLogicalSize.Height());
 
                     if(bTile)
                     {
@@ -3505,14 +3060,12 @@ void E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& /*rOut*/, Base3D* pBas
                         else if(eRectPoint == RP_MT || eRectPoint == RP_MM || eRectPoint == RP_MB)
                         {
                             // Mittig
-                            fLeftBound = (rVol.GetWidth() / 2.0)
-                                - ((double)aLogicalSize.Width() / 2.0);
+                            fLeftBound = (rVol.getWidth() / 2.0) - ((double)aLogicalSize.Width() / 2.0);
                         }
                         else
                         {
                             // Rechts aligned starten
-                            fLeftBound = rVol.GetWidth()
-                                - (double)aLogicalSize.Width();
+                            fLeftBound = rVol.getWidth() - (double)aLogicalSize.Width();
                         }
 
                         // Horizontal
@@ -3524,25 +3077,23 @@ void E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& /*rOut*/, Base3D* pBas
                         else if(eRectPoint == RP_LM || eRectPoint == RP_MM || eRectPoint == RP_RM)
                         {
                             // Mittig
-                            fTopBound = (rVol.GetHeight() / 2.0)
-                                - ((double)aLogicalSize.Height() / 2.0);
+                            fTopBound = (rVol.getHeight() / 2.0) - ((double)aLogicalSize.Height() / 2.0);
                         }
                         else
                         {
                             // Bottom aligned starten
-                            fTopBound = rVol.GetHeight()
-                                - (double)aLogicalSize.Height();
+                            fTopBound = rVol.getHeight() - (double)aLogicalSize.Height();
                         }
 
                         // Verschieben
-                        aTranslateVector.X() = fLeftBound;
-                        aTranslateVector.Y() = fTopBound;
+                        aTranslateVector.setX(fLeftBound);
+                        aTranslateVector.setY(fTopBound);
 
                         // Offset beachten
                         if(nOffPosX || nOffPosY)
                         {
-                            aTranslateVector.X() += (double)aLogicalSize.Width() * ((double)nOffPosX / 100.0);
-                            aTranslateVector.Y() += (double)aLogicalSize.Height() * ((double)nOffPosY / 100.0);
+                            aTranslateVector.setX(aTranslateVector.getX() + (double)aLogicalSize.Width() * ((double)nOffPosX / 100.0));
+                            aTranslateVector.setY(aTranslateVector.getY() + (double)aLogicalSize.Height() * ((double)nOffPosY / 100.0));
                         }
                     }
                     else
@@ -3551,8 +3102,8 @@ void E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& /*rOut*/, Base3D* pBas
                         {
                             // 1x drauflegen, alles wie gehabt
                             // fertig
-                            aScaleVector.X() = 1.0;
-                            aScaleVector.Y() = 1.0;
+                            aScaleVector.setX(1.0);
+                            aScaleVector.setY(1.0);
                         }
                         else
                         {
@@ -3561,24 +3112,24 @@ void E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& /*rOut*/, Base3D* pBas
                             eWrapY = Base3DTextureSingle;
 
                             // Groesse beachten, zentriert anlegen
-                            double fLeftBound = (rVol.GetWidth() / 2.0) - ((double)aLogicalSize.Width() / 2.0);
-                            double fTopBound = (rVol.GetHeight() / 2.0) - ((double)aLogicalSize.Height() / 2.0);
+                            double fLeftBound = (rVol.getWidth() / 2.0) - ((double)aLogicalSize.Width() / 2.0);
+                            double fTopBound = (rVol.getHeight() / 2.0) - ((double)aLogicalSize.Height() / 2.0);
 
                             // Verschieben
-                            aTranslateVector.X() = fLeftBound;
-                            aTranslateVector.Y() = fTopBound;
+                            aTranslateVector.setX(fLeftBound);
+                            aTranslateVector.setY(fTopBound);
                         }
                     }
 
                     // TranslateVector anpassen
-                    if(aTranslateVector.X())
-                        aTranslateVector.X() /= -rVol.GetWidth();
-                    if(aTranslateVector.Y())
-                        aTranslateVector.Y() /= -rVol.GetHeight();
+                    if(aTranslateVector.getX())
+                        aTranslateVector.setX(aTranslateVector.getX() / -rVol.getWidth());
+                    if(aTranslateVector.getY())
+                        aTranslateVector.setY(aTranslateVector.getY() / -rVol.getHeight());
 
                     // Texturtransformation setzen
-                    mTexture.Translate(aTranslateVector);
-                    mTexture.Scale(aScaleVector);
+                    mTexture.translate(aTranslateVector.getX(),aTranslateVector.getY());
+                    mTexture.scale(aScaleVector.getX(),aScaleVector.getY());
                 }
                 else if(eFillStyle == XFILL_GRADIENT)
                 {
@@ -3626,7 +3177,7 @@ void E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& /*rOut*/, Base3D* pBas
                     }
 
                     // set different texture transformation
-                    mTexture.Scale(Vector3D(20.0, 20.0, 20.0));
+                    mTexture.scale(20.0, 20.0);
                 }
                 else if(eFillStyle == XFILL_SOLID)
                 {
@@ -3702,11 +3253,14 @@ void E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& /*rOut*/, Base3D* pBas
             }
         }
     }
+
+    return bDrawObject;
 }
 
-void E3dCompoundObject::ImpSet3DParForLine(XOutputDevice& rOut, Base3D* pBase3D,
-    BOOL& bDrawOutline, UINT16 nDrawFlags, BOOL /*bGhosted*/, BOOL bIsLineDraft, BOOL bIsFillDraft)
+sal_Bool E3dCompoundObject::ImpSet3DParForLine(XOutputDevice& rOut, Base3D* pBase3D, UINT16 nDrawFlags, BOOL /*bGhosted*/, BOOL bIsLineDraft, BOOL bIsFillDraft)
 {
+    sal_Bool bDrawOutline(sal_True);
+
     // do drawflags allow line drawing at all?
     const SfxItemSet& rSet = GetObjectItemSet();
     sal_uInt16 nLineTransparence = ((const XLineTransparenceItem&)(rSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
@@ -3769,6 +3323,8 @@ void E3dCompoundObject::ImpSet3DParForLine(XOutputDevice& rOut, Base3D* pBase3D,
         // Material setzen
         pBase3D->SetColor(aColorLine);
     }
+
+    return bDrawOutline;
 }
 
 void E3dCompoundObject::SetBase3DParams(XOutputDevice& rOut, Base3D* pBase3D,
@@ -3777,16 +3333,16 @@ void E3dCompoundObject::SetBase3DParams(XOutputDevice& rOut, Base3D* pBase3D,
 {
     bDrawObject = ((nDrawFlags & E3D_DRAWFLAG_FILLED) != 0);
     if(bDrawObject)
-        ImpSet3DParForFill(rOut, pBase3D, bDrawObject, nDrawFlags, bGhosted, bIsFillDraft);
+        bDrawObject = ImpSet3DParForFill(rOut, pBase3D, nDrawFlags, bGhosted, bIsFillDraft);
 
     bDrawOutline = ((nDrawFlags & E3D_DRAWFLAG_OUTLINE) != 0);
     if(bDrawOutline)
-        ImpSet3DParForLine(rOut, pBase3D, bDrawOutline, nDrawFlags, bGhosted, bIsLineDraft, bIsFillDraft);
+        bDrawOutline = ImpSet3DParForLine(rOut, pBase3D, nDrawFlags, bGhosted, bIsLineDraft, bIsFillDraft);
 
     // Set ObjectTrans if line or fill is still set (maybe retet by upper calls)
     if(bDrawObject || bDrawOutline)
     {
-        Matrix4D mTransform = GetFullTransform();
+        basegfx::B3DHomMatrix mTransform = GetFullTransform();
         GetScene()->GetCameraSet().SetObjectTrans(mTransform);
         pBase3D->SetTransformationSet(&(GetScene()->GetCameraSet()));
     }
@@ -3799,44 +3355,44 @@ void E3dCompoundObject::SetBase3DParams(XOutputDevice& rOut, Base3D* pBase3D,
 \************************************************************************/
 
 // #110988# test if given hit candidate point is inside bound volume of object
-sal_Bool E3dCompoundObject::ImpIsInsideBoundVolume(const Vector3D& rFront, const Vector3D& rBack, const Point& /*rPnt*/) const
+sal_Bool E3dCompoundObject::ImpIsInsideBoundVolume(const basegfx::B3DPoint& rFront, const basegfx::B3DPoint& rBack, const Point& /*rPnt*/) const
 {
     const Volume3D& rBoundVol = ((E3dCompoundObject*)this)->GetBoundVolume();
 
-    if(rBoundVol.IsValid())
+    if(!rBoundVol.isEmpty())
     {
-        double fXMax = rFront.X();
-        double fXMin = rBack.X();
+        double fXMax = rFront.getX();
+        double fXMin = rBack.getX();
 
         if(fXMax < fXMin)
         {
-            fXMax = rBack.X();
-            fXMin = rFront.X();
+            fXMax = rBack.getX();
+            fXMin = rFront.getX();
         }
 
-        if(rBoundVol.MinVec().X() <= fXMax && rBoundVol.MaxVec().X() >= fXMin)
+        if(rBoundVol.getMinX() <= fXMax && rBoundVol.getMaxX() >= fXMin)
         {
-            double fYMax = rFront.Y();
-            double fYMin = rBack.Y();
+            double fYMax = rFront.getY();
+            double fYMin = rBack.getY();
 
             if(fYMax < fYMin)
             {
-                fYMax = rBack.Y();
-                fYMin = rFront.Y();
+                fYMax = rBack.getY();
+                fYMin = rFront.getY();
             }
 
-            if(rBoundVol.MinVec().Y() <= fYMax && rBoundVol.MaxVec().Y() >= fYMin)
+            if(rBoundVol.getMinY() <= fYMax && rBoundVol.getMaxY() >= fYMin)
             {
-                double fZMax = rFront.Z();
-                double fZMin = rBack.Z();
+                double fZMax = rFront.getZ();
+                double fZMin = rBack.getZ();
 
                 if(fZMax < fZMin)
                 {
-                    fZMax = rBack.Z();
-                    fZMin = rFront.Z();
+                    fZMax = rBack.getZ();
+                    fZMin = rFront.getZ();
                 }
 
-                if(rBoundVol.MinVec().Z() <= fZMax && rBoundVol.MaxVec().Z() >= fZMin)
+                if(rBoundVol.getMinZ() <= fZMax && rBoundVol.getMaxZ() >= fZMin)
                 {
                     return sal_True;
                 }
@@ -3855,12 +3411,12 @@ SdrObject* E3dCompoundObject::CheckHit(const Point& rPnt, USHORT nTol, const Set
     {
         // get HitLine in ObjectKoordinates
         // set ObjectTrans
-        Matrix4D mTransform = ((E3dCompoundObject*)this)->GetFullTransform();
+        basegfx::B3DHomMatrix mTransform = GetFullTransform();
         pScene->GetCameraSet().SetObjectTrans(mTransform);
 
         // create HitPoint Front und Back, transform to object coordinates
-        Vector3D aFront(rPnt.X(), rPnt.Y(), 0.0);
-        Vector3D aBack(rPnt.X(), rPnt.Y(), ZBUFFER_DEPTH_RANGE);
+        basegfx::B3DPoint aFront(rPnt.X(), rPnt.Y(), 0.0);
+        basegfx::B3DPoint aBack(rPnt.X(), rPnt.Y(), ZBUFFER_DEPTH_RANGE);
         aFront = pScene->GetCameraSet().ViewToObjectCoor(aFront);
         aBack = pScene->GetCameraSet().ViewToObjectCoor(aBack);
 
@@ -3884,36 +3440,16 @@ SdrObject* E3dCompoundObject::CheckHit(const Point& rPnt, USHORT nTol, const Set
 
 /*************************************************************************
 |*
-|* Geometrie des Objektes auf angegebenen Punkt zentrieren
-|*
-\************************************************************************/
-
-void E3dCompoundObject::CenterObject(const Vector3D& rCenter)
-{
-    // Geometrie herstellen
-    if(!bGeometryValid)
-        ReCreateGeometry();
-
-    Vector3D aOldCenter = aDisplayGeometry.GetCenter();
-    Vector3D aMoveVector = rCenter - aOldCenter;
-    Matrix4D aTransMat;
-
-    aTransMat.Translate(aMoveVector);
-    SetTransform(aTransMat * GetTransform()); // #112587#
-}
-
-/*************************************************************************
-|*
 |* Schattenattribute holen
 |*
 \************************************************************************/
 
-Color E3dCompoundObject::GetShadowColor()
+Color E3dCompoundObject::GetShadowColor() const
 {
     return ((SdrShadowColorItem&)(GetObjectItem(SDRATTR_SHADOWCOLOR))).GetColorValue();
 }
 
-BOOL E3dCompoundObject::DrawShadowAsOutline()
+BOOL E3dCompoundObject::DrawShadowAsOutline() const
 {
     const SfxItemSet& rSet = GetObjectItemSet();
     XFillStyle eFillStyle = ((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
@@ -3923,17 +3459,17 @@ BOOL E3dCompoundObject::DrawShadowAsOutline()
     return (bFillAttrIsNone && !bLineAttrIsNone);
 }
 
-INT32 E3dCompoundObject::GetShadowXDistance()
+INT32 E3dCompoundObject::GetShadowXDistance() const
 {
     return (long)((SdrShadowXDistItem&)(GetObjectItem(SDRATTR_SHADOWXDIST))).GetValue();
 }
 
-INT32 E3dCompoundObject::GetShadowYDistance()
+INT32 E3dCompoundObject::GetShadowYDistance() const
 {
     return (long)((SdrShadowYDistItem&)(GetObjectItem(SDRATTR_SHADOWYDIST))).GetValue();
 }
 
-UINT16 E3dCompoundObject::GetShadowTransparence()
+UINT16 E3dCompoundObject::GetShadowTransparence() const
 {
     return (UINT16)((SdrShadowTransparenceItem&)(GetObjectItem(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
 }
@@ -3971,20 +3507,20 @@ void E3dCompoundObject::DrawObjectWireframe(XOutputDevice& rXOut)
     UINT32 nEntityCounter = 0;
     UINT32 nUpperBound;
     Point aFirstPoint, aLastPoint, aNewPoint;
-    B3dEntityBucket& rEntityBucket = GetDisplayGeometry().GetEntityBucket();
-    GeometryIndexValueBucket& rIndexBucket = GetDisplayGeometry().GetIndexBucket();
+    const B3dEntityBucket& rEntityBucket = GetDisplayGeometry().GetEntityBucket();
+    const GeometryIndexValueBucket& rIndexBucket = GetDisplayGeometry().GetIndexBucket();
     B3dTransformationSet& rTransSet = GetScene()->GetCameraSet();
     BOOL bDrawLine, bLastDrawLine;
-    Vector3D aPoint;
+    basegfx::B3DPoint aPoint;
 
     while(nPolyCounter < rIndexBucket.Count())
     {
         // Naechstes Primitiv
         nUpperBound = rIndexBucket[nPolyCounter++].GetIndex();
         bDrawLine = bLastDrawLine = rEntityBucket[nEntityCounter].IsEdgeVisible();
-        aPoint = rTransSet.ObjectToViewCoor(rEntityBucket[nEntityCounter++].Point().GetVector3D());
-        aFirstPoint.X() = (long)(aPoint.X() + 0.5);
-        aFirstPoint.Y() = (long)(aPoint.Y() + 0.5);
+        aPoint = rTransSet.ObjectToViewCoor(rEntityBucket[nEntityCounter++].Point());
+        aFirstPoint.X() = (long)(aPoint.getX() + 0.5);
+        aFirstPoint.Y() = (long)(aPoint.getY() + 0.5);
         aLastPoint = aFirstPoint;
 
         // Polygon fuellen
@@ -3992,9 +3528,9 @@ void E3dCompoundObject::DrawObjectWireframe(XOutputDevice& rXOut)
         {
             // Punkt holen und auf Weltkoordinaten umrechnen
             bDrawLine = rEntityBucket[nEntityCounter].IsEdgeVisible();
-            aPoint = rTransSet.ObjectToViewCoor(rEntityBucket[nEntityCounter++].Point().GetVector3D());
-            aNewPoint.X() = (long)(aPoint.X() + 0.5);
-            aNewPoint.Y() = (long)(aPoint.Y() + 0.5);
+            aPoint = rTransSet.ObjectToViewCoor(rEntityBucket[nEntityCounter++].Point());
+            aNewPoint.X() = (long)(aPoint.getX() + 0.5);
+            aNewPoint.Y() = (long)(aPoint.getY() + 0.5);
             if(bLastDrawLine)
                 rXOut.GetOutDev()->DrawLine(aLastPoint, aNewPoint);
             aLastPoint = aNewPoint;
@@ -4014,60 +3550,43 @@ void E3dCompoundObject::DrawObjectWireframe(XOutputDevice& rXOut)
 \************************************************************************/
 
 // #i28528#
-PolyPolygon3D E3dCompoundObject::ImpCompleteLinePolygon(const PolyPolygon3D& rLinePolyPoly, sal_uInt16 nPolysPerRun, sal_Bool bClosed)
+basegfx::B3DPolyPolygon E3dCompoundObject::ImpCompleteLinePolygon(const basegfx::B3DPolyPolygon& rLinePolyPoly, sal_uInt32 nPolysPerRun, sal_Bool bClosed)
 {
-    PolyPolygon3D aRetval;
+    basegfx::B3DPolyPolygon aRetval;
+    const sal_uInt32 nLinePolyPolyCount(rLinePolyPoly.count());
 
-    if(rLinePolyPoly.Count() && nPolysPerRun)
+    if(nLinePolyPolyCount && nPolysPerRun)
     {
         // get number of layers
-        sal_uInt16 nLayers(rLinePolyPoly.Count() / nPolysPerRun);
+        sal_uInt32 nLayers(nLinePolyPolyCount / nPolysPerRun);
 
         // add vertical Polygons if at least two horizontal ones exist
-        if(nLayers > 1)
+        if(nLayers > 1L)
         {
-            for(sal_uInt16 a(0); a < nPolysPerRun; a++)
+            for(sal_uInt32 a(0L); a < nPolysPerRun; a++)
             {
-                const sal_uInt16 nPntCnt = rLinePolyPoly[a].GetPointCount();
+                const sal_uInt32 nPntCnt(rLinePolyPoly.getB3DPolygon(a).count());
 
-                for(sal_uInt16 b(0); b < nPntCnt; b++)
+                for(sal_uInt32 b(0L); b < nPntCnt; b++)
                 {
-                    Polygon3D aNewVerPoly(bClosed ? nLayers + 1 : nLayers);
+                    basegfx::B3DPolygon aNewVerPoly;
 
-                    for(sal_uInt16 c(0); c < nLayers; c++)
+                    for(sal_uInt32 c(0L); c < nLayers; c++)
                     {
-                        aNewVerPoly[c] = rLinePolyPoly[(c * nPolysPerRun) + a][b];
+                        aNewVerPoly.append(rLinePolyPoly.getB3DPolygon((c * nPolysPerRun) + a).getB3DPoint(b));
                     }
 
                     // evtl. set first point again to close polygon
-                    if(bClosed)
-                        aNewVerPoly[aNewVerPoly.GetPointCount()] = aNewVerPoly[0];
+                    aNewVerPoly.setClosed(bClosed);
 
                     // insert
-                    aRetval.Insert(aNewVerPoly);
+                    aRetval.append(aNewVerPoly);
                 }
             }
         }
     }
 
     return aRetval;
-}
-
-// #i28528#
-void E3dCompoundObject::ImpCorrectLinePolygon(PolyPolygon3D& rLinePolyPoly, sal_uInt16 nPolysPerRun)
-{
-    if(rLinePolyPoly.Count() && nPolysPerRun)
-    {
-        // open closed polygons
-        for(sal_uInt16 a(0); a < rLinePolyPoly.Count(); a++)
-        {
-            if(rLinePolyPoly[a].IsClosed())
-            {
-                rLinePolyPoly[a][rLinePolyPoly[a].GetPointCount()] = rLinePolyPoly[a][0];
-                rLinePolyPoly[a].SetClosed(FALSE);
-            }
-        }
-    }
 }
 
 /*************************************************************************
@@ -4077,10 +3596,10 @@ void E3dCompoundObject::ImpCorrectLinePolygon(PolyPolygon3D& rLinePolyPoly, sal_
 \************************************************************************/
 
 void E3dCompoundObject::ImpCreateSegment(
-    const PolyPolygon3D& rFront,        // vorderes Polygon
-    const PolyPolygon3D& rBack,         // hinteres Polygon
-    const PolyPolygon3D* pPrev,         // smooth uebergang zu Vorgaenger
-    const PolyPolygon3D* pNext,         // smooth uebergang zu Nachfolger
+    const basegfx::B3DPolyPolygon& rFront,      // vorderes Polygon
+    const basegfx::B3DPolyPolygon& rBack,           // hinteres Polygon
+    const basegfx::B3DPolyPolygon* pPrev,           // smooth uebergang zu Vorgaenger
+    const basegfx::B3DPolyPolygon* pNext,           // smooth uebergang zu Nachfolger
     BOOL bCreateFront,                  // vorderen Deckel erzeugen
     BOOL bCreateBack,                   // hinteren Deckel erzeugen
     double fPercentDiag,                // Anteil des Deckels an der Tiefe
@@ -4095,31 +3614,34 @@ void E3dCompoundObject::ImpCreateSegment(
     BOOL bCharacterExtrude,             // FALSE=exakt, TRUE=ohne Ueberschneidungen
     BOOL bRotateTexture90,              // Textur der Seitenflaechen um 90 Grad kippen
     // #i28528#
-    PolyPolygon3D* pLineGeometryFront,  // For creation of line geometry front parts
-    PolyPolygon3D* pLineGeometryBack,   // For creation of line geometry back parts
-    PolyPolygon3D* pLineGeometry        // For creation of line geometry in-betweens
+    basegfx::B3DPolyPolygon* pLineGeometryFront,    // For creation of line geometry front parts
+    basegfx::B3DPolyPolygon* pLineGeometryBack, // For creation of line geometry back parts
+    basegfx::B3DPolyPolygon* pLineGeometry      // For creation of line geometry in-betweens
     )
 {
-    PolyPolygon3D aNormalsLeft, aNormalsRight;
-    AddInBetweenNormals(rFront, rBack, aNormalsLeft, bSmoothLeft);
-    AddInBetweenNormals(rFront, rBack, aNormalsRight, bSmoothRight);
-    Vector3D aOffset = rBack.GetMiddle() - rFront.GetMiddle();
+    basegfx::B3DPolyPolygon aNormalsLeft(ImpCreateByPattern(rFront));
+    basegfx::B3DPolyPolygon aNormalsRight(ImpCreateByPattern(rFront));
+    aNormalsLeft = ImpAddInBetweenNormals(rFront, rBack, aNormalsLeft, bSmoothLeft);
+    aNormalsRight = ImpAddInBetweenNormals(rFront, rBack, aNormalsRight, bSmoothRight);
+    const basegfx::B3DRange aBackRange(basegfx::tools::getRange(rBack));
+    const basegfx::B3DRange aFrontRange(basegfx::tools::getRange(rFront));
+    basegfx::B3DPoint aOffset(aBackRange.getCenter() - aFrontRange.getCenter());
 
     // #i28528#
     sal_Bool bTakeCareOfLineGeometry(pLineGeometryFront != 0L || pLineGeometryBack != 0L || pLineGeometry != 0L);
 
     // Ausnahmen: Nicht geschlossen
-    if(!rFront.IsClosed())
+    if(!rFront.isClosed())
     {
         bCreateFront = FALSE;
     }
-    if(!rBack.IsClosed())
+    if(!rBack.isClosed())
     {
         bCreateBack = FALSE;
     }
 
     // Ausnahmen: Einfache Linie
-    if(rFront[0].GetPointCount() < 3 || (!bCreateFront && !bCreateBack))
+    if(rFront.getB3DPolygon(0L).count() < 3L || (!bCreateFront && !bCreateBack))
     {
         fPercentDiag = 0.0;
     }
@@ -4129,43 +3651,43 @@ void E3dCompoundObject::ImpCreateSegment(
         // Ohne Schraegen, Vorderseite
         if(bCreateFront)
         {
-            PolyPolygon3D aNormalsFront;
-            AddFrontNormals(rFront, aNormalsFront, aOffset);
+            basegfx::B3DPolyPolygon aNormalsFront(ImpCreateByPattern(rFront));
+            aNormalsFront = ImpAddFrontNormals(aNormalsFront, aOffset);
 
             if(!bSmoothFrontBack)
-                CreateFront(rFront, aNormalsFront, bDoCreateNormals, bDoCreateTexture);
+                ImpCreateFront(rFront, aNormalsFront, bDoCreateNormals, bDoCreateTexture);
             if(bSmoothLeft)
-                AddFrontNormals(rFront, aNormalsLeft, aOffset);
+                aNormalsLeft = ImpAddFrontNormals(aNormalsLeft, aOffset);
             if(bSmoothFrontBack)
-                CreateFront(rFront, aNormalsLeft, bDoCreateNormals, bDoCreateTexture);
+                ImpCreateFront(rFront, aNormalsLeft, bDoCreateNormals, bDoCreateTexture);
         }
         else
         {
             if(pPrev)
-                AddInBetweenNormals(*pPrev, rFront, aNormalsLeft, bSmoothLeft);
+                aNormalsLeft = ImpAddInBetweenNormals(*pPrev, rFront, aNormalsLeft, bSmoothLeft);
         }
 
         // Ohne Schraegen, Rueckseite
         if(bCreateBack)
         {
-            PolyPolygon3D aNormalsBack;
-            AddBackNormals(rBack, aNormalsBack, aOffset);
+            basegfx::B3DPolyPolygon aNormalsBack(ImpCreateByPattern(rBack));
+            aNormalsBack = ImpAddBackNormals(aNormalsBack, aOffset);
 
             if(!bSmoothFrontBack)
-                CreateBack(rBack, aNormalsBack, bDoCreateNormals, bDoCreateTexture);
+                ImpCreateBack(rBack, aNormalsBack, bDoCreateNormals, bDoCreateTexture);
             if(bSmoothRight)
-                AddBackNormals(rBack, aNormalsRight, aOffset);
+                aNormalsRight = ImpAddBackNormals(aNormalsRight, aOffset);
             if(bSmoothFrontBack)
-                CreateBack(rBack, aNormalsRight, bDoCreateNormals, bDoCreateTexture);
+                ImpCreateBack(rBack, aNormalsRight, bDoCreateNormals, bDoCreateTexture);
         }
         else
         {
             if(pNext)
-                AddInBetweenNormals(rBack, *pNext, aNormalsRight, bSmoothRight);
+                aNormalsRight = ImpAddInBetweenNormals(rBack, *pNext, aNormalsRight, bSmoothRight);
         }
 
         // eigentliches Zwischenstueck
-        CreateInBetween(rFront, rBack,
+        ImpCreateInBetween(rFront, rBack,
             aNormalsLeft, aNormalsRight,
             bDoCreateNormals,
             fSurroundFactor,
@@ -4178,41 +3700,41 @@ void E3dCompoundObject::ImpCreateSegment(
         {
             if(bCreateFront)
             {
-                if(pLineGeometryFront) pLineGeometryFront->Insert(rFront);
+                if(pLineGeometryFront) pLineGeometryFront->append(rFront);
             }
             else
             {
-                if(pLineGeometry) pLineGeometry->Insert(rFront);
+                if(pLineGeometry) pLineGeometry->append(rFront);
             }
 
             if(bCreateBack)
             {
-                if(pLineGeometryBack) pLineGeometryBack->Insert(rBack);
+                if(pLineGeometryBack) pLineGeometryBack->append(rBack);
             }
         }
     }
     else
     {
         // Mit Scraegen, Vorderseite
-        PolyPolygon3D aLocalFront = rFront;
-        PolyPolygon3D aLocalBack = rBack;
+        basegfx::B3DPolyPolygon aLocalFront = rFront;
+        basegfx::B3DPolyPolygon aLocalBack = rBack;
         double fExtrudeDepth, fDiagLen(0.0);
         double fTexMidStart = fTextureStart;
         double fTexMidDepth = fTextureDepth;
 
         if(bCreateFront || bCreateBack)
         {
-            fExtrudeDepth = aOffset.GetLength();
+            fExtrudeDepth = basegfx::B3DVector(aOffset).getLength();
             fDiagLen = fPercentDiag * fExtrudeDepth;
         }
 
-        PolyPolygon3D aOuterFront;
-        PolyPolygon3D aOuterBack;
+        basegfx::B3DPolyPolygon aOuterFront;
+        basegfx::B3DPolyPolygon aOuterBack;
 
         if(bCreateFront)
         {
-            PolyPolygon3D aNormalsOuterFront;
-            AddFrontNormals(aLocalFront, aNormalsOuterFront, aOffset);
+            basegfx::B3DPolyPolygon aNormalsOuterFront(ImpCreateByPattern(aLocalFront));
+            aNormalsOuterFront = ImpAddFrontNormals(aNormalsOuterFront, aOffset);
 
             if(bCharacterExtrude)
             {
@@ -4220,54 +3742,51 @@ void E3dCompoundObject::ImpCreateSegment(
                 aOuterFront = aLocalFront;
 
                 // notwendige Normalen erzeugen
-                PolyPolygon3D aGrowDirection;
-                AddInBetweenNormals(aLocalFront, aLocalBack, aGrowDirection, bSmoothLeft);
+                basegfx::B3DPolyPolygon aGrowDirection(ImpCreateByPattern(aLocalFront));
+                aGrowDirection = ImpAddInBetweenNormals(aLocalFront, aLocalBack, aGrowDirection, bSmoothLeft);
 
                 // Groesse inneres Polygon merken
-                Volume3D aOldSize(aLocalFront.GetPolySize());
+                Volume3D aOldSize(basegfx::tools::getRange(aLocalFront));
 
                 // Inneres Polygon vergroessern
-                GrowPoly(aLocalFront, aGrowDirection, fDiagLen);
+                aLocalFront = ImpGrowPoly(aLocalFront, aGrowDirection, fDiagLen);
 
                 // Inneres Polygon nach innen verschieben
                 //GrowPoly(aLocalFront, aNormalsOuterFront, -fDiagLen);
 
                 // Neue Groesse inneres Polygon feststellen
-                Volume3D aNewSize(aLocalFront.GetPolySize());
+                basegfx::B3DRange aNewSize(basegfx::tools::getRange(aLocalFront));
 
                 // Skalierung feststellen (nur X,Y)
-                Vector3D aScaleVec(
-                    (aNewSize.GetWidth() != 0.0) ? aOldSize.GetWidth() / aNewSize.GetWidth() : 1.0,
-                    (aNewSize.GetHeight() != 0.0) ? aOldSize.GetHeight() / aNewSize.GetHeight() : 1.0,
-                    (aNewSize.GetDepth() != 0.0) ? aOldSize.GetDepth() / aNewSize.GetDepth() : 1.0);
+                basegfx::B3DPoint aScaleVec(
+                    (aNewSize.getWidth() != 0.0) ? aOldSize.getWidth() / aNewSize.getWidth() : 1.0,
+                    (aNewSize.getHeight() != 0.0) ? aOldSize.getHeight() / aNewSize.getHeight() : 1.0,
+                    (aNewSize.getDepth() != 0.0) ? aOldSize.getDepth() / aNewSize.getDepth() : 1.0);
 
                 // Transformation bilden
-                Matrix4D aTransMat;
-                aTransMat.Scale(aScaleVec);
+                basegfx::B3DHomMatrix aTransMat;
+                aTransMat.scale(aScaleVec.getX(), aScaleVec.getY(), aScaleVec.getZ());
 
                 // aeusseres und inneres Polygon skalieren
-                aLocalFront.Transform(aTransMat);
-                aOuterFront.Transform(aTransMat);
+                aLocalFront.transform(aTransMat);
+                aOuterFront.transform(aTransMat);
 
                 // Neue Groesse aktualisieren
-                aNewSize = aLocalFront.GetPolySize();
+                aNewSize = basegfx::tools::getRange(aLocalFront);
 
                 // Translation feststellen
-                Vector3D aTransVec(
-                    aOldSize.MinVec().X() - aNewSize.MinVec().X(),
-                    aOldSize.MinVec().Y() - aNewSize.MinVec().Y(),
-                    aOldSize.MinVec().Z() - aNewSize.MinVec().Z());
+                basegfx::B3DPoint aTransVec(aOldSize.getCenter() - aNewSize.getCenter());
 
                 // Transformation bilden
-                aTransMat.Identity();
-                aTransMat.Translate(aTransVec);
+                aTransMat.identity();
+                aTransMat.translate(aTransVec.getX(), aTransVec.getY(), aTransVec.getZ());
 
                 // aeusseres und inneres Polygon skalieren
-                aLocalFront.Transform(aTransMat);
-                aOuterFront.Transform(aTransMat);
+                aLocalFront.transform(aTransMat);
+                aOuterFront.transform(aTransMat);
 
                 // move aLocalFront again, scale and translate has moved it back
-                GrowPoly(aLocalFront, aNormalsOuterFront, -fDiagLen);
+                aLocalFront = ImpGrowPoly(aLocalFront, aNormalsOuterFront, -fDiagLen);
             }
             else
             {
@@ -4275,27 +3794,27 @@ void E3dCompoundObject::ImpCreateSegment(
                 aOuterFront = aLocalFront;
 
                 // notwendige Normalen erzeugen
-                PolyPolygon3D aGrowDirection;
-                AddInBetweenNormals(aLocalFront, aLocalBack, aGrowDirection, bSmoothLeft);
+                basegfx::B3DPolyPolygon aGrowDirection(ImpCreateByPattern(aLocalFront));
+                aGrowDirection = ImpAddInBetweenNormals(aLocalFront, aLocalBack, aGrowDirection, bSmoothLeft);
 
                 // Aeusseres Polygon verkleinern
-                GrowPoly(aOuterFront, aGrowDirection, -fDiagLen);
-                aOuterFront.CorrectGrownPoly(aLocalFront);
+                aOuterFront = ImpGrowPoly(aOuterFront, aGrowDirection, -fDiagLen);
+                aOuterFront = ImpCorrectGrownPoly(aOuterFront, aLocalFront);
 
                 // Inneres Polygon nach innen verschieben
-                GrowPoly(aLocalFront, aNormalsOuterFront, -fDiagLen);
+                aLocalFront = ImpGrowPoly(aLocalFront, aNormalsOuterFront, -fDiagLen);
             }
 
             // eventuell noch glaetten
             if(bSmoothLeft)
             {
                 if(bSmoothFrontBack)
-                    AddInBetweenNormals(aOuterFront, aLocalFront, aNormalsOuterFront, bSmoothLeft);
-                AddInBetweenNormals(aOuterFront, aLocalFront, aNormalsLeft, bSmoothLeft);
+                    aNormalsOuterFront = ImpAddInBetweenNormals(aOuterFront, aLocalFront, aNormalsOuterFront, bSmoothLeft);
+                aNormalsLeft = ImpAddInBetweenNormals(aOuterFront, aLocalFront, aNormalsLeft, bSmoothLeft);
             }
 
             // vordere Zwischenstuecke erzeugen
-            CreateInBetween(aOuterFront, aLocalFront,
+            ImpCreateInBetween(aOuterFront, aLocalFront,
                 aNormalsOuterFront, aNormalsLeft,
                 bDoCreateNormals,
                 fSurroundFactor,
@@ -4304,7 +3823,7 @@ void E3dCompoundObject::ImpCreateSegment(
                 bRotateTexture90);
 
             // Vorderseite erzeugen
-            CreateFront(aOuterFront, aNormalsOuterFront, bDoCreateNormals, bDoCreateTexture);
+            ImpCreateFront(aOuterFront, aNormalsOuterFront, bDoCreateNormals, bDoCreateTexture);
 
             // Weitere Texturwerte setzen
             fTexMidStart += fTextureDepth * fPercentDiag;
@@ -4313,14 +3832,14 @@ void E3dCompoundObject::ImpCreateSegment(
         else
         {
             if(pPrev)
-                AddInBetweenNormals(*pPrev, rFront, aNormalsLeft, bSmoothLeft);
+                aNormalsLeft = ImpAddInBetweenNormals(*pPrev, rFront, aNormalsLeft, bSmoothLeft);
         }
 
         // Mit Scraegen, Rueckseite
         if(bCreateBack)
         {
-            PolyPolygon3D aNormalsOuterBack;
-            AddBackNormals(aLocalBack, aNormalsOuterBack, aOffset);
+            basegfx::B3DPolyPolygon aNormalsOuterBack(ImpCreateByPattern(aLocalBack));
+            aNormalsOuterBack = ImpAddBackNormals(aNormalsOuterBack, aOffset);
 
             if(bCharacterExtrude)
             {
@@ -4328,54 +3847,51 @@ void E3dCompoundObject::ImpCreateSegment(
                 aOuterBack = aLocalBack;
 
                 // notwendige Normalen erzeugen
-                PolyPolygon3D aGrowDirection;
-                AddInBetweenNormals(aLocalFront, aLocalBack, aGrowDirection, bSmoothRight);
+                basegfx::B3DPolyPolygon aGrowDirection(ImpCreateByPattern(aLocalFront));
+                aGrowDirection = ImpAddInBetweenNormals(aLocalFront, aLocalBack, aGrowDirection, bSmoothRight);
 
                 // Groesse inneres Polygon merken
-                Volume3D aOldSize(aLocalBack.GetPolySize());
+                Volume3D aOldSize(basegfx::tools::getRange(aLocalBack));
 
                 // Inneres Polygon vergroessern
-                GrowPoly(aLocalBack, aGrowDirection, fDiagLen);
+                aLocalBack = ImpGrowPoly(aLocalBack, aGrowDirection, fDiagLen);
 
                 // Inneres Polygon nach innen verschieben
                 //GrowPoly(aLocalBack, aNormalsOuterBack, -fDiagLen);
 
                 // Neue Groesse inneres Polygon feststellen
-                Volume3D aNewSize(aLocalBack.GetPolySize());
+                basegfx::B3DRange aNewSize(basegfx::tools::getRange(aLocalBack));
 
                 // Skalierung feststellen (nur X,Y)
-                Vector3D aScaleVec(
-                    (aNewSize.GetWidth() != 0.0) ? aOldSize.GetWidth() / aNewSize.GetWidth() : 1.0,
-                    (aNewSize.GetHeight() != 0.0) ? aOldSize.GetHeight() / aNewSize.GetHeight() : 1.0,
-                    (aNewSize.GetDepth() != 0.0) ? aOldSize.GetDepth() / aNewSize.GetDepth() : 1.0);
+                basegfx::B3DPoint aScaleVec(
+                    (aNewSize.getWidth() != 0.0) ? aOldSize.getWidth() / aNewSize.getWidth() : 1.0,
+                    (aNewSize.getHeight() != 0.0) ? aOldSize.getHeight() / aNewSize.getHeight() : 1.0,
+                    (aNewSize.getDepth() != 0.0) ? aOldSize.getDepth() / aNewSize.getDepth() : 1.0);
 
                 // Transformation bilden
-                Matrix4D aTransMat;
-                aTransMat.Scale(aScaleVec);
+                basegfx::B3DHomMatrix aTransMat;
+                aTransMat.scale(aScaleVec.getX(), aScaleVec.getY(), aScaleVec.getZ());
 
                 // aeusseres und inneres Polygon skalieren
-                aLocalBack.Transform(aTransMat);
-                aOuterBack.Transform(aTransMat);
+                aLocalBack.transform(aTransMat);
+                aOuterBack.transform(aTransMat);
 
                 // Neue Groesse aktualisieren
-                aNewSize = aLocalBack.GetPolySize();
+                aNewSize = basegfx::tools::getRange(aLocalBack);
 
                 // Translation feststellen
-                Vector3D aTransVec(
-                    aOldSize.MinVec().X() - aNewSize.MinVec().X(),
-                    aOldSize.MinVec().Y() - aNewSize.MinVec().Y(),
-                    aOldSize.MinVec().Z() - aNewSize.MinVec().Z());
+                basegfx::B3DPoint aTransVec(aOldSize.getCenter() - aNewSize.getCenter());
 
                 // Transformation bilden
-                aTransMat.Identity();
-                aTransMat.Translate(aTransVec);
+                aTransMat.identity();
+                aTransMat.translate(aTransVec.getX(), aTransVec.getY(), aTransVec.getZ());
 
                 // aeusseres und inneres Polygon skalieren
-                aLocalBack.Transform(aTransMat);
-                aOuterBack.Transform(aTransMat);
+                aLocalBack.transform(aTransMat);
+                aOuterBack.transform(aTransMat);
 
                 // move aLocalBack again, scale and translate has moved it back
-                GrowPoly(aLocalBack, aNormalsOuterBack, -fDiagLen);
+                aLocalBack = ImpGrowPoly(aLocalBack, aNormalsOuterBack, -fDiagLen);
             }
             else
             {
@@ -4383,28 +3899,28 @@ void E3dCompoundObject::ImpCreateSegment(
                 aOuterBack = aLocalBack;
 
                 // notwendige Normalen erzeugen
-                PolyPolygon3D aGrowDirection;
-                AddInBetweenNormals(aLocalFront, aLocalBack, aGrowDirection, bSmoothRight);
+                basegfx::B3DPolyPolygon aGrowDirection(ImpCreateByPattern(aLocalFront));
+                aGrowDirection = ImpAddInBetweenNormals(aLocalFront, aLocalBack, aGrowDirection, bSmoothRight);
 
                 // Aeusseres Polygon verkleinern
-                GrowPoly(aOuterBack, aGrowDirection, -fDiagLen);
-                aOuterBack.CorrectGrownPoly(aLocalBack);
+                aOuterBack = ImpGrowPoly(aOuterBack, aGrowDirection, -fDiagLen);
+                aOuterBack = ImpCorrectGrownPoly(aOuterBack, aLocalBack);
 
                 // Inneres Polygon nach innen verschieben
-                GrowPoly(aLocalBack, aNormalsOuterBack, -fDiagLen);
+                aLocalBack = ImpGrowPoly(aLocalBack, aNormalsOuterBack, -fDiagLen);
             }
 
             // eventuell noch glaetten
             if(bSmoothRight)
             {
                 if(bSmoothFrontBack)
-                    AddInBetweenNormals(aLocalBack, aOuterBack, aNormalsOuterBack, bSmoothRight);
-                AddInBetweenNormals(aLocalBack, aOuterBack, aNormalsRight, bSmoothRight);
+                    aNormalsOuterBack = ImpAddInBetweenNormals(aLocalBack, aOuterBack, aNormalsOuterBack, bSmoothRight);
+                aNormalsRight = ImpAddInBetweenNormals(aLocalBack, aOuterBack, aNormalsRight, bSmoothRight);
             }
 
             // vordere Zwischenstuecke erzeugen
             // hintere Zwischenstuecke erzeugen
-            CreateInBetween(aLocalBack, aOuterBack,
+            ImpCreateInBetween(aLocalBack, aOuterBack,
                 aNormalsRight, aNormalsOuterBack,
                 bDoCreateNormals,
                 fSurroundFactor,
@@ -4413,7 +3929,7 @@ void E3dCompoundObject::ImpCreateSegment(
                 bRotateTexture90);
 
             // Rueckseite erzeugen
-            CreateBack(aOuterBack, aNormalsOuterBack, bDoCreateNormals, bDoCreateTexture);
+            ImpCreateBack(aOuterBack, aNormalsOuterBack, bDoCreateNormals, bDoCreateTexture);
 
             // Weitere Texturwerte setzen
             fTexMidDepth -= fTextureDepth * fPercentDiag;
@@ -4421,11 +3937,11 @@ void E3dCompoundObject::ImpCreateSegment(
         else
         {
             if(pNext)
-                AddInBetweenNormals(rBack, *pNext, aNormalsRight, bSmoothRight);
+                aNormalsRight = ImpAddInBetweenNormals(rBack, *pNext, aNormalsRight, bSmoothRight);
         }
 
         // eigentliches Zwischenstueck
-        CreateInBetween(aLocalFront, aLocalBack,
+        ImpCreateInBetween(aLocalFront, aLocalBack,
             aNormalsLeft, aNormalsRight,
             bDoCreateNormals,
             fSurroundFactor,
@@ -4438,22 +3954,22 @@ void E3dCompoundObject::ImpCreateSegment(
         {
             if(bCreateFront)
             {
-                if(pLineGeometryFront) pLineGeometryFront->Insert(aOuterFront);
+                if(pLineGeometryFront) pLineGeometryFront->append(aOuterFront);
             }
 
             if(bCreateFront)
             {
-                if(pLineGeometryFront) pLineGeometryFront->Insert(aLocalFront);
+                if(pLineGeometryFront) pLineGeometryFront->append(aLocalFront);
             }
             else
             {
-                if(pLineGeometry) pLineGeometry->Insert(aLocalFront);
+                if(pLineGeometry) pLineGeometry->append(aLocalFront);
             }
 
             if(bCreateBack && pLineGeometryBack)
             {
-                pLineGeometryBack->Insert(aLocalBack);
-                pLineGeometryBack->Insert(aOuterBack);
+                pLineGeometryBack->append(aLocalBack);
+                pLineGeometryBack->append(aOuterBack);
             }
         }
     }
@@ -4489,11 +4005,13 @@ void E3dCompoundObject::SetCreateTexture(BOOL bNew)
 |*
 \************************************************************************/
 
-B3dGeometry& E3dCompoundObject::GetDisplayGeometry()
+const B3dGeometry& E3dCompoundObject::GetDisplayGeometry() const
 {
     // Geometrie herstellen
     if(!bGeometryValid)
-        ReCreateGeometry();
+    {
+        ((E3dCompoundObject*)this)->ReCreateGeometry();
+    }
 
     return aDisplayGeometry;
 }
@@ -4534,8 +4052,8 @@ void E3dCompoundObject::SetUseDifferentBackMaterial(BOOL bNew)
 |*
 \************************************************************************/
 
-void ImplGet3DLineGeometry(const SfxItemSet& rSet, const ::basegfx::B3DPolyPolygon& rLinePolyPolygon,
-    ::basegfx::B3DPolyPolygon& rAreaPolyPoly, ::basegfx::B3DPolyPolygon& rNormalPolyPoly)
+void ImplGet3DLineGeometry(const SfxItemSet& rSet, const basegfx::B3DPolyPolygon& rLinePolyPolygon,
+    basegfx::B3DPolyPolygon& rAreaPolyPoly, basegfx::B3DPolyPolygon& rNormalPolyPoly)
 {
     if(rLinePolyPolygon.count())
     {
@@ -4553,25 +4071,25 @@ void ImplGet3DLineGeometry(const SfxItemSet& rSet, const ::basegfx::B3DPolyPolyg
             // create dashed line segments
             ::std::vector<double> aDotDashArray;
             XDash aDash = ((const XLineDashItem&)(rSet.Get(XATTR_LINEDASH))).GetDashValue();
-            double fFullDashDotLen = ImpCreateDotDashArray(aDotDashArray, aDash, nLineWidth);
+            double fFullDotDashLen = aDash.CreateDotDashArray(aDotDashArray, (double)nLineWidth);
 
             // convert to new polygon class
             rAreaPolyPoly = rLinePolyPolygon;
 
             // apply line dashing
-            rAreaPolyPoly = ::basegfx::tools::applyLineDashing(rAreaPolyPoly, aDotDashArray, fFullDashDotLen);
+            rAreaPolyPoly = basegfx::tools::applyLineDashing(rAreaPolyPoly, aDotDashArray, fFullDotDashLen);
         }
 
         if(0L != nLineWidth)
         {
             // prepare rAreaPolyPoly for output data
-            const ::basegfx::B3DPolyPolygon aSourcePolyPolygon(rAreaPolyPoly);
+            const basegfx::B3DPolyPolygon aSourcePolyPolygon(rAreaPolyPoly);
             rAreaPolyPoly.clear();
             const double fDistance(nLineWidth / 2.0);
 
             for(sal_uInt32 nInd(0L); nInd < aSourcePolyPolygon.count(); nInd++)
             {
-                ::basegfx::B3DPolygon aLinePoly(aSourcePolyPolygon.getB3DPolygon(nInd));
+                basegfx::B3DPolygon aLinePoly(aSourcePolyPolygon.getB3DPolygon(nInd));
                 const sal_uInt32 nOrigCount(aLinePoly.count());
 
                 if(nOrigCount)
@@ -4580,9 +4098,9 @@ void ImplGet3DLineGeometry(const SfxItemSet& rSet, const ::basegfx::B3DPolyPolyg
 
                     for(sal_uInt32 a(0L); a < nCount; a++)
                     {
-                        ::basegfx::B3DPoint aStart(aLinePoly.getB3DPoint(a));
-                        ::basegfx::B3DPoint aEnd(aLinePoly.getB3DPoint((a + 1L) % nOrigCount));
-                        ::basegfx::B3DVector aVector(aEnd - aStart);
+                        basegfx::B3DPoint aStart(aLinePoly.getB3DPoint(a));
+                        basegfx::B3DPoint aEnd(aLinePoly.getB3DPoint((a + 1L) % nOrigCount));
+                        basegfx::B3DVector aVector(aEnd - aStart);
 
                         // test length using scalar with itself, gives the quadrat of the length
                         const double fScalar(aVector.scalar(aVector));
@@ -4600,10 +4118,10 @@ void ImplGet3DLineGeometry(const SfxItemSet& rSet, const ::basegfx::B3DPolyPolyg
 
                             // calculate opposite vector and the two axes perpendicular
                             // to it
-                            ::basegfx::B3DVector aOppositeVector(-aVector);
-                            ::basegfx::B3DVector aStartVec(-aVector.getY(), aVector.getZ(), aVector.getX());
-                            ::basegfx::B3DVector aXAxis = aVector.getPerpendicular(aStartVec);
-                            ::basegfx::B3DVector aYAxis = aVector.getPerpendicular(aXAxis);
+                            basegfx::B3DVector aOppositeVector(-aVector);
+                            basegfx::B3DVector aStartVec(-aVector.getY(), aVector.getZ(), aVector.getX());
+                            basegfx::B3DVector aXAxis = aVector.getPerpendicular(aStartVec);
+                            basegfx::B3DVector aYAxis = aVector.getPerpendicular(aXAxis);
 
                             // prepare angle and angle increment
                             double fAngle(0.0);
@@ -4612,10 +4130,10 @@ void ImplGet3DLineGeometry(const SfxItemSet& rSet, const ::basegfx::B3DPolyPolyg
                             double fCos(cos(fAngle));
 
                             // prepare start vectors
-                            ::basegfx::B3DVector aCurrentVector((aXAxis * fCos) + (aYAxis * fSin));
-                            ::basegfx::B3DVector aOffset(aCurrentVector * fDistance);
-                            ::basegfx::B3DPoint aLeft(aStart + aOffset);
-                            ::basegfx::B3DPoint aRight(aEnd + aOffset);
+                            basegfx::B3DVector aCurrentVector((aXAxis * fCos) + (aYAxis * fSin));
+                            basegfx::B3DVector aOffset(aCurrentVector * fDistance);
+                            basegfx::B3DPoint aLeft(aStart + aOffset);
+                            basegfx::B3DPoint aRight(aEnd + aOffset);
 
                             for(sal_uInt32 b(0L); b < 6; b++)
                             {
@@ -4623,12 +4141,12 @@ void ImplGet3DLineGeometry(const SfxItemSet& rSet, const ::basegfx::B3DPolyPolyg
                                 fSin = sin(fAngle);
                                 fCos = cos(fAngle);
 
-                                ::basegfx::B3DVector aNextVector((aXAxis * fCos) + (aYAxis * fSin));
-                                aOffset = ::basegfx::B3DVector(aNextVector * fDistance);
-                                ::basegfx::B3DPoint aNextLeft(aStart + aOffset);
-                                ::basegfx::B3DPoint aNextRight(aEnd + aOffset);
-                                ::basegfx::B3DPolygon aLine;
-                                ::basegfx::B3DPolygon aNormal;
+                                basegfx::B3DVector aNextVector((aXAxis * fCos) + (aYAxis * fSin));
+                                aOffset = basegfx::B3DVector(aNextVector * fDistance);
+                                basegfx::B3DPoint aNextLeft(aStart + aOffset);
+                                basegfx::B3DPoint aNextRight(aEnd + aOffset);
+                                basegfx::B3DPolygon aLine;
+                                basegfx::B3DPolygon aNormal;
 
                                 aLine.append(aStart);
                                 aLine.append(aNextLeft);
@@ -4637,12 +4155,12 @@ void ImplGet3DLineGeometry(const SfxItemSet& rSet, const ::basegfx::B3DPolyPolyg
                                 aLine.append(aRight);
                                 aLine.append(aEnd);
 
-                                aNormal.append(::basegfx::B3DPoint(aVector));
-                                aNormal.append(::basegfx::B3DPoint(aNextVector));
-                                aNormal.append(::basegfx::B3DPoint(aCurrentVector));
-                                aNormal.append(::basegfx::B3DPoint(aNextVector));
-                                aNormal.append(::basegfx::B3DPoint(aCurrentVector));
-                                aNormal.append(::basegfx::B3DPoint(aOppositeVector));
+                                aNormal.append(basegfx::B3DPoint(aVector));
+                                aNormal.append(basegfx::B3DPoint(aNextVector));
+                                aNormal.append(basegfx::B3DPoint(aCurrentVector));
+                                aNormal.append(basegfx::B3DPoint(aNextVector));
+                                aNormal.append(basegfx::B3DPoint(aCurrentVector));
+                                aNormal.append(basegfx::B3DPoint(aOppositeVector));
 
                                 rAreaPolyPoly.append(aLine);
                                 rNormalPolyPoly.append(aNormal);
@@ -4708,9 +4226,9 @@ void E3dCompoundObject::Paint3D(XOutputDevice& rOut, Base3D* pBase3D,
             const SfxItemSet& rSet = GetMergedItemSet();
 
             // get line geometry
-            ::basegfx::B3DPolyPolygon aLinePolyPolygon(Get3DLineGeometry());
-            ::basegfx::B3DPolyPolygon aAreaPolyPolygon;
-            ::basegfx::B3DPolyPolygon aNormalPolyPolygon;
+            basegfx::B3DPolyPolygon aLinePolyPolygon(Get3DLineGeometry());
+            basegfx::B3DPolyPolygon aAreaPolyPolygon;
+            basegfx::B3DPolyPolygon aNormalPolyPolygon;
             ImplGet3DLineGeometry(rSet, aLinePolyPolygon, aAreaPolyPolygon, aNormalPolyPolygon);
 
             if(aAreaPolyPolygon.count())
@@ -4774,19 +4292,15 @@ void E3dCompoundObject::Paint3D(XOutputDevice& rOut, Base3D* pBase3D,
                     for(sal_uInt32 a(0L); a < aAreaPolyPolygon.count(); a++)
                     {
                         // start new primitive
-                        ::basegfx::B3DPolygon aPolygon(aAreaPolyPolygon.getB3DPolygon(a));
-                        ::basegfx::B3DPolygon aNormals(aNormalPolyPolygon.getB3DPolygon(a));
+                        basegfx::B3DPolygon aPolygon(aAreaPolyPolygon.getB3DPolygon(a));
+                        basegfx::B3DPolygon aNormals(aNormalPolyPolygon.getB3DPolygon(a));
                         pBase3D->StartPrimitive(Base3DTriangleStrip);
 
                         for(sal_uInt32 b(0); b < aPolygon.count(); b++)
                         {
-                            ::basegfx::B3DPoint aPoint(aPolygon.getB3DPoint(b));
-                            ::basegfx::B3DPoint aNormal(aNormals.getB3DPoint(b));
-
-                            Vector3D aVec(aPoint.getX(), aPoint.getY(), aPoint.getZ());
-                            Vector3D aNorm(aNormal.getX(), aNormal.getY(), aNormal.getZ());
-
-                            pBase3D->AddVertex(aVec, aNorm);
+                            basegfx::B3DVector aVector(aNormals.getB3DPoint(b));
+                            basegfx::B3DPoint a3DPoint(aPolygon.getB3DPoint(b));
+                            pBase3D->AddVertex(a3DPoint, aVector);
                         }
 
                         // draw primitive
@@ -4805,14 +4319,19 @@ void E3dCompoundObject::Paint3D(XOutputDevice& rOut, Base3D* pBase3D,
                     for(sal_uInt32 a(0L); a < aAreaPolyPolygon.count(); a++)
                     {
                         // start new primitive
-                        ::basegfx::B3DPolygon aPolygon(aAreaPolyPolygon.getB3DPolygon(a));
+                        const basegfx::B3DPolygon aPolygon(aAreaPolyPolygon.getB3DPolygon(a));
                         pBase3D->StartPrimitive(Base3DLineStrip);
 
                         for(sal_uInt32 b(0); b < aPolygon.count(); b++)
                         {
-                            ::basegfx::B3DPoint aPoint(aPolygon.getB3DPoint(b));
-                            Vector3D aVec(aPoint.getX(), aPoint.getY(), aPoint.getZ());
-                            pBase3D->AddVertex(aVec);
+                            basegfx::B3DPoint a3DPoint(aPolygon.getB3DPoint(b));
+                            pBase3D->AddVertex(a3DPoint);
+                        }
+
+                        if(aPolygon.count() && aPolygon.isClosed())
+                        {
+                            basegfx::B3DPoint a3DPoint(aPolygon.getB3DPoint(0L));
+                            pBase3D->AddVertex(a3DPoint);
                         }
 
                         // draw primitive
@@ -4854,57 +4373,53 @@ void E3dCompoundObject::Paint3D(XOutputDevice& rOut, Base3D* pBase3D,
 |*
 \************************************************************************/
 
-void E3dCompoundObject::TakeContour3D(XPolyPolygon& rPoly)
+basegfx::B2DPolyPolygon E3dCompoundObject::ImpTakeContour3D() const
 {
+    basegfx::B2DPolyPolygon aRetval;
+
     // call parent
-    E3dObject::TakeContour3D(rPoly);
+    aRetval.append(E3dObject::ImpTakeContour3D());
 
     // Kontur dieses Objektes liefern
     UINT32 nPolyCounter = 0;
     UINT32 nEntityCounter = 0;
     UINT32 nUpperBound;
-    B3dEntityBucket& rEntityBucket = GetDisplayGeometry().GetEntityBucket();
-    GeometryIndexValueBucket& rIndexBucket = GetDisplayGeometry().GetIndexBucket();
+    const B3dEntityBucket& rEntityBucket = GetDisplayGeometry().GetEntityBucket();
+    const GeometryIndexValueBucket& rIndexBucket = GetDisplayGeometry().GetIndexBucket();
     B3dTransformationSet& rTransSet = GetScene()->GetCameraSet();
-    Vector3D aPoint;
+    basegfx::B3DVector aPoint;
     Point aNewPoint;
 
     // ObjectTrans setzen
-    Matrix4D mTransform = GetFullTransform();
+    basegfx::B3DHomMatrix mTransform = GetFullTransform();
     rTransSet.SetObjectTrans(mTransform);
 
     while(nPolyCounter < rIndexBucket.Count())
     {
         // Naechstes Primitiv
         nUpperBound = rIndexBucket[nPolyCounter++].GetIndex();
-        XPolygon aNewPart(UINT16(nUpperBound - nEntityCounter));
-        UINT16 nIndex = 0;
+        basegfx::B2DPolygon aNew;
 
         while(nEntityCounter < nUpperBound)
         {
-            aPoint = rTransSet.ObjectToViewCoor(rEntityBucket[nEntityCounter++].Point().GetVector3D());
-            aNewPart[nIndex  ].X() = (long)(aPoint.X() + 0.5);
-            aNewPart[nIndex++].Y() = (long)(aPoint.Y() + 0.5);
+            aPoint = rTransSet.ObjectToViewCoor(rEntityBucket[nEntityCounter++].Point());
+            aNew.append(basegfx::B2DPoint(aPoint.getX(), aPoint.getY()));
         }
 
         // Teilprimitiv einfuegen
-        rPoly.Insert(aNewPart);
+        aRetval.append(aNew);
     }
 
     // add shadow now too (#61279#)
-    PolyPolygon3D aShadowPolyPoly;
-    ImpGetShadowPolygon(aShadowPolyPoly);
+    basegfx::B2DPolyPolygon aShadowPolyPoly(ImpGetShadowPolygon());
 
     // invert Y coor cause of GetPolygon() later
-    Matrix4D aTransMat;
-    aTransMat.Scale(1.0, -1.0, 1.0);
-    aShadowPolyPoly.Transform(aTransMat);
+    basegfx::B2DHomMatrix aTransMat;
+    aTransMat.scale(1.0, -1.0);
+    aShadowPolyPoly.transform(aTransMat);
+    aRetval.append(aShadowPolyPoly);
 
-    for(UINT16 a = 0; a < aShadowPolyPoly.Count(); a++)
-    {
-        XPolygon aNewPart(aShadowPolyPoly[a].GetPolygon());
-        rPoly.Insert(aNewPart);
-    }
+    return aRetval;
 }
 
 /*************************************************************************
@@ -4929,30 +4444,31 @@ void E3dCompoundObject::DrawShadows(Base3D *pBase3D, XOutputDevice& rXOut,
         && pVisiLayer->IsSet(GetLayer()))
     {
         // ObjectTrans setzen
-        Matrix4D mTransform = GetFullTransform();
-        GetScene()->GetCameraSet().SetObjectTrans(mTransform);
+        GetScene()->GetCameraSet().SetObjectTrans(GetFullTransform());
 
         // Schattenpolygon holen
-        PolyPolygon3D aShadowPoly;
-        ImpGetShadowPolygon(aShadowPoly);
+        const basegfx::B2DPolyPolygon aShadowPoly(ImpGetShadowPolygon());
 
         // invert Y coor cause of GetPolyPolygon() in ImpDrawShadowPolygon() later
-        Matrix4D aTransMat;
-        aTransMat.Scale(1.0, -1.0, 1.0);
-        aShadowPoly.Transform(aTransMat);
+        // ##not necessary with B2DPolygons
+        //basegfx::B2DHomMatrix aTransMat;
+        //aTransMat.scale(1.0, -1.0);
+        //aShadowPoly.transform(aTransMat);
 
         // ...und Zeichnen
         ImpDrawShadowPolygon(aShadowPoly, rXOut);
     }
 }
 
-void E3dCompoundObject::ImpGetShadowPolygon(PolyPolygon3D& rPoly)
+basegfx::B2DPolyPolygon E3dCompoundObject::ImpGetShadowPolygon() const
 {
+    basegfx::B2DPolyPolygon aRetval;
+
     // #79585#
     sal_Int32 nXDist(GetShadowXDistance());
     sal_Int32 nYDist(GetShadowYDistance());
     BOOL bDrawAsOutline(DrawShadowAsOutline());
-    PolyPolygon3D aLinePolyPolygon;
+    basegfx::B3DPolyPolygon aLinePolyPolygon;
     B3dTransformationSet& rTransSet = GetScene()->GetCameraSet();
     const SfxItemSet& rSet = GetObjectItemSet();
     XLineStyle aLineStyle = ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
@@ -4961,8 +4477,8 @@ void E3dCompoundObject::ImpGetShadowPolygon(PolyPolygon3D& rPoly)
     if(!bDrawAsOutline)
     {
         // add basic polygon geometry, generate from 3D bucket
-        B3dEntityBucket& rEntityBucket = ((E3dCompoundObject*)this)->GetDisplayGeometry().GetEntityBucket();
-        GeometryIndexValueBucket& rIndexBucket = ((E3dCompoundObject*)this)->GetDisplayGeometry().GetIndexBucket();
+        const B3dEntityBucket& rEntityBucket = GetDisplayGeometry().GetEntityBucket();
+        const GeometryIndexValueBucket& rIndexBucket = GetDisplayGeometry().GetIndexBucket();
         sal_uInt32 nPolyCounter(0);
         sal_uInt32 nEntityCounter(0);
 
@@ -4970,23 +4486,24 @@ void E3dCompoundObject::ImpGetShadowPolygon(PolyPolygon3D& rPoly)
         {
             // next primitive
             sal_uInt32 nUpperBound(rIndexBucket[nPolyCounter++].GetIndex());
-            Polygon3D aNewPolygon((sal_uInt16)(nUpperBound - nEntityCounter));
-            sal_uInt16 nIndex(0);
+            basegfx::B3DPolygon aNewPolygon;
 
             while(nEntityCounter < nUpperBound)
-                aNewPolygon[nIndex++] = rEntityBucket[nEntityCounter++].Point().GetVector3D();
+            {
+                aNewPolygon.append(rEntityBucket[nEntityCounter++].Point());
+            }
 
-            aNewPolygon.SetClosed(TRUE);
-            aLinePolyPolygon.Insert(aNewPolygon);
+            aNewPolygon.setClosed(true);
+            aLinePolyPolygon.append(aNewPolygon);
         }
     }
 
     if(bDrawAsOutline || (XLINE_NONE != aLineStyle))
     {
         // get line geometry
-        ::basegfx::B3DPolyPolygon aBasicLinePolyPoly(Get3DLineGeometry());
-        ::basegfx::B3DPolyPolygon aAreaPolyPolygon;
-        ::basegfx::B3DPolyPolygon aNormalPolyPolygon;
+        basegfx::B3DPolyPolygon aBasicLinePolyPoly(Get3DLineGeometry());
+        basegfx::B3DPolyPolygon aAreaPolyPolygon;
+        basegfx::B3DPolyPolygon aNormalPolyPolygon;
         ImplGet3DLineGeometry(rSet, aBasicLinePolyPoly, aAreaPolyPolygon, aNormalPolyPolygon);
 
         if(aAreaPolyPolygon.count())
@@ -4997,49 +4514,52 @@ void E3dCompoundObject::ImpGetShadowPolygon(PolyPolygon3D& rPoly)
                 for(sal_uInt32 a(0L); a < aAreaPolyPolygon.count(); a++)
                 {
                     // start new primitive
-                    ::basegfx::B3DPolygon aPolygon(aAreaPolyPolygon.getB3DPolygon(a));
-                    Polygon3D aNewPolygon(4);
+                    basegfx::B3DPolygon aPolygon(aAreaPolyPolygon.getB3DPolygon(a));
+                    basegfx::B3DPolygon aNewPolygon;
 
-                    ::basegfx::B3DPoint aPointA(aPolygon.getB3DPoint(1));
-                    Vector3D aVecA(aPointA.getX(), aPointA.getY(), aPointA.getZ());
+                    aNewPolygon.append(aPolygon.getB3DPoint(1L));
+                    aNewPolygon.append(aPolygon.getB3DPoint(3L));
+                    aNewPolygon.append(aPolygon.getB3DPoint(4L));
+                    aNewPolygon.append(aPolygon.getB3DPoint(2L));
+                    aNewPolygon.setClosed(true);
 
-                    ::basegfx::B3DPoint aPointB(aPolygon.getB3DPoint(3));
-                    Vector3D aVecB(aPointB.getX(), aPointB.getY(), aPointB.getZ());
-
-                    ::basegfx::B3DPoint aPointC(aPolygon.getB3DPoint(4));
-                    Vector3D aVecC(aPointC.getX(), aPointC.getY(), aPointC.getZ());
-
-                    ::basegfx::B3DPoint aPointD(aPolygon.getB3DPoint(2));
-                    Vector3D aVecD(aPointD.getX(), aPointD.getY(), aPointD.getZ());
-
-                    aNewPolygon[0] = aVecA;
-                    aNewPolygon[1] = aVecB;
-                    aNewPolygon[2] = aVecC;
-                    aNewPolygon[3] = aVecD;
-                    aNewPolygon.SetClosed(sal_True);
-
-                    aLinePolyPolygon.Insert(aNewPolygon);
+                    aLinePolyPolygon.append(aNewPolygon);
                 }
             }
             else
             {
                 // draw as lines
-                aBasicLinePolyPoly = aAreaPolyPolygon;
-                aLinePolyPolygon.Insert(aBasicLinePolyPoly);
+                for(sal_uInt32 a(0L); a < aAreaPolyPolygon.count(); a++)
+                {
+                    basegfx::B3DPolygon aNewPolygon(aAreaPolyPolygon.getB3DPolygon(a));
+
+                    if(aNewPolygon.isClosed() && aNewPolygon.count())
+                    {
+                        // use open polygon to force to line draw, close by hand
+                        aNewPolygon.setClosed(false);
+
+                        if(aNewPolygon.getB3DPoint(0L) != aNewPolygon.getB3DPoint(aNewPolygon.count() - 1L))
+                        {
+                            aNewPolygon.append(aNewPolygon.getB3DPoint(0L));
+                        }
+                    }
+
+                    aLinePolyPolygon.append(aNewPolygon);
+                }
             }
         }
     }
 
-    if(aLinePolyPolygon.Count())
+    if(aLinePolyPolygon.count())
     {
         if(GetShadow3D())
         {
             // 3D Schatten. Nimm Lichtquelle und Ebene. Projiziere
             // die Punkte und jage sie durch die 3D Darstellung.
-            Vector3D aLampPositionOrDirection;
+            basegfx::B3DVector aLampPositionOrDirection;
             BOOL bDirectionalSource(TRUE);
-            Vector3D aGroundPosition;
-            Vector3D aGroundDirection;
+            basegfx::B3DVector aGroundPosition;
+            basegfx::B3DVector aGroundDirection;
             B3dLightGroup& rLightGroup = GetScene()->GetLightGroup();
 
             // Lampe waehlen
@@ -5061,7 +4581,7 @@ void E3dCompoundObject::ImpGetShadowPolygon(PolyPolygon3D& rPoly)
                 {
                     // Nur Richtung vorhanden
                     aLampPositionOrDirection = -rLightGroup.GetDirection(aLightNumber);
-                    aLampPositionOrDirection.Normalize();
+                    aLampPositionOrDirection.normalize();
                 }
                 else
                 {
@@ -5072,71 +4592,73 @@ void E3dCompoundObject::ImpGetShadowPolygon(PolyPolygon3D& rPoly)
 
                 // Ebene holen, Richtung in Augkoordinaten
                 aGroundDirection = -GetScene()->GetShadowPlaneDirection();
-                aGroundDirection.Normalize();
+                aGroundDirection.normalize();
 
                 // Ist die Lampe auch vor der Ebene?
-                Vector3D aLightNormal = aLampPositionOrDirection;
+                basegfx::B3DVector aLightNormal(aLampPositionOrDirection);
                 if(!bDirectionalSource)
                 {
                     // Nur Position vorhanden, berechne einen Lichtvektor
-                    aLightNormal = aLinePolyPolygon[0][0] - aLampPositionOrDirection;
-                    aLightNormal.Normalize();
+                    const basegfx::B3DPoint aPolyNullPoint(aLinePolyPolygon.getB3DPolygon(0L).getB3DPoint(0L));
+                    aLightNormal = aPolyNullPoint - aLampPositionOrDirection;
+                    aLightNormal.normalize();
                 }
 
-                double fLightAndNormal = aLightNormal.Scalar(aGroundDirection);
-                B3dVolume aVolume = rTransSet.GetDeviceVolume();
+                double fLightAndNormal = aLightNormal.scalar(aGroundDirection);
+                basegfx::B3DRange aVolume(rTransSet.GetDeviceVolume());
 
                 // auf Augkoordinaten umstellen
-                double fTemp = aVolume.MinVec().Z();
-                aVolume.MinVec().Z() = -aVolume.MaxVec().Z();
-                aVolume.MaxVec().Z() = -fTemp;
+                basegfx::B3DPoint aOldMin(aVolume.getMinimum());
+                basegfx::B3DPoint aOldMax(aVolume.getMaximum());
+                double fTemp = aOldMin.getZ();
+                aOldMin.setZ(-aOldMax.getZ());
+                aOldMax.setZ(-fTemp);
+                aVolume = basegfx::B3DRange(aOldMin, aOldMax);
 
                 if(fLightAndNormal > 0.0)
                 {
                     // Position der Ebene in Augkoordinaten setzen
-                    aGroundPosition.X() = (aGroundDirection.X() < 0.0) ? aVolume.MinVec().X() : aVolume.MaxVec().X();
-                    aGroundPosition.Y() = (aGroundDirection.Y() < 0.0) ? aVolume.MinVec().Y() : aVolume.MaxVec().Y();
-                    aGroundPosition.Z() = aVolume.MinVec().Z() - ((aVolume.MaxVec().Z() - aVolume.MinVec().Z()) / 8.0);
+                    aGroundPosition.setX((aGroundDirection.getX() < 0.0) ? aVolume.getMinX() : aVolume.getMaxX());
+                    aGroundPosition.setY((aGroundDirection.getY() < 0.0) ? aVolume.getMinY() : aVolume.getMaxY());
+                    aGroundPosition.setZ(aVolume.getMinZ() - ((aVolume.getMaxZ() - aVolume.getMinZ()) / 8.0));
 
                     // Skalar der Ebenengleichung holen
-                    double fGroundScalar = -aGroundPosition.Scalar(aGroundDirection);
+                    const double fGroundScalar(-aGroundPosition.scalar(aGroundDirection));
 
                     // ObjectTrans setzen
                     BOOL bPolygonVisible(TRUE);
-                    Matrix4D mTransform = GetFullTransform();
-                    rTransSet.SetObjectTrans(mTransform);
+                    rTransSet.SetObjectTrans(GetFullTransform());
 
-                    for(sal_uInt16 a(0); a < aLinePolyPolygon.Count(); a++)
+                    for(sal_uInt32 a(0L); a < aLinePolyPolygon.count(); a++)
                     {
-                        Polygon3D& rLinePoly = aLinePolyPolygon[a];
-                        Polygon3D aPoly(rLinePoly.GetPointCount());
-                        sal_uInt16 nPolyPos(0);
+                        basegfx::B3DPolygon aLinePoly = aLinePolyPolygon.getB3DPolygon(a);
+                        basegfx::B2DPolygon aPoly;
 
-                        for(sal_uInt16 b(0); b < rLinePoly.GetPointCount(); b++)
+                        for(sal_uInt32 b(0L); b < aLinePoly.count(); b++)
                         {
                             // Naechsten Punkt holen
-                            Vector3D aPoint = rLinePoly[b];
+                            basegfx::B3DPoint aPoint(aLinePoly.getB3DPoint(b));
 
                             // Auf Augkoordinaten umrechnen
                             aPoint = rTransSet.ObjectToEyeCoor(aPoint);
 
                             // Richtung bestimmen
-                            Vector3D aDirection = aLampPositionOrDirection;
+                            basegfx::B3DVector aDirection(aLampPositionOrDirection);
                             if(!bDirectionalSource)
                             {
                                 aDirection = aPoint - aLampPositionOrDirection;
-                                aDirection.Normalize();
+                                aDirection.normalize();
                             }
 
                             // Schnittpunkt berechnen (N.D)
-                            double fDiv = aGroundDirection.Scalar(aDirection);
+                            double fDiv = aGroundDirection.scalar(aDirection);
                             if(fabs(fDiv) < SMALL_DVALUE)
                             {
                                 bPolygonVisible = FALSE;
                             }
                             else
                             {
-                                fDiv = -((fGroundScalar + aGroundDirection.Scalar(aPoint)) / fDiv);
+                                fDiv = -((fGroundScalar + aGroundDirection.scalar(aPoint)) / fDiv);
                                 aPoint += aDirection * fDiv;
                             }
 
@@ -5144,19 +4666,18 @@ void E3dCompoundObject::ImpGetShadowPolygon(PolyPolygon3D& rPoly)
                             if(bPolygonVisible)
                             {
                                 // Auf ViewKoordinaten
-                                Vector3D aShadowPoint = rTransSet.EyeToViewCoor(aPoint);
-                                aPoly[nPolyPos++] = Vector3D(
-                                    aShadowPoint.X() + (double)nXDist,
-                                    aShadowPoint.Y() + (double)nYDist,
-                                    0.0);
+                                basegfx::B3DPoint aShadowPoint(rTransSet.EyeToViewCoor(aPoint));
+                                aPoly.append(basegfx::B2DPoint(
+                                    aShadowPoint.getX() + (double)nXDist,
+                                    aShadowPoint.getY() + (double)nYDist));
                             }
                         }
 
                         // Teilpolygon einfuegen
-                        if(nPolyPos)
+                        if(aPoly.count())
                         {
-                            aPoly.SetClosed(rLinePoly.IsClosed());
-                            rPoly.Insert(aPoly);
+                            aPoly.setClosed(aLinePoly.isClosed());
+                            aRetval.append(aPoly);
                         }
                     }
                 }
@@ -5165,38 +4686,37 @@ void E3dCompoundObject::ImpGetShadowPolygon(PolyPolygon3D& rPoly)
         else
         {
             // ObjectTrans setzen
-            Matrix4D mTransform = GetFullTransform();
-            rTransSet.SetObjectTrans(mTransform);
+            rTransSet.SetObjectTrans(GetFullTransform());
 
-            for(sal_uInt16 a(0); a < aLinePolyPolygon.Count(); a++)
+            for(sal_uInt32 a(0L); a < aLinePolyPolygon.count(); a++)
             {
-                Polygon3D& rLinePoly = aLinePolyPolygon[a];
-                Polygon3D aPoly(rLinePoly.GetPointCount());
-                sal_uInt16 nPolyPos(0);
+                basegfx::B3DPolygon aLinePoly(aLinePolyPolygon.getB3DPolygon(a));
+                basegfx::B2DPolygon aPoly;
 
                 // Polygon fuellen
-                for(sal_uInt16 b(0); b < rLinePoly.GetPointCount(); b++)
+                for(sal_uInt32 b(0L); b < aLinePoly.count(); b++)
                 {
                     // Naechsten Punkt holen
-                    Vector3D aPoint = rLinePoly[b];
+                    basegfx::B3DPoint aPoint(aLinePoly.getB3DPoint(b));
                     aPoint = rTransSet.ObjectToViewCoor(aPoint);
-                    aPoly[nPolyPos++] = Vector3D(
-                        aPoint.X() + (double)nXDist,
-                        aPoint.Y() + (double)nYDist,
-                        0.0);
+                    aPoly.append(basegfx::B2DPoint(
+                        aPoint.getX() + (double)nXDist,
+                        aPoint.getY() + (double)nYDist));
                 }
 
                 // open/close
-                aPoly.SetClosed(rLinePoly.IsClosed());
+                aPoly.setClosed(aLinePoly.isClosed());
 
                 // Teilpolygon einfuegen
-                rPoly.Insert(aPoly);
+                aRetval.append(aPoly);
             }
         }
     }
+
+    return aRetval;
 }
 
-void E3dCompoundObject::ImpDrawShadowPolygon(PolyPolygon3D& rPoly, XOutputDevice& rXOut)
+void E3dCompoundObject::ImpDrawShadowPolygon(const basegfx::B2DPolyPolygon& rPoly, XOutputDevice& rXOut)
 {
     Color aCol = GetShadowColor();
     OutputDevice *pDevice = rXOut.GetOutDev();
@@ -5220,7 +4740,7 @@ void E3dCompoundObject::ImpDrawShadowPolygon(PolyPolygon3D& rPoly, XOutputDevice
             aGradient.SetSteps(3);
 
             // create BoundRectangle
-            PolyPolygon aPolyPolygon(rPoly.GetPolyPolygon());
+            PolyPolygon aPolyPolygon(rPoly);
             Rectangle aBound(aPolyPolygon.GetBoundRect());
 
             // prepare VDev and MetaFile
@@ -5230,12 +4750,13 @@ void E3dCompoundObject::ImpDrawShadowPolygon(PolyPolygon3D& rPoly, XOutputDevice
 
             aVDev.SetFont(rXOut.GetOutDev()->GetFont());
             aVDev.SetDrawMode(rXOut.GetOutDev()->GetDrawMode());
+            aVDev.SetSettings(rXOut.GetOutDev()->GetSettings());
             aVDev.SetRefPoint(rXOut.GetOutDev()->GetRefPoint());
 
             // create output
             for(UINT16 a(0); a < aPolyPolygon.Count(); a++)
             {
-                if(rPoly[a].IsClosed())
+                if(rPoly.getB2DPolygon(a).isClosed())
                 {
                     aVDev.SetLineColor();
                     aVDev.SetFillColor(aCol);
@@ -5261,9 +4782,11 @@ void E3dCompoundObject::ImpDrawShadowPolygon(PolyPolygon3D& rPoly, XOutputDevice
     else
     {
          // no transparence, draw all single polys directly
-        for(UINT16 a(0); a < rPoly.Count(); a++)
+        for(sal_uInt32 a(0L); a < rPoly.count(); a++)
         {
-            if(rPoly[a].IsClosed())
+            const basegfx::B2DPolygon aPoly(rPoly.getB2DPolygon(a));
+
+            if(aPoly.isClosed())
             {
                 pDevice->SetLineColor();
                 pDevice->SetFillColor(aCol);
@@ -5274,48 +4797,45 @@ void E3dCompoundObject::ImpDrawShadowPolygon(PolyPolygon3D& rPoly, XOutputDevice
                 pDevice->SetFillColor();
             }
 
-            pDevice->DrawPolygon(rPoly[a].GetPolygon());
+            Polygon aPolygon(aPoly);
+            pDevice->DrawPolygon(aPoly);
         }
     }
 }
 
 /*************************************************************************
 |*
-|* convert given PolyPolygon3D to screen coor
+|* convert given basegfx::B3DPolyPolygon to screen coor
 |*
 \************************************************************************/
 
-XPolyPolygon E3dCompoundObject::TransformToScreenCoor(const PolyPolygon3D &rExtrudePoly)
+basegfx::B2DPolyPolygon E3dCompoundObject::TransformToScreenCoor(const basegfx::B3DPolyPolygon& rCandidate)
 {
-    XPolyPolygon aNewPolyPolygon;
+    basegfx::B2DPolyPolygon aRetval;
     B3dTransformationSet& rTransSet = GetScene()->GetCameraSet();
+    const basegfx::B3DHomMatrix mTransform(GetFullTransform() * rTransSet.GetMatFromWorldToView());
 
-    // set ObjectTrans
-    Matrix4D mTransform = GetFullTransform();
-    rTransSet.SetObjectTrans(mTransform);
-
-    // transform base polygon to screen coor
-    for(UINT16 a=0;a<rExtrudePoly.Count();a++)
+    for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
     {
-        const Polygon3D &rExtPoly = rExtrudePoly[a];
-        BOOL bClosed = rExtPoly.IsClosed();
-        XPolygon aNewPoly(rExtPoly.GetPointCount() + (bClosed ? 1 : 0));
+        const basegfx::B3DPolygon aCandidate(rCandidate.getB3DPolygon(a));
+        const sal_uInt32 nCount(aCandidate.count());
 
-        UINT16 b;
-        for(b=0;b<rExtPoly.GetPointCount();b++)
+        if(nCount)
         {
-            Vector3D aPoint = rTransSet.ObjectToViewCoor(rExtPoly[b]);
-            aNewPoly[b].X() = (long)(aPoint.X() + 0.5);
-            aNewPoly[b].Y() = (long)(aPoint.Y() + 0.5);
+            basegfx::B2DPolygon aTempPoly;
+
+            for(sal_uInt32 b(0L); b < nCount; b++)
+            {
+                basegfx::B3DPoint aPoint(aCandidate.getB3DPoint(b));
+                aPoint *= mTransform;
+                aTempPoly.append(basegfx::B2DPoint(aPoint.getX(), aPoint.getY()));
+            }
+
+            aRetval.append(aTempPoly);
         }
-
-        if(bClosed)
-            aNewPoly[b] = aNewPoly[0];
-
-        aNewPolyPolygon.Insert(aNewPoly);
     }
 
-    return aNewPolyPolygon;
+    return aRetval;
 }
 
 // #110988#
@@ -5323,10 +4843,10 @@ double E3dCompoundObject::GetMinimalDepthInViewCoor(E3dScene& rScene) const
 {
     double fRetval(DBL_MAX);
     B3dTransformationSet& rTransSet = rScene.GetCameraSet();
-    Matrix4D mTransform = ((E3dCompoundObject*)this)->GetFullTransform();
+    basegfx::B3DHomMatrix mTransform = GetFullTransform();
     rTransSet.SetObjectTrans(mTransform);
-    B3dEntityBucket& rEntityBucket = ((E3dCompoundObject*)this)->GetDisplayGeometry().GetEntityBucket();
-    GeometryIndexValueBucket& rIndexBucket = ((E3dCompoundObject*)this)->GetDisplayGeometry().GetIndexBucket();
+    const B3dEntityBucket& rEntityBucket = GetDisplayGeometry().GetEntityBucket();
+    const GeometryIndexValueBucket& rIndexBucket = GetDisplayGeometry().GetIndexBucket();
     sal_uInt32 nPolyCounter(0L);
     sal_uInt32 nEntityCounter(0L);
 
@@ -5336,12 +4856,12 @@ double E3dCompoundObject::GetMinimalDepthInViewCoor(E3dScene& rScene) const
 
         while(nEntityCounter < nUpperBound)
         {
-            Vector3D aNewPoint = rEntityBucket[nEntityCounter++].Point().GetVector3D();
+            basegfx::B3DPoint aNewPoint(rEntityBucket[nEntityCounter++].Point());
             aNewPoint = rTransSet.ObjectToViewCoor(aNewPoint);
 
-            if(aNewPoint.Z() < fRetval)
+            if(aNewPoint.getZ() < fRetval)
             {
-                fRetval = aNewPoint.Z();
+                fRetval = aNewPoint.getZ();
             }
         }
     }
