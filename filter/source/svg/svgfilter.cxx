@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svgfilter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:44:52 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:02:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,9 @@
 #include <com/sun/star/frame/XDesktop.hdl>
 #include <com/sun/star/frame/XController.hdl>
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
