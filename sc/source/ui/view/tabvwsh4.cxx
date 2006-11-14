@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:13:13 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:00:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1955,6 +1955,9 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     SvBorder aBorder;
     GetBorderSize( aBorder, Size() );
     SetBorderPixel( aBorder );
+
+    // #114409#
+    MakeDrawLayer();
 }
 
 #undef __INIT_ScTabViewShell
