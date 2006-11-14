@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontactofobjlistpainter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:34:19 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,7 @@ namespace sdr
 
         ViewContact& ObjectContactOfObjListPainter::GetPaintObjectViewContact(sal_uInt32 nIndex) const
         {
-            SdrObject* pObj = maStartObjects[nIndex];
+            const SdrObject* pObj = maStartObjects[nIndex];
             DBG_ASSERT(pObj, "ObjectContactOfObjListPainter::EnsureValidDrawHierarchy: Corrupt SdrObjectVector (!)");
             return pObj->GetViewContact();
         }
