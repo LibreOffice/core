@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impgrfll.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:06:33 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:38:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,22 @@
 #include <vcl/graphictools.hxx>
 #endif
 
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
+#ifndef _BGFX_RANGE_B2DRANGE_HXX
+#include <basegfx/range/b2drange.hxx>
+#endif
+
+#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#endif
+
 #include "svdobj.hxx"
 #include "xpoly.hxx"
 #include "xattr.hxx"
@@ -110,19 +126,18 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
         pMtf=mrXOut.GetOutDev()->GetConnectMetaFile();
     if( pMtf != NULL )
     {
-        XPolyPolygon aGeometry;
-        mrObj.TakeXorPoly(aGeometry, TRUE);
+        basegfx::B2DPolyPolygon aGeometry(mrObj.TakeXorPoly(sal_True));
 
         // #104686# Prune non-closed polygons from geometry
-        XPolyPolygon aPolyPoly;
-        USHORT i;
-        for( i=0; i<aGeometry.Count(); ++i )
+        basegfx::B2DPolyPolygon aPolyPoly;
+        sal_uInt32 i;
+        for( i=0L; i<aGeometry.count(); ++i )
         {
-            const XPolygon& rPoly = aGeometry.GetObject(i);
-            if( rPoly[0] == rPoly[ rPoly.GetPointCount()-1 ] )
+            const basegfx::B2DPolygon aCandidate(aGeometry.getB2DPolygon(i));
+
+            if(aCandidate.isClosed())
             {
-                // polygon is closed - use for fillings
-                aPolyPoly.Insert( rPoly );
+                aPolyPoly.append(aCandidate);
             }
         }
 
@@ -130,7 +145,10 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
         if( bIsShadow && (nDX || nDY) )
         {
             // transformation necessary
-            aPolyPoly.Move( nDX, nDY );
+            basegfx::B2DHomMatrix aMatrix;
+
+            aMatrix.translate(nDX, nDY);
+            aPolyPoly.transform(aMatrix);
         }
 
         SvtGraphicFill::FillType eType(SvtGraphicFill::fillSolid);
@@ -228,7 +246,8 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
             if( pOut )
             {
                 Bitmap          aBitmap(((const XFillBitmapItem&)(rSet.Get(XATTR_FILLBITMAP))).GetBitmapValue().GetBitmap());
-                Rectangle       aPolyRect( aPolyPoly.GetBoundRect() );
+                const basegfx::B2DRange aTempRange(basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(aPolyPoly)));
+                const Rectangle aPolyRect(FRound(aTempRange.getMinX()), FRound(aTempRange.getMinY()), FRound(aTempRange.getMaxX()), FRound(aTempRange.getMaxY()));
                 MapMode         aMap( pOut->GetMapMode().GetMapUnit() );
                 Size            aStartOffset;
                 Size            aBmpOutputSize;
@@ -328,10 +347,8 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
             }
         }
 
-//BFS09        SvtGraphicFill aFill( XOutCreatePolyPolygonBezier( aPolyPoly, rXOut.GetOutDev() ),
-        const ::basegfx::B2DPolyPolygon aCandidate(aPolyPoly.getB2DPolyPolygon());
         const Color aColorSolid = ((const XFillColorItem&) (rFillItemSet.Get(XATTR_FILLCOLOR))).GetColorValue();
-        SvtGraphicFill aFill( static_cast<PolyPolygon>(aCandidate),
+        SvtGraphicFill aFill( PolyPolygon(aPolyPoly),
                               aColorSolid,
                               ITEMVALUE( rFillItemSet, XATTR_FILLTRANSPARENCE, XFillTransparenceItem ) / 100.0,
                               SvtGraphicFill::fillEvenOdd,
