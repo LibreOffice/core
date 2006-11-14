@@ -4,9 +4,9 @@
  *
  *  $RCSfile: displayinfo.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:11:22 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:30:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,8 +102,7 @@ namespace sdr
             mbGhostedDrawModeActive(sal_False),
             mbBufferingAllowed(sal_True),
             mbContinuePaint(sal_True),
-            mbMasterPagePainting(sal_False),
-            mbPreRenderingAllowed(sal_False)
+            mbMasterPagePainting(sal_False)
         {
         }
 
@@ -379,20 +378,6 @@ namespace sdr
             if(mbMasterPagePainting != bNew)
             {
                 mbMasterPagePainting = bNew;
-            }
-        }
-
-        // access to PreRendering flag
-        sal_Bool DisplayInfo::IsPreRenderingAllowed() const
-        {
-            return mbPreRenderingAllowed;
-        }
-
-        void DisplayInfo::SetPreRenderingAllowed(sal_Bool bNew)
-        {
-            if(mbPreRenderingAllowed != bNew)
-            {
-                mbPreRenderingAllowed = bNew;
             }
         }
 
