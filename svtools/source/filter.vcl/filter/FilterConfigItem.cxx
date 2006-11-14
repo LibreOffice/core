@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterConfigItem.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:50:37 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:40:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ using namespace ::com::sun::star::uno       ;   // Reference
 using namespace ::com::sun::star::util      ;   // XChangesBatch
 using namespace ::com::sun::star::awt       ;   // Size
 using namespace ::com::sun::star::container ;   //
+using namespace ::com::sun::star::task      ;   // XStatusIndicator
 
 static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, const String& rTree )
 {
@@ -627,3 +628,21 @@ Sequence< PropertyValue > FilterConfigItem::GetFilterData() const
 }
 
 // ------------------------------------------------------------------------
+
+Reference< XStatusIndicator > FilterConfigItem::GetStatusIndicator() const
+{
+    Reference< XStatusIndicator > xStatusIndicator;
+    const rtl::OUString sStatusIndicator( RTL_CONSTASCII_USTRINGPARAM( "StatusIndicator" ) );
+
+    sal_Int32 i, nCount = aFilterData.getLength();
+    for ( i = 0; i < nCount; i++ )
+    {
+        if ( aFilterData[ i ].Name == sStatusIndicator )
+        {
+            aFilterData[ i ].Value >>= xStatusIndicator;
+            break;
+        }
+    }
+    return xStatusIndicator;
+}
+
