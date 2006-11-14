@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopolyhelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:28:59 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:28:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,25 +44,18 @@ namespace com { namespace sun { namespace star { namespace drawing {
     struct PolyPolygonBezierCoords;
 } } } }
 
-class XPolygon;
-class XPolyPolygon;
+namespace basegfx {
+    class B2DPolyPolygon;
+}
 
-/** convert a drawing::PolyPolygonBezierCoords to a XPolygon
+/** convert a drawing::PolyPolygonBezierCoords to a B2DPolyPolygon
 */
-void SvxConvertPolyPolygonBezierToXPolygon( const com::sun::star::drawing::PolyPolygonBezierCoords* pSourcePolyPolygon, XPolygon& rNewPolygon )
+basegfx::B2DPolyPolygon SvxConvertPolyPolygonBezierToB2DPolyPolygon( const com::sun::star::drawing::PolyPolygonBezierCoords* pSourcePolyPolygon)
     throw( com::sun::star::lang::IllegalArgumentException );
 
-/** convert a drawing::PolyPolygonBezierCoords to a XPolyPolygon
+/** convert a B2DPolyPolygon to a drawing::PolyPolygonBezierCoords
 */
-void SvxConvertPolyPolygonBezierToXPolyPolygon( const com::sun::star::drawing::PolyPolygonBezierCoords* pSourcePolyPolygon, XPolyPolygon& rNewPolygon )
-    throw( com::sun::star::lang::IllegalArgumentException );
-
-/** convert a XPolygon to a drawing::PolyPolygonBezierCoords
-*/
-void SvxConvertXPolygonToPolyPolygonBezier( const XPolygon& rPolygon, com::sun::star::drawing::PolyPolygonBezierCoords& rRetval )
-    throw();
-
-void SvxPolyPolygonToPolyPolygonBezierCoords( const XPolyPolygon& rPolyPoly, com::sun::star::drawing::PolyPolygonBezierCoords& rRetval );
+void SvxConvertB2DPolyPolygonToPolyPolygonBezier( const basegfx::B2DPolyPolygon& rPolyPoly, com::sun::star::drawing::PolyPolygonBezierCoords& rRetval );
 
 
 #endif
