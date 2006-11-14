@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:32:01 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:28:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,13 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #include <algorithm>
 #include <functional>
@@ -176,6 +183,64 @@ void DlgEdObj::SetPage(SdrPage* _pNewPage)
 
 //----------------------------------------------------------------------------
 
+namespace
+{
+    /** returns the DlgEdForm which the given DlgEdObj belongs to
+        (which might in fact be the object itself)
+
+        Failure to obtain the form will be reported with an assertion in the non-product
+        version.
+     */
+    bool lcl_getDlgEdForm( DlgEdObj* _pObject, DlgEdForm*& _out_pDlgEdForm )
+    {
+        _out_pDlgEdForm = dynamic_cast< DlgEdForm* >( _pObject );
+        if ( !_out_pDlgEdForm )
+            _out_pDlgEdForm = _pObject->GetDlgEdForm();
+        DBG_ASSERT( _out_pDlgEdForm, "lcl_getDlgEdForm: no form!" );
+        return ( _out_pDlgEdForm != NULL );
+    }
+}
+
+//----------------------------------------------------------------------------
+
+awt::DeviceInfo DlgEdObj::getFormDeviceInfo( const DlgEdForm& _rForm )
+{
+    awt::DeviceInfo aDeviceInfo;
+
+    DlgEditor* pEditor = _rForm.GetDlgEditor();
+    DBG_ASSERT( pEditor, "DlgEdObj::getFormDeviceInfo: no editor associated with the form object!" );
+    if ( !pEditor )
+        return aDeviceInfo;
+
+    Window* pWindow = pEditor->GetWindow();
+    DBG_ASSERT( pWindow, "DlgEdObj::getFormDeviceInfo: no window associated with the editor!" );
+    if ( !pWindow )
+        return aDeviceInfo;
+
+    // obtain an XControl (might be a temporary one)
+    bool bIsTemporaryControl = false;
+    Reference< awt::XControl > xDialogControl( _rForm.GetUnoControl( pWindow ) );
+    if ( !xDialogControl.is() )
+    {
+        Reference< awt::XControlContainer > xEditorControlContainer( pEditor->GetWindowControlContainer() );
+        xDialogControl = GetTemporaryControlForWindow( *pWindow, xEditorControlContainer );
+        bIsTemporaryControl = true;
+    }
+
+    Reference< awt::XDevice > xDialogDevice;
+    if ( xDialogControl.is() )
+        xDialogDevice.set( xDialogControl->getPeer(), UNO_QUERY );
+    DBG_ASSERT( xDialogDevice.is(), "DlgEdObj::getFormDeviceInfo: no device!" );
+    if ( xDialogDevice.is() )
+        aDeviceInfo = xDialogDevice->getInfo();
+
+    if ( bIsTemporaryControl )
+        ::comphelper::disposeComponent( xDialogControl );
+    return aDeviceInfo;
+}
+
+//----------------------------------------------------------------------------
+
 bool DlgEdObj::TransformSdrToControlCoordinates(
     sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
     sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut )
@@ -185,13 +250,8 @@ bool DlgEdObj::TransformSdrToControlCoordinates(
     Size aSize( nWidthIn, nHeightIn );
 
     // form position
-    DlgEdForm* pForm = 0;
-    if ( ISA( DlgEdForm ) )
-        pForm = (DlgEdForm*)this;
-    else
-        pForm = GetDlgEdForm();
-    DBG_ASSERT( pForm, "DlgEdObj::TransformSdrToControlCoordinates: no form!" );
-    if ( !pForm )
+    DlgEdForm* pForm = NULL;
+    if ( !lcl_getDlgEdForm( this, pForm ) )
         return false;
     Rectangle aFormRect = pForm->GetSnapRect();
     Size aFormPos( aFormRect.Left(), aFormRect.Top() );
@@ -210,30 +270,9 @@ bool DlgEdObj::TransformSdrToControlCoordinates(
     aPos.Height() -= aFormPos.Height();
 
     // take window borders into account
-    Reference< awt::XDevice > xDev;
-    DlgEditor* pEditor = pForm->GetDlgEditor();
-    if ( pEditor )
-    {
-        Window* pWindow = pEditor->GetWindow();
-        DBG_ASSERT( pWindow, "DlgEdObj::TransformSdrToControlCoordinates: no window!" );
-        if ( pWindow )
-        {
-            Reference< awt::XControl > xDlg( pForm->GetUnoControl( pWindow ), UNO_QUERY );
-            if ( xDlg.is() )
-                xDev.set( xDlg->getPeer(), UNO_QUERY );
-        }
-    }
-    DBG_ASSERT( xDev.is(), "DlgEdObj::TransformSdrToControlCoordinates: no device!" );
-    if ( xDev.is() )
-    {
-        awt::DeviceInfo aDeviceInfo = xDev->getInfo();
-        aPos.Width() -= aDeviceInfo.LeftInset;
-        aPos.Height() -= aDeviceInfo.TopInset;
-    }
-    else
-    {
-        return false;
-    }
+    awt::DeviceInfo aDeviceInfo = getFormDeviceInfo( *pForm );
+    aPos.Width() -= aDeviceInfo.LeftInset;
+    aPos.Height() -= aDeviceInfo.TopInset;
 
     // convert pixel to logic units
     aPos = pDevice->PixelToLogic( aPos, MapMode( MAP_APPFONT ) );
@@ -267,38 +306,14 @@ bool DlgEdObj::TransformSdrToFormCoordinates(
     aSize = pDevice->LogicToPixel( aSize, MapMode( MAP_100TH_MM ) );
 
     // take window borders into account
-    Reference< awt::XDevice > xDev;
-    DlgEdForm* pForm = 0;
-    if ( ISA( DlgEdForm ) )
-        pForm = (DlgEdForm*)this;
-    else
-        pForm = GetDlgEdForm();
-    DBG_ASSERT( pForm, "DlgEdObj::TransformSdrToFormCoordinates: no form!" );
-    if ( !pForm )
+    DlgEdForm* pForm = NULL;
+    if ( !lcl_getDlgEdForm( this, pForm ) )
         return false;
-    DlgEditor* pEditor = pForm->GetDlgEditor();
-    if ( pEditor )
-    {
-        Window* pWindow = pEditor->GetWindow();
-        DBG_ASSERT( pWindow, "DlgEdObj::TransformSdrToFormCoordinates: no window!" );
-        if ( pWindow )
-        {
-            Reference< awt::XControl > xDlg( pForm->GetUnoControl( pWindow ), UNO_QUERY );
-            if ( xDlg.is() )
-                xDev.set( xDlg->getPeer(), UNO_QUERY );
-        }
-    }
-    DBG_ASSERT( xDev.is(), "DlgEdObj::TransformSdrToFormCoordinates: no device!" );
-    if ( xDev.is() )
-    {
-        awt::DeviceInfo aDeviceInfo = xDev->getInfo();
-        aSize.Width() -= aDeviceInfo.LeftInset + aDeviceInfo.RightInset;
-        aSize.Height() -= aDeviceInfo.TopInset + aDeviceInfo.BottomInset;
-    }
-    else
-    {
-        return false;
-    }
+
+    // take window borders into account
+    awt::DeviceInfo aDeviceInfo = getFormDeviceInfo( *pForm );
+    aSize.Width() -= aDeviceInfo.LeftInset + aDeviceInfo.RightInset;
+    aSize.Height() -= aDeviceInfo.TopInset + aDeviceInfo.BottomInset;
 
     // convert pixel to logic units
     aPos = pDevice->PixelToLogic( aPos, MapMode( MAP_APPFONT ) );
@@ -324,14 +339,10 @@ bool DlgEdObj::TransformControlToSdrCoordinates(
     Size aSize( nWidthIn, nHeightIn );
 
     // form position
-    DlgEdForm* pForm = 0;
-    if ( ISA( DlgEdForm ) )
-        pForm = (DlgEdForm*)this;
-    else
-        pForm = GetDlgEdForm();
-    DBG_ASSERT( pForm, "DlgEdObj::TransformControlToSdrCoordinates: no form!" );
-    if ( !pForm )
+    DlgEdForm* pForm = NULL;
+    if ( !lcl_getDlgEdForm( this, pForm ) )
         return false;
+
     Reference< beans::XPropertySet > xPSetForm( pForm->GetUnoControlModel(), UNO_QUERY );
     DBG_ASSERT( xPSetForm.is(), "DlgEdObj::TransformControlToSdrCoordinates: no form property set!" );
     if ( !xPSetForm.is() )
@@ -357,30 +368,9 @@ bool DlgEdObj::TransformControlToSdrCoordinates(
     aPos.Height() += aFormPos.Height();
 
     // take window borders into account
-    Reference< awt::XDevice > xDev;
-    DlgEditor* pEditor = pForm->GetDlgEditor();
-    if ( pEditor )
-    {
-        Window* pWindow = pEditor->GetWindow();
-        DBG_ASSERT( pWindow, "DlgEdObj::TransformControlToSdrCoordinates: no window!" );
-        if ( pWindow )
-        {
-            Reference< awt::XControl > xDlg( pForm->GetUnoControl( pWindow ), UNO_QUERY );
-            if ( xDlg.is() )
-                xDev.set( xDlg->getPeer(), UNO_QUERY );
-        }
-    }
-    DBG_ASSERT( xDev.is(), "DlgEdObj::TransformControlTSdrCoordinates: no device!" );
-    if ( xDev.is() )
-    {
-        awt::DeviceInfo aDeviceInfo = xDev->getInfo();
-        aPos.Width() += aDeviceInfo.LeftInset;
-        aPos.Height() += aDeviceInfo.TopInset;
-    }
-    else
-    {
-        return false;
-    }
+    awt::DeviceInfo aDeviceInfo = getFormDeviceInfo( *pForm );
+    aPos.Width() += aDeviceInfo.LeftInset;
+    aPos.Height() += aDeviceInfo.TopInset;
 
     // convert pixel to 100th_mm
     aPos = pDevice->PixelToLogic( aPos, MapMode( MAP_100TH_MM ) );
@@ -414,38 +404,14 @@ bool DlgEdObj::TransformFormToSdrCoordinates(
     aSize = pDevice->LogicToPixel( aSize, MapMode( MAP_APPFONT ) );
 
     // take window borders into account
-    Reference< awt::XDevice > xDev;
-    DlgEdForm* pForm = 0;
-    if ( ISA( DlgEdForm ) )
-        pForm = (DlgEdForm*)this;
-    else
-        pForm = GetDlgEdForm();
-    DBG_ASSERT( pForm, "DlgEdObj::TransformFormToSdrCoordinates: no form!" );
-    if ( !pForm )
+    DlgEdForm* pForm = NULL;
+    if ( !lcl_getDlgEdForm( this, pForm ) )
         return false;
-    DlgEditor* pEditor = pForm->GetDlgEditor();
-    if ( pEditor )
-    {
-        Window* pWindow = pEditor->GetWindow();
-        DBG_ASSERT( pWindow, "DlgEdObj::TransformFormToSdrCoordinates: no window!" );
-        if ( pWindow )
-        {
-            Reference< awt::XControl > xDlg( pForm->GetUnoControl( pWindow ), UNO_QUERY );
-            if ( xDlg.is() )
-                xDev.set( xDlg->getPeer(), UNO_QUERY );
-        }
-    }
-    DBG_ASSERT( xDev.is(), "DlgEdObj::TransformFormToSdrCoordinates: no device!" );
-    if ( xDev.is() )
-    {
-        awt::DeviceInfo aDeviceInfo = xDev->getInfo();
-        aSize.Width() += aDeviceInfo.LeftInset + aDeviceInfo.RightInset;
-        aSize.Height() += aDeviceInfo.TopInset + aDeviceInfo.BottomInset;
-    }
-    else
-    {
-        return false;
-    }
+
+    // take window borders into account
+    awt::DeviceInfo aDeviceInfo = getFormDeviceInfo( *pForm );
+    aSize.Width() += aDeviceInfo.LeftInset + aDeviceInfo.RightInset;
+    aSize.Height() += aDeviceInfo.TopInset + aDeviceInfo.BottomInset;
 
     // convert pixel to 100th_mm
     aPos = pDevice->PixelToLogic( aPos, MapMode( MAP_100TH_MM ) );
@@ -1089,20 +1055,6 @@ void DlgEdObj::operator= (const SdrObject& rObj)
 {
     SdrUnoObj::operator= (rObj);
 }
-
-//----------------------------------------------------------------------------
-
-//BFS01void DlgEdObj::WriteData(SvStream& rOut) const   // not working yet
-//BFS01{
-//BFS01 SdrUnoObj::WriteData(rOut);
-//BFS01}
-
-//----------------------------------------------------------------------------
-
-//BFS01void DlgEdObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)  // not working yet
-//BFS01{
-//BFS01 SdrUnoObj::ReadData(rHead,rIn);
-//BFS01}
 
 //----------------------------------------------------------------------------
 
