@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:51:01 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:52:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,6 +235,9 @@
 #include "detfunc.hxx"
 #include "document.hxx"
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 /*************************************************************************
 |*
@@ -496,7 +499,7 @@ IMPL_LINK( FuPoor, DragTimerHdl, Timer *, EMPTYARG )
 
 IMPL_LINK( FuPoor, DragHdl, void *, EMPTYARG )
 {
-    SdrHdl* pHdl = pView->HitHandle(aMDPos, *pWindow);
+    SdrHdl* pHdl = pView->PickHandle(aMDPos);
 
     if ( pHdl==NULL && pView->IsMarkedHit(aMDPos) )
     {
@@ -514,7 +517,7 @@ IMPL_LINK( FuPoor, DragHdl, void *, EMPTYARG )
 
 BOOL FuPoor::IsDetectiveHit( const Point& rLogicPos )
 {
-    SdrPageView* pPV = pView->GetPageViewPvNum(0);
+    SdrPageView* pPV = pView->GetSdrPageView();
     if (!pPV)
         return FALSE;
 
