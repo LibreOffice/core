@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayerTabBar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:33:43 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:25:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
         {
             // Toggle zw. Layer sichtbar / unsichtbar
             String aName(GetPageText(aLayerId));
-            SdrPageView* pPV = pDrViewSh->GetView()->GetPageViewPvNum(0);
+            SdrPageView* pPV = pDrViewSh->GetView()->GetSdrPageView();
             BOOL bVisible = pPV->IsLayerVisible(aName);
             pPV->SetLayerVisible(aName, !bVisible);
             pDrViewSh->ResetActualLayer();
@@ -267,7 +267,7 @@ long LayerTabBar::StartRenaming()
 
         if ( pView->IsTextEdit() )
         {
-            pView->EndTextEdit();
+            pView->SdrEndTextEdit();
         }
     }
 
