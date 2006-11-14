@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-12 12:41:30 $
+#   last change: $Author: ihi $ $Date: 2006-11-14 13:19:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,22 +59,21 @@ SLOFILES= \
         $(SLO)$/polygn3d.obj 		\
         $(SLO)$/svx3ditems.obj	\
         $(SLO)$/deflt3d.obj		\
-        $(SLO)$/class3d.obj		\
         $(SLO)$/e3dundo.obj      \
         $(SLO)$/volume3d.obj		\
         $(SLO)$/viewpt3d.obj		\
+        $(SLO)$/viewpt3d2.obj		\
         $(SLO)$/camera3d.obj		\
-        $(SLO)$/poly3d.obj 		\
-        $(SLO)$/volmrk3d.obj 	\
         $(SLO)$/objfac3d.obj 	\
         $(SLO)$/dragmt3d.obj		\
         $(SLO)$/view3d.obj		\
         $(SLO)$/view3d1.obj       \
         $(SLO)$/float3d.obj
 
-.IF "$(COM)"=="ICC"
+#disable optimizer for MSCompiler and ICC
+.IF "$(COM)"=="ICC" || "$(COM)"=="MSC"
 NOOPTFILES=\
-        $(SLO)$/class3d.obj
+        $(SLO)$/viewpt3d.obj
 .ENDIF
 
 SRS1NAME=engine3d
