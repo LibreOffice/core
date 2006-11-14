@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:16:12 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:31:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,7 +243,7 @@ void FuText::disposing()
     if(pView)
     {
         FunctionReference xThis(this);
-        if(pView->EndTextEdit(FALSE,xThis) == SDRENDTEXTEDIT_DELETED)
+        if(pView->SdrEndTextEdit(FALSE,xThis) == SDRENDTEXTEDIT_DELETED)
             pTextObj = NULL;
 
         // die RequestHandler der benutzten Outliner zuruecksetzen auf den
@@ -288,7 +288,7 @@ void FuText::DoExecute( SfxRequest& rReq )
     if (nSlotId == SID_TEXTEDIT)
     {
         // Try to select an object
-        SdrPageView* pPV = pView->GetPageViewPvNum(0);
+        SdrPageView* pPV = pView->GetSdrPageView();
         SdrViewEvent aVEvt;
         SdrHitKind eHit = pView->PickAnything(aMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
         pView->MarkObj(aVEvt.pRootObj, pPV);
@@ -369,15 +369,15 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
         if (pView->IsTextEdit() && eHit != SDRHIT_MARKEDOBJECT && eHit != SDRHIT_HANDLE)
         {
             // Texteingabe beenden
-            if (pView->EndTextEdit() == SDRENDTEXTEDIT_DELETED)
+            if(pView->SdrEndTextEdit() == SDRENDTEXTEDIT_DELETED)
             {
                 // Bugfix von MBA: bei Doppelclick auf der Wiese im Modus Text wird
                 // beim zweiten Click eHit = SDRHIT_TEXTEDITOBJ erhalten, weil ja der
                 // zweite Click auf das im ersten Click angelegte TextObject geht.
-                // Dieses wird aber in EndTextEdit entfernt, weil es leer ist. Es
+                // Dieses wird aber in SdrEndTextEdit entfernt, weil es leer ist. Es
                 // befindet sich aber noch in der Mark-Liste und der Aufruf MarkObj
                 // weiter unten greift dann auf das tote Object zu.
-                // Als einfacher Fix wird nach EndTextEdit noch einmal eHit ermittelt,
+                // Als einfacher Fix wird nach SdrEndTextEdit noch einmal eHit ermittelt,
                 // was dann SDRHIT_NONE liefert.
                 pTextObj = NULL;
                 eHit = pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
@@ -391,7 +391,7 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
         {
             pWindow->CaptureMouse();
             SdrObject* pObj;
-            SdrPageView* pPV = pView->GetPageViewPvNum(0);
+            SdrPageView* pPV = pView->GetSdrPageView();
 
             if (eHit == SDRHIT_TEXTEDIT)
             {
@@ -495,7 +495,7 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
                             if (pTextObj && (pTextObj->GetOutlinerParaObject() ||
                                 (pOutl && pOutl->GetText(pOutl->GetParagraph( 0 )).Len() != 0)))
                             {
-                                pView->EndTextEdit();
+                                pView->SdrEndTextEdit();
                             }
 
                             USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
@@ -822,7 +822,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
             // Damit die Handles und der graue Rahmen stimmen
             pView->AdjustMarkHdl();
-            pView->HitHandle(aPnt, *pWindow);
+            pView->PickHandle(aPnt);
             SetInEditMode(rMEvt, FALSE);
         }
     }
@@ -840,7 +840,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
          Abs(aMDPos.Y() - aPnt.Y()) < nDrgLog &&
          !rMEvt.IsShift() && !rMEvt.IsMod2() )
     {
-        SdrPageView* pPV = pView->GetPageViewPvNum(0);
+        SdrPageView* pPV = pView->GetSdrPageView();
         SdrViewEvent aVEvt;
         SdrHitKind eHit = pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
         pView->MarkObj(aVEvt.pRootObj, pPV);
@@ -978,7 +978,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
         else
         {
             // In die Fkt. Selektion wechseln
-            if (pView->EndTextEdit() == SDRENDTEXTEDIT_DELETED)
+            if (pView->SdrEndTextEdit() == SDRENDTEXTEDIT_DELETED)
             {
                 pTextObj = NULL;
             }
@@ -1133,7 +1133,7 @@ void FuText::Deactivate()
 
 void FuText::SetInEditMode(const MouseEvent& rMEvt, BOOL bQuickDrag)
 {
-    SdrPageView* pPV = pView->GetPageViewPvNum(0);
+    SdrPageView* pPV = pView->GetSdrPageView();
     if( pTextObj && pTextObj->GetPage() == pPV->GetPage() )
     {
         pView->SetCurrentObj(OBJ_TEXT);
@@ -1214,13 +1214,11 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, BOOL bQuickDrag)
 
                 if (bEmptyOutliner)
                 {
-                    pView->EndTextEdit(TRUE);
+                    pView->SdrEndTextEdit(sal_True);
                 }
 
                 if( pTextObj )
                 {
-                    FASTBOOL bNewObj = TRUE;
-
                     OutlinerParaObject* pOPO = pTextObj->GetOutlinerParaObject();
                     if( ( pOPO && pOPO->IsVertical() ) ||
                         nSlotId == SID_ATTR_CHAR_VERTICAL ||
@@ -1228,8 +1226,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, BOOL bQuickDrag)
                         pOutl->SetVertical( TRUE );
 
 
-                    if (pView->BegTextEdit(pTextObj, pPV, pWindow, bNewObj, pOutl) &&
-                        pTextObj->GetObjInventor() == SdrInventor)
+                    if (pView->SdrBeginTextEdit(pTextObj, pPV, pWindow, sal_True, pOutl) && pTextObj->GetObjInventor() == SdrInventor)
                     {
                         bFirstObjCreated = TRUE;
                         DeleteDefaultText();
@@ -1465,7 +1462,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
             if (!pTextObj)
             {
                 // Versuchen, ein Obj zu selektieren
-                SdrPageView* pPV = pView->GetPageViewPvNum(0);
+                SdrPageView* pPV = pView->GetSdrPageView();
                 SdrViewEvent aVEvt;
                 SdrHitKind eHit = pView->PickAnything(aMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
                 pView->MarkObj(aVEvt.pRootObj, pPV);
@@ -1584,8 +1581,8 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
             }
 
             // Put text object into edit mode.
-            SdrPageView* pPV = pView->GetPageViewPvNum(0);
-            pView->BegTextEdit (pText, pPV);
+            SdrPageView* pPV = pView->GetSdrPageView();
+            pView->SdrBeginTextEdit(pText, pPV);
         }
         else
         {
@@ -1609,7 +1606,7 @@ bool FuText::cancel()
 {
     if ( pView->IsTextEdit() )
     {
-        if (pView->EndTextEdit() == SDRENDTEXTEDIT_DELETED)
+        if (pView->SdrEndTextEdit() == SDRENDTEXTEDIT_DELETED)
         {
             pTextObj = NULL;
         }
