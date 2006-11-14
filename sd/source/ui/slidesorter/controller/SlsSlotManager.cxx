@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:07:59 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:36:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,10 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGES_HPP_
 #include <com/sun/star/drawing/XDrawPages.hpp>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -860,7 +864,7 @@ void SlotManager::RenameSlide (void)
     {
         if ( pDrView->IsTextEdit() )
         {
-            pDrView->EndTextEdit();
+            pDrView->SdrEndTextEdit();
         }
 
         SdPage* pSelectedPage = NULL;
