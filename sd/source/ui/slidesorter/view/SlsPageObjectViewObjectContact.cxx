@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:11:29 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:36:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,10 @@
 #include <tools/color.hxx>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/Exception.hpp>
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 using namespace ::sdr::contact;
 using namespace ::sd::slidesorter::model;
