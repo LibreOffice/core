@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpomv.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:53:59 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:53:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,8 +58,7 @@ private:
     void ImpClearVars();
 #endif
 public:
-    SdrPolyMarkView(SdrModel* pModel1, OutputDevice* pOut);
-    SdrPolyMarkView(SdrModel* pModel1, XOutputDevice* pXOut);
+    SdrPolyMarkView(SdrModel* pModel1, OutputDevice* pOut = 0L);
     ~SdrPolyMarkView();
 };
 
