@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawViewWrapper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:00:47 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:30:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,19 +116,20 @@ DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut)
             , m_apOutliner( SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pSdrModel ) )
 {
     // #114898#
-    SetBufferedOutputAllowed(sal_True);
+    SetBufferedOutputAllowed(true);
+    SetBufferedOverlayAllowed(true);
 
     ReInit();
 }
 
 void DrawViewWrapper::ReInit()
 {
-    OutputDevice* pOutDev = this->GetWin(0);
+    OutputDevice* pOutDev = this->GetFirstOutputDevice();
     Size aOutputSize(100,100);
     if(pOutDev)
         aOutputSize = pOutDev->GetOutputSize();
 
-    m_pWrappedDLPageView = this->ShowPagePgNum( 0, Point(0,0) );
+    m_pWrappedDLPageView = this->ShowSdrPage(this->GetModel()->GetPage(0));
     m_pWrappedDLPageView->GetPage()->SetSize( aOutputSize );
     this->SetPageBorderVisible(false);
     this->SetBordVisible(false);
@@ -172,7 +173,7 @@ SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
 
     short nHitTolerance = 50;
     {
-        OutputDevice* pOutDev = this->GetWin(0);
+        OutputDevice* pOutDev = this->GetFirstOutputDevice();
         if(pOutDev)
             nHitTolerance = static_cast<short>(pOutDev->PixelToLogic(Size(HITPIX,0)).Width());
     }
