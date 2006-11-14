@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:53:42 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:53:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -352,7 +352,7 @@ void FuText::StopEditMode(BOOL bTextDirection)
             pUndoMan->AddUndoAction( pShowUndo );
     }
 
-    SdrEndTextEditKind eResult = pView->EndTextEdit();
+    SdrEndTextEditKind eResult = pView->SdrEndTextEdit();
     pViewShell->SetDrawTextUndo(NULL);  // or ScEndTextEdit (with drawview.hxx)
 
     Cursor* pCur = pWindow->GetCursor();
