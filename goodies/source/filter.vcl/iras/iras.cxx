@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iras.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:38:24 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:16:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,6 @@ class RASReader {
 
 private:
 
-    PFilterCallback pCallback;
-    void * pCallerData;
-
     SvStream*           mpRAS;                  // Die einzulesende RAS-Datei
 
     BOOL                mbStatus;
@@ -81,7 +78,7 @@ private:
 public:
                         RASReader();
                         ~RASReader();
-    BOOL                ReadRAS( SvStream & rRAS, Graphic & rGraphic, PFilterCallback pcallback, void * pcallerdata );
+    BOOL                ReadRAS( SvStream & rRAS, Graphic & rGraphic );
 };
 
 //=================== Methoden von RASReader ==============================
@@ -100,8 +97,9 @@ RASReader::~RASReader()
 
 //----------------------------------------------------------------------------
 
-BOOL RASReader::ImplCallback( USHORT nPercent )
+BOOL RASReader::ImplCallback( USHORT /*nPercent*/ )
 {
+/*
     if ( pCallback != NULL )
     {
         if ( ( (*pCallback)( pCallerData, nPercent ) ) == TRUE )
@@ -110,19 +108,18 @@ BOOL RASReader::ImplCallback( USHORT nPercent )
             return TRUE;
         }
     }
+*/
     return FALSE;
 }
 
 //----------------------------------------------------------------------------
 
-BOOL RASReader::ReadRAS( SvStream & rRAS, Graphic & rGraphic, PFilterCallback pcallback, void * pcallerdata)
+BOOL RASReader::ReadRAS( SvStream & rRAS, Graphic & rGraphic )
 {
     UINT32 nMagicNumber;
 
-    if ( rRAS.GetError() ) return FALSE;
-
-    pCallback = pcallback;
-    pCallerData = pcallerdata;
+    if ( rRAS.GetError() )
+        return FALSE;
 
     mpRAS = &rRAS;
     mpRAS->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
@@ -376,19 +373,11 @@ BYTE RASReader::ImplGetByte()
 
 //================== GraphicImport - die exportierte Funktion ================
 
-#ifdef WNT
-extern "C" BOOL _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                        PFilterCallback pCallback, void * pCallerData,
-                            FilterConfigItem*, BOOL)
-#else
-extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                        PFilterCallback pCallback, void * pCallerData,
-                            FilterConfigItem*, BOOL)
-#endif
+extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL )
 {
     RASReader aRASReader;
 
-    return aRASReader.ReadRAS( rStream, rGraphic, pCallback, pCallerData );
+    return aRASReader.ReadRAS( rStream, rGraphic );
 }
 
 //================== ein bischen Muell fuer Windows ==========================
