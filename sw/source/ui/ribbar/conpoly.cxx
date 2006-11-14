@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conpoly.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:10:44 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:18:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,9 @@
 #include "drawbase.hxx"
 #include "conpoly.hxx"
 
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
 
 /************************************************************************/
 
@@ -139,27 +142,35 @@ BOOL ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
             if (!(bReturn && (aPnt == aStartPos || rMEvt.IsRight())))
             {
                 SdrView *pSdrView = pSh->GetDrawView();
-
-                long nCloseDist = pWin->PixelToLogic(Size(CLOSE_PIXDIST, 0)).Width();
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+
                 if (rMarkList.GetMark(0))
                 {
                     SdrObject* pMarkedObject = rMarkList.GetMark(0)->GetMarkedSdrObj();
                     // #127440# - crash report shows that the marked object is not always an SdrPathObj
                     SdrPathObj* pPathObj = dynamic_cast< SdrPathObj*>(pMarkedObject);
-                    DBG_ASSERT(pPathObj, "issue #127440# SdrPathObj expected")
+                    DBG_ASSERT(pPathObj, "issue #127440# SdrPathObj expected");
+
                     if( pPathObj )
                     {
-                        const XPolyPolygon& rXPP = pPathObj->GetPathPoly();
-                        if (rXPP.Count() == 1)
-                        {
-                            USHORT nPntMax = rXPP[0].GetPointCount() - 1;
-                            Point aDiff = rXPP[0][nPntMax] - rXPP[0][0];
-                            long nSqDist = aDiff.X() * aDiff.X() + aDiff.Y() * aDiff.Y();
-                            nCloseDist *= nCloseDist;
+                        const ::basegfx::B2DPolyPolygon& rPolyPolygon = pPathObj->GetPathPoly();
 
-                            if (nSqDist <= nCloseDist && !pPathObj->IsClosed())
-                                pPathObj->ToggleClosed(0);
+                        if(1L == rPolyPolygon.count())
+                        {
+                            const ::basegfx::B2DPolygon aPolygon(rPolyPolygon.getB2DPolygon(0L));
+
+                            if(aPolygon.count())
+                            {
+                                const ::basegfx::B2DPoint aFirst(aPolygon.getB2DPoint(0L));
+                                const ::basegfx::B2DPoint aLast(aPolygon.getB2DPoint(aPolygon.count() - 1L));
+                                const ::basegfx::B2DVector aDiff(aLast - aFirst);
+
+                                const long nCloseDist(pWin->PixelToLogic(Size(CLOSE_PIXDIST, 0)).Width());
+                                if(aDiff.getLength() < (double)nCloseDist)
+                                {
+                                    pPathObj->ToggleClosed();
+                                }
+                            }
                         }
                     }
                 }
