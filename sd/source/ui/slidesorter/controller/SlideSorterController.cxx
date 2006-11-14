@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:05:10 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:35:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,10 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::sd::slidesorter::model;
@@ -158,8 +162,8 @@ SlideSorterController::SlideSorterController (
     // class.
     ::sd::Window* pWindow = GetViewShell().GetActiveWindow();
     pWindow->SetBackground (Wallpaper());
-    mrView.AddWin (pWindow);
-    mrView.SetActualWin (pWindow);
+    mrView.AddWindowToPaintView(pWindow);
+    mrView.SetActualWin(pWindow);
     pWindow->SetCenterAllowed (false);
     pWindow->SetViewSize (mrView.GetModelArea().GetSize());
     mrView.HandleModelChange();
