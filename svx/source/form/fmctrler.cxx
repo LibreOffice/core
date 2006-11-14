@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:44:59 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:24:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,9 @@
 #ifndef _COM_SUN_STAR_SDB_PARAMETERSREQUEST_HPP_
 #include <com/sun/star/sdb/ParametersRequest.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XIDENTIFIERREPLACE_HPP_
+#include <com/sun/star/container/XIdentifierReplace.hpp>
+#endif
 
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
@@ -219,6 +222,10 @@
 #endif
 #ifndef _TOOLKIT_CONTROLS_UNOCONTROL_HXX_
 #include <toolkit/controls/unocontrol.hxx>
+#endif
+
+#ifndef _SDRPAGEWINDOW_HXX
+#include <sdrpagewindow.hxx>
 #endif
 
 #include <algorithm>
@@ -999,7 +1006,7 @@ void SAL_CALL FmXFormController::propertyChange(const PropertyChangeEvent& evt) 
                     stopListening();
             }
 
-            if (bNewChanged && m_pView)
+            if (bNewChanged)
             {
                 if (m_nToggleEvent)
                     Application::RemoveUserEvent( m_nToggleEvent );
@@ -1028,28 +1035,73 @@ void SAL_CALL FmXFormController::propertyChange(const PropertyChangeEvent& evt) 
 }
 
 //------------------------------------------------------------------------------
+bool FmXFormController::replaceControl( const Reference< XControl >& _rxExistentControl, const Reference< XControl >& _rxNewControl )
+{
+    bool bSuccess = false;
+    try
+    {
+        Reference< XIdentifierReplace > xContainer( getContainer(), UNO_QUERY );
+        DBG_ASSERT( xContainer.is(), "FmXFormController::replaceControl: yes, it's not required by the service description, but XItentifierReplaces would be nice!" );
+        if ( xContainer.is() )
+        {
+            // look up the ID of _rxExistentControl
+            Sequence< sal_Int32 > aIdentifiers( xContainer->getIdentifiers() );
+            const sal_Int32* pIdentifiers = aIdentifiers.getConstArray();
+            const sal_Int32* pIdentifiersEnd = aIdentifiers.getConstArray() + aIdentifiers.getLength();
+            for ( ; pIdentifiers != pIdentifiersEnd; ++pIdentifiers )
+            {
+                Reference< XControl > xCheck( xContainer->getByIdentifier( *pIdentifiers ), UNO_QUERY );
+                if ( xCheck == _rxExistentControl )
+                    break;
+            }
+            DBG_ASSERT( pIdentifiers != pIdentifiersEnd, "FmXFormController::replaceControl: did not find the control in the container!" );
+            if ( pIdentifiers != pIdentifiersEnd )
+            {
+                bool bReplacedWasActive = ( m_xActiveControl.get() == _rxExistentControl.get() );
+                bool bReplacedWasCurrent = ( m_xCurrentControl.get() == _rxExistentControl.get() );
+
+                if ( bReplacedWasActive )
+                {
+                    m_xActiveControl = m_xCurrentControl = NULL;
+                }
+                else if ( bReplacedWasCurrent )
+                    m_xCurrentControl = _rxNewControl;
+
+                // carry over the model
+                _rxNewControl->setModel( _rxExistentControl->getModel() );
+
+                xContainer->replaceByIdentifer( *pIdentifiers, makeAny( _rxNewControl ) );
+                bSuccess = true;
+
+                if ( bReplacedWasActive )
+                {
+                    Reference< XWindow > xControlWindow( _rxNewControl, UNO_QUERY );
+                    if ( xControlWindow.is() )
+                        xControlWindow->setFocus();
+                }
+            }
+        }
+    }
+    catch( const Exception& )
+    {
+      OSL_ENSURE( sal_False, "FmXFormController::replaceControl: caught an exception!" );
+    }
+
+    Reference< XControl > xDisposeIt( bSuccess ? _rxExistentControl : _rxNewControl );
+    ::comphelper::disposeComponent( xDisposeIt );
+    return bSuccess;
+}
+
+//------------------------------------------------------------------------------
 void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-    if (!m_pView)
-    {
-        DBG_ERROR("FmXFormController::toggleAutoFields : you can't call toggleAutoFields when no view exists !");
-        return;
-    }
 
-
-    // Austauschen der Kontrols fuer das aktuelle Formular
-    SdrPageView* pCurPageView = m_pView->GetPageViewPvNum(0);
-    const SdrPageViewWindow* pWindow = pCurPageView ? pCurPageView->FindWindow(*((OutputDevice*)m_pView->GetActualOutDev())) : 0L;
-    if ( !pWindow )
-        return;
 
     Sequence< Reference< XControl > > aControlsCopy( m_aControls );
     const Reference< XControl >* pControls = aControlsCopy.getConstArray();
     sal_Int32 nControls = aControlsCopy.getLength();
 
-    // the control we have to activate after replacement
-    Reference< XControl > xNewActiveControl;
     if (bAutoFields)
     {
         // as we don't want new controls to be attached to the scripting environment
@@ -1057,7 +1109,7 @@ void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
         m_bAttachEvents = sal_False;
         for (sal_Int32 i = nControls; i > 0;)
         {
-            const Reference< XControl > & xControl = pControls[--i];
+            Reference< XControl > xControl = pControls[--i];
             if (xControl.is())
             {
                 Reference< XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);
@@ -1068,32 +1120,12 @@ void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
                     xSet->getPropertyValue(FM_PROP_BOUNDFIELD) >>= xField;
 
                     // is it a autofield?
-                    if (xField.is() && ::comphelper::hasProperty(FM_PROP_AUTOINCREMENT, xField) &&
-                        ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_AUTOINCREMENT)))
+                    if  (   xField.is()
+                        &&  ::comphelper::hasProperty( FM_PROP_AUTOINCREMENT, xField )
+                        &&  ::comphelper::getBOOL( xField->getPropertyValue( FM_PROP_AUTOINCREMENT ) )
+                        )
                     {
-                        //const SdrPageViewWinRec& rWR = pCurPageView->GetWinList()[nPos];
-                        const SdrUnoControlList& rControlList = pWindow->GetControlList();
-                        sal_uInt16 nCtrlNum = rControlList.Find(xControl);
-
-                        if (nCtrlNum != SDRUNOCONTROL_NOTFOUND)
-                        {
-                            // ok create an autocontrol
-                            SdrUnoControlRec& rControlRec = (SdrUnoControlRec&)rControlList[nCtrlNum];
-                            FmXAutoControl* pAutoControl = new FmXAutoControl();
-                            Reference< XControl >  xNewControl(pAutoControl);
-
-                            // setting the focus if the current control
-                            // is the active one
-                            if ((XControl*)m_xActiveControl.get() == (XControl*)xControl.get())
-                            {
-                                xNewActiveControl = xNewControl;
-                                m_xActiveControl = m_xCurrentControl = NULL;
-                            }
-                            else if ((XControl*)m_xCurrentControl.get() == (XControl*)xControl.get())
-                                m_xCurrentControl = xNewControl;
-
-                            rControlRec.ReplaceControl(xNewControl);
-                        }
+                        replaceControl( xControl, new FmXAutoControl );
                     }
                 }
             }
@@ -1105,7 +1137,7 @@ void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
         m_bDetachEvents = sal_False;
         for (sal_Int32 i = nControls; i > 0;)
         {
-            const Reference< XControl > & xControl = pControls[--i];
+            Reference< XControl > xControl = pControls[--i];
             if (xControl.is())
             {
                 Reference< XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);
@@ -1116,44 +1148,21 @@ void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
                     xSet->getPropertyValue(FM_PROP_BOUNDFIELD) >>= xField;
 
                     // is it a autofield?
-                    if (xField.is() && ::comphelper::hasProperty(FM_PROP_AUTOINCREMENT, xField) &&
-                        ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_AUTOINCREMENT)))
+                    if  (   xField.is()
+                        &&  ::comphelper::hasProperty( FM_PROP_AUTOINCREMENT, xField )
+                        &&  ::comphelper::getBOOL( xField->getPropertyValue(FM_PROP_AUTOINCREMENT ) )
+                        )
                     {
-                        // const SdrPageViewWinRec& rWR = pCurPageView->GetWinList()[nPos];
-                        // const SdrPageViewWindow& rWindow = pCurPageView->GetPageViewWindows().Get(nPos);
-                        const SdrUnoControlList& rControlList = pWindow->GetControlList();
-                        sal_uInt16 nCtrlNum = rControlList.Find(xControl);
-                        if (nCtrlNum != SDRUNOCONTROL_NOTFOUND)
-                        {
-                            // Zuruecksetzen des Controls auf das Defaultcontrol
-                            SdrUnoControlRec& rControlRec = (SdrUnoControlRec&)rControlList[nCtrlNum];
-                            ::rtl::OUString aServiceName = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_DEFAULTCONTROL));
-                            Reference< XControl >  xNewControl(m_xORB->createInstance(aServiceName), UNO_QUERY);
-
-                            // setting the focus if the current control
-                            // is the active one
-                            if ((XControl*)m_xActiveControl.get() == (XControl*)xControl.get())
-                            {
-                                xNewActiveControl = xNewControl;
-                                m_xActiveControl = m_xCurrentControl = NULL;
-                            }
-                            else if ((XControl*)m_xCurrentControl.get() == (XControl*)xControl.get())
-                                m_xCurrentControl = xNewControl;
-
-                            rControlRec.ReplaceControl(xNewControl);
-                        }
+                        ::rtl::OUString sServiceName;
+                        OSL_VERIFY( xSet->getPropertyValue( FM_PROP_DEFAULTCONTROL ) >>= sServiceName );
+                        Reference< XControl > xNewControl( m_xORB->createInstance( sServiceName ), UNO_QUERY );
+                        replaceControl( xControl, xNewControl );
                     }
                 }
             }
         }
         m_bDetachEvents = sal_True;
     }
-
-    // set the focus async if possible
-    // setting the focus to the replacing control
-    Reference< XWindow >  xWindow(xNewActiveControl, UNO_QUERY);
-    if (xWindow.is())
-        xWindow->setFocus();
 }
 
 //------------------------------------------------------------------------------
@@ -1400,7 +1409,7 @@ void FmXFormController::focusGained(const FocusEvent& e) throw( RuntimeException
             ::com::sun::star::awt::Rectangle aRect = xWindow->getPosSize();
             ::Rectangle aNewRect(aRect.X,aRect.Y,aRect.X+aRect.Width,aRect.Y+aRect.Height);
             aNewRect = m_pWindow->PixelToLogic(aNewRect);
-            m_pView->MakeVisible(aNewRect, *m_pWindow);
+            m_pView->MakeVisible( aNewRect, *const_cast< Window* >( m_pWindow ) );
         }
     }
 }
@@ -2249,7 +2258,7 @@ IMPL_LINK(FmXFormController, OnLoad, void*, EMPTYARG)
         startListening();
 
     // just one exception toggle the auto values
-    if (m_bCurrentRecordNew && m_pView)
+    if (m_bCurrentRecordNew)
         toggleAutoFields(sal_True);
 
     return 1L;
@@ -2303,7 +2312,7 @@ void FmXFormController::unload() throw( RuntimeException )
     }
 
     // be sure not to have autofields
-    if (m_bCurrentRecordNew && m_pView)
+    if (m_bCurrentRecordNew)
         toggleAutoFields(sal_False);
 
     // remove bound field listing again
@@ -2481,25 +2490,16 @@ void SAL_CALL FmXFormController::elementInserted(const ContainerEvent& evt) thro
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::elementReplaced(const ContainerEvent& evt) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-    ::osl::MutexGuard aGuard( m_aMutex );
+    // simulate an elementRemoved
+    ContainerEvent aRemoveEvent( evt );
+    aRemoveEvent.Element = evt.ReplacedElement;
+    aRemoveEvent.ReplacedElement = Any();
+    elementRemoved( aRemoveEvent );
 
-    // Remove the control
-    Reference< XControl >  xReplControl;
-    evt.ReplacedElement >>= xReplControl;
-    Reference< XFormComponent >  xModel(xReplControl->getModel(), UNO_QUERY);
-    if (xModel.is() && m_xModelAsIndex == xModel->getParent())
-        removeControl(xReplControl);
-    else if (m_aFilterControls.size())
-    {
-        Reference< XTextComponent >  xText(xReplControl, UNO_QUERY);
-        FmFilterControls::iterator iter = m_aFilterControls.find(xText);
-        if (iter != m_aFilterControls.end())
-            m_aFilterControls.erase(iter);
-    }
-
-    // Add the new one
-    elementInserted(evt);
+    // simulate an elementInserted
+    ContainerEvent aInsertEvent( evt );
+    aInsertEvent.ReplacedElement = Any();
+    elementInserted( aInsertEvent );
 }
 
 //------------------------------------------------------------------------------
@@ -2519,7 +2519,8 @@ void SAL_CALL FmXFormController::elementRemoved(const ContainerEvent& evt) throw
         removeControl(xControl);
         // TabOrder nicht neu berechnen, da das intern schon funktionieren muﬂ!
     }
-    else if (m_aFilterControls.size())
+    // are we in filtermode and a XModeSelector has inserted an element
+    else if (m_bFiltering && Reference< XModeSelector > (evt.Source, UNO_QUERY).is())
     {
         Reference< XTextComponent >  xText(xControl, UNO_QUERY);
         FmFilterControls::iterator iter = m_aFilterControls.find(xText);
@@ -2770,11 +2771,6 @@ void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
 void FmXFormController::startFiltering()
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-    if (!m_pView)
-    {
-        DBG_ERROR("FmXFormController::startFiltering : you can't filter if you created me as service !");
-        return;
-    }
 
     OStaticDataAccessTools aStaticTools;
     Reference< XConnection >  xConnection( aStaticTools.getRowSetConnection( Reference< XRowSet >( m_xModelAsIndex, UNO_QUERY ) ) );
@@ -2799,7 +2795,6 @@ void FmXFormController::startFiltering()
     sal_Int32 nControlCount = aControlsCopy.getLength();
 
     // the control we have to activate after replacement
-    Reference< XControl >  xNewActiveControl;
     Reference< XDatabaseMetaData >  xMetaData(xConnection->getMetaData());
     Reference< XNumberFormatsSupplier >  xFormatSupplier = aStaticTools.getNumberFormats(xConnection, sal_True);
     Reference< XNumberFormatter >  xFormatter(m_xORB
@@ -2809,122 +2804,97 @@ void FmXFormController::startFiltering()
     // structure for storing the field info
     vector<FmFieldInfo> aFieldInfos;
 
-    SdrPageView* pCurPageView = m_pView->GetPageViewPvNum(0);
-    const SdrPageViewWindow* pWindow = pCurPageView ? pCurPageView->FindWindow(*((OutputDevice*)m_pView->GetActualOutDev())) : 0L;
-
-    if ( pWindow )
+    for (sal_Int32 i = nControlCount; i > 0;)
     {
-        for (sal_Int32 i = nControlCount; i > 0;)
+        Reference< XControl > xControl = pControls[--i];
+        if (xControl.is())
         {
-            const Reference< XControl > & xControl = pControls[--i];
-            if (xControl.is())
+            // no events for the control anymore
+            removeFromEventAttacher(xControl);
+
+            // do we have a mode selector
+            Reference< XModeSelector >  xSelector(xControl, UNO_QUERY);
+            if (xSelector.is())
             {
-                // no events for the control anymore
-                removeFromEventAttacher(xControl);
+                xSelector->setMode(FILTER_MODE);
 
-                // do we have a mode selector
-                Reference< XModeSelector >  xSelector(xControl, UNO_QUERY);
-                if (xSelector.is())
+                // listening for new controls of the selector
+                Reference< XContainer >  xContainer(xSelector, UNO_QUERY);
+                if (xContainer.is())
+                    xContainer->addContainerListener(this);
+
+                Reference< XEnumerationAccess >  xElementAccess(xSelector, UNO_QUERY);
+                if (xElementAccess.is())
                 {
-                    xSelector->setMode(FILTER_MODE);
-
-                    // listening for new controls of the selector
-                    Reference< XContainer >  xContainer(xSelector, UNO_QUERY);
-                    if (xContainer.is())
-                        xContainer->addContainerListener(this);
-
-                    Reference< XEnumerationAccess >  xElementAccess(xSelector, UNO_QUERY);
-                    if (xElementAccess.is())
+                    Reference< XEnumeration >  xEnumeration(xElementAccess->createEnumeration());
+                    Reference< XControl >  xSubControl;
+                    while (xEnumeration->hasMoreElements())
                     {
-                        Reference< XEnumeration >  xEnumeration(xElementAccess->createEnumeration());
-                        Reference< XControl >  xSubControl;
-                        while (xEnumeration->hasMoreElements())
+                        xEnumeration->nextElement() >>= xSubControl;
+                        if (xSubControl.is())
                         {
-                            xEnumeration->nextElement() >>= xSubControl;
-                            if (xSubControl.is())
+                            Reference< XPropertySet >  xSet(xSubControl->getModel(), UNO_QUERY);
+                            if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
                             {
-                                Reference< XPropertySet >  xSet(xSubControl->getModel(), UNO_QUERY);
-                                if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
-                                {
-                                    // does the model use a bound field ?
-                                    Reference< XPropertySet >  xField;
-                                    xSet->getPropertyValue(FM_PROP_BOUNDFIELD) >>= xField;
+                                // does the model use a bound field ?
+                                Reference< XPropertySet >  xField;
+                                xSet->getPropertyValue(FM_PROP_BOUNDFIELD) >>= xField;
 
-                                    Reference< XTextComponent >  xText(xSubControl, UNO_QUERY);
-                                    // may we filter the field?
-                                    if (xText.is() && xField.is() && ::comphelper::hasProperty(FM_PROP_SEARCHABLE, xField) &&
-                                        ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_SEARCHABLE)))
-                                    {
-                                        aFieldInfos.push_back(FmFieldInfo(xField, xText));
-                                        xText->addTextListener(this);
-                                    }
+                                Reference< XTextComponent >  xText(xSubControl, UNO_QUERY);
+                                // may we filter the field?
+                                if (xText.is() && xField.is() && ::comphelper::hasProperty(FM_PROP_SEARCHABLE, xField) &&
+                                    ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_SEARCHABLE)))
+                                {
+                                    aFieldInfos.push_back(FmFieldInfo(xField, xText));
+                                    xText->addTextListener(this);
                                 }
                             }
                         }
                     }
-                    continue;
                 }
+                continue;
+            }
 
-                Reference< XPropertySet >  xModel( xControl->getModel(), UNO_QUERY );
-                if (xModel.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xModel))
+            Reference< XPropertySet >  xModel( xControl->getModel(), UNO_QUERY );
+            if (xModel.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xModel))
+            {
+                // does the model use a bound field ?
+                Any aVal = xModel->getPropertyValue(FM_PROP_BOUNDFIELD);
+                Reference< XPropertySet >  xField;
+                aVal >>= xField;
+
+                // may we filter the field?
+
+                if  (   xField.is()
+                    &&  ::comphelper::hasProperty( FM_PROP_SEARCHABLE, xField )
+                    && ::comphelper::getBOOL( xField->getPropertyValue( FM_PROP_SEARCHABLE ) )
+                    )
                 {
-                    // does the model use a bound field ?
-                    Any aVal = xModel->getPropertyValue(FM_PROP_BOUNDFIELD);
-                    Reference< XPropertySet >  xField;
-                    aVal >>= xField;
+                    // create a filter control
+                    Sequence< Any > aCreationArgs( 3 );
+                    aCreationArgs[ 0 ] <<= NamedValue( ::rtl::OUString::createFromAscii( "MessageParent" ), makeAny( VCLUnoHelper::GetInterface( getDialogParentWindow() ) ) );
+                    aCreationArgs[ 1 ] <<= NamedValue( ::rtl::OUString::createFromAscii( "NumberFormatter" ), makeAny( xFormatter ) );
+                    aCreationArgs[ 2 ] <<= NamedValue( ::rtl::OUString::createFromAscii( "ControlModel" ), makeAny( xModel ) );
+                    Reference< XControl > xFilterControl(
+                        m_xORB->createInstanceWithArguments(
+                            ::rtl::OUString::createFromAscii( "com.sun.star.form.control.FilterControl" ),
+                            aCreationArgs
+                        ),
+                        UNO_QUERY
+                    );
+                    DBG_ASSERT( xFilterControl.is(), "FmXFormController::startFiltering: could not create a filter control!" );
 
-                    // may we filter the field?
-
-                    if (xField.is() && ::comphelper::hasProperty(FM_PROP_SEARCHABLE, xField) &&
-                        ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_SEARCHABLE)))
+                    if ( replaceControl( xControl, xFilterControl ) )
                     {
-                        // const SdrPageViewWinRec& rWR = pCurPageView->GetWinList()[nPos];
-                        // const SdrPageViewWindow& rWindow = pCurPageView->GetPageViewWindows().Get(nPos);
-                        const SdrUnoControlList& rControlList = pWindow->GetControlList();
-                        sal_uInt16 nCtrlNum = rControlList.Find(xControl);
-                        if (nCtrlNum != SDRUNOCONTROL_NOTFOUND)
-                        {
-                            // Setzen des FilterControls
-                            SdrUnoControlRec& rControlRec = (SdrUnoControlRec&)rControlList[nCtrlNum];
-
-                            // create a filter control
-                            Sequence< Any > aCreationArgs( 3 );
-                            aCreationArgs[ 0 ] <<= NamedValue( ::rtl::OUString::createFromAscii( "MessageParent" ), makeAny( VCLUnoHelper::GetInterface( m_pWindow ) ) );
-                            aCreationArgs[ 1 ] <<= NamedValue( ::rtl::OUString::createFromAscii( "NumberFormatter" ), makeAny( xFormatter ) );
-                            aCreationArgs[ 2 ] <<= NamedValue( ::rtl::OUString::createFromAscii( "ControlModel" ), makeAny( xModel ) );
-                            Reference< XControl > xFilterControl(
-                                m_xORB->createInstanceWithArguments(
-                                    ::rtl::OUString::createFromAscii( "com.sun.star.form.control.FilterControl" ),
-                                    aCreationArgs
-                                ),
-                                UNO_QUERY
-                            );
-                            DBG_ASSERT( xFilterControl.is(), "FmXFormController::startFiltering: could not create a filter control!" );
-
-                            Reference< XTextComponent >  xText( xFilterControl, UNO_QUERY );
-
-                            // merken in der Map
-                            aFieldInfos.push_back(FmFieldInfo(xField, xText));
-                            xText->addTextListener(this);
-
-                            // setting the focus if the current control
-                            // is the active one
-                            if (m_xActiveControl.get() == xControl.get())
-                            {
-                                xNewActiveControl = xFilterControl;
-                                m_xActiveControl = m_xCurrentControl = NULL;
-                            }
-                            else if (m_xCurrentControl.get() == xControl.get())
-                                m_xCurrentControl = xFilterControl;
-
-                            rControlRec.ReplaceControl( xFilterControl );
-                        }
+                        Reference< XTextComponent > xFilterText( xFilterControl, UNO_QUERY );
+                        aFieldInfos.push_back( FmFieldInfo( xField, xFilterText ) );
+                        xFilterText->addTextListener(this);
                     }
                 }
-                else
-                {
-                    // abmelden vom EventManager
-                }
+            }
+            else
+            {
+                // abmelden vom EventManager
             }
         }
     }
@@ -2932,11 +2902,6 @@ void FmXFormController::startFiltering()
     // we have all filter controls now, so the next step is to read the filters from the form
     // resolve all aliases and set the current filter to the according structure
     setFilter(aFieldInfos);
-
-    // setting the focus to the replacing control
-    Reference< XWindow >  xWindow(xNewActiveControl, UNO_QUERY);
-    if (xWindow.is())
-        xWindow->setFocus();
 
     Reference< XPropertySet > xSet( m_xModelAsIndex, UNO_QUERY );
     if ( xSet.is() )
@@ -2970,12 +2935,6 @@ void FmXFormController::stopFiltering()
         return;
     }
 
-    if (!m_pView)
-    {
-        DBG_ERROR("FmXFormController::startFiltering : you can't filter if you created me as service !");
-        return;
-    }
-
     m_bFiltering = sal_False;
     m_bDetachEvents = sal_False;
 
@@ -2985,13 +2944,10 @@ void FmXFormController::stopFiltering()
     Sequence< Reference< XControl > > aControlsCopy( m_aControls );
     const Reference< XControl > * pControls = aControlsCopy.getConstArray();
     sal_Int32 nControlCount = aControlsCopy.getLength();
-    SdrPageView* pCurPageView = m_pView->GetPageViewPvNum(0);
+    // SdrPageView* pCurPageView = m_pView->GetSdrPageView();
 
     // sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
-    const SdrPageViewWindow* pWindow = pCurPageView ? pCurPageView->FindWindow(*((OutputDevice*)m_pView->GetActualOutDev())) : 0L;
-
-    // the control we have to activate after replacement
-    Reference< ::com::sun::star::awt::XControl >  xNewActiveControl;
+    // const SdrPageWindow* pWindow = pCurPageView ? pCurPageView->FindPageWindow(*((OutputDevice*)m_pView->GetActualOutDev())) : 0L;
 
     // clear the filter control map
     for (FmFilterControls::const_iterator iter = m_aFilterControls.begin();
@@ -3000,72 +2956,47 @@ void FmXFormController::stopFiltering()
 
     m_aFilterControls.clear();
 
-    if (pWindow)
+    for ( sal_Int32 i = nControlCount; i > 0; )
     {
-        for ( sal_Int32 i = nControlCount; i > 0; )
+        Reference< XControl > xControl = pControls[--i];
+        if (xControl.is())
         {
-            const Reference< XControl > & xControl = pControls[--i];
-            if (xControl.is())
+            // now enable eventhandling again
+            addToEventAttacher(xControl);
+
+            Reference< XModeSelector >  xSelector(xControl, UNO_QUERY);
+            if (xSelector.is())
             {
-                // now enable eventhandling again
-                addToEventAttacher(xControl);
+                xSelector->setMode(DATA_MODE);
 
-                Reference< XModeSelector >  xSelector(xControl, UNO_QUERY);
-                if (xSelector.is())
+                // listening for new controls of the selector
+                Reference< XContainer >  xContainer(xSelector, UNO_QUERY);
+                if (xContainer.is())
+                    xContainer->removeContainerListener(this);
+                continue;
+            }
+
+            Reference< XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);
+            if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
+            {
+                // does the model use a bound field ?
+                Reference< XPropertySet >  xField;
+                xSet->getPropertyValue(FM_PROP_BOUNDFIELD) >>= xField;
+
+                // may we filter the field?
+                if  (   xField.is()
+                    &&  ::comphelper::hasProperty( FM_PROP_SEARCHABLE, xField )
+                    &&  ::comphelper::getBOOL( xField->getPropertyValue( FM_PROP_SEARCHABLE ) )
+                    )
                 {
-                    xSelector->setMode(DATA_MODE);
-
-                    // listening for new controls of the selector
-                    Reference< XContainer >  xContainer(xSelector, UNO_QUERY);
-                    if (xContainer.is())
-                        xContainer->removeContainerListener(this);
-                    continue;
-                }
-
-                Reference< XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);
-                if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
-                {
-                    // does the model use a bound field ?
-                    Reference< XPropertySet >  xField;
-                    xSet->getPropertyValue(FM_PROP_BOUNDFIELD) >>= xField;
-
-                    // may we filter the field?
-                    if (xField.is() && ::comphelper::hasProperty(FM_PROP_SEARCHABLE, xField) &&
-                        ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_SEARCHABLE)))
-                    {
-                        // const SdrPageViewWinRec& rWR = pCurPageView->GetWinList()[nPos];
-                        // const SdrPageViewWindow& rWindow = pCurPageView->GetPageViewWindows().Get(nPos);
-                        const SdrUnoControlList& rControlList = pWindow->GetControlList();
-                        sal_uInt16 nCtrlNum = rControlList.Find(xControl);
-                        if (nCtrlNum != SDRUNOCONTROL_NOTFOUND)
-                        {
-                            // Zuruecksetzen des Controls auf das Defaultcontrol
-                            SdrUnoControlRec& rControlRec = (SdrUnoControlRec&)rControlList[nCtrlNum];
-                            ::rtl::OUString aServiceName = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_DEFAULTCONTROL));
-                            Reference< XControl >  xNewControl(m_xORB->createInstance(aServiceName), UNO_QUERY);
-
-                            // setting the focus if the current control
-                            // is the active one
-                            if ((XControl*)m_xActiveControl.get() == (XControl*)xControl.get())
-                            {
-                                xNewActiveControl = xNewControl;
-                                m_xActiveControl = m_xCurrentControl = NULL;
-                            }
-                            else if ((XControl*)m_xCurrentControl.get() == (XControl*)xControl.get())
-                                m_xCurrentControl = xNewControl;
-
-                            rControlRec.ReplaceControl(xNewControl);
-                        }
-                    }
+                    ::rtl::OUString sServiceName;
+                    OSL_VERIFY( xSet->getPropertyValue( FM_PROP_DEFAULTCONTROL ) >>= sServiceName );
+                    Reference< XControl > xNewControl( m_xORB->createInstance( sServiceName ), UNO_QUERY );
+                    replaceControl( xControl, xNewControl );
                 }
             }
         }
     }
-
-    // setting the focus to the replacing control
-    Reference< XWindow >  xWindow(xNewActiveControl, UNO_QUERY);
-    if (xWindow.is())
-        xWindow->setFocus();
 
     Reference< XPropertySet >  xSet( m_xModelAsIndex, UNO_QUERY );
     if ( xSet.is() )
@@ -3157,18 +3088,19 @@ Window* FmXFormController::getDialogParentWindow()
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     Window* pParent = m_pWindow;
-    if (!pParent)
+    if ( !pParent )
     {
-        Reference< XControlContainer >  xContainer = getContainer();
-        Reference< XControl >  xCtrl(xContainer, UNO_QUERY);
-        if (xCtrl.is())
+        try
         {
-            Reference< XWindowPeer >  xPeer(xCtrl->getPeer(), UNO_QUERY);
-            if (xPeer.is())
-                pParent = VCLUnoHelper::GetWindow(xPeer);
+            Reference< XControl > xContainerControl( getContainer(), UNO_QUERY_THROW );
+            Reference< XWindowPeer > xContainerPeer( xContainerControl->getPeer(), UNO_QUERY_THROW );
+            pParent = VCLUnoHelper::GetWindow( xContainerPeer );
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "FmXFormController::getDialogParentWindow: caught an exception!" );
         }
     }
-
     return pParent;
 }
 //------------------------------------------------------------------------------
@@ -3279,14 +3211,6 @@ sal_Bool SAL_CALL FmXFormController::approveRowChange(const RowChangeEvent& aEve
         aEvent.Action == RowChangeAction::INSERT ||
         aEvent.Action == RowChangeAction::UPDATE))
     {
-        if (m_pView)
-        {   // we're working for a FormView
-            if (!(m_pWindow || (m_pView->GetActualOutDev() == (const OutputDevice*)m_pWindow ||
-                !m_pView->GetActualOutDev() && m_pWindow->IsActive())))
-                // we're not active
-                return sal_True;
-        }
-
         // if some of the control modes are bound to validators, check them
         ::rtl::OUString sInvalidityExplanation;
         Reference< XControlModel > xInvalidModel;
@@ -3420,13 +3344,6 @@ void SAL_CALL FmXFormController::errorOccured(const SQLErrorEvent& aEvent) throw
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-    if (m_pView)
-    {   // we're working for a FormView
-        if (!(m_pWindow || (m_pView->GetActualOutDev() == (const OutputDevice*)m_pWindow ||
-            !m_pView->GetActualOutDev() && m_pWindow->IsActive())))
-            // we're not active
-            return;
-    }
 
     ::cppu::OInterfaceIteratorHelper aIter(m_aErrorListeners);
     if (aIter.hasMoreElements())
@@ -3491,13 +3408,6 @@ void SAL_CALL FmXFormController::removeParameterListener(const Reference< XDatab
 sal_Bool SAL_CALL FmXFormController::approveParameter(const DatabaseParameterEvent& aEvent) throw( RuntimeException )
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-    if (m_pView)
-    {   // we're working for a FormView
-        if (!(m_pWindow || (m_pView->GetActualOutDev() == (const OutputDevice*)m_pWindow ||
-            !m_pView->GetActualOutDev() && m_pWindow->IsActive())))
-            // we're not active
-            return sal_True;
-    }
 
     ::cppu::OInterfaceIteratorHelper aIter(m_aParameterListeners);
     if (aIter.hasMoreElements())
@@ -3592,13 +3502,6 @@ void SAL_CALL FmXFormController::removeConfirmDeleteListener(const Reference< XC
 sal_Bool SAL_CALL FmXFormController::confirmDelete(const RowChangeEvent& aEvent) throw( RuntimeException )
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-    if (m_pView)
-    {   // we're working for a FormView
-        if (!(m_pWindow || (m_pView->GetActualOutDev() == (const OutputDevice*)m_pWindow ||
-            !m_pView->GetActualOutDev() && m_pWindow->IsActive())))
-            // we're not active
-            return sal_True;
-    }
 
     ::cppu::OInterfaceIteratorHelper aIter(m_aDeleteListeners);
     if (aIter.hasMoreElements())
