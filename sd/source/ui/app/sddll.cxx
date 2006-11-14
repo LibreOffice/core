@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddll.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:30:42 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:24:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,9 +156,6 @@ void SdDLL::Init()
 
     // ::com::sun::star::form::component::Form-Objekt-Factory eintragen
     FmFormObjFactory();
-
-    // factory for dummy import of old si-controls in 3.1 documents
-//BFS02    SiImportFactory();
 
     // Objekt-Factory eintragen
     SdrObjFactory::InsertMakeUserDataHdl(LINK(&aSdObjectFactory, SdObjectFactory, MakeUserData));
