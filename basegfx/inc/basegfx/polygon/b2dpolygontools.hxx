@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolygontools.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:53:36 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:05:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,6 +279,41 @@ namespace basegfx
          */
         B2DPolygon createPolygonFromEllipse( const B2DPoint& rCenter, double fRadiusX, double fRadiusY );
 
+        /** append a unit circle with one point and the control vectors to the given polygon
+         */
+        void appendUnitCircleQuadrant(B2DPolygon& rPolygon, sal_uInt32 nQuadrant, bool bEndPoint);
+
+        /** append a segment of unit circle with one point and the control vectors to the given polygon
+         */
+        void appendUnitCircleQuadrantSegment(B2DPolygon& rPolygon, sal_uInt32 nQuadrant, double fStart, double fEnd, bool bEndPoint);
+
+        /** create a polygon which describes the unit circle and close it
+         */
+        B2DPolygon createPolygonFromUnitCircle();
+
+        /** Create an ellipse polygon with given radii.
+
+            This method creates an ellipse approximation consisting of
+            four cubic bezier segments, which approximate the given
+            ellipse with an error of less than 0.5 percent.
+
+            @param rCenter
+            Center point of the circle
+
+            @param fRadiusX
+            Radius of the ellipse in X direction
+
+            @param fRadiusY
+            Radius of the ellipse in Y direction
+
+            @param fStart
+            Start angle where the ellipe segment starts in the range [0.0 .. 2PI[
+
+            @param fEnd
+            End angle where the ellipe segment ends in the range [0.0 .. 2PI[
+         */
+        B2DPolygon createPolygonFromEllipse( const B2DPoint& rCenter, double fRadiusX, double fRadiusY );
+
         /** Create an ellipse polygon with given radii and the given angles, from start to end
 
             This method creates an ellipse approximation consisting of
@@ -375,6 +410,10 @@ namespace basegfx
 
         // calculates if given point is on given line, taking care of the numerical epsilon
         bool isPointOnLine(const B2DPoint& rStart, const B2DPoint& rEnd, const B2DPoint& rCandidate, bool bWithPoints = false);
+
+        // calculates if given point is on given polygon, taking care of the numerical epsilon. Uses
+        // isPointOnLine internally
+        bool isPointOnPolygon(const B2DPolygon& rCandidate, const B2DPoint& rPoint, bool bWithPoints = true);
 
         // test if candidate is inside triangle
         bool isPointInTriangle(const B2DPoint& rA, const B2DPoint& rB, const B2DPoint& rC, const B2DPoint& rCandidate, bool bWithBorder = false);
