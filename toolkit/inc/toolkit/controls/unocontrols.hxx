@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:13:57 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:28:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -330,6 +330,8 @@ protected:
     sal_Bool SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model) throw ( ::com::sun::star::uno::RuntimeException );
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
+
+    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
 
 private:
     ImageConsumerControl( const ImageConsumerControl& );            // never implemented
