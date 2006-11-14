@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdglev.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:09:41 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:42:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,12 +55,6 @@ void SdrGlueEditView::ImpClearVars()
 
 SdrGlueEditView::SdrGlueEditView(SdrModel* pModel1, OutputDevice* pOut):
     SdrPolyEditView(pModel1,pOut)
-{
-    ImpClearVars();
-}
-
-SdrGlueEditView::SdrGlueEditView(SdrModel* pModel1, XOutputDevice* _pXOut):
-    SdrPolyEditView(pModel1,_pXOut)
 {
     ImpClearVars();
 }
@@ -318,7 +312,6 @@ void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const vo
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont* pPts=pM->GetMarkedGluePoints();
-        Point aPvOfs(pM->GetPageView()->GetOffset());
         ULONG nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
         if (nPtAnz!=0) {
             SdrGluePointList* pGPL=pObj->ForceGluePointList();
@@ -330,9 +323,7 @@ void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const vo
                     if (nGlueIdx!=SDRGLUEPOINT_NOTFOUND) {
                         SdrGluePoint& rGP=(*pGPL)[nGlueIdx];
                         Point aPos(rGP.GetAbsolutePos(*pObj));
-                        aPos+=aPvOfs;
                         (*pTrFunc)(aPos,p1,p2,p3,p4,p5);
-                        aPos-=aPvOfs;
                         rGP.SetAbsolutePos(aPos,*pObj);
                     }
                 }
