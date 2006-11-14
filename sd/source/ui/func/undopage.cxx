@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undopage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:00:21 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:32:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ void SdPageFormatUndoAction::Undo()
         pDrViewShell->GetView()->SetWorkArea(Rectangle(Point(0,0) - aPageOrg, aViewSize));
 
         pDrViewShell->UpdateScrollBars();
-        pDrViewShell->GetView()->GetPageViewPvNum(0)->SetPageOrigin(Point(0,0));
+        pDrViewShell->GetView()->GetPageViewByIndex(0)->SetPageOrigin(Point(0,0));
         pViewShell->GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
         pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
     }
@@ -162,7 +162,7 @@ void SdPageFormatUndoAction::Redo()
         pDrViewShell->GetView()->SetWorkArea(Rectangle(Point(0,0) - aPageOrg, aViewSize));
 
         pDrViewShell->UpdateScrollBars();
-        pDrViewShell->GetView()->GetPageViewPvNum(0)->SetPageOrigin(Point(0,0));
+        pDrViewShell->GetView()->GetPageViewByIndex(0)->SetPageOrigin(Point(0,0));
         pViewShell->GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
         pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
     }
