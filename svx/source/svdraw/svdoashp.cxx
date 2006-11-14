@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:11:40 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:44:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,6 @@
 #define ITEMID_ESCAPEMENT   EE_CHAR_ESCAPEMENT
 #define ITEMID_AUTOKERN     EE_CHAR_PAIRKERNING
 #define ITEMID_WORDLINEMODE EE_CHAR_WLM
-//      paraitem.hxx       editdata.hxx
 #define ITEMID_ADJUST      EE_PARA_JUST
 #define ITEMID_FIELD       EE_FEATURE_FIELD
 #include "xlnclit.hxx"
@@ -221,6 +220,14 @@
 #include <svdview.hxx>
 #endif
 
+#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#endif
+
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
 // #104018# replace macros above with type-safe methods
 inline double ImplTwipsToMM(double fVal) { return (fVal * (127.0 / 72.0)); }
 inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
@@ -228,7 +235,6 @@ inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 
@@ -611,18 +617,6 @@ const double SdrObjCustomShape::GetExtraTextRotation() const
 {
     const com::sun::star::uno::Any* pAny;
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-/*
-    const rtl::OUString sMirroredX( RTL_CONSTASCII_USTRINGPARAM ( "MirroredX" ) );
-    const rtl::OUString sMirroredY( RTL_CONSTASCII_USTRINGPARAM ( "MirroredY" ) );
-    pAny = rGeometryItem.GetPropertyValueByName( sMirroredX );
-    sal_Bool bFlipH;
-    if ( pAny && ( *pAny >>= bFlipH ) && bFlipH )
-        nDrehWink = -nDrehWink;
-    pAny = rGeometryItem.GetPropertyValueByName( sMirroredY );
-    sal_Bool bFlipV;
-    if ( pAny && ( *pAny >>= bFlipV ) && bFlipV )
-        nDrehWink = -nDrehWink;
-*/
     const rtl::OUString sTextRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
     pAny = rGeometryItem.GetPropertyValueByName( sTextRotateAngle );
     double fExtraTextRotateAngle = 0.0;
@@ -645,8 +639,9 @@ const sal_Bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
     }
     return bRet;
 }
-const sal_Bool SdrObjCustomShape::GetLineGeometry( XPolyPolygon& rLineGeometry, const SdrObjCustomShape* pCustomShape, const sal_Bool bBezierAllowed ) const
+basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const SdrObjCustomShape* pCustomShape, const sal_Bool bBezierAllowed ) const
 {
+    basegfx::B2DPolyPolygon aRetval;
     sal_Bool bRet = sal_False;
     Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine( pCustomShape ) );
     if ( xCustomShapeEngine.is() )
@@ -654,15 +649,10 @@ const sal_Bool SdrObjCustomShape::GetLineGeometry( XPolyPolygon& rLineGeometry, 
         com::sun::star::drawing::PolyPolygonBezierCoords aBezierCoords = xCustomShapeEngine->getLineGeometry();
         try
         {
-            SvxConvertPolyPolygonBezierToXPolyPolygon( &aBezierCoords, rLineGeometry );
-            if ( !bBezierAllowed )
+            aRetval = SvxConvertPolyPolygonBezierToB2DPolyPolygon( &aBezierCoords );
+            if ( !bBezierAllowed && aRetval.areControlVectorsUsed())
             {
-                sal_uInt16 i;
-                XPolyPolygon aXPP;
-                for ( i = 0; i < rLineGeometry.Count(); i++ )
-                    aXPP.Insert( XOutCreatePolygon( rLineGeometry.GetObject( i )), XPOLYPOLY_APPEND );
-//BFS09                 aXPP.Insert( XOutCreatePolygon( rLineGeometry.GetObject( i ), NULL, 100 ), XPOLYPOLY_APPEND );
-                rLineGeometry = aXPP;
+                aRetval = basegfx::tools::adaptiveSubdivideByAngle(aRetval);
             }
             bRet = sal_True;
         }
@@ -670,7 +660,7 @@ const sal_Bool SdrObjCustomShape::GetLineGeometry( XPolyPolygon& rLineGeometry, 
         {
         }
     }
-    return bRet;
+    return aRetval;
 }
 
 std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandles( const SdrObjCustomShape* pCustomShape ) const
@@ -2321,24 +2311,25 @@ SdrGluePointList* SdrObjCustomShape::ForceGluePointList()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-USHORT SdrObjCustomShape::GetHdlCount() const
+sal_uInt32 SdrObjCustomShape::GetHdlCount() const
 {
-    USHORT nBasicHdlCount = SdrTextObj::GetHdlCount();
+    const sal_uInt32 nBasicHdlCount(SdrTextObj::GetHdlCount());
     std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles( this ) );
-    return (USHORT)( aInteractionHandles.size() + nBasicHdlCount );
+    return ( aInteractionHandles.size() + nBasicHdlCount );
 }
 
-SdrHdl* SdrObjCustomShape::GetHdl( USHORT nHdlNum ) const
+SdrHdl* SdrObjCustomShape::GetHdl( sal_uInt32 nHdlNum ) const
 {
     SdrHdl* pH = NULL;
-    USHORT nBasicHdlCount = SdrTextObj::GetHdlCount();
+    const sal_uInt32 nBasicHdlCount(SdrTextObj::GetHdlCount());
 
     if ( nHdlNum < nBasicHdlCount )
         pH = SdrTextObj::GetHdl( nHdlNum );
     else
     {
         std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles( this ) );
-        USHORT nCustomShapeHdlNum = nHdlNum - nBasicHdlCount;
+        const sal_uInt32 nCustomShapeHdlNum(nHdlNum - nBasicHdlCount);
+
         if ( nCustomShapeHdlNum < aInteractionHandles.size() )
         {
             if ( aInteractionHandles[ nCustomShapeHdlNum ].xInteraction.is() )
@@ -2405,10 +2396,19 @@ FASTBOOL SdrObjCustomShape::BegDrag( SdrDragStat& rDrag ) const
                 bRet = FALSE;
         }
     }
-    if ( bRet )
+
+    if(bRet)
     {
-        ImpCustomShapeDragUser* pUser=new ImpCustomShapeDragUser;
-        pUser->aR=aRect;
+        ImpCustomShapeDragUser* pUser = (ImpCustomShapeDragUser*)rDrag.GetUser();
+
+        if(pUser)
+        {
+            delete pUser->pCustoObj;
+            delete pUser;
+        }
+
+        pUser = new ImpCustomShapeDragUser;
+        pUser->aR = aRect;
         pUser->pCustoObj = (SdrObjCustomShape*)Clone();
         rDrag.SetUser(pUser);
     }
@@ -2655,7 +2655,8 @@ FASTBOOL SdrObjCustomShape::MovDrag( SdrDragStat& rDrag ) const
 
     const SdrHdl* pHdl = rDrag.GetHdl();
     SdrHdlKind eHdl = pHdl == NULL ? HDL_MOVE : pHdl->GetKind();
-    ImpCustomShapeDragUser* pUser=(ImpCustomShapeDragUser*)rDrag.GetUser();
+    ImpCustomShapeDragUser* pUser = (ImpCustomShapeDragUser*)rDrag.GetUser();
+
     if ( pUser && pUser->pCustoObj )
     {
         switch( eHdl )
@@ -2663,7 +2664,7 @@ FASTBOOL SdrObjCustomShape::MovDrag( SdrDragStat& rDrag ) const
             case HDL_CUSTOMSHAPE1 :
             {
                 rDrag.SetEndDragChangesGeoAndAttributes( TRUE );
-                DragMoveCustomShapeHdl( rDrag.GetNow(), pHdl->GetPointNum(), pUser->pCustoObj );
+                DragMoveCustomShapeHdl( rDrag.GetNow(), (sal_uInt16)pHdl->GetPointNum(), pUser->pCustoObj );
             }
             break;
 
@@ -2693,6 +2694,7 @@ FASTBOOL SdrObjCustomShape::MovDrag( SdrDragStat& rDrag ) const
             default: break;
         }
     }
+
     return bRet;
 }
 
@@ -2701,7 +2703,8 @@ FASTBOOL SdrObjCustomShape::EndDrag( SdrDragStat& rDrag )
     FASTBOOL bRet = TRUE;
     const SdrHdl* pHdl = rDrag.GetHdl();
     SdrHdlKind eHdl = pHdl == NULL ? HDL_MOVE : pHdl->GetKind();
-    ImpCustomShapeDragUser* pUser=(ImpCustomShapeDragUser*)rDrag.GetUser();
+    ImpCustomShapeDragUser* pUser = (ImpCustomShapeDragUser*)rDrag.GetUser();
+
     if ( pUser && pUser->pCustoObj )
     {
         switch( eHdl )
@@ -2713,7 +2716,7 @@ FASTBOOL SdrObjCustomShape::EndDrag( SdrDragStat& rDrag )
                     aBoundRect0 = GetLastBoundRect();
             //  SendRepaintBroadcast();
 
-                DragMoveCustomShapeHdl( rDrag.GetNow(), pHdl->GetPointNum(), this );
+                DragMoveCustomShapeHdl( rDrag.GetNow(), (sal_uInt16)pHdl->GetPointNum(), this );
 
                 SetRectsDirty();
                 InvalidateRenderGeometry();
@@ -2743,20 +2746,25 @@ FASTBOOL SdrObjCustomShape::EndDrag( SdrDragStat& rDrag )
             break;
             default: break;
         }
+
         delete pUser->pCustoObj;
         delete pUser;
         rDrag.SetUser(NULL);
     }
+
     return bRet;
 }
 
 void SdrObjCustomShape::BrkDrag( SdrDragStat& rDrag ) const
 {
     ImpCustomShapeDragUser* pUser = (ImpCustomShapeDragUser*)rDrag.GetUser();
-    if ( pUser )
+
+    if(pUser)
+    {
         delete pUser->pCustoObj;
-    delete pUser;
-    rDrag.SetUser( NULL );
+        delete pUser;
+        rDrag.SetUser( NULL );
+    }
 }
 
 void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
@@ -2812,7 +2820,7 @@ FASTBOOL SdrObjCustomShape::BegCreate( SdrDragStat& rDrag )
 FASTBOOL SdrObjCustomShape::MovCreate(SdrDragStat& rStat)
 {
     SdrView* pView = rStat.GetView();       // #i37448#
-    if( pView && pView->IsSolidDraggingNow() )
+    if( pView && pView->IsSolidDragging() )
     {
         InvalidateRenderGeometry();
     }
@@ -2848,15 +2856,13 @@ FASTBOOL SdrObjCustomShape::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
     return ( eCmd == SDRCREATE_FORCEEND || rStat.GetPointAnz() >= 2 );
 }
 
-void SdrObjCustomShape::TakeCreatePoly( const SdrDragStat& /*rDrag*/, XPolyPolygon& rXPP ) const
+basegfx::B2DPolyPolygon SdrObjCustomShape::TakeCreatePoly(const SdrDragStat& /*rDrag*/) const
 {
-    rXPP.Clear();
-    GetLineGeometry( rXPP, this, sal_False );
+    return GetLineGeometry( this, sal_False );
 }
 
-void SdrObjCustomShape::TakeDragPoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) const
+basegfx::B2DPolyPolygon SdrObjCustomShape::TakeDragPoly(const SdrDragStat& rDrag) const
 {
-    rXPP.Clear();
     const SdrHdl* pHdl = rDrag.GetHdl();
     SdrHdlKind eHdl = pHdl == NULL ? HDL_MOVE : pHdl->GetKind();
     switch( eHdl )
@@ -2872,13 +2878,18 @@ void SdrObjCustomShape::TakeDragPoly(const SdrDragStat& rDrag, XPolyPolygon& rXP
         case HDL_LWRGT :
         case HDL_MOVE :
         {
-            ImpCustomShapeDragUser* pUser=(ImpCustomShapeDragUser*)rDrag.GetUser();
-            if ( pUser )
-                GetLineGeometry( rXPP, pUser->pCustoObj, sal_False );
+            ImpCustomShapeDragUser* pUser = (ImpCustomShapeDragUser*)rDrag.GetUser();
+
+            if(pUser && pUser->pCustoObj)
+            {
+                return GetLineGeometry(pUser->pCustoObj, sal_False);
+            }
         }
         break;
         default: break;
     }
+
+    return SdrTextObj::TakeDragPoly(rDrag);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3206,7 +3217,7 @@ FASTBOOL SdrObjCustomShape::AdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOO
     }
     return bRet;
 }
-FASTBOOL SdrObjCustomShape::BegTextEdit( SdrOutliner& rOutl )
+sal_Bool SdrObjCustomShape::BegTextEdit( SdrOutliner& rOutl )
 {
     return SdrTextObj::BegTextEdit( rOutl );
 }
@@ -3259,11 +3270,6 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Recta
             nMinWdt = nMaxWdt;
         }
     }
-//      if (!((SdrTextAutoGrowHeightItem&)(GetItem(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue())
-//      {
-//          nMaxHgt = aAnkSiz.Height();
-//          nMinHgt = nMaxHgt;
-//      }
     aPaperMax.Width()=nMaxWdt;
     aPaperMax.Height()=nMaxHgt;
 
@@ -3360,8 +3366,6 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
         else
             nMaxAutoPaperWidth = nAnkWdt;
     }
-//      if (!((SdrTextAutoGrowHeightItem&)(GetItem(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue())
-//          nMaxAutoPaperHeight = nAnkHgt;
     if(SDRTEXTHORZADJUST_BLOCK == eHAdj && !IsVerticalWriting())
     {
         rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, 0));
@@ -3587,16 +3591,17 @@ void SdrObjCustomShape::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralCUSTOMSHAPE);
 }
 
-void SdrObjCustomShape::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL /*bDetail*/) const
+basegfx::B2DPolyPolygon SdrObjCustomShape::TakeXorPoly(sal_Bool /*bDetail*/) const
 {
-    GetLineGeometry( rPoly, (SdrObjCustomShape*)this, sal_False );
+    return GetLineGeometry( (SdrObjCustomShape*)this, sal_False );
 }
 
-void SdrObjCustomShape::TakeContour(XPolyPolygon& rXPoly ) const
+basegfx::B2DPolyPolygon SdrObjCustomShape::TakeContour() const
 {
     const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
     if ( pSdrObject )
-        pSdrObject->TakeContour( rXPoly );
+        return pSdrObject->TakeContour();
+    return basegfx::B2DPolyPolygon();
 }
 
 SdrObject* SdrObjCustomShape::DoConvertToPolyObj(BOOL bBezier) const
@@ -3656,8 +3661,6 @@ void SdrObjCustomShape::SetPage( SdrPage* pNewPage )
 /*  invalidating rectangles by SetRectsDirty is not sufficient,
     AdjustTextFrameWidthAndHeight() also has to be made, both
     actions are done by NbcSetSnapRect !  */
-//  SetRectsDirty();
-
     Rectangle aTmp( aRect );    //creating temporary rectangle #i61108#
     NbcSetSnapRect( aTmp );
 }
@@ -3700,12 +3703,13 @@ void SdrObjCustomShape::RestGeoData(const SdrObjGeoData& rGeo)
     InvalidateRenderGeometry();
 }
 
-void SdrObjCustomShape::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& /*rPolyPolygon*/)
+void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& /*rPolyPolygon*/)
 {
     // break up matrix
-    Vector2D aScale, aTranslate;
-    double fShear, fRotate;
-    rMat.DecomposeAndCorrect(aScale, fShear, fRotate, aTranslate);
+    basegfx::B2DTuple aScale;
+    basegfx::B2DTuple aTranslate;
+    double fRotate, fShearX;
+    rMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
     // reset object shear and rotations
     aGeo.nDrehWink = 0;
@@ -3722,14 +3726,12 @@ void SdrObjCustomShape::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolyg
             case SFX_MAPUNIT_TWIP :
             {
                 // position
-                // #104018#
-                aTranslate.X() = ImplMMToTwips(aTranslate.X());
-                aTranslate.Y() = ImplMMToTwips(aTranslate.Y());
+                aTranslate.setX(ImplMMToTwips(aTranslate.getX()));
+                aTranslate.setY(ImplMMToTwips(aTranslate.getY()));
 
                 // size
-                // #104018#
-                aScale.X() = ImplMMToTwips(aScale.X());
-                aScale.Y() = ImplMMToTwips(aScale.Y());
+                aScale.setX(ImplMMToTwips(aScale.getX()));
+                aScale.setY(ImplMMToTwips(aScale.getY()));
 
                 break;
             }
@@ -3743,28 +3745,29 @@ void SdrObjCustomShape::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolyg
     // if anchor is used, make position relative to it
     if( pModel->IsWriter() )
     {
-        if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
-            aTranslate += Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+        if(GetAnchorPos().X() || GetAnchorPos().Y())
+        {
+            aTranslate += basegfx::B2DTuple(GetAnchorPos().X(), GetAnchorPos().Y());
+        }
     }
 
     // build and set BaseRect (use scale)
     Point aPoint = Point();
-    Size  aSize(FRound(aScale.X()), FRound(aScale.Y()));
+    Size aSize(FRound(aScale.getX()), FRound(aScale.getY()));
     Rectangle aBaseRect(aPoint, aSize);
     SetSnapRect(aBaseRect);
 
-/*
     // shear?
-    if(fShear != 0.0)
-    {
-        GeoStat aGeoStat;
-        aGeoStat.nShearWink = FRound((atan(fShear) / F_PI180) * 100.0);
-        aGeoStat.RecalcTan();
-        Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, FALSE);
-    }
-*/
+//  if(0.0 != fShearX)
+//  {
+//      GeoStat aGeoStat;
+//      aGeoStat.nShearWink = FRound((atan(fShearX) / F_PI180) * 100.0);
+//      aGeoStat.RecalcTan();
+//      Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, FALSE);
+//  }
+
     // rotation?
-    if(fRotate != 0.0)
+    if(0.0 != fRotate)
     {
         GeoStat aGeoStat;
         aGeoStat.nDrehWink = FRound((fRotate / F_PI180) * 100.0);
@@ -3773,22 +3776,19 @@ void SdrObjCustomShape::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolyg
     }
 
     // translate?
-    if(aTranslate.X() != 0.0 || aTranslate.Y() != 0.0)
+    if(0.0 != aTranslate.getX() || 0.0 != aTranslate.getY())
     {
-        Move(Size(
-            (sal_Int32)FRound(aTranslate.X()),
-            (sal_Int32)FRound(aTranslate.Y())));
+        Move(Size(FRound(aTranslate.getX()), FRound(aTranslate.getY())));
     }
 }
 
 // taking fObjectRotation instead of aGeo.nWink
-BOOL SdrObjCustomShape::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& /*rPolyPolygon*/) const
+sal_Bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
 {
     // get turn and shear
 //  double fRotate = (aGeo.nDrehWink / 100.0) * F_PI180;
-
     double fRotate = fObjectRotation * F_PI180;
-    double fShear = (aGeo.nShearWink / 100.0) * F_PI180;
+    double fShearX = (aGeo.nShearWink / 100.0) * F_PI180;
 
     // get aRect, this is the unrotated snaprect
     Rectangle aRectangle(aRect);
@@ -3847,14 +3847,16 @@ BOOL SdrObjCustomShape::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& /*rPolyP
     }
 
     // fill other values
-    Vector2D aScale((double)aRectangle.GetWidth(), (double)aRectangle.GetHeight());
-    Vector2D aTranslate((double)aRectangle.Left(), (double)aRectangle.Top());
+    basegfx::B2DTuple aScale(aRectangle.GetWidth(), aRectangle.GetHeight());
+    basegfx::B2DTuple aTranslate(aRectangle.Left(), aRectangle.Top());
 
     // position maybe relative to anchorpos, convert
     if( pModel->IsWriter() )
     {
-        if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
-            aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+        if(GetAnchorPos().X() || GetAnchorPos().Y())
+        {
+            aTranslate -= basegfx::B2DTuple(GetAnchorPos().X(), GetAnchorPos().Y());
+        }
     }
 
     // force MapUnit to 100th mm
@@ -3865,15 +3867,13 @@ BOOL SdrObjCustomShape::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& /*rPolyP
         {
             case SFX_MAPUNIT_TWIP :
             {
-                // position
-                // #104018#
-                aTranslate.X() = ImplTwipsToMM(aTranslate.X());
-                aTranslate.Y() = ImplTwipsToMM(aTranslate.Y());
+                // postion
+                aTranslate.setX(ImplTwipsToMM(aTranslate.getX()));
+                aTranslate.setY(ImplTwipsToMM(aTranslate.getY()));
 
                 // size
-                // #104018#
-                aScale.X() = ImplTwipsToMM(aScale.X());
-                aScale.Y() = ImplTwipsToMM(aScale.Y());
+                aScale.setX(ImplTwipsToMM(aScale.getX()));
+                aScale.setY(ImplTwipsToMM(aScale.getY()));
 
                 break;
             }
@@ -3885,25 +3885,30 @@ BOOL SdrObjCustomShape::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& /*rPolyP
     }
 
     // build matrix
-    rMat.Identity();
-    if(aScale.X() != 1.0 || aScale.Y() != 1.0)
-        rMat.Scale(aScale.X(), aScale.Y());
-    if(fShear != 0.0)
-        rMat.ShearX(tan(fShear));
-    if(fRotate != 0.0)
-        rMat.Rotate(fRotate);
-    if(aTranslate.X() != 0.0 || aTranslate.Y() != 0.0)
-        rMat.Translate(aTranslate.X(), aTranslate.Y());
-    return FALSE;
+    rMatrix.identity();
+
+    if(1.0 != aScale.getX() || 1.0 != aScale.getY())
+    {
+        rMatrix.scale(aScale.getX(), aScale.getY());
+    }
+
+    if(0.0 != fShearX)
+    {
+        rMatrix.shearX(tan(fShearX));
+    }
+
+    if(0.0 != fRotate)
+    {
+        rMatrix.rotate(fRotate);
+    }
+
+    if(0.0 != aTranslate.getX() || 0.0 != aTranslate.getY())
+    {
+        rMatrix.translate(aTranslate.getX(), aTranslate.getY());
+    }
+
+    return sal_False;
 }
-
-//BFS01void SdrObjCustomShape::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01}
-
-//BFS01void SdrObjCustomShape::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01}
 
 sdr::contact::ViewContact* SdrObjCustomShape::CreateObjectSpecificViewContact()
 {
