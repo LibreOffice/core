@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dflyobj.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:02:51 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:08:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,6 @@
 #include "precompiled_sw.hxx"
 #include "hintids.hxx"
 
-#ifndef _XPOLY_HXX //autogen
-#include <svx/xpoly.hxx>
-#endif
 #ifndef _SVDTRANS_HXX
 #include <svx/svdtrans.hxx>
 #endif
@@ -89,6 +86,18 @@
 #endif
 // <--
 
+#ifndef _BGFX_RANGE_B2DRANGE_HXX
+#include <basegfx/range/b2drange.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
 static FASTBOOL bInResize = FALSE;
 
 TYPEINIT1( SwFlyDrawObj, SdrObject )
@@ -116,7 +125,6 @@ sdr::properties::BaseProperties* SwFlyDrawObj::CreateObjectSpecificProperties()
 
 SwFlyDrawObj::SwFlyDrawObj()
 {
-//BFS01 bNotPersistent = TRUE;
 }
 
 SwFlyDrawObj::~SwFlyDrawObj()
@@ -178,9 +186,6 @@ SwVirtFlyDrawObj::SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly) :
 {
     //#110094#-1
     // bNotPersistent = bNeedColorRestore = bWriterFlyFrame = TRUE;
-//BFS01 bNotPersistent = bNeedColorRestore = TRUE;
-//BFS01 bNeedColorRestore = TRUE;
-
     const SvxProtectItem &rP = pFlyFrm->GetFmt()->GetProtect();
     bMovProt = rP.IsPosProtected();
     bSizProt = rP.IsSizeProtected();
@@ -423,9 +428,15 @@ void __EXPORT SwVirtFlyDrawObj::NbcSetLogicRect(const Rectangle& rRect)
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL ) const
+::basegfx::B2DPolyPolygon SwVirtFlyDrawObj::TakeXorPoly(sal_Bool bDetail) const
 {
-    rPoly = XPolyPolygon( XPolygon( GetFlyFrm()->Frm().SVRect() ) );
+    const Rectangle aSourceRectangle(GetFlyFrm()->Frm().SVRect());
+    const ::basegfx::B2DRange aSourceRange(aSourceRectangle.Left(), aSourceRectangle.Top(), aSourceRectangle.Right(), aSourceRectangle.Bottom());
+    ::basegfx::B2DPolyPolygon aRetval;
+
+    aRetval.append(::basegfx::tools::createPolygonFromRect(aSourceRange));
+
+    return aRetval;
 }
 
 /*************************************************************************
