@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:58:39 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:21:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,10 @@
 // #110094#
 #ifndef _SDR_CONTACT_VIEWCONTACTOFE3DSCENE_HXX
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
+#endif
+
+#ifndef _SVDDRAG_HXX //autogen
+#include "svddrag.hxx"
 #endif
 
 // for ::std::sort
@@ -274,7 +278,7 @@ TYPEINIT1(E3dScene, E3dObject);
 
 E3dScene::E3dScene()
 :   E3dObject(),
-    aCamera(Vector3D(0,0,4), Vector3D()),
+    aCamera(basegfx::B3DPoint(0.0, 0.0, 4.0), basegfx::B3DPoint()),
     aPaintTime(),
     nDisplayQuality(255),
     mp3DDepthRemapper(0L),
@@ -290,7 +294,7 @@ E3dScene::E3dScene()
 
 E3dScene::E3dScene(E3dDefaultAttributes& rDefault)
 :   E3dObject(),
-    aCamera(Vector3D(0,0,4), Vector3D()),
+    aCamera(basegfx::B3DPoint(0.0, 0.0, 4.0), basegfx::B3DPoint()),
     aPaintTime(),
     nDisplayQuality(255),
     mp3DDepthRemapper(0L),
@@ -357,16 +361,15 @@ void E3dScene::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
     aCamera.SetDeviceWindow(Rectangle(0, 0, 10, 10));
     Rectangle aRect(0, 0, 10, 10);
     aCameraSet.SetViewportRectangle(aRect);
-    //BFS01nSortingMode = E3D_SORT_FAST_SORTING | E3D_SORT_IN_PARENTS | E3D_SORT_TEST_LENGTH;
 
     // set defaults for Camera from ItemPool
     aCamera.SetProjection(GetPerspective());
-    Vector3D aActualPosition = aCamera.GetPosition();
+    basegfx::B3DPoint aActualPosition(aCamera.GetPosition());
     double fNew = GetDistance();
 
-    if(fabs(fNew - aActualPosition.Z()) > 1.0)
+    if(fabs(fNew - aActualPosition.getZ()) > 1.0)
     {
-        aCamera.SetPosition( Vector3D( aActualPosition.X(), aActualPosition.Y(), fNew) );
+        aCamera.SetPosition( basegfx::B3DPoint( aActualPosition.getX(), aActualPosition.getY(), fNew) );
     }
 
     fNew = GetFocalLength() / 100.0;
@@ -479,7 +482,7 @@ UINT16 E3dScene::GetObjIdentifier() const
 |*
 \************************************************************************/
 
-USHORT E3dScene::GetHdlCount() const
+sal_uInt32 E3dScene::GetHdlCount() const
 {
     // Ueberladung aus E3dObject rueckgaengig machen
     return SdrAttrObj::GetHdlCount();
@@ -573,13 +576,12 @@ void E3dScene::SetCamera(const Camera3D& rNewCamera)
         GetCameraSet().SetRatio(0.0);
 
     // Abbildungsgeometrie setzen
-    Vector3D aVRP = rCam.GetViewPoint();
-    Vector3D aVPN = aVRP - rCam.GetVRP();
-    Vector3D aVUV = rCam.GetVUV();
+    basegfx::B3DPoint aVRP(rCam.GetViewPoint());
+    basegfx::B3DVector aVPN(aVRP - rCam.GetVRP());
+    basegfx::B3DVector aVUV(rCam.GetVUV());
 
     // #91047# use SetViewportValues() to set VRP, VPN and VUV as vectors, too.
     // Else these values would not be exported/imported correctly.
-    //GetCameraSet().SetOrientation(aVRP, aVPN, aVUV);
     GetCameraSet().SetViewportValues(aVRP, aVPN, aVUV);
 
     // Perspektive setzen
@@ -702,120 +704,142 @@ void E3dScene::SetFitInSnapRect(FASTBOOL bFit)
 |*
 \************************************************************************/
 
-Volume3D E3dScene::FitInSnapRect()
+basegfx::B3DRange E3dScene::FitInSnapRect()
 {
-    // Alter Kram
-    Matrix4D aFullTrans = GetFullTransform();
-    aCamera.FitViewToVolume(GetBoundVolume(), aFullTrans);
+    basegfx::B3DRange aNewVol;
+    const sal_uInt32 nObjCount(GetSubList() ? GetSubList()->GetObjCount() : 0L);
 
-    // Neuer Kram
-    // Maximas holen in Augkoordinaten zwecks Z-Werten
-    Volume3D aNewVol;
-    Vector3D aTfVec;
-    Vol3DPointIterator aIter(GetBoundVolume());
-
-    GetCameraSet().SetObjectTrans(aFullTrans);
-    while ( aIter.Next(aTfVec) )
+    if(nObjCount)
     {
-        aTfVec = GetCameraSet().ObjectToEyeCoor(aTfVec);
-        aNewVol.Union(aTfVec);
-    }
+        // Alter Kram
+        basegfx::B3DHomMatrix aFullTrans(GetFullTransform());
+        aCamera.FitViewToVolume(GetBoundVolume(), aFullTrans);
 
-    // ... und merken
-    double fZMin = -aNewVol.MaxVec().Z();
-    double fZMax = -aNewVol.MinVec().Z();
+        // Neuer Kram
+        // Maximas holen in Augkoordinaten zwecks Z-Werten
+        basegfx::B3DPoint aTfVec;
+        Vol3DPointIterator aIter(GetBoundVolume());
 
-    // Jetzt XY-Werte projizieren auf Projektionsflaeche
-    // in Device-Koordinaten
-    Matrix4D aWorldToDevice = GetCameraSet().GetOrientation();
-    if(aCamera.GetProjection() == PR_PERSPECTIVE)
-        aWorldToDevice.Frustum(-1.0, 1.0, -1.0, 1.0, fZMin, fZMax);
-    else
-        aWorldToDevice.Ortho(-1.0, 1.0, -1.0, 1.0, fZMin, fZMax);
-    aNewVol.Reset();
-    aIter.Reset();
-    while ( aIter.Next(aTfVec) )
-    {
-        aTfVec = GetCameraSet().ObjectToWorldCoor(aTfVec);
-        aTfVec *= aWorldToDevice;
-        aNewVol.Union(aTfVec);
-    }
+        GetCameraSet().SetObjectTrans(aFullTrans);
 
-    // Labels behandeln
-    ULONG nLabelCnt = aLabelList.Count();
-    if ( nLabelCnt > 0 )
-    {
-        // Vorlaeufige Projektion bestimmen und Transformation in
-        // ViewKoordinaten bestimmen
-        Matrix4D aMatWorldToView = GetCameraSet().GetOrientation();
-        if(aCamera.GetProjection() == PR_PERSPECTIVE)
-            aMatWorldToView.Frustum(aNewVol.MinVec().X(), aNewVol.MaxVec().X(),
-            aNewVol.MinVec().Y(), aNewVol.MaxVec().Y(), fZMin, fZMax);
-        else
-            aMatWorldToView.Ortho(aNewVol.MinVec().X(), aNewVol.MaxVec().X(),
-            aNewVol.MinVec().Y(), aNewVol.MaxVec().Y(), fZMin, fZMax);
-
-        // Logische Abmessungen der Szene holen
-        Rectangle aSceneRect = GetSnapRect();
-
-        // Matrix DeviceToView aufbauen
-        Vector3D aTranslate, aScale;
-
-        aTranslate[0] = (double)aSceneRect.Left() + (aSceneRect.GetWidth() / 2.0);
-        aTranslate[1] = (double)aSceneRect.Top() + (aSceneRect.GetHeight() / 2.0);
-        aTranslate[2] = ZBUFFER_DEPTH_RANGE / 2.0;
-
-        // Skalierung
-        aScale[0] = (aSceneRect.GetWidth() - 1) / 2.0;
-        aScale[1] = (aSceneRect.GetHeight() - 1) / -2.0;
-        aScale[2] = ZBUFFER_DEPTH_RANGE / 2.0;
-
-        aMatWorldToView.Scale(aScale);
-        aMatWorldToView.Translate(aTranslate);
-
-        // Inverse Matrix ViewToDevice aufbauen
-        Matrix4D aMatViewToWorld(aMatWorldToView);
-        aMatViewToWorld.Invert();
-
-        for (ULONG i = 0; i < nLabelCnt; i++)
+        while ( aIter.Next(aTfVec) )
         {
-            E3dLabelObj* p3DObj = aLabelList.GetObject(i);
-            const SdrObject* pObj = p3DObj->Get2DLabelObj();
-
-            // View- Abmessungen des Labels holen
-            const Rectangle& rObjRect = pObj->GetLogicRect();
-
-            // Position des Objektes in Weltkoordinaten ermitteln
-            Matrix4D aObjTrans = p3DObj->GetFullTransform();
-            Vector3D aObjPos = aObjTrans * p3DObj->GetPosition();
-
-            // View-Position des Objektes feststellen
-            // nach ViewKoordinaten
-            aObjPos *= aMatWorldToView;
-
-            // Relative Position des Labels in View-Koordinaten
-            Vector3D aRelPosOne(pObj->GetRelativePos(), aObjPos.Z());
-            aRelPosOne.X() += aObjPos.X();
-            aRelPosOne.Y() += aObjPos.Y();
-            Vector3D aRelPosTwo(aRelPosOne);
-            aRelPosTwo.X() += rObjRect.GetWidth();
-            aRelPosTwo.Y() += rObjRect.GetHeight();
-
-            // Jetzt Eckpunkte in DeviceKoordinaten bestimmen und
-            // den Abmessungen hinzufuegen
-            aRelPosOne *= aMatViewToWorld;
-            aRelPosOne *= aWorldToDevice;
-            aNewVol.Union(aRelPosOne);
-
-            aRelPosTwo *= aMatViewToWorld;
-            aRelPosTwo *= aWorldToDevice;
-            aNewVol.Union(aRelPosTwo);
+            aTfVec = GetCameraSet().ObjectToEyeCoor(aTfVec);
+            aNewVol.expand(aTfVec);
         }
-    }
 
-    // Z-Werte eintragen
-    aNewVol.MinVec().Z() = fZMin;
-    aNewVol.MaxVec().Z() = fZMax;
+        // ... und merken
+        double fZMin(-aNewVol.getMaxZ());
+        double fZMax(-aNewVol.getMinZ());
+
+        // Jetzt XY-Werte projizieren auf Projektionsflaeche
+        // in Device-Koordinaten
+        basegfx::B3DHomMatrix aWorldToDevice(GetCameraSet().GetOrientation());
+
+        if(aCamera.GetProjection() == PR_PERSPECTIVE)
+        {
+            aWorldToDevice.frustum(-1.0, 1.0, -1.0, 1.0, fZMin, fZMax);
+        }
+        else
+        {
+            aWorldToDevice.ortho(-1.0, 1.0, -1.0, 1.0, fZMin, fZMax);
+        }
+
+        aNewVol.reset();
+        aIter.Reset();
+
+        while ( aIter.Next(aTfVec) )
+        {
+            aTfVec = GetCameraSet().ObjectToWorldCoor(aTfVec);
+            aTfVec *= aWorldToDevice;
+            aNewVol.expand(aTfVec);
+        }
+
+        // Labels behandeln
+        const sal_uInt32 nLabelCnt(aLabelList.Count());
+
+        if ( nLabelCnt )
+        {
+            // Vorlaeufige Projektion bestimmen und Transformation in
+            // ViewKoordinaten bestimmen
+            basegfx::B3DHomMatrix aMatWorldToView(GetCameraSet().GetOrientation());
+
+            if(aCamera.GetProjection() == PR_PERSPECTIVE)
+            {
+                aMatWorldToView.frustum(aNewVol.getMinX(), aNewVol.getMaxX(), aNewVol.getMinY(), aNewVol.getMaxY(), fZMin, fZMax);
+            }
+            else
+            {
+                aMatWorldToView.ortho(aNewVol.getMinX(), aNewVol.getMaxX(), aNewVol.getMinY(), aNewVol.getMaxY(), fZMin, fZMax);
+            }
+
+            // Logische Abmessungen der Szene holen
+            Rectangle aSceneRect = GetSnapRect();
+
+            // Matrix DeviceToView aufbauen
+            basegfx::B3DPoint aTranslate, aScale;
+
+            aTranslate.setX((double)aSceneRect.Left() + (aSceneRect.GetWidth() / 2.0));
+            aTranslate.setY((double)aSceneRect.Top() + (aSceneRect.GetHeight() / 2.0));
+            aTranslate.setZ(ZBUFFER_DEPTH_RANGE / 2.0);
+
+            // Skalierung
+            aScale.setX((aSceneRect.GetWidth() - 1) / 2.0);
+            aScale.setY((aSceneRect.GetHeight() - 1) / -2.0);
+            aScale.setZ(ZBUFFER_DEPTH_RANGE / 2.0);
+
+            aMatWorldToView.scale(aScale.getX(), aScale.getY(), aScale.getZ());
+            aMatWorldToView.translate(aTranslate.getX(), aTranslate.getY(), aTranslate.getZ());
+
+            // Inverse Matrix ViewToDevice aufbauen
+            basegfx::B3DHomMatrix aMatViewToWorld(aMatWorldToView);
+            aMatViewToWorld.invert();
+
+            for (sal_uInt32 i = 0; i < nLabelCnt; i++)
+            {
+                E3dLabelObj* p3DObj = aLabelList.GetObject(i);
+                const SdrObject* pObj = p3DObj->Get2DLabelObj();
+
+                // View- Abmessungen des Labels holen
+                const Rectangle& rObjRect = pObj->GetLogicRect();
+
+                // Position des Objektes in Weltkoordinaten ermitteln
+                basegfx::B3DHomMatrix aObjTrans(p3DObj->GetFullTransform());
+                // Here, without the 'B3DPoint operator*( const B3DHomMatrix& rMat, const B3DPoint& rPoint )'
+                // from b3dpoint.hxx, the wrong multiplication is taken (the one with B3DVector). This
+                // leads to wrong results since tre translation is not added to vector-matrix multiplications.
+                basegfx::B3DPoint aObjPos(aObjTrans * p3DObj->GetPosition());
+
+                // View-Position des Objektes feststellen
+                // nach ViewKoordinaten
+                aObjPos *= aMatWorldToView;
+
+                // Relative Position des Labels in View-Koordinaten
+                basegfx::B3DPoint aRelPosOne(
+                    pObj->GetRelativePos().X() + aObjPos.getX(),
+                    pObj->GetRelativePos().Y() + aObjPos.getY(),
+                    aObjPos.getZ());
+
+                basegfx::B3DPoint aRelPosTwo(
+                    aRelPosOne.getX() + (double)rObjRect.GetWidth(),
+                    aRelPosOne.getY() + (double)rObjRect.GetHeight(),
+                    aRelPosOne.getZ());
+
+                // Jetzt Eckpunkte in DeviceKoordinaten bestimmen und
+                // den Abmessungen hinzufuegen
+                aRelPosOne *= aMatViewToWorld;
+                aRelPosOne *= aWorldToDevice;
+                aNewVol.expand(aRelPosOne);
+
+                aRelPosTwo *= aMatViewToWorld;
+                aRelPosTwo *= aWorldToDevice;
+                aNewVol.expand(aRelPosTwo);
+            }
+        }
+
+        // Z-Werte eintragen
+        aNewVol = basegfx::B3DRange(aNewVol.getMinX(), aNewVol.getMinY(), fZMin, aNewVol.getMaxX(), aNewVol.getMaxY(), fZMax);
+    }
 
     // #110988#
     ImpCleanup3DDepthMapper();
@@ -852,11 +876,11 @@ void E3dScene::InitTransformationSet()
     B3dCamera& rSet = GetCameraSet();
 
     // Transformation auf Weltkoordinaten holen
-    Matrix4D mTransform = GetFullTransform();
+    basegfx::B3DHomMatrix mTransform = GetFullTransform();
     rSet.SetObjectTrans(mTransform);
 
     // 3D Ausgabe vorbereiten, Maximas holen in DeviceKoordinaten
-    Volume3D aVolume = FitInSnapRect();
+    basegfx::B3DRange aVolume(FitInSnapRect());
 
     // Maximas fuer Abbildung verwenden
     rSet.SetDeviceVolume(aVolume, FALSE);
@@ -868,247 +892,29 @@ void E3dScene::InitTransformationSet()
 
 /*************************************************************************
 |*
-|* sichern mit neuer Methode und zukunftskompatibilitaet
-|* Die Zahl 3560 ist die Major-Update-Nummer * 10 zu der die Umstellung
-|* erfolgte. Dies ist leider das korrekte Verhalten, die 3d-Engine hat keine
-|* eigene Versionsnummer sondern ist an die der Drawing-Engine gekoppelt.
-|* Probleme gibt es immer dann wenn einen neue Version ein altes Format
-|* schreiben soll: Hier wird von der Drawing-Engine trotzdem die neue Nummer
-|* verwendet.
-|*
-\************************************************************************/
-
-//BFS01void E3dScene::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01#ifndef SVX_LIGHT
-//BFS01 long nVersion = rOut.GetVersion(); // Build_Nr * 10 z.B. 3810
-//BFS01 if(nVersion < 3830)
-//BFS01 {
-//BFS01     // Hier die Lichtobjekte erzeugen, um im alten Format schreiben zu koennen
-//BFS01     ((E3dScene*)(this))->CreateLightObjectsFromLightGroup();
-//BFS01 }
-//BFS01
-//BFS01 // Schreiben
-//BFS01 E3dObject::WriteData(rOut);
-//BFS01
-//BFS01 if(nVersion < 3830)
-//BFS01 {
-//BFS01     // Lichtobjekte wieder wegnehmen
-//BFS01     ((E3dScene*)(this))->RemoveLightObjects();
-//BFS01 }
-//BFS01 else
-//BFS01 {
-//BFS01#ifdef E3D_STREAMING
-//BFS01     SdrDownCompat aCompat(rOut, STREAM_WRITE);
-//BFS01#ifdef DBG_UTIL
-//BFS01     aCompat.SetID("B3dLightGroup");
-//BFS01#endif
-//BFS01     // LightGroup schreiben
-//BFS01     aLightGroup.WriteData(rOut);
-//BFS01
-//BFS01#endif
-//BFS01 }
-//BFS01
-//BFS01#ifdef E3D_STREAMING
-//BFS01 SdrDownCompat aCompat(rOut, STREAM_WRITE);
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("E3dScene");
-//BFS01#endif
-//BFS01
-//BFS01 DBG_ASSERT (rOut.GetVersion(),"3d-Engine: Keine Version am Stream gesetzt!");
-//BFS01 if (rOut.GetVersion() < 3560) // FG: Das ist der Zeitpunkt der Umstellung
-//BFS01 {
-//BFS01     rOut << aCamera;
-//BFS01 }
-//BFS01 if (rOut.GetVersion() >= 3560)
-//BFS01 {
-//BFS01     aCamera.WriteData(rOut);
-//BFS01 }
-//BFS01
-//BFS01 rOut << BOOL(bDoubleBuffered);
-//BFS01 rOut << BOOL(bClipping);
-//BFS01 rOut << BOOL(bFitInSnapRect);
-//BFS01 rOut << nSortingMode;
-//BFS01
-//BFS01 // neu ab 377:
-//BFS01 Vector3D aPlaneDirection = GetShadowPlaneDirection();
-//BFS01 rOut << aPlaneDirection;
-//BFS01
-//BFS01 // neu ab 383:
-//BFS01 rOut << (BOOL)bDither;
-//BFS01
-//BFS01 // neu ab 384:
-//BFS01 sal_uInt16 nShadeMode = GetShadeMode();
-//BFS01 if(nShadeMode == 0)
-//BFS01     rOut << (sal_uInt16)Base3DFlat;
-//BFS01 else if(nShadeMode == 1)
-//BFS01     rOut << (sal_uInt16)Base3DPhong;
-//BFS01 else
-//BFS01     rOut << (sal_uInt16)Base3DSmooth;
-//BFS01 rOut << (BOOL)(nShadeMode > 2);
-//BFS01
-//BFS01#endif
-//BFS01#endif   // #ifndef SVX_LIGHT
-//BFS01}
-
-/*************************************************************************
-|*
-|* laden
-|*
-\************************************************************************/
-
-//BFS01void E3dScene::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 if (ImpCheckSubRecords (rHead, rIn))
-//BFS01 {
-//BFS01     E3dObject::ReadData(rHead, rIn);
-//BFS01
-//BFS01     if(CountNumberOfLights())
-//BFS01     {
-//BFS01         // An dieser Stelle die gelesenen Lampen ausmerzen
-//BFS01         // und in die neue Struktur ueberfuehren
-//BFS01         FillLightGroup();
-//BFS01         RemoveLightObjects();
-//BFS01     }
-//BFS01     long nVersion = rIn.GetVersion(); // Build_Nr * 10 z.B. 3810
-//BFS01     if(nVersion >= 3830)
-//BFS01     {
-//BFS01         SdrDownCompat aCompat(rIn, STREAM_READ);
-//BFS01#ifdef DBG_UTIL
-//BFS01         aCompat.SetID("B3dLightGroup");
-//BFS01#endif
-//BFS01         if(aCompat.GetBytesLeft())
-//BFS01         {
-//BFS01             // LightGroup lesen
-//BFS01             aLightGroup.ReadData(rIn);
-//BFS01         }
-//BFS01     }
-//BFS01
-//BFS01     SdrDownCompat aCompat(rIn, STREAM_READ);
-//BFS01#ifdef DBG_UTIL
-//BFS01     aCompat.SetID("E3dScene");
-//BFS01#endif
-//BFS01     BOOL bTmp;
-//BFS01
-//BFS01     DBG_ASSERT (rIn.GetVersion(),"3d-Engine: Keine Version am Stream gesetzt!");
-//BFS01
-//BFS01     if ((rIn.GetVersion() < 3560) || (rHead.GetVersion() <= 12))
-//BFS01     {
-//BFS01         rIn >> aCamera;
-//BFS01     }
-//BFS01     if ((rIn.GetVersion() >= 3560) && (rHead.GetVersion() >= 13))
-//BFS01     {
-//BFS01         aCamera.ReadData(rHead, rIn);
-//BFS01     }
-//BFS01
-//BFS01     // Neue Kamera aus alter fuellen
-//BFS01     Camera3D& rCam = (Camera3D&)GetCamera();
-//BFS01
-//BFS01     // Ratio abschalten
-//BFS01     if(rCam.GetAspectMapping() == AS_NO_MAPPING)
-//BFS01         GetCameraSet().SetRatio(0.0);
-//BFS01
-//BFS01     // Abbildungsgeometrie setzen
-//BFS01     Vector3D aVRP = rCam.GetViewPoint();
-//BFS01     Vector3D aVPN = aVRP - rCam.GetVRP();
-//BFS01     Vector3D aVUV = rCam.GetVUV();
-//BFS01     GetCameraSet().SetOrientation(aVRP, aVPN, aVUV);
-//BFS01
-//BFS01     // Perspektive setzen
-//BFS01     GetCameraSet().SetPerspective(rCam.GetProjection() == PR_PERSPECTIVE);
-//BFS01     GetCameraSet().SetViewportRectangle((Rectangle&)rCam.GetDeviceWindow());
-//BFS01
-//BFS01     rIn >> bTmp; bDoubleBuffered = bTmp;
-//BFS01     rIn >> bTmp; bClipping = bTmp;
-//BFS01     rIn >> bTmp; bFitInSnapRect = bTmp;
-//BFS01
-//BFS01     if (aCompat.GetBytesLeft() >= sizeof(UINT32))
-//BFS01     {
-//BFS01         rIn >> nSortingMode;
-//BFS01     }
-//BFS01
-//BFS01     // neu ab 377:
-//BFS01     if (aCompat.GetBytesLeft() >= sizeof(Vector3D))
-//BFS01     {
-//BFS01         Vector3D aShadowVec;
-//BFS01         rIn >> aShadowVec;
-//BFS01         SetShadowPlaneDirection(aShadowVec);
-//BFS01     }
-//BFS01
-//BFS01     // neu ab 383:
-//BFS01     if (aCompat.GetBytesLeft() >= sizeof(BOOL))
-//BFS01     {
-//BFS01         rIn >> bTmp; bDither = bTmp;
-//BFS01     }
-//BFS01
-//BFS01     // neu ab 384:
-//BFS01     if (aCompat.GetBytesLeft() >= sizeof(UINT16))
-//BFS01     {
-//BFS01         UINT16 nTmp;
-//BFS01         rIn >> nTmp;
-//BFS01         if(nTmp == (Base3DShadeModel)Base3DFlat)
-//BFS01         {
-//BFS01             GetProperties().SetObjectItemDirect(Svx3DShadeModeItem(0));
-//BFS01         }
-//BFS01         else if(nTmp == (Base3DShadeModel)Base3DPhong)
-//BFS01         {
-//BFS01             GetProperties().SetObjectItemDirect(Svx3DShadeModeItem(1));
-//BFS01         }
-//BFS01         else
-//BFS01         {
-//BFS01             GetProperties().SetObjectItemDirect(Svx3DShadeModeItem(2));
-//BFS01         }
-//BFS01     }
-//BFS01     if (aCompat.GetBytesLeft() >= sizeof(BOOL))
-//BFS01     {
-//BFS01         rIn >> bTmp;
-//BFS01         if(bTmp)
-//BFS01         {
-//BFS01             GetProperties().SetObjectItemDirect(Svx3DShadeModeItem(3));
-//BFS01         }
-//BFS01     }
-//BFS01
-//BFS01     // SnapRects der Objekte ungueltig
-//BFS01     SetRectsDirty();
-//BFS01
-//BFS01     // Transformationen initialisieren, damit bei RecalcSnapRect()
-//BFS01     // richtig gerechnet wird
-//BFS01     InitTransformationSet();
-//BFS01
-//BFS01     RebuildLists();
-//BFS01
-//BFS01     // set items from combined read objects like lightgroup and camera
-//BFS01     ((sdr::properties::E3dSceneProperties&)GetProperties()).SetLightItemsFromLightGroup(aLightGroup);
-//BFS01     ((sdr::properties::E3dSceneProperties&)GetProperties()).SetSceneItemsFromCamera();
-//BFS01 }
-//BFS01}
-
-/*************************************************************************
-|*
 |* Einpassen der Objekte in umschliessendes Rechteck aus-/einschalten
 |*
 \************************************************************************/
 
 void E3dScene::FitSnapRectToBoundVol()
 {
-    Vector3D aTfVec;
+    basegfx::B3DPoint aTfVec;
     Volume3D aFitVol;
 
     SetBoundVolInvalid();
-    Matrix4D aTransform = aCamera.GetViewTransform() * GetFullTransform(); // #112587#
+    basegfx::B3DHomMatrix aTransform = aCamera.GetViewTransform() * GetFullTransform(); // #112587#
     Vol3DPointIterator aIter(GetBoundVolume(), &aTransform);
     Rectangle aRect;
 
     while ( aIter.Next(aTfVec) )
     {
-        aCamera.DoProjection(aTfVec);
-        aFitVol.Union(aTfVec);
-        Vector3D aZwi = aCamera.MapToDevice(aTfVec);
-        Point aP((long)aZwi.X(), (long)aZwi.Y());
+        aTfVec = aCamera.DoProjection(aTfVec);
+        aFitVol.expand(aTfVec);
+        basegfx::B3DPoint aZwi(aCamera.MapToDevice(aTfVec));
+        Point aP((long)aZwi.getX(), (long)aZwi.getY());
         aRect.Union(Rectangle(aP, aP));
     }
-    aCamera.SetViewWindow(aFitVol.MinVec().X(), aFitVol.MinVec().Y(),
-        aFitVol.GetWidth(), aFitVol.GetHeight());
+    aCamera.SetViewWindow(aFitVol.getMinX(), aFitVol.getMinY(), aFitVol.getWidth(), aFitVol.getHeight());
     SetSnapRect(aRect);
 
     // Die SnapRects aller beteiligten Objekte muessen auf dieser
@@ -1130,23 +936,28 @@ void E3dScene::FitSnapRectToBoundVol()
 
 void E3dScene::CorrectSceneDimensions()
 {
-    // SnapRects der Objekte ungueltig
-    SetRectsDirty();
+    const sal_uInt32 nObjCount(GetSubList() ? GetSubList()->GetObjCount() : 0L);
 
-    // SnapRect anpassen, invalidiert auch die SnapRects
-    // der enthaltenen Objekte
-    FitSnapRectToBoundVol();
+    if(nObjCount)
+    {
+        // SnapRects der Objekte ungueltig
+        SetRectsDirty();
 
-    // Neues BoundVolume der Kamera holen
-    Volume3D aVolume = FitInSnapRect();
+        // SnapRect anpassen, invalidiert auch die SnapRects
+        // der enthaltenen Objekte
+        FitSnapRectToBoundVol();
 
-    // Neues BoundVolume an der Kamera setzen
-    GetCameraSet().SetDeviceVolume(aVolume, FALSE);
+        // Neues BoundVolume der Kamera holen
+        basegfx::B3DRange aVolume(FitInSnapRect());
 
-    // Danach noch die SnapRects der enthaltenen Objekte
-    // invalidieren, um diese auf der neuen Grundlage berechnen
-    // zu lassen (falls diese von FitInSnapRect() berechnet wurden)
-    SetRectsDirty();
+        // Neues BoundVolume an der Kamera setzen
+        GetCameraSet().SetDeviceVolume(aVolume, FALSE);
+
+        // Danach noch die SnapRects der enthaltenen Objekte
+        // invalidieren, um diese auf der neuen Grundlage berechnen
+        // zu lassen (falls diese von FitInSnapRect() berechnet wurden)
+        SetRectsDirty();
+    }
 
     // #110988#
     ImpCleanup3DDepthMapper();
@@ -1167,7 +978,6 @@ void E3dScene::operator=(const SdrObject& rObj)
     bDoubleBuffered  = r3DObj.bDoubleBuffered;
     bClipping        = r3DObj.bClipping;
     bFitInSnapRect   = r3DObj.bFitInSnapRect;
-    //BFS01nSortingMode     = r3DObj.nSortingMode;
 
     // neu ab 377:
     aCameraSet = r3DObj.aCameraSet;
@@ -1383,189 +1193,6 @@ void E3dScene::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 
 /*************************************************************************
 |*
-|* Licht-Objekte rauswerfen
-|*
-\************************************************************************/
-
-//BFS01void E3dScene::RemoveLightObjects()
-//BFS01{
-//BFS01 SdrObjList* pSubList = GetSubList();
-//BFS01 if(pSubList)
-//BFS01 {
-//BFS01     SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
-//BFS01     while ( a3DIterator.IsMore() )
-//BFS01     {
-//BFS01         E3dObject* pObj = (E3dObject*) a3DIterator.Next();
-//BFS01         DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
-//BFS01         if(pObj->ISA(E3dLight))
-//BFS01         {
-//BFS01             // Weg damit
-//BFS01             Remove3DObj(pObj);
-//BFS01         }
-//BFS01     }
-//BFS01 }
-//BFS01}
-
-/*************************************************************************
-|*
-|* Licht-Objekte erzeugen, um kompatibel zur 4.0
-|* speichern zu koennen
-|*
-\************************************************************************/
-
-//BFS01void E3dScene::CreateLightObjectsFromLightGroup()
-//BFS01{
-//BFS01 if(aLightGroup.IsLightingEnabled())
-//BFS01 {
-//BFS01     // Global Ambient Light
-//BFS01     const Color& rAmbient = aLightGroup.GetGlobalAmbientLight();
-//BFS01     if(rAmbient != Color(COL_BLACK))
-//BFS01         Insert3DObj(new E3dLight(Vector3D(), rAmbient, 1.0));
-//BFS01
-//BFS01     // Andere Lichter
-//BFS01     for(UINT16 a=0;a<BASE3D_MAX_NUMBER_LIGHTS;a++)
-//BFS01     {
-//BFS01         B3dLight& rLight = aLightGroup.GetLightObject((Base3DLightNumber)(Base3DLight0 + a));
-//BFS01         if(rLight.IsEnabled())
-//BFS01         {
-//BFS01             if(rLight.IsDirectionalSource())
-//BFS01             {
-//BFS01                 // erzeuge E3dDistantLight
-//BFS01                 Insert3DObj(new E3dDistantLight(Vector3D(),
-//BFS01                     rLight.GetPosition(),
-//BFS01                     rLight.GetIntensity(Base3DMaterialDiffuse), 1.0));
-//BFS01             }
-//BFS01             else
-//BFS01             {
-//BFS01                 // erzeuge E3dPointLight
-//BFS01                 Insert3DObj(new E3dPointLight(rLight.GetPosition(),
-//BFS01                     rLight.GetIntensity(Base3DMaterialDiffuse), 1.0));
-//BFS01             }
-//BFS01         }
-//BFS01     }
-//BFS01 }
-//BFS01}
-
-/*************************************************************************
-|*
-|* Beleuchtung aus dem alten Beleuchtungsmodell uebernehmen
-|*
-\************************************************************************/
-
-//BFS01void E3dScene::FillLightGroup()
-//BFS01{
-//BFS01 SdrObjList* pSubList = GetSubList();
-//BFS01 BOOL bLampFound = FALSE;
-//BFS01
-//BFS01 if(pSubList)
-//BFS01 {
-//BFS01     SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
-//BFS01     Base3DLightNumber eLight = Base3DLight0;
-//BFS01
-//BFS01     // AmbientLight aus
-//BFS01     aLightGroup.SetGlobalAmbientLight(Color(COL_BLACK));
-//BFS01
-//BFS01     while ( a3DIterator.IsMore() )
-//BFS01     {
-//BFS01         E3dObject* pObj = (E3dObject*) a3DIterator.Next();
-//BFS01         DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
-//BFS01         if(pObj->ISA(E3dLight) && eLight <= Base3DLight7)
-//BFS01         {
-//BFS01             E3dLight* pLight = (E3dLight*)pObj;
-//BFS01             bLampFound = TRUE;
-//BFS01
-//BFS01             // pLight in Base3D Konvention aktivieren
-//BFS01             if(pLight->IsOn())
-//BFS01             {
-//BFS01                 if(pLight->ISA(E3dPointLight))
-//BFS01                 {
-//BFS01                     // ist ein E3dPointLight
-//BFS01                     // Position, keine Richtung
-//BFS01                     B3dColor aCol(pLight->GetColor().GetColor());
-//BFS01                     aCol *= pLight->GetIntensity();
-//BFS01                     aLightGroup.SetIntensity(aCol, Base3DMaterialDiffuse, eLight);
-//BFS01                     aLightGroup.SetIntensity(Color(COL_WHITE), Base3DMaterialSpecular, eLight);
-//BFS01                     Vector3D aPos = pLight->GetPosition();
-//BFS01                     aLightGroup.SetPosition(aPos, eLight);
-//BFS01
-//BFS01                     // Lichtquelle einschalten
-//BFS01                     aLightGroup.Enable(TRUE, eLight);
-//BFS01
-//BFS01                     // Naechstes Licht in Base3D
-//BFS01                     eLight = (Base3DLightNumber)(eLight + 1);
-//BFS01                 }
-//BFS01                 else if(pLight->ISA(E3dDistantLight))
-//BFS01                 {
-//BFS01                     // ist ein E3dDistantLight
-//BFS01                     // Richtung, keine Position
-//BFS01                     B3dColor aCol(pLight->GetColor().GetColor());
-//BFS01                     aCol *= pLight->GetIntensity();
-//BFS01                     aLightGroup.SetIntensity(aCol, Base3DMaterialDiffuse, eLight);
-//BFS01                     aLightGroup.SetIntensity(Color(COL_WHITE), Base3DMaterialSpecular, eLight);
-//BFS01                     Vector3D aDir = ((E3dDistantLight *)pLight)->GetDirection();
-//BFS01                     aLightGroup.SetDirection(aDir, eLight);
-//BFS01
-//BFS01                     // Lichtquelle einschalten
-//BFS01                     aLightGroup.Enable(TRUE, eLight);
-//BFS01
-//BFS01                     // Naechstes Licht in Base3D
-//BFS01                     eLight = (Base3DLightNumber)(eLight + 1);
-//BFS01                 }
-//BFS01                 else
-//BFS01                 {
-//BFS01                     // nur ein E3dLight, gibt ein
-//BFS01                     // ambientes licht, auf globales aufaddieren
-//BFS01                     B3dColor aCol(pLight->GetColor().GetColor());
-//BFS01                     aCol *= pLight->GetIntensity();
-//BFS01                     aCol += (const B3dColor &)aLightGroup.GetGlobalAmbientLight();
-//BFS01                     aLightGroup.SetGlobalAmbientLight(aCol);
-//BFS01                 }
-//BFS01             }
-//BFS01         }
-//BFS01     }
-//BFS01
-//BFS01     // Alle anderen Lichter ausschalten
-//BFS01     while(eLight <= Base3DLight7)
-//BFS01     {
-//BFS01         aLightGroup.Enable(FALSE, eLight);
-//BFS01         eLight = (Base3DLightNumber)(eLight + 1);
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 // Beleuchtung einschalten, falls Lampen vorhanden
-//BFS01 aLightGroup.EnableLighting(bLampFound);
-//BFS01}
-
-/*************************************************************************
-|*
-|* Lichter zaehlen
-|*
-\************************************************************************/
-
-//BFS01UINT16 E3dScene::CountNumberOfLights()
-//BFS01{
-//BFS01 UINT16 nNumLights = 0;
-//BFS01
-//BFS01 SdrObjList* pSubList = GetSubList();
-//BFS01 if(pSubList)
-//BFS01 {
-//BFS01     SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
-//BFS01     while ( a3DIterator.IsMore() )
-//BFS01     {
-//BFS01         E3dObject* pObj = (E3dObject*) a3DIterator.Next();
-//BFS01         DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
-//BFS01         if(pObj->ISA(E3dLight))
-//BFS01         {
-//BFS01             // Zaehlen...
-//BFS01             nNumLights++;
-//BFS01         }
-//BFS01     }
-//BFS01 }
-//BFS01 return nNumLights;
-//BFS01}
-
-/*************************************************************************
-|*
 |* SnapRect berechnen
 |*
 \************************************************************************/
@@ -1612,17 +1239,17 @@ BOOL E3dScene::IsBreakObjPossible()
     return TRUE;
 }
 
-Vector3D E3dScene::GetShadowPlaneDirection() const
+basegfx::B3DVector E3dScene::GetShadowPlaneDirection() const
 {
     double fWink = (double)GetShadowSlant() * F_PI180;
-    Vector3D aShadowPlaneDir(0.0, sin(fWink), cos(fWink));
-    aShadowPlaneDir.Normalize();
+    basegfx::B3DVector aShadowPlaneDir(0.0, sin(fWink), cos(fWink));
+    aShadowPlaneDir.normalize();
     return aShadowPlaneDir;
 }
 
-void E3dScene::SetShadowPlaneDirection(const Vector3D& rVec)
+void E3dScene::SetShadowPlaneDirection(const basegfx::B3DVector& rVec)
 {
-    UINT16 nSceneShadowSlant = (UINT16)((atan2(rVec.Y(), rVec.Z()) / F_PI180) + 0.5);
+    UINT16 nSceneShadowSlant = (UINT16)((atan2(rVec.getY(), rVec.getZ()) / F_PI180) + 0.5);
     GetProperties().SetObjectItemDirect(Svx3DShadowSlantItem(nSceneShadowSlant));
 }
 
@@ -1668,81 +1295,84 @@ sal_uInt32 E3dScene::HitTest(const Point& rHitTestPosition, ::std::vector< SdrOb
 
             if(pObj->ISA(E3dCompoundObject))
             {
+                E3dCompoundObject* pCompoundObj = (E3dCompoundObject*)pObj;
+
                 // get HitLine in local 3D ObjectKoordinates
-                Matrix4D mTransform = ((E3dCompoundObject*)pObj)->GetFullTransform();
+                basegfx::B3DHomMatrix mTransform = pCompoundObj->GetFullTransform();
                 GetCameraSet().SetObjectTrans(mTransform);
 
                 // create HitPoint Front und Back, transform to local object coordinates
-                Vector3D aFront(rHitTestPosition.X(), rHitTestPosition.Y(), 0.0);
-                Vector3D aBack(rHitTestPosition.X(), rHitTestPosition.Y(), ZBUFFER_DEPTH_RANGE);
+                basegfx::B3DPoint aFront(rHitTestPosition.X(), rHitTestPosition.Y(), 0.0);
+                basegfx::B3DPoint aBack(rHitTestPosition.X(), rHitTestPosition.Y(), ZBUFFER_DEPTH_RANGE);
                 aFront = GetCameraSet().ViewToObjectCoor(aFront);
                 aBack = GetCameraSet().ViewToObjectCoor(aBack);
 
                 // make BoundVolume HitTest for speedup first
-                const Volume3D& rBoundVol = ((E3dCompoundObject*)pObj)->GetBoundVolume();
+                const Volume3D& rBoundVol = pCompoundObj->GetBoundVolume();
 
-                if(rBoundVol.IsValid())
+                if(!rBoundVol.isEmpty())
                 {
-                    double fXMax = aFront.X();
-                    double fXMin = aBack.X();
+                    double fXMax(aFront.getX());
+                    double fXMin(aBack.getX());
 
                     if(fXMax < fXMin)
                     {
-                        fXMax = aBack.X();
-                        fXMin = aFront.X();
+                        fXMax = aBack.getX();
+                        fXMin = aFront.getX();
                     }
 
-                    if(rBoundVol.MinVec().X() <= fXMax && rBoundVol.MaxVec().X() >= fXMin)
+                    if(rBoundVol.getMinX() <= fXMax && rBoundVol.getMaxX() >= fXMin)
                     {
-                        double fYMax = aFront.Y();
-                        double fYMin = aBack.Y();
+                        double fYMax(aFront.getY());
+                        double fYMin(aBack.getY());
 
                         if(fYMax < fYMin)
                         {
-                            fYMax = aBack.Y();
-                            fYMin = aFront.Y();
+                            fYMax = aBack.getY();
+                            fYMin = aFront.getY();
                         }
 
-                        if(rBoundVol.MinVec().Y() <= fYMax && rBoundVol.MaxVec().Y() >= fYMin)
+                        if(rBoundVol.getMinY() <= fYMax && rBoundVol.getMaxY() >= fYMin)
                         {
-                            double fZMax = aFront.Z();
-                            double fZMin = aBack.Z();
+                            double fZMax(aFront.getZ());
+                            double fZMin(aBack.getZ());
 
                             if(fZMax < fZMin)
                             {
-                                fZMax = aBack.Z();
-                                fZMin = aFront.Z();
+                                fZMax = aBack.getZ();
+                                fZMin = aFront.getZ();
                             }
 
-                            if(rBoundVol.MinVec().Z() <= fZMax && rBoundVol.MaxVec().Z() >= fZMin)
+                            if(rBoundVol.getMinZ() <= fZMax && rBoundVol.getMaxZ() >= fZMin)
                             {
                                 // BoundVol is hit, get geometry cuts now
-                                Vector3DVector aParameter;
-                                B3dGeometry& rGeometry = ((E3dCompoundObject*)pObj)->GetDisplayGeometry();
+                                ::std::vector< basegfx::B3DPoint > aParameter;
+                                const B3dGeometry& rGeometry = pCompoundObj->GetDisplayGeometry();
                                 rGeometry.GetAllCuts(aParameter, aFront, aBack);
 
                                 if(aParameter.size())
                                 {
                                     // take first cut as base, use Z-Coor in ViewCoor (0 ..ZBUFFER_DEPTH_RANGE)
                                     ImplPairDephAndObject aTempResult;
-                                    Vector3D aTempVector(aParameter[0]);
+                                    basegfx::B3DPoint aTempVector(aParameter[0]);
                                     aTempVector = GetCameraSet().ObjectToViewCoor(aTempVector);
 
-                                    aTempResult.pObject = pObj;
-                                    aTempResult.fDepth = aTempVector.Z();
+                                    aTempResult.pObject = pCompoundObj;
+                                    aTempResult.fDepth = aTempVector.getZ();
 
                                     // look for cut points in front of the first one
-                                    Vector3DVector::iterator aIterator2(aParameter.begin());
+                                    ::std::vector< basegfx::B3DPoint >::iterator aIterator2(aParameter.begin());
                                     aIterator2++;
 
                                     for(;aIterator2 != aParameter.end(); aIterator2++)
                                     {
-                                        aTempVector = GetCameraSet().ObjectToViewCoor(*aIterator2);
+                                        basegfx::B3DPoint aTempVector2(*aIterator2);
+                                        aTempVector2 = GetCameraSet().ObjectToViewCoor(aTempVector2);
 
                                         // use the smallest one
-                                        if(aTempVector.Z() < aTempResult.fDepth)
+                                        if(aTempVector2.getZ() < aTempResult.fDepth)
                                         {
-                                            aTempResult.fDepth = aTempVector.Z();
+                                            aTempResult.fDepth = aTempVector2.getZ();
                                         }
                                     }
 
@@ -1775,6 +1405,52 @@ sal_uInt32 E3dScene::HitTest(const Point& rHitTestPosition, ::std::vector< SdrOb
     }
 
     return nRetval;
+}
+
+basegfx::B2DPolyPolygon E3dScene::TakeCreatePoly(const SdrDragStat& /*rDrag*/) const
+{
+    return TakeXorPoly(sal_True);
+}
+
+FASTBOOL E3dScene::BegCreate(SdrDragStat& rStat)
+{
+    rStat.SetOrtho4Possible();
+    Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
+    aRect1.Justify();
+    rStat.SetActionRect(aRect1);
+    NbcSetSnapRect(aRect1);
+    return TRUE;
+}
+
+FASTBOOL E3dScene::MovCreate(SdrDragStat& rStat)
+{
+    Rectangle aRect1;
+    rStat.TakeCreateRect(aRect1);
+    aRect1.Justify();
+    rStat.SetActionRect(aRect1);
+    NbcSetSnapRect(aRect1);
+    bBoundRectDirty=TRUE;
+    bSnapRectDirty=TRUE;
+    return TRUE;
+}
+
+FASTBOOL E3dScene::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+{
+    Rectangle aRect1;
+    rStat.TakeCreateRect(aRect1);
+    aRect1.Justify();
+    NbcSetSnapRect(aRect1);
+    SetRectsDirty();
+    return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointAnz()>=2);
+}
+
+FASTBOOL E3dScene::BckCreate(SdrDragStat& /*rStat*/)
+{
+    return FALSE;
+}
+
+void E3dScene::BrkCreate(SdrDragStat& /*rStat*/)
+{
 }
 
 // eof
