@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itga.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:38:37 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:17:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,9 +97,6 @@ class TGAReader {
 
 private:
 
-    PFilterCallback     pCallback;
-    void*               pCallerData;
-
     SvStream*           mpTGA;
 
     BitmapWriteAccess*  mpAcc;
@@ -123,7 +120,7 @@ private:
 public:
                         TGAReader();
                         ~TGAReader();
-    BOOL                ReadTGA( SvStream & rTGA, Graphic & rGraphic, PFilterCallback pcallback, void * pcallerdata );
+    BOOL                ReadTGA( SvStream & rTGA, Graphic & rGraphic );
 };
 
 //=================== Methoden von TGAReader ==============================
@@ -149,8 +146,9 @@ TGAReader::~TGAReader()
     delete mpFileFooter;
 }
 
-BOOL TGAReader::Callback( USHORT nPercent )
+BOOL TGAReader::Callback( USHORT /*nPercent*/ )
 {
+/*
     if ( pCallback != NULL )
     {
         if ( ( (*pCallback)( pCallerData,nPercent ) ) == TRUE )
@@ -159,18 +157,16 @@ BOOL TGAReader::Callback( USHORT nPercent )
             return TRUE;
         }
     }
+*/
     return FALSE;
 }
 
 // -------------------------------------------------------------------------------------------
 
-BOOL TGAReader::ReadTGA( SvStream & rTGA, Graphic & rGraphic, PFilterCallback pcallback, void * pcallerdata )
+BOOL TGAReader::ReadTGA( SvStream & rTGA, Graphic & rGraphic )
 {
     if ( rTGA.GetError() )
         return FALSE;
-
-    pCallback = pcallback;
-    pCallerData = pcallerdata;
 
     mpTGA = &rTGA;
     mpTGA->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
@@ -750,19 +746,11 @@ BOOL TGAReader::ImplReadPalette()
 
 //================== GraphicImport - die exportierte Funktion ================
 
-#ifdef WNT
-extern "C" BOOL _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                            PFilterCallback pCallback, void * pCallerData,
-                                FilterConfigItem*, BOOL)
-#else
-extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                            PFilterCallback pCallback, void * pCallerData,
-                                FilterConfigItem*, BOOL)
-#endif
+extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL )
 {
     TGAReader aTGAReader;
 
-    return aTGAReader.ReadTGA( rStream, rGraphic, pCallback, pCallerData );
+    return aTGAReader.ReadTGA( rStream, rGraphic );
 }
 
 //================== ein bischen Muell fuer Windows ==========================
