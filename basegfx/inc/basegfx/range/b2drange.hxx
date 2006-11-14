@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2drange.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:54:51 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:06:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,6 +264,8 @@ namespace basegfx
             maRangeX.grow(fValue);
             maRangeY.grow(fValue);
         }
+
+        void transform(const B2DHomMatrix& rMatrix);
 
     private:
         typedef ::basegfx::BasicRange< ValueType, TraitsType >  MyBasicRange;
