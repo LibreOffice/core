@@ -4,9 +4,9 @@
  *
  *  $RCSfile: View.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:16:39 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:33:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,9 @@
 #ifndef _SVDMARK_HXX //autogen
 #include <svx/svdmark.hxx>
 #endif
-#ifndef _SVDVMARK_HXX //autogen
-#include <svx/svdvmark.hxx>
-#endif
+//#ifndef _SVDVMARK_HXX //autogen
+//#include <svx/svdvmark.hxx>
+//#endif
 #ifndef _SVDPAGE_HXX //autogen
 #include <svx/svdpage.hxx>
 #endif
@@ -149,12 +149,12 @@ public:
     inline SdDrawDocument* GetDoc (void) const;
     inline ViewShell* GetViewShell (void) const;
 
-    BOOL                    BegTextEdit( SdrObject* pObj, SdrPageView* pPV=NULL, Window* pWin=NULL, BOOL bIsNewObj=FALSE,
-                                         SdrOutliner* pGivenOutliner=NULL, OutlinerView* pGivenOutlinerView=NULL,
-                                         BOOL bDontDeleteOutliner=FALSE, BOOL bOnlyOneView=FALSE, BOOL bGrabFocus=TRUE );
-    virtual SdrEndTextEditKind EndTextEdit(BOOL bDontDeleteReally=FALSE);
-
-    SdrEndTextEditKind          EndTextEdit(BOOL bDontDeleteReally, FunctionReference xFunc);
+    sal_Bool SdrBeginTextEdit(
+        SdrObject* pObj, SdrPageView* pPV = 0L, Window* pWin = 0L, sal_Bool bIsNewObj = sal_False,
+        SdrOutliner* pGivenOutliner = 0L, OutlinerView* pGivenOutlinerView = 0L,
+        sal_Bool bDontDeleteOutliner = sal_False, sal_Bool bOnlyOneView = sal_False, sal_Bool bGrabFocus = sal_True);
+    virtual SdrEndTextEditKind SdrEndTextEdit(sal_Bool bDontDeleteReally = sal_False);
+    SdrEndTextEditKind SdrEndTextEdit(sal_Bool bDontDeleteReally, FunctionReference xFunc);
 
     BOOL                    InsertData( const TransferableDataHelper& rDataHelper,
                                         const Point& rPos, sal_Int8& rDnDAction, BOOL bDrag,
@@ -206,7 +206,7 @@ protected:
     ViewShell* pViewSh;
     SdrMarkList*            pDragSrcMarkList;
     SdrObject*              pDropMarkerObj;
-    SdrViewUserMarker*      pDropMarker;
+    SdrDropMarkerOverlay*   pDropMarker;
     USHORT                  nDragSrcPgNum;
     Point                   aDropPos;
     ::std::vector< String > aDropFileVector;
@@ -221,6 +221,7 @@ protected:
                             DECL_LINK( DropInsertFileHdl, Timer* );
                             DECL_LINK( ExecuteNavigatorDrop, SdNavigatorDropEvent* pSdNavigatorDropEvent );
 
+    void ImplClearDrawDropMarker();
 private:
     ::std::auto_ptr<ViewClipboard> mpClipboard;
 };
