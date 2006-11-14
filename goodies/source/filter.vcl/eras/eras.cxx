@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eras.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:34:27 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:12:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,15 +39,13 @@
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
 #include <svtools/fltcall.hxx>
+#include <svtools/FilterConfigItem.hxx>
 
 //============================ RASWriter ==================================
 
 class RASWriter {
 
 private:
-
-    PFilterCallback     mpCallback;
-    void *              mpCallerData;
 
     SvStream*           mpOStm;
     USHORT              mpOStmOldModus;
@@ -61,7 +59,9 @@ private:
     ULONG               mnRepCount;
     BYTE                mnRepVal;
 
-    BOOL                ImplCallback( ULONG nCurrentYPos );
+    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
+
+    void                ImplCallback( ULONG nCurrentYPos );
     BOOL                ImplWriteHeader();
     void                ImplWritePalette();
     void                ImplWriteBody();
@@ -71,9 +71,7 @@ public:
                         RASWriter();
                         ~RASWriter();
 
-    BOOL                WriteRAS( const Graphic& rGraphic, SvStream& rRAS,
-                            PFilterCallback pCallback, void* pCallerdata,
-                                FilterConfigItem* pConfigItem );
+    BOOL                WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von RASWriter ==============================
@@ -93,30 +91,29 @@ RASWriter::~RASWriter()
 
 // ------------------------------------------------------------------------
 
-BOOL RASWriter::ImplCallback( ULONG nYPos )
+void RASWriter::ImplCallback( ULONG nYPos )
 {
-    if ( mpCallback != NULL )
-    {
-        if ( ( (*mpCallback)( mpCallerData, (USHORT)( ( 100 * nYPos ) / mnHeight ) ) ) == TRUE )
-        {
-            mpOStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
-            return TRUE;
-        }
-    }
-    return FALSE;
+    if ( xStatusIndicator.is() )
+        xStatusIndicator->setValue( (USHORT)( ( 100 * nYPos ) / mnHeight ) );
 }
 
 //  ------------------------------------------------------------------------
 
-BOOL RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS,
-                            PFilterCallback pCallback, void* pCallerdata,
-                                FilterConfigItem* )
+BOOL RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterConfigItem* pFilterConfigItem)
 {
     Bitmap  aBmp;
 
     mpOStm = &rRAS;
-    mpCallback = pCallback;
-    mpCallerData = pCallerdata;
+
+    if ( pFilterConfigItem )
+    {
+        xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
+        if ( xStatusIndicator.is() )
+        {
+            rtl::OUString aMsg;
+            xStatusIndicator->start( aMsg, 100 );
+        }
+    }
 
     BitmapEx    aBmpEx( rGraphic.GetBitmapEx() );
     aBmp = aBmpEx.GetBitmap();
@@ -147,6 +144,9 @@ BOOL RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS,
         mbStatus = FALSE;
 
     mpOStm->SetNumberFormatInt( mpOStmOldModus );
+
+    if ( xStatusIndicator.is() )
+        xStatusIndicator->end();
 
     return mbStatus;
 }
@@ -288,13 +288,11 @@ void RASWriter::ImplPutByte( BYTE nPutThis )
 // - exported function -
 // ---------------------
 
-extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic,
-                                               PFilterCallback pCallback, void* pCallerData,
-                                               FilterConfigItem* pConfigItem, BOOL )
+extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, BOOL )
 {
     RASWriter aRASWriter;
 
-    return aRASWriter.WriteRAS( rGraphic, rStream, pCallback, pCallerData, pConfigItem );
+    return aRASWriter.WriteRAS( rGraphic, rStream, pFilterConfigItem );
 }
 #ifndef GCC
 #endif
