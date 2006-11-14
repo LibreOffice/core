@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:17:40 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:15:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,14 @@
 
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
+
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
 #endif
 
 #define OUTPUT_DRAWMODE_COLOR       (DRAWMODE_DEFAULT)
@@ -1948,33 +1956,36 @@ SvxXLinePreview::SvxXLinePreview( Window* pParent, const ResId& rResId, XOutputD
 
     // create DrawObectA
     const sal_Int32 aYPosA(aOutputSize.Height() / 2);
-    const Point aPointA1( nDistance,  aYPosA);
-    const Point aPointA2( aPointA1.X() + ((nAvailableLength * 14) / 20), aYPosA );
-    mpLineObjA = new SdrPathObj(aPointA1, aPointA2);
+    const basegfx::B2DPoint aPointA1( nDistance,  aYPosA);
+    const basegfx::B2DPoint aPointA2( aPointA1.getX() + ((nAvailableLength * 14) / 20), aYPosA );
+    basegfx::B2DPolygon aPolygonA;
+    aPolygonA.append(aPointA1);
+    aPolygonA.append(aPointA2);
+    mpLineObjA = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPolygonA));
     mpLineObjA->SetModel(mpModel);
 
     // create DrawObectB
     const sal_Int32 aYPosB1((aOutputSize.Height() * 3) / 4);
     const sal_Int32 aYPosB2((aOutputSize.Height() * 1) / 4);
-    const Point aPointB1( aPointA2.X() + nDistance,  aYPosB1);
-    const Point aPointB2( aPointB1.X() + ((nAvailableLength * 2) / 20), aYPosB2 );
-    const Point aPointB3( aPointB2.X() + ((nAvailableLength * 2) / 20), aYPosB1 );
-    XPolygon aPolygonB(3);
-    aPolygonB[0] = aPointB1;
-    aPolygonB[1] = aPointB2;
-    aPolygonB[2] = aPointB3;
-    mpLineObjB = new SdrPathObj(OBJ_PLIN, XPolyPolygon(aPolygonB));
+    const basegfx::B2DPoint aPointB1( aPointA2.getX() + nDistance,  aYPosB1);
+    const basegfx::B2DPoint aPointB2( aPointB1.getX() + ((nAvailableLength * 2) / 20), aYPosB2 );
+    const basegfx::B2DPoint aPointB3( aPointB2.getX() + ((nAvailableLength * 2) / 20), aYPosB1 );
+    basegfx::B2DPolygon aPolygonB;
+    aPolygonB.append(aPointB1);
+    aPolygonB.append(aPointB2);
+    aPolygonB.append(aPointB3);
+    mpLineObjB = new SdrPathObj(OBJ_PLIN, basegfx::B2DPolyPolygon(aPolygonB));
     mpLineObjB->SetModel(mpModel);
 
     // create DrawObectC
-    const Point aPointC1( aPointB3.X() + nDistance,  aYPosB1);
-    const Point aPointC2( aPointC1.X() + ((nAvailableLength * 1) / 20), aYPosB2 );
-    const Point aPointC3( aPointC2.X() + ((nAvailableLength * 1) / 20), aYPosB1 );
-    XPolygon aPolygonC(3);
-    aPolygonC[0] = aPointC1;
-    aPolygonC[1] = aPointC2;
-    aPolygonC[2] = aPointC3;
-    mpLineObjC = new SdrPathObj(OBJ_PLIN, XPolyPolygon(aPolygonC));
+    const basegfx::B2DPoint aPointC1( aPointB3.getX() + nDistance,  aYPosB1);
+    const basegfx::B2DPoint aPointC2( aPointC1.getX() + ((nAvailableLength * 1) / 20), aYPosB2 );
+    const basegfx::B2DPoint aPointC3( aPointC2.getX() + ((nAvailableLength * 1) / 20), aYPosB1 );
+    basegfx::B2DPolygon aPolygonC;
+    aPolygonC.append(aPointC1);
+    aPolygonC.append(aPointC2);
+    aPolygonC.append(aPointC3);
+    mpLineObjC = new SdrPathObj(OBJ_PLIN, basegfx::B2DPolyPolygon(aPolygonC));
     mpLineObjC->SetModel(mpModel);
 
     //  Draw the control's border as a flat thin black line.
