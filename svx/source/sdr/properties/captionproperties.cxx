@@ -4,9 +4,9 @@
  *
  *  $RCSfile: captionproperties.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:40:11 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:35:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,10 +58,6 @@
 
 #ifndef _SVDCAPT_HXX
 #include <svdocapt.hxx>
-#endif
-
-#ifndef _SXCSITM_HXX
-#include <sxcsitm.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -130,36 +126,6 @@ namespace sdr
             // local changes
             rObj.ImpRecalcTail();
         }
-
-//BFS01     void CaptionProperties::PreProcessSave()
-//BFS01     {
-//BFS01         // call parent
-//BFS01         RectangleProperties::PreProcessSave();
-//BFS01
-//BFS01         // force ItemSet
-//BFS01         GetObjectItemSet();
-//BFS01
-//BFS01         // prepare SetItems for storage
-//BFS01         const SfxItemSet& rSet = *mpItemSet;
-//BFS01         const SfxItemSet* pParent = mpStyleSheet ? &(mpStyleSheet->GetItemSet()) : 0L;
-//BFS01
-//BFS01         SdrCaptionSetItem aCaptAttr(rSet.GetPool());
-//BFS01         aCaptAttr.GetItemSet().Put(rSet);
-//BFS01         aCaptAttr.GetItemSet().SetParent(pParent);
-//BFS01         mpItemSet->Put(aCaptAttr);
-//BFS01     }
-
-//BFS01     void CaptionProperties::PostProcessSave()
-//BFS01     {
-//BFS01         // call parent
-//BFS01         RectangleProperties::PostProcessSave();
-//BFS01
-//BFS01         // remove SetItems from local itemset
-//BFS01         if(mpItemSet)
-//BFS01         {
-//BFS01             mpItemSet->ClearItem(SDRATTRSET_CAPTION);
-//BFS01         }
-//BFS01     }
 
         void CaptionProperties::ForceDefaultAttributes()
         {
