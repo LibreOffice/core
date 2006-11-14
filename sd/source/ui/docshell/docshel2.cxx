@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:44:42 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:26:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,14 @@
 #include "fupoor.hxx"
 #endif
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
+
 namespace sd {
 
 /*************************************************************************
@@ -138,8 +146,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup& rSetup,
 
     Rectangle aVisArea = GetVisArea(nAspect);
     pOut->IntersectClipRegion(aVisArea);
-
-    pView->ShowPage(pSelectedPage, Point());
+    pView->ShowSdrPage(pSelectedPage);
 
     if (pOut->GetOutDevType() != OUTDEV_WINDOW)
     {
@@ -312,15 +319,13 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
 
     ClientView* pView = new ClientView( this, &aVDev, NULL );
     FrameView*      pFrameView = GetFrameView();
-
-    pView->ShowPage( pPage, aNullPt );
+    pView->ShowSdrPage( pPage );
 
     if ( GetFrameView() )
     {
         // Initialisierungen der Zeichen-(Bildschirm-)Attribute
         pView->SetGridCoarse( pFrameView->GetGridCoarse() );
         pView->SetGridFine( pFrameView->GetGridFine() );
-        pView->SetSnapGrid( pFrameView->GetSnapGrid() );
         pView->SetSnapGridWidth(pFrameView->GetSnapGridWidthX(), pFrameView->GetSnapGridWidthY());
         pView->SetGridVisible( pFrameView->IsGridVisible() );
         pView->SetGridFront( pFrameView->IsGridFront() );
@@ -343,7 +348,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
         pView->SetBigOrtho( pFrameView->IsBigOrtho() );
         pView->SetOrtho( pFrameView->IsOrtho() );
 
-        SdrPageView* pPageView = pView->GetPageViewPvNum(0);
+        SdrPageView* pPageView = pView->GetSdrPageView();
 
         if (pPageView)
         {
