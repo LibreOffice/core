@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polysc3d.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:41:58 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,9 +149,9 @@ UINT16 E3dPolyScene::GetObjIdentifier() const
 |*
 \************************************************************************/
 
-void E3dPolyScene::TakeContour(XPolyPolygon& rPoly) const
+basegfx::B2DPolyPolygon E3dPolyScene::TakeContour() const
 {
-    ((E3dPolyScene*)this)->TakeContour3D(rPoly);
+    return ImpTakeContour3D();
 }
 
 /*************************************************************************
@@ -160,13 +160,13 @@ void E3dPolyScene::TakeContour(XPolyPolygon& rPoly) const
 |*
 \************************************************************************/
 
-void E3dPolyScene::TakeContour3D(XPolyPolygon& rPoly)
+basegfx::B2DPolyPolygon E3dPolyScene::ImpTakeContour3D() const
 {
     // TransformationSet vorbereiten
-    InitTransformationSet();
+    ((E3dPolyScene*)this)->InitTransformationSet();
 
     // Holen
-    E3dScene::TakeContour3D(rPoly);
+    return E3dScene::ImpTakeContour3D();
 }
 
 /*************************************************************************
@@ -182,23 +182,6 @@ sal_Bool E3dPolyScene::DoPaintObject(XOutputDevice& rOut,   const SdrPaintInfoRe
     {
         bOk = ((E3dPolyScene*)this)->LocalPaint3D(rOut, rInfoRec);
     }
-    // #110094#
-    // moved to DrawContact objects
-    //else
-    //{
-    //  // Leere Szene, zeichne genau wie leere Gruppe
-    //  if (!rInfoRec.bPrinter && rInfoRec.aPaintLayer.IsSet(nLayerId)) {
-    //      OutputDevice* pOutDev=rOut.GetOutDev();
-    //      pOutDev->SetLineColor(Color(COL_LIGHTGRAY));
-    //      pOutDev->SetFillColor();
-    //      pOutDev->DrawRect(aOutRect);
-    //  }
-    //}
-
-    // #110094#-13
-    //if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
-    //  bOk=PaintGluePoints(rOut,rInfoRec);
-    //}
 
     return bOk;
 }
@@ -301,8 +284,7 @@ BOOL E3dPolyScene::LocalPaint3D(XOutputDevice& rOut,
         // Schatten zeichnen
         if(pBase3D->GetDisplayQuality() > 128)
         {
-            B3dVolume aVol = rSet.GetDeviceVolume();
-            Volume3D aVolume(aVol.MinVec(), aVol.MaxVec());
+            Volume3D aVolume(rSet.GetDeviceVolume());
             DrawAllShadows(pBase3D, rOut, aBound, aVolume, rInfoRec);
         }
 
@@ -328,8 +310,8 @@ BOOL E3dPolyScene::LocalPaint3D(XOutputDevice& rOut,
             {
                 E3dLabelObj* pLabelObject = (E3dLabelObj*)pObj;
                 SdrObject* pLabel = (SdrObject*)pLabelObject->Get2DLabelObj();
-                const Vector3D aPos = rSet.WorldToViewCoor(pLabelObject->GetTransPosition());
-                Point a2DPos((long)(aPos.X() + 0.5), (long)(aPos.Y() + 0.5));
+                const basegfx::B3DPoint aPos(rSet.WorldToViewCoor(pLabelObject->GetTransPosition()));
+                Point a2DPos((long)(aPos.getX() + 0.5), (long)(aPos.getY() + 0.5));
                 pLabel->NbcSetAnchorPos(a2DPos);
                 pLabel->SingleObjectPainter(rOut, rInfoRec); // #110094#-17
             }
@@ -542,7 +524,7 @@ void E3dPolyScene::DrawWireframe(Base3D* pBase3D, XOutputDevice& rXOut)
                 E3dCompoundObject* pCompObj = (E3dCompoundObject*)pObj;
 
                 // ObjectTrans setzen
-                Matrix4D mTransform = pCompObj->GetFullTransform();
+                basegfx::B3DHomMatrix mTransform = pCompObj->GetFullTransform();
                 GetCameraSet().SetObjectTrans(mTransform);
                 pBase3D->SetTransformationSet(&(GetScene()->GetCameraSet()));
 
