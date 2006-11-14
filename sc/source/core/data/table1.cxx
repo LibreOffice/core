@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:09:08 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:47:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,7 @@ ScTable::~ScTable()
     {
         //  nicht im dtor die Pages in der falschen Reihenfolge loeschen
         //  (nTab stimmt dann als Page-Number nicht!)
-        //  In ScDocument::Clear wird hinterher per Clear am DrawLayer alles geloescht.
+        //  In ScDocument::Clear wird hinterher per Clear am Draw Layer alles geloescht.
 
         ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
         if (pDrawLayer)
