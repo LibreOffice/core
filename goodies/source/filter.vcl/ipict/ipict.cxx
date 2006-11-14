@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipict.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:37:58 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:16:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,9 +61,6 @@ enum PictDrawingMethod {
 class PictReader {
 
 private:
-
-    PFilterCallback pCallback;
-    void * pCallerData;
 
     SvStream    * pPict;             // Die einzulesende Pict-Datei
     VirtualDevice * pVirDev;         // Hier werden die Drawing-Methoden aufgerufen.
@@ -161,7 +158,7 @@ public:
 
     PictReader() {}
 
-    void ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile, PFilterCallback pcallback, void * pcallerdata);
+    void ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile );
         // Liesst aus dem Stream eine Pict-Datei und fuellt das GDIMetaFile
 
 };
@@ -230,14 +227,16 @@ void PictReader::SetFillColor( const Color& rColor )
     pVirDev->SetFillColor( rColor );
 }
 
-BOOL PictReader::Callback(USHORT nPercent)
+BOOL PictReader::Callback(USHORT /*nPercent*/)
 {
+/*
     if (pCallback!=NULL) {
         if (((*pCallback)(pCallerData,nPercent))==TRUE) {
             pPict->SetError(SVSTREAM_FILEFORMAT_ERROR);
             return TRUE;
         }
     }
+*/
     return FALSE;
 }
 
@@ -1800,13 +1799,11 @@ ULONG PictReader::ReadData(USHORT nOpcode)
     return nDataSize;
 }
 
-void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile, PFilterCallback pcallback, void * pcallerdata)
+void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 {
     USHORT          nOpcode;
     BYTE            nOneByteOpcode;
     ULONG           nSize, nPos, nStartPos, nEndPos, nPercent, nLastPercent;
-
-    pCallback=pcallback; pCallerData=pcallerdata;
 
     pPict               = &rStreamPict;
     nOrigPos            = pPict->Tell();
@@ -1903,21 +1900,13 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile, P
 
 //================== GraphicImport - die exportierte Funktion ================
 
-#ifdef WNT
-extern "C" BOOL _cdecl GraphicImport( SvStream& rIStm, Graphic & rGraphic,
-                            PFilterCallback pCallback, void * pCallerData,
-                                FilterConfigItem*, BOOL)
-#else
-extern "C" BOOL GraphicImport( SvStream& rIStm, Graphic & rGraphic,
-                            PFilterCallback pCallback, void * pCallerData,
-                                FilterConfigItem*, BOOL)
-#endif
+extern "C" BOOL __LOADONCALLAPI GraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem*, BOOL )
 {
     GDIMetaFile aMTF;
     PictReader  aPictReader;
     BOOL        bRet = FALSE;
 
-    aPictReader.ReadPict( rIStm, aMTF, pCallback, pCallerData );
+    aPictReader.ReadPict( rIStm, aMTF );
 
     if ( !rIStm.GetError() )
     {
