@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawbase.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:11:14 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:18:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,7 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                 * Klebepunkt einfuegen
                 ******************************************************************/
                 bNoInterrupt = TRUE;
-                bReturn = pSdrView->BegInsObjPoint(aStartPos, rMEvt.IsMod1(), NULL, 0);
+                bReturn = pSdrView->BegInsObjPoint(aStartPos, rMEvt.IsMod1());
                 pWin->SetDrawAction(TRUE);
             }
             else if (eHit == SDRHIT_MARKEDOBJECT && rMEvt.IsMod1())
@@ -198,7 +198,7 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                 if (!rMEvt.IsShift())
                     pSdrView->UnmarkAllPoints();
 
-                bReturn = pSdrView->BegMarkPoints(aStartPos, (OutputDevice*) NULL);
+                bReturn = pSdrView->BegMarkPoints(aStartPos);
                 pWin->SetDrawAction(TRUE);
             }
             else if (eHit == SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() && !rMEvt.IsMod2())
@@ -220,7 +220,7 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                     if (!rMEvt.IsShift())
                     {
                         pSdrView->UnmarkAllPoints();
-                        pHdl = pSdrView->HitHandle(aStartPos, *pWin);
+                        pHdl = pSdrView->PickHandle(aStartPos);
                     }
                     else
                     {
@@ -231,7 +231,7 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                         }
                         else
                         {
-                            pHdl = pSdrView->HitHandle(aStartPos, *pWin);
+                            pHdl = pSdrView->PickHandle(aStartPos);
                         }
                     }
 
