@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dxfreprd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:50:04 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:14:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,9 +156,7 @@ DXFRepresentation::~DXFRepresentation()
 }
 
 
-BOOL DXFRepresentation::Read(SvStream & rIStream,
-                             PFilterCallback pCallback, void * pCallerData,
-                             USHORT nMinPercent, USHORT nMaxPercent)
+BOOL DXFRepresentation::Read( SvStream & rIStream, USHORT nMinPercent, USHORT nMaxPercent)
 {
     DXFGroupReader * pDGR;
     BOOL bRes;
@@ -167,7 +165,7 @@ BOOL DXFRepresentation::Read(SvStream & rIStream,
     aBlocks.Clear();
     aEntities.Clear();
 
-    pDGR = new DXFGroupReader(rIStream,pCallback,pCallerData,nMinPercent,nMaxPercent);
+    pDGR = new DXFGroupReader( rIStream, nMinPercent, nMaxPercent );
 
     pDGR->Read();
     while (pDGR->GetG()!=0 || strcmp(pDGR->GetS(),"EOF")!=0) {
