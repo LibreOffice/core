@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:42:44 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:45:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,9 @@
 #include <svx/xlnclit.hxx>
 #endif
 
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
 
 #include "app.hrc"
 #include "strings.hrc"
@@ -122,7 +125,6 @@
 #ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
 #endif
-#include "graphpro.hxx"
 #ifndef SD_FU_TEXT_HXX
 #include "futext.hxx"
 #endif
@@ -194,7 +196,8 @@ View::View(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
     mpClipboard (new ViewClipboard (*this))
 {
     // #114898#
-    SetBufferedOutputAllowed(sal_True);
+    SetBufferedOutputAllowed(true);
+    SetBufferedOverlayAllowed(true);
 
     EnableExtendedKeyInputDispatcher(FALSE);
     EnableExtendedMouseEventDispatcher(FALSE);
@@ -215,6 +218,15 @@ View::View(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
     aDropInsertFileTimer.SetTimeout(50);
 }
 
+void View::ImplClearDrawDropMarker()
+{
+    if(pDropMarker)
+    {
+        delete pDropMarker;
+        pDropMarker = 0L;
+    }
+}
+
 /*************************************************************************
 |*
 |* Dtor
@@ -229,12 +241,12 @@ View::~View()
     aDropErrorTimer.Stop();
     aDropInsertFileTimer.Stop();
 
-    delete pDropMarker;
+    ImplClearDrawDropMarker();
 
-    while (GetWin(0))
+    while(PaintWindowCount())
     {
         // Alle angemeldeten OutDevs entfernen
-        DelWin(GetWin(0));
+        DeleteWindowFromPaintView(GetFirstOutputDevice() /*GetWin(0)*/);
     }
 
     // gespeicherte Redraws loeschen
@@ -469,7 +481,7 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, ::sdr::cont
     // ausfuehren ??
     if (nLockRedrawSmph == 0)
     {
-        SdrPageView* pPgView = GetPageViewPvNum(0);
+        SdrPageView* pPgView = GetSdrPageView();
 
         if (pPgView)
         {
@@ -549,7 +561,7 @@ BOOL View::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPresOb
     SdrMarkList* pMarkList;
 
     if (nDragSrcPgNum != SDRPAGE_NOTFOUND &&
-        nDragSrcPgNum != GetPageViewPvNum(0)->GetPage()->GetPageNum())
+        nDragSrcPgNum != GetSdrPageView()->GetPage()->GetPageNum())
     {
         // Es laeuft gerade Drag&Drop
         // Source- und Destination-Page unterschiedlich:
@@ -662,16 +674,18 @@ BOOL View::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
 |*
 \************************************************************************/
 
-BOOL View::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
-                         BOOL bIsNewObj, SdrOutliner* pGivenOutliner,
-                         OutlinerView* pGivenOutlinerView, BOOL bDontDeleteOutliner,
-                         BOOL bOnlyOneView, BOOL bGrabFocus)
+sal_Bool View::SdrBeginTextEdit(
+    SdrObject* pObj, SdrPageView* pPV, Window* pWin,
+    sal_Bool bIsNewObj, SdrOutliner* pGivenOutliner,
+    OutlinerView* pGivenOutlinerView,
+    sal_Bool bDontDeleteOutliner, sal_Bool bOnlyOneView, sal_Bool bGrabFocus)
 {
     GetViewShell()->GetViewShellBase().GetEventMultiplexer().MultiplexEvent( sd::tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT, (void*)pObj );
 
-    BOOL bReturn = FmFormView::BegTextEdit(pObj, pPV, pWin, bIsNewObj, pGivenOutliner,
-                                        pGivenOutlinerView, bDontDeleteOutliner,
-                                        bOnlyOneView, bGrabFocus);
+    sal_Bool bReturn = FmFormView::SdrBeginTextEdit(
+        pObj, pPV, pWin, bIsNewObj, pGivenOutliner,
+        pGivenOutlinerView, bDontDeleteOutliner,
+        bOnlyOneView, bGrabFocus);
 
     if (bReturn)
     {
@@ -693,13 +707,13 @@ BOOL View::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
 |*
 \************************************************************************/
 
-SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally)
+SdrEndTextEditKind View::SdrEndTextEdit(sal_Bool bDontDeleteReally)
 {
     FunctionReference xFunc;
-    return EndTextEdit(bDontDeleteReally, xFunc );
+    return SdrEndTextEdit(bDontDeleteReally, xFunc );
 }
 
-SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FunctionReference xFunc)
+SdrEndTextEditKind View::SdrEndTextEdit(BOOL bDontDeleteReally, FunctionReference xFunc)
 {
     SdrObject* pObj = GetTextEditObject();
 
@@ -725,7 +739,7 @@ SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FunctionReference x
     {
         BOOL bDefaultTextRestored = pFuText->RestoreDefaultText();
 
-        eKind = FmFormView::EndTextEdit(bDontDeleteReally);
+        eKind = FmFormView::SdrEndTextEdit(bDontDeleteReally);
 
         SdrTextObj* pTextObj = pFuText->GetTextObj();
 
@@ -757,7 +771,7 @@ SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FunctionReference x
     }
     else
     {
-        eKind = FmFormView::EndTextEdit(bDontDeleteReally);
+        eKind = FmFormView::SdrEndTextEdit(bDontDeleteReally);
     }
 
     if( eKind != SDRENDTEXTEDIT_CHANGED )
@@ -917,8 +931,8 @@ VirtualDevice* View::CreatePageVDev(USHORT nSdPage, PageKind ePageKind, ULONG nW
             pView->SetGridVisible( FALSE );
             pView->SetHlplVisible( FALSE );
             pView->SetGlueVisible( FALSE );
-            pView->ShowPage(pPage, Point(-pPage->GetLftBorder(), -pPage->GetUppBorder()));
-            SdrPageView* pPageView  = pView->GetPageView(pPage);
+            pView->ShowSdrPage(pPage); // WAITING FOR SJ , Point(-pPage->GetLftBorder(), -pPage->GetUppBorder()));
+            SdrPageView* pPageView  = pView->GetSdrPageView();
             if( pViewShell )
             {
                 FrameView* pFrameView   = pViewShell->GetFrameView();
