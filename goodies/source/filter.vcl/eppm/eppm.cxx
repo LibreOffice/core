@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eppm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:34:13 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:11:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,6 @@ class PPMWriter {
 
 private:
 
-    PFilterCallback     mpCallback;
-    void *              mpCallerData;
-
     SvStream*           mpOStm;             // Die auszugebende PPM-Datei
     USHORT              mpOStmOldModus;
 
@@ -64,18 +61,18 @@ private:
     BitmapReadAccess*   mpAcc;
     ULONG               mnWidth, mnHeight;  // Bildausmass in Pixeln
 
-    BOOL                ImplCallback( USHORT nPercent );
+    void                ImplCallback( USHORT nPercent );
     BOOL                ImplWriteHeader();
     void                ImplWriteBody();
     void                ImplWriteNumber( sal_Int32 );
+
+    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
 public:
                         PPMWriter();
                         ~PPMWriter();
 
-    BOOL                WritePPM( const Graphic& rGraphic, SvStream& rPPM,
-                                  PFilterCallback pCallback, void* pCallerdata,
-                                  FilterConfigItem* pConfigItem );
+    BOOL                WritePPM( const Graphic& rGraphic, SvStream& rPPM, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von PPMWriter ==============================
@@ -94,32 +91,30 @@ PPMWriter::~PPMWriter()
 
 // ------------------------------------------------------------------------
 
-BOOL PPMWriter::ImplCallback( USHORT nPercent )
+void PPMWriter::ImplCallback( USHORT nPercent )
 {
-    if ( mpCallback != NULL )
-    {
-        if ( ( (*mpCallback)( mpCallerData, nPercent ) ) == TRUE )
-        {
-            mpOStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
-            return TRUE;
-        }
-    }
-    return FALSE;
+    if ( xStatusIndicator.is() && ( nPercent <= 100 ) )
+        xStatusIndicator->setValue( nPercent );
 }
 
 // ------------------------------------------------------------------------
 
-BOOL PPMWriter::WritePPM( const Graphic& rGraphic, SvStream& rPPM,
-                            PFilterCallback pCallback, void* pCallerdata,
-                                FilterConfigItem* pConfigItem )
+BOOL PPMWriter::WritePPM( const Graphic& rGraphic, SvStream& rPPM, FilterConfigItem* pFilterConfigItem )
 {
 
     mpOStm = &rPPM;
-    mpCallback = pCallback;
-    mpCallerData = pCallerdata;
 
-    if ( pConfigItem )
-        mnMode = pConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FileFormat" ) ), 0 );
+    if ( pFilterConfigItem )
+    {
+        mnMode = pFilterConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FileFormat" ) ), 0 );
+
+        xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
+        if ( xStatusIndicator.is() )
+        {
+            rtl::OUString aMsg;
+            xStatusIndicator->start( aMsg, 100 );
+        }
+    }
 
     BitmapEx    aBmpEx( rGraphic.GetBitmapEx() );
     Bitmap      aBmp = aBmpEx.GetBitmap();
@@ -141,6 +136,9 @@ BOOL PPMWriter::WritePPM( const Graphic& rGraphic, SvStream& rPPM,
         mbStatus = FALSE;
 
     mpOStm->SetNumberFormatInt( mpOStmOldModus );
+
+    if ( xStatusIndicator.is() )
+        xStatusIndicator->end();
 
     return mbStatus;
 }
@@ -259,12 +257,10 @@ void PPMWriter::ImplWriteNumber( sal_Int32 nNumber )
 // - exported function -
 // ---------------------
 
-extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic,
-                                               PFilterCallback pCallback, void* pCallerData,
-                                               FilterConfigItem* pConfigItem, BOOL )
+extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, BOOL )
 {
     PPMWriter aPPMWriter;
-    return aPPMWriter.WritePPM( rGraphic, rStream, pCallback, pCallerData, pConfigItem );
+    return aPPMWriter.WritePPM( rGraphic, rStream, pFilterConfigItem );
 }
 
 // ------------------------------------------------------------------------
