@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dtex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:38:59 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:08:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,13 +56,13 @@
 |*
 \************************************************************************/
 
-TextureAttributes::TextureAttributes(BOOL bGhosted, void* pFT)
+TextureAttributes::TextureAttributes(sal_Bool bGhosted, void* pFT)
 :   mpFloatTrans(pFT),
     mbGhosted(bGhosted)
 {
 }
 
-BOOL TextureAttributes::operator==(const TextureAttributes& rAtt) const
+sal_Bool TextureAttributes::operator==(const TextureAttributes& rAtt) const
 {
     return ( GetTextureAttributeType() == rAtt.GetTextureAttributeType()
         && rAtt.mbGhosted == mbGhosted
@@ -71,62 +71,66 @@ BOOL TextureAttributes::operator==(const TextureAttributes& rAtt) const
 
 // Fuer Colors
 
-TextureAttributesColor::TextureAttributesColor(BOOL bGhosted, void* pFT, Color aColor)
+TextureAttributesColor::TextureAttributesColor(sal_Bool bGhosted, void* pFT, Color aColor)
 :   TextureAttributes(bGhosted, pFT),
     maColorAttribute(aColor)
 {
 }
 
-BOOL TextureAttributesColor::operator==(const TextureAttributes& rAtt) const
+sal_Bool TextureAttributesColor::operator==(const TextureAttributes& rAtt) const
 {
     if(TextureAttributes::operator==(rAtt))
     {
         const TextureAttributesColor& rAttCol = (const TextureAttributesColor&)rAtt;
         if(rAttCol.maColorAttribute == maColorAttribute)
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-UINT16 TextureAttributesColor::GetTextureAttributeType() const
+sal_uInt16 TextureAttributesColor::GetTextureAttributeType() const
 {
     return TEXTURE_ATTRIBUTE_TYPE_COLOR;
 }
 
 // Fuer Bitmaps
 
-TextureAttributesBitmap::TextureAttributesBitmap(BOOL bGhosted, void* pFT, Bitmap aBmp)
+TextureAttributesBitmap::TextureAttributesBitmap(sal_Bool bGhosted, void* pFT, Bitmap aBmp)
 :   TextureAttributes(bGhosted, pFT),
     maBitmapAttribute(aBmp)
 {
 }
 
-BOOL TextureAttributesBitmap::operator==(const TextureAttributes& rAtt) const
+TextureAttributesBitmap::~TextureAttributesBitmap()
+{
+}
+
+sal_Bool TextureAttributesBitmap::operator==(const TextureAttributes& rAtt) const
 {
     if(TextureAttributes::operator==(rAtt))
     {
         const TextureAttributesBitmap& rAttBmp = (const TextureAttributesBitmap&)rAtt;
         if(rAttBmp.maBitmapAttribute == maBitmapAttribute)
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-UINT16 TextureAttributesBitmap::GetTextureAttributeType() const
+sal_uInt16 TextureAttributesBitmap::GetTextureAttributeType() const
 {
     return TEXTURE_ATTRIBUTE_TYPE_BITMAP;
 }
 
 // Fuer Gradientfills
 
-TextureAttributesGradient::TextureAttributesGradient(BOOL bGhosted, void* pFT, void* pF, void *pSC)
+TextureAttributesGradient::TextureAttributesGradient(sal_Bool bGhosted, void* pFT, void* pF, void *pSC)
 :   TextureAttributes(bGhosted, pFT),
     mpFill(pF),
     mpStepCount(pSC)
 {
 }
 
-BOOL TextureAttributesGradient::operator==(const TextureAttributes& rAtt) const
+sal_Bool TextureAttributesGradient::operator==(const TextureAttributes& rAtt) const
 {
     if(TextureAttributes::operator==(rAtt))
     {
@@ -134,37 +138,37 @@ BOOL TextureAttributesGradient::operator==(const TextureAttributes& rAtt) const
 
         if(rAttGra.mpFill == mpFill
             && rAttGra.mpStepCount == mpStepCount)
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-UINT16 TextureAttributesGradient::GetTextureAttributeType() const
+sal_uInt16 TextureAttributesGradient::GetTextureAttributeType() const
 {
     return TEXTURE_ATTRIBUTE_TYPE_GRADIENT;
 }
 
 // Fuer Hatchfills
 
-TextureAttributesHatch::TextureAttributesHatch(BOOL bGhosted, void* pFT, void* pF)
+TextureAttributesHatch::TextureAttributesHatch(sal_Bool bGhosted, void* pFT, void* pF)
 :   TextureAttributes(bGhosted, pFT),
     mpFill(pF)
 {
 }
 
-BOOL TextureAttributesHatch::operator==(const TextureAttributes& rAtt) const
+sal_Bool TextureAttributesHatch::operator==(const TextureAttributes& rAtt) const
 {
     if(TextureAttributes::operator==(rAtt))
     {
         const TextureAttributesHatch& rAttHat = (const TextureAttributesHatch&)rAtt;
 
         if(rAttHat.mpFill == mpFill)
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-UINT16 TextureAttributesHatch::GetTextureAttributeType() const
+sal_uInt16 TextureAttributesHatch::GetTextureAttributeType() const
 {
     return TEXTURE_ATTRIBUTE_TYPE_HATCH;
 }
@@ -193,7 +197,7 @@ B3dTexture::B3dTexture(
     eWrapS(eS),
     eWrapT(eT),
     nSwitchVal(0),
-    bTextureKindChanged(FALSE)
+    bTextureKindChanged(sal_False)
 {
     // ReadAccess auf Textur anfordern
     pReadAccess = aBitmap.AcquireReadAccess();
@@ -282,7 +286,7 @@ void B3dTexture::SetTextureWrapS(Base3DTextureWrap eNew)
     if(eNew != eWrapS)
     {
         eWrapS = eNew;
-        bTextureKindChanged = TRUE;
+        bTextureKindChanged = sal_True;
     }
 }
 
@@ -297,7 +301,7 @@ void B3dTexture::SetTextureWrapT(Base3DTextureWrap eNew)
     if(eNew != eWrapT)
     {
         eWrapT = eNew;
-        bTextureKindChanged = TRUE;
+        bTextureKindChanged = sal_True;
     }
 }
 
@@ -317,7 +321,7 @@ void B3dTexture::SetBlendColor(Color rNew)
         aColBlend.SetGreen(rNew.GetGreen());
         aColBlend.SetBlue(rNew.GetBlue());
         if(eWrapS == Base3DTextureSingle || eWrapT == Base3DTextureSingle)
-            bTextureKindChanged = TRUE;
+            bTextureKindChanged = sal_True;
     }
 }
 
@@ -345,7 +349,7 @@ void B3dTexture::SetTextureColor(Color rNew)
         aColTexture.SetGreen(rNew.GetGreen());
         aColTexture.SetBlue(rNew.GetBlue());
         if(eWrapS == Base3DTextureSingle || eWrapT == Base3DTextureSingle)
-            bTextureKindChanged = TRUE;
+            bTextureKindChanged = sal_True;
     }
 }
 
@@ -417,7 +421,7 @@ void B3dTexture::SetTextureKind(Base3DTextureKind eNew)
     if(eKind != eNew)
     {
         eKind = eNew;
-        bTextureKindChanged = TRUE;
+        bTextureKindChanged = sal_True;
     }
     SetSwitchVal();
 }
@@ -460,7 +464,7 @@ void B3dTexture::ModifyColor(Color& rCol, double fS, double fT)
     long nX((long)fS);
     long nY((long)fT);
     BitmapColor aBmCol = aColTexture;
-    BOOL bOnTexture(TRUE);
+    sal_Bool bOnTexture(sal_True);
 
     // Wrapping in S-Richtung
     if(eWrapS == Base3DTextureClamp)
@@ -482,7 +486,7 @@ void B3dTexture::ModifyColor(Color& rCol, double fS, double fT)
     {
         // Single
         if(nX < 0 || nX >= GetBitmapSize().Width())
-            bOnTexture = FALSE;
+            bOnTexture = sal_False;
     }
 
     // Wrapping in T-Richtung
@@ -507,7 +511,7 @@ void B3dTexture::ModifyColor(Color& rCol, double fS, double fT)
         {
             // Single
             if(nY < 0 || nY >= GetBitmapSize().Height())
-                bOnTexture = FALSE;
+                bOnTexture = sal_False;
         }
 
         if(bOnTexture)
@@ -520,7 +524,7 @@ void B3dTexture::ModifyColor(Color& rCol, double fS, double fT)
 
     // Falls die Position nicht innerhalb der Textur ist, auch das Filtern
     // unterdruecken um keine falschen BitmapAcesses zu bekommen
-    UINT8 nLocalSwitchVal(nSwitchVal);
+    sal_uInt8 nLocalSwitchVal(nSwitchVal);
     if(!bOnTexture)
         nLocalSwitchVal |= B3D_TXT_FLTR_NEA;
 
@@ -535,19 +539,19 @@ void B3dTexture::ModifyColor(Color& rCol, double fS, double fT)
         }
         case (B3D_TXT_FLTR_NEA|B3D_TXT_MODE_MOD|B3D_TXT_KIND_COL) :
         {
-            rCol.SetRed((UINT8)( ((UINT16)rCol.GetRed() * (UINT16)aBmCol.GetRed())>>8 ));
-            rCol.SetGreen((UINT8)( ((UINT16)rCol.GetGreen() * (UINT16)aBmCol.GetGreen())>>8 ));
-            rCol.SetBlue((UINT8)( ((UINT16)rCol.GetBlue() * (UINT16)aBmCol.GetBlue())>>8 ));
+            rCol.SetRed((sal_uInt8)( ((sal_uInt16)rCol.GetRed() * (sal_uInt16)aBmCol.GetRed())>>8 ));
+            rCol.SetGreen((sal_uInt8)( ((sal_uInt16)rCol.GetGreen() * (sal_uInt16)aBmCol.GetGreen())>>8 ));
+            rCol.SetBlue((sal_uInt8)( ((sal_uInt16)rCol.GetBlue() * (sal_uInt16)aBmCol.GetBlue())>>8 ));
             break;
         }
         case (B3D_TXT_FLTR_NEA|B3D_TXT_MODE_BND|B3D_TXT_KIND_COL) :
         {
-            rCol.SetRed((UINT8)( ((UINT16)rCol.GetRed() * (0x00ff - (UINT16)aBmCol.GetRed()))
-                + ((UINT16)aColBlend.GetRed() * (UINT16)aBmCol.GetRed()) ));
-            rCol.SetGreen((UINT8)( ((UINT16)rCol.GetGreen() * (0x00ff - (UINT16)aBmCol.GetGreen()))
-                + ((UINT16)aColBlend.GetGreen() * (UINT16)aBmCol.GetGreen()) ));
-            rCol.SetBlue((UINT8)( ((UINT16)rCol.GetBlue() * (0x00ff - (UINT16)aBmCol.GetBlue()))
-                + ((UINT16)aColBlend.GetBlue() * (UINT16)aBmCol.GetBlue()) ));
+            rCol.SetRed((sal_uInt8)( ((sal_uInt16)rCol.GetRed() * (0x00ff - (sal_uInt16)aBmCol.GetRed()))
+                + ((sal_uInt16)aColBlend.GetRed() * (sal_uInt16)aBmCol.GetRed()) ));
+            rCol.SetGreen((sal_uInt8)( ((sal_uInt16)rCol.GetGreen() * (0x00ff - (sal_uInt16)aBmCol.GetGreen()))
+                + ((sal_uInt16)aColBlend.GetGreen() * (sal_uInt16)aBmCol.GetGreen()) ));
+            rCol.SetBlue((sal_uInt8)( ((sal_uInt16)rCol.GetBlue() * (0x00ff - (sal_uInt16)aBmCol.GetBlue()))
+                + ((sal_uInt16)aColBlend.GetBlue() * (sal_uInt16)aBmCol.GetBlue()) ));
             break;
         }
         case (B3D_TXT_FLTR_NEA|B3D_TXT_MODE_REP|B3D_TXT_KIND_INT) :
@@ -561,23 +565,23 @@ void B3dTexture::ModifyColor(Color& rCol, double fS, double fT)
         case (B3D_TXT_FLTR_NEA|B3D_TXT_MODE_MOD|B3D_TXT_KIND_INT) :
         case (B3D_TXT_FLTR_NEA|B3D_TXT_MODE_MOD|B3D_TXT_KIND_LUM) :
         {
-            UINT16 nMidCol = (aBmCol.GetRed() + aBmCol.GetGreen() + aBmCol.GetBlue()) / 3;
-            rCol.SetRed((UINT8)( ((UINT16)rCol.GetRed() * nMidCol)>>8 ));
-            rCol.SetGreen((UINT8)( ((UINT16)rCol.GetGreen() * nMidCol)>>8 ));
-            rCol.SetBlue((UINT8)( ((UINT16)rCol.GetBlue() * nMidCol)>>8 ));
+            sal_uInt16 nMidCol = (aBmCol.GetRed() + aBmCol.GetGreen() + aBmCol.GetBlue()) / 3;
+            rCol.SetRed((sal_uInt8)( ((sal_uInt16)rCol.GetRed() * nMidCol)>>8 ));
+            rCol.SetGreen((sal_uInt8)( ((sal_uInt16)rCol.GetGreen() * nMidCol)>>8 ));
+            rCol.SetBlue((sal_uInt8)( ((sal_uInt16)rCol.GetBlue() * nMidCol)>>8 ));
             break;
         }
         case (B3D_TXT_FLTR_NEA|B3D_TXT_MODE_BND|B3D_TXT_KIND_INT) :
         case (B3D_TXT_FLTR_NEA|B3D_TXT_MODE_BND|B3D_TXT_KIND_LUM) :
         {
-            UINT16 nMidCol = (aBmCol.GetRed() + aBmCol.GetGreen() + aBmCol.GetBlue()) / 3;
-            UINT16 nInvMidCol = 0x00ff - nMidCol;
-            rCol.SetRed((UINT8)( ((UINT16)rCol.GetRed() * nInvMidCol)
-                + ((UINT16)aColBlend.GetRed() * nMidCol) ));
-            rCol.SetGreen((UINT8)( ((UINT16)rCol.GetGreen() * nInvMidCol)
-                + ((UINT16)aColBlend.GetGreen() * nMidCol) ));
-            rCol.SetBlue((UINT8)( ((UINT16)rCol.GetBlue() * nInvMidCol)
-                + ((UINT16)aColBlend.GetBlue() * nMidCol) ));
+            sal_uInt16 nMidCol = (aBmCol.GetRed() + aBmCol.GetGreen() + aBmCol.GetBlue()) / 3;
+            sal_uInt16 nInvMidCol = 0x00ff - nMidCol;
+            rCol.SetRed((sal_uInt8)( ((sal_uInt16)rCol.GetRed() * nInvMidCol)
+                + ((sal_uInt16)aColBlend.GetRed() * nMidCol) ));
+            rCol.SetGreen((sal_uInt8)( ((sal_uInt16)rCol.GetGreen() * nInvMidCol)
+                + ((sal_uInt16)aColBlend.GetGreen() * nMidCol) ));
+            rCol.SetBlue((sal_uInt8)( ((sal_uInt16)rCol.GetBlue() * nInvMidCol)
+                + ((sal_uInt16)aColBlend.GetBlue() * nMidCol) ));
             break;
         }
         case (B3D_TXT_MODE_REP|B3D_TXT_KIND_COL) :
@@ -608,11 +612,11 @@ void B3dTexture::ModifyColor(Color& rCol, double fS, double fT)
             BitmapColor aColBL = pReadAccess->GetColor(nY2, nX);
             BitmapColor aColBR = pReadAccess->GetColor(nY2, nX2);
 
-            rCol.SetRed((UINT8)(((double)aColTL.GetRed() * fS + (double)aColTR.GetRed() * fRight) * fT
+            rCol.SetRed((sal_uInt8)(((double)aColTL.GetRed() * fS + (double)aColTR.GetRed() * fRight) * fT
                 + ((double)aColBL.GetRed() * fS + (double)aColBR.GetRed() * fRight) * fBottom));
-            rCol.SetGreen((UINT8)(((double)aColTL.GetGreen() * fS + (double)aColTR.GetGreen() * fRight) * fT
+            rCol.SetGreen((sal_uInt8)(((double)aColTL.GetGreen() * fS + (double)aColTR.GetGreen() * fRight) * fT
                 + ((double)aColBL.GetGreen() * fS + (double)aColBR.GetGreen() * fRight) * fBottom));
-            rCol.SetBlue((UINT8)(((double)aColTL.GetBlue() * fS + (double)aColTR.GetBlue() * fRight) * fT
+            rCol.SetBlue((sal_uInt8)(((double)aColTL.GetBlue() * fS + (double)aColTR.GetBlue() * fRight) * fT
                 + ((double)aColBL.GetBlue() * fS + (double)aColBR.GetBlue() * fRight) * fBottom));
             break;
         }
@@ -651,9 +655,9 @@ void B3dTexture::ModifyColor(Color& rCol, double fS, double fT)
             double fBlue = ((double)aColTL.GetBlue() * fS + (double)aColTR.GetBlue() * fRight) * fT
                 + ((double)aColBL.GetBlue() * fS + (double)aColBR.GetBlue() * fRight) * fBottom;
 
-            rCol.SetRed((UINT8)(((double)rCol.GetRed() * fRed) / 255.0));
-            rCol.SetGreen((UINT8)(((double)rCol.GetGreen() * fGreen) / 255.0));
-            rCol.SetBlue((UINT8)(((double)rCol.GetBlue() * fBlue) / 255.0));
+            rCol.SetRed((sal_uInt8)(((double)rCol.GetRed() * fRed) / 255.0));
+            rCol.SetGreen((sal_uInt8)(((double)rCol.GetGreen() * fGreen) / 255.0));
+            rCol.SetBlue((sal_uInt8)(((double)rCol.GetBlue() * fBlue) / 255.0));
             break;
         }
         case (B3D_TXT_MODE_BND|B3D_TXT_KIND_COL) :
@@ -691,9 +695,9 @@ void B3dTexture::ModifyColor(Color& rCol, double fS, double fT)
             double fBlue = ((double)aColTL.GetBlue() * fS + (double)aColTR.GetBlue() * fRight) * fT
                 + ((double)aColBL.GetBlue() * fS + (double)aColBR.GetBlue() * fRight) * fBottom;
 
-            rCol.SetRed((UINT8)((((double)rCol.GetRed() * (255.0 - fRed)) + ((double)aColBlend.GetRed() * fRed)) / 255.0));
-            rCol.SetGreen((UINT8)((((double)rCol.GetGreen() * (255.0 - fGreen)) + ((double)aColBlend.GetGreen() * fGreen)) / 255.0));
-            rCol.SetBlue((UINT8)((((double)rCol.GetBlue() * (255.0 - fBlue)) + ((double)aColBlend.GetBlue() * fBlue)) / 255.0));
+            rCol.SetRed((sal_uInt8)((((double)rCol.GetRed() * (255.0 - fRed)) + ((double)aColBlend.GetRed() * fRed)) / 255.0));
+            rCol.SetGreen((sal_uInt8)((((double)rCol.GetGreen() * (255.0 - fGreen)) + ((double)aColBlend.GetGreen() * fGreen)) / 255.0));
+            rCol.SetBlue((sal_uInt8)((((double)rCol.GetBlue() * (255.0 - fBlue)) + ((double)aColBlend.GetBlue() * fBlue)) / 255.0));
             break;
         }
         case (B3D_TXT_MODE_REP|B3D_TXT_KIND_INT) :
@@ -720,7 +724,7 @@ void B3dTexture::ModifyColor(Color& rCol, double fS, double fT)
             double fRight = 1.0 - fS;
             double fBottom = 1.0 - fT;
 
-            UINT8 nMidVal = (UINT8)((
+            sal_uInt8 nMidVal = (sal_uInt8)((
                 (double)pReadAccess->GetLuminance(nY, nX) * fS +
                 (double)pReadAccess->GetLuminance(nY, nX2) * fRight) * fT + (
                 (double)pReadAccess->GetLuminance(nY2, nX) * fS +
@@ -761,9 +765,9 @@ void B3dTexture::ModifyColor(Color& rCol, double fS, double fT)
                 (double)pReadAccess->GetLuminance(nY2, nX) * fS +
                 (double)pReadAccess->GetLuminance(nY2, nX2) * fRight) * fBottom;
 
-            rCol.SetRed((UINT8)(((double)rCol.GetRed() * fMidVal) / 255.0));
-            rCol.SetGreen((UINT8)(((double)rCol.GetGreen() * fMidVal) / 255.0));
-            rCol.SetBlue((UINT8)(((double)rCol.GetBlue() * fMidVal) / 255.0));
+            rCol.SetRed((sal_uInt8)(((double)rCol.GetRed() * fMidVal) / 255.0));
+            rCol.SetGreen((sal_uInt8)(((double)rCol.GetGreen() * fMidVal) / 255.0));
+            rCol.SetBlue((sal_uInt8)(((double)rCol.GetBlue() * fMidVal) / 255.0));
             break;
         }
         case (B3D_TXT_MODE_BND|B3D_TXT_KIND_INT) :
@@ -797,9 +801,9 @@ void B3dTexture::ModifyColor(Color& rCol, double fS, double fT)
                 (double)pReadAccess->GetLuminance(nY2, nX2) * fRight) * fBottom;
             double fInvMidVal(255.0 - fMidVal);
 
-            rCol.SetRed((UINT8)((((double)rCol.GetRed() * fInvMidVal) + ((double)aColBlend.GetRed() * fMidVal)) / 255.0));
-            rCol.SetGreen((UINT8)((((double)rCol.GetGreen() * fInvMidVal) + ((double)aColBlend.GetGreen() * fMidVal)) / 255.0));
-            rCol.SetBlue((UINT8)((((double)rCol.GetBlue() * fInvMidVal) + ((double)aColBlend.GetBlue() * fMidVal)) / 255.0));
+            rCol.SetRed((sal_uInt8)((((double)rCol.GetRed() * fInvMidVal) + ((double)aColBlend.GetRed() * fMidVal)) / 255.0));
+            rCol.SetGreen((sal_uInt8)((((double)rCol.GetGreen() * fInvMidVal) + ((double)aColBlend.GetGreen() * fMidVal)) / 255.0));
+            rCol.SetBlue((sal_uInt8)((((double)rCol.GetBlue() * fInvMidVal) + ((double)aColBlend.GetBlue() * fMidVal)) / 255.0));
             break;
         }
     }
@@ -874,21 +878,21 @@ void B3dTexture::ModifyColor(Color& rCol, double fS, double fT)
 //  {
 //      if(eMode == Base3DTextureReplace)
 //      {
-//          rCol.SetRed((UINT8)fRed);
-//          rCol.SetGreen((UINT8)fGreen);
-//          rCol.SetBlue((UINT8)fBlue);
+//          rCol.SetRed((sal_uInt8)fRed);
+//          rCol.SetGreen((sal_uInt8)fGreen);
+//          rCol.SetBlue((sal_uInt8)fBlue);
 //      }
 //      else if(eMode == Base3DTextureModulate)
 //      {
-//          rCol.SetRed((UINT8)(((double)rCol.GetRed() * fRed) / 255.0));
-//          rCol.SetGreen((UINT8)(((double)rCol.GetGreen() * fGreen) / 255.0));
-//          rCol.SetBlue((UINT8)(((double)rCol.GetBlue() * fBlue) / 255.0));
+//          rCol.SetRed((sal_uInt8)(((double)rCol.GetRed() * fRed) / 255.0));
+//          rCol.SetGreen((sal_uInt8)(((double)rCol.GetGreen() * fGreen) / 255.0));
+//          rCol.SetBlue((sal_uInt8)(((double)rCol.GetBlue() * fBlue) / 255.0));
 //      }
 //      else // Base3DTextureBlend
 //      {
-//          rCol.SetRed((UINT8)((((double)rCol.GetRed() * (255.0 - fRed)) + ((double)aColBlend.GetRed() * fRed)) / 255.0));
-//          rCol.SetGreen((UINT8)((((double)rCol.GetGreen() * (255.0 - fGreen)) + ((double)aColBlend.GetGreen() * fGreen)) / 255.0));
-//          rCol.SetBlue((UINT8)((((double)rCol.GetBlue() * (255.0 - fBlue)) + ((double)aColBlend.GetBlue() * fBlue)) / 255.0));
+//          rCol.SetRed((sal_uInt8)((((double)rCol.GetRed() * (255.0 - fRed)) + ((double)aColBlend.GetRed() * fRed)) / 255.0));
+//          rCol.SetGreen((sal_uInt8)((((double)rCol.GetGreen() * (255.0 - fGreen)) + ((double)aColBlend.GetGreen() * fGreen)) / 255.0));
+//          rCol.SetBlue((sal_uInt8)((((double)rCol.GetBlue() * (255.0 - fBlue)) + ((double)aColBlend.GetBlue() * fBlue)) / 255.0));
 //      }
 //  }
 //  else
@@ -896,22 +900,22 @@ void B3dTexture::ModifyColor(Color& rCol, double fS, double fT)
 //      double fMidVal((fRed + fGreen + fBlue) / 3.0);
 //      if(eMode == Base3DTextureReplace)
 //      {
-//          rCol.SetRed((UINT8)fMidVal);
-//          rCol.SetGreen((UINT8)fMidVal);
-//          rCol.SetBlue((UINT8)fMidVal);
+//          rCol.SetRed((sal_uInt8)fMidVal);
+//          rCol.SetGreen((sal_uInt8)fMidVal);
+//          rCol.SetBlue((sal_uInt8)fMidVal);
 //      }
 //      else if(eMode == Base3DTextureModulate)
 //      {
-//          rCol.SetRed((UINT8)(((double)rCol.GetRed() * fMidVal) / 255.0));
-//          rCol.SetGreen((UINT8)(((double)rCol.GetGreen() * fMidVal) / 255.0));
-//          rCol.SetBlue((UINT8)(((double)rCol.GetBlue() * fMidVal) / 255.0));
+//          rCol.SetRed((sal_uInt8)(((double)rCol.GetRed() * fMidVal) / 255.0));
+//          rCol.SetGreen((sal_uInt8)(((double)rCol.GetGreen() * fMidVal) / 255.0));
+//          rCol.SetBlue((sal_uInt8)(((double)rCol.GetBlue() * fMidVal) / 255.0));
 //      }
 //      else // Base3DTextureBlend
 //      {
 //          double fInvMidVal(255.0 - fMidVal);
-//          rCol.SetRed((UINT8)((((double)rCol.GetRed() * fInvMidVal) + ((double)aColBlend.GetRed() * fRed)) / 255.0));
-//          rCol.SetGreen((UINT8)((((double)rCol.GetGreen() * fInvMidVal) + ((double)aColBlend.GetGreen() * fGreen)) / 255.0));
-//          rCol.SetBlue((UINT8)((((double)rCol.GetBlue() * fInvMidVal) + ((double)aColBlend.GetBlue() * fBlue)) / 255.0));
+//          rCol.SetRed((sal_uInt8)((((double)rCol.GetRed() * fInvMidVal) + ((double)aColBlend.GetRed() * fRed)) / 255.0));
+//          rCol.SetGreen((sal_uInt8)((((double)rCol.GetGreen() * fInvMidVal) + ((double)aColBlend.GetGreen() * fGreen)) / 255.0));
+//          rCol.SetBlue((sal_uInt8)((((double)rCol.GetBlue() * fInvMidVal) + ((double)aColBlend.GetBlue() * fBlue)) / 255.0));
 //      }
 //  }
 }
@@ -1046,7 +1050,7 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
     Size aSize(0,0);
 
     // Groesse entscheiden (auf 1024 begrenzen)
-    for(UINT16 a=1;a<0x0400 && (!aSize.Width() || !aSize.Height());a<<=1)
+    for(sal_uInt16 a=1;a<0x0400 && (!aSize.Width() || !aSize.Height());a<<=1)
     {
         if(!aSize.Width() && (a>=GetBitmapSize().Width()))
             aSize.Width() = a;
@@ -1068,8 +1072,8 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
         aSize.Height() = 8;
 
     // Skalierte Bitmap anlegen
-    BOOL bUsesAlpha(!!GetAlphaMask());
-    Bitmap aBmp(GetBitmap());
+    sal_Bool bUsesAlpha(!!GetAlphaMask());
+    Bitmap aLocalBitmap(GetBitmap());
     AlphaMask aTransAlphaMask;
 
     if(bUsesAlpha)
@@ -1079,7 +1083,7 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
 
     if(aSize != GetBitmapSize())
     {
-        aBmp.Scale((double)aSize.Width() / (double)GetBitmapSize().Width(),
+        aLocalBitmap.Scale((double)aSize.Width() / (double)GetBitmapSize().Width(),
             (double)aSize.Height() / (double)GetBitmapSize().Height());
 
         if(bUsesAlpha)
@@ -1093,7 +1097,7 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
     // handelt, lege nun eine mit einem definierten Rand an
     if(GetTextureWrapS() == Base3DTextureSingle || GetTextureWrapT() == Base3DTextureSingle)
     {
-        Bitmap aHelpBitmap(aBmp);
+        Bitmap aHelpBitmap(aLocalBitmap);
         AlphaMask aTransAlphaHelpMask;
 
         if(bUsesAlpha)
@@ -1118,11 +1122,11 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
         aHelpBitmap.Scale((double)aNewSize.Width() / (double)aSize.Width(),
             (double)aNewSize.Height() / (double)aSize.Height());
         Color aEraseCol = GetTextureColor();
-        aBmp.Erase(aEraseCol);
+        aLocalBitmap.Erase(aEraseCol);
         Point aPoint;
         Rectangle aCopySrc(aPoint, aNewSize);
         Rectangle aCopyDest(aNewPos, aNewSize);
-        aBmp.CopyPixel(aCopyDest, aCopySrc, &aHelpBitmap);
+        aLocalBitmap.CopyPixel(aCopyDest, aCopySrc, &aHelpBitmap);
 
         if(bUsesAlpha)
         {
@@ -1134,10 +1138,10 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
     }
 
     // Lesezugriff auf neue Bitmap holen
-    BitmapReadAccess* pRAccess = aBmp.AcquireReadAccess();
-    BitmapReadAccess* pAlphaRAccess = (bUsesAlpha) ? aTransAlphaMask.AcquireReadAccess() : NULL;
-    BOOL bGotReadAccess((bUsesAlpha)
-        ? (pRAccess != 0 && pAlphaRAccess != 0) : pRAccess != 0);
+    BitmapReadAccess* pLocalReadAccess = aLocalBitmap.AcquireReadAccess();
+    BitmapReadAccess* pLocalAlphaReadAccess = (bUsesAlpha) ? aTransAlphaMask.AcquireReadAccess() : NULL;
+    sal_Bool bGotReadAccess((bUsesAlpha)
+        ? (pLocalReadAccess != 0 && pLocalAlphaReadAccess != 0) : pLocalReadAccess != 0);
 
     if(bGotReadAccess)
     {
@@ -1162,20 +1166,20 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
             GL_UINT8 pRunner = pBuffer;
             if(GetTextureKind() == Base3DTextureColor)
             {
-                if(pRAccess->HasPalette())
+                if(pLocalReadAccess->HasPalette())
                 {
                     for(long a=0;a<aSize.Height();a++)
                     {
                         for(long b=0;b<aSize.Width();b++)
                         {
-                            BitmapColor rCol = pRAccess->GetPaletteColor(pRAccess->GetPixel(a, b));
+                            BitmapColor rCol = pLocalReadAccess->GetPaletteColor(pLocalReadAccess->GetPixel(a, b));
                             *pRunner++ = rCol.GetRed();
                             *pRunner++ = rCol.GetGreen();
                             *pRunner++ = rCol.GetBlue();
 
                             if(bUsesAlpha)
                             {
-                                BitmapColor rTrn = pAlphaRAccess->GetPixel(a, b);
+                                BitmapColor rTrn = pLocalAlphaReadAccess->GetPixel(a, b);
                                 *pRunner++ = (BYTE)255 - rTrn.GetIndex();
                             }
                         }
@@ -1187,14 +1191,14 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
                     {
                         for(long b=0;b<aSize.Width();b++)
                         {
-                            BitmapColor rCol = pRAccess->GetPixel(a, b);
+                            BitmapColor rCol = pLocalReadAccess->GetPixel(a, b);
                             *pRunner++ = rCol.GetRed();
                             *pRunner++ = rCol.GetGreen();
                             *pRunner++ = rCol.GetBlue();
 
                             if(bUsesAlpha)
                             {
-                                BitmapColor rTrn = pAlphaRAccess->GetPixel(a, b);
+                                BitmapColor rTrn = pLocalAlphaReadAccess->GetPixel(a, b);
                                 *pRunner++ = (BYTE)255 - rTrn.GetIndex();
                             }
                         }
@@ -1203,18 +1207,18 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
             }
             else
             {
-                if(pRAccess->HasPalette())
+                if(pLocalReadAccess->HasPalette())
                 {
                     for(long a=0;a<aSize.Height();a++)
                     {
                         for(long b=0;b<aSize.Width();b++)
                         {
-                            BitmapColor rCol = pRAccess->GetPaletteColor(pRAccess->GetPixel(a, b));
+                            BitmapColor rCol = pLocalReadAccess->GetPaletteColor(pLocalReadAccess->GetPixel(a, b));
                             *pRunner++ = (rCol.GetRed() + rCol.GetGreen() + rCol.GetBlue()) / 3;
 
                             if(bUsesAlpha)
                             {
-                                BitmapColor rTrn = pAlphaRAccess->GetPixel(a, b);
+                                BitmapColor rTrn = pLocalAlphaReadAccess->GetPixel(a, b);
                                 *pRunner++ = (BYTE)255 - rTrn.GetIndex();
                             }
                         }
@@ -1226,12 +1230,12 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
                     {
                         for(long b=0;b<aSize.Width();b++)
                         {
-                            BitmapColor rCol = pRAccess->GetPixel(a, b);
+                            BitmapColor rCol = pLocalReadAccess->GetPixel(a, b);
                             *pRunner++ = (rCol.GetRed() + rCol.GetGreen() + rCol.GetBlue()) / 3;
 
                             if(bUsesAlpha)
                             {
-                                BitmapColor rTrn = pAlphaRAccess->GetPixel(a, b);
+                                BitmapColor rTrn = pLocalAlphaReadAccess->GetPixel(a, b);
                                 *pRunner++ = (BYTE)255 - rTrn.GetIndex();
                             }
                         }
@@ -1301,12 +1305,13 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
         }
 
         // Lesezugriff freigeben
-        aBmp.ReleaseAccess(pRAccess);
+        aLocalBitmap.ReleaseAccess(pLocalReadAccess);
         if(bUsesAlpha)
-            aTransAlphaMask.ReleaseAccess(pAlphaRAccess);
+            aTransAlphaMask.ReleaseAccess(pLocalAlphaReadAccess);
     }
 
     // Hinweis auf Veraenderung der Texturart auf jeden Fall elliminieren
-    bTextureKindChanged = FALSE;
+    bTextureKindChanged = sal_False;
 }
 
+// eof
