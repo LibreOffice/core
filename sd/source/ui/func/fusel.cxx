@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:15:58 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:31:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ FuSelection::~FuSelection()
 {
     HPUX_DTOR_BUG;
     pView->UnmarkAllPoints();
-    pView->ShowMirrored();
+    //pView->ShowMirrored();
     pView->ResetCreationActive();
     delete pSound;
     pSound = NULL;
@@ -263,7 +263,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         * KEIN BEZIER_EDITOR
         ******************************************************************/
         pWindow->CaptureMouse();
-        pHdl = pView->HitHandle(aMDPos, *pWindow);
+        pHdl = pView->PickHandle(aMDPos);
         SdrObject* pObj;
         SdrPageView* pPV;
 
@@ -272,7 +272,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         nAngle0 = NormAngle360(nAngle0);
         bMirrorSide0 = BOOL (nAngle0 < 18000L);
 
-        if (!pHdl && pView->IsCreationActive())
+        if (!pHdl && pView->Is3DRotationCreationActive())
         {
             /******************************************************************
             * Wenn 3D-Rotationskoerper erstellt werden sollen, jetzt
@@ -303,10 +303,10 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             && (rMEvt.GetClicks() != 2)
             )
         {
-            if (!pHdl && pView->IsCreationActive())
+            if (!pHdl && pView->Is3DRotationCreationActive())
             {
                 // Wechsel Rotationskoerper -> Selektion
-                pView->ShowMirrored();
+                //pView->ShowMirrored();
                 pView->ResetCreationActive();
             }
             else if (bWaterCan)
@@ -415,7 +415,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         // Neu: Doppelklick ins Leere
                         // Gruppe verlassen
-                        pPV = pView->GetPageViewPvNum(0);
+                        pPV = pView->GetSdrPageView();
 
                         if(pPV && pPV->GetAktGroup())
                         {
@@ -489,7 +489,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         **********************************************************/
                         aDragTimer.Start();
 
-                        pHdl=pView->HitHandle(aMDPos, *pWindow);
+                        pHdl=pView->PickHandle(aMDPos);
                         if ( ! rMEvt.IsRight())
                             pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
                     }
@@ -529,7 +529,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             /******************************************************************
             * Klebepunkt einfuegen
             ******************************************************************/
-            pView->BegInsObjPoint(aMDPos, rMEvt.IsMod1(), NULL, 0);
+            pView->BegInsObjPoint(aMDPos, rMEvt.IsMod1());
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && rMEvt.IsMod1())
         {
@@ -540,7 +540,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 pView->UnmarkAllPoints();
 
             if ( ! rMEvt.IsRight())
-                pView->BegMarkPoints(aMDPos, (OutputDevice*) NULL);
+                pView->BegMarkPoints(aMDPos);
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() && !rMEvt.IsMod2())
         {
@@ -560,7 +560,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 if (!rMEvt.IsShift())
                 {
                     pView->UnmarkAllPoints();
-                    pHdl = pView->HitHandle(aMDPos, *pWindow);
+                    pHdl = pView->PickHandle(aMDPos);
                 }
                 else
                 {
@@ -571,7 +571,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     }
                     else
                     {
-                        pHdl = pView->HitHandle(aMDPos, *pWindow);
+                        pHdl = pView->PickHandle(aMDPos);
                     }
                 }
 
@@ -586,7 +586,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 // #90239# point IS marked and NO shift is pressed. Start
                 // dragging of selected point(s)
-                pHdl = pView->HitHandle(aMDPos, *pWindow);
+                pHdl = pView->PickHandle(aMDPos);
                 if(pHdl)
                     if ( ! rMEvt.IsRight())
                         pView->BegDragObj(aMDPos, (OutputDevice*)NULL, pHdl, nDrgLog);
@@ -632,7 +632,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     pView->UnmarkAllPoints();
 
                 if ( ! rMEvt.IsRight())
-                    pView->BegMarkPoints(aMDPos, (OutputDevice*) NULL);
+                    pView->BegMarkPoints(aMDPos);
             }
             else
             {
@@ -802,7 +802,7 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 }
                 else if (pHdl->GetKind() != HDL_MIRX &&
                          pHdl->GetKind() != HDL_REF1 &&
-                         pHdl->GetKind() != HDL_REF2 && pView->IsCreationActive())
+                         pHdl->GetKind() != HDL_REF2 && pView->Is3DRotationCreationActive())
                 {
                     /*********************************************************
                     * Wenn 3D-Rotationskoerper erstellt werden sollen, jetzt
@@ -1019,7 +1019,7 @@ BOOL FuSelection::KeyInput(const KeyEvent& rKEvt)
 
         if(pView->GetMarkedObjectList().GetMarkCount() == 0)
         {
-            pView->ShowMirrored();
+            //pView->ShowMirrored();
             pView->ResetCreationActive();
 
             pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
@@ -1142,7 +1142,7 @@ void FuSelection::Activate()
             if ( pView->GetDragMode() != eMode )
                 pView->SetDragMode(eMode);
 
-            if (!pView->IsCreationActive())
+            if (!pView->Is3DRotationCreationActive())
                 pView->Start3DCreation();
 
             bSuppressChangesOfSelection = FALSE;
@@ -1193,10 +1193,10 @@ void FuSelection::SelectionHasChanged()
 
     FuDraw::SelectionHasChanged();
 
-    if ((pView->IsCreationActive() && !bSuppressChangesOfSelection))
+    if ((pView->Is3DRotationCreationActive() && !bSuppressChangesOfSelection))
     {
         // Wechsel Rotationskoerper -> Selektion
-        pView->ShowMirrored();
+        //pView->ShowMirrored();
         pView->ResetCreationActive();
         nSlotId = SID_OBJECT_SELECT;
         Activate();
@@ -1269,7 +1269,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
         bFilled = rFillStyle.GetValue() != XFILL_NONE;
     }
 
-    const SetOfByte* pVisiLayer = &pView->GetPageViewPvNum(0)->GetVisibleLayers();
+    const SetOfByte* pVisiLayer = &pView->GetSdrPageView()->GetVisibleLayers();
     USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(HITPIX,0)).Width() );
     const long  n2HitLog = nHitLog * 2;
     Point aHitPosR(rPos);
@@ -1415,7 +1415,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 {
                     // Verb zuweisen
                     pView->UnmarkAll();
-                    pView->MarkObj(pObj, pView->GetPageViewPvNum(0), FALSE, FALSE);
+                    pView->MarkObj(pObj, pView->GetSdrPageView(), FALSE, FALSE);
                     pDrViewSh->DoVerb((sal_Int16)pInfo->nVerb);
                     bAnimated = TRUE;
                 }
@@ -1579,9 +1579,9 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 */
 bool FuSelection::cancel()
 {
-    if (pView->IsCreationActive())
+    if (pView->Is3DRotationCreationActive())
     {
-        pView->ShowMirrored();
+        //pView->ShowMirrored();
         pView->ResetCreationActive();
 
         pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
