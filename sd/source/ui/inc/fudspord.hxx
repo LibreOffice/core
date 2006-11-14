@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudspord.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:10:48 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:33:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,8 @@
 #include <vcl/pointr.hxx>
 #endif
 
+class SdrDropMarkerOverlay;
 class SdrObject;
-class SdrViewUserMarker;
 
 namespace sd {
 
@@ -74,10 +74,11 @@ public:
 
 protected:
     virtual ~FuDisplayOrder (void);
+    void implClearOverlay();
 
     Pointer         aPtr;
-     SdrObject*         pRefObj;
-     SdrViewUserMarker* pUserMarker;
+    SdrObject*      pRefObj;
+    SdrDropMarkerOverlay*                       mpOverlay;
 
 private:
     FuDisplayOrder (
