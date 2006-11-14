@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:15:42 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:30:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,7 +364,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                     if(pCandidate)
                     {
                         pView->UnMarkAll();
-                        pView->MarkObj(pCandidate, pView->GetPageViewPvNum(0));
+                        pView->MarkObj(pCandidate, pView->GetSdrPageView());
 
                         pViewShell->GetViewFrame()->GetDispatcher()->Execute(
                             SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON);
@@ -392,7 +392,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                     if( pObj && pObj->ISA( SdrOle2Obj ) && !pDocSh->IsUIActive() )
                     {
-                        pView->HideMarkHdl(NULL);
+                        pView->HideMarkHdl();
                         pViewShell->ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
                     }
                     else if( pObj && pObj->IsEmptyPresObj() && pObj->ISA( SdrGrafObj ) )
@@ -568,7 +568,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                     // With no modifier pressed we move to the previous
                     // slide.
 
-                    pView->EndTextEdit();
+                    pView->SdrEndTextEdit();
 
                     // Previous page.
                     bReturn = TRUE;
@@ -613,7 +613,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 {
                     // With no modifier pressed we move to the next slide.
 
-                    pView->EndTextEdit();
+                    pView->SdrEndTextEdit();
 
                     // Next page.
                     bReturn = TRUE;
@@ -659,8 +659,8 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 if(pHdl->GetKind() == HDL_POLY)
                 {
                     // rescue ID of point with focus
-                    sal_uInt16 nPol(pHdl->GetPolyNum());
-                    sal_uInt16 nPnt(pHdl->GetPointNum());
+                    sal_uInt32 nPol(pHdl->GetPolyNum());
+                    sal_uInt32 nPnt(pHdl->GetPointNum());
 
                     if(pView->IsPointMarked(*pHdl))
                     {
@@ -760,14 +760,14 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                     {
                         pEdgeObj = (SdrEdgeObj*)pHdl->GetObj();
 
-                        if(0 == pHdl->GetPointNum())
+                        if(0L == pHdl->GetPointNum())
                         {
                             if(pEdgeObj->GetConnection(sal_True).GetObject())
                             {
                                 bIsMoveOfConnectedHandle = sal_True;
                             }
                         }
-                        if(1 == pHdl->GetPointNum())
+                        if(1L == pHdl->GetPointNum())
                         {
                             if(pEdgeObj->GetConnection(sal_False).GetObject())
                             {
@@ -1000,7 +1000,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                     if(pCandidate && pCandidate->IsEmptyPresObj())
                     {
                         pView->UnMarkAll();
-                        pView->MarkObj(pCandidate, pView->GetPageViewPvNum(0));
+                        pView->MarkObj(pCandidate, pView->GetSdrPageView());
                         SfxStringItem aInputString(SID_ATTR_CHAR, String(rKEvt.GetCharCode()));
 
                         pViewShell->GetViewFrame()->GetDispatcher()->Execute(
@@ -1080,7 +1080,7 @@ IMPL_LINK( FuPoor, DragHdl, Timer *, pTimer )
     if( pView )
     {
         USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(HITPIX,0)).Width() );
-        SdrHdl* pHdl = pView->HitHandle(aMDPos, *pWindow);
+        SdrHdl* pHdl = pView->PickHandle(aMDPos);
 
         if ( pHdl==NULL && pView->IsMarkedHit(aMDPos, nHitLog)
              && !pView->IsPresObjSelected(FALSE, TRUE) )
@@ -1183,7 +1183,7 @@ BOOL FuPoor::RequestHelp(const HelpEvent& rHEvt)
 {
     BOOL bReturn = FALSE;
 
-    SdrPageView* pPV = pView->GetPageViewPvNum(0);
+    SdrPageView* pPV = pView->GetSdrPageView();
 
     if (pPV)
     {
