@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:07:50 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:27:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@
 #endif
 
 //class SdrPageViewWinRec;
-class SdrPageViewWindow;
+class SdrPageWindow;
 
 class SdrPageView;
 class SdrObject;
@@ -121,13 +121,14 @@ class FmXPageViewWinRec : public ::cppu::WeakImplHelper1< ::com::sun::star::cont
     friend class FmXFormView;
 
     ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > >    m_aControllerList;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >                    m_xControlContainer;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >                m_xORB;
     FmXFormView*                m_pViewImpl;
     Window*                     m_pWindow;
 
 public:
     FmXPageViewWinRec(  const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB,
-        const SdrPageViewWindow&, FmXFormView* pView);
+        const SdrPageWindow&, FmXFormView* pView);
         //const SdrPageViewWinRec*, FmXFormView* pView);
     ~FmXPageViewWinRec();
 
@@ -149,11 +150,10 @@ public:
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  getController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm );
     void setController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& xCC,
                         FmXFormController* pParent = NULL);
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  getControlContainer() const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  getControlContainer() const { return m_xControlContainer; }
     void updateTabOrder( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& xControl,
-                         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& xCC );
+                         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC );
     void dispose();
     Window* getWindow() const {return m_pWindow;}
 };
@@ -231,7 +231,7 @@ public:
     virtual void SAL_CALL focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw (::com::sun::star::uno::RuntimeException);
 
     FmFormView* getView() const {return m_pView;}
-    FmWinRecList::const_iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& rCC ) const;
+    FmWinRecList::const_iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC ) const;
     const FmWinRecList& getWindowList() const {return m_aWinList;}
 
 
@@ -244,10 +244,10 @@ public:
             void        onFirstViewActivation( const FmFormModel* _pDocModel );
 
 private:
-    FmWinRecList::iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& rCC );
+    FmWinRecList::iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC );
     //void addWindow(const SdrPageViewWinRec*);
-    void addWindow(const SdrPageViewWindow&);
-    void removeWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& rCC );
+    void addWindow(const SdrPageWindow&);
+    void removeWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC );
     void Activate(sal_Bool bSync = sal_False);
     void Deactivate(BOOL bDeactivateController = TRUE);
 
