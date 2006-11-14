@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolingu.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:47:23 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:58:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,8 +88,6 @@ class Window;
 #define DIC_ERR_READONLY    2
 #define DIC_ERR_UNKNOWN     3
 #define DIC_ERR_NOT_EXISTS  4
-//#define DIC_ERR_ENTRY_EXISTS  5
-//#define DIC_ERR_ENTRY_NOTEXISTS   6
 
 ///////////////////////////////////////////////////////////////////////////
 // SvxLinguConfigUpdate
