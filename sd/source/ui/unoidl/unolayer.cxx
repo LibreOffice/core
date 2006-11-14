@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolayer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:26:36 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:38:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,10 @@
 
 #include "unokywds.hxx"
 #include "unowcntr.hxx"
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::vos;
@@ -338,7 +342,7 @@ sal_Bool SdLayer::get( LayerAttribute what ) throw()
         ::sd::View *pView = pLayerManager->GetView();
         SdrPageView* pSdrPageView = NULL;
         if(pView)
-            pSdrPageView = pView->GetPageViewPvNum(0);
+            pSdrPageView = pView->GetSdrPageView();
 
         if(pSdrPageView)
         {
@@ -377,7 +381,7 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
         ::sd::View *pView = pLayerManager->GetView();
         SdrPageView* pSdrPageView = NULL;
         if(pView)
-            pSdrPageView = pView->GetPageViewPvNum(0);
+            pSdrPageView = pView->GetSdrPageView();
 
         if(pSdrPageView)
         {
