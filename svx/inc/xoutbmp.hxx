@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xoutbmp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:50:35 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:02:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,6 @@ public:
 
     static USHORT       ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                        GraphicFilter& rFilter, const USHORT nFormat,
-                                       BOOL bIgnoreOptions,
                                        const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL );
 
     static Bitmap       DetectEdges( const Bitmap& rBmp, const BYTE cThreshold );
