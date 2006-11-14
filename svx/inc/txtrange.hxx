@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtrange.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:21:27 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:58:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,6 @@
 #endif
 
 class PolyPolygon;
-class XPolyPolygon;
 class Range;
 class Rectangle;
 
@@ -66,8 +65,8 @@ class SVX_DLLPUBLIC TextRanger
 {
     Range *pRangeArr;
     SvLongsPtr *pCache;
-    PolyPolygon *pPoly; // Flaechenpolygon
-    PolyPolygon *pLine; // Linienpolygon
+    PolyPolygon *mpPolyPolygon; // Flaechenpolygon
+    PolyPolygon *mpLinePolyPolygon; // Linienpolygon
     Rectangle *pBound;  // Umfassendes Rechteck
     USHORT nCacheSize;  // Cache-Size
     USHORT nCacheIdx;   // Cache-Index
@@ -75,7 +74,7 @@ class SVX_DLLPUBLIC TextRanger
     USHORT nLeft;       // Abstand Text-Kontur
     USHORT nUpper;      // Abstand Kontur-Text
     USHORT nLower;      // Abstand Text-Kontur
-    USHORT nPointCount; // Anzahl der Polygonpunkte
+    sal_uInt32 nPointCount; // Anzahl der Polygonpunkte
     BOOL bSimple : 1;   // Nur Aussenkante
     BOOL bInner  : 1;   // TRUE: Objekt beschriften (EditEngine);
                         // FALSE: Objekt umfliessen (StarWriter);
@@ -88,7 +87,7 @@ class SVX_DLLPUBLIC TextRanger
     TextRanger( const TextRanger& ); // not implemented
     const Rectangle& _GetBoundRect();
 public:
-    TextRanger( const XPolyPolygon& rXPoly, const XPolyPolygon* pXLine,
+    TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon,
                 USHORT nCacheSize, USHORT nLeft, USHORT nRight,
                 BOOL bSimple, BOOL bInner, BOOL bVert = sal_False );
     ~TextRanger();
@@ -97,13 +96,13 @@ public:
     USHORT GetLeft() const { return nLeft; }
     USHORT GetUpper() const { return nUpper; }
     USHORT GetLower() const { return nLower; }
-    USHORT GetPointCount() const { return nPointCount; }
+    sal_uInt32 GetPointCount() const { return nPointCount; }
     BOOL IsSimple() const { return bSimple; }
     BOOL IsInner() const { return bInner; }
     BOOL IsVertical() const { return bVertical; }
     BOOL HasBorder() const { return nRight || nLeft; }
-    const PolyPolygon& GetPolyPolygon() const { return *pPoly; }
-    const PolyPolygon* GetLinePolygon() const { return pLine; }
+    const PolyPolygon& GetPolyPolygon() const { return *mpPolyPolygon; }
+    const PolyPolygon* GetLinePolygon() const { return mpLinePolyPolygon; }
     const Rectangle& GetBoundRect()
         { return pBound ? *pBound : _GetBoundRect(); }
     void SetUpper( USHORT nNew ){ nUpper = nNew; }
