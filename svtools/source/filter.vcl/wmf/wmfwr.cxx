@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:56:20 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:43:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,24 +263,26 @@
 
 void WMFWriter::MayCallback()
 {
-    ULONG nPercent;
+    if ( xStatusIndicator.is() )
+    {
+        ULONG nPercent;
 
-    // Wir gehen mal einfach so davon aus, dass 16386 Actions einer Bitmap entsprechen
-    // (in der Regel wird ein Metafile entweder nur Actions oder einige Bitmaps und fast
-    // keine Actions enthalten. Dann ist das Verhaeltnis ziemlich unwichtig)
+        // Wir gehen mal einfach so davon aus, dass 16386 Actions einer Bitmap entsprechen
+        // (in der Regel wird ein Metafile entweder nur Actions oder einige Bitmaps und fast
+        // keine Actions enthalten. Dann ist das Verhaeltnis ziemlich unwichtig)
 
-    nPercent=((nWrittenBitmaps<<14)+(nActBitmapPercent<<14)/100+nWrittenActions)
-             *100
-             /((nNumberOfBitmaps<<14)+nNumberOfActions);
+        nPercent=((nWrittenBitmaps<<14)+(nActBitmapPercent<<14)/100+nWrittenActions)
+                *100
+                /((nNumberOfBitmaps<<14)+nNumberOfActions);
 
-    if (nPercent>=nLastPercent+3) {
-        nLastPercent=nPercent;
-        if(pCallback!=NULL && nPercent<=100) {
-            if (((*pCallback)(pCallerData,(USHORT)nPercent))==TRUE) bStatus=FALSE;
+        if ( nPercent >= nLastPercent + 3 )
+        {
+            nLastPercent = nPercent;
+            if( nPercent <= 100 )
+                xStatusIndicator->setValue( nPercent );
         }
     }
 }
-
 
 void WMFWriter::CountActionsAndBitmaps( const GDIMetaFile & rMTF )
 {
@@ -1751,17 +1753,25 @@ void WMFWriter::UpdateHeader()
 
 // ------------------------------------------------------------------------
 
-BOOL WMFWriter::WriteWMF(const GDIMetaFile& rMTF, SvStream& rTargetStream,
-                         PFilterCallback pcallback, void* pcallerdata,
-                         BOOL bPlaceable)
+BOOL WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
+                            FilterConfigItem* pFConfigItem, BOOL bPlaceable )
 {
     WMFWriterAttrStackMember * pAt;
 
     bStatus=TRUE;
     pConvert = 0;
     pVirDev = new VirtualDevice;
-    pCallback=pcallback;
-    pCallerData=pcallerdata;
+
+    pFilterConfigItem = pFConfigItem;
+    if ( pFilterConfigItem )
+    {
+        xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
+        if ( xStatusIndicator.is() )
+        {
+            rtl::OUString aMsg;
+            xStatusIndicator->start( aMsg, 100 );
+        }
+    }
     nLastPercent=0;
 
     pWMF=&rTargetStream;
@@ -1856,6 +1866,9 @@ BOOL WMFWriter::WriteWMF(const GDIMetaFile& rMTF, SvStream& rTargetStream,
 
     delete pVirDev;
     delete pConvert;
+
+    if ( xStatusIndicator.is() )
+        xStatusIndicator->end();
 
     return bStatus;
 }
