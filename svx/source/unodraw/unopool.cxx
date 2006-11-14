@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopool.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:26:31 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:54:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,11 +121,9 @@ SvxUnoDrawPool::~SvxUnoDrawPool() throw()
 void SvxUnoDrawPool::init()
 {
     mpDefaultsPool = new SdrItemPool();
-//BFS01    mpDefaultsPool = new SdrItemPool(SDRATTR_START, SDRATTR_END );
     SfxItemPool* pOutlPool=EditEngine::CreatePool();
     mpDefaultsPool->SetSecondaryPool(pOutlPool);
 
-//  mpDefaultsPool = new SdrItemPool( SdrObject::GetGlobalDrawObjectItemPool() );
     SdrModel::SetTextDefaults( mpDefaultsPool, SdrEngineDefaults::GetFontHeight() );
     mpDefaultsPool->SetDefaultMetric((SfxMapUnit)SdrEngineDefaults::GetMapUnit());
     mpDefaultsPool->FreezeIdRanges();
