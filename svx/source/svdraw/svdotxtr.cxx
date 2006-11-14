@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxtr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:58:25 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:47:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #include "precompiled_svx.hxx"
 
 #include "svdotext.hxx"
-#include "xoutx.hxx"     // fuer XOutCreatePolygon
 #include "svditext.hxx"
 #include "svdtrans.hxx"
 #include "svdogrp.hxx"
@@ -143,8 +142,6 @@ long SdrTextObj::GetRotateAngle() const
 
 long SdrTextObj::GetShearAngle(FASTBOOL /*bVertical*/) const
 {
-    // #i25941#
-    // return (aGeo.nDrehWink==0 || aGeo.nDrehWink==18000) ? aGeo.nShearWink : 0;
     return aGeo.nShearWink;
 }
 
@@ -386,57 +383,43 @@ SdrObject* SdrTextObj::DoConvertToPolyObj(BOOL bBezier) const
     return ImpConvertObj(!bBezier);
 }
 
-SdrObject* SdrTextObj::ImpConvertMakeObj(const XPolyPolygon& rXPP, FASTBOOL bClosed, FASTBOOL bBezier, FASTBOOL bNoSetAttr) const
+SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, sal_Bool bClosed, sal_Bool bBezier, sal_Bool bNoSetAttr) const
 {
-    SdrObjKind ePathKind=bClosed?OBJ_PATHFILL:OBJ_PATHLINE;
-    XPolyPolygon aXPP(rXPP);
-    if (bClosed) {
-        // Alle XPolygone des XPolyPolygons schliessen, sonst kommt das PathObj durcheinander!
-        for (USHORT i=0; i<aXPP.Count(); i++) {
-            const XPolygon& rXP=aXPP[i];
-            USHORT nAnz=rXP.GetPointCount();
-            if (nAnz>0) {
-                USHORT nMax=USHORT(nAnz-1);
-                Point aPnt(rXP[0]);
-                if (aPnt!=rXP[nMax]) {
-                    aXPP[i].SetPointCount(nAnz+1);
-                    aXPP[i][nAnz]=aPnt;
-                }
-            }
-        }
-    }
+    SdrObjKind ePathKind = bClosed ? OBJ_PATHFILL : OBJ_PATHLINE;
+    basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPolygon);
 
     // #i37011#
     if(!bBezier)
     {
-        ::basegfx::B2DPolyPolygon aB2DPolyPolygon(aXPP.getB2DPolyPolygon());
-        aB2DPolyPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(aB2DPolyPolygon);
-        aXPP = XPolyPolygon(aB2DPolyPolygon);
+        aB2DPolyPolygon = basegfx::tools::adaptiveSubdivideByAngle(aB2DPolyPolygon);
         ePathKind = bClosed ? OBJ_POLY : OBJ_PLIN;
     }
 
-    SdrPathObj* pPathObj=new SdrPathObj(ePathKind,aXPP);
-    if (bBezier) {
-        pPathObj->ConvertAllSegments(SDRPATH_CURVE);
+    SdrPathObj* pPathObj = new SdrPathObj(ePathKind, aB2DPolyPolygon);
+
+    if(bBezier)
+    {
+        // create bezier curves
+        pPathObj->SetPathPoly(basegfx::tools::expandToCurve(pPathObj->GetPathPoly()));
     }
 
     {
-        if (pPathObj!=NULL) {
+        if(pPathObj)
+        {
             pPathObj->ImpSetAnchorPos(aAnchor);
             pPathObj->NbcSetLayer(SdrLayerID(nLayerId));
-            if (pModel!=NULL) {
+
+            if(pModel)
+            {
                 pPathObj->SetModel(pModel);
-                if (!bNoSetAttr)
+
+                if(!bNoSetAttr)
                 {
                     sdr::properties::ItemChangeBroadcaster aC(*pPathObj);
-                    //SdrBroadcastItemChange aItemChange(*pPathObj);
 
                     pPathObj->ClearMergedItem();
                     pPathObj->SetMergedItemSet(GetObjectItemSet());
-
-                    //pPathObj->BroadcastItemChange(aItemChange);
                     pPathObj->GetProperties().BroadcastItemChange(aC);
-
                     pPathObj->NbcSetStyleSheet(GetStyleSheet(), sal_True);
                 }
             }
