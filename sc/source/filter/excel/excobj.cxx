@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:48:51 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:48:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,14 @@
 
 #include "imp_op.hxx"
 
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
 using namespace com::sun::star;
 
 // Object Flags
@@ -201,8 +209,10 @@ SdrObject* ImportExcel::LineObj( SfxItemSet& rSet, const Point& rUL, const Point
     aIn >> nLc >> nStyle >> nWeight >> nAuto >> nEndStyles >> nQuadrant;
     aIn.Ignore( 1 );
 
-    Point       aPointArr[2] = { rUL, rLR };
-    SdrPathObj* pObj = new SdrPathObj( OBJ_LINE, XPolyPolygon( XPolygon( Polygon( 2, aPointArr ) ) ) );
+    basegfx::B2DPolygon aB2DPolygon;
+    aB2DPolygon.append(basegfx::B2DPoint(rUL.X(), rUL.Y()));
+    aB2DPolygon.append(basegfx::B2DPoint(rLR.X(), rLR.Y()));
+    SdrPathObj* pObj = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aB2DPolygon));
     SetLineStyle( rSet, nLc, nStyle, nWeight );
     return pObj;
 }
