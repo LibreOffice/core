@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 17:46:42 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:53:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,24 @@
 #endif
 #ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICRENDERER_HPP_
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONCONTINUATION_HPP_
+#include <com/sun/star/task/XInteractionContinuation.hpp>
+#endif
+
+#include <framework/interaction.hxx>
+
+#ifndef _COM_SUN_STAR_DRAWING_GRAPHICFILTERREQUEST_HPP_
+#include <com/sun/star/drawing/GraphicFilterRequest.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_URL_HPP_
@@ -228,6 +246,72 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::task;
+
+#ifndef _SDR_CONTACT_VIEWOBJECTCONTACTREDIRECTOR_HXX
+#include <svx/sdr/contact/viewobjectcontactredirector.hxx>
+#endif
+
+#ifndef _SDR_CONTACT_VIEWOBJECTCONTACT_HXX
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+#endif
+
+#ifndef _SDR_CONTACT_VIEWCONTACT_HXX
+#include <svx/sdr/contact/viewcontact.hxx>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+// #114389# use new redirector instead of pPaintProc
+
+class ImplLocalRedirector : public ::sdr::contact::ViewObjectContactRedirector
+{
+public:
+    ImplLocalRedirector() : ViewObjectContactRedirector() {}
+    virtual ~ImplLocalRedirector();
+
+    // all default implementations just call the same methods at the original. To do something
+    // different, overload the method and at least do what the method does.
+    virtual void PaintObject(::sdr::contact::ViewObjectContact& rOriginal, ::sdr::contact::DisplayInfo& rDisplayInfo);
+};
+
+ImplLocalRedirector::~ImplLocalRedirector()
+{
+}
+
+void ImplLocalRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, ::sdr::contact::DisplayInfo& rDisplayInfo)
+{
+    SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
+    sal_Bool bDoPaint(sal_False);
+
+    if(pObject)
+    {
+        if(pObject->IsEmptyPresObj())
+        {
+            // do not paint empty PresObjs, but the background obejct.
+            // SInce the new mechanism does not paint the background object
+            // at all, it is not necessary to test for it here and the whole
+            // method may be simplified soon. For testing for BackgroundObj
+            // You may use pObject->IsMasterPageBackgroundObject().
+        }
+        else
+        {
+            // paint non-empty PresObjs
+            bDoPaint = sal_True;
+        }
+    }
+    else
+    {
+        // no SdrObject, may be SdrPage. Do paint.
+        bDoPaint = sal_True;
+    }
+
+    if(bDoPaint)
+    {
+        rOriginal.PaintObject(rDisplayInfo);
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace svx
 {
@@ -522,17 +606,12 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, ULONG nWidthPixe
     pView->SetGridVisible( FALSE );
     pView->SetHlplVisible( FALSE );
     pView->SetGlueVisible( FALSE );
-    pView->ShowPage(pPage, aPoint );
-
+    pView->ShowSdrPage(pPage);
     Region aRegion (Rectangle( aPoint, aPageSize ) );
 
     ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
 
-    for (USHORT i=0; i<pView->GetPageViewCount(); i++)
-    {
-        SdrPageView* pPV=pView->GetPageViewPvNum(i);
-        pPV->CompleteRedraw(pVDev, aRegion, 0, &aRedirector);
-    }
+    pView->CompleteRedraw(pVDev, aRegion, 0, &aRedirector);
 
     delete pView;
     return pVDev;
@@ -569,6 +648,8 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
     com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >         xOutputStream;
     com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicRenderer > xGraphicRenderer;
+    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator >    xStatusIndicator;
+    com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > xInteractionHandler;
     {
         sal_Int32 nArgs = aDescriptor.getLength();
         const PropertyValue* pValues = aDescriptor.getConstArray();
@@ -597,6 +678,14 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             {
                 pValues->Value >>= xGraphicRenderer;
             }
+            else if ( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ) ) )
+            {
+                pValues->Value >>= xStatusIndicator;
+            }
+            else if ( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ) ) )
+            {
+                pValues->Value >>= xInteractionHandler;
+            }
             else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )  // for compatibility reasons, deprecated
             {
                 pValues->Value >>= nWidth;
@@ -619,7 +708,12 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 {
                     if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Translucent" ) ) )
                     {
-                        pDataValues->Value >>= bTranslucent;
+                        if ( !( pDataValues->Value >>= bTranslucent ) ) // SJ: TODO: The GIF Transparency is stored as int32 in
+                        {                                               // configuration files, this has to be changed to boolean
+                            sal_Int32 nTranslucent;
+                            if ( pDataValues->Value >>= nTranslucent )
+                                bTranslucent = nTranslucent != 0;
+                        }
                     }
                     else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PixelWidth" ) ) )
                     {
@@ -677,6 +771,16 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         }
     }
 
+    // putting the StatusIndicator that we got from the MediaDescriptor into our local FilterData copy
+    if ( xStatusIndicator.is() )
+    {
+        rtl::OUString sStatusIndicator( RTL_CONSTASCII_USTRINGPARAM( "StatusIndicator" ) );
+        int i = aFilterData.getLength();
+        aFilterData.realloc( i + 1 );
+        aFilterData[ i ].Name = sStatusIndicator;
+        aFilterData[ i ].Value <<= xStatusIndicator;
+    }
+
     // create the output stuff
 
     Graphic             aGraphic;
@@ -702,15 +806,14 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
     pView->SetBordVisible( FALSE );
     pView->SetPageVisible( FALSE );
-    pView->ShowPage( pPage, Point() );
+    pView->ShowSdrPage( pPage );
 
-
-    bool bRet = true;
+    USHORT nStatus = GRFILTER_OK;
 
     SdrOutliner& rOutl=mpDoc->GetDrawOutliner(NULL);
     maOldCalcFieldValueHdl = rOutl.GetCalcFieldValueHdl();
     rOutl.SetCalcFieldValueHdl( LINK(this, GraphicExporter, CalcFieldValueHdl) );
-    rOutl.SetBackgroundColor( pPage->GetBackgroundColor(pView->GetPageViewPvNum(0)) );
+    rOutl.SetBackgroundColor( pPage->GetBackgroundColor(pView->GetSdrPageView()) );
 
     std::vector< SdrObject* > aShapes;
 
@@ -805,6 +908,10 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 Size aNewSize;
                 if ( pView && pPage )
                 {
+                    pView->SetBordVisible( FALSE );
+                    pView->SetPageVisible( FALSE );
+                    pView->ShowSdrPage( pPage );
+
                     const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
                     aNewSize = Size( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
                                           aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
@@ -825,13 +932,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                     // Use new StandardCheckVisisbilityRedirector
                     ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
 
-                    for (USHORT i=0; i<pView->GetPageViewCount(); i++)
-                    {
-                        SdrPageView* pPV=pView->GetPageViewPvNum(i);
-
-                        pPV->CompleteRedraw(&aVDev, Region(Rectangle(Point(), aNewSize)),
-                                            nPaintMode, &aRedirector);
-                    }
+                    pView->CompleteRedraw(&aVDev, Region(Rectangle(Point(), aNewSize)), 0, &aRedirector);
 
                     aVDev.Pop();
 
@@ -879,10 +980,10 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         }
 
         if( 0 == aShapes.size() )
-            bRet = false;
+            nStatus = GRFILTER_FILTERERROR;
     }
 
-    if( bRet && aShapes.size() )
+    if( ( nStatus == GRFILTER_OK ) && aShapes.size() )
     {
         // special treatment for only one SdrGrafObj that has text
         sal_Bool bSingleGraphic = sal_False;
@@ -1043,13 +1144,13 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         }
     }
 
-    if( bRet )
+    if( nStatus == GRFILTER_OK )
     {
         // export graphic only if it has a size
         const Size aGraphSize( aGraphic.GetPrefSize() );
         if ( ( aGraphSize.Width() == 0 ) || ( aGraphSize.Height() == 0 ) )
         {
-            bRet = false;
+            nStatus = GRFILTER_FILTERERROR;
         }
         else
         {
@@ -1065,7 +1166,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 // SvOutputStream, or adapt the graphic filter to not seek anymore.
                 SvMemoryStream aStream( 1024, 1024 );
 
-                bRet = 0 == pFilter->ExportGraphic( aGraphic, String(), aStream, nFilter, sal_True, &aFilterData );
+                nStatus = pFilter->ExportGraphic( aGraphic, String(), aStream, nFilter, &aFilterData );
 
                 // copy temp stream to XOutputStream
                 SvOutputStream aOutputStream( xOutputStream );
@@ -1077,7 +1178,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 INetURLObject aURLObject( aURL.Complete );
                 DBG_ASSERT( aURLObject.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-                bRet = XOutBitmap::ExportGraphic( aGraphic, aURLObject, *pFilter, nFilter, FALSE, &aFilterData ) == GRFILTER_OK;
+                nStatus = XOutBitmap::ExportGraphic( aGraphic, aURLObject, *pFilter, nFilter, &aFilterData );
             }
         }
     }
@@ -1087,7 +1188,21 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
     rOutl.SetCalcFieldValueHdl( maOldCalcFieldValueHdl );
 
-    return bRet;
+    if ( xInteractionHandler.is() && ( nStatus != GRFILTER_OK ) )
+    {
+        Any aInteraction;
+        Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > lContinuations(1);
+        ::framework::ContinuationApprove* pApprove = new ::framework::ContinuationApprove();
+        lContinuations[0] = Reference< XInteractionContinuation >(static_cast< XInteractionContinuation* >(pApprove), UNO_QUERY);
+
+        GraphicFilterRequest aErrorCode;
+        aErrorCode.ErrCode = nStatus;
+        aInteraction <<= aErrorCode;
+        framework::InteractionRequest* pRequest = new framework::InteractionRequest( aInteraction, lContinuations );
+        Reference< XInteractionRequest >xRequest( static_cast< XInteractionRequest* >(pRequest), UNO_QUERY );
+        xInteractionHandler->handle( xRequest );
+    }
+    return nStatus == GRFILTER_OK;
 }
 
 void SAL_CALL GraphicExporter::cancel()
