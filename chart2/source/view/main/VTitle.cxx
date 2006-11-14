@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VTitle.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:39:37 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:36:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,11 +48,6 @@
 #endif
 #ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
 #include <com/sun/star/chart2/XIdentifiable.hpp>
-#endif
-
-// header for class Matrix3D
-#ifndef _B2D_MATRIX3D_HXX
-#include <goodies/matrix3d.hxx>
 #endif
 
 #ifndef INCLUDED_RTL_MATH_HXX
@@ -153,11 +148,11 @@ void VTitle::changePosition( const awt::Point& rPos )
 
         //set position matrix
         //the matrix needs to be set at the end behind autogrow and such position influencing properties
-        Matrix3D aM3;
-        aM3.Scale( 1, 1 );
-        aM3.Rotate( m_fRotationAngleDegree*F_PI/180.0 );
-        aM3.Translate( m_nXPos, m_nYPos);
-        xShapeProp->setPropertyValue( C2U( "Transformation" ), uno::makeAny( Matrix3DToHomogenMatrix3(aM3) ) );
+        ::basegfx::B2DHomMatrix aM3;
+        // aM3.Scale( 1, 1 ); Oops? A scale with this parameters is neutral, line commented out
+        aM3.rotate( m_fRotationAngleDegree*F_PI/180.0 );
+        aM3.translate( m_nXPos, m_nYPos);
+        xShapeProp->setPropertyValue( C2U( "Transformation" ), uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM3) ) );
     }
     catch( uno::Exception& e )
     {
@@ -320,11 +315,11 @@ void VTitle::createShapes(
 
         //set position matrix
         //the matrix needs to be set at the end behind autogrow and such position influencing properties
-        Matrix3D aM3;
-        aM3.Scale( 1, 1 );
-        aM3.Rotate( m_fRotationAngleDegree*F_PI/180.0 );
-        aM3.Translate( m_nXPos, m_nYPos );
-        xShapeProp->setPropertyValue( C2U( "Transformation" ), uno::makeAny( Matrix3DToHomogenMatrix3(aM3) ) );
+        ::basegfx::B2DHomMatrix aM3;
+        // aM3.Scale( 1, 1 ); Oops? A scale with this parameters is neutral, line commented out
+        aM3.rotate( m_fRotationAngleDegree*F_PI/180.0 );
+        aM3.translate( m_nXPos, m_nYPos );
+        xShapeProp->setPropertyValue( C2U( "Transformation" ), uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM3) ) );
     }
     catch( uno::Exception& e )
     {
