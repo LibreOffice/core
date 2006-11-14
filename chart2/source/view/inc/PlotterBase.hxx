@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PlotterBase.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:43:37 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:35:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,9 +80,9 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
-#ifndef _B3D_HMATRIX_HXX
-#include <goodies/hmatrix.hxx>
-#endif
+//#ifndef _B3D_HMATRIX_HXX
+//#include <goodies/hmatrix.hxx>
+//#endif
 
 //.............................................................................
 namespace chart
