@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:09:08 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:25:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -555,10 +555,10 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
         if (GetImpl()->HasAnyPendingCursorAction())
             GetImpl()->CancelAnyPendingCursorAction();
 
-        SdrPageView* pCurPageView = m_pFormView->GetPageViewPvNum(0);
+        SdrPageView* pCurPageView = m_pFormView->GetSdrPageView();
 
         // sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pFormView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
-        SdrPageViewWindow* pWindow = pCurPageView ? pCurPageView->FindWindow(*((OutputDevice*)m_pFormView->GetActualOutDev())) : 0L;
+        SdrPageWindow* pWindow = pCurPageView ? pCurPageView->FindPageWindow(*((OutputDevice*)m_pFormView->GetActualOutDev())) : 0L;
 
         if(pWindow)
         {
@@ -1238,7 +1238,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     if (m_pFormView)
                     {
                         // Ist der ::com::sun::star::drawing::Layer gelocked, so müssen die Slots disabled werden. #36897
-                        SdrPageView* pPV = m_pFormView->GetPageViewPvNum(0);
+                        SdrPageView* pPV = m_pFormView->GetSdrPageView();
                         if (pPV != NULL)
                             bLayerLocked = pPV->IsLayerLocked(m_pFormView->GetActiveLayer());
                     }
@@ -1543,8 +1543,8 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
 FmFormPage* FmFormShell::GetCurPage() const
 {
     FmFormPage* pP = NULL;
-    if (m_pFormView && m_pFormView->GetPageViewPvNum(0))
-        pP = PTR_CAST(FmFormPage,m_pFormView->GetPageViewPvNum(0)->GetPage());
+    if (m_pFormView && m_pFormView->GetSdrPageView())
+        pP = PTR_CAST(FmFormPage,m_pFormView->GetSdrPageView()->GetPage());
     return pP;
 }
 
