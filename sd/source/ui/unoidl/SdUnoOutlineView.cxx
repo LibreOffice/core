@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:23:30 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:38:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,17 @@
 #include <cppuhelper/proptypehlp.hxx>
 #include <svx/unopage.hxx>
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
+using ::rtl::OUString;
+using namespace ::vos;
+using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
