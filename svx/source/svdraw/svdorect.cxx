@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdorect.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:14:17 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:46:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,14 @@
 #include <svx/sdr/properties/rectangleproperties.hxx>
 #endif
 
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 sdr::properties::BaseProperties* SdrRectObj::CreateObjectSpecificProperties()
@@ -89,25 +97,22 @@ sdr::properties::BaseProperties* SdrRectObj::CreateObjectSpecificProperties()
 
 TYPEINIT1(SdrRectObj,SdrTextObj);
 
-SdrRectObj::SdrRectObj():
-    pXPoly(NULL),
-    bXPolyIsLine(FALSE)
+SdrRectObj::SdrRectObj()
+:   mpXPoly(0L)
 {
     bClosedObj=TRUE;
 }
 
-SdrRectObj::SdrRectObj(const Rectangle& rRect):
-    SdrTextObj(rRect),
-    pXPoly(NULL),
-    bXPolyIsLine(FALSE)
+SdrRectObj::SdrRectObj(const Rectangle& rRect)
+:   SdrTextObj(rRect),
+    mpXPoly(NULL)
 {
     bClosedObj=TRUE;
 }
 
-SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind):
-    SdrTextObj(eNewTextKind),
-    pXPoly(NULL),
-    bXPolyIsLine(FALSE)
+SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind)
+:   SdrTextObj(eNewTextKind),
+    mpXPoly(NULL)
 {
     DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
                eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
@@ -115,10 +120,9 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind):
     bClosedObj=TRUE;
 }
 
-SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect):
-    SdrTextObj(eNewTextKind,rRect),
-    pXPoly(NULL),
-    bXPolyIsLine(FALSE)
+SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect)
+:   SdrTextObj(eNewTextKind,rRect),
+    mpXPoly(NULL)
 {
     DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
                eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
@@ -126,10 +130,9 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect):
     bClosedObj=TRUE;
 }
 
-SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, USHORT eFormat):
-    SdrTextObj(eNewTextKind,rNewRect,rInput,rBaseURL,eFormat),
-    pXPoly(NULL),
-    bXPolyIsLine(FALSE)
+SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, USHORT eFormat)
+:    SdrTextObj(eNewTextKind,rNewRect,rInput,rBaseURL,eFormat),
+    mpXPoly(NULL)
 {
     DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
                eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
@@ -139,14 +142,18 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStr
 
 SdrRectObj::~SdrRectObj()
 {
-    if (pXPoly!=NULL) delete pXPoly;
+    if(mpXPoly)
+    {
+        delete mpXPoly;
+    }
 }
 
 void SdrRectObj::SetXPolyDirty()
 {
-    if (pXPoly!=NULL) {
-        delete pXPoly;
-        pXPoly=NULL;
+    if(mpXPoly)
+    {
+        delete mpXPoly;
+        mpXPoly = 0L;
     }
 }
 
@@ -156,26 +163,24 @@ FASTBOOL SdrRectObj::PaintNeedsXPoly(long nEckRad) const
     return bNeed;
 }
 
-XPolygon SdrRectObj::ImpCalcXPoly(const Rectangle& rRect1, long nRad1, FASTBOOL bContour) const
+XPolygon SdrRectObj::ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const
 {
-    bContour=TRUE; // am 14.1.97 wg. Umstellung TakeContour ueber Mtf und Paint. Joe.
     XPolygon aXPoly(rRect1,nRad1,nRad1);
-    if (bContour) {
-        USHORT nPointAnz=aXPoly.GetPointCount();
-        XPolygon aNeuPoly(nPointAnz+1);
-        USHORT nShift=nPointAnz-2;
-        if (nRad1!=0) nShift=nPointAnz-5;
-        USHORT j=nShift;
-        for (USHORT i=1; i<nPointAnz; i++) {
-            aNeuPoly[i]=aXPoly[j];
-            aNeuPoly.SetFlags(i,aXPoly.GetFlags(j));
-            j++;
-            if (j>=nPointAnz) j=1;
-        }
-        aNeuPoly[0]=rRect1.BottomCenter();
-        aNeuPoly[nPointAnz]=aNeuPoly[0];
-        aXPoly=aNeuPoly;
+    const sal_uInt16 nPointAnz(aXPoly.GetPointCount());
+    XPolygon aNeuPoly(nPointAnz+1);
+    sal_uInt16 nShift=nPointAnz-2;
+    if (nRad1!=0) nShift=nPointAnz-5;
+    sal_uInt16 j=nShift;
+    for (sal_uInt16 i=1; i<nPointAnz; i++) {
+        aNeuPoly[i]=aXPoly[j];
+        aNeuPoly.SetFlags(i,aXPoly.GetFlags(j));
+        j++;
+        if (j>=nPointAnz) j=1;
     }
+    aNeuPoly[0]=rRect1.BottomCenter();
+    aNeuPoly[nPointAnz]=aNeuPoly[0];
+    aXPoly=aNeuPoly;
+
     // Die Winkelangaben beziehen sich immer auf die linke obere Ecke von !aRect!
     if (aGeo.nShearWink!=0) ShearXPoly(aXPoly,aRect.TopLeft(),aGeo.nTan);
     if (aGeo.nDrehWink!=0) RotateXPoly(aXPoly,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
@@ -184,13 +189,17 @@ XPolygon SdrRectObj::ImpCalcXPoly(const Rectangle& rRect1, long nRad1, FASTBOOL 
 
 void SdrRectObj::RecalcXPoly()
 {
-    pXPoly=new XPolygon(ImpCalcXPoly(aRect,GetEckenradius()));
+    mpXPoly = new XPolygon(ImpCalcXPoly(aRect,GetEckenradius()));
 }
 
 const XPolygon& SdrRectObj::GetXPoly() const
 {
-    if (pXPoly==NULL) ((SdrRectObj*)this)->RecalcXPoly();
-    return *pXPoly;
+    if(!mpXPoly)
+    {
+        ((SdrRectObj*)this)->RecalcXPoly();
+    }
+
+    return *mpXPoly;
 }
 
 void SdrRectObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
@@ -316,7 +325,7 @@ void SdrRectObj::ImpDoPaintRectObjShadow(XOutputDevice& rXOut, const SdrPaintInf
             {
                 XPolygon aX(GetXPoly());
                 aX.Move(nXDist,nYDist);
-                rXOut.DrawXPolygon(aX);
+                rXOut.DrawPolygon(aX.getB2DPolygon());
             }
             else
             {
@@ -384,7 +393,7 @@ void SdrRectObj::ImpDoPaintRectObj(XOutputDevice& rXOut, const SdrPaintInfoRec& 
 
             if (PaintNeedsXPoly(nEckRad))
             {
-                rXOut.DrawXPolygon(GetXPoly());
+                rXOut.DrawPolygon(GetXPoly().getB2DPolygon());
             }
             else
             {
@@ -450,7 +459,11 @@ sal_Bool SdrRectObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
 
 SdrObject* SdrRectObj::ImpCheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer, FASTBOOL bForceFilled, FASTBOOL bForceTol) const
 {
-    if (pVisiLayer!=NULL && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId))) return NULL;
+    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId)))
+    {
+        return NULL;
+    }
+
     INT32 nMyTol=nTol;
     FASTBOOL bFilled=bForceFilled || HasFill();
     FASTBOOL bPickThrough=pModel!=NULL && pModel->IsPickThroughTransparentTextFrames();
@@ -491,8 +504,7 @@ SdrObject* SdrRectObj::ImpCheckHit(const Point& rPnt, USHORT nTol, const SetOfBy
                     INT32 nRad=nEckRad;
                     if (bFilled) nRad+=nMyTol; // um korrekt zu sein ...
                     XPolygon aXPoly(ImpCalcXPoly(aR,nRad));
-//BFS09                 aPol=XOutCreatePolygon(aXPoly,NULL);
-                    aPol=XOutCreatePolygon(aXPoly);
+                    aPol = Polygon(basegfx::tools::adaptiveSubdivideByAngle(aXPoly.getB2DPolygon()));
                 } else {
                     if (aGeo.nShearWink!=0) ShearPoly(aPol,aRect.TopLeft(),aGeo.nTan);
                     if (aGeo.nDrehWink!=0) RotatePoly(aPol,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
@@ -570,20 +582,12 @@ void SdrRectObj::operator=(const SdrObject& rObj)
     SdrTextObj::operator=(rObj);
 }
 
-void SdrRectObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL /*bDetail*/) const
+basegfx::B2DPolyPolygon SdrRectObj::TakeXorPoly(sal_Bool /*bDetail*/) const
 {
-    rPoly=XPolyPolygon(ImpCalcXPoly(aRect,GetEckenradius()));
+    XPolyPolygon aXPP;
+    aXPP.Insert(ImpCalcXPoly(aRect,GetEckenradius()));
+    return aXPP.getB2DPolyPolygon();
 }
-
-void SdrRectObj::TakeContour(XPolyPolygon& rPoly) const
-{
-    SdrTextObj::TakeContour(rPoly);
-}
-
-//#110094#-12
-//void SdrRectObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
-//{
-//}
 
 void SdrRectObj::RecalcSnapRect()
 {
@@ -607,12 +611,12 @@ void SdrRectObj::NbcSetLogicRect(const Rectangle& rRect)
     SetXPolyDirty();
 }
 
-USHORT SdrRectObj::GetHdlCount() const
+sal_uInt32 SdrRectObj::GetHdlCount() const
 {
-    return 9;
+    return 9L;
 }
 
-SdrHdl* SdrRectObj::GetHdl(USHORT nHdlNum) const
+SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
 {
     SdrHdl* pH=NULL;
     Point aPnt;
@@ -740,29 +744,37 @@ XubString SdrRectObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDra
     }
 }
 
-void SdrRectObj::TakeDragPoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) const
+basegfx::B2DPolyPolygon SdrRectObj::TakeDragPoly(const SdrDragStat& rDrag) const
 {
-    rXPP.Clear();
-    FASTBOOL bRad=rDrag.GetHdl()!=NULL && rDrag.GetHdl()->GetKind()==HDL_CIRC;
-    //FASTBOOL bRectSiz=!bRad;
-    if (bRad) {
+    XPolyPolygon aXPP;
+    const bool bRad(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
+
+    if(bRad)
+    {
         Point aPt(rDrag.GetNow());
         if (aGeo.nDrehWink!=0) RotatePoint(aPt,aRect.TopLeft(),-aGeo.nSin,aGeo.nCos); // -sin fuer Umkehrung
         // Shear nicht noetig, da Pt auf einer Linie mit dem RefPt (LiOb Ecke des Rect)
         long nRad=aPt.X()-aRect.Left();
         if (nRad<0) nRad=0;
-        rXPP.Insert(ImpCalcXPoly(aRect,nRad));
-    } else {
-        rXPP.Insert(ImpCalcXPoly(ImpDragCalcRect(rDrag),GetEckenradius()));
+        aXPP.Insert(ImpCalcXPoly(aRect,nRad));
     }
+    else
+    {
+        aXPP.Insert(ImpCalcXPoly(ImpDragCalcRect(rDrag),GetEckenradius()));
+    }
+
+    return aXPP.getB2DPolyPolygon();
 }
 
-void SdrRectObj::TakeCreatePoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) const
+basegfx::B2DPolyPolygon SdrRectObj::TakeCreatePoly(const SdrDragStat& rDrag) const
 {
     Rectangle aRect1;
     rDrag.TakeCreateRect(aRect1);
     aRect1.Justify();
-    rXPP=XPolyPolygon(ImpCalcXPoly(aRect1,GetEckenradius()));
+
+    basegfx::B2DPolyPolygon aRetval;
+    aRetval.append(ImpCalcXPoly(aRect1,GetEckenradius()).getB2DPolygon());
+    return aRetval;
 }
 
 Pointer SdrRectObj::GetCreatePointer() const
@@ -870,11 +882,17 @@ SdrObject* SdrRectObj::DoConvertToPolyObj(BOOL bBezier) const
         aXP.Remove(0,1);
         aXP[aXP.GetPointCount()-1]=aXP[0];
     }
-    SdrObject* pRet=NULL;
-    if (!IsTextFrame() || HasFill() || HasLine()) {
-        pRet=ImpConvertMakeObj(XPolyPolygon(aXP),TRUE,bBezier);
+
+    basegfx::B2DPolyPolygon aPolyPolygon(aXP.getB2DPolygon());
+    SdrObject* pRet = 0L;
+
+    if(!IsTextFrame() || HasFill() || HasLine())
+    {
+        pRet = ImpConvertMakeObj(aPolyPolygon, sal_True, bBezier);
     }
-    pRet=ImpConvertAddText(pRet,bBezier);
+
+    pRet = ImpConvertAddText(pRet, bBezier);
+
     return pRet;
 }
 
@@ -884,70 +902,10 @@ void SdrRectObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const Sf
     SetXPolyDirty(); // wg. Eckenradius
 }
 
-// #109872#
-//SdrObjGeoData* SdrRectObj::NewGeoData() const
-//{ // etwas umstaendlicher, damit's vielleicht unter Chicago durchgeht
-//  SdrObjGeoData* pGeo=new SdrRectObjGeoData;
-//  return pGeo;
-//}
-
-// #109872#
-//void SdrRectObj::SaveGeoData(SdrObjGeoData& rGeo) const
-//{
-//  SdrTextObj::SaveGeoData(rGeo);
-//  SdrRectObjGeoData& rRGeo=(SdrRectObjGeoData&)rGeo;
-//  rRGeo.nEckRad=GetEckenradius();
-//}
-
 void SdrRectObj::RestGeoData(const SdrObjGeoData& rGeo)
 {
     SdrTextObj::RestGeoData(rGeo);
-// #109872#
-//  SdrRectObjGeoData& rRGeo=(SdrRectObjGeoData&)rGeo;
-//  long nAltRad=GetEckenradius();
-//  if (rRGeo.nEckRad!=nAltRad) NbcSetEckenradius(rRGeo.nEckRad);
     SetXPolyDirty();
 }
-
-//BFS01void SdrRectObj::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01 SdrTextObj::WriteData(rOut);
-//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrRectObj");
-//BFS01#endif
-//BFS01}
-
-//BFS01void SdrRectObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 if (rIn.GetError()!=0) return;
-//BFS01 SdrTextObj::ReadData(rHead,rIn);
-//BFS01 if (IsTextFrame() && rHead.GetVersion()<3 && !HAS_BASE(SdrCaptionObj,this)) {
-//BFS01     // Bis einschl. Version 2 wurden Textrahmen mit SdrTextObj dargestellt, ausser CaptionObj
-//BFS01     SfxItemPool* pPool=GetItemPool();
-//BFS01     if (pPool!=NULL) {
-//BFS01         // Umrandung und Hintergrund des importierten Textrahmens ausschalten
-//BFS01         SfxItemSet aSet(*pPool);
-//BFS01         aSet.Put(XFillColorItem(String(),Color(COL_WHITE))); // Falls einer auf Solid umschaltet
-//BFS01         aSet.Put(XFillStyleItem(XFILL_NONE));
-//BFS01         aSet.Put(XLineColorItem(String(),Color(COL_BLACK))); // Falls einer auf Solid umschaltet
-//BFS01         aSet.Put(XLineStyleItem(XLINE_NONE));
-//BFS01
-//BFS01         SetObjectItemSet(aSet);
-//BFS01     }
-//BFS01 } else {
-//BFS01     SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01#ifdef DBG_UTIL
-//BFS01     aCompat.SetID("SdrRectObj");
-//BFS01#endif
-//BFS01     if (rHead.GetVersion()<=5) {
-//BFS01         long nEckRad;
-//BFS01         rIn>>nEckRad;
-//BFS01         long nAltRad=GetEckenradius();
-//BFS01         if (nEckRad!=nAltRad) NbcSetEckenradius(nEckRad);
-//BFS01     }
-//BFS01 }
-//BFS01 SetXPolyDirty();
-//BFS01}
 
 // eof
