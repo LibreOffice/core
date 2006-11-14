@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontworkbar.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:08:28 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:53:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,10 @@
 #endif
 #ifndef _SVX_KERNITEM_HXX
 #include <kernitem.hxx>
+#endif
+
+#ifndef _SDRPAINTWINDOW_HXX
+#include <sdrpaintwindow.hxx>
 #endif
 
 #include "svxids.hrc"
@@ -270,14 +274,18 @@ static Window* ImpGetViewWin(SdrView* pView)
 {
     if( pView )
     {
-        USHORT nAnz=pView->GetWinCount();
-        for (USHORT nNum=0; nNum<nAnz; nNum++) {
-            OutputDevice* pOut=pView->GetWin(nNum);
-            if (pOut->GetOutDevType()==OUTDEV_WINDOW) {
+        const sal_uInt32 nAnz(pView->PaintWindowCount());
+        for(sal_uInt32 nNum(0L); nNum < nAnz; nNum++)
+        {
+            OutputDevice* pOut = &(pView->GetPaintWindow(nNum)->GetOutputDevice());
+
+            if(OUTDEV_WINDOW == pOut->GetOutDevType())
+            {
                 return (Window*)pOut;
             }
         }
     }
+
     return 0L;
 }
 
