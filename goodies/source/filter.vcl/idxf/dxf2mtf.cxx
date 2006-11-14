@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dxf2mtf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:36:41 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:13:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,10 +55,10 @@ ULONG DXF2GDIMetaFile::CountEntities(const DXFEntities & rEntities)
 }
 
 
-void DXF2GDIMetaFile::MayCallback(ULONG nMainEntitiesProcessed)
+void DXF2GDIMetaFile::MayCallback(ULONG /*nMainEntitiesProcessed*/)
 {
-    ULONG nPercent;
-
+    // ULONG nPercent;
+/*
     if (pCallback!=NULL && nMainEntitiesCount!=0) {
         nPercent=nMinPercent+(nMaxPercent-nMinPercent)*nMainEntitiesProcessed/nMainEntitiesCount;
         if (nPercent>=nLastPercent+4) {
@@ -66,6 +66,7 @@ void DXF2GDIMetaFile::MayCallback(ULONG nMainEntitiesProcessed)
             nLastPercent=nPercent;
         }
     }
+*/
 }
 
 Color DXF2GDIMetaFile::ConvertColor(BYTE nColor)
@@ -784,9 +785,7 @@ DXF2GDIMetaFile::~DXF2GDIMetaFile()
 }
 
 
-BOOL DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF,
-                              PFilterCallback pcallback, void * pcallerdata,
-                              USHORT nminpercent, USHORT nmaxpercent)
+BOOL DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF, USHORT nminpercent, USHORT nmaxpercent)
 {
     double fWidth,fHeight,fScale;
     DXFTransform aTransform;
@@ -800,8 +799,6 @@ BOOL DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
 
     OptPointsPerCircle=50;
 
-    pCallback=pcallback;
-    pCallerData=pcallerdata;
     nMinPercent=(ULONG)nminpercent;
     nMaxPercent=(ULONG)nmaxpercent;
     nLastPercent=nMinPercent;
