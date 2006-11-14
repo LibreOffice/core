@@ -4,9 +4,9 @@
  *
  *  $RCSfile: emfwr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:18:59 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:41:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,8 +157,7 @@
 // - EMFWriter -
 // -------------
 
-BOOL EMFWriter::WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm,
-                          PFilterCallback pCallback, void* pCallerData )
+BOOL EMFWriter::WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterConfigItem* pFilterConfigItem )
 {
     const ULONG nHeaderPos = rOStm.Tell();
 
@@ -169,10 +168,9 @@ BOOL EMFWriter::WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm,
     mbRecordOpen = FALSE;
 
     mpStm = &rOStm;
-    mpCallback = pCallback;
-    mpCallerData = pCallerData;
     maVDev.EnableOutput( FALSE );
     maVDev.SetMapMode( rMtf.GetPrefMapMode() );
+    mpFilterConfigItem = pFilterConfigItem;
 
     const Size aMtfSizePix( maVDev.LogicToPixel( rMtf.GetPrefSize(), rMtf.GetPrefMapMode() ) );
     const Size aMtfSizeLog( maVDev.LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_100TH_MM ) );
