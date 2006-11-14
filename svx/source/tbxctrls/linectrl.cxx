@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linectrl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:22:01 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:53:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -555,7 +555,7 @@ void SvxLineEndWindow::FillValueSet()
 
         // Erster Eintrag: kein LinienEnde
         // Temporaer wird ein Eintrag hinzugefuegt, um die UI-Bitmap zu erhalten
-        XPolygon aNothing( 0 );
+        basegfx::B2DPolyPolygon aNothing;
         pLineEndList->Insert( new XLineEndEntry( aNothing, SVX_RESSTR( RID_SVXSTR_NONE ) ) );
         pEntry = pLineEndList->GetLineEnd( nCount );
         pBmp = pLineEndList->GetBitmap( nCount );
