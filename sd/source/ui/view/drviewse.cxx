@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:17:47 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:44:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -324,7 +324,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
              nSId != SID_ATTR_CHAR_VERTICAL && nSId != SID_TEXT_FITTOSIZE_VERTICAL &&
              pDrView->IsTextEdit() )
         {
-            pDrView->EndTextEdit();
+            pDrView->SdrEndTextEdit();
         }
 
         if( HasCurrentFunction() )
@@ -395,7 +395,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             {
                 // get the form view
                 FmFormView* pFormView = PTR_CAST(FmFormView, pDrView);
-                SdrPageView* pPageView = pFormView ? pFormView->GetPageViewPvNum(0) : NULL;
+                SdrPageView* pPageView = pFormView ? pFormView->GetSdrPageView() : NULL;
 
                 if(pPageView)
                 {
@@ -413,7 +413,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
                         pNewDBField->SetLogicRect(aNewObjectRectangle);
 
-                        GetView()->InsertObject(pNewDBField, *pPageView, GetView()->IsSolidDraggingNow() ? SDRINSERT_NOBROADCAST : 0);
+                        GetView()->InsertObjectAtView(pNewDBField, *pPageView);
                     }
                 }
             }
@@ -694,7 +694,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         aPagePos.X() -= nDefaultObjectSizeWidth / 2;
         aPagePos.Y() -= nDefaultObjectSizeHeight / 2;
         Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
-        SdrPageView* pPageView = pDrView->GetPageViewPvNum(0);
+        SdrPageView* pPageView = pDrView->GetSdrPageView();
 
         if(pPageView)
         {
@@ -704,7 +704,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             if(pObj)
             {
                 // insert into page
-                GetView()->InsertObject(pObj, *pPageView, GetView()->IsSolidDraggingNow() ? SDRINSERT_NOBROADCAST : 0);
+                GetView()->InsertObjectAtView(pObj, *pPageView);
 
                 // Now that pFuActual has done what it was created for we
                 // can switch on the edit mode for callout objects.
@@ -719,7 +719,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                             Execute(SID_TEXTEDIT, SFX_CALLMODE_SYNCHRON |
                                 SFX_CALLMODE_RECORD, &aItem, 0L);
                         // Put text object into edit mode.
-                        GetView()->BegTextEdit (reinterpret_cast<SdrTextObj*>(pObj), pPageView);
+                        GetView()->SdrBeginTextEdit(reinterpret_cast<SdrTextObj*>(pObj), pPageView);
                         break;
                     }
                 }
@@ -797,7 +797,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             if( !mpSlideShow )
             {
                 if( pDrView->IsTextEdit() )
-                    pDrView->EndTextEdit();
+                    pDrView->SdrEndTextEdit();
 
                 SFX_REQUEST_ARG( rReq, pFullScreen, SfxBoolItem, ATTR_PRESENT_FULLSCREEN, FALSE );
                 const BOOL bFullScreen = ( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) && pFullScreen ) ? pFullScreen->GetValue() : GetDoc()->getPresentationSettings().mbFullScreen;
@@ -861,9 +861,9 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetMarkedSdrObj();
                 pDrView->BegUndo(String(SdResId(STR_UNDO_BEZCLOSE)));
                 pDrView->UnmarkAllPoints();
-                Size aDist(GetActiveWindow()->PixelToLogic(Size(8,8)));
+                //Size aDist(GetActiveWindow()->PixelToLogic(Size(8,8)));
                 pDrView->AddUndo(new SdrUndoGeoObj(*pPathObj));
-                pPathObj->ToggleClosed(aDist.Width());
+                pPathObj->ToggleClosed(); //aDist.Width());
                 pDrView->EndUndo();
             }
             rReq.Done();
@@ -1187,11 +1187,11 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         {
             bZoomOnPage = ( rReq.GetSlot() == SID_SIZE_PAGE );
 
-            SdrPageView* pPageView = pDrView->GetPageViewPvNum(0);
+            SdrPageView* pPageView = pDrView->GetSdrPageView();
 
             if ( pPageView )
             {
-                Point aPagePos = pPageView->GetOffset();
+                Point aPagePos(0, 0); // = pPageView->GetOffset();
                 Size aPageSize = pPageView->GetPage()->GetSize();
 
                 aPagePos.X() += aPageSize.Width()  / 2;
@@ -1309,7 +1309,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_SIZE_ALL:  // BASIC
         {
             bZoomOnPage = FALSE;
-            SdrPageView* pPageView = pDrView->GetPageViewPvNum( 0 );
+            SdrPageView* pPageView = pDrView->GetSdrPageView();
 
             if( pPageView )
             {
@@ -1342,7 +1342,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         {
             if (pDrView->IsTextEdit())
             {
-                pDrView->EndTextEdit();
+                pDrView->SdrEndTextEdit();
             }
 
             if (pZoomList->IsPreviousPossible())
@@ -1359,7 +1359,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         {
             if (pDrView->IsTextEdit())
             {
-                pDrView->EndTextEdit();
+                pDrView->SdrEndTextEdit();
             }
 
             if (pZoomList->IsNextPossible())
@@ -1399,8 +1399,9 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 #ifndef PRODUCT
         case SID_SHOW_ITEMBROWSER:
         {
+#ifdef DBG_UTIL
             pDrView->ShowItemBrowser( !pDrView->IsItemBrowserVisible() );
-
+#endif
             rReq.Done ();
         }
         break;
@@ -1501,7 +1502,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                                 pNewObj->SetGraphic( aBmpEx );
                             }
 
-                            pDrView->ReplaceObject( pObj, *pDrView->GetPageViewPvNum(0), pNewObj );
+                            pDrView->ReplaceObjectAtView( pObj, *pDrView->GetSdrPageView(), pNewObj );
                         }
                     }
                 }
@@ -1695,7 +1696,7 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
     if (bNewObj)
     {
         SdrUnoObj* pUnoCtrl = (SdrUnoObj*) SdrObjFactory::MakeNewObject(FmFormInventor, OBJ_FM_BUTTON,
-                                pDrView->GetPageViewPvNum(0)->GetPage(), GetDoc());
+                                pDrView->GetSdrPageView()->GetPage(), GetDoc());
 
         uno::Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel() );
 
@@ -1756,7 +1757,7 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
             nOptions |= SDRINSERT_DONTMARK;
         }
 
-        pDrView->InsertObject(pUnoCtrl, *pDrView->GetPageViewPvNum(0), nOptions);
+        pDrView->InsertObjectAtView(pUnoCtrl, *pDrView->GetSdrPageView(), nOptions);
     }
 }
 
@@ -1785,7 +1786,7 @@ void DrawViewShell::StopSlideShow (bool bCloseFrame)
     if (mpSlideShow != NULL)
     {
         if( pDrView->IsTextEdit() )
-            pDrView->EndTextEdit();
+            pDrView->SdrEndTextEdit();
 
 //        mpSlideShow->Deactivate();
         delete mpSlideShow;
