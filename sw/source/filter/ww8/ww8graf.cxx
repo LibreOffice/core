@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:23:14 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:14:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,6 +254,14 @@
 #include "writerwordglue.hxx"
 #endif
 
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
 using namespace sw::types;
 using namespace sw::util;
 
@@ -441,12 +449,14 @@ static void SetLineEndAttr( SfxItemSet& rSet, WW8_DP_LINEEND& rLe,
                             WW8_DP_LINETYPE& rLt )
 {
     UINT16 aSB = SVBT16ToShort( rLe.aStartBits );
-    if( aSB & 0x3 ){
-        XPolygon aXP(3);
-        aXP[0] = Point( 0, 330 );
-        aXP[1] = Point( 100, 0 );
-        aXP[2] = Point( 200, 330 );
-        rSet.Put( XLineEndItem( aEmptyStr, aXP ) );
+    if( aSB & 0x3 )
+    {
+        ::basegfx::B2DPolygon aPolygon;
+        aPolygon.append(::basegfx::B2DPoint(0.0, 330.0));
+        aPolygon.append(::basegfx::B2DPoint(100.0, 0.0));
+        aPolygon.append(::basegfx::B2DPoint(200.0, 330.0));
+        aPolygon.setClosed(true);
+        rSet.Put( XLineEndItem( aEmptyStr, ::basegfx::B2DPolyPolygon(aPolygon) ) );
         USHORT nSiz = SVBT16ToShort( rLt.lnpw )
                         * ( ( aSB >> 2 & 0x3 ) + ( aSB >> 4 & 0x3 ) );
         if( nSiz < 220 ) nSiz = 220;
@@ -456,11 +466,12 @@ static void SetLineEndAttr( SfxItemSet& rSet, WW8_DP_LINEEND& rLe,
 
     UINT16 aEB = SVBT16ToShort( rLe.aEndBits );
     if( aEB & 0x3 ){
-        XPolygon aXP(3);
-        aXP[0] = Point( 0, 330 );
-        aXP[1] = Point( 100, 0 );
-        aXP[2] = Point( 200, 330 );
-        rSet.Put( XLineStartItem( aEmptyStr, aXP ) );
+        ::basegfx::B2DPolygon aPolygon;
+        aPolygon.append(::basegfx::B2DPoint(0.0, 330.0));
+        aPolygon.append(::basegfx::B2DPoint(100.0, 0.0));
+        aPolygon.append(::basegfx::B2DPoint(200.0, 330.0));
+        aPolygon.setClosed(true);
+        rSet.Put( XLineStartItem( aEmptyStr, ::basegfx::B2DPolyPolygon(aPolygon) ) );
         USHORT nSiz = SVBT16ToShort( rLt.lnpw )
                         * ( ( aEB >> 2 & 0x3 ) + ( aEB >> 4 & 0x3 ) );
         if( nSiz < 220 ) nSiz = 220;
@@ -491,7 +502,11 @@ SdrObject* SwWW8ImplReader::ReadLine( WW8_DPHEAD* pHd, const WW8_DO* pDo,
         rP1.X() += (INT16)SVBT16ToShort( aLine.xaEnd );
         rP1.Y() += (INT16)SVBT16ToShort( aLine.yaEnd );
     }
-    SdrObject* pObj = new SdrPathObj( OBJ_LINE, XPolygon( Polygon( 2, aP ) ) );
+
+    ::basegfx::B2DPolygon aPolygon;
+    aPolygon.append(::basegfx::B2DPoint(aP[0].X(), aP[0].Y()));
+    aPolygon.append(::basegfx::B2DPoint(aP[1].X(), aP[1].Y()));
+    SdrObject* pObj = new SdrPathObj(OBJ_LINE, ::basegfx::B2DPolyPolygon(aPolygon));
 
     SetStdAttr( rSet, aLine.aLnt, aLine.aShd );
     SetLineEndAttr( rSet, aLine.aEpp, aLine.aLnt );
@@ -602,10 +617,7 @@ SdrObject* SwWW8ImplReader::ReadPolyLine( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     }
     delete[] pP;
 
-    SdrObject* pObj = new SdrPathObj(
-                ( SVBT16ToShort( aPoly.aBits1 ) & 0x1 ) ? OBJ_POLY : OBJ_PLIN,
-                                XPolygon( aP ) );
-
+    SdrObject* pObj = new SdrPathObj(( SVBT16ToShort( aPoly.aBits1 ) & 0x1 ) ? OBJ_POLY : OBJ_PLIN, ::basegfx::B2DPolyPolygon(aP.getB2DPolygon()));
     SetStdAttr( rSet, aPoly.aLnt, aPoly.aShd );
     SetFill( rSet, aPoly.aFill );
 
