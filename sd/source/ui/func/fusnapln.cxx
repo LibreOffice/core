@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusnapln.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:56:15 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:31:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
         static_cast<DrawViewShell*>(pViewShell)->SetMousePosFreezed( FALSE );
         BOOL bLineExist = FALSE;
 
-        pPV = pView->GetPageViewPvNum(0);
+        pPV = pView->GetSdrPageView();
 
         if ( aLinePos.X() >= 0 )
         {
@@ -122,7 +122,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
             if ( bLineExist )
                 aLinePos = (pPV->GetHelpLines())[nHelpLine].GetPos();
             else
-                pPV = pView->GetPageViewPvNum(0);
+                pPV = pView->GetSdrPageView();
 
             pPV->LogicToPagePos(aLinePos);
         }
@@ -193,7 +193,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
     {
         SdrHelpLineKind eKind;
 
-        pPV = pView->GetPageViewPvNum(0);
+        pPV = pView->GetSdrPageView();
 
         switch ( (SnapKind) ((const SfxAllEnumItem&)
                  pArgs->Get(ATTR_SNAPLINE_KIND)).GetValue() )
