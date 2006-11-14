@@ -4,9 +4,9 @@
  *
  *  $RCSfile: e3ditem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:53:39 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,101 +50,110 @@ using namespace ::com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
-DBG_NAMEEX(SvxVector3DItem)
-DBG_NAME(SvxVector3DItem)
+DBG_NAMEEX(SvxB3DVectorItem)
+DBG_NAME(SvxB3DVectorItem)
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SvxVector3DItem, SfxPoolItem);
+TYPEINIT1_AUTOFACTORY(SvxB3DVectorItem, SfxPoolItem);
 
 // -----------------------------------------------------------------------
 
-SvxVector3DItem::SvxVector3DItem()
+SvxB3DVectorItem::SvxB3DVectorItem()
 {
-    DBG_CTOR(SvxVector3DItem, 0);
+    DBG_CTOR(SvxB3DVectorItem, 0);
 }
 
-SvxVector3DItem::~SvxVector3DItem()
+SvxB3DVectorItem::~SvxB3DVectorItem()
 {
-    DBG_DTOR(SvxVector3DItem, 0);
+    DBG_DTOR(SvxB3DVectorItem, 0);
 }
 
 // -----------------------------------------------------------------------
 
-SvxVector3DItem::SvxVector3DItem( USHORT _nWhich, const Vector3D& rVal ) :
+SvxB3DVectorItem::SvxB3DVectorItem( USHORT _nWhich, const basegfx::B3DVector& rVal ) :
     SfxPoolItem( _nWhich ),
     aVal( rVal )
 {
-    DBG_CTOR(SvxVector3DItem, 0);
+    DBG_CTOR(SvxB3DVectorItem, 0);
 }
 
 // -----------------------------------------------------------------------
 
-SvxVector3DItem::SvxVector3DItem( USHORT _nWhich, SvStream& rStream ) :
+SvxB3DVectorItem::SvxB3DVectorItem( USHORT _nWhich, SvStream& rStream ) :
     SfxPoolItem( _nWhich )
 {
-    DBG_CTOR(SvxVector3DItem, 0);
-    rStream >> aVal;
+    DBG_CTOR(SvxB3DVectorItem, 0);
+    double fValue;
+    rStream >> fValue; aVal.setX(fValue);
+    rStream >> fValue; aVal.setY(fValue);
+    rStream >> fValue; aVal.setZ(fValue);
 }
 
 // -----------------------------------------------------------------------
 
-SvxVector3DItem::SvxVector3DItem( const SvxVector3DItem& rItem ) :
+SvxB3DVectorItem::SvxB3DVectorItem( const SvxB3DVectorItem& rItem ) :
     SfxPoolItem( rItem ),
     aVal( rItem.aVal )
 {
-    DBG_CTOR(SvxVector3DItem, 0);
+    DBG_CTOR(SvxB3DVectorItem, 0);
 }
 
 // -----------------------------------------------------------------------
 
-int SvxVector3DItem::operator==( const SfxPoolItem &rItem ) const
+int SvxB3DVectorItem::operator==( const SfxPoolItem &rItem ) const
 {
-    DBG_CHKTHIS(SvxVector3DItem, 0);
+    DBG_CHKTHIS(SvxB3DVectorItem, 0);
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
-    return ((SvxVector3DItem&)rItem).aVal == aVal;
+    return ((SvxB3DVectorItem&)rItem).aVal == aVal;
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxVector3DItem::Clone( SfxItemPool * ) const
+SfxPoolItem* SvxB3DVectorItem::Clone( SfxItemPool* /*pPool*/ ) const
 {
-    DBG_CHKTHIS(SvxVector3DItem, 0);
-    return new SvxVector3DItem( *this );
+    DBG_CHKTHIS(SvxB3DVectorItem, 0);
+    return new SvxB3DVectorItem( *this );
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxVector3DItem::Create(SvStream &rStream, USHORT /*nVersion*/) const
+SfxPoolItem* SvxB3DVectorItem::Create(SvStream &rStream, USHORT /*nVersion*/) const
 {
-    DBG_CHKTHIS(SvxVector3DItem, 0);
-    Vector3D aStr;
-    rStream >> aStr;
-    return new SvxVector3DItem(Which(), aStr);
+    DBG_CHKTHIS(SvxB3DVectorItem, 0);
+    basegfx::B3DVector aStr;
+    double fValue;
+    rStream >> fValue; aStr.setX(fValue);
+    rStream >> fValue; aStr.setY(fValue);
+    rStream >> fValue; aStr.setZ(fValue);
+    return new SvxB3DVectorItem(Which(), aStr);
 }
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxVector3DItem::Store(SvStream &rStream, USHORT /*nItemVersion*/) const
+SvStream& SvxB3DVectorItem::Store(SvStream &rStream, USHORT /*nItemVersion*/) const
 {
-    DBG_CHKTHIS(SvxVector3DItem, 0);
+    DBG_CHKTHIS(SvxB3DVectorItem, 0);
 
     // ## if (nItemVersion)
-    rStream << aVal;
+    double fValue;
+    fValue = aVal.getX(); rStream << fValue;
+    fValue = aVal.getY(); rStream << fValue;
+    fValue = aVal.getZ(); rStream << fValue;
 
     return rStream;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxVector3DItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
+sal_Bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     drawing::Direction3D aDirection;
 
     // Werte eintragen
-    aDirection.DirectionX = aVal.X();
-    aDirection.DirectionY = aVal.Y();
-    aDirection.DirectionZ = aVal.Z();
+    aDirection.DirectionX = aVal.getX();
+    aDirection.DirectionY = aVal.getY();
+    aDirection.DirectionZ = aVal.getZ();
 
     rVal <<= aDirection;
     return( sal_True );
@@ -152,23 +161,23 @@ sal_Bool SvxVector3DItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxVector3DItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
+sal_Bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     drawing::Direction3D aDirection;
     if(!(rVal >>= aDirection))
         return sal_False;
 
-    aVal.X() = aDirection.DirectionX;
-    aVal.Y() = aDirection.DirectionY;
-    aVal.Z() = aDirection.DirectionZ;
+    aVal.setX(aDirection.DirectionX);
+    aVal.setY(aDirection.DirectionY);
+    aVal.setZ(aDirection.DirectionZ);
     return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-USHORT SvxVector3DItem::GetVersion (USHORT nFileFormatVersion) const
+USHORT SvxB3DVectorItem::GetVersion (USHORT nFileFormatVersion) const
 {
     return (nFileFormatVersion == SOFFICE_FILEFORMAT_31) ? USHRT_MAX : 0;
 }
 
-
+// eof
