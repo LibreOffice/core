@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edittest.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:27:22 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:59:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1314,7 +1314,6 @@ void EditMainWindow::CreatePolygon()
     aPoly.SetPoint( Point( 0, aSz.Height()/2 ), 3 );
     aPoly.SetPoint( Point( aSz.Width()/2, 0 ), 4 );
     PolyPolygon aPPoly( aPoly );
-    XPolyPolygon aXPoly( aPPoly );
     pEditView->GetEditEngine()->SetPolygon( aPPoly );
     pEditView->SetOutputArea( Rectangle( aOffset, aSz ) );
     ULONG nWord = pEditView->GetControlWord();
