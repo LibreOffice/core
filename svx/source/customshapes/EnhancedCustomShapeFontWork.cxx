@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFontWork.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:02:19 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:14:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -612,11 +612,9 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
     }
 }
 
-//BFS09PolyPolygon GetOutlinesFromShape2d( const SdrObject* pShape2d )
-::basegfx::B2DPolyPolygon GetOutlinesFromShape2d( const SdrObject* pShape2d )
+basegfx::B2DPolyPolygon GetOutlinesFromShape2d( const SdrObject* pShape2d )
 {
-//BFS09 PolyPolygon aOutlines2d;
-    ::basegfx::B2DPolyPolygon aOutlines2d;
+    basegfx::B2DPolyPolygon aOutlines2d;
 
     SdrObjListIter aObjListIter( *pShape2d, IM_DEEPWITHGROUPS );
     while( aObjListIter.IsMore() )
@@ -624,23 +622,12 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
         SdrObject* pPartObj = aObjListIter.Next();
         if ( pPartObj->ISA( SdrPathObj ) )
         {
-            const XPolyPolygon& rXPolyPoly = ((SdrPathObj*)pPartObj)->GetPathPoly();
-            ::basegfx::B2DPolyPolygon aCandidate(rXPolyPoly.getB2DPolyPolygon());
+            basegfx::B2DPolyPolygon aCandidate(((SdrPathObj*)pPartObj)->GetPathPoly());
             if(aCandidate.areControlPointsUsed())
             {
-                aCandidate = ::basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
+                aCandidate = basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
             }
             aOutlines2d.append(aCandidate);
-
-//BFS09         sal_uInt16 i, nCount = rXPolyPoly.Count();
-//BFS09         for ( i = 0; i < nCount; i++ )
-//BFS09         {
-//BFS09//BFS09      Polygon aPoly( XOutCreatePolygonBezier( rXPolyPoly.GetObject( i ), NULL ) );
-//BFS09             Polygon aPoly( XOutCreatePolygonBezier( rXPolyPoly.GetObject( i )) );
-//BFS09             Polygon aSimplePoly;
-//BFS09             aPoly.GetSimple( aSimplePoly );
-//BFS09             aOutlines2d.Insert( aSimplePoly, POLYPOLY_APPEND );
-//BFS09         }
         }
     }
 
@@ -847,11 +834,11 @@ void FitTextOutlinesToShapeOutlines( const PolyPolygon& aOutlines2d, FWData& rFW
                             for ( i = 0; i < nPolyCount; i++ )
                             {
                                 // #i35928#
-                                ::basegfx::B2DPolygon aCandidate(rPolyPoly[ i ].getB2DPolygon());
+                                basegfx::B2DPolygon aCandidate(rPolyPoly[ i ].getB2DPolygon());
 
                                 if(aCandidate.areControlVectorsUsed())
                                 {
-                                    aCandidate = ::basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
+                                    aCandidate = basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
                                 }
 
                                 // create local polygon copy to work on
@@ -859,10 +846,6 @@ void FitTextOutlinesToShapeOutlines( const PolyPolygon& aOutlines2d, FWData& rFW
 
                                 InsertMissingOutlinePoints( rOutlinePoly, vDistances, rTextAreaBoundRect, aLocalPoly );
                                 InsertMissingOutlinePoints( rOutlinePoly2, vDistances2, rTextAreaBoundRect, aLocalPoly );
-
-//BFS09                                 Polygon& rPoly = rPolyPoly[ i ];
-//BFS09                             InsertMissingOutlinePoints( rOutlinePoly, vDistances, rTextAreaBoundRect, rPoly );
-//BFS09                             InsertMissingOutlinePoints( rOutlinePoly2, vDistances2, rTextAreaBoundRect, rPoly );
 
                                 sal_uInt16 j, _nPointCount = aLocalPoly.GetSize();
                                 for ( j = 0; j < _nPointCount; j++ )
@@ -921,7 +904,7 @@ SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const Sd
                     std::vector< PolyPolygon >::const_iterator aOutlineIEnd = aCharacterIter->vOutlines.end();
                     while( aOutlineIter != aOutlineIEnd )
                     {
-                        SdrObject* pPathObj = new SdrPathObj( OBJ_POLY, *aOutlineIter );
+                        SdrObject* pPathObj = new SdrPathObj( OBJ_POLY, aOutlineIter->getB2DPolyPolygon() );
     // SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
     //                  pPathObj->SetModel( pCustomShape->GetModel() );
                         ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pPathObj );
