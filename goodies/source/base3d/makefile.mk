@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 21:40:35 $
+#   last change: $Author: ihi $ $Date: 2006-11-14 16:09:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,23 +48,18 @@ EXCEPTIONSFILES=\
                 $(SLO)$/b3dgeom.obj
 
 SLOFILES= \
-                $(SLO)$/base3d.obj       \
-                $(SLO)$/b3dtrans.obj     \
-                $(SLO)$/b3ddeflt.obj     \
-                $(SLO)$/b3dopngl.obj     \
-                $(SLO)$/b3dprint.obj     \
-                $(SLO)$/b3dcommn.obj     \
-                $(SLO)$/vector3d.obj     \
-                $(SLO)$/point4d.obj		\
-                $(SLO)$/matril3d.obj		\
-                $(SLO)$/b3dcolor.obj		\
-                $(SLO)$/b3dlight.obj		\
-                $(SLO)$/b3dentty.obj		\
-                $(SLO)$/b3dcompo.obj		\
-                $(SLO)$/hmatrix.obj		\
+                $(SLO)$/base3d.obj      \
+                $(SLO)$/b3dtrans.obj    \
+                $(SLO)$/b3ddeflt.obj    \
+                $(SLO)$/b3dopngl.obj    \
+                $(SLO)$/b3dcommn.obj    \
+                $(SLO)$/matril3d.obj	\
+                $(SLO)$/b3dcolor.obj	\
+                $(SLO)$/b3dlight.obj	\
+                $(SLO)$/b3dentty.obj	\
+                $(SLO)$/b3dcompo.obj	\
                 $(SLO)$/b3dtex.obj		\
-                $(SLO)$/b3dgeom.obj		\
-                $(SLO)$/b3dvolum.obj
+                $(SLO)$/b3dgeom.obj		
 
 
 .INCLUDE :  target.mk
