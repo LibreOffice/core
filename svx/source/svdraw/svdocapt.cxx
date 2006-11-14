@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:12:25 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:44:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,6 @@
 #include "svddrag.hxx"
 #include "svdmodel.hxx"
 #include "svdview.hxx"   // fuer RectSnap
-#include "svdpagv.hxx"   // fuer GetOffset bei BegDrag()
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
 #include "svdogrp.hxx"
@@ -90,6 +89,26 @@
 // #i32599#
 #ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>     // FRound
+#endif
+
+#ifndef _BGFX_TUPLE_B2DTUPLE_HXX
+#include <basegfx/tuple/b2dtuple.hxx>
+#endif
+
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_RANGE_B2DRANGE_HXX
+#include <basegfx/range/b2drange.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #endif
 
 // #i32599#
@@ -295,7 +314,7 @@ sal_Bool SdrCaptionObj::DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec
         {
             XPolygon aX(GetXPoly());
             aX.Move(nXDist,nYDist);
-            rOut.DrawXPolygon(aX);
+            rOut.DrawPolygon(aX.getB2DPolygon());
         }
         else
         {
@@ -356,7 +375,11 @@ void SdrCaptionObj::RecalcBoundRect()
 
 SdrObject* SdrCaptionObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
-    if (pVisiLayer!=NULL && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId))) return NULL;
+    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId)))
+    {
+        return NULL;
+    }
+
     sal_Bool bHit(SdrRectObj::CheckHit(rPnt,nTol,pVisiLayer) != NULL);
     if (!bHit) {
         INT32 nMyTol=nTol;
@@ -400,39 +423,46 @@ void SdrCaptionObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralCAPTION);
 }
 
-void SdrCaptionObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const
+basegfx::B2DPolyPolygon SdrCaptionObj::TakeXorPoly(sal_Bool bDetail) const
 {
-    SdrRectObj::TakeXorPoly(rPoly,bDetail);
-    rPoly.Insert(XPolygon(aTailPoly));
+    basegfx::B2DPolyPolygon aPolyPoly(SdrRectObj::TakeXorPoly(bDetail));
+    aPolyPoly.append(aTailPoly.getB2DPolygon());
+
+    return aPolyPoly;
 }
 
-//#110094#-12
-//void SdrCaptionObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
-//{
-//}
-
-USHORT SdrCaptionObj::GetHdlCount() const
+sal_uInt32 SdrCaptionObj::GetHdlCount() const
 {
-    USHORT nAnz1=SdrRectObj::GetHdlCount();
-    //USHORT nAnz2=aTailPoly.GetSize();
+    sal_uInt32 nAnz1(SdrRectObj::GetHdlCount());
+    // sal_uInt32 nAnz2(aTailPoly.GetSize());
     // Derzeit ist nur das Draggen des Schwanzendes implementiert
-    return nAnz1+1;
+    return nAnz1 + 1L;
 }
 
-SdrHdl* SdrCaptionObj::GetHdl(USHORT nHdlNum) const
+SdrHdl* SdrCaptionObj::GetHdl(sal_uInt32 nHdlNum) const
 {
-    USHORT nRectHdlAnz=SdrRectObj::GetHdlCount();
-    if (nHdlNum<nRectHdlAnz) {
+    const sal_uInt32 nRectHdlAnz(SdrRectObj::GetHdlCount());
+
+    if(nHdlNum < nRectHdlAnz)
+    {
         return SdrRectObj::GetHdl(nHdlNum);
-    } else {
-        USHORT nPntNum=nHdlNum;
-        nPntNum=nPntNum-nRectHdlAnz;
-        if (nPntNum<aTailPoly.GetSize()) {
-            SdrHdl* pHdl=new SdrHdl(aTailPoly.GetPoint(nPntNum),HDL_POLY);
-            pHdl->SetPolyNum(1);
+    }
+    else
+    {
+        sal_uInt32 nPntNum(nHdlNum);
+        nPntNum -= nRectHdlAnz;
+
+        if(nPntNum < aTailPoly.GetSize())
+        {
+            SdrHdl* pHdl = new SdrHdl(aTailPoly.GetPoint((sal_uInt16)nPntNum), HDL_POLY);
+            pHdl->SetPolyNum(1L);
             pHdl->SetPointNum(nPntNum);
             return pHdl;
-        } else return NULL;
+        }
+        else
+        {
+            return 0L;
+        }
     }
 }
 
@@ -462,9 +492,6 @@ FASTBOOL SdrCaptionObj::BegDrag(SdrDragStat& rDrag) const
             rDrag.SetNoSnap(TRUE); // Snap mache ich in diesem Fall selbst (RectSnap)
             rDrag.SetActionRect(aRect);
             Point aHit(rDrag.GetStart());
-            if (rDrag.GetPageView()!=NULL) { // Hitposition bei versetzter PageView korregieren
-                aHit-=rDrag.GetPageView()->GetOffset();
-            }
             if (SdrRectObj::CheckHit(aHit,0,NULL)!=NULL) return TRUE;
             else return FALSE;
         } else {
@@ -551,15 +578,20 @@ XubString SdrCaptionObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndo
     }
 }
 
-void SdrCaptionObj::TakeDragPoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) const
+basegfx::B2DPolyPolygon SdrCaptionObj::TakeDragPoly(const SdrDragStat& rDrag) const
 {
-    rXPP.Clear();
-    const SdrHdl* pHdl=rDrag.GetHdl();
-    FASTBOOL bRad=rDrag.GetHdl()!=NULL && rDrag.GetHdl()->GetKind()==HDL_CIRC;
-    FASTBOOL bRectSiz=(pHdl!=NULL && pHdl->GetPolyNum()==0);
-    if (bRad) {
-        SdrRectObj::TakeDragPoly(rDrag,rXPP);
-    } else {
+    const SdrHdl* pHdl = rDrag.GetHdl();
+    const bool bRad(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
+    const bool bRectSiz(pHdl && 0L == pHdl->GetPolyNum());
+
+    if(bRad)
+    {
+        return SdrRectObj::TakeDragPoly(rDrag);
+    }
+    else
+    {
+        XPolyPolygon aXPP;
+
         Point aDelt(rDrag.GetNow()-rDrag.GetStart());
         Polygon aTmpPoly(aTailPoly);
         Rectangle aTmpRect;
@@ -575,8 +607,10 @@ void SdrCaptionObj::TakeDragPoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) c
             }
         }
         ImpCalcTail(aPara,aTmpPoly,aTmpRect);
-        rXPP.Insert(ImpCalcXPoly(aTmpRect,GetEckenradius()));
-        rXPP.Insert(XPolygon(aTmpPoly));
+        aXPP.Insert(ImpCalcXPoly(aTmpRect,GetEckenradius()));
+        aXPP.Insert(XPolygon(aTmpPoly));
+
+        return aXPP.getB2DPolyPolygon();
     }
 }
 
@@ -749,11 +783,13 @@ void SdrCaptionObj::BrkCreate(SdrDragStat& /*rStat*/)
 {
 }
 
-void SdrCaptionObj::TakeCreatePoly(const SdrDragStat& /*rDrag*/, XPolyPolygon& rXPP) const
+basegfx::B2DPolyPolygon SdrCaptionObj::TakeCreatePoly(const SdrDragStat& /*rDrag*/) const
 {
-    rXPP.Clear();
-    rXPP.Insert(XPolygon(aRect));
-    rXPP.Insert(XPolygon(aTailPoly));
+    basegfx::B2DPolyPolygon aRetval;
+    const basegfx::B2DRange aRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+    aRetval.append(basegfx::tools::createPolygonFromRect(aRange));
+    aRetval.append(aTailPoly.getB2DPolygon());
+    return aRetval;
 }
 
 Pointer SdrCaptionObj::GetCreatePointer() const
@@ -859,13 +895,13 @@ void SdrCaptionObj::NbcSetTailPos(const Point& rPos)
     ImpRecalcTail();
 }
 
-USHORT SdrCaptionObj::GetSnapPointCount() const
+sal_uInt32 SdrCaptionObj::GetSnapPointCount() const
 {
     // !!!!! fehlende Impl.
-    return 0;
+    return 0L;
 }
 
-Point SdrCaptionObj::GetSnapPoint(USHORT /*i*/) const
+Point SdrCaptionObj::GetSnapPoint(sal_uInt32 /*i*/) const
 {
     // !!!!! fehlende Impl.
     return Point(0,0);
@@ -905,7 +941,7 @@ void SdrCaptionObj::RestGeoData(const SdrObjGeoData& rGeo)
 SdrObject* SdrCaptionObj::DoConvertToPolyObj(BOOL bBezier) const
 { // #42334# - Convert implementiert
     SdrObject* pRect=SdrRectObj::DoConvertToPolyObj(bBezier);
-    SdrObject* pTail=ImpConvertMakeObj(XPolyPolygon(XPolygon(aTailPoly)),FALSE,bBezier);
+    SdrObject* pTail = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aTailPoly.getB2DPolygon()), sal_False, bBezier);
     SdrObject* pRet=(pTail!=NULL) ? pTail : pRect;
     if (pTail!=NULL && pRect!=NULL) {
         FASTBOOL bInsRect=TRUE;
@@ -925,70 +961,15 @@ SdrObject* SdrCaptionObj::DoConvertToPolyObj(BOOL bBezier) const
     return pRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//BFS01void SdrCaptionObj::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01 SdrRectObj::WriteData(rOut);
-//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrCaptionObj");
-//BFS01#endif
-//BFS01
-//BFS01 rOut << aTailPoly;
-//BFS01 SfxItemPool* pPool = GetItemPool();
-//BFS01
-//BFS01 if(pPool)
-//BFS01 {
-//BFS01     const SfxItemSet& rSet = GetObjectItemSet();
-//BFS01
-//BFS01     pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_CAPTION));
-//BFS01 }
-//BFS01 else
-//BFS01 {
-//BFS01     rOut << UINT16(SFX_ITEMS_NULL);
-//BFS01 }
-//BFS01}
-
-//BFS01void SdrCaptionObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 if(rIn.GetError())
-//BFS01     return;
-//BFS01
-//BFS01 SdrRectObj::ReadData(rHead,rIn);
-//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrCaptionObj");
-//BFS01#endif
-//BFS01
-//BFS01 rIn >> aTailPoly;
-//BFS01
-//BFS01 if(rHead.GetVersion() < 11) { sal_uInt16 nWhichDum; rIn >> nWhichDum; } // ab V11 keine WhichId mehr
-//BFS01
-//BFS01 SfxItemPool* pPool = GetItemPool();
-//BFS01
-//BFS01 if(pPool)
-//BFS01 {
-//BFS01     sal_uInt16 nSetID = SDRATTRSET_CAPTION;
-//BFS01     const SdrCaptionSetItem* pCaptAttr = (const SdrCaptionSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
-//BFS01     if(pCaptAttr)
-//BFS01         SetObjectItemSet(pCaptAttr->GetItemSet());
-//BFS01 }
-//BFS01 else
-//BFS01 {
-//BFS01     sal_uInt16 nSuroDum;
-//BFS01     rIn >> nSuroDum;
-//BFS01 }
-//BFS01}
-
 // #i32599#
 // Add own implementation for TRSetBaseGeometry to handle TailPos over changes.
-void SdrCaptionObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& /*rPolyPolygon*/)
+void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& /*rPolyPolygon*/)
 {
     // break up matrix
-    Vector2D aScale, aTranslate;
-    double fShear, fRotate;
-    rMat.DecomposeAndCorrect(aScale, fShear, fRotate, aTranslate);
+    basegfx::B2DTuple aScale;
+    basegfx::B2DTuple aTranslate;
+    double fRotate, fShearX;
+    rMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
     // force metric to pool metric
     SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
@@ -999,14 +980,12 @@ void SdrCaptionObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& 
             case SFX_MAPUNIT_TWIP :
             {
                 // position
-                // #104018#
-                aTranslate.X() = ImplMMToTwips(aTranslate.X());
-                aTranslate.Y() = ImplMMToTwips(aTranslate.Y());
+                aTranslate.setX(ImplMMToTwips(aTranslate.getX()));
+                aTranslate.setY(ImplMMToTwips(aTranslate.getY()));
 
                 // size
-                // #104018#
-                aScale.X() = ImplMMToTwips(aScale.X());
-                aScale.Y() = ImplMMToTwips(aScale.Y());
+                aScale.setX(ImplMMToTwips(aScale.getX()));
+                aScale.setY(ImplMMToTwips(aScale.getY()));
 
                 break;
             }
@@ -1020,13 +999,15 @@ void SdrCaptionObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& 
     // if anchor is used, make position relative to it
     if( pModel->IsWriter() )
     {
-        if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
-            aTranslate += Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+        if(GetAnchorPos().X() || GetAnchorPos().Y())
+        {
+            aTranslate += basegfx::B2DTuple(GetAnchorPos().X(), GetAnchorPos().Y());
+        }
     }
 
     // build BaseRect
-    Point aPoint(FRound(aTranslate.X()), FRound(aTranslate.Y()));
-    Rectangle aBaseRect(aPoint, Size(FRound(aScale.X()), FRound(aScale.Y())));
+    Point aPoint(FRound(aTranslate.getX()), FRound(aTranslate.getY()));
+    Rectangle aBaseRect(aPoint, Size(FRound(aScale.getX()), FRound(aScale.getY())));
 
     // set BaseRect, but rescue TailPos over this call
     const Point aTailPoint = GetTailPos();
