@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:07:25 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:35:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -497,7 +497,6 @@ void SelectionFunction::Deactivate()
 {
     FuPoor::Deactivate();
 }
-
 
 
 
