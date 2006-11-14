@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dvolum.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:14:09 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:03:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,9 @@
 #ifndef _B3D_VOLUM_HXX
 #define _B3D_VOLUM_HXX
 
-#ifndef _SVX_VECTOR3D_HXX
-#include "vector3d.hxx"
-#endif
+//#ifndef _SVX_VECTOR3D_HXX
+//#include "vector3d.hxx"
+//#endif
 
 #ifndef _INC_FLOAT
 #include <float.h>
@@ -54,12 +54,10 @@
 |*
 \************************************************************************/
 
-namespace binfilter {class Vol3DPointIterator;}
-
 class B3dVolume
 {
- friend class binfilter::Vol3DPointIterator; //STRIP008
  friend class Vol3DPointIterator;
+
  protected:
     Vector3D aMinVec;
     Vector3D aMaxVec;
