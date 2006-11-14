@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conrect.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:10:57 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:18:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,8 +191,8 @@ BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             }
             if( pObj )
             {
-                SdrPageView* pPV = pSdrView->GetPageViewPvNum(0);
-                pView->BeginTextEdit( pObj, pPV, pWin, TRUE );
+                SdrPageView* pPV = pSdrView->GetSdrPageView();
+                pView->BeginTextEdit( pObj, pPV, pWin, sal_True );
             }
             pView->LeaveDrawCreate();   // In Selektionsmode wechseln
             pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
