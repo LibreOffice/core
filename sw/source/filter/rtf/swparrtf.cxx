@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:15:14 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:13:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,10 +216,6 @@
 #include <svx/keepitem.hxx>
 #endif
 
-#ifndef _XPOLY_HXX
-#include <svx/xpoly.hxx>
-#endif
-
 #ifndef _SVDOPATH_HXX
 #include <svx/svdopath.hxx>
 #endif
@@ -270,6 +266,22 @@
 #endif
 
 #include <tools/stream.hxx>
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#endif
+
+#ifndef _BGFX_RANGE_B2DRANGE_HXX
+#include <basegfx/range/b2drange.hxx>
+#endif
+
+#ifndef _SV_SALBTYPE_HXX
+#include <vcl/salbtype.hxx>     // FRound
+#endif
 
 // einige Hilfs-Funktionen
 // char
@@ -1295,9 +1307,10 @@ void SwRTFParser::ReadDrawingObject()
     int level;
     level=1;
     Rectangle aRect;
-    XPolygon *pPolygon = NULL;
-    Point aPoint;
-    int points=0;
+    ::basegfx::B2DPolygon aPolygon;
+    ::basegfx::B2DPoint aPoint;
+    bool bPolygonActive(false);
+
     while (level>0 && IsParserWorking())
     {
         nToken = GetNextToken();
@@ -1322,17 +1335,19 @@ void SwRTFParser::ReadDrawingObject()
                 aRect.setHeight(nTokenValue);
                 break;
             case RTF_DPPOLYCOUNT:
-                pPolygon = new XPolygon(nTokenValue);
+                bPolygonActive = true;
                 break;
             case RTF_DPPTX:
                 aPoint.setX(nTokenValue);
                 break;
             case RTF_DPPTY:
                 aPoint.setY(nTokenValue);
-                if (pPolygon)
+
+                if(bPolygonActive)
                 {
-                    (*pPolygon)[points++]=aPoint;
+                    aPolygon.append(aPoint);
                 }
+
                 break;
             default:
                 break;
@@ -1348,9 +1363,9 @@ void SwRTFParser::ReadDrawingObject()
     aPolygonC[1] = aPointC2;
     aPolygonC[2] = aPointC3;
     */
-    if (pPolygon)
+    if(bPolygonActive && aPolygon.count())
     {
-        SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, XPolyPolygon(*pPolygon));
+        SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, ::basegfx::B2DPolyPolygon(aPolygon));
         SfxItemSet aFlySet(pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
         SwFmtSurround aSur( SURROUND_PARALLEL );
         aSur.SetContour( false );
@@ -1456,10 +1471,10 @@ void SwRTFParser::InsertShpObject(SdrObject* pStroke, int nZOrder)
         SwFrmFmt* pRetFrmFmt = pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
 }
 
-Point rotate(Point p, Point m)
+::basegfx::B2DPoint rotate(const ::basegfx::B2DPoint& rStart, const ::basegfx::B2DPoint& rEnd)
 {
-  Point _p(p-m);
-  return Point(_p.Y(), -_p.X())+m;
+    const ::basegfx::B2DVector aVector(rStart - rEnd);
+    return ::basegfx::B2DPoint(aVector.getY() + rEnd.getX(), -aVector.getX() + rEnd.getY());
 }
 
 
@@ -1468,8 +1483,8 @@ void SwRTFParser::ReadShapeObject()
     int nToken;
     int level;
     level=1;
-    Point aPointLeftTop;
-    Point aPointRightBottom;
+    ::basegfx::B2DPoint aPointLeftTop;
+    ::basegfx::B2DPoint aPointRightBottom;
     String sn;
     sal_Int32 shapeType=-1;
     Graphic aGrf;
@@ -1569,15 +1584,19 @@ void SwRTFParser::ReadShapeObject()
         case 202: /* Text Box */
     case 1: /* Rectangle */
         {
-            Rectangle aRect(aPointLeftTop, aPointRightBottom);
+            ::basegfx::B2DRange aRange(aPointLeftTop);
+            aRange.expand(aPointRightBottom);
 
           if (txflTextFlow==2) {
-            Point a(rotate(aRect.TopLeft(), aRect.Center()));
-            Point b(rotate(aRect.BottomRight(), aRect.Center()));
-            aRect=Rectangle(a, b);
+            const ::basegfx::B2DPoint a(rotate(aRange.getMinimum(), aRange.getCenter()));
+            const ::basegfx::B2DPoint b(rotate(aRange.getMaximum(), aRange.getCenter()));
+
+            aRange.reset();
+            aRange.expand(a);
+            aRange.expand(b);
           }
 
-
+            const Rectangle aRect(FRound(aRange.getMinX()), FRound(aRange.getMinY()), FRound(aRange.getMaxX()), FRound(aRange.getMaxY()));
             SdrRectObj* pStroke = new SdrRectObj(aRect);
             pStroke->SetSnapRect(aRect);
             pDoc->GetOrCreateDrawModel(); // create model
@@ -1621,11 +1640,11 @@ void SwRTFParser::ReadShapeObject()
         break;
     case 20: /* Line */
         {
-            XPolygon aLine(2);
-            aLine [0] = aPointLeftTop;
-            aLine [1] = aPointRightBottom;
+            ::basegfx::B2DPolygon aLine;
+            aLine.append(aPointLeftTop);
+            aLine.append(aPointRightBottom);
 
-            SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, aLine);
+            SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, ::basegfx::B2DPolyPolygon(aLine));
             //pStroke->SetSnapRect(aRect);
 
             InsertShpObject(pStroke, this->nZOrder++);
@@ -1641,7 +1660,9 @@ void SwRTFParser::ReadShapeObject()
         break;
     case 75 : /* Picture */
         if (bGrfValid) {
-            Rectangle aRect(aPointLeftTop, aPointRightBottom);
+            ::basegfx::B2DRange aRange(aPointLeftTop);
+            aRange.expand(aPointRightBottom);
+            const Rectangle aRect(FRound(aRange.getMinX()), FRound(aRange.getMinY()), FRound(aRange.getMaxX()), FRound(aRange.getMaxY()));
 
             SdrRectObj* pStroke = new SdrGrafObj(aGrf);
             pStroke->SetSnapRect(aRect);
