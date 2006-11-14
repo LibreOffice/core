@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epgm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:33:59 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:11:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,6 @@ class PGMWriter {
 
 private:
 
-    PFilterCallback     mpCallback;
-    void *              mpCallerData;
-
     SvStream*           mpOStm;             // Die auszugebende PGM-Datei
     USHORT              mpOStmOldModus;
 
@@ -64,18 +61,18 @@ private:
     BitmapReadAccess*   mpAcc;
     ULONG               mnWidth, mnHeight;  // Bildausmass in Pixeln
 
-    BOOL                ImplCallback( USHORT nPercent );
+    void                ImplCallback( USHORT nPercent );
     BOOL                ImplWriteHeader();
     void                ImplWriteBody();
     void                ImplWriteNumber( sal_Int32 );
+
+    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
 public:
                         PGMWriter();
                         ~PGMWriter();
 
-    BOOL                WritePGM( const Graphic& rGraphic, SvStream& rPGM,
-                                    PFilterCallback pCallback, void* pCallerdata,
-                                        FilterConfigItem* pConfigItem );
+    BOOL                WritePGM( const Graphic& rGraphic, SvStream& rPGM, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von PGMWriter ==============================
@@ -94,32 +91,30 @@ PGMWriter::~PGMWriter()
 
 // ------------------------------------------------------------------------
 
-BOOL PGMWriter::ImplCallback( USHORT nPercent )
+void PGMWriter::ImplCallback( USHORT nPercent )
 {
-    if ( mpCallback != NULL )
-    {
-        if ( ( (*mpCallback)( mpCallerData, nPercent ) ) == TRUE )
-        {
-            mpOStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
-            return TRUE;
-        }
-    }
-    return FALSE;
+    if ( xStatusIndicator.is() && ( nPercent <= 100 ) )
+        xStatusIndicator->setValue( nPercent );
 }
 
 // ------------------------------------------------------------------------
 
-BOOL PGMWriter::WritePGM( const Graphic& rGraphic, SvStream& rPGM,
-                          PFilterCallback pCallback, void* pCallerdata,
-                          FilterConfigItem* pConfigItem )
+BOOL PGMWriter::WritePGM( const Graphic& rGraphic, SvStream& rPGM, FilterConfigItem* pFilterConfigItem )
 {
 
     mpOStm = &rPGM;
-    mpCallback = pCallback;
-    mpCallerData = pCallerdata;
 
-    if ( pConfigItem )
-        mnMode = pConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FileFormat" ) ), 0 );
+    if ( pFilterConfigItem )
+    {
+        mnMode = pFilterConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FileFormat" ) ), 0 );
+
+        xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
+        if ( xStatusIndicator.is() )
+        {
+            rtl::OUString aMsg;
+            xStatusIndicator->start( aMsg, 100 );
+        }
+    }
 
     BitmapEx    aBmpEx( rGraphic.GetBitmapEx() );
     Bitmap      aBmp = aBmpEx.GetBitmap();
@@ -141,6 +136,9 @@ BOOL PGMWriter::WritePGM( const Graphic& rGraphic, SvStream& rPGM,
         mbStatus = FALSE;
 
     mpOStm->SetNumberFormatInt( mpOStmOldModus );
+
+    if ( xStatusIndicator.is() )
+        xStatusIndicator->end();
 
     return mbStatus;
 }
@@ -251,13 +249,11 @@ void PGMWriter::ImplWriteNumber( sal_Int32 nNumber )
 // - exported function -
 // ---------------------
 
-extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic,
-                                               PFilterCallback pCallback, void* pCallerData,
-                                               FilterConfigItem* pConfigItem, BOOL )
+extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, BOOL )
 {
     PGMWriter aPGMWriter;
 
-    return aPGMWriter.WritePGM( rGraphic, rStream, pCallback, pCallerData, pConfigItem );
+    return aPGMWriter.WritePGM( rGraphic, rStream, pFilterConfigItem );
 }
 
 // ------------------------------------------------------------------------
