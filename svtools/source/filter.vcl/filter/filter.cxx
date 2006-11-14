@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:17:37 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,23 +180,6 @@ public:
                                         ~ImpFilterOutputStream() {}
 };
 
-// -------------------------
-// - ImpFilterCallbackData -
-// -------------------------
-
-struct ImpFilterCallbackData
-{
-    GraphicFilter * pFilt;
-    USHORT *        pPercent;
-    Link *          pUpdatePercentHdl;
-    BOOL *          pAbort;
-    USHORT          nFilePercentOfTotal;
-};
-
-// ---------------------
-// - ImpFilterCallback -
-// ---------------------
-
 BOOL ImplDirEntryHelper::Exists( const INetURLObject& rObj )
 {
     BOOL bExists = FALSE;
@@ -244,25 +227,6 @@ void ImplDirEntryHelper::Kill( const String& rMainUrl )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
-}
-
-// ---------------------
-// - ImpFilterCallback -
-// ---------------------
-
-BOOL ImpFilterCallback( void* pCallerData, USHORT nPercent )
-{
-    ImpFilterCallbackData* pData= (ImpFilterCallbackData*) pCallerData;
-
-    nPercent = nPercent * pData->nFilePercentOfTotal / 100;
-
-    if( nPercent >= ( 3 + *pData->pPercent ) )
-    {
-        *pData->pPercent = nPercent;
-        pData->pUpdatePercentHdl->Call( pData->pFilt );
-    }
-
-    return *pData->pAbort;
 }
 
 // --------------------
@@ -1122,7 +1086,6 @@ void GraphicFilter::ImplInit()
     }
 
     pErrorEx = new FilterErrorEx;
-    nPercent = 0;
     bAbort = sal_False;
 }
 
@@ -1339,7 +1302,7 @@ USHORT GraphicFilter::CanImportGraphic( const String& rMainUrl, SvStream& rIStre
 }
 
 // ------------------------------------------------------------------------
-
+//SJ: TODO, we need to create a GraphicImporter component
 USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject& rPath,
                                      USHORT nFormat, USHORT * pDeterminedFormat, sal_uInt32 nImportFlags )
 {
@@ -1368,7 +1331,6 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
                                      USHORT nFormat, USHORT* pDeterminedFormat, sal_uInt32 nImportFlags,
                                      com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData )
 {
-    ImpFilterCallbackData   aCallbackData;
     String                  aFilterName;
     ULONG                   nStmBegin;
     USHORT                  nStatus;
@@ -1426,13 +1388,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
         else
             nStmBegin = rIStream.Tell();
 
-        aCallbackData.pFilt = this;
-        aCallbackData.pPercent = &nPercent;
-        aCallbackData.pUpdatePercentHdl = &aUpdatePercentHdlLink;
-        aCallbackData.pAbort = &bAbort;
-        aCallbackData.nFilePercentOfTotal = 100;
         bAbort = FALSE;
-        nPercent = 0;
         nStatus = ImpTestOrFindFormat( rPath, rIStream, nFormat );
         // Falls Pending, geben wir GRFILTER_OK zurueck,
         // um mehr Bytes anzufordern
@@ -1471,7 +1427,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
             if( rGraphic.GetContext() == (GraphicReader*) 1 )
                 rGraphic.SetContext( NULL );
 
-            if( !ImportGIF( rIStream, rGraphic, NULL ) )
+            if( !ImportGIF( rIStream, rGraphic ) )
                 nStatus = GRFILTER_FILTERERROR;
             else
                 eLinkType = GFX_LINK_TYPE_NATIVE_GIF;
@@ -1510,7 +1466,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
                         {
                             const std::vector< sal_uInt8 >& rData = aIter->aData;
                             SvMemoryStream aIStrm( (void*)&rData[ 11 ], nChunkSize - 11, STREAM_READ );
-                            ImportGIF( aIStrm, rGraphic, NULL );
+                            ImportGIF( aIStrm, rGraphic );
                             eLinkType = GFX_LINK_TYPE_NATIVE_PNG;
                             break;
                         }
@@ -1551,7 +1507,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
             if( rGraphic.GetContext() == (GraphicReader*) 1 )
                 rGraphic.SetContext( NULL );
 
-            if( !ImportXBM( rIStream, rGraphic, NULL ) )
+            if( !ImportXBM( rIStream, rGraphic ) )
                 nStatus = GRFILTER_FILTERERROR;
         }
         else if( aFilterName.EqualsIgnoreCaseAscii( IMP_XPM ) )
@@ -1559,20 +1515,14 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
             if( rGraphic.GetContext() == (GraphicReader*) 1 )
                 rGraphic.SetContext( NULL );
 
-            if( !ImportXPM( rIStream, rGraphic, NULL ) )
+            if( !ImportXPM( rIStream, rGraphic ) )
                 nStatus = GRFILTER_FILTERERROR;
         }
         else if( aFilterName.EqualsIgnoreCaseAscii( IMP_BMP ) ||
                     aFilterName.EqualsIgnoreCaseAscii( IMP_SVMETAFILE ) )
         {
             // SV interne Importfilter fuer Bitmaps und MetaFiles
-            aStartFilterHdlLink.Call( this );
-            nPercent = 60;
-            aUpdatePercentHdlLink.Call( this );
             rIStream >> rGraphic;
-            nPercent = 100;
-            aUpdatePercentHdlLink.Call( this );
-
             if( rIStream.GetError() )
                 nStatus = GRFILTER_FORMATERROR;
         }
@@ -1580,10 +1530,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
                 aFilterName.EqualsIgnoreCaseAscii( IMP_EMF ) )
         {
             GDIMetaFile aMtf;
-            aStartFilterHdlLink.Call( this );
-            nPercent = 1;
-
-            if( !ConvertWMFToGDIMetaFile( rIStream, aMtf, &ImpFilterCallback, &aCallbackData ) )
+            if( !ConvertWMFToGDIMetaFile( rIStream, aMtf, NULL ) )
                 nStatus = GRFILTER_FORMATERROR;
             else
             {
@@ -1605,22 +1552,13 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
                     if( aTempStream.GetError() )
                         return GRFILTER_OPENERROR;
 
-                    // SGF in temporaere Datei filtern
-                    aStartFilterHdlLink.Call( this );
-                    nPercent = 30;
-                    aUpdatePercentHdlLink.Call( this );
-
                     if( !SgfBMapFilter( rIStream, aTempStream ) )
                         nStatus = GRFILTER_FILTERERROR;
                     else
                     {
-                        nPercent = 60;
-                        aUpdatePercentHdlLink.Call( this );
                         aTempStream.Seek( 0L );
                         aTempStream >> rGraphic;
 
-                        nPercent = 100;
-                        aUpdatePercentHdlLink.Call( this );
                         if( aTempStream.GetError() )
                             nStatus = GRFILTER_FILTERERROR;
                     }
@@ -1630,18 +1568,10 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
                 case SGF_SIMPVECT:
                 {
                     GDIMetaFile aMtf;
-
-                    aStartFilterHdlLink.Call( this );
-                    nPercent = 50;
-                    aUpdatePercentHdlLink.Call( this );
                     if( !SgfVectFilter( rIStream, aMtf ) )
                         nStatus = GRFILTER_FILTERERROR;
                     else
-                    {
-                        nPercent = 100;
-                        aUpdatePercentHdlLink.Call( this );
                         rGraphic = Graphic( aMtf );
-                    }
                 }
                 break;
 
@@ -1652,21 +1582,13 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
                     else
                     {
                         GDIMetaFile aMtf;
-
-                        aStartFilterHdlLink.Call( this );
-                        nPercent = 50;
-                        aUpdatePercentHdlLink.Call( this );
                         if( !SgfSDrwFilter( rIStream, aMtf,
                                 INetURLObject(aFilterPath) ) )
                         {
                             nStatus = GRFILTER_FILTERERROR;
                         }
                         else
-                        {
-                            nPercent = 100;
-                            aUpdatePercentHdlLink.Call( this );
                             rGraphic = Graphic( aMtf );
-                        }
                     }
                 }
                 break;
@@ -1700,9 +1622,6 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
                 nStatus = GRFILTER_FILTERERROR;
             else
             {
-                aStartFilterHdlLink.Call( this );
-                aUpdatePercentHdlLink.Call( this );
-
                 String aShortName;
                 if( nFormat != GRFILTER_FORMAT_DONTKNOW )
                 {
@@ -1713,13 +1632,10 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
                         pFilterConfigItem = new FilterConfigItem( aFilterConfigPath );
                     }
                 }
-                if( !(*pFunc)( rIStream, rGraphic, &ImpFilterCallback, &aCallbackData, pFilterConfigItem, sal_False ) )
+                if( !(*pFunc)( rIStream, rGraphic, pFilterConfigItem, sal_False ) )
                     nStatus = GRFILTER_FORMATERROR;
                 else
                 {
-                    nPercent = 100;
-                    aUpdatePercentHdlLink.Call( this );
-
                     // try to set link type if format matches
                     if( nFormat != GRFILTER_FORMAT_DONTKNOW )
                     {
@@ -1743,9 +1659,6 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
         ImplSetError( nStatus, &rIStream );
         rIStream.Seek( nStmBegin );
         rGraphic.Clear();
-
-        if( nPercent )
-            aErrorHdlLink.Call( this );
     }
     else if( bCreateNativeLink && ( eLinkType != GFX_LINK_TYPE_NONE ) && !rGraphic.GetContext() && !bLinkSet )
     {
@@ -1762,12 +1675,6 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
             rGraphic.SetLink( GfxLink( pBuf, nBufSize, eLinkType, TRUE ) );
         }
     }
-
-    if( nPercent && !pContext )
-    {
-        nPercent = 0;
-        aEndFilterHdlLink.Call( this );
-    }
     delete pFilterConfigItem;
     return nStatus;
 }
@@ -1775,11 +1682,8 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
 
 // ------------------------------------------------------------------------
 
-// SJ: bIgnoreOptions is not used anymore,
-
 USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
-    sal_uInt16 nFormat, sal_Bool bIgnoreOptions,
-        const uno::Sequence< beans::PropertyValue >* pFilterData )
+    sal_uInt16 nFormat, const uno::Sequence< beans::PropertyValue >* pFilterData )
 {
     sal_uInt16  nRetValue = GRFILTER_FORMATERROR;
     DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::ExportGraphic() : ProtType == INET_PROT_NOT_VALID" );
@@ -1789,7 +1693,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObjec
     SvStream*   pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_WRITE | STREAM_TRUNC );
     if ( pStream )
     {
-        nRetValue = ExportGraphic( rGraphic, aMainUrl, *pStream, nFormat, bIgnoreOptions, pFilterData );
+        nRetValue = ExportGraphic( rGraphic, aMainUrl, *pStream, nFormat, pFilterData );
         delete pStream;
 
         if( ( GRFILTER_OK != nRetValue ) && !bAlreadyExists )
@@ -1800,11 +1704,8 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObjec
 
 // ------------------------------------------------------------------------
 
-// SJ: bIgnoreOptions is not used anymore
-
 USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPath,
-    SvStream& rOStm, sal_uInt16 nFormat, sal_Bool,
-        const uno::Sequence< beans::PropertyValue >* pFilterData )
+    SvStream& rOStm, sal_uInt16 nFormat, const uno::Sequence< beans::PropertyValue >* pFilterData )
 {
     USHORT nFormatCount = GetExportFormatCount();
 
@@ -1831,18 +1732,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
     FilterConfigItem aConfigItem( (uno::Sequence< beans::PropertyValue >*)pFilterData );
     String aFilterName( pConfig->GetExportFilterName( nFormat ) );
 
-    ImpFilterCallbackData aCallbackData;
-    aCallbackData.pFilt=this;
-    aCallbackData.pPercent=&nPercent;
-    aCallbackData.pUpdatePercentHdl=&aUpdatePercentHdlLink;
-    aCallbackData.pAbort=&bAbort;
-    aCallbackData.nFilePercentOfTotal=100;
-    bAbort=FALSE;
-
-    nPercent=0;
-    aStartFilterHdlLink.Call(this);
-    aUpdatePercentHdlLink.Call(this);
-
+    bAbort              = FALSE;
     USHORT      nStatus = GRFILTER_OK;
     GraphicType eType;
     Graphic     aGraphic( rGraphic );
@@ -1903,9 +1793,6 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
         {
             if( aFilterName.EqualsIgnoreCaseAscii( EXP_BMP ) )
             {
-                nPercent = 60;
-                aUpdatePercentHdlLink.Call( this );
-
                 Bitmap aBmp( aGraphic.GetBitmap() );
                 sal_Int32 nColorRes = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Colors" ) ), 0 );
                 if ( nColorRes && ( nColorRes <= (USHORT)BMP_CONVERSION_24BIT) )
@@ -1918,9 +1805,6 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                 // Wollen wir RLE-Kodiert speichern?
                 aBmp.Write( rOStm, bRleCoding );
                 delete pResMgr;
-
-                nPercent = 90;
-                aUpdatePercentHdlLink.Call( this );
 
                 if( rOStm.GetError() )
                     nStatus = GRFILTER_IOERROR;
@@ -1944,12 +1828,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                     aMTF.SetPrefSize( aGraphic.GetPrefSize() );
                     aMTF.SetPrefMapMode( aGraphic.GetPrefMapMode() );
                 }
-                nPercent = 60;
-                aUpdatePercentHdlLink.Call( this );
                 rOStm << aMTF;
-                nPercent = 90;
-                aUpdatePercentHdlLink.Call( this );
-
                 if( rOStm.GetError() )
                     nStatus = GRFILTER_IOERROR;
             }
@@ -1957,7 +1836,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             {
                 if( eType == GRAPHIC_GDIMETAFILE )
                 {
-                    if ( !ConvertGDIMetaFileToWMF( aGraphic.GetGDIMetaFile(), rOStm, &ImpFilterCallback, &aCallbackData ) )
+                    if ( !ConvertGDIMetaFileToWMF( aGraphic.GetGDIMetaFile(), rOStm, &aConfigItem ) )
                         nStatus = GRFILTER_FORMATERROR;
                 }
                 else
@@ -1971,7 +1850,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                     aMTF.Stop();
                     aMTF.SetPrefSize( aBmp.GetSizePixel() );
 
-                    if( !ConvertGDIMetaFileToWMF( aMTF, rOStm, &ImpFilterCallback, &aCallbackData) )
+                    if( !ConvertGDIMetaFileToWMF( aMTF, rOStm, &aConfigItem ) )
                         nStatus = GRFILTER_FORMATERROR;
                 }
                 if( rOStm.GetError() )
@@ -1981,7 +1860,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             {
                 if( eType == GRAPHIC_GDIMETAFILE )
                 {
-                    if ( !ConvertGDIMetaFileToEMF( aGraphic.GetGDIMetaFile(), rOStm, &ImpFilterCallback, &aCallbackData ) )
+                    if ( !ConvertGDIMetaFileToEMF( aGraphic.GetGDIMetaFile(), rOStm, &aConfigItem ) )
                         nStatus = GRFILTER_FORMATERROR;
                 }
                 else
@@ -1995,7 +1874,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                     aMTF.Stop();
                     aMTF.SetPrefSize( aBmp.GetSizePixel() );
 
-                    if( !ConvertGDIMetaFileToEMF( aMTF, rOStm, &ImpFilterCallback, &aCallbackData) )
+                    if( !ConvertGDIMetaFileToEMF( aMTF, rOStm, &aConfigItem ) )
                         nStatus = GRFILTER_FORMATERROR;
                 }
                 if( rOStm.GetError() )
@@ -2003,7 +1882,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             }
             else if( aFilterName.EqualsIgnoreCaseAscii( EXP_JPEG ) )
             {
-                if( !ExportJPEG( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, pFilterData ) )
+                if( !ExportJPEG( rOStm, aGraphic, pFilterData ) )
                     nStatus = GRFILTER_FORMATERROR;
 
                 if( rOStm.GetError() )
@@ -2091,15 +1970,10 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                                 aMemStm.SetCompressMode( COMPRESSMODE_FULL );
                                 ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( aMemStm );
 
-                                nPercent = 60;
-                                aUpdatePercentHdlLink.Call( this );
-
                                 xActiveDataSource->setOutputStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >(
                                     xStmIf, ::com::sun::star::uno::UNO_QUERY ) );
                                 ::com::sun::star::uno::Sequence< sal_Int8 > aMtfSeq( (sal_Int8*) aMemStm.GetData(), aMemStm.Tell() );
                                 xSVGWriter->write( xSaxWriter, aMtfSeq );
-                                nPercent = 90;
-                                aUpdatePercentHdlLink.Call( this );
                             }
                         }
                     }
@@ -2124,7 +1998,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                 // Dialog in DLL ausfuehren
                 if( pFunc )
                 {
-                    if ( !(*pFunc)( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, &aConfigItem, sal_False ) )
+                    if ( !(*pFunc)( rOStm, aGraphic, &aConfigItem, sal_False ) )
                         nStatus = GRFILTER_FORMATERROR;
                     break;
                 }
@@ -2139,15 +2013,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             nStatus = GRFILTER_ABORT;
 
         ImplSetError( nStatus, &rOStm );
-        aErrorHdlLink.Call( this );
     }
-    else
-    {
-        nPercent = 100;
-        aUpdatePercentHdlLink.Call( this );
-    }
-
-    aEndFilterHdlLink.Call( this );
     return nStatus;
 }
 
@@ -2269,17 +2135,19 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
         {
             // Import
             nFormat = GetImportFormatNumberForShortName( String( aShortName.GetBuffer(), RTL_TEXTENCODING_UTF8 ) );
-            nRet = ImportGraphic( pData->maGraphic, String(), pData->mrStm, nFormat ) == 0;
+            nRet = ImportGraphic( pData->maGraphic, String(), pData->mrStm ) == 0;
         }
         else if( aShortName.Len() )
         {
             // Export
             nFormat = GetExportFormatNumberForShortName( String( aShortName.GetBuffer(), RTL_TEXTENCODING_UTF8 ) );
-            nRet = ExportGraphic( pData->maGraphic, String(), pData->mrStm, nFormat, sal_True ) == 0;
+            nRet = ExportGraphic( pData->maGraphic, String(), pData->mrStm, nFormat ) == 0;
         }
     }
     return nRet;
 }
+
+// ------------------------------------------------------------------------
 
 GraphicFilter* GraphicFilter::GetGraphicFilter()
 {
@@ -2288,10 +2156,5 @@ GraphicFilter* GraphicFilter::GetGraphicFilter()
         pGraphicFilter = new GraphicFilter;
         pGraphicFilter->GetImportFormatCount();
     }
-
-    const Link aLink;
-    pGraphicFilter->SetStartFilterHdl( aLink );
-    pGraphicFilter->SetEndFilterHdl( aLink );
-    pGraphicFilter->SetUpdatePercentHdl( aLink );
     return pGraphicFilter;
 }
