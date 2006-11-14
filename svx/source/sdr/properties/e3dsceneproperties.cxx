@@ -4,9 +4,9 @@
  *
  *  $RCSfile: e3dsceneproperties.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:42:21 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:36:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,12 +243,12 @@ namespace sdr
                     }
 
                     // for SDRATTR_3DSCENE_DISTANCE:
-                    Vector3D aActualPosition = aSceneCam.GetPosition();
+                    basegfx::B3DPoint aActualPosition(aSceneCam.GetPosition());
                     double fNew = rObj.GetDistance();
 
-                    if(fNew != aActualPosition.Z())
+                    if(fNew != aActualPosition.getZ())
                     {
-                        aSceneCam.SetPosition(Vector3D(aActualPosition.X(), aActualPosition.Y(), fNew));
+                        aSceneCam.SetPosition(basegfx::B3DPoint(aActualPosition.getX(), aActualPosition.getY(), fNew));
                         bChange = sal_True;
                     }
 
@@ -450,28 +450,6 @@ namespace sdr
             return pRetval;
         }
 
-//BFS01     void E3dSceneProperties::PreProcessSave()
-//BFS01     {
-//BFS01         const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
-//BFS01         const sal_uInt32 nCount(pSub->GetObjCount());
-//BFS01
-//BFS01         for(sal_uInt32 a(0L); a < nCount; a++)
-//BFS01         {
-//BFS01             pSub->GetObj(a)->GetProperties().PreProcessSave();
-//BFS01         }
-//BFS01     }
-
-//BFS01     void E3dSceneProperties::PostProcessSave()
-//BFS01     {
-//BFS01         const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
-//BFS01         const sal_uInt32 nCount(pSub->GetObjCount());
-//BFS01
-//BFS01         for(sal_uInt32 a(0L); a < nCount; a++)
-//BFS01         {
-//BFS01             pSub->GetObj(a)->GetProperties().PostProcessSave();
-//BFS01         }
-//BFS01     }
-
         void E3dSceneProperties::MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
         {
             if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
@@ -551,7 +529,7 @@ namespace sdr
             mpItemSet->Put(Svx3DPerspectiveItem((UINT16)aSceneCam.GetProjection()));
 
             // CamPos
-            mpItemSet->Put(Svx3DDistanceItem((UINT32)(aSceneCam.GetPosition().Z() + 0.5)));
+            mpItemSet->Put(Svx3DDistanceItem((UINT32)(aSceneCam.GetPosition().getZ() + 0.5)));
 
             // FocalLength
             mpItemSet->Put(Svx3DFocalLengthItem((UINT32)((aSceneCam.GetFocalLength() * 100.0) + 0.5)));
