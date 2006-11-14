@@ -4,9 +4,9 @@
  *
  *  $RCSfile: invmerge.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:02:25 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:57:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,17 @@
 //------------------------------------------------------------------
 
 ScInvertMerger::ScInvertMerger( Window* pWindow ) :
-    pWin( pWindow )
+    pWin( pWindow ),
+    pRects( NULL )
 {
     //  both rectangles empty
+}
+
+ScInvertMerger::ScInvertMerger( ::std::vector< Rectangle >* pRectangles ) :
+    pWin( NULL ),
+    pRects( pRectangles )
+{
+    //  collect rectangles instead of inverting
 }
 
 ScInvertMerger::~ScInvertMerger()
@@ -62,6 +70,49 @@ void ScInvertMerger::Flush()
     FlushTotal();
 
     DBG_ASSERT( aLineRect.IsEmpty() && aTotalRect.IsEmpty(), "Flush: not empty" );
+
+    if ( pRects )
+    {
+        //
+        // also join vertically if there are non-adjacent columns involved
+        //
+
+        size_t nComparePos = 0;
+        while ( nComparePos < pRects->size() )
+        {
+            Rectangle aCompRect = (*pRects)[nComparePos];
+            sal_Int32 nBottom = aCompRect.Bottom();
+            size_t nOtherPos = nComparePos + 1;
+
+            while ( nOtherPos < pRects->size() )
+            {
+                Rectangle aOtherRect = (*pRects)[nOtherPos];
+                if ( aOtherRect.Top() > nBottom + 1 )
+                {
+                    // rectangles are sorted, so we can stop searching
+                    break;
+                }
+                if ( aOtherRect.Top() == nBottom + 1 &&
+                     aOtherRect.Left() == aCompRect.Left() &&
+                     aOtherRect.Right() == aCompRect.Right() )
+                {
+                    // extend first rectangle
+                    nBottom = aOtherRect.Bottom();
+                    aCompRect.Bottom() = nBottom;
+                    (*pRects)[nComparePos].Bottom() = nBottom;
+
+                    // remove second rectangle
+                    pRects->erase( pRects->begin() + nOtherPos );
+
+                    // continue at unmodified nOtherPos
+                }
+                else
+                    ++nOtherPos;
+            }
+
+            ++nComparePos;
+        }
+    }
 }
 
 void ScInvertMerger::FlushTotal()
@@ -69,7 +120,11 @@ void ScInvertMerger::FlushTotal()
     if( aTotalRect.IsEmpty() )
         return;                         // nothing to do
 
-    pWin->Invert( aTotalRect, INVERT_HIGHLIGHT );
+    if ( pWin )
+        pWin->Invert( aTotalRect, INVERT_HIGHLIGHT );
+    else if ( pRects )
+        pRects->push_back( aTotalRect );
+
     aTotalRect.SetEmpty();
 }
 
