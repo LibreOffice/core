@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofsdrmediaobj.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:02:00 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:05:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 #endif
 
 namespace avmedia { class MediaItem; }
+class Window;
 
 namespace sdr
 {
