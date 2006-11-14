@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:12:41 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:10:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,11 @@
 #include "flyfrms.hxx"
 #include "ndindex.hxx"   // GetGrfArea
 #include "sectfrm.hxx"
+#include <vcl/svapp.hxx>
+
+#ifndef _SV_SALBTYPE_HXX
+#include <vcl/salbtype.hxx>     // FRound
+#endif
 
 // OD 2004-03-23 #i26791
 TYPEINIT2(SwFlyFrm,SwLayoutFrm,SwAnchoredObject);
