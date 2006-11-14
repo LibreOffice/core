@@ -4,9 +4,9 @@
  *
  *  $RCSfile: emfwr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:03:35 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:41:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,7 @@ class EMFWriter
 private:
 
     VirtualDevice       maVDev;
-    PFilterCallback     mpCallback;
-    void*               mpCallerData;
+    FilterConfigItem*   mpFilterConfigItem;
     SvStream*           mpStm;
     BOOL*               mpHandlesUsed;
     ULONG               mnHandleCount;
@@ -97,8 +96,7 @@ public:
 
                         EMFWriter() {}
 
-    BOOL                WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm,
-                                  PFilterCallback pCallback, void* pCallerData );
+    BOOL                WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterConfigItem* pConfigItem = NULL );
 };
 
 #endif // _EMFWR_HXX
