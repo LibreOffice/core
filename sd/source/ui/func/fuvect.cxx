@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuvect.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:58:23 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:31:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,7 @@ void FuVectorize::DoExecute( SfxRequest& rReq )
             if( pDlg && pDlg->Execute() == RET_OK )
             {
                 const GDIMetaFile&  rMtf = pDlg->GetGDIMetaFile(); //CHINA001 const GDIMetaFile&    rMtf = aDlg.GetGDIMetaFile();
-                SdrPageView*        pPageView = pView->GetPageViewPvNum( 0 );
+                SdrPageView*        pPageView = pView->GetSdrPageView();
 
                 if( pPageView && rMtf.GetActionCount() )
                 {
@@ -124,7 +124,7 @@ void FuVectorize::DoExecute( SfxRequest& rReq )
                     aStr.Append( String( SdResId( STR_UNDO_VECTORIZE ) ) );
                     pView->BegUndo( aStr );
                     pVectObj->SetGraphic( rMtf );
-                    pView->ReplaceObject( pObj, *pPageView, pVectObj );
+                    pView->ReplaceObjectAtView( pObj, *pPageView, pVectObj );
                     pView->EndUndo();
                 }
             }
