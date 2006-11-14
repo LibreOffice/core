@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:56:43 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:19:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,10 +59,6 @@
 #include "lathe3d.hxx"
 #endif
 
-#ifndef _POLY3D_HXX
-#include "poly3d.hxx"
-#endif
-
 #ifndef _XPOLY_HXX
 #include "xpoly.hxx"
 #endif
@@ -87,6 +83,18 @@
 #include <svx/sdr/properties/e3dlatheproperties.hxx>
 #endif
 
+#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 sdr::properties::BaseProperties* E3dLatheObj::CreateObjectSpecificProperties()
@@ -100,110 +108,39 @@ TYPEINIT1(E3dLatheObj, E3dCompoundObject);
 
 /*************************************************************************
 |*
-|* Konstruktor aus SV-Polygon, Scale gibt den Umrechnungsfaktor fuer
-|* die Koordinaten an
-|*
-\************************************************************************/
-
-E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const PolyPolygon& rPoly)
-:   E3dCompoundObject(rDefault),
-    aPolyPoly3D (PolyPolygon3D(rPoly, rDefault.GetDefaultLatheScale()))
-{
-    // Defaults setzen
-    SetDefaultAttributes(rDefault);
-
-    // Ueberfluessige Punkte entfernen, insbesondere doppelte
-    // Start- und Endpunkte verhindern
-    aPolyPoly3D.RemoveDoublePoints();
-
-    const Polygon3D rPoly3D = aPolyPoly3D[0];
-    sal_uInt32 nSegCnt((sal_uInt32)rPoly3D.GetPointCount());
-    if(nSegCnt && !rPoly3D.IsClosed())
-        nSegCnt -= 1;
-
-    GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nSegCnt));
-
-    // Geometrie erzeugen
-    CreateGeometry();
-}
-
-/*************************************************************************
-|*
-|* wie voriger Konstruktor, nur mit XPolygon; das XPolygon wird
-|* jedoch nicht Bezier-konvertiert, sondern es werden nur seine
-|* Punktkoordinaten uebernommen
-|*
-\************************************************************************/
-
-E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const XPolyPolygon& rXPoly)
-:   E3dCompoundObject(rDefault),
-    aPolyPoly3D (PolyPolygon3D(rXPoly, rDefault.GetDefaultLatheScale()))
-{
-    // Defaults setzen
-    SetDefaultAttributes(rDefault);
-
-    // Ueberfluessige Punkte entfernen, insbesondere doppelte
-    // Start- und Endpunkte verhindern
-    aPolyPoly3D.RemoveDoublePoints();
-    const Polygon3D rPoly = aPolyPoly3D[0];
-    sal_uInt32 nSegCnt((sal_uInt32)rPoly.GetPointCount());
-    if(nSegCnt && !rPoly.IsClosed())
-        nSegCnt -= 1;
-
-    GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nSegCnt));
-
-    // Geometrie erzeugen
-    CreateGeometry();
-}
-
-/*************************************************************************
-|*
-\************************************************************************/
-
-E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const XPolygon& rXPoly)
-:   E3dCompoundObject(rDefault),
-    aPolyPoly3D (PolyPolygon3D(rXPoly, rDefault.GetDefaultLatheScale()))
-{
-    // Defaults setzen
-    SetDefaultAttributes(rDefault);
-
-    // Ueberfluessige Punkte entfernen, insbesondere doppelte
-    // Start- und Endpunkte verhindern
-    aPolyPoly3D.RemoveDoublePoints();
-    const Polygon3D rPoly = aPolyPoly3D[0];
-    sal_uInt32 nSegCnt((sal_uInt32)rPoly.GetPointCount());
-    if(nSegCnt && !rPoly.IsClosed())
-        nSegCnt -= 1;
-
-    GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nSegCnt));
-
-    // Geometrie erzeugen
-    CreateGeometry();
-}
-
-/*************************************************************************
-|*
 |* Konstruktor aus 3D-Polygon, Scale gibt den Umrechnungsfaktor fuer
 |* die Koordinaten an
 |*
 \************************************************************************/
 
-E3dLatheObj::E3dLatheObj (E3dDefaultAttributes& rDefault, const PolyPolygon3D rPoly3D)
+E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon rPoly2D)
 :   E3dCompoundObject(rDefault),
-    aPolyPoly3D(rPoly3D)
+    maPolyPoly2D(rPoly2D)
 {
+    // since the old class PolyPolygon3D did mirror the given PolyPolygons in Y, do the same here
+    basegfx::B2DHomMatrix aMirrorY;
+    aMirrorY.scale(1.0, -1.0);
+    maPolyPoly2D.transform(aMirrorY);
+
     // Defaults setzen
     SetDefaultAttributes(rDefault);
 
     // Ueberfluessige Punkte entfernen, insbesondere doppelte
     // Start- und Endpunkte verhindern
-    aPolyPoly3D.RemoveDoublePoints();
-    const Polygon3D rPoly = aPolyPoly3D[0];
-    sal_uInt32 nSegCnt((sal_uInt32)rPoly.GetPointCount());
-    if(nSegCnt && !rPoly.IsClosed())
-        nSegCnt -= 1;
+    maPolyPoly2D.removeDoublePoints();
 
-    GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nSegCnt));
+    if(maPolyPoly2D.count())
+    {
+        const basegfx::B2DPolygon rPoly(maPolyPoly2D.getB2DPolygon(0L));
+        sal_uInt32 nSegCnt(rPoly.count());
+
+        if(nSegCnt && !rPoly.isClosed())
+        {
+            nSegCnt -= 1;
+        }
+
+        GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nSegCnt));
+    }
 
     // Geometrie erzeugen
     CreateGeometry();
@@ -216,7 +153,7 @@ E3dLatheObj::E3dLatheObj (E3dDefaultAttributes& rDefault, const PolyPolygon3D rP
 \************************************************************************/
 
 E3dLatheObj::E3dLatheObj()
-:    aPolyPoly3D(Polygon3D())
+:    E3dCompoundObject()
 {
     // Defaults setzen
     E3dDefaultAttributes aDefault;
@@ -225,8 +162,6 @@ E3dLatheObj::E3dLatheObj()
 
 void E3dLatheObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 {
-    fLatheScale = rDefault.GetDefaultLatheScale();
-
     GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(rDefault.GetDefaultLatheSmoothed()));
     GetProperties().SetObjectItemDirect(Svx3DSmoothLidsItem(rDefault.GetDefaultLatheSmoothFrontBack()));
     GetProperties().SetObjectItemDirect(Svx3DCharacterModeItem(rDefault.GetDefaultLatheCharacterMode()));
@@ -240,13 +175,9 @@ void E3dLatheObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 |*
 \************************************************************************/
 
-::basegfx::B3DPolyPolygon E3dLatheObj::Get3DLineGeometry() const
+basegfx::B3DPolyPolygon E3dLatheObj::Get3DLineGeometry() const
 {
-    ::basegfx::B3DPolyPolygon aRetval;
-
-    aRetval.append(maLinePolyPolygon.getB3DPolyPolygon());
-
-    return aRetval;
+    return maLinePolyPolygon;
 }
 
 /*************************************************************************
@@ -269,242 +200,274 @@ void E3dLatheObj::CreateGeometry()
     StartCreateGeometry();
 
     // #78972#
-    maLinePolyPolygon.Clear();
+    maLinePolyPolygon.clear();
 
-    // Polygon erzeugen
-    PolyPolygon3D aLathePoly3D(aPolyPoly3D);
-
-    // Eventuelle Anpassung der Segmentanzahlen
-    aLathePoly3D = CreateLathePolyPoly(aPolyPoly3D, GetVerticalSegments());
-
-    // Normale holen
-    Vector3D aNormal = aLathePoly3D.GetNormal();
-    if(aNormal.Z() > 0.0)
+    if(maPolyPoly2D.count())
     {
-        aLathePoly3D.FlipDirections();
-        aNormal = aLathePoly3D.GetNormal();
-    }
+        // Polygon erzeugen
+        // Eventuelle Anpassung der Segmentanzahlen
+        basegfx::B2DPolyPolygon aLathePoly2D(CreateLathePolyPoly(maPolyPoly2D, GetVerticalSegments()));
+        aLathePoly2D = basegfx::tools::correctOrientations(aLathePoly2D);
+        const basegfx::B2VectorOrientation aOrient = basegfx::tools::getOrientation(aLathePoly2D.getB2DPolygon(0L));
 
-    // Orientierung evtl. vorhandener Loecher in einen definierten
-    // Ausgangszustand bringen
-    aLathePoly3D.SetDirections();
-
-    // #i28528#
-    PolyPolygon3D aFrontLines;
-    PolyPolygon3D aBackLines;
-    PolyPolygon3D aInBetweenLines;
-
-    // Spezialfall Einzelnes Polygon erzeugen
-    BOOL bSinglePoly = (GetEndAngle() == 0 || GetHorizontalSegments() == 0);
-    if(bSinglePoly)
-    {
-        // nur ein Polygon erzeugen
-        GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(TRUE));
-
-        // Fuer evtl. selbst erzeugte Normalen
-        PolyPolygon3D aNormalsFront;
-
-        // Normalen und Vorderseite selbst erzeugen
-        AddFrontNormals(aLathePoly3D, aNormalsFront, aNormal);
-        CreateFront(aLathePoly3D, aNormalsFront, GetCreateNormals(), GetCreateTexture());
+        if(basegfx::ORIENTATION_NEGATIVE == aOrient)
+        {
+            aLathePoly2D.flip();
+        }
 
         // #i28528#
-        aInBetweenLines.Insert(aLathePoly3D);
-    }
-    else
-    {
-        // Eventuell doppelseitig erzeugen?
-        if(!aLathePoly3D.IsClosed())
+        basegfx::B3DPolyPolygon aFrontLines;
+        basegfx::B3DPolyPolygon aBackLines;
+        basegfx::B3DPolyPolygon aInBetweenLines;
+        basegfx::B3DPolyPolygon aLathePoly3D(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(aLathePoly2D));
+
+        // Spezialfall Einzelnes Polygon erzeugen
+        BOOL bSinglePoly = (GetEndAngle() == 0 || GetHorizontalSegments() == 0);
+        if(bSinglePoly)
         {
+            // nur ein Polygon erzeugen
             GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(TRUE));
+
+            // Fuer evtl. selbst erzeugte Normalen
+            basegfx::B3DPolyPolygon aNormalsFront(ImpCreateByPattern(aLathePoly3D));
+
+            // Normalen und Vorderseite selbst erzeugen
+            aNormalsFront = ImpAddFrontNormals(aNormalsFront, basegfx::B3DVector(0.0, 0.0, 1.0));
+            ImpCreateFront(aLathePoly3D, aNormalsFront, GetCreateNormals(), GetCreateTexture());
+
+            // #i28528#
+            aInBetweenLines.append(aLathePoly3D);
         }
-
-        // Seiten genenrieren?
-        BOOL bCreateSides = ((GetEndAngle() < 3600 && !GetDoubleSided())
-            || (GetBackScale() != 100));
-
-        // Polygone vorbereiten
-        PolyPolygon3D aPrev, aFront, aBack, aNext;
-
-        // Rotation vorbereiten
-        double fAng = DEG2RAD(double(GetEndAngle()) / 10);
-        Matrix4D aRotMat;
-
-        // Skalierung vorbereiten
-        double fScalePerStep(0.0);
-        if(GetBackScale() != 100)
-            fScalePerStep = (((double)GetBackScale() - 100.0) / 100.0) / (double)GetHorizontalSegments();
-
-        // Texturen erzeugen?
-        double fTextureDepth=1.0;
-        double fTextureStart=0.0;
-        if(!GetCreateTexture())
-            fTextureStart = fTextureDepth = 0.0;
-
-        // aPrev bis aBack ausfuellen als Startvorbereitung
-        aRotMat.RotateY(-(fAng / (double)GetHorizontalSegments()));
-        aPrev = aLathePoly3D;
-        RotatePoly(aPrev, aRotMat);
-        if(GetBackScale() != 100)
+        else
         {
-            ScalePoly(aPrev, 1.0 - fScalePerStep);
-        }
-        aRotMat.Identity();
-        aRotMat.RotateY(fAng / (double)GetHorizontalSegments());
-        aFront = aLathePoly3D;
-        aBack = aLathePoly3D;
-        RotatePoly(aBack, aRotMat);
-        if(GetBackScale() != 100)
-        {
-            ScalePoly(aBack, 1.0 + fScalePerStep);
-        }
-
-        // Werte fuer Textur-Zwischensegmenterzeugung berechnen
-        double fTmpStart = 0.0;
-        double fTmpLength = fTextureDepth / (double)GetHorizontalSegments();
-        sal_uInt16 nUpperBound = (sal_uInt16)GetHorizontalSegments();
-
-        for(UINT16 a=0;a<nUpperBound;a++)
-        {
-            // Naechstes Polygon vorbereiten
-            aNext = aLathePoly3D;
-
-            // Rotieren
-            if(!(a+2 == nUpperBound && GetEndAngle() == 3600))
+            // Eventuell doppelseitig erzeugen?
+            if(!aLathePoly3D.isClosed())
             {
-                aRotMat.Identity();
-                aRotMat.RotateY((fAng * (double)(a+2))/ (double)nUpperBound);
-                RotatePoly(aNext, aRotMat);
+                GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(TRUE));
             }
 
-            // Skalieren
+            // Seiten genenrieren?
+            BOOL bCreateSides = ((GetEndAngle() < 3600 && !GetDoubleSided()) || (GetBackScale() != 100));
+
+            // Polygone vorbereiten
+            basegfx::B3DPolyPolygon aPrev, aFront, aBack, aNext;
+
+            // Rotation vorbereiten
+            double fAng = DEG2RAD(double(GetEndAngle()) / 10);
+            basegfx::B3DHomMatrix aRotMat;
+
+            // Skalierung vorbereiten
+            double fScalePerStep(1.0);
+
             if(GetBackScale() != 100)
             {
-                ScalePoly(aNext, 1.0 + (fScalePerStep * (double)(a+2)));
+                fScalePerStep = (((double)GetBackScale() - 100.0) / 100.0) / (double)GetHorizontalSegments();
             }
 
-            // Jetzt Segment erzeugen
-            ImpCreateSegment(
-                aFront,
-                aBack,
-                &aPrev,
-                &aNext,
-                (a == 0) && bCreateSides && GetCloseFront(), // #107245# bLatheCloseFront,
-                (a == nUpperBound-1) && bCreateSides && GetCloseBack(), // #107245# bLatheCloseBack,
-                ((double)GetPercentDiagonal() / 200.0)
-                    * (double(nUpperBound) / 6.0),
-                GetSmoothNormals(), // #107245# GetLatheSmoothed(),
-                GetSmoothNormals(), // #107245# GetLatheSmoothed(),
-                GetSmoothLids(), // #107245# GetLatheSmoothFrontBack(),
-                1.0,
-                fTmpStart,
-                fTmpLength,
-                GetCreateTexture(),
-                GetCreateNormals(),
-                GetCharacterMode(), // #107245# GetLatheCharacterMode(),
-                TRUE,
-                // #78972#
-                &aFrontLines,
-                &aBackLines,
-                &aInBetweenLines);
+            // Texturen erzeugen?
+            double fTextureDepth(1.0);
+            double fTextureStart(0.0);
 
-            // naechsten Schritt vorbereiten
-            fTmpStart += fTmpLength;
-            aPrev = aFront;
-            aFront = aBack;
-            aBack = aNext;
+            if(!GetCreateTexture())
+            {
+                fTextureStart = fTextureDepth = 0.0;
+            }
+
+            // aPrev bis aBack ausfuellen als Startvorbereitung
+            aRotMat.rotate(0.0, -(fAng / (double)GetHorizontalSegments()), 0.0);
+            aPrev = aLathePoly3D;
+            aPrev.transform(aRotMat);
+            if(GetBackScale() != 100)
+            {
+                ImpScalePoly(aPrev, 1.0 - fScalePerStep);
+            }
+            aRotMat.identity();
+            aRotMat.rotate(0.0, fAng / (double)GetHorizontalSegments(), 0.0);
+            aFront = aLathePoly3D;
+            aBack = aLathePoly3D;
+            aBack.transform(aRotMat);
+            if(GetBackScale() != 100)
+            {
+                ImpScalePoly(aBack, 1.0 + fScalePerStep);
+            }
+
+            // Werte fuer Textur-Zwischensegmenterzeugung berechnen
+            double fTmpStart(0.0);
+            double fTmpLength(fTextureDepth / (double)GetHorizontalSegments());
+            sal_uInt16 nUpperBound((sal_uInt16)GetHorizontalSegments());
+
+            for(UINT16 a=0;a<nUpperBound;a++)
+            {
+                // Naechstes Polygon vorbereiten
+                aNext = aLathePoly3D;
+
+                // Rotieren
+                if(!(a+2 == nUpperBound && GetEndAngle() == 3600))
+                {
+                    aRotMat.identity();
+                    aRotMat.rotate(0.0, (fAng * (double)(a+2))/ (double)nUpperBound, 0.0);
+                    aNext.transform(aRotMat);
+                }
+
+                // Skalieren
+                if(GetBackScale() != 100)
+                {
+                    ImpScalePoly(aNext, 1.0 + (fScalePerStep * (double)(a+2)));
+                }
+
+                // Jetzt Segment erzeugen
+                ImpCreateSegment(
+                    aFront,
+                    aBack,
+                    &aPrev,
+                    &aNext,
+                    (a == 0) && bCreateSides && GetCloseFront(), // #107245# bLatheCloseFront,
+                    (a == nUpperBound-1) && bCreateSides && GetCloseBack(), // #107245# bLatheCloseBack,
+                    ((double)GetPercentDiagonal() / 200.0)
+                        * (double(nUpperBound) / 6.0),
+                    GetSmoothNormals(), // #107245# GetLatheSmoothed(),
+                    GetSmoothNormals(), // #107245# GetLatheSmoothed(),
+                    GetSmoothLids(), // #107245# GetLatheSmoothFrontBack(),
+                    1.0,
+                    fTmpStart,
+                    fTmpLength,
+                    GetCreateTexture(),
+                    GetCreateNormals(),
+                    GetCharacterMode(), // #107245# GetLatheCharacterMode(),
+                    TRUE,
+                    // #78972#
+                    &aFrontLines,
+                    &aBackLines,
+                    &aInBetweenLines);
+
+                // naechsten Schritt vorbereiten
+                fTmpStart += fTmpLength;
+                aPrev = aFront;
+                aFront = aBack;
+                aBack = aNext;
+            }
         }
+
+        // #78972#
+        // Simply add them for preparing line geometry
+        maLinePolyPolygon.append(aFrontLines);
+        maLinePolyPolygon.append(aInBetweenLines);
+        maLinePolyPolygon.append(aBackLines);
+
+        // #i28528#
+        sal_Bool bClosedLines((3600 == GetEndAngle()) && (100 == GetBackScale()));
+        basegfx::B3DPolyPolygon aNewPolyPoly(ImpCompleteLinePolygon(maLinePolyPolygon, aLathePoly3D.count(), bClosedLines));
+
+        if(GetReducedLineGeometry())
+        {
+            // replace vertical with horizontal lines
+            maLinePolyPolygon = aNewPolyPoly;
+
+            // append front lines
+            maLinePolyPolygon.append(aFrontLines);
+
+            // append back lines
+            maLinePolyPolygon.append(aBackLines);
+        }
+        else
+        {
+            // append horizontal lines
+            maLinePolyPolygon.append(aNewPolyPoly);
+        }
+
+        //ImpCorrectLinePolygon(maLinePolyPolygon, aLathePoly3D.count());
     }
-
-    // #78972#
-    // Simply add them for preparing line geometry
-    maLinePolyPolygon.Insert(aFrontLines);
-    maLinePolyPolygon.Insert(aInBetweenLines);
-    maLinePolyPolygon.Insert(aBackLines);
-
-    // #i28528#
-    sal_Bool bClosedLines((3600 == GetEndAngle()) && (100 == GetBackScale()));
-    PolyPolygon3D aNewPolyPoly = ImpCompleteLinePolygon(maLinePolyPolygon, aLathePoly3D.Count(), bClosedLines);
-
-    if(GetReducedLineGeometry())
-    {
-        // replace vertical with horizontal lines
-        maLinePolyPolygon = aNewPolyPoly;
-
-        // append front lines
-        maLinePolyPolygon.Insert(aFrontLines);
-
-        // append back lines
-        maLinePolyPolygon.Insert(aBackLines);
-    }
-    else
-    {
-        // append horizontal lines
-        maLinePolyPolygon.Insert(aNewPolyPoly);
-    }
-
-    ImpCorrectLinePolygon(maLinePolyPolygon, aLathePoly3D.Count());
 
     // call parent
     E3dCompoundObject::CreateGeometry();
 }
 
-PolyPolygon3D E3dLatheObj::CreateLathePolyPoly(PolyPolygon3D& rPolyPoly3D, long nVSegs)
+basegfx::B2DPolyPolygon E3dLatheObj::CreateLathePolyPoly(const basegfx::B2DPolyPolygon& rPolyPoly2D, sal_uInt32 nVSegs)
 {
-    PolyPolygon3D aLathePolyPolygon3D = rPolyPoly3D;
-    sal_uInt16 nCnt = aLathePolyPolygon3D.Count();
-    sal_uInt16 nOrigSegmentCnt = aPolyPoly3D[0].GetPointCount();
+    basegfx::B2DPolyPolygon aRetval(rPolyPoly2D);
+    const sal_uInt32 nCnt(aRetval.count());
+    const basegfx::B2DPolygon aFirstOriginal(aRetval.getB2DPolygon(0L));
+    sal_uInt32 nOrigSegmentCnt(aFirstOriginal.count());
 
-    if(nOrigSegmentCnt && !aPolyPoly3D[0].IsClosed())
+    if(nOrigSegmentCnt && !aFirstOriginal.isClosed())
+    {
         nOrigSegmentCnt -= 1;
+    }
 
     if(nVSegs && nVSegs != nOrigSegmentCnt)
     {
         // make sure minimum is not too small, 3 edges for closed
         // and 2 edges for open obects
-        sal_Int32 nMinVSegs = aPolyPoly3D[0].IsClosed() ? 3 : 2;
+        sal_uInt32 nMinVSegs(aFirstOriginal.isClosed() ? 3L : 2L);
+
         if(nVSegs <= nMinVSegs)
+        {
             nVSegs = nMinVSegs;
+        }
 
         if(nVSegs != nOrigSegmentCnt)
         {
             // Erstes Polygon anpassen
-            aLathePolyPolygon3D[0] = CreateLathePoly(aLathePolyPolygon3D[0], nVSegs);
-
+            aRetval.setB2DPolygon(0L, CreateLathePoly(aRetval.getB2DPolygon(0L), nVSegs));
             GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nVSegs));
 
             // andere Polygone im richtigen Verhaeltnis anpassen,
             // aber nur, wenn Wert fuer erstes angepasst werden musste
-            for(UINT16 i = 1; i < nCnt; i++ )
+            for(sal_uInt32 i(1L); i < nCnt; i++ )
             {
-                Polygon3D &rPoly3D = aLathePolyPolygon3D[i];
-                sal_uInt16 nSegCnt(rPoly3D.GetPointCount());
-                if(nSegCnt && !rPoly3D.IsClosed())
+                basegfx::B2DPolygon aPoly2D(aRetval.getB2DPolygon(i));
+                sal_uInt32 nSegCnt(aPoly2D.count());
+
+                if(nSegCnt && !aPoly2D.isClosed())
+                {
                     nSegCnt -= 1;
-                long nNewVSegs = (nSegCnt * nVSegs) / nOrigSegmentCnt;
+                }
+
+                sal_uInt32 nNewVSegs((nSegCnt * nVSegs) / nOrigSegmentCnt);
 
                 // make sure min is not too small for subpolys, too
                 if(nNewVSegs <= nMinVSegs)
+                {
                     nNewVSegs = nMinVSegs;
+                }
 
                 if(nNewVSegs && nNewVSegs != nSegCnt)
                 {
-                    aLathePolyPolygon3D[i] = CreateLathePoly(aLathePolyPolygon3D[i], nNewVSegs);
+                    aRetval.setB2DPolygon(i, CreateLathePoly(aPoly2D, nNewVSegs));
                 }
             }
         }
     }
-    return aLathePolyPolygon3D;
+
+    return aRetval;
 }
 
-Polygon3D E3dLatheObj::CreateLathePoly(Polygon3D& rPoly3D, long nVSegs)
+basegfx::B2DPolygon E3dLatheObj::CreateLathePoly(const basegfx::B2DPolygon& rPoly2D, sal_uInt32 nVSegs)
 {
     // attention: Here number of SEGMENTS is given, while GetExpandedPolygon()
     // takes number of points. Calc PntNum first
-    long nNumPts = rPoly3D.IsClosed() ? nVSegs : nVSegs + 1;
-    if(nNumPts != rPoly3D.GetPointCount())
-        return rPoly3D.GetExpandedPolygon(nNumPts);
-    return rPoly3D;
+    sal_uInt32 nNumPts(rPoly2D.isClosed() ? nVSegs : nVSegs + 1L);
+
+    if(nNumPts && rPoly2D.count() && nNumPts != rPoly2D.count())
+    {
+        // create a expanded or compresssed poly with exactly nNum Points
+        basegfx::B2DPolygon aRetval;
+        const double fLength(basegfx::tools::getLength(rPoly2D));
+        const double fDivisor(rPoly2D.isClosed() ? ((double)nNumPts) : ((double)(nNumPts - 1L)));
+
+        for(sal_uInt32 a(0L); a < nNumPts; a++)
+        {
+            const double fRelativePos((double)a / fDivisor); // 0.0 .. 1.0 for open, less for closed (without 1.0 e.g. last point)
+            const basegfx::B2DPoint aNewPoint(basegfx::tools::getPositionRelative(rPoly2D, fRelativePos, fLength));
+            aRetval.append(aNewPoint);
+        }
+
+        // copy closed flag
+        aRetval.setClosed(rPoly2D.isClosed());
+        return aRetval;
+    }
+
+    return rPoly2D;
 }
 
 /*************************************************************************
@@ -520,27 +483,6 @@ UINT16 E3dLatheObj::GetObjIdentifier() const
 
 /*************************************************************************
 |*
-|* Wireframe erzeugen
-|*
-\************************************************************************/
-
-//BFS01void E3dLatheObj::CreateWireframe(Polygon3D& rWirePoly, const Matrix4D* pTf, E3dDragDetail eDetail)
-//BFS01{
-//BFS01 // Nur selbst erzeugen, wenn alle Linien angezeigt werden sollen
-//BFS01 if ( eDetail == E3DDETAIL_ALLLINES ||
-//BFS01     (eDetail == E3DDETAIL_DEFAULT && GetDragDetail() == E3DDETAIL_ALLLINES) )
-//BFS01 {
-//BFS01     // Detailliert erzeugen
-//BFS01 }
-//BFS01 else
-//BFS01 {
-//BFS01     // call parent
-//BFS01     E3dObject::CreateWireframe(rWirePoly, pTf, eDetail);
-//BFS01 }
-//BFS01}
-
-/*************************************************************************
-|*
 |* Zuweisungsoperator
 |*
 \************************************************************************/
@@ -553,443 +495,11 @@ void E3dLatheObj::operator=(const SdrObject& rObj)
     // weitere Parameter kopieren
     const E3dLatheObj& r3DObj = (const E3dLatheObj&)rObj;
 
-    aPolyPoly3D  = r3DObj.aPolyPoly3D;
-    fLatheScale  = r3DObj.fLatheScale;
+    maPolyPoly2D  = r3DObj.maPolyPoly2D;
 
     // #95519# copy LinePolygon info, too
     maLinePolyPolygon = r3DObj.maLinePolyPolygon;
-
-    // #107245# These properties are now items and are copied with the ItemSet
-    // // Ab Version 374 (15.12.97)
-    // bLatheSmoothed = r3DObj.bLatheSmoothed;
-    // bLatheSmoothFrontBack = r3DObj.bLatheSmoothFrontBack;
-    // bLatheCharacterMode = r3DObj.bLatheCharacterMode;
-    // bLatheCloseFront = r3DObj.bLatheCloseFront;
-    // bLatheCloseBack = r3DObj.bLatheCloseBack;
 }
-
-/*************************************************************************
-|*
-|* Objektdaten in Stream speichern
-|*
-\************************************************************************/
-
-//BFS01void E3dLatheObj::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01#ifndef SVX_LIGHT
-//BFS01 long nVersion = rOut.GetVersion(); // Build_Nr * 10 z.B. 3810
-//BFS01 if(nVersion < 3800)
-//BFS01 {
-//BFS01     // Alte Geometrie erzeugen, um die E3dPolyObj's zu haben
-//BFS01     ((E3dCompoundObject*)this)->ReCreateGeometry(TRUE);
-//BFS01 }
-//BFS01
-//BFS01 // leider kann das E3dLatheObj nicht auf E3dObject abgestuetzt werden,
-//BFS01 // da neue Member hinzugekommen sind und die Kompatibilitaet erhalten
-//BFS01 // bleiben muss.
-//BFS01 SdrAttrObj::WriteData(rOut);
-//BFS01
-//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01 SdrDownCompat aCompat(rOut, STREAM_WRITE);
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("E3dLatheObj");
-//BFS01#endif
-//BFS01
-//BFS01 pSub->Save(rOut);
-//BFS01
-//BFS01 // Parameter aus E3dObject speichern
-//BFS01 rOut << aLocalBoundVol;
-//BFS01 Old_Matrix3D aMat3D;
-//BFS01 aMat3D = aTfMatrix;
-//BFS01 rOut << aMat3D;
-//BFS01 rOut << nLogicalGroup;
-//BFS01 rOut << nObjTreeLevel;
-//BFS01 rOut << nPartOfParent;
-//BFS01 rOut << UINT16(eDragDetail);
-//BFS01
-//BFS01 // neue Member
-//BFS01 // Alte version schreibt Polygon3D raus, neue Version
-//BFS01 // benutzt dafuer das erste Teilpolygon von PolyPolygon3D
-//BFS01 // rOut << aPolyPoly3D;
-//BFS01 rOut << aPolyPoly3D[0];
-//BFS01
-//BFS01 rOut << GetHorizontalSegments();
-//BFS01
-//BFS01 rOut << GetEndAngle();
-//BFS01
-//BFS01 rOut << ((E3dLatheObj*)this)->GetDoubleSided();
-//BFS01 rOut << fLatheScale;
-//BFS01
-//BFS01 // Ab Version 364f (19.06.97)
-//BFS01
-//BFS01 // #83965# internally the real number of segments (edges) is
-//BFS01 // used, no longer the number of points
-//BFS01 sal_Int32 nVSegs = GetVerticalSegments();
-//BFS01 if(!aPolyPoly3D[0].IsClosed())
-//BFS01     nVSegs += 1;
-//BFS01
-//BFS01 rOut << nVSegs;
-//BFS01
-//BFS01 // Ab Version 374 (15.12.97)
-//BFS01 rOut << aPolyPoly3D;
-//BFS01
-//BFS01 rOut << ((double)GetBackScale() / 100.0);
-//BFS01
-//BFS01 rOut << ((double)GetPercentDiagonal() / 200.0);
-//BFS01
-//BFS01 rOut << GetSmoothNormals(); // #107245# (BOOL)bLatheSmoothed;
-//BFS01 rOut << GetSmoothLids(); // #107245# (BOOL)bLatheSmoothFrontBack;
-//BFS01 rOut << GetCharacterMode(); // #107245# (BOOL)bLatheCharacterMode;
-//BFS01
-//BFS01 // Ab Version 395 (8.6.98): Parameter aus dem Objekt
-//BFS01 // E3dCompoundObject. Da irgendwann mal jemand die Ableitungs-
-//BFS01 // hierarchie beim FileFormat unterbrochen hat, wurden diese Attribute
-//BFS01 // bisher NOCH NIE gespeichert (Grrr). Diese Stelle muss nun natuerlich
-//BFS01 // auch IMMER MITGEPFLEGT werden, wenn sich Parameter in
-//BFS01 // E3dCompoundObject oder E3dObject aendern.
-//BFS01 rOut << GetDoubleSided();
-//BFS01
-//BFS01 rOut << BOOL(bCreateNormals);
-//BFS01 rOut << BOOL(bCreateTexture);
-//BFS01
-//BFS01 sal_uInt16 nVal = GetNormalsKind();
-//BFS01 rOut << BOOL(nVal > 0);
-//BFS01 rOut << BOOL(nVal > 1);
-//BFS01
-//BFS01 nVal = GetTextureProjectionX();
-//BFS01 rOut << BOOL(nVal > 0);
-//BFS01 rOut << BOOL(nVal > 1);
-//BFS01
-//BFS01 nVal = GetTextureProjectionY();
-//BFS01 rOut << BOOL(nVal > 0);
-//BFS01 rOut << BOOL(nVal > 1);
-//BFS01
-//BFS01 rOut << BOOL(GetShadow3D());
-//BFS01
-//BFS01 rOut << GetMaterialAmbientColor();
-//BFS01 rOut << GetMaterialColor();
-//BFS01 rOut << GetMaterialSpecular();
-//BFS01 rOut << GetMaterialEmission();
-//BFS01 rOut << GetMaterialSpecularIntensity();
-//BFS01
-//BFS01 aBackMaterial.WriteData(rOut);
-//BFS01
-//BFS01 rOut << (UINT16)GetTextureKind();
-//BFS01
-//BFS01 rOut << (UINT16)GetTextureMode();
-//BFS01
-//BFS01 rOut << BOOL(GetNormalsInvert());
-//BFS01
-//BFS01 // Ab Version 513a (5.2.99): Parameter fuer das
-//BFS01 // Erzeugen der Vorder/Rueckwand
-//BFS01 rOut << GetCloseFront(); // #107245# BOOL(bLatheCloseFront);
-//BFS01 rOut << GetCloseBack(); // #107245# BOOL(bLatheCloseBack);
-//BFS01
-//BFS01 // neu ab 534: (hat noch gefehlt)
-//BFS01 rOut << BOOL(GetTextureFilter());
-//BFS01
-//BFS01 if(nVersion < 3800)
-//BFS01 {
-//BFS01     // Geometrie neu erzeugen, um E3dPolyObj's wieder loszuwerden
-//BFS01     ((E3dCompoundObject*)this)->ReCreateGeometry();
-//BFS01 }
-//BFS01#endif
-//BFS01}
-
-/*************************************************************************
-|*
-|* Objektdaten aus Stream laden
-|*
-\************************************************************************/
-
-//BFS01void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 if (ImpCheckSubRecords (rHead, rIn))
-//BFS01 {
-//BFS01     // leider kann das E3dLatheObj nicht auf E3dObject abgestuetzt werden,
-//BFS01     // da neue Member hinzugekommen sind und die Kompatibilitaet erhalten
-//BFS01     // bleiben muss.
-//BFS01     SdrAttrObj::ReadData(rHead, rIn);
-//BFS01
-//BFS01     // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01     SdrDownCompat aCompat(rIn, STREAM_READ);
-//BFS01#ifdef DBG_UTIL
-//BFS01     aCompat.SetID("E3dLatheObj");
-//BFS01#endif
-//BFS01     // dann die Member
-//BFS01     UINT16  nTmp16;
-//BFS01
-//BFS01     // #106240# Flag if poly was loaded (all versions above 3.0 and 3.1)
-//BFS01     sal_Bool bPolyWasRead(sal_False);
-//BFS01
-//BFS01     pSub->Load(rIn, *pPage);
-//BFS01
-//BFS01     // Parameter aus E3dObject laden
-//BFS01     rIn >> aLocalBoundVol;
-//BFS01     Old_Matrix3D aMat3D;
-//BFS01     rIn >> aMat3D;
-//BFS01     aTfMatrix = Matrix4D(aMat3D);
-//BFS01     rIn >> nLogicalGroup;
-//BFS01     rIn >> nObjTreeLevel;
-//BFS01     rIn >> nPartOfParent;
-//BFS01     rIn >> nTmp16; eDragDetail = E3dDragDetail(nTmp16);
-//BFS01
-//BFS01     // BoundVolume muss neu berechnet werden
-//BFS01     bBoundVolValid = FALSE;
-//BFS01
-//BFS01     if (aCompat.GetBytesLeft ())
-//BFS01     {
-//BFS01         // neue Member
-//BFS01         BOOL bTmp;
-//BFS01         sal_Int32 nTmp;
-//BFS01
-//BFS01         // alte Version holt sich nur ein Polygon3D, wird hier durch
-//BFS01         // Eintragen als erstes Teilpolygon geladen
-//BFS01         // rIn >> aPolyPoly3D;
-//BFS01         rIn >> aPolyPoly3D[0];
-//BFS01
-//BFS01         // #106240# OK, this file does have a saved polygon
-//BFS01         bPolyWasRead = sal_True;
-//BFS01
-//BFS01         rIn >> nTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DHorizontalSegmentsItem(nTmp));
-//BFS01
-//BFS01         rIn >> nTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DEndAngleItem(nTmp));
-//BFS01
-//BFS01         rIn >> bTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(bTmp));
-//BFS01
-//BFS01         rIn >> fLatheScale;
-//BFS01     }
-//BFS01
-//BFS01     // #106240# No PolyPolygon as base for the lathe object was saved.
-//BFS01     // Reconstruct it from the objects in the SubList.
-//BFS01     if(!bPolyWasRead)
-//BFS01     {
-//BFS01         // This is really a old 3.0 or 3.1 file, reconstruct
-//BFS01         // the not saved polygon using the SubList.
-//BFS01         SdrObjList* pSubList = GetSubList();
-//BFS01
-//BFS01         if(pSubList && pSubList->GetObjCount())
-//BFS01         {
-//BFS01             sal_uInt16 nHorSegCount = (sal_uInt16)GetHorizontalSegments() / 2;
-//BFS01             sal_uInt16 nVerSegCount = (sal_uInt16)(pSubList->GetObjCount() / nHorSegCount);
-//BFS01             Polygon3D aNewBasePoly;
-//BFS01
-//BFS01             for(sal_uInt16 a(0); a < nVerSegCount; a++)
-//BFS01             {
-//BFS01                 E3dPolyObj* pCandidate = (E3dPolyObj*)pSubList->GetObj(a * nHorSegCount);
-//BFS01                 if(pCandidate->ISA(E3dPolyObj))
-//BFS01                 {
-//BFS01                     const PolyPolygon3D& rCandPoly = ((E3dPolyObj*)pCandidate)->GetPolyPolygon3D();
-//BFS01
-//BFS01                     if(rCandPoly[0].GetPointCount() > 1)
-//BFS01                     {
-//BFS01                         aNewBasePoly[a] = rCandPoly[0][1];
-//BFS01                     }
-//BFS01                 }
-//BFS01             }
-//BFS01
-//BFS01             aPolyPoly3D.Clear();
-//BFS01             aNewBasePoly.SetClosed(sal_True);
-//BFS01             aPolyPoly3D.Insert(aNewBasePoly);
-//BFS01         }
-//BFS01     }
-//BFS01
-//BFS01     if (aCompat.GetBytesLeft())
-//BFS01     {
-//BFS01         // Ab Version 364f (19.06.97)
-//BFS01         sal_Int32 nTmp;
-//BFS01         rIn >> nTmp;
-//BFS01
-//BFS01         // #83965# internally the real number of segments (edges) is
-//BFS01         // used, no longer the number of points
-//BFS01         if(!aPolyPoly3D[0].IsClosed())
-//BFS01             nTmp -= 1;
-//BFS01
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nTmp));
-//BFS01     }
-//BFS01
-//BFS01     if (aCompat.GetBytesLeft())
-//BFS01     {
-//BFS01         // Ab Version 374 (15.12.97)
-//BFS01         // Gesamtes PolyPolygon laden
-//BFS01         BOOL bTmp;
-//BFS01         double fTmp;
-//BFS01
-//BFS01         aPolyPoly3D.Clear();
-//BFS01         rIn >> aPolyPoly3D;
-//BFS01
-//BFS01         rIn >> fTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DBackscaleItem((sal_uInt16)(fTmp * 100.0)));
-//BFS01
-//BFS01         rIn >> fTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DPercentDiagonalItem(sal_uInt16(fTmp * 200.0)));
-//BFS01
-//BFS01         rIn >> bTmp; // #107245# bLatheSmoothed = bTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(bTmp));
-//BFS01
-//BFS01         rIn >> bTmp; // #107245# bLatheSmoothFrontBack = bTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DSmoothLidsItem(bTmp));
-//BFS01
-//BFS01         rIn >> bTmp; // #107245# bLatheCharacterMode = bTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DCharacterModeItem(bTmp));
-//BFS01     }
-//BFS01     else
-//BFS01     {
-//BFS01         // Geometrie aus erzeugten PolyObj's rekonstruieren
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DBackscaleItem(100));
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DPercentDiagonalItem(10));
-//BFS01
-//BFS01         // #107245# bLatheSmoothed = TRUE;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(sal_True));
-//BFS01
-//BFS01         // #107245# bLatheSmoothFrontBack = FALSE;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DSmoothLidsItem(sal_False));
-//BFS01
-//BFS01         // #107245# bLatheCharacterMode = FALSE;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DCharacterModeItem(sal_False));
-//BFS01     }
-//BFS01
-//BFS01     if (aCompat.GetBytesLeft())
-//BFS01     {
-//BFS01         // Ab Version 395 (8.6.98): Parameter aus dem Objekt
-//BFS01         // E3dCompoundObject. Da irgendwann mal jemand die Ableitungs-
-//BFS01         // hierarchie beim FileFormat unterbrochen hat, wurden diese Attribute
-//BFS01         // bisher NOCH NIE gespeichert (Grrr). Diese Stelle muss nun natuerlich
-//BFS01         // auch IMMER MITGEPFLEGT werden, wenn sich Parameter in
-//BFS01         // E3dCompoundObject oder E3dObject aendern.
-//BFS01         BOOL bTmp, bTmp2;
-//BFS01         sal_uInt16 nTmp;
-//BFS01
-//BFS01         rIn >> bTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(bTmp));
-//BFS01
-//BFS01         rIn >> bTmp; bCreateNormals = bTmp;
-//BFS01         rIn >> bTmp; bCreateTexture = bTmp;
-//BFS01
-//BFS01         rIn >> bTmp;
-//BFS01         rIn >> bTmp2;
-//BFS01         if(bTmp == FALSE && bTmp2 == FALSE)
-//BFS01             nTmp = 0;
-//BFS01         else if(bTmp == TRUE && bTmp2 == FALSE)
-//BFS01             nTmp = 1;
-//BFS01         else
-//BFS01             nTmp = 2;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DNormalsKindItem(nTmp));
-//BFS01
-//BFS01         rIn >> bTmp;
-//BFS01         rIn >> bTmp2;
-//BFS01         if(bTmp == FALSE && bTmp2 == FALSE)
-//BFS01             nTmp = 0;
-//BFS01         else if(bTmp == TRUE && bTmp2 == FALSE)
-//BFS01             nTmp = 1;
-//BFS01         else
-//BFS01             nTmp = 2;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DTextureProjectionXItem(nTmp));
-//BFS01
-//BFS01         rIn >> bTmp;
-//BFS01         rIn >> bTmp2;
-//BFS01         if(bTmp == FALSE && bTmp2 == FALSE)
-//BFS01             nTmp = 0;
-//BFS01         else if(bTmp == TRUE && bTmp2 == FALSE)
-//BFS01             nTmp = 1;
-//BFS01         else
-//BFS01             nTmp = 2;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DTextureProjectionYItem(nTmp));
-//BFS01
-//BFS01         rIn >> bTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DShadow3DItem(bTmp));
-//BFS01
-//BFS01         Color aCol;
-//BFS01
-//BFS01         rIn >> aCol;
-//BFS01         SetMaterialAmbientColor(aCol);
-//BFS01
-//BFS01         rIn >> aCol;
-//BFS01         // do NOT use, this is the old 3D-Color(!)
-//BFS01         // SetItem(XFillColorItem(String(), aCol));
-//BFS01
-//BFS01         rIn >> aCol;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DMaterialSpecularItem(aCol));
-//BFS01
-//BFS01         rIn >> aCol;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DMaterialEmissionItem(aCol));
-//BFS01
-//BFS01         rIn >> nTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DMaterialSpecularIntensityItem(nTmp));
-//BFS01
-//BFS01         aBackMaterial.ReadData(rIn);
-//BFS01
-//BFS01         rIn >> nTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DTextureKindItem(nTmp));
-//BFS01
-//BFS01         rIn >> nTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DTextureModeItem(nTmp));
-//BFS01
-//BFS01         rIn >> bTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DNormalsInvertItem(bTmp));
-//BFS01     }
-//BFS01
-//BFS01     if (aCompat.GetBytesLeft())
-//BFS01     {
-//BFS01         // Ab Version 513a (5.2.99): Parameter fuer das
-//BFS01         // Erzeugen der Vorder/Rueckwand
-//BFS01         BOOL bTmp;
-//BFS01
-//BFS01         rIn >> bTmp; // #107245# bLatheCloseFront = bTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DCloseFrontItem(bTmp));
-//BFS01
-//BFS01         rIn >> bTmp; // #107245# bLatheCloseBack = bTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DCloseBackItem(bTmp));
-//BFS01     }
-//BFS01     else
-//BFS01     {
-//BFS01         // #107245# bLatheCloseFront = TRUE;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DCloseFrontItem(sal_True));
-//BFS01
-//BFS01         // #107245# bLatheCloseBack = TRUE;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DCloseBackItem(sal_True));
-//BFS01     }
-//BFS01
-//BFS01     // neu ab 534: (hat noch gefehlt)
-//BFS01     if (aCompat.GetBytesLeft () >= sizeof (BOOL))
-//BFS01     {
-//BFS01         BOOL bTmp;
-//BFS01         rIn >> bTmp;
-//BFS01         GetProperties().SetObjectItemDirect(Svx3DTextureFilterItem(bTmp));
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 // correct position of extrude polygon, in case it's not positioned
-//BFS01 // at the Z==0 layer
-//BFS01 if(aPolyPoly3D.Count() && aPolyPoly3D[0].GetPointCount())
-//BFS01 {
-//BFS01     const Vector3D& rFirstPoint = aPolyPoly3D[0][0];
-//BFS01     if(rFirstPoint.Z() != 0.0)
-//BFS01     {
-//BFS01         // change transformation so that source poly lies in Z == 0,
-//BFS01         // so it can be exported as 2D polygon
-//BFS01         //
-//BFS01         // ATTENTION: the translation has to be multiplied from LEFT
-//BFS01         // SIDE since it was executed as the first translate for this
-//BFS01         // 3D object during it's creation.
-//BFS01         double fTransDepth(rFirstPoint.Z());
-//BFS01         Matrix4D aTransMat;
-//BFS01         aTransMat.TranslateZ(fTransDepth);
-//BFS01         NbcSetTransform(GetTransform() * aTransMat); // #112587#
-//BFS01
-//BFS01         // correct polygon itself
-//BFS01         aTransMat.Identity();
-//BFS01         aTransMat.TranslateZ(-fTransDepth);
-//BFS01         aPolyPoly3D.Transform(aTransMat);
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 // Geometrie neu erzeugen
-//BFS01 ReCreateGeometry();
-//BFS01}
 
 /*************************************************************************
 |*
@@ -1008,7 +518,7 @@ SdrObject *E3dLatheObj::DoConvertToPolyObj(BOOL /*bBezier*/) const
 |*
 \************************************************************************/
 
-void E3dLatheObj::ReSegment(long nHSegs, long nVSegs)
+void E3dLatheObj::ReSegment(sal_uInt32 nHSegs, sal_uInt32 nVSegs)
 {
     if ((nHSegs != GetHorizontalSegments() || nVSegs != GetVerticalSegments()) &&
         (nHSegs != 0 || nVSegs != 0))
@@ -1026,28 +536,26 @@ void E3dLatheObj::ReSegment(long nHSegs, long nVSegs)
 |*
 \************************************************************************/
 
-void E3dLatheObj::SetPolyPoly3D(const PolyPolygon3D& rNew)
+void E3dLatheObj::SetPolyPoly2D(const basegfx::B2DPolyPolygon& rNew)
 {
-    if(aPolyPoly3D != rNew)
+    if(maPolyPoly2D != rNew)
     {
-        aPolyPoly3D = rNew;
+        maPolyPoly2D = rNew;
+        maPolyPoly2D.removeDoublePoints();
 
-        // #83965# take care of vertical segments, too.
-        sal_Int32 nNumVSegs = aPolyPoly3D[0].GetPointCount();
-        if(!aPolyPoly3D[0].IsClosed())
-            nNumVSegs -= 1;
+        if(maPolyPoly2D.count())
+        {
+            const basegfx::B2DPolygon rPoly(maPolyPoly2D.getB2DPolygon(0L));
+            sal_uInt32 nSegCnt(rPoly.count());
 
-        GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nNumVSegs));
+            if(nSegCnt && !rPoly.isClosed())
+            {
+                nSegCnt -= 1;
+            }
 
-        bGeometryValid = FALSE;
-    }
-}
+            GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nSegCnt));
+        }
 
-void E3dLatheObj::SetLatheScale(double fNew)
-{
-    if(fLatheScale != fNew)
-    {
-        fLatheScale = fNew;
         bGeometryValid = FALSE;
     }
 }
@@ -1097,29 +605,17 @@ BOOL E3dLatheObj::IsBreakObjPossible()
 SdrAttrObj* E3dLatheObj::GetBreakObj()
 {
     // create PathObj
-    PolyPolygon3D aTransPoly = TransformToScreenCoor(GetPolyPolygon());
-    XPolyPolygon aPoly(aTransPoly.GetXPolyPolygon());
-    SdrPathObj* pPathObj = new SdrPathObj(OBJ_PLIN, aPoly);
+    basegfx::B3DPolyPolygon aLathePoly3D(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(maPolyPoly2D));
+    basegfx::B2DPolyPolygon aTransPoly(TransformToScreenCoor(aLathePoly3D));
+    SdrPathObj* pPathObj = new SdrPathObj(OBJ_PLIN, aTransPoly);
 
     if(pPathObj)
     {
-        // set position ans size
-        Rectangle aNewPosSize(aPoly.GetBoundRect());
-        pPathObj->SetSnapRect(aNewPosSize);
-
-        // Objekt ggf. schliessen
-        BOOL bDistSmallerTen = FALSE;
-        for(UINT16 nCnt=0;nCnt<pPathObj->GetPathPoly().Count();nCnt++)
-        if(((XPolygon)(pPathObj->GetPathPoly()[0])).CalcDistance(0, pPathObj->GetPathPoly()[0].GetPointCount()-1) < 10)
-        bDistSmallerTen = TRUE;
-        if (!pPathObj->IsClosed() && bDistSmallerTen)
-            pPathObj->ToggleClosed(0);
-
         // Attribute setzen
         SfxItemSet aSet(GetObjectItemSet());
 
         // Linien aktivieren, um Objekt garantiert sichtbar zu machen
-        aSet.Put(XLineStyleItem (XLINE_SOLID));
+        aSet.Put(XLineStyleItem(XLINE_SOLID));
 
         pPathObj->SetMergedItemSet(aSet);
     }
