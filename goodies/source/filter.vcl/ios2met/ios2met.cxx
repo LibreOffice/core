@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ios2met.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:37:09 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:15:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,9 +338,6 @@ private:
 
     long ErrorCode;
 
-    PFilterCallback pCallback;
-    void * pCallerData;
-
     SvStream    * pOS2MET;             // Die einzulesende OS2MET-Datei
     VirtualDevice * pVirDev;         // Hier werden die Drawing-Methoden aufgerufen.
                                      // Dabei findet ein Recording in das GDIMetaFile
@@ -424,21 +421,23 @@ public:
     OS2METReader();
     ~OS2METReader();
 
-    void ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaFile, PFilterCallback pcallback, void * pcallerdata);
+    void ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaFile );
         // Liesst aus dem Stream eine OS2MET-Datei und fuellt das GDIMetaFile
 
 };
 
 //=================== Methoden von OS2METReader ==============================
 
-BOOL OS2METReader::Callback(USHORT nPercent)
+BOOL OS2METReader::Callback(USHORT /*nPercent*/)
 {
+/*
     if (pCallback!=NULL) {
         if (((*pCallback)(pCallerData,nPercent))==TRUE) {
             pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
             return TRUE;
         }
     }
+*/
     return FALSE;
 }
 
@@ -2555,7 +2554,7 @@ void OS2METReader::ReadField(USHORT nFieldType, USHORT nFieldSize)
     }
 }
 
-void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaFile, PFilterCallback pcallback, void * pcallerdata)
+void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaFile )
 {
     USHORT nFieldSize;
     USHORT nFieldType;
@@ -2563,8 +2562,6 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     BYTE nMagicByte;
 
     ErrorCode=0;
-
-    pCallback=pcallback; pCallerData=pcallerdata;
 
     pOS2MET             = &rStreamOS2MET;
     nOrigPos            = pOS2MET->Tell();
@@ -2749,45 +2746,18 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
 
 //================== GraphicImport - die exportierte Funktion ================
 
-#ifdef WNT
-extern "C" BOOL _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                            PFilterCallback pCallback, void * pCallerData,
-                                FilterConfigItem*, BOOL)
-#else
-extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                            PFilterCallback pCallback, void * pCallerData,
-                                FilterConfigItem*, BOOL)
-#endif
+extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL )
 {
     OS2METReader    aOS2METReader;
     GDIMetaFile     aMTF;
     BOOL            bRet = FALSE;
 
-    if ( &rStream == NULL && pCallerData )
+    aOS2METReader.ReadOS2MET( rStream, aMTF );
+
+    if ( !rStream.GetError() )
     {
-        SvMemoryStream  aMemStm;
-
-        aMemStm << *(GDIMetaFile*) pCallerData;
-        aMemStm.Seek( 0 );
-        pCallerData = NULL;
-
-        aOS2METReader.ReadOS2MET( aMemStm, aMTF, NULL, NULL );
-
-        if ( !aMemStm.GetError() )
-        {
-            rGraphic = Graphic(aMTF);
-            bRet = TRUE;
-        }
-    }
-    else
-    {
-        aOS2METReader.ReadOS2MET(rStream,aMTF,pCallback,pCallerData);
-
-        if ( !rStream.GetError() )
-        {
-            rGraphic=Graphic(aMTF);
-            bRet = TRUE;
-        }
+        rGraphic=Graphic( aMTF );
+        bRet = TRUE;
     }
 
     return bRet;
