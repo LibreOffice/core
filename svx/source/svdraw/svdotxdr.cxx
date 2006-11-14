@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxdr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:57:31 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:47:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,18 @@
 #include <tools/bigint.hxx>
 #endif
 
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_RANGE_B2DRANGE_HXX
+#include <basegfx/range/b2drange.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //  @@@@@@ @@@@@ @@   @@ @@@@@@  @@@@  @@@@@  @@@@@@
@@ -63,12 +75,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-USHORT SdrTextObj::GetHdlCount() const
+sal_uInt32 SdrTextObj::GetHdlCount() const
 {
-    return 8;
+    return 8L;
 }
 
-SdrHdl* SdrTextObj::GetHdl(USHORT nHdlNum) const
+SdrHdl* SdrTextObj::GetHdl(sal_uInt32 nHdlNum) const
 {
     SdrHdl* pH=NULL;
     Point aPnt;
@@ -244,18 +256,24 @@ XubString SdrTextObj::GetDragComment(const SdrDragStat& /*rDrag*/, FASTBOOL /*bU
     return aStr;
 }
 
-void SdrTextObj::TakeDragPoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) const
+basegfx::B2DPolyPolygon SdrTextObj::TakeDragPoly(const SdrDragStat& rDrag) const
 {
-    rXPP.Clear();
+    XPolyPolygon aXPP;
     Rectangle aTmpRect(ImpDragCalcRect(rDrag));
-    if (aGeo.nDrehWink!=0 || aGeo.nShearWink!=0) {
+
+    if(aGeo.nDrehWink || aGeo.nShearWink)
+    {
         Polygon aPoly(aTmpRect);
         if (aGeo.nShearWink!=0) ShearPoly(aPoly,aRect.TopLeft(),aGeo.nTan);
         if (aGeo.nDrehWink!=0) RotatePoly(aPoly,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-        rXPP.Insert(XPolygon(aPoly));
-    } else {
-        rXPP.Insert(XPolygon(aTmpRect));
+        aXPP.Insert(XPolygon(aPoly));
     }
+    else
+    {
+        aXPP.Insert(XPolygon(aTmpRect));
+    }
+
+    return aXPP.getB2DPolyPolygon();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -264,6 +282,10 @@ void SdrTextObj::TakeDragPoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) cons
 FASTBOOL SdrTextObj::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho4Possible();
+    Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
+    aRect1.Justify();
+    rStat.SetActionRect(aRect1);
+    aRect = aRect1;
     return TRUE;
 }
 
@@ -318,12 +340,16 @@ FASTBOOL SdrTextObj::BckCreate(SdrDragStat& /*rStat*/)
     return TRUE;
 }
 
-void SdrTextObj::TakeCreatePoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) const
+basegfx::B2DPolyPolygon SdrTextObj::TakeCreatePoly(const SdrDragStat& rDrag) const
 {
     Rectangle aRect1;
     rDrag.TakeCreateRect(aRect1);
     aRect1.Justify();
-    rXPP=XPolyPolygon(XPolygon(aRect1));
+
+    basegfx::B2DPolyPolygon aRetval;
+    const basegfx::B2DRange aRange(aRect1.Left(), aRect1.Top(), aRect1.Right(), aRect1.Bottom());
+    aRetval.append(basegfx::tools::createPolygonFromRect(aRange));
+    return aRetval;
 }
 
 Pointer SdrTextObj::GetCreatePointer() const
