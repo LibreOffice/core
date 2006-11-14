@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:38:46 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:36:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,10 +86,6 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #endif
 
-// header for class Matrix3D
-#ifndef _B2D_MATRIX3D_HXX
-#include <goodies/matrix3d.hxx>
-#endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
