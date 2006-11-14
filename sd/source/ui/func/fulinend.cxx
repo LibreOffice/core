@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fulinend.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:51:29 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:29:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ void FuLineEnd::DoExecute( SfxRequest& rReq )
             else return; // Abbruch
         }
 
-        const XPolygon aXPoly = ( (SdrPathObj*) pNewObj )->GetPathPoly().GetObject( 0 );
+        const ::basegfx::B2DPolyPolygon aPolyPolygon = ( (SdrPathObj*) pNewObj )->GetPathPoly();
 
         // Loeschen des angelegten PolyObjektes
         if( pConvPolyObj )
@@ -209,7 +209,7 @@ void FuLineEnd::DoExecute( SfxRequest& rReq )
                                     Point( aTmpVD.GetOutputSize().Width(), aTmpVD.GetOutputSize().Height() / 2 ) );
                 Bitmap* pBitmap = new Bitmap( aTmpVD.GetBitmap( Point(), aTmpVD.GetOutputSize() ) );
             */
-                pEntry = new XLineEndEntry( aXPoly, aName );
+                pEntry = new XLineEndEntry( aPolyPolygon, aName );
                 pLineEndList->Insert( pEntry, LIST_APPEND);
             }
             else
