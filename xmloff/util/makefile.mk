@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2006-10-30 09:08:39 $
+#   last change: $Author: ihi $ $Date: 2006-11-14 14:16:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ SHL1STDLIBS= \
         $(SALLIB)		\
         $(UNOTOOLSLIB)	\
         $(ONELIB)		\
-        $(GOODIESLIB)	\
+        $(BASEGFXLIB)	\
         $(SALHELPERLIB)
 
 # SCO: the linker does know about weak symbols, but we can't ignore multiple defined symbols
