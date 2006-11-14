@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSlideSorterView.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:26:40 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:24:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,10 @@
 #endif
 #include <unotools/accessiblestatesethelper.hxx>
 #include <rtl/ref.hxx>
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
