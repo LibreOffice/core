@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:55:23 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:45:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,203 +116,6 @@
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #endif
 
-static double SMALLEST_DASH_WIDTH(26.95);
-
-///////////////////////////////////////////////////////////////////////////////
-// ImpCreateDotDashArray takes a XDash and translates it into an array of doubles
-// which describe the lengths of the dashes, dots and empty passages. It returns
-// the complete length of a full DashDot sequence and fills the given vetor of
-// doubles accordingly (also resizing it).
-
-double ImpCreateDotDashArray(::std::vector< double >& rDotDashArray, const XDash& mrDash, sal_Int32 nLineWidth)
-{
-    double fFullDashDotLen(0.0);
-    const sal_uInt16 nNumDotDashArray = (mrDash.GetDots() + mrDash.GetDashes()) * 2;
-    rDotDashArray.resize( nNumDotDashArray, 0.0 );
-    sal_uInt16 a;
-    sal_uInt16 nIns(0);
-    double fDashDotDistance = (double)mrDash.GetDistance();
-    double fSingleDashLen = (double)mrDash.GetDashLen();
-    double fSingleDotLen = (double)mrDash.GetDotLen();
-    double fLineWidth = (double)nLineWidth;
-
-    if(mrDash.GetDashStyle() == XDASH_RECTRELATIVE || mrDash.GetDashStyle() == XDASH_ROUNDRELATIVE)
-    {
-        if(nLineWidth)
-        {
-            double fFactor = fLineWidth / 100.0;
-
-            if(mrDash.GetDashes())
-            {
-                if(mrDash.GetDashLen())
-                {
-                    // is a dash
-                    fSingleDashLen *= fFactor;
-                }
-                else
-                {
-                    // is a dot
-                    fSingleDashLen = fLineWidth;
-                }
-            }
-
-            if(mrDash.GetDots())
-            {
-                if(mrDash.GetDotLen())
-                {
-                    // is a dash
-                    fSingleDotLen *= fFactor;
-                }
-                else
-                {
-                    // is a dot
-                    fSingleDotLen = fLineWidth;
-                }
-            }
-
-            if(mrDash.GetDashes() || mrDash.GetDots())
-            {
-                if(mrDash.GetDistance())
-                {
-                    fDashDotDistance *= fFactor;
-                }
-                else
-                {
-                    fDashDotDistance = fLineWidth;
-                }
-            }
-        }
-        else
-        {
-            if(mrDash.GetDashes())
-            {
-                if(mrDash.GetDashLen())
-                {
-                    // is a dash
-                    fSingleDashLen = (SMALLEST_DASH_WIDTH * fSingleDashLen) / 100.0;
-                }
-                else
-                {
-                    // is a dot
-                    fSingleDashLen = SMALLEST_DASH_WIDTH;
-                }
-            }
-
-            if(mrDash.GetDots())
-            {
-                if(mrDash.GetDotLen())
-                {
-                    // is a dash
-                    fSingleDotLen = (SMALLEST_DASH_WIDTH * fSingleDotLen) / 100.0;
-                }
-                else
-                {
-                    // is a dot
-                    fSingleDotLen = SMALLEST_DASH_WIDTH;
-                }
-            }
-
-            if(mrDash.GetDashes() || mrDash.GetDots())
-            {
-                if(mrDash.GetDistance())
-                {
-                    // dash as distance
-                    fDashDotDistance = (SMALLEST_DASH_WIDTH * fDashDotDistance) / 100.0;
-                }
-                else
-                {
-                    // dot as distance
-                    fDashDotDistance = SMALLEST_DASH_WIDTH;
-                }
-            }
-        }
-    }
-    else
-    {
-        // smallest dot size compare value
-        double fDotCompVal(nLineWidth ? fLineWidth : SMALLEST_DASH_WIDTH);
-
-        // absolute values
-        if(mrDash.GetDashes())
-        {
-            if(mrDash.GetDashLen())
-            {
-                // is a dash
-                if(fSingleDashLen < SMALLEST_DASH_WIDTH)
-                {
-                    fSingleDashLen = SMALLEST_DASH_WIDTH;
-                }
-            }
-            else
-            {
-                // is a dot
-                if(fSingleDashLen < fDotCompVal)
-                {
-                    fSingleDashLen = fDotCompVal;
-                }
-            }
-        }
-
-        if(mrDash.GetDots())
-        {
-            if(mrDash.GetDotLen())
-            {
-                // is a dash
-                if(fSingleDotLen < SMALLEST_DASH_WIDTH)
-                {
-                    fSingleDotLen = SMALLEST_DASH_WIDTH;
-                }
-            }
-            else
-            {
-                // is a dot
-                if(fSingleDotLen < fDotCompVal)
-                {
-                    fSingleDotLen = fDotCompVal;
-                }
-            }
-        }
-
-        if(mrDash.GetDashes() || mrDash.GetDots())
-        {
-            if(mrDash.GetDistance())
-            {
-                // dash as distance
-                if(fDashDotDistance < SMALLEST_DASH_WIDTH)
-                {
-                    fDashDotDistance = SMALLEST_DASH_WIDTH;
-                }
-            }
-            else
-            {
-                // dot as distance
-                if(fDashDotDistance < fDotCompVal)
-                {
-                    fDashDotDistance = fDotCompVal;
-                }
-            }
-        }
-    }
-
-    for(a=0;a<mrDash.GetDots();a++)
-    {
-        rDotDashArray[nIns++] = fSingleDotLen;
-        fFullDashDotLen += fSingleDotLen;
-        rDotDashArray[nIns++] = fDashDotDistance;
-        fFullDashDotLen += fDashDotDistance;
-    }
-
-    for(a=0;a<mrDash.GetDashes();a++)
-    {
-        rDotDashArray[nIns++] = fSingleDashLen;
-        fFullDashDotLen += fSingleDashLen;
-        rDotDashArray[nIns++] = fDashDotDistance;
-        fFullDashDotLen += fDashDotDistance;
-    }
-
-    return fFullDashDotLen;
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 
 ImpLineStyleParameterPack::ImpLineStyleParameterPack(
@@ -322,33 +125,33 @@ ImpLineStyleParameterPack::ImpLineStyleParameterPack(
     mbForceNoArrowsRight(false),
     mbForceHair(_bForceHair)
 {
-    maStartPolygon = (((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetLineStartValue()).getB2DPolygon();
+    maStartPolyPolygon = ((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetLineStartValue();
 
-    if(maStartPolygon.count())
+    if(maStartPolyPolygon.count())
     {
-        if(maStartPolygon.areControlPointsUsed())
+        if(maStartPolyPolygon.areControlPointsUsed())
         {
-            maStartPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(maStartPolygon);
+            maStartPolyPolygon = basegfx::tools::adaptiveSubdivideByAngle(maStartPolyPolygon);
         }
 
-        if(::basegfx::ORIENTATION_NEGATIVE == ::basegfx::tools::getOrientation(maStartPolygon))
+        if(basegfx::ORIENTATION_NEGATIVE == basegfx::tools::getOrientation(maStartPolyPolygon.getB2DPolygon(0L)))
         {
-            maStartPolygon.flip();
+            maStartPolyPolygon.flip();
         }
     }
 
-    maEndPolygon = (((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetLineEndValue()).getB2DPolygon();
+    maEndPolyPolygon = ((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetLineEndValue();
 
-    if(maEndPolygon.count())
+    if(maEndPolyPolygon.count())
     {
-        if(maEndPolygon.areControlPointsUsed())
+        if(maEndPolyPolygon.areControlPointsUsed())
         {
-            maEndPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(maEndPolygon);
+            maEndPolyPolygon = basegfx::tools::adaptiveSubdivideByAngle(maEndPolyPolygon);
         }
 
-        if(::basegfx::ORIENTATION_NEGATIVE == ::basegfx::tools::getOrientation(maEndPolygon))
+        if(basegfx::ORIENTATION_NEGATIVE == basegfx::tools::getOrientation(maEndPolyPolygon.getB2DPolygon(0L)))
         {
-            maEndPolygon.flip();
+            maEndPolyPolygon.flip();
         }
     }
 
@@ -372,22 +175,42 @@ ImpLineStyleParameterPack::ImpLineStyleParameterPack(
     XDash aDash = ((const XLineDashItem&)(rSet.Get(XATTR_LINEDASH))).GetDashValue();
 
     // fill local dash info
-    mfFullDashDotLen = ImpCreateDotDashArray(maDotDashArray, aDash, GetDisplayLineWidth());
+    mfFullDotDashLen = aDash.CreateDotDashArray(maDotDashArray, (double)GetDisplayLineWidth());
 }
 
 ImpLineStyleParameterPack::~ImpLineStyleParameterPack()
 {
 }
 
-void ImpLineGeometryCreator::ImpCreateLineGeometry(const ::basegfx::B2DPolygon& rSourcePoly)
+bool ImpLineStyleParameterPack::IsStartActive() const
+{
+    if(!mbForceNoArrowsLeft && maStartPolyPolygon.count() && GetStartWidth())
+    {
+        return (0L != maStartPolyPolygon.getB2DPolygon(0L).count());
+    }
+
+    return false;
+}
+
+bool ImpLineStyleParameterPack::IsEndActive() const
+{
+    if(!mbForceNoArrowsRight && maEndPolyPolygon.count() && GetEndWidth())
+    {
+        return (0L != maEndPolyPolygon.getB2DPolygon(0L).count());
+    }
+
+    return false;
+}
+
+void ImpLineGeometryCreator::ImpCreateLineGeometry(const basegfx::B2DPolygon& rSourcePoly)
 {
     if(rSourcePoly.count() > 1L)
     {
-        ::basegfx::B2DPolygon aSourceLineGeometry(rSourcePoly);
+        basegfx::B2DPolygon aSourceLineGeometry(rSourcePoly);
 
         if(aSourceLineGeometry.areControlPointsUsed())
         {
-            aSourceLineGeometry = ::basegfx::tools::adaptiveSubdivideByAngle(aSourceLineGeometry);
+            aSourceLineGeometry = basegfx::tools::adaptiveSubdivideByAngle(aSourceLineGeometry);
         }
 
         sal_uInt32 nCount(aSourceLineGeometry.count());
@@ -395,17 +218,17 @@ void ImpLineGeometryCreator::ImpCreateLineGeometry(const ::basegfx::B2DPolygon& 
         if(!aSourceLineGeometry.isClosed())
         {
             nCount--;
-            const double fPolyLength(::basegfx::tools::getLength(aSourceLineGeometry));
+            const double fPolyLength(basegfx::tools::getLength(aSourceLineGeometry));
             double fStart(0.0);
             double fEnd(0.0);
 
             if(mrLineAttr.IsStartActive())
             {
                 // create line start polygon and move line end
-                ::basegfx::B2DPolyPolygon aArrowPolyPolygon;
-                aArrowPolyPolygon.append(mrLineAttr.GetStartPolygon());
+                basegfx::B2DPolyPolygon aArrowPolyPolygon;
+                aArrowPolyPolygon.append(mrLineAttr.GetStartPolyPolygon());
 
-                ::basegfx::B2DPolyPolygon aArrow = ::basegfx::tools::createAreaGeometryForLineStartEnd(
+                basegfx::B2DPolyPolygon aArrow = basegfx::tools::createAreaGeometryForLineStartEnd(
                     aSourceLineGeometry,
                     aArrowPolyPolygon,
                     true,
@@ -420,10 +243,10 @@ void ImpLineGeometryCreator::ImpCreateLineGeometry(const ::basegfx::B2DPolygon& 
             if(mrLineAttr.IsEndActive())
             {
                 // create line end polygon and move line end
-                ::basegfx::B2DPolyPolygon aArrowPolyPolygon;
-                aArrowPolyPolygon.append(mrLineAttr.GetEndPolygon());
+                basegfx::B2DPolyPolygon aArrowPolyPolygon;
+                aArrowPolyPolygon.append(mrLineAttr.GetEndPolyPolygon());
 
-                ::basegfx::B2DPolyPolygon aArrow = ::basegfx::tools::createAreaGeometryForLineStartEnd(
+                basegfx::B2DPolyPolygon aArrow = basegfx::tools::createAreaGeometryForLineStartEnd(
                     aSourceLineGeometry,
                     aArrowPolyPolygon,
                     false,
@@ -438,7 +261,7 @@ void ImpLineGeometryCreator::ImpCreateLineGeometry(const ::basegfx::B2DPolygon& 
             if(fStart != 0.0 || fEnd != 0.0)
             {
                 // build new poly, consume something from old poly
-                aSourceLineGeometry = ::basegfx::tools::getSnippetAbsolute(
+                aSourceLineGeometry = basegfx::tools::getSnippetAbsolute(
                     aSourceLineGeometry, fStart, fPolyLength - fEnd, fPolyLength);
                 nCount = aSourceLineGeometry.count() - 1L;
             }
@@ -446,7 +269,7 @@ void ImpLineGeometryCreator::ImpCreateLineGeometry(const ::basegfx::B2DPolygon& 
 
         if(nCount)
         {
-            ::basegfx::B2DPolyPolygon aHairLinePolyPolygon;
+            basegfx::B2DPolyPolygon aHairLinePolyPolygon;
 
             if(mbLineDraft || mrLineAttr.IsLineStyleSolid())
             {
@@ -456,10 +279,10 @@ void ImpLineGeometryCreator::ImpCreateLineGeometry(const ::basegfx::B2DPolygon& 
             else
             {
                 // apply LineStyle
-                aHairLinePolyPolygon = ::basegfx::tools::applyLineDashing(aSourceLineGeometry, mrLineAttr.GetDotDash(), mrLineAttr.GetFullDashDotLen());
+                aHairLinePolyPolygon = basegfx::tools::applyLineDashing(aSourceLineGeometry, mrLineAttr.GetDotDash(), mrLineAttr.GetFullDotDashLen());
 
                 // merge LineStyle polygons to bigger parts
-                aHairLinePolyPolygon = ::basegfx::tools::mergeDashedLines(aHairLinePolyPolygon);
+                aHairLinePolyPolygon = basegfx::tools::mergeDashedLines(aHairLinePolyPolygon);
             }
 
             if(!mrLineAttr.GetDisplayLineWidth())
@@ -469,21 +292,21 @@ void ImpLineGeometryCreator::ImpCreateLineGeometry(const ::basegfx::B2DPolygon& 
             }
             else
             {
-                ::basegfx::tools::B2DLineJoin aB2DLineJoin(::basegfx::tools::B2DLINEJOIN_NONE);
+                basegfx::tools::B2DLineJoin aB2DLineJoin(basegfx::tools::B2DLINEJOIN_NONE);
 
                 switch(mrLineAttr.GetLineJoint())
                 {
-                case XLINEJOINT_NONE    : aB2DLineJoin = ::basegfx::tools::B2DLINEJOIN_NONE;    break;
-                case XLINEJOINT_MIDDLE  : aB2DLineJoin = ::basegfx::tools::B2DLINEJOIN_MIDDLE;  break;
-                case XLINEJOINT_BEVEL   : aB2DLineJoin = ::basegfx::tools::B2DLINEJOIN_BEVEL;   break;
-                case XLINEJOINT_MITER   : aB2DLineJoin = ::basegfx::tools::B2DLINEJOIN_MITER;   break;
-                case XLINEJOINT_ROUND   : aB2DLineJoin = ::basegfx::tools::B2DLINEJOIN_ROUND;   break;
+                case XLINEJOINT_NONE    : aB2DLineJoin = basegfx::tools::B2DLINEJOIN_NONE;  break;
+                case XLINEJOINT_MIDDLE  : aB2DLineJoin = basegfx::tools::B2DLINEJOIN_MIDDLE;    break;
+                case XLINEJOINT_BEVEL   : aB2DLineJoin = basegfx::tools::B2DLINEJOIN_BEVEL; break;
+                case XLINEJOINT_MITER   : aB2DLineJoin = basegfx::tools::B2DLINEJOIN_MITER; break;
+                case XLINEJOINT_ROUND   : aB2DLineJoin = basegfx::tools::B2DLINEJOIN_ROUND; break;
                 }
 
                 for(sal_uInt32 a(0L); a < aHairLinePolyPolygon.count(); a++)
                 {
-                    ::basegfx::B2DPolygon aCandidate = aHairLinePolyPolygon.getB2DPolygon(a);
-                    ::basegfx::B2DPolyPolygon aAreaPolyPolygon = ::basegfx::tools::createAreaGeometryForPolygon(
+                    basegfx::B2DPolygon aCandidate = aHairLinePolyPolygon.getB2DPolygon(a);
+                    basegfx::B2DPolyPolygon aAreaPolyPolygon = basegfx::tools::createAreaGeometryForPolygon(
                         aCandidate,
                         (double)mrLineAttr.GetDisplayLineWidth() / 2.0,
                         aB2DLineJoin,
