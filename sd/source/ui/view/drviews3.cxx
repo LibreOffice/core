@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:36:39 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:42:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,7 +210,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         default:
             if ( pDrView->IsTextEdit() )
             {
-                pDrView->EndTextEdit();
+                pDrView->SdrEndTextEdit();
             }
     }
 
@@ -828,9 +828,9 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 {
     Point aOrigin;
 
-    if (pDrView->GetPageViewPvNum(0))
+    if (pDrView->GetSdrPageView())
     {
-        aOrigin = pDrView->GetPageViewPvNum(0)->GetPageOrigin();
+        aOrigin = pDrView->GetSdrPageView()->GetPageOrigin();
     }
 
     Size aViewSize = GetActiveWindow()->GetViewSize();
@@ -1046,7 +1046,7 @@ void  DrawViewShell::GetSnapItemState( SfxItemSet &rSet )
 
 void DrawViewShell::AddWindow (::sd::Window* pWin)
 {
-    pDrView->AddWin(pWin);
+    pDrView->AddWindowToPaintView(pWin);
 }
 
 /*************************************************************************
@@ -1057,7 +1057,7 @@ void DrawViewShell::AddWindow (::sd::Window* pWin)
 
 void DrawViewShell::RemoveWindow(::sd::Window* pWin)
 {
-    pDrView->DelWin(pWin);
+    pDrView->DeleteWindowFromPaintView(pWin);
 }
 
 } // end of namespace sd
