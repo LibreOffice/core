@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontact.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:01:28 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:05:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,10 +173,15 @@ namespace sdr
             // and repaints.
             virtual void PaintObject(DisplayInfo& rDisplayInfo);
 
+            // Pre- and Post-Paint this object. Is used e.g. for page background/foreground painting.
+            virtual void PrePaintObject(DisplayInfo& rDisplayInfo);
+            virtual void PostPaintObject(DisplayInfo& rDisplayInfo);
+
             // Paint this objects DrawHierarchy
             virtual void PaintDrawHierarchy(DisplayInfo& rDisplayInfo);
 
-            // This method recursively paints the draw hierarchy.
+            // This method recursively paints the draw hierarchy. It is also the
+            // start point for the mechanism seen from the ObjectContact.
             void PaintObjectHierarchy(DisplayInfo& rDisplayInfo);
 
             // Get info if this is the active group of the view
