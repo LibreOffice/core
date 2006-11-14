@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-08 11:55:35 $
+#   last change: $Author: hjs $ $Date: 2006-11-14 11:28:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,11 @@ MENUDEPN = \
     $(MISC)/$(TARGET)/install/doinst.sh \
     $(MISC)/$(TARGET)/install/slack-desc 
         
+.IF "$(WITH_LANG)"!=""
 ULFDIR = $(COMMONMISC)$/desktopshare
+.ELSE			# "$(WITH_LANG)"!=""
+ULFDIR:=..$/share
+.ENDIF			# "$(WITH_LANG)"!=""
 
 # --- Targets -------------------------------------------------------
 
