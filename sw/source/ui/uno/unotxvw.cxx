@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:31:30 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:21:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,6 +166,10 @@
 #include <sfx2/docfile.hxx>
 
 #include "swdtflvr.hxx"
+
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
+#endif
 
 using ::com::sun::star::util::URL;
 
@@ -560,10 +564,10 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
             if(pObj)
             {
                 SdrView* pDrawView = rSh.GetDrawView();
-                SdrPageView* pPV = pDrawView->GetPageViewPvNum(0);
+                SdrPageView* pPV = pDrawView->GetSdrPageView();
                 if ( pPV && pObj->GetPage() == pPV->GetPage() )
                 {
-                    pDrawView->EndTextEdit();
+                    pDrawView->SdrEndTextEdit();
                     pDrawView->UnmarkAll();
                     pDrawView->MarkObj( pObj, pPV );
                 }
@@ -591,7 +595,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
             SdrView* pDrawView = rSh.GetDrawView();
             if (pDrawView)
             {
-                pDrawView->EndTextEdit();
+                pDrawView->SdrEndTextEdit();
                 pDrawView->UnmarkAll();
 
                 if (pSvxShape)      // einzelnes Shape
@@ -600,7 +604,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                     if (pObj)
                     {
 //                      lcl_ShowObject( *pViewSh, *pDrawView, pObj );
-                        SdrPageView* pPV = pDrawView->GetPageViewPvNum(0);
+                        SdrPageView* pPV = pDrawView->GetSdrPageView();
                         if ( pPV && pObj->GetPage() == pPV->GetPage() )
                         {
                             pDrawView->MarkObj( pObj, pPV );
@@ -633,7 +637,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                                     if (!pPV)               // erstes Objekt
                                     {
 //                                      lcl_ShowObject( *pViewSh, *pDrawView, pObj );
-                                        pPV = pDrawView->GetPageViewPvNum(0);
+                                        pPV = pDrawView->GetSdrPageView();
                                     }
                                     if ( pPV && pObj->GetPage() == pPV->GetPage() )
                                     {
