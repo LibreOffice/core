@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-29 14:22:41 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:49:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -362,14 +362,9 @@ void ScDLL::Init()
     // ::com::sun::star::form::component::Form-Objekt-Factory eintragen
     FmFormObjFactory();
 
-    // factory for dummy import of old si-controls in 3.1 documents
-//BFS02    SiImportFactory();
-
-
     pMod->PutItem( SfxUInt16Item( SID_ATTR_METRIC, pMod->GetAppOptions().GetAppMetric() ) );
 
     //  StarOne Services are now handled in the registry
-
 }
 
 void ScDLL::Exit()
