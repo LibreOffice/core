@@ -4,9 +4,9 @@
  *
  *  $RCSfile: userdat.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:02:42 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,8 +76,7 @@ public:
 class ScDrawObjData : public SdrObjUserData
 {
     virtual SdrObjUserData* Clone(SdrObject* pObj) const;
-//BFS01 virtual void WriteData(SvStream& rOut);
-//BFS01 virtual void ReadData(SvStream& rIn);
+
 public:
     ScAddress aStt, aEnd;
     BOOL bValidStart, bValidEnd;
