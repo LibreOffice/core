@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dhommatrix.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:59:09 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:06:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -339,6 +339,119 @@ namespace basegfx
         }
     }
 
+    void B3DHomMatrix::frustum(double fLeft, double fRight, double fBottom, double fTop, double fNear, double fFar)
+    {
+        const double fZero(0.0);
+        const double fOne(1.0);
+
+        if(!fTools::more(fNear, fZero))
+        {
+            fNear = 0.001;
+        }
+
+        if(!fTools::more(fFar, fZero))
+        {
+            fFar = fOne;
+        }
+
+        if(fTools::equal(fNear, fFar))
+        {
+            fFar = fNear + fOne;
+        }
+
+        if(fTools::equal(fLeft, fRight))
+        {
+            fLeft -= fOne;
+            fRight += fOne;
+        }
+
+        if(fTools::equal(fTop, fBottom))
+        {
+            fBottom -= fOne;
+            fTop += fOne;
+        }
+
+        Impl3DHomMatrix aFrustumMat;
+
+        aFrustumMat.set(0, 0, 2.0 * fNear / (fRight - fLeft));
+        aFrustumMat.set(1, 1, 2.0 * fNear / (fTop - fBottom));
+        aFrustumMat.set(0, 2, (fRight + fLeft) / (fRight - fLeft));
+        aFrustumMat.set(1, 2, (fTop + fBottom) / (fTop - fBottom));
+        aFrustumMat.set(2, 2, -fOne * ((fFar + fNear) / (fFar - fNear)));
+        aFrustumMat.set(3, 2, -fOne);
+        aFrustumMat.set(2, 3, -fOne * ((2.0 * fFar * fNear) / (fFar - fNear)));
+        aFrustumMat.set(3, 3, fZero);
+
+        mpImpl->doMulMatrix(aFrustumMat);
+    }
+
+    void B3DHomMatrix::ortho(double fLeft, double fRight, double fBottom, double fTop, double fNear, double fFar)
+    {
+        if(fTools::equal(fNear, fFar))
+        {
+            fFar = fNear + 1.0;
+        }
+
+        if(fTools::equal(fLeft, fRight))
+        {
+            fLeft -= 1.0;
+            fRight += 1.0;
+        }
+
+        if(fTools::equal(fTop, fBottom))
+        {
+            fBottom -= 1.0;
+            fTop += 1.0;
+        }
+
+        Impl3DHomMatrix aOrthoMat;
+
+        aOrthoMat.set(0, 0, 2.0 / (fRight - fLeft));
+        aOrthoMat.set(1, 1, 2.0 / (fTop - fBottom));
+        aOrthoMat.set(2, 2, -1.0 * (2.0 / (fFar - fNear)));
+        aOrthoMat.set(0, 3, -1.0 * ((fRight + fLeft) / (fRight - fLeft)));
+        aOrthoMat.set(1, 3, -1.0 * ((fTop + fBottom) / (fTop - fBottom)));
+        aOrthoMat.set(2, 3, -1.0 * ((fFar + fNear) / (fFar - fNear)));
+
+        mpImpl->doMulMatrix(aOrthoMat);
+    }
+
+    void B3DHomMatrix::orientation(B3DPoint aVRP, B3DVector aVPN, B3DVector aVUV)
+    {
+        Impl3DHomMatrix aOrientationMat;
+
+        // translate -VRP
+        aOrientationMat.set(0, 3, -aVRP.getX());
+        aOrientationMat.set(1, 3, -aVRP.getY());
+        aOrientationMat.set(2, 3, -aVRP.getZ());
+
+        // build rotation
+        aVUV.normalize();
+        aVPN.normalize();
+
+        // build x-axis as peroendicular fron aVUV and aVPN
+        B3DVector aRx(aVUV.getPerpendicular(aVPN));
+        aRx.normalize();
+
+        // y-axis perpendicular to that
+        B3DVector aRy(aVPN.getPerpendicular(aRx));
+        aRy.normalize();
+
+        // the calculated normals are the line vectors of the rotation matrix,
+        // set them to create rotation
+        aOrientationMat.set(0, 0, aRx.getX());
+        aOrientationMat.set(0, 1, aRx.getY());
+        aOrientationMat.set(0, 2, aRx.getZ());
+        aOrientationMat.set(1, 0, aRy.getX());
+        aOrientationMat.set(1, 1, aRy.getY());
+        aOrientationMat.set(1, 2, aRy.getZ());
+        aOrientationMat.set(2, 0, aVPN.getX());
+        aOrientationMat.set(2, 1, aVPN.getY());
+        aOrientationMat.set(2, 2, aVPN.getZ());
+
+        mpImpl->doMulMatrix(aOrientationMat);
+    }
+
     bool B3DHomMatrix::decompose(B3DTuple& rScale, B3DTuple& rTranslate, B3DTuple& rRotate, B3DTuple& rShear) const
     {
         // when perspective is used, decompose is not made here
@@ -457,21 +570,46 @@ namespace basegfx
         rScale.correctValues(1.0);
 
         // Get rotations
-        rRotate.setY(asin(-aCol0.getZ()));
-
-        if(::basegfx::fTools::equalZero(cos(rRotate.getY())))
         {
-            rRotate.setX(atan2(aCol1.getX(), aCol1.getY()));
-            rRotate.setZ(0.0);
-        }
-        else
-        {
-            rRotate.setX(atan2(aCol1.getZ(), aCol2.getZ()));
-            rRotate.setZ(atan2(aCol0.getY(), aCol0.getX()));
-        }
+            double fy=0;
+            double cy=0;
 
-        // corrcet rotate values
-        rRotate.correctValues();
+            if( ::basegfx::fTools::equal( aCol0.getZ(), 1.0 )
+                || aCol0.getZ() > 1.0 )
+            {
+                fy = -F_PI/2.0;
+                cy = 0.0;
+            }
+            else if( ::basegfx::fTools::equal( aCol0.getZ(), -1.0 )
+                || aCol0.getZ() < -1.0 )
+            {
+                fy = F_PI/2.0;
+                cy = 0.0;
+            }
+            else
+            {
+                fy = asin( -aCol0.getZ() );
+                cy = cos(fy);
+            }
+
+            rRotate.setY(fy);
+            if( ::basegfx::fTools::equalZero( cy ) )
+            {
+                if( aCol0.getZ() > 0.0 )
+                    rRotate.setX(atan2(-1.0*aCol1.getX(), aCol1.getY()));
+                else
+                    rRotate.setX(atan2(aCol1.getX(), aCol1.getY()));
+                rRotate.setZ(0.0);
+            }
+            else
+            {
+                rRotate.setX(atan2(aCol1.getZ(), aCol2.getZ()));
+                rRotate.setZ(atan2(aCol0.getY(), aCol0.getX()));
+            }
+
+            // corrcet rotate values
+            rRotate.correctValues();
+        }
 
         return true;
     }
