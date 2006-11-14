@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dopngl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:26:42 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:08:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,21 +61,20 @@ private:
     OpenGL                      aOpenGL;
 
     // Letzte Normale und letzte Texturkoordinate
-    Vector3D                    aLastNormal;
-    Vector3D                    aLastTexCoor;
-    Vector3D                    aEmptyVector;
+    basegfx::B3DVector      aLastNormal;
+    basegfx::B2DPoint           aLastTexCoor;
 
     float                       fOffFacMul100;
     float                       fOffUniMul100;
 
     // Simulation Phong-Mode
-    BOOL                        bPhongBufferedMode;
+    sal_Bool                    bPhongBufferedMode;
     B3dEntityBucket             aPhongBuffer;
     long                        nPhongDivideSize;
     long                        nInternPhongDivideSize;
 
     // flags (#70626#)
-    BOOL                        bForceToSinglePrimitiveOutput;
+    sal_Bool                    bForceToSinglePrimitiveOutput;
 
     void DrawPhongPrimitives();
     void DrawPhongTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3);
@@ -89,21 +88,21 @@ public:
     void SetPhongDivideSize(long nNew);
 
     // Get/Set force to single primitive output (#70626#)
-    BOOL IsForceToSinglePrimitiveOutput() const { return bForceToSinglePrimitiveOutput; }
-    void SetForceToSinglePrimitiveOutput(BOOL bNew) { bForceToSinglePrimitiveOutput = bNew; }
+    sal_Bool IsForceToSinglePrimitiveOutput() const { return bForceToSinglePrimitiveOutput; }
+    void SetForceToSinglePrimitiveOutput(sal_Bool bNew) { bForceToSinglePrimitiveOutput = bNew; }
 
     // Typbestimmung
-    virtual UINT16 GetBase3DType();
+    virtual sal_uInt16 GetBase3DType();
 
     virtual void StartScene();
     virtual void EndScene();
 
     // Scissoring
-    virtual void SetScissorRegionPixel(const Rectangle& rRect, BOOL bActivate=TRUE);
-    virtual void ActivateScissorRegion(BOOL bNew);
+    virtual void SetScissorRegionPixel(const Rectangle& rRect, sal_Bool bActivate=sal_True);
+    virtual void ActivateScissorRegion(sal_Bool bNew);
 
     // Dithering
-    virtual void SetDither(BOOL bNew);
+    virtual void SetDither(sal_Bool bNew);
 
     // Farbe
     virtual void SetColor(Color aNew);
@@ -112,7 +111,7 @@ public:
     virtual void SetMaterial(Color rNew,
         Base3DMaterialValue=Base3DMaterialAmbient,
         Base3DMaterialMode=Base3DMaterialFrontAndBack);
-    virtual void SetShininess(UINT16 nExponent,
+    virtual void SetShininess(sal_uInt16 nExponent,
         Base3DMaterialMode=Base3DMaterialFrontAndBack);
 
     // Texturen
@@ -127,22 +126,22 @@ public:
 
     // PolygonOffset
     virtual void SetPolygonOffset(
-        Base3DPolygonOffset eNew=Base3DPolygonOffsetLine, BOOL bNew=FALSE);
+        Base3DPolygonOffset eNew=Base3DPolygonOffsetLine, sal_Bool bNew=sal_False);
 
     // Beleuchtung setzen/lesen
-    virtual void SetLightGroup(B3dLightGroup* pSet, BOOL bSetGlobal=TRUE);
+    virtual void SetLightGroup(B3dLightGroup* pSet, sal_Bool bSetGlobal=sal_True);
 
     virtual void SetRenderMode(Base3DRenderMode eNew,
         Base3DMaterialMode=Base3DMaterialFrontAndBack);
     virtual void SetShadeModel(Base3DShadeModel eNew);
     virtual void SetCullMode(Base3DCullMode eNew);
 
-    virtual void SetEdgeFlag(BOOL bNew=TRUE);
+    virtual void SetEdgeFlag(sal_Bool bNew=sal_True);
     virtual void SetPointSize(double fNew=1.0);
     virtual void SetLineWidth(double fNew=1.0);
 
     // Ein Objekt in Form einer B3dGeometry direkt ausgeben
-    virtual void DrawPolygonGeometry(B3dGeometry& rGeometry, BOOL bOutline=FALSE);
+    virtual void DrawPolygonGeometry(const B3dGeometry& rGeometry, sal_Bool bOutline=sal_False);
 
     // Callbacks bei Matrixaenderungen
     virtual void SetTransformationSet(B3dTransformationSet* pSet);
@@ -163,23 +162,23 @@ protected:
 
     // lokale Parameter des LightModels
     void SetGlobalAmbientLight(const Color rNew);
-    void SetLocalViewer(BOOL bNew=TRUE);
-    void SetModelTwoSide(BOOL bNew=FALSE);
+    void SetLocalViewer(sal_Bool bNew=sal_True);
+    void SetModelTwoSide(sal_Bool bNew=sal_False);
 
     // Hauptschalter fuer die Beleuchtung
-    void EnableLighting(BOOL bNew=TRUE);
+    void EnableLighting(sal_Bool bNew=sal_True);
 
     // Lichtquellen Interface
     void SetIntensity(const Color rNew,
         Base3DMaterialValue=Base3DMaterialAmbient,
         Base3DLightNumber=Base3DLight0);
-    void SetPosition(const Vector3D& rNew,
+    void SetPosition(const basegfx::B3DPoint& rNew,
         Base3DLightNumber=Base3DLight0);
-    void SetDirection(const Vector3D& rNew,
+    void SetDirection(const basegfx::B3DVector& rNew,
         Base3DLightNumber=Base3DLight0);
-    void SetSpotDirection(const Vector3D& rNew,
+    void SetSpotDirection(const basegfx::B3DVector& rNew,
         Base3DLightNumber=Base3DLight0);
-    void SetSpotExponent(UINT16 nNew,
+    void SetSpotExponent(sal_uInt16 nNew,
         Base3DLightNumber=Base3DLight0);
     void SetSpotCutoff(double fNew,
         Base3DLightNumber=Base3DLight0);
@@ -189,7 +188,7 @@ protected:
         Base3DLightNumber=Base3DLight0);
     void SetQuadraticAttenuation(double fNew,
         Base3DLightNumber=Base3DLight0);
-    void Enable(BOOL bNew=TRUE,
+    void Enable(sal_Bool bNew=sal_True,
         Base3DLightNumber=Base3DLight0);
 };
 
