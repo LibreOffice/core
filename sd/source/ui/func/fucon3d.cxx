@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fucon3d.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:47:12 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:27:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,6 @@
 #include <svx/cube3d.hxx>
 #include <svx/lathe3d.hxx>
 #include <svx/camera3d.hxx>
-#include <svx/xpoly.hxx>
 #include <svx/xoutx.hxx>
 
 #include "app.hrc"
@@ -96,6 +95,10 @@
 // #97016#
 #ifndef _E3D_POLYSC3D_HXX
 #include <svx/polysc3d.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #endif
 
 namespace sd {
@@ -153,8 +156,8 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
         {
             p3DObj = new E3dCubeObj(
                 pView->Get3DDefaultAttributes(),
-                Vector3D(-2500, -2500, -2500),
-                Vector3D(5000, 5000, 5000));
+                ::basegfx::B3DPoint(-2500, -2500, -2500),
+                ::basegfx::B3DVector(5000, 5000, 5000));
             break;
         }
 
@@ -162,8 +165,8 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
         {
             p3DObj = new E3dSphereObj(
                 pView->Get3DDefaultAttributes(),
-                Vector3D(0, 0, 0),
-                Vector3D(5000, 5000, 5000));
+                ::basegfx::B3DPoint(0, 0, 0),
+                ::basegfx::B3DVector(5000, 5000, 5000));
             break;
         }
 
@@ -172,8 +175,12 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
             XPolygon aXPoly(Point (0, 1250), 2500, 2500, 0, 900, FALSE);
             aXPoly.Scale(5.0, 5.0);
 
-//BFS09         p3DObj = new E3dLatheObj(pView->Get3DDefaultAttributes(),(XPolygon)XOutCreatePolygon (aXPoly, pWindow));
-            p3DObj = new E3dLatheObj(pView->Get3DDefaultAttributes(),(XPolygon)XOutCreatePolygon (aXPoly));
+            ::basegfx::B2DPolygon aB2DPolygon(aXPoly.getB2DPolygon());
+            if(aB2DPolygon.areControlVectorsUsed())
+            {
+                aB2DPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(aB2DPolygon);
+            }
+            p3DObj = new E3dLatheObj(pView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aB2DPolygon));
 
             // Dies ist ein offenes Objekt, muss daher defaultmaessig
             // doppelseitig behandelt werden
@@ -194,89 +201,98 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
             aXPoly.Insert(0, Point (250*5, 1250*5), XPOLY_NORMAL);
             aXPoly.Insert(0, Point (50*5, 1250*5), XPOLY_NORMAL);
             aXPoly.Insert(0, Point (0*5, 1250*5), XPOLY_NORMAL);
-//BFS09         p3DObj = new E3dLatheObj(pView->Get3DDefaultAttributes(),(XPolygon)XOutCreatePolygon (aXPoly, pWindow));
-            p3DObj = new E3dLatheObj(pView->Get3DDefaultAttributes(),(XPolygon)XOutCreatePolygon (aXPoly));
+
+            ::basegfx::B2DPolygon aB2DPolygon(aXPoly.getB2DPolygon());
+            if(aB2DPolygon.areControlVectorsUsed())
+            {
+                aB2DPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(aB2DPolygon);
+            }
+            p3DObj = new E3dLatheObj(pView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aB2DPolygon));
             break;
         }
 
         case SID_3D_TORUS:
         {
-//BFS09         p3DObj = new E3dLatheObj(pView->Get3DDefaultAttributes(),(XPolygon)XOutCreatePolygon(XPolygon (Point (1000, 0), 500, 500, 0, 3600), pWindow));
-            p3DObj = new E3dLatheObj(pView->Get3DDefaultAttributes(),(XPolygon)XOutCreatePolygon(XPolygon (Point (1000, 0), 500, 500, 0, 3600)));
+            ::basegfx::B2DPolygon aB2DPolygon(::basegfx::tools::createPolygonFromCircle(::basegfx::B2DPoint(1000.0, 0.0), 500.0));
+            if(aB2DPolygon.areControlVectorsUsed())
+            {
+                aB2DPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(aB2DPolygon);
+            }
+            p3DObj = new E3dLatheObj(pView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aB2DPolygon));
             break;
         }
 
         case SID_3D_CYLINDER:
         {
-            XPolygon aXPoly(16);
-            aXPoly[0] = Point(0, 1000*5);
-            aXPoly[1] = Point(50*5, 1000*5);
-            aXPoly[2] = Point(100*5, 1000*5);
-            aXPoly[3] = Point(200*5, 1000*5);
-            aXPoly[4] = Point(300*5, 1000*5);
-            aXPoly[5] = Point(400*5, 1000*5);
-            aXPoly[6] = Point(450*5, 1000*5);
-            aXPoly[7] = Point(500*5, 1000*5);
-            aXPoly[8] = Point(500*5, -1000*5);
-            aXPoly[9] = Point(450*5, -1000*5);
-            aXPoly[10] = Point(400*5, -1000*5);
-            aXPoly[11] = Point(300*5, -1000*5);
-            aXPoly[12] = Point(200*5, -1000*5);
-            aXPoly[13] = Point(100*5, -1000*5);
-            aXPoly[14] = Point(50*5, -1000*5);
-            aXPoly[15] = Point(0*5, -1000*5);
+            ::basegfx::B2DPolygon aInnerPoly;
 
-            p3DObj = new E3dLatheObj(
-                pView->Get3DDefaultAttributes(),
-                aXPoly);
+            aInnerPoly.append(::basegfx::B2DPoint(0, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(50*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(100*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(200*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(300*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(400*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(450*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(500*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(500*5, -1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(450*5, -1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(400*5, -1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(300*5, -1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(200*5, -1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(100*5, -1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(50*5, -1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(0*5, -1000*5));
+            aInnerPoly.setClosed(true);
+
+            p3DObj = new E3dLatheObj(pView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aInnerPoly));
             break;
         }
 
         case SID_3D_CONE:
         {
-            XPolygon aXPoly(14);
-            aXPoly[0] = Point(0, -1000*5);
-            aXPoly[1] = Point(25*5, -900*5);
-            aXPoly[2] = Point(50*5, -800*5);
-            aXPoly[3] = Point(100*5, -600*5);
-            aXPoly[4] = Point(200*5, -200*5);
-            aXPoly[5] = Point(300*5, 200*5);
-            aXPoly[6] = Point(400*5, 600*5);
-            aXPoly[7] = Point(500*5, 1000*5);
-            aXPoly[8] = Point(400*5, 1000*5);
-            aXPoly[9] = Point(300*5, 1000*5);
-            aXPoly[10] = Point(200*5, 1000*5);
-            aXPoly[11] = Point(100*5, 1000*5);
-            aXPoly[12] = Point(50*5, 1000*5);
-            aXPoly[13] = Point(0*5, 1000*5);
+            ::basegfx::B2DPolygon aInnerPoly;
 
-            p3DObj = new E3dLatheObj(
-                pView->Get3DDefaultAttributes(),
-                aXPoly);
+            aInnerPoly.append(::basegfx::B2DPoint(0, -1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(25*5, -900*5));
+            aInnerPoly.append(::basegfx::B2DPoint(50*5, -800*5));
+            aInnerPoly.append(::basegfx::B2DPoint(100*5, -600*5));
+            aInnerPoly.append(::basegfx::B2DPoint(200*5, -200*5));
+            aInnerPoly.append(::basegfx::B2DPoint(300*5, 200*5));
+            aInnerPoly.append(::basegfx::B2DPoint(400*5, 600*5));
+            aInnerPoly.append(::basegfx::B2DPoint(500*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(400*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(300*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(200*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(100*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(50*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(0*5, 1000*5));
+            aInnerPoly.setClosed(true);
+
+            p3DObj = new E3dLatheObj(pView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aInnerPoly));
             break;
         }
 
         case SID_3D_PYRAMID:
         {
-            XPolygon aXPoly(14);
-            aXPoly[0] = Point(0, -1000*5);
-            aXPoly[1] = Point(25*5, -900*5);
-            aXPoly[2] = Point(50*5, -800*5);
-            aXPoly[3] = Point(100*5, -600*5);
-            aXPoly[4] = Point(200*5, -200*5);
-            aXPoly[5] = Point(300*5, 200*5);
-            aXPoly[6] = Point(400*5, 600*5);
-            aXPoly[7] = Point(500*5, 1000*5);
-            aXPoly[8] = Point(400*5, 1000*5);
-            aXPoly[9] = Point(300*5, 1000*5);
-            aXPoly[10] = Point(200*5, 1000*5);
-            aXPoly[11] = Point(100*5, 1000*5);
-            aXPoly[12] = Point(50*5, 1000*5);
-            aXPoly[13] = Point(0, 1000*5);
+            ::basegfx::B2DPolygon aInnerPoly;
 
-            p3DObj = new E3dLatheObj(
-                pView->Get3DDefaultAttributes(),
-                aXPoly);
+            aInnerPoly.append(::basegfx::B2DPoint(0, -1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(25*5, -900*5));
+            aInnerPoly.append(::basegfx::B2DPoint(50*5, -800*5));
+            aInnerPoly.append(::basegfx::B2DPoint(100*5, -600*5));
+            aInnerPoly.append(::basegfx::B2DPoint(200*5, -200*5));
+            aInnerPoly.append(::basegfx::B2DPoint(300*5, 200*5));
+            aInnerPoly.append(::basegfx::B2DPoint(400*5, 600*5));
+            aInnerPoly.append(::basegfx::B2DPoint(500*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(400*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(300*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(200*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(100*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(50*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(0, 1000*5));
+            aInnerPoly.setClosed(true);
+
+            p3DObj = new E3dLatheObj(pView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aInnerPoly));
             p3DObj->SetMergedItem(Svx3DHorizontalSegmentsItem(4));
             break;
         }
@@ -293,15 +309,12 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dS
     // get transformed BoundVolume of the new object
     Volume3D aBoundVol;
     const Volume3D& rObjVol = p3DObj->GetBoundVolume();
-    const Matrix4D& rObjTrans  = p3DObj->GetTransform();
-    aBoundVol.Union(rObjVol.GetTransformVolume(rObjTrans));
+    const ::basegfx::B3DHomMatrix& rObjTrans  = p3DObj->GetTransform();
+    aBoundVol.expand(rObjVol.GetTransformVolume(rObjTrans));
+    double fDeepth(aBoundVol.getDepth());
 
-    Vector3D aMinVec (aBoundVol.MinVec ());
-    Vector3D aMaxVec (aBoundVol.MaxVec ());
-    double fDeepth = fabs (aMaxVec.Z () - aMinVec.Z ());
-
-    aCamera.SetPRP(Vector3D(0, 0, 1000));
-    aCamera.SetPosition(Vector3D(0.0, 0.0, pView->GetDefaultCamPosZ() + fDeepth / 2));
+    aCamera.SetPRP(::basegfx::B3DPoint(0.0, 0.0, 1000.0));
+    aCamera.SetPosition(::basegfx::B3DPoint(0.0, 0.0, pView->GetDefaultCamPosZ() + fDeepth / 2));
     aCamera.SetFocalLength(pView->GetDefaultCamFocal());
     pScene->SetCamera(aCamera);
 
@@ -347,27 +360,6 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dS
         break;
     }
 
-//BFS02 if (nSlotId == SID_3D_SPHERE)
-//BFS02 {
-//BFS02     // Keine Sortierung noetig
-//BFS02     pScene->SetSortingMode(E3D_SORT_NO_SORTING);
-//BFS02 }
-//BFS02 else if (nSlotId == SID_3D_CYLINDER)
-//BFS02 {
-//BFS02     // Das muss auch ohne aufwendige Sortierung gehen!
-//BFS02     // Ersteinaml jedoch: Sortierung ueber Lookupfield
-//BFS02     pScene->SetSortingMode(E3D_SORT_LOOKUP_FIELD |
-//BFS02                            E3D_SORT_IN_PARENTS   |
-//BFS02                            E3D_SORT_TEST_LENGTH);
-//BFS02 }
-//BFS02 else
-//BFS02 {
-//BFS02     // Einfache Sortierung
-//BFS02     pScene->SetSortingMode(E3D_SORT_FAST_SORTING |
-//BFS02                            E3D_SORT_IN_PARENTS   |
-//BFS02                            E3D_SORT_TEST_LENGTH);
-//BFS02 }
-
     pScene->FitSnapRectToBoundVol();
 
     SfxItemSet aAttr (pViewShell->GetPool());
@@ -391,14 +383,11 @@ BOOL FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
 
         // #97016#
         p3DObj = ImpCreateBasic3DShape();
-
-        pView->SetCurrent3DObj(p3DObj);
-        E3dScene *pScene   = (E3dScene*) pView->GetCurrentLibObj();
+        E3dScene* pScene = pView->SetCurrent3DObj(p3DObj);
 
         // #97016#
         ImpPrepareBasic3DShape(p3DObj, pScene);
-
-        bReturn = pView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
+        bReturn = pView->BegCreatePreparedObject(aPnt, nDrgLog, pScene);
 
         SdrObject* pObj = pView->GetCreateObj();
 
@@ -508,31 +497,29 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
     // E3dView::SetCurrent3DObj part
     // get transformed BoundVolume of the object
     const Volume3D& rObjVol = p3DObj->GetBoundVolume();
-    const Matrix4D& rObjTrans = p3DObj->GetTransform();
-    Volume3D aVolume;
-    aVolume.Union(rObjVol.GetTransformVolume(rObjTrans));
-    double fW(aVolume.GetWidth());
-    double fH(aVolume.GetHeight());
+    const ::basegfx::B3DHomMatrix& rObjTrans = p3DObj->GetTransform();
+    Volume3D aVolume(rObjVol.GetTransformVolume(rObjTrans));
+    double fW(aVolume.getWidth());
+    double fH(aVolume.getHeight());
     Rectangle a3DRect(0, 0, (long)fW, (long)fH);
     E3dScene* pScene = new E3dPolyScene(pView->Get3DDefaultAttributes());
 
     // pView->InitScene(pScene, fW, fH, aVolume.MaxVec().Z() + ((fW + fH) / 4.0));
     // copied code from E3dView::InitScene
-    double fCamZ(aVolume.MaxVec().Z() + ((fW + fH) / 4.0));
+    double fCamZ(aVolume.getMaxZ() + ((fW + fH) / 4.0));
     Camera3D aCam(pScene->GetCamera());
     aCam.SetAutoAdjustProjection(FALSE);
     aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
-    Vector3D aLookAt;
+    ::basegfx::B3DPoint aLookAt;
     double fDefaultCamPosZ = pView->GetDefaultCamPosZ();
-    Vector3D aCamPos(0.0, 0.0, fCamZ < fDefaultCamPosZ ? fDefaultCamPosZ : fCamZ);
+    ::basegfx::B3DPoint aCamPos(0.0, 0.0, fCamZ < fDefaultCamPosZ ? fDefaultCamPosZ : fCamZ);
     aCam.SetPosAndLookAt(aCamPos, aLookAt);
     aCam.SetFocalLength(pView->GetDefaultCamFocal());
-    aCam.SetDefaults(Vector3D(0.0, 0.0, fDefaultCamPosZ), aLookAt, pView->GetDefaultCamFocal());
+    aCam.SetDefaults(::basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt, pView->GetDefaultCamFocal());
     pScene->SetCamera(aCam);
 
     pScene->Insert3DObj(p3DObj);
     pScene->NbcSetSnapRect(a3DRect);
-    // SetCurrentLibObj(pScene);
     pScene->SetModel(pDoc);
 
     ImpPrepareBasic3DShape(p3DObj, pScene);
