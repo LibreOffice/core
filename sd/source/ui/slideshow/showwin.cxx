@@ -4,9 +4,9 @@
  *
  *  $RCSfile: showwin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:02:26 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:34:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,9 @@
 #include "helpids.h"
 #include "strings.hrc"
 
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
 
 namespace sd {
 
@@ -423,7 +426,7 @@ BOOL ShowWindow::SetEndMode()
 {
     if( ( SHOWWINDOWMODE_NORMAL == meShowWindowMode ) && mpViewShell && mpViewShell->GetView() )
     {
-        mpViewShell->GetView()->DelWin( this );
+        mpViewShell->GetView()->DeleteWindowFromPaintView( this );
         meShowWindowMode = SHOWWINDOWMODE_END;
 //      maShowBackground = GetBackground();
 //      SetBackground( Wallpaper( Color( COL_BLACK ) ) );
@@ -452,7 +455,7 @@ BOOL ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout
     }
     else if( ( SHOWWINDOWMODE_NORMAL == meShowWindowMode ) && mpViewShell && mpViewShell->GetView() )
     {
-        mpViewShell->GetView()->DelWin( this );
+        mpViewShell->GetView()->DeleteWindowFromPaintView( this );
         mnPauseTimeout = nTimeout;
         mnRestartPageIndex = nPageIndexToRestart;
         meShowWindowMode = SHOWWINDOWMODE_PAUSE;
@@ -485,7 +488,7 @@ BOOL ShowWindow::SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlan
 {
     if( ( SHOWWINDOWMODE_NORMAL == meShowWindowMode ) && mpViewShell && mpViewShell->GetView() )
     {
-        mpViewShell->GetView()->DelWin( this );
+        mpViewShell->GetView()->DeleteWindowFromPaintView( this );
         mnRestartPageIndex = nPageIndexToRestart;
         meShowWindowMode = SHOWWINDOWMODE_BLANK;
 //      maShowBackground = GetBackground();
@@ -569,7 +572,7 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
         if( pSlideShow )
         {
             if( mpViewShell->GetView() )
-                mpViewShell->GetView()->AddWin( this );
+                mpViewShell->GetView()->AddWindowToPaintView( this );
 
             if( SHOWWINDOWMODE_BLANK == eOldShowWindowMode )
             {
