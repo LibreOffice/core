@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:38:06 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:36:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,14 +102,19 @@
 #include <rtl/math.hxx>
 #endif
 
-#ifndef _XPOLY_HXX
-#include <svx/xpoly.hxx>
-#endif
 #ifndef _SVDOCIRC_HXX
 #include <svx/svdocirc.hxx>
 #endif
 #ifndef _SVDOPATH_HXX
 #include <svx/svdopath.hxx>
+#endif
+
+#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
+#include <basegfx/vector/b2dvector.hxx>
+#endif
+
+#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
+#include <basegfx/matrix/b3dhommatrix.hxx>
 #endif
 
 #include <algorithm>
@@ -554,8 +559,8 @@ uno::Reference<drawing::XShape>
 
             //Matrix for position
             {
-                Matrix4D aM4;
-                aM4.Translate(rGeometry.m_aPosition.PositionX
+                ::basegfx::B3DHomMatrix aM4;
+                aM4.translate(rGeometry.m_aPosition.PositionX
                             , rGeometry.m_aPosition.PositionY
                             , rGeometry.m_aPosition.PositionZ - (fDepth/2.0));
                 drawing::HomogenMatrix aHM = Matrix4DToHomogenMatrix(aM4);
@@ -659,14 +664,14 @@ uno::Reference<drawing::XShape>
 
             //Matrix for position
             {
-                Matrix4D aM4;
+                ::basegfx::B3DHomMatrix aM4;
                 //if(ntest%2) //llllllllllllllllllll
                 //aM4.RotateY( fYRotateAnglePi );
 
                 // Note: Uncomment the following to let the objects grow in z
                 // direction to fill the diagram
 //                 aM4.ScaleZ(rGeometry.m_aSize.DirectionZ/rGeometry.m_aSize.DirectionX);
-                aM4.Translate(rGeometry.m_aPosition.PositionX, rGeometry.m_aPosition.PositionY, rGeometry.m_aPosition.PositionZ);
+                aM4.translate(rGeometry.m_aPosition.PositionX, rGeometry.m_aPosition.PositionY, rGeometry.m_aPosition.PositionZ);
                 drawing::HomogenMatrix aHM = Matrix4DToHomogenMatrix(aM4);
                 xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                     , uno::makeAny(aHM) );
@@ -713,7 +718,7 @@ void appendBezierCoords( drawing::PolyPolygonBezierCoords& rReturn, const drawin
 
 drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
         double fAngleRadian
-        , const Matrix3D& rTransformationFromUnitCircle )
+        , const ::basegfx::B2DHomMatrix& rTransformationFromUnitCircle )
 {
     //at least one polygon is created using two normal and two control points
     //if the angle is larger it is separated into multiple sub angles
@@ -735,8 +740,8 @@ drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
 
     //
 
-    Vector2D P0,P1,P2,P3;
-    Vector2D POrigin = rTransformationFromUnitCircle*Vector2D(0,0);
+    ::basegfx::B2DVector P0,P1,P2,P3;
+    ::basegfx::B2DVector POrigin = rTransformationFromUnitCircle * ::basegfx::B2DVector(0.0, 0.0);
 
     sal_Int32 nPoint=0;
     for(sal_Int32 nSegment=0; nSegment<nSegmentCount; nSegment++)
@@ -749,16 +754,18 @@ drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
         //first create untransformed points for a unit circle arc:
         const double fCos = cos(fCurrentSegmentAngle/2.0);
         const double fSin = sin(fCurrentSegmentAngle/2.0);
-        P0.X() = P3.X() = fCos;
-        P0.Y() = -fSin;
-        P3.Y() = -P0.Y();
+        P0.setX(fCos);
+        P3.setX(fCos);
+        P0.setY(-fSin);
+        P3.setY(-P0.getY());
 
-        P1.X() = P2.X() = (4.0-fCos)/3.0;
-        P1.Y() = (1.0-fCos)*(fCos-3.0)/(3.0*fSin);
-        P2.Y() = -P1.Y();
+        P1.setX((4.0-fCos)/3.0);
+        P2.setX(P1.getX());
+        P1.setY((1.0-fCos)*(fCos-3.0)/(3.0*fSin));
+        P2.setY(-P1.getY());
         //transform thus startangle equals NULL
-        Matrix3D aStart;
-        aStart.Rotate(fCurrentSegmentAngle/2.0 + nSegment*fSmallAngleRadian);
+        ::basegfx::B2DHomMatrix aStart;
+        aStart.rotate(fCurrentSegmentAngle/2.0 + nSegment*fSmallAngleRadian);
 
         //apply given transformation to get final points
         P0 = rTransformationFromUnitCircle*(aStart*P0);
@@ -766,22 +773,22 @@ drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
         P2 = rTransformationFromUnitCircle*(aStart*P2);
         P3 = rTransformationFromUnitCircle*(aStart*P3);
 
-        aPoints[nPoint].X = static_cast< sal_Int32 >( P0.X());
-        aPoints[nPoint].Y = static_cast< sal_Int32 >( P0.Y());
+        aPoints[nPoint].X = static_cast< sal_Int32 >( P0.getX());
+        aPoints[nPoint].Y = static_cast< sal_Int32 >( P0.getY());
         aFlags [nPoint++] = drawing::PolygonFlags_NORMAL;
 
-        aPoints[nPoint].X = static_cast< sal_Int32 >( P1.X());
-        aPoints[nPoint].Y = static_cast< sal_Int32 >( P1.Y());
+        aPoints[nPoint].X = static_cast< sal_Int32 >( P1.getX());
+        aPoints[nPoint].Y = static_cast< sal_Int32 >( P1.getY());
         aFlags[nPoint++] = drawing::PolygonFlags_CONTROL;
 
-        aPoints[nPoint].X = static_cast< sal_Int32 >( P2.X());
-        aPoints[nPoint].Y = static_cast< sal_Int32 >( P2.Y());
+        aPoints[nPoint].X = static_cast< sal_Int32 >( P2.getX());
+        aPoints[nPoint].Y = static_cast< sal_Int32 >( P2.getY());
         aFlags [nPoint++] = drawing::PolygonFlags_CONTROL;
 
         if(nSegment==(nSegmentCount-1))
         {
-            aPoints[nPoint].X = static_cast< sal_Int32 >( P3.X());
-            aPoints[nPoint].Y = static_cast< sal_Int32 >( P3.Y());
+            aPoints[nPoint].X = static_cast< sal_Int32 >( P3.getX());
+            aPoints[nPoint].Y = static_cast< sal_Int32 >( P3.getY());
             aFlags [nPoint++] = drawing::PolygonFlags_NORMAL;
         }
     }
@@ -805,23 +812,19 @@ drawing::PolyPolygonBezierCoords getRingBezierCoords(
     aReturn.Coordinates = drawing::PointSequenceSequence(1);
     aReturn.Flags       = drawing::FlagSequenceSequence(1);
 
-    Matrix3D aTransformationFromUnitCircle_Outer;
-    aTransformationFromUnitCircle_Outer.Rotate(fStartAngleRadian);
-    aTransformationFromUnitCircle_Outer.ScaleX(fOuterXRadius);
-    aTransformationFromUnitCircle_Outer.ScaleY(fOuterYRadius);
-    aTransformationFromUnitCircle_Outer.TranslateX(fPosX);
-    aTransformationFromUnitCircle_Outer.TranslateY(fPosY);
+    ::basegfx::B2DHomMatrix aTransformationFromUnitCircle_Outer;
+    aTransformationFromUnitCircle_Outer.rotate(fStartAngleRadian);
+    aTransformationFromUnitCircle_Outer.scale(fOuterXRadius, fOuterYRadius);
+    aTransformationFromUnitCircle_Outer.translate(fPosX, fPosY);
 
     drawing::PolyPolygonBezierCoords aOuterArc = getCircularArcBezierCoords( fWidthAngleRadian, aTransformationFromUnitCircle_Outer );
     aReturn.Coordinates[0] = aOuterArc.Coordinates[0];
     aReturn.Flags[0] = aOuterArc.Flags[0];
 
-    Matrix3D aTransformationFromUnitCircle_Inner;
-    aTransformationFromUnitCircle_Inner.Rotate(fStartAngleRadian);
-    aTransformationFromUnitCircle_Inner.ScaleX(fInnerXRadius);
-    aTransformationFromUnitCircle_Inner.ScaleY(fInnerXRadius*fOuterYRadius/fOuterXRadius);
-    aTransformationFromUnitCircle_Inner.TranslateX(fPosX);
-    aTransformationFromUnitCircle_Inner.TranslateY(fPosY);
+    ::basegfx::B2DHomMatrix aTransformationFromUnitCircle_Inner;
+    aTransformationFromUnitCircle_Inner.rotate(fStartAngleRadian);
+    aTransformationFromUnitCircle_Inner.scale(fInnerXRadius, fInnerXRadius*fOuterYRadius/fOuterXRadius);
+    aTransformationFromUnitCircle_Inner.translate(fPosX, fPosY);
 
     drawing::PolyPolygonBezierCoords aInnerArc = getCircularArcBezierCoords( fWidthAngleRadian, aTransformationFromUnitCircle_Inner );
     appendBezierCoords( aReturn, aInnerArc, sal_True );
@@ -915,10 +918,10 @@ uno::Reference< drawing::XShape >
 
             //Matrix for position
             {
-                Matrix4D aM4;
-                aM4.ScaleZ(fOuterYRadius/fOuterXRadius);
-                aM4.RotateY( ZDIRECTION*fStartAngleDegree*F_PI/180.0 );
-                aM4.Translate(rOrigin.PositionX, rOrigin.PositionZ, rOrigin.PositionY);
+                ::basegfx::B3DHomMatrix aM4;
+                aM4.scale(1.0, 1.0, fOuterYRadius/fOuterXRadius);
+                aM4.rotate( 0.0, ZDIRECTION*fStartAngleDegree*F_PI/180.0, 0.0 );
+                aM4.translate(rOrigin.PositionX, rOrigin.PositionZ, rOrigin.PositionY);
                 drawing::HomogenMatrix aHM = Matrix4DToHomogenMatrix(aM4);
                 xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                     , uno::makeAny(aHM) );
@@ -1429,7 +1432,7 @@ uno::Reference< drawing::XShapes >
         {
             try
             {
-                Matrix4D aM4;
+                ::basegfx::B3DHomMatrix aM4;
                 xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                     , uno::makeAny(Matrix4DToHomogenMatrix(aM4)) );
             }
@@ -1700,13 +1703,13 @@ uno::Reference< drawing::XShape > ShapeFactory::createErrorBar2D(
 
 uno::Any ShapeFactory::makeTransformation( const awt::Point& rScreenPosition2D, double fRotationAnglePi )
 {
-    Matrix3D aM3;
+    ::basegfx::B2DHomMatrix aM3;
     //As autogrow is active the rectangle is automatically expanded to that side
     //to which the text is not adjusted.
-    aM3.Scale( 1, 1 );
-    aM3.Rotate( fRotationAnglePi );
-    aM3.Translate( rScreenPosition2D.X, rScreenPosition2D.Y );
-    uno::Any aATransformation = uno::makeAny( Matrix3DToHomogenMatrix3(aM3) );
+    // aM3.scale( 1, 1 ); Oops? A scale with this parameters is neutral, line commented out
+    aM3.rotate( fRotationAnglePi );
+    aM3.translate( rScreenPosition2D.X, rScreenPosition2D.Y );
+    uno::Any aATransformation = uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM3) );
     return aATransformation;
 }
 
