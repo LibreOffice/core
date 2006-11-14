@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoimp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:26:35 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:27:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,9 +75,9 @@
 #include "xpoly.hxx"
 #endif
 
-#ifndef _POLY3D_HXX
-#include "poly3d.hxx"
-#endif
+//#ifndef _POLY3D_HXX
+//#include "poly3d.hxx"
+//#endif
 
 #ifndef _XENUM_HXX
 #include "xenum.hxx"
@@ -91,8 +91,8 @@
 #include "rectenum.hxx"
 #endif
 
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
-#include <basegfx/polygon/b2dpolygon.hxx>
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #endif
 
 class SdrObject;
@@ -100,6 +100,7 @@ class XOutputDevice;
 class XFillAttrSetItem;
 class XLineAttrSetItem;
 class SfxItemSet;
+class Bitmap;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -177,27 +178,19 @@ void ImpCalcBmpFillSizes( Size&            rStartOffset,
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// ImpCreateDotDashArray takes a XDash and translates it into an array of doubles
-// which describe the lengths of the dashes, dots and empty passages. It returns
-// the complete length of a full DashDot sequence and fills the given vetor of
-// doubles accordingly (also resizing it).
-
-double ImpCreateDotDashArray(::std::vector< double >& rDotDashArray, const XDash& mrDash, sal_Int32 nLineWidth);
-
-///////////////////////////////////////////////////////////////////////////////
 
 class ImpLineStyleParameterPack
 {
     XLineJoint                      meLineJoint;
-    ::basegfx::B2DPolygon           maStartPolygon;
-    ::basegfx::B2DPolygon           maEndPolygon;
+    basegfx::B2DPolyPolygon     maStartPolyPolygon;
+    basegfx::B2DPolyPolygon     maEndPolyPolygon;
 
     sal_Int32                       mnLineWidth;
     sal_Int32                       mnStartWidth;
     sal_Int32                       mnEndWidth;
 
     ::std::vector<double>           maDotDashArray;
-    double                          mfFullDashDotLen;
+    double                          mfFullDotDashLen;
     double                          mfDegreeStepWidth;
 
     // bitfield
@@ -221,22 +214,22 @@ public:
     sal_Int32 GetStartWidth() const { return mnStartWidth; }
     sal_Int32 GetEndWidth() const { return mnEndWidth; }
 
-    const ::basegfx::B2DPolygon& GetStartPolygon() const { return maStartPolygon; }
-    const ::basegfx::B2DPolygon& GetEndPolygon() const { return maEndPolygon; }
+    const basegfx::B2DPolyPolygon& GetStartPolyPolygon() const { return maStartPolyPolygon; }
+    const basegfx::B2DPolyPolygon& GetEndPolyPolygon() const { return maEndPolyPolygon; }
 
     double GetDegreeStepWidth() const { return mfDegreeStepWidth; }
 
     XLineJoint GetLineJoint() const { return meLineJoint; }
     double GetLinejointMiterMinimumAngle() const { return 15.0; }
 
-    double GetFullDashDotLen() const { return mfFullDashDotLen; }
+    double GetFullDotDashLen() const { return mfFullDotDashLen; }
     const ::std::vector< double >& GetDotDash() const { return maDotDashArray; }
 
     bool IsStartCentered() const { return mbStartCentered; }
     bool IsEndCentered() const { return mbEndCentered; }
 
-    bool IsStartActive() const { return (!mbForceNoArrowsLeft && maStartPolygon.count() && GetStartWidth()); }
-    bool IsEndActive() const { return (!mbForceNoArrowsRight && maEndPolygon.count() && GetEndWidth()); }
+    bool IsStartActive() const;
+    bool IsEndActive() const;
 
     void ForceNoArrowsLeft(bool bNew) { mbForceNoArrowsLeft = bNew; }
     void ForceNoArrowsRight(bool bNew) { mbForceNoArrowsRight = bNew; }
@@ -247,8 +240,8 @@ public:
 class ImpLineGeometryCreator
 {
     const ImpLineStyleParameterPack&        mrLineAttr;
-    ::basegfx::B2DPolyPolygon&              maAreaPolyPolygon;
-    ::basegfx::B2DPolyPolygon&              maLinePolyPolygon;
+    basegfx::B2DPolyPolygon&                maAreaPolyPolygon;
+    basegfx::B2DPolyPolygon&                maLinePolyPolygon;
 
     // bitfield
     unsigned                                mbLineDraft : 1;
@@ -256,13 +249,13 @@ class ImpLineGeometryCreator
     // private support functions
     // help functions for line geometry creation
     void ImpCreateLineGeometry(
-        const ::basegfx::B2DPolygon& rSourcePoly);
+        const basegfx::B2DPolygon& rSourcePoly);
 
 public:
     ImpLineGeometryCreator(
         const ImpLineStyleParameterPack& rAttr,
-        ::basegfx::B2DPolyPolygon& rPoPo,
-        ::basegfx::B2DPolyPolygon& rPoLi,
+        basegfx::B2DPolyPolygon& rPoPo,
+        basegfx::B2DPolyPolygon& rPoLi,
         bool bIsLineDraft = false)
     :   mrLineAttr(rAttr),
         maAreaPolyPolygon(rPoPo),
@@ -271,17 +264,17 @@ public:
     {
     }
 
-    void AddPolygon(const ::basegfx::B2DPolygon& rPoly) { ImpCreateLineGeometry(rPoly); }
-    const ::basegfx::B2DPolyPolygon& GetAreaPolyPolygon() const { return maAreaPolyPolygon; }
-    const ::basegfx::B2DPolyPolygon& GetLinePolyPolygon() const { return maLinePolyPolygon; }
+    void AddPolygon(const basegfx::B2DPolygon& rPoly) { ImpCreateLineGeometry(rPoly); }
+    const basegfx::B2DPolyPolygon& GetAreaPolyPolygon() const { return maAreaPolyPolygon; }
+    const basegfx::B2DPolyPolygon& GetLinePolyPolygon() const { return maLinePolyPolygon; }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SdrLineGeometry
 {
-    ::basegfx::B2DPolyPolygon               maAreaPolyPolygon;
-    ::basegfx::B2DPolyPolygon               maLinePolyPolygon;
+    basegfx::B2DPolyPolygon             maAreaPolyPolygon;
+    basegfx::B2DPolyPolygon             maLinePolyPolygon;
     ImpLineStyleParameterPack               maLineAttr;
 
     // bitfield
@@ -290,8 +283,8 @@ class SdrLineGeometry
 
 public:
     SdrLineGeometry(
-        const ::basegfx::B2DPolyPolygon& rAreaPolyPolygon,
-        const ::basegfx::B2DPolyPolygon& rLinePolyPolygon,
+        const basegfx::B2DPolyPolygon& rAreaPolyPolygon,
+        const basegfx::B2DPolyPolygon& rLinePolyPolygon,
         const ImpLineStyleParameterPack& rLineAttr,
         bool bForceOnePixel,
         bool bForceTwoPixel)
@@ -302,8 +295,8 @@ public:
         mbForceTwoPixel(bForceTwoPixel)
     {}
 
-    const ::basegfx::B2DPolyPolygon& GetAreaPolyPolygon() { return maAreaPolyPolygon; }
-    const ::basegfx::B2DPolyPolygon& GetLinePolyPolygon() { return maLinePolyPolygon; }
+    const basegfx::B2DPolyPolygon& GetAreaPolyPolygon() { return maAreaPolyPolygon; }
+    const basegfx::B2DPolyPolygon& GetLinePolyPolygon() { return maLinePolyPolygon; }
     const ImpLineStyleParameterPack& GetLineAttr() { return maLineAttr; }
     bool DoForceOnePixel() const { return mbForceOnePixel; }
     bool DoForceTwoPixel() const { return mbForceTwoPixel; }
