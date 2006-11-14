@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:20:02 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:41:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1965,7 +1965,7 @@ sal_Bool SdrPowerPointOLEDecompress( SvStream& rOutput, SvStream& rInput, sal_uI
     aZCodec.BeginCompression();
     SvMemoryStream aSource( pBuf, nInputSize, STREAM_READ );
     aZCodec.Decompress( aSource, rOutput );
-    sal_Bool bSuccess = aZCodec.EndCompression() != 0;
+    const sal_Bool bSuccess(0L != aZCodec.EndCompression());
     delete[] pBuf;
     rInput.Seek( nOldPos );
     return bSuccess;
