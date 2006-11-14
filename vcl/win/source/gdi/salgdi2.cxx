@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:45:05 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:27:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -582,6 +582,48 @@ void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
         DeleteObject( hMemBitmap );
         DeleteObject( hMaskBitmap );
     }
+}
+
+// -----------------------------------------------------------------------
+
+bool WinSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
+                      const SalBitmap&  rSrcBitmap,
+                      const SalBitmap&  rAlphaBmp )
+{
+    (void)rTR; (void)rSrcBitmap; (void)rAlphaBmp;
+
+    // TODO(P3): implement alpha bmp blits. Catch: Windows only
+    // handles 32bpp, premultiplied bitmaps
+    return false;
+}
+
+// -----------------------------------------------------------------------
+
+bool WinSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
+                                    long nHeight, sal_uInt8 nTransparency )
+{
+    if( mbPen || !mbBrush || mbXORMode )
+        return false; // can only perform solid fills without XOR.
+
+    HDC hMemDC = ImplGetCachedDC( CACHED_HDC_1, 0 );
+    SetPixel( hMemDC, (int)0, (int)0, mnBrushColor );
+
+    BLENDFUNCTION aFunc = {
+        AC_SRC_OVER,
+        0,
+        255 - 255L*nTransparency/100,
+        0
+    };
+
+    // hMemDC contains a 1x1 bitmap of the right color - stretch-blit
+    // that to dest hdc
+    bool bRet = AlphaBlend( mhDC, nX, nY, nWidth, nHeight,
+                            hMemDC, 0,0,1,1,
+                            aFunc ) == TRUE;
+
+    ImplReleaseCachedDC( CACHED_HDC_1 );
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
