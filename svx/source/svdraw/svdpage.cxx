@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:15:03 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:48:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -403,7 +403,6 @@ void SdrObjList::InsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason
         {
             // only repaint here
             pOwnerObj->ActionChanged();
-            // pOwnerObj->BroadcastObjectChange();
         }
 
         if(pModel)
@@ -480,7 +479,6 @@ SdrObject* SdrObjList::RemoveObject(ULONG nObjNum)
         {
             // only repaint here
             pOwnerObj->ActionChanged();
-            // pOwnerObj->BroadcastObjectChange();
         }
     }
     return pObj;
@@ -722,29 +720,6 @@ void SdrObjList::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
     }
 }
 
-//BFS01void SdrObjList::RemoveNotPersistentObjects(FASTBOOL bNoBroadcast)
-//BFS01{
-//BFS01 FASTBOOL bNoOLE=pModel!=NULL && pModel->IsStreamingSdrModel();
-//BFS01 ULONG nObjAnz=GetObjCount();
-//BFS01 for (ULONG nObjNum=nObjAnz; nObjNum>0;) {
-//BFS01     nObjNum--;
-//BFS01     SdrObject* pObj=GetObj(nObjNum);
-//BFS01     FASTBOOL bThisObjNot=pObj->IsNotPersistent();
-//BFS01     if (!bThisObjNot && bNoOLE && pObj->ISA(SdrOle2Obj)) {
-//BFS01         bThisObjNot=TRUE;
-//BFS01     }
-//BFS01     if (bThisObjNot) {
-//BFS01         if (bNoBroadcast) NbcRemoveObject(nObjNum);
-//BFS01         else RemoveObject(nObjNum);
-//BFS01     } else {
-//BFS01         SdrObjList* pOL=pObj->GetSubList();
-//BFS01         if (pOL!=NULL) {
-//BFS01             pOL->RemoveNotPersistentObjects(bNoBroadcast);
-//BFS01         }
-//BFS01     }
-//BFS01 }
-//BFS01}
-
 FASTBOOL SdrObjList::ImpGetFillColor(SdrObject* pObj, Color& rCol) const
 {
     return GetDraftFillColor(pObj->GetMergedItemSet(), rCol);
@@ -831,176 +806,6 @@ void SdrObjList::ForceSwapOutObjects() const
         }
     }
 }
-
-//BFS01void SdrObjList::Save(SvStream& rOut) const
-//BFS01{
-//BFS01 FASTBOOL bNotPersist=pPage!=NULL && pPage->IsObjectsNotPersistent();
-//BFS01 FASTBOOL bNoOLE=pModel!=NULL && pModel->IsStreamingSdrModel();
-//BFS01 if (!bNotPersist) {
-//BFS01     SdrObjListIter aIter(*this,IM_FLAT);
-//BFS01     while (aIter.IsMore()) {
-//BFS01         SdrObject* pObj=aIter.Next();
-//BFS01         FASTBOOL bThisObjNot=pObj->IsNotPersistent();
-//BFS01         if (!bThisObjNot && bNoOLE && pObj->ISA(SdrOle2Obj)) {
-//BFS01             bThisObjNot=TRUE;
-//BFS01         }
-//BFS01         if (!bThisObjNot) rOut<<*pObj;
-//BFS01         if (pModel!=NULL) pModel->IncProgress();
-//BFS01     }
-//BFS01 }
-//BFS01 SdrIOHeader(rOut,STREAM_WRITE,SdrIOEndeID); // Endemarke
-//BFS01}
-
-//BFS01void SdrObjList::Load(SvStream& rIn, SdrPage& rPage)
-//BFS01{
-//BFS01 Clear();
-//BFS01
-//BFS01 if (rIn.GetError()!=0)
-//BFS01     return;
-//BFS01
-//BFS01 SdrInsertReason aReason(SDRREASON_STREAMING);
-//BFS01 FASTBOOL        bEnde=FALSE;
-//BFS01
-//BFS01 while( rIn.GetError()==0 && !rIn.IsEof() && !bEnde )
-//BFS01 {
-//BFS01     SdrObjIOHeaderLookAhead aHead(rIn,STREAM_READ);
-//BFS01
-//BFS01     if (!aHead.IsEnde())
-//BFS01     {
-//BFS01         SdrObject* pObj=SdrObjFactory::MakeNewObject(aHead.nInventor,aHead.nIdentifier,&rPage);
-//BFS01
-//BFS01         if( pObj!=NULL )
-//BFS01         {
-//BFS01             rIn >> *pObj;
-//BFS01
-//BFS01#ifndef SVX_LIGHT
-//BFS01             if( ( pObj->GetObjIdentifier() == OBJ_OLE2 ) && ( pObj->GetObjInventor() == SdrInventor ) )
-//BFS01             {
-//BFS01                 // convert StarImage OLE objects to normal graphic objects
-//BFS01                 SdrOle2Obj* pOLEObj = (SdrOle2Obj*) pObj;
-//BFS01                 BOOL        bImageOLE = FALSE;
-//BFS01
-//BFS01                 if( pOLEObj->GetProgName() == String( RTL_CONSTASCII_USTRINGPARAM( "StarImage" ) ) )
-//BFS01                     bImageOLE = TRUE;
-//BFS01                 else if( pModel->GetPersist() )
-//BFS01                 {
-//BFS01                     SvInfoObjectRef     xInfo( pModel->GetPersist()->Find( pOLEObj->GetPersistName() ) );
-//BFS01                     const SvGlobalName  aSim30Name( SO3_SIM_CLASSID_30 );
-//BFS01                     const SvGlobalName  aSim40Name( SO3_SIM_CLASSID_40 );
-//BFS01                     const SvGlobalName  aSim50Name( SO3_SIM_CLASSID_50 );
-//BFS01
-//BFS01                     if( xInfo.Is() &&
-//BFS01                         ( xInfo->GetClassName() == aSim30Name ||
-//BFS01                           xInfo->GetClassName() == aSim40Name ||
-//BFS01                           xInfo->GetClassName() == aSim50Name ) )
-//BFS01                     {
-//BFS01                         bImageOLE = TRUE;
-//BFS01                     }
-//BFS01                 }
-//BFS01
-//BFS01                 if( bImageOLE && pOLEObj->GetPersistName().Len() )
-//BFS01                 {
-//BFS01                     SotStorage*     pModelStorage = pModel->GetModelStorage();
-//BFS01                     const String    aSimStorageName( pOLEObj->GetPersistName() );
-//BFS01
-//BFS01                     if( pModelStorage && pModelStorage->IsStorage( aSimStorageName ) )
-//BFS01                     {
-//BFS01                         SotStorageRef xSimStorage( pModelStorage->OpenSotStorage( aSimStorageName ) );
-//BFS01
-//BFS01                         if( xSimStorage.Is() )
-//BFS01                         {
-//BFS01                             String aStmName( RTL_CONSTASCII_USTRINGPARAM( "StarImageDocument" ) );
-//BFS01
-//BFS01                             if( xSimStorage->IsStream( aStmName ) ||
-//BFS01                                 xSimStorage->IsStream( aStmName = String( RTL_CONSTASCII_USTRINGPARAM( "StarImageDocument 4.0" ) ) ) )
-//BFS01                             {
-//BFS01                                 SotStorageStreamRef xSimStm( xSimStorage->OpenSotStream( aStmName ) );
-//BFS01
-//BFS01                                 if( xSimStm.Is() && !xSimStm->GetError() )
-//BFS01                                 {
-//BFS01                                     Graphic aGraphic;
-//BFS01
-//BFS01                                     xSimStm->SetBufferSize( 32768 );
-//BFS01                                     xSimStm->SetKey( xSimStorage->GetKey() );
-//BFS01                                     *xSimStm >> aGraphic;
-//BFS01                                     xSimStm->SetBufferSize( 0 );
-//BFS01
-//BFS01                                     SdrGrafObj* pNewObj = (SdrGrafObj*) SdrObjFactory::MakeNewObject( SdrInventor, OBJ_GRAF, &rPage );
-//BFS01
-//BFS01                                     if( pNewObj )
-//BFS01                                     {
-//BFS01                                         pNewObj->SetGraphic( aGraphic );
-//BFS01                                         pNewObj->SetLogicRect( pObj->GetLogicRect() );
-//BFS01                                         delete pObj;
-//BFS01                                         pObj = pNewObj;
-//BFS01                                     }
-//BFS01                                 }
-//BFS01                             }
-//BFS01                         }
-//BFS01                     }
-//BFS01                 }
-//BFS01             }
-//BFS01#endif // SVX_LIGHT
-//BFS01
-//BFS01             InsertObject(pObj,CONTAINER_APPEND,&aReason);
-//BFS01         }
-//BFS01         else
-//BFS01         { // aha, das wil keiner. Also ueberlesen.
-//BFS01#ifdef SVX_LIGHT
-//BFS01             if( aHead.nInventor != FmFormInventor )
-//BFS01             {
-//BFS01#endif
-//BFS01
-//BFS01#ifdef DBG_UTIL
-//BFS01             ByteString aStr("SdrObjList::Load(): Zeichenobjekt kann von der Factory nicht erzeugt werden:\n");
-//BFS01             UINT32 nPos(GetObjCount());
-//BFS01
-//BFS01             aStr += "Listenposition: ";
-//BFS01             aStr += ByteString::CreateFromInt32( nPos );
-//BFS01             aStr += "\n";
-//BFS01             aStr += "Inventor: ";
-//BFS01                sal_Int32 nInv = SWAPLONG( aHead.nInventor );
-//BFS01                aStr += ByteString::CreateFromInt32( nInv );
-//BFS01             aStr += ", Identifier: ";
-//BFS01             aStr += ByteString::CreateFromInt32( aHead.nIdentifier );
-//BFS01             aStr += "\n";
-//BFS01             aStr += "FilePos: ";
-//BFS01             aStr += ByteString::CreateFromInt32( aHead.GetFilePos() );
-//BFS01             aStr += ", BlockSize: ";
-//BFS01             aStr += ByteString::CreateFromInt32( aHead.GetBlockSize() );
-//BFS01
-//BFS01             DBG_ERROR(aStr.GetBuffer());
-//BFS01#endif
-//BFS01
-//BFS01#ifdef SVX_LIGHT
-//BFS01             }
-//BFS01#endif
-//BFS01             aHead.SkipRecord();
-//BFS01         }
-//BFS01     }
-//BFS01     else
-//BFS01     {
-//BFS01         bEnde=TRUE;
-//BFS01         aHead.SkipRecord(); // die Endemarke weglesen
-//BFS01     }
-//BFS01
-//BFS01     SdrModel* pMd=pModel;
-//BFS01
-//BFS01     if (pMd==NULL)
-//BFS01         pMd=rPage.GetModel();
-//BFS01
-//BFS01     if (pMd!=NULL)
-//BFS01         pMd->DoProgress(rIn.Tell());
-//BFS01 }
-//BFS01}
-
-//BFS01void SdrObjList::AfterRead()
-//BFS01{
-//BFS01 ULONG nAnz=GetObjCount();
-//BFS01 for (ULONG i=0; i<nAnz; i++) {
-//BFS01     GetObj(i)->AfterRead();
-//BFS01 }
-//BFS01}
 
 void SdrObjList::FlattenGroups()
 {
@@ -1256,11 +1061,6 @@ SdrPage* SdrPage::Clone(SdrModel* pNewModel) const
     *pPage2=*this;
     return pPage2;
 }
-
-//BFS01SfxItemPool& SdrPage::GetItemPool() const
-//BFS01{
-//BFS01 return pModel->GetItemPool();
-//BFS01}
 
 void SdrPage::SetSize(const Size& aSiz)
 {
@@ -1535,183 +1335,6 @@ const SdrPageGridFrameList* SdrPage::GetGridFrameList(const SdrPageView* /*pPV*/
     return NULL;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//BFS01void SdrPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 DBG_ERROR("SdrPage::ReadData(): binfilter still used, but should not (!)");
-//  if (rIn.GetError()!=0) return;
-//  SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//#ifdef DBG_UTIL
-//  aCompat.SetID("SdrPage");
-//#endif
-//
-//  if (rHead.GetVersion()>=11) {
-//      // damit ich meine eigenen SubRecords erkenne (ab V11)
-//      char cMagic[4];
-//      if (rIn.Read(cMagic,4)!=4 || memcmp(cMagic,SdrIOJoeMagic,4)!=0) {
-//          rIn.SetError(SVSTREAM_FILEFORMAT_ERROR);
-//          return;
-//      }
-//  }
-//
-//  { // MiscellaneousData ab V11 eingepackt
-//      SdrDownCompat* pPageMiscCompat=NULL;
-//      if (rHead.GetVersion()>=11) {
-//          pPageMiscCompat=new SdrDownCompat(rIn,STREAM_READ);
-//#ifdef DBG_UTIL
-//          pPageMiscCompat->SetID("SdrPage(Miscellaneous)");
-//#endif
-//      }
-//      rIn>>nWdt;
-//      rIn>>nHgt;
-//      rIn>>nBordLft;
-//      rIn>>nBordUpp;
-//      rIn>>nBordRgt;
-//      rIn>>nBordLwr;
-//      USHORT n;
-//      rIn>>n; //aName;
-//      if (pPageMiscCompat!=NULL) {
-//          delete pPageMiscCompat;
-//      }
-//  }
-//
-//  FASTBOOL bEnde=FALSE;
-//  while (rIn.GetError()==0 && !rIn.IsEof() && !bEnde) {
-//      SdrIOHeaderLookAhead aHead(rIn);   // Layerdefinitionen lesen
-//      if (aHead.IsID(SdrIOLayrID)) {
-//          SdrLayer* pLay=new SdrLayer;       // Layerdefinition lesen
-//          rIn>>*pLay;
-//          pLayerAdmin->InsertLayer(pLay);
-//      }
-//      //#110094#-10
-//      //else if (aHead.IsID(SdrIOLSetID))
-//      //{
-//      //  SdrLayerSet* pSet=new SdrLayerSet; // Layersetdefinition lesen
-//      //  rIn>>*pSet;
-//      //  pLayerAdmin->InsertLayerSet(pSet);
-//      //}
-//      else
-//      // Fuer den Fall der Faelle kann hier ww. MPgDscr oder MPgDscrList stehen
-//      if (aHead.IsID(SdrIOMPgDID)) { // Masterpagedescriptor
-//          SdrMasterPageDescriptor aDscr;
-//          rIn>>aDscr;
-//          aMasters.Insert(aDscr);
-//      } else
-//      if (aHead.IsID(SdrIOMPDLID)) { // MasterpagedescriptorList
-//          SdrMasterPageDescriptorList aDscrList;
-//          rIn>>aDscrList;
-//          USHORT nAnz=aDscrList.GetCount();
-//          for (USHORT nNum=0; nNum<nAnz; nNum++) {
-//              aMasters.Insert(aDscrList[nNum]);
-//          }
-//      } else bEnde=TRUE;
-//  }
-//
-//  if (rHead.GetVersion()>=1) {
-//  } else {
-//      USHORT nMaAnz=0,i;
-//      rIn>>nMaAnz;
-//      for (i=0; i<nMaAnz; i++) {
-//          USHORT nMaPgNum;
-//          rIn>>nMaPgNum;
-//          InsertMasterPage(nMaPgNum);
-//      }
-//  }
-//  SdrObjList::Load(rIn,*this);  // Liste der Objekte lesen
-//
-//  if ( rHead.GetVersion() >= 16 )
-//  {
-//      BOOL bBackgroundObj = FALSE;
-//      rIn >> bBackgroundObj;
-//      if( bBackgroundObj )
-//      {
-//          SdrObjIOHeaderLookAhead aHead( rIn,STREAM_READ );
-//          if ( !aHead.IsEnde() )
-//          {
-//              pBackgroundObj = SdrObjFactory::MakeNewObject( aHead.nInventor, aHead.nIdentifier, this );
-//              if ( bBackgroundObj )
-//                  rIn >> *pBackgroundObj;
-//          }
-//          else
-//              aHead.SkipRecord(); // skip end mark
-//      }
-//  }
-//
-//  // #88340#
-//  if(!aMasters.GetCount() && !IsMasterPage())
-//  {
-//      if(pModel && pModel->GetMasterPageCount() > 2)
-//      {
-//          // This is not allowed. Create a dummy entry
-//          // to compensate this error.
-//          SdrMasterPageDescriptor aDscr(1/*PageMaster*/);
-//          aMasters.Insert(aDscr);
-//      }
-//      else
-//      {
-//          SdrMasterPageDescriptor aDscr(0);
-//          aMasters.Insert(aDscr);
-//      }
-//  }
-//BFS01}
-
-//BFS01void SdrPage::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01 DBG_ERROR("SdrPage::WriteData(): binfilter still used, but should not (!)");
-//  SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//#ifdef DBG_UTIL
-//  aCompat.SetID("SdrPage");
-//#endif
-//  rOut.Write(SdrIOJoeMagic,4); // damit ich meine eigenen SubRecords erkenne (ab V11)
-//  { // MiscellaneousData ab V11 eingepackt
-//      SdrDownCompat aPageMiscCompat(rOut,STREAM_WRITE);
-//#ifdef DBG_UTIL
-//      aPageMiscCompat.SetID("SdrPage(Miscellaneous)");
-//#endif
-//      rOut<<nWdt;
-//      rOut<<nHgt;
-//      rOut<<nBordLft;
-//      rOut<<nBordUpp;
-//      rOut<<nBordRgt;
-//      rOut<<nBordLwr;
-//      USHORT n=0;
-//      rOut<<n; //rPg.aName;
-//  }
-//
-//  USHORT i; // Lokale Layerdefinitionen der Seite
-//  for (i=0; i<pLayerAdmin->GetLayerCount(); i++) {
-//      rOut<<*pLayerAdmin->GetLayer(i);
-//  }
-//  //#110094#-10
-//  //for (i=0; i<pLayerAdmin->GetLayerSetCount(); i++) {
-//  //  rOut<<*pLayerAdmin->GetLayerSet(i);
-//  //}
-//
-//  rOut<<aMasters;
-//  SdrObjList::Save(rOut);
-//
-//  BOOL bBackgroundObj = pBackgroundObj ? TRUE : FALSE;
-//  rOut << bBackgroundObj;
-//  if( pBackgroundObj )
-//      rOut << *pBackgroundObj;
-//BFS01}
-
-//BFS01SvStream& operator>>(SvStream& rIn, SdrPage& rPg)
-//BFS01{
-//BFS01 if (rIn.GetError()!=0) return rIn;
-//BFS01 SdrIOHeader aHead(rIn,STREAM_READ);
-//BFS01 rPg.ReadData(aHead,rIn);
-//BFS01 return rIn;
-//BFS01}
-
-//BFS01SvStream& operator<<(SvStream& rOut, const SdrPage& rPg)
-//BFS01{
-//BFS01 SdrIOHeader aHead(rOut,STREAM_WRITE,!rPg.bMaster ? SdrIOPageID : SdrIOMaPgID);
-//BFS01 rPg.WriteData(rOut);
-//BFS01 return rOut;
-//BFS01}
-
 XubString SdrPage::GetLayoutName() const
 {
     // Die wollte Dieter haben.
@@ -1893,6 +1516,32 @@ GDIMetaFile SdrPage::GetMetaFile(const SetOfByte& /*rVisibleLayers*/, FASTBOOL /
 {
     DBG_ASSERT(0, "SdrPage::GetMetaFile(): not yet implemented.");
     return GDIMetaFile();
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// sdr::Comment interface
+
+const sdr::Comment& SdrPage::GetCommentByIndex(sal_uInt32 nIndex)
+{
+    DBG_ASSERT(nIndex < maComments.size(), "SdrPage::GetCommentByIndex: Access out of range (!)");
+    return maComments[nIndex];
+}
+
+void SdrPage::AddComment(const sdr::Comment& rNew)
+{
+    maComments.push_back(rNew);
+    ::std::sort(maComments.begin(), maComments.end());
+}
+
+void SdrPage::ReplaceCommentByIndex(sal_uInt32 nIndex, const sdr::Comment& rNew)
+{
+    DBG_ASSERT(nIndex < maComments.size(), "SdrPage::GetCommentByIndex: Access out of range (!)");
+
+    if(maComments[nIndex] != rNew)
+    {
+        maComments[nIndex] = rNew;
+        ::std::sort(maComments.begin(), maComments.end());
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
