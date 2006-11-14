@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:24:43 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:11:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,9 @@
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
 #endif
+
+// FLT_MAX
+#include <cfloat>
 
 //Fuer SwFlyFrm::GetCrsrOfst
 class SwCrsrOszControl
