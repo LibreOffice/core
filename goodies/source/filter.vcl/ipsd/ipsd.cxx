@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipsd.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:38:11 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:16:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,9 +69,6 @@ class PSDReader {
 
 private:
 
-    PFilterCallback     pCallback;
-    void*               pCallerData;
-
     SvStream*           mpPSD;          // Die einzulesende PSD-Datei
     PSDFileHeader*      mpFileHeader;
 
@@ -97,7 +94,7 @@ private:
 public:
                         PSDReader();
                         ~PSDReader();
-    BOOL                ReadPSD( SvStream & rPSD, Graphic & rGraphic, PFilterCallback pcallback, void * pcallerdata );
+    BOOL                ReadPSD( SvStream & rPSD, Graphic & rGraphic );
 };
 
 //=================== Methoden von PSDReader ==============================
@@ -123,8 +120,9 @@ PSDReader::~PSDReader()
 
 // ------------------------------------------------------------------------
 
-BOOL PSDReader::ImplCallback( USHORT nPercent )
+BOOL PSDReader::ImplCallback( USHORT /*nPercent*/ )
 {
+/*
     if ( pCallback != NULL )
     {
         if ( ( (*pCallback)( pCallerData, nPercent ) ) == TRUE )
@@ -133,18 +131,16 @@ BOOL PSDReader::ImplCallback( USHORT nPercent )
             return TRUE;
         }
     }
+*/
     return FALSE;
 }
 
 // ------------------------------------------------------------------------
 
-BOOL PSDReader::ReadPSD( SvStream & rPSD, Graphic & rGraphic, PFilterCallback pcallback, void * pcallerdata)
+BOOL PSDReader::ReadPSD( SvStream & rPSD, Graphic & rGraphic )
 {
     if ( rPSD.GetError() )
         return FALSE;
-
-    pCallback = pcallback;
-    pCallerData = pcallerdata;
 
     mpPSD = &rPSD;
     mpPSD->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
@@ -758,19 +754,11 @@ BOOL PSDReader::ImplReadBody()
 
 //================== GraphicImport - die exportierte Funktion ================
 
-#ifdef WNT
-extern "C" BOOL _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                        PFilterCallback pCallback, void * pCallerData,
-                            FilterConfigItem*, BOOL)
-#else
-extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                        PFilterCallback pCallback, void * pCallerData,
-                            FilterConfigItem*, BOOL)
-#endif
+extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL )
 {
     PSDReader aPSDReader;
 
-    return aPSDReader.ReadPSD( rStream, rGraphic, pCallback, pCallerData );
+    return aPSDReader.ReadPSD( rStream, rGraphic );
 }
 
 //================== ein bischen Muell fuer Windows ==========================
