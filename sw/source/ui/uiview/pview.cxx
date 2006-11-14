@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:22:36 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:20:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,6 +200,10 @@
 
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
+
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 
 SFX_IMPL_VIEWFACTORY(SwPagePreView, SW_RES(STR_NONAME))
 {
