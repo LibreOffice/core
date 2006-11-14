@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:05:37 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:47:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -389,7 +389,7 @@ void ViewShell::Exit (void)
     sd::View* pView = GetView();
     if (pView!=NULL && pView->IsTextEdit())
     {
-        pView->EndTextEdit();
+        pView->SdrEndTextEdit();
         pView->UnmarkAll();
     }
 
@@ -452,7 +452,7 @@ void ViewShell::Activate(BOOL bIsMDIActivate)
 
         if (pView)
         {
-            pView->ShowMarkHdl(NULL);
+            pView->ShowMarkHdl();
         }
     }
 
@@ -516,7 +516,7 @@ void ViewShell::Deactivate(BOOL bIsMDIActivate)
 
         if (pView)
         {
-            pView->HideMarkHdl(NULL);
+            pView->HideMarkHdl();
         }
     }
 
