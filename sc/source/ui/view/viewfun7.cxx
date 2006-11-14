@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:37:44 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:00:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,8 +154,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
             // innerhalb einer Page verschieben?
 
         if ( bPasteIsMove &&
-                pDrawView->GetPageViewPvNum(0)->GetPage() ==
-                pDragEditView->GetPageViewPvNum(0)->GetPage() )
+                pDrawView->GetSdrPageView()->GetPage() ==
+                pDragEditView->GetSdrPageView()->GetPage() )
         {
             if ( nDiffX != 0 || nDiffY != 0 )
                 pDragEditView->MoveAllMarked(Size(nDiffX,nDiffY), FALSE);
@@ -205,7 +205,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         bPasteIsMove = FALSE;       // kein internes Verschieben passiert
 
         SdrMarkView aView(pModel);
-        SdrPageView* pPv = aView.ShowPagePgNum(0,Point());
+        SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
         aView.MarkAllObj(pPv);
         Size aSize = aView.GetAllMarkedRect().GetSize();
         lcl_AdjustInsertPos( GetViewData(), aPos, aSize );
@@ -342,7 +342,7 @@ BOOL ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
         ScDrawView* pDrView = GetScDrawView();
         SdrOle2Obj* pSdrObj = new SdrOle2Obj( aObjRef, aName, aRect );
 
-        SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
+        SdrPageView* pPV = pDrView->GetSdrPageView();
         pDrView->InsertObjectSafe( pSdrObj, *pPV );             // nicht markieren wenn Ole
         GetViewData()->GetViewShell()->SetDrawShell( TRUE );
         return TRUE;
@@ -405,7 +405,7 @@ BOOL ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     pGrafObj->SetName(aName);
 
     // nicht markieren wenn Ole
-    pDrawView->InsertObjectSafe(pGrafObj, *pDrawView->GetPageViewPvNum(0));
+    pDrawView->InsertObjectSafe(pGrafObj, *pDrawView->GetSdrPageView());
 
     // #118522# SetGraphicLink has to be used after inserting the object,
     // otherwise an empty graphic is swapped in and the contact stuff crashes.
@@ -427,7 +427,7 @@ BOOL ScViewFunc::ApplyGraphicToObject( SdrObject* pPickObj, const Graphic& rGrap
         /**********************************************************************
         * Objekt neu attributieren
         **********************************************************************/
-        SdrPageView* pPV = pDrawView->GetPageViewPvNum(0);
+        SdrPageView* pPV = pDrawView->GetSdrPageView();
         if (pPickObj->ISA(SdrGrafObj))
         {
             /******************************************************************
@@ -437,7 +437,7 @@ BOOL ScViewFunc::ApplyGraphicToObject( SdrObject* pPickObj, const Graphic& rGrap
             pNewGrafObj->SetGraphic(rGraphic);
 
             pDrawView->BegUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
-            pDrawView->ReplaceObject(pPickObj, *pPV, pNewGrafObj);
+            pDrawView->ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj);
             pDrawView->EndUndo();
 
             bRet = TRUE;
