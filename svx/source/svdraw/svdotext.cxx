@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:14:33 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:47:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,18 @@
 // #111111#
 #ifndef _SDR_CONTACT_VIEWCONTACTOFTEXTOBJ_HXX
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
+#endif
+
+#ifndef _BGFX_TUPLE_B2DTUPLE_HXX
+#include <basegfx/tuple/b2dtuple.hxx>
+#endif
+
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
 #endif
 
 // #104018# replace macros above with type-safe methods
@@ -426,9 +438,6 @@ void SdrTextObj::SetText(SvStream& rInput, const String& rBaseURL, USHORT eForma
     SetChanged();
     BroadcastObjectChange();
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-    //if (GetBoundRect()!=aBoundRect0) {
-    //  SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-    //}
 }
 
 const Size& SdrTextObj::GetTextSize() const
@@ -805,22 +814,24 @@ FASTBOOL SdrTextObj::NbcSetFitToSize(SdrFitToSizeType eFit)
 
 void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAnchorRect, BOOL bLineWidth ) const
 {
+    basegfx::B2DPolyPolygon aXorPolyPolygon(TakeXorPoly(FALSE));
+    basegfx::B2DPolyPolygon* pContourPolyPolygon = 0L;
+    basegfx::B2DHomMatrix aMatrix;
 
-    XPolyPolygon aXorXPP;
-    TakeXorPoly(aXorXPP, FALSE);
-    if (aGeo.nDrehWink!=0) { // Unrotate!
-        RotateXPoly(aXorXPP,rAnchorRect.TopLeft(),-aGeo.nSin,aGeo.nCos);
+    aMatrix.translate(-rAnchorRect.Left(), -rAnchorRect.Top());
+    if(aGeo.nDrehWink)
+    {
+        // Unrotate!
+        aMatrix.rotate(-aGeo.nDrehWink * nPi180);
     }
-    Point aRef(rAnchorRect.TopLeft());
-    aXorXPP.Move(-aRef.X(),-aRef.Y());
 
-    XPolyPolygon* pContourXPP = NULL;
+    aXorPolyPolygon.transform(aMatrix);
 
     if( bLineWidth )
     {
         // Strichstaerke beruecksichtigen
         // Beim Hittest muss das unterbleiben (Performance!)
-        pContourXPP = new XPolyPolygon();
+        pContourPolyPolygon = new basegfx::B2DPolyPolygon();
 
         // #86258# test if shadow needs to be avoided for TakeContour()
         const SfxItemSet& rSet = GetObjectItemSet();
@@ -837,12 +848,12 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
             // #86258# force shadow off
             SdrObject* pCopy = Clone();
             pCopy->SetMergedItem(SdrShadowItem(FALSE));
-            pCopy->TakeContour(*pContourXPP);
+            *pContourPolyPolygon = pCopy->TakeContour();
             delete pCopy;
         }
         else
         {
-            TakeContour(*pContourXPP);
+            *pContourPolyPolygon = TakeContour();
         }
 
         // #i33696#
@@ -852,12 +863,10 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
             rOutliner.SetTextObj(pLastTextObject);
         }
 
-        if (aGeo.nDrehWink!=0)  // Unrotate!
-            RotateXPoly(*pContourXPP,rAnchorRect.TopLeft(),-aGeo.nSin,aGeo.nCos);
-        pContourXPP->Move(-aRef.X(),-aRef.Y());
+        pContourPolyPolygon->transform(aMatrix);
     }
 
-    rOutliner.SetPolygon(aXorXPP, pContourXPP);
+    rOutliner.SetPolygon(aXorPolyPolygon, pContourPolyPolygon);
 }
 
 void SdrTextObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
@@ -957,32 +966,6 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FAS
         {
             rOutliner.SetMinAutoPaperSize(Size(0, nAnkHgt));
         }
-
-        // #103335# back to old solution, thus #100801# will be back and needs to be solved in
-        // another way.
-//      if (eHAdj==SDRTEXTHORZADJUST_BLOCK)
-//      {
-//          if(IsVerticalWriting())
-//              rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, nAnkHgt));
-//          else
-//              rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, 0));
-//      }
-
-//      // #100801# MinAutoPaperSize needs always to be set completely
-//      // when Verical
-//      if(IsVerticalWriting())
-//      {
-//          rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, nAnkHgt));
-//      }
-//
-//      if(SDRTEXTHORZADJUST_BLOCK == eHAdj)
-//      {
-//          // #89459#
-//          if(!IsVerticalWriting())
-//          {
-//              rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, 0));
-//          }
-//      }
     }
 
     rOutliner.SetPaperSize(aNullSize);
@@ -1013,7 +996,6 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FAS
     }
     else
     {
-//      rOutliner.Clear();
         rOutliner.SetTextObj( NULL );
     }
 
@@ -1224,11 +1206,6 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Rectangle& r
 
 sal_Bool SdrTextObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
-    // #110094#-16 Moved to ViewContactOfSdrObj::ShouldPaintObject(..)
-    //// Hidden objects on masterpages, draw nothing
-    //if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
-    //  return TRUE;
-
     sal_Bool bOk(sal_True);
     FASTBOOL bPrinter=rXOut.GetOutDev()->GetOutDevType()==OUTDEV_PRINTER;
     FASTBOOL bPrintPreView=rXOut.GetOutDev()->GetOutDevViewType()==OUTDEV_VIEWTYPE_PRINTPREVIEW;
@@ -1431,40 +1408,10 @@ sal_Bool SdrTextObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
                 rOutliner.Clear();
                 rOutliner.ClearPaintInfoRec();
             }
-        } // if (pPara!=NULL)
-/*
-        if (bEmptyPresObj)
-        {
-            // leere Praesentationsobjekte bekommen einen grauen Rahmen
-            svtools::ColorConfig aColorConfig;
-            svtools::ColorConfigValue aColor( aColorConfig.GetColorValue( svtools::OBJECTBOUNDARIES ) );
-
-            if( aColor.bIsVisible )
-            {
-                rXOut.GetOutDev()->SetFillColor();
-                rXOut.GetOutDev()->SetLineColor( aColor.nColor );
-
-                if (aGeo.nDrehWink!=0 || aGeo.nShearWink!=0)
-                {
-                    Polygon aPoly(aRect);
-                    if (aGeo.nShearWink!=0)
-                        ShearPoly(aPoly,aRect.TopLeft(),aGeo.nTan);
-
-                    if (aGeo.nDrehWink!=0)
-                        RotatePoly(aPoly,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-
-                    rXOut.GetOutDev()->DrawPolyLine(aPoly);
-                }
-                else
-                {
-                    rXOut.GetOutDev()->DrawRect(aRect);
-                }
-            }
-        } // if pOutlParaObj!=NULL
-*/
+        }
     }
     else
-    { // sonst SDRPAINTMODE_DRAFTTEXT
+    {
         FASTBOOL bFill=HasFill();
         FASTBOOL bLine=HasLine();
         FASTBOOL bHide=IsFontwork() && IsHideContour() && pFormTextBoundRect!=NULL;
@@ -1573,8 +1520,16 @@ void SdrTextObj::ImpAddTextToBoundRect()
 
 SdrObject* SdrTextObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
-    if (!bTextFrame && pOutlinerParaObject==NULL) return NULL;
-    if (pVisiLayer!=NULL && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId))) return NULL;
+    if(!bTextFrame && !pOutlinerParaObject)
+    {
+        return NULL;
+    }
+
+    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId)))
+    {
+        return NULL;
+    }
+
     INT32 nMyTol=nTol;
     FASTBOOL bFontwork=IsFontwork();
     SdrFitToSizeType eFit=GetFitToSize();
@@ -1775,17 +1730,20 @@ void SdrTextObj::operator=(const SdrObject& rObj)
     }
 }
 
-void SdrTextObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL /*bDetail*/) const
+basegfx::B2DPolyPolygon SdrTextObj::TakeXorPoly(sal_Bool /*bDetail*/) const
 {
     Polygon aPol(aRect);
     if (aGeo.nShearWink!=0) ShearPoly(aPol,aRect.TopLeft(),aGeo.nTan);
     if (aGeo.nDrehWink!=0) RotatePoly(aPol,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-    rPoly=XPolyPolygon(XPolygon(aPol));
+
+    basegfx::B2DPolyPolygon aRetval;
+    aRetval.append(aPol.getB2DPolygon());
+    return aRetval;
 }
 
-void SdrTextObj::TakeContour(XPolyPolygon& rPoly) const
+basegfx::B2DPolyPolygon SdrTextObj::TakeContour() const
 {
-    SdrAttrObj::TakeContour(rPoly);
+    basegfx::B2DPolyPolygon aRetval(SdrAttrObj::TakeContour());
 
     // und nun noch ggf. das BoundRect des Textes dazu
     if ( pModel && pOutlinerParaObject && !IsFontwork() && !IsContourTextFrame() )
@@ -1804,14 +1762,12 @@ void SdrTextObj::TakeContour(XPolyPolygon& rPoly) const
         if (bFitToSize) aR=aAnchor2;
         Polygon aPol(aR);
         if (aGeo.nDrehWink!=0) RotatePoly(aPol,aR.TopLeft(),aGeo.nSin,aGeo.nCos);
-        rPoly.Insert(XPolygon(aPol));
-    }
-}
 
-//#110094#-12
-//void SdrTextObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
-//{
-//}
+        aRetval.append(aPol.getB2DPolygon());
+    }
+
+    return aRetval;
+}
 
 void SdrTextObj::RecalcSnapRect()
 {
@@ -1825,12 +1781,12 @@ void SdrTextObj::RecalcSnapRect()
     }
 }
 
-USHORT SdrTextObj::GetSnapPointCount() const
+sal_uInt32 SdrTextObj::GetSnapPointCount() const
 {
-    return 4;
+    return 4L;
 }
 
-Point SdrTextObj::GetSnapPoint(USHORT i) const
+Point SdrTextObj::GetSnapPoint(sal_uInt32 i) const
 {
     Point aP;
     switch (i) {
@@ -2027,9 +1983,6 @@ void SdrTextObj::ReformatText()
         SetChanged();
         BroadcastObjectChange();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-        //if (GetBoundRect()!=aBoundRect0) {
-        //  SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-        //}
     }
 }
 
@@ -2054,198 +2007,6 @@ void SdrTextObj::RestGeoData(const SdrObjGeoData& rGeo)
     aGeo   =rTGeo.aGeo;
     SetTextSizeDirty();
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// I/O
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//BFS01void SdrTextObj::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01 SdrAttrObj::WriteData(rOut);
-//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrTextObj");
-//BFS01#endif
-//BFS01 rOut<<BYTE(eTextKind);
-//BFS01 rOut<<aRect;
-//BFS01 rOut<<INT32(aGeo.nDrehWink);
-//BFS01 rOut<<INT32(aGeo.nShearWink);
-//BFS01
-//BFS01 // Wird gerade editiert, also das ParaObject aus dem aktiven Editor verwenden
-//BFS01 // Das war frueher. Jetzt wird beim Speichern sowas aehnliches wie EndTextEdit gemacht! #43095#
-//BFS01 if (pEdtOutl!=NULL) {
-//BFS01     // #43095#
-//BFS01     OutlinerParaObject* pPara=GetEditOutlinerParaObject();
-//BFS01     // casting auf nicht-const
-//BFS01     ((SdrTextObj*)this)->SetOutlinerParaObject(pPara);
-//BFS01
-//BFS01     // #91254# put text to object and set EmptyPresObj to FALSE
-//BFS01     if(pPara && IsEmptyPresObj())
-//BFS01         ((SdrTextObj*)this)->SetEmptyPresObj(FALSE);
-//BFS01 }
-//BFS01 OutlinerParaObject* pPara=pOutlinerParaObject;
-//BFS01
-//BFS01 BOOL bOutlinerParaObjectValid=pPara!=NULL;
-//BFS01 rOut<<bOutlinerParaObjectValid;
-//BFS01
-//BFS01 if (bOutlinerParaObjectValid)
-//BFS01 {
-//BFS01     SdrDownCompat aTextCompat(rOut,STREAM_WRITE); // Ab V11 eingepackt
-//BFS01#ifdef DBG_UTIL
-//BFS01     aTextCompat.SetID("SdrTextObj(OutlinerParaObject)");
-//BFS01#endif
-//BFS01     pPara->Store(rOut); // neues Store am Outliner ab SV303
-//BFS01     pPara->FinishStore();
-//BFS01 }
-//BFS01
-//BFS01 // Ab FileVersion 10 wird das TextBoundRect gestreamt
-//BFS01 BOOL bFormTextBoundRectValid=pFormTextBoundRect!=NULL;
-//BFS01 rOut<<bFormTextBoundRectValid;
-//BFS01 if (bFormTextBoundRectValid) {
-//BFS01     rOut<<*pFormTextBoundRect;
-//BFS01 }
-//BFS01}
-
-//BFS01void SdrTextObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 if (rIn.GetError()!=0) return;
-//BFS01 if (pOutlinerParaObject!=NULL) {
-//BFS01     delete pOutlinerParaObject;
-//BFS01     pOutlinerParaObject=NULL;
-//BFS01 }
-//BFS01
-//BFS01 SdrAttrObj::ReadData(rHead,rIn);
-//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrTextObj");
-//BFS01#endif
-//BFS01 BYTE nTmp;
-//BFS01 rIn>>nTmp;
-//BFS01 eTextKind=SdrObjKind(nTmp);
-//BFS01 rIn>>aRect;
-//BFS01 INT32 n32;
-//BFS01 rIn>>n32; aGeo.nDrehWink=n32;
-//BFS01 rIn>>n32; aGeo.nShearWink=n32;
-//BFS01 aGeo.RecalcSinCos();
-//BFS01 aGeo.RecalcTan();
-//BFS01 //rIn>>aText;
-//BFS01 if (rHead.GetVersion()<=5 && IsOutlText()) { // Das war bis zu diesem Zeitpunkt nicht gespeichert
-//BFS01     NbcSetAutoGrowHeight(FALSE);
-//BFS01 }
-//BFS01
-//BFS01 BOOL bOutlinerParaObjectValid=FALSE;
-//BFS01 rIn>>bOutlinerParaObjectValid;
-//BFS01 if (bOutlinerParaObjectValid)
-//BFS01 {
-//BFS01     SfxItemPool* pOutlPool=pModel!=NULL ? &pModel->GetItemPool() : NULL;
-//BFS01     if (rHead.GetVersion()>=11) {
-//BFS01         SdrDownCompat aTextCompat(rIn,STREAM_READ); // ab V11 eingepackt
-//BFS01#ifdef DBG_UTIL
-//BFS01         aTextCompat.SetID("SdrTextObj(OutlinerParaObject)");
-//BFS01#endif
-//BFS01         pOutlinerParaObject=OutlinerParaObject::Create(rIn,pOutlPool);
-//BFS01     } else {
-//BFS01         pOutlinerParaObject=OutlinerParaObject::Create(rIn,pOutlPool);
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 if( pOutlinerParaObject )
-//BFS01 {
-//BFS01     if( pOutlinerParaObject->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
-//BFS01     {
-//BFS01         if( eTextKind == OBJ_TITLETEXT )
-//BFS01             pOutlinerParaObject->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
-//BFS01         else if( eTextKind == OBJ_OUTLINETEXT )
-//BFS01             pOutlinerParaObject->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
-//BFS01         else
-//BFS01             pOutlinerParaObject->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
-//BFS01     }
-//BFS01
-//BFS01     if( pOutlinerParaObject->IsVertical() )
-//BFS01     {
-//BFS01         GetProperties().SetObjectItemDirect(SvxWritingModeItem(com::sun::star::text::WritingMode_TB_RL));
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 if (rHead.GetVersion()>=10) {
-//BFS01     // Ab FileVersion 10 wird das TextBoundRect gestreamt
-//BFS01     BOOL bFormTextBoundRectValid=FALSE;
-//BFS01     rIn>>bFormTextBoundRectValid;
-//BFS01     if (bFormTextBoundRectValid) {
-//BFS01         if (pFormTextBoundRect==NULL) pFormTextBoundRect=new Rectangle;
-//BFS01         rIn>>*pFormTextBoundRect;
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 if(rHead.GetVersion() < 12 && !bTextFrame)
-//BFS01 {
-//BFS01     GetProperties().SetObjectItemDirect(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
-//BFS01     GetProperties().SetObjectItemDirect(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
-//BFS01     GetProperties().SetObjectItemDirect(SvxAdjustItem(SVX_ADJUST_CENTER));
-//BFS01 }
-//BFS01
-//BFS01 if (bTextFrame && pOutlinerParaObject!=NULL)
-//BFS01     NbcAdjustTextFrameWidthAndHeight();
-//BFS01
-//BFS01 if ( pOutlinerParaObject &&
-//BFS01      pOutlinerParaObject->GetTextObject().GetVersion() < 500 &&
-//BFS01      !pOutlinerParaObject->IsEditDoc() )
-//BFS01 {
-//BFS01     pOutlinerParaObject->MergeParaAttribs( GetObjectItemSet() );
-//BFS01 }
-//BFS01
-//BFS01 // #84529# correct gradient rotation for 5.2 and earlier
-//BFS01 if(aGeo.nDrehWink != 0 && rHead.GetVersion() <= 16)
-//BFS01 {
-//BFS01     XFillStyle eStyle = ((const XFillStyleItem&)GetObjectItem(XATTR_FILLSTYLE)).GetValue();
-//BFS01     if(XFILL_GRADIENT == eStyle)
-//BFS01     {
-//BFS01         XFillGradientItem aItem = (XFillGradientItem&)GetObjectItem(XATTR_FILLGRADIENT);
-//BFS01         XGradient aGradient = aItem.GetValue();
-//BFS01
-//BFS01         // calc new angle. aGeo.nDrehWink is 1/100th degree, aGradient.GetAngle()
-//BFS01         // is 1/10th degree. Match this.
-//BFS01         sal_Int32 nNewAngle = ((aGeo.nDrehWink + (aGradient.GetAngle() * 10)) + 5) / 10;
-//BFS01
-//BFS01         while(nNewAngle < 0)
-//BFS01             nNewAngle += 3600;
-//BFS01
-//BFS01         while(nNewAngle >= 3600)
-//BFS01             nNewAngle -= 3600;
-//BFS01
-//BFS01         // create new item and set
-//BFS01         aGradient.SetAngle(nNewAngle);
-//BFS01         aItem.SetValue(aGradient);
-//BFS01         SetObjectItem(aItem);
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 ImpSetTextStyleSheetListeners();
-//BFS01 SetTextSizeDirty();
-//BFS01 ImpCheckMasterCachable();
-//BFS01}
-
-// #111096#
-//void SdrTextObj::SetTextAnimationSupervisor( OutputDevice* pDisplayDev, BOOL bObjSupervises )
-//{
-//  ImpSdrMtfAnimator* pAnimator = ImpGetMtfAnimator();
-//
-//  if( GetTextAniKind() != SDRTEXTANI_NONE && pAnimator )
-//  {
-//      for( ULONG nInfoNum = pAnimator->GetInfoCount(); nInfoNum > 0; )
-//      {
-//          ImpMtfAnimationInfo* pInfo = pAnimator->GetInfo( --nInfoNum );
-//
-//          if( pInfo->pOutDev == pDisplayDev )
-//          {
-//              pInfo->nExtraData = ( bObjSupervises ? 1L : (long) this );
-//
-//              if( !bObjSupervises )
-//                  pInfo->bPause = FALSE;
-//          }
-//      }
-//  }
-//}
 
 SdrFitToSizeType SdrTextObj::GetFitToSize() const
 {
@@ -2366,24 +2127,26 @@ void SdrTextObj::SetVerticalWriting(sal_Bool bVertical)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
 // with the base geometry and returns TRUE. Otherwise it returns FALSE.
-BOOL SdrTextObj::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& /*rPolyPolygon*/) const
+sal_Bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
 {
     // get turn and shear
     double fRotate = (aGeo.nDrehWink / 100.0) * F_PI180;
-    double fShear = (aGeo.nShearWink / 100.0) * F_PI180;
+    double fShearX = (aGeo.nShearWink / 100.0) * F_PI180;
 
     // get aRect, this is the unrotated snaprect
     Rectangle aRectangle(aRect);
 
     // fill other values
-    Vector2D aScale((double)aRectangle.GetWidth(), (double)aRectangle.GetHeight());
-    Vector2D aTranslate((double)aRectangle.Left(), (double)aRectangle.Top());
+    basegfx::B2DTuple aScale(aRectangle.GetWidth(), aRectangle.GetHeight());
+    basegfx::B2DTuple aTranslate(aRectangle.Left(), aRectangle.Top());
 
     // position maybe relative to anchorpos, convert
     if( pModel->IsWriter() )
     {
-        if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
-            aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+        if(GetAnchorPos().X() || GetAnchorPos().Y())
+        {
+            aTranslate -= basegfx::B2DTuple(GetAnchorPos().X(), GetAnchorPos().Y());
+        }
     }
 
     // force MapUnit to 100th mm
@@ -2394,15 +2157,13 @@ BOOL SdrTextObj::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& /*rPolyPolygon*
         {
             case SFX_MAPUNIT_TWIP :
             {
-                // position
-                // #104018#
-                aTranslate.X() = ImplTwipsToMM(aTranslate.X());
-                aTranslate.Y() = ImplTwipsToMM(aTranslate.Y());
+                // postion
+                aTranslate.setX(ImplTwipsToMM(aTranslate.getX()));
+                aTranslate.setY(ImplTwipsToMM(aTranslate.getY()));
 
                 // size
-                // #104018#
-                aScale.X() = ImplTwipsToMM(aScale.X());
-                aScale.Y() = ImplTwipsToMM(aScale.Y());
+                aScale.setX(ImplTwipsToMM(aScale.getX()));
+                aScale.setY(ImplTwipsToMM(aScale.getY()));
 
                 break;
             }
@@ -2414,28 +2175,41 @@ BOOL SdrTextObj::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& /*rPolyPolygon*
     }
 
     // build matrix
-    rMat.Identity();
-    if(aScale.X() != 1.0 || aScale.Y() != 1.0)
-        rMat.Scale(aScale.X(), aScale.Y());
-    if(fShear != 0.0)
-        rMat.ShearX(tan(fShear));
-    if(fRotate != 0.0)
-        rMat.Rotate(fRotate);
-    if(aTranslate.X() != 0.0 || aTranslate.Y() != 0.0)
-        rMat.Translate(aTranslate.X(), aTranslate.Y());
+    rMatrix.identity();
 
-    return FALSE;
+    if(1.0 != aScale.getX() || 1.0 != aScale.getY())
+    {
+        rMatrix.scale(aScale.getX(), aScale.getY());
+    }
+
+    if(0.0 != fShearX)
+    {
+        rMatrix.shearX(tan(fShearX));
+    }
+
+    if(0.0 != fRotate)
+    {
+        rMatrix.rotate(fRotate);
+    }
+
+    if(0.0 != aTranslate.getX() || 0.0 != aTranslate.getY())
+    {
+        rMatrix.translate(aTranslate.getX(), aTranslate.getY());
+    }
+
+    return sal_False;
 }
 
 // sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
 // If it's an SdrPathObj it will use the provided geometry information. The Polygon has
 // to use (0,0) as upper left and will be scaled to the given size in the matrix.
-void SdrTextObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& /*rPolyPolygon*/)
+void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& /*rPolyPolygon*/)
 {
     // break up matrix
-    Vector2D aScale, aTranslate;
-    double fShear, fRotate;
-    rMat.DecomposeAndCorrect(aScale, fShear, fRotate, aTranslate);
+    basegfx::B2DTuple aScale;
+    basegfx::B2DTuple aTranslate;
+    double fRotate, fShearX;
+    rMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
     // reset object shear and rotations
     aGeo.nDrehWink = 0;
@@ -2452,14 +2226,12 @@ void SdrTextObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& /*r
             case SFX_MAPUNIT_TWIP :
             {
                 // position
-                // #104018#
-                aTranslate.X() = ImplMMToTwips(aTranslate.X());
-                aTranslate.Y() = ImplMMToTwips(aTranslate.Y());
+                aTranslate.setX(ImplMMToTwips(aTranslate.getX()));
+                aTranslate.setY(ImplMMToTwips(aTranslate.getY()));
 
                 // size
-                // #104018#
-                aScale.X() = ImplMMToTwips(aScale.X());
-                aScale.Y() = ImplMMToTwips(aScale.Y());
+                aScale.setX(ImplMMToTwips(aScale.getX()));
+                aScale.setY(ImplMMToTwips(aScale.getY()));
 
                 break;
             }
@@ -2473,27 +2245,29 @@ void SdrTextObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& /*r
     // if anchor is used, make position relative to it
     if( pModel->IsWriter() )
     {
-        if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
-            aTranslate += Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+        if(GetAnchorPos().X() || GetAnchorPos().Y())
+        {
+            aTranslate += basegfx::B2DTuple(GetAnchorPos().X(), GetAnchorPos().Y());
+        }
     }
 
     // build and set BaseRect (use scale)
     Point aPoint = Point();
-    Size  aSize(FRound(aScale.X()), FRound(aScale.Y()));
+    Size aSize(FRound(aScale.getX()), FRound(aScale.getY()));
     Rectangle aBaseRect(aPoint, aSize);
     SetSnapRect(aBaseRect);
 
     // shear?
-    if(fShear != 0.0)
+    if(0.0 != fShearX)
     {
         GeoStat aGeoStat;
-        aGeoStat.nShearWink = FRound((atan(fShear) / F_PI180) * 100.0);
+        aGeoStat.nShearWink = FRound((atan(fShearX) / F_PI180) * 100.0);
         aGeoStat.RecalcTan();
         Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, FALSE);
     }
 
     // rotation?
-    if(fRotate != 0.0)
+    if(0.0 != fRotate)
     {
         GeoStat aGeoStat;
         aGeoStat.nDrehWink = FRound((fRotate / F_PI180) * 100.0);
@@ -2502,11 +2276,9 @@ void SdrTextObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& /*r
     }
 
     // translate?
-    if(aTranslate.X() != 0.0 || aTranslate.Y() != 0.0)
+    if(0.0 != aTranslate.getX() || 0.0 != aTranslate.getY())
     {
-        Move(Size(
-            (sal_Int32)FRound(aTranslate.X()),
-            (sal_Int32)FRound(aTranslate.Y())));
+        Move(Size(FRound(aTranslate.getX()), FRound(aTranslate.getY())));
     }
 }
 
