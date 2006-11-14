@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:59:34 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:56:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@
 #include "drawutil.hxx"
 #include "document.hxx"
 
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
+#endif
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -208,8 +211,7 @@ BOOL ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
     return FALSE;
 }
 
-void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, const Rectangle& rDrawingRect,
-                                    ScUpdateMode eMode, ULONG nLayer )
+void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, ULONG nLayer )
 {
     // #109985#
     sal_uInt16 nPaintMode(0);
@@ -266,7 +268,7 @@ void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, const Rectangle& rDraw
         }
         else
         {
-            rOutputData.DrawSelectiveObjects((sal_uInt16)nLayer, rDrawingRect, nPaintMode);
+            rOutputData.DrawSelectiveObjects((sal_uInt16)nLayer, nPaintMode);
         }
     }
 }
@@ -278,13 +280,13 @@ void ScGridWindow::DrawSdrGrid( const Rectangle& rDrawingRect )
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
     if ( pDrView && pDrView->IsGridVisible() )
     {
-        SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
+        SdrPageView* pPV = pDrView->GetSdrPageView();
         DBG_ASSERT(pPV, "keine PageView");
         if (pPV)
         {
             SetLineColor(COL_GRAY);
 
-            pPV->DrawGrid( *this, rDrawingRect );
+            pPV->DrawPageViewGrid( *this, rDrawingRect );
         }
     }
 }
@@ -331,28 +333,28 @@ MapMode ScGridWindow::GetDrawMapMode( BOOL bForce )
     return aDrawMode;
 }
 
-BOOL ScGridWindow::DrawBeforeScroll()
-{
-    ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
+//BOOL ScGridWindow::DrawBeforeScroll()
+//{
+//  ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
+//
+//  BOOL bXor = FALSE;
+//  if (pDrView)
+//  {
+//      bXor=pDrView->IsShownXorVisible(this);
+//      if (bXor) pDrView->HideShownXor(this);
+//  }
+//  return bXor;
+//}
 
-    BOOL bXor = FALSE;
-    if (pDrView)
-    {
-        bXor=pDrView->IsShownXorVisible(this);
-        if (bXor) pDrView->HideShownXor(this);
-    }
-    return bXor;
-}
-
-void ScGridWindow::DrawAfterScroll(BOOL bVal)
+void ScGridWindow::DrawAfterScroll(/*BOOL bVal*/)
 {
     Update();       // immer, damit das Verhalten mit/ohne DrawingLayer gleich ist
 
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
     if (pDrView)
     {
-        if (bVal)
-            pDrView->ShowShownXor(this);
+        //if (bVal)
+        //  pDrView->ShowShownXor(this);
 
         OutlinerView* pOlView = pDrView->GetTextEditOutlinerView();
         if (pOlView && pOlView->GetWindow() == this)
@@ -360,18 +362,18 @@ void ScGridWindow::DrawAfterScroll(BOOL bVal)
     }
 }
 
-void ScGridWindow::DrawMarks()
-{
-    ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
-    if (pDrView)
-        pDrView->DrawMarks(this);
-}
+//void ScGridWindow::DrawMarks()
+//{
+//  ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
+//  if (pDrView)
+//      pDrView->DrawMarks(this);
+//}
 
-BOOL ScGridWindow::NeedDrawMarks()
-{
-    ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
-    return pDrView && pDrView->IsMarkHdlShown() && pDrView->AreObjectsMarked();
-}
+//BOOL ScGridWindow::NeedDrawMarks()
+//{
+//  ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
+//  return pDrView && pDrView->IsMarkHdlShown() && pDrView->AreObjectsMarked();
+//}
 
 void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddress)
 {
@@ -437,12 +439,14 @@ void ScGridWindow::OutlinerViewPaint( const Rectangle& rRect )
                         //  DrawLayer mit dem Text-Rechteck zeichnet nur die Outliner-View
                         //  und den Text-Rahmen (an den kommt man sonst von aussen nicht heran).
 
-                        SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
+                        SdrPageView* pPV = pDrView->GetSdrPageView();
                         DBG_ASSERT(pPV, "keine PageView");
                         if (pPV)
                         {
                             SdrLayerID nLayer = pEditObj ? pEditObj->GetLayer() : SC_LAYER_FRONT;
-                            pPV->DrawLayer( nLayer, aEffRect, this );
+                            // Region aDrawRegion(aEffRect);
+                            // pPV->DrawLayer( nLayer, aDrawRegion, this );
+                            pPV->DrawLayer( nLayer, this );
                         }
                     }
                     else
@@ -479,7 +483,7 @@ void ScGridWindow::UpdateStatusPosSize()
     if (!pDrView)
         return;         // shouldn't be called in that case
 
-    SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
+    SdrPageView* pPV = pDrView->GetSdrPageView();
     if (!pPV)
         return;         // shouldn't be called in that case either
 
@@ -532,11 +536,11 @@ BOOL ScGridWindow::DrawHasMarkedObj()
     return p ? p->AreObjectsMarked() : FALSE;
 }
 
-void ScGridWindow::DrawStartTimer()
-{
-    ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
-    if (pDrView)
-    {
+//void ScGridWindow::DrawStartTimer()
+//{
+    //ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
+    //if (pDrView)
+    //{
         /* jetzt in DrawMarks
         USHORT nWinNum = pDrView->FindWin(this);
         if (nWinNum!=SDRVIEWWIN_NOTFOUND)
@@ -544,9 +548,9 @@ void ScGridWindow::DrawStartTimer()
         */
 
         // pDrView->PostPaint();
-        pDrView->RestartAfterPaintTimer();
-    }
-}
+        // pDrView->RestartAfterPaintTimer();
+    //}
+//}
 
 void ScGridWindow::DrawMarkDropObj( SdrObject* pObj )
 {
