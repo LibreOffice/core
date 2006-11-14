@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconcustomshape.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:48:56 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:50:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,8 @@
 #ifndef _SVX_ADJITEM_HXX
 #include <svx/adjitem.hxx>
 #endif
+
+#include <math.h>
 
 //------------------------------------------------------------------------
 
