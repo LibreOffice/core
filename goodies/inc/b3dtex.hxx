@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dtex.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:35:19 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:02:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,17 +164,16 @@ enum Base3DTextureWrap
 class TextureAttributes
 {
 private:
-    void*           mpFloatTrans;
-    BOOL            mbGhosted;
+    void*               mpFloatTrans;
+    sal_Bool            mbGhosted;
 
 public:
-    TextureAttributes(BOOL bGhosted, void* pFT);
-    virtual ~TextureAttributes(){};
+    TextureAttributes(sal_Bool bGhosted, void* pFT);
 
-    virtual BOOL operator==(const TextureAttributes&) const;
-    virtual UINT16 GetTextureAttributeType() const =0;
+    virtual sal_Bool operator==(const TextureAttributes&) const;
+    virtual sal_uInt16 GetTextureAttributeType() const =0;
 
-    BOOL GetGhostedAttribute() { return mbGhosted; }
+    sal_Bool GetGhostedAttribute() { return mbGhosted; }
     void* GetFloatTransAttribute() { return mpFloatTrans; }
 };
 
@@ -184,10 +183,10 @@ private:
     Color           maColorAttribute;
 
 public:
-    TextureAttributesColor(BOOL bGhosted, void* pFT, Color aColor);
+    TextureAttributesColor(sal_Bool bGhosted, void* pFT, Color aColor);
 
-    virtual BOOL operator==(const TextureAttributes&) const;
-    virtual UINT16 GetTextureAttributeType() const;
+    virtual sal_Bool operator==(const TextureAttributes&) const;
+    virtual sal_uInt16 GetTextureAttributeType() const;
 
     Color GetColorAttribute() { return maColorAttribute; }
 };
@@ -198,10 +197,11 @@ private:
     Bitmap          maBitmapAttribute;
 
 public:
-    TextureAttributesBitmap(BOOL bGhosted, void* pFT, Bitmap aBmp);
+    TextureAttributesBitmap(sal_Bool bGhosted, void* pFT, Bitmap aBmp);
+    virtual ~TextureAttributesBitmap();
 
-    virtual BOOL operator==(const TextureAttributes&) const;
-    virtual UINT16 GetTextureAttributeType() const;
+    virtual sal_Bool operator==(const TextureAttributes&) const;
+    virtual sal_uInt16 GetTextureAttributeType() const;
 
     Bitmap GetBitmapAttribute() { return maBitmapAttribute; }
 };
@@ -213,10 +213,10 @@ private:
     void*           mpStepCount;
 
 public:
-    TextureAttributesGradient(BOOL bGhosted, void* pFT, void* pF, void *pSC);
+    TextureAttributesGradient(sal_Bool bGhosted, void* pFT, void* pF, void *pSC);
 
-    virtual BOOL operator==(const TextureAttributes&) const;
-    virtual UINT16 GetTextureAttributeType() const;
+    virtual sal_Bool operator==(const TextureAttributes&) const;
+    virtual sal_uInt16 GetTextureAttributeType() const;
 
     void* GetFillAttribute() { return mpFill; }
     void* GetStepCountAttribute() { return mpStepCount; }
@@ -228,10 +228,10 @@ private:
     void*           mpFill;
 
 public:
-    TextureAttributesHatch(BOOL bGhosted, void* pFT, void* pF);
+    TextureAttributesHatch(sal_Bool bGhosted, void* pFT, void* pF);
 
-    virtual BOOL operator==(const TextureAttributes&) const;
-    virtual UINT16 GetTextureAttributeType() const;
+    virtual sal_Bool operator==(const TextureAttributes&) const;
+    virtual sal_uInt16 GetTextureAttributeType() const;
 
     void* GetHatchFillAttribute() { return mpFill; }
 };
@@ -277,7 +277,7 @@ protected:
     Base3DTextureWrap       eWrapT;
 
     // Entscheidungsvariable
-    UINT8                   nSwitchVal;
+    sal_uInt8               nSwitchVal;
 
     // Vorbestimmbare interne booleans
     unsigned                bTextureKindChanged : 1;
