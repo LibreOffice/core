@@ -4,9 +4,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:08:02 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:58:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -409,7 +409,9 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
 
             pViewData->SetDelMark( ScRange( nDelStartX,nDelStartY,nTab,
                                             nEndX,nEndY,nTab ) );
+            pViewData->GetView()->UpdateShrinkOverlay();
 
+#if 0
             if ( bOldDelMark )
             {
                 ScUpdateRect aRect( aDelRange.aStart.Col(), aDelRange.aStart.Row(),
@@ -425,6 +427,7 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
                                     nPaintEndX, nPaintEndY, SC_UPDATE_MARKS );
             }
             else
+#endif
                 pViewData->GetView()->
                     PaintArea( nStartX,nDelStartY, nEndX,nEndY, SC_UPDATE_MARKS );
 
@@ -443,9 +446,13 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
             if ( bOldDelMark )
             {
                 pViewData->ResetDelMark();
+                pViewData->GetView()->UpdateShrinkOverlay();
+
+#if 0
                 pViewData->GetView()->
                     PaintArea( aDelRange.aStart.Col(), aDelRange.aStart.Row(),
                                aDelRange.aEnd.Col(), aDelRange.aEnd.Row(), SC_UPDATE_MARKS );
+#endif
             }
 
             BOOL bNegX = ( nPosX < (SCsCOL) nStartX );
