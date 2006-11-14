@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:00:42 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:24:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,8 +107,11 @@ public:
     SAL_DLLPRIVATE XImage* ImplCreateXImage( SalDisplay* pSalDisp,
                                             int nScreen, long nDepth,
                                               const SalTwoRect& rTwoRect ) const;
+
+    SAL_DLLPRIVATE ImplSalDDB* ImplGetDDB( Drawable, int nScreen, long nDrawableDepth,
+                                           const SalTwoRect& ) const;
     void    ImplDraw( Drawable aDrawable, int nScreen, long nDrawableDepth,
-                     const SalTwoRect& rTwoRect, const GC& rGC ) const;
+                      const SalTwoRect& rTwoRect, const GC& rGC ) const;
 
 public:
 
