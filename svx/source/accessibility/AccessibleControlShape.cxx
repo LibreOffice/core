@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:59:45 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:12:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,17 +216,9 @@ namespace {
     {
         Reference< XContainer > xReturn;
         DBG_ASSERT( _pView, "lcl_getControlContainer: invalid view!" );
-        if ( _pView )
+        if ( _pView  && _pView->GetSdrPageView())
         {
-            USHORT nPageViews = _pView->GetPageViewCount();
-            for ( USHORT nPage = 0; ( nPage < nPageViews ) && !xReturn.is(); ++nPage )
-            {
-                SdrPageView* pPageView = _pView->GetPageViewPvNum( nPage );
-                if ( pPageView )
-                {
-                    xReturn = xReturn.query( pPageView->GetControlContainer( _pWin ) );
-                }
-            }
+            xReturn = xReturn.query( _pView->GetSdrPageView()->GetControlContainer( *_pWin ) );
         }
         return xReturn;
     }
