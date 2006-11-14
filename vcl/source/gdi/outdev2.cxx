@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:49:09 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:22:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1960,11 +1960,26 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
 
     if( !aDstRect.Intersection( Rectangle( aOutPt, aOutSz ) ).IsEmpty() )
     {
+        bool bNativeAlpha = false;
+        static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
+        if( !pDisableNative && !bHMirr && !bVMirr ) {
+        Point aRelPt = aOutPt + Point( mnOutOffX, mnOutOffY );
+            SalTwoRect aTR = {
+                rSrcPtPixel.X(), rSrcPtPixel.Y(),
+                rSrcSizePixel.Width(), rSrcSizePixel.Height(),
+                aRelPt.X(), aRelPt.Y(),
+                aOutSz.Width(), aOutSz.Height()
+            };
+            SalBitmap* pSalSrcBmp = rBmp.ImplGetImpBitmap()->ImplGetSalBitmap();
+            SalBitmap* pSalAlphaBmp = rAlpha.ImplGetImpBitmap()->ImplGetSalBitmap();
+            bNativeAlpha = mpGraphics->DrawAlphaBitmap( aTR, *pSalSrcBmp, *pSalAlphaBmp, this );
+        }
+
         VirtualDevice* pOldVDev = mpAlphaVDev;
 
         Rectangle aBmpRect( aNullPt, rBmp.GetSizePixel() );
-
-        if( !aBmpRect.Intersection( Rectangle( rSrcPtPixel, rSrcSizePixel ) ).IsEmpty() )
+        if( !bNativeAlpha
+                &&  !aBmpRect.Intersection( Rectangle( rSrcPtPixel, rSrcSizePixel ) ).IsEmpty() )
         {
             GDIMetaFile*    pOldMetaFile = mpMetaFile; mpMetaFile = NULL;
             const BOOL      bOldMap = mbMap; mbMap = FALSE;
