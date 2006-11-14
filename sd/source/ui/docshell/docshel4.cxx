@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:45:09 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:26:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,6 @@
 #include "sdpptwrp.hxx"
 #include "sdcgmfilter.hxx"
 #include "sdgrffilter.hxx"
-#include "sdbinfilter.hxx"
 #include "sdhtmlfilter.hxx"
 
 using namespace ::com::sun::star;
@@ -233,7 +232,7 @@ void DrawDocShell::SetPrinter(SfxPrinter *pNewPrinter)
     {
         ::sd::View* pView = pViewShell->GetView();
         if ( pView->IsTextEdit() )
-            pView->EndTextEdit();
+            pView->SdrEndTextEdit();
     }
 
     if ( pPrinter && bOwnPrinter && (pPrinter != pNewPrinter) )
@@ -590,7 +589,7 @@ BOOL DrawDocShell::ConvertFrom( SfxMedium& rMedium )
     {
         pDoc->CreateFirstPages();
         pDoc->StopWorkStartupDelay();
-        bRet = SdGRFFilter( rMedium, *this, sal_True ).Import();
+        bRet = SdGRFFilter( rMedium, *this ).Import();
     }
 
     FinishedLoading( SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES );
@@ -716,7 +715,7 @@ BOOL DrawDocShell::ConvertTo( SfxMedium& rMedium )
         }
         else
         {
-            pFilter = new SdGRFFilter( rMedium, *this, sal_True );
+            pFilter = new SdGRFFilter( rMedium, *this );
         }
 
         if( pFilter )
@@ -927,7 +926,7 @@ BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
                 pDrViewSh->MakeVisible(pObj->GetLogicRect(),
                                        *pDrViewSh->GetActiveWindow());
                 pDrViewSh->GetView()->UnmarkAll();
-                pDrViewSh->GetView()->MarkObj(pObj, pDrViewSh->GetView()->GetPageViewPvNum(0), FALSE);
+                pDrViewSh->GetView()->MarkObj(pObj, pDrViewSh->GetView()->GetSdrPageView(), FALSE);
             }
         }
 
