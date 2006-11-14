@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconstr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:25:30 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:51:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,7 +273,7 @@ BOOL __EXPORT FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
     {
         pWindow->CaptureMouse();
 
-        SdrHdl* pHdl = pView->HitHandle(aMDPos, *pWindow);
+        SdrHdl* pHdl = pView->PickHandle(aMDPos);
 
         if ( pHdl != NULL || pView->IsMarkedHit(aMDPos) )
         {
@@ -321,7 +321,7 @@ BOOL __EXPORT FuConstruct::MouseMove(const MouseEvent& rMEvt)
     }
     else
     {
-        SdrHdl* pHdl=pView->HitHandle(aPnt, *pWindow);
+        SdrHdl* pHdl=pView->PickHandle(aPnt);
 
         if ( pHdl != NULL )
         {
