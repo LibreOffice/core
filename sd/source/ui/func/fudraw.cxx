@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:15:28 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:28:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -293,7 +293,7 @@ BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
         BOOL bHelpLine(FALSE);
         if(pView->IsHlplVisible())
             bHelpLine = pView->PickHelpLine(aMDPos, nHitLog, *pWindow, nHelpLine, pPV);
-        BOOL bHitHdl = (pView->HitHandle(aMDPos, *pWindow) != NULL);
+        BOOL bHitHdl = (pView->PickHandle(aMDPos) != NULL);
 
         if ( bHelpLine
             && !pView->IsCreateObj()
@@ -443,7 +443,7 @@ BOOL FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
         Rectangle aOutputArea(Point(0,0), pWindow->GetOutputSizePixel());
 
         if ( !aOutputArea.IsInside(rMEvt.GetPosPixel()) )
-            pView->GetPageViewPvNum(0)->DeleteHelpLine(nHelpLine);
+            pView->GetSdrPageView()->DeleteHelpLine(nHelpLine);
 
         pWindow->ReleaseMouse();
     }
@@ -619,10 +619,10 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
 
 void FuDraw::ScrollStart()
 {
-    if ( pView->IsShownXorVisible(pWindow) )
-    {
-        pView->HideShownXor(pWindow);
-    }
+    //if ( pView->IsShownXorVisible(pWindow) )
+    //{
+    //  pView->HideShownXor(pWindow);
+    //}
 }
 
 /*************************************************************************
@@ -633,10 +633,10 @@ void FuDraw::ScrollStart()
 
 void FuDraw::ScrollEnd()
 {
-    if ( !pView->IsShownXorVisible(pWindow) )
-    {
-        pView->ShowShownXor(pWindow);
-    }
+    //if ( !pView->IsShownXorVisible(pWindow) )
+    //{
+    //  pView->ShowShownXor(pWindow);
+    //}
 }
 
 /*************************************************************************
@@ -691,7 +691,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 
     if (pView->IsDragObj())
     {
-        if (SD_MOD()->GetWaterCan() && !pView->HitHandle(aPnt, *pWindow))
+        if (SD_MOD()->GetWaterCan() && !pView->PickHandle(aPnt))
         {
             /******************************************************************
             * Giesskannenmodus
@@ -702,7 +702,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
     }
     else
     {
-        SdrHdl* pHdl = pView->HitHandle(aPnt, *pWindow);
+        SdrHdl* pHdl = pView->PickHandle(aPnt);
 
         if (SD_MOD()->GetWaterCan() && !pHdl)
         {
@@ -821,7 +821,7 @@ BOOL FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
 
     if (bAnimationInfo || bImageMapInfo)
     {
-        const SetOfByte* pVisiLayer = &pView->GetPageViewPvNum(0)->GetVisibleLayers();
+        const SetOfByte* pVisiLayer = &pView->GetSdrPageView()->GetVisibleLayers();
         USHORT nHitLog(USHORT (pWindow->PixelToLogic(Size(HITPIX,0)).Width()));
         long  n2HitLog(nHitLog * 2);
         Point aHitPosR(rPos);
@@ -927,7 +927,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
                     /**********************************************************
                     * aktivate OLE-object
                     **********************************************************/
-                    pView->HideMarkHdl(NULL);
+                    pView->HideMarkHdl();
                     pViewShell->ActivateObject( (SdrOle2Obj*) pObj, 0);
                 }
             }
@@ -1184,7 +1184,7 @@ bool FuDraw::cancel()
     }
     else if ( pView->IsTextEdit() )
     {
-        pView->EndTextEdit();
+        pView->SdrEndTextEdit();
         bReturn = true;
 
         SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
