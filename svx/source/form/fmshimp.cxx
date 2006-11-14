@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:24:00 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:25:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,6 +253,10 @@
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
+#endif
+
+#ifndef _SDRPAGEWINDOW_HXX
+#include <sdrpagewindow.hxx>
 #endif
 
 #include <algorithm>
@@ -1376,11 +1380,11 @@ Reference< XControlContainer > FmXFormShell::getControlContainerForView()
 {
     SdrPageView* pPageView = NULL;
     if ( m_pShell && m_pShell->GetFormView() )
-        pPageView = m_pShell->GetFormView()->GetPageViewPvNum(0);
+        pPageView = m_pShell->GetFormView()->GetSdrPageView();
 
     Reference< XControlContainer> xControlContainer;
     if ( pPageView )
-        xControlContainer = pPageView->GetWindow(0)->GetControlContainerRef();
+        xControlContainer = pPageView->GetPageWindow(0)->GetControlContainer();
 
     return xControlContainer;
 }
@@ -1578,7 +1582,7 @@ void FmXFormShell::ExecuteSearch()
     // GridControls wieder restaurieren
     LoopGrids(GA_ENABLE_SYNC | GA_DISABLE_ROCTRLR);
 
-    m_pShell->GetFormView()->UnMarkAll(m_pShell->GetFormView()->GetPageViewPvNum(0));
+    m_pShell->GetFormView()->UnMarkAll(m_pShell->GetFormView()->GetSdrPageView());
         // da ich in OnFoundData (fals ich dort war) Controls markiert habe
 }
 
@@ -1756,7 +1760,7 @@ void FmXFormShell::ExecuteFormSlot( sal_Int32 _nSlot,
 
     aHelper->execute( _nSlot );
     if ( _nSlot == SID_FM_RECORD_UNDO )
-        {
+    {
         // if we're doing an UNDO, *and* if the affected form is the form which we also display
         // as external view, then we need to reset the controls of the external form, too
         if ( getInternalForm( _rxForm ) == m_xExternalDisplayedForm )
@@ -2159,8 +2163,8 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     SdrObject* pObject = m_arrSearchedControls.GetObject(pfriWhere->nFieldPos);
     DBG_ASSERT(pObject != NULL, "FmXFormShell::OnFoundData : unerwartet : ungueltiges VclControl-Interface");
 
-    m_pShell->GetFormView()->UnMarkAll(m_pShell->GetFormView()->GetPageView(m_pShell->GetCurPage()));
-    m_pShell->GetFormView()->MarkObj(pObject, m_pShell->GetFormView()->GetPageView(m_pShell->GetCurPage()));
+    m_pShell->GetFormView()->UnMarkAll(m_pShell->GetFormView()->GetSdrPageView());
+    m_pShell->GetFormView()->MarkObj(pObject, m_pShell->GetFormView()->GetSdrPageView());
 
     DBG_ASSERT(pObject->IsUnoObj(), "FmXFormShell::OnFoundData : ungueltiges Control !");
     Reference< XControlModel> xControlModel( ((SdrUnoObj*)pObject)->GetUnoControlModel());
@@ -2231,7 +2235,7 @@ IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere
     }
 
 
-    m_pShell->GetFormView()->UnMarkAll(m_pShell->GetFormView()->GetPageViewPvNum(0));
+    m_pShell->GetFormView()->UnMarkAll(m_pShell->GetFormView()->GetSdrPageView());
     return 0L;
 }
 
@@ -3809,7 +3813,7 @@ void FmXFormShell::viewDeactivated( FmFormView* _pCurrentView, sal_Bool _bDeacti
         // if we have an async load operation pending for the 0-th page for this view,
         // we need to cancel this
         // 103727 - 2002-09-26 - fs@openoffice.org
-        const SdrPageView* pCurPageView = _pCurrentView->GetPageViewPvNum( 0 );
+        const SdrPageView* pCurPageView = _pCurrentView->GetSdrPageView();
         const FmFormPage* pPage = pCurPageView ? PTR_CAST( FmFormPage, pCurPageView->GetPage() ) : NULL;
         if ( pPage )
         {
@@ -3872,7 +3876,7 @@ void FmXFormShell::viewActivated( FmFormView* _pCurrentView, sal_Bool _bSyncActi
     if ( _pCurrentView && _pCurrentView->GetImpl() && !_pCurrentView->IsDesignMode() )
     {
         // load forms for the page the current view belongs to
-        SdrPageView* pCurPageView = _pCurrentView->GetPageViewPvNum( 0 );
+        SdrPageView* pCurPageView = _pCurrentView->GetSdrPageView();
         FmFormPage* pPage = pCurPageView ? PTR_CAST( FmFormPage, pCurPageView->GetPage() ) : NULL;
         if ( pPage )
         {
