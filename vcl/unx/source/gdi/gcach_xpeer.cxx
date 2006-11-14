@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:44:14 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:24:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,13 +39,12 @@
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
 #include <osl/thread.h>
-using namespace rtl;
 
 #include <gcach_xpeer.hxx>
-#include <stdio.h>
-#include <stdlib.h>
+#include <xrender_peer.hxx>
 #include <saldisp.hxx>
 #include <saldata.hxx>
+#include <salgdi.h>
 
 // ===========================================================================
 
@@ -62,52 +61,19 @@ struct MultiScreenGlyph
 // ===========================================================================
 
 X11GlyphPeer::X11GlyphPeer()
-:   mpDisplay(NULL)
+:   mpDisplay( GetX11SalData()->GetDisplay()->GetDisplay() )
 ,   mnMaxScreens(0)
 ,   mnDefaultScreen(0)
 ,   mnExtByteCount(0)
 ,   mnForcedAA(0)
 ,   mnUsingXRender(0)
-,   mnRenderVersion(0x00)
-,   mpGlyphFormat(NULL)
 {
     maRawBitmap.mnAllocated = 0;
     maRawBitmap.mpBits = NULL;
-}
-
-// ---------------------------------------------------------------------------
-
-X11GlyphPeer::~X11GlyphPeer()
-{
-    SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
-    Display* const pX11Disp = pSalDisp->GetDisplay();
-    for( int i = 0; i < mnMaxScreens; i++ )
-    {
-        SalDisplay::RenderEntryMap& rMap = pSalDisp->GetRenderEntries( i );
-        for( SalDisplay::RenderEntryMap::iterator it = rMap.begin(); it != rMap.end(); ++it )
-        {
-            if( it->second.m_aPixmap )
-                XFreePixmap( pX11Disp, it->second.m_aPixmap );
-            if( it->second.m_aPicture )
-            {
-                #ifdef XRENDER_LINK
-                XRenderFreePicture ( pX11Disp, it->second.m_aPicture );
-                #else
-                (*pXRenderFreePicture)( pX11Disp, it->second.m_aPicture );
-                #endif
-            }
-        }
-        rMap.clear();
-    }
-}
-
-// ---------------------------------------------------------------------------
-
-void X11GlyphPeer::SetDisplay( const SalDisplay& rSalDisplay )
-{
     if( mpDisplay != NULL )
         return;
 
+    SalDisplay& rSalDisplay = *GetX11SalData()->GetDisplay();
     mpDisplay    = rSalDisplay.GetDisplay();
     mnMaxScreens = rSalDisplay.GetScreenCount();
     if( mnMaxScreens > MAX_GCACH_SCREENS )
@@ -118,6 +84,34 @@ void X11GlyphPeer::SetDisplay( const SalDisplay& rSalDisplay )
         mnExtByteCount = sizeof(MultiScreenGlyph) + sizeof(Pixmap) * (mnMaxScreens - 1);
     mnDefaultScreen = rSalDisplay.GetDefaultScreenNumber();
 
+    InitAntialiasing();
+}
+
+// ---------------------------------------------------------------------------
+
+X11GlyphPeer::~X11GlyphPeer()
+{
+    SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
+    Display* const pX11Disp = pSalDisp->GetDisplay();
+    XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
+    for( int i = 0; i < mnMaxScreens; i++ )
+    {
+        SalDisplay::RenderEntryMap& rMap = pSalDisp->GetRenderEntries( i );
+        for( SalDisplay::RenderEntryMap::iterator it = rMap.begin(); it != rMap.end(); ++it )
+        {
+            if( it->second.m_aPixmap )
+                ::XFreePixmap( pX11Disp, it->second.m_aPixmap );
+            if( it->second.m_aPicture )
+                rRenderPeer.FreePicture( it->second.m_aPicture );
+        }
+        rMap.clear();
+    }
+}
+
+// ---------------------------------------------------------------------------
+
+void X11GlyphPeer::InitAntialiasing()
+{
     int nEnvAntiAlias = 0;
     const char* pEnvAntiAlias = getenv( "SAL_ANTIALIAS_DISABLE" );
     if( pEnvAntiAlias )
@@ -127,13 +121,22 @@ void X11GlyphPeer::SetDisplay( const SalDisplay& rSalDisplay )
             return;
     }
 
-    // we can do anti aliasing on the client side
-    // when the display's visuals are suitable
-    mnForcedAA = ~0U;
-    // unless the feature is explicitly disabled by an environment variable
+    mnUsingXRender = 0;
+    mnForcedAA = 0;
+
+    // enable XRENDER accelerated aliasing on screens that support it
+    // unless it explicitly disabled by an environment variable
+    if( (nEnvAntiAlias & 2) == 0 )
+        mnUsingXRender = XRenderPeer::GetInstance().InitRenderText( mnMaxScreens );
+
+    // else enable client side antialiasing for these screens
+    // unless it is explicitly disabled by an environment variable
     if( (nEnvAntiAlias & 1) != 0 )
-        mnForcedAA = 0;
-    int nMaxDepth = 0;
+        return;
+
+    // disable client side antialiasing for screen visuals that are not suitable
+    mnForcedAA = ~mnUsingXRender;
+    SalDisplay& rSalDisplay = *GetX11SalData()->GetDisplay();
     for( int nScreen = 0; nScreen < mnMaxScreens; ++nScreen)
     {
         Visual* pVisual = rSalDisplay.GetVisual( nScreen ).GetVisual();
@@ -143,8 +146,6 @@ void X11GlyphPeer::SetDisplay( const SalDisplay& rSalDisplay )
         XVisualInfo* pXVisualInfo = XGetVisualInfo( mpDisplay, VisualIDMask, &aXVisualInfo, &nVisuals );
         for( int i = nVisuals; --i >= 0; )
         {
-            if( nMaxDepth < pXVisualInfo[i].depth )
-                nMaxDepth = pXVisualInfo[i].depth;
             if( ((pXVisualInfo[i].c_class==PseudoColor) || (pXVisualInfo[i].depth<24))
             && ((pXVisualInfo[i].c_class>GrayScale) || (pXVisualInfo[i].depth!=8) ) )
                 mnForcedAA &= ~(1U << nScreen);
@@ -152,152 +153,6 @@ void X11GlyphPeer::SetDisplay( const SalDisplay& rSalDisplay )
         if( pXVisualInfo != NULL )
             XFree( pXVisualInfo );
     }
-
-    // but we prefer the hardware accelerated solution
-    int nDummy;
-    if( !XQueryExtension( mpDisplay, "RENDER", &nDummy, &nDummy, &nDummy ) )
-        return;
-
-#ifndef XRENDER_LINK
-    // we don't know if we are running on a system with xrender library
-    // we don't want to install system libraries ourselves
-    // => load them dynamically when they are available
-#ifdef MACOSX
-    OUString xrenderLibraryName( RTL_CONSTASCII_USTRINGPARAM( "libXrender.dylib" ));
-#else
-    OUString xrenderLibraryName( RTL_CONSTASCII_USTRINGPARAM( "libXrender.so.1" ));
-#endif
-    oslModule pRenderLib=osl_loadModule(xrenderLibraryName.pData, SAL_LOADMODULE_DEFAULT);
-    if( !pRenderLib ) {
-#ifdef DEBUG
-        fprintf( stderr, "Display can do XRender, but no %s installed.\n"
-            "Please install for improved display performance\n", OUStringToOString( xrenderLibraryName.getStr(), osl_getThreadTextEncoding() ).getStr() );
-#endif
-        return;
-    }
-
-    OUString queryExtensionFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderQueryExtension"));
-    oslGenericFunction pFunc;
-    pFunc=osl_getFunctionSymbol(pRenderLib, queryExtensionFuncName.pData);
-    if( !pFunc ) return;
-    pXRenderQueryExtension          = (Bool(*)(Display*,int*,int*))pFunc;
-
-    OUString queryVersionFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderQueryVersion"));
-    pFunc=osl_getFunctionSymbol(pRenderLib, queryVersionFuncName.pData);
-    if( !pFunc ) return;
-    pXRenderQueryVersion            = (void(*)(Display*,int*,int*))pFunc;
-
-    OUString visFormatFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFindVisualFormat"));
-    pFunc=osl_getFunctionSymbol(pRenderLib, visFormatFuncName.pData);
-    if( !pFunc ) return;
-    pXRenderFindVisualFormat        = (XRenderPictFormat*(*)(Display*,Visual*))pFunc;
-
-    OUString fmtFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFindFormat"));
-    pFunc=osl_getFunctionSymbol(pRenderLib, fmtFuncName.pData);
-    if( !pFunc ) return;
-    pXRenderFindFormat              = (XRenderPictFormat*(*)(Display*,unsigned long,XRenderPictFormat*,int))pFunc;
-
-    OUString creatGlyphFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCreateGlyphSet"));
-    pFunc=osl_getFunctionSymbol(pRenderLib, creatGlyphFuncName.pData);
-    if( !pFunc ) return;
-    pXRenderCreateGlyphSet          = (GlyphSet(*)(Display*,XRenderPictFormat*))pFunc;
-
-    OUString freeGlyphFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFreeGlyphSet"));
-    pFunc=osl_getFunctionSymbol(pRenderLib, freeGlyphFuncName.pData);
-    if( !pFunc ) return;
-    pXRenderFreeGlyphSet            = (void(*)(Display*,GlyphSet))pFunc;
-
-    OUString addGlyphFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderAddGlyphs"));
-    pFunc=osl_getFunctionSymbol(pRenderLib, addGlyphFuncName.pData);
-    if( !pFunc ) return;
-    pXRenderAddGlyphs               = (void(*)(Display*,GlyphSet,Glyph*,XGlyphInfo*,int,char*,int))pFunc;
-
-    OUString freeGlyphsFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFreeGlyphs"));
-    pFunc=osl_getFunctionSymbol(pRenderLib, freeGlyphsFuncName.pData);
-    if( !pFunc ) return;
-    pXRenderFreeGlyphs              = (void(*)(Display*,GlyphSet,Glyph*,int))pFunc;
-
-    OUString compStringFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCompositeString32"));
-    pFunc=osl_getFunctionSymbol(pRenderLib, compStringFuncName.pData);
-    if( !pFunc ) return;
-    pXRenderCompositeString32       = (void(*)(Display*,int,Picture,Picture,XRenderPictFormat*,GlyphSet,int,int,int,int,unsigned*,int))pFunc;
-
-    OUString creatPicFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCreatePicture"));
-    pFunc=osl_getFunctionSymbol(pRenderLib, creatPicFuncName.pData);
-    if( !pFunc ) return;
-    pXRenderCreatePicture           = (Picture(*)(Display*,Drawable,XRenderPictFormat*,unsigned long,XRenderPictureAttributes*))pFunc;
-
-    OUString setClipFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderSetPictureClipRegion"));
-    pFunc=osl_getFunctionSymbol(pRenderLib, setClipFuncName.pData);
-    if( !pFunc ) return;
-    pXRenderSetPictureClipRegion    = (void(*)(Display*,Picture,XLIB_Region))pFunc;
-
-    OUString freePicFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFreePicture"));
-    pFunc=osl_getFunctionSymbol(pRenderLib, freePicFuncName.pData);
-    if( !pFunc ) return;
-    pXRenderFreePicture             = (void(*)(Display*,Picture))pFunc;
-
-    OUString fillRectangleFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFillRectangle"));
-    pFunc=osl_getFunctionSymbol(pRenderLib, fillRectangleFuncName.pData);
-    if( !pFunc ) return;
-    pXRenderFillRectangle           = (void(*)(Display*,int,Picture,_Xconst XRenderColor*,int,int,unsigned int,unsigned int))pFunc;
-#endif
-
-    // needed to initialize libXrender internals, we already know its there
-#ifdef XRENDER_LINK
-    XRenderQueryExtension( mpDisplay, &nDummy, &nDummy );
-#else
-    (*pXRenderQueryExtension)( mpDisplay, &nDummy, &nDummy );
-#endif
-
-    int nMajor, nMinor;
-#ifdef XRENDER_LINK
-    XRenderQueryVersion( mpDisplay, &nMajor, &nMinor );
-#else
-    (*pXRenderQueryVersion)( mpDisplay, &nMajor, &nMinor );
-#endif
-    mnRenderVersion = 16*nMajor + nMinor;
-    // TODO: enable/disable things depending on version
-
-    // the 8bit alpha mask format must be there
-    XRenderPictFormat aPictFormat={0,0,8,{0,0,0,0,0,0,0,0xFF},0};
-#ifdef XRENDER_LINK
-    mpGlyphFormat = XRenderFindFormat ( mpDisplay,
-        PictFormatAlphaMask|PictFormatDepth, &aPictFormat, 0 );
-#else
-    mpGlyphFormat = (*pXRenderFindFormat)( mpDisplay,
-        PictFormatAlphaMask|PictFormatDepth, &aPictFormat, 0 );
-#endif
-
-    if( mpGlyphFormat != NULL )
-    {
-        for( int nScreen = 0; nScreen < mnMaxScreens; ++nScreen)
-        {
-            Visual* pVisual = rSalDisplay.GetVisual( nScreen ).GetVisual();
-
-            // and the visual must be supported too on the screen
-#ifdef XRENDER_LINK
-            XRenderPictFormat* pVisualFormat = XRenderFindVisualFormat( mpDisplay, pVisual );
-#else
-            XRenderPictFormat* pVisualFormat = (*pXRenderFindVisualFormat)( mpDisplay, pVisual );
-#endif
-            if( pVisualFormat != NULL )
-                mnUsingXRender = ~0U;
-        }
-    }
-
-    // #97763# disable XRENDER on <15bit displays for XFree<=4.2.0
-    if( (nMaxDepth < 15) && (mnRenderVersion <= 0x02) )
-        mnUsingXRender = 0;
-
-    // #93033# disable XRENDER for old RENDER versions if XINERAMA is present
-    if( (mnRenderVersion < 0x02)
-    &&  XQueryExtension( mpDisplay, "XINERAMA", &nDummy, &nDummy, &nDummy ) )
-        mnUsingXRender = 0;
-
-    // disable XRENDER if requested by an environment variable
-    if( (nEnvAntiAlias & 2) != 0 )
-        mnUsingXRender = 0;
 }
 
 // ===========================================================================
@@ -472,11 +327,7 @@ void X11GlyphPeer::RemovingFont( ServerFont& rServerFont )
             break;
 
         case INFO_XRENDER:
-#ifdef XRENDER_LINK
-            XRenderFreeGlyphSet( mpDisplay, (GlyphSet)pFontExt );
-#else
-            (*pXRenderFreeGlyphSet)( mpDisplay, (GlyphSet)pFontExt );
-#endif
+            XRenderPeer::GetInstance().FreeGlyphSet( (GlyphSet)pFontExt );
             break;
     }
 
@@ -523,7 +374,8 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& /*rServerFont*/, GlyphData& rGlyph
                     mnBytesUsed -= nHeight * ((nWidth + 7) >> 3);
                 }
                 delete pMSGlyph->mpRawBitmap;
-                // (*pXRenderFreeGlyphs)( mpDisplay, aGlyphSet, &nGlyphId, 1 );
+                // Glyph nGlyphId = (Glyph)rGlyphData.GetExtPointer();
+                // XRenderPeer::GetInstance().FreeGlyph( aGlyphSet, &nGlyphId );
                 delete[] pMSGlyph; // it was allocated with new char[]
             }
             break;
@@ -542,16 +394,8 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& /*rServerFont*/, GlyphData& rGlyph
 
         case INFO_XRENDER:
             {
-/*
-                // TODO: reenable when it works without problems
-                Glyph nGlyphId = (Glyph)rGlyphData.ExtDataRef().mpData;
-                // XRenderFreeGlyphs not implemented yet for version<=0.2
-                // #108209# disabled because of crash potential,
-                // the glyph leak is not too bad because they will
-                // be cleaned up when the glyphset is released
-                if( mnRenderVersion >= 0x05 )
-                    (*pXRenderFreeGlyphs)( mpDisplay, aGlyphSet, &nGlyphId, 1 );
-*/
+                // Glyph nGlyphId = (Glyph)rGlyphData.GetExtPointer();
+                // XRenderPeer::GetInstance().FreeGlyph( aGlyphSet, &nGlyphId );
                 mnBytesUsed -= nHeight * ((nWidth + 3) & ~3);
             }
             break;
@@ -597,11 +441,7 @@ GlyphSet X11GlyphPeer::GetGlyphSet( ServerFont& rServerFont, int nScreen )
                 int nHeight = rServerFont.GetFontSelData().mnHeight;
                 if( nHeight<250 && rServerFont.GetAntialiasAdvice() )
                 {
-#ifdef XRENDER_LINK
-                    aGlyphSet = XRenderCreateGlyphSet ( mpDisplay, mpGlyphFormat );
-#else
-                    aGlyphSet = (*pXRenderCreateGlyphSet)( mpDisplay, mpGlyphFormat );
-#endif
+                    aGlyphSet = XRenderPeer::GetInstance().CreateGlyphSet();
                     rServerFont.SetExtended( INFO_XRENDER, (void*)aGlyphSet );
                 }
                 else
@@ -780,13 +620,8 @@ Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
 
             aGlyphId = nGlyphIndex & 0x00FFFFFF;
             const ULONG nBytes = maRawBitmap.mnScanlineSize * maRawBitmap.mnHeight;
-#ifdef XRENDER_LINK
-            XRenderAddGlyphs ( mpDisplay, aGlyphSet, &aGlyphId, &aGlyphInfo, 1,
-                (char*)maRawBitmap.mpBits, nBytes );
-#else
-            (*pXRenderAddGlyphs)( mpDisplay, aGlyphSet, &aGlyphId, &aGlyphInfo, 1,
-                (char*)maRawBitmap.mpBits, nBytes );
-#endif
+            XRenderPeer::GetInstance().AddGlyph( aGlyphSet, aGlyphId,
+                aGlyphInfo, (char*)maRawBitmap.mpBits, nBytes );
             mnBytesUsed += nBytes;
         }
         else
@@ -801,3 +636,48 @@ Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
 
     return aGlyphId;
 }
+
+// ===========================================================================
+
+X11GlyphCache::X11GlyphCache( X11GlyphPeer& rPeer )
+:   GlyphCache( rPeer )
+{
+#ifdef MACOSX
+    LoadFonts();
+#endif
+}
+
+// ---------------------------------------------------------------------------
+
+static X11GlyphPeer* pX11GlyphPeer = NULL;
+static X11GlyphCache* pX11GlyphCache = NULL;
+
+X11GlyphCache& X11GlyphCache::GetInstance()
+{
+    if( !pX11GlyphCache )
+    {
+        pX11GlyphPeer = new X11GlyphPeer();
+        pX11GlyphCache = new X11GlyphCache( *pX11GlyphPeer );
+    }
+    return *pX11GlyphCache;
+}
+
+// ---------------------------------------------------------------------------
+
+void X11GlyphCache::KillInstance()
+{
+    delete pX11GlyphCache;
+    delete pX11GlyphPeer;
+    pX11GlyphCache = NULL;
+    pX11GlyphPeer = NULL;
+}
+
+// ===========================================================================
+
+void X11SalGraphics::releaseGlyphPeer()
+{
+    X11GlyphCache::KillInstance();
+}
+
+// ===========================================================================
+
