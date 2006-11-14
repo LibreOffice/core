@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:09:58 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:36:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,10 @@
 #include <vcl/lineinfo.hxx>
 #include <algorithm>
 #include <svx/sdr/contact/objectcontact.hxx>
+
+#ifndef _SDRPAGEWINDOW_HXX
+#include <svx/sdrpagewindow.hxx>
+#endif
 
 using namespace std;
 using namespace ::sd::slidesorter::model;
@@ -231,11 +235,11 @@ void SlideSorterView::ModelHasChanged (void)
         View::ModelHasChanged ();
 
         // Then re-set the page as current page that contains the page objects.
-        ShowPage (mpPage, Point(0,0));
+        ShowSdrPage(mpPage);
 
         // Initialize everything that depends on a page view, now that we have
         // one.
-        GetPageViewPvNum(0)->SetApplicationBackgroundColor(
+        GetSdrPageView()->SetApplicationBackgroundColor(
             Application::GetSettings().GetStyleSettings().GetWindowColor());
 
         UpdatePageBorders();
@@ -613,7 +617,7 @@ void SlideSorterView::InvalidateOneWin (
 
 ::sd::Window* SlideSorterView::GetWindow (void) const
 {
-    return static_cast< ::sd::Window*>(GetWin(0));
+    return static_cast< ::sd::Window*>(GetFirstOutputDevice());
 }
 
 
@@ -689,7 +693,7 @@ ViewOverlay& SlideSorterView::GetOverlay (void)
 
 ::sdr::contact::ObjectContact& SlideSorterView::GetObjectContact (void) const
 {
-    return GetPageViewPvNum(0)->GetWindow(0)->GetObjectContact();
+    return GetSdrPageView()->GetPageWindow(0)->GetObjectContact();
 }
 
 
