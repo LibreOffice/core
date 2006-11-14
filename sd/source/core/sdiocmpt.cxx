@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdiocmpt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:15:45 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:21:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,6 @@
 
 #include "sdiocmpt.hxx"
 
-
-//BFS02
 //////////////////////////////////////////////////////////////////////////////
 
 old_SdrDownCompat::old_SdrDownCompat(SvStream& rNewStream, UINT16 nNewMode)
