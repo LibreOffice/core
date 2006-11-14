@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:50:58 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:42:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,6 @@
 #endif
 
 #include "sxekitm.hxx"
-#include "sxesitm.hxx"
 #include "svdstr.hrc"
 #include "svdglob.hxx"
 
@@ -83,8 +82,51 @@
 #include "svdopath.hxx"
 #endif
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
+#include <basegfx/vector/b2dvector.hxx>
+#endif
 
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _SDR_OVERLAY_OVERLAYMANAGER_HXX
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#endif
+
+#ifndef _SDR_OVERLAY_OVERLAYANIMATEDBITMAPEX_HXX
+#include <svx/sdr/overlay/overlayanimatedbitmapex.hxx>
+#endif
+
+#ifndef _SDR_OVERLAY_OVERLAYBITMAPEX_HXX
+#include <svx/sdr/overlay/overlaybitmapex.hxx>
+#endif
+
+#ifndef _SDR_OVERLAY_OVERLAYBITMAP_HXX
+#include <svx/sdr/overlay/overlaybitmap.hxx>
+#endif
+
+#ifndef _SDR_OVERLAY_OVERLAYLINESTRIPED_HXX
+#include <svx/sdr/overlay/overlaylinestriped.hxx>
+#endif
+
+#ifndef _SDR_OVERLAY_OVERLAYTRIANGLE_HXX
+#include <svx/sdr/overlay/overlaytriangle.hxx>
+#endif
+
+#ifndef _SDRPAGEWINDOW_HXX
+#include <sdrpagewindow.hxx>
+#endif
+
+#ifndef _SDRPAINTWINDOW_HXX
+#include <sdrpaintwindow.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
+#endif
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // #i15222#
 // Due to the ressource problems in Win95/98 with bitmap ressources i
 // will change this handle bitmap provinging class. Old version was splitting
@@ -98,20 +140,12 @@ class SdrHdlBitmapSet
     // the bitmap holding all infos
     BitmapEx                maMarkersBitmap;
 
-//  void FillBitmapsFromResource(sal_uInt16 nResId);
-
 public:
     SdrHdlBitmapSet(UINT16 nResId);
     ~SdrHdlBitmapSet();
 
     BitmapEx GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nInd=0);
 };
-
-//void SdrHdlBitmapSet::FillBitmapsFromResource(sal_uInt16 nResId)
-//{
-//  // ?!?!
-//  sal_Bool bBla;
-//}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -424,7 +458,10 @@ void SdrHdl::Touch()
 
 void SdrHdl::GetRidOfIAObject()
 {
-    aIAOGroup.Delete();
+    //OLMaIAOGroup.Delete();
+
+    // OVERLAYMANAGER
+    maOverlayGroup.clear();
 }
 
 void SdrHdl::CreateB2dIAObject()
@@ -561,25 +598,23 @@ void SdrHdl::CreateB2dIAObject()
         }
 
         SdrMarkView* pView = pHdlList->GetView();
-        for(sal_uInt16 a(0); a < pView->GetPageViewCount(); a++)
-        {
-            SdrPageView* pPageView = pView->GetPageViewPvNum(a);
-            // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
-            // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
+        SdrPageView* pPageView = pView->GetSdrPageView();
 
-            for(sal_uInt32 b(0L); b < pPageView->WindowCount(); b++)
+        if(pPageView)
+        {
+            for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
             {
                 // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
-                const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(b);
-                OutputDevice& rOutDev = rPageViewWindow.GetOutputDevice();
+                const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
-                if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                if(rPageWindow.GetPaintWindow().OutputToWindow())
                 {
                     Point aMoveOutsideOffset(0, 0);
 
                     // add offset if necessary
                     if(pHdlList->IsMoveOutside())
                     {
+                        OutputDevice& rOutDev = rPageWindow.GetPaintWindow().GetOutputDevice();
                         Size aOffset = rOutDev.PixelToLogic(Size(4, 4));
 
                         if(eKind == HDL_UPLFT || eKind == HDL_UPPER || eKind == HDL_UPRGT)
@@ -592,20 +627,20 @@ void SdrHdl::CreateB2dIAObject()
                             aMoveOutsideOffset.X() += aOffset.Height();
                     }
 
-                    // Manager may be zero when printing or drawing to VDevs
-                    if(rPageViewWindow.GetIAOManager())
+                    if(rPageWindow.GetOverlayManager())
                     {
-                        B2dIAObject* pNew = CreateMarkerObject(
-                            rPageViewWindow.GetIAOManager(),
-                            aPos, // + aMoveOutsideOffset,
+                        basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
+                        ::sdr::overlay::OverlayObject* pNewOverlayObject = CreateOverlayObject(
+                            aPosition,
                             eColIndex,
                             eKindOfMarker,
                             aMoveOutsideOffset);
 
-                        if(pNew)
+                        // OVERLAYMANAGER
+                        if(pNewOverlayObject)
                         {
-                            // set as B2DIAObject
-                            aIAOGroup.InsertIAO(pNew);
+                            rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                            maOverlayGroup.append(*pNewOverlayObject);
                         }
                     }
                 }
@@ -674,10 +709,11 @@ BitmapEx SdrHdl::ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd,
     }
 }
 
-B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point _aPos, BitmapColorIndex eColIndex,
-    BitmapMarkerKind eKindOfMarker, Point aMoveOutsideOffset)
+::sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
+    const basegfx::B2DPoint& rPos,
+    BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker, Point aMoveOutsideOffset)
 {
-    B2dIAObject* pRetval = 0L;
+    ::sdr::overlay::OverlayObject* pRetval = 0L;
     sal_Bool bIsFineHdl(pHdlList->IsFineHdl());
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     sal_Bool bIsHighContrast(rStyleSettings.GetHighContrastMode());
@@ -744,19 +780,19 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point _aPos, Bitmap
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
         {
             // #98388# when anchor is used take upper left as reference point inside the handle
-            pRetval = new B2dIAOAnimatedBitmapEx(pMan, _aPos, aBmpEx1, aBmpEx2);
+            pRetval = new ::sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2);
         }
         else if(eKindOfMarker == AnchorTR || eKindOfMarker == AnchorPressedTR)
         {
             // #101688# AnchorTR for SW, take top right as (0,0)
-            pRetval = new B2dIAOAnimatedBitmapEx(pMan, _aPos, aBmpEx1, aBmpEx2,
+            pRetval = new ::sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2,
                 (UINT16)(aBmpEx1.GetSizePixel().Width() - 1), 0,
                 (UINT16)(aBmpEx2.GetSizePixel().Width() - 1), 0);
         }
         else
         {
             // create centered handle as default
-            pRetval = new B2dIAOAnimatedBitmapEx(pMan, _aPos, aBmpEx1, aBmpEx2,
+            pRetval = new ::sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2,
                 (UINT16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
                 (UINT16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
                 (UINT16)(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
@@ -772,12 +808,12 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point _aPos, Bitmap
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
         {
             // #98388# upper left as reference point inside the handle for AnchorPressed, too
-            pRetval = new B2dIAOBitmapEx(pMan, _aPos, aBmpEx);
+            pRetval = new ::sdr::overlay::OverlayBitmapEx(rPos, aBmpEx);
         }
         else if(eKindOfMarker == AnchorTR || eKindOfMarker == AnchorPressedTR)
         {
             // #101688# AnchorTR for SW, take top right as (0,0)
-            pRetval = new B2dIAOBitmapEx(pMan, _aPos, aBmpEx,
+            pRetval = new ::sdr::overlay::OverlayBitmapEx(rPos, aBmpEx,
                 (UINT16)(aBmpEx.GetSizePixel().Width() - 1), 0);
         }
         else
@@ -804,22 +840,18 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point _aPos, Bitmap
             }
 
             // create centered handle as default
-            pRetval = new B2dIAOBitmapEx(pMan, _aPos, aBmpEx, nCenX, nCenY);
+            pRetval = new ::sdr::overlay::OverlayBitmapEx(rPos, aBmpEx, nCenX, nCenY);
         }
     }
 
     return pRetval;
 }
 
-BOOL SdrHdl::IsHit(const Point& rPnt, const OutputDevice& rOut) const
+bool SdrHdl::IsHdlHit(const Point& rPnt) const
 {
-    if(aIAOGroup.GetIAOCount())
-    {
-        Point aPixelPos(rOut.LogicToPixel(rPnt));
-        return aIAOGroup.IsHit(aPixelPos);
-    }
-    else
-        return FALSE;
+    // OVERLAYMANAGER
+    basegfx::B2DPoint aPosition(rPnt.X(), rPnt.Y());
+    return maOverlayGroup.isHit(aPosition);
 }
 
 Pointer SdrHdl::GetPointer() const
@@ -866,12 +898,12 @@ Pointer SdrHdl::GetPointer() const
             }
         } else {
             switch (eKind) {
-                case HDL_UPLFT: ePtr=POINTER_SESIZE;  break;
+                case HDL_UPLFT: ePtr=POINTER_NWSIZE;  break;
                 case HDL_UPPER: ePtr=POINTER_SSIZE;     break;
                 case HDL_UPRGT: ePtr=POINTER_NESIZE;  break;
                 case HDL_LEFT : ePtr=POINTER_ESIZE;     break;
                 case HDL_RIGHT: ePtr=POINTER_ESIZE;     break;
-                case HDL_LWLFT: ePtr=POINTER_NESIZE;  break;
+                case HDL_LWLFT: ePtr=POINTER_SWSIZE;  break;
                 case HDL_LOWER: ePtr=POINTER_SSIZE;     break;
                 case HDL_LWRGT: ePtr=POINTER_SESIZE;  break;
                 case HDL_POLY : ePtr=POINTER_MOVEPOINT; break;
@@ -974,29 +1006,35 @@ void SdrHdlColor::CreateB2dIAObject()
 
         if(pView && !pView->IsMarkHdlHidden())
         {
-            for(sal_uInt16 a(0); a < pView->GetPageViewCount(); a++)
-            {
-                SdrPageView* pPageView = pView->GetPageViewPvNum(a);
-                // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
-                // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
+            SdrPageView* pPageView = pView->GetSdrPageView();
 
-                for(sal_uInt32 b(0L); b < pPageView->WindowCount(); b++)
+            if(pPageView)
+            {
+                for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
                 {
                     // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
-                    const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(b);
-                    OutputDevice& rOutDev = rPageViewWindow.GetOutputDevice();
+                    const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
-                    if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                    if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        // Manager may be zero when printing or drawing to VDevs
-                        if(rPageViewWindow.GetIAOManager())
+                        if(rPageWindow.GetOverlayManager())
                         {
                             Bitmap aBmpCol(CreateColorDropper(aMarkerColor));
-                            B2dIAObject* pNew = new B2dIAOBitmapObj(rPageViewWindow.GetIAOManager(), aPos, aBmpCol,
-                                (UINT16)(aBmpCol.GetSizePixel().Width() - 1) >> 1,
-                                (UINT16)(aBmpCol.GetSizePixel().Height() - 1) >> 1);
-                            DBG_ASSERT(pNew, "Got NO new IAO!");
-                            aIAOGroup.InsertIAO(pNew);
+                            basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
+                            ::sdr::overlay::OverlayObject* pNewOverlayObject = new
+                                ::sdr::overlay::OverlayBitmap(
+                                    aPosition, aBmpCol,
+                                    (UINT16)(aBmpCol.GetSizePixel().Width() - 1) >> 1,
+                                    (UINT16)(aBmpCol.GetSizePixel().Height() - 1) >> 1
+                                );
+                            DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
+
+                            // OVERLAYMANAGER
+                            if(pNewOverlayObject)
+                            {
+                                rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                                maOverlayGroup.append(*pNewOverlayObject);
+                            }
                         }
                     }
                 }
@@ -1132,46 +1170,61 @@ void SdrHdlGradient::CreateB2dIAObject()
 
         if(pView && !pView->IsMarkHdlHidden())
         {
-            for(sal_uInt16 a(0); a < pView->GetPageViewCount(); a++)
+            SdrPageView* pPageView = pView->GetSdrPageView();
+
+            if(pPageView)
             {
-                SdrPageView* pPageView = pView->GetPageViewPvNum(a);
-                // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
-                // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
-
-                for(sal_uInt32 b(0L); b < pPageView->WindowCount(); b++)
+                for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
                 {
-                    // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
-                    const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(b);
-                    OutputDevice& rOutDev = rPageViewWindow.GetOutputDevice();
+                    const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
-                    if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                    if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        // Manager may be zero when printing or drawing to VDevs
-                        if(rPageViewWindow.GetIAOManager())
+                        if(rPageWindow.GetOverlayManager())
                         {
                             // striped line in between
-                            Vector2D aVec(a2ndPos.X() - aPos.X(), a2ndPos.Y() - aPos.Y());
-                            double fVecLen = aVec.GetLength();
+                            basegfx::B2DVector aVec(a2ndPos.X() - aPos.X(), a2ndPos.Y() - aPos.Y());
+                            double fVecLen = aVec.getLength();
                             double fLongPercentArrow = (1.0 - 0.05) * fVecLen;
                             double fHalfArrowWidth = (0.05 * 0.5) * fVecLen;
-                            aVec.Normalize();
-                            Vector2D aPerpend(-aVec.Y(), aVec.X());
-                            INT32 nMidX = (INT32)(aPos.X() + aVec.X() * fLongPercentArrow);
-                            INT32 nMidY = (INT32)(aPos.Y() + aVec.Y() * fLongPercentArrow);
+                            aVec.normalize();
+                            basegfx::B2DVector aPerpend(-aVec.getY(), aVec.getX());
+                            INT32 nMidX = (INT32)(aPos.X() + aVec.getX() * fLongPercentArrow);
+                            INT32 nMidY = (INT32)(aPos.Y() + aVec.getY() * fLongPercentArrow);
                             Point aMidPoint(nMidX, nMidY);
-                            B2dIAObject* pNew = new B2dIAOLineStriped(rPageViewWindow.GetIAOManager(), aPos, aMidPoint, 4);
-                            DBG_ASSERT(pNew, "Got NO new IAO!");
-                            pNew->SetBaseColor(IsGradient() ? Color(COL_BLACK) : Color(COL_BLUE));
-                            aIAOGroup.InsertIAO(pNew);
+
+                            basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
+                            basegfx::B2DPoint aMidPos(aMidPoint.X(), aMidPoint.Y());
+
+                            ::sdr::overlay::OverlayObject* pNewOverlayObject = new
+                                ::sdr::overlay::OverlayLineStriped(
+                                    aPosition, aMidPos
+                                );
+                            DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
+
+                            pNewOverlayObject->setBaseColor(IsGradient() ? Color(COL_BLACK) : Color(COL_BLUE));
+                            rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                            maOverlayGroup.append(*pNewOverlayObject);
 
                             // arrowhead
-                            Point aLeft(aMidPoint.X() + (INT32)(aPerpend.X() * fHalfArrowWidth),
-                                        aMidPoint.Y() + (INT32)(aPerpend.Y() * fHalfArrowWidth));
-                            Point aRight(aMidPoint.X() - (INT32)(aPerpend.X() * fHalfArrowWidth),
-                                        aMidPoint.Y() - (INT32)(aPerpend.Y() * fHalfArrowWidth));
-                            pNew = new B2dIAOBitmapTriangle(rPageViewWindow.GetIAOManager(), aLeft, a2ndPos, aRight, IsGradient() ? Color(COL_BLACK) : Color(COL_BLUE));
-                            DBG_ASSERT(pNew, "Got NO new IAO!");
-                            aIAOGroup.InsertIAO(pNew);
+                            Point aLeft(aMidPoint.X() + (INT32)(aPerpend.getX() * fHalfArrowWidth),
+                                        aMidPoint.Y() + (INT32)(aPerpend.getY() * fHalfArrowWidth));
+                            Point aRight(aMidPoint.X() - (INT32)(aPerpend.getX() * fHalfArrowWidth),
+                                        aMidPoint.Y() - (INT32)(aPerpend.getY() * fHalfArrowWidth));
+
+                            basegfx::B2DPoint aPositionLeft(aLeft.X(), aLeft.Y());
+                            basegfx::B2DPoint aPositionRight(aRight.X(), aRight.Y());
+                            basegfx::B2DPoint aPosition2(a2ndPos.X(), a2ndPos.Y());
+
+                            pNewOverlayObject = new
+                                ::sdr::overlay::OverlayTriangle(
+                                    aPositionLeft, aPosition2, aPositionRight
+                                );
+                            DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
+
+                            pNewOverlayObject->setBaseColor(IsGradient() ? Color(COL_BLACK) : Color(COL_BLUE));
+                            rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                            maOverlayGroup.append(*pNewOverlayObject);
                         }
                     }
                 }
@@ -1199,8 +1252,8 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, BOOL bSetItemOnObject, BOOL
 
     String aString;
 
-    aGradTransVector.aPos1 = GetPos();
-    aGradTransVector.aPos2 = Get2ndPos();
+    aGradTransVector.maPositionA = basegfx::B2DPoint(GetPos().X(), GetPos().Y());
+    aGradTransVector.maPositionB = basegfx::B2DPoint(Get2ndPos().X(), Get2ndPos().Y());
     if(pColHdl1)
         aGradTransVector.aCol1 = pColHdl1->GetColor();
     if(pColHdl2)
@@ -1239,23 +1292,22 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, BOOL bSetItemOnObject, BOOL
             pModel->EndUndo();
         }
 
-        //_pObj->SetItemSetAndBroadcast(aNewSet);
-        _pObj->SetMergedItemSetAndBroadcast(aNewSet);
+        pObj->SetMergedItemSetAndBroadcast(aNewSet);
     }
 
     // back transformation, set values on pIAOHandle
     aGradTransformer.GradToVec(aGradTransGradient, aGradTransVector, _pObj);
 
-    SetPos(aGradTransVector.aPos1);
-    Set2ndPos(aGradTransVector.aPos2);
+    SetPos(Point(FRound(aGradTransVector.maPositionA.getX()), FRound(aGradTransVector.maPositionA.getY())));
+    Set2ndPos(Point(FRound(aGradTransVector.maPositionB.getX()), FRound(aGradTransVector.maPositionB.getY())));
     if(pColHdl1)
     {
-        pColHdl1->SetPos(aGradTransVector.aPos1);
+        pColHdl1->SetPos(Point(FRound(aGradTransVector.maPositionA.getX()), FRound(aGradTransVector.maPositionA.getY())));
         pColHdl1->SetColor(aGradTransVector.aCol1);
     }
     if(pColHdl2)
     {
-        pColHdl2->SetPos(aGradTransVector.aPos2);
+        pColHdl2->SetPos(Point(FRound(aGradTransVector.maPositionB.getX()), FRound(aGradTransVector.maPositionB.getY())));
         pColHdl2->SetColor(aGradTransVector.aCol2);
     }
 }
@@ -1275,35 +1327,36 @@ void SdrHdlLine::CreateB2dIAObject()
 
         if(pView && !pView->IsMarkHdlHidden() && pHdl1 && pHdl2)
         {
-            for(sal_uInt16 a(0); a < pView->GetPageViewCount(); a++)
+            SdrPageView* pPageView = pView->GetSdrPageView();
+
+            if(pPageView)
             {
-                SdrPageView* pPageView = pView->GetPageViewPvNum(a);
-                // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
-                // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
-
-                for(sal_uInt32 b(0L); b < pPageView->WindowCount(); b++)
+                for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
                 {
-                    // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
-                    const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(b);
-                    OutputDevice& rOutDev = rPageViewWindow.GetOutputDevice();
+                    const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
-                    if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                    if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        // Manager may be zero when printing or drawing to VDevs
-                        if(rPageViewWindow.GetIAOManager())
+                        if(rPageWindow.GetOverlayManager())
                         {
-                            B2dIAObject* pNew = new B2dIAOLine(
-                                rPageViewWindow.GetIAOManager(),
-                                pHdl1->GetPos(),
-                                pHdl2->GetPos());
+                            basegfx::B2DPoint aPosition1(pHdl1->GetPos().X(), pHdl1->GetPos().Y());
+                            basegfx::B2DPoint aPosition2(pHdl2->GetPos().X(), pHdl2->GetPos().Y());
 
-                            if(pNew)
+                            ::sdr::overlay::OverlayObject* pNewOverlayObject = new
+                                ::sdr::overlay::OverlayLineStriped(
+                                    aPosition1,
+                                    aPosition2
+                                );
+                            DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
+
+                            // OVERLAYMANAGER
+                            if(pNewOverlayObject)
                             {
                                 // color(?)
-                                pNew->SetBaseColor(Color(COL_LIGHTRED));
+                                pNewOverlayObject->setBaseColor(Color(COL_LIGHTRED));
 
-                                // set as B2DIAObject
-                                aIAOGroup.InsertIAO(pNew);
+                                rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                                maOverlayGroup.append(*pNewOverlayObject);
                             }
                         }
                     }
@@ -1313,15 +1366,11 @@ void SdrHdlLine::CreateB2dIAObject()
     }
 }
 
-BOOL SdrHdlLine::IsHit(const Point& rPnt, const OutputDevice& rOut) const
+bool SdrHdlLine::IsHdlHit(const Point& rPnt) const
 {
-    if(aIAOGroup.GetIAOCount())
-    {
-        Point aPixelPos(rOut.LogicToPixel(rPnt));
-        return aIAOGroup.IsHit(aPixelPos, 2);
-    }
-    else
-        return FALSE;
+    // OVERLAYMANAGER
+    basegfx::B2DPoint aPosition(rPnt.X(), rPnt.Y());
+    return maOverlayGroup.isHit(aPosition);
 }
 
 Pointer SdrHdlLine::GetPointer() const
@@ -1345,38 +1394,39 @@ void SdrHdlBezWgt::CreateB2dIAObject()
 
         if(pView && !pView->IsMarkHdlHidden())
         {
-            for(sal_uInt16 a(0); a < pView->GetPageViewCount(); a++)
+            SdrPageView* pPageView = pView->GetSdrPageView();
+
+            if(pPageView)
             {
-                SdrPageView* pPageView = pView->GetPageViewPvNum(a);
-                // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
-                // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
-
-                for(sal_uInt32 b(0L); b < pPageView->WindowCount(); b++)
+                for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
                 {
-                    // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
-                    const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(b);
-                    OutputDevice& rOutDev = rPageViewWindow.GetOutputDevice();
+                    const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
-                    if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                    if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        // Manager may be zero when printing or drawing to VDevs
-                        if(rPageViewWindow.GetIAOManager())
+                        if(rPageWindow.GetOverlayManager())
                         {
-                            B2dIAObject* pNew = new B2dIAOLine(
-                                rPageViewWindow.GetIAOManager(),
-                                pHdl1->GetPos(),
-                                aPos);
+                            basegfx::B2DPoint aPosition1(pHdl1->GetPos().X(), pHdl1->GetPos().Y());
+                            basegfx::B2DPoint aPosition2(aPos.X(), aPos.Y());
 
-                            if(pNew)
+                            ::sdr::overlay::OverlayObject* pNewOverlayObject = new
+                                ::sdr::overlay::OverlayLineStriped(
+                                    aPosition1,
+                                    aPosition2
+                                );
+                            DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
+
+                            // OVERLAYMANAGER
+                            if(pNewOverlayObject)
                             {
                                 // line part is not hittable
-                                pNew->SetHittable(FALSE);
+                                pNewOverlayObject->setHittable(sal_False);
 
                                 // color(?)
-                                pNew->SetBaseColor(Color(COL_LIGHTBLUE));
+                                pNewOverlayObject->setBaseColor(Color(COL_LIGHTBLUE));
 
-                                // set as B2DIAObject
-                                aIAOGroup.InsertIAO(pNew);
+                                rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                                maOverlayGroup.append(*pNewOverlayObject);
                             }
                         }
                     }
@@ -1388,9 +1438,9 @@ void SdrHdlBezWgt::CreateB2dIAObject()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-E3dVolumeMarker::E3dVolumeMarker(const XPolyPolygon& rXPP)
+E3dVolumeMarker::E3dVolumeMarker(const basegfx::B2DPolyPolygon& rWireframePoly)
 {
-    aWireframePoly = rXPP;
+    aWireframePoly = rWireframePoly;
 }
 
 void E3dVolumeMarker::CreateB2dIAObject()
@@ -1402,38 +1452,40 @@ void E3dVolumeMarker::CreateB2dIAObject()
 
         if(pView && !pView->IsMarkHdlHidden())
         {
-            for(sal_uInt16 a(0); a < pView->GetPageViewCount(); a++)
+            SdrPageView* pPageView = pView->GetSdrPageView();
+
+            if(pPageView)
             {
-                SdrPageView* pPageView = pView->GetPageViewPvNum(a);
-                // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
-                // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
-
-                for(sal_uInt32 b(0L); b < pPageView->WindowCount(); b++)
+                for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
                 {
-                    // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
-                    const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(b);
-                    OutputDevice& rOutDev = rPageViewWindow.GetOutputDevice();
+                    const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
-                    if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                    if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        // Manager may be zero when printing or drawing to VDevs
-                        if(rPageViewWindow.GetIAOManager())
+                        if(rPageWindow.GetOverlayManager())
                         {
-                            UINT16 nCnt = aWireframePoly.Count();
-                            for(UINT16 i = 0; i < nCnt; i++)
+                            const sal_uInt32 nCnt(aWireframePoly.count());
+
+                            for(sal_uInt32 i(0L); i < nCnt; i++)
                             {
-                                B2dIAObject* pNew = new B2dIAOLine(
-                                    rPageViewWindow.GetIAOManager(),
-                                    aWireframePoly[i][0],
-                                    aWireframePoly[i][1]);
+                                const basegfx::B2DPolygon aPoly(aWireframePoly.getB2DPolygon(i));
+                                const basegfx::B2DPoint aPointA(aPoly.getB2DPoint(0L));
+                                const basegfx::B2DPoint aPointB(aPoly.getB2DPoint(1L));
 
-                                if(pNew)
+                                ::sdr::overlay::OverlayObject* pNewOverlayObject = new
+                                    ::sdr::overlay::OverlayLineStriped(
+                                        aPointA,
+                                        aPointB
+                                    );
+                                DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
+
+                                // OVERLAYMANAGER
+                                if(pNewOverlayObject)
                                 {
-                                    // color(?)
-                                    pNew->SetBaseColor(Color(COL_BLACK));
+                                    pNewOverlayObject->setBaseColor(Color(COL_BLACK));
 
-                                    // set as B2DIAObject
-                                    aIAOGroup.InsertIAO(pNew);
+                                    rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                                    maOverlayGroup.append(*pNewOverlayObject);
                                 }
                             }
                         }
@@ -1477,33 +1529,30 @@ void ImpEdgeHdl::CreateB2dIAObject()
                     eKindOfMarker = Circ_7x7;
                 }
 
-                for(sal_uInt16 a(0); a < pView->GetPageViewCount(); a++)
+                SdrPageView* pPageView = pView->GetSdrPageView();
+
+                if(pPageView)
                 {
-                    SdrPageView* pPageView = pView->GetPageViewPvNum(a);
-                    // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
-                    // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
-
-                    for(sal_uInt32 b(0); b < pPageView->WindowCount(); b++)
+                    for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
                     {
-                        // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
-                        const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(b);
-                        OutputDevice& rOutDev = rPageViewWindow.GetOutputDevice();
+                        const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
-                        if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                        if(rPageWindow.GetPaintWindow().OutputToWindow())
                         {
-                            // Manager may be zero when printing or drawing to VDevs
-                            if(rPageViewWindow.GetIAOManager())
+                            if(rPageWindow.GetOverlayManager())
                             {
-                                B2dIAObject* pNew = CreateMarkerObject(
-                                    rPageViewWindow.GetIAOManager(),
-                                    aPos,
+                                basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
+
+                                ::sdr::overlay::OverlayObject* pNewOverlayObject = CreateOverlayObject(
+                                    aPosition,
                                     eColIndex,
                                     eKindOfMarker);
 
-                                if(pNew)
+                                // OVERLAYMANAGER
+                                if(pNewOverlayObject)
                                 {
-                                    // set as B2DIAObject
-                                    aIAOGroup.InsertIAO(pNew);
+                                    rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                                    maOverlayGroup.append(*pNewOverlayObject);
                                 }
                             }
                         }
@@ -1589,33 +1638,30 @@ void ImpMeasureHdl::CreateB2dIAObject()
                 eColIndex = Cyan;
             }
 
-            for(sal_uInt16 a(0); a < pView->GetPageViewCount(); a++)
+            SdrPageView* pPageView = pView->GetSdrPageView();
+
+            if(pPageView)
             {
-                SdrPageView* pPageView = pView->GetPageViewPvNum(a);
-                // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
-                // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
-
-                for(sal_uInt32 b(0L); b < pPageView->WindowCount(); b++)
+                for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
                 {
-                    // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
-                    const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(b);
-                    OutputDevice& rOutDev = rPageViewWindow.GetOutputDevice();
+                    const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
-                    if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                    if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        // Manager may be zero when printing or drawing to VDevs
-                        if(rPageViewWindow.GetIAOManager())
+                        if(rPageWindow.GetOverlayManager())
                         {
-                            B2dIAObject* pNew = CreateMarkerObject(
-                                rPageViewWindow.GetIAOManager(),
-                                aPos,
+                            basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
+
+                            ::sdr::overlay::OverlayObject* pNewOverlayObject = CreateOverlayObject(
+                                aPosition,
                                 eColIndex,
                                 eKindOfMarker);
 
-                            if(pNew)
+                            // OVERLAYMANAGER
+                            if(pNewOverlayObject)
                             {
-                                // set as B2DIAObject
-                                aIAOGroup.InsertIAO(pNew);
+                                rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                                maOverlayGroup.append(*pNewOverlayObject);
                             }
                         }
                     }
@@ -1669,8 +1715,8 @@ int ImpSdrHdlListSorter::Compare(const void* pElem1, const void* pElem2) const
             SdrObject* pObj1=((SdrHdl*)pElem1)->GetObj();
             SdrObject* pObj2=((SdrHdl*)pElem2)->GetObj();
             if (pObj1==pObj2) {
-                USHORT nNum1=((SdrHdl*)pElem1)->GetObjHdlNum();
-                USHORT nNum2=((SdrHdl*)pElem2)->GetObjHdlNum();
+                sal_uInt32 nNum1=((SdrHdl*)pElem1)->GetObjHdlNum();
+                sal_uInt32 nNum2=((SdrHdl*)pElem2)->GetObjHdlNum();
                 if (nNum1==nNum2) { // #48763#
                     if (eKind1==eKind2)
                         return (long)pElem1<(long)pElem2 ? -1 : 1; // Notloesung, um immer die gleiche Sortierung zu haben
@@ -1715,10 +1761,18 @@ extern "C" int __LOADONCALLAPI ImplSortHdlFunc( const void* pVoid1, const void* 
                 && (p2->mpHdl->GetKind() == HDL_POLY || p2->mpHdl->GetKind() == HDL_BWGT))
             {
                 // both handles are point or control handles
-                sal_uInt32 nInd1 = (p1->mpHdl->GetPolyNum() << 16) | p1->mpHdl->GetPointNum();
-                sal_uInt32 nInd2 = (p2->mpHdl->GetPolyNum() << 16) | p2->mpHdl->GetPointNum();
-
-                if(nInd1 < nInd2)
+                if(p1->mpHdl->GetPolyNum() == p2->mpHdl->GetPolyNum())
+                {
+                    if(p1->mpHdl->GetPointNum() < p2->mpHdl->GetPointNum())
+                    {
+                        return -1;
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                }
+                else if(p1->mpHdl->GetPolyNum() < p2->mpHdl->GetPolyNum())
                 {
                     return -1;
                 }
@@ -1899,13 +1953,6 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
             }
         }
 
-        // if something has changed do a handle refresh
-        if(bRefresh)
-        {
-            if(pView)
-                pView->RefreshAllIAOManagers();
-        }
-
         // #105678# free mem again
         delete pHdlAndIndex;
     }
@@ -1946,11 +1993,11 @@ void SdrHdlList::SetFocusHdl(SdrHdl* pNew)
                     bRefresh = sal_True;
                 }
 
-                if(bRefresh)
-                {
-                    if(pView)
-                        pView->RefreshAllIAOManagers();
-                }
+                //OLMif(bRefresh)
+                //OLM{
+                //OLM   if(pView)
+                //OLM       pView->RefreshAllIAOManagers();
+                //OLM}
             }
         }
     }
@@ -1965,9 +2012,6 @@ void SdrHdlList::ResetFocusHdl()
     if(pHdl)
     {
         pHdl->Touch();
-
-        if(pView)
-            pView->RefreshAllIAOManagers();
     }
 }
 
@@ -2064,10 +2108,6 @@ void SdrHdlList::Clear()
     }
     aList.Clear();
 
-    // immediately remove from display
-    if(pView)
-        pView->RefreshAllIAOManagers();
-
     bRotateShear=FALSE;
     bDistortShear=FALSE;
 }
@@ -2098,12 +2138,6 @@ void SdrHdlList::Sort()
             pNow->Touch();
             bRefresh = sal_True;
         }
-
-        if(bRefresh)
-        {
-            if(pView)
-                pView->RefreshAllIAOManagers();
-        }
     }
 }
 
@@ -2126,7 +2160,7 @@ void SdrHdlList::AddHdl(SdrHdl* pHdl, BOOL bAtBegin)
     }
 }
 
-SdrHdl* SdrHdlList::HitTest(const Point& rPnt, const OutputDevice& rOut, BOOL bBack, BOOL bNext, SdrHdl* pHdl0) const
+SdrHdl* SdrHdlList::IsHdlListHit(const Point& rPnt, BOOL bBack, BOOL bNext, SdrHdl* pHdl0) const
 {
    SdrHdl* pRet=NULL;
    ULONG nAnz=GetHdlCount();
@@ -2137,7 +2171,7 @@ SdrHdl* SdrHdlList::HitTest(const Point& rPnt, const OutputDevice& rOut, BOOL bB
        if (bNext) {
            if (pHdl==pHdl0) bNext=FALSE;
        } else {
-           if (pHdl->IsHit(rPnt,rOut)) pRet=pHdl;
+           if (pHdl->IsHdlHit(rPnt)) pRet=pHdl;
        }
        if (bBack) nNum++;
    }
