@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfshex.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:15:24 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:20:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,10 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/stritem.hxx>
 #include <avmedia/mediawindow.hxx>
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 // -> #111827#
 #include <SwRewriter.hxx>
