@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:10:59 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:59:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,7 +394,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
         if(pDrView)
         {
-            SdrPageView* pPageView = pDrView->GetPageViewPvNum(0);
+            SdrPageView* pPageView = pDrView->GetSdrPageView();
 
             if(pPageView)
             {
@@ -404,7 +404,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
                 if(pObj)
                 {
                     // insert into page
-                    pView->InsertObject(pObj, *pPageView, pView->IsSolidDraggingNow() ? SDRINSERT_NOBROADCAST : 0);
+                    pView->InsertObjectAtView(pObj, *pPageView);
 
                     if ( nNewId == SID_DRAW_CAPTION || nNewId == SID_DRAW_CAPTION_VERTICAL )
                     {
