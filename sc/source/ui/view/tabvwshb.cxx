@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:23:03 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:00:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -402,7 +402,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                     //! merge with ScViewFunc::PasteDataFormat (SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE)?
 
                     ScDrawView* pDrView = GetScDrawView();
-                    SdrPageView* pPageView = pDrView ? pDrView->GetPageViewPvNum(0) : NULL;
+                    SdrPageView* pPageView = pDrView ? pDrView->GetSdrPageView() : NULL;
                     if(pPageView)
                     {
                         ::svx::ODataAccessDescriptor aDescriptor(pDescriptorItem->GetValue());
@@ -438,7 +438,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                                 }
                             }
 
-                            pView->InsertObject(pNewDBField, *pPageView, pView->IsSolidDraggingNow() ? SDRINSERT_NOBROADCAST : 0);
+                            pView->InsertObjectAtView(pNewDBField, *pPageView);
                         }
                     }
                 }
