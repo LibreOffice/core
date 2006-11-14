@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:42:19 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:44:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,32 +319,6 @@ inline BOOL SvxSearchDialog::HasReplaceAttributes() const
     return ( aReplaceAttrText.IsEnabled() && bLen );
 }
 
-
-//////////////////////////////////////////////////////////////////////
-
-/* //CHINA001
-class SvxJSearchOptionsDialog : public SfxSingleTabDialog
-{
-    INT32                   nInitialTlFlags;
-    SvxJSearchOptionsPage  *pPage;
-
-    // disallow copy-constructor and assignment-operator for now
-    SvxJSearchOptionsDialog( const SvxJSearchOptionsDialog & );
-    SvxJSearchOptionsDialog & operator == ( const SvxJSearchOptionsDialog & );
-
-public:
-    SvxJSearchOptionsDialog( Window *pParent,
-                            const SfxItemSet& rOptionsSet, USHORT nUniqueId,
-                            INT32 nInitialFlags  );
-    virtual ~SvxJSearchOptionsDialog();
-
-    // Window
-    virtual void    Activate();
-
-    INT32           GetTransliterationFlags() const;
-    void            SetTransliterationFlags( INT32 nSettings );
-};
-*/ //CHINA001
 
 //////////////////////////////////////////////////////////////////////
 
