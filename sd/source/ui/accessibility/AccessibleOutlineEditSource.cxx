@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleOutlineEditSource.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:24:32 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:23:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,10 @@
 #endif
 #ifndef SD_OUTLINE_VIEW_HXX
 #include "OutlineView.hxx"
+#endif
+
+#ifndef _SDRPAINTWINDOW_HXX
+#include <svx/sdrpaintwindow.hxx>
 #endif
 
 namespace accessibility
@@ -143,7 +147,13 @@ namespace accessibility
     {
         if( IsValid() )
         {
-            Rectangle aVisArea = mrView.GetVisibleArea( mrView.FindWin( const_cast< Window* > (&mrWindow) ) );
+            SdrPaintWindow* pPaintWindow = mrView.FindPaintWindow(mrWindow);
+            Rectangle aVisArea;
+
+            if(pPaintWindow)
+            {
+                aVisArea = pPaintWindow->GetVisibleArea();
+            }
 
             MapMode aMapMode(mrWindow.GetMapMode());
             aMapMode.SetOrigin(Point());
