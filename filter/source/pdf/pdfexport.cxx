@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:42:30 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:02:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1535,7 +1535,7 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
                 aFilterData[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ColorMode" ) );
                 aFilterData[ 1 ].Value <<= nColorMode;
 
-                /*sal_uInt16 nError =*/ aGraphicFilter.ExportGraphic( aGraphic, String(), aStrm, nFormatName, sal_True, &aFilterData );
+                /*sal_uInt16 nError =*/ aGraphicFilter.ExportGraphic( aGraphic, String(), aStrm, nFormatName, &aFilterData );
                 aStrm.Seek( STREAM_SEEK_TO_END );
                 if ( aStrm.Tell() > nZippedFileSize )
                     bUseJPGCompression = sal_False;
