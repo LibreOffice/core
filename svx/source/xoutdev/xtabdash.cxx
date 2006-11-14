@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtabdash.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:25:47 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:58:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,93 +175,6 @@ Bitmap* XDashTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
     return( NULL );
 }
 
-/************************************************************************/
-
-//BFS01SvStream& XDashTable::ImpStore( SvStream& rOut )
-//BFS01{
-//BFS01 // Schreiben
-//BFS01 rOut.SetStreamCharSet( gsl_getSystemTextEncoding() );
-//BFS01
-//BFS01 // Tabellentyp schreiben (0 = gesamte Tabelle)
-//BFS01 rOut << (long)0;
-//BFS01
-//BFS01 // Anzahl der Eintraege
-//BFS01 rOut << (long)Count();
-//BFS01
-//BFS01 // die Eintraege
-//BFS01 XDashEntry* pEntry = (XDashEntry*)aTable.First();
-//BFS01 for (long nIndex = 0; nIndex < Count(); nIndex++)
-//BFS01 {
-//BFS01     rOut << (long)aTable.GetCurKey();
-//BFS01
-//BFS01     // UNICODE: rOut << pEntry->GetName();
-//BFS01     rOut.WriteByteString(pEntry->GetName());
-//BFS01
-//BFS01     XDash& rDash = pEntry->GetDash();
-//BFS01     rOut << (long)rDash.GetDashStyle();
-//BFS01     rOut << (long)rDash.GetDots();
-//BFS01     rOut << rDash.GetDotLen();
-//BFS01     rOut << (long)rDash.GetDashes();
-//BFS01     rOut << rDash.GetDashLen();
-//BFS01     rOut << rDash.GetDistance();
-//BFS01     pEntry = (XDashEntry*)aTable.Next();
-//BFS01 }
-//BFS01
-//BFS01 return rOut;
-//BFS01}
-
-/************************************************************************/
-
-//BFS01SvStream& XDashTable::ImpRead( SvStream& rIn )
-//BFS01{
-//BFS01 // Lesen
-//BFS01 rIn.SetStreamCharSet( RTL_TEXTENCODING_IBM_850 );
-//BFS01
-//BFS01 delete pBmpTable;
-//BFS01 pBmpTable = new Table( 16, 16 );
-//BFS01
-//BFS01 XDashEntry* pEntry = NULL;
-//BFS01 long        nType;
-//BFS01 long        nCount;
-//BFS01 long        nIndex;
-//BFS01 XubString       aName;
-//BFS01
-//BFS01 long        nStyle;
-//BFS01 long        nDots;
-//BFS01 ULONG       nDotLen;
-//BFS01 long        nDashes;
-//BFS01 ULONG       nDashLen;
-//BFS01 ULONG       nDistance;
-//BFS01
-//BFS01 rIn >> nType;
-//BFS01
-//BFS01 // gesamte Tabelle?
-//BFS01 if (nType == 0)
-//BFS01 {
-//BFS01     rIn >> nCount;
-//BFS01     for (long nI = 0; nI < nCount; nI++)
-//BFS01     {
-//BFS01         rIn >> nIndex;
-//BFS01
-//BFS01         // UNICODE: rIn >> aName;
-//BFS01         rIn.ReadByteString(aName);
-//BFS01
-//BFS01         rIn >> nStyle;
-//BFS01         rIn >> nDots;
-//BFS01         rIn >> nDotLen;
-//BFS01         rIn >> nDashes;
-//BFS01         rIn >> nDashLen;
-//BFS01         rIn >> nDistance;
-//BFS01         XDash aDash((XDashStyle)nStyle, (BYTE)nDots, nDotLen,
-//BFS01                     (BYTE)nDashes, nDashLen, nDistance);
-//BFS01         pEntry = new XDashEntry (aDash, aName);
-//BFS01         Insert (nIndex, pEntry);
-//BFS01     }
-//BFS01 }
-//BFS01 return( rIn );
-//BFS01}
-
-
 // ----------------
 // class XDashList
 // ----------------
@@ -319,7 +232,6 @@ XDashEntry* XDashList::GetDash(long nIndex) const
 
 BOOL XDashList::Load()
 {
-//BFS01#ifndef SVX_LIGHT
     if( bListDirty )
     {
         bListDirty = FALSE;
@@ -337,46 +249,9 @@ BOOL XDashList::Load()
         if( !aURL.getExtension().getLength() )
             aURL.setExtension( rtl::OUString( pszExtDash, 3 ) );
 
-//BFS01     // check if file exists, SfxMedium shows an errorbox else
-//BFS01     {
-//BFS01         com::sun::star::uno::Reference < com::sun::star::task::XInteractionHandler > xHandler;
-//BFS01         SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, xHandler );
-//BFS01
-//BFS01         sal_Bool bOk = pIStm && ( pIStm->GetError() == 0);
-//BFS01
-//BFS01         if( pIStm )
-//BFS01             delete pIStm;
-//BFS01
-//BFS01         if( !bOk )
-//BFS01             return sal_False;
-//BFS01     }
-
-//BFS01     {
-//BFS01         SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ | STREAM_NOCREATE, TRUE );
-//BFS01         SvStream* pStream = aMedium.GetInStream();
-//BFS01         if( !pStream )
-//BFS01             return( FALSE );
-//BFS01
-//BFS01         char aCheck[6];
-//BFS01         pStream->Read( aCheck, 6 );
-//BFS01
-//BFS01         // Handelt es sich um die gew"unschte Tabelle?
-//BFS01         if( memcmp( aCheck, aChckDash, sizeof( aChckDash ) ) == 0 ||
-//BFS01             memcmp( aCheck, aChckDash0, sizeof( aChckDash0 ) ) == 0 )
-//BFS01         {
-//BFS01             ImpRead( *pStream );
-//BFS01             return( pStream->GetError() == SVSTREAM_OK );
-//BFS01         }
-//BFS01         else if( memcmp( aCheck, aChckXML, sizeof( aChckXML ) ) != 0 )
-//BFS01         {
-//BFS01             return FALSE;
-//BFS01         }
-//BFS01     }
-
         uno::Reference< container::XNameContainer > xTable( SvxUnoXDashTable_createInstance( this ), uno::UNO_QUERY );
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
     }
-//BFS01#endif
     return( FALSE );
 }
 
@@ -384,7 +259,6 @@ BOOL XDashList::Load()
 
 BOOL XDashList::Save()
 {
-//BFS01#ifndef SVX_LIGHT
     INetURLObject aURL( aPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
@@ -400,31 +274,6 @@ BOOL XDashList::Save()
 
     uno::Reference< container::XNameContainer > xTable( SvxUnoXDashTable_createInstance( this ), uno::UNO_QUERY );
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
-
-
-/*
-
-
-    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC, TRUE );
-    aMedium.IsRemote();
-
-    SvStream* pStream = aMedium.GetOutStream();
-    if( !pStream )
-        return( FALSE );
-
-    // UNICODE: *pStream << String( pszChckDash0, 4 );
-    pStream->WriteByteString(String( pszChckDash0, 4 ));
-
-    ImpStore( *pStream );
-
-    aMedium.Close();
-    aMedium.Commit();
-
-    return( aMedium.GetError() == 0 );
-*/
-//BFS01#else
-//BFS01 return FALSE;
-//BFS01#endif
 }
 
 /************************************************************************/
@@ -518,167 +367,5 @@ Bitmap* XDashList::CreateBitmapForUI( long nIndex, BOOL bDelete )
     }
     return( pBitmap );
 }
-
-/************************************************************************/
-
-//BFS01SvStream& XDashList::ImpStore( SvStream& rOut )
-//BFS01{
-//BFS01 // Schreiben
-//BFS01 rOut.SetStreamCharSet( gsl_getSystemTextEncoding() );
-//BFS01
-//BFS01 // Version statt Anzahl, um auch alte Tabellen zu lesen
-//BFS01 rOut << (long) -1;
-//BFS01
-//BFS01 // Anzahl der Eintraege
-//BFS01 rOut << (long)Count();
-//BFS01
-//BFS01 // die Eintraege
-//BFS01 XDashEntry* pEntry = NULL;
-//BFS01 for (long nIndex = 0; nIndex < Count(); nIndex++)
-//BFS01 {
-//BFS01     // Versionsverwaltung: Version 0
-//BFS01     XIOCompat aIOC( rOut, STREAM_WRITE, 0 );
-//BFS01
-//BFS01     pEntry = Get(nIndex);
-//BFS01
-//BFS01     // UNICODE: rOut << pEntry->GetName();
-//BFS01     rOut.WriteByteString(pEntry->GetName());
-//BFS01
-//BFS01     XDash& rDash = pEntry->GetDash();
-//BFS01     rOut << (long)rDash.GetDashStyle();
-//BFS01     rOut << (long)rDash.GetDots();
-//BFS01     rOut << rDash.GetDotLen();
-//BFS01     rOut << (long)rDash.GetDashes();
-//BFS01     rOut << rDash.GetDashLen();
-//BFS01     rOut << rDash.GetDistance();
-//BFS01 }
-//BFS01 return rOut;
-//BFS01}
-
-/************************************************************************/
-
-//BFS01XubString& XDashList::ConvertName( XubString& rStrName )
-//BFS01{
-//BFS01 static USHORT __READONLY_DATA aDefResId[] =
-//BFS01 {
-//BFS01     RID_SVXSTR_DASH5_DEF,
-//BFS01     RID_SVXSTR_DASH0_DEF,
-//BFS01     RID_SVXSTR_DASH1_DEF,
-//BFS01     RID_SVXSTR_DASH2_DEF,
-//BFS01     RID_SVXSTR_DASH3_DEF,
-//BFS01     RID_SVXSTR_DASH4_DEF,
-//BFS01     RID_SVXSTR_DASH6_DEF,
-//BFS01     RID_SVXSTR_DASH7_DEF,
-//BFS01     RID_SVXSTR_DASH8_DEF,
-//BFS01     RID_SVXSTR_DASH9_DEF,
-//BFS01     RID_SVXSTR_DASH10_DEF
-//BFS01 };
-//BFS01 static USHORT __READONLY_DATA aResId[] =
-//BFS01 {
-//BFS01     RID_SVXSTR_DASH5,
-//BFS01     RID_SVXSTR_DASH0,
-//BFS01     RID_SVXSTR_DASH1,
-//BFS01     RID_SVXSTR_DASH2,
-//BFS01     RID_SVXSTR_DASH3,
-//BFS01     RID_SVXSTR_DASH4,
-//BFS01     RID_SVXSTR_DASH6,
-//BFS01     RID_SVXSTR_DASH7,
-//BFS01     RID_SVXSTR_DASH8,
-//BFS01     RID_SVXSTR_DASH9,
-//BFS01     RID_SVXSTR_DASH10
-//BFS01 };
-//BFS01
-//BFS01 BOOL bFound = FALSE;
-//BFS01
-//BFS01 for( int i=0; i<(sizeof(aDefResId) / sizeof(USHORT)) && !bFound; i++ )
-//BFS01 {
-//BFS01     XubString aStrDefName = SVX_RESSTR( aDefResId[i] );
-//BFS01     if( rStrName.Search( aStrDefName ) == 0 )
-//BFS01     {
-//BFS01         rStrName.Replace( 0, aStrDefName.Len(), SVX_RESSTR( aResId[i] ) );
-//BFS01         bFound = TRUE;
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 return rStrName;
-//BFS01}
-
-/************************************************************************/
-
-//BFS01SvStream& XDashList::ImpRead( SvStream& rIn )
-//BFS01{
-//BFS01 // Lesen
-//BFS01 rIn.SetStreamCharSet( RTL_TEXTENCODING_IBM_850 );
-//BFS01
-//BFS01 delete pBmpList;
-//BFS01 pBmpList = new List( 16, 16 );
-//BFS01
-//BFS01 XDashEntry* pEntry = NULL;
-//BFS01 long        nCount;
-//BFS01 XubString   aName;
-//BFS01
-//BFS01 long        nStyle;
-//BFS01 long        nDots;
-//BFS01 ULONG       nDotLen;
-//BFS01 long        nDashes;
-//BFS01 ULONG       nDashLen;
-//BFS01 ULONG       nDistance;
-//BFS01
-//BFS01 rIn >> nCount;
-//BFS01
-//BFS01 if( nCount >= 0 ) // Alte Tabellen (bis 3.00)
-//BFS01 {
-//BFS01     for (long nIndex = 0; nIndex < nCount; nIndex++)
-//BFS01     {
-//BFS01         // UNICODE: rIn >> aName;
-//BFS01         rIn.ReadByteString(aName);
-//BFS01
-//BFS01         aName = ConvertName( aName );
-//BFS01         rIn >> nStyle;
-//BFS01         rIn >> nDots;
-//BFS01         rIn >> nDotLen;
-//BFS01         rIn >> nDashes;
-//BFS01         rIn >> nDashLen;
-//BFS01         rIn >> nDistance;
-//BFS01         XDash aDash((XDashStyle)nStyle, (BYTE)nDots, nDotLen,
-//BFS01                     (BYTE)nDashes, nDashLen, nDistance);
-//BFS01         pEntry = new XDashEntry (aDash, aName);
-//BFS01         Insert (pEntry, nIndex);
-//BFS01     }
-//BFS01 }
-//BFS01 else // ab 3.00a
-//BFS01 {
-//BFS01     rIn >> nCount;
-//BFS01
-//BFS01     for (long nIndex = 0; nIndex < nCount; nIndex++)
-//BFS01     {
-//BFS01         // Versionsverwaltung
-//BFS01         XIOCompat aIOC( rIn, STREAM_READ );
-//BFS01
-//BFS01         // UNICODE: rIn >> aName;
-//BFS01         rIn.ReadByteString(aName);
-//BFS01
-//BFS01         aName = ConvertName( aName );
-//BFS01         rIn >> nStyle;
-//BFS01         rIn >> nDots;
-//BFS01         rIn >> nDotLen;
-//BFS01         rIn >> nDashes;
-//BFS01         rIn >> nDashLen;
-//BFS01         rIn >> nDistance;
-//BFS01
-//BFS01         if (aIOC.GetVersion() > 0)
-//BFS01         {
-//BFS01             // lesen neuer Daten ...
-//BFS01         }
-//BFS01
-//BFS01         XDash aDash((XDashStyle)nStyle, (BYTE)nDots, nDotLen,
-//BFS01                     (BYTE)nDashes, nDashLen, nDistance);
-//BFS01         pEntry = new XDashEntry (aDash, aName);
-//BFS01         Insert (pEntry, nIndex);
-//BFS01     }
-//BFS01 }
-//BFS01 return( rIn );
-//BFS01}
-
 
 // eof
