@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:02:46 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:12:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
         if ( pRoot->GetDrawPage()->GetSize() != pRoot->Frm().SSize() )
             pRoot->GetDrawPage()->SetSize( pRoot->Frm().SSize() );
 
-        pSdrPageView = pDrawView->ShowPage( pRoot->GetDrawPage(), Point());
+        pSdrPageView = pDrawView->ShowSdrPage( pRoot->GetDrawPage());
         // OD 26.06.2003 #108784# - notify drawing page view about invisible
         // layers.
         pIDDMA->NotifyInvisibleLayers( *pSdrPageView );
@@ -112,7 +112,6 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
             ( rSz.Width() ? rSz.Width() /Max(short(1),pNewOpt->GetDivisionX()):0,
               rSz.Height()? rSz.Height()/Max(short(1),pNewOpt->GetDivisionY()):0);
      pDrawView->SetGridFine( aFSize );
-     pDrawView->SetSnapGrid( aFSize );
     Fraction aSnGrWdtX(rSz.Width(), pNewOpt->GetDivisionX() + 1);
     Fraction aSnGrWdtY(rSz.Height(), pNewOpt->GetDivisionY() + 1);
     pDrawView->SetSnapGridWidth( aSnGrWdtX, aSnGrWdtY );
@@ -162,7 +161,8 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
     pAccMap( 0 ),
     pSdrObjCached(NULL)
 {
-    bResetXorVisibility = bShowHdlPaint =
+    //bResetXorVisibility =
+    bShowHdlPaint =
     bResetHdlHiddenPaint = bScrolled =
     bPaintInScroll = bSmoothUpdate = bStopSmooth = bStopPrt = FALSE;
     bFirstPageInvalid = bScroll = bNextScroll = TRUE;
@@ -188,9 +188,9 @@ SwViewImp::~SwViewImp()
     // OD 12.12.2002 #103492#
     delete mpPgPrevwLayout;
 
-    //JP 29.03.96: nach ShowPage muss auch HidePage gemacht werden!!!
+    //JP 29.03.96: nach ShowSdrPage muss auch HideSdrPage gemacht werden!!!
     if( pDrawView )
-         pDrawView->HidePage( pSdrPageView );
+         pDrawView->HideSdrPage();
 
     delete pDrawView;
 
@@ -343,9 +343,21 @@ void SwViewImp::MakeDrawView()
                                         GetShell()->GetWin() :
                                         (OutputDevice*)GetShell()->getIDocumentDeviceAccess()->getPrinter( false ) );
         }
+
         GetDrawView()->SetActiveLayer( XubString::CreateFromAscii(
                             RTL_CONSTASCII_STRINGPARAM( "Heaven" ) ) );
         Init( GetShell()->GetViewOptions() );
+
+        // #i68597# Init overlay buffer when destination is a window. This is necessary as long
+        // as DrawingLayer is created on demand to start fully buffered overlay correctly.
+        if(pDrawView && GetShell() && GetShell()->GetWin())
+        {
+            const Rectangle aRectLogic(Point(), GetShell()->GetWin()->PixelToLogic(GetShell()->GetWin()->GetOutputSizePixel()));
+            const Region aRegionLogic(aRectLogic);
+            ViewShell &rSh = *GetShell();
+            rSh.DLPreOutsidePaint(aRegionLogic);
+            rSh.DLPostOutsidePaint(aRegionLogic);
+        }
     }
 }
 
