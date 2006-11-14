@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximp3dobject.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:55:36 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:15:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,10 +60,6 @@
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #endif
 
-#ifndef _SVX_VECTOR3D_HXX
-#include <goodies/vector3d.hxx>
-#endif
-
 #ifndef _COM_SUN_STAR_DRAWING_DIRECTION3D_HPP_
 #include <com/sun/star/drawing/Direction3D.hpp>
 #endif
@@ -111,8 +107,8 @@ public:
 
 class SdXML3DCubeObjectShapeContext : public SdXML3DObjectContext
 {
-    Vector3D                maMinEdge;
-    Vector3D                maMaxEdge;
+    ::basegfx::B3DVector    maMinEdge;
+    ::basegfx::B3DVector    maMaxEdge;
     BOOL                    mbMinEdgeUsed;
     BOOL                    mbMaxEdgeUsed;
 
@@ -135,8 +131,8 @@ public:
 
 class SdXML3DSphereObjectShapeContext : public SdXML3DObjectContext
 {
-    Vector3D                maCenter;
-    Vector3D                maSize;
+    ::basegfx::B3DVector    maCenter;
+    ::basegfx::B3DVector    maSize;
     BOOL                    mbCenterUsed;
     BOOL                    mbSizeUsed;
 
