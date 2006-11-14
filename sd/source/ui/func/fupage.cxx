@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:53:19 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:30:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,7 +200,7 @@ void FuPage::DoExecute( SfxRequest& rReq )
         // if there are no arguments given, open the dialog
         if( !mpArgs )
         {
-            pView->EndTextEdit();
+            pView->SdrEndTextEdit();
             mpArgs = ExecuteDialog(pWindow);
         }
 
