@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipcx.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:37:37 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:16:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,6 @@ class PCXReader {
 
 private:
 
-    PFilterCallback pCallback;
-    void * pCallerData;
-
     SvStream*           pPCX;               // Die einzulesende PCX-Datei
 
     Bitmap              aBmp;
@@ -75,7 +72,7 @@ private:
 public:
                         PCXReader();
                         ~PCXReader();
-    BOOL                ReadPCX( SvStream & rPCX, Graphic & rGraphic, PFilterCallback pcallback, void * pcallerdata );
+    BOOL                ReadPCX( SvStream & rPCX, Graphic & rGraphic );
                         // Liesst aus dem Stream eine PCX-Datei und fuellt das GDIMetaFile
 };
 
@@ -92,18 +89,20 @@ PCXReader::~PCXReader()
     delete[] pPalette;
 }
 
-BOOL PCXReader::Callback( USHORT nPercent )
+BOOL PCXReader::Callback( USHORT /*nPercent*/ )
 {
+/*
     if (pCallback!=NULL) {
         if (((*pCallback)(pCallerData,nPercent))==TRUE) {
             nStatus = FALSE;
             return TRUE;
         }
     }
+*/
     return FALSE;
 }
 
-BOOL PCXReader::ReadPCX( SvStream & rPCX, Graphic & rGraphic, PFilterCallback pcallback, void * pcallerdata)
+BOOL PCXReader::ReadPCX( SvStream & rPCX, Graphic & rGraphic )
 {
     if ( rPCX.GetError() )
         return FALSE;
@@ -113,9 +112,6 @@ BOOL PCXReader::ReadPCX( SvStream & rPCX, Graphic & rGraphic, PFilterCallback pc
                                                // verwendet wird, da es sonst
                                                // in dieser DLL nur Vector-news
                                                // gibt;
-
-    pCallback = pcallback;
-    pCallerData = pcallerdata;
 
     pPCX = &rPCX;
     pPCX->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
@@ -420,18 +416,10 @@ void PCXReader::ImplReadPalette( ULONG nCol )
 
 //================== GraphicImport - die exportierte Funktion ================
 
-#ifdef WNT
-extern "C" BOOL _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                            PFilterCallback pCallback, void * pCallerData,
-                                FilterConfigItem*, BOOL)
-#else
-extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                            PFilterCallback pCallback, void * pCallerData,
-                                FilterConfigItem*, BOOL)
-#endif
+extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL )
 {
     PCXReader aPCXReader;
-    BOOL nRetValue = aPCXReader.ReadPCX( rStream, rGraphic, pCallback, pCallerData );
+    BOOL nRetValue = aPCXReader.ReadPCX( rStream, rGraphic );
     if ( nRetValue == FALSE )
         rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
     return nRetValue;
