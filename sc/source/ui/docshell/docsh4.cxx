@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:39:56 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:49:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1918,7 +1918,7 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
                     if(pModel)
                     {
                         pDrawView = new FmFormView( pModel, pPrinter );
-                        pDrawView->ShowPagePgNum( static_cast<sal_uInt16>(nTab), Point() );
+                        pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
                         pDrawView->SetPrintPreview( TRUE );
                     }
 
