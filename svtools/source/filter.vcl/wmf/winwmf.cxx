@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:19:20 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:42:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -995,7 +995,7 @@ BOOL WMFReader::ReadHeader()
     return TRUE;
 }
 
-void WMFReader::ReadWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, PFilterCallback pcallback, void * pcallerdata)
+void WMFReader::ReadWMF()
 {
     USHORT  nFunction;
     ULONG   nPos, nPercent, nLastPercent;
@@ -1027,9 +1027,7 @@ void WMFReader::ReadWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, 
 
                 if( nLastPercent + 4 <= nPercent )
                 {
-                    if( Callback( (USHORT) nPercent ) )
-                        break;
-
+                    Callback( (USHORT) nPercent );
                     nLastPercent = nPercent;
                 }
                 *pWMF >> nRecSize >> nFunction;
