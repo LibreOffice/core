@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:03:54 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:47:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -741,7 +741,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 
     if (pView)
     {
-        pView->GetPageViewPvNum(0)->SetPageOrigin(aNewOrigin);
+        pView->GetSdrPageView()->SetPageOrigin(aNewOrigin);
     }
 
     pViewShell->GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
@@ -779,16 +779,13 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
 
     if (pViewShell->GetWindow() != pWin)
     {
-        // #i31551#
-        // This flag was not used in VCL up to now, but with the new native controls
-        // it is used now. Setting it leads to child windows being overpainted, e.g.
-        // FormControls. DL added this in 1996, comment was only EnableChildTransparentMode().
-        // I think it is not used correctly and can be removed since it leads to errors.
-        //
-        //if (pWin)
-        //{
-        //  pWin->EnableChildTransparentMode();
-        //}
+        // #i31551# was wrong, it may have been a problem with the repaint at that time.
+        // For transparent form controls, it is necessary to have that flag set, all apps
+        // do set it. Enabling again.
+        if (pWin)
+        {
+            pWin->EnableChildTransparentMode();
+        }
 
         // The ViewShellBase is informed only about the center window.  The
         // windows of the other panes are not its business.
@@ -1020,7 +1017,7 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
         if (pView->IsTextEdit())
         {
-            pView->EndTextEdit();
+            pView->SdrEndTextEdit();
         }
 
         SfxInPlaceClient* pSdClient =
