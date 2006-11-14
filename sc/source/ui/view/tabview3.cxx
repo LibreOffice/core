@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 15:29:27 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:59:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,7 +257,12 @@ void ScTabView::ShowAllCursors()
     for (USHORT i=0; i<4; i++)
         if (pGridWin[i])
             if (pGridWin[i]->IsVisible())
+            {
                 pGridWin[i]->ShowCursor();
+
+                // #114409#
+                pGridWin[i]->CursorChanged();
+            }
 }
 
 void ScTabView::HideCursor()
@@ -268,6 +273,9 @@ void ScTabView::HideCursor()
 void ScTabView::ShowCursor()
 {
     pGridWin[aViewData.GetActivePart()]->ShowCursor();
+
+    // #114409#
+    pGridWin[aViewData.GetActivePart()]->CursorChanged();
 }
 
 void ScTabView::InvalidateAttribs()
@@ -1768,8 +1776,13 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
                 {
                     pGridWin[i]->HideCursor();
 
-                    // MapMode must be set after HideCursor
+                    pGridWin[i]->DeleteCursorOverlay();
+                    pGridWin[i]->DeleteAutoFillOverlay();
 
+                    // flush OverlayManager before changing MapMode to text edit
+                    pGridWin[i]->flushOverlayManager();
+
+                    // MapMode must be set after HideCursor
                     pGridWin[i]->SetMapMode(aViewData.GetLogicMode());
 
                     aViewData.SetEditEngine( (ScSplitPos) i, pEngine, pGridWin[i], nCol, nRow );
@@ -1834,10 +1847,13 @@ void ScTabView::KillEditView( BOOL bNoPaint )
             {
                 pGridWin[i]->ShowCursor();
 
-                if (bExtended || ( bAtCursor && !bNoPaint ))
-                    pGridWin[i]->Draw( nCol1, nRow1, nCol2, nRow2 );
-                else
-                    pGridWin[i]->SetMapMode(pGridWin[i]->GetDrawMapMode());
+                // simplify refresh due to overlay objects - just set MapMode
+                pGridWin[i]->SetMapMode(pGridWin[i]->GetDrawMapMode());
+
+                //if (bExtended || ( bAtCursor && !bNoPaint ))
+                //  pGridWin[i]->Draw( nCol1, nRow1, nCol2, nRow2 );
+                //else
+                //  pGridWin[i]->SetMapMode(pGridWin[i]->GetDrawMapMode());
             }
 
     if (pDrawView)
@@ -1874,6 +1890,13 @@ void ScTabView::KillEditView( BOOL bNoPaint )
             Cursor* pCur = pGridWin[i]->GetCursor();
             if (pCur && pCur->IsVisible())
                 pCur->Hide();
+
+            if(bPaint[i])
+            {
+                pGridWin[i]->UpdateCursorOverlay();
+                pGridWin[i]->UpdateAutoFillOverlay();
+                // pGridWin[i]->UpdateAllOverlays();
+            }
         }
 }
 
@@ -2002,6 +2025,8 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
                     }
                 }
             }
+
+    UpdateAllOverlays();
 }
 
 void ScTabView::PaintRangeFinder( long nNumber )
@@ -2786,12 +2811,29 @@ void ScTabView::ZoomChanged()
     UpdateScrollBars();
 
     //  VisArea...
+    // AW: Discussed with NN if there is a reason that new map mode was only set for one window,
+    // but is not. Setting only on one window causes the first repaint to have the old mapMode
+    // in three of four views, so the overlay will save the wrong content e.g. when zooming out.
+    // Changing to setting map mode at all windows.
+    sal_uInt32 a;
+
+    for(a = 0L; a < 4L; a++)
+    {
+        if(pGridWin[a])
+        {
+            pGridWin[a]->SetMapMode(pGridWin[a]->GetDrawMapMode());
+        }
+    }
+
+    SetNewVisArea();
+
+    /* the old code
     ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()];
     if (pWin)
     {
         pWin->SetMapMode( pWin->GetDrawMapMode() ); // mit neuem Zoom
         SetNewVisArea();                            // benutzt den gesetzten MapMode
-    }
+    } */
 
     InterpretVisible();     // #69343# have everything calculated before painting
 
@@ -2800,11 +2842,16 @@ void ScTabView::ZoomChanged()
 
     HideNoteMarker();
 
+    // AW: To not change too much, use pWin here
+    ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()];
+
     if ( pWin && aViewData.HasEditView( aViewData.GetActivePart() ) )
     {
+        // flush OverlayManager before changing the MapMode
+        pWin->flushOverlayManager();
+
         //  #93650# make sure the EditView's position and size are updated
         //  with the right (logic, not drawing) MapMode
-
         pWin->SetMapMode( aViewData.GetLogicMode() );
         UpdateEditView();
     }
