@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jpeg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:35:18 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:41:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,8 @@ extern "C"
 // - Defines -
 // -----------
 
+using namespace ::com::sun::star;
+
 #define JPEGMINREAD 512
 
 // -------------
@@ -86,18 +88,18 @@ extern "C" void* GetScanline( void* pJPEGWriter, long nY )
 
 // ------------------------------------------------------------------------
 
-extern "C" long JPEGCallback( void* /*pCallbackData*/, long /*nPercent*/ )
+struct JPEGCallbackStruct
 {
-/*
-    MyCallbackHandler* pH = (MyCallbackHandler*) pCallbackData;
+    uno::Reference< task::XStatusIndicator > xStatusIndicator;
+};
 
-    if ( pH->pCallback )
+extern "C" long JPEGCallback( void* pCallbackData, long nPercent )
+{
+    JPEGCallbackStruct* pS = (JPEGCallbackStruct*)pCallbackData;
+    if ( pS && pS->xStatusIndicator.is() )
     {
-        return (short) (pH->pCallback) ( pH->pCallerData,
-            (USHORT) (pH->nMinPercent+(pH->nMaxPercent-pH->nMinPercent) * nPercent / 100 ) );
+        pS->xStatusIndicator->setValue( nPercent );
     }
-*/
-
     return 0L;
 }
 
@@ -612,13 +614,28 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
 // - JPEGWriter -
 // --------------
 
-JPEGWriter::JPEGWriter( SvStream& rStm, PFilterCallback pClb, void* pData ) :
+JPEGWriter::JPEGWriter( SvStream& rStm, const uno::Sequence< beans::PropertyValue >* pFilterData ) :
         rOStm       ( rStm ),
         pAcc        ( NULL ),
-        pBuffer     ( NULL ),
-        pCallback   ( pClb ),
-        pCallerData ( pData )
+        pBuffer     ( NULL )
 {
+    FilterConfigItem aConfigItem( (uno::Sequence< beans::PropertyValue >*)pFilterData );
+    bGreys = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "ColorMode" ) ), 0 ) != 0;
+    nQuality = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ), 75 );
+
+    if ( pFilterData )
+    {
+        int nArgs = pFilterData->getLength();
+        const beans::PropertyValue* pValues = pFilterData->getConstArray();
+        while( nArgs-- )
+        {
+            if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ) ) )
+            {
+                pValues->Value >>= xStatusIndicator;
+            }
+            pValues++;
+        }
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -679,22 +696,26 @@ void* JPEGWriter::GetScanline( long nY )
 
 // ------------------------------------------------------------------------
 
-BOOL JPEGWriter::Write( const Graphic& rGraphic,
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData )
+BOOL JPEGWriter::Write( const Graphic& rGraphic )
 {
     BOOL bRet = FALSE;
 
+    if ( xStatusIndicator.is() )
+    {
+        rtl::OUString aMsg;
+        xStatusIndicator->start( aMsg, 100 );
+    }
+
     Bitmap aGraphicBmp( rGraphic.GetBitmap() );
-    FilterConfigItem aConfigItem( (::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)pFilterData );
-    const sal_Bool bGreys = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "ColorMode" ) ), 0 ) != 0;
+
     if ( bGreys )
     {
         if ( !aGraphicBmp.Convert( BMP_CONVERSION_8BIT_GREYS ) )
             aGraphicBmp = rGraphic.GetBitmap();
     }
-    sal_Int32 nQuality = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ), 75 );
 
     pAcc = aGraphicBmp.AcquireReadAccess();
+
     if( pAcc )
     {
 #ifndef SYSTEM_JPEG
@@ -706,14 +727,9 @@ BOOL JPEGWriter::Write( const Graphic& rGraphic,
         if( !bNative )
             pBuffer = new BYTE[ AlignedWidth4Bytes( pAcc->Width() * 24L ) ];
 
-        bRet = (BOOL) WriteJPEG( this, &rOStm, pAcc->Width(), pAcc->Height(), nQuality, NULL );
-
-    //      MyCallbackHandler   aCbH;
-    //      aCbH.pCallback = pCallback;
-    //      aCbH.pCallerData = pCallerData;
-    //      aCbH.nMinPercent = 0;
-    //      aCbH.nMaxPercent = 99;
-    //      bRet = (BOOL) WriteJPEG( this, &rOStm, pAcc->Width(), pAcc->Height(), nQuality, &aCbH );
+        JPEGCallbackStruct aCallbackData;
+        aCallbackData.xStatusIndicator = xStatusIndicator;
+        bRet = (BOOL) WriteJPEG( this, &rOStm, pAcc->Width(), pAcc->Height(), nQuality, &aCallbackData );
 
         delete[] pBuffer;
         pBuffer = NULL;
@@ -721,6 +737,9 @@ BOOL JPEGWriter::Write( const Graphic& rGraphic,
         aGraphicBmp.ReleaseAccess( pAcc );
         pAcc = NULL;
     }
+    if ( xStatusIndicator.is() )
+        xStatusIndicator->end();
+
     return bRet;
 }
 
@@ -762,10 +781,8 @@ BOOL ImportJPEG( SvStream& rStm, Graphic& rGraphic, void* pCallerData, sal_Int32
 //  - ExportJPEG -
 //  --------------
 
-BOOL ExportJPEG( SvStream& rOStm, const Graphic& rGraphic,
-                PFilterCallback pCallback, void* pCallerData,
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData )
+BOOL ExportJPEG( SvStream& rOStm, const Graphic& rGraphic, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData )
 {
-    JPEGWriter aJPEGWriter( rOStm, pCallback, pCallerData );
-    return aJPEGWriter.Write( rGraphic, pFilterData );
+    JPEGWriter aJPEGWriter( rOStm, pFilterData );
+    return aJPEGWriter.Write( rGraphic );
 }
