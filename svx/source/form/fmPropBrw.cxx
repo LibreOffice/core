@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:44:43 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:23:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,10 @@
 #endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
+#endif
+
+#ifndef _SDRPAGEWINDOW_HXX
+#include <sdrpagewindow.hxx>
 #endif
 
 #include <algorithm>
@@ -562,8 +566,17 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     Reference< awt::XControlContainer > xControlContext;
     if ( _pFormShell && _pFormShell->GetFormView() )
     {
-        SdrPageView* pPageView = _pFormShell->GetFormView()->GetPageViewPvNum(0);
-        xControlContext = pPageView->GetWindow(0)->GetControlContainerRef();
+        SdrPageView* pPageView = _pFormShell->GetFormView()->GetSdrPageView();
+
+        if(pPageView)
+        {
+            SdrPageWindow* pPageWindow = pPageView->GetPageWindow(0L);
+
+            if(pPageWindow)
+            {
+                xControlContext = pPageWindow->GetControlContainer();
+            }
+        }
     }
 
     // the default parent window for message boxes
