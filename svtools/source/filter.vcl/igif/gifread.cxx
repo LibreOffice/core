@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gifread.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:54:02 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:40:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 // - GIFReader -
 // -------------
 
-GIFReader::GIFReader( SvStream& rStm, void* ) :
+GIFReader::GIFReader( SvStream& rStm ) :
             aGPalette       ( 256 ),
             aLPalette       ( 256 ),
             rIStm           ( rStm ),
@@ -832,7 +832,7 @@ ReadState GIFReader::ReadGIF( Graphic& rGraphic )
 // - ImportGIF -
 // -------------
 
-BOOL ImportGIF( SvStream & rStm, Graphic& rGraphic, void* pCallerData )
+BOOL ImportGIF( SvStream & rStm, Graphic& rGraphic )
 {
     GIFReader*  pGIFReader = (GIFReader*) rGraphic.GetContext();
     USHORT      nOldFormat = rStm.GetNumberFormatInt();
@@ -842,7 +842,7 @@ BOOL ImportGIF( SvStream & rStm, Graphic& rGraphic, void* pCallerData )
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
     if( !pGIFReader )
-        pGIFReader = new GIFReader( rStm, pCallerData );
+        pGIFReader = new GIFReader( rStm );
 
     rGraphic.SetContext( NULL );
     eReadState = pGIFReader->ReadGIF( rGraphic );
