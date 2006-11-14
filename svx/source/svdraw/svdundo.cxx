@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:16:51 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:50:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,8 +210,8 @@ void SdrUndoGroup::SdrRepeat(SdrView& rView)
     switch (eFunction) {
         case SDRREPFUNC_OBJ_NONE            :  break;
         case SDRREPFUNC_OBJ_DELETE          :  rView.DeleteMarked();                break;
-        case SDRREPFUNC_OBJ_COMBINE_POLYPOLY:  rView.CombineMarkedObjects(FALSE);   break;
-        case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  rView.CombineMarkedObjects(TRUE);    break;
+        case SDRREPFUNC_OBJ_COMBINE_POLYPOLY:  rView.CombineMarkedObjects(sal_False);   break;
+        case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  rView.CombineMarkedObjects(sal_True);    break;
         case SDRREPFUNC_OBJ_DISMANTLE_POLYS :  rView.DismantleMarkedObjects(FALSE); break;
         case SDRREPFUNC_OBJ_DISMANTLE_LINES :  rView.DismantleMarkedObjects(TRUE);  break;
         case SDRREPFUNC_OBJ_CONVERTTOPOLY   :  rView.ConvertMarkedToPolyObj(FALSE); break;
@@ -686,15 +686,11 @@ void SdrUndoGeoObj::Undo()
 
     if(pUndoGroup)
     {
-        // #97172#
-        // #110094#-14 pObj->SendRepaintBroadcast();
-
         pUndoGroup->Undo();
 
         // #97172#
         // only repaint, no objectchange
         pObj->ActionChanged();
-        // pObj->BroadcastObjectChange();
     }
     else
     {
@@ -708,15 +704,11 @@ void SdrUndoGeoObj::Redo()
 {
     if(pUndoGroup)
     {
-        // #97172#
-        // #110094#-14 pObj->SendRepaintBroadcast();
-
         pUndoGroup->Redo();
 
         // #97172#
         // only repaint, no objectchange
         pObj->ActionChanged();
-        //pObj->BroadcastObjectChange();
     }
     else
     {
