@@ -4,9 +4,9 @@
  *
  *  $RCSfile: egif.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:41:18 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:10:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,6 @@
 class GIFWriter
 {
     Bitmap              aAccBmp;
-    PFilterCallback     pCallback;
-    void*               pCallerData;
     BitmapReadAccess*   pAcc;
     SvStream*           pGIF;
     ULONG               nMinPercent;
@@ -86,22 +84,32 @@ class GIFWriter
     void                WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint, BOOL bExtended,
                                        long nTimer = 0, Disposal eDisposal = DISPOSE_NOT );
 
+    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
+
 public:
 
                         GIFWriter() {}
                         ~GIFWriter() {}
 
     BOOL                WriteGIF( const Graphic& rGraphic, SvStream& rGIF,
-                                    PFilterCallback pcallback, void* pcallerdata,
                                         FilterConfigItem* pConfigItem );
 };
 
 // ------------------------------------------------------------------------
 
 BOOL GIFWriter::WriteGIF( const Graphic& rGraphic, SvStream& rGIF,
-                            PFilterCallback pcallback, void* pcallerdata,
-                                FilterConfigItem* pConfigItem )
+                                FilterConfigItem* pFilterConfigItem )
 {
+    if ( pFilterConfigItem )
+    {
+        xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
+        if ( xStatusIndicator.is() )
+        {
+            rtl::OUString aMsg;
+            xStatusIndicator->start( aMsg, 100 );
+        }
+    }
+
     Size            aSize100;
     const MapMode   aMap( rGraphic.GetPrefMapMode() );
     BOOL            bLogSize = ( aMap.GetMapUnit() != MAP_PIXEL );
@@ -114,11 +122,9 @@ BOOL GIFWriter::WriteGIF( const Graphic& rGraphic, SvStream& rGIF,
     nLastPercent = 0;
     nInterlaced = 0;
     pAcc = NULL;
-    pCallback = pcallback;
-    pCallerData = pcallerdata;
 
-    if ( pConfigItem )
-        nInterlaced = pConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Interlaced" ) ), 0 );
+    if ( pFilterConfigItem )
+        nInterlaced = pFilterConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Interlaced" ) ), 0 );
 
     pGIF->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
@@ -173,6 +179,9 @@ BOOL GIFWriter::WriteGIF( const Graphic& rGraphic, SvStream& rGIF,
 
         WriteTerminator();
     }
+
+    if ( xStatusIndicator.is() )
+        xStatusIndicator->end();
 
     return bStatus;
 }
@@ -236,13 +245,14 @@ void GIFWriter::WriteAnimation( const Animation& rAnimation )
 
 void GIFWriter::MayCallback( ULONG nPercent )
 {
-    if( nPercent >= nLastPercent + 3 )
+    if ( xStatusIndicator.is() )
     {
-        nLastPercent = nPercent;
-
-        if( pCallback && ( nPercent <= 100 ) && bStatus )
-            if ( ( (*pCallback)( pCallerData, (USHORT) nPercent ) ) )
-                bStatus = FALSE;
+        if( nPercent >= nLastPercent + 3 )
+        {
+            nLastPercent = nPercent;
+            if ( nPercent <= 100 )
+                xStatusIndicator->setValue( nPercent );
+        }
     }
 }
 
@@ -566,10 +576,9 @@ void GIFWriter::WriteTerminator()
 // ------------------------------------------------------------------------
 
 extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic,
-                                               PFilterCallback pCallback, void* pCallerData,
                                                FilterConfigItem* pConfigItem, BOOL )
 {
-    return GIFWriter().WriteGIF( rGraphic, rStream, pCallback, pCallerData, pConfigItem );
+    return GIFWriter().WriteGIF( rGraphic, rStream, pConfigItem );
 }
 
 // ------------------------------------------------------------------------
