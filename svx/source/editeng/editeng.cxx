@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:35:55 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:17:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,10 @@
 
 #if OSL_DEBUG_LEVEL > 1
 #include <frmdiritem.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
 #endif
 
 // Spaeter -> TOOLS\STRING.H (fuer Grep: WS_TARGET)
@@ -641,29 +645,27 @@ BOOL EditEngine::IsAddExtLeading() const
     return pImpEditEngine->IsAddExtLeading();
 }
 
-void EditEngine::SetPolygon( const XPolyPolygon& rPoly )
+void EditEngine::SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    SetPolygon( rPoly, NULL );
+    SetPolygon( rPolyPolygon, 0L );
 }
 
-void EditEngine::SetPolygon( const XPolyPolygon& rPoly, const XPolyPolygon* pXorPoly )
+void EditEngine::SetPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon)
 {
     DBG_CHKTHIS( EditEngine, 0 );
+    sal_Bool bSimple(sal_False);
 
-    sal_Bool bSimple = sal_False;
-    if( pXorPoly && rPoly.Count() == 1 )
+    if(pLinePolyPolygon && 1L == rPolyPolygon.count())
     {
-        // Handelt es sich um eine offene Kurve?
-        const XPolygon& rP = rPoly[0];
-        USHORT nCnt = rP.GetPointCount();
-
-        if( ( nCnt == 0 ) || ( rP[0] != rP[nCnt - 1] ) )
-            // Offene Kurve
+        if(rPolyPolygon.getB2DPolygon(0L).isClosed())
+        {
+            // open polygon
             bSimple = sal_True;
+        }
     }
 
-    TextRanger* pRanger = new TextRanger( rPoly, pXorPoly, 30, 2, 2, bSimple, sal_True );
+    TextRanger* pRanger = new TextRanger( rPolyPolygon, pLinePolyPolygon, 30, 2, 2, bSimple, sal_True );
     pImpEditEngine->SetTextRanger( pRanger );
     pImpEditEngine->SetPaperSize( pRanger->GetBoundRect().GetSize() );
 }
