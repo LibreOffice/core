@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lightdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:00:56 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:40:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,34 +63,6 @@
 #include "dlgctrl.hxx"
 #endif
 
-class Vector3D;
-
-/*************************************************************************
-|*
-|* Dialog
-|*
-\************************************************************************/
-/*
-class SvxLight3DDlg : public ModalDialog
-{
-private:
-    SvxRectCtl3D    aCtlLight;
-    FixedText       aFtIntensity;
-    MetricField     aMtrFldIntensity;
-    OKButton        aBtnOK;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-
-public:
-    SvxLight3DDlg(Window* pWindow);
-    virtual     ~SvxLight3DDlg();
-
-    Vector3D    GetVector();
-    void        SetLight( Vector3D aVect );
-    double      GetIntensity();
-    void        SetIntensity( double fIntens );
-};
-*/
 /*************************************************************************
 |*
 |* 3D-Tab-Dialog
@@ -120,37 +92,6 @@ private:
 public:
         Svx3DSingleTabDialog( Window* pParent, const SfxItemSet* pAttr );
         ~Svx3DSingleTabDialog();
-};
-
-/*************************************************************************
-|*
-|* Light-Tab-Page
-|*
-\************************************************************************/
-class SvxLight3DTabPage : public SfxTabPage
-{
-private:
-    SvxRectCtl3D        aCtlLight;
-    FixedText           aFtLightIntensity;
-    MetricField         aMtrFldLightIntensity;
-    FixedText           aFtLightColor;
-    ColorLB             aLbLightColor;
-    GroupBox            aGrpLight;
-    FixedText           aFtIntensity;
-    MetricField         aMtrFldIntensity;
-    FixedText           aFtColor;
-    ColorLB             aLbColor;
-    GroupBox            aGrpAmbient;
-    const SfxItemSet&   rOutAttrs;
-
-public:
-         SvxLight3DTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
-
-    static SfxTabPage* Create( Window*, const SfxItemSet& );
-    static USHORT*     GetRanges();
-
-    virtual BOOL FillItemSet( SfxItemSet& );
-    virtual void Reset( const SfxItemSet & );
 };
 
 #endif // _SVX_LIGHT3D_HXX_
