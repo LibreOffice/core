@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unokywds.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:02:44 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:34:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,8 +208,6 @@ SD_CONSTASCII_ACTION( sUNO_View_GridCoarseWidth,                "GridCoarseWidth
 SD_CONSTASCII_ACTION( sUNO_View_GridCoarseHeight,               "GridCoarseHeight" );
 SD_CONSTASCII_ACTION( sUNO_View_GridFineWidth,                  "GridFineWidth" );
 SD_CONSTASCII_ACTION( sUNO_View_GridFineHeight,                 "GridFineHeight" );
-SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidth,                  "GridSnapWidth" );
-SD_CONSTASCII_ACTION( sUNO_View_GridSnapHeight,                 "GridSnapHeight" );
 SD_CONSTASCII_ACTION( sUNO_View_IsAngleSnapEnabled,             "IsAngleSnapEnabled" );
 SD_CONSTASCII_ACTION( sUNO_View_SnapAngle,                      "SnapAngle" );
 SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidthXNumerator,        "GridSnapWidthXNumerator" );
