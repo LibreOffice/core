@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:23:10 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:55:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -774,7 +774,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
     if( pModel )
     {
         pDrawView = new FmFormView( pModel, pDev );
-        pDrawView->ShowPagePgNum( static_cast<sal_uInt16>(nTab), Point() );
+        pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
         pDrawView->SetPrintPreview( TRUE );
     }
 
