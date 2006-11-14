@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dflyobj.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:18:44 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:10:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ public:
     virtual const Rectangle& GetLogicRect() const;
     virtual       void       SetLogicRect(const Rectangle& rRect);
     virtual       void       NbcSetLogicRect(const Rectangle& rRect);
-    virtual       void       TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL) const;
+    virtual ::basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
     virtual       void       NbcMove  (const Size& rSiz);
     virtual       void       NbcResize(const Point& rRef, const Fraction& xFact,
                                        const Fraction& yFact);
