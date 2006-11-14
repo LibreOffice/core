@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dtrans.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:31:52 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:03:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,30 @@
 #ifndef _B3D_B3DTRANS_HXX
 #define _B3D_B3DTRANS_HXX
 
-#ifndef _B3D_HMATRIX_HXX
-#include "hmatrix.hxx"
+// Zu verwendender DephRange des Z-Buffers
+#define ZBUFFER_DEPTH_RANGE         ((double)(256L * 256L * 256L))
+
+#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
+#include <basegfx/matrix/b3dhommatrix.hxx>
 #endif
 
-// Zu verwendender DephRange des Z-Buffers
-#define ZBUFFER_DEPTH_RANGE         (256.0 * 256.0 * 256.0)
+#ifndef _BGFX_RANGE_B3DRANGE_HXX
+#include <basegfx/range/b3drange.hxx>
+#endif
+
+#ifndef _GEN_HXX //autogen
+#include <tools/gen.hxx>
+#endif
+
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
+#endif
 
 // Vorausdeklarationen
-class Base3D;
-class B3dVolume;
 
 /*************************************************************************
 |*
@@ -82,160 +96,177 @@ class B3dTransformationSet
 {
 private:
     // Object Matrix Object -> World
-    Matrix4D                aObjectTrans;
-    Matrix4D                aInvObjectTrans;
+    basegfx::B3DHomMatrix           maObjectTrans;
+    basegfx::B3DHomMatrix           maInvObjectTrans;
 
     // Orientation Matrix
-    Matrix4D                aOrientation;
-    Matrix4D                aInvOrientation;
+    basegfx::B3DHomMatrix           maOrientation;
+    basegfx::B3DHomMatrix           maInvOrientation;
 
     // Projection Matrix
-    Matrix4D                aProjection;
-    Matrix4D                aInvProjection;
+    basegfx::B3DHomMatrix           maProjection;
+    basegfx::B3DHomMatrix           maInvProjection;
 
     // Texture Matrices
-    Matrix4D                aTexture;
+    basegfx::B2DHomMatrix           maTexture;
 
     // Speziell zum Umwandeln von Punkten Objekt -> Device
-    Matrix4D                aObjectToDevice;
+    basegfx::B3DHomMatrix           maObjectToDevice;
 
     // Transponierte Inverse fuer Vectortransformationen
-    Matrix4D                aInvTransObjectToEye;
+    basegfx::B3DHomMatrix           maInvTransObjectToEye;
 
     // Transformation World->View
-    Matrix4D                aMatFromWorldToView;
-    Matrix4D                aInvMatFromWorldToView;
+    basegfx::B3DHomMatrix           maMatFromWorldToView;
+    basegfx::B3DHomMatrix           maInvMatFromWorldToView;
 
     // Parameters for ViewportTransformation
-    Vector3D                aScale;
-    Vector3D                aTranslate;
+    basegfx::B3DVector          maScale;
+    basegfx::B3DVector          maTranslate;
 
     // ViewPlane DeviceRectangle (vom Benutzer gesetzt)
-    double                  fLeftBound;
-    double                  fRightBound;
-    double                  fBottomBound;
-    double                  fTopBound;
+    double                          mfLeftBound;
+    double                          mfRightBound;
+    double                          mfBottomBound;
+    double                          mfTopBound;
 
     // Near and far clipping planes
-    double                  fNearBound;
-    double                  fFarBound;
+    double                          mfNearBound;
+    double                          mfFarBound;
 
     // Seitenverhaeltnis der 3D Abbildung (Y / X)
     // default ist 1:1 -> 1.0
     // Deaktivieren mit 0.0 als Wert
-    double                  fRatio;
+    double                          mfRatio;
 
     // Der gesetzte Ausgabebereich (in logischen Koordinaten)
     // und der dazugehoerige sichtbare Bereich
-    Rectangle               aViewportRectangle;
-    Rectangle               aVisibleRectangle;
+    Rectangle                       maViewportRectangle;
+    Rectangle                       maVisibleRectangle;
 
     // Die tatsaechlich von CalcViewport gesetzten Abmessungen
     // des sichtbaren Bereichs (in logischen Koordinaten)
-    Rectangle               aSetBound;
+    Rectangle                       maSetBound;
 
     // Methode zur Aufrechterhaltung des Seitenverhaeltnisses
     // default ist Base3DRatioGrow
-    Base3DRatio             eRatio;
+    Base3DRatio                     meRatio;
 
     // Flags
-    unsigned                bPerspective                : 1;
-    unsigned                bWorldToViewValid           : 1;
-    unsigned                bInvTransObjectToEyeValid   : 1;
-    unsigned                bObjectToDeviceValid        : 1;
-    unsigned                bProjectionValid            : 1;
+    unsigned                        mbPerspective               : 1;
+    unsigned                        mbWorldToViewValid          : 1;
+    unsigned                        mbInvTransObjectToEyeValid  : 1;
+    unsigned                        mbObjectToDeviceValid       : 1;
+    unsigned                        mbProjectionValid           : 1;
 
 public:
     B3dTransformationSet();
+    virtual ~B3dTransformationSet();
 
     // Zurueck auf Standard
     void Reset();
 
     // ObjectTrans
-    void SetObjectTrans(Matrix4D& rObj);
-    const Matrix4D& GetObjectTrans() { return aObjectTrans; }
-    const Matrix4D& GetInvObjectTrans() { return aInvObjectTrans; }
+    void SetObjectTrans(const basegfx::B3DHomMatrix& rObj);
+    const basegfx::B3DHomMatrix& GetObjectTrans() { return maObjectTrans; }
+    const basegfx::B3DHomMatrix& GetInvObjectTrans() { return maInvObjectTrans; }
 
     // Orientation
-    void SetOrientation(Vector3D const & aVRP = Vector3D(0.0,0.0,1.0),
-        Vector3D const & aVPN = Vector3D(0.0,0.0,1.0),
-        Vector3D const & aVUP = Vector3D(0.0,1.0,0.0));
-    void SetOrientation(Matrix4D& mOrient);
-    const Matrix4D& GetOrientation() { return aOrientation; }
-    const Matrix4D& GetInvOrientation() { return aInvOrientation; }
+    void SetOrientation(
+        basegfx::B3DPoint aVRP = basegfx::B3DPoint(0.0,0.0,1.0),
+        basegfx::B3DVector aVPN = basegfx::B3DVector(0.0,0.0,1.0),
+        basegfx::B3DVector aVUP = basegfx::B3DVector(0.0,1.0,0.0));
+    void SetOrientation(basegfx::B3DHomMatrix& mOrient);
+    const basegfx::B3DHomMatrix& GetOrientation() { return maOrientation; }
+    const basegfx::B3DHomMatrix& GetInvOrientation() { return maInvOrientation; }
 
     // Projection
-    void SetProjection(Matrix4D& mProject);
-    const Matrix4D& GetProjection();
-    const Matrix4D& GetInvProjection();
+    void SetProjection(const basegfx::B3DHomMatrix& mProject);
+    const basegfx::B3DHomMatrix& GetProjection();
+    const basegfx::B3DHomMatrix& GetInvProjection();
 
     // Texture
-    void SetTexture(Matrix4D& rTxt);
-    const Matrix4D& GetTexture() { return aTexture; }
+    void SetTexture(const basegfx::B2DHomMatrix& rTxt);
+    const basegfx::B2DHomMatrix& GetTexture() { return maTexture; }
 
     // Seitenverhaeltnis und Modus zu dessen Aufrechterhaltung
-    double GetRatio() { return fRatio; }
+    double GetRatio() { return mfRatio; }
     void SetRatio(double fNew=1.0);
-    Base3DRatio GetRatioMode() { return eRatio; }
+    Base3DRatio GetRatioMode() { return meRatio; }
     void SetRatioMode(Base3DRatio eNew=Base3DRatioGrow);
 
     // Parameter der ViewportTransformation
-    void SetDeviceRectangle(double fL=-1.0, double fR=1.0, double fB=-1.0, double fT=1.0,
-        BOOL bBroadCastChange=TRUE);
-    void SetDeviceVolume(const B3dVolume& rVol, BOOL bBroadCastChange=TRUE);
+    void SetDeviceRectangle(double fL=-1.0, double fR=1.0, double fB=-1.0, double fT=1.0, sal_Bool bBroadCastChange=sal_True);
+    void SetDeviceVolume(const basegfx::B3DRange& rVol, sal_Bool bBroadCastChange=sal_True);
     void GetDeviceRectangle(double &fL, double &fR, double& fB, double& fT);
-    B3dVolume GetDeviceVolume();
-    double GetDeviceRectangleWidth() const { return fRightBound - fLeftBound; }
-    double GetDeviceRectangleHeight() const { return fTopBound - fBottomBound; }
+    basegfx::B3DRange GetDeviceVolume();
+    double GetDeviceRectangleWidth() const { return mfRightBound - mfLeftBound; }
+    double GetDeviceRectangleHeight() const { return mfTopBound - mfBottomBound; }
     void SetFrontClippingPlane(double fF=0.0);
-    double GetFrontClippingPlane() { return fNearBound; }
+    double GetFrontClippingPlane() { return mfNearBound; }
     void SetBackClippingPlane(double fB=1.0);
-    double GetBackClippingPlane() { return fFarBound; }
-    void SetPerspective(BOOL bNew);
-    BOOL GetPerspective() { return bPerspective; }
+    double GetBackClippingPlane() { return mfFarBound; }
+    void SetPerspective(sal_Bool bNew);
+    sal_Bool GetPerspective() { return mbPerspective; }
     void SetViewportRectangle(Rectangle& rRect, Rectangle& rVisible);
     void SetViewportRectangle(Rectangle& rRect) { SetViewportRectangle(rRect, rRect); }
-    const Rectangle& GetViewportRectangle() { return aViewportRectangle; }
+    const Rectangle& GetViewportRectangle() { return maViewportRectangle; }
     void CalcViewport();
 
     // Spezielle Matritzen anfordern
-    Matrix4D GetMatFromObjectToView();
+    basegfx::B3DHomMatrix GetMatFromObjectToView();
 
     // Transponierte Inverse fuer Vectortransformationen
-    const Matrix4D& GetInvTransObjectToEye();
+    const basegfx::B3DHomMatrix& GetInvTransObjectToEye();
 
     // Speziell zum Umwandeln von Punkten Objekt -> Device
-    const Matrix4D& GetObjectToDevice();
+    const basegfx::B3DHomMatrix& GetObjectToDevice();
 
     // Speziell zum Umwandeln von Punkten World -> View
-    const Matrix4D& GetMatFromWorldToView();
-    const Matrix4D& GetInvMatFromWorldToView();
+    const basegfx::B3DHomMatrix& GetMatFromWorldToView();
+    const basegfx::B3DHomMatrix& GetInvMatFromWorldToView();
 
     // Bounds des Viewports lesen
     const Rectangle& GetLogicalViewportBounds();
-    const Vector3D& GetScale();
-    const Vector3D& GetTranslate();
+    const basegfx::B3DVector& GetScale();
+    const basegfx::B3DVector& GetTranslate();
 
     // Direkter Zugriff auf verschiedene Transformationen
-    const Vector3D WorldToEyeCoor(const Vector3D& rVec);
-    const Vector3D EyeToWorldCoor(const Vector3D& rVec);
-    const Vector3D EyeToViewCoor(const Vector3D& rVec);
-    const Vector3D ViewToEyeCoor(const Vector3D& rVec);
-    const Vector3D WorldToViewCoor(const Vector3D& rVec);
-    const Vector3D ViewToWorldCoor(const Vector3D& rVec);
-    const Vector3D DeviceToViewCoor(const Vector3D& rVec);
-    const Vector3D ViewToDeviceCoor(const Vector3D& rVec);
-    const Vector3D ObjectToWorldCoor(const Vector3D& rVec);
-    const Vector3D WorldToObjectCoor(const Vector3D& rVec);
-    const Vector3D ObjectToViewCoor(const Vector3D& rVec);
-    const Vector3D ViewToObjectCoor(const Vector3D& rVec);
-    const Vector3D ObjectToEyeCoor(const Vector3D& rVec);
-    const Vector3D EyeToObjectCoor(const Vector3D& rVec);
-    const Vector3D DeviceToEyeCoor(const Vector3D& rVec);
-    const Vector3D EyeToDeviceCoor(const Vector3D& rVec);
+    const basegfx::B3DPoint WorldToEyeCoor(const basegfx::B3DPoint& rVec);
+    const basegfx::B3DPoint EyeToWorldCoor(const basegfx::B3DPoint& rVec);
+    const basegfx::B3DPoint EyeToViewCoor(const basegfx::B3DPoint& rVec);
+    const basegfx::B3DPoint ViewToEyeCoor(const basegfx::B3DPoint& rVec);
+    const basegfx::B3DPoint WorldToViewCoor(const basegfx::B3DPoint& rVec);
+    const basegfx::B3DPoint ViewToWorldCoor(const basegfx::B3DPoint& rVec);
+    const basegfx::B3DPoint DeviceToViewCoor(const basegfx::B3DPoint& rVec);
+    const basegfx::B3DPoint ViewToDeviceCoor(const basegfx::B3DPoint& rVec);
+    const basegfx::B3DPoint ObjectToWorldCoor(const basegfx::B3DPoint& rVec);
+    const basegfx::B3DPoint WorldToObjectCoor(const basegfx::B3DPoint& rVec);
+    const basegfx::B3DPoint ObjectToViewCoor(const basegfx::B3DPoint& rVec);
+    const basegfx::B3DPoint ViewToObjectCoor(const basegfx::B3DPoint& rVec);
+    const basegfx::B3DPoint ObjectToEyeCoor(const basegfx::B3DPoint& rVec);
+    const basegfx::B3DPoint EyeToObjectCoor(const basegfx::B3DPoint& rVec);
+    const basegfx::B3DPoint DeviceToEyeCoor(const basegfx::B3DPoint& rVec);
+    const basegfx::B3DPoint EyeToDeviceCoor(const basegfx::B3DPoint& rVec);
 
-    const Vector3D InvTransObjectToEye(const Vector3D& rVec);
-    const Vector3D TransTextureCoor(const Vector3D& rVec);
+    const basegfx::B3DPoint InvTransObjectToEye(const basegfx::B3DPoint& rVec);
+    const basegfx::B2DPoint TransTextureCoor(const basegfx::B2DPoint& rVec);
+
+    static void Frustum(
+        basegfx::B3DHomMatrix& rTarget,
+        double fLeft = -1.0, double fRight = 1.0,
+        double fBottom = -1.0, double fTop = 1.0,
+        double fNear = 0.001, double fFar = 1.0);
+    static void Ortho(
+        basegfx::B3DHomMatrix& rTarget,
+        double fLeft = -1.0, double fRight = 1.0,
+        double fBottom = -1.0, double fTop = 1.0,
+        double fNear = 0.0, double fFar = 1.0);
+    static void Orientation(
+        basegfx::B3DHomMatrix& rTarget,
+        basegfx::B3DPoint aVRP = basegfx::B3DPoint(0.0,0.0,1.0),
+        basegfx::B3DVector aVPN = basegfx::B3DVector(0.0,0.0,1.0),
+        basegfx::B3DVector aVUP = basegfx::B3DVector(0.0,1.0,0.0));
 
 protected:
     void PostSetObjectTrans();
@@ -263,24 +294,25 @@ protected:
 class B3dViewport : public B3dTransformationSet
 {
 private:
-    Vector3D                aVRP;           // View Reference Point
-    Vector3D                aVPN;           // View Plane Normal
-    Vector3D                aVUV;           // View Up Vector
+    basegfx::B3DPoint               aVRP;           // View Reference Point
+    basegfx::B3DVector          aVPN;           // View Plane Normal
+    basegfx::B3DVector          aVUV;           // View Up Vector
 
 public:
     B3dViewport();
+    virtual ~B3dViewport();
 
-    void SetVRP(const Vector3D& rNewVRP);
-    void SetVPN(const Vector3D& rNewVPN);
-    void SetVUV(const Vector3D& rNewVUV);
+    void SetVRP(const basegfx::B3DPoint& rNewVRP);
+    void SetVPN(const basegfx::B3DVector& rNewVPN);
+    void SetVUV(const basegfx::B3DVector& rNewVUV);
     void SetViewportValues(
-        const Vector3D& rNewVRP,
-        const Vector3D& rNewVPN,
-        const Vector3D& rNewVUV);
+        const basegfx::B3DPoint& rNewVRP,
+        const basegfx::B3DVector& rNewVPN,
+        const basegfx::B3DVector& rNewVUV);
 
-    const Vector3D& GetVRP() const  { return aVRP; }
-    const Vector3D& GetVPN() const  { return aVPN; }
-    const Vector3D& GetVUV() const  { return aVUV; }
+    const basegfx::B3DPoint&    GetVRP() const  { return aVRP; }
+    const basegfx::B3DVector&   GetVPN() const  { return aVPN; }
+    const basegfx::B3DVector&   GetVUV() const  { return aVUV; }
 
 protected:
     void CalcOrientation();
@@ -295,26 +327,28 @@ protected:
 class B3dCamera : public B3dViewport
 {
 private:
-    Vector3D                aPosition;
-    Vector3D                aCorrectedPosition;
-    Vector3D                aLookAt;
+    basegfx::B3DPoint       aPosition;
+    basegfx::B3DPoint       aCorrectedPosition;
+    basegfx::B3DVector  aLookAt;
     double                  fFocalLength;
     double                  fBankAngle;
 
     unsigned                bUseFocalLength         : 1;
 
 public:
-    B3dCamera(const Vector3D& rPos = Vector3D(0.0, 0.0, 1.0),
-        const Vector3D& rLkAt = Vector3D(0.0, 0.0, 0.0),
+    B3dCamera(
+        const basegfx::B3DPoint& rPos = basegfx::B3DPoint(0.0, 0.0, 1.0),
+        const basegfx::B3DVector& rLkAt = basegfx::B3DVector(0.0, 0.0, 0.0),
         double fFocLen = 35.0, double fBnkAng = 0.0,
-        BOOL bUseFocLen = FALSE);
+        sal_Bool bUseFocLen = sal_False);
+    virtual ~B3dCamera();
 
     // Positionen
-    void SetPosition(const Vector3D& rNewPos);
-    const Vector3D& GetPosition() const { return aPosition; }
-    void SetLookAt(const Vector3D& rNewLookAt);
-    const Vector3D& GetLookAt() const { return aLookAt; }
-    void SetPositionAndLookAt(const Vector3D& rNewPos, const Vector3D& rNewLookAt);
+    void SetPosition(const basegfx::B3DPoint& rNewPos);
+    const basegfx::B3DPoint& GetPosition() const { return aPosition; }
+    void SetLookAt(const basegfx::B3DVector& rNewLookAt);
+    const basegfx::B3DVector& GetLookAt() const { return aLookAt; }
+    void SetPositionAndLookAt(const basegfx::B3DPoint& rNewPos, const basegfx::B3DVector& rNewLookAt);
 
     // Brennweite in mm
     void SetFocalLength(double fLen);
@@ -325,12 +359,12 @@ public:
     double GetBankAngle() const { return fBankAngle; }
 
     // FocalLength Flag
-    void SetUseFocalLength(BOOL bNew);
-    BOOL GetUseFocalLength() const { return (BOOL)bUseFocalLength; }
+    void SetUseFocalLength(sal_Bool bNew);
+    sal_Bool GetUseFocalLength() const { return (sal_Bool)bUseFocalLength; }
 
 protected:
     void CalcNewViewportValues();
-    BOOL CalcFocalLength();
+    sal_Bool CalcFocalLength();
 
     virtual void DeviceRectangleChange();
 };
