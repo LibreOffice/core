@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewClipboard.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:33:05 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:40:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,14 @@
 #include "glob.hrc"
 
 #include <svx/svdpagv.hxx>
+
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 namespace sd {
 
@@ -151,7 +159,7 @@ void ViewClipboard::AssignMasterPage (
             return;
 
         // Get the target page to which the master page is assigned.
-        SdrPageView* pPageView = mrView.GetPageViewPvNum(0);
+        SdrPageView* pPageView = mrView.GetSdrPageView();
         if (pPageView == NULL)
             break;
 
