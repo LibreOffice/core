@@ -4,9 +4,9 @@
  *
  *  $RCSfile: volume3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:00:18 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:23:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,12 +40,8 @@
 #include "volume3d.hxx"
 #endif
 
-#ifndef _POLY3D_HXX
-#include "poly3d.hxx"
-#endif
-
-#ifndef _SVX_MATRIX3D_HXX
-#include "matrix3d.hxx"
+#ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
+#include <basegfx/polygon/b3dpolygon.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -60,8 +56,23 @@
 |*
 \************************************************************************/
 
-Volume3D::Volume3D(const Vector3D& rPos, const Vector3D& r3DSize, BOOL bPosIsCenter)
-:   B3dVolume(rPos, r3DSize, bPosIsCenter)
+Volume3D::Volume3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& r3DSize, bool bPosIsCenter)
+:   basegfx::B3DRange()
+{
+    if(bPosIsCenter)
+    {
+        expand(rPos - r3DSize / 2.0);
+    }
+    else
+    {
+        expand(rPos);
+    }
+
+    expand(getMinimum() + r3DSize);
+}
+
+Volume3D::Volume3D(const basegfx::B3DRange& rVol)
+:   basegfx::B3DRange(rVol)
 {
 }
 
@@ -71,7 +82,8 @@ Volume3D::Volume3D(const Vector3D& rPos, const Vector3D& r3DSize, BOOL bPosIsCen
 |*
 \************************************************************************/
 
-Volume3D::Volume3D() : B3dVolume()
+Volume3D::Volume3D()
+:   basegfx::B3DRange()
 {
 }
 
@@ -82,17 +94,19 @@ Volume3D::Volume3D() : B3dVolume()
 |*
 \************************************************************************/
 
-Volume3D Volume3D::GetTransformVolume(const Matrix4D& rTfMatrix) const
+Volume3D Volume3D::GetTransformVolume(const basegfx::B3DHomMatrix& rTfMatrix) const
 {
     Volume3D aTfVol;
 
-    if(IsValid())
+    if(!isEmpty())
     {
-        Vector3D aTfVec;
+        basegfx::B3DPoint aTfVec;
         Vol3DPointIterator aIter(*this, &rTfMatrix);
 
         while(aIter.Next(aTfVec))
-            aTfVol.Union(aTfVec);
+        {
+            aTfVol.expand(aTfVec);
+        }
     }
     return aTfVol;
 }
@@ -103,28 +117,31 @@ Volume3D Volume3D::GetTransformVolume(const Matrix4D& rTfMatrix) const
 |*
 \************************************************************************/
 
-void Volume3D::CreateWireframe(Polygon3D& rPoly3D, const Matrix4D* pTf) const
+void Volume3D::CreateWireframe(basegfx::B3DPolygon& rPoly3D, const basegfx::B3DHomMatrix* pTf) const
 {
-    if(!IsValid())
+    if(isEmpty())
         return;
 
-    Vector3D aDiff = aMaxVec - aMinVec;
-    Polygon3D aVolPnts(8);
-    UINT16 nZeroCnt(0);
-    UINT16 nIdx = rPoly3D.GetPointCount();
+    basegfx::B3DVector aDiff(getRange());
+    basegfx::B3DPolygon aVolPnts;
+    sal_uInt32 nZeroCnt(0L);
 
     // Alle Punkte holen
     Vol3DPointIterator aIter(*this, pTf);
-    Vector3D aTfVec;
-    UINT16 i(0);
+    basegfx::B3DPoint aTfVec;
 
     while(aIter.Next(aTfVec))
-        aVolPnts[i++] = aTfVec;
+    {
+        aVolPnts.append(aTfVec);
+    }
 
     // 0-Ausmasse des BoundVolumes zaehlen
-    for(i = 0; i < 3; i++)
-        if(aDiff[i] == 0)
-            nZeroCnt++;
+    if(0.0 == aDiff.getX())
+        nZeroCnt++;
+    if(0.0 == aDiff.getY())
+        nZeroCnt++;
+    if(0.0 == aDiff.getZ())
+        nZeroCnt++;
 
     // Die drei Ecksegemente des Volumens mit je drei Linien ausgeben;
     // falls Koordinatenanteile 0 sind, nicht alle Segmente verwenden,
@@ -139,20 +156,20 @@ void Volume3D::CreateWireframe(Polygon3D& rPoly3D, const Matrix4D* pTf) const
     // X-, Y- und dann Z-Richtung ausgegeben (gilt natuerlich nur fuer
     // untransformierte Koordinaten)
 
-    rPoly3D[nIdx++] = aVolPnts[0];
+    rPoly3D.append(aVolPnts.getB3DPoint(0));
 
-    if(nZeroCnt < 3)
+    if(nZeroCnt < 3L)
     {
         // wenn keine Ausdehnung, dann nur den ersten Punkt einfuegen
-        rPoly3D[nIdx++] = aVolPnts[1];
-        rPoly3D[nIdx++] = aVolPnts[0];
-        rPoly3D[nIdx++] = aVolPnts[4];
-        rPoly3D[nIdx++] = aVolPnts[0];
-        rPoly3D[nIdx++] = aVolPnts[3];
+        rPoly3D.append(aVolPnts.getB3DPoint(1L));
+        rPoly3D.append(aVolPnts.getB3DPoint(0L));
+        rPoly3D.append(aVolPnts.getB3DPoint(4L));
+        rPoly3D.append(aVolPnts.getB3DPoint(0L));
+        rPoly3D.append(aVolPnts.getB3DPoint(3L));
     }
-    if(nZeroCnt < 2)
+    if(nZeroCnt < 2L)
     {
-        if(nZeroCnt == 0 || aDiff.X() == 0)
+        if(nZeroCnt == 0L || aDiff.getX() == 0.0)
         {
             //   4
             //  /
@@ -160,38 +177,38 @@ void Volume3D::CreateWireframe(Polygon3D& rPoly3D, const Matrix4D* pTf) const
             // |
             // |
             // 3
-            rPoly3D[nIdx++] = aVolPnts[7];
-            rPoly3D[nIdx++] = aVolPnts[6];
-            rPoly3D[nIdx++] = aVolPnts[7];
-            rPoly3D[nIdx++] = aVolPnts[3];
-            rPoly3D[nIdx++] = aVolPnts[7];
-            rPoly3D[nIdx++] = aVolPnts[4];
+            rPoly3D.append(aVolPnts.getB3DPoint(7L));
+            rPoly3D.append(aVolPnts.getB3DPoint(6L));
+            rPoly3D.append(aVolPnts.getB3DPoint(7L));
+            rPoly3D.append(aVolPnts.getB3DPoint(3L));
+            rPoly3D.append(aVolPnts.getB3DPoint(7L));
+            rPoly3D.append(aVolPnts.getB3DPoint(4L));
         }
-        if(nZeroCnt == 0 || (aDiff.Y() == 0))
+        if(nZeroCnt == 0L || (aDiff.getY() == 0.0))
         {
             //     6
             //     | 1
             //     |/
             // 3---2
-            rPoly3D[nIdx++] = aVolPnts[2];
-            rPoly3D[nIdx++] = aVolPnts[3];
-            rPoly3D[nIdx++] = aVolPnts[2];
-            rPoly3D[nIdx++] = aVolPnts[6];
-            rPoly3D[nIdx++] = aVolPnts[2];
-            rPoly3D[nIdx++] = aVolPnts[1];
+            rPoly3D.append(aVolPnts.getB3DPoint(2L));
+            rPoly3D.append(aVolPnts.getB3DPoint(3L));
+            rPoly3D.append(aVolPnts.getB3DPoint(2L));
+            rPoly3D.append(aVolPnts.getB3DPoint(6L));
+            rPoly3D.append(aVolPnts.getB3DPoint(2L));
+            rPoly3D.append(aVolPnts.getB3DPoint(1L));
         }
-        if(nZeroCnt == 0 || (aDiff.Z() == 0))
+        if(nZeroCnt == 0L || (aDiff.getZ() == 0.0))
         {
             //   4---5
             //      /|
             //     6 |
             //       1
-            rPoly3D[nIdx++] = aVolPnts[5];
-            rPoly3D[nIdx++] = aVolPnts[4];
-            rPoly3D[nIdx++] = aVolPnts[5];
-            rPoly3D[nIdx++] = aVolPnts[1];
-            rPoly3D[nIdx++] = aVolPnts[5];
-            rPoly3D[nIdx++] = aVolPnts[6];
+            rPoly3D.append(aVolPnts.getB3DPoint(5L));
+            rPoly3D.append(aVolPnts.getB3DPoint(4L));
+            rPoly3D.append(aVolPnts.getB3DPoint(5L));
+            rPoly3D.append(aVolPnts.getB3DPoint(1L));
+            rPoly3D.append(aVolPnts.getB3DPoint(5L));
+            rPoly3D.append(aVolPnts.getB3DPoint(6L));
         }
     }
 }
@@ -202,13 +219,13 @@ void Volume3D::CreateWireframe(Polygon3D& rPoly3D, const Matrix4D* pTf) const
 |*
 \************************************************************************/
 
-Vol3DPointIterator::Vol3DPointIterator(const Volume3D& rVol, const Matrix4D* pTf)
+Vol3DPointIterator::Vol3DPointIterator(const basegfx::B3DRange& rVol, const basegfx::B3DHomMatrix* pTf)
 :   rVolume(rVol),
     pTransform(pTf),
     nIndex(0)
 {
-    DBG_ASSERT(rVol.IsValid(), "Vol3DPointIterator-Aufruf mit ungueltigem Volume3D!");
-    a3DExtent = rVolume.aMaxVec - rVolume.aMinVec;
+    DBG_ASSERT(!rVol.isEmpty(), "Vol3DPointIterator-Aufruf mit ungueltigem Volume3D!");
+    a3DExtent = rVolume.getMaximum() - rVolume.getMinimum();
 }
 
 /*************************************************************************
@@ -224,37 +241,41 @@ Vol3DPointIterator::Vol3DPointIterator(const Volume3D& rVol, const Matrix4D* pTf
 |*
 \************************************************************************/
 
-BOOL Vol3DPointIterator::Next(Vector3D& rVec)
+bool Vol3DPointIterator::Next(basegfx::B3DPoint& rVec)
 {
     if(nIndex > 7)
     {
-        return FALSE;
+        return false;
     }
     else
     {
-        rVec = rVolume.aMinVec;
+        rVec = rVolume.getMinimum();
 
         if(nIndex >= 4)
-            rVec.Y() += a3DExtent.Y();
+        {
+            rVec.setY(rVec.getY() + a3DExtent.getY());
+        }
 
         switch(nIndex)
         {
             case 6:
-            case 2: rVec.Z() += a3DExtent.Z();
+            case 2: rVec.setZ(rVec.getZ() + a3DExtent.getZ());
             case 5:
-            case 1: rVec.X() += a3DExtent.X();
+            case 1: rVec.setX(rVec.getX() + a3DExtent.getX());
                     break;
             case 7:
-            case 3: rVec.Z() += a3DExtent.Z();
+            case 3: rVec.setZ(rVec.getZ() + a3DExtent.getZ());
                     break;
         }
         nIndex++;
 
         if(pTransform)
+        {
             rVec *= *pTransform;
+        }
 
-        return TRUE;
+        return true;
     }
 }
 
-
+// eof
