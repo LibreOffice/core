@@ -4,9 +4,9 @@
  *
  *  $RCSfile: deflt3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:55:07 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:18:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,25 +73,22 @@ E3dDefaultAttributes::E3dDefaultAttributes()
 void E3dDefaultAttributes::Reset()
 {
     // Compound-Objekt
-//  aDefaultFrontMaterial;
-//  aDefaultBackMaterial;
     bDefaultCreateNormals = TRUE;
     bDefaultCreateTexture = TRUE;
     bDefaultUseDifferentBackMaterial = FALSE;
 
     // Cube-Objekt
-    aDefaultCubePos = Vector3D(-500.0, -500.0, -500.0);
-    aDefaultCubeSize = Vector3D(1000.0, 1000.0, 1000.0);
+    aDefaultCubePos = basegfx::B3DPoint(-500.0, -500.0, -500.0);
+    aDefaultCubeSize = basegfx::B3DVector(1000.0, 1000.0, 1000.0);
     nDefaultCubeSideFlags = CUBE_FULL;
     bDefaultCubePosIsCenter = FALSE;
 
     // Sphere-Objekt
-    aDefaultSphereCenter = Vector3D(0.0, 0.0, 0.0);
-    aDefaultSphereSize = Vector3D(1000.0, 1000.0, 1000.0);
+    aDefaultSphereCenter = basegfx::B3DPoint(0.0, 0.0, 0.0);
+    aDefaultSphereSize = basegfx::B3DPoint(1000.0, 1000.0, 1000.0);
 
     // Lathe-Objekt
     nDefaultLatheEndAngle = 3600;
-    fDefaultLatheScale = 1.0;
     bDefaultLatheSmoothed = TRUE;
     bDefaultLatheSmoothFrontBack = FALSE;
     bDefaultLatheCharacterMode = FALSE;
@@ -99,7 +96,6 @@ void E3dDefaultAttributes::Reset()
     bDefaultLatheCloseBack = TRUE;
 
     // Extrude-Objekt
-    fDefaultExtrudeScale = 1.0;
     bDefaultExtrudeSmoothed = TRUE;
     bDefaultExtrudeSmoothFrontBack = FALSE;
     bDefaultExtrudeCharacterMode = FALSE;
@@ -107,6 +103,7 @@ void E3dDefaultAttributes::Reset()
     bDefaultExtrudeCloseBack = TRUE;
 
     // Scene-Objekt
-//  aDefaultLightGroup;
     bDefaultDither = TRUE;
 }
+
+// eof
