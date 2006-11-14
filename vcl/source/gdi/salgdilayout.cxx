@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdilayout.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:10:36 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:23:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,6 +151,14 @@ SalGraphics::SalGraphics()
 
 SalGraphics::~SalGraphics()
 {
+}
+
+// ----------------------------------------------------------------------------
+
+bool SalGraphics::drawAlphaBitmap( const SalTwoRect&,
+    const SalBitmap&, const SalBitmap& )
+{
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -618,6 +626,30 @@ BOOL SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, 
     else
         return getNativeControlRegion( nType, nPart, rControlRegion, nState, aValue, rControlHandle, aCaption,
                                                 rNativeBoundingRegion, rNativeContentRegion );
+}
+
+bool SalGraphics::DrawAlphaBitmap( const SalTwoRect& rPosAry,
+                                   const SalBitmap& rSourceBitmap,
+                                   const SalBitmap& rAlphaBitmap,
+                                   const OutputDevice *pOutDev )
+{
+    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
+    {
+        SalTwoRect pPosAry2 = rPosAry;
+        mirror( pPosAry2.mnDestX, pPosAry2.mnDestWidth, pOutDev );
+        return drawAlphaBitmap( pPosAry2, rSourceBitmap, rAlphaBitmap );
+    }
+    else
+        return drawAlphaBitmap( rPosAry, rSourceBitmap, rAlphaBitmap );
+}
+
+bool SalGraphics::DrawAlphaRect( long nX, long nY, long nWidth, long nHeight,
+                                 sal_uInt8 nTransparency, const OutputDevice *pOutDev )
+{
+    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
+        mirror( nX, nWidth, pOutDev );
+
+    return drawAlphaRect( nX, nY, nWidth, nHeight, nTransparency );
 }
 
 bool SalGraphics::filterText( const String&, String&, xub_StrLen, xub_StrLen&, xub_StrLen&, xub_StrLen& )
