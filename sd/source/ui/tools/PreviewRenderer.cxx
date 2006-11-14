@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreviewRenderer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:22:07 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:37:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@
 #include <svx/eeitem.hxx>
 #include <svx/editstat.hxx>
 #include <tools/link.hxx>
+#include <vcl/svapp.hxx>
 
 
 namespace sd {
@@ -239,12 +240,16 @@ bool PreviewRenderer::Initialize (
         // Tell the view to show the given page.
         SdPage* pNonConstPage = const_cast<SdPage*>(pPage);
         if (pPage->IsMasterPage())
-            mpView->ShowMasterPagePgNum(pPage->GetPageNum(), Point(0, 0));
+        {
+            mpView->ShowSdrPage(mpView->GetModel()->GetMasterPage(pPage->GetPageNum()));
+        }
         else
-            mpView->ShowPage (pNonConstPage, Point(0,0));
+        {
+            mpView->ShowSdrPage(pNonConstPage);
+        }
 
         // Make sure that a page view exists.
-        SdrPageView* pPageView = mpView->GetPageView (pPage);
+        SdrPageView* pPageView = mpView->GetSdrPageView();
         if (pPageView == NULL)
             break;
         // Set background color of page view and outliner.
@@ -269,7 +274,7 @@ bool PreviewRenderer::Initialize (
 
 void PreviewRenderer::Cleanup (void)
 {
-    mpView->HideAllPages();
+    mpView->HideSdrPage();
 }
 
 
