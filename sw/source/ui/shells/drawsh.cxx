@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:13:34 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:19:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,7 +385,7 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
 
         if ( pDrView->IsTextEdit() )
         {
-            pDrView->EndTextEdit( TRUE );
+            pDrView->SdrEndTextEdit( TRUE );
             GetView().AttrChangedNotify(&rSh);
         }
 
@@ -399,7 +399,7 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
             SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)(GetView().GetViewFrame()->
                                         GetChildWindow(nId)->GetWindow());
 
-            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetPageViewPvNum(0),
+            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetSdrPageView(),
                                     rSet, *rMarkList.GetMark(0)->GetMarkedSdrObj(),
                                    ((const XFormTextStdFormItem*) pItem)->
                                    GetValue());
