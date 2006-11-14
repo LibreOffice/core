@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:37:05 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:27:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -946,6 +946,52 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					<label>Object refresh during interaction</label>
 				</info>
 				<value>false</value>
+			</prop>
+		</group>
+		<group oor:name="Drawinglayer">
+			<info>
+				<author>AW</author>
+				<desc>Specifies settings for the Drawinglayer.</desc>
+			</info>
+			<prop oor:name="OverlayBuffer" oor:type="xs:boolean">
+				<info>
+					<author>AW</author>
+					<desc>Specifies if the Overlay pane shall use an own buffer. If on, Overlay is fast but a buffer (graphics memory) is used. If off, Overlay is slow, but no Buffer is needed.</desc>
+					<label>Overlay uses Background Buffer</label>
+				</info>
+				<value>true</value>
+			</prop>
+			<prop oor:name="PaintBuffer" oor:type="xs:boolean">
+				<info>
+					<author>AW</author>
+					<desc>Specifies if the Paint shall use a buffer. If on, screen flicker is greatly reduced and remote display is fast, but a buffer (graphics memory) is needed. If off, screen flicker will occurr and remote display is slow, but no buffer is needed.</desc>
+					<label>Paint uses Output Buffer</label>
+				</info>
+				<value>true</value>
+			</prop>
+			<prop oor:name="StripeColorA" oor:type="xs:int">
+				<info>
+					<author>AW</author>
+					<desc>Specifies the first one of two colors used from overlay to display striped lines as helplines. Default is black.</desc>
+					<label>Use given color as first stripe color</label>
+				</info>
+				<value>0</value>
+			</prop>
+			<prop oor:name="StripeColorB" oor:type="xs:int">
+				<info>
+					<author>AW</author>
+					<desc>Specifies the second one of two colors used from overlay to display striped lines as helplines. Default is white.</desc>
+					<label>Use given color as second stripe color</label>
+				</info>
+				<value>16777215</value>
+			</prop>
+			<prop oor:name="StripeLength" oor:type="xs:short">
+				<info>
+					<author>AW</author>
+					<desc>Specifies the length in pixels of a single stripe used from overlay to display striped lines as helplines. Default is four.</desc>
+					<label>Use given length as stripe length</label>
+				</info>
+				<value>4</value>
 			</prop>
 		</group>
 		<group oor:name="AutoCorrect">
