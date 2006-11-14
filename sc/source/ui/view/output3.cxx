@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:06:33 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:57:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,10 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/xoutx.hxx>
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #include "output.hxx"
 #include "drwlayer.hxx"
@@ -142,14 +146,14 @@ void ScOutputData::DrawingLayer(const sal_uInt16 nLayer, const sal_uInt16 nPaint
 
     // #109985#
     //DrawSelectiveObjects( nLayer, aRect, nObjectFlags );
-    DrawSelectiveObjects( nLayer, aRect, nPaintMode);
+    DrawSelectiveObjects( nLayer, nPaintMode);
 
     if (!bMetaFile)
         pDev->SetMapMode( aOldMode );
 }
 
 // #109985#
-void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer, const Rectangle& rRect, const sal_uInt16 nPaintMode)
+void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode)
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
@@ -183,11 +187,13 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer, const Rectangle
 
         if(pLocalDrawView)
         {
-            SdrPageView* pPageView = pLocalDrawView->GetPageViewPvNum(0);
+            SdrPageView* pPageView = pLocalDrawView->GetSdrPageView();
 
             if(pPageView)
             {
-                pPageView->DrawLayer(nLayer, rRect, pDev, nPaintMode);
+                // Region aDrawRegion(rRect);
+                // pPageView->DrawLayer(nLayer, aDrawRegion, pDev, nPaintMode);
+                pPageView->DrawLayer(nLayer, pDev, nPaintMode);
             }
         }
     }
@@ -210,7 +216,7 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer, const Rectangle
     {
         SdrView* pDrawView = pViewShell->GetSdrView();
         if (pDrawView)
-            aInfoRec.pPV = pDrawView->GetPageViewPvNum(0);
+            aInfoRec.pPV = pDrawView->GetPageViewByIndex(0);
     }
 
     BOOL bDidDummy = FALSE;
@@ -405,10 +411,6 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer, const Rectangle
 // #109985#
 void ScOutputData::DrawingSingle(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode)
 {
-    Rectangle aDrawingRect;
-    aDrawingRect.Left() = nScrX;
-    aDrawingRect.Right() = nScrX+nScrW-1;
-
     BOOL    bHad    = FALSE;
     long    nPosY   = nScrY;
     SCSIZE  nArrY;
@@ -421,21 +423,19 @@ void ScOutputData::DrawingSingle(const sal_uInt16 nLayer, const sal_uInt16 nPain
         {
             if (!bHad)
             {
-                aDrawingRect.Top() = nPosY;
                 bHad = TRUE;
             }
-            aDrawingRect.Bottom() = nPosY + pRowInfo[nArrY].nHeight - 1;
         }
         else if (bHad)
         {
-            DrawSelectiveObjects( nLayer, pDev->PixelToLogic(aDrawingRect), nPaintMode);
+            DrawSelectiveObjects( nLayer, nPaintMode);
             bHad = FALSE;
         }
         nPosY += pRowInfo[nArrY].nHeight;
     }
 
     if (bHad)
-        DrawSelectiveObjects( nLayer, pDev->PixelToLogic(aDrawingRect), nPaintMode);
+        DrawSelectiveObjects( nLayer, nPaintMode);
 }
 
 
