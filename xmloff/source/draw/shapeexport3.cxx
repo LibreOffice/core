@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:41:36 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:14:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-
-#ifndef _B3D_HMATRIX_HXX
-#include <goodies/hmatrix.hxx>
-#endif
 
 #ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
@@ -102,6 +98,10 @@
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
+#endif
+
+#ifndef _BGFX_VECTOR_B3DVECTOR_HXX
+#include <basegfx/vector/b3dvector.hxx>
 #endif
 
 #include "xmlnmspe.hxx"
@@ -193,29 +193,29 @@ void XMLShapeExport::ImpExport3DShape(
                 aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPosition")));
                 drawing::Position3D aPosition3D;
                 aAny >>= aPosition3D;
-                Vector3D aPos3D(aPosition3D.PositionX, aPosition3D.PositionY, aPosition3D.PositionZ);
+                ::basegfx::B3DVector aPos3D(aPosition3D.PositionX, aPosition3D.PositionY, aPosition3D.PositionZ);
 
                 // maxEdge
                 aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSize")));
                 drawing::Direction3D aDirection3D;
                 aAny >>= aDirection3D;
-                Vector3D aDir3D(aDirection3D.DirectionX, aDirection3D.DirectionY, aDirection3D.DirectionZ);
+                ::basegfx::B3DVector aDir3D(aDirection3D.DirectionX, aDirection3D.DirectionY, aDirection3D.DirectionZ);
 
                 // transform maxEdge from distance to pos
                 aDir3D = aPos3D + aDir3D;
 
                 // write minEdge
-                if(aPos3D != Vector3D(-2500.0, -2500.0, -2500.0)) // write only when not default
+                if(aPos3D != ::basegfx::B3DVector(-2500.0, -2500.0, -2500.0)) // write only when not default
                 {
-                    mrExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aPos3D);
+                    mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aPos3D);
                     aStr = sStringBuffer.makeStringAndClear();
                     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_MIN_EDGE, aStr);
                 }
 
                 // write maxEdge
-                if(aDir3D != Vector3D(2500.0, 2500.0, 2500.0)) // write only when not default
+                if(aDir3D != ::basegfx::B3DVector(2500.0, 2500.0, 2500.0)) // write only when not default
                 {
-                    mrExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aDir3D);
+                    mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aDir3D);
                     aStr = sStringBuffer.makeStringAndClear();
                     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_MAX_EDGE, aStr);
                 }
@@ -231,26 +231,26 @@ void XMLShapeExport::ImpExport3DShape(
                 aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPosition")));
                 drawing::Position3D aPosition3D;
                 aAny >>= aPosition3D;
-                Vector3D aPos3D(aPosition3D.PositionX, aPosition3D.PositionY, aPosition3D.PositionZ);
+                ::basegfx::B3DVector aPos3D(aPosition3D.PositionX, aPosition3D.PositionY, aPosition3D.PositionZ);
 
                 // Size
                 aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSize")));
                 drawing::Direction3D aDirection3D;
                 aAny >>= aDirection3D;
-                Vector3D aDir3D(aDirection3D.DirectionX, aDirection3D.DirectionY, aDirection3D.DirectionZ);
+                ::basegfx::B3DVector aDir3D(aDirection3D.DirectionX, aDirection3D.DirectionY, aDirection3D.DirectionZ);
 
                 // write Center
-                if(aPos3D != Vector3D(0.0, 0.0, 0.0)) // write only when not default
+                if(aPos3D != ::basegfx::B3DVector(0.0, 0.0, 0.0)) // write only when not default
                 {
-                    mrExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aPos3D);
+                    mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aPos3D);
                     aStr = sStringBuffer.makeStringAndClear();
                     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_CENTER, aStr);
                 }
 
                 // write Size
-                if(aDir3D != Vector3D(5000.0, 5000.0, 5000.0)) // write only when not default
+                if(aDir3D != ::basegfx::B3DVector(5000.0, 5000.0, 5000.0)) // write only when not default
                 {
-                    mrExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aDir3D);
+                    mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aDir3D);
                     aStr = sStringBuffer.makeStringAndClear();
                     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SIZE, aStr);
                 }
@@ -399,26 +399,26 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     drawing::CameraGeometry aCamGeo;
     aAny >>= aCamGeo;
 
-    Vector3D aVRP(aCamGeo.vrp.PositionX, aCamGeo.vrp.PositionY, aCamGeo.vrp.PositionZ);
-    if(aVRP != Vector3D(0.0, 0.0, 1.0)) // write only when not default
+    ::basegfx::B3DVector aVRP(aCamGeo.vrp.PositionX, aCamGeo.vrp.PositionY, aCamGeo.vrp.PositionZ);
+    if(aVRP != ::basegfx::B3DVector(0.0, 0.0, 1.0)) // write only when not default
     {
-        mrExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVRP);
+        mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aVRP);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_VRP, aStr);
     }
 
-    Vector3D aVPN(aCamGeo.vpn.DirectionX, aCamGeo.vpn.DirectionY, aCamGeo.vpn.DirectionZ);
-    if(aVPN != Vector3D(0.0, 0.0, 1.0)) // write only when not default
+    ::basegfx::B3DVector aVPN(aCamGeo.vpn.DirectionX, aCamGeo.vpn.DirectionY, aCamGeo.vpn.DirectionZ);
+    if(aVPN != ::basegfx::B3DVector(0.0, 0.0, 1.0)) // write only when not default
     {
-        mrExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVPN);
+        mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aVPN);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_VPN, aStr);
     }
 
-    Vector3D aVUP(aCamGeo.vup.DirectionX, aCamGeo.vup.DirectionY, aCamGeo.vup.DirectionZ);
-    if(aVUP != Vector3D(0.0, 1.0, 0.0)) // write only when not default
+    ::basegfx::B3DVector aVUP(aCamGeo.vup.DirectionX, aCamGeo.vup.DirectionY, aCamGeo.vup.DirectionZ);
+    if(aVUP != ::basegfx::B3DVector(0.0, 1.0, 0.0)) // write only when not default
     {
-        mrExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVUP);
+        mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aVUP);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_VUP, aStr);
     }
@@ -511,7 +511,7 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
     OUString aIndexStr;
     sal_Int32 aColTemp;
     Color aLightColor;
-    Vector3D aLightDirection;
+    ::basegfx::B3DVector aLightDirection;
     drawing::Direction3D xLightDir;
     sal_Bool bLightOnOff = false;
     for(sal_Int32 nLamp = 1; nLamp <= 8; nLamp++)
@@ -531,8 +531,8 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
         aPropName = aDirectionPropName;
         aPropName += aIndexStr;
         xPropSet->getPropertyValue(aPropName) >>= xLightDir;
-        aLightDirection = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
-        mrExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aLightDirection);
+        aLightDirection = ::basegfx::B3DVector(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
+        mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aLightDirection);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_DIRECTION, aStr);
 
