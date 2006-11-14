@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontact.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-08 08:29:22 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:05:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,8 +56,8 @@
 // predeclarations
 
 class SetOfByte;
-class SdrObject;
 class SdrPage;
+class SdrObject;
 
 namespace sdr
 {
