@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:35:24 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:48:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,10 @@
 // #108584#
 #ifndef _SVX_FHGTITEM_HXX
 #include <svx/fhgtitem.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -235,8 +239,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     //
 
     SdrExchangeView aView(pModel);
-    Point aPos;
-    SdrPageView* pPv = aView.ShowPagePgNum(0,aPos);
+    SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
     aView.MarkAllObj(pPv);
     aSrcSize = aView.GetAllMarkedRect().GetSize();
     aObjDesc.maSize = aSrcSize;
@@ -441,8 +444,7 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
         else if ( nFormat == SOT_FORMAT_BITMAP || nFormat == SOT_FORMAT_GDIMETAFILE )
         {
             SdrExchangeView aView( pModel );
-            Point aPos;
-            SdrPageView* pPv = aView.ShowPagePgNum( 0, aPos );
+            SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
             DBG_ASSERT( pPv, "pPv not there..." );
             aView.MarkAllObj( pPv );
             if ( nFormat == SOT_FORMAT_GDIMETAFILE )
@@ -504,7 +506,6 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
         case SCDRAWTRANS_TYPE_DRAWMODEL:
             {
                 SdrModel* pDrawModel = (SdrModel*)pUserObject;
-//BFS04                pDrawModel->SetStreamingSdrModel(TRUE);
                 rxOStm->SetBufferSize( 0xff00 );
 
                 // #108584#
@@ -538,7 +539,7 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                     if( SvxDrawingLayerExport( pDrawModel, xDocOut ) )
                         rxOStm->Commit();
                 }
-//BFS04             pDrawModel->SetStreamingSdrModel(FALSE);
+
                 bRet = ( rxOStm->GetError() == ERRCODE_NONE );
             }
             break;
@@ -673,9 +674,9 @@ void ScDrawTransferObj::SetDrawPersist( const SfxObjectShellRef& rRef )
 
 void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, SCTAB nTab )
 {
-    rDest.ShowPagePgNum( static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)), Point() );
-    SdrPageView* pDestPV = rDest.GetPageViewPvNum(0);
-    DBG_ASSERT(pDestPV,"PageView ?");
+    rDest.ShowSdrPage(rDest.GetModel()->GetPage(nTab));
+    SdrPageView* pDestPV = rDest.GetSdrPageView();
+    DBG_ASSERT(pDestPV,"PageView ??!?!");
 
     const SdrMarkList& rMarkList = rSource.GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount();
@@ -701,8 +702,8 @@ void ScDrawTransferObj::SetDragSourceObj( SdrObject* pObj, SCTAB nTab )
 {
     DELETEZ( pDragSourceView );
     pDragSourceView = new SdrView( pObj->GetModel() );
-    pDragSourceView->ShowPagePgNum( static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)), Point() );
-    SdrPageView* pPV = pDragSourceView->GetPageViewPvNum(0);
+    pDragSourceView->ShowSdrPage(pDragSourceView->GetModel()->GetPage(nTab));
+    SdrPageView* pPV = pDragSourceView->GetSdrPageView();
     pDragSourceView->MarkObj(pObj, pPV);
 
     //! add as listener with document, delete pDragSourceView if document gone
@@ -754,8 +755,7 @@ void ScDrawTransferObj::InitDocShell()
 
         SdrModel* pDestModel = pDestDoc->GetDrawLayer();
         SdrExchangeView aDestView( pDestModel );
-        Point aPos;
-        aDestView.ShowPagePgNum( 0, aPos );
+        aDestView.ShowSdrPage(aDestView.GetModel()->GetPage(0));
         aDestView.Paste( *pModel, Point( aSrcSize.Width()/2, aSrcSize.Height()/2 ) );
 
         // put objects to right layer (see ScViewFunc::PasteDataFormat for SOT_FORMATSTR_ID_DRAWING)
