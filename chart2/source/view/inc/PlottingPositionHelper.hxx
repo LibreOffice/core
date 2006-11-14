@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:43:50 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:35:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,9 +54,13 @@
 #include <com/sun/star/drawing/Position3D.hpp>
 #endif
 
-#ifndef _B3D_HMATRIX_HXX
-#include <goodies/hmatrix.hxx>
+#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
+#include <basegfx/matrix/b3dhommatrix.hxx>
 #endif
+
+//#ifndef _B3D_HMATRIX_HXX
+//#include <goodies/hmatrix.hxx>
+//#endif
 /*
 //for WeakImplHelper1
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
@@ -112,8 +116,8 @@ public:
 
 protected: //member
     ::com::sun::star::uno::Sequence<
-            ::com::sun::star::chart2::ExplicitScaleData > m_aScales;
-    Matrix4D                                                      m_aMatrixScreenToScene;
+            ::com::sun::star::chart2::ExplicitScaleData >   m_aScales;
+    ::basegfx::B3DHomMatrix                                 m_aMatrixScreenToScene;
 
     //this is calculated based on m_aScales and m_aMatrixScreenToScene
     mutable ::com::sun::star::uno::Reference<
