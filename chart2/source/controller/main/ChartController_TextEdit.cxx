@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_TextEdit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:05:32 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:31:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,14 +100,14 @@ void ChartController::StartTextEdit()
     //pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)pStyleSheetPool);
     //pOutliner->SetDefaultLanguage( eLang );
     //pOutliner->SetHyphenator( xHyphenator );
-    BOOL bEdit = m_pDrawViewWrapper->BegTextEdit( pTextObj
+    sal_Bool bEdit = m_pDrawViewWrapper->SdrBeginTextEdit( pTextObj
                     , m_pDrawViewWrapper->GetPageView()
                     , m_pChartWindow
-                    , FALSE //bIsNewObj
+                    , sal_False //bIsNewObj
                     , pOutliner
-                    , NULL //pOutlinerView
-                    , TRUE //bDontDeleteOutliner
-                    , TRUE //bOnlyOneView
+                    , 0L //pOutlinerView
+                    , sal_True //bDontDeleteOutliner
+                    , sal_True //bOnlyOneView
                     );
     if(bEdit)
     {
@@ -127,7 +127,7 @@ void ChartController::StartTextEdit()
 
 bool ChartController::EndTextEdit()
 {
-    m_pDrawViewWrapper->EndTextEdit();
+    m_pDrawViewWrapper->SdrEndTextEdit();
     SdrObject* pTextObject = m_pDrawViewWrapper->getTextEditObject();
     if(!pTextObject)
         return false;
