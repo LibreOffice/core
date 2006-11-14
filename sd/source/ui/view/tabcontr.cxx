@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabcontr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:44:32 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:47:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -400,7 +400,7 @@ long TabControl::StartRenaming()
         ::sd::View* pView = pDrViewSh->GetView();
 
         if ( pView->IsTextEdit() )
-            pView->EndTextEdit();
+            pView->SdrEndTextEdit();
     }
 
     return( bOK );
