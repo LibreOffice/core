@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:48:19 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:27:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,14 @@
 #include <svx/writingmodeitem.hxx>
 #endif
 
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
 #include "sdresid.hxx"
 #ifndef SD_VIEW_HXX
 #include "View.hxx"
@@ -196,10 +204,9 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
                                            pCenterX->GetValue () + pAxisX->GetValue () / 2,
                                            pCenterY->GetValue () + pAxisY->GetValue () / 2);
                 SdrCircObj  *pNewCircle = new SdrCircObj (OBJ_CIRC, aNewRectangle);
-                SdrPageView *pPV = pView->GetPageViewPvNum(0);
+                SdrPageView *pPV = pView->GetSdrPageView();
 
-                pView->InsertObject (pNewCircle, *pPV, SDRINSERT_SETDEFLAYER |
-                                                       SDRINSERT_SETDEFATTR);
+                pView->InsertObjectAtView(pNewCircle, *pPV, SDRINSERT_SETDEFLAYER | SDRINSERT_SETDEFATTR);
             }
             break;
 
@@ -215,10 +222,9 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
                                            pMouseEndX->GetValue (),
                                            pMouseEndY->GetValue ());
                 SdrRectObj  *pNewRect = new SdrRectObj (aNewRectangle);
-                SdrPageView *pPV = pView->GetPageViewPvNum (0);
+                SdrPageView *pPV = pView->GetSdrPageView();
 
-                pView->InsertObject (pNewRect, *pPV, SDRINSERT_SETDEFLAYER |
-                                                     SDRINSERT_SETDEFATTR);
+                pView->InsertObjectAtView(pNewRect, *pPV, SDRINSERT_SETDEFLAYER | SDRINSERT_SETDEFATTR);
             }
             break;
         }
@@ -630,7 +636,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         /**********************************************************************
         * Masslinie
         **********************************************************************/
-        SdPage* pPage = (SdPage*) pView->GetPageViewPvNum(0)->GetPage();
+        SdPage* pPage = (SdPage*) pView->GetSdrPageView()->GetPage();
         String aName(SdResId(STR_POOLSHEET_MEASURE));
         SfxStyleSheet* pSheet = (SfxStyleSheet*) pPage->GetModel()->
                                      GetStyleSheetPool()->
@@ -658,10 +664,9 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 |*
 \************************************************************************/
 
-XPolygon getPolygon( sal_uInt16 nResId, SdrModel* pDoc )
+::basegfx::B2DPolyPolygon getPolygon( sal_uInt16 nResId, SdrModel* pDoc )
 {
-    XPolygon xPolygon;
-
+    ::basegfx::B2DPolyPolygon aRetval;
     XLineEndList* pLineEndList = pDoc->GetLineEndList();
 
     if( pLineEndList )
@@ -669,19 +674,18 @@ XPolygon getPolygon( sal_uInt16 nResId, SdrModel* pDoc )
         String aArrowName( SVX_RES(nResId) );
         long nCount = pLineEndList->Count();
         long nIndex;
-        for( nIndex = 0; nIndex < nCount; nIndex++ )
+        for( nIndex = 0L; nIndex < nCount; nIndex++ )
         {
             XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nIndex);
             if( pEntry->GetName() == aArrowName )
             {
-                xPolygon = pEntry->GetLineEnd();
+                aRetval = pEntry->GetLineEnd();
                 break;
             }
         }
     }
 
-    return xPolygon;
-
+    return aRetval;
 }
 
 void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
@@ -704,31 +708,38 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
         **************************************************************/
 
         // Pfeilspitze
-        XPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, pDoc ) );
-        if( 0 == aArrow.GetSize() )
+        ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, pDoc ) );
+        if( !aArrow.count() )
         {
-            aArrow.SetSize(4);                            //      []
-            aArrow[0]=Point(10,0);                        // 0,4__[]__2,4
-            aArrow[1]=Point(0,30);                        //    \    /
-            aArrow[2]=Point(20,30);                       //     \  /
-            aArrow[3]=Point(10,0);                        //      \/1,0
+            ::basegfx::B2DPolygon aNewArrow;
+            aNewArrow.append(::basegfx::B2DPoint(10.0, 0.0));
+            aNewArrow.append(::basegfx::B2DPoint(0.0, 30.0));
+            aNewArrow.append(::basegfx::B2DPoint(20.0, 30.0));
+            aNewArrow.setClosed(true);
+            aArrow.append(aNewArrow);
         }
 
         // Kreis
-        XPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, pDoc ) );
-
-        if( 0 == aCircle.GetSize() )
-            aCircle = XPolygon( Point(0,0), 250, 250 );
+        ::basegfx::B2DPolyPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, pDoc ) );
+        if( !aCircle.count() )
+        {
+            ::basegfx::B2DPolygon aNewCircle;
+            aNewCircle = ::basegfx::tools::createPolygonFromEllipse(::basegfx::B2DPoint(0.0, 0.0), 250.0, 250.0);
+            aNewCircle.setClosed(true);
+            aCircle.append(aNewCircle);
+        }
 
         // Quadrat
-        XPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, pDoc ) );
-        if( 0 == aSquare.GetSize() )
+        ::basegfx::B2DPolyPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, pDoc ) );
+        if( !aSquare.count() )
         {
-            aSquare.SetSize(4);
-            aSquare[0].X()= 0; aSquare[0].Y()= 0;
-            aSquare[1].X()=10; aSquare[1].Y()= 0;
-            aSquare[2].X()=10; aSquare[2].Y()=10;
-            aSquare[3].X()= 0; aSquare[3].Y()=10;
+            ::basegfx::B2DPolygon aNewSquare;
+            aNewSquare.append(::basegfx::B2DPoint(0.0, 0.0));
+            aNewSquare.append(::basegfx::B2DPoint(10.0, 0.0));
+            aNewSquare.append(::basegfx::B2DPoint(10.0, 10.0));
+            aNewSquare.append(::basegfx::B2DPoint(0.0, 10.0));
+            aNewSquare.setClosed(true);
+            aSquare.append(aNewSquare);
         }
 
         SfxItemSet aSet( pDoc->GetPool() );
@@ -959,14 +970,12 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
             {
                 if(pObj->ISA(SdrPathObj))
                 {
-                    XPolyPolygon aPoly;
-                    aPoly.Insert(XPolygon(2));
-
                     sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
-                    aPoly[0][0] = Point(aStart.X(), nYMiddle);
-                    aPoly[0][1] = Point(aEnd.X(), nYMiddle);
 
-                    ((SdrPathObj*)pObj)->SetPathPoly(aPoly);
+                    ::basegfx::B2DPolygon aB2DPolygon;
+                    aB2DPolygon.append(::basegfx::B2DPoint(aStart.X(), nYMiddle));
+                    aB2DPolygon.append(::basegfx::B2DPoint(aEnd.X(), nYMiddle));
+                    ((SdrPathObj*)pObj)->SetPathPoly(::basegfx::B2DPolyPolygon(aB2DPolygon));
                 }
                 else
                 {
