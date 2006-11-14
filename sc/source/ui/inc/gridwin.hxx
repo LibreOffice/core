@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:30:53 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:53:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,12 @@
 #include "cbutton.hxx"
 #endif
 
+#ifndef _SDR_OVERLAY_OVERLAYOBJECT_HXX
+#include <svx/sdr/overlay/overlayobject.hxx>
+#endif
+
+#include <vector>
+
 // ---------------------------------------------------------------------------
 
 struct ScTableInfo;
@@ -116,6 +122,45 @@ public:
             ~ScHideTextCursor();
 };
 
+// ---------------------------------------------------------------------------
+// predefines
+class ScGridWindow;
+
+enum ScOverlayType { SC_OVERLAY_INVERT, SC_OVERLAY_HATCH, SC_OVERLAY_TRANSPARENT, SC_OVERLAY_LIGHT_TRANSPARENT };
+
+// #114409#
+namespace sdr
+{
+    namespace overlay
+    {
+        // predefines
+        class OverlayObjectList;
+
+        // OverlayObjectCell - used for cell cursor, selection and AutoFill handle
+
+        class OverlayObjectCell : public OverlayObject
+        {
+        public:
+            typedef ::std::vector< basegfx::B2DRange > RangeVector;
+
+        private:
+            ScOverlayType   mePaintType;
+            RangeVector     maRectangles;
+
+            virtual void drawGeometry(OutputDevice& rOutputDevice);
+            virtual void createBaseRange(OutputDevice& rOutputDevice);
+
+        public:
+            OverlayObjectCell( ScOverlayType eType, const Color& rColor, const RangeVector& rRects);
+            virtual ~OverlayObjectCell();
+
+            virtual void transform(const basegfx::B2DHomMatrix& rMatrix);
+        };
+
+    } // end of namespace overlay
+} // end of namespace sdr
+
+// ---------------------------------------------------------------------------
 
 class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHelper
 {
@@ -124,6 +169,15 @@ class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHe
 #ifdef AUTOFILTER_POPUP
     friend class AutoFilterPopup;
 #endif
+
+private:
+    // #114409#
+    ::sdr::overlay::OverlayObjectList*              mpOOCursors;
+    ::sdr::overlay::OverlayObjectList*              mpOOSelection;
+    ::sdr::overlay::OverlayObjectList*              mpOOAutoFill;
+    ::sdr::overlay::OverlayObjectList*              mpOODragRect;
+    ::sdr::overlay::OverlayObjectList*              mpOOHeader;
+    ::sdr::overlay::OverlayObjectList*              mpOOShrink;
 
 private:
     ScViewData*             pViewData;
@@ -252,16 +306,15 @@ private:
     void            DrawMarkDropObj( SdrObject* pObj );
     SdrObject*      GetEditObject();
     BOOL            IsMyModel(SdrEditView* pSdrView);
-    void            DrawStartTimer();
+    //void          DrawStartTimer();
 
-    void            DrawRedraw( ScOutputData& rOutputData, const Rectangle& rDrawingRect,
-                                        ScUpdateMode eMode, ULONG nLayer );
+    void            DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, ULONG nLayer );
     void            DrawSdrGrid( const Rectangle& rDrawingRect );
-    BOOL            DrawBeforeScroll();
-    void            DrawAfterScroll(BOOL bVal);
+    //BOOL          DrawBeforeScroll();
+    void            DrawAfterScroll(/*BOOL bVal*/);
     void            OutlinerViewPaint( const Rectangle& rRect );
-    void            DrawMarks();
-    BOOL            NeedDrawMarks();
+    //void          DrawMarks();
+    //BOOL          NeedDrawMarks();
     void            DrawComboButton( const Point&   rCellPos,
                                      long           nCellSizeX,
                                      long           nCellSizeY,
@@ -290,6 +343,8 @@ private:
 
     void            SelectForContextMenu( const Point& rPosPixel );
 
+    void            GetSelectionRects( ::std::vector< Rectangle >& rPixelRects );
+
 protected:
     virtual void    Resize( const Size& rSize );
     virtual void    Paint( const Rectangle& rRect );
@@ -307,6 +362,10 @@ protected:
 public:
     ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhichPos );
     ~ScGridWindow();
+
+    // #i70788# flush and get overlay
+    ::sdr::overlay::OverlayManager* getOverlayManager();
+    void flushOverlayManager();
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
@@ -381,6 +440,30 @@ public:
     void            DoInvertRect( const Rectangle& rPixel );
 
     void            CheckNeedsRepaint();
+
+    // #114409#
+    void CursorChanged();
+    void DrawLayerCreated();
+
+    void            DeleteCursorOverlay();
+    void            UpdateCursorOverlay();
+    void            DeleteSelectionOverlay();
+    void            UpdateSelectionOverlay();
+    void            DeleteAutoFillOverlay();
+    void            UpdateAutoFillOverlay();
+    void            DeleteDragRectOverlay();
+    void            UpdateDragRectOverlay();
+    void            DeleteHeaderOverlay();
+    void            UpdateHeaderOverlay();
+    void            DeleteShrinkOverlay();
+    void            UpdateShrinkOverlay();
+    void            UpdateAllOverlays();
+
+protected:
+    // #114409#
+    void ImpCreateOverlayObjects();
+    void ImpDestroyOverlayObjects();
+
 };
 
 
