@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:34:41 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:12:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,6 @@ class XPMWriter {
 
 private:
 
-    PFilterCallback     mpCallback;
-    void *              mpCallerData;
-
     SvStream*           mpOStm;             // Die auszugebende XPM-Datei
     USHORT              mpOStmOldModus;
 
@@ -58,7 +55,9 @@ private:
     ULONG               mnWidth, mnHeight;  // Bildausmass in Pixeln
     USHORT              mnColors;
 
-    BOOL                ImplCallback( USHORT nPercent );
+    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
+
+    void                ImplCallback( USHORT nPercent );
     BOOL                ImplWriteHeader();
     void                ImplWritePalette();
     void                ImplWriteColor( USHORT );
@@ -70,9 +69,7 @@ public:
                         XPMWriter();
                         ~XPMWriter();
 
-    BOOL                WriteXPM( const Graphic& rGraphic, SvStream& rXPM,
-                                  PFilterCallback pCallback, void* pCallerdata,
-                                  FilterConfigItem* pConfigItem );
+    BOOL                WriteXPM( const Graphic& rGraphic, SvStream& rXPM, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von XPMWriter ==============================
@@ -92,30 +89,32 @@ XPMWriter::~XPMWriter()
 
 // ------------------------------------------------------------------------
 
-BOOL XPMWriter::ImplCallback( USHORT nPercent )
+void XPMWriter::ImplCallback( USHORT nPercent )
 {
-    if ( mpCallback != NULL )
+    if ( xStatusIndicator.is() )
     {
-        if ( ( (*mpCallback)( mpCallerData, nPercent ) ) == TRUE )
-        {
-            mpOStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
-            return TRUE;
-        }
+        if ( nPercent <= 100 )
+            xStatusIndicator->setValue( nPercent );
     }
-    return FALSE;
 }
 
 //  ------------------------------------------------------------------------
 
-BOOL XPMWriter::WriteXPM( const Graphic& rGraphic, SvStream& rXPM,
-                          PFilterCallback pCallback, void* pCallerdata,
-                          FilterConfigItem* )
+BOOL XPMWriter::WriteXPM( const Graphic& rGraphic, SvStream& rXPM, FilterConfigItem* pFilterConfigItem)
 {
     Bitmap  aBmp;
 
     mpOStm = &rXPM;
-    mpCallback = pCallback;
-    mpCallerData = pCallerdata;
+
+    if ( pFilterConfigItem )
+    {
+        xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
+        if ( xStatusIndicator.is() )
+        {
+            rtl::OUString aMsg;
+            xStatusIndicator->start( aMsg, 100 );
+        }
+    }
 
     BitmapEx    aBmpEx( rGraphic.GetBitmapEx() );
     aBmp = aBmpEx.GetBitmap();
@@ -153,6 +152,9 @@ BOOL XPMWriter::WriteXPM( const Graphic& rGraphic, SvStream& rXPM,
         mbStatus = FALSE;
 
     mpOStm->SetNumberFormatInt( mpOStmOldModus );
+
+    if ( xStatusIndicator.is() )
+        xStatusIndicator->end();
 
     return mbStatus;
 }
@@ -270,13 +272,11 @@ void XPMWriter::ImplWriteColor( USHORT nNumber )
 // - exported function -
 // ---------------------
 
-extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic,
-                                               PFilterCallback pCallback, void* pCallerData,
-                                               FilterConfigItem* pConfigItem, BOOL )
+extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, BOOL )
 {
     XPMWriter aXPMWriter;
 
-    return aXPMWriter.WriteXPM( rGraphic, rStream, pCallback, pCallerData, pConfigItem );
+    return aXPMWriter.WriteXPM( rGraphic, rStream, pFilterConfigItem );
 }
 
 #ifndef GCC
