@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:40:51 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:02:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -633,7 +633,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
         //     for rotatet text
         Rectangle textBounds( 0, 0, static_cast<long>(mnDocWidth*mnDocXScale), static_cast<long>(mnDocHeight*mnDocYScale) );
 
-        Matrix3D m;
+        ::basegfx::B3DHomMatrix m;
 
         double scale = 1.0;
 
@@ -652,9 +652,9 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
             scale =  (double)n1 / (double)n2;
         }
 
-        m.Rotate( static_cast<double>(nOrientation) * F_PI1800 );
-        m.Translate( double(aPt.X() / scale), double(aPt.Y()) );
-        m.ScaleX( scale );
+        m.rotate( 0.0 , 0.0 , static_cast<double>(nOrientation) * F_PI1800 );
+        m.translate( double(aPt.X() / scale), double(aPt.Y()) , 0.0 );
+        m.scale( scale, 1.0 , 1.0 );
 
         sal_Int16 nHeight = _Int16( map( Size( 0, aFont.GetHeight() ) ).Height() );
 
@@ -888,14 +888,12 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
     {
         SvFileStream aDstStm( String( RTL_CONSTASCII_USTRINGPARAM("e:\\test.png") ), STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
         aFilter.ExportGraphic( aGraphic, String(), aDstStm,
-                                    aFilter.GetExportFormatNumberForShortName( OUString( RTL_CONSTASCII_USTRINGPARAM( PNG_SHORTNAME ) ) ),
-                                    false, &aFilterData );
+                                    aFilter.GetExportFormatNumberForShortName( OUString( RTL_CONSTASCII_USTRINGPARAM( PNG_SHORTNAME ) ) ), &aFilterData );
     }
 #endif
 
     if( aFilter.ExportGraphic( aGraphic, String(), aDstStm,
-                                aFilter.GetExportFormatNumberForShortName( OUString( RTL_CONSTASCII_USTRINGPARAM( JPG_SHORTNAME ) ) ),
-                                false, &aFilterData ) == ERRCODE_NONE )
+                                aFilter.GetExportFormatNumberForShortName( OUString( RTL_CONSTASCII_USTRINGPARAM( JPG_SHORTNAME ) ) ), &aFilterData ) == ERRCODE_NONE )
     {
         pJpgData = reinterpret_cast<const sal_uInt8*>(aDstStm.GetData());
         nJpgDataLength = aDstStm.Seek( STREAM_SEEK_TO_END );
@@ -1001,10 +999,10 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
 
             // AS: Since images are being cropped now, no translation is normally necessary.
             //  However, some things like graphical bullet points are still get translated.
-            Matrix3D m;
-            m.Scale(1.0/XScale, 1.0/YScale);
+            ::basegfx::B3DHomMatrix m;
+            m.scale(1.0/XScale, 1.0/YScale, 1.0);
             if (destRect.Left() || destRect.Top())
-                m.Translate(destRect.Left(), destRect.Top());
+                m.translate(destRect.Left(), destRect.Top(), 0.0);
 
             FillStyle aFillStyle( nBitmapId, true, m );
 
@@ -1307,7 +1305,7 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
             // CL->AS: Should we also scale down the quality here depending on image scale?
             sal_uInt16 nBitmapId = defineBitmap( aGraphic.GetBitmapEx(), mnJPEGCompressMode );
 
-            Matrix3D aMatrix;
+            ::basegfx::B3DHomMatrix aMatrix;
 
             SvtGraphicFill::Transform aTransform;
 
@@ -1318,10 +1316,12 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
             {
                 for( b = 0; b < 3; b++ )
                 {
-                    aMatrix[a][b] = aTransform.matrix[a*3+b];
+                    aMatrix.set(a, b, aTransform.matrix[a*3+b]);
                 }
             }
-            aMatrix[2][0] = 0.0; aMatrix[2][1] = 0.0; aMatrix[2][2] = 1.0;
+            aMatrix.set(2, 0, 0.0);
+            aMatrix.set(2, 1, 0.0);
+            aMatrix.set(2, 2, 1.0);
 
             // scale bitmap
             Rectangle originalPixelRect = Rectangle(Point(), aGraphic.GetBitmapEx().GetSizePixel());
@@ -1329,7 +1329,7 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
             double XScale = (double)aNewRect.GetWidth()/aOldRect.GetWidth();
             double YScale = (double)aNewRect.GetHeight()/aOldRect.GetHeight();
 
-             aMatrix.Scale( XScale, YScale );
+             aMatrix.scale( XScale, YScale , 1.0);
 
             FillStyle aFillStyle( nBitmapId, !rFilling.IsTiling(), aMatrix );
 
