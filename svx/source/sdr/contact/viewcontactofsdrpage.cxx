@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:37:10 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:31:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,10 @@
 
 #ifndef _SDR_CONTACT_VIEWCONTACTPAINTHELPER_HXX
 #include <svx/sdr/contact/viewcontactpainthelper.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -494,7 +498,7 @@ namespace sdr
                     const SdrView& rView = pPageView->GetView();
                     OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
 
-                    ((SdrPageView*)pPageView)->DrawGrid(
+                    ((SdrPageView*)pPageView)->DrawPageViewGrid(
                         *pOut,
                         rDisplayInfo.GetPaintInfoRec()->aCheckRect,
                         rView.GetGridColor());
