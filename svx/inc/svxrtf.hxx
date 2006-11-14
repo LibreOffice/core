@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxrtf.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:54:32 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:56:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -403,8 +403,6 @@ public:
     void ReadBackgroundAttr( int nToken, SfxItemSet& rSet, int bTableDef=FALSE  );
 
     // fuers asynchrone lesen aus dem SvStream
-//  virtual void SaveState( int nToken );
-//  virtual void RestoreState();
     virtual void Continue( int nToken );
 
     // get RTF default ItemSets. Must be used by pard/plain tokens or in
