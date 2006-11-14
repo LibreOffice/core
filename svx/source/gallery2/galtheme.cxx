@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:49:21 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:26:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -859,7 +859,8 @@ BOOL GalleryTheme::GetGraphic( ULONG nPos, Graphic& rGraphic, BOOL bProgress )
                         FmFormView aView( &aModel, &aVDev );
 
                         aView.SetMarkHdlHidden( TRUE );
-                        aView.ShowPagePgNum( 0, Point() );
+                        aView.ShowSdrPage(aView.GetModel()->GetPage(0));
+//                      aView.ShowSdrPage(aView.GetModel()->GetPage(0), Point());
                         aView.MarkAll();
                         rGraphic = aView.GetAllMarkedGraphic();
                         bRet = TRUE;
@@ -1017,8 +1018,6 @@ BOOL GalleryTheme::InsertModel( const FmFormModel& rModel, ULONG nInsertPos )
             FmFormModel*    pFormModel = (FmFormModel*) &rModel;
 
             pFormModel->BurnInStyleSheetAttributes();
-//BFS04         pFormModel->SetStreamingSdrModel( TRUE );
-//BFS01         pFormModel->RemoveNotPersistentObjects( TRUE );
 
             {
                 com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( aMemStm ) );
@@ -1027,7 +1026,6 @@ BOOL GalleryTheme::InsertModel( const FmFormModel& rModel, ULONG nInsertPos )
                     SvxDrawingLayerExport( pFormModel, xDocOut );
             }
 
-//BFS04         pFormModel->SetStreamingSdrModel( FALSE );
             aMemStm.Seek( 0 );
 
             xOStm->SetBufferSize( 16348 );
