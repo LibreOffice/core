@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipcd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:51:43 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:15:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,6 @@ private:
 
     BOOL bStatus;
 
-    PFilterCallback     pCallback;
-    void*               pCallerData;
     ULONG               nLastPercent;
 
     SvStream*           pPCD;
@@ -101,22 +99,16 @@ public:
     PCDReader() {}
     ~PCDReader() {}
 
-    BOOL ReadPCD( SvStream & rPCD, Graphic & rGraphic,
-                    PFilterCallback pcallback, void * pcallerdata,
-                        FilterConfigItem* pConfigItem );
+    BOOL ReadPCD( SvStream & rPCD, Graphic & rGraphic, FilterConfigItem* pConfigItem );
 };
 
 //=================== Methoden von PCDReader ==============================
 
-BOOL PCDReader::ReadPCD( SvStream & rPCD, Graphic & rGraphic,
-                            PFilterCallback pcallback, void * pcallerdata,
-                                FilterConfigItem* pConfigItem )
+BOOL PCDReader::ReadPCD( SvStream & rPCD, Graphic & rGraphic, FilterConfigItem* pConfigItem )
 {
     Bitmap       aBmp;
 
     bStatus      = TRUE;
-    pCallback    = pcallback;
-    pCallerData  = pcallerdata;
     nLastPercent = 0;
     pPCD         = &rPCD;
 
@@ -188,8 +180,9 @@ BOOL PCDReader::ReadPCD( SvStream & rPCD, Graphic & rGraphic,
 
 // -------------------------------------------------------------------------------------------
 
-void PCDReader::MayCallback(ULONG nPercent)
+void PCDReader::MayCallback(ULONG /*nPercent*/)
 {
+/*
     if ( nPercent >= nLastPercent + 3 )
     {
         nLastPercent=nPercent;
@@ -199,6 +192,7 @@ void PCDReader::MayCallback(ULONG nPercent)
                 bStatus = FALSE;
         }
     }
+*/
 }
 
 // -------------------------------------------------------------------------------------------
@@ -400,18 +394,10 @@ void PCDReader::ReadImage(ULONG nMinPercent, ULONG nMaxPercent)
 
 //================== GraphicImport - die exportierte Funktion ================
 
-#ifdef WNT
-extern "C" BOOL _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                            PFilterCallback pCallback, void * pCallerData,
-                                FilterConfigItem* pConfigItem, BOOL)
-#else
-extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                            PFilterCallback pCallback, void * pCallerData,
-                                FilterConfigItem* pConfigItem, BOOL)
-#endif
+extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pConfigItem, BOOL )
 {
     PCDReader aPCDReader;
-    return aPCDReader.ReadPCD( rStream, rGraphic, pCallback, pCallerData, pConfigItem );
+    return aPCDReader.ReadPCD( rStream, rGraphic, pConfigItem );
 }
 
 //============================= fuer Windows ==================================
