@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:01:33 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:50:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,6 @@
 #include <vcl/metric.hxx>
 #endif
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// #101499#
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -100,6 +98,18 @@
 #include "unolingu.hxx"
 #endif
 
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
@@ -109,7 +119,6 @@ using namespace ::com::sun::star::i18n;
 ImpTextPortionHandler::ImpTextPortionHandler(SdrOutliner& rOutln, const SdrTextObj& rTxtObj):
     rOutliner(rOutln),
     rTextObj(rTxtObj),
-    // #101498# aPoly(0)
     mpRecordPortions(0L)
 {
     pModel=rTextObj.GetModel();
@@ -168,15 +177,13 @@ void ImpTextPortionHandler::DrawTextToPath(XOutputDevice& rXOut, FASTBOOL bDrawE
         pPara=rTextObj.GetEditOutlinerParaObject();
     }
     if (pPara!=NULL) {
-        XPolyPolygon aXPP;
-        //rTextObj.TakeContour(aXPP);
-        rTextObj.TakeXorPoly(aXPP,FALSE);
+        basegfx::B2DPolyPolygon aContourPolyPolygon(rTextObj.TakeXorPoly(FALSE));
         pXOut=&rXOut;
         Font aFont(rXOut.GetOutDev()->GetFont());
         rOutliner.Clear();
         rOutliner.SetPaperSize(Size(LONG_MAX,LONG_MAX));
         rOutliner.SetText(*pPara);
-        USHORT nCnt = Min(aXPP.Count(), (USHORT) rOutliner.GetParagraphCount());
+        sal_uInt32 nCnt(Min(aContourPolyPolygon.count(), rOutliner.GetParagraphCount()));
 
         if ( nCnt == 1 )    bToLastPoint = TRUE;
         else                bToLastPoint = FALSE;
@@ -201,13 +208,17 @@ void ImpTextPortionHandler::DrawTextToPath(XOutputDevice& rXOut, FASTBOOL bDrawE
 
         for(nParagraph = 0; nParagraph < nCnt; nParagraph++)
         {
-//BFS09         Polygon aPoly = XOutCreatePolygon(aXPP[sal_uInt16(nParagraph)], rXOut.GetOutDev());
-            Polygon aPoly = XOutCreatePolygon(aXPP[sal_uInt16(nParagraph)]);
+            basegfx::B2DPolygon aContourPolygon(aContourPolyPolygon.getB2DPolygon(nParagraph));
+
+            if(aContourPolygon.areControlVectorsUsed())
+            {
+                aContourPolygon = basegfx::tools::adaptiveSubdivideByAngle(aContourPolygon);
+            }
 
             rOutliner.SetDrawPortionHdl(LINK(this, ImpTextPortionHandler, FormTextRecordPortionHdl));
             rOutliner.StripPortions();
 
-            DrawFormTextRecordPortions(aPoly);
+            DrawFormTextRecordPortions(Polygon(aContourPolygon));
             ClearFormTextRecordPortions();
 
             const Rectangle& rFTBR = rXOut.GetFormTextBoundRect();
@@ -215,22 +226,6 @@ void ImpTextPortionHandler::DrawTextToPath(XOutputDevice& rXOut, FASTBOOL bDrawE
         }
 
         rXOut.GetOutDev()->SetLayoutMode(nSavedLayoutMode);
-
-        //for (nParagraph = 0; nParagraph < nCnt; nParagraph++)
-        //{
-        //  aPoly = XOutCreatePolygon(aXPP[USHORT(nParagraph)], rXOut.GetOutDev());
-        //  nTextWidth = 0;
-        //
-        //  rOutliner.SetDrawPortionHdl(LINK(this,ImpTextPortionHandler,FormTextWidthHdl));
-        //  rOutliner.StripPortions();
-        //  rOutliner.SetDrawPortionHdl(LINK(this,ImpTextPortionHandler,FormTextDrawHdl));
-        //  rOutliner.StripPortions();
-        //  rOutliner.SetDrawPortionHdl(Link());
-        //
-        //  const Rectangle& rFTBR=rXOut.GetFormTextBoundRect();
-        //  aFormTextBoundRect.Union(rFTBR);
-        //}
-
         rXOut.GetOutDev()->SetFont(aFont);
         rOutliner.Clear();
     }
@@ -453,9 +448,6 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
     if(bIsVertical)
         aPos2 = aFormTextBoundRect.TopRight() + pInfo->rStartPos;
 
-    // #100318# new for XOutGetCharOutline
-    // xub_StrLen nCnt = pInfo->nTextLen;
-
     Point aStartPos(aPos2);
     SfxItemSet aAttrSet((SfxItemPool&)(*rTextObj.GetObjectItemPool()));
     long nHochTief(pInfo->rFont.GetEscapement());
@@ -523,23 +515,34 @@ aVDev.SetFont( aFont );
 
             if(aPolyPoly.Count() > 0 && aPolyPoly[0].GetSize() > 0)
             {
-
-                XPolyPolygon aXPP(aPolyPoly);
+                basegfx::B2DPolyPolygon aPolyPolygon(aPolyPoly.getB2DPolyPolygon());
+                basegfx::B2DHomMatrix aMatrix;
 
                 // rotate 270 degree if vertical since result is unrotated
-                if( pInfo->rFont.GetOrientation() )
-                    aXPP.Rotate( Point(), pInfo->rFont.GetOrientation() );
+                if(pInfo->rFont.GetOrientation())
+                {
+                    double fAngle(F_PI * (pInfo->rFont.GetOrientation() % 3600) / 1800.0);
+                    aMatrix.rotate(fAngle);
+                }
 
                 // result is baseline oriented, thus move one line height, too
                 if(bIsVertical)
-                    aXPP.Move(-aFontMetric.GetAscent(), 0);
+                {
+                    aMatrix.translate(-aFontMetric.GetAscent(), 0.0);
+                }
                 else
-                    aXPP.Move(0, aFontMetric.GetAscent());
+                {
+                    aMatrix.translate(0.0, aFontMetric.GetAscent());
+                }
 
                 // move to output coordinates
-                aXPP.Move(aPos2.X(), aPos2.Y());
-                SdrObject* pObj = rTextObj.ImpConvertMakeObj(aXPP, TRUE, !bToPoly, TRUE);
+                aMatrix.translate(aPos2.X(), aPos2.Y());
 
+                // transform
+                aPolyPolygon.transform(aMatrix);
+
+                // create object
+                SdrObject* pObj = rTextObj.ImpConvertMakeObj(aPolyPolygon, sal_True, !bToPoly, sal_True);
                 pObj->SetMergedItemSet(aAttrSet);
                 pGroup->GetSubList()->InsertObject(pObj);
             }
@@ -556,20 +559,20 @@ aVDev.SetFont( aFont );
         long nAscend=aFontMetric.GetAscent();
         long nDick=nDescent / (bDouble ? 5 : 3);
         long nDist=(nDescent-nDick*2)/3; // Linienabstand bei doppelt
+        basegfx::B2DPolyPolygon aPolyPolygon;
 
-        XPolyPolygon aXPP;
         if (eUndl!=UNDERLINE_DOTTED) {
             Point aPoint(0,0);
             XPolygon aXP(Rectangle(aPoint,bIsVertical ? Point(nDick,nLineLen) : Point(nLineLen,nDick)));
             if(bIsVertical)
                 aXP.Move(nAscend-nDist,0);
-            aXPP.Insert(aXP);
+            aPolyPolygon.append(aXP.getB2DPolygon());
             if (bDouble) {
                 if(bIsVertical)
                     aXP.Move(-(nDick+nDist),0);
                 else
                     aXP.Move(0,nDick+nDist);
-                aXPP.Insert(aXP);
+                aPolyPolygon.append(aXP.getB2DPolygon());
             }
         } else {
             Point aPoint(0,0);
@@ -581,7 +584,7 @@ aVDev.SetFont( aFont );
                         bIsVertical ? Point(0,n) : Point(n,0),
                         bIsVertical ? Point(nDick,nLineLen) : Point(nLineLen,nDick)));
                 }
-                aXPP.Insert(aXP);
+                aPolyPolygon.append(aXP.getB2DPolygon());
                 if(bIsVertical)
                     aXP.Move(0,2*nDick);
                 else
@@ -594,14 +597,21 @@ aVDev.SetFont( aFont );
         if (bDouble) y-=nDick+nDist;
         y=(y+1)/2;
 
+        basegfx::B2DHomMatrix aMatrix;
+
         if(bIsVertical)
-            aXPP.Move(aStartPos.X()-(y-nHochTief),aStartPos.Y());
+        {
+            aMatrix.translate(aStartPos.X() - (y - nHochTief), aStartPos.Y());
+        }
         else
-            aXPP.Move(aStartPos.X(),aStartPos.Y()+y-nHochTief);
+        {
+            aMatrix.translate(aStartPos.X(), aStartPos.Y() + y - nHochTief);
+        }
+
+        aPolyPolygon.transform(aMatrix);
+
         // aFormTextBoundRect enthaelt den Ausgabebereich des Textobjekts
-        // #35825# Rotieren erst nach Resize (wg. FitToSize)
-        //RotateXPoly(aXPP,aFormTextBoundRect.TopLeft(),rTextObj.aGeo.nSin,rTextObj.aGeo.nCos);
-        SdrObject* pObj=rTextObj.ImpConvertMakeObj(aXPP,TRUE,!bToPoly, TRUE);
+        SdrObject* pObj=rTextObj.ImpConvertMakeObj(aPolyPolygon, sal_True, !bToPoly, sal_True);
         pObj->SetMergedItemSet(aAttrSet);
         pGroup->GetSubList()->InsertObject(pObj);
     }
@@ -611,17 +621,25 @@ aVDev.SetFont( aFont );
         //long nAscend=aFontMetric.GetAscent();
         long nDick=nDescent / (bDouble ? 5 : 3);
         long nDist=(nDescent-nDick*2)/3; // Linienabstand bei doppelt
+        basegfx::B2DPolyPolygon aPolyPolygon;
 
-        XPolyPolygon aXPP;
-        Point aPoint(0,0);
-        XPolygon aXP(Rectangle(aPoint,bIsVertical ? Point(nDick,nLineLen) : Point(nLineLen,nDick)));
-        aXPP.Insert(aXP);
-        if (bDouble) {
+        const Point aPoint(0,0);
+        const Rectangle aRect(aPoint,bIsVertical ? Point(nDick,nLineLen) : Point(nLineLen,nDick));
+        const basegfx::B2DRange aRectRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+        basegfx::B2DPolygon aPolyFromRect(basegfx::tools::createPolygonFromRect(aRectRange));
+        aPolyPolygon.append(aPolyFromRect);
+
+        if (bDouble)
+        {
+            basegfx::B2DHomMatrix aMatrix;
+
             if(bIsVertical)
-                aXP.Move(-(nDick+nDist),0);
+                aMatrix.translate(-(nDick+nDist), 0.0);
             else
-                aXP.Move(0,nDick+nDist);
-            aXPP.Insert(aXP);
+                aMatrix.translate(0.0, nDick+nDist);
+
+            aPolyFromRect.transform(aMatrix);
+            aPolyPolygon.append(aPolyFromRect);
         }
 
         // y-Position der Striche zur Baseline bestimmen
@@ -629,17 +647,25 @@ aVDev.SetFont( aFont );
         if (!bDouble) y-=(nDick+1)/2;
         else y-=nDick+(nDist+1)/2;
 
+        basegfx::B2DHomMatrix aMatrix;
+
         if(bIsVertical)
-            aXPP.Move(aStartPos.X()-(y-nHochTief),aStartPos.Y());
+        {
+            aMatrix.translate(aStartPos.X() - (y - nHochTief), aStartPos.Y());
+        }
         else
-            aXPP.Move(aStartPos.X(),aStartPos.Y() +y-nHochTief);
+        {
+            aMatrix.translate(aStartPos.X(), aStartPos.Y() + y - nHochTief);
+        }
+
+        aPolyPolygon.transform(aMatrix);
+
         // aFormTextBoundRect enthaelt den Ausgabebereich des Textobjekts
-        // #35825# Rotieren erst nach Resize (wg. FitToSize)
-        //RotateXPoly(aXPP,aFormTextBoundRect.TopLeft(),rTextObj.aGeo.nSin,rTextObj.aGeo.nCos);
-        SdrObject* pObj=rTextObj.ImpConvertMakeObj(aXPP,TRUE,!bToPoly, TRUE);
+        SdrObject* pObj=rTextObj.ImpConvertMakeObj(aPolyPolygon, sal_True, !bToPoly, sal_True);
         pObj->SetMergedItemSet(aAttrSet);
         pGroup->GetSubList()->InsertObject(pObj);
     }
+
     return 0;
 }
 
@@ -658,29 +684,3 @@ IMPL_LINK(ImpTextPortionHandler,FitTextDrawHdl,DrawPortionInfo*,EMPTYARG)
     return 0;
 }
 
-//IMPL_LINK(ImpTextPortionHandler, FormTextWidthHdl, DrawPortionInfo*, pInfo)
-//{
-//  // #101498# change calculation of nTextWidth
-//  if(pInfo->nPara == nParagraph && pInfo->nTextLen)
-//  {
-//      // negative value is used because of the interface of
-//      // XOutputDevice::ImpDrawFormText(...), please look there
-//      // for more info.
-//      nTextWidth -= pInfo->pDXArray[pInfo->nTextLen - 1];
-//  }
-//
-//  return 0;
-//}
-
-//IMPL_LINK(ImpTextPortionHandler, FormTextDrawHdl, DrawPortionInfo*, pInfo)
-//{
-//  // #101498# Implementation of DrawFormText needs to be updated, too.
-//  if(pInfo->nPara == nParagraph)
-//  {
-//      nTextWidth = pXOut->DrawFormText(pInfo, aPoly, nTextWidth, bToLastPoint, bDraw);
-//          //pInfo->rText, aPoly, pInfo->rFont, nTextWidth,
-//          //bToLastPoint, bDraw, pInfo->pDXArray);
-//  }
-//
-//  return 0;
-//}
