@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeEngine.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:02:05 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:14:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,10 @@
 #include "unopolyhelper.hxx"
 #endif
 #include <uno/mapping.hxx>
+
+#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#endif
 
 // ---------------------------
 // - EnhancedCustomShapeEngine -
@@ -431,36 +435,45 @@ com::sun::star::drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEng
                 pObj->NbcMirror( aLeft, aRight );
             }
 
-            XPolyPolygon aXPolyPoly;
+            basegfx::B2DPolyPolygon aPolyPolygon;
             SdrObjListIter aIter( *pObj, IM_DEEPWITHGROUPS );
+
             while ( aIter.IsMore() )
             {
                 SdrObject* pNewObj = NULL;
-                const XPolyPolygon* pPP = NULL;
+                basegfx::B2DPolyPolygon aPP;
                 const SdrObject* pNext = aIter.Next();
 
                 if ( pNext->ISA( SdrPathObj ) )
-                    pPP = &((SdrPathObj*)pNext)->GetPathPoly();
+                {
+                    aPP = ((SdrPathObj*)pNext)->GetPathPoly();
+                }
                 else
                 {
                     pNewObj = pNext->ConvertToPolyObj( FALSE, FALSE );
                     SdrPathObj* pPath = PTR_CAST( SdrPathObj, pNewObj );
                     if ( pPath )
-                        pPP = &pPath->GetPathPoly();
+                        aPP = pPath->GetPathPoly();
                 }
-                if ( pPP )
+
+                if ( aPP.count() )
                 {
-                    sal_uInt16 i;
-                    for ( i = 0; i < pPP->Count(); i++ )
-                        aXPolyPoly.Insert( XOutCreatePolygon( pPP->GetObject( i )), XPOLYPOLY_APPEND );
-//BFS09                     aXPolyPoly.Insert( XOutCreatePolygon( pPP->GetObject( i ), NULL, 100 ), XPOLYPOLY_APPEND );
+                    if(aPP.areControlVectorsUsed())
+                    {
+                        aPolyPolygon.append(basegfx::tools::adaptiveSubdivideByAngle(aPP));
+                    }
+                    else
+                    {
+                        aPolyPolygon.append(aPP);
+                    }
                 }
                 delete pNewObj;
             }
             delete pObj;
-            SvxPolyPolygonToPolyPolygonBezierCoords( aXPolyPoly, aPolyPolygonBezierCoords );
+            SvxConvertB2DPolyPolygonToPolyPolygonBezier( aPolyPolygon, aPolyPolygonBezierCoords );
         }
     }
+
     return aPolyPolygonBezierCoords;
 }
 
