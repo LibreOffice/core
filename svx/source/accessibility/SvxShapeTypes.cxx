@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SvxShapeTypes.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:05:27 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:13:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,6 @@ AccessibleShape* CreateSvxAccessibleShape (
         case DRAWING_3D_CUBE:
         case DRAWING_3D_EXTRUDE:
         case DRAWING_3D_LATHE:
-//BFS01        case DRAWING_3D_POLYGON:
         case DRAWING_3D_SCENE:
         case DRAWING_3D_SPHERE:
         case DRAWING_CAPTION:
@@ -193,9 +192,6 @@ ShapeTypeDescriptor aSvxShapeTypeList[] = {
     ShapeTypeDescriptor (   DRAWING_3D_EXTRUDE,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.Shape3DExtrudeObject"),
         CreateSvxAccessibleShape ),
-//BFS01    ShapeTypeDescriptor (   DRAWING_3D_POLYGON,
-//BFS01        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.Shape3DPolygonObject"),
-//BFS01        CreateSvxAccessibleShape )
     // --> OD 2004-11-29 #i37790# - default accessiblility shape for
     // com::sun::star::drawing::CustomShape
     ShapeTypeDescriptor (   DRAWING_CUSTOM,
