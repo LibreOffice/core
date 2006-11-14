@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:14:53 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:54:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,24 @@
 #include "lathe3d.hxx"
 #include "extrud3d.hxx"
 #include "polygn3d.hxx"
-#include "poly3d.hxx"
+//#include "poly3d.hxx"
 #include "svdmodel.hxx"
+
+#ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
+#include <basegfx/polygon/b3dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B3DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b3dpolygontools.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_POLYPOLYGONSHAPE3D_HPP_
+#include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
+#endif
+
+#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#endif
 
 using ::rtl::OUString;
 using namespace ::vos;
@@ -294,45 +310,45 @@ sal_Bool SAL_CALL Svx3DSceneObject::hasElements()
 #define HOMOGEN_MATRIX_TO_OBJECT \
     drawing::HomogenMatrix m; \
     if( aValue >>= m ) { \
-        Matrix4D aMat; \
-        aMat[0][0] = m.Line1.Column1; \
-        aMat[0][1] = m.Line1.Column2; \
-        aMat[0][2] = m.Line1.Column3; \
-        aMat[0][3] = m.Line1.Column4; \
-        aMat[1][0] = m.Line2.Column1; \
-        aMat[1][1] = m.Line2.Column2; \
-        aMat[1][2] = m.Line2.Column3; \
-        aMat[1][3] = m.Line2.Column4; \
-        aMat[2][0] = m.Line3.Column1; \
-        aMat[2][1] = m.Line3.Column2; \
-        aMat[2][2] = m.Line3.Column3; \
-        aMat[2][3] = m.Line3.Column4; \
-        aMat[3][0] = m.Line4.Column1; \
-        aMat[3][1] = m.Line4.Column2; \
-        aMat[3][2] = m.Line4.Column3; \
-        aMat[3][3] = m.Line4.Column4; \
+        basegfx::B3DHomMatrix aMat; \
+        aMat.set(0, 0, m.Line1.Column1); \
+        aMat.set(0, 1, m.Line1.Column2); \
+        aMat.set(0, 2, m.Line1.Column3); \
+        aMat.set(0, 3, m.Line1.Column4); \
+        aMat.set(1, 0, m.Line2.Column1); \
+        aMat.set(1, 1, m.Line2.Column2); \
+        aMat.set(1, 2, m.Line2.Column3); \
+        aMat.set(1, 3, m.Line2.Column4); \
+        aMat.set(2, 0, m.Line3.Column1); \
+        aMat.set(2, 1, m.Line3.Column2); \
+        aMat.set(2, 2, m.Line3.Column3); \
+        aMat.set(2, 3, m.Line3.Column4); \
+        aMat.set(3, 0, m.Line4.Column1); \
+        aMat.set(3, 1, m.Line4.Column2); \
+        aMat.set(3, 2, m.Line4.Column3); \
+        aMat.set(3, 3, m.Line4.Column4); \
         ((E3dObject*)mpObj.get())->SetTransform(aMat); \
     }
 
 #define OBJECT_TO_HOMOGEN_MATRIX \
     drawing::HomogenMatrix aHomMat; \
-    const Matrix4D& rMat = ((E3dObject*)mpObj.get())->GetTransform(); \
-    aHomMat.Line1.Column1 = rMat[0][0]; \
-    aHomMat.Line1.Column2 = rMat[0][1]; \
-    aHomMat.Line1.Column3 = rMat[0][2]; \
-    aHomMat.Line1.Column4 = rMat[0][3]; \
-    aHomMat.Line2.Column1 = rMat[1][0]; \
-    aHomMat.Line2.Column2 = rMat[1][1]; \
-    aHomMat.Line2.Column3 = rMat[1][2]; \
-    aHomMat.Line2.Column4 = rMat[1][3]; \
-    aHomMat.Line3.Column1 = rMat[2][0]; \
-    aHomMat.Line3.Column2 = rMat[2][1]; \
-    aHomMat.Line3.Column3 = rMat[2][2]; \
-    aHomMat.Line3.Column4 = rMat[2][3]; \
-    aHomMat.Line4.Column1 = rMat[3][0]; \
-    aHomMat.Line4.Column2 = rMat[3][1]; \
-    aHomMat.Line4.Column3 = rMat[3][2]; \
-    aHomMat.Line4.Column4 = rMat[3][3]; \
+    const basegfx::B3DHomMatrix& rMat = ((E3dObject*)mpObj.get())->GetTransform(); \
+    aHomMat.Line1.Column1 = rMat.get(0, 0); \
+    aHomMat.Line1.Column2 = rMat.get(0, 1); \
+    aHomMat.Line1.Column3 = rMat.get(0, 2); \
+    aHomMat.Line1.Column4 = rMat.get(0, 3); \
+    aHomMat.Line2.Column1 = rMat.get(1, 0); \
+    aHomMat.Line2.Column2 = rMat.get(1, 1); \
+    aHomMat.Line2.Column3 = rMat.get(1, 2); \
+    aHomMat.Line2.Column4 = rMat.get(1, 3); \
+    aHomMat.Line3.Column1 = rMat.get(2, 0); \
+    aHomMat.Line3.Column2 = rMat.get(2, 1); \
+    aHomMat.Line3.Column3 = rMat.get(2, 2); \
+    aHomMat.Line3.Column4 = rMat.get(2, 3); \
+    aHomMat.Line4.Column1 = rMat.get(3, 0); \
+    aHomMat.Line4.Column2 = rMat.get(3, 1); \
+    aHomMat.Line4.Column3 = rMat.get(3, 2); \
+    aHomMat.Line4.Column4 = rMat.get(3, 3); \
     return uno::Any( &aHomMat, ::getCppuType((const drawing::HomogenMatrix*)0) );
 
 //----------------------------------------------------------------------
@@ -342,7 +358,7 @@ sal_Bool SAL_CALL Svx3DSceneObject::hasElements()
 
 struct ImpRememberTransAndRect
 {
-    Matrix4D                    maMat;
+    basegfx::B3DHomMatrix                   maMat;
     Rectangle                   maRect;
 };
 
@@ -364,9 +380,9 @@ void SAL_CALL Svx3DSceneObject::setPropertyValue( const OUString& aPropertyName,
 
         if(aValue >>= aCamGeo)
         {
-            Vector3D aVRP(aCamGeo.vrp.PositionX, aCamGeo.vrp.PositionY, aCamGeo.vrp.PositionZ);
-            Vector3D aVPN(aCamGeo.vpn.DirectionX, aCamGeo.vpn.DirectionY, aCamGeo.vpn.DirectionZ);
-            Vector3D aVUP(aCamGeo.vup.DirectionX, aCamGeo.vup.DirectionY, aCamGeo.vup.DirectionZ);
+            basegfx::B3DPoint aVRP(aCamGeo.vrp.PositionX, aCamGeo.vrp.PositionY, aCamGeo.vrp.PositionZ);
+            basegfx::B3DVector aVPN(aCamGeo.vpn.DirectionX, aCamGeo.vpn.DirectionY, aCamGeo.vpn.DirectionZ);
+            basegfx::B3DVector aVUP(aCamGeo.vup.DirectionX, aCamGeo.vup.DirectionY, aCamGeo.vup.DirectionZ);
 
             // rescue scene transformation
             ImpRememberTransAndRect aSceneTAR;
@@ -379,7 +395,7 @@ void SAL_CALL Svx3DSceneObject::setPropertyValue( const OUString& aPropertyName,
             while(aIter.IsMore())
             {
                 E3dObject* p3DObj = (E3dObject*)aIter.Next();
-                Matrix4D* pNew = new Matrix4D;
+                basegfx::B3DHomMatrix* pNew = new basegfx::B3DHomMatrix;
                 *pNew = p3DObj->GetTransform();
                 aObjTrans.Insert(pNew, LIST_APPEND);
             }
@@ -398,8 +414,8 @@ void SAL_CALL Svx3DSceneObject::setPropertyValue( const OUString& aPropertyName,
             // fill old camera from new parameters
             Camera3D aCam(pScene->GetCamera());
             const Volume3D& rVolume = pScene->GetBoundVolume();
-            double fW = rVolume.GetWidth();
-            double fH = rVolume.GetHeight();
+            double fW = rVolume.getWidth();
+            double fH = rVolume.getHeight();
 
             const SfxItemSet& rSceneSet = pScene->GetMergedItemSet();
             double fCamPosZ =
@@ -409,20 +425,20 @@ void SAL_CALL Svx3DSceneObject::setPropertyValue( const OUString& aPropertyName,
 
             aCam.SetAutoAdjustProjection(FALSE);
             aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
-            Vector3D aLookAt;
-            Vector3D aCamPos(0.0, 0.0, fCamPosZ);
+            basegfx::B3DPoint aLookAt;
+            basegfx::B3DPoint aCamPos(0.0, 0.0, fCamPosZ);
             aCam.SetPosAndLookAt(aCamPos, aLookAt);
             aCam.SetFocalLength(fCamFocal / 100.0);
-            aCam.SetDefaults(Vector3D(0.0, 0.0, fCamPosZ), aLookAt, fCamFocal / 100.0);
+            aCam.SetDefaults(basegfx::B3DPoint(0.0, 0.0, fCamPosZ), aLookAt, fCamFocal / 100.0);
             aCam.SetDeviceWindow(Rectangle(0, 0, (long)fW, (long)fH));
 
             // set at scene
             pScene->SetCamera(aCam);
 
             // #91047# use imported VRP, VPN and VUP (if used)
-            sal_Bool bVRPUsed(aVRP != Vector3D(0.0, 0.0, 1.0));
-            sal_Bool bVPNUsed(aVPN != Vector3D(0.0, 0.0, 1.0));
-            sal_Bool bVUPUsed(aVUP != Vector3D(0.0, 1.0, 0.0));
+            sal_Bool bVRPUsed(!aVRP.equal(basegfx::B3DPoint(0.0, 0.0, 1.0)));
+            sal_Bool bVPNUsed(!aVPN.equal(basegfx::B3DVector(0.0, 0.0, 1.0)));
+            sal_Bool bVUPUsed(!aVUP.equal(basegfx::B3DVector(0.0, 1.0, 0.0)));
 
             if(bVRPUsed || bVPNUsed || bVUPUsed)
             {
@@ -435,7 +451,7 @@ void SAL_CALL Svx3DSceneObject::setPropertyValue( const OUString& aPropertyName,
             while(aIter.IsMore())
             {
                 E3dObject* p3DObj = (E3dObject*)aIter.Next();
-                Matrix4D* pMat = (Matrix4D*)aObjTrans.GetObject(nIndex++);
+                basegfx::B3DHomMatrix* pMat = (basegfx::B3DHomMatrix*)aObjTrans.GetObject(nIndex++);
                 p3DObj->NbcSetTransform(*pMat);
                 delete pMat;
             }
@@ -475,20 +491,20 @@ uno::Any SAL_CALL Svx3DSceneObject::getPropertyValue( const OUString& PropertyNa
 
         // fill Vectors from scene camera
         B3dCamera& aCameraSet = pScene->GetCameraSet();
-        Vector3D aVRP = aCameraSet.GetVRP();
-        Vector3D aVPN = aCameraSet.GetVPN();
-        Vector3D aVUP = aCameraSet.GetVUV();
+        basegfx::B3DPoint aVRP(aCameraSet.GetVRP());
+        basegfx::B3DVector aVPN(aCameraSet.GetVPN());
+        basegfx::B3DVector aVUP(aCameraSet.GetVUV());
 
         // transfer to structure
-        aCamGeo.vrp.PositionX = aVRP.X();
-        aCamGeo.vrp.PositionY = aVRP.Y();
-        aCamGeo.vrp.PositionZ = aVRP.Z();
-        aCamGeo.vpn.DirectionX = aVPN.X();
-        aCamGeo.vpn.DirectionY = aVPN.Y();
-        aCamGeo.vpn.DirectionZ = aVPN.Z();
-        aCamGeo.vup.DirectionX = aVUP.X();
-        aCamGeo.vup.DirectionY = aVUP.Y();
-        aCamGeo.vup.DirectionZ = aVUP.Z();
+        aCamGeo.vrp.PositionX = aVRP.getX();
+        aCamGeo.vrp.PositionY = aVRP.getY();
+        aCamGeo.vrp.PositionZ = aVRP.getZ();
+        aCamGeo.vpn.DirectionX = aVPN.getX();
+        aCamGeo.vpn.DirectionY = aVPN.getY();
+        aCamGeo.vpn.DirectionZ = aVPN.getZ();
+        aCamGeo.vup.DirectionX = aVUP.getX();
+        aCamGeo.vup.DirectionY = aVUP.getY();
+        aCamGeo.vup.DirectionZ = aVUP.getZ();
 
         return uno::Any(&aCamGeo, ::getCppuType((const drawing::CameraGeometry*)0) );
     }
@@ -539,7 +555,7 @@ void SAL_CALL Svx3DCubeObject::setPropertyValue( const OUString& aPropertyName, 
         drawing::Position3D aUnoPos;
         if( aValue >>= aUnoPos )
         {
-            Vector3D aPos(aUnoPos.PositionX, aUnoPos.PositionY, aUnoPos.PositionZ);
+            basegfx::B3DPoint aPos(aUnoPos.PositionX, aUnoPos.PositionY, aUnoPos.PositionZ);
             ((E3dCubeObj*)mpObj.get())->SetCubePos(aPos);
         }
     }
@@ -549,7 +565,7 @@ void SAL_CALL Svx3DCubeObject::setPropertyValue( const OUString& aPropertyName, 
         drawing::Direction3D aDirection;
         if( aValue >>= aDirection )
         {
-            Vector3D aSize(aDirection.DirectionX, aDirection.DirectionY, aDirection.DirectionZ);
+            basegfx::B3DVector aSize(aDirection.DirectionX, aDirection.DirectionY, aDirection.DirectionZ);
             ((E3dCubeObj*)mpObj.get())->SetCubeSize(aSize);
         }
     }
@@ -582,24 +598,24 @@ uno::Any SAL_CALL Svx3DCubeObject::getPropertyValue( const OUString& aPropertyNa
     else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS)) )
     {
         // Position packen
-        const Vector3D& rPos = ((E3dCubeObj*)mpObj.get())->GetCubePos();
+        const basegfx::B3DPoint& rPos = ((E3dCubeObj*)mpObj.get())->GetCubePos();
         drawing::Position3D aPos;
 
-        aPos.PositionX = rPos.X();
-        aPos.PositionY = rPos.Y();
-        aPos.PositionZ = rPos.Z();
+        aPos.PositionX = rPos.getX();
+        aPos.PositionY = rPos.getY();
+        aPos.PositionZ = rPos.getZ();
 
         return uno::Any( &aPos, ::getCppuType((const drawing::Position3D*)0) );
     }
     else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_SIZE)) )
     {
         // Groesse packen
-        const Vector3D& rSize = ((E3dCubeObj*)mpObj.get())->GetCubeSize();
+        const basegfx::B3DVector& rSize = ((E3dCubeObj*)mpObj.get())->GetCubeSize();
         drawing::Direction3D aDir;
 
-        aDir.DirectionX = rSize.X();
-        aDir.DirectionY = rSize.Y();
-        aDir.DirectionZ = rSize.Z();
+        aDir.DirectionX = rSize.getX();
+        aDir.DirectionY = rSize.getY();
+        aDir.DirectionZ = rSize.getZ();
 
         return uno::Any( &aDir, ::getCppuType((const drawing::Direction3D*)0) );
     }
@@ -657,7 +673,7 @@ void SAL_CALL Svx3DSphereObject::setPropertyValue( const OUString& aPropertyName
         drawing::Position3D aUnoPos;
         if( aValue >>= aUnoPos )
         {
-            Vector3D aPos(aUnoPos.PositionX, aUnoPos.PositionY, aUnoPos.PositionZ);
+            basegfx::B3DPoint aPos(aUnoPos.PositionX, aUnoPos.PositionY, aUnoPos.PositionZ);
             ((E3dSphereObj*)mpObj.get())->SetCenter(aPos);
         }
     }
@@ -667,7 +683,7 @@ void SAL_CALL Svx3DSphereObject::setPropertyValue( const OUString& aPropertyName
         drawing::Direction3D aDir;
         if( aValue >>= aDir )
         {
-            Vector3D aPos(aDir.DirectionX, aDir.DirectionY, aDir.DirectionZ);
+            basegfx::B3DVector aPos(aDir.DirectionX, aDir.DirectionY, aDir.DirectionZ);
             ((E3dSphereObj*)mpObj.get())->SetSize(aPos);
         }
     }
@@ -691,24 +707,24 @@ uno::Any SAL_CALL Svx3DSphereObject::getPropertyValue( const OUString& aProperty
     else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS)))
     {
         // Position packen
-        const Vector3D& rPos = ((E3dSphereObj*)mpObj.get())->Center();
+        const basegfx::B3DPoint& rPos = ((E3dSphereObj*)mpObj.get())->Center();
         drawing::Position3D aPos;
 
-        aPos.PositionX = rPos.X();
-        aPos.PositionY = rPos.Y();
-        aPos.PositionZ = rPos.Z();
+        aPos.PositionX = rPos.getX();
+        aPos.PositionY = rPos.getY();
+        aPos.PositionZ = rPos.getZ();
 
         return uno::Any( &aPos, ::getCppuType((const drawing::Position3D*)0) );
     }
     else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_SIZE)))
     {
         // Groesse packen
-        const Vector3D& rSize = ((E3dSphereObj*)mpObj.get())->Size();
+        const basegfx::B3DVector& rSize = ((E3dSphereObj*)mpObj.get())->Size();
         drawing::Direction3D aDir;
 
-        aDir.DirectionX = rSize.X();
-        aDir.DirectionY = rSize.Y();
-        aDir.DirectionZ = rSize.Z();
+        aDir.DirectionX = rSize.getX();
+        aDir.DirectionY = rSize.getY();
+        aDir.DirectionZ = rSize.getZ();
 
         return uno::Any( &aDir, ::getCppuType((const drawing::Direction3D*)0) );
     }
@@ -732,12 +748,6 @@ uno::Sequence< OUString > SAL_CALL Svx3DSphereObject::getSupportedServiceNames()
 *                                                                      *
 ***********************************************************************/
 
-#ifndef _COM_SUN_STAR_DRAWING_POLYPOLYGONSHAPE3D_HPP_
-#include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
-#endif
-
-
-
 //----------------------------------------------------------------------
 Svx3DLatheObject::Svx3DLatheObject( SdrObject* pObj ) throw()
 :   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DLATHEOBJECT) )
@@ -749,7 +759,7 @@ Svx3DLatheObject::~Svx3DLatheObject() throw()
 {
 }
 
-#define POLYPOLYGONSHAPE3D_TO_POLYPOLYGON3D \
+#define POLYPOLYGONSHAPE3D_TO_B3DPOLYPOLYGON(aResultPolygon) \
     drawing::PolyPolygonShape3D aSourcePolyPolygon; \
     if( !(aValue >>= aSourcePolyPolygon) ) \
         throw lang::IllegalArgumentException(); \
@@ -759,11 +769,11 @@ Svx3DLatheObject::~Svx3DLatheObject() throw()
     { \
         throw lang::IllegalArgumentException(); \
     } \
-    PolyPolygon3D aNewPolyPolygon; \
+    basegfx::B3DPolyPolygon aResultPolygon; \
     drawing::DoubleSequence* pInnerSequenceX = aSourcePolyPolygon.SequenceX.getArray(); \
     drawing::DoubleSequence* pInnerSequenceY = aSourcePolyPolygon.SequenceY.getArray(); \
     drawing::DoubleSequence* pInnerSequenceZ = aSourcePolyPolygon.SequenceZ.getArray(); \
-    for(sal_Int32 a=0;a<nOuterSequenceCount;a++) \
+    for(sal_Int32 a(0L);a<nOuterSequenceCount;a++) \
     { \
         sal_Int32 nInnerSequenceCount = pInnerSequenceX->getLength(); \
         if(nInnerSequenceCount != pInnerSequenceY->getLength() \
@@ -771,53 +781,53 @@ Svx3DLatheObject::~Svx3DLatheObject() throw()
         { \
             throw lang::IllegalArgumentException(); \
         } \
-        Polygon3D aNewPolygon((USHORT)nInnerSequenceCount); \
+        basegfx::B3DPolygon aNewPolygon; \
         double* pArrayX = pInnerSequenceX->getArray(); \
         double* pArrayY = pInnerSequenceY->getArray(); \
         double* pArrayZ = pInnerSequenceZ->getArray(); \
-        for(sal_Int32 b=0;b<nInnerSequenceCount;b++) \
+        for(sal_Int32 b(0L);b<nInnerSequenceCount;b++) \
         { \
-            aNewPolygon[(USHORT)b].X() = *pArrayX++; \
-            aNewPolygon[(USHORT)b].Y() = *pArrayY++; \
-            aNewPolygon[(USHORT)b].Z() = *pArrayZ++; \
+            aNewPolygon.append(basegfx::B3DPoint(*pArrayX++,*pArrayY++,*pArrayZ++)); \
         } \
         pInnerSequenceX++; \
         pInnerSequenceY++; \
         pInnerSequenceZ++; \
-        aNewPolygon.CheckClosed(); \
-        aNewPolyPolygon.Insert(aNewPolygon); \
+        basegfx::tools::checkClosed(aNewPolygon); \
+        aResultPolygon.append(aNewPolygon); \
     } \
 
-#define POLYPOLYGON3D_TO_POLYPOLYGONSHAPE3D \
+#define B3DPOLYPOLYGON_TO_POLYPOLYGONSHAPE3D(rSourcePolyPolygon) \
     drawing::PolyPolygonShape3D aRetval; \
-    aRetval.SequenceX.realloc((sal_Int32)rPolyPoly.Count()); \
-    aRetval.SequenceY.realloc((sal_Int32)rPolyPoly.Count()); \
-    aRetval.SequenceZ.realloc((sal_Int32)rPolyPoly.Count()); \
+    aRetval.SequenceX.realloc(rSourcePolyPolygon.count()); \
+    aRetval.SequenceY.realloc(rSourcePolyPolygon.count()); \
+    aRetval.SequenceZ.realloc(rSourcePolyPolygon.count()); \
     drawing::DoubleSequence* pOuterSequenceX = aRetval.SequenceX.getArray(); \
     drawing::DoubleSequence* pOuterSequenceY = aRetval.SequenceY.getArray(); \
     drawing::DoubleSequence* pOuterSequenceZ = aRetval.SequenceZ.getArray(); \
-    for(sal_uInt16 a=0;a<rPolyPoly.Count();a++) \
+    for(sal_uInt32 a(0L);a<rSourcePolyPolygon.count();a++) \
     { \
-        const Polygon3D& rPoly = rPolyPoly[a]; \
-        sal_Int32 nPointCount(rPoly.GetPointCount()); \
-        if(rPoly.IsClosed()) nPointCount++; \
+        const basegfx::B3DPolygon aPoly(rSourcePolyPolygon.getB3DPolygon(a)); \
+        sal_Int32 nPointCount(aPoly.count()); \
+        if(aPoly.isClosed()) nPointCount++; \
         pOuterSequenceX->realloc(nPointCount); \
         pOuterSequenceY->realloc(nPointCount); \
         pOuterSequenceZ->realloc(nPointCount); \
         double* pInnerSequenceX = pOuterSequenceX->getArray(); \
         double* pInnerSequenceY = pOuterSequenceY->getArray(); \
         double* pInnerSequenceZ = pOuterSequenceZ->getArray(); \
-        for(sal_uInt16 b=0;b<rPoly.GetPointCount();b++) \
+        for(sal_uInt32 b(0L);b<aPoly.count();b++) \
         { \
-            *pInnerSequenceX++ = rPoly[(USHORT)b].X(); \
-            *pInnerSequenceY++ = rPoly[(USHORT)b].Y(); \
-            *pInnerSequenceZ++ = rPoly[(USHORT)b].Z(); \
+            const basegfx::B3DPoint aPoint(aPoly.getB3DPoint(b)); \
+            *pInnerSequenceX++ = aPoint.getX(); \
+            *pInnerSequenceY++ = aPoint.getY(); \
+            *pInnerSequenceZ++ = aPoint.getZ(); \
         } \
-        if(rPoly.IsClosed()) \
+        if(aPoly.isClosed()) \
         { \
-            *pInnerSequenceX++ = rPoly[0].X(); \
-            *pInnerSequenceY++ = rPoly[0].Y(); \
-            *pInnerSequenceZ++ = rPoly[0].Z(); \
+            const basegfx::B3DPoint aPoint(aPoly.getB3DPoint(0L)); \
+            *pInnerSequenceX++ = aPoint.getX(); \
+            *pInnerSequenceY++ = aPoint.getY(); \
+            *pInnerSequenceZ++ = aPoint.getZ(); \
         } \
         pOuterSequenceX++; \
         pOuterSequenceY++; \
@@ -839,7 +849,7 @@ void SAL_CALL Svx3DLatheObject::setPropertyValue( const OUString& aPropertyName,
     else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
         // Polygondefinition in das Objekt packen
-        POLYPOLYGONSHAPE3D_TO_POLYPOLYGON3D
+        POLYPOLYGONSHAPE3D_TO_B3DPOLYPOLYGON(aNewB3DPolyPolygon)
 
         // #105127# SetPolyPoly3D sets the Svx3DVerticalSegmentsItem to the number
         // of points of the polygon. Thus, value gets lost. To avoid this, rescue
@@ -847,8 +857,9 @@ void SAL_CALL Svx3DLatheObject::setPropertyValue( const OUString& aPropertyName,
         const sal_uInt32 nPrevVerticalSegs(((E3dLatheObj*)mpObj.get())->GetVerticalSegments());
 
         // Polygon setzen
-        ((E3dLatheObj*)mpObj.get())->SetPolyPoly3D(aNewPolyPolygon);
-
+        const basegfx::B3DHomMatrix aIdentity;
+        const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(aNewB3DPolyPolygon, aIdentity));
+        ((E3dLatheObj*)mpObj.get())->SetPolyPoly2D(aB2DPolyPolygon);
         const sal_uInt32 nPostVerticalSegs(((E3dLatheObj*)mpObj.get())->GetVerticalSegments());
 
         if(nPrevVerticalSegs != nPostVerticalSegs)
@@ -873,52 +884,34 @@ uno::Any SAL_CALL Svx3DLatheObject::getPropertyValue( const OUString& aPropertyN
     {
         // Transformation in eine homogene Matrix packen
         drawing::HomogenMatrix aHomMat;
-        Matrix4D aMat = ((E3dObject*)mpObj.get())->GetTransform();
-
-        // test for transformed PolyPolygon3D
-        const PolyPolygon3D& rPolyPoly = ((E3dExtrudeObj*)mpObj.get())->GetExtrudePolygon();
-        if(rPolyPoly.Count() && rPolyPoly[0].GetPointCount())
-        {
-            const Vector3D& rFirstPoint = rPolyPoly[0][0];
-            if(rFirstPoint.Z() != 0.0)
-            {
-                // change transformation so that source poly lies in Z == 0,
-                // so it can be exported as 2D polygon
-                //
-                // ATTENTION: the translation has to be multiplied from LEFT
-                // SIDE since it was executed as the first translate for this
-                // 3D object during it's creation.
-                Matrix4D aTransMat;
-                aTransMat.TranslateZ(rFirstPoint.Z());
-                aMat = aMat * aTransMat; // #112587#
-            }
-        }
+        basegfx::B3DHomMatrix aMat = ((E3dObject*)mpObj.get())->GetTransform();
 
         // pack evtl. transformed matrix to output
-        aHomMat.Line1.Column1 = aMat[0][0];
-        aHomMat.Line1.Column2 = aMat[0][1];
-        aHomMat.Line1.Column3 = aMat[0][2];
-        aHomMat.Line1.Column4 = aMat[0][3];
-        aHomMat.Line2.Column1 = aMat[1][0];
-        aHomMat.Line2.Column2 = aMat[1][1];
-        aHomMat.Line2.Column3 = aMat[1][2];
-        aHomMat.Line2.Column4 = aMat[1][3];
-        aHomMat.Line3.Column1 = aMat[2][0];
-        aHomMat.Line3.Column2 = aMat[2][1];
-        aHomMat.Line3.Column3 = aMat[2][2];
-        aHomMat.Line3.Column4 = aMat[2][3];
-        aHomMat.Line4.Column1 = aMat[3][0];
-        aHomMat.Line4.Column2 = aMat[3][1];
-        aHomMat.Line4.Column3 = aMat[3][2];
-        aHomMat.Line4.Column4 = aMat[3][3];
+        aHomMat.Line1.Column1 = aMat.get(0, 0);
+        aHomMat.Line1.Column2 = aMat.get(0, 1);
+        aHomMat.Line1.Column3 = aMat.get(0, 2);
+        aHomMat.Line1.Column4 = aMat.get(0, 3);
+        aHomMat.Line2.Column1 = aMat.get(1, 0);
+        aHomMat.Line2.Column2 = aMat.get(1, 1);
+        aHomMat.Line2.Column3 = aMat.get(1, 2);
+        aHomMat.Line2.Column4 = aMat.get(1, 3);
+        aHomMat.Line3.Column1 = aMat.get(2, 0);
+        aHomMat.Line3.Column2 = aMat.get(2, 1);
+        aHomMat.Line3.Column3 = aMat.get(2, 2);
+        aHomMat.Line3.Column4 = aMat.get(2, 3);
+        aHomMat.Line4.Column1 = aMat.get(3, 0);
+        aHomMat.Line4.Column2 = aMat.get(3, 1);
+        aHomMat.Line4.Column3 = aMat.get(3, 2);
+        aHomMat.Line4.Column4 = aMat.get(3, 3);
 
         return uno::Any( &aHomMat, ::getCppuType((const drawing::HomogenMatrix*)0) );
     }
     else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
-        const PolyPolygon3D& rPolyPoly = ((E3dLatheObj*)mpObj.get())->GetPolyPoly3D();
+        const basegfx::B2DPolyPolygon& rPolyPoly = ((E3dLatheObj*)mpObj.get())->GetPolyPoly2D();
+        const basegfx::B3DPolyPolygon aB3DPolyPolygon(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(rPolyPoly));
 
-        POLYPOLYGON3D_TO_POLYPOLYGONSHAPE3D
+        B3DPOLYPOLYGON_TO_POLYPOLYGONSHAPE3D(aB3DPolyPolygon)
     }
     else
     {
@@ -964,10 +957,12 @@ void SAL_CALL Svx3DExtrudeObject::setPropertyValue( const OUString& aPropertyNam
     else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
         // Polygondefinition in das Objekt packen
-        POLYPOLYGONSHAPE3D_TO_POLYPOLYGON3D
+        POLYPOLYGONSHAPE3D_TO_B3DPOLYPOLYGON(aNewB3DPolyPolygon)
 
         // Polygon setzen
-        ((E3dExtrudeObj*)mpObj.get())->SetExtrudePolygon(aNewPolyPolygon);
+        const basegfx::B3DHomMatrix aIdentity;
+        const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(aNewB3DPolyPolygon, aIdentity));
+        ((E3dExtrudeObj*)mpObj.get())->SetExtrudePolygon(aB2DPolyPolygon);
     }
     else
     {
@@ -985,53 +980,35 @@ uno::Any SAL_CALL Svx3DExtrudeObject::getPropertyValue( const OUString& aPropert
     {
         // Transformation in eine homogene Matrix packen
         drawing::HomogenMatrix aHomMat;
-        Matrix4D aMat = ((E3dObject*)mpObj.get())->GetTransform();
-
-        // test for transformed PolyPolygon3D
-        const PolyPolygon3D& rPolyPoly = ((E3dExtrudeObj*)mpObj.get())->GetExtrudePolygon();
-        if(rPolyPoly.Count() && rPolyPoly[0].GetPointCount())
-        {
-            const Vector3D& rFirstPoint = rPolyPoly[0][0];
-            if(rFirstPoint.Z() != 0.0)
-            {
-                // change transformation so that source poly lies in Z == 0,
-                // so it can be exported as 2D polygon
-                //
-                // ATTENTION: the translation has to be multiplied from LEFT
-                // SIDE since it was executed as the first translate for this
-                // 3D object during it's creation.
-                Matrix4D aTransMat;
-                aTransMat.TranslateZ(rFirstPoint.Z());
-                aMat = aMat * aTransMat; // #112587#
-            }
-        }
+        basegfx::B3DHomMatrix aMat = ((E3dObject*)mpObj.get())->GetTransform();
 
         // pack evtl. transformed matrix to output
-        aHomMat.Line1.Column1 = aMat[0][0];
-        aHomMat.Line1.Column2 = aMat[0][1];
-        aHomMat.Line1.Column3 = aMat[0][2];
-        aHomMat.Line1.Column4 = aMat[0][3];
-        aHomMat.Line2.Column1 = aMat[1][0];
-        aHomMat.Line2.Column2 = aMat[1][1];
-        aHomMat.Line2.Column3 = aMat[1][2];
-        aHomMat.Line2.Column4 = aMat[1][3];
-        aHomMat.Line3.Column1 = aMat[2][0];
-        aHomMat.Line3.Column2 = aMat[2][1];
-        aHomMat.Line3.Column3 = aMat[2][2];
-        aHomMat.Line3.Column4 = aMat[2][3];
-        aHomMat.Line4.Column1 = aMat[3][0];
-        aHomMat.Line4.Column2 = aMat[3][1];
-        aHomMat.Line4.Column3 = aMat[3][2];
-        aHomMat.Line4.Column4 = aMat[3][3];
+        aHomMat.Line1.Column1 = aMat.get(0, 0);
+        aHomMat.Line1.Column2 = aMat.get(0, 1);
+        aHomMat.Line1.Column3 = aMat.get(0, 2);
+        aHomMat.Line1.Column4 = aMat.get(0, 3);
+        aHomMat.Line2.Column1 = aMat.get(1, 0);
+        aHomMat.Line2.Column2 = aMat.get(1, 1);
+        aHomMat.Line2.Column3 = aMat.get(1, 2);
+        aHomMat.Line2.Column4 = aMat.get(1, 3);
+        aHomMat.Line3.Column1 = aMat.get(2, 0);
+        aHomMat.Line3.Column2 = aMat.get(2, 1);
+        aHomMat.Line3.Column3 = aMat.get(2, 2);
+        aHomMat.Line3.Column4 = aMat.get(2, 3);
+        aHomMat.Line4.Column1 = aMat.get(3, 0);
+        aHomMat.Line4.Column2 = aMat.get(3, 1);
+        aHomMat.Line4.Column3 = aMat.get(3, 2);
+        aHomMat.Line4.Column4 = aMat.get(3, 3);
 
         return uno::Any( &aHomMat, ::getCppuType((const drawing::HomogenMatrix*)0) );
     }
     else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
         // Polygondefinition packen
-        const PolyPolygon3D& rPolyPoly = ((E3dExtrudeObj*)mpObj.get())->GetExtrudePolygon();
+        const basegfx::B2DPolyPolygon& rPolyPoly = ((E3dExtrudeObj*)mpObj.get())->GetExtrudePolygon();
+        const basegfx::B3DPolyPolygon aB3DPolyPolygon(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(rPolyPoly));
 
-        POLYPOLYGON3D_TO_POLYPOLYGONSHAPE3D
+        B3DPOLYPOLYGON_TO_POLYPOLYGONSHAPE3D(aB3DPolyPolygon)
     }
     else
     {
@@ -1078,26 +1055,28 @@ void SAL_CALL Svx3DPolygonObject::setPropertyValue( const OUString& aPropertyNam
     else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
         // Polygondefinition in das Objekt packen
-        POLYPOLYGONSHAPE3D_TO_POLYPOLYGON3D
+        POLYPOLYGONSHAPE3D_TO_B3DPOLYPOLYGON(aNewB3DPolyPolygon)
 
         // Polygon setzen
-        ((E3dPolygonObj*)mpObj.get())->SetPolyPolygon3D(aNewPolyPolygon);
+        ((E3dPolygonObj*)mpObj.get())->SetPolyPolygon3D(aNewB3DPolyPolygon);
     }
     else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_NORMALSPOLYGON3D)) )
     {
         // Normalendefinition in das Objekt packen
-        POLYPOLYGONSHAPE3D_TO_POLYPOLYGON3D
+        POLYPOLYGONSHAPE3D_TO_B3DPOLYPOLYGON(aNewB3DPolyPolygon)
 
         // Polygon setzen
-        ((E3dPolygonObj*)mpObj.get())->SetPolyNormals3D(aNewPolyPolygon);
+        ((E3dPolygonObj*)mpObj.get())->SetPolyNormals3D(aNewB3DPolyPolygon);
     }
     else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TEXTUREPOLYGON3D)) )
     {
         // Texturdefinition in das Objekt packen
-        POLYPOLYGONSHAPE3D_TO_POLYPOLYGON3D
+        POLYPOLYGONSHAPE3D_TO_B3DPOLYPOLYGON(aNewB3DPolyPolygon)
 
         // Polygon setzen
-        ((E3dPolygonObj*)mpObj.get())->SetPolyTexture3D(aNewPolyPolygon);
+        const basegfx::B3DHomMatrix aIdentity;
+        const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(aNewB3DPolyPolygon, aIdentity));
+        ((E3dPolygonObj*)mpObj.get())->SetPolyTexture2D(aB2DPolyPolygon);
     }
     else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_LINEONLY)) )
     {
@@ -1128,23 +1107,24 @@ uno::Any SAL_CALL Svx3DPolygonObject::getPropertyValue( const OUString& aPropert
     else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
         // Polygondefinition packen
-        const PolyPolygon3D& rPolyPoly = ((E3dPolygonObj*)mpObj.get())->GetPolyPolygon3D();
+        const basegfx::B3DPolyPolygon& rPolyPoly = ((E3dPolygonObj*)mpObj.get())->GetPolyPolygon3D();
 
-        POLYPOLYGON3D_TO_POLYPOLYGONSHAPE3D
+        B3DPOLYPOLYGON_TO_POLYPOLYGONSHAPE3D(rPolyPoly)
     }
     else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_NORMALSPOLYGON3D)) )
     {
         // Normalendefinition packen
-        const PolyPolygon3D& rPolyPoly = ((E3dPolygonObj*)mpObj.get())->GetPolyNormals3D();
+        const basegfx::B3DPolyPolygon& rPolyPoly = ((E3dPolygonObj*)mpObj.get())->GetPolyNormals3D();
 
-        POLYPOLYGON3D_TO_POLYPOLYGONSHAPE3D
+        B3DPOLYPOLYGON_TO_POLYPOLYGONSHAPE3D(rPolyPoly)
     }
     else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TEXTUREPOLYGON3D)) )
     {
         // Texturdefinition packen
-        const PolyPolygon3D& rPolyPoly = ((E3dPolygonObj*)mpObj.get())->GetPolyTexture3D();
+        const basegfx::B2DPolyPolygon& rPolyPoly = ((E3dPolygonObj*)mpObj.get())->GetPolyTexture2D();
+        const basegfx::B3DPolyPolygon aB3DPolyPolygon(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(rPolyPoly));
 
-        POLYPOLYGON3D_TO_POLYPOLYGONSHAPE3D
+        B3DPOLYPOLYGON_TO_POLYPOLYGONSHAPE3D(aB3DPolyPolygon)
     }
     else if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_LINEONLY)) )
     {
@@ -1168,5 +1148,4 @@ uno::Sequence< OUString > SAL_CALL Svx3DPolygonObject::getSupportedServiceNames(
     return aSeq;
 }
 
-
-
+// eof
