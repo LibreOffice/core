@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:35:51 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -410,8 +410,8 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
             if (!bIsFromFile)
                 pSkipPaintObj = pObj;
 
-            SdrPageView* pPV = pView->GetPageViewPvNum(0);
-            pView->InsertObject(pObj, *pPV);
+            SdrPageView* pPV = pView->GetSdrPageView();
+            pView->InsertObjectAtView(pObj, *pPV);
 
             if ( nAspect != embed::Aspects::MSOLE_ICON )
             {
@@ -746,8 +746,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
                 // (in MarkListHasChanged kommt ein Update)
                 pSkipPaintObj = pObj;
 
-                SdrPageView* pPV = pView->GetPageViewPvNum(0);
-                pView->InsertObject(pObj, *pPV);
+                SdrPageView* pPV = pView->GetSdrPageView();
+                pView->InsertObjectAtView(pObj, *pPV);
 
                 // Dies veranlaesst Chart zum sofortigen Update
                 //SvData aEmpty;
