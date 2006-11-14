@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fucopy.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:48:59 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,7 +218,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             bColor = FALSE;
 
         // Handles wegnehmen
-        pView->HideMarkHdl( NULL );
+        pView->HideMarkHdl();
 
         SfxProgress*    pProgress = NULL;
         BOOL            bWaiting = FALSE;
@@ -236,7 +236,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
         const SdrMarkList   aMarkList( pView->GetMarkedObjectList() );
         const ULONG         nMarkCount = aMarkList.GetMarkCount();
-        SdrPageView*        pPageView = pView->GetPageViewPvNum( 0 );
+        SdrPageView*        pPageView = pView->GetSdrPageView();
         SdrObject*          pObj = NULL;
 
         // Anzahl moeglicher Kopien berechnen
@@ -341,7 +341,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
         // Handles zeigen
         pView->AdjustMarkHdl( TRUE );
-        pView->ShowMarkHdl( NULL );
+        pView->ShowMarkHdl();
 
         pView->EndUndo();
     }
