@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:14:36 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:21:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1132,13 +1132,13 @@ BOOL SdDrawDocument::InsertBookmarkAsObject(
 
                 if (pPage->IsMasterPage())
                 {
-                    pPV = pBMView->ShowMasterPagePgNum(pPage->GetPageNum(), Point(0, 0));
+                    pPV = pBMView->ShowSdrPage(pBMView->GetModel()->GetMasterPage(pPage->GetPageNum()));
                 }
                 else
                 {
-                    pPV = pBMView->GetPageView( pPage );
-                    if( !pPV )
-                        pPV = pBMView->ShowPage(pPage, Point(0, 0));
+                    pPV = pBMView->GetSdrPageView();
+                    if( !pPV || (pPV->GetPage() != pPage))
+                        pPV = pBMView->ShowSdrPage(pPage);
                 }
 
                 pBMView->MarkObj(pObj, pPV, FALSE);
@@ -1164,7 +1164,7 @@ BOOL SdDrawDocument::InsertBookmarkAsObject(
             if (pViewSh)
             {
                 // Welche Seite wird denn aktuell angezeigt?
-                SdrPageView* pPV = pViewSh->GetView()->GetPageViewPvNum(0);
+                SdrPageView* pPV = pViewSh->GetView()->GetSdrPageView();
 
                 if (pPV)
                 {
@@ -1236,28 +1236,6 @@ BOOL SdDrawDocument::InsertBookmarkAsObject(
 
             pList = pExchangeList;
         }
-
-//BFS02     if( pList )
-//BFS02     {
-//BFS02         for (USHORT nPos = 0; nPos < pList->Count(); nPos++)
-//BFS02         {
-//BFS02             /******************************************************************
-//BFS02             * Namen der Bookmarks aus Liste holen
-//BFS02             ******************************************************************/
-//BFS02             String aBMName (*(String*) pList->GetObject(nPos));
-//BFS02
-//BFS02             SdrObject* pObj = GetObj(aBMName);
-//BFS02
-//BFS02             if (pObj)
-//BFS02             {
-//BFS02                 // Objekt gefunden
-//BFS02                 if (bLink && pObj->ISA(SdrObjGroup))
-//BFS02                 {
-//BFS02                     ( (SdrObjGroup*) pObj)->SetGroupLink(aBookmarkName, aBMName);
-//BFS02                 }
-//BFS02             }
-//BFS02         }
-//BFS02     }
     }
 
     delete pBMView;
@@ -1522,13 +1500,9 @@ void SdDrawDocument::RemoveUnnessesaryMasterPages(SdPage* pMasterPage, BOOL bOnl
                 if (pView)
                 {
                     // falls MasterPage sichtbar: erst PageView abmelden, dann loeschen
-                    SdrPageView* pPgView = pView->GetPageView(pNotesMaster);
+                    SdrPageView* pPgView = pView->GetSdrPageView();
                     if (pPgView)
-                        pView->HidePage(pPgView);
-
-                    pPgView = pView->GetPageView(pMaster);
-                    if (pPgView)
-                        pView->HidePage(pPgView);
+                        pView->HideSdrPage();
                 }
 
                 if( bUndo )
