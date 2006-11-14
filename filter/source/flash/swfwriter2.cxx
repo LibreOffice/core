@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:41:06 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:02:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,8 @@
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
 #endif
+
+#include <math.h>
 
 using namespace ::swf;
 using namespace ::std;
@@ -313,19 +315,19 @@ void Tag::writeRect( SvStream& rOut, const Rectangle& rRect )
 
 // -----------------------------------------------------------------------------
 
-void Tag::addMatrix( const Matrix3D& rMatrix )
+void Tag::addMatrix( const ::basegfx::B3DHomMatrix& rMatrix )
 {
     writeMatrix( *this, rMatrix );
 }
 
 // -----------------------------------------------------------------------------
 
-void Tag::writeMatrix( SvStream& rOut, const Matrix3D& rMatrix )
+void Tag::writeMatrix( SvStream& rOut, const ::basegfx::B3DHomMatrix& rMatrix )
 {
 
     BitStream aBits;
 
-    const sal_uInt8 bHasScale = rMatrix[0][0] != 1 || rMatrix[1][1] != 1;
+    const sal_uInt8 bHasScale = rMatrix.get(0, 0) != 1.0 || rMatrix.get(1, 1) != 1.0;
 
     aBits.writeUB( bHasScale, 1 );
 
@@ -334,11 +336,11 @@ void Tag::writeMatrix( SvStream& rOut, const Matrix3D& rMatrix )
         sal_uInt8 nScaleBits = 31;
 
         aBits.writeUB( nScaleBits, 5 );
-        aBits.writeFB( getFixed( rMatrix[0][0] ), nScaleBits ); // Scale X
-        aBits.writeFB( getFixed( rMatrix[1][1] ), nScaleBits ); // Scale Y
+        aBits.writeFB( getFixed( rMatrix.get(0, 0) ), nScaleBits ); // Scale X
+        aBits.writeFB( getFixed( rMatrix.get(1, 1) ), nScaleBits ); // Scale Y
     }
 
-    const sal_uInt8 bHasRotate = rMatrix[0][1] != 0 || rMatrix[1][0] != 0;
+    const sal_uInt8 bHasRotate = rMatrix.get(0, 1) != 0.0 || rMatrix.get(1, 0) != 0.0;
 
     aBits.writeUB( bHasRotate, 1 );
 
@@ -347,15 +349,15 @@ void Tag::writeMatrix( SvStream& rOut, const Matrix3D& rMatrix )
         sal_uInt8 nRotateBits = 31;
 
         aBits.writeUB( nRotateBits, 5 );
-        aBits.writeFB( getFixed( rMatrix[0][1] ), nRotateBits );    // RotateSkew0
-        aBits.writeFB( getFixed( rMatrix[1][0] ), nRotateBits );    // RotateSkew1
+        aBits.writeFB( getFixed( rMatrix.get(0, 1) ), nRotateBits );    // RotateSkew0
+        aBits.writeFB( getFixed( rMatrix.get(1, 0) ), nRotateBits );    // RotateSkew1
     }
 
     sal_uInt8 nTranslateBits = 16;
 
     aBits.writeUB( nTranslateBits, 5 );
-    aBits.writeSB( (sal_Int16)rMatrix[0][2], nTranslateBits );      // Translate X
-    aBits.writeSB( (sal_Int16)rMatrix[1][2], nTranslateBits );      // Translate Y
+    aBits.writeSB( (sal_Int16)rMatrix.get(0, 2), nTranslateBits );      // Translate X
+    aBits.writeSB( (sal_Int16)rMatrix.get(1, 2), nTranslateBits );      // Translate Y
 
     aBits.writeTo( rOut );
 }
@@ -545,7 +547,7 @@ FillStyle::FillStyle( const Color& rSolidColor )
 // -----------------------------------------------------------------------------
 
 /** this c'tor creates a tiled or clipped bitmap fill style */
-FillStyle::FillStyle( sal_uInt16 nBitmapId, bool bClipped, const Matrix3D& rMatrix )
+FillStyle::FillStyle( sal_uInt16 nBitmapId, bool bClipped, const ::basegfx::B3DHomMatrix& rMatrix )
 :   meType( bClipped ? clipped_bitmap : tiled_bitmap ),
     maMatrix( rMatrix ),
     mnBitmapId( nBitmapId )
@@ -617,9 +619,9 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
 {
     vector< struct GradRecord > aGradientRecords;
 
-    Matrix3D m;
+    ::basegfx::B3DHomMatrix m;
 
-    m.Rotate( (maGradient.GetAngle() - 900) * F_PI1800 );
+    m.rotate( 0.0, 0.0, (maGradient.GetAngle() - 900) * F_PI1800 );
 
     switch( maGradient.GetStyle() )
     {
@@ -634,25 +636,25 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
             double scalex = (double)maBoundRect.GetWidth() / 32768.0;
             double scaley = (double)maBoundRect.GetHeight() / 32768.0;
 
-            m.Scale( 1.2, 1.2 );
+            m.scale( 1.2, 1.2, 1.0 );
 
             if( scalex > scaley )
             {
                 double scale_move = scaley / scalex;
 
-                m.Translate( tx, scale_move * ty );
+                m.translate( tx, scale_move * ty, 0.0 );
 
 
-                m.Scale( scalex, scalex );
+                m.scale( scalex, scalex , 1.0);
             }
             else
             {
                 double scale_move = scalex / scaley;
 
-                m.Translate( scale_move * tx, ty );
+                m.translate( scale_move * tx, ty , 0.0);
 
 
-                m.Scale( scaley, scaley );
+                m.scale( scaley, scaley, 1.0 );
             }
 
         }
@@ -667,8 +669,8 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
             double scalex = (double)maBoundRect.GetWidth() / 32768.0;
             double scaley = (double)maBoundRect.GetHeight() / 32768.0;
 
-            m.Translate( tx, ty );
-            m.Scale( scalex, scaley );
+            m.translate( tx, ty , 0.0);
+            m.scale( scalex, scaley , 1.0);
         }
         break;
     case GradientStyle_SQUARE:
@@ -680,14 +682,14 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
             double scalex = (double)maBoundRect.GetWidth() / 32768.0;
             double scaley = (double)maBoundRect.GetHeight() / 32768.0;
 
-            m.Scale( scalex, scaley );
+            m.scale( scalex, scaley , 1.0);
 
-            m.Translate( maBoundRect.GetWidth() / 2.0, maBoundRect.GetHeight() / 2.0 );
+            m.translate( maBoundRect.GetWidth() / 2.0, maBoundRect.GetHeight() / 2.0 , 0.0);
         }
         break;
     }
 
-    m.Translate( maBoundRect.nLeft, maBoundRect.nTop );
+    m.translate( maBoundRect.nLeft, maBoundRect.nTop , 0.0);
 
     pTag->addMatrix( m );
 
