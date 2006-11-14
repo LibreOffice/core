@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdtouch.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:53:41 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:54:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,32 +45,14 @@
 class Point;
 class Polygon;
 class PolyPolygon;
-class XPolygon;
-class XPolyPolygon;
 class Rectangle;
-//BFS09class OutputDevice;
 
-sal_Bool IsPointInsidePoly(const Polygon& rPoly, const Point& rHit);
-sal_Bool IsPointInsidePoly(const PolyPolygon& rPoly, const Point& rHit);
-//BFS09sal_Bool IsPointInsidePoly(const XPolygon& rPoly, const Point& rHit, OutputDevice* pOut=NULL);
-//BFS09sal_Bool IsPointInsidePoly(const XPolyPolygon& rPoly, const Point& rHit, OutputDevice* pOut=NULL);
-sal_Bool IsPointInsidePoly(const XPolygon& rPoly, const Point& rHit);
-sal_Bool IsPointInsidePoly(const XPolyPolygon& rPoly, const Point& rHit);
-
-sal_Bool IsRectTouchesPoly(const Polygon& rPoly, const Rectangle& rHit);
-sal_Bool IsRectTouchesPoly(const PolyPolygon& rPoly, const Rectangle& rHit);
-//BFS09sal_Bool IsRectTouchesPoly(const XPolygon& rPoly, const Rectangle& rHit, OutputDevice* pOut=NULL);
-//BFS09sal_Bool IsRectTouchesPoly(const XPolyPolygon& rPoly, const Rectangle& rHit, OutputDevice* pOut=NULL);
-sal_Bool IsRectTouchesPoly(const XPolygon& rPoly, const Rectangle& rHit);
-sal_Bool IsRectTouchesPoly(const XPolyPolygon& rPoly, const Rectangle& rHit);
+bool IsPointInsidePoly(const Polygon& rPoly, const Point& rHit);
+bool IsPointInsidePoly(const PolyPolygon& rPoly, const Point& rHit);
 
 bool IsRectTouchesLine(const Point& rPt1, const Point& rPt2, const Rectangle& rHit);
 bool IsRectTouchesLine(const Polygon& rLine, const Rectangle& rHit);
 bool IsRectTouchesLine(const PolyPolygon& rLine, const Rectangle& rHit);
-//BFS09sal_Bool IsRectTouchesLine(const XPolygon& rLine, const Rectangle& rHit, OutputDevice* pOut=NULL);
-//BFS09sal_Bool IsRectTouchesLine(const XPolyPolygon& rLine, const Rectangle& rHit, OutputDevice* pOut=NULL);
-bool IsRectTouchesLine(const XPolygon& rLine, const Rectangle& rHit);
-bool IsRectTouchesLine(const XPolyPolygon& rLine, const Rectangle& rHit);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
