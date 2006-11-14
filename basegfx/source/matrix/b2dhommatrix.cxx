@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dhommatrix.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:58:56 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:06:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,6 +386,9 @@ namespace basegfx
 
             if(fTools::equalZero(aUnitVecX.scalar(aUnitVecY)))
             {
+                // no shear, direct value extraction
+                rShearX = 0.0;
+
                 // calculate rotation
                 rRotate = atan2(aUnitVecX.getY(), aUnitVecX.getX());
 
