@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport4.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:42:02 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:14:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-
-#ifndef _B3D_HMATRIX_HXX
-#include <goodies/hmatrix.hxx>
-#endif
 
 #ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
@@ -144,6 +140,14 @@
 #endif
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
+#endif
+
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
+
+#ifndef _BGFX_VECTOR_B3DVECTOR_HXX
+#include <basegfx/vector/b3dvector.hxx>
 #endif
 
 #include "xmlnmspe.hxx"
@@ -710,9 +714,9 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         drawing::Direction3D aExtrusionFirstLightDirection;
                                         if ( rProp.Value >>= aExtrusionFirstLightDirection )
                                         {
-                                            Vector3D aVec3D( aExtrusionFirstLightDirection.DirectionX, aExtrusionFirstLightDirection.DirectionY,
+                                            ::basegfx::B3DVector aVec3D( aExtrusionFirstLightDirection.DirectionX, aExtrusionFirstLightDirection.DirectionY,
                                                 aExtrusionFirstLightDirection.DirectionZ );
-                                            rUnitConverter.convertVector3D( aStrBuffer, aVec3D );
+                                            rUnitConverter.convertB3DVector( aStrBuffer, aVec3D );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_FIRST_LIGHT_DIRECTION, aStr );
                                         }
@@ -723,9 +727,9 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         drawing::Direction3D aExtrusionSecondLightDirection;
                                         if ( rProp.Value >>= aExtrusionSecondLightDirection )
                                         {
-                                            Vector3D aVec3D( aExtrusionSecondLightDirection.DirectionX, aExtrusionSecondLightDirection.DirectionY,
+                                            ::basegfx::B3DVector aVec3D( aExtrusionSecondLightDirection.DirectionX, aExtrusionSecondLightDirection.DirectionY,
                                                 aExtrusionSecondLightDirection.DirectionZ );
-                                            rUnitConverter.convertVector3D( aStrBuffer, aVec3D );
+                                            rUnitConverter.convertB3DVector( aStrBuffer, aVec3D );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SECOND_LIGHT_DIRECTION, aStr );
                                         }
@@ -779,9 +783,9 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         drawing::Direction3D aExtrusionRotationCenter;
                                         if ( rProp.Value >>= aExtrusionRotationCenter )
                                         {
-                                            Vector3D aVec3D( aExtrusionRotationCenter.DirectionX, aExtrusionRotationCenter.DirectionY,
+                                            ::basegfx::B3DVector aVec3D( aExtrusionRotationCenter.DirectionX, aExtrusionRotationCenter.DirectionY,
                                                 aExtrusionRotationCenter.DirectionZ );
-                                            rUnitConverter.convertVector3D( aStrBuffer, aVec3D );
+                                            rUnitConverter.convertB3DVector( aStrBuffer, aVec3D );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_ROTATION_CENTER, aStr );
                                         }
