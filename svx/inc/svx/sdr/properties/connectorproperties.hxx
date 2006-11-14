@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connectorproperties.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:04:37 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:10:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,10 +70,6 @@ namespace sdr
 
             // set a new StyleSheet and broadcast
             virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
-
-            // pre/post-process saving
-            //BFS01virtual void PreProcessSave();
-            //BFS01virtual void PostProcessSave();
         };
     } // end of namespace properties
 } // end of namespace sdr
