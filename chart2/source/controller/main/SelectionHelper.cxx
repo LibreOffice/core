@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:07:19 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:31:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,13 +300,14 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
         {
             //if th object is a polygon
             //from each point a handle is generated
-            const XPolyPolygon& rPolyPolygon = ((SdrPathObj*)m_pMarkObj)->GetPathPoly();
-            for( sal_Int32 nN = 0; nN < rPolyPolygon.Count(); nN++)
+            const ::basegfx::B2DPolyPolygon& rPolyPolygon = ((SdrPathObj*)m_pMarkObj)->GetPathPoly();
+            for( sal_uInt32 nN = 0L; nN < rPolyPolygon.count(); nN++)
             {
-                const XPolygon& rPolygon = rPolyPolygon[nN];
-                for( sal_Int32 nM = 0; nM < rPolygon.GetPointCount(); nM++)
+                const ::basegfx::B2DPolygon aPolygon(rPolyPolygon.getB2DPolygon(nN));
+                for( sal_uInt32 nM = 0L; nM < aPolygon.count(); nM++)
                 {
-                    SdrHdl* pHdl = new SdrHdl(rPolygon[nM],HDL_POLY);
+                    const ::basegfx::B2DPoint aPoint(aPolygon.getB2DPoint(nM));
+                    SdrHdl* pHdl = new SdrHdl(Point(FRound(aPoint.getX()), FRound(aPoint.getY())), HDL_POLY);
                     rHdlList.AddHdl(pHdl);
                 }
             }
