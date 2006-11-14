@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpptwrp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:19:36 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:22:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ sal_Bool SdPPTFilter::Export()
 
             /* !!!
             if ( pViewShell && pViewShell->GetView() )
-                pViewShell->GetView()->EndTextEdit();
+                pViewShell->GetView()->SdrEndTextEdit();
             */
             if( PPTExport && xStorRef.Is() )
             {
