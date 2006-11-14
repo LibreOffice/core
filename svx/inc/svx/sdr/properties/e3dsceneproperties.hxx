@@ -4,9 +4,9 @@
  *
  *  $RCSfile: e3dsceneproperties.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:06:32 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:10:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,10 +92,6 @@ namespace sdr
 
             // get the installed StyleSheet
             virtual SfxStyleSheet* GetStyleSheet() const;
-
-            // pre/post-process saving
-            //BFS01virtual void PreProcessSave();
-            //BFS01virtual void PostProcessSave();
 
             // Move properties to a new ItemPool. Default implementation does nothing.
             virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = 0L);
