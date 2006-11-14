@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdviter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:02:15 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:51:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,86 +48,101 @@
 #include <svtools/brdcst.hxx>
 #endif
 
+#ifndef _SDRPAINTWINDOW_HXX
+#include <sdrpaintwindow.hxx>
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrViewIter::ImpInitVars()
 {
-    nListenerNum=0;
-    nPageViewNum=0;
-    nOutDevNum=0;
-    pAktView=NULL;
+    mnListenerNum = 0L;
+    mnPageViewNum = 0L;
+    mnOutDevNum = 0L;
+    mpAktView = 0L;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrViewIter::SdrViewIter(const SdrModel* pModel_)
+SdrViewIter::SdrViewIter(const SdrModel* pModel)
 {
-    pModel=pModel_;
-    pPage=NULL;
-    pObject=NULL;
+    mpModel = pModel;
+    mpPage = 0L;
+    mpObject = 0L;
     ImpInitVars();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrViewIter::SdrViewIter(const SdrPage* pPage_, FASTBOOL bNoMasterPage_)
+SdrViewIter::SdrViewIter(const SdrPage* pPage, sal_Bool bNoMasterPage)
 {
-    pPage=pPage_;
-    pModel=pPage_!=NULL ? pPage_->GetModel() : NULL;
-    pObject=NULL;
-    bNoMasterPage=bNoMasterPage_;
+    mpPage = pPage;
+    mpModel = (pPage) ? pPage->GetModel() : 0L;
+    mpObject = 0L;
+    mbNoMasterPage = bNoMasterPage;
     ImpInitVars();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrViewIter::SdrViewIter(const SdrObject* pObject_, FASTBOOL bNoMasterPage_)
+SdrViewIter::SdrViewIter(const SdrObject* pObject, sal_Bool bNoMasterPage)
 {
-    pObject=pObject_;
-    pModel=pObject_!=NULL ? pObject_->GetModel() : NULL;
-    pPage=pObject_!=NULL ? pObject_->GetPage() : NULL;
-    bNoMasterPage=bNoMasterPage_;
-    if (pModel==NULL || pPage==NULL) {
-        pModel=NULL;
-        pPage=NULL;
+    mpObject = pObject;
+    mpModel = (pObject) ? pObject->GetModel() : 0L;
+    mpPage = (pObject) ? pObject->GetPage() : 0L;
+    mbNoMasterPage = bNoMasterPage;
+
+    if(!mpModel || !mpPage)
+    {
+        mpModel = 0L;
+        mpPage = 0L;
     }
+
     ImpInitVars();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FASTBOOL SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
+sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
 {
-    if (pPage!=NULL) {
-        FASTBOOL bMaster=pPage->IsMasterPage();
-        SdrPage* pPg=pPV->GetPage();
-        if (pPg==pPage) {
-            if (pObject!=NULL) {
+    if(mpPage)
+    {
+        sal_Bool bMaster(mpPage->IsMasterPage());
+        SdrPage* pPg = pPV->GetPage();
+
+        if(pPg == mpPage)
+        {
+            if(mpObject)
+            {
                 // Objekt gewuenscht? Na dann erstmal sehen, ob
                 // das Obj in dieser PageView auch sichtbar ist.
                 SetOfByte aObjLay;
-                pObject->GetLayerSet(aObjLay);
-                aObjLay&=pPV->GetVisibleLayers();
+                mpObject->GetLayerSet(aObjLay);
+                aObjLay &= pPV->GetVisibleLayers();
                 return !aObjLay.IsEmpty();
-            } else {
-                return TRUE;
             }
-        } else {
-            if (!bNoMasterPage && bMaster && (pObject==NULL || !pObject->IsNotVisibleAsMaster()))
+            else
+            {
+                return sal_True;
+            }
+        }
+        else
+        {
+            if(!mbNoMasterPage && bMaster && (!mpObject || !mpObject->IsNotVisibleAsMaster()))
             {
                 if(pPg->TRG_HasMasterPage())
                 {
                     SdrPage& rMasterPage = pPg->TRG_GetMasterPage();
 
-                    if(&rMasterPage == pPage)
+                    if(&rMasterPage == mpPage)
                     {
                         // Aha, die gewuenschte Page ist also MasterPage in dieser PageView
-                        if(pObject)
+                        if(mpObject)
                         {
                             // Objekt gewuenscht? Na dann erstmal sehen, ob
                             // das Obj in dieser PageView auch sichtbar ist.
                             SetOfByte aObjLay;
-                            pObject->GetLayerSet(aObjLay);
+                            mpObject->GetLayerSet(aObjLay);
                             aObjLay &= pPV->GetVisibleLayers();
                             aObjLay &= pPg->TRG_GetMasterPageVisibleLayers();
 
@@ -138,16 +153,19 @@ FASTBOOL SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
                         }
                         else
                         {
-                            return TRUE;
+                            return sal_True;
                         }
                     }
                 }
             }
+
             // MasterPage nicht erlaubt oder keine passende gefunden
-            return FALSE;
+            return sal_False;
         }
-    } else {
-        return TRUE;
+    }
+    else
+    {
+        return sal_True;
     }
 }
 
@@ -155,91 +173,125 @@ FASTBOOL SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
 
 SdrView* SdrViewIter::ImpFindView()
 {
-    if (pModel!=NULL) {
-        USHORT nLsAnz=pModel->GetListenerCount();
-        while (nListenerNum<nLsAnz) {
-            SfxListener* pLs=pModel->GetListener(nListenerNum);
-            pAktView=PTR_CAST(SdrView,pLs);
-            if (pAktView!=NULL) {
-                if (pPage!=NULL) {
-                    USHORT nPvAnz=pAktView->GetPageViewCount();
-                    USHORT nPvNum=0;
-                    while (nPvNum<nPvAnz) {
-                        SdrPageView* pPV=pAktView->GetPageViewPvNum(nPvNum);
-                        if (ImpCheckPageView(pPV)) {
-                            return pAktView;
+    if(mpModel)
+    {
+        sal_uInt32 nLsAnz(mpModel->GetListenerCount());
+
+        while(mnListenerNum < nLsAnz)
+        {
+            SfxListener* pLs = mpModel->GetListener((sal_uInt16)mnListenerNum);
+            mpAktView = PTR_CAST(SdrView, pLs);
+
+            if(mpAktView)
+            {
+                if(mpPage)
+                {
+                    SdrPageView* pPV = mpAktView->GetSdrPageView();
+
+                    if(pPV)
+                    {
+                        if(ImpCheckPageView(pPV))
+                        {
+                            return mpAktView;
                         }
-                        nPvNum++;
                     }
-                } else {
-                    return pAktView;
+                }
+                else
+                {
+                    return mpAktView;
                 }
             }
-            nListenerNum++;
+
+            mnListenerNum++;
         }
     }
-    pAktView=NULL;
-    return pAktView;
+
+    mpAktView = 0L;
+    return mpAktView;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrPageView* SdrViewIter::ImpFindPageView()
 {
-    //SdrView* pRet=NULL;
-    if (pModel!=NULL) {
-        while (pAktView!=NULL) {
-            USHORT nPvAnz=pAktView->GetPageViewCount();
-            while (nPageViewNum<nPvAnz) {
-                SdrPageView* pPV=pAktView->GetPageViewPvNum(nPageViewNum);
-                if (pPage!=NULL) {
-                    if (ImpCheckPageView(pPV)) {
+    if(mpModel)
+    {
+        while(mpAktView)
+        {
+            SdrPageView* pPV = mpAktView->GetSdrPageView();
+
+            if(pPV)
+            {
+                if(mpPage)
+                {
+                    if(ImpCheckPageView(pPV))
+                    {
                         return pPV;
                     }
-                } else {
+                }
+                else
+                {
                     return pPV;
                 }
-                nPageViewNum++;
+
+                mnPageViewNum++;
             }
-            nListenerNum++;
+
+            mnListenerNum++;
             ImpFindView();
         }
     }
-    return NULL;
+
+    return 0L;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 OutputDevice* SdrViewIter::ImpFindOutDev()
 {
-    while (pAktView!=NULL) {
-        USHORT nOutDevAnz=pAktView->GetWinCount();
-        if (nOutDevNum<nOutDevAnz) {
-            return pAktView->GetWin(nOutDevNum);
+    while(mpAktView)
+    {
+        const sal_uInt32 nOutDevAnz(mpAktView->PaintWindowCount());
+
+        if(mnOutDevNum < nOutDevAnz)
+        {
+            SdrPaintWindow* pPaintWindow = mpAktView->GetPaintWindow(mnOutDevNum);
+            return &pPaintWindow->GetOutputDevice();
         }
-        nListenerNum++;
+
+        mnListenerNum++;
         ImpFindView();
     }
-    return NULL;
+
+    return 0L;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Window* SdrViewIter::ImpFindWindow()
 {
-    while (pAktView!=NULL) {
-        USHORT nOutDevAnz=pAktView->GetWinCount();
-        while (nOutDevNum<nOutDevAnz) {
-            OutputDevice* pOutDev=pAktView->GetWin(nOutDevNum);
-            if (pOutDev->GetOutDevType()==OUTDEV_WINDOW) {
-                return (Window*)pOutDev;
+    while(mpAktView)
+    {
+        const sal_uInt32 nOutDevAnz(mpAktView->PaintWindowCount());
+
+        while(mnOutDevNum < nOutDevAnz)
+        {
+            SdrPaintWindow* pPaintWindow = mpAktView->GetPaintWindow(mnOutDevNum);
+            OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
+
+            if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+            {
+                return (Window*)(&rOutDev);
             }
-            nOutDevNum++;
+
+            mnOutDevNum++;
         }
-        nListenerNum++;
+
+        mnListenerNum++;
         ImpFindView();
     }
-    return NULL;
+
+    return 0L;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -254,7 +306,7 @@ SdrView* SdrViewIter::FirstView()
 
 SdrView* SdrViewIter::NextView()
 {
-    nListenerNum++;
+    mnListenerNum++;
     return ImpFindView();
 }
 
@@ -271,7 +323,7 @@ SdrPageView* SdrViewIter::FirstPageView()
 
 SdrPageView* SdrViewIter::NextPageView()
 {
-    nPageViewNum++;
+    mnPageViewNum++;
     return ImpFindPageView();
 }
 
@@ -288,7 +340,7 @@ OutputDevice* SdrViewIter::FirstOutDev()
 
 OutputDevice* SdrViewIter::NextOutDev()
 {
-    nOutDevNum++;
+    mnOutDevNum++;
     return ImpFindOutDev();
 }
 
@@ -305,7 +357,7 @@ Window* SdrViewIter::FirstWindow()
 
 Window* SdrViewIter::NextWindow()
 {
-    nOutDevNum++;
+    mnOutDevNum++;
     return ImpFindWindow();
 }
 
