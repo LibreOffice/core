@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dxfgrprd.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:49:49 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:13:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,9 +105,7 @@ BOOL DXFReadLine( SvStream& rIStm, ByteString& rStr )
 
 // ------------------
 
-DXFGroupReader::DXFGroupReader(SvStream & rIStream,
-                PFilterCallback pcallback, void * pcallerdata,
-                USHORT nminpercent, USHORT nmaxpercent) :
+DXFGroupReader::DXFGroupReader(SvStream & rIStream, USHORT nminpercent, USHORT nmaxpercent ) :
     rIS(rIStream)
 {
     USHORT i;
@@ -118,8 +116,6 @@ DXFGroupReader::DXFGroupReader(SvStream & rIStream,
     nLastG=0;
     nGCount=0;
 
-    pCallback=pcallback;
-    pCallerData=pcallerdata;
     nMinPercent=(ULONG)nminpercent;
     nMaxPercent=(ULONG)nmaxpercent;
     nLastPercent=nMinPercent;
@@ -312,7 +308,7 @@ void DXFGroupReader::ReadLine(char * ptgt)
 
     memcpy( ptgt, aStr.GetBuffer(), nLen );
     ptgt[ nLen ] = 0x00;
-
+/*
     if ( pCallback )
     {
         const ULONG nPercent= nMinPercent + (nMaxPercent-nMinPercent)*rIS.Tell() / nFileSize;
@@ -324,6 +320,7 @@ void DXFGroupReader::ReadLine(char * ptgt)
                 bStatus=FALSE;
         }
     }
+*/
 }
 
 
