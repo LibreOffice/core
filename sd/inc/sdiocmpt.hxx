@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdiocmpt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:00:25 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:20:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,10 @@
 #ifndef _SD_SDIOCMPT_HXX
 #define _SD_SDIOCMPT_HXX
 
-//BFS02#ifndef _SVDIO_HXX //autogen
-//BFS02#include <svx/svdio.hxx>
-//BFS02#endif
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
 
-//BFS02
 //////////////////////////////////////////////////////////////////////////////
 class SvStream;
 
