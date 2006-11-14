@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdhlpln.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:10:10 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:42:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,24 +182,6 @@ bool SdrHelpLine::IsVisibleEqual( const SdrHelpLine& rHelpLine, const OutputDevi
     return false;
 }
 
-//BFS01SvStream& operator<<(SvStream& rOut, const SdrHelpLine& rHL)
-//BFS01{
-//BFS01 SdrIOHeader aHead(rOut,STREAM_WRITE,SdrIOHlpLID);
-//BFS01 rOut<<UINT16(rHL.eKind);
-//BFS01 rOut<<rHL.aPos;
-//BFS01 return rOut;
-//BFS01}
-
-//BFS01SvStream& operator>>(SvStream& rIn, SdrHelpLine& rHL)
-//BFS01{
-//BFS01 SdrIOHeader aHead(rIn,STREAM_READ);
-//BFS01 UINT16 nDum;
-//BFS01 rIn>>nDum;
-//BFS01 rHL.eKind=(SdrHelpLineKind)nDum;
-//BFS01 rIn>>rHL.aPos;
-//BFS01 return rIn;
-//BFS01}
-
 void SdrHelpLineList::Clear()
 {
     USHORT nAnz=GetCount();
@@ -272,30 +254,5 @@ USHORT SdrHelpLineList::HitTest(const Point& rPnt, USHORT nTolLog, const OutputD
     }
     return SDRHELPLINE_NOTFOUND;
 }
-
-//BFS01SvStream& operator<<(SvStream& rOut, const SdrHelpLineList& rHLL)
-//BFS01{
-//BFS01 SdrIOHeader aHead(rOut,STREAM_WRITE,SdrIOHLstID);
-//BFS01 USHORT nAnz=rHLL.GetCount();
-//BFS01 rOut<<nAnz;
-//BFS01 for (USHORT i=0; i<nAnz; i++) {
-//BFS01     rOut<<rHLL[i];
-//BFS01 }
-//BFS01 return rOut;
-//BFS01}
-
-//BFS01SvStream& operator>>(SvStream& rIn, SdrHelpLineList& rHLL)
-//BFS01{
-//BFS01 SdrIOHeader aHead(rIn,STREAM_READ);
-//BFS01 rHLL.Clear();
-//BFS01 USHORT nAnz;
-//BFS01 rIn>>nAnz;
-//BFS01 for (USHORT i=0; i<nAnz; i++) {
-//BFS01     SdrHelpLine* pHL=new SdrHelpLine;
-//BFS01     rIn>>*pHL;
-//BFS01     rHLL.aList.Insert(pHL,CONTAINER_APPEND);
-//BFS01 }
-//BFS01 return rIn;
-//BFS01}
 
 // eof
