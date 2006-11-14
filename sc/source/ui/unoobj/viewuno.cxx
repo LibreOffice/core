@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:26:36 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:55:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -742,7 +742,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                 if (pObj)
                 {
                     lcl_ShowObject( *pViewSh, *pDrawView, pObj );
-                    SdrPageView* pPV = pDrawView->GetPageViewPvNum(0);
+                    SdrPageView* pPV = pDrawView->GetSdrPageView();
                     if ( pPV && pObj->GetPage() == pPV->GetPage() )
                     {
                         pDrawView->MarkObj( pObj, pPV );
@@ -781,7 +781,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                                     if (!pPV)               // erstes Objekt
                                     {
                                         lcl_ShowObject( *pViewSh, *pDrawView, pObj );
-                                        pPV = pDrawView->GetPageViewPvNum(0);
+                                        pPV = pDrawView->GetSdrPageView();
                                     }
                                     if ( pPV && pObj->GetPage() == pPV->GetPage() )
                                     {
