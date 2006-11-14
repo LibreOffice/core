@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dcommn.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:24:44 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:06:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@
 |*
 \************************************************************************/
 
-BASE3D_DECL_BUCKET(UINT32, Bucket)
+BASE3D_DECL_BUCKET(sal_uInt32, Bucket)
 
 /*************************************************************************
 |*
@@ -78,20 +78,20 @@ protected:
     B3dEntityBucket         aBuffers;
 
     // Remember if last primitive was rejected
-    BOOL                    bLastPrimitiveRejected  : 1;
+    unsigned                bLastPrimitiveRejected  : 1;
 
     // #93184# flag for polygon normal direction
-    BOOL                    bNormalPointsAway       : 1;
+    unsigned                bNormalPointsAway       : 1;
 
 public:
     Base3DCommon(OutputDevice* pOutDev);
     virtual ~Base3DCommon();
 
     // Beleuchtung setzen/lesen
-    virtual void SetLightGroup(B3dLightGroup* pSet, BOOL bSetGlobal=TRUE);
+    virtual void SetLightGroup(B3dLightGroup* pSet, sal_Bool bSetGlobal=sal_True);
 
     // Info if last primitive was rejected
-    BOOL WasLastPrimitiveRejected()
+    sal_Bool WasLastPrimitiveRejected()
         { return bLastPrimitiveRejected; }
 
     // Szenenverwaltung
@@ -106,37 +106,34 @@ protected:
     virtual void ImplEndPrimitive();
     virtual void ImplPostAddVertex(B3dEntity& rEnt);
 
-    void Create3DPoint(UINT32 nInd);
-    void Create3DPointClipped(UINT32 nInd);
-    void Create3DLine(UINT32 nInd1, UINT32 nInd2);
-    void Create3DLineClipped(UINT32 nInd1, UINT32 nInd2);
-    void Create3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3);
+    void Create3DPoint(sal_uInt32 nInd);
+    void Create3DPointClipped(sal_uInt32 nInd);
+    void Create3DLine(sal_uInt32 nInd1, sal_uInt32 nInd2);
+    void Create3DLineClipped(sal_uInt32 nInd1, sal_uInt32 nInd2);
+    void Create3DTriangle(sal_uInt32 nInd1, sal_uInt32 nInd2, sal_uInt32 nInd3);
 
-    virtual void Clipped3DPoint(UINT32 nInd) = 0;
-    virtual void Clipped3DLine(UINT32 nInd1,UINT32 nInd2) = 0;
-    virtual void Clipped3DTriangle(UINT32 nInd1,UINT32 nInd2, UINT32 nInd3) = 0;
+    virtual void Clipped3DPoint(sal_uInt32 nInd) = 0;
+    virtual void Clipped3DLine(sal_uInt32 nInd1,sal_uInt32 nInd2) = 0;
+    virtual void Clipped3DTriangle(sal_uInt32 nInd1,sal_uInt32 nInd2, sal_uInt32 nInd3) = 0;
 
     // clipping functions
-    BOOL AreEqual(UINT32 nInd1, UINT32 nInd2);
-    BOOL Clip3DPoint(UINT32 nInd);
-    BOOL Clip3DLine(UINT32& nInd1,UINT32& nInd2);
-    BOOL Clip3DPolygon(UINT32Bucket& rEdgeIndex);
-    UINT16 GetClipFlags(UINT32 nInd);
-    BOOL IsInside(UINT32 nInd, UINT32 nDim, BOOL bLow);
-    void ClipPoly(UINT32Bucket& rEdgeIndex, UINT16 nDim,BOOL bLow);
-    void CalcNewPoint(UINT32 nNew,UINT32 nHigh,UINT32 nLow,
-        UINT16 nDim, double fBound);
+    sal_Bool AreEqual(sal_uInt32 nInd1, sal_uInt32 nInd2);
+    sal_Bool Clip3DPoint(sal_uInt32 nInd);
+    sal_Bool Clip3DLine(sal_uInt32& nInd1,sal_uInt32& nInd2);
+    sal_Bool Clip3DPolygon(sal_uInt32Bucket& rEdgeIndex);
+    sal_uInt16 GetClipFlags(sal_uInt32 nInd);
+    sal_Bool IsInside(sal_uInt32 nInd, sal_uInt32 nDim, sal_Bool bLow);
+    void ClipPoly(sal_uInt32Bucket& rEdgeIndex, sal_uInt16 nDim,sal_Bool bLow);
+    void CalcNewPoint(sal_uInt32 nNew,sal_uInt32 nHigh,sal_uInt32 nLow,
+        sal_uInt16 nDim, double fBound);
 
     // Beleuchtungsmodell (ColorModel) in einem Punkt loesen
     // Punkt MUSS in ClipCoordinates vorliegen !
-    void SolveColorModel(B3dColor&, Vector3D&, const Vector3D&);
-    B3dColor SolveColorModel(B3dMaterial& rMat, Vector3D& rVec,
-        const Vector3D& rPnt);
+    void SolveColorModel(B3dColor& rCol, basegfx::B3DVector& rVec, const basegfx::B3DPoint& rPnt);
+    B3dColor SolveColorModel(B3dMaterial& rMat, basegfx::B3DVector& rVec, const basegfx::B3DPoint& rPnt);
 
     // Beleuchtungsmodell (ColorModel) fuer eine Lichtquelle loesen
-    B3dColor SolveColorModel(B3dLight& rLight, B3dMaterial& rMat,
-        Vector3D& rVec, const Vector3D& rPnt);
+    B3dColor SolveColorModel(B3dLight& rLight, B3dMaterial& rMat, basegfx::B3DVector& rVec, const basegfx::B3DPoint& rPnt);
 };
-
 
 #endif          // _B3D_B3DCOMMN_HXX
