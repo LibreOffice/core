@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewElementListProvider.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:01:03 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:31:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,7 +224,7 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
     pModel->InsertPage( pPage, 0 );
     SdrView* pView = new SdrView( pModel, &aVDev );
     pView->SetMarkHdlHidden( TRUE );
-    SdrPageView* pPageView = pView->ShowPage(pPage, Point());
+    SdrPageView* pPageView = pView->ShowSdrPage(pPage);
 
     pObj=pObj->Clone();
     pPage->NbcInsertObject(pObj);
