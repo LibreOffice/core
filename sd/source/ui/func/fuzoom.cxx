@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuzoom.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:58:37 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:31:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,7 @@ BOOL FuZoom::MouseMove(const MouseEvent& rMEvt)
             if (aScroll.X() != 0 || aScroll.Y() != 0)
             {
                 Size aWorkSize = pView->GetWorkArea().GetSize();
-                Size aPageSize = pView->GetPageViewPvNum(0)->GetPage()->GetSize();
+                Size aPageSize = pView->GetSdrPageView()->GetPage()->GetSize();
                 aScroll.X() /= aWorkSize.Width()  / aPageSize.Width();
                 aScroll.Y() /= aWorkSize.Height() / aPageSize.Height();
                 pViewShell->Scroll(aScroll.X(), aScroll.Y());
