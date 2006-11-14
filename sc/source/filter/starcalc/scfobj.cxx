@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scfobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:34:42 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rect
         {
             pDoc->InitDrawLayer();
             pModel = pDoc->GetDrawLayer();
-            DBG_ASSERT(pModel,"DrawLayer ?");
+            DBG_ASSERT(pModel,"Draw Layer ?");
         }
 
         SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nDestTab));
