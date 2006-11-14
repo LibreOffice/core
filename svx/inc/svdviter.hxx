@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdviter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:57:44 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:55:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,10 @@
 #include <tools/solar.h>
 #endif
 
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
+
 #ifndef INCLUDED_SVXDLLAPI_H
 #include "svx/svxdllapi.h"
 #endif
@@ -57,34 +61,44 @@ class SetOfByte;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class SVX_DLLPUBLIC SdrViewIter {
-    const SdrModel*  pModel;
-    const SdrPage*   pPage;
-    const SdrObject* pObject;
-    SdrView*   pAktView;
-    FASTBOOL   bNoMasterPage;
-    USHORT     nListenerNum;
-    USHORT     nPageViewNum;
-    USHORT     nOutDevNum;
+class SVX_DLLPUBLIC SdrViewIter
+{
+    const SdrModel*                                     mpModel;
+    const SdrPage*                                      mpPage;
+    const SdrObject*                                    mpObject;
+    SdrView*                                            mpAktView;
+
+    sal_uInt32                                          mnListenerNum;
+    sal_uInt32                                          mnPageViewNum;
+    sal_uInt32                                          mnOutDevNum;
+
+    // bitfield
+    unsigned                                            mbNoMasterPage : 1;
+
 private:
     SVX_DLLPRIVATE void          ImpInitVars();
     SVX_DLLPRIVATE SdrView*      ImpFindView();
     SVX_DLLPRIVATE SdrPageView*  ImpFindPageView();
     SVX_DLLPRIVATE OutputDevice* ImpFindOutDev();
     SVX_DLLPRIVATE Window*       ImpFindWindow();
-    SVX_DLLPRIVATE FASTBOOL      ImpCheckPageView(SdrPageView* pPV) const;
+    SVX_DLLPRIVATE sal_Bool      ImpCheckPageView(SdrPageView* pPV) const;
+
 public:
-    SdrViewIter(const SdrModel*  pModel);
-    SdrViewIter(const SdrPage*   pPage, FASTBOOL bNoMasterPage=FALSE);
-    SdrViewIter(const SdrObject* pObject, FASTBOOL bNoMasterPage=FALSE);
-    SdrView*      FirstView();
-    SdrView*      NextView();
-    SdrPageView*  FirstPageView();
-    SdrPageView*  NextPageView();
+    SdrViewIter(const SdrModel* pModel);
+    SdrViewIter(const SdrPage* pPage, sal_Bool bNoMasterPage = sal_False);
+    SdrViewIter(const SdrObject* pObject, sal_Bool bNoMasterPage = sal_False);
+
+    SdrView* FirstView();
+    SdrView* NextView();
+
+    SdrPageView* FirstPageView();
+    SdrPageView* NextPageView();
+
     OutputDevice* FirstOutDev();
     OutputDevice* NextOutDev();
-    Window*       FirstWindow();
-    Window*       NextWindow();
+
+    Window* FirstWindow();
+    Window* NextWindow();
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
