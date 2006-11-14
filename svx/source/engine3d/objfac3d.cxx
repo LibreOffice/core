@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objfac3d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:57:17 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:20:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,23 +118,9 @@ IMPL_LINK( E3dObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
             case E3D_POLYSCENE_ID:
                 pObjFactory->pNewObj = new E3dPolyScene();
                 break;
-//BFS01         case E3D_LIGHT_ID:
-//BFS01             pObjFactory->pNewObj = new E3dLight();
-//BFS01             break;
-//BFS01         case E3D_DISTLIGHT_ID:
-//BFS01             pObjFactory->pNewObj = new E3dDistantLight();
-//BFS01             break;
-//BFS01         case E3D_POINTLIGHT_ID:
-//BFS01             pObjFactory->pNewObj = new E3dPointLight();
-//BFS01             break;
-//BFS01         case E3D_SPOTLIGHT_ID:
-//BFS01             break;
             case E3D_OBJECT_ID:
                 pObjFactory->pNewObj = new E3dObject();
                 break;
-//BFS01         case E3D_POLYOBJ_ID :
-//BFS01             pObjFactory->pNewObj = new E3dPolyObj();
-//BFS01             break;
             case E3D_POLYGONOBJ_ID  :
                 pObjFactory->pNewObj = new E3dPolygonObj();
                 break;
