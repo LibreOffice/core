@@ -4,9 +4,9 @@
  *
  *  $RCSfile: postit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:07:51 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:47:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,14 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
+#endif
+
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
 #endif
 
 namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
@@ -310,13 +318,13 @@ SfxItemSet ScPostIt::DefaultItemSet() const
 {
     SfxItemSet  aCaptionSet( mpDoc->GetNoteItemPool(), SDRATTR_START,  SDRATTR_END, EE_ITEMS_START, EE_ITEMS_END, 0,0);
 
-    XPolygon aTriangle(4);
-    aTriangle[0].X()=10; aTriangle[0].Y()= 0;
-    aTriangle[1].X()= 0; aTriangle[1].Y()=30;
-    aTriangle[2].X()=20; aTriangle[2].Y()=30;
-    aTriangle[3].X()=10; aTriangle[3].Y()= 0;   // #99319# line end polygon must be closed
+    basegfx::B2DPolygon aTriangle;
+    aTriangle.append(basegfx::B2DPoint(10.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(0.0, 30.0));
+    aTriangle.append(basegfx::B2DPoint(20.0, 30.0));
+    aTriangle.setClosed(true);
 
-    aCaptionSet.Put( XLineStartItem( EMPTY_STRING, aTriangle ) );
+    aCaptionSet.Put( XLineStartItem( EMPTY_STRING, basegfx::B2DPolyPolygon(aTriangle) ) );
     aCaptionSet.Put( XLineStartWidthItem( 200 ) );
     aCaptionSet.Put( XLineStartCenterItem( FALSE ) );
     aCaptionSet.Put( XFillStyleItem( XFILL_SOLID ) );
