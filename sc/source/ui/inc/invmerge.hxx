@@ -4,9 +4,9 @@
  *
  *  $RCSfile: invmerge.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:35:13 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:54:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,12 +40,15 @@
 #include <tools/gen.hxx>
 #endif
 
+#include <vector>
+
 class Window;
 
 class ScInvertMerger
 {
 private:
     Window*     pWin;
+    ::std::vector< Rectangle >* pRects;
     Rectangle   aTotalRect;
     Rectangle   aLineRect;
 
@@ -54,6 +57,7 @@ private:
 
 public:
                 ScInvertMerger( Window* pWindow );
+                ScInvertMerger( ::std::vector< Rectangle >* pRectangles );
                 ~ScInvertMerger();
 
     void        AddRect( const Rectangle& rRect );
