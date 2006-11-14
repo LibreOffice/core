@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:31:01 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:39:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -431,8 +431,8 @@ void Outliner::EndSpelling (void)
         {
             SetStatusEventHdl(Link());
             mpView = mpViewShell->GetView();
-            mpView->UnmarkAllObj (mpView->GetPageViewPvNum(0));
-            mpView->EndTextEdit();
+            mpView->UnmarkAllObj (mpView->GetSdrPageView());
+            mpView->SdrEndTextEdit();
             // Make FuSelection the current function.
             mpViewShell->GetDispatcher()->Execute(
                 SID_OBJECT_SELECT,
@@ -853,10 +853,10 @@ void Outliner::DetectChange (void)
         // Either the edit mode or the page kind has changed.
         SetStatusEventHdl(Link());
 
-        SdrPageView* pPageView = mpView->GetPageViewPvNum(0);
+        SdrPageView* pPageView = mpView->GetSdrPageView();
         if (pPageView != NULL)
             mpView->UnmarkAllObj (pPageView);
-        mpView->EndTextEdit();
+        mpView->SdrEndTextEdit();
         SetUpdateMode(FALSE);
         OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
         if (pOutlinerView != NULL)
@@ -1011,13 +1011,12 @@ void Outliner::RestoreStartPosition (void)
             {
                 // Turn on the text toolbar as it is done in FuText so that
                 // undo manager setting/restoring in
-                // sd::View::{Beg,End}TextEdit() works on the same view
-                // shell.
+                // sd::View::{Beg,End}TextEdit() works on the same view shell.
                 mpViewShell->GetViewShellBase().GetToolBarManager().SetToolBarShell(
                     ToolBarManager::TBG_FUNCTION,
                     RID_DRAW_TEXT_TOOLBOX);
 
-                mpView->BegTextEdit (mpStartEditedObject);
+                mpView->SdrBeginTextEdit(mpStartEditedObject);
 
                 ::Outliner* pOutliner =
                       static_cast<DrawView*>(mpView)->GetTextEditOutliner();
@@ -1051,10 +1050,10 @@ void Outliner::ProvideNextTextObject (void)
     mbEndOfSearch = false;
     mbFoundObject = false;
 
-    mpView->UnmarkAllObj (mpView->GetPageViewPvNum(0));
+    mpView->UnmarkAllObj (mpView->GetSdrPageView());
     try
     {
-        mpView->EndTextEdit();
+        mpView->SdrEndTextEdit();
     }
     catch (::com::sun::star::uno::Exception e)
     {
@@ -1424,7 +1423,7 @@ void Outliner::EnterEditMode (BOOL bGrabFocus)
     {
         pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1)));
         SetPaperSize( mpTextObj->GetLogicRect().GetSize() );
-        SdrPageView* pPV = mpView->GetPageViewPvNum(0);
+        SdrPageView* pPV = mpView->GetSdrPageView();
         BOOL bIsNewObj = TRUE;
 
         // Make FuText the current function.
@@ -1442,8 +1441,8 @@ void Outliner::EnterEditMode (BOOL bGrabFocus)
         mpView->MarkObj (mpTextObj, pPV);
 
         // Turn on the edit mode for the text object.
-        mpView->BegTextEdit(mpTextObj, pPV, mpWindow, bIsNewObj, this,
-            pOutlinerView, TRUE, TRUE, bGrabFocus);
+        mpView->SdrBeginTextEdit(mpTextObj, pPV, mpWindow, sal_True, this,
+            pOutlinerView, sal_True, sal_True, bGrabFocus);
 
 
         SetUpdateMode(TRUE);
