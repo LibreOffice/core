@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:05:45 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:31:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,10 @@
 // header for class XOutputDevice
 #ifndef _XOUTX_HXX
 #include <svx/xoutx.hxx>
+#endif
+// header for class ::basegfx::B3DPolygon
+#ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
+#include <basegfx/polygon/b3dpolygon.hxx>
 #endif
 
 #define FIXED_SIZE_FOR_3D_CHART_VOLUME (10000.0)
@@ -442,10 +446,10 @@ public:
         double              m_fXAngleDegree;
         double              m_fYAngleDegree;
         double              m_fZAngleDegree;
-        Matrix4D            m_aParentTransform;
+        ::basegfx::B3DHomMatrix     m_aParentTransform;
 
-        Matrix4D            m_aCurrentTransform;
-        Polygon3D           m_aWireframePoly;
+        ::basegfx::B3DHomMatrix     m_aCurrentTransform;
+        ::basegfx::B3DPolygon       m_aWireframePoly;
 };
 
 RotateDiagramDragMethod::RotateDiagramDragMethod( DrawViewWrapper& rDrawViewWrapper )
@@ -465,20 +469,17 @@ RotateDiagramDragMethod::RotateDiagramDragMethod( DrawViewWrapper& rDrawViewWrap
     if(pObj)
     {
         m_aReferenceRect = pObj->GetLogicRect();
-        m_aWireframePoly.SetPointCount(0);
+        m_aWireframePoly.clear();
         if(pObj->ISA(E3dObject))
         {
             E3dObject* pE3dObject = (E3dObject*)pObj;
-
-//BFS03         pE3dObject->CreateWireframe(m_aWireframePoly, NULL, E3DDETAIL_DEFAULT ); //E3DDETAIL_ONEBOX, E3DDETAIL_ALLBOXES, E3DDETAIL_ALLLINES
             pE3dObject->CreateWireframe(m_aWireframePoly, NULL );
-
             m_pScene = pE3dObject->GetScene();
 
             //get pure rotation matrix
-            Matrix4D aPureRotateMatrix = m_pScene->GetTransform();
-            Matrix4D aTranslateM4Inverse;
-            aTranslateM4Inverse.Translate(FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0.0);
+            ::basegfx::B3DHomMatrix aPureRotateMatrix = m_pScene->GetTransform();
+            ::basegfx::B3DHomMatrix aTranslateM4Inverse;
+            aTranslateM4Inverse.translate(FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0.0);
             aPureRotateMatrix = aPureRotateMatrix*aTranslateM4Inverse;
 
             //get euler angles from pure rotation matrix
@@ -493,8 +494,8 @@ RotateDiagramDragMethod::RotateDiagramDragMethod( DrawViewWrapper& rDrawViewWrap
                 m_aParentTransform = pParent->GetTransform();
             }
 
-            Matrix4D aTranslateM4;
-            aTranslateM4.Translate(-FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0.0);
+            ::basegfx::B3DHomMatrix aTranslateM4;
+            aTranslateM4.translate(-FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0.0);
             m_aParentTransform = aTranslateM4*m_aParentTransform;
 
             m_aCurrentTransform = aPureRotateMatrix*m_aParentTransform;
@@ -526,7 +527,7 @@ void RotateDiagramDragMethod::Mov(const Point& rPnt)
         //get new transformation matrix from euler angles
         drawing::Direction3D aAxis; double fAngle;
         Rotation::getAxisAngleFromEulerRepresentation( aAxis, fAngle, m_fXAngleDegree+fHAngle, m_fYAngleDegree+fWAngle, m_fZAngleDegree );
-        Matrix4D aRotateM4 = Rotation::getRotationMatrixFromAxisAngleRepresentation( aAxis, fAngle );
+        ::basegfx::B3DHomMatrix aRotateM4 = Rotation::getRotationMatrixFromAxisAngleRepresentation( aAxis, fAngle );
 
         //use new matrix
         Hide();
@@ -552,24 +553,24 @@ Pointer RotateDiagramDragMethod::GetPointer() const
 void RotateDiagramDragMethod::DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const
 {
     //rXOut.SetOffset(pPV->GetOffset());
-    UINT16 nPntCnt = m_aWireframePoly.GetPointCount();
-    if(nPntCnt > 1 && m_pScene)
+    const sal_uInt32 nPntCnt(m_aWireframePoly.count());
+    if(nPntCnt > 1L && m_pScene)
     {
         B3dCamera& rCameraSet = m_pScene->GetCameraSet();
-        XPolygon aLine(2);
-        for(UINT16 b=0;b < nPntCnt;b += 2)
+
+        for(sal_uInt32 b(0L); b < nPntCnt; b += 2L)
         {
-            Vector3D aPnt1 = m_aCurrentTransform * m_aWireframePoly[b];
+            ::basegfx::B2DPolygon aLine;
+
+            ::basegfx::B3DPoint aPnt1(m_aCurrentTransform * m_aWireframePoly.getB3DPoint(b));
             aPnt1 = rCameraSet.WorldToViewCoor(aPnt1);
-            aLine[0].X() = (long)(aPnt1.X() + 0.5);
-            aLine[0].Y() = (long)(aPnt1.Y() + 0.5);
+            aLine.append(::basegfx::B2DPoint(aPnt1.getX(), aPnt1.getY()));
 
-            Vector3D aPnt2 = m_aCurrentTransform * m_aWireframePoly[b+1];
+            ::basegfx::B3DPoint aPnt2(m_aCurrentTransform * m_aWireframePoly.getB3DPoint(b + 1L));
             aPnt2 = rCameraSet.WorldToViewCoor(aPnt2);
-            aLine[1].X() = (long)(aPnt2.X() + 0.5);
-            aLine[1].Y() = (long)(aPnt2.Y() + 0.5);
+            aLine.append(::basegfx::B2DPoint(aPnt2.getX(), aPnt2.getY()));
 
-            rXOut.DrawXPolyLine(aLine);
+            rXOut.DrawPolyLine(aLine);
         }
     }
 }
@@ -625,7 +626,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
     SdrHdl* pHitSelectionHdl = 0;
     //switch from move to resize if handle is hit on a resizeable object
     if( lcl_isResizeableObject( m_aSelectedObjectCID ) )
-        pHitSelectionHdl = pDrawViewWrapper->PickHandle( aMPos, *pWindow );
+        pHitSelectionHdl = pDrawViewWrapper->PickHandle( aMPos );
     bool bClickedTwiceOnDragableObject = SelectionHelper::isDragableObjectHitTwice( aMPos, m_aSelectedObjectCID, *pDrawViewWrapper );
     //do not change selection if clicked twice on a dragable object
     //or if selection handles are hit
@@ -653,7 +654,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
             E3dScene* pScene = pE3dObject->GetScene();
             pDrawViewWrapper->UnmarkAll();
             pDrawViewWrapper->MarkObject(pScene);
-            pHitSelectionHdl = pDrawViewWrapper->PickHandle( aMPos, *pWindow );//get new handle as selection has changed
+            pHitSelectionHdl = pDrawViewWrapper->PickHandle( aMPos );//get new handle as selection has changed
 
             SdrDragMode eDragMode = pDrawViewWrapper->GetDragMode();
             if( SDRDRAG_ROTATE==eDragMode )
@@ -719,9 +720,10 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                 {
                     if(pObj->ISA(E3dObject))
                     {
-                        Matrix4D aSceneMatrix(((E3dObject*)pObj)->GetScene()->GetFullTransform());
-                        Matrix4D aTranslateM4Inverse;
-                        aTranslateM4Inverse.Translate(FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0.0);
+//                        Matrix4D aSceneMatrix(((E3dObject*)pObj)->GetScene()->GetFullTransform());
+                        ::basegfx::B3DHomMatrix aSceneMatrix(((E3dObject*)pObj)->GetScene()->GetFullTransform());
+                        ::basegfx::B3DHomMatrix aTranslateM4Inverse;
+                        aTranslateM4Inverse.translate(FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0.0);
                         aSceneMatrix = aSceneMatrix*aTranslateM4Inverse;
 
                         SceneDescriptor aSceneDescriptor;
