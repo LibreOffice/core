@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:01:51 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:30:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,16 +263,16 @@ const Size& Outliner::GetPaperSize() const
     return pEditEngine->GetPaperSize();
 }
 
-void Outliner::SetPolygon( const XPolyPolygon& rPoly )
+void Outliner::SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon )
 {
     DBG_CHKTHIS( Outliner, 0 );
-    pEditEngine->SetPolygon( rPoly );
+    pEditEngine->SetPolygon( rPolyPolygon );
 }
 
-void Outliner::SetPolygon( const XPolyPolygon& rPoly, const XPolyPolygon* pXorPoly )
+void Outliner::SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon)
 {
     DBG_CHKTHIS( Outliner, 0 );
-    pEditEngine->SetPolygon( rPoly, pXorPoly );
+    pEditEngine->SetPolygon( rPolyPolygon, pLinePolyPolygon);
 }
 
 void Outliner::ClearPolygon()
