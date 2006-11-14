@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtabcolr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:25:33 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:57:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,6 @@ XColorEntry* XColorTable::GetColor(long nIndex) const
 
 BOOL XColorTable::Load()
 {
-//BFS01#ifndef SVX_LIGHT
     if( bTableDirty )
     {
         bTableDirty = FALSE;
@@ -151,46 +150,9 @@ BOOL XColorTable::Load()
         if( !aURL.getExtension().getLength() )
             aURL.setExtension( rtl::OUString( pszExtColor, 3 ) );
 
-//BFS01     // check if file exists, SfxMedium shows an errorbox else
-//BFS01     {
-//BFS01         com::sun::star::uno::Reference < com::sun::star::task::XInteractionHandler > xHandler;
-//BFS01         SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, xHandler );
-//BFS01
-//BFS01         sal_Bool bOk = pIStm && ( pIStm->GetError() == 0);
-//BFS01
-//BFS01         if( pIStm )
-//BFS01             delete pIStm;
-//BFS01
-//BFS01         if( !bOk )
-//BFS01             return sal_False;
-//BFS01     }
-
-//BFS01     {
-//BFS01         SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ | STREAM_NOCREATE, TRUE );
-//BFS01         SvStream* pStream = aMedium.GetInStream();
-//BFS01         if( !pStream )
-//BFS01             return( FALSE );
-//BFS01
-//BFS01         char aCheck[6];
-//BFS01         pStream->Read( aCheck, 6 );
-//BFS01
-//BFS01         // Handelt es sich um die gew"unschte Tabelle?
-//BFS01         if( memcmp( aCheck, aChckColor, sizeof( aChckColor ) ) == 0 ||
-//BFS01             memcmp( aCheck, aChckColor0, sizeof( aChckColor0 ) ) == 0 )
-//BFS01         {
-//BFS01             ImpRead( *pStream );
-//BFS01             return( pStream->GetError() == SVSTREAM_OK );
-//BFS01         }
-//BFS01         else if( memcmp( aCheck, aChckXML, sizeof( aChckXML ) ) != 0 )
-//BFS01         {
-//BFS01             return FALSE;
-//BFS01         }
-//BFS01     }
-
         uno::Reference< container::XNameContainer > xTable( SvxUnoXColorTable_createInstance( this ), uno::UNO_QUERY );
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
     }
-//BFS01#endif
     return( FALSE );
 }
 
@@ -198,7 +160,6 @@ BOOL XColorTable::Load()
 
 BOOL XColorTable::Save()
 {
-//BFS01#ifndef SVX_LIGHT
     INetURLObject aURL( aPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
@@ -214,29 +175,6 @@ BOOL XColorTable::Save()
 
     uno::Reference< container::XNameContainer > xTable( SvxUnoXColorTable_createInstance( this ), uno::UNO_QUERY );
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
-
-/*
-    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC, TRUE );
-    aMedium.IsRemote();
-
-    SvStream* pStream = aMedium.GetOutStream();
-    if( !pStream )
-        return( FALSE );
-
-    // UNICODE: *pStream << String( pszChckColor0, 4 );
-    pStream->WriteByteString(String( pszChckColor0, 4 ));
-
-
-    ImpStore( *pStream );
-
-    aMedium.Close();
-    aMedium.Commit();
-
-    return( aMedium.GetError() == 0 );
-*/
-//BFS01#else
-//BFS01 return FALSE;
-//BFS01#endif
 }
 
 /************************************************************************/
@@ -512,208 +450,6 @@ Bitmap* XColorTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
     return( NULL );
 }
 
-/************************************************************************/
-
-//BFS01SvStream& XColorTable::ImpStore( SvStream& rOut )
-//BFS01{
-//BFS01 // Schreiben
-//BFS01 rOut.SetStreamCharSet( gsl_getSystemTextEncoding() );
-//BFS01
-//BFS01 // Tabellentyp schreiben (0 = gesamte Tabelle)
-//BFS01 // Version statt Tabellentyp, um auch alte Tabellen zu lesen
-//BFS01 rOut << (long) -1;
-//BFS01
-//BFS01 // Anzahl der Eintraege
-//BFS01 rOut << (long)Count();
-//BFS01
-//BFS01 // die Farben
-//BFS01 XColorEntry* pEntry = (XColorEntry*)aTable.First();
-//BFS01 for (long nIndex = 0; nIndex < Count(); nIndex++)
-//BFS01 {
-//BFS01     // Versionsverwaltung: Version 0
-//BFS01     XIOCompat aIOC( rOut, STREAM_WRITE, 0 );
-//BFS01
-//BFS01     rOut << (long)aTable.GetCurKey();
-//BFS01
-//BFS01     // UNICODE:: rOut << pEntry->GetName();
-//BFS01     rOut.WriteByteString(pEntry->GetName());
-//BFS01
-//BFS01     USHORT nCol = pEntry->GetColor().GetRed();
-//BFS01     nCol = nCol << 8;
-//BFS01     rOut << nCol;
-//BFS01
-//BFS01     nCol = pEntry->GetColor().GetGreen();
-//BFS01     nCol = nCol << 8;
-//BFS01     rOut << nCol;
-//BFS01
-//BFS01     nCol = pEntry->GetColor().GetBlue();
-//BFS01     nCol = nCol << 8;
-//BFS01     rOut << nCol;
-//BFS01     pEntry = (XColorEntry*)aTable.Next();
-//BFS01 }
-//BFS01 return( rOut );
-//BFS01}
-
-/************************************************************************/
-
-//BFS01XubString& XColorTable::ConvertName( XubString& rStrName )
-//BFS01{
-//BFS01 static USHORT __READONLY_DATA aDefResId[] =
-//BFS01 {
-//BFS01     RID_SVXSTR_BLUEGREY_DEF,
-//BFS01     RID_SVXSTR_BLACK_DEF,
-//BFS01     RID_SVXSTR_BLUE_DEF,
-//BFS01     RID_SVXSTR_GREEN_DEF,
-//BFS01     RID_SVXSTR_CYAN_DEF,
-//BFS01     RID_SVXSTR_RED_DEF,
-//BFS01     RID_SVXSTR_MAGENTA_DEF,
-//BFS01     RID_SVXSTR_BROWN_DEF,
-//BFS01     RID_SVXSTR_GREY_DEF,
-//BFS01     RID_SVXSTR_LIGHTGREY_DEF,
-//BFS01     RID_SVXSTR_LIGHTBLUE_DEF,
-//BFS01     RID_SVXSTR_LIGHTGREEN_DEF,
-//BFS01     RID_SVXSTR_LIGHTCYAN_DEF,
-//BFS01     RID_SVXSTR_LIGHTRED_DEF,
-//BFS01     RID_SVXSTR_LIGHTMAGENTA_DEF,
-//BFS01     RID_SVXSTR_YELLOW_DEF,
-//BFS01     RID_SVXSTR_WHITE_DEF,
-//BFS01     RID_SVXSTR_ORANGE_DEF,
-//BFS01     RID_SVXSTR_VIOLET_DEF,
-//BFS01     RID_SVXSTR_BORDEAUX_DEF,
-//BFS01     RID_SVXSTR_PALE_YELLOW_DEF,
-//BFS01     RID_SVXSTR_PALE_GREEN_DEF,
-//BFS01     RID_SVXSTR_DKVIOLET_DEF,
-//BFS01     RID_SVXSTR_SALMON_DEF,
-//BFS01     RID_SVXSTR_SEABLUE_DEF,
-//BFS01     RID_SVXSTR_COLOR_SUN_DEF
-//BFS01 };
-//BFS01 static USHORT __READONLY_DATA aResId[] =
-//BFS01 {
-//BFS01     RID_SVXSTR_BLUEGREY,
-//BFS01     RID_SVXSTR_BLACK,
-//BFS01     RID_SVXSTR_BLUE,
-//BFS01     RID_SVXSTR_GREEN,
-//BFS01     RID_SVXSTR_CYAN,
-//BFS01     RID_SVXSTR_RED,
-//BFS01     RID_SVXSTR_MAGENTA,
-//BFS01     RID_SVXSTR_BROWN,
-//BFS01     RID_SVXSTR_GREY,
-//BFS01     RID_SVXSTR_LIGHTGREY,
-//BFS01     RID_SVXSTR_LIGHTBLUE,
-//BFS01     RID_SVXSTR_LIGHTGREEN,
-//BFS01     RID_SVXSTR_LIGHTCYAN,
-//BFS01     RID_SVXSTR_LIGHTRED,
-//BFS01     RID_SVXSTR_LIGHTMAGENTA,
-//BFS01     RID_SVXSTR_YELLOW,
-//BFS01     RID_SVXSTR_WHITE,
-//BFS01     RID_SVXSTR_ORANGE,
-//BFS01     RID_SVXSTR_VIOLET,
-//BFS01     RID_SVXSTR_BORDEAUX,
-//BFS01     RID_SVXSTR_PALE_YELLOW,
-//BFS01     RID_SVXSTR_PALE_GREEN,
-//BFS01     RID_SVXSTR_DKVIOLET,
-//BFS01     RID_SVXSTR_SALMON,
-//BFS01     RID_SVXSTR_SEABLUE,
-//BFS01     RID_SVXSTR_COLOR_SUN
-//BFS01 };
-//BFS01
-//BFS01 BOOL bFound = FALSE;
-//BFS01
-//BFS01 for( int i=0; i<(sizeof(aDefResId) / sizeof(USHORT)) && !bFound; i++ )
-//BFS01 {
-//BFS01     XubString aStrDefName = SVX_RESSTR( aDefResId[i] );
-//BFS01     if( rStrName.Search( aStrDefName ) == 0 )
-//BFS01     {
-//BFS01         rStrName.Replace( 0, aStrDefName.Len(), SVX_RESSTR( aResId[i] ) );
-//BFS01         bFound = TRUE;
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 return rStrName;
-//BFS01}
-
-/************************************************************************/
-
-//BFS01SvStream& XColorTable::ImpRead( SvStream& rIn )
-//BFS01{
-//BFS01 // Lesen
-//BFS01 rIn.SetStreamCharSet( RTL_TEXTENCODING_IBM_850 );
-//BFS01
-//BFS01 delete pBmpTable;
-//BFS01 pBmpTable = new Table( 16, 16 );
-//BFS01
-//BFS01 XColorEntry* pEntry = NULL;
-//BFS01 long         nType;
-//BFS01 long         nCount;
-//BFS01 long         nIndex;
-//BFS01 USHORT       nRed;
-//BFS01 USHORT       nGreen;
-//BFS01 USHORT       nBlue;
-//BFS01 Color        aColor;
-//BFS01 XubString    aName;
-//BFS01
-//BFS01 rIn >> nType;
-//BFS01
-//BFS01 // gesamte Tabelle?
-//BFS01 if (nType == 0)
-//BFS01 {
-//BFS01     rIn >> nCount;
-//BFS01     for (long nI = 0; nI < nCount; nI++)
-//BFS01     {
-//BFS01         rIn >> nIndex;
-//BFS01
-//BFS01         // UNICODE: rIn >> aName;
-//BFS01         rIn.ReadByteString(aName);
-//BFS01         aName = ConvertName( aName );
-//BFS01
-//BFS01         rIn >> nRed;
-//BFS01         rIn >> nGreen;
-//BFS01         rIn >> nBlue;
-//BFS01
-//BFS01         aColor = Color( (BYTE) ( nRed   >> 8 ),
-//BFS01                         (BYTE) ( nGreen >> 8 ),
-//BFS01                         (BYTE) ( nBlue  >> 8 ) );
-//BFS01         pEntry = new XColorEntry( aColor, aName);
-//BFS01         Insert (nIndex, pEntry);
-//BFS01     }
-//BFS01 }
-//BFS01 else // Version ab 3.00a
-//BFS01 {
-//BFS01     rIn >> nCount;
-//BFS01     for (long nI = 0; nI < nCount; nI++)
-//BFS01     {
-//BFS01         // Versionsverwaltung
-//BFS01         XIOCompat aIOC( rIn, STREAM_READ );
-//BFS01
-//BFS01         rIn >> nIndex;
-//BFS01
-//BFS01         // UNICODE: rIn >> aName;
-//BFS01         rIn.ReadByteString(aName);
-//BFS01         aName = ConvertName( aName );
-//BFS01
-//BFS01         if( aIOC.GetVersion() >= 0 )
-//BFS01         {
-//BFS01             rIn >> nRed;
-//BFS01             rIn >> nGreen;
-//BFS01             rIn >> nBlue;
-//BFS01             aColor = Color( (BYTE) ( nRed   >> 8 ),
-//BFS01                             (BYTE) ( nGreen >> 8 ),
-//BFS01                             (BYTE) ( nBlue  >> 8 ) );
-//BFS01         }
-//BFS01         /*
-//BFS01         else if( aIOC.GetVersion() >= 1 )
-//BFS01         {
-//BFS01             // lesen neuer Daten ...
-//BFS01         }
-//BFS01         */
-//BFS01
-//BFS01         pEntry = new XColorEntry( aColor, aName );
-//BFS01         Insert( nIndex, pEntry );
-//BFS01     }
-//BFS01 }
-//BFS01 return( rIn );
-//BFS01}
-
 // --------------------
 // class XColorList
 // --------------------
@@ -793,82 +529,5 @@ Bitmap* XColorList::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
 {
     return( NULL );
 }
-
-/************************************************************************/
-
-//BFS01SvStream& XColorList::ImpStore( SvStream& rOut )
-//BFS01{
-//BFS01 // Erstmal von XColorTable uebernommen !!!
-//BFS01
-//BFS01 // Schreiben
-//BFS01 rOut.SetStreamCharSet( gsl_getSystemTextEncoding() );
-//BFS01
-//BFS01 // Tabellentyp schreiben (0 = gesamte Tabelle)
-//BFS01 rOut << (long)0;
-//BFS01
-//BFS01 // Anzahl der Eintraege
-//BFS01 rOut << (long)Count();
-//BFS01
-//BFS01 // die Farben
-//BFS01 XColorEntry* pEntry = (XColorEntry*)aList.First();
-//BFS01 for (long nIndex = 0; nIndex < Count(); nIndex++)
-//BFS01 {
-//BFS01     // rOut << (long)aList.GetCurKey();
-//BFS01
-//BFS01     // UNICODE:rOut << pEntry->GetName();
-//BFS01     rOut.WriteByteString(pEntry->GetName());
-//BFS01
-//BFS01     rOut << pEntry->GetColor().GetRed();
-//BFS01     rOut << pEntry->GetColor().GetGreen();
-//BFS01     rOut << pEntry->GetColor().GetBlue();
-//BFS01     pEntry = (XColorEntry*)aList.Next();
-//BFS01 }
-//BFS01 return rOut;
-//BFS01}
-
-/************************************************************************/
-
-//BFS01SvStream& XColorList::ImpRead( SvStream& rIn )
-//BFS01{
-//BFS01 // Lesen
-//BFS01 rIn.SetStreamCharSet( RTL_TEXTENCODING_IBM_850 );
-//BFS01
-//BFS01 // Erstmal von XColorTable uebernommen !!!
-//BFS01 delete pBmpList;
-//BFS01 pBmpList = new List( 16, 16 );
-//BFS01
-//BFS01
-//BFS01 XColorEntry* pEntry = NULL;
-//BFS01 long         nType;
-//BFS01 long         nCount;
-//BFS01 long         nIndex;
-//BFS01 USHORT       nRed;
-//BFS01 USHORT       nGreen;
-//BFS01 USHORT       nBlue;
-//BFS01 XubString    aName;
-//BFS01
-//BFS01 rIn >> nType;
-//BFS01
-//BFS01 // gesamte Tabelle?
-//BFS01 if (nType == 0)
-//BFS01 {
-//BFS01     rIn >> nCount;
-//BFS01     for (long nI = 0; nI < nCount; nI++)
-//BFS01     {
-//BFS01         rIn >> nIndex;
-//BFS01
-//BFS01         // UNICODE: rIn >> aName;
-//BFS01         rIn.ReadByteString(aName);
-//BFS01
-//BFS01         rIn >> nRed;
-//BFS01         rIn >> nGreen;
-//BFS01         rIn >> nBlue;
-//BFS01
-//BFS01         pEntry = new XColorEntry (Color( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue), aName);
-//BFS01         Insert (pEntry, nIndex);
-//BFS01     }
-//BFS01 }
-//BFS01 return( rIn );
-//BFS01}
 
 // eof
