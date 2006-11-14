@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdcgmfilter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:20:01 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:22:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@ sal_Bool SdCGMFilter::Export()
 
             /* !!!
             if ( pViewShell && pViewShell->GetView() )
-                pViewShell->GetView()->EndTextEdit();
+                pViewShell->GetView()->SdrEndTextEdit();
             */
             CreateStatusIndicator();
             bRet = FncCGMExport( aPhysicalName, mxModel, mxStatusIndicator, NULL );
