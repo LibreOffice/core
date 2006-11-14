@@ -4,9 +4,9 @@
  *
  *  $RCSfile: circleproperties.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:40:26 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:35:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,10 +58,6 @@
 
 #ifndef _SVDOCIRC_HXX
 #include <svdocirc.hxx>
-#endif
-
-#ifndef _SXCISITM_HXX
-#include <sxcisitm.hxx>
 #endif
 
 #ifndef _SXCIKITM_HXX
@@ -145,36 +141,6 @@ namespace sdr
             // local changes
             rObj.ImpSetAttrToCircInfo();
         }
-
-//BFS01     void CircleProperties::PreProcessSave()
-//BFS01     {
-//BFS01         // call parent
-//BFS01         RectangleProperties::PreProcessSave();
-//BFS01
-//BFS01         // force ItemSet
-//BFS01         GetObjectItemSet();
-//BFS01
-//BFS01         // prepare SetItems for storage
-//BFS01         const SfxItemSet& rSet = *mpItemSet;
-//BFS01         const SfxItemSet* pParent = mpStyleSheet ? &(mpStyleSheet->GetItemSet()) : 0L;
-//BFS01
-//BFS01         SdrCircSetItem aCircAttr(rSet.GetPool());
-//BFS01         aCircAttr.GetItemSet().Put(rSet);
-//BFS01         aCircAttr.GetItemSet().SetParent(pParent);
-//BFS01         mpItemSet->Put(aCircAttr);
-//BFS01     }
-
-//BFS01     void CircleProperties::PostProcessSave()
-//BFS01     {
-//BFS01         // call parent
-//BFS01         RectangleProperties::PostProcessSave();
-//BFS01
-//BFS01         // remove SetItems from local itemset
-//BFS01         if(mpItemSet)
-//BFS01         {
-//BFS01             mpItemSet->ClearItem(SDRATTRSET_CIRC);
-//BFS01         }
-//BFS01     }
 
         void CircleProperties::ForceDefaultAttributes()
         {
