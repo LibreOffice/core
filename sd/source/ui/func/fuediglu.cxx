@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuediglu.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:49:54 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:29:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,7 +188,7 @@ BOOL FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             if (!rMEvt.IsShift())
                 pView->UnmarkAllGluePoints();
 
-            pView->BegMarkGluePoints(aMDPos, (OutputDevice*) NULL);
+            pView->BegMarkGluePoints(aMDPos);
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() && !rMEvt.IsMod2())
         {
@@ -251,7 +251,7 @@ BOOL FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
                 if (!rMEvt.IsShift())
                     pView->UnmarkAllGluePoints();
 
-                pView->BegMarkGluePoints(aMDPos, (OutputDevice*) NULL);
+                pView->BegMarkGluePoints(aMDPos);
             }
             else
             {
