@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:23:28 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:14:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,7 +359,7 @@ bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
 
     GDIMetaFile aWMF;
     pSt->Seek( nPosFc );
-    bool bOk = ReadWindowMetafile(*pSt, aWMF) ? true : false;
+    bool bOk = ReadWindowMetafile( *pSt, aWMF, NULL ) ? true : false;
 
     if (!bOk || pSt->GetError() || !aWMF.GetActionCount())
         return false;
