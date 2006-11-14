@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cube3d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:54:53 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,14 +47,6 @@
 #include "globl3d.hxx"
 #endif
 
-#ifndef _POLY3D_HXX
-#include "poly3d.hxx"
-#endif
-
-#ifndef _SVX_VECTOR3D_HXX
-#include <goodies/vector3d.hxx>
-#endif
-
 #ifndef _BGFX_POINT_B3DPOINT_HXX
 #include <basegfx/point/b3dpoint.hxx>
 #endif
@@ -73,7 +65,7 @@ TYPEINIT1(E3dCubeObj, E3dCompoundObject);
 |*
 \************************************************************************/
 
-E3dCubeObj::E3dCubeObj(E3dDefaultAttributes& rDefault, Vector3D aPos, const Vector3D& r3DSize)
+E3dCubeObj::E3dCubeObj(E3dDefaultAttributes& rDefault, basegfx::B3DPoint aPos, const basegfx::B3DVector& r3DSize)
 :   E3dCompoundObject(rDefault)
 {
     // Defaults setzen
@@ -131,45 +123,45 @@ SdrObject *E3dCubeObj::DoConvertToPolyObj(BOOL /*bBezier*/) const
 |*
 \************************************************************************/
 
-::basegfx::B3DPolyPolygon E3dCubeObj::Get3DLineGeometry() const
+basegfx::B3DPolyPolygon E3dCubeObj::Get3DLineGeometry() const
 {
-    ::basegfx::B3DPolyPolygon aRetval;
+    basegfx::B3DPolyPolygon aRetval;
 
     // add geometry describing polygons to rLinePolyPolygon
-    ::basegfx::B3DPolygon aNewUpper;
-    aNewUpper.append(::basegfx::B3DPoint(aCubePos.X(), aCubePos.Y(), aCubePos.Z() + aCubeSize.Z()));
-    aNewUpper.append(::basegfx::B3DPoint(aCubePos.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z() + aCubeSize.Z()));
-    aNewUpper.append(::basegfx::B3DPoint(aCubePos.X() + aCubeSize.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z() + aCubeSize.Z()));
-    aNewUpper.append(::basegfx::B3DPoint(aCubePos.X() + aCubeSize.X(), aCubePos.Y(), aCubePos.Z() + aCubeSize.Z()));
+    basegfx::B3DPolygon aNewUpper;
+    aNewUpper.append(basegfx::B3DPoint(aCubePos.getX(), aCubePos.getY(), aCubePos.getZ() + aCubeSize.getZ()));
+    aNewUpper.append(basegfx::B3DPoint(aCubePos.getX(), aCubePos.getY() + aCubeSize.getY(), aCubePos.getZ() + aCubeSize.getZ()));
+    aNewUpper.append(basegfx::B3DPoint(aCubePos.getX() + aCubeSize.getX(), aCubePos.getY() + aCubeSize.getY(), aCubePos.getZ() + aCubeSize.getZ()));
+    aNewUpper.append(basegfx::B3DPoint(aCubePos.getX() + aCubeSize.getX(), aCubePos.getY(), aCubePos.getZ() + aCubeSize.getZ()));
     aNewUpper.append(aNewUpper.getB3DPoint(0));
     aRetval.append(aNewUpper);
 
-    ::basegfx::B3DPolygon aNewLower;
-    aNewLower.append(::basegfx::B3DPoint(aCubePos.X(), aCubePos.Y(), aCubePos.Z()));
-    aNewLower.append(::basegfx::B3DPoint(aCubePos.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z()));
-    aNewLower.append(::basegfx::B3DPoint(aCubePos.X() + aCubeSize.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z()));
-    aNewLower.append(::basegfx::B3DPoint(aCubePos.X() + aCubeSize.X(), aCubePos.Y(), aCubePos.Z()));
+    basegfx::B3DPolygon aNewLower;
+    aNewLower.append(basegfx::B3DPoint(aCubePos.getX(), aCubePos.getY(), aCubePos.getZ()));
+    aNewLower.append(basegfx::B3DPoint(aCubePos.getX(), aCubePos.getY() + aCubeSize.getY(), aCubePos.getZ()));
+    aNewLower.append(basegfx::B3DPoint(aCubePos.getX() + aCubeSize.getX(), aCubePos.getY() + aCubeSize.getY(), aCubePos.getZ()));
+    aNewLower.append(basegfx::B3DPoint(aCubePos.getX() + aCubeSize.getX(), aCubePos.getY(), aCubePos.getZ()));
     aNewLower.append(aNewLower.getB3DPoint(0));
     aRetval.append(aNewLower);
 
-    ::basegfx::B3DPolygon aNewVertical;
-    aNewVertical.append(::basegfx::B3DPoint(aCubePos.X(), aCubePos.Y(), aCubePos.Z()));
-    aNewVertical.append(::basegfx::B3DPoint(aCubePos.X(), aCubePos.Y(), aCubePos.Z() + aCubeSize.Z()));
+    basegfx::B3DPolygon aNewVertical;
+    aNewVertical.append(basegfx::B3DPoint(aCubePos.getX(), aCubePos.getY(), aCubePos.getZ()));
+    aNewVertical.append(basegfx::B3DPoint(aCubePos.getX(), aCubePos.getY(), aCubePos.getZ() + aCubeSize.getZ()));
     aRetval.append(aNewVertical);
 
     aNewVertical.clear();
-    aNewVertical.append(::basegfx::B3DPoint(aCubePos.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z()));
-    aNewVertical.append(::basegfx::B3DPoint(aCubePos.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z() + aCubeSize.Z()));
+    aNewVertical.append(basegfx::B3DPoint(aCubePos.getX(), aCubePos.getY() + aCubeSize.getY(), aCubePos.getZ()));
+    aNewVertical.append(basegfx::B3DPoint(aCubePos.getX(), aCubePos.getY() + aCubeSize.getY(), aCubePos.getZ() + aCubeSize.getZ()));
     aRetval.append(aNewVertical);
 
     aNewVertical.clear();
-    aNewVertical.append(::basegfx::B3DPoint(aCubePos.X() + aCubeSize.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z()));
-    aNewVertical.append(::basegfx::B3DPoint(aCubePos.X() + aCubeSize.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z() + aCubeSize.Z()));
+    aNewVertical.append(basegfx::B3DPoint(aCubePos.getX() + aCubeSize.getX(), aCubePos.getY() + aCubeSize.getY(), aCubePos.getZ()));
+    aNewVertical.append(basegfx::B3DPoint(aCubePos.getX() + aCubeSize.getX(), aCubePos.getY() + aCubeSize.getY(), aCubePos.getZ() + aCubeSize.getZ()));
     aRetval.append(aNewVertical);
 
     aNewVertical.clear();
-    aNewVertical.append(::basegfx::B3DPoint(aCubePos.X() + aCubeSize.X(), aCubePos.Y(), aCubePos.Z()));
-    aNewVertical.append(::basegfx::B3DPoint(aCubePos.X() + aCubeSize.X(), aCubePos.Y(), aCubePos.Z() + aCubeSize.Z()));
+    aNewVertical.append(basegfx::B3DPoint(aCubePos.getX() + aCubeSize.getX(), aCubePos.getY(), aCubePos.getZ()));
+    aNewVertical.append(basegfx::B3DPoint(aCubePos.getX() + aCubeSize.getX(), aCubePos.getY(), aCubePos.getZ() + aCubeSize.getZ()));
     aRetval.append(aNewVertical);
 
     return aRetval;
@@ -183,10 +175,7 @@ SdrObject *E3dCubeObj::DoConvertToPolyObj(BOOL /*bBezier*/) const
 
 void E3dCubeObj::CreateGeometry()
 {
-    Vector3D    aPos(aCubePos);
-    Polygon3D   aRect3D(4);
-    Polygon3D   aNormals3D(4);
-    Polygon3D   aTexture3D(4);
+    basegfx::B3DPoint   aPos(aCubePos);
     short       nV1, nV2;
     UINT16      nSideBit = 0x0001;
 
@@ -204,41 +193,42 @@ void E3dCubeObj::CreateGeometry()
         // Nur die Flaechen erzeugen, fuer die ein Bit
         if ( nSideFlags & nSideBit )
         {   // Flaechenpunkte entgegen dem Uhrzeigersinn generieren
-            aRect3D[0] = aPos; aPos[nV1] += aCubeSize[nV1];
-            aRect3D[1] = aPos; aPos[nV2] += aCubeSize[nV2];
-            aRect3D[2] = aPos; aPos[nV1] -= aCubeSize[nV1];
-            aRect3D[3] = aPos; aPos[nV2] -= aCubeSize[nV2];
+            basegfx::B3DPolygon aRect3D;
+
+            aRect3D.append(aPos); aPos[nV1] += aCubeSize[nV1];
+            aRect3D.append(aPos); aPos[nV2] += aCubeSize[nV2];
+            aRect3D.append(aPos); aPos[nV1] -= aCubeSize[nV1];
+            aRect3D.append(aPos); aPos[nV2] -= aCubeSize[nV2];
 
             if(GetCreateNormals())
             {
-                aNormals3D = aRect3D;
-                aNormals3D[0].Normalize();
-                aNormals3D[1].Normalize();
-                aNormals3D[2].Normalize();
-                aNormals3D[3].Normalize();
+                basegfx::B3DPolygon aNormals3D;
+                basegfx::B3DVector aVecTmp;
+
+                aVecTmp = aRect3D.getB3DPoint(0L); aVecTmp.normalize(); aNormals3D.append(basegfx::B3DPoint(aVecTmp));
+                aVecTmp = aRect3D.getB3DPoint(1L); aVecTmp.normalize(); aNormals3D.append(basegfx::B3DPoint(aVecTmp));
+                aVecTmp = aRect3D.getB3DPoint(2L); aVecTmp.normalize(); aNormals3D.append(basegfx::B3DPoint(aVecTmp));
+                aVecTmp = aRect3D.getB3DPoint(3L); aVecTmp.normalize(); aNormals3D.append(basegfx::B3DPoint(aVecTmp));
 
                 if(GetCreateTexture())
                 {
-                    aTexture3D[1].X() = 0.0;
-                    aTexture3D[1].Y() = 0.0;
+                    basegfx::B2DPolygon aTexture2D;
 
-                    aTexture3D[0].X() = 1.0;
-                    aTexture3D[0].Y() = 0.0;
+                    aTexture2D.append(basegfx::B2DPoint(1.0, 0.0));
+                    aTexture2D.append(basegfx::B2DPoint(0.0, 0.0));
+                    aTexture2D.append(basegfx::B2DPoint(0.0, 1.0));
+                    aTexture2D.append(basegfx::B2DPoint(1.0, 1.0));
 
-                    aTexture3D[2].X() = 0.0;
-                    aTexture3D[2].Y() = 1.0;
-
-                    aTexture3D[3].X() = 1.0;
-                    aTexture3D[3].Y() = 1.0;
-
-                    AddGeometry(aRect3D, aNormals3D, aTexture3D, FALSE);
+                    AddGeometry(basegfx::B3DPolyPolygon(aRect3D), basegfx::B3DPolyPolygon(aNormals3D), basegfx::B2DPolyPolygon(aTexture2D), FALSE);
                 }
                 else
-                    AddGeometry(aRect3D, aNormals3D, FALSE);
+                {
+                    AddGeometry(basegfx::B3DPolyPolygon(aRect3D), basegfx::B3DPolyPolygon(aNormals3D), FALSE);
+                }
             }
             else
             {
-                AddGeometry(aRect3D, FALSE);
+                AddGeometry(basegfx::B3DPolyPolygon(aRect3D), FALSE);
             }
         }
         nSideBit <<= 1;
@@ -252,42 +242,44 @@ void E3dCubeObj::CreateGeometry()
 
         if ( nSideFlags & nSideBit )
         {   // Flaechenpunkte entgegen dem Uhrzeigersinn generieren
-            aRect3D[0] = aPos; aPos[nV1] -= aCubeSize[nV1];
-            aRect3D[1] = aPos; aPos[nV2] -= aCubeSize[nV2];
-            aRect3D[2] = aPos; aPos[nV1] += aCubeSize[nV1];
-            aRect3D[3] = aPos; aPos[nV2] += aCubeSize[nV2];
+            basegfx::B3DPolygon aRect3D;
+            basegfx::B2DPolygon aTexture2D;
+
+            aRect3D.append(aPos); aPos[nV1] -= aCubeSize[nV1];
+            aRect3D.append(aPos); aPos[nV2] -= aCubeSize[nV2];
+            aRect3D.append(aPos); aPos[nV1] += aCubeSize[nV1];
+            aRect3D.append(aPos); aPos[nV2] += aCubeSize[nV2];
 
             if(GetCreateTexture())
             {
-                aTexture3D[1].X() = 0.0;
-                aTexture3D[1].Y() = 0.0;
-
-                aTexture3D[0].X() = 1.0;
-                aTexture3D[0].Y() = 0.0;
-
-                aTexture3D[2].X() = 0.0;
-                aTexture3D[2].Y() = 1.0;
-
-                aTexture3D[3].X() = 1.0;
-                aTexture3D[3].Y() = 1.0;
+                aTexture2D.append(basegfx::B2DPoint(1.0, 0.0));
+                aTexture2D.append(basegfx::B2DPoint(0.0, 0.0));
+                aTexture2D.append(basegfx::B2DPoint(0.0, 1.0));
+                aTexture2D.append(basegfx::B2DPoint(1.0, 1.0));
             }
 
             if(GetCreateNormals())
             {
-                aNormals3D = aRect3D;
-                aNormals3D[0].Normalize();
-                aNormals3D[1].Normalize();
-                aNormals3D[2].Normalize();
-                aNormals3D[3].Normalize();
+                basegfx::B3DPolygon aNormals3D;
+                basegfx::B3DVector aVecTmp;
+
+                aVecTmp = aRect3D.getB3DPoint(0L); aVecTmp.normalize(); aNormals3D.append(basegfx::B3DPoint(aVecTmp));
+                aVecTmp = aRect3D.getB3DPoint(1L); aVecTmp.normalize(); aNormals3D.append(basegfx::B3DPoint(aVecTmp));
+                aVecTmp = aRect3D.getB3DPoint(2L); aVecTmp.normalize(); aNormals3D.append(basegfx::B3DPoint(aVecTmp));
+                aVecTmp = aRect3D.getB3DPoint(3L); aVecTmp.normalize(); aNormals3D.append(basegfx::B3DPoint(aVecTmp));
 
                 if(GetCreateTexture())
-                    AddGeometry(aRect3D, aNormals3D, aTexture3D, FALSE);
+                {
+                    AddGeometry(basegfx::B3DPolyPolygon(aRect3D), basegfx::B3DPolyPolygon(aNormals3D), basegfx::B2DPolyPolygon(aTexture2D), FALSE);
+                }
                 else
-                    AddGeometry(aRect3D, aNormals3D, FALSE);
+                {
+                    AddGeometry(basegfx::B3DPolyPolygon(aRect3D), basegfx::B3DPolyPolygon(aNormals3D), FALSE);
+                }
             }
             else
             {
-                AddGeometry(aRect3D, FALSE);
+                AddGeometry(basegfx::B3DPolyPolygon(aRect3D), FALSE);
             }
         }
         nSideBit <<= 1;
@@ -296,80 +288,6 @@ void E3dCubeObj::CreateGeometry()
     // call parent
     E3dCompoundObject::CreateGeometry();
 }
-
-/*************************************************************************
-|*
-|* Objektdaten in Stream speichern
-|*
-\************************************************************************/
-
-//BFS01void E3dCubeObj::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01#ifndef SVX_LIGHT
-//BFS01 long nVersion = rOut.GetVersion(); // Build_Nr * 10 z.B. 3810
-//BFS01 if(nVersion < 3800)
-//BFS01 {
-//BFS01     // Alte Geometrie erzeugen, um die E3dPolyObj's zu haben
-//BFS01     ((E3dCompoundObject*)this)->ReCreateGeometry(TRUE);
-//BFS01 }
-//BFS01
-//BFS01 // call parent, schreibt die SubList (alte Geometrie) raus
-//BFS01 E3dCompoundObject::WriteData(rOut);
-//BFS01
-//BFS01 E3dIOCompat aCompat(rOut, STREAM_WRITE, 1);
-//BFS01 rOut << aCubePos;
-//BFS01 rOut << aCubeSize;
-//BFS01 rOut << BOOL(bPosIsCenter);
-//BFS01 rOut << nSideFlags;
-//BFS01
-//BFS01 if(nVersion < 3800)
-//BFS01 {
-//BFS01     // Geometrie neu erzeugen, um E3dPolyObj's wieder loszuwerden
-//BFS01     ((E3dCompoundObject*)this)->ReCreateGeometry();
-//BFS01 }
-//BFS01#endif
-//BFS01}
-
-/*************************************************************************
-|*
-|* Objektdaten aus Stream laden
-|*
-\************************************************************************/
-
-//BFS01void E3dCubeObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 // call parent
-//BFS01 E3dCompoundObject::ReadData(rHead, rIn);
-//BFS01
-//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01 BOOL bAllDone(FALSE);
-//BFS01 if(AreBytesLeft())
-//BFS01 {
-//BFS01     E3dIOCompat aIoCompat(rIn, STREAM_READ);
-//BFS01     if(aIoCompat.GetVersion() >= 1)
-//BFS01     {
-//BFS01         BOOL bTmp;
-//BFS01         rIn >> aCubePos;
-//BFS01         rIn >> aCubeSize;
-//BFS01         rIn >> bTmp; bPosIsCenter = bTmp;
-//BFS01         rIn >> nSideFlags;
-//BFS01         bAllDone = TRUE;
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 if(!bAllDone)
-//BFS01 {
-//BFS01     // Geometrie aus erzeugten PolyObj's rekonstruieren
-//BFS01     const Volume3D& rVolume = GetLocalBoundVolume();
-//BFS01     aCubeSize = rVolume.MaxVec() - rVolume.MinVec();
-//BFS01     aCubePos = rVolume.MinVec();
-//BFS01     bPosIsCenter = FALSE;
-//BFS01     nSideFlags = CUBE_FULL;
-//BFS01 }
-//BFS01
-//BFS01 // Geometrie neu erzeugen, mit oder ohne E3dPolyObj's
-//BFS01 ReCreateGeometry();
-//BFS01}
 
 /*************************************************************************
 |*
@@ -397,7 +315,7 @@ void E3dCubeObj::operator=(const SdrObject& rObj)
 |*
 \************************************************************************/
 
-void E3dCubeObj::SetCubePos(const Vector3D& rNew)
+void E3dCubeObj::SetCubePos(const basegfx::B3DPoint& rNew)
 {
     if(aCubePos != rNew)
     {
@@ -406,7 +324,7 @@ void E3dCubeObj::SetCubePos(const Vector3D& rNew)
     }
 }
 
-void E3dCubeObj::SetCubeSize(const Vector3D& rNew)
+void E3dCubeObj::SetCubeSize(const basegfx::B3DVector& rNew)
 {
     if(aCubeSize != rNew)
     {
