@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:14:23 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:19:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -471,10 +471,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             // Shellwechsel!
             {
                 SdrObject* pTmpObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-                SdrPageView* pTmpPV = pSdrView->GetPageViewPvNum(0);
+                SdrPageView* pTmpPV = pSdrView->GetSdrPageView();
                 SdrView* pTmpView = pSdrView;
 
-                pSdrView->EndTextEdit(TRUE);
+                pSdrView->SdrEndTextEdit(sal_True);
 
                 SfxItemSet aAttr( *aNewAttr.GetPool(),
                             SDRATTR_TEXTDIRECTION,
@@ -486,8 +486,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                         : com::sun::star::text::WritingMode_TB_RL ) );
                 pTmpView->SetAttributes( aAttr );
 
-                rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV,
-                                    &rSh.GetView().GetEditWin(), FALSE );
+                rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV, &rSh.GetView().GetEditWin(), sal_False);
                 rSh.GetView().AttrChangedNotify( &rSh );
             }
             return;
@@ -496,10 +495,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_ATTR_PARA_RIGHT_TO_LEFT:
         {
             SdrObject* pTmpObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-            SdrPageView* pTmpPV = pSdrView->GetPageViewPvNum(0);
+            SdrPageView* pTmpPV = pSdrView->GetSdrPageView();
             SdrView* pTmpView = pSdrView;
 
-            pSdrView->EndTextEdit(TRUE);
+            pSdrView->SdrEndTextEdit(sal_True);
             sal_Bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
 
             const SfxPoolItem* pPoolItem;
@@ -530,8 +529,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                     aAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
             }
             pTmpView->SetAttributes( aAttr );
-            rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV,
-                                &rSh.GetView().GetEditWin(), FALSE );
+            rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV, &rSh.GetView().GetEditWin(), sal_False );
             rSh.GetView().AttrChangedNotify( &rSh );
         }
         return;
