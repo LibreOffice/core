@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:08:10 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:40:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,18 +121,11 @@ void SdrEditView::ImpClearVars()
 {
     ImpResetPossibilityFlags();
     bPossibilitiesDirty=TRUE;   // << war von Purify angemeckert
-    bCombineError=FALSE;
     bBundleVirtObj=FALSE;
 }
 
 SdrEditView::SdrEditView(SdrModel* pModel1, OutputDevice* pOut):
     SdrMarkView(pModel1,pOut)
-{
-    ImpClearVars();
-}
-
-SdrEditView::SdrEditView(SdrModel* pModel1, XOutputDevice* _pXOut):
-    SdrMarkView(pModel1,_pXOut)
 {
     ImpClearVars();
 }
@@ -324,7 +317,6 @@ void SdrEditView::EndUndo()
 void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
 {
     const List& rAllMarkedObjects = GetTransitiveHullOfMarkedObjects();
-//  ForceEdgesOfMarkedNodes();
 
     // #i13033#
     // New mechanism to search for necessary disconnections for
@@ -509,9 +501,6 @@ void SdrEditView::CheckPossibilities()
                 BOOL bHasText=pObj->GetOutlinerParaObject()!=NULL;
                 if (bGroup || bHasText) {
                     bCombinePossible=TRUE;
-                } else {
-                    // folgendes Statemant macht IMHO keinen Sinn (Bugfix am 27-11-1995 Combine und Fontwork):
-                    //bCombinePossible=pPath->GetPathPoly().Count()>1;
                 }
             }
             bCombineNoPolyPolyPossible=bCombinePossible;
@@ -553,13 +542,6 @@ void SdrEditView::CheckPossibilities()
                         bGradientAllowed = FALSE;
                     }
                 }
-
-                //if(SFX_ITEM_DONTCARE == rSet.GetItemState(XATTR_FILLSTYLE, FALSE))
-                //XFillStyle eFillStyle = ((XFillStyleItem&)(pObj->GetItem(XATTR_FILLSTYLE))).GetValue();
-                //if(eFillStyle != XFILL_GRADIENT)
-                //{
-                //  bGradientAllowed = FALSE;
-                //}
             }
 
             BOOL bNoMovRotFound=FALSE;
@@ -618,13 +600,16 @@ void SdrEditView::CheckPossibilities()
                 if (aInfo.bCanConvToPoly          ) bCanConvToPoly          =TRUE;
                 if (aInfo.bCanConvToPathLineToArea) bCanConvToPathLineToArea=TRUE;
                 if (aInfo.bCanConvToPolyLineToArea) bCanConvToPolyLineToArea=TRUE;
+
                 // Combine/Dismantle
-                if (bCombinePossible) {
-                    bCombinePossible=ImpCanConvertForCombine(pObj);
-                    bCombineNoPolyPolyPossible=bCombinePossible;
+                if(bCombinePossible)
+                {
+                    bCombinePossible = ImpCanConvertForCombine(pObj);
+                    bCombineNoPolyPolyPossible = bCombinePossible;
                 }
-                if (!bDismantlePossible) bDismantlePossible=ImpCanDismantle(pObj,FALSE);
-                if (!bDismantleMakeLinesPossible) bDismantleMakeLinesPossible=ImpCanDismantle(pObj,TRUE);
+
+                if (!bDismantlePossible) bDismantlePossible = ImpCanDismantle(pObj, sal_False);
+                if (!bDismantleMakeLinesPossible) bDismantleMakeLinesPossible = ImpCanDismantle(pObj, sal_True);
                 // OrthoDesiredOnMarked checken
                 if (!bOrthoDesiredOnMarked && !aInfo.bNoOrthoDesired) bOrthoDesiredOnMarked=TRUE;
                 // ImportMtf checken
@@ -680,20 +665,19 @@ void SdrEditView::ForceMarkedObjToAnotherPage()
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         Rectangle aObjRect(pObj->GetCurrentBoundRect());
-        aObjRect+=pM->GetPageView()->GetOffset(); // auf View-Koordinaten
         Rectangle aPgRect(pM->GetPageView()->GetPageRect());
         if (!aObjRect.IsOver(aPgRect)) {
             BOOL bFnd=FALSE;
-            SdrPageView* pPV = NULL;
-            for (USHORT nv=GetPageViewCount(); nv>0 && !bFnd;) {
-                nv--;
-                pPV=GetPageViewPvNum(nv);
-                bFnd=aObjRect.IsOver(pPV->GetPageRect());
+            SdrPageView* pPV = GetSdrPageView();
+
+            if(pPV)
+            {
+                bFnd = aObjRect.IsOver(pPV->GetPageRect());
             }
-            if (bFnd) {
+
+            if(bFnd)
+            {
                 pM->GetPageView()->GetObjList()->RemoveObject(pObj->GetOrdNum());
-                Point aDelta(pM->GetPageView()->GetOffset()-pPV->GetOffset());
-                pObj->Move(Size(aDelta.X(),aDelta.Y()));
                 SdrInsertReason aReason(SDRREASON_VIEWCALL);
                 pPV->GetObjList()->InsertObject(pObj,CONTAINER_APPEND,&aReason);
                 pM->SetPageView(pPV);
@@ -740,10 +724,9 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
 
 void SdrEditView::DeleteMarkedObj()
 {
-    if (GetMarkedObjectCount()!=0) {
-        nSpecialCnt=0;
+    if (GetMarkedObjectCount()) {
         BrkAction();
-        HideMarkHdl(NULL);
+        HideMarkHdl();
         BegUndo(ImpGetResStr(STR_EditDelete),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_DELETE);
         DeleteMarkedList(GetMarkedObjectList());
         GetMarkedObjectListWriteAccess().Clear();
@@ -756,7 +739,6 @@ void SdrEditView::DeleteMarkedObj()
 void SdrEditView::CopyMarkedObj()
 {
     SortMarkedObjects();
-    //ForceEdgesOfMarkedNodes();
 
     SdrMarkList aSourceObjectsForCopy(GetMarkedObjectList());
     // Folgende Schleife Anstatt MarkList::Merge(), damit
@@ -786,8 +768,6 @@ void SdrEditView::CopyMarkedObj()
             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoCopyObject(*pO));
             SdrMark aME(*pM);
             aME.SetMarkedSdrObj(pO);
-
-            // aCopiedObjects.InsertEntry(aME);
             aCloneList.AddPair(pM->GetMarkedSdrObj(), pO);
 
             if (pM->GetUser()==0)
@@ -829,7 +809,7 @@ void SdrEditView::CopyMarkedObj()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL SdrEditView::InsertObject(SdrObject* pObj, SdrPageView& rPV, ULONG nOptions)
+BOOL SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, ULONG nOptions)
 {
     if ((nOptions & SDRINSERT_SETDEFLAYER)!=0) {
         SdrLayerID nLayer=rPV.GetPage()->GetLayerAdmin().GetLayerID(aAktLayer,TRUE);
@@ -860,7 +840,7 @@ BOOL SdrEditView::InsertObject(SdrObject* pObj, SdrPageView& rPV, ULONG nOptions
     return TRUE;
 }
 
-void SdrEditView::ReplaceObject(SdrObject* pOldObj, SdrPageView& rPV, SdrObject* pNewObj, BOOL bMark)
+void SdrEditView::ReplaceObjectAtView(SdrObject* pOldObj, SdrPageView& rPV, SdrObject* pNewObj, BOOL bMark)
 {
     SdrObjList* pOL=pOldObj->GetObjList();
     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoReplaceObject(*pOldObj,*pNewObj));
