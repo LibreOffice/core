@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:03:48 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:09:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,9 +82,9 @@
 using namespace com::sun::star;
 
 // OD 18.06.2003 #108784#
-#ifndef _SVDVMARK_HXX //autogen
-#include <svx/svdvmark.hxx>
-#endif
+//#ifndef _SVDVMARK_HXX //autogen
+//#include <svx/svdvmark.hxx>
+//#endif
 #include <vector>
 // --> OD 2004-06-24 #i28701#
 #ifndef _SORTEDOBJS_HXX
@@ -159,6 +159,9 @@ SwDrawView::SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice *pOutDev) :
     SetHitTolerancePixel( GetMarkHdlSizePixel()/2 );
 
     SetPrintPreview( rI.GetShell()->IsPreView() );
+
+    // #i68597# allow sw to use fully buffered overlay from Drawinglayer
+    SetBufferedOverlayAllowed(true);
 }
 
 /*************************************************************************
@@ -819,7 +822,7 @@ void SwDrawView::ShowDragAnchor()
     {
         CalcAnchor();
         pHdl->SetPos(aAnchorPoint);
-        RefreshAllIAOManagers();
+        //OLMRefreshAllIAOManagers();
     }
 }
 
@@ -948,7 +951,7 @@ void SwDrawView::CheckPossibilities()
 */
 void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
 {
-    SdrPageView* pDrawPageView = _rMarkView.GetPageViewPgNum(0);
+    SdrPageView* pDrawPageView = _rMarkView.GetSdrPageView();
     const SdrMarkList& rMarkList = _rMarkView.GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() )
