@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:25:45 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:54:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,8 +224,6 @@ sal_Bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* 
             break;
 //                HINT_DEFAULTTABCHG,   // Default Tabulatorweite geaendert
 //                HINT_DEFFONTHGTCHG,   // Default FontHeight geaendert
-//                HINT_CONTROLINSERTED, // UnoControl wurde eingefuegt
-//                HINT_CONTROLREMOVED,  // UnoControl wurde entfernt
 //                HINT_SWITCHTOPAGE,    // #94278# UNDO/REDO at an object evtl. on another page
 //                HINT_OBJLISTCLEAR     // Is called before an SdrObjList will be cleared
         default:
