@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vdraw.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:02:33 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:12:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,10 +90,13 @@
 #include "dview.hxx"
 #include "flyfrm.hxx"
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 #ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
 #include <IDocumentDrawModelAccess.hxx>
 #endif
-
 
 /*************************************************************************
 |*
@@ -103,24 +106,24 @@
 |*  Letzte Aenderung    MA 02. Jun. 98
 |*
 |*************************************************************************/
-SwSaveHdl::SwSaveHdl( SwViewImp *pI ) :
-    pImp( pI ),
-    bXorVis( FALSE )
-{
-    if ( pImp->HasDrawView() )
-    {
-        bXorVis = pImp->GetDrawView()->IsShownXorVisible( pImp->GetShell()->GetOut());
-        if ( bXorVis )
-            pImp->GetDrawView()->HideShownXor( pImp->GetShell()->GetOut() );
-    }
-}
+//SwSaveHdl::SwSaveHdl( SwViewImp *pI ) :
+//  pImp( pI ),
+//  bXorVis( FALSE )
+//{
+    //if ( pImp->HasDrawView() )
+    //{
+    //  bXorVis = pImp->GetDrawView()->IsShownXorVisible( pImp->GetShell()->GetOut());
+    //  if ( bXorVis )
+    //      pImp->GetDrawView()->HideShownXor( pImp->GetShell()->GetOut() );
+    //}
+//}
 
 
-SwSaveHdl::~SwSaveHdl()
-{
-    if ( bXorVis )
-        pImp->GetDrawView()->ShowShownXor( pImp->GetShell()->GetOut() );
-}
+//SwSaveHdl::~SwSaveHdl()
+//{
+    //if ( bXorVis )
+    //  pImp->GetDrawView()->ShowShownXor( pImp->GetShell()->GetOut() );
+//}
 
 
 /*************************************************************************
@@ -140,8 +143,8 @@ void SwViewImp::StartAction()
         SET_CURR_SHELL( GetShell() );
         if ( pSh->ISA(SwFEShell) )
             ((SwFEShell*)pSh)->HideChainMarker();   //Kann sich geaendert haben
-        bResetXorVisibility = GetDrawView()->IsShownXorVisible( GetShell()->GetOut());
-        GetDrawView()->HideShownXor( GetShell()->GetOut() );
+        //bResetXorVisibility = GetDrawView()->IsShownXorVisible( GetShell()->GetOut());
+        //GetDrawView()->HideShownXor( GetShell()->GetOut() );
     }
 }
 
@@ -152,8 +155,8 @@ void SwViewImp::EndAction()
     if ( HasDrawView() )
     {
         SET_CURR_SHELL( GetShell() );
-        if ( bResetXorVisibility )
-            GetDrawView()->ShowShownXor( GetShell()->GetOut() );
+        //if ( bResetXorVisibility )
+        //  GetDrawView()->ShowShownXor( GetShell()->GetOut() );
         if ( pSh->ISA(SwFEShell) )
             ((SwFEShell*)pSh)->SetChainMarker();    //Kann sich geaendert haben
     }
@@ -175,7 +178,7 @@ void SwViewImp::LockPaint()
     {
         bShowHdlPaint = GetDrawView()->IsMarkHdlShown();
         if ( bShowHdlPaint )
-            GetDrawView()->HideMarkHdl( GetShell()->GetOut() );
+            GetDrawView()->HideMarkHdl();
         bResetHdlHiddenPaint = !GetDrawView()->IsMarkHdlHidden();
         GetDrawView()->SetMarkHdlHidden( TRUE );
     }
@@ -193,7 +196,7 @@ void SwViewImp::UnlockPaint()
     if ( bResetHdlHiddenPaint )
         GetDrawView()->SetMarkHdlHidden( FALSE );
     if ( bShowHdlPaint )
-        GetDrawView()->ShowMarkHdl( GetShell()->GetOut() );
+        GetDrawView()->ShowMarkHdl();
 }
 
 
@@ -258,15 +261,12 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
             GetDrawView()->GetModel()->GetDrawOutliner().SetDefaultHorizontalTextDirection( aEEHoriTextDirOfPage );
         }
 
-        //#110094#-3
-        //Link aLnk( LINK( this, SwViewImp, PaintDispatcher ) );
         pOutDev->Push( PUSH_LINECOLOR ); // #114231#
-        GetPageView()->DrawLayer( _nLayerID, _rRect.SVRect(),
-                        pOutDev,
-                        GetShell()->IsPreView() ? SDRPAINTMODE_ANILIKEPRN : 0);
+        // Region aDrawRegion(_rRect.SVRect());
+        //GetPageView()->DrawLayer( _nLayerID, aDrawRegion, pOutDev,
+        //              GetShell()->IsPreView() ? SDRPAINTMODE_ANILIKEPRN : 0);
+        GetPageView()->DrawLayer( _nLayerID, pOutDev, GetShell()->IsPreView() ? SDRPAINTMODE_ANILIKEPRN : 0);
         pOutDev->Pop();
-        //#110094#-3
-        //,&aLnk );
 
         // OD 29.08.2002 #102450#
         // reset background color of the outliner
