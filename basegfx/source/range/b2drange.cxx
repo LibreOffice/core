@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2drange.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:04:56 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:09:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,10 @@
 #include <basegfx/numeric/ftools.hxx>
 #endif
 
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
 namespace basegfx
 {
     B2DRange::B2DRange( const B2IRange& rRange ) :
@@ -61,6 +65,19 @@ namespace basegfx
 
             maRangeX.expand(rRange.getMaxX());
             maRangeY.expand(rRange.getMaxY());
+        }
+    }
+
+    void B2DRange::transform(const B2DHomMatrix& rMatrix)
+    {
+        if(!isEmpty() && !rMatrix.isIdentity())
+        {
+            const B2DRange aSource(*this);
+            reset();
+            expand(rMatrix * B2DPoint(aSource.getMinX(), aSource.getMinY()));
+            expand(rMatrix * B2DPoint(aSource.getMaxX(), aSource.getMinY()));
+            expand(rMatrix * B2DPoint(aSource.getMinX(), aSource.getMaxY()));
+            expand(rMatrix * B2DPoint(aSource.getMaxX(), aSource.getMaxY()));
         }
     }
 
