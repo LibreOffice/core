@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlex.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 10:44:20 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:23:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,6 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #endif
 
-#ifndef _XPOLY_HXX
-#include <svx/xpoly.hxx>
-#endif
 #ifndef _SV_GDIMTF_HXX //autogen
 #include <vcl/gdimtf.hxx>
 #endif
@@ -239,9 +236,7 @@ class HtmlExport
 
     String  CreateHTMLCircleArea( ULONG nRadius, ULONG nCenterX,
                                   ULONG nCenterY, const String& rHRef ) const;
-    String  CreateHTMLPolygonArea( const XPolyPolygon& rXPolyPoly,
-                                   Size aShift, double fFactor,
-                                   const String& rHRef ) const;
+    String  CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPolyPoly, Size aShift, double fFactor, const String& rHRef ) const;
     String  CreateHTMLRectArea( const Rectangle& rRect,
                                 const String& rHRef ) const;
 
