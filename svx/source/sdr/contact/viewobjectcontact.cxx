@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontact.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:38:06 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:32:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,6 +311,17 @@ namespace sdr
             }
         }
 
+        // Pre- and Post-Paint this object. Is used e.g. for page background/foreground painting.
+        void ViewObjectContact::PrePaintObject(DisplayInfo& rDisplayInfo)
+        {
+            GetViewContact().PrePaintObject(rDisplayInfo, *this);
+        }
+
+        void ViewObjectContact::PostPaintObject(DisplayInfo& rDisplayInfo)
+        {
+            GetViewContact().PostPaintObject(rDisplayInfo, *this);
+        }
+
         // Paint this objects DrawHierarchy
         void ViewObjectContact::PaintDrawHierarchy(DisplayInfo& rDisplayInfo)
         {
@@ -339,12 +350,13 @@ namespace sdr
             }
         }
 
-        // This method recursively paints the draw hierarchy.
+        // This method recursively paints the draw hierarchy. It is also the
+        // start point for the mechanism seen from the ObjectContact.
         void ViewObjectContact::PaintObjectHierarchy(DisplayInfo& rDisplayInfo)
         {
             // test for ghosted displaying, see old SdrObjList::Paint
             // #i29129# No ghosted display for printing.
-            sal_Bool bDoGhostedDisplaying(
+            const sal_Bool bDoGhostedDisplaying(
                 IsActiveGroup()
                 && GetObjectContact().DoVisualizeEnteredGroup()
                 && !rDisplayInfo.OutputToPrinter());
@@ -359,11 +371,10 @@ namespace sdr
             }
 
             // handle pre-paint of ViewObjectContact
-            GetViewContact().PrePaintObject(rDisplayInfo, *this);
+            PrePaintObject(rDisplayInfo);
 
             // handle paint of ViewObjectContact
-            if(GetViewContact().ShouldPaintObject(rDisplayInfo, *this)
-                && rDisplayInfo.DoContinuePaint())
+            if(GetViewContact().ShouldPaintObject(rDisplayInfo, *this) && rDisplayInfo.DoContinuePaint())
             {
                 if(pRedirector)
                 {
@@ -379,7 +390,7 @@ namespace sdr
             PaintDrawHierarchy(rDisplayInfo);
 
             // handle post-paint of ViewObjectContact
-            GetViewContact().PostPaintObject(rDisplayInfo, *this);
+            PostPaintObject(rDisplayInfo);
 
             // if activated, reset here again
             if(bDoGhostedDisplaying)
