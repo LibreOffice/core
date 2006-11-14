@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:24:17 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:23:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,10 @@
 
 #include "accessibility.hrc"
 #include "sdresid.hxx"
+
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
