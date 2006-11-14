@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin5.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:01:02 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:57:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,7 +388,7 @@ void __EXPORT ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 
     if ( pDrView && bHelpEnabled && !bDone )
     {
-        SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
+        SdrPageView* pPV = pDrView->GetSdrPageView();
         DBG_ASSERT( pPV, "SdrPageView* ist NULL" );
         if (pPV)
             bDone = ((ScDrawPage*)pPV->GetPage())->RequestHelp( this, pDrView, rHEvt );
