@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontactofpageview.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:57:39 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:05:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,10 +40,6 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #endif
 
-#ifndef _SV_VIRDEV_HXX
-#include <vcl/virdev.hxx>
-#endif
-
 #ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
 #endif
@@ -51,7 +47,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
-class SdrPageViewWindow;
+class SdrPageWindow;
 class SdrPage;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -65,13 +61,10 @@ namespace sdr
         protected:
             // the owner of this ObjectContactOfPageView. Set from constructor and not
             // to be changed in any way.
-            SdrPageViewWindow&                              mrPageViewWindow;
+            SdrPageWindow&                                  mrPageWindow;
 
             // The last remembered StartPoint of the hierarchy
             SdrPage*                                        mpRememberedStartPage;
-
-            // The VirtualDevice for PreRendering
-            VirtualDevice                                   maPreRenderDevice;
 
             // Create and set the ExpandPaintClipRegion. This needs to be done before
             // any of the objects gets really painted because it relies on the invalidated
@@ -81,19 +74,18 @@ namespace sdr
             // Process the whole displaying, the real version
             void DoProcessDisplay(DisplayInfo& rDisplayInfo);
 
-            // Decide if to PreRender
-            sal_Bool DoPreRender(DisplayInfo& rDisplayInfo) const;
-
-            // The PreRenderer itself which creates the PreRenderedBitmap
-            // using the PreRenderDevice.
-            void PreRender(DisplayInfo& rDisplayInfo);
-
             // Update Draw Hierarchy data
             virtual void EnsureValidDrawHierarchy(DisplayInfo& rDisplayInfo);
 
         public:
-            // basic constructor, used from SdrPageViewWindow.
-            ObjectContactOfPageView(SdrPageViewWindow& rPageViewWindow);
+            // access to SdrPageWindow
+            SdrPageWindow& GetPageWindow() const { return mrPageWindow; }
+
+            // access to SdrPage of PageView
+            SdrPage* GetSdrPage() const;
+
+            // basic constructor, used from SdrPageView.
+            ObjectContactOfPageView(SdrPageWindow& rPageWindow);
 
             // The destructor. When PrepareDelete() was not called before (see there)
             // warnings will be generated in debug version if there are still contacts
@@ -147,12 +139,10 @@ namespace sdr
             // check if buffering of MasterPages is allowed. Default is sal_False.
             virtual sal_Bool IsMasterPageBufferingAllowed() const;
 
-        public:
-                    // internal access to SdrPageViewWindow
-            SdrPageViewWindow& GetPageViewWindow() const;
-
-            // internal access to SdrPage of PageView
-            SdrPage* GetSdrPage() const;
+            /** sets all UNO controls which are associated with this ObjectContact to
+                design or alive mode.
+            */
+            void    SetUNOControlsDesignMode( bool _bDesignMode ) const;
         };
     } // end of namespace contact
 } // end of namespace sdr
