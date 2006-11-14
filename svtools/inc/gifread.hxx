@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gifread.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:02:17 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:38:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,7 @@ public:
     ReadState           ReadGIF( Graphic& rGraphic );
     const Graphic&      GetIntermediateGraphic();
 
-                        GIFReader( SvStream& rStm, void* pCallData );
+                        GIFReader( SvStream& rStm );
     virtual             ~GIFReader();
 };
 
@@ -147,6 +147,6 @@ public:
 // - ImportGIF -
 // -------------
 
- BOOL ImportGIF( SvStream& rStream, Graphic& rGraphic, void* pCallerData );
+ BOOL ImportGIF( SvStream& rStream, Graphic& rGraphic );
 
 #endif // _GIFREAD_HXX
