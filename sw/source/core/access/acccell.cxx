@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccell.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:33:55 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:07:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,10 @@
 #endif
 #ifndef _ACCCELL_HXX
 #include <acccell.hxx>
+#endif
+
+#ifndef _STLP_CFLOAT
+#include <cfloat>
 #endif
 
 #include <limits.h>
