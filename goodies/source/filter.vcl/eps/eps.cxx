@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:44:24 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:11:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,8 +119,6 @@ class PSWriter
 private:
     BOOL                mbStatus;
     ULONG               mnLevelWarning;     // number of embedded eps files which was not exported
-    PFilterCallback     mpCallback;
-    void*               mpCallerData;
     ULONG               mnLastPercent;      // Mit welcher Zahl pCallback zuletzt aufgerufen wurde.
     UINT32              mnLatestPush;       // offset auf streamposition, an der zuletzt gepusht wurde
 
@@ -175,6 +173,8 @@ private:
     USHORT              nCodeSize;
     ULONG               nOffset;
     ULONG               dwShift;
+
+    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
     void                MayCallback( ULONG nPercent );
 
@@ -256,8 +256,7 @@ private:
     inline void         WriteBits( USHORT nCode, USHORT nCodeLen );
 
 public:
-    BOOL                WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
-                                    PFilterCallback, void*, FilterConfigItem* );
+    BOOL                WritePS( const Graphic& rGraphic, SvStream& rTargetStream, FilterConfigItem* );
     PSWriter();
     ~PSWriter();
 };
@@ -266,14 +265,13 @@ public:
 
 void PSWriter::MayCallback( ULONG nPercent )
 {
-
-    if ( nPercent >= mnLastPercent + 3 )
+    if ( xStatusIndicator.is() )
     {
-        mnLastPercent = nPercent;
-        if( mpCallback && nPercent <= 100 )
+        if( nPercent >= mnLastPercent + 3 )
         {
-            if ( ( (*mpCallback)( mpCallerData, (USHORT)nPercent ) ) == TRUE )
-                mbStatus = FALSE;
+            mnLastPercent = nPercent;
+            if ( nPercent <= 100 )
+                xStatusIndicator->setValue( nPercent );
         }
     }
 }
@@ -293,18 +291,25 @@ PSWriter::~PSWriter()
 
 //---------------------------------------------------------------------------------
 
-BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
-                          PFilterCallback pcallback, void* pcallerdata, FilterConfigItem* pConfigItem )
+BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, FilterConfigItem* pFilterConfigItem )
 {
     UINT32 nStreamPosition = 0, nPSPosition = 0; // -Wall warning, unset, check
 
     mbStatus = TRUE;
     mnPreview = 0;
     mnLevelWarning = 0;
-    mpCallback = pcallback;
-    mpCallerData = pcallerdata;
     mnLastPercent = 0;
     mnLatestPush = 0xEFFFFFFE;
+
+    if ( pFilterConfigItem )
+    {
+        xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
+        if ( xStatusIndicator.is() )
+        {
+            rtl::OUString aMsg;
+            xStatusIndicator->start( aMsg, 100 );
+        }
+    }
 
     mpPS = &rTargetStream;
     mpPS->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
@@ -316,7 +321,7 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
     mnTextMode = 0;         // default0 : export glyph outlines
 
     // try to get the dialog selection
-    if ( pConfigItem )
+    if ( pFilterConfigItem )
     {
         ByteString  aResMgrName( "eps" );
         ResMgr*     pResMgr;
@@ -330,14 +335,14 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
             String aVersionStr( RTL_CONSTASCII_USTRINGPARAM( "Version" ) );
             String aColorStr( RTL_CONSTASCII_USTRINGPARAM( "ColorFormat" ) );
             String aComprStr( RTL_CONSTASCII_USTRINGPARAM( "CompressionMode" ) );
-            mnPreview = pConfigItem->ReadInt32( aPreviewStr, 1 );
-            mnLevel = pConfigItem->ReadInt32( aVersionStr, 2 );
+            mnPreview = pFilterConfigItem->ReadInt32( aPreviewStr, 1 );
+            mnLevel = pFilterConfigItem->ReadInt32( aVersionStr, 2 );
             if ( mnLevel != 1 )
                 mnLevel = 2;
-            mbGrayScale = pConfigItem->ReadInt32( aColorStr, 1 ) == 2;
-            mbCompression = pConfigItem->ReadInt32( aComprStr, 1 ) == 1;
+            mbGrayScale = pFilterConfigItem->ReadInt32( aColorStr, 1 ) == 2;
+            mbCompression = pFilterConfigItem->ReadInt32( aComprStr, 1 ) == 1;
             String sTextMode( RTL_CONSTASCII_USTRINGPARAM( "TextMode" ) );
-            mnTextMode = pConfigItem->ReadInt32( sTextMode, 0 );
+            mnTextMode = pFilterConfigItem->ReadInt32( sTextMode, 0 );
             if ( mnTextMode > 2 )
                 mnTextMode = 0;
             delete pResMgr;
@@ -446,7 +451,7 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
     else
         mbStatus = FALSE;
 
-    if ( mbStatus && mnLevelWarning && pConfigItem )
+    if ( mbStatus && mnLevelWarning && pFilterConfigItem )
     {
         ByteString  aResMgrName( "eps" );
         ResMgr* pResMgr;
@@ -459,6 +464,10 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
             delete pResMgr;
         }
     }
+
+    if ( xStatusIndicator.is() )
+        xStatusIndicator->end();
+
     return mbStatus;
 }
 
@@ -2736,18 +2745,10 @@ BOOL PSWriter::ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
 
 //================== GraphicExport - die exportierte Funktion ================
 
-#ifdef WNT
-extern "C" BOOL _cdecl GraphicExport(SvStream & rStream, Graphic & rGraphic,
-                              PFilterCallback pCallback, void * pCallerData,
-                              FilterConfigItem* pConfigItem, BOOL)
-#else
-extern "C" BOOL GraphicExport(SvStream & rStream, Graphic & rGraphic,
-                              PFilterCallback pCallback, void * pCallerData,
-                              FilterConfigItem* pConfigItem, BOOL)
-#endif
+extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem, BOOL)
 {
     PSWriter aPSWriter;
-    return aPSWriter.WritePS( rGraphic, rStream, pCallback, pCallerData, pConfigItem );
+    return aPSWriter.WritePS( rGraphic, rStream, pFilterConfigItem );
 }
 
 //---------------------------------------------------------------------------------
