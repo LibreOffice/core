@@ -4,9 +4,9 @@
  *
  *  $RCSfile: emptyproperties.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:42:50 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:36:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,14 +172,6 @@ namespace sdr
             DBG_ASSERT(sal_False, "EmptyProperties::GetStyleSheet() should never be called (!)");
             return 0L;
         }
-
-//BFS01     void EmptyProperties::PreProcessSave()
-//BFS01     {
-//BFS01     }
-
-//BFS01     void EmptyProperties::PostProcessSave()
-//BFS01     {
-//BFS01     }
     } // end of namespace properties
 } // end of namespace sdr
 
