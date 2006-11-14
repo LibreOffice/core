@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxdraw.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:46:46 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:57:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
 
 class SvxPopupWindowTbxMgr : public SfxPopupWindow
 {
-//  SfxToolBoxManager   aTbx;
     void*               pNiemalsDenPointerAufDieErzeugendeToolBoxMerken; // MI!
     ResId               aRIdWinTemp;
     ResId               aRIdTbxTemp;
@@ -76,7 +75,6 @@ public:
     virtual void                PopupModeEnd();
 
     void                        StartSelection();
-//  inline SfxToolBoxManager&   GetTbxMgr() { return aTbx; }
 
     // toolbox click or execute may chage the default selection in the tools toolbox
     virtual void                UserEvent( ULONG nEvent, void* pEventData );
