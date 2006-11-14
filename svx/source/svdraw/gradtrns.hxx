@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gradtrns.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:21:16 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:37:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,8 @@
 #include <tools/gen.hxx>
 #endif
 
-#ifndef _VECTOR2D_HXX
-#include <tools/vector2d.hxx>
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
 #endif
 
 class SdrObject;
@@ -51,8 +51,8 @@ class SdrObject;
 class GradTransVector
 {
 public:
-    Point                       aPos1;
-    Point                       aPos2;
+    basegfx::B2DPoint           maPositionA;
+    basegfx::B2DPoint           maPositionB;
     Color                       aCol1;
     Color                       aCol2;
 };
@@ -71,7 +71,7 @@ public:
     void GradToVec(GradTransGradient& rG, GradTransVector& rV,
         const SdrObject* pObj);
     void VecToGrad(GradTransVector& rV, GradTransGradient& rG,
-        GradTransGradient& rGOld, const SdrObject* pObj, BOOL bMoveSingle, BOOL bMoveFirst);
+        GradTransGradient& rGOld, const SdrObject* pObj, sal_Bool bMoveSingle, sal_Bool bMoveFirst);
 };
 
 #endif // _GRADTRANS_HXX
