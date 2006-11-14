@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedfunc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:31:20 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:28:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -424,7 +424,7 @@ BOOL DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
 
     if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 1 )
     {
-        SdrHdl* pHdl = pView->HitHandle(aPos, *pWindow);
+        SdrHdl* pHdl = pView->PickHandle(aPos);
 
         // if selected object was hit, drag object
         if ( pHdl!=NULL || pView->IsMarkedHit(aPos, nHitLog) )
@@ -546,7 +546,7 @@ BOOL DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
 #ifdef MAC
         pWindow->GrabFocus();
 #endif
-        SdrHdl* pHdl = pView->HitHandle(aMDPos, *pWindow );
+        SdrHdl* pHdl = pView->PickHandle(aMDPos);
         SdrObject* pObj;
         SdrPageView* pPV;
 
@@ -574,13 +574,13 @@ BOOL DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
             if ( pView->MarkObj(aMDPos, nHitLog) )
             {
                 // drag object
-                pHdl=pView->HitHandle(aMDPos, *pWindow);
+                pHdl=pView->PickHandle(aMDPos);
                 pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
             }
             else
             {
                 // select object
-                pView->BegMarkObj(aMDPos, (OutputDevice*) NULL);
+                pView->BegMarkObj(aMDPos);
                 bMarkAction = TRUE;
             }
         }
