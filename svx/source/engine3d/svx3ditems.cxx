@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svx3ditems.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:59:06 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:22:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,36 +259,36 @@ Svx3DLightOnOff8Item::Svx3DLightOnOff8Item(BOOL bVal)
 :   SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_8, bVal)
 {}
 
-Svx3DLightDirection1Item::Svx3DLightDirection1Item(const Vector3D& rVec)
-:   SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_1, rVec)
+Svx3DLightDirection1Item::Svx3DLightDirection1Item(const basegfx::B3DVector& rVec)
+:   SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_1, rVec)
 {}
 
-Svx3DLightDirection2Item::Svx3DLightDirection2Item(const Vector3D& rVec)
-:   SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_2, rVec)
+Svx3DLightDirection2Item::Svx3DLightDirection2Item(const basegfx::B3DVector& rVec)
+:   SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_2, rVec)
 {}
 
-Svx3DLightDirection3Item::Svx3DLightDirection3Item(const Vector3D& rVec)
-:   SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_3, rVec)
+Svx3DLightDirection3Item::Svx3DLightDirection3Item(const basegfx::B3DVector& rVec)
+:   SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_3, rVec)
 {}
 
-Svx3DLightDirection4Item::Svx3DLightDirection4Item(const Vector3D& rVec)
-:   SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_4, rVec)
+Svx3DLightDirection4Item::Svx3DLightDirection4Item(const basegfx::B3DVector& rVec)
+:   SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_4, rVec)
 {}
 
-Svx3DLightDirection5Item::Svx3DLightDirection5Item(const Vector3D& rVec)
-:   SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_5, rVec)
+Svx3DLightDirection5Item::Svx3DLightDirection5Item(const basegfx::B3DVector& rVec)
+:   SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_5, rVec)
 {}
 
-Svx3DLightDirection6Item::Svx3DLightDirection6Item(const Vector3D& rVec)
-:   SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_6, rVec)
+Svx3DLightDirection6Item::Svx3DLightDirection6Item(const basegfx::B3DVector& rVec)
+:   SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_6, rVec)
 {}
 
-Svx3DLightDirection7Item::Svx3DLightDirection7Item(const Vector3D& rVec)
-:   SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_7, rVec)
+Svx3DLightDirection7Item::Svx3DLightDirection7Item(const basegfx::B3DVector& rVec)
+:   SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_7, rVec)
 {}
 
-Svx3DLightDirection8Item::Svx3DLightDirection8Item(const Vector3D& rVec)
-:   SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_8, rVec)
+Svx3DLightDirection8Item::Svx3DLightDirection8Item(const basegfx::B3DVector& rVec)
+:   SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_8, rVec)
 {}
 
 Svx3DShadowSlantItem::Svx3DShadowSlantItem(sal_uInt16 nVal)
