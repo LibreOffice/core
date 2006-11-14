@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msashape3d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:46:01 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:29:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,18 @@
 #ifndef _MSDFFIMP_HXX
 #include <msdffimp.hxx>
 #endif
+
+#ifndef _BGFX_POINT_B3DPOINT_HXX
+#include <basegfx/point/b3dpoint.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
+#include <basegfx/polygon/b3dpolygon.hxx>
+#endif
+
 #include <vector>
-#include <poly3d.hxx>
-#include <goodies/point3d.hxx>
+//#include <poly3d.hxx>
+//#include <goodies/point3d.hxx>
 
 class SvxMSDffCustomShape3D
 {
@@ -56,16 +65,15 @@ class SvxMSDffCustomShape3D
 
         // perspective projection
         double      fZScreen;
-        Point3D     fViewPoint;
+        basegfx::B3DPoint       fViewPoint;
         double      fViewPointOriginX;
         double      fViewPointOriginY;
 
         public :
 
-                        Transformation2D( const DffPropSet& rPropSet, const Rectangle& rSnapRect );
-
-            void        ApplySkewSettings( Polygon3D& rPolyPoly3D );
-            Point       Transform2D( const Vector3D& rPoint );
+            Transformation2D( const DffPropSet& rPropSet, const Rectangle& rSnapRect );
+            basegfx::B3DPolygon ApplySkewSettings( const basegfx::B3DPolygon& rPoly3D );
+            Point       Transform2D( const basegfx::B3DPoint& rPoint );
             sal_Bool    IsParallel() const { return bParallel; };
     };
 
@@ -73,8 +81,8 @@ class SvxMSDffCustomShape3D
 
     protected :
 
-        static void Rotate( Vector3D& rPoint, const double x, const double y, const double z );
-        static void Rotate( PolyPolygon3D&, const Point3D& rRotateCenter, const double x, const double y, const double z );
+        static basegfx::B3DPoint Rotate( const basegfx::B3DPoint& rPoint, const double x, const double y, const double z );
+//      static void Rotate( basegfx::B3DPolyPolygon&, const basegfx::B3DPoint& rRotateCenter, const double x, const double y, const double z );
         static double Fix16ToAngle( sal_Int32 nFixAngle );
         static Rectangle CalculateNewSnapRect( const Rectangle& rOriginalSnapRect, const DffPropSet& );
 
