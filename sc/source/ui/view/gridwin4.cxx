@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:00:36 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:57:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,10 @@
 #include "inputopt.hxx"
 #include "fillinfo.hxx"
 #include "sc.hrc"
+
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
 
 //#include "tabvwsh.hxx"            //! Test !!!!
 
@@ -304,7 +308,7 @@ void lcl_DrawHighlight( ScOutputData& rOutputData, ScViewData* pViewData,
 
 void ScGridWindow::DoInvertRect( const Rectangle& rPixel )
 {
-    Invert( PixelToLogic(rPixel) );
+//  Invert( PixelToLogic(rPixel) );
 
     if ( rPixel == aInvertRect )
         aInvertRect = Rectangle();      // aufheben
@@ -314,6 +318,8 @@ void ScGridWindow::DoInvertRect( const Rectangle& rPixel )
 
         aInvertRect = rPixel;           // neues Rechteck merken
     }
+
+    UpdateHeaderOverlay();      // uses aInvertRect
 }
 
 //------------------------------------------------------------------------
@@ -405,8 +411,8 @@ void __EXPORT ScGridWindow::Paint( const Rectangle& rRect )
 
     OutlinerViewPaint( rRect );
 
-    if (!aInvertRect.IsEmpty())
-        Invert( PixelToLogic(aInvertRect) );    // auf das Clipping verlassen...
+//  if (!aInvertRect.IsEmpty())
+//      Invert( PixelToLogic(aInvertRect) );    // auf das Clipping verlassen...
 
     bIsInPaint = FALSE;
 }
@@ -601,15 +607,99 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 //          bOnlyEdit = TRUE;
     }
 
-    MapMode aDrawMode = GetDrawMapMode();
-    Rectangle aDrawingRect = PixelToLogic( Rectangle( Point( nScrX, nScrY ),
-                                        Size( aOutputData.GetScrW(), aOutputData.GetScrH() ) ),
-                                        aDrawMode );
+    // define drawing layer map mode and paint rectangle
+    const MapMode aDrawMode = GetDrawMapMode();
+    Rectangle aDrawingRectLogic;
 
-    if (bCurVis)
-        HideCursor();
+    {
+        // get drawing pixel rect
+        Rectangle aDrawingRectPixel(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
 
-    if ( pDoc->HasBackgroundDraw( nTab, aDrawingRect ) )
+        // correct for border (left/right)
+        if(MAXCOL == nX2)
+        {
+            if(bLayoutRTL)
+            {
+                aDrawingRectPixel.Left() = 0L;
+            }
+            else
+            {
+                aDrawingRectPixel.Right() = GetOutputSizePixel().getWidth();
+            }
+        }
+
+        // correct for border (bottom)
+        if(MAXROW == nY2)
+        {
+            aDrawingRectPixel.Bottom() = GetOutputSizePixel().getHeight();
+        }
+
+        // get logic positions
+        aDrawingRectLogic = PixelToLogic(aDrawingRectPixel, aDrawMode);
+    }
+
+// not necessary with overlay
+//  if (bCurVis)
+//      HideCursor();
+
+    {
+        // init redraw here
+        ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
+
+        if(pTabViewShell)
+        {
+            SdrView* pDrawView = pTabViewShell->GetSdrView();
+
+            if(pDrawView)
+            {
+                // pDrawView->RefreshAllIAOManagers();
+                Region aDrawingRegion(aDrawingRectLogic);
+                pDrawView->BeginDrawLayers(this, aDrawingRegion, sal_False);
+            }
+        }
+    }
+
+    //  Rand (Wiese) (Pixel)
+    if ( nX2==MAXCOL || nY2==MAXROW )
+    {
+        // save MapMode and set to pixel
+        MapMode aCurrentMapMode(GetMapMode());
+        SetMapMode(MAP_PIXEL);
+
+        Rectangle aPixRect = Rectangle( Point(), GetOutputSizePixel() );
+        SetFillColor( rColorCfg.GetColorValue(svtools::APPBACKGROUND).nColor );
+        SetLineColor();
+        if ( nX2==MAXCOL )
+        {
+            Rectangle aDrawRect( aPixRect );
+            if ( bLayoutRTL )
+                aDrawRect.Right() = nScrX - 1;
+            else
+                aDrawRect.Left() = nScrX + aOutputData.GetScrW();
+            if (aDrawRect.Right() >= aDrawRect.Left())
+                DrawRect( aDrawRect );
+        }
+        if ( nY2==MAXROW )
+        {
+            Rectangle aDrawRect( aPixRect );
+            aDrawRect.Top() = nScrY + aOutputData.GetScrH();
+            if ( nX2==MAXCOL )
+            {
+                // no double painting of the corner
+                if ( bLayoutRTL )
+                    aDrawRect.Left() = nScrX;
+                else
+                    aDrawRect.Right() = nScrX + aOutputData.GetScrW() - 1;
+            }
+            if (aDrawRect.Bottom() >= aDrawRect.Top())
+                DrawRect( aDrawRect );
+        }
+
+        // restore MapMode
+        SetMapMode(aCurrentMapMode);
+    }
+
+    if ( pDoc->HasBackgroundDraw( nTab, aDrawingRectLogic ) )
     {
         SetMapMode(MAP_PIXEL);
         aOutputData.DrawClear();
@@ -617,7 +707,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
             // Drawing Hintergrund
 
         SetMapMode(aDrawMode);
-        DrawRedraw( aOutputData, aDrawingRect, eMode, SC_LAYER_BACK );
+        DrawRedraw( aOutputData, eMode, SC_LAYER_BACK );
     }
     else
         aOutputData.SetSolidBackground(TRUE);
@@ -702,38 +792,28 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         // Drawing Vordergrund
 
     SetMapMode(aDrawMode);
-    DrawRedraw( aOutputData, aDrawingRect, eMode, SC_LAYER_FRONT );
-    DrawRedraw( aOutputData, aDrawingRect, eMode, SC_LAYER_INTERN );
-    DrawRedraw( aOutputData, aDrawingRect, eMode, SC_LAYER_CONTROLS );  // als letztes
-    DrawSdrGrid( aDrawingRect );
 
-    {
-        // call RefreshAllIAOManagers only once in paint, so do it here
-        // and not in DrawOneLayer(). But after DrawGrid...
-        ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
-
-        if(pTabViewShell)
-        {
-            SdrView* pDrawView = pTabViewShell->GetSdrView();
-
-            if(pDrawView)
-            {
-                pDrawView->RefreshAllIAOManagers();
-            }
-        }
-    }
+    DrawRedraw( aOutputData, eMode, SC_LAYER_FRONT );
+    DrawRedraw( aOutputData, eMode, SC_LAYER_INTERN );
+    DrawRedraw( aOutputData, eMode, SC_LAYER_CONTROLS );    // als letztes
+    DrawSdrGrid( aDrawingRectLogic );
 
     if (!bIsInScroll)                               // Drawing Markierungen
     {
-        BOOL bDraw = TRUE;
-        if (eMode == SC_UPDATE_CHANGED)
-            bDraw = NeedDrawMarks() && aOutputData.SetChangedClip();
-        if (bDraw)
+        if(eMode == SC_UPDATE_CHANGED && aOutputData.SetChangedClip())
         {
-            DrawMarks();
-            if (eMode == SC_UPDATE_CHANGED)
-                SetClipRegion();
+            SetClipRegion();
         }
+
+        //BOOL bDraw = TRUE;
+        //if (eMode == SC_UPDATE_CHANGED)
+        //  bDraw = NeedDrawMarks() && aOutputData.SetChangedClip();
+        //if (bDraw)
+        //{
+        //  DrawMarks();
+        //  if (eMode == SC_UPDATE_CHANGED)
+        //      SetClipRegion();
+        //}
     }
 
     SetMapMode(MAP_PIXEL);
@@ -759,11 +839,15 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         SetMapMode(MAP_PIXEL);
     }
 
+#ifdef OLD_SELECTION_PAINT
     if (pViewData->IsActive())
         aOutputData.DrawMark( this );
+#endif
 
     if ( pViewData->IsRefMode() && nTab >= pViewData->GetRefStartZ() && nTab <= pViewData->GetRefEndZ() )
     {
+        // The AutoFill shrink area has an own overlay now
+#if 0
         //  Schraffur beim Loeschen per AutoFill
         if ( pViewData->GetRefType() == SC_REFTYPE_FILL )
         {
@@ -792,6 +876,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
                 }
             }
         }
+#endif
 
         Color aRefColor( rColorCfg.GetColorValue(svtools::CALCREFERENCE).nColor );
         aOutputData.DrawRefMark( pViewData->GetRefStartX(), pViewData->GetRefStartY(),
@@ -826,52 +911,50 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         }
     }
 
-        //  Rand (Pixel)
-
-    if ( nX2==MAXCOL || nY2==MAXROW )
     {
-        Rectangle aPixRect = Rectangle( Point(), GetOutputSizePixel() );
-        SetFillColor( rColorCfg.GetColorValue(svtools::APPBACKGROUND).nColor );
-        SetLineColor();
-        if ( nX2==MAXCOL )
+        // save map mode and set to draw map mode
+        MapMode aCurrentMapMode(GetMapMode());
+        SetMapMode(aDrawMode);
+
+        // call RefreshAllIAOManagers only once in paint, so do it here
+        // and not in DrawOneLayer(). But after DrawGrid and after border (Wiese)
+        ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
+
+        if(pTabViewShell)
         {
-            Rectangle aDrawRect( aPixRect );
-            if ( bLayoutRTL )
-                aDrawRect.Right() = nScrX - 1;
-            else
-                aDrawRect.Left() = nScrX + aOutputData.GetScrW();
-            if (aDrawRect.Right() >= aDrawRect.Left())
-                DrawRect( aDrawRect );
-        }
-        if ( nY2==MAXROW )
-        {
-            Rectangle aDrawRect( aPixRect );
-            aDrawRect.Top() = nScrY + aOutputData.GetScrH();
-            if ( nX2==MAXCOL )
+            SdrView* pDrawView = pTabViewShell->GetSdrView();
+
+            if(pDrawView)
             {
-                // no double painting of the corner
-                if ( bLayoutRTL )
-                    aDrawRect.Left() = nScrX;
-                else
-                    aDrawRect.Right() = nScrX + aOutputData.GetScrW() - 1;
+                // pDrawView->RefreshAllIAOManagers();
+                Region aDrawingRegion(aDrawingRectLogic);
+                pDrawView->EndDrawLayers(this);
             }
-            if (aDrawRect.Bottom() >= aDrawRect.Top())
-                DrawRect( aDrawRect );
         }
+
+        // restore map mode
+        SetMapMode(aCurrentMapMode);
     }
 
-    if (bCurVis)
-        ShowCursor();
+// not necessary with overlay
+//  if (bCurVis)
+//      ShowCursor();
 
     if (pViewData->HasEditView(eWhich))
+    {
+        // flush OverlayManager before changing the MapMode
+        flushOverlayManager();
+
+        // set MapMode for text edit
         SetMapMode(pViewData->GetLogicMode());
+    }
     else
         SetMapMode(aDrawMode);
 
     if ( pNoteMarker )
         pNoteMarker->Draw();        // ueber den Cursor, im Drawing-MapMode
 
-    DrawStartTimer();               // fuer bunte Handles ohne System-Clipping
+    //DrawStartTimer();             // fuer bunte Handles ohne System-Clipping
 
     //
     //  Wenn waehrend des Paint etwas invertiert wurde (Selektion geaendert aus Basic-Macro),
@@ -1604,6 +1687,189 @@ void ScGridWindow::InvertSimple( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     CheckInverted();
 }
 
+void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
+{
+    // transformed from ScGridWindow::InvertSimple
+
+//  ScMarkData& rMark = pViewData->GetMarkData();
+    ScMarkData aMultiMark( pViewData->GetMarkData() );
+    aMultiMark.SetMarking( FALSE );
+    aMultiMark.MarkToMulti();
+
+    ScDocument* pDoc = pViewData->GetDocument();
+    SCTAB nTab = pViewData->GetTabNo();
+
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
+
+    if ( !aMultiMark.IsMultiMarked() )
+        return;
+
+    ScRange aMultiRange;
+    aMultiMark.GetMultiMarkArea( aMultiRange );
+    SCCOL nX1 = aMultiRange.aStart.Col();
+    SCROW nY1 = aMultiRange.aStart.Row();
+    SCCOL nX2 = aMultiRange.aEnd.Col();
+    SCROW nY2 = aMultiRange.aEnd.Row();
+
+    PutInOrder( nX1, nX2 );
+    PutInOrder( nY1, nY2 );
+
+    BOOL bTestMerge = TRUE;
+    BOOL bRepeat = TRUE;
+
+    SCCOL nTestX2 = nX2;
+    SCROW nTestY2 = nY2;
+    if (bTestMerge)
+        pDoc->ExtendMerge( nX1,nY1, nTestX2,nTestY2, nTab );
+
+    SCCOL nPosX = pViewData->GetPosX( eHWhich );
+    SCROW nPosY = pViewData->GetPosY( eVWhich );
+    if (nTestX2 < nPosX || nTestY2 < nPosY)
+        return;                                         // unsichtbar
+    SCCOL nRealX1 = nX1;
+    if (nX1 < nPosX)
+        nX1 = nPosX;
+    if (nY1 < nPosY)
+        nY1 = nPosY;
+
+    SCCOL nXRight = nPosX + pViewData->VisibleCellsX(eHWhich);
+    if (nXRight > MAXCOL) nXRight = MAXCOL;
+    SCROW nYBottom = nPosY + pViewData->VisibleCellsY(eVWhich);
+    if (nYBottom > MAXROW) nYBottom = MAXROW;
+
+    if (nX1 > nXRight || nY1 > nYBottom)
+        return;                                         // unsichtbar
+    if (nX2 > nXRight) nX2 = nXRight;
+    if (nY2 > nYBottom) nY2 = nYBottom;
+
+//  MapMode aOld = GetMapMode(); SetMapMode(MAP_PIXEL);     // erst nach den return's !!!
+
+    double nPPTX = pViewData->GetPPTX();
+    double nPPTY = pViewData->GetPPTY();
+
+    ScInvertMerger aInvert( &rPixelRects );
+
+    Point aScrPos = pViewData->GetScrPos( nX1, nY1, eWhich );
+    long nScrY = aScrPos.Y();
+    BOOL bWasHidden = FALSE;
+    for (SCROW nY=nY1; nY<=nY2; nY++)
+    {
+        BOOL bFirstRow = ( nY == nPosY );                       // first visible row?
+        BOOL bDoHidden = FALSE;                                 // versteckte nachholen ?
+        USHORT nHeightTwips = pDoc->GetRowHeight( nY,nTab );
+        BOOL bDoRow = ( nHeightTwips != 0 );
+        if (bDoRow)
+        {
+            if (bTestMerge)
+                if (bWasHidden)                 // auf versteckte zusammengefasste testen
+                {
+                    bDoHidden = TRUE;
+                    bDoRow = TRUE;
+                }
+
+            bWasHidden = FALSE;
+        }
+        else
+        {
+            bWasHidden = TRUE;
+            if (bTestMerge)
+                if (nY==nY2)
+                    bDoRow = TRUE;              // letzte Zeile aus Block
+        }
+
+        if ( bDoRow )
+        {
+            SCCOL nLoopEndX = nX2;
+            if (nX2 < nX1)                      // Rest von zusammengefasst
+            {
+                SCCOL nStartX = nX1;
+                while ( ((const ScMergeFlagAttr*)pDoc->
+                            GetAttr(nStartX,nY,nTab,ATTR_MERGE_FLAG))->IsHorOverlapped() )
+                    --nStartX;
+                if (nStartX <= nX2)
+                    nLoopEndX = nX1;
+            }
+
+            long nEndY = nScrY + ScViewData::ToPixel( nHeightTwips, nPPTY ) - 1;
+            long nScrX = aScrPos.X();
+            for (SCCOL nX=nX1; nX<=nLoopEndX; nX++)
+            {
+                long nWidth = ScViewData::ToPixel( pDoc->GetColWidth( nX,nTab ), nPPTX );
+                if ( nWidth > 0 )
+                {
+                    long nEndX = nScrX + ( nWidth - 1 ) * nLayoutSign;
+                    if (bTestMerge)
+                    {
+                        SCROW nThisY = nY;
+                        const ScPatternAttr* pPattern = pDoc->GetPattern( nX, nY, nTab );
+                        const ScMergeFlagAttr* pMergeFlag = (const ScMergeFlagAttr*) &pPattern->
+                                                                        GetItem(ATTR_MERGE_FLAG);
+                        if ( pMergeFlag->IsVerOverlapped() && ( bDoHidden || bFirstRow ) )
+                        {
+                            while ( pMergeFlag->IsVerOverlapped() && nThisY > 0 &&
+                                        ( (pDoc->GetRowFlags( nThisY-1, nTab ) & CR_HIDDEN) || bFirstRow ) )
+                            {
+                                --nThisY;
+                                pPattern = pDoc->GetPattern( nX, nThisY, nTab );
+                                pMergeFlag = (const ScMergeFlagAttr*) &pPattern->GetItem(ATTR_MERGE_FLAG);
+                            }
+                        }
+
+                        // nur Rest von zusammengefasster zu sehen ?
+                        SCCOL nThisX = nX;
+                        if ( pMergeFlag->IsHorOverlapped() && nX == nPosX && nX > nRealX1 )
+                        {
+                            while ( pMergeFlag->IsHorOverlapped() )
+                            {
+                                --nThisX;
+                                pPattern = pDoc->GetPattern( nThisX, nThisY, nTab );
+                                pMergeFlag = (const ScMergeFlagAttr*) &pPattern->GetItem(ATTR_MERGE_FLAG);
+                            }
+                        }
+
+                        if ( aMultiMark.IsCellMarked( nThisX, nThisY, TRUE ) == bRepeat )
+                        {
+                            if ( !pMergeFlag->IsOverlapped() )
+                            {
+                                ScMergeAttr* pMerge = (ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
+                                if (pMerge->GetColMerge() > 0 || pMerge->GetRowMerge() > 0)
+                                {
+                                    Point aEndPos = pViewData->GetScrPos(
+                                            nThisX + pMerge->GetColMerge(),
+                                            nThisY + pMerge->GetRowMerge(), eWhich );
+                                    if ( aEndPos.X() * nLayoutSign > nScrX * nLayoutSign && aEndPos.Y() > nScrY )
+                                    {
+                                        aInvert.AddRect( Rectangle( nScrX,nScrY,
+                                                    aEndPos.X()-nLayoutSign,aEndPos.Y()-1 ) );
+                                    }
+                                }
+                                else if ( nEndX * nLayoutSign >= nScrX * nLayoutSign && nEndY >= nScrY )
+                                {
+                                    aInvert.AddRect( Rectangle( nScrX,nScrY,nEndX,nEndY ) );
+                                }
+                            }
+                        }
+                    }
+                    else        // !bTestMerge
+                    {
+                        if ( aMultiMark.IsCellMarked( nX, nY, TRUE ) == bRepeat &&
+                                                nEndX * nLayoutSign >= nScrX * nLayoutSign && nEndY >= nScrY )
+                        {
+                            aInvert.AddRect( Rectangle( nScrX,nScrY,nEndX,nEndY ) );
+                        }
+                    }
+
+                    nScrX = nEndX + nLayoutSign;
+                }
+            }
+            nScrY = nEndY + 1;
+        }
+    }
+
+//  aInvert.Flush();        // before restoring MapMode
+}
+
 // -------------------------------------------------------------------------
 
 void ScGridWindow::DrawDragRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
@@ -1694,121 +1960,123 @@ void ScGridWindow::DrawDragRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
 
 void ScGridWindow::DrawCursor()
 {
-    SCTAB nTab = pViewData->GetTabNo();
-    SCCOL nX = pViewData->GetCurX();
-    SCROW nY = pViewData->GetCurY();
-
-    //  in verdeckten Zellen nicht zeichnen
-
-    ScDocument* pDoc = pViewData->GetDocument();
-    const ScPatternAttr* pPattern = pDoc->GetPattern(nX,nY,nTab);
-    const ScMergeFlagAttr& rMerge = (const ScMergeFlagAttr&) pPattern->GetItem(ATTR_MERGE_FLAG);
-    if (rMerge.IsOverlapped())
-        return;
-
-    //  links/oben ausserhalb des Bildschirms ?
-
-    BOOL bVis = ( nX>=pViewData->GetPosX(eHWhich) && nY>=pViewData->GetPosY(eVWhich) );
-    if (!bVis)
-    {
-        SCCOL nEndX = nX;
-        SCROW nEndY = nY;
-        ScDocument* pDoc = pViewData->GetDocument();
-        const ScMergeAttr& rMerge = (const ScMergeAttr&) pPattern->GetItem(ATTR_MERGE);
-        if (rMerge.GetColMerge() > 1)
-            nEndX += rMerge.GetColMerge()-1;
-        if (rMerge.GetRowMerge() > 1)
-            nEndY += rMerge.GetRowMerge()-1;
-        bVis = ( nEndX>=pViewData->GetPosX(eHWhich) && nEndY>=pViewData->GetPosY(eVWhich) );
-    }
-
-    if ( bVis )
-    {
-        //  hier kein Update, da aus Paint gerufen und laut Zaehler Cursor schon da
-        //  wenn Update noetig, dann bei Hide/Showcursor vor dem Hoch-/Runterzaehlen
-
-        MapMode aOld = GetMapMode(); SetMapMode(MAP_PIXEL);
-
-        Point aScrPos = pViewData->GetScrPos( nX, nY, eWhich, TRUE );
-        BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-
-        //  completely right of/below the screen?
-        //  (test with logical start position in aScrPos)
-        BOOL bMaybeVisible;
-        if ( bLayoutRTL )
-            bMaybeVisible = ( aScrPos.X() >= -2 && aScrPos.Y() >= -2 );
-        else
-        {
-            Size aOutSize = GetOutputSizePixel();
-            bMaybeVisible = ( aScrPos.X() <= aOutSize.Width() + 2 && aScrPos.Y() <= aOutSize.Height() + 2 );
-        }
-        if ( bMaybeVisible )
-        {
-            long nSizeXPix;
-            long nSizeYPix;
-            pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
-
-            if ( bLayoutRTL )
-                aScrPos.X() -= nSizeXPix - 2;       // move instead of mirroring
-
-            BOOL bFix = ( pViewData->GetHSplitMode() == SC_SPLIT_FIX ||
-                            pViewData->GetVSplitMode() == SC_SPLIT_FIX );
-            if ( pViewData->GetActivePart()==eWhich || bFix )
-            {
-                //  old UNX version with two Invert calls causes flicker.
-                //  if optimization is needed, a new flag should be added
-                //  to InvertTracking
-
-                aScrPos.X() -= 2;
-                aScrPos.Y() -= 2;
-                Rectangle aRect( aScrPos, Size( nSizeXPix + 3, nSizeYPix + 3 ) );
-
-                Invert(Rectangle( aRect.Left(), aRect.Top(), aRect.Left()+2, aRect.Bottom() ));
-                Invert(Rectangle( aRect.Right()-2, aRect.Top(), aRect.Right(), aRect.Bottom() ));
-                Invert(Rectangle( aRect.Left()+3, aRect.Top(), aRect.Right()-3, aRect.Top()+2 ));
-                Invert(Rectangle( aRect.Left()+3, aRect.Bottom()-2, aRect.Right()-3, aRect.Bottom() ));
-            }
-            else
-            {
-                Rectangle aRect( aScrPos, Size( nSizeXPix - 1, nSizeYPix - 1 ) );
-                Invert( aRect );
-            }
-        }
-
-        SetMapMode(aOld);
-    }
+// #114409#
+//  SCTAB nTab = pViewData->GetTabNo();
+//  SCCOL nX = pViewData->GetCurX();
+//  SCROW nY = pViewData->GetCurY();
+//
+//  //  in verdeckten Zellen nicht zeichnen
+//
+//  ScDocument* pDoc = pViewData->GetDocument();
+//  const ScPatternAttr* pPattern = pDoc->GetPattern(nX,nY,nTab);
+//  const ScMergeFlagAttr& rMerge = (const ScMergeFlagAttr&) pPattern->GetItem(ATTR_MERGE_FLAG);
+//  if (rMerge.IsOverlapped())
+//      return;
+//
+//  //  links/oben ausserhalb des Bildschirms ?
+//
+//  BOOL bVis = ( nX>=pViewData->GetPosX(eHWhich) && nY>=pViewData->GetPosY(eVWhich) );
+//  if (!bVis)
+//  {
+//      SCCOL nEndX = nX;
+//      SCROW nEndY = nY;
+//      ScDocument* pDoc = pViewData->GetDocument();
+//      const ScMergeAttr& rMerge = (const ScMergeAttr&) pPattern->GetItem(ATTR_MERGE);
+//      if (rMerge.GetColMerge() > 1)
+//          nEndX += rMerge.GetColMerge()-1;
+//      if (rMerge.GetRowMerge() > 1)
+//          nEndY += rMerge.GetRowMerge()-1;
+//      bVis = ( nEndX>=pViewData->GetPosX(eHWhich) && nEndY>=pViewData->GetPosY(eVWhich) );
+//  }
+//
+//  if ( bVis )
+//  {
+//      //  hier kein Update, da aus Paint gerufen und laut Zaehler Cursor schon da
+//      //  wenn Update noetig, dann bei Hide/Showcursor vor dem Hoch-/Runterzaehlen
+//
+//      MapMode aOld = GetMapMode(); SetMapMode(MAP_PIXEL);
+//
+//      Point aScrPos = pViewData->GetScrPos( nX, nY, eWhich, TRUE );
+//      BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+//
+//      //  completely right of/below the screen?
+//      //  (test with logical start position in aScrPos)
+//      BOOL bMaybeVisible;
+//      if ( bLayoutRTL )
+//          bMaybeVisible = ( aScrPos.X() >= -2 && aScrPos.Y() >= -2 );
+//      else
+//      {
+//          Size aOutSize = GetOutputSizePixel();
+//          bMaybeVisible = ( aScrPos.X() <= aOutSize.Width() + 2 && aScrPos.Y() <= aOutSize.Height() + 2 );
+//      }
+//      if ( bMaybeVisible )
+//      {
+//          long nSizeXPix;
+//          long nSizeYPix;
+//          pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
+//
+//          if ( bLayoutRTL )
+//              aScrPos.X() -= nSizeXPix - 2;       // move instead of mirroring
+//
+//          BOOL bFix = ( pViewData->GetHSplitMode() == SC_SPLIT_FIX ||
+//                          pViewData->GetVSplitMode() == SC_SPLIT_FIX );
+//          if ( pViewData->GetActivePart()==eWhich || bFix )
+//          {
+//              //  old UNX version with two Invert calls causes flicker.
+//              //  if optimization is needed, a new flag should be added
+//              //  to InvertTracking
+//
+//              aScrPos.X() -= 2;
+//              aScrPos.Y() -= 2;
+//              Rectangle aRect( aScrPos, Size( nSizeXPix + 3, nSizeYPix + 3 ) );
+//
+//              Invert(Rectangle( aRect.Left(), aRect.Top(), aRect.Left()+2, aRect.Bottom() ));
+//              Invert(Rectangle( aRect.Right()-2, aRect.Top(), aRect.Right(), aRect.Bottom() ));
+//              Invert(Rectangle( aRect.Left()+3, aRect.Top(), aRect.Right()-3, aRect.Top()+2 ));
+//              Invert(Rectangle( aRect.Left()+3, aRect.Bottom()-2, aRect.Right()-3, aRect.Bottom() ));
+//          }
+//          else
+//          {
+//              Rectangle aRect( aScrPos, Size( nSizeXPix - 1, nSizeYPix - 1 ) );
+//              Invert( aRect );
+//          }
+//      }
+//
+//      SetMapMode(aOld);
+//  }
 }
 
     //  AutoFill-Anfasser:
 
 void ScGridWindow::DrawAutoFillMark()
 {
-    if ( bAutoMarkVisible && aAutoMarkPos.Tab() == pViewData->GetTabNo() )
-    {
-        SCCOL nX = aAutoMarkPos.Col();
-        SCROW nY = aAutoMarkPos.Row();
-        SCTAB nTab = pViewData->GetTabNo();
-        ScDocument* pDoc = pViewData->GetDocument();
-        BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-
-        Point aFillPos = pViewData->GetScrPos( nX, nY, eWhich, TRUE );
-        long nSizeXPix;
-        long nSizeYPix;
-        pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
-        if ( bLayoutRTL )
-            aFillPos.X() -= nSizeXPix + 3;
-        else
-            aFillPos.X() += nSizeXPix - 2;
-
-        aFillPos.Y() += nSizeYPix;
-        aFillPos.Y() -= 2;
-        Rectangle aFillRect( aFillPos, Size(6,6) );
-        //  Anfasser von Zeichenobjekten sind 7*7
-
-        MapMode aOld = GetMapMode(); SetMapMode(MAP_PIXEL);
-        Invert( aFillRect );
-        SetMapMode(aOld);
-    }
+// #114409#
+//  if ( bAutoMarkVisible && aAutoMarkPos.Tab() == pViewData->GetTabNo() )
+//  {
+//      SCCOL nX = aAutoMarkPos.Col();
+//      SCROW nY = aAutoMarkPos.Row();
+//      SCTAB nTab = pViewData->GetTabNo();
+//      ScDocument* pDoc = pViewData->GetDocument();
+//      BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+//
+//      Point aFillPos = pViewData->GetScrPos( nX, nY, eWhich, TRUE );
+//      long nSizeXPix;
+//      long nSizeYPix;
+//      pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
+//      if ( bLayoutRTL )
+//          aFillPos.X() -= nSizeXPix + 3;
+//      else
+//          aFillPos.X() += nSizeXPix - 2;
+//
+//      aFillPos.Y() += nSizeYPix;
+//      aFillPos.Y() -= 2;
+//      Rectangle aFillRect( aFillPos, Size(6,6) );
+//      //  Anfasser von Zeichenobjekten sind 7*7
+//
+//      MapMode aOld = GetMapMode(); SetMapMode(MAP_PIXEL);
+//      Invert( aFillRect );
+//      SetMapMode(aOld);
+//  }
 }
 
 // -------------------------------------------------------------------------
