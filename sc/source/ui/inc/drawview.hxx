@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:22:17 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:53:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@
 
 class ScDocument;
 class ScViewData;
-class SdrViewUserMarker;
 
 class ScDrawView: public FmFormView
 {
@@ -54,7 +53,7 @@ class ScDrawView: public FmFormView
     SCTAB                   nTab;
     Fraction                aScaleX;                // Faktor fuer Drawing-MapMode
     Fraction                aScaleY;
-    SdrViewUserMarker*      pDropMarker;
+    SdrDropMarkerOverlay*   pDropMarker;
     SdrObject*              pDropMarkObj;
     BOOL                    bInConstruct;
     BOOL                    bDisableHdl;
@@ -68,6 +67,8 @@ protected:
 
     // add custom handles (used by other apps, e.g. AnchorPos)
     virtual void AddCustomHdl();
+
+    void ImplClearCalcDropMarker();
 
 public:
                     ScDrawView( OutputDevice* pOut, ScViewData* pData );
