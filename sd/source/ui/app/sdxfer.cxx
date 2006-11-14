@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:13:30 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:25:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,6 +149,10 @@
 #include "imapinfo.hxx"
 #include "sdxfer.hxx"
 #include "unomodel.hxx"
+
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
 
 // --------------
 // - Namespaces -
@@ -364,7 +368,7 @@ void SdTransferable::CreateData()
         pSdViewIntern = new ::sd::View( pSdDrawDocumentIntern, pVDev );
         pSdViewIntern->EndListening(*pSdDrawDocumentIntern );
         pSdViewIntern->SetMarkHdlHidden( TRUE );
-        SdrPageView* pPageView = pSdViewIntern->ShowPage(pPage, Point());
+        SdrPageView* pPageView = pSdViewIntern->ShowSdrPage(pPage);
         ((SdrMarkView*)pSdViewIntern)->MarkAllObj(pPageView);
     }
     else if( pSdView && !pSdDrawDocumentIntern )
@@ -390,7 +394,7 @@ void SdTransferable::CreateData()
         }
 
         // Groesse der Source-Seite uebernehmen
-        SdrPageView*        pPgView = pSdView->GetPageViewPvNum( 0 );
+        SdrPageView*        pPgView = pSdView->GetSdrPageView();
         SdPage*             pOldPage = (SdPage*) pPgView->GetPage();
         SdrModel*           pOldModel = pSdView->GetModel();
         SdStyleSheetPool*   pOldStylePool = (SdStyleSheetPool*) pOldModel->GetStyleSheetPool();
@@ -667,8 +671,6 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
                 SdDrawDocument* pDoc = (SdDrawDocument*) pObject;
                 if ( !bDontBurnInStyleSheet )
                     pDoc->BurnInStyleSheetAttributes();
-//BFS04             pDoc->SetStreamingSdrModel( TRUE );
-//BFS02             pDoc->RemoveNotPersistentObjects( TRUE );
                 rxOStm->SetBufferSize( 16348 );
 
                 Reference< XComponent > xComponent( new SdXImpressDocument( pDoc, sal_True ) );
@@ -690,8 +692,6 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
                         aMedium.Commit();
                 }
     */
-
-//BFS04             pDoc->SetStreamingSdrModel( FALSE );
 
                 xComponent->dispose();
                 bRet = ( rxOStm->GetError() == ERRCODE_NONE );
@@ -787,7 +787,7 @@ void SdTransferable::SetPageBookmarks( const List& rPageBookmarks, BOOL bPersist
     if( pSourceDoc )
     {
         if( pSdViewIntern )
-            pSdViewIntern->HideAllPages();
+            pSdViewIntern->HideSdrPage();
 
         // #116168#
         pSdDrawDocument->ClearModel(sal_False);
@@ -816,7 +816,7 @@ void SdTransferable::SetPageBookmarks( const List& rPageBookmarks, BOOL bPersist
 
             if( pPage )
             {
-                ( (SdrMarkView*) pSdViewIntern )->MarkAllObj( (SdrPageView*) pSdViewIntern->ShowPage( pPage, Point() ) );
+                ( (SdrMarkView*) pSdViewIntern )->MarkAllObj( (SdrPageView*) pSdViewIntern->ShowSdrPage( pPage ) );
             }
         }
 
