@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:02:42 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:51:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,10 @@
 #include <clonelist.hxx>
 #endif
 
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
+
 // b4967543
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
@@ -91,17 +95,15 @@ SdrExchangeView::SdrExchangeView(SdrModel* pModel1, OutputDevice* pOut):
 {
 }
 
-SdrExchangeView::SdrExchangeView(SdrModel* pModel1, XOutputDevice* _pXOut):
-    SdrObjEditView(pModel1,_pXOut)
-{
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Point SdrExchangeView::GetViewCenter(const OutputDevice* pOut) const
 {
     Point aCenter;
-    if (pOut==NULL) pOut=GetWin(0);
+    if (pOut==NULL)
+    {
+        pOut = GetFirstOutputDevice();
+    }
     if (pOut!=NULL) {
         Point aOfs=pOut->GetMapMode().GetOrigin();
         Size aOutSiz=pOut->GetOutputSize();
@@ -126,15 +128,12 @@ Point SdrExchangeView::GetPastePos(SdrObjList* pLst, OutputDevice* pOut)
     return aP;
 }
 
-BOOL SdrExchangeView::ImpLimitToWorkArea(Point& rPt, const SdrPageView* pPV) const
+BOOL SdrExchangeView::ImpLimitToWorkArea(Point& rPt) const
 {
     BOOL bRet(FALSE);
 
     if(!aMaxWorkArea.IsEmpty())
     {
-        if(pPV)
-            rPt += pPV->GetOffset();
-
         if(rPt.X()<aMaxWorkArea.Left())
         {
             rPt.X() = aMaxWorkArea.Left();
@@ -158,20 +157,18 @@ BOOL SdrExchangeView::ImpLimitToWorkArea(Point& rPt, const SdrPageView* pPV) con
             rPt.Y() = aMaxWorkArea.Bottom();
             bRet = TRUE;
         }
-
-        if(pPV)
-            rPt -= pPV->GetOffset();
     }
     return bRet;
 }
 
-void SdrExchangeView::ImpGetPasteObjList(Point& rPos, SdrObjList*& rpLst)
+void SdrExchangeView::ImpGetPasteObjList(Point& /*rPos*/, SdrObjList*& rpLst)
 {
-    if (rpLst==NULL) {
-        SdrPageView* pPV=GetPageView(rPos);
+    if (rpLst==NULL)
+    {
+        SdrPageView* pPV = GetSdrPageView();
+
         if (pPV!=NULL) {
             rpLst=pPV->GetObjList();
-            rPos-=pPV->GetOffset();
         }
     }
 }
@@ -185,7 +182,7 @@ BOOL SdrExchangeView::ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerID& r
         if (pPg!=NULL) {
             rLayer=pPg->GetLayerAdmin().GetLayerID(aAktLayer,TRUE);
             if (rLayer==SDRLAYER_NOTFOUND) rLayer=0;
-            SdrPageView* pPV=GetPageView(pPg);
+            SdrPageView* pPV = GetSdrPageView();
             if (pPV!=NULL) {
                 bRet=!pPV->GetLockedLayers().IsSet(rLayer) && pPV->GetVisibleLayers().IsSet(rLayer);
             }
@@ -200,15 +197,7 @@ BOOL SdrExchangeView::Paste(const GDIMetaFile& rMtf, const Point& rPos, SdrObjLi
 {
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);
-    SdrPageView* pMarkPV=NULL;
-    for ( USHORT nv = 0; nv < GetPageViewCount() && !pMarkPV; nv++ )
-    {
-        SdrPageView* pPV = GetPageViewPvNum(nv);
-        if ( pPV->GetObjList() == pLst )
-            pMarkPV=pPV;
-    }
-
-    ImpLimitToWorkArea( aPos, pMarkPV );
+    ImpLimitToWorkArea( aPos );
     if (pLst==NULL) return FALSE;
     SdrLayerID nLayer;
     if (!ImpGetPasteLayer(pLst,nLayer)) return FALSE;
@@ -224,15 +213,7 @@ BOOL SdrExchangeView::Paste(const Bitmap& rBmp, const Point& rPos, SdrObjList* p
 {
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);
-    SdrPageView* pMarkPV=NULL;
-    for ( USHORT nv = 0; nv < GetPageViewCount() && !pMarkPV; nv++ )
-    {
-        SdrPageView* pPV = GetPageViewPvNum(nv);
-        if ( pPV->GetObjList() == pLst )
-            pMarkPV=pPV;
-    }
-
-    ImpLimitToWorkArea( aPos, pMarkPV );
+    ImpLimitToWorkArea( aPos );
     if (pLst==NULL) return FALSE;
     SdrLayerID nLayer;
     if (!ImpGetPasteLayer(pLst,nLayer)) return FALSE;
@@ -251,15 +232,7 @@ BOOL SdrExchangeView::Paste(const XubString& rStr, const Point& rPos, SdrObjList
 
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);
-    SdrPageView* pMarkPV=NULL;
-    for ( USHORT nv = 0; nv < GetPageViewCount() && !pMarkPV; nv++ )
-    {
-        SdrPageView* pPV = GetPageViewPvNum(nv);
-        if ( pPV->GetObjList() == pLst )
-            pMarkPV=pPV;
-    }
-
-    ImpLimitToWorkArea( aPos, pMarkPV );
+    ImpLimitToWorkArea( aPos );
     if (pLst==NULL) return FALSE;
     SdrLayerID nLayer;
     if (!ImpGetPasteLayer(pLst,nLayer)) return FALSE;
@@ -296,15 +269,7 @@ BOOL SdrExchangeView::Paste(SvStream& rInput, const String& rBaseURL, USHORT eFo
 {
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);
-    SdrPageView* pMarkPV=NULL;
-    for ( USHORT nv = 0; nv < GetPageViewCount() && !pMarkPV; nv++ )
-    {
-        SdrPageView* pPV = GetPageViewPvNum(nv);
-        if ( pPV->GetObjList() == pLst )
-            pMarkPV=pPV;
-    }
-
-    ImpLimitToWorkArea( aPos, pMarkPV );
+    ImpLimitToWorkArea( aPos );
     if (pLst==NULL) return FALSE;
     SdrLayerID nLayer;
     if (!ImpGetPasteLayer(pLst,nLayer)) return FALSE;
@@ -365,14 +330,15 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);
     SdrPageView* pMarkPV=NULL;
-    for ( USHORT nv = 0; nv < GetPageViewCount() && !pMarkPV; nv++ )
+    SdrPageView* pPV = GetSdrPageView();
+
+    if(pPV)
     {
-        SdrPageView* pPV = GetPageViewPvNum(nv);
         if ( pPV->GetObjList() == pLst )
             pMarkPV=pPV;
     }
 
-    ImpLimitToWorkArea( aPos, pMarkPV );
+    ImpLimitToWorkArea( aPos );
     if (pLst==NULL) return FALSE;
     BOOL bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
     if (bUnmark) UnmarkAllObj();
@@ -414,7 +380,6 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
             const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
 
             // #116235#
-            //SdrObject* pNeuObj=pSrcOb->Clone(pDstLst->GetPage(),pDstLst->GetModel());
             SdrObject* pNeuObj = pSrcOb->Clone();
 
             if (pNeuObj!=NULL)
@@ -525,10 +490,13 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     rLst.InsertObject(pObj,CONTAINER_APPEND,&aReason);
     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
     SdrPageView* pMarkPV=NULL;
-    for (USHORT nv=0; nv<GetPageViewCount() && pMarkPV==NULL; nv++) {
-        SdrPageView* pPV=GetPageViewPvNum(nv);
+    SdrPageView* pPV = GetSdrPageView();
+
+    if(pPV)
+    {
         if (pPV->GetObjList()==&rLst) pMarkPV=pPV;
     }
+
     BOOL bMark=pMarkPV!=NULL && !IsTextEdit() && (nOptions&SDRINSERT_DONTMARK)==0;
     if (bMark) { // Obj in der ersten gefundenen PageView markieren
         MarkObj(pObj,pMarkPV);
@@ -739,8 +707,6 @@ void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
             SdrMark*    pMark = rObjVector[ i ];
             Point       aOfs( -rOfs.X(),-rOfs.Y() );
 
-            aOfs += pMark->GetPageView()->GetOffset();
-
             if( aOfs != pXOut->GetOffset() )
                 pXOut->SetOffset(aOfs);
 
@@ -813,8 +779,6 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
 
             if( pNeuObj )
             {
-                Point aP(pMark->GetPageView()->GetOffset());
-                if (aP.X()!=0 || aP.Y()!=0) pNeuObj->NbcMove(Size(aP.X(),aP.Y()));
                 SdrInsertReason aReason(SDRREASON_VIEWCALL);
                 pNeuPag->InsertObject(pNeuObj,CONTAINER_APPEND,&aReason);
 
