@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dopngl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:38:18 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:08:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,9 @@
 #include "b3dopngl.hxx"
 #endif
 
-#ifndef _B3D_HMATRIX_HXX
-#include "hmatrix.hxx"
-#endif
+//#ifndef _B3D_HMATRIX_HXX
+//#include "hmatrix.hxx"
+//#endif
 
 #ifndef _B3D_B3DTEX_HXX
 #include "b3dtex.hxx"
@@ -78,13 +78,12 @@ Base3DOpenGL::Base3DOpenGL(OutputDevice* pOutDev)
 :   Base3D(pOutDev),
     aOpenGL(pOutDev),
     aLastNormal(DBL_MAX, DBL_MAX, DBL_MAX),
-    aLastTexCoor(DBL_MAX, DBL_MAX, DBL_MAX),
-    aEmptyVector(0.0, 0.0, 0.0),
+    aLastTexCoor(DBL_MAX, DBL_MAX),
     fOffFacMul100((float)(-0.2 * 100.0)),
     fOffUniMul100((float)(-1.0 * 100.0)),
     aPhongBuffer(12),       // 4K
     nPhongDivideSize(20),
-    bForceToSinglePrimitiveOutput(TRUE) // (#70626#)
+    bForceToSinglePrimitiveOutput(sal_True) // (#70626#)
 {
     // create OpenGL context for pOutDev; pOutDev is NOT a printer,
     // so don't care about printers in this place
@@ -122,7 +121,7 @@ Base3DOpenGL::Base3DOpenGL(OutputDevice* pOutDev)
 |*
 \************************************************************************/
 
-UINT16 Base3DOpenGL::GetBase3DType()
+sal_uInt16 Base3DOpenGL::GetBase3DType()
 {
     return BASE3D_TYPE_OPENGL;
 }
@@ -137,7 +136,7 @@ void Base3DOpenGL::StartScene()
 {
     // Falls Transparenz an war, diese zuruecknehmen
     aOpenGL.Disable( GL_BLEND );
-    aOpenGL.DepthMask( TRUE );
+    aOpenGL.DepthMask( sal_True );
 
     // OutputDevice setzen und ZBuffer loeschen
     aOpenGL.SetConnectOutputDevice(GetOutputDevice());
@@ -150,7 +149,7 @@ void Base3DOpenGL::StartScene()
 |*
 \************************************************************************/
 
-void Base3DOpenGL::SetScissorRegionPixel(const Rectangle& rRect, BOOL bActivate)
+void Base3DOpenGL::SetScissorRegionPixel(const Rectangle& rRect, sal_Bool bActivate)
 {
     // OpenGL specifics
     aOpenGL.Scissor( rRect.Left(), rRect.Top(),
@@ -166,7 +165,7 @@ void Base3DOpenGL::SetScissorRegionPixel(const Rectangle& rRect, BOOL bActivate)
 |*
 \************************************************************************/
 
-void Base3DOpenGL::SetDither(BOOL bNew)
+void Base3DOpenGL::SetDither(sal_Bool bNew)
 {
     // call parent
     Base3D::SetDither(bNew);
@@ -184,7 +183,7 @@ void Base3DOpenGL::SetDither(BOOL bNew)
 |*
 \************************************************************************/
 
-void Base3DOpenGL::ActivateScissorRegion(BOOL bNew)
+void Base3DOpenGL::ActivateScissorRegion(sal_Bool bNew)
 {
     // OpenGL specifics
     if(bNew)
@@ -244,13 +243,13 @@ void Base3DOpenGL::ImplStartPrimitive()
     if(GetMaterial(Base3DMaterialDiffuse).GetTransparency())
     {
         aOpenGL.Enable( GL_BLEND );
-        aOpenGL.DepthMask( FALSE );
+        aOpenGL.DepthMask( sal_False );
         aOpenGL.BlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     }
     else
     {
         aOpenGL.Disable( GL_BLEND );
-        aOpenGL.DepthMask( TRUE );
+        aOpenGL.DepthMask( sal_True );
     }
 
     if(bPhongBufferedMode)
@@ -339,9 +338,9 @@ void Base3DOpenGL::CalcInternPhongDivideSize()
 
 void Base3DOpenGL::DrawPhongPrimitives()
 {
-    UINT32 aCount = aPhongBuffer.Count();
-    UINT32 aPos(0L);
-    bPhongBufferedMode = FALSE;
+    sal_uInt32 aCount = aPhongBuffer.Count();
+    sal_uInt32 aPos(0L);
+    bPhongBufferedMode = sal_False;
     aOpenGL.Begin(Base3DTriangles);
 
     switch(GetObjectMode())
@@ -421,37 +420,37 @@ void Base3DOpenGL::DrawPhongPrimitives()
 |*
 \************************************************************************/
 
-void Base3DOpenGL::DrawPhongTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
+void Base3DOpenGL::DrawPhongTriangle(sal_uInt32 nInd1, sal_uInt32 nInd2, sal_uInt32 nInd3)
 {
-    Vector3D aPos1 = GetTransformationSet()->ObjectToViewCoor(aPhongBuffer[nInd1].Point().GetVector3D());
-    double fXMin = aPos1.X();
-    double fXMax = aPos1.X();
-    double fYMin = aPos1.Y();
-    double fYMax = aPos1.Y();
-    Vector3D aPos2 = GetTransformationSet()->ObjectToViewCoor(aPhongBuffer[nInd2].Point().GetVector3D());
-    if(aPos2.X() < fXMin)
-        fXMin = aPos2.X();
-    if(aPos2.X() > fXMax)
-        fXMax = aPos2.X();
-    if(aPos2.Y() < fYMin)
-        fYMin = aPos2.Y();
-    if(aPos2.Y() > fYMax)
-        fYMax = aPos2.Y();
-    aPos2 = GetTransformationSet()->ObjectToViewCoor(aPhongBuffer[nInd3].Point().GetVector3D());
-    if(aPos2.X() < fXMin)
-        fXMin = aPos2.X();
-    if(aPos2.X() > fXMax)
-        fXMax = aPos2.X();
-    if(aPos2.Y() < fYMin)
-        fYMin = aPos2.Y();
-    if(aPos2.Y() > fYMax)
-        fYMax = aPos2.Y();
+    basegfx::B3DPoint aPos1 = GetTransformationSet()->ObjectToViewCoor(aPhongBuffer[nInd1].Point());
+    double fXMin = aPos1.getX();
+    double fXMax = aPos1.getX();
+    double fYMin = aPos1.getY();
+    double fYMax = aPos1.getY();
+    basegfx::B3DPoint aPos2 = GetTransformationSet()->ObjectToViewCoor(aPhongBuffer[nInd2].Point());
+    if(aPos2.getX() < fXMin)
+        fXMin = aPos2.getX();
+    if(aPos2.getX() > fXMax)
+        fXMax = aPos2.getX();
+    if(aPos2.getY() < fYMin)
+        fYMin = aPos2.getY();
+    if(aPos2.getY() > fYMax)
+        fYMax = aPos2.getY();
+    aPos2 = GetTransformationSet()->ObjectToViewCoor(aPhongBuffer[nInd3].Point());
+    if(aPos2.getX() < fXMin)
+        fXMin = aPos2.getX();
+    if(aPos2.getX() > fXMax)
+        fXMax = aPos2.getX();
+    if(aPos2.getY() < fYMin)
+        fYMin = aPos2.getY();
+    if(aPos2.getY() > fYMax)
+        fYMax = aPos2.getY();
 
     Size aPixelSize = GetOutputDevice()->LogicToPixel(
         Size((long)(fXMax - fXMin),(long)(fYMax - fYMin)));
     if(aPixelSize.Width() * aPixelSize.Height() > nInternPhongDivideSize)
     {
-        UINT32 aCount = aPhongBuffer.Count();
+        sal_uInt32 aCount = aPhongBuffer.Count();
         aPhongBuffer.Append();
         aPhongBuffer.Append();
         aPhongBuffer.Append();
@@ -485,6 +484,13 @@ void Base3DOpenGL::DrawPhongTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
 |*
 \************************************************************************/
 
+// hack to get the address of the mfX member for OpenGL
+class LocVecAcc : public basegfx::B3DVector
+{
+public:
+    double& getXDirect() { return mfX; }
+};
+
 void Base3DOpenGL::ImplPostAddVertex(B3dEntity& rEntity)
 {
     if(bPhongBufferedMode)
@@ -501,7 +507,7 @@ void Base3DOpenGL::ImplPostAddVertex(B3dEntity& rEntity)
                 if(rEntity.PlaneNormal() != aLastNormal)
                 {
                     aLastNormal = rEntity.PlaneNormal();
-                    aOpenGL.Normal3dv(&aLastNormal.X());
+                    aOpenGL.Normal3dv(&(((LocVecAcc*)&aLastNormal)->getXDirect()));
                 }
             }
             else
@@ -509,16 +515,16 @@ void Base3DOpenGL::ImplPostAddVertex(B3dEntity& rEntity)
                 if(rEntity.Normal() != aLastNormal)
                 {
                     aLastNormal = rEntity.Normal();
-                    aOpenGL.Normal3dv(&aLastNormal.X());
+                    aOpenGL.Normal3dv(&(((LocVecAcc*)&aLastNormal)->getXDirect()));
                 }
             }
         }
         else
         {
-            if(aLastNormal != aEmptyVector)
+            if(!aLastNormal.equalZero())
             {
-                aLastNormal = aEmptyVector;
-                aOpenGL.Normal3dv(&aLastNormal.X());
+                aLastNormal = basegfx::B3DVector(0.0, 0.0, 0.0);
+                aOpenGL.Normal3dv(&(((LocVecAcc*)&aLastNormal)->getXDirect()));
             }
         }
 
@@ -528,20 +534,20 @@ void Base3DOpenGL::ImplPostAddVertex(B3dEntity& rEntity)
             if(rEntity.TexCoor() != aLastTexCoor)
             {
                 aLastTexCoor = rEntity.TexCoor();
-                aOpenGL.TexCoord3dv(&aLastTexCoor.X());
+                aOpenGL.TexCoord2dv(&(((LocVecAcc*)&aLastTexCoor)->getXDirect()));
             }
         }
         else
         {
-            if(aLastTexCoor != aEmptyVector)
+            if(!aLastTexCoor.equalZero())
             {
-                aLastTexCoor = aEmptyVector;
-                aOpenGL.TexCoord3dv(&aLastTexCoor.X());
+                aLastTexCoor = basegfx::B2DPoint(0.0, 0.0);
+                aOpenGL.TexCoord2dv(&(((LocVecAcc*)&aLastTexCoor)->getXDirect()));
             }
         }
 
         // Punkt erzeugen
-        aOpenGL.Vertex3dv(&rEntity.Point().X());
+        aOpenGL.Vertex3dv(&(((LocVecAcc*)&(rEntity.Point()))->getXDirect()));
     }
 }
 
@@ -604,7 +610,7 @@ void Base3DOpenGL::SetMaterial(Color rNew, Base3DMaterialValue eVal,
 |*
 \************************************************************************/
 
-void Base3DOpenGL::SetShininess(UINT16 nExponent,
+void Base3DOpenGL::SetShininess(sal_uInt16 nExponent,
     Base3DMaterialMode eMode)
 {
     // call parent
@@ -680,7 +686,7 @@ void Base3DOpenGL::DestroyTexture(B3dTexture* pTex)
 |*
 \************************************************************************/
 
-void Base3DOpenGL::SetPolygonOffset(Base3DPolygonOffset eNew, BOOL bNew)
+void Base3DOpenGL::SetPolygonOffset(Base3DPolygonOffset eNew, sal_Bool bNew)
 {
     // call parent
     Base3D::SetPolygonOffset(eNew, bNew);
@@ -722,7 +728,7 @@ void Base3DOpenGL::SetPolygonOffset(Base3DPolygonOffset eNew, BOOL bNew)
 |*
 \************************************************************************/
 
-void Base3DOpenGL::SetLightGroup(B3dLightGroup* pSet, BOOL bSetGlobal)
+void Base3DOpenGL::SetLightGroup(B3dLightGroup* pSet, sal_Bool bSetGlobal)
 {
     // call parent
     Base3D::SetLightGroup(pSet, bSetGlobal);
@@ -744,9 +750,9 @@ void Base3DOpenGL::SetLightGroup(B3dLightGroup* pSet, BOOL bSetGlobal)
 
         // Set and enable lights from the beginning of array in
         // OpenGL
-        UINT16 nNumAlloc = 0;
+        sal_uInt16 nNumAlloc = 0;
 
-        UINT16 a;
+        sal_uInt16 a;
         for(a=0;a<BASE3D_MAX_NUMBER_LIGHTS;a++)
         {
             Base3DLightNumber eNum = (Base3DLightNumber)(Base3DLight0 + a);
@@ -757,7 +763,7 @@ void Base3DOpenGL::SetLightGroup(B3dLightGroup* pSet, BOOL bSetGlobal)
                 Base3DLightNumber eNumAlloc = (Base3DLightNumber)(Base3DLight0 + nNumAlloc);
                 nNumAlloc++;
 
-                Enable(TRUE, eNumAlloc);
+                Enable(sal_True, eNumAlloc);
 
                 SetIntensity(rLight.GetIntensity(Base3DMaterialAmbient),
                     Base3DMaterialAmbient, eNumAlloc);
@@ -787,7 +793,7 @@ void Base3DOpenGL::SetLightGroup(B3dLightGroup* pSet, BOOL bSetGlobal)
         for(a=nNumAlloc;a<BASE3D_MAX_NUMBER_LIGHTS;a++)
         {
             Base3DLightNumber eNum = (Base3DLightNumber)(Base3DLight0 + a);
-            Enable(FALSE, eNum);
+            Enable(sal_False, eNum);
         }
 
         if(GetTransformationSet() && bSetGlobal)
@@ -841,7 +847,7 @@ void Base3DOpenGL::SetGlobalAmbientLight(const Color rNew)
 |*
 \************************************************************************/
 
-void Base3DOpenGL::SetLocalViewer(BOOL bNew)
+void Base3DOpenGL::SetLocalViewer(sal_Bool bNew)
 {
     // OpenGL Specifics
     aOpenGL.LightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER,
@@ -854,7 +860,7 @@ void Base3DOpenGL::SetLocalViewer(BOOL bNew)
 |*
 \************************************************************************/
 
-void Base3DOpenGL::SetModelTwoSide(BOOL bNew)
+void Base3DOpenGL::SetModelTwoSide(sal_Bool bNew)
 {
     // OpenGL Specifics
     aOpenGL.LightModelf(GL_LIGHT_MODEL_TWO_SIDE,
@@ -867,7 +873,7 @@ void Base3DOpenGL::SetModelTwoSide(BOOL bNew)
 |*
 \************************************************************************/
 
-void Base3DOpenGL::EnableLighting(BOOL bNew)
+void Base3DOpenGL::EnableLighting(sal_Bool bNew)
 {
     // OpenGL Specifics
     if(bNew)
@@ -930,12 +936,12 @@ void Base3DOpenGL::SetIntensity(const Color rNew,
 |*
 \************************************************************************/
 
-void Base3DOpenGL::SetPosition(const Vector3D& rNew, Base3DLightNumber eNum)
+void Base3DOpenGL::SetPosition(const basegfx::B3DPoint& rNew, Base3DLightNumber eNum)
 {
     // OpenGL Specifics
     GLenum eLight = GL_LIGHT0 + (eNum - Base3DLight0);
     float fArray[4] = {
-        (float)rNew[0], (float)rNew[1], (float)rNew[2], (float)1.0
+        (float)rNew.getX(), (float)rNew.getY(), (float)rNew.getZ(), (float)1.0
     };
     aOpenGL.Lightfv(eLight, GL_POSITION, fArray);
 }
@@ -946,12 +952,12 @@ void Base3DOpenGL::SetPosition(const Vector3D& rNew, Base3DLightNumber eNum)
 |*
 \************************************************************************/
 
-void Base3DOpenGL::SetDirection(const Vector3D& rNew, Base3DLightNumber eNum)
+void Base3DOpenGL::SetDirection(const basegfx::B3DVector& rNew, Base3DLightNumber eNum)
 {
     // OpenGL Specifics
     GLenum eLight = GL_LIGHT0 + (eNum - Base3DLight0);
     float fArray[4] = {
-        (float)rNew[0], (float)rNew[1], (float)rNew[2], (float)0.0
+        (float)rNew.getX(), (float)rNew.getY(), (float)rNew.getZ(), (float)0.0
     };
     aOpenGL.Lightfv(eLight, GL_POSITION, fArray);
 }
@@ -962,13 +968,12 @@ void Base3DOpenGL::SetDirection(const Vector3D& rNew, Base3DLightNumber eNum)
 |*
 \************************************************************************/
 
-void Base3DOpenGL::SetSpotDirection(const Vector3D& rNew,
-    Base3DLightNumber eNum)
+void Base3DOpenGL::SetSpotDirection(const basegfx::B3DVector& rNew, Base3DLightNumber eNum)
 {
     // OpenGL Specifics
     GLenum eLight = GL_LIGHT0 + (eNum - Base3DLight0);
     float fArray[4] = {
-        (float)rNew[0], (float)rNew[1], (float)rNew[2], (float)0.0
+        (float)rNew.getX(), (float)rNew.getY(), (float)rNew.getZ(), (float)0.0
     };
     aOpenGL.Lightfv(eLight, GL_SPOT_DIRECTION, fArray);
 }
@@ -979,7 +984,7 @@ void Base3DOpenGL::SetSpotDirection(const Vector3D& rNew,
 |*
 \************************************************************************/
 
-void Base3DOpenGL::SetSpotExponent(UINT16 nNew, Base3DLightNumber eNum)
+void Base3DOpenGL::SetSpotExponent(sal_uInt16 nNew, Base3DLightNumber eNum)
 {
     // OpenGL Specifics
     GLenum eLight = GL_LIGHT0 + (eNum - Base3DLight0);
@@ -1047,7 +1052,7 @@ void Base3DOpenGL::SetQuadraticAttenuation(double fNew,
 |*
 \************************************************************************/
 
-void Base3DOpenGL::Enable(BOOL bNew, Base3DLightNumber eNum)
+void Base3DOpenGL::Enable(sal_Bool bNew, Base3DLightNumber eNum)
 {
     // OpenGL Specifics
     GLenum eLight = GL_LIGHT0 + (eNum - Base3DLight0);
@@ -1166,7 +1171,7 @@ void Base3DOpenGL::SetCullMode(Base3DCullMode eNew)
 |*
 \************************************************************************/
 
-void Base3DOpenGL::SetEdgeFlag(BOOL bNew)
+void Base3DOpenGL::SetEdgeFlag(sal_Bool bNew)
 {
     // EdgeFlag fuer OpenGL setzen
     if(bNew)
@@ -1231,13 +1236,13 @@ void Base3DOpenGL::SetTransformationSet(B3dTransformationSet* pSet)
 void Base3DOpenGL::PostSetObjectOrientation(B3dTransformationSet* pCaller)
 {
     // OpenGL specifics
-    Matrix4D aMat = pCaller->GetObjectTrans();
+    basegfx::B3DHomMatrix aMat = pCaller->GetObjectTrans();
     aMat *= pCaller->GetOrientation();
     double fBuffer[16] = {
-        aMat[0][0], aMat[1][0], aMat[2][0], aMat[3][0],
-        aMat[0][1], aMat[1][1], aMat[2][1], aMat[3][1],
-        aMat[0][2], aMat[1][2], aMat[2][2], aMat[3][2],
-        aMat[0][3], aMat[1][3], aMat[2][3], aMat[3][3]
+        aMat.get(0, 0), aMat.get(1, 0), aMat.get(2, 0), aMat.get(3, 0),
+        aMat.get(0, 1), aMat.get(1, 1), aMat.get(2, 1), aMat.get(3, 1),
+        aMat.get(0, 2), aMat.get(1, 2), aMat.get(2, 2), aMat.get(3, 2),
+        aMat.get(0, 3), aMat.get(1, 3), aMat.get(2, 3), aMat.get(3, 3)
     };
     aOpenGL.MatrixMode(GL_MODELVIEW);
     aOpenGL.LoadMatrixd(fBuffer);
@@ -1246,12 +1251,12 @@ void Base3DOpenGL::PostSetObjectOrientation(B3dTransformationSet* pCaller)
 void Base3DOpenGL::PostSetProjection(B3dTransformationSet* pCaller)
 {
     // OpenGL specifics
-    const Matrix4D& rMat = pCaller->GetProjection();
+    const basegfx::B3DHomMatrix& rMat = pCaller->GetProjection();
     double fBuffer[16] = {
-        rMat[0][0], rMat[1][0], rMat[2][0], rMat[3][0],
-        rMat[0][1], rMat[1][1], rMat[2][1], rMat[3][1],
-        rMat[0][2], rMat[1][2], rMat[2][2], rMat[3][2],
-        rMat[0][3], rMat[1][3], rMat[2][3], rMat[3][3]
+        rMat.get(0, 0), rMat.get(1, 0), rMat.get(2, 0), rMat.get(3, 0),
+        rMat.get(0, 1), rMat.get(1, 1), rMat.get(2, 1), rMat.get(3, 1),
+        rMat.get(0, 2), rMat.get(1, 2), rMat.get(2, 2), rMat.get(3, 2),
+        rMat.get(0, 3), rMat.get(1, 3), rMat.get(2, 3), rMat.get(3, 3)
     };
     aOpenGL.MatrixMode(GL_PROJECTION);
     aOpenGL.LoadMatrixd(fBuffer);
@@ -1260,12 +1265,12 @@ void Base3DOpenGL::PostSetProjection(B3dTransformationSet* pCaller)
 void Base3DOpenGL::PostSetTexture(B3dTransformationSet* pCaller)
 {
     // OpenGL specifics
-    const Matrix4D& rMat = pCaller->GetTexture();
+    const basegfx::B2DHomMatrix& rMat = pCaller->GetTexture();
     double fBuffer[16] = {
-        rMat[0][0], rMat[1][0], rMat[2][0], rMat[3][0],
-        rMat[0][1], rMat[1][1], rMat[2][1], rMat[3][1],
-        rMat[0][2], rMat[1][2], rMat[2][2], rMat[3][2],
-        rMat[0][3], rMat[1][3], rMat[2][3], rMat[3][3]
+        rMat.get(0, 0), rMat.get(1, 0),            0.0, rMat.get(2, 0),
+        rMat.get(0, 1), rMat.get(1, 1),            0.0, rMat.get(2, 1),
+                   0.0,            0.0,            0.0,            0.0,
+        rMat.get(0, 2), rMat.get(1, 2),            0.0, rMat.get(3, 3)
     };
     aOpenGL.MatrixMode(GL_TEXTURE);
     aOpenGL.LoadMatrixd(fBuffer);
@@ -1286,7 +1291,7 @@ void Base3DOpenGL::PostSetViewport(B3dTransformationSet* pCaller)
 |*
 \************************************************************************/
 
-void Base3DOpenGL::DrawPolygonGeometry(B3dGeometry& rGeometry, BOOL bOutline)
+void Base3DOpenGL::DrawPolygonGeometry(const B3dGeometry& rGeometry, sal_Bool bOutline)
 {
     // bForceToSinglePrimitiveOutput: (#70626#)
     if(bForceToSinglePrimitiveOutput || (GetShadeModel() == Base3DPhong && GetRenderMode() == Base3DRenderFill))
@@ -1297,21 +1302,21 @@ void Base3DOpenGL::DrawPolygonGeometry(B3dGeometry& rGeometry, BOOL bOutline)
     else
     {
         // Buckets der Geometrie holen
-        B3dEntityBucket& rEntityBucket = rGeometry.GetEntityBucket();
-        GeometryIndexValueBucket& rIndexBucket = rGeometry.GetIndexBucket();
+        const B3dEntityBucket& rEntityBucket = rGeometry.GetEntityBucket();
+        const GeometryIndexValueBucket& rIndexBucket = rGeometry.GetIndexBucket();
 
         if(rEntityBucket.Count() && rIndexBucket.Count())
         {
             // Arrays aktivieren
             aOpenGL.EnableClientState(GL_VERTEX_ARRAY);
 
-            UINT32 nPolyCounter = 0;
-            UINT32 nEntityCounter = 0;
-            UINT32 nArrayStartIndex = 0;
-            UINT32 nUpperBound;
+            sal_uInt32 nPolyCounter = 0;
+            sal_uInt32 nEntityCounter = 0;
+            sal_uInt32 nArrayStartIndex = 0;
+            sal_uInt32 nUpperBound;
 
             // Pointer setzen
-            UINT16 nArray = 0;
+            sal_uInt16 nArray = 0;
             aOpenGL.VertexPointer(3, GL_DOUBLE, rEntityBucket.GetSlotSize(), &rEntityBucket[0].Point());
 
             if(bOutline)
@@ -1320,13 +1325,13 @@ void Base3DOpenGL::DrawPolygonGeometry(B3dGeometry& rGeometry, BOOL bOutline)
                 if(GetColor().GetTransparency())
                 {
                     aOpenGL.Enable( GL_BLEND );
-                    aOpenGL.DepthMask( FALSE );
+                    aOpenGL.DepthMask( sal_False );
                     aOpenGL.BlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
                 }
                 else
                 {
                     aOpenGL.Disable( GL_BLEND );
-                    aOpenGL.DepthMask( TRUE );
+                    aOpenGL.DepthMask( sal_True );
                 }
 
                 // ALLE Linien Zeichnen
@@ -1343,7 +1348,7 @@ void Base3DOpenGL::DrawPolygonGeometry(B3dGeometry& rGeometry, BOOL bOutline)
                 {
                     // Naechstes Primitiv
                     nUpperBound = rIndexBucket[nPolyCounter].GetIndex();
-                    BOOL bLineMode = (rIndexBucket[nPolyCounter++].GetMode() == B3D_INDEX_MODE_LINE);
+                    sal_Bool bLineMode = (rIndexBucket[nPolyCounter++].GetMode() == B3D_INDEX_MODE_LINE);
 
                     if(nUpperBound >> rEntityBucket.GetBlockShift() != nArray)
                     {
@@ -1354,7 +1359,7 @@ void Base3DOpenGL::DrawPolygonGeometry(B3dGeometry& rGeometry, BOOL bOutline)
                         // Polygon ausgeben
                         while(nEntityCounter < nUpperBound)
                         {
-                            B3dEntity& rEntity = rEntityBucket[nEntityCounter++];
+                            const B3dEntity& rEntity = rEntityBucket[nEntityCounter++];
                             aOpenGL.EdgeFlag(rEntity.IsEdgeVisible() ? GL_TRUE : GL_FALSE);
                             aOpenGL.Vertex3dv((const double *)(&rEntity.Point()));
                         }
@@ -1366,9 +1371,9 @@ void Base3DOpenGL::DrawPolygonGeometry(B3dGeometry& rGeometry, BOOL bOutline)
                         if(nEntityCounter < rEntityBucket.Count())
                         {
                             // Pointer auf neues Array setzen
-                            nArray = (UINT16)(nEntityCounter >> rEntityBucket.GetBlockShift());
+                            nArray = (sal_uInt16)(nEntityCounter >> rEntityBucket.GetBlockShift());
                             nArrayStartIndex = nEntityCounter;
-                            B3dEntity& rStart = rEntityBucket[nEntityCounter];
+                            const B3dEntity& rStart = rEntityBucket[nEntityCounter];
 
                             aOpenGL.VertexPointer(3, GL_DOUBLE, rEntityBucket.GetSlotSize(), &rStart);
                             aOpenGL.EdgeFlagPointer(rEntityBucket.GetSlotSize(), &(rStart.EdgeFlag()));
@@ -1395,13 +1400,13 @@ void Base3DOpenGL::DrawPolygonGeometry(B3dGeometry& rGeometry, BOOL bOutline)
                     || (GetActiveTexture() && !!(GetActiveTexture()->GetAlphaMask())))
                 {
                     aOpenGL.Enable( GL_BLEND );
-                    aOpenGL.DepthMask( FALSE );
+                    aOpenGL.DepthMask( sal_False );
                     aOpenGL.BlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
                 }
                 else
                 {
                     aOpenGL.Disable( GL_BLEND );
-                    aOpenGL.DepthMask( TRUE );
+                    aOpenGL.DepthMask( sal_True );
                 }
 
                 // Polygone gefuellt ausgeben
@@ -1418,7 +1423,7 @@ void Base3DOpenGL::DrawPolygonGeometry(B3dGeometry& rGeometry, BOOL bOutline)
                 {
                     // Naechstes Primitiv
                     nUpperBound = rIndexBucket[nPolyCounter].GetIndex();
-                    BOOL bLineMode = (rIndexBucket[nPolyCounter++].GetMode() == B3D_INDEX_MODE_LINE);
+                    sal_Bool bLineMode = (rIndexBucket[nPolyCounter++].GetMode() == B3D_INDEX_MODE_LINE);
 
                     if(nUpperBound >> rEntityBucket.GetBlockShift() != nArray)
                     {
@@ -1429,7 +1434,7 @@ void Base3DOpenGL::DrawPolygonGeometry(B3dGeometry& rGeometry, BOOL bOutline)
                         // Polygon ausgeben
                         while(nEntityCounter < nUpperBound)
                         {
-                            B3dEntity& rEntity = rEntityBucket[nEntityCounter++];
+                            const B3dEntity& rEntity = rEntityBucket[nEntityCounter++];
                             if(GetForceFlat() || GetShadeModel() == Base3DFlat)
                                 aOpenGL.Normal3dv((const double *)(&rEntity.PlaneNormal()));
                             else
@@ -1445,9 +1450,9 @@ void Base3DOpenGL::DrawPolygonGeometry(B3dGeometry& rGeometry, BOOL bOutline)
                         if(nEntityCounter < rEntityBucket.Count())
                         {
                             // Pointer auf neues Array setzen
-                            nArray = (UINT16)(nEntityCounter >> rEntityBucket.GetBlockShift());
+                            nArray = (sal_uInt16)(nEntityCounter >> rEntityBucket.GetBlockShift());
                             nArrayStartIndex = nEntityCounter;
-                            B3dEntity& rStart = rEntityBucket[nEntityCounter];
+                            const B3dEntity& rStart = rEntityBucket[nEntityCounter];
 
                             aOpenGL.VertexPointer(3, GL_DOUBLE, rEntityBucket.GetSlotSize(), &rStart);
                             if(GetForceFlat() || GetShadeModel() == Base3DFlat)
