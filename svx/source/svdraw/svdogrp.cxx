@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:13:22 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:45:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,74 +100,17 @@
 #include <svx/sdr/contact/viewcontactofgroup.hxx>
 #endif
 
-//BFS01#ifndef SVX_LIGHT
+#ifndef _BGFX_RANGE_B2DRANGE_HXX
+#include <basegfx/range/b2drange.hxx>
+#endif
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@  @@@@@  @@@@@@   @@@@@ @@@@@   @@@@  @@  @@ @@@@@   @@    @@ @@  @@ @@  @@
-// @@  @@ @@  @@     @@  @@     @@  @@ @@  @@ @@  @@ @@  @@  @@    @@ @@@ @@ @@ @@
-// @@  @@ @@@@@      @@  @@ @@@ @@@@@  @@  @@ @@  @@ @@@@@   @@    @@ @@@@@@ @@@@
-// @@  @@ @@  @@ @@  @@  @@  @@ @@  @@ @@  @@ @@  @@ @@      @@    @@ @@ @@@ @@ @@
-//  @@@@  @@@@@   @@@@    @@@@@ @@  @@  @@@@   @@@@  @@      @@@@@ @@ @@  @@ @@  @@
-//
-// ImpSdrObjGroupLink zur Verbindung von SdrObjGroup und LinkManager
-//
-// Einem solchen Link merke ich mir als SdrObjUserData am Objekt. Im Gegensatz
-// zum Grafik-Link werden die ObjektDaten jedoch kopiert (fuer Paint, etc.).
-// Die Information ob das Objekt ein Link ist besteht genau darin, dass dem
-// Objekt ein entsprechender UserData-Record angehaengt ist oder nicht.
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
 
-//BFS01ImpSdrObjGroupLink::~ImpSdrObjGroupLink()
-//BFS01{
-//BFS01}
-
-// Closed() wird gerufen, wenn die Verknüpfung geloesst wird.
-
-//BFS01void ImpSdrObjGroupLink::Closed()
-//BFS01{
-//BFS01 if (pSdrObj!=NULL) {
-//BFS01     // pLink des Objekts auf NULL setzen, da die Link-Instanz ja gerade destruiert wird.
-//BFS01     ImpSdrObjGroupLinkUserData* pData=((SdrObjGroup*)pSdrObj)->GetLinkUserData();
-//BFS01     if (pData!=NULL) pData->pLink=NULL;
-//BFS01     ((SdrObjGroup*)pSdrObj)->ReleaseGroupLink();
-//BFS01 }
-//BFS01 SvBaseLink::Closed();
-//BFS01}
-
-
-//BFS01void ImpSdrObjGroupLink::DataChanged( const String& ,
-//BFS01                                   const ::com::sun::star::uno::Any& )
-//BFS01{
-//BFS01 FASTBOOL bForceReload=FALSE;
-//BFS01 SdrModel* pModel = pSdrObj ? pSdrObj->GetModel() : 0;
-//BFS01 SvxLinkManager* pLinkManager= pModel ? pModel->GetLinkManager() : 0;
-//BFS01 if( pLinkManager )
-//BFS01 {
-//BFS01     ImpSdrObjGroupLinkUserData* pData=
-//BFS01                             ((SdrObjGroup*)pSdrObj)->GetLinkUserData();
-//BFS01     if( pData )
-//BFS01     {
-//BFS01         String aFile;
-//BFS01         String aName;
-//BFS01         pLinkManager->GetDisplayNames( this, 0, &aFile, &aName, 0 );
-//BFS01
-//BFS01         if( !pData->aFileName.Equals( aFile ) ||
-//BFS01             !pData->aObjName.Equals( aName ))
-//BFS01         {
-//BFS01             pData->aFileName=aFile;
-//BFS01             pData->aObjName=aName;
-//BFS01             pSdrObj->SetChanged();
-//BFS01             bForceReload=TRUE;
-//BFS01         }
-//BFS01     }
-//BFS01 }
-//BFS01 if( pSdrObj )
-//BFS01     ((SdrObjGroup*)pSdrObj)->ReloadLinkedGroup( bForceReload );
-//BFS01}
-
-//BFS01#endif // SVX_LIGHT
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -213,16 +156,11 @@ SdrObjGroup::SdrObjGroup()
 
 SdrObjGroup::~SdrObjGroup()
 {
-    //BFS01ReleaseGroupLink();
     delete pSub;
 }
 
 void SdrObjGroup::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-//    rInfo.bCanConvToPath          =FALSE;
-//    rInfo.bCanConvToPoly          =FALSE;
-//    rInfo.bCanConvToPathLineToArea=FALSE;
-//    rInfo.bCanConvToPolyLineToArea=FALSE;
     rInfo.bNoContortion=FALSE;
     SdrObjList* pOL=pSub;
     ULONG nObjAnz=pOL->GetObjCount();
@@ -269,28 +207,6 @@ void SdrObjGroup::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
         rInfo.bTransparenceAllowed = FALSE;
         rInfo.bGradientAllowed = FALSE;
     }
-    //BFS01if (pPlusData!=NULL && nObjAnz!=0) {
-    //BFS01 ImpSdrObjGroupLinkUserData* pData=GetLinkUserData();
-    //BFS01 if (pData!=NULL) {
-    //BFS01     if (pData->bOrigPos   ) rInfo.bMoveAllowed =FALSE;
-    //BFS01     if (pData->bOrigSize  ) { rInfo.bResizeFreeAllowed=FALSE; rInfo.bResizePropAllowed=FALSE; }
-    //BFS01     if (pData->bOrigRotate) rInfo.bMoveAllowed =FALSE;
-    //BFS01     if (pData->bOrigShear ) rInfo.bMoveAllowed =FALSE;
-    //BFS01     // erstmal alles abschalten
-    //BFS01     //rInfo.bResizeFreeAllowed=FALSE;
-    //BFS01     //rInfo.bResizePropAllowed=FALSE;
-    //BFS01     rInfo.bRotateFreeAllowed=FALSE;
-    //BFS01     rInfo.bRotate90Allowed  =FALSE;
-    //BFS01     rInfo.bMirrorFreeAllowed=FALSE;
-    //BFS01     rInfo.bMirror45Allowed=FALSE;
-    //BFS01     rInfo.bMirror90Allowed=FALSE;
-    //BFS01     rInfo.bShearAllowed=FALSE;
-    //BFS01     rInfo.bShearAllowed=FALSE;
-    //BFS01     rInfo.bNoContortion=TRUE;
-    //BFS01     // default: Proportionen beibehalten
-    //BFS01     rInfo.bNoOrthoDesired=FALSE;
-    //BFS01 }
-    //BFS01}
 }
 
 
@@ -335,59 +251,38 @@ void SdrObjGroup::SetObjList(SdrObjList* pNewObjList)
 
 void SdrObjGroup::SetPage(SdrPage* pNewPage)
 {
-    //BFS01FASTBOOL bLinked=IsLinkedGroup();
-    //FASTBOOL bRemove=pNewPage==NULL && pPage!=NULL;
-    //FASTBOOL bInsert=pNewPage!=NULL && pPage==NULL;
-
-    //BFS01if (bLinked && bRemove) {
-    //BFS01 ImpLinkAbmeldung();
-    //BFS01}
-
     SdrObject::SetPage(pNewPage);
     pSub->SetPage(pNewPage);
-
-    //BFS01if (bLinked && bInsert) {
-    //BFS01 ImpLinkAnmeldung();
-    //BFS01}
 }
 
 
 void SdrObjGroup::SetModel(SdrModel* pNewModel)
 {
-    // #i30648#
-    // This method also needs to migrate the used ItemSet
-    // when the destination model uses a different pool
-    // than the current one. Else it is possible to create
-    // SdrObjGroups which reference the old pool which might
-    // be destroyed (as the bug shows).
-    SdrModel* pOldModel = pModel;
-    //BFS01const sal_Bool bLinked(IsLinkedGroup());
-    //const sal_Bool bChg(pNewModel!=pModel);
-
-    //BFS01if(bLinked && bChg)
-    //BFS01{
-    //BFS01 ImpLinkAbmeldung();
-    //BFS01}
-
-    // test for correct pool in ItemSet; move to new pool if necessary
-    if(pNewModel && GetObjectItemPool() && GetObjectItemPool() != &pNewModel->GetItemPool())
+    if(pNewModel!=pModel)
     {
-        MigrateItemPool(GetObjectItemPool(), &pNewModel->GetItemPool(), pNewModel);
+        // #i30648#
+        // This method also needs to migrate the used ItemSet
+        // when the destination model uses a different pool
+        // than the current one. Else it is possible to create
+        // SdrObjGroups which reference the old pool which might
+        // be destroyed (as the bug shows).
+        SdrModel* pOldModel = pModel;
+
+        // test for correct pool in ItemSet; move to new pool if necessary
+        if(pNewModel && GetObjectItemPool() && GetObjectItemPool() != &pNewModel->GetItemPool())
+        {
+            MigrateItemPool(GetObjectItemPool(), &pNewModel->GetItemPool(), pNewModel);
+        }
+
+        // call parent
+        SdrObject::SetModel(pNewModel);
+
+        // set new model at content
+        pSub->SetModel(pNewModel);
+
+        // modify properties
+        GetProperties().SetModel(pOldModel, pNewModel);
     }
-
-    // call parent
-    SdrObject::SetModel(pNewModel);
-
-    // set new model at content
-    pSub->SetModel(pNewModel);
-
-    //BFS01if(bLinked && bChg)
-    //BFS01{
-    //BFS01 ImpLinkAnmeldung();
-    //BFS01}
-
-    // modify properties
-    GetProperties().SetModel(pOldModel, pNewModel);
 }
 
 
@@ -459,8 +354,7 @@ SdrObject* SdrObjGroup::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte
     if (pSub->GetObjCount()!=0) {
         return pSub->CheckHit(rPnt,nTol,pVisiLayer);
     } else { // ansonsten ist es eine leere Gruppe
-        if (pVisiLayer==NULL ||
-            pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId)))
+        if(!pVisiLayer || pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId)))
         {
             Rectangle aAussen(aOutRect);
             aAussen.Top()   -=nTol;
@@ -480,16 +374,6 @@ SdrObject* SdrObjGroup::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte
     }
     return NULL;
 }
-
-/*SdrObject* SdrObjGroup::Clone() const
-{
-    SdrObjGroup* pObj=new SdrObjGroup();
-    if (pObj!=NULL) {
-        *pObj=*this;
-    }
-    return pObj;
-}*/
-
 
 void SdrObjGroup::operator=(const SdrObject& rObj)
 {
@@ -517,11 +401,6 @@ void SdrObjGroup::operator=(const SdrObject& rObj)
 
 void SdrObjGroup::TakeObjNameSingul(XubString& rName) const
 {
-    //BFS01if(IsLinkedGroup())
-    //BFS01{
-    //BFS01 rName = ImpGetResStr(STR_ObjNameSingulGRUPLNK);
-    //BFS01}
-    //BFS01else
     if(!pSub->GetObjCount())
     {
         rName = ImpGetResStr(STR_ObjNameSingulGRUPEMPTY);
@@ -543,9 +422,6 @@ void SdrObjGroup::TakeObjNameSingul(XubString& rName) const
 
 void SdrObjGroup::TakeObjNamePlural(XubString& rName) const
 {
-    //BFS01if (IsLinkedGroup()) {
-    //BFS01 rName=ImpGetResStr(STR_ObjNamePluralGRUPLNK);
-    //BFS01} else
     if (pSub->GetObjCount()==0) {
         rName=ImpGetResStr(STR_ObjNamePluralGRUPEMPTY);
     } else {
@@ -559,39 +435,25 @@ void SdrObjGroup::RecalcSnapRect()
     // nicht erforderlich, da die Rects von der SubList verwendet werden.
 }
 
-
-void MergePoly(XPolyPolygon& rDst, const XPolyPolygon& rSrc)
+basegfx::B2DPolyPolygon SdrObjGroup::TakeXorPoly(sal_Bool bDetail) const
 {
-    USHORT nAnz=rSrc.Count();
-    USHORT i;
-    for (i=0; i<nAnz; i++) {
-        rDst.Insert(rSrc.GetObject(i));
+    basegfx::B2DPolyPolygon aRetval;
+    const sal_uInt32 nObjCount(pSub->GetObjCount());
+
+    for(sal_uInt32 a(0L); a < nObjCount; a++)
+    {
+        SdrObject* pObj = pSub->GetObj(a);
+        aRetval.append(pObj->TakeXorPoly(bDetail));
     }
+
+    if(!aRetval.count())
+    {
+        const basegfx::B2DRange aRange(aOutRect.Left(), aOutRect.Top(), aOutRect.Right(), aOutRect.Bottom());
+        aRetval.append(basegfx::tools::createPolygonFromRect(aRange));
+    }
+
+    return aRetval;
 }
-
-
-void SdrObjGroup::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const
-{
-    rPoly.Clear();
-    ULONG nAnz=pSub->GetObjCount();
-    ULONG i=0;
-    while (i<nAnz) {
-        SdrObject* pObj=pSub->GetObj(i);
-        XPolyPolygon aPP;
-        pObj->TakeXorPoly(aPP,bDetail);
-        MergePoly(rPoly,aPP);
-        i++;
-    }
-    if (rPoly.Count()==0) {
-        rPoly.Insert(XPolygon(aOutRect));
-    }
-}
-
-//#110094#-12
-//void SdrObjGroup::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
-//{
-//}
-
 
 FASTBOOL SdrObjGroup::BegDrag(SdrDragStat& /*rDrag*/) const
 {
@@ -1011,66 +873,5 @@ SdrObject* SdrObjGroup::DoConvertToPolyObj(BOOL bBezier) const
 
     return pGroup;
 }
-
-
-//BFS01void SdrObjGroup::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01 SdrObject::WriteData(rOut);
-//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01 SdrDownCompat aCompat(rOut, STREAM_WRITE);
-//BFS01
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrObjGroup");
-//BFS01#endif
-//BFS01
-//BFS01 // UNICODE: rOut << aName;
-//BFS01 rOut.WriteByteString(aName);
-//BFS01
-//BFS01 UINT8 nTemp = bRefPoint; rOut << nTemp;
-//BFS01 rOut << aRefPoint;
-//BFS01 pSub->Save(rOut);
-//BFS01 rOut << INT32(nDrehWink);
-//BFS01 rOut << INT32(nShearWink);
-//BFS01}
-
-
-//BFS01void SdrObjGroup::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 if(rIn.GetError())
-//BFS01     return;
-//BFS01
-//BFS01 SdrObject::ReadData(rHead, rIn);
-//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01 SdrDownCompat aCompat(rIn, STREAM_READ);
-//BFS01
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrObjGroup");
-//BFS01#endif
-//BFS01
-//BFS01 // UNICODE: rIn >> aName;
-//BFS01 rIn.ReadByteString(aName);
-//BFS01
-//BFS01 UINT8 nTemp; rIn >> nTemp; bRefPoint = nTemp;
-//BFS01 rIn >> aRefPoint;
-//BFS01 pSub->Load(rIn, *pPage);
-//BFS01
-//BFS01 if(rHead.GetVersion() >= 2)
-//BFS01 {
-//BFS01     INT32 n32;
-//BFS01
-//BFS01     rIn >> n32; nDrehWink = n32;
-//BFS01     rIn >> n32; nShearWink = n32;
-//BFS01 }
-//BFS01}
-
-//BFS01void SdrObjGroup::AfterRead()
-//BFS01{
-//BFS01 SdrObject::AfterRead();
-//BFS01 pSub->AfterRead();
-//BFS01
-//BFS01 // #80049# as fix for errors after #69055#
-//BFS01 if(aAnchor.X() || aAnchor.Y())
-//BFS01     NbcSetAnchorPos(aAnchor);
-//BFS01}
 
 // eof
