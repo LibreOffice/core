@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtspell.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:40:35 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:36:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,16 +68,12 @@ protected:
     virtual BOOL            SpellContinue();    // Bereich pruefen
     virtual void            ReplaceAll( const String &rNewText, INT16 nLanguage );
     virtual void            SpellEnd();
-//  virtual BOOL            ();
     virtual BOOL            SpellMore();
     virtual BOOL            HasOtherCnt();
     virtual void            ScrollArea();
     virtual void            ChangeWord( const String& rNewWord, const USHORT nLang );
     virtual void            ChangeThesWord( const String& rNewWord );
-//  virtual void            ChangeAll( const String& rNewWord );
     virtual void            AutoCorrect( const String& rOldWord, const String& rNewWord );
-
-//  virtual String          GetCurrentWord() const;
 
 public:
     EditSpellWrapper( Window* pWin,
