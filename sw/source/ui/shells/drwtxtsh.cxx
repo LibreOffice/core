@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:14:37 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:20:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -403,10 +403,10 @@ void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
         SfxViewFrame* pVFrame = GetView().GetViewFrame();
         if ( pDrView->IsTextEdit() )
         {
-            //#111733# Sometimes EndTextEdit() initiates the change in selection and
+            //#111733# Sometimes SdrEndTextEdit() initiates the change in selection and
             // 'this' is not valid anymore
             SwView& rView = GetView();
-            pDrView->EndTextEdit( TRUE );
+            pDrView->SdrEndTextEdit(sal_True);
             //this removes the current shell from the dispatcher stack!!
             rView.AttrChangedNotify(&rSh);
         }
@@ -420,7 +420,7 @@ void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
             SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)(
                     pVFrame->GetChildWindow(nId)->GetWindow());
 
-            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetPageViewPvNum(0),
+            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetSdrPageView(),
                                     rSet, *rMarkList.GetMark(0)->GetMarkedSdrObj(),
                                    ((const XFormTextStdFormItem*) pItem)->
                                    GetValue());
