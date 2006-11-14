@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_xpeer.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:05:49 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:24:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,11 @@
 #include <X11/extensions/Xrender.h>
 #include <postx.h>
 
+#ifndef _VCL_DLLAPI_H
+#include "dllapi.h"
+#endif
+
+
 class SalDisplay;
 struct MultiScreenGlyph;
 
@@ -52,8 +57,6 @@ public:
                         X11GlyphPeer();
     virtual            ~X11GlyphPeer();
 
-    void                SetDisplay( const SalDisplay& );
-
     Pixmap              GetPixmap( ServerFont&, int nGlyphIndex, int nScreen );
     const RawBitmap*    GetRawBitmap( ServerFont&, int nGlyphIndex );
     bool                ForcedAntialiasing( const ServerFont&, int nScreen ) const;
@@ -62,6 +65,8 @@ public:
     Glyph               GetGlyphId( ServerFont&, int nGlyphIndex );
 
 protected:
+    void                InitAntialiasing();
+
     virtual void        RemovingFont( ServerFont& );
     virtual void        RemovingGlyph( ServerFont&, GlyphData&, int nGlyphIndex );
 
@@ -81,29 +86,20 @@ private:
     int                 mnMaxScreens;
     int                 mnDefaultScreen;
     int                 mnExtByteCount;
+    RawBitmap           maRawBitmap;
     sal_uInt32          mnForcedAA;
     sal_uInt32          mnUsingXRender;
+};
 
-    int                 mnRenderVersion;
-    XRenderPictFormat*  mpGlyphFormat;
-    RawBitmap           maRawBitmap;
-
-#ifndef XRENDER_LINK
+class X11GlyphCache : public GlyphCache
+{
 public:
-    XRenderPictFormat*  (*pXRenderFindFormat)(Display*,unsigned long,XRenderPictFormat*,int);
-    XRenderPictFormat*  (*pXRenderFindVisualFormat)(Display*,Visual*);
-    Bool        (*pXRenderQueryExtension)(Display*,int*,int*);
-    void        (*pXRenderQueryVersion)(Display*,int*,int*);
-    GlyphSet    (*pXRenderCreateGlyphSet)(Display*,XRenderPictFormat*);
-    void        (*pXRenderFreeGlyphSet)(Display*,GlyphSet);
-    void        (*pXRenderAddGlyphs)(Display*,GlyphSet,Glyph*,XGlyphInfo*,int,char*,int);
-    void        (*pXRenderFreeGlyphs)(Display*,GlyphSet,Glyph*,int);
-    void        (*pXRenderCompositeString32)(Display*,int,Picture,Picture,XRenderPictFormat*,GlyphSet,int,int,int,int,unsigned*,int);
-    Picture     (*pXRenderCreatePicture)(Display*,Drawable,XRenderPictFormat*,unsigned long,XRenderPictureAttributes*);
-    void        (*pXRenderSetPictureClipRegion)(Display*,Picture,XLIB_Region);
-    void        (*pXRenderFreePicture)(Display*,Picture);
-    void        (*pXRenderFillRectangle)(Display*,int,Picture,_Xconst XRenderColor*,int,int,unsigned int,unsigned int);
-#endif
+    X11GlyphPeer&      GetPeer() { return reinterpret_cast<X11GlyphPeer&>( mrPeer ); }
+static X11GlyphCache&  GetInstance();
+static void            KillInstance();
+
+private:
+                       X11GlyphCache( X11GlyphPeer& );
 };
 
 #endif // _SV_GCACH_XPEER_HXX
