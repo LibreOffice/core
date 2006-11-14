@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolcontainer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:52:15 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:28:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,13 +40,14 @@
 #ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
 #include <com/sun/star/awt/XControlContainer.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_AWT_XUNOCONTROLCONTAINER_HPP_
 #include <com/sun/star/awt/XUnoControlContainer.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
 #include <com/sun/star/container/XContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XIDENTIFIERCONTAINER_HPP_
+#include <com/sun/star/container/XIdentifierContainer.hpp>
 #endif
 
 #include <toolkit/controls/unocontrol.hxx>
@@ -54,16 +55,21 @@
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/servicenames.hxx>
 
+#include <cppuhelper/implbase4.hxx>
 
 class UnoControlHolderList;
 
 //  ----------------------------------------------------
 //  class UnoControlContainer
 //  ----------------------------------------------------
-class UnoControlContainer : public ::com::sun::star::awt::XUnoControlContainer,
-                            public ::com::sun::star::awt::XControlContainer,
-                            public ::com::sun::star::container::XContainer,
-                            public UnoControlBase
+typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
+                                            ,   ::com::sun::star::awt::XUnoControlContainer
+                                            ,   ::com::sun::star::awt::XControlContainer
+                                            ,   ::com::sun::star::container::XContainer
+                                            ,   ::com::sun::star::container::XIdentifierContainer
+                                            >   UnoControlContainer_Base;
+
+class UnoControlContainer : public UnoControlContainer_Base
 {
 private:
     UnoControlHolderList*                   mpControls;
@@ -79,16 +85,6 @@ public:
                 ~UnoControlContainer();
 
 
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControl::queryInterface(rType); }
-    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
-
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-
     // ::com::sun::star::lang::XComponent
     void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
 
@@ -98,6 +94,21 @@ public:
     // ::com::sun::star::container::XContainer
     void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::container::XIdentifierContainer
+    virtual ::sal_Int32 SAL_CALL insert( const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::container::XIdentifierReplace
+    virtual void SAL_CALL removeByIdentifier( ::sal_Int32 Identifier ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL replaceByIdentifer( ::sal_Int32 Identifier, const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::container::XIdentifierAccess
+    virtual ::com::sun::star::uno::Any SAL_CALL getByIdentifier( ::sal_Int32 Identifierr ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL getIdentifiers(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::container::XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XControlContainer
     void SAL_CALL setStatusText( const ::rtl::OUString& StatusText ) throw(::com::sun::star::uno::RuntimeException);
@@ -120,10 +131,49 @@ public:
 
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlContainer, UnoControlBase, szServiceName2_UnoControlContainer )
 
-
 protected:
     virtual void removingControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
     virtual void addingControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
+
+private:
+    /** adds the control to the container, does necessary notifications, and the like
+        @param _rxControl
+            the control to add. Must not be <NULL/>
+        @param _pName
+            Pointer to a name for the control. Might be <NULL/>, in this case an auotmatic name is generated
+        @return
+            the ID of the newly added control
+    */
+    sal_Int32 impl_addControl(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl,
+        const ::rtl::OUString* _pName = NULL
+    );
+
+    /** removes the given control from the container, including necessary notifications and the like
+        @param  _nId
+            the ID of the control to remove
+        @param  _rxControl
+            the control itself. Must be the one which is stored under the given ID. This parameter could also be
+            obtained inside the method, but callers usually have obtained it, anyway.
+        @param  _pNameAccessor
+            the name which the control was registered for. Might be <NULL/>, in this case
+            container event broadcasts use the ID as accessor.
+    */
+    void      impl_removeControl(
+        sal_Int32 _nId,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl,
+        const ::rtl::OUString* _pNameAccessor
+    );
+
+    /** ensures that the given control has a peer, if necessary and possible
+        @param _rxControl
+            an ->XControl which has just been inserted into the container. Must not be <NULL/>.
+        @precond
+            our mutex is locked
+    */
+    void    impl_createControlPeerIfNecessary(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl
+    );
 };
 
 
