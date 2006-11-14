@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuins1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:50:06 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:51:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,10 @@
 #include <tools/urlobj.hxx>
 #include <avmedia/mediawindow.hxx>
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 #include "fuinsert.hxx"
 #include "tabvwsh.hxx"
 #include "drwlayer.hxx"
@@ -64,50 +68,50 @@
 
 
 
-//========================================================================
-//  class ImportProgress
+////========================================================================
+////    class ImportProgress
+////
+////  Bemerkung:
+////    Diese Klasse stellt lediglich den Handler fuer den ImportProgress des
+////    Grafikfilters bereit.
+////========================================================================
 //
-//  Bemerkung:
-//  Diese Klasse stellt lediglich den Handler fuer den ImportProgress des
-//  Grafikfilters bereit.
-//========================================================================
-
-class ImportProgress
-{
-public:
-        ImportProgress( GraphicFilter& rFilter );
-        ~ImportProgress();
-
-    DECL_LINK( Update, GraphicFilter* );
-
-private:
-    ScProgress aProgress;
-};
-
-//------------------------------------------------------------------------
-
-ImportProgress::ImportProgress( GraphicFilter& rFilter )
-    : aProgress( NULL, // SfxViewFrame*, NULL == alle Docs locken
-                 String( ScResId(STR_INSERTGRAPHIC) ),
-                 100 )
-{
-    rFilter.SetUpdatePercentHdl( LINK( this, ImportProgress, Update) );
-}
-
-//------------------------------------------------------------------------
-
-__EXPORT ImportProgress::~ImportProgress()
-{
-    aProgress.SetState( 100 );
-}
-
-//------------------------------------------------------------------------
-
-IMPL_LINK( ImportProgress, Update, GraphicFilter*, pGraphicFilter )
-{
-    aProgress.SetState( pGraphicFilter->GetPercent() );
-    return 0;
-}
+//class ImportProgress
+//{
+//public:
+//      ImportProgress( GraphicFilter& rFilter );
+//      ~ImportProgress();
+//
+//  DECL_LINK( Update, GraphicFilter* );
+//
+//private:
+//  ScProgress aProgress;
+//};
+//
+////------------------------------------------------------------------------
+//
+//ImportProgress::ImportProgress( GraphicFilter& rFilter )
+//  : aProgress( NULL, // SfxViewFrame*, NULL == alle Docs locken
+//               String( ScResId(STR_INSERTGRAPHIC) ),
+//               100 )
+//{
+//  rFilter.SetUpdatePercentHdl( LINK( this, ImportProgress, Update) );
+//}
+//
+////------------------------------------------------------------------------
+//
+//__EXPORT ImportProgress::~ImportProgress()
+//{
+//  aProgress.SetState( 100 );
+//}
+//
+////------------------------------------------------------------------------
+//
+//IMPL_LINK( ImportProgress, Update, GraphicFilter*, pGraphicFilter )
+//{
+//  aProgress.SetState( pGraphicFilter->GetPercent() );
+//  return 0;
+//}
 
 
 //------------------------------------------------------------------------
@@ -182,7 +186,7 @@ void lcl_InsertGraphic( const Graphic& rGraphic,
 
     //  Limit size
 
-    SdrPageView* pPV  = pView->GetPageViewPvNum(0);
+    SdrPageView* pPV  = pView->GetSdrPageView();
     SdrPage* pPage = pPV->GetPage();
     Point aInsertPos = pViewSh->GetInsertPos();
 
@@ -206,7 +210,7 @@ void lcl_InsertGraphic( const Graphic& rGraphic,
 
     //  don't select if from (dispatch) API, to allow subsequent cell operations
     ULONG nInsOptions = bApi ? SDRINSERT_DONTMARK : 0;
-    pView->InsertObject( pObj, *pPV, nInsOptions );
+    pView->InsertObjectAtView( pObj, *pPV, nInsOptions );
 
     // #118522# SetGraphicLink has to be used after inserting the object,
     // otherwise an empty graphic is swapped in and the contact stuff crashes.
@@ -221,7 +225,7 @@ void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
                       ScTabViewShell* pViewSh, Window* pWindow, SdrView* pView,
                       const Size& rPrefSize )
 {
-    SdrPageView*    pPV  = pView->GetPageViewPvNum(0);
+    SdrPageView*    pPV  = pView->GetSdrPageView();
     SdrPage*        pPage = pPV->GetPage();
     ScViewData*     pData = pViewSh->GetViewData();
     Point           aInsertPos( pViewSh->GetInsertPos() );
@@ -246,7 +250,7 @@ void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
 
     pObj->setURL( rMediaURL );
     ScDrawLayer* pLayer = (ScDrawLayer*) pView->GetModel();
-    pView->InsertObject( pObj, *pPV, bApi ? SDRINSERT_DONTMARK : 0 );
+    pView->InsertObjectAtView( pObj, *pPV, bApi ? SDRINSERT_DONTMARK : 0 );
 }
 
 /*************************************************************************
