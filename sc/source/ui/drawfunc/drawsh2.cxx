@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:24:38 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:49:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -306,7 +306,7 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
     else
         rSet.Put( pDrView->GetDefaultAttr() );
 
-    SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
+    SdrPageView* pPV = pDrView->GetSdrPageView();
     if ( pPV )
     {
         // #i52073# when a sheet with an active OLE object is deleted,
