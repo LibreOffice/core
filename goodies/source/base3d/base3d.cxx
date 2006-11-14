@@ -4,9 +4,9 @@
  *
  *  $RCSfile: base3d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:39:38 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:09:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,9 @@
 #include "b3ddeflt.hxx"
 #endif
 
-#ifndef _B3D_B3DPRINT_HXX
-#include "b3dprint.hxx"
-#endif
+//#ifndef _B3D_B3DPRINT_HXX
+//#include "b3dprint.hxx"
+//#endif
 
 #ifndef _B3D_B3DGEOM_HXX
 #include "b3dgeom.hxx"
@@ -80,6 +80,9 @@
 #include <tools/poly.hxx>
 #endif
 
+#ifndef _SV_OUTDEV_HXX //autogen
+#include <vcl/outdev.hxx>
+#endif
 
 /*************************************************************************
 |*
@@ -348,7 +351,8 @@ Base3D* Base3D::Create(OutputDevice* pOutDev, BOOL bForcePrinter)
             // erzeuge neues Base3D, je nach Anforderungen
             if(bForcePrinter)
             {
-                pRetval = new Base3DPrinter(pOutDev);
+                DBG_ERROR("Base3D::Create(): Printer renderer not supported ATM, if needed migrate from old goodies lib.");
+                //pRetval = new Base3DPrinter(pOutDev);
             }
             else if(bOwnDevice)
             {
@@ -497,7 +501,7 @@ void Base3D::SetDither(BOOL bNew)
 |*
 \************************************************************************/
 
-Base3DObjectMode Base3D::GetObjectMode()
+Base3DObjectMode Base3D::GetObjectMode() const
 {
     return eObjectMode;
 }
@@ -574,11 +578,11 @@ void Base3D::EndPrimitive()
 |*
 \************************************************************************/
 
-void Base3D::DrawPolygonGeometry(B3dGeometry& rGeometry, BOOL bOutline)
+void Base3D::DrawPolygonGeometry(const B3dGeometry& rGeometry, sal_Bool bOutline)
 {
     // Buckets der Geometrie holen
-    B3dEntityBucket& rEntityBucket = rGeometry.GetEntityBucket();
-    GeometryIndexValueBucket& rIndexBucket = rGeometry.GetIndexBucket();
+    const B3dEntityBucket& rEntityBucket = rGeometry.GetEntityBucket();
+    const GeometryIndexValueBucket& rIndexBucket = rGeometry.GetIndexBucket();
 
     UINT32 nPolyCounter = 0;
     UINT32 nEntityCounter = 0;
@@ -655,28 +659,28 @@ B3dMaterial& Base3D::GetMaterialObject(Base3DMaterialMode eMode)
 |*
 \************************************************************************/
 
-void Base3D::AddVertex(Vector3D& rVertex)
+void Base3D::AddVertex(basegfx::B3DPoint& rVertex)
 {
     // Platz fuer neue Daten holen
     B3dEntity& rEntity = GetFreeEntity();
     rEntity.Reset();
 
     // geometrische Daten
-    rEntity.Point() = Point4D(rVertex);
+    rEntity.Point() = rVertex;
     rEntity.SetValid();
 
     // Nachbehandlung
     PostAddVertex(rEntity);
 }
 
-void Base3D::AddVertex(Vector3D& rVertex, Vector3D& rNormal)
+void Base3D::AddVertex(basegfx::B3DPoint& rVertex, basegfx::B3DVector& rNormal)
 {
     // Platz fuer neue Daten holen
     B3dEntity& rEntity = GetFreeEntity();
     rEntity.Reset();
 
     // geometrische Daten
-    rEntity.Point() = Point4D(rVertex);
+    rEntity.Point() = rVertex;
     rEntity.SetValid();
 
     // Normale
@@ -690,15 +694,14 @@ void Base3D::AddVertex(Vector3D& rVertex, Vector3D& rNormal)
     PostAddVertex(rEntity);
 }
 
-void Base3D::AddVertex(Vector3D& rVertex, Vector3D& rNormal,
-    Vector3D& rTexPos)
+void Base3D::AddVertex(basegfx::B3DPoint& rVertex, basegfx::B3DVector& rNormal, basegfx::B2DPoint& rTexPos)
 {
     // Platz fuer neue Daten holen
     B3dEntity& rEntity = GetFreeEntity();
     rEntity.Reset();
 
     // geometrische Daten
-    rEntity.Point() = Point4D(rVertex);
+    rEntity.Point() = rVertex;
     rEntity.SetValid();
 
     // Normale
@@ -871,7 +874,7 @@ void Base3D::SetMaterial(Color aNew,
 \************************************************************************/
 
 Color Base3D::GetMaterial(Base3DMaterialValue eVal,
-    Base3DMaterialMode eMode)
+    Base3DMaterialMode eMode) const
 {
     if(eMode == Base3DMaterialFrontAndBack
         || eMode == Base3DMaterialFront)
@@ -908,7 +911,7 @@ void Base3D::SetShininess(UINT16 nExponent,
 |*
 \************************************************************************/
 
-UINT16 Base3D::GetShininess(Base3DMaterialMode eMode)
+UINT16 Base3D::GetShininess(Base3DMaterialMode eMode) const
 {
     if(eMode == Base3DMaterialFrontAndBack
         || eMode == Base3DMaterialFront)
@@ -1080,7 +1083,7 @@ void Base3D::SetDisplayQuality(UINT8 nNew)
 |*
 \************************************************************************/
 
-UINT8 Base3D::GetDisplayQuality()
+UINT8 Base3D::GetDisplayQuality() const
 {
     return nDisplayQuality;
 }
@@ -1115,7 +1118,7 @@ void Base3D::SetPolygonOffset(Base3DPolygonOffset eNew, BOOL bNew)
 |*
 \************************************************************************/
 
-BOOL Base3D::GetPolygonOffset(Base3DPolygonOffset eNew)
+BOOL Base3D::GetPolygonOffset(Base3DPolygonOffset eNew) const
 {
     if(eNew == Base3DPolygonOffsetLine)
         return bPolyOffsetLine;
@@ -1130,7 +1133,7 @@ BOOL Base3D::GetPolygonOffset(Base3DPolygonOffset eNew)
 |*
 \************************************************************************/
 
-BOOL Base3D::GetEdgeFlag()
+BOOL Base3D::GetEdgeFlag() const
 {
     return bEdgeFlag;
 }
@@ -1152,7 +1155,7 @@ void Base3D::SetEdgeFlag(BOOL bNew)
 |*
 \************************************************************************/
 
-double Base3D::GetPointSize()
+double Base3D::GetPointSize() const
 {
     return fPointSize;
 }
@@ -1174,7 +1177,7 @@ void Base3D::SetPointSize(double fNew)
 |*
 \************************************************************************/
 
-double Base3D::GetLineWidth()
+double Base3D::GetLineWidth() const
 {
     return fLineWidth;
 }
@@ -1217,7 +1220,7 @@ void Base3D::SetRenderMode(Base3DRenderMode eNew,
 |*
 \************************************************************************/
 
-Base3DRenderMode Base3D::GetRenderMode(Base3DMaterialMode eMode)
+Base3DRenderMode Base3D::GetRenderMode(Base3DMaterialMode eMode) const
 {
     if(eMode == Base3DMaterialFrontAndBack
         || eMode == Base3DMaterialFront)
@@ -1244,7 +1247,7 @@ void Base3D::SetShadeModel(Base3DShadeModel eNew)
 |*
 \************************************************************************/
 
-Base3DShadeModel Base3D::GetShadeModel()
+Base3DShadeModel Base3D::GetShadeModel() const
 {
     return eShadeModel;
 }
@@ -1266,7 +1269,7 @@ void Base3D::SetCullMode(Base3DCullMode eNew)
 |*
 \************************************************************************/
 
-Base3DCullMode Base3D::GetCullMode()
+Base3DCullMode Base3D::GetCullMode() const
 {
     return eCullMode;
 }
