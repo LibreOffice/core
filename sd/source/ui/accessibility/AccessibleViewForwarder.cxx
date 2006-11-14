@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleViewForwarder.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:27:37 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:24:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,10 @@
 #include <vcl/outdev.hxx>
 #endif
 
+#ifndef _SDRPAINTWINDOW_HXX
+#include <svx/sdrpaintwindow.hxx>
+#endif
+
 namespace accessibility {
 
 /** For the time beeing, the implementation of this class will not use the
@@ -59,7 +63,7 @@ namespace accessibility {
 AccessibleViewForwarder::AccessibleViewForwarder (SdrPaintView* pView, USHORT nWindowId)
     : mpView (pView),
       mnWindowId (nWindowId),
-      mrDevice (*pView->GetWin(nWindowId))
+      mrDevice (pView->GetPaintWindow((sal_uInt32)nWindowId)->GetOutputDevice())
 {
     OSL_ASSERT (mpView != NULL);
     // empty
@@ -74,12 +78,17 @@ AccessibleViewForwarder::AccessibleViewForwarder (SdrPaintView* pView, OutputDev
       mrDevice (rDevice)
 {
     // Search the output device to determine its id.
-    for (USHORT i=0; i<mpView->GetWinCount(); i++)
-        if (mpView->GetWin(i) == &rDevice)
+    for(sal_uInt32 a(0L); a < mpView->PaintWindowCount(); a++)
+    {
+        SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow(a);
+        OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
+
+        if(&rOutDev == &rDevice)
         {
-            mnWindowId = i;
+            mnWindowId = (sal_uInt16)a;
             break;
         }
+    }
 }
 
 
@@ -112,7 +121,15 @@ sal_Bool AccessibleViewForwarder::IsValid (void) const
 
 Rectangle AccessibleViewForwarder::GetVisibleArea (void) const
 {
-    return mpView->GetVisibleArea (mnWindowId);
+    Rectangle aVisibleArea;
+
+    if((sal_uInt32)mnWindowId < mpView->PaintWindowCount())
+    {
+        SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow((sal_uInt32)mnWindowId);
+        aVisibleArea = pPaintWindow->GetVisibleArea();
+    }
+
+    return aVisibleArea;
 }
 
 
@@ -125,11 +142,12 @@ Rectangle AccessibleViewForwarder::GetVisibleArea (void) const
 Point AccessibleViewForwarder::LogicToPixel (const Point& rPoint) const
 {
     OSL_ASSERT (mpView != NULL);
-    OutputDevice* pDevice = mpView->GetWin(mnWindowId);
-    if (pDevice != NULL)
+    if((sal_uInt32)mnWindowId < mpView->PaintWindowCount())
     {
-        Rectangle aBBox (static_cast<Window*>(pDevice)->GetWindowExtentsRelative(NULL));
-        return pDevice->LogicToPixel (rPoint) + aBBox.TopLeft();
+        SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow((sal_uInt32)mnWindowId);
+        OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
+        Rectangle aBBox(static_cast<Window&>(rOutDev).GetWindowExtentsRelative(0L));
+        return rOutDev.LogicToPixel (rPoint) + aBBox.TopLeft();
     }
     else
         return Point();
@@ -141,9 +159,12 @@ Point AccessibleViewForwarder::LogicToPixel (const Point& rPoint) const
 Size AccessibleViewForwarder::LogicToPixel (const Size& rSize) const
 {
     OSL_ASSERT (mpView != NULL);
-    OutputDevice* pDevice = mpView->GetWin(mnWindowId);
-    if (pDevice != NULL)
-        return pDevice->LogicToPixel (rSize);
+    if((sal_uInt32)mnWindowId < mpView->PaintWindowCount())
+    {
+        SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow((sal_uInt32)mnWindowId);
+        OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
+        return rOutDev.LogicToPixel (rSize);
+    }
     else
         return Size();
 }
@@ -157,11 +178,12 @@ Size AccessibleViewForwarder::LogicToPixel (const Size& rSize) const
 Point AccessibleViewForwarder::PixelToLogic (const Point& rPoint) const
 {
     OSL_ASSERT (mpView != NULL);
-    OutputDevice* pDevice = mpView->GetWin(mnWindowId);
-    if (pDevice != NULL)
+    if((sal_uInt32)mnWindowId < mpView->PaintWindowCount())
     {
-        Rectangle aBBox (static_cast<Window*>(pDevice)->GetWindowExtentsRelative(NULL));
-        return pDevice->PixelToLogic (rPoint - aBBox.TopLeft());
+        SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow((sal_uInt32)mnWindowId);
+        OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
+        Rectangle aBBox (static_cast<Window&>(rOutDev).GetWindowExtentsRelative(0L));
+        return rOutDev.PixelToLogic (rPoint - aBBox.TopLeft());
     }
     else
         return Point();
@@ -173,9 +195,12 @@ Point AccessibleViewForwarder::PixelToLogic (const Point& rPoint) const
 Size AccessibleViewForwarder::PixelToLogic (const Size& rSize) const
 {
     OSL_ASSERT (mpView != NULL);
-    OutputDevice* pDevice = mpView->GetWin(mnWindowId);
-    if (pDevice != NULL)
-        return pDevice->PixelToLogic (rSize);
+    if((sal_uInt32)mnWindowId < mpView->PaintWindowCount())
+    {
+        SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow((sal_uInt32)mnWindowId);
+        OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
+        return rOutDev.PixelToLogic (rSize);
+    }
     else
         return Size();
 }
