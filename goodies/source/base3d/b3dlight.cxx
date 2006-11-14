@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dlight.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:38:05 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:07:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,27 +68,27 @@ void B3dLight::SetIntensity(const Color rNew, Base3DMaterialValue eVal)
         {
             aAmbient = rNew;
             if(rNew.GetRed() || rNew.GetGreen() || rNew.GetBlue())
-                bIsAmbient = TRUE;
+                bIsAmbient = sal_True;
             else
-                bIsAmbient = FALSE;
+                bIsAmbient = sal_False;
             break;
         }
         case Base3DMaterialDiffuse:
         {
             aDiffuse = rNew;
             if(rNew.GetRed() || rNew.GetGreen() || rNew.GetBlue())
-                bIsDiffuse = TRUE;
+                bIsDiffuse = sal_True;
             else
-                bIsDiffuse = FALSE;
+                bIsDiffuse = sal_False;
             break;
         }
         default:
         {
             aSpecular = rNew;
             if(rNew.GetRed() || rNew.GetGreen() || rNew.GetBlue())
-                bIsSpecular = TRUE;
+                bIsSpecular = sal_True;
             else
-                bIsSpecular = FALSE;
+                bIsSpecular = sal_False;
             break;
         }
     }
@@ -132,33 +132,34 @@ void B3dLight::Init()
     {
         aDiffuse = Color(255, 204, 204, 204);
         aSpecular = Color(255, 255, 255, 255);
-        aPosition = Vector3D(1.0, 1.0, 1.0);
-        aPosition.Normalize();
-        bIsDiffuse = TRUE;
-        bIsSpecular = TRUE;
-        bIsEnabled = TRUE;
+        basegfx::B3DVector aTiltVector(1.0, 1.0, 1.0);
+        aTiltVector.normalize();
+        aPosition = aTiltVector;
+        bIsDiffuse = sal_True;
+        bIsSpecular = sal_True;
+        bIsEnabled = sal_True;
     }
     else
     {
         aDiffuse = Color(0, 0, 0, 0);
         aSpecular = Color(0, 0, 0, 0);
-        aPosition = Vector3D(0.0, 0.0, 1.0);
-        bIsDiffuse = FALSE;
-        bIsSpecular = FALSE;
-        bIsEnabled = FALSE;
+        aPosition = basegfx::B3DPoint(0.0, 0.0, 1.0);
+        bIsDiffuse = sal_False;
+        bIsSpecular = sal_False;
+        bIsEnabled = sal_False;
     }
-    aPositionEye = Vector3D(0.0, 0.0, 0.0);
-    aSpotDirection = Vector3D(0.0, 0.0, -1.0);
-    aSpotDirectionEye = Vector3D(0.0, 0.0, 0.0);
+    aPositionEye = basegfx::B3DPoint(0.0, 0.0, 0.0);
+    aSpotDirection = basegfx::B3DVector(0.0, 0.0, -1.0);
+    aSpotDirectionEye = basegfx::B3DVector(0.0, 0.0, 0.0);
     nSpotExponent = 0;
     fSpotCutoff = 180.0;
     fConstantAttenuation = 1.0;
     fLinearAttenuation = 0.0;
     fQuadraticAttenuation = 0.0;
-    bLinearOrQuadratic = FALSE;
-    bIsDirectionalSource = TRUE;
-    bIsSpot = FALSE;
-    bIsAmbient = FALSE;
+    bLinearOrQuadratic = sal_False;
+    bIsDirectionalSource = sal_True;
+    bIsSpot = sal_False;
+    bIsAmbient = sal_False;
 }
 
 /*************************************************************************
@@ -167,10 +168,10 @@ void B3dLight::Init()
 |*
 \************************************************************************/
 
-void B3dLight::SetSpotDirection(const Vector3D& rNew)
+void B3dLight::SetSpotDirection(const basegfx::B3DVector& rNew)
 {
     aSpotDirection=rNew;
-    aSpotDirection.Normalize();
+    aSpotDirection.normalize();
 }
 
 /*************************************************************************
@@ -179,10 +180,10 @@ void B3dLight::SetSpotDirection(const Vector3D& rNew)
 |*
 \************************************************************************/
 
-void B3dLight::SetSpotDirectionEye(const Vector3D& rNew)
+void B3dLight::SetSpotDirectionEye(const basegfx::B3DVector& rNew)
 {
     aSpotDirectionEye=rNew;
-    aSpotDirectionEye.Normalize();
+    aSpotDirectionEye.normalize();
 }
 
 /*************************************************************************
@@ -194,7 +195,7 @@ void B3dLight::SetSpotDirectionEye(const Vector3D& rNew)
 void B3dLight::SetSpotCutoff(double fNew)
 {
     fSpotCutoff = fNew;
-    bIsSpot = (fNew == 180.0) ? FALSE : TRUE;
+    bIsSpot = (fNew == 180.0) ? sal_False : sal_True;
     fCosSpotCutoff = cos(fNew * F_PI180);
 }
 
@@ -208,7 +209,7 @@ void B3dLight::SetLinearAttenuation(double fNew)
 {
     fLinearAttenuation = fNew;
     bLinearOrQuadratic =
-        (fNew + fQuadraticAttenuation == 0.0) ? FALSE : TRUE;
+        (fNew + fQuadraticAttenuation == 0.0) ? sal_False : sal_True;
 }
 
 /*************************************************************************
@@ -221,65 +222,7 @@ void B3dLight::SetQuadraticAttenuation(double fNew)
 {
     fQuadraticAttenuation = fNew;
     bLinearOrQuadratic =
-        (fNew + fLinearAttenuation == 0.0) ? FALSE : TRUE;
-}
-
-void B3dLight::WriteData(SvStream& rOut) const
-{
-    rOut << aAmbient;
-    rOut << aDiffuse;
-    rOut << aSpecular;
-
-    rOut << aPosition;
-    rOut << aPositionEye;
-    rOut << aSpotDirection;
-    rOut << aSpotDirectionEye;
-    rOut << nSpotExponent;
-
-    rOut << fSpotCutoff;
-    rOut << fCosSpotCutoff;
-    rOut << fConstantAttenuation;
-    rOut << fLinearAttenuation;
-    rOut << fQuadraticAttenuation;
-
-    rOut << (BOOL)bIsFirstLight;
-    rOut << (BOOL)bIsEnabled;
-    rOut << (BOOL)bIsDirectionalSource;
-    rOut << (BOOL)bIsSpot;
-    rOut << (BOOL)bIsAmbient;
-    rOut << (BOOL)bIsDiffuse;
-    rOut << (BOOL)bIsSpecular;
-    rOut << (BOOL)bLinearOrQuadratic;
-}
-
-void B3dLight::ReadData(SvStream& rIn)
-{
-    BOOL bTmp;
-
-    rIn >> aAmbient;
-    rIn >> aDiffuse;
-    rIn >> aSpecular;
-
-    rIn >> aPosition;
-    rIn >> aPositionEye;
-    rIn >> aSpotDirection;
-    rIn >> aSpotDirectionEye;
-    rIn >> nSpotExponent;
-
-    rIn >> fSpotCutoff;
-    rIn >> fCosSpotCutoff;
-    rIn >> fConstantAttenuation;
-    rIn >> fLinearAttenuation;
-    rIn >> fQuadraticAttenuation;
-
-    rIn >> bTmp; bIsFirstLight = bTmp;
-    rIn >> bTmp; bIsEnabled = bTmp;
-    rIn >> bTmp; bIsDirectionalSource = bTmp;
-    rIn >> bTmp; bIsSpot = bTmp;
-    rIn >> bTmp; bIsAmbient = bTmp;
-    rIn >> bTmp; bIsDiffuse = bTmp;
-    rIn >> bTmp; bIsSpecular = bTmp;
-    rIn >> bTmp; bLinearOrQuadratic = bTmp;
+        (fNew + fLinearAttenuation == 0.0) ? sal_False : sal_True;
 }
 
 /*************************************************************************
@@ -290,16 +233,20 @@ void B3dLight::ReadData(SvStream& rIn)
 
 B3dLightGroup::B3dLightGroup()
 :   aGlobalAmbientLight(255, 102, 102, 102),
-    bLightingEnabled(TRUE),
-    bLocalViewer(TRUE),
-    bModelTwoSide(FALSE)
+    bLightingEnabled(sal_True),
+    bLocalViewer(sal_True),
+    bModelTwoSide(sal_False)
 {
     // Lichtquellen initialisieren
-    for(UINT16 i=0; i < BASE3D_MAX_NUMBER_LIGHTS;i++)
+    for(sal_uInt16 i=0; i < BASE3D_MAX_NUMBER_LIGHTS;i++)
     {
         aLight[i].SetFirst(i==0);
         aLight[i].Init();
     }
+}
+
+B3dLightGroup::~B3dLightGroup()
+{
 }
 
 /*************************************************************************
@@ -333,7 +280,7 @@ const Color B3dLightGroup::GetGlobalAmbientLight()
 |*
 \************************************************************************/
 
-void B3dLightGroup::SetLocalViewer(BOOL bNew)
+void B3dLightGroup::SetLocalViewer(sal_Bool bNew)
 {
     if(bLocalViewer != bNew)
     {
@@ -347,7 +294,7 @@ void B3dLightGroup::SetLocalViewer(BOOL bNew)
 |*
 \************************************************************************/
 
-BOOL B3dLightGroup::GetLocalViewer()
+sal_Bool B3dLightGroup::GetLocalViewer()
 {
     return bLocalViewer;
 }
@@ -358,7 +305,7 @@ BOOL B3dLightGroup::GetLocalViewer()
 |*
 \************************************************************************/
 
-void B3dLightGroup::SetModelTwoSide(BOOL bNew)
+void B3dLightGroup::SetModelTwoSide(sal_Bool bNew)
 {
     if(bModelTwoSide != bNew)
     {
@@ -372,7 +319,7 @@ void B3dLightGroup::SetModelTwoSide(BOOL bNew)
 |*
 \************************************************************************/
 
-BOOL B3dLightGroup::GetModelTwoSide()
+sal_Bool B3dLightGroup::GetModelTwoSide()
 {
     return bModelTwoSide;
 }
@@ -383,7 +330,7 @@ BOOL B3dLightGroup::GetModelTwoSide()
 |*
 \************************************************************************/
 
-void B3dLightGroup::EnableLighting(BOOL bNew)
+void B3dLightGroup::EnableLighting(sal_Bool bNew)
 {
     if(bLightingEnabled != bNew)
     {
@@ -397,7 +344,7 @@ void B3dLightGroup::EnableLighting(BOOL bNew)
 |*
 \************************************************************************/
 
-BOOL B3dLightGroup::IsLightingEnabled()
+sal_Bool B3dLightGroup::IsLightingEnabled()
 {
     return bLightingEnabled;
 }
@@ -446,12 +393,12 @@ const Color B3dLightGroup::GetIntensity(Base3DMaterialValue eMat,
 |*
 \************************************************************************/
 
-void B3dLightGroup::SetPosition(const Vector3D& rNew, Base3DLightNumber eNum)
+void B3dLightGroup::SetPosition(const basegfx::B3DPoint& rNew, Base3DLightNumber eNum)
 {
     if(eNum >= Base3DLight0 && eNum <= Base3DLight7)
     {
         aLight[eNum].SetPosition(rNew);
-        aLight[eNum].SetDirectionalSource(FALSE);
+        aLight[eNum].SetDirectionalSource(sal_False);
     }
 #ifdef DBG_UTIL
     else
@@ -465,7 +412,7 @@ void B3dLightGroup::SetPosition(const Vector3D& rNew, Base3DLightNumber eNum)
 |*
 \************************************************************************/
 
-const Vector3D& B3dLightGroup::GetPosition(Base3DLightNumber eNum)
+const basegfx::B3DPoint& B3dLightGroup::GetPosition(Base3DLightNumber eNum)
 {
     if(eNum < Base3DLight0 || eNum > Base3DLight7)
     {
@@ -487,12 +434,12 @@ const Vector3D& B3dLightGroup::GetPosition(Base3DLightNumber eNum)
 |*
 \************************************************************************/
 
-void B3dLightGroup::SetDirection(const Vector3D& rNew, Base3DLightNumber eNum)
+void B3dLightGroup::SetDirection(const basegfx::B3DVector& rNew, Base3DLightNumber eNum)
 {
     if(eNum >= Base3DLight0 && eNum <= Base3DLight7)
     {
         aLight[eNum].SetPosition(rNew);
-        aLight[eNum].SetDirectionalSource(TRUE);
+        aLight[eNum].SetDirectionalSource(sal_True);
     }
 #ifdef DBG_UTIL
     else
@@ -506,7 +453,7 @@ void B3dLightGroup::SetDirection(const Vector3D& rNew, Base3DLightNumber eNum)
 |*
 \************************************************************************/
 
-const Vector3D& B3dLightGroup::GetDirection(Base3DLightNumber eNum)
+const basegfx::B3DVector& B3dLightGroup::GetDirection(Base3DLightNumber eNum)
 {
     if(eNum < Base3DLight0 || eNum > Base3DLight7)
     {
@@ -519,7 +466,7 @@ const Vector3D& B3dLightGroup::GetDirection(Base3DLightNumber eNum)
     if(!IsDirectionalSource())
         DBG_ERROR("Zugriff auf die Richtung einer ungerichteten Lichtquelle!");
 #endif
-    return aLight[eNum].GetPosition();
+    return (basegfx::B3DVector&)aLight[eNum].GetPosition();
 }
 
 /*************************************************************************
@@ -528,7 +475,7 @@ const Vector3D& B3dLightGroup::GetDirection(Base3DLightNumber eNum)
 |*
 \************************************************************************/
 
-void B3dLightGroup::SetSpotDirection(const Vector3D& rNew, Base3DLightNumber eNum)
+void B3dLightGroup::SetSpotDirection(const basegfx::B3DVector& rNew, Base3DLightNumber eNum)
 {
     if(eNum >= Base3DLight0 && eNum <= Base3DLight7)
     {
@@ -546,7 +493,7 @@ void B3dLightGroup::SetSpotDirection(const Vector3D& rNew, Base3DLightNumber eNu
 |*
 \************************************************************************/
 
-const Vector3D& B3dLightGroup::GetSpotDirection(Base3DLightNumber eNum)
+const basegfx::B3DVector& B3dLightGroup::GetSpotDirection(Base3DLightNumber eNum)
 {
     if(eNum < Base3DLight0 || eNum > Base3DLight7)
     {
@@ -564,7 +511,7 @@ const Vector3D& B3dLightGroup::GetSpotDirection(Base3DLightNumber eNum)
 |*
 \************************************************************************/
 
-void B3dLightGroup::SetSpotExponent(UINT16 nNew, Base3DLightNumber eNum)
+void B3dLightGroup::SetSpotExponent(sal_uInt16 nNew, Base3DLightNumber eNum)
 {
     if(eNum >= Base3DLight0 && eNum <= Base3DLight7)
     {
@@ -582,7 +529,7 @@ void B3dLightGroup::SetSpotExponent(UINT16 nNew, Base3DLightNumber eNum)
 |*
 \************************************************************************/
 
-UINT16 B3dLightGroup::GetSpotExponent(Base3DLightNumber eNum)
+sal_uInt16 B3dLightGroup::GetSpotExponent(Base3DLightNumber eNum)
 {
     if(eNum < Base3DLight0 || eNum > Base3DLight7)
     {
@@ -744,7 +691,7 @@ double B3dLightGroup::GetQuadraticAttenuation(Base3DLightNumber eNum)
 |*
 \************************************************************************/
 
-void B3dLightGroup::Enable(BOOL bNew, Base3DLightNumber eNum)
+void B3dLightGroup::Enable(sal_Bool bNew, Base3DLightNumber eNum)
 {
     if(eNum >= Base3DLight0 && eNum <= Base3DLight7)
     {
@@ -762,7 +709,7 @@ void B3dLightGroup::Enable(BOOL bNew, Base3DLightNumber eNum)
 |*
 \************************************************************************/
 
-BOOL B3dLightGroup::IsEnabled(Base3DLightNumber eNum)
+sal_Bool B3dLightGroup::IsEnabled(Base3DLightNumber eNum)
 {
     if(eNum < Base3DLight0 || eNum > Base3DLight7)
     {
@@ -780,7 +727,7 @@ BOOL B3dLightGroup::IsEnabled(Base3DLightNumber eNum)
 |*
 \************************************************************************/
 
-BOOL B3dLightGroup::IsDirectionalSource(Base3DLightNumber eNum)
+sal_Bool B3dLightGroup::IsDirectionalSource(Base3DLightNumber eNum)
 {
     if(eNum < Base3DLight0 || eNum > Base3DLight7)
     {
@@ -810,35 +757,4 @@ B3dLight& B3dLightGroup::GetLightObject(Base3DLightNumber eNum)
     return aLight[eNum];
 }
 
-void B3dLightGroup::WriteData(SvStream& rOut) const
-{
-    for(UINT16 a=0;a<BASE3D_MAX_NUMBER_LIGHTS;a++)
-    {
-        B3dLight& rLight = ((B3dLightGroup*)(this))->GetLightObject((Base3DLightNumber)(Base3DLight0 + a));
-        rLight.WriteData(rOut);
-    }
-
-    rOut << aGlobalAmbientLight;
-
-    rOut << (BOOL)bLightingEnabled;
-    rOut << (BOOL)bLocalViewer;
-    rOut << (BOOL)bModelTwoSide;
-}
-
-void B3dLightGroup::ReadData(SvStream& rIn)
-{
-    BOOL bTmp;
-
-    for(UINT16 a=0;a<BASE3D_MAX_NUMBER_LIGHTS;a++)
-    {
-        B3dLight& rLight = GetLightObject((Base3DLightNumber)(Base3DLight0 + a));
-        rLight.ReadData(rIn);
-    }
-
-    rIn >> aGlobalAmbientLight;
-
-    rIn >> bTmp; bLightingEnabled = bTmp;
-    rIn >> bTmp; bLocalViewer = bTmp;
-    rIn >> bTmp; bModelTwoSide = bTmp;
-}
-
+// eof
