@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grviewsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:40:58 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:44:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/scrbar.hxx>
 
+#ifndef _SV_SALBTYPE_HXX
+#include <vcl/salbtype.hxx>     // FRound
+#endif
 
 namespace sd {
 
