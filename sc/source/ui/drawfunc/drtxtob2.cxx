@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:25:08 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:50:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,7 +235,7 @@ void ScDrawTextObjectBar::ExecFormText(SfxRequest& rReq)
                                        (pViewFrm->
                                             GetChildWindow(nId)->GetWindow());
 
-            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetPageViewPvNum(0),
+            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetSdrPageView(),
                                     rSet, *rMarkList.GetMark(0)->GetMarkedSdrObj(),
                                    ((const XFormTextStdFormItem*) pItem)->
                                    GetValue());
