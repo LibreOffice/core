@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:27:39 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:38:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1031,7 +1031,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                         pMetaFile->SetPrefSize( aSize );
 
                         SvMemoryStream aDestStrm( 65535, 65535 );
-                        ConvertGDIMetaFileToWMF( *pMetaFile, aDestStrm, NULL, NULL, sal_False );
+                        ConvertGDIMetaFileToWMF( *pMetaFile, aDestStrm, NULL, sal_False );
                         uno::Sequence<sal_Int8> aSeq( (sal_Int8*)aDestStrm.GetData(), aDestStrm.Tell() );
                         aAny <<= aSeq;
                         delete pMetaFile;
@@ -1424,7 +1424,7 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::combine( const Referenc
     if(mpView==NULL||!xShapes.is()||GetPage()==NULL)
         return xShape;
 
-    SdrPageView* pPageView = mpView->ShowPage( GetPage(), Point() );
+    SdrPageView* pPageView = mpView->ShowSdrPage( GetPage() );
 
     _SelectObjectsInView( xShapes, pPageView );
 
@@ -1439,7 +1439,7 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::combine( const Referenc
             xShape = Reference< drawing::XShape >::query( pObj->getUnoShape() );
     }
 
-    mpView->HidePage(pPageView);
+    mpView->HideSdrPage();
 
     GetModel()->SetModified();
 
@@ -1457,10 +1457,10 @@ void SAL_CALL SdGenericDrawPage::split( const Reference< drawing::XShape >& xGro
     if(mpView==NULL||!xGroup.is()||GetPage()==NULL)
         return;
 
-    SdrPageView* pPageView = mpView->ShowPage( GetPage(), Point() );
+    SdrPageView* pPageView = mpView->ShowSdrPage( GetPage() );
     _SelectObjectInView( xGroup, pPageView );
     mpView->DismantleMarkedObjects( sal_False );
-    mpView->HidePage(pPageView);
+    mpView->HideSdrPage();
 
     GetModel()->SetModified();
 }
@@ -1477,7 +1477,7 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::bind( const Reference< 
     if(mpView==NULL||!xShapes.is()||GetPage()==NULL)
         return xShape;
 
-    SdrPageView* pPageView = mpView->ShowPage( GetPage(), Point() );
+    SdrPageView* pPageView = mpView->ShowSdrPage( GetPage() );
 
     _SelectObjectsInView( xShapes, pPageView );
 
@@ -1492,7 +1492,7 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::bind( const Reference< 
             xShape = Reference< drawing::XShape >::query( pObj->getUnoShape() );
     }
 
-    mpView->HidePage(pPageView);
+    mpView->HideSdrPage();
 
     GetModel()->SetModified();
 
@@ -1510,10 +1510,10 @@ void SAL_CALL SdGenericDrawPage::unbind( const Reference< drawing::XShape >& xSh
     if(mpView==NULL||!xShape.is()||GetPage()==NULL)
         return;
 
-    SdrPageView* pPageView = mpView->ShowPage( GetPage(), Point() );
+    SdrPageView* pPageView = mpView->ShowSdrPage( GetPage() );
     _SelectObjectInView( xShape, pPageView );
     mpView->DismantleMarkedObjects( sal_True );
-    mpView->HidePage(pPageView);
+    mpView->HideSdrPage();
 
     GetModel()->SetModified();
 }
