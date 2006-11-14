@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:22:53 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:11:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,6 +206,10 @@
 #include <EnhancedPDFExportHelper.hxx>
 #endif
 // <--
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #define GETOBJSHELL()       ((SfxObjectShell*)rSh.GetDoc()->GetDocShell())
 
@@ -873,7 +877,6 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
         // OD 2004-04-23 #116347#
         pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
         pOut->SetLineColor();
-
         ConnectEdges( pOut );
         const Color *pLast = 0;
 
@@ -2687,7 +2690,7 @@ void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
 |*  Beschreibung
 |*      Fuer jede sichtbare Seite, die von Rect ber?hrt wird einmal Painten.
 |*      1. Umrandungen und Hintergruende Painten.
-|*      2. Den DrawLayer (Ramen und Zeichenobjekte) der unter dem Dokument
+|*      2. Den Draw Layer (Ramen und Zeichenobjekte) der unter dem Dokument
 |*         liegt painten (Hoelle).
 |*      3. Den Dokumentinhalt (Text) Painten.
 |*      4. Den Drawlayer der ueber dem Dokuemnt liegt painten.
@@ -2720,6 +2723,14 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
     }
     else
         SwRootFrm::bInPaint = bResetRootPaint = TRUE;
+
+    // #i68597# paint pre-process for DrawingLayer overlay if not in paint
+    const Region aDLRegion(rRect.SVRect());
+
+    if(!pSh->IsPaintInProgress())
+    {
+        pSh->DLPreOutsidePaint(aDLRegion);
+    }
 
     SwSavePaintStatics *pStatics = 0;
     if ( pGlobalShell )
@@ -2881,15 +2892,9 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
     if ( pSh->GetWin() && pSh->Imp()->HasDrawView() &&
          pSh->Imp()->GetDrawView()->IsGridVisible() )
     {
-        pSh->Imp()->GetDrawView()->GetPageViewPgNum(0)->DrawGrid(
-            *pSh->GetOut(), rRect.SVRect(), SwViewOption::GetTextGridColor() );
-    }
-
-    // call RefreshAllIAOManagers only once in paint, so do it here
-    // and not in DrawOneLayer()
-    if(pSh->GetWin() && pSh->Imp()->HasDrawView())
-    {
-        pSh->Imp()->GetDrawView()->RefreshAllIAOManagers();
+        SdrPaintView* pPaintView = pSh->Imp()->GetDrawView();
+        SdrPageView* pPageView = pPaintView->GetSdrPageView();
+        pPageView->DrawPageViewGrid(*pSh->GetOut(), rRect.SVRect(), SwViewOption::GetTextGridColor() );
     }
 
     if ( bResetRootPaint )
@@ -2902,8 +2907,11 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
         pGlobalShell = 0;
     }
 
-    //if ( ViewShell::IsLstEndAction() && pSh->GetWin() && pSh->Imp()->HasDrawView() )
-    //  pSh->Imp()->GetDrawView()->PostPaint();
+    // #i68597# paint post-process for DrawingLayer overlay if not in paint
+    if(!pSh->IsPaintInProgress())
+    {
+        pSh->DLPostOutsidePaint(aDLRegion);
+    }
 
     ((SwRootFrm*)this)->SetCallbackActionEnabled( bOldAction );
 }
@@ -6293,10 +6301,10 @@ Graphic SwDrawFrmFmt::MakeGraphic( ImageMap* pMap )
     {
         SdrObject *pObj = FindSdrObject();
         SdrView *pView = new SdrView( pMod );
-        SdrPageView *pPgView = pView->ShowPagePgNum( 0, Point() );
+        SdrPageView *pPgView = pView->ShowSdrPage(pView->GetModel()->GetPage(0));
         pView->MarkObj( pObj, pPgView );
         aRet = pView->GetMarkedObjBitmap();
-        pView->HidePage( pPgView );
+        pView->HideSdrPage();
         delete pView;
     }
     return aRet;
