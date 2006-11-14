@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 19:53:22 $
+#   last change: $Author: ihi $ $Date: 2006-11-14 15:25:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,8 @@ SLOFILES=	\
         $(SLO)$/xlfd_extd.obj		\
         $(SLO)$/xlfd_smpl.obj		\
         $(SLO)$/salgdi3.obj		\
+        $(SLO)$/gcach_xpeer.obj		\
+        $(SLO)$/xrender_peer.obj	\
         $(SLO)$/pspgraphics.obj
         
 EXCEPTIONSFILES=\
@@ -96,10 +98,6 @@ ENVCFLAGS+=-DUSE_CDE
 
 .IF "$(XRENDER_LINK)" == "YES"
 CFLAGS+=-DXRENDER_LINK
-.ENDIF
-
-.IF "$(USE_BUILTIN_RASTERIZER)" != ""
-SLOFILES+=	$(SLO)$/gcach_xpeer.obj
 .ENDIF
 
 .ENDIF	# "$(GUIBASE)"!="unx"
