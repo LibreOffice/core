@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3ddeflt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:25:31 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:06:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ private:
     // Vergroeberungsstufe und dazugehoerige Variablen
     double                  fDetail;
     double                  fDetailBackup;
-    long                    nMaxPixels;
+    sal_Int32               nMaxPixels;
 
     // Groesse der Textur, falls benutzt
     double                  fTexWidth;
@@ -139,6 +139,7 @@ private:
     // Lokale Scissor Region (ohne TopLeft)
     Rectangle               aDefaultScissorRectangle;
 
+    // bitfileld
     // Booleans fuer Zeichenoperationen
     unsigned                bNormalsUsed                    : 1;
     unsigned                bTextureUsed                    : 1;
@@ -157,25 +158,25 @@ private:
 
     // Umrechnung auf PixelCoor der Bitmaps und zurueck
     Point GetPixelCoor(B3dEntity& rEntity);
-    Vector3D Get3DCoor(Point& rPnt, double fDepth);
+    basegfx::B3DPoint Get3DCoor(Point& rPnt, double fDepth);
 
     // ZBuffer funktionen
-    inline BOOL IsInScissorRegion(long nX, long nY);
-    inline BOOL IsVisibleAndScissor(long nX, long nY, UINT32 nDepth);
-    inline void WritePixel(long nX, long nY, Color aColor, UINT32 nDepth);
+    inline sal_Bool IsInScissorRegion(sal_Int32 nX, sal_Int32 nY);
+    inline sal_Bool IsVisibleAndScissor(sal_Int32 nX, sal_Int32 nY, sal_uInt32 nDepth);
+    inline void WritePixel(sal_Int32 nX, sal_Int32 nY, Color aColor, sal_uInt32 nDepth);
 
     // Zeilenerzeuger fuer Polygon
-    /*inline*/ void DrawLinePhongTexture(long nYPos, B3dMaterial& rMat);
-    /*inline*/ void DrawLinePhong(long nYPos, B3dMaterial& rMat);
-    /*inline*/ void DrawLineColorTexture(long nYPos);
-    /*inline*/ void DrawLineColor(long nYPos);
-    /*inline*/ void DrawLineTexture(long nYPos, Color& rCol);
-    /*inline*/ void DrawLine(long nYPos, Color& rCol);
+    /*inline*/ void DrawLinePhongTexture(sal_Int32 nYPos, B3dMaterial& rMat);
+    /*inline*/ void DrawLinePhong(sal_Int32 nYPos, B3dMaterial& rMat);
+    /*inline*/ void DrawLineColorTexture(sal_Int32 nYPos);
+    /*inline*/ void DrawLineColor(sal_Int32 nYPos);
+    /*inline*/ void DrawLineTexture(sal_Int32 nYPos, Color& rCol);
+    /*inline*/ void DrawLine(sal_Int32 nYPos, Color& rCol);
 
-    inline void LoadLeft(long nSize);
-    inline void LoadLeftTexture(long nSize);
-    inline void LoadRight(long nSize);
-    inline void LoadRightTexture(long nSize);
+    inline void LoadLeft(sal_Int32 nSize);
+    inline void LoadLeftTexture(sal_Int32 nSize);
+    inline void LoadRight(sal_Int32 nSize);
+    inline void LoadRightTexture(sal_Int32 nSize);
 
     inline void NextStepRight();
     inline void NextStepRightTexture();
@@ -194,14 +195,14 @@ public:
     virtual void EndScene();
 
     // Nullwert des ZBuffers setzen
-    void SetClearValue(UINT32 nNew) { aClearValue = Color(nNew); }
+    void SetClearValue(sal_uInt32 nNew) { aClearValue = Color(nNew); }
 
     // Detailstufe/Vergroeberung der Ausgabe setzen/lesen
     void SetDetail(double fNew=1.0);
     double GetDetail() { return fDetail; }
-    void SetMaxPixels(long nNew=500000) { nMaxPixels = nNew; }
-    long GetMaxPixels() { return nMaxPixels; }
-    virtual void SetDisplayQuality(UINT8 nNew);
+    void SetMaxPixels(sal_Int32 nNew=500000) { nMaxPixels = nNew; }
+    sal_Int32 GetMaxPixels() { return nMaxPixels; }
+    virtual void SetDisplayQuality(sal_uInt8 nNew);
 
     // Callbacks bei Matrixaenderungen
     virtual void SetTransformationSet(B3dTransformationSet* pSet);
@@ -209,10 +210,9 @@ public:
 protected:
 
     // Geometrie
-    virtual void Clipped3DPoint(UINT32 nInd);
-    virtual void Clipped3DLine(UINT32 nInd1, UINT32 nInd2);
-    virtual void Clipped3DTriangle(UINT32 nInd1, UINT32 nInd2,
-        UINT32 nInd3);
+    virtual void Clipped3DPoint(sal_uInt32 nInd);
+    virtual void Clipped3DLine(sal_uInt32 nInd1, sal_uInt32 nInd2);
+    virtual void Clipped3DTriangle(sal_uInt32 nInd1, sal_uInt32 nInd2, sal_uInt32 nInd3);
 };
 
 
