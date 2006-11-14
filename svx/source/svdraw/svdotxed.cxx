@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxed.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:57:45 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:47:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,9 +78,9 @@ FASTBOOL SdrTextObj::HasTextEdit() const
     return TRUE;
 }
 
-FASTBOOL SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
+sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
 {
-    if (pEdtOutl!=NULL) return FALSE; // Textedit laeuft evtl. schon an einer anderen View!
+    if (pEdtOutl!=NULL) return sal_False; // Textedit laeuft evtl. schon an einer anderen View!
     pEdtOutl=&rOutl;
 
     // #101684#
@@ -126,15 +126,6 @@ FASTBOOL SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
             // Parent enthaltenen Items hart am Absatz attributiert werden.
             // -> BugID 22467
             const SfxItemSet& rSet = GetObjectItemSet();
-//BFS01         SdrOutlinerSetItem aOutlSetItem(rSet.GetPool());
-//BFS01         aOutlSetItem.GetItemSet().Put(rSet);
-//BFS01         const SfxItemSet* pTmpSet = &aOutlSetItem.GetItemSet();
-//BFS01         const SfxItemSet* pParentMerk = pTmpSet->GetParent();
-//BFS01         ((SfxItemSet*)pTmpSet)->SetParent(NULL);
-//BFS01         rOutl.SetParaAttribs(0,*pTmpSet);
-//BFS01         ((SfxItemSet*)pTmpSet)->SetParent(pParentMerk);
-
-            //BFS01
             SfxItemSet aFilteredSet(*rSet.GetPool(), EE_ITEMS_START, EE_ITEMS_END);
             aFilteredSet.Put(rSet);
             rOutl.SetParaAttribs(0, aFilteredSet);
@@ -168,7 +159,7 @@ FASTBOOL SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     rOutl.UpdateFields();
     rOutl.ClearModifyFlag();
 
-    return TRUE;
+    return sal_True;
 }
 
 void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const
