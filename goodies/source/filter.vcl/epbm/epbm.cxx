@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epbm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:42:30 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:10:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,6 @@ class PBMWriter {
 
 private:
 
-    PFilterCallback     mpCallback;
-    void *              mpCallerData;
-
     SvStream*           mpOStm;             // Die auszugebende PBM-Datei
     USHORT              mpOStmOldModus;
 
@@ -64,18 +61,18 @@ private:
     BitmapReadAccess*   mpAcc;
     ULONG               mnWidth, mnHeight;  // Bildausmass in Pixeln
 
-    BOOL                ImplCallback( USHORT nPercent );
+    void                ImplCallback( USHORT nPercent );
     BOOL                ImplWriteHeader();
     void                ImplWriteBody();
     void                ImplWriteNumber( sal_Int32 );
+
+    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
 public:
                         PBMWriter();
                         ~PBMWriter();
 
-    BOOL                WritePBM( const Graphic& rGraphic, SvStream& rPBM,
-                                  PFilterCallback pCallback, void* pCallerdata,
-                                  FilterConfigItem* pConfigItem );
+    BOOL                WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von PBMWriter ==============================
@@ -94,32 +91,30 @@ PBMWriter::~PBMWriter()
 
 // ------------------------------------------------------------------------
 
-BOOL PBMWriter::ImplCallback( USHORT nPercent )
+void PBMWriter::ImplCallback( USHORT nPercent )
 {
-    if ( mpCallback != NULL )
-    {
-        if ( ( (*mpCallback)( mpCallerData, nPercent ) ) == TRUE )
-        {
-            mpOStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
-            return TRUE;
-        }
-    }
-    return FALSE;
+    if ( xStatusIndicator.is() && ( nPercent <= 100 ) )
+        xStatusIndicator->setValue( nPercent );
 }
 
 // ------------------------------------------------------------------------
 
-BOOL PBMWriter::WritePBM( const Graphic& rGraphic, SvStream& rPBM,
-                          PFilterCallback pCallback, void* pCallerdata,
-                          FilterConfigItem* pConfigItem )
+BOOL PBMWriter::WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterConfigItem* pFilterConfigItem )
 {
 
     mpOStm = &rPBM;
-    mpCallback = pCallback;
-    mpCallerData = pCallerdata;
 
-    if ( pConfigItem )
-        mnMode = pConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FileFormat" ) ), 0 );
+    if ( pFilterConfigItem )
+    {
+        mnMode = pFilterConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FileFormat" ) ), 0 );
+
+        xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
+        if ( xStatusIndicator.is() )
+        {
+            rtl::OUString aMsg;
+            xStatusIndicator->start( aMsg, 100 );
+        }
+    }
 
     BitmapEx    aBmpEx( rGraphic.GetBitmapEx() );
     Bitmap      aBmp = aBmpEx.GetBitmap();
@@ -140,6 +135,9 @@ BOOL PBMWriter::WritePBM( const Graphic& rGraphic, SvStream& rPBM,
         mbStatus = FALSE;
 
     mpOStm->SetNumberFormatInt( mpOStmOldModus );
+
+    if ( xStatusIndicator.is() )
+        xStatusIndicator->end();
 
     return mbStatus;
 }
@@ -226,13 +224,11 @@ void PBMWriter::ImplWriteNumber( sal_Int32 nNumber )
 // - exported function -
 // ---------------------
 
-extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic,
-                                               PFilterCallback pCallback, void* pCallerData,
-                                               FilterConfigItem* pConfigItem, BOOL )
+extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, BOOL )
 {
     PBMWriter aPBMWriter;
 
-    return aPBMWriter.WritePBM( rGraphic, rStream, pCallback, pCallerData, pConfigItem );
+    return aPBMWriter.WritePBM( rGraphic, rStream, pFilterConfigItem );
 }
 
 // ------------------------------------------------------------------------
