@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:23:17 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:38:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -282,7 +282,7 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
             mrDrawViewShell.WriteFrameViewData();
         }
 
-        SdrPageView *pPV = mrView.GetPageViewPvNum(0);
+        SdrPageView *pPV = mrView.GetSdrPageView();
 
         if(pPV)
         {
@@ -606,7 +606,7 @@ void SAL_CALL SdUnoDrawView::setCurrentPage (
     {
         // End editing of text.  Otherwise the edited text object would
         // still be visible on the new page.
-        mrDrawViewShell.GetView()->EndTextEdit();
+        mrDrawViewShell.GetView()->SdrEndTextEdit();
 
         setMasterPageMode( pSdrPage->IsMasterPage() );
         mrDrawViewShell.SwitchPage( (pSdrPage->GetPageNum() - 1) >> 1 );
@@ -622,7 +622,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoDrawView::getCurrentPage()
     Reference< drawing::XDrawPage >  xPage;
 
     SdXImpressDocument* pModel = GetModel();
-    SdrPageView *pPV = mrView.GetPageViewPvNum(0);
+    SdrPageView *pPV = mrView.GetSdrPageView();
     SdrPage* pPage = pPV ? pPV->GetPage() : NULL;
 
     if(pPage)
