@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtrange.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:40:51 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:17:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@
 #pragma optimize ( "", off )
 #endif
 
-TextRanger::TextRanger( const XPolyPolygon& rXPoly, const XPolyPolygon* pXLine,
+TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon,
     USHORT nCacheSz, USHORT nLft, USHORT nRght, BOOL bSimpl, BOOL bInnr,
     BOOL bVert ) :
     pBound( NULL ),
@@ -95,47 +95,30 @@ TextRanger::TextRanger( const XPolyPolygon& rXPoly, const XPolyPolygon* pXLine,
     pCache = new SvLongsPtr[ nCacheSize ];
     memset( pRangeArr, 0, nCacheSize * sizeof( Range ) );
     memset( pCache, 0, nCacheSize * sizeof( SvLongsPtr ) );
-    USHORT nCount = rXPoly.Count();
-    pPoly = new PolyPolygon( nCount );
-    for( USHORT i = 0; i < nCount; ++i )
+    sal_uInt32 nCount(rPolyPolygon.count());
+    mpPolyPolygon = new PolyPolygon( (sal_uInt16)nCount );
+
+    for(sal_uInt32 i(0L); i < nCount; i++)
     {
-        ::basegfx::B2DPolygon aCandidate(::basegfx::tools::adaptiveSubdivideByAngle(rXPoly[ i ].getB2DPolygon()));
-        nPointCount = sal::static_int_cast< USHORT >(
-            nPointCount + aCandidate.count());
-        pPoly->Insert( Polygon(aCandidate), i );
+        const basegfx::B2DPolygon aCandidate(basegfx::tools::adaptiveSubdivideByAngle(rPolyPolygon.getB2DPolygon(i)));
+        nPointCount += aCandidate.count();
+        mpPolyPolygon->Insert( Polygon(aCandidate), (sal_uInt16)i );
     }
-    if( pXLine )
+
+    if( pLinePolyPolygon )
     {
-        nCount = pXLine->Count();
-        pLine = new PolyPolygon();
-        for( USHORT i = 0; i < nCount; ++i )
+        nCount = pLinePolyPolygon->count();
+        mpLinePolyPolygon = new PolyPolygon();
+
+        for(sal_uInt32 i(0L); i < nCount; i++)
         {
-            ::basegfx::B2DPolygon aCandidate(::basegfx::tools::adaptiveSubdivideByAngle((*pXLine)[ i ].getB2DPolygon()));
-            nPointCount = sal::static_int_cast< USHORT >(
-                nPointCount + aCandidate.count());
-            pLine->Insert( Polygon(aCandidate), i );
+            const basegfx::B2DPolygon aCandidate(basegfx::tools::adaptiveSubdivideByAngle(pLinePolyPolygon->getB2DPolygon(i)));
+            nPointCount += aCandidate.count();
+            mpLinePolyPolygon->Insert( Polygon(aCandidate), (sal_uInt16)i );
         }
     }
     else
-        pLine = NULL;
-
-#if 0
-    ULONG nPolyPtr = (ULONG)&rXPoly;
-    String aDbgFile( "d:\\" );
-    aDbgFile += nPolyPtr;
-    aDbgFile += ".pol";
-    SvFileStream aStream( aDbgFile, STREAM_WRITE|STREAM_TRUNC );
-    aStream << "pPoly: " << String( (ULONG)pPoly ).GetStr();
-    for ( USHORT nPoly = 0; nPoly < pPoly->Count(); nPoly++ )
-    {
-        const Polygon& rPoly = pPoly->GetObject( nPoly );
-        for ( USHORT n = 0; n < rPoly.GetSize(); n++ )
-        {
-            const Point& rPoint = rPoly.GetPoint( n );
-            aStream << String( rPoint.X() ).GetStr() << ", " << String( rPoint.Y() ).GetStr()  << endl;
-        }
-    }
-#endif
+        mpLinePolyPolygon = NULL;
 }
 
 #ifdef WIN
@@ -158,8 +141,8 @@ TextRanger::~TextRanger()
         delete pCache[i];
     delete[] pCache;
     delete[] pRangeArr;
-    delete pPoly;
-    delete pLine;
+    delete mpPolyPolygon;
+    delete mpLinePolyPolygon;
 }
 
 /*-----------------17.11.00 09:49-------------------
@@ -743,9 +726,9 @@ SvLongsPtr TextRanger::GetTextRanges( const Range& rRange )
             pCache[ nCacheIdx ] = new SvLongs( 2, 8 );
         nIndex = nCacheIdx;
         SvxBoundArgs aArg( this, pCache[ nCacheIdx ], rRange );
-        aArg.Calc( *pPoly );
-        if( pLine )
-            aArg.Concat( pLine );
+        aArg.Calc( *mpPolyPolygon );
+        if( mpLinePolyPolygon )
+            aArg.Concat( mpLinePolyPolygon );
     }
     return pCache[ nIndex ];
 }
@@ -753,7 +736,7 @@ SvLongsPtr TextRanger::GetTextRanges( const Range& rRange )
 const Rectangle& TextRanger::_GetBoundRect()
 {
     DBG_ASSERT( 0 == pBound, "Don't call twice." );
-    pBound = new Rectangle( pPoly->GetBoundRect() );
+    pBound = new Rectangle( mpPolyPolygon->GetBoundRect() );
     return *pBound;
 }
 
