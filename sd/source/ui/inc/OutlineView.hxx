@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OutlineView.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 12:51:38 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:32:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,8 +93,8 @@ public:
     SdrTextObj*     CreateTitleTextObject(SdPage* pPage);
     SdrTextObj*     CreateOutlineTextObject(SdPage* pPage);
 
-    virtual void AddWin (::sd::Window* pWin);
-    virtual void DelWin (::sd::Window* pWin);
+    virtual void AddWindowToPaintView(::sd::Window* pWin);
+    virtual void DeleteWindowFromPaintView(::sd::Window* pWin);
 
     OutlinerView*   GetViewByWindow (::Window* pWin) const;
     SdrOutliner*    GetOutliner() { return(pOutliner) ; }
