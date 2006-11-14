@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VDiagram.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:34:50 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:34:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,12 +228,12 @@ drawing::HomogenMatrix lcl_getTransformationMatrixForOuterScene( const uno::Refe
     if( !xProp.is() || !(xProp->getPropertyValue( C2U( "SceneProperties" ) ) >>= aSceneDescriptor) )
         aSceneDescriptor = lcl_getDefaultSceneDescriptor();
 
-    Matrix4D aTranslateM4;
-    aTranslateM4.Translate(-FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0);
+    ::basegfx::B3DHomMatrix aTranslateM4;
+    aTranslateM4.translate(-FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0);
 
-    Matrix4D aRotateM4 = Rotation::getRotationMatrixFromAxisAngleRepresentation( aSceneDescriptor.aDirection, aSceneDescriptor.fRotationAngle );
+    ::basegfx::B3DHomMatrix aRotateM4 = Rotation::getRotationMatrixFromAxisAngleRepresentation( aSceneDescriptor.aDirection, aSceneDescriptor.fRotationAngle );
 
-    Matrix4D aM4 = aRotateM4*aTranslateM4;
+    ::basegfx::B3DHomMatrix aM4 = aRotateM4*aTranslateM4;
 
     //@todo remove this test:
     double fTestAngle=1.0;
@@ -266,9 +266,9 @@ drawing::HomogenMatrix lcl_getTransformationMatrixForInnerScene( const uno::Refe
     if( !xProp.is() || !(xProp->getPropertyValue( C2U( "SceneProperties" ) ) >>= aSceneDescriptor) )
         aSceneDescriptor = lcl_getDefaultSceneDescriptor();
 
-    Matrix4D aM4;
+    ::basegfx::B3DHomMatrix aM4;
     double CatsFactor = 3.0;//@todo needs to be calculated from seriescount and slot distance ...
-    aM4.Scale(1.0, aSceneDescriptor.fRelativeHeight, aSceneDescriptor.fRelativeDepth/CatsFactor);
+    aM4.scale(1.0, aSceneDescriptor.fRelativeHeight, aSceneDescriptor.fRelativeDepth/CatsFactor);
     return Matrix4DToHomogenMatrix(aM4);
 }
 
@@ -516,9 +516,9 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rReserv
                 double fYScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -FLOOR_THICKNESS      ) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
                 double fZScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -GRID_TO_WALL_DISTANCE) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
 
-                Matrix4D aM4;
-                aM4.Translate(GRID_TO_WALL_DISTANCE/fXScale, FLOOR_THICKNESS/fYScale, GRID_TO_WALL_DISTANCE/fZScale);
-                aM4.Scale( fXScale, fYScale, fZScale );
+                ::basegfx::B3DHomMatrix aM4;
+                aM4.translate(GRID_TO_WALL_DISTANCE/fXScale, FLOOR_THICKNESS/fYScale, GRID_TO_WALL_DISTANCE/fZScale);
+                aM4.scale( fXScale, fYScale, fZScale );
                 xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                     , uno::makeAny(Matrix4DToHomogenMatrix(aM4)) );
             }
