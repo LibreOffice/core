@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IdleDetection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:21:53 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:37:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,10 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <com/sun/star/frame/XFrame.hdl>
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 using namespace ::com::sun::star;
 
