@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:38:42 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:44:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,7 +231,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 //      {
 //          // Versuchen, die betretene Gruppe zu bekommen
 //          SdrObject* pGroup = NULL;
-//          SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
+//          SdrPageView* pPV = pDrView->GetPageViewByIndex(0);
 //          if(pPV)
 //              pGroup = pPV->GetAktGroup();
 //
@@ -259,7 +259,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 //          {
 //              for (USHORT nv=0; nv<pDrView->GetPageViewCount(); nv++)
 //              {
-//                  SdrPageView* pPV = pDrView->GetPageViewPvNum(nv);
+//                  SdrPageView* pPV = pDrView->GetPageViewByIndex(nv);
 //                  pDrView->MarkObj(pGroup, pPV);
 //              }
 //          }
@@ -270,7 +270,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         {
             // #88224# End text edit to avoid conflicts
             if(pDrView->IsTextEdit())
-                pDrView->EndTextEdit();
+                pDrView->SdrEndTextEdit();
 
             if ( pDrView->IsPresObjSelected() )
             {
@@ -280,7 +280,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
             else
             {
                 WaitObject aWait( (Window*)GetActiveWindow() );
-                pDrView->CombineMarkedObjects(FALSE);
+                pDrView->CombineMarkedObjects(sal_False);
             }
             Cancel();
             rReq.Done ();
@@ -307,7 +307,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         {
             // #88224# End text edit to avoid conflicts
             if(pDrView->IsTextEdit())
-                pDrView->EndTextEdit();
+                pDrView->SdrEndTextEdit();
 
             if ( pDrView->IsPresObjSelected() )
             {
@@ -328,7 +328,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         {
             // #88224# End text edit to avoid conflicts
             if(pDrView->IsTextEdit())
-                pDrView->EndTextEdit();
+                pDrView->SdrEndTextEdit();
 
             if ( pDrView->IsPresObjSelected() )
             {
@@ -349,7 +349,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         {
             // #88224# End text edit to avoid conflicts
             if(pDrView->IsTextEdit())
-                pDrView->EndTextEdit();
+                pDrView->SdrEndTextEdit();
 
             if ( pDrView->IsPresObjSelected() )
             {
@@ -388,7 +388,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
             else
             {
                 WaitObject aWait( (Window*)GetActiveWindow() );
-                pDrView->CombineMarkedObjects(TRUE);
+                pDrView->CombineMarkedObjects(sal_True);
             }
             Cancel();
             rReq.Done ();
@@ -399,7 +399,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         {
             if ( pDrView->IsTextEdit() )
             {
-                pDrView->EndTextEdit();
+                pDrView->SdrEndTextEdit();
             }
 
             if ( pDrView->IsBreak3DObjPossible() )
@@ -473,7 +473,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                 {
                     if (pDrView->IsTextEdit())
                     {
-                        pDrView->EndTextEdit();
+                        pDrView->SdrEndTextEdit();
                     }
 
                     WaitObject aWait( (Window*)GetActiveWindow() );
@@ -619,7 +619,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
                 if( (pStyleSheet == NULL) && GetView()->IsTextEdit() )
                 {
-                    GetView()->EndTextEdit();
+                    GetView()->SdrEndTextEdit();
 
                     pStyleSheet = pDrView->GetStyleSheet();
                     if(pStyleSheet && pStyleSheet->GetFamily() == SD_LT_FAMILY)
