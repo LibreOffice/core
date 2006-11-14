@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dpolypolygon.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:04:03 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:09:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,10 @@
 
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
+#endif
+
+#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
+#include <basegfx/matrix/b3dhommatrix.hxx>
 #endif
 
 #include <functional>
@@ -350,7 +354,10 @@ namespace basegfx
 
     void B3DPolyPolygon::transform(const ::basegfx::B3DHomMatrix& rMatrix)
     {
-        mpPolyPolygon->transform(rMatrix);
+        if(mpPolyPolygon->count() && !rMatrix.isIdentity())
+        {
+            mpPolyPolygon->transform(rMatrix);
+        }
     }
 } // end of namespace basegfx
 
