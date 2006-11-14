@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dff.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:48:51 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-14 13:21:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,9 @@ void DffRecord::initChildren()
             sal_uInt32 nSize = 0;
             boost::shared_ptr<DffRecord> pRec
                 (createDffRecord(this, nOffset, &nSize));
+
+            if (nSize == 0)
+                break;
 
             mRecords.push_back(pRec);
 
@@ -354,6 +357,9 @@ void DffBlock::initChildren()
         sal_uInt32 nSize = 0;
         DffRecord::Pointer_t pDffRecord
             (createDffRecord(this, nOffset, &nSize));
+
+        if (nSize == 0)
+            break;
 
         mRecords.push_back(pDffRecord);
 
