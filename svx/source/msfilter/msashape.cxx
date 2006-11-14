@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:26:29 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:29:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,16 @@
 #endif
 #ifndef _SVX_XLNEDCIT_HXX
 #include <xlnedcit.hxx>
+#endif
+
+#include <math.h>
+
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
 #endif
 
 struct SvxMSDffVertPair
@@ -6115,7 +6125,7 @@ SdrObject* SvxMSDffCustomShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet
             {
                 FASTBOOL bClosed = aXP[ 0 ] == aXP[ (sal_uInt16)( aXP.GetPointCount() - 1 ) ];
                 Rectangle aUnion( aXP.GetBoundRect() );
-                pRet = new SdrPathObj( bClosed ? OBJ_POLY : OBJ_PLIN, aXP );
+                pRet = new SdrPathObj( bClosed ? OBJ_POLY : OBJ_PLIN, basegfx::B2DPolyPolygon(aXP.getB2DPolygon()));
                 pRet->NbcSetSnapRect( Rectangle( Point( aSnapRect.Left() + aUnion.Left(),
                                                          aSnapRect.Top() + aUnion.Top() ),
                                                             aUnion.GetSize() ) );
@@ -6192,7 +6202,7 @@ SdrObject* SvxMSDffCustomShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet
                                     pGrp->GetSubList()->NbcInsertObject( pSdrPathObj );
                                 }
                                 aUnion.Union( aPolyPoly.GetBoundRect() );
-                                pSdrPathObj = new SdrPathObj( bClosed ? OBJ_POLY : OBJ_PLIN, aPolyPoly );
+                                pSdrPathObj = new SdrPathObj( bClosed ? OBJ_POLY : OBJ_PLIN, aPolyPoly.getB2DPolyPolygon() );
                                 pSdrPathObj->SetModel( pSdrModel );
                                 if ( !bClosed )
                                     rSet.Put( SdrShadowItem( FALSE ) );
