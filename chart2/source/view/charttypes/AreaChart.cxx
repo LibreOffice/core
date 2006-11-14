@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AreaChart.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:33:08 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:33:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,10 +62,6 @@
 #endif
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
-// header for class Polygon3D
-#ifndef _POLY3D_HXX
-#include <svx/poly3d.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_DOUBLESEQUENCE_HPP_
