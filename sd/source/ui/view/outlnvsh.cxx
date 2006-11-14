@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:41:30 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:45:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -484,7 +484,7 @@ void OutlineViewShell::ExecCtrl(SfxRequest &rReq)
 
 void OutlineViewShell::AddWindow (::sd::Window* pWin)
 {
-    pOlView->AddWin(pWin);
+    pOlView->AddWindowToPaintView(pWin);
 }
 
 
@@ -492,7 +492,7 @@ void OutlineViewShell::AddWindow (::sd::Window* pWin)
 
 void OutlineViewShell::RemoveWindow (::sd::Window* pWin)
 {
-    pOlView->DelWin(pWin);
+    pOlView->DeleteWindowFromPaintView(pWin);
 }
 
 
