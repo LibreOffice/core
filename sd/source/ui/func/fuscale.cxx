@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuscale.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:54:38 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
         {
             if( pViewShell->ISA( DrawViewShell ) )
             {
-                SdrPageView* pPageView = pView->GetPageViewPvNum( 0 );
+                SdrPageView* pPageView = pView->GetSdrPageView();
                 if( ( pPageView && pPageView->GetObjList()->GetObjCount() == 0 ) )
                     // || ( pView->GetMarkedObjectList().GetMarkCount() == 0 ) )
                 {
