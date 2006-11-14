@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:52:34 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:16:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,9 +125,9 @@
 #ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
 #endif
-#ifndef _SVDVMARK_HXX //autogen
-#include <svx/svdvmark.hxx>
-#endif
+//#ifndef _SVDVMARK_HXX //autogen
+//#include <svx/svdvmark.hxx>
+//#endif
 #ifndef _SVDHDL_HXX //autogen
 #include <svx/svdhdl.hxx>
 #endif
@@ -321,6 +321,14 @@
 #include "formatclipboard.hxx"
 #endif
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
+#endif
+
 //JP 11.10.2001: enable test code for bug fix 91313
 #if !defined( PRODUCT ) && (OSL_DEBUG_LEVEL > 1)
 //#define TEST_FOR_BUG91313
@@ -464,7 +472,10 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
         if( rSh.IsOverReadOnlyPos( rLPt ))
         {
             if( pUserMarker )
-                DELETEZ( pUserMarker );
+            {
+                delete pUserMarker;
+                pUserMarker = 0L;
+            }
 //          rSh.SwCrsrShell::UnSetVisCrsr( rLPt );
             eStyle = POINTER_NOTALLOWED;
         }
@@ -486,13 +497,18 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
             {
                 //Highlight fuer Rahmen anwerfen
                 Rectangle aTmp( pRect->SVRect() );
+
                 if ( !pUserMarker )
-                    pUserMarker = new SdrViewUserMarker( rSh.GetDrawView() );
-                pUserMarker->SetRectangle( aTmp );
-                pUserMarker->Show();
+                {
+                    pUserMarker = new SdrDropMarkerOverlay( *rSh.GetDrawView(), aTmp );
+                }
             }
             else if(pUserMarker)
-                DELETEZ(pUserMarker);
+            {
+                delete pUserMarker;
+                pUserMarker = 0L;
+            }
+
             rSh.SwCrsrShell::SetVisCrsr( rLPt );
         }
         SetPointer( eStyle );
@@ -513,15 +529,18 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
         if ( !nChainable )
         {
             Rectangle aTmp( aRect.SVRect() );
+
             if ( !pUserMarker )
-                pUserMarker = new SdrViewUserMarker( rSh.GetDrawView() );
-            pUserMarker->SetRectangle( aTmp );
-            pUserMarker->Show();
+            {
+                pUserMarker = new SdrDropMarkerOverlay( *rSh.GetDrawView(), aTmp );
+            }
         }
         else
         {
-            DELETEZ( pUserMarker );
+            delete pUserMarker;
+            pUserMarker = 0L;
         }
+
         rView.GetViewFrame()->ShowStatusText(
                                         SW_RESSTR(STR_CHAIN_OK+nChainable));
         SetPointer( eStyle );
@@ -541,7 +560,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
     PointerStyle eStyle = POINTER_TEXT;
     if ( !pSdrView )
         bCntAtPos = TRUE;
-    else if ( bHitHandle = pSdrView->HitHandle( rLPt, *(rSh.GetOut())) != 0 )
+    else if ( bHitHandle = pSdrView->PickHandle( rLPt ) != 0 )
     {
         aActHitType = SDRHIT_OBJECT;
         bPrefSdrPointer = TRUE;
@@ -2747,7 +2766,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     SdrHdl* pHdl;
                     if( !bIsDocReadOnly &&
                         !pAnchorMarker &&
-                        0 != ( pHdl = pSdrView->HitHandle(aDocPos, *(rSh.GetOut())) ) &&
+                        0 != ( pHdl = pSdrView->PickHandle(aDocPos) ) &&
                             ( pHdl->GetKind() == HDL_ANCHOR ||
                               pHdl->GetKind() == HDL_ANCHOR_TR ) )
                     {
@@ -2772,8 +2791,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 {
                     if ( rSh.IsSelFrmMode())
                     {
-                        SdrHdl* pHdl = rSh.GetDrawView()->HitHandle
-                                                    (aDocPos, *(rSh.GetOut()));
+                        SdrHdl* pHdl = rSh.GetDrawView()->PickHandle(aDocPos);
                         BOOL bHitHandle = pHdl && pHdl->GetKind() != HDL_ANCHOR &&
                                                   pHdl->GetKind() != HDL_ANCHOR_TR;
 
@@ -2892,7 +2910,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             rView.NoRotate();
                             SdrHdl *pHdl;
                             if( !bIsDocReadOnly && !pAnchorMarker && 0 !=
-                                ( pHdl = pSdrView->HitHandle(aDocPos, *(rSh.GetOut())) ) &&
+                                ( pHdl = pSdrView->PickHandle(aDocPos) ) &&
                                     ( pHdl->GetKind() == HDL_ANCHOR ||
                                       pHdl->GetKind() == HDL_ANCHOR_TR ) )
                             {
@@ -3120,8 +3138,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             }
                         }
                         else if( rSh.IsSelFrmMode() &&
-                                 rSh.GetDrawView()->HitHandle( aDocPos,
-                                                            *rSh.GetOut() ))
+                                 rSh.GetDrawView()->PickHandle( aDocPos ))
                         {
                             bFrmDrag = TRUE;
                             bNoInterrupt = FALSE;
@@ -3149,8 +3166,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             }
                         }
                         else if( rSh.IsSelFrmMode() &&
-                                 rSh.GetDrawView()->HitHandle( aDocPos,
-                                                            *rSh.GetOut() ))
+                                 rSh.GetDrawView()->PickHandle( aDocPos ))
                         {
                             bFrmDrag = TRUE;
                             bNoInterrupt = FALSE;
@@ -3558,9 +3574,8 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 Point aOld = pAnchorMarker->GetPos();
                 Point aNew = rSh.FindAnchorPos( aDocPt );
                 SdrHdl* pHdl;
-                if( (0!=( pHdl = pSdrView->HitHandle( aOld, *(rSh.GetOut())) )||
-                    0 !=(pHdl = pSdrView->HitHandle( pAnchorMarker->GetHdlPos(),
-                    *(rSh.GetOut())) ) ) &&
+                if( (0!=( pHdl = pSdrView->PickHandle( aOld ) )||
+                    0 !=(pHdl = pSdrView->PickHandle( pAnchorMarker->GetHdlPos()) ) ) &&
                         ( pHdl->GetKind() == HDL_ANCHOR ||
                           pHdl->GetKind() == HDL_ANCHOR_TR ) )
                 {
@@ -3569,7 +3584,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     {
                          pAnchorMarker->SetPos( aNew );
                          pAnchorMarker->SetLastPos( aDocPt );
-                         pSdrView->RefreshAllIAOManagers();
+                         //OLMpSdrView->RefreshAllIAOManagers();
                      }
                 }
                 else
@@ -3620,7 +3635,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                         // geht es los?
                         if( HDL_USER == eSdrMoveHdl )
                         {
-                            SdrHdl* pHdl = pSdrView->HitHandle( aSttPt, *this );
+                            SdrHdl* pHdl = pSdrView->PickHandle( aSttPt );
                             eSdrMoveHdl = pHdl ? pHdl->GetKind() : HDL_MOVE;
                         }
 
@@ -3890,7 +3905,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     if( pAnchorMarker )
     {
         Point aPnt( pAnchorMarker->GetLastPos() );
-        pSdrView->RefreshAllIAOManagers();
+        //OLMpSdrView->RefreshAllIAOManagers();
         DELETEZ( pAnchorMarker );
         if( aPnt.X() || aPnt.Y() )
             rSh.FindAnchorPos( aPnt, TRUE );
@@ -4474,7 +4489,12 @@ SwEditWin::~SwEditWin()
     bExecuteDrag = FALSE;
     delete pApplyTempl;
     rView.SetDrawFuncPtr(NULL);
-    delete pUserMarker;
+
+    if(pUserMarker)
+    {
+        delete pUserMarker;
+    }
+
     delete pAnchorMarker;
 }
 
@@ -5258,10 +5278,13 @@ void SwEditWin::SetChainMode( BOOL bOn )
 {
     if ( !bChainMode )
         StopInsFrm();
+
     if ( pUserMarker )
     {
-        DELETEZ( pUserMarker );
+        delete pUserMarker;
+        pUserMarker = 0L;
     }
+
     bChainMode = bOn;
     if ( !bChainMode )
         rView.GetViewFrame()->HideStatusText();
