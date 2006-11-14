@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:42:32 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:54:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,7 +255,7 @@ public:
 
     // #109985#
     //void  DrawSelectiveObjects( USHORT nLayer, const Rectangle& rRect, USHORT nObjectFlags, USHORT nDummyFlags = 0 );
-    void    DrawSelectiveObjects(const sal_uInt16 nLayer, const Rectangle& rRect, const sal_uInt16 nPaintMode);
+    void    DrawSelectiveObjects(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode);
 
     BOOL    SetChangedClip();       // FALSE = nix
 
