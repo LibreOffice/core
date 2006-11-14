@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:38:16 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:43:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,9 +63,6 @@
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _XPOLY_HXX //autogen
-#include <svx/xpoly.hxx>
 #endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
@@ -209,12 +206,12 @@ DrawViewShell::DrawViewShell (
     : ViewShell (pFrame, pParentWindow, rViewShellBase),
       aTabControl(this, pParentWindow),
       pActualPage(NULL),
-      pXPolygon (0),
-      nPolygonIndex (0),
-      bLineError (FALSE),
-      bLastWasLineTo (FALSE),
-      bLastWasMoveTo (FALSE),
-      bLastWasBezierTo (FALSE),
+//      pXPolygon (0),
+//      nPolygonIndex (0),
+//      bLineError (FALSE),
+//      bLastWasLineTo (FALSE),
+//      bLastWasMoveTo (FALSE),
+//      bLastWasBezierTo (FALSE),
       bMousePosFreezed (FALSE),
       nLastSlot(0),
       bReadOnly(GetDocSh()->IsReadOnly()),
@@ -246,12 +243,12 @@ DrawViewShell::DrawViewShell (
     : ViewShell(pFrame, pParentWindow, rShell),
       aTabControl(this, pParentWindow),
       pActualPage(NULL),
-      pXPolygon (0),
-      nPolygonIndex (0),
-      bLineError (FALSE),
-      bLastWasLineTo (FALSE),
-      bLastWasMoveTo (FALSE),
-      bLastWasBezierTo (FALSE),
+//      pXPolygon (0),
+//      nPolygonIndex (0),
+//      bLineError (FALSE),
+//      bLastWasLineTo (FALSE),
+//      bLastWasMoveTo (FALSE),
+//      bLastWasBezierTo (FALSE),
       bMousePosFreezed (FALSE),
       nLastSlot(0),
       bReadOnly(GetDocSh()->IsReadOnly()),
@@ -330,7 +327,7 @@ DrawViewShell::~DrawViewShell()
     mpView = pDrView = NULL;
 
     pFrameView->Disconnect();
-    delete pXPolygon;
+//  delete pXPolygon;
     delete [] pSlotArray;
 }
 
@@ -511,9 +508,6 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
                                 ::com::sun::star::uno::UNO_QUERY );
         }
     }
-
-    DestroyPolygons ();
-    pXPolygon = new XPolygon;
 }
 
 
@@ -571,91 +565,79 @@ void DrawViewShell::Init (bool bIsMainViewShell)
     den gesammelten punkten der linienzug erzeugt wird
 */
 
-void DrawViewShell::CheckLineTo (SfxRequest& rReq)
+void DrawViewShell::CheckLineTo(SfxRequest& rReq)
 {
-    if (rReq.IsAPI ())
-        if ((rReq.GetSlot () == SID_LINETO) || (rReq.GetSlot () == SID_BEZIERTO))
-        {
-            if ((bLastWasLineTo && (rReq.GetSlot () == SID_LINETO)) ||
-                (bLastWasBezierTo && (rReq.GetSlot () == SID_BEZIERTO)) ||
-                bLastWasMoveTo)
-            {
-                const SfxItemSet* pArgs = rReq.GetArgs ();
-
-                if (pArgs)
-                    if (pArgs->Count () == 2)
-                    {
-                        SFX_REQUEST_ARG (rReq, pMouseStartX, SfxUInt32Item, ID_VAL_MOUSEEND_X, FALSE);
-                        SFX_REQUEST_ARG (rReq, pMouseStartY, SfxUInt32Item, ID_VAL_MOUSEEND_Y, FALSE);
-
-                        Point aTempPoint (pMouseStartX->GetValue (), pMouseStartY->GetValue ());
-                        if (nPolygonIndex < 30) pXPolygon->Insert (nPolygonIndex ++, aTempPoint, XPOLY_NORMAL);
-
-                        bLastWasLineTo   = (rReq.GetSlot () == SID_LINETO);
-                        bLastWasBezierTo = (rReq.GetSlot () == SID_BEZIERTO);
-                        bLastWasMoveTo   = FALSE;
-                    }
-                    else DestroyPolygons ();
-                else DestroyPolygons ();
-            }
-            else DestroyPolygons ();
-        }
-        else
-        {
-            if (bLastWasLineTo || bLastWasBezierTo)
-            {
-                SdrPageView *pPV = pDrView->GetPageViewPvNum (0);
-
-                pDrView->InsertObject (new SdrPathObj (bLastWasLineTo
-                                                           ? OBJ_PLIN
-                                                           : OBJ_PATHLINE, *pXPolygon), *pPV, SDRINSERT_SETDEFLAYER);
-                if (bLastWasBezierTo) pDrView->ConvertMarkedToPathObj(FALSE);
-                DestroyPolygons ();
-            }
-
-            if (rReq.GetSlot () == SID_MOVETO)
-            {
-                const SfxItemSet* pArgs = rReq.GetArgs ();
-
-                if (pArgs)
-                    if (pArgs->Count () == 2)
-                    {
-                        SFX_REQUEST_ARG (rReq, pMouseStartX, SfxUInt32Item, ID_VAL_MOUSESTART_X, FALSE);
-                        SFX_REQUEST_ARG (rReq, pMouseStartY, SfxUInt32Item, ID_VAL_MOUSESTART_Y, FALSE);
-
-                        nPolygonIndex = 0;
-                        Point aTempPoint (pMouseStartX->GetValue (), pMouseStartY->GetValue ());
-                        pXPolygon->Insert (nPolygonIndex ++, aTempPoint, XPOLY_NORMAL);
-
-                        bLastWasMoveTo = TRUE;
-                    }
-                    else DestroyPolygons ();
-                else DestroyPolygons ();
-            }
-            else bLastWasMoveTo = FALSE;
-        }
-
-    rReq.Ignore ();
-}
-
-/*************************************************************************
-|*
-|* loesche alle polygone, wenn noetig
-|*
-\************************************************************************/
-
-void DrawViewShell::DestroyPolygons ()
-{
-    if (nPolygonIndex)
+    if(rReq.IsAPI())
     {
-        if (pXPolygon) delete pXPolygon;
-        pXPolygon      = new XPolygon;
-        nPolygonIndex  = 0;
-        bLineError     =
-        bLastWasLineTo =
-        bLastWasBezierTo =
-        bLastWasMoveTo = FALSE;
+#ifdef DBG_UTIL
+        if(SID_LINETO == rReq.GetSlot() || SID_BEZIERTO == rReq.GetSlot() || SID_MOVETO == rReq.GetSlot() )
+        {
+            DBG_ERROR("DrawViewShell::CheckLineTo: slots SID_LINETO, SID_BEZIERTO, SID_MOVETO no longer supported.");
+        }
+#endif
+//      if ((rReq.GetSlot () == SID_LINETO) || (rReq.GetSlot () == SID_BEZIERTO))
+//      {
+//          if ((bLastWasLineTo && (rReq.GetSlot () == SID_LINETO)) ||
+//              (bLastWasBezierTo && (rReq.GetSlot () == SID_BEZIERTO)) ||
+//              bLastWasMoveTo)
+//          {
+//              const SfxItemSet* pArgs = rReq.GetArgs ();
+//
+//              if (pArgs)
+//                  if (pArgs->Count () == 2)
+//                  {
+//                      SFX_REQUEST_ARG (rReq, pMouseStartX, SfxUInt32Item, ID_VAL_MOUSEEND_X, FALSE);
+//                      SFX_REQUEST_ARG (rReq, pMouseStartY, SfxUInt32Item, ID_VAL_MOUSEEND_Y, FALSE);
+//
+//                      Point aTempPoint (pMouseStartX->GetValue (), pMouseStartY->GetValue ());
+//                      if (nPolygonIndex < 30) pXPolygon->Insert (nPolygonIndex ++, aTempPoint, XPOLY_NORMAL);
+//
+//                      bLastWasLineTo   = (rReq.GetSlot () == SID_LINETO);
+//                      bLastWasBezierTo = (rReq.GetSlot () == SID_BEZIERTO);
+//                      bLastWasMoveTo   = FALSE;
+//                  }
+//                  else DestroyPolygons ();
+//              else DestroyPolygons ();
+//          }
+//          else DestroyPolygons ();
+//      }
+//      else
+//      {
+//          if (bLastWasLineTo || bLastWasBezierTo)
+//          {
+//              SdrPageView *pPV = pDrView->GetPageViewPvNum (0);
+//
+//              pDrView->InsertObject (new SdrPathObj (bLastWasLineTo
+//                                                         ? OBJ_PLIN
+//                                                         : OBJ_PATHLINE, *pXPolygon), *pPV, SDRINSERT_SETDEFLAYER);
+//              if (bLastWasBezierTo) pDrView->ConvertMarkedToPathObj(FALSE);
+//              DestroyPolygons ();
+//          }
+//
+//          if (rReq.GetSlot () == SID_MOVETO)
+//          {
+//              const SfxItemSet* pArgs = rReq.GetArgs ();
+//
+//              if (pArgs)
+//                  if (pArgs->Count () == 2)
+//                  {
+//                      SFX_REQUEST_ARG (rReq, pMouseStartX, SfxUInt32Item, ID_VAL_MOUSESTART_X, FALSE);
+//                      SFX_REQUEST_ARG (rReq, pMouseStartY, SfxUInt32Item, ID_VAL_MOUSESTART_Y, FALSE);
+//
+//                      nPolygonIndex = 0;
+//                      Point aTempPoint (pMouseStartX->GetValue (), pMouseStartY->GetValue ());
+//                      pXPolygon->Insert (nPolygonIndex ++, aTempPoint, XPOLY_NORMAL);
+//
+//                      bLastWasMoveTo = TRUE;
+//                  }
+//                  else DestroyPolygons ();
+//              else DestroyPolygons ();
+//          }
+//          else bLastWasMoveTo = FALSE;
+//      }
     }
+
+    rReq.Ignore();
 }
 
 /*************************************************************************
@@ -773,7 +755,7 @@ void DrawViewShell::SetupPage (Size &rSize,
     UpdateScrollBars();
 
     Point aNewOrigin(pActualPage->GetLftBorder(), pActualPage->GetUppBorder());
-    GetView()->GetPageViewPvNum(0)->SetPageOrigin(aNewOrigin);
+    GetView()->GetSdrPageView()->SetPageOrigin(aNewOrigin);
 
     GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
 
@@ -811,7 +793,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
 
             // Bereich einschraenken
             USHORT nZoomValues = SVX_ZOOM_ENABLE_ALL;
-            SdrPageView* pPageView = pDrView->GetPageViewPvNum( 0 );
+            SdrPageView* pPageView = pDrView->GetSdrPageView();
 
             if( ( pPageView && pPageView->GetObjList()->GetObjCount() == 0 ) )
                 // || ( pDrView->GetMarkedObjectList().GetMarkCount() == 0 ) )
@@ -826,7 +808,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     }
 
     Point aPos = GetActiveWindow()->PixelToLogic(aMousePos);
-    pDrView->GetPageViewPvNum(0)->LogicToPagePos(aPos);
+    pDrView->GetSdrPageView()->LogicToPagePos(aPos);
     Fraction aUIScale(GetDoc()->GetUIScale());
     aPos.X() = Fraction(aPos.X()) / aUIScale;
     aPos.Y() = Fraction(aPos.Y()) / aUIScale;
@@ -841,7 +823,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             rSet.Put( SfxPointItem(SID_ATTR_POSITION, aPos) );
         else
         {
-            pDrView->GetPageViewPvNum(0)->LogicToPagePos(aRect);
+            pDrView->GetSdrPageView()->LogicToPagePos(aRect);
             aPos = aRect.TopLeft();
             aPos.X() = Fraction(aPos.X()) / aUIScale;
             aPos.Y() = Fraction(aPos.Y()) / aUIScale;
@@ -857,7 +839,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         if ( pDrView->AreObjectsMarked() )
         {
             Rectangle aRect = pDrView->GetAllMarkedRect();
-            pDrView->GetPageViewPvNum(0)->LogicToPagePos(aRect);
+            pDrView->GetSdrPageView()->LogicToPagePos(aRect);
 
             // Show the position of the selected shape(s)
             Point aShapePosition (aRect.TopLeft());
