@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:15:32 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:29:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -804,6 +804,14 @@ void SAL_CALL ImageConsumerControl::createPeer( const uno::Reference< awt::XTool
 
     // add the peer as image consumer to the model
     lcl_knitImageComponents( getModel(), getPeer(), true );
+}
+
+void SAL_CALL ImageConsumerControl::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    // remove the peer as image consumer from the model
+    lcl_knitImageComponents( getModel(), getPeer(), false );
+
+    UnoControlBase::dispose();
 }
 
 void ImageConsumerControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
