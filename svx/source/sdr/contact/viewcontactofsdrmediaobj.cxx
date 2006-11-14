@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofsdrmediaobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:36:28 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:31:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,8 +107,10 @@ void ViewContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rItem ) co
 
 void ViewContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaItem& rItem )
 {
-    for( sal_uInt32 n = 0; n < maVOCList.Count(); ++n )
+    for( sal_uInt32 n(0L); n < maVOCList.Count(); n++ )
+    {
         static_cast< ViewObjectContactOfSdrMediaObj* >( maVOCList.GetObject( n ) )->executeMediaItem( rItem );
+    }
 }
 
 // ------------------------------------------------------------------------------
@@ -119,3 +121,5 @@ void ViewContactOfSdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaIte
 }
 
 } }
+
+// eof
