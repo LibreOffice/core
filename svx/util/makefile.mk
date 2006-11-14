@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 14:09:23 $
+#   last change: $Author: ihi $ $Date: 2006-11-14 13:58:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ LIB1FILES=\
     $(SLB)$/svxrtf.lib    \
     $(SLB)$/editeng.lib   \
     $(SLB)$/outliner.lib \
-    $(SLB)$/dialogs.lib\
+    $(SLB)$/dialogs.lib	\
     $(SLB)$/mnuctrls.lib  \
     $(SLB)$/options.lib   \
     $(SLB)$/stbctrls.lib  \
@@ -79,6 +79,7 @@ LIB1FILES=\
     $(SLB)$/mixer.lib \
     $(SLB)$/event.lib \
     $(SLB)$/animation.lib \
+    $(SLB)$/overlay.lib \
     $(SLB)$/svdraw.lib \
     $(SLB)$/form.lib \
     $(SLB)$/fmcomp.lib \
@@ -151,6 +152,7 @@ SHL2STDLIBS= \
             $(AVMEDIALIB) \
             $(SFX2LIB) \
             $(GOODIESLIB) \
+            $(BASEGFXLIB) \
             $(SVTOOLLIB) \
             $(TKLIB) \
             $(VCLLIB) \
