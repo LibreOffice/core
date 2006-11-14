@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connctrl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:12:21 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:14:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,10 @@
 // #110094#
 #ifndef _SDR_CONTACT_DISPLAYINFO_HXX
 #include <svx/sdr/contact/displayinfo.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 /*************************************************************************
@@ -169,7 +173,7 @@ void SvxXConnectionPreview::Construct()
     // Groesse anpassen
     if( pObjList )
     {
-        OutputDevice* pOD = pView->GetWin( 0 );
+        OutputDevice* pOD = pView->GetFirstOutputDevice(); // GetWin( 0 );
         Rectangle aRect = pObjList->GetAllObjBoundRect();
 
         MapMode aMapMode = GetMapMode();
