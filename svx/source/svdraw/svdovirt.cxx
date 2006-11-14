@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdovirt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:59:22 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:48:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,10 @@
 
 #ifndef _SDR_CONTACT_VIEWCONTACTOFVIRTOBJ_HXX
 #include <svx/sdr/contact/viewcontactofvirtobj.hxx>
+#endif
+
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -232,25 +236,28 @@ void operator +=(PolyPolygon& rPoly, const Point& rOfs)
     }
 }
 
-void SdrVirtObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const
+basegfx::B2DPolyPolygon SdrVirtObj::TakeXorPoly(sal_Bool bDetail) const
 {
-    rRefObj.TakeXorPoly(rPoly,bDetail);
-    rPoly.Move(aAnchor.X(),aAnchor.Y());
-}
+    basegfx::B2DPolyPolygon aPolyPolygon(rRefObj.TakeXorPoly(bDetail));
 
-//#110094#-12
-//void SdrVirtObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
-//{
-//}
+    if(aAnchor.X() || aAnchor.Y())
+    {
+        basegfx::B2DHomMatrix aMatrix;
+        aMatrix.translate(aAnchor.X(), aAnchor.Y());
+        aPolyPolygon.transform(aMatrix);
+    }
+
+    return aPolyPolygon;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-USHORT SdrVirtObj::GetHdlCount() const
+sal_uInt32 SdrVirtObj::GetHdlCount() const
 {
     return rRefObj.GetHdlCount();
 }
 
-SdrHdl* SdrVirtObj::GetHdl(USHORT nHdlNum) const
+SdrHdl* SdrVirtObj::GetHdl(sal_uInt32 nHdlNum) const
 {
     SdrHdl* pHdl=rRefObj.GetHdl(nHdlNum);
     Point aP(pHdl->GetPos()+aAnchor);
@@ -258,15 +265,15 @@ SdrHdl* SdrVirtObj::GetHdl(USHORT nHdlNum) const
     return pHdl;
 }
 
-USHORT SdrVirtObj::GetPlusHdlCount(const SdrHdl& rHdl) const
+sal_uInt32 SdrVirtObj::GetPlusHdlCount(const SdrHdl& rHdl) const
 {
     return rRefObj.GetPlusHdlCount(rHdl);
 }
 
-SdrHdl* SdrVirtObj::GetPlusHdl(const SdrHdl& rHdl, USHORT nPlNum) const
+SdrHdl* SdrVirtObj::GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlNum) const
 {
     SdrHdl* pHdl=rRefObj.GetPlusHdl(rHdl,nPlNum);
-    pHdl->SetPos(pHdl->GetPos()+aAnchor);
+    pHdl->SetPos(pHdl->GetPos() + aAnchor);
     return pHdl;
 }
 
@@ -300,9 +307,9 @@ void SdrVirtObj::BrkDrag(SdrDragStat& rDrag) const
     rRefObj.BrkDrag(rDrag);
 }
 
-void SdrVirtObj::TakeDragPoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) const
+basegfx::B2DPolyPolygon SdrVirtObj::TakeDragPoly(const SdrDragStat& rDrag) const
 {
-    rRefObj.TakeDragPoly(rDrag,rXPP);
+    return rRefObj.TakeDragPoly(rDrag);
     // Offset handlen !!!!!! fehlt noch !!!!!!!
 }
 
@@ -338,9 +345,9 @@ void SdrVirtObj::BrkCreate(SdrDragStat& rStat)
     rRefObj.BrkCreate(rStat);
 }
 
-void SdrVirtObj::TakeCreatePoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) const
+basegfx::B2DPolyPolygon SdrVirtObj::TakeCreatePoly(const SdrDragStat& rDrag) const
 {
-    rRefObj.TakeCreatePoly(rDrag,rXPP);
+    return rRefObj.TakeCreatePoly(rDrag);
     // Offset handlen !!!!!! fehlt noch !!!!!!!
 }
 
@@ -504,36 +511,34 @@ long SdrVirtObj::GetShearAngle(FASTBOOL bVertical) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-USHORT SdrVirtObj::GetSnapPointCount() const
+sal_uInt32 SdrVirtObj::GetSnapPointCount() const
 {
     return rRefObj.GetSnapPointCount();
 }
 
-Point SdrVirtObj::GetSnapPoint(USHORT i) const
+Point SdrVirtObj::GetSnapPoint(sal_uInt32 i) const
 {
     Point aP(rRefObj.GetSnapPoint(i));
     aP+=aAnchor;
     return aP;
 }
 
-FASTBOOL SdrVirtObj::IsPolyObj() const
+sal_Bool SdrVirtObj::IsPolyObj() const
 {
     return rRefObj.IsPolyObj();
 }
 
-USHORT SdrVirtObj::GetPointCount() const
+sal_uInt32 SdrVirtObj::GetPointCount() const
 {
     return rRefObj.GetPointCount();
 }
 
-const Point& SdrVirtObj::GetPoint(USHORT i) const
+Point SdrVirtObj::GetPoint(sal_uInt32 i) const
 {
-    ((SdrVirtObj*)this)->aHack=rRefObj.GetPoint(i);
-    ((SdrVirtObj*)this)->aHack+=aAnchor;
-    return aHack;
+    return Point(rRefObj.GetPoint(i) + aAnchor);
 }
 
-void SdrVirtObj::NbcSetPoint(const Point& rPnt, USHORT i)
+void SdrVirtObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
 {
     Point aP(rPnt);
     aP-=aAnchor;
@@ -617,38 +622,6 @@ XubString SdrVirtObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
 {
     return rRefObj.GetMacroPopupComment(rRec); // Todo: Positionsversatz
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//BFS01void SdrVirtObj::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrVirtObj");
-//BFS01#endif
-//BFS01 // fehlende Implementation
-//BFS01 rOut<<aAnchor;
-//BFS01}
-
-//BFS01void SdrVirtObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 if (rIn.GetError()!=0) return;
-//BFS01 if (rHead.GetVersion()>=4) {
-//BFS01     SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01#ifdef DBG_UTIL
-//BFS01     aCompat.SetID("SdrVirtObj");
-//BFS01#endif
-//BFS01     // fehlende Implementation
-//BFS01     rIn>>aAnchor;
-//BFS01 } else {
-//BFS01     rIn>>aAnchor;
-//BFS01 }
-//BFS01}
-
-//BFS01void SdrVirtObj::AfterRead()
-//BFS01{
-//BFS01 // fehlende Implementation
-//BFS01}
 
 const Point SdrVirtObj::GetOffset() const
 {
