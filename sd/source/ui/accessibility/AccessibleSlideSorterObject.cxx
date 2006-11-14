@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSlideSorterObject.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:26:26 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:23:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,11 @@
 
 #include "sdpage.hxx"
 #include "sdresid.hxx"
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 #include "glob.hrc"
 
 using ::rtl::OUString;
