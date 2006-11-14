@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ui_pch.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:26:46 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:54:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,13 +300,10 @@
 #include <svx/sderitm.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/svddef.hxx>
-#include <svx/sdmsitm.hxx>
-#include <svx/sdolsitm.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/sdprcitm.hxx>
 #include <svx/sdshcitm.hxx>
 #include <svx/sdshitm.hxx>
-#include <svx/sdshsitm.hxx>
 #include <svx/sdshtitm.hxx>
 #include <svx/sdsxyitm.hxx>
 #include <svx/sdtaaitm.hxx>
@@ -337,7 +334,6 @@
 #include <svx/svxenum.hxx>
 #include <svx/xtextit0.hxx>
 #include <svx/svdtrans.hxx>
-#include <svx/xtxasit.hxx>
 #include <svtools/style.hxx>
 #include <reffact.hxx>
 #include <svx/svdotext.hxx>
