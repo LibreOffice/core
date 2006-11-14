@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:45:06 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:07:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,10 @@
 #endif
 #ifndef _FMTEIRO_HXX //autogen
 #include <fmteiro.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 #include <globals.hrc>
@@ -1129,7 +1133,9 @@ void SwCrsrShell::Paint( const Rectangle &rRect)
         pVisCrsr->Hide();
     }
 
-    ViewShell::Paint( rRect );      // Bereich neu painten
+    // Bereich neu painten
+    ViewShell::Paint( rRect );
+
     if( bHasFocus && !bBasicHideCrsr )
     {
         SwShellCrsr* pAktCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
