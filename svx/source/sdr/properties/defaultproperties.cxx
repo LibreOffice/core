@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultproperties.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:41:09 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:36:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,14 +250,6 @@ namespace sdr
             // no StyleSheet in DefaultProperties
             return 0L;
         }
-
-//BFS01     void DefaultProperties::PreProcessSave()
-//BFS01     {
-//BFS01     }
-
-//BFS01     void DefaultProperties::PostProcessSave()
-//BFS01     {
-//BFS01     }
 
         void DefaultProperties::ForceDefaultAttributes()
         {
