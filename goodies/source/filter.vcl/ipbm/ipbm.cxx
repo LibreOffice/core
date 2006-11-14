@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipbm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:37:23 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:15:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,6 @@ class PBMReader {
 
 private:
 
-    PFilterCallback pCallback;
-    void * pCallerData;
-
     SvStream*           mpPBM;          // Die einzulesende PBM-Datei
 
     BOOL                mbStatus;
@@ -67,7 +64,7 @@ private:
 public:
                         PBMReader();
                         ~PBMReader();
-    BOOL                ReadPBM( SvStream & rPBM, Graphic & rGraphic, PFilterCallback pcallback, void * pcallerdata );
+    BOOL                ReadPBM( SvStream & rPBM, Graphic & rGraphic );
 };
 
 //=================== Methoden von PBMReader ==============================
@@ -84,8 +81,9 @@ PBMReader::~PBMReader()
 {
 }
 
-BOOL PBMReader::ImplCallback( USHORT nPercent )
+BOOL PBMReader::ImplCallback( USHORT /*nPercent*/ )
 {
+/*
     if ( pCallback != NULL )
     {
         if ( ( (*pCallback)( pCallerData, nPercent ) ) == TRUE )
@@ -94,17 +92,16 @@ BOOL PBMReader::ImplCallback( USHORT nPercent )
             return TRUE;
         }
     }
+*/
     return FALSE;
 }
 
-BOOL PBMReader::ReadPBM( SvStream & rPBM, Graphic & rGraphic, PFilterCallback pcallback, void * pcallerdata)
+BOOL PBMReader::ReadPBM( SvStream & rPBM, Graphic & rGraphic )
 {
     USHORT i;
 
-    if ( rPBM.GetError() ) return FALSE;
-
-    pCallback = pcallback;
-    pCallerData = pcallerdata;
+    if ( rPBM.GetError() )
+        return FALSE;
 
     mpPBM = &rPBM;
     mpPBM->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
@@ -539,19 +536,11 @@ BOOL PBMReader::ImplReadBody()
 
 //================== GraphicImport - die exportierte Funktion ================
 
-#ifdef WNT
-extern "C" BOOL _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                        PFilterCallback pCallback, void * pCallerData,
-                            FilterConfigItem*, BOOL)
-#else
-extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                        PFilterCallback pCallback, void * pCallerData,
-                            FilterConfigItem*, BOOL)
-#endif
+extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL )
 {
     PBMReader aPBMReader;
 
-    return aPBMReader.ReadPBM( rStream, rGraphic, pCallback, pCallerData );
+    return aPBMReader.ReadPBM( rStream, rGraphic );
 }
 
 //================== ein bischen Muell fuer Windows ==========================
