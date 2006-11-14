@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itiff.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:39:14 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:17:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,9 +73,6 @@ private:
 
     BOOL                bStatus;                    // Ob bisher kein Fehler auftrat
     Animation           aAnimation;
-
-    PFilterCallback     pCallback;
-    void*               pCallerData;
     ULONG               nLastPercent;
 
     SvStream*           pTIFF;                      // Die einzulesende TIFF-Datei
@@ -154,13 +151,14 @@ public:
     TIFFReader() {}
     ~TIFFReader() {}
 
-    BOOL ReadTIFF( SvStream & rTIFF, Graphic & rGraphic, PFilterCallback pcallback, void * pcallerdata );
+    BOOL ReadTIFF( SvStream & rTIFF, Graphic & rGraphic );
 };
 
 //=================== Methoden von TIFFReader ==============================
 
-void TIFFReader::MayCallback( ULONG nPercent )
+void TIFFReader::MayCallback( ULONG /*nPercent*/ )
 {
+/*
     if ( nPercent >= nLastPercent + 3 )
     {
         nLastPercent=nPercent;
@@ -170,6 +168,7 @@ void TIFFReader::MayCallback( ULONG nPercent )
                 bStatus = FALSE;
         }
     }
+*/
 }
 
 // ---------------------------------------------------------------------------------
@@ -1067,8 +1066,7 @@ void TIFFReader::ReadHeader()
 
 // ---------------------------------------------------------------------------------
 
-BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic,
-                          PFilterCallback pcallback, void * pcallerdata)
+BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 {
     USHORT  i, nNumTags, nTagType;
     ULONG   nMaxPos;
@@ -1076,9 +1074,6 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic,
     sal_uInt32 nFirstIfd, nDataLen;
 
     bStatus = TRUE;
-
-    pCallback    = pcallback;
-    pCallerData  = pcallerdata;
     nLastPercent = 0;
 
     pTIFF = &rTIFF;
@@ -1281,17 +1276,11 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic,
 
 //================== GraphicImport - die exportierte Funktion ================
 
-#ifdef WNT
-extern "C" BOOL _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                              PFilterCallback pCallback, void * pCallerData, FilterConfigItem*, BOOL)
-#else
-extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                              PFilterCallback pCallback, void * pCallerData, FilterConfigItem*, BOOL)
-#endif
+extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL )
 {
     TIFFReader aTIFFReader;
 
-    if (aTIFFReader.ReadTIFF( rStream, rGraphic, pCallback, pCallerData ) == FALSE )
+    if ( aTIFFReader.ReadTIFF( rStream, rGraphic ) == FALSE )
         return FALSE;
 
     return TRUE;
