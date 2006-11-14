@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-15 11:39:45 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:06:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -363,9 +363,9 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual void RecalcBoundRect();
         virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
         virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
-        virtual void TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const;
-        virtual void TakeContour(XPolyPolygon& rPoly) const;
-        virtual SdrHdl* GetHdl(USHORT nHdlNum) const;
+        virtual ::basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
+        virtual ::basegfx::B2DPolyPolygon TakeContour() const;
+        virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
         virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, USHORT nPlNum) const;
         virtual void NbcMove(const Size& rSiz);
         virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
@@ -384,9 +384,9 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual const Rectangle& GetLogicRect() const;
         virtual void SetLogicRect(const Rectangle& rRect);
         virtual void NbcSetLogicRect(const Rectangle& rRect);
-        virtual Point GetSnapPoint(USHORT i) const;
-        virtual const Point& GetPoint(USHORT i) const;
-        virtual void NbcSetPoint(const Point& rPnt, USHORT i);
+        virtual Point GetSnapPoint(sal_uInt32 i) const;
+        virtual Point GetPoint(sal_uInt32 i) const;
+        virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i);
 
         // #108784#
         virtual FASTBOOL HasTextEdit() const;
