@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:28:36 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:14:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,6 +215,14 @@
 
 #ifndef _XMLOFF_NUMBERSTYLESEXPORT_HXX
 #include "XMLNumberStylesExport.hxx"
+#endif
+
+#ifndef _LIST_HXX
+#include <tools/list.hxx>
+#endif
+
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
 #endif
 
 #include "animationexport.hxx"
