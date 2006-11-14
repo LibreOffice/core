@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unovwcrs.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:29:23 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:39:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,10 @@
 #endif
 
 #include <cppuhelper/implbase2.hxx>
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 using namespace ::vos;
 using namespace ::rtl;
