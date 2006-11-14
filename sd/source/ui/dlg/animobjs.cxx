@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:35:05 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:25:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,10 @@
 #include "res_bmp.hrc"
 #ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
+#endif
+
+#ifndef _SV_SVAPP_HXX_
+#include <vcl/svapp.hxx>
 #endif
 
 #include <string>
@@ -903,7 +907,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
     // Texteingabemodus beenden, damit Bitmap mit
     // Objekt identisch ist.
     if( rView.IsTextEdit() )
-        rView.EndTextEdit();
+        rView.SdrEndTextEdit();
 
     // Objekt(e) clonen und den/die Clone(s) in die Liste stellen
     const SdrMarkList& rMarkList   = rView.GetMarkedObjectList();
@@ -1072,7 +1076,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
 void AnimationWindow::CreateAnimObj (::sd::View& rView )
 {
-    ::Window* pOutWin = static_cast< ::Window*>(rView.GetWin(0));
+    ::Window* pOutWin = static_cast< ::Window*>(rView.GetFirstOutputDevice()); // GetWin( 0 );
     DBG_ASSERT( pOutWin, "Window ist nicht vorhanden!" );
 
     // die Fentermitte ermitteln
@@ -1106,7 +1110,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         aMaxSizePix.Height() = Max( aMaxSizePix.Height(), aTmpSizePix.Height() );
     }
 
-    SdrPageView* pPV = rView.GetPageViewPvNum( 0 );
+    SdrPageView* pPV = rView.GetSdrPageView();
 
     if( aRbtBitmap.IsChecked() )
     {
@@ -1192,7 +1196,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         const Point aOrg( aWindowCenter.X() - ( aMaxSizeLog.Width() >> 1 ), aWindowCenter.Y() - ( aMaxSizeLog.Height() >> 1 ) );
 
         pGrafObj->SetLogicRect( Rectangle( aOrg, aMaxSizeLog ) );
-        rView.InsertObject( pGrafObj, *pPV, SDRINSERT_SETDEFLAYER);
+        rView.InsertObjectAtView( pGrafObj, *pPV, SDRINSERT_SETDEFLAYER);
     }
     else
     {
@@ -1285,7 +1289,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         pInfo->bIsMovie = TRUE;
         pInfo->aBlueScreen = COL_WHITE;
 
-        rView.InsertObject( pGroup, *pPV, SDRINSERT_SETDEFLAYER);
+        rView.InsertObjectAtView( pGroup, *pPV, SDRINSERT_SETDEFLAYER);
     }
 
     ClickFirstHdl( this );
