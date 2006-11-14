@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1filter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:19:21 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:13:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1986,7 +1986,7 @@ void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& rMan)
          (sizeof(*pPic)-sizeof(pPic->rgb)));
         aOut.Seek(0);
         GDIMetaFile aWMF;
-        if (ReadWindowMetafile(aOut, aWMF) && aWMF.GetActionCount() > 0)
+        if (ReadWindowMetafile( aOut, aWMF, NULL ) && aWMF.GetActionCount() > 0)
         {
             aWMF.SetPrefMapMode(MapMode(MAP_100TH_MM));
             Size aOldSiz(aWMF.GetPrefSize());
