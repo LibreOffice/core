@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:30:47 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:56:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,18 @@
 
 #ifndef _SVDMODEL_HXX
 #include "svdmodel.hxx"
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
+#endif
+
+#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
+#include <basegfx/vector/b2dvector.hxx>
 #endif
 
 using namespace ::rtl;
@@ -733,6 +745,198 @@ bool XDash::operator==(const XDash& rDash) const
              nDistance  == rDash.nDistance );
 }
 
+
+// XDash is translated into an array of doubles which describe the lengths of the
+// dashes, dots and empty passages. It returns the complete length of the full DashDot
+// sequence and fills the given vetor of doubles accordingly (also resizing, so deleting it).
+static double SMALLEST_DASH_WIDTH(26.95);
+double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double fLineWidth) const
+{
+    double fFullDotDashLen(0.0);
+    const sal_uInt16 nNumDotDashArray = (GetDots() + GetDashes()) * 2;
+    rDotDashArray.resize( nNumDotDashArray, 0.0 );
+    sal_uInt16 a;
+    sal_uInt16 nIns(0);
+    double fDashDotDistance = (double)GetDistance();
+    double fSingleDashLen = (double)GetDashLen();
+    double fSingleDotLen = (double)GetDotLen();
+
+    if(GetDashStyle() == XDASH_RECTRELATIVE || GetDashStyle() == XDASH_ROUNDRELATIVE)
+    {
+        if(fLineWidth != 0.0)
+        {
+            double fFactor = fLineWidth / 100.0;
+
+            if(GetDashes())
+            {
+                if(GetDashLen())
+                {
+                    // is a dash
+                    fSingleDashLen *= fFactor;
+                }
+                else
+                {
+                    // is a dot
+                    fSingleDashLen = fLineWidth;
+                }
+            }
+
+            if(GetDots())
+            {
+                if(GetDotLen())
+                {
+                    // is a dash
+                    fSingleDotLen *= fFactor;
+                }
+                else
+                {
+                    // is a dot
+                    fSingleDotLen = fLineWidth;
+                }
+            }
+
+            if(GetDashes() || GetDots())
+            {
+                if(GetDistance())
+                {
+                    fDashDotDistance *= fFactor;
+                }
+                else
+                {
+                    fDashDotDistance = fLineWidth;
+                }
+            }
+        }
+        else
+        {
+            if(GetDashes())
+            {
+                if(GetDashLen())
+                {
+                    // is a dash
+                    fSingleDashLen = (SMALLEST_DASH_WIDTH * fSingleDashLen) / 100.0;
+                }
+                else
+                {
+                    // is a dot
+                    fSingleDashLen = SMALLEST_DASH_WIDTH;
+                }
+            }
+
+            if(GetDots())
+            {
+                if(GetDotLen())
+                {
+                    // is a dash
+                    fSingleDotLen = (SMALLEST_DASH_WIDTH * fSingleDotLen) / 100.0;
+                }
+                else
+                {
+                    // is a dot
+                    fSingleDotLen = SMALLEST_DASH_WIDTH;
+                }
+            }
+
+            if(GetDashes() || GetDots())
+            {
+                if(GetDistance())
+                {
+                    // dash as distance
+                    fDashDotDistance = (SMALLEST_DASH_WIDTH * fDashDotDistance) / 100.0;
+                }
+                else
+                {
+                    // dot as distance
+                    fDashDotDistance = SMALLEST_DASH_WIDTH;
+                }
+            }
+        }
+    }
+    else
+    {
+        // smallest dot size compare value
+        double fDotCompVal(fLineWidth != 0.0 ? fLineWidth : SMALLEST_DASH_WIDTH);
+
+        // absolute values
+        if(GetDashes())
+        {
+            if(GetDashLen())
+            {
+                // is a dash
+                if(fSingleDashLen < SMALLEST_DASH_WIDTH)
+                {
+                    fSingleDashLen = SMALLEST_DASH_WIDTH;
+                }
+            }
+            else
+            {
+                // is a dot
+                if(fSingleDashLen < fDotCompVal)
+                {
+                    fSingleDashLen = fDotCompVal;
+                }
+            }
+        }
+
+        if(GetDots())
+        {
+            if(GetDotLen())
+            {
+                // is a dash
+                if(fSingleDotLen < SMALLEST_DASH_WIDTH)
+                {
+                    fSingleDotLen = SMALLEST_DASH_WIDTH;
+                }
+            }
+            else
+            {
+                // is a dot
+                if(fSingleDotLen < fDotCompVal)
+                {
+                    fSingleDotLen = fDotCompVal;
+                }
+            }
+        }
+
+        if(GetDashes() || GetDots())
+        {
+            if(GetDistance())
+            {
+                // dash as distance
+                if(fDashDotDistance < SMALLEST_DASH_WIDTH)
+                {
+                    fDashDotDistance = SMALLEST_DASH_WIDTH;
+                }
+            }
+            else
+            {
+                // dot as distance
+                if(fDashDotDistance < fDotCompVal)
+                {
+                    fDashDotDistance = fDotCompVal;
+                }
+            }
+        }
+    }
+
+    for(a=0;a<GetDots();a++)
+    {
+        rDotDashArray[nIns++] = fSingleDotLen;
+        fFullDotDashLen += fSingleDotLen;
+        rDotDashArray[nIns++] = fDashDotDistance;
+        fFullDotDashLen += fDashDotDistance;
+    }
+
+    for(a=0;a<GetDashes();a++)
+    {
+        rDotDashArray[nIns++] = fSingleDashLen;
+        fFullDotDashLen += fSingleDashLen;
+        rDotDashArray[nIns++] = fDashDotDistance;
+        fFullDotDashLen += fDashDotDistance;
+    }
+
+    return fFullDotDashLen;
+}
 
 // -------------------
 // class XLineDashItem
@@ -1471,6 +1675,93 @@ sal_Bool XLineColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
     return sal_True;
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// tooling for simple spooling B2DPolygon to file and back
+
+namespace
+{
+    void streamOutB2DPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, SvStream& rOut)
+    {
+        const sal_uInt32 nPolygonCount(rPolyPolygon.count());
+        rOut << nPolygonCount;
+
+        for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+        {
+            const basegfx::B2DPolygon aCandidate(rPolyPolygon.getB2DPolygon(a));
+            const sal_uInt32 nPointCount(aCandidate.count());
+            const sal_uInt8 bClosed(aCandidate.isClosed() ? 1 : 0);
+            const sal_uInt8 bControlPoints(aCandidate.areControlPointsUsed() ? 1 : 0);
+            rOut << nPointCount;
+            rOut << bClosed;
+            rOut << bControlPoints;
+
+            for(sal_uInt32 b(0L); b < nPointCount; b++)
+            {
+                const basegfx::B2DPoint aPoint(aCandidate.getB2DPoint(b));
+                rOut << aPoint.getX();
+                rOut << aPoint.getY();
+
+                if(bControlPoints)
+                {
+                    const basegfx::B2DVector aControlVectorA(aCandidate.getControlVectorA(b));
+                    rOut << aControlVectorA.getX();
+                    rOut << aControlVectorA.getY();
+
+                    const basegfx::B2DVector aControlVectorB(aCandidate.getControlVectorB(b));
+                    rOut << aControlVectorB.getX();
+                    rOut << aControlVectorB.getY();
+                }
+            }
+        }
+    }
+
+    basegfx::B2DPolyPolygon streamInB2DPolyPolygon(SvStream& rIn)
+    {
+        basegfx::B2DPolyPolygon aRetval;
+        sal_uInt32 nPolygonCount;
+        rIn >> nPolygonCount;
+
+        for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+        {
+            sal_uInt32 nPointCount;
+            sal_uInt8 bClosed;
+            sal_uInt8 bControlPoints;
+
+            rIn >> nPointCount;
+            rIn >> bClosed;
+            rIn >> bControlPoints;
+
+            basegfx::B2DPolygon aCandidate;
+            aCandidate.setClosed(0 != bClosed);
+
+            for(sal_uInt32 b(0L); b < nPointCount; b++)
+            {
+                double fX, fY;
+                rIn >> fX;
+                rIn >> fY;
+                aCandidate.append(basegfx::B2DPoint(fX, fY));
+
+                if(0 != bControlPoints)
+                {
+                    rIn >> fX;
+                    rIn >> fY;
+                    aCandidate.setControlVectorA(b, basegfx::B2DVector(fX, fY));
+
+                    rIn >> fX;
+                    rIn >> fY;
+                    aCandidate.setControlVectorA(b, basegfx::B2DVector(fX, fY));
+                }
+            }
+
+            aRetval.append(aCandidate);
+        }
+
+        return aRetval;
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 // -----------------------
 // class XLineStartItem
 // -----------------------
@@ -1486,15 +1777,15 @@ TYPEINIT1_AUTOFACTORY(XLineStartItem, NameOrIndex);
 |*
 *************************************************************************/
 
-XLineStartItem::XLineStartItem(long nIndex) :
-    NameOrIndex(XATTR_LINESTART, nIndex)
+XLineStartItem::XLineStartItem(long nIndex)
+:   NameOrIndex(XATTR_LINESTART, nIndex)
 {
 }
 
 /*************************************************************************
 |*
 |*    XLineStartItem::XLineStartItem(const XubString& rName,
-|*                                   const XPolygon& rXPolygon)
+|*                                   const basegfx::B2DPolyPolygon& rXPolygon)
 |*
 |*    Beschreibung
 |*    Ersterstellung    15.11.94
@@ -1502,10 +1793,9 @@ XLineStartItem::XLineStartItem(long nIndex) :
 |*
 *************************************************************************/
 
-XLineStartItem::XLineStartItem(const XubString& rName,
-                               const XPolygon& rXPolygon):
-    NameOrIndex(XATTR_LINESTART, rName),
-    aXPolygon(rXPolygon)
+XLineStartItem::XLineStartItem(const XubString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon)
+:   NameOrIndex(XATTR_LINESTART, rName),
+    maPolyPolygon(rPolyPolygon)
 {
 }
 
@@ -1519,9 +1809,9 @@ XLineStartItem::XLineStartItem(const XubString& rName,
 |*
 *************************************************************************/
 
-XLineStartItem::XLineStartItem(const XLineStartItem& rItem) :
-    NameOrIndex(rItem),
-    aXPolygon(rItem.aXPolygon)
+XLineStartItem::XLineStartItem(const XLineStartItem& rItem)
+:   NameOrIndex(rItem),
+    maPolyPolygon(rItem.maPolyPolygon)
 {
 }
 
@@ -1540,31 +1830,22 @@ XLineStartItem::XLineStartItem(SvStream& rIn) :
 {
     if (!IsIndex())
     {
-        UINT32 nPoints;
-        INT32  nFlags;
-        rIn >> nPoints;
-        aXPolygon.SetSize((USHORT)nPoints);
-        for (USHORT nIndex = 0; nIndex < (USHORT)nPoints; nIndex++)
-        {
-            rIn >> aXPolygon[nIndex].X();
-            rIn >> aXPolygon[nIndex].Y();
-            rIn >> nFlags; aXPolygon.SetFlags(nIndex, (XPolyFlags)nFlags);
-        }
+        maPolyPolygon = streamInB2DPolyPolygon(rIn);
     }
 }
 
 //*************************************************************************
 
-XLineStartItem::XLineStartItem(SfxItemPool* /*pPool*/, const XPolygon& rXPolygon)
+XLineStartItem::XLineStartItem(SfxItemPool* /*pPool*/, const basegfx::B2DPolyPolygon& rPolyPolygon)
 :   NameOrIndex( XATTR_LINESTART, -1 ),
-    aXPolygon(rXPolygon)
+    maPolyPolygon(rPolyPolygon)
 {
 }
 
 //*************************************************************************
 
 XLineStartItem::XLineStartItem(SfxItemPool* /*pPool*/)
-: NameOrIndex(XATTR_LINESTART, -1 )
+:   NameOrIndex(XATTR_LINESTART, -1 )
 {
 }
 
@@ -1595,8 +1876,7 @@ SfxPoolItem* XLineStartItem::Clone(SfxItemPool* /*pPool*/) const
 
 int XLineStartItem::operator==(const SfxPoolItem& rItem) const
 {
-    return ( NameOrIndex::operator==(rItem) &&
-            ((const XLineStartItem&) rItem).aXPolygon == aXPolygon );
+    return ( NameOrIndex::operator==(rItem) && ((const XLineStartItem&) rItem).maPolyPolygon == maPolyPolygon );
 }
 
 /*************************************************************************
@@ -1630,14 +1910,7 @@ SvStream& XLineStartItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 
     if (!IsIndex())
     {
-        UINT32 nPoints = (UINT32)aXPolygon.GetPointCount();
-        rOut << nPoints;
-        for (USHORT nIndex = 0; nIndex < (USHORT)nPoints; nIndex++)
-        {
-            rOut << aXPolygon[nIndex].X();
-            rOut << aXPolygon[nIndex].Y();
-            rOut << (INT32)aXPolygon.GetFlags(nIndex);
-        }
+        streamOutB2DPolyPolygon(maPolyPolygon, rOut);
     }
 
     return rOut;
@@ -1645,7 +1918,7 @@ SvStream& XLineStartItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const XPolygon& XLineStartItem::GetValue(const XLineEndTable* pTable)
+|*    const basegfx::B2DPolyPolygon& XLineStartItem::GetValue(const XLineEndTable* pTable)
 |*                                             const
 |*
 |*    Beschreibung
@@ -1654,12 +1927,16 @@ SvStream& XLineStartItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 |*
 *************************************************************************/
 
-const XPolygon& XLineStartItem::GetLineStartValue(const XLineEndTable* pTable) const // GetValue -> GetLineStartValue
+basegfx::B2DPolyPolygon XLineStartItem::GetLineStartValue(const XLineEndTable* pTable) const
 {
     if (!IsIndex())
-        return aXPolygon;
+    {
+        return maPolyPolygon;
+    }
     else
+    {
         return pTable->GetLineEnd(GetIndex())->GetLineEnd();
+    }
 }
 
 //------------------------------------------------------------------------
@@ -1699,7 +1976,7 @@ sal_Bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
     else
     {
         com::sun::star::drawing::PolyPolygonBezierCoords aBezier;
-        SvxConvertXPolygonToPolyPolygonBezier( aXPolygon, aBezier );
+        SvxConvertB2DPolyPolygonToPolyPolygonBezier( maPolyPolygon, aBezier );
         rVal <<= aBezier;
     }
 
@@ -1716,16 +1993,16 @@ sal_Bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
     }
     else
     {
-        aXPolygon.SetSize( 0 );
+        maPolyPolygon.clear();
+
         if( rVal.hasValue() && rVal.getValue() )
         {
             if( rVal.getValueType() != ::getCppuType((const com::sun::star::drawing::PolyPolygonBezierCoords*)0) )
                 return sal_False;
 
-            aXPolygon.SetSize(0);
             com::sun::star::drawing::PolyPolygonBezierCoords* pCoords = (com::sun::star::drawing::PolyPolygonBezierCoords*)rVal.getValue();
             if( pCoords->Coordinates.getLength() > 0 )
-                SvxConvertPolyPolygonBezierToXPolygon( pCoords, aXPolygon );
+                maPolyPolygon = SvxConvertPolyPolygonBezierToB2DPolyPolygon( pCoords );
         }
     }
 
@@ -1744,25 +2021,25 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
 
         String aUniqueName( GetName() );
 
-        if( aXPolygon.GetPointCount() == 0 )
+        if( !maPolyPolygon.count() )
         {
             // if the polygon is empty, check if the name is empty
             if( aUniqueName.Len() == 0 )
                 return (XLineStartItem*)this;
 
             // force empty name for empty polygons
-            return new XLineStartItem( String(), aXPolygon );
+            return new XLineStartItem( String(), maPolyPolygon );
         }
 
-        if( aXPolygon.GetPointCount() > 1 )
+        if( maPolyPolygon.count() > 1L )
         {
             // check if the polygon is closed
-            if( aXPolygon[0] != aXPolygon[aXPolygon.GetPointCount() - 1] )
+            if(!maPolyPolygon.isClosed())
             {
                 // force a closed polygon
-                XPolygon aNewPolygon( aXPolygon );
-                aNewPolygon[ aXPolygon.GetPointCount() ] = aXPolygon[0];
-                pTempItem = new XLineStartItem( aUniqueName, aNewPolygon );
+                basegfx::B2DPolyPolygon aNew(maPolyPolygon);
+                aNew.setClosed(true);
+                pTempItem = new XLineStartItem( aUniqueName, aNew );
                 pLineStartItem = pTempItem;
             }
         }
@@ -1945,7 +2222,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
             }
             else
             {
-                return new XLineStartItem( aUniqueName, aXPolygon );
+                return new XLineStartItem( aUniqueName, maPolyPolygon );
             }
         }
     }
@@ -1968,15 +2245,15 @@ TYPEINIT1_AUTOFACTORY(XLineEndItem, NameOrIndex);
 |*
 *************************************************************************/
 
-XLineEndItem::XLineEndItem(long nIndex) :
-    NameOrIndex(XATTR_LINEEND, nIndex)
+XLineEndItem::XLineEndItem(long nIndex)
+:   NameOrIndex(XATTR_LINEEND, nIndex)
 {
 }
 
 /*************************************************************************
 |*
 |*    XLineEndItem::XLineEndItem(const XubString& rName,
-|*                               const XPolygon& rXPolygon)
+|*                               const basegfx::B2DPolyPolygon& rXPolygon)
 |*
 |*    Beschreibung
 |*    Ersterstellung    15.11.94
@@ -1984,9 +2261,9 @@ XLineEndItem::XLineEndItem(long nIndex) :
 |*
 *************************************************************************/
 
-XLineEndItem::XLineEndItem(const XubString& rName, const XPolygon& rPolygon) :
-    NameOrIndex(XATTR_LINEEND, rName),
-    aXPolygon(rPolygon)
+XLineEndItem::XLineEndItem(const XubString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon)
+:   NameOrIndex(XATTR_LINEEND, rName),
+    maPolyPolygon(rPolyPolygon)
 {
 }
 
@@ -2000,9 +2277,9 @@ XLineEndItem::XLineEndItem(const XubString& rName, const XPolygon& rPolygon) :
 |*
 *************************************************************************/
 
-XLineEndItem::XLineEndItem(const XLineEndItem& rItem) :
-    NameOrIndex(rItem),
-    aXPolygon(rItem.aXPolygon)
+XLineEndItem::XLineEndItem(const XLineEndItem& rItem)
+:   NameOrIndex(rItem),
+    maPolyPolygon(rItem.maPolyPolygon)
 {
 }
 
@@ -2021,31 +2298,22 @@ XLineEndItem::XLineEndItem(SvStream& rIn) :
 {
     if (!IsIndex())
     {
-        UINT32 nPoints;
-        INT32  nFlags;
-        rIn >> nPoints;
-        aXPolygon.SetSize((USHORT)nPoints);
-        for (USHORT nIndex = 0; nIndex < (USHORT)nPoints; nIndex++)
-        {
-            rIn >> aXPolygon[nIndex].X();
-            rIn >> aXPolygon[nIndex].Y();
-            rIn >> nFlags; aXPolygon.SetFlags(nIndex, (XPolyFlags)nFlags);
-        }
+        maPolyPolygon = streamInB2DPolyPolygon(rIn);
     }
 }
 
 //*************************************************************************
 
-XLineEndItem::XLineEndItem(SfxItemPool* /*pPool*/, const XPolygon& rXPolygon)
+XLineEndItem::XLineEndItem(SfxItemPool* /*pPool*/, const basegfx::B2DPolyPolygon& rPolyPolygon)
 :   NameOrIndex( XATTR_LINEEND, -1 ),
-    aXPolygon(rXPolygon)
+    maPolyPolygon(rPolyPolygon)
 {
 }
 
 //*************************************************************************
 
 XLineEndItem::XLineEndItem(SfxItemPool* /*pPool*/)
-: NameOrIndex(XATTR_LINEEND, -1 )
+:   NameOrIndex(XATTR_LINEEND, -1 )
 {
 }
 
@@ -2076,8 +2344,7 @@ SfxPoolItem* XLineEndItem::Clone(SfxItemPool* /*pPool*/) const
 
 int XLineEndItem::operator==(const SfxPoolItem& rItem) const
 {
-    return ( NameOrIndex::operator==(rItem) &&
-            ((const XLineEndItem&) rItem).aXPolygon == aXPolygon );
+    return ( NameOrIndex::operator==(rItem) && ((const XLineEndItem&) rItem).maPolyPolygon == maPolyPolygon );
 }
 
 /*************************************************************************
@@ -2111,14 +2378,7 @@ SvStream& XLineEndItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 
     if (!IsIndex())
     {
-        UINT32 nPoints = (UINT32)aXPolygon.GetPointCount();
-        rOut << nPoints;
-        for (USHORT nIndex = 0; nIndex < (USHORT)nPoints; nIndex++)
-        {
-            rOut << aXPolygon[nIndex].X();
-            rOut << aXPolygon[nIndex].Y();
-            rOut << (INT32)aXPolygon.GetFlags(nIndex);
-        }
+        streamOutB2DPolyPolygon(maPolyPolygon, rOut);
     }
 
     return rOut;
@@ -2126,7 +2386,7 @@ SvStream& XLineEndItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const XPolygon& XLineEndItem::GetValue(const XLineEndTable* pTable) const
+|*    const basegfx::B2DPolyPolygon& XLineEndItem::GetValue(const XLineEndTable* pTable) const
 |*
 |*    Beschreibung
 |*    Ersterstellung    15.11.94
@@ -2134,12 +2394,16 @@ SvStream& XLineEndItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 |*
 *************************************************************************/
 
-const XPolygon& XLineEndItem::GetLineEndValue(const XLineEndTable* pTable) const // GetValue -> GetLineEndValue
+basegfx::B2DPolyPolygon XLineEndItem::GetLineEndValue(const XLineEndTable* pTable) const
 {
     if (!IsIndex())
-        return aXPolygon;
+    {
+        return maPolyPolygon;
+    }
     else
+    {
         return pTable->GetLineEnd(GetIndex())->GetLineEnd();
+    }
 }
 
 
@@ -2155,25 +2419,25 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
 
         String aUniqueName( GetName() );
 
-        if( aXPolygon.GetPointCount() == 0 )
+        if( !maPolyPolygon.count() )
         {
             // if the polygon is empty, check if the name is empty
             if( aUniqueName.Len() == 0 )
                 return (XLineEndItem*)this;
 
             // force empty name for empty polygons
-            return new XLineEndItem( String(), aXPolygon );
+            return new XLineEndItem( String(), maPolyPolygon );
         }
 
-        if( aXPolygon.GetPointCount() > 1 )
+        if( maPolyPolygon.count() > 1L )
         {
             // check if the polygon is closed
-            if( aXPolygon[0] != aXPolygon[aXPolygon.GetPointCount() - 1] )
+            if(!maPolyPolygon.isClosed())
             {
                 // force a closed polygon
-                XPolygon aNewPolygon( aXPolygon );
-                aNewPolygon[ aXPolygon.GetPointCount() ] = aXPolygon[0];
-                pTempItem = new XLineEndItem( aUniqueName, aNewPolygon );
+                basegfx::B2DPolyPolygon aNew(maPolyPolygon);
+                aNew.setClosed(true);
+                pTempItem = new XLineEndItem( aUniqueName, aNew );
                 pLineEndItem = pTempItem;
             }
         }
@@ -2356,7 +2620,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
             }
             else
             {
-                return new XLineEndItem( aUniqueName, aXPolygon );
+                return new XLineEndItem( aUniqueName, maPolyPolygon );
             }
         }
     }
@@ -2402,7 +2666,7 @@ sal_Bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMembe
     else
     {
         com::sun::star::drawing::PolyPolygonBezierCoords aBezier;
-        SvxConvertXPolygonToPolyPolygonBezier( aXPolygon, aBezier );
+        SvxConvertB2DPolyPolygonToPolyPolygonBezier( maPolyPolygon, aBezier );
         rVal <<= aBezier;
     }
     return sal_True;
@@ -2418,16 +2682,16 @@ sal_Bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nM
     }
     else
     {
-        aXPolygon.SetSize( 0 );
+        maPolyPolygon.clear();
+
         if( rVal.hasValue() && rVal.getValue() )
         {
             if( rVal.getValueType() != ::getCppuType((const com::sun::star::drawing::PolyPolygonBezierCoords*)0) )
                 return sal_False;
 
-            aXPolygon.SetSize(0);
             com::sun::star::drawing::PolyPolygonBezierCoords* pCoords = (com::sun::star::drawing::PolyPolygonBezierCoords*)rVal.getValue();
             if( pCoords->Coordinates.getLength() > 0 )
-                SvxConvertPolyPolygonBezierToXPolygon( pCoords, aXPolygon );
+                maPolyPolygon = SvxConvertPolyPolygonBezierToB2DPolyPolygon( pCoords );
         }
     }
 
@@ -3176,7 +3440,7 @@ SfxPoolItem* XSecondaryFillColorItem::Create( SvStream& rIn, USHORT nVer ) const
     else
         return new XSecondaryFillColorItem( String(), Color(0,184,255) );
 }
-USHORT XSecondaryFillColorItem::GetVersion( USHORT /*nFileFormatVersion*/) const
+USHORT XSecondaryFillColorItem::GetVersion( USHORT /*nFileFormatVersion*/ ) const
 {
     return 2;
 }
@@ -3846,12 +4110,12 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem( const XFillFloatTranspar
 
 //------------------------------------------------------------------------
 
-XFillFloatTransparenceItem::XFillFloatTransparenceItem( SvStream& rIn, USHORT nVer ) :
-    XFillGradientItem   ( rIn, nVer )
-{
-    SetWhich( XATTR_FILLFLOATTRANSPARENCE );
-    rIn >> bEnabled;
-}
+//XFillFloatTransparenceItem::XFillFloatTransparenceItem( SvStream& rIn, USHORT nVer ) :
+//  XFillGradientItem   ( rIn, nVer )
+//{
+//  SetWhich( XATTR_FILLFLOATTRANSPARENCE );
+//  rIn >> bEnabled;
+//}
 
 //*************************************************************************
 
@@ -3887,19 +4151,19 @@ SfxPoolItem* XFillFloatTransparenceItem::Clone( SfxItemPool* /*pPool*/) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* XFillFloatTransparenceItem::Create( SvStream& rIn, USHORT nVer ) const
-{
-    return( ( 0 == nVer ) ? Clone( NULL ) : new XFillFloatTransparenceItem( rIn, nVer ) );
-}
+//SfxPoolItem* XFillFloatTransparenceItem::Create( SvStream& rIn, USHORT nVer ) const
+//{
+//  return( ( 0 == nVer ) ? Clone( NULL ) : new XFillFloatTransparenceItem( rIn, nVer ) );
+//}
 
 //------------------------------------------------------------------------
 
-SvStream& XFillFloatTransparenceItem::Store( SvStream& rOut, USHORT nItemVersion ) const
-{
-    XFillGradientItem::Store( rOut, nItemVersion );
-    rOut << bEnabled;
-    return rOut;
-}
+//SvStream& XFillFloatTransparenceItem::Store( SvStream& rOut, USHORT nItemVersion ) const
+//{
+//  XFillGradientItem::Store( rOut, nItemVersion );
+//  rOut << bEnabled;
+//  return rOut;
+//}
 
 //------------------------------------------------------------------------
 
@@ -5552,79 +5816,5 @@ SvStream& XFillAttrSetItem::Store( SvStream& rStream, USHORT nItemVersion ) cons
     return SfxSetItem::Store( rStream, nItemVersion );
 }
 
-
-//BFS01TYPEINIT1(XTextAttrSetItem, SfxSetItem);
-
-/*************************************************************************
-|*
-|* Konstruktoren fuer Textattribute-SetItem
-|*
-\************************************************************************/
-
-//BFS01XTextAttrSetItem::XTextAttrSetItem( SfxItemSet* pItemSet ) :
-//BFS01 SfxSetItem( XATTRSET_TEXT, pItemSet)
-//BFS01{
-//BFS01}
-
-/************************************************************************/
-
-//BFS01XTextAttrSetItem::XTextAttrSetItem( SfxItemPool* pItemPool ) :
-//BFS01 SfxSetItem( XATTRSET_TEXT,
-//BFS01     new SfxItemSet( *pItemPool, XATTR_TEXT_FIRST, XATTR_TEXT_LAST))
-//BFS01{
-//BFS01}
-
-/************************************************************************/
-
-//BFS01XTextAttrSetItem::XTextAttrSetItem( const XTextAttrSetItem& rTextAttr ) :
-//BFS01 SfxSetItem( rTextAttr )
-//BFS01{
-//BFS01}
-
-/************************************************************************/
-
-//BFS01XTextAttrSetItem::XTextAttrSetItem( const XTextAttrSetItem& rTextAttr,
-//BFS01                                 SfxItemPool* pItemPool ) :
-//BFS01 SfxSetItem( rTextAttr, pItemPool )
-//BFS01{
-//BFS01}
-
-/*************************************************************************
-|*
-|* Clone-Funktion
-|*
-\************************************************************************/
-
-//BFS01SfxPoolItem* XTextAttrSetItem::Clone( SfxItemPool* pPool ) const
-//BFS01{
-//BFS01 return new XTextAttrSetItem( *this, pPool );
-//BFS01}
-
-/*************************************************************************
-|*
-|* SetItem aus Stream erzeugen
-|*
-\************************************************************************/
-
-//BFS01SfxPoolItem* XTextAttrSetItem::Create( SvStream& rStream, USHORT nVersion ) const
-//BFS01{
-//BFS01 SfxItemSet *pSet = new SfxItemSet( *GetItemSet().GetPool(),
-//BFS01                                 XATTR_TEXT_FIRST, XATTR_TEXT_LAST);
-//BFS01 pSet->Load( rStream );
-//BFS01 return new XTextAttrSetItem( pSet );
-//BFS01}
-
-/*************************************************************************
-|*
-|* SetItem in Stream speichern
-|*
-\************************************************************************/
-
-//BFS01SvStream& XTextAttrSetItem::Store( SvStream& rStream, USHORT nItemVersion ) const
-//BFS01{
-//BFS01 return SfxSetItem::Store( rStream, nItemVersion );
-//BFS01}
-
-
-
+// eof
 
