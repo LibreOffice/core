@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:40:37 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:01:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
     FillStyle aFill = FillStyle( Color(COL_WHITE) );
     mnWhiteBackgroundShapeId = defineShape( aPoly, aFill );
 
-    Matrix3D m;
+    ::basegfx::B3DHomMatrix m;
     mnPageButtonId = createID();
     startTag( TAG_DEFINEBUTTON );
     mpTag->addUI16( mnPageButtonId );           // character id for button
@@ -262,8 +262,8 @@ void Writer::placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int
     mpTag->addUI16( nDepth );       // depth
     mpTag->addUI16( nID );          // character Id
 
-    Matrix3D aMatrix;
-    aMatrix.Translate( _Int16(static_cast<long>(map100thmm(x)*mnDocXScale)), _Int16(static_cast<long>(map100thmm(y)*mnDocYScale)) );
+    ::basegfx::B3DHomMatrix aMatrix;
+    aMatrix.translate( _Int16(static_cast<long>(map100thmm(x)*mnDocXScale)), _Int16(static_cast<long>(map100thmm(y)*mnDocYScale)) , 0.0);
     mpTag->addMatrix( aMatrix );        // transformation matrix
 
     if( pName )
@@ -294,8 +294,8 @@ void Writer::moveShape( sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y )
     mpTag->addBits( aBits );
     mpTag->addUI16( nDepth );           // depth
 
-    Matrix3D aMatrix;
-    aMatrix.Translate( _Int16(static_cast<long>(map100thmm(x)*mnDocXScale)), _Int16(static_cast<long>(map100thmm(y)*mnDocYScale)) );
+    ::basegfx::B3DHomMatrix aMatrix;
+    aMatrix.translate( _Int16(static_cast<long>(map100thmm(x)*mnDocXScale)), _Int16(static_cast<long>(map100thmm(y)*mnDocYScale)) , 0.0);
     mpTag->addMatrix( aMatrix );        // transformation matrix
 
     endTag();
