@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:58:17 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:27:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,6 +229,11 @@ protected:
     virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
                                                 const ImplControlValue& aValue, SalControlHandle& rControlHandle, const rtl::OUString& aCaption,
                                                 Region &rNativeBoundingRegion, Region &rNativeContentRegion );
+
+    virtual bool        drawAlphaBitmap( const SalTwoRect&,
+                                         const SalBitmap& rSourceBitmap,
+                                         const SalBitmap& rAlphaBitmap );
+    virtual bool        drawAlphaRect( long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency );
 
 public:
     // public SalGraphics methods, the interface to teh independent vcl part
