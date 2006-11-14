@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:17:19 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:41:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -484,7 +484,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 if ( pDrView->IsTextEdit() )
                 {
-                    pDrView->EndTextEdit();
+                    pDrView->SdrEndTextEdit();
                 }
                 USHORT nPage = aTabControl.GetCurPageId() - 1;
                 pActualPage = GetDoc()->GetSdPage(nPage, ePageKind);
@@ -506,7 +506,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 || (ePageKind==PK_HANDOUT && eEditMode==EM_MASTERPAGE))
             {
                 if ( pDrView->IsTextEdit() )
-                    pDrView->EndTextEdit();
+                    pDrView->SdrEndTextEdit();
 
                 SFX_REQUEST_ARG (rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, FALSE);
                 SFX_REQUEST_ARG (rReq, pWhatLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
@@ -526,7 +526,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 if ( pDrView->IsTextEdit() )
                 {
-                    pDrView->EndTextEdit();
+                    pDrView->SdrEndTextEdit();
                 }
 
                 USHORT nPageId = aTabControl.GetCurPageId();
@@ -570,7 +570,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 if ( pDrView->IsTextEdit() )
                 {
-                    pDrView->EndTextEdit();
+                    pDrView->SdrEndTextEdit();
                 }
 
                 aTabControl.StartEditMode( aTabControl.GetCurPageId() );
@@ -705,7 +705,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_CHANGEPOLYGON:
             if ( pDrView->IsTextEdit() )
             {
-                pDrView->EndTextEdit();
+                pDrView->SdrEndTextEdit();
                 GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
             }
 
@@ -748,7 +748,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_CONVERT_TO_CONTOUR:
             if ( pDrView->IsTextEdit() )
             {
-                pDrView->EndTextEdit();
+                pDrView->SdrEndTextEdit();
                 GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
             }
 
@@ -776,7 +776,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             // bitmap that will be created does not support it.
             if ( pDrView->IsTextEdit() )
             {
-                pDrView->EndTextEdit();
+                pDrView->SdrEndTextEdit();
                 GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
             }
 
@@ -830,7 +830,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 pDrView->DeleteMarkedObj(); // #69979# delete the objects, not only the marked area
 
                 // insert new object
-                pDrView->InsertObject (pGraphicObj, *pPageView);
+                pDrView->InsertObjectAtView(pGraphicObj, *pPageView);
 
                 // switch off undo
                 pDrView->EndUndo();
@@ -867,7 +867,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 // pDrView->SetAttributes( *pSet, TRUE ) verloren gehen und spaeter restauriert
                 // werden muessen
                 List* pAttrList = new List();
-                SdPage* pPresPage = (SdPage*) pDrView->GetPageViewPvNum(0)->GetPage();
+                SdPage* pPresPage = (SdPage*) pDrView->GetSdrPageView()->GetPage();
                 ULONG i;
 
                 for ( i = 0; i < nCount; i++ )
@@ -1045,7 +1045,7 @@ SdPage* DrawViewShell::CreateOrDuplicatePage (
     {
         if ( pDrView->IsTextEdit() )
         {
-            pDrView->EndTextEdit();
+            pDrView->SdrEndTextEdit();
         }
         pNewPage = ViewShell::CreateOrDuplicatePage (rRequest, ePageKind, pPage);
     }
