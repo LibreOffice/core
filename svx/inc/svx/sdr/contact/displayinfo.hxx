@@ -4,9 +4,9 @@
  *
  *  $RCSfile: displayinfo.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:50:49 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:04:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,9 +158,6 @@ namespace sdr
             // the instance which is painting the MasterPage and knows about.
             unsigned                                        mbMasterPagePainting : 1;
 
-            // Flag to set PreRendering to allowed/forbidden. Default is forbidden.
-            unsigned                                        mbPreRenderingAllowed : 1;
-
             // This uses Application::AnyInput() and may change mbContinuePaint
             // to interrupt the paint
             void CheckContinuePaint();
@@ -248,10 +245,6 @@ namespace sdr
             // access to master page painting flag
             sal_Bool GetMasterPagePainting() const;
             void SetMasterPagePainting(sal_Bool bNew);
-
-            // access to PreRendering flag
-            sal_Bool IsPreRenderingAllowed() const;
-            void SetPreRenderingAllowed(sal_Bool bNew);
 
             // Infos about draft painting. These may get bitfield members later.
             sal_Bool IsDraftText() const;
