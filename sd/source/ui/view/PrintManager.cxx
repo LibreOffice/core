@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrintManager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 10:15:27 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:40:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,11 @@
 #endif
 #include <svx/svdpagv.hxx>
 #include "strings.hrc"
+
+#ifndef _B3D_BASE3D_HXX
+#include <goodies/base3d.hxx>
+#endif
+
 #include "sdabstdlg.hxx"
 #include "printdlg.hrc"
 #include "prntopts.hrc"
@@ -1150,9 +1155,9 @@ void PrintManager::PrintHandout (
             rInfo.mrViewShell.SetPrintedHandoutPageNum(rInfo.mrViewShell.GetPrintedHandoutPageNum() + 1);
 
             rInfo.mrPrinter.StartPage();
-            pPrintView->ShowPage(pPage, Point());
+            pPrintView->ShowSdrPage(pPage); // , Point());
 
-            SdrPageView* pPageView = pPrintView->GetPageView(pPage);
+            SdrPageView* pPageView = pPrintView->GetSdrPageView(); // pPage);
             pPageView->SetVisibleLayers(rInfo.mrViewShell.GetFrameView()->GetVisibleLayers() );
             pPageView->SetPrintableLayers(rInfo.mrViewShell.GetFrameView()->GetPrintableLayers() );
 
@@ -1167,7 +1172,7 @@ void PrintManager::PrintHandout (
                 rInfo.mrPrinter.SetFont(aOldFont);
             }
             rInfo.mrPrinter.EndPage();
-            pPrintView->HidePage(pPrintView->GetPageView(pPage));
+            pPrintView->HideSdrPage(); // pPrintView->GetPageView(pPage));
         }
 
         USHORT nRealPage = 0;
@@ -1475,9 +1480,9 @@ void PrintManager::PrintStdOrNotes (
                             Point aPrintOrigin;
 
                             rInfo.mrPrinter.StartPage();
-                            pPrintView->ShowPage( pPage, aPtZero );
+                            pPrintView->ShowSdrPage( pPage ); // , aPtZero );
 
-                            SdrPageView* pPageView = pPrintView->GetPageView(pPage);
+                            SdrPageView* pPageView = pPrintView->GetSdrPageView(); // pPage);
                             pPageView->SetVisibleLayers(rInfo.mrViewShell.GetFrameView()->GetVisibleLayers() );
                             pPageView->SetPrintableLayers(rInfo.mrViewShell.GetFrameView()->GetPrintableLayers() );
 
@@ -1538,7 +1543,7 @@ void PrintManager::PrintStdOrNotes (
                                 rInfo.mrPrinter.SetFont(aOldFont);
                             }
                             rInfo.mrPrinter.EndPage();
-                            pPrintView->HidePage(pPrintView->GetPageView(pPage));
+                            pPrintView->HideSdrPage(); // pPrintView->GetPageView(pPage));
 
                             bPrint = FALSE;
                         }
@@ -1614,7 +1619,7 @@ void PrintManager::PrintPagePart (
     const Point& rStringOffset)
 {
     rInfo.mrPrinter.StartPage();
-    rPrintView.ShowPage(pPage, Point(0,0));
+    rPrintView.ShowSdrPage(pPage); // , Point(0,0));
 
     // Set origin of the map mode so that the next part of the page is
     // printed.
@@ -1623,7 +1628,7 @@ void PrintManager::PrintPagePart (
     aMapMode.SetOrigin(rPageOrigin);
     rInfo.mrPrinter.SetMapMode(aMapMode);
 
-    SdrPageView* pPageView = rPrintView.GetPageView(pPage);
+    SdrPageView* pPageView = rPrintView.GetSdrPageView(); // pPage);
     pPageView->SetVisibleLayers(rInfo.mrViewShell.GetFrameView()->GetVisibleLayers() );
     pPageView->SetPrintableLayers(rInfo.mrViewShell.GetFrameView()->GetPrintableLayers() );
 
@@ -1645,7 +1650,7 @@ void PrintManager::PrintPagePart (
         rInfo.mrPrinter.SetFont(aOldFont);
     }
     rInfo.mrPrinter.EndPage();
-    rPrintView.HidePage(rPrintView.GetPageView(pPage));
+    rPrintView.HideSdrPage(); // rPrintView.GetPageView(pPage));
 }
 
 
@@ -1659,9 +1664,9 @@ void PrintManager::PrintPage (
     BOOL bPrintMarkedOnly)
 {
     Point aPtZero;
-    pPrintView->ShowPage( pPage, aPtZero );
+    pPrintView->ShowSdrPage( pPage ); // , aPtZero );
 
-    SdrPageView* pPageView = pPrintView->GetPageView( pPage );
+    SdrPageView* pPageView = pPrintView->GetSdrPageView(); // pPage );
     pPageView->SetVisibleLayers(rInfo.mrViewShell.GetFrameView()->GetVisibleLayers() );
     pPageView->SetPrintableLayers(rInfo.mrViewShell.GetFrameView()->GetPrintableLayers() );
 
@@ -1672,7 +1677,7 @@ void PrintManager::PrintPage (
             &rInfo.mrPrinter,
             Rectangle(Point(0,0), pPage->GetSize()));
 
-    pPrintView->HidePage( pPrintView->GetPageView( pPage ) );
+    pPrintView->HideSdrPage(); //  pPrintView->GetPageView( pPage ) );
 }
 
 
