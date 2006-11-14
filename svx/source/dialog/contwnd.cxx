@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contwnd.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:13:27 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:15:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,14 @@
 
 #ifndef _SVX_FILLITEM_HXX //autogen
 #include <xfillit.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #endif
 
 #ifdef MAC
@@ -109,7 +117,9 @@ void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
 
     for ( USHORT i = 0; i < nPolyCount; i++ )
     {
-        SdrPathObj* pPathObj = new SdrPathObj( OBJ_PATHFILL, XPolygon( aPolyPoly[ i ] ) );
+        basegfx::B2DPolyPolygon aPolyPolygon;
+        aPolyPolygon.append(aPolyPoly[ i ].getB2DPolygon());
+        SdrPathObj* pPathObj = new SdrPathObj( OBJ_PATHFILL, aPolyPolygon );
 
         if ( pPathObj )
         {
@@ -129,7 +139,7 @@ void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
     if ( nPolyCount )
     {
         pView->MarkAll();
-        pView->CombineMarkedObjects( FALSE );
+        pView->CombineMarkedObjects( sal_False );
     }
 
     pModel->SetChanged( sal_False );
@@ -152,12 +162,9 @@ const PolyPolygon& ContourWindow::GetPolyPolygon()
 
         if ( pPage && pPage->GetObjCount() )
         {
-            SdrPathObj*         pPathObj = (SdrPathObj*) pPage->GetObj( 0 );
-            const XPolyPolygon& rXPolyPoly = pPathObj->GetPathPoly();
-
-            for ( USHORT i = 0, nPolyCount = rXPolyPoly.Count(); i < nPolyCount; i++ )
-                aPolyPoly.Insert( XOutCreatePolygon( rXPolyPoly.GetObject( i )) );
-//BFS09             aPolyPoly.Insert( XOutCreatePolygon( rXPolyPoly.GetObject( i ), NULL ) );
+            SdrPathObj* pPathObj = (SdrPathObj*)pPage->GetObj(0L);
+            const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(pPathObj->GetPathPoly()));
+            aPolyPoly = PolyPolygon(aB2DPolyPolygon);
         }
 
         pModel->SetChanged( sal_False );
@@ -195,7 +202,7 @@ void ContourWindow::InitSdrModel()
 void ContourWindow::SdrObjCreated( const SdrObject&  )
 {
     pView->MarkAll();
-    pView->CombineMarkedObjects( FALSE );
+    pView->CombineMarkedObjects( sal_False );
 }
 
 
@@ -211,7 +218,7 @@ BOOL ContourWindow::IsContourChanged() const
     BOOL        bRet = FALSE;
 
     if ( pPage && pPage->GetObjCount() )
-        bRet = ( (SdrPathObj*) pPage->GetObj( 0 ) )->GetPathPoly().Count() && pModel->IsChanged();
+        bRet = ( (SdrPathObj*) pPage->GetObj( 0 ) )->GetPathPoly().count() && pModel->IsChanged();
 
     return bRet;
 }
