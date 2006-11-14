@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibledialogwindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:23:54 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:28:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,10 @@
 #endif
 #ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 #include <vector>
@@ -1052,7 +1056,7 @@ void AccessibleDialogWindow::selectAccessibleChild( sal_Int32 nChildIndex ) thro
             SdrView* pSdrView = m_pDialogWindow->GetView();
             if ( pSdrView )
             {
-                SdrPageView* pPgView = pSdrView->GetPageViewPvNum(0);
+                SdrPageView* pPgView = pSdrView->GetSdrPageView();
                 if ( pPgView )
                     pSdrView->MarkObj( pDlgEdObj, pPgView );
             }
@@ -1169,7 +1173,7 @@ void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex ) th
             SdrView* pSdrView = m_pDialogWindow->GetView();
             if ( pSdrView )
             {
-                SdrPageView* pPgView = pSdrView->GetPageViewPvNum(0);
+                SdrPageView* pPgView = pSdrView->GetSdrPageView();
                 if ( pPgView )
                     pSdrView->MarkObj( pDlgEdObj, pPgView, TRUE );
             }
