@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommonConverters.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:38:44 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:32:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,15 +35,12 @@
 #ifndef __CHART_COMMON_CONVERTERS_HXX
 #define __CHART_COMMON_CONVERTERS_HXX
 
-#ifndef _SVX_VECTOR3D_HXX
-#include <goodies/vector3d.hxx>
-#endif
-#ifndef _B3D_HMATRIX_HXX
-#include <goodies/hmatrix.hxx>
-#endif
-#ifndef _B2D_MATRIX3D_HXX
-#include <goodies/matrix3d.hxx>
-#endif
+//#ifndef _SVX_VECTOR3D_HXX
+//#include <goodies/vector3d.hxx>
+//#endif
+//#ifndef _B3D_HMATRIX_HXX
+//#include <goodies/hmatrix.hxx>
+//#endif
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
@@ -74,6 +71,18 @@
 #include <com/sun/star/chart2/XDataSequence.hpp>
 #endif
 
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
+#ifndef _BGFX_POINT_B3DPOINT_HXX
+#include <basegfx/point/b3dpoint.hxx>
+#endif
+
+#ifndef _BGFX_VECTOR_B3DVECTOR_HXX
+#include <basegfx/vector/b3dvector.hxx>
+#endif
+
 //.............................................................................
 namespace chart
 {
@@ -81,44 +90,43 @@ namespace chart
 
 //-----------------------------------------------------------------------------
 /**
-diverse methods for class conversions; e.g. Matrix4D to HomogenMatrix
+diverse methods for class conversions; e.g. ::basegfx::B3DHomMatrix to HomogenMatrix
 and operations e.g  drawing::Position3D + drawing::Direction3D
 */
 
 //-----------------------------------------------------------------------------
-/** Matrix4D -> HomogenMatrix
+/** ::basegfx::B3DHomMatrix -> HomogenMatrix
 */
 com::sun::star::drawing::HomogenMatrix
-                 Matrix4DToHomogenMatrix( const Matrix4D& rM4 );
+                 Matrix4DToHomogenMatrix( const ::basegfx::B3DHomMatrix& rM4 );
 
 //-----------------------------------------------------------------------------
-/** HomogenMatrix -> Matrix4D
+/** HomogenMatrix -> ::basegfx::B3DHomMatrix
 */
-Matrix4D        HomogenMatrixToMatrix4D( const com::sun::star::drawing::HomogenMatrix& rHM );
+::basegfx::B3DHomMatrix HomogenMatrixToMatrix4D( const com::sun::star::drawing::HomogenMatrix& rHM );
 
 //-----------------------------------------------------------------------------
-/** Matrix4D -> Matrix3D
+/** ::basegfx::B3DHomMatrix -> B2DHomMatrix
 */
-Matrix3D        IgnoreZ( const Matrix4D& rM4 );
+::basegfx::B2DHomMatrix IgnoreZ( const ::basegfx::B3DHomMatrix& rM4 );
 
 //-----------------------------------------------------------------------------
-/** Matrix3D <-> HomogenMatrix3
+/** B2DHomMatrix <-> HomogenMatrix3
 */
 com::sun::star::drawing::HomogenMatrix3
-                 Matrix3DToHomogenMatrix3( const Matrix3D& rM3 );
+B2DHomMatrixToHomogenMatrix3( const ::basegfx::B2DHomMatrix& rM3 );
 
-Matrix3D         HomogenMatrix3ToMatrix3D( const com::sun::star::drawing::HomogenMatrix3& rHM );
-
-//-----------------------------------------------------------------------------
-/** Position3D -> Vector3D
-*/
-Vector3D        Position3DToVector3D( const com::sun::star::drawing::Position3D& rPosition );
+::basegfx::B2DHomMatrix HomogenMatrix3ToB2DHomMatrix( const com::sun::star::drawing::HomogenMatrix3& rHM );
 
 //-----------------------------------------------------------------------------
-/** Vector3D -> Direction3D
+/** Position3D -> B3DPoint
 */
-com::sun::star::drawing::Direction3D
-                Vector3DToDirection3D( const Vector3D& rVector);
+::basegfx::B3DPoint Position3DToB3DPoint( const com::sun::star::drawing::Position3D& rPosition );
+
+//-----------------------------------------------------------------------------
+/** B3DVector -> Direction3D
+*/
+com::sun::star::drawing::Direction3D B3DVectorToDirection3D( const ::basegfx::B3DVector& rVector);
 
 //-----------------------------------------------------------------------------
 /** two drawing::Position3D -> PolyPolygonShape3D
@@ -208,15 +216,14 @@ bool            operator==( const com::sun::star::drawing::Position3D& rPos1
                            , const com::sun::star::drawing::Position3D& rPos2);
 
 //-----------------------------------------------------------------------------
-/** Sequence<double> -> Vector3D
+/** Sequence<double> -> B3DPoint
 */
-Vector3D        SequenceToVector3D( const com::sun::star::uno::Sequence< double >& rSeq );
+::basegfx::B3DPoint SequenceToB3DPoint( const com::sun::star::uno::Sequence< double >& rSeq );
 
 //-----------------------------------------------------------------------------
-/** Vector3D -> Sequence<double>
+/** B3DPoint -> Sequence<double>
 */
-com::sun::star::uno::Sequence< double >
-                Vector3DToSequence( const Vector3D& rVector );
+com::sun::star::uno::Sequence< double > B3DPointToSequence( const ::basegfx::B3DPoint& rPoint );
 
 //-----------------------------------------------------------------------------
 /** Sequence<double> -> drawing::Position3D
