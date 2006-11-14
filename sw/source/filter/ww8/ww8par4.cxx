@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:11:29 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:15:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,7 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
         ASSERT( !pSt, "+OLE: Groesse von 0 ???" );
         return false;
     }
-    bool bOk = ReadWindowMetafile(*pSt, rWMF) ? true : false;   // WMF lesen
+    bool bOk = ReadWindowMetafile( *pSt, rWMF, NULL ) ? true : false;   // WMF lesen
                     // *pSt >> aWMF  geht nicht ohne placable Header
     if (!bOk || pSt->GetError() || rWMF.GetActionCount() == 0)
     {
