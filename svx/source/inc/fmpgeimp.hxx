@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmpgeimp.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:05:55 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:27:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,6 @@
 #endif
 
 class SvStream;
-//BFS01class SdrIOHeader;
 class FmFormObj;
 class FmFormPage;
 class SdrObject;
@@ -138,9 +137,6 @@ public:
 
 protected:
     // lesen und schreiben der Objecte
-//BFS01 void WriteData(SvStream& rOut) const; //
-//BFS01 void ReadData(const SdrIOHeader& rHead, SvStream& rIn); //
-
     void write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& OutStream) const;
     void read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& InStream);
 
