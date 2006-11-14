@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuoaprms.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:52:25 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:30:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,14 @@
 #include "tpaction.hrc" //CHINA001
 #include "sdresid.hxx"
 
+#ifndef _SV_SALBTYPE_HXX
+#include <vcl/salbtype.hxx>     // FRound
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
 using namespace ::com::sun::star;
 
 namespace sd {
@@ -126,7 +134,7 @@ FunctionReference FuObjectAnimationParameters::Create( ViewShell* pViewSh, ::sd:
 void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 {
 
-    BOOL bOnMaster = pView->GetPageViewPvNum(0)->GetPage()->IsMasterPage();
+    BOOL bOnMaster = pView->GetSdrPageView()->GetPage()->IsMasterPage();
     SfxUndoManager* pUndoMgr = pViewShell->GetViewFrame()->GetObjectShell()->
                                 GetUndoManager();
 
@@ -731,13 +739,13 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             // das laufende Objekt auf das Kurvenende schieben
             Rectangle aCurRect(pRunningObj->GetLogicRect());
             Point     aCurCenter(aCurRect.Center());
-            const XPolyPolygon& rXPP = pPath->GetPathPoly();
-            USHORT nNoOfXPoly = rXPP.Count();
-            const XPolygon& rXPoly = rXPP.GetObject(nNoOfXPoly - 1);
-            USHORT nPoints = rXPoly.GetPointCount();
-            Point aNewCenter(rXPoly[nPoints - 1]);
-            Size aDistance(aNewCenter.X() - aCurCenter.X(),
-                           aNewCenter.Y() - aCurCenter.Y());
+            const ::basegfx::B2DPolyPolygon& rPolyPolygon = pPath->GetPathPoly();
+            sal_uInt32 nNoOfPolygons(rPolyPolygon.count());
+            const ::basegfx::B2DPolygon aPolygon(rPolyPolygon.getB2DPolygon(nNoOfPolygons - 1L));
+            sal_uInt32 nPoints(aPolygon.count());
+            const ::basegfx::B2DPoint aNewB2DCenter(aPolygon.getB2DPoint(nPoints - 1L));
+            const Point aNewCenter(FRound(aNewB2DCenter.getX()), FRound(aNewB2DCenter.getY()));
+            Size aDistance(aNewCenter.X() - aCurCenter.X(), aNewCenter.Y() - aCurCenter.Y());
             pRunningObj->Move(aDistance);
 
             pUndoMgr->AddUndoAction(pDoc->GetSdrUndoFactory().CreateUndoMoveObject( *pRunningObj, aDistance));
