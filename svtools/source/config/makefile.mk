@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.57 $
+#   $Revision: 1.58 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 20:46:33 $
+#   last change: $Author: ihi $ $Date: 2006-11-14 15:39:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@ LIB1OBJFILES=  \
     $(SLO)$/menuoptions.obj				\
     $(SLO)$/dynamicmenuoptions.obj		\
     $(SLO)$/options3d.obj				\
+    $(SLO)$/optionsdrawinglayer.obj		\
     $(SLO)$/fontoptions.obj				\
     $(SLO)$/addxmltostorageoptions.obj	\
     $(SLO)$/miscopt.obj					\
