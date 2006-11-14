@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultproperties.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:05:09 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:10:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,10 +108,6 @@ namespace sdr
 
             // get the installed StyleSheet
             virtual SfxStyleSheet* GetStyleSheet() const;
-
-            // pre/post-process saving
-            //BFS01virtual void PreProcessSave();
-            //BFS01virtual void PostProcessSave();
 
             // force default attributes for a specific object type, called from
             // DefaultProperties::GetObjectItemSet() if a new ItemSet is created.
