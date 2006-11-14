@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximp3dscene.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:30:53 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:15:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ SdXML3DLightContext::SdXML3DLightContext(
             }
             case XML_TOK_3DLIGHT_DIRECTION:
             {
-                GetImport().GetMM100UnitConverter().convertVector3D(maDirection, sValue);
+                GetImport().GetMM100UnitConverter().convertB3DVector(maDirection, sValue);
                 break;
             }
             case XML_TOK_3DLIGHT_ENABLED:
@@ -300,8 +300,8 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
         }
         else if( IsXMLToken( rLocalName, XML_VRP ) )
         {
-            Vector3D aNewVec;
-            mrImport.GetMM100UnitConverter().convertVector3D(aNewVec, rValue);
+            ::basegfx::B3DVector aNewVec;
+            mrImport.GetMM100UnitConverter().convertB3DVector(aNewVec, rValue);
 
             if(aNewVec != maVRP)
             {
@@ -312,8 +312,8 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
         }
         else if( IsXMLToken( rLocalName, XML_VPN ) )
         {
-            Vector3D aNewVec;
-            mrImport.GetMM100UnitConverter().convertVector3D(aNewVec, rValue);
+            ::basegfx::B3DVector aNewVec;
+            mrImport.GetMM100UnitConverter().convertB3DVector(aNewVec, rValue);
 
             if(aNewVec != maVPN)
             {
@@ -324,8 +324,8 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
         }
         else if( IsXMLToken( rLocalName, XML_VUP ) )
         {
-            Vector3D aNewVec;
-            mrImport.GetMM100UnitConverter().convertVector3D(aNewVec, rValue);
+            ::basegfx::B3DVector aNewVec;
+            mrImport.GetMM100UnitConverter().convertB3DVector(aNewVec, rValue);
 
             if(aNewVec != maVUP)
             {
@@ -431,9 +431,9 @@ void SdXML3DSceneAttributesHelper::setSceneAttributes( const com::sun::star::uno
             // set anys
             aAny <<= pCtx->GetDiffuseColor().GetColor();
             drawing::Direction3D xLightDir;
-            xLightDir.DirectionX = pCtx->GetDirection().X();
-            xLightDir.DirectionY = pCtx->GetDirection().Y();
-            xLightDir.DirectionZ = pCtx->GetDirection().Z();
+            xLightDir.DirectionX = pCtx->GetDirection().getX();
+            xLightDir.DirectionY = pCtx->GetDirection().getY();
+            xLightDir.DirectionZ = pCtx->GetDirection().getZ();
             aAny2 <<= xLightDir;
             aAny3 <<= pCtx->GetEnabled();
 
@@ -501,15 +501,15 @@ void SdXML3DSceneAttributesHelper::setSceneAttributes( const com::sun::star::uno
 
     // CameraGeometry and camera settings
     drawing::CameraGeometry aCamGeo;
-    aCamGeo.vrp.PositionX = maVRP.X();
-    aCamGeo.vrp.PositionY = maVRP.Y();
-    aCamGeo.vrp.PositionZ = maVRP.Z();
-    aCamGeo.vpn.DirectionX = maVPN.X();
-    aCamGeo.vpn.DirectionY = maVPN.Y();
-    aCamGeo.vpn.DirectionZ = maVPN.Z();
-    aCamGeo.vup.DirectionX = maVUP.X();
-    aCamGeo.vup.DirectionY = maVUP.Y();
-    aCamGeo.vup.DirectionZ = maVUP.Z();
+    aCamGeo.vrp.PositionX = maVRP.getX();
+    aCamGeo.vrp.PositionY = maVRP.getY();
+    aCamGeo.vrp.PositionZ = maVRP.getZ();
+    aCamGeo.vpn.DirectionX = maVPN.getX();
+    aCamGeo.vpn.DirectionY = maVPN.getY();
+    aCamGeo.vpn.DirectionZ = maVPN.getZ();
+    aCamGeo.vup.DirectionX = maVUP.getX();
+    aCamGeo.vup.DirectionY = maVUP.getY();
+    aCamGeo.vup.DirectionZ = maVUP.getZ();
     aAny <<= aCamGeo;
     xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DCameraGeometry")), aAny);
 
