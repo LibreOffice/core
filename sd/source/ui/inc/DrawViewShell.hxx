@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:06:41 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,6 @@ class SdAnimationWin;
 class SdRuler;
 class TabBar;
 class SdrObject;
-class XPolygon;
 class SdrPageView;
 class TransferableDataHelper;
 class TransferableClipboardListener;
@@ -158,7 +157,7 @@ public:
     */
     virtual void ArrangeGUIElements (void);
 
-    void            HidePage(SdrPageView* pPV);
+    void            HidePage();
 
     virtual BOOL    KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
     virtual void    MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin);
@@ -402,12 +401,6 @@ protected:
     PageKind        ePageKind;
     BOOL            bZoomOnPage;
     BOOL            bIsRulerDrag;
-    XPolygon*       pXPolygon;
-    USHORT          nPolygonIndex;
-    BOOL            bLineError;
-    BOOL            bLastWasLineTo;
-    BOOL            bLastWasMoveTo;
-    BOOL            bLastWasBezierTo;
     Color           aGradStartColor;
     Color           aGradEndColor;
     Color           aHatchColor;
@@ -437,7 +430,7 @@ protected:
     virtual void    SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY);
     virtual Size    GetOptimalSizePixel() const;
 
-    void            DestroyPolygons();
+//  void            DestroyPolygons();
 
     void            SetupPage( Size &rSize, long nLeft, long nRight, long nUpper, long nLower,
                                BOOL bSize, BOOL bMargin, BOOL bScaleAll );
