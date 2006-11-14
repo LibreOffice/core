@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdgrffilter.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-05 21:49:26 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:20:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,11 +51,11 @@ class Graphic;
 
 class SdGRFFilter : public SdFilter
 {
+    bool mbHideSpell;
+
 public:
-    SdGRFFilter (
-        SfxMedium& rMedium,
-        ::sd::DrawDocShell& rDocShell,
-        sal_Bool bShowProgress );
+    SdGRFFilter ( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell );
+
     virtual ~SdGRFFilter (void);
 
     sal_Bool        Import();
@@ -63,14 +63,6 @@ public:
 
     static void             SaveGraphic( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape );
     static void             HandleGraphicFilterError( USHORT nFilterError, ULONG nStreamError = ERRCODE_NONE );
-
-private:
-
-    static GDIMetaFile      ImplRemoveClipRegionActions( const GDIMetaFile& rMtf );
-    static BitmapEx         ImplGetBitmapFromMetaFile( const GDIMetaFile& rMtf, BOOL bTransparent, const Size* pSizePixel = NULL );
-
-    bool mbHideSpell;
-
 };
 
 #endif // _SD_SDGRFFILTER_HXX
