@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:56:15 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:12:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,10 +154,12 @@
 #endif
 // <--
 // --> OD 2005-03-10 #i44334#, #i44681#
-#ifndef _B2D_MATRIX3D_HXX
-#include <goodies/matrix3d.hxx>
+#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
+#include <basegfx/matrix/b3dhommatrix.hxx>
 #endif
 // <--
+
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 
@@ -392,7 +394,7 @@ void SwFmDrawPage::PreUnGroup(const uno::Reference< drawing::XShapeGroup >  xSha
 SdrPageView*    SwFmDrawPage::GetPageView()
 {
     if(!pPageView)
-        pPageView = mpView->ShowPage( mpPage, Point() );
+        pPageView = mpView->ShowSdrPage( mpPage );
     return pPageView;
 }
 /*-- 22.01.99 11:13:08---------------------------------------------------
@@ -401,7 +403,7 @@ SdrPageView*    SwFmDrawPage::GetPageView()
 void    SwFmDrawPage::RemovePageView()
 {
     if(pPageView && mpView)
-        mpView->HidePage( pPageView );
+        mpView->HideSdrPage();
     pPageView = 0;
 }
 /*-- 22.01.99 11:13:09---------------------------------------------------
@@ -2466,22 +2468,29 @@ drawing::HomogenMatrix3 SwXShape::_ConvertTransformationToLayoutDir(
             // apply translation difference to transformation matrix.
             if ( aTranslateDiff.X != 0 || aTranslateDiff.Y != 0 )
             {
-                Matrix3D aMatrix3D;
-                aMatrix3D[0] = Point3D( aMatrix.Line1.Column1, aMatrix.Line1.Column2, aMatrix.Line1.Column3 );
-                aMatrix3D[1] = Point3D( aMatrix.Line2.Column1, aMatrix.Line2.Column2, aMatrix.Line2.Column3 );
-                aMatrix3D[2] = Point3D( aMatrix.Line3.Column1, aMatrix.Line3.Column2, aMatrix.Line3.Column3 );
+                ::basegfx::B3DHomMatrix aTempMatrix;
 
-                aMatrix3D.Translate( aTranslateDiff.X, aTranslateDiff.Y );
+                aTempMatrix.set(0, 0, aMatrix.Line1.Column1 );
+                aTempMatrix.set(0, 1, aMatrix.Line1.Column2 );
+                aTempMatrix.set(0, 2, aMatrix.Line1.Column3 );
+                aTempMatrix.set(1, 0, aMatrix.Line2.Column1 );
+                aTempMatrix.set(1, 1, aMatrix.Line2.Column2 );
+                aTempMatrix.set(1, 2, aMatrix.Line2.Column3 );
+                aTempMatrix.set(2, 0, aMatrix.Line3.Column1 );
+                aTempMatrix.set(2, 1, aMatrix.Line3.Column2 );
+                aTempMatrix.set(2, 2, aMatrix.Line3.Column3 );
 
-                aMatrix.Line1.Column1 = aMatrix3D[0].X();
-                aMatrix.Line1.Column2 = aMatrix3D[0].Y();
-                aMatrix.Line1.Column3 = aMatrix3D[0].W();
-                aMatrix.Line2.Column1 = aMatrix3D[1].X();
-                aMatrix.Line2.Column2 = aMatrix3D[1].Y();
-                aMatrix.Line2.Column3 = aMatrix3D[1].W();
-                aMatrix.Line3.Column1 = aMatrix3D[2].X();
-                aMatrix.Line3.Column2 = aMatrix3D[2].Y();
-                aMatrix.Line3.Column3 = aMatrix3D[2].W();
+                aTempMatrix.translate( aTranslateDiff.X, aTranslateDiff.Y, 0.0 );
+
+                aMatrix.Line1.Column1 = aTempMatrix.get(0, 0);
+                aMatrix.Line1.Column2 = aTempMatrix.get(0, 1);
+                aMatrix.Line1.Column3 = aTempMatrix.get(0, 2);
+                aMatrix.Line2.Column1 = aTempMatrix.get(1, 0);
+                aMatrix.Line2.Column2 = aTempMatrix.get(1, 1);
+                aMatrix.Line2.Column3 = aTempMatrix.get(1, 2);
+                aMatrix.Line3.Column1 = aTempMatrix.get(2, 0);
+                aMatrix.Line3.Column2 = aTempMatrix.get(2, 1);
+                aMatrix.Line3.Column3 = aTempMatrix.get(2, 2);
             }
         }
     }
