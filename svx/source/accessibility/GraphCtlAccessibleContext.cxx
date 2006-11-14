@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:04:58 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:13:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,10 @@
 #endif
 #ifndef COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
 #include <comphelper/accessibleeventnotifier.hxx>
+#endif
+
+#ifndef _SDRPAINTWINDOW_HXX
+#include <sdrpaintwindow.hxx>
 #endif
 
 //===== local includes ========================================================
@@ -689,7 +693,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::selectAccessibleChild( sal_Int32 nI
     SdrObject* pObj = getSdrObject( nIndex );
 
     if( pObj )
-        mpView->MarkObj( pObj, mpView->GetPageViewPgNum(0));
+        mpView->MarkObj( pObj, mpView->GetSdrPageView());
 }
 
 //-----------------------------------------------------------------------------
@@ -777,7 +781,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::deselectAccessibleChild( sal_Int32 
         {
             SdrMarkList aRefList( rList );
 
-            SdrPageView* pPV = mpView->GetPageViewPgNum(0);
+            SdrPageView* pPV = mpView->GetSdrPageView();
             mpView->UnmarkAllObj( pPV );
 
             sal_uInt32 nCount = aRefList.GetMarkCount();
@@ -1020,10 +1024,15 @@ sal_Bool SvxGraphCtrlAccessibleContext::IsValid (void) const
 
 Rectangle SvxGraphCtrlAccessibleContext::GetVisibleArea (void) const
 {
-    if( mpView )
-        return mpView->GetVisibleArea(0);
-    else
-        return Rectangle();
+    Rectangle aVisArea;
+
+    if( mpView && mpView->PaintWindowCount())
+    {
+        SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow(0L);
+        aVisArea = pPaintWindow->GetVisibleArea();
+    }
+
+    return aVisArea;
 }
 
 //-----------------------------------------------------------------------------
