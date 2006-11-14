@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:32:15 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:16:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,6 +212,14 @@
 
 #ifndef _XMLOFF_XMLERROR_HXX
 #include "xmlerror.hxx"
+#endif
+
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
+#ifndef _STRING_HXX //autogen
+#include <tools/string.hxx>
 #endif
 
 // --> OD 2006-02-22 #b6382898#
@@ -597,7 +605,7 @@ void SdXMLShapeContext::SetTransformation()
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
         if(xPropSet.is())
         {
-            Matrix3D aTransformation;
+            ::basegfx::B2DHomMatrix aTransformation;
 
             if(maSize.Width != 1 || maSize.Height != 1)
             {
@@ -608,13 +616,13 @@ void SdXMLShapeContext::SetTransformation()
                     maSize.Height = 1;
 
                 // set global size. This should always be used.
-                aTransformation.Scale(maSize.Width, maSize.Height);
+                aTransformation.scale(maSize.Width, maSize.Height);
             }
 
             if(maPosition.X != 0 || maPosition.Y != 0)
             {
                 // if global position is used, add it to transformation
-                aTransformation.Translate(maPosition.X, maPosition.Y);
+                aTransformation.translate(maPosition.X, maPosition.Y);
             }
 
             if(mnTransform.NeedsAction())
@@ -624,7 +632,7 @@ void SdXMLShapeContext::SetTransformation()
                 // global positioning and scaling is used, so any shear or
                 // rotate used herein is applied around the (0,0) position
                 // of the PAGE object !!!
-                Matrix3D aMat;
+                ::basegfx::B2DHomMatrix aMat;
                 mnTransform.GetFullTransform(aMat);
 
                 // now add to transformation
@@ -635,17 +643,17 @@ void SdXMLShapeContext::SetTransformation()
             uno::Any aAny;
             drawing::HomogenMatrix3 aMatrix;
 
-            aMatrix.Line1.Column1 = aTransformation[0].X();
-            aMatrix.Line1.Column2 = aTransformation[0].Y();
-            aMatrix.Line1.Column3 = aTransformation[0].W();
+            aMatrix.Line1.Column1 = aTransformation.get(0, 0);
+            aMatrix.Line1.Column2 = aTransformation.get(0, 1);
+            aMatrix.Line1.Column3 = aTransformation.get(0, 2);
 
-            aMatrix.Line2.Column1 = aTransformation[1].X();
-            aMatrix.Line2.Column2 = aTransformation[1].Y();
-            aMatrix.Line2.Column3 = aTransformation[1].W();
+            aMatrix.Line2.Column1 = aTransformation.get(1, 0);
+            aMatrix.Line2.Column2 = aTransformation.get(1, 1);
+            aMatrix.Line2.Column3 = aTransformation.get(1, 2);
 
-            aMatrix.Line3.Column1 = aTransformation[2].X();
-            aMatrix.Line3.Column2 = aTransformation[2].Y();
-            aMatrix.Line3.Column3 = aTransformation[2].W();
+            aMatrix.Line3.Column1 = aTransformation.get(2, 0);
+            aMatrix.Line3.Column2 = aTransformation.get(2, 1);
+            aMatrix.Line3.Column3 = aTransformation.get(2, 2);
 
             aAny <<= aMatrix;
 
