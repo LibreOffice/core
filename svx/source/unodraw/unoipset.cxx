@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:25:31 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:53:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -505,18 +505,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap ) 
     // diesen zurueck
 
     SdrItemPool& rItemPool = SdrObject::GetGlobalDrawObjectItemPool();
-//BFS04/*
-//BFS04 if(!pItemPool)
-//BFS04 {
-//BFS04     // ItemPool generieren
-//BFS04     ((SvxItemPropertySet*)this)->pItemPool = new SdrItemPool;
-//BFS04     // Der Outliner hat keinen eigenen Pool, deshalb den der EditEngine
-//BFS04     SfxItemPool* pOutlPool=EditEngine::CreatePool();
-//BFS04     // OutlinerPool als SecondaryPool des SdrPool
-//BFS04     pItemPool->SetSecondaryPool(pOutlPool);
-//BFS04 }
-//BFS04*/
-    const SfxMapUnit eMapUnit = rItemPool.GetMetric((USHORT)pMap->nWID); //BFS01 : SFX_MAPUNIT_100TH_MM;
+    const SfxMapUnit eMapUnit = rItemPool.GetMetric((USHORT)pMap->nWID);
     BYTE nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
     if( eMapUnit == SFX_MAPUNIT_100TH_MM )
         nMemberId &= (~CONVERT_TWIPS);
