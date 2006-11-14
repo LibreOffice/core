@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:43:35 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:46:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -583,20 +583,19 @@ long Window::SetZoomRect (const Rectangle& rZoomRect)
         // rectangle being fully visible (when translated accordingly) as
         // large as possible in the output area independently in both
         // coordinate directions .
-        ULONG nX;
-        ULONG nY;
+        ULONG nX(0L);
+        ULONG nY(0L);
 
-        if( (nX != 0) && (nY != 0) )
+        if(rZoomRect.GetHeight())
         {
             nX = (ULONG) ((double) aWinSize.Height()
                * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetHeight());
+        }
+
+        if(rZoomRect.GetWidth())
+        {
             nY = (ULONG) ((double) aWinSize.Width()
                 * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetWidth());
-        }
-        else
-        {
-            nX = 0;
-            nY = 0;
         }
 
         // Use the smaller one of both so that the zoom rectangle will be
