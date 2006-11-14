@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:12:11 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:44:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,10 +57,6 @@
 #include "svdmodel.hxx"
 #include "svdpage.hxx"
 #include "svdovirt.hxx"  // Fuer Add/Del Ref
-
-// #110094#-13
-// #include "svdpagv.hxx"   // fuer PaintGluePoints
-
 #include "svdview.hxx"   // fuer Dragging (Ortho abfragen)
 #include "svdscrol.hxx"
 #include "svdglob.hxx"   // StringCache
@@ -192,6 +188,10 @@
 #include "unoshape.hxx"
 #endif
 
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
+
 using namespace ::com::sun::star;
 
 // #104018# replace macros above with type-detecting methods
@@ -232,24 +232,6 @@ SdrObjUserData::~SdrObjUserData()
 {
 }
 
-//BFS01void SdrObjUserData::WriteData(SvStream& rOut)
-//BFS01{
-//BFS01 rOut<<nInventor;
-//BFS01 rOut<<nIdentifier;
-//BFS01 rOut<<nVersion;
-//BFS01}
-
-//BFS01void SdrObjUserData::ReadData(SvStream& rIn)
-//BFS01{
-//BFS01 //Inventor und Identifier wurden bereits von Aufrufer gelesen,
-//BFS01 //sonst haette er mich ja nicht erzeugen koennen (kein SeekBack!).
-//BFS01 rIn>>nVersion; // Miniatur-Versionsverwaltung.
-//BFS01}
-
-//BFS01void SdrObjUserData::AfterRead()
-//BFS01{
-//BFS01}
-
 FASTBOOL SdrObjUserData::HasMacro(const SdrObject* /*pObj*/) const
 {
     return FALSE;
@@ -275,11 +257,11 @@ void SdrObjUserData::PaintMacro(XOutputDevice& rXOut, const Rectangle& /*rDirtyR
     rXOut.OverrideFillColor( aTranspColor );
     RasterOp eRop0=rXOut.GetRasterOp();
     rXOut.SetRasterOp(ROP_INVERT);
-    XPolyPolygon aXPP;
-    pObj->TakeXorPoly(aXPP,TRUE);
-    USHORT nAnz=aXPP.Count();
-    for (USHORT nNum=0; nNum<nAnz; nNum++) {
-        rXOut.DrawXPolyLine(aXPP[nNum]);
+    basegfx::B2DPolyPolygon aPP(pObj->TakeXorPoly(sal_True));
+    const sal_uInt32 nAnz(aPP.count());
+    for(sal_uInt32 nNum(0L); nNum < nAnz; nNum++)
+    {
+        rXOut.DrawPolyLine(aPP.getB2DPolygon(nNum));
     }
     rXOut.SetRasterOp(eRop0);
 }
@@ -332,8 +314,6 @@ SdrObjPlusData::SdrObjPlusData():
     pBroadcast(NULL),
     pUserDataList(NULL),
     pGluePoints(NULL),
-    // #111096#
-    // pAnimator(NULL),
     pAutoTimer(NULL)
 {
 }
@@ -343,8 +323,6 @@ SdrObjPlusData::~SdrObjPlusData()
     if (pBroadcast   !=NULL) delete pBroadcast;
     if (pUserDataList!=NULL) delete pUserDataList;
     if (pGluePoints  !=NULL) delete pGluePoints;
-    //#111096#
-    //if (pAnimator    !=NULL) delete pAnimator;
     if (pAutoTimer   !=NULL) delete pAutoTimer;
 }
 
@@ -510,8 +488,6 @@ SdrObject::SdrObject()
     bSizProt         =FALSE;
     bNoPrint         =FALSE;
     bEmptyPresObj    =FALSE;
-//BFS01 bNotPersistent   =FALSE;
-//BFS01 bNeedColorRestore=FALSE;
     bNotVisibleAsMaster=FALSE;
     bClosedObj       =FALSE;
 
@@ -534,7 +510,8 @@ SdrObject::SdrObject()
 SdrObject::~SdrObject()
 {
     // tell all the registered ObjectUsers that the page is in destruction
-    for(::sdr::ObjectUserVector::iterator aIterator = maObjectUsers.begin(); aIterator != maObjectUsers.end(); aIterator++)
+    ::sdr::ObjectUserVector aListCopy(maObjectUsers.begin(), maObjectUsers.end());
+    for(::sdr::ObjectUserVector::iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); aIterator++)
     {
         sdr::ObjectUser* pObjectUser = *aIterator;
         DBG_ASSERT(pObjectUser, "SdrObject::~SdrObject: corrupt ObjectUser list (!)");
@@ -632,7 +609,6 @@ SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
     if(!mpGlobalItemPool)
     {
         mpGlobalItemPool = new SdrItemPool();
-//BFS01     mpGlobalItemPool = new SdrItemPool(SDRATTR_START, SDRATTR_END);
         SfxItemPool* pGlobalOutlPool = EditEngine::CreatePool();
         mpGlobalItemPool->SetSecondaryPool(pGlobalOutlPool);
         mpGlobalItemPool->SetDefaultMetric((SfxMapUnit)SdrEngineDefaults::GetMapUnit());
@@ -743,14 +719,6 @@ void SdrObject::DelReference(SdrVirtObj& rVrtObj)
 {
     RemoveListener(rVrtObj);
 }
-
-//#111096#
-//ImpSdrMtfAnimator* SdrObject::ImpForceMtfAnimator()
-//{
-//  ImpForcePlusData();
-//  if (pPlusData->pAnimator==NULL) pPlusData->pAnimator=new ImpSdrMtfAnimator;
-//  return pPlusData->pAnimator;
-//}
 
 AutoTimer* SdrObject::ForceAutoTimer()
 {
@@ -876,56 +844,6 @@ void SdrObject::RecalcBoundRect()
 {
 }
 
-//void SdrObject::BroadcastObjectChange(const Rectangle& rRect) const
-//{
-//  if( pModel && pModel->isLocked() )
-//      return;
-//
-//  sal_Bool bPlusDataBroadcast(pPlusData && pPlusData->pBroadcast);
-//  sal_Bool bObjectChange(bInserted && pModel);
-//
-//  if(bPlusDataBroadcast || bObjectChange)
-//  {
-//      SdrHint aHint(*this, rRect);
-//
-//      if(bPlusDataBroadcast)
-//      {
-//          pPlusData->pBroadcast->Broadcast(aHint);
-//      }
-//
-//      if(bObjectChange)
-//      {
-//          pModel->Broadcast(aHint);
-//      }
-//
-//      // alle Animationen wegen Obj-Aenderung neustarten
-//      RestartAnimation(NULL);
-//  }
-//}
-
-//void SdrObject::SendRepaintBroadcast(const Rectangle& rRect) const
-//{
-//  if( pModel && pModel->isLocked() )
-//      return;
-//
-//  BOOL bBrd(pPlusData && pPlusData->pBroadcast);
-//  BOOL bPnt(bInserted && pModel);
-//
-//  if(bPnt || bBrd)
-//  {
-//      SdrHint aHint(*this, rRect);
-//
-//      if(bBrd)
-//          pPlusData->pBroadcast->Broadcast(aHint);
-//
-//      if(bPnt)
-//          pModel->Broadcast(aHint);
-//
-//      // alle Animationen wegen Obj-Aenderung neustarten
-//      RestartAnimation(NULL);
-//  }
-//}
-
 void SdrObject::BroadcastObjectChange() const
 {
     if( pModel && pModel->isLocked() )
@@ -949,30 +867,6 @@ void SdrObject::BroadcastObjectChange() const
         }
     }
 }
-
-//void SdrObject::SendRepaintBroadcast(BOOL bNoPaintNeeded) const
-//{
-//  if( pModel && pModel->isLocked() )
-//      return;
-//
-//  BOOL bBrd(pPlusData && pPlusData->pBroadcast);
-//  BOOL bPnt(bInserted && pModel);
-//
-//  if(bPnt || bBrd)
-//  {
-//      SdrHint aHint(*this);
-//      aHint.SetNeedRepaint(!bNoPaintNeeded);
-//
-//      if(bBrd)
-//          pPlusData->pBroadcast->Broadcast(aHint);
-//
-//      if(bPnt)
-//          pModel->Broadcast(aHint);
-//
-//      // alle Animationen wegen Obj-Aenderung neustarten
-//      RestartAnimation(NULL);
-//  }
-//}
 
 void SdrObject::SetChanged()
 {
@@ -999,7 +893,7 @@ sal_Bool SdrObject::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& /
 }
 
 // Tooling for painting a single object to a OutputDevice.
-sal_Bool SdrObject::SingleObjectPainter(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec)
+sal_Bool SdrObject::SingleObjectPainter(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
     sdr::contact::SdrObjectVector aObjectVector;
     aObjectVector.push_back(this);
@@ -1024,44 +918,32 @@ sal_Bool SdrObject::SingleObjectPainter(XOutputDevice& rXOut, const SdrPaintInfo
 }
 
 ::std::auto_ptr< SdrLineGeometry >  SdrObject::CreateLinePoly(
-//BFS07 OutputDevice& rOut,
     sal_Bool bForceOnePixel,
     sal_Bool bForceTwoPixel,
     sal_Bool bIsLineDraft ) const
 {
-    ::basegfx::B2DPolyPolygon aAreaPolyPolygon;
-    ::basegfx::B2DPolyPolygon aLinePolyPolygon;
-    //PolyPolygon3D aPolyPoly3D;
-    //PolyPolygon3D aLinePoly3D;
+    basegfx::B2DPolyPolygon aAreaPolyPolygon;
+    basegfx::B2DPolyPolygon aLinePolyPolygon;
 
     // get XOR Poly as base
-    XPolyPolygon aTmpPolyPolygon;
-    TakeXorPoly(aTmpPolyPolygon, TRUE);
+    basegfx::B2DPolyPolygon aTmpPolyPolygon(TakeXorPoly(TRUE));
 
     // get ImpLineStyleParameterPack
-//BFS06 ImpLineStyleParameterPack aLineAttr(GetMergedItemSet(), bForceOnePixel || bForceTwoPixel || bIsLineDraft, &rOut);
     ImpLineStyleParameterPack aLineAttr(GetMergedItemSet(), bForceOnePixel || bForceTwoPixel || bIsLineDraft);
-    //ImpLineGeometryCreator aLineCreator(aLineAttr, aPolyPoly3D, aLinePoly3D, bIsLineDraft);
     ImpLineGeometryCreator aLineCreator(aLineAttr, aAreaPolyPolygon, aLinePolyPolygon, bIsLineDraft);
 
     // compute single lines
-    for(UINT16 a=0;a<aTmpPolyPolygon.Count();a++)
+    for(sal_uInt32 a(0L); a < aTmpPolyPolygon.count(); a++)
     {
         // expand splines into polygons and convert to double
-        ::basegfx::B2DPolygon aCandidate(aTmpPolyPolygon[a].getB2DPolygon());
+        basegfx::B2DPolygon aCandidate(aTmpPolyPolygon.getB2DPolygon(a));
         aCandidate.removeDoublePoints();
 
         if(aCandidate.areControlPointsUsed())
         {
-            aCandidate = ::basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
+            aCandidate = basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
         }
 
-        //Polygon3D aPoly3D(XOutCreatePolygon(aTmpPolyPolygon[a], &rOut));
-        //aPoly3D.RemoveDoublePoints();
-
-        // convert line to single Polygons; make sure the part
-        // polygons are all clockwise oriented
-        // aLineCreator.AddPolygon3D(aPoly3D);
         aLineCreator.AddPolygon(aCandidate);
     }
 
@@ -1103,7 +985,6 @@ sal_Bool SdrObject::SingleObjectPainter(XOutputDevice& rXOut, const SdrPaintInfo
 
         // create line geometry
         return CreateLinePoly(
-//BFS07         *rXOut.GetOutDev(),
             bForceOnePixel, bForceTwoPixel, bIsLineDraft);
     }
 
@@ -1159,25 +1040,18 @@ void SdrObject::ImpDrawLineGeometry(   XOutputDevice&   rXOut,
     }
 
     // #103692# Hold local copy of geometry
-    ::basegfx::B2DPolyPolygon aAreaPolyPolygon(rLineGeometry.GetAreaPolyPolygon());
-    ::basegfx::B2DPolyPolygon aLinePolyPolygon(rLineGeometry.GetLinePolyPolygon());
-    //PolyPolygon3D aPolyPoly = rLineGeometry.GetPolyPoly3D();
-    //PolyPolygon3D aLinePoly = rLineGeometry.GetLinePoly3D();
+    basegfx::B2DPolyPolygon aAreaPolyPolygon(rLineGeometry.GetAreaPolyPolygon());
+    basegfx::B2DPolyPolygon aLinePolyPolygon(rLineGeometry.GetLinePolyPolygon());
 
     // #103692# Offset geometry (extracted from SdrObject::ImpDrawShadowLineGeometry)
     if( nDX || nDY )
     {
         // transformation necessary
-        ::basegfx::B2DHomMatrix aMatrix;
+        basegfx::B2DHomMatrix aMatrix;
 
         aMatrix.translate((double)nDX, (double)nDY);
         aAreaPolyPolygon.transform(aMatrix);
         aLinePolyPolygon.transform(aMatrix);
-
-        // Matrix4D aTrans;
-        //aTrans.Translate((double)nDX, -(double)nDY, 0.0);
-        //aPolyPoly.Transform(aTrans);
-        //aLinePoly.Transform(aTrans);
     }
 
     // #100127# Bracket output with a comment, if recording a Mtf
@@ -1185,33 +1059,33 @@ void SdrObject::ImpDrawLineGeometry(   XOutputDevice&   rXOut,
     GDIMetaFile* pMtf=rXOut.GetOutDev()->GetConnectMetaFile();
     if( pMtf )
     {
-        XPolyPolygon aPolyPoly;
-        TakeXorPoly(aPolyPoly, TRUE);
+        basegfx::B2DPolyPolygon aPolyPoly(TakeXorPoly(TRUE));
 
         // #103692# Offset original geometry, too
         if( nDX || nDY )
         {
             // transformation necessary
-            aPolyPoly.Move( nDX, nDY );
+            basegfx::B2DHomMatrix aMatrix;
+            aMatrix.translate(nDX, nDY);
+            aPolyPoly.transform(aMatrix);
         }
 
         // for geometries with more than one polygon, dashing, arrows
         // etc. become ambiguous (e.g. measure objects have no arrows
         // on the end line), thus refrain from writing the comment
         // here.
-        if( aPolyPoly.Count() == 1 )
+        if( 1L == aPolyPoly.count() )
         {
             // add completely superfluous color action (gets overwritten
             // below), to store our line color reliably
             rXOut.GetOutDev()->SetLineColor(aLineColor);
 
             const ImpLineStyleParameterPack& rLineParameters = rLineGeometry.GetLineAttr();
-
-            XPolygon aStartPoly( rLineParameters.GetStartPolygon() );
-            XPolygon aEndPoly( rLineParameters.GetEndPolygon() );
+            PolyPolygon aStartPoly( rLineParameters.GetStartPolyPolygon() );
+            PolyPolygon aEndPoly( rLineParameters.GetEndPolyPolygon() );
 
             // scale arrows to specified stroke width
-            if( aStartPoly.GetPointCount() )
+            if( aStartPoly.Count() && aStartPoly.GetObject(0).GetSize() )
             {
                 Rectangle aBounds( aStartPoly.GetBoundRect() );
 
@@ -1233,7 +1107,7 @@ void SdrObject::ImpDrawLineGeometry(   XOutputDevice&   rXOut,
                 if( rLineParameters.IsStartCentered() )
                     aStartPoly.Translate( Point(0, -aStartPoly.GetBoundRect().GetHeight() / 2) );
             }
-            if( aEndPoly.GetPointCount() )
+            if( aEndPoly.Count() && aEndPoly.GetObject(0).GetSize() )
             {
                 Rectangle aBounds( aEndPoly.GetBoundRect() );
 
@@ -1256,12 +1130,6 @@ void SdrObject::ImpDrawLineGeometry(   XOutputDevice&   rXOut,
                     aEndPoly.Translate( Point(0, -aEndPoly.GetBoundRect().GetHeight() / 2) );
             }
 
-//BFS09            SvtGraphicStroke aStroke( XOutCreatePolygonBezier( aPolyPoly[0], rXOut.GetOutDev() ),
-//BFS09                                      XOutCreatePolygonBezier( aStartPoly, rXOut.GetOutDev() ),
-//BFS09                                      XOutCreatePolygonBezier( aEndPoly, rXOut.GetOutDev() ),
-//BFS09            SvtGraphicStroke aStroke( XOutCreatePolygonBezier( aPolyPoly[0] ),
-//BFS09                                      XOutCreatePolygonBezier( aStartPoly ),
-//BFS09                                      XOutCreatePolygonBezier( aEndPoly ),
             SvtGraphicStroke::JoinType eJoin;
             double fMiterLength = rLineParameters.GetLineWidth();
             switch( rLineParameters.GetLineJoint() )
@@ -1281,15 +1149,16 @@ void SdrObject::ImpDrawLineGeometry(   XOutputDevice&   rXOut,
                 default:
                 case XLINEJOINT_ROUND: eJoin = SvtGraphicStroke::joinRound;break;
             }
-            SvtGraphicStroke aStroke( static_cast<Polygon>(aPolyPoly[0].getB2DPolygon()),
-                                      Polygon(aStartPoly.getB2DPolygon()),
-                                      Polygon(aEndPoly.getB2DPolygon()),
+
+            const Polygon aSingleStrokePoly(aPolyPoly.getB2DPolygon(0L));
+            SvtGraphicStroke aStroke( aSingleStrokePoly,
+                                      aStartPoly,
+                                      aEndPoly,
                                       nTransparence / 100.0,
                                       rLineParameters.GetLineWidth(),
                                       SvtGraphicStroke::capButt,
                                       eJoin,
                                       fMiterLength,
-//BFS06                                      rLineParameters.GetLineStyle() == XLINE_DASH ? rLineParameters.GetDotDash() : SvtGraphicStroke::DashArray() );
                                       rLineParameters.IsLineStyleSolid() ? SvtGraphicStroke::DashArray() : rLineParameters.GetDotDash() );
 
 #ifdef DBG_UTIL
@@ -1318,7 +1187,7 @@ void SdrObject::ImpDrawLineGeometry(   XOutputDevice&   rXOut,
             GDIMetaFile aMetaFile;
             VirtualDevice aVDev;
 
-            ::basegfx::B2DRange aFullRange;
+            basegfx::B2DRange aFullRange;
             //Volume3D aVolume;
 
             MapMode aMap(rXOut.GetOutDev()->GetMapMode());
@@ -1329,20 +1198,15 @@ void SdrObject::ImpDrawLineGeometry(   XOutputDevice&   rXOut,
             // get bounds of geometry
             if(aAreaPolyPolygon.count())
             {
-                ::basegfx::B2DRange aRange = ::basegfx::tools::getRange(aAreaPolyPolygon);
+                basegfx::B2DRange aRange = basegfx::tools::getRange(aAreaPolyPolygon);
                 aFullRange.expand(aRange);
             }
 
             if(aLinePolyPolygon.count())
             {
-                ::basegfx::B2DRange aRange = ::basegfx::tools::getRange(aLinePolyPolygon);
+                basegfx::B2DRange aRange = basegfx::tools::getRange(aLinePolyPolygon);
                 aFullRange.expand(aRange);
             }
-
-            //if(aPolyPoly.Count())
-            //  aVolume.Union(aPolyPoly.GetPolySize());
-            //if(aLinePoly.Count())
-            //  aVolume.Union(aLinePoly.GetPolySize());
 
             // get pixel size in logic coor for 1,2 pixel cases
             Size aSizeSinglePixel(1, 1);
@@ -1353,18 +1217,12 @@ void SdrObject::ImpDrawLineGeometry(   XOutputDevice&   rXOut,
             }
 
             // create BoundRectangle
-            ::basegfx::B2DTuple aMinimum(aFullRange.getMinimum());
-            ::basegfx::B2DTuple aMaximum(aFullRange.getMaximum());
+            basegfx::B2DTuple aMinimum(aFullRange.getMinimum());
+            basegfx::B2DTuple aMaximum(aFullRange.getMaximum());
 
             Rectangle aBound(
                 FRound(aMinimum.getX()), FRound(aMinimum.getY()),
                 FRound(aMaximum.getX()), FRound(aMaximum.getY()));
-
-            //Rectangle aBound(
-            //  (INT32)aVolume.MinVec().X(),
-            //  (INT32)-aVolume.MaxVec().Y(),
-            //  (INT32)aVolume.MaxVec().X(),
-            //  (INT32)-aVolume.MinVec().Y());
 
             if(rLineGeometry.DoForceOnePixel() || rLineGeometry.DoForceTwoPixel())
             {
@@ -1389,6 +1247,7 @@ void SdrObject::ImpDrawLineGeometry(   XOutputDevice&   rXOut,
             aVDev.SetFillColor(aLineColor);
             aVDev.SetFont(rXOut.GetOutDev()->GetFont());
             aVDev.SetDrawMode(rXOut.GetOutDev()->GetDrawMode());
+            aVDev.SetSettings(rXOut.GetOutDev()->GetSettings());
             aVDev.SetRefPoint(rXOut.GetOutDev()->GetRefPoint());
 
             // create output
@@ -1401,22 +1260,10 @@ void SdrObject::ImpDrawLineGeometry(   XOutputDevice&   rXOut,
                     aMetaFile.AddAction(new MetaPolygonAction(aVCLPolyPoly[a]));
                 }
             }
-            //if(aPolyPoly.Count())
-            //{
-            //  PolyPolygon aVCLPolyPoly = aPolyPoly.GetPolyPolygon();
-            //
-            //  for(UINT16 a=0;a<aVCLPolyPoly.Count();a++)
-            //      aMetaFile.AddAction(new MetaPolygonAction(aVCLPolyPoly[a]));
-            //}
 
             if(aLinePolyPolygon.count())
             {
                 PolyPolygon aVCLLinePoly(aLinePolyPolygon);
-
-            //}
-            //if(aLinePoly.Count())
-            //{
-            //  PolyPolygon aVCLLinePoly = aLinePoly.GetPolyPolygon();
 
                 if(rLineGeometry.DoForceTwoPixel())
                 {
@@ -1463,10 +1310,6 @@ void SdrObject::ImpDrawLineGeometry(   XOutputDevice&   rXOut,
         {
             PolyPolygon aVCLPolyPoly(aAreaPolyPolygon);
 
-        //if(aPolyPoly.Count())
-        //{
-        //  PolyPolygon aVCLPolyPoly = aPolyPoly.GetPolyPolygon();
-
             rXOut.GetOutDev()->SetLineColor();
             rXOut.GetOutDev()->SetFillColor(aLineColor);
 
@@ -1477,11 +1320,6 @@ void SdrObject::ImpDrawLineGeometry(   XOutputDevice&   rXOut,
         if(aLinePolyPolygon.count())
         {
             PolyPolygon aVCLLinePoly(aLinePolyPolygon);
-
-        //if(aLinePoly.Count())
-        //{
-        //  PolyPolygon aVCLLinePoly = aLinePoly.GetPolyPolygon();
-
             rXOut.GetOutDev()->SetLineColor(aLineColor);
             rXOut.GetOutDev()->SetFillColor();
 
@@ -1561,25 +1399,9 @@ BOOL SdrObject::LineGeometryUsageIsNecessary() const
     return (eXLS != XLINE_NONE);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
-// #110094#-13
-//FASTBOOL SdrObject::PaintGluePoints(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
-//{
-//  // Nur Klebepunkte der aktuellen ObjList Painten
-//  if (rInfoRec.pPV==NULL || rInfoRec.pPV->GetObjList()==pObjList) {
-//      const SdrGluePointList* pGPL=GetGluePointList();
-//      if (pGPL!=NULL) {
-//          OutputDevice* pOut=rXOut.GetOutDev();
-//          pGPL->DrawAll(*pOut,this);
-//      }
-//  }
-//  return TRUE;
-//}
-
 SdrObject* SdrObject::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
-    if(pVisiLayer && !pVisiLayer->IsSet((const sal_uInt8)nLayerId))
+    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId)))
     {
         return 0L;
     }
@@ -1600,18 +1422,6 @@ SdrObject* SdrObject::Clone() const
     }
     return pObj;
 }
-
-// #116235#
-//SdrObject* SdrObject::Clone(SdrPage* pNewPage, SdrModel* pNewModel) const
-//{
-//  SdrObject* pObj=SdrObjFactory::MakeNewObject(GetObjInventor(),GetObjIdentifier(),NULL);
-//  if (pObj!=NULL) {
-//      pObj->pModel=pNewModel;
-//      pObj->pPage=pNewPage;
-//      *pObj=*this;
-//  }
-//  return pObj;
-//}
 
 void SdrObject::operator=(const SdrObject& rObj)
 {
@@ -1724,17 +1534,22 @@ XubString SdrObject::GetMetrStr(long nVal, MapUnit /*eWantMap*/, FASTBOOL bNoUni
     return aStr;
 }
 
-void SdrObject::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL /*bDetail*/) const
+basegfx::B2DPolyPolygon SdrObject::TakeXorPoly(sal_Bool /*bDetail*/) const
 {
-    rPoly=XPolyPolygon(XPolygon(GetCurrentBoundRect()));
+    basegfx::B2DPolyPolygon aRetval;
+    const Rectangle aR(GetCurrentBoundRect());
+    const basegfx::B2DRange aRange(aR.Left(), aR.Top(), aR.Right(), aR.Bottom());
+    aRetval.append(basegfx::tools::createPolygonFromRect(aRange));
+
+    return aRetval;
 }
 
-void SdrObject::TakeContour( XPolyPolygon& rPoly ) const
+basegfx::B2DPolyPolygon SdrObject::TakeContour() const
 {
     VirtualDevice   aBlackHole;
     GDIMetaFile     aMtf;
     SdrPaintInfoRec aPaintInfo;
-    XPolygon        aXPoly;
+    basegfx::B2DPolygon aXPoly;
 
     aBlackHole.EnableOutput( FALSE );
     aBlackHole.SetDrawMode( DRAWMODE_NOFILL );
@@ -1774,9 +1589,6 @@ void SdrObject::TakeContour( XPolyPolygon& rPoly ) const
     aNewSet.Put(XLineColorItem(String(), Color(COL_BLACK)));
     aNewSet.Put(XFillStyleItem(XFILL_NONE));
     pClone->SetMergedItemSet(aNewSet);
-    //pClone->SetItem(XLineStyleItem(XLINE_SOLID));
-    //pClone->SetItem(XLineColorItem(String(), Color(COL_BLACK)));
-    //pClone->SetItem(XFillStyleItem(XFILL_NONE));
 
     aMtf.Record( &aBlackHole );
     aPaintInfo.nPaintMode = SDRPAINTMODE_DRAFTTEXT | SDRPAINTMODE_DRAFTGRAF;
@@ -1784,7 +1596,7 @@ void SdrObject::TakeContour( XPolyPolygon& rPoly ) const
     delete pClone;
     aMtf.Stop();
     aMtf.WindStart();
-    rPoly.Clear();
+    basegfx::B2DPolyPolygon aNewPoly;
 
     for( ULONG nActionNum = 0, nActionAnz = aMtf.GetActionCount(); nActionNum < nActionAnz; nActionNum++ )
     {
@@ -1799,7 +1611,8 @@ void SdrObject::TakeContour( XPolyPolygon& rPoly ) const
 
                 if( rRect.GetWidth() && rRect.GetHeight() )
                 {
-                    aXPoly = rRect;
+                    const basegfx::B2DRange aRange(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom());
+                    aXPoly = basegfx::tools::createPolygonFromRect(aRange);
                     bXPoly = TRUE;
                 }
             }
@@ -1811,7 +1624,7 @@ void SdrObject::TakeContour( XPolyPolygon& rPoly ) const
 
                 if( rRect.GetWidth() && rRect.GetHeight() )
                 {
-                    aXPoly = XPolygon( rRect.Center(), rRect.GetWidth() >> 1, rRect.GetHeight() >> 1 );
+                    aXPoly = basegfx::tools::createPolygonFromEllipse(basegfx::B2DPoint(rRect.Center().X(), rRect.Center().Y()), rRect.GetWidth() >> 1, rRect.GetHeight() >> 1);
                     bXPoly = TRUE;
                 }
             }
@@ -1823,7 +1636,7 @@ void SdrObject::TakeContour( XPolyPolygon& rPoly ) const
 
                 if( rPoly2.GetSize() > 2 )
                 {
-                    aXPoly = rPoly2;
+                    aXPoly = rPoly2.getB2DPolygon();
                     bXPoly = TRUE;
                 }
             }
@@ -1834,7 +1647,7 @@ void SdrObject::TakeContour( XPolyPolygon& rPoly ) const
                 const PolyPolygon& rPolyPoly = ( (const MetaPolyPolygonAction&) rAct ).GetPolyPolygon();
 
                 if( rPolyPoly.Count() && ( rPolyPoly[ 0 ].GetSize() > 2 ) )
-                    rPoly.Insert( rPolyPoly );
+                    aNewPoly.append( rPolyPoly.getB2DPolyPolygon() );
             }
             break;
 
@@ -1844,7 +1657,7 @@ void SdrObject::TakeContour( XPolyPolygon& rPoly ) const
 
                 if( rPoly2.GetSize() > 1 )
                 {
-                    aXPoly = rPoly2;
+                    aXPoly = rPoly2.getB2DPolygon();
                     bXPoly = TRUE;
                 }
             }
@@ -1852,9 +1665,11 @@ void SdrObject::TakeContour( XPolyPolygon& rPoly ) const
 
             case META_LINE_ACTION:
             {
-                aXPoly = XPolygon( 2 );
-                aXPoly[ 0 ] = ( (const MetaLineAction&) rAct ).GetStartPoint();
-                aXPoly[ 1 ] = ( (const MetaLineAction&) rAct ).GetEndPoint();
+                const Point aStart(((const MetaLineAction&) rAct ).GetStartPoint());
+                const Point aEnd(((const MetaLineAction&) rAct ).GetEndPoint());
+                aXPoly.clear();
+                aXPoly.append(basegfx::B2DPoint(aStart.X(), aStart.Y()));
+                aXPoly.append(basegfx::B2DPoint(aEnd.X(), aEnd.Y()));
                 bXPoly = TRUE;
             }
             break;
@@ -1864,27 +1679,22 @@ void SdrObject::TakeContour( XPolyPolygon& rPoly ) const
         }
 
         if( bXPoly )
-            rPoly.Insert( aXPoly );
+            aNewPoly.append( aXPoly );
     }
 
     // if we only have the outline of the object, we have _no_ contouir
-    if( rPoly.Count() == 1 )
-        rPoly.Clear();
+    if( 1L == aNewPoly.count() )
+        aNewPoly.clear();
+
+    return aNewPoly;
 }
 
-//#110094#-12
-//void SdrObject::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
-//{
-//}
-
-// Handles
-
-USHORT SdrObject::GetHdlCount() const
+sal_uInt32 SdrObject::GetHdlCount() const
 {
-    return 8;
+    return 8L;
 }
 
-SdrHdl* SdrObject::GetHdl(USHORT nHdlNum) const
+SdrHdl* SdrObject::GetHdl(sal_uInt32 nHdlNum) const
 {
     SdrHdl* pH=NULL;
     const Rectangle& rR=GetSnapRect();
@@ -1901,28 +1711,26 @@ SdrHdl* SdrObject::GetHdl(USHORT nHdlNum) const
     return pH;
 }
 
-USHORT SdrObject::GetPlusHdlCount(const SdrHdl& /*rHdl*/) const
+sal_uInt32 SdrObject::GetPlusHdlCount(const SdrHdl& /*rHdl*/) const
 {
-    return 0;
+    return 0L;
 }
 
-SdrHdl* SdrObject::GetPlusHdl(const SdrHdl& /*rHdl*/, USHORT /*nPlNum*/) const
+SdrHdl* SdrObject::GetPlusHdl(const SdrHdl& /*rHdl*/, sal_uInt32 /*nPlNum*/) const
 {
-    return NULL;
+    return 0L;
 }
 
 void SdrObject::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    USHORT nAnz=GetHdlCount();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt32 nAnz=GetHdlCount();
+    for (sal_uInt32 i=0L; i<nAnz; i++) {
         SdrHdl* pHdl=GetHdl(i);
         if (pHdl!=NULL) {
             rHdlList.AddHdl(pHdl);
         }
     }
 }
-
-// Drag
 
 Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
 {
@@ -2032,17 +1840,24 @@ XubString SdrObject::GetDragComment(const SdrDragStat& /*rDrag*/, FASTBOOL /*bDr
     return String();
 }
 
-void SdrObject::TakeDragPoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) const
+basegfx::B2DPolyPolygon SdrObject::TakeDragPoly(const SdrDragStat& rDrag) const
 {
-    rXPP.Clear();
+    basegfx::B2DPolyPolygon aRetval;
     Rectangle aTmpRect(ImpDragCalcRect(rDrag));
-    rXPP.Insert(XPolygon(aTmpRect));
+
+    aRetval.append(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(aTmpRect.Left(), aTmpRect.Top(), aTmpRect.Right(), aTmpRect.Bottom())));
+
+    return aRetval;
 }
 
 // Create
 FASTBOOL SdrObject::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho4Possible();
+    Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
+    aRect1.Justify();
+    rStat.SetActionRect(aRect1);
+    aOutRect = aRect1;
     return TRUE;
 }
 
@@ -2073,12 +1888,16 @@ FASTBOOL SdrObject::BckCreate(SdrDragStat& /*rStat*/)
     return FALSE;
 }
 
-void SdrObject::TakeCreatePoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) const
+basegfx::B2DPolyPolygon SdrObject::TakeCreatePoly(const SdrDragStat& rDrag) const
 {
     Rectangle aRect1;
     rDrag.TakeCreateRect(aRect1);
     aRect1.Justify();
-    rXPP=XPolyPolygon(XPolygon(aRect1));
+
+    basegfx::B2DPolyPolygon aRetval;
+    const basegfx::B2DRange aRange(aRect1.Left(), aRect1.Top(), aRect1.Right(), aRect1.Bottom());
+    aRetval.append(basegfx::tools::createPolygonFromRect(aRange));
+    return aRetval;
 }
 
 Pointer SdrObject::GetCreatePointer() const
@@ -2340,128 +2159,44 @@ long SdrObject::GetShearAngle(FASTBOOL /*bVertical*/) const
     return 0;
 }
 
-USHORT SdrObject::GetSnapPointCount() const
+sal_uInt32 SdrObject::GetSnapPointCount() const
 {
     return GetPointCount();
 }
 
-Point  SdrObject::GetSnapPoint(USHORT i) const
+Point SdrObject::GetSnapPoint(sal_uInt32 i) const
 {
     return GetPoint(i);
 }
 
-FASTBOOL SdrObject::IsPolyObj() const
+sal_Bool SdrObject::IsPolyObj() const
 {
-    return FALSE;
+    return sal_False;
 }
 
-USHORT SdrObject::GetPointCount() const
+sal_uInt32 SdrObject::GetPointCount() const
 {
-    return 0;
+    return 0L;
 }
 
-const Point& SdrObject::GetPoint(USHORT /*i*/) const
+Point SdrObject::GetPoint(sal_uInt32 /*i*/) const
 {
-    return *((Point*)NULL);
+    return Point();
 }
 
-void SdrObject::SetPoint(const Point& rPnt, USHORT i)
+void SdrObject::SetPoint(const Point& rPnt, sal_uInt32 i)
 {
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
     // #110094#-14 SendRepaintBroadcast();
-    NbcSetPoint(rPnt,i);
+    NbcSetPoint(rPnt, i);
     SetChanged();
     BroadcastObjectChange();
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 
-void SdrObject::NbcSetPoint(const Point& /*rPnt*/, USHORT /*i*/)
+void SdrObject::NbcSetPoint(const Point& /*rPnt*/, sal_uInt32 /*i*/)
 {
 }
-
-USHORT SdrObject::InsPoint(const Point& rPos, FASTBOOL bNewObj, FASTBOOL& rInsNextAfter)
-{
-    USHORT nRet=0xFFFF;
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    // #110094#-14 SendRepaintBroadcast();
-    nRet=NbcInsPoint(rPos,bNewObj,FALSE,rInsNextAfter);
-    SetChanged();
-    BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-    return nRet;
-}
-
-USHORT SdrObject::NbcInsPoint(const Point& /*rPos*/, FASTBOOL /*bNewObj*/, FASTBOOL /*bHideHim*/, FASTBOOL& /*rInsNextAfter*/)
-{
-    return 0xFFFF;
-}
-
-USHORT SdrObject::InsPoint(USHORT i, const Point& rPos, FASTBOOL bInsAfter, FASTBOOL bNewObj)
-{
-    USHORT nRet=0xFFFF;
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    // #110094#-14 SendRepaintBroadcast();
-    nRet=NbcInsPoint(i,rPos,bInsAfter,bNewObj,FALSE);
-    SetChanged();
-    BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-    return nRet;
-}
-
-USHORT SdrObject::NbcInsPoint(USHORT /*i*/, const Point& /*rPos*/, FASTBOOL /*bInsAfter*/, FASTBOOL /*bNewObj*/, FASTBOOL /*bHideHim*/)
-{
-    return 0xFFFF;
-}
-
-FASTBOOL SdrObject::DelPoint(USHORT i)
-{
-    FASTBOOL bRet=TRUE;
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    // #110094#-14 SendRepaintBroadcast();
-    bRet=NbcDelPoint(i);
-    SetChanged();
-    BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-    return bRet;
-}
-
-FASTBOOL SdrObject::NbcDelPoint(USHORT /*i*/)
-{
-    return TRUE;
-}
-
-SdrObject* SdrObject::RipPoint(USHORT i, USHORT& rNewPt0Index)
-{
-    SdrObject* pRet=NULL;
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    // #110094#-14 SendRepaintBroadcast();
-    pRet=NbcRipPoint(i,rNewPt0Index);
-    SetChanged();
-    BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-    return pRet;
-}
-
-SdrObject* SdrObject::NbcRipPoint(USHORT /*i*/, USHORT& /*rNewPt0Index*/)
-{
-    return NULL;
-}
-
-void SdrObject::Shut()
-{
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    // #110094#-14 SendRepaintBroadcast();
-    NbcShut();
-    SetChanged();
-    BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-}
-
-void SdrObject::NbcShut()
-{
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 FASTBOOL SdrObject::HasTextEdit() const
 {
@@ -2473,7 +2208,7 @@ SdrObject* SdrObject::CheckTextEditHit(const Point& rPnt, USHORT nTol, const Set
     return CheckHit(rPnt,nTol,pVisiLayer);
 }
 
-FASTBOOL SdrObject::BegTextEdit(SdrOutliner& /*rOutl*/)
+sal_Bool SdrObject::BegTextEdit(SdrOutliner& /*rOutl*/)
 {
     return FALSE;
 }
@@ -2510,7 +2245,6 @@ void SdrObject::NbcReformatText()
 void SdrObject::ReformatText()
 {
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    // #110094#-14 SendRepaintBroadcast();
     NbcReformatText();
     SetChanged();
     BroadcastObjectChange();
@@ -2573,11 +2307,11 @@ void SdrObject::PaintMacro(XOutputDevice& rXOut, const Rectangle& rDirtyRect, co
         rXOut.OverrideFillColor( aTranspColor );
         RasterOp eRop0=rXOut.GetRasterOp();
         rXOut.SetRasterOp(ROP_INVERT);
-        XPolyPolygon aXPP;
-        TakeXorPoly(aXPP,TRUE);
-        USHORT nAnz=aXPP.Count();
-        for (USHORT nNum=0; nNum<nAnz; nNum++) {
-            rXOut.DrawXPolyLine(aXPP[nNum]);
+        basegfx::B2DPolyPolygon aPP(TakeXorPoly(sal_True));
+        const sal_uInt32 nAnz(aPP.count());
+        for (sal_uInt32 nNum(0L); nNum < nAnz; nNum++)
+        {
+            rXOut.DrawPolyLine(aPP.getB2DPolygon(nNum));
         }
         rXOut.SetRasterOp(eRop0);
     }
@@ -2670,7 +2404,6 @@ SdrObjGeoData* SdrObject::GetGeoData() const
 void SdrObject::SetGeoData(const SdrObjGeoData& rGeo)
 {
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    // #110094#-14 SendRepaintBroadcast();
     RestGeoData(rGeo);
     SetChanged();
     BroadcastObjectChange();
@@ -2730,30 +2463,14 @@ const SfxPoolItem& SdrObject::GetMergedItem(const sal_uInt16 nWhich) const
     return GetMergedItemSet().Get(nWhich);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// syntactical sugar for ItemSet accesses
-
-//void SdrObject::SetItemAndBroadcast(const SfxPoolItem& rItem)
-//{
-//  GetProperties().SetItemAndBroadcast(rItem);
-//}
-
-//void SdrObject::ClearItemAndBroadcast(const sal_uInt16 nWhich)
-//{
-//  GetProperties().ClearItemAndBroadcast(nWhich);
-//}
-
 void SdrObject::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, sal_Bool bClearAllItems)
 {
     GetProperties().SetMergedItemSetAndBroadcast(rSet, bClearAllItems);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void SdrObject::ApplyNotPersistAttr(const SfxItemSet& rAttr)
 {
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    // #110094#-14 SendRepaintBroadcast();
     NbcApplyNotPersistAttr(rAttr);
     SetChanged();
     BroadcastObjectChange();
@@ -3102,22 +2819,6 @@ FASTBOOL SdrObject::IsEdge() const
     return FALSE;
 }
 
-void SdrObject::ToggleEdgeXor(const SdrDragStat& rDrag, XOutputDevice& rXOut, FASTBOOL bTail1, FASTBOOL bTail2, FASTBOOL bDetail) const
-{
-    Color aBlackColor( COL_BLACK );
-    Color aTranspColor( COL_TRANSPARENT );
-    rXOut.OverrideLineColor( aBlackColor );
-    rXOut.OverrideFillColor( aTranspColor );
-    RasterOp eRop0=rXOut.GetRasterOp();
-    rXOut.SetRasterOp(ROP_INVERT);
-    NspToggleEdgeXor(rDrag,rXOut,bTail1,bTail2,bDetail);
-    rXOut.SetRasterOp(eRop0);
-}
-
-void SdrObject::NspToggleEdgeXor(const SdrDragStat& /*rDrag*/, XOutputDevice& /*rXOut*/, FASTBOOL /*bTail1*/, FASTBOOL /*bTail2*/, FASTBOOL /*bDetail*/) const
-{
-}
-
 void SdrObject::ConnectToNode(FASTBOOL /*bTail1*/, SdrObject* /*pObj*/)
 {
 }
@@ -3139,32 +2840,19 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
 
     if(pRet->LineGeometryUsageIsNecessary())
     {
-        // Polygon aus Bezierkurve interpolieren
-//BFS07     VirtualDevice aVDev;
-//BFS07     MapMode aMap = aVDev.GetMapMode();
-//BFS07     aMap.SetMapUnit(pModel->GetScaleUnit());
-//BFS07     aMap.SetScaleX(pModel->GetScaleFraction());
-//BFS07     aMap.SetScaleY(pModel->GetScaleFraction());
-//BFS07     aVDev.SetMapMode(aMap);
-
-//BFS07     ::std::auto_ptr< SdrLineGeometry > aLineGeom( pRet->CreateLinePoly(aVDev, sal_False, sal_False, sal_False));
         ::std::auto_ptr< SdrLineGeometry > aLineGeom( pRet->CreateLinePoly(sal_False, sal_False, sal_False));
         if( aLineGeom.get() )
         {
-            //PolyPolygon3D& aAreaPolyPolygon = aLineGeom->GetPolyPoly3D();
-            //PolyPolygon3D& aLinePolyPolygon = aLineGeom->GetLinePoly3D();
-            ::basegfx::B2DPolyPolygon aAreaPolyPolygon = aLineGeom->GetAreaPolyPolygon();
-            ::basegfx::B2DPolyPolygon aLinePolyPolygon = aLineGeom->GetLinePolyPolygon();
+            basegfx::B2DPolyPolygon aAreaPolyPolygon = aLineGeom->GetAreaPolyPolygon();
+            basegfx::B2DPolyPolygon aLinePolyPolygon = aLineGeom->GetLinePolyPolygon();
 
             // #107201#
             // Since this may in some cases lead to a count of 0 after
             // the merge i moved the merge to the front.
             if(aAreaPolyPolygon.count())
             {
-                // aAreaPolyPolygon.Merge(TRUE);
-//BFS08             ::basegfx::tools::removeIntersections(aAreaPolyPolygon, sal_True);
-                aAreaPolyPolygon = ::basegfx::tools::removeAllIntersections(aAreaPolyPolygon);
-                aAreaPolyPolygon = ::basegfx::tools::removeNeutralPolygons(aAreaPolyPolygon, sal_True);
+                aAreaPolyPolygon = basegfx::tools::removeAllIntersections(aAreaPolyPolygon);
+                aAreaPolyPolygon = basegfx::tools::removeNeutralPolygons(aAreaPolyPolygon, sal_True);
             }
 
             //  || aLinePolyPolygon.Count() removed; the conversion is ONLY
@@ -3182,8 +2870,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
 
                 if(aAreaPolyPolygon.count())
                 {
-                    //aLinePolygonPart = new SdrPathObj(OBJ_PATHFILL, aAreaPolyPolygon.GetXPolyPolygon());
-                    aLinePolygonPart = new SdrPathObj(OBJ_PATHFILL, XPolyPolygon(aAreaPolyPolygon));
+                    aLinePolygonPart = new SdrPathObj(OBJ_PATHFILL, aAreaPolyPolygon);
                     aLinePolygonPart->SetModel(pRet->GetModel());
 
                     aSet.Put(XLineWidthItem(0L));
@@ -3203,9 +2890,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
                     // OBJ_PATHLINE is necessary here, not OBJ_PATHFILL. This is intended
                     // to get a non-filled object. If the poly is closed, the PathObj takes care for
                     // the correct closed state.
-                    // aLineLinePart = new SdrPathObj(OBJ_PATHLINE, aLinePolyPolygon.GetXPolyPolygon());
-                    aLineLinePart = new SdrPathObj(OBJ_PATHLINE, XPolyPolygon(aLinePolyPolygon));
-
+                    aLineLinePart = new SdrPathObj(OBJ_PATHLINE, aLinePolyPolygon);
                     aLineLinePart->SetModel(pRet->GetModel());
 
                     aSet.Put(XLineWidthItem(0L));
@@ -3352,221 +3037,6 @@ SdrObject* SdrObject::DoConvertToPolyObj(BOOL /*bBezier*/) const
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Streams
-
-//BFS01void SdrObject::AfterRead()
-//BFS01{
-//BFS01 USHORT nAnz=GetUserDataCount();
-//BFS01 for (USHORT i=0; i<nAnz; i++) {
-//BFS01     GetUserData(i)->AfterRead();
-//BFS01 }
-//BFS01}
-
-//BFS01void SdrObject::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 if (rIn.GetError()!=0) return;
-//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrObject");
-//BFS01#endif
-//BFS01 rIn>>aOutRect;
-//BFS01 rIn>>nLayerId;
-//BFS01 rIn>>aAnchor;
-//BFS01
-//BFS01 // #97849# when in a Draw/Impress binary import the anchor pos is set it's an error.
-//BFS01 // So, when could figure out that a Draw/Impress is running, correct that position
-//BFS01 // to (0,0). Anchor is not used but with 6.0 and XML no longer ignored in Draw/Impress
-//BFS01 // so this correction needs to be made for objects with that error. These could
-//BFS01 // be created when copying back anchor based draw objects from Calc or Writer to
-//BFS01 // Draw/Impress, this did not reset the anchor position.
-//BFS01 if((aAnchor.X() || aAnchor.Y()) && GetModel() && GetModel()->ISA(FmFormModel))
-//BFS01 {
-//BFS01     // find out which application is running
-//BFS01     SfxObjectShell* pObjectShell = ((FmFormModel*)GetModel())->GetObjectShell();
-//BFS01
-//BFS01     if(pObjectShell)
-//BFS01     {
-//BFS01         SfxInterface* pInterface = pObjectShell->GetInterface();
-//BFS01
-//BFS01         if(pInterface)
-//BFS01         {
-//BFS01             sal_uInt16 nInterfaceID = pInterface->GetInterfaceId();
-//BFS01
-//BFS01             if(nInterfaceID >= SFX_INTERFACE_SD_START && nInterfaceID <= SFX_INTERFACE_SD_END)
-//BFS01             {
-//BFS01                 // it's a draw/Impress, reset anchor pos hard
-//BFS01                 aAnchor = Point(0, 0);
-//BFS01             }
-//BFS01         }
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 BOOL bTemp;
-//BFS01 rIn>>bTemp; bMovProt=bTemp;
-//BFS01 rIn>>bTemp; bSizProt=bTemp;
-//BFS01 rIn>>bTemp; bNoPrint=bTemp;
-//BFS01 rIn>>bTemp; bMarkProt=bTemp; // war ganz frueher mal bTextToContour
-//BFS01 rIn>>bTemp; bEmptyPresObj=bTemp;
-//BFS01 if (rHead.GetVersion()>=4) {
-//BFS01     rIn>>bTemp; bNotVisibleAsMaster=bTemp;
-//BFS01 }
-//BFS01 if (rHead.GetVersion()>=11) { // ab V11 sind Connectors in DownCompat gefasst (mit Flag davor)
-//BFS01     rIn>>bTemp;
-//BFS01     if (bTemp) {
-//BFS01         SdrDownCompat aGluePointsCompat(rIn,STREAM_READ);
-//BFS01#ifdef DBG_UTIL
-//BFS01         aGluePointsCompat.SetID("SdrObject(Klebepunkte)");
-//BFS01#endif
-//BFS01         if (aGluePointsCompat.GetBytesLeft()!=0) {
-//BFS01             ImpForcePlusData();
-//BFS01             if (pPlusData->pGluePoints==NULL) pPlusData->pGluePoints=new SdrGluePointList;
-//BFS01             rIn>>*pPlusData->pGluePoints;
-//BFS01         }
-//BFS01     }
-//BFS01 } else {
-//BFS01     Polygon aTmpPoly;
-//BFS01     rIn>>aTmpPoly; // aConnectors; ehemals Konnektoren
-//BFS01 }
-//BFS01
-//BFS01 if (pPlusData!=NULL && pPlusData->pUserDataList!=NULL) {
-//BFS01     delete pPlusData->pUserDataList;
-//BFS01     pPlusData->pUserDataList=NULL;
-//BFS01 }
-//BFS01 FASTBOOL bReadUserDataList=FALSE;
-//BFS01 SdrDownCompat* pUserDataListCompat=NULL;
-//BFS01 if (rHead.GetVersion()>=11) { // ab V11 ist die UserDataList in DownCompat gefasst (mit Flag davor)
-//BFS01     rIn>>bTemp;
-//BFS01     bReadUserDataList=bTemp;
-//BFS01     if (bTemp) {
-//BFS01         pUserDataListCompat=new SdrDownCompat(rIn,STREAM_READ); // Record fuer UserDataList oeffnen
-//BFS01#ifdef DBG_UTIL
-//BFS01         pUserDataListCompat->SetID("SdrObject(UserDataList)");
-//BFS01#endif
-//BFS01     }
-//BFS01 } else {
-//BFS01     bReadUserDataList=TRUE;
-//BFS01 }
-//BFS01 if (bReadUserDataList) {
-//BFS01     USHORT nUserDataAnz;
-//BFS01     rIn>>nUserDataAnz;
-//BFS01     if (nUserDataAnz!=0) {
-//BFS01         ImpForcePlusData();
-//BFS01         pPlusData->pUserDataList=new SdrObjUserDataList;
-//BFS01         for (USHORT i=0; i<nUserDataAnz; i++) {
-//BFS01             SdrDownCompat* pUserDataCompat=NULL;
-//BFS01             if (rHead.GetVersion()>=11) { // ab V11 sind UserData in DownCompat gefasst
-//BFS01                 //SdrDownCompat aUserDataCompat(rIn,STREAM_READ); // Record fuer UserData oeffnen (seit V11)
-//BFS01                 pUserDataCompat=new SdrDownCompat(rIn,STREAM_READ); // Record fuer UserData oeffnen (seit V11)
-//BFS01#ifdef DBG_UTIL
-//BFS01                 pUserDataCompat->SetID("SdrObject(UserData)");
-//BFS01#endif
-//BFS01             }
-//BFS01             UINT32 nInvent;
-//BFS01             UINT16 nIdent;
-//BFS01             rIn>>nInvent;
-//BFS01             rIn>>nIdent;
-//BFS01             SdrObjUserData* pData=SdrObjFactory::MakeNewObjUserData(nInvent,nIdent,this);
-//BFS01             if (pData!=NULL)
-//BFS01             {
-//BFS01                 pData->ReadData(rIn);
-//BFS01                 pPlusData->pUserDataList->InsertUserData(pData);
-//BFS01             } else {
-//BFS01                 // Wenn UserDataFactory nicht gesetzt ist, kann auch keiner
-//BFS01                 // etwas mit diesen Daten anfangen; durch Compat werden sie
-//BFS01                 // eh ueberlesen, daher ist diese Assertion ueberfluessig (KA)
-//BFS01                 // DBG_ERROR("SdrObject::ReadData(): ObjFactory kann UserData nicht erzeugen");
-//BFS01             }
-//BFS01             if (pUserDataCompat!=NULL) { // Aha, UserData war eingepackt. Record nun schliessen
-//BFS01                 delete pUserDataCompat;
-//BFS01                 pUserDataCompat=NULL;
-//BFS01             }
-//BFS01         }
-//BFS01     }
-//BFS01     if (pUserDataListCompat!=NULL) { // Aha, UserDataList war eingepackt. Record nun schliessen
-//BFS01         delete pUserDataListCompat;
-//BFS01         pUserDataListCompat=NULL;
-//BFS01     }
-//BFS01 }
-//BFS01}
-
-//BFS01void SdrObject::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrObject");
-//BFS01#endif
-//BFS01 rOut<<GetCurrentBoundRect();
-//BFS01 rOut<<nLayerId;
-//BFS01 rOut<<aAnchor;
-//BFS01 BOOL bTemp;
-//BFS01 bTemp=bMovProt;       rOut<<bTemp;
-//BFS01 bTemp=bSizProt;       rOut<<bTemp;
-//BFS01 bTemp=bNoPrint;       rOut<<bTemp;
-//BFS01 bTemp=bMarkProt;      rOut<<bTemp;
-//BFS01 bTemp=bEmptyPresObj;  rOut<<bTemp;
-//BFS01 bTemp=bNotVisibleAsMaster; rOut<<bTemp;
-//BFS01
-//BFS01 // Konnektoren
-//BFS01 bTemp=pPlusData!=NULL && pPlusData->pGluePoints!=NULL && pPlusData->pGluePoints->GetCount()!=0;
-//BFS01 rOut<<bTemp; // Flag fuer GluePointList vorhanden
-//BFS01 if (bTemp) {
-//BFS01     SdrDownCompat aConnectorsCompat(rOut,STREAM_WRITE); // ab V11 Konnektoren einpacken
-//BFS01#ifdef DBG_UTIL
-//BFS01     aConnectorsCompat.SetID("SdrObject(Klebepunkte)");
-//BFS01#endif
-//BFS01     rOut<<*pPlusData->pGluePoints;
-//BFS01 }
-//BFS01
-//BFS01 // UserData
-//BFS01 USHORT nUserDataAnz=GetUserDataCount();
-//BFS01 bTemp=nUserDataAnz!=0;
-//BFS01 rOut<<bTemp;
-//BFS01 if (bTemp) {
-//BFS01     SdrDownCompat aUserDataListCompat(rOut,STREAM_WRITE); // Record fuer UserDataList oeffnen (seit V11)
-//BFS01#ifdef DBG_UTIL
-//BFS01     aUserDataListCompat.SetID("SdrObject(UserDataList)");
-//BFS01#endif
-//BFS01     rOut<<nUserDataAnz;
-//BFS01     for (USHORT i=0; i<nUserDataAnz; i++) {
-//BFS01         SdrDownCompat aUserDataCompat(rOut,STREAM_WRITE); // Record fuer UserData oeffnen (seit V11)
-//BFS01#ifdef DBG_UTIL
-//BFS01         aUserDataCompat.SetID("SdrObject(UserData)");
-//BFS01#endif
-//BFS01         pPlusData->pUserDataList->GetUserData(i)->WriteData(rOut);
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01}
-
-//BFS01SvStream& operator>>(SvStream& rIn, SdrObject& rObj)
-//BFS01{
-//BFS01 DBG_ASSERT(!rObj.IsNotPersistent(),"operator>>(SdrObject): Ein nicht persistentes Zeichenobjekts wird gestreamt");
-//BFS01 SdrObjIOHeader aHead(rIn,STREAM_READ,&rObj);
-//BFS01 rObj.ReadData(aHead,rIn);
-//BFS01 return rIn;
-//BFS01}
-
-//BFS01SvStream& operator<<(SvStream& rOut, const SdrObject& rObj)
-//BFS01{
-//BFS01 DBG_ASSERT(!rObj.IsNotPersistent(),"operator<<(SdrObject): Ein nicht persistentes Zeichenobjekts wird gestreamt");
-//BFS01 SdrObjIOHeader aHead(rOut,STREAM_WRITE,&rObj);
-//BFS01
-//BFS01 if(rObj.ISA(SdrVirtObj))
-//BFS01 {
-//BFS01     // #108784#
-//BFS01     // force to write a naked SdrObj
-//BFS01     aHead.nIdentifier = OBJ_NONE;
-//BFS01     rObj.SdrObject::WriteData(rOut);
-//BFS01 }
-//BFS01 else
-//BFS01 {
-//BFS01     rObj.WriteData(rOut);
-//BFS01 }
-//BFS01
-//BFS01 return rOut;
-//BFS01}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrObject::SetInserted(sal_Bool bIns)
 {
@@ -3592,7 +3062,6 @@ void SdrObject::SetMoveProtect(sal_Bool bProt)
     if(IsInserted() && pModel)
     {
         SdrHint aHint(*this);
-        // aHint.SetNeedRepaint(FALSE);
         pModel->Broadcast(aHint);
     }
 }
@@ -3603,7 +3072,6 @@ void SdrObject::SetResizeProtect(sal_Bool bProt)
     SetChanged();
     if (IsInserted() && pModel!=NULL) {
         SdrHint aHint(*this);
-        // aHint.SetNeedRepaint(FALSE);
         pModel->Broadcast(aHint);
     }
 }
@@ -3614,7 +3082,6 @@ void SdrObject::SetPrintable(sal_Bool bPrn)
     SetChanged();
     if (IsInserted() && pModel!=NULL) {
         SdrHint aHint(*this);
-        // aHint.SetNeedRepaint(FALSE);
         pModel->Broadcast(aHint);
     }
 }
@@ -3779,12 +3246,6 @@ sal_Bool SdrObject::IsTransparent( BOOL /*bCheckForAlphaChannel*/) const
 
             // #i25616#
             bRet = pGrafObj->IsObjectTransparent();
-
-            //#i25616#if( ( (const SdrGrafTransparenceItem&) rAttr.Get( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ||
-            //#i25616#    ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP && pGrafObj->GetGraphic().GetBitmapEx().IsAlpha() ) )
-            //#i25616#{
-            //#i25616#  bRet = TRUE;
-            //#i25616#}
         }
     }
 
@@ -3832,20 +3293,22 @@ sal_Bool SdrObject::IsTransparent( BOOL /*bCheckForAlphaChannel*/) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
 // with the base geometry and returns TRUE. Otherwise it returns FALSE.
-BOOL SdrObject::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& /*rPolyPolygon*/) const
+sal_Bool SdrObject::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
 {
     // any kind of SdrObject, just use SnapRect
     Rectangle aRectangle(GetSnapRect());
 
     // convert to transformation values
-    Vector2D aScale((double)aRectangle.GetWidth(), (double)aRectangle.GetHeight());
-    Vector2D aTranslate((double)aRectangle.Left(), (double)aRectangle.Top());
+    basegfx::B2DTuple aScale(aRectangle.GetWidth(), aRectangle.GetHeight());
+    basegfx::B2DTuple aTranslate(aRectangle.Left(), aRectangle.Top());
 
     // position maybe relative to anchorpos, convert
     if( pModel->IsWriter() )
     {
-        if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
-            aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+        if(GetAnchorPos().X() || GetAnchorPos().Y())
+        {
+            aTranslate -= basegfx::B2DTuple(GetAnchorPos().X(), GetAnchorPos().Y());
+        }
     }
 
     // force MapUnit to 100th mm
@@ -3857,14 +3320,12 @@ BOOL SdrObject::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& /*rPolyPolygon*/
             case SFX_MAPUNIT_TWIP :
             {
                 // postion
-                // #104018#
-                aTranslate.X() = ImplTwipsToMM(aTranslate.X());
-                aTranslate.Y() = ImplTwipsToMM(aTranslate.Y());
+                aTranslate.setX(ImplTwipsToMM(aTranslate.getX()));
+                aTranslate.setY(ImplTwipsToMM(aTranslate.getY()));
 
                 // size
-                // #104018#
-                aScale.X() = ImplTwipsToMM(aScale.X());
-                aScale.Y() = ImplTwipsToMM(aScale.Y());
+                aScale.setX(ImplTwipsToMM(aScale.getX()));
+                aScale.setY(ImplTwipsToMM(aScale.getY()));
 
                 break;
             }
@@ -3876,24 +3337,31 @@ BOOL SdrObject::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& /*rPolyPolygon*/
     }
 
     // build matrix
-    rMat.Identity();
-    if(aScale.X() != 1.0 || aScale.Y() != 1.0)
-        rMat.Scale(aScale.X(), aScale.Y());
-    if(aTranslate.X() != 0.0 || aTranslate.Y() != 0.0)
-        rMat.Translate(aTranslate.X(), aTranslate.Y());
+    rMatrix.identity();
 
-    return FALSE;
+    if(1.0 != aScale.getX() || 1.0 != aScale.getY())
+    {
+        rMatrix.scale(aScale.getX(), aScale.getY());
+    }
+
+    if(0.0 != aTranslate.getX() || 0.0 != aTranslate.getY())
+    {
+        rMatrix.translate(aTranslate.getX(), aTranslate.getY());
+    }
+
+    return sal_False;
 }
 
 // sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
 // If it's an SdrPathObj it will use the provided geometry information. The Polygon has
 // to use (0,0) as upper left and will be scaled to the given size in the matrix.
-void SdrObject::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& /*rPolyPolygon*/)
+void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& /*rPolyPolygon*/)
 {
     // break up matrix
-    Vector2D aScale, aTranslate;
-    double fShear, fRotate;
-    rMat.DecomposeAndCorrect(aScale, fShear, fRotate, aTranslate);
+    basegfx::B2DTuple aScale;
+    basegfx::B2DTuple aTranslate;
+    double fRotate, fShearX;
+    rMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
     // force metric to pool metric
     SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
@@ -3904,14 +3372,12 @@ void SdrObject::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& /*rP
             case SFX_MAPUNIT_TWIP :
             {
                 // position
-                // #104018#
-                aTranslate.X() = ImplMMToTwips(aTranslate.X());
-                aTranslate.Y() = ImplMMToTwips(aTranslate.Y());
+                aTranslate.setX(ImplMMToTwips(aTranslate.getX()));
+                aTranslate.setY(ImplMMToTwips(aTranslate.getY()));
 
                 // size
-                // #104018#
-                aScale.X() = ImplMMToTwips(aScale.X());
-                aScale.Y() = ImplMMToTwips(aScale.Y());
+                aScale.setX(ImplMMToTwips(aScale.getX()));
+                aScale.setY(ImplMMToTwips(aScale.getY()));
 
                 break;
             }
@@ -3925,13 +3391,15 @@ void SdrObject::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& /*rP
     // if anchor is used, make position relative to it
     if( pModel->IsWriter() )
     {
-        if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
-            aTranslate += Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+        if(GetAnchorPos().X() || GetAnchorPos().Y())
+        {
+            aTranslate += basegfx::B2DTuple(GetAnchorPos().X(), GetAnchorPos().Y());
+        }
     }
 
     // build BaseRect
-    Point aPoint(FRound(aTranslate.X()), FRound(aTranslate.Y()));
-    Rectangle aBaseRect(aPoint, Size(FRound(aScale.X()), FRound(aScale.Y())));
+    Point aPoint(FRound(aTranslate.getX()), FRound(aTranslate.getY()));
+    Rectangle aBaseRect(aPoint, Size(FRound(aScale.getX()), FRound(aScale.getY())));
 
     // set BaseRect
     SetSnapRect(aBaseRect);
@@ -3966,7 +3434,6 @@ sal_Bool SdrObject::IsInDestruction() const
     return sal_False;
 }
 
-//BFS09
 bool SdrObject::ImpAddLineGeomteryForMiteredLines()
 {
     //sal_Int32 nLineWidth(0L);
@@ -3978,26 +3445,24 @@ bool SdrObject::ImpAddLineGeomteryForMiteredLines()
         {
             if(XLINEJOINT_MITER == ((const XLineJointItem&)(GetObjectItem(XATTR_LINEJOINT))).GetValue())
             {
-                ::basegfx::B2DPolyPolygon aAreaPolyPolygon;
-                ::basegfx::B2DPolyPolygon aLinePolyPolygon;
+                basegfx::B2DPolyPolygon aAreaPolyPolygon;
+                basegfx::B2DPolyPolygon aLinePolyPolygon;
 
                 // get XOR Poly as base
-                XPolyPolygon aTmpPolyPolygon;
-                TakeXorPoly(aTmpPolyPolygon, TRUE);
-
+                basegfx::B2DPolyPolygon aTmpPolyPolygon(TakeXorPoly(TRUE));
                 ImpLineStyleParameterPack aLineAttr(GetMergedItemSet(), false);
                 ImpLineGeometryCreator aLineCreator(aLineAttr, aAreaPolyPolygon, aLinePolyPolygon, true);
 
                 // compute single lines
-                for(sal_uInt16 a(0); a < aTmpPolyPolygon.Count(); a++)
+                for(sal_uInt32 a(0L); a < aTmpPolyPolygon.count(); a++)
                 {
                     // expand splines into polygons and convert to double
-                    ::basegfx::B2DPolygon aCandidate(aTmpPolyPolygon[a].getB2DPolygon());
+                    basegfx::B2DPolygon aCandidate(aTmpPolyPolygon.getB2DPolygon(a));
                     aCandidate.removeDoublePoints();
 
                     if(aCandidate.areControlPointsUsed())
                     {
-                        aCandidate = ::basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
+                        aCandidate = basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
                     }
 
                     // convert line to single Polygons; make sure the part
@@ -4008,9 +3473,9 @@ bool SdrObject::ImpAddLineGeomteryForMiteredLines()
                 // get bounds for areas, expand aOutRect
                 if(aAreaPolyPolygon.count())
                 {
-                    ::basegfx::B2DRange aRange(::basegfx::tools::getRange(aAreaPolyPolygon));
-                    ::basegfx::B2DTuple aMinimum(aRange.getMinimum());
-                    ::basegfx::B2DTuple aMaximum(aRange.getMaximum());
+                    basegfx::B2DRange aRange(basegfx::tools::getRange(aAreaPolyPolygon));
+                    basegfx::B2DTuple aMinimum(aRange.getMinimum());
+                    basegfx::B2DTuple aMaximum(aRange.getMaximum());
 
                     const Rectangle aBound(
                         FRound(aMinimum.getX()), FRound(aMinimum.getY()),
@@ -4191,7 +3656,6 @@ SdrObjUserData* SdrObjFactory::MakeNewObjUserData(UINT32 nInvent, UINT16 nIdent,
     if (nInvent==SdrInventor) {
         switch (nIdent)
         {
-//BFS01         case USHORT(SDRUSERDATA_OBJGROUPLINK): pData=new ImpSdrObjGroupLinkUserData(pObj1); break;
             case USHORT(SDRUSERDATA_OBJTEXTLINK) : pData=new ImpSdrObjTextLinkUserData((SdrTextObj*)pObj1); break;
         }
     }
