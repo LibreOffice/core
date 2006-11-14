@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xbmread.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:18:09 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:39:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ class XBMReader : public GraphicReader
 
 public:
 
-                        XBMReader( SvStream& rStm, void* pCallData );
+                        XBMReader( SvStream& rStm );
     virtual             ~XBMReader();
 
     ReadState           ReadXBM( Graphic& rGraphic );
@@ -100,6 +100,6 @@ public:
 // - ImportXBM -
 // -------------
 
-BOOL ImportXBM( SvStream& rStream, Graphic& rGraphic, void* pCallerData );
+BOOL ImportXBM( SvStream& rStream, Graphic& rGraphic );
 
 #endif // _XBMREAD_HXX
