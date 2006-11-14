@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 09:27:13 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:24:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1398,8 +1398,8 @@ SdOptionsGridItem::SdOptionsGridItem( USHORT nWhich, SdOptions* pOpts, ::sd::Fra
         SetFldDrawY( pView->GetGridCoarse().Height() );
         SetFldDivisionX( pView->GetGridFine().Width() ? ( GetFldDrawX() / pView->GetGridFine().Width() - 1 ) : 0 );
         SetFldDivisionY( pView->GetGridFine().Height() ? ( GetFldDrawY() / pView->GetGridFine().Height() - 1 ) : 0 );
-        SetFldSnapX( pView->GetSnapGrid().Width() );
-        SetFldSnapY( pView->GetSnapGrid().Height() );
+        SetFldSnapX( long(pView->GetSnapGridWidthX()) );
+        SetFldSnapY( long(pView->GetSnapGridWidthY()) );
         SetUseGridSnap( pView->IsGridSnap() );
         SetGridVisible( pView->IsGridVisible() );
     }
