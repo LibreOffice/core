@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:47:01 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:49:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -688,7 +688,7 @@ void ScDrawShell::ExecFormText(SfxRequest& rReq)
                                        (pViewFrm->
                                             GetChildWindow(nId)->GetWindow());
 
-            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetPageViewPvNum(0),
+            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetSdrPageView(),
                                     rSet, *rMarkList.GetMark(0)->GetMarkedSdrObj(),
                                    ((const XFormTextStdFormItem*) pItem)->
                                    GetValue());
