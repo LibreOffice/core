@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dentty.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:37:39 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:07:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,21 +60,21 @@
 
 void B3dEntity::Copy(B3dEntity& rEnt)
 {
-    aPoint = rEnt.Point();
-    bDeviceCoor = rEnt.IsDeviceCoor();
-    bValid = rEnt.IsValid();
-    bEdgeFlag = rEnt.IsEdgeVisible();
-    aPlaneNormal = rEnt.PlaneNormal();
+    maPoint = rEnt.maPoint;
+    mbDeviceCoor = rEnt.IsDeviceCoor();
+    mbValid = rEnt.IsValid();
+    mbEdgeFlag = rEnt.mbEdgeFlag;
+    maPlaneNormal = rEnt.maPlaneNormal;
 
-    bNormalUsed = rEnt.IsNormalUsed();
-    if( bNormalUsed )
-        aNormal = rEnt.Normal();
+    mbNormalUsed = rEnt.IsNormalUsed();
+    if( mbNormalUsed )
+        maNormal = rEnt.maNormal;
 
-    bTexCoorUsed = rEnt.IsTexCoorUsed();
-    if( bTexCoorUsed )
-        aTexCoor = rEnt.TexCoor();
+    mbTexCoorUsed = rEnt.IsTexCoorUsed();
+    if( mbTexCoorUsed )
+        maTexCoor = rEnt.maTexCoor;
 
-    aColor = rEnt.Color();
+    maColor = rEnt.maColor;
 }
 
 /*************************************************************************
@@ -85,8 +85,8 @@ void B3dEntity::Copy(B3dEntity& rEnt)
 
 void B3dEntity::Reset()
 {
-    bValid = bNormalUsed = bTexCoorUsed = bDeviceCoor = FALSE;
-    bEdgeFlag = TRUE;
+    mbValid = mbNormalUsed = mbTexCoorUsed = mbDeviceCoor = sal_False;
+    mbEdgeFlag = sal_True;
 }
 
 /*************************************************************************
@@ -97,17 +97,16 @@ void B3dEntity::Reset()
 
 void B3dEntity::ImplToDeviceCoor(B3dTransformationSet* pSet)
 {
-    if(pSet && !bDeviceCoor)
+    if(pSet && !mbDeviceCoor)
     {
-        const Vector3D& rScale = pSet->GetScale();
-        const Vector3D& rTrans = pSet->GetTranslate();
+        const basegfx::B3DVector& rScale = pSet->GetScale();
+        const basegfx::B3DVector& rTrans = pSet->GetTranslate();
 
-        aPoint.Homogenize();
-        aPoint[0] = (aPoint[0] * rScale[0]) + rTrans[0];
-        aPoint[1] = (aPoint[1] * rScale[1]) + rTrans[1];
-        aPoint[2] = (aPoint[2] * rScale[2]) + rTrans[2];
+        maPoint.setX((maPoint.getX() * rScale.getX()) + rTrans.getX());
+        maPoint.setY((maPoint.getY() * rScale.getY()) + rTrans.getY());
+        maPoint.setZ((maPoint.getZ() * rScale.getZ()) + rTrans.getZ());
 
-        bDeviceCoor = TRUE;
+        mbDeviceCoor = sal_True;
     }
 }
 
@@ -120,20 +119,19 @@ void B3dEntity::ImplToDeviceCoor(B3dTransformationSet* pSet)
 
 void B3dEntity::ImplTo3DCoor(B3dTransformationSet* pSet)
 {
-    if(pSet && bDeviceCoor)
+    if(pSet && mbDeviceCoor)
     {
-        const Vector3D& rScale = pSet->GetScale();
-        const Vector3D& rTrans = pSet->GetTranslate();
+        const basegfx::B3DVector& rScale = pSet->GetScale();
+        const basegfx::B3DVector& rTrans = pSet->GetTranslate();
 
-        aPoint.Homogenize();
-        if(rScale[0] != 0.0)
-            aPoint[0] = (aPoint[0] - rTrans[0]) / rScale[0];
-        if(rScale[1] != 0.0)
-            aPoint[1] = (aPoint[1] - rTrans[1]) / rScale[1];
-        if(rScale[2] != 0.0)
-            aPoint[2] = (aPoint[2] - rTrans[2]) / rScale[2];
+        if(rScale.getX() != 0.0)
+            maPoint.setX((maPoint.getX() - rTrans.getX()) / rScale.getX());
+        if(rScale.getY() != 0.0)
+            maPoint.setY((maPoint.getY() - rTrans.getY()) / rScale.getY());
+        if(rScale.getZ() != 0.0)
+            maPoint.setZ((maPoint.getZ() - rTrans.getZ()) / rScale.getZ());
 
-        bDeviceCoor = FALSE;
+        mbDeviceCoor = sal_False;
     }
 }
 
@@ -194,29 +192,29 @@ void B3dEntity::CalcInBetween(B3dEntity& rOld1, B3dEntity& rOld2, double t)
     SetDeviceCoor(rOld1.IsDeviceCoor());
 
     // Punktkoordinaten berechnen
-    aPoint.CalcInBetween(rOld1.Point(), rOld2.Point(), t);
+    maPoint = interpolate(rOld1.Point(), rOld2.Point(), t);
     SetValid();
 
     // PlaneNormal Koordinaten berechnen
-    rOld1.PlaneNormal().Normalize();
-    rOld2.PlaneNormal().Normalize();
-    aPlaneNormal.CalcInBetween(rOld1.PlaneNormal(), rOld2.PlaneNormal(), t);
-    aPlaneNormal.Normalize();
+    rOld1.PlaneNormal().normalize();
+    rOld2.PlaneNormal().normalize();
+    maPlaneNormal = interpolate(rOld1.PlaneNormal(), rOld2.PlaneNormal(), t);
+    maPlaneNormal.normalize();
 
     // Vektor berechnen
     if(rOld1.IsNormalUsed() && rOld2.IsNormalUsed())
     {
-        rOld1.Normal().Normalize();
-        rOld2.Normal().Normalize();
-        aNormal.CalcInBetween(rOld1.Normal(), rOld2.Normal(), t);
-        aNormal.Normalize();
+        rOld1.Normal().normalize();
+        rOld2.Normal().normalize();
+        maNormal = interpolate(rOld1.Normal(), rOld2.Normal(), t);
+        maNormal.normalize();
         SetNormalUsed();
     }
 
     // Texturkoordinaten berechnen
     if(rOld1.IsTexCoorUsed() && rOld2.IsTexCoorUsed())
     {
-        aTexCoor.CalcInBetween(rOld1.TexCoor(), rOld2.TexCoor(), t);
+        maTexCoor = interpolate(rOld1.TexCoor(), rOld2.TexCoor(), t);
         SetTexCoorUsed();
     }
 
@@ -224,7 +222,7 @@ void B3dEntity::CalcInBetween(B3dEntity& rOld1, B3dEntity& rOld2, double t)
     SetEdgeVisible(rOld1.IsEdgeVisible());
 
     // Farbe berechnen
-    aColor.CalcInBetween(rOld1.Color(), rOld2.Color(), t);
+    maColor.CalcInBetween(rOld1.Color(), rOld2.Color(), t);
 }
 
 /*************************************************************************
@@ -241,29 +239,29 @@ void B3dEntity::CalcMiddle(B3dEntity& rOld1, B3dEntity& rOld2)
     SetDeviceCoor(rOld1.IsDeviceCoor());
 
     // Punktkoordinaten berechnen
-    aPoint.CalcMiddle(rOld1.Point(), rOld2.Point());
+    maPoint = average(rOld1.Point(), rOld2.Point());
     SetValid();
 
     // PlaneNormal Koordinaten berechnen
-    rOld1.PlaneNormal().Normalize();
-    rOld2.PlaneNormal().Normalize();
-    aPlaneNormal.CalcMiddle(rOld1.PlaneNormal(), rOld2.PlaneNormal());
-    aPlaneNormal.Normalize();
+    rOld1.PlaneNormal().normalize();
+    rOld2.PlaneNormal().normalize();
+    maPlaneNormal = average(rOld1.PlaneNormal(), rOld2.PlaneNormal());
+    maPlaneNormal.normalize();
 
     // Vektor berechnen
     if(rOld1.IsNormalUsed() && rOld2.IsNormalUsed())
     {
-        rOld1.Normal().Normalize();
-        rOld2.Normal().Normalize();
-        aNormal.CalcMiddle(rOld1.Normal(), rOld2.Normal());
-        aNormal.Normalize();
+        rOld1.Normal().normalize();
+        rOld2.Normal().normalize();
+        maNormal = average(rOld1.Normal(), rOld2.Normal());
+        maNormal.normalize();
         SetNormalUsed();
     }
 
     // Texturkoordinaten berechnen
     if(rOld1.IsTexCoorUsed() && rOld2.IsTexCoorUsed())
     {
-        aTexCoor.CalcMiddle(rOld1.TexCoor(), rOld2.TexCoor());
+        maTexCoor = average(rOld1.TexCoor(), rOld2.TexCoor());
         SetTexCoorUsed();
     }
 
@@ -271,7 +269,7 @@ void B3dEntity::CalcMiddle(B3dEntity& rOld1, B3dEntity& rOld2)
     SetEdgeVisible(rOld1.IsEdgeVisible());
 
     // Farbe berechnen
-    aColor.CalcMiddle(rOld1.Color(), rOld2.Color());
+    maColor.CalcMiddle(rOld1.Color(), rOld2.Color());
 }
 
 /*************************************************************************
@@ -289,36 +287,36 @@ void B3dEntity::CalcMiddle(B3dEntity& rOld1, B3dEntity& rOld2,
     SetDeviceCoor(rOld1.IsDeviceCoor());
 
     // Punktkoordinaten berechnen
-    aPoint.CalcMiddle(rOld1.Point(), rOld2.Point(), rOld3.Point());
+    maPoint = average(rOld1.Point(), rOld2.Point(), rOld3.Point());
     SetValid();
 
     // PlaneNormal Koordinaten berechnen
-    rOld1.PlaneNormal().Normalize();
-    rOld2.PlaneNormal().Normalize();
-    rOld3.PlaneNormal().Normalize();
-    aPlaneNormal.CalcMiddle(rOld1.PlaneNormal(), rOld2.PlaneNormal(), rOld3.PlaneNormal());
-    aPlaneNormal.Normalize();
+    rOld1.PlaneNormal().normalize();
+    rOld2.PlaneNormal().normalize();
+    rOld3.PlaneNormal().normalize();
+    maPlaneNormal = average(rOld1.PlaneNormal(), rOld2.PlaneNormal(), rOld3.PlaneNormal());
+    maPlaneNormal.normalize();
 
     // Vektor berechnen
     if(rOld1.IsNormalUsed() && rOld2.IsNormalUsed() && rOld3.IsNormalUsed())
     {
-        rOld1.Normal().Normalize();
-        rOld2.Normal().Normalize();
-        rOld3.Normal().Normalize();
-        aNormal.CalcMiddle(rOld1.Normal(), rOld2.Normal(), rOld3.Normal());
-        aNormal.Normalize();
+        rOld1.Normal().normalize();
+        rOld2.Normal().normalize();
+        rOld3.Normal().normalize();
+        maNormal = average(rOld1.Normal(), rOld2.Normal(), rOld3.Normal());
+        maNormal.normalize();
         SetNormalUsed();
     }
 
     // Texturkoordinaten berechnen
     if(rOld1.IsTexCoorUsed() && rOld2.IsTexCoorUsed() && rOld3.IsTexCoorUsed())
     {
-        aTexCoor.CalcMiddle(rOld1.TexCoor(), rOld2.TexCoor(), rOld3.TexCoor());
+        maTexCoor = average(rOld1.TexCoor(), rOld2.TexCoor(), rOld3.TexCoor());
         SetTexCoorUsed();
     }
 
     // Farbe berechnen
-    aColor.CalcMiddle(rOld1.Color(), rOld2.Color(), rOld3.Color());
+    maColor.CalcMiddle(rOld1.Color(), rOld2.Color(), rOld3.Color());
 }
 
 /*************************************************************************
@@ -327,11 +325,15 @@ void B3dEntity::CalcMiddle(B3dEntity& rOld1, B3dEntity& rOld2,
 |*
 \************************************************************************/
 
-void B3dEntity::Transform(const Matrix4D& rMat)
+void B3dEntity::Transform(const basegfx::B3DHomMatrix& rMat)
 {
-    aPoint *= rMat;
-    if(bNormalUsed)
-        rMat.RotateAndNormalize(aNormal);
+    maPoint *= rMat;
+
+    if(mbNormalUsed)
+    {
+        maNormal *= rMat; // RotateAndNormalize
+        maNormal.normalize();
+    }
 }
 
 /*************************************************************************
@@ -342,4 +344,4 @@ void B3dEntity::Transform(const Matrix4D& rMat)
 
 BASE3D_IMPL_BUCKET(B3dEntity, Bucket)
 
-
+// eof
