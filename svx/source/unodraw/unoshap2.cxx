@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:27:01 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:54:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,9 +65,6 @@
 #ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
 #include <com/sun/star/graphic/XGraphic.hpp>
 #endif
-#ifndef _B2D_MATRIX3D_HXX
-#include <goodies/matrix3d.hxx>
-#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -111,6 +108,22 @@
 #include "svdview.hxx"
 #endif
 
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
 using ::rtl::OUString;
 using namespace ::osl;
 using namespace ::vos;
@@ -130,8 +143,7 @@ using namespace ::com::sun::star::container;
 class GDIMetaFile;
 class SvStream;
 sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
-                              PFilterCallback pCallback=NULL, void * pCallerData=NULL,
-                              sal_Bool bPlaceable=sal_True);
+                              FilterConfigItem* pFilterConfigItem = NULL, sal_Bool bPlaceable = sal_True );
 
 /***********************************************************************
 * class SvxShapeGroup                                                  *
@@ -337,7 +349,7 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
         {
             if(CONTAINER_ENTRY_NOTFOUND != pView->TryToFindMarkedObject(pSdrShape))
             {
-                pView->MarkObj(pSdrShape, pView->GetPageViewPvNum(0), sal_True, sal_False);
+                pView->MarkObj(pSdrShape, pView->GetSdrPageView(), sal_True, sal_False);
             }
         }
 
@@ -1095,36 +1107,36 @@ SvxShapePolyPolygon::~SvxShapePolyPolygon() throw()
 {
 }
 
-void SAL_CALL ImplSvxPolyPolygonToPointSequenceSequence( const drawing::PointSequenceSequence* pOuterSequence, XPolyPolygon& rNewPolyPolygon ) throw()
+basegfx::B2DPolyPolygon SAL_CALL ImplSvxPointSequenceSequenceToB2DPolyPolygon( const drawing::PointSequenceSequence* pOuterSequence) throw()
 {
+    basegfx::B2DPolyPolygon aRetval;
+
     // Zeiger auf innere sequences holen
     const drawing::PointSequence* pInnerSequence = pOuterSequence->getConstArray();
     const drawing::PointSequence* pInnerSeqEnd   = pInnerSequence + pOuterSequence->getLength();
 
-    // #85920# Clear the given polygon, since the new one shall be SET, not ADDED
-    rNewPolyPolygon.Clear();
-
-    for(;pInnerSequence != pInnerSeqEnd;++pInnerSequence)
+    for(;pInnerSequence != pInnerSeqEnd; ++pInnerSequence)
     {
-        sal_Int32 nInnerSequenceCount = pInnerSequence->getLength();
-
-        // Neues XPolygon vorbereiten
-        XPolygon aNewPolygon((USHORT)nInnerSequenceCount);
+        // Neues Polygon vorbereiten
+        basegfx::B2DPolygon aNewPolygon;
 
         // Zeiger auf Arrays holen
         const awt::Point* pArray    = pInnerSequence->getConstArray();
-        const awt::Point* pArrayEnd = pArray + nInnerSequenceCount;
+        const awt::Point* pArrayEnd = pArray + pInnerSequence->getLength();
 
-        for(USHORT b=0;pArray != pArrayEnd;++b,++pArray)
+        for(;pArray != pArrayEnd;++pArray)
         {
-            Point& rPoint = aNewPolygon[b];
-            rPoint.X() = pArray->X;
-            rPoint.Y() = pArray->Y;
+            aNewPolygon.append(basegfx::B2DPoint(pArray->X, pArray->Y));
         }
 
+        // check for closed state flag
+        basegfx::tools::checkClosed(aNewPolygon);
+
         // Neues Teilpolygon einfuegen
-        rNewPolyPolygon.Insert(aNewPolygon);
+        aRetval.append(aNewPolygon);
     }
+
+    return aRetval;
 }
 
 //----------------------------------------------------------------------
@@ -1139,10 +1151,7 @@ void SAL_CALL SvxShapePolyPolygon::setPropertyValue( const OUString& aPropertyNa
         if( !aValue.getValue() || aValue.getValueType() != ::getCppuType((const drawing::PointSequenceSequence*)0) )
             throw lang::IllegalArgumentException();
 
-        XPolyPolygon aNewPolyPolygon;
-
-        ImplSvxPolyPolygonToPointSequenceSequence( (drawing::PointSequenceSequence*)aValue.getValue(), aNewPolyPolygon );
-
+        basegfx::B2DPolyPolygon aNewPolyPolygon(ImplSvxPointSequenceSequenceToB2DPolyPolygon( (drawing::PointSequenceSequence*)aValue.getValue()));
         SetPolygon(aNewPolyPolygon);
     }
     else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Geometry")))
@@ -1152,14 +1161,12 @@ void SAL_CALL SvxShapePolyPolygon::setPropertyValue( const OUString& aPropertyNa
 
         if( mpObj.is() )
         {
-            XPolyPolygon aNewPolyPolygon;
-            Matrix3D aMatrix3D;
+            basegfx::B2DPolyPolygon aNewPolyPolygon;
+            basegfx::B2DHomMatrix aNewHomogenMatrix;
 
-            mpObj->TRGetBaseGeometry(aMatrix3D, aNewPolyPolygon);
-
-            ImplSvxPolyPolygonToPointSequenceSequence( (drawing::PointSequenceSequence*)aValue.getValue(), aNewPolyPolygon );
-
-            mpObj->TRSetBaseGeometry(aMatrix3D, aNewPolyPolygon);
+            mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+            aNewPolyPolygon = ImplSvxPointSequenceSequenceToB2DPolyPolygon((drawing::PointSequenceSequence*)aValue.getValue());
+            mpObj->TRSetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
         }
     }
     else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGON)))
@@ -1169,29 +1176,24 @@ void SAL_CALL SvxShapePolyPolygon::setPropertyValue( const OUString& aPropertyNa
         if( !pSequence || aValue.getValueType() != ::getCppuType((const drawing::PointSequence*)0 ) )
             throw lang::IllegalArgumentException();
 
-        // Koordinaten in das PolyPolygon packen
-        const sal_Int32 nSequenceCount = pSequence->getLength();
-
-        // Neues PolyPolygon vorbereiten
-        XPolyPolygon aNewPolyPolygon;
-
-        // Neues XPolygon vorbereiten
-        XPolygon aNewPolygon((USHORT)nSequenceCount);
+        // Neues Polygon vorbereiten
+        basegfx::B2DPolygon aNewPolygon;
 
         // Zeiger auf Arrays holen
-        awt::Point* pArray = pSequence->getArray();
+        // Zeiger auf Arrays holen
+        const awt::Point* pArray    = pSequence->getConstArray();
+        const awt::Point* pArrayEnd = pArray + pSequence->getLength();
 
-        for(sal_Int32 b=0;b<nSequenceCount;b++)
+        for(;pArray != pArrayEnd;++pArray)
         {
-            aNewPolygon[(USHORT)b] = Point( pArray->X,  pArray->Y );
-            pArray++;
+            aNewPolygon.append(basegfx::B2DPoint(pArray->X, pArray->Y));
         }
 
-        // Neues Teilpolygon einfuegen
-        aNewPolyPolygon.Insert(aNewPolygon);
+        // check for closed state flag
+        basegfx::tools::checkClosed(aNewPolygon);
 
         // Polygon setzen
-        SetPolygon(aNewPolyPolygon);
+        SetPolygon(basegfx::B2DPolyPolygon(aNewPolygon));
     }
     else
     {
@@ -1202,28 +1204,29 @@ void SAL_CALL SvxShapePolyPolygon::setPropertyValue( const OUString& aPropertyNa
         mpModel->SetChanged();
 }
 
-void SAL_CALL SvxPointSequenceSequenceToXPolyPolygon( const XPolyPolygon& rPolyPoly, drawing::PointSequenceSequence& rRetval )
+void SAL_CALL B2DPolyPolygonToSvxPointSequenceSequence( const basegfx::B2DPolyPolygon& rPolyPoly, drawing::PointSequenceSequence& rRetval )
 {
-    if( rRetval.getLength() != rPolyPoly.Count() )
-        rRetval.realloc( rPolyPoly.Count() );
+    if( (sal_uInt32)rRetval.getLength() != rPolyPoly.count() )
+        rRetval.realloc( rPolyPoly.count() );
 
     // Zeiger auf aeussere Arrays holen
     drawing::PointSequence* pOuterSequence = rRetval.getArray();
 
-    for(sal_uInt16 a=0;a<rPolyPoly.Count();a++)
+    for(sal_uInt32 a(0L); a < rPolyPoly.count(); a++)
     {
         // Einzelpolygon holen
-        const XPolygon& rPoly = rPolyPoly[a];
+        const basegfx::B2DPolygon aPoly(rPolyPoly.getB2DPolygon(a));
 
         // Platz in Arrays schaffen
-        pOuterSequence->realloc((sal_Int32)rPoly.GetPointCount());
+        pOuterSequence->realloc(aPoly.count());
 
         // Pointer auf arrays holen
         awt::Point* pInnerSequence = pOuterSequence->getArray();
 
-        for(sal_uInt16 b=0;b<rPoly.GetPointCount();b++)
+        for(sal_uInt32 b(0L); b < aPoly.count(); b++)
         {
-            *pInnerSequence = awt::Point( rPoly[b].X(), rPoly[b].Y() );
+            const basegfx::B2DPoint aPoint(aPoly.getB2DPoint(b));
+            *pInnerSequence = awt::Point( basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()) );
             pInnerSequence++;
         }
 
@@ -1241,48 +1244,55 @@ uno::Any SAL_CALL SvxShapePolyPolygon::getPropertyValue( const OUString& aProper
     if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGON)))
     {
         // PolyPolygon in eine struct PolyPolygon packen
-        const XPolyPolygon& rPolyPoly = GetPolygon();
-        drawing::PointSequenceSequence aRetval( rPolyPoly.Count() );
+        const basegfx::B2DPolyPolygon& rPolyPoly = GetPolygon();
+        drawing::PointSequenceSequence aRetval( rPolyPoly.count() );
 
-        SvxPointSequenceSequenceToXPolyPolygon( rPolyPoly, aRetval );
+        B2DPolyPolygonToSvxPointSequenceSequence( rPolyPoly, aRetval );
 
         return uno::Any( &aRetval, ::getCppuType((const drawing::PointSequenceSequence*)0) );
     }
     else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Geometry")))
     {
-        // PolyPolygon in eine struct PolyPolygon packen
-        XPolyPolygon aPolyPoly;
-        Matrix3D aMatrix3D;
-        if( mpObj.is() )
-            mpObj->TRGetBaseGeometry( aMatrix3D, aPolyPoly );
+        // pack a PolyPolygon in struct PolyPolygon
+        basegfx::B2DPolyPolygon aNewPolyPolygon;
+        basegfx::B2DHomMatrix aNewHomogenMatrix;
+        SdrObject* pObject = mpObj.get();
 
-        drawing::PointSequenceSequence aRetval( aPolyPoly.Count() );
+        if(pObject)
+        {
+            mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+        }
 
-        SvxPointSequenceSequenceToXPolyPolygon( aPolyPoly, aRetval );
-
+        drawing::PointSequenceSequence aRetval(aNewPolyPolygon.count());
+        B2DPolyPolygonToSvxPointSequenceSequence(aNewPolyPolygon, aRetval);
         return uno::Any( aRetval );
     }
     else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGON)))
     {
         // PolyPolygon in eine struct PolyPolygon packen
-        const XPolyPolygon& rPolyPoly = GetPolygon();
+        const basegfx::B2DPolyPolygon& rPolyPoly = GetPolygon();
 
         sal_Int32 nCount = 0;
-        if( rPolyPoly.Count() > 0 )
-            nCount = rPolyPoly[0].GetPointCount();
+        if( rPolyPoly.count() > 0 )
+        {
+            nCount = rPolyPoly.getB2DPolygon(0L).count();
+        }
 
         drawing::PointSequence aRetval( nCount );
 
         if( nCount > 0 )
         {
             // Einzelpolygon holen
-            const XPolygon& rPoly = rPolyPoly[0];
+            const basegfx::B2DPolygon aPoly(rPolyPoly.getB2DPolygon(0L));
 
             // Pointer auf arrays holen
             awt::Point* pSequence = aRetval.getArray();
 
             for(sal_Int32 b=0;b<nCount;b++)
-                *pSequence++ = awt::Point( rPoly[(USHORT)b].X(), rPoly[(USHORT)b].Y() );
+            {
+                const basegfx::B2DPoint aPoint(aPoly.getB2DPoint(b));
+                *pSequence++ = awt::Point( basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()) );
+            }
         }
 
         return uno::Any( aRetval );
@@ -1304,7 +1314,7 @@ drawing::PolygonKind SvxShapePolyPolygon::GetPolygonKind() const throw()
 }
 
 //----------------------------------------------------------------------
-void SvxShapePolyPolygon::SetPolygon(const XPolyPolygon& rNew) throw()
+void SvxShapePolyPolygon::SetPolygon(const basegfx::B2DPolyPolygon& rNew) throw()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -1313,7 +1323,7 @@ void SvxShapePolyPolygon::SetPolygon(const XPolyPolygon& rNew) throw()
 }
 
 //----------------------------------------------------------------------
-const XPolyPolygon& SvxShapePolyPolygon::GetPolygon() const throw()
+basegfx::B2DPolyPolygon SvxShapePolyPolygon::GetPolygon() const throw()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -1323,8 +1333,7 @@ const XPolyPolygon& SvxShapePolyPolygon::GetPolygon() const throw()
     }
     else
     {
-        static const XPolyPolygon aEmptyPoly;
-        return aEmptyPoly;
+        return basegfx::B2DPolyPolygon();
     }
 }
 
@@ -1356,9 +1365,10 @@ SvxShapePolyPolygonBezier::~SvxShapePolyPolygonBezier() throw()
 {
 }
 
-void SvxConvertPolyPolygonBezierToXPolyPolygon( const drawing::PolyPolygonBezierCoords* pSourcePolyPolygon, XPolyPolygon& rNewPolyPolygon )
+basegfx::B2DPolyPolygon SvxConvertPolyPolygonBezierToB2DPolyPolygon( const drawing::PolyPolygonBezierCoords* pSourcePolyPolygon)
     throw( IllegalArgumentException )
 {
+    basegfx::B2DPolyPolygon aNewPolyPolygon;
     sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->Coordinates.getLength();
     if(pSourcePolyPolygon->Flags.getLength() != nOuterSequenceCount)
         throw IllegalArgumentException();
@@ -1378,7 +1388,9 @@ void SvxConvertPolyPolygonBezierToXPolyPolygon( const drawing::PolyPolygonBezier
             throw IllegalArgumentException();
 
         // Neues XPolygon vorbereiten
-        XPolygon aNewPolygon((USHORT)nInnerSequenceCount);
+        basegfx::B2DPolygon aNewPolygon;
+        sal_uInt32 nLastPointIndex(0L);
+        bool bFirstControlPointSet(false);
 
         // Zeiger auf Arrays holen
         const awt::Point* pArray = pInnerSequence->getConstArray();
@@ -1387,7 +1399,7 @@ void SvxConvertPolyPolygonBezierToXPolyPolygon( const drawing::PolyPolygonBezier
         for(sal_Int32 b(0); bCurveValid && b < nInnerSequenceCount; b++)
         {
             // coordinate data
-            aNewPolygon[(USHORT)b] = Point( pArray->X, pArray->Y );
+            const basegfx::B2DPoint aNewCoordinatePair(pArray->X, pArray->Y);
             pArray++;
 
             // flag data
@@ -1454,19 +1466,40 @@ void SvxConvertPolyPolygonBezierToXPolyPolygon( const drawing::PolyPolygonBezier
                 }
             }
 
-            aNewPolygon.SetFlags((USHORT)b, ePolyFlag);
+            if(ePolyFlag == XPOLY_CONTROL)
+            {
+                if(bFirstControlPointSet)
+                {
+                    aNewPolygon.setControlPointB(nLastPointIndex, aNewCoordinatePair);
+                    bFirstControlPointSet = false;
+                }
+                else
+                {
+                    aNewPolygon.setControlPointA(nLastPointIndex, aNewCoordinatePair);
+                    bFirstControlPointSet = true;
+                }
+            }
+            else
+            {
+                // add coordinate
+                nLastPointIndex = aNewPolygon.count();
+                bFirstControlPointSet = false;
+                aNewPolygon.append(aNewCoordinatePair);
+            }
         }
 
         pInnerSequence++;
         pInnerSequenceFlags++;
 
         // Neues Teilpolygon einfuegen
-        rNewPolyPolygon.Insert(aNewPolygon);
+        aNewPolyPolygon.append(aNewPolygon);
     }
 
     // throw exception if polygon data is an invalid curve definition
     if(bIsCurve && !bCurveValid)
         throw IllegalArgumentException();
+
+    return aNewPolyPolygon;
 }
 
 //----------------------------------------------------------------------
@@ -1480,8 +1513,7 @@ void SAL_CALL SvxShapePolyPolygonBezier::setPropertyValue( const OUString& aProp
         if( !aValue.getValue() || aValue.getValueType() != ::getCppuType((const drawing::PolyPolygonBezierCoords*)0) )
             throw IllegalArgumentException();
 
-        XPolyPolygon aNewPolyPolygon;
-        SvxConvertPolyPolygonBezierToXPolyPolygon( (drawing::PolyPolygonBezierCoords*)aValue.getValue(), aNewPolyPolygon );
+        basegfx::B2DPolyPolygon aNewPolyPolygon(SvxConvertPolyPolygonBezierToB2DPolyPolygon( (drawing::PolyPolygonBezierCoords*)aValue.getValue()));
         SetPolygon(aNewPolyPolygon);
     }
     else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Geometry")))
@@ -1491,12 +1523,12 @@ void SAL_CALL SvxShapePolyPolygonBezier::setPropertyValue( const OUString& aProp
 
         if( mpObj.is() )
         {
-            Matrix3D aMatrix3D;
-            XPolyPolygon aNewPolyPolygon;
+            basegfx::B2DPolyPolygon aNewPolyPolygon;
+            basegfx::B2DHomMatrix aNewHomogenMatrix;
 
-            mpObj->TRGetBaseGeometry(aMatrix3D, aNewPolyPolygon);
-            SvxConvertPolyPolygonBezierToXPolyPolygon( (drawing::PolyPolygonBezierCoords*)aValue.getValue(), aNewPolyPolygon );
-            mpObj->TRSetBaseGeometry(aMatrix3D, aNewPolyPolygon);
+            mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+            aNewPolyPolygon = SvxConvertPolyPolygonBezierToB2DPolyPolygon((drawing::PolyPolygonBezierCoords*)aValue.getValue());
+            mpObj->TRSetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
         }
     }
     else
@@ -1508,30 +1540,32 @@ void SAL_CALL SvxShapePolyPolygonBezier::setPropertyValue( const OUString& aProp
         mpModel->SetChanged();
 }
 
-void SvxPolyPolygonToPolyPolygonBezierCoords( const XPolyPolygon& rPolyPoly, drawing::PolyPolygonBezierCoords& rRetval )
+void SvxConvertB2DPolyPolygonToPolyPolygonBezier( const basegfx::B2DPolyPolygon& rPolyPoly, drawing::PolyPolygonBezierCoords& rRetval )
 {
+    const PolyPolygon aPolyPoly(rPolyPoly);
+
     // Polygone innerhalb vrobereiten
-    rRetval.Coordinates.realloc((sal_Int32)rPolyPoly.Count());
-    rRetval.Flags.realloc((sal_Int32)rPolyPoly.Count());
+    rRetval.Coordinates.realloc((sal_Int32)aPolyPoly.Count());
+    rRetval.Flags.realloc((sal_Int32)aPolyPoly.Count());
 
     // Zeiger auf aeussere Arrays holen
     drawing::PointSequence* pOuterSequence = rRetval.Coordinates.getArray();
     drawing::FlagSequence*  pOuterFlags = rRetval.Flags.getArray();
 
-    for(sal_uInt16 a=0;a<rPolyPoly.Count();a++)
+    for(sal_uInt16 a=0;a<aPolyPoly.Count();a++)
     {
         // Einzelpolygon holen
-        const XPolygon& rPoly = rPolyPoly[a];
+        const Polygon& rPoly = aPolyPoly[a];
 
         // Platz in Arrays schaffen
-        pOuterSequence->realloc((sal_Int32)rPoly.GetPointCount());
-        pOuterFlags->realloc((sal_Int32)rPoly.GetPointCount());
+        pOuterSequence->realloc((sal_Int32)rPoly.GetSize());
+        pOuterFlags->realloc((sal_Int32)rPoly.GetSize());
 
         // Pointer auf arrays holen
         awt::Point* pInnerSequence = pOuterSequence->getArray();
         drawing::PolygonFlags* pInnerFlags = pOuterFlags->getArray();
 
-        for(sal_uInt16 b=0;b<rPoly.GetPointCount();b++)
+        for(sal_uInt16 b=0;b<rPoly.GetSize();b++)
         {
             *pInnerSequence++ = awt::Point( rPoly[b].X(), rPoly[b].Y() );
             *pInnerFlags++ = (drawing::PolygonFlags)((sal_uInt16)rPoly.GetFlags(b));
@@ -1551,9 +1585,9 @@ uno::Any SAL_CALL SvxShapePolyPolygonBezier::getPropertyValue( const OUString& a
     if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGONBEZIER)))
     {
         // PolyPolygon in eine struct PolyPolygon packen
-        const XPolyPolygon& rPolyPoly = GetPolygon();
+        const basegfx::B2DPolyPolygon& rPolyPoly = GetPolygon();
         drawing::PolyPolygonBezierCoords aRetval;
-        SvxPolyPolygonToPolyPolygonBezierCoords(rPolyPoly, aRetval );
+        SvxConvertB2DPolyPolygonToPolyPolygonBezier(rPolyPoly, aRetval );
 
         return uno::Any( aRetval );
     }
@@ -1563,12 +1597,11 @@ uno::Any SAL_CALL SvxShapePolyPolygonBezier::getPropertyValue( const OUString& a
             throw lang::DisposedException();
 
         // PolyPolygon in eine struct PolyPolygon packen
-        XPolyPolygon aPolyPoly;
-        Matrix3D aMatrix3D;
-        mpObj->TRGetBaseGeometry( aMatrix3D, aPolyPoly );
-
+        basegfx::B2DPolyPolygon aNewPolyPolygon;
+        basegfx::B2DHomMatrix aNewHomogenMatrix;
+        mpObj.get()->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
         drawing::PolyPolygonBezierCoords aRetval;
-        SvxPolyPolygonToPolyPolygonBezierCoords(aPolyPoly, aRetval );
+        SvxConvertB2DPolyPolygonToPolyPolygonBezier(aNewPolyPolygon, aRetval);
 
         return uno::Any( aRetval );
     }
@@ -1589,7 +1622,7 @@ drawing::PolygonKind SvxShapePolyPolygonBezier::GetPolygonKind() const throw()
 }
 
 //----------------------------------------------------------------------
-void SvxShapePolyPolygonBezier::SetPolygon(const XPolyPolygon& rNew) throw()
+void SvxShapePolyPolygonBezier::SetPolygon(const basegfx::B2DPolyPolygon& rNew) throw()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -1598,7 +1631,7 @@ void SvxShapePolyPolygonBezier::SetPolygon(const XPolyPolygon& rNew) throw()
 }
 
 //----------------------------------------------------------------------
-const XPolyPolygon& SvxShapePolyPolygonBezier::GetPolygon() const throw()
+basegfx::B2DPolyPolygon SvxShapePolyPolygonBezier::GetPolygon() const throw()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -1608,8 +1641,7 @@ const XPolyPolygon& SvxShapePolyPolygonBezier::GetPolygon() const throw()
     }
     else
     {
-        static const XPolyPolygon aEmptyPoly;
-        return aEmptyPoly;
+        return basegfx::B2DPolyPolygon();
     }
 }
 
@@ -1808,7 +1840,7 @@ uno::Any SAL_CALL SvxGraphicObject::getPropertyValue( const OUString& aPropertyN
         {
             SvMemoryStream aDestStrm( 65535, 65535 );
 
-            ConvertGDIMetaFileToWMF( rGraphic.GetGDIMetaFile(), aDestStrm, NULL, NULL, sal_False );
+            ConvertGDIMetaFileToWMF( rGraphic.GetGDIMetaFile(), aDestStrm, NULL, sal_False );
             uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
             return uno::Any( aSeq );
         }
@@ -1860,58 +1892,63 @@ uno::Sequence< OUString > SAL_CALL SvxGraphicObject::getSupportedServiceNames()
 }
 
 
-void SvxConvertPolyPolygonBezierToXPolygon( const drawing::PolyPolygonBezierCoords* pSourcePolyPolygon, XPolygon& rNewPolygon )
-    throw( lang::IllegalArgumentException )
-{
-    sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->Coordinates.getLength();
-    if( nOuterSequenceCount != 1 || pSourcePolyPolygon->Flags.getLength() != nOuterSequenceCount)
-        throw lang::IllegalArgumentException();
+//basegfx::B2DPolygon SvxConvertPolyPolygonBezierToB2DPolygon( const drawing::PolyPolygonBezierCoords* pSourcePolyPolygon)
+//  throw( lang::IllegalArgumentException )
+//{
+//  sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->Coordinates.getLength();
+//  if( nOuterSequenceCount != 1 || pSourcePolyPolygon->Flags.getLength() != nOuterSequenceCount)
+//      throw lang::IllegalArgumentException();
+//
+//  // Zeiger auf innere sequences holen
+//  const drawing::PointSequence* pInnerSequence = pSourcePolyPolygon->Coordinates.getConstArray();
+//  const drawing::FlagSequence* pInnerSequenceFlags = pSourcePolyPolygon->Flags.getConstArray();
+//
+//  sal_Int32 nInnerSequenceCount = pInnerSequence->getLength();
+//
+//  if(pInnerSequenceFlags->getLength() != nInnerSequenceCount)
+//      throw lang::IllegalArgumentException();
+//
+//  // Zeiger auf Arrays holen
+//  const awt::Point* pArray = pInnerSequence->getConstArray();
+//  const drawing::PolygonFlags* pArrayFlags = pInnerSequenceFlags->getConstArray();
+//  XPolygon aNewPolygon;
+//
+//  for(sal_Int32 b=0;b<nInnerSequenceCount;b++)
+//  {
+//      aNewPolygon[(USHORT)b] = Point( pArray->X, pArray->Y );
+//      pArray++;
+//      aNewPolygon.SetFlags((USHORT)b, (XPolyFlags)((sal_uInt16)*pArrayFlags++));
+//  }
+//
+//  return aNewPolygon.getB2DPolygon();
+//}
 
-    // Zeiger auf innere sequences holen
-    const drawing::PointSequence* pInnerSequence = pSourcePolyPolygon->Coordinates.getConstArray();
-    const drawing::FlagSequence* pInnerSequenceFlags = pSourcePolyPolygon->Flags.getConstArray();
-
-    sal_Int32 nInnerSequenceCount = pInnerSequence->getLength();
-
-    if(pInnerSequenceFlags->getLength() != nInnerSequenceCount)
-        throw lang::IllegalArgumentException();
-
-    // Zeiger auf Arrays holen
-    const awt::Point* pArray = pInnerSequence->getConstArray();
-    const drawing::PolygonFlags* pArrayFlags = pInnerSequenceFlags->getConstArray();
-
-    for(sal_Int32 b=0;b<nInnerSequenceCount;b++)
-    {
-        rNewPolygon[(USHORT)b] = Point( pArray->X, pArray->Y );
-        pArray++;
-        rNewPolygon.SetFlags((USHORT)b, (XPolyFlags)((sal_uInt16)*pArrayFlags++));
-    }
-}
-
-void SvxConvertXPolygonToPolyPolygonBezier( const XPolygon& rPolygon, drawing::PolyPolygonBezierCoords& rRetval ) throw()
-{
-    // Polygone innerhalb vrobereiten
-    rRetval.Coordinates.realloc(1);
-    rRetval.Flags.realloc(1);
-
-    // Zeiger auf aeussere Arrays holen
-    drawing::PointSequence* pOuterSequence = rRetval.Coordinates.getArray();
-    drawing::FlagSequence*  pOuterFlags = rRetval.Flags.getArray();
-
-    // Platz in Arrays schaffen
-    pOuterSequence->realloc((sal_Int32)rPolygon.GetPointCount());
-    pOuterFlags->realloc((sal_Int32)rPolygon.GetPointCount());
-
-    // Pointer auf arrays holen
-    awt::Point* pInnerSequence = pOuterSequence->getArray();
-    drawing::PolygonFlags* pInnerFlags = pOuterFlags->getArray();
-
-    for(sal_uInt16 b=0;b<rPolygon.GetPointCount();b++)
-    {
-        *pInnerSequence++ = awt::Point( rPolygon[b].X(), rPolygon[b].Y() );
-        *pInnerFlags++ = (drawing::PolygonFlags)((sal_uInt16)rPolygon.GetFlags(b));
-    }
-}
+//void SvxConvertB2DPolygonToPolyPolygonBezier( const basegfx::B2DPolygon& rPolygon, drawing::PolyPolygonBezierCoords& rRetval ) throw()
+//{
+//  const XPolygon aPolygon(rPolygon);
+//
+//  // Polygone innerhalb vrobereiten
+//  rRetval.Coordinates.realloc(1);
+//  rRetval.Flags.realloc(1);
+//
+//  // Zeiger auf aeussere Arrays holen
+//  drawing::PointSequence* pOuterSequence = rRetval.Coordinates.getArray();
+//  drawing::FlagSequence*  pOuterFlags = rRetval.Flags.getArray();
+//
+//  // Platz in Arrays schaffen
+//  pOuterSequence->realloc((sal_Int32)aPolygon.GetPointCount());
+//  pOuterFlags->realloc((sal_Int32)aPolygon.GetPointCount());
+//
+//  // Pointer auf arrays holen
+//  awt::Point* pInnerSequence = pOuterSequence->getArray();
+//  drawing::PolygonFlags* pInnerFlags = pOuterFlags->getArray();
+//
+//  for(sal_uInt16 b=0;b<aPolygon.GetPointCount();b++)
+//  {
+//      *pInnerSequence++ = awt::Point( aPolygon[b].X(), aPolygon[b].Y() );
+//      *pInnerFlags++ = (drawing::PolygonFlags)((sal_uInt16)aPolygon.GetFlags(b));
+//  }
+//}
 
 ///////////////////////////////////////////////////////////////////////
 
