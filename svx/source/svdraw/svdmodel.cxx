@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:10:53 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:43:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -814,11 +814,6 @@ void SdrModel::ClearModel(sal_Bool bCalledFromDestructor)
     MasterPageListChanged();
 
     pLayerAdmin->ClearLayer();
-
-    //#110094#-10
-    //pLayerAdmin->ClearLayerSets();
-
-    //SetChanged();
 }
 
 SdrModel* SdrModel::AllocModel() const
@@ -2108,16 +2103,6 @@ SdrHint::SdrHint(SdrHintKind eNewHint)
     meHint(eNewHint)
 {
 }
-
-// #115423#
-//SdrHint::SdrHint(const SdrPage& rNewPage)
-//: mpPage(&rNewPage),
-//  mpObj(0L),
-//  mpObjList(&rNewPage),
-//  meHint(HINT_PAGECHG)
-//{
-//  maRectangle = Rectangle( 0, 0, rNewPage.GetWdt(), rNewPage.GetHgt());
-//}
 
 SdrHint::SdrHint(const SdrObject& rNewObj)
 :   mpPage(rNewObj.GetPage()),
