@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:19:54 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:46:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -857,9 +857,7 @@ BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
                     ++nTab;
                     break;
                 case SCID_DRAWING:
-                    //BFS03
                     DBG_ERROR("ScDocument::LoadDrawLayer() no longer supported, binary loading removed (!)");
-//BFS03                 LoadDrawLayer(rStream);
                     break;
                 case SCID_DDELINKS:
                     LoadDdeLinks(rStream);
@@ -1269,15 +1267,9 @@ BOOL ScDocument::Save( SvStream& rStream, ScProgress* pProgress ) const
         }
 
         //  Drawing
-
-//      if (pDrawLayer && pDrawLayer->HasObjects())
-        //  auch ohne Objekte - wegen ColorTable etc.
-
         if (pDrawLayer)
         {
             DBG_ERROR("ScDocument::StoreDrawLayer() no longer supported, binary saving removed (!)");
-//BFS03         rStream << (USHORT) SCID_DRAWING;
-//BFS03         StoreDrawLayer(rStream);
         }
 
         //  Collections
