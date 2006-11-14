@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dxfgrprd.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:55:40 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:14:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,9 +49,7 @@ public:
     // Anmerkkung:
     // sizeof(DXFGroupReader) ist gross, also nur dynamisch anlegen!
 
-    DXFGroupReader(SvStream & rIStream,
-                   PFilterCallback pCallback, void * pCallerData,
-                   USHORT nMinPercent, USHORT nMaxPercent);
+    DXFGroupReader( SvStream & rIStream, USHORT nMinPercent, USHORT nMaxPercent );
 
     BOOL GetStatus();
 
@@ -111,8 +109,6 @@ private:
     USHORT nLastG;
     ULONG nGCount;
 
-    PFilterCallback pCallback;
-    void * pCallerData;
     ULONG nMinPercent;
     ULONG nMaxPercent;
     ULONG nLastPercent;
