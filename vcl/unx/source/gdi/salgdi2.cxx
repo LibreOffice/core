@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:06:27 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:25:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,9 @@
 #endif
 #ifndef _SV_SALVD_H
 #include <salvd.h>
+#endif
+#ifndef _SV_XRENDER_PEER_HXX
+#include <xrender_peer.hxx>
 #endif
 
 #ifndef _USE_PRINT_EXTENSION_
@@ -699,14 +702,31 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSa
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
-                                 const SalBitmap& rSalBitmap,
-                                 const SalBitmap& rTransBitmap )
+                                 const SalBitmap& rSrcBitmap,
+                                 const SalBitmap& rMaskBitmap )
 {
     DBG_ASSERT( !bPrinter_, "Drawing of transparent bitmaps on printer devices is strictly forbidden" );
 
+    // decide if alpha masking or transparency masking is needed
+    BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rMaskBitmap).AcquireBuffer( TRUE );
+    int nMaskFormat = pAlphaBuffer->mnFormat;
+    const_cast<SalBitmap&>(rMaskBitmap).ReleaseBuffer( pAlphaBuffer, TRUE );
+    if( nMaskFormat == BMP_FORMAT_8BIT_PAL )
+        drawAlphaBitmap( *pPosAry, rSrcBitmap, rMaskBitmap );
+
+    drawMaskedBitmap( pPosAry, rSrcBitmap, rMaskBitmap );
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+void X11SalGraphics::drawMaskedBitmap( const SalTwoRect* pPosAry,
+                                       const SalBitmap& rSalBitmap,
+                                       const SalBitmap& rTransBitmap )
+{
     const SalDisplay*   pSalDisp = GetDisplay();
     Display*            pXDisp = pSalDisp->GetDisplay();
     Drawable            aDrawable( GetDrawable() );
+
     // figure work mode depth. If this is a VDev Drawable, use its
     // bitdepth to create pixmaps for, otherwise, XCopyArea will
     // refuse to work.
@@ -793,6 +813,176 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
 
     if( aBG )
         XFreePixmap( pXDisp, aBG );
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
+    const SalBitmap& rSrcBitmap, const SalBitmap& rAlphaBmp )
+{
+    // non 8-bit alpha not implemented yet
+    if( rAlphaBmp.GetBitCount() != 8 )
+        return false;
+
+    // horizontal mirroring not implemented yet
+    if( rTR.mnDestWidth < 0 )
+        return false;
+
+    // stretched conversion is not implemented yet
+    if( rTR.mnDestWidth != rTR.mnSrcWidth )
+        return false;
+    if( rTR.mnDestHeight!= rTR.mnSrcHeight )
+        return false;
+
+    XRenderPeer& rPeer = XRenderPeer::GetInstance();
+    if( rPeer.GetVersion() < 0x02 )
+        return false;
+
+    const SalDisplay* pSalDisp = GetDisplay();
+    const SalVisual& rSalVis = pSalDisp->GetVisual( m_nScreen );
+    Display* pXDisplay = pSalDisp->GetDisplay();
+
+    // create destination picture
+    // TODO: scoped Pixmap and Pictures
+    Visual* pDstXVisual = rSalVis.GetVisual();
+    XRenderPictFormat* pDstVisFmt = rPeer.FindVisualFormat( pDstXVisual );
+    if( !pDstVisFmt )
+        return false;
+
+    XRenderPictureAttributes aAttr;
+    Picture aDstPic = rPeer.CreatePicture( hDrawable_, pDstVisFmt, 0, aAttr );
+    if( !aDstPic )
+        return false;
+
+    // create source Picture
+    int nDepth = m_pVDev ? m_pVDev->GetDepth() : rSalVis.GetDepth();
+    const X11SalBitmap& rSrcX11Bmp = reinterpret_cast<const X11SalBitmap&>( rSrcBitmap );
+    ImplSalDDB* pSrcDDB = rSrcX11Bmp.ImplGetDDB( hDrawable_, m_nScreen, nDepth, rTR );
+    if( !pSrcDDB )
+        return false;
+
+    Pixmap aSrcPM = pSrcDDB->ImplGetPixmap();
+    if( !aSrcPM )
+        return false;
+
+    XRenderPictFormat* pSrcVisFmt = pDstVisFmt;
+    Picture aSrcPic = rPeer.CreatePicture( aSrcPM, pSrcVisFmt, 0, aAttr );
+    if( !aSrcPic )
+        return false;
+
+    // create alpha Picture
+    static XRenderPictFormat* pAlphaFormat = NULL;
+    if( !pAlphaFormat )
+    {
+        XRenderPictFormat aPictFormat={0,0,8,{0,0,0,0,0,0,0,0xFF},0};
+        pAlphaFormat = rPeer.FindPictureFormat(
+            PictFormatAlphaMask|PictFormatDepth, aPictFormat );
+    }
+
+    // TODO: use SalX11Bitmap functionality and caching for the Alpha Pixmap
+    // problem is that they don't provide an 8bit Pixmap on a non-8bit display
+    BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rAlphaBmp).AcquireBuffer( TRUE );
+
+    // an XImage needs its data top_down
+    // TODO: avoid wrongly oriented images in upper layers!
+    const int nImageSize = pAlphaBuffer->mnHeight * pAlphaBuffer->mnScanlineSize;
+    const char* pSrc = (char*)pAlphaBuffer->mpBits;
+    char* pAlphaBits = new char[ nImageSize ];
+    if( BMP_SCANLINE_ADJUSTMENT( pAlphaBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN )
+        memcpy( pAlphaBits, pSrc, nImageSize );
+    else
+    {
+        char* pDst = pAlphaBits + nImageSize;
+        const int nLineSize = pAlphaBuffer->mnScanlineSize;
+        for(; (pDst -= nLineSize) >= pAlphaBits; pSrc += nLineSize )
+            memcpy( pDst, pSrc, nLineSize );
+    }
+
+    // the alpha values need to be inverted for XRender
+    // TODO: make upper layers use standard alpha
+    long* pLDst = (long*)pAlphaBits;
+    for( int i = nImageSize/sizeof(long); --i >= 0; ++pLDst )
+        *pLDst = ~*pLDst;
+
+    char* pCDst = (char*)pLDst;
+    for( int i = nImageSize & (sizeof(long)-1); --i >= 0; ++pCDst )
+        *pCDst = ~*pCDst;
+
+    XImage* pAlphaImg = XCreateImage( pXDisplay, pDstXVisual, 8, ZPixmap, 0,
+        pAlphaBits, pAlphaBuffer->mnWidth, pAlphaBuffer->mnHeight,
+        8, pAlphaBuffer->mnScanlineSize );
+
+    Pixmap aAlphaPM = XCreatePixmap( pXDisplay, hDrawable_,
+        rTR.mnDestWidth, rTR.mnDestHeight, 8 );
+
+    XGCValues aAlphaGCV;
+    aAlphaGCV.function = GXcopy;
+    GC aAlphaGC = XCreateGC( pXDisplay, aAlphaPM, GCFunction, &aAlphaGCV );
+    XPutImage( pXDisplay, aAlphaPM, aAlphaGC, pAlphaImg,
+        rTR.mnSrcX, rTR.mnSrcY, 0, 0, rTR.mnDestWidth, rTR.mnDestHeight );
+    XFreeGC( pXDisplay, aAlphaGC );
+    XFree( pAlphaImg );
+    if( pAlphaBits != (char*)pAlphaBuffer->mpBits )
+        delete[] pAlphaBits;
+
+    const_cast<SalBitmap&>(rAlphaBmp).ReleaseBuffer( pAlphaBuffer, TRUE );
+
+    aAttr.repeat = true;
+    Picture aAlphaPic = rPeer.CreatePicture( aAlphaPM, pAlphaFormat, CPRepeat, aAttr );
+    if( !aAlphaPic )
+        return false;
+
+    // paint source * mask over destination picture
+    rPeer.CompositePicture( PictOpOver, aSrcPic, aAlphaPic, aDstPic,
+        rTR.mnSrcX, rTR.mnSrcY, 0, 0,
+        rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight );
+
+    // TODO: used ScopedPic
+    rPeer.FreePicture( aAlphaPic );
+    rPeer.FreePicture( aSrcPic );
+    rPeer.FreePicture( aDstPic );
+    return true;
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool X11SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
+                                    long nHeight, sal_uInt8 nTransparency )
+{
+    if( bPenGC_ || !bBrushGC_ || bXORMode_ )
+        return false; // can only perform solid fills without XOR.
+
+    XRenderPeer& rPeer = XRenderPeer::GetInstance();
+    if( rPeer.GetVersion() < 0x02 )
+        return false;
+
+    const SalDisplay* pSalDisp = GetDisplay();
+    const SalVisual& rSalVis = pSalDisp->GetVisual( m_nScreen );
+
+    // create destination picture
+    // TODO: scoped Pixmap and Pictures
+    Visual* pDstXVisual = rSalVis.GetVisual();
+    XRenderPictFormat* pDstVisFmt = rPeer.FindVisualFormat( pDstXVisual );
+    if( !pDstVisFmt )
+        return false;
+
+    XRenderPictureAttributes aAttr;
+    Picture aDstPic = rPeer.CreatePicture( hDrawable_, pDstVisFmt, 0, aAttr );
+    if( !aDstPic )
+        return false;
+
+      XRenderColor aRenderColor = {
+        SALCOLOR_RED(nBrushColor_),
+        SALCOLOR_GREEN(nBrushColor_),
+        SALCOLOR_BLUE(nBrushColor_),
+        255 - 255L*nTransparency/100
+    };
+
+    rPeer.FillRectangle( PictOpOver,
+                         aDstPic,
+                         &aRenderColor,
+                         nX, nY,
+                         nWidth, nHeight );
+
+    return true;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
