@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:15:50 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:55:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,13 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+
+#ifndef _SDRPAINTWINDOW_HXX
+#include <sdrpaintwindow.hxx>
+#endif
 
 using namespace ::osl;
 using namespace ::vos;
@@ -453,7 +460,7 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
                     // destroy view forwarder, OutlinerView no longer
                     // valid (no need for UpdateData(), it's been
-                    // synched on EndTextEdit)
+                    // synched on SdrEndTextEdit)
                     delete mpViewForwarder;
                     mpViewForwarder = NULL;
 
@@ -818,7 +825,7 @@ SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( sal_Bool bCre
         if( !IsEditMode() )
         {
             // destroy all forwarders (no need for UpdateData(),
-            // it's been synched on EndTextEdit)
+            // it's been synched on SdrEndTextEdit)
             delete mpViewForwarder;
             mpViewForwarder = NULL;
         }
@@ -840,8 +847,9 @@ SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( sal_Bool bCre
             mpTextForwarder = NULL;
 
             // enter edit mode
-            mpView->EndTextEdit();
-            if( mpView->BegTextEdit( mpObject, NULL, NULL, (SdrOutliner*)NULL, NULL, FALSE, FALSE ) )
+            mpView->SdrEndTextEdit();
+
+            if(mpView->SdrBeginTextEdit(mpObject, 0L, 0L, sal_False, (SdrOutliner*)0L, 0L, sal_False, sal_False))
             {
                 SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
                 if( pTextObj->IsTextEditActive() )
@@ -851,9 +859,9 @@ SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( sal_Bool bCre
                 }
                 else
                 {
-                    // failure. Somehow, BegTextEdit did not set
+                    // failure. Somehow, SdrBeginTextEdit did not set
                     // our SdrTextObj into edit mode
-                    mpView->EndTextEdit();
+                    mpView->SdrEndTextEdit();
                 }
             }
         }
@@ -869,7 +877,7 @@ void SvxTextEditSourceImpl::UpdateData()
     // if we have a view and in edit mode, we're working with the
     // DrawOutliner. Thus, all changes made on the text forwarder are
     // reflected on the view and committed to the model on
-    // EndTextEdit(). Thus, no need for explicit updates here.
+    // SdrEndTextEdit(). Thus, no need for explicit updates here.
     if( !HasView() || !IsEditMode() )
     {
         if( mbIsLocked  )
@@ -944,7 +952,13 @@ Rectangle SvxTextEditSourceImpl::GetVisArea()
 {
     if( IsValid() )
     {
-        Rectangle aVisArea = mpView->GetVisibleArea( mpView->FindWin( const_cast< Window* > (mpWindow) ) );
+        SdrPaintWindow* pPaintWindow = mpView->FindPaintWindow(*mpWindow);
+        Rectangle aVisArea;
+
+        if(pPaintWindow)
+        {
+            aVisArea = pPaintWindow->GetVisibleArea();
+        }
 
         // offset vis area by edit engine left-top position
         SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
