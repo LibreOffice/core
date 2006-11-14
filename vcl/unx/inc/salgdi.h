@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:01:23 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:24:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,6 +184,10 @@ protected:
     GC                      SelectFont();
     bool                    setFont( const ImplFontSelectData* pEntry, int nFallbackLevel );
 
+    void                    drawMaskedBitmap( const SalTwoRect* pPosAry,
+                                              const SalBitmap& rSalBitmap,
+                                              const SalBitmap& rTransparentBitmap );
+
 protected:
     void                    DrawStringUCS2MB( ExtendedFontStruct& rFont, const Point&,
                                 const sal_Unicode* pStr, int nLength );
@@ -303,7 +307,7 @@ public:
                                         SalColor nTransparentColor );
     virtual void            drawBitmap( const SalTwoRect* pPosAry,
                                         const SalBitmap& rSalBitmap,
-                                        const SalBitmap& rTransparentBitmap );
+                                        const SalBitmap& rMaskBitmap );
     virtual void            drawMask( const SalTwoRect* pPosAry,
                                       const SalBitmap& rSalBitmap,
                                       SalColor nMaskColor );
@@ -313,6 +317,13 @@ public:
     virtual void            invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nFlags );
 
     virtual BOOL            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize );
+
+    virtual bool            drawAlphaBitmap( const SalTwoRect&,
+                                             const SalBitmap& rSourceBitmap,
+                                             const SalBitmap& rAlphaBitmap );
+
+    virtual bool            drawAlphaRect( long nX, long nY, long nWidth,
+                                           long nHeight, sal_uInt8 nTransparency );
 
     /*  use to handle GraphicsExpose/NoExpose after XCopyArea & friends
      *  if pFrame is not NULL, corresponding Paint events are generated
@@ -326,12 +337,12 @@ public:
     // do XCopyArea or XGet/PutImage depending on screen numbers
     // signature is like XCopyArea with screen numbers added
     static void CopyScreenArea( Display* pDisplay,
-                          Drawable aSrc, int nScreenSrc, int nSrcDepth,
-                          Drawable aDest, int nScreenDest, int nDestDepth,
-                          GC aDestGC,
-                          int src_x, int src_y,
-                          unsigned int w, unsigned int h,
-                          int dest_x, int dest_y );
+                                Drawable aSrc, int nScreenSrc, int nSrcDepth,
+                                Drawable aDest, int nScreenDest, int nDestDepth,
+                                GC aDestGC,
+                                int src_x, int src_y,
+                                unsigned int w, unsigned int h,
+                                int dest_x, int dest_y );
     static void releaseGlyphPeer();
 };
 
