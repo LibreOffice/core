@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:37:07 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:22:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,6 +207,10 @@
 #include "anminfo.hxx"
 #include "imapinfo.hxx"
 #include "sdresid.hxx"
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
 
 using ::rtl::OUString;
 using ::rtl::OString;
@@ -1773,14 +1777,8 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                             case IMAP_OBJ_POLYGON:
                             {
-                                Polygon aArea(((IMapPolygonObject*)pArea)->
-                                               GetPolygon(false));
-                                XPolygon aXPoly(aArea);
-                                XPolyPolygon aXPolyPoly(aXPoly);
-                                aStr += CreateHTMLPolygonArea(aXPolyPoly,
-                                                Size(aLogPos.X() - pPage->GetLftBorder(),
-                                                     aLogPos.Y() - pPage->GetUppBorder()),
-                                                fLogicToPixel, aURL);
+                                Polygon aArea(((IMapPolygonObject*)pArea)->GetPolygon(false));
+                                aStr += CreateHTMLPolygonArea(::basegfx::B2DPolyPolygon(aArea.getB2DPolygon()), Size(aLogPos.X() - pPage->GetLftBorder(), aLogPos.Y() - pPage->GetUppBorder()), fLogicToPixel, aURL);
                             }
                             break;
 
@@ -1884,13 +1882,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                                   pObject->GetObjIdentifier() == OBJ_PLIN ||
                                   pObject->GetObjIdentifier() == OBJ_POLY))
                         {
-                            const XPolyPolygon& rXPolyPoly =
-                                ((SdrPathObj*)pObject)->GetPathPoly();
-                            aStr += CreateHTMLPolygonArea(rXPolyPoly,
-                                                     Size(-pPage->GetLftBorder(),
-                                                          -pPage->GetUppBorder()),
-                                                     fLogicToPixel,
-                                                     aHRef);
+                            aStr += CreateHTMLPolygonArea(((SdrPathObj*)pObject)->GetPathPoly(), Size(-pPage->GetLftBorder(), -pPage->GetUppBorder()), fLogicToPixel, aHRef);
                         }
                         // was anderes: das BoundRect nehmen
                         else
@@ -3079,24 +3071,23 @@ String HtmlExport::CreateHTMLCircleArea( ULONG nRadius,
 // =====================================================================
 // Area fuer Polygon erzeugen; es werden Pixelkoordinaten erwartet
 // =====================================================================
-String HtmlExport::CreateHTMLPolygonArea( const XPolyPolygon& rXPolyPoly,
-                                          Size aShift,
-                                          double fFactor,
-                                          const String& rHRef ) const
+String HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPolyPolygon,
+    Size aShift, double fFactor, const String& rHRef ) const
 {
     String          aStr;
-    const USHORT    nNoOfXPolygons = rXPolyPoly.Count();
+    const sal_uInt32 nNoOfPolygons(rPolyPolygon.count());
 
-    for ( USHORT nXPoly= 0; nXPoly < nNoOfXPolygons; nXPoly++ )
+    for ( sal_uInt32 nXPoly = 0L; nXPoly < nNoOfPolygons; nXPoly++ )
     {
-        const XPolygon& rXPoly = rXPolyPoly.GetObject(nXPoly);
-        const USHORT    nNoOfPoints = rXPoly.GetPointCount();
+        const ::basegfx::B2DPolygon& aPolygon = rPolyPolygon.getB2DPolygon(nXPoly);
+        const sal_uInt32 nNoOfPoints(aPolygon.count());
 
         aStr.AppendAscii( "<area shape=\"polygon\" alt=\"\" coords=\"" );
 
-        for ( USHORT nPoint = 0; nPoint < nNoOfPoints; nPoint++ )
+        for ( sal_uInt32 nPoint = 0L; nPoint < nNoOfPoints; nPoint++ )
         {
-            Point aPnt(rXPoly[nPoint]);
+            const ::basegfx::B2DPoint aB2DPoint(aPolygon.getB2DPoint(nPoint));
+            Point aPnt(FRound(aB2DPoint.getX()), FRound(aB2DPoint.getY()));
             // das Koordinaten beziehen sich auf den
             // physikalischen Seitenursprung, nicht auf den
             // Koordinatenursprung
