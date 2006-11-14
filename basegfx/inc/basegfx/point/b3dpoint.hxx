@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dpoint.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:26:58 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:05:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,17 @@ namespace basegfx
             return (const B3DPoint&) ::basegfx::B3DTuple::getEmptyTuple();
         }
     };
+
+    // external operators
+    //////////////////////////////////////////////////////////////////////////
+
+    /** Transform B3DPoint by given transformation matrix.
+
+        Since this is a Point, translational components of the
+        matrix are used.
+    */
+    B3DPoint operator*( const B3DHomMatrix& rMat, const B3DPoint& rPoint );
+
 } // end of namespace basegfx
 
 #endif /* _BGFX_POINT_B3DPOINT_HXX */
