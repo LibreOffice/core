@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:30:56 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:16:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1024,7 +1024,8 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         pModel->InsertPage( pPage, 0 );
         SdrView* pView = new SdrView( pModel, &aVDev );
         pView->SetMarkHdlHidden( TRUE );
-        SdrPageView* pPageView = pView->ShowPage(pPage, Point());
+        SdrPageView* pPageView = pView->ShowSdrPage(pPage);
+//      SdrPageView* pPageView = pView->ShowSdrPage(pPage, Point());
         SdrObject *pObj=NULL;
         long nSymTmp=nSymType;
         if(pSymbolList)
@@ -1187,12 +1188,12 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     {
         // #86265# select entry using list and polygon, not string
         sal_Bool bSelected(FALSE);
-        const XPolygon& rItemPolygon = ((const XLineStartItem&)rAttrs.Get(XATTR_LINESTART)).GetLineStartValue();
+        const basegfx::B2DPolyPolygon& rItemPolygon = ((const XLineStartItem&)rAttrs.Get(XATTR_LINESTART)).GetLineStartValue();
 
         for(sal_Int32 a(0);!bSelected &&  a < pLineEndList->Count(); a++)
         {
             XLineEndEntry* pEntry = pLineEndList->GetLineEnd(a);
-            const XPolygon& rEntryPolygon = pEntry->GetLineEnd();
+            const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
 
             if(rItemPolygon == rEntryPolygon)
             {
@@ -1220,12 +1221,12 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     {
         // #86265# select entry using list and polygon, not string
         sal_Bool bSelected(FALSE);
-        const XPolygon& rItemPolygon = ((const XLineEndItem&)rAttrs.Get(XATTR_LINEEND)).GetLineEndValue();
+        const basegfx::B2DPolyPolygon& rItemPolygon = ((const XLineEndItem&)rAttrs.Get(XATTR_LINEEND)).GetLineEndValue();
 
         for(sal_Int32 a(0);!bSelected &&  a < pLineEndList->Count(); a++)
         {
             XLineEndEntry* pEntry = pLineEndList->GetLineEnd(a);
-            const XPolygon& rEntryPolygon = pEntry->GetLineEnd();
+            const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
 
             if(rItemPolygon == rEntryPolygon)
             {
@@ -1701,7 +1702,8 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
         // 3D View
         SdrView* pView = new SdrView( pModel, &aVDev );
         pView->SetMarkHdlHidden( TRUE );
-        SdrPageView* pPageView = pView->ShowPage(pPage, Point());
+//      SdrPageView* pPageView = pView->ShowSdrPage(pPage, Point());
+        SdrPageView* pPageView = pView->ShowSdrPage(pPage);
 
         PopupMenu* pPopup = new PopupMenu;
         String aEmptyStr;
