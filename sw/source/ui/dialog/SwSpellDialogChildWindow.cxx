@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwSpellDialogChildWindow.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:48:03 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:15:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ void lcl_LeaveDrawText(SwWrtShell& rSh)
 {
     if(rSh.GetDrawView())
     {
-        rSh.GetDrawView()->EndTextEdit( TRUE );
+        rSh.GetDrawView()->SdrEndTextEdit( TRUE );
         Point aPt(LONG_MIN, LONG_MIN);
         //go out of the frame
         rSh.SelectObj(aPt, SW_LEAVE_FRAME);
@@ -835,12 +835,12 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                 {
                     //now the current one has to be deselected
                     if(pCurrentTextObj)
-                        pDrView->EndTextEdit( TRUE );
+                        pDrView->SdrEndTextEdit( TRUE );
                     //and the found one should be activated
                     rSh.MakeVisible(pTextObj->GetLogicRect());
                     Point aTmp( 0,0 );
                     rSh.SelectObj( aTmp, 0, pTextObj );
-                    SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
+                    SdrPageView* pPV = pDrView->GetSdrPageView();
                     rView.BeginTextEdit( pTextObj, pPV, &rView.GetEditWin(), FALSE );
                     rView.AttrChangedNotify(&rSh);
                     bNextDoc = true;
