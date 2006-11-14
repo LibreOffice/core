@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:18:36 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:00:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
     SdrModel*   pModel  = pDrView->GetModel();
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(FmFormInventor, OBJ_FM_BUTTON,
-                               pDrView->GetPageViewPvNum(0)->GetPage(), pModel);
+                               pDrView->GetSdrPageView()->GetPage(), pModel);
     SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObj);
 
     uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
@@ -142,7 +142,7 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
     //  gesetzt werden - das scheint mit UnoControls nicht noetig zu sein
 
     //  nicht markieren wenn Ole
-    pDrView->InsertObjectSafe( pObj, *pDrView->GetPageViewPvNum(0) );
+    pDrView->InsertObjectSafe( pObj, *pDrView->GetSdrPageView() );
 }
 
 
