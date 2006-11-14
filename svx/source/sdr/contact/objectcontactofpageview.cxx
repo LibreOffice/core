@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontactofpageview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:34:33 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 #ifndef _SDR_CONTACT_OBJECTCONTACTOFPAGEVIEW_HXX
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #endif
+#ifndef SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFUNOCONTROL_HXX
+#include <svx/sdr/contact/viewobjectcontactofunocontrol.hxx>
+#endif
 
 #ifndef _SVDPAGV_HXX
 #include <svdpagv.hxx>
@@ -50,10 +53,6 @@
 
 #ifndef _SDR_CONTACT_DISPLAYINFO_HXX
 #include <svx/sdr/contact/displayinfo.hxx>
-#endif
-
-#ifndef _SVDMODEL_HXX
-#include <svdmodel.hxx>
 #endif
 
 #ifndef _SDR_CONTACT_VIEWOBJECTCONTACT_HXX
@@ -72,12 +71,16 @@
 #include <svx/sdr/animation/objectanimator.hxx>
 #endif
 
-#ifndef _XOUTX_HXX
-#include <xoutx.hxx>
-#endif
-
 #ifndef _SDR_EVENT_EVENTHANDLER_HXX
 #include <svx/sdr/event/eventhandler.hxx>
+#endif
+
+#ifndef _SDRPAGEWINDOW_HXX
+#include <sdrpagewindow.hxx>
+#endif
+
+#ifndef _SDRPAINTWINDOW_HXX
+#include <sdrpaintwindow.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -86,24 +89,18 @@ namespace sdr
 {
     namespace contact
     {
-        // internal access to SdrPageViewWindow
-        SdrPageViewWindow& ObjectContactOfPageView::GetPageViewWindow() const
-        {
-            return mrPageViewWindow;
-        }
-
         // internal access to SdrPage of SdrPageView
         SdrPage* ObjectContactOfPageView::GetSdrPage() const
         {
-            return GetPageViewWindow().GetPageView().GetPage();
+            return GetPageWindow().GetPageView().GetPage();
         }
 
-        ObjectContactOfPageView::ObjectContactOfPageView(SdrPageViewWindow& rPageViewWindow)
+        ObjectContactOfPageView::ObjectContactOfPageView(SdrPageWindow& rPageWindow)
         :   ObjectContact(),
-            mrPageViewWindow(rPageViewWindow),
+            mrPageWindow(rPageWindow),
             mpRememberedStartPage(0L)
         {
-            mbIsPreviewRenderer = ((SdrPaintView&)rPageViewWindow.GetPageView().GetView()).IsPreviewRenderer();
+            mbIsPreviewRenderer = ((SdrPaintView&)rPageWindow.GetPageView().GetView()).IsPreviewRenderer();
         }
 
         // The destructor. When PrepareDelete() was not called before (see there)
@@ -193,7 +190,7 @@ namespace sdr
             {
                 OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
 
-                if(OUTDEV_WINDOW == pOut->GetOutDevType())
+                if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType())
                 {
                     Window* pWin = (Window*)pOut;
                     Region aExpandRegion;
@@ -314,42 +311,6 @@ namespace sdr
             }
         }
 
-        // The PreRenderer
-        void ObjectContactOfPageView::PreRender(DisplayInfo& rDisplayInfo)
-        {
-            // get and remember OutputDevices
-            OutputDevice* pOriginalOutDev = rDisplayInfo.GetOutputDevice();
-            XOutputDevice* pOriginalExtOutDev = rDisplayInfo.GetExtendedOutputDevice();
-
-            // compare size of maPreRenderDevice with size of visible area
-            if(maPreRenderDevice.GetOutputSizePixel() != pOriginalOutDev->GetOutputSizePixel())
-            {
-                maPreRenderDevice.SetOutputSizePixel(pOriginalOutDev->GetOutputSizePixel());
-            }
-
-            // Also compare the MapModes for zoom/scroll changes
-            if(maPreRenderDevice.GetMapMode() != pOriginalOutDev->GetMapMode())
-            {
-                maPreRenderDevice.SetMapMode(pOriginalOutDev->GetMapMode());
-            }
-
-            // Use draw mode and style settings of the original device.
-            // #i29186#
-            maPreRenderDevice.SetDrawMode(pOriginalOutDev->GetDrawMode());
-             maPreRenderDevice.SetSettings(pOriginalOutDev->GetSettings());
-
-            // replace values at rDisplayInfo for rendering to PreRenderDevice
-            pOriginalExtOutDev->SetOutDev(&maPreRenderDevice);
-            rDisplayInfo.SetOutputDevice(&maPreRenderDevice);
-
-            // paint in PreRenderDevice
-            DoProcessDisplay(rDisplayInfo);
-
-            // set back to old OutDev, restore rDisplayInfo
-            pOriginalExtOutDev->SetOutDev(pOriginalOutDev);
-            rDisplayInfo.SetOutputDevice(pOriginalOutDev);
-        }
-
         // Pre-Process the whole displaying.
         void ObjectContactOfPageView::PreProcessDisplay(DisplayInfo& rDisplayInfo)
         {
@@ -372,96 +333,11 @@ namespace sdr
                 && pStartPage
                 && rDisplayInfo.GetPaintInfoRec()
                 && rDisplayInfo.GetOutputDevice()
-                && maDrawHierarchy.Count())
+                && maDrawHierarchy.Count()
+                && !rDisplayInfo.GetProcessLayers().IsEmpty())
             {
-                // #i28641# test if ControlLayer is to be painted
-                //SdrPage* pStartPage = GetSdrPage();
-                const SdrModel& rModel = *(pStartPage->GetModel());
-                const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
-                const sal_uInt32 nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), sal_False);
-                SetOfByte aProcessLayers = rDisplayInfo.GetProcessLayers();
-                sal_Bool bDrawControlLayer(aProcessLayers.IsSet((sal_uInt8)nControlLayerId));
-
-                // Clear ControlLayer
-                if(bDrawControlLayer)
-                {
-                    // clear for normal paint
-                    aProcessLayers.Clear((sal_uInt8)nControlLayerId);
-                }
-
-                // Is there still something to be painted besides control layer?
-                if(!aProcessLayers.IsEmpty())
-                {
-                    // standard paint
-                    rDisplayInfo.SetProcessLayers(aProcessLayers);
-
-                    // Look if pre-rendering should be done. If Yes, use it. If no,
-                    // do a normal ProcessDisplay() using DoProcessDiaply(). The second one
-                    // is called in any case, maybe for pre-rendering or for direct output.
-                    if(DoPreRender(rDisplayInfo))
-                    {
-                        // Get OutputDevice
-                        OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
-
-                        // update pre-rendered VirtualDevice
-                        PreRender(rDisplayInfo);
-
-                        // calculate the to-be-refreshed rectangle
-                        Rectangle aPaintRect(rDisplayInfo.GetRedrawArea().GetBoundRect());
-                        Rectangle aPaintRectPixel = pOut->LogicToPixel(aPaintRect);
-
-                        // paint using prepared, pre-rendered VirtualDevice
-                        sal_Bool bMapModeWasEnabledDest(pOut->IsMapModeEnabled());
-                        sal_Bool bMapModeWasEnabledSource(maPreRenderDevice.IsMapModeEnabled());
-                        pOut->EnableMapMode(sal_False);
-                        maPreRenderDevice.EnableMapMode(sal_False);
-
-                        Size aPaintSizePixel = aPaintRectPixel.GetSize();
-                        pOut->DrawOutDev(
-                            aPaintRectPixel.TopLeft(), aPaintSizePixel,
-                            aPaintRectPixel.TopLeft(), aPaintSizePixel,
-                            maPreRenderDevice);
-
-                        pOut->EnableMapMode(bMapModeWasEnabledDest);
-                        maPreRenderDevice.EnableMapMode(bMapModeWasEnabledSource);
-                    }
-                    else
-                    {
-                        // paint direct
-                        DoProcessDisplay(rDisplayInfo);
-                    }
-                }
-
-                // #i28641# Draw ControlLayer (force to unbuffered due to VCL limitations)
-                if(bDrawControlLayer)
-                {
-                    // paint ControlLayer
-                    aProcessLayers.ClearAll();
-                    aProcessLayers.Set((sal_uInt8)nControlLayerId);
-                    rDisplayInfo.SetProcessLayers(aProcessLayers);
-                    rDisplayInfo.SetControlLayerPainting(sal_True);
-
-                    // paint direct
-                    DoProcessDisplay(rDisplayInfo);
-
-                    rDisplayInfo.SetControlLayerPainting(sal_False);
-                }
-
-                // If a ObjectAnimator exists, execute it. This will only do anything
-                // if the ObjectAnimator's timer is not yet running and if there are
-                // events scheduled.
-                if(HasObjectAnimator())
-                {
-                    GetObjectAnimator().Execute();
-                }
-
-                // Test if paint was interrupted. If Yes, we need to invalidate the
-                // PageView where the paint region was defined
-                if(!rDisplayInfo.DoContinuePaint())
-                {
-                    Rectangle aRect = rDisplayInfo.GetRedrawArea().GetBoundRect();
-                    GetPageViewWindow().Invalidate(aRect);
-                }
+                // paint direct
+                DoProcessDisplay(rDisplayInfo);
             }
 
             // after paint take care of the evtl. scheduled asynchronious commands.
@@ -476,48 +352,6 @@ namespace sdr
                     rEventHandler.Restart();
                 }
             }
-
-#ifdef DBG_UTIL
-            // Do some test painting for the given rectangles
-            if(sal_False && rDisplayInfo.GetPaintInfoRec() && rDisplayInfo.GetOutputDevice())
-            {
-                OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
-                pOut->SetFillColor();
-                pOut->SetLineColor(COL_RED);
-                pOut->DrawRect(rDisplayInfo.GetRedrawArea().GetBoundRect());
-
-                sal_Bool bWasEnabled(pOut->IsMapModeEnabled());
-                pOut->EnableMapMode(sal_False);
-
-                // Test ExpandPaintClipRegion
-                Point aEmptyPoint;
-                Rectangle aVisiblePixel(aEmptyPoint, pOut->GetOutputSizePixel());
-                pOut->Push( PUSH_CLIPREGION );
-
-                if(OUTDEV_WINDOW == pOut->GetOutDevType())
-                {
-                    Window* pWin = (Window*)pOut;
-                    Region aExpandRegion(pOut->PixelToLogic(aVisiblePixel));
-                    pWin->ExpandPaintClipRegion(aExpandRegion);
-                }
-
-                sal_uInt32 nTime(Time::GetSystemTicks());
-                pOut->SetLineColor(Color(sal_uInt8(nTime), sal_uInt8(nTime >> 3), sal_uInt8(nTime >> 6)));
-                pOut->DrawRect(aVisiblePixel);
-
-                pOut->Pop();
-                pOut->EnableMapMode(bWasEnabled);
-            }
-#endif // DBG_UTIL
-        }
-
-        // Decide if to PreRender
-        sal_Bool ObjectContactOfPageView::DoPreRender(DisplayInfo& rDisplayInfo) const
-        {
-            return (rDisplayInfo.IsPreRenderingAllowed()
-                && !rDisplayInfo.OutputToPrinter()
-                && !rDisplayInfo.OutputToVirtualDevice()
-                && !rDisplayInfo.OutputToRecordingMetaFile());
         }
 
         // Process the whole displaying. Only use given DsiplayInfo, do not access other
@@ -525,10 +359,8 @@ namespace sdr
         void ObjectContactOfPageView::DoProcessDisplay(DisplayInfo& rDisplayInfo)
         {
             // visualize entered group when that feature is switched on and it's not
-            // a print output. #i29129# No ghosted display for printing.
-            sal_Bool bVisualizeEnteredGroup(
-                DoVisualizeEnteredGroup()
-                && !rDisplayInfo.OutputToPrinter());
+            // a print output
+            sal_Bool bVisualizeEnteredGroup(DoVisualizeEnteredGroup() && !rDisplayInfo.OutputToPrinter());
 
             // Visualize entered groups: Set to ghosted as default
             // start. Do this only for the DrawPage, not for MasterPages
@@ -549,11 +381,11 @@ namespace sdr
                 rOutDev.IntersectClipRegion(rRedrawArea);
             }
 
-            // standard paint
+            // Draw DrawPage
             ViewObjectContact& rDrawPageVOContact = *(maDrawHierarchy.GetObject(0L));
             rDrawPageVOContact.PaintObjectHierarchy(rDisplayInfo);
 
-            // #114359# restore old ClipRegion
+            // #114359# restore old ClipReghion
             if(bClipRegionPushed)
             {
                 rOutDev.Pop();
@@ -564,12 +396,28 @@ namespace sdr
             {
                 rDisplayInfo.ClearGhostedDrawMode();
             }
+
+            // Test if paint was interrupted. If Yes, we need to invalidate the
+            // PageView where the paint region was defined
+            if(!rDisplayInfo.DoContinuePaint())
+            {
+                Rectangle aRect = rDisplayInfo.GetRedrawArea().GetBoundRect();
+                GetPageWindow().Invalidate(aRect);
+            }
+
+            // If a ObjectAnimator exists, execute it. This will only do anything
+            // if the ObjectAnimator's timer is not yet running and if there are
+            // events scheduled.
+            if(HasObjectAnimator())
+            {
+                GetObjectAnimator().Execute();
+            }
         }
 
         // test if visualizing of entered groups is switched on at all
         sal_Bool ObjectContactOfPageView::DoVisualizeEnteredGroup() const
         {
-            SdrView& rView = GetPageViewWindow().GetPageView().GetView();
+            SdrView& rView = GetPageWindow().GetPageView().GetView();
             return rView.DoVisualizeEnteredGroup();
         }
 
@@ -578,7 +426,7 @@ namespace sdr
         // classes.
         ViewContact* ObjectContactOfPageView::GetActiveGroupContact() const
         {
-            SdrObjList* pActiveGroupList = GetPageViewWindow().GetPageView().GetObjList();
+            SdrObjList* pActiveGroupList = GetPageWindow().GetPageView().GetObjList();
             ViewContact* pRetval = 0L;
 
             if(pActiveGroupList)
@@ -612,7 +460,7 @@ namespace sdr
         void ObjectContactOfPageView::InvalidatePartOfView(const Rectangle& rRectangle) const
         {
             // invalidate all associated windows.
-            GetPageViewWindow().Invalidate(rRectangle);
+            GetPageWindow().Invalidate(rRectangle);
         }
 
         // #i37394# Non-painted object was changed. Test for potentially
@@ -625,7 +473,7 @@ namespace sdr
             if(IsAreaVisible(rOrigObjectRectangle))
             {
                 // invalidate
-                GetPageViewWindow().Invalidate(rOrigObjectRectangle);
+                GetPageWindow().Invalidate(rOrigObjectRectangle);
             }
 
             // call parent
@@ -636,7 +484,7 @@ namespace sdr
         // Get info if given Rectangle is visible in this view
         sal_Bool ObjectContactOfPageView::IsAreaVisible(const Rectangle& rRectangle) const
         {
-            OutputDevice& rOutDev = GetPageViewWindow().GetOutputDevice();
+            OutputDevice& rOutDev = GetPageWindow().GetPaintWindow().GetOutputDevice();
             const Point aEmptyPoint;
             const Rectangle aVisiblePixel(aEmptyPoint, rOutDev.GetOutputSizePixel());
             const Rectangle aTestPixel(rOutDev.LogicToPixel(rRectangle));
@@ -654,13 +502,13 @@ namespace sdr
         // Get info about the need to visualize GluePoints
         sal_Bool ObjectContactOfPageView::AreGluePointsVisible() const
         {
-            return GetPageViewWindow().GetPageView().GetView().ImpIsGlueVisible();
+            return GetPageWindow().GetPageView().GetView().ImpIsGlueVisible();
         }
 
         // check if text animation is allowed.
         sal_Bool ObjectContactOfPageView::IsTextAnimationAllowed() const
         {
-            SdrView& rView = GetPageViewWindow().GetPageView().GetView();
+            SdrView& rView = GetPageWindow().GetPageView().GetView();
             const SvtAccessibilityOptions& rOpt = rView.getAccessibilityOptions();
             return rOpt.GetIsAllowAnimatedText();
         }
@@ -668,7 +516,7 @@ namespace sdr
         // check if graphic animation is allowed.
         sal_Bool ObjectContactOfPageView::IsGraphicAnimationAllowed() const
         {
-            SdrView& rView = GetPageViewWindow().GetPageView().GetView();
+            SdrView& rView = GetPageWindow().GetPageView().GetView();
             const SvtAccessibilityOptions& rOpt = rView.getAccessibilityOptions();
             return rOpt.GetIsAllowAnimatedGraphics();
         }
@@ -676,15 +524,29 @@ namespace sdr
         // check if asynchronious graphis loading is allowed. Default is sal_False.
         sal_Bool ObjectContactOfPageView::IsAsynchronGraphicsLoadingAllowed() const
         {
-            SdrView& rView = GetPageViewWindow().GetPageView().GetView();
+            SdrView& rView = GetPageWindow().GetPageView().GetView();
             return rView.IsSwapAsynchron();
         }
 
         // check if buffering of MasterPages is allowed. Default is sal_False.
         sal_Bool ObjectContactOfPageView::IsMasterPageBufferingAllowed() const
         {
-            SdrView& rView = GetPageViewWindow().GetPageView().GetView();
+            SdrView& rView = GetPageWindow().GetPageView().GetView();
             return rView.IsMasterPagePaintCaching();
+        }
+
+        // set all UNO controls displayed in the view to design/alive mode
+        void ObjectContactOfPageView::SetUNOControlsDesignMode( bool _bDesignMode ) const
+        {
+            sal_uInt32 nVOCCount = maVOCList.Count();
+            for ( sal_uInt32 voc=0; voc<nVOCCount; ++voc )
+            {
+                const ViewObjectContact* pVOC = maVOCList.GetObject( voc );
+                const ViewObjectContactOfUnoControl* pUnoObjectVOC = dynamic_cast< const ViewObjectContactOfUnoControl* >( pVOC );
+                if ( !pUnoObjectVOC )
+                    continue;
+                pUnoObjectVOC->setControlDesignMode( _bDesignMode );
+            }
         }
     } // end of namespace contact
 } // end of namespace sdr
