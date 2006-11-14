@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdshort.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:54:43 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:54:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,12 +43,9 @@
 #ifdef Weg_Mit_Den_Doofen_Abkuerzungen
                                            // Statistik - Stand 02-03-1995
                                            //   Haeufigkeit  Ersparnis
-//BFS01#define SdrObjSurrogate              SdrSU
 #define SdrHelpLineKind              SdrFLK /* HL ist schon besetzt */
 #define SdrHelpLineList              SdrFLL /* HL ist schon besetzt */
 #define SdrHelpLine                  SdrFL  /* HL ist schon besetzt */
-//#define SdrMasterPageDescriptorList  SdrMPL
-//#define SdrMasterPageDescriptor      SdrMP
 #define SdrObjTransformInfoRec       SdrTI
 #define SdrDragCrook                 SdrDC
 #define SdrDragMirror                SdrDI
@@ -67,8 +64,6 @@
 #define SdrMarkList                  SdrML
 #define SdrHdlList                   SdrHL
 #define SdrLayerAdmin                SdrLA
-//#define SdrObjEditRec                SdrER
-//BFS01#define SdrObjIOHeader               SdrOH
 #define SdrObjUserCall               SdrUC
 #define SdrObjUnknown                SdrUO
 #define SdrExchangeView              SdrXV
