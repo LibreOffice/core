@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:03:05 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 18:21:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ void PyUNO_del (PyObject* self)
 {
     PyUNO* me = reinterpret_cast< PyUNO* > (self);
     delete me->members;
-    PyMem_DEL (self);
+    PyObject_Del (self);
 }
 
 
@@ -727,7 +727,7 @@ PyObject* PyUNO_new_UNCHECKED (
     Sequence<Any> arguments (1);
     Reference<XInterface> tmp_interface;
 
-    self = PyObject_NEW (PyUNO, &PyUNOType);
+    self = PyObject_New (PyUNO, &PyUNOType);
     if (self == NULL)
         return NULL; //NULL == error
     self->members = new PyUNOInternals();
