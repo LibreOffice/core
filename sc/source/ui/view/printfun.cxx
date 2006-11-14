@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:07:25 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:58:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -546,7 +546,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrint
     if( pModel )
     {
         pDrawView = new FmFormView( pModel, pDev );
-        pDrawView->ShowPagePgNum( static_cast<sal_uInt16>(nTab), Point() );
+        pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
         pDrawView->SetPrintPreview( TRUE );
         aOutputData.SetDrawView( pDrawView );
     }
@@ -1720,7 +1720,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     // #109985#
     if(pDrawView && !(mnPaintMode & SDRPAINTMODE_SC_HIDE_DRAW))
     {
-        SdrPageView* pPV = pDrawView->GetPageViewPgNum(static_cast<sal_uInt16>(nPrintTab));
+        SdrPageView* pPV = pDrawView->GetSdrPageView();
         DBG_ASSERT(pPV, "keine PageView fuer gedruckte Tabelle");
         if (pPV)
         {
@@ -1731,7 +1731,9 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
             pDev->SetMapMode( aControlMode );
             pDev->SetClipRegion( aLogicRect );      // single controls may extend beyond the page
 
-            pPV->DrawLayer( SC_LAYER_CONTROLS, aLogicRect );
+            // Region aDrawRegion(aLogicRect);
+            // pPV->DrawLayer( SC_LAYER_CONTROLS, aDrawRegion);
+            pPV->DrawLayer( SC_LAYER_CONTROLS);
 
             pDev->SetClipRegion();
         }
