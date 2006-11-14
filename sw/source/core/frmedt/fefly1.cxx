@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:14:10 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:09:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -475,7 +475,7 @@ void SwFEShell::SetFlyPos( const Point& rAbsPos )
     if ( !pFly )
         return;
 
-    SwSaveHdl aSaveX( Imp() );
+    //SwSaveHdl aSaveX( Imp() );
 
     //Bei Absatzgebundenen Flys muss ausgehend von der absoluten
     //Position ein neuer Anker gesetzt werden. Anker und neue RelPos werden
