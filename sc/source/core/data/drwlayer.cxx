@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:33:39 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:47:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -814,70 +814,6 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData, BOOL bNegati
     }
 
 }
-
-//BFS03void ScDrawLayer::Load( SvStream& rStream )
-//BFS03{
-//BFS03 bRecording = FALSE;
-//BFS03 DELETEZ(pUndoGroup);
-//BFS03
-//BFS03 ScReadHeader aHdr( rStream );
-//BFS03 while (aHdr.BytesLeft())
-//BFS03 {
-//BFS03     USHORT nID;
-//BFS03     rStream >> nID;
-//BFS03     switch (nID)
-//BFS03     {
-//BFS03         case SCID_DRAWPOOL:
-//BFS03             {
-//BFS03                 ScReadHeader aPoolHdr( rStream );
-//BFS03                 GetItemPool().Load( rStream );              //! in Pool-Stream ?
-//BFS03             }
-//BFS03             break;
-//BFS03         case SCID_DRAWMODEL:
-//BFS03             {
-//BFS03                 ScReadHeader aDrawHdr( rStream );
-//BFS03                 rStream >> *this;
-//BFS03
-//BFS03                 //  Control-Layer ist nicht in alten Dateien
-//BFS03                 SdrLayerAdmin& rAdmin = GetLayerAdmin();
-//BFS03                 const SdrLayer* pLayer = rAdmin.GetLayerPerID(SC_LAYER_CONTROLS);
-//BFS03                 if (!pLayer)
-//BFS03                     rAdmin.NewLayer(
-//BFS03                         String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Controls")),
-//BFS03                         SC_LAYER_CONTROLS);
-//BFS03             }
-//BFS03             break;
-//BFS03         default:
-//BFS03             {
-//BFS03                 DBG_ERROR("unbekannter Sub-Record in ScDrawLayer::Load");
-//BFS03                 ScReadHeader aDummyHdr( rStream );
-//BFS03             }
-//BFS03     }
-//BFS03 }
-//BFS03
-//BFS03 GetItemPool().LoadCompleted();
-//BFS03}
-
-//BFS03void ScDrawLayer::Store( SvStream& rStream ) const
-//BFS03{
-//BFS03 ScWriteHeader aHdr( rStream );
-//BFS03
-//BFS03//BFS01  const_cast<ScDrawLayer*>(this)->PreSave();      // non-const
-//BFS03
-//BFS03 {
-//BFS03     rStream << (USHORT) SCID_DRAWPOOL;
-//BFS03     ScWriteHeader aPoolHdr( rStream );
-//BFS03     GetItemPool().Store( rStream );             //! in Pool-Stream ?
-//BFS03 }
-//BFS03
-//BFS03 {
-//BFS03     rStream << (USHORT) SCID_DRAWMODEL;
-//BFS03     ScWriteHeader aDrawHdr( rStream );
-//BFS03     rStream << *this;
-//BFS03 }
-//BFS03
-//BFS03//BFS01  const_cast<ScDrawLayer*>(this)->PostSave();     // non-const
-//BFS03}
 
 BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) const
 {
