@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontworkgallery.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:43:08 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:52:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,7 +259,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                 SdrObject* pNewObject = pPage->GetObj(0)->Clone();
 
                 // center shape on current view
-                OutputDevice* pOutDev = mpSdrView->GetWin(0);
+                OutputDevice* pOutDev = mpSdrView->GetFirstOutputDevice();
                 if( pOutDev )
                 {
                     Rectangle aObjRect( pNewObject->GetLogicRect() );
@@ -277,7 +277,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                     aPagePos.X() -= aObjRect.GetWidth() / 2;
                     aPagePos.Y() -= aObjRect.GetHeight() / 2;
                     Rectangle aNewObjectRectangle(aPagePos, aObjRect.GetSize());
-                    SdrPageView* pPV = mpSdrView->GetPageViewPvNum(0);
+                    SdrPageView* pPV = mpSdrView->GetSdrPageView();
 
                     pNewObject->SetLogicRect(aNewObjectRectangle);
                     if ( mppSdrObject )
@@ -287,7 +287,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                     }
                     else if( pPV )
                     {
-                            mpSdrView->InsertObject( pNewObject, *pPV );
+                            mpSdrView->InsertObjectAtView( pNewObject, *pPV );
     //                      changeText( PTR_CAST( SdrTextObj, pNewObject ) );
                     }
                 }
