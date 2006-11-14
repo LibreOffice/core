@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:52:18 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:16:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,9 @@
 #ifndef _OUTLINER_HXX //autogen
 #include <svx/outliner.hxx>
 #endif
-#ifndef _SVDVMARK_HXX //autogen
-#include <svx/svdvmark.hxx>
-#endif
+//#ifndef _SVDVMARK_HXX //autogen
+//#include <svx/svdvmark.hxx>
+//#endif
 #ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
 #endif
@@ -236,7 +236,8 @@ void SwEditWin::CleanupDropUserMarker()
 {
     if ( pUserMarker )
     {
-        delete pUserMarker, pUserMarker = 0;
+        delete pUserMarker;
+        pUserMarker = 0;
         pUserMarkerObj = 0;
     }
 }
@@ -522,15 +523,16 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
         else
         {
             rSh.UnSetVisCrsr();
-            if ( !pUserMarker )
-                pUserMarker = new SdrViewUserMarker( rSh.GetDrawView() );
+
             if ( pUserMarkerObj != pObj )
             {
+                CleanupDropUserMarker();
                 pUserMarkerObj = pObj;
-                pUserMarker->SetXPolyPolygon( pUserMarkerObj,
-                    rSh.GetDrawView()->GetPageView(
-                            rSh.GetDrawView()->GetModel()->GetPage(0)));
-                pUserMarker->Show();
+
+                if(pUserMarkerObj)
+                {
+                    pUserMarker = new SdrDropMarkerOverlay( *rSh.GetDrawView(), *pUserMarkerObj );
+                }
             }
         }
         return nUserOpt;
