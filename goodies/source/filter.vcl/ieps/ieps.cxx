@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ieps.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:36:55 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:15:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -455,13 +455,9 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 //================== GraphicImport - die exportierte Funktion ================
 
 #ifdef WNT
-extern "C" BOOL _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                            PFilterCallback /*pCallback*/, void * /*pCallerData*/,
-                                FilterConfigItem*, BOOL)
+extern "C" BOOL _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL)
 #else
-extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                            PFilterCallback /*pCallback*/, void * /*pCallerData*/,
-                                FilterConfigItem*, BOOL)
+extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL)
 #endif
 {
     if ( rStream.GetError() )
