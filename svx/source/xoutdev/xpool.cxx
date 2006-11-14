@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xpool.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:25:00 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:57:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,11 @@
 #include <svtools/itemset.hxx>
 #endif
 
+/*************************************************************************
+|*
+|* Konstruktor
+|*
+\************************************************************************/
 
 XOutdevItemPool::XOutdevItemPool(
     SfxItemPool* _pMaster,
@@ -57,7 +62,7 @@ XOutdevItemPool::XOutdevItemPool(
     // prepare some defaults
     const XubString aNullStr;
     const Bitmap aNullBmp;
-    const XPolygon aNullPol;
+    const basegfx::B2DPolyPolygon aNullPol;
     const Color aNullLineCol(RGB_Color(COL_BLACK));
     const Color aNullFillCol(RGB_Color(COL_DEFAULT_SHAPE_FILLING));  // "Blue 8"
     const Color aNullShadowCol(RGB_Color(COL_LIGHTGRAY));
