@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.199 $
+ *  $Revision: 1.200 $
  *
- *  last change: $Author: rt $ $Date: 2006-11-07 15:29:45 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:11:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
