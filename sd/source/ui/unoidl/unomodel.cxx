@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:26:56 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:38:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1924,8 +1924,8 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                 ::sd::ViewShell* pOldViewSh = pDocShell->GetViewShell();
                 ::sd::View* pOldSdView = pOldViewSh ? pOldViewSh->GetView() : NULL;
 
-                if ( pOldSdView )
-                    pOldSdView->EndTextEdit();
+                if  ( pOldSdView )
+                    pOldSdView->SdrEndTextEdit();
 
                 pView->SetHlplVisible( sal_False );
                 pView->SetGridVisible( sal_False );
@@ -1941,8 +1941,8 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
                 if( xModel == pDocShell->GetModel() )
                 {
-                    pView->ShowPage( pDoc->GetSdPage( (USHORT)nPageNumber - 1, ePageKind ), aOrigin );
-                    SdrPageView* pPV = pView->GetPageViewPvNum( 0 );
+                    pView->ShowSdrPage( pDoc->GetSdPage( (USHORT)nPageNumber - 1, ePageKind ));
+                    SdrPageView* pPV = pView->GetSdrPageView();
 
                     ImplRenderPaintProc aImplRenderPaintProc( pDoc->GetLayerAdmin(),
                         pPV, pPDFExtOutDevData );
@@ -1954,7 +1954,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                         SdrOutliner& rOutl = pDoc->GetDrawOutliner( NULL );
                         rOutl.SetBackgroundColor( pPage->GetBackgroundColor( pPV ) );
                     }
-                    pPV->CompleteRedraw( pOut, aRegion, 0, &aImplRenderPaintProc );
+                    pView->SdrPaintView::CompleteRedraw( pOut, aRegion, 0, &aImplRenderPaintProc );
 
                     if ( pPDFExtOutDevData )
                     {
@@ -2127,7 +2127,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                        SdrPageView* pPV = NULL;
 
                        ImplRenderPaintProc  aImplRenderPaintProc( pDoc->GetLayerAdmin(),
-                                        pOldSdView ? pOldSdView->GetPageViewPvNum( 0 ) : NULL, pPDFExtOutDevData );
+                                        pOldSdView ? pOldSdView->GetSdrPageView() : NULL, pPDFExtOutDevData );
 
                         for( sal_uInt32 i = 0, nCount = xShapes->getCount(); i < nCount; i++ )
                         {
@@ -2146,7 +2146,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                             && aImplRenderPaintProc.IsPrintable( pObj ) )
                                     {
                                         if( !pPV )
-                                            pPV = pView->ShowPage( pObj->GetPage(), aOrigin );
+                                            pPV = pView->ShowSdrPage( pObj->GetPage() );
 
                                         if( pPV )
                                             pView->MarkObj( pObj, pPV );
