@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:33:18 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:42:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,11 +348,10 @@ const void WinMtfAssertHandler( const sal_Char* pAction, sal_uInt32 nFlags )
 
 // ------------------------------------------------------------------------
 
-WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, PFilterCallback pcallback, void * pcallerdata ) :
+WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, FilterConfigItem* pConfigItem ) :
     pOut                ( pWinMtfOutput ),
     pWMF                ( &rStreamWMF ),
-    pCallback           ( pcallback ),
-    pCallerData         ( pcallerdata )
+    pFilterConfigItem   ( pConfigItem )
 {
 #ifdef WIN_MTF_ASSERT
     // we want to assert not implemented features, but we do this
@@ -369,6 +368,15 @@ WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, PFilterCallba
     nStartPos = pWMF->Tell();
 
     pOut->SetDevOrg( Point() );
+    if ( pFilterConfigItem )
+    {
+        xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
+        if ( xStatusIndicator.is() )
+        {
+            rtl::OUString aMsg;
+            xStatusIndicator->start( aMsg, 100 );
+        }
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -376,21 +384,17 @@ WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, PFilterCallba
 WinMtf::~WinMtf()
 {
     delete pOut;
+
+    if ( xStatusIndicator.is() )
+        xStatusIndicator->end();
 }
 
 // ------------------------------------------------------------------------
 
-BOOL WinMtf::Callback( USHORT nPercent )
+void WinMtf::Callback( USHORT nPercent )
 {
-    if ( pCallback != NULL )
-    {
-        if( (*pCallback)( pCallerData, nPercent ) )
-        {
-            pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
-            return TRUE;
-        }
-    }
-    return FALSE;
+    if ( xStatusIndicator.is() )
+        xStatusIndicator->setValue( nPercent );
 }
 
 // ------------------------------------------------------------------------
