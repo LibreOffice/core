@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:27:53 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:09:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,6 +199,9 @@
 #include <mvsave.hxx>
 #endif
 
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
 
 /*************************************************************************
 |*
@@ -492,7 +495,7 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                 SdrObject* pNew = pDestDoc->CloneSdrObj( *pObj, bIsMove &&
                                         GetDoc() == pDestDoc, FALSE );
                 pNew->NbcMove( aSiz );
-                pDestDrwView->InsertObject( pNew, *pDestPgView );
+                pDestDrwView->InsertObjectAtView( pNew, *pDestPgView );
                 bInsWithFmt = FALSE;
             }
         }
@@ -979,8 +982,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                             pNew->NbcSetSnapRect( aSnapRect );
                         }
 
-                        Imp()->GetDrawView()->InsertObject( pNew,
-                                                        *Imp()->GetPageView() );
+                        Imp()->GetDrawView()->InsertObjectAtView( pNew, *Imp()->GetPageView() );
 
                         Point aGrpAnchor( 0, 0 );
                         SdrObjList* pList = pNew->GetObjList();
@@ -1058,7 +1060,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                             // <--
                             SdrObject *pObj = pNew->FindSdrObject();
                             SwDrawView  *pDV = Imp()->GetDrawView();
-                            pDV->MarkObj( pObj, pDV->GetPageView( pObj->GetPage() ) );
+                            pDV->MarkObj( pObj, pDV->GetSdrPageView() );
                             // --> OD 2005-04-15 #i47455# - notify draw frame format
                             // that position attributes are already set.
                             if ( pNew->ISA(SwDrawFrmFmt) )
@@ -1398,7 +1400,6 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
     FmFormModel* pModel = new FmFormModel( aPathOpt.GetPalettePath(),
                                             0, GetDoc()->GetDocShell() );
     pModel->GetItemPool().FreezeIdRanges();
-//BFS04 pModel->SetStreamingSdrModel(TRUE);
 
     rStrm.Seek(0);
 
@@ -1504,8 +1505,7 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
                     pFmt = GetDoc()->Insert( *GetCrsr(), *pNewObj, &aFrmSet, NULL );
                 }
                 else
-                    pView->ReplaceObject( pOldObj, *Imp()->GetPageView(),
-                                            pNewObj, TRUE );
+                    pView->ReplaceObjectAtView( pOldObj, *Imp()->GetPageView(), pNewObj, TRUE );
             }
             break;
 
