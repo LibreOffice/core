@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:57:36 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:28:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3816,7 +3816,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                     ByteString      aVersion( "MSOFFICE9.0" );
                     aGIFStream.Write( aVersion.GetBuffer(), aVersion.Len() );
                     nErrCode = pFilter->ExportGraphic( aGraphic, String(), aGIFStream,
-                        pFilter->GetExportFormatNumberForShortName( String( RTL_CONSTASCII_USTRINGPARAM( "GIF" ) ) ), sal_False, NULL );
+                        pFilter->GetExportFormatNumberForShortName( String( RTL_CONSTASCII_USTRINGPARAM( "GIF" ) ) ), NULL );
                     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aFilterData( 1 );
                     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aAdditionalChunkSequence( 1 );
                     sal_uInt32 nGIFSreamLen = aGIFStream.Tell();
@@ -3832,8 +3832,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                     aFilterProp.Value <<= aAdditionalChunkSequence;
                     aFilterData[ 0 ] = aFilterProp;
                     nErrCode = pFilter->ExportGraphic( aGraphic, String(), aStream,
-                        pFilter->GetExportFormatNumberForShortName( String( RTL_CONSTASCII_USTRINGPARAM( "PNG" ) ) ), sal_False,
-                            &aFilterData );
+                        pFilter->GetExportFormatNumberForShortName( String( RTL_CONSTASCII_USTRINGPARAM( "PNG" ) ) ), &aFilterData );
                 }
                 if ( nErrCode == ERRCODE_NONE )
                 {
