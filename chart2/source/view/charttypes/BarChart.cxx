@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarChart.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:33:20 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:34:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ uno::Reference< XTransformation > BarPositionHelper::getTransformationLogicToSce
 
     if( !m_xTransformationLogicToScene.is() )
     {
-        Matrix4D aMatrix;
+        ::basegfx::B3DHomMatrix aMatrix;
 
         double MinX = getLogicMinX();
         double MinY = getLogicMinY();
@@ -140,18 +140,18 @@ uno::Reference< XTransformation > BarPositionHelper::getTransformationLogicToSce
         doLogicScaling( NULL, &MaxY, &MaxZ);
 
         if( AxisOrientation_MATHEMATICAL==m_aScales[0].Orientation )
-            aMatrix.TranslateX(-MinX);
+            aMatrix.translate(-MinX, 0.0, 0.0);
         else
-            aMatrix.TranslateX(-MaxX);
+            aMatrix.translate(-MaxX, 0.0, 0.0);
         if( AxisOrientation_MATHEMATICAL==m_aScales[1].Orientation )
-            aMatrix.TranslateY(-MinY);
+            aMatrix.translate(0.0, -MinY, 0.0);
         else
-            aMatrix.TranslateY(-MaxY);
+            aMatrix.translate(0.0, -MaxY, 0.0);
         if( AxisOrientation_MATHEMATICAL==m_aScales[2].Orientation )
-            aMatrix.TranslateZ(-MaxZ);//z direction in draw is reverse mathematical direction
+            aMatrix.translate(0.0, 0.0, -MaxZ);//z direction in draw is reverse mathematical direction
             //aMatrix.TranslateZ(-MinZ+0.5*getSlotWidth());
         else
-            aMatrix.TranslateZ(-MinZ);
+            aMatrix.translate(0.0, 0.0, -MinZ);
             //aMatrix.TranslateZ(-MinZ+0.5*getSlotWidth());
 
         double fWidthX = MaxX - MinX;
@@ -162,9 +162,9 @@ uno::Reference< XTransformation > BarPositionHelper::getTransformationLogicToSce
         double fScaleDirectionY = AxisOrientation_MATHEMATICAL==m_aScales[1].Orientation ? 1.0 : -1.0;
         double fScaleDirectionZ = AxisOrientation_MATHEMATICAL==m_aScales[2].Orientation ? -1.0 : 1.0;
 
-        aMatrix.ScaleX(fScaleDirectionX*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthX);
-        aMatrix.ScaleY(fScaleDirectionY*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthY);
-        aMatrix.ScaleZ(fScaleDirectionZ*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthZ);
+        aMatrix.scale(fScaleDirectionX*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthX,
+            fScaleDirectionY*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthY,
+            fScaleDirectionZ*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthZ);
         //aMatrix.ScaleZ(fScaleDirectionZ*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthZ/getSlotWidth());
 
         //if(nDim==2)
