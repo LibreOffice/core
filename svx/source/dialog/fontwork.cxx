@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontwork.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:12:40 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:15:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,13 @@
 #include "fontwork.hxx"
 #include "outlobj.hxx"
 
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
+#endif
 
 SFX_IMPL_DOCKINGWINDOW( SvxFontWorkChildWindow, SID_FONTWORK );
 
@@ -1111,24 +1118,25 @@ void SvxFontWorkDialog::CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
         }
         case XFTFORM_BUTTON1:
         {
-            XPolyPolygon aXPP;
-            XPolygon aLine(3);
+            basegfx::B2DPolyPolygon aPolyPolygon;
+            basegfx::B2DPolygon aLine;
             long nR = aRect.GetWidth() / 2;
-
-            XPolygon aTopArc(aCenter, -nR, nR, 50, 1750, FALSE);
-            XPolygon aBottomArc(aCenter, -nR, nR, 1850, 3550, FALSE);
+            basegfx::B2DPolygon aTopArc(XPolygon(aCenter, -nR, nR, 50, 1750, FALSE).getB2DPolygon());
+            basegfx::B2DPolygon aBottomArc(XPolygon(aCenter, -nR, nR, 1850, 3550, FALSE).getB2DPolygon());
 
             // Polygone schliessen
-            aTopArc[aTopArc.GetPointCount()] = aTopArc[0];
-            aBottomArc[aBottomArc.GetPointCount()] = aBottomArc[0];
-            aXPP.Insert(aTopArc);
-            aLine[0] = aBottomArc[aBottomArc.GetPointCount()-2];
-            aLine[2] = aLine[0];
-            aLine[1] = aBottomArc[0];
-            aXPP.Insert(aLine);
-            aXPP.Insert(aBottomArc);
+            aTopArc.setClosed(true);
+            aBottomArc.setClosed(true);
+            aPolyPolygon.append(aTopArc);
 
-            pNewObj = new SdrPathObj(OBJ_PATHFILL, aXPP);
+            aLine.append(aBottomArc.getB2DPoint(aBottomArc.count() - 1L));
+            aLine.append(aBottomArc.getB2DPoint(0L));
+            aLine.setClosed(true);
+
+            aPolyPolygon.append(aLine);
+            aPolyPolygon.append(aBottomArc);
+
+            pNewObj = new SdrPathObj(OBJ_PATHFILL, aPolyPolygon);
             eAdjust = XFT_CENTER;
             break;
         }
@@ -1136,52 +1144,51 @@ void SvxFontWorkDialog::CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
         case XFTFORM_BUTTON3:
         case XFTFORM_BUTTON4:
         {
-            XPolyPolygon aXPP;
-            XPolygon aLine(3);
+            basegfx::B2DPolyPolygon aPolyPolygon;
+            basegfx::B2DPolygon aLine;
             long nR = aRect.GetWidth() / 2;
             long nWDiff = nR / 5;
             long nHDiff;
 
             if ( eForm == XFTFORM_BUTTON4 )
             {
-                aXPP.Insert(XPolygon(aCenter, -nR, nR, 950, 2650, FALSE));
-                // Polygon schliessen
-                aXPP[0][aXPP[0].GetPointCount()] = aXPP[0][0];
+                basegfx::B2DPolygon aNewArc(XPolygon(aCenter, -nR, nR, 950, 2650, FALSE).getB2DPolygon());
+                aNewArc.setClosed(true);
+                aPolyPolygon.append(aNewArc);
                 eAdjust = XFT_CENTER;
             }
             else
-                aXPP.Insert(XPolygon(aCenter, -nR, nR, 2700, 2700));
+            {
+                basegfx::B2DPolygon aNewArc(XPolygon(aCenter, -nR, nR, 2700, 2700).getB2DPolygon());
+                aPolyPolygon.append(aNewArc);
+            }
 
             if ( eForm == XFTFORM_BUTTON3 )
                 nHDiff = -aRect.GetHeight() / 10;
             else
                 nHDiff = aRect.GetHeight() / 20;
 
-            aLine[0] = aRect.LeftCenter();
-            aLine[0].X() += nWDiff;
-            aLine[0].Y() += nHDiff;
-            aLine[2] = aLine[0];
-            aLine[1] = aRect.RightCenter();
-            aLine[1].X() -= nWDiff;
-            aLine[1].Y() += nHDiff;
-            aXPP.Insert(aLine);
+            aLine.append(basegfx::B2DPoint(aRect.Left() + nWDiff, aRect.Center().Y() + nHDiff));
+            aLine.append(basegfx::B2DPoint(aRect.Right() - nWDiff, aRect.Center().Y() + nHDiff));
+            aLine.setClosed(true);
+            aPolyPolygon.append(aLine);
 
             if ( eForm == XFTFORM_BUTTON4 )
             {
-                aXPP.Insert(XPolygon(aCenter, -nR, nR, 2750, 850, FALSE));
-                aXPP[2][aXPP[2].GetPointCount()] = aXPP[2][0];
+                basegfx::B2DPolygon aNewArc(XPolygon(aCenter, -nR, nR, 2750, 850, FALSE).getB2DPolygon());
+                aNewArc.setClosed(true);
+                aPolyPolygon.append(aNewArc);
             }
 
             if ( eForm == XFTFORM_BUTTON3 )
             {
                 nHDiff += nHDiff;
-                aLine[0].Y() -= nHDiff;
-                aLine[1].Y() -= nHDiff;
-                aLine[2].Y() -= nHDiff;
-                aXPP.Insert(aLine);
+                aLine.setB2DPoint(0L, basegfx::B2DPoint(aLine.getB2DPoint(0L).getX(), aLine.getB2DPoint(0L).getY() - nHDiff));
+                aLine.setB2DPoint(1L, basegfx::B2DPoint(aLine.getB2DPoint(1L).getX(), aLine.getB2DPoint(1L).getY() - nHDiff));
+                aPolyPolygon.append(aLine);
             }
 
-            pNewObj = new SdrPathObj(OBJ_PATHFILL, aXPP);
+            pNewObj = new SdrPathObj(OBJ_PATHFILL, aPolyPolygon);
             break;
         }
         default: ; //prevent warning
@@ -1212,7 +1219,7 @@ void SvxFontWorkDialog::CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
         else
             bHide = FALSE;
 
-        rView.ReplaceObject(&rOldObj, rPV, pNewObj, TRUE);
+        rView.ReplaceObjectAtView(&rOldObj, rPV, pNewObj, TRUE);
         pNewObj->SetLayer(rOldObj.GetLayer());
         aAttr.Put(XFormTextHideFormItem(bHide));
         aAttr.Put(XFormTextAdjustItem(eAdjust));
