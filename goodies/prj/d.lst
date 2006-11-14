@@ -78,23 +78,15 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\inc%_EXT%\goodies
 hedabu: ..\inc\grfmgr.hxx %_DEST%\inc%_EXT%\goodies\grfmgr.hxx
 hedabu: ..\inc\mailenum.hxx %_DEST%\inc%_EXT%\goodies\mailenum.hxx
-hedabu: ..\inc\vector3d.hxx %_DEST%\inc%_EXT%\goodies\vector3d.hxx
-hedabu: ..\inc\point3d.hxx %_DEST%\inc%_EXT%\goodies\point3d.hxx
-hedabu: ..\inc\hmatrix.hxx %_DEST%\inc%_EXT%\goodies\hmatrix.hxx
-hedabu: ..\inc\matrix3d.hxx %_DEST%\inc%_EXT%\goodies\matrix3d.hxx
-hedabu: ..\inc\point4d.hxx %_DEST%\inc%_EXT%\goodies\point4d.hxx
 hedabu: ..\inc\base3d.hxx %_DEST%\inc%_EXT%\goodies\base3d.hxx
 hedabu: ..\inc\b3dlight.hxx %_DEST%\inc%_EXT%\goodies\b3dlight.hxx
-hedabu: ..\inc\vector3d.hxx %_DEST%\inc%_EXT%\goodies\vector3d.hxx
 hedabu: ..\inc\matril3d.hxx %_DEST%\inc%_EXT%\goodies\matril3d.hxx
 hedabu: ..\inc\bucket.hxx %_DEST%\inc%_EXT%\goodies\bucket.hxx
-hedabu: ..\inc\point3d.hxx %_DEST%\inc%_EXT%\goodies\point3d.hxx
 hedabu: ..\inc\b3dentty.hxx %_DEST%\inc%_EXT%\goodies\b3dentty.hxx
 hedabu: ..\inc\b3dcolor.hxx %_DEST%\inc%_EXT%\goodies\b3dcolor.hxx
 hedabu: ..\inc\b3dcompo.hxx %_DEST%\inc%_EXT%\goodies\b3dcompo.hxx
 hedabu: ..\inc\b3dtex.hxx %_DEST%\inc%_EXT%\goodies\b3dtex.hxx
 hedabu: ..\inc\b3dgeom.hxx %_DEST%\inc%_EXT%\goodies\b3dgeom.hxx
-hedabu: ..\inc\b3dvolum.hxx %_DEST%\inc%_EXT%\goodies\b3dvolum.hxx
 hedabu: ..\inc\b3dtrans.hxx %_DEST%\inc%_EXT%\goodies\b3dtrans.hxx
 hedabu: ..\inc\b2dmbase.hxx %_DEST%\inc%_EXT%\goodies\b2dmbase.hxx
 hedabu: ..\inc\b2dmbmp.hxx %_DEST%\inc%_EXT%\goodies\b2dmbmp.hxx
