@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dxf2mtf.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:54:01 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:13:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,6 @@ private:
 
     USHORT OptPointsPerCircle;
 
-    PFilterCallback pCallback;
-    void * pCallerData;
     ULONG nMinPercent;
     ULONG nMaxPercent;
     ULONG nLastPercent;
@@ -126,9 +124,7 @@ public:
     DXF2GDIMetaFile();
     ~DXF2GDIMetaFile();
 
-    BOOL Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF,
-                 PFilterCallback pCallback, void * pCallerData,
-                 USHORT nMinPercent, USHORT nMaxPercent);
+    BOOL Convert( const DXFRepresentation & rDXF, GDIMetaFile & rMTF, USHORT nMinPercent, USHORT nMaxPercent);
 
 };
 
