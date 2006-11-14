@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtablend.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:26:49 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:58:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,18 @@
 #include <xlnedit.hxx>
 #endif
 
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
 #define GLOBALOVERFLOW
 
 using namespace com::sun::star;
@@ -205,120 +217,6 @@ BOOL XLineEndTable::CreateBitmapsForUI()
     return( FALSE );
 }
 
-/************************************************************************/
-
-//BFS01SvStream& XLineEndTable::ImpStore( SvStream& rOut )
-//BFS01{
-//BFS01 // Schreiben
-//BFS01 rOut.SetStreamCharSet( gsl_getSystemTextEncoding() );
-//BFS01
-//BFS01 // 2. Version
-//BFS01 rOut << (long)-1;
-//BFS01
-//BFS01 // Tabellentyp schreiben (0 = gesamte Tabelle)
-//BFS01 rOut << (long)0;
-//BFS01
-//BFS01 // Anzahl der Eintraege
-//BFS01 rOut << (long)Count();
-//BFS01
-//BFS01 // die Polygone
-//BFS01 XLineEndEntry* pEntry = (XLineEndEntry*)aTable.First();
-//BFS01 for (long nIndex = 0; nIndex < Count(); nIndex++)
-//BFS01 {
-//BFS01     rOut << (long)aTable.GetCurKey();
-//BFS01
-//BFS01     // UNICODE: rOut << pEntry->GetName();
-//BFS01     rOut.WriteByteString(pEntry->GetName());
-//BFS01
-//BFS01     XPolygon& rXPoly = pEntry->GetLineEnd();
-//BFS01     rOut << rXPoly;
-//BFS01
-//BFS01     pEntry = (XLineEndEntry*)aTable.Next();
-//BFS01 }
-//BFS01 return rOut;
-//BFS01}
-
-/************************************************************************/
-
-//BFS01SvStream& XLineEndTable::ImpRead( SvStream& rIn )
-//BFS01{
-//BFS01 // Lesen
-//BFS01 rIn.SetStreamCharSet( RTL_TEXTENCODING_IBM_850 );
-//BFS01
-//BFS01 delete pBmpTable;
-//BFS01 pBmpTable = new Table( 16, 16 );
-//BFS01
-//BFS01 XLineEndEntry* pEntry = NULL;
-//BFS01 long    nVersion;
-//BFS01 long    nType;
-//BFS01 long    nCount;
-//BFS01 long    nIndex;
-//BFS01 XubString   aName;
-//BFS01 long    nFlags;
-//BFS01
-//BFS01 rIn >> nVersion;
-//BFS01
-//BFS01 if( nVersion == -1L ) // 2. Version
-//BFS01 {
-//BFS01     rIn >> nType;
-//BFS01
-//BFS01     // gesamte Tabelle?
-//BFS01     if (nType == 0)
-//BFS01     {
-//BFS01         rIn >> nCount;
-//BFS01         for (long nI = 0; nI < nCount; nI++)
-//BFS01         {
-//BFS01             rIn >> nIndex;
-//BFS01
-//BFS01             // UNICODE: rIn >> aName;
-//BFS01             rIn.ReadByteString(aName);
-//BFS01
-//BFS01             USHORT nPoints;
-//BFS01             ULONG  nTemp;
-//BFS01             Point  aPoint;
-//BFS01             rIn >> nTemp; nPoints = (USHORT)nTemp;
-//BFS01             XPolygon* pXPoly = new XPolygon(nPoints);
-//BFS01             for (USHORT nPoint = 0; nPoint < nPoints; nPoint++)
-//BFS01             {
-//BFS01                 rIn >> aPoint.X();
-//BFS01                 rIn >> aPoint.Y();
-//BFS01                 rIn >> nFlags;
-//BFS01                 pXPoly->Insert(nPoint, aPoint, (XPolyFlags)nFlags);
-//BFS01             }
-//BFS01
-//BFS01             pEntry = new XLineEndEntry (*pXPoly, aName);
-//BFS01             Insert (nIndex, pEntry);
-//BFS01         }
-//BFS01     }
-//BFS01 }
-//BFS01 else // 1. Version
-//BFS01 {
-//BFS01     nType = nVersion;
-//BFS01
-//BFS01     // gesamte Tabelle?
-//BFS01     if (nType == 0)
-//BFS01     {
-//BFS01         XPolygon aXPoly;
-//BFS01
-//BFS01         rIn >> nCount;
-//BFS01         for (long nI = 0; nI < nCount; nI++)
-//BFS01         {
-//BFS01             rIn >> nIndex;
-//BFS01
-//BFS01             // UNICODE: rIn >> aName;
-//BFS01             rIn.ReadByteString(aName);
-//BFS01
-//BFS01             rIn >> aXPoly;
-//BFS01             XPolygon* pXPoly = new XPolygon( aXPoly );
-//BFS01
-//BFS01             pEntry = new XLineEndEntry( *pXPoly, aName );
-//BFS01             Insert( nIndex, pEntry );
-//BFS01         }
-//BFS01     }
-//BFS01 }
-//BFS01 return( rIn );
-//BFS01}
-
 // --------------------
 // class XLineEndList
 // --------------------
@@ -376,7 +274,6 @@ XLineEndEntry* XLineEndList::GetLineEnd(long nIndex) const
 
 BOOL XLineEndList::Load()
 {
-//BFS01#ifndef SVX_LIGHT
     if( bListDirty )
     {
         bListDirty = FALSE;
@@ -394,46 +291,9 @@ BOOL XLineEndList::Load()
         if( !aURL.getExtension().getLength() )
             aURL.setExtension( rtl::OUString( pszExtLineEnd, 3 ) );
 
-//BFS01     // check if file exists, SfxMedium shows an errorbox else
-//BFS01     {
-//BFS01         com::sun::star::uno::Reference < com::sun::star::task::XInteractionHandler > xHandler;
-//BFS01         SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, xHandler );
-//BFS01
-//BFS01         sal_Bool bOk = pIStm && ( pIStm->GetError() == 0);
-//BFS01
-//BFS01         if( pIStm )
-//BFS01             delete pIStm;
-//BFS01
-//BFS01         if( !bOk )
-//BFS01             return sal_False;
-//BFS01     }
-
-//BFS01     {
-//BFS01         SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ | STREAM_NOCREATE, TRUE );
-//BFS01         SvStream* pStream = aMedium.GetInStream();
-//BFS01         if( !pStream )
-//BFS01             return( FALSE );
-//BFS01
-//BFS01         char aCheck[6];
-//BFS01         pStream->Read( aCheck, 6 );
-//BFS01
-//BFS01         // Handelt es sich um die gew'unschte Tabelle?
-//BFS01         if( memcmp( aCheck, aChckLEnd, sizeof( aChckLEnd ) ) == 0 ||
-//BFS01             memcmp( aCheck, aChckLEnd0, sizeof( aChckLEnd0 ) ) == 0 )
-//BFS01         {
-//BFS01             ImpRead( *pStream );
-//BFS01             return( pStream->GetError() == SVSTREAM_OK );
-//BFS01         }
-//BFS01         else if( memcmp( aCheck, aChckXML, sizeof( aChckXML ) ) != 0 )
-//BFS01         {
-//BFS01             return FALSE;
-//BFS01         }
-//BFS01     }
-
         uno::Reference< container::XNameContainer > xTable( SvxUnoXLineEndTable_createInstance( this ), uno::UNO_QUERY );
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
     }
-//BFS01#endif
     return( FALSE );
 }
 
@@ -441,7 +301,6 @@ BOOL XLineEndList::Load()
 
 BOOL XLineEndList::Save()
 {
-//BFS01#ifndef SVX_LIGHT
     INetURLObject aURL( aPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
@@ -457,49 +316,29 @@ BOOL XLineEndList::Save()
 
     uno::Reference< container::XNameContainer > xTable( SvxUnoXLineEndTable_createInstance( this ), uno::UNO_QUERY );
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
-
-/*
-    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC, TRUE );
-    aMedium.IsRemote();
-
-    SvStream* pStream = aMedium.GetOutStream();
-    if( !pStream )
-        return( FALSE );
-
-    // UNICODE: *pStream << String( pszChckLineEnd0, 4 );
-    pStream->WriteByteString(String( pszChckLineEnd0, 4 ));
-
-    ImpStore( *pStream );
-
-    aMedium.Close();
-    aMedium.Commit();
-
-    return( aMedium.GetError() == 0 );
-*/
-//BFS01#else
-//BFS01 return FALSE;
-//BFS01#endif
 }
 
 /************************************************************************/
 
 BOOL XLineEndList::Create()
 {
-    XPolygon aTriangle(3);
-    aTriangle[0].X()=10; aTriangle[0].Y()= 0;
-    aTriangle[1].X()= 0; aTriangle[1].Y()=30;
-    aTriangle[2].X()=20; aTriangle[2].Y()=30;
-    Insert( new XLineEndEntry( aTriangle, SVX_RESSTR( RID_SVXSTR_ARROW ) ) );
+    basegfx::B2DPolygon aTriangle;
+    aTriangle.append(basegfx::B2DPoint(10.0, 0.0));
+    aTriangle.append(basegfx::B2DPoint(0.0, 30.0));
+    aTriangle.append(basegfx::B2DPoint(20.0, 30.0));
+    aTriangle.setClosed(true);
+    Insert( new XLineEndEntry( basegfx::B2DPolyPolygon(aTriangle), SVX_RESSTR( RID_SVXSTR_ARROW ) ) );
 
-    XPolygon aSquare(4);
-    aSquare[0].X()= 0; aSquare[0].Y()= 0;
-    aSquare[1].X()=10; aSquare[1].Y()= 0;
-    aSquare[2].X()=10; aSquare[2].Y()=10;
-    aSquare[3].X()= 0; aSquare[3].Y()=10;
-    Insert( new XLineEndEntry( aSquare, SVX_RESSTR( RID_SVXSTR_SQUARE ) ) );
+    basegfx::B2DPolygon aSquare;
+    aSquare.append(basegfx::B2DPoint(0.0, 0.0));
+    aSquare.append(basegfx::B2DPoint(10.0, 0.0));
+    aSquare.append(basegfx::B2DPoint(10.0, 10.0));
+    aSquare.append(basegfx::B2DPoint(0.0, 10.0));
+    aSquare.setClosed(true);
+    Insert( new XLineEndEntry( basegfx::B2DPolyPolygon(aSquare), SVX_RESSTR( RID_SVXSTR_SQUARE ) ) );
 
-    XPolygon aCircle(Point(0,0),100,100);
-    Insert( new XLineEndEntry( aCircle, SVX_RESSTR( RID_SVXSTR_CIRCLE ) ) );
+    basegfx::B2DPolygon aCircle(basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), 100.0));
+    Insert( new XLineEndEntry( basegfx::B2DPolyPolygon(aCircle), SVX_RESSTR( RID_SVXSTR_CIRCLE ) ) );
 
     return( TRUE );
 }
@@ -595,141 +434,5 @@ Bitmap* XLineEndList::CreateBitmapForUI( long nIndex, BOOL bDelete )
 
     return( pBitmap );
 }
-
-/************************************************************************/
-
-//BFS01SvStream& XLineEndList::ImpStore( SvStream& rOut )
-//BFS01{
-//BFS01 // Schreiben
-//BFS01 rOut.SetStreamCharSet( gsl_getSystemTextEncoding() );
-//BFS01
-//BFS01 // 3. Version
-//BFS01 rOut << (long) -2;
-//BFS01
-//BFS01 // Anzahl der Eintraege
-//BFS01 rOut << (long)Count();
-//BFS01
-//BFS01 // die Polygone
-//BFS01 XLineEndEntry* pEntry = NULL;
-//BFS01 for( long nIndex = 0; nIndex < Count(); nIndex++ )
-//BFS01 {
-//BFS01     // Versionsverwaltung (auch abwaertskompatibel): Version 0
-//BFS01     XIOCompat aIOC( rOut, STREAM_WRITE, 0 );
-//BFS01
-//BFS01     pEntry = Get( nIndex );
-//BFS01     // UNICODE: rOut << pEntry->GetName();
-//BFS01     rOut.WriteByteString(pEntry->GetName());
-//BFS01
-//BFS01     XPolygon& rXPoly = pEntry->GetLineEnd();
-//BFS01     rOut << rXPoly;
-//BFS01 }
-//BFS01 return rOut;
-//BFS01}
-
-/************************************************************************/
-
-//BFS01XubString& XLineEndList::ConvertName( XubString& rStrName )
-//BFS01{
-//BFS01 BOOL bFound = FALSE;
-//BFS01
-//BFS01 for( USHORT i=0; i<(RID_SVXSTR_LEND_DEF_END-RID_SVXSTR_LEND_DEF_START+1) && !bFound; i++ )
-//BFS01 {
-//BFS01     XubString aStrDefName = SVX_RESSTR( RID_SVXSTR_LEND_DEF_START + i );
-//BFS01     if( rStrName.Search( aStrDefName ) == 0 )
-//BFS01     {
-//BFS01         rStrName.Replace( 0, aStrDefName.Len(), SVX_RESSTR( RID_SVXSTR_LEND_START + i ) );
-//BFS01         bFound = TRUE;
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 return rStrName;
-//BFS01}
-
-/************************************************************************/
-
-//BFS01SvStream& XLineEndList::ImpRead( SvStream& rIn )
-//BFS01{
-//BFS01 // Lesen
-//BFS01 rIn.SetStreamCharSet( RTL_TEXTENCODING_IBM_850 );
-//BFS01
-//BFS01 delete pBmpList;
-//BFS01 pBmpList = new List( 16, 16 );
-//BFS01
-//BFS01 XLineEndEntry* pEntry = NULL;
-//BFS01 long    nVersion;
-//BFS01 long    nCount;
-//BFS01 XubString   aName;
-//BFS01 long    nFlags;
-//BFS01
-//BFS01 rIn >> nVersion;
-//BFS01
-//BFS01 if( nVersion >= 0 ) // 1. Version
-//BFS01 {
-//BFS01     nCount = nVersion;
-//BFS01     for( long nI = 0; nI < nCount; nI++ )
-//BFS01     {
-//BFS01         // UNICODE: rIn >> aName;
-//BFS01         rIn.ReadByteString(aName);
-//BFS01
-//BFS01         aName = ConvertName( aName );
-//BFS01         USHORT nPoints;
-//BFS01         ULONG  nTemp;
-//BFS01         Point  aPoint;
-//BFS01         rIn >> nTemp; nPoints = (USHORT)nTemp;
-//BFS01         XPolygon* pXPoly = new XPolygon(nPoints);
-//BFS01         for (USHORT nPoint = 0; nPoint < nPoints; nPoint++)
-//BFS01         {
-//BFS01             rIn >> aPoint.X();
-//BFS01             rIn >> aPoint.Y();
-//BFS01             rIn >> nFlags;
-//BFS01             pXPoly->Insert(nPoint, aPoint, (XPolyFlags)nFlags);
-//BFS01         }
-//BFS01
-//BFS01         pEntry = new XLineEndEntry( *pXPoly, aName );
-//BFS01         Insert( pEntry, nI );
-//BFS01     }
-//BFS01 }
-//BFS01 else if( nVersion == -1L ) // 2. Version
-//BFS01 {
-//BFS01     rIn >> nCount;
-//BFS01     for( long nI = 0; nI < nCount; nI++ )
-//BFS01     {
-//BFS01         // UNICODE: rIn >> aName;
-//BFS01         rIn.ReadByteString(aName);
-//BFS01         aName = ConvertName( aName );
-//BFS01
-//BFS01         XPolygon* pXPoly = new XPolygon;
-//BFS01         rIn >> *pXPoly;
-//BFS01
-//BFS01         pEntry = new XLineEndEntry( *pXPoly, aName );
-//BFS01         Insert( pEntry, nI );
-//BFS01     }
-//BFS01 }
-//BFS01 else // ab 3.00a
-//BFS01 {
-//BFS01     rIn >> nCount;
-//BFS01     for( long nI = 0; nI < nCount; nI++ )
-//BFS01     {
-//BFS01         // Versionsverwaltung
-//BFS01         XIOCompat aIOC( rIn, STREAM_READ );
-//BFS01
-//BFS01         // UNICODE: rIn >> aName;
-//BFS01         rIn.ReadByteString(aName);
-//BFS01         aName = ConvertName( aName );
-//BFS01
-//BFS01         XPolygon aXPoly;
-//BFS01         rIn >> aXPoly;
-//BFS01
-//BFS01         if (aIOC.GetVersion() > 0)
-//BFS01         {
-//BFS01             // lesen neuer Daten ...
-//BFS01         }
-//BFS01
-//BFS01         pEntry = new XLineEndEntry( aXPoly, aName );
-//BFS01         Insert( pEntry, nI );
-//BFS01     }
-//BFS01 }
-//BFS01 return( rIn );
-//BFS01}
 
 // eof
