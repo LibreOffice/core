@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epict.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:43:27 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,10 +94,8 @@ class PictWriter {
 private:
 
     BOOL bStatus;
-
-    PFilterCallback pCallback;
-    void * pCallerData;
     ULONG nLastPercent; // Mit welcher Zahl pCallback zuletzt aufgerufen wurde.
+    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
     SvStream * pPict;
 
@@ -200,8 +198,7 @@ private:
 
 public:
 
-    BOOL WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStream,
-                   PFilterCallback pcallback, void * pcallerdata);
+    BOOL WritePict( const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem* pFilterConfigItem );
 };
 
 
@@ -210,24 +207,21 @@ public:
 
 void PictWriter::MayCallback()
 {
-    ULONG nPercent;
+    if ( xStatusIndicator.is() )
+    {
+        ULONG nPercent;
+        nPercent=((nWrittenBitmaps<<14)+(nActBitmapPercent<<14)/100+nWrittenActions)
+                *100
+                /((nNumberOfBitmaps<<14)+nNumberOfActions);
 
-    // Wir gehen mal einfach so davon aus, dass 16386 Actions einer Bitmap entsprechen
-    // (in der Regel wird ein Metafile entweder nur Actions oder einige Bitmaps und fast
-    // keine Actions enthalten. Dann ist das Verhaeltnis ziemlich unwichtig)
-
-    nPercent=((nWrittenBitmaps<<14)+(nActBitmapPercent<<14)/100+nWrittenActions)
-             *100
-             /((nNumberOfBitmaps<<14)+nNumberOfActions);
-
-    if (nPercent>=nLastPercent+3) {
-        nLastPercent=nPercent;
-        if(pCallback!=NULL && nPercent<=100) {
-            if (((*pCallback)(pCallerData,(USHORT)nPercent))==TRUE) bStatus=FALSE;
+        if (nPercent>=nLastPercent+3)
+        {
+            nLastPercent=nPercent;
+            if( nPercent<=100 )
+                xStatusIndicator->setValue( nPercent );
         }
     }
 }
-
 
 void PictWriter::CountActionsAndBitmaps(const GDIMetaFile & rMTF)
 {
@@ -2176,17 +2170,24 @@ void PictWriter::UpdateHeader()
 }
 
 
-BOOL PictWriter::WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStream, PFilterCallback pcallback, void * pcallerdata)
+BOOL PictWriter::WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem* pFilterConfigItem )
 {
     PictWriterAttrStackMember*  pAt;
     MapMode                     aMap72( MAP_INCH );
     Fraction                    aDPIFrac( 1, 72 );
 
     bStatus=TRUE;
-
-    pCallback=pcallback;
-    pCallerData=pcallerdata;
     nLastPercent=0;
+
+    if ( pFilterConfigItem )
+    {
+        xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
+        if ( xStatusIndicator.is() )
+        {
+            rtl::OUString aMsg;
+            xStatusIndicator->start( aMsg, 100 );
+        }
+    }
 
     pPict=&rTargetStream;
     pPict->SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
@@ -2236,20 +2237,15 @@ BOOL PictWriter::WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStream, P
         delete pAt;
     }
 
+    if ( xStatusIndicator.is() )
+        xStatusIndicator->end();
+
     return bStatus;
 }
 
 //================== GraphicExport - die exportierte Funktion ================
 
-#ifdef WNT
-extern "C" BOOL _cdecl GraphicExport(SvStream & rStream, Graphic & rGraphic,
-                              PFilterCallback pCallback, void * pCallerData,
-                              FilterConfigItem*, BOOL)
-#else
-extern "C" BOOL GraphicExport(SvStream & rStream, Graphic & rGraphic,
-                              PFilterCallback pCallback, void * pCallerData,
-                              FilterConfigItem*, BOOL)
-#endif
+extern "C" BOOL __LOADONCALLAPI GraphicExport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem, BOOL)
 {
     PictWriter      aPictWriter;
 
@@ -2275,7 +2271,7 @@ extern "C" BOOL GraphicExport(SvStream & rStream, Graphic & rGraphic,
         aScaledMtf.SetPrefSize( aNewSize );
 */
 
-        return aPictWriter.WritePict( aScaledMtf, rStream, pCallback, pCallerData );
+        return aPictWriter.WritePict( aScaledMtf, rStream, pFilterConfigItem );
     }
     else
     {
@@ -2287,7 +2283,7 @@ extern "C" BOOL GraphicExport(SvStream & rStream, Graphic & rGraphic,
         aVirDev.DrawBitmap(Point(),aBmp);
         aMTF.Stop();
         aMTF.SetPrefSize(aBmp.GetSizePixel());
-        return aPictWriter.WritePict(aMTF,rStream,pCallback,pCallerData);
+        return aPictWriter.WritePict( aMTF, rStream, pFilterConfigItem );
     }
 }
 
