@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:57:51 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:28:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,9 +135,6 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::style;
-
-BOOL ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
-                              PFilterCallback pCallback, void * pCallerData );
 
 #define EES_MAP_FRACTION 1440   // 1440 dpi
 
