@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docprev.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:38:32 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:25:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,12 +95,14 @@
 #endif
 #include "sdpage.hxx"
 
-#include <memory>
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
+#include <memory>
 
 using ::com::sun::star::drawing::XDrawPage;
 using ::com::sun::star::animations::XAnimationNode;
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -319,7 +321,7 @@ void SdDocPreviewWin::updateViewSettings()
 
             pView->SetBordVisible( FALSE );
             pView->SetPageVisible( FALSE );
-            pView->ShowPage( pPage, Point() );
+            pView->ShowSdrPage( pPage );
 
             const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
             const Size aNewSize( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
@@ -327,21 +329,18 @@ void SdDocPreviewWin::updateViewSettings()
             const Rectangle aClipRect( aNewOrg, aNewSize );
             MapMode         aVMap( aMap );
 
-            SdrPageView* pPageView  = pView->GetPageView( pPage );
+            SdrPageView* pPageView  = pView->GetSdrPageView();
 
             aVDev.Push();
             aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
             aVDev.SetRelativeMapMode( aVMap );
             aVDev.IntersectClipRegion( aClipRect );
 
-            // Use new StandardCheckVisisbilityRedirector
-            StandardCheckVisisbilityRedirector aRedirector;
-
-            for (USHORT i=0; i<pView->GetPageViewCount(); i++)
-            {
-                SdrPageView* pPV=pView->GetPageViewPvNum(i);
-                pPV->CompleteRedraw(&aVDev, Region(Rectangle(Point(), aNewSize)), 0, &aRedirector);
-            }
+        // Use new StandardCheckVisisbilityRedirector
+        StandardCheckVisisbilityRedirector aRedirector;
+        const Rectangle aRedrawRectangle( Point(), aNewSize );
+        Region aRedrawRegion(aRedrawRectangle);
+        pView->SdrPaintView::CompleteRedraw(&aVDev,aRedrawRegion,0,&aRedirector);
 
             aVDev.Pop();
 
