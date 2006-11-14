@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontactofobjlistpainter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:57:22 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:04:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ namespace sdr
     namespace contact
     {
         // typedef for transferring SdrObject
-        typedef ::std::vector< SdrObject* > SdrObjectVector;
+        typedef ::std::vector< const SdrObject* > SdrObjectVector;
 
         class SVX_DLLPUBLIC ObjectContactOfObjListPainter : public ObjectContactPainter
         {
