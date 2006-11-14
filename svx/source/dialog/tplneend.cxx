@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tplneend.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:31:23 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:16:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,26 @@
 #include "svxdlg.hxx" //CHINA001
 #include "dialmgr.hxx"
 #include "dlgutil.hxx"
+
+#ifndef _BGFX_RANGE_B2DRANGE_HXX
+#include <basegfx/range/b2drange.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#endif
 
 #define DLGWIN this->GetParent()->GetParent()
 
@@ -479,14 +499,13 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
             else return( 0L ); // Abbruch
         }
 
-        const XPolygon& rXPoly = ( (SdrPathObj*) pNewObj )->GetPathPoly().GetObject( 0 );
-        XPolygon aXPoly( rXPoly );
+        basegfx::B2DPolyPolygon aNewPolyPolygon(((SdrPathObj*)pNewObj)->GetPathPoly());
+        basegfx::B2DRange aNewRange(basegfx::tools::getRange(aNewPolyPolygon));
 
         // Normalisieren
-        Point aPoint( aXPoly.GetBoundRect().TopLeft() );
-        aPoint.X() *= -1;
-        aPoint.Y() *= -1;
-        aXPoly.Translate( aPoint );
+        basegfx::B2DHomMatrix aMatrix;
+        aMatrix.translate(-aNewRange.getMinX(), -aNewRange.getMinY());
+        aNewPolyPolygon.transform(aMatrix);
 
         // Loeschen des angelegten PolyObjektes
         if( pConvPolyObj )
@@ -536,7 +555,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
             if( bDifferent )
             {
                 bLoop = FALSE;
-                pEntry = new XLineEndEntry( aXPoly, aName );
+                pEntry = new XLineEndEntry( aNewPolyPolygon, aName );
 
                 long nLineEndCount = pLineEndList->Count();
                 pLineEndList->Insert( pEntry, nLineEndCount );
