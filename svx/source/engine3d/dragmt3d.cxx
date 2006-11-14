@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dragmt3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:55:26 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:18:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,14 +65,6 @@
 #include "svdtrans.hxx"
 #endif
 
-#ifndef _POLY3D_HXX
-#include "poly3d.hxx"
-#endif
-
-#ifndef _SVX_MATRIX3D_HXX
-#include "matrix3d.hxx"
-#endif
-
 #ifndef _E3D_OBJ3D_HXX
 #include "obj3d.hxx"
 #endif
@@ -91,6 +83,14 @@
 
 #ifndef _SVX_DIALOGS_HRC
 #include "dialogs.hrc"
+#endif
+
+#ifndef _SDR_OVERLAY_OVERLAYPOLYPOLYGON_HXX
+#include <svx/sdr/overlay/overlaypolypolygon.hxx>
+#endif
+
+#ifndef _SDR_OVERLAY_OVERLAYMANAGER_HXX
+#include <svx/sdr/overlay/overlaymanager.hxx>
 #endif
 
 TYPEINIT1(E3dDragMethod, SdrDragMethod);
@@ -123,12 +123,10 @@ SV_IMPL_PTRARR(E3dDragMethodUnitGroup, E3dDragMethodUnit*);
 E3dDragMethod::E3dDragMethod (
     SdrDragView &_rView,
     const SdrMarkList& rMark,
-    //BFS01E3dDragDetail eDetail,
     E3dDragConstraint eConstr,
     BOOL bFull)
 :   SdrDragMethod(_rView),
     eConstraint(eConstr),
-    //BFS01eDragDetail(eDetail),
     bMoveFull(bFull),
     bMovedAtAll(FALSE)
 {
@@ -152,7 +150,7 @@ E3dDragMethod::E3dDragMethod (
             if(p3DObj->GetParentObj())
                 pNewUnit->aDisplayTransform = p3DObj->GetParentObj()->GetFullTransform();
             pNewUnit->aInvDisplayTransform = pNewUnit->aDisplayTransform;
-            pNewUnit->aInvDisplayTransform.Invert();
+            pNewUnit->aInvDisplayTransform.invert();
 
             // SnapRects der beteiligten Objekte invalidieren, um eine
             // Neuberechnung beim Setzen der Marker zu erzwingen
@@ -166,9 +164,9 @@ E3dDragMethod::E3dDragMethod (
             else
             {
                 // Drahtgitterdarstellung fuer Parent-Koodinaten erzeugen
-                pNewUnit->aWireframePoly.SetPointCount(0);
-                p3DObj->CreateWireframe(pNewUnit->aWireframePoly, NULL /*BFS01, eDragDetail*/);
-                pNewUnit->aWireframePoly.Transform(pNewUnit->aTransform);
+                pNewUnit->aWireframePoly.clear();
+                p3DObj->CreateWireframe(pNewUnit->aWireframePoly, NULL);
+                pNewUnit->aWireframePoly.transform(pNewUnit->aTransform);
             }
 
             // FullBound ermitteln
@@ -419,41 +417,48 @@ void E3dDragMethod::Mov(const Point& /*rPnt*/)
 |*
 \************************************************************************/
 
-void E3dDragMethod::DrawXor(XOutputDevice& rXOut, FASTBOOL /*bFull*/) const
+// for migration from XOR to overlay
+void E3dDragMethod::CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverlayManager, ::sdr::overlay::OverlayObjectList& rOverlayList)
 {
-    UINT16 nPVCnt = rView.GetPageViewCount();
-    XPolygon aLine(2);
-    UINT16 nCnt = aGrp.Count();
+    sal_uInt16 nCnt(aGrp.Count());
+    basegfx::B2DPolyPolygon aResult;
 
-    for(UINT16 nOb=0;nOb<nCnt;nOb++)
+    for(sal_uInt16 nOb(0); nOb < nCnt; nOb++)
     {
         B3dCamera& rCameraSet = aGrp[nOb]->p3DObj->GetScene()->GetCameraSet();
-        for (UINT16 a=0;a<nPVCnt;a++)
+        SdrPageView* pPV = rView.GetSdrPageView();
+
+        if(pPV)
         {
-            SdrPageView* pPV = rView.GetPageViewPvNum(a);
             if(pPV->HasMarkedObjPageView())
             {
-                rXOut.SetOffset(pPV->GetOffset());
-                UINT16 nPntCnt = aGrp[nOb]->aWireframePoly.GetPointCount();
-                if(nPntCnt > 1)
+                const sal_uInt32 nPntCnt(aGrp[nOb]->aWireframePoly.count());
+
+                if(nPntCnt > 1L)
                 {
-                    for(UINT16 b=0;b < nPntCnt;b += 2)
+                    for(sal_uInt32 b(0L); b < nPntCnt; b += 2L)
                     {
-                        Vector3D aPnt1 = aGrp[nOb]->aDisplayTransform * aGrp[nOb]->aWireframePoly[b];
-                        aPnt1 = rCameraSet.WorldToViewCoor(aPnt1);
-                        aLine[0].X() = (long)(aPnt1.X() + 0.5);
-                        aLine[0].Y() = (long)(aPnt1.Y() + 0.5);
+                        basegfx::B3DPoint aStart = aGrp[nOb]->aDisplayTransform * aGrp[nOb]->aWireframePoly.getB3DPoint(b);
+                        aStart = rCameraSet.WorldToViewCoor(aStart);
 
-                        Vector3D aPnt2 = aGrp[nOb]->aDisplayTransform * aGrp[nOb]->aWireframePoly[b+1];
-                        aPnt2 = rCameraSet.WorldToViewCoor(aPnt2);
-                        aLine[1].X() = (long)(aPnt2.X() + 0.5);
-                        aLine[1].Y() = (long)(aPnt2.Y() + 0.5);
+                        basegfx::B3DPoint aEnd = aGrp[nOb]->aDisplayTransform * aGrp[nOb]->aWireframePoly.getB3DPoint(b+1L);
+                        aEnd = rCameraSet.WorldToViewCoor(aEnd);
 
-                        rXOut.DrawXPolyLine(aLine);
+                        basegfx::B2DPolygon aTempPoly;
+                        aTempPoly.append(basegfx::B2DPoint(aStart.getX(), aStart.getY()));
+                        aTempPoly.append(basegfx::B2DPoint(aEnd.getX(), aEnd.getY()));
+                        aResult.append(aTempPoly);
                     }
                 }
             }
         }
+    }
+
+    if(aResult.count())
+    {
+        ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(aResult);
+        rOverlayManager.add(*pNew);
+        rOverlayList.append(*pNew);
     }
 }
 
@@ -467,10 +472,9 @@ TYPEINIT1(E3dDragRotate, E3dDragMethod);
 
 E3dDragRotate::E3dDragRotate(SdrDragView &_rView,
     const SdrMarkList& rMark,
-    //BFS01E3dDragDetail eDetail,
     E3dDragConstraint eConstr,
     BOOL bFull)
-:   E3dDragMethod(_rView, rMark/*BFS01, eDetail*/, eConstr, bFull)
+:   E3dDragMethod(_rView, rMark, eConstr, bFull)
 {
     // Zentrum aller selektierten Objekte in Augkoordinaten holen
     UINT16 nCnt = aGrp.Count();
@@ -478,7 +482,7 @@ E3dDragRotate::E3dDragRotate(SdrDragView &_rView,
 
     for(UINT16 nOb=0;nOb<nCnt;nOb++)
     {
-        Vector3D aObjCenter = aGrp[nOb]->p3DObj->GetCenter();
+        basegfx::B3DPoint aObjCenter = aGrp[nOb]->p3DObj->GetCenter();
         B3dCamera& rCameraSet = aGrp[nOb]->p3DObj->GetScene()->GetCameraSet();
         aObjCenter *= aGrp[nOb]->aInitTransform;
         aObjCenter *= aGrp[nOb]->aDisplayTransform;
@@ -507,13 +511,13 @@ E3dDragRotate::E3dDragRotate(SdrDragView &_rView,
         Point aRotCenter2D = Ref1();
 
         // In Augkoordinaten transformieren
-        Vector3D aRotCenter(aRotCenter2D.X(), aRotCenter2D.Y(), 0.0);
+        basegfx::B3DPoint aRotCenter(aRotCenter2D.X(), aRotCenter2D.Y(), 0.0);
         aRotCenter = pScene->GetCameraSet().ViewToEyeCoor(aRotCenter);
 
         // X,Y des RotCenter und Tiefe der gemeinsamen Objektmitte aus
         // Rotationspunkt im Raum benutzen
-        aGlobalCenter.X() = aRotCenter.X();
-        aGlobalCenter.Y() = aRotCenter.Y();
+        aGlobalCenter.setX(aRotCenter.getX());
+        aGlobalCenter.setY(aRotCenter.getY());
     }
 }
 
@@ -576,34 +580,34 @@ void E3dDragRotate::Mov(const Point& rPnt)
             fHAngle *= F_PI180;
 
             // Transformation bestimmen
-            Matrix4D aRotMat;
+            basegfx::B3DHomMatrix aRotMat;
             if(eConstraint & E3DDRAG_CONSTR_Y)
             {
                 if(nModifier & KEY_MOD2)
-                    aRotMat.RotateZ(fWAngle);
+                    aRotMat.rotate(0.0, 0.0, fWAngle);
                 else
-                    aRotMat.RotateY(fWAngle);
+                    aRotMat.rotate(0.0, fWAngle, 0.0);
             }
             else if(eConstraint & E3DDRAG_CONSTR_Z)
             {
                 if(nModifier & KEY_MOD2)
-                    aRotMat.RotateY(fWAngle);
+                    aRotMat.rotate(0.0, fWAngle, 0.0);
                 else
-                    aRotMat.RotateZ(fWAngle);
+                    aRotMat.rotate(0.0, 0.0, fWAngle);
             }
             if(eConstraint & E3DDRAG_CONSTR_X)
             {
-                aRotMat.RotateX(fHAngle);
+                aRotMat.rotate(fHAngle, 0.0, 0.0);
             }
 
             // Transformation in Eye-Koordinaten, dort rotieren
             // und zurueck
             B3dCamera& rCameraSet = aGrp[nOb]->p3DObj->GetScene()->GetCameraSet();
-            Matrix4D aTransMat = aGrp[nOb]->aDisplayTransform;
+            basegfx::B3DHomMatrix aTransMat = aGrp[nOb]->aDisplayTransform;
             aTransMat *= rCameraSet.GetOrientation();
-            aTransMat.Translate(-aGlobalCenter);
+            aTransMat.translate(-aGlobalCenter.getX(), -aGlobalCenter.getY(), -aGlobalCenter.getZ());
             aTransMat *= aRotMat;
-            aTransMat.Translate(aGlobalCenter);
+            aTransMat.translate(aGlobalCenter.getX(), aGlobalCenter.getY(), aGlobalCenter.getZ());
             aTransMat *= rCameraSet.GetInvOrientation();
             aTransMat *= aGrp[nOb]->aInvDisplayTransform;
 
@@ -617,7 +621,7 @@ void E3dDragRotate::Mov(const Point& rPnt)
             else
             {
                 Hide();
-                aGrp[nOb]->aWireframePoly.Transform(aTransMat);
+                aGrp[nOb]->aWireframePoly.transform(aTransMat);
                 Show();
             }
         }
@@ -648,11 +652,10 @@ TYPEINIT1(E3dDragMove, E3dDragMethod);
 
 E3dDragMove::E3dDragMove(SdrDragView &_rView,
     const SdrMarkList& rMark,
-    //BFS01E3dDragDetail eDetail,
     SdrHdlKind eDrgHdl,
     E3dDragConstraint eConstr,
     BOOL bFull)
-:   E3dDragMethod(_rView, rMark, /*BFS01eDetail,*/ eConstr, bFull),
+:   E3dDragMethod(_rView, rMark, eConstr, bFull),
     eWhatDragHdl(eDrgHdl)
 {
     switch(eWhatDragHdl)
@@ -711,9 +714,8 @@ void E3dDragMove::Mov(const Point& rPnt)
         {
             // Translation
             // Bewegungsvektor bestimmen
-            Vector3D aGlobalMoveHead((double)(rPnt.X() - aLastPos.X()),
-                (double)(rPnt.Y() - aLastPos.Y()), 32768.0);
-            Vector3D aGlobalMoveTail(0.0, 0.0, 32768.0);
+            basegfx::B3DPoint aGlobalMoveHead((double)(rPnt.X() - aLastPos.X()), (double)(rPnt.Y() - aLastPos.Y()), 32768.0);
+            basegfx::B3DPoint aGlobalMoveTail(0.0, 0.0, 32768.0);
             UINT16 nCnt = aGrp.Count();
 
             // Modifier holen
@@ -729,19 +731,19 @@ void E3dDragMove::Mov(const Point& rPnt)
                 B3dCamera& rCameraSet = aGrp[nOb]->p3DObj->GetScene()->GetCameraSet();
 
                 // Bewegungsvektor von View-Koordinaten nach Aug-Koordinaten
-                Vector3D aMoveHead = rCameraSet.ViewToEyeCoor(aGlobalMoveHead);
-                Vector3D aMoveTail = rCameraSet.ViewToEyeCoor(aGlobalMoveTail);
+                basegfx::B3DPoint aMoveHead(rCameraSet.ViewToEyeCoor(aGlobalMoveHead));
+                basegfx::B3DPoint aMoveTail(rCameraSet.ViewToEyeCoor(aGlobalMoveTail));
 
                 // Eventuell Bewegung von XY-Ebene auf XZ-Ebene umschalten
                 if(nModifier & KEY_MOD2)
                 {
-                    double fZwi = aMoveHead.Y();
-                    aMoveHead.Y() = aMoveHead.Z();
-                    aMoveHead.Z() = fZwi;
+                    double fZwi = aMoveHead.getY();
+                    aMoveHead.setY(aMoveHead.getZ());
+                    aMoveHead.setZ(fZwi);
 
-                    fZwi = aMoveTail.Y();
-                    aMoveTail.Y() = aMoveTail.Z();
-                    aMoveTail.Z() = fZwi;
+                    fZwi = aMoveTail.getY();
+                    aMoveTail.setY(aMoveTail.getZ());
+                    aMoveTail.setZ(fZwi);
                 }
 
                 // Bewegungsvektor von Aug-Koordinaten nach Parent-Koordinaten
@@ -751,8 +753,9 @@ void E3dDragMove::Mov(const Point& rPnt)
                 aMoveTail *= aGrp[nOb]->aInvDisplayTransform;
 
                 // Transformation bestimmen
-                Matrix4D aTransMat;
-                aTransMat.Translate(aMoveHead - aMoveTail);
+                basegfx::B3DHomMatrix aTransMat;
+                basegfx::B3DPoint aTranslate(aMoveHead - aMoveTail);
+                aTransMat.translate(aTranslate.getX(), aTranslate.getY(), aTranslate.getZ());
 
                 // ...und anwenden
                 aGrp[nOb]->aTransform *= aTransMat;
@@ -764,7 +767,7 @@ void E3dDragMove::Mov(const Point& rPnt)
                 else
                 {
                     Hide();
-                    aGrp[nOb]->aWireframePoly.Transform(aTransMat);
+                    aGrp[nOb]->aWireframePoly.transform(aTransMat);
                     Show();
                 }
             }
@@ -774,23 +777,23 @@ void E3dDragMove::Mov(const Point& rPnt)
             // Skalierung
             // Skalierungsvektor bestimmen
             Point aStartPos = DragStat().GetStart();
-            Vector3D aGlobalScaleStart((double)(aStartPos.X()), (double)(aStartPos.Y()), 32768.0);
-            Vector3D aGlobalScaleNext((double)(rPnt.X()), (double)(rPnt.Y()), 32768.0);
-            Vector3D aGlobalScaleFixPos((double)(aScaleFixPos.X()), (double)(aScaleFixPos.Y()), 32768.0);
+            basegfx::B3DPoint aGlobalScaleStart((double)(aStartPos.X()), (double)(aStartPos.Y()), 32768.0);
+            basegfx::B3DPoint aGlobalScaleNext((double)(rPnt.X()), (double)(rPnt.Y()), 32768.0);
+            basegfx::B3DPoint aGlobalScaleFixPos((double)(aScaleFixPos.X()), (double)(aScaleFixPos.Y()), 32768.0);
             UINT16 nCnt = aGrp.Count();
 
             for(UINT16 nOb=0;nOb<nCnt;nOb++)
             {
                 B3dCamera& rCameraSet = aGrp[nOb]->p3DObj->GetScene()->GetCameraSet();
-                Vector3D aObjectCenter = aGrp[nOb]->p3DObj->GetCenter();
-                aGlobalScaleStart.Z() = aObjectCenter.Z();
-                aGlobalScaleNext.Z() = aObjectCenter.Z();
-                aGlobalScaleFixPos.Z() = aObjectCenter.Z();
+                basegfx::B3DPoint aObjectCenter(aGrp[nOb]->p3DObj->GetCenter());
+                aGlobalScaleStart.setZ(aObjectCenter.getZ());
+                aGlobalScaleNext.setZ(aObjectCenter.getZ());
+                aGlobalScaleFixPos.setZ(aObjectCenter.getZ());
 
                 // Skalierungsvektor von View-Koordinaten nach Aug-Koordinaten
-                Vector3D aScStart = rCameraSet.ViewToEyeCoor(aGlobalScaleStart);
-                Vector3D aScNext = rCameraSet.ViewToEyeCoor(aGlobalScaleNext);
-                Vector3D aScFixPos = rCameraSet.ViewToEyeCoor(aGlobalScaleFixPos);
+                basegfx::B3DPoint aScStart(rCameraSet.ViewToEyeCoor(aGlobalScaleStart));
+                basegfx::B3DPoint aScNext(rCameraSet.ViewToEyeCoor(aGlobalScaleNext));
+                basegfx::B3DPoint aScFixPos(rCameraSet.ViewToEyeCoor(aGlobalScaleFixPos));
 
                 // Einschraenkungen?
                 switch(eWhatDragHdl)
@@ -798,53 +801,53 @@ void E3dDragMove::Mov(const Point& rPnt)
                     case HDL_LEFT:
                     case HDL_RIGHT:
                         // Einschraenken auf X -> Y gleichsetzen
-                        aScNext.Y() = aScFixPos.Y();
+                        aScNext.setY(aScFixPos.getY());
                         break;
                     case HDL_UPPER:
                     case HDL_LOWER:
                         // Einschraenken auf Y -> X gleichsetzen
-                        aScNext.X() = aScFixPos.X();
+                        aScNext.setX(aScFixPos.getX());
                         break;
                     default:
                         break;
                 }
 
                 // ScaleVector in Augkoordinaten bestimmen
-                Vector3D aScaleVec = aScStart - aScFixPos;
-                aScaleVec.Z() = 1.0;
+                basegfx::B3DPoint aScaleVec(aScStart - aScFixPos);
+                aScaleVec.setZ(1.0);
 
-                if(aScaleVec.X() != 0.0)
-                    aScaleVec.X() = (aScNext.X() - aScFixPos.X()) / aScaleVec.X();
+                if(aScaleVec.getX() != 0.0)
+                    aScaleVec.setX((aScNext.getX() - aScFixPos.getX()) / aScaleVec.getX());
                 else
-                    aScaleVec.X() = 1.0;
+                    aScaleVec.setX(1.0);
 
-                if(aScaleVec.Y() != 0.0)
-                    aScaleVec.Y() = (aScNext.Y() - aScFixPos.Y()) / aScaleVec.Y();
+                if(aScaleVec.getY() != 0.0)
+                    aScaleVec.setY((aScNext.getY() - aScFixPos.getY()) / aScaleVec.getY());
                 else
-                    aScaleVec.Y() = 1.0;
+                    aScaleVec.setY(1.0);
 
                 // Mit SHIFT-Taste?
                 if(rView.IsOrtho())
                 {
-                    if(fabs(aScaleVec.X()) > fabs(aScaleVec.Y()))
+                    if(fabs(aScaleVec.getX()) > fabs(aScaleVec.getY()))
                     {
                         // X ist am groessten
-                        aScaleVec.Y() = aScaleVec.X();
+                        aScaleVec.setY(aScaleVec.getX());
                     }
                     else
                     {
                         // Y ist am groessten
-                        aScaleVec.X() = aScaleVec.Y();
+                        aScaleVec.setX(aScaleVec.getY());
                     }
                 }
 
                 // Transformation bestimmen
-                Matrix4D aNewTrans = aGrp[nOb]->aInitTransform;
+                basegfx::B3DHomMatrix aNewTrans = aGrp[nOb]->aInitTransform;
                 aNewTrans *= aGrp[nOb]->aDisplayTransform;
                 aNewTrans *= rCameraSet.GetOrientation();
-                aNewTrans.Translate(-aScFixPos);
-                aNewTrans.Scale(aScaleVec);
-                aNewTrans.Translate(aScFixPos);
+                aNewTrans.translate(-aScFixPos.getX(), -aScFixPos.getY(), -aScFixPos.getZ());
+                aNewTrans.scale(aScaleVec.getX(), aScaleVec.getY(), aScaleVec.getZ());
+                aNewTrans.translate(aScFixPos.getX(), aScFixPos.getY(), aScFixPos.getZ());
                 aNewTrans *= rCameraSet.GetInvOrientation();
                 aNewTrans *= aGrp[nOb]->aInvDisplayTransform;
 
@@ -858,9 +861,9 @@ void E3dDragMove::Mov(const Point& rPnt)
                 else
                 {
                     Hide();
-                    aGrp[nOb]->aWireframePoly.SetPointCount(0);
-                    aGrp[nOb]->p3DObj->CreateWireframe(aGrp[nOb]->aWireframePoly, NULL/*BFS01, eDragDetail*/);
-                    aGrp[nOb]->aWireframePoly.Transform(aGrp[nOb]->aTransform);
+                    aGrp[nOb]->aWireframePoly.clear();
+                    aGrp[nOb]->p3DObj->CreateWireframe(aGrp[nOb]->aWireframePoly, NULL);
+                    aGrp[nOb]->aWireframePoly.transform(aGrp[nOb]->aTransform);
                     Show();
                 }
             }
@@ -879,4 +882,4 @@ Pointer E3dDragMove::GetPointer() const
     return Pointer(POINTER_MOVE);
 }
 
-
+// eof
