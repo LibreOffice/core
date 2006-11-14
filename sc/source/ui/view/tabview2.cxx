@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:09:42 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:59:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,11 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         }
 
         rMark.SetMarkArea( ScRange( nBlockStartX,nBlockStartY, nTab, nBlockEndX,nBlockEndY, nTab ) );
+
+#ifdef OLD_SELECTION_PAINT
         InvertBlockMark( nBlockStartX,nBlockStartY,nBlockEndX,nBlockEndY );
+#endif
+        UpdateSelectionOverlay();
 
         bNewStartIfMarking = FALSE;     // use only once
     }
@@ -380,10 +384,11 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         // Set new selection area
         aRect.SetNew( nBlockStartX, nBlockStartY, nBlockEndX, nBlockEndY );
         BOOL bCont;
-        BOOL bDraw = aRect.GetXorDiff( nDrawStartCol, nDrawStartRow,
-                                        nDrawEndCol, nDrawEndRow, bCont );
         rMark.SetMarkArea( ScRange( nBlockStartX, nBlockStartY, nTab, nBlockEndX, nBlockEndY, nTab ) );
 
+#ifdef OLD_SELECTION_PAINT
+        BOOL bDraw = aRect.GetXorDiff( nDrawStartCol, nDrawStartRow,
+                                        nDrawEndCol, nDrawEndRow, bCont );
         if ( bDraw )
         {
 //?         PutInOrder( nDrawStartCol, nDrawEndCol );
@@ -398,6 +403,8 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
             }
             ShowAllCursors();
         }
+#endif
+        UpdateSelectionOverlay();
 
         nOldCurX = nCurX;
         nOldCurY = nCurY;
@@ -408,6 +415,27 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
     if ( !bCols && !bRows )
         aHdrFunc.SetAnchorFlag( FALSE );
+}
+
+void ScTabView::UpdateSelectionOverlay()
+{
+    for (USHORT i=0; i<4; i++)
+        if ( pGridWin[i] && pGridWin[i]->IsVisible() )
+            pGridWin[i]->UpdateSelectionOverlay();
+}
+
+void ScTabView::UpdateShrinkOverlay()
+{
+    for (USHORT i=0; i<4; i++)
+        if ( pGridWin[i] && pGridWin[i]->IsVisible() )
+            pGridWin[i]->UpdateShrinkOverlay();
+}
+
+void ScTabView::UpdateAllOverlays()
+{
+    for (USHORT i=0; i<4; i++)
+        if ( pGridWin[i] && pGridWin[i]->IsVisible() )
+            pGridWin[i]->UpdateAllOverlays();
 }
 
 //!
@@ -460,16 +488,20 @@ void ScTabView::PaintBlock( BOOL bReset )
                     USHORT i;
                     if ( bMulti )
                     {
+#ifdef OLD_SELECTION_PAINT
                         for (i=0; i<4; i++)
                             if (pGridWin[i] && pGridWin[i]->IsVisible())
                                 pGridWin[i]->InvertSimple( nBlockStartX, nBlockStartY,
                                                             nBlockEndX, nBlockEndY,
                                                             TRUE, TRUE );
+#endif
                         rMark.ResetMark();
+                        UpdateSelectionOverlay();
                         bDidReset = TRUE;
                     }
                     else
                     {
+#ifdef OLD_SELECTION_PAINT
                         // (mis)use InvertBlockMark to remove all of the selection
                         // -> set bBlockNeg (like when removing parts of a selection)
                         //    and convert everything to Multi
@@ -484,8 +516,9 @@ void ScTabView::PaintBlock( BOOL bReset )
                         InvertBlockMark( nBlockStartX, nBlockStartY, nBlockEndX, nBlockEndY );
 
                         bBlockNeg = bOld;
+#endif
                         rMark.ResetMark();
-
+                        UpdateSelectionOverlay();
                         bDidReset = TRUE;
                     }
 
@@ -838,6 +871,15 @@ void ScTabView::MakeDrawLayer()
 
         //  pDrawView wird per Notify gesetzt
         DBG_ASSERT(pDrawView,"ScTabView::MakeDrawLayer funktioniert nicht");
+
+        // #114409#
+        for(sal_uInt16 a(0); a < 4; a++)
+        {
+            if(pGridWin[a])
+            {
+                pGridWin[a]->DrawLayerCreated();
+            }
+        }
     }
 }
 
