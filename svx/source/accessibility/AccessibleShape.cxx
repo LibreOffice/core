@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:02:08 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:12:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1102,7 +1102,6 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
         case DRAWING_3D_CUBE:
         case DRAWING_3D_EXTRUDE:
         case DRAWING_3D_LATHE:
-//BFS01        case DRAWING_3D_POLYGON:
         case DRAWING_3D_SPHERE:
             aDG.Add3DProperties ();
             break;
