@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsd.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:38:54 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:44:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
             else if (nSId == SID_NAVIGATOR_PAGE)
             {
                 if ( pDrView->IsTextEdit() )
-                    pDrView->EndTextEdit();
+                    pDrView->SdrEndTextEdit();
 
                 const SfxItemSet* pArgs = rReq.GetArgs();
                 PageJump eJump = (PageJump)((SfxAllEnumItem&) pArgs->
