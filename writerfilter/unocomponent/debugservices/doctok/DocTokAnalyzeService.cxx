@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocTokAnalyzeService.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-09 16:03:18 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-14 13:36:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,6 +241,7 @@ sal_Int32 SAL_CALL AnalyzeService::run
             aURL = aLister.getURL();
 
             fprintf(stdout, "</file>\n");
+            fflush(stdout);
         }
 
         fprintf(stdout, "</analyze>\n");
