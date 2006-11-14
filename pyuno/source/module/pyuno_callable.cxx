@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_callable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:03:27 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 18:21:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ void PyUNO_callable_del (PyObject* self)
 
     me = (PyUNO_callable*) self;
     delete me->members;
-    PyMem_DEL (self);
+    PyObject_Del (self);
 
     return;
 }
@@ -261,7 +261,7 @@ PyRef PyUNO_callable_new (
 {
     PyUNO_callable* self;
 
-    self = PyObject_NEW (PyUNO_callable, &PyUNO_callable_Type);
+    self = PyObject_New (PyUNO_callable, &PyUNO_callable_Type);
     if (self == NULL)
         return NULL; //NULL == Error!
 
