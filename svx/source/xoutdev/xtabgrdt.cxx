@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtabgrdt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:26:02 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:58:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,117 +164,6 @@ Bitmap* XGradientTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
     return( NULL );
 }
 
-/************************************************************************/
-
-//BFS01SvStream& XGradientTable::ImpStore( SvStream& rOut )
-//BFS01{
-//BFS01 // Schreiben
-//BFS01 rOut.SetStreamCharSet( gsl_getSystemTextEncoding() );
-//BFS01
-//BFS01 // Tabellentyp schreiben (0 = gesamte Tabelle)
-//BFS01 rOut << (long)0;
-//BFS01
-//BFS01 // Anzahl der Eintraege
-//BFS01 rOut << (long)Count();
-//BFS01
-//BFS01 // die Eintraege
-//BFS01 XGradientEntry* pEntry = (XGradientEntry*)aTable.First();
-//BFS01
-//BFS01 for (long nIndex = 0; nIndex < Count(); nIndex++)
-//BFS01 {
-//BFS01     rOut << (long)aTable.GetCurKey();
-//BFS01
-//BFS01     // UNICODE: rOut << pEntry->GetName();
-//BFS01     rOut.WriteByteString(pEntry->GetName());
-//BFS01
-//BFS01     XGradient& rGradient = pEntry->GetGradient();
-//BFS01     rOut << (long)rGradient.GetGradientStyle();
-//BFS01     rOut << rGradient.GetStartColor().GetRed();
-//BFS01     rOut << rGradient.GetStartColor().GetGreen();
-//BFS01     rOut << rGradient.GetStartColor().GetBlue();
-//BFS01     rOut << rGradient.GetEndColor().GetRed();
-//BFS01     rOut << rGradient.GetEndColor().GetGreen();
-//BFS01     rOut << rGradient.GetEndColor().GetBlue();
-//BFS01     rOut << rGradient.GetAngle();
-//BFS01     rOut << (ULONG)rGradient.GetBorder();
-//BFS01     rOut << (ULONG)rGradient.GetXOffset();
-//BFS01     rOut << (ULONG)rGradient.GetYOffset();
-//BFS01     pEntry = (XGradientEntry*)aTable.Next();
-//BFS01 }
-//BFS01
-//BFS01 return rOut;
-//BFS01}
-
-/************************************************************************/
-
-//BFS01SvStream& XGradientTable::ImpRead( SvStream& rIn )
-//BFS01{
-//BFS01 // Lesen
-//BFS01 rIn.SetStreamCharSet( RTL_TEXTENCODING_IBM_850 );
-//BFS01
-//BFS01 delete pBmpTable;
-//BFS01 pBmpTable = new Table( 16, 16 );
-//BFS01
-//BFS01 XGradientEntry* pEntry = NULL;
-//BFS01 long        nType;
-//BFS01 long        nCount;
-//BFS01 long        nIndex;
-//BFS01 XubString       aName;
-//BFS01
-//BFS01 long    nStyle;
-//BFS01 USHORT  nRed;
-//BFS01 USHORT  nGreen;
-//BFS01 USHORT  nBlue;
-//BFS01 Color   aStart;
-//BFS01 Color   aEnd;
-//BFS01 long    nAngle;
-//BFS01 ULONG   nBorder;
-//BFS01 ULONG   nXOfs;
-//BFS01 ULONG   nYOfs;
-//BFS01
-//BFS01 rIn >> nType;
-//BFS01
-//BFS01 // gesamte Tabelle?
-//BFS01 if (nType == 0)
-//BFS01 {
-//BFS01     rIn >> nCount;
-//BFS01     for (long nI = 0; nI < nCount; nI++)
-//BFS01     {
-//BFS01         rIn >> nIndex;
-//BFS01
-//BFS01         // UNICODE: rIn >> aName;
-//BFS01         rIn.ReadByteString(aName);
-//BFS01
-//BFS01         rIn >> nStyle;
-//BFS01         rIn >> nRed;
-//BFS01         rIn >> nGreen;
-//BFS01         rIn >> nBlue;
-//BFS01
-//BFS01         aStart = Color( (BYTE) ( nRed   >> 8 ),
-//BFS01                         (BYTE) ( nGreen >> 8 ),
-//BFS01                         (BYTE) ( nBlue  >> 8 ) );
-//BFS01         rIn >> nRed;
-//BFS01         rIn >> nGreen;
-//BFS01         rIn >> nBlue;
-//BFS01
-//BFS01         aEnd = Color( (BYTE) ( nRed   >> 8 ),
-//BFS01                         (BYTE) ( nGreen >> 8 ),
-//BFS01                         (BYTE) ( nBlue  >> 8 ) );
-//BFS01
-//BFS01         rIn >> nAngle;
-//BFS01         rIn >> nBorder;
-//BFS01         rIn >> nXOfs;
-//BFS01         rIn >> nYOfs;
-//BFS01
-//BFS01         XGradient aGradient(aStart, aEnd, (XGradientStyle)nStyle, nAngle,
-//BFS01                             (USHORT)nXOfs, (USHORT)nYOfs, (USHORT)nBorder);
-//BFS01         pEntry = new XGradientEntry (aGradient, aName);
-//BFS01         Insert (nIndex, pEntry);
-//BFS01     }
-//BFS01 }
-//BFS01 return( rIn );
-//BFS01}
-
 // --------------------
 // class XGradientList
 // --------------------
@@ -330,7 +219,6 @@ XGradientEntry* XGradientList::GetGradient(long nIndex) const
 
 BOOL XGradientList::Load()
 {
-//BFS01#ifndef SVX_LIGHT
     if( bListDirty )
     {
         bListDirty = FALSE;
@@ -348,47 +236,10 @@ BOOL XGradientList::Load()
         if( !aURL.getExtension().getLength() )
             aURL.setExtension( rtl::OUString( pszExtGradient, 3 ) );
 
-//BFS01     // check if file exists, SfxMedium shows an errorbox else
-//BFS01     {
-//BFS01         com::sun::star::uno::Reference < com::sun::star::task::XInteractionHandler > xHandler;
-//BFS01         SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, xHandler );
-//BFS01
-//BFS01         sal_Bool bOk = pIStm && ( pIStm->GetError() == 0);
-//BFS01
-//BFS01         if( pIStm )
-//BFS01             delete pIStm;
-//BFS01
-//BFS01         if( !bOk )
-//BFS01             return sal_False;
-//BFS01     }
-
-//BFS01     {
-//BFS01         SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ | STREAM_NOCREATE, TRUE );
-//BFS01         SvStream* pStream = aMedium.GetInStream();
-//BFS01         if( !pStream )
-//BFS01             return( FALSE );
-//BFS01
-//BFS01         char aCheck[6];
-//BFS01         pStream->Read( aCheck, 6 );
-//BFS01
-//BFS01         // Handelt es sich um die gew"unschte Tabelle?
-//BFS01         if( memcmp( aCheck, aChckGradient, sizeof( aChckGradient ) ) == 0 ||
-//BFS01             memcmp( aCheck, aChckGradient0, sizeof( aChckGradient0 ) ) == 0 )
-//BFS01         {
-//BFS01             ImpRead( *pStream );
-//BFS01             return( pStream->GetError() == SVSTREAM_OK );
-//BFS01         }
-//BFS01         else if( memcmp( aCheck, aChckXML, sizeof( aChckXML ) ) != 0 )
-//BFS01         {
-//BFS01             return FALSE;
-//BFS01         }
-//BFS01     }
-
         uno::Reference< container::XNameContainer > xTable( SvxUnoXGradientTable_createInstance( this ), uno::UNO_QUERY );
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
 
     }
-//BFS01#endif
     return( FALSE );
 }
 
@@ -396,7 +247,6 @@ BOOL XGradientList::Load()
 
 BOOL XGradientList::Save()
 {
-//BFS01#ifndef SVX_LIGHT
     INetURLObject aURL( aPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
@@ -412,28 +262,6 @@ BOOL XGradientList::Save()
 
     uno::Reference< container::XNameContainer > xTable( SvxUnoXGradientTable_createInstance( this ), uno::UNO_QUERY );
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
-
-/*
-    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC, TRUE );
-    aMedium.IsRemote();
-
-    SvStream* pStream = aMedium.GetOutStream();
-    if( !pStream )
-        return( FALSE );
-
-    // UNICODE: *pStream << String( pszChckGradient0, 4 );
-    pStream->WriteByteString(String( pszChckGradient0, 4 ));
-
-    ImpStore( *pStream );
-
-    aMedium.Close();
-    aMedium.Commit();
-
-    return( aMedium.GetError() == 0 );
-*/
-//BFS01#else
-//BFS01 return FALSE;
-//BFS01#endif
 }
 
 /************************************************************************/
@@ -518,239 +346,5 @@ Bitmap* XGradientList::CreateBitmapForUI( long nIndex, BOOL bDelete )
     }
     return( pBitmap );
 }
-
-/************************************************************************/
-
-//BFS01SvStream& XGradientList::ImpStore( SvStream& rOut )
-//BFS01{
-//BFS01 // Schreiben
-//BFS01 rOut.SetStreamCharSet( gsl_getSystemTextEncoding() );
-//BFS01
-//BFS01 XGradientEntry* pEntry = NULL;
-//BFS01
-//BFS01 // Kennung
-//BFS01 rOut << (long) -2;
-//BFS01
-//BFS01 // Anzahl der Eintraege
-//BFS01 rOut << (long)Count();
-//BFS01
-//BFS01 for (long nIndex = 0; nIndex < Count(); nIndex++)
-//BFS01 {
-//BFS01     // Versionsverwaltung: Version 0
-//BFS01     XIOCompat aIOC( rOut, STREAM_WRITE, 0 );
-//BFS01
-//BFS01     pEntry = Get(nIndex);
-//BFS01
-//BFS01     // UNICODE: rOut << pEntry->GetName();
-//BFS01     rOut.WriteByteString(pEntry->GetName());
-//BFS01
-//BFS01     XGradient& rGradient = pEntry->GetGradient();
-//BFS01     rOut << (long)rGradient.GetGradientStyle();
-//BFS01
-//BFS01     USHORT nCol = rGradient.GetStartColor().GetRed();
-//BFS01     nCol = nCol << 8;
-//BFS01     rOut << nCol;
-//BFS01     nCol = rGradient.GetStartColor().GetGreen();
-//BFS01     nCol = nCol << 8;
-//BFS01     rOut << nCol;
-//BFS01     nCol = rGradient.GetStartColor().GetBlue();
-//BFS01     nCol = nCol << 8;
-//BFS01     rOut << nCol;
-//BFS01
-//BFS01     nCol = rGradient.GetEndColor().GetRed();
-//BFS01     nCol = nCol << 8;
-//BFS01     rOut << nCol;
-//BFS01     nCol = rGradient.GetEndColor().GetGreen();
-//BFS01     nCol = nCol << 8;
-//BFS01     rOut << nCol;
-//BFS01     nCol = rGradient.GetEndColor().GetBlue();
-//BFS01     nCol = nCol << 8;
-//BFS01     rOut << nCol;
-//BFS01     rOut << rGradient.GetAngle();
-//BFS01     rOut << (ULONG)rGradient.GetBorder();
-//BFS01     rOut << (ULONG)rGradient.GetXOffset();
-//BFS01     rOut << (ULONG)rGradient.GetYOffset();
-//BFS01     rOut << (ULONG)rGradient.GetStartIntens();
-//BFS01     rOut << (ULONG)rGradient.GetEndIntens();
-//BFS01 }
-//BFS01
-//BFS01 return rOut;
-//BFS01}
-
-/************************************************************************/
-
-//BFS01XubString& XGradientList::ConvertName( XubString& rStrName )
-//BFS01{
-//BFS01 BOOL bFound = FALSE;
-//BFS01
-//BFS01 for( USHORT i=0; i<(RID_SVXSTR_GRDT_DEF_END-RID_SVXSTR_GRDT_DEF_START+1) && !bFound; i++ )
-//BFS01 {
-//BFS01     XubString aStrDefName = SVX_RESSTR( RID_SVXSTR_GRDT_DEF_START + i );
-//BFS01     if( rStrName.Search( aStrDefName ) == 0 )
-//BFS01     {
-//BFS01         rStrName.Replace( 0, aStrDefName.Len(), SVX_RESSTR( RID_SVXSTR_GRDT_START + i ) );
-//BFS01         bFound = TRUE;
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 return rStrName;
-//BFS01}
-
-/************************************************************************/
-
-//BFS01SvStream& XGradientList::ImpRead( SvStream& rIn )
-//BFS01{
-//BFS01 // Lesen
-//BFS01 rIn.SetStreamCharSet( RTL_TEXTENCODING_IBM_850 );
-//BFS01
-//BFS01 delete pBmpList;
-//BFS01 pBmpList = new List( 16, 16 );
-//BFS01
-//BFS01 XGradientEntry* pEntry = NULL;
-//BFS01 long        nCheck;
-//BFS01 long        nCount;
-//BFS01 XubString       aName;
-//BFS01
-//BFS01 long    nStyle;
-//BFS01 USHORT  nRed;
-//BFS01 USHORT  nGreen;
-//BFS01 USHORT  nBlue;
-//BFS01 Color   aStart;
-//BFS01 Color   aEnd;
-//BFS01 long    nAngle;
-//BFS01 ULONG   nBorder;
-//BFS01 ULONG   nXOfs;
-//BFS01 ULONG   nYOfs;
-//BFS01 ULONG   nStartIntens;
-//BFS01 ULONG   nEndIntens;
-//BFS01
-//BFS01 // Kennung oder Anzahl
-//BFS01 rIn >> nCheck;
-//BFS01
-//BFS01 if( nCheck >= 0 )
-//BFS01 {
-//BFS01     nCount = nCheck;
-//BFS01
-//BFS01     for (long nIndex = 0; nIndex < nCount; nIndex++)
-//BFS01     {
-//BFS01         // UNICODE: rIn >> aName;
-//BFS01         rIn.ReadByteString(aName);
-//BFS01
-//BFS01         aName = ConvertName( aName );
-//BFS01         rIn >> nStyle;
-//BFS01         rIn >> nRed;
-//BFS01         rIn >> nGreen;
-//BFS01         rIn >> nBlue;
-//BFS01         aStart = Color( (BYTE) ( nRed   >> 8 ),
-//BFS01                         (BYTE) ( nGreen >> 8 ),
-//BFS01                         (BYTE) ( nBlue  >> 8 ) );
-//BFS01         rIn >> nRed;
-//BFS01         rIn >> nGreen;
-//BFS01         rIn >> nBlue;
-//BFS01         aEnd = Color( (BYTE) ( nRed   >> 8 ),
-//BFS01                         (BYTE) ( nGreen >> 8 ),
-//BFS01                         (BYTE) ( nBlue  >> 8 ) );
-//BFS01
-//BFS01         rIn >> nAngle;
-//BFS01         rIn >> nBorder;
-//BFS01         rIn >> nXOfs;
-//BFS01         rIn >> nYOfs;
-//BFS01
-//BFS01         nStartIntens = 100L;
-//BFS01         nEndIntens = 100L;
-//BFS01
-//BFS01         XGradient aGradient( aStart, aEnd, (XGradientStyle)nStyle, nAngle,
-//BFS01                              (USHORT) nXOfs, (USHORT) nYOfs, (USHORT) nBorder,
-//BFS01                              (USHORT) nStartIntens, (USHORT) nEndIntens );
-//BFS01         pEntry = new XGradientEntry (aGradient, aName);
-//BFS01         Insert (pEntry, nIndex);
-//BFS01     }
-//BFS01 }
-//BFS01 else if( nCheck == -1L )
-//BFS01 {
-//BFS01     rIn >> nCount;
-//BFS01     for (long nIndex = 0; nIndex < nCount; nIndex++)
-//BFS01     {
-//BFS01         // UNICODE: rIn >> aName;
-//BFS01         rIn.ReadByteString(aName);
-//BFS01
-//BFS01         aName = ConvertName( aName );
-//BFS01         rIn >> nStyle;
-//BFS01         rIn >> nRed;
-//BFS01         rIn >> nGreen;
-//BFS01         rIn >> nBlue;
-//BFS01         aStart = Color( (BYTE) ( nRed   >> 8 ),
-//BFS01                         (BYTE) ( nGreen >> 8 ),
-//BFS01                         (BYTE) ( nBlue  >> 8 ) );
-//BFS01         rIn >> nRed;
-//BFS01         rIn >> nGreen;
-//BFS01         rIn >> nBlue;
-//BFS01         aEnd = Color( (BYTE) ( nRed   >> 8 ),
-//BFS01                         (BYTE) ( nGreen >> 8 ),
-//BFS01                         (BYTE) ( nBlue  >> 8 ) );
-//BFS01
-//BFS01         rIn >> nAngle;
-//BFS01         rIn >> nBorder;
-//BFS01         rIn >> nXOfs;
-//BFS01         rIn >> nYOfs;
-//BFS01
-//BFS01         rIn >> nStartIntens;
-//BFS01         rIn >> nEndIntens;
-//BFS01
-//BFS01         XGradient aGradient( aStart, aEnd, (XGradientStyle)nStyle, nAngle,
-//BFS01                              (USHORT) nXOfs, (USHORT) nYOfs, (USHORT) nBorder,
-//BFS01                              (USHORT) nStartIntens, (USHORT) nEndIntens );
-//BFS01         pEntry = new XGradientEntry (aGradient, aName);
-//BFS01         Insert (pEntry, nIndex);
-//BFS01     }
-//BFS01 }
-//BFS01 else // ab 3.00a
-//BFS01 {
-//BFS01     rIn >> nCount;
-//BFS01     for (long nIndex = 0; nIndex < nCount; nIndex++)
-//BFS01     {
-//BFS01         // Versionsverwaltung
-//BFS01         XIOCompat aIOC( rIn, STREAM_READ );
-//BFS01
-//BFS01         // UNICODE: rIn >> aName;
-//BFS01         rIn.ReadByteString(aName);
-//BFS01
-//BFS01         aName = ConvertName( aName );
-//BFS01         rIn >> nStyle;
-//BFS01         rIn >> nRed;
-//BFS01         rIn >> nGreen;
-//BFS01         rIn >> nBlue;
-//BFS01         aStart = Color( (BYTE) ( nRed   >> 8 ),
-//BFS01                         (BYTE) ( nGreen >> 8 ),
-//BFS01                         (BYTE) ( nBlue  >> 8 ) );
-//BFS01         rIn >> nRed;
-//BFS01         rIn >> nGreen;
-//BFS01         rIn >> nBlue;
-//BFS01         aEnd = Color( (BYTE) ( nRed   >> 8 ),
-//BFS01                         (BYTE) ( nGreen >> 8 ),
-//BFS01                         (BYTE) ( nBlue  >> 8 ) );
-//BFS01
-//BFS01         rIn >> nAngle;
-//BFS01         rIn >> nBorder;
-//BFS01         rIn >> nXOfs;
-//BFS01         rIn >> nYOfs;
-//BFS01
-//BFS01         rIn >> nStartIntens;
-//BFS01         rIn >> nEndIntens;
-//BFS01
-//BFS01         if (aIOC.GetVersion() > 0)
-//BFS01         {
-//BFS01             // lesen neuer Daten ...
-//BFS01         }
-//BFS01
-//BFS01         XGradient aGradient( aStart, aEnd, (XGradientStyle)nStyle, nAngle,
-//BFS01                              (USHORT) nXOfs, (USHORT) nYOfs, (USHORT) nBorder,
-//BFS01                              (USHORT) nStartIntens, (USHORT) nEndIntens );
-//BFS01         pEntry = new XGradientEntry (aGradient, aName);
-//BFS01         Insert (pEntry, nIndex);
-//BFS01     }
-//BFS01 }
-//BFS01 return( rIn );
-//BFS01}
 
 // eof
