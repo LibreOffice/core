@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpcustomshape.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:31:20 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:16:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,13 +267,13 @@ void GetDoublePercentage( std::vector< com::sun::star::beans::PropertyValue >& r
     }
 }
 
-void GetVector3D( std::vector< com::sun::star::beans::PropertyValue >& rDest,
+void GetB3DVector( std::vector< com::sun::star::beans::PropertyValue >& rDest,
                          const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
-    Vector3D aVector3D;
-    if ( SvXMLUnitConverter::convertVector3D( aVector3D, rValue ) )
+    ::basegfx::B3DVector aB3DVector;
+    if ( SvXMLUnitConverter::convertB3DVector( aB3DVector, rValue ) )
     {
-        drawing::Direction3D aDirection3D( aVector3D.X(), aVector3D.Y(), aVector3D.Z() );
+        drawing::Direction3D aDirection3D( aB3DVector.getX(), aB3DVector.getY(), aB3DVector.getZ() );
         beans::PropertyValue aProp;
         aProp.Name = EASGet( eDestProp );
         aProp.Value <<= aDirection3D;
@@ -1015,10 +1015,10 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                     GetDoublePercentage( maExtrusion, rValue, EAS_SecondLightLevel );
                 break;
                 case EAS_extrusion_first_light_direction :
-                    GetVector3D( maExtrusion, rValue, EAS_FirstLightDirection );
+                    GetB3DVector( maExtrusion, rValue, EAS_FirstLightDirection );
                 break;
                 case EAS_extrusion_second_light_direction :
-                    GetVector3D( maExtrusion, rValue, EAS_SecondLightDirection );
+                    GetB3DVector( maExtrusion, rValue, EAS_SecondLightDirection );
                 break;
                 case EAS_extrusion_metal :
                     GetBool( maExtrusion, rValue, EAS_Metal );
@@ -1043,7 +1043,7 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                     GetEnhancedParameterPair( maExtrusion, rValue, EAS_RotateAngle );
                 break;
                 case EAS_extrusion_rotation_center :
-                    GetVector3D( maExtrusion, rValue, EAS_RotationCenter );
+                    GetB3DVector( maExtrusion, rValue, EAS_RotationCenter );
                 break;
                 case EAS_extrusion_shininess :
                     GetDoublePercentage( maExtrusion, rValue, EAS_Shininess );
