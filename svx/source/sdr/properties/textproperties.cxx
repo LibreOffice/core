@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textproperties.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:04:21 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:37:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -389,21 +389,6 @@ namespace sdr
                 rObj.NbcAdjustTextFrameWidthAndHeight();
             }
         }
-
-//BFS01     void TextProperties::PreProcessSave()
-//BFS01     {
-//BFS01         // call parent
-//BFS01         AttributeProperties::PreProcessSave();
-//BFS01
-//BFS01         // Prepare OutlinerParaObjects for storing
-//BFS01         SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
-//BFS01         OutlinerParaObject* pParaObj = rObj.GetOutlinerParaObject();
-//BFS01
-//BFS01         if(pParaObj && rObj.GetModel())
-//BFS01         {
-//BFS01             pParaObj->PrepareStore((SfxStyleSheetPool*)rObj.GetModel()->GetStyleSheetPool());
-//BFS01         }
-//BFS01     }
 
         void TextProperties::ForceDefaultAttributes()
         {
