@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:24:28 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:54:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,6 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
-#endif
-#ifndef _B2D_MATRIX3D_HXX
-#include <goodies/matrix3d.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -188,6 +185,12 @@
 #include <outlobj.hxx>
 #endif
 
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
+#include <vector>
+
 #include <comphelper/scopeguard.hxx>
 #include <boost/bind.hpp>
 
@@ -243,8 +246,7 @@ const SfxItemPropertyMap* ImplGetSvxTextPortionPropertyMap()
 class GDIMetaFile;
 class SvStream;
 sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
-                              PFilterCallback pCallback=NULL, void * pCallerData=NULL,
-                              sal_Bool bPlaceable=sal_True);
+                              FilterConfigItem* pFilterConfigItem = NULL, sal_Bool bPlaceable = sal_True );
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoGluePointAccess_createInstance( SdrObject* pObject );
 
@@ -690,7 +692,7 @@ uno::Any SvxShape::GetBitmap( sal_Bool bMetaFile /* = sal_False */ ) const throw
 
     E3dView* pView = new E3dView( pModel, &aVDev );
     pView->SetMarkHdlHidden( sal_True );
-    SdrPageView* pPageView = pView->ShowPage(pPage, Point());
+    SdrPageView* pPageView = pView->ShowSdrPage(pPage);
 
     SdrObject *pTempObj = mpObj.get();
     pView->MarkObj(pTempObj,pPageView);
@@ -703,7 +705,7 @@ uno::Any SvxShape::GetBitmap( sal_Bool bMetaFile /* = sal_False */ ) const throw
     if( bMetaFile )
     {
         SvMemoryStream aDestStrm( 65535, 65535 );
-        ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, NULL, sal_False );
+        ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, sal_False );
         uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
         aAny.setValue( &aSeq, ::getCppuType((const uno::Sequence< sal_Int8 >*)0) );
     }
@@ -1566,11 +1568,11 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
         case XATTR_LINESTART:
             {
                 const String aEmpty;
-                const XPolygon aPoly;
+                const basegfx::B2DPolyPolygon aEmptyPoly;
                 if( nWID == XATTR_LINEEND )
-                    rSet.Put( XLineEndItem( aEmpty, aPoly ) );
+                    rSet.Put( XLineEndItem( aEmpty, aEmptyPoly ) );
                 else
-                    rSet.Put( XLineStartItem( aEmpty, aPoly ) );
+                    rSet.Put( XLineStartItem( aEmpty, aEmptyPoly ) );
 
                 return sal_True;
             }
@@ -1647,11 +1649,12 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                 Point aVclPoint( aPnt.X, aPnt.Y );
 
                 // #90763# position is relative to top left, make it absolute
-                XPolyPolygon aEmptyPolygon;
-                Matrix3D aMatrix3D;
-                mpObj->TRGetBaseGeometry(aMatrix3D, aEmptyPolygon);
-                aVclPoint.X() += FRound(aMatrix3D[0][2]);
-                aVclPoint.Y() += FRound(aMatrix3D[1][2]);
+                basegfx::B2DPolyPolygon aNewPolyPolygon;
+                basegfx::B2DHomMatrix aNewHomogenMatrix;
+                mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+
+                aVclPoint.X() += FRound(aNewHomogenMatrix.get(0, 2));
+                aVclPoint.Y() += FRound(aNewHomogenMatrix.get(1, 2));
 
                 // #88657# metric of pool maybe twips (writer)
                 ForceMetricToItemPoolMetric(aVclPoint);
@@ -1673,13 +1676,22 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
             drawing::HomogenMatrix3 aMatrix;
             if(rVal >>= aMatrix)
             {
-                XPolyPolygon aEmptyPolygon;
-                Matrix3D aMatrix3D;
-                mpObj->TRGetBaseGeometry(aMatrix3D, aEmptyPolygon);
-                aMatrix3D[0] = Point3D( aMatrix.Line1.Column1, aMatrix.Line1.Column2, aMatrix.Line1.Column3 );
-                aMatrix3D[1] = Point3D( aMatrix.Line2.Column1, aMatrix.Line2.Column2, aMatrix.Line2.Column3 );
-                aMatrix3D[2] = Point3D( aMatrix.Line3.Column1, aMatrix.Line3.Column2, aMatrix.Line3.Column3 );
-                mpObj->TRSetBaseGeometry(aMatrix3D, aEmptyPolygon);
+                basegfx::B2DPolyPolygon aNewPolyPolygon;
+                basegfx::B2DHomMatrix aNewHomogenMatrix;
+
+                mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+
+                aNewHomogenMatrix.set(0, 0, aMatrix.Line1.Column1);
+                aNewHomogenMatrix.set(0, 1, aMatrix.Line1.Column2);
+                aNewHomogenMatrix.set(0, 2, aMatrix.Line1.Column3);
+                aNewHomogenMatrix.set(1, 0, aMatrix.Line2.Column1);
+                aNewHomogenMatrix.set(1, 1, aMatrix.Line2.Column2);
+                aNewHomogenMatrix.set(1, 2, aMatrix.Line2.Column3);
+                aNewHomogenMatrix.set(2, 0, aMatrix.Line3.Column1);
+                aNewHomogenMatrix.set(2, 1, aMatrix.Line3.Column2);
+                aNewHomogenMatrix.set(2, 2, aMatrix.Line3.Column3);
+
+                mpObj->TRSetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
                 return;
             }
             break;
@@ -1845,7 +1857,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                 if( mpModel->IsWriter() )
                     aPoint += mpObj->GetAnchorPos();
 
-                pMeasureObj->NbcSetPoint( aPoint, pMap->nWID == OWN_ATTR_MEASURE_START_POS ? 0 : 1 );
+                pMeasureObj->NbcSetPoint( aPoint, pMap->nWID == OWN_ATTR_MEASURE_START_POS ? 0L : 1L );
                 pMeasureObj->SetChanged();
                 pMeasureObj->BroadcastObjectChange();
                 return;
@@ -2270,11 +2282,12 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 ForceMetricTo100th_mm(aVclPoint);
 
                 // #90763# pos is absolute, make it relative to top left
-                Matrix3D aMatrix3D;
-                XPolyPolygon aPolyPolygon;
-                mpObj->TRGetBaseGeometry( aMatrix3D, aPolyPolygon );
-                aVclPoint.X() -= FRound(aMatrix3D[0][2]);
-                aVclPoint.Y() -= FRound(aMatrix3D[1][2]);
+                basegfx::B2DPolyPolygon aNewPolyPolygon;
+                basegfx::B2DHomMatrix aNewHomogenMatrix;
+                mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+
+                aVclPoint.X() -= FRound(aNewHomogenMatrix.get(0, 2));
+                aVclPoint.Y() -= FRound(aNewHomogenMatrix.get(1, 2));
 
                 awt::Point aPnt( aVclPoint.X(), aVclPoint.Y() );
                 aAny <<= aPnt;
@@ -2289,23 +2302,23 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
             }
             case OWN_ATTR_TRANSFORMATION:
             {
-                Matrix3D aMatrix3D;
-                XPolyPolygon aPolyPolygon;
-                mpObj->TRGetBaseGeometry( aMatrix3D, aPolyPolygon );
-
+                basegfx::B2DPolyPolygon aNewPolyPolygon;
+                basegfx::B2DHomMatrix aNewHomogenMatrix;
+                mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
                 drawing::HomogenMatrix3 aMatrix;
-                aMatrix.Line1.Column1 = aMatrix3D[0].X();
-                aMatrix.Line1.Column2 = aMatrix3D[0].Y();
-                aMatrix.Line1.Column3 = aMatrix3D[0].W();
 
-                aMatrix.Line2.Column1 = aMatrix3D[1].X();
-                aMatrix.Line2.Column2 = aMatrix3D[1].Y();
-                aMatrix.Line2.Column3 = aMatrix3D[1].W();
+                aMatrix.Line1.Column1 = aNewHomogenMatrix.get(0, 0);
+                aMatrix.Line1.Column2 = aNewHomogenMatrix.get(0, 1);
+                aMatrix.Line1.Column3 = aNewHomogenMatrix.get(0, 2);
+                aMatrix.Line2.Column1 = aNewHomogenMatrix.get(1, 0);
+                aMatrix.Line2.Column2 = aNewHomogenMatrix.get(1, 1);
+                aMatrix.Line2.Column3 = aNewHomogenMatrix.get(1, 2);
+                aMatrix.Line3.Column1 = aNewHomogenMatrix.get(2, 0);
+                aMatrix.Line3.Column2 = aNewHomogenMatrix.get(2, 1);
+                aMatrix.Line3.Column3 = aNewHomogenMatrix.get(2, 2);
 
-                aMatrix.Line3.Column1 = aMatrix3D[2].X();
-                aMatrix.Line3.Column2 = aMatrix3D[2].Y();
-                aMatrix.Line3.Column3 = aMatrix3D[2].W();
                 aAny <<= aMatrix;
+
                 break;
             }
             case OWN_ATTR_ZORDER:
@@ -2514,7 +2527,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                                 aMtf.SetPrefMapMode( pGraphic->GetPrefMapMode() );
                             }
                             SvMemoryStream aDestStrm( 65535, 65535 );
-                            ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, NULL, sal_False );
+                            ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, sal_False );
                             uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
                             aAny <<= aSeq;
                         }
