@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:37:35 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:42:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -401,7 +401,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
 
-    SdrPageView* pPageView = pDrView->GetPageViewPvNum( 0 );
+    SdrPageView* pPageView = pDrView->GetSdrPageView();
 
     GetMenuStateSel(rSet);
 
@@ -1097,7 +1097,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
+    SdrPageView* pPV = pDrView->GetSdrPageView();
     String aActiveLayer = pDrView->GetActiveLayer();
 
     if ( ( aActiveLayer.Len() != 0 && pPV && ( pPV->IsLayerLocked(aActiveLayer) ||
