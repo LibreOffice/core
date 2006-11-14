@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sanedlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:27:27 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:00:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 #include <sanedlg.hxx>
 #include <sanedlg.hrc>
 #include <grid.hxx>
+#include <math.h>
 
 #define USE_SAVE_STATE
 #undef  SAVE_ALL_STATES
