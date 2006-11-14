@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:35:55 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:41:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -361,7 +361,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
         {
-            pView->EndTextEdit();
+            pView->SdrEndTextEdit();
             SfxItemSet aAttr( pView->GetDoc()->GetPool(), SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION, 0 );
             aAttr.Put( SvxWritingModeItem( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ? com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL ) );
             rReq.Done( aAttr );
