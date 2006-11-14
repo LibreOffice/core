@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:32:25 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:17:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,7 +244,6 @@ sal_uInt16  OfaTreeOptionsDialog::nLastDialogPageId = USHRT_MAX;
 static const sal_Char*      pViewOptDataName = "page data";
 #define VIEWOPT_DATANAME    OUString::createFromAscii( pViewOptDataName )
 
-//BFS01
 static XOutdevItemPool* mpStaticXOutdevItemPool = 0L;
 
 static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const String& rData )
@@ -976,14 +975,11 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
             {
                 if(!pColorPageItemSet)
                 {
-                    //BFS01
                     // Move usage of a static XOutdevItemPool instance here
                     if(!mpStaticXOutdevItemPool)
                     {
                         mpStaticXOutdevItemPool = new XOutdevItemPool();
                     }
-//BFS01                 pColorPageItemSet = new SfxItemSet( *XOutdevItemPool::Get(),
-//BFS01                                         XATTR_FILLSTYLE, XATTR_FILLCOLOR );
                     pColorPageItemSet = new SfxItemSet( *mpStaticXOutdevItemPool, XATTR_FILLSTYLE, XATTR_FILLCOLOR);
                     pColorPageItemSet->Put( XFillColorItem() );
                 }
