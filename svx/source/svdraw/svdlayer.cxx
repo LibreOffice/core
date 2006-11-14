@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdlayer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:10:25 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:43:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,106 +244,6 @@ bool SdrLayer::operator==(const SdrLayer& rCmpLayer) const
         && aName.Equals(rCmpLayer.aName));
 }
 
-//BFS01SvStream& operator>>(SvStream& rIn, SdrLayer& rLayer)
-//BFS01{
-//BFS01 if(rIn.GetError())
-//BFS01     return rIn;
-//BFS01
-//BFS01 SdrIOHeader aHead(rIn, STREAM_READ);
-//BFS01
-//BFS01 rIn >> rLayer.nID;
-//BFS01
-//BFS01 // UNICODE: rIn >> rLayer.aName;
-//BFS01 rIn.ReadByteString(rLayer.aName);
-//BFS01
-//BFS01 if(aHead.GetVersion() >= 1)
-//BFS01 {
-//BFS01     // Das Standardlayerflag kam direkt nach der Betalieferung dazu
-//BFS01     rIn >> rLayer.nType;
-//BFS01
-//BFS01     if(rLayer.nType == 1)
-//BFS01     {
-//BFS01         rLayer.aName = ImpGetResStr(STR_StandardLayerName);
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 if(aHead.GetVersion() <= 12)
-//BFS01 {
-//BFS01     // nType war lange Zeit nicht initiallisiert!
-//BFS01     if(rLayer.nType > 1)
-//BFS01         rLayer.nType = 0;
-//BFS01 }
-//BFS01
-//BFS01 return rIn;
-//BFS01}
-
-//BFS01SvStream& operator<<(SvStream& rOut, const SdrLayer& rLayer)
-//BFS01{
-//BFS01 SdrIOHeader aHead(rOut, STREAM_WRITE, SdrIOLayrID);
-//BFS01
-//BFS01 rOut << rLayer.nID;
-//BFS01
-//BFS01 // UNICODE: rOut << rLayer.aName;
-//BFS01 rOut.WriteByteString(rLayer.aName);
-//BFS01
-//BFS01 rOut << rLayer.nType;
-//BFS01
-//BFS01 return rOut;
-//BFS01}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// SdrLayerSet
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//#110094#-10
-//FASTBOOL SdrLayerSet::operator==(const SdrLayerSet& rCmpLayerSet) const
-//{
-//  return(aName.Equals(rCmpLayerSet.aName)
-//      && aMember == rCmpLayerSet.aMember
-//      && aExclude == rCmpLayerSet.aExclude);
-//}
-
-//#110094#-10
-//void SdrLayerSet::Broadcast() const
-//{
-//  if (pModel!=NULL) {
-//      SdrHint aHint(HINT_LAYERSETCHG);
-//      pModel->Broadcast(aHint);
-//      pModel->SetChanged();
-//  }
-//}
-
-//#110094#-10
-//SvStream& operator>>(SvStream& rIn, SdrLayerSet& rSet)
-//{
-//  if(rIn.GetError())
-//      return rIn;
-//
-//  SdrIOHeader aHead(rIn, STREAM_READ);
-//
-//  rIn >> rSet.aMember;
-//  rIn >> rSet.aExclude;
-//
-//  // UNICODE: rIn >> rSet.aName;
-//  rIn.ReadByteString(rSet.aName);
-//
-//  return rIn;
-//}
-
-//#110094#-10
-//SvStream& operator<<(SvStream& rOut, const SdrLayerSet& rSet)
-//{
-//  SdrIOHeader aHead(rOut, STREAM_WRITE, SdrIOLSetID);
-//
-//  rOut << rSet.aMember;
-//  rOut << rSet.aExclude;
-//
-//  // UNICODE: rOut << rSet.aName;
-//  rOut.WriteByteString(rSet.aName);
-//
-//  return rOut;
-//}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // SdrLayerAdmin
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -372,8 +272,6 @@ SdrLayerAdmin::SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin):
 SdrLayerAdmin::~SdrLayerAdmin()
 {
     ClearLayer();
-    //#110094#-10
-    //ClearLayerSets();
 }
 
 void SdrLayerAdmin::ClearLayer()
@@ -387,34 +285,15 @@ void SdrLayerAdmin::ClearLayer()
     aLayer.Clear();
 }
 
-//#110094#-10
-//void SdrLayerAdmin::ClearLayerSets()
-//{
-//  SdrLayerSet* pL;
-//  pL=(SdrLayerSet*)aLSets.First();
-//  while (pL!=NULL) {
-//      delete pL;
-//      pL=(SdrLayerSet*)aLSets.Next();
-//  }
-//  aLSets.Clear();
-//}
-
 const SdrLayerAdmin& SdrLayerAdmin::operator=(const SdrLayerAdmin& rSrcLayerAdmin)
 {
     ClearLayer();
-    //#110094#-10
-    //ClearLayerSets();
     pParent=rSrcLayerAdmin.pParent;
     USHORT i;
     USHORT nAnz=rSrcLayerAdmin.GetLayerCount();
     for (i=0; i<nAnz; i++) {
         aLayer.Insert(new SdrLayer(*rSrcLayerAdmin.GetLayer(i)),CONTAINER_APPEND);
     }
-//#110094#-10
-//  nAnz=rSrcLayerAdmin.GetLayerSetCount();
-//  for (i=0; i<nAnz; i++) {
-//      aLSets.Insert(new SdrLayerSet(*rSrcLayerAdmin.GetLayerSet(i)),CONTAINER_APPEND);
-//  }
     return *this;
 }
 
@@ -430,13 +309,6 @@ bool SdrLayerAdmin::operator==(const SdrLayerAdmin& rCmpLayerAdmin) const
         bOk=*GetLayer(i)==*rCmpLayerAdmin.GetLayer(i);
         i++;
     }
-    //#110094#-10
-    //nAnz=GetLayerSetCount();
-    //i=0;
-    //while (bOk && i<nAnz) {
-    //  bOk=*GetLayerSet(i)==*rCmpLayerAdmin.GetLayerSet(i);
-    //  i++;
-    //}
     return bOk;
 }
 
@@ -449,21 +321,12 @@ void SdrLayerAdmin::SetModel(SdrModel* pNewModel)
         for (i=0; i<nAnz; i++) {
             GetLayer(i)->SetModel(pNewModel);
         }
-        //#110094#-10
-        //nAnz=GetLayerSetCount();
-        //for (i=0; i<nAnz; i++) {
-        //  GetLayerSet(i)->SetModel(pNewModel);
-        //}
     }
 }
 
-//#110094#-10
-//void SdrLayerAdmin::Broadcast(FASTBOOL bLayerSet) const
 void SdrLayerAdmin::Broadcast() const
 {
     if (pModel!=NULL) {
-        //#110094#-10
-        //SdrHint aHint(bLayerSet ? HINT_LAYERSETORDERCHG : HINT_LAYERORDERCHG);
         SdrHint aHint(HINT_LAYERORDERCHG);
         pModel->Broadcast(aHint);
         pModel->SetChanged();
@@ -473,11 +336,7 @@ void SdrLayerAdmin::Broadcast() const
 SdrLayer* SdrLayerAdmin::RemoveLayer(USHORT nPos)
 {
     SdrLayer* pRetLayer=(SdrLayer*)(aLayer.Remove(nPos));
-
-    //#110094#-10
     Broadcast();
-    //Broadcast(FALSE);
-
     return pRetLayer;
 }
 
@@ -487,11 +346,7 @@ SdrLayer* SdrLayerAdmin::NewLayer(const XubString& rName, USHORT nPos)
     SdrLayer* pLay=new SdrLayer(nID,rName);
     pLay->SetModel(pModel);
     aLayer.Insert(pLay,nPos);
-
-    //#110094#-10
-    //Broadcast(FALSE);
     Broadcast();
-
     return pLay;
 }
 
@@ -502,11 +357,7 @@ SdrLayer* SdrLayerAdmin::NewStandardLayer(USHORT nPos)
     pLay->SetStandardLayer();
     pLay->SetModel(pModel);
     aLayer.Insert(pLay,nPos);
-
-    //#110094#-10
-    //Broadcast(FALSE);
     Broadcast();
-
     return pLay;
 }
 
@@ -517,10 +368,7 @@ SdrLayer* SdrLayerAdmin::MoveLayer(USHORT nPos, USHORT nNewPos)
         aLayer.Insert(pLayer,nNewPos);
     }
 
-    //#110094#-10
-    //Broadcast(FALSE);
     Broadcast();
-
     return pLayer;
 }
 
@@ -530,9 +378,6 @@ void SdrLayerAdmin::MoveLayer(SdrLayer* pLayer, USHORT nNewPos)
     if (nPos!=CONTAINER_ENTRY_NOTFOUND) {
         aLayer.Remove(nPos);
         aLayer.Insert(pLayer,nNewPos);
-
-        //#110094#-10
-        //Broadcast(FALSE);
         Broadcast();
     }
 }
@@ -600,7 +445,7 @@ SdrLayerID SdrLayerAdmin::GetUniqueLayerID() const
     USHORT j;
     for (j=0; j<GetLayerCount(); j++)
     {
-        aSet.Set(GetLayer(j)->GetID());
+        aSet.Set(GetLayer((sal_uInt16)j)->GetID());
     }
     SdrLayerID i;
     if (!bDown)
@@ -621,55 +466,4 @@ SdrLayerID SdrLayerAdmin::GetUniqueLayerID() const
     }
     return i;
 }
-
-//#110094#-10
-//SdrLayerSet* SdrLayerAdmin::NewLayerSet(const XubString& rName, USHORT nPos)
-//{
-//  SdrLayerSet* pSet=new SdrLayerSet(/**this,*/rName);
-//  pSet->SetModel(pModel);
-//  aLSets.Insert(pSet,nPos);
-//  Broadcast(TRUE);
-//  return pSet;
-//}
-
-//#110094#-10
-//SdrLayerSet* SdrLayerAdmin::RemoveLayerSet(SdrLayerSet* pSet)
-//{
-//  SdrLayerSet* pRetSet=(SdrLayerSet*)aLSets.Remove(pSet);
-//  Broadcast(TRUE);
-//  return pRetSet;
-//}
-
-//#110094#-10
-//void SdrLayerAdmin::MoveLayerSet(SdrLayerSet* pSet, USHORT nNewPos)
-//{
-//  ULONG nPos=aLSets.GetPos(pSet);
-//  if (nPos!=CONTAINER_ENTRY_NOTFOUND) {
-//      aLSets.Remove(nPos);
-//      aLSets.Insert(pSet,nNewPos);
-//      Broadcast(TRUE);
-//  }
-//}
-
-//#110094#-10
-//const SdrLayerSet* SdrLayerAdmin::GetLayerSet(const XubString& rName, FASTBOOL bInherited) const
-//{
-//  UINT16 i(0);
-//  const SdrLayerSet* pSet = NULL;
-//
-//  while(i <= GetLayerSetCount() && !pSet)
-//  {
-//      if(rName.Equals(GetLayerSet(i)->GetName()))
-//          pSet = GetLayerSet(i);
-//      else
-//          i++;
-//  }
-//
-//  if(!pSet && pParent)
-//  {
-//      pSet = pParent->GetLayerSet(rName, TRUE);
-//  }
-//
-//  return pSet;
-//}
 
