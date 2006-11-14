@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:48:01 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:26:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,10 @@
 #endif
 #ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
 #include <com/sun/star/datatransfer/XTransferable.hpp>
+#endif
+
+#ifndef _SDRPAINTWINDOW_HXX
+#include <sdrpaintwindow.hxx>
 #endif
 
 #include "svxdlg.hxx" //CHINA001
@@ -1560,7 +1564,7 @@ namespace svxform
         //////////////////////////////////////////////////////////////////////
         // Namen setzen
         FmFormView*     pFormView       = GetNavModel()->GetFormShell()->GetFormView();
-        SdrPageView*    pPageView       = pFormView->GetPageViewPvNum(0);
+        SdrPageView*    pPageView       = pFormView->GetSdrPageView();
         FmFormPage*     pPage           = (FmFormPage*)pPageView->GetPage();
 
         ::rtl::OUString sName = pPage->GetImpl()->setUniqueName( xNewComponent, xParentForm );
@@ -1850,7 +1854,7 @@ namespace svxform
 
         // see below for why we need this mapping from models to shapes
         FmFormView*     pFormView       = pFormShell->GetFormView();
-        SdrPageView*    pPageView       = pFormView ? pFormView->GetPageViewPvNum(0) : NULL;
+        SdrPageView*    pPageView       = pFormView ? pFormView->GetSdrPageView() : NULL;
         SdrPage*        pPage           = pPageView ? pPageView->GetPage() : NULL;
         DBG_ASSERT( pPage, "NavigatorTree::DeleteSelection: invalid form page!" );
 
@@ -2239,7 +2243,7 @@ namespace svxform
         // In der Page das entsprechende SdrObj finden und selektieren
         Reference< XFormComponent >  xFormComponent( pControlData->GetFormComponent());
         FmFormView*     pFormView       = pFormShell->GetFormView();
-        SdrPageView*    pPageView       = pFormView->GetPageViewPvNum(0);
+        SdrPageView*    pPageView       = pFormView->GetSdrPageView();
         SdrPage*        pPage           = pPageView->GetPage();
 
         SdrObjListIter  aIter( *pPage );
@@ -2271,9 +2275,16 @@ namespace svxform
                     {
                         ::Rectangle aMarkRect( pFormView->GetAllMarkedRect());
 
-                        for( sal_uInt16 i=0; i<pFormView->GetWinCount(); i++ )
-                            if ( !aMarkRect.IsEmpty() )
-                                pFormView->MakeVisible( aMarkRect, *(Window*)pFormView->GetWin(i) );
+                        for(sal_uInt32 a(0L); a < pFormView->PaintWindowCount(); a++)
+                        {
+                            SdrPaintWindow* pPaintWindow = pFormView->GetPaintWindow(a);
+                            OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
+
+                            if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                            {
+                                pFormView->MakeVisible(aMarkRect, (Window&)rOutDev);
+                            }
+                        }
                     }
                 }
             }
