@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:37:52 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:34:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -661,7 +661,7 @@ bool SlideshowImpl::startPreview(
 
         if( mpView )
         {
-            mpView->AddWin( mpShowWindow );
+            mpView->AddWindowToPaintView( mpShowWindow );
             mpView->SetAnimationPause( TRUE );
         }
 
@@ -887,7 +887,7 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
 
         if( mpView )
         {
-            mpView->AddWin( mpShowWindow );
+            mpView->AddWindowToPaintView( mpShowWindow );
             mpView->SetAnimationPause( TRUE );
         }
 
@@ -1079,7 +1079,7 @@ void SlideshowImpl::stopShow()
 
     // der DrawView das Praesentationfenster wegnehmen und ihr dafuer ihre alten Fenster wiedergeben
     if( mpShowWindow && mpView )
-        mpView->DelWin( mpShowWindow );
+        mpView->DeleteWindowFromPaintView( mpShowWindow );
 
     if( mpView )
         mpView->SetAnimationPause( FALSE );
