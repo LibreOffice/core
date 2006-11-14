@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlform.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:10:07 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:13:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -873,32 +873,37 @@ void SwHTMLParser::SetControlSize( const Reference< drawing::XShape >& rShape,
 
     awt::Size aSz( rShape->getSize() );
     awt::Size aNewSz( 0, 0 );
-    if( bMinWidth || bMinHeight )
+
+    // #i71248# ensure we got a XControl before apllying corrections
+    if(xControl.is())
     {
-        Reference< awt::XLayoutConstrains > xLC( xControl, UNO_QUERY );
-        awt::Size aTmpSz( xLC->getPreferredSize() );
-        if( bMinWidth )
-            aNewSz.Width = aTmpSz.Width;
-        if( bMinHeight )
-            aNewSz.Height = aTmpSz.Height;
-    }
-    if( rTextSz.Width() || rTextSz.Height())
-    {
-        Reference< awt::XTextLayoutConstrains > xLC( xControl, UNO_QUERY );
-        ASSERT( xLC.is(), "kein XTextLayoutConstrains" );
-        if( xLC.is() )
+        if( bMinWidth || bMinHeight )
         {
-            awt::Size aTmpSz( rTextSz.Width(), rTextSz.Height() );
-            if( -1 == rTextSz.Width() )
-            {
-                aTmpSz.Width = 0;
-                aTmpSz.Height = nSelectEntryCnt;
-            }
-            aTmpSz = xLC->getMinimumSize( aTmpSz.Width, aTmpSz.Height );
-            if( rTextSz.Width() )
+            Reference< awt::XLayoutConstrains > xLC( xControl, UNO_QUERY );
+            awt::Size aTmpSz( xLC->getPreferredSize() );
+            if( bMinWidth )
                 aNewSz.Width = aTmpSz.Width;
-            if( rTextSz.Height() )
+            if( bMinHeight )
                 aNewSz.Height = aTmpSz.Height;
+        }
+        if( rTextSz.Width() || rTextSz.Height())
+        {
+            Reference< awt::XTextLayoutConstrains > xLC( xControl, UNO_QUERY );
+            ASSERT( xLC.is(), "kein XTextLayoutConstrains" );
+            if( xLC.is() )
+            {
+                awt::Size aTmpSz( rTextSz.Width(), rTextSz.Height() );
+                if( -1 == rTextSz.Width() )
+                {
+                    aTmpSz.Width = 0;
+                    aTmpSz.Height = nSelectEntryCnt;
+                }
+                aTmpSz = xLC->getMinimumSize( aTmpSz.Width, aTmpSz.Height );
+                if( rTextSz.Width() )
+                    aNewSz.Width = aTmpSz.Width;
+                if( rTextSz.Height() )
+                    aNewSz.Height = aTmpSz.Height;
+            }
         }
     }
 
