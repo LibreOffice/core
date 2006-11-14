@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dcommn.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:32:46 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:06:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@
 |*
 \************************************************************************/
 
-BASE3D_IMPL_BUCKET(UINT32, Bucket)
+BASE3D_IMPL_BUCKET(sal_uInt32, Bucket)
 
 /*************************************************************************
 |*
@@ -122,50 +122,64 @@ B3dEntity& Base3DCommon::ImplGetFreeEntity()
 |*
 \************************************************************************/
 
-void Base3DCommon::SetLightGroup(B3dLightGroup* pSet, BOOL bSetGlobal)
+void Base3DCommon::SetLightGroup(B3dLightGroup* pSet, sal_Bool bSetGlobal)
 {
     // call parent
     Base3D::SetLightGroup(pSet, bSetGlobal);
 
     if(GetLightGroup())
     {
-        Matrix4D aOldObjectTrans;
-        Matrix4D aEmptyTrans;
+        basegfx::B3DHomMatrix aOldObjectTrans;
+        basegfx::B3DHomMatrix aEmptyTrans;
+
         if(GetTransformationSet() && bSetGlobal)
         {
             aOldObjectTrans = GetTransformationSet()->GetObjectTrans();
             GetTransformationSet()->SetObjectTrans(aEmptyTrans);
         }
 
-        for(UINT16 i=0;i<BASE3D_MAX_NUMBER_LIGHTS;i++)
+        for(sal_uInt16 i=0;i<BASE3D_MAX_NUMBER_LIGHTS;i++)
         {
-            B3dLight& rLight = GetLightGroup()->
-                GetLightObject((Base3DLightNumber)(Base3DLight0 + i));
+            B3dLight& rLight = GetLightGroup()->GetLightObject((Base3DLightNumber)(Base3DLight0 + i));
+
             if(rLight.IsDirectionalSource())
             {
-                Vector3D aDirection = rLight.GetPosition();
+                basegfx::B3DPoint aPosition(rLight.GetPosition());
+
                 if(GetTransformationSet())
-                    aDirection = GetTransformationSet()->InvTransObjectToEye(aDirection);
-                aDirection.Normalize();
-                rLight.SetPositionEye(aDirection);
+                {
+                    aPosition = GetTransformationSet()->InvTransObjectToEye(aPosition);
+                }
+
+                rLight.SetPositionEye(aPosition);
             }
             else
             {
-                Vector3D aPosition = rLight.GetPosition();
+                basegfx::B3DPoint aPosition(rLight.GetPosition());
+
                 if(GetTransformationSet())
+                {
                     aPosition = GetTransformationSet()->ObjectToEyeCoor(aPosition);
+                }
+
                 rLight.SetPositionEye(aPosition);
 
-                Vector3D aDirection = rLight.GetSpotDirection();
+                basegfx::B3DVector aDirection(rLight.GetSpotDirection());
+
                 if(GetTransformationSet())
+                {
                     aDirection = GetTransformationSet()->InvTransObjectToEye(aDirection);
-                aDirection.Normalize();
+                }
+
+                aDirection.normalize();
                 rLight.SetSpotDirectionEye(aDirection);
             }
         }
 
         if(GetTransformationSet() && bSetGlobal)
+        {
             GetTransformationSet()->SetObjectTrans(aOldObjectTrans);
+        }
     }
 }
 
@@ -187,17 +201,18 @@ void Base3DCommon::ImplPostAddVertex(B3dEntity& rEntity)
         if((GetLightGroup() && GetLightGroup()->IsLightingEnabled()) && rEntity.IsNormalUsed())
         {
             if(GetForceFlat() || GetShadeModel() == Base3DFlat)
+            {
                 rEntity.Normal() = pSet->InvTransObjectToEye(rEntity.PlaneNormal());
+            }
             else
+            {
                 rEntity.Normal() = pSet->InvTransObjectToEye(rEntity.Normal());
+            }
         }
 
         // Texturkoordinaten transformieren anhand der Texturmatrix
         if(rEntity.IsTexCoorUsed())
         {
-            // Multiplikation mittels Point4D, um die Translationen zu
-            // beruecksichtigen. Die Koordinaten werden bei GetVector3D()
-            // homogenisiert.
             rEntity.TexCoor() = pSet->TransTextureCoor(rEntity.TexCoor());
         }
     }
@@ -206,7 +221,7 @@ void Base3DCommon::ImplPostAddVertex(B3dEntity& rEntity)
     rEntity.Color() = GetColor();
 
     // Jetzt Topologie beachten und evtl. ein Primitiv ausspucken
-    UINT32 aCount = aBuffers.Count();
+    sal_uInt32 aCount = aBuffers.Count();
     switch(GetObjectMode())
     {
         case Base3DPoints:
@@ -266,13 +281,13 @@ void Base3DCommon::ImplPostAddVertex(B3dEntity& rEntity)
                 B3dEntity& rEnt2 = aBuffers[2];
                 B3dEntity& rEnt0 = aBuffers[0];
 
-                BOOL bZwi = rEnt2.IsEdgeVisible();
-                rEnt2.SetEdgeVisible(FALSE);
+                sal_Bool bZwi = rEnt2.IsEdgeVisible();
+                rEnt2.SetEdgeVisible(sal_False);
                 Create3DTriangle(0, 1, 2);
                 rEnt2.SetEdgeVisible(bZwi);
 
                 bZwi = rEnt0.IsEdgeVisible();
-                rEnt0.SetEdgeVisible(FALSE);
+                rEnt0.SetEdgeVisible(sal_False);
                 Create3DTriangle(0, 2, 3);
                 rEnt0.SetEdgeVisible(bZwi);
 
@@ -285,8 +300,8 @@ void Base3DCommon::ImplPostAddVertex(B3dEntity& rEntity)
             if(aCount > 2)
             {
                 B3dEntity& rEnt = aBuffers[aCount - 2];
-                BOOL bZwi = rEnt.IsEdgeVisible();
-                rEnt.SetEdgeVisible(FALSE);
+                sal_Bool bZwi = rEnt.IsEdgeVisible();
+                rEnt.SetEdgeVisible(sal_False);
                 if(aCount % 2)
                     Create3DTriangle(aCount - 2, aCount - 1, aCount - 3);
                 else
@@ -300,14 +315,14 @@ void Base3DCommon::ImplPostAddVertex(B3dEntity& rEntity)
             if(aCount > 2)
             {
                 B3dEntity& rEnt = aBuffers[aCount - 1];
-                BOOL bZwi = rEnt.IsEdgeVisible();
-                rEnt.SetEdgeVisible(FALSE);
+                sal_Bool bZwi = rEnt.IsEdgeVisible();
+                rEnt.SetEdgeVisible(sal_False);
                 Create3DTriangle(0, aCount - 2, aCount - 1);
                 rEnt.SetEdgeVisible(bZwi);
                 // Ab jetzt nie wieder eine Kante vom 1. Punkt (0)
                 // ausgehend generieren
                 if(aCount == 3)
-                    aBuffers[0].SetEdgeVisible(FALSE);
+                    aBuffers[0].SetEdgeVisible(sal_False);
             }
             break;
 
@@ -339,7 +354,7 @@ void Base3DCommon::ImplStartPrimitive()
 void Base3DCommon::ImplEndPrimitive()
 {
     // Topologie beachten und evtl. ein Primitiv ausspucken
-    UINT32 aCount = aBuffers.Count();
+    sal_uInt32 aCount = aBuffers.Count();
     switch(GetObjectMode())
     {
         case Base3DLineLoop:
@@ -374,9 +389,9 @@ void Base3DCommon::ImplEndPrimitive()
 |*
 \************************************************************************/
 
-void Base3DCommon::Create3DPoint(UINT32 nInd)
+void Base3DCommon::Create3DPoint(sal_uInt32 nInd)
 {
-    bLastPrimitiveRejected = TRUE;
+    bLastPrimitiveRejected = sal_True;
     if(GetRenderMode() != Base3DRenderNone)
     {
         // Sicherstellen, dass die Koordinaten in
@@ -389,7 +404,7 @@ void Base3DCommon::Create3DPoint(UINT32 nInd)
     }
 }
 
-void Base3DCommon::Create3DPointClipped(UINT32 nInd)
+void Base3DCommon::Create3DPointClipped(sal_uInt32 nInd)
 {
     // einige Beleuchtungsdinge koennen hier schon geklaert
     // werden
@@ -399,9 +414,9 @@ void Base3DCommon::Create3DPointClipped(UINT32 nInd)
         if(rEnt.IsNormalUsed() && GetLightGroup())
         {
             // Beleuchtungsmodell loesen, Normale loeschen
-            SolveColorModel(rEnt.Color(), rEnt.Normal(), rEnt.Point().GetVector3D());
+            SolveColorModel(rEnt.Color(), rEnt.Normal(), rEnt.Point());
         }
-        rEnt.SetNormalUsed(FALSE);
+        rEnt.SetNormalUsed(sal_False);
     }
 
     // Punkt wird dargestellt, weiterreichen
@@ -423,31 +438,31 @@ void Base3DCommon::Create3DPointClipped(UINT32 nInd)
 
         // Bereite neue Punkte vor
         // Hole die neuen Punkte
-        UINT32 nNew1 = aBuffers.Count();
+        sal_uInt32 nNew1 = aBuffers.Count();
         aBuffers.Append(rEnt1);
         B3dEntity& rNew1 = aBuffers[nNew1];
 
-        UINT32 nNew2 = aBuffers.Count();
+        sal_uInt32 nNew2 = aBuffers.Count();
         aBuffers.Append(rEnt1);
         B3dEntity& rNew2 = aBuffers[nNew2];
 
-        UINT32 nNew3 = aBuffers.Count();
+        sal_uInt32 nNew3 = aBuffers.Count();
         aBuffers.Append(rEnt1);
         B3dEntity& rNew3 = aBuffers[nNew3];
 
         // Schleife drehen
         Base3DRenderMode eRenderMode = GetRenderMode();
         SetRenderMode(Base3DRenderFill);
-        BOOL bPolyOffset = GetPolygonOffset(Base3DPolygonOffsetFill);
-        SetPolygonOffset(Base3DPolygonOffsetFill, TRUE);
+        sal_Bool bPolyOffset = GetPolygonOffset(Base3DPolygonOffsetFill);
+        SetPolygonOffset(Base3DPolygonOffsetFill, sal_True);
 
         for(double fWink=0.0;fWink<F_2PI-(F_2PI/24.0);fWink+=F_2PI/12.0)
         {
-            rNew2.Point().X() = rNew1.Point().X() + (cos(fWink) * fRadius);
-            rNew2.Point().Y() = rNew1.Point().Y() + (sin(fWink) * fRadius);
+            rNew2.Point().setX(rNew1.Point().getX() + (cos(fWink) * fRadius));
+            rNew2.Point().setY(rNew1.Point().getY() + (sin(fWink) * fRadius));
 
-            rNew3.Point().X() = rNew1.Point().X() + (cos(fWink+(F_2PI/12.0)) * fRadius);
-            rNew3.Point().Y() = rNew1.Point().Y() + (sin(fWink+(F_2PI/12.0)) * fRadius);
+            rNew3.Point().setX(rNew1.Point().getX() + (cos(fWink+(F_2PI/12.0)) * fRadius));
+            rNew3.Point().setY(rNew1.Point().getY() + (sin(fWink+(F_2PI/12.0)) * fRadius));
 
             // Dreieck Zeichnen
             Create3DTriangle(nNew1, nNew3, nNew2);
@@ -456,12 +471,12 @@ void Base3DCommon::Create3DPointClipped(UINT32 nInd)
         SetRenderMode(eRenderMode);
         SetPolygonOffset(Base3DPolygonOffsetFill, bPolyOffset);
 
-        bLastPrimitiveRejected = FALSE;
+        bLastPrimitiveRejected = sal_False;
     }
     else
     {
         Clipped3DPoint(nInd);
-        bLastPrimitiveRejected = FALSE;
+        bLastPrimitiveRejected = sal_False;
     }
 }
 
@@ -472,9 +487,9 @@ void Base3DCommon::Create3DPointClipped(UINT32 nInd)
 |*
 \************************************************************************/
 
-void Base3DCommon::Create3DLine(UINT32 nInd1, UINT32 nInd2)
+void Base3DCommon::Create3DLine(sal_uInt32 nInd1, sal_uInt32 nInd2)
 {
-    bLastPrimitiveRejected = TRUE;
+    bLastPrimitiveRejected = sal_True;
     if(GetRenderMode() != Base3DRenderNone)
     {
         // Sicherstellen, dass die Koordinaten in
@@ -506,7 +521,7 @@ void Base3DCommon::Create3DLine(UINT32 nInd1, UINT32 nInd2)
     }
 }
 
-void Base3DCommon::Create3DLineClipped(UINT32 nInd1, UINT32 nInd2)
+void Base3DCommon::Create3DLineClipped(sal_uInt32 nInd1, sal_uInt32 nInd2)
 {
     // einige Beleuchtungsdinge koennen hier schon geklaert
     // werden
@@ -520,14 +535,14 @@ void Base3DCommon::Create3DLineClipped(UINT32 nInd1, UINT32 nInd2)
             B3dEntity& rEnt2 = aBuffers[nInd2];
             if(rEnt1.IsNormalUsed() && rEnt2.IsNormalUsed() && GetLightGroup())
             {
-                Vector3D aNormal = rEnt1.Normal() + rEnt2.Normal();
-                aNormal.Normalize();
-                Vector3D aPoint = (rEnt1.Point().GetVector3D() + rEnt2.Point().GetVector3D()) / 2.0;
+                basegfx::B3DVector aNormal = rEnt1.Normal() + rEnt2.Normal();
+                aNormal.normalize();
+                basegfx::B3DPoint aPoint = (rEnt1.Point() + rEnt2.Point()) / 2.0;
                 SolveColorModel(rEnt1.Color(), aNormal, aPoint);
                 rEnt2.Color() = rEnt1.Color();
             }
-            rEnt1.SetNormalUsed(FALSE);
-            rEnt2.SetNormalUsed(FALSE);
+            rEnt1.SetNormalUsed(sal_False);
+            rEnt2.SetNormalUsed(sal_False);
         }
     }
     else
@@ -564,26 +579,26 @@ void Base3DCommon::Create3DLineClipped(UINT32 nInd1, UINT32 nInd2)
 
             // Bereite neue Punkte vor
             // Hole die neuen Punkte
-            UINT32 nNew1 = aBuffers.Count();
+            sal_uInt32 nNew1 = aBuffers.Count();
             aBuffers.Append(rEnt1);
             B3dEntity& rNew1 = aBuffers[nNew1];
 
-            UINT32 nNew2 = aBuffers.Count();
+            sal_uInt32 nNew2 = aBuffers.Count();
             aBuffers.Append(rEnt1);
             B3dEntity& rNew2 = aBuffers[nNew2];
 
-            UINT32 nNew3 = aBuffers.Count();
+            sal_uInt32 nNew3 = aBuffers.Count();
             aBuffers.Append(rEnt2);
             B3dEntity& rNew3 = aBuffers[nNew3];
 
-            UINT32 nNew4 = aBuffers.Count();
+            sal_uInt32 nNew4 = aBuffers.Count();
             aBuffers.Append(rEnt2);
             B3dEntity& rNew4 = aBuffers[nNew4];
 
             // Berechnen
-            Vector3D aEntVector = rEnt2.Point().GetVector3D() - rEnt1.Point().GetVector3D();
-            Vector3D aTurned(-aEntVector.Y(), aEntVector.X(), 0.0);
-            aTurned.Normalize();
+            basegfx::B3DVector aEntVector = rEnt2.Point() - rEnt1.Point();
+            basegfx::B3DVector aTurned(-aEntVector.getY(), aEntVector.getX(), 0.0);
+            aTurned.normalize();
 
             // Logische Koordinaten nach Pixel
             Point aPnt((long)(GetLineWidth() + 0.5), 0);
@@ -594,21 +609,21 @@ void Base3DCommon::Create3DLineClipped(UINT32 nInd1, UINT32 nInd2)
             // Aufmuliplizieren
             aTurned *= fFac;
 
-            rNew1.Point().X() += aTurned.X();
-            rNew1.Point().Y() += aTurned.Y();
-            rNew2.Point().X() -= aTurned.X();
-            rNew2.Point().Y() -= aTurned.Y();
+            rNew1.Point().setX(rNew1.Point().getX() + aTurned.getX());
+            rNew1.Point().setY(rNew1.Point().getY() + aTurned.getY());
+            rNew2.Point().setX(rNew2.Point().getX() - aTurned.getX());
+            rNew2.Point().setY(rNew2.Point().getY() - aTurned.getY());
 
-            rNew3.Point().X() += aTurned.X();
-            rNew3.Point().Y() += aTurned.Y();
-            rNew4.Point().X() -= aTurned.X();
-            rNew4.Point().Y() -= aTurned.Y();
+            rNew3.Point().setX(rNew3.Point().getX() + aTurned.getX());
+            rNew3.Point().setY(rNew3.Point().getY() + aTurned.getY());
+            rNew4.Point().setX(rNew4.Point().getX() - aTurned.getX());
+            rNew4.Point().setY(rNew4.Point().getY() - aTurned.getY());
 
             // Ausgeben
             Base3DRenderMode eRenderMode = GetRenderMode();
             SetRenderMode(Base3DRenderFill);
-            BOOL bPolyOffset = GetPolygonOffset(Base3DPolygonOffsetFill);
-            SetPolygonOffset(Base3DPolygonOffsetFill, TRUE);
+            sal_Bool bPolyOffset = GetPolygonOffset(Base3DPolygonOffsetFill);
+            SetPolygonOffset(Base3DPolygonOffsetFill, sal_True);
 
             Create3DTriangle(nNew2, nNew1, nNew3);
             Create3DTriangle(nNew2, nNew3, nNew4);
@@ -616,13 +631,13 @@ void Base3DCommon::Create3DLineClipped(UINT32 nInd1, UINT32 nInd2)
             SetRenderMode(eRenderMode);
             SetPolygonOffset(Base3DPolygonOffsetFill, bPolyOffset);
 
-            bLastPrimitiveRejected = FALSE;
+            bLastPrimitiveRejected = sal_False;
         }
         else
         {
             // Linie ausgeben
             Clipped3DLine(nInd1,nInd2);
-            bLastPrimitiveRejected = FALSE;
+            bLastPrimitiveRejected = sal_False;
         }
     }
 }
@@ -634,9 +649,9 @@ void Base3DCommon::Create3DLineClipped(UINT32 nInd1, UINT32 nInd2)
 |*
 \************************************************************************/
 
-void Base3DCommon::Create3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
+void Base3DCommon::Create3DTriangle(sal_uInt32 nInd1, sal_uInt32 nInd2, sal_uInt32 nInd3)
 {
-    bLastPrimitiveRejected = TRUE;
+    bLastPrimitiveRejected = sal_True;
 
     // Sicherstellen, dass die Koordinaten in
     // ClipCoordinates vorliegen
@@ -652,29 +667,29 @@ void Base3DCommon::Create3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
     // Normale vorbereiten, die echte Ebenennormale der Geometrie
     // im Device-Koordinatensystem. Verzerrungen durch perspektivische
     // Projektion sind somit bereits beruecksichtigt.
-    const Vector3D& rPnt1 = aBuffers[nInd1].Point().GetVector3D();
-    const Vector3D& rPnt2 = aBuffers[nInd2].Point().GetVector3D();
-    const Vector3D& rPnt3 = aBuffers[nInd3].Point().GetVector3D();
-    Vector3D aNormal = (rPnt2 - rPnt3)|(rPnt2 - rPnt1);
-    aNormal.Normalize();
+    const basegfx::B3DPoint& rPnt1 = aBuffers[nInd1].Point();
+    const basegfx::B3DPoint& rPnt2 = aBuffers[nInd2].Point();
+    const basegfx::B3DPoint& rPnt3 = aBuffers[nInd3].Point();
+    basegfx::B3DVector aNormal = basegfx::B3DVector(rPnt2 - rPnt3).getPerpendicular(basegfx::B3DVector(rPnt2 - rPnt1));
+    aNormal.normalize();
 
     if(GetCullMode() != Base3DCullNone)
     {
         // Normale ermitteln, eventuell gar nicht zeichnen
         if(GetCullMode() == Base3DCullFront)
         {
-            if(aNormal.Z() > 0.0)
+            if(aNormal.getZ() > 0.0)
                 return;
         }
         else
         {
-            if(aNormal.Z() < 0.0)
+            if(aNormal.getZ() < 0.0)
                 return;
         }
     }
 
     // allgemeines Polygon vorbereiten
-    UINT32Bucket aEdgeIndex(8);
+    sal_uInt32Bucket aEdgeIndex(8);
     aEdgeIndex.Append(nInd1);
     aEdgeIndex.Append(nInd2);
     aEdgeIndex.Append(nInd3);
@@ -686,9 +701,9 @@ void Base3DCommon::Create3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
     if(Clip3DPolygon(aEdgeIndex))
     {
         // #93184# set flag for polygon normal direction
-        bNormalPointsAway = BOOL(aNormal.Z() < 0.0);
+        bNormalPointsAway = sal_Bool(aNormal.getZ() < 0.0);
 
-        UINT32 nNumPoints = aEdgeIndex.Count();
+        sal_uInt32 nNumPoints = aEdgeIndex.Count();
 
         // einige Beleuchtungsdinge koennen hier schon geklaert
         // werden
@@ -700,17 +715,17 @@ void Base3DCommon::Create3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
                 B3dColor aColFlatMode;
 
                 // #63505#
-                aNormal.X() = -aNormal.X();
-                aNormal.Y() = -aNormal.Y();
+                aNormal.setX(-aNormal.getX());
+                aNormal.setY(-aNormal.getY());
 
-                SolveColorModel(aColFlatMode, aNormal, rEntity.Point().GetVector3D());
+                SolveColorModel(aColFlatMode, aNormal, rEntity.Point());
 
                 // Vorberechnete Farbe in Eckpunkten setzen
-                for(UINT32 i=0;i<nNumPoints;i++)
+                for(sal_uInt32 i=0;i<nNumPoints;i++)
                 {
                     B3dEntity& rEnt = aBuffers[aEdgeIndex[i]];
                     rEnt.Color() = aColFlatMode;
-                    rEnt.SetNormalUsed(FALSE);
+                    rEnt.SetNormalUsed(sal_False);
                 }
             }
         }
@@ -718,15 +733,15 @@ void Base3DCommon::Create3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
         {
             if(GetShadeModel() == Base3DFlat && nNumPoints != 0)
             {
-                unsigned int aRed(0), aGreen(0), aBlue(0), aAlpha(0);
-                UINT32 i;
+                sal_uInt16 aRed(0), aGreen(0), aBlue(0), aAlpha(0);
+                sal_uInt32 i;
                 for(i=0;i<nNumPoints;i++)
                 {
                     B3dEntity& rEnt = aBuffers[aEdgeIndex[i]];
-                    aRed += rEnt.Color().GetRed();
-                    aGreen += rEnt.Color().GetGreen();
-                    aBlue += rEnt.Color().GetBlue();
-                    aAlpha += rEnt.Color().GetTransparency();
+                    aRed = aRed + rEnt.Color().GetRed();
+                    aGreen = aGreen + rEnt.Color().GetGreen();
+                    aBlue = aBlue + rEnt.Color().GetBlue();
+                    aAlpha = aAlpha + rEnt.Color().GetTransparency();
                 }
                 B3dColor aCol((UINT8)(aAlpha / nNumPoints),
                     (UINT8)(aRed / nNumPoints),
@@ -741,7 +756,7 @@ void Base3DCommon::Create3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
 
         // Ausgeben, je nach Modus
         Base3DMaterialMode eMat = Base3DMaterialFront;
-        if(aNormal.Z() < 0.0
+        if(aNormal.getZ() < 0.0
             && (GetLightGroup() && GetLightGroup()->GetModelTwoSide()))
             eMat = Base3DMaterialBack;
         Base3DRenderMode eMode = GetRenderMode(eMat);
@@ -749,7 +764,7 @@ void Base3DCommon::Create3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
         if(eMode == Base3DRenderPoint)
         {
             // Als Punktmenge ausgeben
-            for(UINT32 i=0;i<nNumPoints;i++)
+            for(sal_uInt32 i=0;i<nNumPoints;i++)
             {
                 Create3DPointClipped(aEdgeIndex[i]);
             }
@@ -757,8 +772,8 @@ void Base3DCommon::Create3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
         else if(eMode == Base3DRenderLine)
         {
             // Als Linien ausgeben
-            UINT32 i2, i3;
-            for(UINT32 i=0;i<nNumPoints;i++)
+            sal_uInt32 i2, i3;
+            for(sal_uInt32 i=0;i<nNumPoints;i++)
             {
                 i2 = i+1;
                 if(i2 == nNumPoints)
@@ -780,13 +795,13 @@ void Base3DCommon::Create3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
             // to allow further computations.
             if(nNumPoints > 2)
             {
-                for(UINT32 i=2;i < nNumPoints; i++)
+                for(sal_uInt32 i=2;i < nNumPoints; i++)
                 {
                     Clipped3DTriangle(
                         aEdgeIndex[0],
                         aEdgeIndex[i-1],
                         aEdgeIndex[i]);
-                    bLastPrimitiveRejected = FALSE;
+                    bLastPrimitiveRejected = sal_False;
                 }
             }
         }
@@ -803,9 +818,9 @@ void Base3DCommon::Create3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
 |*
 \************************************************************************/
 
-BOOL Base3DCommon::Clip3DPoint(UINT32 nInd)
+sal_Bool Base3DCommon::Clip3DPoint(sal_uInt32 nInd)
 {
-    return (!(BOOL)GetClipFlags(nInd));
+    return (!(sal_Bool)GetClipFlags(nInd));
 }
 
 /*************************************************************************
@@ -814,16 +829,12 @@ BOOL Base3DCommon::Clip3DPoint(UINT32 nInd)
 |*
 \************************************************************************/
 
-BOOL Base3DCommon::AreEqual(UINT32 nInd1, UINT32 nInd2)
+sal_Bool Base3DCommon::AreEqual(sal_uInt32 nInd1, sal_uInt32 nInd2)
 {
-    const Vector3D& rVec1 = aBuffers[nInd1].Point().GetVector3D();
-    const Vector3D& rVec2 = aBuffers[nInd2].Point().GetVector3D();
+    const basegfx::B3DPoint& rPnt1 = aBuffers[nInd1].Point();
+    const basegfx::B3DPoint& rPnt2 = aBuffers[nInd2].Point();
 
-    if(fabs(rVec1.X() - rVec2.X()) < SMALL_DVALUE)
-        if(fabs(rVec1.Y() - rVec2.Y()) < SMALL_DVALUE)
-            if(fabs(rVec1.Z() - rVec2.Z()) < SMALL_DVALUE)
-                return TRUE;
-    return FALSE;
+    return rPnt1.equal(rPnt2);
 }
 
 /*************************************************************************
@@ -832,9 +843,9 @@ BOOL Base3DCommon::AreEqual(UINT32 nInd1, UINT32 nInd2)
 |*
 \************************************************************************/
 
-BOOL Base3DCommon::Clip3DLine(UINT32& nInd1,UINT32& nInd2)
+sal_Bool Base3DCommon::Clip3DLine(sal_uInt32& nInd1,sal_uInt32& nInd2)
 {
-    UINT16 nFlag0, nFlag1;
+    sal_uInt16 nFlag0, nFlag1;
     do
     {
         nFlag0 = GetClipFlags(nInd1);
@@ -842,14 +853,14 @@ BOOL Base3DCommon::Clip3DLine(UINT32& nInd1,UINT32& nInd2)
 
         // Beide Endpunkte drin?
         if(!(nFlag0 | nFlag1))
-            return TRUE;
+            return sal_True;
 
         // Linie komplett draussen?
         if(nFlag0 & nFlag1)
-            return FALSE;
+            return sal_False;
 
         // Es muss geclippt werden, bereite einen neuen Punkt vor
-        UINT32 nNewIndex = aBuffers.Count();
+        sal_uInt32 nNewIndex = aBuffers.Count();
         aBuffers.Append();
 
         if((nFlag0 | nFlag1) & (CLIPFLAG_FRONT | CLIPFLAG_BACK))
@@ -913,7 +924,7 @@ BOOL Base3DCommon::Clip3DLine(UINT32& nInd1,UINT32& nInd2)
             }
         }
     } while(nFlag0 | nFlag1);
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -922,25 +933,24 @@ BOOL Base3DCommon::Clip3DLine(UINT32& nInd1,UINT32& nInd2)
 |*
 \************************************************************************/
 
-UINT16 Base3DCommon::GetClipFlags(UINT32 nInd)
+sal_uInt16 Base3DCommon::GetClipFlags(sal_uInt32 nInd)
 {
-    UINT16 nRetval(0);
-    Point4D& rPoint = aBuffers[nInd].Point();
-    rPoint.Homogenize();
+    sal_uInt16 nRetval(0);
+    basegfx::B3DPoint& rPoint = aBuffers[nInd].Point();
 
-    if(rPoint[0] < -(1.0 + SMALL_DVALUE))
+    if(rPoint.getX() < -(1.0 + SMALL_DVALUE))
         nRetval |= CLIPFLAG_LEFT;
-    if(rPoint[0] >  1.0 + SMALL_DVALUE)
+    if(rPoint.getX() >  1.0 + SMALL_DVALUE)
         nRetval |= CLIPFLAG_RIGHT;
 
-    if(rPoint[1] < -(1.0 + SMALL_DVALUE))
+    if(rPoint.getY() < -(1.0 + SMALL_DVALUE))
         nRetval |= CLIPFLAG_BOTTOM;
-    if(rPoint[1] >  1.0 + SMALL_DVALUE)
+    if(rPoint.getY() >  1.0 + SMALL_DVALUE)
         nRetval |= CLIPFLAG_TOP;
 
-    if(rPoint[2] < -(1.0 + SMALL_DVALUE))
+    if(rPoint.getZ() < -(1.0 + SMALL_DVALUE))
         nRetval |= CLIPFLAG_FRONT;
-    if(rPoint[2] >  1.0 + SMALL_DVALUE)
+    if(rPoint.getZ() >  1.0 + SMALL_DVALUE)
         nRetval |= CLIPFLAG_BACK;
 
     return nRetval;
@@ -954,10 +964,10 @@ UINT16 Base3DCommon::GetClipFlags(UINT32 nInd)
 |*
 \************************************************************************/
 
-BOOL Base3DCommon::Clip3DPolygon(UINT32Bucket& rEdgeIndex)
+sal_Bool Base3DCommon::Clip3DPolygon(sal_uInt32Bucket& rEdgeIndex)
 {
-    UINT32 i;
-    UINT16 nAllFlagsOr, nAllFlagsAnd;
+    sal_uInt32 i;
+    sal_uInt16 nAllFlagsOr, nAllFlagsAnd;
 
     do
     {
@@ -967,29 +977,29 @@ BOOL Base3DCommon::Clip3DPolygon(UINT32Bucket& rEdgeIndex)
 
         for(i=0; i < rEdgeIndex.Count(); i++)
         {
-            UINT16 nFlag = GetClipFlags(rEdgeIndex[i]);
+            sal_uInt16 nFlag = GetClipFlags(rEdgeIndex[i]);
             nAllFlagsOr |= nFlag;
             nAllFlagsAnd &= nFlag;
         }
 
         // Alle Endpunkte drin?
         if(!nAllFlagsOr)
-            return TRUE;
+            return sal_True;
 
         // Dreieck komplett draussen?
         if(nAllFlagsAnd)
-            return FALSE;
+            return sal_False;
 
         if(nAllFlagsOr & (CLIPFLAG_FRONT|CLIPFLAG_BACK))
         {
             // clippen in Z
             if(nAllFlagsOr & CLIPFLAG_FRONT)
             {
-                ClipPoly(rEdgeIndex, 2, TRUE);
+                ClipPoly(rEdgeIndex, 2, sal_True);
             }
             else
             {
-                ClipPoly(rEdgeIndex, 2, FALSE);
+                ClipPoly(rEdgeIndex, 2, sal_False);
             }
         }
         else if(nAllFlagsOr & (CLIPFLAG_LEFT|CLIPFLAG_RIGHT))
@@ -997,11 +1007,11 @@ BOOL Base3DCommon::Clip3DPolygon(UINT32Bucket& rEdgeIndex)
             // clippen in X
             if(nAllFlagsOr & CLIPFLAG_LEFT)
             {
-                ClipPoly(rEdgeIndex, 0, TRUE);
+                ClipPoly(rEdgeIndex, 0, sal_True);
             }
             else
             {
-                ClipPoly(rEdgeIndex, 0, FALSE);
+                ClipPoly(rEdgeIndex, 0, sal_False);
             }
         }
         else
@@ -1009,15 +1019,15 @@ BOOL Base3DCommon::Clip3DPolygon(UINT32Bucket& rEdgeIndex)
             // clippen in Y
             if(nAllFlagsOr & CLIPFLAG_BOTTOM)
             {
-                ClipPoly(rEdgeIndex, 1, TRUE);
+                ClipPoly(rEdgeIndex, 1, sal_True);
             }
             else
             {
-                ClipPoly(rEdgeIndex, 1, FALSE);
+                ClipPoly(rEdgeIndex, 1, sal_False);
             }
         }
     } while(nAllFlagsOr);
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -1026,7 +1036,7 @@ BOOL Base3DCommon::Clip3DPolygon(UINT32Bucket& rEdgeIndex)
 |*
 \************************************************************************/
 
-BOOL Base3DCommon::IsInside(UINT32 nInd, UINT32 nDim, BOOL bLow)
+sal_Bool Base3DCommon::IsInside(sal_uInt32 nInd, sal_uInt32 nDim, sal_Bool bLow)
 {
     B3dEntity& aEntity = aBuffers[nInd];
 
@@ -1035,14 +1045,14 @@ BOOL Base3DCommon::IsInside(UINT32 nInd, UINT32 nDim, BOOL bLow)
     if(bLow)
     {
         if(aEntity.Point()[nDim] < -(1.0 + SMALL_DVALUE))
-            return FALSE;
+            return sal_False;
     }
     else
     {
         if(aEntity.Point()[nDim] > (1.0 + SMALL_DVALUE))
-            return FALSE;
+            return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -1052,16 +1062,16 @@ BOOL Base3DCommon::IsInside(UINT32 nInd, UINT32 nDim, BOOL bLow)
 |*
 \************************************************************************/
 
-void Base3DCommon::ClipPoly(UINT32Bucket& rEdgeIndex, UINT16 nDim, BOOL bLow)
+void Base3DCommon::ClipPoly(sal_uInt32Bucket& rEdgeIndex, sal_uInt16 nDim, sal_Bool bLow)
 {
-    UINT32 nNumEdges = rEdgeIndex.Count();
-    UINT32 nCurrentInd = rEdgeIndex[0];
-    BOOL bCurrentInside = IsInside(nCurrentInd, nDim, bLow);
-    UINT32 nNextInd;
-    BOOL bNextInside;
-    UINT32Bucket aEdgeIndex(8);
+    sal_uInt32 nNumEdges = rEdgeIndex.Count();
+    sal_uInt32 nCurrentInd = rEdgeIndex[0];
+    sal_Bool bCurrentInside = IsInside(nCurrentInd, nDim, bLow);
+    sal_uInt32 nNextInd;
+    sal_Bool bNextInside;
+    sal_uInt32Bucket aEdgeIndex(8);
 
-    for(UINT32 i=0;i<nNumEdges;i++)
+    for(sal_uInt32 i=0;i<nNumEdges;i++)
     {
         // hole naechsten Eckpunkt
         nNextInd = i+1;
@@ -1080,7 +1090,7 @@ void Base3DCommon::ClipPoly(UINT32Bucket& rEdgeIndex, UINT16 nDim, BOOL bLow)
             {
                 // drin -> draussen
                 // Platz fuer Schnittpunkt allokieren
-                UINT32 nNewIndex = aBuffers.Count();
+                sal_uInt32 nNewIndex = aBuffers.Count();
                 aBuffers.Append();
 
                 // Schnittpunkt berechnen
@@ -1091,7 +1101,7 @@ void Base3DCommon::ClipPoly(UINT32Bucket& rEdgeIndex, UINT16 nDim, BOOL bLow)
 
                 // EdgeFlag behandeln, beim Verlassen zuruecksetzen
                 if(aBuffers[nCurrentInd].IsEdgeVisible())
-                    aBuffers[nNewIndex].SetEdgeVisible(FALSE);
+                    aBuffers[nNewIndex].SetEdgeVisible(sal_False);
 
                 // Schnittpunkt hinzufuegen
                 aEdgeIndex.Append(nNewIndex);
@@ -1103,7 +1113,7 @@ void Base3DCommon::ClipPoly(UINT32Bucket& rEdgeIndex, UINT16 nDim, BOOL bLow)
             {
                 // draussen -> drin
                 // Platz fuer Schnittpunkt allokieren
-                UINT32 nNewIndex = aBuffers.Count();
+                sal_uInt32 nNewIndex = aBuffers.Count();
                 aBuffers.Append();
 
                 // Schnittpunkt berechnen
@@ -1136,8 +1146,8 @@ void Base3DCommon::ClipPoly(UINT32Bucket& rEdgeIndex, UINT16 nDim, BOOL bLow)
 |*
 \************************************************************************/
 
-void Base3DCommon::CalcNewPoint(UINT32 nNew, UINT32 nHigh, UINT32 nLow,
-    UINT16 nDim, double fBound)
+void Base3DCommon::CalcNewPoint(sal_uInt32 nNew, sal_uInt32 nHigh, sal_uInt32 nLow,
+    sal_uInt16 nDim, double fBound)
 {
     B3dEntity& aNew = aBuffers[nNew];
     B3dEntity& aHigh = aBuffers[nHigh];
@@ -1218,17 +1228,16 @@ void Base3DCommon::CalcNewPoint(UINT32 nNew, UINT32 nHigh, UINT32 nLow,
 |*
 \************************************************************************/
 
-void Base3DCommon::SolveColorModel(B3dColor& rCol, Vector3D& rVec,
-    const Vector3D& rPnt)
+void Base3DCommon::SolveColorModel(B3dColor& rCol, basegfx::B3DVector& rVec, const basegfx::B3DPoint& rPnt)
 {
     if(GetLightGroup() && GetLightGroup()->IsLightingEnabled())
     {
         B3dMaterial& rMat = GetMaterialObject();
-        BOOL bDoSolve(TRUE);
+        sal_Bool bDoSolve(sal_True);
 
         // Welches Material? Zeigt der Vektor vom Betrachter
         // weg oder auf diesen?
-        if(rVec.Z() < 0.0)
+        if(rVec.getZ() < 0.0)
         {
             // Rueckseite, soll diese dargestellt werden?
             if(GetLightGroup() && GetLightGroup()->GetModelTwoSide())
@@ -1237,7 +1246,7 @@ void Base3DCommon::SolveColorModel(B3dColor& rCol, Vector3D& rVec,
             }
             else
             {
-                bDoSolve = FALSE;
+                bDoSolve = sal_False;
             }
         }
         if(bDoSolve)
@@ -1245,7 +1254,7 @@ void Base3DCommon::SolveColorModel(B3dColor& rCol, Vector3D& rVec,
     }
 }
 
-B3dColor Base3DCommon::SolveColorModel(B3dMaterial& rMat, Vector3D& rVec, const Vector3D& rPnt)
+B3dColor Base3DCommon::SolveColorModel(B3dMaterial& rMat, basegfx::B3DVector& rVec, const basegfx::B3DPoint& rPnt)
 {
     // Material emission einbeziehen
     B3dColor aNew = rMat.GetMaterial(Base3DMaterialEmission);
@@ -1259,18 +1268,18 @@ B3dColor Base3DCommon::SolveColorModel(B3dMaterial& rMat, Vector3D& rVec, const 
         // Die Punktkoordinate liegt in ClipCoordinates vor, wird
         // aber zur Farbberechnung in EyeCoordinates benoetigt.
         // Fuehre eine Ruecktransformation durch.
-        Vector3D aPnt(rPnt);
+        basegfx::B3DPoint aPnt(rPnt);
         aPnt = GetTransformationSet()->DeviceToEyeCoor(aPnt);
 
         // Falls die Normale vom Betrachter weg zeigt und das Beleuchtungs-
         // modell doppelseitig ist, Normale umdrehen
-        Vector3D aVec(rVec);
+        basegfx::B3DVector aVec(rVec);
         // #93184# use flag from polygon normal direction to switch local normal eventually
         if(bNormalPointsAway && GetLightGroup()->GetModelTwoSide())
             aVec = -rVec;
 
         // Die einzelnen Lichtquellen einbeziehen
-        for(UINT16 i=Base3DLight0; i <= Base3DLight7; i++)
+        for(sal_uInt16 i=Base3DLight0; i <= Base3DLight7; i++)
         {
             if(GetLightGroup()->IsEnabled((Base3DLightNumber)i))
             {
@@ -1292,17 +1301,16 @@ B3dColor Base3DCommon::SolveColorModel(B3dMaterial& rMat, Vector3D& rVec, const 
 |*
 \************************************************************************/
 
-B3dColor Base3DCommon::SolveColorModel(B3dLight& rLight, B3dMaterial& rMat,
-    Vector3D& rVec, const Vector3D& rPnt)
+B3dColor Base3DCommon::SolveColorModel(B3dLight& rLight, B3dMaterial& rMat, basegfx::B3DVector& rVec, const basegfx::B3DPoint& rPnt)
 {
     B3dColor aRetval(255, 0, 0, 0);
     if(rLight.IsEnabled())
     {
         // Faktor mit Attenuation 1.0 initialisieren, falls
-        // IsDirectionalSource() == TRUE
+        // IsDirectionalSource() == sal_True
         double fFac = 1.0;
-        Vector3D aLightToVertex;
-        BOOL bLightToVertex(FALSE);
+        basegfx::B3DVector aLightToVertex;
+        sal_Bool bLightToVertex(sal_False);
 
         if(!rLight.IsDirectionalSource())
         {
@@ -1314,9 +1322,9 @@ B3dColor Base3DCommon::SolveColorModel(B3dLight& rLight, B3dMaterial& rMat,
                 // jetzt wird die Entfernung zwischen Lichtposition
                 // und Punkt benoetigt
                 aLightToVertex = rPnt - rLight.GetPositionEye();
-                bLightToVertex = TRUE;
-                double fLen = aLightToVertex.GetLength();
-                aLightToVertex.Normalize();
+                bLightToVertex = sal_True;
+                double fLen = aLightToVertex.getLength();
+                aLightToVertex.normalize();
 
                 fFac += rLight.GetLinearAttenuation() * fLen;
                 fFac += rLight.GetQuadraticAttenuation() * fLen * fLen;
@@ -1332,10 +1340,10 @@ B3dColor Base3DCommon::SolveColorModel(B3dLight& rLight, B3dMaterial& rMat,
                 if(!bLightToVertex)
                 {
                     aLightToVertex = rPnt - rLight.GetPositionEye();
-                    aLightToVertex.Normalize();
-                    bLightToVertex = TRUE;
+                    aLightToVertex.normalize();
+                    bLightToVertex = sal_True;
                 }
-                double fCosAngle = aLightToVertex.Scalar(rLight.GetSpotDirection());
+                double fCosAngle = aLightToVertex.scalar(rLight.GetSpotDirection());
                 // innerhalb des konus?
                 if(fCosAngle <= rLight.GetCosSpotCutoff())
                 {
@@ -1391,9 +1399,9 @@ B3dColor Base3DCommon::SolveColorModel(B3dLight& rLight, B3dMaterial& rMat,
                         // vom Punkt zur Lichtquelle
                         aLightToVertex -= rPnt;
                     }
-                    aLightToVertex.Normalize();
+                    aLightToVertex.normalize();
                 }
-                double fCosFac = aLightToVertex.Scalar(rVec);
+                double fCosFac = aLightToVertex.scalar(rVec);
 
                 if(fCosFac > 0.000001)
                 {
@@ -1410,7 +1418,7 @@ B3dColor Base3DCommon::SolveColorModel(B3dLight& rLight, B3dMaterial& rMat,
                         if(GetLightGroup()->GetLocalViewer())
                         {
                             // use vector 0,0,1
-                            aLightToVertex.Z() += 1.0;
+                            aLightToVertex.setZ(aLightToVertex.getZ() + 1.0);
                         }
                         else
                         {
@@ -1418,8 +1426,8 @@ B3dColor Base3DCommon::SolveColorModel(B3dLight& rLight, B3dMaterial& rMat,
                             // Augkoordinaten, ist 0 - rPnt
                             aLightToVertex -= rPnt;
                         }
-                        aLightToVertex.Normalize();
-                        fCosFac = aLightToVertex.Scalar(rVec);
+                        aLightToVertex.normalize();
+                        fCosFac = aLightToVertex.scalar(rVec);
                         if(fCosFac > 0.000001)
                         {
                             if(rMat.GetShininess())
@@ -1440,4 +1448,4 @@ B3dColor Base3DCommon::SolveColorModel(B3dLight& rLight, B3dMaterial& rMat,
     return aRetval;
 }
 
-
+// eof
