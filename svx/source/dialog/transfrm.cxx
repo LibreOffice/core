@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:31:49 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:17:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,7 +319,7 @@ void SvxAngleTabPage::Construct()
     }
 
     aRect = pView->GetAllMarkedRect();
-    pView->GetPageViewPvNum( 0 )->LogicToPagePos( aRect );
+    pView->GetSdrPageView()->LogicToPagePos( aRect );
 
     // Ankerposition beachten (Writer)
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
@@ -580,7 +580,7 @@ void SvxSlantTabPage::Construct()
     SetFieldUnit( aMtrRadius, eDlgUnit, TRUE );
 
     aRect = pView->GetAllMarkedRect();
-    pView->GetPageViewPvNum( 0 )->LogicToPagePos( aRect );
+    pView->GetSdrPageView()->LogicToPagePos( aRect );
 }
 
 // -----------------------------------------------------------------------
@@ -614,7 +614,7 @@ BOOL SvxSlantTabPage::FillItemSet( SfxItemSet& rAttrs )
         // Referenzpunkt setzen
         // #75897#
         Rectangle aObjectRect(pView->GetAllMarkedRect());
-        pView->GetPageViewPvNum(0)->LogicToPagePos(aObjectRect);
+        pView->GetSdrPageView()->LogicToPagePos(aObjectRect);
         Point aPt = aObjectRect.Center();
 
         rAttrs.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_X, aPt.X()));
@@ -827,7 +827,7 @@ void SvxPositionSizeTabPage::Construct()
     }
 
     maRect = mpView->GetAllMarkedRect();
-    mpView->GetPageViewPvNum( 0 )->LogicToPagePos( maRect );
+    mpView->GetSdrPageView()->LogicToPagePos( maRect );
 
     // WorkArea holen und umrechnen:
     maWorkArea = mpView->GetWorkArea();
@@ -895,7 +895,7 @@ void SvxPositionSizeTabPage::Construct()
 
 
     // use page offset and recalculate
-    Point aPt( mpView->GetPageViewPvNum( 0 )->GetPageOrigin() );
+    Point aPt( mpView->GetSdrPageView()->GetPageOrigin() );
 
     // Massstab
     Fraction aUIScale = mpView->GetModel()->GetUIScale();
@@ -938,7 +938,7 @@ BOOL SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 
             // Altes Rechteck mit CoreUnit
             maRect = mpView->GetAllMarkedRect();
-            mpView->GetPageViewPvNum( 0 )->LogicToPagePos( maRect );
+            mpView->GetSdrPageView()->LogicToPagePos( maRect );
 
             Fraction aUIScale = mpView->GetModel()->GetUIScale();
             lX += maAnchorPos.X();
