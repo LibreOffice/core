@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:24:33 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:21:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -399,14 +399,6 @@ String SwView::GetPageStr( USHORT nPg, USHORT nLogPg,
 }
 
 
-IMPL_LINK_INLINE_START( SwView, UpdatePercentHdl, GraphicFilter *, pFilter )
-{
-    ::SetProgressState( pFilter->GetPercent(), GetDocShell() );
-    return 0;
-}
-IMPL_LINK_INLINE_END( SwView, UpdatePercentHdl, GraphicFilter *, pFilter )
-
-
 int SwView::InsertGraphic( const String &rPath, const String &rFilter,
                                 BOOL bLink, GraphicFilter *pFlt,
                                 Graphic* pPreviewGrf, BOOL bRule )
@@ -421,12 +413,7 @@ int SwView::InsertGraphic( const String &rPath, const String &rFilter,
     {
         if( !pFlt )
             pFlt = ::GetGrfFilter();
-        Link aOldLink = pFlt->GetUpdatePercentHdl();
-        pFlt->SetUpdatePercentHdl( LINK( this, SwView, UpdatePercentHdl ));
-        ::StartProgress( STR_STATSTR_IMPGRF, 0, 100, GetDocShell() );
         nRes = ::LoadGraphic( rPath, rFilter, aGrf, pFlt /*, nFilter*/ );
-        ::EndProgress( GetDocShell() );
-        pFlt->SetUpdatePercentHdl( aOldLink );
     }
 
     if( GRFILTER_OK == nRes )
