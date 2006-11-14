@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:35:15 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:40:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,14 @@
 #include "anminfo.hxx"
 #ifndef _SD_SLIDESHOW_HXX
 #include "slideshow.hxx"
+#endif
+
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
+
+#ifndef _SDRPAINTWINDOW_HXX
+#include <svx/sdrpaintwindow.hxx>
 #endif
 
 #ifndef _SDR_CONTACT_VIEWOBJECTCONTACT_HXX
@@ -713,14 +721,14 @@ void DrawView::MakeVisible(const Rectangle& rRect, ::Window& rWin)
 |*
 \************************************************************************/
 
-void DrawView::HidePage(SdrPageView* pPV)
+void DrawView::HideSdrPage()
 {
     if (pDrawViewShell)
     {
-        pDrawViewShell->HidePage(pPV);
+        pDrawViewShell->HidePage();
     }
 
-    ::sd::View::HidePage(pPV);
+    ::sd::View::HideSdrPage();
 }
 
 SdrObject* DrawView::GetMaxToBtmObj(SdrObject* pObj) const
