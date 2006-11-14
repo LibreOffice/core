@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:53:13 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-14 13:35:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 #include <Dff.hxx>
 #include <iterator>
 #include <XNoteHelperImpl.hxx>
-#include <WW8OutputWithDepth.hxx>
 
 namespace doctok
 {
@@ -490,6 +489,7 @@ WW8DocumentImpl & WW8DocumentImpl::Assign(const WW8DocumentImpl & rSrc)
     mpFootnoteHelper = rSrc.mpFootnoteHelper;
     mpEndnoteHelper = rSrc.mpEndnoteHelper;
     mpAnnotationHelper = rSrc.mpAnnotationHelper;
+    mpShapeHelper = rSrc.mpShapeHelper;
 
     mpBookmarkHelper = rSrc.mpBookmarkHelper;
 
@@ -1127,11 +1127,18 @@ WW8DocumentImpl::getShape(const CpAndFc & rCpAndFc) const
 doctok::Reference<Properties>::Pointer_t
 WW8DocumentImpl::getShape(sal_uInt32 nSpid)
 {
-    DffSpContainer * pTmp = new DffSpContainer(*mpDffBlock->getShape(nSpid));
+    doctok::Reference<Properties>::Pointer_t pResult;
+    DffRecord::Pointer_t pShape = mpDffBlock->getShape(nSpid);
 
-    pTmp->setDocument(this);
+    if (pShape.get() != NULL)
+    {
+        DffSpContainer * pTmp = new DffSpContainer(*pShape);
+        pTmp->setDocument(this);
 
-    return doctok::Reference<Properties>::Pointer_t(pTmp);
+        pResult = doctok::Reference<Properties>::Pointer_t(pTmp);
+    }
+
+    return pResult;
 }
 
 doctok::Reference<Properties>::Pointer_t
@@ -1139,10 +1146,15 @@ WW8DocumentImpl::getBlip(sal_uInt32 nBid)
 {
     doctok::Reference<Properties>::Pointer_t pResult;
 
-    DffBSE * pBlip = new DffBSE(*mpDffBlock->getBlip(nBid));
+    DffRecord::Pointer_t pDffRecord(mpDffBlock->getBlip(nBid));
 
-    if (pBlip != NULL)
-        pResult = doctok::Reference<Properties>::Pointer_t(pBlip);
+    if (pDffRecord.get() != NULL)
+    {
+        DffBSE * pBlip = new DffBSE(*pDffRecord);
+
+        if (pBlip != NULL)
+            pResult = doctok::Reference<Properties>::Pointer_t(pBlip);
+    }
 
     return pResult;
 }
@@ -1358,10 +1370,6 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         {
             WW8StructBase aStructBase(*mpTableStream, mpFib->get_fcPlcftxbxTxt(),
                                       mpFib->get_lcbPlcftxbxTxt());
-
-            output.addItem("<textboxes>");
-            aStructBase.dump(output);
-            output.addItem("</textboxes>");
         }
 
         if (mpFib->get_lcbPlcftxbxBkd() > 0)
@@ -1369,10 +1377,6 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             PLCF<WW8BKD> aPLCF(*mpTableStream,
                                mpFib->get_fcPlcftxbxBkd(),
                                mpFib->get_lcbPlcftxbxBkd());
-
-            output.addItem("<textboxes.breaks>");
-            aPLCF.dump(output);
-            output.addItem("</textboxes.breaks>");
         }
 
         if (mpDffBlock.get() != NULL)
