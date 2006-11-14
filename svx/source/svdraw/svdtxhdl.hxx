@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdtxhdl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:16:36 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:50:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,9 +82,6 @@ class ImpTextPortionHandler
     Fraction                    aYFact;
 
     // Variablen fuer DrawTextToPath
-    // #101498#
-    //Polygon                       aPoly;
-    //long                      nTextWidth;
     ULONG                       nParagraph;
     BOOL                        bToLastPoint;
     bool                        bDraw;
@@ -112,8 +109,6 @@ public:
 
     // #101498#
     DECL_LINK(FormTextRecordPortionHdl, DrawPortionInfo*);
-    //DECL_LINK(FormTextWidthHdl,DrawPortionInfo*);
-    //DECL_LINK(FormTextDrawHdl,DrawPortionInfo*);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
