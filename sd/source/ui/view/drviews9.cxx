@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews9.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:38:01 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:43:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
                 Size aSize = aWindow.PixelToLogic(aSizePix);
 
                 // Groesse ggf. auf Seitengroesse begrenzen
-                SdrPage* pPage = pDrView->GetPageViewPvNum(0)->GetPage();
+                SdrPage* pPage = pDrView->GetSdrPageView()->GetPage();
                 Size aPageSize = pPage->GetSize();
                 aPageSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
                 aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
@@ -263,8 +263,8 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
                                 aStr += sal_Unicode(' ');
                                 aStr += String(SdResId(STR_UNDO_REPLACE));
                                 pDrView->BegUndo(aStr);
-                                SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
-                                pDrView->ReplaceObject(pGrafObj, *pPV, pNewGrafObj);
+                                SdrPageView* pPV = pDrView->GetSdrPageView();
+                                pDrView->ReplaceObjectAtView(pGrafObj, *pPV, pNewGrafObj);
                                 pDrView->EndUndo();
                             }
                         }
@@ -275,8 +275,8 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
                 if( bInsertNewObject )
                 {
                     pGrafObj = new SdrGrafObj(aGraphic, aRect);
-                    SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
-                    pDrView->InsertObject(pGrafObj, *pPV, SDRINSERT_SETDEFLAYER);
+                    SdrPageView* pPV = pDrView->GetSdrPageView();
+                    pDrView->InsertObjectAtView(pGrafObj, *pPV, SDRINSERT_SETDEFLAYER);
                 }
 
                 // Soll nur ein Link benutzt werden?
