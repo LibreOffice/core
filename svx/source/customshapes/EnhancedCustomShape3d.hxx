@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape3d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:25:05 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:13:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,10 +40,18 @@
 #include <msdffimp.hxx>
 #endif
 #include <vector>
-#include <poly3d.hxx>
-#include <goodies/point3d.hxx>
+//#include <poly3d.hxx>
+//#include <goodies/point3d.hxx>
 #ifndef _COM_SUN_STAR_DRAWING_PROJECTIONMODE_HPP_
 #include <com/sun/star/drawing/ProjectionMode.hpp>
+#endif
+
+#ifndef _BGFX_POINT_B3DPOINT_HXX
+#include <basegfx/point/b3dpoint.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
+#include <basegfx/polygon/b3dpolygon.hxx>
 #endif
 
 class EnhancedCustomShape3d
@@ -59,7 +67,7 @@ class EnhancedCustomShape3d
 
         // perspective projection
         double      fZScreen;
-        Point3D     fViewPoint;
+        basegfx::B3DPoint       fViewPoint;
         double      fOriginX;
         double      fOriginY;
 
@@ -69,8 +77,8 @@ class EnhancedCustomShape3d
 
                         Transformation2D( const SdrObject* pCustomShape, const Rectangle& rBoundRect, const double* pMap );
 
-            void        ApplySkewSettings( Polygon3D& rPolyPoly3D ) const;
-            Point       Transform2D( const Vector3D& rPoint ) const;
+            basegfx::B3DPolygon ApplySkewSettings( const basegfx::B3DPolygon& rPolygon3D ) const;
+            Point       Transform2D( const basegfx::B3DPoint& rPoint ) const;
             sal_Bool    IsParallel() const;
     };
 
@@ -78,8 +86,8 @@ class EnhancedCustomShape3d
 
     protected :
 
-        static void Rotate( Vector3D& rPoint, const double x, const double y, const double z );
-        static void Rotate( PolyPolygon3D&, const Point3D& rRotateCenter, const double x, const double y, const double z );
+//      static void Rotate( Vector3D& rPoint, const double x, const double y, const double z );
+//      static void Rotate( basegfx::B3DPolyPolygon&, const Point3D& rRotateCenter, const double x, const double y, const double z );
         static Rectangle CalculateNewSnapRect( const SdrObject* pCustomShape, const Rectangle& rBoundRect, const double* pMap );
 
     public :
