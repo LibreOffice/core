@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:35:03 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:35:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,10 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #endif
 
+#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
+#include <basegfx/matrix/b3dhommatrix.hxx>
+#endif
+
 //.............................................................................
 namespace chart
 {
@@ -147,13 +151,13 @@ ChartViewImpl::~ChartViewImpl()
     m_aVCooSysList.clear();
 }
 
-Matrix4D createTransformationSceneToScreen(
+::basegfx::B3DHomMatrix createTransformationSceneToScreen(
     const awt::Point& rPos, const awt::Size& rSize )
 {
-    Matrix4D aM4;
-    aM4.Scale(double(rSize.Width)/FIXED_SIZE_FOR_3D_CHART_VOLUME
+    ::basegfx::B3DHomMatrix aM4;
+    aM4.scale(double(rSize.Width)/FIXED_SIZE_FOR_3D_CHART_VOLUME
             , -double(rSize.Height)/FIXED_SIZE_FOR_3D_CHART_VOLUME, 1.0 );
-    aM4.Translate(double(rPos.X), double(rPos.Y+rSize.Height-1), 0);
+    aM4.translate(double(rPos.X), double(rPos.Y+rSize.Height-1), 0);
     return aM4;
 }
 
@@ -425,7 +429,7 @@ void initializeDiagramAndGetCooSys( std::vector< VCoordinateSystem* >& rVCooSysL
             VCoordinateSystem* pVCooSys = rVCooSysList[nC];
             pVCooSys->doAutoScale( apPlotter.get() );
 
-            Matrix4D aM4_SceneToScreen( createTransformationSceneToScreen(rPos,rSize) );
+            ::basegfx::B3DHomMatrix aM4_SceneToScreen( createTransformationSceneToScreen(rPos,rSize) );
             drawing::HomogenMatrix aHM_SceneToScreen( Matrix4DToHomogenMatrix(aM4_SceneToScreen) );
 
             pVCooSys->initPlottingTargets(xTarget,xPageShapes,xShapeFactory);
