@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swpossizetabpage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:28:07 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:16:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -759,7 +759,7 @@ BOOL SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
 
                 // Altes Rechteck mit CoreUnit
                 m_aRect = m_pSdrView->GetAllMarkedRect();
-                m_pSdrView->GetPageViewPvNum( 0 )->LogicToPagePos( m_aRect );
+                m_pSdrView->GetSdrPageView()->LogicToPagePos( m_aRect );
 
                 nHoriByPos += m_aAnchorPos.X();
                 nVertByPos += m_aAnchorPos.Y();
@@ -1915,7 +1915,7 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
 
     // Setzen des Rechtecks und der Workingarea
     m_aRect = m_pSdrView->GetAllMarkedRect();
-    m_pSdrView->GetPageViewPvNum( 0 )->LogicToPagePos( m_aRect );
+    m_pSdrView->GetSdrPageView()->LogicToPagePos( m_aRect );
 
     // get WorkArea
     m_aWorkArea = m_pSdrView->GetWorkArea();
@@ -1984,7 +1984,7 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
         m_bIsMultiSelection = true;
 
     // use page offset and recalculate
-    Point aPt( m_pSdrView->GetPageViewPvNum( 0 )->GetPageOrigin() );
+    Point aPt( m_pSdrView->GetSdrPageView()->GetPageOrigin() );
 
     // Massstab
     Fraction aUIScale = m_pSdrView->GetModel()->GetUIScale();
