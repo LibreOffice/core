@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:47:51 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:25:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -579,9 +579,10 @@ X11SalBitmap::ImplCreateFromXImage (Display* pDisplay, XLIB_Window hWindow, int 
     return False;
 }
 
-void X11SalBitmap::ImplDraw( Drawable aDrawable,
-                             int nScreen, long nDrawableDepth,
-                             const SalTwoRect& rTwoRect, const GC& rGC ) const
+ImplSalDDB* X11SalBitmap::ImplGetDDB( Drawable          aDrawable,
+                                      int               nScreen,
+                                      long              nDrawableDepth,
+                                      const SalTwoRect& rTwoRect ) const
 {
     if( !mpDDB || !mpDDB->ImplMatches( nScreen, nDrawableDepth, rTwoRect ) )
     {
@@ -633,7 +634,7 @@ void X11SalBitmap::ImplDraw( Drawable aDrawable,
             // than image bitmap (broken)
             if( aTwoRect.mnSrcX >= aSize.Width() ||
                 aTwoRect.mnSrcY >= aSize.Height() )
-                return; // this would be a really mad case
+                return NULL; // this would be a really mad case
 
             if( aTwoRect.mnSrcWidth+aTwoRect.mnSrcX > aSize.Width() )
             {
@@ -669,6 +670,18 @@ void X11SalBitmap::ImplDraw( Drawable aDrawable,
         }
     }
 
+    return mpDDB;
+}
+
+// -----------------------------------------------------------------------------
+
+void X11SalBitmap::ImplDraw( Drawable           aDrawable,
+                             int                nScreen,
+                             long               nDrawableDepth,
+                             const SalTwoRect&  rTwoRect,
+                             const GC&          rGC ) const
+{
+    ImplGetDDB( aDrawable, nScreen, nDrawableDepth, rTwoRect );
     if( mpDDB )
         mpDDB->ImplDraw( aDrawable, nDrawableDepth, rTwoRect, rGC );
 }
