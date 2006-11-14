@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopage.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:56:21 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:46:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,44 +205,4 @@ void SdrPageObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralPAGE);
 }
 
-//BFS01void SdrPageObj::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01 SdrObject::WriteData(rOut);
-//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrPageObj");
-//BFS01#endif
-//BFS01
-//BFS01 // #111111#
-//BFS01 if(mpShownPage)
-//BFS01 {
-//BFS01     rOut << (sal_uInt16)mpShownPage->GetPageNum();
-//BFS01 }
-//BFS01 else
-//BFS01 {
-//BFS01     rOut << (sal_uInt16)0;
-//BFS01 }
-//BFS01}
-
-//BFS01void SdrPageObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 if (rIn.GetError()!=0) return;
-//BFS01 SdrObject::ReadData(rHead,rIn);
-//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrPageObj");
-//BFS01#endif
-//BFS01
-//BFS01 // #111111#
-//BFS01 sal_uInt16 nPageNum;
-//BFS01 rIn >> nPageNum;
-//BFS01
-//BFS01 if(GetModel())
-//BFS01 {
-//BFS01     SdrPage* pNewPage = GetModel()->GetPage(nPageNum);
-//BFS01     SetReferencedPage(pNewPage);
-//BFS01 }
-//BFS01}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 // eof
