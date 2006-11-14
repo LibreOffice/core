@@ -4,9 +4,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:06:38 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:58:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,10 @@
 #include "AccessibilityHints.hxx"
 #endif
 
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
+#endif
+
 // STATIC DATA -----------------------------------------------------------
 
 //==================================================================
@@ -130,7 +134,6 @@ __EXPORT ScPreview::~ScPreview()
     delete pLocationData;
 }
 
-
 void ScPreview::UpdateDrawView()        // nTab muss richtig sein
 {
     ScDocument* pDoc = pDocShell->GetDocument();
@@ -139,7 +142,7 @@ void ScPreview::UpdateDrawView()        // nTab muss richtig sein
     // #114135#
     if ( pModel )
     {
-        if ( pDrawView && !pDrawView->GetPageViewPgNum(static_cast<sal_uInt16>(nTab)) )
+        if ( pDrawView && !pDrawView->GetSdrPageView())
         {
             //  die angezeigte Page der DrawView umzustellen (s.u.) funktioniert nicht ?!?
             delete pDrawView;
@@ -153,13 +156,13 @@ void ScPreview::UpdateDrawView()        // nTab muss richtig sein
             // (Einstellung "Im Entwurfsmodus oeffnen"), darum hier zuruecksetzen
             pDrawView->SetDesignMode( TRUE );
             pDrawView->SetPrintPreview( TRUE );
-            pDrawView->ShowPagePgNum( static_cast<sal_uInt16>(nTab), Point() );
+            pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
         }
 #if 0
-        else if ( !pDrawView->GetPageViewPgNum(nTab) )      // angezeigte Page umstellen
+        else if ( !pDrawView->GetSdrPageView())     // angezeigte Page umstellen
         {
-            pDrawView->HideAllPages();
-            pDrawView->ShowPagePgNum( nTab, Point() );
+            pDrawView->HideSdrPage();
+            pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
         }
 #endif
     }
