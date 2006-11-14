@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommonConverters.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:22:52 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:32:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,10 @@
 #include <rtl/math.hxx>
 #endif
 
+#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
+#include <basegfx/matrix/b3dhommatrix.hxx>
+#endif
+
 #include <cstdarg>
 
 
@@ -66,151 +70,116 @@ using namespace ::com::sun::star;
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-//  diverse methods for class conversions; e.g. Matrix4D to HomogenMatrix
+//  diverse methods for class conversions; e.g. ::basegfx::B3DHomMatrix to HomogenMatrix
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-drawing::HomogenMatrix Matrix4DToHomogenMatrix( const Matrix4D& rM4 )
+drawing::HomogenMatrix Matrix4DToHomogenMatrix( const ::basegfx::B3DHomMatrix& rM4 )
 {
     drawing::HomogenMatrix aHM;
-    aHM.Line1.Column1 = rM4[0][0];
-    aHM.Line1.Column2 = rM4[0][1];
-    aHM.Line1.Column3 = rM4[0][2];
-    aHM.Line1.Column4 = rM4[0][3];
-    aHM.Line2.Column1 = rM4[1][0];
-    aHM.Line2.Column2 = rM4[1][1];
-    aHM.Line2.Column3 = rM4[1][2];
-    aHM.Line2.Column4 = rM4[1][3];
-    aHM.Line3.Column1 = rM4[2][0];
-    aHM.Line3.Column2 = rM4[2][1];
-    aHM.Line3.Column3 = rM4[2][2];
-    aHM.Line3.Column4 = rM4[2][3];
-    aHM.Line4.Column1 = rM4[3][0];
-    aHM.Line4.Column2 = rM4[3][1];
-    aHM.Line4.Column3 = rM4[3][2];
-    aHM.Line4.Column4 = rM4[3][3];
+    aHM.Line1.Column1 = rM4.get(0, 0);
+    aHM.Line1.Column2 = rM4.get(0, 1);
+    aHM.Line1.Column3 = rM4.get(0, 2);
+    aHM.Line1.Column4 = rM4.get(0, 3);
+    aHM.Line2.Column1 = rM4.get(1, 0);
+    aHM.Line2.Column2 = rM4.get(1, 1);
+    aHM.Line2.Column3 = rM4.get(1, 2);
+    aHM.Line2.Column4 = rM4.get(1, 3);
+    aHM.Line3.Column1 = rM4.get(2, 0);
+    aHM.Line3.Column2 = rM4.get(2, 1);
+    aHM.Line3.Column3 = rM4.get(2, 2);
+    aHM.Line3.Column4 = rM4.get(2, 3);
+    aHM.Line4.Column1 = rM4.get(3, 0);
+    aHM.Line4.Column2 = rM4.get(3, 1);
+    aHM.Line4.Column3 = rM4.get(3, 2);
+    aHM.Line4.Column4 = rM4.get(3, 3);
     return aHM;
 }
 
-Matrix4D HomogenMatrixToMatrix4D(
-    const drawing::HomogenMatrix& rHM )
+::basegfx::B3DHomMatrix HomogenMatrixToMatrix4D( const drawing::HomogenMatrix& rHM )
 {
-    Matrix4D aM4;
-    aM4[0][0] = rHM.Line1.Column1;
-    aM4[0][1] = rHM.Line1.Column2;
-    aM4[0][2] = rHM.Line1.Column3;
-    aM4[0][3] = rHM.Line1.Column4;
-    aM4[1][0] = rHM.Line2.Column1;
-    aM4[1][1] = rHM.Line2.Column2;
-    aM4[1][2] = rHM.Line2.Column3;
-    aM4[1][3] = rHM.Line2.Column4;
-    aM4[2][0] = rHM.Line3.Column1;
-    aM4[2][1] = rHM.Line3.Column2;
-    aM4[2][2] = rHM.Line3.Column3;
-    aM4[2][3] = rHM.Line3.Column4;
-    aM4[3][0] = rHM.Line4.Column1;
-    aM4[3][1] = rHM.Line4.Column2;
-    aM4[3][2] = rHM.Line4.Column3;
-    aM4[3][3] = rHM.Line4.Column4;
+    ::basegfx::B3DHomMatrix aM4;
+    aM4.set(0, 0, rHM.Line1.Column1);
+    aM4.set(0, 1, rHM.Line1.Column2);
+    aM4.set(0, 2, rHM.Line1.Column3);
+    aM4.set(0, 3, rHM.Line1.Column4);
+    aM4.set(1, 0, rHM.Line2.Column1);
+    aM4.set(1, 1, rHM.Line2.Column2);
+    aM4.set(1, 2, rHM.Line2.Column3);
+    aM4.set(1, 3, rHM.Line2.Column4);
+    aM4.set(2, 0, rHM.Line3.Column1);
+    aM4.set(2, 1, rHM.Line3.Column2);
+    aM4.set(2, 2, rHM.Line3.Column3);
+    aM4.set(2, 3, rHM.Line3.Column4);
+    aM4.set(3, 0, rHM.Line4.Column1);
+    aM4.set(3, 1, rHM.Line4.Column2);
+    aM4.set(3, 2, rHM.Line4.Column3);
+    aM4.set(3, 3, rHM.Line4.Column4);
     return aM4;
 }
 
-Matrix3D IgnoreZ( const Matrix4D& rM4 )
+::basegfx::B2DHomMatrix IgnoreZ( const ::basegfx::B3DHomMatrix& rM4 )
 {
-    Matrix3D aM3;
-    aM3[0][0] = rM4[0][0];
-    aM3[0][1] = rM4[0][1];
-    aM3[0][2] = rM4[0][3];
-    aM3[1][0] = rM4[1][0];
-    aM3[1][1] = rM4[1][1];
-    aM3[1][2] = rM4[1][3];
-    aM3[2][0] = rM4[3][0];
-    aM3[2][1] = rM4[3][1];
-    aM3[2][2] = rM4[3][3];
+    ::basegfx::B2DHomMatrix aM3;
+    aM3.set(0, 0, rM4.get(0, 0));
+    aM3.set(0, 1, rM4.get(0, 1));
+    aM3.set(0, 2, rM4.get(0, 3));
+    aM3.set(1, 0, rM4.get(1, 0));
+    aM3.set(1, 1, rM4.get(1, 1));
+    aM3.set(1, 2, rM4.get(1, 3));
+    aM3.set(2, 0, rM4.get(3, 0));
+    aM3.set(2, 1, rM4.get(3, 1));
+    aM3.set(2, 2, rM4.get(3, 3));
     return aM3;
 }
 
 
-drawing::HomogenMatrix3 Matrix3DToHomogenMatrix3( const Matrix3D& rM3 )
+drawing::HomogenMatrix3 B2DHomMatrixToHomogenMatrix3( const ::basegfx::B2DHomMatrix& rM3 )
 {
     drawing::HomogenMatrix3 aHM;
-    aHM.Line1.Column1 = rM3[0][0];
-    aHM.Line1.Column2 = rM3[0][1];
-    aHM.Line1.Column3 = rM3[0][2];
-    aHM.Line2.Column1 = rM3[1][0];
-    aHM.Line2.Column2 = rM3[1][1];
-    aHM.Line2.Column3 = rM3[1][2];
-    aHM.Line3.Column1 = rM3[2][0];
-    aHM.Line3.Column2 = rM3[2][1];
-    aHM.Line3.Column3 = rM3[2][2];
+    aHM.Line1.Column1 = rM3.get(0, 0);
+    aHM.Line1.Column2 = rM3.get(0, 1);
+    aHM.Line1.Column3 = rM3.get(0, 2);
+    aHM.Line2.Column1 = rM3.get(1, 0);
+    aHM.Line2.Column2 = rM3.get(1, 1);
+    aHM.Line2.Column3 = rM3.get(1, 2);
+    aHM.Line3.Column1 = rM3.get(2, 0);
+    aHM.Line3.Column2 = rM3.get(2, 1);
+    aHM.Line3.Column3 = rM3.get(2, 2);
     return aHM;
 }
 
-Matrix3D HomogenMatrix3ToMatrix3D( const drawing::HomogenMatrix3& rHM )
+::basegfx::B2DHomMatrix HomogenMatrix3ToB2DHomMatrix( const drawing::HomogenMatrix3& rHM )
 {
-    Matrix3D aM3;
-    aM3[0][0] = rHM.Line1.Column1;
-    aM3[0][1] = rHM.Line1.Column2;
-    aM3[0][2] = rHM.Line1.Column3;
-    aM3[1][0] = rHM.Line2.Column1;
-    aM3[1][1] = rHM.Line2.Column2;
-    aM3[1][2] = rHM.Line2.Column3;
-    aM3[2][0] = rHM.Line3.Column1;
-    aM3[2][1] = rHM.Line3.Column2;
-    aM3[2][2] = rHM.Line3.Column3;
+    ::basegfx::B2DHomMatrix aM3;
+    aM3.set(0, 0, rHM.Line1.Column1);
+    aM3.set(0, 1, rHM.Line1.Column2);
+    aM3.set(0, 2, rHM.Line1.Column3);
+    aM3.set(1, 0, rHM.Line2.Column1);
+    aM3.set(1, 1, rHM.Line2.Column2);
+    aM3.set(1, 2, rHM.Line2.Column3);
+    aM3.set(2, 0, rHM.Line3.Column1);
+    aM3.set(2, 1, rHM.Line3.Column2);
+    aM3.set(2, 2, rHM.Line3.Column3);
     return aM3;
 }
 
-Vector3D Position3DToVector3D( const drawing::Position3D& rPosition )
+::basegfx::B3DPoint Position3DToB3DPoint( const drawing::Position3D& rPosition )
 {
-    return Vector3D(
-          rPosition.PositionX
-        , rPosition.PositionY
-        , rPosition.PositionZ
-        );
+    return ::basegfx::B3DPoint(
+        rPosition.PositionX ,
+        rPosition.PositionY ,
+        rPosition.PositionZ );
 }
 
-drawing::Direction3D Vector3DToDirection3D( const Vector3D& rVector)
+drawing::Direction3D B3DVectorToDirection3D( const ::basegfx::B3DVector& rVector)
 {
     return drawing::Direction3D(
-          rVector.X()
-        , rVector.Y()
-        , rVector.Z()
+          rVector.getX()
+        , rVector.getY()
+        , rVector.getZ()
         );
 }
-
-/*
-drawing::PolyPolygonShape3D XPolygonToPolyPolygonShape3D( const XPolygon& rP )
-{
-    USHORT nPointCount = rP.GetPointCount();
-
-    drawing::PolyPolygonShape3D aPP;
-
-    aPP.SequenceX.realloc(1);
-    aPP.SequenceY.realloc(1);
-    aPP.SequenceZ.realloc(1);
-
-    drawing::DoubleSequence* pOuterSequenceX = aPP.SequenceX.getArray();
-    drawing::DoubleSequence* pOuterSequenceY = aPP.SequenceY.getArray();
-    drawing::DoubleSequence* pOuterSequenceZ = aPP.SequenceZ.getArray();
-
-    pOuterSequenceX->realloc(nPointCount);
-    pOuterSequenceY->realloc(nPointCount);
-    pOuterSequenceZ->realloc(nPointCount);
-
-    double* pInnerSequenceX = pOuterSequenceX->getArray();
-    double* pInnerSequenceY = pOuterSequenceY->getArray();
-    double* pInnerSequenceZ = pOuterSequenceZ->getArray();
-
-    for(sal_Int32 nN = 0; nN < nPointCount; nN++)
-    {
-        *pInnerSequenceX++ = (double)rP[nN].X();
-        *pInnerSequenceY++ = (double)rP[nN].Y();
-        *pInnerSequenceZ++ = 0.0;
-    }
-    return aPP;
-}
-*/
 
 drawing::PolyPolygonShape3D MakeLine3D(
     const drawing::Position3D & rStart,
@@ -581,7 +550,7 @@ bool operator==( const drawing::Position3D& rPos1
         && rPos1.PositionZ == rPos2.PositionZ;
 }
 
-Vector3D SequenceToVector3D( const uno::Sequence< double >& rSeq )
+::basegfx::B3DPoint SequenceToB3DPoint( const uno::Sequence< double >& rSeq )
 {
     OSL_ENSURE(rSeq.getLength()==3,"The sequence needs to have length 3 for conversion into vector");
 
@@ -589,16 +558,16 @@ Vector3D SequenceToVector3D( const uno::Sequence< double >& rSeq )
     double y=rSeq.getLength()>1?rSeq[1]:0.0;
     double z=rSeq.getLength()>2?rSeq[2]:0.0;
 
-    Vector3D aRet(x,y,z);
+    ::basegfx::B3DPoint aRet(x,y,z);
     return aRet;
 }
 
-uno::Sequence< double > Vector3DToSequence( const Vector3D& rVector )
+uno::Sequence< double > B3DPointToSequence( const ::basegfx::B3DPoint& rPoint )
 {
     uno::Sequence< double > aRet(3);
-    aRet[0] = rVector.X();
-    aRet[1] = rVector.Y();
-    aRet[2] = rVector.Z();
+    aRet[0] = rPoint.getX();
+    aRet[1] = rPoint.getY();
+    aRet[2] = rPoint.getZ();
     return aRet;
 }
 
