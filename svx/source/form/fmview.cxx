@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:47:30 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:25:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,14 @@
 #endif
 #include "fmglob.hxx"
 
+#ifndef _SDRPAGEWINDOW_HXX
+#include <sdrpagewindow.hxx>
+#endif
+
+#ifndef _SDRPAINTWINDOW_HXX
+#include <sdrpaintwindow.hxx>
+#endif
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
@@ -197,20 +205,6 @@ TYPEINIT1(FmFormView, E3dView);
 //------------------------------------------------------------------------
 FmFormView::FmFormView( FmFormModel* pModel, OutputDevice* pOut )
     :E3dView(pModel,pOut)
-{
-    Init();
-}
-
-//------------------------------------------------------------------------
-FmFormView::FmFormView( FmFormModel* _pModel, XOutputDevice* _pXOut )
-    :E3dView( _pModel, _pXOut )
-{
-    Init();
-}
-
-//------------------------------------------------------------------------
-FmFormView::FmFormView( FmFormModel* pModel )
-    :E3dView( pModel )
 {
     Init();
 }
@@ -304,7 +298,7 @@ void FmFormView::MarkListHasChanged()
                 pImpl->m_xWindow = NULL;
             }
             SetMoveOutside(FALSE);
-            RefreshAllIAOManagers();
+            //OLMRefreshAllIAOManagers();
         }
 
         pFormShell->GetImpl()->SetSelectionDelayed();
@@ -313,21 +307,18 @@ void FmFormView::MarkListHasChanged()
 
 namespace
 {
-    const SdrPageViewWindow* findPageViewWindow( const SdrPaintView* _pView, OutputDevice* _pWindow )
+    const SdrPageWindow* findPageWindow( const SdrPaintView* _pView, OutputDevice* _pWindow )
     {
-        for ( USHORT pageView = 0; pageView < _pView->GetPageViewCount(); ++pageView )
+        SdrPageView* pPageView = _pView->GetSdrPageView();
+        if(pPageView)
         {
-            SdrPageView* pPageView = _pView->GetPageViewPvNum( pageView );
-            if ( !pPageView )
-                continue;
-
-            for ( sal_uInt32 window = 0; window < pPageView->WindowCount(); ++window )
+            for ( sal_uInt32 window = 0; window < pPageView->PageWindowCount(); ++window )
             {
-                const SdrPageViewWindow* pPageViewWindow = pPageView->GetWindow( window );
-                if ( !pPageViewWindow || &pPageViewWindow->GetOutputDevice() != _pWindow )
+                const SdrPageWindow* pPageWindow = pPageView->GetPageWindow( window );
+                if ( !pPageWindow || &pPageWindow->GetPaintWindow().GetOutputDevice() != _pWindow )
                     continue;
 
-                return pPageViewWindow;
+                return pPageWindow;
             }
         }
         return NULL;
@@ -335,28 +326,28 @@ namespace
 }
 
 //------------------------------------------------------------------------
-void FmFormView::AddWin( OutputDevice* pWindow )
+void FmFormView::AddWindowToPaintView(OutputDevice* pNewWin)
 {
-    E3dView::AddWin( pWindow );
+    E3dView::AddWindowToPaintView(pNewWin);
 
-    if ( !pWindow )
+    if ( !pNewWin )
         return;
 
     // look up the PageViewWindow for the newly inserted window, and care for it
-    // #ii39269# / 2004-12-20 / frank.schoenheit@sun.com
-    const SdrPageViewWindow* pPageViewWindow = findPageViewWindow( this, pWindow );
-    if ( pPageViewWindow && pPageViewWindow->GetControlList().GetCount() )
-        pImpl->addWindow( *pPageViewWindow );
+    // #i39269# / 2004-12-20 / frank.schoenheit@sun.com
+    const SdrPageWindow* pPageWindow = findPageWindow( this, pNewWin );
+    if ( pPageWindow )
+        pImpl->addWindow( *pPageWindow );
 }
 
 //------------------------------------------------------------------------
-void FmFormView::DelWin( OutputDevice* pWindow )
+void FmFormView::DeleteWindowFromPaintView(OutputDevice* pNewWin)
 {
-    const SdrPageViewWindow* pPageViewWindow = findPageViewWindow( this, pWindow );
-    if ( pPageViewWindow && pPageViewWindow->GetControlList().GetCount() )
-        pImpl->removeWindow( pPageViewWindow->GetControlContainerRef() );
+    const SdrPageWindow* pPageWindow = findPageWindow( this, pNewWin );
+    if ( pPageWindow )
+        pImpl->removeWindow( pPageWindow->GetControlContainer() );
 
-    E3dView::DelWin( pWindow );
+    E3dView::DeleteWindowFromPaintView(pNewWin);
 }
 
 //------------------------------------------------------------------------
@@ -379,7 +370,7 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
     // b.) Designmode an die ::com::sun::star::sdbcx::View weitergeben
     // c.) Controls aktivieren
 
-    SdrPageView* pCurPageView = GetPageViewPvNum(0);
+    SdrPageView* pCurPageView = GetSdrPageView();
     FmFormPage*  pCurPage = pCurPageView ? PTR_CAST(FmFormPage,pCurPageView->GetPage()) : NULL;
 
     if (pCurPage && bDesign)
@@ -398,10 +389,9 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
 
     // über all angemeldeten Pages iterieren
     // nur die aktive wird umgeschaltet
-    sal_uInt16 nCount = GetPageViewCount();
-    for (sal_uInt16 i = 0; i < nCount; i++)
+    if(GetSdrPageView())
     {
-        FmFormPage* pPage = PTR_CAST(FmFormPage,GetPageViewPvNum(i)->GetPage());
+        FmFormPage* pPage = PTR_CAST(FmFormPage,GetSdrPageView()->GetPage());
         if (pPage)
         {
             // during load the environment covers the error handling
@@ -469,9 +459,11 @@ void FmFormView::GrabFirstControlFocus( sal_Bool _bForceSync )
 }
 
 //------------------------------------------------------------------------
-SdrPageView* FmFormView::ShowPage(SdrPage* pPage, const Point& rOffs)
+SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
+//SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage, const Point& rOffs)
 {
-    SdrPageView* pPV = E3dView::ShowPage(pPage, rOffs);
+    SdrPageView* pPV = E3dView::ShowSdrPage(pPage);
+//  SdrPageView* pPV = E3dView::ShowSdrPage(pPage, rOffs);
 
     if (pPage)
     {
@@ -505,18 +497,19 @@ SdrPageView* FmFormView::ShowPage(SdrPage* pPage, const Point& rOffs)
 }
 
 //------------------------------------------------------------------------
-void FmFormView::HidePage(SdrPageView* pPV)
+void FmFormView::HideSdrPage()
 {
     if (!IsDesignMode())
     {
         // Controls wieder deaktivieren
-        DeactivateControls(pPV);
+        DeactivateControls(GetSdrPageView());
         if ( pFormShell && pFormShell->GetImpl() )
             pFormShell->GetImpl()->viewDeactivated( this );
         else
             pImpl->Deactivate( sal_True );
     }
-    E3dView::HidePage(pPV);
+
+    E3dView::HideSdrPage();
 }
 
 //------------------------------------------------------------------------
@@ -536,18 +529,10 @@ void FmFormView::ActivateControls(SdrPageView* pPageView)
 {
     if (!pPageView) return;
 
-    //const SdrPageViewWinList& rWinList = pPageView->GetWinList();
-    //const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
-
-    for (sal_uInt32 i = 0L; i < pPageView->WindowCount(); i++)
+    for (sal_uInt32 i = 0L; i < pPageView->PageWindowCount(); ++i)
     {
-        const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(i);
-
-        if (rPageViewWindow.GetControlList().GetCount())
-        {
-            // pImpl->addWindow(&rWinList[i]);
-            pImpl->addWindow(rPageViewWindow);
-        }
+        const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(i);
+        pImpl->addWindow(rPageWindow);
     }
 }
 
@@ -556,17 +541,10 @@ void FmFormView::DeactivateControls(SdrPageView* pPageView)
 {
     if( !pPageView ) return;
 
-    // const SdrPageViewWinList& rWinList = pPageView->GetWinList();
-    // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
-
-    for (sal_uInt32 i = 0L; i < pPageView->WindowCount(); i++)
+    for (sal_uInt32 i = 0L; i < pPageView->PageWindowCount(); ++i)
     {
-        const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(i);
-
-        if (rPageViewWindow.GetControlList().GetCount())
-        {
-            pImpl->removeWindow(rPageViewWindow.GetControlContainerRef() );
-        }
+        const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(i);
+        pImpl->removeWindow(rPageWindow.GetControlContainer() );
     }
 }
 
@@ -696,19 +674,16 @@ void FmFormView::InsertControlContainer(const Reference< ::com::sun::star::awt::
 {
     if( !IsDesignMode() )
     {
-        SdrPageView* pPageView = GetPageViewPvNum(0);
+        SdrPageView* pPageView = GetSdrPageView();
         if( pPageView )
         {
-            // const SdrPageViewWinList& rWinList = pPageView->GetWinList();
-            // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
-
-            for( sal_uInt32 i = 0L; i < pPageView->WindowCount(); i++ )
+            for( sal_uInt32 i = 0L; i < pPageView->PageWindowCount(); i++ )
             {
-                const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(i);
+                const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(i);
 
-                if( rPageViewWindow.GetControlContainerRef() == xCC )
+                if( rPageWindow.GetControlContainer( false ) == xCC )
                 {
-                    pImpl->addWindow(rPageViewWindow);
+                    pImpl->addWindow(rPageWindow);
                     break;
                 }
             }
@@ -751,7 +726,7 @@ BOOL FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
                     // add as listener to get notified when ESC will be pressed inside the grid
                     pImpl->m_xWindow->addFocusListener(pImpl);
                     SetMoveOutside(TRUE);
-                    RefreshAllIAOManagers();
+                    //OLMRefreshAllIAOManagers();
                     xWindow->setFocus();
                     bDone = TRUE;
                 }
