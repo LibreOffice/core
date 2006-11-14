@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:01:39 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:13:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,31 +124,11 @@
 #include <basegfx/numeric/ftools.hxx>
 #endif
 
-//#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
-//#include <basegfx/polygon/b2dpolypolygontools.hxx>
-//#endif
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
 
-//#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
-//#include <basegfx/matrix/b2dhommatrix.hxx>
-//#endif
-
-//#ifndef _EEITEM_HXX
-//#include <eeitem.hxx>
-//#endif
-//
-//#define ITEMID_COLOR          0
-//
-//#ifndef _SVX_LCOLITEM_HXX
-//#include <lcolitem.hxx>
-//#endif
-//
-//#ifndef _SVX_XLNTRIT_HXX
-//#include <xlntrit.hxx>
-//#endif
-//
-//#ifndef _SVX_XFLTRIT_HXX
-//#include <xfltrit.hxx>
-//#endif
+#include <math.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
@@ -1743,7 +1723,7 @@ void EnhancedCustomShape2d::SwapStartAndEndArrow( SdrObject* pObj ) //#108274
     pObj->SetMergedItem( aLineEndCenter );
 }
 
-void AppendArc( const Rectangle& rRect, const Point& rStart, const Point& rEnd, const sal_Bool bClockwise, XPolygon& rPoly )
+basegfx::B2DPolygon CreateArc( const Rectangle& rRect, const Point& rStart, const Point& rEnd, const sal_Bool bClockwise )
 {
     Rectangle aRect( rRect );
     Point aStart( rStart );
@@ -1765,19 +1745,26 @@ void AppendArc( const Rectangle& rRect, const Point& rStart, const Point& rEnd, 
             aEnd = aTmp;
         }
     }
-    Polygon aTempPoly( aRect, aStart, aEnd, POLY_ARC );
 
-    sal_uInt16 j, nDstPt = rPoly.GetPointCount();
+    Polygon aTempPoly( aRect, aStart, aEnd, POLY_ARC );
+    basegfx::B2DPolygon aRetval;
+
     if ( bClockwise )
     {
-        for ( j = aTempPoly.GetSize(); j--; )
-            rPoly[ nDstPt++ ] = aTempPoly[ j ];
+        for ( sal_uInt16 j = aTempPoly.GetSize(); j--; )
+        {
+            aRetval.append(basegfx::B2DPoint(aTempPoly[ j ].X(), aTempPoly[ j ].Y()));
+        }
     }
     else
     {
-        for ( j = 0; j < aTempPoly.GetSize(); j++ )
-            rPoly[ nDstPt++ ] = aTempPoly[ j ];
+        for ( sal_uInt16 j = 0; j < aTempPoly.GetSize(); j++ )
+        {
+            aRetval.append(basegfx::B2DPoint(aTempPoly[ j ].X(), aTempPoly[ j ].Y()));
+        }
     }
+
+    return aRetval;
 }
 
 void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegmentInd, std::vector< SdrPathObj* >& rObjectList,
@@ -1787,21 +1774,22 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
     sal_Bool bNoFill = sal_False;
     sal_Bool bNoStroke = sal_False;
 
-    XPolyPolygon    aPolyPoly;
-    XPolygon        aPoly;
-    XPolygon        aEmptyPoly;
+    basegfx::B2DPolyPolygon aNewB2DPolyPolygon;
+    basegfx::B2DPolygon aNewB2DPolygon;
 
     sal_Int32 nCoordSize = seqCoordinates.getLength();
     sal_Int32 nSegInfoSize = seqSegments.getLength();
     if ( !nSegInfoSize )
     {
-        sal_Int32 nPtNum;
-        aPoly = XPolygon( (sal_uInt16)( nCoordSize + 1 ) );
         const EnhancedCustomShapeParameterPair* pTmp = seqCoordinates.getArray();
-        for ( nPtNum = 0; nPtNum < nCoordSize; nPtNum++ )
-            aPoly[ (sal_uInt16)nPtNum ] = GetPoint( *pTmp++, sal_True, sal_True );
-        if ( aPoly[ 0 ] != aPoly[ (sal_uInt16)( nPtNum - 1 ) ] )
-            aPoly[ (sal_uInt16)nPtNum ] = aPoly[ 0 ];
+
+        for ( sal_Int32 nPtNum(0L); nPtNum < nCoordSize; nPtNum++ )
+        {
+            const Point aTempPoint(GetPoint( *pTmp++, sal_True, sal_True ));
+            aNewB2DPolygon.append(basegfx::B2DPoint(aTempPoint.X(), aTempPoint.Y()));
+        }
+
+        aNewB2DPolygon.setClosed(true);
     }
     else
     {
@@ -1820,53 +1808,60 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 break;
                 case MOVETO :
                 {
-                    if ( aPoly.GetPointCount() > 1 )
-                        aPolyPoly.Insert( aPoly );
-                    aPoly = aEmptyPoly;
+                    if ( aNewB2DPolygon.count() > 1L )
+                        aNewB2DPolyPolygon.append( aNewB2DPolygon );
+                    aNewB2DPolygon.clear();
+
                     if ( rSrcPt < nCoordSize )
-                        aPoly[ 0 ] = GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True );
+                    {
+                        const Point aTempPoint(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
+                        aNewB2DPolygon.append(basegfx::B2DPoint(aTempPoint.X(), aTempPoint.Y()));
+                    }
                 }
                 break;
                 case ENDSUBPATH :
                 break;
                 case CLOSESUBPATH :
                 {
-                    sal_uInt16 nDstPt = aPoly.GetPointCount();
-                    if ( nDstPt )
+                    if(aNewB2DPolygon.count())
                     {
-                        aPoly[ nDstPt ] = aPoly[ 0 ];
-                        if ( aPoly.GetPointCount() > 1 )
-                            aPolyPoly.Insert( aPoly );
-                        aPoly = aEmptyPoly;
+                        aNewB2DPolygon.setClosed(true);
+                        if ( aNewB2DPolygon.count() > 1L )
+                            aNewB2DPolyPolygon.append( aNewB2DPolygon );
+                        aNewB2DPolygon.clear();
                     }
                 }
                 break;
                 case CURVETO :
                 {
-                    sal_uInt16 nDstPt = aPoly.GetPointCount();
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( ( rSrcPt + 2 ) < nCoordSize ); i++ )
                     {
-                        aPoly[ nDstPt ] = GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True );
-                        aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                        aPoly[ nDstPt ] = GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True );
-                        aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                        aPoly[ nDstPt++ ] = GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True );
+                        const Point aControlA(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
+                        const Point aControlB(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
+                        const Point aEnd(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
+
+                        DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding control point (!)");
+                        aNewB2DPolygon.setControlPointA(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aControlA.X(), aControlA.Y()));
+
+                        DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding control point (!)");
+                        aNewB2DPolygon.setControlPointB(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aControlB.X(), aControlB.Y()));
+
+                        aNewB2DPolygon.append(basegfx::B2DPoint(aEnd.X(), aEnd.Y()));
                     }
                 }
                 break;
 
                 case ANGLEELLIPSE :
                 {
-                    if ( aPoly.GetPointCount() > 1 )
-                        aPolyPoly.Insert( aPoly );
-                    aPoly = aEmptyPoly;
+                    if ( aNewB2DPolygon.count() > 1l )
+                        aNewB2DPolyPolygon.append( aNewB2DPolygon );
+                    aNewB2DPolygon.clear();
                 }
                 case ANGLEELLIPSETO :
                 {
-                    sal_uInt16 nDstPt = aPoly.GetPointCount();
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( ( rSrcPt + 2 ) < nCoordSize ); i++ )
-                    {    // create a circle
-
+                    {
+                        // create a circle
                         Point _aCenter( GetPoint( seqCoordinates[ rSrcPt ], sal_True, sal_True ) );
                         double fWidth, fHeight;
                         GetParameter( fWidth,  seqCoordinates[ rSrcPt + 1 ].First, sal_True, sal_False  );
@@ -1903,38 +1898,35 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                                 double fy1 = ( -sin( fStartAngle * F_PI180 ) * 65536.0 * fYScale ) + fCenterY;
                                 double fx2 = ( cos( fEndAngle * F_PI180 ) * 65536.0 * fXScale ) + fCenterX;
                                 double fy2 = ( -sin( fEndAngle * F_PI180 ) * 65536.0 * fYScale ) + fCenterY;
-                                AppendArc( aRect, Point( (sal_Int32)fx1, (sal_Int32)fy1 ), Point( (sal_Int32)fx2, (sal_Int32)fy2 ), sal_False, aPoly );
+                                aNewB2DPolygon.append(CreateArc( aRect, Point( (sal_Int32)fx1, (sal_Int32)fy1 ), Point( (sal_Int32)fx2, (sal_Int32)fy2 ), sal_False));
                             }
                             else
                             {   /* SJ: TODO: this block should be replaced sometimes, because the current point
                                    is not set correct, it also does not use the correct moveto
-                                   point if ANGLEELLIPSETO was used, but the method AppendArc
+                                   point if ANGLEELLIPSETO was used, but the method CreateArc
                                    is at the moment not able to draw full circles (if startangle is 0
                                    and endangle 360 nothing is painted :-( */
                                 sal_Int32 nXControl = (sal_Int32)((double)aRect.GetWidth() * 0.2835 );
                                 sal_Int32 nYControl = (sal_Int32)((double)aRect.GetHeight() * 0.2835 );
-                                Point __aCenter( aRect.Center() );
-                                aPoly[ nDstPt++ ] = Point( __aCenter.X(), aRect.Top() );
-                                aPoly[ nDstPt ] = Point( __aCenter.X() + nXControl, aRect.Top() );
-                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                aPoly[ nDstPt ] = Point( aRect.Right(), __aCenter.Y() - nYControl );
-                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                aPoly[ nDstPt++ ] = Point( aRect.Right(), __aCenter.Y() );
-                                aPoly[ nDstPt ] = Point( aRect.Right(), __aCenter.Y() + nYControl );
-                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                aPoly[ nDstPt ] = Point( __aCenter.X() + nXControl, aRect.Bottom() );
-                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                aPoly[ nDstPt++ ] = Point( __aCenter.X(), aRect.Bottom() );
-                                aPoly[ nDstPt ] = Point( __aCenter.X() - nXControl, aRect.Bottom() );
-                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                aPoly[ nDstPt ] = Point( aRect.Left(), __aCenter.Y() + nYControl );
-                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                aPoly[ nDstPt++ ] = Point( aRect.Left(), __aCenter.Y() );
-                                aPoly[ nDstPt ] = Point( aRect.Left(), __aCenter.Y() - nYControl );
-                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                aPoly[ nDstPt ] = Point( __aCenter.X() - nXControl, aRect.Top() );
-                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                aPoly[ nDstPt++ ] = Point( __aCenter.X(), aRect.Top() );
+                                Point aCenter( aRect.Center() );
+
+                                aNewB2DPolygon.append(basegfx::B2DPoint(aCenter.X(), aRect.Top()));
+                                aNewB2DPolygon.setControlPointA(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aCenter.X() + nXControl, aRect.Top()));
+                                aNewB2DPolygon.setControlPointB(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aRect.Right(), aCenter.Y() - nYControl));
+
+                                aNewB2DPolygon.append(basegfx::B2DPoint(aRect.Right(), aCenter.Y()));
+                                aNewB2DPolygon.setControlPointA(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aRect.Right(), aCenter.Y() + nYControl));
+                                aNewB2DPolygon.setControlPointB(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aCenter.X() + nXControl, aRect.Bottom()));
+
+                                aNewB2DPolygon.append(basegfx::B2DPoint(aCenter.X(), aRect.Bottom()));
+                                aNewB2DPolygon.setControlPointA(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aCenter.X() - nXControl, aRect.Bottom()));
+                                aNewB2DPolygon.setControlPointB(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aRect.Left(), aCenter.Y() + nYControl));
+
+                                aNewB2DPolygon.append(basegfx::B2DPoint(aRect.Left(), aCenter.Y()));
+                                aNewB2DPolygon.setControlPointA(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aRect.Left(), aCenter.Y() - nYControl));
+                                aNewB2DPolygon.setControlPointB(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aCenter.X() - nXControl, aRect.Top()));
+
+                                aNewB2DPolygon.setClosed(true);
                             }
                         }
                         rSrcPt += 3;
@@ -1944,18 +1936,20 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 
                 case LINETO :
                 {
-                    sal_uInt16 nDstPt = aPoly.GetPointCount();
-                    for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( rSrcPt < nCoordSize ); i++ )
-                        aPoly[ nDstPt++ ] = GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True );
+                    for ( sal_Int32 i(0L); ( i < nPntCount ) && ( rSrcPt < nCoordSize ); i++ )
+                    {
+                        const Point aTempPoint(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
+                        aNewB2DPolygon.append(basegfx::B2DPoint(aTempPoint.X(), aTempPoint.Y()));
+                    }
                 }
                 break;
 
                 case ARC :
                 case CLOCKWISEARC :
                 {
-                    if ( aPoly.GetPointCount() > 1 )
-                        aPolyPoly.Insert( aPoly );
-                    aPoly = aEmptyPoly;
+                    if ( aNewB2DPolygon.count() > 1L )
+                        aNewB2DPolyPolygon.append( aNewB2DPolygon );
+                    aNewB2DPolygon.clear();
                 }
                 case ARCTO :
                 case CLOCKWISEARCTO :
@@ -1975,7 +1969,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                             aStart.Y() = (sal_Int32)( ( (double)( aStart.Y() - aCenter.Y() ) ) ) + aCenter.Y();
                             aEnd.X() = (sal_Int32)( ( (double)( aEnd.X() - aCenter.X() ) ) * fRatio ) + aCenter.X();
                             aEnd.Y() = (sal_Int32)( ( (double)( aEnd.Y() - aCenter.Y() ) ) ) + aCenter.Y();
-                            AppendArc( aRect, aStart, aEnd, bClockwise, aPoly );
+                            aNewB2DPolygon.append(CreateArc( aRect, aStart, aEnd, bClockwise));
                         }
                         rSrcPt += 4;
                     }
@@ -1985,8 +1979,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 case ELLIPTICALQUADRANTX :
                 case ELLIPTICALQUADRANTY :
                 {
-                    BOOL    bFirstDirection = TRUE;
-                    sal_uInt16  nDstPt = aPoly.GetPointCount();
+                    bool bFirstDirection(true);
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( rSrcPt < nCoordSize ); i++ )
                     {
                         sal_uInt32 nModT = ( nCommand == ELLIPTICALQUADRANTX ) ? 1 : 0;
@@ -2000,14 +1993,14 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                             if ( ( nY ^ nX ) & 0x80000000 )
                             {
                                 if ( !i )
-                                    bFirstDirection = TRUE;
+                                    bFirstDirection = true;
                                 else if ( !bFirstDirection )
                                     nModT ^= 1;
                             }
                             else
                             {
                                 if ( !i )
-                                    bFirstDirection = FALSE;
+                                    bFirstDirection = false;
                                 else if ( bFirstDirection )
                                     nModT ^= 1;
                             }
@@ -2024,22 +2017,25 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                             sal_Int32 nXVec = ( nX - aPrev.X() ) >> 1;
                             sal_Int32 nYVec = ( nY - aPrev.Y() ) >> 1;
                             Point aControl1( aPrev.X() + nXVec, aPrev.Y() + nYVec );
-                            aPoly[ nDstPt ] = aControl1;
-                            aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
+
+                            DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding control point (!)");
+                            aNewB2DPolygon.setControlPointA(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aControl1.X(), aControl1.Y()));
+
                             nXVec = ( nX - aCurrent.X() ) >> 1;
                             nYVec = ( nY - aCurrent.Y() ) >> 1;
                             Point aControl2( aCurrent.X() + nXVec, aCurrent.Y() + nYVec );
-                            aPoly[ nDstPt ] = aControl2;
-                            aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
+
+                            DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding control point (!)");
+                            aNewB2DPolygon.setControlPointB(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aControl2.X(), aControl2.Y()));
                         }
-                        aPoly[ nDstPt ] = aCurrent;
+
+                        aNewB2DPolygon.append(basegfx::B2DPoint(aCurrent.X(), aCurrent.Y()));
                         rSrcPt++;
-                        nDstPt++;
                     }
                 }
                 break;
 
-    #ifdef DBG_CUSTOMSHAPE
+#ifdef DBG_CUSTOMSHAPE
                 case UNKNOWN :
                 default :
                 {
@@ -2048,7 +2044,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                     DBG_ERROR( aString.GetBuffer() );
                 }
                 break;
-    #endif
+#endif
             }
             if ( nCommand == ENDSUBPATH )
                 break;
@@ -2057,16 +2053,15 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
     if ( rSegmentInd == nSegInfoSize )
         rSegmentInd++;
 
-    if ( aPoly.GetPointCount() > 1 )
-        aPolyPoly.Insert( aPoly );
-    aPoly = aEmptyPoly;
-    if ( aPolyPoly.Count() )
+    if ( aNewB2DPolygon.count() > 1L )
+        aNewB2DPolyPolygon.append( aNewB2DPolygon );
+    aNewB2DPolygon.clear();
+    if ( aNewB2DPolyPolygon.count() )
     {
         // #i37011#
         bool bForceCreateTwoObjects(false);
-        ::basegfx::B2DPolyPolygon aLocalPolyPolygon(aPolyPoly.getB2DPolyPolygon());
 
-        if(!bSortFilledObjectsToBack && !aLocalPolyPolygon.isClosed() && !bNoStroke)
+        if(!bSortFilledObjectsToBack && !aNewB2DPolyPolygon.isClosed() && !bNoStroke)
         {
             bForceCreateTwoObjects = true;
         }
@@ -2082,9 +2077,9 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
         {
             if(bFilled && !bNoFill)
             {
-                ::basegfx::B2DPolyPolygon aClosedPolyPolygon(aLocalPolyPolygon);
+                basegfx::B2DPolyPolygon aClosedPolyPolygon(aNewB2DPolyPolygon);
                 aClosedPolyPolygon.setClosed(true);
-                SdrPathObj* pFill = new SdrPathObj(OBJ_POLY, XPolyPolygon(aClosedPolyPolygon));
+                SdrPathObj* pFill = new SdrPathObj(OBJ_POLY, aClosedPolyPolygon);
                 SfxItemSet aTempSet(*this);
                 aTempSet.Put(SdrShadowItem(sal_False));
                 aTempSet.Put(XLineStyleItem(XLINE_NONE));
@@ -2093,7 +2088,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
             }
             if(!bNoStroke)
             {
-                SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, XPolyPolygon(aLocalPolyPolygon));
+                SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, aNewB2DPolyPolygon);
                 SfxItemSet aTempSet(*this);
                 aTempSet.Put(SdrShadowItem(sal_False));
                 aTempSet.Put(XFillStyleItem(XFILL_NONE));
@@ -2104,8 +2099,8 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
         else
         {
             SdrObjKind eObjKind(bNoFill ? OBJ_PLIN : OBJ_POLY);
-            aLocalPolyPolygon.setClosed(true);
-            SdrPathObj* pObj = new SdrPathObj(eObjKind, XPolyPolygon(aLocalPolyPolygon));
+            aNewB2DPolyPolygon.setClosed(true);
+            SdrPathObj* pObj = new SdrPathObj(eObjKind, aNewB2DPolyPolygon);
             SfxItemSet aTempSet(*this);
             aTempSet.Put(SdrShadowItem(sal_False));
 
