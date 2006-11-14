@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdibrow.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:51:28 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:43:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,10 @@
 
 #ifndef _SFXRNGITEM_HXX
 #include <svtools/rngitem.hxx>
+#endif
+
+#ifndef _SDRPAINTWINDOW_HXX
+#include <sdrpaintwindow.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -501,16 +505,6 @@ void __EXPORT _SdrItemBrowserControl::KeyInput(const KeyEvent& rKEvt)
                 SetDirty();
             }
         }
-/*      else if (XubString::IsPrintable(rKEvt.GetCharCode())) {
-            if (BegChangeEntry(nPos)) {
-                bAusgewertet=TRUE;
-                // folgende 3 Statements, weil
-                // pEditControl->KeyInput(rKEvt) nicht geht
-                pEditControl->SetText(rKEvt.GetCharCode());
-                pEditControl->SetModifyFlag();
-                pEditControl->SetSelection(1);
-            }
-        } */
     }
     if (!bAusgewertet) BrowseBox::KeyInput(rKEvt);
 }
@@ -1187,13 +1181,18 @@ SdrItemBrowser::SdrItemBrowser(SdrView& rView):
 
 Window* SdrItemBrowser::ImpGetViewWin(SdrView& rView)
 {
-    USHORT nAnz=rView.GetWinCount();
-    for (USHORT nNum=0; nNum<nAnz; nNum++) {
-        OutputDevice* pOut=rView.GetWin(nNum);
-        if (pOut->GetOutDevType()==OUTDEV_WINDOW) {
-            return (Window*)pOut;
+    const sal_uInt32 nWinCount(rView.PaintWindowCount());
+
+    for(sal_uInt32 a(0L); a < nWinCount; a++)
+    {
+        SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
+
+        if(OUTDEV_WINDOW == pCandidate->GetOutputDevice().GetOutDevType())
+        {
+            return (Window*)(&pCandidate->GetOutputDevice());
         }
     }
+
     return 0L;
 }
 
