@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:40:49 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:24:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,6 +191,12 @@ public:
 
     virtual BOOL            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize );
     virtual bool            filterText( const String& rOrigText, String& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop );
+
+    virtual bool            drawAlphaBitmap( const SalTwoRect&,
+                                             const SalBitmap& rSourceBitmap,
+                                             const SalBitmap& rAlphaBitmap );
+    virtual bool            drawAlphaRect( long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency );
+
 };
 
 #endif // _VCL_PSPGRAPHICS_H
