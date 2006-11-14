@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews8.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:37:48 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:43:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,18 @@
 #endif
 #include "zoomlist.hxx"
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+
+#ifndef _SV_SALBTYPE_HXX
+#include <vcl/salbtype.hxx>     // FRound
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 namespace sd {
 
 /*************************************************************************
@@ -291,7 +303,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
             {
                 if ( pDrView->IsTextEdit() )
                 {
-                    pDrView->EndTextEdit();
+                    pDrView->SdrEndTextEdit();
                 }
 
                 SetCurrentFunction( FuCopy::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
@@ -545,7 +557,7 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& rEv
                 if( !!aScanBmp )
                 {
                     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-                    SdrPage*            pPage = pDrView->GetPageViewPvNum( 0 )->GetPage();
+                    SdrPage*            pPage = pDrView->GetSdrPageView()->GetPage();
                     Size                aBmpSize( aScanBmp.GetPrefSize() ), aPageSize( pPage->GetSize() );
                     const MapMode       aMap100( MAP_100TH_MM );
 
@@ -610,8 +622,8 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& rEv
                     if( bInsertNewObject )
                     {
                         pGrafObj = new SdrGrafObj( Graphic( aScanBmp ), aRect );
-                        SdrPageView* pPV = GetView()->GetPageViewPvNum(0);
-                        GetView()->InsertObject( pGrafObj, *pPV, SDRINSERT_SETDEFLAYER );
+                        SdrPageView* pPV = GetView()->GetSdrPageView();
+                        GetView()->InsertObjectAtView( pGrafObj, *pPV, SDRINSERT_SETDEFLAYER );
                     }
                 }
             }
