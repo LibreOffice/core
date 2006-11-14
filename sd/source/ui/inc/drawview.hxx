@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:21:45 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:33:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ public:
     virtual BOOL IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const;
 
     virtual void MakeVisible(const Rectangle& rRect, ::Window& rWin);
-    virtual void HidePage(SdrPageView* pPV);
+    virtual void HideSdrPage(); // SdrPageView* pPV);
 
     void    PresPaint(const Region& rRegion);
 
