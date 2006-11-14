@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdfilter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:19:23 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:22:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,6 @@ SdFilter::SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool 
     mrDocShell( rDocShell ),
     mrDocument( *rDocShell.GetDoc() ),
     mxModel( rDocShell.GetModel() ),
-    mpProgress( NULL ),
     mbIsDraw( rDocShell.GetDocumentType() == DOCUMENT_TYPE_DRAW ),
     mbShowProgress( bShowProgress )
 {
@@ -100,8 +99,6 @@ SdFilter::SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool 
 
 SdFilter::~SdFilter()
 {
-    if( !mrDocShell.HasSpecialProgress() )
-        delete mpProgress;
 }
 
 // -----------------------------------------------------------------------------
@@ -168,18 +165,5 @@ void SdFilter::CreateStatusIndicator()
 //  catch( Exception& )
 //  {
 //  }
-}
-
-// -----------------------------------------------------------------------------
-
-void SdFilter::CreateProgress()
-{
-    if( mrDocShell.HasSpecialProgress() )
-        mpProgress = mrDocShell.GetSpecialProgress();
-    else
-    {
-        mpProgress = new SfxProgress( &mrDocShell, String( SdResId( STR_OPEN_DOCUMENT ) ), 100 );
-        mpProgress->SetState( 0, 100 );
-    }
 }
 
