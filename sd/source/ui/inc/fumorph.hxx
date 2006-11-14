@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fumorph.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:13:27 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:33:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,11 @@
 |*
 \************************************************************************/
 class List;
-class PolyPolygon3D;
-class Polygon3D;
-class Vector3D;
+namespace basegfx {
+    class B2DPolyPolygon;
+    class B2DPolygon;
+    class B2DPoint;
+}
 
 namespace sd {
 
@@ -71,16 +73,16 @@ private:
 
     void ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
         const SdrObject* pObj1, const SdrObject* pObj2);
-    PolyPolygon3D* ImpCreateMorphedPolygon(
-        const PolyPolygon3D& rPolyPolyStart,
-        const PolyPolygon3D& rPolyPolyEnd,
-        const double fMorphingFactor);
-    BOOL ImpMorphPolygons(
-        const PolyPolygon3D& rPolyPoly1, const PolyPolygon3D& rPolyPoly2,
-        const USHORT nSteps, List& rPolyPolyList3D);
-    void ImpAddPolys(PolyPolygon3D& rSmaller, const PolyPolygon3D& rBigger);
-    void ImpEqualizePolyPointCount(Polygon3D& rSmall, const Polygon3D& rBig);
-    sal_uInt16 ImpGetNearestIndex(const Polygon3D& rPoly, const Vector3D& rPos);
+    ::basegfx::B2DPolyPolygon* ImpCreateMorphedPolygon(
+        const ::basegfx::B2DPolyPolygon& rPolyPolyStart,
+        const ::basegfx::B2DPolyPolygon& rPolyPolyEnd,
+        double fMorphingFactor);
+    sal_Bool ImpMorphPolygons(
+        const ::basegfx::B2DPolyPolygon& rPolyPoly1, const ::basegfx::B2DPolyPolygon& rPolyPoly2,
+        const sal_uInt16 nSteps, List& rPolyPolyList3D);
+    void ImpAddPolys(::basegfx::B2DPolyPolygon& rSmaller, const ::basegfx::B2DPolyPolygon& rBigger);
+    void ImpEqualizePolyPointCount(::basegfx::B2DPolygon& rSmall, const ::basegfx::B2DPolygon& rBig);
+    sal_uInt32 ImpGetNearestIndex(const ::basegfx::B2DPolygon& rPoly, const ::basegfx::B2DPoint& rPos);
 };
 
 } // end of namespace sd
