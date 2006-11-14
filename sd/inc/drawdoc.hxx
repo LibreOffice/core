@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:14:15 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:19:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -486,10 +486,6 @@ public:
 public:
 
     static SdDrawDocument* pDocLockedInsertingLinks;  // static to prevent recursions while resolving links
-
-//BFS02 friend SvStream&    operator<<(SvStream& rOut, SdDrawDocument& rDoc);
-//BFS02 friend SvStream&    operator>>(SvStream& rIn, SdDrawDocument& rDoc);
-
 
     /** This method acts as a simplified front end for the more complex
         <member>CreatePage()</member> method.
