@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolcontainer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:19:48 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:28:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,10 @@
 #include <tools/debug.hxx>
 #include <tools/list.hxx>
 
+#include <limits>
+#include <map>
+#include <boost/shared_ptr.hpp>
+
 using namespace ::com::sun::star;
 
 //  ----------------------------------------------------
@@ -67,20 +71,273 @@ using namespace ::com::sun::star;
 //  ----------------------------------------------------
 struct UnoControlHolder
 {
-public:
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >     xCtrl;
-    ::rtl::OUString aName;
+    uno::Reference< awt::XControl > mxControl;
+    ::rtl::OUString                 msName;
 
-    UnoControlHolder( const ::rtl::OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > & rControl )
-        : aName( rName )
+public:
+    UnoControlHolder( const ::rtl::OUString& rName, const uno::Reference< awt::XControl > & rControl )
+    :   mxControl( rControl ),
+        msName( rName )
     {
-        xCtrl = rControl;
     }
+
+    inline const ::rtl::OUString&                   getName() const { return msName; }
+    inline const uno::Reference< awt::XControl >&   getControl() const { return mxControl; }
 };
 
-DECLARE_LIST( UnoControlHolderList, UnoControlHolder* )
+//DECLARE_LIST( UnoControlHolderList, UnoControlHolder* );
 
+class UnoControlHolderList
+{
+public:
+    typedef sal_Int32                                       ControlIdentifier;
+private:
+    typedef ::boost::shared_ptr< UnoControlHolder >         ControlInfo;
+    typedef ::std::map< ControlIdentifier, ControlInfo >    ControlMap;
 
+private:
+    ControlMap  maControls;
+
+public:
+    UnoControlHolderList();
+    ~UnoControlHolderList();
+
+    /** adds a control with the given name to the list
+        @param _rxControl
+            the control to add. Must not be <NULL/>
+        @param _pBName
+            the name of the control, or <NULL/> if an automatic name should be generated
+        @return
+            the identifier of the newly added control
+    */
+    ControlIdentifier   addControl( const uno::Reference< awt::XControl >& _rxControl, const ::rtl::OUString* _pName );
+
+    /** returns the number of controls in the list
+    */
+    inline size_t       size() const { return maControls.size(); }
+
+    /** determines whether or not the list is empty
+    */
+    inline bool         empty() const { return maControls.empty(); }
+
+    /** retrieves all controls currently in the list
+        @return
+            the number of controls in the list
+    */
+    size_t  getControls( uno::Sequence< uno::Reference< awt::XControl > >& _out_rControls ) const;
+
+    /** retrieves all identifiers of all controls currently in the list
+        @return
+            the number of controls in the list
+    */
+    size_t  getIdentifiers( uno::Sequence< sal_Int32 >& _out_rIdentifiers ) const;
+
+    /** returns the first control which is registered under the given name
+    */
+    uno::Reference< awt::XControl >
+            getControlForName( const ::rtl::OUString& _rName ) const;
+
+    /** returns the identifier which a control is registered for, or -1 if the control
+            isn't registered
+    */
+    ControlIdentifier
+            getControlIdentifier( const uno::Reference< awt::XControl >& _rxControl );
+
+    /** retrieves the control for a given id
+        @param _nIdentifier
+            the identifier for the control
+        @param _out_rxControl
+            takes the XControl upon successful return
+        @return
+            <TRUE/> if and only if a control with the given id is part of the list
+    */
+    bool    getControlForIdentifier( ControlIdentifier _nIdentifier, uno::Reference< awt::XControl >& _out_rxControl ) const;
+
+    /** removes a control from the list, given by id
+        @param _nId
+            The identifier of the control to remove.
+    */
+    void    removeControlById( ControlIdentifier _nId );
+
+    /** replaces a control from the list with another one
+        @param _nId
+            The identifier of the control to replace
+        @param _rxNewControl
+            the new control to put into the list
+    */
+    void    replaceControlById( ControlIdentifier _nId, const uno::Reference< awt::XControl >& _rxNewControl );
+
+private:
+    /** adds a control
+    @param _rxControl
+        the control to add to the container
+    @param _pName
+        pointer to the name of the control. Might be <NULL/>, in this case, a name is generated.
+    @return
+        the identifier of the newly inserted control
+    */
+    ControlIdentifier impl_addControl(
+        const uno::Reference< awt::XControl >& _rxControl,
+        const ::rtl::OUString*  _pName
+    );
+
+    /** finds a free identifier
+        @throw uno::RuntimeException
+            if no free identifier can be found
+    */
+    ControlIdentifier UnoControlHolderList::impl_getFreeIdentifier_throw();
+
+    /** finds a free name
+        @throw uno::RuntimeException
+            if no free name can be found
+    */
+    ::rtl::OUString UnoControlHolderList::impl_getFreeName_throw();
+};
+
+//------------------------------------------------------------------------
+UnoControlHolderList::UnoControlHolderList()
+{
+}
+
+//------------------------------------------------------------------------
+UnoControlHolderList::~UnoControlHolderList()
+{
+}
+
+//------------------------------------------------------------------------
+UnoControlHolderList::ControlIdentifier UnoControlHolderList::addControl( const uno::Reference< awt::XControl >& _rxControl, const ::rtl::OUString* _pName )
+{
+    return impl_addControl( _rxControl, _pName );
+}
+
+//------------------------------------------------------------------------
+size_t UnoControlHolderList::getControls( uno::Sequence< uno::Reference< awt::XControl > >& _out_rControls ) const
+{
+    _out_rControls.realloc( maControls.size() );
+    uno::Reference< awt::XControl >* pControls = _out_rControls.getArray();
+    for (   ControlMap::const_iterator loop = maControls.begin();
+            loop != maControls.end();
+            ++loop, ++pControls
+        )
+        *pControls = loop->second->getControl();
+    return maControls.size();
+}
+
+//------------------------------------------------------------------------
+size_t UnoControlHolderList::getIdentifiers( uno::Sequence< sal_Int32 >& _out_rIdentifiers ) const
+{
+    _out_rIdentifiers.realloc( maControls.size() );
+    sal_Int32* pIndentifiers = _out_rIdentifiers.getArray();
+    for (   ControlMap::const_iterator loop = maControls.begin();
+            loop != maControls.end();
+            ++loop, ++pIndentifiers
+        )
+        *pIndentifiers = loop->first;
+    return maControls.size();
+}
+
+//------------------------------------------------------------------------
+uno::Reference< awt::XControl > UnoControlHolderList::getControlForName( const ::rtl::OUString& _rName ) const
+{
+    for (   ControlMap::const_iterator loop = maControls.begin();
+            loop != maControls.end();
+            ++loop
+        )
+        if ( loop->second->getName() == _rName )
+            return loop->second->getControl();
+    return uno::Reference< awt::XControl >();
+}
+
+//------------------------------------------------------------------------
+UnoControlHolderList::ControlIdentifier UnoControlHolderList::getControlIdentifier( const uno::Reference< awt::XControl >& _rxControl )
+{
+    for (   ControlMap::iterator loop = maControls.begin();
+            loop != maControls.end();
+            ++loop
+        )
+    {
+        if ( loop->second->getControl().get() == _rxControl.get() )
+            return loop->first;
+    }
+    return -1;
+}
+
+//------------------------------------------------------------------------
+bool UnoControlHolderList::getControlForIdentifier( UnoControlHolderList::ControlIdentifier _nIdentifier, uno::Reference< awt::XControl >& _out_rxControl ) const
+{
+    ControlMap::const_iterator pos = maControls.find( _nIdentifier );
+    if ( pos == maControls.end() )
+        return false;
+    _out_rxControl = pos->second->getControl();
+    return true;
+}
+
+//------------------------------------------------------------------------
+void UnoControlHolderList::removeControlById( UnoControlHolderList::ControlIdentifier _nId )
+{
+    ControlMap::iterator pos = maControls.find( _nId );
+    DBG_ASSERT( pos != maControls.end(), "UnoControlHolderList::removeControlById: invalid id!" );
+    if ( pos == maControls.end() )
+        return;
+
+    maControls.erase( pos );
+}
+
+//------------------------------------------------------------------------
+void UnoControlHolderList::replaceControlById( ControlIdentifier _nId, const uno::Reference< awt::XControl >& _rxNewControl )
+{
+    DBG_ASSERT( _rxNewControl.is(), "UnoControlHolderList::replaceControlById: invalid new control!" );
+
+    ControlMap::iterator pos = maControls.find( _nId );
+    DBG_ASSERT( pos != maControls.end(), "UnoControlHolderList::replaceControlById: invalid id!" );
+    if ( pos == maControls.end() )
+        return;
+
+    pos->second.reset( new UnoControlHolder( pos->second->getName(), _rxNewControl ) );
+}
+
+//------------------------------------------------------------------------
+UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_addControl( const uno::Reference< awt::XControl >& _rxControl, const ::rtl::OUString* _pName )
+{
+    DBG_ASSERT( _rxControl.is(), "UnoControlHolderList::impl_addControl: invalid control!" );
+
+    ::rtl::OUString sName = _pName ? *_pName : impl_getFreeName_throw();
+    sal_Int32 nId = impl_getFreeIdentifier_throw();
+
+    maControls[ nId ] = ControlInfo( new UnoControlHolder( sName, _rxControl ) );
+    return nId;
+}
+
+//------------------------------------------------------------------------
+UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_getFreeIdentifier_throw()
+{
+    for ( ControlIdentifier candidateId = 0; candidateId < ::std::numeric_limits< ControlIdentifier >::max(); ++candidateId )
+    {
+        ControlMap::const_iterator existent = maControls.find( candidateId );
+        if ( existent == maControls.end() )
+            return candidateId;
+    }
+    throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "out of identifiers" ) ), NULL );
+}
+
+//------------------------------------------------------------------------
+::rtl::OUString UnoControlHolderList::impl_getFreeName_throw()
+{
+    ::rtl::OUString name( RTL_CONSTASCII_USTRINGPARAM( "control_" ) );
+    for ( ControlIdentifier candidateId = 0; candidateId < ::std::numeric_limits< ControlIdentifier >::max(); ++candidateId )
+    {
+        ::rtl::OUString candidateName( name + ::rtl::OUString::valueOf( candidateId ) );
+        ControlMap::const_iterator loop = maControls.begin();
+        for ( ; loop != maControls.end(); ++loop )
+        {
+            if ( loop->second->getName() == candidateName )
+                break;
+        }
+        if ( loop == maControls.end() )
+            return candidateName;
+    }
+    throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "out of identifiers" ) ), NULL );
+}
 //  ----------------------------------------------------
 //  Function to set the controls' visibility according
 //  to the dialog's "Step" property
@@ -88,38 +345,38 @@ DECLARE_LIST( UnoControlHolderList, UnoControlHolder* )
 void implUpdateVisibility
 (
     sal_Int32 nDialogStep,
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > xControlContainer
+    uno::Reference< awt::XControlContainer > xControlContainer
 )
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > >
+    uno::Sequence< uno::Reference< awt::XControl > >
         aCtrls = xControlContainer->getControls();
-    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >* pCtrls = aCtrls.getConstArray();
+    const uno::Reference< awt::XControl >* pCtrls = aCtrls.getConstArray();
     sal_uInt32 nCtrls = aCtrls.getLength();
     sal_Bool bCompleteVisible = (nDialogStep == 0);
     for( sal_uInt32 n = 0; n < nCtrls; n++ )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xControl = pCtrls[ n ];
+        uno::Reference< awt::XControl > xControl = pCtrls[ n ];
 
         sal_Bool bVisible = bCompleteVisible;
         if( !bVisible )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > xModel( xControl->getModel() );
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPSet
-                ( xModel, ::com::sun::star::uno::UNO_QUERY );
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+            uno::Reference< awt::XControlModel > xModel( xControl->getModel() );
+            uno::Reference< beans::XPropertySet > xPSet
+                ( xModel, uno::UNO_QUERY );
+            uno::Reference< beans::XPropertySetInfo >
                 xInfo = xPSet->getPropertySetInfo();
             ::rtl::OUString aPropName(RTL_CONSTASCII_USTRINGPARAM( "Step" ) );
             sal_Int32 nControlStep = 0;
             if ( xInfo->hasPropertyByName( aPropName ) )
             {
-                ::com::sun::star::uno::Any aVal = xPSet->getPropertyValue( aPropName );
+                uno::Any aVal = xPSet->getPropertyValue( aPropName );
                 aVal >>= nControlStep;
             }
             bVisible = (nControlStep == 0) || (nControlStep == nDialogStep);
         }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> xWindow
-            ( xControl, ::com::sun::star::uno::UNO_QUERY );
+        uno::Reference< awt::XWindow> xWindow
+            ( xControl, uno::UNO_QUERY );
         if( xWindow.is() )
             xWindow->setVisible( bVisible );
     }
@@ -129,40 +386,39 @@ void implUpdateVisibility
 //  ----------------------------------------------------
 //  class DialogStepChangedListener
 //  ----------------------------------------------------
-typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener > PropertyChangeListenerHelper;
+typedef ::cppu::WeakImplHelper1< beans::XPropertyChangeListener > PropertyChangeListenerHelper;
 
 class DialogStepChangedListener: public PropertyChangeListenerHelper
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > mxControlContainer;
+    uno::Reference< awt::XControlContainer > mxControlContainer;
 
 public:
-    DialogStepChangedListener( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > xControlContainer )
+    DialogStepChangedListener( uno::Reference< awt::XControlContainer > xControlContainer )
         : mxControlContainer( xControlContainer ) {}
 
     // XEventListener
-    virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL disposing( const  lang::EventObject& Source ) throw( uno::RuntimeException);
 
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL propertyChange( const  beans::PropertyChangeEvent& evt ) throw( uno::RuntimeException);
 
 };
 
-void SAL_CALL DialogStepChangedListener::disposing( const  ::com::sun::star::lang::EventObject& )
-    throw( ::com::sun::star::uno::RuntimeException)
+void SAL_CALL DialogStepChangedListener::disposing( const  lang::EventObject& /*_rSource*/)
+    throw( uno::RuntimeException)
 {
     mxControlContainer.clear();
 }
 
-void SAL_CALL DialogStepChangedListener::propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt )
-    throw( ::com::sun::star::uno::RuntimeException)
+void SAL_CALL DialogStepChangedListener::propertyChange( const  beans::PropertyChangeEvent& evt )
+    throw( uno::RuntimeException)
 {
     // evt.PropertyName HAS to be "Step" because we only use the listener for that
     sal_Int32 nDialogStep;
     evt.NewValue >>= nDialogStep;
     implUpdateVisibility( nDialogStep, mxControlContainer );
 }
-
 
 //  ----------------------------------------------------
 //  class UnoControlContainer
@@ -172,7 +428,7 @@ UnoControlContainer::UnoControlContainer() : maCListeners( *this )
     mpControls = new UnoControlHolderList;
 }
 
-UnoControlContainer::UnoControlContainer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP )
+UnoControlContainer::UnoControlContainer( uno::Reference< awt::XWindowPeer >  xP )
     :   maCListeners( *this )
 {
     setPeer( xP );
@@ -182,13 +438,7 @@ UnoControlContainer::UnoControlContainer( ::com::sun::star::uno::Reference< ::co
 
 UnoControlContainer::~UnoControlContainer()
 {
-    for ( sal_uInt32 n = mpControls->Count(); n; )
-    {
-        UnoControlHolder* pHolder = mpControls->GetObject( --n );
-        delete pHolder;
-    }
-    mpControls->Clear();
-    delete mpControls;
+    DELETEZ( mpControls );
 }
 
 void UnoControlContainer::ImplActivateTabControllers()
@@ -201,26 +451,8 @@ void UnoControlContainer::ImplActivateTabControllers()
     }
 }
 
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any UnoControlContainer::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XUnoControlContainer*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XControlContainer*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::container::XContainer*, this ) );
-    return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
-}
-
-// ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoControlContainer )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XUnoControlContainer>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer>* ) NULL ),
-    UnoControlBase::getTypes()
-IMPL_XTYPEPROVIDER_END
-
-// ::com::sun::star::lang::XComponent
-void UnoControlContainer::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
+// lang::XComponent
+void UnoControlContainer::dispose(  ) throw(uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -246,16 +478,14 @@ void UnoControlContainer::dispose(  ) throw(::com::sun::star::uno::RuntimeExcept
 
 
     // alle Strukturen entfernen
-    for ( sal_Int32 n = mpControls->Count();  n; )
-        delete mpControls->GetObject( --n );
-    mpControls->Clear();
-
+    DELETEZ( mpControls );
+    mpControls = new UnoControlHolderList;
 
     UnoControlBase::dispose();
 }
 
-// ::com::sun::star::lang::XEventListener
-void UnoControlContainer::disposing( const ::com::sun::star::lang::EventObject& _rEvt ) throw(::com::sun::star::uno::RuntimeException)
+// lang::XEventListener
+void UnoControlContainer::disposing( const lang::EventObject& _rEvt ) throw(uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -266,15 +496,15 @@ void UnoControlContainer::disposing( const ::com::sun::star::lang::EventObject& 
     UnoControlBase::disposing( _rEvt );
 }
 
-// ::com::sun::star::container::XContainer
-void UnoControlContainer::addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+// container::XContainer
+void UnoControlContainer::addContainerListener( const uno::Reference< container::XContainerListener >& rxListener ) throw(uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     maCListeners.addInterface( rxListener );
 }
 
-void UnoControlContainer::removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControlContainer::removeContainerListener( const uno::Reference< container::XContainerListener >& rxListener ) throw(uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -282,50 +512,127 @@ void UnoControlContainer::removeContainerListener( const ::com::sun::star::uno::
 }
 
 
-// ::com::sun::star::awt::XControlContainer
-void UnoControlContainer::setStatusText( const ::rtl::OUString& rStatusText ) throw(::com::sun::star::uno::RuntimeException)
+::sal_Int32 SAL_CALL UnoControlContainer::insert( const uno::Any& _rElement ) throw (lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    uno::Reference< awt::XControl > xControl;
+    if ( !( _rElement >>= xControl ) || !xControl.is() )
+        throw lang::IllegalArgumentException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Elements must support the XControl interface." ) ),
+            *this,
+            1
+        );
+
+    return impl_addControl( xControl, NULL );
+}
+
+void SAL_CALL UnoControlContainer::removeByIdentifier( ::sal_Int32 _nIdentifier ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    uno::Reference< awt::XControl > xControl;
+    if ( !mpControls->getControlForIdentifier( _nIdentifier, xControl ) )
+        throw container::NoSuchElementException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "There is no element with the given identifier." ) ),
+            *this
+        );
+
+    impl_removeControl( _nIdentifier, xControl, NULL );
+}
+
+void SAL_CALL UnoControlContainer::replaceByIdentifer( ::sal_Int32 _nIdentifier, const uno::Any& _rElement ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    uno::Reference< awt::XControl > xExistentControl;
+    if ( !mpControls->getControlForIdentifier( _nIdentifier, xExistentControl ) )
+        throw container::NoSuchElementException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "There is no element with the given identifier." ) ),
+            *this
+        );
+
+    uno::Reference< awt::XControl > xNewControl;
+    if ( !( _rElement >>= xNewControl ) )
+        throw lang::IllegalArgumentException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Elements must support the XControl interface." ) ),
+            *this,
+            1
+        );
+
+    removingControl( xExistentControl );
+
+    mpControls->replaceControlById( _nIdentifier, xNewControl );
+
+    addingControl( xNewControl );
+
+    impl_createControlPeerIfNecessary( xNewControl );
+
+    if ( maCListeners.getLength() )
+    {
+        container::ContainerEvent aEvent;
+        aEvent.Source = *this;
+        aEvent.Accessor <<= _nIdentifier;
+        aEvent.Element <<= xNewControl;
+        aEvent.ReplacedElement <<= xExistentControl;
+        maCListeners.elementReplaced( aEvent );
+    }
+}
+
+uno::Any SAL_CALL UnoControlContainer::getByIdentifier( ::sal_Int32 _nIdentifier ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    uno::Reference< awt::XControl > xControl;
+    if ( !mpControls->getControlForIdentifier( _nIdentifier, xControl ) )
+        throw container::NoSuchElementException();
+    return uno::makeAny( xControl );
+}
+
+uno::Sequence< ::sal_Int32 > SAL_CALL UnoControlContainer::getIdentifiers(  ) throw (uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    uno::Sequence< ::sal_Int32 > aIdentifiers;
+    mpControls->getIdentifiers( aIdentifiers );
+    return aIdentifiers;
+}
+
+// container::XElementAccess
+uno::Type SAL_CALL UnoControlContainer::getElementType(  ) throw (uno::RuntimeException)
+{
+    return awt::XControlModel::static_type();
+}
+
+::sal_Bool SAL_CALL UnoControlContainer::hasElements(  ) throw (uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    return !mpControls->empty();
+}
+
+// awt::XControlContainer
+void UnoControlContainer::setStatusText( const ::rtl::OUString& rStatusText ) throw(uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     // In der Parenthierarchie nach unten gehen
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  xContainer( mxContext, ::com::sun::star::uno::UNO_QUERY );
+    uno::Reference< awt::XControlContainer >  xContainer( mxContext, uno::UNO_QUERY );
     if( xContainer.is() )
         xContainer->setStatusText( rStatusText );
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > UnoControlContainer::getControls(  ) throw(::com::sun::star::uno::RuntimeException)
+uno::Sequence< uno::Reference< awt::XControl > > UnoControlContainer::getControls(  ) throw(uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    sal_uInt32 nCtrls = mpControls->Count();
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > aD( nCtrls );
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  * pDest = aD.getArray();
-    for( sal_uInt32 n = 0; n < nCtrls; n++ )
-    {
-        UnoControlHolder* pHolder= mpControls->GetObject( n );
-        pDest[n] = pHolder->xCtrl;
-    }
-
-    return aD;
+    uno::Sequence< uno::Reference< awt::XControl > > aControls;
+    mpControls->getControls( aControls );
+    return aControls;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > UnoControlContainer::getControl( const ::rtl::OUString& rName ) throw(::com::sun::star::uno::RuntimeException)
+uno::Reference< awt::XControl > UnoControlContainer::getControl( const ::rtl::OUString& rName ) throw(uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xCtrl;
-
-    sal_uInt32 nCtrls = mpControls->Count();
-    for( sal_uInt32 n = 0; n < nCtrls; n++ )
-    {
-        UnoControlHolder* pHolder = mpControls->GetObject( n );
-        if ( pHolder->aName == rName )
-        {
-            xCtrl = pHolder->xCtrl;
-            break;
-        }
-    }
-    return xCtrl;
+    return mpControls->getControlForName( rName );
 }
 
 void UnoControlContainer::addingControl( const uno::Reference< awt::XControl >& _rxControl )
@@ -340,32 +647,45 @@ void UnoControlContainer::addingControl( const uno::Reference< awt::XControl >& 
     }
 }
 
-void UnoControlContainer::addControl( const ::rtl::OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rControl ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControlContainer::impl_createControlPeerIfNecessary( const uno::Reference< awt::XControl >& _rxControl )
+{
+    OSL_PRECOND( _rxControl.is(), "UnoControlContainer::impl_createControlPeerIfNecessary: invalid control, this will crash!" );
+
+    // if the container already has a peer, then also create a peer for the control
+    uno::Reference< awt::XWindowPeer > xMyPeer( getPeer() );
+    if( xMyPeer.is() )
+    {
+        _rxControl->createPeer( NULL, xMyPeer );
+        ImplActivateTabControllers();
+    }
+
+}
+
+sal_Int32 UnoControlContainer::impl_addControl( const uno::Reference< awt::XControl >& _rxControl, const ::rtl::OUString* _pName )
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    UnoControlHolderList::ControlIdentifier id = mpControls->addControl( _rxControl, _pName );
+
+    addingControl( _rxControl );
+
+    impl_createControlPeerIfNecessary( _rxControl );
+
+    if ( maCListeners.getLength() )
+    {
+        container::ContainerEvent aEvent;
+        aEvent.Source = *this;
+        _pName ? ( aEvent.Accessor <<= *_pName ) : ( aEvent.Accessor <<= (sal_Int32)id );
+        aEvent.Element <<= _rxControl;
+        maCListeners.elementInserted( aEvent );
+    }
+
+    return id;
+}
+
+void UnoControlContainer::addControl( const ::rtl::OUString& rName, const uno::Reference< awt::XControl >& rControl ) throw(uno::RuntimeException)
 {
     if ( rControl.is() )
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-        UnoControlHolder* pHolder = new UnoControlHolder( rName, rControl );
-        mpControls->Insert( pHolder, LIST_APPEND );
-
-        addingControl( rControl );
-
-        if( getPeer().is() )
-        {
-            // Hat der Container ein Peer, dann auch gleich im Child erzeugen
-            rControl->createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > (), getPeer() );
-            ImplActivateTabControllers();
-        }
-
-        if ( maCListeners.getLength() )
-        {
-            ::com::sun::star::container::ContainerEvent aEvent;
-            aEvent.Source = *this;
-            aEvent.Element <<= rControl;
-            maCListeners.elementInserted( aEvent );
-        }
-    }
+        impl_addControl( rControl, &rName );
 }
 
 void UnoControlContainer::removingControl( const uno::Reference< awt::XControl >& _rxControl )
@@ -377,54 +697,59 @@ void UnoControlContainer::removingControl( const uno::Reference< awt::XControl >
     }
 }
 
-void UnoControlContainer::removeControl( const uno::Reference< awt::XControl >& _rxControl ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControlContainer::impl_removeControl( sal_Int32 _nId, const uno::Reference< awt::XControl >& _rxControl, const ::rtl::OUString* _pNameAccessor )
+{
+#ifdef DBG_UTIL
+    {
+        uno::Reference< awt::XControl > xControl;
+        bool bHas = mpControls->getControlForIdentifier( _nId, xControl );
+        DBG_ASSERT( bHas && xControl == _rxControl, "UnoControlContainer::impl_removeControl: inconsistency in the parameters!" );
+    }
+#endif
+    removingControl( _rxControl );
+
+    mpControls->removeControlById( _nId );
+
+    if ( maCListeners.getLength() )
+    {
+        container::ContainerEvent aEvent;
+        aEvent.Source = *this;
+        _pNameAccessor ? ( aEvent.Accessor <<= *_pNameAccessor ) : ( aEvent.Accessor <<= _nId );
+        aEvent.Element <<= _rxControl;
+        maCListeners.elementRemoved( aEvent );
+    }
+}
+
+void UnoControlContainer::removeControl( const uno::Reference< awt::XControl >& _rxControl ) throw(uno::RuntimeException)
 {
     if ( _rxControl.is() )
     {
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-        sal_uInt32 nCtrls = mpControls->Count();
-        for( sal_uInt32 n = 0; n < nCtrls; n++ )
-        {
-            UnoControlHolder* pHolder = mpControls->GetObject( n );
-            if ( _rxControl.get() == pHolder->xCtrl.get() )
-            {
-                removingControl( _rxControl );
-
-                delete pHolder;
-                mpControls->Remove( n );
-
-                if ( maCListeners.getLength() )
-                {
-                    ::com::sun::star::container::ContainerEvent aEvent;
-                    aEvent.Source = *this;
-                    aEvent.Element <<= _rxControl;
-                    maCListeners.elementRemoved( aEvent );
-                }
-                break;
-            }
-        }
+        UnoControlHolderList::ControlIdentifier id = mpControls->getControlIdentifier( _rxControl );
+        if ( id != -1 )
+            impl_removeControl( id, _rxControl, NULL );
     }
 }
 
 
 
-// ::com::sun::star::awt::XUnoControlContainer
-void UnoControlContainer::setTabControllers( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController > >& TabControllers ) throw(::com::sun::star::uno::RuntimeException)
+// awt::XUnoControlContainer
+void UnoControlContainer::setTabControllers( const uno::Sequence< uno::Reference< awt::XTabController > >& TabControllers ) throw(uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     maTabControllers = TabControllers;
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController > > UnoControlContainer::getTabControllers(  ) throw(::com::sun::star::uno::RuntimeException)
+uno::Sequence< uno::Reference< awt::XTabController > > UnoControlContainer::getTabControllers(  ) throw(uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     return maTabControllers;
 }
 
-void UnoControlContainer::addTabController( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >& TabController ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControlContainer::addTabController( const uno::Reference< awt::XTabController >& TabController ) throw(uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -433,7 +758,7 @@ void UnoControlContainer::addTabController( const ::com::sun::star::uno::Referen
     maTabControllers[ nCount ] = TabController;
 }
 
-void UnoControlContainer::removeTabController( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >& TabController ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControlContainer::removeTabController( const uno::Reference< awt::XTabController >& TabController ) throw(uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -449,8 +774,8 @@ void UnoControlContainer::removeTabController( const ::com::sun::star::uno::Refe
     }
 }
 
-// ::com::sun::star::awt::XControl
-void UnoControlContainer::createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& rxToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& rParent ) throw(::com::sun::star::uno::RuntimeException)
+// awt::XControl
+void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxToolkit, const uno::Reference< awt::XWindowPeer >& rParent ) throw(uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -466,33 +791,33 @@ void UnoControlContainer::createPeer( const ::com::sun::star::uno::Reference< ::
         if ( !mbCreatingCompatiblePeer )
         {
             // Evaluate "Step" property
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > xModel( getModel() );
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPSet
-                ( xModel, ::com::sun::star::uno::UNO_QUERY );
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+            uno::Reference< awt::XControlModel > xModel( getModel() );
+            uno::Reference< beans::XPropertySet > xPSet
+                ( xModel, uno::UNO_QUERY );
+            uno::Reference< beans::XPropertySetInfo >
                 xInfo = xPSet->getPropertySetInfo();
             ::rtl::OUString aPropName(RTL_CONSTASCII_USTRINGPARAM( "Step" ) );
             if ( xInfo->hasPropertyByName( aPropName ) )
             {
-                ::com::sun::star::uno::Any aVal = xPSet->getPropertyValue( aPropName );
+                uno::Any aVal = xPSet->getPropertyValue( aPropName );
                 sal_Int32 nDialogStep;
                 aVal >>= nDialogStep;
-                ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > xContainer =
-                    SAL_STATIC_CAST( ::com::sun::star::awt::XControlContainer*, this );
+                uno::Reference< awt::XControlContainer > xContainer =
+                    SAL_STATIC_CAST( awt::XControlContainer*, this );
                 implUpdateVisibility( nDialogStep, xContainer );
 
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > xListener =
-                    SAL_STATIC_CAST( ::com::sun::star::beans::XPropertyChangeListener*,
+                uno::Reference< beans::XPropertyChangeListener > xListener =
+                    SAL_STATIC_CAST( beans::XPropertyChangeListener*,
                         new DialogStepChangedListener( xContainer ) );
                 xPSet->addPropertyChangeListener( aPropName, xListener );
             }
 
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > aCtrls = getControls();
+            uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
             sal_uInt32 nCtrls = aCtrls.getLength();
             for( sal_uInt32 n = 0; n < nCtrls; n++ )
                 aCtrls.getArray()[n]->createPeer( rxToolkit, getPeer() );
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclContainerPeer >  xC( getPeer(), ::com::sun::star::uno::UNO_QUERY );
+            uno::Reference< awt::XVclContainerPeer >  xC( getPeer(), uno::UNO_QUERY );
 
             xC->enableDialogControl( sal_True );
             ImplActivateTabControllers();
@@ -504,15 +829,15 @@ void UnoControlContainer::createPeer( const ::com::sun::star::uno::Reference< ::
 }
 
 
-// ::com::sun::star::awt::XWindow
-void UnoControlContainer::setVisible( sal_Bool bVisible ) throw(::com::sun::star::uno::RuntimeException)
+// awt::XWindow
+void UnoControlContainer::setVisible( sal_Bool bVisible ) throw(uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     UnoControl::setVisible( bVisible );
     if( !mxContext.is() && bVisible )
         // Es ist ein TopWindow, also automatisch anzeigen
-        createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > (), ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > () );
+        createPeer( uno::Reference< awt::XToolkit > (), uno::Reference< awt::XWindowPeer > () );
 }
 
 
