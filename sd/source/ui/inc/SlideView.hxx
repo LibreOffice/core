@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideView.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:15:56 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:32:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,6 @@ public:
     virtual void        InvalidateOneWin( ::Window& rWin );
     virtual void        InvalidateOneWin( ::Window& rWin, const Rectangle& rRect );
 
-    void                SetMultiPageView( BOOL bFlag ) { bPageTwice = bFlag; }
     void                SetAllowInvalidate( BOOL bFlag );
     BOOL                IsInvalidateAllowed() const;
 
