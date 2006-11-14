@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jpeg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:51:45 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:38:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
+#include <com/sun/star/task/XStatusIndicator.hpp>
 #endif
 
 #ifdef _JPEGPRIVATE
@@ -107,21 +110,21 @@ class JPEGWriter
     Bitmap              aBmp;
     BitmapReadAccess*   pAcc;
     BYTE*               pBuffer;
-    PFilterCallback     pCallback;
-    void*               pCallerData;
     BOOL                bNative;
+
+    sal_Bool            bGreys;
+    sal_Int32           nQuality;
+
+    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
 public:
 
     void*               GetScanline( long nY );
 
-public:
-
-                        JPEGWriter( SvStream& rOStm, PFilterCallback pCallback, void* pCallData );
+                        JPEGWriter( SvStream& rOStm, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData );
                         ~JPEGWriter() {};
 
-    BOOL                Write( const Graphic& rGraphic, const
-                        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData );
+    BOOL                Write( const Graphic& rGraphic );
 };
 
 #endif // _JPEGPRIVATE
@@ -132,8 +135,6 @@ public:
 
 BOOL ImportJPEG( SvStream& rStream, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags );
 
-BOOL ExportJPEG( SvStream& rStream, const Graphic& rGraphic,
-                 PFilterCallback pCallback, void* pCallerData,
-                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData );
+BOOL ExportJPEG( SvStream& rStream, const Graphic& rGraphic, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData );
 
 #endif // _JPEG_HXX
