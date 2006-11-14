@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3ddeflt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:37:25 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:06:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,10 +115,10 @@ UINT16 Base3DDefault::GetBase3DType()
 |*
 \************************************************************************/
 
-void Base3DDefault::SetDisplayQuality(UINT8 nNew)
+void Base3DDefault::SetDisplayQuality(sal_uInt8 nNew)
 {
     // Entsprechende PixelGrenze setzen
-    SetMaxPixels(((long)nNew * 3500) + 3500);
+    SetMaxPixels(((sal_Int32)nNew * 3500) + 3500);
 
     // call parent
     Base3D::SetDisplayQuality(nNew);
@@ -203,7 +203,7 @@ void Base3DDefault::StartScene()
     ReleaseAccess();
 
     // Groesse der Bitmaps anpassen?
-    BOOL bSizeHasChanged = (aLocalSizePixel.GetSize() != aPicture.GetSizePixel());
+    sal_Bool bSizeHasChanged = (aLocalSizePixel.GetSize() != aPicture.GetSizePixel());
 
     // Neue BitMaps fuer ZBuffer und Picture allokieren
     if(bSizeHasChanged || !aZBuffer || !aPicture)
@@ -260,8 +260,8 @@ void Base3DDefault::StartScene()
         // Detailstufe beachten
         if(bReducedDetail && fDetail != 0.0)
         {
-            long nReducedWidth = (long)((double)(aDefaultScissorRectangle.GetWidth() - 1) * fDetail);
-            long nReducedHeight = (long)((double)(aDefaultScissorRectangle.GetHeight() - 1)* fDetail);
+            sal_Int32 nReducedWidth = (sal_Int32)((double)(aDefaultScissorRectangle.GetWidth() - 1) * fDetail);
+            sal_Int32 nReducedHeight = (sal_Int32)((double)(aDefaultScissorRectangle.GetHeight() - 1)* fDetail);
             aDefaultScissorRectangle.SetSize(Size(nReducedWidth + 1, nReducedHeight + 1));
         }
     }
@@ -312,11 +312,11 @@ void Base3DDefault::EndScene()
     }
     else
     {
-        BOOL bWasEnabled = GetOutputDevice()->IsMapModeEnabled();
+        sal_Bool bWasEnabled = GetOutputDevice()->IsMapModeEnabled();
         GetOutputDevice()->EnableMapMode(FALSE);
 
 #ifdef DBG_UTIL     // draw for testing
-        static BOOL bDoDrawBitmapForTesting(FALSE);
+        static sal_Bool bDoDrawBitmapForTesting(FALSE);
         if(bDoDrawBitmapForTesting)
         {
             Bitmap aBmp( aBitmapEx.GetMask() );
@@ -410,8 +410,8 @@ void Base3DDefault::SetTransformationSet(B3dTransformationSet* pSet)
         // Detailstufe beachten
         if(bReducedDetail && fDetail != 0.0)
         {
-            long nReducedWidth = (long)((double)(aLocalSizePixel.GetWidth() - 1) * fDetail);
-            long nReducedHeight = (long)((double)(aLocalSizePixel.GetHeight() - 1)* fDetail);
+            sal_Int32 nReducedWidth = (sal_Int32)((double)(aLocalSizePixel.GetWidth() - 1) * fDetail);
+            sal_Int32 nReducedHeight = (sal_Int32)((double)(aLocalSizePixel.GetHeight() - 1)* fDetail);
             aLocalSizePixel.SetSize(Size(nReducedWidth + 1, nReducedHeight + 1));
         }
 
@@ -434,17 +434,17 @@ Point Base3DDefault::GetPixelCoor(B3dEntity& rEntity)
     if(bReducedDetail && fDetail != 0.0)
     {
         Point aRetval = GetOutputDevice()->LogicToPixel(
-            Point((long)(rEntity.Point().X()),
-            (long)(rEntity.Point().Y()))) - aSizePixel.TopLeft();
-        aRetval.X() = (long)((double)aRetval.X() * fDetail);
-        aRetval.Y() = (long)((double)aRetval.Y() * fDetail);
+            Point((sal_Int32)(rEntity.Point().getX()),
+            (sal_Int32)(rEntity.Point().getY()))) - aSizePixel.TopLeft();
+        aRetval.X() = (sal_Int32)((double)aRetval.X() * fDetail);
+        aRetval.Y() = (sal_Int32)((double)aRetval.Y() * fDetail);
         return aRetval;
     }
     else
     {
         return GetOutputDevice()->LogicToPixel(
-            Point((long)(rEntity.Point().X()),
-            (long)(rEntity.Point().Y()))) - aSizePixel.TopLeft();
+            Point((sal_Int32)(rEntity.Point().getX()),
+            (sal_Int32)(rEntity.Point().getY()))) - aSizePixel.TopLeft();
     }
 }
 
@@ -454,20 +454,20 @@ Point Base3DDefault::GetPixelCoor(B3dEntity& rEntity)
 |*
 \************************************************************************/
 
-Vector3D Base3DDefault::Get3DCoor(Point& rPnt, double fDepth)
+basegfx::B3DPoint Base3DDefault::Get3DCoor(Point& rPnt, double fDepth)
 {
     if(bReducedDetail && fDetail != 0.0)
     {
         Point aPnt(rPnt);
-        aPnt.X() = (long)((double)aPnt.X() / fDetail);
-        aPnt.Y() = (long)((double)aPnt.Y() / fDetail);
+        aPnt.X() = (sal_Int32)((double)aPnt.X() / fDetail);
+        aPnt.Y() = (sal_Int32)((double)aPnt.Y() / fDetail);
         aPnt = GetOutputDevice()->PixelToLogic(aPnt + aSizePixel.TopLeft());
-        return Vector3D(aPnt.X(), aPnt.Y(), fDepth);
+        return basegfx::B3DPoint(aPnt.X(), aPnt.Y(), fDepth);
     }
     else
     {
         Point aPnt = GetOutputDevice()->PixelToLogic(rPnt + aSizePixel.TopLeft());
-        return Vector3D(aPnt.X(), aPnt.Y(), fDepth);
+        return basegfx::B3DPoint(aPnt.X(), aPnt.Y(), fDepth);
     }
 }
 
@@ -477,7 +477,7 @@ Vector3D Base3DDefault::Get3DCoor(Point& rPnt, double fDepth)
 |*
 \************************************************************************/
 
-BOOL Base3DDefault::IsVisibleAndScissor(long nX, long nY, UINT32 nDepth)
+sal_Bool Base3DDefault::IsVisibleAndScissor(sal_Int32 nX, sal_Int32 nY, sal_uInt32 nDepth)
 {
     // #112303#
     // Do not allow pixels smaller then the bitmap
@@ -506,7 +506,7 @@ BOOL Base3DDefault::IsVisibleAndScissor(long nX, long nY, UINT32 nDepth)
 |*
 \************************************************************************/
 
-BOOL Base3DDefault::IsInScissorRegion(long nX, long nY)
+sal_Bool Base3DDefault::IsInScissorRegion(sal_Int32 nX, sal_Int32 nY)
 {
     if(nX < aDefaultScissorRectangle.Left())
         return FALSE;
@@ -525,7 +525,7 @@ BOOL Base3DDefault::IsInScissorRegion(long nX, long nY)
 |*
 \************************************************************************/
 
-void Base3DDefault::WritePixel(long nX, long nY, Color aColor, UINT32 nDepth)
+void Base3DDefault::WritePixel(sal_Int32 nX, sal_Int32 nY, Color aColor, sal_uInt32 nDepth)
 {
     // #112303#
     // WritePixel requires the pixel coordinates to be safely on the buffer
@@ -606,14 +606,14 @@ void Base3DDefault::WritePixel(long nX, long nY, Color aColor, UINT32 nDepth)
 
 #define POLYGONOFFSET_VALUE         (120)
 
-void Base3DDefault::Clipped3DPoint(UINT32 nInd)
+void Base3DDefault::Clipped3DPoint(sal_uInt32 nInd)
 {
     B3dEntity& rEntity = aBuffers[nInd];
 
     // Geometrie holen
     rEntity.ToDeviceCoor(GetTransformationSet());
     Point aOutPoint = GetPixelCoor(rEntity);
-    UINT32 nDepth = (UINT32)rEntity.Point().Z();
+    sal_uInt32 nDepth = (sal_uInt32)rEntity.Point().getZ();
 
     // PolygonOffset beachten
     if(GetPolygonOffset(Base3DPolygonOffsetPoint))
@@ -636,7 +636,7 @@ void Base3DDefault::Clipped3DPoint(UINT32 nInd)
 |*
 \************************************************************************/
 
-void Base3DDefault::Clipped3DLine(UINT32 nInd1, UINT32 nInd2)
+void Base3DDefault::Clipped3DLine(sal_uInt32 nInd1, sal_uInt32 nInd2)
 {
     B3dEntity& rEntity1 = aBuffers[nInd1];
     B3dEntity& rEntity2 = aBuffers[nInd2];
@@ -649,16 +649,16 @@ void Base3DDefault::Clipped3DLine(UINT32 nInd1, UINT32 nInd2)
     if(bNormalsUsed)
     {
         // Vektoren normalisieren
-        rEntity1.Normal().Normalize();
-        rEntity2.Normal().Normalize();
+        rEntity1.Normal().normalize();
+        rEntity2.Normal().normalize();
 
         if(GetShadeModel() != Base3DPhong)
         {
             // Farben auswerten
             rEntity1.Color() = SolveColorModel(GetMaterialObject(),
-                rEntity1.Normal(), rEntity1.Point().GetVector3D());
+                rEntity1.Normal(), rEntity1.Point());
             rEntity2.Color() = SolveColorModel(GetMaterialObject(),
-                rEntity2.Normal(), rEntity2.Point().GetVector3D());
+                rEntity2.Normal(), rEntity2.Point());
 
             // Die Normalen NICHT ungueltig machen, da die Entities
             // eventuell noch fuer weitere Primitive benutzt werden.
@@ -692,9 +692,9 @@ void Base3DDefault::Clipped3DLine(UINT32 nInd1, UINT32 nInd2)
         }
 
         // Punkt, Farbe und Z-Wert interpolieren und die Linie gererieren
-        long nDx = aOutPointLeft.X() - aOutPointTop.X();
-        long nDy = aOutPointLeft.Y() - aOutPointTop.Y();
-        long nCount;
+        sal_Int32 nDx = aOutPointLeft.X() - aOutPointTop.X();
+        sal_Int32 nDy = aOutPointLeft.Y() - aOutPointTop.Y();
+        sal_Int32 nCount;
 
         // Werte fuer Schleife vorbereiten
         if(labs(nDx) > labs(nDy))
@@ -709,13 +709,13 @@ void Base3DDefault::Clipped3DLine(UINT32 nInd1, UINT32 nInd2)
             // Interpolatoren vorbereiten
             aIntXPosLeft.Load(aOutPointTop.X(), aOutPointLeft.X(), nCount);
             aIntXPosRight.Load(aOutPointTop.Y(), aOutPointLeft.Y(), nCount);
-            UINT32 nDepth;
+            sal_uInt32 nDepth;
 
             // PolygonOffset beachten
             if(GetPolygonOffset())
             {
-                double fDepthLeft = rEntity1.Point().Z();
-                double fDepthRight = rEntity2.Point().Z();
+                double fDepthLeft = rEntity1.Point().getZ();
+                double fDepthRight = rEntity2.Point().getZ();
 
                 if(fDepthLeft >= double(POLYGONOFFSET_VALUE))
                     fDepthLeft -= double(POLYGONOFFSET_VALUE);
@@ -731,20 +731,20 @@ void Base3DDefault::Clipped3DLine(UINT32 nInd1, UINT32 nInd2)
             }
             else
             {
-                aIntDepthLine.Load(rEntity1.Point().Z(), rEntity2.Point().Z(), nCount);
+                aIntDepthLine.Load(rEntity1.Point().getZ(), rEntity2.Point().getZ(), nCount);
             }
 
             // Texturkoordinateninterpolation?
             if(bTextureUsed)
             {
                 aIntTexSLine.Load(
-                    rEntity1.TexCoor().X() * fTexWidth,
-                    rEntity2.TexCoor().X() * fTexWidth,
+                    rEntity1.TexCoor().getX() * fTexWidth,
+                    rEntity2.TexCoor().getX() * fTexWidth,
                     nCount);
 
                 aIntTexTLine.Load(
-                    rEntity1.TexCoor().Y() * fTexHeight,
-                    rEntity2.TexCoor().Y() * fTexHeight,
+                    rEntity1.TexCoor().getY() * fTexHeight,
+                    rEntity2.TexCoor().getY() * fTexHeight,
                     nCount);
             }
 
@@ -753,8 +753,8 @@ void Base3DDefault::Clipped3DLine(UINT32 nInd1, UINT32 nInd2)
                 // Normalen und Geometrie interpolieren
                 if(GetTransformationSet())
                 {
-                    Vector3D aInvTrans = GetTransformationSet()->GetTranslate();
-                    Vector3D aInvScale = GetTransformationSet()->GetScale();
+                    basegfx::B3DVector aInvTrans(GetTransformationSet()->GetTranslate());
+                    basegfx::B3DVector aInvScale(GetTransformationSet()->GetScale());
 
                     // Tiefe und Normale vorbereiten
                     aIntVectorLine.Load(rEntity1.Normal(), rEntity2.Normal(), nCount);
@@ -772,12 +772,12 @@ void Base3DDefault::Clipped3DLine(UINT32 nInd1, UINT32 nInd2)
                             if(IsVisibleAndScissor(nDx, nDy, nDepth))
                             {
                                 Point aTmpPoint(nDx, nDy);
-                                Vector3D aPoint = Get3DCoor(aTmpPoint, nDepth);
+                                basegfx::B3DPoint aPoint = Get3DCoor(aTmpPoint, nDepth);
                                 aPoint -= aInvTrans;
                                 aPoint /= aInvScale;
-                                Vector3D aNormal;
+                                basegfx::B3DVector aNormal;
                                 aIntVectorLine.GetVector3DValue(aNormal);
-                                aNormal.Normalize();
+                                aNormal.normalize();
                                 Color aCol = SolveColorModel(GetMaterialObject(), aNormal, aPoint);
                                 GetActiveTexture()->ModifyColor(aCol,
                                     aIntTexSLine.GetDoubleValue(),
@@ -809,12 +809,12 @@ void Base3DDefault::Clipped3DLine(UINT32 nInd1, UINT32 nInd2)
                             if(IsVisibleAndScissor(nDx, nDy, nDepth))
                             {
                                 Point aTmpPoint(nDx, nDy);
-                                Vector3D aPoint = Get3DCoor(aTmpPoint, nDepth);
+                                basegfx::B3DPoint aPoint = Get3DCoor(aTmpPoint, nDepth);
                                 aPoint -= aInvTrans;
                                 aPoint /= aInvScale;
-                                Vector3D aNormal;
+                                basegfx::B3DVector aNormal;
                                 aIntVectorLine.GetVector3DValue(aNormal);
-                                aNormal.Normalize();
+                                aNormal.normalize();
                                 Color aCol = SolveColorModel(GetMaterialObject(), aNormal, aPoint);
                                 WritePixel(nDx, nDy, aCol, nDepth);
                             }
@@ -962,7 +962,7 @@ void Base3DDefault::Clipped3DLine(UINT32 nInd1, UINT32 nInd2)
 |*
 \************************************************************************/
 
-void Base3DDefault::Clipped3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
+void Base3DDefault::Clipped3DTriangle(sal_uInt32 nInd1, sal_uInt32 nInd2, sal_uInt32 nInd3)
 {
     B3dEntity& rEntity1 = aBuffers[nInd1];
     B3dEntity& rEntity2 = aBuffers[nInd2];
@@ -978,32 +978,32 @@ void Base3DDefault::Clipped3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
     if(bNormalsUsed)
     {
         // Vektoren normalisieren
-        rEntity1.Normal().Normalize();
-        rEntity2.Normal().Normalize();
-        rEntity3.Normal().Normalize();
+        rEntity1.Normal().normalize();
+        rEntity2.Normal().normalize();
+        rEntity3.Normal().normalize();
 
         if(GetShadeModel() != Base3DPhong)
         {
             // Normale berechnen, Farben auswerten
-            if(rEntity1.PlaneNormal().Z() < 0.0 && (GetLightGroup() && GetLightGroup()->GetModelTwoSide()))
+            if(rEntity1.PlaneNormal().getZ() < 0.0 && (GetLightGroup() && GetLightGroup()->GetModelTwoSide()))
                 eMode = Base3DMaterialBack;
 
             rEntity1.Color() = SolveColorModel(
                 GetMaterialObject(eMode),
                 rEntity1.Normal(),
-                rEntity1.Point().GetVector3D()
+                rEntity1.Point()
                 );
 
             rEntity2.Color() = SolveColorModel(
                 GetMaterialObject(eMode),
                 rEntity2.Normal(),
-                rEntity2.Point().GetVector3D()
+                rEntity2.Point()
                 );
 
             rEntity3.Color() = SolveColorModel(
                 GetMaterialObject(eMode),
                 rEntity3.Normal(),
-                rEntity3.Point().GetVector3D()
+                rEntity3.Point()
                 );
 
             // Die Normalen NICHT ungueltig machen, da die Entities
@@ -1019,8 +1019,7 @@ void Base3DDefault::Clipped3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
     rEntity3.ToDeviceCoor(GetTransformationSet());
 
     // Punkte ordnen. Oberster nach pEntTop
-    if(rEntity1.Point().Y() < rEntity2.Point().Y()
-        && rEntity1.Point().Y() < rEntity3.Point().Y())
+    if(rEntity1.Point().getY() < rEntity2.Point().getY() && rEntity1.Point().getY() < rEntity3.Point().getY())
     {
         // rEntity1 ist der oberste
         pEntTop = &rEntity1;
@@ -1031,7 +1030,7 @@ void Base3DDefault::Clipped3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
     }
     else
     {
-        if(rEntity2.Point().Y() < rEntity3.Point().Y())
+        if(rEntity2.Point().getY() < rEntity3.Point().getY())
         {
             // rEntity2 ist der oberste
             pEntTop = &rEntity2;
@@ -1076,9 +1075,9 @@ void Base3DDefault::Clipped3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
         }
 
         // Links und rechts ordnen
-        long nDeltaYLeft = aOutPointLeft.Y() - aOutPointTop.Y();
-        long nDeltaYRight = aOutPointRight.Y() - aOutPointTop.Y();
-        long nYLine;
+        sal_Int32 nDeltaYLeft = aOutPointLeft.Y() - aOutPointTop.Y();
+        sal_Int32 nDeltaYRight = aOutPointRight.Y() - aOutPointTop.Y();
+        sal_Int32 nYLine;
 
         if((aOutPointLeft.X() - aOutPointTop.X()) * nDeltaYRight
             - nDeltaYLeft * (aOutPointRight.X() - aOutPointTop.X()) > 0)
@@ -1103,10 +1102,10 @@ void Base3DDefault::Clipped3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
         nYLine = aOutPointTop.Y();
 
         aIntXPosLeft.Load(aOutPointTop.X(), aOutPointLeft.X(), nDeltaYLeft);
-        aIntDepthLeft.Load(pEntTop->Point().Z(), pEntLeft->Point().Z(), nDeltaYLeft);
+        aIntDepthLeft.Load(pEntTop->Point().getZ(), pEntLeft->Point().getZ(), nDeltaYLeft);
 
         aIntXPosRight.Load(aOutPointTop.X(), aOutPointRight.X(), nDeltaYRight);
-        aIntDepthRight.Load(pEntTop->Point().Z(), pEntRight->Point().Z(), nDeltaYRight);
+        aIntDepthRight.Load(pEntTop->Point().getZ(), pEntRight->Point().getZ(), nDeltaYRight);
 
         if(bTextureUsed)
         {
@@ -1114,53 +1113,53 @@ void Base3DDefault::Clipped3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
             if(mbPTCorrection)
             {
                 // Load real depth interpolators (if needed)
-                const double fRealDepthLeft(1.0 / GetTransformationSet()->ViewToEyeCoor(pEntLeft->Point().GetVector3D()).Z());
-                const double fRealDepthRight(1.0 / GetTransformationSet()->ViewToEyeCoor(pEntRight->Point().GetVector3D()).Z());
-                const double fRealDepthTop(1.0 / GetTransformationSet()->ViewToEyeCoor(pEntTop->Point().GetVector3D()).Z());
+                const double fRealDepthLeft(1.0 / GetTransformationSet()->ViewToEyeCoor(pEntLeft->Point()).getZ());
+                const double fRealDepthRight(1.0 / GetTransformationSet()->ViewToEyeCoor(pEntRight->Point()).getZ());
+                const double fRealDepthTop(1.0 / GetTransformationSet()->ViewToEyeCoor(pEntTop->Point()).getZ());
                 aRealDepthLeft.Load(fRealDepthTop, fRealDepthLeft, nDeltaYLeft);
                 aRealDepthRight.Load(fRealDepthTop, fRealDepthRight, nDeltaYRight);
 
                 // #96837#
                 aIntTexSLeft.Load(
-                    pEntTop->TexCoor().X() * fTexWidth * fRealDepthTop,
-                    pEntLeft->TexCoor().X() * fTexWidth * fRealDepthLeft,
+                    pEntTop->TexCoor().getX() * fTexWidth * fRealDepthTop,
+                    pEntLeft->TexCoor().getX() * fTexWidth * fRealDepthLeft,
                     nDeltaYLeft);
 
                 aIntTexTLeft.Load(
-                    pEntTop->TexCoor().Y() * fTexHeight * fRealDepthTop,
-                    pEntLeft->TexCoor().Y() * fTexHeight * fRealDepthLeft,
+                    pEntTop->TexCoor().getY() * fTexHeight * fRealDepthTop,
+                    pEntLeft->TexCoor().getY() * fTexHeight * fRealDepthLeft,
                     nDeltaYLeft);
 
                 aIntTexSRight.Load(
-                    pEntTop->TexCoor().X() * fTexWidth * fRealDepthTop,
-                    pEntRight->TexCoor().X() * fTexWidth * fRealDepthRight,
+                    pEntTop->TexCoor().getX() * fTexWidth * fRealDepthTop,
+                    pEntRight->TexCoor().getX() * fTexWidth * fRealDepthRight,
                     nDeltaYRight);
 
                 aIntTexTRight.Load(
-                    pEntTop->TexCoor().Y() * fTexHeight * fRealDepthTop,
-                    pEntRight->TexCoor().Y() * fTexHeight * fRealDepthRight,
+                    pEntTop->TexCoor().getY() * fTexHeight * fRealDepthTop,
+                    pEntRight->TexCoor().getY() * fTexHeight * fRealDepthRight,
                     nDeltaYRight);
             }
             else
             {
                 aIntTexSLeft.Load(
-                    pEntTop->TexCoor().X() * fTexWidth,
-                    pEntLeft->TexCoor().X() * fTexWidth,
+                    pEntTop->TexCoor().getX() * fTexWidth,
+                    pEntLeft->TexCoor().getX() * fTexWidth,
                     nDeltaYLeft);
 
                 aIntTexTLeft.Load(
-                    pEntTop->TexCoor().Y() * fTexHeight,
-                    pEntLeft->TexCoor().Y() * fTexHeight,
+                    pEntTop->TexCoor().getY() * fTexHeight,
+                    pEntLeft->TexCoor().getY() * fTexHeight,
                     nDeltaYLeft);
 
                 aIntTexSRight.Load(
-                    pEntTop->TexCoor().X() * fTexWidth,
-                    pEntRight->TexCoor().X() * fTexWidth,
+                    pEntTop->TexCoor().getX() * fTexWidth,
+                    pEntRight->TexCoor().getX() * fTexWidth,
                     nDeltaYRight);
 
                 aIntTexTRight.Load(
-                    pEntTop->TexCoor().Y() * fTexHeight,
-                    pEntRight->TexCoor().Y() * fTexHeight,
+                    pEntTop->TexCoor().getY() * fTexHeight,
+                    pEntRight->TexCoor().getY() * fTexHeight,
                     nDeltaYRight);
             }
         }
@@ -1428,7 +1427,7 @@ void Base3DDefault::Clipped3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
     }
 }
 
-void Base3DDefault::DrawLinePhongTexture(long nYPos, B3dMaterial& rMat)
+void Base3DDefault::DrawLinePhongTexture(sal_Int32 nYPos, B3dMaterial& rMat)
 {
     // Ausserhalb des Clipping-Bereichs?
     if(IsScissorRegionActive()
@@ -1437,8 +1436,8 @@ void Base3DDefault::DrawLinePhongTexture(long nYPos, B3dMaterial& rMat)
         return;
 
     // Von links bis rechts zeichnen
-    long nXLineStart = aIntXPosLeft.GetLongValue();
-    long nXLineDelta = aIntXPosRight.GetLongValue() - nXLineStart;
+    sal_Int32 nXLineStart = aIntXPosLeft.GetLongValue();
+    sal_Int32 nXLineDelta = aIntXPosRight.GetLongValue() - nXLineStart;
 
     if(nXLineDelta > 0)
     {
@@ -1448,9 +1447,9 @@ void Base3DDefault::DrawLinePhongTexture(long nYPos, B3dMaterial& rMat)
             || nXLineStart > aDefaultScissorRectangle.Right()))
             return;
 
-        Vector3D aVectorLeft;
+        basegfx::B3DVector aVectorLeft;
         aIntVectorLeft.GetVector3DValue(aVectorLeft);
-        Vector3D aVectorRight;
+        basegfx::B3DVector aVectorRight;
         aIntVectorRight.GetVector3DValue(aVectorRight);
         aIntVectorLine.Load(aVectorLeft, aVectorRight, nXLineDelta);
         aIntDepthLine.Load(aIntDepthLeft.GetDoubleValue(), aIntDepthRight.GetDoubleValue(), nXLineDelta);
@@ -1466,24 +1465,24 @@ void Base3DDefault::DrawLinePhongTexture(long nYPos, B3dMaterial& rMat)
 
         if(GetTransformationSet())
         {
-            Vector3D aInvTrans = GetTransformationSet()->GetTranslate();
-            Vector3D aInvScale = GetTransformationSet()->GetScale();
+            basegfx::B3DVector aInvTrans = GetTransformationSet()->GetTranslate();
+            basegfx::B3DVector aInvScale = GetTransformationSet()->GetScale();
 
             while(nXLineDelta--)
             {
                 // Werte vorbereiten
-                UINT32 nDepth = aIntDepthLine.GetUINT32Value();
+                sal_uInt32 nDepth = aIntDepthLine.GetUINT32Value();
 
                 // Punkt ausgeben
                 if(IsVisibleAndScissor(nXLineStart, nYPos, nDepth))
                 {
                     Point aTmpPoint(nXLineStart, nYPos);
-                    Vector3D aPoint = Get3DCoor(aTmpPoint, nDepth);
+                    basegfx::B3DPoint aPoint = Get3DCoor(aTmpPoint, nDepth);
                     aPoint -= aInvTrans;
                     aPoint /= aInvScale;
-                    Vector3D aNormal;
+                    basegfx::B3DVector aNormal;
                     aIntVectorLine.GetVector3DValue(aNormal);
-                    aNormal.Normalize();
+                    aNormal.normalize();
                     Color aCol = SolveColorModel(rMat, aNormal, aPoint);
 
                     // #96837#
@@ -1530,7 +1529,7 @@ void Base3DDefault::DrawLinePhongTexture(long nYPos, B3dMaterial& rMat)
     }
 }
 
-void Base3DDefault::DrawLinePhong(long nYPos, B3dMaterial& rMat)
+void Base3DDefault::DrawLinePhong(sal_Int32 nYPos, B3dMaterial& rMat)
 {
     // Ausserhalb des Clipping-Bereichs?
     if(IsScissorRegionActive()
@@ -1539,8 +1538,8 @@ void Base3DDefault::DrawLinePhong(long nYPos, B3dMaterial& rMat)
         return;
 
     // Von links bis rechts zeichnen
-    long nXLineStart = aIntXPosLeft.GetLongValue();
-    long nXLineDelta = aIntXPosRight.GetLongValue() - nXLineStart;
+    sal_Int32 nXLineStart = aIntXPosLeft.GetLongValue();
+    sal_Int32 nXLineDelta = aIntXPosRight.GetLongValue() - nXLineStart;
 
     if(nXLineDelta > 0)
     {
@@ -1550,32 +1549,32 @@ void Base3DDefault::DrawLinePhong(long nYPos, B3dMaterial& rMat)
             || nXLineStart > aDefaultScissorRectangle.Right()))
             return;
 
-        Vector3D aVectorLeft;
+        basegfx::B3DVector aVectorLeft;
         aIntVectorLeft.GetVector3DValue(aVectorLeft);
-        Vector3D aVectorRight;
+        basegfx::B3DVector aVectorRight;
         aIntVectorRight.GetVector3DValue(aVectorRight);
         aIntVectorLine.Load(aVectorLeft, aVectorRight, nXLineDelta);
         aIntDepthLine.Load(aIntDepthLeft.GetDoubleValue(), aIntDepthRight.GetDoubleValue(), nXLineDelta);
 
         if(GetTransformationSet())
         {
-            Vector3D aInvTrans = GetTransformationSet()->GetTranslate();
-            Vector3D aInvScale = GetTransformationSet()->GetScale();
+            basegfx::B3DVector aInvTrans = GetTransformationSet()->GetTranslate();
+            basegfx::B3DVector aInvScale = GetTransformationSet()->GetScale();
             while(nXLineDelta--)
             {
                 // Werte vorbereiten
-                UINT32 nDepth = aIntDepthLine.GetUINT32Value();
+                sal_uInt32 nDepth = aIntDepthLine.GetUINT32Value();
 
                 // Punkt ausgeben
                 if(IsVisibleAndScissor(nXLineStart, nYPos, nDepth))
                 {
                     Point aTmpPoint(nXLineStart, nYPos);
-                    Vector3D aPoint = Get3DCoor(aTmpPoint, nDepth);
+                    basegfx::B3DPoint aPoint = Get3DCoor(aTmpPoint, nDepth);
                     aPoint -= aInvTrans;
                     aPoint /= aInvScale;
-                    Vector3D aNormal;
+                    basegfx::B3DVector aNormal;
                     aIntVectorLine.GetVector3DValue(aNormal);
-                    aNormal.Normalize();
+                    aNormal.normalize();
                     Color aCol = SolveColorModel(rMat, aNormal, aPoint);
                     WritePixel(nXLineStart, nYPos, aCol, nDepth);
                 }
@@ -1594,7 +1593,7 @@ void Base3DDefault::DrawLinePhong(long nYPos, B3dMaterial& rMat)
     }
 }
 
-void Base3DDefault::DrawLineColorTexture(long nYPos)
+void Base3DDefault::DrawLineColorTexture(sal_Int32 nYPos)
 {
     // Ausserhalb des Clipping-Bereichs?
     if(IsScissorRegionActive()
@@ -1603,8 +1602,8 @@ void Base3DDefault::DrawLineColorTexture(long nYPos)
         return;
 
     // Von links bis rechts zeichnen
-    long nXLineStart = aIntXPosLeft.GetLongValue();
-    long nXLineDelta = aIntXPosRight.GetLongValue() - nXLineStart;
+    sal_Int32 nXLineStart = aIntXPosLeft.GetLongValue();
+    sal_Int32 nXLineDelta = aIntXPosRight.GetLongValue() - nXLineStart;
 
     if(nXLineDelta > 0)
     {
@@ -1628,7 +1627,7 @@ void Base3DDefault::DrawLineColorTexture(long nYPos)
         while(nXLineDelta--)
         {
             // Werte vorbereiten
-            UINT32 nDepth = aIntDepthLine.GetUINT32Value();
+            sal_uInt32 nDepth = aIntDepthLine.GetUINT32Value();
 
             // Punkt ausgeben
             if(IsVisibleAndScissor(nXLineStart, nYPos, nDepth))
@@ -1677,7 +1676,7 @@ void Base3DDefault::DrawLineColorTexture(long nYPos)
     }
 }
 
-void Base3DDefault::DrawLineColor(long nYPos)
+void Base3DDefault::DrawLineColor(sal_Int32 nYPos)
 {
     // Ausserhalb des Clipping-Bereichs?
     if(IsScissorRegionActive()
@@ -1686,8 +1685,8 @@ void Base3DDefault::DrawLineColor(long nYPos)
         return;
 
     // Von links bis rechts zeichnen
-    long nXLineStart = aIntXPosLeft.GetLongValue();
-    long nXLineDelta = aIntXPosRight.GetLongValue() - nXLineStart;
+    sal_Int32 nXLineStart = aIntXPosLeft.GetLongValue();
+    sal_Int32 nXLineDelta = aIntXPosRight.GetLongValue() - nXLineStart;
 
     if(nXLineDelta > 0)
     {
@@ -1703,7 +1702,7 @@ void Base3DDefault::DrawLineColor(long nYPos)
         while(nXLineDelta--)
         {
             // Werte vorbereiten
-            UINT32 nDepth = aIntDepthLine.GetUINT32Value();
+            sal_uInt32 nDepth = aIntDepthLine.GetUINT32Value();
 
             // Punkt ausgeben
             if(IsVisibleAndScissor(nXLineStart, nYPos, nDepth))
@@ -1722,7 +1721,7 @@ void Base3DDefault::DrawLineColor(long nYPos)
     }
 }
 
-void Base3DDefault::DrawLineTexture(long nYPos, Color& rCol)
+void Base3DDefault::DrawLineTexture(sal_Int32 nYPos, Color& rCol)
 {
     // Ausserhalb des Clipping-Bereichs?
     if(IsScissorRegionActive()
@@ -1731,8 +1730,8 @@ void Base3DDefault::DrawLineTexture(long nYPos, Color& rCol)
         return;
 
     // Von links bis rechts zeichnen
-    long nXLineStart = aIntXPosLeft.GetLongValue();
-    long nXLineDelta = aIntXPosRight.GetLongValue() - nXLineStart;
+    sal_Int32 nXLineStart = aIntXPosLeft.GetLongValue();
+    sal_Int32 nXLineDelta = aIntXPosRight.GetLongValue() - nXLineStart;
 
     if(nXLineDelta > 0)
     {
@@ -1755,7 +1754,7 @@ void Base3DDefault::DrawLineTexture(long nYPos, Color& rCol)
         while(nXLineDelta--)
         {
             // Werte vorbereiten
-            UINT32 nDepth = aIntDepthLine.GetUINT32Value();
+            sal_uInt32 nDepth = aIntDepthLine.GetUINT32Value();
 
             // Punkt ausgeben
             if(IsVisibleAndScissor(nXLineStart, nYPos, nDepth))
@@ -1804,7 +1803,7 @@ void Base3DDefault::DrawLineTexture(long nYPos, Color& rCol)
     }
 }
 
-void Base3DDefault::DrawLine(long nYPos, Color& rCol)
+void Base3DDefault::DrawLine(sal_Int32 nYPos, Color& rCol)
 {
     // Ausserhalb des Clipping-Bereichs?
     if(IsScissorRegionActive()
@@ -1813,8 +1812,8 @@ void Base3DDefault::DrawLine(long nYPos, Color& rCol)
         return;
 
     // Von links bis rechts zeichnen
-    long nXLineStart = aIntXPosLeft.GetLongValue();
-    long nXLineDelta = aIntXPosRight.GetLongValue() - nXLineStart;
+    sal_Int32 nXLineStart = aIntXPosLeft.GetLongValue();
+    sal_Int32 nXLineDelta = aIntXPosRight.GetLongValue() - nXLineStart;
 
     if(nXLineDelta > 0)
     {
@@ -1829,7 +1828,7 @@ void Base3DDefault::DrawLine(long nYPos, Color& rCol)
         while(nXLineDelta--)
         {
             // Werte vorbereiten
-            UINT32 nDepth = aIntDepthLine.GetUINT32Value();
+            sal_uInt32 nDepth = aIntDepthLine.GetUINT32Value();
 
             // Punkt ausgeben
             if(IsVisibleAndScissor(nXLineStart, nYPos, nDepth))
@@ -1847,89 +1846,89 @@ void Base3DDefault::DrawLine(long nYPos, Color& rCol)
     }
 }
 
-void Base3DDefault::LoadLeftTexture(long nSize)
+void Base3DDefault::LoadLeftTexture(sal_Int32 nSize)
 {
     aIntXPosLeft.Load(aOutPointLeft.X(), aOutPointRight.X(), nSize);
-    aIntDepthLeft.Load(pEntLeft->Point().Z(), pEntRight->Point().Z(), nSize);
+    aIntDepthLeft.Load(pEntLeft->Point().getZ(), pEntRight->Point().getZ(), nSize);
 
     // #96837#
     if(mbPTCorrection)
     {
-        const double fRealDepthLeft = 1.0 / GetTransformationSet()->ViewToEyeCoor(pEntLeft->Point().GetVector3D()).Z();
-        const double fRealDepthRight = 1.0 / GetTransformationSet()->ViewToEyeCoor(pEntRight->Point().GetVector3D()).Z();
+        const double fRealDepthLeft = 1.0 / GetTransformationSet()->ViewToEyeCoor(pEntLeft->Point()).getZ();
+        const double fRealDepthRight = 1.0 / GetTransformationSet()->ViewToEyeCoor(pEntRight->Point()).getZ();
         aRealDepthLeft.Load(fRealDepthLeft, fRealDepthRight, nSize);
 
         aIntTexSLeft.Load(
-            pEntLeft->TexCoor().X() * fTexWidth * fRealDepthLeft,
-            pEntRight->TexCoor().X() * fTexWidth * fRealDepthRight,
+            pEntLeft->TexCoor().getX() * fTexWidth * fRealDepthLeft,
+            pEntRight->TexCoor().getX() * fTexWidth * fRealDepthRight,
             nSize);
 
         aIntTexTLeft.Load(
-            pEntLeft->TexCoor().Y() * fTexHeight * fRealDepthLeft,
-            pEntRight->TexCoor().Y() * fTexHeight * fRealDepthRight,
+            pEntLeft->TexCoor().getY() * fTexHeight * fRealDepthLeft,
+            pEntRight->TexCoor().getY() * fTexHeight * fRealDepthRight,
             nSize);
     }
     else
     {
         aIntTexSLeft.Load(
-            pEntLeft->TexCoor().X() * fTexWidth,
-            pEntRight->TexCoor().X() * fTexWidth,
+            pEntLeft->TexCoor().getX() * fTexWidth,
+            pEntRight->TexCoor().getX() * fTexWidth,
             nSize);
 
         aIntTexTLeft.Load(
-            pEntLeft->TexCoor().Y() * fTexHeight,
-            pEntRight->TexCoor().Y() * fTexHeight,
+            pEntLeft->TexCoor().getY() * fTexHeight,
+            pEntRight->TexCoor().getY() * fTexHeight,
             nSize);
     }
 }
 
-void Base3DDefault::LoadLeft(long nSize)
+void Base3DDefault::LoadLeft(sal_Int32 nSize)
 {
     aIntXPosLeft.Load(aOutPointLeft.X(), aOutPointRight.X(), nSize);
-    aIntDepthLeft.Load(pEntLeft->Point().Z(), pEntRight->Point().Z(), nSize);
+    aIntDepthLeft.Load(pEntLeft->Point().getZ(), pEntRight->Point().getZ(), nSize);
 }
 
-void Base3DDefault::LoadRightTexture(long nSize)
+void Base3DDefault::LoadRightTexture(sal_Int32 nSize)
 {
     aIntXPosRight.Load(aOutPointRight.X(), aOutPointLeft.X(), nSize);
-    aIntDepthRight.Load(pEntRight->Point().Z(), pEntLeft->Point().Z(), nSize);
+    aIntDepthRight.Load(pEntRight->Point().getZ(), pEntLeft->Point().getZ(), nSize);
 
     // #96837#
     if(mbPTCorrection)
     {
-        const double fRealDepthLeft = 1.0 / GetTransformationSet()->ViewToEyeCoor(pEntLeft->Point().GetVector3D()).Z();
-        const double fRealDepthRight = 1.0 / GetTransformationSet()->ViewToEyeCoor(pEntRight->Point().GetVector3D()).Z();
+        const double fRealDepthLeft = 1.0 / GetTransformationSet()->ViewToEyeCoor(pEntLeft->Point()).getZ();
+        const double fRealDepthRight = 1.0 / GetTransformationSet()->ViewToEyeCoor(pEntRight->Point()).getZ();
         aRealDepthRight.Load(fRealDepthRight, fRealDepthLeft, nSize);
 
         // #96837#
         aIntTexSRight.Load(
-            pEntRight->TexCoor().X() * fTexWidth * fRealDepthRight,
-            pEntLeft->TexCoor().X() * fTexWidth * fRealDepthLeft,
+            pEntRight->TexCoor().getX() * fTexWidth * fRealDepthRight,
+            pEntLeft->TexCoor().getX() * fTexWidth * fRealDepthLeft,
             nSize);
 
         aIntTexTRight.Load(
-            pEntRight->TexCoor().Y() * fTexHeight * fRealDepthRight,
-            pEntLeft->TexCoor().Y() * fTexHeight * fRealDepthLeft,
+            pEntRight->TexCoor().getY() * fTexHeight * fRealDepthRight,
+            pEntLeft->TexCoor().getY() * fTexHeight * fRealDepthLeft,
             nSize);
     }
     else
     {
         aIntTexSRight.Load(
-            pEntRight->TexCoor().X() * fTexWidth,
-            pEntLeft->TexCoor().X() * fTexWidth,
+            pEntRight->TexCoor().getX() * fTexWidth,
+            pEntLeft->TexCoor().getX() * fTexWidth,
             nSize);
 
         aIntTexTRight.Load(
-            pEntRight->TexCoor().Y() * fTexHeight,
-            pEntLeft->TexCoor().Y() * fTexHeight,
+            pEntRight->TexCoor().getY() * fTexHeight,
+            pEntLeft->TexCoor().getY() * fTexHeight,
             nSize);
     }
 }
 
-void Base3DDefault::LoadRight(long nSize)
+void Base3DDefault::LoadRight(sal_Int32 nSize)
 {
     aIntXPosRight.Load(aOutPointRight.X(), aOutPointLeft.X(), nSize);
-    aIntDepthRight.Load(pEntRight->Point().Z(), pEntLeft->Point().Z(), nSize);
+    aIntDepthRight.Load(pEntRight->Point().getZ(), pEntLeft->Point().getZ(), nSize);
 }
 
 void Base3DDefault::NextStepRightTexture()
