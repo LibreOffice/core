@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPropertyTable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:10:37 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:53:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,10 @@
 
 #include "unoapi.hxx"
 #include "unoprnms.hxx"
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -419,7 +423,7 @@ Any SvxUnoXLineEndTable::getAny( const XPropertyEntry* pEntry ) const throw()
 
     Any aAny;
     drawing::PolyPolygonBezierCoords aBezier;
-    SvxConvertXPolygonToPolyPolygonBezier( ((XLineEndEntry*)pEntry)->GetLineEnd(), aBezier );
+    SvxConvertB2DPolyPolygonToPolyPolygonBezier( ((XLineEndEntry*)pEntry)->GetLineEnd(), aBezier );
     aAny <<= aBezier;
     return aAny;
 }
@@ -430,17 +434,16 @@ XPropertyEntry* SvxUnoXLineEndTable::getEntry( const OUString& rName, const Any&
     if( !rAny.getValue() || rAny.getValueType() != ::getCppuType((const drawing::PolyPolygonBezierCoords*)0) )
         return NULL;
 
-    XPolygon aPolygon;
+    basegfx::B2DPolyPolygon aPolyPolygon;
     drawing::PolyPolygonBezierCoords* pCoords = (drawing::PolyPolygonBezierCoords*)rAny.getValue();
     if( pCoords->Coordinates.getLength() > 0 )
-        SvxConvertPolyPolygonBezierToXPolygon( pCoords, aPolygon );
+        aPolyPolygon = SvxConvertPolyPolygonBezierToB2DPolyPolygon( pCoords );
 
     // #86265# make sure polygon is closed
-    if(aPolygon.GetPointCount() > 1 && aPolygon[0] != aPolygon[aPolygon.GetPointCount() - 1])
-        aPolygon[aPolygon.GetPointCount()] = aPolygon[0];
+    aPolyPolygon.setClosed(true);
 
     const String aName( rName );
-    return new XLineEndEntry( aPolygon, aName );
+    return new XLineEndEntry( aPolyPolygon, aName );
 }
 
 // XElementAccess
