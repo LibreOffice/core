@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellManager.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:34:07 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:40:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1426,7 +1426,7 @@ void ViewShellManager::Implementation::Deactivate (SfxShell* pShell)
         sd::View* pView = pViewShell->GetView();
         if (pView!=NULL && pView->IsTextEdit())
         {
-            pView->EndTextEdit();
+            pView->SdrEndTextEdit();
             pView->UnmarkAll();
             pViewShell->GetViewFrame()->GetDispatcher()->Execute(
                 SID_OBJECT_SELECT,
