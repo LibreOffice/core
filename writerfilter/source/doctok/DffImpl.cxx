@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DffImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:49:42 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-14 13:23:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -361,10 +361,11 @@ WW8BinaryObjReference::Pointer_t DffBSE::get_binary()
     {
         WW8FBSE aFBSE(this, 0x8);
 
-        if (aFBSE.get_foDelay() > 0 && getDocument() != NULL)
+        sal_Int32 nOffset = sal::static_int_cast<sal_Int32>(aFBSE.get_foDelay());
+        if (nOffset > 0 && getDocument() != NULL)
         {
             WW8StructBase aStructBase(*getDocument()->getDocStream(),
-                                      aFBSE.get_foDelay(), 0x8);
+                                      nOffset, 0x8);
 
             sal_uInt32 nCount = aStructBase.getU32(0x4) - 0x11;
 
