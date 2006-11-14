@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:40:46 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:44:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,6 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         SetRuler( pFrameView->HasRuler() );
         SetGridCoarse( pFrameView->GetGridCoarse() );
         SetGridFine( pFrameView->GetGridFine() );
-        SetSnapGrid( pFrameView->GetSnapGrid() );
         SetSnapGridWidth(pFrameView->GetSnapGridWidthX(), pFrameView->GetSnapGridWidthY());
         SetGridVisible( pFrameView->IsGridVisible() );
         SetGridFront( pFrameView->IsGridFront() );
@@ -256,7 +255,6 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         aVisibleLayers.SetAll();
         aPrintableLayers.SetAll();
         SetGridCoarse( Size( 1000, 1000 ) );
-        SetSnapGrid( Size( 1000, 1000 ) );
         SetSnapGridWidth(Fraction(1000, 1), Fraction(1000, 1));
         SetActiveLayer( String( SdResId(STR_LAYER_LAYOUT) ) );
         bNoColors = TRUE;
@@ -343,242 +341,6 @@ void FrameView::Disconnect()
     }
 }
 
-
-/*************************************************************************
-|*
-|* Inserter fuer SvStream zum Speichern
-|*
-\************************************************************************/
-
-//BFS02SvStream& operator << (SvStream& rOut, const FrameView& rView)
-//BFS02{
-//BFS02 ULONG nULTemp;
-//BFS02
-//BFS02 // #95895# translate view-layer name to standard-ASCII
-//BFS02 // like in MakeUniqueLayerNames()
-//BFS02 String aLayerName(rView.GetActiveLayer());
-//BFS02
-//BFS02 String aLayerLayout(SdResId(STR_LAYER_LAYOUT));
-//BFS02 String aLayerBckgrnd(SdResId(STR_LAYER_BCKGRND));
-//BFS02 String aLayerBckgrndObj(SdResId(STR_LAYER_BCKGRNDOBJ));
-//BFS02 String aLayerControls(SdResId(STR_LAYER_CONTROLS));
-//BFS02 String aLayerMeasurelines(SdResId(STR_LAYER_MEASURELINES));
-//BFS02
-//BFS02 sal_Bool bActiveLayerWasChanged(sal_False);
-//BFS02 String aOldLayerName(rView.GetActiveLayer());
-//BFS02
-//BFS02 if (aLayerName == aLayerLayout)
-//BFS02 {
-//BFS02     ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_LAYOUT" )));
-//BFS02     bActiveLayerWasChanged = sal_True;
-//BFS02 }
-//BFS02 else if (aLayerName == aLayerBckgrnd)
-//BFS02 {
-//BFS02     ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BCKGRND" )));
-//BFS02     bActiveLayerWasChanged = sal_True;
-//BFS02 }
-//BFS02 else if (aLayerName == aLayerBckgrndObj)
-//BFS02 {
-//BFS02     ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BACKGRNDOBJ" )));
-//BFS02     bActiveLayerWasChanged = sal_True;
-//BFS02 }
-//BFS02 else if (aLayerName == aLayerControls)
-//BFS02 {
-//BFS02     ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_CONTROLS" )));
-//BFS02     bActiveLayerWasChanged = sal_True;
-//BFS02 }
-//BFS02 else if (aLayerName == aLayerMeasurelines)
-//BFS02 {
-//BFS02     ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_MEASURELINES" )));
-//BFS02     bActiveLayerWasChanged = sal_True;
-//BFS02 }
-//BFS02
-//BFS02 // stream out the view
-//BFS02 rOut << (SdrView&) rView;
-//BFS02
-//BFS02 // #95895# when active layer name was changed for export, change it back to original here
-//BFS02 if(bActiveLayerWasChanged)
-//BFS02 {
-//BFS02     ((FrameView&)rView).SetActiveLayer(aOldLayerName);
-//BFS02 }
-//BFS02
-//BFS02 // Letzter Parameter ist die aktuelle Versionsnummer des Codes
-//BFS02 SdIOCompat aIO(rOut, STREAM_WRITE, 11);
-//BFS02
-//BFS02 rOut << rView.bRuler;
-//BFS02 rOut << rView.aVisibleLayers;
-//BFS02 rOut << rView.aLockedLayers;
-//BFS02 rOut << rView.aPrintableLayers;
-//BFS02 rOut << rView.aStandardHelpLines;
-//BFS02 rOut << rView.aNotesHelpLines;
-//BFS02 rOut << rView.aHandoutHelpLines;
-//BFS02 rOut << rView.bNoColors;
-//BFS02 rOut << rView.bNoAttribs;
-//BFS02 rOut << rView.aVisArea;
-//BFS02 nULTemp = (ULONG) rView.ePageKind;            rOut << nULTemp;
-//BFS02 rOut << rView.nSelectedPage;
-//BFS02 nULTemp = (ULONG) rView.eStandardEditMode;    rOut << nULTemp;
-//BFS02 rOut << rView.bLayerMode;
-//BFS02 rOut << rView.bQuickEdit;
-//BFS02 rOut << rView.bDragWithCopy;
-//BFS02 rOut << (UINT16)rView.nSlidesPerRow;
-//BFS02
-//BFS02 rOut << rView.bBigHandles;
-//BFS02 rOut << rView.bDoubleClickTextEdit;
-//BFS02 rOut << rView.bClickChangeRotation;
-//BFS02
-//BFS02 nULTemp = (ULONG) rView.eNotesEditMode;       rOut << nULTemp;
-//BFS02 nULTemp = (ULONG) rView.eHandoutEditMode;     rOut << nULTemp;
-//BFS02
-//BFS02 rOut << rView.nDrawMode;
-//BFS02 rOut << rView.nPreviewDrawMode;
-//BFS02
-//BFS02 rOut << rView.bShowPreviewInPageMode;
-//BFS02 rOut << rView.bShowPreviewInMasterPageMode;
-//BFS02 rOut << rView.bShowPreviewInOutlineMode;
-//BFS02
-//BFS02 return rOut;
-//BFS02}
-
-/*************************************************************************
-|*
-|* Extractor fuer SvStream zum Laden
-|*
-\************************************************************************/
-
-//BFS02SvStream& operator >> (SvStream& rIn, FrameView& rView)
-//BFS02{
-//BFS02 rIn >> (SdrView&) rView;
-//BFS02
-//BFS02 SdIOCompat aIO(rIn, STREAM_READ);
-//BFS02
-//BFS02 rIn >> rView.bRuler;
-//BFS02 rIn >> rView.aVisibleLayers;
-//BFS02 rIn >> rView.aLockedLayers;
-//BFS02 rIn >> rView.aPrintableLayers;
-//BFS02 rIn >> rView.aStandardHelpLines;
-//BFS02
-//BFS02 if (aIO.GetVersion() >= 1)
-//BFS02 {
-//BFS02     // Daten der Versionen >= 1 einlesen
-//BFS02     rIn >> rView.aNotesHelpLines;
-//BFS02     rIn >> rView.aHandoutHelpLines;
-//BFS02 }
-//BFS02
-//BFS02 if (aIO.GetVersion() >= 2)
-//BFS02 {
-//BFS02     // Daten der Versionen >= 2 einlesen
-//BFS02     rIn >> rView.bNoColors;
-//BFS02     rIn >> rView.bNoAttribs;
-//BFS02 }
-//BFS02
-//BFS02 if (aIO.GetVersion() >= 3)
-//BFS02 {
-//BFS02     ULONG nULTemp;
-//BFS02     rIn >> rView.aVisArea;
-//BFS02     rIn >> nULTemp;          rView.ePageKind = (PageKind) nULTemp;
-//BFS02     rIn >> rView.nSelectedPage;
-//BFS02     rIn >> nULTemp;          rView.eStandardEditMode = (EditMode) nULTemp;
-//BFS02     rView.eNotesEditMode   = rView.eStandardEditMode;
-//BFS02     rView.eHandoutEditMode = rView.eStandardEditMode;
-//BFS02     rIn >> rView.bLayerMode;
-//BFS02 }
-//BFS02
-//BFS02 if (aIO.GetVersion() >= 4)
-//BFS02 {
-//BFS02     rIn >> rView.bQuickEdit;
-//BFS02 }
-//BFS02
-//BFS02 if (aIO.GetVersion() >= 5)
-//BFS02 {
-//BFS02     rIn >> rView.bDragWithCopy;
-//BFS02 }
-//BFS02
-//BFS02 if (aIO.GetVersion() >= 6)
-//BFS02 {
-//BFS02     UINT16 nTemp;
-//BFS02     rIn >> nTemp; rView.nSlidesPerRow = (USHORT)nTemp;
-//BFS02 }
-//BFS02
-//BFS02 if (aIO.GetVersion() >= 7)
-//BFS02 {
-//BFS02     rIn >> rView.bBigHandles;
-//BFS02     rIn >> rView.bDoubleClickTextEdit;
-//BFS02     rIn >> rView.bClickChangeRotation;
-//BFS02 }
-//BFS02
-//BFS02 if (aIO.GetVersion() >= 8)
-//BFS02 {
-//BFS02     ULONG nULTemp;
-//BFS02     rIn >> nULTemp; rView.eNotesEditMode   = (EditMode) nULTemp;
-//BFS02     rIn >> nULTemp; rView.eHandoutEditMode = (EditMode) nULTemp;
-//BFS02 }
-//BFS02
-//BFS02 if (aIO.GetVersion() >= 9)
-//BFS02 {
-//BFS02     rIn >> rView.nDrawMode;
-//BFS02     rIn >> rView.nPreviewDrawMode;
-//BFS02 }
-//BFS02
-//BFS02 if (aIO.GetVersion() >= 10)
-//BFS02 {
-//BFS02     rIn >> rView.bShowPreviewInPageMode;
-//BFS02     rIn >> rView.bShowPreviewInMasterPageMode;
-//BFS02 }
-//BFS02
-//BFS02 if (aIO.GetVersion() >= 11)
-//BFS02 {
-//BFS02     rIn >> rView.bShowPreviewInOutlineMode;
-//BFS02 }
-//BFS02
-//BFS02 // Falls die UniqueLayerNames vorhanden sind, werden die Default-Namen
-//BFS02 // verwendet
-//BFS02 String aLayerName(rView.GetActiveLayer());
-//BFS02
-//BFS02 if (aLayerName == String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_LAYOUT" )))
-//BFS02 {
-//BFS02     rView.SetActiveLayer(String(SdResId(STR_LAYER_LAYOUT)));
-//BFS02 }
-//BFS02 else if (aLayerName == String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BCKGRND" )))
-//BFS02 {
-//BFS02     rView.SetActiveLayer(String(SdResId(STR_LAYER_BCKGRND)));
-//BFS02 }
-//BFS02 else if (aLayerName == String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BACKGRNDOBJ" )))
-//BFS02 {
-//BFS02     rView.SetActiveLayer(String(SdResId(STR_LAYER_BCKGRNDOBJ)));
-//BFS02 }
-//BFS02 else if (aLayerName == String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_CONTROLS" )))
-//BFS02 {
-//BFS02     rView.SetActiveLayer(String(SdResId(STR_LAYER_CONTROLS)));
-//BFS02 }
-//BFS02 else if (aLayerName == String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_MEASURELINES" )))
-//BFS02 {
-//BFS02     rView.SetActiveLayer(String(SdResId(STR_LAYER_MEASURELINES)));
-//BFS02 }
-//BFS02 else
-//BFS02 {
-//BFS02     // #i12131#
-//BFS02     // If layer name was not translated this may be an old layer name in
-//BFS02     // translated speech version. To avoid errors (see bugid) this needs to be
-//BFS02     // set to a useful default. Best default-layout is 'Layout'.
-//BFS02     rView.SetActiveLayer(String(SdResId(STR_LAYER_LAYOUT)));
-//BFS02 }
-//BFS02
-//BFS02 if (rView.GetModel())
-//BFS02 {
-//BFS02     USHORT nMaxPages = ((SdDrawDocument* )rView.GetModel())->
-//BFS02                                   GetSdPageCount(rView.ePageKind);
-//BFS02
-//BFS02     if (rView.nSelectedPage >= nMaxPages)
-//BFS02     {
-//BFS02         // Ggf. auf die letzte Seite selektieren
-//BFS02         rView.nSelectedPage = nMaxPages - 1;
-//BFS02     }
-//BFS02 }
-//BFS02
-//BFS02 return rIn;
-//BFS02}
-
 /*************************************************************************
 |*
 |* Update mit Daten der SdOptions
@@ -623,7 +385,6 @@ void FrameView::Update(SdOptions* pOptions)
 
         SetGridCoarse( Size( pOptions->GetFldDrawX(), pOptions->GetFldDrawY() ) );
         SetGridFine( Size( pOptions->GetFldDivisionX(), pOptions->GetFldDivisionY() ) );
-//      SetSnapGrid( Size( pOptions->GetFldSnapX(), pOptions->GetFldSnapY() ) );
         Fraction aFractX(pOptions->GetFldDrawX(), pOptions->GetFldDrawX() / ( pOptions->GetFldDivisionX() ? pOptions->GetFldDivisionX() : 1 ));
         Fraction aFractY(pOptions->GetFldDrawY(), pOptions->GetFldDrawY() / ( pOptions->GetFldDivisionY() ? pOptions->GetFldDivisionY() : 1 ));
         SetSnapGridWidth(aFractX, aFractY);
@@ -850,8 +611,6 @@ void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com:
     aUserData.addValue( sUNO_View_GridCoarseHeight, makeAny( (sal_Int32)GetGridCoarse().Height() ) );
     aUserData.addValue( sUNO_View_GridFineWidth, makeAny( (sal_Int32)GetGridFine().Width() ) );
     aUserData.addValue( sUNO_View_GridFineHeight, makeAny( (sal_Int32)GetGridFine().Height() ) );
-    aUserData.addValue( sUNO_View_GridSnapWidth, makeAny( (sal_Int32)GetSnapGrid().Width() ) );
-    aUserData.addValue( sUNO_View_GridSnapHeight, makeAny( (sal_Int32)GetSnapGrid().Height() ) );
     aUserData.addValue( sUNO_View_GridSnapWidthXNumerator, makeAny( (sal_Int32)GetSnapGridWidthX().GetNumerator() ) );
     aUserData.addValue( sUNO_View_GridSnapWidthXDenominator, makeAny( (sal_Int32)GetSnapGridWidthX().GetDenominator() ) );
     aUserData.addValue( sUNO_View_GridSnapWidthYNumerator, makeAny( (sal_Int32)GetSnapGridWidthY().GetNumerator() ) );
@@ -1345,22 +1104,6 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                 {
                     const Size aCoarse( GetGridFine().Width(), nInt32 );
                     SetGridFine( aCoarse );
-                }
-            }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_GridSnapWidth ) ) )
-            {
-                if( pValue->Value >>= nInt32 )
-                {
-                    const Size aCoarse( nInt32, GetSnapGrid().Height() );
-                    SetSnapGrid( aCoarse );
-                }
-            }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_GridSnapHeight ) ) )
-            {
-                if( pValue->Value >>= nInt32 )
-                {
-                    const Size aCoarse( GetSnapGrid().Width(), nInt32 );
-                    SetSnapGrid( aCoarse );
                 }
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsAngleSnapEnabled ) ) )
