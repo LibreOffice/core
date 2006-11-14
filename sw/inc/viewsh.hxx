@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:38:24 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:07:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,7 @@ class SwTxtFrm;
 // <--
 
 struct SwAccessibilityOptions;
+class Region;
 
 //JP 19.07.98: - Bug 52312
 // define fuer Flags, die im CTOR oder den darunter liegenden Schichten
@@ -244,6 +245,13 @@ public:
     void SetNoNextScroll();
 
     void InvalidateWindows( const SwRect &rRect );
+
+    // #i68597# paint pre- and post-processing
+    void DLPrePaint(const Region& rRegion);
+    void DLPostPaint(const Region& rRegion);
+    void DLPreOutsidePaint(const Region& rRegion);
+    void DLPostOutsidePaint(const Region& rRegion);
+
     virtual void Paint(const Rectangle &rRect);
     sal_Bool IsPaintInProgress() const { return bPaintInProgress; }
 
