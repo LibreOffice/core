@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfmtf.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:49:57 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:41:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,10 @@
 
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
 #endif
 
 #ifndef _SV_SALBTYPE_HXX
@@ -457,7 +461,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction& rAct)
 
     if ( bCreateLineObject )
     {
-        SdrPathObj* pPath = new SdrPathObj( OBJ_LINE, XPolyPolygon( aXP ) );
+        SdrPathObj* pPath = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aXP.getB2DPolygon()));
         SetAttributes( pPath );
         InsertObj( pPath, sal_False );
     }
@@ -532,10 +536,10 @@ sal_Bool ImpSdrGDIMetaFileImport::CheckLastLineMerge(const XPolygon& rSrcPoly)
         SdrPathObj* pLastPoly=PTR_CAST(SdrPathObj,pTmpObj);
         if ( pLastPoly )
         {
-            if (pLastPoly->GetPathPoly().Count()==1)
+            if(1L == pLastPoly->GetPathPoly().count())
             {
                 sal_Bool bOk = sal_False;
-                XPolygon aDstPoly(pLastPoly->GetPathPoly()[0]);
+                XPolygon aDstPoly(pLastPoly->GetPathPoly().getB2DPolygon(0L));
                 sal_uInt16 i, nMaxDstPnt=aDstPoly.GetPointCount();
                 if (nMaxDstPnt!=0)
                 {
@@ -572,7 +576,7 @@ sal_Bool ImpSdrGDIMetaFileImport::CheckLastLineMerge(const XPolygon& rSrcPoly)
                 }
                 if ( bOk )
                 {
-                    pLastPoly->NbcSetPathPoly(XPolyPolygon(aDstPoly));
+                    pLastPoly->NbcSetPathPoly(basegfx::B2DPolyPolygon(aDstPoly.getB2DPolygon()));
                 }
                 return bOk;
             }
@@ -589,7 +593,7 @@ sal_Bool ImpSdrGDIMetaFileImport::CheckLastPolyLineAndFillMerge( const XPolyPoly
         SdrPathObj* pLastPoly=PTR_CAST(SdrPathObj,pTmpObj);
         if ( pLastPoly )
         {
-            if (pLastPoly->GetPathPoly()==rPoly)
+            if (pLastPoly->GetPathPoly() == rPoly.getB2DPolyPolygon())
             {
                 SetAttributes(NULL);
                 if (!bNoLine && bNoFill)
@@ -623,7 +627,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolyLineAction& rAct )
 
     if ( bCreateLineObject )
     {
-        SdrPathObj* pPath = new SdrPathObj( OBJ_PLIN, XPolyPolygon( aXP ) );
+        SdrPathObj* pPath = new SdrPathObj(OBJ_PLIN, basegfx::B2DPolyPolygon(aXP.getB2DPolygon()));
         SetAttributes( pPath );
         InsertObj( pPath, sal_False );
     }
@@ -639,7 +643,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolygonAction& rAct )
 
         if ( !bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge( XPolyPolygon( aXP ) ) )
         {
-            SdrPathObj* pPath = new SdrPathObj( OBJ_POLY, XPolyPolygon( aXP ) );
+            SdrPathObj* pPath = new SdrPathObj(OBJ_POLY, basegfx::B2DPolyPolygon(aXP.getB2DPolygon()));
             SetAttributes( pPath );
             InsertObj( pPath, sal_False );
         }
@@ -663,7 +667,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaPolyPolygonAction& rAct)
         aXPP.Translate( aOfs );
         if ( !bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge( XPolyPolygon( aXPP ) ) )
         {
-            SdrPathObj* pPath = new SdrPathObj( OBJ_POLY, aXPP );
+            SdrPathObj* pPath = new SdrPathObj( OBJ_POLY, aXPP.getB2DPolyPolygon() );
             SetAttributes( pPath );
             InsertObj( pPath, sal_False );
         }
@@ -817,7 +821,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction& rAct )
         if ( !bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge( XPolyPolygon( aXPP ) ) )
         {
             const Hatch&    rHatch = rAct.GetHatch();
-            SdrPathObj*     pPath = new SdrPathObj( OBJ_POLY, aXPP );
+            SdrPathObj*     pPath = new SdrPathObj( OBJ_POLY, aXPP.getB2DPolyPolygon() );
             SfxItemSet      aHatchAttr( pModel->GetItemPool(),
                                         XATTR_FILLSTYLE, XATTR_FILLSTYLE,
                                         XATTR_FILLHATCH, XATTR_FILLHATCH, 0 );
@@ -907,7 +911,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
                 if (!bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(XPolyPolygon(aXPP)))
                 {
                     const Gradient& rGrad = pAct->GetGradient();
-                    SdrPathObj*     pPath=new SdrPathObj(OBJ_POLY,aXPP);
+                    SdrPathObj*     pPath=new SdrPathObj(OBJ_POLY,aXPP.getB2DPolyPolygon());
                     SfxItemSet      aGradAttr( pModel->GetItemPool(),
                                                XATTR_FILLSTYLE, XATTR_FILLSTYLE,
                                                XATTR_FILLGRADIENT, XATTR_FILLGRADIENT, 0 );
