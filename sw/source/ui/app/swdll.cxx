@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdll.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:35:38 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:15:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,9 +137,6 @@ void SwDLL::Init()
 
     // ::com::sun::star::form::component::Form-Objekt-Factory eintragen
     FmFormObjFactory();
-
-    // factory for dummy import of old si-controls in 3.1 documents
-//BFS02    SiImportFactory();
 
     SdrObjFactory::InsertMakeObjectHdl( LINK( &aSwObjectFactory, SwObjectFactory, MakeObject ) );
 
