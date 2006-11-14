@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgm1.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:07:16 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:39:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,9 @@ public:
     virtual void Mov(const Point& rPnt);
     virtual FASTBOOL End(FASTBOOL bCopy);
     virtual Pointer GetPointer() const;
-    virtual void DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const;
+
+    // for migration from XOR to overlay
+    virtual void CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverlayManager, ::sdr::overlay::OverlayObjectList& rOverlayList);
 
     //SJ: added following method, otherwise the object won't be
     //able to notice that dragging has been cancelled.
@@ -127,7 +129,8 @@ public:
 
     virtual FASTBOOL Beg();
     virtual void MovAllPoints();
-    virtual void MovPoint(Point& rPnt, const Point& rPvOfs);
+    virtual void MovPoint(Point& rPnt);
+//  virtual void MovPoint(Point& rPnt, const Point& rPvOfs);
     virtual void Mov(const Point& rPnt);
     virtual FASTBOOL End(FASTBOOL bCopy);
     virtual FASTBOOL IsMoveOnly() const;
@@ -151,7 +154,7 @@ public:
     virtual void TakeComment(String& rStr) const;
 
     virtual FASTBOOL Beg();
-    virtual void MovPoint(Point& rPnt, const Point& rPvOfs);
+    virtual void MovPoint(Point& rPnt);
     virtual void Mov(const Point& rPnt);
     virtual FASTBOOL End(FASTBOOL bCopy);
     virtual Pointer GetPointer() const;
@@ -177,7 +180,7 @@ public:
     virtual void TakeComment(String& rStr) const;
 
     virtual FASTBOOL Beg();
-    virtual void MovPoint(Point& rPnt, const Point& rPvOfs);
+    virtual void MovPoint(Point& rPnt);
     virtual void Mov(const Point& rPnt);
     virtual FASTBOOL End(FASTBOOL bCopy);
     virtual Pointer GetPointer() const;
@@ -209,7 +212,7 @@ public:
     virtual void TakeComment(String& rStr) const;
 
     virtual FASTBOOL Beg();
-    virtual void MovPoint(Point& rPnt, const Point& rPvOfs);
+    virtual void MovPoint(Point& rPnt);
     virtual void Mov(const Point& rPnt);
     virtual FASTBOOL End(FASTBOOL bCopy);
     virtual Pointer GetPointer() const;
@@ -236,7 +239,7 @@ public:
     virtual void TakeComment(String& rStr) const;
 
     virtual FASTBOOL Beg();
-    virtual void MovPoint(Point& rPnt, const Point& rPvOfs);
+    virtual void MovPoint(Point& rPnt);
     virtual void Mov(const Point& rPnt);
     virtual FASTBOOL End(FASTBOOL bCopy);
     virtual Pointer GetPointer() const;
@@ -311,11 +314,10 @@ public:
 
     virtual FASTBOOL Beg();
     virtual void MovAllPoints();
-    void MovPointCrook(Point& rPnt, const Point& rPvOfs, Point* pC1, Point* pC2); // MovPoint -> MovPointCrook
+    void MovCrookPoint(Point& rPnt, Point* pC1, Point* pC2);
     virtual void Mov(const Point& rPnt);
     virtual FASTBOOL End(FASTBOOL bCopy);
     virtual Pointer GetPointer() const;
-    virtual void DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const;
 };
 
 //************************************************************
@@ -343,7 +345,6 @@ public:
     virtual void Mov(const Point& rPnt);
     virtual FASTBOOL End(FASTBOOL bCopy);
     virtual Pointer GetPointer() const;
-    virtual void DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
