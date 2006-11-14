@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:22:48 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:56:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@
 #include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
-#include <svx/svdvmark.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/xoutx.hxx>
@@ -79,6 +78,10 @@
 
 #include "sc.hrc"
 
+#ifndef _SDRPAINTWINDOW_HXX
+#include <svx/sdrpaintwindow.hxx>
+#endif
+
 using namespace com::sun::star;
 
 // -----------------------------------------------------------------------
@@ -87,7 +90,6 @@ using namespace com::sun::star;
 #define SC_HANDLESIZE_SMALL     7
 
 // -----------------------------------------------------------------------
-
 
 #ifdef WNT
 #pragma optimize ( "", off )
@@ -109,7 +111,7 @@ void ScDrawView::Construct()
     if (pViewData)
     {
         SCTAB nTab = pViewData->GetTabNo();
-        ShowPagePgNum( static_cast<sal_uInt16>(nTab), Point() );
+        ShowSdrPage(GetModel()->GetPage(nTab));
 
         BOOL bEx = pViewData->GetViewShell()->IsDrawSelMode();
         BOOL bProt = pDoc->IsTabProtected( nTab ) ||
@@ -142,7 +144,9 @@ void ScDrawView::Construct()
         SetSwapAsynchron(TRUE);
     }
     else
-        ShowPagePgNum( static_cast<sal_uInt16>(nTab), Point() );
+    {
+        ShowSdrPage(GetModel()->GetPage(nTab));
+    }
 
     UpdateUserViewOptions();
     RecalcScale();
@@ -151,9 +155,18 @@ void ScDrawView::Construct()
     bInConstruct = FALSE;
 }
 
+void ScDrawView::ImplClearCalcDropMarker()
+{
+    if(pDropMarker)
+    {
+        delete pDropMarker;
+        pDropMarker = 0L;
+    }
+}
+
 __EXPORT ScDrawView::~ScDrawView()
 {
-    delete pDropMarker;
+    ImplClearCalcDropMarker();
 }
 
 void ScDrawView::AddCustomHdl()
@@ -249,20 +262,19 @@ void ScDrawView::InvalidateDrawTextAttrs()
     rBindings.Invalidate( SID_ALIGN_ANY_JUSTIFIED );
 }
 
-void ScDrawView::DrawMarks( OutputDevice* pOut ) const
-{
-//  if (IsMarkHdlShown())
-//      DrawMarkHdl(pOut,FALSE);
-
-    USHORT nWinNum = ((ScDrawView*)this)->FindWin(pOut);        //! DrawMarks nicht-const
-    if (nWinNum!=SDRVIEWWIN_NOTFOUND)
-    {
-        // ((ScDrawView*)this)->AfterInitRedraw(nWinNum);           //! DrawMarks nicht-const
-
-        if (IsShownXorVisibleWinNum(nWinNum))
-            ((ScDrawView*)this)->ToggleShownXor(pOut,NULL);     //! DrawMarks nicht-const
-    }
-}
+//void ScDrawView::DrawMarks( OutputDevice* pOut ) const
+//{
+//  DBG_ASSERT(pOut, "ScDrawView::DrawMarks: No OutputDevice (!)");
+//  SdrPaintWindow* pPaintWindow = FindPaintWindow(*pOut);
+//
+//  if(pPaintWindow)
+//  {
+//      if(pPaintWindow->isXorVisible())
+//      {
+//          ToggleShownXor(pOut, 0L);
+//      }
+//  }
+//}
 
 void ScDrawView::SetMarkedToLayer( BYTE nLayerNo )
 {
@@ -577,12 +589,15 @@ void __EXPORT ScDrawView::MarkListHasChanged()
     InvalidateAttribs();                // nach dem IMap-Editor Update
     InvalidateDrawTextAttrs();
 
-    USHORT nWinCount = GetWinCount();
-    for (USHORT i=0; i<nWinCount; i++)
+    for(sal_uInt32 a(0L); a < PaintWindowCount(); a++)
     {
-        OutputDevice* pDev = GetWin(i);
-        if (pDev->GetOutDevType() == OUTDEV_WINDOW)
-            ((Window*)pDev)->Update();
+        SdrPaintWindow* pPaintWindow = GetPaintWindow(a);
+        OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
+
+        if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+        {
+            ((Window&)rOutDev).Update();
+        }
     }
 
     //  uno object for view returns drawing objects as selection,
@@ -714,7 +729,7 @@ BOOL ScDrawView::SelectObject( const String& rName )
                 SetLayerLocked( pLayer->GetName(), FALSE );
         }
 
-        SdrPageView* pPV = GetPageViewPvNum(0);
+        SdrPageView* pPV = GetSdrPageView();
         MarkObj( pFound, pPV );
     }
 
@@ -750,7 +765,7 @@ FASTBOOL ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, ULONG n
             nOptions |= SDRINSERT_DONTMARK;
     }
 
-    return InsertObject( pObj, rPV, nOptions );
+    return InsertObjectAtView( pObj, rPV, nOptions );
 }
 
 void __EXPORT ScDrawView::MakeVisible( const Rectangle& rRect, Window& rWin )
@@ -765,7 +780,7 @@ void __EXPORT ScDrawView::MakeVisible( const Rectangle& rRect, Window& rWin )
 SdrEndTextEditKind ScDrawView::ScEndTextEdit()
 {
     BOOL bIsTextEdit = IsTextEdit();
-    SdrEndTextEditKind eKind = EndTextEdit();
+    SdrEndTextEditKind eKind = SdrEndTextEdit();
 
     if ( bIsTextEdit && pViewData )
         pViewData->GetViewShell()->SetDrawTextUndo(NULL);   // "normaler" Undo-Manager
@@ -775,23 +790,14 @@ SdrEndTextEditKind ScDrawView::ScEndTextEdit()
 
 void ScDrawView::MarkDropObj( SdrObject* pObj )
 {
-    if ( pObj )
+    if ( pDropMarkObj != pObj )
     {
-        if ( !pDropMarker )
-            pDropMarker = new SdrViewUserMarker(this);
-        if ( pDropMarkObj != pObj )
+        pDropMarkObj = pObj;
+        ImplClearCalcDropMarker();
+
+        if(pDropMarkObj)
         {
-            pDropMarkObj = pObj;
-            pDropMarker->SetXPolyPolygon(pDropMarkObj, GetPageViewPvNum(0));
-            pDropMarker->Show();
-        }
-    }
-    else                // Markierung aufheben
-    {
-        if (pDropMarker)
-        {
-            pDropMarker->Hide();
-            pDropMarkObj = NULL;
+            pDropMarker = new SdrDropMarkerOverlay(*this, *pDropMarkObj);
         }
     }
 }
