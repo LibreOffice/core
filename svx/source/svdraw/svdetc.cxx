@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:49:43 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:41:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,13 @@
 #include "fontworkbar.hxx"
 #endif
 
+#ifndef _B3D_B3DCOLOR_HXX
+#include <goodies/b3dcolor.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx> //add CHINA001
+#endif
 
 /******************************************************************************
 * Globale Daten der DrawingEngine
@@ -162,7 +169,6 @@ SdrGlobalData::SdrGlobalData() :
     pOutliner(NULL),
     pDefaults(NULL),
     pResMgr(NULL),
-//BFS06 pStrCache(NULL),
     nExchangeFormat(0)
 {
     pSysLocale = new SvtSysLocale;
@@ -178,7 +184,6 @@ SdrGlobalData::~SdrGlobalData()
     delete pOutliner;
     delete pDefaults;
     delete pResMgr;
-//BFS06 delete [] pStrCache;
     //! do NOT delete pCharClass and pLocaleData
     delete pSysLocale;
 }
@@ -647,10 +652,6 @@ void SdrEngineDefaults::LanguageHasChanged()
         delete rGlobalData.pResMgr;
         rGlobalData.pResMgr=NULL;
     }
-//BFS06 if (rGlobalData.pStrCache!=NULL) {
-//BFS06     delete [] rGlobalData.pStrCache;
-//BFS06     rGlobalData.pStrCache=NULL;
-//BFS06 }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -658,42 +659,6 @@ void SdrEngineDefaults::LanguageHasChanged()
 SdrOutliner* SdrMakeOutliner( USHORT nOutlinerMode, SdrModel* pModel )
 {
     //SdrEngineDefaults& rDefaults = SdrEngineDefaults::GetDefaults();
-
-/*
-    MapUnit  eUn( (pMod==NULL) ? rDefaults.eMapUnit : pMod->GetScaleUnit());
-    Fraction aFr( *((pMod==NULL) ? &rDefaults.aMapFraction : &pMod->GetScaleFraction()));
-
-    if ( pMod->GetRefDevice() )
-        pOutl->SetRefDevice( pMod->GetRefDevice() );
-    else
-    {
-        MapMode aMapMode(eUn,Point(0,0),aFr,aFr);
-        pOutl->SetRefMapMode( aMapMode );
-    }
-
-    SfxItemSet aSet(pOutl->GetEmptyItemSet());
-    aSet.Put(SvxFontItem(rDefaults.eFontFamily, rDefaults.aFontName, String(), PITCH_DONTKNOW, gsl_getSystemTextEncoding() ) );
-    aSet.Put(SvxColorItem(rDefaults.aFontColor));
-    ULONG nHgt=rDefaults.nFontHeight;
-    FASTBOOL bDifUn=(eUn!=rDefaults.eMapUnit); // different MapUnits
-    FASTBOOL bDifFr=(aFr!=rDefaults.aMapFraction); // different MapFractions
-    if (bDifUn || bDifFr) { // Wenn pMod!=NULL und pMod->Map!=rDef.Map
-        long nTmpLong=long(nHgt); // caasting im Ctor bringt unter MSVC sehr merkwuerdige Fehlermeldungen
-        BigInt aHgt1(nTmpLong); // umrechnen von DefMap in ModMap
-        FrPair aUnitMul(GetMapFactor(rDefaults.eMapUnit,eUn));
-
-        if (bDifUn) aHgt1*=aUnitMul.Y().GetNumerator();
-        if (bDifFr) aHgt1*=aFr.GetNumerator();
-        if (bDifFr) aHgt1*=rDefaults.aMapFraction.GetDenominator();
-        if (bDifUn) aHgt1/=aUnitMul.Y().GetDenominator();
-        if (bDifFr) aHgt1/=aFr.GetDenominator();
-        if (bDifFr) aHgt1/=rDefaults.aMapFraction.GetNumerator();
-
-        nHgt=ULONG(long(aHgt1));
-    }
-    aSet.Put(SvxFontHeightItem(nHgt));
-    pOutl->SetDefaults(aSet);
-*/
 
     SfxItemPool* pPool = &pModel->GetItemPool();
     SdrOutliner* pOutl = new SdrOutliner( pPool, nOutlinerMode );
@@ -731,11 +696,7 @@ ResMgr* ImpGetResMgr()
 
     if(!rGlobalData.pResMgr)
     {
-//BFS06#ifndef SVX_LIGHT
         ByteString aName("svx");
-//BFS06#else
-//BFS06     ByteString aName("svl");
-//BFS06#endif
         INT32 nSolarUpd(SOLARUPD);
         aName += ByteString::CreateFromInt32( nSolarUpd );
         rGlobalData.pResMgr =
@@ -747,37 +708,10 @@ ResMgr* ImpGetResMgr()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//BFS06
 String ImpGetResStr(sal_uInt16 nResID)
 {
     return String(ResId(nResID, ImpGetResMgr()));
 }
-
-//BFS06const XubString& ImpGetResStr(USHORT nResID)
-//BFS06{
-//BFS06 SdrGlobalData& rGlobalData=GetSdrGlobalData();
-//BFS06 if (rGlobalData.pStrCache==NULL) {
-//BFS06     USHORT nAnz=SDR_StringCacheEnd-SDR_StringCacheBegin+1;
-//BFS06     rGlobalData.pStrCache=new XubString[nAnz];
-//BFS06     XubString* pStr=rGlobalData.pStrCache;
-//BFS06     ResMgr* pResMgr=ImpGetResMgr();
-//BFS06     for (USHORT i=0; i<nAnz; i++) {
-//BFS06         USHORT nResNum=SDR_StringCacheBegin+i;
-//BFS06         {
-//BFS06             pStr[i]=XubString(ResId(nResNum,pResMgr));
-//BFS06         }
-//BFS06     }
-//BFS06 }
-//BFS06 if (nResID>=SDR_StringCacheBegin && nResID<=SDR_StringCacheEnd) {
-//BFS06     return rGlobalData.pStrCache[nResID-SDR_StringCacheBegin];
-//BFS06 } else {
-//BFS06#ifdef DBG_UTIL
-//BFS06     DBG_ERROR("ImpGetResStr(): ResourceID outside of cache range!");
-//BFS06#endif
-//BFS06     static String aEmpty;
-//BFS06     return aEmpty;
-//BFS06 }
-//BFS06}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
