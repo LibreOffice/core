@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuprlout.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:54:10 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,10 +133,9 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 {
     // damit nicht Objekte, die gerade editiert werden oder selektiert
     // sind , verschwinden
-    pView->EndTextEdit();
+    pView->SdrEndTextEdit();
 
-    USHORT nPgViewCount = pView->GetPageViewCount();
-    for (USHORT nPgView = 0; nPgView < nPgViewCount; nPgView++)
+    if(pView->GetSdrPageView())
     {
         pView->UnmarkAll();
     }
@@ -266,8 +265,8 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
                     if (static_cast<DrawViewShell*>(pViewShell)->GetPageKind() == PK_NOTES)
                         nPgNum++;
 
-                    pView->HideAllPages();
-                    pView->ShowMasterPagePgNum(nPgNum, Point());
+                    pView->HideSdrPage();
+                    pView->ShowSdrPage(pView->GetModel()->GetMasterPage(nPgNum));
                 }
 
                 // damit TabBar aktualisiert wird
