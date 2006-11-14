@@ -4,9 +4,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:56:15 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:19:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,6 @@
 #include <svxids.hrc>
 #include <dialogs.hrc>
 
-//#define ITEMID_COLOR          SID_ATTR_3D_LIGHTCOLOR - defined in svx3ditems.hxx
 #include <colritem.hxx>
 #include <e3ditem.hxx>
 
@@ -472,59 +471,6 @@ __EXPORT Svx3DWin::~Svx3DWin()
 // -----------------------------------------------------------------------
 void Svx3DWin::Construct()
 {
-/*
-    // Ueber die Gallery werden die Favoriten eingelesen
-    ULONG nFavCount = GalleryExplorer::GetSdrObjCount( GALLERY_THEME_3D );
-
-    // ValueSet Favoriten
-    WinBits nWinBits = aCtlFavorites.GetStyle();
-    nWinBits |= WB_ITEMBORDER | WB_DOUBLEBORDER; //| WB_NAMEFIELD
-    if( nFavCount > 6 )
-        nWinBits |= WB_VSCROLL;
-
-    aCtlFavorites.SetStyle( nWinBits );
-    aCtlFavorites.SetColCount( 3 );
-    aCtlFavorites.SetLineCount( 2 );
-    aCtlFavorites.SetExtraSpacing( 1 );
-
-    // Listen erzeugen
-//  pFavorSetList = new List();
-//  SfxItemSet* pSet;
-
-    // Gallery thema locken
-    GalleryExplorer::BeginLocking(GALLERY_THEME_3D);
-
-    for( ULONG nModelPos = 0; nModelPos < nFavCount; nModelPos++ )
-    {
-        Bitmap  aThumb;
-        Size    aNewSize( 60, 60 );
-
-        if( GalleryExplorer::GetSdrObj( GALLERY_THEME_3D, nModelPos,
-                                        pModel, &aThumb ) )
-        {
-            // ValueSet fuellen
-            Size aOldSize = Size( aThumb.GetSizePixel() );
-            aThumb.Scale( (double) aNewSize.Width() / aOldSize.Width(),
-                            (double) aNewSize.Height() / aOldSize.Height() );
-
-            String aStr(SVX_RES(RID_SVXFLOAT3D_FAVORITE));
-            aStr += sal_Unicode(' ');
-            aStr += String::CreateFromInt32((INT32)nModelPos + 1L);
-
-            aCtlFavorites.InsertItem( (USHORT)nModelPos+1, aThumb, aStr );
-        }
-    }
-
-    // Gallery thema freigeben
-    GalleryExplorer::EndLocking(GALLERY_THEME_3D);
-
-    if( nFavCount == 0 )
-    {
-        // Keine Favoriten vorhanden
-        eViewType = VIEWTYPE_GEO;
-    }
-*/
-
     aBtnGeo.Check();
     Link aLink( LINK( this, Svx3DWin, ClickViewTypeHdl ) );
     aLink.Call( &aBtnGeo );
@@ -542,8 +488,6 @@ void Svx3DWin::Reset()
     aMtrMatSpecularIntensity.SetValue( 50 );
 
     aBtnLight1.Check();
-//  ClickHdl( &aBtnLight1 );
-
     ClickUpdateHdl( NULL );
 
     // Nichts selektieren, um Fehler beim erstselektieren zu vermeiden
@@ -571,8 +515,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         mpRemember2DAttributes = new SfxItemSet(*rAttrs.GetPool(),
             SDRATTR_START, SDRATTR_SHADOW_LAST,
             SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
-//          SDRATTR_START, SDRATTR_CIRC_LAST,
-//          SDRATTR_GRAF_FIRST, SDRATTR_3DSCENE_LAST,
             0, 0);
 
     SfxWhichIter aIter(*mpRemember2DAttributes);
@@ -720,8 +662,8 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_HORZ_SEGS);
         if(eState != SFX_ITEM_DONTCARE)
         {
-            UINT32 nValue = ((const Svx3DHorizontalSegmentsItem&)rAttrs.Get(SDRATTR_3DOBJ_HORZ_SEGS)).GetValue();
-            if(nValue != (UINT32)aNumHorizontal.GetValue())
+            sal_uInt32 nValue = ((const Svx3DHorizontalSegmentsItem&)rAttrs.Get(SDRATTR_3DOBJ_HORZ_SEGS)).GetValue();
+            if(nValue != (sal_uInt32 )aNumHorizontal.GetValue())
             {
                 aNumHorizontal.SetValue( nValue );
                 // evtl. am Ende...
@@ -1081,7 +1023,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
 
 // Beleuchtung
     Color aColor;
-    Vector3D aVector;
+    basegfx::B3DVector aVector;
     // Licht 1 (Farbe)
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_1);
     if( eState != SFX_ITEM_DONTCARE )
@@ -1132,7 +1074,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     if( eState != SFX_ITEM_DONTCARE )
     {
         aVector = ((const Svx3DLightDirection1Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue();
-        Vector3D aVector2 = pLightGroup->GetDirection( Base3DLight0 );
+        basegfx::B3DVector aVector2 = pLightGroup->GetDirection( Base3DLight0 );
         if( aVector != aVector2 )
         {
             pLightGroup->SetDirection( aVector, Base3DLight0 );
@@ -1190,7 +1132,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     if( eState != SFX_ITEM_DONTCARE )
     {
         aVector = ((const Svx3DLightDirection2Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue();
-        Vector3D aVector2 = pLightGroup->GetDirection( Base3DLight1 );
+        basegfx::B3DVector aVector2 = pLightGroup->GetDirection( Base3DLight1 );
         if( aVector != aVector2 )
         {
             pLightGroup->SetDirection( aVector, Base3DLight1 );
@@ -1248,7 +1190,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     if( eState != SFX_ITEM_DONTCARE )
     {
         aVector = ((const Svx3DLightDirection3Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue();
-        Vector3D aVector2 = pLightGroup->GetDirection( Base3DLight2 );
+        basegfx::B3DVector aVector2 = pLightGroup->GetDirection( Base3DLight2 );
         if( aVector != aVector2 )
         {
             pLightGroup->SetDirection( aVector, Base3DLight2 );
@@ -1306,7 +1248,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     if( eState != SFX_ITEM_DONTCARE )
     {
         aVector = ((const Svx3DLightDirection4Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue();
-        Vector3D aVector2 = pLightGroup->GetDirection( Base3DLight3 );
+        basegfx::B3DVector aVector2 = pLightGroup->GetDirection( Base3DLight3 );
         if( aVector != aVector2 )
         {
             pLightGroup->SetDirection( aVector, Base3DLight3 );
@@ -1364,7 +1306,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     if( eState != SFX_ITEM_DONTCARE )
     {
         aVector = ((const Svx3DLightDirection5Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue();
-        Vector3D aVector2 = pLightGroup->GetDirection( Base3DLight4 );
+        basegfx::B3DVector aVector2 = pLightGroup->GetDirection( Base3DLight4 );
         if( aVector != aVector2 )
         {
             pLightGroup->SetDirection( aVector, Base3DLight4 );
@@ -1422,7 +1364,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     if( eState != SFX_ITEM_DONTCARE )
     {
         aVector = ((const Svx3DLightDirection6Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue();
-        Vector3D aVector2 = pLightGroup->GetDirection( Base3DLight5 );
+        basegfx::B3DVector aVector2 = pLightGroup->GetDirection( Base3DLight5 );
         if( aVector != aVector2 )
         {
             pLightGroup->SetDirection( aVector, Base3DLight5 );
@@ -1480,7 +1422,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     if( eState != SFX_ITEM_DONTCARE )
     {
         aVector = ((const Svx3DLightDirection7Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue();
-        Vector3D aVector2 = pLightGroup->GetDirection( Base3DLight6 );
+        basegfx::B3DVector aVector2 = pLightGroup->GetDirection( Base3DLight6 );
         if( aVector != aVector2 )
         {
             pLightGroup->SetDirection( aVector, Base3DLight6 );
@@ -1538,7 +1480,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     if( eState != SFX_ITEM_DONTCARE )
     {
         aVector = ((const Svx3DLightDirection8Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue();
-        Vector3D aVector2 = pLightGroup->GetDirection( Base3DLight7 );
+        basegfx::B3DVector aVector2 = pLightGroup->GetDirection( Base3DLight7 );
         if( aVector != aVector2 )
         {
             pLightGroup->SetDirection( aVector, Base3DLight7 );
@@ -1909,7 +1851,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Anzahl Segmente (horizontal)
     if( !aNumHorizontal.IsEmptyFieldValue() )
     {
-        UINT32 nValue = aNumHorizontal.GetValue();
+        sal_uInt32 nValue = aNumHorizontal.GetValue();
         rAttrs.Put(Svx3DHorizontalSegmentsItem(nValue));
     }
     else
@@ -2057,7 +1999,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
 // Beleuchtung
     Image aImg;
-    Vector3D aVector;
+    basegfx::B3DVector aVector;
     Color aColor;
     // Licht 1 Farbe
     if( aLbLight1.GetSelectEntryCount() )
@@ -2485,11 +2427,6 @@ IMPL_LINK( Svx3DWin, ClickUpdateHdl, void *, EMPTYARG )
     else
     {
         // Controls koennen u.U. disabled sein
-        /*
-        aFtSegments.Enable();
-        aNumHorizontal.Enable();
-        aNumVertical.Enable();
-        */
     }
 
     return( 0L );
@@ -3479,15 +3416,6 @@ Svx3DCtrlItem::Svx3DCtrlItem( USHORT _nId,
 void __EXPORT Svx3DCtrlItem::StateChanged( USHORT /*nSId*/,
                         SfxItemState /*eState*/, const SfxPoolItem* /*pItem*/ )
 {
-    /*
-    if( eState >= SFX_ITEM_AVAILABLE && nSId == SID_3D_STATE )
-    {
-        const SfxUInt32Item* pStateItem = PTR_CAST( SfxUInt32Item, pItem );
-        DBG_ASSERT( pStateItem, "SfxUInt32Item erwartet");
-        UINT32 nState = pStateItem->GetValue();
-        p3DWin->bCount = (BOOL) (nState & 3D_COUNT);
-    }
-    */
 }
 
 /*************************************************************************
