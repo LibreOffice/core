@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:32:42 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:28:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,6 +204,7 @@ private:
 //  ----------------------------------------------------
 //  class UnoControl
 //  ----------------------------------------------------
+DBG_NAME( UnoControl )
 UnoControl::UnoControl()
     : maDisposeListeners( *this )
     , maWindowListeners( *this )
@@ -214,6 +215,7 @@ UnoControl::UnoControl()
     , maPaintListeners( *this )
     , maModeChangeListeners( GetMutex() )
 {
+    DBG_CTOR( UnoControl, NULL );
     mbDisposePeer = sal_True;
     mbRefeshingPeer = sal_False;
     mbCreatingPeer = sal_False;
@@ -223,6 +225,7 @@ UnoControl::UnoControl()
 
 UnoControl::~UnoControl()
 {
+    DBG_DTOR( UnoControl, NULL );
 }
 
 ::rtl::OUString UnoControl::GetComponentServiceName()
@@ -592,6 +595,58 @@ void UnoControl::disposing( const EventObject& rEvt ) throw(RuntimeException)
     }
 }
 
+
+void SAL_CALL UnoControl::setOutputSize( const awt::Size& aSize ) throw (RuntimeException)
+{
+    Reference< XWindow2 > xPeerWindow;
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+        xPeerWindow = xPeerWindow.query( getPeer() );
+    }
+
+    if ( xPeerWindow.is() )
+        xPeerWindow->setOutputSize( aSize );
+}
+
+namespace
+{
+    template < typename RETVALTYPE >
+    RETVALTYPE lcl_askPeer( const uno::Reference< awt::XWindowPeer >& _rxPeer, RETVALTYPE (SAL_CALL XWindow2::*_pMethod)(), RETVALTYPE _aDefault )
+    {
+        RETVALTYPE aReturn( _aDefault );
+
+        Reference< XWindow2 > xPeerWindow( _rxPeer, UNO_QUERY );
+        if ( xPeerWindow.is() )
+            aReturn = (xPeerWindow.get()->*_pMethod)();
+
+        return aReturn;
+    }
+}
+
+awt::Size SAL_CALL UnoControl::getOutputSize(  ) throw (RuntimeException)
+{
+    return lcl_askPeer( getPeer(), &XWindow2::getOutputSize, awt::Size() );
+}
+
+::sal_Bool SAL_CALL UnoControl::isVisible(  ) throw (RuntimeException)
+{
+    return lcl_askPeer( getPeer(), &XWindow2::isVisible, sal_False );
+}
+
+::sal_Bool SAL_CALL UnoControl::isActive(  ) throw (RuntimeException)
+{
+    return lcl_askPeer( getPeer(), &XWindow2::isActive, sal_False );
+}
+
+::sal_Bool SAL_CALL UnoControl::isEnabled(  ) throw (RuntimeException)
+{
+    return lcl_askPeer( getPeer(), &XWindow2::isEnabled, sal_False );
+}
+
+::sal_Bool SAL_CALL UnoControl::hasFocus(  ) throw (RuntimeException)
+{
+    return lcl_askPeer( getPeer(), &XWindow2::hasFocus, sal_False );
+}
 
 // XWindow
 void UnoControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw(RuntimeException)
@@ -1119,7 +1174,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
     }
 }
 
-Reference< XWindowPeer > UnoControl::getPeer(  ) throw(RuntimeException)
+Reference< XWindowPeer > UnoControl::getPeer() throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     return mxPeer;
@@ -1189,8 +1244,7 @@ void UnoControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
         xWindow->setVisible( !bOn );
 
     // and notify our mode listeners
-    maModeChangeListeners.notifyEach(
-        &XModeChangeListener::modeChanged, aModeChangeEvent );
+    maModeChangeListeners.notifyEach( &XModeChangeListener::modeChanged, aModeChangeEvent );
 }
 
 sal_Bool UnoControl::isDesignMode(  ) throw(RuntimeException)
