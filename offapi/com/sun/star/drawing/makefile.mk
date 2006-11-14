@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 00:01:20 $
+#   last change: $Author: ihi $ $Date: 2006-11-14 12:31:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,7 @@ IDLFILES=\
     GluePoint2.idl\
     GradientTable.idl\
     GraphicExportFilter.idl\
+    GraphicFilterRequest.idl\
     GraphicObjectShape.idl\
     GroupShape.idl\
     Hatch.idl\
