@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cusshow.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:53:38 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:19:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,9 +89,6 @@ public:
     String GetName() const              { return aName; }
 
     SdDrawDocument* GetDoc() const { return pDoc; }
-
-//BFS02 friend SvStream& operator << (SvStream& rOut, const SdCustomShow& rCustomShow);
-//BFS02 friend SvStream& operator >> (SvStream& rIn, SdCustomShow& rCustomShow);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoCustomShow();
 };
