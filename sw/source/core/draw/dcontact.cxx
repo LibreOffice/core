@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:02:37 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:08:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,9 @@
 #include <sortedobjs.hxx>
 #endif
 
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
 
 TYPEINIT1( SwContact, SwClient )
 TYPEINIT1( SwFlyDrawContact, SwContact )
@@ -1845,7 +1848,7 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
         for( SdrView* pView = aIter.FirstView(); pView;
                     pView = aIter.NextView() )
         {
-            pView->MarkObj( GetMaster(), pView->GetPageViewPvNum(0), TRUE );
+            pView->MarkObj( GetMaster(), pView->GetSdrPageView(), TRUE );
         }
 
         // OD 25.06.2003 #108784# - Instead of removing 'master' object from
@@ -2492,19 +2495,27 @@ SdrObject* SwDrawVirtObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfBy
     return bRet ? (SdrObject*)this : NULL;
 }
 
-void SwDrawVirtObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const
+::basegfx::B2DPolyPolygon SwDrawVirtObj::TakeXorPoly(sal_Bool bDetail) const
 {
-    rRefObj.TakeXorPoly(rPoly, bDetail);
-    rPoly.Move(GetOffset().X(), GetOffset().Y());
+    ::basegfx::B2DPolyPolygon aRetval(rRefObj.TakeXorPoly(bDetail));
+    ::basegfx::B2DHomMatrix aMatrix;
+    aMatrix.translate(GetOffset().X(), GetOffset().Y());
+    aRetval.transform(aMatrix);
+
+    return aRetval;
 }
 
-void SwDrawVirtObj::TakeContour(XPolyPolygon& rPoly) const
+::basegfx::B2DPolyPolygon SwDrawVirtObj::TakeContour() const
 {
-    rRefObj.TakeContour(rPoly);
-    rPoly.Move(GetOffset().X(), GetOffset().Y());
+    ::basegfx::B2DPolyPolygon aRetval(rRefObj.TakeContour());
+    ::basegfx::B2DHomMatrix aMatrix;
+    aMatrix.translate(GetOffset().X(), GetOffset().Y());
+    aRetval.transform(aMatrix);
+
+    return aRetval;
 }
 
-SdrHdl* SwDrawVirtObj::GetHdl(USHORT nHdlNum) const
+SdrHdl* SwDrawVirtObj::GetHdl(sal_uInt32 nHdlNum) const
 {
     SdrHdl* pHdl = rRefObj.GetHdl(nHdlNum);
     Point aP(pHdl->GetPos() + GetOffset());
@@ -2658,7 +2669,7 @@ void SwDrawVirtObj::NbcSetLogicRect(const Rectangle& rRect)
     SetRectsDirty();
 }
 
-Point SwDrawVirtObj::GetSnapPoint(USHORT i) const
+Point SwDrawVirtObj::GetSnapPoint(sal_uInt32 i) const
 {
     Point aP(rRefObj.GetSnapPoint(i));
     aP += GetOffset();
@@ -2666,15 +2677,12 @@ Point SwDrawVirtObj::GetSnapPoint(USHORT i) const
     return aP;
 }
 
-const Point& SwDrawVirtObj::GetPoint(USHORT i) const
+Point SwDrawVirtObj::GetPoint(sal_uInt32 i) const
 {
-    ((SwDrawVirtObj*)this)->aHack = rRefObj.GetPoint(i);
-    ((SwDrawVirtObj*)this)->aHack += GetOffset();
-
-    return aHack;
+    return Point(rRefObj.GetPoint(i) + GetOffset());
 }
 
-void SwDrawVirtObj::NbcSetPoint(const Point& rPnt, USHORT i)
+void SwDrawVirtObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
 {
     Point aP(rPnt);
     aP -= GetOffset();
