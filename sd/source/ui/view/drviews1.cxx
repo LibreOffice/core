@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:05:23 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:41:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,7 +276,7 @@ void DrawViewShell::SelectionHasChanged (void)
             if (!pOleObj)
             {
                 pIPClient->DeactivateObject();
-                pDrView->ShowMarkHdl(NULL);
+                pDrView->ShowMarkHdl();
             }
             else
             {
@@ -395,7 +395,7 @@ USHORT DrawViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
         USHORT nID = GetCurrentFunction()->GetSlotID();
         if (nID == SID_TEXTEDIT || nID == SID_ATTR_CHAR)
         {
-            pDrView->EndTextEdit();
+            pDrView->SdrEndTextEdit();
         }
     }
     else if( !bRet )
@@ -428,7 +428,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
         if ( pDrView->IsTextEdit() )
         {
-            pDrView->EndTextEdit();
+            pDrView->SdrEndTextEdit();
         }
 
         LayerTabBar* pLayerBar = GetLayerTabControl();
@@ -871,7 +871,7 @@ ErrCode DrawViewShell::DoVerb(long nVerb)
                     * OLE-Objekt erzeugen, StarImage starten
                     * Grafik-Objekt loeschen (durch OLE-Objekt ersetzt)
                     **************************************************************/
-                    pDrView->HideMarkHdl(NULL);
+                    pDrView->HideMarkHdl();
 
                     SvStorageRef aStor = new SvStorage(String());
                     SvInPlaceObjectRef aNewIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())
@@ -894,10 +894,10 @@ ErrCode DrawViewShell::DoVerb(long nVerb)
                         SdrOle2Obj* pSdrOle2Obj = new SdrOle2Obj( aNewIPObj,
                                                                   aName, aRect );
 
-                        SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
+                        SdrPageView* pPV = pDrView->GetSdrPageView();
 
                         pPV->GetObjList()->InsertObject( pSdrOle2Obj );
-                        pDrView->ReplaceObject( pObj, *pPV, pTempSdrGrafObj );
+                        pDrView->ReplaceObjectAtView( pObj, *pPV, pTempSdrGrafObj );
 
                         pSdrOle2Obj->SetLogicRect(aRect);
                         aNewIPObj->SetVisAreaSize(aRect.GetSize());
@@ -1003,7 +1003,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
 
                 if( pNewPage )
                 {
-                    SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
+                    SdrPageView* pPV = pDrView->GetSdrPageView();
 
                     String sPageText (pNewPage->GetLayoutName());
                     sPageText.Erase(sPageText.SearchAscii(SD_LT_SEPARATOR));
@@ -1023,7 +1023,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
 
                 if (pActualPage == pNewPage)
                 {
-                    SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
+                    SdrPageView* pPV = pDrView->GetSdrPageView();
 
                     if (pPV && pNewPage == dynamic_cast< SdPage* >( pPV->GetPage() ) &&
                         pNewPage->GetName() == aTabControl.GetPageText(nSelectedPage+1))
@@ -1036,7 +1036,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
         }
 
         if( pDrView )
-            pDrView->EndTextEdit();
+            pDrView->SdrEndTextEdit();
 
         pActualPage = NULL;
 
@@ -1107,7 +1107,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
             **********************************************************************/
             GetDoc()->SetSelected(pActualPage, TRUE);
 
-            SdrPageView* pPageView = pDrView->GetPageViewPvNum(0);
+            SdrPageView* pPageView = pDrView->GetSdrPageView();
 
             if (pPageView)
             {
@@ -1129,11 +1129,11 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
                 }
             }
 
-            pDrView->HideAllPages();
-            pDrView->ShowPage(pActualPage, Point(0, 0));
+            pDrView->HideSdrPage();
+            pDrView->ShowSdrPage(pActualPage);
             GetViewShellBase().GetDrawController().FireSwitchCurrentPage(pActualPage);
 
-            SdrPageView* pNewPageView = pDrView->GetPageViewPvNum(0);
+            SdrPageView* pNewPageView = pDrView->GetSdrPageView();
 
             if (pNewPageView)
             {
@@ -1168,7 +1168,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
             /**********************************************************************
             * MASTERPAGE
             **********************************************************************/
-            SdrPageView* pPageView = pDrView->GetPageViewPvNum(0);
+            SdrPageView* pPageView = pDrView->GetSdrPageView();
 
             if (pPageView)
             {
@@ -1190,7 +1190,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
                 }
             }
 
-            pDrView->HideAllPages();
+            pDrView->HideSdrPage();
 
             SdPage* pMaster = GetDoc()->GetMasterSdPage(nSelectedPage, ePageKind);
 
@@ -1198,11 +1198,11 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
                 pMaster = GetDoc()->GetMasterSdPage(0, ePageKind);
 
             USHORT nNum = pMaster->GetPageNum();
-            pDrView->ShowMasterPagePgNum(nNum, Point(0, 0));
+            pDrView->ShowSdrPage(pDrView->GetModel()->GetMasterPage(nNum));
 
             GetViewShellBase().GetDrawController().FireSwitchCurrentPage(pMaster);
 
-            SdrPageView* pNewPageView = pDrView->GetPageViewPvNum(0);
+            SdrPageView* pNewPageView = pDrView->GetSdrPageView();
 
             if (pNewPageView)
             {
@@ -1351,7 +1351,7 @@ void DrawViewShell::ResetActualLayer()
                         pLayerBar->InsertPage(nLayer+1, aName);
 
                         TabBarPageBits nBits = 0;
-                        SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
+                        SdrPageView* pPV = pDrView->GetSdrPageView();
 
                         if (pPV && !pPV->IsLayerVisible(aName))
                         {
@@ -1371,7 +1371,7 @@ void DrawViewShell::ResetActualLayer()
 
                         TabBarPageBits nBits = 0;
 
-                        if (!pDrView->GetPageViewPvNum(0)->IsLayerVisible(aName))
+                        if (!pDrView->GetSdrPageView()->IsLayerVisible(aName))
                         {
                             // Unsichtbare Layer werden anders dargestellt
                             nBits = TPB_SPECIAL;
