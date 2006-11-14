@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:09:31 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:58:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,11 @@
 #define _SDR_NOTRANSFORM
 #define _SVDXOUT_HXX
 #endif
+
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
+#endif
+
 ///////////////////////////////////////////////////////////////////////////
 // NODRAW.HXX
 // Erweiterte Konstanten, um CLOKs mit SVDRAW.HXX zu vermeiden
@@ -80,7 +85,6 @@
 
 #define _SDR_NOEXTDEV           // XOutputDevice
 #define _SDR_NOUNDO             // Undo-Objekte
-//BFS01#define _SDR_NOSURROGATEOBJ     // SdrObjSurrogate
 #define _SDR_NOPAGEOBJ          // SdrPageObj
 #define _SDR_NOVIRTOBJ          // SdrVirtObj
 #define _SDR_NOGROUPOBJ         // SdrGroupObj
@@ -2230,6 +2234,8 @@ void ScTabView::SetNewVisArea()
     }
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
         aViewData.GetViewShell()->BroadcastAccessibility(SfxSimpleHint(SC_HINT_ACC_VISAREACHANGED));
+
+    UpdateAllOverlays();
 }
 
 sal_Bool ScTabView::HasPageFieldDataAtCursor() const
