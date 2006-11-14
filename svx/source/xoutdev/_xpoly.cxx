@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _xpoly.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:30:31 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:56:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,10 @@
 
 #ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
+#endif
+
+#ifndef _BGFX_NUMERIC_FTOOLS_HXX
+#include <basegfx/numeric/ftools.hxx>
 #endif
 
 #define GLOBALOVERFLOW
@@ -719,7 +723,6 @@ void XPolygon::Move( long nHorzMove, long nVertMove )
 |*
 *************************************************************************/
 
-//BFS09Rectangle XPolygon::GetBoundRect(OutputDevice *pOut) const
 Rectangle XPolygon::GetBoundRect() const
 {
     pImpXPolygon->CheckPointDelete();
@@ -727,59 +730,19 @@ Rectangle XPolygon::GetBoundRect() const
 
     if(pImpXPolygon->nPoints)
     {
-        ::basegfx::B2DPolygon aPolygon(getB2DPolygon());
+        // #i37709#
+        // For historical reasons the control points are not part of the
+        // BoundRect. This makes it necessary to subdivide the polygon to
+        // get a relatively correct BoundRect. Numerically, this is not
+        // correct and never was.
 
-        if(aPolygon.areControlPointsUsed())
-        {
-            // #i37709#
-            // For historical reasons the control points are not part of the
-            // BoundRect. This makes it necessary to subdivide the polygon to
-            // get a relatively correct BoundRect. Numerically, this is not
-            // correct and never was.
-            aPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(aPolygon);
-        }
-
-        const ::basegfx::B2DRange aPolygonRange(::basegfx::tools::getRange(aPolygon));
+        const basegfx::B2DRange aPolygonRange(basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(getB2DPolygon())));
         aRetval = Rectangle(
             FRound(aPolygonRange.getMinX()), FRound(aPolygonRange.getMinY()),
             FRound(aPolygonRange.getMaxX()), FRound(aPolygonRange.getMaxY()));
     }
 
     return aRetval;
-
-//BFS09 Rectangle aRect(XOutCalcXPolyExtent(*this, pOut));
-
-//  USHORT  nCount = pImpXPolygon->nPoints;
-//  if( !nCount )
-//      return Rectangle();
-
-//  Polygon aPoly = XOutCreatePolygon(*this, pOut);
-//  Rectangle aRect = aPoly.GetBoundRect();
-/*
-    if ( pOut == NULL )
-    {
-        BOOL bHasBezier = FALSE;
-
-        for (USHORT i = 0; i < nCount; i++)
-        {
-            if ( pImpXPolygon->pFlagAry[i] == (BYTE) XPOLY_CONTROL )
-            {
-                bHasBezier = TRUE;
-                i = nCount;
-            }
-        }
-        if ( bHasBezier )
-        {   // Breite und Hoehe um 1 Prozent erweitern, um Differenzen zur
-            // ungenauen Bezierberechnung (wg. fehlendem OutputDevice) auszugleichen
-            long nWDiff = aRect.GetWidth()  / 200;
-            long nHDiff = aRect.GetHeight() / 200;
-            aRect.Left()   -= nWDiff;
-            aRect.Right()  += nWDiff;
-            aRect.Top()    -= nHDiff;
-            aRect.Bottom() += nHDiff;
-        }
-    }
-*/  //BFS09return aRect;
 }
 
 /*************************************************************************
@@ -1540,239 +1503,10 @@ void XPolygon::Rotate20()
     }
 }
 
-/*************************************************************************
-|*
-|*    XPolygon::operator>>()
-|*
-|*    Beschreibung      Stream-Leseoperator
-|*    Ersterstellung    ESO 04.04.95
-|*    Letzte Aenderung  ESO 04.04.95
-|*
-*************************************************************************/
-
-//BFS01SvStream& operator>>( SvStream& rIStream, XPolygon& rXPoly )
-//BFS01{
-//BFS01 DBG_CHKOBJ( &rXPoly, XPolygon, NULL );
-//BFS01
-//BFS01 USHORT          i;
-//BFS01 USHORT          nStart;
-//BFS01 USHORT          nCurPoints;
-//BFS01 USHORT          nReadPoints; // Anzahl der Punkte im Stream
-//BFS01 USHORT          nMerkPoints; // Anzahl der Punkte die ich speichern kann
-//BFS01 unsigned char   bShort;
-//BFS01 short           nShortX;
-//BFS01 short           nShortY;
-//BFS01 long            nLongX;
-//BFS01 long            nLongY;
-//BFS01
-//BFS01 rXPoly.pImpXPolygon->CheckPointDelete();
-//BFS01
-//BFS01 // Anzahl der Punkte einlesen und Array erzeugen
-//BFS01 rIStream >> nReadPoints;
-//BFS01 nMerkPoints=nReadPoints;
-//BFS01 if (nMerkPoints>XPOLY_MAXPOINTS) {
-//BFS01     nMerkPoints=XPOLY_MAXPOINTS;
-//BFS01     // hier koennte man ein Flag am Stream setzen um zu vermerken
-//BFS01     // dass beim Lesen Informationsverlusst aufgetreten ist !!!!!
-//BFS01 }
-//BFS01 rXPoly.pImpXPolygon->nPoints = nMerkPoints;
-//BFS01
-//BFS01 if ( rXPoly.pImpXPolygon->nRefCount != 1 )
-//BFS01 {
-//BFS01     if ( rXPoly.pImpXPolygon->nRefCount )
-//BFS01         rXPoly.pImpXPolygon->nRefCount--;
-//BFS01     rXPoly.pImpXPolygon = new ImpXPolygon( nMerkPoints );
-//BFS01 }
-//BFS01 else
-//BFS01     rXPoly.pImpXPolygon->Resize( nMerkPoints );
-//BFS01
-//BFS01 // Je nach CompressMode das Polygon einlesen
-//BFS01 if ( rIStream.GetCompressMode() == COMPRESSMODE_FULL )
-//BFS01 {
-//BFS01     i = 0;
-//BFS01     while ( i < nReadPoints )
-//BFS01     {
-//BFS01         rIStream >> bShort >> nCurPoints;
-//BFS01
-//BFS01         if ( bShort )
-//BFS01         {
-//BFS01             for ( nStart = i; i < nStart+nCurPoints; i++ )
-//BFS01             {
-//BFS01                 rIStream >> nShortX >> nShortY;
-//BFS01                 if (i<nMerkPoints) { // restliche Punkte ueberspringen
-//BFS01                     rXPoly.pImpXPolygon->pPointAry[i].X() = nShortX;
-//BFS01                     rXPoly.pImpXPolygon->pPointAry[i].Y() = nShortY;
-//BFS01                 }
-//BFS01             }
-//BFS01         }
-//BFS01         else
-//BFS01         {
-//BFS01             for ( nStart = i; i < nStart+nCurPoints; i++ )
-//BFS01             {
-//BFS01                 rIStream >> nLongX >> nLongY;
-//BFS01                 if (i<nMerkPoints) { // restliche Punkte ueberspringen
-//BFS01                     rXPoly.pImpXPolygon->pPointAry[i].X() = nLongX;
-//BFS01                     rXPoly.pImpXPolygon->pPointAry[i].Y() = nLongY;
-//BFS01                 }
-//BFS01             }
-//BFS01         }
-//BFS01     }
-//BFS01 }
-//BFS01 else
-//BFS01 {
-//BFS01     // Feststellen, ob ueber die Operatoren gelesen werden muss
-//BFS01#if (SAL_TYPES_SIZEOFLONG) != 4
-//BFS01     if ( 1 )
-//BFS01#else
-//BFS01#ifdef OSL_BIGENDIAN
-//BFS01     if ( rIStream.GetNumberFormatInt() != NUMBERFORMAT_INT_BIGENDIAN )
-//BFS01#else
-//BFS01     if ( rIStream.GetNumberFormatInt() != NUMBERFORMAT_INT_LITTLEENDIAN )
-//BFS01#endif
-//BFS01#endif
-//BFS01     {
-//BFS01         for( i = 0; i < nReadPoints; i++ ) {
-//BFS01             long x,y;
-//BFS01             rIStream >> x >> y;
-//BFS01             if (i<nMerkPoints) { // restliche Punkte ueberspringen
-//BFS01                 rXPoly.pImpXPolygon->pPointAry[i].X()=x;
-//BFS01                 rXPoly.pImpXPolygon->pPointAry[i].Y()=y;
-//BFS01             }
-//BFS01         }
-//BFS01     } else {
-//BFS01         rIStream.Read( rXPoly.pImpXPolygon->pPointAry, nMerkPoints*sizeof(Point) );
-//BFS01         if (nReadPoints>nMerkPoints) { // restliche Punkte ueberspringen
-//BFS01             rIStream.SeekRel( ULONG(nReadPoints-nMerkPoints)*sizeof(Point) );
-//BFS01         }
-//BFS01     }
-//BFS01 }
-//BFS01 rIStream.Read( rXPoly.pImpXPolygon->pFlagAry, nMerkPoints );
-//BFS01 if (nReadPoints>nMerkPoints) { // Flags der restlichen Punkte ueberspringen
-//BFS01     rIStream.SeekRel( ULONG(nReadPoints-nMerkPoints) );
-//BFS01     // Poly muesste hier noch etwas korregiert werden (Bezier-Kontrollpunkte am Ende..., geschlossen?)
-//BFS01 }
-//BFS01 while (rXPoly.GetPointCount()>0 && rXPoly.GetFlags(USHORT(rXPoly.GetPointCount()-1))==XPOLY_CONTROL) {
-//BFS01     // Kontrollpunkte am Ende entfernen (kann auftreten bei truncate wg. 64k-Grenze!)
-//BFS01     rXPoly.Remove(USHORT(rXPoly.GetPointCount()-1),1);
-//BFS01 }
-//BFS01
-//BFS01 return rIStream;
-//BFS01}
-
-/*************************************************************************
-|*
-|*    XPolygon::operator<<()
-|*
-|*    Beschreibung      Stream-Schreiboperator
-|*    Ersterstellung    ESO 04.04.95
-|*    Letzte Aenderung  ESO 04.04.95
-|*
-*************************************************************************/
-
-//BFS01SvStream& operator<<( SvStream& rOStream, const XPolygon& rXPoly )
-//BFS01{
-//BFS01 DBG_CHKOBJ( &rXPoly, XPolygon, NULL );
-//BFS01
-//BFS01 unsigned char   bShort;
-//BFS01 unsigned char   bCurShort;
-//BFS01 USHORT          nStart;
-//BFS01 USHORT          i;
-//BFS01 USHORT          nPoints = rXPoly.GetPointCount();
-//BFS01
-//BFS01 rXPoly.pImpXPolygon->CheckPointDelete();
-//BFS01
-//BFS01 // Anzahl der Punkte rausschreiben
-//BFS01 rOStream << nPoints;
-//BFS01
-//BFS01 // Je nach CompressMode das Polygon rausschreiben
-//BFS01 if ( rOStream.GetCompressMode() == COMPRESSMODE_FULL )
-//BFS01 {
-//BFS01     i = 0;
-//BFS01     while ( i < nPoints )
-//BFS01     {
-//BFS01         nStart = i;
-//BFS01
-//BFS01         // Feststellen, welcher Typ geschrieben werden soll
-//BFS01         if ( ((rXPoly.pImpXPolygon->pPointAry[nStart].X() >= SHRT_MIN) &&
-//BFS01               (rXPoly.pImpXPolygon->pPointAry[nStart].X() <= SHRT_MAX)) &&
-//BFS01              ((rXPoly.pImpXPolygon->pPointAry[nStart].Y() >= SHRT_MIN) &&
-//BFS01               (rXPoly.pImpXPolygon->pPointAry[nStart].Y() <= SHRT_MAX)) )
-//BFS01             bShort = TRUE;
-//BFS01         else
-//BFS01             bShort = FALSE;
-//BFS01         while ( i < nPoints )
-//BFS01         {
-//BFS01             // Feststellen, welcher Typ geschrieben werden soll
-//BFS01             if ( ((rXPoly.pImpXPolygon->pPointAry[nStart].X() >= SHRT_MIN) &&
-//BFS01                   (rXPoly.pImpXPolygon->pPointAry[nStart].X() <= SHRT_MAX)) &&
-//BFS01                  ((rXPoly.pImpXPolygon->pPointAry[nStart].Y() >= SHRT_MIN) &&
-//BFS01                   (rXPoly.pImpXPolygon->pPointAry[nStart].Y() <= SHRT_MAX)) )
-//BFS01                 bCurShort = TRUE;
-//BFS01             else
-//BFS01                 bCurShort = FALSE;
-//BFS01
-//BFS01             // Wenn sich die Werte in einen anderen Bereich begeben,
-//BFS01             // muessen wir neu rausschreiben
-//BFS01             if ( bCurShort != bShort )
-//BFS01             {
-//BFS01                 bShort = bCurShort;
-//BFS01                 break;
-//BFS01             }
-//BFS01
-//BFS01             i++;
-//BFS01         }
-//BFS01
-//BFS01         rOStream << bShort << (USHORT)(i-nStart);
-//BFS01
-//BFS01         if ( bShort )
-//BFS01         {
-//BFS01             for( ; nStart < i; nStart++ )
-//BFS01             {
-//BFS01                 rOStream << (short)rXPoly.pImpXPolygon->pPointAry[nStart].X()
-//BFS01                          << (short)rXPoly.pImpXPolygon->pPointAry[nStart].Y();
-//BFS01             }
-//BFS01         }
-//BFS01         else
-//BFS01         {
-//BFS01             for( ; nStart < i; nStart++ )
-//BFS01             {
-//BFS01                 rOStream << rXPoly.pImpXPolygon->pPointAry[nStart].X()
-//BFS01                          << rXPoly.pImpXPolygon->pPointAry[nStart].Y();
-//BFS01             }
-//BFS01         }
-//BFS01     }
-//BFS01 }
-//BFS01 else
-//BFS01 {
-//BFS01     // Feststellen, ob ueber die Operatoren geschrieben werden muss
-//BFS01#if (SAL_TYPES_SIZEOFLONG) != 4
-//BFS01     if ( 1 )
-//BFS01#else
-//BFS01#ifdef OSL_BIGENDIAN
-//BFS01     if ( rOStream.GetNumberFormatInt() != NUMBERFORMAT_INT_BIGENDIAN )
-//BFS01#else
-//BFS01     if ( rOStream.GetNumberFormatInt() != NUMBERFORMAT_INT_LITTLEENDIAN )
-//BFS01#endif
-//BFS01#endif
-//BFS01     {
-//BFS01         for( i = 0; i < nPoints; i++ )
-//BFS01             rOStream << rXPoly.pImpXPolygon->pPointAry[i].X()
-//BFS01                      << rXPoly.pImpXPolygon->pPointAry[i].Y();
-//BFS01     }
-//BFS01     else if ( nPoints )
-//BFS01         rOStream.Write( rXPoly.pImpXPolygon->pPointAry, nPoints*sizeof(Point) );
-//BFS01 }
-//BFS01
-//BFS01 if ( nPoints )
-//BFS01     rOStream.Write( rXPoly.pImpXPolygon->pFlagAry, nPoints );
-//BFS01
-//BFS01 return rOStream;
-//BFS01}
-
-// #116512# convert to ::basegfx::B2DPolygon and return
-::basegfx::B2DPolygon XPolygon::getB2DPolygon() const
+// #116512# convert to basegfx::B2DPolygon and return
+basegfx::B2DPolygon XPolygon::getB2DPolygon() const
 {
-    ::basegfx::B2DPolygon aRetval;
+    basegfx::B2DPolygon aRetval;
     const sal_uInt16 nCount(GetPointCount());
 
     for(sal_uInt16 a(0L); a < nCount;)
@@ -1788,32 +1522,32 @@ void XPolygon::Rotate20()
             Point aControlB = (*this)[a++];
 
             // add point A
-            ::basegfx::B2DPoint aPoA(aPointA.X(), aPointA.Y());
+            basegfx::B2DPoint aPoA(aPointA.X(), aPointA.Y());
             aRetval.append(aPoA);
 
             // calculate Vectors and add them
             const sal_uInt32 nDestIndex(aRetval.count() - 1L);
-            ::basegfx::B2DVector aVeA(aControlA.X() - aPointA.X(), aControlA.Y() - aPointA.Y());
+            basegfx::B2DVector aVeA(aControlA.X() - aPointA.X(), aControlA.Y() - aPointA.Y());
             aRetval.setControlVectorA(nDestIndex, aVeA);
-            ::basegfx::B2DVector aVeB(aControlB.X() - aPointA.X(), aControlB.Y() - aPointA.Y());
+            basegfx::B2DVector aVeB(aControlB.X() - aPointA.X(), aControlB.Y() - aPointA.Y());
             aRetval.setControlVectorB(nDestIndex, aVeB);
         }
         else
         {
             // add point A
-            ::basegfx::B2DPoint aPoA(aPointA.X(), aPointA.Y());
+            basegfx::B2DPoint aPoA(aPointA.X(), aPointA.Y());
             aRetval.append(aPoA);
         }
     }
 
     // set closed flag
-    ::basegfx::tools::checkClosed(aRetval);
+    basegfx::tools::checkClosed(aRetval);
 
     return aRetval;
 }
 
-// #116512# constructor to convert from ::basegfx::B2DPolygon
-XPolygon::XPolygon(const ::basegfx::B2DPolygon& rPolygon)
+// #116512# constructor to convert from basegfx::B2DPolygon
+XPolygon::XPolygon(const basegfx::B2DPolygon& rPolygon)
 {
     DBG_CTOR(XPolygon,NULL);
 
@@ -1827,7 +1561,7 @@ XPolygon::XPolygon(const ::basegfx::B2DPolygon& rPolygon)
         const sal_uInt32 nLoopCount(bClosed ? nCount : (nCount ? nCount - 1L : 0L ));
         const sal_uInt32 nTargetCount(nLoopCount ? (nLoopCount * 3L) + 1L : 0L);
         DBG_ASSERT(nTargetCount == sal_uInt32(sal_uInt16(nTargetCount)),
-            "XPolygon::XPolygon: Too many points in given ::basegfx::B2DPolygon (!)");
+            "XPolygon::XPolygon: Too many points in given basegfx::B2DPolygon (!)");
         pImpXPolygon = new ImpXPolygon( sal_uInt16(nTargetCount) , 1024 );
 
         if(nLoopCount)
@@ -1837,53 +1571,85 @@ XPolygon::XPolygon(const ::basegfx::B2DPolygon& rPolygon)
             for(sal_uInt32 a(0L); a < nLoopCount; a++)
             {
                 // get and add start point
-                ::basegfx::B2DPoint aB2DPointA(rPolygon.getB2DPoint(a));
-                Point aPointA(FRound(aB2DPointA.getX()), FRound(aB2DPointA.getY()));
-                sal_uInt16 nPointIndex(nIndex++);
+                const basegfx::B2DPoint aB2DPointA(rPolygon.getB2DPoint(a));
+                const Point aPointA(FRound(aB2DPointA.getX()), FRound(aB2DPointA.getY()));
+                const sal_uInt16 nPointIndex(nIndex++);
                 Insert(nPointIndex, aPointA, XPOLY_NORMAL);
 
-                // get and add first control point
-                ::basegfx::B2DVector aB2DVectorA(rPolygon.getControlVectorA(a));
+                // get and add first and second control point if one is defined
+                const basegfx::B2DVector aB2DVectorA(rPolygon.getControlVectorA(a));
+                const basegfx::B2DVector aB2DVectorB(rPolygon.getControlVectorB(a));
                 const sal_Bool bVectorAUsed(!aB2DVectorA.equalZero());
-                Point aVecA(aPointA);
-
-                if(bVectorAUsed)
-                {
-                    aVecA = Point(
-                        FRound(aB2DPointA.getX() + aB2DVectorA.getX()),
-                        FRound(aB2DPointA.getY() + aB2DVectorA.getY()));
-                }
-
-                Insert(nIndex++, aVecA, XPOLY_CONTROL);
-
-                // get and add second control point
-                ::basegfx::B2DVector aB2DVectorB(rPolygon.getControlVectorB(a));
                 const sal_Bool bVectorBUsed(!aB2DVectorB.equalZero());
-                Point aVecB(aPointA);
 
-                if(bVectorBUsed)
+                if(bVectorAUsed || bVectorBUsed)
                 {
-                    aVecB = Point(
-                        FRound(aB2DPointA.getX() + aB2DVectorB.getX()),
-                        FRound(aB2DPointA.getY() + aB2DVectorB.getY()));
-                }
+                    if(bVectorAUsed)
+                    {
+                        const Point aVecA(FRound(aB2DPointA.getX() + aB2DVectorA.getX()),  FRound(aB2DPointA.getY() + aB2DVectorA.getY()));
+                        Insert(nIndex++, aVecA, XPOLY_CONTROL);
+                    }
+                    else
+                    {
+                        Insert(nIndex++, aPointA, XPOLY_CONTROL);
+                    }
 
-                Insert(nIndex++, aVecB, XPOLY_CONTROL);
+                    if(bVectorBUsed)
+                    {
+                        const Point aVecB(FRound(aB2DPointA.getX() + aB2DVectorB.getX()), FRound(aB2DPointA.getY() + aB2DVectorB.getY()));
+                        Insert(nIndex++, aVecB, XPOLY_CONTROL);
+                    }
+                    else
+                    {
+                        const basegfx::B2DPoint aB2DPointB(rPolygon.getB2DPoint(basegfx::tools::getIndexOfSuccessor(a, rPolygon)));
+                        const Point aVecB(FRound(aB2DPointB.getX()), FRound(aB2DPointB.getY()));
+                        Insert(nIndex++, aVecB, XPOLY_CONTROL);
+                    }
+                }
 
                 // test continuity with previous control point
                 if(bVectorAUsed && (bClosed || a))
                 {
                     const sal_uInt32 nPrevInd(a == 0L ? nCount  - 1L : a - 1L);
-                    ::basegfx::B2DVector aB2DVectorPrev(rPolygon.getControlPointB(nPrevInd) - aB2DPointA);
-                    ::basegfx::B2VectorContinuity eCont = ::basegfx::getContinuity(aB2DVectorPrev, aB2DVectorA);
+                    const basegfx::B2DVector aB2DVectorPrev(rPolygon.getControlPointB(nPrevInd) - aB2DPointA);
 
-                    if(::basegfx::CONTINUITY_C1 == eCont)
+                    // do not use basegfx::getContinuity() here since the values are (or were) integer
+                    // based on their way, so basegfx::areParallel() needs to be unsharp enough for detecting
+                    // the C1 continoity for the integer case
+                    if(!aB2DVectorPrev.equalZero() && !aB2DVectorA.equalZero())
                     {
-                        SetFlags(nPointIndex, XPOLY_SMOOTH);
-                    }
-                    else if(::basegfx::CONTINUITY_C2 == eCont)
-                    {
-                        SetFlags(nPointIndex, XPOLY_SYMMTR);
+                        if( basegfx::fTools::equal(aB2DVectorPrev.getX(), -aB2DVectorA.getX()) &&
+                            basegfx::fTools::equal(aB2DVectorPrev.getY(), -aB2DVectorA.getY()))
+                        {
+                            // same direction and same length -> C2
+                            SetFlags(nPointIndex, XPOLY_SYMMTR);
+                        }
+                        else
+                        {
+                            const double fCrossA(aB2DVectorPrev.getX() * aB2DVectorA.getY());
+                            const double fCrossB(aB2DVectorPrev.getY() * aB2DVectorA.getX());
+                            bool bIsParallel(false);
+
+                            if(basegfx::fTools::equal(fCrossA, fCrossB))
+                            {
+                                bIsParallel = true;
+                            }
+                            else
+                            {
+                                const double fRelativeDifference((fCrossA - fCrossB) / (fCrossA + fCrossB));
+
+                                if(basegfx::fTools::equalZero(fRelativeDifference, 0.01))
+                                {
+                                    bIsParallel = true;
+                                }
+                            }
+
+                            if(bIsParallel)
+                            {
+                                // same direction -> C1
+                                SetFlags(nPointIndex, XPOLY_SMOOTH);
+                            }
+                        }
                     }
                 }
             }
@@ -1896,10 +1662,13 @@ XPolygon::XPolygon(const ::basegfx::B2DPolygon& rPolygon)
             else
             {
                 // add last point as closing point
-                ::basegfx::B2DPoint aClosingPoint(rPolygon.getB2DPoint(nCount - 1L));
-                Point aEnd(FRound(aClosingPoint.getX()), FRound(aClosingPoint.getY()));
+                const basegfx::B2DPoint aClosingPoint(rPolygon.getB2DPoint(nCount - 1L));
+                const Point aEnd(FRound(aClosingPoint.getX()), FRound(aClosingPoint.getY()));
                 Insert(nIndex, aEnd, XPOLY_NORMAL);
             }
+
+            // set correct point count
+            pImpXPolygon->nPoints = nIndex + 1;
         }
     }
     else
@@ -1907,7 +1676,7 @@ XPolygon::XPolygon(const ::basegfx::B2DPolygon& rPolygon)
         // point list creation
         const sal_uInt32 nTargetCount(nCount + (bClosed ? 1L : 0L));
         DBG_ASSERT(nTargetCount == sal_uInt32(sal_uInt16(nTargetCount)),
-            "XPolygon::XPolygon: Too many points in given ::basegfx::B2DPolygon (!)");
+            "XPolygon::XPolygon: Too many points in given basegfx::B2DPolygon (!)");
         pImpXPolygon = new ImpXPolygon( sal_uInt16(nTargetCount) , 1024 );
 
         if(nCount)
@@ -1916,8 +1685,8 @@ XPolygon::XPolygon(const ::basegfx::B2DPolygon& rPolygon)
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
-                ::basegfx::B2DPoint aB2DPoint(rPolygon.getB2DPoint(a));
-                Point aPoint(FRound(aB2DPoint.getX()), FRound(aB2DPoint.getY()));
+                const basegfx::B2DPoint aB2DPoint(rPolygon.getB2DPoint(a));
+                const Point aPoint(FRound(aB2DPoint.getX()), FRound(aB2DPoint.getY()));
                 Insert(nIndex++, aPoint, XPOLY_NORMAL);
             }
 
@@ -2292,7 +2061,6 @@ void XPolyPolygon::Move( long nHorzMove, long nVertMove )
 |*
 *************************************************************************/
 
-//BFS09Rectangle XPolyPolygon::GetBoundRect(OutputDevice* pOut) const
 Rectangle XPolyPolygon::GetBoundRect() const
 {
     USHORT    nXPoly = (USHORT)pImpXPolyPolygon->aXPolyList.Count();
@@ -2301,8 +2069,6 @@ Rectangle XPolyPolygon::GetBoundRect() const
     for ( USHORT n = 0; n < nXPoly; n++ )
     {
         const XPolygon* pXPoly = pImpXPolyPolygon->aXPolyList.GetObject( n );
-
-//BFS09     aRect.Union( pXPoly->GetBoundRect(pOut) );
         aRect.Union( pXPoly->GetBoundRect() );
     }
 
@@ -2542,95 +2308,10 @@ void XPolyPolygon::Distort(const Rectangle& rRefRect,
 }
 
 
-/*************************************************************************
-|*
-|*    XPolyPolygon::operator>>()
-|*
-|*    Beschreibung      Stream-Leseoperator
-|*    Ersterstellung    ESO 04.04.95
-|*    Letzte Aenderung  Joe 10.10.95  64k Begrenzung
-|*
-*************************************************************************/
-
-//BFS01SvStream& operator>>( SvStream& rIStream, XPolyPolygon& rXPolyPoly )
-//BFS01{
-//BFS01 DBG_CHKOBJ( &rXPolyPoly, XPolyPolygon, NULL );
-//BFS01
-//BFS01 XPolygon* pXPoly;
-//BFS01
-//BFS01 // Anzahl der Polygone einlesen
-//BFS01 USHORT nXPolyCount;
-//BFS01 rIStream >> nXPolyCount;
-//BFS01
-//BFS01 FASTBOOL bTruncated=FALSE;
-//BFS01 ULONG nAllPointCount=0; // Gesamtanzahl der Punkte mitzaehlen
-//BFS01
-//BFS01 if ( rXPolyPoly.pImpXPolyPolygon->nRefCount > 1 ) {
-//BFS01     rXPolyPoly.pImpXPolyPolygon->nRefCount--;
-//BFS01 } else {
-//BFS01     delete rXPolyPoly.pImpXPolyPolygon;
-//BFS01 }
-//BFS01 rXPolyPoly.pImpXPolyPolygon = new ImpXPolyPolygon( nXPolyCount );
-//BFS01
-//BFS01 while (nXPolyCount>0) {
-//BFS01     pXPoly = new XPolygon;
-//BFS01     rIStream >> *pXPoly;
-//BFS01     nAllPointCount+=pXPoly->GetPointCount();
-//BFS01     if (!bTruncated) {
-//BFS01         if (nAllPointCount>XPOLY_MAXPOINTS) {
-//BFS01             USHORT nDel=(USHORT)(nAllPointCount-XPOLY_MAXPOINTS);
-//BFS01             USHORT nPos=pXPoly->GetPointCount()-nDel;
-//BFS01             pXPoly->Remove(nPos,nDel);
-//BFS01             bTruncated=TRUE; // Alle nachfolgenden Polygone werden ignoriert
-//BFS01         }
-//BFS01         rXPolyPoly.pImpXPolyPolygon->aXPolyList.Insert( pXPoly, LIST_APPEND );
-//BFS01     } else {
-//BFS01         delete pXPoly;
-//BFS01     }
-//BFS01     nXPolyCount--;
-//BFS01 }
-//BFS01
-//BFS01 if (bTruncated) {
-//BFS01     // hier koennte man ein Flag am Stream setzen um zu vermerken
-//BFS01     // dass beim Lesen Informationsverlusst aufgetreten ist !!!!!
-//BFS01 }
-//BFS01
-//BFS01 return rIStream;
-//BFS01}
-
-/*************************************************************************
-|*
-|*    XPolyPolygon::operator<<()
-|*
-|*    Beschreibung      Stream-Schreiboperator
-|*    Ersterstellung    ESO 04.04.95
-|*    Letzte Aenderung  ESO 04.04.95
-|*
-*************************************************************************/
-
-//BFS01SvStream& operator<<( SvStream& rOStream, const XPolyPolygon& rXPolyPoly )
-//BFS01{
-//BFS01 DBG_CHKOBJ( &rXPolyPoly, XPolyPolygon, NULL );
-//BFS01
-//BFS01 // Anzahl der Polygone rausschreiben
-//BFS01 rOStream << rXPolyPoly.Count();
-//BFS01
-//BFS01 // Die einzelnen Polygone ausgeben
-//BFS01 XPolygon* pXPoly = rXPolyPoly.pImpXPolyPolygon->aXPolyList.First();
-//BFS01
-//BFS01 while( pXPoly )
-//BFS01 {
-//BFS01     rOStream << *pXPoly;
-//BFS01     pXPoly = rXPolyPoly.pImpXPolyPolygon->aXPolyList.Next();
-//BFS01 }
-//BFS01
-//BFS01 return rOStream;
-//BFS01}
-
-// #116512# convert to ::basegfx::B2DPolyPolygon and return
-::basegfx::B2DPolyPolygon XPolyPolygon::getB2DPolyPolygon() const
+// #116512# convert to basegfx::B2DPolyPolygon and return
+basegfx::B2DPolyPolygon XPolyPolygon::getB2DPolyPolygon() const
 {
-    ::basegfx::B2DPolyPolygon aRetval;
+    basegfx::B2DPolyPolygon aRetval;
 
     for(sal_uInt16 a(0L); a < Count(); a++)
     {
@@ -2641,15 +2322,15 @@ void XPolyPolygon::Distort(const Rectangle& rRefRect,
     return aRetval;
 }
 
-// #116512# constructor to convert from ::basegfx::B2DPolyPolygon
-XPolyPolygon::XPolyPolygon(const ::basegfx::B2DPolyPolygon& rPolyPolygon)
+// #116512# constructor to convert from basegfx::B2DPolyPolygon
+XPolyPolygon::XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
     DBG_CTOR(XPolyPolygon,NULL);
     pImpXPolyPolygon = new ImpXPolyPolygon( 16, 16 );
 
     for(sal_uInt32 a(0L); a < rPolyPolygon.count(); a++)
     {
-        ::basegfx::B2DPolygon aCandidate = rPolyPolygon.getB2DPolygon(a);
+        basegfx::B2DPolygon aCandidate = rPolyPolygon.getB2DPolygon(a);
         XPolygon aNewPoly(aCandidate);
         Insert(aNewPoly);
     }
