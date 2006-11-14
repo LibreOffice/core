@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impgrf.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:56:35 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:39:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@
 // returnt einen static Graphic-Filter, wird einmalig angelegt,
 // steht immer zur Verfuegung, DARF NIE geloescht werden!!!!
 SVX_DLLPUBLIC GraphicFilter* GetGrfFilter();
-//USHORT    FillFilter( GraphicFilter& rFilter );
 SVX_DLLPUBLIC int   LoadGraphic( const String& rPath, const String& rFilter,
                      Graphic& rGraphic,
                      GraphicFilter* pFilter = NULL,
