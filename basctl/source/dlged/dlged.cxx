@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:30:38 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:28:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,18 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
+
 using namespace comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -207,7 +219,7 @@ void DlgEditor::ShowDialog()
 BOOL DlgEditor::UnmarkDialog()
 {
     SdrObject*      pDlgObj = pDlgEdModel->GetPage(0)->GetObj(0);
-    SdrPageView*    pPgView = pDlgEdView->GetPageViewPvNum(0);
+    SdrPageView*    pPgView = pDlgEdView->GetSdrPageView();
 
     BOOL bWasMarked = pDlgEdView->IsObjMarked( pDlgObj );
 
@@ -222,7 +234,7 @@ BOOL DlgEditor::UnmarkDialog()
 BOOL DlgEditor::RemarkDialog()
 {
     SdrObject*      pDlgObj = pDlgEdModel->GetPage(0)->GetObj(0);
-    SdrPageView*    pPgView = pDlgEdView->GetPageViewPvNum(0);
+    SdrPageView*    pPgView = pDlgEdView->GetSdrPageView();
 
     BOOL bWasMarked = pDlgEdView->IsObjMarked( pDlgObj );
 
@@ -289,10 +301,21 @@ DlgEditor::~DlgEditor()
     aPaintTimer.Stop();
     aMarkTimer.Stop();
 
+    ::comphelper::disposeComponent( m_xControlContainer );
+
     delete pObjFac;
     delete pFunc;
     delete pDlgEdView;
     delete pDlgEdModel;
+}
+
+//----------------------------------------------------------------------------
+
+Reference< awt::XControlContainer > DlgEditor::GetWindowControlContainer()
+{
+    if ( !m_xControlContainer.is() && pWindow )
+        m_xControlContainer = VCLUnoHelper::CreateControlContainer( pWindow );
+    return m_xControlContainer;
 }
 
 //----------------------------------------------------------------------------
@@ -304,18 +327,20 @@ void DlgEditor::SetWindow( Window* pWindow )
     pDlgEdPage->SetSize( pWindow->PixelToLogic( Size( DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN ) ) );
 
     pDlgEdView = new DlgEdView( pDlgEdModel, pWindow, this );
-    pDlgEdView->ShowPagePgNum( 0, Point() );
+    pDlgEdView->ShowSdrPage(pDlgEdView->GetModel()->GetPage(0));
     pDlgEdView->SetLayerVisible( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ), FALSE );
     pDlgEdView->SetMoveSnapOnlyTopLeft( TRUE );
     pDlgEdView->SetWorkArea( Rectangle( Point( 0, 0 ), pDlgEdPage->GetSize() ) );
 
     pDlgEdView->SetGridCoarse( aGridSize );
-    pDlgEdView->SetSnapGrid( aGridSize );
+    pDlgEdView->SetSnapGridWidth(Fraction(aGridSize.Width(), 1), Fraction(aGridSize.Height(), 1));
     pDlgEdView->SetGridSnap( bGridSnap );
     pDlgEdView->SetGridVisible( bGridVisible );
     pDlgEdView->SetDragStripes( FALSE );
 
     pDlgEdView->SetDesignMode( TRUE );
+
+    ::comphelper::disposeComponent( m_xControlContainer );
 }
 
 //----------------------------------------------------------------------------
@@ -569,7 +594,7 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
                 Size   aSize = pWindow->PixelToLogic( Size( 400, 300 ) );
 
                 // align with grid
-                Size  aGridSize = pDlgEdView->GetSnapGrid();
+                Size  aGridSize(long(pDlgEdView->GetSnapGridWidthX()), long(pDlgEdView->GetSnapGridWidthY()));
                 aSize.Width()  -= aSize.Width()  % aGridSize.Width();
                 aSize.Height() -= aSize.Height() % aGridSize.Height();
 
@@ -614,20 +639,27 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
         }
     }
 
-    // #i43005# repaint problems when deleting controls
-    Wallpaper aWallpaper = Wallpaper( Color( COL_WHITE ) );
-    if ( pWindow )
-        pWindow->DrawWallpaper( aPaintRect, aWallpaper );
+    // repaint, get PageView and prepare Region
+    SdrPageView* pPgView = pDlgEdView->GetSdrPageView();
+    const Region aPaintRectRegion(aPaintRect);
 
-    // #114282# unbuffered paint
-    SdrPageView* pPgView = pDlgEdView->GetPageViewPvNum(0);
-    if ( pPgView )
+    // mark repaint start
+    if(pPgView)
     {
-        pPgView->DrawLayer( 0, aPaintRect, pWindow );
+        pPgView->GetView().BeginDrawLayers(pWindow, aPaintRectRegion, sal_False);
+    }
 
-        // #i32773#
-        // Handles need to be painted in paint method, too.
-        (pPgView->GetView()).RefreshAllIAOManagers();
+    // draw background self using wallpaper
+    if(pWindow)
+    {
+        pWindow->DrawWallpaper(aPaintRect, Wallpaper(Color(COL_WHITE)));
+    }
+
+    // do paint (unbuffered) and mark repaint end
+    if(pPgView)
+    {
+        pPgView->DrawLayer(0, pWindow);
+        pPgView->GetView().EndDrawLayers(pWindow);
     }
 
     nInPaint = FALSE;
@@ -712,8 +744,8 @@ void DlgEditor::CreateDefaultObject()
         pDlgEdObj->SetDefaults();
 
         // insert object into drawing page
-        SdrPageView* pPageView = pDlgEdView->GetPageViewPvNum(0);
-        pDlgEdView->InsertObject( pDlgEdObj, *pPageView, 0 );
+        SdrPageView* pPageView = pDlgEdView->GetSdrPageView();
+        pDlgEdView->InsertObjectAtView( pDlgEdObj, *pPageView);
 
         // start listening
         pDlgEdObj->StartListening();
@@ -918,7 +950,7 @@ void DlgEditor::Paste()
                         pCtrlObj->StartListening();                         // start listening
 
                         // mark object
-                        SdrPageView* pPgView = pDlgEdView->GetPageViewPvNum(0);
+                        SdrPageView* pPgView = pDlgEdView->GetSdrPageView();
                         pDlgEdView->MarkObj( pCtrlObj, pPgView, FALSE, TRUE);
                     }
 
