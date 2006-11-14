@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolypolygon.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:02:27 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:08:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,10 @@
 
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
+#endif
+
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 
 #include <functional>
@@ -369,7 +373,10 @@ namespace basegfx
 
     void B2DPolyPolygon::transform(const ::basegfx::B2DHomMatrix& rMatrix)
     {
-        mpPolyPolygon->transform(rMatrix);
+        if(mpPolyPolygon->count() && !rMatrix.isIdentity())
+        {
+            mpPolyPolygon->transform(rMatrix);
+        }
     }
 } // end of namespace basegfx
 
