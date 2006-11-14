@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmfwr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 13:04:05 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:43:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,16 +76,17 @@ private:
 
     BOOL            bStatus;
 
-    PFilterCallback pCallback;
-    void*           pCallerData;
-    ULONG           nLastPercent; // Mit welcher Zahl pCallback zuletzt aufgerufen wurde.
+    ULONG                   nLastPercent; // Mit welcher Zahl pCallback zuletzt aufgerufen wurde.
+    FilterConfigItem*       pFilterConfigItem;
 
-    SvStream*       pWMF;
-    VirtualDevice*  pVirDev;
+    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
+
+    SvStream*               pWMF;
+    VirtualDevice*          pVirDev;
     StarSymbolToMSMultiFont *pConvert;
-    MapMode         aTargetMapMode;
-    Size            aTargetSize;
-    USHORT          nTargetDivisor;
+    MapMode                 aTargetMapMode;
+    Size                    aTargetSize;
+    USHORT                  nTargetDivisor;
 
     ULONG nMetafileHeaderPos;
     sal_uInt32 nMaxRecordSize; // in Worten
@@ -213,9 +214,7 @@ public:
 
     WMFWriter() {}
 
-    BOOL WriteWMF(const GDIMetaFile & rMTF, SvStream & rTargetStream,
-                  PFilterCallback pcallback, void * pcallerdata,
-                  BOOL bPlaceable=TRUE);
+    BOOL WriteWMF(const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem* pFilterConfigItem, BOOL bPlaceable=TRUE);
 };
 
 #endif
