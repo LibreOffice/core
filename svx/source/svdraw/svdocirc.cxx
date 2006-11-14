@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:12:39 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:45:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,22 @@
 #include <svx/sdr/properties/circleproperties.hxx>
 #endif
 
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
 void SetWinkPnt(const Rectangle& rR, long nWink, Point& rPnt)
 {
     Point aCenter(rR.Center());
@@ -142,6 +158,7 @@ TYPEINIT1(SdrCircObj,SdrRectObj);
 
 SdrCircObj::SdrCircObj(SdrObjKind eNewKind)
 {
+    mbPolygonIsLine = false;
     nStartWink=0;
     nEndWink=36000;
     eKind=eNewKind;
@@ -151,6 +168,7 @@ SdrCircObj::SdrCircObj(SdrObjKind eNewKind)
 SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect):
     SdrRectObj(rRect)
 {
+    mbPolygonIsLine = false;
     nStartWink=0;
     nEndWink=36000;
     eKind=eNewKind;
@@ -160,6 +178,7 @@ SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect):
 SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect, long nNewStartWink, long nNewEndWink):
     SdrRectObj(rRect)
 {
+    mbPolygonIsLine = false;
     long nWinkDif=nNewEndWink-nNewStartWink;
     nStartWink=NormAngle360(nNewStartWink);
     nEndWink=NormAngle360(nNewEndWink);
@@ -213,13 +232,13 @@ FASTBOOL SdrCircObj::PaintNeedsXPolyCirc() const
         if(!bNeed && eKind == OBJ_CARC)
         {
             // Linienanfang ist da, wenn StartPolygon und StartWidth!=0
-            bNeed=((XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetLineStartValue().GetPointCount() != 0 &&
+            bNeed=((XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetLineStartValue().count() != 0L &&
                   ((XLineStartWidthItem&)(rSet.Get(XATTR_LINESTARTWIDTH))).GetValue() != 0;
 
             if(!bNeed)
             {
                 // Linienende ist da, wenn EndPolygon und EndWidth!=0
-                bNeed = ((XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetLineEndValue().GetPointCount() != 0 &&
+                bNeed = ((XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetLineEndValue().count() != 0L &&
                         ((XLineEndWidthItem&)(rSet.Get(XATTR_LINEENDWIDTH))).GetValue() != 0;
             }
         }
@@ -265,8 +284,8 @@ XPolygon SdrCircObj::ImpCalcXPolyCirc(const Rectangle& rRect1, long nStart, long
             ry=-ry;
         }
     }
-    ((SdrCircObj*)this)->bXPolyIsLine=eKind==OBJ_CARC;
-    bool bClose=eKind==OBJ_CIRC /*|| eKind==OBJ_SECT*/;
+    ((SdrCircObj*)this)->mbPolygonIsLine=eKind==OBJ_CARC;
+    const bool bClose(eKind==OBJ_CIRC /*|| eKind==OBJ_SECT*/);
     XPolygon aXPoly(rRect1.Center(),rx,ry,USHORT(a),USHORT(e),bClose);
     if (eKind!=OBJ_CIRC && nStart==nEnd) {
         if (eKind==OBJ_SECT) {
@@ -294,7 +313,7 @@ XPolygon SdrCircObj::ImpCalcXPolyCirc(const Rectangle& rRect1, long nStart, long
 
 void SdrCircObj::RecalcXPoly()
 {
-    pXPoly=new XPolygon(ImpCalcXPolyCirc(aRect,nStartWink,nEndWink));
+    mpXPoly = new XPolygon(ImpCalcXPolyCirc(aRect,nStartWink,nEndWink));
 }
 
 void SdrCircObj::RecalcBoundRect()
@@ -316,7 +335,6 @@ void SdrCircObj::RecalcBoundRect()
         if (nLEndWdt>nLineWdt) nLineWdt=nLEndWdt;
     }
 
-    //BFS09
     if(ImpAddLineGeomteryForMiteredLines())
     {
         nLineWdt = 0;
@@ -381,7 +399,7 @@ sal_Bool SdrCircObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
 
         if (PaintNeedsXPolyCirc())
         {
-            if( !bXPolyIsLine )
+            if( !mbPolygonIsLine )
             {
                 XPolygon aX(GetXPoly()); // In dieser Reihenfolge, damit bXPolyIsLine gueltig ist.
                 aX.Move(nXDist,nYDist);
@@ -389,7 +407,7 @@ sal_Bool SdrCircObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
                 // #100127# Output original geometry for metafiles
                 ImpGraphicFill aFill( *this, rXOut, aShadowSet, true );
 
-                rXOut.DrawXPolygon(aX);
+                rXOut.DrawPolygon(aX.getB2DPolygon());
             }
         } else {
             // #100127# Output original geometry for metafiles
@@ -432,14 +450,14 @@ sal_Bool SdrCircObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
     if (!bHideContour) {
         if (PaintNeedsXPolyCirc())
         {
-            if( !bXPolyIsLine )
+            if( !mbPolygonIsLine )
             {
                 const XPolygon& rXP=GetXPoly(); // In dieser Reihenfolge, damit bXPolyIsLine gueltig ist.
 
                 // #100127# Output original geometry for metafiles
                 ImpGraphicFill aFill( *this, rXOut, bIsFillDraft ? aEmptySet : aItemSet );
 
-                rXOut.DrawXPolygon(rXP);
+                rXOut.DrawPolygon(rXP.getB2DPolygon());
             }
         } else {
             // #100127# Output original geometry for metafiles
@@ -471,17 +489,16 @@ sal_Bool SdrCircObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
         bOk=SdrTextObj::DoPaintObject(rXOut,rInfoRec);
     }
 
-    // #110094#-13
-    //if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
-    //  bOk=PaintGluePoints(rXOut,rInfoRec);
-    //}
-
     return bOk;
 }
 
 SdrObject* SdrCircObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
-    if (pVisiLayer!=NULL && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId))) return NULL;
+    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(nLayerId)))
+    {
+        return NULL;
+    }
+
     Point aPt(rPnt);
     Point aZero;
     aPt.X()-=aRect.Left();
@@ -585,8 +602,7 @@ SdrObject* SdrCircObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
                 if (eKind==OBJ_CCUT) { // Kreisabschnitt noch die Sehne und die MaeuseEcke (Dreieck) testen
                     if (IsRectTouchesLine(aP1,aP2,aR)) bRet = sal_True; // die Sehne
                     else if (bFilled) { // und nun die Maeusescke
-//BFS09                     Polygon aPoly(XOutCreatePolygon(GetXPoly(),NULL));
-                        Polygon aPoly(XOutCreatePolygon(GetXPoly()));
+                        const Polygon aPoly(basegfx::tools::adaptiveSubdivideByAngle(GetXPoly().getB2DPolygon()));
                         bRet=IsPointInsidePoly(aPoly,rPnt);
                     }
                 }
@@ -662,27 +678,21 @@ void SdrCircObj::operator=(const SdrObject& rObj)
     aPnt2 = ((SdrCircObj&)rObj).aPnt2;
 }
 
-void SdrCircObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL /*bDetail*/) const
+basegfx::B2DPolyPolygon SdrCircObj::TakeXorPoly(sal_Bool /*bDetail*/) const
 {
+    basegfx::B2DPolyPolygon aRetval;
+
     XPolygon aP(ImpCalcXPolyCirc(aRect,nStartWink,nEndWink));
-    if (!bXPolyIsLine) { // Polygon schliessen
+    if (!mbPolygonIsLine) { // Polygon schliessen
         USHORT n=aP.GetPointCount();
         Point aPnt(aP[0]);
         aP[n]=aPnt;
     }
-    rPoly=XPolyPolygon(aP);
-}
 
-void SdrCircObj::TakeContour(XPolyPolygon& rPoly) const
-{
-    // am 14.1.97 wg. Umstellung TakeContour ueber Mtf und Paint. Joe.
-    SdrRectObj::TakeContour(rPoly);
-}
+    aRetval.append(aP.getB2DPolygon());
 
-//#110094#-12
-//void SdrCircObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
-//{
-//}
+    return aRetval;
+}
 
 struct ImpCircUser : public SdrDragStatUserData
 {
@@ -711,38 +721,42 @@ public:
     void SetCreateParams(SdrDragStat& rStat);
 };
 
-USHORT SdrCircObj::GetHdlCount() const
+sal_uInt32 SdrCircObj::GetHdlCount() const
 {
-    if (eKind!=OBJ_CIRC) {
-        return 10;
-    } else {
-        return 8;
+    if(OBJ_CIRC != eKind)
+    {
+        return 10L;
+    }
+    else
+    {
+        return 8L;
     }
 }
 
-SdrHdl* SdrCircObj::GetHdl(USHORT nHdlNum) const
+SdrHdl* SdrCircObj::GetHdl(sal_uInt32 nHdlNum) const
 {
-    if (eKind==OBJ_CIRC) nHdlNum+=2; // Keine Winkelhandles fuer den Vollkreis
+    if (eKind==OBJ_CIRC)
+        nHdlNum += 2L; // Keine Winkelhandles fuer den Vollkreis
     SdrHdl* pH=NULL;
     Point aPnt;
-    SdrHdlKind eKind2=HDL_MOVE;
-    USHORT nPNum=0;
+    SdrHdlKind eLocalKind=HDL_MOVE;
+    sal_uInt32 nPNum(0L);
     switch (nHdlNum) {
-        case 0: aPnt=aPnt1; eKind2=HDL_CIRC; nPNum=1; break; // StartWink
-        case 1: aPnt=aPnt2; eKind2=HDL_CIRC; nPNum=2; break; // EndWink
-        case 2: aPnt=aRect.TopLeft();      eKind2=HDL_UPLFT; break; // Oben links
-        case 3: aPnt=aRect.TopCenter();    eKind2=HDL_UPPER; break; // Oben
-        case 4: aPnt=aRect.TopRight();     eKind2=HDL_UPRGT; break; // Oben rechts
-        case 5: aPnt=aRect.LeftCenter();   eKind2=HDL_LEFT ; break; // Links
-        case 6: aPnt=aRect.RightCenter();  eKind2=HDL_RIGHT; break; // Rechts
-        case 7: aPnt=aRect.BottomLeft();   eKind2=HDL_LWLFT; break; // Unten links
-        case 8: aPnt=aRect.BottomCenter(); eKind2=HDL_LOWER; break; // Unten
-        case 9: aPnt=aRect.BottomRight();  eKind2=HDL_LWRGT; break; // Unten rechts
+        case 0: aPnt=aPnt1; eLocalKind=HDL_CIRC; nPNum=1L; break; // StartWink
+        case 1: aPnt=aPnt2; eLocalKind=HDL_CIRC; nPNum=2L; break; // EndWink
+        case 2: aPnt=aRect.TopLeft();      eLocalKind=HDL_UPLFT; break; // Oben links
+        case 3: aPnt=aRect.TopCenter();    eLocalKind=HDL_UPPER; break; // Oben
+        case 4: aPnt=aRect.TopRight();     eLocalKind=HDL_UPRGT; break; // Oben rechts
+        case 5: aPnt=aRect.LeftCenter();   eLocalKind=HDL_LEFT ; break; // Links
+        case 6: aPnt=aRect.RightCenter();  eLocalKind=HDL_RIGHT; break; // Rechts
+        case 7: aPnt=aRect.BottomLeft();   eLocalKind=HDL_LWLFT; break; // Unten links
+        case 8: aPnt=aRect.BottomCenter(); eLocalKind=HDL_LOWER; break; // Unten
+        case 9: aPnt=aRect.BottomRight();  eLocalKind=HDL_LWRGT; break; // Unten rechts
     }
     if (aGeo.nShearWink!=0) ShearPoint(aPnt,aRect.TopLeft(),aGeo.nTan);
     if (aGeo.nDrehWink!=0) RotatePoint(aPnt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-    if (eKind2!=HDL_MOVE) {
-        pH=new SdrHdl(aPnt,eKind2);
+    if (eLocalKind!=HDL_MOVE) {
+        pH=new SdrHdl(aPnt,eLocalKind);
         pH->SetPointNum(nPNum);
         pH->SetObj((SdrObject*)this);
         pH->SetDrehWink(aGeo.nDrehWink);
@@ -821,9 +835,7 @@ FASTBOOL SdrCircObj::EndDrag(SdrDragStat& rDrag)
     FASTBOOL bWink=rDrag.GetHdl()!=NULL && rDrag.GetHdl()->GetKind()==HDL_CIRC;
     if (bWink) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        // #110094#-14 SendRepaintBroadcast();
-        ImpCircUser* pUserData = (ImpCircUser*)rDrag.GetUser();
-        const long nWink(pUserData ? pUserData->nWink : 0L);
+        long nWink=*((long*)(rDrag.GetUser()));
         if (rDrag.GetHdl()->GetPointNum()==1) nStartWink=nWink;
         if (rDrag.GetHdl()->GetPointNum()==2) nEndWink=nWink;
         SetRectsDirty();
@@ -890,26 +902,34 @@ XubString SdrCircObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDra
     }
 }
 
-void SdrCircObj::TakeDragPoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) const
+basegfx::B2DPolyPolygon SdrCircObj::TakeDragPoly(const SdrDragStat& rDrag) const
 {
-    rXPP.Clear();
-    FASTBOOL bWink=rDrag.GetHdl()!=NULL && rDrag.GetHdl()->GetKind()==HDL_CIRC;
-    long a=nStartWink;
-    long e=nEndWink;
-    if (bWink) {
-        ImpCircUser* pUserData = (ImpCircUser*)rDrag.GetUser();
-        const sal_Int32 nWink(pUserData ? pUserData->nWink : 0L);
+    const bool bWink(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
+    long a(nStartWink);
+    long e(nEndWink);
+
+    if(bWink)
+    {
+        long nWink=*((long*)(rDrag.GetUser()));
         if (rDrag.GetHdl()->GetPointNum()==1) a=nWink;
         else e=nWink;
     }
+
     Rectangle aTmpRect(bWink ? aRect : ImpDragCalcRect(rDrag));
-    XPolygon aXP(ImpCalcXPolyCirc(aTmpRect,a,e));
-    if (!bXPolyIsLine) { // Polygon schliessen
+    XPolygon aXP(ImpCalcXPolyCirc(aTmpRect, a, e));
+
+    if(!mbPolygonIsLine)
+    {
+        // Polygon schliessen
         USHORT n=aXP.GetPointCount();
         Point aPnt(aXP[0]);
         aXP[n]=aPnt;
     }
-    rXPP.Insert(aXP);
+
+    XPolyPolygon aXPP;
+    aXPP.Insert(aXP);
+
+    return aXPP.getB2DPolyPolygon();
 }
 
 void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
@@ -979,6 +999,10 @@ void SdrCircObj::ImpSetCreateParams(SdrDragStat& rStat) const
 FASTBOOL SdrCircObj::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho4Possible();
+    Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
+    aRect1.Justify();
+    rStat.SetActionRect(aRect1);
+    aRect = aRect1;
     ImpSetCreateParams(rStat);
     return TRUE;
 }
@@ -1046,27 +1070,37 @@ FASTBOOL SdrCircObj::BckCreate(SdrDragStat& rStat)
     return eKind!=OBJ_CIRC;
 }
 
-void SdrCircObj::TakeCreatePoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) const
+basegfx::B2DPolyPolygon SdrCircObj::TakeCreatePoly(const SdrDragStat& rDrag) const
 {
-    rXPP.Clear();
-    ImpCircUser* pU=(ImpCircUser*)rDrag.GetUser();
-    if (eKind==OBJ_CIRC || rDrag.GetPointAnz()<4) {
-        rXPP.Insert(XPolygon(pU->aCenter,pU->aR.GetWidth()/2,pU->aR.GetHeight()/2));
-        if (rDrag.GetPointAnz()==3) {
-            XPolygon aXP(2);
-            aXP[0]=pU->aCenter;
-            aXP[1]=pU->aP1;
-            rXPP.Insert(aXP);
+    basegfx::B2DPolyPolygon aRetval;
+    ImpCircUser* pU = (ImpCircUser*)rDrag.GetUser();
+
+    if(OBJ_CIRC == eKind || rDrag.GetPointAnz() < 4L)
+    {
+        aRetval.append(XPolygon(pU->aCenter,pU->aR.GetWidth()/2,pU->aR.GetHeight()/2).getB2DPolygon());
+
+        if(3L == rDrag.GetPointAnz())
+        {
+            basegfx::B2DPolygon aNew;
+            aNew.append(basegfx::B2DPoint(pU->aCenter.X(), pU->aCenter.Y()));
+            aNew.append(basegfx::B2DPoint(pU->aP1.X(), pU->aP1.Y()));
+            aRetval.append(aNew);
         }
-    } else {
-        XPolygon aXP(ImpCalcXPolyCirc(pU->aR,pU->nStart,pU->nEnd));
-        if (!bXPolyIsLine) { // Polygon schliessen
-            USHORT n=aXP.GetPointCount();
-            Point aPnt(aXP[0]);
-            aXP[n]=aPnt;
-        }
-        rXPP.Insert(aXP);
     }
+    else
+    {
+        basegfx::B2DPolygon aNew(XPolygon(ImpCalcXPolyCirc(pU->aR,pU->nStart,pU->nEnd)).getB2DPolygon());
+
+        if(!mbPolygonIsLine)
+        {
+            // Polygon schliessen
+            aNew.setClosed(true);
+        }
+
+        aRetval.append(aNew);
+    }
+
+    return aRetval;
 }
 
 Pointer SdrCircObj::GetCreatePointer() const
@@ -1325,16 +1359,16 @@ void SdrCircObj::NbcSetSnapRect(const Rectangle& rRect)
     ImpSetCircInfoToAttr();
 }
 
-USHORT SdrCircObj::GetSnapPointCount() const
+sal_uInt32 SdrCircObj::GetSnapPointCount() const
 {
     if (eKind==OBJ_CIRC) {
-        return 1;
+        return 1L;
     } else {
-        return 3;
+        return 3L;
     }
 }
 
-Point SdrCircObj::GetSnapPoint(USHORT i) const
+Point SdrCircObj::GetSnapPoint(sal_uInt32 i) const
 {
     switch (i) {
         case 1 : return aPnt1;
@@ -1429,114 +1463,14 @@ void SdrCircObj::ImpSetCircInfoToAttr()
 
 SdrObject* SdrCircObj::DoConvertToPolyObj(BOOL bBezier) const
 {
-    XPolygon aXP(ImpCalcXPolyCirc(aRect,nStartWink,nEndWink));
-    //SdrObjKind ePathKind=OBJ_PATHFILL;
-    FASTBOOL bFill=TRUE;
-    if (eKind==OBJ_CARC) bFill=FALSE;
-    SdrObject* pRet=ImpConvertMakeObj(XPolyPolygon(aXP),bFill,bBezier);
-    pRet=ImpConvertAddText(pRet,bBezier);
+    const sal_Bool bFill(OBJ_CARC == eKind ? sal_False : sal_True);
+    basegfx::B2DPolyPolygon aPolyPolygon;
+    aPolyPolygon.append(ImpCalcXPolyCirc(aRect, nStartWink, nEndWink).getB2DPolygon());
+    SdrObject* pRet = ImpConvertMakeObj(aPolyPolygon, bFill, bBezier);
+    pRet = ImpConvertAddText(pRet, bBezier);
+
     return pRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//BFS01void SdrCircObj::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01 SdrRectObj::WriteData(rOut);
-//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrCircObj");
-//BFS01#endif
-//BFS01
-//BFS01 if(eKind != OBJ_CIRC)
-//BFS01 {
-//BFS01     rOut << nStartWink;
-//BFS01     rOut << nEndWink;
-//BFS01 }
-//BFS01
-//BFS01 SfxItemPool* pPool=GetItemPool();
-//BFS01 if(pPool)
-//BFS01 {
-//BFS01     const SfxItemSet& rSet = GetObjectItemSet();
-//BFS01
-//BFS01     pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_CIRC));
-//BFS01 }
-//BFS01 else
-//BFS01 {
-//BFS01     rOut << UINT16(SFX_ITEMS_NULL);
-//BFS01 }
-//BFS01}
-
-//BFS01void SdrCircObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 if(rIn.GetError())
-//BFS01     return;
-//BFS01
-//BFS01 // #91764# remember eKind, it will be deleted during SdrRectObj::ReadData(...)
-//BFS01 // but needs to be known to decide to jump over angles or not. Deletion happens
-//BFS01 // cause of fix #89025# wich is necessary, too.
-//BFS01 SdrObjKind eRememberedKind = eKind;
-//BFS01
-//BFS01 SdrRectObj::ReadData(rHead,rIn);
-//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrCircObj");
-//BFS01#endif
-//BFS01
-//BFS01 // #92309# at once restore the remembered eKind here.
-//BFS01 eKind = eRememberedKind;
-//BFS01
-//BFS01 // #91764# use remembered eKind here
-//BFS01 if(eRememberedKind != OBJ_CIRC)
-//BFS01 {
-//BFS01     rIn >> nStartWink;
-//BFS01     rIn >> nEndWink;
-//BFS01 }
-//BFS01
-//BFS01 if(aCompat.GetBytesLeft() > 0)
-//BFS01 {
-//BFS01     SfxItemPool* pPool = GetItemPool();
-//BFS01
-//BFS01     if(pPool)
-//BFS01     {
-//BFS01         sal_uInt16 nSetID = SDRATTRSET_CIRC;
-//BFS01         const SdrCircSetItem* pCircAttr = (const SdrCircSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
-//BFS01         if(pCircAttr)
-//BFS01             SetObjectItemSet(pCircAttr->GetItemSet());
-//BFS01     }
-//BFS01     else
-//BFS01     {
-//BFS01         sal_uInt16 nSuroDum;
-//BFS01         rIn >> nSuroDum;
-//BFS01     }
-//BFS01 }
-//BFS01 else
-//BFS01 {
-//BFS01     // create pCircAttr for old Objects to let ImpSetCircInfoToAttr() do it's work
-//BFS01     SdrCircKind eKindA(SDRCIRC_FULL);
-//BFS01
-//BFS01     if(eKind == OBJ_SECT)
-//BFS01         eKindA = SDRCIRC_SECT;
-//BFS01     else if(eKind == OBJ_CARC)
-//BFS01         eKindA = SDRCIRC_ARC;
-//BFS01     else if(eKind == OBJ_CCUT)
-//BFS01         eKindA = SDRCIRC_CUT;
-//BFS01
-//BFS01     if(eKindA != SDRCIRC_FULL)
-//BFS01     {
-//BFS01         GetProperties().SetObjectItemDirect(SdrCircKindItem(eKindA));
-//BFS01
-//BFS01         if(nStartWink)
-//BFS01         {
-//BFS01             GetProperties().SetObjectItemDirect(SdrCircStartAngleItem(nStartWink));
-//BFS01         }
-//BFS01
-//BFS01         if(nEndWink != 36000)
-//BFS01         {
-//BFS01             GetProperties().SetObjectItemDirect(SdrCircEndAngleItem(nEndWink));
-//BFS01         }
-//BFS01     }
-//BFS01 }
-//BFS01}
-
+//////////////////////////////////////////////////////////////////////////////
 // eof
