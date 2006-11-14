@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Linear3DTransformation.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:36:29 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:35:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,9 +59,9 @@ Sequence< double > SAL_CALL Linear3DTransformation::transform(
            lang::IllegalArgumentException)
 {
     /*
-    Vector3D aSource( SequenceToVector3D( rSourceValues ) );
-    Vector3D aTarget = m_Matrix*aSource;
-    return Vector3DToSequence(aTarget);
+    ::basegfx::B3DPoint aSource( SequenceToB3DPoint( rSourceValues ) );
+    ::basegfx::B3DPoint aTarget = m_Matrix*aSource;
+    return B3DPointToSequence(aTarget);
     */
     Sequence< double > aNewVec(3);
     double fZwi;
