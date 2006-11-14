@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupproperties.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:43:19 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:37:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,30 +196,24 @@ namespace sdr
 
         void GroupProperties::SetMergedItem(const SfxPoolItem& rItem)
         {
-            //BFS01if(!((const SdrObjGroup&)GetSdrObject()).IsLinkedGroup())
-            //BFS01{
-                const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-                const sal_uInt32 nCount(pSub->GetObjCount());
+            const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
+            const sal_uInt32 nCount(pSub->GetObjCount());
 
-                for(sal_uInt32 a(0L); a < nCount; a++)
-                {
-                    pSub->GetObj(a)->GetProperties().SetMergedItem(rItem);
-                }
-            //BFS01}
+            for(sal_uInt32 a(0L); a < nCount; a++)
+            {
+                pSub->GetObj(a)->GetProperties().SetMergedItem(rItem);
+            }
         }
 
         void GroupProperties::ClearMergedItem(const sal_uInt16 nWhich)
         {
-            //BFS01if(!((const SdrObjGroup&)GetSdrObject()).IsLinkedGroup())
-            //BFS01{
-                const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-                const sal_uInt32 nCount(pSub->GetObjCount());
+            const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
+            const sal_uInt32 nCount(pSub->GetObjCount());
 
-                for(sal_uInt32 a(0L); a < nCount; a++)
-                {
-                    pSub->GetObj(a)->GetProperties().ClearMergedItem(nWhich);
-                }
-            //BFS01}
+            for(sal_uInt32 a(0L); a < nCount; a++)
+            {
+                pSub->GetObj(a)->GetProperties().ClearMergedItem(nWhich);
+            }
         }
 
         void GroupProperties::SetObjectItemSet(const SfxItemSet& /*rSet*/)
@@ -252,74 +246,40 @@ namespace sdr
         {
             SfxStyleSheet* pRetval = 0L;
 
-            //BFS01if(!((const SdrObjGroup&)GetSdrObject()).IsLinkedGroup())
-            //BFS01{
-                const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-                const sal_uInt32 nCount(pSub->GetObjCount());
+            const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
+            const sal_uInt32 nCount(pSub->GetObjCount());
 
-                for(sal_uInt32 a(0L); a < nCount; a++)
+            for(sal_uInt32 a(0L); a < nCount; a++)
+            {
+                SfxStyleSheet* pCandidate = pSub->GetObj(a)->GetStyleSheet();
+
+                if(pRetval)
                 {
-                    SfxStyleSheet* pCandidate = pSub->GetObj(a)->GetStyleSheet();
-
-                    if(pRetval)
+                    if(pCandidate != pRetval)
                     {
-                        if(pCandidate != pRetval)
-                        {
-                            // different StyleSheelts, return none
-                            return 0L;
-                        }
-                    }
-                    else
-                    {
-                        pRetval = pCandidate;
+                        // different StyleSheelts, return none
+                        return 0L;
                     }
                 }
-            //BFS01}
+                else
+                {
+                    pRetval = pCandidate;
+                }
+            }
 
             return pRetval;
         }
 
         void GroupProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
         {
-            //BFS01if(!((const SdrObjGroup&)GetSdrObject()).IsLinkedGroup())
-            //BFS01{
-                const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-                const sal_uInt32 nCount(pSub->GetObjCount());
+            const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
+            const sal_uInt32 nCount(pSub->GetObjCount());
 
-                for(sal_uInt32 a(0L); a < nCount; a++)
-                {
-                    pSub->GetObj(a)->SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
-                }
-            //BFS01}
+            for(sal_uInt32 a(0L); a < nCount; a++)
+            {
+                pSub->GetObj(a)->SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
+            }
         }
-
-//BFS01     void GroupProperties::PreProcessSave()
-//BFS01     {
-//BFS01         //BFS01if(!((const SdrObjGroup&)GetSdrObject()).IsLinkedGroup())
-//BFS01         //BFS01{
-//BFS01             const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-//BFS01             const sal_uInt32 nCount(pSub->GetObjCount());
-//BFS01
-//BFS01             for(sal_uInt32 a(0L); a < nCount; a++)
-//BFS01             {
-//BFS01                 pSub->GetObj(a)->GetProperties().PreProcessSave();
-//BFS01             }
-//BFS01         //BFS01}
-//BFS01     }
-
-//BFS01     void GroupProperties::PostProcessSave()
-//BFS01     {
-//BFS01         //BFS01if(!((const SdrObjGroup&)GetSdrObject()).IsLinkedGroup())
-//BFS01         //BFS01{
-//BFS01             const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-//BFS01             const sal_uInt32 nCount(pSub->GetObjCount());
-//BFS01
-//BFS01             for(sal_uInt32 a(0L); a < nCount; a++)
-//BFS01             {
-//BFS01                 pSub->GetObj(a)->GetProperties().PostProcessSave();
-//BFS01             }
-//BFS01         //BFS01}
-//BFS01     }
 
         void GroupProperties::ForceDefaultAttributes()
         {
