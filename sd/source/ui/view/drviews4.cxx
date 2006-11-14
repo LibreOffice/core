@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:36:53 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:42:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@ void DrawViewShell::DeleteActualPage()
     USHORT nPageCount = GetDoc()->GetPageCount();
     DBG_ASSERT(nPageCount > 1, "aber das ist die letzte!");
 
-    pDrView->EndTextEdit();
+    pDrView->SdrEndTextEdit();
 
     pDrView->BegUndo();
 
@@ -235,7 +235,7 @@ BOOL DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
                 SdrObject* pOldObj = pMark->GetMarkedSdrObj();
 
                 // end text edit now
-                GetView()->EndTextEdit();
+                GetView()->SdrEndTextEdit();
 
                 // look for a new candidate, a successor of pOldObj
                 SdrObjListIter aIter(*pActualPage, IM_DEEPNOGROUPS);
@@ -269,7 +269,7 @@ BOOL DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
             {
                 // set the new candidate to text edit mode
                 GetView()->UnMarkAll();
-                GetView()->MarkObj(pCandidate, GetView()->GetPageViewPvNum(0));
+                GetView()->MarkObj(pCandidate, GetView()->GetSdrPageView());
 
                 GetViewFrame()->GetDispatcher()->Execute(
                     SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON);
@@ -509,9 +509,9 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
             else if (rMEvt.IsLeft() && bIsSetPageOrg)
             {
                 pDrView->BrkAction();
-                SdPage* pPage = (SdPage*) pDrView->GetPageViewPvNum(0)->GetPage();
+                SdPage* pPage = (SdPage*) pDrView->GetSdrPageView()->GetPage();
                 Point aOrg(pPage->GetLftBorder(), pPage->GetUppBorder());
-                pDrView->GetPageViewPvNum(0)->SetPageOrigin(aOrg);
+                pDrView->GetSdrPageView()->SetPageOrigin(aOrg);
                 GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
             }
             else
