@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:43:07 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:46:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,6 @@
 #ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
 #endif
-#include "graphpro.hxx"
 #ifndef SD_FU_INSERT_FILE_HXX
 #include "fuinsfil.hxx"
 #endif
@@ -164,16 +163,19 @@ namespace sd {
 SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                                    const Point& rPos, SdrObject* pObj, ImageMap* pImageMap )
 {
-    EndTextEdit();
+    SdrEndTextEdit();
     nAction = rAction;
 
     // Liegt ein Objekt an der Position rPos?
     SdrGrafObj*     pNewGrafObj = NULL;
-    SdrPageView*    pPV = GetPageViewPvNum(0);
+    SdrPageView*    pPV = GetSdrPageView();
     SdrObject*      pPickObj = pObj;
 
-    if( this->ISA(SlideView))
-        pPV = HitPage( rPos );
+    if(pPV && this->ISA(SlideView))
+    {
+        if(!pPV->GetPageRect().IsInside(rPos))
+            pPV = 0L;
+    }
 
     if( !pPickObj && pPV )
     {
@@ -214,7 +216,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             if (pImageMap)
                 pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
 
-            ReplaceObject(pPickObj, *pPV, pNewGrafObj);
+            ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj); // maybe ReplaceObjectAtView
             EndUndo();
         }
         else if (pPickObj->IsClosedObj() && !pPickObj->ISA(SdrOle2Obj))
@@ -262,7 +264,8 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         Size aPageSize( pPage->GetSize() );
         aPageSize.Width()  -= pPage->GetLftBorder() + pPage->GetRgtBorder();
         aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
-        pNewGrafObj->AdjustToMaxRect( Rectangle( pPV->GetOffset(), aPageSize ), TRUE );
+        pNewGrafObj->AdjustToMaxRect( Rectangle( Point(), aPageSize ), TRUE );
+//      pNewGrafObj->AdjustToMaxRect( Rectangle( pPV->GetOffset(), aPageSize ), TRUE );
 
         ULONG   nOptions = SDRINSERT_SETDEFLAYER;
         BOOL    bIsPresTarget = FALSE;
@@ -312,7 +315,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         }
         else
         {
-            InsertObject(pNewGrafObj, *pPV, nOptions);
+            InsertObjectAtView(pNewGrafObj, *pPV, nOptions);
 
             if( pImageMap )
                 pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
@@ -329,15 +332,18 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAction,
                                    const Point& rPos, const Size& rSize )
 {
-    EndTextEdit();
+    SdrEndTextEdit();
     nAction = rAction;
 
     SdrMediaObj*    pNewMediaObj = NULL;
-    SdrPageView*    pPV = GetPageViewPvNum( 0 );
+    SdrPageView*    pPV = GetSdrPageView();
     SdrObject*      pPickObj = NULL;
 
-    if( this->ISA( SlideView ) )
-        pPV = HitPage( rPos );
+    if(pPV && this->ISA( SlideView ))
+    {
+        if(!pPV->GetPageRect().IsInside(rPos))
+            pPV = 0L;
+    }
 
     if( !pPickObj && pPV )
     {
@@ -351,14 +357,14 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
         pNewMediaObj->setURL( rMediaURL );
 
         BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
-        ReplaceObject(pPickObj, *pPV, pNewMediaObj);
+        ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj);
         EndUndo();
     }
     else if( pPV )
     {
         pNewMediaObj = new SdrMediaObj( Rectangle( rPos, rSize ) );
 
-        if( pPV && InsertObject( pNewMediaObj, *pPV, SDRINSERT_SETDEFLAYER ) )
+        if( pPV && InsertObjectAtView( pNewMediaObj, *pPV, SDRINSERT_SETDEFLAYER ) )
             pNewMediaObj->setURL( rMediaURL );
     }
 
@@ -404,8 +410,6 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
 
         if( !::avmedia::MediaWindow::isMediaURL( aCurrentDropFile ) )
         {
-            FilterProgress* pFilterProgress = new FilterProgress( pGraphicFilter, pViewSh->GetDocSh() );
-
             if( !pGraphicFilter->ImportGraphic( aGraphic, aURL ) )
             {
                 sal_Int8    nTempAction = ( aIter == aDropFileVector.begin() ) ? nAction : 0;
@@ -420,9 +424,6 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
 
                 bOK = TRUE;
             }
-
-            delete pFilterProgress;
-
             if( !bOK )
             {
                 const SfxFilter*        pFoundFilter = NULL;
@@ -542,7 +543,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
                                     nOptions |= SDRINSERT_DONTMARK;
                             }
 
-                            InsertObject( pOleObj, *GetPageViewPvNum(0), nOptions );
+                            InsertObjectAtView( pOleObj, *GetSdrPageView(), nOptions );
                             pOleObj->SetLogicRect( aRect );
                             aSz.Width = aRect.GetWidth();
                             aSz.Height = aRect.GetHeight();
