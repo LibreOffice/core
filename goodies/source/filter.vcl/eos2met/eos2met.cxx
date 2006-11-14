@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eos2met.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:42:03 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:10:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,8 +143,6 @@ class METWriter
 private:
 
     BOOL                bStatus;
-    PFilterCallback     pCallback;
-    void*               pCallerData;
     ULONG               nLastPercent; // Mit welcher Zahl pCallback zuletzt aufgerufen wurde.
     SvStream*           pMET;
     Rectangle           aPictureRect;
@@ -175,6 +173,8 @@ private:
     ULONG               nWrittenActions;  // Anzahl der bereits verarbeiteten Actions beim Schreiben der Orders
     ULONG               nWrittenBitmaps;  // Anzahl der bereits geschriebenen Bitmaps
     ULONG               nActBitmapPercent; // Wieviel Prozent die naechste Bitmap schon geschrieben ist.
+
+    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
     void MayCallback();
         // Berechnet anhand der obigen 5 Parameter eine Prozentzahl
@@ -256,8 +256,8 @@ public:
 
     METWriter() {}
 
-    BOOL WriteMET(const GDIMetaFile & rMTF, SvStream & rTargetStream,
-                  PFilterCallback pcallback, void * pcallerdata);
+    BOOL WriteMET( const GDIMetaFile & rMTF, SvStream & rTargetStream,
+                        FilterConfigItem* pConfigItem );
 };
 
 
@@ -265,22 +265,17 @@ public:
 
 void METWriter::MayCallback()
 {
-    ULONG nPercent;
-
-    // Wir gehen mal einfach so davon aus, dass 16386 Actions einer Bitmap entsprechen
-    // (in der Regel wird ein Metafile entweder nur Actions oder einige Bitmaps und fast
-    // keine Actions enthalten. Dann ist das Verhaeltnis ziemlich unwichtig)
-
-    nPercent=((nWrittenBitmaps<<14)+(nActBitmapPercent<<14)/100+nWrittenActions)
-             *100/((nNumberOfBitmaps<<14)+nNumberOfActions);
-
-    if (nPercent>=nLastPercent+3)
+    if ( xStatusIndicator.is() )
     {
-        nLastPercent=nPercent;
-        if(pCallback!=NULL && nPercent<=100)
+        ULONG nPercent;
+        nPercent=((nWrittenBitmaps<<14)+(nActBitmapPercent<<14)/100+nWrittenActions)
+                *100/((nNumberOfBitmaps<<14)+nNumberOfActions);
+
+        if (nPercent>=nLastPercent+3)
         {
-            if (((*pCallback)(pCallerData,(USHORT)nPercent))==TRUE)
-                bStatus=FALSE;
+            nLastPercent = nPercent;
+            if ( nPercent <= 100 )
+                xStatusIndicator->setValue( nPercent );
         }
     }
 }
@@ -2537,17 +2532,22 @@ void METWriter::WriteDocument(const GDIMetaFile * pMTF)
         bStatus=FALSE;
 }
 
-
-BOOL METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream,
-                          PFilterCallback pcallback, void* pcallerdata )
+BOOL METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, FilterConfigItem* pFilterConfigItem )
 {
+    if ( pFilterConfigItem )
+    {
+        xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
+        if ( xStatusIndicator.is() )
+        {
+            rtl::OUString aMsg;
+            xStatusIndicator->start( aMsg, 100 );
+        }
+    }
+
     METChrSet*          pCS;
     METGDIStackMember*  pGS;
 
     bStatus=TRUE;
-
-    pCallback=pcallback;
-    pCallerData=pcallerdata;
     nLastPercent=0;
 
     pMET=&rTargetStream;
@@ -2596,27 +2596,21 @@ BOOL METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream,
         delete pGS;
     }
 
+    if ( xStatusIndicator.is() )
+        xStatusIndicator->end();
+
     return bStatus;
 }
 
 //================== GraphicExport - die exportierte Funktion ================
 
-#ifdef WNT
-extern "C" BOOL _cdecl GraphicExport(SvStream & rStream, Graphic & rGraphic,
-                              PFilterCallback pCallback, void * pCallerData,
-                              FilterConfigItem*, BOOL)
-#else
-extern "C" BOOL GraphicExport(SvStream & rStream, Graphic & rGraphic,
-                              PFilterCallback pCallback, void * pCallerData,
-                              FilterConfigItem*, BOOL)
-#endif
-{
-    METWriter aMETWriter;
+extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem, BOOL )
+{   METWriter aMETWriter;
 
-    if (rGraphic.GetType()==GRAPHIC_GDIMETAFILE) {
-        return aMETWriter.WriteMET(rGraphic.GetGDIMetaFile(),rStream,pCallback,pCallerData);
-    }
-    else {
+    if ( rGraphic.GetType() == GRAPHIC_GDIMETAFILE )
+        return aMETWriter.WriteMET( rGraphic.GetGDIMetaFile(), rStream, pFilterConfigItem );
+    else
+    {
         Bitmap aBmp=rGraphic.GetBitmap();
         GDIMetaFile aMTF;
         VirtualDevice aVirDev;
@@ -2625,7 +2619,7 @@ extern "C" BOOL GraphicExport(SvStream & rStream, Graphic & rGraphic,
         aVirDev.DrawBitmap(Point(),aBmp);
         aMTF.Stop();
         aMTF.SetPrefSize(aBmp.GetSizePixel());
-        return aMETWriter.WriteMET(aMTF,rStream,pCallback,pCallerData);
+        return aMETWriter.WriteMET( aMTF, rStream, pFilterConfigItem );
     }
 }
 
