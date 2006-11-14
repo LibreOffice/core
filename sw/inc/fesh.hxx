@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:22:05 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:07:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,6 @@ class SdrObject;
 class Color;
 class Outliner;
 class SotDataObject;
-class SdrViewUserMarker;
 class SwFrmFmt;
 struct SwSortOptions;
 class SdrMarkList;
@@ -198,11 +197,11 @@ struct SwGetCurColNumPara
 #define SW_TABCOLSEL_VERT       12
 // <--
 
+class SdrDropMarkerOverlay;
 
 class SW_DLLPUBLIC SwFEShell : public SwEditShell
 {
-    SdrViewUserMarker *pChainFrom,
-                      *pChainTo;
+    SdrDropMarkerOverlay *pChainFrom, *pChainTo;
     BOOL bCheckForOLEInCaption;
 
     SW_DLLPRIVATE SwFlyFrm *FindFlyFrm() const;
