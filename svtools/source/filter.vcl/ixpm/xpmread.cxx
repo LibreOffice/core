@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xpmread.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:54:29 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:41:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 // - XPMReader -
 // -------------
 
-XPMReader::XPMReader( SvStream& rStm, void* ) :
+XPMReader::XPMReader( SvStream& rStm ) :
             mrIStm          ( rStm ),
             mpAcc           ( NULL ),
             mpMaskAcc       ( NULL ),
@@ -677,14 +677,14 @@ BOOL XPMReader::ImplGetString( void )
 // - ImportXPM -
 // -------------
 
-BOOL ImportXPM( SvStream& rStm, Graphic& rGraphic, void* pCallerData )
+BOOL ImportXPM( SvStream& rStm, Graphic& rGraphic )
 {
     XPMReader*  pXPMReader = (XPMReader*) rGraphic.GetContext();
     ReadState   eReadState;
     BOOL        bRet = TRUE;
 
     if( !pXPMReader )
-        pXPMReader = new XPMReader( rStm, pCallerData );
+        pXPMReader = new XPMReader( rStm );
 
     rGraphic.SetContext( NULL );
     eReadState = pXPMReader->ReadXPM( rGraphic );
