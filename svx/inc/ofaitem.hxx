@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ofaitem.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:09:48 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:41:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,22 +62,5 @@ public:
     void*                    GetValue() const { return pPtr; }
     void                     SetValue( void* pNewPtr ) { pPtr = pNewPtr; }
 };
-/*
-class SvxDashListPtrItem : public OfaPtrItem
-{
-    public:
-                             TYPEINFO();
 
-                             SvxDashListPtrItem( USHORT nWhich, SvxDashListItem* pPtr );
-                             SvxDashListPtrItem( const DashListPtrItem& );
-
-    virtual int              operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-
-    virtual sal_Bool         QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool         PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
-
-    SvxDashListPtrItem*      GetValue() const { return OfaPtrItem::GetValue(); }
-};
-*/
 #endif
