@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:38:28 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:43:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
         {
             if ( pDrView->IsTextEdit() )
             {
-                pDrView->EndTextEdit();
+                pDrView->SdrEndTextEdit();
             }
 
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
@@ -291,7 +291,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
         {
             if ( pDrView->IsTextEdit() )
             {
-                pDrView->EndTextEdit();
+                pDrView->SdrEndTextEdit();
             }
 
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
@@ -435,7 +435,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
         {
             if ( pDrView->IsTextEdit() )
             {
-                pDrView->EndTextEdit();
+                pDrView->SdrEndTextEdit();
             }
 
             GetLayerTabControl()->StartEditMode(
@@ -652,7 +652,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 Rectangle aLogicRect(aPos, aSize);
                 pRectObj->SetLogicRect(aLogicRect);
                 pRectObj->SetOutlinerParaObject( pOutlParaObject );
-                pDrView->InsertObject(pRectObj, *pDrView->GetPageViewPvNum(0));
+                pDrView->InsertObjectAtView(pRectObj, *pDrView->GetSdrPageView());
                 pOutl->Init( nOutlMode );
                 pOutl->SetMinDepth( nMinDepth );
             }
