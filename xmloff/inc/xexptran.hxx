@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xexptran.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:37:39 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:13:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,10 +40,6 @@
 #include <rtl/ustring.hxx>
 #endif
 
-#ifndef _B2D_MATRIX3D_HXX
-#include <goodies/matrix3d.hxx>
-#endif
-
 #ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #endif
@@ -72,19 +68,27 @@
 #include <vcl/mapunit.hxx>
 #endif
 
+#include <vector>
+
 //////////////////////////////////////////////////////////////////////////////
+// predeclarations
 
 struct ImpSdXMLExpTransObj2DBase;
 struct ImpSdXMLExpTransObj3DBase;
 class SvXMLUnitConverter;
-class Vector3D;
-class Matrix3D;
-class Matrix4D;
+
+namespace basegfx
+{
+    class B2DTuple;
+    class B2DHomMatrix;
+    class B3DTuple;
+    class B3DHomMatrix;
+} // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
 
-DECLARE_LIST(ImpSdXMLExpTransObj2DBaseList, ImpSdXMLExpTransObj2DBase*)
-DECLARE_LIST(ImpSdXMLExpTransObj3DBaseList, ImpSdXMLExpTransObj3DBase*)
+typedef ::std::vector< ImpSdXMLExpTransObj2DBase* > ImpSdXMLExpTransObj2DBaseList;
+typedef ::std::vector< ImpSdXMLExpTransObj3DBase* > ImpSdXMLExpTransObj3DBaseList;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -101,14 +105,14 @@ public:
     ~SdXMLImExTransform2D() { EmptyList(); }
 
     void AddRotate(double fNew);
-    void AddScale(const Vector2D& rNew);
-    void AddTranslate(const Vector2D& rNew);
+    void AddScale(const ::basegfx::B2DTuple& rNew);
+    void AddTranslate(const ::basegfx::B2DTuple& rNew);
     void AddSkewX(double fNew);
     void AddSkewY(double fNew);
-    void AddMatrix(const Matrix3D& rNew);
+    void AddMatrix(const ::basegfx::B2DHomMatrix& rNew);
 
-    sal_Bool NeedsAction() const { return (sal_Bool)(maList.Count() > 0L); }
-    void GetFullTransform(Matrix3D& rFullTrans);
+    bool NeedsAction() const { return 0L != maList.size(); }
+    void GetFullTransform(::basegfx::B2DHomMatrix& rFullTrans);
     const rtl::OUString& GetExportString(const SvXMLUnitConverter& rConv);
     void SetString(const rtl::OUString& rNew, const SvXMLUnitConverter& rConv);
 };
@@ -130,14 +134,14 @@ public:
     void AddRotateX(double fNew);
     void AddRotateY(double fNew);
     void AddRotateZ(double fNew);
-    void AddScale(const Vector3D& rNew);
-    void AddTranslate(const Vector3D& rNew);
-    void AddMatrix(const Matrix4D& rNew);
+    void AddScale(const ::basegfx::B3DTuple& rNew);
+    void AddTranslate(const ::basegfx::B3DTuple& rNew);
+    void AddMatrix(const ::basegfx::B3DHomMatrix& rNew);
 
     void AddHomogenMatrix(const com::sun::star::drawing::HomogenMatrix& xHomMat);
-    sal_Bool NeedsAction() const { return (sal_Bool)(maList.Count() > 0L); }
-    void GetFullTransform(Matrix4D& rFullTrans);
-    BOOL GetFullHomogenTransform(com::sun::star::drawing::HomogenMatrix& xHomMat);
+    bool NeedsAction() const { return 0L != maList.size(); }
+    void GetFullTransform(::basegfx::B3DHomMatrix& rFullTrans);
+    bool GetFullHomogenTransform(com::sun::star::drawing::HomogenMatrix& xHomMat);
     const rtl::OUString& GetExportString(const SvXMLUnitConverter& rConv);
     void SetString(const rtl::OUString& rNew, const SvXMLUnitConverter& rConv);
 };
@@ -176,7 +180,7 @@ public:
         const com::sun::star::awt::Point& rObjectPos,
         const com::sun::star::awt::Size& rObjectSize,
         // #96328#
-        const sal_Bool bClosed = sal_True);
+        const bool bClosed = true);
     SdXMLImExPointsElement(const rtl::OUString& rNew,
         const SdXMLImExViewBox& rViewBox,
         const com::sun::star::awt::Point& rObjectPos,
@@ -193,8 +197,8 @@ class SdXMLImExSvgDElement
 {
     rtl::OUString                   msString;
     const SdXMLImExViewBox&         mrViewBox;
-    sal_Bool                        mbIsClosed;
-    sal_Bool                        mbIsCurve;
+    bool                            mbIsClosed;
+    bool                            mbIsCurve;
 
     sal_Int32                       mnLastX;
     sal_Int32                       mnLastY;
@@ -215,11 +219,11 @@ public:
         com::sun::star::drawing::FlagSequence* pFlags,
         const com::sun::star::awt::Point& rObjectPos,
         const com::sun::star::awt::Size& rObjectSize,
-        sal_Bool bClosed = FALSE, sal_Bool bRelative = TRUE);
+        bool bClosed = false, bool bRelative = true);
 
     const rtl::OUString& GetExportString() const { return msString; }
-    sal_Bool IsClosed() const { return mbIsClosed; }
-    sal_Bool IsCurve() const { return mbIsCurve; }
+    bool IsClosed() const { return mbIsClosed; }
+    bool IsCurve() const { return mbIsCurve; }
     const com::sun::star::drawing::PointSequenceSequence& GetPointSequenceSequence() const { return maPoly; }
     const com::sun::star::drawing::FlagSequenceSequence& GetFlagSequenceSequence() const { return maFlag; }
 };
