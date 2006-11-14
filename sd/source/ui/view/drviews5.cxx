@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:37:07 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:42:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,9 +237,6 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     if (pDrView->GetGridFine() != pView->GetGridFine())
         pDrView->SetGridFine( pView->GetGridFine() );
 
-    if (pDrView->GetSnapGrid() != pView->GetSnapGrid())
-        pDrView->SetSnapGrid( pView->GetSnapGrid() );
-
     if (pDrView->GetSnapGridWidthX() != pView->GetSnapGridWidthX() || pDrView->GetSnapGridWidthY() != pView->GetSnapGridWidthY())
         pDrView->SetSnapGridWidth(pView->GetSnapGridWidthX(), pView->GetSnapGridWidthY());
 
@@ -351,7 +348,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
         pDrView->SetMarkHdlSizePixel( 9 );
 
 
-    SdrPageView* pPageView = pDrView->GetPageViewPvNum(0);
+    SdrPageView* pPageView = pDrView->GetSdrPageView();
 
     if (pPageView)
     {
@@ -423,7 +420,6 @@ void DrawViewShell::WriteFrameViewData()
     pFrameView->SetRuler( HasRuler() );
     pFrameView->SetGridCoarse( pDrView->GetGridCoarse() );
     pFrameView->SetGridFine( pDrView->GetGridFine() );
-    pFrameView->SetSnapGrid( pDrView->GetSnapGrid() );
     pFrameView->SetSnapGridWidth(pDrView->GetSnapGridWidthX(), pDrView->GetSnapGridWidthY());
     pFrameView->SetGridVisible( pDrView->IsGridVisible() );
     pFrameView->SetGridFront( pDrView->IsGridFront() );
@@ -477,7 +473,7 @@ void DrawViewShell::WriteFrameViewData()
     pFrameView->SetViewShEditMode(eEditMode, ePageKind);
     pFrameView->SetLayerMode(IsLayerModeActive());
 
-    SdrPageView* pPageView = pDrView->GetPageViewPvNum(0);
+    SdrPageView* pPageView = pDrView->GetSdrPageView();
 
     if (pPageView)
     {
@@ -556,7 +552,7 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 //             || pWin != static_cast<const ::sd::Window*>(
 //                 pFuSlideShow->GetShowWindow()))
 //      {
-//             const SdrPageView*  pPageView = pDrView->GetPageViewPvNum( 0 );
+//             const SdrPageView*  pPageView = pDrView->GetPageViewByIndex( 0 );
 //          const Color         aOldLineColor( pWin->GetLineColor() );
 //          const Color         aOldFillColor( pWin->GetFillColor() );
 //          const ULONG         nOldDrawMode( pWin->GetDrawMode() );
@@ -660,7 +656,7 @@ Size DrawViewShell::GetOptimalSizePixel() const
 {
     Size aSize;
 
-    SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
+    SdrPageView* pPV = pDrView->GetSdrPageView();
 
     if (pPV)
     {
@@ -693,7 +689,7 @@ Size DrawViewShell::GetOptimalSizePixel() const
 |*
 \************************************************************************/
 
-void DrawViewShell::HidePage(SdrPageView* pPV)
+void DrawViewShell::HidePage()
 {
     FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager().GetFormShell();
     if (pFormShell != NULL)
