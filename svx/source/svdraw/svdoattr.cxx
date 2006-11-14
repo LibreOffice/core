@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:11:55 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:44:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,6 +198,18 @@
 #include <svx/sdr/properties/attributeproperties.hxx>
 #endif
 
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _SVX_XLINJOIT_HXX
+#include <xlinjoit.hxx>
+#endif
+
+#ifndef _SVX_SVDOIMP_HXX
+#include <svdoimp.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 sdr::properties::BaseProperties* SdrAttrObj::CreateObjectSpecificProperties()
@@ -226,201 +238,6 @@ const Rectangle& SdrAttrObj::GetSnapRect() const
     }
     return maSnapRect;
 }
-
-//BFS01void SdrAttrObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 if(rIn.GetError())
-//BFS01     return;
-//BFS01
-//BFS01 // call parent
-//BFS01 SdrObject::ReadData(rHead, rIn);
-//BFS01
-//BFS01 SdrDownCompat aCompat(rIn, STREAM_READ);
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrAttrObj");
-//BFS01#endif
-//BFS01 SfxItemPool* pPool = GetItemPool();
-//BFS01
-//BFS01 if(pPool)
-//BFS01 {
-//BFS01     sal_uInt16 nSetID;
-//BFS01
-//BFS01     // #89025# if mpObjectItemSet is set and contains items, it is because of ForceDefaultAttr()
-//BFS01     // and the items need to be deleted.
-//BFS01     GetProperties().ClearObjectItemDirect();
-//BFS01
-//BFS01     // Do this initialization AFTER the above fix
-//BFS01     SfxItemSet aNewSet(GetMergedItemSet());
-//BFS01
-//BFS01     if(rHead.GetVersion() < 11)
-//BFS01         { sal_uInt16 nWhichDum; rIn >> nWhichDum; }
-//BFS01     nSetID = XATTRSET_LINE;
-//BFS01     const XLineAttrSetItem* pLineAttr = (const XLineAttrSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
-//BFS01     if(pLineAttr)
-//BFS01         aNewSet.Put(pLineAttr->GetItemSet());
-//BFS01
-//BFS01     if(rHead.GetVersion() < 11)
-//BFS01         { sal_uInt16 nWhichDum; rIn >> nWhichDum; }
-//BFS01     nSetID = XATTRSET_FILL;
-//BFS01     const XFillAttrSetItem* pFillAttr = (const XFillAttrSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
-//BFS01     if(pFillAttr)
-//BFS01         aNewSet.Put(pFillAttr->GetItemSet());
-//BFS01
-//BFS01     if(rHead.GetVersion() < 11)
-//BFS01         { sal_uInt16 nWhichDum; rIn >> nWhichDum; }
-//BFS01     nSetID = XATTRSET_TEXT;
-//BFS01     const XTextAttrSetItem* pTextAttr = (const XTextAttrSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
-//BFS01     if(pTextAttr)
-//BFS01         aNewSet.Put(pTextAttr->GetItemSet());
-//BFS01
-//BFS01     if(rHead.GetVersion() < 11)
-//BFS01         { sal_uInt16 nWhichDum; rIn >> nWhichDum; }
-//BFS01     nSetID = SDRATTRSET_SHADOW;
-//BFS01     const SdrShadowSetItem* pShadAttr = (const SdrShadowSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
-//BFS01     if(pShadAttr)
-//BFS01         aNewSet.Put(pShadAttr->GetItemSet());
-//BFS01
-//BFS01     if(rHead.GetVersion() >= 5)
-//BFS01     {
-//BFS01         if(rHead.GetVersion() < 11)
-//BFS01             { sal_uInt16 nWhichDum; rIn >> nWhichDum; }
-//BFS01         nSetID = SDRATTRSET_OUTLINER;
-//BFS01         const SdrOutlinerSetItem* pOutlAttr = (const SdrOutlinerSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
-//BFS01         if(pOutlAttr)
-//BFS01             aNewSet.Put(pOutlAttr->GetItemSet());
-//BFS01     }
-//BFS01
-//BFS01     if(rHead.GetVersion() >= 6)
-//BFS01     {
-//BFS01         if(rHead.GetVersion() < 11)
-//BFS01             { sal_uInt16 nWhichDum; rIn >> nWhichDum; }
-//BFS01         nSetID = SDRATTRSET_MISC;
-//BFS01         const SdrMiscSetItem* pMiscAttr = (const SdrMiscSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
-//BFS01         if(pMiscAttr)
-//BFS01             aNewSet.Put(pMiscAttr->GetItemSet());
-//BFS01     }
-//BFS01
-//BFS01     SetMergedItemSet(aNewSet);
-//BFS01 }
-//BFS01 else
-//BFS01 {
-//BFS01     // an den Surrogaten und ggf. auch Whiches vorbeiseeken
-//BFS01     // ganz zu anfang waren es 4 SetItems
-//BFS01     sal_uInt16 nAnz(4);
-//BFS01
-//BFS01     if(rHead.GetVersion() >= 5)
-//BFS01         nAnz++;
-//BFS01
-//BFS01     if(rHead.GetVersion() >= 6)
-//BFS01         nAnz++;
-//BFS01
-//BFS01     nAnz *= sizeof(sal_uInt16);
-//BFS01
-//BFS01     if(rHead.GetVersion() < 11)
-//BFS01         nAnz *= 2;
-//BFS01
-//BFS01     rIn.SeekRel(nAnz);
-//BFS01 }
-//BFS01
-//BFS01 // TextToContour: altes Format(Flag) in neues Format(Item) wandeln
-//BFS01 if(rHead.GetVersion() <= 4 && pPool)
-//BFS01 {
-//BFS01     SetMergedItem(XFormTextStyleItem(XFT_NONE));
-//BFS01 }
-//BFS01
-//BFS01 // Fuer die StyleSheetgeschichte gehoert eigentlich auch noch eine
-//BFS01 // Versionsabfrage hierher.
-//BFS01 // Name und Familie des StyleSheet einlesen, in Pointer auf StyleSheet
-//BFS01 // umwandeln lassen (SB)
-//BFS01 XubString aStyleSheetName;
-//BFS01 SfxStyleFamily eFamily;
-//BFS01 sal_uInt16 nRead;
-//BFS01
-//BFS01 // UNICODE: rIn>>aStyleSheetName;
-//BFS01 rIn.ReadByteString(aStyleSheetName);
-//BFS01
-//BFS01 if(aStyleSheetName.Len())
-//BFS01 {
-//BFS01     rIn >> nRead;
-//BFS01     eFamily = (SfxStyleFamily)(int)nRead;
-//BFS01
-//BFS01     // ab Version 1 wird der CharacterSet gelesen, ab V11 nicht mehr
-//BFS01     if(rHead.GetVersion() > 0 && rHead.GetVersion() < 11)
-//BFS01     {
-//BFS01         sal_Int16 nCharSet;
-//BFS01         rIn >> nCharSet;
-//BFS01         //aStyleSheetName.Convert((CharSet)nCharSet);
-//BFS01         // nicht mehr noetig, da ab Vers 11 der CharSet bereits am
-//BFS01         // Stream gesetzt wird.
-//BFS01     }
-//BFS01
-//BFS01     DBG_ASSERT(pModel, "SdrAttrObj::ReadData(): pModel=NULL, StyleSheet kann nicht gesetzt werden!");
-//BFS01     if(pModel)
-//BFS01     {
-//BFS01         SfxStyleSheetBasePool *pPool = pModel->GetStyleSheetPool();
-//BFS01         if(pPool)
-//BFS01         {
-//BFS01             SfxStyleSheet *pTmpStyleSheet = (SfxStyleSheet*)pPool->Find(aStyleSheetName, eFamily);
-//BFS01             DBG_ASSERT(pTmpStyleSheet, "SdrAttrObj::ReadData(): StyleSheet nicht gefunden");
-//BFS01
-//BFS01             if(pTmpStyleSheet)
-//BFS01             {
-//BFS01                 NbcSetStyleSheet(pTmpStyleSheet, sal_True);
-//BFS01             }
-//BFS01         }
-//BFS01     }
-//BFS01 }
-//BFS01}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//BFS01void SdrAttrObj::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01 // call parent
-//BFS01 SdrObject::WriteData(rOut);
-//BFS01
-//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01 SdrDownCompat aCompat(rOut, STREAM_WRITE);
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("SdrAttrObj");
-//BFS01#endif
-//BFS01 SfxItemPool* pPool = GetItemPool();
-//BFS01
-//BFS01 if(pPool)
-//BFS01 {
-//BFS01     const SfxItemSet& rSet = GetMergedItemSet();
-//BFS01
-//BFS01     pPool->StoreSurrogate(rOut, &rSet.Get(XATTRSET_LINE));
-//BFS01     pPool->StoreSurrogate(rOut, &rSet.Get(XATTRSET_FILL));
-//BFS01     pPool->StoreSurrogate(rOut, &rSet.Get(XATTRSET_TEXT));
-//BFS01     pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_SHADOW));
-//BFS01     pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_OUTLINER));
-//BFS01     pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_MISC));
-//BFS01 }
-//BFS01 else
-//BFS01 {
-//BFS01     rOut << sal_uInt16(SFX_ITEMS_NULL);
-//BFS01     rOut << sal_uInt16(SFX_ITEMS_NULL);
-//BFS01     rOut << sal_uInt16(SFX_ITEMS_NULL);
-//BFS01     rOut << sal_uInt16(SFX_ITEMS_NULL);
-//BFS01     rOut << sal_uInt16(SFX_ITEMS_NULL);
-//BFS01     rOut << sal_uInt16(SFX_ITEMS_NULL);
-//BFS01 }
-//BFS01
-//BFS01 // StyleSheet-Pointer als Name, Familie abspeichern
-//BFS01 // wenn kein StyleSheet vorhanden: leeren String speichern
-//BFS01 if(GetStyleSheet())
-//BFS01 {
-//BFS01     // UNICODE: rOut << pStyleSheet->GetName();
-//BFS01     rOut.WriteByteString(GetStyleSheet()->GetName());
-//BFS01     rOut << (sal_uInt16)(int)(GetStyleSheet()->GetFamily());
-//BFS01 }
-//BFS01 else
-//BFS01 {
-//BFS01     // UNICODE: rOut << String();
-//BFS01     rOut.WriteByteString(String());
-//BFS01 }
-//BFS01}
 
 void SdrAttrObj::SetModel(SdrModel* pNewModel)
 {
@@ -451,24 +268,12 @@ void __EXPORT SdrAttrObj::SFX_NOTIFY(SfxBroadcaster& /*rBC*/, const TypeId& rBCT
     if(bDataChg)
     {
         Rectangle aBoundRect = GetLastBoundRect();
-
-        //if(pPage && pPage->IsInserted())
-        //  BroadcastObjectChange(); // Erstmal mit dem alten Rect
-
         SetBoundRectDirty();
         SetRectsDirty(sal_True);
 
         // This may have lead to object change
         SetChanged();
         BroadcastObjectChange();
-
-        //if(pPage && pPage->IsInserted())
-        //{
-        //  // looks like one more invalidate, not like a HINT_OBJCHANGED
-        //  ActionChanged();
-        //  // BroadcastObjectChange();
-        //}
-
         SendUserCall(SDRUSERCALL_CHGATTR, aBoundRect);
     }
 }
@@ -483,16 +288,6 @@ sal_Int32 SdrAttrObj::ImpGetLineWdt() const
     }
 
     return nRetval;
-
-//#i25616#  const SfxItemSet& rSet = GetMergedItemSet();
-//#i25616#  XLineStyle eLine = ((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
-//#i25616#
-//#i25616#  if(XLINE_NONE == eLine)
-//#i25616#      return 0; // Garkeine Linie da.
-//#i25616#
-//#i25616#  sal_Int32 nWdt = ((XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
-//#i25616#
-//#i25616#  return nWdt;
 }
 
 INT32 SdrAttrObj::ImpGetLineEndAdd() const
@@ -537,8 +332,8 @@ INT32 SdrAttrObj::ImpGetLineEndAdd() const
     if(bSttCenter)
     {
         // Linienende steht um die Haelfe ueber
-        XPolygon aSttPoly(((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetLineStartValue());
-        nSttHgt = XOutputDevice::InitLineStartEnd(aSttPoly, nSttWdt, bSttCenter);
+        basegfx::B2DPolyPolygon aSttPoly(((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetLineStartValue());
+        nSttHgt = XOutputDevice::getLineStartEndDistance(aSttPoly, nSttWdt, bSttCenter);
         // InitLineStartEnd liefert bei bCenter=TRUE die halbe Hoehe
     }
 
@@ -564,8 +359,8 @@ INT32 SdrAttrObj::ImpGetLineEndAdd() const
     if(bEndCenter)
     {
         // Linienende steht um die Haelfe ueber
-        XPolygon aEndPoly(((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetLineEndValue());
-        nEndHgt = XOutputDevice::InitLineStartEnd(aEndPoly, nEndWdt, bEndCenter);
+        basegfx::B2DPolyPolygon aEndPoly(((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetLineEndValue());
+        nEndHgt = XOutputDevice::getLineStartEndDistance(aEndPoly, nEndWdt, bEndCenter);
         // InitLineStartEnd liefert bei bCenter=TRUE die halbe Hoehe
     }
 
@@ -581,44 +376,6 @@ INT32 SdrAttrObj::ImpGetLineEndAdd() const
 }
 
 //////////////////////////////////////////////////////////////////////////////
-
-//BFS09sal_Bool SdrAttrObj::ImpLineEndHitTest(const Point& rEndPt, double nSin, double nCos, FASTBOOL bStart, const Point& rHit, USHORT nTol) const
-//BFS09{
-//BFS09 const SfxItemSet& rSet = GetMergedItemSet();
-//BFS09 sal_Int32 nWdt = 0;
-//BFS09 BOOL bCenter = FALSE;
-//BFS09 XPolygon aXPoly;
-//BFS09
-//BFS09 if(bStart)
-//BFS09 {
-//BFS09     nWdt = ((const XLineStartWidthItem&)(rSet.Get(XATTR_LINESTARTWIDTH))).GetValue();
-//BFS09     bCenter = ((const XLineStartCenterItem&)(rSet.Get(XATTR_LINESTARTCENTER))).GetValue();
-//BFS09     aXPoly = ((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetValue();
-//BFS09 }
-//BFS09 else
-//BFS09 {
-//BFS09     nWdt = ((const XLineEndWidthItem&)(rSet.Get(XATTR_LINEENDWIDTH))).GetValue();
-//BFS09     bCenter = ((const XLineEndCenterItem&)(rSet.Get(XATTR_LINEENDCENTER))).GetValue();
-//BFS09     aXPoly = ((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetValue();
-//BFS09 }
-//BFS09
-//BFS09 if(nWdt < 0)
-//BFS09 {
-//BFS09     sal_Int32 nLineWdt = ((XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue(); // Strichstaerke
-//BFS09     nWdt = -nLineWdt * nWdt / 100; // <0 = relativ
-//BFS09 }
-//BFS09
-//BFS09 // InitLineStartEnd liefert bei bCenter=TRUE die halbe Hoehe
-//BFS09 XOutputDevice::InitLineStartEnd(aXPoly, nWdt, bCenter);
-//BFS09 RotateXPoly(aXPoly, Point(), nSin, nCos);
-//BFS09 Point aHit(rHit);
-//BFS09 aHit -= rEndPt;
-//BFS09 Rectangle aHitRect(aHit.X() - nTol, aHit.Y() - nTol, aHit.X() + nTol, aHit.Y() + nTol);
-//BFS09//BFS09  FASTBOOL bHit = IsRectTouchesPoly(XOutCreatePolygon(aXPoly, NULL), aHitRect);
-//BFS09 sal_Bool bHit(IsRectTouchesPoly(XOutCreatePolygon(aXPoly), aHitRect));
-//BFS09
-//BFS09 return bHit;
-//BFS09}
 
 FASTBOOL SdrAttrObj::ImpGetShadowDist(sal_Int32& nXDist, sal_Int32& nYDist) const
 {
@@ -663,20 +420,6 @@ FASTBOOL SdrAttrObj::ImpSetShadowAttributes( const SfxItemSet& rSet, SfxItemSet&
 
     if(bShadOn)
     {
-// LineAttr for shadow no longer necessary, lines and line shadows are drawn in Paint()
-// routines individually (grep for CreateLinePoly())
-//
-//          if (pLineAttr!=NULL) {
-//              XLineAttrSetItem aL(*pLineAttr);
-//              aL.GetItemSet().Put(XLineColorItem(String(),aShadCol));
-//              aL.GetItemSet().Put(XLineTransparenceItem(nTransp));
-//              rXOut.SetLineAttr(aL);
-//          }
-
-// #103692# Caller must now handle noFill case
-//      if(!bNoFill)
-//      {
-
         const SdrShadowColorItem& rShadColItem = ((const SdrShadowColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR)));
         Color aShadCol(rShadColItem.GetColorValue());
         sal_uInt16 nTransp = ((const SdrShadowTransparenceItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
