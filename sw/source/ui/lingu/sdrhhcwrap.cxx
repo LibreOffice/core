@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrhhcwrap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:05:40 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:17:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@ SdrHHCWrapper::~SdrHHCWrapper()
     {
         SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
         ASSERT( pSdrView, "SdrHHCWrapper without DrawView?" );
-        pSdrView->EndTextEdit( sal_True );
+        pSdrView->SdrEndTextEdit( sal_True );
         SetUpdateMode(sal_False);
         pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
 //      SetPaperSize( Size(1, 1) );
@@ -196,7 +196,7 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
     {
         SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
         ASSERT( pSdrView, "SdrHHCWrapper without DrawView?" );
-        pSdrView->EndTextEdit( sal_True );
+        pSdrView->SdrEndTextEdit( sal_True );
         SetUpdateMode(sal_False);
         pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
         SetPaperSize( Size(1, 1) );
@@ -268,15 +268,15 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
                 {
                     SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
                     ASSERT( pSdrView, "SdrHHCWrapper without DrawView?" );
-                    SdrPageView* pPV = pSdrView->GetPageViewPvNum(0);
+                    SdrPageView* pPV = pSdrView->GetSdrPageView();
                     nDocIndex = n;
                     bNextDoc = sal_True;
                     pOutlView->SetOutputArea( Rectangle( Point(), Size(1,1)));
                     SetPaperSize( pTextObj->GetLogicRect().GetSize() );
                     SetUpdateMode(sal_True);
                     pView->GetWrtShell().MakeVisible(pTextObj->GetLogicRect());
-                    pSdrView->BegTextEdit( pTextObj, pPV, &pView->GetEditWin(),
-                                           sal_False, this, pOutlView, sal_True, sal_True);
+
+                    pSdrView->SdrBeginTextEdit(pTextObj, pPV, &pView->GetEditWin(), sal_False, this, pOutlView, sal_True, sal_True);
                 }
                 else
                     SetUpdateMode(sal_False);
