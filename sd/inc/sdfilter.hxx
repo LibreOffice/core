@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdfilter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:29:56 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:20:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,15 +77,13 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >    mxStatusIndicator;
 
     SfxMedium&                  mrMedium;
-    ::sd::DrawDocShell&             mrDocShell;
+    ::sd::DrawDocShell&         mrDocShell;
     SdDrawDocument&             mrDocument;
-    SfxProgress*                mpProgress;
     sal_Bool                    mbIsDraw : 1;
     sal_Bool                    mbShowProgress : 1;
 
     ::vos::OModule*             OpenLibrary( const ::rtl::OUString& rLibraryName ) const;
     void                        CreateStatusIndicator();
-    void                        CreateProgress();
 
 private:
 
