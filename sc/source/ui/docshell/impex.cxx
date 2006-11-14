@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:46:46 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:49:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1836,7 +1836,7 @@ BOOL ScImportExport::HTML2Doc( SvStream& rStrm, const String& rBaseURL )
     if (bOk)
     {
         //  ScHTMLImport may call ScDocument::InitDrawLayer, resulting in
-        //  a DrawLayer but no DrawView -> create DrawLayer and View here
+        //  a Draw Layer but no Draw View -> create Draw Layer and View here
         if (pDocSh)
             pDocSh->MakeDrawLayer();
 
