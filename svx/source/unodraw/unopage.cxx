@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:20:35 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:54:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,10 @@
 
 #ifndef _E3D_LATHE3D_HXX
 #include <lathe3d.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 using ::rtl::OUString;
@@ -526,7 +530,7 @@ Reference< drawing::XShapeGroup > SAL_CALL SvxDrawPage::group( const Reference< 
     if(mpPage==NULL||mpView==NULL||!xShapes.is())
         return xShapeGroup;
 
-    SdrPageView* pPageView = mpView->ShowPage( mpPage, Point() );
+    SdrPageView* pPageView = mpView->ShowSdrPage( mpPage );
 
     _SelectObjectsInView( xShapes, pPageView );
 
@@ -541,7 +545,7 @@ Reference< drawing::XShapeGroup > SAL_CALL SvxDrawPage::group( const Reference< 
              xShapeGroup = Reference< drawing::XShapeGroup >::query( pObj->getUnoShape() );
     }
 
-    mpView->HidePage(pPageView);
+    mpView->HideSdrPage();
 
     if( mpModel )
         mpModel->SetChanged();
@@ -564,13 +568,13 @@ void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGr
     if(mpPage==NULL||mpView==NULL||!aGroup.is())
         return;
 
-    SdrPageView* pPageView = mpView->ShowPage( mpPage, Point() );
+    SdrPageView* pPageView = mpView->ShowSdrPage( mpPage );
 
     Reference< drawing::XShape > xShape( aGroup, UNO_QUERY );
     _SelectObjectInView( xShape, pPageView );
     mpView->UnGroupMarked();
 
-    mpView->HidePage(pPageView);
+    mpView->HideSdrPage();
 
     if( mpModel )
         mpModel->SetChanged();
@@ -599,11 +603,18 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
             switch( nType )
             {
             case OBJ_MEASURE:
-                pNewObj = new SdrMeasureObj( aRect.TopLeft(), aRect.BottomRight() );
-                break;
+                {
+                    pNewObj = new SdrMeasureObj( aRect.TopLeft(), aRect.BottomRight() );
+                    break;
+                }
             case OBJ_LINE:
-                pNewObj = new SdrPathObj( aRect.TopLeft(), aRect.BottomRight() );
-                break;
+                {
+                    basegfx::B2DPolygon aPoly;
+                    aPoly.append(basegfx::B2DPoint(aRect.Left(), aRect.Top()));
+                    aPoly.append(basegfx::B2DPoint(aRect.Right(), aRect.Bottom()));
+                    pNewObj = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPoly));
+                    break;
+                }
             }
         }
 
@@ -625,8 +636,8 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
                 Camera3D aCam(pScene->GetCamera());
                 aCam.SetAutoAdjustProjection(sal_False);
                 aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
-                Vector3D aLookAt;
-                Vector3D aCamPos(0.0, 0.0, 10000.0);
+                basegfx::B3DPoint aLookAt;
+                basegfx::B3DPoint aCamPos(0.0, 0.0, 10000.0);
                 aCam.SetPosAndLookAt(aCamPos, aLookAt);
                 aCam.SetFocalLength(100.0);
                 aCam.SetDefaults(aCamPos, aLookAt, 10000.0);
@@ -638,18 +649,16 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
             else if(pNewObj->ISA(E3dExtrudeObj))
             {
                 E3dExtrudeObj* pObj = (E3dExtrudeObj*)pNewObj;
-                Polygon3D aNewP(3);
-                aNewP[0] = Vector3D(0,0,0);
-                aNewP[1] = Vector3D(0,1,0);
-                aNewP[2] = Vector3D(1,0,0);
+                basegfx::B2DPolygon aNewPolygon;
+                aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
+                aNewPolygon.append(basegfx::B2DPoint(0.0, 1.0));
+                aNewPolygon.append(basegfx::B2DPoint(1.0, 0.0));
 
                 // #87922#
                 // To avoid that CreateGeometry(...) sets the DoubleSided
                 // item at once, use a closed poylgon.
-                aNewP.SetClosed(TRUE);
-
-                PolyPolygon3D aNewPP(aNewP);
-                pObj->SetExtrudePolygon(aNewPP);
+                aNewPolygon.setClosed(true);
+                pObj->SetExtrudePolygon(basegfx::B2DPolyPolygon(aNewPolygon));
 
                 // #107245# pObj->SetExtrudeCharacterMode(TRUE);
                 pObj->SetMergedItem(Svx3DCharacterModeItem(sal_True));
@@ -657,18 +666,16 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
             else if(pNewObj->ISA(E3dLatheObj))
             {
                 E3dLatheObj* pObj = (E3dLatheObj*)pNewObj;
-                Polygon3D aNewP(3);
-                aNewP[0] = Vector3D(0,0,0);
-                aNewP[1] = Vector3D(0,1,0);
-                aNewP[2] = Vector3D(1,0,0);
+                basegfx::B2DPolygon aNewPolygon;
+                aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
+                aNewPolygon.append(basegfx::B2DPoint(0.0, 1.0));
+                aNewPolygon.append(basegfx::B2DPoint(1.0, 0.0));
 
                 // #87922#
                 // To avoid that CreateGeometry(...) sets the DoubleSided
                 // item at once, use a closed poylgon.
-                aNewP.SetClosed(TRUE);
-
-                PolyPolygon3D aNewPP(aNewP);
-                pObj->SetPolyPoly3D(aNewPP);
+                aNewPolygon.setClosed(true);
+                pObj->SetPolyPoly2D(basegfx::B2DPolyPolygon(aNewPolygon));
 
                 // #107245# pObj->SetLatheCharacterMode(TRUE);
                 pObj->SetMergedItem(Svx3DCharacterModeItem(sal_True));
