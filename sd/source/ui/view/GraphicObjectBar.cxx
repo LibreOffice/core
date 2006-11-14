@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicObjectBar.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:30:04 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:39:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,7 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest& rReq )
             if( SVX_GRAPHICFILTER_ERRCODE_NONE ==
                 SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ) )
             {
-                SdrPageView* pPageView = pView->GetPageViewPvNum( 0 );
+                SdrPageView* pPageView = pView->GetSdrPageView();
 
                 if( pPageView )
                 {
@@ -204,7 +204,7 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest& rReq )
                     aStr.Append( String( SdResId( STR_UNDO_GRAFFILTER ) ) );
                     pView->BegUndo( aStr );
                     pFilteredObj->SetGraphicObject( aFilterObj );
-                    pView->ReplaceObject( pObj, *pPageView, pFilteredObj );
+                    pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj );
                     pView->EndUndo();
                 }
             }
