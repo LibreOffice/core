@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawvie3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:26:48 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:55:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
     bDisableHdl( FALSE ),
     bInConstruct( TRUE )
 {
+    SetBufferedOverlayAllowed(true);
     Construct();
 }
 
@@ -85,6 +86,7 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScDocument* pDocument, SCTAB nTable 
     bDisableHdl( FALSE ),
     bInConstruct( TRUE )
 {
+    SetBufferedOverlayAllowed(true);
     Construct();
 }
 
@@ -141,7 +143,9 @@ void __EXPORT ScDrawView::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType
     {
         SCTAB nDelTab = ((ScTabDeletedHint&)rHint).GetTab();
         if (ValidTab(nDelTab))
-            HidePagePgNum(static_cast<sal_uInt16>(nDelTab));
+        {
+            HideSdrPage();
+        }
     }
     else if (rHint.ISA(ScTabSizeChangedHint))               // Groesse geaendert
     {
