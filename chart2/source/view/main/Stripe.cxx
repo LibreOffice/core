@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Stripe.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:38:18 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:36:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,12 @@
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #endif
 
-#ifndef _POLY3D_HXX
-#include <svx/poly3d.hxx>
+#ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
+#include <basegfx/polygon/b3dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B3DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b3dpolygontools.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -130,12 +134,12 @@ uno::Any Stripe::getPolyPolygonShape3D() const
 
 drawing::Direction3D Stripe::getNormal() const
 {
-    Polygon3D aPolygon3D(3);
-    aPolygon3D[0] = Position3DToVector3D( m_aPoint1 );
-    aPolygon3D[1] = Position3DToVector3D( m_aPoint2 );
-    aPolygon3D[2] = Position3DToVector3D( m_aPoint3 );
-    Vector3D aNormal = aPolygon3D.GetNormal();
-    return Vector3DToDirection3D(aNormal);
+    ::basegfx::B3DPolygon aPolygon3D;
+    aPolygon3D.append(Position3DToB3DPoint( m_aPoint1 ));
+    aPolygon3D.append(Position3DToB3DPoint( m_aPoint2 ));
+    aPolygon3D.append(Position3DToB3DPoint( m_aPoint3 ));
+    ::basegfx::B3DVector aNormal(::basegfx::tools::getNormal(aPolygon3D));
+    return B3DVectorToDirection3D(aNormal);
 }
 
 uno::Any Stripe::getNormalsPolyPolygonShape3D() const
