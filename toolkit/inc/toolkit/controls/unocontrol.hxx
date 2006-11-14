@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:51:35 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 12:28:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,8 @@
 #ifndef _COM_SUN_STAR_AWT_XCONTROL_HPP_
 #include <com/sun/star/awt/XControl.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
-#include <com/sun/star/awt/XWindow.hpp>
+#ifndef _COM_SUN_STAR_AWT_XWINDOW2_HPP_
+#include <com/sun/star/awt/XWindow2.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XView_HPP_
 #include <com/sun/star/awt/XView.hpp>
@@ -123,7 +123,7 @@ struct UnoControlComponentInfos
 //  class UnoControl
 //  ----------------------------------------------------
 typedef ::cppu::WeakAggImplHelper7  <   ::com::sun::star::awt::XControl
-                                    ,   ::com::sun::star::awt::XWindow
+                                    ,   ::com::sun::star::awt::XWindow2
                                     ,   ::com::sun::star::awt::XView
                                     ,   ::com::sun::star::beans::XPropertiesChangeListener
                                     ,   ::com::sun::star::lang::XServiceInfo
@@ -204,6 +204,14 @@ public:
 
     // XEventListener
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XWindow2
+    virtual void SAL_CALL setOutputSize( const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Size SAL_CALL getOutputSize(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isVisible(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isActive(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isEnabled(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasFocus(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XWindow
     void SAL_CALL setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw(::com::sun::star::uno::RuntimeException);
