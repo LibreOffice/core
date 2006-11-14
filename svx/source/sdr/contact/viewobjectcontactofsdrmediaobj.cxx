@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofsdrmediaobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:38:35 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:32:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,14 @@
 #include <vcl/window.hxx>
 #include <avmedia/mediaitem.hxx>
 #include "sdrmediawindow.hxx"
+
+#ifndef _SDRPAGEWINDOW_HXX
+#include <sdrpagewindow.hxx>
+#endif
+
+#ifndef _SDRPAINTWINDOW_HXX
+#include <sdrpaintwindow.hxx>
+#endif
 
 namespace sdr { namespace contact {
 
@@ -160,15 +168,21 @@ void ViewObjectContactOfSdrMediaObj::PaintObject(DisplayInfo& rDisplayInfo)
 
 Window* ViewObjectContactOfSdrMediaObj::getWindow() const
 {
-    ObjectContactOfPageView* pOC = dynamic_cast< ObjectContactOfPageView* >( &GetObjectContact() );
+    Window* pRetval = 0;
 
-    if( pOC)
+    const ObjectContactOfPageView* pObjectContactOfPageView = dynamic_cast< const ObjectContactOfPageView* >(&GetObjectContact());
+
+    if(pObjectContactOfPageView)
     {
-        OutputDevice& rOutDev = pOC->GetPageViewWindow().GetOutputDevice();
-        return( ( rOutDev.GetOutDevType() == OUTDEV_WINDOW ) ? static_cast< Window* >( &rOutDev ) : NULL );
+        OutputDevice& rOutDev = pObjectContactOfPageView->GetPageWindow().GetPaintWindow().GetOutputDevice();
+
+        if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
+        {
+            pRetval = static_cast< Window* >(&rOutDev);
+        }
     }
 
-    return NULL;
+    return pRetval;
 }
 
 // ------------------------------------------------------------------------------
