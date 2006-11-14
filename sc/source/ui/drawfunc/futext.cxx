@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:26:03 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:52:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,7 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
     if ( rMEvt.IsLeft() )
     {
-        SdrHdl* pHdl = pView->HitHandle(aMDPos, *pWindow);
+        SdrHdl* pHdl = pView->PickHandle(aMDPos);
 
         ULONG nHdlNum = pView->GetHdlNum(pHdl);
 
@@ -216,7 +216,7 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 pO->SetVertical( bVertical );
 
                 //!??   ohne uebergebenen Outliner stimmen die Defaults nicht ???!?
-                if ( pView->BegTextEdit(pObj, pPV, pWindow, (FASTBOOL)TRUE, pO) )
+                if ( pView->SdrBeginTextEdit(pObj, pPV, pWindow, sal_True, pO) )
                 {
                     //  EditEngine-UndoManager anmelden
                     pViewShell->SetDrawTextUndo( &pO->GetUndoManager() );
@@ -290,7 +290,7 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         aDragTimer.Start();
 
-                        pHdl=pView->HitHandle(aMDPos,*pWindow);
+                        pHdl=pView->PickHandle(aMDPos);
 
                         if (pHdl!=NULL)
                         {
@@ -304,11 +304,11 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         if (bPointMode)
                         {
-                            pView->BegMarkPoints(aMDPos, (OutputDevice*) NULL);
+                            pView->BegMarkPoints(aMDPos);
                         }
                         else
                         {
-                            pView->BegMarkObj(aMDPos, (OutputDevice*) NULL);
+                            pView->BegMarkObj(aMDPos);
                         }
                     }
                 }
@@ -788,7 +788,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
             nSdrObjKind == OBJ_OUTLINETEXT ||
             pObj->ISA(SdrTextObj))
         {
-            SdrPageView* pPV = pView->GetPageViewPvNum(0);
+            SdrPageView* pPV = pView->GetSdrPageView();
             Rectangle aRect = pObj->GetLogicRect();
             Point aPnt = aRect.Center();
 
@@ -808,7 +808,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
                 pO->SetVertical( bVertical );
 
                 //!??   ohne uebergebenen Outliner stimmen die Defaults nicht ???!?
-                if ( pView->BegTextEdit(pObj, pPV, pWindow, (FASTBOOL)TRUE, pO) )
+                if ( pView->SdrBeginTextEdit(pObj, pPV, pWindow, sal_True, pO) )
                 {
                     //  EditEngine-UndoManager anmelden
                     pViewShell->SetDrawTextUndo( &pO->GetUndoManager() );
