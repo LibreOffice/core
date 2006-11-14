@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 17:46:27 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:45:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,11 @@
 #include <svtools/filter.hxx>
 #include <svtools/urihelper.hxx>
 #include <goodies/grfmgr.hxx>
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 #include "linkmgr.hxx"
 #include "svdxout.hxx"
 #include "svdetc.hxx"
@@ -86,6 +91,14 @@
 
 #ifndef _SDR_CONTACT_VIEWCONTACTOFGRAPHIC_HXX
 #include <svx/sdr/contact/viewcontactofgraphic.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -225,7 +238,6 @@ SdrGrafObj::SdrGrafObj()
     pGraphic = new GraphicObject;
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
     bNoShear = TRUE;
-    //BFS01bCopyToPoolOnAfterRead = FALSE;
 
     // #111096#
     mbGrafAnimationAllowed = sal_True;
@@ -249,7 +261,6 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect)
     pGraphic = new GraphicObject( rGrf );
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
     bNoShear = TRUE;
-    //BFS01bCopyToPoolOnAfterRead = FALSE;
 
     // #111096#
     mbGrafAnimationAllowed = sal_True;
@@ -273,7 +284,6 @@ SdrGrafObj::SdrGrafObj( const Graphic& rGrf )
     pGraphic = new GraphicObject( rGrf );
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
     bNoShear = TRUE;
-    //BFS01bCopyToPoolOnAfterRead = FALSE;
 
     // #111096#
     mbGrafAnimationAllowed = sal_True;
@@ -629,275 +639,6 @@ sal_Bool SdrGrafObj::ImpUpdateGraphicLink() const
 
 // -----------------------------------------------------------------------------
 
-// Liefert FALSE, wenn die Pres-Bitmap zu gross ist
-//FASTBOOL SdrGrafObj::ImpPaintEmptyPres( OutputDevice* pOutDev ) const
-//{
-//  const MapMode   aDstMapMode( pOutDev->GetMapMode().GetMapUnit() );
-//  Point           aPos( aRect.Center() );
-//  Size            aSize;
-//    FASTBOOL        bRet;
-//
-//  if( pGraphic->GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
-//      aSize = pOutDev->PixelToLogic( pGraphic->GetPrefSize(), aDstMapMode );
-//  else
-//      aSize = pOutDev->LogicToLogic( pGraphic->GetPrefSize(), pGraphic->GetPrefMapMode(), aDstMapMode );
-//
-//  aPos.X() -= ( aSize.Width() >> 1 );
-//  aPos.Y() -= ( aSize.Height() >> 1 );
-//
-//    if( aPos.X() >= aRect.Left() && aPos.Y() >= aRect.Top() )
-//  {
-//      const Graphic& rGraphic = pGraphic->GetGraphic();
-//
-//      if( pGraphic->GetType() == GRAPHIC_BITMAP )
-//      {
-//          DrawGraphic(pOutDev, aPos, aSize);
-//      }
-//      else
-//      {
-//          const ULONG nOldDrawMode = pOutDev->GetDrawMode();
-//
-//          if( ( nOldDrawMode & DRAWMODE_GRAYBITMAP ) != 0 )
-//          {
-//              // Falls Modus GRAYBITMAP, wollen wir auch Mtf's als Graustufen darstellen
-//              ULONG nNewDrawMode = nOldDrawMode;
-//              nNewDrawMode &= ~( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_WHITEFILL | DRAWMODE_NOFILL );
-//              pOutDev->SetDrawMode( nNewDrawMode |= DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL  );
-//          }
-//
-//          rGraphic.Draw( pOutDev, aPos, aSize );
-//          pOutDev->SetDrawMode( nOldDrawMode );
-//      }
-//
-//      bRet = TRUE;
-//  }
-//  else
-//      bRet = FALSE;
-//
-//  return bRet;
-//}
-
-// -----------------------------------------------------------------------------
-
-//void SdrGrafObj::ImpPaintReplacement(OutputDevice* pOutDev, const XubString& rText, const Bitmap* pBmp, FASTBOOL bFill) const
-//{
-//    Size aPixelSize( 1, 1 );
-//    Size aBmpSize;
-//
-//    aPixelSize = Application::GetDefaultDevice()->PixelToLogic( aPixelSize, pOutDev->GetMapMode() );
-//
-//  if( bFill )
-//  {
-//      pOutDev->SetLineColor();
-//      pOutDev->SetFillColor( COL_LIGHTGRAY );
-//  }
-//
-//  Rectangle   aRect1( aRect );
-//  Rectangle   aRect2( aRect1 );
-//  Rectangle   aTextRect( aRect1 );
-//  Point       aTopLeft( aRect1.TopLeft() );
-//  Point       aBmpPos( aTopLeft );
-//
-//    aRect2.Left() += aPixelSize.Width();
-//    aRect2.Top() += aPixelSize.Height();
-//    aRect2.Right() -= aPixelSize.Width();
-//    aRect2.Bottom() -= aPixelSize.Height();
-//
-//  if( pBmp != NULL )
-//  {
-//      aBmpSize = Size( Application::GetDefaultDevice()->PixelToLogic( pBmp->GetSizePixel(), pOutDev->GetMapMode() ) );
-//
-//      long        nRectWdt = aTextRect.Right() - aTextRect.Left();
-//      long        nRectHgt = aTextRect.Bottom() - aTextRect.Top();
-//      long        nBmpWdt = aBmpSize.Width();
-//      long        nBmpHgt = aBmpSize.Height();
-//      long        nMinWdt = nBmpWdt;
-//      long        nMinHgt = nBmpHgt;
-//      BOOL        bText = rText.Len() > 0;
-//
-//      if( bText )
-//      {
-//          nMinWdt= 2 * nBmpWdt + 5 * aPixelSize.Width();
-//          nMinHgt= 2 * nBmpHgt + 5 * aPixelSize.Height();
-//      }
-//
-//      if( nRectWdt < nMinWdt || nRectHgt < nMinHgt )
-//          pBmp=NULL;
-//      else
-//      {
-//          aTextRect.Left() += nBmpWdt;
-//
-//          if( bText )
-//              aTextRect.Left() += 5 * aPixelSize.Width();
-//      }
-//
-//      aBmpPos.X() += 2 * aPixelSize.Width();
-//      aBmpPos.Y() += 2 * aPixelSize.Height();
-//
-//      if( aGeo.nDrehWink != 0 )
-//      {
-//          Point   aRef( aBmpPos.X() - aBmpSize.Width() / 2 + 2 * aPixelSize.Width(),
-//                        aBmpPos.Y() - aBmpSize.Height() / 2 + 2 * aPixelSize.Height() );
-//          double  nSin = sin( aGeo.nDrehWink * nPi180 );
-//          double  nCos = cos( aGeo.nDrehWink * nPi180 );
-//
-//          RotatePoint( aBmpPos, aRef, nSin, nCos );
-//      }
-//  }
-//
-//  if( aGeo.nDrehWink == 0 && aGeo.nShearWink == 0 )
-//  {
-//      const StyleSettings& rStyleSettings = pOutDev->GetSettings().GetStyleSettings();
-//
-//      if( bFill )
-//          pOutDev->DrawRect( aRect );
-//
-//      if( pBmp!=NULL )
-//          pOutDev->DrawBitmap( aBmpPos, aBmpSize, *pBmp );
-//
-//      pOutDev->SetFillColor();
-//      pOutDev->SetLineColor( rStyleSettings.GetShadowColor() );
-//      pOutDev->DrawLine( aRect1.TopLeft(), aRect1.TopRight() );
-//      pOutDev->DrawLine( aRect1.TopLeft(), aRect1.BottomLeft() );
-//
-//      pOutDev->SetLineColor( rStyleSettings.GetLightColor() );
-//      pOutDev->DrawLine( aRect1.TopRight(), aRect1.BottomRight() );
-//      pOutDev->DrawLine( aRect1.BottomLeft(), aRect1.BottomRight() );
-//
-//      pOutDev->SetLineColor( rStyleSettings.GetLightColor() );
-//      pOutDev->DrawLine( aRect2.TopLeft(), aRect2.TopRight() );
-//      pOutDev->DrawLine( aRect2.TopLeft(), aRect2.BottomLeft() );
-//
-//      pOutDev->SetLineColor( rStyleSettings.GetShadowColor() );
-//      pOutDev->DrawLine( aRect2.TopRight(), aRect2.BottomRight() );
-//      pOutDev->DrawLine( aRect2.BottomLeft(), aRect2.BottomRight() );
-//  }
-//  else
-//  {
-//      Polygon aPoly1( Rect2Poly( aRect1, aGeo ) );
-//      Polygon aPoly2(5);
-//
-//      aPoly2[0] = aRect2.TopLeft();
-//      aPoly2[1] = aRect2.TopRight();
-//      aPoly2[2] = aRect2.BottomRight();
-//      aPoly2[3] = aRect2.BottomLeft();
-//      aPoly2[4] = aRect2.TopLeft();
-//
-//      if( aGeo.nShearWink != 0 )
-//          ShearPoly( aPoly2, aTopLeft, aGeo.nTan );
-//
-//      if( aGeo.nDrehWink != 0 )
-//          RotatePoly( aPoly2, aTopLeft, aGeo.nSin, aGeo.nCos );
-//
-//      if( bFill )
-//          pOutDev->DrawPolygon( aPoly1 );
-//
-//      if( pBmp != NULL )
-//          pOutDev->DrawBitmap( aBmpPos, aBmpSize, *pBmp );
-//
-//      pOutDev->SetFillColor();
-//
-//      const StyleSettings&    rStyleSettings = pOutDev->GetSettings().GetStyleSettings();
-//      Color                   a3DLightColor( rStyleSettings.GetLightColor() );
-//      Color                   a3DShadowColor( rStyleSettings.GetShadowColor() );
-//      long                    nHWink=NormAngle360( aGeo.nDrehWink );
-//      long                    nVWink=NormAngle360( aGeo.nDrehWink-aGeo.nShearWink );
-//      FASTBOOL                bHorzChg=nHWink>13500 && nHWink<=31500;
-//      FASTBOOL                bVertChg=nVWink>4500 && nVWink<=22500;
-//
-//      pOutDev->SetLineColor( bHorzChg ? a3DShadowColor : a3DLightColor);
-//      pOutDev->DrawLine( aPoly2[0], aPoly2[1] );
-//
-//      pOutDev->SetLineColor( bHorzChg ? a3DLightColor  : a3DShadowColor);
-//      pOutDev->DrawLine( aPoly2[2], aPoly2[3] );
-//
-//      pOutDev->SetLineColor( bVertChg ? a3DLightColor  : a3DShadowColor);
-//      pOutDev->DrawLine( aPoly2[1], aPoly2[2] );
-//
-//      pOutDev->SetLineColor( bVertChg ? a3DShadowColor : a3DLightColor);
-//      pOutDev->DrawLine( aPoly2[3], aPoly2[4] );
-//
-//      pOutDev->SetLineColor( bHorzChg ? a3DLightColor  : a3DShadowColor);
-//      pOutDev->DrawLine( aPoly1[0], aPoly1[1] );
-//
-//      pOutDev->SetLineColor( bHorzChg ? a3DShadowColor : a3DLightColor);
-//      pOutDev->DrawLine( aPoly1[2], aPoly1[3] );
-//
-//      pOutDev->SetLineColor( bVertChg ? a3DShadowColor : a3DLightColor);
-//      pOutDev->DrawLine( aPoly1[1], aPoly1[2] );
-//
-//      pOutDev->SetLineColor( bVertChg ? a3DLightColor  : a3DShadowColor);
-//      pOutDev->DrawLine( aPoly1[3], aPoly1[4] );
-//  }
-//
-//  XubString aNam( rText );
-//
-//  if( aNam.Len() )
-//  {
-//      Size aOutSize( aTextRect.GetWidth() - 6 * aPixelSize.Width(),
-//                     aTextRect.GetHeight() - 6 * aPixelSize.Height() );
-//
-//      if( aOutSize.Width() >= ( 4 * aPixelSize.Width() ) ||
-//          aOutSize.Height() >=  ( 4 * aPixelSize.Height() ) )
-//      {
-//          Point   aOutPos( aTextRect.Left() + 3 * aPixelSize.Width(),
-//                           aTextRect.Top() + 3 * aPixelSize.Height() );
-//          long    nMaxOutY = aOutPos.Y() + aOutSize.Height();
-//          Font    aFontMerk( pOutDev->GetFont() );
-//          Font    aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE, LANGUAGE_SYSTEM, DEFAULTFONT_FLAGS_ONLYONE ) );
-//
-//          aFont.SetColor( COL_LIGHTRED );
-//          aFont.SetTransparent( TRUE );
-//          aFont.SetLineOrientation( USHORT( NormAngle360( aGeo.nDrehWink ) / 10 ) );
-//
-//          if( IsLinkedGraphic() )
-//              aFont.SetUnderline( UNDERLINE_SINGLE );
-//
-//          Size aFontSize( 0, ( aGeo.nDrehWink % 9000 == 0 ? 12 : 14 ) * aPixelSize.Height() );
-//
-//          if( aFontSize.Height() > aOutSize.Height() )
-//              aFontSize.Height() = aOutSize.Height();
-//
-//          aFont.SetSize( aFontSize );
-//          pOutDev->SetFont( aFont );
-//          String aOutStr( aNam );
-//
-//          while( aOutStr.Len() && aOutPos.Y() <= nMaxOutY )
-//          {
-//              String  aStr1( aOutStr );
-//              INT32   nTextWidth = pOutDev->GetTextWidth( aStr1 );
-//              INT32   nTextHeight = pOutDev->GetTextHeight();
-//
-//              while( aStr1.Len() && nTextWidth > aOutSize.Width() )
-//              {
-//                  aStr1.Erase( aStr1.Len() - 1 );
-//                  nTextWidth = pOutDev->GetTextWidth( aStr1 );
-//                  nTextHeight = pOutDev->GetTextHeight();
-//              }
-//
-//              Point aPos( aOutPos );
-//              aOutPos.Y() += nTextHeight;
-//
-//              if( aOutPos.Y() <= nMaxOutY )
-//              {
-//                  if( aGeo.nShearWink != 0 )
-//                      ShearPoint( aPos, aTopLeft, aGeo.nTan );
-//
-//                  if( aGeo.nDrehWink != 0 )
-//                      RotatePoint( aPos, aTopLeft, aGeo.nSin, aGeo.nCos );
-//
-//                  pOutDev->DrawText( aPos, aStr1 );
-//                  aOutStr.Erase( 0, aStr1.Len() );
-//              }
-//          }
-//
-//          pOutDev->SetFont( aFontMerk );
-//      }
-//  }
-//}
-
-// -----------------------------------------------------------------------------
-
 //////////////////////////////////////////////////////////////////////////////
 // #i25616#
 
@@ -1000,8 +741,7 @@ void SdrGrafObj::ImpDoPaintGrafObjShadow( XOutputDevice& rOut, const SdrPaintInf
                 // shadow for the whole rectangle
                 pOutDev->SetFillColor(aShadowColor);
                 pOutDev->SetLineColor();
-//BFS09             Polygon aOutputPoly(XOutCreatePolygon(GetXPoly(), pOutDev));
-                Polygon aOutputPoly(XOutCreatePolygon(GetXPoly()));
+                Polygon aOutputPoly(basegfx::tools::adaptiveSubdivideByAngle(GetXPoly().getB2DPolygon()));
                 aOutputPoly.Move(nXDist, nYDist);
 
                 if(0 != nShadowTransparence && 100 > nShadowTransparence)
@@ -1255,10 +995,12 @@ void SdrGrafObj::operator=( const SdrObject& rObj )
 // -----------------------------------------------------------------------------
 // #i25616#
 
-void SdrGrafObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const
+basegfx::B2DPolyPolygon SdrGrafObj::TakeXorPoly(sal_Bool bDetail) const
 {
     if(mbInsidePaint)
     {
+        basegfx::B2DPolyPolygon aRetval;
+
         // take grown rectangle
         const sal_Int32 nHalfLineWidth(ImpGetLineWdt() / 2);
         const Rectangle aGrownRect(
@@ -1267,12 +1009,15 @@ void SdrGrafObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const
             aRect.Right() + nHalfLineWidth,
             aRect.Bottom() + nHalfLineWidth);
 
-        rPoly = XPolyPolygon(ImpCalcXPoly(aGrownRect, GetEckenradius()));
+        XPolygon aXPoly(ImpCalcXPoly(aGrownRect, GetEckenradius()));
+        aRetval.append(aXPoly.getB2DPolygon());
+
+        return aRetval;
     }
     else
     {
         // call parent
-        SdrRectObj::TakeXorPoly(rPoly, bDetail);
+        return SdrRectObj::TakeXorPoly(bDetail);
     }
 }
 
@@ -1285,16 +1030,16 @@ FASTBOOL SdrGrafObj::HasSpecialDrag() const
 
 // -----------------------------------------------------------------------------
 
-USHORT SdrGrafObj::GetHdlCount() const
+sal_uInt32 SdrGrafObj::GetHdlCount() const
 {
-    return 8;
+    return 8L;
 }
 
 // -----------------------------------------------------------------------------
 
-SdrHdl* SdrGrafObj::GetHdl(USHORT nHdlNum) const
+SdrHdl* SdrGrafObj::GetHdl(sal_uInt32 nHdlNum) const
 {
-    return SdrRectObj::GetHdl( nHdlNum + 1 );
+    return SdrRectObj::GetHdl( nHdlNum + 1L );
 }
 
 // -----------------------------------------------------------------------------
@@ -1460,49 +1205,6 @@ const GDIMetaFile* SdrGrafObj::GetGDIMetaFile() const
 
 // -----------------------------------------------------------------------------
 
-//#111096#
-//Rectangle SdrGrafObj::GetAnimationRect(const OutputDevice* pOutDev) const
-//{
-//  return GetSnapRect();
-//}
-
-// -----------------------------------------------------------------------------
-
-//#111096#
-//void SdrGrafObj::SetAnimationSupervisor( OutputDevice* pDisplayDev, BOOL bObjSupervises )
-//{
-//  ForceSwapIn();
-//  List* pAInfoList = pGraphic->GetAnimationInfoList();
-//
-//  if ( pAInfoList )
-//  {
-//      for( AInfo* pAInfo = (AInfo*) pAInfoList->First(); pAInfo; pAInfo = (AInfo*) pAInfoList->Next() )
-//      {
-//          if( pAInfo->pOutDev == pDisplayDev )
-//          {
-//              pAInfo->nExtraData = ( bObjSupervises ? 1L : (long) this );
-//
-//              if ( !bObjSupervises )
-//                  pAInfo->bPause = FALSE;
-//          }
-//      }
-//  }
-//}
-
-// -----------------------------------------------------------------------------
-
-//#111096#
-//void SdrGrafObj::ResetAnimationLoopCount()
-//{
-//  if( pGraphic->IsAnimated() )
-//  {
-//      ForceSwapIn();
-//      pGraphic->ResetAnimationLoopCount();
-//  }
-//}
-
-// -----------------------------------------------------------------------------
-
 SdrObject* SdrGrafObj::DoConvertToPolyObj(BOOL bBezier) const
 {
     SdrObject* pRetval = NULL;
@@ -1582,19 +1284,6 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(BOOL bBezier) const
 
     return pRetval;
 }
-
-// -----------------------------------------------------------------------------
-
-//BFS01void SdrGrafObj::AfterRead()
-//BFS01{
-//BFS01 SdrRectObj::AfterRead();
-//BFS01
-//BFS01 if( bCopyToPoolOnAfterRead )
-//BFS01 {
-//BFS01     ImpSetGrafInfoToAttr();
-//BFS01     bCopyToPoolOnAfterRead = FALSE;
-//BFS01 }
-//BFS01}
 
 // -----------------------------------------------------------------------------
 
@@ -1710,20 +1399,6 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
             // ## test only if there are VOCs other than the preview renderer
             if(!GetViewContact().HasViewObjectContacts(true))
             {
-//          SdrViewIter aIter( this );
-//          SdrView*    pView = aIter.FirstView();
-//          BOOL        bVisible = FALSE;
-//
-//          while( !bVisible && pView )
-//          {
-//              bVisible = !pView->IsGrafDraft();
-//
-//              if( !bVisible )
-//                  pView = aIter.NextView();
-//          }
-//
-//          if( !bVisible )
-//          {
                 const ULONG nSwapMode = pModel->GetSwapGraphicsMode();
 
                 if( ( pGraphic->HasUserData() || pGraphicLink ) &&
