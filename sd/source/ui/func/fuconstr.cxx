@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconstr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:15:13 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:28:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ BOOL FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
     {
         pWindow->CaptureMouse();
 
-        SdrHdl* pHdl = pView->HitHandle(aMDPos, *pWindow);
+        SdrHdl* pHdl = pView->PickHandle(aMDPos);
 
         if ( pHdl != NULL || pView->IsMarkedHit(aMDPos, nHitLog) )
         {
@@ -240,7 +240,7 @@ BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
     {
         pWindow->ReleaseMouse();
         USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-        SdrHdl* pHdl = pView->HitHandle(aPnt, *pWindow);
+        SdrHdl* pHdl = pView->PickHandle(aPnt);
 
         if ( !pView->AreObjectsMarked() )
         {
@@ -391,7 +391,7 @@ void FuConstruct::SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj)
 void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         const sal_Bool bForceFillStyle, const sal_Bool bForceNoFillStyle )
 {
-    SdPage* pPage = (SdPage*)pView->GetPageViewPvNum(0)->GetPage();
+    SdPage* pPage = (SdPage*)pView->GetSdrPageView()->GetPage();
     if ( pPage->IsMasterPage() && pPage->GetPageKind() == PK_STANDARD &&
          pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
     {
