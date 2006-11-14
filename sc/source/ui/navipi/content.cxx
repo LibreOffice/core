@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:13:47 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:55:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,10 @@
 
 #ifndef SC_NAVSETT_HXX
 #include "navsett.hxx"
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -1082,8 +1086,8 @@ void lcl_DoDragObject( ScDocShell* pSrcShell, const String& rName, USHORT nType,
         if (pObject)
         {
             SdrView aEditView( pModel );
-            aEditView.ShowPagePgNum( static_cast<sal_uInt16>(nTab), Point() );
-            SdrPageView* pPV = aEditView.GetPageViewPvNum(0);
+            aEditView.ShowSdrPage(aEditView.GetModel()->GetPage(nTab));
+            SdrPageView* pPV = aEditView.GetSdrPageView();
             aEditView.MarkObj(pObject, pPV);
 
             SdrModel* pDragModel = aEditView.GetAllMarkedModel();
