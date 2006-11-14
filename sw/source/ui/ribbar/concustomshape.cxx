@@ -4,9 +4,9 @@
  *
  *  $RCSfile: concustomshape.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:10:16 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 15:18:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,8 @@
 #ifndef _SVX_ADJITEM_HXX
 #include <svx/adjitem.hxx>
 #endif
+
+#include <math.h>
 
 /*************************************************************************
 |*
