@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmobj.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:45:41 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 13:24:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,10 @@
 
 #ifndef _TOOLKIT_AWT_VCLXDEVICE_HXX_
 #include <toolkit/awt/vclxdevice.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 using namespace ::com::sun::star::io;
@@ -326,7 +330,7 @@ sal_uInt32 FmFormObj::GetObjInventor()   const
 //------------------------------------------------------------------
 sal_uInt16 FmFormObj::GetObjIdentifier() const
 {
-    return OBJ_FM_CONTROL;
+    return OBJ_UNO;
 }
 
 //------------------------------------------------------------------
