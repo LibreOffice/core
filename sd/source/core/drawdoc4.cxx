@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:14:43 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:21:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,6 +231,14 @@
 #include "shapelist.hxx"
 #endif
 
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -272,7 +280,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     String   aNullStr;
 
-    XPolygon aNullPol;
+    ::basegfx::B2DPolyPolygon aNullPolyPolygon;
     Color    aNullCol(RGB_Color(COL_BLACK));
 
     XDash     aNullDash;
@@ -286,8 +294,8 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(XLineColorItem(String(), RGB_Color(COL_BLACK)));
     rISet.Put(XLineWidthItem(0));
     rISet.Put(XLineDashItem(pPool,aNullDash));
-    rISet.Put(XLineStartItem(pPool,aNullPol));
-    rISet.Put(XLineEndItem(pPool,aNullPol));
+    rISet.Put(XLineStartItem(pPool,aNullPolyPolygon));
+    rISet.Put(XLineEndItem(pPool,aNullPolyPolygon));
     rISet.Put(XLineStartWidthItem(300));
     rISet.Put(XLineEndWidthItem(300));
     rISet.Put(XLineStartCenterItem());
@@ -415,12 +423,12 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineColorItem(String(), RGB_Color(COL_BLACK)));
     pISet->Put(XLineWidthItem(150));
 
-    XPolygon aArrow(4);                          //      []
-    aArrow[0]=Point(10,0);                        // 0,4__[]__2,4
-    aArrow[1]=Point(0,30);                      //    \    /
-    aArrow[2]=Point(20,30);                        //     \  /
-    aArrow[3]=Point(10,0);                        //      \/1,0
-    pISet->Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW),aArrow));
+    ::basegfx::B2DPolygon aArrow;
+    aArrow.append(::basegfx::B2DPoint(10.0, 0.0));
+    aArrow.append(::basegfx::B2DPoint(0.0, 30.0));
+    aArrow.append(::basegfx::B2DPoint(20.0, 30.0));
+    aArrow.setClosed(true);
+    pISet->Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW),::basegfx::B2DPolyPolygon(aArrow)));
 
     pISet->Put(XLineStartWidthItem(700));
     pISet->Put(XLineEndWidthItem(300));
@@ -638,9 +646,9 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(SvxFontHeightItem(423));         // 12 pt
 
-    pISet->Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW),aArrow));
+    pISet->Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW),::basegfx::B2DPolyPolygon(aArrow)));
     pISet->Put(XLineStartWidthItem(200));
-    pISet->Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW),aArrow));
+    pISet->Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW),::basegfx::B2DPolyPolygon(aArrow)));
     pISet->Put(XLineEndWidthItem(200));
     pISet->Put(XLineStyleItem(XLINE_SOLID));
 
