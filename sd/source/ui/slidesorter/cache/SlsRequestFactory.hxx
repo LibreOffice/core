@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsRequestFactory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:18:13 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:35:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,10 @@
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
 #include <svx/svdpagv.hxx>
+
+#ifndef _SDRPAGEWINDOW_HXX
+#include <svx/sdrpagewindow.hxx>
+#endif
 
 #include <svx/sdr/contact/viewcontact.hxx>
 
@@ -76,14 +80,14 @@ template <class Queue,bool UseAheadOfTimeRequests>
     // Fill the queues with the new content.  Visible page objects go into
     // the regular queue, non-visible page objects go into the ahead-of-time
     // queue.
-    SdrPageView* pPageView = rView.GetPageViewPvNum(0);
-    SdrPageViewWindow* pPageViewWindow = NULL;
+    SdrPageView* pPageView = rView.GetSdrPageView();
+    SdrPageWindow* pPageWindow = NULL;
     if (pPageView != NULL)
-        pPageViewWindow = pPageView->GetWindow(0);
-    if (pPageViewWindow != NULL)
+        pPageWindow = pPageView->GetPageWindow(0);
+    if (pPageWindow != NULL)
     {
         ::sdr::contact::ObjectContact& rObjectContact (
-            rView.GetPageViewPvNum(0)->GetWindow(0)->GetObjectContact());
+            pPageWindow->GetObjectContact());
 
         // Add the requests for the visible pages.
         model::SlideSorterModel::Enumeration aPageEnumeration (
