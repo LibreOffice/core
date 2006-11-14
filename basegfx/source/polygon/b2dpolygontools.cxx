@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolygontools.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:02:00 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 14:08:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,67 +436,60 @@ namespace basegfx
         bool isInside(const B2DPolygon& rCandidate, const B2DPoint& rPoint, bool bWithBorder)
         {
             const B2DPolygon aCandidate(rCandidate.areControlPointsUsed() ? adaptiveSubdivideByCount(rCandidate, 6L) : rCandidate);
-            bool bRetval(false);
-            const sal_uInt32 nPointCount(aCandidate.count());
 
-            for(sal_uInt32 a(0L); a < nPointCount; a++)
+            if(bWithBorder && isPointOnPolygon(aCandidate, rPoint, true))
             {
-                const B2DPoint aCurrentPoint(aCandidate.getB2DPoint(a));
+                return true;
+            }
+            else
+            {
+                bool bRetval(false);
+                const sal_uInt32 nPointCount(aCandidate.count());
 
-                if(bWithBorder && aCurrentPoint.equal(rPoint))
+                if(nPointCount)
                 {
-                    return true;
-                }
+                    B2DPoint aCurrentPoint(aCandidate.getB2DPoint(nPointCount - 1L));
 
-                // cross-over in Y?
-                const B2DPoint aPreviousPoint(aCandidate.getB2DPoint((!a) ? nPointCount - 1L : a - 1L));
-                const bool bCompYA(fTools::more(aPreviousPoint.getY(), rPoint.getY()));
-                const bool bCompYB(fTools::more(aCurrentPoint.getY(), rPoint.getY()));
-
-                if(bCompYA != bCompYB)
-                {
-                    const bool bCompXA(fTools::more(aPreviousPoint.getX(), rPoint.getX()));
-                    const bool bCompXB(fTools::more(aCurrentPoint.getX(), rPoint.getX()));
-
-                    if(bCompXA == bCompXB)
+                    for(sal_uInt32 a(0L); a < nPointCount; a++)
                     {
-                        if(bCompXA)
+                        const B2DPoint aPreviousPoint(aCurrentPoint);
+                        aCurrentPoint = aCandidate.getB2DPoint(a);
+
+                        // cross-over in Y?
+                        const bool bCompYA(fTools::more(aPreviousPoint.getY(), rPoint.getY()));
+                        const bool bCompYB(fTools::more(aCurrentPoint.getY(), rPoint.getY()));
+
+                        if(bCompYA != bCompYB)
                         {
-                            bRetval = !bRetval;
-                        }
-                        else
-                        {
-                            // it may still be a touch with a vertical line when bWithBorder==true,
-                            // check for it. If it is, return true
-                            if(bWithBorder
-                                && fTools::equal(aPreviousPoint.getX(), rPoint.getX())
-                                && fTools::equal(aCurrentPoint.getX(), rPoint.getX()))
+                            // cross-over in X?
+                            const bool bCompXA(fTools::more(aPreviousPoint.getX(), rPoint.getX()));
+                            const bool bCompXB(fTools::more(aCurrentPoint.getX(), rPoint.getX()));
+
+                            if(bCompXA == bCompXB)
                             {
-                                return true;
+                                if(bCompXA)
+                                {
+                                    bRetval = !bRetval;
+                                }
+                            }
+                            else
+                            {
+                                const double fCompare(
+                                    aCurrentPoint.getX() - (aCurrentPoint.getY() - rPoint.getY()) *
+                                    (aPreviousPoint.getX() - aCurrentPoint.getX()) /
+                                    (aPreviousPoint.getY() - aCurrentPoint.getY()));
+
+                                if(fTools::more(fCompare, rPoint.getX()))
+                                {
+                                    bRetval = !bRetval;
+                                }
                             }
                         }
                     }
-                    else
-                    {
-                        const double fCompare =
-                            aCurrentPoint.getX() - (aCurrentPoint.getY() - rPoint.getY()) *
-                            (aPreviousPoint.getX() - aCurrentPoint.getX()) /
-                            (aPreviousPoint.getY() - aCurrentPoint.getY());
-
-                        if(bWithBorder && fTools::equal(fCompare, rPoint.getX()))
-                        {
-                            // point on line, when bWithBorder=true, all is done
-                            return true;
-                        }
-                        else if(fTools::more(fCompare, rPoint.getX()))
-                        {
-                            bRetval = !bRetval;
-                        }
-                    }
                 }
-            }
 
-            return bRetval;
+                return bRetval;
+            }
         }
 
         bool isInside(const B2DPolygon& rCandidate, const B2DPolygon& rPolygon, bool bWithBorder)
@@ -2020,6 +2013,36 @@ namespace basegfx
 
                 return false;
             }
+        }
+
+        bool isPointOnPolygon(const B2DPolygon& rCandidate, const B2DPoint& rPoint, bool bWithPoints)
+        {
+            const B2DPolygon aCandidate(rCandidate.areControlPointsUsed() ? adaptiveSubdivideByCount(rCandidate, 6L) : rCandidate);
+            const sal_uInt32 nPointCount(aCandidate.count());
+
+            if(nPointCount > 1L)
+            {
+                const sal_uInt32 nLoopCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                B2DPoint aCurrentPoint(aCandidate.getB2DPoint(0L));
+
+                for(sal_uInt32 a(0L); a < nLoopCount; a++)
+                {
+                    const B2DPoint aNextPoint(aCandidate.getB2DPoint((a + 1L) % nPointCount));
+
+                    if(isPointOnLine(aCurrentPoint, aNextPoint, rPoint, bWithPoints))
+                    {
+                        return true;
+                    }
+
+                    aCurrentPoint = aNextPoint;
+                }
+            }
+            else if(nPointCount && bWithPoints)
+            {
+                return rPoint.equal(aCandidate.getB2DPoint(0L));
+            }
+
+            return false;
         }
 
         bool isPointInTriangle(const B2DPoint& rA, const B2DPoint& rB, const B2DPoint& rC, const B2DPoint& rCandidate, bool bWithBorder)
