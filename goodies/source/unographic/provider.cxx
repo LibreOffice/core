@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:40:40 $
+ *  last change: $Author: ihi $ $Date: 2006-11-14 16:17:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -525,7 +525,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
                     {
                         pFilter->ExportGraphic( *pGraphic, aPath, *pOStm,
                                                 pFilter->GetExportFormatNumberForShortName( ::rtl::OUString::createFromAscii( pFilterShortName ) ),
-                                                true, ( aFilterDataSeq.getLength() ? &aFilterDataSeq : NULL ) );
+                                                    ( aFilterDataSeq.getLength() ? &aFilterDataSeq : NULL ) );
                     }
                 }
             }
