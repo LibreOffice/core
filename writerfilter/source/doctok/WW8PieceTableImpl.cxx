@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8PieceTableImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:31 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:36:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,6 +287,18 @@ bool WW8PieceTableImpl::isComplex(const Fc & rFc) const
         bResult = aIt->isComplex();
 
     return bResult;
+}
+
+CpAndFc WW8PieceTableImpl::createCpAndFc
+(const Cp & rCp, PropertyType eType) const
+{
+    return CpAndFc(rCp, cp2fc(rCp), eType);
+}
+
+CpAndFc WW8PieceTableImpl::createCpAndFc
+(const Fc & rFc, PropertyType eType) const
+{
+    return CpAndFc(fc2cp(rFc), rFc, eType);
 }
 
 void WW8PieceTableImpl::dump(ostream & o) const

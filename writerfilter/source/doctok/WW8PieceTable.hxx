@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8PieceTable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:31 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:36:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,11 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif // _SAL_TYPES_H_
+
+#ifndef INCLUDED_WW8_DOCUMENT_HXX
+#include <doctok/WW8Document.hxx>
+#endif
+
 #include <boost/shared_ptr.hpp>
 #include <iostream>
 
@@ -48,6 +53,7 @@ using namespace ::std;
 
 struct Cp;
 struct Fc;
+class CpAndFc;
 
 /**
    The piece table of a Word document.
@@ -142,6 +148,24 @@ public:
        @param nIndex     index of FC to return
     */
     virtual Fc getFc(sal_uInt32 nIndex) const = 0;
+
+    /**
+        Create CpAndFc from Cp.
+
+        @param rCp   the Cp
+
+        @return CpAndFc containing rCp and corresponding Fc
+    */
+    virtual CpAndFc createCpAndFc(const Cp & rCp, PropertyType eType) const = 0;
+
+    /**
+        Create CpAndFc from Fc.
+
+        @param rFc   the Fc
+
+        @return CpAndFc containing rFc and corresponding Cp
+    */
+    virtual CpAndFc createCpAndFc(const Fc & rFc, PropertyType eType) const = 0;
 
     /**
        Dump piece table.
