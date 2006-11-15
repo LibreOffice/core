@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dff.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-14 13:21:39 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:25:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,6 +213,21 @@ sal_uInt32 DffRecord::getShapeType()
     {
         DffFSP * pDffFSP = dynamic_cast<DffFSP*>((*aRecords.begin()).get());
         nResult = pDffFSP->get_shptype();
+    }
+
+    return nResult;
+}
+
+sal_uInt32 DffRecord::getShapeId()
+{
+    sal_uInt32 nResult = 0;
+
+    Records_t aRecords = findRecords(0xf00a);
+
+    if (aRecords.size() > 0)
+    {
+        DffFSP * pDffFSP = dynamic_cast<DffFSP*>((*aRecords.begin()).get());
+        nResult = pDffFSP->get_shpid();
     }
 
     return nResult;

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dff.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:49:09 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:25:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,9 @@
  *
  *  $RCSfile: Dff.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:49:09 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:25:48 $
  *
  ******************************************************************/
 
@@ -98,6 +98,7 @@ public:
     Records_t::iterator end();
 
     sal_uInt32 getShapeType();
+    sal_uInt32 getShapeId();
     sal_uInt32 getShapeBid();
 
     /* Properties methods */
