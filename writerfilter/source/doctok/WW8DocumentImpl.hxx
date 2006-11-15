@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:53:34 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:35:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -330,6 +330,9 @@ class WW8DocumentImpl : public WW8Document
     /// DffBlock of document
     DffBlock::Pointer_t mpDffBlock;
 
+    /// Textbox stories
+    PLCF<WW8FTXBXS>::Pointer_t mpTextBoxStories;
+
     bool isSpecial(sal_uInt32 nChar);
 
     WW8Stream::Pointer_t getSubStream(const ::rtl::OUString & sId) const;
@@ -619,6 +622,14 @@ public:
      */
     doctok::Reference<Properties>::Pointer_t
     getField(const CpAndFc & rCpAndFc) const;
+
+    /**
+       Return stream of text box.
+
+       @param nShpId    shape id of text box
+     */
+    doctok::Reference<Stream>::Pointer_t
+    getTextboxText(sal_uInt32 nShpId) const;
 
     /**
        Return file character position according to a character

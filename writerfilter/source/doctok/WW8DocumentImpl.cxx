@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-14 13:35:42 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:35:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,8 @@ namespace doctok
 {
 
 using namespace ::std;
-// WW8DocumentIteratorImpl
 
+// WW8DocumentIteratorImpl
 bool operator == (const WW8DocumentIterator & rA,
                   const WW8DocumentIterator & rB)
 {
@@ -416,6 +416,25 @@ WW8DocumentImpl::WW8DocumentImpl(WW8Stream::Pointer_t rpStream)
         mpDffBlock->setDocument(this);
     }
 
+    if (mpFib->get_lcbPlcftxbxTxt() > 0)
+    {
+        mpTextBoxStories = PLCF<WW8FTXBXS>::Pointer_t
+            (new PLCF<WW8FTXBXS>(*mpTableStream,
+                                 mpFib->get_fcPlcftxbxTxt(),
+                                 mpFib->get_lcbPlcftxbxTxt()));
+
+        sal_uInt32 nCount = mpTextBoxStories->getEntryCount();
+
+        for (sal_uInt32 n = 0; n < nCount; ++n)
+        {
+            Cp aCp(mpTextBoxStories->getFc(n));
+            aCp += mEndnoteEndCpAndFc.getCp().get();
+            CpAndFc aCpAndFc(mpPieceTable->createCpAndFc(aCp, PROP_DOC));
+
+            insertCpAndFc(aCpAndFc);
+        }
+    }
+
     mpShapeHelper = ShapeHelper::Pointer_t
         (new ShapeHelper(pPlcspaMom, pPlcspaHdr, this));
 
@@ -494,6 +513,7 @@ WW8DocumentImpl & WW8DocumentImpl::Assign(const WW8DocumentImpl & rSrc)
     mpBookmarkHelper = rSrc.mpBookmarkHelper;
 
     mpDffBlock = rSrc.mpDffBlock;
+    mpTextBoxStories = rSrc.mpTextBoxStories;
 
     mDocumentEndCpAndFc = rSrc.mDocumentEndCpAndFc;
     mFootnoteEndCpAndFc = rSrc.mFootnoteEndCpAndFc;
@@ -1175,6 +1195,44 @@ void WW8DocumentImpl::setPicLocation(sal_uInt32 fcPicLoc)
     mfcPicLoc = fcPicLoc;
 }
 
+doctok::Reference<Stream>::Pointer_t
+WW8DocumentImpl::getTextboxText(sal_uInt32 nShpId) const
+{
+    doctok::Reference<Stream>::Pointer_t pResult;
+
+    if (mpTextBoxStories.get() != NULL)
+    {
+        sal_uInt32 nCount = mpTextBoxStories->getEntryCount();
+
+        sal_uInt32 n = 0;
+        while (n < nCount)
+        {
+            WW8FTXBXS * pTextboxStory = mpTextBoxStories->getEntryPointer(n);
+
+            if (pTextboxStory->get_lid() == nShpId)
+                break;
+
+            ++n;
+        }
+
+        if (n < nCount)
+        {
+            Cp aCpStart(mpTextBoxStories->getFc(n));
+            aCpStart += getEndnoteEndCp().getCp().get();
+            CpAndFc aCpAndFcStart =
+                mpPieceTable->createCpAndFc(aCpStart, PROP_DOC);
+            Cp aCpEnd(mpTextBoxStories->getFc(n + 1));
+            aCpEnd += getEndnoteEndCp().getCp().get();
+            CpAndFc aCpAndFcEnd = mpPieceTable->createCpAndFc(aCpEnd, PROP_DOC);
+
+            pResult = doctok::Reference<Stream>::Pointer_t
+                (new WW8DocumentImpl(*this, aCpAndFcStart, aCpAndFcEnd));
+        }
+    }
+
+    return pResult;
+}
+
 QName_t lcl_headerQName(sal_uInt32 nIndex)
 {
     QName_t qName = NS_rtf::LN_header;
@@ -1366,10 +1424,12 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             (new WW8Fib(*mpFib));
         rStream.props(pFib);
 
-        if (mpFib->get_lcbPlcftxbxTxt() > 0)
+
+        if (mpTextBoxStories.get() != NULL)
         {
-            WW8StructBase aStructBase(*mpTableStream, mpFib->get_fcPlcftxbxTxt(),
-                                      mpFib->get_lcbPlcftxbxTxt());
+            output.addItem("<textbox.boxes>");
+            mpTextBoxStories->dump(output);
+            output.addItem("</textbox.boxes>");
         }
 
         if (mpFib->get_lcbPlcftxbxBkd() > 0)
@@ -1377,6 +1437,10 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             PLCF<WW8BKD> aPLCF(*mpTableStream,
                                mpFib->get_fcPlcftxbxBkd(),
                                mpFib->get_lcbPlcftxbxBkd());
+
+            output.addItem("<textbox.breaks>");
+            aPLCF.dump(output);
+            output.addItem("</textbox.breaks>");
         }
 
         if (mpDffBlock.get() != NULL)
