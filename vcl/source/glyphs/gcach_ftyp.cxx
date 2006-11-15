@@ -1247,6 +1247,9 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
         return;
     }
 
+    if( mbArtBold && pFTEmbolden )
+        (*pFTEmbolden)( maFaceFT->glyph );
+
     int nCharWidth = maFaceFT->glyph->metrics.horiAdvance;
 
     if( nGlyphFlags & GF_ROTMASK ) {  // for bVertical rotated glyphs
@@ -1259,12 +1262,12 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     }
     rGD.SetCharWidth( (nCharWidth + 32) >> 6 );
 
-    if( mbArtBold && pFTEmbolden )
-        (*pFTEmbolden)( maFaceFT->glyph );
     FT_Glyph pGlyphFT;
     rc = FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
 
-    /*int nAngle =*/ ApplyGlyphTransform( nGlyphFlags, pGlyphFT, false );
+    ApplyGlyphTransform( nGlyphFlags, pGlyphFT, false );
+    if( mbArtBold && pFTEmbolden && (nFTVERSION < 2200) ) // #i71094# workaround staircase bug
+        pGlyphFT->advance.y = 0;
     rGD.SetDelta( (pGlyphFT->advance.x + 0x8000) >> 16, -((pGlyphFT->advance.y + 0x8000) >> 16) );
 
     FT_BBox aBbox;
