@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:57:42 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:37:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,6 +371,11 @@ doctok::Reference<Properties>::Pointer_t WW8Value::getProperties()
     return doctok::Reference<Properties>::Pointer_t();
 }
 
+doctok::Reference<Stream>::Pointer_t WW8Value::getStream()
+{
+    return doctok::Reference<Stream>::Pointer_t();
+}
+
 int WW8IntValue::getInt() const
 {
     return mValue;
@@ -471,9 +476,24 @@ string WW8PropertiesValue::toString() const
     return "properties";
 }
 
+doctok::Reference<Stream>::Pointer_t WW8StreamValue::getStream()
+{
+    return mRef;
+}
+
+string WW8StreamValue::toString() const
+{
+    return "stream";
+}
+
 WW8Value::Pointer_t createValue(doctok::Reference<Properties>::Pointer_t rRef)
 {
     return WW8Value::Pointer_t(new WW8PropertiesValue(rRef));
+}
+
+WW8Value::Pointer_t createValue(doctok::Reference<Stream>::Pointer_t rRef)
+{
+    return WW8Value::Pointer_t(new WW8StreamValue(rRef));
 }
 
 WW8StreamHandler::WW8StreamHandler()
@@ -665,6 +685,18 @@ void WW8StreamHandler::info(const string & info_)
 
 void WW8PropertiesHandler::attribute(Id name, Value & val)
 {
+    boost::shared_ptr<rtl::OString> pStr(new ::rtl::OString());
+    ::rtl::OUString aStr = val.getString();
+    aStr.convertToString(pStr.get(), RTL_TEXTENCODING_ASCII_US,
+                         OUSTRING_TO_OSTRING_CVTFLAGS);
+    string sXMLValue = xmlify(pStr->getStr());
+
+    output.addItem("<attribute name=\"" +
+                   (*QNameToString::Instance())(name) +
+                   "\" value=\"" +
+                   sXMLValue +
+                   + "\">");
+
     doctok::Reference<Properties>::Pointer_t pProps = val.getProperties();
 
     if (pProps.get() != NULL)
@@ -683,20 +715,22 @@ void WW8PropertiesHandler::attribute(Id name, Value & val)
 
         output.addItem("</properties>");
     }
-    else
-    {
-        boost::shared_ptr<rtl::OString> pStr(new ::rtl::OString());
-        ::rtl::OUString aStr = val.getString();
-        aStr.convertToString(pStr.get(), RTL_TEXTENCODING_ASCII_US,
-                             OUSTRING_TO_OSTRING_CVTFLAGS);
-        string sXMLValue = xmlify(pStr->getStr());
 
-        output.addItem("<attribute name=\"" +
-                       (*QNameToString::Instance())(name) +
-                       "\" value=\"" +
-                       sXMLValue +
-                       + "\"/>");
+    doctok::Reference<Stream>::Pointer_t pStream = val.getStream();
+
+    if (pStream.get() != NULL)
+    {
+        try {
+            WW8StreamHandler aHandler;
+
+            pStream->resolve(aHandler);
+        }
+        catch (ExceptionOutOfBounds e)
+        {
+        }
     }
+
+    output.addItem("</attribute>");
 }
 
 void WW8PropertiesHandler::sprm(Sprm & sprm_)
@@ -728,6 +762,16 @@ void WW8PropertiesHandler::sprm(Sprm & sprm_)
         WW8BinaryObjHandler aHandler;
         pBinObj->resolve(aHandler);
         output.addItem("</binary>");
+    }
+
+    doctok::Reference<Stream>::Pointer_t pStream = sprm_.getStream();
+
+    if (pStream.get() != NULL)
+    {
+        output.addItem("<stream>");
+        WW8StreamHandler aHandler;
+        pStream->resolve(aHandler);
+        output.addItem("</stream>");
     }
 
     gTableManager.sprm(sprm_);

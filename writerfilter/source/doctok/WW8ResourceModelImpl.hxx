@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:59:09 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:37:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,6 +177,7 @@ public:
     virtual ::rtl::OUString getString() const;
     virtual uno::Any getAny() const;
     virtual doctok::Reference<Properties>::Pointer_t getProperties();
+    virtual doctok::Reference<Stream>::Pointer_t getStream();
     virtual WW8Value * clone() const = 0;
 };
 
@@ -250,6 +251,27 @@ public:
     virtual WW8Value * clone() const { return new WW8PropertiesValue(mRef); }
 };
 
+class WW8StreamValue : public WW8Value
+{
+    mutable doctok::Reference<Stream>::Pointer_t mRef;
+
+public:
+    WW8StreamValue(doctok::Reference<Stream>::Pointer_t rRef)
+    : mRef(rRef)
+    {
+    }
+
+    virtual ~WW8StreamValue()
+    {
+    }
+
+    virtual doctok::Reference<Stream>::Pointer_t getStream();
+
+    virtual string toString() const;
+
+    virtual WW8Value * clone() const { return new WW8StreamValue(mRef); }
+};
+
 /**
    Creates value from a properties reference.
 
@@ -257,11 +279,22 @@ public:
 */
 WW8Value::Pointer_t createValue(doctok::Reference<Properties>::Pointer_t rRef);
 
+/**
+   Creates value from another value.
+
+   @param value  the value to copy
+*/
 WW8Value::Pointer_t createValue(WW8Value::Pointer_t value);
+
+/**
+   Creates value from a stream reference.
+
+   @param rRef    reference to the stream
+ */
+WW8Value::Pointer_t createValue(doctok::Reference<Stream>::Pointer_t rRef);
 
 class WW8StreamHandler : public Stream
 {
-
 public:
     WW8StreamHandler();
     virtual ~WW8StreamHandler();
