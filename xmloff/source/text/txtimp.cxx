@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:07:30 $
+ *  last change: $Author: ihi $ $Date: 2006-11-15 12:40:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1339,7 +1339,9 @@ void XMLTextImportHelper::FindOutlineStyleName( ::rtl::OUString& rStyleName,
 
             // finally, we'll use the previously used style name for this
             // format (or the default we've just put into that style)
-            rStyleName = mpOutlineStylesCandidates[nOutlineLevel][0];
+            // --> OD 2006-11-06 #i71249# - take last added one
+            rStyleName = mpOutlineStylesCandidates[nOutlineLevel].back();
+            // <--
         }
         // else: nothing we can do, so we'll leave it empty
     }
@@ -1495,7 +1497,9 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
                     if ( nUPD < 680 ||
                          ( nUPD == 680 && nBuild <= 9073 /* BuildId of OOo 2.0.4/SO8 PU4 */ ) )
                     {
-                        sChoosenStyle = mpOutlineStylesCandidates[i][0];
+                        // --> OD 2006-11-06 #i71249# - take last added one
+                        sChoosenStyle = mpOutlineStylesCandidates[i].back();
+                        // <--
                     }
                     else
                     {
