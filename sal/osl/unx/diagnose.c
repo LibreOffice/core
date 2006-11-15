@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:41:14 $
+ *  last change: $Author: ihi $ $Date: 2006-11-15 12:33:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,10 +198,11 @@ static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
     for (i = 0; (i < FRAME_OFFSET) && (fp != 0); i++)
         fp = (struct frame*)((char*)(fp->fr_savfp) + STACK_BIAS);
 
-    for (i = 0; (fp != 0) && (fp->fr_savpc != 0) && (fp->fr_savpc != -1); i++)
+    for (i = 0; (fp != 0) && (fp->fr_savpc != 0); i++)
     {
+        struct frame * prev = (struct frame*)((char*)(fp->fr_savfp) + STACK_BIAS);
         osl_diagnose_frame_Impl (f, i, (void*)(fp->fr_savpc));
-        fp = (struct frame*)((char*)(fp->fr_savfp) + STACK_BIAS);
+        fp = (prev > fp) ? prev : 0;
     }
 }
 
