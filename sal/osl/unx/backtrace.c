@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backtrace.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:41:00 $
+ *  last change: $Author: ihi $ $Date: 2006-11-15 12:33:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,13 +89,16 @@ int backtrace( void **buffer, int max_frames )
         fp = (struct frame*)((char*)(fp->fr_savfp) + STACK_BIAS);
 
     /* iterate through backtrace */
-    for (i = 0; (fp != 0) && (fp->fr_savpc != 0) && (fp->fr_savpc != -1) && (i < max_frames); i++)
+    for (i = 0; (fp != 0) && (fp->fr_savpc != 0) && (i < max_frames); i++)
     {
+        /* saved (prev) frame */
+        struct frame * prev = (struct frame*)((char*)(fp->fr_savfp) + STACK_BIAS);
+
         /* store frame */
         *(buffer++) = (void*)(fp->fr_savpc);
 
-        /* next frame */
-        fp = (struct frame*)((char*)(fp->fr_savfp) + STACK_BIAS);
+        /* prev frame (w/ stack growing top down) */
+        fp = (prev > fp) ? prev : 0;
     }
 
     /* return number of frames stored */
