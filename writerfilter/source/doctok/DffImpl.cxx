@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DffImpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-14 13:23:48 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:26:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -425,4 +425,19 @@ DffSpContainer::get_blip()
     return pResult;
 }
 
+doctok::Reference<Stream>::Pointer_t
+DffSpContainer::get_shptxt()
+{
+    doctok::Reference<Stream>::Pointer_t pResult;
+
+    if (getShapeType() == 202)
+    {
+        sal_uInt32 nShpId = getShapeId();
+
+        if (getDocument() != NULL)
+            pResult = getDocument()->getTextboxText(nShpId);
+    }
+
+    return pResult;
+}
 }
