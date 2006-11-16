@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:35:51 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-16 15:55:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,6 +230,28 @@ public:
 };
 
 /**
+    Helper for Breaks.
+*/
+class BreakHelper
+{
+public:
+    typedef hash_map<CpAndFc, WW8BKD::Pointer_t,
+                     CpAndFcHash> Map_t;
+private:
+    WW8DocumentImpl * mpDoc;
+    Map_t mMap;
+public:
+    typedef boost::shared_ptr<BreakHelper> Pointer_t;
+    BreakHelper(PLCF<WW8BKD>::Pointer_t pPlcfbkdMom,
+                WW8DocumentImpl * pDoc);
+
+    void init();
+
+    doctok::Reference<Properties>::Pointer_t
+    getBreak(const CpAndFc & rCpAndFc);
+};
+
+/**
    Implementation class for document.
  */
 class WW8DocumentImpl : public WW8Document
@@ -304,6 +326,9 @@ class WW8DocumentImpl : public WW8Document
 
     /// pointer to the helper for shapes
     ShapeHelper::Pointer_t mpShapeHelper;
+
+    /// pointer to the helper for breaks
+    BreakHelper::Pointer_t mpBreakHelper;
 
 
     /// cache for the Cp where main text flow end
@@ -612,8 +637,22 @@ public:
     doctok::Reference<Properties>::Pointer_t
     getShape(sal_uInt32 nSpid);
 
+    /**
+       Return blip.
+
+       @param nBlib  number of the blip to return
+    */
     doctok::Reference<Properties>::Pointer_t
     getBlip(sal_uInt32 nBlib);
+
+    /**
+       Return break descriptor.
+
+       @param rCpAndFc    CpAndFc of the break
+    */
+    doctok::Reference<Properties>::Pointer_t
+    getBreak(const CpAndFc & rCpAndFc) const;
+
 
     /**
        Return field.
@@ -689,6 +728,14 @@ public:
        @param rStream
      */
     void resolvePicture(Stream & rStream);
+
+    /**
+       Resolve special char.
+
+       @param nChar    the special char
+       @param rStream  the stream handler to resolve the special char to
+     */
+    void resolveSpecialChar(sal_uInt32 nChar, Stream & rStream);
 };
 
 /**
