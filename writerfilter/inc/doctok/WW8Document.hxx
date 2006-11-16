@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8Document.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-08 09:54:54 $
+ *  last change: $Author: hbrinkm $ $Date: 2006-11-16 15:51:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -285,7 +285,10 @@ enum PropertyType {
     PROP_FLD,
 
     /** a shape character */
-    PROP_SHP
+    PROP_SHP,
+
+    /** a break character */
+    PROP_BRK
 };
 
 /**
